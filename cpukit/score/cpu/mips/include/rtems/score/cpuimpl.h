@@ -17,6 +17,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUMIPS MIPS
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief MIPS Architecture Support
+ *
+ * @{
+ */
+
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #ifndef ASM
@@ -52,5 +62,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */

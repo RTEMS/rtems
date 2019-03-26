@@ -39,6 +39,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUm68kASM m68k Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUm68k
+ *
+ * @brief Motorola 68000 and NXP ColdFire (m68k) Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -148,5 +158,7 @@
 
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
+
+/** @} */
 
 #endif

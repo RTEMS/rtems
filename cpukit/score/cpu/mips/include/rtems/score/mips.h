@@ -24,9 +24,9 @@
 #define _RTEMS_SCORE_MIPS_H
 
 /**
- *  @defgroup ScoreMips RTEMS no cpu Build Information
+ *  @defgroup RTEMSScoreCPUMIPSBuild RTEMS no cpu Build Information
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScoreCPUMIPS
  *
  */
 /**@{*/

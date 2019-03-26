@@ -34,9 +34,9 @@
 #define _RTEMS_MIPS_IDTCPU_H
 
 /**
- *  @defgroup MipsSet_idtcpu CPU Related Definitions
+ *  @defgroup RTEMSScoreMIPSSet_idtcpu CPU Related Definitions
  *
- *  @ingroup MIPS
+ *  @ingroup RTEMSScoreCPUMIPS
  *
  */
 /**@{*/

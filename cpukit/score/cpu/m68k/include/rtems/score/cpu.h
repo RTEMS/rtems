@@ -3,6 +3,8 @@
  * 
  * @brief Motorola M68K CPU Dependent Source
  * 
+ * @addtogroup RTEMSScoreCPUm68k
+ * 
  * This include file contains information pertaining to the Motorola
  * m68xxx processor family.
  */

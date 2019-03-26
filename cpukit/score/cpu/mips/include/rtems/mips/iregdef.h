@@ -37,9 +37,9 @@
 #define _RTEMS_MIPS_IREGDEF_H
 
 /**
- *  @defgroup MipsSet_iregdef Register Structure
+ *  @defgroup RTEMSScoreMIPSSet_iregdef Register Structure
  *
- *  @ingroup MIPS
+ *  @ingroup RTEMSScoreCPUMIPS
  *
  */
 /**@{*/

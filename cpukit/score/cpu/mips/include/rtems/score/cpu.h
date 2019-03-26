@@ -45,10 +45,7 @@
 #define _RTEMS_SCORE_CPU_H
 
 /**
- *  @defgroup RTEMSScoreCPU CPU CPU
- *
- *  @ingroup Score
- *
+ *  @addtogroup RTEMSScoreCPUMIPS
  */
 /**@{*/
 
