@@ -144,30 +144,44 @@ static int fdt_string_eq_(const void *fdt, int stroffset,
 	return p && (slen == len) && (memcmp(p, s, len) == 0);
 }
 
-uint32_t fdt_get_max_phandle(const void *fdt)
+int fdt_find_max_phandle(const void *fdt, uint32_t *phandle)
 {
-	uint32_t max_phandle = 0;
-	int offset;
+	uint32_t max = 0;
+	int offset = -1;
 
-	for (offset = fdt_next_node(fdt, -1, NULL);;
-	     offset = fdt_next_node(fdt, offset, NULL)) {
-		uint32_t phandle;
+	while (true) {
+		uint32_t value;
 
-		if (offset == -FDT_ERR_NOTFOUND)
-			return max_phandle;
+		offset = fdt_next_node(fdt, offset, NULL);
+		if (offset < 0) {
+			if (offset == -FDT_ERR_NOTFOUND)
+				break;
 
-		if (offset < 0)
-			return (uint32_t)-1;
+			return offset;
+		}
 
-		phandle = fdt_get_phandle(fdt, offset);
-		if (phandle == (uint32_t)-1)
-			continue;
+		value = fdt_get_phandle(fdt, offset);
 
-		if (phandle > max_phandle)
-			max_phandle = phandle;
+		if (value > max)
+			max = value;
 	}
 
+	if (phandle)
+		*phandle = max;
+
 	return 0;
+}
+
+uint32_t fdt_get_max_phandle(const void *fdt)
+{
+	uint32_t phandle;
+	int err;
+
+	err = fdt_find_max_phandle(fdt, &phandle);
+	if (err < 0)
+		return (uint32_t)-1;
+
+	return phandle;
 }
 
 static const struct fdt_reserve_entry *fdt_mem_rsv(const void *fdt, int n)

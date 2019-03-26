@@ -386,12 +386,28 @@ const char *fdt_get_string(const void *fdt, int stroffset, int *lenp);
 const char *fdt_string(const void *fdt, int stroffset);
 
 /**
+ * fdt_find_max_phandle - find and return the highest phandle in a tree
+ * @fdt: pointer to the device tree blob
+ * @phandle: return location for the highest phandle value found in the tree
+ *
+ * fdt_find_max_phandle() finds the highest phandle value in the given device
+ * tree. The value returned in @phandle is only valid if the function returns
+ * success.
+ *
+ * returns:
+ *     0 on success or a negative error code on failure
+ */
+int fdt_find_max_phandle(const void *fdt, uint32_t *phandle);
+
+/**
  * fdt_get_max_phandle - retrieves the highest phandle in a tree
  * @fdt: pointer to the device tree blob
  *
  * fdt_get_max_phandle retrieves the highest phandle in the given
  * device tree. This will ignore badly formatted phandles, or phandles
  * with a value of 0 or -1.
+ *
+ * This function is deprecated in favour of fdt_find_max_phandle().
  *
  * returns:
  *      the highest phandle on success
