@@ -1,5 +1,7 @@
 /**
  * @file
+ * 
+ * @addtogroup RTEMSScoreCPUMoxie
  */
 
 /*

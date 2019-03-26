@@ -41,6 +41,16 @@
 
 #include <rtems/score/moxie.h>
 
+/**
+ * @defgroup RTEMSScoreCPUMoxieASM Moxie Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUMoxie
+ *
+ * @brief Moxie Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -112,5 +122,7 @@
 
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
+
+/** @} */
 
 #endif
