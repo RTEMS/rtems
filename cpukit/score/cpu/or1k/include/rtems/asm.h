@@ -37,6 +37,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/or1k.h>
 
+/**
+ * @defgroup RTEMSScoreCPUor1kASM OpenRISC 1000 (or1k) Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUor1k
+ *
+ * @brief OpenRISC 1000 (or1k) Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -95,5 +105,7 @@
 
 #define PUBLIC(sym) .global SYM (sym)
 #define EXTERN(sym) .global SYM (sym)
+
+/** @} */
 
 #endif

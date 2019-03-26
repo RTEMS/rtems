@@ -1,5 +1,7 @@
 /**
  * @file
+ *
+ * @ingroup RTEMScoreCPUor1k
  */
 
 /*
