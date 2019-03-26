@@ -39,6 +39,15 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/lm32.h>
 
+/**
+ * @defgroup RTEMSScoreCPUlm32ASM lm32 Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUlm32
+ *
+ * @brief LatticeMicro32 (lm32) Assembler Support
+ */
+/**@{**/
+
 #ifndef __USER_LABEL_PREFIX__
 /**
  * Recent versions of GNU cpp define variables which indicate the
@@ -123,5 +132,7 @@
  * They may need to put underscores in front of the symbols.
  */
 #define EXTERN(sym) .globl SYM (sym)
+
+/**@}**/
 
 #endif

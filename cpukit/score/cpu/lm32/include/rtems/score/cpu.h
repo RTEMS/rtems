@@ -185,7 +185,7 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  * The following defines the number of bits actually used in the
  * interrupt field of the task mode.  How those bits map to the
  * CPU interrupt levels is defined by the routine @ref _CPU_ISR_Set_level.
@@ -209,7 +209,9 @@ extern "C" {
 /* may need to put some structures here.  */
 
 /**
- * @defgroup CPUContext Processor Dependent Context Management
+ * @defgroup RTEMSScoreCPUlm32Context Processor Dependent Context Management
+ * 
+ * @ingroup RTEMSScoreCPUlm32
  *
  * From the highest level viewpoint, there are 2 types of context to save.
  *
@@ -336,9 +338,12 @@ extern Context_Control_fp _CPU_Null_fp_context;
 /** @} */
 
 /**
- * @defgroup CPUInterrupt Processor Dependent Interrupt Management
+ * @defgroup RTEMSScoreCPUlm32Interrupt Processor Dependent Interrupt Management
+ * 
+ * @ingroup RTEMSScoreCPUlm32
  */
-/**@{**/
+/** @{ **/
+/** @} **/
 
 /*
  * Nothing prevents the porter from declaring more CPU specific variables.
@@ -351,7 +356,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 /* XXX: if needed, put more variables here */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUlm32Context
  * The size of the floating point context area.  On some CPUs this
  * will not be a "sizeof" because the format of the floating point
  * area is not defined -- only the size is.  This is usually on
@@ -364,6 +369,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /**
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  * Amount of extra stack (above minimum stack size) required by
  * MPCI receive server thread.  Remember that in a multiprocessor
  * system this thread must exist and be able to process all directives.
@@ -375,6 +381,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /**
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  * This defines the number of entries in the @ref _ISR_Vector_table managed
  * by RTEMS.
  *
@@ -385,20 +392,21 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS      32
 
 /**
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  * This defines the highest interrupt vector number for this port.
  */
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /**
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  * This is defined if the port has a special way to report the ISR nesting
  * level.  Most ports maintain the variable @a _ISR_Nest_level.
  */
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
-/** @} */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUlm32Context
  * Should be large enough to run all RTEMS tests.  This ensures
  * that a "reasonable" small application should not have any problems.
  *
@@ -466,7 +474,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
  */
 
 /**
- * @addtogroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  */
 /**@{**/
 
@@ -565,7 +573,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Context handler macros */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUlm32Context
  * Initialize the context to a state suitable for starting a
  * task after a context restore operation.  Generally, this
  * involves:
@@ -686,7 +694,7 @@ extern char _gp[];
 void _CPU_Initialize(void);
 
 /**
- * @addtogroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUlm32Interrupt
  */
 /**@{**/
 
@@ -714,7 +722,7 @@ void _CPU_ISR_install_vector(
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUlm32Context
  * This routine switches from the run context to the heir context.
  *
  * @param[in] run points to the context of the currently executing task
@@ -730,7 +738,7 @@ void _CPU_Context_switch(
 );
 
 /**
- * @addtogroup CPUContext
+ * @addtogroup RTEMSScoreCPUlm32Context
  */
 /**@{**/
 
@@ -792,7 +800,15 @@ typedef CPU_Interrupt_frame CPU_Exception_frame;
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 /**
- * @ingroup CPUEndian
+ * @defgroup RTEMSScoreCPUlm32CPUEndian CPUEndian
+ * 
+ * @ingroup RTEMSScoreCPUlm32
+ * 
+ * @brief CPUEndian
+ */
+/** @{ */
+
+/**
  * The following routine swaps the endian format of an unsigned int.
  * It must be static because it is referenced indirectly.
  *
@@ -835,7 +851,6 @@ static inline uint32_t CPU_swap_u32(
 }
 
 /**
- * @ingroup CPUEndian
  * This routine swaps a 16 bir quantity.
  *
  * @param[in] value is the value to be swapped
@@ -845,6 +860,8 @@ static inline uint16_t CPU_swap_u16(uint16_t v)
 {
     return v << 8 | v >> 8;
 }
+
+/** @} */
 
 typedef uint32_t CPU_Counter_ticks;
 
