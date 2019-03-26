@@ -184,6 +184,24 @@ uint32_t fdt_get_max_phandle(const void *fdt)
 	return phandle;
 }
 
+int fdt_generate_phandle(const void *fdt, uint32_t *phandle)
+{
+	uint32_t max;
+	int err;
+
+	err = fdt_find_max_phandle(fdt, &max);
+	if (err < 0)
+		return err;
+
+	if (max == FDT_MAX_PHANDLE)
+		return -FDT_ERR_NOPHANDLES;
+
+	if (phandle)
+		*phandle = max + 1;
+
+	return 0;
+}
+
 static const struct fdt_reserve_entry *fdt_mem_rsv(const void *fdt, int n)
 {
 	int offset = n * sizeof(struct fdt_reserve_entry);
