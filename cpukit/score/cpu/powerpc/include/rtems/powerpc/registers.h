@@ -1,6 +1,8 @@
 /**
  * @file
  * 
+ * @addtogroup RTEMSScoreCPUPowerPC
+ * 
  * @brief PowerPc MSR and Registers Access Definitions
  * 
  * This file contains some powerpc MSR and registers access definitions.

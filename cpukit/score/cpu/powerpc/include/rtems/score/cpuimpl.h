@@ -22,6 +22,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUPowerPC PowerPC
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief PowerPC Architecture Support
+ *
+ * @{
+ */
+
 /* Exception stack frame -> BSP_Exception_frame */
 #ifdef __powerpc64__
   #define FRAME_LINK_SPACE 32
@@ -257,5 +267,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */

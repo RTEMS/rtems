@@ -1,6 +1,8 @@
 /**
  * @file
  * 
+ * @addtogroup RTEMSScoreCPUPowerPC
+ * 
  * @brief PowerPC CPU Department Source
  */
 

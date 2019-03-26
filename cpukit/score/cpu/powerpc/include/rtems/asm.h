@@ -42,6 +42,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/powerpc.h>
 
+/**
+ * @defgroup RTEMSScoreCPUPowerPCASM PowerPC Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUPowerPC
+ *
+ * @brief PowerPC Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -302,3 +312,5 @@ SYM (x):;				\
 #endif
 
 #endif
+
+/** @} */

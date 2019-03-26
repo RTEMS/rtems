@@ -25,9 +25,11 @@
 #define _RTEMS_SCORE_PARAVIRT_H
 
 /**
- * @defgroup ParavirtPowerPC Paravirtualization PowerPC Support
+ * @defgroup RTEMSScoreCPUPowerPCParavirt PowerPC Paravirtualization Support
  *
- * @ingroup Score
+ * @ingroup RTEMSScoreCPUPowerPC
+ * 
+ * @brief PowerPC Paravirtualization Support
  *
  * This handler encapulates the functionality (primarily conditional
  * feature defines) related to paravirtualization on the PowerPC.
