@@ -1,5 +1,7 @@
 /**
  * @file
+ * 
+ * @addtogroup RTEMSScoreCPUnios2
  *
  * @brief Altera Nios II CPU Department Source
  */
