@@ -41,6 +41,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/x86_64.h>
 
+/**
+ * @defgroup RTEMSScoreCPUx86-64ASM x86-64 Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUx86-64
+ *
+ * @brief x86-64 Assembler Support
+ *
+ * @{
+ */
+
 #ifndef __USER_LABEL_PREFIX__
 /**
  *  Recent versions of GNU cpp define variables which indicate the
@@ -142,3 +152,5 @@
 #define EXTERN(sym) .globl SYM (sym)
 
 #endif
+
+/** @} */
