@@ -17,6 +17,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUsh SuperH (sh)
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief SuperH (sh) Architecture Support
+ *
+ * @{
+ */
+
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #ifndef ASM

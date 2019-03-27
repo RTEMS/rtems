@@ -55,6 +55,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/sh.h>
 
+/**
+ * @defgroup RTEMSScoreCPUshASM SuperH (sh) Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUsh
+ *
+ * @brief SuperH (sh) Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
