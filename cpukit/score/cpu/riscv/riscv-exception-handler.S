@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @addtogroup RTEMSScoreCPURISCV
  *
  * @brief RISC-V exception support implementation.
  */

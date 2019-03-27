@@ -34,6 +34,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPURISCV RISC-V
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief RISCV Architecture Support
+ *
+ * @{
+ */
+
 #if defined(__riscv_atomic) && __riscv_xlen == 64
 #define CPU_PER_CPU_CONTROL_SIZE 48
 #elif defined(__riscv_atomic) && __riscv_xlen == 32
@@ -417,5 +427,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */

@@ -59,6 +59,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/riscv.h>
 
+/**
+ * @defgroup RTEMSScoreCPURISCVASM RISC-V Assembler Support
+ *
+ * @ingroup RTEMSScoreCPURISCV
+ *
+ * @brief RISC-V Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -192,3 +202,5 @@
 .endm
 
 #endif
+
+/** @} */
