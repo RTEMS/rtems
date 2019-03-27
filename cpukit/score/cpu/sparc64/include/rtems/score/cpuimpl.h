@@ -17,6 +17,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUSPARC64 SPARC64
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief SPARC64 Architecture Support
+ *
+ * @{
+ */
+
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #ifndef ASM

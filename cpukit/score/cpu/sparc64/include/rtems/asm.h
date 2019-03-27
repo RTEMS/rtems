@@ -40,6 +40,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUSPARC64ASM SPARC64 Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUSPARC64
+ *
+ * @brief SPARC64 Assembler Support
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -101,3 +111,5 @@
 #define EXTERN(sym) .globl SYM (sym)
 
 #endif
+
+/** @} */
