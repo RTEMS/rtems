@@ -39,6 +39,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/no_cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUV850ASM V850 Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUV850
+ *
+ * @brief V850 Assembler Support
+ *
+ * @{
+ */
+
 #ifndef __USER_LABEL_PREFIX__
 /**
  * Recent versions of GNU cpp define variables which indicate the
@@ -125,3 +135,5 @@
 #define EXTERN(sym) .globl SYM (sym)
 
 #endif
+
+/** @} */

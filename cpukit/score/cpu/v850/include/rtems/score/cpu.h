@@ -183,7 +183,7 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUV850CPUInterrupt
  * The following defines the number of bits actually used in the
  * interrupt field of the task mode.  How those bits map to the
  * CPU interrupt levels is defined by the routine @ref _CPU_ISR_Set_level.
@@ -197,7 +197,9 @@ extern "C" {
 #define CPU_MAXIMUM_PROCESSORS 32
 
 /**
- * @defgroup CPUContext Processor Dependent Context Management
+ * @defgroup RTEMSScoreCPUV850CPUContext Processor Dependent Context Management
+ * 
+ * @ingroup RTEMSScoreCPUV850
  *
  * From the highest level viewpoint, there are 2 types of context to save.
  *
@@ -238,7 +240,7 @@ extern "C" {
  * On the v850, this port saves special registers and those that are
  * callee saved.
  */
-/**@{**/
+/** @{ **/
 
 /**
  * This defines the minimal set of integer and processor state registers
@@ -295,15 +297,7 @@ typedef struct {
     uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
 
-/** @} */
-
 /**
- * @defgroup CPUInterrupt Processor Dependent Interrupt Management
- */
-/**@{**/
-
-/**
- * @ingroup CPUContext
  * The size of the floating point context area.  On some CPUs this
  * will not be a "sizeof" because the format of the floating point
  * area is not defined -- only the size is.  This is usually on
@@ -316,6 +310,15 @@ typedef struct {
  */
 /* #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp ) */
 #define CPU_CONTEXT_FP_SIZE 0
+
+/** @} */
+
+/**
+ * @defgroup RTEMSScoreCPUV850CPUInterrupt Processor Dependent Interrupt Management
+ * 
+ * @ingroup RTEMSScoreCPUV850
+ */
+/** @{ **/
 
 /**
  * Amount of extra stack (above minimum stack size) required by
@@ -338,7 +341,7 @@ typedef struct {
 /** @} */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUV850CPUContext
  * Should be large enough to run all RTEMS tests.  This ensures
  * that a "reasonable" small application should not have any problems.
  *
@@ -408,9 +411,9 @@ typedef struct {
  */
 
 /**
- * @addtogroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUV850CPUInterrupt
  */
-/**@{**/
+/** @{ **/
 
 /**
  * Disable all interrupts for an RTEMS critical section.  The previous
@@ -516,7 +519,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Context handler macros */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUV850CPUContext
  * Initialize the context to a state suitable for starting a
  * task after a context restore operation.  Generally, this
  * involves:
@@ -641,7 +644,7 @@ void _CPU_Initialize(void);
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
- * @addtogroup CPUContext
+ * @addtogroup RTEMSScoreCPUV850CPUContext
  */
 /**@{**/
 
@@ -724,7 +727,15 @@ typedef CPU_Interrupt_frame CPU_Exception_frame;
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 /**
- * @ingroup CPUEndian
+ * @defgroup RTEMSScoreCPUV850CPUEndian CPUEndian
+ * 
+ * @ingroup RTEMSScoreCPUV850
+ * 
+ * @brief CPUEndian
+ */
+/** @{ */
+
+/**
  * The following routine swaps the endian format of an unsigned int.
  * It must be static because it is referenced indirectly.
  *
@@ -776,7 +787,6 @@ static inline uint32_t CPU_swap_u32(
 }
 
 /**
- * @ingroup CPUEndian
  * This routine swaps a 16 bir quantity.
  *
  * @param[in] value is the value to be swapped
@@ -800,6 +810,8 @@ static inline uint16_t CPU_swap_u16( uint16_t value )
   #endif
   return swapped;
 }
+
+/** @} */
 
 typedef uint32_t CPU_Counter_ticks;
 
