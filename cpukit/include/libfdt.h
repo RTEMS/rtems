@@ -171,6 +171,16 @@ static inline uint32_t fdt32_ld(const fdt32_t *p)
 		| bp[3];
 }
 
+static inline void fdt32_st(void *property, uint32_t value)
+{
+	uint8_t *bp = property;
+
+	bp[0] = value >> 24;
+	bp[1] = (value >> 16) & 0xff;
+	bp[2] = (value >> 8) & 0xff;
+	bp[3] = value & 0xff;
+}
+
 static inline uint64_t fdt64_ld(const fdt64_t *p)
 {
 	const uint8_t *bp = (const uint8_t *)p;
@@ -183,6 +193,20 @@ static inline uint64_t fdt64_ld(const fdt64_t *p)
 		| ((uint64_t)bp[5] << 16)
 		| ((uint64_t)bp[6] << 8)
 		| bp[7];
+}
+
+static inline void fdt64_st(void *property, uint64_t value)
+{
+	uint8_t *bp = property;
+
+	bp[0] = value >> 56;
+	bp[1] = (value >> 48) & 0xff;
+	bp[2] = (value >> 40) & 0xff;
+	bp[3] = (value >> 32) & 0xff;
+	bp[4] = (value >> 24) & 0xff;
+	bp[5] = (value >> 16) & 0xff;
+	bp[6] = (value >> 8) & 0xff;
+	bp[7] = value & 0xff;
 }
 
 /**********************************************************************/
@@ -1830,6 +1854,43 @@ static inline int fdt_appendprop_cell(void *fdt, int nodeoffset,
  */
 #define fdt_appendprop_string(fdt, nodeoffset, name, str) \
 	fdt_appendprop((fdt), (nodeoffset), (name), (str), strlen(str)+1)
+
+/**
+ * fdt_appendprop_addrrange - append a address range property
+ * @fdt: pointer to the device tree blob
+ * @parent: offset of the parent node
+ * @nodeoffset: offset of the node to add a property at
+ * @name: name of property
+ * @addr: start address of a given range
+ * @size: size of a given range
+ *
+ * fdt_appendprop_addrrange() appends an address range value (start
+ * address and size) to the value of the named property in the given
+ * node, or creates a new property with that value if it does not
+ * already exist.
+ * If "name" is not specified, a default "reg" is used.
+ * Cell sizes are determined by parent's #address-cells and #size-cells.
+ *
+ * This function may insert data into the blob, and will therefore
+ * change the offsets of some existing nodes.
+ *
+ * returns:
+ *	0, on success
+ *	-FDT_ERR_BADLAYOUT,
+ *	-FDT_ERR_BADMAGIC,
+ *	-FDT_ERR_BADNCELLS, if the node has a badly formatted or invalid
+ *		#address-cells property
+ *	-FDT_ERR_BADOFFSET, nodeoffset did not point to FDT_BEGIN_NODE tag
+ *	-FDT_ERR_BADSTATE,
+ *	-FDT_ERR_BADSTRUCTURE,
+ *	-FDT_ERR_BADVERSION,
+ *	-FDT_ERR_BADVALUE, addr or size doesn't fit to respective cells size
+ *	-FDT_ERR_NOSPACE, there is insufficient free space in the blob to
+ *		contain a new property
+ *	-FDT_ERR_TRUNCATED, standard meanings
+ */
+int fdt_appendprop_addrrange(void *fdt, int parent, int nodeoffset,
+			     const char *name, uint64_t addr, uint64_t size);
 
 /**
  * fdt_delprop - delete a property
