@@ -1525,7 +1525,22 @@ lib_tests += ttest01
 lib_screens += ttest01/ttest01.scn
 lib_docs += ttest01/ttest01.doc
 ttest01_SOURCES = ttest01/init.c
+ttest01_SOURCES += ttest01/test-assert.c
+ttest01_SOURCES += ttest01/test-checks.c
+ttest01_SOURCES += ttest01/test-destructor.c
+ttest01_SOURCES += ttest01/test-eno.c
 ttest01_SOURCES += ttest01/test-example.c
+ttest01_SOURCES += ttest01/test-fixture.c
+ttest01_SOURCES += ttest01/test-leak.c
+ttest01_SOURCES += ttest01/test-log.c
+ttest01_SOURCES += ttest01/test-malloc.c
+ttest01_SOURCES += ttest01/test-plan.c
+ttest01_SOURCES += ttest01/test-psx.c
+ttest01_SOURCES += ttest01/test-rtems.c
+ttest01_SOURCES += ttest01/test-simple.c
+ttest01_SOURCES += ttest01/test-step.c
+ttest01_SOURCES += ttest01/test-time.c
+ttest01_SOURCES += ttest01/test-verbosity.c
 ttest01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ttest01) \
 	$(support_includes)
 endif

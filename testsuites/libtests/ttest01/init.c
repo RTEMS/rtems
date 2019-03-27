@@ -32,6 +32,8 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
+#include <rtems/timecounter.h>
+#include <rtems/sysinit.h>
 
 #include "t-self-test.h"
 
@@ -47,6 +49,7 @@ typedef struct {
 	const char *c;
 	size_t case_begin_count;
 	size_t case_end_count;
+	struct timecounter tc;
 } test_context;
 
 static test_context test_instance;
@@ -138,11 +141,44 @@ now(void)
 	return t * SBT_1MS;
 }
 
+static uint32_t
+get_timecount(struct timecounter *tc)
+{
+	return 0;
+}
+
+static void
+install_timecounter(void)
+{
+	test_context *ctx;
+
+	ctx = &test_instance;
+	ctx->tc.tc_get_timecount = get_timecount;
+	ctx->tc.tc_counter_mask = 0xffffffff;
+	ctx->tc.tc_frequency = 1000000000;
+	ctx->tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER + 1;
+	rtems_timecounter_install(&ctx->tc);
+}
+
+RTEMS_SYSINIT_ITEM(install_timecounter, RTEMS_SYSINIT_DEVICE_DRIVERS,
+    RTEMS_SYSINIT_ORDER_FIRST);
+
 static char buffer[512];
 
 static const T_action actions[] = {
 	T_report_hash_sha256,
-	test_action
+	test_action,
+	T_check_file_descriptors,
+	T_check_rtems_barriers,
+	T_check_rtems_extensions,
+	T_check_rtems_message_queues,
+	T_check_rtems_partitions,
+	T_check_rtems_periods,
+	T_check_rtems_regions,
+	T_check_rtems_semaphores,
+	T_check_rtems_tasks,
+	T_check_rtems_timers,
+	T_check_posix_keys
 };
 
 static const T_config config = {
@@ -180,9 +216,21 @@ Init(rtems_task_argument arg)
 	rtems_test_exit(0);
 }
 
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+
+#define CONFIGURE_MAXIMUM_BARRIERS 1
+#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+#define CONFIGURE_MAXIMUM_PARTITIONS 1
+#define CONFIGURE_MAXIMUM_PERIODS 1
+#define CONFIGURE_MAXIMUM_REGIONS 1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
+#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TIMERS 1
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
