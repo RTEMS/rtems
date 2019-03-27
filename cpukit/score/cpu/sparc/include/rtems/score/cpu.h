@@ -277,9 +277,9 @@ typedef struct {
 #define CPU_MAXIMUM_PROCESSORS 32
 
 /**
- * @defgroup Contexts SPARC Context Structures
+ * @defgroup RTEMSScoreCPUSPARCContext SPARC Context Structures
  *
- * @ingroup Score
+ * @ingroup RTEMSScoreCPUSPARC
  *
  * Generally there are 2 types of context to save.
  *    + Interrupt registers to save

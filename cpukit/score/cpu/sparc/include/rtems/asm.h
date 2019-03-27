@@ -37,6 +37,16 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUSPARCASM SPARC Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUSPARC
+ *
+ * @brief SPARC Assembler Support 
+ *
+ * @{
+ */
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -118,3 +128,5 @@
   mov   _vector, %l3
 
 #endif
+
+/** @} */

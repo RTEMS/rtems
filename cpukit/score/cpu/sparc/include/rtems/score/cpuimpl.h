@@ -18,6 +18,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUSPARC SPARC
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief SPARC Architecture Support
+ *
+ * @{
+ */
+
 /** This defines the size of the minimum stack frame. */
 #define SPARC_MINIMUM_STACK_FRAME_SIZE 0x60
 
@@ -165,5 +175,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */
