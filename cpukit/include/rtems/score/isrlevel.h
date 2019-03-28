@@ -27,13 +27,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreISR ISR Handler
- *
- *  @ingroup Score
- *
  *  @addtogroup ScoreISR ISR Handler
  */
-/**@{*/
+/** @{ */
 
 /**
  *  The following type defines the control block used to manage
@@ -145,7 +141,7 @@ typedef uint32_t   ISR_Level;
     RTEMS_COMPILER_MEMORY_BARRIER();  \
   } while (0)
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }

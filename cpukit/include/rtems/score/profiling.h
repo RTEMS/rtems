@@ -32,6 +32,8 @@ extern "C" {
 
 /**
  * @defgroup ScoreProfiling Profiling Support
+ * 
+ * @ingroup Score
  *
  * @brief Profiling support.
  *

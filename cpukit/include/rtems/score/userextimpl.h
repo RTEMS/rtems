@@ -29,13 +29,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreUserExt User Extension Handler
- *
- * @ingroup Score
- *
  * @addtogroup ScoreUserExt
  */
-/**@{**/
+/** @{ **/
 
 /**
  * @brief Chain iterator for dynamic user extensions.
@@ -82,7 +78,7 @@ extern Chain_Control _User_extensions_Switches_list;
 /**
  * @name Extension Maintainance
  */
-/**@{**/
+/** @{ **/
 
 void _User_extensions_Handler_initialization( void );
 
@@ -200,7 +196,7 @@ void _User_extensions_Iterate(
 /**
  * @name Extension Callout Dispatcher
  */
-/**@{**/
+/** @{ **/
 
 static inline bool _User_extensions_Thread_create( Thread_Control *created )
 {

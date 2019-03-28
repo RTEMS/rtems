@@ -29,9 +29,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreSMP SMP Support
- *
- * @ingroup Score
+ * @addtogroup ScoreSMP
  *
  * This defines the interface of the SuperCore SMP support.
  *

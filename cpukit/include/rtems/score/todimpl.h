@@ -118,9 +118,7 @@ extern "C" {
 #define TOD_BASE_YEAR 1988
 
 /**
- *  @defgroup ScoreTOD Time Of Day (TOD) Handler
- *
- *  @ingroup Score
+ *  @addtogroup ScoreTOD
  *
  *  This handler encapsulates functionality used to manage time of day.
  */

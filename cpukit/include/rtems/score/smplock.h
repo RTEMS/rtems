@@ -22,21 +22,6 @@
 
 #include <rtems/score/cpuopts.h>
 
-#if defined(RTEMS_SMP)
-
-#include <rtems/score/smplockstats.h>
-#include <rtems/score/smplockticket.h>
-#include <rtems/score/isrlevel.h>
-
-#if defined(RTEMS_DEBUG)
-#include <rtems/score/assert.h>
-#include <rtems/score/smp.h>
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 /**
  * @defgroup ScoreSMPLock SMP Locks
  *
@@ -54,6 +39,21 @@ extern "C" {
  *
  * @{
  */
+
+#if defined(RTEMS_SMP)
+
+#include <rtems/score/smplockstats.h>
+#include <rtems/score/smplockticket.h>
+#include <rtems/score/isrlevel.h>
+
+#if defined(RTEMS_DEBUG)
+#include <rtems/score/assert.h>
+#include <rtems/score/smp.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #if defined(RTEMS_DEBUG) || defined(RTEMS_PROFILING)
 #define RTEMS_SMP_LOCK_DO_NOT_INLINE
@@ -316,7 +316,7 @@ void _SMP_lock_Release_and_ISR_enable(
 bool _SMP_lock_Is_owner( const SMP_lock_Control *lock );
 #endif
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
