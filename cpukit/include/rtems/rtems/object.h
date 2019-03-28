@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicClassInfo
+ * @ingroup ClassicClassInfo
  *
  * This include file defines Classic API interfaces to Object Services.
  */
@@ -29,7 +29,7 @@ extern "C" {
 /**
  *  @defgroup ClassicClassInfo Object Class Information
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API Object
  *  Class Services.

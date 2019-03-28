@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicCache Cache
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief The Cache Manager provides functions to perform maintenance
  * operations for data and instruction caches.

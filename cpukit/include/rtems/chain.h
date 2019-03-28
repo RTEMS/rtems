@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicChains Chains
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief Chain API
  */

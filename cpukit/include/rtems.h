@@ -1,9 +1,7 @@
 /**
  * @file
- *
- * @defgroup ClassicRTEMS RTEMS Classic API
- *
- * @brief RTEMS Classic API
+ * 
+ * @ingroup RTEMSAPIClassic
  *
  * the Public Interface to the RTEMS Classic API
  */
@@ -20,11 +18,13 @@
 #define _RTEMS_H
 
 /**
- * @defgroup ClassicRTEMS RTEMS Classic API
+ * @defgroup RTEMSAPIClassic Classic
  *
- * RTEMS Classic API definitions and modules.
+ * @ingroup RTEMSAPI
+ * 
+ * @brief RTEMS Classic API definitions and modules.
  */
-/**@{*/
+/** @{ */
 
 #include <rtems/system.h>
 #include <rtems/rtems/status.h>
@@ -187,7 +187,7 @@ const char *rtems_get_version_string(void);
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */

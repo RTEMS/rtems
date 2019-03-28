@@ -29,7 +29,7 @@ extern "C" {
 /**
  *  @defgroup ClassicTasks Tasks
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates the functionality of the Classic API Task Manager.
  *  This functionality includes task services such as creation, deletion,

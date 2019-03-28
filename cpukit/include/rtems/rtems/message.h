@@ -29,7 +29,7 @@ extern "C" {
 /**
  *  @defgroup ClassicMessageQueue Message Queues
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API Message Queue
  *  Manager.

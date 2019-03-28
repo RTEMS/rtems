@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicAttributes
+ * @ingroup ClassicAttributes
  *
  * This include file contains all information about the Object Attributes
  * Handler.
@@ -27,7 +27,7 @@ extern "C" {
 /**
  *  @defgroup ClassicAttributes Attributes
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality which defines and manages the
  *  set of Classic API object attributes.

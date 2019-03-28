@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup ClassicCounter Free-Running Counter and Busy Wait Delay
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief Free-running counter and busy wait delay functions.
  *

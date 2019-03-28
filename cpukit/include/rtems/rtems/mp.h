@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicMP
+ * @ingroup ClassicMP
  *
  * This include file contains all the constants and structures associated
  * with the Multiprocessing Manager.
@@ -21,7 +21,7 @@
 /**
  *  @defgroup ClassicMP Multiprocessing
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the distributed
  *  Multiprocessing support in the Classic API.

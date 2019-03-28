@@ -29,7 +29,7 @@ extern "C" {
 /**
  * @defgroup ClassicRBTrees Red-Black Trees
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief A Red-Black Tree container.
  *

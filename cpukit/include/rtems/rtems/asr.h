@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicASR
+ * @ingroup ClassicASR
  *
  * This include file contains all the constants and structures associated
  * with the Asynchronous Signal Handler. This Handler provides the low-level
@@ -28,7 +28,7 @@ extern "C" {
 /**
  *  @defgroup ClassicASR ASR Support
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API Signal
  *  Manager.

@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup ClassicRateMonImpl Classic Rate Monotonic Scheduler Implementation
  *
- * @ingroup ClassicRateMon
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

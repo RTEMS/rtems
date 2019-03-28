@@ -30,7 +30,7 @@ extern "C" {
 /**
  *  @defgroup ClassicSem Semaphores
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API
  *  Semaphore Manager.

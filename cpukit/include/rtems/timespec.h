@@ -27,7 +27,7 @@ extern "C" {
 /**
  *  @defgroup TimespecAPI Timespec
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  @brief Timespec API
  * 

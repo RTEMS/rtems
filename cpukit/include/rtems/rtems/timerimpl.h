@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup ClassicTimerImpl Classic Timer Implementation
  *
- * @ingroup ClassicTimer
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

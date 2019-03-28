@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicStatus
+ * @ingroup ClassicStatus
  *
  * This include file contains the status codes returned from the
  * executive directives.
@@ -27,7 +27,7 @@ extern "C" {
 /**
  *  @defgroup ClassicStatus Status Codes
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the status codes returned
  *  by Classic API directives.

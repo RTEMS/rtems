@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicModesImpl Classic Modes Implementation
  *
- * @ingroup ClassicModes
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

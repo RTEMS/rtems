@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- * @addtogroup ClassicINTR
+ * @ingroup ClassicINTR
  *
  * This include file contains all the constants and structures associated with
  * the Interrupt Manager.
@@ -29,7 +29,7 @@ extern "C" {
 /**
  *  @defgroup ClassicINTR Interrupts
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API Interrupt
  *  Manager.

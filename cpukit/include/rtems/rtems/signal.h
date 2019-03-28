@@ -29,7 +29,7 @@ extern "C" {
 /**
  * @defgroup ClassicSignal Signals
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * Directives provided are:
  *

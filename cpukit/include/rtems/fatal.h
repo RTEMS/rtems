@@ -26,7 +26,7 @@ extern "C" {
 /**
  * @defgroup ClassicFatal Fatal
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief The Fatal Manager provides functions for fatal system states and or
  * irrecoverable errors.

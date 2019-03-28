@@ -32,7 +32,7 @@ extern "C" {
 /**
  *  @defgroup ClassicTimer Timers
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API Timer
  *  Manager.  This manager provides functionality which allows the

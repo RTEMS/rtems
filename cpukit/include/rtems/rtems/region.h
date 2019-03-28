@@ -29,7 +29,7 @@ extern "C" {
 /**
  *  @defgroup ClassicRegion Regions
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the Classic API Region
  *  Manager.

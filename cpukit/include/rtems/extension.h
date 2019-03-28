@@ -32,7 +32,7 @@ typedef User_extensions_routine
 /**
  * @defgroup ClassicUserExtensions User Extensions
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief The User Extensions Manager allows the application developer to
  * augment the executive by allowing them to supply extension routines which

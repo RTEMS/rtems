@@ -30,7 +30,7 @@ extern "C" {
 /**
  * @defgroup ClassicRegionImpl Classic Region Manager Implementation
  *
- * @ingroup ClassicRegion
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

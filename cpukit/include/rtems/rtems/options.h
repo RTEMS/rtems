@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicOptions
+ * @ingroup ClassicOptions
  *
  * This include file contains information which defines the
  * options available on many directives.
@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicOptions Classic API Options
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * This encapsulates functionality related to the options argument
  * to Classic API blocking operations. The primary option is whether

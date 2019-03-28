@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicBarrier Barriers
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * This encapsulates functionality which implements the Classic API
  * Barrier Manager.

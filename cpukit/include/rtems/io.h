@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicIO Input/Output
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  */
 /**@{**/

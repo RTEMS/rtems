@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicConfig
+ * @ingroup ClassicConfig
  *
  * This include file contains the table of user defined configuration
  * parameters specific for the RTEMS API.
@@ -28,7 +28,7 @@ extern "C" {
 /**
  *  @defgroup ClassicConfig Configuration
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the application's configuration
  *  of the Classic API including the maximum number of each class of objects.

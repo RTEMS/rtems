@@ -923,7 +923,7 @@
  /**
   * @defgroup LocalPackages Local Packages
   * 
-  * @ingroup ClassicRTEMS
+  * @ingroup RTEMSAPIClassic
   *
   * @brief Local packages.
   */

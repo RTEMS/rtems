@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup RBHeap Red-Black Tree Heap
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * @brief Red-Black Tree Heap API.
  *

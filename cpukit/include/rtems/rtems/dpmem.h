@@ -27,7 +27,7 @@ extern "C" {
 /**
  *  @defgroup ClassicDPMEM Dual Ported Memory
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the
  *  Classic API Dual Ported Memory Manager.

@@ -26,7 +26,7 @@ extern "C" {
 /**
  * @defgroup ClassicOptionsImpl Classic Options Implementation
  *
- * @ingroup ClassicOptions
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

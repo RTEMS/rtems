@@ -3,7 +3,8 @@
  *
  * @defgroup ClassicTypes Types
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
+ * 
  * @brief Types used by Classic API.
  */
 
@@ -39,7 +40,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicRTEMS
+ * @addtogroup ClassicTasks
  */
 /**@{**/
 

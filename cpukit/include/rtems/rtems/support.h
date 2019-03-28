@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicRTEMSWorkspace
+ * @ingroup ClassicRTEMSWorkspace
  */
 
 /* COPYRIGHT (c) 1989-2008.
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicRTEMS
+ * @addtogroup ClassicTasks
  */
 /**@{**/
 
@@ -78,7 +78,7 @@ RTEMS_INLINE_ROUTINE void rtems_name_to_characters(
 /**
  * @defgroup ClassicRTEMSWorkspace Workspace
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * Workspace definitions.
  */

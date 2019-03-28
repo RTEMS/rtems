@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicEventImpl Classic Event Implementation
  *
- * @ingroup ClassicEvent
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

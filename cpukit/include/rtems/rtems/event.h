@@ -114,7 +114,7 @@ typedef uint32_t   rtems_event_set;
 /**
  *  @defgroup ClassicEvent Events
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  @brief The event manager provides a high performance method of intertask
  *  communication and synchronization.

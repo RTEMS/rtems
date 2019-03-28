@@ -28,7 +28,7 @@ extern "C" {
 /**
  *  @defgroup ClassicPart Partitions
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the
  *  Classic API Partition Manager.

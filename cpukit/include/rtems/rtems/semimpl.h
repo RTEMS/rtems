@@ -29,7 +29,7 @@ extern "C" {
 /**
  * @defgroup ClassicSemImpl Semaphore Manager Implementation
  *
- * @ingroup ClassicSem
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

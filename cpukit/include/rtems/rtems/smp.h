@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicSMP SMP Services
  *
- * @ingroup ClassicRTEMS
+ * @ingroup RTEMSAPIClassic
  *
  * This encapsulates functionality which is useful for SMP applications.
  *

@@ -29,7 +29,7 @@ extern "C" {
 /**
  * @defgroup ClassicPartImpl Classic Partition Manager Implementation
  *
- * @ingroup ClassicPart
+ * @ingroup RTEMSInternalClassic
  *
  * @{
  */

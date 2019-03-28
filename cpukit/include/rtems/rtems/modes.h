@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @addtogroup ClassicModes
+ * @ingroup ClassicModes
  *
  * This include file contains all constants and structures associated
  * with the RTEMS thread and RTEMS_ASR modes.
@@ -27,7 +27,7 @@ extern "C" {
 /**
  *  @defgroup ClassicModes Modes
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup RTEMSAPIClassic
  *
  *  This encapsulates functionality related to the task modes supported
  *  by the Classic API Task Manager.
