@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicConfig Configuration
+ *  @defgroup PosixConfig Configuration
  *
- *  @ingroup ClassicRTEMS
+ *  @ingroup POSIXAPI
  *
  *  This encapsulates functionality related to the application's configuration
  *  of the Classic API including the maximum number of each class of objects.
