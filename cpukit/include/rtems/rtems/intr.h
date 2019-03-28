@@ -1,10 +1,7 @@
 /**
  *  @file
  *
- * @defgroup ClassicINTR Interrupts
- *
- * @ingroup ClassicRTEMS
- * @brief Header file for Interrupt Manager
+ * @addtogroup ClassicINTR
  *
  * This include file contains all the constants and structures associated with
  * the Interrupt Manager.

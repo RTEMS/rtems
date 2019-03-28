@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicAttributes Attributes
- *
- * @ingroup ClassicRTEMS
- * @brief Object Attributes Handler
+ * @addtogroup ClassicAttributes
  *
  * This include file contains all information about the Object Attributes
  * Handler.

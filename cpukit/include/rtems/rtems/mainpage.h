@@ -922,6 +922,8 @@
 
  /**
   * @defgroup LocalPackages Local Packages
+  * 
+  * @ingroup ClassicRTEMS
   *
   * @brief Local packages.
   */

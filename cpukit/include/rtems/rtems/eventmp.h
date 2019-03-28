@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicEventMP Event MP Support
- *
- * @ingroup ClassicRTEMS
- * @brief Event Manager MP Support
+ * @addtogroup ClassicEventMP
  *
  * This include file contains all the constants and structures associated
  * with the Multiprocessing Support in the Event Manager.

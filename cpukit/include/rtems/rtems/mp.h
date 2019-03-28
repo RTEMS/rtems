@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicMP Multiprocessing
- *
- * @ingroup ClassicRTEMS
- * @brief Multiprocessing Manager
+ * @addtogroup ClassicMP
  *
  * This include file contains all the constants and structures associated
  * with the Multiprocessing Manager.

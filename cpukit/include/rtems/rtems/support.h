@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicRTEMSWorkspace Workspace
- *
- * @ingroup ClassicRTEMS
- * @brief Classic API support.
+ * @addtogroup ClassicRTEMSWorkspace
  */
 
 /* COPYRIGHT (c) 1989-2008.

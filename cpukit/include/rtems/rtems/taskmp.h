@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicTaskMP Task MP Support
- *
- * @ingroup ClassicRTEMS
- * @brief Task Manager MP Support
+ * @addtogroup ClassicTaskMP
  *
  * This include file contains all the constants and structures associated
  * with the multiprocessing support in the task manager.

@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicClassInfo Object Class Information
- *
- * @ingroup ClassicRTEMS
- * @brief Classic API interfaces to Object Services
+ * @addtogroup ClassicClassInfo
  *
  * This include file defines Classic API interfaces to Object Services.
  */

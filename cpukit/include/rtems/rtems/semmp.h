@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicSEM Semaphore MP Support
- *
- * @ingroup ClassicRTEMS
- * @brief Semaphore Manager MP Support
+ * @addtogroup ClassicSEM
  *
  * This include file contains all the constants and structures associated
  * with the Multiprocessing Support in the Semaphore Manager.

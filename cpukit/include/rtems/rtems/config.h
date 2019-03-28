@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicConfig Configuration
- *
- * @ingroup ClassicRTEMS
- * @brief Configuration Table
+ * @addtogroup ClassicConfig
  *
  * This include file contains the table of user defined configuration
  * parameters specific for the RTEMS API.

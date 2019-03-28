@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicOptions Classic API Options
- *
- * @ingroup ClassicRTEMS
- * @brief Options Available on Many Directives
+ * @addtogroup ClassicOptions
  *
  * This include file contains information which defines the
  * options available on many directives.

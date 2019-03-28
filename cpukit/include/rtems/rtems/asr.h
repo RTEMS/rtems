@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicASR ASR Support
- *
- * @ingroup ClassicRTEMS
- * @brief Asynchronous Signal Handler
+ * @addtogroup ClassicASR
  *
  * This include file contains all the constants and structures associated
  * with the Asynchronous Signal Handler. This Handler provides the low-level

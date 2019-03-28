@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicStatus Status Codes
- *
- * @ingroup ClassicRTEMS
- * @brief Status Codes Returned from Executive Directives
+ * @addtogroup ClassicStatus
  *
  * This include file contains the status codes returned from the
  * executive directives.

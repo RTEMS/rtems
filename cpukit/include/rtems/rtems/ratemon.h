@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicRateMon Rate Monotonic Scheduler
- *
- * @ingroup ClassicRTEMS
- * @brief Classic API Rate Monotonic Manager.
+ * @addtogroup ClassicRateMon
  *
  * This include file contains all the constants, structures, and
  * prototypes associated with the Rate Monotonic Manager. This manager

@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicModes Modes
- *
- * @ingroup ClassicRTEMS
- * @brief RTEMS thread and RTEMS_ASR modes
+ * @addtogroup ClassicModes
  *
  * This include file contains all constants and structures associated
  * with the RTEMS thread and RTEMS_ASR modes.

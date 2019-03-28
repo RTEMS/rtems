@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @defgroup ClassicClock Clocks
- *
- * @ingroup ClassicRTEMS
- * @brief Clock Manager API
+ * @addtogroup ClassicClock
  *
  * This include file contains all the constants and structures associated
  * with the Clock Manager. This manager provides facilities to set, obtain,
