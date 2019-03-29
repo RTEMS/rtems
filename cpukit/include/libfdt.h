@@ -418,7 +418,17 @@ int fdt_find_max_phandle(const void *fdt, uint32_t *phandle);
  *      0, if no phandle was found in the device tree
  *      -1, if an error occurred
  */
-uint32_t fdt_get_max_phandle(const void *fdt);
+static inline uint32_t fdt_get_max_phandle(const void *fdt)
+{
+	uint32_t phandle;
+	int err;
+
+	err = fdt_find_max_phandle(fdt, &phandle);
+	if (err < 0)
+		return (uint32_t)-1;
+
+	return phandle;
+}
 
 /**
  * fdt_generate_phandle - return a new, unused phandle for a device tree blob

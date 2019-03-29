@@ -172,18 +172,6 @@ int fdt_find_max_phandle(const void *fdt, uint32_t *phandle)
 	return 0;
 }
 
-uint32_t fdt_get_max_phandle(const void *fdt)
-{
-	uint32_t phandle;
-	int err;
-
-	err = fdt_find_max_phandle(fdt, &phandle);
-	if (err < 0)
-		return (uint32_t)-1;
-
-	return phandle;
-}
-
 int fdt_generate_phandle(const void *fdt, uint32_t *phandle)
 {
 	uint32_t max;
