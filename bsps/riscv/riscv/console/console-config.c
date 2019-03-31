@@ -161,17 +161,28 @@ static void riscv_console_probe(void)
       ns16550_context *ctx;
       fdt32_t *val;
       int len;
+      int reg_shift;
 
       ctx = &ns16550_instances[ns16550_devices];
       ctx->initial_baud = BSP_CONSOLE_BAUD;
 
-      if (RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "ns16750")) {
-        ctx->has_precision_clock_synthesizer = true;
+      /* Get register shift property of the UART device */
+      val = (fdt32_t *) fdt_getprop(fdt, node, "reg-shift", &len);
+
+      if (val) {
+        reg_shift = fdt32_to_cpu(val[0]);
+      }
+
+      if (reg_shift == 2) {
         ctx->get_reg = riscv_console_get_reg_32;
         ctx->set_reg = riscv_console_set_reg_32;
       } else {
         ctx->get_reg = riscv_console_get_reg_8;
         ctx->set_reg = riscv_console_set_reg_8;
+      }
+
+      if (RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "ns16750")) {
+        ctx->has_precision_clock_synthesizer = true;
       }
 
       ctx->port = (uintptr_t) riscv_fdt_get_address(fdt, node);
