@@ -29,7 +29,7 @@
 /**
  *  @defgroup libfs_ff Fat File
  *
- *  @ingroup libfs
+ *  @ingroup libfs_dosfs
  */
 /**@{*/
 

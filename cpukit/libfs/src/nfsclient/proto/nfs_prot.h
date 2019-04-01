@@ -11,7 +11,7 @@
 /**
  *  @defgroup libfs_nfsclient_nfs_prot NFS Prot
  *
- *  @ingroup libfs
+ *  @ingroup nfsclient
  */
 /**@{*/
 #ifdef __cplusplus

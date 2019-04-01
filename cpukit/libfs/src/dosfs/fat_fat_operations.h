@@ -29,7 +29,7 @@
 /**
  *  @defgroup libfs_ffo Fat Fat Operations
  *
- *  @ingroup libfs
+ *  @ingroup libfs_dosfs
  */
 /**@{*/
 #ifdef __cplusplus

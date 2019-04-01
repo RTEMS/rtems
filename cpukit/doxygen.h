@@ -17,3 +17,19 @@
  *
  * @brief API
  */
+
+/**
+ * @defgroup libfs libfs
+ * 
+ * @ingroup FileSystemTypesAndMount
+ * 
+ * @brief libfs
+ */
+
+/**
+ * @defgroup nfsclient nfs Client
+ * 
+ * @ingroup FileSystemTypesAndMount
+ * 
+ * @brief nfs Client
+ */
