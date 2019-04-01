@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPUARMCP15
+ * @ingroup RTEMSScoreCPUARMCP15
  *
  * @brief ARM co-processor 15 (CP15) API.
  */
@@ -45,9 +45,9 @@ extern "C" {
   ((const void *) (((uint32_t) (mva)) & ~0x3fU))
 
 /**
- * @defgroup ScoreCPUARMCP15 ARM Co-Processor 15 Support
+ * @defgroup RTEMSScoreCPUARMCP15 ARM Co-Processor 15 Support
  *
- * @ingroup ScoreCPUARM
+ * @ingroup RTEMSScoreCPUARM
  *
  * @brief ARM co-processor 15 (CP15) support.
  *
