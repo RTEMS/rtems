@@ -25,14 +25,18 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdog.h>
 
+/**
+ * @defgroup ScoreRWLock ScoreRWLock
+ * 
+ * @ingroup Score
+ * 
+ * @brief ScoreRWLock
+ */
+/** @{ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @addtogroup ScoreRWLock
- */
-/**@{**/
 
 #define CORE_RWLOCK_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
