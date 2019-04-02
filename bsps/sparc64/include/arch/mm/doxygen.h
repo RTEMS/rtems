@@ -5,3 +5,11 @@
  * 
  * @brief MM
  */
+
+/**
+ * @defgroup RTEMSBSPsSPARC64Generic Generic
+ *
+ * @ingroup RTEMSBSPsSPARC64
+ *
+ * @brief Generic
+ */
