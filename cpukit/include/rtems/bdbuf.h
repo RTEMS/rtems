@@ -2,6 +2,7 @@
  * @file
  *
  * @ingroup rtems_bdbuf
+ *
  * @brief Block Device Buffer Management
  */
 
@@ -34,7 +35,9 @@ extern "C" {
 /**
  * @defgroup rtems_libblock Block Device Library
  *
- * Block device modules.
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief Block device modules.
  */
 
 /**

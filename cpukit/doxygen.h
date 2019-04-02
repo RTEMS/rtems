@@ -19,6 +19,12 @@
  */
 
 /**
+ * @defgroup RTEMSDeviceDrivers Device Drivers
+ *
+ * @brief Device Drivers
+ */
+
+/**
  * @defgroup libfs libfs
  * 
  * @ingroup FileSystemTypesAndMount
