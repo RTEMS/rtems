@@ -40,6 +40,8 @@ typedef struct spi_bus spi_bus;
 /**
  * @defgroup SPI Serial Peripheral Interface (SPI) Driver
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  * @brief Serial Peripheral Interface (SPI) bus driver support.
  *
  * @{
