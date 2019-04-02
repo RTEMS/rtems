@@ -26,7 +26,7 @@
 /**
  *  @defgroup libmisc_devnull Null Device Driver
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSDeviceDrivers
  */
 /**@{*/
 
