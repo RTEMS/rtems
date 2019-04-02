@@ -31,7 +31,7 @@ typedef struct rtems_printer rtems_printer;
 /**
  * @defgroup RTEMSPrintSupport RTEMS Print Support
  *
- * @ingroup LibIO
+ * @ingroup RTEMSAPIPrintSupport
  *
  * This module contains all methods and support related to providing the user
  * with an interface to the kernel level print support.

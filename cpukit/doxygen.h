@@ -19,6 +19,22 @@
  */
 
 /**
+ * @defgroup RTEMSAPIIO IO
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief IO
+ */
+
+/**
+ * @defgroup RTEMSAPIPrintSupport Print Support
+ *
+ * @ingroup RTEMSAPIIO
+ *
+ * @brief Print Support
+ */
+
+/**
  * @defgroup RTEMSDeviceDrivers Device Drivers
  *
  * @brief Device Drivers
