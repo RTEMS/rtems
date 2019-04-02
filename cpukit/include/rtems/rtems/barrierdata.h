@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup XXX
+ * @addtogroup ClassicBarrierImpl
  *
  * @{
  */
