@@ -307,6 +307,14 @@ extern "C" {
 /** @} */
 
 /**
+ * @defgroup Management Management
+ *
+ * @ingroup RTEMSScoreCPUExample
+ *
+ * @brief Management
+ */
+
+/**
  * @addtogroup Management
  * This defines the minimal set of integer and processor state registers
  * that must be saved during a voluntary context switch from one thread
