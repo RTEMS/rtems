@@ -28,7 +28,7 @@ extern "C" {
 /**
  *  @defgroup shared_tod RTC
  *
- *  @ingroup bsp_shared
+ *  @ingroup RTEMSBSPsShared
  *
  *  @brief Set the RTC
  */
