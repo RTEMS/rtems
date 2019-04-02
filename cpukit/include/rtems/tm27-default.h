@@ -20,9 +20,9 @@
 #define __tm27_h
 
 /**
- *  @defgroup shared_tm27 Time Test 27
+ *  @defgroup shared_tm27 Time Test 27 Default
  *
- *  @ingroup shared_include
+ *  @ingroup RTEMSTimeTest27Support
  *
  *  @brief Stuff for Time Test 27
  */

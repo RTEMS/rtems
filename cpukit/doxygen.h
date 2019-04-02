@@ -33,6 +33,14 @@
  */
 
 /**
+ * @defgroup RTEMSTimeTest27Support Time Test 27 Support
+ *
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief Time Test 27 Support
+ */
+
+/**
  * @defgroup libfs libfs
  * 
  * @ingroup FileSystemTypesAndMount
