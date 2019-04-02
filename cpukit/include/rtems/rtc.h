@@ -27,6 +27,8 @@ extern "C" {
 /**
  * @defgroup rtems_rtc Real-Time Clock Driver Interface
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  * This driver interface provides support to read and set the real-time clock
  * and to initialize the time of day for the system.
  */
