@@ -25,6 +25,14 @@
  */
 
 /**
+ * @defgroup RTEMSLegacyBenchmarkDrivers Legacy Benchmark Drivers
+ *
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief Legacy Benchmark Drivers
+ */
+
+/**
  * @defgroup libfs libfs
  * 
  * @ingroup FileSystemTypesAndMount

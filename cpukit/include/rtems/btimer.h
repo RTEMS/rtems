@@ -36,6 +36,8 @@ extern "C" {
 /**
  * @defgroup BenchmarkTimer Benchmark Timer Driver Interface
  *
+ * @ingroup RTEMSLegacyBenchmarkDrivers
+ *
  * This module defines the interface for the Benchmark Timer Driver.
  *
  * The following methods in this module must be provided by each BSP:
