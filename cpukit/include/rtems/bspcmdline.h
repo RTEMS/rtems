@@ -1,9 +1,6 @@
 /**
  * @file
  *
- * @defgroup BSPCommandLine BSP Command Line Helpers
- *
- * @ingroup libmisc
  * @brief BSP Command Line Handler
  *
  * This include file contains all prototypes and specifications
@@ -27,6 +24,8 @@
 
 /**
  * @defgroup BSPCommandLine BSP Command Line Helpers
+ *
+ * @ingroup libmisc
  *
  * The BSP Command Line Handler provides a set of routines which assist
  * in examining and decoding the Command Line String passed to the BSP

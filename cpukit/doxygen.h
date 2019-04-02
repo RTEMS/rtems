@@ -39,3 +39,20 @@
  * 
  * @brief nfs Client
  */
+
+/**
+ * @defgroup libmisc libmisc
+ *
+ * @ingroup TODO
+ *
+ * @brief libmisc
+ */
+
+/**
+ * @defgroup libmisc_mouse Serial Mouse
+ *
+ * @ingroup libmisc
+ *
+ * @brief Serial Mouse
+ */
+
