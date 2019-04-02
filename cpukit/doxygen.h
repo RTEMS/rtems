@@ -67,7 +67,7 @@
 /**
  * @defgroup libmisc_mouse Serial Mouse
  *
- * @ingroup libmisc
+ * @ingroup RTEMSDeviceDrivers
  *
  * @brief Serial Mouse
  */
