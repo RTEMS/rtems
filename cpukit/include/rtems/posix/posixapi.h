@@ -30,6 +30,8 @@
 /**
  * @defgroup POSIXAPI RTEMS POSIX API
  *
+ * @ingroup RTEMSInternal
+ *
  * RTEMS POSIX API definitions and modules.
  *
  */
