@@ -48,6 +48,8 @@ typedef struct i2c_rdwr_ioctl_data i2c_rdwr_ioctl_data;
 /**
  * @defgroup I2C Inter-Integrated Circuit (I2C) Driver
  *
+ * @ingroup RTEMSDeviceDrivers
+ *
  * @brief Inter-Integrated Circuit (I2C) bus and device driver support.
  *
  * @{
