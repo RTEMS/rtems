@@ -8,7 +8,7 @@
  * updated if it has changed. The key may indicate there are local
  * modification.
  *
- * @ingroup ClassicVersion
+ * @ingroup RTEMSAPIClassicVersion
  */
 
 /*

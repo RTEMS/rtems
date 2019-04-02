@@ -42,6 +42,8 @@ extern "C" {
 /**
  * @defgroup RTEMSRecord Event Recording
  *
+ * @ingroup RTEMSAPIClassic
+ *
  * @brief Low-level event recording support.
  *
  * @{

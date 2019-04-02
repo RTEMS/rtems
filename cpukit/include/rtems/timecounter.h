@@ -33,6 +33,8 @@ extern "C" {
 /**
  * @defgroup SAPITimecounter Timecounter Support
  *
+ * @ingroup RTEMSAPIClassic
+ *
  * @{
  */
 

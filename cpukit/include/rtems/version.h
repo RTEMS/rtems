@@ -21,9 +21,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicVersion Version
+ * @defgroup RTEMSAPIClassicVersion Version
  *
- * @ingroup ClassicVersion
+ * @ingroup RTEMSAPIClassic
  *
  * @brief The Version API provides functions to return the version or parts of
  * the version of RTEMS you are using.
