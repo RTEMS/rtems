@@ -18,7 +18,7 @@
 /**
  * @defgroup libmisc_fb Frame Buffer Device Driver Interface
  *
- * @ingroup Device Drivers and Frameworks
+ * @ingroup RTEMSDeviceDrivers
  */
 /**@{*/
 
