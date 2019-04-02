@@ -3,7 +3,7 @@
  *
  * @ingroup libi2c
  *
- * @brief I2C Library
+ * @brief Legacy I2C Library
  */
 
 #ifndef _RTEMS_LIBI2C_H
@@ -63,9 +63,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup libi2c I2C Library
+ * @defgroup libi2c Legacy I2C Library
  *
- * @brief I2C library.
+ * @ingroup RTEMSDeviceDrivers
+ *
+ * @brief Legacy I2C library.
  *
  */
 /**@{**/

@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSMedia
+ * @ingroup RTEMSIOMedia
  *
- * @brief Media API.
+ * @brief Media Manager API.
  */
 
 /*
@@ -31,7 +31,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup RTEMSMedia Media Manager
+ * @defgroup RTEMSIOMedia Media Manager
+ *
+ * @ingroup LibIO
  *
  * @brief Removable media support.
  *

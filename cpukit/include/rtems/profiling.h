@@ -34,6 +34,8 @@ extern "C" {
 /**
  * @defgroup Profiling Profiling Support
  *
+ * @ingroup RTEMSAPI
+ *
  * @brief The profiling support offers functions to report profiling
  * information available in the system.
  *
