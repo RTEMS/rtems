@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup BSD
+ * @ingroup RTEMSAPIBSD
  *
  * @brief BSD Compatibility API
  */
@@ -31,7 +31,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup BSD BSD Compatibility Support
+ * @defgroup RTEMSAPIBSD BSD Compatibility Support
+ *
+ * @ingroup RTEMSAPI
  *
  * @{
  */

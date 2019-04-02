@@ -1,20 +1,14 @@
 /**
  * @file
  *
- * @brief RTEMS Associativity Routines
+ * @ingroup RTEMSAPIAssociativity
  *
- * RTEMS associativity routines.  Mainly used to convert a value from
- * one space to another (eg: our errno's to host errno's and vice-versa)
+ * @brief RTEMS Associativity Routines
  */
 
 
 #ifndef _RTEMS_RTEMS_ASSOC_H
 #define _RTEMS_RTEMS_ASSOC_H
-
-/**
- *  @defgroup Associativity Associativity Routines
- */
-/**@{*/
 
 #include <stddef.h>
 #include <stdint.h>
@@ -22,6 +16,17 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup RTEMSAPIAssociativity Associativity Routines
+ *
+ * @ingroup RTEMSAPI
+ *
+ * RTEMS associativity routines.  Mainly used to convert a value from
+ * one space to another (eg: our errno's to host errno's and vice-versa)
+ *
+ * @{
+ */
 
 typedef struct {
     const char  *name;
@@ -197,8 +202,10 @@ size_t rtems_assoc_thread_states_to_string(
   size_t    buffer_size
 );
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
+
 #endif /* ! _RTEMS_RTEMS_ASSOC_H */
