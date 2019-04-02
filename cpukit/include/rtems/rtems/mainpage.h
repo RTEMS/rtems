@@ -394,7 +394,7 @@
  */
 
 /**
- * @addtogroup ClassicAPI
+ * @addtogroup RTEMSAPIClassic
  *
  * The facilities provided by RTEMS are built upon a foundation of very
  * powerful concepts. These concepts must be understood before the application
