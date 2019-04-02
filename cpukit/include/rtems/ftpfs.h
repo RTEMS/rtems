@@ -44,6 +44,8 @@ extern "C" {
 /**
  * @defgroup rtems_ftpfs File Transfer Protocol File System
  *
+ * @ingroup FileSystemTypesAndMount
+ *
  * @brief The FTP file system (FTP client) can be used to transfer files from
  * or to remote hosts.
  *

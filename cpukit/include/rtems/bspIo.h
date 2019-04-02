@@ -29,6 +29,8 @@ extern "C" {
 /**
  * @defgroup BSPIO Kernel Print Support
  *
+ * @ingroup LibIO
+ *
  * This module contains all methods and support related to providing
  * kernel level print support.
  *

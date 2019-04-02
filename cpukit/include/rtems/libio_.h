@@ -38,6 +38,8 @@ extern "C" {
 /**
  * @defgroup LibIOInternal IO Internal Library
  *
+ * @ingroup LibIO
+ *
  * @brief Internal IO library API and implementation.
  *
  */
