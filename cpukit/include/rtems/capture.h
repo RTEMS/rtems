@@ -41,7 +41,7 @@
 /**
  *  @defgroup libmisc_capture RTEMS Capture Engine
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSAPITracing
  *
  *  Capture Engine Component of the RTEMS Measurement and Monitoring System
  */

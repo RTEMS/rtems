@@ -35,6 +35,14 @@
  */
 
 /**
+ * @defgroup RTEMSAPITracing Tracing
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @brief Tracing
+ */
+
+/**
  * @defgroup RTEMSDeviceDrivers Device Drivers
  *
  * @brief Device Drivers
