@@ -30,6 +30,8 @@ extern "C" {
 /**
  * @defgroup RTEMS inttypes.h Extensions
  *
+ * @ingroup RTEMSAPIPrintSupport
+ *
  * This module defines portable PRIxxx constants beyond those
  * in the C and POSIX standard.
  */
