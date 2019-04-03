@@ -1,9 +1,8 @@
 /**
  * @file
  *
- * @defgroup libmisc_fb_mw Input Devices for MicroWindows
+ * @ingroup libmisc_fb_mw
  *
- * @ingroup libmisc
  * @brief Input Devices for MicroWindows
  *
  * This file defines the interface for input devices used by MicroWindows
@@ -23,7 +22,7 @@
 /**
  *  @defgroup libmisc_fb_mw Input Devices for MicroWindows
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSDeviceDrivers
  */
 /**@{*/
 #ifdef __cplusplus

@@ -1,9 +1,8 @@
 /**
  * @file
  *
- * @defgroup libmisc_conv_help Conversion Helpers
+ * @ingroup libmisc_conv_help
  *
- * @ingroup libmisc
  * @brief Convert String to Pointer (with validation)
  *
  * This file defines the interface to a set of string conversion helpers.
@@ -23,7 +22,7 @@
 /**
  *  @defgroup libmisc_conv_help Conversion Helpers
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSAPIClassic
  */
 /**@{*/
 

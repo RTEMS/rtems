@@ -1,9 +1,8 @@
 /**
  * @file
  *
- * @defgroup libmisc_stackchk Stack Checker Mechanism
+ * @ingroup libmisc_stackchk
  *
- * @ingroup libmisc
  * @brief Stack Checker Information
  *
  * This include file contains information necessary to utilize
@@ -30,7 +29,7 @@
 /**
  *  @defgroup libmisc_stackchk Stack Checker Mechanism
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSAPIClassic
  */
 /**@{*/
 #ifdef __cplusplus

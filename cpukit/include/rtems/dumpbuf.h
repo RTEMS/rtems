@@ -22,7 +22,7 @@
 /**
  *  @defgroup libmisc_dumpbuf Print Memory Buffer
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSAPIPrintSupport
  */
 /**@{*/
 #ifdef __cplusplus

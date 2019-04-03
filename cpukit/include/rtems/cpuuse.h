@@ -1,9 +1,8 @@
 /**
  * @file
  *
- * @defgroup libmisc_cpuuse CPU Usage
+ * @ingroup libmisc_cpuuse
  *
- * @ingroup libmisc
  * @brief CPU Usage Report
  *
  * This include file contains information necessary to utilize
@@ -28,7 +27,7 @@
 /**
  *  @defgroup libmisc_cpuuse CPU Usage
  *
- *  @ingroup libmisc
+ *  @ingroup RTEMSAPIClassic
  */
 /**@{*/
 #ifdef __cplusplus

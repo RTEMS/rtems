@@ -28,7 +28,7 @@
 /**
  *  @defgroup libmisc_untar_img Untar Image
  *
- *  @ingroup libmisc
+ *  @ingroup LibIO
  */
 /**@{*/
 #ifdef __cplusplus
