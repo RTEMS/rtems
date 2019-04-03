@@ -27,6 +27,8 @@ extern "C" {
 /**
  * @defgroup RTEMSTest Test Support
  *
+ * @ingroup RTEMSAPI
+ *
  * @brief Test support functions.
  *
  * @{

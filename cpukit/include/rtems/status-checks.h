@@ -31,6 +31,8 @@ extern "C" {
 
 /**
  * @defgroup rtems_status_checks Status Checks
+ *
+ * @ingroup RTEMSAPI
  */
 /**@{**/
 

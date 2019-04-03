@@ -28,6 +28,8 @@ extern "C" {
 /**
  * @defgroup rtems_rap RTEMS Application Loader
  *
+ * @ingroup RTEMSAPI
+ *
  * The module implements an application loader for files in the RAP format. The
  * RAP format is:
  *

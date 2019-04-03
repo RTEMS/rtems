@@ -39,6 +39,8 @@ extern "C" {
 /**
  * @defgroup rtems_rtl RTEMS Runtime Link Editor
  *
+ * @ingroup RTEMSAPI
+ *
  * The module implements a runtime link editor with the standard dlopen, and
  * dlclose family of functions.
  *
