@@ -104,19 +104,27 @@ rtems_status_code rtems_message_queue_delete(
 );
 
 /**
- *  @brief rtems_message_queue_send
+ * @brief Sends a message to the message queue.
  *
- *  Message Queue Manager - rtems_message_queue_send
+ * This directive sends the message buffer to the message queue indicated by
+ * ID.  If one or more tasks is blocked waiting to receive a message from this
+ * message queue, then one will receive the message.  The task selected to
+ * receive the message is based on the task queue discipline algorithm in use
+ * by this particular message queue.  If no tasks are waiting, then the message
+ * buffer will be placed at the rear of the chain of pending messages for this
+ * message queue.
  *
- *  This routine implements the rtems_message_queue_send directive.
- *  This directive sends the message buffer to the message queue
- *  indicated by ID.  If one or more tasks is blocked waiting
- *  to receive a message from this message queue, then one will
- *  receive the message.  The task selected to receive the
- *  message is based on the task queue discipline algorithm in
- *  use by this particular message queue.  If no tasks are waiting,
- *  then the message buffer will be placed at the REAR of the
- *  chain of pending messages for this message queue.
+ * @param id The message queue ID.
+ * @param buffer The message content buffer.
+ * @param size The size of the message.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid message queue ID.
+ * @retval RTEMS_INVALID_ADDRESS The message buffer pointer is @c NULL.
+ * @retval RTEMS_INVALID_SIZE The message size is larger than the maximum
+ *   message size of the message queue.
+ * @retval RTEMS_TOO_MANY The new message would exceed the message queue limit
+ *   for pending messages.
  */
 rtems_status_code rtems_message_queue_send(
   rtems_id    id,
@@ -169,25 +177,27 @@ rtems_status_code rtems_message_queue_broadcast(
 );
 
 /**
- * @brief RTEMS Message Queue Receive
+ * @brief Receives a message from the message queue
  *
- * This routine implements the rtems_message_queue_receive directive.
- * This directive is invoked when the calling task wishes to receive
- * a message from the message queue indicated by ID. The received
- * message is to be placed in buffer. If no messages are outstanding
- * and the option_set indicates that the task is willing to block,
- * then the task will be blocked until a message arrives or until,
- * optionally, timeout clock ticks have passed.
+ * This directive is invoked when the calling task wishes to receive a message
+ * from the message queue indicated by ID. The received message is to be placed
+ * in the buffer. If no messages are outstanding and the option set indicates
+ * that the task is willing to block, then the task will be blocked until a
+ * message arrives or until, optionally, timeout clock ticks have passed.
  *
- * @param[in] id is the queue id
- * @param[in] buffer is the pointer to message buffer
- * @param[in] size is the size of message receive
- * @param[in] option_set is the options on receive
- * @param[in] timeout is the number of ticks to wait
+ * @param id The message queue ID.
+ * @param[out] buffer The buffer for the message content.  The buffer must be
+ *   large enough to store maximum size messages of this message queue.
+ * @param[out] size The size of the message.
+ * @param option_set The option set, e.g. RTEMS_NO_WAIT or RTEMS_WAIT.
+ * @param timeout The number of ticks to wait if the RTEMS_WAIT is set.  Use
+ *   RTEMS_NO_TIMEOUT to wait indefinitely.
  *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error.
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid message queue ID.
+ * @retval RTEMS_INVALID_ADDRESS The message buffer pointer or the message size
+ *   pointer is @c NULL.
+ * @retval RTEMS_TIMEOUT A timeout occurred and no message was received.
  */
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,

@@ -57,19 +57,16 @@ void _Workspace_Handler_initialization(
 );
 
 /**
- * @brief Allocate memory from workspace.
+ * @brief Allocates a memory block of the specified size from the workspace.
  *
- *  This routine returns the address of a block of memory of size
- *  bytes.  If a block of the appropriate size cannot be allocated
- *  from the workspace, then NULL is returned.
+ * @param size The size of the memory block.
  *
- *  @param size is the requested size
- *
- *  @retval a pointer to the requested memory or NULL.
+ * @retval pointer The pointer to the memory block.  The pointer is at least
+ *   aligned by CPU_HEAP_ALIGNMENT.
+ * @retval NULL No memory block with the requested size is available in the
+ *   workspace.
  */
-void *_Workspace_Allocate(
-  size_t   size
-);
+void *_Workspace_Allocate( size_t size );
 
 /**
  * @brief Allocate aligned memory from workspace.

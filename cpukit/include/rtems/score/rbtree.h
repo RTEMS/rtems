@@ -106,8 +106,8 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_tree(
 /**
  * @brief Rebalances the red-black tree after insertion of the node.
  *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] the_node The most recently inserted node.
+ * @param[in, out] the_rbtree The red-black tree control.
+ * @param[in, out] the_node The most recently inserted node.
  */
 void _RBTree_Insert_color(
   RBTree_Control *the_rbtree,
