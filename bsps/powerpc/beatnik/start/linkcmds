@@ -2,4 +2,6 @@ STARTUP(motld_start.o)
 ENTRY(__rtems_entry_point)
 EXTERN(__vectors)
 
+bsp_section_small_data_area_size = 65536;
+
 INCLUDE linkcmds.share
