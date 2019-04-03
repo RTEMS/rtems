@@ -45,6 +45,8 @@ extern "C" {
 /**
  * @defgroup RTEMSTestFramework RTEMS Test Framework
  *
+ * @ingroup RTEMSAPI
+ *
  * @brief The RTEMS Test Framework helps you to write tests.
  *
  * @{
