@@ -25,17 +25,20 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreChain Chain Handler
+ * @defgroup RTEMSScoreChain Chain Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  The Chain Handler is used to manage sets of entities.  This handler
- *  provides two data structures.  The Chain Node data structure is included
- *  as the first part of every data structure that will be placed on
- *  a chain.  The second data structure is Chain Control which is used
- *  to manage a set of Chain Nodes.
+ * @brief Provides Data Structures Chain Node and Chain Control
+ *
+ * The Chain Handler is used to manage sets of entities.  This handler
+ * provides two data structures.  The Chain Node data structure is included
+ * as the first part of every data structure that will be placed on
+ * a chain.  The second data structure is Chain Control which is used
+ * to manage a set of Chain Nodes.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  @typedef Chain_Node
@@ -92,7 +95,7 @@ typedef union {
   } Tail;
 } Chain_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
