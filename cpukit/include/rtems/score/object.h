@@ -298,16 +298,14 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
 }
 
 /**
- * This function builds an object's id from the processor node and index
- * values specified.
+ * @brief Builds an object ID from its components.
  *
- * @param[in] the_api indicates the API associated with this Id.
- * @param[in] the_class indicates the class of object.
- *            It is specific to @a the_api.
- * @param[in] node is the node where this object resides.
- * @param[in] index is the instance number of this object.
+ * @param the_api The object API.
+ * @param the_class The object API class.
+ * @param node The object node.
+ * @param index The object index.
  *
- * @return This method returns an object Id constructed from the arguments.
+ * @return Returns the object ID constructed from the arguments.
  */
 #define _Objects_Build_id( the_api, the_class, node, index ) \
   ( (Objects_Id) ( (Objects_Id) the_api   << OBJECTS_API_START_BIT )   | \
