@@ -21,11 +21,12 @@
 #define _RTEMS_BASEDEFS_H
 
 /**
- *  @defgroup RTEMSScoreBaseDefs Basic Definitions
+ * @defgroup RTEMSScoreBaseDefs Basic Definitions
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
+ *
+ * @{
  */
-/**@{*/
 
 #include <rtems/score/cpuopts.h>
 
@@ -532,6 +533,6 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
   typedef void * proc_ptr RTEMS_DEPRECATED;
 #endif
 
-/**@}*/
+/** @} */
 
 #endif /* _RTEMS_BASEDEFS_H */
