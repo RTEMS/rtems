@@ -3,7 +3,7 @@
  *
  * @brief Simple Scheduler Block a Thread
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

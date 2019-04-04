@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSchedulerEDF
+ * @ingroup RTEMSScoreSchedulerEDF
  *
  * @brief EDF Scheduler Implementation
  */
@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreSchedulerEDF
+ * @addtogroup RTEMSScoreSchedulerEDF
  *
  * @{
  */

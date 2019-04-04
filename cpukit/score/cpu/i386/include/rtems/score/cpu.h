@@ -34,7 +34,7 @@ extern "C" {
 #include <rtems/score/i386.h>
     
 /**
- * @defgroup ScoreCPUi386 i386 Specific Support
+ * @defgroup RTEMSScoreCPUi386 i386 Specific Support
  *
  * @ingroup RTEMSScoreCPUi386
  *

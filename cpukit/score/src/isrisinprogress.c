@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreISR
+ * @ingroup RTEMSScoreISR
  *
  * @brief ISR Is In Progress Default Implementation
  */

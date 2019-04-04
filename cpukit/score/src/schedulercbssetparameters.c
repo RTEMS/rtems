@@ -3,7 +3,7 @@
  *
  * @brief Set Parameters for CBS Scheduling
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreOnce
+ * @ingroup RTEMSScoreOnce
  *
  * @brief Once API
  */
@@ -30,9 +30,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreOnce Once Functions.
+ * @defgroup RTEMSScoreOnce Once Functions.
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief The _Once() function for pthread_once() and rtems_gxx_once().
  *

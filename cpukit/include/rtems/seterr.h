@@ -20,9 +20,9 @@
 #define _RTEMS_SETERR_H
 
 /**
- *  @defgroup ScoreSetErr Set Errno
+ *  @defgroup RTEMSScoreSetErr Set Errno
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  */
 /**@{*/

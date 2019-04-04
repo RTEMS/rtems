@@ -3,7 +3,7 @@
  *
  * @brief Thread Wait Timeout
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Basic Definitions
  */
@@ -21,9 +21,9 @@
 #define _RTEMS_BASEDEFS_H
 
 /**
- *  @defgroup ScoreBaseDefs Basic Definitions
+ *  @defgroup RTEMSScoreBaseDefs Basic Definitions
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 /**@{*/
 

@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Watchdog Ticks Since Boot
- *  @ingroup ScoreWatchdog
+ *  @ingroup RTEMSScoreWatchdog
  */
 
 /*

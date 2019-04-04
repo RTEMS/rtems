@@ -26,9 +26,9 @@
 #include <rtems/score/watchdog.h>
 
 /**
- * @defgroup ScoreRWLock ScoreRWLock
+ * @defgroup RTEMSScoreRWLock ScoreRWLock
  * 
- * @ingroup Score
+ * @ingroup RTEMSScore
  * 
  * @brief ScoreRWLock
  */

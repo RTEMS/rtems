@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSMPBarrier
+ * @ingroup RTEMSScoreSMPBarrier
  *
  * @brief SMP Barrier API
  */
@@ -31,9 +31,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreSMPBarrier SMP Barriers
+ * @defgroup RTEMSScoreSMPBarrier SMP Barriers
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief The SMP barrier provides barrier synchronization for SMP systems at
  * the lowest level.

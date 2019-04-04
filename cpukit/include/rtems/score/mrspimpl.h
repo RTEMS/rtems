@@ -30,7 +30,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup ScoreMRSP
+ * @addtogroup RTEMSScoreMRSP
  *
  * @{
  */

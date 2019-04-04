@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Insert a Message into the Message Queue
- * @ingroup ScoreMessageQueue
+ * @ingroup RTEMSScoreMessageQueue
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Scheduler EDF Unblock
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Object id to name
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 
 /*

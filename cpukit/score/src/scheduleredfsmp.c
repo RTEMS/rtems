@@ -3,7 +3,7 @@
  *
  * @brief EDF SMP Scheduler Implementation
  *
- * @ingroup ScoreSchedulerSMPEDF
+ * @ingroup RTEMSScoreSchedulerSMPEDF
  */
 
 /*

@@ -30,9 +30,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreThreadMP Thread Handler Multiprocessing Support
+ *  @defgroup RTEMSScoreThreadMP Thread Handler Multiprocessing Support
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which is related to managing
  *  threads in a multiprocessor system configuration.  This handler must

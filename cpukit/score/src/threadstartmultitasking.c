@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Start Thread Multitasking
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 
 /*

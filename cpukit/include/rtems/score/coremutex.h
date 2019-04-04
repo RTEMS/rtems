@@ -34,9 +34,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreMutex Mutex Handler
+ *  @defgroup RTEMSScoreMutex Mutex Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which provides the foundation
  *  Mutex services used in all of the APIs supported by RTEMS.

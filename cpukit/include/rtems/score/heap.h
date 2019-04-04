@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreHeap
+ * @ingroup RTEMSScoreHeap
  *
  * @brief Heap Handler API
  */
@@ -30,9 +30,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreHeap Heap Handler
+ * @defgroup RTEMSScoreHeap Heap Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief The Heap Handler provides a heap.
  *

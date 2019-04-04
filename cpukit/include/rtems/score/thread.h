@@ -54,9 +54,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreThread Thread Handler
+ *  @defgroup RTEMSScoreThread Thread Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality related to the management of
  *  threads.  This includes the creation, deletion, and scheduling of threads.

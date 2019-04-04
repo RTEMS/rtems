@@ -29,9 +29,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScorePriority Priority Handler
+ * @defgroup RTEMSScorePriority Priority Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * This handler encapsulates functionality which is used to manage thread
  * priorities.  The actual priority of a thread is an aggregation of priority

@@ -3,7 +3,7 @@
  *
  * @brief Scheduler CBS Destroy Server
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

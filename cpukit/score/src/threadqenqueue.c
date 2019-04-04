@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Thread Queue Operations
- * @ingroup ScoreThreadQ
+ * @ingroup RTEMSScoreThreadQ
  */
 
 /*

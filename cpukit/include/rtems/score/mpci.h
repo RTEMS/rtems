@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreMPCI
+ * @ingroup RTEMSScoreMPCI
  *
  * @brief MPCI Layer API
  */
@@ -28,9 +28,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreMPCI MPCI Handler
+ *  @defgroup RTEMSScoreMPCI MPCI Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  The MPCI Handler encapsulates functionality which is related to the
  *  generation, receipt, and processing of remote operations in a

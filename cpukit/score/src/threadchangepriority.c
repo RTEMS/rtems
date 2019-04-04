@@ -3,7 +3,7 @@
  *
  * @brief Changes the Priority of a Thread
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

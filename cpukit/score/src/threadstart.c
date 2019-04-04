@@ -3,7 +3,7 @@
  *
  * @brief Initializes Thread and Executes it
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

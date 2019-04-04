@@ -23,7 +23,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup ScoreThread
+ * @addtogroup RTEMSScoreThread
  *
  * @{
  */

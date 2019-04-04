@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Thread Handler
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 
 /*

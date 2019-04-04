@@ -3,7 +3,7 @@
  *
  * @brief Removes a Thread from the Simple Queue
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

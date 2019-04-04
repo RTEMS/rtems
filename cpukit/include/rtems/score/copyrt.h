@@ -22,7 +22,7 @@
 /**
  *  @defgroup SuperCoreCopyright RTEMS Copyright Notice
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 /**@{*/
 

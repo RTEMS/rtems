@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreRBTree
+ * @addtogroup RTEMSScoreRBTree
  */
 /**@{**/
 

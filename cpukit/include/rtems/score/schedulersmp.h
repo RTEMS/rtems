@@ -3,7 +3,7 @@
  *
  * @brief SMP Scheduler API
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup RTEMSScoreSchedulerSMP
  */
 
 /*
@@ -31,9 +31,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreSchedulerSMP SMP Scheduler
+ * @defgroup RTEMSScoreSchedulerSMP SMP Scheduler
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  *
  * @{
  */

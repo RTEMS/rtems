@@ -3,7 +3,7 @@
  *
  * @brief Scheduler Default Node Destruction Operation
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

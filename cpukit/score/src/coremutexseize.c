@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Seize Mutex with Blocking
- *  @ingroup ScoreMutex
+ *  @ingroup RTEMSScoreMutex
  */
 
 /*

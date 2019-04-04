@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreAtomic
+ * @ingroup RTEMSScoreAtomic
  *
  * @brief Atomic Operations API
  */
@@ -20,9 +20,9 @@
 #include <rtems/score/cpuatomic.h>
 
 /**
- * @defgroup ScoreAtomic Atomic Operations
+ * @defgroup RTEMSScoreAtomic Atomic Operations
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Support for atomic operations.
  *

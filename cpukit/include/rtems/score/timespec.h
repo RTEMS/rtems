@@ -19,7 +19,7 @@
 /**
  *  @defgroup Timespec Helpers
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality related to manipulating
  *  POSIX struct timespecs.

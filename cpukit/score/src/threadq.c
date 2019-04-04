@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Thread Queue Initialize
- *  @ingroup ScoreThreadQ
+ *  @ingroup RTEMSScoreThreadQ
  */
 
 /*

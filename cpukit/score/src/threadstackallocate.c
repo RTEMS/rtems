@@ -2,7 +2,7 @@
  * @file
  * 
  * @brief Stack Allocate Helper
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 

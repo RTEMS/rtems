@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreTLS
+ * @ingroup RTEMSScoreTLS
  *
  * @brief Thread-Local Storage (TLS)
  */
@@ -32,9 +32,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreTLS Thread-Local Storage (TLS)
+ * @defgroup RTEMSScoreTLS Thread-Local Storage (TLS)
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Thread-local storage (TLS) support.
  *

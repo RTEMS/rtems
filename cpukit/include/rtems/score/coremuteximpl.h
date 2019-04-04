@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreMutex
+ * @ingroup RTEMSScoreMutex
  *
  * @brief CORE Mutex Implementation
  */
@@ -30,7 +30,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreMutex
+ * @addtogroup RTEMSScoreMutex
  */
 /**@{**/
 

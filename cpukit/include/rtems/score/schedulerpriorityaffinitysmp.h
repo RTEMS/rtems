@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSchedulerPriorityAffinitySMP
+ * @ingroup RTEMSScoreSchedulerPriorityAffinitySMP
  *
  * @brief Deterministic Priority Affinity SMP Scheduler API
  */
@@ -30,9 +30,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreSchedulerPriorityAffinitySMP Deterministic Priority Affinity SMP Scheduler
+ * @defgroup RTEMSScoreSchedulerPriorityAffinitySMP Deterministic Priority Affinity SMP Scheduler
  *
- * @ingroup ScoreSchedulerPrioritySMP
+ * @ingroup RTEMSScoreSchedulerPrioritySMP
  *
  * This is an extension of the Deterministic Priority SMP Scheduler. which
  * is an implementation of the global fixed priority scheduler (G-FP). 

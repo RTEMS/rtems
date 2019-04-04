@@ -3,7 +3,7 @@
  *
  * @brief Get Thread Execution Info
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreProtHeap
+ * @ingroup RTEMSScoreProtHeap
  *
  * @brief Protected Heap Handler API
  */
@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreProtHeap Protected Heap Handler
+ * @defgroup RTEMSScoreProtHeap Protected Heap Handler
  *
- * @ingroup ScoreHeap
+ * @ingroup RTEMSScoreHeap
  *
  * @brief Provides protected heap services.
  *

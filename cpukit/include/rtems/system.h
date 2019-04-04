@@ -23,9 +23,9 @@
 #include <rtems/score/cpu.h>
 
 /**
- *  @defgroup ScoreSystem System Information
+ *  @defgroup RTEMSScoreSystem System Information
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 /**@{*/
 

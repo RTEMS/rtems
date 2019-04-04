@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Broadcast a Message to the Message Queue
- *  @ingroup ScoreMessageQueue
+ *  @ingroup RTEMSScoreMessageQueue
  */
 
 /*

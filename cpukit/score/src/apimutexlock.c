@@ -3,7 +3,7 @@
  *
  * @brief Acquires the specified API mutex.
  *
- * @ingroup ScoreAPIMutex
+ * @ingroup RTEMSScoreAPIMutex
  */
 
 /*

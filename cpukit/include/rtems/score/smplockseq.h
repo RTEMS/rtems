@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSMPLock
+ * @ingroup RTEMSScoreSMPLock
  *
  * @brief SMP Lock API
  */
@@ -29,7 +29,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup ScoreSMPLock
+ * @addtogroup RTEMSScoreSMPLock
  *
  * @{
  */

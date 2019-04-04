@@ -28,9 +28,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreWorkspace Workspace Handler
+ *  @defgroup RTEMSScoreWorkspace Workspace Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality related to the management of
  *  the RTEMS Executive Workspace.

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreAPIMutex
+ * @ingroup RTEMSScoreAPIMutex
  *
  * @brief API Mutex Handler API
  */
@@ -23,9 +23,9 @@
 #include <sys/lock.h>
 
 /**
- * @defgroup ScoreAPIMutex API Mutex Handler
+ * @defgroup RTEMSScoreAPIMutex API Mutex Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Provides routines to ensure mutual exclusion on API level.
  */
@@ -81,9 +81,9 @@ bool _API_Mutex_Is_owner( const API_Mutex_Control *mutex );
 /** @} */
 
 /**
- * @defgroup ScoreAllocatorMutex RTEMS Allocator Mutex
+ * @defgroup RTEMSScoreAllocatorMutex RTEMS Allocator Mutex
  *
- * @ingroup ScoreAPIMutex
+ * @ingroup RTEMSScoreAPIMutex
  *
  * @brief Protection for all memory allocations and deallocations in RTEMS.
  *

@@ -42,7 +42,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreThread
+ * @addtogroup RTEMSScoreThread
  */
 /**@{**/
 

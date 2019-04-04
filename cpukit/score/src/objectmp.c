@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Objects MP Support
- *  @ingroup ScoreObjectMP
+ *  @ingroup RTEMSScoreObjectMP
  */
 
 /*

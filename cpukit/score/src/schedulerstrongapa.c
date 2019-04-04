@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSchedulerStrongAPA
+ * @ingroup RTEMSScoreSchedulerStrongAPA
  *
  * @brief Strong APA Scheduler Implementation
  */

@@ -3,7 +3,7 @@
  *
  * @brief Initialize a Chain Header
  *
- * @ingroup ScoreChain
+ * @ingroup RTEMSScoreChain
  */
 
 /*

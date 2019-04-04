@@ -2,7 +2,7 @@
  * @file
  *
  * @brief _Scheduler_CBS_Get_parameters
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -3,7 +3,7 @@
  *
  * @brief Simple SMP Scheduler API
  *
- * @ingroup ScoreSchedulerSMPSimple
+ * @ingroup RTEMSScoreSchedulerSMPSimple
  */
 
 /*
@@ -28,9 +28,9 @@ extern "C" {
 #include <rtems/score/schedulersmp.h>
 
 /**
- * @defgroup ScoreSchedulerSMPSimple Simple Priority SMP Scheduler
+ * @defgroup RTEMSScoreSchedulerSMPSimple Simple Priority SMP Scheduler
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup RTEMSScoreSchedulerSMP
  *
  * The Simple Priority SMP Scheduler allocates a processor for the processor
  * count highest priority ready threads.  The thread priority and position in

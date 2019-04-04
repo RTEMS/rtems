@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Get Object Information
- *  @ingroup ScoreObject
+ *  @ingroup RTEMSScoreObject
  */
 
 /*

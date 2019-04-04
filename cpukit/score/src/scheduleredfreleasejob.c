@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Scheduler EDF Release Job
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

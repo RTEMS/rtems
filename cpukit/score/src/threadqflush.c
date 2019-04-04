@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Thread Queue Flush
- * @ingroup ScoreThreadQ
+ * @ingroup RTEMSScoreThreadQ
  */
 
 /*

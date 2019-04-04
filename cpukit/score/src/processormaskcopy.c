@@ -3,7 +3,7 @@
  *
  * @brief Processor Mask Implementation
  *
- * @ingroup ScoreProcessorMask
+ * @ingroup RTEMSScoreProcessorMask
  */
 
 /*

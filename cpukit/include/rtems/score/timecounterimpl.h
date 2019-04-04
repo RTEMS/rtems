@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreTimecounter
+ * @ingroup RTEMSScoreTimecounter
  *
  * @brief Timecounter Implementation
  */
@@ -31,7 +31,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup ScoreTimecounter
+ * @addtogroup RTEMSScoreTimecounter
  *
  * @{
  */

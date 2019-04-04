@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreBarrier Barrier Handler
+ *  @defgroup RTEMSScoreBarrier Barrier Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which provides the foundation
  *  Barrier services used in all of the APIs supported by RTEMS.

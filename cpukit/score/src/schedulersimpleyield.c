@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Simple Schedule Yield CPU
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

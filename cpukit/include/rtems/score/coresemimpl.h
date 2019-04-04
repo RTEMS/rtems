@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreSemaphore
+ * @addtogroup RTEMSScoreSemaphore
  */
 /**@{**/
 

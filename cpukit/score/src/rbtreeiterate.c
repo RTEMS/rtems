@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreRBTree
+ * @ingroup RTEMSScoreRBTree
  *
  * @brief _RBTree_Iterate() implementation.
  */

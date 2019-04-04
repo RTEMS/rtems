@@ -3,7 +3,7 @@
  *
  * @brief Extracts a Node from a Chain
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  */
 
 /*

@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup Score SuperCore
+ * @defgroup RTEMSScore SuperCore
  *
  * @ingroup RTEMSInternal
  *
@@ -39,16 +39,16 @@ extern "C" {
 /**
  * @defgroup RTEMSScoreCPU CPU Architecture Support
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Provides CPU architecture dependent services.
  */
 /**@{*/
 
 /**
- *  @defgroup ScoreObject Object Handler
+ *  @defgroup RTEMSScoreObject Object Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 /**@{*/
 

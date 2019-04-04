@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreTOD
+ * @ingroup RTEMSScoreTOD
  *
  * @brief Time of Day Handler API
  */
@@ -30,9 +30,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreTOD Time of Day Handler
+ *  @defgroup RTEMSScoreTOD Time of Day Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  The following constants are related to the time of day and are
  *  independent of RTEMS.
@@ -118,7 +118,7 @@ extern "C" {
 #define TOD_BASE_YEAR 1988
 
 /**
- *  @addtogroup ScoreTOD
+ *  @addtogroup RTEMSScoreTOD
  *
  *  This handler encapsulates functionality used to manage time of day.
  */

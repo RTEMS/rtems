@@ -31,9 +31,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreSchedulerEDF EDF Scheduler
+ *  @defgroup RTEMSScoreSchedulerEDF EDF Scheduler
  *
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 /**@{*/
 

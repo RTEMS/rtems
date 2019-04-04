@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreObject
+ * @ingroup RTEMSScoreObject
  *
  * @brief Object Handler Data Structures
  */
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreObject
+ * @addtogroup RTEMSScoreObject
  *
  * @{
  */

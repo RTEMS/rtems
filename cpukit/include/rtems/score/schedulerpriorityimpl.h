@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreSchedulerDPS
+ * @addtogroup RTEMSScoreSchedulerDPS
  */
 /**@{**/
 

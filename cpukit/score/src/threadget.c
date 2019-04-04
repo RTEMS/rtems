@@ -3,7 +3,7 @@
  *
  * @brief Maps Thread IDs to TCB Pointer
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

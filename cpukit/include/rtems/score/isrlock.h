@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreISRLocks
+ * @ingroup RTEMSScoreISRLocks
  *
  * @brief ISR Locks
  */
@@ -31,9 +31,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreISRLocks ISR Locks
+ * @defgroup RTEMSScoreISRLocks ISR Locks
  *
- * @ingroup ScoreISR
+ * @ingroup RTEMSScoreISR
  *
  * @brief Low-level lock to protect critical sections accessed by threads and
  * interrupt service routines.

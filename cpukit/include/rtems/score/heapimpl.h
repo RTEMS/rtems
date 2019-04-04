@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreHeap
+ * @ingroup RTEMSScoreHeap
  *
  * @brief Heap Handler Implementation
  */
@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreHeap
+ * @addtogroup RTEMSScoreHeap
  */
 /**@{**/
 

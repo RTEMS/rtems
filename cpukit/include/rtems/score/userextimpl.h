@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreUserExt
+ * @ingroup RTEMSScoreUserExt
  *
  * @brief User Extension Handler API
  */
@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreUserExt
+ * @addtogroup RTEMSScoreUserExt
  */
 /** @{ **/
 

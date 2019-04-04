@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler CBS Get Approved Budget
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

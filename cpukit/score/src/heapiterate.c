@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreHeap
+ * @ingroup RTEMSScoreHeap
  *
  * @brief _Heap_Iterate() implementation.
  */

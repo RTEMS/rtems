@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler Priority Unblock
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

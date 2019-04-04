@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreFreechain
+ * @ingroup RTEMSScoreFreechain
  *
  * @brief Freechain Handler Implementation
  */

@@ -3,7 +3,7 @@
  *
  * @brief SMP Scheduler Implementation
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup RTEMSScoreSchedulerSMP
  */
 
 /*
@@ -34,7 +34,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup ScoreSchedulerSMP
+ * @addtogroup RTEMSScoreSchedulerSMP
  *
  * The scheduler nodes can be in four states
  * - @ref SCHEDULER_SMP_NODE_BLOCKED,

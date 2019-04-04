@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief SMP Support
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 
 /*

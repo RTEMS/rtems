@@ -33,7 +33,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreMessageQueue
+ * @addtogroup RTEMSScoreMessageQueue
  */
 /**@{**/
 

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Simple Schedule Determine Heir
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

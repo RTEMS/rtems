@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Clear Thread state
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 
 /*

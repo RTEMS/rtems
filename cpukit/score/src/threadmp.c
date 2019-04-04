@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Distributed MP Support
- *  @ingroup ScoreThreadMP
+ *  @ingroup RTEMSScoreThreadMP
  */
 
 /*

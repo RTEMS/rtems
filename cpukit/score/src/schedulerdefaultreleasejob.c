@@ -3,7 +3,7 @@
  *
  * @brief Default Scheduler Release Job Operation
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

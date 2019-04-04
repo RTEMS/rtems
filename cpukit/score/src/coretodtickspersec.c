@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Convert Ticks To Seconds
- * @ingroup ScoreTOD
+ * @ingroup RTEMSScoreTOD
  */
 
 /*  COPYRIGHT (c) 1989-2014.

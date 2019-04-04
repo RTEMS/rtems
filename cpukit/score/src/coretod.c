@@ -3,7 +3,7 @@
  *
  * @brief Initializes the Time of Day Handler
  *
- * @ingroup ScoreTOD
+ * @ingroup RTEMSScoreTOD
  */
 
 /*  COPYRIGHT (c) 1989-2014.

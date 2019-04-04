@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSMPLock
+ * @ingroup RTEMSScoreSMPLock
  *
  * @brief SMP Lock API
  */
@@ -23,9 +23,9 @@
 #include <rtems/score/cpuopts.h>
 
 /**
- * @defgroup ScoreSMPLock SMP Locks
+ * @defgroup RTEMSScoreSMPLock SMP Locks
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief The SMP lock provides mutual exclusion for SMP systems at the lowest
  * level.

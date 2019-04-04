@@ -3,7 +3,7 @@
  *
  * @brief Get Information of an Object from an ID
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  */
 
 /*

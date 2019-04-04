@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief  Get Object without Dispatching Protection
- *  @ingroup ScoreObject
+ *  @ingroup RTEMSScoreObject
  */
 
 /*

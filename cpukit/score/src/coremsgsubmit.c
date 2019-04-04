@@ -3,7 +3,7 @@
  *
  * @brief CORE Message Queue Submit
  *
- * @ingroup ScoreMessageQueue
+ * @ingroup RTEMSScoreMessageQueue
  */
 
 /*

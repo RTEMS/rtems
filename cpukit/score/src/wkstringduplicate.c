@@ -3,7 +3,7 @@
  *
  * @brief Duplicates String with Memory from the Workspace
  *
- * @ingroup ScoreWorkspace
+ * @ingroup RTEMSScoreWorkspace
  */
 
 /*

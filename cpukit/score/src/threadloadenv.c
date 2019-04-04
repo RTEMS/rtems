@@ -3,7 +3,7 @@
  *
  * @brief Initializes Enviroment for A Thread
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

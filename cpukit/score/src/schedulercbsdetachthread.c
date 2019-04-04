@@ -3,7 +3,7 @@
  *
  * @brief Detach from the CBS Server
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

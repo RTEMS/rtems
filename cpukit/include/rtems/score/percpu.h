@@ -78,7 +78,7 @@ struct Scheduler_Context;
 /**
  *  @defgroup PerCPU RTEMS Per CPU Information
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This defines the per CPU state information required by RTEMS
  *  and the BSP.  In an SMP configuration, there will be multiple

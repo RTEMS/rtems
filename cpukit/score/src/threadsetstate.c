@@ -3,7 +3,7 @@
  *
  * @brief Sets States for a Thread
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

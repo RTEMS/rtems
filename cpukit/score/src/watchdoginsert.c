@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Watchdog Insert
- * @ingroup ScoreWatchdog
+ * @ingroup RTEMSScoreWatchdog
  */
 
 /*

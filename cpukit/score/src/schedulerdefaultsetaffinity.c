@@ -3,7 +3,7 @@
  *
  * @brief Scheduler Default Set Affinity Operation
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

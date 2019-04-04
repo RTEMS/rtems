@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup ScoreWatchdog
+ *  @addtogroup RTEMSScoreWatchdog
  *  @{
  */
 

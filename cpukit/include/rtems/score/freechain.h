@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreFreechain
+ * @ingroup RTEMSScoreFreechain
  *
  * @brief Freechain Handler API
  */
@@ -24,9 +24,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreFreechain Freechain Handler
+ * @defgroup RTEMSScoreFreechain Freechain Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * The Freechain Handler is used to manage a chain of nodes, of which size can
  * automatically increase when there is no free node left. This handler

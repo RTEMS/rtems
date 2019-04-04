@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreProfiling
+ * @ingroup RTEMSScoreProfiling
  *
  * @brief Profiling Support API
  */
@@ -31,9 +31,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreProfiling Profiling Support
+ * @defgroup RTEMSScoreProfiling Profiling Support
  * 
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Profiling support.
  *

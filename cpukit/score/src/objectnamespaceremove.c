@@ -3,7 +3,7 @@
  *
  * @brief Removes Object from Namespace
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  */
 
 /*

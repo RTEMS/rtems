@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Deallocate Thread Stack
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 
 /*

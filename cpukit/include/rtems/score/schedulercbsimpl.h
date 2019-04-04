@@ -3,7 +3,7 @@
  *
  * @brief CBS Scheduler Implementation
  *
- * @ingroup ScoreSchedulerCBS
+ * @ingroup RTEMSScoreSchedulerCBS
  */
 
 /*
@@ -31,7 +31,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @addtogroup ScoreSchedulerCBS
+ * @addtogroup RTEMSScoreSchedulerCBS
  *
  * @{
  */

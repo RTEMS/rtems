@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler CBS Cleanup
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

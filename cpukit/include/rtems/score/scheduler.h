@@ -28,9 +28,9 @@ extern "C" {
 struct Per_CPU_Control;
 
 /**
- *  @defgroup ScoreScheduler Scheduler Handler
+ *  @defgroup RTEMSScoreScheduler Scheduler Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality related to managing sets of threads
  *  that are ready for execution.

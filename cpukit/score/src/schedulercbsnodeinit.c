@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler CBS Allocate
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

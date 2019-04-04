@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler CBS Get Remaining Budget
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

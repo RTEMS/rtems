@@ -26,9 +26,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreMRSP Multiprocessor Resource Sharing Protocol Handler
+ * @defgroup RTEMSScoreMRSP Multiprocessor Resource Sharing Protocol Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Multiprocessor Resource Sharing Protocol (MrsP).
  *

@@ -3,7 +3,7 @@
  *
  * @brief Flush Messages Routine
  *
- * @ingroup ScoreMessageQueue
+ * @ingroup RTEMSScoreMessageQueue
  */
 
 /*

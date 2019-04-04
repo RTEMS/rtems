@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreObject
+ * @addtogroup RTEMSScoreObject
  *
  * @{
  */

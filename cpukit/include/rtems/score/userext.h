@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreUserExt
+ * @ingroup RTEMSScoreUserExt
  *
  * @brief User Extension Handler API
  */
@@ -29,9 +29,9 @@ struct _Thread_Control;
 typedef void User_extensions_routine RTEMS_DEPRECATED;
 
 /**
- * @defgroup ScoreUserExt User Extension Handler
+ * @defgroup RTEMSScoreUserExt User Extension Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief The User Extension Handler provides invocation of application
  * dependent routines at critical points in the life of each thread and the

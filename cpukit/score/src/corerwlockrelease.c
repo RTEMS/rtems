@@ -3,7 +3,7 @@
  *
  * @brief Releases the RWLock
  *
- * @ingroup ScoreRWLock
+ * @ingroup RTEMSScoreRWLock
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSysState
+ * @ingroup RTEMSScoreSysState
  *
  * @brief System State Handler API
  */
@@ -25,9 +25,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreSysState System State Handler
+ * @defgroup RTEMSScoreSysState System State Handler
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * @brief Management of the internal system state of RTEMS.
  */

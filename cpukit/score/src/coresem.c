@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Core Semaphore Initialize
- *  @ingroup ScoreSemaphore
+ *  @ingroup RTEMSScoreSemaphore
  */
 
 /*

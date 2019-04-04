@@ -3,7 +3,7 @@
  *
  * @brief Set Time of Day Given a Timestamp
  *
- * @ingroup ScoreTOD
+ * @ingroup RTEMSScoreTOD
  */
 
 /*  COPYRIGHT (c) 1989-2007.

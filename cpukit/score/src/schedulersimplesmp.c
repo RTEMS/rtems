@@ -3,7 +3,7 @@
  *
  * @brief Simple SMP Scheduler Implementation
  *
- * @ingroup ScoreSchedulerSMPSimple
+ * @ingroup RTEMSScoreSchedulerSMPSimple
  */
 
 /*

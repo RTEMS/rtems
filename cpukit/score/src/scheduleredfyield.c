@@ -3,7 +3,7 @@
  *
  * @brief Scheduler EDF Yield
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

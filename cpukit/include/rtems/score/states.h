@@ -25,9 +25,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreStates SuperCore Thread States
+ *  @defgroup RTEMSScoreStates SuperCore Thread States
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which relates to the management of
  *  the state bitmap associated with each thread.

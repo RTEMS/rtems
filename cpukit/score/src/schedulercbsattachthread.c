@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Attach Scheduler CBS Thread
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSchedulerStrongAPA
+ * @ingroup RTEMSScoreSchedulerStrongAPA
  *
  * @brief Strong APA Scheduler API
  */
@@ -32,9 +32,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreSchedulerStrongAPA Strong APA Scheduler
+ * @defgroup RTEMSScoreSchedulerStrongAPA Strong APA Scheduler
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup RTEMSScoreSchedulerSMP
  *
  * This is an implementation of the global fixed priority scheduler (G-FP).  It
  * uses one ready chain per priority to ensure constant time insert operations.

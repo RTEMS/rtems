@@ -3,7 +3,7 @@
  *
  * @brief Scheduler Simple Functions
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Create Idle Thread
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 
 /*

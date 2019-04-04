@@ -3,7 +3,7 @@
  *
  * @brief Releases the Specified API Mutex
  *
- * @ingroup ScoreAPIMutex
+ * @ingroup RTEMSScoreAPIMutex
  */
 
 /*

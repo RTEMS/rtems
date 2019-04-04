@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSMP
+ * @ingroup RTEMSScoreSMP
  *
  * @brief SuperCore SMP Support API
  */
@@ -25,9 +25,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreSMP SMP Support
+ * @defgroup RTEMSScoreSMP SMP Support
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * This defines the interface of the SuperCore SMP support.
  *

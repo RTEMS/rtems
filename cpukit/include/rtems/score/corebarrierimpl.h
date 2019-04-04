@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreBarrier
+ * @addtogroup RTEMSScoreBarrier
  */
 /**@{**/
 

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreSchedulerPrioritySMP
+ * @ingroup RTEMSScoreSchedulerPrioritySMP
  *
  * @brief Deterministic Priority SMP Scheduler API
  */
@@ -33,7 +33,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @ingroup ScoreSchedulerPrioritySMP
+ * @ingroup RTEMSScoreSchedulerPrioritySMP
  * @{
  */
 

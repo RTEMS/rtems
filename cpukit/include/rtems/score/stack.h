@@ -27,9 +27,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreStack Stack Handler
+ *  @defgroup RTEMSScoreStack Stack Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which is used in the management
  *  of thread stacks.

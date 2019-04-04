@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Close a Message Queue
- *  @ingroup ScoreMessageQueue
+ *  @ingroup RTEMSScoreMessageQueue
  */
 
 /*

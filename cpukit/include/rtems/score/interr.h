@@ -22,9 +22,9 @@
 #include <rtems/score/cpu.h>
 
 /**
- *  @defgroup ScoreIntErr Internal Error Handler
+ *  @defgroup RTEMSScoreIntErr Internal Error Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which provides the foundation
  *  Semaphore services used in all of the APIs supported by RTEMS.

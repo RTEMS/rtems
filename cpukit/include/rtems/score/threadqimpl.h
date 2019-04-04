@@ -37,7 +37,7 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup ScoreThreadQueue
+ *  @addtogroup RTEMSScoreThreadQueue
  */
 /**@{*/
 

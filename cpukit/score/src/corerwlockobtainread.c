@@ -2,7 +2,7 @@
  * @file
  * 
  * @brief Obtain RWLock for reading
- * @ingroup ScoreRWLock
+ * @ingroup RTEMSScoreRWLock
  */
 
 /*

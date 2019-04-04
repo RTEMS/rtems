@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Initialize the ISR handler
- *  @ingroup ScoreISR
+ *  @ingroup RTEMSScoreISR
  */
 
 /*

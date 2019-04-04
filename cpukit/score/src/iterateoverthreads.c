@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Iterates Over All Threads
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 
 /*

@@ -36,9 +36,9 @@ struct Per_CPU_Control;
 struct Scheduler_Node;
 
 /**
- *  @defgroup ScoreThreadQueue Thread Queue Handler
+ *  @defgroup RTEMSScoreThreadQueue Thread Queue Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler provides the capability to have threads block in
  *  ordered sets. The sets may be ordered using the FIFO or priority

@@ -3,7 +3,7 @@
  *
  * @brief Scheduler CBS Release Job
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

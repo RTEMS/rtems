@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreRBTree
+ * @ingroup RTEMSScoreRBTree
  *
  * @brief _RBTree_Postorder_first() and _RBTree_Postorder_next()
  * implementation.

@@ -2,7 +2,7 @@
  * @file
  * 
  * @brief Scheduler Simple Handler / Unblock
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

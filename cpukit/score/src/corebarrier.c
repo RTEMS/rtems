@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Initialize CORE Barrier
- *  @ingroup ScoreBarrier
+ *  @ingroup RTEMSScoreBarrier
  */
 
 /*

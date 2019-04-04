@@ -3,7 +3,7 @@
  *
  *  @brief Initialize Thread
  *
- *  @ingroup ScoreThread
+ *  @ingroup RTEMSScoreThread
  */
 /*
  *  COPYRIGHT (c) 1989-2014.

@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler CBS Get Server id
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

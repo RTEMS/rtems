@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Scheduler Initialize
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

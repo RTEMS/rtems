@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Initiates system termination
- * @ingroup ScoreIntErr
+ * @ingroup RTEMSScoreIntErr
  */
 
 /*

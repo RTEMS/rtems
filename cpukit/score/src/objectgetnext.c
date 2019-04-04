@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Get Pointer to Next Object that is Active
- * @ingroup ScoreObject
+ * @ingroup RTEMSScoreObject
  */
 
 /*

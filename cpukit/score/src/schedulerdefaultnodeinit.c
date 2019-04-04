@@ -3,7 +3,7 @@
  *
  * @brief Scheduler Default Node Initialization Operation
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

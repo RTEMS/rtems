@@ -24,9 +24,9 @@
 #include <rtems/score/isrlevel.h>
 
 /**
- *  @defgroup ScoreISR ISR Handler
+ *  @defgroup RTEMSScoreISR ISR Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which provides the foundation
  *  ISR services used in all of the APIs supported by RTEMS.

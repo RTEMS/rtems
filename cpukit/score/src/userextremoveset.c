@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreUserExt
+ * @ingroup RTEMSScoreUserExt
  *
  * @brief User Extension Handler implementation.
  */

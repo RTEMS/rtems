@@ -33,9 +33,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreSchedulerCBS CBS Scheduler
+ *  @defgroup RTEMSScoreSchedulerCBS CBS Scheduler
  *
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 /**@{*/
 

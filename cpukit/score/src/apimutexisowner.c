@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreAPIMutex
+ * @ingroup RTEMSScoreAPIMutex
  */
 
 /*

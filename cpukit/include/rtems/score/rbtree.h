@@ -27,9 +27,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreRBTree Red-Black Tree Handler
+ *  @defgroup RTEMSScoreRBTree Red-Black Tree Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  The Red-Black Tree Handler is used to manage sets of entities.  This handler
  *  provides two data structures.  The rbtree Node data structure is included

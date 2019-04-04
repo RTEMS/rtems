@@ -3,7 +3,7 @@
  *
  * @brief Thread Yield
  *
- * @ingroup ScoreThread
+ * @ingroup RTEMSScoreThread
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreWatchdog
+ * @ingroup RTEMSScoreWatchdog
  */
 
 /*
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreWatchdog
+ * @addtogroup RTEMSScoreWatchdog
  *
  * @{
  */

@@ -19,9 +19,9 @@
 #define _RTEMS_SCORE_CONTEXT_H
 
 /**
- *  @defgroup ScoreContext Context Handler
+ *  @defgroup RTEMSScoreContext Context Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which abstracts thread context
  *  management in a portable manner.

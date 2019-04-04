@@ -3,7 +3,7 @@
  *
  * @brief Manually releases the Barrier
  *
- * @ingroup ScoreBarrier
+ * @ingroup RTEMSScoreBarrier
  */
 
 /*

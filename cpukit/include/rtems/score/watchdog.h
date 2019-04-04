@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @ingroup ScoreWatchdog
+ *  @ingroup RTEMSScoreWatchdog
  *
  *  @brief Constants and Structures Associated with Watchdog Timers
  *
@@ -33,9 +33,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreWatchdog Watchdog Handler
+ *  @defgroup RTEMSScoreWatchdog Watchdog Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality related to the scheduling of
  *  watchdog functions to be called at specific times in the future.

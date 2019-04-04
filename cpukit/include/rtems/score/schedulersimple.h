@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreSchedulerSimple Simple Priority Scheduler
+ *  @defgroup RTEMSScoreSchedulerSimple Simple Priority Scheduler
  *
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 /**@{*/
 

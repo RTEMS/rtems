@@ -3,7 +3,7 @@
  *
  * @brief EDF SMP Scheduler API
  *
- * @ingroup ScoreSchedulerSMPEDF
+ * @ingroup RTEMSScoreSchedulerSMPEDF
  */
 
 /*
@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ScoreSchedulerSMPEDF EDF Priority SMP Scheduler
+ * @defgroup RTEMSScoreSchedulerSMPEDF EDF Priority SMP Scheduler
  *
- * @ingroup ScoreSchedulerSMP
+ * @ingroup RTEMSScoreSchedulerSMP
  *
  * @{
  */

@@ -3,7 +3,7 @@
  *
  * @brief Flush Waiting Threads.
  *
- * @ingroup ScoreMessageQueue
+ * @ingroup RTEMSScoreMessageQueue
  */
 
 /*

@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreAddress Address Handler
+ *  @defgroup RTEMSScoreAddress Address Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  This handler encapsulates functionality which abstracts address
  *  manipulation in a portable manner.

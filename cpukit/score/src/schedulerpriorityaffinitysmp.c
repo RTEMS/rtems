@@ -3,7 +3,7 @@
  *
  * @brief Deterministic Priority Affinity SMP Scheduler Implementation
  *
- * @ingroup ScoreSchedulerPriorityAffinitySMP
+ * @ingroup RTEMSScoreSchedulerPriorityAffinitySMP
  */
 
 /*

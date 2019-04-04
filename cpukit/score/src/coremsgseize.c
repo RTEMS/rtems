@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Seize a Message from the Message Queue
- *  @ingroup ScoreMessageQueue
+ *  @ingroup RTEMSScoreMessageQueue
  */
 
 /*

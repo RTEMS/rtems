@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Allocate Object
- *  @ingroup ScoreObject
+ *  @ingroup RTEMSScoreObject
  */
 
 /*

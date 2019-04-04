@@ -3,7 +3,7 @@
  *
  * @brief Default Scheduler At Tick Handler
  *
- * @ingroup ScoreScheduler
+ * @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Workspace Handler Support
- *  @ingroup ScoreWorkspace
+ *  @ingroup RTEMSScoreWorkspace
  */
 
 /*

@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Extend Set of Objects
- * @ingroup ScoreObject
+ * @ingroup RTEMSScoreObject
  */
 
 /*

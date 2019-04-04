@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Find the control structure of the tree containing the given node
- * @ingroup Scorertems_rbtree
+ * @ingroup RTEMSScorertems_rbtree
  */
 
 /*

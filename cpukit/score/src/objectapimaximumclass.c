@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Object API Maximum Class
- *  @ingroup ScoreObject
+ *  @ingroup RTEMSScoreObject
  */
 
 /*

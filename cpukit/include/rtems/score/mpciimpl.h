@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreMPCI
+ * @ingroup RTEMSScoreMPCI
  *
  * @brief MPCI Layer Implementation
  */
@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreMPCI
+ * @addtogroup RTEMSScoreMPCI
  *
  * @{
  */

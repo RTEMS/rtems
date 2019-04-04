@@ -2,7 +2,7 @@
  * @file
  *
  * @brief Adjust the Time of Time
- * @ingroup ScoreTOD
+ * @ingroup RTEMSScoreTOD
  */
 
 /*

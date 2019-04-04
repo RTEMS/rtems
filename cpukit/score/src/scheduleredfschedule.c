@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Scheduler EDF Allocate
- *  @ingroup ScoreScheduler
+ *  @ingroup RTEMSScoreScheduler
  */
 
 /*

@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup ScoreISR ISR Handler
+ *  @addtogroup RTEMSScoreISR ISR Handler
  */
 /** @{ */
 

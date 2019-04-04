@@ -2,7 +2,7 @@
  *  @file
  *
  *  @brief Wait For The Barrier
- *  @ingroup ScoreBarrier
+ *  @ingroup RTEMSScoreBarrier
  */
 
 /*

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreChain
+ * @ingroup RTEMSScoreChain
  *
  * @brief Chain Handler API
  */
@@ -25,9 +25,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScoreChain Chain Handler
+ *  @defgroup RTEMSScoreChain Chain Handler
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  *
  *  The Chain Handler is used to manage sets of entities.  This handler
  *  provides two data structures.  The Chain Node data structure is included

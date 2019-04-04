@@ -3,7 +3,7 @@
  *
  * @brief Priority Bit Map Implementation
  *
- * @ingroup ScorePriorityBitmap
+ * @ingroup RTEMSScorePriorityBitmap
  */
 
 /*

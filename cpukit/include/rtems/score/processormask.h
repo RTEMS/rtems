@@ -3,7 +3,7 @@
  *
  * @brief Processor Mask API
  *
- * @ingroup ScoreProcessorMask
+ * @ingroup RTEMSScoreProcessorMask
  */
 
 /*
@@ -34,9 +34,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ScoreProcessorMask Processor Mask
+ * @defgroup RTEMSScoreProcessorMask Processor Mask
  *
- * @ingroup Score
+ * @ingroup RTEMSScore
  *
  * The processor mask provides a bit map large enough to provide one bit for
  * each processor in the system.  It is a fixed size internal data type

@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ScorePriorityBitmap Bitmap Priority Thread Routines
+ *  @defgroup RTEMSScorePriorityBitmap Bitmap Priority Thread Routines
  *
- *  @ingroup Score
+ *  @ingroup RTEMSScore
  */
 /**@{*/
 

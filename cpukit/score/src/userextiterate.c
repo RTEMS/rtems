@@ -3,7 +3,7 @@
  *
  * @brief User Extension Iteration Helpers
  *
- * @ingroup ScoreUserExt
+ * @ingroup RTEMSScoreUserExt
  */
 
 /*
