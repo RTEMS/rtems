@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Information Required to Manipulate Physical Addresses
+ * @ingroup RTEMSScoreAddress
  *
- *  This include file contains the information required to manipulate
- *  physical addresses.
+ * @brief Information Required to Manipulate Physical Addresses
+ *
+ * This include file contains the information required to manipulate
+ * physical addresses.
  */
 
 /*
@@ -26,24 +28,27 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreAddress Address Handler
+ * @defgroup RTEMSScoreAddress Address Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which abstracts address
- *  manipulation in a portable manner.
+ * @brief Support for Address Manipulation
+ *
+ * This handler encapsulates functionality which abstracts address
+ * manipulation in a portable manner.
+ *
+ * @{
  */
-/**@{*/
 
 /**
- * @brief Add offset to an address.
+ * @brief Adds offset to an address.
  *
  * This function is used to add an @a offset to a @a base address.
  * It returns the resulting address.  This address is typically
  * converted to an access type before being used further.
  *
- * @param[in] base is the base address.
- * @param[in] offset is the offset to add to @a base.
+ * @param base The base address to add the offset to.
+ * @param offset The offset to add to @a base.
  *
  * @return This method returns the resulting address.
  */
@@ -56,14 +61,14 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Add_offset (
 }
 
 /**
- * @brief Subtract offset from offset.
+ * @brief Subtracts offset from an address.
  *
  * This function is used to subtract an @a offset from a @a base
  * address.  It returns the resulting address.  This address is
  * typically converted to an access type before being used further.
  *
- * @param[in] base is the base address.
- * @param[in] offset is the offset to subtract to @a base.
+ * @param base The base address to subtract the offset from.
+ * @param offset The offset to subtract from @a base.
  *
  * @return This method returns the resulting address.
  */
@@ -77,13 +82,13 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
 }
 
 /**
- * @brief Subtract two addresses.
+ * @brief Subtracts two addresses.
  *
  * This function is used to subtract two addresses.  It returns the
  * resulting offset.
  *
- * @param[in] left is the address on the left hand side of the subtraction.
- * @param[in] right is the address on the right hand side of the subtraction.
+ * @param left The address on the left hand side of the subtraction.
+ * @param right The address on the right hand side of the subtraction.
  *
  * @return This method returns the resulting address.
  */
@@ -96,13 +101,13 @@ RTEMS_INLINE_ROUTINE intptr_t _Addresses_Subtract(
 }
 
 /**
- * @brief Is address aligned.
+ * @brief Checks if address is aligned.
  *
  * This function returns true if the given address is correctly
  * aligned for this processor and false otherwise.  Proper alignment
  * is based on correctness and efficiency.
  *
- * @param[in] address is the address being checked for alignment.
+ * @param address The address being checked for alignment.
  *
  * @retval true The @a address is aligned.
  * @retval false The @a address is not aligned.
@@ -115,17 +120,17 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned(
 }
 
 /**
- * @brief Is address in range.
+ * @brief Checks if address is in range.
  *
  * This function returns true if the given address is within the
- * memory range specified and false otherwise.  base is the address
- * of the first byte in the memory range and limit is the address
+ * memory range specified and false otherwise.  @a base is the address
+ * of the first byte in the memory range and @a limit is the address
  * of the last byte in the memory range.  The base address is
  * assumed to be lower than the limit address.
  *
- * @param[in] address is the address to check.
- * @param[in] base is the lowest address of the range to check against.
- * @param[in] limit is the highest address of the range to check against.
+ * @param address The address to check if it is in the given range.
+ * @param base The lowest address of the range to check against.
+ * @param limit The highest address of the range to check against.
  *
  * @retval true The @a address is within the memory range specified
  * @retval false The @a address is not within the memory range specified.
@@ -140,15 +145,15 @@ RTEMS_INLINE_ROUTINE bool _Addresses_Is_in_range (
 }
 
 /**
- * @brief Align address to nearest multiple of alignment, rounding up.
+ * @brief Aligns address to nearest multiple of alignment, rounding up.
  *
  * This function returns the given address aligned to the given alignment.
  * If the address already is aligned, or if alignment is 0, the address is
  * returned as is. The returned address is greater than or equal to the
  * given address.
  *
- * @param[in] address is the address to align.
- * @param[in] alignment is the boundary for alignment and must be a power of 2
+ * @param address The address to align to the given alignment.
+ * @param alignment The desired alignment for the address. It must be a power of two.
  *
  * @return Returns the aligned address.
  */
@@ -162,15 +167,15 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Align_up(
 }
 
 /**
- * @brief Align address to nearest multiple of alignment, truncating.
+ * @brief Aligns address to nearest multiple of alignment, truncating.
  *
  * This function returns the given address aligned to the given alignment.
  * If the address already is aligned, or if alignment is 0, the address is
  * returned as is. The returned address is less than or equal to the
  * given address.
  *
- * @param[in] address is the address to align.
- * @param[in] alignment is the boundary for alignment and must be a power of 2.
+ * @param address The address to align to the given alignment.
+ * @param alignment The desired alignment for the address. It must be a power of two.
  *
  * @return Returns the aligned address.
  */
@@ -183,7 +188,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Align_down(
   return (void*)((uintptr_t)address & ~mask);
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
