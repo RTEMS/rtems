@@ -28,8 +28,9 @@
  * @ingroup RTEMSScore
  *
  * @brief Provides routines to ensure mutual exclusion on API level.
+ *
+ * @{
  */
-/**@{**/
 
 #ifdef __cplusplus
 extern "C" {
@@ -60,21 +61,21 @@ typedef struct {
 /**
  * @brief Acquires the specified API mutex.
  *
- * @param[in] mutex The API mutex.
+ * @param[in, out] mutex The API mutex to acquire.
  */
 void _API_Mutex_Lock( API_Mutex_Control *mutex );
 
 /**
  * @brief Releases the specified API mutex.
  *
- * @param[in] mutex The API mutex.
+ * @param[in, out] mutex The API mutex to release.
  */
 void _API_Mutex_Unlock( API_Mutex_Control *mutex );
 
 /**
  * @brief Checks if the specified API mutex is owned by the executing thread.
  *
- * @param[in] mutex The API mutex.
+ * @param[in] mutex The API mutex to check the owner from.
  */
 bool _API_Mutex_Is_owner( const API_Mutex_Control *mutex );
 
@@ -90,8 +91,9 @@ bool _API_Mutex_Is_owner( const API_Mutex_Control *mutex );
  * When the APIs all use this for allocation and deallocation protection, then
  * this possibly should be renamed and moved to a higher level in the
  * hierarchy.
+ *
+ * @{
  */
-/**@{**/
 
 void _RTEMS_Lock_allocator( void );
 
