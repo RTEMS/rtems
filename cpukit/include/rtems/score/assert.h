@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreAssert
+ *
+ * @brief Information for the Assert Handler
+ */
+
 /*
  * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *
@@ -16,6 +24,16 @@
 #define _RTEMS_SCORE_ASSERT_H
 
 #include <rtems/score/basedefs.h>
+
+/**
+ * @defgroup RTEMSScoreAssert Assert Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief Support for Assert Statements
+ *
+ * @{
+ */
 
 #if defined( RTEMS_DEBUG )
   #include <assert.h>
@@ -104,5 +122,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_ASSERT_H */
