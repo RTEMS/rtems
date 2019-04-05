@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Structures Associated with the Message Queue Handler.
+ * @ingroup RTEMSScoreMessageQueue
  *
- *  This include file contains all the constants and structures associated
- *  with the Message queue Handler.
+ * @brief Constants and Structures Associated with the Message Queue Handler.
+ *
+ * This include file contains all the constants and structures associated
+ * with the Message queue Handler.
  */
 
 /*
@@ -29,14 +31,17 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreMessageQueue Message Queue Handler
+ * @defgroup RTEMSScoreMessageQueue Message Queue Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which provides the foundation
- *  Message Queue services used in all of the APIs supported by RTEMS.
+ * @brief Message Queue Handler
+ *
+ * This handler encapsulates functionality which provides the foundation
+ * Message Queue services used in all of the APIs supported by RTEMS.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  This macro is defined when an API is enabled that requires that the
@@ -171,7 +176,7 @@ struct CORE_message_queue_Control {
   Chain_Control                      Inactive_messages;
 };
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
