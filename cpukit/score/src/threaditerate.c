@@ -30,10 +30,7 @@ void _Thread_Iterate(
     Objects_Maximum            maximum;
     Objects_Maximum            index;
 
-    if ( _Objects_Information_table[ api_index ] == NULL ) {
-      continue;
-    }
-
+    _Assert( _Objects_Information_table[ api_index ] != NULL );
     information = _Objects_Information_table[ api_index ][ 1 ];
 
     if ( information == NULL ) {

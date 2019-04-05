@@ -196,13 +196,7 @@ int _POSIX_signals_Send(
   interested_priority = UINT64_MAX;
 
   for (the_api = OBJECTS_CLASSIC_API; the_api <= OBJECTS_APIS_LAST; the_api++) {
-
-    /*
-     *  This can occur when no one is interested and an API is not configured.
-     */
-    if ( !_Objects_Information_table[ the_api ] )
-      continue;
-
+    _Assert( _Objects_Information_table[ the_api ] != NULL );
     the_info = _Objects_Information_table[ the_api ][ 1 ];
     if ( !the_info )
       continue;
