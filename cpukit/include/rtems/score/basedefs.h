@@ -107,6 +107,17 @@
 /**
  *  The following defines a compiler specific attribute which informs
  *  the compiler that the method has no effect except the return value
+ *  and that the return value depends only the value of parameters.
+ */
+#ifdef __GNUC__
+  #define RTEMS_CONST __attribute__((__const__))
+#else
+  #define RTEMS_CONST
+#endif
+
+/**
+ *  The following defines a compiler specific attribute which informs
+ *  the compiler that the method has no effect except the return value
  *  and that the return value depends only on parameters and/or global
  *  variables.
  */
