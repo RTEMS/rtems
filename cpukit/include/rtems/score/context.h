@@ -1,9 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Information About Each Thread's Context
+ * @ingroup RTEMSScoreContext
  *
- *  This include file contains all information about each thread's context.
+ * @brief Information About Each Thread's Context
+ *
+ * This include file contains all information about each thread's context.
  */
 
 /*
@@ -19,17 +21,20 @@
 #define _RTEMS_SCORE_CONTEXT_H
 
 /**
- *  @defgroup RTEMSScoreContext Context Handler
+ * @defgroup RTEMSScoreContext Context Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which abstracts thread context
- *  management in a portable manner.
+ * @brief Functionality for Abstraction of Thread Context Management
  *
- *  The context switch needed variable is contained in the per cpu
- *  data structure.
+ * This handler encapsulates functionality which abstracts thread context
+ * management in a portable manner.
+ *
+ * The context switch needed variable is contained in the per cpu
+ * data structure.
+ *
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -157,7 +162,7 @@ extern "C" {
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
