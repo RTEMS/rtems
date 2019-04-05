@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Structures Associated with the Barrier Handler
+ * @ingroup RTEMSScoreBarrier
  *
- *  This include file contains all the constants and structures associated
- *  with the Barrier Handler.
+ * @brief Constants and Structures Associated with the Barrier Handler
+ *
+ * This include file contains all the constants and structures associated
+ * with the Barrier Handler.
  */
 
 /*
@@ -26,14 +28,17 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreBarrier Barrier Handler
+ * @defgroup RTEMSScoreBarrier Barrier Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which provides the foundation
- *  Barrier services used in all of the APIs supported by RTEMS.
+ * @brief Functionality for Foundation Barrier Services
+ *
+ * This handler encapsulates functionality which provides the foundation
+ * Barrier services used in all of the APIs supported by RTEMS.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  Flavors of barriers.
@@ -81,7 +86,7 @@ typedef struct {
   uint32_t                 number_of_waiting_threads;
 }   CORE_barrier_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
