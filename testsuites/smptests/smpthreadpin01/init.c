@@ -286,18 +286,18 @@ static void test_simple_pin_unpin(test_context *ctx, int run)
   set_affinity(ctx->busy, 0);
   set_prio(ctx->busy, PRIO_IDLE);
   set_prio(RTEMS_SELF, PRIO_MIDDLE);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   cpu_self = _Thread_Dispatch_disable();
   executing = _Per_CPU_Get_executing(cpu_self);
   _Thread_Pin(executing);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   _Thread_Unpin(executing, cpu_self);
   _Thread_Dispatch_enable(cpu_self);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 }
 
 static void test_pin_wait_unpin(test_context *ctx, bool blocked, int run)
@@ -309,20 +309,20 @@ static void test_pin_wait_unpin(test_context *ctx, bool blocked, int run)
   set_prio(RTEMS_SELF, PRIO_MIDDLE);
   set_prio(ctx->event, PRIO_LOW);
   set_affinity(ctx->event, 1);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   pin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   send_events(ctx->event, EVENT_WAKEUP_MASTER);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
   wait_for_events();
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   set_prio(ctx->busy, PRIO_HIGH);
   set_affinity(ctx->busy, 0);
   unpin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 }
 
 static void test_pin_preempt_unpin(test_context *ctx, bool blocked, int run)
@@ -338,10 +338,10 @@ static void test_pin_preempt_unpin(test_context *ctx, bool blocked, int run)
   set_prio(ctx->busy, PRIO_HIGH);
   set_affinity(ctx->event, 0);
   set_affinity(ctx->busy, 0);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   pin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   ctx->flag = false;
   send_events(
@@ -351,12 +351,12 @@ static void test_pin_preempt_unpin(test_context *ctx, bool blocked, int run)
   );
 
   while (!ctx->flag) {
-    rtems_test_assert(rtems_get_current_processor() == 1);
+    rtems_test_assert(rtems_scheduler_get_processor() == 1);
   }
 
   set_affinity(ctx->busy, 0);
   unpin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 }
 
 static void test_pin_home_no_help_unpin(
@@ -376,16 +376,16 @@ static void test_pin_home_no_help_unpin(
   set_affinity(ctx->busy, 1);
   set_prio(ctx->busy, PRIO_IDLE);
   set_prio(RTEMS_SELF, PRIO_MIDDLE);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   pin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   sc = rtems_task_set_scheduler(RTEMS_SELF, ctx->sched_b, 1);
   rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
 
   rtems_mutex_lock(&ctx->mtx);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   set_affinity(ctx->event, 1);
   set_prio(ctx->event, PRIO_MIDDLE);
@@ -398,7 +398,7 @@ static void test_pin_home_no_help_unpin(
 
   /* Now the event task can help us */
   rtems_test_assert(ctx->mtx._Queue._heads != NULL);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   set_affinity(ctx->event_2, 0);
   set_affinity(ctx->busy, 1);
@@ -409,17 +409,17 @@ static void test_pin_home_no_help_unpin(
       | EVENT_SET_SELF_PRIO_TO_LOW | EVENT_SET_BUSY_PRIO_TO_IDLE
   );
   set_prio(ctx->event_2, PRIO_VERY_HIGH);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   rtems_mutex_unlock(&ctx->mtx);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   send_events(ctx->event, EVENT_WAKEUP_MASTER | EVENT_MTX_UNLOCK);
   wait_for_events();
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   unpin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 }
 
 static void test_pin_foreign_no_help_unpin(
@@ -437,10 +437,10 @@ static void test_pin_foreign_no_help_unpin(
   set_affinity(ctx->busy, 1);
   set_prio(ctx->busy, PRIO_IDLE);
   set_prio(RTEMS_SELF, PRIO_MIDDLE);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   rtems_mutex_lock(&ctx->mtx);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   set_affinity(ctx->event, 1);
   set_prio(ctx->event, PRIO_MIDDLE);
@@ -452,16 +452,16 @@ static void test_pin_foreign_no_help_unpin(
 
   /* Now the event task can help us */
   rtems_test_assert(ctx->mtx._Queue._heads != NULL);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   /* Request help */
   set_affinity(ctx->busy, 0);
   set_prio(ctx->busy, PRIO_HIGH);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   /* Pin while using foreign scheduler */
   pin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   set_affinity(ctx->event_2, 1);
   send_events(
@@ -470,18 +470,18 @@ static void test_pin_foreign_no_help_unpin(
       | EVENT_SET_SELF_PRIO_TO_LOW | EVENT_SET_BUSY_PRIO_TO_IDLE
   );
   set_prio(ctx->event_2, PRIO_VERY_HIGH);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   unpin(blocked);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   set_prio(ctx->busy, PRIO_IDLE);
   rtems_mutex_unlock(&ctx->mtx);
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   send_events(ctx->event, EVENT_WAKEUP_MASTER | EVENT_MTX_UNLOCK);
   wait_for_events();
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 }
 
 static void test(test_context *ctx)
@@ -514,7 +514,7 @@ static void test(test_context *ctx)
 
   set_affinity(ctx->busy, 0);
   set_prio(ctx->busy, PRIO_IDLE);
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   sc = rtems_task_create(
     rtems_build_name('E', 'V', 'T', '1'),

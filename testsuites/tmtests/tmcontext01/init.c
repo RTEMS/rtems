@@ -116,7 +116,7 @@ static void load_task(rtems_task_argument arg)
   volatile int *load_data = (volatile int *) arg;
   size_t n = data_size;
   size_t clsz = cache_line_size;
-  int j = (int) rtems_get_current_processor();
+  int j = (int) rtems_scheduler_get_processor();
 
   while (true) {
     j = dirty_data_cache(load_data, n, clsz, j);

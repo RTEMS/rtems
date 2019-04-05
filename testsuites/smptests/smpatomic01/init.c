@@ -487,7 +487,7 @@ static void test_atomic_store_load_rmw_body(
    * Use the physical processor index, to observe timing differences introduced
    * by the system topology.
    */
-  cpu_self_index = rtems_get_current_processor();
+  cpu_self_index = rtems_scheduler_get_processor();
 
   /* Store release and load acquire test case */
 
@@ -638,7 +638,7 @@ static void test_single_writer_seqlock_body(
    * Use the physical processor index, to observe timing differences introduced
    * by the system topology.
    */
-  cpu_self_index = rtems_get_current_processor();
+  cpu_self_index = rtems_scheduler_get_processor();
 
   if (cpu_self_index == 0) {
     counter = 0;
@@ -700,7 +700,7 @@ static void test_multi_writer_seqlock_body(
    * Use the physical processor index, to observe timing differences introduced
    * by the system topology.
    */
-  cpu_self_index = rtems_get_current_processor();
+  cpu_self_index = rtems_scheduler_get_processor();
 
   if (cpu_self_index % 2 == 0) {
     counter = 0;

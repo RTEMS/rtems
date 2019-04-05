@@ -66,7 +66,7 @@ static void task(rtems_task_argument arg)
   uint32_t cpu;
   cpu_set_t cpuset;
 
-  cpu = rtems_get_current_processor();
+  cpu = rtems_scheduler_get_processor();
 
   rtems_task_get_affinity( rtems_task_self(), sizeof(cpuset), &cpuset );
 

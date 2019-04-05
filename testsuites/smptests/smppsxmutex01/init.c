@@ -50,7 +50,7 @@ static void *thread_b(void *arg)
 
   ctx = arg;
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -61,7 +61,7 @@ static void *thread_b(void *arg)
   sc = rtems_task_set_scheduler(pthread_self(), scheduler_b_id, prio);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   eno = pthread_mutex_init(&ctx->mtx_b, &ctx->mtx_attr);
   rtems_test_assert(eno == 0);
@@ -97,7 +97,7 @@ static void test(test_context *ctx)
 
   cpu_count = rtems_get_processor_count();
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   eno = pthread_mutexattr_init(&ctx->mtx_attr);
   rtems_test_assert(eno == 0);

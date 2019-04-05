@@ -584,6 +584,40 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
 );
 
 /**
+ * @brief Returns the index of the current processor.
+ *
+ * In uniprocessor configurations, a value of zero will be returned.
+ *
+ * In SMP configurations, an architecture specific method is used to obtain the
+ * index of the current processor in the system.  The set of processor indices
+ * is the range of integers starting with zero up to the processor count minus
+ * one.
+ *
+ * Outside of sections with disabled thread dispatching the current processor
+ * index may change after every instruction since the thread may migrate from
+ * one processor to another.  Sections with disabled interrupts are sections
+ * with thread dispatching disabled.
+ *
+ * @return The index of the current processor.
+ */
+uint32_t rtems_scheduler_get_processor( void );
+
+/**
+ * @brief Returns the index of the current processor.
+ *
+ * @return The index of the current processor.
+ *
+ * @deprecated
+ *
+ * Use rtems_scheduler_get_processor() instead.
+ */
+RTEMS_DEPRECATED RTEMS_INLINE_ROUTINE uint32_t
+rtems_get_current_processor( void )
+{
+  return rtems_scheduler_get_processor();
+}
+
+/**
  * @brief Gets the set of processors owned by the specified scheduler instance.
  *
  * @param[in] scheduler_id Identifier of the scheduler instance.

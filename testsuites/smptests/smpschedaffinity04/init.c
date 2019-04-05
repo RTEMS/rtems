@@ -60,7 +60,7 @@ static void task(rtems_task_argument arg)
     sc = rtems_semaphore_obtain (task_sem, RTEMS_NO_WAIT, 0);
     if (sc == RTEMS_SUCCESSFUL) {
       task_data.ran = true;
-      task_data.actual_cpu = rtems_get_current_processor();
+      task_data.actual_cpu = rtems_scheduler_get_processor();
       rtems_semaphore_release(task_sem);
     }
   }
@@ -115,7 +115,7 @@ static void test(void)
    * Verify the Init task is running on the max core.
    */ 
   printf("Verify Init task is on cpu %" PRIu32 "\n",cpu_count-1);
-  cpu = rtems_get_current_processor();
+  cpu = rtems_scheduler_get_processor();
   rtems_test_assert(cpu == (cpu_count-1));
 
   /* Walk TA1 across all of the cores */

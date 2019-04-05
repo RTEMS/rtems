@@ -64,7 +64,7 @@ static void timer_task(rtems_task_argument arg)
   rtems_status_code sc;
   rtems_id timer_id;
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   sc = rtems_timer_create(SCHEDULER_B, &timer_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -96,7 +96,7 @@ static void delay_clock_tick(test_context *ctx)
   const Per_CPU_Control *cpu_other = _Per_CPU_Get_by_index(1);
   uint64_t ticks;
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   rtems_test_spin_until_next_tick();
   ticks = cpu_self->Watchdog.ticks;

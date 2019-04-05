@@ -356,7 +356,7 @@ void
 rtems_capture_record_lock (rtems_capture_record_lock_context* context)
 {
   rtems_capture_per_cpu_data* cpu;
-  cpu = capture_per_cpu_get (rtems_get_current_processor ());
+  cpu = capture_per_cpu_get (rtems_scheduler_get_processor ());
   rtems_interrupt_lock_interrupt_disable (&context->lock_context);
   context->lock = &cpu->lock;
   rtems_interrupt_lock_acquire_isr (&cpu->lock, &context->lock_context);
@@ -379,7 +379,7 @@ rtems_capture_record_open (rtems_tcb*                         tcb,
 
   size += sizeof (rtems_capture_record);
 
-  cpu = capture_per_cpu_get (rtems_get_current_processor ());
+  cpu = capture_per_cpu_get (rtems_scheduler_get_processor ());
 
   rtems_capture_record_lock (context);
 

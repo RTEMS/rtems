@@ -154,7 +154,7 @@ static void switch_extension(Thread_Control *executing, Thread_Control *heir)
     switch_event *e = &ctx->switch_events[i];
     Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node(heir);
 
-    e->cpu_index = rtems_get_current_processor();
+    e->cpu_index = rtems_scheduler_get_processor();
     e->executing = executing;
     e->heir = heir;
     e->heir_node = _Scheduler_Node_get_owner(&node->Base);
@@ -505,9 +505,9 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
-  while (rtems_get_current_processor() != 0) {
+  while (rtems_scheduler_get_processor() != 0) {
     /* Wait */
   }
 
@@ -654,7 +654,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
   sc = rtems_task_start(ctx->high_task_id[0], obtain_after_migration_high, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   /* Obtain done (I) */
   _SMP_barrier_State_initialize(&barrier_state);
@@ -663,7 +663,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
   sc = rtems_task_suspend(ctx->high_task_id[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   /*
    * Obtain second MrsP semaphore and ensure that we change the priority of our
@@ -675,7 +675,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
 
   assert_prio(RTEMS_SELF, 1);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   sc = rtems_semaphore_release(ctx->mrsp_ids[2]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -686,7 +686,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
   /* Ready to release (J) */
   barrier(ctx, &barrier_state);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   /* Prepare barrier for worker */
   barrier_init(ctx);
@@ -695,7 +695,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   print_switch_events(ctx);
 
@@ -1106,7 +1106,7 @@ static void various_block_unblock(test_context *ctx)
   sc = rtems_task_resume(ctx->worker_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   /* Use node of the active rival */
 
@@ -1116,7 +1116,7 @@ static void various_block_unblock(test_context *ctx)
   sc = rtems_task_resume(ctx->high_task_id[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   sc = rtems_task_suspend(ctx->worker_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -1152,7 +1152,7 @@ static void various_block_unblock(test_context *ctx)
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   assert_prio(RTEMS_SELF, 4);
 
@@ -1409,12 +1409,12 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
   sc = rtems_task_wake_after(2);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
   rtems_test_assert(!run);
 
   change_prio(run_task_id, 1);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   while (!run) {
     /* Wait */
@@ -1423,11 +1423,11 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
   sc = rtems_task_wake_after(2);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   change_prio(run_task_id, 4);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   /*
    * With this operation the scheduler instance 0 has now only the main and the
@@ -1436,7 +1436,7 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
   sc = rtems_task_suspend(run_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
   change_prio(RTEMS_SELF, 1);
   change_prio(RTEMS_SELF, 3);
@@ -1444,7 +1444,7 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   assert_prio(RTEMS_SELF, 3);
 
@@ -1494,7 +1494,7 @@ static void load_worker(rtems_task_argument index)
       sc = rtems_task_wake_after(1);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-      ++ctx->counters[index].cpu[rtems_get_current_processor()];
+      ++ctx->counters[index].cpu[rtems_scheduler_get_processor()];
     } else {
       uint32_t n = (v >> 17) % (i + 1);
       uint32_t s;
@@ -1517,7 +1517,7 @@ static void load_worker(rtems_task_argument index)
           break;
         }
 
-        ++ctx->counters[index].cpu[rtems_get_current_processor()];
+        ++ctx->counters[index].cpu[rtems_scheduler_get_processor()];
 
         v = simple_random(v);
       }
@@ -1529,7 +1529,7 @@ static void load_worker(rtems_task_argument index)
         sc = rtems_semaphore_release(ctx->mrsp_ids[k]);
         rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-        ++ctx->counters[index].cpu[rtems_get_current_processor()];
+        ++ctx->counters[index].cpu[rtems_scheduler_get_processor()];
       }
     }
 
@@ -1556,7 +1556,7 @@ static void migration_task(rtems_task_argument arg)
     sc = rtems_task_set_scheduler(RTEMS_SELF, ctx->scheduler_ids[cpu_index], 2);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    ++ctx->migration_counters[rtems_get_current_processor()];
+    ++ctx->migration_counters[rtems_scheduler_get_processor()];
 
     v = simple_random(v);
   }

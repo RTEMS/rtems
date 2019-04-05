@@ -46,7 +46,7 @@ static void fatal_extension(
 )
 {
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
-  uint32_t self = rtems_get_current_processor();
+  uint32_t self = rtems_scheduler_get_processor();
 
   assert(!always_set_to_false);
 
@@ -80,7 +80,7 @@ static rtems_status_code test_driver_init(
   void *arg
 )
 {
-  uint32_t self = rtems_get_current_processor();
+  uint32_t self = rtems_scheduler_get_processor();
   uint32_t cpu_count = rtems_get_processor_count();
   uint32_t cpu;
 

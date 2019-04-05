@@ -74,7 +74,7 @@ static void run_tests(
        */
       rtems_interrupt_local_disable(level);
       _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
-      worker_index = rtems_get_current_processor();
+      worker_index = rtems_scheduler_get_processor();
       rtems_interrupt_local_enable(level);
 
       _Assert(worker_index < ctx->worker_count);

@@ -57,7 +57,7 @@ static void migration_task(rtems_task_argument arg)
   uint32_t task_index = arg;
   rtems_task_priority prio = migration_task_prio(task_index);
   uint32_t cpu_count = rtems_get_processor_count();
-  uint32_t cpu_index = rtems_get_current_processor();
+  uint32_t cpu_index = rtems_scheduler_get_processor();
 
   while (true) {
     rtems_status_code sc;
@@ -73,7 +73,7 @@ static void migration_task(rtems_task_argument arg)
 
     ++ctx->counters[task_index].value;
 
-    rtems_test_assert(cpu_index == rtems_get_current_processor());
+    rtems_test_assert(cpu_index == rtems_scheduler_get_processor());
   }
 }
 

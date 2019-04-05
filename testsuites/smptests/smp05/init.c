@@ -35,7 +35,7 @@ rtems_task Test_task(
   rtems_task_argument argument
 )
 {
-  locked_printf( "Shut down from CPU %" PRIu32 "\n", rtems_get_current_processor() );
+  locked_printf( "Shut down from CPU %" PRIu32 "\n", rtems_scheduler_get_processor() );
   success();
 }
 
@@ -69,7 +69,7 @@ rtems_task Init(
     );
     directive_failed( status, "task create" );
 
-    cpu_num = rtems_get_current_processor();
+    cpu_num = rtems_scheduler_get_processor();
     locked_printf(" CPU %" PRIu32 " start task TA%c\n", cpu_num, ch);
 
     status = rtems_task_start( id, Test_task, i+1 );

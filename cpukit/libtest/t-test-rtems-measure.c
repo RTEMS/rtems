@@ -115,7 +115,7 @@ load_worker(rtems_task_argument arg)
 	chunk = lctx->chunk;
 	chunk_size = ctx->chunk_size;
 	cache_line_size = ctx->cache_line_size;
-	token = (unsigned int)rtems_get_current_processor();
+	token = (unsigned int)rtems_scheduler_get_processor();
 
 	token = dirty_data_cache(chunk, chunk_size, cache_line_size, token);
 	wakeup_master(ctx);

@@ -46,7 +46,7 @@ static void task(rtems_task_argument arg)
 
   (void) arg;
 
-  rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(rtems_scheduler_get_processor() == 1);
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
   rtems_test_assert(sched_get_priority_max(SCHED_RR) == INT_MAX - 1);
 
@@ -77,7 +77,7 @@ static void sticky_task(rtems_task_argument arg)
 
   (void) arg;
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   sc = rtems_semaphore_create(
     rtems_build_name(' ', 'M', 'T', 'X'),
@@ -149,12 +149,12 @@ static void test_scheduler_add_remove_processors(void)
     sc = rtems_scheduler_add_processor(scheduler_a_id, 1);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    rtems_test_assert(rtems_get_current_processor() == 0);
+    rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
     sc = rtems_scheduler_remove_processor(scheduler_a_id, 0);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    rtems_test_assert(rtems_get_current_processor() == 1);
+    rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
     CPU_ZERO(&first_cpu);
     CPU_SET(0, &first_cpu);
@@ -168,7 +168,7 @@ static void test_scheduler_add_remove_processors(void)
     sc = rtems_scheduler_add_processor(scheduler_a_id, 0);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    rtems_test_assert(rtems_get_current_processor() == 1);
+    rtems_test_assert(rtems_scheduler_get_processor() == 1);
 
     sc = rtems_task_create(
       rtems_build_name('T', 'A', 'S', 'K'),
@@ -190,7 +190,7 @@ static void test_scheduler_add_remove_processors(void)
     sc = rtems_scheduler_remove_processor(scheduler_a_id, 1);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    rtems_test_assert(rtems_get_current_processor() == 0);
+    rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
     sc = rtems_event_transient_send(task_id);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -222,7 +222,7 @@ static void test(void)
   cpu_set_t online_cpus;
   uint32_t cpu_count;
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
   cpu_count = rtems_get_processor_count();
   main_task_id = rtems_task_self();

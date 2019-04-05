@@ -84,7 +84,7 @@ static test_context test_instance;
 
 static void assert_cpu(uint32_t expected_cpu)
 {
-  rtems_test_assert(rtems_get_current_processor() == expected_cpu);
+  rtems_test_assert(rtems_scheduler_get_processor() == expected_cpu);
 }
 
 static void test_task_get_priority_not_defined(test_context *ctx)
@@ -226,7 +226,7 @@ static void request(test_context *ctx, task_id id, request_id req)
   send_event(ctx, id, req);
   clear_done(ctx);
 
-  if (rtems_get_current_processor() == 0) {
+  if (rtems_scheduler_get_processor() == 0) {
     id = H_B;
   } else {
     id = H_A;

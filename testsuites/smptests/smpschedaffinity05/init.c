@@ -77,7 +77,7 @@ static void task(rtems_task_argument arg)
     sc = rtems_semaphore_obtain (task_sem, RTEMS_NO_WAIT, 0);
     if (sc == RTEMS_SUCCESSFUL) {
       task_data[arg].ran = true;
-      task_data[arg].actual_cpu = rtems_get_current_processor();
+      task_data[arg].actual_cpu = rtems_scheduler_get_processor();
       rtems_semaphore_release(task_sem);
     }
   }
@@ -92,7 +92,7 @@ static void verify_tasks(void)
 
   /* Set Init task data */
   task_data[0].ran = true;
-  task_data[0].actual_cpu = rtems_get_current_processor();
+  task_data[0].actual_cpu = rtems_scheduler_get_processor();
 
   /* Verify all tasks */
   for (i = 0; i < NUM_CPUS; i++) {

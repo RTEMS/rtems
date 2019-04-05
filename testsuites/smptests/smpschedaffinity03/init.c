@@ -64,7 +64,7 @@ static void test(void)
     test_delay(100);
 
     /* Check the cpu the Init task is running on */
-    cpu = rtems_get_current_processor();
+    cpu = rtems_scheduler_get_processor();
     printf("On cpu %d\n", cpu);
     rtems_test_assert(cpu == i);
   }

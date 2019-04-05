@@ -99,7 +99,7 @@ static void init_verify( int expect )
 
   test_delay(20);
 
-  cpu = rtems_get_current_processor();
+  cpu = rtems_scheduler_get_processor();
   printf( "Init: expected=%d actual=%d\n", expect, cpu);
   rtems_test_assert( expect == cpu );
 }
@@ -112,7 +112,7 @@ static void task(rtems_task_argument arg)
   while (true) {
     sc = rtems_semaphore_obtain (task_sem, RTEMS_NO_WAIT, 0);
     if (sc == RTEMS_SUCCESSFUL) {
-      task_data.actual_cpu = rtems_get_current_processor();
+      task_data.actual_cpu = rtems_scheduler_get_processor();
       task_data.ran = true;
       test_delay(25);
       rtems_semaphore_release(task_sem);

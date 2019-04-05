@@ -47,7 +47,7 @@ static void test_action( void *arg )
 {
   rtems_test_assert(arg == &ctx);
 
-  ctx.count[rtems_get_current_processor()]++;
+  ctx.count[rtems_scheduler_get_processor()]++;
 }
 
 typedef void ( *test_case )(
@@ -68,7 +68,7 @@ static void test_cache_invalidate_multiple_instruction_lines(
   const cpu_set_t *cpu_set
 )
 {
-  uint32_t self = rtems_get_current_processor();
+  uint32_t self = rtems_scheduler_get_processor();
 
   ctx.do_longjmp[self] = true;
 
@@ -87,7 +87,7 @@ static void barrier( SMP_barrier_State *bs )
 
 static void broadcast_test_init( void )
 {
-  ctx.count[rtems_get_current_processor()] = 0;
+  ctx.count[rtems_scheduler_get_processor()] = 0;
 }
 
 static void broadcast_test_body(
@@ -101,7 +101,7 @@ static void broadcast_test_body(
 static void broadcast_test_fini( void )
 {
   rtems_test_assert(
-    ctx.count[rtems_get_current_processor()] == rtems_get_processor_count()
+    ctx.count[rtems_scheduler_get_processor()] == rtems_get_processor_count()
   );
 }
 
@@ -169,7 +169,7 @@ static void call_tests_with_thread_dispatch_disabled( size_t set_size,
 
 static void cmlog(  const char* str )
 {
-  if ( rtems_get_current_processor() == 0 )
+  if ( rtems_scheduler_get_processor() == 0 )
     printf( "%s", str );
 }
 
@@ -256,7 +256,7 @@ static void fatal_extension(
   rtems_fatal_code error
 )
 {
-  uint32_t self = rtems_get_current_processor();
+  uint32_t self = rtems_scheduler_get_processor();
 
   if (source == RTEMS_FATAL_SOURCE_EXCEPTION && ctx.do_longjmp[self]) {
     _ISR_Set_level(0);
