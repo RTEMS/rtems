@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Copyright Notice for RTEMS
+ * @ingroup RTEMSSuperCoreCopyright
  *
- *  This include file contains the copyright notice for RTEMS
- *  which is included in every binary copy of the executive.
+ * @brief Copyright Notice for RTEMS
+ *
+ * This include file contains the copyright notice for RTEMS
+ * which is included in every binary copy of the executive.
  */
 
 /*
@@ -20,11 +22,15 @@
 #define _RTEMS_SCORE_COPYRT_H
 
 /**
- *  @defgroup SuperCoreCopyright RTEMS Copyright Notice
+ * @defgroup RTEMSSuperCoreCopyright RTEMS Copyright Notice
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
+ *
+ * @brief Copyright Notice for RTEMS
+ *
+ * @{
  */
-/**@{*/
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,6 +45,7 @@ extern const char _Copyright_Notice[];
 }
 #endif
 
-/**@}*/
+/** @} */
+
 #endif
 /* end of include file */
