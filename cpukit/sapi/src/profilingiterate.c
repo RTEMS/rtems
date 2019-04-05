@@ -31,7 +31,7 @@ static void per_cpu_stats_iterate(
 )
 {
 #ifdef RTEMS_PROFILING
-  uint32_t n = rtems_get_processor_count();
+  uint32_t n = rtems_scheduler_get_processor_maximum();
   uint32_t i;
 
   memset(data, 0, sizeof(*data));

@@ -99,7 +99,7 @@ rtems_task Init(
   locked_print_initialize();
   TEST_BEGIN();
 
-  if ( rtems_get_processor_count() == 1 ) {
+  if ( rtems_scheduler_get_processor_maximum() == 1 ) {
     success();
   }
 

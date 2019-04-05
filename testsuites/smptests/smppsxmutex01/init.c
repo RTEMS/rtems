@@ -95,7 +95,7 @@ static void test(test_context *ctx)
   int prio_ceiling;
   int eno;
 
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
 
   rtems_test_assert(rtems_scheduler_get_processor() == 0);
 

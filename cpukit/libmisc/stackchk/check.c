@@ -477,7 +477,7 @@ void rtems_stack_checker_report_usage_with_plugin(
     RTEMS_DECONST( rtems_printer *, printer )
   );
 
-  cpu_max = rtems_get_processor_count();
+  cpu_max = rtems_scheduler_get_processor_maximum();
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Stack_check_Dump_interrupt_stack_usage(

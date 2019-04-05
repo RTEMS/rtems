@@ -60,7 +60,7 @@ static bsp_interrupt_server_context *bsp_interrupt_server_get_context(
   }
 #endif
 
-  if (server_index >= rtems_get_processor_count()) {
+  if (server_index >= rtems_scheduler_get_processor_maximum()) {
     *sc = RTEMS_INVALID_ID;
     return NULL;
   }
@@ -504,7 +504,7 @@ rtems_status_code rtems_interrupt_server_initialize(
     server_count = &dummy;
   }
 
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
 
 #if defined(RTEMS_SMP)
   instances = calloc(cpu_count, sizeof(*instances));

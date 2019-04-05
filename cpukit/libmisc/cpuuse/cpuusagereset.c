@@ -56,7 +56,7 @@ void rtems_cpu_usage_reset( void )
 
   _TOD_Get_uptime( &CPU_usage_Uptime_at_last_reset );
 
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 

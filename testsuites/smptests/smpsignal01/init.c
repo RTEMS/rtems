@@ -224,7 +224,7 @@ static void Init(rtems_task_argument arg)
 
   test_isr_level(ctx);
 
-  if (rtems_get_processor_count() >= 2) {
+  if (rtems_scheduler_get_processor_maximum() >= 2) {
     test_two_processors(ctx);
   }
 

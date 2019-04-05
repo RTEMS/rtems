@@ -618,6 +618,39 @@ rtems_get_current_processor( void )
 }
 
 /**
+ * @brief Returns the processor maximum supported by the system.
+ *
+ * In uniprocessor configurations, a value of one will be returned.
+ *
+ * In SMP configurations, this function returns the minimum of the processors
+ * (physically or virtually) available by the platform and the configured
+ * processor maximum.  Not all processors in the range from processor index
+ * zero to the last processor index (which is the processor maximum minus one)
+ * may be configured to be used by a scheduler or online (online processors
+ * have a scheduler assigned).
+ *
+ * @return The processor maximum supported by the system.
+ *
+ * @see rtems_scheduler_add_processor() and rtems_scheduler_remove_processor().
+ */
+RTEMS_CONST uint32_t rtems_scheduler_get_processor_maximum( void );
+
+/**
+ * @brief Returns the processor maximum supported by the system.
+ *
+ * @return The processor maximum supported by the system.
+ *
+ * @deprecated
+ *
+ * Use rtems_scheduler_get_processor_maximum() instead.
+ */
+RTEMS_DEPRECATED RTEMS_INLINE_ROUTINE uint32_t
+rtems_get_processor_count( void )
+{
+  return rtems_scheduler_get_processor_maximum();
+}
+
+/**
  * @brief Gets the set of processors owned by the specified scheduler instance.
  *
  * @param[in] scheduler_id Identifier of the scheduler instance.

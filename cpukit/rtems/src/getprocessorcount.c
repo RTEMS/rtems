@@ -16,10 +16,10 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/smp.h>
+#include <rtems/rtems/tasks.h>
 #include <rtems/score/smp.h>
 
-uint32_t rtems_get_processor_count(void)
+uint32_t rtems_scheduler_get_processor_maximum(void)
 {
   return _SMP_Get_processor_count();
 }

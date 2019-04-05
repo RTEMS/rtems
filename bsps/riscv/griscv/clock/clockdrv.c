@@ -80,7 +80,7 @@ static void grlib_tc_tick_irqmp_timestamp_init(void)
 
   bool done =
     _Atomic_Fetch_add_uint(&counter, 1, ATOMIC_ORDER_RELAXED)
-      == rtems_get_processor_count() - 1;
+      == rtems_scheduler_get_processor_maximum() - 1;
 #else
   bool done = true;
 #endif

@@ -55,7 +55,6 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/mp.h>
 #endif
-#include <rtems/rtems/smp.h>
 
 #include <rtems/rtems/support.h>
 #include <rtems/score/stack.h>

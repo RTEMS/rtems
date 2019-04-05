@@ -60,8 +60,8 @@ static void run_tests(
 
   for (i = 0; i < job_count; ++i) {
     const rtems_test_parallel_job *job = &jobs[i];
-    size_t n = rtems_get_processor_count();
-    size_t j = job->cascade ? 0 : rtems_get_processor_count() - 1;
+    size_t n = rtems_scheduler_get_processor_maximum();
+    size_t j = job->cascade ? 0 : rtems_scheduler_get_processor_maximum() - 1;
 
     while (j < n) {
       size_t active_worker = j + 1;
@@ -133,7 +133,7 @@ void rtems_test_parallel(
 
   _Atomic_Init_ulong(&ctx->stop, 0);
   _SMP_barrier_Control_initialize(&ctx->barrier);
-  ctx->worker_count = rtems_get_processor_count();
+  ctx->worker_count = rtems_scheduler_get_processor_maximum();
   ctx->worker_ids[0] = rtems_task_self();
   ctx->jobs = jobs;
   ctx->job_count = job_count;

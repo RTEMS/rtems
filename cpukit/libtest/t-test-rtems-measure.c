@@ -200,7 +200,7 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 
 	chunk_size *= 2;
 
-	load_count = rtems_get_processor_count();
+	load_count = rtems_scheduler_get_processor_maximum();
 	load_size = load_count * sizeof(ctx->load_contexts[0]);
 
 	ctx = malloc(sizeof(*ctx) + sample_size + load_size + chunk_size +

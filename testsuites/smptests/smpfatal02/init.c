@@ -71,7 +71,11 @@ static void fatal_extension(
     assert(code == SMP_FATAL_SHUTDOWN);
   }
 
-  _SMP_barrier_Wait(&barrier, &barrier_state, rtems_get_processor_count());
+  _SMP_barrier_Wait(
+    &barrier,
+    &barrier_state,
+    rtems_scheduler_get_processor_maximum()
+  );
 }
 
 static rtems_status_code test_driver_init(
@@ -81,7 +85,7 @@ static rtems_status_code test_driver_init(
 )
 {
   uint32_t self = rtems_scheduler_get_processor();
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu;
 
   TEST_BEGIN();

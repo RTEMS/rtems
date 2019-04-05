@@ -53,7 +53,7 @@ rtems_task Init(
   for ( killtime=0; killtime<1000000; killtime++ )
     ;
   
-  for ( i=0; i<rtems_get_processor_count() -1; i++ ) {
+  for ( i=0; i<rtems_scheduler_get_processor_maximum() -1; i++ ) {
     ch = '1' + i;
 
     status = rtems_task_create(

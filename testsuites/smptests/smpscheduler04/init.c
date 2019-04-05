@@ -46,7 +46,7 @@ static test_context test_instance;
 static void migration_task(rtems_task_argument arg)
 {
   test_context *ctx = (test_context *) arg;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index = rtems_scheduler_get_processor();
 
   while (true) {
@@ -73,7 +73,7 @@ static void migration_task(rtems_task_argument arg)
 static void scheduler_task(rtems_task_argument arg)
 {
   test_context *ctx = (test_context *) arg;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index = rtems_scheduler_get_processor();
 
   while (true) {
@@ -107,7 +107,7 @@ static void test(test_context *ctx)
   rtems_status_code sc;
   uint32_t i;
 
-  for (i = 0; i < rtems_get_processor_count(); ++i) {
+  for (i = 0; i < rtems_scheduler_get_processor_maximum(); ++i) {
     sc = rtems_scheduler_ident(i, &ctx->scheduler_ids[i]);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }

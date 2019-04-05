@@ -134,7 +134,7 @@ static void test_scheduler_add_remove_processors(void)
   sc = rtems_scheduler_remove_processor(scheduler_a_id, 0);
   rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
 
-  if (rtems_get_processor_count() > 1) {
+  if (rtems_scheduler_get_processor_maximum() > 1) {
     rtems_id scheduler_id;
     rtems_id scheduler_b_id;
     rtems_id task_id;
@@ -224,7 +224,7 @@ static void test(void)
 
   rtems_test_assert(rtems_scheduler_get_processor() == 0);
 
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
   main_task_id = rtems_task_self();
 
   CPU_ZERO(&first_cpu);

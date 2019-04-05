@@ -599,7 +599,7 @@ rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp RTEMS_UNU
     return RTEMS_RESOURCE_IN_USE;
   }
 
-  count = rtems_get_processor_count();
+  count = rtems_scheduler_get_processor_maximum();
   if (capture_per_cpu == NULL) {
     capture_per_cpu = calloc( count, sizeof( *capture_per_cpu ) );
   }
@@ -686,7 +686,7 @@ rtems_capture_close (void)
   }
 
   capture_controls = NULL;
-  for (cpu=0; cpu < rtems_get_processor_count(); cpu++) {
+  for (cpu=0; cpu < rtems_scheduler_get_processor_maximum(); cpu++) {
     if (capture_records_on_cpu(cpu).buffer)
       rtems_capture_buffer_destroy( &capture_records_on_cpu(cpu) );
 
@@ -788,7 +788,7 @@ rtems_capture_flush (bool prime)
     else
       capture_flags_global &= ~RTEMS_CAPTURE_OVERFLOW;
 
-    for (cpu=0; cpu < rtems_get_processor_count(); cpu++) {
+    for (cpu=0; cpu < rtems_scheduler_get_processor_maximum(); cpu++) {
       RTEMS_INTERRUPT_LOCK_REFERENCE( lock, &(capture_lock_on_cpu( cpu )) )
       rtems_interrupt_lock_context lock_context_per_cpu;
 

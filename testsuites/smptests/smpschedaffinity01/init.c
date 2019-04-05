@@ -84,7 +84,7 @@ static void test(void)
   uint32_t            cpu_count;
 
   /* Get the number of processors that we are using. */
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
  
   size = sizeof(cpu_set_t);
 

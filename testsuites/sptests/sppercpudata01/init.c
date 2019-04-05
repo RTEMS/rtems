@@ -68,7 +68,11 @@ static void test_initial_values(void)
 {
   uint32_t cpu_index;
 
-  for (cpu_index = 0; cpu_index < rtems_get_processor_count(); ++cpu_index) {
+  for (
+    cpu_index = 0;
+    cpu_index < rtems_scheduler_get_processor_maximum();
+    ++cpu_index
+  ) {
     Per_CPU_Control *cpu;
     unsigned char *c;
     unsigned short *s;
@@ -137,7 +141,11 @@ static void set_unique_values(unsigned int v)
 {
   uint32_t cpu_index;
 
-  for (cpu_index = 0; cpu_index < rtems_get_processor_count(); ++cpu_index) {
+  for (
+    cpu_index = 0;
+    cpu_index < rtems_scheduler_get_processor_maximum();
+    ++cpu_index
+  ) {
     Per_CPU_Control *cpu;
     unsigned char *c;
     unsigned short *s;
@@ -196,7 +204,11 @@ static void test_unique_values(unsigned int v)
 {
   uint32_t cpu_index;
 
-  for (cpu_index = 0; cpu_index < rtems_get_processor_count(); ++cpu_index) {
+  for (
+    cpu_index = 0;
+    cpu_index < rtems_scheduler_get_processor_maximum();
+    ++cpu_index
+  ) {
     Per_CPU_Control *cpu;
     unsigned char *c;
     unsigned short *s;

@@ -250,7 +250,7 @@ static void create_mrsp_sema(
   rtems_task_priority prio
 )
 {
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t index;
   rtems_status_code sc;
 
@@ -1547,7 +1547,7 @@ static void migration_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
   rtems_status_code sc;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t v = 0xdeadbeef;
 
   while (true) {
@@ -1565,7 +1565,7 @@ static void migration_task(rtems_task_argument arg)
 static void test_mrsp_load(test_context *ctx)
 {
   rtems_status_code sc;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t index;
 
   puts("test MrsP load");
@@ -1727,7 +1727,7 @@ static void Init(rtems_task_argument arg)
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   rtems_resource_snapshot snapshot;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index;
 
   TEST_BEGIN();

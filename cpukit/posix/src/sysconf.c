@@ -50,7 +50,7 @@ long sysconf(
     case _SC_NPROCESSORS_CONF:
       return (long) rtems_configuration_get_maximum_processors();
     case _SC_NPROCESSORS_ONLN:
-      return (long) rtems_get_processor_count();
+      return (long) rtems_scheduler_get_processor_maximum();
     case _SC_POSIX_26_VERSION:
       return (long) _POSIX_26_VERSION;
 #if defined(__sparc__)

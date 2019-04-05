@@ -75,7 +75,7 @@ static void test(void)
 {
   rtems_status_code sc;
   uint32_t test_time_in_seconds = 10;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t i;
 
   for (i = 0; i < cpu_count; ++i) {

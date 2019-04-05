@@ -161,7 +161,7 @@ static void Init(rtems_task_argument arg)
 
   rtems_resource_snapshot_take(&snapshot);
 
-  if (rtems_get_processor_count() == CPU_COUNT) {
+  if (rtems_scheduler_get_processor_maximum() == CPU_COUNT) {
     test();
   }
 

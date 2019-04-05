@@ -49,7 +49,7 @@ void bsp_fatal_extension(
        */
       uint32_t max_wait = 1234567;
       uint32_t self_cpu = rtems_scheduler_get_processor();
-      uint32_t cpu_count = rtems_get_processor_count();
+      uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
       uint32_t halt_mask = 0;
       uint32_t i;
 

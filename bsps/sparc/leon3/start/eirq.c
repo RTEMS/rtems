@@ -31,7 +31,7 @@ void bsp_interrupt_set_affinity(
 )
 {
   uint32_t unmasked = 0;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index;
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
@@ -53,7 +53,7 @@ void bsp_interrupt_get_affinity(
   Processor_mask *affinity
 )
 {
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index;
 
   _Processor_mask_Zero(affinity);

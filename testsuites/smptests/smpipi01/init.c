@@ -78,7 +78,7 @@ static void test_send_message_while_processing_a_message(
   test_context *ctx
 )
 {
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index_self = rtems_scheduler_get_processor();
   uint32_t cpu_index;
   SMP_barrier_State *bs = &ctx->main_barrier_state;
@@ -131,7 +131,7 @@ static void test_send_message_flood(
   test_context *ctx
 )
 {
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index_self = rtems_scheduler_get_processor();
   uint32_t cpu_index;
 

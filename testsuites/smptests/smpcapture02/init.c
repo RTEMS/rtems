@@ -301,7 +301,7 @@ static void Init(rtems_task_argument arg)
   TEST_BEGIN();
 
   /* Get the number of processors that we are using. */
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
 
   sc = rtems_capture_open(50000, NULL);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

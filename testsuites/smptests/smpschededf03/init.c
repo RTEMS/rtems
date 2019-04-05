@@ -57,7 +57,7 @@ static void affinity_task(rtems_task_argument arg)
   uint32_t n;
 
   v = (uint32_t) arg;
-  n = rtems_get_processor_count();
+  n = rtems_scheduler_get_processor_maximum();
 
   while (true) {
     rtems_status_code sc;

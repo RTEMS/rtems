@@ -50,20 +50,22 @@ rtems_task Init(
   char              ch = '0';
   rtems_id          id;
   rtems_status_code status;
+  uint32_t          cpu_max;
 
   Loop();
 
   TEST_BEGIN();
 
   locked_print_initialize();
+  cpu_max = rtems_scheduler_get_processor_maximum();
 
-  if ( rtems_get_processor_count() == 1 ) {
+  if ( cpu_max == 1 ) {
     success();
   }
 
   /* Initialize the TaskRan array */
   TaskRan[0] = true;
-  for ( i=1; i<rtems_get_processor_count() ; i++ ) {
+  for ( i=1; i<cpu_max ; i++ ) {
     TaskRan[i] = false;
   }
 
@@ -71,7 +73,7 @@ rtems_task Init(
   PrintTaskInfo( "Init" );
 
   /* for each remaining cpu create and start a task */
-  for ( i=1; i < rtems_get_processor_count(); i++ ){
+  for ( i=1; i < cpu_max; i++ ){
 
     ch = '0' + i;
 
@@ -104,13 +106,13 @@ rtems_task Init(
     &id
   );
   directive_failed( status, "rtems_task_create" );
-  status = rtems_task_start(id,Test_task,rtems_get_processor_count());
+  status = rtems_task_start(id,Test_task,cpu_max);
   directive_failed( status, "rtems_task_start" );
 
   /* Wait on all tasks to run */
   while (1) {
     TestFinished = true;
-    for ( i=1; i < (rtems_get_processor_count()+1) ; i++ ) {
+    for ( i=1; i < (cpu_max+1) ; i++ ) {
       if (TaskRan[i] == false)
         TestFinished = false;
     }

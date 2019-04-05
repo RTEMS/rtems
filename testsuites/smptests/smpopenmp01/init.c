@@ -239,7 +239,7 @@ static uint32_t find_free_cpu(test_context *ctx)
   uint32_t i;
   uint32_t n;
 
-  n = rtems_get_processor_count();
+  n = rtems_scheduler_get_processor_maximum();
 
   pthread_mutex_lock(&ctx->mtx);
 

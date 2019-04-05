@@ -268,7 +268,7 @@ rtems_capture_print_trace_records (int total, bool csv)
   rtems_capture_time last_time = 0;
   int                i;
 
-  cpus = rtems_get_processor_count ();
+  cpus = rtems_scheduler_get_processor_maximum ();
 
   per_cpu = calloc (cpus, sizeof(*per_cpu));
   if (per_cpu == NULL)

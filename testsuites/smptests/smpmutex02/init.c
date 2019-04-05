@@ -171,7 +171,7 @@ static void set_up(test_context *ctx)
   rtems_status_code sc;
   uint32_t i;
 
-  ctx->cpu_count = rtems_get_processor_count();
+  ctx->cpu_count = rtems_scheduler_get_processor_maximum();
   ctx->mtx_count = MTX_PER_CPU * ctx->cpu_count;
 
   sc = rtems_semaphore_create(

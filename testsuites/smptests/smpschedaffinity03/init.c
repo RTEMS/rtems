@@ -43,7 +43,7 @@ static void test(void)
   cpu_set_t           cpuset;
 
   /* Get the number of processors that we are using. */
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
  
   id = rtems_task_self();
 

@@ -80,7 +80,7 @@ static void inherit_obtain_task(rtems_task_argument arg)
   test_context *ctx = &test_instance;
   rtems_status_code sc;
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   rtems_counter_ticks delay = (cpu_count - 1 - arg) * ctx->inherit_obtain_delay;
 
   while (true) {
@@ -333,7 +333,7 @@ static void test(void)
   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  for (i = 0; i < rtems_get_processor_count(); ++i) {
+  for (i = 0; i < rtems_scheduler_get_processor_maximum(); ++i) {
     sc = rtems_task_create(
       rtems_build_name('I', 'N', 'H', 'O'),
       INHERIT_OBTAIN_PRIO_BASE + i,
@@ -368,7 +368,7 @@ static void test(void)
     ctx->inherit_release_counter
   );
 
-  for (i = 0; i < rtems_get_processor_count(); ++i) {
+  for (i = 0; i < rtems_scheduler_get_processor_maximum(); ++i) {
     printf(
       "priority inheritance obtain count %2" PRIu32 ": %" PRIu64 "\n",
       i,

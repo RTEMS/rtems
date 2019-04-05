@@ -56,7 +56,7 @@ static void migration_task(rtems_task_argument arg)
   test_context *ctx = &test_instance;
   uint32_t task_index = arg;
   rtems_task_priority prio = migration_task_prio(task_index);
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index = rtems_scheduler_get_processor();
 
   while (true) {
@@ -80,7 +80,7 @@ static void migration_task(rtems_task_argument arg)
 static void test_migrations(test_context *ctx)
 {
   rtems_status_code sc;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t task_count = cpu_count + 1;
   uint32_t task_index;
 
@@ -146,7 +146,7 @@ static Thread_Control *get_thread_by_id(rtems_id task_id)
 
 static void test_double_migration(test_context *ctx)
 {
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
 
   if (cpu_count >= 2) {
     rtems_status_code sc;
@@ -250,7 +250,7 @@ static void test_double_migration(test_context *ctx)
 static void init_scheduler_ids(test_context *ctx)
 {
   rtems_status_code sc;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index;
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {

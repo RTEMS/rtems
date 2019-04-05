@@ -133,7 +133,7 @@ static void test(void)
   rtems_task_priority priority;
 
   /* Get the number of processors that we are using. */
-  cpu_count = rtems_get_processor_count();
+  cpu_count = rtems_scheduler_get_processor_maximum();
   if (cpu_count != 4) {
     printf("Test requires a minimum of 4 cores\n");
     return;

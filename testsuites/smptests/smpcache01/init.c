@@ -82,7 +82,11 @@ static void test_cache_invalidate_multiple_instruction_lines(
 
 static void barrier( SMP_barrier_State *bs )
 {
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
+  _SMP_barrier_Wait(
+    &ctx.barrier,
+    bs,
+    rtems_scheduler_get_processor_maximum()
+  );
 }
 
 static void broadcast_test_init( void )
@@ -101,7 +105,8 @@ static void broadcast_test_body(
 static void broadcast_test_fini( void )
 {
   rtems_test_assert(
-    ctx.count[rtems_scheduler_get_processor()] == rtems_get_processor_count()
+    ctx.count[rtems_scheduler_get_processor()]
+      == rtems_scheduler_get_processor_maximum()
   );
 }
 
@@ -175,9 +180,9 @@ static void cmlog(  const char* str )
 
 static void all_tests( void )
 {
-  uint32_t cpu_count = rtems_get_processor_count();
-  size_t set_size = CPU_ALLOC_SIZE( rtems_get_processor_count() );
-  cpu_set_t *cpu_set = CPU_ALLOC( rtems_get_processor_count() );
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
+  size_t set_size = CPU_ALLOC_SIZE( cpu_count );
+  cpu_set_t *cpu_set = CPU_ALLOC( cpu_count );
   SMP_barrier_State bs = SMP_BARRIER_STATE_INITIALIZER;
 
   /* Send message to all available CPUs */
@@ -217,7 +222,7 @@ static void test_smp_cache_manager( void )
 {
   rtems_status_code sc;
   size_t worker_index;
-  uint32_t cpu_count = rtems_get_processor_count();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
 
   for (worker_index = 1; worker_index < cpu_count; ++worker_index) {
     rtems_id worker_id;

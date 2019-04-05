@@ -227,7 +227,7 @@ static void Init(rtems_task_argument arg)
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
 
-  if (rtems_get_processor_count() >= 2) {
+  if (rtems_scheduler_get_processor_maximum() >= 2) {
     test();
   }
 

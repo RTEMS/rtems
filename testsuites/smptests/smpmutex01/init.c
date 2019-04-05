@@ -516,7 +516,7 @@ static void test_init(test_context *ctx)
   start_task(ctx, A_2_1, worker, 2, SCHED_A);
   start_task(ctx, H_A, helper, 3, SCHED_A);
 
-  if (rtems_get_processor_count() >= PART_COUNT) {
+  if (rtems_scheduler_get_processor_maximum() >= PART_COUNT) {
     start_task(ctx, B_4, worker, 4, SCHED_B);
     start_task(ctx, B_5_0, worker, 5, SCHED_B);
     start_task(ctx, B_5_1, worker, 5, SCHED_B);
@@ -1065,7 +1065,7 @@ static void test(test_context *ctx)
 {
   test_init(ctx);
 
-  if (rtems_get_processor_count() >= PART_COUNT) {
+  if (rtems_scheduler_get_processor_maximum() >= PART_COUNT) {
     test_task_get_priority_not_defined(ctx);
     test_simple_inheritance(ctx);
     test_dequeue_order_one_scheduler_instance(ctx);

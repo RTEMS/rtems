@@ -79,7 +79,8 @@ void *POSIX_Init(
   );
 
   rtems_test_assert(
-    sysconf( _SC_NPROCESSORS_ONLN ) == (long) rtems_get_processor_count()
+    sysconf( _SC_NPROCESSORS_ONLN )
+      == (long) rtems_scheduler_get_processor_maximum()
   );
 
 #if defined(__sparc__)
