@@ -24,7 +24,11 @@ int _POSIX_Shm_Object_create_from_workspace(
   size_t size
 )
 {
-  shm_obj->handle = _Workspace_Allocate_or_fatal_error( size );
+  shm_obj->handle = _Workspace_Allocate( size );
+  if ( shm_obj->handle == NULL ) {
+    return ENOMEM;
+  }
+
   memset( shm_obj->handle, 0, size );
   shm_obj->size = size;
   return 0;
