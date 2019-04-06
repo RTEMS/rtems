@@ -2370,38 +2370,6 @@ struct _reent *__getreent(void)
 /**@}*/  /* end of GNAT Configuration */
 
 /**
- * @defgroup ConfigurationGo GCC Go Configuration
- *
- * @addtogroup Configuration
- *
- *  This modules includes configuration parameters for applications which
- *  use GCC Go.
- */
-/**@{*/
-#ifdef CONFIGURE_ENABLE_GO
-
-  #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-    #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_GOROUTINES
-    #define CONFIGURE_MAXIMUM_GOROUTINES 400
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_GO_CHANNELS
-    #define CONFIGURE_MAXIMUM_GO_CHANNELS 500
-  #endif
-
-#else
-  /** This specifies the maximum number of Go co-routines. */
-  #define CONFIGURE_MAXIMUM_GOROUTINES          0
-
-  /** This specifies the maximum number of Go channels required. */
-  #define CONFIGURE_MAXIMUM_GO_CHANNELS         0
-#endif
-/**@}*/  /* end of Go Configuration */
-
-/**
  * This is so we can account for tasks with stacks greater than minimum
  * size.  This is in bytes.
  */
@@ -2414,8 +2382,7 @@ struct _reent *__getreent(void)
  */
 #define _CONFIGURE_POSIX_THREADS \
    (CONFIGURE_MAXIMUM_POSIX_THREADS + \
-     CONFIGURE_MAXIMUM_ADA_TASKS + \
-     CONFIGURE_MAXIMUM_GOROUTINES)
+     CONFIGURE_MAXIMUM_ADA_TASKS)
 
 /*
  * We must be able to split the free block used for the second last allocation
@@ -2632,14 +2599,6 @@ struct _reent *__getreent(void)
   (_Configure_Max_Objects( CONFIGURE_MAXIMUM_ADA_TASKS ) * \
     _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
-/*
- * This macro is calculated to specify the memory required for
- * the stacks of all Go routines.
- */
-#define _CONFIGURE_GOROUTINES_STACK \
-  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_GOROUTINES ) * \
-    _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
-
 #else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
 
 #define _CONFIGURE_IDLE_TASKS_STACK 0
@@ -2647,7 +2606,6 @@ struct _reent *__getreent(void)
 #define _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS 0
 #define _CONFIGURE_TASKS_STACK 0
 #define _CONFIGURE_POSIX_THREADS_STACK 0
-#define _CONFIGURE_GOROUTINES_STACK 0
 #define _CONFIGURE_ADA_TASKS_STACK 0
 
 #if CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK != 0
@@ -2671,7 +2629,6 @@ struct _reent *__getreent(void)
     _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS + \
     _CONFIGURE_TASKS_STACK + \
     _CONFIGURE_POSIX_THREADS_STACK + \
-    _CONFIGURE_GOROUTINES_STACK + \
     _CONFIGURE_ADA_TASKS_STACK + \
     CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK + \
     _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS + \
@@ -3115,8 +3072,7 @@ struct _reent *__getreent(void)
 #if !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
   #if (CONFIGURE_MAXIMUM_TASKS == 0) && \
       (CONFIGURE_MAXIMUM_POSIX_THREADS == 0) && \
-      (CONFIGURE_MAXIMUM_ADA_TASKS == 0) && \
-      (CONFIGURE_MAXIMUM_GOROUTINES == 0)
+      (CONFIGURE_MAXIMUM_ADA_TASKS == 0)
     #error "CONFIGURATION ERROR: No tasks or threads configured!!"
   #endif
 #endif
@@ -3272,6 +3228,17 @@ struct _reent *__getreent(void)
   #error "IMFS Memfile block size must be a power of 2 between 16 and 512"
 #endif
 
+#ifdef CONFIGURE_ENABLE_GO
+  #warning "The CONFIGURE_ENABLE_GO configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_GOROUTINES
+  #warning "The CONFIGURE_MAXIMUM_GOROUTINES configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_GO_CHANNELS
+  #warning "The CONFIGURE_MAXIMUM_GO_CHANNELS configuration option is obsolete since RTEMS 5.1"
+#endif
 
 #endif
 /* end of include file */
