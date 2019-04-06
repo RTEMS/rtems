@@ -31,4 +31,4 @@
 
 #include <rtems/posix/psignal.h>
 
-const uint32_t _Configuration_POSIX_Maximum_queued_signals;
+const uint32_t _POSIX_signals_Maximum_queued_signals;

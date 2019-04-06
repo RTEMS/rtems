@@ -2860,7 +2860,7 @@ struct _reent *__getreent(void)
 
   #ifdef RTEMS_POSIX_API
     #if CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS > 0
-      const uint32_t _Configuration_POSIX_Maximum_queued_signals =
+      const uint32_t _POSIX_signals_Maximum_queued_signals =
         CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS;
     #endif
 
