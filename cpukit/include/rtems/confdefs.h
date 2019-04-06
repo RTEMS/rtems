@@ -2862,6 +2862,10 @@ struct _reent *__getreent(void)
     #if CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS > 0
       const uint32_t _POSIX_signals_Maximum_queued_signals =
         CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS;
+
+      POSIX_signals_Siginfo_node _POSIX_signals_Siginfo_nodes[
+        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
+      ];
     #endif
 
     #if CONFIGURE_MAXIMUM_POSIX_TIMERS > 0

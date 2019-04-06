@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright 2018, embedded brains GmbH <rtems@embedded-brains.de>
+ * Copyright 2018, 2019 embedded brains GmbH <rtems@embedded-brains.de>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,3 +32,5 @@
 #include <rtems/posix/psignal.h>
 
 const uint32_t _POSIX_signals_Maximum_queued_signals;
+
+POSIX_signals_Siginfo_node _POSIX_signals_Siginfo_nodes[ 0 ];

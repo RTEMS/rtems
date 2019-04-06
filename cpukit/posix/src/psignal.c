@@ -100,10 +100,7 @@ Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
 
 static void _POSIX_signals_Manager_Initialization(void)
 {
-  uint32_t   signo;
-  uint32_t   maximum_queued_signals;
-
-  maximum_queued_signals = _POSIX_signals_Maximum_queued_signals;
+  uint32_t signo;
 
   memcpy(
     _POSIX_signals_Vectors,
@@ -121,21 +118,16 @@ static void _POSIX_signals_Manager_Initialization(void)
   /*
    *  Allocate the siginfo pools.
    */
-  for ( signo=1 ; signo<= SIGRTMAX ; signo++ )
+  for ( signo=1 ; signo<= SIGRTMAX ; signo++ ) {
     _Chain_Initialize_empty( &_POSIX_signals_Siginfo[ signo ] );
-
-  if ( maximum_queued_signals ) {
-    _Chain_Initialize(
-      &_POSIX_signals_Inactive_siginfo,
-      _Workspace_Allocate_or_fatal_error(
-        maximum_queued_signals * sizeof( POSIX_signals_Siginfo_node )
-      ),
-      maximum_queued_signals,
-      sizeof( POSIX_signals_Siginfo_node )
-    );
-  } else {
-    _Chain_Initialize_empty( &_POSIX_signals_Inactive_siginfo );
   }
+
+  _Chain_Initialize(
+    &_POSIX_signals_Inactive_siginfo,
+    &_POSIX_signals_Siginfo_nodes[ 0 ],
+    _POSIX_signals_Maximum_queued_signals,
+    sizeof( _POSIX_signals_Siginfo_nodes[ 0 ] )
+  );
 }
 
 RTEMS_SYSINIT_ITEM(

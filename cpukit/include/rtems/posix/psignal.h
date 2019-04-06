@@ -33,5 +33,7 @@ typedef struct {
 
 extern const uint32_t _POSIX_signals_Maximum_queued_signals;
 
+extern POSIX_signals_Siginfo_node _POSIX_signals_Siginfo_nodes[];
+
 #endif
 /* end of file */
