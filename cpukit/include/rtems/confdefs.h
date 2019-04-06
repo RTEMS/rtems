@@ -2869,7 +2869,7 @@ struct _reent *__getreent(void)
     #endif
   #endif
 
-  const size_t _Configuration_POSIX_Minimum_stack_size =
+  const size_t _POSIX_Threads_Minimum_stack_size =
     CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE;
 
   /**

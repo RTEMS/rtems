@@ -40,7 +40,7 @@ extern "C" {
 /**
  * The following sets the minimum stack size for POSIX threads.
  */
-#define PTHREAD_MINIMUM_STACK_SIZE _Configuration_POSIX_Minimum_stack_size
+#define PTHREAD_MINIMUM_STACK_SIZE _POSIX_Threads_Minimum_stack_size
 
 #if defined(RTEMS_POSIX_API)
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(

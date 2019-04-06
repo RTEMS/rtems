@@ -36,7 +36,7 @@ extern "C" {
  */
 /**@{**/
 
-extern const size_t _Configuration_POSIX_Minimum_stack_size;
+extern const size_t _POSIX_Threads_Minimum_stack_size;
 
 /**
  * @brief POSIX threads initialize user threads body.
