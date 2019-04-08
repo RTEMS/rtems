@@ -126,8 +126,9 @@ extern "C" {
  * block indicates that the previous block is used, this ensures that the
  * last block appears as used for the _Heap_Is_used() and _Heap_Is_free()
  * functions.
+ *
+ * @{
  */
-/**@{**/
 
 typedef struct Heap_Control Heap_Control;
 
@@ -294,8 +295,7 @@ typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
 );
 
 /**
- * @brief Extends the memory available for the heap @a heap using the memory
- * area starting at @a area_begin of size @a area_size bytes.
+ * @brief Extends the memory available for the heap.
  *
  * There are no alignment requirements for the memory area.  The memory area
  * must be big enough to contain some maintenance blocks.  It must not overlap
@@ -304,10 +304,13 @@ typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
  * inappropriate memory area will corrupt the heap resulting in undefined
  * behaviour.
  *
- * The unused fourth parameter is provided to have the same signature as
- * _Heap_Initialize().
+ * @param[in, out] heap The heap to extend.
+ * @param[out] area_begin The start address of the area to extend the @a heap with.
+ * @param area_size The size of the area in bytes.
+ * @param unused Is not used, only provided to have the same signature as _Heap_Initialize().
  *
- * Returns the extended space available for allocation, or zero in case of failure.
+ * @retval some_value The extended space available for allocation after successful extension.
+ * @retval 0 The heap extension failed.
  *
  * @see Heap_Initialization_or_extend_handler.
  */
@@ -323,7 +326,10 @@ uintptr_t _Heap_Extend(
  *
  * This function only returns zero and does nothing else.
  *
- * Returns always zero.
+ * @param unused_0 This parameter does nothing.
+ * @param unused_1 This parameter does nothing.
+ * @param unused_2 This parameter does nothing.
+ * @param unused_3 This parameter does nothing.
  *
  * @see Heap_Initialization_or_extend_handler.
  */
@@ -334,6 +340,14 @@ uintptr_t _Heap_No_extend(
   uintptr_t unused_3
 );
 
+/**
+ * @brief Aligns the value to a given alignment, rounding up.
+ *
+ * @param value The value to be aligned.
+ * @param alignment The alignment for the value.
+ *
+ * @return The @a value aligned to the given @a alignment, rounded up.
+ */
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
   uintptr_t value,
   uintptr_t alignment
@@ -348,6 +362,13 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Align_up(
   }
 }
 
+/**
+ * @brief Returns the minimal Heap Block size for the given page_size.
+ *
+ * @param page_size The page size for the heap.
+ *
+ * @return The minimal Heap Block size for the given @a page_size.
+ */
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min_block_size( uintptr_t page_size )
 {
   return _Heap_Align_up( sizeof( Heap_Block ), page_size );
@@ -355,6 +376,10 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Min_block_size( uintptr_t page_size )
 
 /**
  * @brief Returns the worst case overhead to manage a memory area.
+ *
+ * @param page_size The page size to calculate the worst case memory manage overhead.
+ *
+ * @return The worst case overhead to manage a memory area.
  */
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
   uintptr_t page_size
@@ -372,6 +397,12 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
 /**
  * @brief Returns the size with administration and alignment overhead for one
  * allocation.
+ *
+ * @param page_size The page size for the allocation.
+ * @param size The size to allocate.
+ * @param alignment The alignment that needs to be considered.
+ *
+ * @return The size with administration and alignment overhead for one allocation.
  */
 RTEMS_INLINE_ROUTINE uintptr_t _Heap_Size_with_overhead(
   uintptr_t page_size,
