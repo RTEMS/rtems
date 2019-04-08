@@ -1,12 +1,14 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Data Associated with the Counting Semaphore Handler
+ * @ingroup RTEMSScoreSemaphore
  *
- *  This include file contains all the constants and structures associated
- *  with the Counting Semaphore Handler.  A counting semaphore is the
- *  standard Dijkstra binary semaphore used to provide synchronization
- *  and mutual exclusion capabilities.
+ * @brief Data Associated with the Counting Semaphore Handler
+ *
+ * This include file contains all the constants and structures associated
+ * with the Counting Semaphore Handler.  A counting semaphore is the
+ * standard Dijkstra binary semaphore used to provide synchronization
+ * and mutual exclusion capabilities.
  */
 
 /*
@@ -28,14 +30,16 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreSemaphore Semaphore Handler
+ * @defgroup RTEMSScoreSemaphore Semaphore Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which provides the foundation
- *  Semaphore services used in all of the APIs supported by RTEMS.
+ * @brief Semaphore Handler
+ *
+ * This handler encapsulates functionality which provides the foundation
+ * Semaphore services used in all of the APIs supported by RTEMS.
  */
-/**@{*/
+/** @{ */
 
 /**
  *  The following defines the control block used to manage each
@@ -51,7 +55,7 @@ typedef struct {
   uint32_t                    count;
 }   CORE_semaphore_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
