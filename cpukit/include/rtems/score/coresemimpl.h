@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreSemaphore
+ *
  * @brief Inlined Routines Associated with the SuperCore Semaphore
  *
  * This include file contains all of the inlined routines associated
@@ -33,26 +35,35 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScoreSemaphore
+ *
+ * @{
  */
-/**@{**/
 
 /**
- *  @brief Initialize the semaphore based on the parameters passed.
+ * @brief Initializes the semaphore based on the parameters passed.
  *
- *  This package is the implementation of the CORE Semaphore Handler.
- *  This core object utilizes standard Dijkstra counting semaphores to provide
- *  synchronization and mutual exclusion capabilities.
+ * This package is the implementation of the CORE Semaphore Handler.
+ * This core object utilizes standard Dijkstra counting semaphores to provide
+ * synchronization and mutual exclusion capabilities.
  *
- *  This routine initializes the semaphore based on the parameters passed.
+ * This routine initializes the semaphore based on the parameters passed.
  *
- *  @param[in] the_semaphore is the semaphore to initialize
- *  @param[in] initial_value is the initial count of the semaphore
+ * @param[out] the_semaphore The semaphore to initialize.
+ * @param initial_value The initial count of the semaphore.
  */
 void _CORE_semaphore_Initialize(
   CORE_semaphore_Control *the_semaphore,
   uint32_t                initial_value
 );
 
+/**
+ * @brief Acquires the semaphore critical.
+ *
+ * This routine acquires the semaphore.
+ *
+ * @param[in, out] the_semaphore The semaphore to acquire.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Acquire_critical(
   CORE_semaphore_Control *the_semaphore,
   Thread_queue_Context   *queue_context
@@ -61,6 +72,14 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Acquire_critical(
   _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, queue_context );
 }
 
+/**
+ * @brief Releases the semaphore.
+ *
+ * This routine releases the semaphore.
+ *
+ * @param[in, out] the_semaphore The semaphore to release.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
   CORE_semaphore_Control *the_semaphore,
   Thread_queue_Context   *queue_context
@@ -69,6 +88,15 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
   _Thread_queue_Release( &the_semaphore->Wait_queue, queue_context );
 }
 
+/**
+ * @brief Destroys the semaphore.
+ *
+ * This routine destroys the semaphore.
+ *
+ * @param[out] the_semaphore The semaphore to destroy.
+ * @param operations The thread queue operations.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
   CORE_semaphore_Control        *the_semaphore,
   const Thread_queue_Operations *operations,
@@ -85,18 +113,20 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
 }
 
 /**
- *  @brief Surrender a unit to a semaphore.
+ * @brief Surrenders a unit to the semaphore.
  *
- *  This routine frees a unit to the semaphore.  If a task was blocked waiting
- *  for a unit from this semaphore, then that task will be readied and the unit
- *  given to that task.  Otherwise, the unit will be returned to the semaphore.
+ * This routine frees a unit to the semaphore.  If a task was blocked waiting
+ * for a unit from this semaphore, then that task will be readied and the unit
+ * given to that task.  Otherwise, the unit will be returned to the semaphore.
  *
- *  @param[in] the_semaphore is the semaphore to surrender
- *  @param[in] operations The thread queue operations.
- *  @param[in] queue_context is a temporary variable used to contain the ISR
- *        disable level cookie
+ * @param[in, out] the_semaphore is the semaphore to surrender
+ * @param operations The thread queue operations.
+ * @param maximum_count The maximum number of units in the semaphore.
+ * @param queue_context is a temporary variable used to contain the ISR
+ *       disable level cookie.
  *
- *  @retval an indication of whether the routine succeeded or failed
+ * @retval STATUS_SUCCESSFUL The unit was successfully freed to the semaphore.
+ * @retval STATUS_MAXIMUM_COUNT_EXCEEDED The maximum number of units was exceeded.
  */
 RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
   CORE_semaphore_Control        *the_semaphore,
@@ -136,11 +166,11 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
 }
 
 /**
- * This routine returns the current count associated with the semaphore.
+ * @brief Returns the current count associated with the semaphore.
  *
- * @param[in] the_semaphore is the semaphore to obtain the count of
+ * @param the_semaphore The semaphore to obtain the count of.
  *
- * @return the current count of this semaphore
+ * @return the current count of this semaphore.
  */
 RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
   const CORE_semaphore_Control *the_semaphore
@@ -150,17 +180,24 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
 }
 
 /**
+ * @brief Seizes the semaphore
+ *
  * This routine attempts to receive a unit from the_semaphore.
  * If a unit is available or if the wait flag is false, then the routine
  * returns.  Otherwise, the calling task is blocked until a unit becomes
  * available.
  *
- * @param[in] the_semaphore is the semaphore to obtain
- * @param[in] operations The thread queue operations.
- * @param[in] executing The currently executing thread.
- * @param[in] wait is true if the thread is willing to wait
- * @param[in] queue_context is a temporary variable used to contain the ISR
- *        disable level cookie
+ * @param[in, out] the_semaphore The semaphore to obtain.
+ * @param operations The thread queue operations.
+ * @param executing The currently executing thread.
+ * @param wait Indicates whether the calling thread is willing to wait.
+ * @param queue_context is a temporary variable used to contain the ISR
+ *        disable level cookie.
+ *
+ * @retval STATUS_SUCCESSFUL The semaphore was successfully seized.
+ * @retval STATUS_UNSATISFIED The semaphore is currently not free and the
+ *      calling thread not willing to wait.
+ * @retval STATUS_TIMEOUT A timeout occured.
  */
 RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
   CORE_semaphore_Control        *the_semaphore,
