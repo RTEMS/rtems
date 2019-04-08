@@ -85,11 +85,15 @@ typedef struct rtems_debugger_target_swbreak {
 
 /**
  * The target data.
+ *
+ * reg_offset: Table of size_t offset of a register in the register
+ *             table. The table has one more entry than reg_num where
+ *             the last entry is the size of the register table.
  */
 typedef struct rtems_debugger_target {
   int                  capabilities;     /*<< The capabilities to report. */
   size_t               reg_num;          /*<< The number of registers. */
-  size_t               reg_size;         /*<< The size of a register. */
+  const size_t*        reg_offset;       /*<< The reg offsettable, len = reg_num + 1. */
   const uint8_t*       breakpoint;       /*<< The breakpoint instruction(s). */
   size_t               breakpoint_size;  /*<< The breakpoint size. */
   rtems_debugger_block swbreaks;         /*<< The software breakpoint block. */
@@ -133,9 +137,19 @@ extern uint32_t rtems_debugger_target_capabilities(void);
 extern size_t rtems_debugger_target_reg_num(void);
 
 /**
- * Return the size of the regisers in bytes.
+ * Return the offset of a register in the register table.
  */
-extern size_t rtems_debugger_target_reg_size(void);
+extern size_t rtems_debugger_target_reg_size(size_t reg);
+
+/**
+ * Return the offset of a register in the register table.
+ */
+extern size_t rtems_debugger_target_reg_offset(size_t reg);
+
+/**
+ * Return the size of register table.
+ */
+extern size_t rtems_debugger_target_reg_table_size(void);
 
 /**
  * Read the regosters.
@@ -176,6 +190,11 @@ extern int rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread);
  * Return the signal for the exception.
  */
 extern int rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame);
+
+/**
+ * Print the target exception registers.
+ */
+extern void rtems_debugger_target_exception_print(CPU_Exception_frame* frame);
 
 /**
  * Software breakpoints. These are also referred to as memory breakpoints.
@@ -244,6 +263,11 @@ extern int rtems_debugger_target_start_memory_access(void);
  * End a target memory access.
  */
 extern void rtems_debugger_target_end_memory_access(void);
+
+/**
+ * Is this a target memory access?
+ */
+extern bool rtems_debugger_target_is_memory_access(void);
 
 #ifdef __cplusplus
 }

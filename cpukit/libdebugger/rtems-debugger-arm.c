@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * Copyright (c) 2016-2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -116,18 +116,13 @@
 #define RTEMS_DEBUGGER_NUMREGS 26
 
 /*
- * Number of bytes per register.
+ * Number of bytes per type of register.
  */
-#define RTEMS_DEBUGGER_REGBYTES 4
+#define RTEMS_DEBUGGER_REG_BYTES    4
+#define RTEMS_DEBUGGER_FP_REG_BYTES 12
 
 /*
- * Number of bytes of registers.
- */
-#define RTEMS_DEBUGGER_NUMREGBYTES \
-  (RTEMS_DEBUGGER_NUMREGS * RTEMS_DEBUGGER_REGBYTES)
-
-/*
- * Debugger registers layout.
+ * Debugger registers layout. See arm-core.xml in GDB source.
  */
 #define REG_R0    0
 #define REG_R1    1
@@ -145,7 +140,59 @@
 #define REG_SP    13
 #define REG_LR    14
 #define REG_PC    15
+#define REG_F0    16
+#define REG_F1    17
+#define REG_F2    18
+#define REG_F3    19
+#define REG_F4    20
+#define REG_F5    21
+#define REG_F6    22
+#define REG_F7    23
+#define REG_FPS   24
 #define REG_CPSR  25
+
+/**
+ * Register offset table with the total as the last entry.
+ *
+ * Check this table in gdb with the command:
+ *
+ *   maint print registers
+ */
+static const size_t arm_reg_offsets[RTEMS_DEBUGGER_NUMREGS + 1] =
+{
+  0,   /* REG_R0    4 uint32_t */
+  4,   /* REG_R1    4 uint32_t */
+  8,   /* REG_R2    4 uint32_t */
+  12,  /* REG_R3    4 uint32_t */
+  16,  /* REG_R4    4 uint32_t */
+  20,  /* REG_R5    4 uint32_t */
+  24,  /* REG_R6    4 uint32_t */
+  28,  /* REG_R7    4 uint32_t */
+  32,  /* REG_R8    4 uint32_t */
+  36,  /* REG_R9    4 uint32_t */
+  40,  /* REG_R10   4 uint32_t */
+  44,  /* REG_R11   4 uint32_t */
+  48,  /* REG_R12   4 uint32_t */
+  52,  /* REG_SP    4 *1 */
+  56,  /* REG_LR    4 uint32_t */
+  60,  /* REG_PC    4 *1 */
+  64,  /* REG_F0   12 _arm_ext */
+  76,  /* REG_F1   12 _arm_ext */
+  88,  /* REG_F2   12 _arm_ext */
+  100, /* REG_F3   12 _arm_ext */
+  112, /* REG_F4   12 _arm_ext */
+  124, /* REG_F5   12 _arm_ext */
+  136, /* REG_F6   12 _arm_ext */
+  148, /* REG_F7   12 _arm_ext */
+  160, /* REG_FPS   4 uint32_t */
+  164, /* REG_CPSR  4 uint32_t */
+  168  /* total size */
+};
+
+/*
+ * Number of bytes of registers.
+ */
+#define RTEMS_DEBUGGER_NUMREGBYTES arm_reg_offsets[RTEMS_DEBUGGER_NUMREGS]
 
 /**
  * The various status registers.
@@ -235,8 +282,13 @@ target_printk(const char* format, ...)
   rtems_debugger_printk_unlock(&lock_context);
   va_end(ap);
 }
+#else
+#define target_printk(_fmt, ...)
+#define mode_labels(_m) NULL
+#endif
+
 static const char*
-mode_label(int mode)
+arm_mode_label(int mode)
 {
   switch (mode) {
   case 0x10:
@@ -260,10 +312,6 @@ mode_label(int mode)
   }
   return "---";
 }
-#else
-#define target_printk(_fmt, ...)
-#define mode_labels(_m) NULL
-#endif
 
 /*
  * CP register access.
@@ -577,7 +625,7 @@ rtems_debugger_target_configure(rtems_debugger_target* target)
 {
   target->capabilities = (RTEMS_DEBUGGER_TARGET_CAP_SWBREAK);
   target->reg_num = RTEMS_DEBUGGER_NUMREGS;
-  target->reg_size = sizeof(uint32_t);
+  target->reg_offset = arm_reg_offsets;
   target->breakpoint = &breakpoint[0];
   target->breakpoint_size = sizeof(breakpoint);
   return arm_debug_probe(target);
@@ -590,7 +638,7 @@ target_exception(CPU_Exception_frame* frame)
   uint32_t ifsr = arm_cp15_get_instruction_fault_status();
 #endif
 
-  target_printk("[} frame = %08lx sig=%d vector=%x ifsr=%08lx pra=%08x\n",
+  target_printk("[} frame = %08" PRIx32 " sig=%d vector=%x ifsr=%08" PRIx32 " pra=%08x\n",
                 (uint32_t) frame,
                 rtems_debugger_target_exception_to_signal(frame),
                 frame->vector, ifsr, (intptr_t) frame->register_pc);
@@ -632,7 +680,7 @@ target_exception(CPU_Exception_frame* frame)
                 (FRAME_SR & (1 <<  5)) != 0 ? 'T' : '-',
                 ((FRAME_SR >> (25 - 5)) & (0x3 << 5)) | ((FRAME_SR >> 10) & 0x1f),
                 (FRAME_SR >> 16) & 0xf,
-                FRAME_SR & 0x1f, mode_label(FRAME_SR & 0x1f));
+                FRAME_SR & 0x1f, arm_mode_label(FRAME_SR & 0x1f));
 
   arm_debug_break_clear();
 
@@ -652,7 +700,7 @@ target_exception(CPU_Exception_frame* frame)
     break;
   }
 
-  target_printk("[} resuming frame = %08lx PC = %08" PRIxPTR " CPSR = %08" PRIx32 "\n",
+  target_printk("[} resuming frame = %08" PRIx32 " PC = %08" PRIxPTR " CPSR = %08" PRIx32 "\n",
                 (uint32_t) frame, (intptr_t) frame->register_pc, FRAME_SR);
 }
 
@@ -986,6 +1034,34 @@ rtems_debugger_target_set_vectors(void)
 }
 #endif
 
+static bool
+rtems_debugger_is_int_reg(size_t reg)
+{
+  const size_t size = arm_reg_offsets[reg + 1] - arm_reg_offsets[reg];
+  return size == RTEMS_DEBUGGER_REG_BYTES;
+}
+
+static void
+rtems_debugger_set_int_reg(rtems_debugger_thread* thread,
+                           size_t                 reg,
+                           const uint32_t         value)
+{
+  const size_t offset = arm_reg_offsets[reg];
+  /*
+   * Use memcpy to avoid alignment issues.
+   */
+  memcpy(&thread->registers[offset], &value, sizeof(uint32_t));
+}
+
+static const uint32_t
+rtems_debugger_get_int_reg(rtems_debugger_thread* thread, size_t reg)
+{
+  const size_t offset = arm_reg_offsets[reg];
+  uint32_t     value;
+  memcpy(&value, &thread->registers[offset], sizeof(uint32_t));
+  return value;
+}
+
 int
 rtems_debugger_target_enable(void)
 {
@@ -1028,11 +1104,14 @@ rtems_debugger_target_read_regs(rtems_debugger_thread* thread)
   if (!rtems_debugger_thread_flag(thread,
                                   RTEMS_DEBUGGER_THREAD_FLAG_REG_VALID)) {
     static const uint32_t good_address = (uint32_t) &good_address;
-    uint32_t*             regs = &thread->registers[0];
     int                   i;
 
-    for (i = 0; i < RTEMS_DEBUGGER_NUMREGS; ++i)
-      regs[i] = (uint32_t) &good_address;
+    memset(&thread->registers[0], 0, RTEMS_DEBUGGER_NUMREGBYTES);
+
+    for (i = 0; i < RTEMS_DEBUGGER_NUMREGS; ++i) {
+      if (rtems_debugger_is_int_reg(i))
+        rtems_debugger_set_int_reg(thread, i, (uint32_t) &good_address);
+    }
 
     if (thread->frame) {
       CPU_Exception_frame* frame = thread->frame;
@@ -1050,23 +1129,23 @@ rtems_debugger_target_read_regs(rtems_debugger_thread* thread)
         thread->flags = ~RTEMS_DEBUGGER_THREAD_FLAG_INTS_DISABLED;
       }
 
-      regs[REG_R0]   = frame->register_r0;
-      regs[REG_R1]   = frame->register_r1;
-      regs[REG_R2]   = frame->register_r2;
-      regs[REG_R3]   = frame->register_r3;
-      regs[REG_R4]   = frame->register_r4;
-      regs[REG_R5]   = frame->register_r5;
-      regs[REG_R6]   = frame->register_r6;
-      regs[REG_R7]   = frame->register_r7;
-      regs[REG_R8]   = frame->register_r8;
-      regs[REG_R9]   = frame->register_r9;
-      regs[REG_R10]  = frame->register_r10;
-      regs[REG_R11]  = frame->register_r11;
-      regs[REG_R12]  = frame->register_r12;
-      regs[REG_SP]   = frame->register_sp;
-      regs[REG_LR]   = (uint32_t) frame->register_lr;
-      regs[REG_PC]   = (uint32_t) frame->register_pc;
-      regs[REG_CPSR] = FRAME_SR;
+      rtems_debugger_set_int_reg(thread, REG_R0,   frame->register_r0);
+      rtems_debugger_set_int_reg(thread, REG_R1,   frame->register_r1);
+      rtems_debugger_set_int_reg(thread, REG_R2,   frame->register_r2);
+      rtems_debugger_set_int_reg(thread, REG_R3,   frame->register_r3);
+      rtems_debugger_set_int_reg(thread, REG_R4,   frame->register_r4);
+      rtems_debugger_set_int_reg(thread, REG_R5,   frame->register_r5);
+      rtems_debugger_set_int_reg(thread, REG_R6,   frame->register_r6);
+      rtems_debugger_set_int_reg(thread, REG_R7,   frame->register_r7);
+      rtems_debugger_set_int_reg(thread, REG_R8,   frame->register_r8);
+      rtems_debugger_set_int_reg(thread, REG_R9,   frame->register_r9);
+      rtems_debugger_set_int_reg(thread, REG_R10,  frame->register_r10);
+      rtems_debugger_set_int_reg(thread, REG_R11,  frame->register_r11);
+      rtems_debugger_set_int_reg(thread, REG_R12,  frame->register_r12);
+      rtems_debugger_set_int_reg(thread, REG_SP,   frame->register_sp);
+      rtems_debugger_set_int_reg(thread, REG_LR,   (uint32_t) frame->register_lr);
+      rtems_debugger_set_int_reg(thread, REG_PC,   (uint32_t) frame->register_pc);
+      rtems_debugger_set_int_reg(thread, REG_CPSR, FRAME_SR);
       /*
        * Get the signal from the frame.
        */
@@ -1074,29 +1153,29 @@ rtems_debugger_target_read_regs(rtems_debugger_thread* thread)
     }
     else {
 #if defined(ARM_MULTILIB_ARCH_V4)
-      regs[REG_R4]  = thread->tcb->Registers.register_r4;
-      regs[REG_R5]  = thread->tcb->Registers.register_r5;
-      regs[REG_R6]  = thread->tcb->Registers.register_r6;
-      regs[REG_R7]  = thread->tcb->Registers.register_r7;
-      regs[REG_R8]  = thread->tcb->Registers.register_r8;
-      regs[REG_R9]  = thread->tcb->Registers.register_r9;
-      regs[REG_R10] = thread->tcb->Registers.register_r10;
-      regs[REG_R11] = thread->tcb->Registers.register_fp;
-      regs[REG_LR]  = (intptr_t) thread->tcb->Registers.register_lr;
-      regs[REG_PC]  = (intptr_t) thread->tcb->Registers.register_lr;
-      regs[REG_SP]  = (intptr_t) thread->tcb->Registers.register_sp;
+      rtems_debugger_set_int_reg(thread, REG_R4,  thread->tcb->Registers.register_r4);
+      rtems_debugger_set_int_reg(thread, REG_R5,  thread->tcb->Registers.register_r5);
+      rtems_debugger_set_int_reg(thread, REG_R6,  thread->tcb->Registers.register_r6);
+      rtems_debugger_set_int_reg(thread, REG_R7,  thread->tcb->Registers.register_r7);
+      rtems_debugger_set_int_reg(thread, REG_R8,  thread->tcb->Registers.register_r8);
+      rtems_debugger_set_int_reg(thread, REG_R9,  thread->tcb->Registers.register_r9);
+      rtems_debugger_set_int_reg(thread, REG_R10, thread->tcb->Registers.register_r10);
+      rtems_debugger_set_int_reg(thread, REG_R11, thread->tcb->Registers.register_fp);
+      rtems_debugger_set_int_reg(thread, REG_LR,  (intptr_t) thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_PC,  (intptr_t) thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_SP,  (intptr_t) thread->tcb->Registers.register_sp);
 #elif defined(ARM_MULTILIB_ARCH_V7M)
-      regs[REG_R4]  = thread->tcb->Registers.register_r4;
-      regs[REG_R5]  = thread->tcb->Registers.register_r5;
-      regs[REG_R6]  = thread->tcb->Registers.register_r6;
-      regs[REG_R7]  = thread->tcb->Registers.register_r7;
-      regs[REG_R8]  = thread->tcb->Registers.register_r8;
-      regs[REG_R9]  = thread->tcb->Registers.register_r9;
-      regs[REG_R10] = thread->tcb->Registers.register_r10;
-      regs[REG_R11] = thread->tcb->Registers.register_r11;
-      regs[REG_LR]  = (intptr_t) thread->tcb->Registers.register_lr;
-      regs[REG_PC]  = (intptr_t) thread->tcb->Registers.register_lr;
-      regs[REG_SP]  = (intptr_t) thread->tcb->Registers.register_sp;
+      rtems_debugger_set_int_reg(thread, REG_R4,  thread->tcb->Registers.register_r4);
+      rtems_debugger_set_int_reg(thread, REG_R5,  thread->tcb->Registers.register_r5);
+      rtems_debugger_set_int_reg(thread, REG_R6,  thread->tcb->Registers.register_r6);
+      rtems_debugger_set_int_reg(thread, REG_R7,  thread->tcb->Registers.register_r7);
+      rtems_debugger_set_int_reg(thread, REG_R8,  thread->tcb->Registers.register_r8);
+      rtems_debugger_set_int_reg(thread, REG_R9,  thread->tcb->Registers.register_r9);
+      rtems_debugger_set_int_reg(thread, REG_R10, thread->tcb->Registers.register_r10);
+      rtems_debugger_set_int_reg(thread, REG_R11, thread->tcb->Registers.register_r11);
+      rtems_debugger_set_int_reg(thread, REG_LR,  (intptr_t) thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_PC,  (intptr_t) thread->tcb->Registers.register_lr);
+      rtems_debugger_set_int_reg(thread, REG_SP,  (intptr_t) thread->tcb->Registers.register_sp);
 #endif
       /*
        * Blocked threads have no signal.
@@ -1116,8 +1195,6 @@ rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
 {
   if (rtems_debugger_thread_flag(thread,
                                  RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY)) {
-    uint32_t* regs = &thread->registers[0];
-
     /*
      * Only write to debugger controlled exception threads. Do not touch the
      * registers for threads blocked in the context switcher.
@@ -1125,23 +1202,23 @@ rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
     if (rtems_debugger_thread_flag(thread,
                                    RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
       CPU_Exception_frame* frame = thread->frame;
-      frame->register_r0  = regs[REG_R0];
-      frame->register_r1  = regs[REG_R1];
-      frame->register_r2  = regs[REG_R2];
-      frame->register_r3  = regs[REG_R3];
-      frame->register_r4  = regs[REG_R4];
-      frame->register_r5  = regs[REG_R5];
-      frame->register_r6  = regs[REG_R6];
-      frame->register_r7  = regs[REG_R7];
-      frame->register_r8  = regs[REG_R8];
-      frame->register_r9  = regs[REG_R9];
-      frame->register_r10 = regs[REG_R10];
-      frame->register_r11 = regs[REG_R11];
-      frame->register_r12 = regs[REG_R12];
-      frame->register_sp  = regs[REG_SP];
-      frame->register_lr  = (void*) regs[REG_LR];
-      frame->register_pc  = (void*) regs[REG_PC];
-      FRAME_SR            = regs[REG_CPSR];
+      frame->register_r0  = rtems_debugger_get_int_reg(thread, REG_R0);
+      frame->register_r1  = rtems_debugger_get_int_reg(thread, REG_R1);
+      frame->register_r2  = rtems_debugger_get_int_reg(thread, REG_R2);
+      frame->register_r3  = rtems_debugger_get_int_reg(thread, REG_R3);
+      frame->register_r4  = rtems_debugger_get_int_reg(thread, REG_R4);
+      frame->register_r5  = rtems_debugger_get_int_reg(thread, REG_R5);
+      frame->register_r6  = rtems_debugger_get_int_reg(thread, REG_R6);
+      frame->register_r7  = rtems_debugger_get_int_reg(thread, REG_R7);
+      frame->register_r8  = rtems_debugger_get_int_reg(thread, REG_R8);
+      frame->register_r9  = rtems_debugger_get_int_reg(thread, REG_R9);
+      frame->register_r10 = rtems_debugger_get_int_reg(thread, REG_R10);
+      frame->register_r11 = rtems_debugger_get_int_reg(thread, REG_R11);
+      frame->register_r12 = rtems_debugger_get_int_reg(thread, REG_R12);
+      frame->register_sp  = rtems_debugger_get_int_reg(thread, REG_SP);
+      frame->register_lr  = (void*) rtems_debugger_get_int_reg(thread, REG_LR);
+      frame->register_pc  = (void*) rtems_debugger_get_int_reg(thread, REG_PC);
+      FRAME_SR            = rtems_debugger_get_int_reg(thread, REG_CPSR);
     }
     thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY;
   }
@@ -1154,8 +1231,7 @@ rtems_debugger_target_reg_pc(rtems_debugger_thread* thread)
   int r;
   r = rtems_debugger_target_read_regs(thread);
   if (r >= 0) {
-    uint32_t* regs = &thread->registers[0];
-    return regs[REG_PC];
+    return rtems_debugger_get_int_reg(thread, REG_PC);
   }
   return 0;
 }
@@ -1172,8 +1248,7 @@ rtems_debugger_target_reg_sp(rtems_debugger_thread* thread)
   int r;
   r = rtems_debugger_target_read_regs(thread);
   if (r >= 0) {
-    uint32_t* regs = &thread->registers[0];
-    return regs[REG_SP];
+    return rtems_debugger_get_int_reg(thread, REG_SP);
   }
   return 0;
 }
@@ -1291,6 +1366,44 @@ rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
   }
 #endif
   return sig;
+}
+
+void
+rtems_debugger_target_exception_print(CPU_Exception_frame* frame)
+{
+  rtems_debugger_printf("  R0 = %08" PRIx32 "  R1 = %08" PRIx32       \
+                        "  R2 = %08" PRIx32 "  R3 = %08" PRIx32 "\n",
+                        frame->register_r0, frame->register_r1,
+                        frame->register_r2, frame->register_r3);
+  rtems_debugger_printf("  R4 = %08" PRIx32 "  R5 = %08" PRIx32       \
+                        "  R6 = %08" PRIx32 "  R7 = %08" PRIx32 "\n",
+                        frame->register_r4, frame->register_r5,
+                        frame->register_r6, frame->register_r7);
+  rtems_debugger_printf("  R8 = %08" PRIx32 "  R9 = %08" PRIx32       \
+                        " R10 = %08" PRIx32 " R11 = %08" PRIx32 "\n",
+                        frame->register_r8, frame->register_r9,
+                        frame->register_r10, frame->register_r11);
+  rtems_debugger_printf(" R12 = %08" PRIx32 "  SP = %08" PRIx32       \
+                        "  LR = %08" PRIxPTR "  PC = %08" PRIxPTR "\n", \
+                        frame->register_r12, frame->register_sp,
+                        (intptr_t) frame->register_lr, (intptr_t) frame->register_pc);
+  rtems_debugger_printf(" CPSR = %08" PRIx32 " %c%c%c%c%c%c%c%c%c%c%c"       \
+                        " GE:%" PRIx32 " IT:%02" PRIx32 " M:%" PRIx32 " %s\n",
+                        FRAME_SR,
+                        (FRAME_SR & (1 << 31)) != 0 ? 'N' : '-',
+                        (FRAME_SR & (1 << 30)) != 0 ? 'Z' : '-',
+                        (FRAME_SR & (1 << 29)) != 0 ? 'C' : '-',
+                        (FRAME_SR & (1 << 28)) != 0 ? 'V' : '-',
+                        (FRAME_SR & (1 << 27)) != 0 ? 'Q' : '-',
+                        (FRAME_SR & (1 << 24)) != 0 ? 'J' : '-',
+                        (FRAME_SR & (1 <<  9)) != 0 ? 'E' : '-',
+                        (FRAME_SR & (1 <<  8)) != 0 ? 'A' : '-',
+                        (FRAME_SR & (1 <<  7)) != 0 ? 'I' : '-',
+                        (FRAME_SR & (1 <<  6)) != 0 ? 'F' : '-',
+                        (FRAME_SR & (1 <<  5)) != 0 ? 'T' : '-',
+                        ((FRAME_SR >> (25 - 5)) & (0x3 << 5)) | ((FRAME_SR >> 10) & 0x1f),
+                        (FRAME_SR >> 16) & 0xf,
+                        FRAME_SR & 0x1f, arm_mode_label(FRAME_SR & 0x1f));
 }
 
 int

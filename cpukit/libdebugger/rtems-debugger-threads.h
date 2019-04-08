@@ -90,7 +90,7 @@ typedef struct rtems_debugger_thread
   Thread_Control* tcb;
   rtems_id        id;
   int             cpu;
-  DB_UINT*        registers;
+  uint8_t*        registers;
   int             signal;
   void*           frame;
 } rtems_debugger_thread;
@@ -234,7 +234,7 @@ rtems_debugger_thread_current(rtems_debugger_threads* threads)
 /**
  * Get the registers.
  */
-static inline DB_UINT*
+static inline uint8_t*
 rtems_debugger_thread_registers(rtems_debugger_threads* threads)
 {
   return threads->registers.block;

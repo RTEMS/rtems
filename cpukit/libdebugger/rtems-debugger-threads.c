@@ -25,6 +25,7 @@
  */
 
 #include <errno.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -85,7 +86,7 @@ rtems_debugger_thread_create(void)
 
   r = rtems_debugger_block_create(&threads->registers,
                                   RTEMS_DEBUGGER_THREAD_BLOCK_SIZE,
-                                  rtems_debugger_target_reg_size());
+                                  rtems_debugger_target_reg_table_size());
   if (r < 0) {
     rtems_debugger_thread_free(threads);
     free(threads);
@@ -209,7 +210,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
   }
   else {
     rtems_debugger_thread* current;
-    DB_UINT*               registers;
+    uint8_t*               registers;
     rtems_debugger_thread* thread;
     int                    r;
 
@@ -229,7 +230,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
 
     thread = &current[threads->current.level++];
     thread->registers =
-        &registers[threads->registers.level++ * rtems_debugger_target_reg_num()];
+        &registers[threads->registers.level++ * rtems_debugger_target_reg_table_size()];
 
     thread->tcb    = tcb;
     thread->id     = id;
@@ -262,7 +263,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
       rtems_status_code sc;
       sc = rtems_task_suspend(id);
       if (sc != RTEMS_SUCCESSFUL && sc != RTEMS_ALREADY_SUSPENDED) {
-        rtems_debugger_printf("error: rtems-db: thread: suspend: %08lx: %s\n",
+        rtems_debugger_printf("error: rtems-db: thread: suspend: %08" PRIx32 ": %s\n",
                               id, rtems_status_text(sc));
         r = -1;
       }
@@ -274,7 +275,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
     rtems_debugger_target_read_regs(thread);
 
     if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_VERBOSE))
-      rtems_debugger_printf("rtems-db: sys: thd: %08lx: signal: %d\n",
+      rtems_debugger_printf("rtems-db: sys: thd: %08" PRIx32 ": signal: %d\n",
                             id, thread->signal);
 
     /*
@@ -380,7 +381,7 @@ rtems_debugger_thread_system_resume(bool detaching)
             }
           }
           if (rtems_debugger_verbose())
-            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08lx\n",
+            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08" PRIx32 "\n",
                                   thread->id);
           if (rtems_debugger_thread_flag(thread,
                                          RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
@@ -388,7 +389,7 @@ rtems_debugger_thread_system_resume(bool detaching)
           } else {
               sc = rtems_task_resume(thread->id);
               if (sc != RTEMS_SUCCESSFUL) {
-                  rtems_debugger_printf("error: rtems-db: thread: resume: %08lx: %s\n",
+                  rtems_debugger_printf("error: rtems-db: thread: resume: %08" PRIx32 ": %s\n",
                                         thread->id, rtems_status_text(sc));
               }
           }

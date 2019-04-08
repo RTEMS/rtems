@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * Copyright (c) 2016-2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -134,16 +134,36 @@ rtems_debugger_target_capabilities(void)
 size_t
 rtems_debugger_target_reg_num(void)
 {
-  if (rtems_debugger->target != NULL)
-    return rtems_debugger->target->reg_num;
+  rtems_debugger_target* target = rtems_debugger->target;
+  if (target != NULL)
+    return target->reg_num;
   return 0;
 }
 
 size_t
-rtems_debugger_target_reg_size(void)
+rtems_debugger_target_reg_size(size_t reg)
 {
-  if (rtems_debugger->target != NULL)
-    return rtems_debugger->target->reg_num * rtems_debugger->target->reg_size;
+  rtems_debugger_target* target = rtems_debugger->target;
+  if (target != NULL && reg < target->reg_num)
+    return target->reg_offset[reg + 1] - target->reg_offset[reg];
+  return 0;
+}
+
+size_t
+rtems_debugger_target_reg_offset(size_t reg)
+{
+  rtems_debugger_target* target = rtems_debugger->target;
+  if (target != NULL && reg < target->reg_num)
+    return target->reg_offset[reg];
+  return 0;
+}
+
+size_t
+rtems_debugger_target_reg_table_size(void)
+{
+  rtems_debugger_target* target = rtems_debugger->target;
+  if (target != NULL)
+    return target->reg_offset[target->reg_num];
   return 0;
 }
 
@@ -305,17 +325,23 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
     rtems_debugger_lock();
 
     /*
-     * If the thread is the debugger recover.
+     * If the thread is in the debugger recover. If the access is from gdb
+     * continue else shutdown and let the user know.
      */
-    if (tid == rtems_debugger->server_task) {
-      if (rtems_debugger->target->memory_access) {
-        target_printk("[} server access fault\n");
-        rtems_debugger->target->memory_access = true;
-        rtems_debugger_unlock();
+    if (tid == rtems_debugger->server_task ||
+        tid == rtems_debugger->events_task) {
+      bool memory_access = rtems_debugger_target_is_memory_access();
+      rtems_debugger_unlock();
+      /*
+       * Has GDB has asked us to write to an address?
+       */
+      if (memory_access) {
+        target_printk("[} server fault: memory access\n");
         longjmp(rtems_debugger->target->access_return, -1);
       }
-      target_printk("[} server exception\n");
-      rtems_debugger_unlock();
+      rtems_debugger_printf("rtems-db: server exception (report)\n");
+      rtems_debugger_target_exception_print(frame);
+      rtems_debugger_server_crash();
       return rtems_debugger_target_exc_cascade;
     }
 
@@ -332,7 +358,7 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
          *        the contents of the instruction, step then return the
          *        swbreak's contents.
          */
-        target_printk("[} tid:%08lx: excluded\n", tid);
+        target_printk("[} tid:%08" PRIx32 ": excluded\n", tid);
         rtems_debugger_unlock();
         return rtems_debugger_target_exc_cascade;
       }
@@ -346,12 +372,12 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
     if (stepper != NULL) {
       stepper->thread->frame = frame;
       rtems_debugger_target_thread_stepping(stepper->thread);
-      target_printk("[} tid:%08lx: stepping\n", tid);
+      target_printk("[} tid:%08" PRIx32 ": stepping\n", tid);
       rtems_debugger_unlock();
       return rtems_debugger_target_exc_step;
     }
 
-    target_printk("[} tid:%08lx: suspending\n", tid);
+    target_printk("[} tid:%08" PRIx32 ": suspending\n", tid);
 
     /*
      * Initialise the target exception data and queue ready for the debugger
@@ -381,12 +407,12 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
      */
     rtems_debugger_unlock();
 
-    target_printk("[} tid:%08lx: resuming\n", tid);
+    target_printk("[} tid:%08" PRIx32 ": resuming\n", tid);
 
     return rtems_debugger_target_exc_consumed;
   }
 
-  target_printk("[} cascade, in interrupt\n");
+  rtems_debugger_printf("rtems-db: exception in an interrupt, cascading\n");
 
   return rtems_debugger_target_exc_cascade;
 }
@@ -438,4 +464,10 @@ void
 rtems_debugger_target_end_memory_access(void)
 {
   rtems_debugger->target->memory_access = false;
+}
+
+bool
+rtems_debugger_target_is_memory_access(void)
+{
+  return rtems_debugger->target->memory_access;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * Copyright (c) 2016-2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -175,6 +175,11 @@ extern void rtems_debugger_unlock(void);
  * Is the server still running?
  */
 extern bool rtems_debugger_server_running(void);
+
+/**
+ * Signel a server crash.
+ */
+extern void rtems_debugger_server_crash(void);
 
 /**
  * Get the remote handle from the debugger.

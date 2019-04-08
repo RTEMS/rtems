@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * Copyright (c) 2016-2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,9 +25,9 @@
  */
 
 #define RTEMS_DEBUGGER_VERBOSE_LOCK 0
-#define RTEMS_DEBUGGER_PRINT_PRINTK 1
 
 #include <errno.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -84,9 +84,7 @@ rtems_debugger_server* rtems_debugger;
  * Print lock ot make the prints sequential. This is to debug the debugger in
  * SMP.
  */
-#if RTEMS_DEBUGGER_PRINT_PRINTK
 RTEMS_INTERRUPT_LOCK_DEFINE(static, printk_lock, "printk_lock")
-#endif
 
 void
 rtems_debugger_printk_lock(rtems_interrupt_lock_context* lock_context)
@@ -103,17 +101,13 @@ rtems_debugger_printk_unlock(rtems_interrupt_lock_context* lock_context)
 int
 rtems_debugger_clean_printf(const char* format, ...)
 {
-  int     len;
-  va_list ap;
+  rtems_interrupt_lock_context lock_context;
+  int                          len;
+  va_list                      ap;
   va_start(ap, format);
-  if (RTEMS_DEBUGGER_PRINT_PRINTK) {
-    rtems_interrupt_lock_context lock_context;
-    rtems_debugger_printk_lock(&lock_context);
-    len = vprintk(format, ap);
-    rtems_debugger_printk_unlock(&lock_context);
-  }
-  else
-    len = rtems_vprintf(&rtems_debugger->printer, format, ap);
+  rtems_debugger_printk_lock(&lock_context);
+  len = vprintk(format, ap);
+  rtems_debugger_printk_unlock(&lock_context);
   va_end(ap);
   return len;
 }
@@ -121,18 +115,14 @@ rtems_debugger_clean_printf(const char* format, ...)
 int
 rtems_debugger_printf(const char* format, ...)
 {
-  int     len;
-  va_list ap;
+  rtems_interrupt_lock_context lock_context;
+  int                          len;
+  va_list                      ap;
   va_start(ap, format);
-  if (RTEMS_DEBUGGER_PRINT_PRINTK) {
-    rtems_interrupt_lock_context lock_context;
-    rtems_debugger_printk_lock(&lock_context);
-    printk("[CPU:%d] ", (int) _SMP_Get_current_processor ());
-    len = vprintk(format, ap);
-    rtems_debugger_printk_unlock(&lock_context);
-  }
-  else
-    len = rtems_vprintf(&rtems_debugger->printer, format, ap);
+  rtems_debugger_printk_lock(&lock_context);
+  printk("[CPU:%d] ", (int) _SMP_Get_current_processor ());
+  len = vprintk(format, ap);
+  rtems_debugger_printk_unlock(&lock_context);
   va_end(ap);
   return len;
 }
@@ -897,7 +887,7 @@ remote_gq_thread_extra_info(uint8_t* buffer, int size)
         current = rtems_debugger_thread_current(threads);
         thread = &current[r];
         l = snprintf(buf, sizeof(buf),
-                     "%4s (%08lx), ", thread->name, thread->id);
+                     "%4s (%08" PRIx32 "), ", thread->name, thread->id);
         remote_packet_out_append_hex((const uint8_t*) buf, l);
         l = snprintf(buf, sizeof(buf),
                      "priority(c:%3d r:%3d), ",
@@ -1330,7 +1320,7 @@ remote_read_general_regs(uint8_t* buffer, int size)
     if (r >= 0) {
       remote_packet_out_reset();
       r = remote_packet_out_append_hex((const uint8_t*) &thread->registers[0],
-                                       rtems_debugger_target_reg_size());
+                                       rtems_debugger_target_reg_table_size());
       if (r >= 0)
         ok = true;
     }
@@ -1345,12 +1335,12 @@ static int
 remote_write_general_regs(uint8_t* buffer, int size)
 {
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  size_t                  reg_size = rtems_debugger_target_reg_size();
+  size_t                  reg_table_size = rtems_debugger_target_reg_table_size();
   bool                    ok = false;
   int                     r;
   if (threads->selector_gen >= 0 &&
       threads->selector_gen < (int) threads->current.level &&
-      ((size - 1) / 2) == (int) reg_size) {
+      ((size - 1) / 2) == (int) reg_table_size) {
     rtems_debugger_thread* current;
     rtems_debugger_thread* thread;
     current = rtems_debugger_thread_current(threads);
@@ -1359,7 +1349,7 @@ remote_write_general_regs(uint8_t* buffer, int size)
     if (r >= 0) {
       r = rtems_debugger_remote_packet_in_hex((uint8_t*) &thread->registers[0],
                                               (const char*) &buffer[1],
-                                              reg_size);
+                                              reg_table_size);
       if (r >= 0) {
         thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY;
         ok = true;
@@ -1388,9 +1378,11 @@ remote_read_reg(uint8_t* buffer, int size)
       thread = &current[threads->selector_gen];
       r = rtems_debugger_target_read_regs(thread);
       if (r >= 0) {
-        const uint8_t* addr = (const uint8_t*) &thread->registers[reg];
+        const size_t   reg_size = rtems_debugger_target_reg_size(reg);
+        const size_t   reg_offset = rtems_debugger_target_reg_offset(reg);
+        const uint8_t* addr = &thread->registers[reg_offset];
         remote_packet_out_reset();
-        r = remote_packet_out_append_hex(addr, sizeof(thread->registers[0]));
+        r = remote_packet_out_append_hex(addr, reg_size);
         if (r >= 0)
           ok = true;
       }
@@ -1421,10 +1413,10 @@ remote_write_reg(uint8_t* buffer, int size)
         thread = &current[threads->selector_gen];
         r = rtems_debugger_target_read_regs(thread);
         if (r >= 0) {
-          uint8_t* addr = (uint8_t*) &thread->registers[reg];
-          r = rtems_debugger_remote_packet_in_hex(addr,
-                                                  equals + 1,
-                                                  sizeof(thread->registers[reg]));
+          const size_t reg_size = rtems_debugger_target_reg_size(reg);
+          const size_t reg_offset = rtems_debugger_target_reg_offset(reg);
+          uint8_t*     addr = &thread->registers[reg_offset];
+          r = rtems_debugger_remote_packet_in_hex(addr, equals + 1, reg_size);
           if (r == 0) {
             thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY;
             response = r_OK;
@@ -1505,7 +1497,7 @@ remote_single_step(uint8_t* buffer, int size)
       rtems_debugger_thread* current;
       char                   vCont_s[32];
       current = rtems_debugger_thread_current(threads);
-      snprintf(vCont_s, sizeof(vCont_s), "vCont;s:p1.%08lx;c:p1.-1",
+      snprintf(vCont_s, sizeof(vCont_s), "vCont;s:p1.%08" PRIx32 ";c:p1.-1",
                current[threads->selector_cont].id);
       return remote_v_continue((uint8_t*) vCont_s, strlen(vCont_s));
     }
@@ -1668,6 +1660,8 @@ rtems_debugger_events(rtems_task_argument arg)
 
   while (rtems_debugger_server_events_running()) {
     rtems_debugger_server_events_wait();
+    if (rtems_debugger_verbose())
+      rtems_debugger_printf("rtems-db: event woken\n");
     if (!rtems_debugger_server_events_running())
       break;
     r = rtems_debugger_thread_system_suspend();
@@ -1947,6 +1941,15 @@ rtems_debugger_start(const char*          remote,
   }
 
   return 0;
+}
+
+void
+rtems_debugger_server_crash(void)
+{
+  rtems_debugger_lock();
+  rtems_debugger->server_running = false;
+  rtems_debugger_unlock();
+  rtems_debugger->remote->end(rtems_debugger->remote);
 }
 
 int
