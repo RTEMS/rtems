@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreRWLock
+ *
  * @brief Inlined Routines Associated with the SuperCore RWLock
  *
  * This include file contains all of the inlined routines associated
@@ -87,16 +89,23 @@ typedef struct {
 }   CORE_RWLock_Control;
 
 /**
- *  @brief Initialize a RWlock.
+ * @brief Initializes a RWlock.
  *
- *  This routine initializes the RWLock based on the parameters passed.
+ * This routine initializes the RWLock.
  *
- *  @param[in] the_rwlock is the RWLock to initialize
+ * @param[out] the_rwlock is the RWLock to initialize.
  */
 void _CORE_RWLock_Initialize(
   CORE_RWLock_Control *the_rwlock
 );
 
+/**
+ * @brief Destroys a RWlock.
+ *
+ * This routine destroys the RWLock.
+ *
+ * @param[out] the_rwlock is the RWLock to destroy.
+ */
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
   CORE_RWLock_Control *the_rwlock
 )
@@ -104,6 +113,14 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
   (void) the_rwlock;
 }
 
+/**
+ * @brief Acquires the RWlock.
+ *
+ * @param[in, out] the_rwlock The RWlock to acquire.
+ * @param queue_context The thread queue context.
+ *
+ * @return The executing thread.
+ */
 RTEMS_INLINE_ROUTINE Thread_Control *_CORE_RWLock_Acquire(
   CORE_RWLock_Control  *the_rwlock,
   Thread_queue_Context *queue_context
@@ -124,6 +141,12 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_RWLock_Acquire(
   return executing;
 }
 
+/**
+ * @brief Releases the RWlock.
+ *
+ * @param[in, out] the_rwlock The RWlock to release.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
   CORE_RWLock_Control  *the_rwlock,
   Thread_queue_Context *queue_context
@@ -136,12 +159,18 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
 }
 
 /**
- *  @brief Obtain RWLock for reading.
+ * @brief Obtains RWLock for reading.
  *
- *  This routine attempts to obtain the RWLock for read access.
+ * This routine attempts to obtain the RWLock for read access.
  *
- *  @param[in] the_rwlock is the RWLock to wait for
- *  @param[in] wait is true if the calling thread is willing to wait
+ * @param[in, out] the_rwlock is the RWLock to wait for
+ * @param wait Indicates whether the calling thread is willing to wait.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The RWlock was successfully seized.
+ * @retval STATUS_UNAVAILABLE The RWlock is currently locked for writing
+ *          and the calling thread is not willing to wait.
+ * @retval STATUS_TIMEOUT A timeout occured.
  */
 
 Status_Control _CORE_RWLock_Seize_for_reading(
@@ -151,12 +180,19 @@ Status_Control _CORE_RWLock_Seize_for_reading(
 );
 
 /**
- *  @brief Obtain RWLock for writing.
+ * @brief Obtains RWLock for writing.
  *
- *  This routine attempts to obtain the RWLock for write exclusive access.
+ * This routine attempts to obtain the RWLock for write exclusive access.
  *
- *  @param[in] the_rwlock is the RWLock to wait for
- *  @param[in] wait is true if the calling thread is willing to wait
+ * @param[in, out] the_rwlock The RWLock to wait for.
+ * @param wait Indicates whether the calling thread is willing to wait.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The RWLock was successfully obtained for write
+ *          exclusive access.
+ * @retval STATUS_UNAVAILABLE The RWlock is currently locked and the calling
+ *          thread is not willing to wait.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 Status_Control _CORE_RWLock_Seize_for_writing(
   CORE_RWLock_Control  *the_rwlock,
@@ -165,14 +201,14 @@ Status_Control _CORE_RWLock_Seize_for_writing(
 );
 
 /**
- *  @brief Release the RWLock.
+ * @brief Releases the RWLock.
  *
- *  This routine manually releases @a the_rwlock.  All of the threads waiting
- *  for the RWLock will be readied.
+ * This routine manually releases @a the_rwlock.  All of the threads waiting
+ * for the RWLock will be readied.
  *
- *  @param[in] the_rwlock is the RWLock to surrender
+ * @param[in, out] the_rwlock The RWLock to surrender.
  *
- *  @retval Status is returned to indicate successful or failure.
+ * @return STATUS_SUCCESSFUL This method is always successful.
  */
 Status_Control _CORE_RWLock_Surrender( CORE_RWLock_Control *the_rwlock );
 
