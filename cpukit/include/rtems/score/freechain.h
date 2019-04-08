@@ -28,6 +28,8 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
+ * @brief The Freechain Handler.
+ *
  * The Freechain Handler is used to manage a chain of nodes, of which size can
  * automatically increase when there is no free node left. This handler
  * provides one data structure: Freechain_Control.
@@ -54,13 +56,13 @@ typedef struct {
  * @brief Initializes a freechain.
  *
  * This routine initializes the freechain control structure to manage a chain
- * of nodes.  In case the freechain is empty the extend handler is called to
+ * of nodes.  In the case the freechain is empty the extend handler is called to
  * get more nodes.
  *
- * @param[in] freechain The freechain control to initialize.
- * @param[in] initial_nodes Array with the initial nodes.
- * @param[in] number_nodes The initial number of nodes.
- * @param[in] node_size The node size.
+ * @param[out] freechain The freechain control to initialize.
+ * @param[out] initial_nodes Array with the initial nodes.
+ * @param number_nodes The initial number of nodes.
+ * @param node_size The node size.
  */
 RTEMS_INLINE_ROUTINE void _Freechain_Initialize(
   Freechain_Control   *freechain,
@@ -80,14 +82,14 @@ RTEMS_INLINE_ROUTINE void _Freechain_Initialize(
 /**
  * @brief Gets a node from the freechain.
  *
- * @param[in] freechain The freechain control.
- * @param[in] allocator The allocator function.
- * @param[in] number_nodes_to_extend The number of nodes in case an extend is
+ * @param[in, out] freechain The freechain control.
+ * @param allocator The allocator function.
+ * @param number_nodes_to_extend The number of nodes in the case an extend is
  *   necessary due to an empty freechain.
  * @param[in] node_size The node size.
  *
  * @retval NULL The freechain is empty and the extend operation failed.
- * @retval otherwise Pointer to a node.  The node ownership passes to the
+ * @retval pointer Pointer to a node.  The node ownership passes to the
  * caller.
  */
 void *_Freechain_Get(
@@ -100,8 +102,8 @@ void *_Freechain_Get(
 /**
  * @brief Puts a node back onto the freechain.
  *
- * @param[in] freechain The freechain control.
- * @param[in] node The node to put back.  The node may be @c NULL, in this case
+ * @param[in, out] freechain The freechain control.
+ * @param[out] node The node to put back.  The node may be @c NULL, in this case
  *   the function does nothing.
  */
 void _Freechain_Put(
@@ -109,7 +111,7 @@ void _Freechain_Put(
   void              *node
 );
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
