@@ -59,6 +59,7 @@ static uint32_t _ARMV7M_Clock_counter(ARMV7M_Timecounter *tc)
   ticks = tc->ticks;
 
   if ((systick->csr & ARMV7M_SYSTICK_CSR_COUNTFLAG) != 0) {
+    counter = systick->cvr;
     ticks += interval;
     tc->ticks = ticks;
   }
