@@ -18,6 +18,16 @@
 
 #include <rtems/score/basedefs.h>
 
+/**
+ * @defgroup RTEMSScoreCPUAtomic Atomic Operations CPU
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief Atomic Operations CPU API
+ *
+ * @{
+ */
+
 #ifdef RTEMS_SMP
   #if defined(__cplusplus) \
     && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 9))
@@ -131,6 +141,11 @@ typedef int CPU_atomic_Order;
 
 #endif
 
+/**
+ * @brief Sets up a cpu fence.
+ *
+ * @param[out] order The order for the fence.
+ */
 static inline void _CPU_atomic_Fence( CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -143,6 +158,12 @@ static inline void _CPU_atomic_Fence( CPU_atomic_Order order )
 #endif
 }
 
+/**
+ * @brief Initializes Uint.
+ *
+ * @param[out] obj The CPU atomic Uint to initialize.
+ * @param desired The desired value for @a obj.
+ */
 static inline void _CPU_atomic_Init_uint( CPU_atomic_Uint *obj, unsigned int desired )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -154,6 +175,12 @@ static inline void _CPU_atomic_Init_uint( CPU_atomic_Uint *obj, unsigned int des
 #endif
 }
 
+/**
+ * @brief Initializes Ulong.
+ *
+ * @param[out] obj The CPU atomic Ulong to initialize.
+ * @param desired The desired value for @a obj.
+ */
 static inline void _CPU_atomic_Init_ulong( CPU_atomic_Ulong *obj, unsigned long desired )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -165,6 +192,12 @@ static inline void _CPU_atomic_Init_ulong( CPU_atomic_Ulong *obj, unsigned long 
 #endif
 }
 
+/**
+ * @brief Initializes Uintptr.
+ *
+ * @param[out] obj The CPU atomic Uintptr to initialize.
+ * @param desired The desired value for @a obj.
+ */
 static inline void _CPU_atomic_Init_uintptr( CPU_atomic_Uintptr *obj, uintptr_t desired )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -176,6 +209,14 @@ static inline void _CPU_atomic_Init_uintptr( CPU_atomic_Uintptr *obj, uintptr_t 
 #endif
 }
 
+/**
+ * @brief Loads value of Uint considering the order.
+ *
+ * @param obj The CPU atomic Uint to get the value from.
+ * @param order The atomic order for getting the value.
+ *
+ * @return The value of @a obj considering the @a order.
+ */
 static inline unsigned int _CPU_atomic_Load_uint( const CPU_atomic_Uint *obj, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -193,6 +234,14 @@ static inline unsigned int _CPU_atomic_Load_uint( const CPU_atomic_Uint *obj, CP
 #endif
 }
 
+/**
+ * @brief Loads value of Ulong considering the order.
+ *
+ * @param obj The CPU atomic Ulong to get the value from.
+ * @param order The atomic order for getting the value.
+ *
+ * @return The value of @a obj considering the @a order.
+ */
 static inline unsigned long _CPU_atomic_Load_ulong( const CPU_atomic_Ulong *obj, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -210,6 +259,14 @@ static inline unsigned long _CPU_atomic_Load_ulong( const CPU_atomic_Ulong *obj,
 #endif
 }
 
+/**
+ * @brief Loads value of Uintptr considering the order.
+ *
+ * @param obj The CPU atomic Uintptr to get the value from.
+ * @param order The atomic order for getting the value.
+ *
+ * @return The value of @a obj considering the @a order.
+ */
 static inline uintptr_t _CPU_atomic_Load_uintptr( const CPU_atomic_Uintptr *obj, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -227,6 +284,13 @@ static inline uintptr_t _CPU_atomic_Load_uintptr( const CPU_atomic_Uintptr *obj,
 #endif
 }
 
+/**
+ * @brief Stores a value to Uint considering the order.
+ *
+ * @param[out] obj The CPU atomic Uint to store a value in.
+ * @param desired The desired value for @a obj.
+ * @param order The atomic order for storing the value.
+ */
 static inline void _CPU_atomic_Store_uint( CPU_atomic_Uint *obj, unsigned int desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -240,6 +304,13 @@ static inline void _CPU_atomic_Store_uint( CPU_atomic_Uint *obj, unsigned int de
 #endif
 }
 
+/**
+ * @brief Stores a value to Ulong considering the order.
+ *
+ * @param[out] obj The CPU atomic Ulong to store a value in.
+ * @param desired The desired value for @a obj.
+ * @param order The atomic order for storing the value.
+ */
 static inline void _CPU_atomic_Store_ulong( CPU_atomic_Ulong *obj, unsigned long desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -253,6 +324,13 @@ static inline void _CPU_atomic_Store_ulong( CPU_atomic_Ulong *obj, unsigned long
 #endif
 }
 
+/**
+ * @brief Stores a value to Uintptr considering the order.
+ *
+ * @param[out] obj The CPU atomic Uintptr to store a value in.
+ * @param desired The desired value for @a obj.
+ * @param order The atomic order for storing the value.
+ */
 static inline void _CPU_atomic_Store_uintptr( CPU_atomic_Uintptr *obj, uintptr_t desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -266,6 +344,15 @@ static inline void _CPU_atomic_Store_uintptr( CPU_atomic_Uintptr *obj, uintptr_t
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uint and adds a value to the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uint to get the value from and add @a arg to.
+ * @param arg The value to add to @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the addition of @a arg.
+ */
 static inline unsigned int _CPU_atomic_Fetch_add_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -286,6 +373,15 @@ static inline unsigned int _CPU_atomic_Fetch_add_uint( CPU_atomic_Uint *obj, uns
 #endif
 }
 
+/**
+ * @brief Fetches current value of Ulong and adds a value to the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to get the value from and add @a arg to.
+ * @param arg The value to add to @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the addition of @a arg.
+ */
 static inline unsigned long _CPU_atomic_Fetch_add_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -306,6 +402,15 @@ static inline unsigned long _CPU_atomic_Fetch_add_ulong( CPU_atomic_Ulong *obj, 
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uintptr and adds a value to the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uintptr to get the value from and add @a arg to.
+ * @param arg The value to add to @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the addition of @a arg.
+ */
 static inline uintptr_t _CPU_atomic_Fetch_add_uintptr( CPU_atomic_Uintptr *obj, uintptr_t arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -326,6 +431,15 @@ static inline uintptr_t _CPU_atomic_Fetch_add_uintptr( CPU_atomic_Uintptr *obj, 
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uint and subtracts a value from the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uint to get the value from and subtract @a arg from.
+ * @param arg The value to subtract from @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the subtraction of @a arg.
+ */
 static inline unsigned int _CPU_atomic_Fetch_sub_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -346,6 +460,15 @@ static inline unsigned int _CPU_atomic_Fetch_sub_uint( CPU_atomic_Uint *obj, uns
 #endif
 }
 
+/**
+ * @brief Fetches current value of Ulong and subtracts a value from the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to get the value from and subtract @a arg from.
+ * @param arg The value to subtract from @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the subtraction of @a arg.
+ */
 static inline unsigned long _CPU_atomic_Fetch_sub_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -366,6 +489,15 @@ static inline unsigned long _CPU_atomic_Fetch_sub_ulong( CPU_atomic_Ulong *obj, 
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uintptr and subtracts a value from the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uintptr to get the value from and subtract @a arg from.
+ * @param arg The value to subtract from @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the subtraction of @a arg.
+ */
 static inline uintptr_t _CPU_atomic_Fetch_sub_uintptr( CPU_atomic_Uintptr *obj, uintptr_t arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -386,6 +518,15 @@ static inline uintptr_t _CPU_atomic_Fetch_sub_uintptr( CPU_atomic_Uintptr *obj, 
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uint and ORs a value with the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uint to get the value from and OR @a arg to.
+ * @param arg The value to OR with @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the OR operation with @a arg.
+ */
 static inline unsigned int _CPU_atomic_Fetch_or_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -406,6 +547,15 @@ static inline unsigned int _CPU_atomic_Fetch_or_uint( CPU_atomic_Uint *obj, unsi
 #endif
 }
 
+/**
+ * @brief Fetches current value of Ulong and ORs a value with the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to get the value from and OR @a arg to.
+ * @param arg The value to OR with @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the OR operation with @a arg.
+ */
 static inline unsigned long _CPU_atomic_Fetch_or_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -426,6 +576,15 @@ static inline unsigned long _CPU_atomic_Fetch_or_ulong( CPU_atomic_Ulong *obj, u
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uintptr and ORs a value with the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uintptr to get the value from and OR @a arg to.
+ * @param arg The value to OR with @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the OR operation with @a arg.
+ */
 static inline uintptr_t _CPU_atomic_Fetch_or_uintptr( CPU_atomic_Uintptr *obj, uintptr_t arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -446,6 +605,15 @@ static inline uintptr_t _CPU_atomic_Fetch_or_uintptr( CPU_atomic_Uintptr *obj, u
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uint and ANDs a value with the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uint to get the value from and AND @a arg to.
+ * @param arg The value to AND with @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the AND operation with @a arg.
+ */
 static inline unsigned int _CPU_atomic_Fetch_and_uint( CPU_atomic_Uint *obj, unsigned int arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -466,6 +634,15 @@ static inline unsigned int _CPU_atomic_Fetch_and_uint( CPU_atomic_Uint *obj, uns
 #endif
 }
 
+/**
+ * @brief Fetches current value of Ulong and ANDs a value with the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to get the value from and AND @a arg to.
+ * @param arg The value to AND with @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the AND operation with @a arg.
+ */
 static inline unsigned long _CPU_atomic_Fetch_and_ulong( CPU_atomic_Ulong *obj, unsigned long arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -486,6 +663,15 @@ static inline unsigned long _CPU_atomic_Fetch_and_ulong( CPU_atomic_Ulong *obj, 
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uintptr and ANDs a value with the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Uintptr to get the value from and AND @a arg to.
+ * @param arg The value to AND with @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the AND operation with @a arg.
+ */
 static inline uintptr_t _CPU_atomic_Fetch_and_uintptr( CPU_atomic_Uintptr *obj, uintptr_t arg, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -506,6 +692,15 @@ static inline uintptr_t _CPU_atomic_Fetch_and_uintptr( CPU_atomic_Uintptr *obj, 
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uint and sets its value.
+ *
+ * @param[in, out] obj The CPU atomic Uint to get the value from and set the value to @a desired.
+ * @param arg The value to set for @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the exchange with @a desired.
+ */
 static inline unsigned int _CPU_atomic_Exchange_uint( CPU_atomic_Uint *obj, unsigned int desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -526,6 +721,15 @@ static inline unsigned int _CPU_atomic_Exchange_uint( CPU_atomic_Uint *obj, unsi
 #endif
 }
 
+/**
+ * @brief Fetches current value of Ulong and sets its value.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to get the value from and set the value to @a desired.
+ * @param arg The value to set for @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the exchange with @a desired.
+ */
 static inline unsigned long _CPU_atomic_Exchange_ulong( CPU_atomic_Ulong *obj, unsigned long desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -546,6 +750,15 @@ static inline unsigned long _CPU_atomic_Exchange_ulong( CPU_atomic_Ulong *obj, u
 #endif
 }
 
+/**
+ * @brief Fetches current value of Uintptr and sets its value.
+ *
+ * @param[in, out] obj The CPU atomic Uintptr to get the value from and set the value to @a desired.
+ * @param arg The value to set for @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the exchange with @a desired.
+ */
 static inline uintptr_t _CPU_atomic_Exchange_uintptr( CPU_atomic_Uintptr *obj, uintptr_t desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -566,6 +779,23 @@ static inline uintptr_t _CPU_atomic_Exchange_uintptr( CPU_atomic_Uintptr *obj, u
 #endif
 }
 
+/**
+ * @brief Checks if value of Uint is as expected.
+ *
+ * This method checks if the value of @a obj is equal to the value of @a expected.  If
+ * this is the case, the value of @a obj is changed to @a desired.  Otherwise, the value
+ * of @a obj is changed to @a expected.
+ *
+ * @param[in, out] obj The CPU atomic Uint to operate upon.
+ * @param[in, out] expected The expected value of @a obj.  If @a obj has a different
+ *      value, @a expected is changed to the actual value of @a obj.
+ * @param desired The new value of @a obj if the old value of @a obj was as expected.
+ * @param succ The order if it is successful.
+ * @param fail The order if it fails.
+ *
+ * @retval true The old value of @a obj was as expected.
+ * @retval false The old value of @a obj was not as expected.
+ */
 static inline bool _CPU_atomic_Compare_exchange_uint( CPU_atomic_Uint *obj, unsigned int *expected, unsigned int desired, CPU_atomic_Order succ, CPU_atomic_Order fail )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -593,6 +823,23 @@ static inline bool _CPU_atomic_Compare_exchange_uint( CPU_atomic_Uint *obj, unsi
 #endif
 }
 
+/**
+ * @brief Checks if value of Ulong is as expected.
+ *
+ * This method checks if the value of @a obj is equal to the value of @a expected.  If
+ * this is the case, the value of @a obj is changed to @a desired.  Otherwise, the value
+ * of @a obj is changed to @a expected.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to operate upon.
+ * @param[in, out] expected The expected value of @a obj.  If @a obj has a different
+ *      value, @a expected is changed to the actual value of @a obj.
+ * @param desired The new value of @a obj if the old value of @a obj was as expected.
+ * @param succ The order if it is successful.
+ * @param fail The order if it fails.
+ *
+ * @retval true The old value of @a obj was as expected.
+ * @retval false The old value of @a obj was not as expected.
+ */
 static inline bool _CPU_atomic_Compare_exchange_ulong( CPU_atomic_Ulong *obj, unsigned long *expected, unsigned long desired, CPU_atomic_Order succ, CPU_atomic_Order fail )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -620,6 +867,23 @@ static inline bool _CPU_atomic_Compare_exchange_ulong( CPU_atomic_Ulong *obj, un
 #endif
 }
 
+/**
+ * @brief Checks if value of Uintptr is as expected.
+ *
+ * This method checks if the value of @a obj is equal to the value of @a expected.  If
+ * this is the case, the value of @a obj is changed to @a desired.  Otherwise, the value
+ * of @a obj is changed to @a expected.
+ *
+ * @param[in, out] obj The CPU atomic Uintptr to operate upon.
+ * @param[in, out] expected The expected value of @a obj.  If @a obj has a different
+ *      value, @a expected is changed to the actual value of @a obj.
+ * @param desired The new value of @a obj if the old value of @a obj was as expected.
+ * @param succ The order if it is successful.
+ * @param fail The order if it fails.
+ *
+ * @retval true The old value of @a obj was as expected.
+ * @retval false The old value of @a obj was not as expected.
+ */
 static inline bool _CPU_atomic_Compare_exchange_uintptr( CPU_atomic_Uintptr *obj, uintptr_t *expected, uintptr_t desired, CPU_atomic_Order succ, CPU_atomic_Order fail )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -647,6 +911,12 @@ static inline bool _CPU_atomic_Compare_exchange_uintptr( CPU_atomic_Uintptr *obj
 #endif
 }
 
+/**
+ * @brief Clears the atomic flag.
+ *
+ * @param[out] obj The atomic flag to be cleared.
+ * @param order The atomic order for the operation.
+ */
 static inline void _CPU_atomic_Flag_clear( CPU_atomic_Flag *obj, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -659,6 +929,15 @@ static inline void _CPU_atomic_Flag_clear( CPU_atomic_Flag *obj, CPU_atomic_Orde
 #endif
 }
 
+/**
+ * @brief Returns current flag state and sets it.
+ *
+ * @param[in, out] obj The atomic flag to be set.
+ * @param order The atomic order for the operation.
+ *
+ * @retval true @a obj was set prior to this operation.
+ * @retval false @a obj was not set prior to this operation.
+ */
 static inline bool _CPU_atomic_Flag_test_and_set( CPU_atomic_Flag *obj, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
@@ -678,5 +957,7 @@ static inline bool _CPU_atomic_Flag_test_and_set( CPU_atomic_Flag *obj, CPU_atom
   return flag;
 #endif
 }
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUSTDATOMIC_H */
