@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreMutex
+ *
  * @brief CORE Mutex API
  *
  * This include file contains all the constants and structures associated with
@@ -34,14 +36,17 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreMutex Mutex Handler
+ * @defgroup RTEMSScoreMutex Mutex Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which provides the foundation
- *  Mutex services used in all of the APIs supported by RTEMS.
+ * @brief Mutex Handler
+ *
+ * This handler encapsulates functionality which provides the foundation
+ * Mutex services used in all of the APIs supported by RTEMS.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  @brief Control block used to manage each mutex.
@@ -94,7 +99,7 @@ typedef struct {
 #endif
 } CORE_ceiling_mutex_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
