@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief ISR Level Type
+ * @ingroup RTEMSScoreISR
  *
- *  This include file defines the ISR Level type.  It exists to
- *  simplify include dependencies.  It is part of the ISR Handler.
+ * @brief ISR Level Type
+ *
+ * This include file defines the ISR Level type.  It exists to
+ * simplify include dependencies.  It is part of the ISR Handler.
  */
 
 /*
@@ -27,9 +29,10 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup RTEMSScoreISR ISR Handler
+ * @addtogroup RTEMSScoreISR ISR Handler
+ *
+ * @{
  */
-/** @{ */
 
 /**
  *  The following type defines the control block used to manage
