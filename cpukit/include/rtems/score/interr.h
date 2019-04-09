@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Prototypes Related to the Internal Error Handler
+ * @ingroup RTEMSScoreIntErr
  *
- *  This include file contains constants and prototypes related
- *  to the Internal Error Handler.
+ * @brief Constants and Prototypes Related to the Internal Error Handler
+ *
+ * This include file contains constants and prototypes related
+ * to the Internal Error Handler.
  */
 
 /*
@@ -22,14 +24,17 @@
 #include <rtems/score/cpu.h>
 
 /**
- *  @defgroup RTEMSScoreIntErr Internal Error Handler
+ * @defgroup RTEMSScoreIntErr Internal Error Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which provides the foundation
- *  Semaphore services used in all of the APIs supported by RTEMS.
+ * @brief Internal Error Handler
+ *
+ * This handler encapsulates functionality which provides the foundation
+ * Semaphore services used in all of the APIs supported by RTEMS.
+ *
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -241,9 +246,9 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  *
  * The final step is to call the CPU specific _CPU_Fatal_halt().
  *
- * @param[in] the_source The fatal source indicating the subsystem the fatal
+ * @param the_source The fatal source indicating the subsystem the fatal
  * condition originated in.
- * @param[in] the_error The fatal error code.  This value must be interpreted
+ * @param the_error The fatal error code.  This value must be interpreted
  * with respect to the source.
  *
  * @see rtems_fatal() and _Internal_error().
@@ -257,7 +262,7 @@ void _Terminate(
  * @brief Terminates the system with an INTERNAL_ERROR_CORE fatal source and
  * the specified core error code.
  *
- * @param[in] core_error The core error code.
+ * @param core_error The core error code.
  *
  * @see _Terminate().
  */
@@ -267,7 +272,7 @@ void _Internal_error( Internal_errors_Core_list core_error ) RTEMS_NO_RETURN;
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
