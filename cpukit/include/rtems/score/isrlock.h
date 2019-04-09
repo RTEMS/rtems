@@ -153,8 +153,8 @@ typedef struct {
 /**
  * @brief Sets the ISR level in the ISR lock context.
  *
- * @param[in] context The ISR lock context.
- * @param[in] level The ISR level.
+ * @param[out] context The ISR lock context.
+ * @param level The ISR level.
  */
 RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
   ISR_lock_Context *context,
