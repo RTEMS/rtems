@@ -89,14 +89,12 @@ _SMP_Multicasts_try_process( void )
 }
 
 void _SMP_Multicast_action(
-  const size_t setsize,
-  const cpu_set_t *cpus,
-  SMP_Action_handler handler,
-  void *arg
+  const Processor_mask *targets,
+  SMP_Action_handler    handler,
+  void                 *arg
 )
 {
   SMP_Multicast_action node;
-  Processor_mask       targets;
   ISR_lock_Context     lock_context;
   uint32_t             i;
 
@@ -105,29 +103,21 @@ void _SMP_Multicast_action(
     return;
   }
 
-  if( cpus == NULL ) {
-    _Processor_mask_Assign( &targets, _SMP_Get_online_processors() );
-  } else {
-    _Processor_mask_Zero( &targets );
-
-    for ( i = 0; i < _SMP_Get_processor_maximum(); ++i ) {
-      if ( CPU_ISSET_S( i, setsize, cpus ) ) {
-        _Processor_mask_Set( &targets, i );
-      }
-    }
+  if( targets == NULL ) {
+    targets = _SMP_Get_online_processors();
   }
 
   _Chain_Initialize_node( &node.Node );
   node.handler = handler;
   node.arg = arg;
-  _Processor_mask_Assign( &node.targets, &targets );
+  _Processor_mask_Assign( &node.targets, targets );
   _Atomic_Store_ulong( &node.done, 0, ATOMIC_ORDER_RELAXED );
 
   _ISR_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
   _Chain_Prepend_unprotected( &_SMP_Multicast.Actions, &node.Node );
   _ISR_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
 
-  _SMP_Send_message_multicast( &targets, SMP_MESSAGE_MULTICAST_ACTION );
+  _SMP_Send_message_multicast( targets, SMP_MESSAGE_MULTICAST_ACTION );
   _SMP_Multicasts_try_process();
 
   while ( _Atomic_Load_ulong( &node.done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {

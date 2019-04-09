@@ -329,7 +329,7 @@ rtems_cache_invalidate_multiple_instruction_lines(
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
   smp_cache_area area = { i_addr, n_bytes };
 
-  _SMP_Multicast_action( 0, NULL, smp_cache_inst_inv, &area );
+  _SMP_Multicast_action( NULL, smp_cache_inst_inv, &area );
 #else
   _CPU_cache_invalidate_instruction_range( i_addr, n_bytes );
 #endif
@@ -345,7 +345,7 @@ rtems_cache_invalidate_entire_instruction( void )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
-  _SMP_Multicast_action( 0, NULL, smp_cache_inst_inv_all, NULL );
+  _SMP_Multicast_action( NULL, smp_cache_inst_inv_all, NULL );
 #else
  _CPU_cache_invalidate_entire_instruction();
 #endif

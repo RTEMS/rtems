@@ -249,20 +249,19 @@ void _SMP_Send_message_multicast(
 typedef void ( *SMP_Action_handler )( void *arg );
 
 /**
- *  @brief Initiates an SMP multicast action to a set of processors.
+ * @brief Initiates an SMP multicast action to a set of target processors.
  *
- *  The current processor may be part of the set.
+ * The current processor may be part of the set.
  *
- *  @param[in] setsize The size of the set of target processors of the message.
- *  @param[in] cpus The set of target processors of the message.
- *  @param[in] handler The multicast action handler.
- *  @param[in] arg The multicast action argument.
+ * @param targets The set of target processors for the action.  If @c NULL,
+ *   then the action will be performed on all online processors.
+ * @param handler The multicast action handler.
+ * @param arg The multicast action argument.
  */
 void _SMP_Multicast_action(
-  const size_t setsize,
-  const cpu_set_t *cpus,
-  SMP_Action_handler handler,
-  void *arg
+  const Processor_mask *targets,
+  SMP_Action_handler    handler,
+  void                 *arg
 );
 
 /**

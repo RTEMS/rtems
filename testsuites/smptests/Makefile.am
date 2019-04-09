@@ -315,6 +315,17 @@ endif
 endif
 
 if HAS_SMP
+if TEST_smpmulticast01
+smp_tests += smpmulticast01
+smp_screens += smpmulticast01/smpmulticast01.scn
+smp_docs += smpmulticast01/smpmulticast01.doc
+smpmulticast01_SOURCES = smpmulticast01/init.c
+smpmulticast01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smpmulticast01) \
+	$(support_includes)
+endif
+endif
+
+if HAS_SMP
 if TEST_smpmutex01
 smp_tests += smpmutex01
 smp_screens += smpmutex01/smpmutex01.scn

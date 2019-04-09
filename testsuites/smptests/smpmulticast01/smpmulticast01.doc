@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpmulticast01
+
+directives:
+
+  - _SMP_Multicast_action()
+
+concepts:
+
+  - Ensure that _SMP_Multicast_action() works before multitasking.
+  - Ensure that _SMP_Multicast_action() works during multitasking.

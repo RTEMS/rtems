@@ -50,23 +50,14 @@ static void test_action( void *arg )
   ctx.count[rtems_scheduler_get_processor()]++;
 }
 
-typedef void ( *test_case )(
-  size_t set_size,
-  const cpu_set_t *cpu_set
-);
+typedef void ( *test_case )( void );
 
-static void test_cache_invalidate_entire_instruction(
-  size_t set_size,
-  const cpu_set_t *cpu_set
-)
+static void test_cache_invalidate_entire_instruction( void )
 {
   rtems_cache_invalidate_entire_instruction();
 }
 
-static void test_cache_invalidate_multiple_instruction_lines(
-  size_t set_size,
-  const cpu_set_t *cpu_set
-)
+static void test_cache_invalidate_multiple_instruction_lines( void )
 {
   uint32_t self = rtems_scheduler_get_processor();
 
@@ -94,12 +85,9 @@ static void broadcast_test_init( void )
   ctx.count[rtems_scheduler_get_processor()] = 0;
 }
 
-static void broadcast_test_body(
-  size_t set_size,
-  const cpu_set_t *cpu_set
-)
+static void broadcast_test_body( void )
 {
-  _SMP_Multicast_action( set_size, cpu_set, test_action, &ctx );
+  _SMP_Multicast_action( NULL, test_action, &ctx );
 }
 
 static void broadcast_test_fini( void )
@@ -116,8 +104,7 @@ static test_case test_cases[] = {
   broadcast_test_body
 };
 
-static void call_tests( size_t set_size,
-    const cpu_set_t *cpu_set, SMP_barrier_State *bs  )
+static void call_tests( SMP_barrier_State *bs )
 {
   size_t i;
 
@@ -125,15 +112,14 @@ static void call_tests( size_t set_size,
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     barrier( bs );
-    ( *test_cases[ i ] )( set_size, cpu_set );
+    ( *test_cases[ i ] )();
     barrier( bs );
   }
 
   broadcast_test_fini();
 }
 
-static void call_tests_isr_disabled( size_t set_size,
-    const cpu_set_t *cpu_set, SMP_barrier_State *bs  )
+static void call_tests_isr_disabled( SMP_barrier_State *bs )
 {
   size_t i;
 
@@ -144,7 +130,7 @@ static void call_tests_isr_disabled( size_t set_size,
 
     _ISR_Local_disable( isr_level );
     barrier( bs );
-    ( *test_cases[ i ] )( set_size, cpu_set );
+    ( *test_cases[ i ] )();
     _ISR_Local_enable( isr_level );
     barrier( bs );
   }
@@ -152,8 +138,7 @@ static void call_tests_isr_disabled( size_t set_size,
   broadcast_test_fini();
 }
 
-static void call_tests_with_thread_dispatch_disabled( size_t set_size,
-    const cpu_set_t *cpu_set, SMP_barrier_State *bs )
+static void call_tests_with_thread_dispatch_disabled( SMP_barrier_State *bs )
 {
   size_t i;
 
@@ -164,7 +149,7 @@ static void call_tests_with_thread_dispatch_disabled( size_t set_size,
 
     cpu_self = _Thread_Dispatch_disable();
     barrier( bs );
-    ( *test_cases[ i ] )( set_size, cpu_set );
+    ( *test_cases[ i ] )();
     barrier( bs );
     _Thread_Dispatch_enable( cpu_self );
   }
@@ -180,32 +165,29 @@ static void cmlog(  const char* str )
 
 static void all_tests( void )
 {
-  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
-  size_t set_size = CPU_ALLOC_SIZE( cpu_count );
-  cpu_set_t *cpu_set = CPU_ALLOC( cpu_count );
   SMP_barrier_State bs = SMP_BARRIER_STATE_INITIALIZER;
-
-  /* Send message to all available CPUs */
-  CPU_FILL_S( set_size, cpu_set );
 
   /* Call test cases */
   cmlog( "Calling test cases. " );
-  call_tests( set_size, cpu_set, &bs );
+  call_tests( &bs );
   cmlog( "Done!\n");
 
   /* Call test cases with ISR disabled */
   cmlog( "Calling test cases with ISR disabled. " );
-  call_tests_isr_disabled( set_size, cpu_set, &bs );
+  call_tests_isr_disabled( &bs );
   cmlog( "Done!\n" );
 
   /* Call test cases with thread dispatch disabled */
   cmlog( "Calling test cases with thread_dispatch_disabled. ");
-  call_tests_with_thread_dispatch_disabled( set_size, cpu_set, &bs );
+  call_tests_with_thread_dispatch_disabled( &bs );
   cmlog( "Done!\n");
 
   /* Done. Free up memory. */
-  _SMP_barrier_Wait( &ctx.barrier, &bs, cpu_count);
-  CPU_FREE( cpu_set );
+  _SMP_barrier_Wait(
+    &ctx.barrier,
+    &bs,
+    rtems_scheduler_get_processor_maximum()
+  );
 }
 
 static void worker_task(rtems_task_argument arg)
