@@ -40,6 +40,11 @@ RTEMS_PURE static int pure_func(void)
   return 21;
 }
 
+RTEMS_CONST static int const_func(void)
+{
+  return 23;
+}
+
 RTEMS_SECTION(".rtemsroset.test") static int section_variable = 28;
 
 RTEMS_USED static int used_func(void)
@@ -192,6 +197,7 @@ static void Init(rtems_task_argument arg)
   RTEMS_COMPILER_MEMORY_BARRIER();
   rtems_test_assert(noinline_func() == 14);
   rtems_test_assert(pure_func() == 21);
+  rtems_test_assert(const_func() == 23);
   rtems_test_assert(section_variable == 28);
   rtems_test_assert(unused_arg_and_variable_func(49) == 42);
   rtems_test_assert(sizeof(packed_struct) == 5);
