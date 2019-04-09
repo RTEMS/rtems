@@ -31,6 +31,8 @@
  * \page samv7_Xplained_ultra_board_desc SAM V71 Xplained Ultra - Board
  * Description
  *
+ * @ingroup RTEMSBSPsARM
+ *
  * \section Purpose
  *
  * This file is dedicated to describe the SAM V71 Xplained Ultra board.
