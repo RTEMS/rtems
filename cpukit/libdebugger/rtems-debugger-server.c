@@ -1646,7 +1646,7 @@ remote_packets(uint8_t* buffer, size_t size)
 static void
 rtems_debugger_events(rtems_task_argument arg)
 {
-  int r;
+  int r = 0;
 
   if (rtems_debugger_verbose())
     rtems_debugger_printf("rtems-db: events running\n");

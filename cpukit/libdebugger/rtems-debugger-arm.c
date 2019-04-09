@@ -734,7 +734,7 @@ target_exception(CPU_Exception_frame* frame)
  * Note, the code currently assumes cp15 has been set up to match the
  *       instruction set being used.
  */
-#define EXCEPTION_ENTRY_EXC()                                           \
+#define EXCEPTION_ENTRY_EXC_V4()                                        \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "sub  sp, %[frame_size]\n"           /* alloc the frame and CPSR */ \
@@ -777,7 +777,7 @@ target_exception(CPU_Exception_frame* frame)
 #define EXCEPTION_ENTRY_FPU(frame_fpu_size)
 #endif /* ARM_MULTILIB_VFP */
 
-#define EXCEPTION_ENTRY_THREAD(_frame)                                  \
+#define EXCEPTION_ENTRY_THREAD_V4(_frame)                               \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "ldr  lr, [sp]\n"                        /* recover the link reg */ \
@@ -861,7 +861,7 @@ target_exception(CPU_Exception_frame* frame)
  * Note, the code currently assumes cp15 has been set up to match the
  *       instruction set being used.
  */
-#define EXCEPTION_EXIT_THREAD(_frame)                                   \
+#define EXCEPTION_EXIT_THREAD_V4(_frame)                                \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "mov  r0, %[i_frame]\n"                         /* get the frame */ \
@@ -901,7 +901,7 @@ target_exception(CPU_Exception_frame* frame)
       [i_frame] "r" (_frame)                                            \
     : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory")
 
-#define EXCEPTION_EXIT_EXC()                                            \
+#define EXCEPTION_EXIT_EXC_V4()                                         \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "ldr  lr, [sp]\n"                        /* recover the link reg */ \
@@ -913,6 +913,22 @@ target_exception(CPU_Exception_frame* frame)
     : [frame_size] "i" (EXCEPTION_FRAME_SIZE)                           \
     : "memory")
 
+/**
+ * ARM Variant support.
+ */
+#if defined(ARM_MULTILIB_ARCH_V4)
+ #define EXCEPTION_ENTRY_EXC()               EXCEPTION_ENTRY_EXC_V4()
+ #define EXCEPTION_ENTRY_THREAD(_frame)      EXCEPTION_ENTRY_THREAD_V4(_frame)
+ #define EXCEPTION_EXIT_THREAD(_frame)       EXCEPTION_EXIT_THREAD_V4(_frame)
+ #define EXCEPTION_EXIT_EXC()                EXCEPTION_EXIT_EXC_V4()
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+ #define EXCEPTION_ENTRY_EXC()               (void) arm_switch_reg
+ #define EXCEPTION_ENTRY_THREAD(_frame)      (_frame) = NULL
+ #define EXCEPTION_EXIT_THREAD(_frame)       (_frame) = NULL
+ #define EXCEPTION_EXIT_EXC()                (void) arm_switch_reg
+#else
+ #error ARM architecture is not supported.
+#endif
 
 static void __attribute__((naked))
 target_exception_undefined_instruction(void)
