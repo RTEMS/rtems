@@ -1,12 +1,14 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Data Related to the Management of Processor Interrupt Levels
+ * @ingroup RTEMSScoreISR
  *
- *  This include file contains all the constants and structures associated
- *  with the management of processor interrupt levels.  This handler
- *  supports interrupt critical sections, vectoring of user interrupt
- *  handlers, nesting of interrupts, and manipulating interrupt levels.
+ * @brief Data Related to the Management of Processor Interrupt Levels
+ *
+ * This include file contains all the constants and structures associated
+ * with the management of processor interrupt levels.  This handler
+ * supports interrupt critical sections, vectoring of user interrupt
+ * handlers, nesting of interrupts, and manipulating interrupt levels.
  */
 
 /*
@@ -24,17 +26,20 @@
 #include <rtems/score/isrlevel.h>
 
 /**
- *  @defgroup RTEMSScoreISR ISR Handler
+ * @defgroup RTEMSScoreISR ISR Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which provides the foundation
- *  ISR services used in all of the APIs supported by RTEMS.
+ * @brief ISR Handler
  *
- *  The ISR Nest level counter variable is maintained as part of the
- *  per cpu data structure.
+ * This handler encapsulates functionality which provides the foundation
+ * ISR services used in all of the APIs supported by RTEMS.
+ *
+ * The ISR Nest level counter variable is maintained as part of the
+ * per cpu data structure.
+ *
+ * @{
  */
-/**@{*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,9 +108,9 @@ extern char _ISR_Stack_area_begin[];
 extern const char _ISR_Stack_area_end[];
 
 /**
- *  @brief Initialize the ISR handler.
+ * @brief Initializes the ISR handler.
  *
- *  This routine performs the initialization necessary for the ISR handler.
+ * This routine performs the initialization necessary for the ISR handler.
  */
 void _ISR_Handler_initialization ( void );
 
@@ -130,29 +135,30 @@ void _ISR_Handler_initialization ( void );
   _CPU_ISR_install_vector( _vector, _new_handler, _old_handler )
 
 /**
- *  @brief ISR interrupt dispatcher.
+ * @brief ISR interrupt dispatcher.
  *
- *  This routine is the interrupt dispatcher.  ALL interrupts
- *  are vectored to this routine so that minimal context can be saved
- *  and setup performed before the application's high-level language
- *  interrupt service routine is invoked.   After the application's
- *  interrupt service routine returns control to this routine, it
- *  will determine if a thread dispatch is necessary.  If so, it will
- *  ensure that the necessary thread scheduling operations are
- *  performed when the outermost interrupt service routine exits.
+ * This routine is the interrupt dispatcher.  ALL interrupts
+ * are vectored to this routine so that minimal context can be saved
+ * and setup performed before the application's high-level language
+ * interrupt service routine is invoked.   After the application's
+ * interrupt service routine returns control to this routine, it
+ * will determine if a thread dispatch is necessary.  If so, it will
+ * ensure that the necessary thread scheduling operations are
+ * performed when the outermost interrupt service routine exits.
  *
- *  @note  Typically implemented in assembly language.
+ * @note  Typically implemented in assembly language.
  */
 void _ISR_Handler( void );
 
 /**
- *  @brief Checks if an ISR in progress.
+ * @brief Checks if an ISR in progress.
  *
- *  This function returns true if the processor is currently servicing
- *  and interrupt and false otherwise.   A return value of true indicates
- *  that the caller is an interrupt service routine, NOT a thread.
+ * This function returns true if the processor is currently servicing
+ * and interrupt and false otherwise.   A return value of true indicates
+ * that the caller is an interrupt service routine, NOT a thread.
  *
- *  @retval This methods returns true when called from an ISR.
+ * @retval true Returns true when called from an ISR.
+ * @retval false Returns false when not called from an ISR.
  */
 bool _ISR_Is_in_progress( void );
 
@@ -160,7 +166,7 @@ bool _ISR_Is_in_progress( void );
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
