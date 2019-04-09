@@ -50,15 +50,16 @@ static uint32_t _ARMV7M_Clock_counter(ARMV7M_Timecounter *tc)
   uint32_t interval;
   uint32_t counter;
   uint32_t ticks;
-
-  systick = _ARMV7M_Systick;
-  interval = systick->rvr;
+  uint32_t csr;
 
   rtems_interrupt_disable(level);
+  systick = _ARMV7M_Systick;
   counter = systick->cvr;
+  csr = systick->csr;
+  interval = systick->rvr;
   ticks = tc->ticks;
 
-  if ((systick->csr & ARMV7M_SYSTICK_CSR_COUNTFLAG) != 0) {
+  if (RTEMS_PREDICT_FALSE((csr & ARMV7M_SYSTICK_CSR_COUNTFLAG) != 0)) {
     counter = systick->cvr;
     ticks += interval;
     tc->ticks = ticks;
