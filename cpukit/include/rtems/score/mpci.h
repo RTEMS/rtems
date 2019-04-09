@@ -28,17 +28,20 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreMPCI MPCI Handler
+ * @defgroup RTEMSScoreMPCI MPCI Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  The MPCI Handler encapsulates functionality which is related to the
- *  generation, receipt, and processing of remote operations in a
- *  multiprocessor system.  This handler contains the message passing
- *  support for making remote service calls as well as the server thread
- *  which processes requests from remote nodes.
-*/
-/**@{*/
+ * @brief MPCI Handler
+ *
+ * The MPCI Handler encapsulates functionality which is related to the
+ * generation, receipt, and processing of remote operations in a
+ * multiprocessor system.  This handler contains the message passing
+ * support for making remote service calls as well as the server thread
+ * which processes requests from remote nodes.
+ *
+ * @{
+ */
 
 /**
  *  The following defines the node number used when a broadcast is desired.
@@ -125,7 +128,7 @@ typedef struct {
   MPCI_receive_entry         receive_packet;
 } MPCI_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
