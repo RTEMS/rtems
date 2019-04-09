@@ -54,6 +54,36 @@ T_TEST_CASE(calloc_auto)
 	T_eq_int(*i, 0);
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(malloc_free,
+"B:malloc_free\n"
+"P:0:0:UI1:test-malloc.c:8\n"
+"E:malloc_free:N:1:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(malloc_auto,
+"B:malloc_auto\n"
+"P:0:0:UI1:test-malloc.c:17\n"
+"E:malloc_auto:N:1:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(zalloc_auto,
+"B:zalloc_auto\n"
+"P:0:0:UI1:test-malloc.c:35\n"
+"P:1:0:UI1:test-malloc.c:36\n"
+"P:2:0:UI1:test-malloc.c:26\n"
+"E:zalloc_auto:N:3:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(malloc_huge,
+"B:malloc_huge\n"
+"P:0:0:UI1:test-malloc.c:45\n"
+"E:malloc_huge:N:1:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(calloc_auto,
+"B:calloc_auto\n"
+"P:0:0:UI1:test-malloc.c:53\n"
+"P:1:0:UI1:test-malloc.c:54\n"
+"E:calloc_auto:N:2:F:0:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

@@ -7,6 +7,13 @@ T_TEST_CASE(log)
 	T_log(T_NORMAL, "not verbose enough");
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(log,
+"B:log\n"
+"L:a custom message 1, 2, 3\n"
+"E:log:N:0:F:0:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

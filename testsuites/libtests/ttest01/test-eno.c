@@ -21,6 +21,26 @@ T_TEST_CASE(test_eno_success)
 	T_assert_eno_success(ENOMEM);
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(test_eno,
+"B:test_eno\n"
+"P:0:0:UI1:test-eno.c:6\n"
+"F:1:0:UI1:test-eno.c:7:ENOMEM == ERANGE\n"
+"F:*:0:UI1:test-eno.c:9:ENOMEM == ERANGE\n"
+"P:2:0:UI1:test-eno.c:10\n"
+"F:3:0:UI1:test-eno.c:11:ENOMEM == ERANGE\n"
+"E:test_eno:N:4:F:3:D:0.001000\n");
+
+T_TEST_OUTPUT(test_eno_success,
+"B:test_eno_success\n"
+"P:0:0:UI1:test-eno.c:16\n"
+"F:1:0:UI1:test-eno.c:17:ENOMEM == 0\n"
+"F:*:0:UI1:test-eno.c:19:ENOMEM == 0\n"
+"P:2:0:UI1:test-eno.c:20\n"
+"F:3:0:UI1:test-eno.c:21:ENOMEM == 0\n"
+"E:test_eno_success:N:4:F:3:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

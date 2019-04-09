@@ -70,6 +70,38 @@ T_TEST_CASE(rsc_success)
 	T_assert_rsc_success(RTEMS_INVALID_NUMBER);
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(timer,
+"B:timer\n"
+"P:0:0:UI1:test-rtems.c:26\n"
+"P:1:0:UI1:test-rtems.c:29\n"
+"P:2:0:UI1:test-rtems.c:39\n"
+"P:3:0:ISR:test-rtems.c:14\n"
+"P:4:0:ISR:test-rtems.c:15\n"
+"P:5:0:UI1:test-rtems.c:44\n"
+"P:6:0:UI1:test-rtems.c:45\n"
+"P:7:0:UI1:test-rtems.c:48\n"
+"E:timer:N:8:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(rsc,
+"B:rsc\n"
+"P:0:0:UI1:test-rtems.c:54\n"
+"F:1:0:UI1:test-rtems.c:55:RTEMS_INVALID_NUMBER == RTEMS_INVALID_ID\n"
+"F:*:0:UI1:test-rtems.c:57:RTEMS_INVALID_NUMBER == RTEMS_INVALID_ID\n"
+"P:2:0:UI1:test-rtems.c:58\n"
+"F:3:0:UI1:test-rtems.c:59:RTEMS_INVALID_NUMBER == RTEMS_INVALID_ID\n"
+"E:rsc:N:4:F:3:D:0.001000\n");
+
+T_TEST_OUTPUT(rsc_success,
+"B:rsc_success\n"
+"P:0:0:UI1:test-rtems.c:65\n"
+"F:1:0:UI1:test-rtems.c:66:RTEMS_INVALID_NUMBER == RTEMS_SUCCESSFUL\n"
+"F:*:0:UI1:test-rtems.c:68:RTEMS_INVALID_NUMBER == RTEMS_SUCCESSFUL\n"
+"P:2:0:UI1:test-rtems.c:69\n"
+"F:3:0:UI1:test-rtems.c:70:RTEMS_INVALID_NUMBER == RTEMS_SUCCESSFUL\n"
+"E:rsc_success:N:4:F:3:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

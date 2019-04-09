@@ -15,6 +15,13 @@ T_TEST_CASE(destructor)
 	T_add_destructor(&dtor, destroy);
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(destructor,
+"B:destructor\n"
+"P:0:0:UI1:test-destructor.c:7\n"
+"E:destructor:N:1:F:0:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

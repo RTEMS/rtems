@@ -34,6 +34,37 @@ T_TEST_CASE(steps)
 	T_step(2, "c");
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(wrong_step,
+"B:wrong_step\n"
+"P:0:0:UI1:test-plan.c:6\n"
+"F:1:0:UI1:test-plan.c:7:planned step (2)\n"
+"E:wrong_step:N:2:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(plan_ok,
+"B:plan_ok\n"
+"P:0:0:UI1:test-plan.c:13\n"
+"E:plan_ok:N:1:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(plan_failed,
+"B:plan_failed\n"
+"P:0:0:UI1:test-plan.c:19\n"
+"F:*:0:UI1:*:*:actual steps (1), planned steps (2)\n"
+"E:plan_failed:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(double_plan,
+"B:double_plan\n"
+"F:*:0:UI1:*:*:planned steps (99) already set\n"
+"E:double_plan:N:0:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(steps,
+"B:steps\n"
+"P:0:0:UI1:test-plan.c:31\n"
+"P:1:0:UI1:test-plan.c:33\n"
+"P:2:0:UI1:test-plan.c:34\n"
+"E:steps:N:3:F:0:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

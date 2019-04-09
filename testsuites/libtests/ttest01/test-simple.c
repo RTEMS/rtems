@@ -14,6 +14,14 @@ T_TEST_CASE(a_test_case)
 	T_true(false, "a test failure message");
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(a_test_case,
+"B:a_test_case\n"
+"P:0:0:UI1:test-simple.c:13\n"
+"F:1:0:UI1:test-simple.c:14:a test failure message\n"
+"E:a_test_case:N:2:F:1:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the

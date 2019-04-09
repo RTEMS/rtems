@@ -131,6 +131,81 @@ T_TEST_CASE(missing_key_delete)
 	T_psx_success(eno);
 }
 
+#include "t-self-test.h"
+
+T_TEST_OUTPUT(missing_sema_delete,
+"B:missing_sema_delete\n"
+"P:0:0:UI1:test-leak.c:14\n"
+"F:*:0:UI1:*:*:RTEMS semaphore leak (1)\n"
+"E:missing_sema_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_free,
+"B:missing_free\n"
+"P:0:0:UI1:test-leak.c:22\n"
+"E:missing_free:N:1:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_close,
+"B:missing_close\n"
+"P:0:0:UI1:test-leak.c:35\n"
+"F:*:0:UI1:*:*:file descriptor leak (1)\n"
+"E:missing_close:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_barrier_delete,
+"B:missing_barrier_delete\n"
+"P:0:0:UI1:test-leak.c:45\n"
+"F:*:0:UI1:*:*:RTEMS barrier leak (1)\n"
+"E:missing_barrier_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_extension_delete,
+"B:missing_extension_delete\n"
+"P:0:0:UI1:test-leak.c:57\n"
+"F:*:0:UI1:*:*:RTEMS extension leak (1)\n"
+"E:missing_extension_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_mq_delete,
+"B:missing_mq_delete\n"
+"P:0:0:UI1:test-leak.c:67\n"
+"F:*:0:UI1:*:*:RTEMS message queue leak (1)\n"
+"E:missing_mq_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_part_delete,
+"B:missing_part_delete\n"
+"P:0:0:UI1:test-leak.c:78\n"
+"F:*:0:UI1:*:*:RTEMS partition leak (1)\n"
+"E:missing_part_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_period_delete,
+"B:missing_period_delete\n"
+"P:0:0:UI1:test-leak.c:88\n"
+"F:*:0:UI1:*:*:RTEMS period leak (1)\n"
+"E:missing_period_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_region_delete,
+"B:missing_region_delete\n"
+"P:0:0:UI1:test-leak.c:99\n"
+"F:*:0:UI1:*:*:RTEMS region leak (1)\n"
+"E:missing_region_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_task_delete,
+"B:missing_task_delete\n"
+"P:0:0:UI1:test-leak.c:110\n"
+"F:*:0:UI1:*:*:RTEMS task leak (1)\n"
+"E:missing_task_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_timer_delete,
+"B:missing_timer_delete\n"
+"P:0:0:UI1:test-leak.c:119\n"
+"F:*:0:UI1:*:*:RTEMS timer leak (1)\n"
+"E:missing_timer_delete:N:1:F:1:D:0.001000\n");
+
+T_TEST_OUTPUT(missing_key_delete,
+"B:missing_key_delete\n"
+"P:0:0:UI1:test-leak.c:128\n"
+"P:1:0:UI1:test-leak.c:131\n"
+"F:*:0:UI1:*:*:POSIX key leak (1)\n"
+"F:*:0:UI1:*:*:POSIX key value pair leak (1)\n"
+"E:missing_key_delete:N:2:F:2:D:0.001000\n");
+
 /*
  * The license is at the end of the file to be able to use the test code and
  * output in examples in the documentation.  This is also the reason for the
