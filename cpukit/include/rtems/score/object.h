@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreObject
+ *
  * @brief Constants and Structures Associated with the Object Handler
  *
  * This include file contains all the constants and structures associated
@@ -33,8 +35,9 @@ extern "C" {
  * @ingroup RTEMSInternal
  *
  * @brief Provides services for all APIs.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  * @defgroup RTEMSScoreCPU CPU Architecture Support
@@ -42,15 +45,17 @@ extern "C" {
  * @ingroup RTEMSScore
  *
  * @brief Provides CPU architecture dependent services.
+ *
+ * @{
  */
-/**@{*/
 
 /**
- *  @defgroup RTEMSScoreObject Object Handler
+ * @defgroup RTEMSScoreObject Object Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  The following type defines the control block used to manage
@@ -241,11 +246,11 @@ typedef enum {
     (uint32_t)(_C4) )
 
 /**
- * This function returns the API portion of the ID.
+ * @brief Returns the API portion of the ID.
  *
- * @param[in] id is the object Id to be processed.
+ * @param id The object Id to be processed.
  *
- * @return This method returns an object Id constructed from the arguments.
+ * @return An object Id constructed from the arguments.
  */
 RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
   Objects_Id id
@@ -255,9 +260,11 @@ RTEMS_INLINE_ROUTINE Objects_APIs _Objects_Get_API(
 }
 
 /**
- * This function returns the class portion of the ID.
+ * @brief Returns the class portion of the ID.
  *
- * @param[in] id is the object Id to be processed
+ * @param id The object Id to be processed.
+ *
+ * @return The class portion of the ID.
  */
 RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_class(
   Objects_Id id
@@ -268,11 +275,11 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_class(
 }
 
 /**
- * This function returns the node portion of the ID.
+ * @brief Returns the node portion of the ID.
  *
- * @param[in] id is the object Id to be processed
+ * @param id The object Id to be processed.
  *
- * @return This method returns the node portion of an object ID.
+ * @return Returns the node portion of an object ID.
  */
 RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
   Objects_Id id
@@ -282,11 +289,11 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
 }
 
 /**
- * This function returns the index portion of the ID.
+ * @brief Returns the index portion of the ID.
  *
- * @param[in] id is the Id to be processed
+ * @param id is the Id to be processed.
  *
- * @return This method returns the class portion of the specified object ID.
+ * @return Returns the index portion of the specified object ID.
  */
 RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
   Objects_Id id
@@ -331,9 +338,9 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
 #define _Objects_Maximum_per_allocation( maximum ) \
   ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
 
-/**@}*/
-/**@}*/
-/**@}*/
+/** @} */
+/** @} */
+/** @} */
 
 #ifdef __cplusplus
 }
