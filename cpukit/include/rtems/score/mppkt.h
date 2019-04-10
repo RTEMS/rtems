@@ -1,13 +1,15 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Specification for the Packet Handler
+ * @ingroup RTEMSScoreMPPacket
  *
- *  This package is the specification for the Packet Handler.
- *  This handler defines the basic packet and provides
- *  mechanisms to utilize packets based on this prefix.
- *  Packets are the fundamental basis for messages passed between
- *  nodes in an MP system.
+ * @brief Specification for the Packet Handler
+ *
+ * This package is the specification for the Packet Handler.
+ * This handler defines the basic packet and provides
+ * mechanisms to utilize packets based on this prefix.
+ * Packets are the fundamental basis for messages passed between
+ * nodes in an MP system.
  */
 
 /*
@@ -31,15 +33,18 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreMPPacket MP Packet Handler
+ * @defgroup RTEMSScoreMPPacket MP Packet Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates the primary definition of MPCI packets.  This
- *  handler defines the part of the packet that is common to all remote
- *  operations.
+ * @brief MP Packte Handler
+ *
+ * This handler encapsulates the primary definition of MPCI packets.  This
+ * handler defines the part of the packet that is common to all remote
+ * operations.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  The following enumerated type defines the packet classes.
@@ -111,7 +116,7 @@ typedef struct {
 #define MP_PACKET_MINIMUN_HETERO_CONVERSION  \
   ( sizeof( MP_packet_Prefix ) / sizeof( uint32_t   ) )
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
