@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreMRSP
+ *
+ * @brief Definitions for Multiprocessor Resource Sharing Protocol (MrsP).
+ */
+
 /*
  * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
