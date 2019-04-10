@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScorePriority
+ *
  * @brief Inlined Routines in the Priority Handler Bit Map Implementation
  *
  * This file contains the static inline implementation of all inlined
@@ -29,8 +31,9 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScorePriority
+ *
+ * @{
  */
-/**@{**/
 
 /**
  *  This table is used by the generic bitfield routines to perform
@@ -113,23 +116,34 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_Bits_index(
 }
 
 /**
- * This function returns the major portion of the_priority.
+ * @brief Returns the major portion of the_priority.
+ *
+ * @param the_priority The priority of which we want the major portion.
+ *
+ * @return The major portion of the priority.
  */
-
 RTEMS_INLINE_ROUTINE unsigned int _Priority_Major( unsigned int the_priority )
 {
   return the_priority / 16;
 }
 
 /**
- * This function returns the minor portion of the_priority.
+ * @brief Returns the minor portion of the_priority.
+ *
+ * @param the_priority The priority of which we want the minor portion.
+ *
+ * @return The minor portion of the priority.
  */
-
 RTEMS_INLINE_ROUTINE unsigned int _Priority_Minor( unsigned int the_priority )
 {
   return the_priority % 16;
 }
 
+/**
+ * @brief Initializes a bit map.
+ *
+ * @param[out] bit_map The bit map to initialize.
+ */
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize(
   Priority_bit_map_Control *bit_map
 )
@@ -138,9 +152,13 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize(
 }
 
 /**
- * Priority Queue implemented by bit map
+ * @brief Adds Priority queue bit map information.
+ *
+ * Priority Queue implemented by bit map.
+ *
+ * @param[out] bit_map The bit map to be altered by @a bit_map_info.
+ * @param bit_map_info The information with which to alter @a bit_map.
  */
-
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info
@@ -150,6 +168,14 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Add (
   bit_map->major_bit_map |= bit_map_info->ready_major;
 }
 
+/**
+ * @brief Removes Priority queue bit map information.
+ *
+ * Priority Queue implemented by bit map.
+ *
+ * @param[out] bit_map The bit map to be altered by @a bit_map_info.
+ * @param bit_map_info The information with which to alter @a bit_map.
+ */
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info
@@ -160,6 +186,13 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
     bit_map->major_bit_map &= bit_map_info->block_major;
 }
 
+/**
+ * @brief Gets highest portion of Priority queue bit map.
+ *
+ * @param bit_map The bitmap to get the highest portion from.
+ *
+ * @return The highest portion of the bitmap.
+ */
 RTEMS_INLINE_ROUTINE unsigned int _Priority_bit_map_Get_highest(
   const Priority_bit_map_Control *bit_map
 )
@@ -174,6 +207,14 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_bit_map_Get_highest(
           _Priority_Bits_index( minor );
 }
 
+/**
+ * @brief Checks if the Priority queue bit map is empty.
+ *
+ * @param bit_map The bit map of which to check if it is empty.
+ *
+ * @retval true The Priority queue bit map is empty
+ * @retval false The Priority queue bit map is not empty.
+ */
 RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty(
   const Priority_bit_map_Control *bit_map
 )
@@ -181,6 +222,15 @@ RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty(
   return bit_map->major_bit_map == 0;
 }
 
+/**
+ * @brief Initializes the bit map information.
+ *
+ * @param bit_map The bit map for the initialization of the bit
+ *      map information.
+ * @param[out] bit_map_info The bit map information to initialize.
+ * @param new_priority The new priority for the initialization
+ *      of the bit map information.
+ */
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info,
