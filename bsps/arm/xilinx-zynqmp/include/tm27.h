@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup zynq_tm27
+ * @ingroup zynqmp_tm27
  * @brief Interrupt mechanisms for tm27 test.
  */
 
@@ -8,6 +8,11 @@
  * SPDX-License-Identifier: BSD-2-Clause
  *
  * Copyright (C) 2013 embedded brains GmbH
+ *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,8 +44,8 @@
 #define __tm27_h
 
 /**
- * @defgroup zynq_tm27 TM27 Test Support
- * @ingroup RTEMSBSPsARMZynq
+ * @defgroup zynqmp_tm27 TM27 Test Support
+ * @ingroup RTEMSBSPsARMZynqMP
  * @brief Interrupt Mechanisms for tm27 test
  */
 

@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2014 embedded brains GmbH
  *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:

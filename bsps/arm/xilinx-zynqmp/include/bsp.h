@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup RTEMSBSPsARMZynq
+ * @ingroup RTEMSBSPsARMZynqMP
  * @brief Global BSP definitions.
  */
 
@@ -8,6 +8,11 @@
  * SPDX-License-Identifier: BSD-2-Clause
  *
  * Copyright (C) 2013, 2014 embedded brains GmbH
+ *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,15 +36,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_XILINX_ZYNQ_BSP_H
-#define LIBBSP_ARM_XILINX_ZYNQ_BSP_H
+#ifndef LIBBSP_ARM_XILINX_ZYNQMP_BSP_H
+#define LIBBSP_ARM_XILINX_ZYNQMP_BSP_H
 
 /**
- * @defgroup RTEMSBSPsARMZynq Xilinx Zynq
+ * @defgroup RTEMSBSPsARMZynqMP Xilinx Zynq UltraScale+ MPSoC
  *
  * @ingroup RTEMSBSPsARM
  *
- * @brief Xilinx Zynq Board Support Package.
+ * @brief Xilinx Zynq UltraScale+ MPSoC Board Support Package.
  *
  * @{
  */
@@ -54,39 +59,29 @@
 
 #include <bsp/default-initial-extension.h>
 #include <bsp/start.h>
-#include <bsp/zynq-uart.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_ARM_A9MPCORE_SCU_BASE 0xf8f00000
+#define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
 
-#define BSP_ARM_GIC_CPUIF_BASE 0xf8f00100
+#define BSP_ARM_GIC_DIST_BASE 0xf9010000
 
-#define BSP_ARM_A9MPCORE_GT_BASE 0xf8f00200
+#define BSP_ARM_A9MPCORE_SCU_BASE 0
 
-#define BSP_ARM_A9MPCORE_PT_BASE 0xf8f00600
-
-#define BSP_ARM_GIC_DIST_BASE 0xf8f01000
-
-#define BSP_ARM_L2C_310_BASE 0xf8f02000
-
-#define BSP_ARM_L2C_310_ID 0x410000c8
-
-extern zynq_uart_context zynq_uart_instances[2];
+#define BSP_ARM_A9MPCORE_GT_BASE 0
 
 /**
- * @brief Zynq specific set up of the MMU.
+ * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
  *
- * Provide in the application to override
- * the defaults in the BSP. Note the defaults do not map in the GP0 and GP1
- * AXI ports. You should add the specific regions that map into your
- * PL rather than just open the whole of the GP[01] address space up.
+ * Provide in the application to override the defaults in the BSP.
  */
-BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void);
+BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void);
 
-uint32_t zynq_clock_cpu_1x(void);
+void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
+
+void zynqmp_debug_console_flush(void);
 
 #ifdef __cplusplus
 }
@@ -96,4 +91,4 @@ uint32_t zynq_clock_cpu_1x(void);
 
 /** @} */
 
-#endif /* LIBBSP_ARM_XILINX_ZYNQ_BSP_H */
+#endif /* LIBBSP_ARM_XILINX_ZYNQMP_BSP_H */

@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2013, 2015 embedded brains GmbH
  *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -30,9 +35,22 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 
-__attribute__ ((weak)) uint32_t zynq_clock_cpu_1x(void)
+#include <libcpu/arm-cp15.h>
+
+void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq)
 {
-  return ZYNQ_CLOCK_CPU_1X;
+#ifdef ARM_GENERIC_TIMER_FREQ
+  *frequency = ARM_GENERIC_TIMER_FREQ;
+#else
+  /* Use generic timer frequency provided by boot loader */
+  *frequency = arm_cp15_get_counter_frequency();
+#endif
+
+#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
+  *irq = ZYNQMP_IRQ_VIRT_TIMER;
+#else
+  *irq = ZYNQMP_IRQ_NS_PHYS_TIMER;
+#endif
 }
 
 void bsp_start(void)

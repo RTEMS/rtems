@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2013 embedded brains GmbH
  *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -33,7 +38,7 @@
 #include <bsp/arm-a9mpcore-start.h>
 
 BSP_START_DATA_SECTION static const arm_cp15_start_section_config
-zynq_mmu_config_table[] = {
+zynqmp_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
 #if defined(RTEMS_SMP)
   {
@@ -43,12 +48,12 @@ zynq_mmu_config_table[] = {
   },
 #endif
   {
-    .begin = 0xe0000000U,
-    .end = 0xe0200000U,
+    .begin = 0xf9000000U,
+    .end = 0xf9100000U,
     .flags = ARMV7_MMU_DEVICE
   }, {
-    .begin = 0xf8000000U,
-    .end = 0xf9000000U,
+    .begin = 0xfd000000U,
+    .end = 0xffc00000U,
     .flags = ARMV7_MMU_DEVICE
   }
 };
@@ -56,12 +61,12 @@ zynq_mmu_config_table[] = {
 /*
  * Make weak and let the user override.
  */
-BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void) __attribute__ ((weak));
+BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void) __attribute__ ((weak));
 
-BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void)
+BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void)
 {
   uint32_t ctrl = arm_cp15_start_setup_mmu_and_cache(
-    ARM_CP15_CTRL_A,
+    ARM_CP15_CTRL_TRE | ARM_CP15_CTRL_A,
     ARM_CP15_CTRL_AFE | ARM_CP15_CTRL_Z
   );
 
@@ -69,7 +74,7 @@ BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void)
     ctrl,
     (uint32_t *) bsp_translation_table_base,
     ARM_MMU_DEFAULT_CLIENT_DOMAIN,
-    &zynq_mmu_config_table[0],
-    RTEMS_ARRAY_SIZE(zynq_mmu_config_table)
+    &zynqmp_mmu_config_table[0],
+    RTEMS_ARRAY_SIZE(zynqmp_mmu_config_table)
   );
 }

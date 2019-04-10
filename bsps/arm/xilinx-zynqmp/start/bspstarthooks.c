@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2013, 2014 embedded brains GmbH
  *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -37,6 +42,8 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
   uint32_t sctlr_val;
 
   sctlr_val = arm_cp15_get_control();
+  sctlr_val |= ARM_CP15_CTRL_CP15BEN;
+  arm_cp15_set_control( sctlr_val );
 
   /*
    * Current U-boot loader seems to start kernel image
@@ -69,21 +76,12 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
   arm_cp15_branch_predictor_invalidate_all();
   arm_cp15_tlb_invalidate();
   arm_cp15_flush_prefetch_buffer();
-  arm_a9mpcore_start_hook_0();
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 {
-  arm_a9mpcore_start_hook_1();
+  arm_a9mpcore_start_set_vector_base();
   bsp_start_copy_sections();
-  zynq_setup_mmu_and_cache();
-
-#if !defined(RTEMS_SMP) \
-  && (defined(BSP_DATA_CACHE_ENABLED) \
-    || defined(BSP_INSTRUCTION_CACHE_ENABLED))
-  /* Enable unified L2 cache */
-  rtems_cache_enable_data();
-#endif
-
+  zynqmp_setup_mmu_and_cache();
   bsp_start_clear_bss();
 }

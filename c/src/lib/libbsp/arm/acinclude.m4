@@ -42,6 +42,8 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([tms570]);;
   xilinx-zynq )
     AC_CONFIG_SUBDIRS([xilinx-zynq]);;
+  xilinx-zynqmp )
+    AC_CONFIG_SUBDIRS([xilinx-zynqmp]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac

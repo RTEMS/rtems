@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2013 embedded brains GmbH
  *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -26,18 +31,12 @@
  */
 
 #include <bsp.h>
-#include <bsp/bootcard.h>
-#include <bsp/zynq-uart.h>
 
 void bsp_reset(void)
 {
-  volatile uint32_t *slcr_unlock = (volatile uint32_t *) 0xf8000008;
-  volatile uint32_t *pss_rst_ctrl = (volatile uint32_t *) 0xf8000200;
-
-  zynq_uart_reset_tx_flush(&zynq_uart_instances[BSP_CONSOLE_MINOR]);
+  zynqmp_debug_console_flush();
 
   while (true) {
-    *slcr_unlock = 0xdf0d;
-    *pss_rst_ctrl = 0x1;
+    /* Wait */
   }
 }

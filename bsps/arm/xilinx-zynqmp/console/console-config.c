@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2013, 2017 embedded brains GmbH
  *
+ * Copyright (C) 2019 DornerWorks
+ *
+ * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -27,21 +32,22 @@
 
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
+#include <rtems/sysinit.h>
 
 #include <bsp/irq.h>
 #include <bsp/zynq-uart.h>
 
 #include <bspopts.h>
 
-zynq_uart_context zynq_uart_instances[2] = {
+static zynq_uart_context zynqmp_uart_instances[2] = {
   {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 0" ),
-    .regs = (volatile struct zynq_uart *) 0xe0000000,
-    .irq = ZYNQ_IRQ_UART_0
+    .regs = (volatile struct zynq_uart *) 0xff000000,
+    .irq = ZYNQMP_IRQ_UART_0
   }, {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 1" ),
-    .regs = (volatile struct zynq_uart *) 0xe0001000,
-    .irq = ZYNQ_IRQ_UART_1
+    .regs = (volatile struct zynq_uart *) 0xff010000,
+    .irq = ZYNQMP_IRQ_UART_1
   }
 };
 
@@ -55,7 +61,7 @@ rtems_status_code console_initialize(
 
   rtems_termios_initialize();
 
-  for (i = 0; i < RTEMS_ARRAY_SIZE(zynq_uart_instances); ++i) {
+  for (i = 0; i < RTEMS_ARRAY_SIZE(zynqmp_uart_instances); ++i) {
     char uart[] = "/dev/ttySX";
 
     uart[sizeof(uart) - 2] = (char) ('0' + i);
@@ -63,7 +69,7 @@ rtems_status_code console_initialize(
       &uart[0],
       &zynq_uart_handler,
       NULL,
-      &zynq_uart_instances[i].base
+      &zynqmp_uart_instances[i].base
     );
 
     if (i == BSP_CONSOLE_MINOR) {
@@ -73,3 +79,52 @@ rtems_status_code console_initialize(
 
   return RTEMS_SUCCESSFUL;
 }
+
+void zynqmp_debug_console_flush(void)
+{
+  zynq_uart_reset_tx_flush(&zynqmp_uart_instances[BSP_CONSOLE_MINOR]);
+}
+
+static void zynqmp_debug_console_out(char c)
+{
+  rtems_termios_device_context *base =
+    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
+
+  zynq_uart_write_polled(base, c);
+}
+
+static void zynqmp_debug_console_init(void)
+{
+  rtems_termios_device_context *base =
+    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
+
+  zynq_uart_initialize(base);
+  BSP_output_char = zynqmp_debug_console_out;
+}
+
+static void zynqmp_debug_console_early_init(char c)
+{
+  rtems_termios_device_context *base =
+    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
+
+  zynq_uart_initialize(base);
+  zynqmp_debug_console_out(c);
+}
+
+static int zynqmp_debug_console_in(void)
+{
+  rtems_termios_device_context *base =
+    &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
+
+  return zynq_uart_read_polled(base);
+}
+
+BSP_output_char_function_type BSP_output_char = zynqmp_debug_console_early_init;
+
+BSP_polling_getchar_function_type BSP_poll_char = zynqmp_debug_console_in;
+
+RTEMS_SYSINIT_ITEM(
+  zynqmp_debug_console_init,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_LAST
+);

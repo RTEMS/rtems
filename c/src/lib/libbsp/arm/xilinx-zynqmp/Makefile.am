@@ -2,7 +2,7 @@
 #
 # @file
 #
-# @brief Makefile of LibBSP for the Xilinx Zynq platform.
+# @brief Makefile of LibBSP for the Xilinx Zynq UltraScale+ MPSoC platform.
 #
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = ../../../../../../bsps/arm/xilinx-zynq/start/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/xilinx-zynqmp/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -46,11 +46,11 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-exc
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 
 # Startup
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspreset.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/start/bspstart.c
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/arm-a9mpcore-smp.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/start/bspsmp.c
 endif
 
 # IRQ
@@ -59,22 +59,18 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-gic.c
 
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/console-config.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/debug-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/console/console-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-a9mpcore.c
-
-# I2C
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/i2c/cadence-i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-generic-timer.c
 
 # Cache
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstarthooks.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstartmmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/start/bspstartmmu.c
 
 ###############################################################################
 #                  Special Rules                                              #
@@ -83,4 +79,4 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstartmm
 
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
-include $(srcdir)/../../../../../../bsps/arm/xilinx-zynq/headers.am
+include $(srcdir)/../../../../../../bsps/arm/xilinx-zynqmp/headers.am

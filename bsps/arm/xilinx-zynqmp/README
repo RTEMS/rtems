@@ -1,13 +1,30 @@
-Tested only on Qemu.
+Tested on an Ultra96 board with JTAG boot.
 
-git clone git://git.qemu.org/qemu.git qemu
-cd qemu
-git checkout 1b0d3845b454eaaac0b2064c78926ca4d739a080
-mkdir build
-cd build
-../configure --prefix=/opt/qemu --interp-prefix=/opt/qemu
-make
-make install
-export PATH="$PATH:/opt/qemu/bin"
+Make sure to configure the boot mode switches for JTAG mode.
 
-qemu-system-arm -no-reboot -serial null -serial mon:stdio -net none -nographic -M xilinx-zynq-a9 -m 256M -kernel ticker.exe
+Using the xsct tool, load and run the application with
+
+connect
+
+targets -set -filter {name =~ "PSU"}
+rst -system
+source psu_init.tcl
+psu_init
+
+targets -set -filter {name =~ "Cortex-A53 #0"}
+rst -processor
+dow ticker.exe
+
+# Set generic timer frequency
+rwr sys 14 cntfrq_el0 100000000
+
+# Switch to AArch32 Supervisor mode
+rwr cpsr 0x2001d3
+
+# Boot arguments
+rwr r0 0
+rwr r1 0
+rwr r2 0
+rwr r3 0
+
+con
