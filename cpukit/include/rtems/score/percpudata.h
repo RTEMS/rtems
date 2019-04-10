@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup PerCPUData
+ *
+ * @brief Definition of custom per-CPU items.
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
  *
