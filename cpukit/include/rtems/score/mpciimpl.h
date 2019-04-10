@@ -101,13 +101,12 @@ extern MPCI_Packet_processor
 _MPCI_Packet_processors[ MP_PACKET_CLASSES_LAST + 1 ];
 
 /**
- *  This routine registers the MPCI packet processor for the
- *  designated object class.
+ * @brief Registers the MPCI packet processor for the designated object class.
  *
- *  @param[in] the_class is the class indicator for packets which will
- *             be processed by @a the_packet_processor method.
- *  @param[in] the_packet_processor is a pointer to a method which is
- *             invoked when packets with @a the_class are received.
+ * @param the_class The class indicator for packets which will
+ *            be processed by @a the_packet_processor method.
+ * @param the_packet_processor Pointer to a method which is
+ *            invoked when packets with @a the_class are received.
  */
 void _MPCI_Register_packet_processor(
   MP_packet_Classes      the_class,
@@ -116,35 +115,35 @@ void _MPCI_Register_packet_processor(
 );
 
 /**
- *  This function obtains a packet by invoking the user provided
- *  MPCI get packet callout.
+ * @brief Obtains a packet by invoking the user provided
+ *          MPCI get packet callout.
  *
- *  @retval This method returns a pointer to a MPCI packet which can be
+ * @return Returns a pointer to a MPCI packet which can be
  *          filled in by the caller and used to perform a subsequent
  *          remote operation.
  */
 MP_packet_Prefix *_MPCI_Get_packet ( void );
 
 /**
- *  @brief Deallocate a packet.
+ * @brief Deallocates a packet.
  *
- *  This routine deallocates a packet by invoking the user provided
- *  MPCI return packet callout.
+ * This routine deallocates a packet by invoking the user provided
+ * MPCI return packet callout.
  *
- *  @param[in] the_packet is the MP packet to deallocate.
+ * @param[out] the_packet The MP packet to deallocate.
  */
 void _MPCI_Return_packet (
   MP_packet_Prefix *the_packet
 );
 
 /**
- *  @brief Send a process packet.
+ * @brief Sends a process packet.
  *
- *  This routine sends a process packet by invoking the user provided
- *  MPCI send callout.
+ * This routine sends a process packet by invoking the user provided
+ * MPCI send callout.
  *
- *  @param[in] destination is the node which should receive this packet.
- *  @param[in] the_packet is the packet to be sent.
+ * @param destination The node which should receive this packet.
+ * @param the_packet The packet to be sent.
  */
 void _MPCI_Send_process_packet (
   uint32_t          destination,
@@ -152,19 +151,19 @@ void _MPCI_Send_process_packet (
 );
 
 /**
- *  @brief Send a request packet.
+ * @brief Sends a request packet.
  *
- *  This routine sends a request packet by invoking the user provided
- *  MPCI send callout.
+ * This routine sends a request packet by invoking the user provided
+ * MPCI send callout.
  *
- *  @param[in] destination is the node which should receive this packet.
- *  @param[in] the_packet is the packet to be sent.
- *  @param[in] extra_state is the extra thread state bits which should be
- *             set in addition to the remote operation pending state.  It
- *             may indicate the caller is blocking on a message queue
- *             operation.
+ * @param destination The node which should receive this packet.
+ * @param the_packet The packet to be sent.
+ * @param extra_state The extra thread state bits which should be
+ *            set in addition to the remote operation pending state.  It
+ *            may indicate the caller is blocking on a message queue
+ *            operation.
  *
- *  @retval This method returns the operation status from the remote node.
+ * @ret This method returns the operation status from the remote node.
  */
 Status_Control _MPCI_Send_request_packet(
   uint32_t          destination,
@@ -173,13 +172,13 @@ Status_Control _MPCI_Send_request_packet(
 );
 
 /**
- *  @brief Send a response packet.
+ * @brief Sends a response packet.
  *
- *  This routine sends a response packet by invoking the user provided
- *  MPCI send callout.
+ * This routine sends a response packet by invoking the user provided
+ * MPCI send callout.
  *
- *  @param[in] destination is the node which should receive this packet.
- *  @param[in] the_packet is the packet to be sent.
+ * @param destination The node which should receive this packet.
+ * @param the_packet The packet to be sent.
  */
 void _MPCI_Send_response_packet (
   uint32_t          destination,
@@ -187,56 +186,56 @@ void _MPCI_Send_response_packet (
 );
 
 /**
- *  @brief Receive a packet.
+ * @brief Receives a packet.
  *
- *  This routine receives a packet by invoking the user provided
- *  MPCI receive callout.
+ * This routine receives a packet by invoking the user provided
+ * MPCI receive callout.
  *
- *  @retval This method returns the packet received.
+ * @return This method returns the packet received.
  */
 MP_packet_Prefix  *_MPCI_Receive_packet ( void );
 
 /**
- *  @brief Pass a packet to the thread.
+ * @brief Passes a packet to the thread.
  *
- *  This routine is responsible for passing @a the_packet to the thread
- *  waiting on the remote operation to complete.  The unblocked thread is
- *  responsible for eventually freeing @a the_packet.
+ * This routine is responsible for passing @a the_packet to the thread
+ * waiting on the remote operation to complete.  The unblocked thread is
+ * responsible for eventually freeing @a the_packet.
  *
- *  @param[in] the_packet is the response packet to be processed.
+ * @param the_packet is the response packet to be processed.
  *
- *  @retval This method returns a pointer to the thread which was if unblocked
- *          or NULL if the waiting thread no longer exists.
+ * @retval pointer This method returns a pointer to the thread which was unblocked
+ * @retval NULL The waiting thread no longer exists.
  */
 Thread_Control *_MPCI_Process_response (
   MP_packet_Prefix *the_packet
 );
 
 /**
- *  @brief Receive and process all packets.
+ * @brief Receives and processes all packets.
  *
- *  This is the server thread which receives and processes all MCPI packets.
+ * This is the server thread which receives and processes all MCPI packets.
  *
- *  @param[in] ignored is the thread argument.  It is not used.
+ * @param ignored The thread argument.  It is not used.
  */
 void _MPCI_Receive_server(
   Thread_Entry_numeric_type ignored
 );
 
 /**
- *  @brief Announce the availability of a packet.
+ * @brief Announces the availability of a packet.
  *
- *  This routine informs RTEMS of the availability of an MPCI packet.
+ * This routine informs RTEMS of the availability of an MPCI packet.
  */
 void _MPCI_Announce ( void );
 
 /**
- *  @brief Perform a process on another node.
+ * @brief Performs a process on another node.
  *
- *  This routine performs a remote procedure call so that a
- *  process operation can be performed on another node.
+ * This routine performs a remote procedure call so that a
+ * process operation can be performed on another node.
  *
- *  @param[in] operation is the remote operation to perform.
+ * @param operation The remote operation to perform.
  */
 void _MPCI_Internal_packets_Send_process_packet (
    MPCI_Internal_Remote_operations operation
@@ -263,10 +262,12 @@ void _MPCI_Internal_packets_Send_process_packet (
  */
 
 /**
- *  @brief Perform requested action from another node.
+ * @brief Performs requested action from another node.
  *
- *  This routine performs the actions specific to this package for
- *  the request from another node.
+ * This routine performs the actions specific to this package for
+ * the request from another node.
+ *
+ * @param the_packet_prefix The packet prefix for this method.
  */
 void _MPCI_Internal_packets_Process_packet (
   MP_packet_Prefix *the_packet_prefix
@@ -295,15 +296,22 @@ void _MPCI_Internal_packets_Process_packet (
  */
 
 /**
- *  @brief Obtain an internal thread.
+ * @brief Obtains an internal thread.
  *
- *  This routine is used to obtain an internal threads MP packet.
+ * This routine is used to obtain an internal threads MP packet.
+ *
+ * @retval pointer The pointer to the obtained packet.
+ * @retval NULL Something went wrong.
  */
 MPCI_Internal_packet *_MPCI_Internal_packets_Get_packet ( void );
 
 /**
- * This function returns true if the the_packet_class is valid,
- * and false otherwise.
+ * @brief Checks if the packet class is valid.
+ *
+ * @param the_packet_class The packet class to perform the validation on.
+ *
+ * @retval true @a the_packet_class is valid.
+ * @retval false @a the_packet_class is not valid.
  *
  * @note Check for lower bounds (MP_PACKET_CLASSES_FIRST ) is unnecessary
  *       because this enum starts at lower bound of zero.
@@ -316,7 +324,7 @@ RTEMS_INLINE_ROUTINE bool _Mp_packet_Is_valid_packet_class (
   return ( the_packet_class <= MP_PACKET_CLASSES_LAST );
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
