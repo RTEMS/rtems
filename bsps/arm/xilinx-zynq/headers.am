@@ -11,5 +11,3 @@ include_bsp_HEADERS += ../../../../../../bsps/arm/xilinx-zynq/include/bsp/cadenc
 include_bsp_HEADERS += ../../../../../../bsps/arm/xilinx-zynq/include/bsp/cadence-i2c.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/xilinx-zynq/include/bsp/i2c.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/xilinx-zynq/include/bsp/irq.h
-include_bsp_HEADERS += ../../../../../../bsps/arm/xilinx-zynq/include/bsp/zynq-uart-regs.h
-include_bsp_HEADERS += ../../../../../../bsps/arm/xilinx-zynq/include/bsp/zynq-uart.h
