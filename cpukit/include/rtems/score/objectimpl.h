@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreObject
+ *
  * @brief Inlined Routines in the Object Handler
  *
  * This include file contains the static inline implementation of all
@@ -93,23 +95,23 @@ extern Objects_Information ** const
 _Objects_Information_table[ OBJECTS_APIS_LAST + 1 ];
 
 /**
- *  This function extends an object class information record.
+ * @brief Extends an object class information record.
  *
- *  @param[in] information points to an object class information block.
+ * @param information Points to an object class information block.
  */
 void _Objects_Extend_information(
   Objects_Information *information
 );
 
 /**
- *  @brief Shrink an object class information record
+ * @brief Shrinks an object class information record.
  *
- *  This function shrink an object class information record.
- *  The object's name and object space are released. The local_table
- *  etc block does not shrink. The InActive list needs to be scanned
- *  to find the objects are remove them.
+ * This function shrinks an object class information record.
+ * The object's name and object space are released. The local_table
+ * etc block does not shrink. The InActive list needs to be scanned
+ * to find the objects are remove them.
  *
- *  @param[in] information points to an object class information block.
+ * @param information Points to an object class information block.
  */
 void _Objects_Shrink_information(
   Objects_Information *information
@@ -120,18 +122,21 @@ void _Objects_Shrink_information(
  *
  * The objects information must be statically pre-initialized with the
  * OBJECTS_INFORMATION_DEFINE() macro before this function is called.
+ *
+ * @param information The object information to be initialized.
  */
 void _Objects_Initialize_information( Objects_Information *information );
 
 /**
- *  @brief Object API Maximum Class
+ * @brief Returns highest numeric value of a valid API for the specified API.
  *
- *  This function returns the highest numeric value of a valid
- *  API for the specified @a api.
+ * This function returns the highest numeric value of a valid
+ * API for the specified @a api.
  *
- *  @param[in] api is the API of interest
+ * @param api The API of interest.
  *
- *  @retval A positive integer on success and 0 otherwise.
+ * @retval some_value Positive integer on success.
+ * @retval 0 The method failed.
  */
 unsigned int _Objects_API_maximum_class(
   uint32_t api
@@ -145,10 +150,10 @@ unsigned int _Objects_API_maximum_class(
  * - in case the system state is not up, e.g. during sequential system
  *   initialization.
  *
- * @param[in] information The object information block.
+ * @param[in, out] information The object information block.
  *
- * @retval NULL No object available.
  * @retval object The allocated object.
+ * @retval NULL No object available.
  *
  * @see _Objects_Allocate() and _Objects_Free().
  */
@@ -188,10 +193,10 @@ Objects_Control *_Objects_Allocate_unprotected(
  * }
  * @endcode
  *
- * @param[in] information The object information block.
+ * @param[in, out] information The object information block.
  *
- * @retval NULL No object available.
  * @retval object The allocated object.
+ * @retval NULL No object available.
  *
  * @see _Objects_Free().
  */
@@ -202,8 +207,8 @@ Objects_Control *_Objects_Allocate( Objects_Information *information );
  *
  * Appends the object to the chain of inactive objects.
  *
- * @param[in] information The object information block.
- * @param[in] the_object The object to free.
+ * @param information The object information block.
+ * @param[out] the_object The object to free.
  *
  * @see _Objects_Allocate().
  *
@@ -277,20 +282,20 @@ typedef enum {
 #define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
 
 /**
- *  @brief Converts an object name to an Id.
+ * @brief Converts an object name to an Id.
  *
- *  This method converts an object name to an Id.  It performs a look up
- *  using the object information block for this object class.
+ * This method converts an object name to an Id.  It performs a look up
+ * using the object information block for this object class.
  *
- *  @param[in] information points to an object class information block.
- *  @param[in] name is the name of the object to find.
- *  @param[in] node is the set of nodes to search.
- *  @param[in] id will contain the Id if the search is successful.
+ * @param information points to an object class information block.
+ * @param name is the name of the object to find.
+ * @param node is the set of nodes to search.
+ * @param[out] id will contain the Id if the search is successful.
  *
- *  @retval This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a id will contain the Id of
- *          the requested object.
+ * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The operations was successful
+ *      @a id contains the ID.
+ * @retval OBJECTS_INVALID_NAME The name was invalid.
+ * @retval OBJECTS_INVALID_ID The id is not 0 before the operation.
  */
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   Objects_Information *information,
@@ -312,12 +317,12 @@ typedef enum {
  *
  * @param information The object information.  Must not be NULL.
  * @param name The object name.
- * @param name_length_p Optional parameter to return the name length.
- * @param error The error indication in case of failure.  Must not be NULL.
+ * @param[out] name_length_p Optional parameter to return the name length.
+ * @param[out] error The error indication in case of failure.  Must not be NULL.
  *
+ * @retval pointer The first object according to object index associated with
+ *      this name.
  * @retval NULL No object exists for this name or invalid parameters.
- * @retval other The first object according to object index associated with
- * this name.
  */
 Objects_Control *_Objects_Get_by_name(
   const Objects_Information *information,
@@ -327,21 +332,20 @@ Objects_Control *_Objects_Get_by_name(
 );
 
 /**
- *  @brief Implements the common portion of the object Id to name directives.
+ * @brief Returns the name associated with object id.
  *
- *  This function implements the common portion of the object Id
- *  to name directives.  This function returns the name
- *  associated with object id.
+ * This function implements the common portion of the object Id
+ * to name directives.  This function returns the name
+ * associated with object id.
  *
- *  @param[in] id is the Id of the object whose name we are locating.
- *  @param[in] name will contain the name of the object, if found.
+ * @param id is the Id of the object whose name we are locating.
+ * @param[out] name will contain the name of the object, if found.
  *
- *  @retval This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a name will contain the name of
- *          the requested object.
+ * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The operation succeeded.  @a name
+ *      contains the name of the object.
+ * @retval OBJECTS_INVALID_ID The id is invalid, the operation failed.
  *
- *  @note This function currently does not support string names.
+ * @note This function currently does not support string names.
  */
 Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   Objects_Id      id,
@@ -357,16 +361,16 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
  * previous interrupt state is restored.
  *
  * @param id The object identifier.  This is the first parameter since usual
- *   callers get the object identifier as the first parameter themself.
+ *      callers get the object identifier as the first parameter themself.
  * @param lock_context The interrupt lock context.  This is the second
- *   parameter since usual callers get the interrupt lock context as the second
- *   parameter themself.
+ *      parameter since usual callers get the interrupt lock context as the second
+ *      parameter themself.
  * @param information The object class information block.
  *
+ * @retval pointer The pointer to the associated object control block.
+ *      Interrupts are now disabled and must be restored using the specified lock
+ *      context via _ISR_lock_ISR_enable() or _ISR_lock_Release_and_ISR_enable().
  * @retval NULL No associated object exists.
- * @retval other The pointer to the associated object control block.
- * Interrupts are now disabled and must be restored using the specified lock
- * context via _ISR_lock_ISR_enable() or _ISR_lock_Release_and_ISR_enable().
  */
 Objects_Control *_Objects_Get(
   Objects_Id                 id,
@@ -375,26 +379,24 @@ Objects_Control *_Objects_Get(
 );
 
 /**
- *  @brief  Maps object ids to object control blocks.
+ * @brief  Maps object ids to object control blocks.
  *
- *  This function maps object ids to object control blocks.
- *  If id corresponds to a local object, then it returns
- *  the_object control pointer which maps to id and location
- *  is set to OBJECTS_LOCAL.  If the object class supports global
- *  objects and the object id is global and resides on a remote
- *  node, then location is set to OBJECTS_REMOTE, and the_object
- *  is undefined.  Otherwise, location is set to OBJECTS_ERROR
- *  and the_object is undefined.
+ * This function maps object ids to object control blocks.
+ * If id corresponds to a local object, then it returns
+ * the_object control pointer which maps to id and location
+ * is set to OBJECTS_LOCAL.  If the object class supports global
+ * objects and the object id is global and resides on a remote
+ * node, then location is set to OBJECTS_REMOTE, and the_object
+ * is undefined.  Otherwise, location is set to OBJECTS_ERROR
+ * and the_object is undefined.
  *
- *  @param[in] id is the Id of the object whose name we are locating.
- *    This is the first parameter since usual callers get the object identifier
- *    as the first parameter themself.
- *  @param[in] information points to an object class information block.
+ * @param id The Id of the object whose name we are locating.
+ *   This is the first parameter since usual callers get the object identifier
+ *   as the first parameter themself.
+ * @param information Points to an object class information block.
  *
- *  @retval This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a id will contain the Id of
- *          the requested object.
+ * @retval pointer The local object corresponding to the given id.
+ * @retval NULL The object to the given id was not found locally.
  */
 Objects_Control *_Objects_Get_no_protection(
   Objects_Id                 id,
@@ -402,18 +404,18 @@ Objects_Control *_Objects_Get_no_protection(
 );
 
 /**
- *  Gets the next open object after the specified object identifier.
+ * @brief Gets the next open object after the specified object identifier.
  *
- *  Locks the object allocator mutex in case a next object exists.
+ * Locks the object allocator mutex in case a next object exists.
  *
- *  @param[in] id is the Id of the object whose name we are locating.
- *    This is the first parameter since usual callers get the object identifier
- *    as the first parameter themself.
- *  @param[in] information points to an object class information block.
- *  @param[in] next_id_p is the Id of the next object we will look at.
+ * @param id The Id of the object whose name we are locating.
+ *   This is the first parameter since usual callers get the object identifier
+ *   as the first parameter themself.
+ * @param information Points to an object class information block.
+ * @param[in, out] next_id_p The Id of the next object we will look at.
  *
- *  @retval This method returns the pointer to the object located or
- *          NULL on error.
+ * @retval pointer Pointer to the located object.
+ * @retval NULL An error occured.
  */
 Objects_Control *_Objects_Get_next(
   Objects_Id                 id,
@@ -422,17 +424,18 @@ Objects_Control *_Objects_Get_next(
 );
 
 /**
- *  @brief Get object information.
+ * @brief Gets object information.
  *
- *  This function return the information structure given
- *  an the API and Class.  This can be done independent of
- *  the existence of any objects created by the API.
+ * This function returns the information structure given
+ * an API and Class.  This can be done independent of the
+ * existence of any objects created by the API.
  *
- *  @param[in] the_api indicates the API for the information we want
- *  @param[in] the_class indicates the Class for the information we want
+ * @param the_api Indicates the API for the information we want
+ * @param the_class Indicates the Class for the information we want
  *
- *  @retval This method returns a pointer to the Object Information Table
- *          for the class of objects which corresponds to this object ID.
+ * @retval pointer Pointer to the Object Information Table
+ *         for the class of objects which corresponds to this object ID.
+ * @retval NULL An error occured.
  */
 Objects_Information *_Objects_Get_information(
   Objects_APIs   the_api,
@@ -440,33 +443,34 @@ Objects_Information *_Objects_Get_information(
 );
 
 /**
- *  @brief Get information of an object from an ID.
+ * @brief Gets information of an object from an ID.
  *
- *  This function return the information structure given
- *  an @a id of an object.
+ * This function returns the information structure given
+ * an @a id of an object.
  *
- *  @param[in] id is the object ID to get the information from
+ * @param id The object ID to get the information from.
  *
- *  @retval This method returns a pointer to the Object Information Table
- *          for the class of objects which corresponds to this object ID.
+ * @retval pointer Pointer to the Object Information Table
+ *         for the class of objects which corresponds to this object ID.
+ * @retval NULL An error occured.
  */
 Objects_Information *_Objects_Get_information_id(
   Objects_Id  id
 );
 
 /**
- *  @brief Gets object name in the form of a C string.
+ * @brief Gets object name in the form of a C string.
  *
- *  This method objects the name of an object and returns its name
- *  in the form of a C string.  It attempts to be careful about
- *  overflowing the user's string and about returning unprintable characters.
+ * This method gets the name of an object and returns its name
+ * in the form of a C string.  It attempts to be careful about
+ * overflowing the user's string and about returning unprintable characters.
  *
- *  @param[in] id is the object to obtain the name of
- *  @param[in] length indicates the length of the caller's buffer
- *  @param[in] name points a string which will be filled in.
+ * @param id The object to obtain the name of.
+ * @param length Indicates the length of the caller's buffer.
+ * @param[out] name A string which will be filled in.
  *
- *  @retval This method returns @a name or NULL on error. @a *name will
- *          contain the name if successful.
+ * @retval @a name The operation was succeeded and the string was correctly filled in.
+ * @retval NULL An error occured.
  */
 char *_Objects_Get_name_as_string(
   Objects_Id   id,
@@ -479,13 +483,13 @@ char *_Objects_Get_name_as_string(
  *
  * Non-printable characters according to isprint() are converted to '*'.
  *
- * @param[in] name The object name.
- * @param[in] is_string Indicates if the object name is a string or a four
+ * @param name The object name.
+ * @param is_string Indicates if the object name is a string or a four
  *   character array (32-bit unsigned integer).
- * @param[in] buffer The string buffer for the text representation.
- * @param[in] buffer_size The buffer size in characters.
+ * @param[out] buffer The string buffer for the text representation.
+ * @param buffer_size The buffer size in characters.
  *
- * @retval The length of the text representation.  May be greater than or equal
+ * @return The length of the text representation.  May be greater than or equal
  * to the buffer size if truncation occurred.
  */
 size_t _Objects_Name_to_string(
@@ -496,17 +500,18 @@ size_t _Objects_Name_to_string(
 );
 
 /**
- *  @brief Set objects name.
+ * @brief Sets objects name.
  *
- *  This method sets the object name to either a copy of a string
- *  or up to the first four characters of the string based upon
- *  whether this object class uses strings for names.
+ * This method sets the object name to either a copy of a string
+ * or up to the first four characters of the string based upon
+ * whether this object class uses strings for names.
  *
- *  @param[in] information points to the object information structure
- *  @param[in] the_object is the object to operate upon
- *  @param[in] name is a pointer to the name to use
+ * @param information points to the object information structure
+ * @param[out] the_object is the object to operate upon
+ * @param name is a pointer to the name to use
  *
- *  @retval If successful, true is returned.  Otherwise false is returned.
+ * @retval true The operation succeeded.
+ * @retval false The operation failed.
  */
 bool _Objects_Set_name(
   const Objects_Information *information,
@@ -517,8 +522,8 @@ bool _Objects_Set_name(
 /**
  * @brief Removes object with a 32-bit integer name from its namespace.
  *
- * @param[in] information The corresponding object information table.
- * @param[in] the_object The object.
+ * @param information The corresponding object information table.
+ * @param[out] the_object The object to operate upon.
  */
 void _Objects_Namespace_remove_u32(
   const Objects_Information *information,
@@ -528,8 +533,8 @@ void _Objects_Namespace_remove_u32(
 /**
  * @brief Removes object with a string name from its namespace.
  *
- * @param[in] information The corresponding object information table.
- * @param[in] the_object The object.
+ * @param information The corresponding object information table.
+ * @param[out] the_object The object the object to operate upon.
  */
 void _Objects_Namespace_remove_string(
   const Objects_Information *information,
@@ -537,13 +542,13 @@ void _Objects_Namespace_remove_string(
 );
 
 /**
- *  @brief Close object.
+ * @brief Closes object.
  *
- *  This function removes the_object control pointer and object name
- *  in the Local Pointer and Local Name Tables.
+ * This function removes the_object control pointer and object name
+ * in the Local Pointer and Local Name Tables.
  *
- *  @param[in] information points to an Object Information Table
- *  @param[in] the_object is a pointer to an object
+ * @param information Points to an Object Information Table.
+ * @param[out] the_object A pointer to an object.
  */
 void _Objects_Close(
   const Objects_Information *information,
@@ -553,14 +558,22 @@ void _Objects_Close(
 /**
  * @brief Returns the count of active objects.
  *
- * @param[in] information The object information table.
+ * @param information The object information table.
  *
- * @retval The count of active objects.
+ * @return The count of active objects.
  */
 Objects_Maximum _Objects_Active_count(
   const Objects_Information *information
 );
 
+/**
+ * @brief Returns if the object has a string name.
+ *
+ * @param information The object information table.
+ *
+ * @retval true The object has a string name.
+ * @retval false The object does not have a string name.
+ */
 RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
   const Objects_Information *information
 )
@@ -568,6 +581,13 @@ RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
   return information->name_length > 0;
 }
 
+/**
+ * @brief Returns the object's objects per block.
+ *
+ * @param information The object information table.
+ *
+ * @return The number of objects per block of @a information.
+ */
 RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
   const Objects_Information *information
 )
@@ -576,12 +596,12 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
 }
 
 /**
- * This function returns true if the api is valid.
+ * @brief Checks if the api is valid.
  *
- * @param[in] the_api is the api portion of an object ID.
+ * @param the_api is the api portion of an object ID.
  *
- * @return This method returns true if the specified api value is valid
- *         and false otherwise.
+ * @retval true The specified api value is valid.
+ * @retval false The specified api value is not valid.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
   uint32_t   the_api
@@ -593,14 +613,13 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_api_valid(
 }
 
 /**
- * This function returns true if the node is of the local object, and
- * false otherwise.
+ * @brief Checks if the node is of the local object.
  *
- * @param[in] node is the node number and corresponds to the node number
+ * @param node The node number and corresponds to the node number
  *        portion of an object ID.
  *
- * @return This method returns true if the specified node is the local node
- *         and false otherwise.
+ * @retval true The specified node is the local node.
+ * @retval false The specified node is not the local node.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
   uint32_t   node
@@ -610,13 +629,12 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
 }
 
 /**
- * This function returns true if the id is of a local object, and
- * false otherwise.
+ * @brief Checks if the id is of a local object.
  *
- * @param[in] id is an object ID
+ * @param id The object ID.
  *
- * @return This method returns true if the specified object Id is local
- *         and false otherwise.
+ * @retval true The specified object Id is local.
+ * @retval false The specified object Id is not local.
  *
  * @note On a single processor configuration, this always returns true.
  */
@@ -636,14 +654,13 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
 }
 
 /**
- * This function returns true if left and right are equal,
- * and false otherwise.
+ * @brief Checks if two object IDs are equal.
  *
- * @param[in] left is the Id on the left hand side of the comparison
- * @param[in] right is the Id on the right hand side of the comparison
+ * @param left The Id on the left hand side of the comparison.
+ * @param right The Id on the right hand side of the comparison.
  *
- * @return This method returns true if the specified object IDs are equal
- *         and false otherwise.
+ * @retval true The specified object IDs are equal.
+ * @retval false The specified object IDs are not equal.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
   Objects_Id left,
@@ -654,11 +671,11 @@ RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
 }
 
 /**
- * Returns the identifier with the minimum index for the specified identifier.
+ * @brief Returns the identifier with the minimum index for the specified identifier.
  *
  * The specified identifier must have valid API, class and node fields.
  *
- * @param[in] id The identifier to be processed.
+ * @param id The identifier to be processed.
  *
  * @return The corresponding ID with the minimum index.
  */
@@ -670,9 +687,9 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Get_minimum_id( Objects_Id id )
 }
 
 /**
- * Returns the maximum index of the specified object class.
+ * @brief Returns the maximum index of the specified object class.
  *
- * @param[in] information The object information.
+ * @param information The object information.
  *
  * @return The maximum index of the specified object class.
  */
@@ -684,13 +701,13 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_maximum_index(
 }
 
 /**
- * @brief Returns true if the automatic object extension (unlimited objects) is
- * enabled, otherwise false.
+ * @brief Checks if the automatic object extension (unlimited objects) is
+ * enabled.
  *
- * @param[in] information The object information.
+ * @param information The object information.
  *
  * @retval true The automatic object extension (unlimited objects) is enabled.
- * @retval false Otherwise.
+ * @retval false The automatic object extension (unlimited objects) is not enabled.
  */
 RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Is_auto_extend(
   const Objects_Information *information
@@ -700,12 +717,12 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Is_auto_extend(
 }
 
 /**
- * This function sets the pointer to the local_table object
+ * @brief Sets the pointer to the local_table object
  * referenced by the index.
  *
- * @param[in] information points to an Object Information Table
- * @param[in] index is the index of the object the caller wants to access
- * @param[in] the_object is the local object pointer
+ * @param[in, out] information Points to an Object Information Table.
+ * @param index The index of the object the caller wants to access.
+ * @param the_object The local object pointer.
  *
  * @note This routine is ONLY to be called in places where the
  *       index portion of the Id is known to be good.  This is
@@ -731,12 +748,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
 }
 
 /**
+ * @brief Invalidates an object Id.
+ *
  * This function sets the pointer to the local_table object
- * referenced by the index to a NULL so the object Id is invalid
+ * referenced by the index to NULL so the object Id is invalid
  * after this call.
  *
- * @param[in] information points to an Object Information Table
- * @param[in] the_object is the local object pointer
+ * @param[in, out] information points to an Object Information Table.
+ * @param the_object The local object pointer.
  *
  * @note This routine is ONLY to be called in places where the
  *       index portion of the Id is known to be good.  This is
@@ -760,12 +779,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
 }
 
 /**
- * This function places the_object control pointer and object name
- * in the Local Pointer and Local Name Tables, respectively.
+ * @brief Places the_object control pointer and object name
+ *      in the Local Pointer and Local Name Tables, respectively.
  *
- * @param[in] information points to an Object Information Table
- * @param[in] the_object is a pointer to an object
- * @param[in] name is the name of the object to make accessible
+ * This method uses Objects_Name for the object name.
+ *
+ * @param[in, out] information Points to an Object Information Table.
+ * @param the_object Pointer to an object.
+ * @param name The name of the object to make accessible.
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open(
   Objects_Information *information,
@@ -786,12 +807,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
 }
 
 /**
- * This function places the_object control pointer and object name
- * in the Local Pointer and Local Name Tables, respectively.
+ * @brief Places the_object control pointer and object name
+ *      in the Local Pointer and Local Name Tables, respectively.
  *
- * @param[in] information points to an Object Information Table
- * @param[in] the_object is a pointer to an object
- * @param[in] name is the name of the object to make accessible
+ * This method uses uint32_t for the object name.
+ *
+ * @param[in, out] information Points to an Object Information Table.
+ * @param the_object Pointer to an object.
+ * @param name The name of the object to make accessible.
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
   const Objects_Information *information,
@@ -810,12 +833,14 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
 }
 
 /**
- * This function places the_object control pointer and object name
- * in the Local Pointer and Local Name Tables, respectively.
+ * @brief Places the_object control pointer and object name
+ *      in the Local Pointer and Local Name Tables, respectively.
  *
- * @param[in] information points to an Object Information Table
- * @param[in] the_object is a pointer to an object
- * @param[in] name is the name of the object to make accessible
+ * This method uses a String for the object name.
+ *
+ * @param[in, out] information Points to an Object Information Table.
+ * @param the_object Pointer to an object.
+ * @param name The name of the object to make accessible.
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   const Objects_Information *information,
@@ -864,6 +889,12 @@ RTEMS_INLINE_ROUTINE void _Objects_Allocator_unlock( void )
   _RTEMS_Unlock_allocator();
 }
 
+/**
+ * @brief Checks if the allocator is the owner of the object allocator mutex
+ *
+ * @retval true The allocator is the owner of the object allocator mutex.
+ * @retval false The allocato is not the owner of the object allocator mutex.
+ */
 RTEMS_INLINE_ROUTINE bool _Objects_Allocator_is_owner( void )
 {
   return _RTEMS_Allocator_is_owner();
