@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreMRSP
+ *
+ * @brief Definitions for Multiprocessor Resource Sharing Protocol (MrsP) Implementation.
+ */
+
 /*
  * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
@@ -37,6 +45,12 @@ extern "C" {
 
 #define MRSP_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
 
+/**
+ * @brief Acquires critical accordingt to MrsP.
+ *
+ * @param mrsp The MrsP control for the operation.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
   MRSP_Control         *mrsp,
   Thread_queue_Context *queue_context
@@ -45,6 +59,12 @@ RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
   _Thread_queue_Acquire_critical( &mrsp->Wait_queue, queue_context );
 }
 
+/**
+ * @brief Releases according to MrsP.
+ *
+ * @param mrsp The MrsP control for the operation.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Release(
   MRSP_Control         *mrsp,
   Thread_queue_Context *queue_context
@@ -53,6 +73,13 @@ RTEMS_INLINE_ROUTINE void _MRSP_Release(
   _Thread_queue_Release( &mrsp->Wait_queue, queue_context );
 }
 
+/**
+ * @brief Gets owner of the MrsP control.
+ *
+ * @param mrsp The MrsP control to get the owner from.
+ *
+ * @return The owner of the Mrsp control.
+ */
 RTEMS_INLINE_ROUTINE Thread_Control *_MRSP_Get_owner(
   const MRSP_Control *mrsp
 )
@@ -60,6 +87,12 @@ RTEMS_INLINE_ROUTINE Thread_Control *_MRSP_Get_owner(
   return mrsp->Wait_queue.Queue.owner;
 }
 
+/**
+ * @brief Sets owner of the MrsP control.
+ *
+ * @param[out] mrsp The MrsP control to set the owner of.
+ * @param owner The desired new owner for @a mrsp.
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Set_owner(
   MRSP_Control   *mrsp,
   Thread_Control *owner
@@ -68,6 +101,14 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_owner(
   mrsp->Wait_queue.Queue.owner = owner;
 }
 
+/**
+ * @brief Gets priority of the MrsP control.
+ *
+ * @param mrsp The mrsp to get the priority from.
+ * @param scheduler The corresponding scheduler.
+ *
+ * @return The priority of the MrsP control.
+ */
 RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
   const MRSP_Control      *mrsp,
   const Scheduler_Control *scheduler
@@ -79,6 +120,13 @@ RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
   return mrsp->ceiling_priorities[ scheduler_index ];
 }
 
+/**
+ * @brief Sets priority of the MrsP control
+ *
+ * @param[out] mrsp The MrsP control to set the priority of.
+ * @param schedulger The corresponding scheduler.
+ * @param new_priority The new priority for the MrsP control
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
   MRSP_Control            *mrsp,
   const Scheduler_Control *scheduler,
@@ -91,6 +139,19 @@ RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
   mrsp->ceiling_priorities[ scheduler_index ] = new_priority;
 }
 
+/**
+ * @brief Adds the priority to the given thread.
+ *
+ * @param mrsp The MrsP control for the operation.
+ * @param[in, out] thread The thread to add the priority node to.
+ * @param[out] priority_node The priority node to initialize and add to
+ *      the thread.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the thread
+ *      exceeds the ceiling priority.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
   MRSP_Control         *mrsp,
   Thread_Control       *thread,
@@ -126,6 +187,13 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
   return status;
 }
 
+/**
+ * @brief Removes the priority from the given thread.
+ *
+ * @param[in, out] The thread to remove the priority from.
+ * @param priority_node The priority node to remove from the thread
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
   Thread_Control       *thread,
   Priority_Node        *priority_node,
@@ -140,6 +208,14 @@ RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
   _Thread_Wait_release_default_critical( thread, &lock_context );
 }
 
+/**
+ * @brief Replaces the given priority node with the ceiling priority of
+ *      the MrsP control.
+ *
+ * @param mrsp The mrsp control for the operation.
+ * @param[out] thread The thread to replace the priorities.
+ * @param ceiling_priority The node to be replaced.
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Replace_priority(
   MRSP_Control   *mrsp,
   Thread_Control *thread,
@@ -157,6 +233,17 @@ RTEMS_INLINE_ROUTINE void _MRSP_Replace_priority(
   _Thread_Wait_release_default( thread, &lock_context );
 }
 
+/**
+ * @brief Claims ownership of the MrsP control.
+ *
+ * @param mrsp The MrsP control to claim the ownership of.
+ * @param[in, out] executing The currently executing thread.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the executing
+ *      thread exceeds the ceiling priority.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Claim_ownership(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
@@ -186,6 +273,20 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Claim_ownership(
   return STATUS_SUCCESSFUL;
 }
 
+/**
+ * @brief Initializes a MrsP control.
+ *
+ * @param[out] mrsp The MrsP control that is initialized.
+ * @param scheduler The scheduler for the operation.
+ * @param ceiling_priority
+ * @param executing The currently executing thread.  Ignored in this method.
+ * @param initially_locked Indicates whether the MrsP control shall be initally
+ *      locked. If it is initially locked, this method returns STATUS_INVALID_NUMBER.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_INVALID_NUMBER The MrsP control is initially locked.
+ * @retval STATUS_NO_MEMORY There is not enough memory to allocate.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   MRSP_Control            *mrsp,
   const Scheduler_Control *scheduler,
@@ -225,6 +326,19 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   return STATUS_SUCCESSFUL;
 }
 
+/**
+ * @brief Waits for the ownership of the MrsP control.
+ *
+ * @param[in, out] mrsp The MrsP control to get the ownership of.
+ * @param[in, out] executing The currently executing thread.
+ * @param queue_context the thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the
+ *      currently executing thread exceeds the ceiling priority.
+ * @retval STATUS_DEADLOCK A deadlock occured.
+ * @retval STATUS_TIMEOUT A timeout occured.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
@@ -283,6 +397,20 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   return status;
 }
 
+/**
+ * @brief Seizes the MrsP control.
+ *
+ * @param[in, out] mrsp The MrsP control to seize the control of.
+ * @param[in, out] executing The currently executing thread.
+ * @param wait Indicates whether the calling thread is willing to wait.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the executing
+ *      thread exceeds the ceiling priority.
+ * @retval STATUS_UNAVAILABLE The executing thread is already the owner of
+ *      the MrsP control.  Seizing it is not possible.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
@@ -312,6 +440,16 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
   return status;
 }
 
+/**
+ * @brief Surrenders the MrsP control.
+ *
+ * @param[in, out] mrsp The MrsP control to surrender the control of.
+ * @param[in, out] executing The currently executing thread.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_NOT_OWNER The executing thread does not own the MrsP control.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
@@ -354,6 +492,16 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
   return STATUS_SUCCESSFUL;
 }
 
+/**
+ * @brief Checks if the MrsP control can be destroyed.
+ *
+ * @param mrsp The MrsP control for the operation.
+ *
+ * @retval STATUS_SUCCESSFUL The MrsP is currently not used
+ *      and can be destroyed.
+ * @retval STATUS_RESOURCE_IN_USE The MrsP control is in use,
+ *      it cannot be destroyed.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Can_destroy( MRSP_Control *mrsp )
 {
   if ( _MRSP_Get_owner( mrsp ) != NULL ) {
@@ -363,6 +511,12 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Can_destroy( MRSP_Control *mrsp )
   return STATUS_SUCCESSFUL;
 }
 
+/**
+ * @brief Destroys the MrsP control
+ *
+ * @param[in, out] The mrsp that is about to be destroyed.
+ * @param queue_context The thread queue context.
+ */
 RTEMS_INLINE_ROUTINE void _MRSP_Destroy(
   MRSP_Control         *mrsp,
   Thread_queue_Context *queue_context
