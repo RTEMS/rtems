@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScorePriority
+ *
  * @brief Priority Handler API
  */
 
@@ -32,6 +34,8 @@ extern "C" {
  * @defgroup RTEMSScorePriority Priority Handler
  *
  * @ingroup RTEMSScore
+ *
+ * @brief Priority Handler
  *
  * This handler encapsulates functionality which is used to manage thread
  * priorities.  The actual priority of a thread is an aggregation of priority
@@ -197,7 +201,7 @@ typedef struct {
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
