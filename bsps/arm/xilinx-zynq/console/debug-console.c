@@ -28,6 +28,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
 
+#include <bsp.h>
 #include <bsp/zynq-uart.h>
 
 #include <bspopts.h>

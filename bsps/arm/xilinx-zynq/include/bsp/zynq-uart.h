@@ -53,9 +53,7 @@ typedef struct {
   rtems_vector_number irq;
 } zynq_uart_context;
 
-const rtems_termios_device_handler zynq_uart_handler;
-
-extern zynq_uart_context zynq_uart_instances[2];
+extern const rtems_termios_device_handler zynq_uart_handler;
 
 #define ZYNQ_UART_DEFAULT_BAUD 115200
 
