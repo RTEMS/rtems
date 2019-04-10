@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Manipulation Routines for the Bitmap Priority Queue Implementation
+ * @ingroup RTEMSScorePriorityBitmap
  *
- *  This include file contains all thread priority manipulation routines for
- *  the bit map priority queue implementation.
+ * @brief Manipulation Routines for the Bitmap Priority Queue Implementation
+ *
+ * This include file contains all thread priority manipulation routines for
+ * the bit map priority queue implementation.
  */
 
 /*
@@ -26,11 +28,14 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScorePriorityBitmap Bitmap Priority Thread Routines
+ * @defgroup RTEMSScorePriorityBitmap Bitmap Priority Thread Routines
  *
- *  @ingroup RTEMSScore
+ * @brief Bitmap Priority Thread Routines
+ *
+ * @ingroup RTEMSScore
+ *
+ * @{
  */
-/**@{*/
 
 typedef uint16_t Priority_bit_map_Word;
 
@@ -69,7 +74,7 @@ typedef struct {
   Priority_bit_map_Word  block_minor;
 } Priority_bit_map_Information;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
