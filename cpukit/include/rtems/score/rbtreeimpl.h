@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreRBTree
+ *
  * @brief Inlined Routines Associated with Red-Black Trees
  *
  * This include file contains the bodies of the routines which are
@@ -30,8 +32,9 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScoreRBTree
+ *
+ * @{
  */
-/**@{**/
 
 /**
  * @brief Red-black tree visitor.
@@ -52,9 +55,9 @@ typedef bool (*RBTree_Visitor)(
 /**
  * @brief Red-black tree iteration.
  *
- * @param[in] rbtree The red-black tree.
- * @param[in] visitor The visitor.
- * @param[in] visitor_arg The visitor argument.
+ * @param rbtree The red-black tree.
+ * @param visitor The visitor.
+ * @param visitor_arg The visitor argument.
  */
 void _RBTree_Iterate(
   const RBTree_Control *rbtree,
