@@ -169,24 +169,36 @@ static void test_isr_level( void )
 
 static void test_isr_locks( void )
 {
+  static const char name[] = "test";
   ISR_Level normal_interrupt_level = _ISR_Get_level();
-  ISR_lock_Control initialized = ISR_LOCK_INITIALIZER("test");
+  ISR_lock_Control initialized = ISR_LOCK_INITIALIZER( name );
+  ISR_lock_Control zero_initialized;
   union {
     ISR_lock_Control lock;
     uint8_t bytes[ sizeof( ISR_lock_Control ) ];
   } container;
   ISR_lock_Context lock_context;
   size_t i;
-  const uint8_t *initialized_bytes;
+  const uint8_t *bytes;
   ISR_Level interrupt_level;
 
   memset( &container, 0xff, sizeof( container ) );
-  _ISR_lock_Initialize( &container.lock, "test" );
-  initialized_bytes = (const uint8_t *) &initialized;
+  _ISR_lock_Initialize( &container.lock, name );
+  bytes = (const uint8_t *) &initialized;
 
   for ( i = 0; i < sizeof( container ); ++i ) {
     if ( container.bytes[ i ] != 0xff ) {
-      rtems_test_assert( container.bytes[ i ] == initialized_bytes[ i] );
+      rtems_test_assert( container.bytes[ i ] == bytes[ i ] );
+    }
+  }
+
+  memset( &zero_initialized, 0, sizeof( zero_initialized ) );
+  _ISR_lock_Set_name( &zero_initialized, name );
+  bytes = (const uint8_t *) &zero_initialized;
+
+  for ( i = 0; i < sizeof( container ); ++i ) {
+    if ( container.bytes[ i ] != 0xff ) {
+      rtems_test_assert( container.bytes[ i ] == bytes[ i ] );
     }
   }
 

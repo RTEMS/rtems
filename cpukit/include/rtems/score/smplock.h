@@ -149,7 +149,7 @@ static inline void _SMP_lock_Initialize_inline(
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Initialize(
   SMP_lock_Control *lock,
-  const char *      name
+  const char       *name
 );
 #else
 #define _SMP_lock_Initialize( lock, name ) \
@@ -175,6 +175,25 @@ void _SMP_lock_Destroy( SMP_lock_Control *lock );
 #define _SMP_lock_Destroy( lock ) \
   _SMP_lock_Destroy_inline( lock )
 #endif
+
+/**
+ * @brief Sets the name of an SMP lock.
+ *
+ * @param[out] lock The SMP lock control.
+ * @param name The name for the SMP lock statistics.  This name must be
+ *   persistent throughout the life time of this statistics block.
+ */
+static inline void _SMP_lock_Set_name(
+  SMP_lock_Control *lock,
+  const char       *name
+)
+{
+#if defined(RTEMS_PROFILING)
+  lock->Stats.name = name;
+#else
+  (void) name;
+#endif
+}
 
 #if defined(RTEMS_DEBUG)
 static inline uint32_t _SMP_lock_Who_am_I( void )

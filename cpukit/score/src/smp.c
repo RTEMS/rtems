@@ -114,11 +114,12 @@ void _SMP_Handler_initialize( void )
   cpu_config_max = rtems_configuration_get_maximum_processors();
 
   for ( cpu_index = 0 ; cpu_index < cpu_config_max; ++cpu_index ) {
-    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
+    Per_CPU_Control *cpu;
 
-    _ISR_lock_Initialize( &cpu->Watchdog.Lock, "Watchdog" );
+    cpu = _Per_CPU_Get_by_index( cpu_index );
     _SMP_ticket_lock_Initialize( &cpu->Lock );
     _SMP_lock_Stats_initialize( &cpu->Lock_stats, "Per-CPU" );
+    _ISR_lock_Set_name( &cpu->Watchdog.Lock, "Per-CPU Watchdog" );
     _Chain_Initialize_empty( &cpu->Threads_in_need_for_help );
   }
 

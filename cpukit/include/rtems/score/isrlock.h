@@ -200,6 +200,21 @@ RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
 #endif
 
 /**
+ * @brief Sets the name of an ISR lock.
+ *
+ * @param[out] _lock The ISR lock control.
+ * @param _name The name for the ISR lock.  This name must be a string
+ *   persistent throughout the life time of this lock.  The name is only used
+ *   if profiling is enabled.
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_Set_name( _lock, _name ) \
+    _SMP_lock_Set_name( &( _lock )->Lock, _name )
+#else
+  #define _ISR_lock_Set_name( _lock, _name )
+#endif
+
+/**
  * @brief Acquires an ISR lock.
  *
  * Interrupts will be disabled.  On SMP configurations this function acquires
