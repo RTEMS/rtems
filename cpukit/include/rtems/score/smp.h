@@ -35,11 +35,11 @@ extern "C" {
  */
 
 #if defined( RTEMS_SMP )
-  extern uint32_t _SMP_Processor_count;
+  extern uint32_t _SMP_Processor_maximum;
 
   static inline uint32_t _SMP_Get_processor_count( void )
   {
-    return _SMP_Processor_count;
+    return _SMP_Processor_maximum;
   }
 #else
   #define _SMP_Get_processor_count() UINT32_C(1)

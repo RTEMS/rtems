@@ -30,7 +30,7 @@
 
 Processor_mask _SMP_Online_processors;
 
-uint32_t _SMP_Processor_count;
+uint32_t _SMP_Processor_maximum;
 
 static const Scheduler_Assignment *_Scheduler_Get_initial_assignment(
   uint32_t cpu_index
@@ -126,7 +126,7 @@ void _SMP_Handler_initialize( void )
 
   cpu_count = _CPU_SMP_Initialize();
   cpu_count = cpu_count < cpu_max ? cpu_count : cpu_max;
-  _SMP_Processor_count = cpu_count;
+  _SMP_Processor_maximum = cpu_count;
 
   for ( cpu_index = cpu_count ; cpu_index < cpu_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
