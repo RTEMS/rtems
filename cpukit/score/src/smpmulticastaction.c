@@ -32,7 +32,6 @@
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/threaddispatch.h>
-#include <rtems/score/sysstate.h>
 
 typedef struct Per_CPU_Job Per_CPU_Job;
 
@@ -181,11 +180,30 @@ static void _SMP_Wait_for_action_jobs(
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
       const Per_CPU_Job *job;
+      Per_CPU_Control   *cpu;
 
       job = &jobs->Jobs[ cpu_index ];
+      cpu = _Per_CPU_Get_by_index( cpu_index );
 
       while ( _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
-        _Per_CPU_Try_perform_jobs( cpu_self );
+        switch ( cpu->state ) {
+          case PER_CPU_STATE_INITIAL:
+          case PER_CPU_STATE_READY_TO_START_MULTITASKING:
+          case PER_CPU_STATE_REQUEST_START_MULTITASKING:
+            _CPU_SMP_Processor_event_broadcast();
+            /* Fall through */
+          case PER_CPU_STATE_UP:
+            /*
+             * Calling this function with the current processor is intentional.
+             * We have to perform our own jobs here in case inter-processor
+             * interrupts are not working.
+             */
+            _Per_CPU_Try_perform_jobs( cpu_self );
+            break;
+          default:
+            _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
+            break;
+        }
       }
     }
   }
@@ -203,11 +221,6 @@ void _SMP_Multicast_action(
 
   cpu_max = _SMP_Get_processor_maximum();
   _Assert( cpu_max <= CPU_MAXIMUM_PROCESSORS );
-
-  if ( ! _System_state_Is_up( _System_state_Get() ) ) {
-    ( *handler )( arg );
-    return;
-  }
 
   if ( targets == NULL ) {
     targets = _SMP_Get_online_processors();

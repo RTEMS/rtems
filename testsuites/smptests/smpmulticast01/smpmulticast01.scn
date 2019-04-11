@@ -1,12 +1,12 @@
 *** BEGIN OF TEST SMPMULTICAST 1 ***
-*** TEST VERSION: 5.0.0.c44199ccea624f31b1116fa2e47d547944e90909-modified
+*** TEST VERSION: 5.0.0.d9c9d1af7a885bc402c57e88919635b27b363111
 *** TEST STATE: EXPECTED-PASS
 *** TEST BUILD: RTEMS_POSIX_API RTEMS_SMP
 *** TEST TOOLS: 7.4.0 20181206 (RTEMS 5, RSB e0aec65182449a4e22b820e773087636edaf5b32, Newlib 1d35a003f)
 A:SMPMultiCast
 S:Platform:RTEMS
 S:Compiler:7.4.0 20181206 (RTEMS 5, RSB e0aec65182449a4e22b820e773087636edaf5b32, Newlib 1d35a003f)
-S:Version:5.0.0.c44199ccea624f31b1116fa2e47d547944e90909
+S:Version:5.0.0.d9c9d1af7a885bc402c57e88919635b27b363111
 S:BSP:qoriq_e6500_32
 S:RTEMS_DEBUG:0
 S:RTEMS_MULTIPROCESSING:0
@@ -14,41 +14,47 @@ S:RTEMS_POSIX_API:1
 S:RTEMS_PROFILING:0
 S:RTEMS_SMP:1
 B:UnicastBeforeMultitasking
-P:0:0:IDLE:init.c:150
-E:UnicastBeforeMultitasking:N:1:F:0:D:0.001999
+P:0:0:IDLE:init.c:142
+E:UnicastBeforeMultitasking:N:1:F:0:D:0.002206
 B:UnicastBeforeMultitaskingIRQDisabled
-P:0:0:IDLE:init.c:150
-E:UnicastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.001999
+P:0:0:IDLE:init.c:142
+E:UnicastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.002184
 B:UnicastBeforeMultitaskingDispatchDisabled
-P:0:0:IDLE:init.c:150
-E:UnicastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.001999
+P:0:0:IDLE:init.c:142
+E:UnicastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.002198
 B:BroadcastBeforeMultitasking
-P:0:0:IDLE:init.c:194
-E:BroadcastBeforeMultitasking:N:1:F:0:D:0.001999
+P:0:0:IDLE:init.c:174
+E:BroadcastBeforeMultitasking:N:1:F:0:D:0.004153
 B:BroadcastBeforeMultitaskingIRQDisabled
-P:0:0:IDLE:init.c:194
-E:BroadcastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.001999
+P:0:0:IDLE:init.c:174
+E:BroadcastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.004135
 B:BroadcastBeforeMultitaskingDispatchDisabled
-P:0:0:IDLE:init.c:194
-E:BroadcastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.001999
+P:0:0:IDLE:init.c:174
+E:BroadcastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.004123
 B:UnicastDuringMultitasking
-P:0:23:UI1:init.c:150
-E:UnicastDuringMultitasking:N:1:F:0:D:0.001999
+P:0:23:UI1:init.c:142
+E:UnicastDuringMultitasking:N:1:F:0:D:0.002270
 B:UnicastDuringMultitaskingIRQDisabled
-P:0:23:UI1:init.c:150
-E:UnicastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.002000
+P:0:23:UI1:init.c:142
+E:UnicastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.002272
 B:UnicastDuringMultitaskingDispatchDisabled
-P:0:23:UI1:init.c:150
-E:UnicastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.002000
+P:0:23:UI1:init.c:142
+E:UnicastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.002271
 B:BroadcastDuringMultitasking
-P:0:23:UI1:init.c:194
-E:BroadcastDuringMultitasking:N:1:F:0:D:0.002134
+P:0:23:UI1:init.c:174
+E:BroadcastDuringMultitasking:N:1:F:0:D:0.003904
 B:BroadcastDuringMultitaskingIRQDisabled
-P:0:23:UI1:init.c:194
-E:BroadcastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.002165
+P:0:23:UI1:init.c:174
+E:BroadcastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.003949
 B:BroadcastDuringMultitaskingDispatchDisabled
-P:0:23:UI1:init.c:194
-E:BroadcastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.002130
-Z:SMPMultiCast:C:12:N:12:F:0:D:0.125615
+P:0:23:UI1:init.c:174
+E:BroadcastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.003914
+B:WrongCPUStateToPerformJobs
+P:0:0:ISR:init.c:226
+P:1:23:UI1:init.c:310
+P:2:23:UI1:init.c:311
+P:3:23:UI1:init.c:312
+E:WrongCPUStateToPerformJobs:N:4:F:0:D:0.007911
+Z:SMPMultiCast:C:13:N:16:F:0:D:0.153651
 
 *** END OF TEST SMPMULTICAST 1 ***

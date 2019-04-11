@@ -89,6 +89,7 @@ static void _Per_CPU_State_busy_wait(
         state != PER_CPU_STATE_READY_TO_START_MULTITASKING
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
+        _Per_CPU_Perform_jobs( cpu );
         _CPU_SMP_Processor_event_receive();
         state = cpu->state;
       }
@@ -99,6 +100,7 @@ static void _Per_CPU_State_busy_wait(
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
         _Per_CPU_State_before_multitasking_action( cpu );
+        _Per_CPU_Perform_jobs( cpu );
         _CPU_SMP_Processor_event_receive();
         state = cpu->state;
       }
