@@ -158,27 +158,30 @@ static ISR_Level _Thread_Preemption_intervention(
 )
 {
 #if defined(RTEMS_SMP)
+  ISR_lock_Context lock_context;
+
   level = _Thread_Check_pinning( executing, cpu_self, level );
 
-  _Per_CPU_Acquire( cpu_self );
+  _Per_CPU_Acquire( cpu_self, &lock_context );
 
   while ( !_Chain_Is_empty( &cpu_self->Threads_in_need_for_help ) ) {
-    Chain_Node       *node;
-    Thread_Control   *the_thread;
-    ISR_lock_Context  lock_context;
+    Chain_Node     *node;
+    Thread_Control *the_thread;
 
     node = _Chain_Get_first_unprotected( &cpu_self->Threads_in_need_for_help );
     _Chain_Set_off_chain( node );
     the_thread = THREAD_OF_SCHEDULER_HELP_NODE( node );
 
-    _Per_CPU_Release( cpu_self );
+    _Per_CPU_Release( cpu_self, &lock_context );
+
     _Thread_State_acquire( the_thread, &lock_context );
     _Thread_Ask_for_help( the_thread );
     _Thread_State_release( the_thread, &lock_context );
-    _Per_CPU_Acquire( cpu_self );
+
+    _Per_CPU_Acquire( cpu_self, &lock_context );
   }
 
-  _Per_CPU_Release( cpu_self );
+  _Per_CPU_Release( cpu_self, &lock_context );
 #else
   (void) cpu_self;
 #endif

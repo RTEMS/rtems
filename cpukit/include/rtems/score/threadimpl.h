@@ -990,14 +990,16 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_cancel_need_for_help(
   Per_CPU_Control *cpu
 )
 {
-  _Per_CPU_Acquire( cpu );
+  ISR_lock_Context lock_context;
+
+  _Per_CPU_Acquire( cpu, &lock_context );
 
   if ( !_Chain_Is_node_off_chain( &the_thread->Scheduler.Help_node ) ) {
     _Chain_Extract_unprotected( &the_thread->Scheduler.Help_node );
     _Chain_Set_off_chain( &the_thread->Scheduler.Help_node );
   }
 
-  _Per_CPU_Release( cpu );
+  _Per_CPU_Release( cpu, &lock_context );
 }
 #endif
 

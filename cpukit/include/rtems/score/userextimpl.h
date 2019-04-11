@@ -261,34 +261,29 @@ static inline void _User_extensions_Thread_switch(
   node = _Chain_Immutable_first( chain );
 
   if ( node != tail ) {
-    Per_CPU_Control *cpu_self;
 #if defined(RTEMS_SMP)
-    ISR_Level        level;
-#endif
+    ISR_lock_Context  lock_context;
+    Per_CPU_Control  *cpu_self;
 
     cpu_self = _Per_CPU_Get();
 
-#if defined(RTEMS_SMP)
-    _ISR_Local_disable( level );
-#endif
-    _Per_CPU_Acquire( cpu_self );
+    _ISR_lock_ISR_disable( &lock_context );
+    _Per_CPU_Acquire( cpu_self, &lock_context );
 
-#if defined(RTEMS_SMP)
     node = _Chain_Immutable_first( chain );
 #endif
 
     while ( node != tail ) {
-      const User_extensions_Switch_control *extension =
-        (const User_extensions_Switch_control *) node;
+      const User_extensions_Switch_control *extension;
 
-      (*extension->thread_switch)( executing, heir );
-
+      extension = (const User_extensions_Switch_control *) node;
       node = _Chain_Immutable_next( node );
+      (*extension->thread_switch)( executing, heir );
     }
 
-    _Per_CPU_Release( cpu_self );
 #if defined(RTEMS_SMP)
-    _ISR_Local_enable( level );
+    _Per_CPU_Release( cpu_self, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
 #endif
   }
 }

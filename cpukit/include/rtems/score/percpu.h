@@ -28,7 +28,6 @@
   #include <rtems/score/chain.h>
   #include <rtems/score/isrlock.h>
   #include <rtems/score/smp.h>
-  #include <rtems/score/smplock.h>
   #include <rtems/score/timestamp.h>
   #include <rtems/score/watchdog.h>
 #endif
@@ -333,7 +332,7 @@ typedef struct Per_CPU_Control {
    *
    * It is volatile since interrupts may alter this flag.
    *
-   * This field is not protected by a lock and must be accessed only by this
+   * This member is not protected by a lock and must be accessed only by this
    * processor.  Code (e.g. scheduler and post-switch action requests) running
    * on another processors must use an inter-processor interrupt to set the
    * thread dispatch necessary indicator to true.
@@ -352,7 +351,8 @@ typedef struct Per_CPU_Control {
   /**
    * @brief This is the thread executing on this processor.
    *
-   * This field is not protected by a lock.  The only writer is this processor.
+   * This member is not protected by a lock.  The only writer is this
+   * processor.
    *
    * On SMP configurations a thread may be registered as executing on more than
    * one processor in case a thread migration is in progress.  On SMP
@@ -364,10 +364,10 @@ typedef struct Per_CPU_Control {
   /**
    * @brief This is the heir thread for this processor.
    *
-   * This field is not protected by a lock.  The only writer after multitasking
-   * start is the scheduler owning this processor.  It is assumed that stores
-   * to pointers are atomic on all supported SMP architectures.  The CPU port
-   * specific code (inter-processor interrupt handling and
+   * This member is not protected by a lock.  The only writer after
+   * multitasking start is the scheduler owning this processor.  It is assumed
+   * that stores to pointers are atomic on all supported SMP architectures.
+   * The CPU port specific code (inter-processor interrupt handling and
    * _CPU_SMP_Send_interrupt()) must guarantee that this processor observes the
    * last value written.
    *
@@ -418,39 +418,31 @@ typedef struct Per_CPU_Control {
 
   #if defined( RTEMS_SMP )
     /**
-     * @brief This lock protects some parts of the low-level thread dispatching.
-     *
-     * We must use a ticket lock here since we cannot transport a local context
-     * through the context switch.
-     *
-     * @see _Thread_Dispatch().
+     * @brief This lock protects some members of this structure.
      */
-    SMP_ticket_lock_Control Lock;
+    ISR_lock_Control Lock;
 
-    #if defined( RTEMS_PROFILING )
-      /**
-       * @brief Lock statistics for the per-CPU lock.
-       */
-      SMP_lock_Stats Lock_stats;
-
-      /**
-       * @brief Lock statistics context for the per-CPU lock.
-       */
-      SMP_lock_Stats_context Lock_stats_context;
-    #endif
+    /**
+     * @brief Lock context used to acquire all per-CPU locks.
+     *
+     * This member is protected by the Per_CPU_Control::Lock lock.
+     *
+     * @see _Per_CPU_Acquire_all().
+     */
+    ISR_lock_Context Lock_context;
 
     /**
      * @brief Chain of threads in need for help.
      *
-     * This field is protected by the Per_CPU_Control::Lock lock.
+     * This member is protected by the Per_CPU_Control::Lock lock.
      */
     Chain_Control Threads_in_need_for_help;
 
     /**
      * @brief Bit field for SMP messages.
      *
-     * This bit field is not protected locks.  Atomic operations are used to
-     * set and get the message bits.
+     * This member is not protected locks.  Atomic operations are used to set
+     * and get the message bits.
      */
     Atomic_Ulong message;
 
@@ -488,7 +480,7 @@ typedef struct Per_CPU_Control {
     /**
      * @brief Indicates the current state of the CPU.
      *
-     * This field is protected by the _Per_CPU_State_lock lock.
+     * This member is protected by the _Per_CPU_State_lock lock.
      *
      * @see _Per_CPU_State_change().
      */
@@ -539,62 +531,11 @@ typedef struct {
  */
 extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 
-#if defined( RTEMS_SMP )
-#define _Per_CPU_Acquire( cpu ) \
-  _SMP_ticket_lock_Acquire( \
-    &( cpu )->Lock, \
-    &( cpu )->Lock_stats, \
-    &( cpu )->Lock_stats_context \
-  )
-#else
-#define _Per_CPU_Acquire( cpu ) \
-  do { \
-    (void) ( cpu ); \
-  } while ( 0 )
-#endif
+#define _Per_CPU_Acquire( cpu, lock_context ) \
+  _ISR_lock_Acquire( &( cpu )->Lock, lock_context )
 
-#if defined( RTEMS_SMP )
-#define _Per_CPU_Release( cpu ) \
-  _SMP_ticket_lock_Release( \
-    &( cpu )->Lock, \
-    &( cpu )->Lock_stats_context \
-  )
-#else
-#define _Per_CPU_Release( cpu ) \
-  do { \
-    (void) ( cpu ); \
-  } while ( 0 )
-#endif
-
-#if defined( RTEMS_SMP )
-#define _Per_CPU_Acquire_all( isr_cookie ) \
-  do { \
-    uint32_t ncpus = _SMP_Get_processor_maximum(); \
-    uint32_t cpu; \
-    _ISR_Local_disable( isr_cookie ); \
-    for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
-      _Per_CPU_Acquire( _Per_CPU_Get_by_index( cpu ) ); \
-    } \
-  } while ( 0 )
-#else
-#define _Per_CPU_Acquire_all( isr_cookie ) \
-  _ISR_Local_disable( isr_cookie )
-#endif
-
-#if defined( RTEMS_SMP )
-#define _Per_CPU_Release_all( isr_cookie ) \
-  do { \
-    uint32_t ncpus = _SMP_Get_processor_maximum(); \
-    uint32_t cpu; \
-    for ( cpu = 0 ; cpu < ncpus ; ++cpu ) { \
-      _Per_CPU_Release( _Per_CPU_Get_by_index( cpu ) ); \
-    } \
-    _ISR_Local_enable( isr_cookie ); \
-  } while ( 0 )
-#else
-#define _Per_CPU_Release_all( isr_cookie ) \
-  _ISR_Local_enable( isr_cookie )
-#endif
+#define _Per_CPU_Release( cpu, lock_context ) \
+  _ISR_lock_Release( &( cpu )->Lock, lock_context )
 
 /*
  * If we get the current processor index in a context which allows thread
@@ -668,6 +609,60 @@ static inline bool _Per_CPU_Is_boot_processor(
   (void) cpu;
 
   return true;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Per_CPU_Acquire_all(
+  ISR_lock_Context *lock_context
+)
+{
+#if defined(RTEMS_SMP)
+  uint32_t         cpu_max;
+  uint32_t         cpu_index;
+  Per_CPU_Control *previous_cpu;
+
+  cpu_max = _SMP_Get_processor_maximum();
+  previous_cpu = _Per_CPU_Get_by_index( 0 );
+
+  _ISR_lock_ISR_disable( lock_context );
+  _Per_CPU_Acquire( previous_cpu, lock_context );
+
+  for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
+     Per_CPU_Control *cpu;
+
+     cpu = _Per_CPU_Get_by_index( cpu_index );
+     _Per_CPU_Acquire( cpu, &previous_cpu->Lock_context );
+     previous_cpu = cpu;
+  }
+#else
+  _ISR_lock_ISR_disable( lock_context );
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Per_CPU_Release_all(
+  ISR_lock_Context *lock_context
+)
+{
+#if defined(RTEMS_SMP)
+  uint32_t         cpu_max;
+  uint32_t         cpu_index;
+  Per_CPU_Control *cpu;
+
+  cpu_max = _SMP_Get_processor_maximum();
+  cpu = _Per_CPU_Get_by_index( cpu_max - 1 );
+
+  for ( cpu_index = cpu_max - 1 ; cpu_index > 0 ; --cpu_index ) {
+     Per_CPU_Control *previous_cpu;
+
+     previous_cpu = _Per_CPU_Get_by_index( cpu_index - 1 );
+     _Per_CPU_Release( cpu, &previous_cpu->Lock_context );
+     cpu = previous_cpu;
+  }
+
+  _Per_CPU_Release( cpu, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
+#else
+  _ISR_lock_ISR_enable( lock_context );
 #endif
 }
 

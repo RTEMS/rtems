@@ -41,17 +41,15 @@ void _User_extensions_Add_set(
    */
 
   if ( the_extension->Callouts.thread_switch != NULL ) {
-    ISR_Level level;
-
     the_extension->Switch.thread_switch =
       the_extension->Callouts.thread_switch;
 
-    _Per_CPU_Acquire_all( level );
+    _Per_CPU_Acquire_all( &lock_context );
     _Chain_Initialize_node( &the_extension->Switch.Node );
     _Chain_Append_unprotected(
       &_User_extensions_Switches_list,
       &the_extension->Switch.Node
     );
-    _Per_CPU_Release_all( level );
+    _Per_CPU_Release_all( &lock_context );
   }
 }

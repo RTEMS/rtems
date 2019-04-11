@@ -58,20 +58,17 @@ int pthread_spin_lock( pthread_spinlock_t *spinlock )
   POSIX_Spinlock_Control *the_spinlock;
   ISR_Level               level;
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
-  Per_CPU_Control        *cpu_self;
+  SMP_lock_Stats          unused_stats;
+  SMP_lock_Stats_context  unused_context;
 #endif
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );
   _ISR_Local_disable( level );
 #if defined(RTEMS_SMP)
-#if defined(RTEMS_PROFILING)
-  /* The lock statistics are incorrect in case of nested pthread spinlocks */
-  cpu_self = _Per_CPU_Get();
-#endif
   _SMP_ticket_lock_Acquire(
     &the_spinlock->Lock,
-    &cpu_self->Lock_stats,
-    &cpu_self->Lock_stats_context
+    &unused_stats,
+    &unused_context
   );
 #endif
   the_spinlock->interrupt_state = level;

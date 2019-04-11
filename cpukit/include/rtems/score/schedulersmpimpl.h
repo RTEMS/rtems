@@ -566,13 +566,13 @@ static inline Thread_Control *_Scheduler_SMP_Preempt(
 )
 {
   Thread_Control   *victim_thread;
-  ISR_lock_Context  lock_context;
+  ISR_lock_Context  scheduler_lock_context;
   Per_CPU_Control  *victim_cpu;
 
   victim_thread = _Scheduler_Node_get_user( victim );
   _Scheduler_SMP_Node_change_state( victim, SCHEDULER_SMP_NODE_READY );
 
-  _Thread_Scheduler_acquire_critical( victim_thread, &lock_context );
+  _Thread_Scheduler_acquire_critical( victim_thread, &scheduler_lock_context );
 
   victim_cpu = _Thread_Get_CPU( victim_thread );
 
@@ -580,16 +580,18 @@ static inline Thread_Control *_Scheduler_SMP_Preempt(
     _Scheduler_Thread_change_state( victim_thread, THREAD_SCHEDULER_READY );
 
     if ( victim_thread->Scheduler.helping_nodes > 0 ) {
-      _Per_CPU_Acquire( victim_cpu );
+      ISR_lock_Context per_cpu_lock_context;
+
+      _Per_CPU_Acquire( victim_cpu, &per_cpu_lock_context );
       _Chain_Append_unprotected(
         &victim_cpu->Threads_in_need_for_help,
         &victim_thread->Scheduler.Help_node
       );
-      _Per_CPU_Release( victim_cpu );
+      _Per_CPU_Release( victim_cpu, &per_cpu_lock_context );
     }
   }
 
-  _Thread_Scheduler_release_critical( victim_thread, &lock_context );
+  _Thread_Scheduler_release_critical( victim_thread, &scheduler_lock_context );
 
   _Scheduler_SMP_Allocate_processor(
     context,
