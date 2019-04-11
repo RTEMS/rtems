@@ -1,91 +1,194 @@
 /*
- * Copyright (c) 2014 Aeroflex Gaisler AB.  All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Copyright (C) 2019 embedded brains GmbH
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
-  #include "config.h"
+#include "config.h"
 #endif
 
 #include <rtems/score/smpimpl.h>
-#include <rtems/score/isrlock.h>
-#include <rtems/score/chainimpl.h>
+#include <rtems/score/assert.h>
+#include <rtems/score/threaddispatch.h>
 #include <rtems/score/sysstate.h>
 
-typedef struct {
-  Chain_Node          Node;
-  SMP_Action_handler  handler;
-  void               *arg;
-  Processor_mask      targets;
-  Atomic_Ulong        done;
-} SMP_Multicast_action;
+typedef struct Per_CPU_Job Per_CPU_Job;
 
-typedef struct {
-  ISR_lock_Control Lock;
-  Chain_Control    Actions;
-} SMP_Multicast_context;
+typedef struct Per_CPU_Jobs Per_CPU_Jobs;
 
-static SMP_Multicast_context _SMP_Multicast = {
-  .Lock = ISR_LOCK_INITIALIZER( "SMP Multicast Action" ),
-  .Actions = CHAIN_INITIALIZER_EMPTY( _SMP_Multicast.Actions )
+/**
+ * @brief A per-processor job.
+ */
+struct Per_CPU_Job {
+  union {
+    /**
+     * @brief The next job in the corresponding per-processor job list.
+     */
+    Per_CPU_Job *next;
+
+    /**
+     * @brief Indication if the job is done.
+     *
+     * A job is done if this member has the value one.  This assumes that one
+     * is not a valid pointer value.
+     */
+    Atomic_Ulong done;
+  };
+
+  /**
+   * @brief Back pointer to the jobs to get the handler and argument.
+   */
+  Per_CPU_Jobs *jobs;
 };
 
-void _SMP_Multicast_actions_process( void )
+/**
+ * @brief A collection of jobs, one for each processor.
+ */
+struct Per_CPU_Jobs {
+  /**
+   * @brief The job handler.
+   */
+  SMP_Action_handler handler;
+
+  /**
+   * @brief The job handler argument.
+   */
+  void *arg;
+
+  /**
+   * @brief One job for each potential processor.
+   */
+  Per_CPU_Job Jobs[ CPU_MAXIMUM_PROCESSORS ];
+};
+
+void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
 {
-  ISR_lock_Context      lock_context;
-  uint32_t              cpu_self_index;
-  SMP_Multicast_action *node;
-  SMP_Multicast_action *next;
+  ISR_lock_Context  lock_context;
+  Per_CPU_Job      *job;
 
-  _ISR_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
-  cpu_self_index = _SMP_Get_current_processor();
-  node = (SMP_Multicast_action *) _Chain_First( &_SMP_Multicast.Actions );
+  _ISR_lock_ISR_disable( &lock_context );
+  _Per_CPU_Acquire( cpu, &lock_context );
 
-  while ( !_Chain_Is_tail( &_SMP_Multicast.Actions, &node->Node ) ) {
-    next = (SMP_Multicast_action *) _Chain_Next( &node->Node );
+  while ( ( job = cpu->Jobs.head ) != NULL ) {
+    Per_CPU_Jobs *jobs;
 
-    if ( _Processor_mask_Is_set( &node->targets, cpu_self_index ) ) {
-      _Processor_mask_Clear( &node->targets, cpu_self_index );
+    cpu->Jobs.head = job->next;
+    _Per_CPU_Release( cpu, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
 
-      ( *node->handler )( node->arg );
+    jobs = job->jobs;
+    ( *jobs->handler )( jobs->arg );
+    _Atomic_Store_ulong( &job->done, 1, ATOMIC_ORDER_RELEASE );
 
-      if ( _Processor_mask_Is_zero( &node->targets ) ) {
-        _Chain_Extract_unprotected( &node->Node );
-        _Atomic_Store_ulong( &node->done, 1, ATOMIC_ORDER_RELEASE );
-      }
-    }
-
-    node = next;
+     _ISR_lock_ISR_disable( &lock_context );
+    _Per_CPU_Acquire( cpu, &lock_context );
   }
 
-  _ISR_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
+  _Per_CPU_Release( cpu, &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
 }
 
-static void
-_SMP_Multicasts_try_process( void )
+static void _Per_CPU_Try_perform_jobs( Per_CPU_Control *cpu_self )
 {
   unsigned long message;
-  Per_CPU_Control *cpu_self;
-  ISR_Level isr_level;
-
-  _ISR_Local_disable( isr_level );
-
-  cpu_self = _Per_CPU_Get();
 
   message = _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED );
 
-  if ( message & SMP_MESSAGE_MULTICAST_ACTION ) {
-    if ( _Atomic_Compare_exchange_ulong( &cpu_self->message, &message,
-        message & ~SMP_MESSAGE_MULTICAST_ACTION, ATOMIC_ORDER_RELAXED,
-        ATOMIC_ORDER_RELAXED ) ) {
-      _SMP_Multicast_actions_process();
+  if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
+    bool success;
+
+    success = _Atomic_Compare_exchange_ulong(
+      &cpu_self->message, &message,
+      message & ~SMP_MESSAGE_PERFORM_JOBS, ATOMIC_ORDER_RELAXED,
+      ATOMIC_ORDER_RELAXED
+    );
+
+    if ( success ) {
+      _Per_CPU_Perform_jobs( cpu_self );
     }
   }
+}
 
-  _ISR_Local_enable( isr_level );
+static void _SMP_Issue_action_jobs(
+  const Processor_mask *targets,
+  Per_CPU_Jobs         *jobs,
+  uint32_t              cpu_max
+)
+{
+  uint32_t cpu_index;
+
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
+    if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
+      ISR_lock_Context  lock_context;
+      Per_CPU_Job      *job;
+      Per_CPU_Control  *cpu;
+
+      job = &jobs->Jobs[ cpu_index ];
+      _Atomic_Store_ulong( &job->done, 0, ATOMIC_ORDER_RELAXED );
+      _Assert( job->next == NULL );
+      job->jobs = jobs;
+
+      cpu = _Per_CPU_Get_by_index( cpu_index );
+      _ISR_lock_ISR_disable( &lock_context );
+      _Per_CPU_Acquire( cpu, &lock_context );
+
+      if ( cpu->Jobs.head == NULL ) {
+        cpu->Jobs.head = job;
+      } else {
+        *cpu->Jobs.tail = job;
+      }
+
+      cpu->Jobs.tail = &job->next;
+
+      _Per_CPU_Release( cpu, &lock_context );
+      _ISR_lock_ISR_enable( &lock_context );
+      _SMP_Send_message( cpu_index, SMP_MESSAGE_PERFORM_JOBS );
+    }
+  }
+}
+
+static void _SMP_Wait_for_action_jobs(
+  const Processor_mask *targets,
+  const Per_CPU_Jobs   *jobs,
+  uint32_t              cpu_max,
+  Per_CPU_Control      *cpu_self
+)
+{
+  uint32_t cpu_index;
+
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
+    if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
+      const Per_CPU_Job *job;
+
+      job = &jobs->Jobs[ cpu_index ];
+
+      while ( _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
+        _Per_CPU_Try_perform_jobs( cpu_self );
+      }
+    }
+  }
 }
 
 void _SMP_Multicast_action(
@@ -94,33 +197,27 @@ void _SMP_Multicast_action(
   void                 *arg
 )
 {
-  SMP_Multicast_action node;
-  ISR_lock_Context     lock_context;
-  uint32_t             i;
+  Per_CPU_Jobs     jobs;
+  uint32_t         cpu_max;
+  Per_CPU_Control *cpu_self;
+
+  cpu_max = _SMP_Get_processor_maximum();
+  _Assert( cpu_max <= CPU_MAXIMUM_PROCESSORS );
 
   if ( ! _System_state_Is_up( _System_state_Get() ) ) {
     ( *handler )( arg );
     return;
   }
 
-  if( targets == NULL ) {
+  if ( targets == NULL ) {
     targets = _SMP_Get_online_processors();
   }
 
-  _Chain_Initialize_node( &node.Node );
-  node.handler = handler;
-  node.arg = arg;
-  _Processor_mask_Assign( &node.targets, targets );
-  _Atomic_Store_ulong( &node.done, 0, ATOMIC_ORDER_RELAXED );
+  jobs.handler = handler;
+  jobs.arg = arg;
 
-  _ISR_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
-  _Chain_Prepend_unprotected( &_SMP_Multicast.Actions, &node.Node );
-  _ISR_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
-
-  _SMP_Send_message_multicast( targets, SMP_MESSAGE_MULTICAST_ACTION );
-  _SMP_Multicasts_try_process();
-
-  while ( _Atomic_Load_ulong( &node.done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
-    /* Wait */
-  };
+  cpu_self = _Thread_Dispatch_disable();
+  _SMP_Issue_action_jobs( targets, &jobs, cpu_max );
+  _SMP_Wait_for_action_jobs( targets, &jobs, cpu_max, cpu_self );
+  _Thread_Dispatch_enable( cpu_self );
 }

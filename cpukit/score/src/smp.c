@@ -118,6 +118,7 @@ void _SMP_Handler_initialize( void )
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
     _ISR_lock_Set_name( &cpu->Lock, "Per-CPU" );
+    _ISR_lock_Set_name( &cpu->Jobs.Lock, "Per-CPU Jobs" );
     _ISR_lock_Set_name( &cpu->Watchdog.Lock, "Per-CPU Watchdog" );
     _Chain_Initialize_empty( &cpu->Threads_in_need_for_help );
   }

@@ -74,6 +74,8 @@ struct _Thread_Control;
 
 struct Scheduler_Context;
 
+struct Per_CPU_Job;
+
 /**
  *  @defgroup PerCPU RTEMS Per CPU Information
  *
@@ -495,6 +497,37 @@ typedef struct Per_CPU_Control {
     Atomic_Uintptr before_multitasking_action;
 
     /**
+     * @brief FIFO list of jobs to be performed by this processor.
+     *
+     * @see _SMP_Multicast_action().
+     */
+    struct {
+      /**
+       * @brief Lock to protect the FIFO list of jobs to be performed by this
+       * processor.
+       */
+      ISR_lock_Control Lock;
+
+      /**
+       * @brief Head of the FIFO list of jobs to be performed by this
+       * processor.
+       *
+       * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
+       */
+      struct Per_CPU_Job *head;
+
+      /**
+       * @brief Tail of the FIFO list of jobs to be performed by this
+       * processor.
+       *
+       * This member is only valid if the head is not @c NULL.
+       *
+       * This member is protected by the Per_CPU_Control::Jobs::Lock lock.
+       */
+      struct Per_CPU_Job **tail;
+    } Jobs;
+
+    /**
      * @brief Indicates if the processor has been successfully started via
      * _CPU_SMP_Start_processor().
      */
@@ -709,6 +742,13 @@ bool _Per_CPU_State_wait_for_non_initial_state(
   uint32_t cpu_index,
   uint32_t timeout_in_ns
 );
+
+/**
+ * @brief Performs the jobs of the specified processor.
+ *
+ * @param[in, out] cpu The jobs of this processor will be performed.
+ */
+void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu );
 
 #endif /* defined( RTEMS_SMP ) */
 

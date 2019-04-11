@@ -51,11 +51,11 @@ extern "C" {
 #define SMP_MESSAGE_TEST 0x2UL
 
 /**
- * @brief SMP message to request a multicast action.
+ * @brief SMP message to perform per-processor jobs.
  *
  * @see _SMP_Send_message().
  */
-#define SMP_MESSAGE_MULTICAST_ACTION 0x4UL
+#define SMP_MESSAGE_PERFORM_JOBS 0x4UL
 
 /**
  * @brief SMP message to request a clock tick.
@@ -158,11 +158,6 @@ static inline void _SMP_Set_test_message_handler(
 }
 
 /**
- * @brief Processes all pending multicast actions.
- */
-void _SMP_Multicast_actions_process( void );
-
-/**
  * @brief Interrupt handler for inter-processor interrupts.
  *
  * @return The received message.
@@ -195,8 +190,8 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
       ( *_SMP_Test_message_handler )( cpu_self );
     }
 
-    if ( ( message & SMP_MESSAGE_MULTICAST_ACTION ) != 0 ) {
-      _SMP_Multicast_actions_process();
+    if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
+      _Per_CPU_Perform_jobs( cpu_self );
     }
   }
 
