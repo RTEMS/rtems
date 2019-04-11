@@ -567,34 +567,6 @@ extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
 #endif
 
 #if defined( RTEMS_SMP )
-#define _Per_CPU_ISR_disable_and_acquire( cpu, isr_cookie ) \
-  do { \
-    _ISR_Local_disable( isr_cookie ); \
-    _Per_CPU_Acquire( cpu ); \
-  } while ( 0 )
-#else
-#define _Per_CPU_ISR_disable_and_acquire( cpu, isr_cookie ) \
-  do { \
-    _ISR_Local_disable( isr_cookie ); \
-    (void) ( cpu ); \
-  } while ( 0 )
-#endif
-
-#if defined( RTEMS_SMP )
-#define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
-  do { \
-    _Per_CPU_Release( cpu ); \
-    _ISR_Local_enable( isr_cookie ); \
-  } while ( 0 )
-#else
-#define _Per_CPU_Release_and_ISR_enable( cpu, isr_cookie ) \
-  do { \
-    (void) ( cpu ); \
-    _ISR_Local_enable( isr_cookie ); \
-  } while ( 0 )
-#endif
-
-#if defined( RTEMS_SMP )
 #define _Per_CPU_Acquire_all( isr_cookie ) \
   do { \
     uint32_t ncpus = _SMP_Get_processor_maximum(); \
