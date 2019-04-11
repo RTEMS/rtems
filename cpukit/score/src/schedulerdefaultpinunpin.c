@@ -26,7 +26,7 @@ void _Scheduler_default_Pin_or_unpin(
   (void) node;
   (void) cpu;
 
-  if ( _SMP_Get_processor_count() > 1 ) {
+  if ( _SMP_Get_processor_maximum() > 1 ) {
     _Terminate(
       RTEMS_FATAL_SOURCE_SMP,
       SMP_FATAL_SCHEDULER_PIN_OR_UNPIN_NOT_SUPPORTED

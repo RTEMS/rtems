@@ -79,10 +79,12 @@ static void Clock_driver_timecounter_tick( void )
 #if defined(CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER)
   rtems_clock_tick();
 #elif defined(RTEMS_SMP) && defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
-  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_max;
   uint32_t cpu_index;
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  cpu_max = _SMP_Get_processor_maximum();
+
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );

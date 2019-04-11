@@ -322,7 +322,7 @@ uninitialized =
 /*partmp.h*/    0                                         +
 #endif
 
-/*percpu.h*/    (_SMP_Get_processor_count() * sizeof(Per_CPU_Control))  +
+/*percpu.h*/    (_SMP_Get_processor_maximum() * sizeof(Per_CPU_Control))  +
 
 /*ratemonimpl.h*/ (sizeof _Rate_monotonic_Information)    +
 

@@ -29,7 +29,7 @@ void _TOD_Set(
 {
   struct bintime  tod_as_bintime;
   uint64_t        tod_as_ticks;
-  uint32_t        cpu_count;
+  uint32_t        cpu_max;
   uint32_t        cpu_index;
 
   _Assert( _TOD_Is_owner() );
@@ -38,9 +38,9 @@ void _TOD_Set(
   _Timecounter_Set_clock( &tod_as_bintime, lock_context );
 
   tod_as_ticks = _Watchdog_Ticks_from_timespec( tod );
-  cpu_count = _SMP_Get_processor_count();
+  cpu_max = _SMP_Get_processor_maximum();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control  *cpu;
     Watchdog_Header  *header;
     ISR_lock_Context  lock_context;

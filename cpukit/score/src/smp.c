@@ -53,14 +53,14 @@ static bool _Scheduler_Should_start_processor(
   return assignment->scheduler != NULL;
 }
 
-static void _SMP_Start_processors( uint32_t cpu_count )
+static void _SMP_Start_processors( uint32_t cpu_max )
 {
   uint32_t cpu_index_self;
   uint32_t cpu_index;
 
   cpu_index_self = _SMP_Get_current_processor();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
+  for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
     Per_CPU_Control            *cpu;
     bool                        started;
@@ -107,11 +107,13 @@ static void _SMP_Start_processors( uint32_t cpu_count )
 
 void _SMP_Handler_initialize( void )
 {
-  uint32_t cpu_max = rtems_configuration_get_maximum_processors();
-  uint32_t cpu_count;
+  uint32_t cpu_config_max;
+  uint32_t cpu_max;
   uint32_t cpu_index;
 
-  for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
+  cpu_config_max = rtems_configuration_get_maximum_processors();
+
+  for ( cpu_index = 0 ; cpu_index < cpu_config_max; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     _ISR_lock_Initialize( &cpu->Watchdog.Lock, "Watchdog" );
@@ -124,11 +126,11 @@ void _SMP_Handler_initialize( void )
    * Discover and initialize the secondary cores in an SMP system.
    */
 
-  cpu_count = _CPU_SMP_Initialize();
-  cpu_count = cpu_count < cpu_max ? cpu_count : cpu_max;
-  _SMP_Processor_maximum = cpu_count;
+  cpu_max = _CPU_SMP_Initialize();
+  cpu_max = cpu_max < cpu_config_max ? cpu_max : cpu_config_max;
+  _SMP_Processor_maximum = cpu_max;
 
-  for ( cpu_index = cpu_count ; cpu_index < cpu_max; ++cpu_index ) {
+  for ( cpu_index = cpu_max ; cpu_index < cpu_config_max; ++cpu_index ) {
     const Scheduler_Assignment *assignment;
 
     assignment = _Scheduler_Get_initial_assignment( cpu_index );
@@ -138,23 +140,23 @@ void _SMP_Handler_initialize( void )
     }
   }
 
-  _SMP_Start_processors( cpu_count );
+  _SMP_Start_processors( cpu_max );
 
-  _CPU_SMP_Finalize_initialization( cpu_count );
+  _CPU_SMP_Finalize_initialization( cpu_max );
 }
 
 void _SMP_Request_start_multitasking( void )
 {
   Per_CPU_Control *cpu_self;
-  uint32_t         cpu_count;
+  uint32_t         cpu_max;
   uint32_t         cpu_index;
 
   cpu_self = _Per_CPU_Get();
   _Per_CPU_State_change( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
 
-  cpu_count = _SMP_Get_processor_count();
+  cpu_max = _SMP_Get_processor_maximum();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
@@ -215,13 +217,15 @@ void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
 
 void _SMP_Send_message_broadcast( unsigned long message )
 {
-  uint32_t cpu_count = _SMP_Get_processor_count();
-  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  uint32_t cpu_max;
+  uint32_t cpu_index_self;
   uint32_t cpu_index;
 
   _Assert( _Debug_Is_thread_dispatching_allowed() );
+  cpu_max = _SMP_Get_processor_maximum();
+  cpu_index_self = _SMP_Get_current_processor();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     if (
       cpu_index != cpu_index_self
         && _Processor_mask_Is_set( &_SMP_Online_processors, cpu_index )
@@ -236,10 +240,12 @@ void _SMP_Send_message_multicast(
   unsigned long         message
 )
 {
-  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_max;
   uint32_t cpu_index;
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  cpu_max = _SMP_Get_processor_maximum();
+
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
       _SMP_Send_message( cpu_index, message );
     }
@@ -251,11 +257,14 @@ bool _SMP_Before_multitasking_action_broadcast(
   void               *arg
 )
 {
-  bool done = true;
-  uint32_t cpu_count = _SMP_Get_processor_count();
+  bool     done;
+  uint32_t cpu_max;
   uint32_t cpu_index;
 
-  for ( cpu_index = 0 ; done && cpu_index < cpu_count ; ++cpu_index ) {
+  done = true;
+  cpu_max = _SMP_Get_processor_maximum();
+
+  for ( cpu_index = 0 ; done && cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if (

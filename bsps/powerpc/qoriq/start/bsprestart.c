@@ -67,7 +67,7 @@ static void restart_interrupt(void *arg)
   (void) level;
 
   _SMP_barrier_State_initialize(&bs);
-  _SMP_barrier_Wait(&restart_barrier, &bs, _SMP_Get_processor_count());
+  _SMP_barrier_Wait(&restart_barrier, &bs, _SMP_Get_processor_maximum());
 
   cpu_self_index = rtems_scheduler_get_processor();
   thread_index = cpu_self_index % QORIQ_THREAD_COUNT;

@@ -247,12 +247,12 @@ void bsp_interrupt_vector_enable(rtems_vector_number vector)
     if (enable != NULL) {
       enable[group] |= bit;
     } else {
+      uint32_t cpu_max;
       uint32_t cpu_index;
-      uint32_t cpu_count;
 
-      cpu_count = _SMP_Get_processor_count();
+      cpu_max = _SMP_Get_processor_maximum();
 
-      for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+      for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
         Per_CPU_Control *cpu;
 
         cpu = _Per_CPU_Get_by_index(cpu_index);
@@ -289,12 +289,12 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
     if (enable != NULL) {
       enable[group] &= ~bit;
     } else {
+      uint32_t cpu_max;
       uint32_t cpu_index;
-      uint32_t cpu_count;
 
-      cpu_count = _SMP_Get_processor_count();
+      cpu_max = _SMP_Get_processor_maximum();
 
-      for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+      for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
         Per_CPU_Control *cpu;
 
         cpu = _Per_CPU_Get_by_index(cpu_index);
@@ -357,12 +357,12 @@ void bsp_interrupt_get_affinity(
     enable = riscv_plic_irq_to_cpu[interrupt_index - 1];
 
     if (enable != NULL) {
+      uint32_t cpu_max;
       uint32_t cpu_index;
-      uint32_t cpu_count;
 
-      cpu_count = _SMP_Get_processor_count();
+      cpu_max = _SMP_Get_processor_maximum();
 
-      for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+      for (cpu_index = 0; cpu_index < cpu_max; ++cpu_index) {
         Per_CPU_Control *cpu;
 
         cpu = _Per_CPU_Get_by_index(cpu_index);

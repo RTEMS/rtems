@@ -85,12 +85,13 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
 
 void _Thread_Create_idle( void )
 {
-  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_max;
   uint32_t cpu_index;
 
   _System_state_Set( SYSTEM_STATE_BEFORE_MULTITASKING );
+  cpu_max = _SMP_Get_processor_maximum();
 
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if ( _Per_CPU_Is_processor_online( cpu ) ) {

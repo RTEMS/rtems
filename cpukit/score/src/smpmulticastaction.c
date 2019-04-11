@@ -110,7 +110,7 @@ void _SMP_Multicast_action(
   } else {
     _Processor_mask_Zero( &targets );
 
-    for ( i = 0; i < _SMP_Get_processor_count(); ++i ) {
+    for ( i = 0; i < _SMP_Get_processor_maximum(); ++i ) {
       if ( CPU_ISSET_S( i, setsize, cpus ) ) {
         _Processor_mask_Set( &targets, i );
       }

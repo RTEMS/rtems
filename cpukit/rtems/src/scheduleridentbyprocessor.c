@@ -31,7 +31,7 @@ rtems_status_code rtems_scheduler_ident_by_processor(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if ( cpu_index >= _SMP_Get_processor_count() ) {
+  if ( cpu_index >= _SMP_Get_processor_maximum() ) {
     return RTEMS_INVALID_NAME;
   }
 

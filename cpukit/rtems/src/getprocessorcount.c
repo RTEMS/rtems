@@ -21,5 +21,5 @@
 
 uint32_t rtems_scheduler_get_processor_maximum(void)
 {
-  return _SMP_Get_processor_count();
+  return _SMP_Get_processor_maximum();
 }
