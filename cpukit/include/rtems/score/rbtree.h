@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Structures Associated with the Red-Black Tree Handler
+ * @ingroup RTEMSScoreRBTree
  *
- *  This include file contains all the constants and structures associated
- *  with the Red-Black Tree Handler.
+ * @brief Constants and Structures Associated with the Red-Black Tree Handler
+ *
+ * This include file contains all the constants and structures associated
+ * with the Red-Black Tree Handler.
  */
 
 /*
@@ -27,17 +29,20 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreRBTree Red-Black Tree Handler
+ * @defgroup RTEMSScoreRBTree Red-Black Tree Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  The Red-Black Tree Handler is used to manage sets of entities.  This handler
- *  provides two data structures.  The rbtree Node data structure is included
- *  as the first part of every data structure that will be placed on
- *  a RBTree.  The second data structure is rbtree Control which is used
- *  to manage a set of rbtree Nodes.
+ * @brief Red-Black Tree Handler.
+ *
+ * The Red-Black Tree Handler is used to manage sets of entities.  This handler
+ * provides two data structures.  The rbtree Node data structure is included
+ * as the first part of every data structure that will be placed on
+ * a RBTree.  The second data structure is rbtree Control which is used
+ * to manage a set of rbtree Nodes.
+ *
+ * @{
  */
-/**@{*/
 
 struct RBTree_Control;
 
@@ -76,7 +81,7 @@ typedef RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
  *
  * Do not use this function on nodes which are a part of a tree.
  *
- * @param[in] the_node The node to set off-tree.
+ * @param[out] the_node The node to set off-tree.
  *
  * @see _RBTree_Is_node_off_tree().
  */
@@ -86,13 +91,12 @@ RTEMS_INLINE_ROUTINE void _RBTree_Set_off_tree( RBTree_Node *the_node )
 }
 
 /**
- * @brief Returns true, if this red-black tree node is off-tree, and false
- * otherwise.
+ * @brief Checks if this red-black tree node is off-tree.
  *
- * @param[in] the_node The node to test.
+ * @param the_node The node to test.
  *
  * @retval true The node is not a part of a tree (off-tree).
- * @retval false Otherwise.
+ * @retval false The node is part of a tree.
  *
  * @see _RBTree_Set_off_tree().
  */
@@ -120,7 +124,7 @@ void _RBTree_Insert_color(
  * In debug configurations, the node is set off tree.  In all other
  * configurations, this function does nothing.
  *
- * @param[in] the_node The red-black tree node to initialize.
+ * @param[out] the_node The red-black tree node to initialize.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
 {
@@ -134,9 +138,9 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
 /**
  * @brief Adds a child node to a parent node.
  *
- * @param[in] child The child node.
- * @param[in] parent The parent node.
- * @param[in] link The child node link of the parent node.
+ * @param child The child node.
+ * @param[out] parent The parent node.
+ * @param[out] link The child node link of the parent node.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Add_child(
   RBTree_Node  *child,
@@ -153,10 +157,10 @@ RTEMS_INLINE_ROUTINE void _RBTree_Add_child(
  * @brief Inserts the node into the red-black tree using the specified parent
  * node and link.
  *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] the_node The node to insert.
- * @param[in] parent The parent node.
- * @param[in] link The child node link of the parent node.
+ * @param[in, out] the_rbtree The red-black tree control.
+ * @param[in, out] the_node The node to insert.
+ * @param[out] parent The parent node.
+ * @param[out] link The child node link of the parent node.
  *
  * @code
  * #include <rtems/score/rbtree.h>
@@ -213,14 +217,14 @@ RTEMS_INLINE_ROUTINE void _RBTree_Insert_with_parent(
 /**
  * @brief Extracts (removes) the node from the red-black tree.
  *
- * This function does not set the node off-tree.  In case this is desired, then
+ * This function does not set the node off-tree.  In the case this is desired, then
  * call _RBTree_Set_off_tree() after the extraction.
  *
- * In case the node to extract is not a node of the tree, then this function
+ * In the case the node to extract is not a node of the tree, then this function
  * yields unpredictable results.
  *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] the_node The node to extract.
+ * @param[in, out] the_rbtree The red-black tree control.
+ * @param[out] the_node The node to extract.
  */
 void _RBTree_Extract(
   RBTree_Control *the_rbtree,
@@ -232,10 +236,10 @@ void _RBTree_Extract(
  *
  * The root node may change after insert or extract operations.
  *
- * @param[in] the_rbtree The red-black tree control.
+ * @param the_rbtree The red-black tree control.
  *
- * @retval NULL The tree is empty.
  * @retval root The root node.
+ * @retval NULL The tree is empty.
  *
  * @see _RBTree_Is_root().
  */
@@ -248,6 +252,11 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Root(
 
 /**
  * @brief Returns a reference to the root pointer of the red-black tree.
+ *
+ * @param the_rbtree The red-black tree control.
+ *
+ * @retval pointer Pointer to the root node.
+ * @retval NULL The tree is empty.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Root_reference(
   RBTree_Control *the_rbtree
@@ -258,6 +267,12 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Root_reference(
 
 /**
  * @brief Returns a constant reference to the root pointer of the red-black tree.
+ *
+ * @param the_rbtree The red-black tree control.
+ *
+ * @retval pointer Pointer to the root node.
+ * @retval NULL The tree is empty.
+ */
  */
 RTEMS_INLINE_ROUTINE RBTree_Node * const *_RBTree_Root_const_reference(
   const RBTree_Control *the_rbtree
@@ -273,7 +288,7 @@ RTEMS_INLINE_ROUTINE RBTree_Node * const *_RBTree_Root_const_reference(
  * root node or a node that is not part of a tree.  To test for the root node
  * compare with _RBTree_Root() or use _RBTree_Is_root().
  *
- * @param[in] the_node The node of interest.
+ * @param the_node The node of interest.
  *
  * @retval parent The parent of this node.
  * @retval undefined The node is the root node or not part of a tree.
@@ -286,11 +301,11 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Parent(
 }
 
 /**
- * @brief Return pointer to the left of this node.
+ * @brief Returns pointer to the left of this node.
  *
  * This function returns a pointer to the left node of this node.
  *
- * @param[in] the_node is the node to be operated upon.
+ * @param the_node is the node to be operated upon.
  *
  * @return This method returns the left node on the rbtree.
  */
@@ -304,6 +319,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Left(
 /**
  * @brief Returns a reference to the left child pointer of the red-black tree
  * node.
+ *
+ * @param the_node is the node to be operated upon.
+ *
+ * @return This method returns a reference to the left child pointer on the rbtree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Left_reference(
   RBTree_Node *the_node
@@ -313,11 +332,11 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Left_reference(
 }
 
 /**
- * @brief Return pointer to the right of this node.
+ * @brief Returns pointer to the right of this node.
  *
  * This function returns a pointer to the right node of this node.
  *
- * @param[in] the_node is the node to be operated upon.
+ * @param the_node is the node to be operated upon.
  *
  * @return This method returns the right node on the rbtree.
  */
@@ -331,6 +350,10 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Right(
 /**
  * @brief Returns a reference to the right child pointer of the red-black tree
  * node.
+ *
+ * @param the_node is the node to be operated upon.
+ *
+ * @return This method returns a reference to the right child pointer on the rbtree.
  */
 RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Right_reference(
   RBTree_Node *the_node
@@ -340,12 +363,12 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Right_reference(
 }
 
 /**
- * @brief Is the RBTree empty.
+ * @brief Checks if the RBTree is empty.
  *
  * This function returns true if there are no nodes on @a the_rbtree and
  * false otherwise.
  *
- * @param[in] the_rbtree is the rbtree to be operated upon.
+ * @param the_rbtree is the rbtree to be operated upon.
  *
  * @retval true There are no nodes on @a the_rbtree.
  * @retval false There are nodes on @a the_rbtree.
@@ -358,17 +381,16 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_empty(
 }
 
 /**
- * @brief Returns true if this node is the root node of a red-black tree, and
- * false otherwise.
+ * @brief Checks if this node is the root node of a red-black tree.
  *
  * The root node may change after insert or extract operations.  In case the
  * node is not a node of a tree, then this function yields unpredictable
  * results.
  *
- * @param[in] the_node The node of interest.
+ * @param the_node The node of interest.
  *
- * @retval true The node is the root node.
- * @retval false Otherwise.
+ * @retval true @a the_node is the root node.
+ * @retval false @a the_node is not the root node.
  *
  * @see _RBTree_Root().
  */
@@ -380,9 +402,11 @@ RTEMS_INLINE_ROUTINE bool _RBTree_Is_root(
 }
 
 /**
- * @brief Initialize this RBTree as empty.
+ * @brief Initializes this RBTree as empty.
  *
  * This routine initializes @a the_rbtree to contain zero nodes.
+ *
+ * @param[out] the_rbtree The rbtree to initialize.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
   RBTree_Control *the_rbtree
@@ -395,8 +419,8 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
  * @brief Initializes this red-black tree to contain exactly the specified
  * node.
  *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] the_node The one and only node.
+ * @param[out] the_rbtree The red-black tree control.
+ * @param[out] the_node The one and only node.
  */
 RTEMS_INLINE_ROUTINE void _RBTree_Initialize_one(
   RBTree_Control *the_rbtree,
@@ -414,48 +438,49 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_one(
 /**
  * @brief Returns the minimum node of the red-black tree.
  *
- * @param[in] the_rbtree The red-black tree control.
+ * @param the_rbtree The red-black tree control.
  *
- * @retval NULL The red-black tree is empty.
  * @retval node The minimum node.
+ * @retval NULL The red-black tree is empty.
  */
 RBTree_Node *_RBTree_Minimum( const RBTree_Control *the_rbtree );
 
 /**
  * @brief Returns the maximum node of the red-black tree.
  *
- * @param[in] the_rbtree The red-black tree control.
+ * @param the_rbtree The red-black tree control.
  *
- * @retval NULL The red-black tree is empty.
  * @retval node The maximum node.
+ * @retval NULL The red-black tree is empty.
  */
 RBTree_Node *_RBTree_Maximum( const RBTree_Control *the_rbtree );
 
 /**
  * @brief Returns the predecessor of a node.
  *
- * @param[in] node is the node.
+ * @param node is the node.
  *
- * @retval NULL The predecessor does not exist.  Otherwise it returns
- *         the predecessor node.
+ * @retval node The predecessor node.
+ * @retval NULL The predecessor does not exist.
  */
 RBTree_Node *_RBTree_Predecessor( const RBTree_Node *node );
 
 /**
  * @brief Returns the successor of a node.
  *
- * @param[in] node is the node.
+ * @param node is the node.
  *
- * @retval NULL The successor does not exist.  Otherwise the successor node.
+ * @retval node The successor node.
+ * @retval NULL The successor does not exist.
  */
 RBTree_Node *_RBTree_Successor( const RBTree_Node *node );
 
 /**
  * @brief Replaces a node in the red-black tree without a rebalance.
  *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] victim The victim node.
- * @param[in] replacement The replacement node.
+ * @param[in, out] the_rbtree The red-black tree control.
+ * @param victim The victim node.
+ * @param[out] replacement The replacement node.
  */
 void _RBTree_Replace_node(
   RBTree_Control *the_rbtree,
@@ -466,8 +491,8 @@ void _RBTree_Replace_node(
 /**
  * @brief Inserts the node into the red-black tree.
  *
- * @param the_rbtree The red-black tree control.
- * @param the_node The node to insert.
+ * @param[in, out] the_rbtree The red-black tree control.
+ * @param[out] the_node The node to insert.
  * @param key The key of the node to insert.  This key must be equal to the key
  *   stored in the node to insert.  The separate key parameter is provided for
  *   two reasons.  Firstly, it allows to share the less operator with
@@ -478,7 +503,8 @@ void _RBTree_Replace_node(
  *
  * @retval true The inserted node is the new minimum node according to the
  *   specified less order function.
- * @retval false Otherwise.
+ * @retval false The inserted node is not the new minimum node according to the
+ *   specified less order function.
  */
 RTEMS_INLINE_ROUTINE bool _RBTree_Insert_inline(
   RBTree_Control *the_rbtree,
@@ -567,9 +593,9 @@ RTEMS_INLINE_ROUTINE void *_RBTree_Find_inline(
  * @param the_rbtree The red-black tree control.
  * @param offset The offset to the red-black tree node in the container structure.
  *
- * @retval NULL The red-black tree is empty.
  * @retval container The container of the first node of the specified red-black
  *   tree in postorder.
+ * @retval NULL The red-black tree is empty.
  *
  * @see _RBTree_Postorder_next().
  *
@@ -614,8 +640,8 @@ void *_RBTree_Postorder_first(
  * @param the_node The red-black tree node.  The node must not be NULL.
  * @param offset The offset to the red-black tree node in the container structure.
  *
- * @retval NULL The node is NULL or there is no next node in postorder.
  * @retval container The container of the next node in postorder.
+ * @retval NULL The node is NULL or there is no next node in postorder.
  *
  * @see _RBTree_Postorder_first().
  */
@@ -624,7 +650,7 @@ void *_RBTree_Postorder_next(
   size_t             offset
 );
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
