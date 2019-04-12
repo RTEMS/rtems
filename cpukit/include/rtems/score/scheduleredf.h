@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Data Related to the Manipulation of Threads for the EDF Scheduler
+ * @ingroup RTEMSScoreSchedulerEDF
  *
- *  This include file contains all the constants and structures associated
- *  with the manipulation of threads for the EDF scheduler.
+ * @brief Data Related to the Manipulation of Threads for the EDF Scheduler
+ *
+ * This include file contains all the constants and structures associated
+ * with the manipulation of threads for the EDF scheduler.
  */
 
 /*
@@ -31,11 +33,14 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreSchedulerEDF EDF Scheduler
+ * @defgroup RTEMSScoreSchedulerEDF EDF Scheduler
  *
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief EDF Scheduler
+ *
+ * @{
  */
-/**@{*/
 
 /*
  * Actually the EDF scheduler supports a maximum priority of
@@ -100,14 +105,22 @@ typedef struct {
 } Scheduler_EDF_Node;
 
 /**
- *  @brief Initialize EDF scheduler.
+ * @brief Initializes EDF scheduler.
  *
- *  This routine initializes the EDF scheduler.
+ * This routine initializes the EDF scheduler.
  *
- *  @param[in] scheduler The scheduler instance.
+ * @param[in, out] scheduler The scheduler instance.
  */
 void _Scheduler_EDF_Initialize( const Scheduler_Control *scheduler );
 
+/**
+ * @brief Removes the blocking thread from the ready queue and schedules is only
+ *      again if the thread is executing or the heir thread.
+ *
+ * @param[in, out] scheduler The scheduler for the operation.
+ * @param the_thread The thread to operate upon.
+ * @param[in, out] node The scheduler node for this thread.
+ */
 void _Scheduler_EDF_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -115,14 +128,14 @@ void _Scheduler_EDF_Block(
 );
 
 /**
- *  @brief Sets the heir thread to be the next ready thread
- *  in the rbtree ready queue.
+ * @brief Sets the heir thread to be the next ready thread
+ * in the rbtree ready queue.
  *
- *  This kernel routine sets the heir thread to be the next ready thread
- *  in the rbtree ready queue.
+ * This kernel routine sets the heir thread to be the next ready thread
+ * in the rbtree ready queue.
  *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread being scheduled.
+ * @param[in, out] scheduler The scheduler instance.
+ * @param the_thread The thread being scheduled.
  */
 void _Scheduler_EDF_Schedule(
   const Scheduler_Control *scheduler,
@@ -130,12 +143,12 @@ void _Scheduler_EDF_Schedule(
 );
 
 /**
- *  @brief Initializes an EDF specific scheduler node of @a the_thread.
+ * @brief Initializes an EDF specific scheduler node of @a the_thread.
  *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] node being initialized.
- *  @param[in] the_thread the thread of the node.
- *  @param[in] priority The thread priority.
+ * @param scheduler The scheduler instance.
+ * @param node The node being initialized.
+ * @param the_thread The thread of the node.
+ * @param priority The thread priority.
  */
 void _Scheduler_EDF_Node_initialize(
   const Scheduler_Control *scheduler,
@@ -144,34 +157,80 @@ void _Scheduler_EDF_Node_initialize(
   Priority_Control         priority
 );
 
+/**
+ * @brief Performs an unblocking of the thread.
+ *
+ * @param[in, out] scheduler The scheduler instance.
+ * @param the_thread The unblocking thread.  May be set as new heir.
+ * @param[in, out] node The scheduler node for the thread.
+ */
 void _Scheduler_EDF_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Updates the priority of the scheduler node.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread for the operation.
+ * @param[in, out] node The priority node to update the priority of.
+ */
 void _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Gets the mapped priority map of the priority control.
+ *
+ * @param scheduler Not used in this operation.
+ * @param priority The priority control to get the priority map of.
+ *
+ * @return The mapped priority map of @a priority.
+ */
 Priority_Control _Scheduler_EDF_Map_priority(
   const Scheduler_Control *scheduler,
   Priority_Control         priority
 );
 
+/**
+ * @brief Gets the unmapped priority map of the priority control.
+ *
+ * @param scheduler Not used in this operation.
+ * @param priority The priority control to get the priority map of.
+ *
+ * @return The unmapped priority map of @a priority.
+ */
 Priority_Control _Scheduler_EDF_Unmap_priority(
   const Scheduler_Control *scheduler,
   Priority_Control         priority
 );
 
+/**
+ * @brief Executes a thread yield for the thread.
+ *
+ * @param[in, out] scheduler The scheduler instance.
+ * @param the_thread The thread that performs the yield.
+ * @param[in, out] node The scheduler node for this thread.
+ */
 void _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Releases a EDF job.
+ *
+ * @param scheduler The scheduler instance
+ * @param the_thread The thread
+ * @param[in, out] priority_node The priority node for the operation.
+ * @param deadline The deadline for the job.
+ * @param[in, out] queue_context The thread queue context.
+ */
 void _Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -180,6 +239,14 @@ void _Scheduler_EDF_Release_job(
   Thread_queue_Context    *queue_context
 );
 
+/**
+ * @brief Cancels a job and removes the thread from the queue context.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread for the operation.
+ * @param[in, out] priority_node The corresponding priority node.
+ * @param[in, out] queue_context The thread queue context.
+ */
 void _Scheduler_EDF_Cancel_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -191,7 +258,7 @@ void _Scheduler_EDF_Cancel_job(
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
