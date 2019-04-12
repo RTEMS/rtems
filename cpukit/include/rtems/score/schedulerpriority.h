@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Thread Manipulation with the Priority-Based Scheduler
+ * @ingroup RTEMSScoreSchedulerDPS
  *
- *  This include file contains all the constants and structures associated
- *  with the manipulation of threads for the priority-based scheduler.
+ * @brief Thread Manipulation with the Priority-Based Scheduler
+ *
+ * This include file contains all the constants and structures associated
+ * with the manipulation of threads for the priority-based scheduler.
  */
 
 /*
@@ -31,8 +33,11 @@ extern "C" {
  * @defgroup RTEMSScoreSchedulerDPS Deterministic Priority Scheduler
  *
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Deterministic Priority Scheduler
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  Entry points for the Deterministic Priority Based Scheduler.
@@ -107,10 +112,20 @@ typedef struct {
 
 /**
  * @brief Initializes the priority scheduler.
+ *
  * This routine initializes the priority scheduler.
+ *
+ * @param scheduler The scheduler to initialize.
  */
 void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler );
 
+/**
+ * @brief Blocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread to block.
+ * @param[in, out] node The @a thread's scheduler node.
+ */
 void _Scheduler_priority_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -118,28 +133,53 @@ void _Scheduler_priority_Block(
 );
 
 /**
- *  @brief Sets the heir thread to be the next ready thread.
+ * @brief Sets the heir thread to be the next ready thread.
  *
- *  This kernel routine sets the heir thread to be the next ready thread
- *  by invoking the_scheduler->ready_queue->operations->first().
+ * This kernel routine sets the heir thread to be the next ready thread
+ * by invoking the_scheduler->ready_queue->operations->first().
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread for the operation.
  */
 void _Scheduler_priority_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
 
+/**
+ * @brief Unblocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread to unblock.
+ * @param[in, out] node The @a thread's scheduler node.
+ */
 void _Scheduler_priority_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Updates the priority of the node.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread for the operation.
+ * @param base_node The thread's scheduler node.
+ */
 void _Scheduler_priority_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *base_node
 );
 
+/**
+ * @brief Initializes the node with the given priority.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[out] node The node to initialize.
+ * @param the_thread The thread of the scheduler node.
+ * @param priority The priority for the initialization.
+ */
 void _Scheduler_priority_Node_initialize(
   const Scheduler_Control *scheduler,
   Scheduler_Node          *node,
@@ -147,13 +187,20 @@ void _Scheduler_priority_Node_initialize(
   Priority_Control         priority
 );
 
+/**
+ * @brief Performs the yield of a thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread that performed the yield operation.
+ * @param node The scheduler node of @a the_thread.
+ */
 void _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
