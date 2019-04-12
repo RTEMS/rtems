@@ -1,7 +1,7 @@
 /**
  * @file
  * @ingroup can
- * @brief Gaisler wrapper to OpenCores CAN - driver interface
+ * @brief Driver API for GRLIB wrapper to OpenCores CAN
  */
 
 /*

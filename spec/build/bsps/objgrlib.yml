@@ -21,6 +21,7 @@ install:
   - bsps/include/grlib/b1553brm.h
   - bsps/include/grlib/b1553rt.h
   - bsps/include/grlib/bspcommon.h
+  - bsps/include/grlib/canbtrs.h
   - bsps/include/grlib/canmux.h
   - bsps/include/grlib/cons.h
   - bsps/include/grlib/debug_defs.h
@@ -99,6 +100,7 @@ source:
 - bsps/shared/grlib/btimer/gptimer.c
 - bsps/shared/grlib/btimer/tlib.c
 - bsps/shared/grlib/btimer/tlib_ckinit.c
+- bsps/shared/grlib/can/canbtrs.c
 - bsps/shared/grlib/can/canmux.c
 - bsps/shared/grlib/can/grcan.c
 - bsps/shared/grlib/can/occan.c
