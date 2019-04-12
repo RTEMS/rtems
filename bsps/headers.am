@@ -34,6 +34,7 @@ include_grlib_HEADERS += ../../bsps/include/grlib/apbuart_termios.h
 include_grlib_HEADERS += ../../bsps/include/grlib/b1553brm.h
 include_grlib_HEADERS += ../../bsps/include/grlib/b1553rt.h
 include_grlib_HEADERS += ../../bsps/include/grlib/bspcommon.h
+include_grlib_HEADERS += ../../bsps/include/grlib/canbtrs.h
 include_grlib_HEADERS += ../../bsps/include/grlib/canmux.h
 include_grlib_HEADERS += ../../bsps/include/grlib/cons.h
 include_grlib_HEADERS += ../../bsps/include/grlib/debug_defs.h

@@ -1,6 +1,7 @@
 /**
  * @file
  * @ingroup can
+ * @brief Driver API for the GRLIB GRCAN and GRCANFD controllers
  */
 
 /*
@@ -24,6 +25,8 @@
  *
  * @{
  */
+
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
