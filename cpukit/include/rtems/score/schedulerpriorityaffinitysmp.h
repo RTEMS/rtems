@@ -34,6 +34,8 @@ extern "C" {
  *
  * @ingroup RTEMSScoreSchedulerPrioritySMP
  *
+ * @brief Deterministic Priority Affinity SMP Scheduler
+ *
  * This is an extension of the Deterministic Priority SMP Scheduler. which
  * is an implementation of the global fixed priority scheduler (G-FP). 
  * It adds thread to core affinity support.
@@ -75,15 +77,15 @@ extern "C" {
   }
 
 /**
- *  @brief Initializes per thread scheduler information
+ * @brief Initializes per thread scheduler information.
  *
- *  This routine allocates @a thread->scheduler.
+ * This routine allocates @a thread->scheduler.
  *
- *  @param[in] scheduler points to the scheduler specific information.
- *  @param[in] node is the node the scheduler is allocating
- *             management memory for.
- *  @param[in] the_thread the thread of the node.
- *  @param[in] priority is the thread priority.
+ * @param scheduler Points to the scheduler specific information.
+ * @param[in, out] node The node the scheduler is allocating
+ *            management memory for.
+ * @param the_thread The thread of the node.
+ * @param priority The thread priority.
  */
 void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
@@ -92,36 +94,84 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
   Priority_Control         priority
 );
 
+/**
+ * @brief Blocks a thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] The thread to block.
+ * @param[in, out] node The scheduler node of the thread.
+ */
 void _Scheduler_priority_affinity_SMP_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Unblocks a thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] The thread to unblock.
+ * @param[in, out] node The scheduler node of the thread.
+ */
 void _Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Updates the priority of the node.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread of the node.
+ * @param[in, out] The node to update the priority of.
+ */
 void _Scheduler_priority_affinity_SMP_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Asks for help.
+ *
+ * @param scheduler The scheduler instance to ask for help.
+ * @param the_thread The thread needing help.
+ * @param node The scheduler node.
+ *
+ * @retval true Ask for help was successful.
+ * @retval false Ask for help was not successful.
+ */
 bool _Scheduler_priority_affinity_SMP_Ask_for_help(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Reconsiders help.
+ *
+ * @param scheduler The scheduler instance to reconsider the help
+ *   request.
+ * @param the_thread The thread reconsidering a help request.
+ * @param node The scheduler node.
+ */
 void _Scheduler_priority_affinity_SMP_Reconsider_help_request(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Withdraws node.
+ *
+ * @param scheduler The scheduler instance to withdraw the node.
+ * @param the_thread The thread using the node.
+ * @param node The scheduler node to withdraw.
+ * @param next_state The next thread scheduler state in the case the node is
+ *   scheduled.
+ */
 void _Scheduler_priority_affinity_SMP_Withdraw_node(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -129,22 +179,37 @@ void _Scheduler_priority_affinity_SMP_Withdraw_node(
   Thread_Scheduler_state   next_state
 );
 
+/**
+ * @brief Adds @a idle to @a scheduler.
+ *
+ * @param[in, out] scheduler The scheduler instance to add the processor to.
+ * @param idle The idle thread control.
+ */
 void _Scheduler_priority_affinity_SMP_Add_processor(
   const Scheduler_Control *scheduler,
   Thread_Control          *idle
 );
 
+/**
+ * @brief Removes an idle thread from the given cpu.
+ *
+ * @param scheduler The scheduler instance.
+ * @param cpu The cpu control to remove from @a scheduler.
+ *
+ * @return The idle thread of the processor.
+ */
 Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
   const Scheduler_Control *scheduler,
   struct Per_CPU_Control  *cpu
 );
 
 /** 
- * @brief Set affinity for the priority affinity SMP scheduler.
+ * @brief Sets affinity for the priority affinity SMP scheduler.
  *
- * @param[in] scheduler The scheduler of the thread.
- * @param[in] thread The associated thread.
- * @param[in] affinity The new affinity set.
+ * @param scheduler The scheduler of the thread.
+ * @param[in, out] thread The associated thread.
+ * @param[in, out] node The scheduler node.
+ * @param affinity The new affinity set.
  *
  * @retval true if successful
  * @retval false if unsuccessful
