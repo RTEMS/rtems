@@ -19,6 +19,7 @@
 #include <drvmgr/drvmgr.h>
 #include <grlib/ambapp_bus.h>
 #include <grlib/occan.h>
+#include <grlib/canbtrs.h>
 
 #include <grlib/grlib_impl.h>
 
@@ -185,19 +186,20 @@ typedef struct {
 #define pelican_regs pelican32_regs
 #endif
 
+/* Default sampling point in % */
+#define OCCAN_SAMPLING_POINT 90
 
-#define MAX_TSEG2 7
-#define MAX_TSEG1 15
+/* OCCAN baud-rate paramter boundaries */
+struct grlib_canbtrs_ranges occan_btrs_ranges = {
+	.max_scaler = 64,
+	.has_bpr = 0,
+	.divfactor = 1,
+	.min_tseg1 = 1,
+	.max_tseg1 = 16,
+	.min_tseg2 = 1,
+	.max_tseg2 = 8,
+};
 
-#if 0
-typedef struct {
-	unsigned char brp;
-	unsigned char sjw;
-	unsigned char tseg1;
-	unsigned char tseg2;
-	unsigned char sam;
-} occan_speed_regs;
-#endif
 typedef struct {
 	unsigned char btr0;
 	unsigned char btr1;
@@ -251,7 +253,9 @@ static CANMsg *occan_fifo_claim_get(occan_fifo *fifo);
 static void occan_fifo_clr(occan_fifo *fifo);
 
 /**** Hardware related Interface ****/
-static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result);
+static void convert_timing_to_btrs(
+	struct grlib_canbtrs_timing *t,
+	occan_speed_regs *btrs);
 static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing);
 static void pelican_init(occan_priv *priv);
 static void pelican_open(occan_priv *priv);
@@ -765,6 +769,7 @@ static void pelican_init(occan_priv *priv){
 
 static void pelican_open(occan_priv *priv){
 	int ret;
+	struct grlib_canbtrs_timing timing;
 
 	/* Set defaults */
 	priv->speed = OCCAN_SPEED_250K;
@@ -783,13 +788,19 @@ static void pelican_open(occan_priv *priv){
 	 */
 	WRITE_REG(priv, &priv->regs->clkdiv, (1<<PELICAN_CDR_MODE_BITS) | (DEFAULT_CLKDIV & PELICAN_CDR_DIV));
 
-	ret = occan_calc_speedregs(priv->sys_freq_hz,priv->speed,&priv->timing);
-	if ( ret ){
+	ret = grlib_canbtrs_calc_timing(
+			priv->speed, priv->sys_freq_hz,
+			OCCAN_SAMPLING_POINT, &occan_btrs_ranges,
+			(struct grlib_canbtrs_timing *)&timing);
+	if ( ret ) {
 		/* failed to set speed for this system freq, try with 50K instead */
 		priv->speed = OCCAN_SPEED_50K;
-		occan_calc_speedregs(priv->sys_freq_hz, priv->speed,
-			&priv->timing);
+		grlib_canbtrs_calc_timing(
+			priv->speed, priv->sys_freq_hz,
+			OCCAN_SAMPLING_POINT, &occan_btrs_ranges,
+			(struct grlib_canbtrs_timing *)&timing);
 	}
+	convert_timing_to_btrs(&timing, &priv->timing);
 
 	/* disable all interrupts */
 	WRITE_REG(priv, &priv->regs->inten, 0);
@@ -983,97 +994,13 @@ static void pelican_set_accept(occan_priv *priv, unsigned char *acode, unsigned 
 	WRITE_REG(priv, amask3, amask[3]);
 }
 
-
-/* This function calculates BTR0 and BTR1 values for a given bitrate.
- *
- * Set communication parameters.
- * \param clock_hz OC_CAN Core frequency in Hz.
- * \param rate Requested baud rate in bits/second.
- * \param result Pointer to where resulting BTRs will be stored.
- * \return zero if successful to calculate a baud rate.
- */
-static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result)
+static void convert_timing_to_btrs(
+	struct grlib_canbtrs_timing *t,
+	occan_speed_regs *btrs)
 {
-	int best_error = 1000000000;
-	int error;
-	int best_tseg=0, best_brp=0, brp=0;
-	int tseg=0, tseg1=0, tseg2=0;
-	int sjw = 0;
-	int clock = clock_hz / 2;
-	int sampl_pt = 90;
-
-	if ( (rate<5000) || (rate>1000000) ){
-		/* invalid speed mode */
-		return -1;
-	}
-
-	/* find best match, return -2 if no good reg
-	 * combination is available for this frequency */
-
-	/* some heuristic specials */
-	if (rate > ((1000000 + 500000) / 2))
-		sampl_pt = 75;
-
-	if (rate < ((12500 + 10000) / 2))
-		sampl_pt = 75;
-
-	if (rate < ((100000 + 125000) / 2))
-		sjw = 1;
-
-	/* tseg even = round down, odd = round up */
-	for (tseg = (0 + 0 + 2) * 2;
-	     tseg <= (MAX_TSEG2 + MAX_TSEG1 + 2) * 2 + 1;
-	     tseg++)
-	{
-		brp = clock / ((1 + tseg / 2) * rate) + tseg % 2;
-		if ((brp == 0) || (brp > 64))
-			continue;
-
-		error = rate - clock / (brp * (1 + tseg / 2));
-		if (error < 0)
-		{
-			error = -error;
-		}
-
-		if (error <= best_error)
-		{
-			best_error = error;
-			best_tseg = tseg/2;
-			best_brp = brp-1;
-		}
-	}
-
-	if (best_error && (rate / best_error < 10))
-	{
-		printk("OCCAN: bitrate %d is not possible with %d Hz clock\n\r",rate, clock);
-		return -2;
-	}else if ( !result )
-		return 0; /* nothing to store result in, but a valid bitrate can be calculated */
-
-	tseg2 = best_tseg - (sampl_pt * (best_tseg + 1)) / 100;
-
-	if (tseg2 < 0)
-	{
-		tseg2 = 0;
-	}
-
-	if (tseg2 > MAX_TSEG2)
-	{
-		tseg2 = MAX_TSEG2;
-	}
-
-	tseg1 = best_tseg - tseg2 - 2;
-
-	if (tseg1 > MAX_TSEG1)
-	{
-		tseg1 = MAX_TSEG1;
-		tseg2 = best_tseg - tseg1 - 2;
-	}
-
-	result->btr0 = (sjw<<OCCAN_BUSTIM_SJW_BIT) | (best_brp&OCCAN_BUSTIM_BRP);
-	result->btr1 = (0<<7) | (tseg2<<OCCAN_BUSTIM_TSEG2_BIT) | tseg1;
-
-	return 0;
+	btrs->btr0 = (t->rsj << OCCAN_BUSTIM_SJW_BIT) |
+	             (t->scaler & OCCAN_BUSTIM_BRP);
+	btrs->btr1 = (0<<7) | (t->ps2 << OCCAN_BUSTIM_TSEG2_BIT) | t->ps1;
 }
 
 static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing)
@@ -1441,7 +1368,7 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
 	int ret;
-	occan_speed_regs timing;
+	struct grlib_canbtrs_timing timing;
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 	unsigned int speed;
@@ -1467,7 +1394,11 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 
 			/* get speed rate from argument */
 			speed = (unsigned int)ioarg->buffer;
-			ret = occan_calc_speedregs(can->sys_freq_hz,speed,&timing);
+			/* Calculate default timing register values */
+			ret = grlib_canbtrs_calc_timing(
+				speed, can->sys_freq_hz,
+				OCCAN_SAMPLING_POINT, &occan_btrs_ranges,
+				(struct grlib_canbtrs_timing *)&timing);
 			if ( ret )
 				return  RTEMS_INVALID_NAME; /* EINVAL */
 
@@ -1476,7 +1407,7 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 
 			/* save timing/speed */
 			can->speed = speed;
-			can->timing = timing;
+			convert_timing_to_btrs(&timing, &can->timing);
 			break;
 
 		case OCCAN_IOC_SET_BTRS:
