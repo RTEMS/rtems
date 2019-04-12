@@ -126,15 +126,12 @@ static void call_tests_isr_disabled( SMP_barrier_State *bs )
   broadcast_test_init();
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
-    Per_CPU_Control *cpu_self;
-    ISR_Level        isr_level;
+    ISR_Level isr_level;
 
-    cpu_self = _Thread_Dispatch_disable();
     _ISR_Local_disable( isr_level );
     barrier( bs );
     ( *test_cases[ i ] )();
     _ISR_Local_enable( isr_level );
-    _Thread_Dispatch_enable( cpu_self );
     barrier( bs );
   }
 

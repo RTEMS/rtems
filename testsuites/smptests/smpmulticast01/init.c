@@ -59,14 +59,11 @@ static void multicast_action_irq_disabled(
   void *arg
 )
 {
-  Per_CPU_Control *cpu_self;
   rtems_interrupt_level level;
 
-  cpu_self = _Thread_Dispatch_disable();
   rtems_interrupt_local_disable(level);
   _SMP_Multicast_action(targets, handler, arg);
   rtems_interrupt_local_enable(level);
-  _Thread_Dispatch_enable(cpu_self);
 }
 
 static void multicast_action_dispatch_disabled(
