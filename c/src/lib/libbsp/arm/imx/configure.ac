@@ -37,11 +37,6 @@ RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[copy the FDT blob
 RTEMS_BSPOPTS_SET([CONSOLE_USE_INTERRUPTS],[*],[1])
 RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],[use interrupt driven mode for console devices (used by default)])
 
-RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR],[*qemu*],[1])
-RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR],
-[If defined, then do the clock tick processing on the boot processor on behalf
-of all other processors.])
-
 RTEMS_BSPOPTS_SET([IMX_CCM_IPG_HZ],[*],[67500000])
 RTEMS_BSPOPTS_HELP([IMX_CCM_IPG_HZ],[IPG clock frequency in Hz])
 
