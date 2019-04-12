@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Thread manipulation for the CBS scheduler
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- *  This include file contains all the constants and structures associated
- *  with the manipulation of threads for the CBS scheduler.
+ * @brief Thread manipulation for the CBS scheduler
+ *
+ * This include file contains all the constants and structures associated
+ * with the manipulation of threads for the CBS scheduler.
  */
 
 /*
@@ -33,11 +35,14 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreSchedulerCBS CBS Scheduler
+ * @defgroup RTEMSScoreSchedulerCBS CBS Scheduler
  *
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief CBS Scheduler.
+ *
+ * @{
  */
-/**@{*/
 
 #define SCHEDULER_CBS_MAXIMUM_PRIORITY SCHEDULER_EDF_MAXIMUM_PRIORITY
 
@@ -146,12 +151,28 @@ typedef struct {
  */
 extern Scheduler_CBS_Server _Scheduler_CBS_Server_list[];
 
+/**
+ * @brief Unblocks a thread.
+ *
+ * @param scheduler The scheduler control.
+ * @param the_thread The thread to unblock.
+ * @param node The scheduler node.
+ */
 void _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Releases a job.
+ *
+ * @param scheduler The scheduler for the operation.
+ * @param the_thread The corresponding thread.
+ * @param priority_node The priority node for the operation.
+ * @param deadline The deadline for the job.
+ * @param queue_context The thread queue context.
+ */
 void _Scheduler_CBS_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -160,6 +181,14 @@ void _Scheduler_CBS_Release_job(
   Thread_queue_Context    *queue_context
 );
 
+/**
+ * @brief Cancels a job.
+ *
+ * @param scheduler The scheduler for the operation.
+ * @param the_thread The corresponding thread.
+ * @param priority_node The priority node for the operation.
+ * @param queue_context The thread queue context.
+ */
 void _Scheduler_CBS_Cancel_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -168,20 +197,27 @@ void _Scheduler_CBS_Cancel_job(
 );
 
 /**
- *  @brief _Scheduler_CBS_Initialize
+ * @brief _Scheduler_CBS_Initialize
  *
- *  Initializes the CBS library.
+ * Initializes the CBS library.
  *
- *  @retval status code.
+ * @return SCHEDULER_CBS_OK This method always returns this status.
  */
 int _Scheduler_CBS_Initialize(void);
 
 /**
- *  @brief Attach a task to an already existing server.
+ * @brief Attaches a task to an already existing server.
  *
- *  Attach a task to an already existing server.
+ * Attach a task to an already existing server.
  *
- *  @retval status code.
+ * @param server_id The id of the existing server.
+ * @param task_id The id of the task to attach.
+ *
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is so big
+ *      or there is no thread for this task id.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER The server is not yet initialized.
+ * @retval SCHEDULER_CBS_ERROR_FULL The server already has a task.
  */
 int _Scheduler_CBS_Attach_thread (
   Scheduler_CBS_Server_id server_id,
@@ -189,11 +225,18 @@ int _Scheduler_CBS_Attach_thread (
 );
 
 /**
- *  @brief Detach from the CBS Server.
+ * @brief Detaches from the CBS Server.
  *
- *  Detach from the CBS Server.
+ * Detach from the CBS Server.
  *
- *  @retval status code.
+ * @param server_id The id of the existing server.
+ * @param task_id The id of the task to attach.
+ *
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is to big,
+ *      or the task with this id is not attached to this server or there is
+ *      no thread with this task.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER The server is not yet initialized.
  */
 int _Scheduler_CBS_Detach_thread (
   Scheduler_CBS_Server_id server_id,
@@ -201,20 +244,28 @@ int _Scheduler_CBS_Detach_thread (
 );
 
 /**
- *  @brief Cleanup resources associated to the CBS Library.
+ * @brief Cleans up resources associated to the CBS Library.
  *
- *  Cleanup resources associated to the CBS Library.
+ * Cleanup resources associated to the CBS Library.
  *
- *  @retval status code.
+ * @return This method always returns SCHEDULER_CBS_OK.
  */
 int _Scheduler_CBS_Cleanup (void);
 
 /**
- *  @brief Create a new server with specified parameters.
+ * @brief Creates a new server with specified parameters.
  *
- *  Create a new server with specified parameters.
+ * Create a new server with specified parameters.
  *
- *  @retval status code.
+ * @param params The parameters for the server.
+ * @param budget_overrun_callback The budget overrun for the new server.
+ * @param[out] server_id In the case of success, this parameter contains the
+ *      id of the newly created server.
+ *
+ * @retval SCHEDULER_CBS_OK The operation succeeded.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The given parameters are invalid.
+ * @retval SCHEDULER_CBS_ERROR_FULL The maximum number of servers was already
+ *      created, a new server cannot be created.
  */
 int _Scheduler_CBS_Create_server (
   Scheduler_CBS_Parameters     *params,
@@ -223,25 +274,32 @@ int _Scheduler_CBS_Create_server (
 );
 
 /**
- *  @brief Detach all tasks from a server and destroy it.
+ * @brief Detaches all tasks from a server and destroys it.
  *
- *  Detach all tasks from a server and destroy it.
+ * Detach all tasks from a server and destroy it.
  *
- *  @param[in] server_id is the ID of the server
+ * @param server_id The id of the server to destroy.
  *
- *  @retval status code.
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
 int _Scheduler_CBS_Destroy_server (
   Scheduler_CBS_Server_id server_id
 );
 
 /**
- *  @brief Retrieve the approved budget.
+ * @brief Retrieves the approved budget.
  *
- *  Retrieve the budget that has been approved for the subsequent
- *  server instances.
+ * Retrieve the budget that has been approved for the subsequent
+ * server instances.
  *
- *  @retval status code.
+ * @param server_id The id of the server instance of which the budget is wanted.
+ * @param[out] approved_budget Contains the approved budget after a successful method call.
+ *
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
 int _Scheduler_CBS_Get_approved_budget (
   Scheduler_CBS_Server_id  server_id,
@@ -249,11 +307,16 @@ int _Scheduler_CBS_Get_approved_budget (
 );
 
 /**
- *  @brief Retrieve remaining budget for the current server instance.
+ * @brief Retrieves remaining budget for the current server instance.
  *
- *  Retrieve remaining budget for the current server instance.
+ * Retrieve remaining budget for the current server instance.
  *
- *  @retval status code.
+ * @param server_id The id of the server instance of which the remaining budget is wanted.
+ * @param[out] remaining_budget Contains the remaining budget after a successful method call.
+ *
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
 int _Scheduler_CBS_Get_remaining_budget (
   Scheduler_CBS_Server_id  server_id,
@@ -261,15 +324,17 @@ int _Scheduler_CBS_Get_remaining_budget (
 );
 
 /**
- *  @brief Get relative time info.
+ * @brief Gets relative time info.
  *
- *  Retrieve time info relative to @a server_id. The server status code is returned.
+ * Retrieve time info relative to @a server_id. The server status code is returned.
  *
- *  @param[in] server_id is the server to get the status code from.
- *  @param[in] exec_time is the execution time.
- *  @param[in] abs_time is not apparently used.
+ * @param server_id is the server to get the status code from.
+ * @param[out] exec_time Contains the execution time after a successful method call.
+ * @param abs_time Not apparently used.
  *
- *  @retval status code.
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
 int _Scheduler_CBS_Get_execution_time (
   Scheduler_CBS_Server_id   server_id,
@@ -278,11 +343,16 @@ int _Scheduler_CBS_Get_execution_time (
 );
 
 /**
- *  @brief Retrieve CBS scheduling parameters.
+ * @brief Retrieves CBS scheduling parameters.
  *
- *  Retrieve CBS scheduling parameters.
+ * Retrieve CBS scheduling parameters.
  *
- *  @retval status code.
+ * @param server_id The id of the server to get the scheduling parameters from.
+ * @param[out] params Will contain the scheduling parameters after successful method call.
+ *
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no initialized server with this id.
  */
 int _Scheduler_CBS_Get_parameters (
   Scheduler_CBS_Server_id   server_id,
@@ -290,12 +360,15 @@ int _Scheduler_CBS_Get_parameters (
 );
 
 /**
- *  @brief Get a thread server id.
+ * @brief Gets a thread server id.
  *
- *  Get a thread server id, or SCHEDULER_CBS_ERROR_NOT_FOUND if it is not
- *  attached to any server.
+ * Get a thread server id, or SCHEDULER_CBS_ERROR_NOT_FOUND if it is not
+ * attached to any server.
  *
- *  @retval status code.
+ * @param task_id The id of the task to get the corresponding server.
+ * @param[out] server_id Will contain the server id after successful method call.
+ * @retval SCHEDULER_CBS_OK The operation was successful
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no server with this task attached.
  */
 int _Scheduler_CBS_Get_server_id (
   rtems_id                 task_id,
@@ -303,14 +376,17 @@ int _Scheduler_CBS_Get_server_id (
 );
 
 /**
- *  @brief Set parameters for CBS scheduling.
+ * @brief Sets parameters for CBS scheduling.
  *
- *  Change CBS scheduling parameters.
+ * Change CBS scheduling parameters.
  *
- *  @param[in] server_id is the ID of the server.
- *  @param[in] parameters are the parameters to set.
+ * @param server_id The id of the server.
+ * @param parameters The parameters to set.
  *
- *  @retval status code.
+ * @retval SCHEDULER_CBS_OK The operation was successful.
+ * @retval SCHEDULER_CBS_ERROR_INVALID_PARAMETER The server id is too big or the
+ *      given parameters are invalid.
+ * @retval SCHEDULER_CBS_ERROR_NOSERVER There is no server with this id.
  */
 int _Scheduler_CBS_Set_parameters (
   Scheduler_CBS_Server_id   server_id,
@@ -318,16 +394,23 @@ int _Scheduler_CBS_Set_parameters (
 );
 
 /**
- *  @brief Invoked when a limited time quantum is exceeded.
+ * @brief Invoked when a limited time quantum is exceeded.
  *
- *  This routine is invoked when a limited time quantum is exceeded.
+ * This routine is invoked when a limited time quantum is exceeded.
+ *
+ * @param the_thread The thread that exceeded a limited time quantum.
  */
 void _Scheduler_CBS_Budget_callout(
   Thread_Control *the_thread
 );
 
 /**
- *  @brief Initializes a CBS specific scheduler node of @a the_thread.
+ * @brief Initializes a CBS specific scheduler node of @a the_thread.
+ *
+ * @param scheduler The scheduler control for the operation.
+ * @param[out] node The scheduler node to initalize.
+ * @param the_thread The thread to initialize a scheduler node for.
+ * @param priority The priority for the node.
  */
 void _Scheduler_CBS_Node_initialize(
   const Scheduler_Control *scheduler,
@@ -340,7 +423,7 @@ void _Scheduler_CBS_Node_initialize(
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
