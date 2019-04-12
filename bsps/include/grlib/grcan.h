@@ -40,7 +40,13 @@ struct grcan_regs {
 	volatile unsigned int smask;         /* 0x18 */
 	volatile unsigned int scode;         /* 0x1C */
 
-	volatile unsigned int dummy1[56];    /* 0x20-0xFC */
+	volatile unsigned int dummy1[8];     /* 0x20-0x3C */
+
+	volatile unsigned int nbtr;          /* 0x40 */
+	volatile unsigned int fdbtr;         /* 0x44 */
+	volatile unsigned int tdelay;        /* 0x48 */
+
+	volatile unsigned int dummy1b[45];   /* 0x4C-0xFC */
 
 	volatile unsigned int pimsr;         /* 0x100 */
 	volatile unsigned int pimr;          /* 0x104 */
@@ -85,8 +91,16 @@ struct grcan_timing {
 	unsigned char scaler;
 	unsigned char ps1;
 	unsigned char ps2;
-	unsigned int  rsj;
+	unsigned char rsj;
 	unsigned char bpr;
+};
+
+struct grcanfd_timing {
+	unsigned char scaler;
+	unsigned char ps1;
+	unsigned char ps2;
+	unsigned char sjw;
+	unsigned char resv_zero;
 };
 
 struct grcan_selection {
@@ -100,15 +114,33 @@ struct grcan_filter {
 	unsigned long long code;
 };
 
+#define GRCAN_FDOPT_NOM   0
+#define GRCAN_FDOPT_FDBTR 0x01
+#define GRCAN_FDOPT_FDFRM 0x02
+#define GRCAN_FDMASK (GRCAN_FDOPT_FDBTR | GRCAN_FDOPT_FDFRM)
+
 /* CAN MESSAGE */
 typedef struct {
 	char extended; /* 1= Extended Frame (29-bit id), 0= STD Frame (11-bit id) */
 	char rtr; /* RTR - Remote Transmission Request */
-	char unused; /* unused */
+	char unused; /* Must be 0 to select classic CAN frame */
 	unsigned char len;
 	unsigned char data[8];
 	unsigned int id;
 } CANMsg;
+
+/* CAN-FD MESSAGE */
+typedef struct {
+	uint8_t extended; /* 1= Extended Frame (29-bit id), 0= STD Frame (11-bit id) */
+	uint8_t rtr;      /* RTR - Remote Transmission Request */
+	uint8_t fdopts;   /* Bit1: 1=Switch bit rate. bit2: 1=FD frame. */
+	uint8_t len;      /* 0-8, 12, 16, 20, 24, 32, 48 or 64 bytes */
+	uint32_t id;
+	union {
+		uint64_t dwords[8]; /* up to 64 bytes if FD=1 and len>8 */
+		uint8_t  bytes[64]; /* up to 64 bytes if FD=1 and len>8 */
+	} data;
+} CANFDMsg;
 
 enum {
 	GRCAN_RET_OK            =  0,
@@ -168,6 +200,26 @@ enum grcan_state {
 
 #define GRCAN_RXCTRL_ENABLE 1
 #define GRCAN_RXCTRL_ONGOING 1
+
+#define GRCANFD_NBTR_SCALER 0x00ff0000
+#define GRCANFD_NBTR_PS1 0x0000fc00
+#define GRCANFD_NBTR_PS2 0x000003e0
+#define GRCANFD_NBTR_SJW 0x0000001f
+
+#define GRCANFD_NBTR_SCALER_BIT 16
+#define GRCANFD_NBTR_PS1_BIT 10
+#define GRCANFD_NBTR_PS2_BIT 5
+#define GRCANFD_NBTR_SJW_BIT 0
+
+#define GRCANFD_FDBTR_SCALER 0x00ff0000
+#define GRCANFD_FDBTR_PS1 0x00003c00
+#define GRCANFD_FDBTR_PS2 0x000001e0
+#define GRCANFD_FDBTR_SJW 0x0000000f
+
+#define GRCANFD_FDBTR_SCALER_BIT 16
+#define GRCANFD_FDBTR_PS1_BIT 10
+#define GRCANFD_FDBTR_PS2_BIT 5
+#define GRCANFD_FDBTR_SJW_BIT 0
 
 /* Relative offset of IRQ sources to AMBA Plug&Play */
 #define GRCAN_IRQ_IRQ 0
@@ -233,6 +285,15 @@ extern void *grcan_open_by_name(char *name, int *dev_no);
 extern int grcan_close(void *d);
 
 /*
+ * Returns if CAN hardware device is CANFD capable.
+ *
+ * dev_no:	Device handle
+ * return:	0=Not FD capable, 1=FD capable.
+ *		function returns NULL if device can not be opened.
+ */
+extern int grcan_canfd_capable(void *d);
+
+/*
  * Receive CAN messages
  *
  * Multiple CAN messages can be received in one call.
@@ -254,6 +315,31 @@ extern int grcan_close(void *d);
 extern int grcan_read(
 	void *d,
 	CANMsg *msg,
+	size_t count
+);
+
+/*
+ * Receive CAN messages  (only GRCANFD)
+ *
+ * Multiple CAN messages can be received in one call.
+ *
+ * d: Device handle
+ * msg: Pointer to receive messages
+ * count: Number of CAN messages to receive
+ *
+ * return:
+ *   >=0:                       Number of CAN messages received. This can be
+ *                              less than the count parameter.
+ *   GRCAN_RET_INVARG:          count parameter less than one or NULL msg.
+ *   GRCAN_RET_NOTSTARTED:      Device not in started mode
+ *   GRCAN_RET_TIMEOUT:         Timeout in non-blocking mode
+ *   GRCAN_RET_BUSOFF:          A read was interrupted by a bus-off error.
+ *                              Device has left started mode.
+ *   GRCAN_RET_AHBERR:          Similar to BUSOFF, but was caused by AHB Error.
+ */
+extern int grcanfd_read(
+	void *d,
+	CANFDMsg *msg,
 	size_t count
 );
 
@@ -280,6 +366,31 @@ extern int grcan_write(
 	void *d,
 	CANMsg *msg,
 	size_t count
+);
+
+/*
+ * Transmit CAN-FD complient messages  (only GRCANFD)
+ *
+ * Multiple CAN messages can be transmit in one call.
+ *
+ * d: Device handle
+ * msg: Pointer to messages to transmit
+ * count: Number of CAN messages to transmit
+ *
+ * return:
+ *   >=0:                       Number of CAN messages transmitted. This can be
+ *                              less than the count parameter.
+ *   GRCAN_RET_INVARG:          count parameter less than one.
+ *   GRCAN_RET_NOTSTARTED:      Device not in started mode
+ *   GRCAN_RET_TIMEOUT:         Timeout in non-blocking mode
+ *   GRCAN_RET_BUSOFF:          A write was interrupted by a Bus-off error.
+ *                              Device has left started mode
+ *   GRCAN_RET_AHBERR:          Similar to BUSOFF, but was caused by AHB Error.
+ */
+extern int grcanfd_write(
+	void *d,
+	CANFDMsg *msg,
+	size_t ucount
 );
 
 /*
@@ -322,6 +433,16 @@ extern int grcan_set_selection(void *d, const struct grcan_selection *selection)
 extern int grcan_set_speed(void *d, unsigned int hz);
 /* Set baudrate by specifying the timing registers manually */
 extern int grcan_set_btrs(void *d, const struct grcan_timing *timing);
+
+/* Set the Nominal and FD baudrate by using driver's baud rate timing
+ * calculation routines
+ */
+extern int grcanfd_set_speed(void *d, unsigned int nomhz, unsigned int fdhz);
+/* Set Nominal and FD baudrate by specifying the timing registers manually*/
+extern int grcanfd_set_btrs(
+	void *d,
+	const struct grcanfd_timing *nominal,
+	const struct grcanfd_timing *fd);
 
 /* Functions can be called whenever */
 /* Enable/disable Blocking on reception (until at least one message has been received) */
