@@ -36,6 +36,8 @@ extern "C" {
  *
  * @ingroup RTEMSScoreSchedulerSMP
  *
+ * @brief Deterministic Priority SMP Scheduler
+ *
  * This is an implementation of the global fixed priority scheduler (G-FP).  It
  * uses one ready chain per priority to ensure constant time insert operations.
  * The scheduled chain uses linear insert operations and has at most processor
@@ -102,8 +104,23 @@ typedef struct {
     SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
   }
 
+/**
+ * @brief Initializes the priority SMP scheduler.
+ *
+ * This routine initializes the priority SMP scheduler.
+ *
+ * @param scheduler The scheduler to initialize.
+ */
 void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler );
 
+/**
+ * @brief Initializes the node with the given priority.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[out] node The node to initialize.
+ * @param the_thread The thread of the scheduler node.
+ * @param priority The priority for the initialization.
+ */
 void _Scheduler_priority_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Scheduler_Node          *node,
@@ -111,36 +128,84 @@ void _Scheduler_priority_SMP_Node_initialize(
   Priority_Control         priority
 );
 
+/**
+ * @brief Blocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread to block.
+ * @param[in, out] node The @a thread's scheduler node.
+ */
 void _Scheduler_priority_SMP_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Unblocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread to unblock.
+ * @param[in, out] node The @a thread's scheduler node.
+ */
 void _Scheduler_priority_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Updates the priority of the node.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread for the operation.
+ * @param base_node The thread's scheduler node.
+ */
 void _Scheduler_priority_SMP_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Asks for help operation.
+ *
+ * @param scheduler The scheduler instance to ask for help.
+ * @param the_thread The thread needing help.
+ * @param node The scheduler node.
+ *
+ * @retval true Ask for help was successful.
+ * @retval false Ask for help was not successful.
+ */
 bool _Scheduler_priority_SMP_Ask_for_help(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Reconsiders help operation.
+ *
+ * @param scheduler The scheduler instance to reconsider the help
+ *   request.
+ * @param the_thread The thread reconsidering a help request.
+ * @param node The scheduler node.
+ */
 void _Scheduler_priority_SMP_Reconsider_help_request(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Withdraws node operation.
+ *
+ * @param scheduler The scheduler instance to withdraw the node.
+ * @param the_thread The thread using the node.
+ * @param node The scheduler node to withdraw.
+ * @param next_state The next thread scheduler state in case the node is
+ *   scheduled.
+ */
 void _Scheduler_priority_SMP_Withdraw_node(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -148,16 +213,37 @@ void _Scheduler_priority_SMP_Withdraw_node(
   Thread_Scheduler_state   next_state
 );
 
+/**
+ * @brief Adds @a idle to @a scheduler.
+ *
+ * @param[in, out] scheduler The scheduler instance to add the processor to.
+ * @param idle The idle thrad control.
+ */
 void _Scheduler_priority_SMP_Add_processor(
   const Scheduler_Control *scheduler,
   Thread_Control          *idle
 );
 
+/**
+ * @brief Removes an idle thread from the given cpu.
+ *
+ * @param scheduler The scheduler instance.
+ * @param cpu The cpu control to remove from @a scheduler.
+ *
+ * @return The idle thread of the processor.
+ */
 Thread_Control *_Scheduler_priority_SMP_Remove_processor(
   const Scheduler_Control *scheduler,
   struct Per_CPU_Control  *cpu
 );
 
+/**
+ * @brief Performs the yield of a thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread that performed the yield operation.
+ * @param node The scheduler node of @a the_thread.
+ */
 void _Scheduler_priority_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
