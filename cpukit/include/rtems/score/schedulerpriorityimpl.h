@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreSchedulerDPS
+ *
  * @brief Inlined Routines Associated with the Manipulation of the
  * Priority-Based Scheduling Structures
  *
@@ -32,15 +34,30 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScoreSchedulerDPS
+ *
+ * @{
  */
-/**@{**/
 
+/**
+ * @brief Gets the context of the scheduler.
+ *
+ * @param scheduler The scheduler to get the context of.
+ *
+ * @return The context of the scheduler.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_priority_Context *
   _Scheduler_priority_Get_context( const Scheduler_Control *scheduler )
 {
   return (Scheduler_priority_Context *) _Scheduler_Get_context( scheduler );
 }
 
+/**
+ * @brief Gets the scheduler node of the thread.
+ *
+ * @param the_thread The thread to get the scheduler node of.
+ *
+ * @return The scheduler node of @a the_thread.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_node(
   Thread_Control *the_thread
 )
@@ -48,6 +65,13 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_nod
   return (Scheduler_priority_Node *) _Thread_Scheduler_get_home_node( the_thread );
 }
 
+/**
+ * @brief Gets the priority node of the scheduler node.
+ *
+ * @param node The node to get the priority node of.
+ *
+ * @return The priority node.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
   Scheduler_Node *node
 )
@@ -59,6 +83,9 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
  * @brief Ready queue initialization.
  *
  * This routine initializes @a ready_queues for priority-based scheduling.
+ *
+ * @param[out] ready_queues The ready queue to initialize.
+ * @param maximum_priority The maximum priority in the ready queue.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
   Chain_Control    *ready_queues,
@@ -77,9 +104,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
  *
  * The node is placed as the last element of its priority group.
  *
- * @param[in] node The node to enqueue.
- * @param[in] ready_queue The ready queue.
- * @param[in] bit_map The priority bit map of the scheduler instance.
+ * @param node The node to enqueue.
+ * @param[in, out] ready_queue The ready queue.
+ * @param[out] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
   Chain_Node                     *node,
@@ -98,9 +125,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue(
  *
  * The node is placed as the first element of its priority group.
  *
- * @param[in] node The node to enqueue as first.
- * @param[in] ready_queue The ready queue.
- * @param[in] bit_map The priority bit map of the scheduler instance.
+ * @param node The node to enqueue as first.
+ * @param[in, out] ready_queue The ready queue.
+ * @param[out] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
   Chain_Node                     *node,
@@ -117,9 +144,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_enqueue_first(
 /**
  * @brief Extracts a node from the specified ready queue.
  *
- * @param[in] node The node to extract.
- * @param[in] ready_queue The ready queue.
- * @param[in] bit_map The priority bit map of the scheduler instance.
+ * @param node The node to extract.
+ * @param[in, out] ready_queue The ready queue.
+ * @param[out] bit_map The priority bit map of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
   Chain_Node                     *node,
@@ -138,6 +165,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
   }
 }
 
+/**
+ * @brief Extracts a node from the context of the scheduler.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread of which the node will be extracted.
+ * @param[in, out] The node which preserves the ready queue.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -158,12 +192,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
 }
 
 /**
- * @brief Return a pointer to the first node.
+ * @brief Returns a pointer to the first node.
  *
  * This routines returns a pointer to the first node on @a ready_queues.
  *
- * @param[in] bit_map The priority bit map of the scheduler instance.
- * @param[in] ready_queues The ready queues of the scheduler instance.
+ * @param bit_map The priority bit map of the scheduler instance.
+ * @param ready_queues The ready queues of the scheduler instance.
  *
  * @return This method returns the first node.
  */
@@ -185,6 +219,11 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Scheduler_priority_Ready_queue_first(
  *
  * This kernel routine implements scheduling decision logic
  * for priority-based scheduling.
+ *
+ * @param[in, out] scheduler The scheduler instance.
+ * @param the_thread This parameter is unused.
+ * @param force_dispatch Indicates whether the dispatch happens also if
+ *      the currently executing thread is set as not preemptible.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
   const Scheduler_Control *scheduler,
@@ -209,10 +248,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
  * @brief Updates the specified ready queue data according to the new priority
  * value.
  *
- * @param[in] ready_queue The ready queue.
- * @param[in] new_priority The new priority.
- * @param[in] bit_map The priority bit map of the scheduler instance.
- * @param[in] ready_queues The ready queues of the scheduler instance.
+ * @param[in, out] ready_queue The ready queue.
+ * @param new_priority The new priority.
+ * @param bit_map The priority bit map of the scheduler instance.
+ * @param ready_queues The ready queues of the scheduler instance.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_update(
   Scheduler_priority_Ready_queue *ready_queue,
