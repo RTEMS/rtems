@@ -49,7 +49,7 @@ void  pfree(void *);
 #endif
 
 #ifndef __BOOT__
-BSP_output_char_function_type     BSP_output_char = debug_putc_onlcr;
+BSP_output_char_function_type     BSP_output_char = debug_putc;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 #endif
 
@@ -420,7 +420,7 @@ typedef struct console_io {
 
 extern console_io* curIo;
 
-void debug_putc(const u_char c)
+void debug_putc(const char c)
 {
   curIo->console_io_putc(c);
 }
@@ -526,7 +526,7 @@ void my_puts(const u_char *s)
         char c;
 
         while ( ( c = *s++ ) != '\0' ) {
-				rtems_putc(c);
+				debug_putc_onlcr(c);
         }
 }
 
