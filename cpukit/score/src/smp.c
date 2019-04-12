@@ -253,30 +253,4 @@ void _SMP_Send_message_multicast(
   }
 }
 
-bool _SMP_Before_multitasking_action_broadcast(
-  SMP_Action_handler  handler,
-  void               *arg
-)
-{
-  bool     done;
-  uint32_t cpu_max;
-  uint32_t cpu_index;
-
-  done = true;
-  cpu_max = _SMP_Get_processor_maximum();
-
-  for ( cpu_index = 0 ; done && cpu_index < cpu_max ; ++cpu_index ) {
-    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-
-    if (
-      !_Per_CPU_Is_boot_processor( cpu )
-        && _Per_CPU_Is_processor_online( cpu )
-    ) {
-      done = _SMP_Before_multitasking_action( cpu, handler, arg );
-    }
-  }
-
-  return done;
-}
-
 SMP_Test_message_handler _SMP_Test_message_handler;

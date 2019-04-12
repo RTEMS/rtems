@@ -489,14 +489,6 @@ typedef struct Per_CPU_Control {
     Per_CPU_State state;
 
     /**
-     * @brief Action to be executed by this processor in the
-     * SYSTEM_STATE_BEFORE_MULTITASKING state on behalf of the boot processor.
-     *
-     * @see _SMP_Before_multitasking_action().
-     */
-    Atomic_Uintptr before_multitasking_action;
-
-    /**
      * @brief FIFO list of jobs to be performed by this processor.
      *
      * @see _SMP_Multicast_action().

@@ -260,50 +260,6 @@ void _SMP_Multicast_action(
   void                 *arg
 );
 
-/**
- * @brief Executes a handler with argument on the specified processor on behalf
- * of the boot processor.
- *
- * The calling processor must be the boot processor.  In case the specified
- * processor is not online or not in the
- * PER_CPU_STATE_READY_TO_START_MULTITASKING state, then no action is
- * performed.
- *
- * @param cpu The processor to execute the action.
- * @param handler The handler of the action.
- * @param arg The argument of the action.
- *
- * @retval true The handler executed on the specified processor.
- * @retval false Otherwise.
- *
- * @see _SMP_Before_multitasking_action_broadcast().
- */
-bool _SMP_Before_multitasking_action(
-  Per_CPU_Control    *cpu,
-  SMP_Action_handler  handler,
-  void               *arg
-);
-
-/**
- * @brief Executes a handler with argument on all online processors except the
- * boot processor on behalf of the boot processor.
- *
- * The calling processor must be the boot processor.
- *
- * @param handler The handler of the action.
- * @param arg The argument of the action.
- *
- * @retval true The handler executed on all online processors except the boot
- * processor.
- * @retval false Otherwise.
- *
- * @see _SMP_Before_multitasking_action().
- */
-bool _SMP_Before_multitasking_action_broadcast(
-  SMP_Action_handler  handler,
-  void               *arg
-);
-
 #endif /* defined( RTEMS_SMP ) */
 
 /**

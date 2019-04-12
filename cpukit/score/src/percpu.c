@@ -36,11 +36,6 @@ RTEMS_STATIC_ASSERT(
 
 #if defined(RTEMS_SMP)
 
-typedef struct {
-  SMP_Action_handler handler;
-  void *arg;
-} SMP_Before_multicast_action;
-
 ISR_LOCK_DEFINE( static, _Per_CPU_State_lock, "Per-CPU State" )
 
 static void _Per_CPU_State_acquire( ISR_lock_Context *lock_context )
@@ -51,29 +46,6 @@ static void _Per_CPU_State_acquire( ISR_lock_Context *lock_context )
 static void _Per_CPU_State_release( ISR_lock_Context *lock_context )
 {
   _ISR_lock_Release_and_ISR_enable( &_Per_CPU_State_lock, lock_context );
-}
-
-static void _Per_CPU_State_before_multitasking_action( Per_CPU_Control *cpu )
-{
-  uintptr_t action_value;
-
-  action_value = _Atomic_Load_uintptr(
-    &cpu->before_multitasking_action,
-    ATOMIC_ORDER_ACQUIRE
-  );
-
-  if ( action_value != 0 ) {
-    SMP_Before_multicast_action *action =
-      (SMP_Before_multicast_action *) action_value;
-
-    ( *action->handler )( action->arg );
-
-    _Atomic_Store_uintptr(
-      &cpu->before_multitasking_action,
-      0,
-      ATOMIC_ORDER_RELEASE
-    );
-  }
 }
 
 static void _Per_CPU_State_busy_wait(
@@ -99,7 +71,6 @@ static void _Per_CPU_State_busy_wait(
         state != PER_CPU_STATE_REQUEST_START_MULTITASKING
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
-        _Per_CPU_State_before_multitasking_action( cpu );
         _Per_CPU_Perform_jobs( cpu );
         _CPU_SMP_Processor_event_receive();
         state = cpu->state;
@@ -206,47 +177,6 @@ void _Per_CPU_State_change(
     _SMP_Fatal( SMP_FATAL_SHUTDOWN );
   }
 }
-
-bool _SMP_Before_multitasking_action(
-  Per_CPU_Control    *cpu,
-  SMP_Action_handler  handler,
-  void               *arg
-)
-{
-  bool done;
-
-  _Assert( _Per_CPU_Is_boot_processor( _Per_CPU_Get() ) );
-
-  if ( _Per_CPU_Is_processor_online( cpu ) ) {
-    SMP_Before_multicast_action action = {
-      .handler = handler,
-      .arg = arg
-    };
-    Per_CPU_State expected_state = PER_CPU_STATE_READY_TO_START_MULTITASKING;
-
-    _Atomic_Store_uintptr(
-      &cpu->before_multitasking_action,
-      (uintptr_t) &action,
-      ATOMIC_ORDER_RELEASE
-    );
-
-    _CPU_SMP_Processor_event_broadcast();
-
-    _Per_CPU_State_busy_wait( cpu, expected_state );
-
-    do {
-      done = _Atomic_Load_uintptr(
-        &cpu->before_multitasking_action,
-        ATOMIC_ORDER_ACQUIRE
-      ) == 0;
-    } while ( !done && cpu->state == expected_state );
-  } else {
-    done = false;
-  }
-
-  return done;
-}
-
 #else
   /*
    * On single core systems, we can efficiently directly access a single
