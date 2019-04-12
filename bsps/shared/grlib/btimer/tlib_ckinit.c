@@ -209,15 +209,14 @@ static uint32_t simple_tlib_tc_get_timecount(struct timecounter *tc)
 
 static rtems_device_driver simple_initialize_counter(void)
 {
-  uint64_t frequency;
-  unsigned int tick_hz;
+  unsigned int tick_hz, frequency;
 
-  frequency = 1000000;
+  tlib_get_freq(priv.tlib_tick, &frequency, NULL);
   tick_hz = rtems_configuration_get_microseconds_per_tick();
 
   rtems_timecounter_simple_install(
     &priv.tc_simple,
-    frequency,
+    (uint64_t)frequency,
     tick_hz,
     simple_tlib_tc_get_timecount
   );
