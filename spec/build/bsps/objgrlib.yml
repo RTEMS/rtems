@@ -103,6 +103,7 @@ source:
 - bsps/shared/grlib/can/canbtrs.c
 - bsps/shared/grlib/can/canmux.c
 - bsps/shared/grlib/can/grcan.c
+- bsps/shared/grlib/can/grcanfd.c
 - bsps/shared/grlib/can/occan.c
 - bsps/shared/grlib/can/satcan.c
 - bsps/shared/grlib/drvmgr/ambapp_bus.c
