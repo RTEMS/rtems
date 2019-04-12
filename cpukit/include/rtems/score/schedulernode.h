@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Handles Scheduler Nodes.
+ */
+
 /*
  * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
@@ -19,6 +27,12 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/smplockseq.h>
+
+/**
+ * @addtogroup RTEMSScoreScheduler
+ *
+ * @{
+ */
 
 struct _Thread_Control;
 
@@ -213,5 +227,7 @@ extern const size_t _Scheduler_Node_size;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_SCHEDULERNODE_H */
