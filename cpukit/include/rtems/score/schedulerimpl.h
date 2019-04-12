@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreScheduler
+ *
  * @brief Inlined Routines Associated with the Manipulation of the Scheduler
  *
  * This inline file contains all of the inlined routines associated with
@@ -33,8 +35,9 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScoreScheduler
+ *
+ * @{
  */
-/**@{**/
 
 /**
  * @brief Maps a priority value to support the append indicator.
@@ -67,14 +70,21 @@ extern "C" {
   ( ( ( priority ) & SCHEDULER_PRIORITY_APPEND_FLAG ) != 0 )
 
 /**
- *  @brief Initializes the scheduler to the policy chosen by the user.
+ * @brief Initializes the scheduler to the policy chosen by the user.
  *
- *  This routine initializes the scheduler to the policy chosen by the user
- *  through confdefs, or to the priority scheduler with ready chains by
- *  default.
+ * This routine initializes the scheduler to the policy chosen by the user
+ * through confdefs, or to the priority scheduler with ready chains by
+ * default.
  */
 void _Scheduler_Handler_initialization( void );
 
+/**
+ * @brief Gets the context of the scheduler.
+ *
+ * @param scheduler The scheduler to get the context of.
+ *
+ * @return The context of @a scheduler.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_Context *_Scheduler_Get_context(
   const Scheduler_Control *scheduler
 )
@@ -82,6 +92,13 @@ RTEMS_INLINE_ROUTINE Scheduler_Context *_Scheduler_Get_context(
   return scheduler->context;
 }
 
+/**
+ * @brief Gets the scheduler for the cpu.
+ *
+ * @param cpu The cpu control to get the scheduler of.
+ *
+ * @return The scheduler for the cpu.
+ */
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
   const Per_CPU_Control *cpu
 )
@@ -98,8 +115,8 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
  * @brief Acquires the scheduler instance inside a critical section (interrupts
  * disabled).
  *
- * @param[in] scheduler The scheduler instance.
- * @param[in] lock_context The lock context to use for
+ * @param scheduler The scheduler instance.
+ * @param lock_context The lock context to use for
  *   _Scheduler_Release_critical().
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Acquire_critical(
@@ -122,8 +139,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Acquire_critical(
  * @brief Releases the scheduler instance inside a critical section (interrupts
  * disabled).
  *
- * @param[in] scheduler The scheduler instance.
- * @param[in] lock_context The lock context used for
+ * @param scheduler The scheduler instance.
+ * @param lock_context The lock context used for
  *   _Scheduler_Acquire_critical().
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
@@ -154,7 +171,7 @@ void _Scheduler_Request_ask_for_help( Thread_Control *the_thread );
  * instance should not be forced to carry out too much work for threads on
  * other scheduler instances.
  *
- * @param[in] the_thread The thread in need for help.
+ * @param the_thread The thread in need for help.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help( Thread_Control *the_thread )
 {
@@ -187,7 +204,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help( Thread_Control *the_thread )
  * This kernel routine implements the scheduling decision logic for
  * the scheduler. It does NOT dispatch.
  *
- * @param[in] the_thread The thread which state changed previously.
+ * @param the_thread The thread which state changed previously.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
 {
@@ -208,7 +225,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
  * This routine is invoked when a thread wishes to voluntarily transfer control
  * of the processor to another thread.
  *
- * @param[in] the_thread The yielding thread.
+ * @param the_thread The yielding thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 {
@@ -230,10 +247,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
  *
  * This routine removes @a the_thread from the scheduling decision for
  * the scheduler. The primary task is to remove the thread from the
- * ready queue.  It performs any necessary schedulering operations
+ * ready queue.  It performs any necessary scheduling operations
  * including the selection of a new heir thread.
  *
- * @param[in] the_thread The thread.
+ * @param the_thread The thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 {
@@ -293,7 +310,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
  * This operation must fetch the latest thread priority value for this
  * scheduler instance and update its internal state if necessary.
  *
- * @param[in] the_thread The thread.
+ * @param the_thread The thread.
  *
  * @see _Scheduler_Node_get_priority().
  */
@@ -328,7 +345,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
  * The operation must update the heir and thread dispatch necessary variables
  * in case the set of scheduled threads changes.
  *
- * @param[in] the_thread The thread changing its priority.
+ * @param the_thread The thread changing its priority.
  *
  * @see _Scheduler_Node_get_priority().
  */
@@ -378,7 +395,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread
  * @brief Changes the sticky level of the home scheduler node and propagates a
  * priority change of a thread to the scheduler.
  *
- * @param[in] the_thread The thread changing its priority or sticky level.
+ * @param the_thread The thread changing its priority or sticky level.
  *
  * @see _Scheduler_Update_priority().
  */
@@ -440,8 +457,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Priority_and_sticky_update(
  * _Scheduler_Map_priority( scheduler, p ) ) == p for all p in [0, M].  For
  * other values the mapping is undefined.
  *
- * @param[in] scheduler The scheduler instance.
- * @param[in] priority The user domain thread priority.
+ * @param scheduler The scheduler instance.
+ * @param priority The user domain thread priority.
  *
  * @return The corresponding thread priority of the scheduler domain is returned.
  */
@@ -456,8 +473,8 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Map_priority(
 /**
  * @brief Unmaps a thread priority from the scheduler domain to the user domain.
  *
- * @param[in] scheduler The scheduler instance.
- * @param[in] priority The scheduler domain thread priority.
+ * @param scheduler The scheduler instance.
+ * @param priority The scheduler domain thread priority.
  *
  * @return The corresponding thread priority of the user domain is returned.
  */
@@ -477,10 +494,10 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Unmap_priority(
  * _Scheduler_Node_initialize() before the memory of the scheduler node is
  * destroyed.
  *
- * @param[in] scheduler The scheduler instance.
- * @param[in] node The scheduler node to initialize.
- * @param[in] the_thread The thread of the scheduler node to initialize.
- * @param[in] priority The thread priority.
+ * @param scheduler The scheduler instance.
+ * @param[out] node The scheduler node to initialize.
+ * @param the_thread The thread of the scheduler node to initialize.
+ * @param priority The thread priority.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_initialize(
   const Scheduler_Control *scheduler,
@@ -503,8 +520,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_initialize(
  * The caller must ensure that _Scheduler_Node_destroy() will be called only
  * after a corresponding _Scheduler_Node_initialize().
  *
- * @param[in] scheduler The scheduler instance.
- * @param[in] node The scheduler node to destroy.
+ * @param scheduler The scheduler instance.
+ * @param[out] node The scheduler node to destroy.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
   const Scheduler_Control *scheduler,
@@ -517,10 +534,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
 /**
  * @brief Releases a job of a thread with respect to the scheduler.
  *
- * @param[in] the_thread The thread.
- * @param[in] priority_node The priority node of the job.
- * @param[in] deadline The deadline in watchdog ticks since boot.
- * @param[in] queue_context The thread queue context to provide the set of
+ * @param the_thread The thread.
+ * @param priority_node The priority node of the job.
+ * @param deadline The deadline in watchdog ticks since boot.
+ * @param queue_context The thread queue context to provide the set of
  *   threads for _Thread_Priority_update().
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
@@ -545,9 +562,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
 /**
  * @brief Cancels a job of a thread with respect to the scheduler.
  *
- * @param[in] the_thread The thread.
- * @param[in] priority_node The priority node of the job.
- * @param[in] queue_context The thread queue context to provide the set of
+ * @param the_thread The thread.
+ * @param priority_node The priority node of the job.
+ * @param queue_context The thread queue context to provide the set of
  *   threads for _Thread_Priority_update().
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
@@ -574,6 +591,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
  * implementation to perform any activities required.  For the
  * scheduler which support standard RTEMS features, this includes
  * time-slicing management.
+ *
+ * @param cpu The cpu control for the operation.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Tick( const Per_CPU_Control *cpu )
 {
@@ -588,7 +607,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Tick( const Per_CPU_Control *cpu )
 /**
  * @brief Starts the idle thread for a particular processor.
  *
- * @param[in] scheduler The scheduler instance.
+ * @param scheduler The scheduler instance.
  * @param[in,out] the_thread The idle thread for the processor.
  * @param[in,out] cpu The processor for the idle thread.
  *
@@ -603,6 +622,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
   ( *scheduler->Operations.start_idle )( scheduler, the_thread, cpu );
 }
 
+/**
+ * @brief Checks if the scheduler of the cpu with the given index is equal
+ *      to the given scheduler.
+ *
+ * @param scheduler The scheduler for the comparison.
+ * @param cpu_index The index of the cpu for the comparison.
+ *
+ * @retval true The scheduler of the cpu is the given @a scheduler.
+ * @retval false The scheduler of the cpu is not the given @a scheduler.
+ */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
   const Scheduler_Control *scheduler,
   uint32_t                 cpu_index
@@ -624,6 +653,13 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 #endif
 }
 
+/**
+ * @brief Gets the processors of the scheduler
+ *
+ * @param scheduler The scheduler to get the processors of.
+ *
+ * @return The processors of the context of the given scheduler.
+ */
 RTEMS_INLINE_ROUTINE const Processor_mask *_Scheduler_Get_processors(
   const Scheduler_Control *scheduler
 )
@@ -635,12 +671,33 @@ RTEMS_INLINE_ROUTINE const Processor_mask *_Scheduler_Get_processors(
 #endif
 }
 
+/**
+ * @brief Copies the thread's scheduler's affinity to the given cpuset.
+ *
+ * @param the_thread The thread to get the affinity of its scheduler.
+ * @param cpusetsize The size of @a cpuset.
+ * @param[out] cpuset The cpuset that serves as destination for the copy operation
+ *
+ * @retval true The copy operation was lossless.
+ * @retval false The copy operation was not lossless
+ */
 bool _Scheduler_Get_affinity(
   Thread_Control *the_thread,
   size_t          cpusetsize,
   cpu_set_t      *cpuset
 );
 
+/**
+ * @brief Checks if the affinity is a subset of the online processors.
+ *
+ * @param scheduler This parameter is unused.
+ * @param the_thread This parameter is unused.
+ * @param node This parameter is unused.
+ * @param affinity The processor mask to check.
+ *
+ * @retval true @a affinity is a subset of the online processors.
+ * @retval false @a affinity is not a subset of the online processors.
+ */
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -654,12 +711,31 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   return _Processor_mask_Is_subset( affinity, _SMP_Get_online_processors() );
 }
 
+/**
+ * @brief Sets the thread's scheduler's affinity.
+ *
+ * @param[in, out] the_thread The thread to set the affinity of.
+ * @param cpusetsize The size of @a cpuset.
+ * @param cpuset The cpuset to set the affinity.
+ *
+ * @retval true The operation succeeded.
+ * @retval false The operation did not succeed.
+ */
 bool _Scheduler_Set_affinity(
   Thread_Control  *the_thread,
   size_t           cpusetsize,
   const cpu_set_t *cpuset
 );
 
+/**
+ * @brief Blocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread to block.
+ * @param node The corresponding scheduler node.
+ * @param extract Method to extract the thread.
+ * @param schedule Method for scheduling threads.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -685,6 +761,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
   }
 }
 
+/**
+ * @brief Gets the number of processors of the scheduler.
+ *
+ * @param scheduler The scheduler instance to get the number of processors of.
+ *
+ * @return The number of processors.
+ */
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(
   const Scheduler_Control *scheduler
 )
@@ -700,6 +783,13 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(
 #endif
 }
 
+/**
+ * @brief Builds an object build id.
+ *
+ * @param scheduler_index The index to build the build id out of.
+ *
+ * @return The build id.
+ */
 RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
 {
   return _Objects_Build_id(
@@ -710,6 +800,13 @@ RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
   );
 }
 
+/**
+ * @brief Gets the scheduler index from the given object build id.
+ *
+ * @param id The object build id.
+ *
+ * @return The scheduler index.
+ */
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index_by_id( Objects_Id id )
 {
   uint32_t minimum_id = _Scheduler_Build_id( 0 );
@@ -717,6 +814,13 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index_by_id( Objects_Id id )
   return id - minimum_id;
 }
 
+/**
+ * @brief Gets the scheduler from the given object build id.
+ *
+ * @param id The object build id.
+ *
+ * @return The scheduler to the object id.
+ */
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_id(
   Objects_Id id
 )
@@ -732,6 +836,13 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_id(
   return &_Scheduler_Table[ index ];
 }
 
+/**
+ * @brief Gets the index of the scheduler
+ *
+ * @param scheduler The scheduler to get the index of.
+ *
+ * @return The index of the given scheduler.
+ */
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
   const Scheduler_Control *scheduler
 )
@@ -743,9 +854,9 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
 /**
  * @brief Gets an idle thread from the scheduler instance.
  *
- * @param[in] context The scheduler instance context.
+ * @param context The scheduler instance context.
  *
- * @retval idle An idle thread for use.  This function must always return an
+ * @return idle An idle thread for use.  This function must always return an
  * idle thread.  If none is available, then this is a fatal error.
  */
 typedef Thread_Control *( *Scheduler_Get_idle_thread )(
@@ -755,14 +866,20 @@ typedef Thread_Control *( *Scheduler_Get_idle_thread )(
 /**
  * @brief Releases an idle thread to the scheduler instance for reuse.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] idle The idle thread to release
+ * @param context The scheduler instance context.
+ * @param idle The idle thread to release.
  */
 typedef void ( *Scheduler_Release_idle_thread )(
   Scheduler_Context *context,
   Thread_Control    *idle
 );
 
+/**
+ * @brief Changes the threads state to the given new state.
+ *
+ * @param[out] the_thread The thread to change the state of.
+ * @param new_state The new state for @a the_thread.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
   Thread_Control         *the_thread,
   Thread_Scheduler_state  new_state
@@ -777,6 +894,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
   the_thread->Scheduler.state = new_state;
 }
 
+/**
+ * @brief Sets the scheduler node's idle thread.
+ *
+ * @param[in, out] node The node to receive an idle thread.
+ * @param idle The idle thread control for the operation.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
   Scheduler_Node *node,
   Thread_Control *idle
@@ -792,17 +915,17 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
 }
 
 /**
- * @brief Use an idle thread for this scheduler node.
+ * @brief Uses an idle thread for this scheduler node.
  *
- * A thread those home scheduler node has a sticky level greater than zero may
- * use an idle thread in the home scheduler instance in case it executes
- * currently in another scheduler instance or in case it is in a blocking
+ * A thread whose home scheduler node has a sticky level greater than zero may
+ * use an idle thread in the home scheduler instance in the case it executes
+ * currently in another scheduler instance or in the case it is in a blocking
  * state.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] node The node which wants to use the idle thread.
- * @param[in] cpu The processor for the idle thread.
- * @param[in] get_idle_thread Function to get an idle thread.
+ * @param context The scheduler instance context.
+ * @param[in, out] node The node which wants to use the idle thread.
+ * @param cpu The processor for the idle thread.
+ * @param get_idle_thread Function to get an idle thread.
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
   Scheduler_Context         *context,
@@ -825,15 +948,15 @@ typedef enum {
 } Scheduler_Try_to_schedule_action;
 
 /**
- * @brief Try to schedule this scheduler node.
+ * @brief Tries to schedule this scheduler node.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] node The node which wants to get scheduled.
- * @param[in] idle A potential idle thread used by a potential victim node.
- * @param[in] get_idle_thread Function to get an idle thread.
+ * @param context The scheduler instance context.
+ * @param[in, out] node The node which wants to get scheduled.
+ * @param idle A potential idle thread used by a potential victim node.
+ * @param get_idle_thread Function to get an idle thread.
  *
  * @retval true This node can be scheduled.
- * @retval false Otherwise.
+ * @retval false This node cannot be scheduled.
  */
 RTEMS_INLINE_ROUTINE Scheduler_Try_to_schedule_action
 _Scheduler_Try_to_schedule_node(
@@ -880,11 +1003,11 @@ _Scheduler_Try_to_schedule_node(
 }
 
 /**
- * @brief Release an idle thread using this scheduler node.
+ * @brief Releases an idle thread using this scheduler node.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] node The node which may have an idle thread as user.
- * @param[in] release_idle_thread Function to release an idle thread.
+ * @param context The scheduler instance context.
+ * @param[in, out] node The node which may have an idle thread as user.
+ * @param release_idle_thread Function to release an idle thread.
  *
  * @retval idle The idle thread which used this node.
  * @retval NULL This node had no idle thread as an user.
@@ -908,6 +1031,14 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
   return idle;
 }
 
+/**
+ * @brief Exchanges an idle thread from the scheduler node that uses it
+ *      right now to another scheduler node.
+ *
+ * @param needs_idle The scheduler node that needs an idle thread.
+ * @param uses_idle The scheduler node that used the idle thread.
+ * @param idle The idle thread that is exchanged.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
   Scheduler_Node *needs_idle,
   Scheduler_Node *uses_idle,
@@ -923,15 +1054,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
 }
 
 /**
- * @brief Block this scheduler node.
+ * @brief Blocks this scheduler node.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] thread The thread which wants to get blocked referencing this
+ * @param context The scheduler instance context.
+ * @param[in, out] thread The thread which wants to get blocked referencing this
  *   node.  This is not necessarily the user of this node in case the node
  *   participates in the scheduler helping protocol.
- * @param[in] node The node which wants to get blocked.
- * @param[in] is_scheduled This node is scheduled.
- * @param[in] get_idle_thread Function to get an idle thread.
+ * @param[in, out] node The node which wants to get blocked.
+ * @param is_scheduled This node is scheduled.
+ * @param get_idle_thread Function to get an idle thread.
  *
  * @retval thread_cpu The processor of the thread.  Indicates to continue with
  *   the blocking operation.
@@ -980,6 +1111,14 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
   return thread_cpu;
 }
 
+/**
+ * @brief Discard the idle thread from the scheduler node.
+ *
+ * @param context The scheduler context.
+ * @param[in, out] the_thread The thread for the operation.
+ * @param[in, out] node The scheduler node to discard the idle thread from.
+ * @param release_idle_thread Method to release the idle thread from the context.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
   Scheduler_Context             *context,
   Thread_Control                *the_thread,
@@ -1005,16 +1144,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
 }
 
 /**
- * @brief Unblock this scheduler node.
+ * @brief Unblocks this scheduler node.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] the_thread The thread which wants to get unblocked.
- * @param[in] node The node which wants to get unblocked.
- * @param[in] is_scheduled This node is scheduled.
- * @param[in] release_idle_thread Function to release an idle thread.
+ * @param context The scheduler instance context.
+ * @param[in, out] the_thread The thread which wants to get unblocked.
+ * @param[in, out] node The node which wants to get unblocked.
+ * @param is_scheduled This node is scheduled.
+ * @param release_idle_thread Function to release an idle thread.
  *
  * @retval true Continue with the unblocking operation.
- * @retval false Otherwise.
+ * @retval false Do not continue with the unblocking operation.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
   Scheduler_Context             *context,
@@ -1047,6 +1186,13 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
 }
 #endif
 
+/**
+ * @brief Updates the heir.
+ *
+ * @param[in, out] new_heir The new heir.
+ * @param force_dispatch Indicates whether the dispatch happens also if the
+ *      currently running thread is set as not preemptible.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
   Thread_Control *new_heir,
   bool            force_dispatch
@@ -1071,6 +1217,17 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_heir(
   }
 }
 
+/**
+ * @brief Sets a new scheduler.
+ *
+ * @param new_scheduler The new scheduler to set.
+ * @param[in, out] the_thread The thread for the operations.
+ * @param priority The initial priority for the thread with the new scheduler.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_RESOURCE_IN_USE The thread's wait queue is not empty.
+ * @retval STATUS_UNSATISFIED The new scheduler has no processors.
+ */
 RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   const Scheduler_Control *new_scheduler,
   Thread_Control          *the_thread,
