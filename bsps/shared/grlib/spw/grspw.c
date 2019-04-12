@@ -261,6 +261,7 @@ static void check_rx_errors(GRSPW_DEV *pDev, int ctrl);
 static void grspw_rxnext(GRSPW_DEV *pDev);
 static void grspw_interrupt(void *arg);
 static int grspw_buffer_alloc(GRSPW_DEV *pDev);
+static int grspw_dmatables_alloc(GRSPW_DEV *pDev);
 
 static rtems_device_driver grspw_initialize(
         rtems_device_major_number  major,
@@ -554,6 +555,8 @@ int grspw_device_init(GRSPW_DEV *pDev)
 
 	if (grspw_buffer_alloc(pDev)) 
 		return RTEMS_NO_MEMORY;
+	if (grspw_dmatables_alloc(pDev))
+		return RTEMS_NO_MEMORY;
 
 	/* Create semaphores */
 	status = rtems_semaphore_create(
@@ -681,7 +684,11 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 			(void **)&pDev->ptr_txhbuf0_remote,
 			pDev->txhbufsize * pDev->txbufcnt);
 	}
+	return 0;
+}
 
+static int grspw_dmatables_alloc(GRSPW_DEV *pDev)
+{
 	/* DMA DESCRIPTOR TABLES */
 	if (pDev->bd_dma_area & 1) {
 		/* Address given in remote address */
