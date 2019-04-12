@@ -40,12 +40,26 @@ extern "C" {
  */
 #define SCHEDULER_EDF_PRIO_MSB 0x8000000000000000
 
+/**
+ * @brief Gets the context of the scheduler.
+ *
+ * @param scheduler The scheduler instance.
+ *
+ * @return The scheduler context of @a scheduler.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
   _Scheduler_EDF_Get_context( const Scheduler_Control *scheduler )
 {
   return (Scheduler_EDF_Context *) _Scheduler_Get_context( scheduler );
 }
 
+/**
+ * @brief Gets the scheduler EDF node of the thread.
+ *
+ * @param the_thread The thread to get the scheduler node of.
+ *
+ * @return The EDF scheduler node of @a the_thread.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   Thread_Control *the_thread
 )
@@ -53,6 +67,13 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   return (Scheduler_EDF_Node *) _Thread_Scheduler_get_home_node( the_thread );
 }
 
+/**
+ * @brief Returns the scheduler EDF node for the scheduler node.
+ *
+ * @param node The scheduler node of which the scheduler EDF node is returned.
+ *
+ * @return The corresponding scheduler EDF node.
+ */
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
   Scheduler_Node *node
 )
@@ -60,6 +81,15 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
   return (Scheduler_EDF_Node *) node;
 }
 
+/**
+ * @brief Checks if @a left is less than the priority of the node @a right.
+ *
+ * @param left The priority on the left hand side of the comparison.
+ * @param right The node of which the priority is compared to left.
+ *
+ * @retval true @a left is less than the priority of @a right.
+ * @retval false @a left is greater or equal than the priority of @a right.
+ */
 RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
   const void        *left,
   const RBTree_Node *right
@@ -79,6 +109,15 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
   return prio_left < prio_right;
 }
 
+/**
+ * @brief Checks if @a left is less or equal than the priority of the node @a right.
+ *
+ * @param left The priority on the left hand side of the comparison.
+ * @param right The node of which the priority is compared to left.
+ *
+ * @retval true @a left is less or equal than the priority of @a right.
+ * @retval false @a left is greater than the priority of @a right.
+ */
 RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Priority_less_equal(
   const void        *left,
   const RBTree_Node *right
@@ -98,6 +137,14 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Priority_less_equal(
   return prio_left <= prio_right;
 }
 
+/**
+ * @brief Inserts the scheduler node with the given priority in the ready
+ *      queue of the context.
+ *
+ * @param[in, out] context The context to insert the node in.
+ * @param node The node to be inserted.
+ * @param insert_priority The priority with which the node will be inserted.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
   Scheduler_EDF_Context *context,
   Scheduler_EDF_Node    *node,
@@ -112,6 +159,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
   );
 }
 
+/**
+ * @brief Extracts the scheduler node from the ready queue of the context.
+ *
+ * @param[in, out] context The context to extract the node from.
+ * @param[in, out] node The node to extract.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract(
   Scheduler_EDF_Context *context,
   Scheduler_EDF_Node    *node
@@ -120,6 +173,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract(
   _RBTree_Extract( &context->Ready, &node->Node );
 }
 
+/**
+ * @brief Extracts the node from the context of the given scheduler.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread is not used in this method.
+ * @param[in, out] node The node to be extracted.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -135,6 +195,14 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Extract_body(
   _Scheduler_EDF_Extract( context, the_node );
 }
 
+/**
+ * @brief Schedules the next ready thread as the heir.
+ *
+ * @param scheduler The scheduler instance to schedule the minimum of the context of.
+ * @param the_thread This parameter is not used.
+ * @param force_dispatch Indicates whether the current heir is blocked even if it is
+ *      not set as preemptible.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -154,7 +222,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Schedule_body(
   _Scheduler_Update_heir( node->Base.owner, force_dispatch );
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
