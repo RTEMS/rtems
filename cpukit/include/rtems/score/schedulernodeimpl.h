@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler Node Implementation.
+ */
+
 /*
  * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
@@ -18,6 +26,12 @@
 #include <rtems/score/schedulernode.h>
 #include <rtems/score/priorityimpl.h>
 
+/**
+ * @addtogroup RTEMSScoreScheduler
+ *
+ * @{
+ */
+
 struct _Scheduler_Control;
 
 #ifdef __cplusplus
@@ -36,6 +50,14 @@ extern "C" {
  */
 #define SCHEDULER_PRIORITY_APPEND_FLAG 1
 
+/**
+ * @brief Initializes a node.
+ *
+ * @param scheduler The scheduler for the initialization of @a node.
+ * @param[out] node The node to initialize.
+ * @param the_thread The thread for the initialization of @a node.
+ * @param priority The priority value for @a node.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   const struct _Scheduler_Control *scheduler,
   Scheduler_Node                  *node,
@@ -59,6 +81,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
 #endif
 }
 
+/**
+ * @brief Gets the scheduler of the node.
+ *
+ * @param node The node to get the scheduler of.
+ *
+ * @return The scheduler of the node.
+ */
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Node_get_scheduler(
   const Scheduler_Node *node
 )
@@ -66,6 +95,13 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Node_get_scheduler(
   return _Priority_Get_scheduler( &node->Wait.Priority );
 }
 
+/**
+ * @brief Gets the owner of the node.
+ *
+ * @param node The node to get the owner of.
+ *
+ * @return The owner of the node.
+ */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
   const Scheduler_Node *node
 )
@@ -73,6 +109,13 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
   return node->owner;
 }
 
+/**
+ * @brief Gets the priority of the node.
+ *
+ * @param node The node to get the priority of.
+ *
+ * @return The priority of the node.
+ */
 RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
   Scheduler_Node *node
 )
@@ -95,6 +138,13 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
   return priority;
 }
 
+/**
+ * @brief Sets the priority of the node.
+ *
+ * @param[in, out] node The node to set the priority of.
+ * @param new_priority The new priority for @a node.
+ * @param prepend_it Indicates whether the new priority should be prepended.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
   Scheduler_Node   *node,
   Priority_Control  new_priority,
@@ -116,6 +166,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
 }
 
 #if defined(RTEMS_SMP)
+/**
+ * @brief Gets the user of the node.
+ *
+ * @param node The node to get the user of.
+ *
+ * @return The user of the node.
+ */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
   const Scheduler_Node *node
 )
@@ -123,6 +180,12 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_user(
   return node->user;
 }
 
+/**
+ * @brief Sets the user of the node.
+ *
+ * @param[out] node The node to set the user of.
+ * @param user The new user for @a node.
+ */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_user(
   Scheduler_Node *node,
   Thread_Control *user
@@ -131,6 +194,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_user(
   node->user = user;
 }
 
+/**
+ * @brief Gets the idle thread of the node.
+ *
+ * @param node The node to get the idle thread of.
+ *
+ * @return The idle thread of @a node.
+ */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
   const Scheduler_Node *node
 )
@@ -142,5 +212,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_SCHEDULERNODEIMPL_H */
