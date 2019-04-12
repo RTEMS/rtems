@@ -226,6 +226,25 @@
 #define GAISLER_SPIMASTER    0x0a6
 #define GAISLER_SPISLAVE     0x0a7
 #define GAISLER_GRSRIO       0x0a8
+#define GAISLER_AHBLM2AHB    0x0a9
+#define GAISLER_AHBS2NOC     0x0aa
+#define GAISLER_TCAU         0x0ab
+#define GAISLER_GRTMDYNVCID  0x0ac
+#define GAISLER_RNOCIRQPROP  0x0ad
+#define GAISLER_FTADDR       0x0ae
+#define GAISLER_ATG          0x0b0
+#define GAISLER_DFITRACE     0x0b1
+#define GAISLER_SELFTEST     0x0b2
+#define GAISLER_DFIERRINJ    0x0b3
+#define GAISLER_DFICHECK     0x0b4
+#define GAISLER_GRCANFD      0x0b5
+#define GAISLER_NIM          0x0b6
+#define GAISLER_BANDGAP      0x1f0
+#define GAISLER_MPROT        0x1f1
+#define GAISLER_ADC          0x1f2
+#define GAISLER_BO           0x1f3
+#define GAISLER_DAC          0x1f4
+#define GAISLER_PLL          0x1f6
 
 #define GAISLER_PIPEWRAPPER  0xffa
 #define GAISLER_L2TIME       0xffd  /* internal device: leon2 timer */
