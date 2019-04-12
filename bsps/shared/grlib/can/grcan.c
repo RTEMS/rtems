@@ -18,6 +18,7 @@
 #include <rtems/bspIo.h>
 
 #include <grlib/grcan.h>
+#include <grlib/canbtrs.h>
 #include <drvmgr/drvmgr.h>
 #include <grlib/ambapp_bus.h>
 #include <grlib/ambapp.h>
@@ -179,6 +180,17 @@ static void grcan_interrupt(void *arg);
 #endif
 
 #define NELEM(a) ((int) (sizeof (a) / sizeof (a[0])))
+
+/* GRCAN nominal boundaries for baud-rate paramters */
+static struct grlib_canbtrs_ranges grcan_btrs_ranges = {
+	.max_scaler = 256*8, /* scaler is multiplied by BPR in steps 1,2,4,8 */
+	.has_bpr = 1,
+	.divfactor = 2,
+	.min_tseg1 = 1,
+	.max_tseg1 = 15,
+	.min_tseg2 = 2,
+	.max_tseg2 = 8,
+};
 
 static int grcan_count = 0;
 static struct grcan_priv *priv_tab[GRCAN_COUNT_MAX];
@@ -562,117 +574,6 @@ static unsigned int grcan_hw_txspace(
 	}
 
 	return left / GRCAN_MSG_SIZE - WRAP_AROUND_TX_MSGS;
-}
-
-#define MIN_TSEG1 1
-#define MIN_TSEG2 2
-#define MAX_TSEG1 14
-#define MAX_TSEG2 8
-
-static int grcan_calc_timing(
-	unsigned int baud,	/* The requested BAUD to calculate timing for */
-	unsigned int core_hz,	/* Frequency in Hz of GRCAN Core */
-	unsigned int sampl_pt,
-	struct grcan_timing *timing	/* result is placed here */
-)
-{
-	int best_error = 1000000000;
-	int error;
-	int best_tseg = 0, best_brp = 0, brp = 0;
-	int tseg = 0, tseg1 = 0, tseg2 = 0;
-	int sjw = 1;
-
-	/* Default to 90% */
-	if ((sampl_pt < 50) || (sampl_pt > 99)) {
-		sampl_pt = GRCAN_SAMPLING_POINT;
-	}
-
-	if ((baud < 5000) || (baud > 1000000)) {
-		/* invalid speed mode */
-		return -1;
-	}
-
-	/* find best match, return -2 if no good reg
-	 * combination is available for this frequency
-	 */
-
-	/* some heuristic specials */
-	if (baud > ((1000000 + 500000) / 2))
-		sampl_pt = 75;
-
-	if (baud < ((12500 + 10000) / 2))
-		sampl_pt = 75;
-
-	/* tseg even = round down, odd = round up */
-	for (
-		tseg = (MIN_TSEG1 + MIN_TSEG2 + 2) * 2;
-		tseg <= (MAX_TSEG2 + MAX_TSEG1 + 2) * 2 + 1;
-		tseg++
-	) {
-		brp = core_hz / ((1 + tseg / 2) * baud) + tseg % 2;
-		if (
-			(brp <= 0) ||
-			((brp > 256 * 1) && (brp <= 256 * 2) && (brp & 0x1)) ||
-			((brp > 256 * 2) && (brp <= 256 * 4) && (brp & 0x3)) ||
-			((brp > 256 * 4) && (brp <= 256 * 8) && (brp & 0x7)) ||
-			(brp > 256 * 8)
-		)
-			continue;
-
-		error = baud - core_hz / (brp * (1 + tseg / 2));
-		if (error < 0) {
-			error = -error;
-		}
-
-		if (error <= best_error) {
-			best_error = error;
-			best_tseg = tseg / 2;
-			best_brp = brp - 1;
-		}
-	}
-
-	if (best_error && (baud / best_error < 10)) {
-		return -2;
-	} else if (!timing)
-		return 0;	/* nothing to store result in, but a valid bitrate can be calculated */
-
-	tseg2 = best_tseg - (sampl_pt * (best_tseg + 1)) / 100;
-
-	if (tseg2 < MIN_TSEG2) {
-		tseg2 = MIN_TSEG2;
-	}
-
-	if (tseg2 > MAX_TSEG2) {
-		tseg2 = MAX_TSEG2;
-	}
-
-	tseg1 = best_tseg - tseg2 - 2;
-
-	if (tseg1 > MAX_TSEG1) {
-		tseg1 = MAX_TSEG1;
-		tseg2 = best_tseg - tseg1 - 2;
-	}
-
-	/* Get scaler and BRP from pseudo BRP */
-	if (best_brp <= 256) {
-		timing->scaler = best_brp;
-		timing->bpr = 0;
-	} else if (best_brp <= 256 * 2) {
-		timing->scaler = ((best_brp + 1) >> 1) - 1;
-		timing->bpr = 1;
-	} else if (best_brp <= 256 * 4) {
-		timing->scaler = ((best_brp + 1) >> 2) - 1;
-		timing->bpr = 2;
-	} else {
-		timing->scaler = ((best_brp + 1) >> 3) - 1;
-		timing->bpr = 3;
-	}
-
-	timing->ps1 = tseg1 + 1;
-	timing->ps2 = tseg2;
-	timing->rsj = sjw;
-
-	return 0;
 }
 
 static int grcan_hw_read_try(
@@ -1282,7 +1183,10 @@ void *grcan_open(int dev_no)
 	pDev->sfilter.code = 0x00000000;
 
 	/* Calculate default timing register values */
-	grcan_calc_timing(GRCAN_DEFAULT_BAUD,pDev->corefreq_hz,GRCAN_SAMPLING_POINT,&pDev->config.timing);
+	grlib_canbtrs_calc_timing(
+		GRCAN_DEFAULT_BAUD, pDev->corefreq_hz,
+		GRCAN_SAMPLING_POINT, &grcan_btrs_ranges,
+		(struct grlib_canbtrs_timing *)&pDev->config.timing);
 
 	if ( grcan_alloc_buffers(pDev,1,1) ) {
 		ret = NULL;
@@ -1725,8 +1629,10 @@ int grcan_set_speed(void *d, unsigned int speed)
 		return -1;
 
 	/* get speed rate from argument */
-	ret = grcan_calc_timing(speed, pDev->corefreq_hz, GRCAN_SAMPLING_POINT, &timing);
-	if ( ret )
+	ret = grlib_canbtrs_calc_timing(
+		speed, pDev->corefreq_hz, GRCAN_SAMPLING_POINT,
+		&grcan_btrs_ranges, (struct grlib_canbtrs_timing *)&timing);
+	if (ret)
 		return -2;
 
 	/* save timing/speed */
