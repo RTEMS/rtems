@@ -23,6 +23,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/btimer/tlib_ckinit.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/can/canbtrs.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/can/canmux.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/can/grcan.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/can/grcanfd.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/can/occan.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/can/satcan.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/drvmgr/ambapp_bus.c
