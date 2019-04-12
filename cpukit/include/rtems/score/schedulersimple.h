@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Manipulation of Threads Simple-Priority-Based Ready Queue
+ * @ingroup RTEMSScoreSchedulerSimple
  *
- *  This include file contains all the constants and structures associated
- *  with the manipulation of threads on a simple-priority-based ready queue.
+ * @brief Manipulation of Threads Simple-Priority-Based Ready Queue
+ *
+ * This include file contains all the constants and structures associated
+ * with the manipulation of threads on a simple-priority-based ready queue.
  */
 
 /*
@@ -26,11 +28,14 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreSchedulerSimple Simple Priority Scheduler
+ * @defgroup RTEMSScoreSchedulerSimple Simple Priority Scheduler
  *
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Simple Priority Scheduler
+ *
+ * @{
  */
-/**@{*/
 
 #define SCHEDULER_SIMPLE_MAXIMUM_PRIORITY 255
 
@@ -73,50 +78,82 @@ typedef struct {
 } Scheduler_simple_Context;
 
 /**
- *  @brief Initialize simple scheduler.
+ * @brief Initializes simple scheduler.
  *
- *  This routine initializes the simple scheduler.
+ * This routine initializes the simple scheduler.
+ *
+ * @param scheduler The scheduler to be initialized.
  */
 void _Scheduler_simple_Initialize( const Scheduler_Control *scheduler );
 
 /**
- *  This routine sets the heir thread to be the next ready thread
- *  on the ready queue by getting the first node in the scheduler
- *  information.
+ * @brief Schedules threads.
  *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread causing the scheduling operation.
+ * This routine sets the heir thread to be the next ready thread
+ * on the ready queue by getting the first node in the scheduler
+ * information.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread causing the scheduling operation.
  */
 void _Scheduler_simple_Schedule(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );
 
+/**
+ * @brief Performs the yield of a thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread that performed the yield operation.
+ * @param node The scheduler node of @a the_thread.
+ */
 void _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Blocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread to block.
+ * @param[in, out] node The @a thread's scheduler node.
+ */
 void _Scheduler_simple_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Unblocks the thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread The thread to unblock.
+ * @param[in, out] node The @a thread's scheduler node.
+ */
 void _Scheduler_simple_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
+/**
+ * @brief Updates the priority of the node.
+ *
+ * @param scheduler The scheduler instance.
+ * @param the_thread The thread for the operation.
+ * @param node The thread's scheduler node.
+ */
 void _Scheduler_simple_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
 );
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
