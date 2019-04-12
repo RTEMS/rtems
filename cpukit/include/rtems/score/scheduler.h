@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Structures Associated with the Scheduler
+ * @ingroup RTEMSScoreScheduler
  *
- *  This include file contains all the constants and structures associated
- *  with the scheduler.
+ * @brief Constants and Structures Associated with the Scheduler
+ *
+ * This include file contains all the constants and structures associated
+ * with the scheduler.
  */
 
 /*
@@ -28,14 +30,15 @@ extern "C" {
 struct Per_CPU_Control;
 
 /**
- *  @defgroup RTEMSScoreScheduler Scheduler Handler
+ * @defgroup RTEMSScoreScheduler Scheduler Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality related to managing sets of threads
- *  that are ready for execution.
+ * This handler encapsulates functionality related to managing sets of threads
+ * that are ready for execution.
+ *
+ * @{
  */
-/**@{*/
 
 typedef struct _Scheduler_Control Scheduler_Control;
 
@@ -367,10 +370,10 @@ extern const Scheduler_Control _Scheduler_Table[];
  * @brief Returns the scheduler internal thread priority mapped by
  * SCHEDULER_PRIORITY_MAP().
  *
- * @param[in] scheduler Unused.
- * @param[in] priority The user visible thread priority.
+ * @param scheduler Unused.
+ * @param priority The user visible thread priority.
  *
- * @return priority The scheduler internal thread priority.
+ * @return The scheduler internal thread priority.
  */
 Priority_Control _Scheduler_default_Map_priority(
   const Scheduler_Control *scheduler,
@@ -381,8 +384,8 @@ Priority_Control _Scheduler_default_Map_priority(
  * @brief Returns the user visible thread priority unmapped by
  * SCHEDULER_PRIORITY_UNMAP().
  *
- * @param[in] scheduler Unused.
- * @param[in] priority The scheduler internal thread priority.
+ * @param scheduler Unused.
+ * @param priority The scheduler internal thread priority.
  *
  * @return priority The user visible thread priority.
  */
@@ -395,11 +398,11 @@ Priority_Control _Scheduler_default_Unmap_priority(
   /**
    * @brief Does nothing.
    *
-   * @param[in] scheduler Unused.
-   * @param[in] the_thread Unused.
-   * @param[in] node Unused.
+   * @param scheduler This parameter is unused.
+   * @param the_thread This parameter is unused.
+   * @param node This parameter is unused.
    *
-   * @retval false Always.
+   * @return Always returns false.
    */
   bool _Scheduler_default_Ask_for_help(
     const Scheduler_Control *scheduler,
@@ -410,9 +413,9 @@ Priority_Control _Scheduler_default_Unmap_priority(
   /**
    * @brief Does nothing.
    *
-   * @param[in] scheduler Unused.
-   * @param[in] the_thread Unused.
-   * @param[in] node Unused.
+   * @param scheduler This parameter is unused.
+   * @param the_thread This parameter is unused.
+   * @param node This parameter is unused.
    */
   void _Scheduler_default_Reconsider_help_request(
     const Scheduler_Control *scheduler,
@@ -423,10 +426,10 @@ Priority_Control _Scheduler_default_Unmap_priority(
   /**
    * @brief Does nothing.
    *
-   * @param[in] scheduler Unused.
-   * @param[in] the_thread Unused.
-   * @param[in] node Unused.
-   * @param[in] next_state Unused.
+   * @param scheduler This parameter is unused.
+   * @param the_thread This parameter is unused..
+   * @param node This parameter is unused.
+   * @param next_state This parameter is unused.
    */
   void _Scheduler_default_Withdraw_node(
     const Scheduler_Control *scheduler,
@@ -439,10 +442,10 @@ Priority_Control _Scheduler_default_Unmap_priority(
    * @brief Does nothing in a single processor system, otherwise a fatal error
    * is issued.
    *
-   * @param[in] scheduler Unused.
-   * @param[in] the_thread Unused.
-   * @param[in] node Unused.
-   * @param[in] cpu Unused.
+   * @param scheduler This parameter is unused.
+   * @param the_thread This parameter is unused.
+   * @param node This parameter is unused.
+   * @param cpu This parameter is unused.
    */
   void _Scheduler_default_Pin_or_unpin(
     const Scheduler_Control *scheduler,
@@ -466,8 +469,8 @@ Priority_Control _Scheduler_default_Unmap_priority(
 /**
  * @brief Does nothing.
  *
- * @param[in] scheduler Unused.
- * @param[in] the_thread Unused.
+ * @param scheduler This parameter is unused.
+ * @param the_thread This parameter is unused.
  */
 void _Scheduler_default_Schedule(
   const Scheduler_Control *scheduler,
@@ -477,10 +480,10 @@ void _Scheduler_default_Schedule(
 /**
  * @brief Performs the scheduler base node initialization.
  *
- * @param[in] scheduler Unused.
- * @param[in] node The node to initialize.
- * @param[in] the_thread Unused.
- * @param[in] priority The thread priority.
+ * @param scheduler This parameter is unused.
+ * @param[out] node The node to initialize.
+ * @param the_thread This parameter is unused.
+ * @param priority The thread priority.
  */
 void _Scheduler_default_Node_initialize(
   const Scheduler_Control *scheduler,
@@ -492,8 +495,8 @@ void _Scheduler_default_Node_initialize(
 /**
  * @brief Does nothing.
  *
- * @param[in] scheduler Unused.
- * @param[in] node Unused.
+ * @param scheduler This parameter is unused.
+ * @param node This parameter is unused.
  */
 void _Scheduler_default_Node_destroy(
   const Scheduler_Control *scheduler,
@@ -503,13 +506,13 @@ void _Scheduler_default_Node_destroy(
 /**
  * @brief Does nothing.
  *
- * @param[in] scheduler Unused.
- * @param[in] the_thread Unused.
- * @param[in] priority_node Unused.
- * @param[in] deadline Unused.
- * @param[in] queue_context Unused.
+ * @param scheduler This parameter is unused.
+ * @param the_thread This parameter is unused.
+ * @param priority_node This parameter is unused.
+ * @param deadline This parameter is unused.
+ * @param queue_context This parameter is unused.
  *
- * @retval NULL Always.
+ * @return Always returns NULL.
  */
 void _Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
@@ -522,12 +525,12 @@ void _Scheduler_default_Release_job(
 /**
  * @brief Does nothing.
  *
- * @param[in] scheduler Unused.
- * @param[in] the_thread Unused.
- * @param[in] priority_node Unused.
- * @param[in] queue_context Unused.
+ * @param scheduler This parameter is unused.
+ * @param the_thread This parameter is unused.
+ * @param priority_node This parameter is unused.
+ * @param queue_context This parameter is unused.
  *
- * @retval NULL Always.
+ * @return Always returns NULL.
  */
 void _Scheduler_default_Cancel_job(
   const Scheduler_Control *scheduler,
@@ -542,8 +545,8 @@ void _Scheduler_default_Cancel_job(
  *
  * This routine is invoked as part of processing each clock tick.
  *
- * @param[in] scheduler The scheduler.
- * @param[in] executing An executing thread.
+ * @param scheduler The scheduler.
+ * @param[in, out] executing An executing thread.
  */
 void _Scheduler_default_Tick(
   const Scheduler_Control *scheduler,
@@ -553,9 +556,9 @@ void _Scheduler_default_Tick(
 /**
  * @brief Starts an idle thread.
  *
- * @param[in] scheduler The scheduler.
- * @param[in] the_thread An idle thread.
- * @param[in] cpu This parameter is unused.
+ * @param scheduler This parameter is unused.
+ * @param[in, out] the_thread An idle thread.
+ * @param cpu This parameter is unused.
  */
 void _Scheduler_default_Start_idle(
   const Scheduler_Control *scheduler,
@@ -565,15 +568,17 @@ void _Scheduler_default_Start_idle(
 
 #if defined(RTEMS_SMP)
   /** 
-   * @brief Default implementation of the set affinity scheduler operation.
+   * @brief Checks if the processor set of the scheduler is the subset of the affinity set.
    *
-   * @param[in] scheduler The scheduler instance.
-   * @param[in] thread The associated thread.
-   * @param[in] node The home scheduler node of the associated thread.
-   * @param[in] affinity The new processor affinity set for the thread.
+   * Default implementation of the set affinity scheduler operation.
+   *
+   * @param scheduler This parameter is unused.
+   * @param thread This parameter is unused.
+   * @param node This parameter is unused.
+   * @param affinity The new processor affinity set for the thread.
    *
    * @retval true The processor set of the scheduler is a subset of the affinity set.
-   * @retval false Otherwise.
+   * @retval false The processor set of the scheduler is not a subset of the affinity set.
    */
   bool _Scheduler_default_Set_affinity(
     const Scheduler_Control *scheduler,
@@ -594,7 +599,7 @@ void _Scheduler_default_Start_idle(
  */
 #define PRIORITY_MAXIMUM ( _Scheduler_Table[ 0 ].maximum_priority )
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
