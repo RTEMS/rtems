@@ -121,6 +121,11 @@ typedef struct {
   #define SMP_LOCK_INITIALIZER( name ) { SMP_TICKET_LOCK_INITIALIZER }
 #endif
 
+/**
+ * @brief Initializes the SMP lock with the given name.
+ *
+ * @param[in, out] lock The lock to initialize.
+ */
 static inline void _SMP_lock_Initialize_inline(
   SMP_lock_Control *lock,
   const char       *name
@@ -142,8 +147,8 @@ static inline void _SMP_lock_Initialize_inline(
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param[in] lock The SMP lock control.
- * @param[in] name The name for the SMP lock statistics.  This name must be
+ * @param[in, out] lock The SMP lock control.
+ * @param name The name for the SMP lock statistics.  This name must be
  * persistent throughout the life time of this statistics block.
  */
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
@@ -156,6 +161,11 @@ void _SMP_lock_Initialize(
   _SMP_lock_Initialize_inline( lock, name )
 #endif
 
+/**
+ * @brief Destroys the SMP lock.
+ *
+ * @param[in, out] lock The lock to destroy.
+ */
 static inline void _SMP_lock_Destroy_inline( SMP_lock_Control *lock )
 {
   _SMP_ticket_lock_Destroy( &lock->Ticket_lock );
@@ -167,7 +177,7 @@ static inline void _SMP_lock_Destroy_inline( SMP_lock_Control *lock )
  *
  * Concurrent destruction leads to unpredictable results.
  *
- * @param[in] lock The SMP lock control.
+ * @param[in, out] lock The SMP lock control.
  */
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Destroy( SMP_lock_Control *lock );
@@ -195,6 +205,11 @@ static inline void _SMP_lock_Set_name(
 #endif
 }
 
+/**
+ * @brief Gets my index.
+ *
+ * @return The current processor index + 1.
+ */
 #if defined(RTEMS_DEBUG)
 static inline uint32_t _SMP_lock_Who_am_I( void )
 {
@@ -206,6 +221,12 @@ static inline uint32_t _SMP_lock_Who_am_I( void )
 }
 #endif
 
+/**
+ * @brief Acquires the lock inline.
+ *
+ * @param[in, out] lock The lock to acquire.
+ * @param[in, out] context The lock context.
+ */
 static inline void _SMP_lock_Acquire_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -233,8 +254,8 @@ static inline void _SMP_lock_Acquire_inline(
  * current thread of execution is not interrupted indefinite once it obtained
  * the SMP lock.
  *
- * @param[in] lock The SMP lock control.
- * @param[in] context The local SMP lock context for an acquire and release
+ * @param[in, out] lock The SMP lock control.
+ * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
 void _SMP_lock_Acquire(
@@ -242,6 +263,12 @@ void _SMP_lock_Acquire(
   SMP_lock_Context *context
 );
 
+/**
+ * @brief Releases an SMP lock.
+ *
+ * @param[in, out] lock The lock to release.
+ * @param[in, out] context The lock context.
+ */
 static inline void _SMP_lock_Release_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -264,8 +291,8 @@ static inline void _SMP_lock_Release_inline(
 /**
  * @brief Releases an SMP lock.
  *
- * @param[in] lock The SMP lock control.
- * @param[in] context The local SMP lock context for an acquire and release
+ * @param[in, out] lock The SMP lock control.
+ * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
@@ -278,6 +305,12 @@ void _SMP_lock_Release(
   _SMP_lock_Release_inline( lock, context )
 #endif
 
+/**
+ * @brief Disables interrupts and acquires the SMP lock
+ *
+ * @param[in, out] lock The lock to acquire.
+ * @param[in, out] context The lock context.
+ */
 static inline void _SMP_lock_ISR_disable_and_acquire_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -290,8 +323,8 @@ static inline void _SMP_lock_ISR_disable_and_acquire_inline(
 /**
  * @brief Disables interrupts and acquires the SMP lock.
  *
- * @param[in] lock The SMP lock control.
- * @param[in] context The local SMP lock context for an acquire and release
+ * @param[in, out] lock The SMP lock control.
+ * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
 void _SMP_lock_ISR_disable_and_acquire(
@@ -299,6 +332,12 @@ void _SMP_lock_ISR_disable_and_acquire(
   SMP_lock_Context *context
 );
 
+/**
+ * @brief Releases the SMP lock and enables interrupts.
+ *
+ * @param[in, out] lock The SMP lock to release.
+ * @param[in, out] context The lock context.
+ */
 static inline void _SMP_lock_Release_and_ISR_enable_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -311,8 +350,8 @@ static inline void _SMP_lock_Release_and_ISR_enable_inline(
 /**
  * @brief Releases the SMP lock and enables interrupts.
  *
- * @param[in] lock The SMP lock control.
- * @param[in] context The local SMP lock context for an acquire and release
+ * @param[in, out] lock The SMP lock control.
+ * @param[in, out] context The local SMP lock context for an acquire and release
  * pair.
  */
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
@@ -327,10 +366,12 @@ void _SMP_lock_Release_and_ISR_enable(
 
 #if defined(RTEMS_DEBUG)
 /**
- * @brief Returns true, if the SMP lock is owned by the current processor,
- * otherwise false.
+ * @brief Checks if the SMP lock is owned by the current processor.
  *
- * @param[in] lock The SMP lock control.
+ * @param lock The SMP lock control.
+ *
+ * @retval true The SMP lock is owned by the current processor.
+ * @retval false The SMP lock is not owned by the current processor.
  */
 bool _SMP_lock_Is_owner( const SMP_lock_Control *lock );
 #endif
