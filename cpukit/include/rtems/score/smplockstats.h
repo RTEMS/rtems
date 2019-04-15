@@ -147,7 +147,7 @@ typedef struct {
  * @brief Initializes an SMP lock statistics block.
  *
  * @param[in, out] stats The SMP lock statistics block.
- * @param[in] name The name for the SMP lock statistics.  This name must be
+ * @param name The name for the SMP lock statistics.  This name must be
  * persistent throughout the life time of this statistics block.
  */
 static inline void _SMP_lock_Stats_initialize(
@@ -163,10 +163,17 @@ static inline void _SMP_lock_Stats_initialize(
 /**
  * @brief Destroys an SMP lock statistics block.
  *
- * @param[in] stats The SMP lock statistics block.
+ * @param[out] stats The SMP lock statistics block.
  */
 void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats );
 
+/**
+ * @brief Sets the max section time of the SMP lock statistics block and
+ *      registers it.
+ *
+ * @param[in, out] stats The SMP lock statistics block.
+ * @param max_section_time The max section time for @a stats.
+ */
 void _SMP_lock_Stats_register_or_max_section_time(
   SMP_lock_Stats    *stats,
   CPU_Counter_ticks  max_section_time
@@ -176,6 +183,11 @@ typedef struct {
   CPU_Counter_ticks first;
 } SMP_lock_Stats_acquire_context;
 
+/**
+ * @brief Starts the lock stats for acquire.
+ *
+ * @param[in, out] acquire_context The acquire context.
+ */
 static inline void _SMP_lock_Stats_acquire_begin(
   SMP_lock_Stats_acquire_context *acquire_context
 )
@@ -183,6 +195,14 @@ static inline void _SMP_lock_Stats_acquire_begin(
   acquire_context->first = _CPU_Counter_read();
 }
 
+/**
+ * @brief Ends the lock stats for acquire.
+ *
+ * @param acquire_context The acquire context for the operation.
+ * @param[in, out] stats The stats to modify.
+ * @param[out] stats_context The context for the stats.
+ * @param queue_length The queue length for the stats contention counts.
+ */
 static inline void _SMP_lock_Stats_acquire_end(
   const SMP_lock_Stats_acquire_context *acquire_context,
   SMP_lock_Stats                       *stats,
@@ -216,7 +236,7 @@ static inline void _SMP_lock_Stats_acquire_end(
 /**
  * @brief Updates an SMP lock statistics block during a lock release.
  *
- * @param[in] stats_context The SMP lock statistics context.
+ * @param[in, out] stats_context The SMP lock statistics context.
  */
 static inline void _SMP_lock_Stats_release_update(
   const SMP_lock_Stats_context *stats_context
@@ -244,11 +264,26 @@ typedef struct {
   SMP_lock_Stats *current;
 } SMP_lock_Stats_iteration_context;
 
+/**
+ * @brief Adds a newly initialized node to the iteration context.
+ *
+ * @param[in, out] iteration_context The iteration context for the operation.
+ */
 void _SMP_lock_Stats_iteration_start(
   SMP_lock_Stats_iteration_context *iteration_context
 );
 
-
+/**
+ * @brief Gets the next statistics node, if it is valid.
+ *
+ * @param[in, out] iteration_context The iteration context.
+ * @param[out] snapshot Contains the next node of the stats chain.
+ * @param[in, out] name The name for @a snapshot.
+ * @param name_size The size of @a name.
+ *
+ * @retval true The node is valid.
+ * @retval false The node is not valid.
+ */
 bool _SMP_lock_Stats_iteration_next(
   SMP_lock_Stats_iteration_context *iteration_context,
   SMP_lock_Stats                   *snapshot,
@@ -256,6 +291,11 @@ bool _SMP_lock_Stats_iteration_next(
   size_t                            name_size
 );
 
+/**
+ * @brief Removes a node from the iteration context.
+ *
+ * @param[in, out] iteration_context The iteration context for the operation.
+ */
 void _SMP_lock_Stats_iteration_stop(
   SMP_lock_Stats_iteration_context *iteration_context
 );
@@ -268,7 +308,7 @@ void _SMP_lock_Stats_iteration_stop(
 
 #endif /* !RTEMS_PROFILING */
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
