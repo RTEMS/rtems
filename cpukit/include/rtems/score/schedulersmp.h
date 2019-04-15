@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @brief SMP Scheduler API
- *
  * @ingroup RTEMSScoreSchedulerSMP
+ *
+ * @brief SMP Scheduler API
  */
 
 /*
@@ -34,6 +34,8 @@ extern "C" {
  * @defgroup RTEMSScoreSchedulerSMP SMP Scheduler
  *
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief SMP Scheduler
  *
  * @{
  */
@@ -112,6 +114,13 @@ typedef struct {
   Priority_Control priority;
 } Scheduler_SMP_Node;
 
+/**
+ * @brief Starts an idle thread on the specified cpu.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] idle The idle thread to schedule.
+ * @param[out] cpu The cpu to run the idle thread on.
+ */
 void _Scheduler_SMP_Start_idle(
   const Scheduler_Control *scheduler,
   Thread_Control          *idle,
