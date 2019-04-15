@@ -82,15 +82,20 @@ typedef enum {
   SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS
 } SMP_Fatal_code;
 
+/**
+ * @brief Terminates with the given code.
+ *
+ * @param code The code for the termination.
+ */
 static inline void _SMP_Fatal( SMP_Fatal_code code )
 {
   _Terminate( RTEMS_FATAL_SOURCE_SMP, code );
 }
 
 /**
- *  @brief Initialize SMP Handler
+ * @brief Initializes SMP Handler
  *
- *  This method initialize the SMP Handler.
+ * This method initialize the SMP Handler.
  */
 #if defined( RTEMS_SMP )
   void _SMP_Handler_initialize( void );
@@ -135,7 +140,7 @@ extern Processor_mask _SMP_Online_processors;
  *
  * This function does not return to the caller.
  *
- * @param[in] cpu_self The current processor control.
+ * @param cpu_self The current processor control.
  */
 void _SMP_Start_multitasking_on_secondary_processor(
   Per_CPU_Control *cpu_self
@@ -150,6 +155,8 @@ extern SMP_Test_message_handler _SMP_Test_message_handler;
  *
  * This handler can be used to test the inter-processor interrupt
  * implementation.
+ *
+ * @param handler The handler for text messages.
  */
 static inline void _SMP_Set_test_message_handler(
   SMP_Test_message_handler handler
@@ -159,7 +166,9 @@ static inline void _SMP_Set_test_message_handler(
 }
 
 /**
- * @brief Interrupt handler for inter-processor interrupts.
+ * @brief Interrupts handler for inter-processor interrupts.
+ *
+ * @param[in, out] cpu_self The cpu control for the operation.
  *
  * @return The received message.
  */
@@ -200,42 +209,41 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
 }
 
 /**
- *  @brief Returns true, if the processor with the specified index should be
- *  started.
+ * @brief Checks if the processor with the specified index should be started.
  *
- *  @param[in] cpu_index The processor index.
+ * @param cpu_index The processor index.
  *
- *  @retval true The processor should be started.
- *  @retval false Otherwise.
+ * @retval true The processor should be started.
+ * @retval false The processor should not be started.
  */
 bool _SMP_Should_start_processor( uint32_t cpu_index );
 
 /**
- *  @brief Sends an SMP message to a processor.
+ * @brief Sends an SMP message to a processor.
  *
- *  The target processor may be the sending processor.
+ * The target processor may be the sending processor.
  *
- *  @param[in] cpu_index The target processor of the message.
- *  @param[in] message The message.
+ * @param cpu_index The target processor of the message.
+ * @param message The message to send.
  */
 void _SMP_Send_message( uint32_t cpu_index, unsigned long message );
 
 /**
- *  @brief Sends an SMP message to all other online processors.
+ * @brief Sends an SMP message to all other online processors.
  *
- *  @param[in] message The message.
+ * @param message The message to send.
  */
 void _SMP_Send_message_broadcast(
   unsigned long message
 );
 
 /**
- *  @brief Sends an SMP message to a set of processors.
+ * @brief Sends an SMP message to a set of processors.
  *
- *  The sending processor may be part of the set.
+ * The sending processor may be part of the set.
  *
- *  @param[in] targets The set of processors to send the message.
- *  @param[in] message The message.
+ * @param targets The set of processors to send the message.
+ * @param message The message to send.
  */
 void _SMP_Send_message_multicast(
   const Processor_mask *targets,
@@ -287,6 +295,11 @@ void _SMP_Multicast_action(
     do { } while ( 0 )
 #endif
 
+/**
+ * @brief Gets all online processors
+ *
+ * @return The processor mask with all online processors.
+ */
 RTEMS_INLINE_ROUTINE const Processor_mask *_SMP_Get_online_processors( void )
 {
 #if defined(RTEMS_SMP)
