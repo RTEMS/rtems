@@ -52,11 +52,11 @@ typedef struct {
   }
 
 /**
- * @brief Initializes an SMP ticket lock.
+ * @brief Initializes the SMP ticket lock.
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param[in] lock The SMP ticket lock control.
+ * @param[in, out] lock The SMP ticket lock control.
  */
 static inline void _SMP_ticket_lock_Initialize(
   SMP_ticket_lock_Control *lock
@@ -67,17 +67,24 @@ static inline void _SMP_ticket_lock_Initialize(
 }
 
 /**
- * @brief Destroys an SMP ticket lock.
+ * @brief Destroys the SMP ticket lock.
  *
  * Concurrent destruction leads to unpredictable results.
  *
- * @param[in] lock The SMP ticket lock control.
+ * @param lock The SMP ticket lock control.
  */
 static inline void _SMP_ticket_lock_Destroy( SMP_ticket_lock_Control *lock )
 {
   (void) lock;
 }
 
+/**
+ * @brief Acquires the SMP ticket lock.
+ *
+ * @param[in, out] lock The lock to acquire.
+ * @param stats The SMP lock statistics.
+ * @param[out] stats_context The context for the statistics.
+ */
 static inline void _SMP_ticket_lock_Do_acquire(
   SMP_ticket_lock_Control *lock
 #if defined(RTEMS_PROFILING)
@@ -143,6 +150,12 @@ static inline void _SMP_ticket_lock_Do_acquire(
     _SMP_ticket_lock_Do_acquire( lock )
 #endif
 
+/**
+ * @brief Releases the SMP ticket lock.
+ *
+ * @param[in, out] lock The SMP ticket lock to release.
+ * @param[out] stats_context The SMP lock statistics context.
+ */
 static inline void _SMP_ticket_lock_Do_release(
   SMP_ticket_lock_Control *lock
 #if defined(RTEMS_PROFILING)
@@ -176,7 +189,7 @@ static inline void _SMP_ticket_lock_Do_release(
     _SMP_ticket_lock_Do_release( lock )
 #endif
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
