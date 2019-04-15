@@ -104,11 +104,11 @@ typedef struct {
 #define SMP_MCS_LOCK_INITIALIZER { { ATOMIC_INITIALIZER_UINTPTR( 0 ) } }
 
 /**
- * @brief Initializes an SMP MCS lock.
+ * @brief Initializes the SMP MCS lock.
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param lock The SMP MCS lock control.
+ * @param[in, out] lock The SMP MCS lock control.
  */
 static inline void _SMP_MCS_lock_Initialize( SMP_MCS_lock_Control *lock )
 {
@@ -116,17 +116,24 @@ static inline void _SMP_MCS_lock_Initialize( SMP_MCS_lock_Control *lock )
 }
 
 /**
- * @brief Destroys an SMP MCS lock.
+ * @brief Destroys the SMP MCS lock.
  *
  * Concurrent destruction leads to unpredictable results.
  *
- * @param lock The SMP MCS lock control.
+ * @param[out] lock The SMP MCS lock control.
  */
 static inline void _SMP_MCS_lock_Destroy( SMP_MCS_lock_Control *lock )
 {
   (void) lock;
 }
 
+/**
+ * @brief Acquires the SMP MCS lock.
+ *
+ * @param[in, out] lock The lock to acquire.
+ * @param[in, out] context The lock context.
+ * @param stats the SMP lock statistics.
+ */
 static inline void _SMP_MCS_lock_Do_acquire(
   SMP_MCS_lock_Control   *lock,
   SMP_MCS_lock_Context   *context
@@ -199,8 +206,8 @@ static inline void _SMP_MCS_lock_Do_acquire(
 /**
  * @brief Releases an SMP MCS lock.
  *
- * @param lock The SMP MCS lock control.
- * @param context The SMP MCS lock context.
+ * @param[in, out] lock The SMP MCS lock control.
+ * @param[in, out] context The SMP MCS lock context.
  */
 static inline void _SMP_MCS_lock_Release(
   SMP_MCS_lock_Control *lock,
@@ -251,7 +258,7 @@ static inline void _SMP_MCS_lock_Release(
   _Atomic_Store_uint( &next->locked, 0, ATOMIC_ORDER_RELEASE );
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
