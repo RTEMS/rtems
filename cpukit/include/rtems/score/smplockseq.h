@@ -66,7 +66,7 @@ typedef struct {
  *
  * Concurrent initialization leads to unpredictable results.
  *
- * @param lock The SMP sequence lock control.
+ * @param[out] lock The SMP sequence lock control.
  */
 static inline void _SMP_sequence_lock_Initialize( SMP_sequence_lock_Control *lock )
 {
@@ -92,7 +92,7 @@ static inline void _SMP_sequence_lock_Destroy( SMP_sequence_lock_Control *lock )
  * current thread of execution is not interrupted indefinite since this would
  * starve readers.
  *
- * @param lock The SMP sequence lock control.
+ * @param[out] lock The SMP sequence lock control.
  *
  * @return The current sequence number.
  */
@@ -116,7 +116,7 @@ static inline unsigned int _SMP_sequence_lock_Write_begin(
 /**
  * @brief Ends an SMP sequence lock write operation.
  *
- * @param lock The SMP sequence lock control.
+ * @param[out] lock The SMP sequence lock control.
  * @param seq The sequence number returned by _SMP_sequence_lock_Write_begin().
  */
 static inline void _SMP_sequence_lock_Write_end(
@@ -132,7 +132,7 @@ static inline void _SMP_sequence_lock_Write_end(
  *
  * This function will not disable interrupts.
  *
- * @param lock The SMP sequence lock control.
+ * @param[out] lock The SMP sequence lock control.
  *
  * @return The current sequence number.
  */
@@ -147,12 +147,12 @@ static inline unsigned int _SMP_sequence_lock_Read_begin(
  * @brief Ends an SMP sequence lock read operation and indicates if a retry is
  * necessary.
  *
- * @param lock The SMP sequence lock control.
+ * @param[in, out] lock The SMP sequence lock control.
  * @param seq The sequence number returned by _SMP_sequence_lock_Read_begin().
  *
  * @retval true The read operation must be retried with a call to
  *   _SMP_sequence_lock_Read_begin().
- * @retval false Otherwise.
+ * @retval false The read operation need not be retried.
  */
 static inline bool _SMP_sequence_lock_Read_retry(
   SMP_sequence_lock_Control *lock,
@@ -165,7 +165,7 @@ static inline bool _SMP_sequence_lock_Read_retry(
   return seq != seq2 || seq % 2 != 0;
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
