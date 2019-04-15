@@ -342,6 +342,13 @@ typedef void ( *Scheduler_SMP_Register_idle )(
   Per_CPU_Control   *cpu
 );
 
+/**
+ * @brief Does nothing.
+ *
+ * @param context This parameter is unused.
+ * @param idle This parameter is unused.
+ * @param cpu This parameter is unused.
+ */
 static inline void _Scheduler_SMP_Do_nothing_register_idle(
   Scheduler_Context *context,
   Scheduler_Node    *idle,
@@ -353,6 +360,15 @@ static inline void _Scheduler_SMP_Do_nothing_register_idle(
   (void) cpu;
 }
 
+/**
+ * @brief Checks if @a to_insert is less or equal than the priority of the chain node.
+ *
+ * @param to_insert The priority to compare.
+ * @param next The chain node to compare the priority of.
+ *
+ * @retval true @a to_insert is less or equal than the priority of @a next.
+ * @retval false @a to_insert is greater than the priority of @a next.
+ */
 static inline bool _Scheduler_SMP_Priority_less_equal(
   const void       *to_insert,
   const Chain_Node *next
@@ -367,6 +383,13 @@ static inline bool _Scheduler_SMP_Priority_less_equal(
   return *priority_to_insert <= node_next->priority;
 }
 
+/**
+ * @brief Gets the scheduler smp context.
+ *
+ * @param context The context to cast to Scheduler_SMP_Context *.
+ *
+ * @return @a context cast to Scheduler_SMP_Context *.
+ */
 static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
   Scheduler_Context *context
 )
@@ -374,6 +397,11 @@ static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
   return (Scheduler_SMP_Context *) context;
 }
 
+/**
+ * @brief Initializes the scheduler smp context.
+ *
+ * @param[out] self The context to initialize.
+ */
 static inline void _Scheduler_SMP_Initialize(
   Scheduler_SMP_Context *self
 )
@@ -382,6 +410,13 @@ static inline void _Scheduler_SMP_Initialize(
   _Chain_Initialize_empty( &self->Idle_threads );
 }
 
+/**
+ * @brief Gets the scheduler smp node of the thread.
+ *
+ * @param thread The thread to get the smp node of.
+ *
+ * @return The scheduler smp node of @a thread.
+ */
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_node(
   Thread_Control *thread
 )
@@ -389,6 +424,13 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_node(
   return (Scheduler_SMP_Node *) _Thread_Scheduler_get_home_node( thread );
 }
 
+/**
+ * @brief Gets the scheduler smp node of the thread.
+ *
+ * @param thread The thread to get the smp node of.
+ *
+ * @return The scheduler smp node of @a thread.
+ */
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_own_node(
   Thread_Control *thread
 )
@@ -396,6 +438,13 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_own_node(
   return (Scheduler_SMP_Node *) _Thread_Scheduler_get_home_node( thread );
 }
 
+/**
+ * @brief Gets the scheduler smp node.
+ *
+ * @param node The node to cast to Scheduler_SMP_Node *.
+ *
+ * @return @a node cast to Scheduler_SMP_Node *.
+ */
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
   Scheduler_Node *node
 )
@@ -403,6 +452,13 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
   return (Scheduler_SMP_Node *) node;
 }
 
+/**
+ * @brief Gets the state of the node.
+ *
+ * @param node The node to get the state of.
+ *
+ * @return The state of @a node.
+ */
 static inline Scheduler_SMP_Node_state _Scheduler_SMP_Node_state(
   const Scheduler_Node *node
 )
@@ -410,6 +466,13 @@ static inline Scheduler_SMP_Node_state _Scheduler_SMP_Node_state(
   return ( (const Scheduler_SMP_Node *) node )->state;
 }
 
+/**
+ * @brief Gets the priority of the node.
+ *
+ * @param node The node to get the priority of.
+ *
+ * @return The priority of @a node.
+ */
 static inline Priority_Control _Scheduler_SMP_Node_priority(
   const Scheduler_Node *node
 )
@@ -417,6 +480,14 @@ static inline Priority_Control _Scheduler_SMP_Node_priority(
   return ( (const Scheduler_SMP_Node *) node )->priority;
 }
 
+/**
+ * @brief Initializes the scheduler smp node.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[out] node The node to initialize.
+ * @param thread The thread of the scheduler smp node.
+ * @param priority The priority to initialize @a node with.
+ */
 static inline void _Scheduler_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Scheduler_SMP_Node      *node,
@@ -429,6 +500,12 @@ static inline void _Scheduler_SMP_Node_initialize(
   node->priority = priority;
 }
 
+/**
+ * @brief Updates the priority of the node to the new priority.
+ *
+ * @param[out] node The node to update the priority of.
+ * @param new_priority The new priority for @a node.
+ */
 static inline void _Scheduler_SMP_Node_update_priority(
   Scheduler_SMP_Node *node,
   Priority_Control    new_priority
@@ -437,6 +514,12 @@ static inline void _Scheduler_SMP_Node_update_priority(
   node->priority = new_priority;
 }
 
+/**
+ * @brief Changes the state of the node to the given state.
+ *
+ * @param[out] node the node to change the state of.
+ * @param new_state The new state for @a node.
+ */
 static inline void _Scheduler_SMP_Node_change_state(
   Scheduler_Node           *node,
   Scheduler_SMP_Node_state  new_state
@@ -448,6 +531,15 @@ static inline void _Scheduler_SMP_Node_change_state(
   the_node->state = new_state;
 }
 
+/**
+ * @brief Checks if the processor is owned by the given context.
+ *
+ * @param context The context to check whether @a cpu is owned by it.
+ * @param cpu The cpu to check whether it is owned by @a context.
+ *
+ * @retval true @a cpu is owned by @a context.
+ * @retval false @a cpu is not owned by @a context.
+ */
 static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   const Scheduler_Context *context,
   const Per_CPU_Control   *cpu
@@ -456,6 +548,13 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   return cpu->Scheduler.context == context;
 }
 
+/**
+ * @brief Gets The first idle thread of the given context.
+ *
+ * @param context The scheduler context to get the first idle thread from.
+ *
+ * @return The first idle thread of @a context.
+ */
 static inline Thread_Control *_Scheduler_SMP_Get_idle_thread(
   Scheduler_Context *context
 )
@@ -469,6 +568,12 @@ static inline Thread_Control *_Scheduler_SMP_Get_idle_thread(
   return idle;
 }
 
+/**
+ * @brief Releases the thread and adds it to the idle threads.
+ *
+ * @param[in, out] context The scheduler context instance.
+ * @param idle The thread to add to the idle threads.
+ */
 static inline void _Scheduler_SMP_Release_idle_thread(
   Scheduler_Context *context,
   Thread_Control    *idle
@@ -479,6 +584,11 @@ static inline void _Scheduler_SMP_Release_idle_thread(
   _Chain_Prepend_unprotected( &self->Idle_threads, &idle->Object.Node );
 }
 
+/**
+ * @brief Extracts the node of the idle thread.
+ *
+ * @param[in, out] idle The thread to extract the node of.
+ */
 static inline void _Scheduler_SMP_Exctract_idle_thread(
   Thread_Control *idle
 )
@@ -486,6 +596,16 @@ static inline void _Scheduler_SMP_Exctract_idle_thread(
   _Chain_Extract_unprotected( &idle->Object.Node );
 }
 
+/**
+ * @brief Allocates the cpu for the scheduled thread.
+ *
+ * Attempts to prevent migrations but does not take into account affinity.
+ *
+ * @param context The scheduler context instance.
+ * @param scheduled The scheduled node that should be executed next.
+ * @param victim If the heir is this node's thread, no processor is allocated.
+ * @param[in, out] victim_cpu The cpu to allocate.
+ */
 static inline void _Scheduler_SMP_Allocate_processor_lazy(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled,
@@ -523,11 +643,18 @@ static inline void _Scheduler_SMP_Allocate_processor_lazy(
   }
 }
 
-/*
+/**
+ * @brief Allocates the cpu for the scheduled thread.
+ *
  * This method is slightly different from
  * _Scheduler_SMP_Allocate_processor_lazy() in that it does what it is asked to
  * do.  _Scheduler_SMP_Allocate_processor_lazy() attempts to prevent migrations
  * but does not take into account affinity.
+ *
+ * @param context This parameter is unused.
+ * @param scheduled The scheduled node whose thread should be executed next.
+ * @param victim This parameter is unused.
+ * @param[in, out] victim_cpu The cpu to allocate.
  */
 static inline void _Scheduler_SMP_Allocate_processor_exact(
   Scheduler_Context *context,
@@ -546,6 +673,15 @@ static inline void _Scheduler_SMP_Allocate_processor_exact(
   _Thread_Dispatch_update_heir( cpu_self, victim_cpu, scheduled_thread );
 }
 
+/**
+ * @brief Allocates the cpu for the scheduled thread using the given allocation function.
+ *
+ * @param context The scheduler context instance.
+ * @param scheduled The scheduled node that should be executed next.
+ * @param victim If the heir is this node's thread, no processor is allocated.
+ * @param[in, out] victim_cpu The cpu to allocate.
+ * @param allocate_processor The function to use for the allocation of @a victim_cpu.
+ */
 static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_Context                *context,
   Scheduler_Node                   *scheduled,
@@ -558,6 +694,16 @@ static inline void _Scheduler_SMP_Allocate_processor(
   ( *allocate_processor )( context, scheduled, victim, victim_cpu );
 }
 
+/**
+ * @brief Preempts the victim's thread and allocates a cpu for the scheduled thread.
+ *
+ * @param context The scheduler context instance.
+ * @param scheduled Node of the scheduled thread that is about to be executed.
+ * @param[in, out] victim Node of the thread to preempt.
+ * @param allocate_processor The function for allocation of a processor for the new thread.
+ *
+ * @return The preempted thread.
+ */
 static inline Thread_Control *_Scheduler_SMP_Preempt(
   Scheduler_Context                *context,
   Scheduler_Node                   *scheduled,
@@ -604,6 +750,14 @@ static inline Thread_Control *_Scheduler_SMP_Preempt(
   return victim_thread;
 }
 
+/**
+ * @brief Returns the lowest member of the scheduled nodes.
+ *
+ * @param context The scheduler context instance.
+ * @param filter This parameter is unused.
+ *
+ * @return The lowest scheduled node.
+ */
 static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   Scheduler_Context *context,
   Scheduler_Node    *filter
@@ -624,6 +778,22 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   return lowest_scheduled;
 }
 
+/**
+ * @brief Tries to schedule the given node.
+ *
+ * Schedules the node, or blocks if that is necessary.
+ *
+ * @param context The scheduler context instance.
+ * @param[in, out] node The node to insert into the scheduled nodes.
+ * @param priority The priority of @a node.
+ * @param[in, out] lowest_scheduled The lowest member of the scheduled nodes.
+ * @param insert_scheduled Function to insert a node into the set of
+ *   scheduled nodes.
+ * @param move_from_scheduled_to_ready Function to move a node from the set
+ *   of scheduled nodes to the set of ready nodes.
+ * @param allocate_processor Function to allocate a processor to a node
+ *   based on the rules of the scheduler.
+ */
 static inline void _Scheduler_SMP_Enqueue_to_scheduled(
   Scheduler_Context                *context,
   Scheduler_Node                   *node,
@@ -685,21 +855,21 @@ static inline void _Scheduler_SMP_Enqueue_to_scheduled(
  *
  * The node must not be in the scheduled state.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] node The node to enqueue.
- * @param[in] priority The node insert priority.
- * @param[in] order The order function.
- * @param[in] insert_ready Function to insert a node into the set of ready
+ * @param context The scheduler instance context.
+ * @param[in, out] node The node to enqueue.
+ * @param priority The node insert priority.
+ * @param order The order function.
+ * @param insert_ready Function to insert a node into the set of ready
  *   nodes.
- * @param[in] insert_scheduled Function to insert a node into the set of
+ * @param insert_scheduled Function to insert a node into the set of
  *   scheduled nodes.
- * @param[in] move_from_scheduled_to_ready Function to move a node from the set
+ * @param move_from_scheduled_to_ready Function to move a node from the set
  *   of scheduled nodes to the set of ready nodes.
- * @param[in] get_lowest_scheduled Function to select the node from the
+ * @param get_lowest_scheduled Function to select the node from the
  *   scheduled nodes to replace.  It may not be possible to find one, in this
  *   case a pointer must be returned so that the order functions returns false
  *   if this pointer is passed as the second argument to the order function.
- * @param[in] allocate_processor Function to allocate a processor to a node
+ * @param allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
  */
 static inline bool _Scheduler_SMP_Enqueue(
@@ -742,19 +912,19 @@ static inline bool _Scheduler_SMP_Enqueue(
  * @brief Enqueues a scheduled node according to the specified order
  * function.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] node The node to enqueue.
- * @param[in] order The order function.
- * @param[in] extract_from_ready Function to extract a node from the set of
+ * @param context The scheduler instance context.
+ * @param[in, out] node The node to enqueue.
+ * @param order The order function.
+ * @param extract_from_ready Function to extract a node from the set of
  *   ready nodes.
- * @param[in] get_highest_ready Function to get the highest ready node.
- * @param[in] insert_ready Function to insert a node into the set of ready
+ * @param get_highest_ready Function to get the highest ready node.
+ * @param insert_ready Function to insert a node into the set of ready
  *   nodes.
- * @param[in] insert_scheduled Function to insert a node into the set of
+ * @param insert_scheduled Function to insert a node into the set of
  *   scheduled nodes.
- * @param[in] move_from_ready_to_scheduled Function to move a node from the set
+ * @param move_from_ready_to_scheduled Function to move a node from the set
  *   of ready nodes to the set of scheduled nodes.
- * @param[in] allocate_processor Function to allocate a processor to a node
+ * @param allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
  */
 static inline bool _Scheduler_SMP_Enqueue_scheduled(
@@ -868,6 +1038,12 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
   }
 }
 
+/**
+ * @brief Extracts a scheduled node from the scheduled nodes.
+ *
+ * @param context This parameter is unused.
+ * @param node The node to extract from the chain it belongs to.
+ */
 static inline void _Scheduler_SMP_Extract_from_scheduled(
   Scheduler_Context *context,
   Scheduler_Node    *node
@@ -877,6 +1053,20 @@ static inline void _Scheduler_SMP_Extract_from_scheduled(
   _Chain_Extract_unprotected( &node->Node.Chain );
 }
 
+/**
+ * @brief Schedules the highest ready node.
+ *
+ * @param context The scheduler context instance.
+ * @param victim The node of the thread that is repressed by the newly scheduled thread.
+ * @param victim_cpu The cpu to allocate.
+ * @param extract_from_ready Function to extract a node from the set of
+ *      ready nodes.
+ * @param get_highest_ready Function to get the highest ready node.
+ * @param move_from_ready_to_scheduled Function to move a node from the set
+ *      of ready nodes to the set of scheduled nodes.
+ * @param allocate_processor Function to allocate a processor to a node
+ *      based on the rules of the scheduler.
+ */
 static inline void _Scheduler_SMP_Schedule_highest_ready(
   Scheduler_Context                *context,
   Scheduler_Node                   *victim,
@@ -922,6 +1112,20 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
   } while ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 }
 
+/**
+ * @brief Schedules the highest ready node and preempts a currently executing one.
+ *
+ * @param context The scheduler context instance.
+ * @param victim The node of the thread that is repressed by the newly scheduled thread.
+ * @param victim_cpu The cpu to allocate.
+ * @param extract_from_ready Function to extract a node from the set of
+ *      ready nodes.
+ * @param get_highest_ready Function to get the highest ready node.
+ * @param move_from_ready_to_scheduled Function to move a node from the set
+ *      of ready nodes to the set of scheduled nodes.
+ * @param allocate_processor Function to allocate a processor to a node
+ *      based on the rules of the scheduler.
+ */
 static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
   Scheduler_Context                *context,
   Scheduler_Node                   *victim,
@@ -967,18 +1171,20 @@ static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
 }
 
 /**
- * @brief Blocks a thread.
+ * @brief Blocks the thread.
  *
- * @param[in] context The scheduler instance context.
- * @param[in] thread The thread of the scheduling operation.
- * @param[in] node The scheduler node of the thread to block.
- * @param[in] extract_from_scheduled Function to extract a node from the set of
- *   scheduled nodes.
- * @param[in] extract_from_ready Function to extract a node from the set of
- *   ready nodes.
- * @param[in] get_highest_ready Function to get the highest ready node.
- * @param[in] move_from_ready_to_scheduled Function to move a node from the set
- *   of ready nodes to the set of scheduled nodes.
+ * @param context The scheduler instance context.
+ * @param[in, out] thread The thread of the scheduling operation.
+ * @param[in, out] node The scheduler node of the thread to block.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
+ * @param extract_from_ready Function to extract a node from the set of
+ *      ready nodes.
+ * @param get_highest_ready Function to get the highest ready node.
+ * @param move_from_ready_to_scheduled Function to move a node from the set
+ *      of ready nodes to the set of scheduled nodes.
+ * @param allocate_processor Function to allocate a processor to a node
+ *      based on the rules of the scheduler.
  */
 static inline void _Scheduler_SMP_Block(
   Scheduler_Context                *context,
@@ -1024,6 +1230,16 @@ static inline void _Scheduler_SMP_Block(
   }
 }
 
+/**
+ * @brief Unblocks the thread.
+ *
+ * @param context The scheduler instance context.
+ * @param[in, out] thread The thread of the scheduling operation.
+ * @param[in, out] node The scheduler node of the thread to block.
+ * @param update Function to update the node's priority to the new value.
+ * @param enqueue Function to insert a node with a priority in the ready queue
+ *      of a context.
+ */
 static inline void _Scheduler_SMP_Unblock(
   Scheduler_Context     *context,
   Thread_Control        *thread,
@@ -1074,6 +1290,25 @@ static inline void _Scheduler_SMP_Unblock(
   }
 }
 
+/**
+ * @brief Updates the priority of the node and the position in the queues it
+ * is in.
+ *
+ * This function firstly updates the priority of the node and then extracts
+ * and reinserts it into the queue the node is part of using the given
+ * functions.
+ *
+ * @param context The scheduler instance context.
+ * @param thread The thread for the operation.
+ * @param[in, out] node The node to update the priority of.
+ * @param extract_from_ready Function to extract a node from the ready
+ *      queue of the scheduler context.
+ * @param update Function to update the priority of a node in the scheduler
+ *      context.
+ * @param enqueue Function to enqueue a node with a given priority.
+ * @param enqueue_scheduled Function to enqueue a scheduled node.
+ * @param ask_for_help Function to perform a help request.
+ */
 static inline void _Scheduler_SMP_Update_priority(
   Scheduler_Context          *context,
   Thread_Control             *thread,
@@ -1119,6 +1354,17 @@ static inline void _Scheduler_SMP_Update_priority(
   }
 }
 
+/**
+ * @brief Performs a yield and asks for help if necessary.
+ *
+ * @param context The scheduler instance context.
+ * @param thread The thread for the operation.
+ * @param node The node of the thread that yields.
+ * @param extract_from_ready Function to extract a node from the ready
+ *      queue of the scheduler context.
+ * @param enqueue Function to enqueue a node with a given priority.
+ * @param enqueue_scheduled Function to enqueue a scheduled node.
+ */
 static inline void _Scheduler_SMP_Yield(
   Scheduler_Context     *context,
   Thread_Control        *thread,
@@ -1153,6 +1399,13 @@ static inline void _Scheduler_SMP_Yield(
   }
 }
 
+/**
+ * @brief Inserts the node with the given priority into the scheduled nodes.
+ *
+ * @param context The scheduler instance context.
+ * @param node_to_insert The scheduled node to insert.
+ * @param priority_to_insert The priority with which to insert the node.
+ */
 static inline void _Scheduler_SMP_Insert_scheduled(
   Scheduler_Context *context,
   Scheduler_Node    *node_to_insert,
@@ -1171,6 +1424,28 @@ static inline void _Scheduler_SMP_Insert_scheduled(
   );
 }
 
+/**
+ * @brief Asks for help.
+ *
+ * @param context The scheduler instance context.
+ * @param thread The thread that asks for help.
+ * @param[in, out] node The node of the thread that performs the ask for help
+ *      operation.
+ * @param order The order function.
+ * @param insert_ready Function to insert a node into the set of ready
+ *      nodes.
+ * @param insert_scheduled Function to insert a node into the set of
+ *      scheduled nodes.
+ * @param move_from_scheduled_to_ready Function to move a node from the set
+ *      of scheduled nodes to the set of ready nodes.
+ * @param get_lowest_scheduled Function to select the node from the
+ *      scheduled nodes to replace.
+ * @param allocate_processor Function to allocate a processor to a node
+ *      based on the rules of the scheduler.
+ *
+ * @retval true The ask for help operation was successful.
+ * @retval false The ask for help operation was not successful.
+ */
 static inline bool _Scheduler_SMP_Ask_for_help(
   Scheduler_Context                  *context,
   Thread_Control                     *thread,
@@ -1265,6 +1540,15 @@ static inline bool _Scheduler_SMP_Ask_for_help(
   return success;
 }
 
+/**
+ * @brief Reconsiders help request.
+ *
+ * @param context The scheduler context instance.
+ * @param thread The thread to reconsider the help request of.
+ * @param[in, out] node The scheduler node of @a thread.
+ * @param extract_from_ready Function to extract a node from the ready queue
+ *      of the scheduler context.
+ */
 static inline void _Scheduler_SMP_Reconsider_help_request(
   Scheduler_Context     *context,
   Thread_Control        *thread,
@@ -1288,6 +1572,21 @@ static inline void _Scheduler_SMP_Reconsider_help_request(
   _Thread_Scheduler_release_critical( thread, &lock_context );
 }
 
+/**
+ * @brief Withdraws the node.
+ *
+ * @param context The scheduler context instance.
+ * @param[in, out] thread The thread to change to @a next_state.
+ * @param[in, out] node The node to withdraw.
+ * @param next_state The new state for @a thread.
+ * @param extract_from_ready Function to extract a node from the ready queue
+ *      of the scheduler context.
+ * @param get_highest_ready Function to get the highest ready node.
+ * @param move_from_ready_to_scheduled Function to move a node from the set
+ *      of ready nodes to the set of scheduled nodes.
+ * @param allocate_processor Function to allocate a processor to a node
+ *      based on the rules of the scheduler.
+ */
 static inline void _Scheduler_SMP_Withdraw_node(
   Scheduler_Context                *context,
   Thread_Control                   *thread,
@@ -1333,6 +1632,14 @@ static inline void _Scheduler_SMP_Withdraw_node(
   }
 }
 
+/**
+ * @brief Starts the idle thread on the given processor.
+ *
+ * @param context The scheduler context instance.
+ * @param[in, out] idle The idle thread to schedule.
+ * @param cpu The processor for the idle thread.
+ * @param register_idle Function to register the idle thread for a cpu.
+ */
 static inline void _Scheduler_SMP_Do_start_idle(
   Scheduler_Context           *context,
   Thread_Control              *idle,
@@ -1355,6 +1662,15 @@ static inline void _Scheduler_SMP_Do_start_idle(
   _Scheduler_SMP_Release_idle_thread( &self->Base, idle );
 }
 
+/**
+ * @brief Adds the idle thread to the processor.
+ *
+ * @param context The scheduler context instance.
+ * @param[in, out] idle The idle thread to add to the processor.
+ * @param has_ready Function that checks if a given context has ready threads.
+ * @param enqueue_scheduled Function to enqueue a scheduled node.
+ * @param register_idle Function to register the idle thread for a cpu.
+ */
 static inline void _Scheduler_SMP_Add_processor(
   Scheduler_Context           *context,
   Thread_Control              *idle,
@@ -1384,6 +1700,17 @@ static inline void _Scheduler_SMP_Add_processor(
   }
 }
 
+/**
+ * @brief Removes an idle thread from the processor.
+ *
+ * @param context The scheduler context instance.
+ * @param cpu The processor to remove from.
+ * @param extract_from_ready Function to extract a node from the ready queue
+ *      of the scheduler context.
+ * @param enqueue Function to enqueue a node with a given priority.
+ *
+ * @return The idle thread of @a cpu.
+ */
 static inline Thread_Control *_Scheduler_SMP_Remove_processor(
   Scheduler_Context     *context,
   Per_CPU_Control       *cpu,
@@ -1446,6 +1773,25 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
   return idle;
 }
 
+/**
+ * @brief Sets the affinity of the node.
+ *
+ * Also performs a reinsert into the queue the node is currently in.
+ *
+ * @param context The scheduler context instance.
+ * @param thread The thread for the operation.
+ * @param[in, out] node The node to set the affinity of.
+ * @param arg The affinity for @a node.
+ * @param set_affinity Function to set the affinity of a node.
+ * @param extract_from_ready Function to extract a node from the ready queue
+ *      of the scheduler context.
+ * @param get_highest_ready Function to get the highest ready node.
+ * @param move_from_ready_to_scheduled Function to move a node from the set
+ *      of ready nodes to the set of scheduled nodes.
+ * @param enqueue Function to enqueue a node with a given priority.
+ * @param allocate_processor Function to allocate a processor to a node
+ *      based on the rules of the scheduler.
+ */
 static inline void _Scheduler_SMP_Set_affinity(
   Scheduler_Context               *context,
   Thread_Control                  *thread,
