@@ -1,4 +1,8 @@
 /**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
  * @brief Constants and Structures Related with Thread Dispatch
  */
 
@@ -114,7 +118,7 @@ void _Thread_Dispatch( void );
  * is useful for operations which synchronously block, e.g. self restart, self
  * deletion, yield, sleep.
  *
- * @param[in] cpu_self The current processor.
+ * @param cpu_self The current processor.
  *
  * @see _Thread_Dispatch().
  */
@@ -128,8 +132,8 @@ void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self );
  *
  * This function assumes that a thread dispatch is necessary.
  *
- * @param[in] cpu_self The current processor.
- * @param[in] level The previous interrupt level.
+ * @param cpu_self The current processor.
+ * @param level The previous interrupt level.
  *
  * @see _Thread_Dispatch().
  */
@@ -139,8 +143,8 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level );
  * @brief Disables thread dispatching inside a critical section (interrupts
  * disabled) with the current processor.
  *
- * @param[in] cpu_self The current processor.
- * @param[in] lock_context The lock context of the corresponding
+ * @param cpu_self The current processor.
+ * @param lock_context The lock context of the corresponding
  * _ISR_lock_ISR_disable() that started the critical section.
  *
  * @return The current processor.
@@ -167,7 +171,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable_with_CPU(
  * @brief Disables thread dispatching inside a critical section (interrupts
  * disabled).
  *
- * @param[in] lock_context The lock context of the corresponding
+ * @param lock_context The lock context of the corresponding
  * _ISR_lock_ISR_disable() that started the critical section.
  *
  * @return The current processor.
@@ -207,14 +211,14 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable( void )
  *
  * May perform a thread dispatch if necessary as a side-effect.
  *
- * @param[in] cpu_self The current processor.
+ * @param[in, out] cpu_self The current processor.
  */
 void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self );
 
 /**
  * @brief Unnests thread dispatching.
  *
- * @param[in] cpu_self The current processor.
+ * @param[in, out] cpu_self The current processor.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
 {
@@ -225,8 +229,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
 /**
  * @brief Requests a thread dispatch on the target processor.
  *
- * @param[in] cpu_self The current processor.
- * @param[in] cpu_target The target processor to request a thread dispatch.
+ * @param[in, out] cpu_self The current processor.
+ * @param[in, out] cpu_target The target processor to request a thread dispatch.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Dispatch_request(
   Per_CPU_Control *cpu_self,
