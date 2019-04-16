@@ -1,9 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Thread Execution State Information
+ * @ingroup RTEMSScoreStates
  *
- *  This include file defines thread execution state information.
+ * @brief Thread Execution State Information
+ *
+ * This include file defines thread execution state information.
  */
 
 /*
@@ -25,14 +27,17 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreStates SuperCore Thread States
+ * @defgroup RTEMSScoreStates SuperCore Thread States
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which relates to the management of
- *  the state bitmap associated with each thread.
+ * @brief SuperCore Thread States
+ *
+ * This handler encapsulates functionality which relates to the management of
+ * the state bitmap associated with each thread.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  The following type defines the control block used to manage a
@@ -40,7 +45,7 @@ extern "C" {
  */
 typedef uint32_t   States_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
