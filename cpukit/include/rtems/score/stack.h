@@ -1,11 +1,13 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Information About the Thread Stack Handler
+ * @ingroup RTEMSScoreStack
  *
- *  This include file contains all information about the thread
- *  Stack Handler.  This Handler provides mechanisms which can be used to
- *  initialize and utilize stacks.
+ * @brief Information About the Thread Stack Handler
+ *
+ * This include file contains all information about the thread
+ * Stack Handler.  This Handler provides mechanisms which can be used to
+ * initialize and utilize stacks.
  */
 
 /*
@@ -27,14 +29,17 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreStack Stack Handler
+ * @defgroup RTEMSScoreStack Stack Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which is used in the management
- *  of thread stacks.
+ * @brief Stack Handler
+ *
+ * This handler encapsulates functionality which is used in the management
+ * of thread stacks.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  The following constant defines the minimum stack size which every
@@ -59,7 +64,7 @@ typedef struct {
  */
 extern uint32_t rtems_minimum_stack_size;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
