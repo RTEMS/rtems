@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Multiprocessing Portion of the Thread Package
+ * @ingroup RTEMSScoreThreadMP
  *
- *  This include file contains the specification for all routines
- *  and data specific to the multiprocessing portion of the thread package.
+ * @brief Multiprocessing Portion of the Thread Package
+ *
+ * This include file contains the specification for all routines
+ * and data specific to the multiprocessing portion of the thread package.
  */
 
 /*
@@ -30,46 +32,57 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreThreadMP Thread Handler Multiprocessing Support
+ * @defgroup RTEMSScoreThreadMP Thread Handler Multiprocessing Support
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality which is related to managing
- *  threads in a multiprocessor system configuration.  This handler must
- *  manage proxies which represent remote threads blocking on local
- *  operations.
+ * @brief Thread Handler Multiprocessing Support
+ *
+ * This handler encapsulates functionality which is related to managing
+ * threads in a multiprocessor system configuration.  This handler must
+ * manage proxies which represent remote threads blocking on local
+ * operations.
+ *
+ * @{
  */
-/**@{*/
 
 /**
- *  @brief Initialize MP thread handler.
+ * @brief Initialize MP thread handler.
  *
- *  This routine initializes the multiprocessing portion of the Thread Handler.
+ * This routine initializes the multiprocessing portion of the Thread Handler.
+ *
+ * @param maximum_proxies The maximum number of proxies for the MP thread handler.
  */
 void _Thread_MP_Handler_initialization (
   uint32_t   maximum_proxies
 );
 
 /**
- *  @brief Allocate a MP proxy control block from
- *  the inactive chain of free proxy control blocks.
+ * @brief Allocates a MP proxy control block from
+ * the inactive chain of free proxy control blocks.
  *
- *  This  allocates a proxy control block from
- *  the inactive chain of free proxy control blocks.
+ * This  allocates a proxy control block from
+ * the inactive chain of free proxy control blocks.
  *
- *  @note This function returns a thread control pointer
- *        because proxies are substitutes for remote threads.
+ * @note This function returns a thread control pointer
+ *       because proxies are substitutes for remote threads.
+ *
+ * * @param the_state The state for the allocated MP proxy control block.
  */
 Thread_Control *_Thread_MP_Allocate_proxy (
   States_Control the_state
 );
 
 /**
- *  @brief Removes the MP proxy control block for the specified
- *  id from the active chain of proxy control blocks.
+ * @brief Removes the MP proxy control block for the specified
+ * id from the active chain of proxy control blocks.
  *
- *  This function removes the proxy control block for the specified
- *  id from the active red-black tree of proxy control blocks.
+ * This function removes the proxy control block for the specified
+ * id from the active red-black tree of proxy control blocks.
+ *
+ * @param the_id The id of the proxy control block to remove.
+ *
+ * @return The removed proxy control block.
  */
 Thread_Control *_Thread_MP_Find_proxy (
   Objects_Id the_id
@@ -86,11 +99,21 @@ Thread_Control *_Thread_MP_Find_proxy (
   ((_the_thread) == _MPCI_Receive_server_tcb)
 
 /**
- * This routine frees a proxy control block to the
- * inactive chain of free proxy control blocks.
+ * @brief Trees a proxy control block to the inactive chain of free proxy
+ *      control blocks.
  */
 void _Thread_MP_Free_proxy( Thread_Control *the_thread );
 
+/**
+ * @brief Checks if the thread MP with this object id is remote.
+ *
+ * @param id The object id.
+ *
+ * @retval true The object id is valid and the thread MP with this object id
+ *      is remote.
+ * @retval false The object if is not valid or the thread MP with this object
+ *      id is not remote.
+ */
 RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_remote( Objects_Id id )
 {
   Objects_Information *information;
@@ -103,7 +126,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_remote( Objects_Id id )
   return _Objects_MP_Is_remote( id, information );
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
