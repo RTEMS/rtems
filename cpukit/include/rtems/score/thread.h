@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Structures Related with the Thread Control Block
+ * @ingroup RTEMSScoreThread
  *
- *  This include file contains all constants and structures associated
- *  with the thread control block.
+ * @brief Constants and Structures Related with the Thread Control Block
+ *
+ * This include file contains all constants and structures associated
+ * with the thread control block.
  */
 
 /*
@@ -54,21 +56,24 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreThread Thread Handler
+ * @defgroup RTEMSScoreThread Thread Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality related to the management of
- *  threads.  This includes the creation, deletion, and scheduling of threads.
+ * @brief Thread Handler
  *
- *  The following variables are maintained as part of the per cpu data
- *  structure.
+ * This handler encapsulates functionality related to the management of
+ * threads.  This includes the creation, deletion, and scheduling of threads.
  *
- *  + Idle thread pointer
- *  + Executing thread pointer
- *  + Heir thread pointer
+ * The following variables are maintained as part of the per cpu data
+ * structure.
+ *
+ * + Idle thread pointer
+ * + Executing thread pointer
+ * + Heir thread pointer
+ *
+ *@{
  */
-/**@{*/
 
 #define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
 
@@ -876,7 +881,11 @@ struct _Thread_Control {
 
 typedef void (*rtems_per_thread_routine)( Thread_Control * );
 
-/* Use rtems_task_iterate() instead */
+/**
+ * @brief Deprecated, use rtems_task_iterate() instead.
+ *
+ * Use rtems_task_iterate() instead.
+ */
 void rtems_iterate_over_all_threads(
   rtems_per_thread_routine routine
 ) RTEMS_DEPRECATED;
@@ -1047,7 +1056,7 @@ Thread_Information name##_Information = { \
   } \
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
