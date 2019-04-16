@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Constants and Structures Needed to Declare a Thread Queue
+ * @ingroup RTEMSScoreThreadQueue
  *
- *  This include file contains all the constants and structures
- *  needed to declare a thread queue.
+ * @brief Constants and Structures Needed to Declare a Thread Queue
+ *
+ * This include file contains all the constants and structures
+ * needed to declare a thread queue.
  */
 
 /*
@@ -36,15 +38,18 @@ struct Per_CPU_Control;
 struct Scheduler_Node;
 
 /**
- *  @defgroup RTEMSScoreThreadQueue Thread Queue Handler
+ * @defgroup RTEMSScoreThreadQueue Thread Queue Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler provides the capability to have threads block in
- *  ordered sets. The sets may be ordered using the FIFO or priority
- *  discipline.
+ * @brief Thread Queue Handler
+ *
+ * This handler provides the capability to have threads block in
+ * ordered sets. The sets may be ordered using the FIFO or priority
+ * discipline.
+ *
+ * @{
  */
-/**@{*/
 
 typedef struct _Thread_Control Thread_Control;
 
@@ -578,7 +583,7 @@ typedef struct {
   Thread_queue_Queue Queue;
 } Thread_queue_Control;
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
