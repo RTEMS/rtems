@@ -30,8 +30,9 @@ extern "C" {
  * @ingroup RTEMSScore
  *
  * @brief Management of the internal system state of RTEMS.
+ *
+ * @{
  */
-/**@{**/
 
 /**
  * @brief System states.
@@ -69,6 +70,11 @@ extern bool _System_state_Is_multiprocessing;
 
 extern System_state_Codes _System_state_Current;
 
+/**
+ * @brief Sets the current system state to the given state.
+ *
+ * @param state The state to set.
+ */
 RTEMS_INLINE_ROUTINE void _System_state_Set (
   System_state_Codes state
 )
@@ -76,11 +82,24 @@ RTEMS_INLINE_ROUTINE void _System_state_Set (
   _System_state_Current = state;
 }
 
+/**
+ * @brief Gets the current system state.
+ *
+ * @return The current system state.
+ */
 RTEMS_INLINE_ROUTINE System_state_Codes _System_state_Get ( void )
 {
   return _System_state_Current;
 }
 
+/**
+ * @brief Checks if the state is before initialization.
+ *
+ * @param state The state to check.
+ *
+ * @retval true @a state is before initialization.
+ * @retval false @a state is not before initialization.
+ */
 RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
   System_state_Codes state
 )
@@ -88,6 +107,14 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_initialization (
   return (state == SYSTEM_STATE_BEFORE_INITIALIZATION);
 }
 
+/**
+ * @brief Checks if the state is before multitasking.
+ *
+ * @param state The state to check.
+ *
+ * @retval true @a state is before multitasking.
+ * @retval false @a state is not before multitasking.
+ */
 RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
   System_state_Codes state
 )
@@ -95,6 +122,14 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_before_multitasking (
   return (state == SYSTEM_STATE_BEFORE_MULTITASKING);
 }
 
+/**
+ * @brief Checks if the state is up.
+ *
+ * @param state The state to check.
+ *
+ * @retval true @a state is up.
+ * @retval false @a state is not up.
+ */
 RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
   System_state_Codes state
 )
@@ -102,6 +137,14 @@ RTEMS_INLINE_ROUTINE bool _System_state_Is_up (
   return (state == SYSTEM_STATE_UP);
 }
 
+/**
+ * @brief Checks if the state is terminated.
+ *
+ * @param state The state to check.
+ *
+ * @retval true @a state is terminated.
+ * @retval false @a state is not terminated.
+ */
 RTEMS_INLINE_ROUTINE bool _System_state_Is_terminated (
   System_state_Codes state
 )
