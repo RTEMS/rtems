@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreStates
+ *
  * @brief Inlined Routines Associated with Thread State Information
  *
  * This file contains the static inline implementation of the inlined
@@ -28,8 +30,9 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScoreStates
+ *
+ * @{
  */
-/**@{**/
 
 /*
  *  The following constants define the individual states which may be
@@ -141,11 +144,13 @@ extern "C" {
 #define STATES_ALL_SET 0xffffffff
 
 /**
- * This function sets the given states_to_set into the current_state
- * passed in.  The result is returned to the user in current_state.
+ * @brief Returns the result of setting the states to set to the given state.
  *
- * @param[in] states_to_set is the state bits to set
- * @param[in] current_state is the state set to add them to
+ * This function sets the given @a states_to_set into the @a current_state
+ * passed in.  The result is returned to the user in @a current_state.
+ *
+ * @param states_to_set The state bits to set.
+ * @param current_state The state set to add them to.
  *
  * @return This method returns the updated states value.
  */
@@ -158,11 +163,13 @@ RTEMS_INLINE_ROUTINE States_Control _States_Set (
 }
 
 /**
- * This function clears the given states_to_clear into the current_state
- * passed in.  The result is returned to the user in current_state.
+ * @brief Clears the states into the passed current state and returns the result.
  *
- * @param[in] states_to_clear is the state bits to clean
- * @param[in] current_state is the state set to remove them from
+ * This function clears the given @a states_to_clear into the @a current_state
+ * passed in.  The result is returned to the user in @a current_state.
+ *
+ * @param states_to_clear The state bits to clear.
+ * @param current_state The state set to remove them from.
  *
  * @return This method returns the updated states value.
  */
@@ -175,12 +182,15 @@ RTEMS_INLINE_ROUTINE States_Control _States_Clear (
 }
 
 /**
+ * @brief Checks if the state is ready.
+ *
  * This function returns true if the_states indicates that the
  * state is READY, and false otherwise.
  *
- * @param[in] the_states is the task state set to test
+ * @param the_states The task state set to test.
  *
- * @return This method returns true if the desired state condition is set.
+ * @retval true The state is ready.
+ * @retval false The state is not ready.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_ready (
   States_Control the_states
@@ -190,12 +200,15 @@ RTEMS_INLINE_ROUTINE bool _States_Is_ready (
 }
 
 /**
+ * @brief Checks if DORMANT state is set.
+ *
  * This function returns true if the DORMANT state is set in
- * the_states, and false otherwise.
+ * @a the_states, and false otherwise.
  *
- * @param[in] the_states is the task state set to test
+ * @param the_states The task state set to test.
  *
- * @return This method returns true if the desired state condition is set.
+ * @retval true DORMANT state is set in @a the_states.
+ * @retval false DORMANT state is not set in @a the_states.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
   States_Control the_states
@@ -205,12 +218,15 @@ RTEMS_INLINE_ROUTINE bool _States_Is_dormant (
 }
 
 /**
+ * @brief Checks if SUSPENDED state is set.
+ *
  * This function returns true if the SUSPENDED state is set in
- * the_states, and false otherwise.
+ * @a the_states, and false otherwise.
  *
- * @param[in] the_states is the task state set to test
+ * @param the_states The task state set to test.
  *
- * @return This method returns true if the desired state condition is set.
+ * @retval true SUSPENDED state is set in @a the_states.
+ * @retval false SUSPENDED state is not set in @a the_states.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
   States_Control the_states
@@ -220,12 +236,15 @@ RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
 }
 
 /**
+ * @brief Checks if WAITING_FOR_TIME state is set.
+ *
  * This function returns true if the WAITING_FOR_TIME state is set in
- * the_states, and false otherwise.
+ * @a the_states, and false otherwise.
  *
- * @param[in] the_states is the task state set to test
+ * @param the_states The task state set to test.
  *
- * @return This method returns true if the desired state condition is set.
+ * @retval true WAITING_FOR_TIME state is set in @a the_states.
+ * @retval false WAITING_FOR_TIME state is not set in @a the_states.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
   States_Control the_states
@@ -234,6 +253,17 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_rpc_reply (
    return (the_states & STATES_WAITING_FOR_RPC_REPLY);
 }
 
+/**
+ * @brief Checks if WAITING_FOR_JOIN_AT_EXIT state is set.
+ *
+ * This function returns true if the WAITING_FOR_JOIN_AT_EXIT state is set in
+ * @a the_states, and false otherwise.
+ *
+ * @param the_states The task state set to test.
+ *
+ * @retval true WAITING_FOR_JOIN_AT_EXIT state is set in @a the_states.
+ * @retval false WAITING_FOR_JOIN_AT_EXIT state is not set in @a the_states.
+ */
 RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_join_at_exit(
   States_Control the_states
 )
@@ -242,12 +272,15 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_join_at_exit(
 }
 
 /**
+ * @brief Checks if the state is set to be interruptible.
+ *
  * This function returns true if the task's state is set in
  * way that allows it to be interrupted by a signal.
  *
- * @param[in] the_states is the task state set to test
+ * @param the_states The task state set to test.
  *
- * @return This method returns true if the desired state condition is set.
+ * @retval true @a the_states is interruptible.
+ * @retval false @a the_states is not interruptible.
  */
 RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
   States_Control the_states
@@ -256,16 +289,21 @@ RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
    return (the_states & STATES_INTERRUPTIBLE_BY_SIGNAL);
 
 }
+
 /**
+ * @brief Checks if the state is blocked waiting on a local resource.
+ *
  * This function returns true if one of the states which indicates
  * that a task is blocked waiting for a local resource is set in
  * the_states, and false otherwise.
  *
- * @param[in] the_states is the task state set to test
+ * @param the_states The task state set to test.
  *
- * @return This method returns true if the desired state condition is set.
+ * @retval true The state indicates that the task is blocked waiting on a local
+ *      resource.
+ * @retval false The state indicates that the task is not blocked waiting on a
+ *      local resource.
  */
-
 RTEMS_INLINE_ROUTINE bool _States_Is_locally_blocked (
   States_Control the_states
 )
