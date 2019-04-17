@@ -1,9 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Helpers for Manipulating Timestamps
+ * @ingroup SuperCoreTimeStamp
  *
- *  This include file contains helpers for manipulating timestamps.
+ * @brief Helpers for Manipulating Timestamps
+ *
+ * This include file contains helpers for manipulating timestamps.
  */
 
 /*
@@ -19,26 +21,29 @@
 #define _RTEMS_SCORE_TIMESTAMP_H
 
 /**
- *  @defgroup SuperCoreTimeStamp Score Timestamp
+ * @defgroup SuperCoreTimeStamp Score Timestamp
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality related to manipulating
- *  SuperCore Timestamps.  SuperCore Timestamps may be used to
- *  represent time of day, uptime, or intervals.
+ * @brief Score Timestamp
  *
- *  The key attribute of the SuperCore Timestamp handler is that it
- *  is a completely opaque handler.  There can be multiple implementations
- *  of the required functionality and with a recompile, RTEMS can use
- *  any implementation.  It is intended to be a simple wrapper.
+ * This handler encapsulates functionality related to manipulating
+ * SuperCore Timestamps.  SuperCore Timestamps may be used to
+ * represent time of day, uptime, or intervals.
  *
- *  This handler can be implemented as either struct timespec or
- *  unsigned64 bit numbers.  The use of a wrapper class allows the
- *  the implementation of timestamps to change on a per architecture
- *  basis.  This is an important option as the performance of this
- *  handler is critical.
+ * The key attribute of the SuperCore Timestamp handler is that it
+ * is a completely opaque handler.  There can be multiple implementations
+ * of the required functionality and with a recompile, RTEMS can use
+ * any implementation.  It is intended to be a simple wrapper.
+ *
+ * This handler can be implemented as either struct timespec or
+ * unsigned64 bit numbers.  The use of a wrapper class allows the
+ * the implementation of timestamps to change on a per architecture
+ * basis.  This is an important option as the performance of this
+ * handler is critical.
+ *
+ * @{
  */
-/**@{*/
 
 #include <rtems/score/timespec.h>
 
@@ -55,7 +60,7 @@ typedef int64_t Timestamp_Control;
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
