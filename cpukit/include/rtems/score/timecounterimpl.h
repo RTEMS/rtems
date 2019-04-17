@@ -36,6 +36,12 @@ extern "C" {
  * @{
  */
 
+/**
+ * @brief Sets the timecounter clock to the given value.
+ *
+ * @param bt The value to set the clock to.
+ * @param lock_context The interrupt lock context.
+ */
 void _Timecounter_Set_clock(
   const struct bintime *bt,
   ISR_lock_Context     *lock_context
