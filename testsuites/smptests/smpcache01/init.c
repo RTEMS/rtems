@@ -29,7 +29,6 @@ const char rtems_test_name[] = "SMPCACHE 1";
 
 typedef struct {
   SMP_barrier_Control barrier;
-  uint32_t count[CPU_COUNT];
   bool do_longjmp[CPU_COUNT];
   jmp_buf instruction_invalidate_return_context[CPU_COUNT];
 } test_context;
@@ -41,13 +40,6 @@ static test_context ctx = {
 static void function_to_flush( void )
 {
   /* Does nothing. Used to give a pointer to instruction address space. */
-}
-
-static void test_action( void *arg )
-{
-  rtems_test_assert(arg == &ctx);
-
-  ctx.count[rtems_scheduler_get_processor()]++;
 }
 
 typedef void ( *test_case )( void );
@@ -80,50 +72,25 @@ static void barrier( SMP_barrier_State *bs )
   );
 }
 
-static void broadcast_test_init( void )
-{
-  ctx.count[rtems_scheduler_get_processor()] = 0;
-}
-
-static void broadcast_test_body( void )
-{
-  _SMP_Multicast_action( NULL, test_action, &ctx );
-}
-
-static void broadcast_test_fini( void )
-{
-  rtems_test_assert(
-    ctx.count[rtems_scheduler_get_processor()]
-      == rtems_scheduler_get_processor_maximum()
-  );
-}
-
 static test_case test_cases[] = {
   test_cache_invalidate_entire_instruction,
-  test_cache_invalidate_multiple_instruction_lines,
-  broadcast_test_body
+  test_cache_invalidate_multiple_instruction_lines
 };
 
 static void call_tests( SMP_barrier_State *bs )
 {
   size_t i;
 
-  broadcast_test_init();
-
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     barrier( bs );
     ( *test_cases[ i ] )();
     barrier( bs );
   }
-
-  broadcast_test_fini();
 }
 
 static void call_tests_isr_disabled( SMP_barrier_State *bs )
 {
   size_t i;
-
-  broadcast_test_init();
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     ISR_Level isr_level;
@@ -134,15 +101,11 @@ static void call_tests_isr_disabled( SMP_barrier_State *bs )
     _ISR_Local_enable( isr_level );
     barrier( bs );
   }
-
-  broadcast_test_fini();
 }
 
 static void call_tests_with_thread_dispatch_disabled( SMP_barrier_State *bs )
 {
   size_t i;
-
-  broadcast_test_init();
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     Per_CPU_Control *cpu_self;
@@ -153,8 +116,6 @@ static void call_tests_with_thread_dispatch_disabled( SMP_barrier_State *bs )
     barrier( bs );
     _Thread_Dispatch_enable( cpu_self );
   }
-
-  broadcast_test_fini();
 }
 
 static void cmlog(  const char* str )

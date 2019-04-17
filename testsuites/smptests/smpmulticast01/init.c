@@ -48,10 +48,16 @@ static const T_config config = {
 };
 
 typedef struct {
-  Atomic_Uint id[CPU_COUNT];
+  rtems_test_parallel_context base;
+  Atomic_Uint id[CPU_COUNT][CPU_COUNT];
 } test_context;
 
 static test_context test_instance;
+
+static void clear_ids_by_worker(test_context *ctx, size_t worker_index)
+{
+  memset(&ctx->id[worker_index][0], 0, sizeof(ctx->id[worker_index]));
+}
 
 static void multicast_action_irq_disabled(
   const Processor_mask *targets,
@@ -81,16 +87,16 @@ static void multicast_action_dispatch_disabled(
 
 static void action(void *arg)
 {
-  test_context *ctx;
+  Atomic_Uint *id;
   uint32_t self;
   unsigned expected;
   bool success;
 
-  ctx = arg;
+  id = arg;
   self = rtems_scheduler_get_processor();
   expected = 0;
   success = _Atomic_Compare_exchange_uint(
-    &ctx->id[self],
+    &id[self],
     &expected,
     self + 1,
     ATOMIC_ORDER_RELAXED,
@@ -116,17 +122,17 @@ static void test_unicast(
     Processor_mask cpus;
     uint32_t j;
 
-    memset(ctx, 0, sizeof(*ctx));
+    clear_ids_by_worker(ctx, 0);
 
     _Processor_mask_Zero(&cpus);
     _Processor_mask_Set(&cpus, i);
-    (*multicast_action)(&cpus, action, ctx);
+    (*multicast_action)(&cpus, action, &ctx->id[0][0]);
 
     for (j = 0; j < n; ++j) {
       unsigned id;
 
       ++step;
-      id = _Atomic_Load_uint(&ctx->id[j], ATOMIC_ORDER_RELAXED);
+      id = _Atomic_Load_uint(&ctx->id[0][j], ATOMIC_ORDER_RELAXED);
 
       if (j == i) {
         T_quiet_eq_uint(j + 1, id);
@@ -155,20 +161,79 @@ static void test_broadcast(
   for (i = 0; i < n; ++i) {
     uint32_t j;
 
-    memset(ctx, 0, sizeof(*ctx));
+    clear_ids_by_worker(ctx, 0);
 
-    (*multicast_action)(NULL, action, ctx);
+    (*multicast_action)(NULL, action, &ctx->id[0][0]);
 
     for (j = 0; j < n; ++j) {
       unsigned id;
 
       ++step;
-      id = _Atomic_Load_uint(&ctx->id[j], ATOMIC_ORDER_RELAXED);
+      id = _Atomic_Load_uint(&ctx->id[0][j], ATOMIC_ORDER_RELAXED);
       T_quiet_eq_uint(j + 1, id);
     }
   }
 
   T_step_eq_u32(0, step, n * n);
+}
+
+static rtems_interval test_duration(void)
+{
+  return rtems_clock_get_ticks_per_second();
+}
+
+static rtems_interval test_broadcast_init(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  return test_duration();
+}
+
+static void test_broadcast_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx;
+
+  ctx = (test_context *) base;
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    clear_ids_by_worker(ctx, worker_index);
+    _SMP_Multicast_action(NULL, action, &ctx->id[worker_index][0]);
+  }
+}
+
+static void test_broadcast_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  /* Do nothing */
+}
+
+static const rtems_test_parallel_job test_jobs[] = {
+  {
+    .init = test_broadcast_init,
+    .body = test_broadcast_body,
+    .fini = test_broadcast_fini,
+    .cascade = true
+  }
+};
+
+T_TEST_CASE(ParallelBroadcast)
+{
+  rtems_test_parallel(
+    &test_instance.base,
+    NULL,
+    &test_jobs[0],
+    RTEMS_ARRAY_SIZE(test_jobs)
+  );
 }
 
 static void test_before_multitasking(void)
@@ -326,7 +391,9 @@ static void fatal_extension(
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS CPU_COUNT
+
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT
 
