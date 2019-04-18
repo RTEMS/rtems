@@ -77,8 +77,6 @@ struct _Thread_Control;
 
 struct Scheduler_Context;
 
-struct Per_CPU_Job;
-
 /**
  *  @defgroup PerCPU RTEMS Per CPU Information
  *
@@ -174,6 +172,61 @@ typedef enum {
    */
   PER_CPU_STATE_SHUTDOWN
 } Per_CPU_State;
+
+typedef void ( *Per_CPU_Job_handler )( void *arg );
+
+/**
+ * @brief Context for per-processor jobs.
+ *
+ * This is separate from Per_CPU_Job to save stack memory in
+ * _SMP_Multicast_action().
+ */
+typedef struct {
+  /**
+   * @brief The job handler.
+   */
+  Per_CPU_Job_handler handler;
+
+  /**
+   * @brief The job handler argument.
+   */
+  void *arg;
+} Per_CPU_Job_context;
+
+/*
+ * Value for the Per_CPU_Job::done member to indicate that a job is done
+ * (handler was called on the target processor).  Must not be a valid pointer
+ * value since it overlaps with the Per_CPU_Job::next member.
+ */
+#define PER_CPU_JOB_DONE 1
+
+/**
+ * @brief A per-processor job.
+ *
+ * This structure must be as small as possible due to stack space constraints
+ * in _SMP_Multicast_action().
+ */
+typedef struct Per_CPU_Job {
+  union {
+    /**
+     * @brief The next job in the corresponding per-processor job list.
+     */
+    struct Per_CPU_Job *next;
+
+    /**
+     * @brief Indication if the job is done.
+     *
+     * A job is done if this member has the value PER_CPU_JOB_DONE.  This
+     * assumes that PER_CPU_JOB_DONE is not a valid pointer value.
+     */
+    Atomic_Ulong done;
+  };
+
+  /**
+   * @brief Pointer to the job context to get the handler and argument.
+   */
+  const Per_CPU_Job_context *context;
+} Per_CPU_Job;
 
 #endif /* defined( RTEMS_SMP ) */
 
@@ -316,7 +369,7 @@ typedef struct Per_CPU_Control {
   uint32_t isr_nest_level;
 
   /**
-   * @brief Indicetes if an ISR thread dispatch is disabled.
+   * @brief Indicates if an ISR thread dispatch is disabled.
    *
    * This flag is context switched with each thread.  It indicates that this
    * thread has an interrupt stack frame on its stack.  By using this flag, we

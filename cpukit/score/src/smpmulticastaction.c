@@ -32,62 +32,6 @@
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
 
-typedef struct Per_CPU_Job Per_CPU_Job;
-
-typedef struct Per_CPU_Jobs Per_CPU_Jobs;
-
-/*
- * Value for the Per_CPU_Job::done member to indicate that a job is done
- * (handler was called on the target processor).  Must not be a valid pointer
- * value since it overlaps with the Per_CPU_Job::next member.
- */
-#define PER_CPU_JOB_DONE 1
-
-/**
- * @brief A per-processor job.
- */
-struct Per_CPU_Job {
-  union {
-    /**
-     * @brief The next job in the corresponding per-processor job list.
-     */
-    Per_CPU_Job *next;
-
-    /**
-     * @brief Indication if the job is done.
-     *
-     * A job is done if this member has the value PER_CPU_JOB_DONE.  This
-     * assumes that PER_CPU_JOB_DONE is not a valid pointer value.
-     */
-    Atomic_Ulong done;
-  };
-
-  /**
-   * @brief Back pointer to the jobs to get the handler and argument.
-   */
-  Per_CPU_Jobs *jobs;
-};
-
-/**
- * @brief A collection of jobs, one for each processor.
- */
-struct Per_CPU_Jobs {
-  /**
-   * @brief The job handler.
-   */
-  SMP_Action_handler handler;
-
-  /**
-   * @brief The job handler argument.
-   */
-  void *arg;
-
-  /**
-   * @brief One job for each potential processor.
-   */
-  Per_CPU_Job Jobs[ CPU_MAXIMUM_PROCESSORS ];
-};
-
 #define _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, lock_context ) \
   _ISR_lock_ISR_disable_and_acquire( &( cpu )->Jobs.Lock, lock_context )
 
@@ -102,13 +46,13 @@ void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
   _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
 
   while ( ( job = cpu->Jobs.head ) != NULL ) {
-    Per_CPU_Jobs *jobs;
+    const Per_CPU_Job_context *context;
 
     cpu->Jobs.head = job->next;
     _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
 
-    jobs = job->jobs;
-    ( *jobs->handler )( jobs->arg );
+    context = job->context;
+    ( *context->handler )( context->arg );
     _Atomic_Store_ulong( &job->done, PER_CPU_JOB_DONE, ATOMIC_ORDER_RELEASE );
 
     _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
@@ -138,9 +82,14 @@ static void _Per_CPU_Try_perform_jobs( Per_CPU_Control *cpu_self )
   }
 }
 
+typedef struct {
+  Per_CPU_Job_context Context;
+  Per_CPU_Job         Jobs[ CPU_MAXIMUM_PROCESSORS ];
+} SMP_Multicast_jobs;
+
 static void _SMP_Issue_action_jobs(
   const Processor_mask *targets,
-  Per_CPU_Jobs         *jobs,
+  SMP_Multicast_jobs   *jobs,
   uint32_t              cpu_max
 )
 {
@@ -155,7 +104,7 @@ static void _SMP_Issue_action_jobs(
       job = &jobs->Jobs[ cpu_index ];
       _Atomic_Store_ulong( &job->done, 0, ATOMIC_ORDER_RELAXED );
       _Assert( job->next == NULL );
-      job->jobs = jobs;
+      job->context = &jobs->Context;
 
       cpu = _Per_CPU_Get_by_index( cpu_index );
       _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
@@ -175,9 +124,9 @@ static void _SMP_Issue_action_jobs(
 }
 
 static void _SMP_Wait_for_action_jobs(
-  const Processor_mask *targets,
-  const Per_CPU_Jobs   *jobs,
-  uint32_t              cpu_max
+  const Processor_mask     *targets,
+  const SMP_Multicast_jobs *jobs,
+  uint32_t                  cpu_max
 )
 {
   uint32_t cpu_index;
@@ -223,14 +172,14 @@ void _SMP_Multicast_action(
   void                 *arg
 )
 {
-  Per_CPU_Jobs jobs;
-  uint32_t     cpu_max;
+  SMP_Multicast_jobs jobs;
+  uint32_t           cpu_max;
 
   cpu_max = _SMP_Get_processor_maximum();
-  _Assert( cpu_max <= CPU_MAXIMUM_PROCESSORS );
+  _Assert( cpu_max <= RTEMS_ARRAY_SIZE( jobs.Jobs ) );
 
-  jobs.handler = handler;
-  jobs.arg = arg;
+  jobs.Context.handler = handler;
+  jobs.Context.arg = arg;
 
   _SMP_Issue_action_jobs( targets, &jobs, cpu_max );
   _SMP_Wait_for_action_jobs( targets, &jobs, cpu_max );
