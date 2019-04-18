@@ -30,14 +30,17 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreTOD Time of Day Handler
+ * @defgroup RTEMSScoreTOD Time of Day Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  The following constants are related to the time of day and are
- *  independent of RTEMS.
+ * @brief Time of Day Handler
+ *
+ * The following constants are related to the time of day and are
+ * independent of RTEMS.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  This constant represents the number of seconds in a minute.
@@ -118,11 +121,12 @@ extern "C" {
 #define TOD_BASE_YEAR 1988
 
 /**
- *  @addtogroup RTEMSScoreTOD
+ * @addtogroup RTEMSScoreTOD
  *
- *  This handler encapsulates functionality used to manage time of day.
+ * This handler encapsulates functionality used to manage time of day.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  @brief TOD control.
@@ -139,14 +143,31 @@ typedef struct {
 
 extern TOD_Control _TOD;
 
+/**
+ * @brief Locks the time of day mutex.
+ */
 void _TOD_Lock( void );
 
+/**
+ * @brief Unlocks the time of day mutex.
+ */
 void _TOD_Unlock( void );
 
+/**
+ * @brief Checks if api mutex is owner of the time of day mutex.
+ *
+ * @retval true It is owner of the time of day mutex.
+ * @retval false It is not owner of the time of day mutex.
+ */
 #if defined(RTEMS_DEBUG)
 bool _TOD_Is_owner( void );
 #endif
 
+/**
+ * @brief Acquires the lock context for the timecounter.
+ *
+ * @param lock_context The lock to acquire.
+ */
 static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
 {
   _Timecounter_Acquire( lock_context );
@@ -169,9 +190,9 @@ void _TOD_Set(
 );
 
 /**
- *  @brief Gets the current time in the timespec format.
+ * @brief Gets the current time in the timespec format.
  *
- *  @param[out] time is the value gathered by the request
+ * @param[out] time The value gathered by the request.
  */
 static inline void _TOD_Get(
   struct timespec *tod
@@ -181,14 +202,14 @@ static inline void _TOD_Get(
 }
 
 /**
- *  @brief Gets the system uptime with potential accuracy to the nanosecond.
+ * @brief Gets the system uptime with potential accuracy to the nanosecond.
  *
- *  This routine returns the system uptime with potential accuracy
- *  to the nanosecond.
+ * This routine returns the system uptime with potential accuracy
+ * to the nanosecond.
  *
- *  The initial uptime value is undefined.
+ * The initial uptime value is undefined.
  *
- *  @param[in] time is a pointer to the uptime to be returned
+ * @param[out] time Is a pointer to the uptime after the method call.
  */
 static inline void _TOD_Get_uptime(
   Timestamp_Control *time
@@ -198,12 +219,11 @@ static inline void _TOD_Get_uptime(
 }
 
 /**
- *  @brief Gets the system uptime with potential accuracy to the nanosecond.
- *  to the nanosecond.
+ * @brief Gets the system uptime with potential accuracy to the nanosecond.
  *
- *  The initial uptime value is zero.
+ * The initial uptime value is zero.
  *
- *  @param[in] time is a pointer to the uptime to be returned
+ * @param[out] time Is a pointer to the uptime after the method call.
  */
 static inline void _TOD_Get_zero_based_uptime(
   Timestamp_Control *time
@@ -213,11 +233,11 @@ static inline void _TOD_Get_zero_based_uptime(
 }
 
 /**
- *  @brief Gets the system uptime with potential accuracy to the nanosecond.
+ * @brief Gets the system uptime with potential accuracy to the nanosecond.
  *
- *  The initial uptime value is zero.
+ * The initial uptime value is zero.
  *
- *  @param[in] time is a pointer to the uptime to be returned
+ * @param[out] time Is a pointer to the uptime after the method call.
  */
 static inline void _TOD_Get_zero_based_uptime_as_timespec(
   struct timespec *time
@@ -228,10 +248,12 @@ static inline void _TOD_Get_zero_based_uptime_as_timespec(
 }
 
 /**
- *  @brief Number of seconds Since RTEMS epoch.
+ * @brief Returns Number of seconds Since RTEMS epoch.
  *
- *  The following contains the number of seconds from 00:00:00
- *  January 1, TOD_BASE_YEAR until the current time of day.
+ * The following contains the number of seconds from 00:00:00
+ * January 1, TOD_BASE_YEAR until the current time of day.
+ *
+ * @return The number of seconds since RTEMS epoch.
  */
 static inline uint32_t _TOD_Seconds_since_epoch( void )
 {
@@ -239,12 +261,14 @@ static inline uint32_t _TOD_Seconds_since_epoch( void )
 }
 
 /**
- *  @brief Gets number of ticks in a second.
+ * @brief Gets number of ticks in a second.
  *
- *  This method returns the number of ticks in a second.
+ * This method returns the number of ticks in a second.
  *
- *  @note If the clock tick value does not multiply evenly into a second
- *        then this number of ticks will be slightly shorter than a second.
+ * @note If the clock tick value does not multiply evenly into a second
+ *       then this number of ticks will be slightly shorter than a second.
+ *
+ * @return The number of ticks in a second.
  */
 uint32_t TOD_TICKS_PER_SECOND_method(void);
 
@@ -259,9 +283,11 @@ uint32_t TOD_TICKS_PER_SECOND_method(void);
 #define TOD_TICKS_PER_SECOND TOD_TICKS_PER_SECOND_method()
 
 /**
- * This routine returns a timeval based upon the internal timespec format TOD.
+ * @brief This routine returns a timeval based upon the internal timespec
+ *      format TOD.
+ *
+ * @param[out] time The timeval to be filled in by the method.
  */
-
 RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
   struct timeval *time
 )
@@ -270,12 +296,12 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
 }
 
 /**
- * @brief Adjust the Time of Time
+ * @brief Adjusts the Time of Time.
  *
  * This method is used to adjust the current time of day by the
  * specified amount.
  *
- * @param[in] delta is the amount to adjust
+ * @param delta is the amount to adjust.
  */
 void _TOD_Adjust(
   const struct timespec *delta
@@ -284,14 +310,15 @@ void _TOD_Adjust(
 /**
  * @brief Check if the TOD is Set
  *
- * @return TRUE is the time is set. FALSE otherwise.
+ * @retval true The time is set.
+ * @retval false The time is not set.
  */
 RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )
 {
   return _TOD.is_set;
 }
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
