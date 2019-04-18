@@ -58,16 +58,6 @@ extern "C" {
 #define SMP_MESSAGE_PERFORM_JOBS 0x4UL
 
 /**
- * @brief SMP message to request a clock tick.
- *
- * This message is provided for systems without a proper interrupt affinity
- * support and may be used by the clock driver.
- *
- * @see _SMP_Send_message().
- */
-#define SMP_MESSAGE_CLOCK_TICK 0x8UL
-
-/**
  * @brief SMP fatal codes.
  */
 typedef enum {

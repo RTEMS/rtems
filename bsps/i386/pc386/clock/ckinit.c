@@ -29,6 +29,9 @@
 #include <libcpu/cpuModel.h>
 #include <assert.h>
 #include <rtems/timecounter.h>
+#ifdef RTEMS_SMP
+#include <rtems/score/smpimpl.h>
+#endif
 
 #define CLOCK_VECTOR 0
 
@@ -66,7 +69,12 @@ extern volatile uint32_t Clock_driver_ticks;
 
 #ifdef RTEMS_SMP
 #define Clock_driver_support_at_tick() \
-  _SMP_Send_message_broadcast(SMP_MESSAGE_CLOCK_TICK)
+  do {                                                              \
+    Processor_mask targets;                                         \
+    _Processor_mask_Assign(&targets, _SMP_Get_online_processors()); \
+    _Processor_mask_Clear(&targets, _SMP_Get_current_processor());  \
+    _SMP_Multicast_action(&targets, Clock_isr, NULL);               \
+  } while (0)
 #endif
 
 static uint32_t pc386_get_timecount_tsc(struct timecounter *tc)
