@@ -37,6 +37,13 @@ typedef struct Per_CPU_Job Per_CPU_Job;
 
 typedef struct Per_CPU_Jobs Per_CPU_Jobs;
 
+/*
+ * Value for the Per_CPU_Job::done member to indicate that a job is done
+ * (handler was called on the target processor).  Must not be a valid pointer
+ * value since it overlaps with the Per_CPU_Job::next member.
+ */
+#define PER_CPU_JOB_DONE 1
+
 /**
  * @brief A per-processor job.
  */
@@ -50,8 +57,8 @@ struct Per_CPU_Job {
     /**
      * @brief Indication if the job is done.
      *
-     * A job is done if this member has the value one.  This assumes that one
-     * is not a valid pointer value.
+     * A job is done if this member has the value PER_CPU_JOB_DONE.  This
+     * assumes that PER_CPU_JOB_DONE is not a valid pointer value.
      */
     Atomic_Ulong done;
   };
@@ -99,7 +106,7 @@ void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
 
     jobs = job->jobs;
     ( *jobs->handler )( jobs->arg );
-    _Atomic_Store_ulong( &job->done, 1, ATOMIC_ORDER_RELEASE );
+    _Atomic_Store_ulong( &job->done, PER_CPU_JOB_DONE, ATOMIC_ORDER_RELEASE );
 
      _ISR_lock_ISR_disable( &lock_context );
     _Per_CPU_Acquire( cpu, &lock_context );
@@ -185,7 +192,10 @@ static void _SMP_Wait_for_action_jobs(
       job = &jobs->Jobs[ cpu_index ];
       cpu = _Per_CPU_Get_by_index( cpu_index );
 
-      while ( _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
+      while (
+        _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
+          != PER_CPU_JOB_DONE
+      ) {
         switch ( cpu->state ) {
           case PER_CPU_STATE_INITIAL:
           case PER_CPU_STATE_READY_TO_START_MULTITASKING:
