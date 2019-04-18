@@ -233,10 +233,6 @@ void _SMP_Multicast_action(
   cpu_max = _SMP_Get_processor_maximum();
   _Assert( cpu_max <= CPU_MAXIMUM_PROCESSORS );
 
-  if ( targets == NULL ) {
-    targets = _SMP_Get_online_processors();
-  }
-
   jobs.handler = handler;
   jobs.arg = arg;
   isr_level = _ISR_Get_level();
@@ -253,4 +249,12 @@ void _SMP_Multicast_action(
   if ( isr_level == 0 ) {
     _Thread_Dispatch_enable( cpu_self );
   }
+}
+
+void _SMP_Broadcast_action(
+  SMP_Action_handler  handler,
+  void               *arg
+)
+{
+  _SMP_Multicast_action( _SMP_Get_online_processors(), handler, arg );
 }

@@ -124,7 +124,7 @@ static void a9mpcore_clock_secondary_initialization(
     .interval = interval
   };
 
-  _SMP_Multicast_action(NULL, a9mpcore_clock_secondary_action, &init_data);
+  _SMP_Broadcast_action(a9mpcore_clock_secondary_action, &init_data);
 
   if (cmpval - a9mpcore_clock_get_counter(gt) >= interval) {
     bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_SMP_INIT);

@@ -253,12 +253,13 @@ void _SMP_Send_message_multicast(
 typedef void ( *SMP_Action_handler )( void *arg );
 
 /**
- * @brief Initiates an SMP multicast action to a set of target processors.
+ * @brief Initiates an SMP multicast action to the set of target processors.
  *
- * The current processor may be part of the set.
+ * The current processor may be part of the set.  In case a target processor is
+ * in a wrong state to process per-processor jobs, then this function results
+ * in an SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS fatal SMP error.
  *
- * @param targets The set of target processors for the action.  If @c NULL,
- *   then the action will be performed on all online processors.
+ * @param targets The set of target processors for the action.
  * @param handler The multicast action handler.
  * @param arg The multicast action argument.
  */
@@ -266,6 +267,21 @@ void _SMP_Multicast_action(
   const Processor_mask *targets,
   SMP_Action_handler    handler,
   void                 *arg
+);
+
+/**
+ * @brief Initiates an SMP multicast action to the set of all online
+ * processors.
+ *
+ * Simply calls _SMP_Multicast_action() with _SMP_Get_online_processors() as
+ * the target processor set.
+ *
+ * @param handler The multicast action handler.
+ * @param arg The multicast action argument.
+ */
+void _SMP_Broadcast_action(
+  SMP_Action_handler  handler,
+  void               *arg
 );
 
 #endif /* defined( RTEMS_SMP ) */

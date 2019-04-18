@@ -135,7 +135,7 @@ static void arm_gt_clock_secondary_action(void *arg)
 static void arm_gt_clock_secondary_initialization(uint64_t cval)
 {
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
-  _SMP_Multicast_action(NULL, arm_gt_clock_secondary_action, &cval);
+  _SMP_Broadcast_action(arm_gt_clock_secondary_action, &cval);
 #endif
 }
 

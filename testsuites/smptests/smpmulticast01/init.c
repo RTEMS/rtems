@@ -85,6 +85,30 @@ static void multicast_action_dispatch_disabled(
   _Thread_Dispatch_enable(cpu_self);
 }
 
+static void broadcast_action_irq_disabled(
+  SMP_Action_handler handler,
+  void *arg
+)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_local_disable(level);
+  _SMP_Broadcast_action(handler, arg);
+  rtems_interrupt_local_enable(level);
+}
+
+static void broadcast_action_dispatch_disabled(
+  SMP_Action_handler handler,
+  void *arg
+)
+{
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
+  _SMP_Broadcast_action(handler, arg);
+  _Thread_Dispatch_enable(cpu_self);
+}
+
 static void action(void *arg)
 {
   Atomic_Uint *id;
@@ -147,7 +171,7 @@ static void test_unicast(
 
 static void test_broadcast(
   test_context *ctx,
-  void (*multicast_action)(const Processor_mask *, SMP_Action_handler, void *)
+  void (*broadcast_action)(SMP_Action_handler, void *)
 )
 {
   uint32_t step;
@@ -163,7 +187,7 @@ static void test_broadcast(
 
     clear_ids_by_worker(ctx, 0);
 
-    (*multicast_action)(NULL, action, &ctx->id[0][0]);
+    (*broadcast_action)(action, &ctx->id[0][0]);
 
     for (j = 0; j < n; ++j) {
       unsigned id;
@@ -255,15 +279,15 @@ static void test_before_multitasking(void)
   T_case_end();
 
   T_case_begin("BroadcastBeforeMultitasking", NULL);
-  test_broadcast(ctx, _SMP_Multicast_action);
+  test_broadcast(ctx, _SMP_Broadcast_action);
   T_case_end();
 
   T_case_begin("BroadcastBeforeMultitaskingIRQDisabled", NULL);
-  test_broadcast(ctx, multicast_action_irq_disabled);
+  test_broadcast(ctx, broadcast_action_irq_disabled);
   T_case_end();
 
   T_case_begin("BroadcastBeforeMultitaskingDispatchDisabled", NULL);
-  test_broadcast(ctx, multicast_action_dispatch_disabled);
+  test_broadcast(ctx, broadcast_action_dispatch_disabled);
   T_case_end();
 }
 
@@ -340,17 +364,17 @@ T_TEST_CASE(UnicastDuringMultitaskingDispatchDisabled)
 
 T_TEST_CASE(BroadcastDuringMultitasking)
 {
-  test_broadcast(&test_instance, _SMP_Multicast_action);
+  test_broadcast(&test_instance, _SMP_Broadcast_action);
 }
 
 T_TEST_CASE(BroadcastDuringMultitaskingIRQDisabled)
 {
-  test_broadcast(&test_instance, multicast_action_irq_disabled);
+  test_broadcast(&test_instance, broadcast_action_irq_disabled);
 }
 
 T_TEST_CASE(BroadcastDuringMultitaskingDispatchDisabled)
 {
-  test_broadcast(&test_instance, multicast_action_dispatch_disabled);
+  test_broadcast(&test_instance, broadcast_action_dispatch_disabled);
 }
 
 static void Init(rtems_task_argument arg)
