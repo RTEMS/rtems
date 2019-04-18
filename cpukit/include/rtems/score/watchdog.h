@@ -1,13 +1,13 @@
 /**
- *  @file
+ * @file
  *
- *  @ingroup RTEMSScoreWatchdog
+ * @ingroup RTEMSScoreWatchdog
  *
- *  @brief Constants and Structures Associated with Watchdog Timers
+ * @brief Constants and Structures Associated with Watchdog Timers
  *
- *  This include file contains all the constants and structures associated
- *  with watchdog timers.   This Handler provides mechanisms which can be
- *  used to initialize and manipulate watchdog timers.
+ * This include file contains all the constants and structures associated
+ * with watchdog timers.   This Handler provides mechanisms which can be
+ * used to initialize and manipulate watchdog timers.
  */
 
 /*
@@ -33,17 +33,20 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreWatchdog Watchdog Handler
+ * @defgroup RTEMSScoreWatchdog Watchdog Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality related to the scheduling of
- *  watchdog functions to be called at specific times in the future.
+ * @brief Watchdog Handler
  *
- *  @note This handler does not have anything to do with hardware watchdog
- *        timers.
+ * This handler encapsulates functionality related to the scheduling of
+ * watchdog functions to be called at specific times in the future.
+ *
+ * @note This handler does not have anything to do with hardware watchdog
+ *       timers.
+ *
+ * @{
  */
-/**@{*/
 
 typedef struct Watchdog_Control Watchdog_Control;
 
@@ -114,7 +117,7 @@ struct Watchdog_Control {
   uint64_t expire;
 };
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
