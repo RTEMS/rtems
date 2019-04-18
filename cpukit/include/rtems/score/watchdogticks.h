@@ -2,6 +2,8 @@
  * @file
  *
  * @ingroup RTEMSScoreWatchdog
+ *
+ * @brief Constants for the watchdog ticks.
  */
 
 /*
