@@ -89,31 +89,33 @@ struct Per_CPU_Jobs {
   Per_CPU_Job Jobs[ CPU_MAXIMUM_PROCESSORS ];
 };
 
+#define _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, lock_context ) \
+  _ISR_lock_ISR_disable_and_acquire( &( cpu )->Jobs.Lock, lock_context )
+
+#define _Per_CPU_Jobs_release_and_ISR_enable( cpu, lock_context ) \
+  _ISR_lock_Release_and_ISR_enable( &( cpu )->Jobs.Lock, lock_context )
+
 void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
 {
   ISR_lock_Context  lock_context;
   Per_CPU_Job      *job;
 
-  _ISR_lock_ISR_disable( &lock_context );
-  _Per_CPU_Acquire( cpu, &lock_context );
+  _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
 
   while ( ( job = cpu->Jobs.head ) != NULL ) {
     Per_CPU_Jobs *jobs;
 
     cpu->Jobs.head = job->next;
-    _Per_CPU_Release( cpu, &lock_context );
-    _ISR_lock_ISR_enable( &lock_context );
+    _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
 
     jobs = job->jobs;
     ( *jobs->handler )( jobs->arg );
     _Atomic_Store_ulong( &job->done, PER_CPU_JOB_DONE, ATOMIC_ORDER_RELEASE );
 
-     _ISR_lock_ISR_disable( &lock_context );
-    _Per_CPU_Acquire( cpu, &lock_context );
+    _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
   }
 
-  _Per_CPU_Release( cpu, &lock_context );
-  _ISR_lock_ISR_enable( &lock_context );
+  _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
 }
 
 static void _Per_CPU_Try_perform_jobs( Per_CPU_Control *cpu_self )
@@ -157,8 +159,7 @@ static void _SMP_Issue_action_jobs(
       job->jobs = jobs;
 
       cpu = _Per_CPU_Get_by_index( cpu_index );
-      _ISR_lock_ISR_disable( &lock_context );
-      _Per_CPU_Acquire( cpu, &lock_context );
+      _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
 
       if ( cpu->Jobs.head == NULL ) {
         cpu->Jobs.head = job;
@@ -168,8 +169,7 @@ static void _SMP_Issue_action_jobs(
 
       cpu->Jobs.tail = &job->next;
 
-      _Per_CPU_Release( cpu, &lock_context );
-      _ISR_lock_ISR_enable( &lock_context );
+      _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
       _SMP_Send_message( cpu_index, SMP_MESSAGE_PERFORM_JOBS );
     }
   }
