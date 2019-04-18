@@ -29,6 +29,8 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
+ * @brief SMP Support
+ *
  * This defines the interface of the SuperCore SMP support.
  *
  * @{
