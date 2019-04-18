@@ -35,6 +35,8 @@ extern "C" {
  *
  * @ingroup PerCPU
  *
+ * @brief Flexible Per-CPU Data
+ *
  * Provides the definition of custom per-CPU items.  The items are collected in
  * a special linker set.  During system initialization the content of the
  * linker set is duplicated for all secondary processors using memory allocated
