@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreAPIMutex
+ *
+ * @brief Structures for the implementation of mutexes.
+ */
+
 /*
  * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *
@@ -17,6 +25,12 @@
 
 #include <rtems/score/threadqimpl.h>
 
+/**
+ * @addtogroup RTEMSScoreAPIMutex
+ *
+ * @{
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -33,5 +47,7 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_MUTEXIMPL_H */
