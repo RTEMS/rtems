@@ -1,9 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Helpers for Manipulating Timestamps
+ * @ingroup SuperCoreTimeStamp
  *
- *  This include file contains helpers for manipulating timestamps.
+ * @brief Helpers for Manipulating Timestamps
+ *
+ * This include file contains helpers for manipulating timestamps.
  */
 
 /*
@@ -34,14 +36,14 @@ extern "C" {
 #endif
 
 /**
- *  @brief Set timestamp to specified seconds and nanoseconds.
+ * @brief Sets timestamp to specified seconds and nanoseconds.
  *
- *  This method sets the timestamp to the specified @a _seconds and @a _nanoseconds
- *  value.
+ * This method sets the timestamp to the specified @a _seconds and @a _nanoseconds
+ * value.
  *
- *  @param[in] _time points to the timestamp instance to validate.
- *  @param[in] _seconds is the seconds portion of the timestamp
- *  @param[in] _nanoseconds is the nanoseconds portion of the timestamp
+ * @param[out] _time The timestamp instance to set.
+ * @param _seconds The seconds portion of the timestamp.
+ * @param _nanoseconds The nanoseconds portion of the timestamp.
  */
 RTEMS_INLINE_ROUTINE void _Timestamp_Set(
   Timestamp_Control *_time,
@@ -58,12 +60,12 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Set(
 }
 
 /**
- *  @brief Sets the timestamp to zero.
+ * @brief Sets the timestamp to zero.
  *
- *  This method sets the timestamp to zero.
- *  value.
+ * This method sets the timestamp to zero.
+ * value.
  *
- *  @param[in] _time points to the timestamp instance to zero.
+ * @param[out] _time The timestamp instance to zero.
  */
 
 RTEMS_INLINE_ROUTINE void _Timestamp_Set_to_zero(
@@ -74,15 +76,15 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Set_to_zero(
 }
 
 /**
- *  @brief Less than operator for timestamps.
+ * @brief Checks if the left hand side timestamp is less than the right one.
  *
- *  This method is the less than operator for timestamps.
+ * This method is the less than operator for timestamps.
  *
- *  @param[in] _lhs points to the left hand side timestamp
- *  @param[in] _rhs points to the right hand side timestamp
+ * @param _lhs The left hand side timestamp.
+ * @param _rhs The right hand side timestamp.
  *
- *  @retval This method returns true if @a _lhs is less than the @a _rhs and
- *          false otherwise.
+ * @retval true @a _lhs is less than the @a _rhs.
+ * @retval false @a _lhs is greater or equal than @a rhs.
  */
 
 RTEMS_INLINE_ROUTINE bool _Timestamp_Less_than(
@@ -94,15 +96,15 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Less_than(
 }
 
 /**
- *  @brief Greater than operator for timestamps.
+ * @brief Checks if the left hand side timestamp is greater than the right one.
  *
- *  This method is the greater than operator for timestamps.
+ * This method is the greater than operator for timestamps.
  *
- *  @param[in] _lhs points to the left hand side timestamp
- *  @param[in] _rhs points to the right hand side timestamp
+ * @param _lhs The left hand side timestamp.
+ * @param _rhs The right hand side timestamp.
  *
- *  @retval This method returns true if @a _lhs is greater than the @a _rhs and
- *          false otherwise.
+ * @retval true @a _lhs is greater than the @a _rhs.
+ * @retval false @a _lhs is less or equal than @a _rhs.
  */
 
 RTEMS_INLINE_ROUTINE bool _Timestamp_Greater_than(
@@ -114,15 +116,15 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Greater_than(
 }
 
 /**
- *  @brief Equal to than operator for timestamps.
+ * @brief Checks if the timestamps are equal.
  *
- *  This method is the is equal to than operator for timestamps.
+ * This method is the is equal to than operator for timestamps.
  *
- *  @param[in] _lhs points to the left hand side timestamp
- *  @param[in] _rhs points to the right hand side timestamp
+ * @param _lhs The left hand side timestamp.
+ * @param _rhs The right hand side timestamp.
  *
- *  @retval This method returns true if @a _lhs is equal to  @a _rhs and
- *          false otherwise.
+ * @retval true @a _lhs is equal to  @a _rhs
+ * @retval false @a _lhs is not equal to @a _rhs.
  */
 
 RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
@@ -134,13 +136,13 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
 }
 
 /**
- *  @brief Adds two timestamps.
+ * @brief Adds two timestamps.
  *
- *  This routine adds two timestamps.  The second argument is added
- *  to the first.
+ * This routine adds two timestamps.  The second argument is added
+ * to the first.
  *
- *  @param[in] _time points to the base time to be added to
- *  @param[in] _add points to the timestamp to add to the first argument
+ * @param[in, out] _time The base time to be added to.
+ * @param _add points The timestamp to add to the first argument.
  */
 RTEMS_INLINE_ROUTINE void _Timestamp_Add_to(
   Timestamp_Control *_time,
@@ -151,17 +153,15 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Add_to(
 }
 
 /**
- *  @brief Subtracts two timestamps.
+ * @brief Subtracts two timestamps.
  *
- *  This routine subtracts two timestamps.  @a result is set to
- *  @a end - @a start.
+ * This routine subtracts two timestamps.  @a result is set to
+ * @a end - @a start.
  *
- *  @param[in] _start points to the starting time
- *  @param[in] _end points to the ending time
- *  @param[in] _result points to the difference between
- *             starting and ending time.
- *
- *  @retval This method fills in @a _result.
+ * @param _start The starting time.
+ * @param _end The ending time.
+ * @param[out] _result Contains the difference between starting and ending
+ *      time after the method call.
  */
 RTEMS_INLINE_ROUTINE void _Timestamp_Subtract(
   const Timestamp_Control *_start,
@@ -173,17 +173,15 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Subtract(
 }
 
 /**
- *  @brief Divides a timestamp by another timestamp.
+ * @brief Divides a timestamp by another timestamp.
  *
- *  This routine divides a timestamp by another timestamp.  The
- *  intended use is for calculating percentages to three decimal points.
+ * This routine divides a timestamp by another timestamp.  The
+ * intended use is for calculating percentages to three decimal points.
  *
- *  @param[in] _lhs points to the left hand number
- *  @param[in] _rhs points to the right hand number
- *  @param[in] _ival_percentage points to the integer portion of the average
- *  @param[in] _fval_percentage points to the thousandths of percentage
- *
- *  @retval This method fills in @a result.
+ * @param _lhs The left hand number.
+ * @param _rhs The right hand number.
+ * @param[out] _ival_percentage The integer portion of the average.
+ * @param[out] _fval_percentage The thousandths of percentage.
  */
 RTEMS_INLINE_ROUTINE void _Timestamp_Divide(
   const Timestamp_Control *_lhs,
@@ -207,13 +205,13 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Divide(
 }
 
 /**
- *  @brief Get seconds portion of timestamp.
+ * @brief Gets seconds portion of timestamp.
  *
- *  This method returns the seconds portion of the specified timestamp
+ * This method returns the seconds portion of the specified timestamp.
  *
- *  @param[in] _time points to the timestamp
+ * @param _time The timestamp.
  *
- *  @retval The seconds portion of @a _time.
+ * @return The seconds portion of @a _time.
  */
 RTEMS_INLINE_ROUTINE time_t _Timestamp_Get_seconds(
   const Timestamp_Control *_time
@@ -223,13 +221,13 @@ RTEMS_INLINE_ROUTINE time_t _Timestamp_Get_seconds(
 }
 
 /**
- *  @brief Get nanoseconds portion of timestamp.
+ * @brief Gets nanoseconds portion of timestamp.
  *
- *  This method returns the nanoseconds portion of the specified timestamp
+ * This method returns the nanoseconds portion of the specified timestamp.
  *
- *  @param[in] _time points to the timestamp
+ * @param _time The timestamp.
  *
- *  @retval The nanoseconds portion of @a _time.
+ * @return The nanoseconds portion of @a _time.
  */
 RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
   const Timestamp_Control *_time
@@ -243,13 +241,13 @@ RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
 }
 
 /**
- *  @brief Get the timestamp as nanoseconds.
+ * @brief Gets the timestamp as nanoseconds.
  *
- *  This method returns the timestamp as nanoseconds.
+ * This method returns the timestamp as nanoseconds.
  *
- *  @param[in] _time points to the timestamp
+ * @param _time The timestamp.
  *
- *  @retval The time in nanoseconds.
+ * @return The time in nanoseconds.
  */
 RTEMS_INLINE_ROUTINE uint64_t _Timestamp_Get_as_nanoseconds(
   const Timestamp_Control *_time
@@ -263,12 +261,10 @@ RTEMS_INLINE_ROUTINE uint64_t _Timestamp_Get_as_nanoseconds(
 }
 
 /**
- *  @brief Convert timestamp to struct timespec.
+ * @brief Converts timestamp to struct timespec.
  *
- *  This method returns the seconds portion of the specified @a _timestamp.
- *
- *  @param[in] _timestamp points to the timestamp
- *  @param[in] _timespec points to the timespec
+ * @param _timestamp The timestamp.
+ * @param[out] _timespec The timespec to be filled in by the method.
  */
 RTEMS_INLINE_ROUTINE void _Timestamp_To_timespec(
   const Timestamp_Control *_timestamp,
@@ -279,10 +275,10 @@ RTEMS_INLINE_ROUTINE void _Timestamp_To_timespec(
 }
 
 /**
- *  @brief Convert timestamp to struct timeval.
+ * @brief Converts timestamp to struct timeval.
  *
- *  @param[in] _timestamp points to the timestamp
- *  @param[in] _timeval points to the timeval
+ * @param _timestamp The timestamp.
+ * @param[out] _timeval The timeval to be filled in by the method.
  */
 RTEMS_INLINE_ROUTINE void _Timestamp_To_timeval(
   const Timestamp_Control *_timestamp,
@@ -296,7 +292,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_To_timeval(
 }
 #endif
 
-/**@}*/
+/** @} */
 
 #endif
 /* end of include file */
