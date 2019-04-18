@@ -1,11 +1,13 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Information Related to the RAM Workspace
+ * @ingroup RTEMSScoreWorkspace
  *
- *  This include file contains information related to the
- *  RAM Workspace.  This Handler provides mechanisms which can be used to
- *  define, initialize and manipulate the workspace.
+ * @brief Information Related to the RAM Workspace
+ *
+ * This include file contains information related to the
+ * RAM Workspace.  This Handler provides mechanisms which can be used to
+ * define, initialize and manipulate the workspace.
  */
 
 /*
@@ -28,14 +30,15 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup RTEMSScoreWorkspace Workspace Handler
+ * @defgroup RTEMSScoreWorkspace Workspace Handler
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This handler encapsulates functionality related to the management of
- *  the RTEMS Executive Workspace.
+ * This handler encapsulates functionality related to the management of
+ * the RTEMS Executive Workspace.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  @brief Executive workspace control.
@@ -46,9 +49,13 @@ extern "C" {
 extern Heap_Control _Workspace_Area;
 
 /**
- * @brief Initilize workspace handler.
+ * @brief Initilizes the workspace handler.
  *
- *  This routine performs the initialization necessary for this handler.
+ * This routine performs the initialization necessary for this handler.
+ *
+ * @param areas The heap area for the new workspace.
+ * @param area_count The number of areas for the allocation.
+ * @param extend The extension handler for the new workspace.
  */
 void _Workspace_Handler_initialization(
   Heap_Area *areas,
@@ -69,43 +76,41 @@ void _Workspace_Handler_initialization(
 void *_Workspace_Allocate( size_t size );
 
 /**
- * @brief Allocate aligned memory from workspace.
+ * @brief Allocates aligned memory from workspace.
  *
- * @param[in] size The size of the requested memory.
- * @param[in] alignment The alignment of the requested memory.
+ * @param size The size of the requested memory.
+ * @param alignment The alignment of the requested memory.
  *
- * @retval NULL Not enough resources.
  * @retval other The memory area begin.
+ * @retval NULL Not enough resources.
  */
 void *_Workspace_Allocate_aligned( size_t size, size_t alignment );
 
 /**
- * @brief Free memory to the workspace.
+ * @brief Frees memory to the workspace.
  *
- *  This function frees the specified block of memory.  If the block
- *  belongs to the Workspace and can be successfully freed, then
- *  true is returned.  Otherwise false is returned.
+ * This function frees the specified block of memory.
  *
- *  @param block is the memory to free
+ * @param block The memory to free.
  *
- *  @note If @a block is equal to NULL, then the request is ignored.
+ * @note If @a block is equal to NULL, then the request is ignored.
  *        This allows the caller to not worry about whether or not
  *        a pointer is NULL.
  */
-
 void _Workspace_Free(
   void *block
 );
 
 /**
- * @brief Workspace allocate or fail with fatal error.
+ * @brief Allocates workspace or fails with fatal error.
  *
- *  This routine returns the address of a block of memory of @a size
- *  bytes.  If a block of the appropriate size cannot be allocated
- *  from the workspace, then the internal error handler is invoked.
+ * This routine returns the address of a block of memory of @a size
+ * bytes.  If a block of the appropriate size cannot be allocated
+ * from the workspace, then the internal error handler is invoked.
  *
- *  @param[in] size is the desired number of bytes to allocate
- *  @retval If successful, the starting address of the allocated memory
+ * @param size is the desired number of bytes to allocate
+ *
+ * @return The starting address of the allocated memory.
  */
 void *_Workspace_Allocate_or_fatal_error(
   size_t  size
@@ -114,18 +119,18 @@ void *_Workspace_Allocate_or_fatal_error(
 /**
  * @brief Duplicates string with memory from the workspace.
  *
- * @param[in] string is the pointer to a zero terminated string.
- * @param[in] len is the length of the string (equal to strlen(string)).
+ * @param string The pointer to a zero terminated string.
+ * @param len The length of the string (equal to strlen(string)).
  *
- * @retval NULL Not enough memory.
  * @retval other Duplicated string.
+ * @retval NULL Not enough memory.
  */
 char *_Workspace_String_duplicate(
   const char *string,
   size_t len
 );
 
-/**@}*/
+/** @} */
 
 #ifdef __cplusplus
 }
