@@ -255,9 +255,11 @@ typedef void ( *SMP_Action_handler )( void *arg );
 /**
  * @brief Initiates an SMP multicast action to the set of target processors.
  *
- * The current processor may be part of the set.  In case a target processor is
- * in a wrong state to process per-processor jobs, then this function results
- * in an SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS fatal SMP error.
+ * The current processor may be part of the set.  The caller must ensure that
+ * no thread dispatch can happen during the call of this function, otherwise
+ * the behaviour is undefined.  In case a target processor is in a wrong state
+ * to process per-processor jobs, then this function results in an
+ * SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS fatal SMP error.
  *
  * @param targets The set of target processors for the action.
  * @param handler The multicast action handler.

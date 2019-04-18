@@ -227,8 +227,12 @@ static void test_broadcast_body(
   ctx = (test_context *) base;
 
   while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    Per_CPU_Control *cpu_self;
+
     clear_ids_by_worker(ctx, worker_index);
+    cpu_self = _Thread_Dispatch_disable();
     _SMP_Multicast_action(NULL, action, &ctx->id[worker_index][0]);
+    _Thread_Dispatch_enable(cpu_self);
   }
 }
 
@@ -347,11 +351,6 @@ static void test_wrong_cpu_state_to_perform_jobs(void)
   rtems_fatal(RTEMS_FATAL_SOURCE_APPLICATION, 0);
 }
 
-T_TEST_CASE(UnicastDuringMultitasking)
-{
-  test_unicast(&test_instance, _SMP_Multicast_action);
-}
-
 T_TEST_CASE(UnicastDuringMultitaskingIRQDisabled)
 {
   test_unicast(&test_instance, multicast_action_irq_disabled);
@@ -360,11 +359,6 @@ T_TEST_CASE(UnicastDuringMultitaskingIRQDisabled)
 T_TEST_CASE(UnicastDuringMultitaskingDispatchDisabled)
 {
   test_unicast(&test_instance, multicast_action_dispatch_disabled);
-}
-
-T_TEST_CASE(BroadcastDuringMultitasking)
-{
-  test_broadcast(&test_instance, _SMP_Broadcast_action);
 }
 
 T_TEST_CASE(BroadcastDuringMultitaskingIRQDisabled)

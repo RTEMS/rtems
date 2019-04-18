@@ -31,7 +31,6 @@
 
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/threaddispatch.h>
 
 typedef struct Per_CPU_Job Per_CPU_Job;
 
@@ -178,8 +177,7 @@ static void _SMP_Issue_action_jobs(
 static void _SMP_Wait_for_action_jobs(
   const Processor_mask *targets,
   const Per_CPU_Jobs   *jobs,
-  uint32_t              cpu_max,
-  Per_CPU_Control      *cpu_self
+  uint32_t              cpu_max
 )
 {
   uint32_t cpu_index;
@@ -208,7 +206,7 @@ static void _SMP_Wait_for_action_jobs(
              * We have to perform our own jobs here in case inter-processor
              * interrupts are not working.
              */
-            _Per_CPU_Try_perform_jobs( cpu_self );
+            _Per_CPU_Try_perform_jobs( _Per_CPU_Get() );
             break;
           default:
             _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
@@ -225,30 +223,17 @@ void _SMP_Multicast_action(
   void                 *arg
 )
 {
-  Per_CPU_Jobs     jobs;
-  uint32_t         cpu_max;
-  Per_CPU_Control *cpu_self;
-  uint32_t         isr_level;
+  Per_CPU_Jobs jobs;
+  uint32_t     cpu_max;
 
   cpu_max = _SMP_Get_processor_maximum();
   _Assert( cpu_max <= CPU_MAXIMUM_PROCESSORS );
 
   jobs.handler = handler;
   jobs.arg = arg;
-  isr_level = _ISR_Get_level();
-
-  if ( isr_level == 0 ) {
-    cpu_self = _Thread_Dispatch_disable();
-  } else {
-    cpu_self = _Per_CPU_Get();
-  }
 
   _SMP_Issue_action_jobs( targets, &jobs, cpu_max );
-  _SMP_Wait_for_action_jobs( targets, &jobs, cpu_max, cpu_self );
-
-  if ( isr_level == 0 ) {
-    _Thread_Dispatch_enable( cpu_self );
-  }
+  _SMP_Wait_for_action_jobs( targets, &jobs, cpu_max );
 }
 
 void _SMP_Broadcast_action(

@@ -85,6 +85,7 @@
 
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/threaddispatch.h>
 #endif
 
 #if CPU_DATA_CACHE_ALIGNMENT > CPU_CACHE_LINE_BYTES
@@ -283,6 +284,26 @@ static void smp_cache_inst_inv_all(void *arg)
   _CPU_cache_invalidate_entire_instruction();
 }
 
+static void smp_cache_broadcast( SMP_Action_handler handler, void *arg )
+{
+  uint32_t         isr_level;
+  Per_CPU_Control *cpu_self;
+
+  isr_level = _ISR_Get_level();
+
+  if ( isr_level == 0 ) {
+    cpu_self = _Thread_Dispatch_disable();
+  } else {
+    cpu_self = _Per_CPU_Get();
+  }
+
+  _SMP_Broadcast_action( handler, arg );
+
+  if ( isr_level == 0 ) {
+    _Thread_Dispatch_enable( cpu_self );
+  }
+}
+
 #endif
 
 /*
@@ -329,7 +350,7 @@ rtems_cache_invalidate_multiple_instruction_lines(
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
   smp_cache_area area = { i_addr, n_bytes };
 
-  _SMP_Broadcast_action( smp_cache_inst_inv, &area );
+  smp_cache_broadcast( smp_cache_inst_inv, &area );
 #else
   _CPU_cache_invalidate_instruction_range( i_addr, n_bytes );
 #endif
@@ -345,7 +366,7 @@ rtems_cache_invalidate_entire_instruction( void )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
-  _SMP_Broadcast_action( smp_cache_inst_inv_all, NULL );
+  smp_cache_broadcast( smp_cache_inst_inv_all, NULL );
 #else
  _CPU_cache_invalidate_entire_instruction();
 #endif
