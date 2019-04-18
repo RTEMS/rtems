@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSScoreWatchdog
+ *
  * @brief Inlined Routines in the Watchdog Handler
  *
  * This file contains the static inline implementation of all inlined
@@ -34,8 +36,9 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup RTEMSScoreWatchdog
- *  @{
+ * @addtogroup RTEMSScoreWatchdog
+ *
+ * @{
  */
 
 /**
@@ -89,6 +92,11 @@ typedef enum {
     }
 #endif
 
+/**
+ * @brief Initializes the watchdog header.
+ *
+ * @param[out] header The header to initialize.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
   Watchdog_Header *header
 )
@@ -97,6 +105,13 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
   header->first = NULL;
 }
 
+/**
+ * @brief Returns the first of the watchdog header.
+ *
+ * @param header The watchdog header to remove the first of.
+ *
+ * @return The first of @a header.
+ */
 RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Header_first(
   const Watchdog_Header *header
 )
@@ -104,6 +119,11 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Header_first(
   return (Watchdog_Control *) header->first;
 }
 
+/**
+ * @brief Destroys the watchdog header.
+ *
+ * @param header The watchdog header to destroy.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Header_destroy(
   Watchdog_Header *header
 )
@@ -113,12 +133,19 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Header_destroy(
 }
 
 /**
- *  @brief Performs a watchdog tick.
+ * @brief Performs a watchdog tick.
  *
- *  @param cpu The processor for this watchdog tick.
+ * @param cpu The processor for this watchdog tick.
  */
 void _Watchdog_Tick( struct Per_CPU_Control *cpu );
 
+/**
+ * @brief Gets the state of the watchdog.
+ *
+ * @param the_watchdog The watchdog to get the state of.
+ *
+ * @return The RB_COLOR of @a the_watchdog.
+ */
 RTEMS_INLINE_ROUTINE Watchdog_State _Watchdog_Get_state(
   const Watchdog_Control *the_watchdog
 )
@@ -126,6 +153,12 @@ RTEMS_INLINE_ROUTINE Watchdog_State _Watchdog_Get_state(
   return RB_COLOR( &the_watchdog->Node.RBTree, Node );
 }
 
+/**
+ * @brief Sets the state of the watchdog.
+ *
+ * @param[out] the_watchdog The watchdog to set the state of.
+ * @param state The state to set the watchdog to.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Set_state(
   Watchdog_Control *the_watchdog,
   Watchdog_State    state
@@ -134,6 +167,13 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Set_state(
   RB_COLOR( &the_watchdog->Node.RBTree, Node ) = state;
 }
 
+/**
+ * @brief Gets the watchdog's cpu.
+ *
+ * @param the_watchdog The watchdog to get the cpu of.
+ *
+ * @return The cpu of the watchdog.
+ */
 RTEMS_INLINE_ROUTINE Per_CPU_Control *_Watchdog_Get_CPU(
   const Watchdog_Control *the_watchdog
 )
@@ -145,6 +185,12 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Watchdog_Get_CPU(
 #endif
 }
 
+/**
+ * @brief Sets the cpu for the watchdog.
+ *
+ * @param[out] the_watchdog The watchdog to set the cpu of.
+ * @param cpu The cpu to be set as @a the_watchdog's cpu.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Set_CPU(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu
@@ -163,7 +209,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Set_CPU(
  * This routine must be called before a watchdog is used in any way.  The
  * exception are statically initialized watchdogs via WATCHDOG_INITIALIZER().
  *
- * @param[in] the_watchdog The uninitialized watchdog.
+ * @param[out] the_watchdog The uninitialized watchdog.
  */
 RTEMS_INLINE_ROUTINE void _Watchdog_Preinitialize(
   Watchdog_Control *the_watchdog,
@@ -183,6 +229,9 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Preinitialize(
  * @brief Initializes a watchdog with a new service routine.
  *
  * The watchdog must be inactive.
+ *
+ * @param[out] the_watchdog The watchdog to initialize.
+ * @param routing The service routine for @a the_watchdog.
  */
 RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
   Watchdog_Control               *the_watchdog,
@@ -193,6 +242,17 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
   the_watchdog->routine = routine;
 }
 
+/**
+ * @brief Calls the routine of each not expired watchdog control node.
+ *
+ * @param header The watchdog header.
+ * @param first The first watchdog control node.
+ * @param now The current time to check the expiration time against.
+ * @param lock The lock that is released before calling the routine and then
+ *      acquired after the call.
+ * @param lock_context The lock context for the release before calling the
+ *      routine and for the acquire after.
+ */
 void _Watchdog_Do_tickle(
   Watchdog_Header  *header,
   Watchdog_Control *first,
@@ -216,6 +276,10 @@ void _Watchdog_Do_tickle(
  * the specified expiration time.
  *
  * The watchdog must be inactive.
+ *
+ * @param[in, out] header The set of scheduler watchdogs to insert into.
+ * @param[in, out] the_watchdog The watchdog to insert.
+ * @param expire The expiration time for the watchdog.
  */
 void _Watchdog_Insert(
   Watchdog_Header  *header,
@@ -224,10 +288,13 @@ void _Watchdog_Insert(
 );
 
 /**
- * @brief In case the watchdog is scheduled, then it is removed from the set of
+ * @brief In the case the watchdog is scheduled, then it is removed from the set of
  * scheduled watchdogs.
  *
  * The watchdog must be initialized before this call.
+ *
+ * @param[in, out] header The scheduled watchdogs.
+ * @param[in, out] the_watchdog The watchdog to remove.
  */
 void _Watchdog_Remove(
   Watchdog_Header  *header,
@@ -235,14 +302,18 @@ void _Watchdog_Remove(
 );
 
 /**
- * @brief In case the watchdog is scheduled, then it is removed from the set of
+ * @brief In the case the watchdog is scheduled, then it is removed from the set of
  * scheduled watchdogs.
  *
  * The watchdog must be initialized before this call.
  *
+ * @param[in, out] header The scheduled watchdogs.
+ * @param[in, out] the_watchdog The watchdog to remove.
+ * @param now The current time.
+ *
+ * @retval other The difference of the now and expiration time.
  * @retval 0 The now time is greater than or equal to the expiration time of
  * the watchdog.
- * @retval other The difference of the now and expiration time.
  */
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Cancel(
   Watchdog_Header  *header,
@@ -266,6 +337,14 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Cancel(
   return remaining;
 }
 
+/**
+ * @brief Checks if the watchdog is scheduled.
+ *
+ * @param the_watchdog The watchdog for the verification.
+ *
+ * @retval true The watchdog is scheduled.
+ * @retval false The watchdog is inactive.
+ */
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_scheduled(
   const Watchdog_Control *the_watchdog
 )
@@ -273,6 +352,17 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_scheduled(
   return _Watchdog_Get_state( the_watchdog ) < WATCHDOG_INACTIVE;
 }
 
+/**
+ * @brief Sets the first node of the header.
+ *
+ * Sets the first node of the header to either the leftmost child node of the
+ *  watchdog control node, or if not present sets it to the right child node of
+ * the watchdog control node. if both are not present, the new first node is
+ * the parent node of the current first node.
+ *
+ * @param[in, out] header The watchdog header.
+ * @param the_watchdog The watchdog control node for the operation.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
   Watchdog_Header  *header,
   Watchdog_Control *the_watchdog
@@ -318,6 +408,14 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
  */
 #define WATCHDOG_MAX_SECONDS 0x3ffffffff
 
+/**
+ * @brief Checks if the timespec is a valid timespec for a watchdog.
+ *
+ * @param ts The timespec for the verification.
+ *
+ * @retval true The timespec is a valid timespec.
+ * @retval false The timespec is invalid.
+ */
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
   const struct timespec *ts
 )
@@ -326,6 +424,14 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
     && (unsigned long) ts->tv_nsec < WATCHDOG_NANOSECONDS_PER_SECOND;
 }
 
+/**
+ * @brief Checks if the timespec is a valid interval timespec for a watchdog.
+ *
+ * @param ts The timespec for the verification.
+ *
+ * @retval true The timespec is a valid interval timespec.
+ * @retval false The timespec is invalid.
+ */
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
   const struct timespec *ts
 )
@@ -333,6 +439,16 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
   return _Watchdog_Is_valid_timespec( ts ) && ts->tv_sec >= 0;
 }
 
+/**
+ * @brief Adds the delta timespec to the current time if the delta is a valid
+ * interval timespec.
+ *
+ * @param[in, out] now The current time.
+ * @param delta The delta timespec for the addition.
+ *
+ * @retval pointer Pointer to the now timespec.
+ * @retval NULL @a delta is not a valid interval timespec.
+ */
 RTEMS_INLINE_ROUTINE const struct timespec * _Watchdog_Future_timespec(
   struct timespec       *now,
   const struct timespec *delta
@@ -363,6 +479,14 @@ RTEMS_INLINE_ROUTINE const struct timespec * _Watchdog_Future_timespec(
   return now;
 }
 
+/**
+ * @brief Checks if the timespec is too far in the future.
+ *
+ * @param ts The timespec for the verification.
+ *
+ * @retval true @a ts is too far in the future.
+ * @retval false @a ts is not too far in the future.
+ */
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_timespec(
   const struct timespec *ts
 )
@@ -370,6 +494,13 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_timespec(
   return ts->tv_sec > WATCHDOG_MAX_SECONDS;
 }
 
+/**
+ * @brief Converts the seconds to ticks.
+ *
+ * @param seconds The seconds to convert to ticks.
+ *
+ * @return @a seconds converted to ticks.
+ */
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
   uint32_t seconds
 )
@@ -381,6 +512,13 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
   return ticks;
 }
 
+/**
+ * @brief Converts the timespec in ticks.
+ *
+ * @param ts The timespec to convert to ticks.
+ *
+ * @return @a ts converted to ticks.
+ */
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
   const struct timespec *ts
 )
@@ -398,6 +536,13 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
   return ticks;
 }
 
+/**
+ * @brief Converts the sbintime in ticks.
+ *
+ * @param sbt The sbintime to convert to ticks.
+ *
+ * @return @a sbt converted to ticks.
+ */
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
 {
   uint64_t ticks = ( sbt >> 32 ) << WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
@@ -407,6 +552,12 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
   return ticks;
 }
 
+/**
+ * @brief Acquires the per cpu watchdog lock in a critical section.
+ *
+ * @param cpu The cpu to acquire the watchdog lock of.
+ * @param lock_context The lock context.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_acquire_critical(
   Per_CPU_Control  *cpu,
   ISR_lock_Context *lock_context
@@ -415,6 +566,12 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_acquire_critical(
   _ISR_lock_Acquire( &cpu->Watchdog.Lock, lock_context );
 }
 
+/**
+ * @brief Releases the per cpu watchdog lock in a critical section.
+ *
+ * @param cpu The cpu to release the watchdog lock of.
+ * @param lock_context The lock context.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
   Per_CPU_Control  *cpu,
   ISR_lock_Context *lock_context
@@ -423,6 +580,16 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
   _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
 }
 
+/**
+ * @brief Sets the watchdog's cpu to the given instance and sets its expiration
+ *      time to the watchdog expiration time of the cpu plus the ticks.
+ *
+ * @param[in, out] the_watchdog The watchdog to set the cpu and expiration time of.
+ * @param cpu The cpu for the watchdog.
+ * @param ticks The ticks to add to the expiration time.
+ *
+ * @return The new expiration time of the watchdog.
+ */
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
   Watchdog_Control  *the_watchdog,
   Per_CPU_Control   *cpu,
@@ -444,6 +611,17 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
   return expire;
 }
 
+/**
+ * @brief Sets the watchdog's cpu and inserts it with the given expiration time
+ *      in the scheduled watchdogs.
+ *
+ * @param[in, out] the_watchdog The watchdog to set cpu and expiration time of.
+ * @param cpu The cpu for the operation.
+ * @param[in, out] header The scheduled watchdogs.
+ * @param expire The expiration time for the watchdog.
+ *
+ * @return The expiration time of the watchdog.
+ */
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
@@ -461,6 +639,13 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert(
   return expire;
 }
 
+/**
+ * @brief Removes the watchdog from the cpu and the scheduled watchdogs.
+ *
+ * @param[in, out] the_watchdog The watchdog to remove.
+ * @param cpu The cpu to remove the watchdog from.
+ * @param[in, out] The scheduled watchdogs.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
@@ -477,6 +662,11 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
 }
 
+/**
+ * @brief Removes the watchdog from the cpu and the scheduled watchdogs.
+ *
+ * @param[in, out] the_watchdog The watchdog to remove.
+ */
 RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_ticks(
   Watchdog_Control *the_watchdog
 )
