@@ -84,6 +84,11 @@ typedef struct {
   uintptr_t offset;
 } TLS_Index;
 
+/**
+ * @brief Gets the TLS size.
+ *
+ * @return the TLS size.
+ */
 static inline uintptr_t _TLS_Get_size( void )
 {
   /*
@@ -93,6 +98,13 @@ static inline uintptr_t _TLS_Get_size( void )
   return (uintptr_t) _TLS_BSS_end - (uintptr_t) _TLS_Data_begin;
 }
 
+/**
+ * @brief Returns the value aligned up to the heap alignment.
+ *
+ * @param val The value to align.
+ *
+ * @return The value aligned to the heap alignment.
+ */
 static inline uintptr_t _TLS_Heap_align_up( uintptr_t val )
 {
   uintptr_t msk = CPU_HEAP_ALIGNMENT - 1;
@@ -100,6 +112,14 @@ static inline uintptr_t _TLS_Heap_align_up( uintptr_t val )
   return (val + msk) & ~msk;
 }
 
+/**
+ * @brief Returns the size of the thread control block area size for this
+ *      alignment, or the minimum size if alignment is too small.
+ *
+ * @param alignment The alignment for the operation.
+ *
+ * @return The size of the thread control block area.
+ */
 static inline uintptr_t _TLS_Get_thread_control_block_area_size(
   uintptr_t alignment
 )
@@ -108,6 +128,15 @@ static inline uintptr_t _TLS_Get_thread_control_block_area_size(
     sizeof(TLS_Thread_control_block) : alignment;
 }
 
+/**
+ * @brief Returns the actual size that has to be allocated for this size and
+ *      alignment.
+ *
+ * @param size The size for the operation.
+ * @param alignment The alignment for the operation.
+ *
+ * @return The actual allocation size.
+ */
 static inline uintptr_t _TLS_Get_allocation_size(
   uintptr_t size,
   uintptr_t alignment
@@ -125,6 +154,14 @@ static inline uintptr_t _TLS_Get_allocation_size(
   return allocation_size;
 }
 
+/**
+ * @brief Copies TLS size bytes from the address tls_area and returns a pointer
+ *      to the start of the area after clearing it.
+ *
+ * @param tls_area The starting address of the area to clear.
+ *
+ * @return The pointer to the beginning of the cleared section.
+ */
 static inline void *_TLS_Copy_and_clear( void *tls_area )
 {
   tls_area = memcpy(
@@ -144,6 +181,16 @@ static inline void *_TLS_Copy_and_clear( void *tls_area )
   return tls_area;
 }
 
+/**
+ * @brief Initializes the dynamic thread vector.
+ *
+ * @param tls_block The tls block for @a dtv.
+ * @param tcb The thread control block for @a dtv.
+ * @param[out] dtv The dynamic thread vector to initialize.
+ *
+ * @return Pointer to an area that was copied and cleared from tls_block
+ *       onwards (@see _TLS_Copy_and_clear).
+ */
 static inline void *_TLS_Initialize(
   void *tls_block,
   TLS_Thread_control_block *tcb,
@@ -162,7 +209,17 @@ static inline void *_TLS_Initialize(
   return _TLS_Copy_and_clear( tls_block );
 }
 
-/* Use Variant I, TLS offsets emitted by linker takes the TCB into account */
+/**
+ * @brief Initializes a dynamic thread vector beginning at the given starting
+ *      address.
+ *
+ * Use Variant I, TLS offsets emitted by linker takes the TCB into account.
+ *
+ * @param tls_area The tls area for the initialization.
+ *
+ * @return Pointer to an area that was copied and cleared from tls_block
+ *       onwards (@see _TLS_Copy_and_clear).
+ */
 static inline void *_TLS_TCB_at_area_begin_initialize( void *tls_area )
 {
   void *tls_block = (char *) tls_area
@@ -175,7 +232,17 @@ static inline void *_TLS_TCB_at_area_begin_initialize( void *tls_area )
   return _TLS_Initialize( tls_block, tcb, dtv );
 }
 
-/* Use Variant I, TLS offsets emitted by linker neglects the TCB */
+/**
+ * @brief Initializes a dynamic thread vector with the area before a given
+ * starting address as thread control block.
+ *
+ * Use Variant I, TLS offsets emitted by linker neglects the TCB.
+ *
+ * @param tls_area The tls area for the initialization.
+ *
+ * @return Pointer to an area that was copied and cleared from tls_block
+ *       onwards (@see _TLS_Copy_and_clear).
+ */
 static inline void *_TLS_TCB_before_TLS_block_initialize( void *tls_area )
 {
   void *tls_block = (char *) tls_area
@@ -189,7 +256,17 @@ static inline void *_TLS_TCB_before_TLS_block_initialize( void *tls_area )
   return _TLS_Initialize( tls_block, tcb, dtv );
 }
 
-/* Use Variant II */
+/**
+ * @brief Initializes a dynamic thread vector with the area after a given
+ * starting address as thread control block.
+ *
+ * Use Variant II
+ *
+ * @param tls_area The tls area for the initialization.
+ *
+ * @return Pointer to an area that was copied and cleared from tls_block
+ *       onwards (@see _TLS_Copy_and_clear).
+ */
 static inline void *_TLS_TCB_after_TLS_block_initialize( void *tls_area )
 {
   uintptr_t size = (uintptr_t) _TLS_Size;
