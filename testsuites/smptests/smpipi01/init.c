@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -40,6 +40,7 @@ typedef struct {
   SMP_barrier_Control barrier;
   SMP_barrier_State main_barrier_state;
   SMP_barrier_State worker_barrier_state;
+  Per_CPU_Job jobs[2];
 } test_context;
 
 static test_context test_instance = {
@@ -56,10 +57,27 @@ static void barrier(
   _SMP_barrier_Wait(&ctx->barrier, state, 2);
 }
 
-static void barrier_handler(Per_CPU_Control *cpu_self)
+static void barrier_1_handler(void *arg)
 {
-  test_context *ctx = &test_instance;
-  uint32_t cpu_index_self = _Per_CPU_Get_index(cpu_self);
+  test_context *ctx = arg;
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  SMP_barrier_State *bs = &ctx->worker_barrier_state;
+
+  ++ctx->counters[cpu_index_self].value;
+
+  /* (D) */
+  barrier(ctx, bs);
+}
+
+static const Per_CPU_Job_context barrier_1_job_context = {
+  .handler = barrier_1_handler,
+  .arg = &test_instance
+};
+
+static void barrier_0_handler(void *arg)
+{
+  test_context *ctx = arg;
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
   SMP_barrier_State *bs = &ctx->worker_barrier_state;
 
   ++ctx->counters[cpu_index_self].value;
@@ -72,7 +90,15 @@ static void barrier_handler(Per_CPU_Control *cpu_self)
 
   /* (C) */
   barrier(ctx, bs);
+
+  ctx->jobs[1].context = &barrier_1_job_context;
+  _Per_CPU_Add_job(_Per_CPU_Get(), &ctx->jobs[1]);
 }
+
+static const Per_CPU_Job_context barrier_0_job_context = {
+  .handler = barrier_0_handler,
+  .arg = &test_instance
+};
 
 static void test_send_message_while_processing_a_message(
   test_context *ctx
@@ -83,17 +109,17 @@ static void test_send_message_while_processing_a_message(
   uint32_t cpu_index;
   SMP_barrier_State *bs = &ctx->main_barrier_state;
 
-  _SMP_Set_test_message_handler(barrier_handler);
-
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
     if (cpu_index != cpu_index_self) {
-      _SMP_Send_message(cpu_index, SMP_MESSAGE_TEST);
+      ctx->jobs[0].context = &barrier_0_job_context;
+      _Per_CPU_Add_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0]);
+      _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
 
       /* (A) */
       barrier(ctx, bs);
 
       rtems_test_assert(ctx->counters[cpu_index].value == 1);
-      _SMP_Send_message(cpu_index, SMP_MESSAGE_TEST);
+      _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
 
       /* (B) */
       barrier(ctx, bs);
@@ -103,16 +129,10 @@ static void test_send_message_while_processing_a_message(
       /* (C) */
       barrier(ctx, bs);
 
-      /* (A) */
+      /* (D) */
       barrier(ctx, bs);
 
       rtems_test_assert(ctx->counters[cpu_index].value == 2);
-
-      /* (B) */
-      barrier(ctx, bs);
-
-      /* (C) */
-      barrier(ctx, bs);
 
       ctx->counters[cpu_index].value = 0;
     }
