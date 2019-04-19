@@ -57,6 +57,24 @@ void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
 
     _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
   }
+}
+
+void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
+{
+  ISR_lock_Context lock_context;
+
+  _Atomic_Store_ulong( &job->done, 0, ATOMIC_ORDER_RELAXED );
+  _Assert( job->next == NULL );
+
+  _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
+
+  if ( cpu->Jobs.head == NULL ) {
+    cpu->Jobs.head = job;
+  } else {
+    *cpu->Jobs.tail = job;
+  }
+
+  cpu->Jobs.tail = &job->next;
 
   _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
 }
@@ -97,27 +115,14 @@ static void _SMP_Issue_action_jobs(
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
-      ISR_lock_Context  lock_context;
-      Per_CPU_Job      *job;
-      Per_CPU_Control  *cpu;
+      Per_CPU_Job     *job;
+      Per_CPU_Control *cpu;
 
       job = &jobs->Jobs[ cpu_index ];
-      _Atomic_Store_ulong( &job->done, 0, ATOMIC_ORDER_RELAXED );
-      _Assert( job->next == NULL );
       job->context = &jobs->Context;
-
       cpu = _Per_CPU_Get_by_index( cpu_index );
-      _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
 
-      if ( cpu->Jobs.head == NULL ) {
-        cpu->Jobs.head = job;
-      } else {
-        *cpu->Jobs.tail = job;
-      }
-
-      cpu->Jobs.tail = &job->next;
-
-      _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
+      _Per_CPU_Add_job( cpu, job );
       _SMP_Send_message( cpu_index, SMP_MESSAGE_PERFORM_JOBS );
     }
   }

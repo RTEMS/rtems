@@ -792,11 +792,24 @@ bool _Per_CPU_State_wait_for_non_initial_state(
 );
 
 /**
- * @brief Performs the jobs of the specified processor.
+ * @brief Performs the jobs of the specified processor in FIFO order.
  *
  * @param[in, out] cpu The jobs of this processor will be performed.
  */
 void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu );
+
+/**
+ * @brief Adds the job to the tail of the processing list of the specified
+ * processor.
+ *
+ * This function does not send the SMP_MESSAGE_PERFORM_JOBS message the
+ * specified processor.
+ *
+ * @param[in, out] cpu The processor to add the job.
+ * @param[in, out] job The job.  The Per_CPU_Job::context member must be
+ *   initialized by the caller.
+ */
+void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job );
 
 #endif /* defined( RTEMS_SMP ) */
 
