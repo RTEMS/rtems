@@ -394,6 +394,47 @@ T_TEST_CASE(JobOrder)
   _Thread_Dispatch_enable(cpu_self);
 }
 
+#define TEST_ADD_JOB_IN_JOB_JOBS 3
+
+static Per_CPU_Job add_job_in_job_jobs[TEST_ADD_JOB_IN_JOB_JOBS];
+
+static void add_job_in_job_handler_0(void *arg)
+{
+  T_step(1, "invalid job order");
+  _Per_CPU_Add_job(_Per_CPU_Get(), &add_job_in_job_jobs[1]);
+}
+
+static void add_job_in_job_handler_1(void *arg)
+{
+  T_step(3, "invalid job order");
+}
+
+static const Per_CPU_Job_context
+add_job_in_job_contexts[TEST_ADD_JOB_IN_JOB_JOBS] = {
+  { .handler = add_job_in_job_handler_0 },
+  { .handler = add_job_in_job_handler_1 }
+};
+
+T_TEST_CASE(AddJobInJob)
+{
+  Per_CPU_Control *cpu_self;
+  size_t i;
+
+  T_plan(4);
+  cpu_self = _Thread_Dispatch_disable();
+
+  for (i = 0; i < TEST_ADD_JOB_IN_JOB_JOBS; ++i) {
+    add_job_in_job_jobs[i].context = &add_job_in_job_contexts[i];
+  }
+
+  _Per_CPU_Add_job(cpu_self, &add_job_in_job_jobs[0]);
+  T_step(0, "wrong job processing time");
+  _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
+  T_step(2, "wrong job processing time");
+  _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
+  _Thread_Dispatch_enable(cpu_self);
+}
+
 T_TEST_CASE(UnicastDuringMultitaskingIRQDisabled)
 {
   test_unicast(&test_instance, multicast_action_irq_disabled);

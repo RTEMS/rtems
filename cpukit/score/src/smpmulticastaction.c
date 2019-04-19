@@ -44,18 +44,20 @@ void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
   Per_CPU_Job      *job;
 
   _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
+  job = cpu->Jobs.head;
+  cpu->Jobs.head = NULL;
+  _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
 
-  while ( ( job = cpu->Jobs.head ) != NULL ) {
+  while ( job != NULL ) {
     const Per_CPU_Job_context *context;
-
-    cpu->Jobs.head = job->next;
-    _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
+    Per_CPU_Job               *next;
 
     context = job->context;
+    next = job->next;
     ( *context->handler )( context->arg );
     _Atomic_Store_ulong( &job->done, PER_CPU_JOB_DONE, ATOMIC_ORDER_RELEASE );
 
-    _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
+    job = next;
   }
 }
 
