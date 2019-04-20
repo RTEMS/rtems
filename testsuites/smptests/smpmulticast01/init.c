@@ -258,35 +258,40 @@ static void test_wrong_cpu_state_to_perform_jobs(void)
   rtems_fatal(RTEMS_FATAL_SOURCE_APPLICATION, 0);
 }
 
+T_TEST_CASE(UnicastDuringMultitasking)
+{
+  test_unicast(&test_instance, _SMP_Multicast_action);
+}
+
+T_TEST_CASE(UnicastDuringMultitaskingIRQDisabled)
+{
+  test_unicast(&test_instance, multicast_action_irq_disabled);
+}
+
+T_TEST_CASE(UnicastDuringMultitaskingDispatchDisabled)
+{
+  test_unicast(&test_instance, multicast_action_dispatch_disabled);
+}
+
+T_TEST_CASE(BroadcastDuringMultitasking)
+{
+  test_broadcast(&test_instance, _SMP_Multicast_action);
+}
+
+T_TEST_CASE(BroadcastDuringMultitaskingIRQDisabled)
+{
+  test_broadcast(&test_instance, multicast_action_irq_disabled);
+}
+
+T_TEST_CASE(BroadcastDuringMultitaskingDispatchDisabled)
+{
+  test_broadcast(&test_instance, multicast_action_dispatch_disabled);
+}
+
 static void Init(rtems_task_argument arg)
 {
-  test_context *ctx;
-
-  ctx = &test_instance;
-
-  T_case_begin("UnicastDuringMultitasking", NULL);
-  test_unicast(ctx, _SMP_Multicast_action);
-  T_case_end();
-
-  T_case_begin("UnicastDuringMultitaskingIRQDisabled", NULL);
-  test_unicast(ctx, multicast_action_irq_disabled);
-  T_case_end();
-
-  T_case_begin("UnicastDuringMultitaskingDispatchDisabled", NULL);
-  test_unicast(ctx, multicast_action_dispatch_disabled);
-  T_case_end();
-
-  T_case_begin("BroadcastDuringMultitasking", NULL);
-  test_broadcast(ctx, _SMP_Multicast_action);
-  T_case_end();
-
-  T_case_begin("BroadcastDuringMultitaskingIRQDisabled", NULL);
-  test_broadcast(ctx, multicast_action_irq_disabled);
-  T_case_end();
-
-  T_case_begin("BroadcastDuringMultitaskingDispatchDisabled", NULL);
-  test_broadcast(ctx, multicast_action_dispatch_disabled);
-  T_case_end();
+  T_register();
+  T_run_all();
 
   if (rtems_scheduler_get_processor_maximum() > 1) {
     test_wrong_cpu_state_to_perform_jobs();
