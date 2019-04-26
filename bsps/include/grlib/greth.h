@@ -100,6 +100,7 @@ typedef struct _greth_regs {
 #define GRETH_STATUS_TXIRQ      0x00000008 /* Transmit Error IRQ */
 #define GRETH_STATUS_RXAHBERR   0x00000010 /* Receiver AHB Error */
 #define GRETH_STATUS_TXAHBERR   0x00000020 /* Transmitter AHB Error */
+#define GRETH_STATUS_NRD        0x0f000000 /* Number of descriptors */
 
 /* MDIO Control  */
 #define GRETH_MDIO_WRITE        0x00000001 /* MDIO Write */
