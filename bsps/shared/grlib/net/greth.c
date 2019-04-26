@@ -187,6 +187,7 @@ struct greth_softc
    unsigned int advmodes; /* advertise ethernet speed modes. 0 = all modes. */
    struct timespec auto_neg_time;
    int mc_available;
+   int num_descs;
 
    /*
     * Statistics
@@ -423,7 +424,7 @@ greth_initialize_hardware (struct greth_softc *sc)
     int tmp2;
     struct timespec tstart, tnow;
     greth_regs *regs;
-    unsigned int advmodes, speed;
+    unsigned int advmodes, speed, tabsize;
 
     regs = sc->regs;
 
@@ -617,8 +618,9 @@ auto_neg_done:
     /* Initialize rx/tx descriptor table pointers. Due to alignment we 
      * always allocate maximum table size.
      */
-    sc->txdesc = (greth_rxtxdesc *) almalloc(0x800, 0x400);
-    sc->rxdesc = (greth_rxtxdesc *) &sc->txdesc[128];
+    tabsize = sc->num_descs * 8;
+    sc->txdesc = (greth_rxtxdesc *) almalloc(tabsize * 2, tabsize);
+    sc->rxdesc = (greth_rxtxdesc *) (tabsize + (void *)sc->txdesc);
     sc->tx_ptr = 0;
     sc->tx_dptr = 0;
     sc->tx_cnt = 0;
@@ -632,8 +634,8 @@ auto_neg_done:
         CPUMEM_TO_DMA,
         (void *)sc->txdesc,
         (void **)&sc->txdesc_remote,
-        0x800);
-    sc->rxdesc_remote = sc->txdesc_remote + 0x400;
+        tabsize * 2);
+    sc->rxdesc_remote = sc->txdesc_remote + tabsize;
     regs->txdesc = (int) sc->txdesc_remote;
     regs->rxdesc = (int) sc->rxdesc_remote;
 
@@ -1555,6 +1557,7 @@ int greth_device_init(struct greth_softc *sc)
     struct ambapp_core *pnpinfo;
     union drvmgr_key_value *value;
     unsigned int speed;
+    int i, nrd;
 
     /* Get device information from AMBA PnP information */
     ambadev = (struct amba_dev_info *)sc->dev->businfo;
@@ -1608,12 +1611,17 @@ int greth_device_init(struct greth_softc *sc)
     sc->rxbufs = 32;
     sc->phyaddr = -1;
 
+    /* Probe the number of descriptors available the */
+    nrd = (sc->regs->status & GRETH_STATUS_NRD) >> 24;
+    for (sc->num_descs = 128, i = 0; i < nrd; i++)
+        sc->num_descs = sc->num_descs * 2;
+
     value = drvmgr_dev_key_get(sc->dev, "txDescs", DRVMGR_KT_INT);
-    if ( value && (value->i <= 128) )
+    if ( value && (value->i <= sc->num_descs) )
         sc->txbufs = value->i;
 
     value = drvmgr_dev_key_get(sc->dev, "rxDescs", DRVMGR_KT_INT);
-    if ( value && (value->i <= 128) )
+    if ( value && (value->i <= sc->num_descs) )
         sc->rxbufs = value->i;
 
     value = drvmgr_dev_key_get(sc->dev, "phyAdr", DRVMGR_KT_INT);
