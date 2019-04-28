@@ -102,13 +102,11 @@ typedef struct {
 
 static void a9mpcore_clock_secondary_action(void *arg)
 {
-  if (!_Per_CPU_Is_boot_processor(_Per_CPU_Get())) {
-    volatile a9mpcore_gt *gt = A9MPCORE_GT;
-    a9mpcore_clock_init_data *init_data = arg;
+  volatile a9mpcore_gt *gt = A9MPCORE_GT;
+  a9mpcore_clock_init_data *init_data = arg;
 
-    a9mpcore_clock_gt_init(gt, init_data->cmpval, init_data->interval);
-    bsp_interrupt_vector_enable(A9MPCORE_IRQ_GT);
-  }
+  a9mpcore_clock_gt_init(gt, init_data->cmpval, init_data->interval);
+  bsp_interrupt_vector_enable(A9MPCORE_IRQ_GT);
 }
 #endif
 
@@ -124,7 +122,7 @@ static void a9mpcore_clock_secondary_initialization(
     .interval = interval
   };
 
-  _SMP_Broadcast_action(a9mpcore_clock_secondary_action, &init_data);
+  _SMP_Othercast_action(a9mpcore_clock_secondary_action, &init_data);
 
   if (cmpval - a9mpcore_clock_get_counter(gt) >= interval) {
     bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_SMP_INIT);

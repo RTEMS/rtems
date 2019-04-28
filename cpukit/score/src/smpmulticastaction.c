@@ -258,3 +258,15 @@ void _SMP_Broadcast_action(
 {
   _SMP_Multicast_action( _SMP_Get_online_processors(), handler, arg );
 }
+
+void _SMP_Othercast_action(
+  SMP_Action_handler  handler,
+  void               *arg
+)
+{
+  Processor_mask targets;
+
+  _Processor_mask_Assign( &targets, _SMP_Get_online_processors() );
+  _Processor_mask_Clear( &targets, _SMP_Get_current_processor() );
+  _SMP_Multicast_action( &targets, handler, arg );
+}

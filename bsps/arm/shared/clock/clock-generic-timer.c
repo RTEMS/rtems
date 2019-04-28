@@ -122,13 +122,11 @@ static void arm_gt_clock_gt_init(uint64_t cval)
 #if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
 static void arm_gt_clock_secondary_action(void *arg)
 {
-  if (!_Per_CPU_Is_boot_processor(_Per_CPU_Get())) {
-    uint64_t *cval;
+  uint64_t *cval;
 
-    cval = arg;
-    arm_gt_clock_gt_init(*cval);
-    bsp_interrupt_vector_enable(arm_gt_clock_instance.irq);
-  }
+  cval = arg;
+  arm_gt_clock_gt_init(*cval);
+  bsp_interrupt_vector_enable(arm_gt_clock_instance.irq);
 }
 #endif
 

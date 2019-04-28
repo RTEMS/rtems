@@ -284,6 +284,21 @@ void _SMP_Broadcast_action(
   void               *arg
 );
 
+/**
+ * @brief Initiates an SMP multicast action to the set of all online
+ * processors excluding the current processor.
+ *
+ * Simply calls _SMP_Multicast_action() with _SMP_Get_online_processors() as
+ * the target processor set excluding the current processor.
+ *
+ * @param handler The multicast action handler.
+ * @param arg The multicast action argument.
+ */
+void _SMP_Othercast_action(
+  SMP_Action_handler  handler,
+  void               *arg
+);
+
 #endif /* defined( RTEMS_SMP ) */
 
 /**
