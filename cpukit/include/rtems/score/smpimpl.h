@@ -44,18 +44,11 @@ extern "C" {
 #define SMP_MESSAGE_SHUTDOWN 0x1UL
 
 /**
- * @brief SMP message to request a test handler invocation.
- *
- * @see _SMP_Send_message().
- */
-#define SMP_MESSAGE_TEST 0x2UL
-
-/**
  * @brief SMP message to perform per-processor jobs.
  *
  * @see _SMP_Send_message().
  */
-#define SMP_MESSAGE_PERFORM_JOBS 0x4UL
+#define SMP_MESSAGE_PERFORM_JOBS 0x2UL
 
 /**
  * @brief SMP fatal codes.
@@ -136,25 +129,6 @@ void _SMP_Start_multitasking_on_secondary_processor(
   Per_CPU_Control *cpu_self
 ) RTEMS_NO_RETURN;
 
-typedef void ( *SMP_Test_message_handler )( Per_CPU_Control *cpu_self );
-
-extern SMP_Test_message_handler _SMP_Test_message_handler;
-
-/**
- * @brief Sets the handler for test messages.
- *
- * This handler can be used to test the inter-processor interrupt
- * implementation.
- *
- * @param handler The handler for text messages.
- */
-static inline void _SMP_Set_test_message_handler(
-  SMP_Test_message_handler handler
-)
-{
-  _SMP_Test_message_handler = handler;
-}
-
 /**
  * @brief Interrupts handler for inter-processor interrupts.
  *
@@ -184,10 +158,6 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       _SMP_Fatal( SMP_FATAL_SHUTDOWN_RESPONSE );
       /* does not continue past here */
-    }
-
-    if ( ( message & SMP_MESSAGE_TEST ) != 0 ) {
-      ( *_SMP_Test_message_handler )( cpu_self );
     }
 
     if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {

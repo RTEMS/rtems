@@ -252,5 +252,3 @@ void _SMP_Send_message_multicast(
     }
   }
 }
-
-SMP_Test_message_handler _SMP_Test_message_handler;
