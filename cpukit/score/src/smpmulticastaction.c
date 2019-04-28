@@ -211,3 +211,13 @@ void _SMP_Othercast_action(
   _Processor_mask_Clear( &targets, _SMP_Get_current_processor() );
   _SMP_Multicast_action( &targets, handler, arg );
 }
+
+static void _SMP_Do_nothing_action( void *arg )
+{
+  /* Do nothing */
+}
+
+void _SMP_Synchronize( void )
+{
+  _SMP_Othercast_action( _SMP_Do_nothing_action, NULL );
+}

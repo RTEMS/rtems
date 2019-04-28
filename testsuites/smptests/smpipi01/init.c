@@ -18,7 +18,6 @@
 
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/smpbarrier.h>
-#include <rtems/counter.h>
 #include <rtems.h>
 
 #include <stdio.h>
@@ -195,10 +194,12 @@ static void test_send_message_flood(
   }
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+    Per_CPU_Control *cpu_self;
     uint32_t i;
 
-    /* Wait 1us so that all outstanding messages have been processed */
-    rtems_counter_delay_nanoseconds(1000000);
+    cpu_self = _Thread_Dispatch_disable();
+    _SMP_Synchronize();
+    _Thread_Dispatch_enable(cpu_self);
 
     for (i = 0; i < cpu_count; ++i) {
       if (i != cpu_index) {

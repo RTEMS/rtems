@@ -261,6 +261,14 @@ void _SMP_Othercast_action(
   void               *arg
 );
 
+/**
+ * @brief Ensures that all store operations issued by the current processor
+ * before the call this function are visible to all other online processors.
+ *
+ * Simply calls _SMP_Othercast_action() with an empty multicast action.
+ */
+void _SMP_Synchronize( void );
+
 #endif /* defined( RTEMS_SMP ) */
 
 /**
