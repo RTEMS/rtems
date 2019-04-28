@@ -101,13 +101,21 @@ static const Per_CPU_Job_context barrier_0_job_context = {
 };
 
 static void test_send_message_while_processing_a_message(
-  test_context *ctx
+  test_context *ctx,
+  uint32_t cpu_index_self,
+  uint32_t cpu_count
 )
 {
-  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
-  uint32_t cpu_index_self = rtems_scheduler_get_processor();
-  uint32_t cpu_index;
   SMP_barrier_State *bs = &ctx->main_barrier_state;
+  uint32_t cpu_index;
+  rtems_status_code sc;
+  cpu_set_t cpuset;
+
+  rtems_test_assert(cpu_index_self < CPU_SETSIZE);
+  CPU_ZERO(&cpuset);
+  CPU_SET((int) cpu_index_self, &cpuset);
+  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
     if (cpu_index != cpu_index_self) {
@@ -148,10 +156,10 @@ static void counter_handler(Per_CPU_Control *cpu_self)
 }
 
 static void test_send_message_flood(
-  test_context *ctx
+  test_context *ctx,
+  uint32_t cpu_count
 )
 {
-  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
   uint32_t cpu_index_self = rtems_scheduler_get_processor();
   uint32_t cpu_index;
 
@@ -204,9 +212,14 @@ static void test_send_message_flood(
 static void test(void)
 {
   test_context *ctx = &test_instance;
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
+  uint32_t cpu_index_self;
 
-  test_send_message_while_processing_a_message(ctx);
-  test_send_message_flood(ctx);
+  for (cpu_index_self = 0; cpu_index_self < cpu_count; ++cpu_index_self) {
+    test_send_message_while_processing_a_message(ctx, cpu_index_self, cpu_count);
+  }
+
+  test_send_message_flood(ctx, cpu_count);
 }
 
 static void Init(rtems_task_argument arg)
