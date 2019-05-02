@@ -22,7 +22,6 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/processormask.h>
 #include <rtems/fatal.h>
-#include <rtems/rtems/cache.h>
 
 #ifdef __cplusplus
 extern "C" {
