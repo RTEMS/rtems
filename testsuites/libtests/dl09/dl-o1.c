@@ -55,6 +55,7 @@ int rtems_main_o1 (void)
   printf (DL_NAME ":       dl01_const1: %4zu: %p: %d\n",   PAINT_VAR (dl01_const1));
   printf (DL_NAME ":       dl01_const2: %4zu: %p: %f\n",   PAINT_VAR (dl01_const2));
   printf (DL_NAME ":        dl01_func1: %4zu: %p\n",       sizeof(dl01_func1), &dl01_func1);
+  printf (DL_NAME ":     rtems_main_o2:       %p\n",       &rtems_main_o2);
 
   rtems_main_o2 ();
 

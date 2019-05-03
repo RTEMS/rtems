@@ -207,7 +207,7 @@ struct rtems_rtl_obj
   size_t              text_size;    /**< The size of the text section. */
   void*               const_base;   /**< The base address of the const section
                                      *   in memory. */
-  size_t              const_size;    /**< The size of the const section. */
+  size_t              const_size;   /**< The size of the const section. */
   void*               eh_base;      /**< The base address of the eh section in
                                      *   memory. */
   size_t              eh_size;      /**< The size of the eh section. */
@@ -227,10 +227,14 @@ struct rtems_rtl_obj
                                      *   obj. */
   void*               trampoline;   /**< Trampoline memory. Used for fixups or
                                      *   veneers */
-  size_t              tramp_size;   /**< Size of the tramopline memory. */
+  size_t              tramp_size;   /**< Size of a tramopline slot. */
+  size_t              tramps_size;  /**< Size of the trampoline memory. */
   void*               tramp_brk;    /**< Trampoline memory allocator. MD
                                      *   relocators can take memory from the
                                      *   break upto the size. */
+  size_t              tramp_relocs; /**< Number of slots reserved for
+                                     *   relocs. The remainder are for
+                                     *   unresolved symbols. */
   struct link_map*    linkmap;      /**< For GDB. */
   void*               loader;       /**< The file details specific to a
                                      *   loader. */
@@ -370,11 +374,35 @@ static inline bool rtems_rtl_obj_has_symbol (const rtems_rtl_obj*     obj,
  * @param size The size to be allocated.
  * @retval bool Returns @true if the space is available.
  */
-static inline bool rtems_rtl_obj_has_ramp_space (const rtems_rtl_obj* obj,
-                                                 const size_t         size)
+static inline bool rtems_rtl_obj_has_tramp_space (const rtems_rtl_obj* obj,
+                                                  const size_t         size)
 {
   return (obj->trampoline != NULL &&
-          ((obj->tramp_brk - obj->trampoline) + size) <= obj->tramp_size);
+          ((obj->tramp_brk - obj->trampoline) + size) <= obj->tramps_size);
+}
+
+/**
+ * Trampoline slots.
+ *
+ * @param obj The object file's descriptor.
+ * @retval size_t The number of trampoline slots.
+ */
+static inline size_t rtems_rtl_obj_trampoline_slots (const rtems_rtl_obj* obj)
+{
+  return obj->trampoline == NULL || obj->tramp_size == 0 ?
+    0 : obj->tramps_size / obj->tramp_size;
+}
+
+/**
+ * Number of trampolines.
+ *
+ * @param obj The object file's descriptor.
+ * @retval size_t The number of trampolines.
+ */
+static inline size_t rtems_rtl_obj_trampolines (const rtems_rtl_obj* obj)
+{
+  return obj->trampoline == NULL || obj->tramp_size == 0 ?
+    0 : (obj->tramp_brk - obj->trampoline) / obj->tramp_size;
 }
 
 /**

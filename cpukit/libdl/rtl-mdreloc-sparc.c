@@ -185,7 +185,7 @@ rtems_rtl_elf_relocate_tramp_max_size (void)
   return 0;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -199,10 +199,10 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
   (void) symname;
   (void) syminfo;
   (void) symvalue;
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
@@ -218,22 +218,22 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
 
   type = ELF_R_TYPE(rela->r_info);
   if (type == R_TYPE(NONE))
-    return true;
+    return rtems_rtl_elf_rel_no_error;
 
   /* We do JMP_SLOTs in _rtld_bind() below */
   if (type == R_TYPE(JMP_SLOT))
-    return true;
+    return rtems_rtl_elf_rel_no_error;
 
   /* COPY relocs are also handled elsewhere */
   if (type == R_TYPE(COPY))
-    return true;
+    return rtems_rtl_elf_rel_no_error;
 
   /*
    * We use the fact that relocation types are an `enum'
    * Note: R_SPARC_6 is currently numerically largest.
    */
   if (type > R_TYPE(6))
-    return false;
+    return rtems_rtl_elf_rel_failure;
 
   value = rela->r_addend;
 
@@ -245,7 +245,7 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
       printf ("rtl: reloc relative in %s --> %p",
               rtems_rtl_obj_oname (obj), (void *)*where);
-    return true;
+    return rtems_rtl_elf_rel_no_error;
   }
 
   if (RELOC_RESOLVE_SYMBOL (type)) {
@@ -315,10 +315,10 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
             reloc_names[ELF_R_TYPE(rela->r_info)],
             (void *)tmp, where, rtems_rtl_obj_oname (obj));
 
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -333,10 +333,10 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
@@ -351,7 +351,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   printf ("rtl: rel type record not supported; please report\n");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
 bool

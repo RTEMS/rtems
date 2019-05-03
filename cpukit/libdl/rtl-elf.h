@@ -52,6 +52,17 @@ extern "C" {
  **/
 
 /**
+ * ELF Relocation status codes.
+ */
+typedef enum rtems_rtl_elf_rel_status
+{
+  rtems_rtl_elf_rel_no_error,    /**< There is no error processing the record. */
+  rtems_rtl_elf_rel_failure,     /**< There was a failure processing the record. */
+  rtems_rtl_elf_rel_tramp_cache, /**< The reloc record may need a trampoliine. */
+  rtems_rtl_elf_rel_tramp_add    /**< Add a trampoliine. */
+} rtems_rtl_elf_rel_status;
+
+/**
  * Relocation trampoline relocation data.
  */
 typedef struct rtems_rtl_mdreloc_trmap
@@ -143,20 +154,19 @@ size_t rtems_rtl_elf_relocate_tramp_max_size (void);
  * relocation record requires a trampoline.
  *
  * @param obj The object file being relocated.
- * @param rel The ELF relocation record.
+ * @param rela The ELF relocation record.
  * @param sect The section of the object file the relocation is for.
  * @param symname The symbol's name.
  * @param syminfo The ELF symbol info field.
  * @param symvalue If a symbol is referenced, this is the symbols value.
- * @retval bool The relocation is valid.
- * @retval bool The relocation is not valid.
+ * @retval rtems_rtl_elf_rel_status The result of the trampoline parsing.
  */
-bool rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
-                                       const Elf_Rel*            rel,
-                                       const rtems_rtl_obj_sect* sect,
-                                       const char*               symname,
-                                       const Elf_Byte            syminfo,
-                                       const Elf_Word            symvalue);
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
+                                                           const Elf_Rel*            rel,
+                                                           const rtems_rtl_obj_sect* sect,
+                                                           const char*               symname,
+                                                           const Elf_Byte            syminfo,
+                                                           const Elf_Word            symvalue);
 
 /**
  * Architecture specific relocation handler compiled in for a specific
@@ -169,15 +179,14 @@ bool rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
  * @param symname The symbol's name.
  * @param syminfo The ELF symbol info field.
  * @param symvalue If a symbol is referenced, this is the symbols value.
- * @retval bool The relocation is valid.
- * @retval bool The relocation is not valid.
+ * @retval rtems_rtl_elf_rel_status The result of the trampoline parsing.
  */
-bool rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
-                                        const Elf_Rela*           rela,
-                                        const rtems_rtl_obj_sect* sect,
-                                        const char*               symname,
-                                        const Elf_Byte            syminfo,
-                                        const Elf_Word            symvalue);
+rtems_rtl_elf_rel_status  rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
+                                                             const Elf_Rela*           rela,
+                                                             const rtems_rtl_obj_sect* sect,
+                                                             const char*               symname,
+                                                             const Elf_Byte            syminfo,
+                                                             const Elf_Word            symvalue);
 
 /**
  * Architecture specific relocation handler compiled in for a specific
@@ -190,15 +199,14 @@ bool rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
  * @param symname The symbol's name.
  * @param syminfo The ELF symbol info field.
  * @param symvalue If a symbol is referenced, this is the symbols value.
- * @retval bool The relocation has been applied.
- * @retval bool The relocation could not be applied.
+ * @retval rtems_rtl_elf_rel_status The result of the trampoline parsing.
  */
-bool rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
-                                 const Elf_Rel*            rel,
-                                 const rtems_rtl_obj_sect* sect,
-                                 const char*               symname,
-                                 const Elf_Byte            syminfo,
-                                 const Elf_Word            symvalue);
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
+                                                     const Elf_Rel*            rel,
+                                                     const rtems_rtl_obj_sect* sect,
+                                                     const char*               symname,
+                                                     const Elf_Byte            syminfo,
+                                                     const Elf_Word            symvalue);
 
 /**
  * Architecture specific relocation handler compiled in for a specific
@@ -211,15 +219,14 @@ bool rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
  * @param symname The symbol's name.
  * @param syminfo The ELF symbol info field.
  * @param symvalue If a symbol is referenced, this is the symbols value.
- * @retval bool The relocation has been applied.
- * @retval bool The relocation could not be applied.
+ * @retval rtems_rtl_elf_rel_status The result of the trampoline parsing.
  */
-bool rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
-                                  const Elf_Rela*           rela,
-                                  const rtems_rtl_obj_sect* sect,
-                                  const char*               symname,
-                                  const Elf_Byte            syminfo,
-                                  const Elf_Word            symvalue);
+rtems_rtl_elf_rel_status rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
+                                                      const Elf_Rela*           rela,
+                                                      const rtems_rtl_obj_sect* sect,
+                                                      const char*               symname,
+                                                      const Elf_Byte            syminfo,
+                                                      const Elf_Word            symvalue);
 
 /**
  * The ELF format check handler.

@@ -66,7 +66,7 @@ rtems_rtl_elf_relocate_tramp_max_size (void)
   return 0;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -81,10 +81,10 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
@@ -99,10 +99,10 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -116,7 +116,7 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   (void) symname;
   (void) syminfo;
   (void) symvalue;
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
 /*
@@ -127,7 +127,7 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
  * symbol is STT_SECTION, it must be STB_LOCAL. Thus
  * just consider symtype here.
  */
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
@@ -162,7 +162,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
       tmp = symvalue + (int)tmp;
       if ((tmp & 0xffff0000) != 0) {
         printf("R_MIPS_16 Overflow\n");
-        return false;
+        return rtems_rtl_elf_rel_failure;
       }
 
       *where = (tmp & 0xffff) | (*where & 0xffff0000);
@@ -224,7 +224,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
       t = ahl + (int16_t)addend;
       tmp = symvalue;
       if (tmp == 0)
-        return false;
+        return rtems_rtl_elf_rel_failure;
 
       addend &= 0xffff0000;
       addend |= (uint16_t)(t + tmp);
@@ -254,7 +254,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
       tmp = (Elf_Sword)tmp >> 2;
       if (((Elf_Sword)tmp > 0x7fff) || ((Elf_Sword)tmp < -0x8000)) {
         printf("R_MIPS_PC16 Overflow\n");
-        return false;
+        return rtems_rtl_elf_rel_failure;
       }
 
       *where = (tmp & 0xffff) | (*where & 0xffff0000);
@@ -274,10 +274,10 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                            "%s: Unsupported relocation type %ld "
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
-      return false;
+      return rtems_rtl_elf_rel_failure;
   }
 
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
 bool

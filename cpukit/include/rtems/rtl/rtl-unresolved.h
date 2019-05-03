@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2019 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -73,7 +73,8 @@ typedef enum rtems_rtl_unresolved_rtype
 {
   rtems_rtl_unresolved_empty = 0,  /**< The records is empty. Must always be 0 */
   rtems_rtl_unresolved_symbol = 1, /**< The record is a symbol. */
-  rtems_rtl_unresolved_reloc = 2   /**< The record is a relocation record. */
+  rtems_rtl_unresolved_reloc = 2,  /**< The record is a relocation record. */
+  rtems_rtl_trampoline_reloc = 3   /**< The record is a trampoline relocation record. */
 } rtems_rtl_unresolved_rtype;
 
 /**
@@ -101,7 +102,7 @@ typedef struct rtems_rtl_unresolv_symbol
 
 /**
  * Unresolved externals symbols require the relocation records to be held
- * and references.
+ * and referenced.
  */
 typedef struct rtems_rtl_unresolv_reloc
 {
@@ -113,6 +114,18 @@ typedef struct rtems_rtl_unresolv_reloc
 } rtems_rtl_unresolv_reloc;
 
 /**
+ * Trampolines require the relocation records to be held
+ */
+typedef struct rtems_rtl_tramp_reloc
+{
+  rtems_rtl_obj* obj;      /**< The relocation's object file. */
+  uint16_t       flags;    /**< Format specific flags. */
+  uint16_t       sect;     /**< The target section. */
+  rtems_rtl_word symvalue; /**< The symbol's value. */
+  rtems_rtl_word rel[3];   /**< Relocation record. */
+} rtems_rtl_tramp_reloc;
+
+/**
  * Unresolved externals records.
  */
 typedef struct rtems_rtl_unresolv_rec
@@ -121,7 +134,8 @@ typedef struct rtems_rtl_unresolv_rec
   union
   {
     rtems_rtl_unresolv_symbol name;   /**< The symbol, or */
-    rtems_rtl_unresolv_reloc  reloc;  /**< the relocation record. */
+    rtems_rtl_unresolv_reloc  reloc;  /**< The relocation record. */
+    rtems_rtl_tramp_reloc     tramp;  /**< The trampoline relocation record. */
   } rec;
 } rtems_rtl_unresolv_rec;
 

@@ -583,10 +583,10 @@ rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
 bool
 rtems_rtl_obj_alloc_trampoline (rtems_rtl_obj* obj)
 {
-  if (obj->tramp_size == 0)
+  if (obj->tramps_size == 0)
     return true;
   obj->trampoline = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                         obj->tramp_size,
+                                         obj->tramps_size,
                                          true);
   if (obj->trampoline == NULL)
     rtems_rtl_set_error (ENOMEM, "no memory for the trampoline");
@@ -903,7 +903,7 @@ rtems_rtl_obj_synchronize_cache (rtems_rtl_obj* obj)
   if (obj->trampoline != NULL)
   {
     rtems_cache_instruction_sync_after_code_change(obj->trampoline,
-                                                   obj->tramp_size);
+                                                   obj->tramps_size);
   }
 }
 
@@ -998,14 +998,11 @@ rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj* obj)
   }
 }
 
-static bool
-rtems_rtl_obj_sections_loader (uint32_t                   mask,
-                               rtems_rtl_alloc_tag        tag,
-                               rtems_rtl_obj*             obj,
-                               int                        fd,
-                               uint8_t*                   base,
-                               rtems_rtl_obj_sect_handler handler,
-                               void*                      data)
+static void
+rtems_rtl_obj_sections_locate (uint32_t            mask,
+                               rtems_rtl_alloc_tag tag,
+                               rtems_rtl_obj*      obj,
+                               uint8_t*            base)
 {
   rtems_chain_control* sections = &obj->sections;
   rtems_chain_node*    node = rtems_chain_first (sections);
@@ -1013,9 +1010,7 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
   int                  order = 0;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
-    printf ("rtl: loading section: mask:%08" PRIx32 " base:%p\n", mask, base);
-
-  rtems_rtl_alloc_wr_enable (tag, base);
+    printf ("rtl: locating section: mask:%08" PRIx32 " base:%p\n", mask, base);
 
   while (!rtems_chain_is_tail (sections, node))
   {
@@ -1032,31 +1027,10 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
         }
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
-          printf ("rtl: loading:%2d: %s -> %p (s:%zi f:%04" PRIx32
+          printf ("rtl: locating:%2d: %s -> %p (s:%zi f:%04" PRIx32
                   " a:%" PRIu32 " l:%02d)\n",
                   order, sect->name, sect->base, sect->size,
                   sect->flags, sect->alignment, sect->link);
-
-        if ((sect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == RTEMS_RTL_OBJ_SECT_LOAD)
-        {
-          if (!handler (obj, fd, sect, data))
-          {
-            sect->base = 0;
-            rtems_rtl_alloc_wr_disable (tag, base);
-            return false;
-          }
-        }
-        else if ((sect->flags & RTEMS_RTL_OBJ_SECT_ZERO) == RTEMS_RTL_OBJ_SECT_ZERO)
-        {
-          memset (sect->base, 0, sect->size);
-        }
-        else
-        {
-          /*
-           * This section is not to be loaded, clear the base.
-           */
-          sect->base = 0;
-        }
 
         if (sect->base)
           base_offset += sect->size;
@@ -1070,10 +1044,6 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
 
     node = rtems_chain_next (node);
   }
-
-  rtems_rtl_alloc_wr_disable (tag, base);
-
-  return true;
 }
 
 bool
@@ -1158,6 +1128,94 @@ rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
   rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_EH,    obj);
   rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_DATA,  obj);
   rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_BSS,   obj);
+
+  /*
+   * Locate all text, data and bss sections in seperate operations so each type of
+   * section is grouped together.
+   */
+  rtems_rtl_obj_sections_locate (RTEMS_RTL_OBJ_SECT_TEXT,
+                                 rtems_rtl_alloc_text_tag (),
+                                 obj, obj->text_base);
+  rtems_rtl_obj_sections_locate (RTEMS_RTL_OBJ_SECT_CONST,
+                                 rtems_rtl_alloc_const_tag (),
+                                 obj, obj->const_base);
+  rtems_rtl_obj_sections_locate (RTEMS_RTL_OBJ_SECT_EH,
+                                 rtems_rtl_alloc_eh_tag (),
+                                 obj, obj->eh_base);
+  rtems_rtl_obj_sections_locate (RTEMS_RTL_OBJ_SECT_DATA,
+                                 rtems_rtl_alloc_data_tag (),
+                                 obj, obj->data_base);
+  rtems_rtl_obj_sections_locate (RTEMS_RTL_OBJ_SECT_BSS,
+                                 rtems_rtl_alloc_bss_tag (),
+                                 obj, obj->bss_base);
+
+  return true;
+}
+
+static bool
+rtems_rtl_obj_sections_loader (uint32_t                   mask,
+                               rtems_rtl_alloc_tag        tag,
+                               rtems_rtl_obj*             obj,
+                               int                        fd,
+                               uint8_t*                   base,
+                               rtems_rtl_obj_sect_handler handler,
+                               void*                      data)
+{
+  rtems_chain_control* sections = &obj->sections;
+  rtems_chain_node*    node = rtems_chain_first (sections);
+  int                  order = 0;
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
+    printf ("rtl: loading section: mask:%08" PRIx32 " base:%p\n", mask, base);
+
+  rtems_rtl_alloc_wr_enable (tag, base);
+
+  while (!rtems_chain_is_tail (sections, node))
+  {
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
+
+    if ((sect->size != 0) && ((sect->flags & mask) == mask))
+    {
+      if (sect->load_order == order)
+      {
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
+          printf ("rtl: loading:%2d: %s -> %p (s:%zi f:%04" PRIx32
+                  " a:%" PRIu32 " l:%02d)\n",
+                  order, sect->name, sect->base, sect->size,
+                  sect->flags, sect->alignment, sect->link);
+
+        if ((sect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == RTEMS_RTL_OBJ_SECT_LOAD)
+        {
+          if (!handler (obj, fd, sect, data))
+          {
+            sect->base = 0;
+            rtems_rtl_alloc_wr_disable (tag, base);
+            return false;
+          }
+        }
+        else if ((sect->flags & RTEMS_RTL_OBJ_SECT_ZERO) == RTEMS_RTL_OBJ_SECT_ZERO)
+        {
+          memset (sect->base, 0, sect->size);
+        }
+        else
+        {
+          /*
+           * This section is not to be loaded, clear the base.
+           */
+          sect->base = 0;
+        }
+
+        ++order;
+
+        node = rtems_chain_first (sections);
+        continue;
+      }
+    }
+
+    node = rtems_chain_next (node);
+  }
+
+  rtems_rtl_alloc_wr_disable (tag, base);
 
   return true;
 }

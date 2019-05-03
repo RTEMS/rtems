@@ -18,6 +18,6 @@ directives:
 
 concepts:
 
-+ Load modules with a space between then so short address range relative
++ Load modules with a space between them so short address range relative
   instructions require trampolines.
 + Repeat 100 times.

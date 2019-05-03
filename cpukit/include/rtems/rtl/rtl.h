@@ -72,7 +72,7 @@ extern "C" {
 /**
  * The number of relocation record per block in the unresolved table.
  */
-#define RTEMS_RTL_UNRESOLVED_BLOCK_SIZE (64)
+#define RTEMS_RTL_UNRESOLVED_BLOCK_SIZE (256)
 
 /**
  * The number of dependency record per block in the dependency table.

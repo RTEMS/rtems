@@ -86,7 +86,7 @@ rtems_rtl_elf_relocate_tramp_max_size (void)
   return 0;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -100,10 +100,10 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
   (void) symname;
   (void) syminfo;
   (void) symvalue;
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
@@ -118,91 +118,91 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   where = (Elf_Addr *)(sect->base + rela->r_offset);
 
   switch (ELF_R_TYPE(rela->r_info)) {
-		case R_TYPE(NONE):
-			break;
+  case R_TYPE(NONE):
+    break;
 
-    case R_TYPE(PC8):
-      tmp = symvalue + rela->r_addend - (Elf_Addr)where;
-      if (overflow_8_check(tmp))
-        return false;
+  case R_TYPE(PC8):
+    tmp = symvalue + rela->r_addend - (Elf_Addr)where;
+    if (overflow_8_check(tmp))
+      return rtems_rtl_elf_rel_failure;
 
-      *(uint8_t *)where = tmp;
+    *(uint8_t *)where = tmp;
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: reloc R_TYPE_8/PC8 in %s --> %p (%p) in %s\n",
-                sect->name, (void*) (symvalue + rela->r_addend),
-                (void *)*where, rtems_rtl_obj_oname (obj));
-      break;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: reloc R_TYPE_8/PC8 in %s --> %p (%p) in %s\n",
+              sect->name, (void*) (symvalue + rela->r_addend),
+              (void *)*where, rtems_rtl_obj_oname (obj));
+    break;
 
-    case R_TYPE(PC16):
-      tmp = symvalue + rela->r_addend - (Elf_Addr)where;
-      if (overflow_16_check(tmp))
-        return false;
+  case R_TYPE(PC16):
+    tmp = symvalue + rela->r_addend - (Elf_Addr)where;
+    if (overflow_16_check(tmp))
+      return rtems_rtl_elf_rel_failure;
 
-      *(uint16_t*)where = tmp;
+    *(uint16_t*)where = tmp;
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: reloc R_TYPE_16/PC16 in %s --> %p (%p) in %s\n",
-                sect->name, (void*) (symvalue + rela->r_addend),
-                (void *)*where, rtems_rtl_obj_oname (obj));
-      break;
-		case R_TYPE(PC32):
-      target = (Elf_Addr) symvalue + rela->r_addend;
-      *where += target - (Elf_Addr)where;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: reloc R_TYPE_16/PC16 in %s --> %p (%p) in %s\n",
+              sect->name, (void*) (symvalue + rela->r_addend),
+              (void *)*where, rtems_rtl_obj_oname (obj));
+    break;
+  case R_TYPE(PC32):
+    target = (Elf_Addr) symvalue + rela->r_addend;
+    *where += target - (Elf_Addr)where;
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: reloc PC32 in %s --> %p (%p) in %s\n",
-                sect->name, (void*) (symvalue + rela->r_addend),
-                (void *)*where, rtems_rtl_obj_oname (obj));
-      break;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: reloc PC32 in %s --> %p (%p) in %s\n",
+              sect->name, (void*) (symvalue + rela->r_addend),
+              (void *)*where, rtems_rtl_obj_oname (obj));
+    break;
 
-		case R_TYPE(GOT32):
-		case R_TYPE(32):
-		case R_TYPE(GLOB_DAT):
-      target = (Elf_Addr) symvalue + rela->r_addend;
+  case R_TYPE(GOT32):
+  case R_TYPE(32):
+  case R_TYPE(GLOB_DAT):
+    target = (Elf_Addr) symvalue + rela->r_addend;
 
-			if (*where != target)
-				*where = target;
+    if (*where != target)
+      *where = target;
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: reloc 32/GLOB_DAT in %s --> %p in %s\n",
-                sect->name, (void *)*where,
-                rtems_rtl_obj_oname (obj));
-			break;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: reloc 32/GLOB_DAT in %s --> %p in %s\n",
+              sect->name, (void *)*where,
+              rtems_rtl_obj_oname (obj));
+    break;
 
-		case R_TYPE(RELATIVE):
-			*where += (Elf_Addr) sect->base + rela->r_addend;
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: reloc RELATIVE in %s --> %p\n",
-                rtems_rtl_obj_oname (obj), (void *)*where);
-			break;
+  case R_TYPE(RELATIVE):
+    *where += (Elf_Addr) sect->base + rela->r_addend;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: reloc RELATIVE in %s --> %p\n",
+              rtems_rtl_obj_oname (obj), (void *)*where);
+    break;
 
-		case R_TYPE(COPY):
-			/*
-			 * These are deferred until all other relocations have
-			 * been done.  All we do here is make sure that the
-			 * COPY relocation is not in a shared library.  They
-			 * are allowed only in executable files.
-			 */
-      printf ("rtl: reloc COPY (please report)\n");
-			break;
+  case R_TYPE(COPY):
+    /*
+     * These are deferred until all other relocations have
+     * been done.  All we do here is make sure that the
+     * COPY relocation is not in a shared library.  They
+     * are allowed only in executable files.
+     */
+    printf ("rtl: reloc COPY (please report)\n");
+    break;
 
-		default:
-      printf ("rtl: reloc unknown: sym = %u, type = %u, offset = %p, "
-              "contents = %p\n",
-              ELF_R_SYM(rela->r_info), (uint32_t) ELF_R_TYPE(rela->r_info),
-              (void *)rela->r_offset, (void *)*where);
-      rtems_rtl_set_error (EINVAL,
-                           "%s: Unsupported relocation type %d "
-                           "in non-PLT relocations",
-                           sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
-      return false;
+  default:
+    printf ("rtl: reloc unknown: sym = %u, type = %u, offset = %p, "
+            "contents = %p\n",
+            ELF_R_SYM(rela->r_info), (uint32_t) ELF_R_TYPE(rela->r_info),
+            (void *)rela->r_offset, (void *)*where);
+    rtems_rtl_set_error (EINVAL,
+                         "%s: Unsupported relocation type %d "
+                         "in non-PLT relocations",
+                         sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
+    return rtems_rtl_elf_rel_failure;
   }
 
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -217,10 +217,10 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
@@ -235,7 +235,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
 bool

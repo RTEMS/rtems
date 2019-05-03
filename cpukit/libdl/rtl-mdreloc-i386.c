@@ -73,7 +73,7 @@ rtems_rtl_elf_relocate_tramp_max_size (void)
   return 0;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -88,10 +88,10 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rel,
                              const rtems_rtl_obj_sect* sect,
@@ -106,10 +106,10 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -123,10 +123,10 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   (void) symname;
   (void) syminfo;
   (void) symvalue;
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
@@ -188,10 +188,10 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                            "%s: Unsupported relocation type %" PRIu32 " "
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
-      return false;
+      return rtems_rtl_elf_rel_failure;
   }
 
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
 bool

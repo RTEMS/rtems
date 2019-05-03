@@ -143,6 +143,7 @@ typedef struct
   bool                 memory_map;   /**< Print the memory map. */
   bool                 symbols;      /**< Print the global symbols. */
   bool                 dependencies; /**< Print any dependencies. */
+  bool                 trampolines;  /**< Print trampoline stats. */
   bool                 base;         /**< Include the base object file. */
   const char*          re_name;      /**< Name regx to filter on. */
   const char*          re_symbol;    /**< Symbol regx to filter on. */
@@ -515,6 +516,8 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
     rtems_printf (print->printer, "%-*cunresolved    : %zu\n", indent, ' ', obj->unresolved);
     rtems_printf (print->printer, "%-*cusers         : %zu\n", indent, ' ', obj->users);
     rtems_printf (print->printer, "%-*creferences    : %zu\n", indent, ' ', obj->refs);
+    rtems_printf (print->printer, "%-*ctrampolines   : %zu\n", indent, ' ',
+                  rtems_rtl_obj_trampolines (obj));
     rtems_printf (print->printer, "%-*csymbols       : %zi\n", indent, ' ', obj->global_syms);
     rtems_printf (print->printer, "%-*csymbol memory : %zi\n", indent, ' ', obj->global_size);
   }
@@ -534,6 +537,33 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
     rtems_rtl_obj_iterate_dependents (obj, rtems_rtl_dependencies, &dd);
     if (!dd.first)
       rtems_printf (print->printer, "\n");
+  }
+  if (print->trampolines)
+  {
+    if (obj->tramp_size == 0)
+    {
+      rtems_printf (print->printer, "%-*ctrampolines: not supported\n", indent, ' ');
+    }
+    else
+    {
+      size_t slots = rtems_rtl_obj_trampoline_slots (obj);
+      size_t used = rtems_rtl_obj_trampolines (obj);
+      rtems_printf (print->printer, "%-*ctrampolines:\n", indent, ' ');
+      rtems_printf (print->printer, "%-*cslots     : %zu\n", indent + 4, ' ',
+                    slots);
+      rtems_printf (print->printer, "%-*csize      : %zu\n", indent + 4, ' ',
+                    obj->tramps_size);
+      rtems_printf (print->printer, "%-*cslot size : %zu\n", indent + 4, ' ',
+                    obj->tramp_size);
+      rtems_printf (print->printer, "%-*cused      : %zu\n", indent + 4, ' ',
+                    used);
+      rtems_printf (print->printer, "%-*crelocs    : %zu\n", indent + 4, ' ',
+                    obj->tramp_relocs);
+      rtems_printf (print->printer, "%-*cunresolved: %zu\n", indent + 4, ' ',
+                    slots - obj->tramp_relocs);
+      rtems_printf (print->printer, "%-*cyield     : %zu%%\n", indent + 4, ' ',
+                    slots ? (used * 100) / slots : 0);
+    }
   }
   return true;
 }
@@ -567,18 +597,31 @@ int
 rtems_rtl_shell_list (const rtems_printer* printer, int argc, char* argv[])
 {
   rtems_rtl_obj_print print = { 0 };
-  if (!rtems_rtl_check_opts (printer, "nlmsdb", argc, argv))
+  if (!rtems_rtl_check_opts (printer, "anlmsdbt", argc, argv))
     return 1;
   print.printer = printer;
   print.indent = 1;
   print.oname = true;
-  print.names = rtems_rtl_parse_opt ('n', argc, argv);
-  print.stats = rtems_rtl_parse_opt ('l', argc, argv);;
-  print.memory_map = rtems_rtl_parse_opt ('m', argc, argv);;
-  print.symbols = rtems_rtl_parse_opt ('s', argc, argv);
-  print.dependencies = rtems_rtl_parse_opt ('d', argc, argv);;
-  print.base = rtems_rtl_parse_opt ('b', argc, argv);;
-  print.re_name = rtems_rtl_parse_arg (' ', NULL, argc, argv);
+  if (rtems_rtl_parse_opt ('a', argc, argv))
+  {
+    print.names = true;
+    print.stats = true;
+    print.memory_map = true;
+    print.symbols = true;
+    print.dependencies = true;
+    print.trampolines = true;
+  }
+  else
+  {
+    print.names = rtems_rtl_parse_opt ('n', argc, argv);
+    print.stats = rtems_rtl_parse_opt ('l', argc, argv);;
+    print.memory_map = rtems_rtl_parse_opt ('m', argc, argv);;
+    print.symbols = rtems_rtl_parse_opt ('s', argc, argv);
+    print.dependencies = rtems_rtl_parse_opt ('d', argc, argv);;
+    print.trampolines = rtems_rtl_parse_opt ('t', argc, argv);;
+    print.base = rtems_rtl_parse_opt ('b', argc, argv);;
+    print.re_name = rtems_rtl_parse_arg (' ', NULL, argc, argv);
+  }
   print.re_symbol = NULL;
   print.rtl = rtems_rtl_lock ();
   if (print.rtl == NULL)

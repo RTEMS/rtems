@@ -147,7 +147,7 @@ rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
   return true;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -162,10 +162,10 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
@@ -180,10 +180,10 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-static bool
+static rtems_rtl_elf_rel_status
 rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
                          const Elf_Rel*            rel,
                          const rtems_rtl_obj_sect* sect,
@@ -209,22 +209,35 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
 
     case R_TYPE(CALL):    /* BL/BLX */
     case R_TYPE(JUMP24):  /* B/BL<cond> */
-      insn = *where;
+      if (parsing)
+      {
+        addend = 0;
+      }
+      else
+      {
+        insn = *where;
 
-      if (insn & 0x00800000)
-        addend = insn | 0xff000000;
-      else addend = insn & 0x00ffffff;
+        if (insn & 0x00800000)
+          addend = insn | 0xff000000;
+        else addend = insn & 0x00ffffff;
 
-      if (isThumb(symvalue)) {
-        if ((insn & 0xfe000000) == 0xfa000000);         /* Already blx */
-        else {
-          if ((insn & 0xff000000) == 0xeb000000) {      /* BL <label> */
-            *where = (insn & 0x00ffffff) | 0xfa000000;  /* BL-->BLX */
-          } else {
-            printf("JUMP24 is not suppored from arm to thumb\n");
-            return false;
+        if (isThumb(symvalue)) {
+          if ((insn & 0xfe000000) == 0xfa000000);         /* Already blx */
+          else {
+            if ((insn & 0xff000000) == 0xeb000000) {      /* BL <label> */
+              *where = (insn & 0x00ffffff) | 0xfa000000;  /* BL-->BLX */
+            } else {
+              printf("JUMP24 is not suppored from arm to thumb\n");
+              return rtems_rtl_elf_rel_failure;
+            }
           }
         }
+      }
+
+      if (parsing && sect->base == 0) {
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+          printf ("rtl: JUMP24/PC24/CALL tramp cache\n");
+        return rtems_rtl_elf_rel_tramp_cache;
       }
 
       tmp = symvalue + (addend << 2) - (Elf_Addr)where;
@@ -235,15 +248,16 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
         size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rel->r_info));
 
         if (parsing) {
-          obj->tramp_size += tramp_size;
-          return true;
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: JUMP24/PC24/CALL tramp add\n");
+          return rtems_rtl_elf_rel_tramp_add;
         }
 
-        if (!rtems_rtl_obj_has_ramp_space (obj, tramp_size)) {
+        if (!rtems_rtl_obj_has_tramp_space (obj, tramp_size)) {
           rtems_rtl_set_error (EINVAL,
                                "%s: CALL/JUMP24: overflow: no tramp memory",
                                sect->name);
-          return false;
+          return rtems_rtl_elf_rel_failure;
         }
 
         tramp_addr = ((Elf_Addr) obj->tramp_brk) | (symvalue & 1);
@@ -286,7 +300,7 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
         tmp = (Elf_Sword)tmp >> 16;
         if (((Elf_Sword)tmp > 0x7fff) || ((Elf_Sword)tmp < -0x8000)) {
           printf("MOVT_ABS Overflow\n");
-          return false;
+          return rtems_rtl_elf_rel_failure;
         }
       }
 
@@ -367,13 +381,22 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
     case R_TYPE(THM_JUMP24):
       /* same as THM_PC22; insn b.w */
     case R_TYPE(THM_PC22):
-      upper_insn = *(uint16_t *)where;
-      lower_insn = *((uint16_t *)where + 1);
-      sign = (upper_insn & (1 << 10)) >> 10;
-      i1 = ((lower_insn >> 13) & 1) ^ sign ? 0 : 1;
-      i2 = ((lower_insn >> 11) & 1) ^ sign ? 0 : 1;
-      tmp = (i1 << 23) | (i2 << 22) | ((upper_insn & 0x3ff) << 12) | ((lower_insn & 0x7ff) << 1);
-      addend = (tmp | ((sign ? 0 : 1) << 24)) - (1 << 24);
+      if (parsing)
+      {
+        addend = 0;
+        upper_insn = 0;
+        lower_insn = 0;
+      }
+      else
+      {
+        upper_insn = *(uint16_t *)where;
+        lower_insn = *((uint16_t *)where + 1);
+        sign = (upper_insn & (1 << 10)) >> 10;
+        i1 = ((lower_insn >> 13) & 1) ^ sign ? 0 : 1;
+        i2 = ((lower_insn >> 11) & 1) ^ sign ? 0 : 1;
+        tmp = (i1 << 23) | (i2 << 22) | ((upper_insn & 0x3ff) << 12) | ((lower_insn & 0x7ff) << 1);
+        addend = (tmp | ((sign ? 0 : 1) << 24)) - (1 << 24);
+      }
 
       if (isThumb(symvalue)) ;/*Thumb to Thumb call, nothing to care */
       else {
@@ -381,32 +404,40 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
           tmp = (tmp + 2) & ~3; /* aligned to 4 bytes only for JUMP24 */
 #if !ALLOW_UNTESTED_RELOCS
           printf("THM_JUMP24 to arm not supported\n");
-          return false;
+          return rtems_rtl_elf_rel_failure;
 #endif
         }
         else {
           /* THM_CALL bl-->blx */
-          lower_insn &=~(1<<12);
+          lower_insn &= ~(1<<12);
         }
+      }
+
+      if (parsing && sect->base == 0) {
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+          printf ("rtl: THM_CALL/JUMP24 tramp cache\n");
+        return rtems_rtl_elf_rel_tramp_cache;
       }
 
       tmp = symvalue + addend;
       tmp = tmp - (Elf_Addr)where;
 
       if (((Elf_Sword)tmp > 0x7fffff) || ((Elf_Sword)tmp < -0x800000)) {
-          Elf_Word tramp_addr;
-          size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rel->r_info));
+        Elf_Word tramp_addr;
+        size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rel->r_info));
 
         if (parsing) {
-          obj->tramp_size += tramp_size;
-          return true;
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: THM_CALL/JUMP24 tramp add: %08x - %p = %i\n",
+                    symvalue + addend, where, (Elf_Sword) tmp);
+          return rtems_rtl_elf_rel_tramp_add;
         }
 
-        if (!rtems_rtl_obj_has_ramp_space (obj, tramp_size)) {
+        if (!rtems_rtl_obj_has_tramp_space (obj, tramp_size)) {
           rtems_rtl_set_error (EINVAL,
                                "%s: THM_CALL/JUMP24: overflow: no tramp memory",
                                sect->name);
-          return false;
+          return rtems_rtl_elf_rel_failure;
         }
 
         tramp_addr = ((Elf_Addr) obj->tramp_brk) | (symvalue & 1);
@@ -438,7 +469,7 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
 
       if (!isThumb(symvalue)) {
         printf("THM_JUMP19 to arm not supported\n");
-        return false;
+        return rtems_rtl_elf_rel_failure;
       }
 
       upper_insn = *(uint16_t *)where;
@@ -463,8 +494,7 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
         rtems_rtl_set_error (EINVAL, "%s: Overflow %" PRIu32 " "
                              "THM_JUMP19 relocations",
                              sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
-        return true;
-        return false;
+        return rtems_rtl_elf_rel_failure;
       }
 
       sign = (tmp >> 20) & 0x1;
@@ -511,13 +541,13 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
                            "%s: Unsupported relocation type %" PRIu32 " "
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
-      return false;
+      return rtems_rtl_elf_rel_failure;
   }
 
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -534,7 +564,7 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   true);
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,

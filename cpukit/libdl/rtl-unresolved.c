@@ -27,6 +27,7 @@
 #include "rtl-error.h"
 #include <rtems/rtl/rtl-unresolved.h>
 #include <rtems/rtl/rtl-trace.h>
+#include "rtl-trampoline.h"
 
 static rtems_rtl_unresolv_block*
 rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved* unresolved)
@@ -69,7 +70,7 @@ rtems_rtl_unresolved_symbol_recs (const char* name)
 
 static int
 rtems_rtl_unresolved_rec_index (rtems_rtl_unresolv_block* block,
-                                rtems_rtl_unresolv_rec* rec)
+                                rtems_rtl_unresolv_rec*   rec)
 {
   return rec - &block->rec[0];
 }
@@ -101,6 +102,7 @@ rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec* rec)
       break;
 
     case rtems_rtl_unresolved_reloc:
+    case rtems_rtl_trampoline_reloc:
       ++rec;
       break;
   }
@@ -403,6 +405,25 @@ rtems_rtl_unresolved_clean_block (rtems_rtl_unresolv_block* block,
   memset (&block->rec[block->recs], 0, bytes);
 }
 
+static rtems_chain_node*
+rtems_rtl_unresolved_delete_block_if_empty (rtems_chain_control*      blocks,
+                                            rtems_rtl_unresolv_block* block)
+{
+  rtems_chain_node* node = &block->link;
+  rtems_chain_node* next_node = rtems_chain_next (node);
+  /*
+   * Always leave a single block allocated. Eases possible heap fragmentation.
+   */
+  if (block->recs == 0 && !rtems_chain_has_only_one_node (blocks))
+  {
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+      printf ("rtl: unresolv: block-del %p\n", block);
+    rtems_chain_extract (node);
+    rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_EXTERNAL, block);
+  }
+  return next_node;
+}
+
 static void
 rtems_rtl_unresolved_compact (void)
 {
@@ -456,19 +477,8 @@ rtems_rtl_unresolved_compact (void)
           rec = rtems_rtl_unresolved_rec_next (rec);
       }
 
-      if (block->recs == 0)
-      {
-        rtems_chain_node* next_node = rtems_chain_next (node);
-        if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
-          printf ("rtl: unresolv: block-del %p\n", block);
-        rtems_chain_extract (node);
-        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_EXTERNAL, block);
-        node = next_node;
-      }
-      else
-      {
-        node = rtems_chain_next (node);
-      }
+      node = rtems_rtl_unresolved_delete_block_if_empty (&unresolved->blocks,
+                                                         block);
     }
   }
 }
@@ -480,7 +490,7 @@ rtems_rtl_unresolved_table_open (rtems_rtl_unresolved* unresolved,
   unresolved->marker = 0xdeadf00d;
   unresolved->block_recs = block_recs;
   rtems_chain_initialize_empty (&unresolved->blocks);
-  return true;
+  return rtems_rtl_unresolved_block_alloc (unresolved);
 }
 
 void
@@ -632,13 +642,13 @@ rtems_rtl_unresolved_resolve (void)
 
   /*
    * The resolving process is two separate stages, The first stage is to
-   * iterate over the unresolved symbols search the global symbol table. If a
-   * symbol is found iterate over the unresolved relocation records for the
+   * iterate over the unresolved symbols searching the global symbol table. If
+   * a symbol is found iterate over the unresolved relocation records for the
    * symbol fixing up the relocations. The second stage is to search the
-   * archives for symbols we have not been search before and if a symbol if
-   * found in an archve loaded the object file. Loading an object file stops
-   * the search of the archives for symbols and stage one is performed
-   * again. The process repeats until no more symbols are resolved.
+   * archives for symbols we have not searched before and if a symbol is found
+   * in an archve load the object file. Loading an object file stops the
+   * search of the archives for symbols and stage one is performed again. The
+   * process repeats until no more symbols are resolved or there is an error.
    */
   while (resolving)
   {
@@ -665,16 +675,85 @@ rtems_rtl_unresolved_resolve (void)
 }
 
 bool
-rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
-                             const char*           name,
-                             const uint16_t        sect,
-                             const rtems_rtl_word* rel)
+rtems_rtl_trampoline_add (rtems_rtl_obj*        obj,
+                          const uint16_t        flags,
+                          const uint16_t        sect,
+                          const rtems_rtl_word  symvalue,
+                          const rtems_rtl_word* rel)
 {
-  rtems_rtl_unresolved* unresolved;
+  rtems_rtl_unresolved*     unresolved;
+  rtems_rtl_unresolv_block* block;
+  rtems_rtl_unresolv_rec*   rec;
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+    printf ("rtl: tramp: add: %s sect:%d flags:%04x\n",
+            rtems_rtl_obj_oname (obj), sect, flags);
+
   unresolved = rtems_rtl_unresolved_unprotected ();
-  if (unresolved == NULL)
+  if (!unresolved)
     return false;
+
+  block = rtems_rtl_unresolved_alloc_recs (unresolved, 1);
+  if (block == NULL)
+  {
+    block = rtems_rtl_unresolved_block_alloc (unresolved);
+    if (!block)
+      return false;
+  }
+
+  rec = rtems_rtl_unresolved_rec_first_free (block);
+  rec->type = rtems_rtl_trampoline_reloc;
+  rec->rec.tramp.obj = obj;
+  rec->rec.tramp.flags = flags;
+  rec->rec.tramp.sect = sect;
+  rec->rec.tramp.symvalue = symvalue;
+  rec->rec.tramp.rel[0] = rel[0];
+  rec->rec.tramp.rel[1] = rel[1];
+  rec->rec.tramp.rel[2] = rel[2];
+
+  ++block->recs;
+
   return true;
+}
+
+void
+rtems_rtl_trampoline_remove (rtems_rtl_obj* obj)
+{
+  rtems_rtl_unresolved* unresolved = rtems_rtl_unresolved_unprotected ();
+  if (unresolved)
+  {
+    /*
+     * Iterate over the blocks clearing any trampoline records.
+     */
+    rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
+    while (!rtems_chain_is_tail (&unresolved->blocks, node))
+    {
+      rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
+      rtems_rtl_unresolv_rec*   rec = rtems_rtl_unresolved_rec_first (block);
+
+      /*
+       * Search the table for a trampoline record and if found clean the
+       * record moving the remaining records down the block.
+       */
+      while (!rtems_rtl_unresolved_rec_is_last (block, rec))
+      {
+        bool next_rec = true;
+
+        if (rec->type == rtems_rtl_trampoline_reloc && rec->rec.tramp.obj == obj)
+        {
+            rtems_rtl_unresolved_clean_block (block, rec, 1,
+                                              unresolved->block_recs);
+            next_rec = false;
+        }
+
+        if (next_rec)
+          rec = rtems_rtl_unresolved_rec_next (rec);
+      }
+
+      node = rtems_rtl_unresolved_delete_block_if_empty (&unresolved->blocks,
+                                                         block);
+    }
+  }
 }
 
 /**
@@ -708,8 +787,10 @@ rtems_rtl_unresolved_dump_iterator (rtems_rtl_unresolv_rec* rec,
             rec->rec.name.length);
     break;
   case rtems_rtl_unresolved_reloc:
+  case rtems_rtl_trampoline_reloc:
     if (dd->show_relocs)
-      printf (" %3zu: 2: reloc: obj:%s name:%2d: sect:%d\n",
+      printf (" %3zu: 2:reloc%c: obj:%s name:%2d: sect:%d\n",
+              rec->type == rtems_rtl_unresolved_reloc ? 'R' : 'T',
               dd->rec,
               rec->rec.reloc.obj == NULL ? "resolved" : rec->rec.reloc.obj->oname,
               rec->rec.reloc.name,

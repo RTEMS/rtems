@@ -66,7 +66,7 @@ rtems_rtl_elf_relocate_tramp_max_size (void)
   return 0;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -80,10 +80,10 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
   (void) symname;
   (void) syminfo;
   (void) symvalue;
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
@@ -151,7 +151,7 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
       tmp = (Elf32_Sword)tmp >> 2;
       if (((Elf32_Sword)tmp > 0x7fff) || ((Elf32_Sword)tmp < -0x8000)){
         printf("BRANCH Overflow\n");
-        return false;
+        return rtems_rtl_elf_rel_failure;
       }
 
       *where = (*where & 0xffff0000) | (tmp & 0xffff);
@@ -164,17 +164,18 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
     default:
       rtems_rtl_set_error (EINVAL, "rela type record not supported");
       printf("Unsupported reloc types\n");
-      return false;
+      return rtems_rtl_elf_rel_failure;
   }
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC)) {
       printf("rela relocation type is %ld\n", ELF_R_TYPE(rela->r_info));
       printf("relocated address 0x%08lx\n", (Elf_Addr)where);
   }
-  return true;
+
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -189,10 +190,10 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
@@ -207,7 +208,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
 bool

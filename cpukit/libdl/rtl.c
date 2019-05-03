@@ -477,21 +477,24 @@ rtems_rtl_find_obj (const char* name)
 rtems_rtl_obj*
 rtems_rtl_find_obj_with_symbol (const rtems_rtl_obj_sym* sym)
 {
-  rtems_chain_node* node = rtems_chain_first (&rtl->objects);
-  while (!rtems_chain_is_tail (&rtl->objects, node))
+  if (sym != NULL)
   {
-    rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
-    if (rtems_rtl_obj_has_symbol (obj, sym))
-      return obj;
-    node = rtems_chain_next (node);
-  }
-  node = rtems_chain_first (&rtl->pending);
-  while (!rtems_chain_is_tail (&rtl->pending, node))
-  {
-    rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
-    if (rtems_rtl_obj_has_symbol (obj, sym))
-      return obj;
-    node = rtems_chain_next (node);
+    rtems_chain_node* node = rtems_chain_first (&rtl->objects);
+    while (!rtems_chain_is_tail (&rtl->objects, node))
+    {
+      rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
+      if (rtems_rtl_obj_has_symbol (obj, sym))
+        return obj;
+      node = rtems_chain_next (node);
+    }
+    node = rtems_chain_first (&rtl->pending);
+    while (!rtems_chain_is_tail (&rtl->pending, node))
+    {
+      rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
+      if (rtems_rtl_obj_has_symbol (obj, sym))
+        return obj;
+      node = rtems_chain_next (node);
+    }
   }
   return NULL;
 }

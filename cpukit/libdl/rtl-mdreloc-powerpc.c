@@ -213,7 +213,14 @@ get_veneer_size (int type)
   return rtems_rtl_elf_relocate_tramp_max_size ();
 }
 
-static bool
+/**
+ * The offsets in the reloc words.
+ */
+#define REL_R_OFFSET (0)
+#define REL_R_INFO   (1)
+#define REL_R_ADDEND (2)
+
+static rtems_rtl_elf_rel_status
 rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
                           const Elf_Rela*           rela,
                           const rtems_rtl_obj_sect* sect,
@@ -226,6 +233,7 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
   Elf_Word tmp;
   uint32_t mask = 0;
   uint32_t bits = 0;
+  bool     needs_tramp = false;
 
   where = (Elf_Addr *)(sect->base + rela->r_offset);
   switch (ELF_R_TYPE(rela->r_info)) {
@@ -259,14 +267,29 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         bits = 24;
         mask = 0x3fffffc;
       }
+
+      if (parsing && sect->base == 0) {
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+          printf ("rtl: ADDR14/ADDR24 tramp cache\n");
+        return rtems_rtl_elf_rel_tramp_cache;
+      }
+
       tmp = (symvalue + rela->r_addend) >> 2;
       if (tmp > ((1<<bits) - 1 )) {
         Elf_Word tramp_addr;
         size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rela->r_info));
         if (parsing) {
-          obj->tramp_size += tramp_size;
-          return true;
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: ADDR14/ADDR24 tramp add\n");
+          return rtems_rtl_elf_rel_tramp_add;
         }
+        if (!rtems_rtl_obj_has_tramp_space (obj, tramp_size)) {
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: ADDR14/ADDR24 no tramp slot: %s\n", rtems_rtl_obj_oname (obj));
+          rtems_rtl_set_error (ENOMEM, "%s: tramp: no slot: ADDR14/ADDR24", sect->name);
+          return rtems_rtl_elf_rel_failure;
+        }
+        needs_tramp = true;
         tramp_addr = (Elf_Addr) obj->tramp_brk;
         obj->tramp_brk = set_veneer(obj->tramp_brk,
                                     symvalue + rela->r_addend);
@@ -283,7 +306,8 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       if (!parsing) {
         *where = tmp;
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: ADDR14/ADDR24 %p @ %p in %s\n",
+          printf ("rtl: ADDR14/ADDR24%s %p @ %p in %s\n",
+                  needs_tramp ? "(tramp)" : "",
                   (void *)*where, where, rtems_rtl_obj_oname (obj));
       }
       break;
@@ -341,15 +365,29 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
         bits = 14;
       }
 
+      if (parsing && sect->base == 0) {
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+          printf ("rtl: REL24/REL14 tramp cache\n");
+        return rtems_rtl_elf_rel_tramp_cache;
+      }
+
       tmp =((int) (symvalue + rela->r_addend - (Elf_Addr)where)) >> 2;
       if (((Elf_Sword)tmp > ((1<<(bits-1)) - 1)) ||
           ((Elf_Sword)tmp < -(1<<(bits-1)))) {
         Elf_Word tramp_addr;
         size_t   tramp_size = get_veneer_size(ELF_R_TYPE(rela->r_info));
         if (parsing) {
-          obj->tramp_size += tramp_size;
-          return true;
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: REL24/REL14 tramp add\n");
+          return rtems_rtl_elf_rel_tramp_add;
         }
+        if (!rtems_rtl_obj_has_tramp_space (obj, tramp_size)) {
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+            printf ("rtl: REL24/REL14 no tramp slot: %s\n", rtems_rtl_obj_oname (obj));
+          rtems_rtl_set_error (ENOMEM, "%s: tramp: no slot: REL24/REL14", sect->name);
+          return rtems_rtl_elf_rel_failure;
+        }
+        needs_tramp = true;
         tramp_addr = (Elf_Addr) obj->tramp_brk;
         obj->tramp_brk = set_veneer(obj->tramp_brk,
                                     symvalue + rela->r_addend);
@@ -367,7 +405,8 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
       if (!parsing) {
         *where = tmp;
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: REL24/REL14 %p @ %p in %s\n",
+          printf ("rtl: REL24/REL14%s %p @ %p in %s\n",
+                  needs_tramp ? "(tramp)" : "",
                   (void *)*where, where, rtems_rtl_obj_oname (obj));
       }
       break;
@@ -412,12 +451,12 @@ rtems_rtl_elf_reloc_rela (rtems_rtl_obj*            obj,
                            "%s: Unsupported relocation type %" PRId32
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
-      return false;
+      return rtems_rtl_elf_rel_failure;
   }
-  return true;
+  return rtems_rtl_elf_rel_no_error;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    const Elf_Rela*           rela,
                                    const rtems_rtl_obj_sect* sect,
@@ -434,7 +473,7 @@ rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
                                    true);
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
@@ -451,7 +490,7 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                                    false);
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Rel*            rel,
                                   const rtems_rtl_obj_sect* sect,
@@ -466,10 +505,10 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
-bool
+rtems_rtl_elf_rel_status
 rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
@@ -484,7 +523,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
   (void) syminfo;
   (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
-  return false;
+  return rtems_rtl_elf_rel_failure;
 }
 
 bool
