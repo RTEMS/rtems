@@ -1832,6 +1832,17 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
+## lib_a_SOURCES += psxhdrs/termios/cfgetispeed.c
+## lib_a_SOURCES += psxhdrs/termios/cfsetispeed.c
+## lib_a_SOURCES += psxhdrs/termios/tcdrain.c
+## lib_a_SOURCES += psxhdrs/termios/tcflush.c
+## lib_a_SOURCES += psxhdrs/termios/tcgetsid.c
+## lib_a_SOURCES += psxhdrs/termios/tcsetattr.c
+## lib_a_SOURCES += psxhdrs/termios/cfgetospeed.c
+## lib_a_SOURCES += psxhdrs/termios/cfsetospeed.c
+## lib_a_SOURCES += psxhdrs/termios/tcflow.c
+## lib_a_SOURCES += psxhdrs/termios/tcgetattr.c
+## lib_a_SOURCES += psxhdrs/termios/tcsendbreak.c
 
 ## Specific issues that tickets are tracking
 ## lib_a_SOURCES += psxhdrs/dirent/dirfd.c               See ticket #3371
