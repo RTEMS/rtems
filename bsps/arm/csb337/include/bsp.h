@@ -61,7 +61,7 @@ static inline int32_t BSP_get_baud(void) {return 38400;}
 /**
  * @brief Network driver configuration
  */
-extern struct rtems_bsdnet_ifconfig *config;
+struct rtems_bsdnet_ifconfig;
 
 /* Change these to match your board */
 int rtems_at91rm9200_emac_attach(struct rtems_bsdnet_ifconfig *config, int attaching);

@@ -50,7 +50,7 @@ int get_perclk1_freq(void);
 /**
  * @brief Network driver configuration
  */
-extern struct rtems_bsdnet_ifconfig *config;
+struct rtems_bsdnet_ifconfig;
 
 /* Change these to match your board */
 int rtems_mc9328mxl_enet_attach(struct rtems_bsdnet_ifconfig *config,

@@ -44,7 +44,7 @@ extern "C" {
 /*
  * Network driver configuration
  */
-extern struct rtems_bsdnet_ifconfig *config;
+struct rtems_bsdnet_ifconfig;
 
 int rtems_au1x00_emac_attach(struct rtems_bsdnet_ifconfig *config,
                              int attaching);
