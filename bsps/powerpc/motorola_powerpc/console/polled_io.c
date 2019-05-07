@@ -429,6 +429,10 @@ void debug_putc(const char c)
 void
 debug_putc_onlcr(const char c)
 {
+	if (c == '\n') {
+		debug_putc('\r');
+	}
+
 	debug_putc(c);
 }
 
