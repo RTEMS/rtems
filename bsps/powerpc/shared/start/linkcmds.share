@@ -134,7 +134,8 @@ SECTIONS
                      . += 1;
                      PROVIDE (__SBSS2_END__ = .);
                     } >CODE
-  .eh_frame	  : { *(.eh_frame)		} >CODE
+  .eh_frame_hdr   : { *(.eh_frame_hdr)			} >CODE
+  .eh_frame	  : { KEEP (*(.eh_frame))		} >CODE
 
   /* NOTE: if the BSP uses page tables, the correctness of
    *       '_etext' (and __DATA_START__) is CRUCIAL - otherwise,
@@ -171,7 +172,7 @@ SECTIONS
   } > CODE
   .data1   : { *(.data1) }	> CODE
   PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table*) } > CODE
+  .gcc_except_table   : { *(.gcc_except_table .gcc_except_table.*) } > CODE
   PROVIDE (__EXCEPT_END__ = .);
   .got1           : { *(.got1) }	> CODE
   /* Put .ctors and .dtors next to the .got2 section, so that the pointers
