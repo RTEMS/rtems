@@ -1826,23 +1826,23 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/select/FD_SET.c \
 	psxhdrs/sys/select/FD_ZERO.c \
 	psxhdrs/sys/select/pselect.c \
-	psxhdrs/sys/select/select.c
+	psxhdrs/sys/select/select.c \
+        psxhdrs/termios/cfgetispeed.c \
+	psxhdrs/termios/cfgetospeed.c \
+	psxhdrs/termios/cfsetispeed.c \
+	psxhdrs/termios/cfsetospeed.c \
+	psxhdrs/termios/tcdrain.c \
+	psxhdrs/termios/tcflow.c \
+	psxhdrs/termios/tcflush.c \
+	psxhdrs/termios/tcgetattr.c \
+	psxhdrs/termios/tcgetsid.c \
+	psxhdrs/termios/tcsendbreak.c \
+	psxhdrs/termios/tcsetattr.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
-## lib_a_SOURCES += psxhdrs/termios/cfgetispeed.c
-## lib_a_SOURCES += psxhdrs/termios/cfsetispeed.c
-## lib_a_SOURCES += psxhdrs/termios/tcdrain.c
-## lib_a_SOURCES += psxhdrs/termios/tcflush.c
-## lib_a_SOURCES += psxhdrs/termios/tcgetsid.c
-## lib_a_SOURCES += psxhdrs/termios/tcsetattr.c
-## lib_a_SOURCES += psxhdrs/termios/cfgetospeed.c
-## lib_a_SOURCES += psxhdrs/termios/cfsetospeed.c
-## lib_a_SOURCES += psxhdrs/termios/tcflow.c
-## lib_a_SOURCES += psxhdrs/termios/tcgetattr.c
-## lib_a_SOURCES += psxhdrs/termios/tcsendbreak.c
 
 ## Specific issues that tickets are tracking
 ## lib_a_SOURCES += psxhdrs/dirent/dirfd.c               See ticket #3371
