@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -25,8 +25,12 @@
 BSP_START_DATA_SECTION const lpc24xx_pin_range
   lpc24xx_start_config_pinsel [] = {
 #if defined(LPC24XX_EMC_MT48LC4M16A2) \
-  && defined(LPC24XX_EMC_M29W160E)
+  && (defined(LPC24XX_EMC_M29W160E) || defined(LPC24XX_EMC_SST39VF3201))
+#if defined(LPC24XX_EMC_M29W160E)
   LPC24XX_PIN_EMC_A_0_20,
+#elif defined(LPC24XX_EMC_SST39VF3201)
+  LPC24XX_PIN_EMC_A_0_21,
+#endif
   LPC24XX_PIN_EMC_D_0_15,
   LPC24XX_PIN_EMC_RAS,
   LPC24XX_PIN_EMC_CAS,
