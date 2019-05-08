@@ -26,8 +26,9 @@
   BSP_START_DATA_SECTION const ARMV7M_MPU_Region
     lpc24xx_start_config_mpu_region [] = {
       #if defined(LPC24XX_EMC_IS42S32800D7) \
-        || defined(LPC24XX_EMC_W9825G2JB75I) \
-        || defined(LPC24XX_EMC_IS42S32800B)
+        || defined(LPC24XX_EMC_IS42S32800B) \
+        || defined(LPC24XX_EMC_MT48LC4M16A2) \
+        || defined(LPC24XX_EMC_W9825G2JB75I)
         ARMV7M_MPU_REGION_INITIALIZER(
           0,
           0x00000000,
@@ -49,11 +50,11 @@
         ARMV7M_MPU_REGION_INITIALIZER(
           3,
           0xa0000000,
-#if defined(LPC24XX_EMC_MT48LC4M16A2)
-          ARMV7M_MPU_SIZE_8_MB,
-#else
-          ARMV7M_MPU_SIZE_32_MB,
-#endif
+          #if defined(LPC24XX_EMC_MT48LC4M16A2)
+            ARMV7M_MPU_SIZE_8_MB,
+          #else
+            ARMV7M_MPU_SIZE_32_MB,
+          #endif
           ARMV7M_MPU_ATTR_RWX
         ),
         ARMV7M_MPU_REGION_INITIALIZER(
