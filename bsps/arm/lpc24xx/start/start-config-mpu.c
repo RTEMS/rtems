@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -49,7 +49,11 @@
         ARMV7M_MPU_REGION_INITIALIZER(
           3,
           0xa0000000,
+#if defined(LPC24XX_EMC_MT48LC4M16A2)
+          ARMV7M_MPU_SIZE_8_MB,
+#else
           ARMV7M_MPU_SIZE_32_MB,
+#endif
           ARMV7M_MPU_ATTR_RWX
         ),
         ARMV7M_MPU_REGION_INITIALIZER(
