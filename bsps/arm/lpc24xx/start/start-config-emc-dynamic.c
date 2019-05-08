@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2011-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -24,7 +24,7 @@
 #include <bsp/lpc24xx.h>
 
 /*
- * FIXME: The NXP example code uses different values for the follwing two
+ * FIXME: The NXP example code uses different values for the following two
  * defines.  In the NXP example code they depend on the EMCCLK.  It is unclear
  * how these values are determined.  The values from the NXP example code do
  * not work.
@@ -46,37 +46,44 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .readconfig = LPC24XX_EMC_DYNAMIC_READCONFIG_DEFAULT,
 
     /* Precharge command period 20 ns */
-    .trp = 1,
+    .trp = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
     /* Active to precharge command period 44 ns */
-    .tras = 3,
+    .tras = LPC24XX_PS_TO_EMCCLK(44000, 1),
 
-    /* FIXME */
-    .tsrex = 5,
+    /*
+     * UM: "devices without this parameter you use the same value as tXSR"
+     *
+     * The tXSR is 75 ns.
+     */
+    .tsrex = LPC24XX_PS_TO_EMCCLK(75000, 1),
 
-    /* FIXME */
-    .tapr = 2,
+    /*
+     * Forum: "tAPR, not in datasheet, if fail, use tRCD val"
+     *
+     * The tRCD is 20 ns */
+    .tapr = LPC24XX_PS_TO_EMCCLK(20000, 1),
 
     /* Data-in to active command period tWR + tRP */
-    .tdal = 4,
+    .tdal = LPC24XX_PS_TO_EMCCLK(15000 + 20000, 0),
 
-    /* Write recovery time 15 ns */
-    .twr = 1,
+    /* Write recovery time 15 ns or 1 CLK + 7.5ns */
+    .twr = LPC24XX_PS_TO_EMCCLK(15000, 1),
 
     /* Active to active command period 66 ns */
-    .trc = 4,
+    .trc = LPC24XX_PS_TO_EMCCLK(66000, 1),
 
     /* Auto refresh period 66 ns */
-    .trfc = 4,
+    .trfc = LPC24XX_PS_TO_EMCCLK(66000, 1),
 
     /* Exit self refresh to active command period 75 ns */
-    .txsr = 5,
+    .txsr = LPC24XX_PS_TO_EMCCLK(75000, 1),
 
     /* Active bank a to active bank b command period 15 ns */
-    .trrd = 1,
+    .trrd = LPC24XX_PS_TO_EMCCLK(15000, 1),
 
     /* Load mode register to active or refresh command period 2 tCK */
-    .tmrd = 1
+    .tmrd = 1 /* + 1 */
   }
 #elif defined(LPC24XX_EMC_IS42S32800D7)
   /* Dynamic Memory 0: ISSI IS42S32800D7 */
