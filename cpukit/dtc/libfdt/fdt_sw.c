@@ -121,6 +121,12 @@ static int fdt_sw_probe_struct_(void *fdt)
 			return err; \
 	}
 
+static inline uint32_t sw_flags(void *fdt)
+{
+	/* assert: (fdt_magic(fdt) == FDT_SW_MAGIC) */
+	return fdt_last_comp_version(fdt);
+}
+
 /* 'complete' state:	Enter this state after fdt_finish()
  *
  * Allowed functions: none
@@ -141,7 +147,7 @@ static void *fdt_grab_space_(void *fdt, size_t len)
 	return fdt_offset_ptr_w_(fdt, offset);
 }
 
-int fdt_create(void *buf, int bufsize)
+int fdt_create_with_flags(void *buf, int bufsize, uint32_t flags)
 {
 	const size_t hdrsize = FDT_ALIGN(sizeof(struct fdt_header),
 					 sizeof(struct fdt_reserve_entry));
@@ -150,11 +156,22 @@ int fdt_create(void *buf, int bufsize)
 	if (bufsize < hdrsize)
 		return -FDT_ERR_NOSPACE;
 
+	if (flags & ~FDT_CREATE_FLAGS_ALL)
+		return -FDT_ERR_BADFLAGS;
+
 	memset(buf, 0, bufsize);
 
+	/*
+	 * magic and last_comp_version keep intermediate state during the fdt
+	 * creation process, which is replaced with the proper FDT format by
+	 * fdt_finish().
+	 *
+	 * flags should be accessed with sw_flags().
+	 */
 	fdt_set_magic(fdt, FDT_SW_MAGIC);
 	fdt_set_version(fdt, FDT_LAST_SUPPORTED_VERSION);
-	fdt_set_last_comp_version(fdt, FDT_FIRST_SUPPORTED_VERSION);
+	fdt_set_last_comp_version(fdt, flags);
+
 	fdt_set_totalsize(fdt,  bufsize);
 
 	fdt_set_off_mem_rsvmap(fdt, hdrsize);
@@ -162,6 +179,11 @@ int fdt_create(void *buf, int bufsize)
 	fdt_set_off_dt_strings(fdt, 0);
 
 	return 0;
+}
+
+int fdt_create(void *buf, int bufsize)
+{
+	return fdt_create_with_flags(buf, bufsize, 0);
 }
 
 int fdt_resize(void *fdt, void *buf, int bufsize)
@@ -377,6 +399,10 @@ int fdt_finish(void *fdt)
 
 	/* Finally, adjust the header */
 	fdt_set_totalsize(fdt, newstroffset + fdt_size_dt_strings(fdt));
+
+	/* And fix up fields that were keeping intermediate state. */
+	fdt_set_last_comp_version(fdt, FDT_FIRST_SUPPORTED_VERSION);
 	fdt_set_magic(fdt, FDT_MAGIC);
+
 	return 0;
 }

@@ -138,7 +138,11 @@
 	/* FDT_ERR_NOPHANDLES: The device tree doesn't have any
 	 * phandle available anymore without causing an overflow */
 
-#define FDT_ERR_MAX		17
+#define FDT_ERR_BADFLAGS	18
+	/* FDT_ERR_BADFLAGS: The function was passed a flags field that
+	 * contains invalid flags or an invalid combination of flags. */
+
+#define FDT_ERR_MAX		18
 
 /* constants */
 #define FDT_MAX_PHANDLE 0xfffffffe
@@ -1429,7 +1433,39 @@ int fdt_nop_node(void *fdt, int nodeoffset);
 /* Sequential write functions                                         */
 /**********************************************************************/
 
+#define FDT_CREATE_FLAGS_ALL	0
+
+/**
+ * fdt_create_with_flags - begin creation of a new fdt
+ * @fdt: pointer to memory allocated where fdt will be created
+ * @bufsize: size of the memory space at fdt
+ * @flags: a valid combination of FDT_CREATE_FLAG_ flags, or 0.
+ *
+ * fdt_create_with_flags() begins the process of creating a new fdt with
+ * the sequential write interface.
+ *
+ * fdt creation process must end with fdt_finished() to produce a valid fdt.
+ *
+ * returns:
+ *	0, on success
+ *	-FDT_ERR_NOSPACE, bufsize is insufficient for a minimal fdt
+ *	-FDT_ERR_BADFLAGS, flags is not valid
+ */
+int fdt_create_with_flags(void *buf, int bufsize, uint32_t flags);
+
+/**
+ * fdt_create - begin creation of a new fdt
+ * @fdt: pointer to memory allocated where fdt will be created
+ * @bufsize: size of the memory space at fdt
+ *
+ * fdt_create() is equivalent to fdt_create_with_flags() with flags=0.
+ *
+ * returns:
+ *	0, on success
+ *	-FDT_ERR_NOSPACE, bufsize is insufficient for a minimal fdt
+ */
 int fdt_create(void *buf, int bufsize);
+
 int fdt_resize(void *fdt, void *buf, int bufsize);
 int fdt_add_reservemap_entry(void *fdt, uint64_t addr, uint64_t size);
 int fdt_finish_reservemap(void *fdt);
