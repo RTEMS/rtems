@@ -409,6 +409,9 @@ lpc24xx_pin_set_function(
       case LPC17XX_PIN_TYPE_OPEN_DRAIN:
         iocon_extra |= IOCON_OD;
         break;
+      case LPC17XX_PIN_TYPE_FAST_SLEW_RATE:
+        iocon_extra |= IOCON_SLEW;
+        break;
       default:
         break;
     }
