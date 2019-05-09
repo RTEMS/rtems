@@ -262,7 +262,16 @@ int fdt_end_node(void *fdt)
 	return 0;
 }
 
-static int fdt_find_add_string_(void *fdt, const char *s)
+/* Must only be used to roll back in case of error */
+static void fdt_del_last_string_(void *fdt, const char *s)
+{
+	int strtabsize = fdt_size_dt_strings(fdt);
+	int len = strlen(s) + 1;
+
+	fdt_set_size_dt_strings(fdt, strtabsize - len);
+}
+
+static int fdt_find_add_string_(void *fdt, const char *s, int *allocated)
 {
 	char *strtab = (char *)fdt + fdt_totalsize(fdt);
 	const char *p;
@@ -270,11 +279,15 @@ static int fdt_find_add_string_(void *fdt, const char *s)
 	int len = strlen(s) + 1;
 	int struct_top, offset;
 
+	*allocated = 0;
+
 	p = fdt_find_string_(strtab - strtabsize, strtabsize, s);
 	if (p)
 		return p - strtab;
 
 	/* Add it */
+	*allocated = 1;
+
 	offset = -strtabsize - len;
 	struct_top = fdt_off_dt_struct(fdt) + fdt_size_dt_struct(fdt);
 	if (fdt_totalsize(fdt) + offset < struct_top)
@@ -289,16 +302,20 @@ int fdt_property_placeholder(void *fdt, const char *name, int len, void **valp)
 {
 	struct fdt_property *prop;
 	int nameoff;
+	int allocated;
 
 	FDT_SW_PROBE_STRUCT(fdt);
 
-	nameoff = fdt_find_add_string_(fdt, name);
+	nameoff = fdt_find_add_string_(fdt, name, &allocated);
 	if (nameoff == 0)
 		return -FDT_ERR_NOSPACE;
 
 	prop = fdt_grab_space_(fdt, sizeof(*prop) + FDT_TAGALIGN(len));
-	if (! prop)
+	if (! prop) {
+		if (allocated)
+			fdt_del_last_string_(fdt, name);
 		return -FDT_ERR_NOSPACE;
+	}
 
 	prop->tag = cpu_to_fdt32(FDT_PROP);
 	prop->nameoff = cpu_to_fdt32(nameoff);
