@@ -232,6 +232,15 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
 #endif
 };
 
+/*
+ * Mode shift is determined for RBC by:
+ *
+ *   bus width in bits / 16 + bank bits + column bits
+ *
+ * Mode shift is determined for BRC by:
+ *
+ *   bus width in bits / 16 + column bits
+ */
 BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
   lpc24xx_start_config_emc_dynamic_chip [] = {
 #if defined(LPC24XX_EMC_MT48LC4M16A2)
@@ -240,7 +249,7 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_chip_config
 
     /*
      * Use SDRAM, 0 0 001 01 address mapping, disabled buffer, unprotected
-     * writes.  4 banks, 12 row lines, 8 column lines.
+     * writes.  4 banks, 12 row lines, 8 column lines, RBC.
      */
     .config = 0x280,
 
