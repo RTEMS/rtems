@@ -83,7 +83,9 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .trrd = LPC24XX_PS_TO_EMCCLK(15000, 1),
 
     /* Load mode register to active or refresh command period 2 tCK */
-    .tmrd = 1 /* + 1 */
+    .tmrd = 1, /* + 1 */
+
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #elif defined(LPC24XX_EMC_IS42S32800D7)
   /* Dynamic Memory 0: ISSI IS42S32800D7 */
@@ -185,7 +187,8 @@ BSP_START_DATA_SECTION const lpc24xx_emc_dynamic_config
     .trfc = 5,
     .txsr = 5,
     .trrd = 3,
-    .tmrd = 2
+    .tmrd = 2,
+    .emcdlyctl = LPC24XX_EMCDLYCTL_DEFAULT
   }
 #elif defined(LPC24XX_EMC_IS42S32800B)
   {
