@@ -284,6 +284,23 @@ int fdt_end_node(void *fdt)
 	return 0;
 }
 
+static int fdt_add_string_(void *fdt, const char *s)
+{
+	char *strtab = (char *)fdt + fdt_totalsize(fdt);
+	int strtabsize = fdt_size_dt_strings(fdt);
+	int len = strlen(s) + 1;
+	int struct_top, offset;
+
+	offset = -strtabsize - len;
+	struct_top = fdt_off_dt_struct(fdt) + fdt_size_dt_struct(fdt);
+	if (fdt_totalsize(fdt) + offset < struct_top)
+		return 0; /* no more room :( */
+
+	memcpy(strtab + offset, s, len);
+	fdt_set_size_dt_strings(fdt, strtabsize + len);
+	return offset;
+}
+
 /* Must only be used to roll back in case of error */
 static void fdt_del_last_string_(void *fdt, const char *s)
 {
@@ -296,10 +313,8 @@ static void fdt_del_last_string_(void *fdt, const char *s)
 static int fdt_find_add_string_(void *fdt, const char *s, int *allocated)
 {
 	char *strtab = (char *)fdt + fdt_totalsize(fdt);
-	const char *p;
 	int strtabsize = fdt_size_dt_strings(fdt);
-	int len = strlen(s) + 1;
-	int struct_top, offset;
+	const char *p;
 
 	*allocated = 0;
 
@@ -307,17 +322,9 @@ static int fdt_find_add_string_(void *fdt, const char *s, int *allocated)
 	if (p)
 		return p - strtab;
 
-	/* Add it */
 	*allocated = 1;
 
-	offset = -strtabsize - len;
-	struct_top = fdt_off_dt_struct(fdt) + fdt_size_dt_struct(fdt);
-	if (fdt_totalsize(fdt) + offset < struct_top)
-		return 0; /* no more room :( */
-
-	memcpy(strtab + offset, s, len);
-	fdt_set_size_dt_strings(fdt, strtabsize + len);
-	return offset;
+	return fdt_add_string_(fdt, s);
 }
 
 int fdt_property_placeholder(void *fdt, const char *name, int len, void **valp)
@@ -328,7 +335,13 @@ int fdt_property_placeholder(void *fdt, const char *name, int len, void **valp)
 
 	FDT_SW_PROBE_STRUCT(fdt);
 
-	nameoff = fdt_find_add_string_(fdt, name, &allocated);
+	/* String de-duplication can be slow, _NO_NAME_DEDUP skips it */
+	if (sw_flags(fdt) & FDT_CREATE_FLAG_NO_NAME_DEDUP) {
+		allocated = 1;
+		nameoff = fdt_add_string_(fdt, name);
+	} else {
+		nameoff = fdt_find_add_string_(fdt, name, &allocated);
+	}
 	if (nameoff == 0)
 		return -FDT_ERR_NOSPACE;
 
