@@ -20,7 +20,6 @@
 #include <time.h>
 
 #include <rtems.h>
-#include <rtems/error.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/shell.h>
@@ -689,7 +688,6 @@ static bool rtems_shell_init_user_env(void)
   /* Make sure we have a private user environment */
   sc = rtems_libio_set_private_env();
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_error(sc, "rtems_libio_set_private_env():");
     return false;
   }
 
@@ -730,18 +728,15 @@ bool rtems_shell_main_loop(
 
   shell_env = rtems_shell_init_env(shell_env_arg);
   if (shell_env == NULL) {
-    rtems_error(0, "rtems_shell_init_env");
     return false;
   }
 
   eno = pthread_setspecific(rtems_shell_current_env_key, shell_env);
   if (eno != 0) {
-    rtems_error(0, "pthread_setspecific(shell_current_env_key)");
     return false;
   }
 
   if (!rtems_shell_init_user_env()) {
-    rtems_error(0, "rtems_shell_init_user_env");
     return false;
   }
 
@@ -997,14 +992,11 @@ static rtems_status_code rtems_shell_run (
     &task_id
   );
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_error(sc,"creating task %s in shell_init()",task_name);
     return sc;
   }
 
   shell_env = rtems_shell_init_env( NULL );
   if ( !shell_env )  {
-   rtems_error(RTEMS_NO_MEMORY,
-               "allocating shell_env %s in shell_init()",task_name);
    return RTEMS_NO_MEMORY;
   }
   shell_env->devname       = devname;
@@ -1025,7 +1017,6 @@ static rtems_status_code rtems_shell_run (
   sc = rtems_task_start(task_id, rtems_shell_task,
                           (rtems_task_argument) shell_env);
   if (sc != RTEMS_SUCCESSFUL) {
-    rtems_error(sc,"starting task %s in shell_init()",task_name);
     return sc;
   }
 
