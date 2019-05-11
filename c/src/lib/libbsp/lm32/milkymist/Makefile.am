@@ -89,5 +89,6 @@ if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/net/network.c
 endif
 
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/lm32/milkymist/headers.am

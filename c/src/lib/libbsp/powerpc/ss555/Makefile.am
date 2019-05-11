@@ -45,6 +45,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/raw_exceptio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors.S
 
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-generic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-info.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-lock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-server.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-shell.c
+
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/ss555/headers.am

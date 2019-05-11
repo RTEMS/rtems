@@ -36,5 +36,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 project_lib_LIBRARIES = librtemsbsp.a
 
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/v850/gdbv850sim/headers.am

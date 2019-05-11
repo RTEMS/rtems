@@ -20,6 +20,7 @@
 #define VIRTEX5_IRQ_IRQ_H
 
 #include <rtems/irq.h>
+#include <bsp/irq-default.h>
 
 /*
  * the following definitions specify the indices used

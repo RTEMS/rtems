@@ -32,6 +32,8 @@
 
 #ifndef ASM
 
+#include <bsp/irq-default.h>
+
 #define OneTierIrqPrioTbl 1
 
 /*

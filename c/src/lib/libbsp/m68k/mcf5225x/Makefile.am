@@ -32,5 +32,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5225x
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/mcf5225x/headers.am

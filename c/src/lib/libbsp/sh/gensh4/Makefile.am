@@ -39,6 +39,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh4/start/hw_init.c
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/sh/gensh4/headers.am

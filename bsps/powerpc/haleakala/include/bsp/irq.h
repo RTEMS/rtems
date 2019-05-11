@@ -20,6 +20,8 @@
 
 #ifndef ASM
 
+#include <bsp/irq-default.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

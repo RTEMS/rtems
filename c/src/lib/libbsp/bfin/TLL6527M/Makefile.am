@@ -29,7 +29,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/TLL6527M/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/TLL6527M/start/interrupt.c
 
-
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/TLL6527M/headers.am

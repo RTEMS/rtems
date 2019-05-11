@@ -30,7 +30,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/eZKit533/console/console-io
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/interrupt.c
 
-
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/eZKit533/headers.am

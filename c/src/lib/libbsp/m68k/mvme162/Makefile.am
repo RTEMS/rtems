@@ -50,6 +50,6 @@ if HAS_FPSP
 include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp-sources.am
 endif
 
-
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/mvme162/headers.am

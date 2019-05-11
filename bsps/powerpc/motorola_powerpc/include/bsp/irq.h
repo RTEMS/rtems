@@ -21,6 +21,7 @@
 
 #define BSP_SHARED_HANDLER_SUPPORT      1
 #include <rtems/irq.h>
+#include <bsp/irq-default.h>
 
 /*
  * 8259 edge/level control definitions at VIA

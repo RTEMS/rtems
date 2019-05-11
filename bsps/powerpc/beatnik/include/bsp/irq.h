@@ -25,6 +25,7 @@
 #define BSP_SHARED_HANDLER_SUPPORT      1
 #include <rtems/irq.h>
 #include <bsp/vectors.h>
+#include <bsp/irq-default.h>
 
 /* This BSP also passes a pointer to the interrupt frame to the handler.
  * The PPC ABI guarantees that this will not mess up handlers written
