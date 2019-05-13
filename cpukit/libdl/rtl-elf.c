@@ -51,6 +51,62 @@ static rtems_rtl_loader_format elf_sig =
   .flags = RTEMS_RTL_FMT_ELF
 };
 
+static const char*
+rtems_rtl_elf_sym_type_label (Elf_Byte st_info)
+{
+  const char* label;
+  switch (ELF_ST_TYPE (st_info))
+  {
+    case STT_NOTYPE:
+      label = "STT_NOTYPE";
+      break;
+    case STT_OBJECT:
+      label = "STT_OBJECT";
+      break;
+    case STT_FUNC:
+      label = "STT_FUNC";
+      break;
+    case STT_SECTION:
+      label = "STT_SECTION";
+      break;
+    case STT_FILE:
+      label = "STT_FILE";
+      break;
+    case STT_COMMON:
+      label = "STT_COMMON";
+      break;
+    case STT_TLS:
+      label = "STT_TLS";
+      break;
+    default:
+      label = "unknown";
+      break;
+  }
+  return label;
+}
+
+static const char*
+rtems_rtl_elf_sym_bind_label (Elf_Byte st_info)
+{
+  const char* label;
+  switch (ELF_ST_BIND (st_info))
+  {
+    case STB_LOCAL:
+      label = "STB_LOCAL";
+      break;
+    case STB_GLOBAL:
+      label = "STB_GLOBAL";
+      break;
+    case STB_WEAK:
+      label = "STB_WEAK";
+      break;
+    default:
+      label = "unknown";
+      break;
+  }
+  return label;
+}
+
 static bool
 rtems_rtl_elf_machine_check (Elf_Ehdr* ehdr)
 {
@@ -842,11 +898,13 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
      * we need to make sure there is a valid seciton.
      */
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-      printf ("rtl: sym:elf:%-4d name:%-4d: %-20s: bind:%-2d " \
-              "type:%-2d sect:%-5d size:%-5d value:%d\n",
+      printf ("rtl: sym:elf:%-4d name:%-4d: %-20s: bind:%-2d:%-12s " \
+              "type:%-2d:%-10s sect:%-5d size:%-5d value:%d\n",
               sym, (int) symbol.st_name, name,
               (int) ELF_ST_BIND (symbol.st_info),
+              rtems_rtl_elf_sym_bind_label (symbol.st_info),
               (int) ELF_ST_TYPE (symbol.st_info),
+              rtems_rtl_elf_sym_type_label (symbol.st_info),
               symbol.st_shndx,
               (int) symbol.st_size,
               (int) symbol.st_value);
@@ -998,68 +1056,113 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
           (ELF_ST_BIND (symbol.st_info) == STB_WEAK) ||
           (ELF_ST_BIND (symbol.st_info) == STB_LOCAL)))
     {
-      rtems_rtl_obj_sym* osym;
-      char*              string;
-      Elf_Word           value;
-      const char*        name;
-
-      off = obj->ooffset + strtab->offset + symbol.st_name;
-      len = RTEMS_RTL_ELF_STRING_MAX;
-
-      if (!rtems_rtl_obj_cache_read (strings, fd, off, (void**) &name, &len))
-        return false;
+      rtems_rtl_obj_sect* symsect;
 
       /*
-       * If a duplicate forget it.
+       * There needs to be a valid section for the symbol.
        */
-      if (rtems_rtl_symbol_global_find (name))
-        continue;
+      symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
 
-      if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
-          (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
+      if (symsect != NULL)
       {
-        osym = gsym;
-        string = gstring;
-        gstring += strlen (name) + 1;
-        ++gsym;
-      }
-      else
-      {
-        osym = lsym;
-        string = lstring;
-        lstring += strlen (name) + 1;
-        ++lsym;
-      }
+        rtems_rtl_obj_sym*  osym;
+        char*               string;
+        Elf_Word            value;
+        const char*         name;
 
-      /*
-       * Allocate any common symbols in the common section.
-       */
-      if (symbol.st_shndx == SHN_COMMON)
-      {
-        size_t value_off = rtems_rtl_obj_align (common_offset,
-                                                symbol.st_value);
-        common_offset = value_off + symbol.st_size;
-        value = value_off;
-      }
-      else
-      {
-        value = symbol.st_value;
-      }
+        off = obj->ooffset + strtab->offset + symbol.st_name;
+        len = RTEMS_RTL_ELF_STRING_MAX;
 
-      rtems_chain_set_off_chain (&osym->node);
-      memcpy (string, name, strlen (name) + 1);
-      osym->name = string;
-      osym->value = (uint8_t*) value;
-      osym->data = symbol.st_shndx;
+        if (!rtems_rtl_obj_cache_read (strings, fd, off, (void**) &name, &len))
+          return false;
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-        printf ("rtl: sym:add:%-4d name:%-4d: %-20s: bind:%-2d " \
-                "type:%-2d val:%-8p sect:%-3d size:%d\n",
-                sym, (int) symbol.st_name, osym->name,
-                (int) ELF_ST_BIND (symbol.st_info),
-                (int) ELF_ST_TYPE (symbol.st_info),
-                osym->value, symbol.st_shndx,
-                (int) symbol.st_size);
+        /*
+         * If a duplicate forget it.
+         */
+        if (rtems_rtl_symbol_global_find (name))
+          continue;
+
+        if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
+            (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
+        {
+          size_t slen = strlen (name) + 1;
+          if ((gstring + slen) > (char*) obj->global_table + obj->global_size)
+            string = NULL;
+          else
+          {
+            osym = gsym;
+            string = gstring;
+            gstring += slen + 1;
+            ++gsym;
+          }
+        }
+        else
+        {
+          size_t slen = strlen (name) + 1;
+          if ((lstring + slen) > (char*) obj->local_table + obj->local_size)
+            string = NULL;
+          else
+          {
+            osym = lsym;
+            string = lstring;
+            lstring += slen + 1;
+            ++lsym;
+          }
+        }
+
+        /*
+         * See if the loading has overflowed the allocated tables.
+         */
+        if (string == NULL)
+        {
+          if (obj->local_syms)
+          {
+            rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->local_table);
+            obj->local_table = NULL;
+            obj->local_size = 0;
+            obj->local_syms = 0;
+          }
+          if (obj->global_syms)
+          {
+            rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
+            obj->global_table = NULL;
+            obj->global_syms = 0;
+            obj->global_size = 0;
+          }
+          rtems_rtl_set_error (ENOMEM, "syms overlow, parsing/loading size mismatch");
+          return false;
+        }
+
+        /*
+         * Allocate any common symbols in the common section.
+         */
+        if (symbol.st_shndx == SHN_COMMON)
+        {
+          size_t value_off = rtems_rtl_obj_align (common_offset,
+                                                  symbol.st_value);
+          common_offset = value_off + symbol.st_size;
+          value = value_off;
+        }
+        else
+        {
+          value = symbol.st_value;
+        }
+
+        rtems_chain_set_off_chain (&osym->node);
+        memcpy (string, name, strlen (name) + 1);
+        osym->name = string;
+        osym->value = (uint8_t*) value;
+        osym->data = symbol.st_shndx;
+
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+          printf ("rtl: sym:add:%-4d name:%-4d: %-20s: bind:%-2d " \
+                  "type:%-2d val:%-8p sect:%-3d size:%d\n",
+                  sym, (int) symbol.st_name, osym->name,
+                  (int) ELF_ST_BIND (symbol.st_info),
+                  (int) ELF_ST_TYPE (symbol.st_info),
+                  osym->value, symbol.st_shndx,
+                  (int) symbol.st_size);
+      }
     }
   }
 
