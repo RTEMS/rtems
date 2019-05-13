@@ -273,7 +273,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node **_RBTree_Root_reference(
  * @retval pointer Pointer to the root node.
  * @retval NULL The tree is empty.
  */
- */
 RTEMS_INLINE_ROUTINE RBTree_Node * const *_RBTree_Root_const_reference(
   const RBTree_Control *the_rbtree
 )
