@@ -200,26 +200,59 @@ rtems_rtl_symbol_global_find (const char* name)
   return NULL;
 }
 
+static int
+rtems_rtl_symbol_obj_compare (const void* a, const void* b)
+{
+  const rtems_rtl_obj_sym* sa;
+  const rtems_rtl_obj_sym* sb;
+  sa = (const rtems_rtl_obj_sym*) a;
+  sb = (const rtems_rtl_obj_sym*) b;
+  return strcmp (sa->name, sb->name);
+}
+
+void
+rtems_rtl_symbol_obj_sort (rtems_rtl_obj* obj)
+{
+  qsort (obj->local_table,
+         obj->local_syms,
+         sizeof (rtems_rtl_obj_sym),
+         rtems_rtl_symbol_obj_compare);
+  qsort (obj->global_table,
+         obj->global_syms,
+         sizeof (rtems_rtl_obj_sym),
+         rtems_rtl_symbol_obj_compare);
+}
+
 rtems_rtl_obj_sym*
 rtems_rtl_symbol_obj_find (rtems_rtl_obj* obj, const char* name)
 {
-  rtems_rtl_obj_sym* sym;
-  size_t             s;
   /*
    * Check the object file's symbols first. If not found search the
    * global symbol table.
    */
   if (obj->local_syms)
   {
-    for (s = 0, sym = obj->local_table; s < obj->local_syms; ++s, ++sym)
-      if (strcmp (name, sym->name) == 0)
-        return sym;
+    rtems_rtl_obj_sym* match;
+    rtems_rtl_obj_sym  key = { 0 };
+    key.name = name;
+    match = bsearch (&key, obj->local_table,
+                     obj->local_syms,
+                     sizeof (rtems_rtl_obj_sym),
+                     rtems_rtl_symbol_obj_compare);
+    if (match != NULL)
+      return match;
   }
   if (obj->global_syms)
   {
-    for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym)
-      if (strcmp (name, sym->name) == 0)
-        return sym;
+    rtems_rtl_obj_sym* match;
+    rtems_rtl_obj_sym  key = { 0 };
+    key.name = name;
+    match = bsearch (&key, obj->global_table,
+                     obj->global_syms,
+                     sizeof (rtems_rtl_obj_sym),
+                     rtems_rtl_symbol_obj_compare);
+    if (match != NULL)
+      return match;
   }
   return rtems_rtl_symbol_global_find (name);
 }

@@ -97,6 +97,15 @@ bool rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
 rtems_rtl_obj_sym* rtems_rtl_symbol_global_find (const char* name);
 
 /**
+ * Sort an object file's local and global symbol table. This needs to
+ * be done before calling @ref rtems_rtl_symbol_obj_find as it
+ * performs a binary search on the tables.
+ *
+ * @param obj The object file to sort.
+ */
+void rtems_rtl_symbol_obj_sort (rtems_rtl_obj* obj);
+
+/**
  * Find a symbol given the symbol label in the local object file.
  *
  * @param obj The object file to search.

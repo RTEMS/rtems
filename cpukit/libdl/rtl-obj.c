@@ -914,7 +914,11 @@ rtems_rtl_obj_load_symbols (rtems_rtl_obj*             obj,
                             void*                      data)
 {
   uint32_t mask = RTEMS_RTL_OBJ_SECT_SYM;
-  return rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
+  bool     ok;
+  ok = rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
+  if (ok)
+    rtems_rtl_symbol_obj_sort (obj);
+  return ok;
 }
 
 static int
