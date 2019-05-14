@@ -1092,7 +1092,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
           {
             osym = gsym;
             string = gstring;
-            gstring += slen + 1;
+            gstring += slen;
             ++gsym;
           }
         }
@@ -1105,7 +1105,7 @@ rtems_rtl_elf_symbols_load (rtems_rtl_obj*      obj,
           {
             osym = lsym;
             string = lstring;
-            lstring += slen + 1;
+            lstring += slen;
             ++lsym;
           }
         }
