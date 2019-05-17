@@ -45,9 +45,6 @@ static const rtems_assoc_t rtems_object_api_classic_assoc[] = {
 static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Thread",                  OBJECTS_POSIX_THREADS, 0},
   { "Key",                     OBJECTS_POSIX_KEYS, 0},
-#ifdef RTEMS_POSIX_API
-  { "Interrupt",               OBJECTS_POSIX_INTERRUPTS, 0},
-#endif
   { "Message Queue",           OBJECTS_POSIX_MESSAGE_QUEUES, 0},
   { "Semaphore",               OBJECTS_POSIX_SEMAPHORES, 0},
 #ifdef RTEMS_POSIX_API
