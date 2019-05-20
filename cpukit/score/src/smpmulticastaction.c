@@ -102,6 +102,36 @@ static void _Per_CPU_Try_perform_jobs( Per_CPU_Control *cpu_self )
   }
 }
 
+void _Per_CPU_Wait_for_job(
+  const Per_CPU_Control *cpu,
+  const Per_CPU_Job     *job
+)
+{
+  while (
+    _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
+      != PER_CPU_JOB_DONE
+  ) {
+    switch ( cpu->state ) {
+      case PER_CPU_STATE_INITIAL:
+      case PER_CPU_STATE_READY_TO_START_MULTITASKING:
+      case PER_CPU_STATE_REQUEST_START_MULTITASKING:
+        _CPU_SMP_Processor_event_broadcast();
+        /* Fall through */
+      case PER_CPU_STATE_UP:
+        /*
+         * Calling this function with the current processor is intentional.
+         * We have to perform our own jobs here in case inter-processor
+         * interrupts are not working.
+         */
+        _Per_CPU_Try_perform_jobs( _Per_CPU_Get() );
+        break;
+      default:
+        _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
+        break;
+    }
+  }
+}
+
 typedef struct {
   Per_CPU_Job_context Context;
   Per_CPU_Job         Jobs[ CPU_MAXIMUM_PROCESSORS ];
@@ -140,35 +170,12 @@ static void _SMP_Wait_for_action_jobs(
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
-      const Per_CPU_Job *job;
-      Per_CPU_Control   *cpu;
+      const Per_CPU_Control *cpu;
+      const Per_CPU_Job     *job;
 
-      job = &jobs->Jobs[ cpu_index ];
       cpu = _Per_CPU_Get_by_index( cpu_index );
-
-      while (
-        _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
-          != PER_CPU_JOB_DONE
-      ) {
-        switch ( cpu->state ) {
-          case PER_CPU_STATE_INITIAL:
-          case PER_CPU_STATE_READY_TO_START_MULTITASKING:
-          case PER_CPU_STATE_REQUEST_START_MULTITASKING:
-            _CPU_SMP_Processor_event_broadcast();
-            /* Fall through */
-          case PER_CPU_STATE_UP:
-            /*
-             * Calling this function with the current processor is intentional.
-             * We have to perform our own jobs here in case inter-processor
-             * interrupts are not working.
-             */
-            _Per_CPU_Try_perform_jobs( _Per_CPU_Get() );
-            break;
-          default:
-            _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
-            break;
-        }
-      }
+      job = &jobs->Jobs[ cpu_index ];
+      _Per_CPU_Wait_for_job( cpu, job );
     }
   }
 }

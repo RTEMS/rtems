@@ -811,6 +811,20 @@ void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu );
  */
 void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job );
 
+/**
+ * @brief Waits for the job carried out by the specified processor.
+ *
+ * This function may result in an SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS
+ * fatal error.
+ *
+ * @param[in] cpu The processor carrying out the job.
+ * @param[in] job The job to wait for.
+ */
+void _Per_CPU_Wait_for_job(
+  const Per_CPU_Control *cpu,
+  const Per_CPU_Job     *job
+);
+
 #endif /* defined( RTEMS_SMP ) */
 
 /*
