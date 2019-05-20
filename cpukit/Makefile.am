@@ -1118,6 +1118,7 @@ librtemscpu_a_SOURCES += score/src/schedulerstrongapa.c
 librtemscpu_a_SOURCES += score/src/smp.c
 librtemscpu_a_SOURCES += score/src/smplock.c
 librtemscpu_a_SOURCES += score/src/smpmulticastaction.c
+librtemscpu_a_SOURCES += score/src/smpunicastaction.c
 librtemscpu_a_SOURCES += score/src/schedulerdefaultaskforhelp.c
 librtemscpu_a_SOURCES += score/src/schedulerdefaultsetaffinity.c
 librtemscpu_a_SOURCES += score/src/schedulersmp.c

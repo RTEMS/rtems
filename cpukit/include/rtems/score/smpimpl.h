@@ -261,6 +261,21 @@ void _SMP_Othercast_action(
 );
 
 /**
+ * @brief Initiates an SMP action on the specified target processor.
+ *
+ * This is an optimized variant of _SMP_Multicast_action().
+ *
+ * @param cpu_index The index of the target processor.
+ * @param handler The action handler.
+ * @param arg The action argument.
+ */
+void _SMP_Unicast_action(
+  uint32_t            cpu_index,
+  SMP_Action_handler  handler,
+  void               *arg
+);
+
+/**
  * @brief Ensures that all store operations issued by the current processor
  * before the call this function are visible to all other online processors.
  *

@@ -59,6 +59,32 @@ static void clear_ids_by_worker(test_context *ctx, size_t worker_index)
   memset(&ctx->id[worker_index][0], 0, sizeof(ctx->id[worker_index]));
 }
 
+static void unicast_action_irq_disabled(
+  uint32_t cpu_index,
+  SMP_Action_handler handler,
+  void *arg
+)
+{
+  rtems_interrupt_level level;
+
+  rtems_interrupt_local_disable(level);
+  _SMP_Unicast_action(cpu_index, handler, arg);
+  rtems_interrupt_local_enable(level);
+}
+
+static void unicast_action_dispatch_disabled(
+  uint32_t cpu_index,
+  SMP_Action_handler handler,
+  void *arg
+)
+{
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Thread_Dispatch_disable();
+  _SMP_Unicast_action(cpu_index, handler, arg);
+  _Thread_Dispatch_enable(cpu_self);
+}
+
 static void multicast_action_irq_disabled(
   const Processor_mask *targets,
   SMP_Action_handler handler,
@@ -130,6 +156,43 @@ static void action(void *arg)
 }
 
 static void test_unicast(
+  test_context *ctx,
+  void (*unicast_action)(uint32_t, SMP_Action_handler, void *)
+)
+{
+  uint32_t step;
+  uint32_t i;
+  uint32_t n;
+
+  T_plan(1);
+  step = 0;
+  n = rtems_scheduler_get_processor_maximum();
+
+  for (i = 0; i < n; ++i) {
+    uint32_t j;
+
+    clear_ids_by_worker(ctx, 0);
+
+    (*unicast_action)(i, action, &ctx->id[0][0]);
+
+    for (j = 0; j < n; ++j) {
+      unsigned id;
+
+      ++step;
+      id = _Atomic_Load_uint(&ctx->id[0][j], ATOMIC_ORDER_RELAXED);
+
+      if (j == i) {
+        T_quiet_eq_uint(j + 1, id);
+      } else {
+        T_quiet_eq_uint(0, id);
+      }
+    }
+  }
+
+  T_step_eq_u32(0, step, n * n);
+}
+
+static void test_multicast(
   test_context *ctx,
   void (*multicast_action)(const Processor_mask *, SMP_Action_handler, void *)
 )
@@ -271,15 +334,27 @@ static void test_before_multitasking(void)
   ctx = &test_instance;
 
   T_case_begin("UnicastBeforeMultitasking", NULL);
-  test_unicast(ctx, _SMP_Multicast_action);
+  test_unicast(ctx, _SMP_Unicast_action);
   T_case_end();
 
   T_case_begin("UnicastBeforeMultitaskingIRQDisabled", NULL);
-  test_unicast(ctx, multicast_action_irq_disabled);
+  test_unicast(ctx, unicast_action_irq_disabled);
   T_case_end();
 
   T_case_begin("UnicastBeforeMultitaskingDispatchDisabled", NULL);
-  test_unicast(ctx, multicast_action_dispatch_disabled);
+  test_unicast(ctx, unicast_action_dispatch_disabled);
+  T_case_end();
+
+  T_case_begin("MulticastBeforeMultitasking", NULL);
+  test_multicast(ctx, _SMP_Multicast_action);
+  T_case_end();
+
+  T_case_begin("MulticastBeforeMultitaskingIRQDisabled", NULL);
+  test_multicast(ctx, multicast_action_irq_disabled);
+  T_case_end();
+
+  T_case_begin("MulticastBeforeMultitaskingDispatchDisabled", NULL);
+  test_multicast(ctx, multicast_action_dispatch_disabled);
   T_case_end();
 
   T_case_begin("BroadcastBeforeMultitasking", NULL);
@@ -437,12 +512,22 @@ T_TEST_CASE(AddJobInJob)
 
 T_TEST_CASE(UnicastDuringMultitaskingIRQDisabled)
 {
-  test_unicast(&test_instance, multicast_action_irq_disabled);
+  test_unicast(&test_instance, unicast_action_irq_disabled);
 }
 
 T_TEST_CASE(UnicastDuringMultitaskingDispatchDisabled)
 {
-  test_unicast(&test_instance, multicast_action_dispatch_disabled);
+  test_unicast(&test_instance, unicast_action_dispatch_disabled);
+}
+
+T_TEST_CASE(MulticastDuringMultitaskingIRQDisabled)
+{
+  test_multicast(&test_instance, multicast_action_irq_disabled);
+}
+
+T_TEST_CASE(MulticastDuringMultitaskingDispatchDisabled)
+{
+  test_multicast(&test_instance, multicast_action_dispatch_disabled);
 }
 
 T_TEST_CASE(BroadcastDuringMultitaskingIRQDisabled)

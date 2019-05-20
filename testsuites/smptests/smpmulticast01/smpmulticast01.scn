@@ -1,60 +1,83 @@
 *** BEGIN OF TEST SMPMULTICAST 1 ***
-*** TEST VERSION: 5.0.0.d9c9d1af7a885bc402c57e88919635b27b363111
+*** TEST VERSION: 5.0.0.41cddcc6e194be27d1e4125b961acb94e278552b
 *** TEST STATE: EXPECTED-PASS
 *** TEST BUILD: RTEMS_POSIX_API RTEMS_SMP
-*** TEST TOOLS: 7.4.0 20181206 (RTEMS 5, RSB e0aec65182449a4e22b820e773087636edaf5b32, Newlib 1d35a003f)
+*** TEST TOOLS: 7.4.1 20190514 (RTEMS 5, RSB 7a80d6ced664748e66904cd98250f6a9c727361b, Newlib 1d35a003f)
 A:SMPMultiCast
 S:Platform:RTEMS
-S:Compiler:7.4.0 20181206 (RTEMS 5, RSB e0aec65182449a4e22b820e773087636edaf5b32, Newlib 1d35a003f)
-S:Version:5.0.0.d9c9d1af7a885bc402c57e88919635b27b363111
-S:BSP:qoriq_e6500_32
-S:RTEMS_DEBUG:0
+S:Compiler:7.4.1 20190514 (RTEMS 5, RSB 7a80d6ced664748e66904cd98250f6a9c727361b, Newlib 1d35a003f)
+S:Version:5.0.0.39862d4adf604fb4dccf3a852d66fe5b71966c47-modified
+S:BSP:leon3
+S:RTEMS_DEBUG:1
 S:RTEMS_MULTIPROCESSING:0
 S:RTEMS_POSIX_API:1
 S:RTEMS_PROFILING:0
 S:RTEMS_SMP:1
 B:UnicastBeforeMultitasking
-P:0:0:IDLE:init.c:142
-E:UnicastBeforeMultitasking:N:1:F:0:D:0.002206
+P:0:0:IDLE:init.c:192
+E:UnicastBeforeMultitasking:N:1:F:0:D:0.000118
 B:UnicastBeforeMultitaskingIRQDisabled
-P:0:0:IDLE:init.c:142
-E:UnicastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.002184
+P:0:0:IDLE:init.c:192
+E:UnicastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.000121
 B:UnicastBeforeMultitaskingDispatchDisabled
-P:0:0:IDLE:init.c:142
-E:UnicastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.002198
+P:0:0:IDLE:init.c:192
+E:UnicastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.000123
+B:MulticastBeforeMultitasking
+P:0:0:IDLE:init.c:232
+E:MulticastBeforeMultitasking:N:1:F:0:D:0.000126
+B:MulticastBeforeMultitaskingIRQDisabled
+P:0:0:IDLE:init.c:232
+E:MulticastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.000126
+B:MulticastBeforeMultitaskingDispatchDisabled
+P:0:0:IDLE:init.c:232
+E:MulticastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.000129
 B:BroadcastBeforeMultitasking
-P:0:0:IDLE:init.c:174
-E:BroadcastBeforeMultitasking:N:1:F:0:D:0.004153
+P:0:0:IDLE:init.c:264
+E:BroadcastBeforeMultitasking:N:1:F:0:D:0.000180
 B:BroadcastBeforeMultitaskingIRQDisabled
-P:0:0:IDLE:init.c:174
-E:BroadcastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.004135
+P:0:0:IDLE:init.c:264
+E:BroadcastBeforeMultitaskingIRQDisabled:N:1:F:0:D:0.000180
 B:BroadcastBeforeMultitaskingDispatchDisabled
-P:0:0:IDLE:init.c:174
-E:BroadcastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.004123
-B:UnicastDuringMultitasking
-P:0:23:UI1:init.c:142
-E:UnicastDuringMultitasking:N:1:F:0:D:0.002270
+P:0:0:IDLE:init.c:264
+E:BroadcastBeforeMultitaskingDispatchDisabled:N:1:F:0:D:0.000187
 B:UnicastDuringMultitaskingIRQDisabled
-P:0:23:UI1:init.c:142
-E:UnicastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.002272
+P:0:3:UI1:init.c:192
+E:UnicastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.000150
 B:UnicastDuringMultitaskingDispatchDisabled
-P:0:23:UI1:init.c:142
-E:UnicastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.002271
-B:BroadcastDuringMultitasking
-P:0:23:UI1:init.c:174
-E:BroadcastDuringMultitasking:N:1:F:0:D:0.003904
+P:0:3:UI1:init.c:192
+E:UnicastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.000154
+B:ParallelBroadcast
+E:ParallelBroadcast:N:0:F:0:D:3.995722
+B:MulticastDuringMultitaskingIRQDisabled
+P:0:0:UI1:init.c:232
+E:MulticastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.000154
+B:MulticastDuringMultitaskingDispatchDisabled
+P:0:0:UI1:init.c:232
+E:MulticastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.000157
+B:JobOrder
+P:0:0:UI1:init.c:467
+P:1:0:ISR:init.c:435
+P:2:0:ISR:init.c:440
+P:3:0:ISR:init.c:445
+E:JobOrder:N:4:F:0:D:0.000259
 B:BroadcastDuringMultitaskingIRQDisabled
-P:0:23:UI1:init.c:174
-E:BroadcastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.003949
+P:0:0:UI1:init.c:264
+E:BroadcastDuringMultitaskingIRQDisabled:N:1:F:0:D:0.000228
 B:BroadcastDuringMultitaskingDispatchDisabled
-P:0:23:UI1:init.c:174
-E:BroadcastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.003914
+P:0:0:UI1:init.c:264
+E:BroadcastDuringMultitaskingDispatchDisabled:N:1:F:0:D:0.000244
+B:AddJobInJob
+P:0:0:UI1:init.c:506
+P:1:0:ISR:init.c:478
+P:2:0:UI1:init.c:508
+P:3:0:ISR:init.c:484
+E:AddJobInJob:N:4:F:0:D:0.000267
 B:WrongCPUStateToPerformJobs
-P:0:0:ISR:init.c:226
-P:1:23:UI1:init.c:310
-P:2:23:UI1:init.c:311
-P:3:23:UI1:init.c:312
-E:WrongCPUStateToPerformJobs:N:4:F:0:D:0.007911
-Z:SMPMultiCast:C:13:N:16:F:0:D:0.153651
+P:0:1:ISR:init.c:391
+P:1:0:UI1:init.c:564
+P:2:0:UI1:init.c:565
+P:3:0:UI1:init.c:566
+E:WrongCPUStateToPerformJobs:N:4:F:0:D:0.000255
+Z:SMPMultiCast:C:19:N:27:F:0:D:4.002547
 
 *** END OF TEST SMPMULTICAST 1 ***
