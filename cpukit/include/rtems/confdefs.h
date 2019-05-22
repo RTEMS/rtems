@@ -258,7 +258,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  *    - If CONFIGURE_APPLICATION_DISABLE_FILESYSTEM is defined all filesystems
  *      are disabled by force.
  *
- *    - If CONFIGURE_USE_DEV_AS_BASE_FILESYSTEM is defined all filesystems
+ *    - If CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM is defined all filesystems
  *      are disabled by force and DEVFS is defined.
  */
 /**@{*/
