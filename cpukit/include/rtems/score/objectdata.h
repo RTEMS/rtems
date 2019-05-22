@@ -50,8 +50,10 @@ typedef struct {
  *  for RTEMS internal object classes.
  */
 typedef enum {
-  OBJECTS_INTERNAL_NO_CLASS =  0,
-  OBJECTS_INTERNAL_THREADS  =  1
+  OBJECTS_INTERNAL_NO_CLASS = 0,
+
+  /* Must be one, see __Thread_Get_objects_information() */
+  OBJECTS_INTERNAL_THREADS = 1
 } Objects_Internal_API;
 
 /**
@@ -59,17 +61,20 @@ typedef enum {
  *  for the RTEMS Classic API.
  */
 typedef enum {
-  OBJECTS_CLASSIC_NO_CLASS     = 0,
-  OBJECTS_RTEMS_TASKS          = 1,
-  OBJECTS_RTEMS_TIMERS         = 2,
-  OBJECTS_RTEMS_SEMAPHORES     = 3,
-  OBJECTS_RTEMS_MESSAGE_QUEUES = 4,
-  OBJECTS_RTEMS_PARTITIONS     = 5,
-  OBJECTS_RTEMS_REGIONS        = 6,
-  OBJECTS_RTEMS_PORTS          = 7,
-  OBJECTS_RTEMS_PERIODS        = 8,
-  OBJECTS_RTEMS_EXTENSIONS     = 9,
-  OBJECTS_RTEMS_BARRIERS       = 10
+  OBJECTS_CLASSIC_NO_CLASS = 0,
+
+  /* Must be one, see __Thread_Get_objects_information() */
+  OBJECTS_RTEMS_TASKS = 1,
+
+  OBJECTS_RTEMS_TIMERS,
+  OBJECTS_RTEMS_SEMAPHORES,
+  OBJECTS_RTEMS_MESSAGE_QUEUES,
+  OBJECTS_RTEMS_PARTITIONS,
+  OBJECTS_RTEMS_REGIONS,
+  OBJECTS_RTEMS_PORTS,
+  OBJECTS_RTEMS_PERIODS,
+  OBJECTS_RTEMS_EXTENSIONS,
+  OBJECTS_RTEMS_BARRIERS
 } Objects_Classic_API;
 
 /**
@@ -77,13 +82,16 @@ typedef enum {
  *  for the POSIX API.
  */
 typedef enum {
-  OBJECTS_POSIX_NO_CLASS            = 0,
-  OBJECTS_POSIX_THREADS             = 1,
-  OBJECTS_POSIX_KEYS                = 2,
-  OBJECTS_POSIX_MESSAGE_QUEUES      = 5,
-  OBJECTS_POSIX_SEMAPHORES          = 7,
-  OBJECTS_POSIX_TIMERS              = 9,
-  OBJECTS_POSIX_SHMS                = 12
+  OBJECTS_POSIX_NO_CLASS = 0,
+
+  /* Must be one, see __Thread_Get_objects_information() */
+  OBJECTS_POSIX_THREADS = 1,
+
+  OBJECTS_POSIX_KEYS,
+  OBJECTS_POSIX_MESSAGE_QUEUES,
+  OBJECTS_POSIX_SEMAPHORES,
+  OBJECTS_POSIX_TIMERS,
+  OBJECTS_POSIX_SHMS
 } Objects_POSIX_API;
 
 /**
