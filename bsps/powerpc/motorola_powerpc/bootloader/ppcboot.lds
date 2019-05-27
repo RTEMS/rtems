@@ -58,10 +58,8 @@ SECTIONS
     *(.got2)
     _FIXUP_TABLE_ = .;
     *(.fixup)
+    _FIXUP_END_ = .;
   }
-
-  __got2_entries = (_FIXUP_TABLE_ - _GOT2_TABLE_) >>2;
-  __fixup_entries = (. - _FIXUP_TABLE_)>>2;
 
   .handlers : 
   {
@@ -74,20 +72,26 @@ SECTIONS
     *(.data*)
     *(.sdata)
     . = ALIGN(4);
-    _edata = .;
+    _data_end = .;
   }
-  PROVIDE(_binary_initrd_gz_start = 0);
-  PROVIDE(_binary_initrd_gz_end = 0);
-  _rtems_gz_size = _binary_rtems_gz_end - _binary_rtems_gz_start;
-  _rtems_size = __rtems_end - __rtems_start;
   .bss :
   {
     *(.sbss)
     *(.bss)
     . = ALIGN(4);
   }
-  __bss_words = SIZEOF(.bss)>>2;
-  __size = . ;
+  .abs 0 : {
+    __got2_entries = ABSOLUTE((_FIXUP_TABLE_ - _GOT2_TABLE_) >>2);
+    __fixup_entries = ABSOLUTE((_FIXUP_END_ - _FIXUP_TABLE_)>>2);
+    _edata = ABSOLUTE(_data_end);
+    PROVIDE(_binary_initrd_gz_start = ABSOLUTE(0));
+    PROVIDE(_binary_initrd_gz_end = ABSOLUTE(0));
+    _rtems_gz_size = ABSOLUTE(_binary_rtems_gz_end - _binary_rtems_gz_start);
+    _rtems_size = ABSOLUTE(__rtems_end - __rtems_start);
+    __bss_words = ABSOLUTE(SIZEOF(.bss)>>2);
+    __size = ABSOLUTE(.);
+  }
+
   /DISCARD/ : 
   {
     *(.comment)
