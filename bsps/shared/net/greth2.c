@@ -260,7 +260,7 @@ static void print_init_info(struct greth_softc *sc)
         }
 #ifdef GRETH_AUTONEGO_PRINT_TIME
         if ( sc->auto_neg ) {
-          printf("Autonegotiation Time: %ldms\n", sc->auto_neg_time.tv_sec*1000 +
+          printf("Autonegotiation Time: %lldms\n", sc->auto_neg_time.tv_sec*1000 +
                  sc->auto_neg_time.tv_nsec/1000000);
         }
 #endif
@@ -326,7 +326,7 @@ greth_initialize_hardware (struct greth_softc *sc)
     sc->fd = 0;
     sc->sp = 0;
     sc->auto_neg = 0;
-    _Timespec_Set_to_zero(&sc->auto_neg_time);
+    timespecclear(&sc->auto_neg_time);
     if ((phyctrl >> 12) & 1) {
             /*wait for auto negotiation to complete*/
             sc->auto_neg = 1;
@@ -335,8 +335,8 @@ greth_initialize_hardware (struct greth_softc *sc)
             while (!(((phystatus = read_mii(phyaddr, 1)) >> 5) & 1)) {
                     if (rtems_clock_get_uptime(&tnow) != RTEMS_SUCCESSFUL)
                             printk("rtems_clock_get_uptime failed\n");
-                    _Timespec_Subtract(&tstart, &tnow, &sc->auto_neg_time);
-                    if (_Timespec_Greater_than(&sc->auto_neg_time, &greth_tan)) {
+                    timespecsub(&tnow, &tstart, &sc->auto_neg_time);
+                    if (timespeccmp(&sc->auto_neg_time, &greth_tan, >)) {
                             sc->auto_neg = -1; /* Failed */
                             tmp1 = read_mii(phyaddr, 0);
                             sc->gb = ((phyctrl >> 6) & 1) && !((phyctrl >> 13) & 1);
