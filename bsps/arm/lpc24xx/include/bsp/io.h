@@ -41,7 +41,11 @@ extern "C" {
  * @{
  */
 
-#define LPC24XX_IO_PORT_COUNT 5U
+#ifdef ARM_MULTILIB_ARCH_V7M
+  #define LPC24XX_IO_PORT_COUNT 6U
+#else
+  #define LPC24XX_IO_PORT_COUNT 5U
+#endif
 
 #define LPC24XX_IO_INDEX_MAX (LPC24XX_IO_PORT_COUNT * 32U)
 
