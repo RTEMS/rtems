@@ -241,12 +241,23 @@ SYM(syscall_lazy_fp_switch):
 
 .Lfp_restore_done:
 
+	/*
+	 * Restore condition codes.  PSR[EF] is 1 here.  Take PSR write delay
+	 * into account (maximum is three instructions).
+	 */
+	mov	%l0, %psr
+	nop
+
 	/* Now, retry the floating point instruction with PSR[EF] == 1 */
 	jmp	%l1
 	 rett	%l2
 
 .Lillegal_use_of_floating_point_unit:
 
+	/*
+	 * There is no need to restore the condition codes here, since
+	 * _Internal_error() does not return.
+	 */
 	sethi	%hi(_Internal_error), %l1
 	or	%l1, %lo(_Internal_error), %l1
 	mov	38, %i0
