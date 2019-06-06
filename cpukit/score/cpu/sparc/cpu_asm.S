@@ -681,7 +681,7 @@ isr_dispatch:
          */
         ld      [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET], %l7
         cmp     %l6, %l7
-        bne     .Ldisable_fp
+        bne,a   .Ldisable_fp
          andn   %l0, %l5, %l0
         ba      .Lthread_dispatch_done
          st     %g0, [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET]
