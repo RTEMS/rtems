@@ -43,6 +43,13 @@
 #define FRAME_SIZE \
   ((FRAME_END + CPU_STACK_ALIGNMENT - 1) & ~(CPU_STACK_ALIGNMENT - 1))
 
+/*
+ * The FSR pattern is masked with undefined fields, reserved fields, ftt
+ * (cleared by fmovs), cexc (cleared by fmovs), and system-specific values
+ * (e.g. FPU architecture version, FP queue).
+ */
+#define FSR_PATTERN_MASK 0xcf800fe0
+
 .macro check_register reg
 	sub	%g1, 1, %g1
 	cmp	%g1, \reg
@@ -53,6 +60,14 @@
 .macro check_float_register reg
 	sub	%g1, 1, %g1
 	st	\reg, [%sp + FRAME_OFFSET_BUFFER_0]
+	cmp	%g0, %sp
+	fmovs	\reg, \reg
+	be	restore_registers
+	 nop
+	cmp	%g0, %g0
+	fmovs	\reg, \reg
+	bne	restore_registers
+	 nop
 	ld	[%sp + FRAME_OFFSET_BUFFER_0], %o1
 	cmp	%g1, %o1
 	bne	restore_registers
@@ -128,15 +143,12 @@ check_for_fp:
 	be	write_y
 	 nop
 
-	/*
-	 * Write pattern to FSR.  FSR is masked with undefined, reserved or
-	 * system-specific values (e.g. FPU architecture version, FP queue).
-	 */
+	/* Write masked pattern to FSR */
 	st	%fsr, [%sp + FRAME_OFFSET_BUFFER_0]
 	ld	[%sp + FRAME_OFFSET_BUFFER_0], %o1
 	add	%g1, 1, %g1
-	sethi	%hi(0xCF800000), %g3
-	or	%g3, %lo(0x0FFF), %g3
+	sethi	%hi(FSR_PATTERN_MASK), %g3
+	or	%g3, %lo(FSR_PATTERN_MASK), %g3
 	and	%g1, %g3, %g3
 	or	%o1, %g3, %g3
 	st	%g3, [%sp + FRAME_OFFSET_BUFFER_0]
@@ -324,8 +336,8 @@ y_checking:
 	ld	[%sp + FRAME_OFFSET_BUFFER_0], %o1
 	sub	%g1, 1, %g1
 	clr	%g3
-	sethi	%hi(0xCF800000), %g3
-	or	%g3, %lo(0x0FFF), %g3
+	sethi	%hi(FSR_PATTERN_MASK), %g3
+	or	%g3, %lo(FSR_PATTERN_MASK), %g3
 	and	%g1, %g3, %g3
 	and	%o1, %g3, %o1
 	cmp	%o1, %g3
