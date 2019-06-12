@@ -261,25 +261,31 @@ extern int RTC_SetTimeAlarm(Rtc *pRtc, uint8_t *pucHour,
 							 uint8_t *pucMinute, uint8_t *pucSecond)
 {
 	uint32_t dwAlarm = 0;
+	uint32_t dwAlarmEnable = 0;
 
 	TRACE_DEBUG("RTC_SetTimeAlarm()\n\r");
 
 	/* Hour */
-	if (pucHour)
-		dwAlarm |= RTC_TIMALR_HOUREN | ((*pucHour / 10) << 20) | ((
-					   *pucHour % 10) << 16);
+	if (pucHour) {
+		dwAlarm |= ((*pucHour / 10) << 20) | (( *pucHour % 10) << 16);
+		dwAlarmEnable |= RTC_TIMALR_HOUREN;
+	}
 
 	/* Minute */
 	if (pucMinute) {
-		dwAlarm |= RTC_TIMALR_MINEN | ((*pucMinute / 10) << 12)
-				   | ((*pucMinute % 10) << 8);
+		dwAlarm |= ((*pucMinute / 10) << 12) | ((*pucMinute % 10) << 8);
+		dwAlarmEnable |= RTC_TIMALR_MINEN;
 	}
 
 	/* Second */
-	if (pucSecond)
-		dwAlarm |= RTC_TIMALR_SECEN | ((*pucSecond / 10) << 4) | (*pucSecond % 10);
+	if (pucSecond) {
+		dwAlarm |= ((*pucSecond / 10) << 4) | (*pucSecond % 10);
+		dwAlarmEnable |= RTC_TIMALR_SECEN;
+	}
 
+	pRtc->RTC_TIMALR = 0;
 	pRtc->RTC_TIMALR = dwAlarm;
+	pRtc->RTC_TIMALR = dwAlarm | dwAlarmEnable;
 
 	return (int)(pRtc->RTC_VER & RTC_VER_NVTIMALR);
 }
