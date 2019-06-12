@@ -409,8 +409,8 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
                   r, (int) type, offset,
                   symname, (uintmax_t) symtype, (uintmax_t) symvalue);
 
-        if (!rtems_rtl_elf_relocate_rel (obj, &rel, targetsect,
-                                         symname, symtype, symvalue))
+        if (rtems_rtl_elf_relocate_rel (obj, &rel, targetsect,
+                                         symname, symtype, symvalue) == rtems_rtl_elf_rel_failure)
         {
           free (symname_buffer);
           return false;
