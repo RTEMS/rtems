@@ -18,23 +18,36 @@
 
 #include <libchip/chip.h>
 
-#define ATSAM_ENABLE_ALARM_INTERRUPT (1u << 1)
+#define ATSAM_ENABLE_ALARM_INTERRUPT RTC_IER_ALREN
 
-static void set_rtc_alarm_interrupt(uint8_t interval)
+static void set_rtc_alarm_interrupt(uint32_t interval)
 {
 	Rtc *rtc = RTC;
-	rtems_time_of_day tod;
+	uint8_t hour;
+	uint8_t minute;
+	uint8_t second;
+	uint32_t time;
 
 	/* Clear current status register */
 	RTC_ClearSCCR(rtc, 0x3F);
 
-	atsam_rtc_get_time(&tod);
-	tod.second = (tod.second + interval) % 60;
-	tod.second = (((tod.second / 10) << 4) | (tod.second % 10));
+	RTC_GetTime(rtc, &hour, &minute, &second);
 
-	rtc->RTC_TIMALR &= ~RTC_TIMALR_SECEN;
-	rtc->RTC_TIMALR = tod.second;
-	rtc->RTC_TIMALR |= RTC_TIMALR_SECEN;
+	time = UINT32_C(3600) * hour + UINT32_C(60) * minute + second;
+	time = (time + interval) % (UINT32_C(24) * 3600);
+
+	second = (uint8_t) (time % 60);
+	minute = (uint8_t) ((time / 60) % 60);
+	hour = (uint8_t) (time / 3600);
+
+	if (interval < 60) {
+		RTC_SetTimeAlarm(rtc, NULL, NULL, &second);
+	} else if (interval < 3600) {
+		RTC_SetTimeAlarm(rtc, NULL, &minute, &second);
+	} else {
+		RTC_SetTimeAlarm(rtc, &hour, &minute, &second);
+	}
+
 	RTC_EnableIt(rtc, ATSAM_ENABLE_ALARM_INTERRUPT);
 }
 

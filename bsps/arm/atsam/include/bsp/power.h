@@ -221,8 +221,10 @@ void atsam_power_handler_sleep_mode(
 typedef struct {
   /**
    * @brief Interval in seconds for which the power off mode should be active.
+   *
+   * An interval up to 24h is supported.
    */
-  uint8_t interval;
+  uint32_t interval;
 } atsam_power_data_rtc_driver;
 
 /**
