@@ -152,5 +152,4 @@ void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
   SCB_CleanDCache();
   SCB_InvalidateICache();
   bsp_start_clear_bss();
-  WDT_Disable(WDT);
 }
