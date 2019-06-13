@@ -1,0 +1,43 @@
+*** PSXINTTYPE 01 TEST ***
+
+strtoimax Testcases....
+Valid Inputs - Positive Number
+Final string pointed by endptr
+Valid Inputs - Negative Number
+Final string pointed by endptr
+Valid Input - Positive Number - Number out of Range
+Valid Input - Negative Number - Number out of Range
+Invalid Input - Send NULL Pointer
+Invalid Input - Invalid base - Use base = 40
+
+strtoumax Testcases....
+Valid Inputs - Positive Number
+Final string pointed by endptr
+Valid Inputs - Negative Number
+Final string pointed by endptr
+Valid Input - Positive Number - Number out of Range
+Valid Input - Negative Number - Number out of Range
+Invalid Input - Send NULL Pointer
+Invalid Input - Invalid base - Use base = 40
+
+wcstoimax Testcases....
+Valid Inputs - Positive Number
+Final string pointed by endptr
+Valid Inputs - Negative Number
+Final string pointed by endptr
+Valid Input - Positive Number - Number out of Range
+Valid Input - Negative Number - Number out of Range
+Invalid Input - Send NULL Pointer
+Invalid Input - Invalid base - Use base = 40
+
+wcstoumax Testcases....
+Valid Inputs - Positive Number
+Final string pointed by endptr
+Valid Inputs - Negative Number
+Final string pointed by endptr
+Valid Input - Positive Number - Number out of Range
+Valid Input - Negative Number - Number out of Range
+Invalid Input - Send NULL Pointer
+Invalid Input - Invalid base - Use base = 40
+
+*** END OF PSXINTTYPE 01 TEST ***

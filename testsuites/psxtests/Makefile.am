@@ -523,6 +523,13 @@ psxintrcritical01_CPPFLAGS = $(AM_CPPFLAGS) \
 endif
 endif
 
+if TEST_psxinttypes01
+psx_tests += psxinttypes01
+psxinttypes01_SOURCES = psxinttypes01/init.c
+psxinttypes01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxinttypes01) \
+       $(support_includes)
+endif
+
 if HAS_POSIX
 if TEST_psxitimer
 psx_tests += psxitimer
