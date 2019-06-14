@@ -400,6 +400,12 @@ static int sc16is752_ioctl(
     case SC16IS752_GET_IOSTATE:
       read_reg(ctx, SC16IS752_IOSTATE, (uint8_t *)buffer, 1);
       break;
+    case SC16IS752_SET_EFCR:
+      write_reg(ctx, SC16IS752_EFCR, (uint8_t *)buffer, 1);
+      break;
+    case SC16IS752_GET_EFCR:
+      read_reg(ctx, SC16IS752_EFCR, (uint8_t *)buffer, 1);
+      break;
     case TIOCMGET:
       sc16is752_get_modem_bits(ctx, (int *)buffer);
       break;

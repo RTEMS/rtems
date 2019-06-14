@@ -280,6 +280,11 @@ rtems_status_code sc16is752_spi_create(
 #define SC16IS752_SET_IOSTATE _IOW('d', 3, uint8_t)
 
 /**
+ * @brief Set the EFCR register.
+ */
+#define SC16IS752_SET_EFCR _IOW('d', 4, uint8_t)
+
+/**
  * @brief Returns non-zero in case the sleep mode is enabled, otherwise zero.
  */
 #define SC16IS752_GET_SLEEP_MODE _IOR('d', 0, int)
@@ -298,6 +303,11 @@ rtems_status_code sc16is752_spi_create(
  * @brief Read the I/O pins state register.
  */
 #define SC16IS752_GET_IOSTATE _IOR('d', 3, uint8_t)
+
+/**
+ * @brief Read the EFCR register.
+ */
+#define SC16IS752_GET_EFCR _IOR('d', 4, uint8_t)
 
 /**
  * @brief Bits for the IOCONTROL register.
