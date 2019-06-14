@@ -68,6 +68,8 @@ extern "C" {
 #define SC16IS752_EFCR_RS485_ENABLE (1u << 0)
 #define SC16IS752_EFCR_RX_DISABLE (1u << 1)
 #define SC16IS752_EFCR_TX_DISABLE (1u << 2)
+#define SC16IS752_EFCR_RTSCON (1u << 4)
+#define SC16IS752_EFCR_RTSINVER (1u << 5)
 
 /* IER */
 #define SC16IS752_IER_RHR (1u << 0)
@@ -91,6 +93,7 @@ extern "C" {
 #define SC16IS752_LCR_2_STOP_BIT (1u << 2)
 #define SC16IS752_LCR_SET_PARITY (1u << 3)
 #define SC16IS752_LCR_EVEN_PARITY (1u << 4)
+#define SC16IS752_LCR_BREAK (1u << 5)
 #define SC16IS752_LCR_ENABLE_DIVISOR (1u << 7)
 
 /* LSR */

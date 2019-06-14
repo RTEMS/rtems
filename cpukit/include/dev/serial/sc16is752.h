@@ -31,7 +31,18 @@ extern "C" {
 
 typedef enum {
   SC16IS752_MODE_RS232,
-  SC16IS752_MODE_RS485
+
+  /* Enable RS485 mode */
+  SC16IS752_MODE_RS485,
+
+  /* Enable RS485 mode, enable the transmitter to control the #RTS pin */
+  SC16IS752_MODE_RS485_RTS,
+
+  /*
+   * Enable RS485 mode, enable the transmitter to control the #RTS pin, invert
+   * RTS signal (#RTS = 1 during transmission and #RTS = 0 during reception)
+   */
+  SC16IS752_MODE_RS485_RTS_INV
 } sc16is752_mode;
 
 typedef struct sc16is752_context sc16is752_context;
