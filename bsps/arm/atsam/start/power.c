@@ -18,9 +18,6 @@
 
 #include <libchip/chip.h>
 
-/* SCR Sleep deep bit */
-#define SCR_SLEEPDEEP (1u << 2)
-
 void atsam_power_change_state(
     const atsam_power_control *controls,
     size_t n,
@@ -92,7 +89,7 @@ void atsam_power_handler_sleep_mode(const atsam_power_control *control, atsam_po
 			/* Enable Low Power Mode in the Fast Startup Mode Register */
 			PMC->PMC_FSMR &= (uint32_t)~PMC_FSMR_LPM;
 			/* Do not set deep sleep, but "normal" sleep */
-			SCB->SCR &= (uint32_t)~SCR_SLEEPDEEP;
+			SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
 
 			__asm__ volatile ("wfi");
 			break;
