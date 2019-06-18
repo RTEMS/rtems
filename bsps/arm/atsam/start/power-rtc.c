@@ -96,6 +96,7 @@ void atsam_power_handler_rtc_driver(
 )
 {
 	atsam_power_data_rtc_driver *rtc_data;
+	rtems_interrupt_level level;
 	Rtc *rtc = RTC;
 
 	rtc_data = (atsam_power_data_rtc_driver *)control->data.arg;
@@ -109,6 +110,11 @@ void atsam_power_handler_rtc_driver(
 			set_rtc_alarm_interrupt(rtc_data->interval);
 			break;
 		case ATSAM_POWER_INIT:
+			/* Enable fast startup via RTC alarm */
+			rtems_interrupt_disable(level);
+			PMC->PMC_FSMR |= PMC_FSMR_RTCAL;
+			rtems_interrupt_enable(level);
+
 			rtc_alarm_handler(rtc_data);
 			break;
 		default:
