@@ -100,6 +100,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/pin-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/pmc-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power-clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power-rtc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power-wait.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/restart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/sdram-config.c

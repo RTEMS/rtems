@@ -179,12 +179,21 @@ void atsam_power_handler_rtc_driver(
 /**
  * @brief Power handler to enter the processor sleep mode.
  *
- * For the power off state, the processor is set into the sleep mode and issues
- * a wait for interrupt instruction.
- *
  * @see ATSAM_POWER_SLEEP_MODE().
  */
 void atsam_power_handler_sleep_mode(
+  const atsam_power_control *controls,
+  atsam_power_state state
+);
+
+/**
+ * @brief Power handler to enter the processor wait mode.
+ *
+ * The internal flash is put into deep sleep mode.
+ *
+ * @see ATSAM_POWER_WAIT_MODE().
+ */
+void atsam_power_handler_wait_mode(
   const atsam_power_control *controls,
   atsam_power_state state
 );
@@ -212,6 +221,9 @@ void atsam_power_handler_sleep_mode(
 
 #define ATSAM_POWER_SLEEP_MODE \
  { .handler = atsam_power_handler_sleep_mode }
+
+#define ATSAM_POWER_WAIT_MODE \
+ { .handler = atsam_power_handler_wait_mode }
 
 /**
  * @brief Data for RTC driver power support.
