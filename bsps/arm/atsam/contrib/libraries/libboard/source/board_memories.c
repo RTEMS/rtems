@@ -288,6 +288,7 @@ void BOARD_ConfigureSdram(void)
 #else /* __rtems__ */
 	SDRAMC->SDRAMC_TR = BOARD_Sdram_Config.sdramc_tr;
 	SDRAMC->SDRAMC_CFR1 = BOARD_Sdram_Config.sdramc_cfr1;
+	SDRAMC->SDRAMC_LPR = BOARD_Sdram_Config.sdramc_lpr;
 #endif /* __rtems__ */
 	/* After initialization, the SDRAM devices are fully functional. */
 }

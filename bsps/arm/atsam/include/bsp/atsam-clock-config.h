@@ -45,15 +45,16 @@ extern const struct atsam_clock_config atsam_clock_config;
 
 #define BOARD_MCK (atsam_clock_config.mck_freq)
 
-struct BOARD_Sdram_Config {
+typedef struct BOARD_Sdram_Config {
   uint32_t sdramc_tr;
   uint32_t sdramc_cr;
   uint32_t sdramc_mdr;
   uint32_t sdramc_cfr1;
-};
+  uint32_t sdramc_lpr;
+} atsam_sdram_config;
 
 ATSAM_START_SRAM_SECTION
-extern const struct BOARD_Sdram_Config BOARD_Sdram_Config;
+extern const atsam_sdram_config BOARD_Sdram_Config;
 
 #ifdef __cplusplus
 }

@@ -38,7 +38,8 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
     | SDRAMC_CR_TRAS(9)      /* Command period (ACT to PRE)  42ns min */
     | SDRAMC_CR_TXSR(15U),   /* Exit self-refresh to active time  70ns Min */
   .sdramc_mdr = SDRAMC_MDR_MD_SDRAM,
-  .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED | SDRAMC_CFR1_TMRD(2)
+  .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED | SDRAMC_CFR1_TMRD(2),
+  .sdramc_lpr = 0
 };
 
 #elif defined ATSAM_SDRAM_IS42S16320F_7BL
@@ -71,7 +72,8 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
     | SDRAMC_CR_TXSR(CLOCK_CYCLES_FROM_NS_MIN(67)),
   .sdramc_mdr = SDRAMC_MDR_MD_SDRAM,
   .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED |
-      SDRAMC_CFR1_TMRD(CLOCK_CYCLES_FROM_NS_MIN(14))
+      SDRAMC_CFR1_TMRD(CLOCK_CYCLES_FROM_NS_MIN(14)),
+  .sdramc_lpr = 0
 };
 
 #elif defined ATSAM_SDRAM_MT48LC16M16A2P_6A
@@ -104,7 +106,8 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
     | SDRAMC_CR_TXSR(9),
   .sdramc_mdr = SDRAMC_MDR_MD_SDRAM,
   .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED |
-      SDRAMC_CFR1_TMRD(2)
+      SDRAMC_CFR1_TMRD(2),
+  .sdramc_lpr = 0
 };
 
 #elif ATSAM_MCK == 123000000
@@ -124,7 +127,8 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
     | SDRAMC_CR_TXSR(9),
   .sdramc_mdr = SDRAMC_MDR_MD_SDRAM,
   .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED |
-      SDRAMC_CFR1_TMRD(2)
+      SDRAMC_CFR1_TMRD(2),
+  .sdramc_lpr = 0
 };
 
 #else /* ATSAM_MCK unknown */
