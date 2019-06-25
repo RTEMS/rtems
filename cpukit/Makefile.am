@@ -1882,6 +1882,7 @@ project_lib_LIBRARIES += libdebugger.a
 
 libdebugger_a_SOURCES =
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-block.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-bsp.c
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-cmd.c
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-remote.c
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-remote-tcp.c

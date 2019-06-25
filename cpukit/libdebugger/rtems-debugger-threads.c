@@ -362,6 +362,7 @@ rtems_debugger_thread_system_resume(bool detaching)
         rtems_debugger_thread* thread = &current[i];
         rtems_status_code      sc;
         int                    rr;
+        bool                   has_exception;
         /*
          * Check if resuming, which can be continuing, a step, or stepping a
          * range.
@@ -380,11 +381,13 @@ rtems_debugger_thread_system_resume(bool detaching)
                 r = rr;
             }
           }
+          has_exception =
+            rtems_debugger_thread_flag(thread,
+                                       RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION);
           if (rtems_debugger_verbose())
-            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08" PRIx32 "\n",
-                                  thread->id);
-          if (rtems_debugger_thread_flag(thread,
-                                         RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
+            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08" PRIx32 " %c\n",
+                                  thread->id, has_exception ? 'E' : ' ');
+          if (has_exception) {
               rtems_debugger_target_exception_thread_resume(thread);
           } else {
               sc = rtems_task_resume(thread->id);

@@ -1704,13 +1704,13 @@ rtems_debugger_session(void)
 
   r = rtems_debugger_target_create();
   if (r < 0) {
-    rtems_debugger_thread_destroy();
     rtems_debugger_unlock();
     return r;
   }
 
   r = rtems_debugger_thread_create();
   if (r < 0) {
+    rtems_debugger_target_destroy();
     rtems_debugger_unlock();
     return r;
   }
@@ -1725,8 +1725,8 @@ rtems_debugger_session(void)
                                  0,
                                  &rtems_debugger->events_task);
   if (r < 0) {
-    rtems_debugger_target_destroy();
     rtems_debugger_thread_destroy();
+    rtems_debugger_target_destroy();
     rtems_debugger_unlock();
     return r;
   }
