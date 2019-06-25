@@ -16,15 +16,18 @@
 
 #include <bsp/linker-symbols.h>
 
-void arm_cp15_set_exception_handler(
+void* arm_cp15_set_exception_handler(
   Arm_symbolic_exception_name exception,
   void (*handler)(void)
 )
 {
+  uint32_t current_handler = 0;
+
   if ((unsigned) exception < MAX_EXCEPTIONS) {
     uint32_t *cpu_table = (uint32_t *) 0 + MAX_EXCEPTIONS;
     uint32_t *mirror_table = (uint32_t *) bsp_vector_table_begin + MAX_EXCEPTIONS;
-    uint32_t current_handler = mirror_table[exception];
+
+    current_handler = mirror_table[exception];
 
     if (current_handler != (uint32_t) handler) {
       size_t table_size = MAX_EXCEPTIONS * sizeof(uint32_t);
@@ -53,4 +56,6 @@ void arm_cp15_set_exception_handler(
       rtems_interrupt_local_enable(level);
     }
   }
+
+  return (void*) current_handler;
 }

@@ -2246,7 +2246,12 @@ uint32_t arm_cp15_set_translation_table_entries(
   uint32_t section_flags
 );
 
-void arm_cp15_set_exception_handler(
+/**
+ * @brief Sets the @a exception @a handler in the vector table.
+ *
+ * @return Previous handler.
+ */
+void* arm_cp15_set_exception_handler(
   Arm_symbolic_exception_name exception,
   void (*handler)(void)
 );
