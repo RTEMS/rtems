@@ -65,12 +65,16 @@ static uint32_t set_translation_table_entries(
 
   for ( i = istart; i != iend; i = (i + 1U) & index_mask ) {
     void *mva = (void *) (i << ARM_MMU_SECT_BASE_SHIFT);
-    #if defined(__ARM_ARCH_7A__)
-    arm_cp15_tlb_invalidate_entry_all_asids(mva);
-    #else
-    arm_cp15_tlb_instruction_invalidate_entry(mva);
-    arm_cp15_tlb_data_invalidate_entry(mva);
-    #endif
+#if defined(__ARM_ARCH_7A__)
+    if ((arm_cp15_get_multiprocessor_affinity() & (1 << 30)) == 0) {
+      arm_cp15_tlb_invalidate_entry_all_asids(mva);
+    }
+    else
+#endif
+    {
+      arm_cp15_tlb_instruction_invalidate_entry(mva);
+      arm_cp15_tlb_data_invalidate_entry(mva);
+    }
   }
 
   _ARM_Data_synchronization_barrier();
