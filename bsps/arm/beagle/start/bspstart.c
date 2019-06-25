@@ -17,6 +17,8 @@
 #include <bsp/irq-generic.h>
 #include <bsp/fdt.h>
 
+#include "bspdebug.h"
+
 void bsp_start(void)
 {
 #if IS_DM3730
@@ -27,6 +29,7 @@ void bsp_start(void)
 #endif
   bsp_interrupt_initialize();
   printk("\nRTEMS Beagleboard: %s\n", type);
+  printk("        ARM Debug: 0x%08x\n", (intptr_t) bbb_arm_debug_registers());
 }
 
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)

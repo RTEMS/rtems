@@ -52,6 +52,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-exc
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 
 # Startup
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspdebug.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspstarthooks.c
