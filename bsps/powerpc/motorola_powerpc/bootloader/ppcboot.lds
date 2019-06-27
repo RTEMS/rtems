@@ -79,6 +79,7 @@ SECTIONS
     *(.sbss)
     *(.bss)
     . = ALIGN(4);
+    _bss_end = .;
   }
   .abs 0 : {
     __got2_entries = ABSOLUTE((_FIXUP_TABLE_ - _GOT2_TABLE_) >>2);
@@ -89,7 +90,7 @@ SECTIONS
     _rtems_gz_size = ABSOLUTE(_binary_rtems_gz_end - _binary_rtems_gz_start);
     _rtems_size = ABSOLUTE(__rtems_end - __rtems_start);
     __bss_words = ABSOLUTE(SIZEOF(.bss)>>2);
-    __size = ABSOLUTE(.);
+    __size = ABSOLUTE(_bss_end);
   }
 
   /DISCARD/ : 
