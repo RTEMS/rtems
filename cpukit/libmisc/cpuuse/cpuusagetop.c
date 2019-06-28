@@ -448,8 +448,8 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
                    " 0x%08" PRIx32 " | %-19s |  %3" PRId64 " |  %3" PRId64 "   | ",
                    thread->Object.id,
                    name,
-                   thread->Real_priority.priority,
-                   _Thread_Get_priority(thread));
+                   _Thread_Get_unmapped_real_priority(thread),
+                   _Thread_Get_unmapped_priority(thread));
 
       usage = data->usage[i];
       current_usage = data->current_usage[i];

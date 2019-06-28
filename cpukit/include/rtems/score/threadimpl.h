@@ -1601,6 +1601,34 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_priority(
 }
 
 /**
+ * @brief Returns the unmapped priority of the thread.
+ *
+ * @param the_thread The thread of which to get the unmapped priority.
+ *
+ * @return The unmapped priority of the thread.
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_unmapped_priority(
+  const Thread_Control *the_thread
+)
+{
+  return SCHEDULER_PRIORITY_UNMAP( _Thread_Get_priority( the_thread ) );
+}
+
+/**
+ * @brief Returns the unmapped real priority of the thread.
+ *
+ * @param the_thread The thread of which to get the unmapped real priority.
+ *
+ * @return The unmapped real priority of the thread.
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_unmapped_real_priority(
+  const Thread_Control *the_thread
+)
+{
+  return SCHEDULER_PRIORITY_UNMAP( the_thread->Real_priority.priority );
+}
+
+/**
  * @brief Acquires the thread wait default lock inside a critical section
  * (interrupts disabled).
  *

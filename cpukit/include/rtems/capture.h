@@ -34,7 +34,6 @@
 
 #include <rtems.h>
 #include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/schedulerimpl.h>
 
 #include <string.h>
 
@@ -890,7 +889,7 @@ rtems_capture_task_start_priority (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_real_priority (rtems_tcb* tcb)
 {
-  return SCHEDULER_PRIORITY_UNMAP (tcb->Real_priority.priority);
+  return _Thread_Get_unmapped_real_priority (tcb);
 }
 
 /**
@@ -905,7 +904,7 @@ rtems_capture_task_real_priority (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_curr_priority (rtems_tcb* tcb)
 {
-  return SCHEDULER_PRIORITY_UNMAP (_Thread_Get_priority (tcb));
+  return _Thread_Get_unmapped_priority (tcb);
 }
 
 /**

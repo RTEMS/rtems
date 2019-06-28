@@ -31,7 +31,6 @@
 
 #include <rtems.h>
 #include <rtems/assoc.h>
-#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 
 #include <rtems/debugger/rtems-debugger-server.h>
@@ -504,13 +503,13 @@ rtems_debugger_thread_is_stepping(rtems_id id, DB_UINT pc)
 int
 rtems_debugger_thread_current_priority(rtems_debugger_thread* thread)
 {
-  return SCHEDULER_PRIORITY_UNMAP(_Thread_Get_priority(thread->tcb));
+  return _Thread_Get_unmapped_priority(thread->tcb);
 }
 
 int
 rtems_debugger_thread_real_priority(rtems_debugger_thread* thread)
 {
-  return SCHEDULER_PRIORITY_UNMAP(thread->tcb->Real_priority.priority);
+  return _Thread_Get_unmapped_real_priority(thread->tcb);
 }
 
 int
