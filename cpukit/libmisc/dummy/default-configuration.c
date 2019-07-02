@@ -99,6 +99,8 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
+#define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_MAXIMUM_PROCESSORS
 
 #define CONFIGURE_DISABLE_BSP_SETTINGS
@@ -106,4 +108,3 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-
