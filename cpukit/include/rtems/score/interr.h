@@ -152,8 +152,8 @@ typedef enum {
  * @brief A list of errors which are generated internally by the executive
  * core.
  *
- * Do not re-use numbers of obsolete error codes.  Uncomment no longer used
- * error codes.
+ * Do not re-use numbers of obsolete error codes.  Comment no longer used
+ * error codes and do not uncomment commented or obsolete error codes.
  */
 typedef enum {
   /* INTERNAL_ERROR_NO_CONFIGURATION_TABLE = 0, */
