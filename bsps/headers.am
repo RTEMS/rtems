@@ -13,6 +13,7 @@ include_bsp_HEADERS += ../../bsps/include/bsp/default-initial-extension.h
 include_bsp_HEADERS += ../../bsps/include/bsp/fatal.h
 include_bsp_HEADERS += ../../bsps/include/bsp/fdt.h
 include_bsp_HEADERS += ../../bsps/include/bsp/gpio.h
+include_bsp_HEADERS += ../../bsps/include/bsp/irq-default.h
 include_bsp_HEADERS += ../../bsps/include/bsp/irq-generic.h
 include_bsp_HEADERS += ../../bsps/include/bsp/irq-info.h
 include_bsp_HEADERS += ../../bsps/include/bsp/stackalloc.h

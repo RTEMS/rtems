@@ -5,3 +5,7 @@ include_HEADERS += ../../../../../../bsps/m68k/mrm332/include/bsp.h
 include_HEADERS += include/bspopts.h
 include_HEADERS += ../../../../../../bsps/m68k/mrm332/include/mrm332.h
 include_HEADERS += ../../../../../../bsps/m68k/mrm332/include/tm27.h
+
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../../bsps/m68k/mrm332/include/bsp/irq.h

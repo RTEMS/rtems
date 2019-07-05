@@ -9,3 +9,7 @@ include_HEADERS += ../../../../../../bsps/m68k/gen68340/include/m68340.h
 include_HEADERS += ../../../../../../bsps/m68k/gen68340/include/m68340.inc
 include_HEADERS += ../../../../../../bsps/m68k/gen68340/include/m68349.inc
 include_HEADERS += ../../../../../../bsps/m68k/gen68340/include/tm27.h
+
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../../bsps/m68k/gen68340/include/bsp/irq.h

@@ -5,3 +5,7 @@ include_HEADERS += ../../../../../../bsps/bfin/eZKit533/include/bsp.h
 include_HEADERS += include/bspopts.h
 include_HEADERS += ../../../../../../bsps/bfin/eZKit533/include/cplb.h
 include_HEADERS += ../../../../../../bsps/bfin/eZKit533/include/tm27.h
+
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../../bsps/bfin/eZKit533/include/bsp/irq.h

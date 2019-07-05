@@ -14,6 +14,7 @@ include_arch_HEADERS += ../../../../../bsps/sparc64/include/arch/stack.h
 include_arch_mmdir = $(includedir)/arch/mm
 include_arch_mm_HEADERS =
 include_arch_mm_HEADERS += ../../../../../bsps/sparc64/include/arch/mm/cache_spec.h
+include_arch_mm_HEADERS += ../../../../../bsps/sparc64/include/arch/mm/doxygen.h
 include_arch_mm_HEADERS += ../../../../../bsps/sparc64/include/arch/mm/frame.h
 include_arch_mm_HEADERS += ../../../../../bsps/sparc64/include/arch/mm/mmu.h
 include_arch_mm_HEADERS += ../../../../../bsps/sparc64/include/arch/mm/page.h

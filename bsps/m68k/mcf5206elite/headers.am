@@ -8,3 +8,7 @@ include_HEADERS += ../../../../../../bsps/m68k/mcf5206elite/include/i2c.h
 include_HEADERS += ../../../../../../bsps/m68k/mcf5206elite/include/i2cdrv.h
 include_HEADERS += ../../../../../../bsps/m68k/mcf5206elite/include/nvram.h
 include_HEADERS += ../../../../../../bsps/m68k/mcf5206elite/include/tm27.h
+
+include_bspdir = $(includedir)/bsp
+include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../../bsps/m68k/mcf5206elite/include/bsp/irq.h
