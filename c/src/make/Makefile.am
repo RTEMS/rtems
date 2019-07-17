@@ -68,6 +68,8 @@ Makefile.inc: Makefile.inc.in Makefile
 	-e "s|[@]exec_prefix[@]|$(exec_prefix)|" \
 	-e "s|[@]pkgdatadir[@]|$(pkgdatadir)|" \
 	-e "s|[@]RTEMS_BSP[@]|$(RTEMS_BSP)|" \
+	-e "s|[@]RTEMS_CPU[@]|$(RTEMS_CPU)|" \
+	-e "s|[@]RTEMS_API[@]|$(RTEMS_API)|" \
 	-e "s|[@]CC[@]|$(CC)|" \
 	-e "s|[@]CXX[@]|$(CXX)|" \
 	-e "s|[@]AS[@]|$(AS)|" \
@@ -85,4 +87,3 @@ CLEANFILES += Makefile.inc
 ## use gcc-target-default.cfg only.
 rtems_make_compilersdir = $(rtems_makedir)/compilers
 dist_rtems_make_compilers_DATA = compilers/gcc-target-default.cfg
-
