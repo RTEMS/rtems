@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    cpuuse: exclude
+    psx07: exclude
+    psx09: exclude
+    psx10: exclude
+    psx11: exclude
+    psxcancel01: exclude
+    psxgetrusage01: exclude
+    psxintrcritical01: exclude
+    psxsignal01: exclude
+    psxsignal02: exclude
+    psxspin01: exclude
+    psxtime: exclude
+    psxtimes01: exclude
+    sp04: exclude
+    sp14: exclude
+    sp19: exclude
+    sp35: exclude
+    sp38: exclude
+    sp44: exclude
+    sp69: exclude
+    spcbssched02: exclude
+    spcbssched03: exclude
+    spcontext01: exclude
+    spcpucounter01: exclude
+    spedfsched03: exclude
+    spintrcritical01: exclude
+    spintrcritical02: exclude
+    spintrcritical03: exclude
+    spintrcritical04: exclude
+    spintrcritical05: exclude
+    spintrcritical06: exclude
+    spintrcritical07: exclude
+    spintrcritical08: exclude
+    spintrcritical09: exclude
+    spintrcritical10: exclude
+    spintrcritical11: exclude
+    spintrcritical12: exclude
+    spintrcritical13: exclude
+    spintrcritical14: exclude
+    spintrcritical15: exclude
+    spintrcritical16: exclude
+    spintrcritical17: exclude
+    spintrcritical18: exclude
+    spintrcritical19: exclude
+    spintrcritical20: exclude
+    spnsext01: exclude
+    spqreslib: exclude
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+asflags: []
+build-type: start-file
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+includes: []
+install-path: ${BSP_LIBDIR}
+links: []
+source:
+- bsps/mips/hurricane/start/start.S
+target: start.o
+type: build

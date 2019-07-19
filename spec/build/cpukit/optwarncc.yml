@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-assign: null
+- env-append: CFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -Wmissing-prototypes
+- -Wimplicit-function-declaration
+- -Wstrict-prototypes
+- -Wnested-externs
+default-by-variant: []
+description: |
+  Warning flags passed to the C compiler
+enabled-by: true
+links: []
+name: CC_WARNING_FLAGS
+type: build

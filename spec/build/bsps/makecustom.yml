@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  include $$(RTEMS_ROOT)/make/custom/default.cfg
+  RTEMS_CPU = ${ARCH}
+  CPU_CFLAGS = ${ABI_FLAGS}
+  CFLAGS_OPTIMIZE_V = ${OPTIMIZATION_FLAGS}
+  LDFLAGS = ${LDFLAGS}
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+install-path: ${PREFIX}/make/custom
+links: []
+target: ${BSP_NAME}.cfg
+type: build

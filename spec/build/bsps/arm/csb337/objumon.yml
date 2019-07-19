@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- ENABLE_UMON
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - bsps/include/rtems/umon.h
+- destination: ${BSP_INCLUDEDIR}/umon
+  source:
+  - bsps/include/umon/cli.h
+  - bsps/include/umon/monlib.h
+  - bsps/include/umon/tfs.h
+links: []
+source:
+- bsps/arm/csb337/start/umonsupp.c
+- bsps/arm/csb337/umon/monlib.c
+- bsps/arm/csb337/umon/tfsDriver.c
+- bsps/arm/csb337/umon/umonrtemsglue.c
+type: build

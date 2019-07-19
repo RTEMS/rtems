@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_MULTIPROCESSING
+includes: []
+install: []
+links: []
+source:
+- cpukit/libmisc/monitor/mon-mpci.c
+- cpukit/rtems/src/eventmp.c
+- cpukit/rtems/src/mp.c
+- cpukit/rtems/src/msgmp.c
+- cpukit/rtems/src/partmp.c
+- cpukit/rtems/src/semmp.c
+- cpukit/rtems/src/signalmp.c
+- cpukit/rtems/src/taskmp.c
+- cpukit/score/src/mpci.c
+- cpukit/score/src/mpcidefault.c
+- cpukit/score/src/objectmp.c
+- cpukit/score/src/threadmp.c
+type: build

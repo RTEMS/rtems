@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- riscv
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - cpukit/score/cpu/riscv/include/libcpu/access.h
+  - cpukit/score/cpu/riscv/include/libcpu/byteorder.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/riscv/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/riscv/include/rtems/score/cpu.h
+  - cpukit/score/cpu/riscv/include/rtems/score/cpu_asm.h
+  - cpukit/score/cpu/riscv/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/riscv/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/riscv/include/rtems/score/riscv-utility.h
+  - cpukit/score/cpu/riscv/include/rtems/score/riscv.h
+links: []
+source:
+- cpukit/score/cpu/riscv/cpu.c
+- cpukit/score/cpu/riscv/riscv-exception-handler.S
+- cpukit/score/cpu/riscv/riscv-exception-frame-print.c
+- cpukit/score/cpu/riscv/riscv-context-switch.S
+- cpukit/score/cpu/riscv/riscv-context-initialize.c
+- cpukit/score/cpu/riscv/riscv-context-validate.S
+- cpukit/score/cpu/riscv/riscv-context-volatile-clobber.S
+- cpukit/score/cpu/riscv/riscv-counter.S
+type: build

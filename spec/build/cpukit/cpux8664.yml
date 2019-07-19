@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- x86_64
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/x86_64/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/x86_64/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/x86_64/include/rtems/score/cpu.h
+  - cpukit/score/cpu/x86_64/include/rtems/score/cpu_asm.h
+  - cpukit/score/cpu/x86_64/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/x86_64/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/x86_64/include/rtems/score/idt.h
+  - cpukit/score/cpu/x86_64/include/rtems/score/x86_64.h
+links: []
+source:
+- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
+- cpukit/score/cpu/no_cpu/cpucounterread.c
+- cpukit/score/cpu/no_cpu/cpuidle.c
+- cpukit/score/cpu/x86_64/cpu.c
+- cpukit/score/cpu/x86_64/x86_64-context-initialize.c
+- cpukit/score/cpu/x86_64/x86_64-context-switch.S
+type: build

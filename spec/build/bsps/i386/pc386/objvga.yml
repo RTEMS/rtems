@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- BSP_ENABLE_VGA
+includes: []
+install: []
+links: []
+source:
+- bsps/i386/pc386/console/defkeymap.c
+- bsps/i386/pc386/console/inch.c
+- bsps/i386/pc386/console/kbd_parser.c
+- bsps/i386/pc386/console/keyboard.c
+- bsps/i386/pc386/console/outch.c
+- bsps/i386/pc386/console/pc_keyb.c
+- bsps/i386/pc386/console/ps2_mouse.c
+- bsps/i386/pc386/console/vgacons.c
+- bsps/i386/pc386/console/vgainit.c
+- bsps/i386/pc386/console/videoAsm.S
+- bsps/i386/pc386/console/vt.c
+type: build

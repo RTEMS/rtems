@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- m68k
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/m68k/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/m68k/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/m68k
+  source:
+  - cpukit/score/cpu/m68k/include/rtems/m68k/m68302.h
+  - cpukit/score/cpu/m68k/include/rtems/m68k/m68360.h
+  - cpukit/score/cpu/m68k/include/rtems/m68k/qsm.h
+  - cpukit/score/cpu/m68k/include/rtems/m68k/sim.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/m68k/include/rtems/score/cpu.h
+  - cpukit/score/cpu/m68k/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/m68k/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/m68k/include/rtems/score/m68k.h
+links: []
+source:
+- cpukit/score/cpu/m68k/cpu_asm.S
+- cpukit/score/cpu/m68k/cpu.c
+- cpukit/score/cpu/m68k/m68k-exception-frame-print.c
+- cpukit/score/cpu/m68k/__m68k_read_tp.c
+- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
+- cpukit/score/cpu/no_cpu/cpucounterread.c
+type: build

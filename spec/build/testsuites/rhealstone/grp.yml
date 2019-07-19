@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- BUILD_TESTS
+- BUILD_RHEALSTONE
+includes:
+- testsuites/support/include
+- testsuites/tmtests/include
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: rhdeadlockbrk
+- role: build-dependency
+  uid: rhilatency
+- role: build-dependency
+  uid: rhmlatency
+- role: build-dependency
+  uid: rhsemshuffle
+- role: build-dependency
+  uid: rhtaskpreempt
+- role: build-dependency
+  uid: rhtaskswitch
+type: build
+use-after:
+- rtemstest
+use-before: []

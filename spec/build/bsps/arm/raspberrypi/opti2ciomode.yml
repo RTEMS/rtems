@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant: []
+description: |
+  Define to 1 to use interrupt-driven I/O with the Raspberry Pi I2C bus. If defined to other value the access will be polled-driven.
+enabled-by: true
+links: []
+name: I2C_IO_MODE
+type: build

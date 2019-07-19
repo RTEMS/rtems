@@ -1,0 +1,41 @@
+actions:
+- set-value: ${ARCH}-rtems5-gcc
+- substitute: null
+- find-program: null
+- env-assign: AS
+- env-assign: CC
+- env-assign: LINK_CC
+- set-value: ${ARCH}-rtems5-g++
+- substitute: null
+- find-program: null
+- env-assign: CXX
+- env-assign: LINK_CXX
+- set-value: ${ARCH}-rtems5-ar
+- substitute: null
+- find-program: null
+- env-assign: AR
+- set-value: ${ARCH}-rtems5-ld
+- substitute: null
+- find-program: null
+- env-assign: LD
+- script: |
+    load = "ar g++ gas gcc"
+    if not is_windows_host:
+        load += " gccdeps"
+    conf.load(load)
+active: true
+build-type: option
+default: null
+default-by-variant: []
+derived: false
+enabled-by: []
+header: ''
+level: 1.39
+links: []
+name: GCC
+normative: true
+order: -900
+ref: ''
+reviewed: oRRzhna6a47p0_QjPWqYLful9JgHGbxMqy-q7mSiZiU=
+text: ''
+type: build

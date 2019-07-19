@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant:
+- value: 3
+  variants:
+  - powerpc/mpc5643l.*
+- value: 8
+  variants:
+  - powerpc/mpc5668g.*
+description: |
+  selects the PIT channel for the RTEMS system tick (the default is the last channel)
+enabled-by: true
+format: '{}'
+links: []
+name: MPC55XX_CLOCK_PIT_CHANNEL
+type: build

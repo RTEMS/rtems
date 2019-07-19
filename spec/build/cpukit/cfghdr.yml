@@ -1,0 +1,69 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-header
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+guard: ''
+include-headers: []
+install-path: null
+links:
+- role: build-dependency
+  uid: cfgattrgetaff
+- role: build-dependency
+  uid: cfgattrgetgrdsz
+- role: build-dependency
+  uid: cfgattrgetstack
+- role: build-dependency
+  uid: cfgattrsetaff
+- role: build-dependency
+  uid: cfgattrsetgrdsz
+- role: build-dependency
+  uid: cfgattrsetstack
+- role: build-dependency
+  uid: cfgcfghdr
+- role: build-dependency
+  uid: cfgcleanupctx
+- role: build-dependency
+  uid: cfggetaff
+- role: build-dependency
+  uid: cfggetattr
+- role: build-dependency
+  uid: cfginttypes
+- role: build-dependency
+  uid: cfgmemory
+- role: build-dependency
+  uid: cfgnewlib
+- role: build-dependency
+  uid: cfgpmtxceilcnst
+- role: build-dependency
+  uid: cfgprionode
+- role: build-dependency
+  uid: cfgpshdprmcnst
+- role: build-dependency
+  uid: cfgrcmd
+- role: build-dependency
+  uid: cfgsetaff
+- role: build-dependency
+  uid: cfgstdatomic
+- role: build-dependency
+  uid: cfgstdint
+- role: build-dependency
+  uid: cfgstdlib
+- role: build-dependency
+  uid: cfgstring
+- role: build-dependency
+  uid: cfgstrings
+- role: build-dependency
+  uid: cfgsysstat
+- role: build-dependency
+  uid: cfgsystypes
+- role: build-dependency
+  uid: cfgszoff
+- role: build-dependency
+  uid: cfgszsize
+- role: build-dependency
+  uid: cfgsztime
+- role: build-dependency
+  uid: cfgunistd
+target: cpukit/include/config.h
+type: build

@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/rtmonuse/init.c
+- testsuites/libtests/rtmonuse/getall.c
+- testsuites/libtests/rtmonuse/task1.c
+stlib: []
+target: testsuites/libtests/rtmonuse.exe
+type: build
+use-after: []
+use-before: []

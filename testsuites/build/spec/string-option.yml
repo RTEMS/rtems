@@ -1,0 +1,24 @@
+active: true
+build-type: option
+derived: false
+enabled-by: []
+format: '{}'
+header: ''
+level: 1.0
+links: []
+name: ABC
+normative: true
+order: 0
+ref: ''
+reviewed: null
+text: ''
+type: build
+default: ZYZ
+default-by-variant:
+- value: DEF
+  variants:
+  - .*go.*d
+actions:
+- get-string: null
+- env-assign: null
+- define: null

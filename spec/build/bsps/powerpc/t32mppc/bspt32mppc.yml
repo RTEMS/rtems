@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: powerpc
+bsp: t32mppc
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: t32mppc
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/t32mppc/include/bsp.h
+  - bsps/powerpc/t32mppc/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/t32mppc/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/shared/start/linkcmds.base
+  - bsps/powerpc/t32mppc/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../optog
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: ../objexc
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: optexcbooke
+- role: build-dependency
+  uid: optexcfixdhdlr
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/exceptions/ppc-exc-handler-table.c
+- bsps/powerpc/shared/start/bsp-start-zero.S
+- bsps/powerpc/shared/start/tictac.c
+- bsps/powerpc/t32mppc/clock/clock-config.c
+- bsps/powerpc/t32mppc/console/console.c
+- bsps/powerpc/t32mppc/irq/irq.c
+- bsps/powerpc/t32mppc/start/bspreset.c
+- bsps/powerpc/t32mppc/start/bspstart.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

@@ -1,0 +1,66 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: gumstix
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: gumstix
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/gumstix/include/bsp.h
+  - bsps/arm/gumstix/include/ffuart.h
+  - bsps/arm/gumstix/include/pxa255.h
+  - bsps/arm/gumstix/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/gumstix/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/gumstix/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: optskyeye
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/gumstix/btimer/btimer.c
+- bsps/arm/gumstix/clock/clock.c
+- bsps/arm/gumstix/console/ffuart.c
+- bsps/arm/gumstix/console/uarts.c
+- bsps/arm/gumstix/fb/fb.c
+- bsps/arm/gumstix/irq/irq.c
+- bsps/arm/gumstix/start/bspreset.c
+- bsps/arm/gumstix/start/bspstart.c
+- bsps/arm/gumstix/start/memmap.c
+- bsps/arm/shared/cp15/arm920-mmu.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

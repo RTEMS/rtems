@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags:
+- -fopenmp
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+features: c cprogram
+includes: []
+ldflags:
+- -fopenmp
+links: []
+source:
+- testsuites/smptests/smpopenmp01/init.c
+stlib: []
+target: testsuites/smptests/smpopenmp01.exe
+type: build
+use-after: []
+use-before: []

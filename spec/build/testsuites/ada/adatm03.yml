@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+ada-main: testsuites/ada/tmtests/tm03/tm03.adb
+ada-object-directory: testsuites/ada/tmtests/tm03
+adaflags: []
+adaincludes:
+- cpukit/include/adainclude
+- testsuites/ada/support
+build-type: ada-test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/ada/tmtests/tm03/init.c
+stlib: []
+target: testsuites/ada/ada_tm03.exe
+type: build
+use-after: []
+use-before: []

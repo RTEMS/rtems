@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- TMS570_USE_HWINIT_STARTUP
+includes: []
+install: []
+links: []
+source:
+- bsps/arm/tms570/start/bspstarthooks-hwinit.c
+- bsps/arm/tms570/start/fail_notification.c
+- bsps/arm/tms570/start/init_emif_sdram.c
+- bsps/arm/tms570/start/init_esm.c
+- bsps/arm/tms570/start/init_pinmux.c
+- bsps/arm/tms570/start/init_system.c
+- bsps/arm/tms570/start/tms570_selftest.c
+- bsps/arm/tms570/start/tms570_selftest_par_can.c
+- bsps/arm/tms570/start/tms570_selftest_par_mibspi.c
+- bsps/arm/tms570/start/tms570_selftest_par_std.c
+- bsps/arm/tms570/start/tms570_selftest_parity.c
+- bsps/arm/tms570/start/tms570_sys_core.S
+- bsps/arm/tms570/start/tms570_tcram_tests.c
+type: build

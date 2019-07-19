@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: mips
+bsp: hurricane
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: hurricane
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/mips/hurricane/include/bsp.h
+  - bsps/mips/hurricane/include/tm27.h
+  - bsps/mips/hurricane/include/usc.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/mips/hurricane/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/mips/hurricane/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: optrm52xx
+- role: build-dependency
+  uid: optusc320
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../tstnolibdl
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/mips/hurricane/clock/ckinit.c
+- bsps/mips/hurricane/console/console.c
+- bsps/mips/hurricane/irq/vectorisrs.c
+- bsps/mips/hurricane/start/bspstart.c
+- bsps/mips/hurricane/start/inittlb.c
+- bsps/mips/hurricane/start/usc.S
+- bsps/mips/shared/irq/exception.S
+- bsps/mips/shared/irq/installisrentries.c
+- bsps/mips/shared/irq/interruptmask.c
+- bsps/mips/shared/irq/irq.c
+- bsps/mips/shared/irq/isr_entries.S
+- bsps/mips/shared/irq/vectorexceptions.c
+- bsps/mips/shared/liblnk/lnklib.S
+- bsps/mips/shared/liblnk/pmon.S
+- bsps/mips/shared/start/idtmem.S
+- bsps/mips/shared/start/idttlb.S
+- bsps/mips/shared/timer/gettime.S
+- bsps/mips/shared/timer/timer.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- script: |
+    def yesno(conf, enable):
+        if enable in conf.env.ENABLE:
+            return "yes"
+        return "no"
+    conf.env["RTEMS_HAS_MULTIPROCESSING"] = yesno(conf, "RTEMS_MULTIPROCESSING")
+    conf.env["RTEMS_HAS_NETWORKING"] = yesno(conf, "RTEMS_NETWORKING")
+    conf.env["RTEMS_HAS_POSIX_API"] = yesno(conf, "RTEMS_POSIX_API")
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

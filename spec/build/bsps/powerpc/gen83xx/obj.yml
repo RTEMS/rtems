@@ -1,0 +1,60 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/gen83xx/include/bsp.h
+  - bsps/powerpc/gen83xx/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/gen83xx/include/bsp/hwreg_vals.h
+  - bsps/powerpc/gen83xx/include/bsp/irq.h
+  - bsps/powerpc/gen83xx/include/bsp/tsec-config.h
+  - bsps/powerpc/gen83xx/include/bsp/u-boot-config.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/gen83xx/start/linkcmds.br_uid
+  - bsps/powerpc/gen83xx/start/linkcmds.hsc_cm01
+  - bsps/powerpc/gen83xx/start/linkcmds.mpc8309som
+  - bsps/powerpc/gen83xx/start/linkcmds.mpc8313erdb
+  - bsps/powerpc/gen83xx/start/linkcmds.mpc8349eamds
+  - bsps/powerpc/gen83xx/start/linkcmds.mpc83xx
+  - bsps/powerpc/shared/start/linkcmds.base
+links: []
+source:
+- bsps/powerpc/gen83xx/console/console-config.c
+- bsps/powerpc/gen83xx/dev/gtm.c
+- bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
+- bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
+- bsps/powerpc/gen83xx/i2c/i2c_init.c
+- bsps/powerpc/gen83xx/irq/irq.c
+- bsps/powerpc/gen83xx/spi/spi_init.c
+- bsps/powerpc/gen83xx/start/bspreset.c
+- bsps/powerpc/gen83xx/start/bsprestart.c
+- bsps/powerpc/gen83xx/start/bspstart.c
+- bsps/powerpc/gen83xx/start/cpuinit.c
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/clock/clock.c
+- bsps/powerpc/shared/mmu/bat.c
+- bsps/powerpc/shared/mmu/mmuAsm.S
+- bsps/powerpc/shared/mmu/pte121.c
+- bsps/powerpc/shared/start/bspidle.c
+- bsps/powerpc/shared/start/tictac.c
+- bsps/powerpc/shared/u-boot/uboot_getenv.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bsp-uboot-board-info.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

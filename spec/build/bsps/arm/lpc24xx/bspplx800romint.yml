@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: lpc24xx_plx800_rom_int
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: lpc24xx
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: tstplx800romint
+- role: build-dependency
+  uid: ../../opto2
+source: []
+type: build

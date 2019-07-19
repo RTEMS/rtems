@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: P
+default-by-variant:
+- value: T
+  variants:
+  - powerpc/qoriq_e6500.*
+description: |
+  chip series, e.g. 'P' or 'T'
+enabled-by: true
+format: '''{}'''
+links: []
+name: QORIQ_CHIP_SERIES
+type: build

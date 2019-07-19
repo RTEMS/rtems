@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 100000
+default-by-variant: []
+description: |
+  speed for I2C0 in HZ
+enabled-by: true
+format: '{}'
+links: []
+name: CYCLONE_V_I2C0_SPEED
+type: build

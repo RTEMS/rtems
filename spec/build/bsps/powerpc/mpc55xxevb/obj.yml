@@ -1,0 +1,97 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/mpc55xxevb/include/bsp.h
+  - bsps/powerpc/mpc55xxevb/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/mpc55xxevb/include/bsp/console-esci.h
+  - bsps/powerpc/mpc55xxevb/include/bsp/console-generic.h
+  - bsps/powerpc/mpc55xxevb/include/bsp/console-linflex.h
+  - bsps/powerpc/mpc55xxevb/include/bsp/irq.h
+  - bsps/powerpc/mpc55xxevb/include/bsp/mpc55xx-config.h
+  - bsps/powerpc/mpc55xxevb/include/bsp/smsc9218i.h
+- destination: ${BSP_INCLUDEDIR}/mpc55xx
+  source:
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/dspi.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/edma.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/emios.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/fsl-mpc551x.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/fsl-mpc555x.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/fsl-mpc556x.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/fsl-mpc564xL.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/fsl-mpc5668.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/fsl-mpc567x.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/mpc55xx.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/reg-defs.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/regs-edma.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/regs-mmu.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/regs.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/siu.h
+  - bsps/powerpc/mpc55xxevb/include/mpc55xx/watchdog.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/mpc55xxevb/start/linkcmds.gwlcfm
+  - bsps/powerpc/mpc55xxevb/start/linkcmds.mpc5566evb
+  - bsps/powerpc/mpc55xxevb/start/linkcmds.mpc55xx
+  - bsps/powerpc/mpc55xxevb/start/linkcmds.mpc5668g
+  - bsps/powerpc/mpc55xxevb/start/linkcmds.mpc5674fevb
+  - bsps/powerpc/mpc55xxevb/start/linkcmds.phycore_mpc5554
+  - bsps/powerpc/shared/start/linkcmds.base
+links: []
+source:
+- bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
+- bsps/powerpc/mpc55xxevb/clock/clock-config.c
+- bsps/powerpc/mpc55xxevb/console/console-config.c
+- bsps/powerpc/mpc55xxevb/console/console-esci.c
+- bsps/powerpc/mpc55xxevb/console/console-generic.c
+- bsps/powerpc/mpc55xxevb/console/console-linflex.c
+- bsps/powerpc/mpc55xxevb/dev/dspi.c
+- bsps/powerpc/mpc55xxevb/i2c/i2c_init.c
+- bsps/powerpc/mpc55xxevb/start/bspgetworkarea.c
+- bsps/powerpc/mpc55xxevb/start/bspreset.c
+- bsps/powerpc/mpc55xxevb/start/bspstart.c
+- bsps/powerpc/mpc55xxevb/start/copy.S
+- bsps/powerpc/mpc55xxevb/start/edma.c
+- bsps/powerpc/mpc55xxevb/start/emios.c
+- bsps/powerpc/mpc55xxevb/start/exc-vector-base.S
+- bsps/powerpc/mpc55xxevb/start/flash_support.c
+- bsps/powerpc/mpc55xxevb/start/get-system-clock.c
+- bsps/powerpc/mpc55xxevb/start/idle-thread.c
+- bsps/powerpc/mpc55xxevb/start/irq.c
+- bsps/powerpc/mpc55xxevb/start/restart.c
+- bsps/powerpc/mpc55xxevb/start/sd-card-init.c
+- bsps/powerpc/mpc55xxevb/start/siu.c
+- bsps/powerpc/mpc55xxevb/start/start-cache.S
+- bsps/powerpc/mpc55xxevb/start/start-clock.c
+- bsps/powerpc/mpc55xxevb/start/start-config-clock.c
+- bsps/powerpc/mpc55xxevb/start/start-config-ebi-cs-cal.c
+- bsps/powerpc/mpc55xxevb/start/start-config-ebi-cs.c
+- bsps/powerpc/mpc55xxevb/start/start-config-ebi.c
+- bsps/powerpc/mpc55xxevb/start/start-config-mmu-early.c
+- bsps/powerpc/mpc55xxevb/start/start-config-mmu.c
+- bsps/powerpc/mpc55xxevb/start/start-config-siu-pcr.c
+- bsps/powerpc/mpc55xxevb/start/start-early.c
+- bsps/powerpc/mpc55xxevb/start/start-flash.S
+- bsps/powerpc/mpc55xxevb/start/start-prologue.c
+- bsps/powerpc/mpc55xxevb/start/start-watchdog.c
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/exceptions/ppc-exc-handler-table.c
+- bsps/powerpc/shared/start/bsp-start-zero.S
+- bsps/powerpc/shared/start/memcpy.c
+- bsps/powerpc/shared/start/tictac.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/stackalloc.c
+type: build

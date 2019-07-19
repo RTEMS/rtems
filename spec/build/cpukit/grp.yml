@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: cpuopts
+- role: build-dependency
+  uid: cfghdr
+- role: build-dependency
+  uid: libdebugger
+- role: build-dependency
+  uid: libftpd
+- role: build-dependency
+  uid: libftpfs
+- role: build-dependency
+  uid: libjffs2
+- role: build-dependency
+  uid: libmghttpd
+- role: build-dependency
+  uid: libnfs
+- role: build-dependency
+  uid: libpppd
+- role: build-dependency
+  uid: librtemscpu
+- role: build-dependency
+  uid: librtemsdfltcfg
+- role: build-dependency
+  uid: librtemstest
+- role: build-dependency
+  uid: libtelnetd
+- role: build-dependency
+  uid: libtftpfs
+- role: build-dependency
+  uid: libz
+type: build
+use-after: []
+use-before: []

@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    psxintrcritical01: exclude
+    spintrcritical01: exclude
+    spintrcritical02: exclude
+    spintrcritical03: exclude
+    spintrcritical04: exclude
+    spintrcritical05: exclude
+    spintrcritical06: exclude
+    spintrcritical07: exclude
+    spintrcritical08: exclude
+    spintrcritical09: exclude
+    spintrcritical10: exclude
+    spintrcritical11: exclude
+    spintrcritical12: exclude
+    spintrcritical13: exclude
+    spintrcritical14: exclude
+    spintrcritical15: exclude
+    spintrcritical16: exclude
+    spintrcritical17: exclude
+    spintrcritical18: exclude
+    spintrcritical20: exclude
+    spintrcritical21: exclude
+    spintrcritical22: exclude
+    spintrcritical23: exclude
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

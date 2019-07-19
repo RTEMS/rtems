@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    dl01: exclude
+    dl02: exclude
+    dl03: exclude
+    dl04: exclude
+    dl05: exclude
+    dl06: exclude
+    dl07: exclude
+    dl08: exclude
+    dl09: exclude
+    dl10: exclude
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

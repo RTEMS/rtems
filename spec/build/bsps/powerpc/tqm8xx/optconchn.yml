@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: CONS_CHN_SMC1
+default-by-variant: []
+description: |
+  (BSP--console driver) Must be defined to be one of CONS_CHN_SMC1, CONS_CHN_SMC2, CONS_CHN_SCC1, CONS_CHN_SCC2, CONS_CHN_SCC3, or CONS_CHN_SCC4.  Determines which device will be registered as /dev/console.
+enabled-by: true
+format: '{}'
+links: []
+name: CONSOLE_CHN
+type: build

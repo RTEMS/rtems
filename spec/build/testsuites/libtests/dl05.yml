@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+do-build: |
+  path = "testsuites/libtests/dl05/"
+  objs = []
+  objs.append(self.cxx(bld, bic, path + "dl05-o5.cc"))
+  tar = path + "dl05.tar"
+  self.pax(bld, objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL05_CPPFLAGS))
+  objs.append(self.cxx(bld, bic, path + "dl-cpp.cc"))
+  objs.append(self.cc(bld, bic, path + "dl-load.c"))
+  dl05_pre = path + "dl05.pre"
+  self.link_cxx(bld, bic, objs, dl05_pre)
+  dl05_sym_o = path + "dl05-sym.o"
+  objs.append(dl05_sym_o)
+  self.rtems_syms(bld, dl05_pre, dl05_sym_o)
+  self.link_cxx(bld, bic, objs, "testsuites/libtests/dl05.exe")
+do-configure: null
+enabled-by:
+- and:
+  - not: TEST_DL05_EXCLUDE
+  - BUILD_LIBDL
+includes:
+- testsuites/libtests/dl05
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+type: build
+use-after: []
+use-before: []

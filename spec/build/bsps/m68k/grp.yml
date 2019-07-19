@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/m68k/include/mvme16x_hw.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/m68k/include/bsp/linker-symbols.h
+- destination: ${BSP_INCLUDEDIR}/mcf5206
+  source:
+  - bsps/m68k/include/mcf5206/mcf5206e.h
+  - bsps/m68k/include/mcf5206/mcfmbus.h
+  - bsps/m68k/include/mcf5206/mcfuart.h
+- destination: ${BSP_INCLUDEDIR}/mcf5223x
+  source:
+  - bsps/m68k/include/mcf5223x/mcf5223x.h
+- destination: ${BSP_INCLUDEDIR}/mcf5225x
+  source:
+  - bsps/m68k/include/mcf5225x/fec.h
+  - bsps/m68k/include/mcf5225x/mcf5225x.h
+- destination: ${BSP_INCLUDEDIR}/mcf5235
+  source:
+  - bsps/m68k/include/mcf5235/mcf5235.h
+- destination: ${BSP_INCLUDEDIR}/mcf5272
+  source:
+  - bsps/m68k/include/mcf5272/mcf5272.h
+- destination: ${BSP_INCLUDEDIR}/mcf5282
+  source:
+  - bsps/m68k/include/mcf5282/mcf5282.h
+- destination: ${BSP_INCLUDEDIR}/mcf532x
+  source:
+  - bsps/m68k/include/mcf532x/mcf532x.h
+- destination: ${BSP_INCLUDEDIR}/mcf548x
+  source:
+  - bsps/m68k/include/mcf548x/MCD_dma.h
+  - bsps/m68k/include/mcf548x/MCD_progCheck.h
+  - bsps/m68k/include/mcf548x/MCD_tasksInit.h
+  - bsps/m68k/include/mcf548x/mcdma_glue.h
+  - bsps/m68k/include/mcf548x/mcf548x.h
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

@@ -1,0 +1,143 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- BUILD_TESTS
+- BUILD_FSTESTS
+includes:
+- testsuites/support/include
+- testsuites/fstests/support
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: libdosfs
+- role: build-dependency
+  uid: libimfs
+- role: build-dependency
+  uid: libjffs2
+- role: build-dependency
+  uid: libmimfs
+- role: build-dependency
+  uid: librfs
+- role: build-dependency
+  uid: fsbdpart01
+- role: build-dependency
+  uid: fsclose01
+- role: build-dependency
+  uid: fsdosfsformat01
+- role: build-dependency
+  uid: fsdosfsname01
+- role: build-dependency
+  uid: fsdosfsname02
+- role: build-dependency
+  uid: fsdosfssync01
+- role: build-dependency
+  uid: fsdosfswrite01
+- role: build-dependency
+  uid: fsfseeko01
+- role: build-dependency
+  uid: fsimfsconfig01
+- role: build-dependency
+  uid: fsimfsconfig02
+- role: build-dependency
+  uid: fsimfsconfig03
+- role: build-dependency
+  uid: fsimfsgeneric01
+- role: build-dependency
+  uid: fsjffs2gc01
+- role: build-dependency
+  uid: fsnofs01
+- role: build-dependency
+  uid: fsrfsbitmap01
+- role: build-dependency
+  uid: fsrofs01
+- role: build-dependency
+  uid: imfsfserror
+- role: build-dependency
+  uid: imfsfslink
+- role: build-dependency
+  uid: imfsfspatheval
+- role: build-dependency
+  uid: imfsfspermission
+- role: build-dependency
+  uid: imfsfsrdwr
+- role: build-dependency
+  uid: imfsfsscandir01
+- role: build-dependency
+  uid: imfsfssymlink
+- role: build-dependency
+  uid: imfsfstime
+- role: build-dependency
+  uid: jffs2fserror
+- role: build-dependency
+  uid: jffs2fslink
+- role: build-dependency
+  uid: jffs2fspatheval
+- role: build-dependency
+  uid: jffs2fspermission
+- role: build-dependency
+  uid: jffs2fsrdwr
+- role: build-dependency
+  uid: jffs2fsscandir01
+- role: build-dependency
+  uid: jffs2fssymlink
+- role: build-dependency
+  uid: jffs2fstime
+- role: build-dependency
+  uid: mdosfsfserror
+- role: build-dependency
+  uid: mdosfsfspatheval
+- role: build-dependency
+  uid: mdosfsfsrdwr
+- role: build-dependency
+  uid: mdosfsfsscandir01
+- role: build-dependency
+  uid: mdosfsfsstatvfs
+- role: build-dependency
+  uid: mdosfsfstime
+- role: build-dependency
+  uid: mimfsfserror
+- role: build-dependency
+  uid: mimfsfslink
+- role: build-dependency
+  uid: mimfsfspatheval
+- role: build-dependency
+  uid: mimfsfspermission
+- role: build-dependency
+  uid: mimfsfsrdwr
+- role: build-dependency
+  uid: mimfsfsrename
+- role: build-dependency
+  uid: mimfsfsscandir01
+- role: build-dependency
+  uid: mimfsfssymlink
+- role: build-dependency
+  uid: mimfsfstime
+- role: build-dependency
+  uid: mrfsfserror
+- role: build-dependency
+  uid: mrfsfsfpathconf
+- role: build-dependency
+  uid: mrfsfslink
+- role: build-dependency
+  uid: mrfsfspatheval
+- role: build-dependency
+  uid: mrfsfspermission
+- role: build-dependency
+  uid: mrfsfsrdwr
+- role: build-dependency
+  uid: mrfsfsrename
+- role: build-dependency
+  uid: mrfsfsscandir01
+- role: build-dependency
+  uid: mrfsfssymlink
+- role: build-dependency
+  uid: mrfsfstime
+type: build
+use-after: []
+use-before:
+- rtemstest

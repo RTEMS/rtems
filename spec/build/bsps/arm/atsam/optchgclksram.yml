@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant: []
+description: |
+  Move the functions that set up the clock into the SRAM.  This allows to change the clock frequency even if the application is started from SDRAM.  Requires a TCM_SIZE > 0.
+enabled-by: true
+links: []
+name: ATSAM_CHANGE_CLOCK_FROM_SRAM
+type: build

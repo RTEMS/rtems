@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant: []
+description: |
+  Number of configured I2C buses. Note that each bus has to be configured in an apropriate i2cdrv_config array.
+enabled-by: true
+links: []
+name: CYCLONE_V_NO_I2C
+type: build

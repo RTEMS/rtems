@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/smptests/smp08/init.c
+- testsuites/smptests/smp08/tasks.c
+- testsuites/support/src/locked_print.c
+stlib: []
+target: testsuites/smptests/smp08.exe
+type: build
+use-after: []
+use-before: []

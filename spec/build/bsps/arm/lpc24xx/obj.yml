@@ -1,0 +1,90 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/lpc24xx/include/bsp.h
+  - bsps/arm/lpc24xx/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/lpc24xx/include/bsp/dma.h
+  - bsps/arm/lpc24xx/include/bsp/i2c.h
+  - bsps/arm/lpc24xx/include/bsp/io.h
+  - bsps/arm/lpc24xx/include/bsp/irq.h
+  - bsps/arm/lpc24xx/include/bsp/lcd.h
+  - bsps/arm/lpc24xx/include/bsp/lpc-clock-config.h
+  - bsps/arm/lpc24xx/include/bsp/lpc-ethernet-config.h
+  - bsps/arm/lpc24xx/include/bsp/lpc17xx.h
+  - bsps/arm/lpc24xx/include/bsp/lpc24xx.h
+  - bsps/arm/lpc24xx/include/bsp/ssp.h
+  - bsps/arm/lpc24xx/include/bsp/start-config.h
+  - bsps/arm/lpc24xx/include/bsp/system-clocks.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/lpc24xx/start/linkcmds.lpc17xx_ea_ram
+  - bsps/arm/lpc24xx/start/linkcmds.lpc17xx_ea_rom_int
+  - bsps/arm/lpc24xx/start/linkcmds.lpc17xx_plx800_ram
+  - bsps/arm/lpc24xx/start/linkcmds.lpc17xx_plx800_rom_int
+  - bsps/arm/lpc24xx/start/linkcmds.lpc2362
+  - bsps/arm/lpc24xx/start/linkcmds.lpc23xx_tli800
+  - bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ea
+  - bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ncs_ram
+  - bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ncs_rom_ext
+  - bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ncs_rom_int
+  - bsps/arm/lpc24xx/start/linkcmds.lpc24xx_plx800_ram
+  - bsps/arm/lpc24xx/start/linkcmds.lpc24xx_plx800_rom_int
+  - bsps/arm/lpc24xx/start/linkcmds.lpc40xx_ea_ram
+  - bsps/arm/lpc24xx/start/linkcmds.lpc40xx_ea_rom_int
+links: []
+source:
+- bsps/arm/lpc24xx/console/console-config.c
+- bsps/arm/lpc24xx/console/uart-probe-1.c
+- bsps/arm/lpc24xx/console/uart-probe-2.c
+- bsps/arm/lpc24xx/console/uart-probe-3.c
+- bsps/arm/lpc24xx/fb/lcd.c
+- bsps/arm/lpc24xx/i2c/i2c.c
+- bsps/arm/lpc24xx/irq/irq-dispatch.c
+- bsps/arm/lpc24xx/irq/irq.c
+- bsps/arm/lpc24xx/rtc/rtc-config.c
+- bsps/arm/lpc24xx/spi/ssp.c
+- bsps/arm/lpc24xx/start/bspidle.c
+- bsps/arm/lpc24xx/start/bspreset-armv4.c
+- bsps/arm/lpc24xx/start/bspstart.c
+- bsps/arm/lpc24xx/start/bspstarthooks.c
+- bsps/arm/lpc24xx/start/dma-copy.c
+- bsps/arm/lpc24xx/start/dma.c
+- bsps/arm/lpc24xx/start/fb-config.c
+- bsps/arm/lpc24xx/start/io.c
+- bsps/arm/lpc24xx/start/restart.c
+- bsps/arm/lpc24xx/start/start-config-emc-dynamic.c
+- bsps/arm/lpc24xx/start/start-config-emc-static.c
+- bsps/arm/lpc24xx/start/start-config-mpu.c
+- bsps/arm/lpc24xx/start/start-config-pinsel.c
+- bsps/arm/lpc24xx/start/system-clocks.c
+- bsps/arm/lpc24xx/start/timer.c
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/clock/clock-nxp-lpc.c
+- bsps/arm/shared/fb/arm-pl111.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/dev/serial/uart-output-char.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+- env-enable: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant: []
+description: |
+  If defined, enables use of the Cirrus GD5446 controller rather than the controller utilizing Vesa Bios Extensions - real mode interface.  NOTE: This has only been tested on Qemu.
+enabled-by: true
+links: []
+name: USE_CIRRUS_GD5446
+type: build

@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/dl08/"
+  objs = []
+  lib_objs = []
+  lib_objs.append(self.cc(bld, bic, path + "dl08-o2.c"))
+  lib_objs.append(self.cc(bld, bic, path + "dl08-o4.c"))
+  objs.append(self.ar(bld, lib_objs, path + "libdl08_1.a"))
+  lib_objs = []
+  lib_objs.append(self.cc(bld, bic, path + "dl08-o3.c"))
+  lib_objs.append(self.cc(bld, bic, path + "dl08-o5.c"))
+  lib_objs.append(self.cc(bld, bic, path + "dl08-o6-123456789-123456789.c"))
+  objs.append(self.ar(bld, lib_objs, path + "libdl08_2.a"))
+  objs.append(self.cc(bld, bic, path + "dl08-o1.c"))
+  tar = path + "dl08.tar"
+  self.pax(bld, [path + "etc/libdl.conf"] + objs, [path], tar)
+  tar_c, tar_h = self.bin2c(bld, tar)
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL08_CPPFLAGS))
+  objs.append(self.cc(bld, bic, path + "dl-load.c"))
+  dl08_pre = path + "dl08.pre"
+  self.link_cc(bld, bic, objs, dl08_pre)
+  dl08_sym_o = path + "dl08-sym.o"
+  objs.append(dl08_sym_o)
+  self.rtems_syms(bld, dl08_pre, dl08_sym_o)
+  self.link_cc(bld, bic, objs, "testsuites/libtests/dl08.exe")
+do-configure: null
+enabled-by:
+- and:
+  - not: TEST_DL08_EXCLUDE
+  - BUILD_LIBDL
+includes:
+- testsuites/libtests/dl08
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+type: build
+use-after: []
+use-before: []

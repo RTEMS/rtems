@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- or1k
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/or1k/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/or1k/include/rtems/score/cpu.h
+  - cpukit/score/cpu/or1k/include/rtems/score/cpu_asm.h
+  - cpukit/score/cpu/or1k/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/or1k/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/or1k/include/rtems/score/or1k-utility.h
+  - cpukit/score/cpu/or1k/include/rtems/score/or1k.h
+links: []
+source:
+- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
+- cpukit/score/cpu/or1k/cpu.c
+- cpukit/score/cpu/or1k/or1k-context-initialize.c
+- cpukit/score/cpu/or1k/or1k-context-switch.S
+- cpukit/score/cpu/or1k/or1k-context-validate.S
+- cpukit/score/cpu/or1k/or1k-context-volatile-clobber.S
+- cpukit/score/cpu/or1k/or1k-exception-default.c
+- cpukit/score/cpu/or1k/or1k-exception-frame-print.c
+- cpukit/score/cpu/or1k/or1k-exception-handler-low.S
+type: build

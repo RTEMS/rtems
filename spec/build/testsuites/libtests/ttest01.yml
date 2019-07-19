@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/ttest01/init.c
+- testsuites/libtests/ttest01/test-assert.c
+- testsuites/libtests/ttest01/test-checks.c
+- testsuites/libtests/ttest01/test-destructor.c
+- testsuites/libtests/ttest01/test-eno.c
+- testsuites/libtests/ttest01/test-example.c
+- testsuites/libtests/ttest01/test-fixture.c
+- testsuites/libtests/ttest01/test-leak.c
+- testsuites/libtests/ttest01/test-log.c
+- testsuites/libtests/ttest01/test-malloc.c
+- testsuites/libtests/ttest01/test-plan.c
+- testsuites/libtests/ttest01/test-psx.c
+- testsuites/libtests/ttest01/test-rtems.c
+- testsuites/libtests/ttest01/test-simple.c
+- testsuites/libtests/ttest01/test-step.c
+- testsuites/libtests/ttest01/test-task-context.c
+- testsuites/libtests/ttest01/test-time.c
+- testsuites/libtests/ttest01/test-verbosity.c
+stlib: []
+target: testsuites/libtests/ttest01.exe
+type: build
+use-after: []
+use-before: []

@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: moxie
+bsp: moxiesim
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: moxiesim
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/moxie/moxiesim/include/bsp.h
+  - bsps/moxie/moxiesim/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/moxie/moxiesim/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/moxie/moxiesim/start/linkcmds
+links:
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirqdflt
+- role: build-dependency
+  uid: ../../optos
+- role: build-dependency
+  uid: ../../tstnolibdl
+- role: build-dependency
+  uid: ../../tstreqtick
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/moxie/moxiesim/console/console-io.c
+- bsps/moxie/moxiesim/console/syscalls.S
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/clock/clock-simidle.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-polled.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/bspstart-empty.c
+- bsps/shared/start/sbrk.c
+type: build

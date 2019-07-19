@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 8000000
+default-by-variant: []
+description: |
+  HSE oscillator frequency in Hz
+enabled-by: true
+format: '{}'
+links: []
+name: STM32F4_HSE_OSCILLATOR
+type: build

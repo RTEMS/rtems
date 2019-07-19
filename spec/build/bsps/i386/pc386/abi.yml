@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -mtune=pentium4
+- -march=pentium4
+- -msse3
+- -mtune=i386
+default-by-variant:
+- value:
+  - -mtune=pentiumpro
+  - -march=pentium
+  - -mtune=i386
+  variants:
+  - i386/pc686
+- value:
+  - -mtune=pentium
+  - -march=pentium
+  - -msse2
+  - -mtune=i386
+  variants:
+  - i386/pc586-sse
+- value:
+  - -mtune=pentium
+  - -march=pentium
+  - -mtune=i386
+  variants:
+  - i386/pc586
+- value:
+  - -mtune=i486
+  - -mtune=i386
+  variants:
+  - i386/pc486
+- value:
+  - -mtune=i386
+  variants:
+  - i386/pc386
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

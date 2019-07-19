@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant:
+- value: /dev/i2c1.eeprom
+  variants:
+  - powerpc/gwlcfm
+description: |
+  EEPROM device file path
+enabled-by: true
+format: '{}'
+links: []
+name: RTEMS_BSP_I2C_EEPROM_DEVICE_PATH
+type: build

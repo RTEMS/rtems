@@ -1,0 +1,315 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_NETWORKING
+includes:
+- cpukit/libnetworking
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - cpukit/libnetworking/ifaddrs.h
+  - cpukit/libnetworking/librtemsNfs.h
+  - cpukit/libnetworking/loop.h
+  - cpukit/libnetworking/resolv.h
+- destination: ${BSP_INCLUDEDIR}/arpa
+  source:
+  - cpukit/libnetworking/arpa/nameser.h
+  - cpukit/libnetworking/arpa/nameser_compat.h
+- destination: ${BSP_INCLUDEDIR}/dev/mii
+  source:
+  - cpukit/libnetworking/dev/mii/mii.h
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/libnetworking/machine/_align.h
+  - cpukit/libnetworking/machine/_kernel_if.h
+  - cpukit/libnetworking/machine/_kernel_lock.h
+  - cpukit/libnetworking/machine/_kernel_socket.h
+  - cpukit/libnetworking/machine/cpu.h
+  - cpukit/libnetworking/machine/cpufunc.h
+  - cpukit/libnetworking/machine/in_cksum.h
+  - cpukit/libnetworking/machine/limits.h
+  - cpukit/libnetworking/machine/vmparam.h
+- destination: ${BSP_INCLUDEDIR}/net
+  source:
+  - cpukit/libnetworking/net/bpf.h
+  - cpukit/libnetworking/net/ethernet.h
+  - cpukit/libnetworking/net/if_arp.h
+  - cpukit/libnetworking/net/if_dl.h
+  - cpukit/libnetworking/net/if_llc.h
+  - cpukit/libnetworking/net/if_media.h
+  - cpukit/libnetworking/net/if_ppp.h
+  - cpukit/libnetworking/net/if_pppvar.h
+  - cpukit/libnetworking/net/if_types.h
+  - cpukit/libnetworking/net/if_var.h
+  - cpukit/libnetworking/net/netisr.h
+  - cpukit/libnetworking/net/ppp_comp.h
+  - cpukit/libnetworking/net/ppp_defs.h
+  - cpukit/libnetworking/net/radix.h
+  - cpukit/libnetworking/net/raw_cb.h
+  - cpukit/libnetworking/net/route.h
+  - cpukit/libnetworking/net/slcompress.h
+- destination: ${BSP_INCLUDEDIR}/netinet
+  source:
+  - cpukit/libnetworking/netinet/icmp_var.h
+  - cpukit/libnetworking/netinet/if_ether.h
+  - cpukit/libnetworking/netinet/igmp.h
+  - cpukit/libnetworking/netinet/igmp_var.h
+  - cpukit/libnetworking/netinet/in_pcb.h
+  - cpukit/libnetworking/netinet/in_systm.h
+  - cpukit/libnetworking/netinet/in_var.h
+  - cpukit/libnetworking/netinet/ip.h
+  - cpukit/libnetworking/netinet/ip_fw.h
+  - cpukit/libnetworking/netinet/ip_icmp.h
+  - cpukit/libnetworking/netinet/ip_mroute.h
+  - cpukit/libnetworking/netinet/ip_var.h
+  - cpukit/libnetworking/netinet/tcp_debug.h
+  - cpukit/libnetworking/netinet/tcp_fsm.h
+  - cpukit/libnetworking/netinet/tcp_seq.h
+  - cpukit/libnetworking/netinet/tcp_timer.h
+  - cpukit/libnetworking/netinet/tcp_var.h
+  - cpukit/libnetworking/netinet/tcpip.h
+  - cpukit/libnetworking/netinet/udp.h
+  - cpukit/libnetworking/netinet/udp_var.h
+- destination: ${BSP_INCLUDEDIR}/nfs
+  source:
+  - cpukit/libnetworking/nfs/nfsproto.h
+  - cpukit/libnetworking/nfs/rpcv2.h
+  - cpukit/libnetworking/nfs/xdr_subs.h
+- destination: ${BSP_INCLUDEDIR}/nfsclient
+  source:
+  - cpukit/libnetworking/nfsclient/nfsargs.h
+  - cpukit/libnetworking/nfsclient/nfsdiskless.h
+- destination: ${BSP_INCLUDEDIR}/rpc
+  source:
+  - cpukit/libnetworking/rpc/auth.h
+  - cpukit/libnetworking/rpc/auth_unix.h
+  - cpukit/libnetworking/rpc/clnt.h
+  - cpukit/libnetworking/rpc/clnt_soc.h
+  - cpukit/libnetworking/rpc/clnt_stat.h
+  - cpukit/libnetworking/rpc/pmap_clnt.h
+  - cpukit/libnetworking/rpc/pmap_prot.h
+  - cpukit/libnetworking/rpc/pmap_rmt.h
+  - cpukit/libnetworking/rpc/rpc.h
+  - cpukit/libnetworking/rpc/rpc_com.h
+  - cpukit/libnetworking/rpc/rpc_msg.h
+  - cpukit/libnetworking/rpc/rpcent.h
+  - cpukit/libnetworking/rpc/svc.h
+  - cpukit/libnetworking/rpc/svc_auth.h
+  - cpukit/libnetworking/rpc/svc_soc.h
+  - cpukit/libnetworking/rpc/types.h
+  - cpukit/libnetworking/rpc/xdr.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/libnetworking/rtems/bootp.h
+  - cpukit/libnetworking/rtems/dhcp.h
+  - cpukit/libnetworking/rtems/mkrootfs.h
+  - cpukit/libnetworking/rtems/rtems_bsdnet.h
+  - cpukit/libnetworking/rtems/rtems_bsdnet_internal.h
+  - cpukit/libnetworking/rtems/rtems_dhcp_failsafe.h
+  - cpukit/libnetworking/rtems/rtems_mii_ioctl.h
+  - cpukit/libnetworking/rtems/rtems_netdb.h
+  - cpukit/libnetworking/rtems/rtems_netinet_in.h
+  - cpukit/libnetworking/rtems/rtems_syscall.h
+- destination: ${BSP_INCLUDEDIR}/rtems/bsdnet
+  source:
+  - cpukit/libnetworking/rtems/bsdnet/_types.h
+  - cpukit/libnetworking/rtems/bsdnet/servers.h
+- destination: ${BSP_INCLUDEDIR}/sys
+  source:
+  - cpukit/libnetworking/sys/callout.h
+  - cpukit/libnetworking/sys/conf.h
+  - cpukit/libnetworking/sys/domain.h
+  - cpukit/libnetworking/sys/kernel.h
+  - cpukit/libnetworking/sys/libkern.h
+  - cpukit/libnetworking/sys/linker_set.h
+  - cpukit/libnetworking/sys/malloc.h
+  - cpukit/libnetworking/sys/mbuf.h
+  - cpukit/libnetworking/sys/mount.h
+  - cpukit/libnetworking/sys/proc.h
+  - cpukit/libnetworking/sys/protosw.h
+  - cpukit/libnetworking/sys/reboot.h
+  - cpukit/libnetworking/sys/resourcevar.h
+  - cpukit/libnetworking/sys/selinfo.h
+  - cpukit/libnetworking/sys/signalvar.h
+  - cpukit/libnetworking/sys/socketvar.h
+  - cpukit/libnetworking/sys/sysctl.h
+  - cpukit/libnetworking/sys/systm.h
+  - cpukit/libnetworking/sys/ucred.h
+- destination: ${BSP_INCLUDEDIR}/vm
+  source:
+  - cpukit/libnetworking/vm/vm.h
+  - cpukit/libnetworking/vm/vm_extern.h
+  - cpukit/libnetworking/vm/vm_kern.h
+  - cpukit/libnetworking/vm/vm_param.h
+links: []
+source:
+- cpukit/libmisc/dummy/dummy-networking.c
+- cpukit/libmisc/monitor/mon-network.c
+- cpukit/libmisc/shell/main_ifconfig.c
+- cpukit/libmisc/shell/main_netstats.c
+- cpukit/libmisc/shell/main_ping.c
+- cpukit/libmisc/shell/main_route.c
+- cpukit/libnetworking/kern/kern_mib.c
+- cpukit/libnetworking/kern/kern_subr.c
+- cpukit/libnetworking/kern/kern_sysctl.c
+- cpukit/libnetworking/kern/uipc_domain.c
+- cpukit/libnetworking/kern/uipc_mbuf.c
+- cpukit/libnetworking/kern/uipc_socket2.c
+- cpukit/libnetworking/kern/uipc_socket.c
+- cpukit/libnetworking/libc/base64.c
+- cpukit/libnetworking/libc/gethostbydns.c
+- cpukit/libnetworking/libc/gethostbyht.c
+- cpukit/libnetworking/libc/gethostbynis.c
+- cpukit/libnetworking/libc/gethostnamadr.c
+- cpukit/libnetworking/libc/getifaddrs.c
+- cpukit/libnetworking/libc/getnameinfo.c
+- cpukit/libnetworking/libc/getnetbydns.c
+- cpukit/libnetworking/libc/getnetbyht.c
+- cpukit/libnetworking/libc/getnetbynis.c
+- cpukit/libnetworking/libc/getnetnamadr.c
+- cpukit/libnetworking/libc/getproto.c
+- cpukit/libnetworking/libc/getprotoent.c
+- cpukit/libnetworking/libc/getprotoname.c
+- cpukit/libnetworking/libc/getservbyname.c
+- cpukit/libnetworking/libc/getservbyport.c
+- cpukit/libnetworking/libc/getservent.c
+- cpukit/libnetworking/libc/herror.c
+- cpukit/libnetworking/libc/if_indextoname.c
+- cpukit/libnetworking/libc/if_nameindex.c
+- cpukit/libnetworking/libc/inet_addr.c
+- cpukit/libnetworking/libc/inet_lnaof.c
+- cpukit/libnetworking/libc/inet_makeaddr.c
+- cpukit/libnetworking/libc/inet_netof.c
+- cpukit/libnetworking/libc/inet_network.c
+- cpukit/libnetworking/libc/inet_ntoa.c
+- cpukit/libnetworking/libc/inet_ntop.c
+- cpukit/libnetworking/libc/inet_pton.c
+- cpukit/libnetworking/libc/linkaddr.c
+- cpukit/libnetworking/libc/map_v4v6.c
+- cpukit/libnetworking/libc/nsap_addr.c
+- cpukit/libnetworking/libc/ns_name.c
+- cpukit/libnetworking/libc/ns_netint.c
+- cpukit/libnetworking/libc/ns_parse.c
+- cpukit/libnetworking/libc/ns_print.c
+- cpukit/libnetworking/libc/ns_ttl.c
+- cpukit/libnetworking/libc/rcmd.c
+- cpukit/libnetworking/libc/recv.c
+- cpukit/libnetworking/libc/res_comp.c
+- cpukit/libnetworking/libc/res_data.c
+- cpukit/libnetworking/libc/res_debug.c
+- cpukit/libnetworking/libc/res_init.c
+- cpukit/libnetworking/libc/res_mkquery.c
+- cpukit/libnetworking/libc/res_mkupdate.c
+- cpukit/libnetworking/libc/res_query.c
+- cpukit/libnetworking/libc/res_send.c
+- cpukit/libnetworking/libc/res_stubs.c
+- cpukit/libnetworking/libc/res_update.c
+- cpukit/libnetworking/libc/send.c
+- cpukit/libnetworking/lib/getprotoby.c
+- cpukit/libnetworking/lib/rtems_bsdnet_ntp.c
+- cpukit/libnetworking/lib/syslog.c
+- cpukit/libnetworking/net/if.c
+- cpukit/libnetworking/net/if_ethersubr.c
+- cpukit/libnetworking/net/if_loop.c
+- cpukit/libnetworking/net/if_ppp.c
+- cpukit/libnetworking/netinet/if_ether.c
+- cpukit/libnetworking/netinet/igmp.c
+- cpukit/libnetworking/netinet/in.c
+- cpukit/libnetworking/netinet/in_cksum.c
+- cpukit/libnetworking/netinet/in_pcb.c
+- cpukit/libnetworking/netinet/in_proto.c
+- cpukit/libnetworking/netinet/in_rmx.c
+- cpukit/libnetworking/netinet/ip_divert.c
+- cpukit/libnetworking/netinet/ip_fw.c
+- cpukit/libnetworking/netinet/ip_icmp.c
+- cpukit/libnetworking/netinet/ip_input.c
+- cpukit/libnetworking/netinet/ip_mroute.c
+- cpukit/libnetworking/netinet/ip_output.c
+- cpukit/libnetworking/netinet/raw_ip.c
+- cpukit/libnetworking/netinet/tcp_debug.c
+- cpukit/libnetworking/netinet/tcp_input.c
+- cpukit/libnetworking/netinet/tcp_output.c
+- cpukit/libnetworking/netinet/tcp_subr.c
+- cpukit/libnetworking/netinet/tcp_timer.c
+- cpukit/libnetworking/netinet/tcp_usrreq.c
+- cpukit/libnetworking/netinet/udp_usrreq.c
+- cpukit/libnetworking/net/ppp_tty.c
+- cpukit/libnetworking/net/radix.c
+- cpukit/libnetworking/net/raw_cb.c
+- cpukit/libnetworking/net/raw_usrreq.c
+- cpukit/libnetworking/net/route.c
+- cpukit/libnetworking/net/rtsock.c
+- cpukit/libnetworking/net/slcompress.c
+- cpukit/libnetworking/nfs/bootp_subr.c
+- cpukit/libnetworking/rtems/mkrootfs.c
+- cpukit/libnetworking/rtems/rtems_bootp.c
+- cpukit/libnetworking/rtems/rtems_bsdnet_malloc_starvation.c
+- cpukit/libnetworking/rtems/rtems_dhcp.c
+- cpukit/libnetworking/rtems/rtems_dhcp_failsafe.c
+- cpukit/libnetworking/rtems/rtems_glue.c
+- cpukit/libnetworking/rtems/rtems_malloc_mbuf.c
+- cpukit/libnetworking/rtems/rtems_mii_ioctl.c
+- cpukit/libnetworking/rtems/rtems_mii_ioctl_kern.c
+- cpukit/libnetworking/rtems/rtems_select.c
+- cpukit/libnetworking/rtems/rtems_showicmpstat.c
+- cpukit/libnetworking/rtems/rtems_showifstat.c
+- cpukit/libnetworking/rtems/rtems_showipstat.c
+- cpukit/libnetworking/rtems/rtems_showmbuf.c
+- cpukit/libnetworking/rtems/rtems_showroute.c
+- cpukit/libnetworking/rtems/rtems_showtcpstat.c
+- cpukit/libnetworking/rtems/rtems_showudpstat.c
+- cpukit/libnetworking/rtems/rtems_socketpair.c
+- cpukit/libnetworking/rtems/rtems_syscall_api.c
+- cpukit/libnetworking/rtems/rtems_syscall.c
+- cpukit/libnetworking/rtems/sghostname.c
+- cpukit/librpc/src/rpc/auth_none.c
+- cpukit/librpc/src/rpc/auth_unix.c
+- cpukit/librpc/src/rpc/authunix_prot.c
+- cpukit/librpc/src/rpc/bindresvport.c
+- cpukit/librpc/src/rpc/clnt_generic.c
+- cpukit/librpc/src/rpc/clnt_perror.c
+- cpukit/librpc/src/rpc/clnt_raw.c
+- cpukit/librpc/src/rpc/clnt_simple.c
+- cpukit/librpc/src/rpc/clnt_tcp.c
+- cpukit/librpc/src/rpc/clnt_udp.c
+- cpukit/librpc/src/rpc/get_myaddress.c
+- cpukit/librpc/src/rpc/getrpcent.c
+- cpukit/librpc/src/rpc/getrpcport.c
+- cpukit/librpc/src/rpc/netname.c
+- cpukit/librpc/src/rpc/netnamer.c
+- cpukit/librpc/src/rpc/pmap_clnt.c
+- cpukit/librpc/src/rpc/pmap_getmaps.c
+- cpukit/librpc/src/rpc/pmap_getport.c
+- cpukit/librpc/src/rpc/pmap_prot2.c
+- cpukit/librpc/src/rpc/pmap_prot.c
+- cpukit/librpc/src/rpc/pmap_rmt.c
+- cpukit/librpc/src/rpc/rpc_callmsg.c
+- cpukit/librpc/src/rpc/rpc_commondata.c
+- cpukit/librpc/src/rpc/rpcdname.c
+- cpukit/librpc/src/rpc/rpc_dtablesize.c
+- cpukit/librpc/src/rpc/rpc_prot.c
+- cpukit/librpc/src/rpc/rtems_portmapper.c
+- cpukit/librpc/src/rpc/rtems_rpc.c
+- cpukit/librpc/src/rpc/rtime.c
+- cpukit/librpc/src/rpc/svc_auth.c
+- cpukit/librpc/src/rpc/svc_auth_unix.c
+- cpukit/librpc/src/rpc/svc.c
+- cpukit/librpc/src/rpc/svc_raw.c
+- cpukit/librpc/src/rpc/svc_run.c
+- cpukit/librpc/src/rpc/svc_simple.c
+- cpukit/librpc/src/rpc/svc_tcp.c
+- cpukit/librpc/src/rpc/svc_udp.c
+- cpukit/librpc/src/xdr/xdr_array.c
+- cpukit/librpc/src/xdr/xdr.c
+- cpukit/librpc/src/xdr/xdr_float.c
+- cpukit/librpc/src/xdr/xdr_mem.c
+- cpukit/librpc/src/xdr/xdr_rec.c
+- cpukit/librpc/src/xdr/xdr_reference.c
+- cpukit/librpc/src/xdr/xdr_sizeof.c
+- cpukit/librpc/src/xdr/xdr_stdio.c
+type: build

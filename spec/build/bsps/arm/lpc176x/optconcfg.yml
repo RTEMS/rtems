@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant: []
+description: |
+  configuration for console (UART 0)
+enabled-by: true
+links: []
+name: LPC176X_CONFIG_CONSOLE
+type: build

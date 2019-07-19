@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/sparc/include/bsp/gnatcommon.h
+  - bsps/sparc/include/bsp/gr_leon4_n2x.h
+- destination: ${BSP_INCLUDEDIR}/drvmgr
+  source:
+  - bsps/sparc/include/drvmgr/leon2_amba_bus.h
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

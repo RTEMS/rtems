@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: mips
+bsp: jmr3904
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: jmr3904
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/mips/jmr3904/include/bsp.h
+  - bsps/mips/jmr3904/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/mips/jmr3904/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/mips/jmr3904/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: tstjmr3904
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/mips/jmr3904/btimer/btimer.c
+- bsps/mips/jmr3904/clock/clockdrv.c
+- bsps/mips/jmr3904/console/console-io.c
+- bsps/mips/jmr3904/irq/vectorisrs.c
+- bsps/mips/jmr3904/start/bspstart.c
+- bsps/mips/shared/irq/installisrentries.c
+- bsps/mips/shared/irq/interruptmask.c
+- bsps/mips/shared/irq/irq.c
+- bsps/mips/shared/irq/isr_entries.S
+- bsps/mips/shared/irq/vectorexceptions.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-polled.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

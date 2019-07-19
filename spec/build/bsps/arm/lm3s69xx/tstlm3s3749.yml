@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    capture: exclude
+    cdtest: exclude
+    fileio: exclude
+    fsdosfsformat01: exclude
+    fsrfsbitmap01: exclude
+    ftp01: exclude
+    iostream: exclude
+    loopback: exclude
+    mdosfsfserror: exclude
+    mdosfsfsrdwr: exclude
+    mghttpd01: exclude
+    monitor02: exclude
+    paranoia: exclude
+    pppd: exclude
+    record01: exclude
+    rtems: exclude
+    shell01: exclude
+    sptls02: exclude
+    syscall01: exclude
+    telnetd01: exclude
+    ttest01: exclude
+    utf8proc01: exclude
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links:
+- role: build-dependency
+  uid: ../../tstnorfs
+- role: build-dependency
+  uid: ../../tstsmallmem
+type: build

@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: ${__RTEMS_MAJOR__}
+- substitute: null
+- define-unquoted: __RTEMS_MAJOR__
+- set-value: ${__RTEMS_MINOR__}
+- substitute: null
+- define-unquoted: __RTEMS_MINOR__
+- set-value: ${__RTEMS_REVISION__}
+- substitute: null
+- define-unquoted: __RTEMS_REVISION__
+- set-value: ${__RTEMS_MAJOR__}.${__RTEMS_MINOR__}.${__RTEMS_REVISION__}
+- substitute: null
+- env-assign: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+name: RTEMS_VERSION
+type: build

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant: []
+description: |
+  Determines, whether RTEMS will try to use the secondary IDE interface.  Enable it, if: - you have a secondary IDE interface - and you have at least one disk attached to this interface - and you do want to access disks attached to this interface
+enabled-by: true
+links: []
+name: IDE_USE_SECONDARY_INTERFACE
+type: build

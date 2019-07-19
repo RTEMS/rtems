@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- assert-aligned: 1048576
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 1048576
+default-by-variant:
+- value: 4194304
+  variants:
+  - arm/xilinx_zynq_zc706
+description: ''
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: ZYNQ_RAM_ORIGIN
+type: build

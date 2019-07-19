@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/mghttpd
+  source:
+  - cpukit/include/mghttpd/mongoose.h
+install-path: ${BSP_LIBDIR}
+links: []
+source:
+- cpukit/mghttpd/mongoose.c
+target: mghttpd
+type: build

@@ -1,0 +1,18 @@
+active: true
+build-type: config-header
+derived: false
+enabled-by: []
+header: ''
+level: 1.0
+links:
+- string-option: null
+- integer-option: null
+normative: true
+order: 0
+ref: ''
+reviewed: null
+target: config-header.h
+guard: CONFIG_HEADER_H
+include-headers: []
+text: ''
+type: build

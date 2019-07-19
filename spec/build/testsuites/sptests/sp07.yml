@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/sptests/sp07/init.c
+- testsuites/sptests/sp07/task1.c
+- testsuites/sptests/sp07/task2.c
+- testsuites/sptests/sp07/task3.c
+- testsuites/sptests/sp07/task4.c
+- testsuites/sptests/sp07/taskexit.c
+- testsuites/sptests/sp07/tcreate.c
+- testsuites/sptests/sp07/tdelete.c
+- testsuites/sptests/sp07/trestart.c
+- testsuites/sptests/sp07/tstart.c
+stlib: []
+target: testsuites/sptests/sp07.exe
+type: build
+use-after: []
+use-before: []

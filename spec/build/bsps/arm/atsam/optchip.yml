@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- script: |
+    c = ("__SAMV71Q21__", 0x00200000, 0x00060000)
+    chips = {
+        "same70j19": ("__SAME70J19__", 0x00080000, 0x00040000),
+        "same70j20": ("__SAME70J20__", 0x00100000, 0x00060000),
+        "same70j21": ("__SAME70J21__", 0x00200000, 0x00060000),
+        "same70n19": ("__SAME70N19__", 0x00080000, 0x00040000),
+        "same70n20": ("__SAME70N20__", 0x00100000, 0x00060000),
+        "same70n21": ("__SAME70N21__", 0x00200000, 0x00060000),
+        "same70q19": ("__SAME70Q19__", 0x00080000, 0x00040000),
+        "same70q20": ("__SAME70Q20__", 0x00100000, 0x00060000),
+        "same70q21": ("__SAME70Q21__", 0x00200000, 0x00060000),
+        "sams70j19": ("__SAMS70J19__", 0x00080000, 0x00040000),
+        "sams70j20": ("__SAMS70J20__", 0x00100000, 0x00060000),
+        "sams70j21": ("__SAMS70J21__", 0x00200000, 0x00060000),
+        "sams70n19": ("__SAMS70N19__", 0x00080000, 0x00040000),
+        "sams70n20": ("__SAMS70N20__", 0x00100000, 0x00060000),
+        "sams70n21": ("__SAMS70N21__", 0x00200000, 0x00060000),
+        "sams70q19": ("__SAMS70Q19__", 0x00080000, 0x00040000),
+        "sams70q20": ("__SAMS70Q20__", 0x00100000, 0x00060000),
+        "sams70q21": ("__SAMS70Q21__", 0x00200000, 0x00060000),
+        "samv71j19": ("__SAMV71J19__", 0x00080000, 0x00040000),
+        "samv71j20": ("__SAMV71J20__", 0x00100000, 0x00060000),
+        "samv71j21": ("__SAMV71J21__", 0x00200000, 0x00060000),
+        "samv71n19": ("__SAMV71N19__", 0x00080000, 0x00040000),
+        "samv71n20": ("__SAMV71N20__", 0x00100000, 0x00060000),
+        "samv71n21": ("__SAMV71N21__", 0x00200000, 0x00060000),
+        "samv71q19": ("__SAMV71Q19__", 0x00080000, 0x00040000),
+        "samv71q20": ("__SAMV71Q20__", 0x00100000, 0x00060000),
+        "samv71q21": c,
+    }
+    if value:
+        try:
+            c = chips[value]
+        except:
+            conf.fatal("Unkown chip variant '{}'".format(value))
+    conf.define_cond(c[0], True)
+    conf.env["ATSAM_MEMORY_INTFLASH_SIZE"] = c[1]
+    conf.env["ATSAM_MEMORY_INTSRAM_SIZE"] = c[2]
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: samv71q21
+default-by-variant: []
+description: |
+  Chip variant
+enabled-by: true
+format: '{}'
+links: []
+name: ATSAM_CHIP
+type: build

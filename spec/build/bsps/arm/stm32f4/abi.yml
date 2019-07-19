@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -mthumb
+- -mcpu=cortex-m4
+default-by-variant:
+- value:
+  - -mthumb
+  - -mcpu=cortex-m3
+  variants:
+  - arm/stm32f105rc
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

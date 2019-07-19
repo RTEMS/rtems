@@ -1,0 +1,16 @@
+active: true
+arch: fake
+bsp: good
+build-type: bsp
+derived: true
+enabled-by: []
+family: good
+header: ''
+level: 1.0
+links: []
+normative: true
+order: 0
+ref: ''
+reviewed: null
+text: ''
+type: build

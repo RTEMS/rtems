@@ -1,0 +1,62 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- arm
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - cpukit/score/cpu/arm/include/libcpu/arm-cp15.h
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/arm/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/arm/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/arm/include/rtems/score/arm.h
+  - cpukit/score/cpu/arm/include/rtems/score/armv4.h
+  - cpukit/score/cpu/arm/include/rtems/score/armv7m.h
+  - cpukit/score/cpu/arm/include/rtems/score/cpu.h
+  - cpukit/score/cpu/arm/include/rtems/score/cpu_asm.h
+  - cpukit/score/cpu/arm/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/arm/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/arm/include/rtems/score/paravirt.h
+links: []
+source:
+- cpukit/score/cpu/arm/__aeabi_read_tp.c
+- cpukit/score/cpu/arm/arm-context-validate.S
+- cpukit/score/cpu/arm/arm-context-volatile-clobber.S
+- cpukit/score/cpu/arm/arm_exc_abort.S
+- cpukit/score/cpu/arm/arm-exception-default.c
+- cpukit/score/cpu/arm/arm-exception-frame-print.c
+- cpukit/score/cpu/arm/arm_exc_interrupt.S
+- cpukit/score/cpu/arm/armv4-exception-default.S
+- cpukit/score/cpu/arm/armv4-sync-synchronize.c
+- cpukit/score/cpu/arm/armv7m-context-initialize.c
+- cpukit/score/cpu/arm/armv7m-context-restore.c
+- cpukit/score/cpu/arm/armv7m-context-switch.c
+- cpukit/score/cpu/arm/armv7m-exception-default.c
+- cpukit/score/cpu/arm/armv7m-exception-handler-get.c
+- cpukit/score/cpu/arm/armv7m-exception-handler-set.c
+- cpukit/score/cpu/arm/armv7m-exception-priority-get.c
+- cpukit/score/cpu/arm/armv7m-exception-priority-handler.c
+- cpukit/score/cpu/arm/armv7m-exception-priority-set.c
+- cpukit/score/cpu/arm/armv7m-initialize.c
+- cpukit/score/cpu/arm/armv7m-isr-dispatch.c
+- cpukit/score/cpu/arm/armv7m-isr-enter-leave.c
+- cpukit/score/cpu/arm/armv7m-isr-level-get.c
+- cpukit/score/cpu/arm/armv7m-isr-level-set.c
+- cpukit/score/cpu/arm/armv7m-isr-vector-install.c
+- cpukit/score/cpu/arm/armv7m-multitasking-start-stop.c
+- cpukit/score/cpu/arm/armv7-thread-idle.c
+- cpukit/score/cpu/arm/cpu_asm.S
+- cpukit/score/cpu/arm/cpu.c
+- cpukit/score/cpu/arm/__tls_get_addr.c
+type: build

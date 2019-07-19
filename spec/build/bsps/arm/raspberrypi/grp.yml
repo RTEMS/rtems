@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: optenhyp
+- role: build-dependency
+  uid: opti2ciomode
+- role: build-dependency
+  uid: ../optmmusz
+- role: build-dependency
+  uid: optnocachelen
+- role: build-dependency
+  uid: optramlen
+- role: build-dependency
+  uid: optresetvec
+- role: build-dependency
+  uid: optrpi2
+- role: build-dependency
+  uid: optspiiomode
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: ../../bspopts
+type: build
+use-after: []
+use-before: []

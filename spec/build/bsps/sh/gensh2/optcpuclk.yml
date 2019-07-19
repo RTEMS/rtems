@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 20000000
+default-by-variant: []
+description: |
+  cpu clock rate in HZ
+enabled-by: true
+format: '{}'
+links: []
+name: CPU_CLOCK_RATE_HZ
+type: build

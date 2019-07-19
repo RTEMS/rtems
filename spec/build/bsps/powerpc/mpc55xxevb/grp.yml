@@ -1,0 +1,112 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../linkcmds
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: ofmpllptmfd
+- role: build-dependency
+  uid: optbootflg
+- role: build-dependency
+  uid: optcachewritethru
+- role: build-dependency
+  uid: optchipfam
+- role: build-dependency
+  uid: optchiptype
+- role: build-dependency
+  uid: optclkemios
+- role: build-dependency
+  uid: optclkpit
+- role: build-dependency
+  uid: optconbaud
+- role: build-dependency
+  uid: optconminor
+- role: build-dependency
+  uid: optearlystksz
+- role: build-dependency
+  uid: opteepromname
+- role: build-dependency
+  uid: opteeprompath
+- role: build-dependency
+  uid: optemiosprescal
+- role: build-dependency
+  uid: optenstartpro
+- role: build-dependency
+  uid: optesciirq
+- role: build-dependency
+  uid: optexcbooke
+- role: build-dependency
+  uid: optexcfixdhdlr
+- role: build-dependency
+  uid: optfmpllesyncr1
+- role: build-dependency
+  uid: optfmpllprediv
+- role: build-dependency
+  uid: optgwlcfm
+- role: build-dependency
+  uid: optirqtblsz
+- role: build-dependency
+  uid: optlowinit
+- role: build-dependency
+  uid: optmpc5566evb
+- role: build-dependency
+  uid: optmpc5674fevb
+- role: build-dependency
+  uid: optnullprot
+- role: build-dependency
+  uid: optphycorempc5554
+- role: build-dependency
+  uid: optrefclk
+- role: build-dependency
+  uid: optsmc91111
+- role: build-dependency
+  uid: optsmc9111enaddr
+- role: build-dependency
+  uid: optsmc9218ibige
+- role: build-dependency
+  uid: optsmc9218iled
+- role: build-dependency
+  uid: optsmc9218ipinirq
+- role: build-dependency
+  uid: optsmc9218ipinrst
+- role: build-dependency
+  uid: optsmc9218irxchn
+- role: build-dependency
+  uid: optsmc9218itxchn
+- role: build-dependency
+  uid: optsysclk
+- role: build-dependency
+  uid: optsysclkdiv
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: ../objexc
+- role: build-dependency
+  uid: ../../bspopts
+type: build
+use-after: []
+use-before: []

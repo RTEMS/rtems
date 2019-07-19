@@ -1,0 +1,91 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/include/ictrl.h
+  - bsps/powerpc/include/mpc5xx.h
+  - bsps/powerpc/include/mpc8260.h
+  - bsps/powerpc/include/mpc8xx.h
+  - bsps/powerpc/include/nvram.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/include/bsp/VME.h
+  - bsps/powerpc/include/bsp/VMEDMA.h
+  - bsps/powerpc/include/bsp/bspVmeDmaList.h
+  - bsps/powerpc/include/bsp/consoleIo.h
+  - bsps/powerpc/include/bsp/flashPgm.h
+  - bsps/powerpc/include/bsp/flashPgmPvt.h
+  - bsps/powerpc/include/bsp/irq_supp.h
+  - bsps/powerpc/include/bsp/linker-symbols.h
+  - bsps/powerpc/include/bsp/motorola.h
+  - bsps/powerpc/include/bsp/openpic.h
+  - bsps/powerpc/include/bsp/pci.h
+  - bsps/powerpc/include/bsp/pnp.h
+  - bsps/powerpc/include/bsp/residual.h
+  - bsps/powerpc/include/bsp/start.h
+  - bsps/powerpc/include/bsp/tictac.h
+  - bsps/powerpc/include/bsp/tsec.h
+  - bsps/powerpc/include/bsp/u-boot-board-info.h
+  - bsps/powerpc/include/bsp/uart.h
+  - bsps/powerpc/include/bsp/vectors.h
+  - bsps/powerpc/include/bsp/vmeTsi148.h
+  - bsps/powerpc/include/bsp/vmeTsi148DMA.h
+  - bsps/powerpc/include/bsp/vmeUniverse.h
+  - bsps/powerpc/include/bsp/vmeUniverseDMA.h
+  - bsps/powerpc/include/bsp/vme_am_defs.h
+  - bsps/powerpc/include/bsp/vpd.h
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - bsps/powerpc/include/libcpu/bat.h
+  - bsps/powerpc/include/libcpu/byteorder.h
+  - bsps/powerpc/include/libcpu/c_clock.h
+  - bsps/powerpc/include/libcpu/cpuIdent.h
+  - bsps/powerpc/include/libcpu/e500_mmu.h
+  - bsps/powerpc/include/libcpu/io.h
+  - bsps/powerpc/include/libcpu/irq.h
+  - bsps/powerpc/include/libcpu/mmu.h
+  - bsps/powerpc/include/libcpu/pgtable.h
+  - bsps/powerpc/include/libcpu/powerpc-utility.h
+  - bsps/powerpc/include/libcpu/pte121.h
+  - bsps/powerpc/include/libcpu/raw_exception.h
+  - bsps/powerpc/include/libcpu/spr.h
+  - bsps/powerpc/include/libcpu/stackTrace.h
+  - bsps/powerpc/include/libcpu/vectors.h
+- destination: ${BSP_INCLUDEDIR}/mpc5xx
+  source:
+  - bsps/powerpc/include/mpc5xx/console.h
+- destination: ${BSP_INCLUDEDIR}/mpc8260
+  source:
+  - bsps/powerpc/include/mpc8260/console.h
+  - bsps/powerpc/include/mpc8260/cpm.h
+  - bsps/powerpc/include/mpc8260/mmu.h
+- destination: ${BSP_INCLUDEDIR}/mpc83xx
+  source:
+  - bsps/powerpc/include/mpc83xx/gtm.h
+  - bsps/powerpc/include/mpc83xx/mpc83xx.h
+  - bsps/powerpc/include/mpc83xx/mpc83xx_i2cdrv.h
+  - bsps/powerpc/include/mpc83xx/mpc83xx_spidrv.h
+- destination: ${BSP_INCLUDEDIR}/mpc8xx
+  source:
+  - bsps/powerpc/include/mpc8xx/console.h
+  - bsps/powerpc/include/mpc8xx/cpm.h
+  - bsps/powerpc/include/mpc8xx/mmu.h
+- destination: ${BSP_INCLUDEDIR}/ppc4xx
+  source:
+  - bsps/powerpc/include/ppc4xx/ppc405ex.h
+  - bsps/powerpc/include/ppc4xx/ppc405gp.h
+- destination: ${BSP_INCLUDEDIR}/rtems/powerpc
+  source:
+  - bsps/powerpc/include/rtems/powerpc/cache.h
+  - bsps/powerpc/include/rtems/powerpc/debugmod.h
+  - bsps/powerpc/include/rtems/powerpc/powerpc.h
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

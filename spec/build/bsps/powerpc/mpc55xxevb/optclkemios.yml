@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 23
+default-by-variant:
+- value: null
+  variants:
+  - powerpc/mpc5643l.*
+- value: null
+  variants:
+  - powerpc/mpc5668g.*
+- value: 31
+  variants:
+  - powerpc/mpc5674f.*
+description: |
+  selects the eMIOS channel for the RTEMS system tick (the default is the last channel)
+enabled-by: true
+format: '{}'
+links: []
+name: MPC55XX_CLOCK_EMIOS_CHANNEL
+type: build

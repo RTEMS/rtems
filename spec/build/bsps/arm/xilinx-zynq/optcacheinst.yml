@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant:
+- value: false
+  variants:
+  - arm/.*qemu
+description: |
+  enable instruction cache
+enabled-by: true
+links: []
+name: BSP_INSTRUCTION_CACHE_ENABLED
+type: build

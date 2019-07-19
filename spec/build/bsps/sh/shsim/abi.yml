@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -m4
+- -ml
+default-by-variant:
+- value:
+  - -m2e
+  - -ml
+  variants:
+  - sh/simsh2e
+- value:
+  - -m2
+  variants:
+  - sh/simsh2
+- value:
+  - -m1
+  variants:
+  - sh/simsh1
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

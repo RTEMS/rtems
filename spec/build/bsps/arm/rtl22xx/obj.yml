@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/rtl22xx/include/bsp.h
+  - bsps/arm/rtl22xx/include/lpc22xx.h
+  - bsps/arm/rtl22xx/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/rtl22xx/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/rtl22xx/start/linkcmds
+links: []
+source:
+- bsps/arm/rtl22xx/btimer/btimer.c
+- bsps/arm/rtl22xx/clock/clockdrv.c
+- bsps/arm/rtl22xx/console/uart.c
+- bsps/arm/rtl22xx/irq/irq.c
+- bsps/arm/rtl22xx/start/bspreset.c
+- bsps/arm/rtl22xx/start/bspstart.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

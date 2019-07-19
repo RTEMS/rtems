@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: powerpc
+bsp: mpc8260ads
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: mpc8260ads
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/mpc8260ads/include/bsp.h
+  - bsps/powerpc/mpc8260ads/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/mpc8260ads/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/mpc8260ads/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: optconminor
+- role: build-dependency
+  uid: optdisphandstat
+- role: build-dependency
+  uid: optprintkminor
+- role: build-dependency
+  uid: optuartsiomode
+- role: build-dependency
+  uid: optuartsterm
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: ../objexc
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/powerpc/mpc8260ads/console/console.c
+- bsps/powerpc/mpc8260ads/dev/console-generic.c
+- bsps/powerpc/mpc8260ads/irq/irq.c
+- bsps/powerpc/mpc8260ads/start/brg.c
+- bsps/powerpc/mpc8260ads/start/bspstart.c
+- bsps/powerpc/mpc8260ads/start/cp.c
+- bsps/powerpc/mpc8260ads/start/cpuinit.c
+- bsps/powerpc/mpc8260ads/start/dpram.c
+- bsps/powerpc/mpc8260ads/start/mmu.c
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/clock/clock.c
+- bsps/powerpc/shared/start/bspidle.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

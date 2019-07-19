@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- sparc
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/pci
+  source:
+  - cpukit/include/pci/access.h
+  - cpukit/include/pci/cfg.h
+  - cpukit/include/pci/cfg_auto.h
+  - cpukit/include/pci/cfg_peripheral.h
+  - cpukit/include/pci/cfg_read.h
+  - cpukit/include/pci/cfg_static.h
+  - cpukit/include/pci/ids.h
+  - cpukit/include/pci/ids_extra.h
+  - cpukit/include/pci/irq.h
+  - cpukit/include/pci/pcireg.h
+links: []
+source:
+- cpukit/libmisc/shell/main_pci.c
+- cpukit/libpci/pci_access.c
+- cpukit/libpci/pci_access_func.c
+- cpukit/libpci/pci_access_io.c
+- cpukit/libpci/pci_access_mem_be.c
+- cpukit/libpci/pci_access_mem.c
+- cpukit/libpci/pci_access_mem_le.c
+- cpukit/libpci/pci_bus.c
+- cpukit/libpci/pci_cfg_auto.c
+- cpukit/libpci/pci_cfg.c
+- cpukit/libpci/pci_cfg_peripheral.c
+- cpukit/libpci/pci_cfg_print_code.c
+- cpukit/libpci/pci_cfg_read.c
+- cpukit/libpci/pci_cfg_static.c
+- cpukit/libpci/pci_find.c
+- cpukit/libpci/pci_find_dev.c
+- cpukit/libpci/pci_for_each.c
+- cpukit/libpci/pci_for_each_child.c
+- cpukit/libpci/pci_for_each_dev.c
+- cpukit/libpci/pci_get_dev.c
+- cpukit/libpci/pci_irq.c
+- cpukit/libpci/pci_print.c
+type: build

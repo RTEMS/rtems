@@ -1,0 +1,75 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/qoriq/include/bsp.h
+  - bsps/powerpc/qoriq/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/asm
+  source:
+  - bsps/powerpc/qoriq/include/asm/epapr_hcalls.h
+  - bsps/powerpc/qoriq/include/asm/fsl_hcalls.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/qoriq/include/bsp/intercom.h
+  - bsps/powerpc/qoriq/include/bsp/irq.h
+  - bsps/powerpc/qoriq/include/bsp/mmu.h
+  - bsps/powerpc/qoriq/include/bsp/qoriq.h
+  - bsps/powerpc/qoriq/include/bsp/tsec-config.h
+  - bsps/powerpc/qoriq/include/bsp/uart-bridge.h
+- destination: ${BSP_INCLUDEDIR}/uapi/asm
+  source:
+  - bsps/powerpc/qoriq/include/uapi/asm/epapr_hcalls.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/qoriq/start/linkcmds.qoriq_core_0
+  - bsps/powerpc/qoriq/start/linkcmds.qoriq_core_1
+  - bsps/powerpc/qoriq/start/linkcmds.qoriq_e500
+  - bsps/powerpc/qoriq/start/linkcmds.qoriq_e6500_32
+  - bsps/powerpc/qoriq/start/linkcmds.qoriq_e6500_64
+  - bsps/powerpc/shared/start/linkcmds.base
+links: []
+source:
+- bsps/powerpc/qoriq/btimer/btimer.c
+- bsps/powerpc/qoriq/clock/clock-config.c
+- bsps/powerpc/qoriq/console/console-config.c
+- bsps/powerpc/qoriq/console/uart-bridge-master.c
+- bsps/powerpc/qoriq/console/uart-bridge-slave.c
+- bsps/powerpc/qoriq/irq/irq.c
+- bsps/powerpc/qoriq/mpci/intercom-mpci.c
+- bsps/powerpc/qoriq/mpci/intercom.c
+- bsps/powerpc/qoriq/mpci/lock.S
+- bsps/powerpc/qoriq/rtc/rtc-config.c
+- bsps/powerpc/qoriq/start/bspreset.c
+- bsps/powerpc/qoriq/start/bsprestart.c
+- bsps/powerpc/qoriq/start/bspstart.c
+- bsps/powerpc/qoriq/start/epapr_hcalls.S
+- bsps/powerpc/qoriq/start/l1cache.S
+- bsps/powerpc/qoriq/start/l2cache.S
+- bsps/powerpc/qoriq/start/mmu-config.c
+- bsps/powerpc/qoriq/start/mmu-tlb1.S
+- bsps/powerpc/qoriq/start/mmu.c
+- bsps/powerpc/qoriq/start/portal.c
+- bsps/powerpc/qoriq/start/restart.S
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/exceptions/ppc-exc-handler-table.c
+- bsps/powerpc/shared/mmu/e500-mmu.c
+- bsps/powerpc/shared/start/bsp-start-zero.S
+- bsps/powerpc/shared/start/bspidle.c
+- bsps/powerpc/shared/start/tictac.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bsp-fdt.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/sbrk.c
+type: build

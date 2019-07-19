@@ -1,0 +1,71 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: powerpc
+bsp: virtex5
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: virtex5
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/virtex5/include/bsp.h
+  - bsps/powerpc/virtex5/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/virtex5/include/bsp/irq.h
+  - bsps/powerpc/virtex5/include/bsp/mmu.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/virtex5/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirqdflt
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: ../objexc
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: optppccachedata
+- role: build-dependency
+  uid: optsprg
+- role: build-dependency
+  uid: optvecbase
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/clock/clock-ppc-dec.c
+- bsps/powerpc/shared/clock/p_clock.c
+- bsps/powerpc/shared/start/memcpy.c
+- bsps/powerpc/shared/start/zerobss.c
+- bsps/powerpc/virtex5/irq/irq_init.c
+- bsps/powerpc/virtex5/start/bspclean.c
+- bsps/powerpc/virtex5/start/bspstart.c
+- bsps/powerpc/virtex5/start/dummy_console.c
+- bsps/powerpc/virtex5/start/mmu.c
+- bsps/powerpc/virtex5/start/start.S
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/printk-dummy.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

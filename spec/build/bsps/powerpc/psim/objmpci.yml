@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_MULTIPROCESSING
+includes: []
+install: []
+links: []
+source:
+- bsps/powerpc/psim/mpci/addrconv.c
+- bsps/powerpc/psim/mpci/getcfg.c
+- bsps/powerpc/psim/mpci/lock.c
+- bsps/powerpc/psim/mpci/mpisr.c
+type: build

@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/stm32f4/include/bsp.h
+  - bsps/arm/stm32f4/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/stm32f4/include/bsp/i2c.h
+  - bsps/arm/stm32f4/include/bsp/io.h
+  - bsps/arm/stm32f4/include/bsp/irq.h
+  - bsps/arm/stm32f4/include/bsp/rcc.h
+  - bsps/arm/stm32f4/include/bsp/stm32_i2c.h
+  - bsps/arm/stm32f4/include/bsp/stm32_usart.h
+  - bsps/arm/stm32f4/include/bsp/stm32f10xxx_exti.h
+  - bsps/arm/stm32f4/include/bsp/stm32f10xxx_gpio.h
+  - bsps/arm/stm32f4/include/bsp/stm32f10xxx_rcc.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_adc.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_exti.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_flash.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_gpio.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_otgfs.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_pwr.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_rcc.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_syscfg.h
+  - bsps/arm/stm32f4/include/bsp/stm32f4xxxx_tim.h
+  - bsps/arm/stm32f4/include/bsp/usart.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/stm32f4/start/linkcmds.stm32f105rc
+  - bsps/arm/stm32f4/start/linkcmds.stm32f4
+links: []
+source:
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/stm32f4/console/console-config.c
+- bsps/arm/stm32f4/console/usart.c
+- bsps/arm/stm32f4/i2c/i2c-config.c
+- bsps/arm/stm32f4/i2c/i2c.c
+- bsps/arm/stm32f4/start/bspreset.c
+- bsps/arm/stm32f4/start/bspstart.c
+- bsps/arm/stm32f4/start/bspstarthook.c
+- bsps/arm/stm32f4/start/io.c
+- bsps/arm/stm32f4/start/rcc.c
+- bsps/arm/stm32f4/start/start-config-io.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

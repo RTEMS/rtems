@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/raspberrypi/include/bsp.h
+  - bsps/arm/raspberrypi/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/raspberrypi/include/bsp/fbcons.h
+  - bsps/arm/raspberrypi/include/bsp/i2c.h
+  - bsps/arm/raspberrypi/include/bsp/irq.h
+  - bsps/arm/raspberrypi/include/bsp/mailbox.h
+  - bsps/arm/raspberrypi/include/bsp/mmu.h
+  - bsps/arm/raspberrypi/include/bsp/raspberrypi.h
+  - bsps/arm/raspberrypi/include/bsp/rpi-fb.h
+  - bsps/arm/raspberrypi/include/bsp/rpi-gpio.h
+  - bsps/arm/raspberrypi/include/bsp/spi.h
+  - bsps/arm/raspberrypi/include/bsp/usart.h
+  - bsps/arm/raspberrypi/include/bsp/vc.h
+links: []
+source:
+- bsps/arm/raspberrypi/clock/clockdrv.c
+- bsps/arm/raspberrypi/console/console-config.c
+- bsps/arm/raspberrypi/console/fb.c
+- bsps/arm/raspberrypi/console/fbcons.c
+- bsps/arm/raspberrypi/console/outch.c
+- bsps/arm/raspberrypi/gpio/rpi-gpio.c
+- bsps/arm/raspberrypi/i2c/i2c.c
+- bsps/arm/raspberrypi/irq/irq.c
+- bsps/arm/raspberrypi/spi/spi.c
+- bsps/arm/raspberrypi/start/bspreset.c
+- bsps/arm/raspberrypi/start/bspstart.c
+- bsps/arm/raspberrypi/start/bspstarthooks.c
+- bsps/arm/raspberrypi/start/cmdline.c
+- bsps/arm/raspberrypi/start/mailbox.c
+- bsps/arm/raspberrypi/start/timer.c
+- bsps/arm/raspberrypi/start/vc.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/serial/arm-pl011.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/gpio/gpio-support.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bsp-fdt.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

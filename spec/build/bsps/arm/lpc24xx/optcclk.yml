@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 72000000
+default-by-variant:
+- value: 96000000
+  variants:
+  - arm/lpc17xx_ea.*
+- value: 96000000
+  variants:
+  - arm/lpc40xx_ea.*
+- value: 58982400
+  variants:
+  - arm/lpc23.*
+- value: 51612800
+  variants:
+  - arm/lpc24xx_plx800_.*
+description: |
+  CPU clock in Hz
+enabled-by: true
+format: '{}'
+links: []
+name: LPC24XX_CCLK
+type: build

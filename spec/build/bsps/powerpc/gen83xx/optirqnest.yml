@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant:
+- value: false
+  variants:
+  - powerpc/mpc8313erdb
+- value: false
+  variants:
+  - powerpc/br_uid
+description: |
+  enable interrupt nesting
+enabled-by: true
+links: []
+name: GEN83XX_ENABLE_INTERRUPT_NESTING
+type: build

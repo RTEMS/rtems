@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: ${ARCH}-rtems${__RTEMS_MAJOR__}-gnatmake
+- substitute: null
+- find-program: null
+- env-assign: GNATMAKE
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

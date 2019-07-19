@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+do-build: |
+  path = "testsuites/libtests/tar02/"
+  tar = "testsuites/libtests/tar01/tar01.tar"
+  tar_c, tar_h = self.bin2c(bld, tar, target=path + "tar02-tar")
+  objs = []
+  objs.append(self.cc(bld, bic, tar_c))
+  objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_TAR02_CPPFLAGS))
+  objs.append(self.cc(bld, bic, "testsuites/psxtests/psxfile01/test_cat.c", target=path + "test_cat.o"))
+  self.link_cc(bld, bic, objs, "testsuites/libtests/tar02.exe")
+do-configure: null
+enabled-by:
+- not: TEST_TAR02_EXCLUDE
+includes:
+- testsuites/libtests/tar02
+ldflags: []
+links: []
+prepare-build: null
+prepare-configure: null
+stlib: []
+type: build
+use-after:
+- z
+use-before: []

@@ -1,0 +1,84 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: realview_pbx_a9_qemu
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: realview-pbx-a9
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/realview-pbx-a9/include/bsp.h
+  - bsps/arm/realview-pbx-a9/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/realview-pbx-a9/include/bsp/console.h
+  - bsps/arm/realview-pbx-a9/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/realview-pbx-a9/start/linkcmds.realview_pbx_a9_qemu
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: opta9periphclk
+- role: build-dependency
+  uid: optcachedata
+- role: build-dependency
+  uid: optcacheinst
+- role: build-dependency
+  uid: optclkbootcpu
+- role: build-dependency
+  uid: optclkfastidle
+- role: build-dependency
+  uid: optmmusmallpages
+- role: build-dependency
+  uid: optresetvec
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../linkcmds
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto0
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/realview-pbx-a9/console/console-config.c
+- bsps/arm/realview-pbx-a9/console/console-polled.c
+- bsps/arm/realview-pbx-a9/start/bspreset.c
+- bsps/arm/realview-pbx-a9/start/bspstart.c
+- bsps/arm/realview-pbx-a9/start/bspstarthooks.c
+- bsps/arm/realview-pbx-a9/start/fb-config.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
+- bsps/arm/shared/clock/clock-a9mpcore.c
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/fb/arm-pl111.c
+- bsps/arm/shared/irq/irq-gic.c
+- bsps/arm/shared/serial/arm-pl011.c
+- bsps/arm/shared/serial/arm-pl050.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/dev/serial/getserialmouseps2.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

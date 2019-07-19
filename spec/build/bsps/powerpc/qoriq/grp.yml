@@ -1,0 +1,118 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../linkcmds
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../optconsolebaud
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: ../objexc
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: optbucsr
+- role: build-dependency
+  uid: optbusclkdiv
+- role: build-dependency
+  uid: optcachealign
+- role: build-dependency
+  uid: optcacheblktouch
+- role: build-dependency
+  uid: optcachedatal1sz
+- role: build-dependency
+  uid: optcachedatal2sz
+- role: build-dependency
+  uid: optcacheinstl1sz
+- role: build-dependency
+  uid: optcacheinstl2sz
+- role: build-dependency
+  uid: optchipnum
+- role: build-dependency
+  uid: optchipser
+- role: build-dependency
+  uid: optclktmctr
+- role: build-dependency
+  uid: optclktmr
+- role: build-dependency
+  uid: optcpucnt
+- role: build-dependency
+  uid: optetsec1phy
+- role: build-dependency
+  uid: optetsec2phy
+- role: build-dependency
+  uid: optetsec3phy
+- role: build-dependency
+  uid: optexcbooke
+- role: build-dependency
+  uid: optexcfixdhdlr
+- role: build-dependency
+  uid: optfdtmxsz
+- role: build-dependency
+  uid: optfdtro
+- role: build-dependency
+  uid: opthid0
+- role: build-dependency
+  uid: opthyp
+- role: build-dependency
+  uid: opthypguest
+- role: build-dependency
+  uid: opticombegin
+- role: build-dependency
+  uid: opticomsz
+- role: build-dependency
+  uid: optmas7
+- role: build-dependency
+  uid: optmsr
+- role: build-dependency
+  uid: optspefscr
+- role: build-dependency
+  uid: optthrdcnt
+- role: build-dependency
+  uid: opttlb1cnt
+- role: build-dependency
+  uid: optuart0en
+- role: build-dependency
+  uid: optuart1en
+- role: build-dependency
+  uid: optuartbrg0en
+- role: build-dependency
+  uid: optuartbrg1en
+- role: build-dependency
+  uid: optuartbrgmas
+- role: build-dependency
+  uid: optuartbrgpri
+- role: build-dependency
+  uid: optuartbrgslv
+- role: build-dependency
+  uid: optuartirq
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../bspopts
+type: build
+use-after: []
+use-before: []

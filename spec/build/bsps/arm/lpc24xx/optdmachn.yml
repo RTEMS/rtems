@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 2
+default-by-variant:
+- value: 8
+  variants:
+  - arm/lpc17.*
+- value: 8
+  variants:
+  - arm/lpc40.*
+description: |
+  DMA channel count
+enabled-by: true
+format: '{}'
+links: []
+name: LPC_DMA_CHANNEL_COUNT
+type: build

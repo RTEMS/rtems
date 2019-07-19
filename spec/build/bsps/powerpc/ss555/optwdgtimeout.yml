@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 65535
+default-by-variant: []
+description: |
+  Define to the desired timeout (in steps of 1/20 msec) to enable the watchdog.  Default is to disable the watchdog entirely.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: WATCHDOG_TIMEOUT
+type: build

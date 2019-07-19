@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- INSTALL_LEGACY_MAKEFILES
+includes: []
+install:
+- destination: ${PREFIX}/share/rtems${__RTEMS_MAJOR__}/make
+  source:
+  - make/lib.cfg
+  - make/host.cfg
+  - make/directory.cfg
+  - make/README
+- destination: ${PREFIX}/share/rtems${__RTEMS_MAJOR__}/make/compilers
+  source:
+  - make/compilers/gcc-target-default.cfg
+- destination: ${PREFIX}/share/rtems${__RTEMS_MAJOR__}/make/Templates
+  source:
+  - make/Templates/Makefile.dir
+  - make/Templates/Makefile.lib
+  - make/Templates/Makefile.leaf
+- destination: ${PREFIX}/make
+  source:
+  - make/main.cfg
+  - make/leaf.cfg
+- destination: ${PREFIX}/make/custom
+  source:
+  - make/custom/default.cfg
+ldflags: []
+links:
+- role: build-dependency
+  uid: makebsp
+- role: build-dependency
+  uid: makecustom
+- role: build-dependency
+  uid: makeinc
+- role: build-dependency
+  uid: maketarget
+- role: build-dependency
+  uid: optmake
+type: build
+use-after: []
+use-before: []

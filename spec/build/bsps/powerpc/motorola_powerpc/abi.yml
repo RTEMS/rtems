@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -mcpu=603e
+default-by-variant:
+- value:
+  - -mcpu=7400
+  - -mmultiple
+  - -mstring
+  - -mstrict-align
+  variants:
+  - powerpc/qemuprep-altivec
+- value:
+  - -mcpu=powerpc
+  - -mmultiple
+  - -mstring
+  - -mstrict-align
+  variants:
+  - powerpc/qemuprep
+- value:
+  - -mcpu=604
+  - -mmultiple
+  - -mstring
+  - -mstrict-align
+  - -meabi
+  variants:
+  - powerpc/mvme2307
+- value:
+  - -mcpu=750
+  variants:
+  - powerpc/mcp750
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

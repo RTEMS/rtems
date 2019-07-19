@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_POSIX_API
+includes: []
+install: []
+links: []
+source:
+- cpukit/posix/src/aio_cancel.c
+- cpukit/posix/src/aio_error.c
+- cpukit/posix/src/aio_fsync.c
+- cpukit/posix/src/aio_misc.c
+- cpukit/posix/src/aio_read.c
+- cpukit/posix/src/aio_return.c
+- cpukit/posix/src/aio_write.c
+- cpukit/posix/src/alarm.c
+- cpukit/posix/src/getitimer.c
+- cpukit/posix/src/kill.c
+- cpukit/posix/src/killinfo.c
+- cpukit/posix/src/kill_r.c
+- cpukit/posix/src/mqueuenotify.c
+- cpukit/posix/src/pause.c
+- cpukit/posix/src/psignal.c
+- cpukit/posix/src/psignalclearprocesssignals.c
+- cpukit/posix/src/psignalclearsignals.c
+- cpukit/posix/src/psignalsetprocesssignals.c
+- cpukit/posix/src/psignalunblockthread.c
+- cpukit/posix/src/psxpriorityisvalid.c
+- cpukit/posix/src/psxtimercreate.c
+- cpukit/posix/src/psxtimerdelete.c
+- cpukit/posix/src/pthreadkill.c
+- cpukit/posix/src/pthreadsigmask.c
+- cpukit/posix/src/ptimer.c
+- cpukit/posix/src/setitimer.c
+- cpukit/posix/src/sigaction.c
+- cpukit/posix/src/signal_2.c
+- cpukit/posix/src/sigpending.c
+- cpukit/posix/src/sigqueue.c
+- cpukit/posix/src/sigsuspend.c
+- cpukit/posix/src/sigtimedwait.c
+- cpukit/posix/src/sigwait.c
+- cpukit/posix/src/sigwaitinfo.c
+- cpukit/posix/src/timergetoverrun.c
+- cpukit/posix/src/timergettime.c
+- cpukit/posix/src/timersettime.c
+- cpukit/posix/src/ualarm.c
+type: build

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant:
+- value: true
+  variants:
+  - m68k/COBRA5475
+description: |
+  If defined, we will not boot from RESET, but from Freescale DBug monitor.
+enabled-by: true
+links: []
+name: HAS_DBUG
+type: build

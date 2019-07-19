@@ -1,0 +1,67 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-header
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+guard: _RTEMS_SCORE_CPUOPTS_H
+include-headers: []
+install-path: ${BSP_INCLUDEDIR}/rtems/score
+links:
+- role: build-dependency
+  uid: optvermaj
+- role: build-dependency
+  uid: optvermin
+- role: build-dependency
+  uid: optverrev
+- role: build-dependency
+  uid: optgcc
+- role: build-dependency
+  uid: optarchbits
+- role: build-dependency
+  uid: optclang
+- role: build-dependency
+  uid: optarflags
+- role: build-dependency
+  uid: optwarn
+- role: build-dependency
+  uid: optwarncc
+- role: build-dependency
+  uid: optwarncxx
+- role: build-dependency
+  uid: optincludes
+- role: build-dependency
+  uid: optinstall
+- role: build-dependency
+  uid: optada
+- role: build-dependency
+  uid: optdebug
+- role: build-dependency
+  uid: optdrvmgr
+- role: build-dependency
+  uid: optmpci
+- role: build-dependency
+  uid: optnet
+- role: build-dependency
+  uid: optnewlib
+- role: build-dependency
+  uid: optparavirt
+- role: build-dependency
+  uid: optposix
+- role: build-dependency
+  uid: optsmp
+- role: build-dependency
+  uid: optlibdl
+- role: build-dependency
+  uid: optszblkcnt
+- role: build-dependency
+  uid: optszblksize
+- role: build-dependency
+  uid: optszmode
+- role: build-dependency
+  uid: optszoff
+- role: build-dependency
+  uid: optsztime
+- role: build-dependency
+  uid: optversion
+target: cpukit/include/rtems/score/cpuopts.h
+type: build

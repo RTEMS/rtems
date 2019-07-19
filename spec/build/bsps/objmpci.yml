@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_MULTIPROCESSING
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/include/mpci.h
+  - bsps/include/shm_driver.h
+links: []
+source:
+- bsps/shared/shmdr/shmdr-addlq.c
+- bsps/shared/shmdr/shmdr-cnvpkt.c
+- bsps/shared/shmdr/shmdr-dump.c
+- bsps/shared/shmdr/shmdr-fatal.c
+- bsps/shared/shmdr/shmdr-getlq.c
+- bsps/shared/shmdr/shmdr-getpkt.c
+- bsps/shared/shmdr/shmdr-init.c
+- bsps/shared/shmdr/shmdr-initlq.c
+- bsps/shared/shmdr/shmdr-intr.c
+- bsps/shared/shmdr/shmdr-mpisr.c
+- bsps/shared/shmdr/shmdr-poll.c
+- bsps/shared/shmdr/shmdr-receive.c
+- bsps/shared/shmdr/shmdr-retpkt.c
+- bsps/shared/shmdr/shmdr-send.c
+type: build

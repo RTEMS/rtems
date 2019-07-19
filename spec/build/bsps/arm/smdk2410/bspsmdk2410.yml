@@ -1,0 +1,69 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: smdk2410
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: smdk2410
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/smdk2410/include/bsp.h
+  - bsps/arm/smdk2410/include/s3c2400.h
+  - bsps/arm/smdk2410/include/s3c2410.h
+  - bsps/arm/smdk2410/include/s3c24xx.h
+  - bsps/arm/smdk2410/include/smc.h
+  - bsps/arm/smdk2410/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/smdk2410/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/smdk2410/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: optcpus3c2410
+- role: build-dependency
+  uid: optskyeye
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cp15/arm920-mmu.c
+- bsps/arm/smdk2410/btimer/btimer.c
+- bsps/arm/smdk2410/clock/clockdrv.c
+- bsps/arm/smdk2410/clock/support.c
+- bsps/arm/smdk2410/console/uart.c
+- bsps/arm/smdk2410/irq/irq.c
+- bsps/arm/smdk2410/smc/smc.c
+- bsps/arm/smdk2410/start/bspidle.c
+- bsps/arm/smdk2410/start/bspreset.c
+- bsps/arm/smdk2410/start/bspstart.c
+- bsps/arm/smdk2410/start/memmap.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

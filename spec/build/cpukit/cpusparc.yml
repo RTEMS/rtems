@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- sparc
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - cpukit/score/cpu/sparc/include/libcpu/access.h
+  - cpukit/score/cpu/sparc/include/libcpu/byteorder.h
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/sparc/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/sparc/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/sparc/include/rtems/score/cpu.h
+  - cpukit/score/cpu/sparc/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/sparc/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/sparc/include/rtems/score/sparc.h
+  - cpukit/score/cpu/sparc/include/rtems/score/sparcimpl.h
+links: []
+source:
+- cpukit/score/cpu/no_cpu/cpuidle.c
+- cpukit/score/cpu/sparc/access_le.c
+- cpukit/score/cpu/sparc/cpu.c
+- cpukit/score/cpu/sparc/cpu_asm.S
+- cpukit/score/cpu/sparc/sparc-access.S
+- cpukit/score/cpu/sparc/sparc-context-validate.S
+- cpukit/score/cpu/sparc/sparc-context-volatile-clobber.S
+- cpukit/score/cpu/sparc/sparc-counter-asm.S
+- cpukit/score/cpu/sparc/syscall.S
+- cpukit/score/cpu/sparc/window.S
+type: build

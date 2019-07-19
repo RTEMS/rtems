@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- powerpc
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/powerpc/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/powerpc/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/powerpc
+  source:
+  - cpukit/score/cpu/powerpc/include/rtems/powerpc/registers.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/powerpc/include/rtems/score/cpu.h
+  - cpukit/score/cpu/powerpc/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/powerpc/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/powerpc/include/rtems/score/paravirt.h
+  - cpukit/score/cpu/powerpc/include/rtems/score/powerpc.h
+links: []
+source:
+- cpukit/score/cpu/no_cpu/cpuidle.c
+- cpukit/score/cpu/powerpc/cpu.c
+- cpukit/score/cpu/powerpc/ppc-context-validate.S
+- cpukit/score/cpu/powerpc/ppc-context-volatile-clobber.S
+- cpukit/score/cpu/powerpc/ppc-isr-disable-mask.S
+type: build

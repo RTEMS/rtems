@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- i386
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/i386/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/i386/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/i386/include/rtems/score/cpu.h
+  - cpukit/score/cpu/i386/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/i386/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/i386/include/rtems/score/i386.h
+  - cpukit/score/cpu/i386/include/rtems/score/idtr.h
+  - cpukit/score/cpu/i386/include/rtems/score/interrupts.h
+  - cpukit/score/cpu/i386/include/rtems/score/paravirt.h
+  - cpukit/score/cpu/i386/include/rtems/score/registers.h
+links: []
+source:
+- cpukit/score/cpu/i386/cpu_asm.S
+- cpukit/score/cpu/i386/cpu.c
+- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
+- cpukit/score/cpu/no_cpu/cpucounterread.c
+- cpukit/score/cpu/no_cpu/cpuidle.c
+type: build

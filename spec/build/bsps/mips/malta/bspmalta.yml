@@ -1,0 +1,67 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: mips
+bsp: malta
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: malta
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/mips/malta/include/bsp.h
+  - bsps/mips/malta/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/mips/malta/include/bsp/irq.h
+  - bsps/mips/malta/include/bsp/pci.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/mips/malta/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto0
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/mips/malta/console/conscfg.c
+- bsps/mips/malta/console/printk_support.c
+- bsps/mips/malta/irq/interruptmask.c
+- bsps/mips/malta/irq/vectorisrs.c
+- bsps/mips/malta/pci/pci.c
+- bsps/mips/malta/start/bspreset.c
+- bsps/mips/malta/start/bspstart.c
+- bsps/mips/malta/start/inittlb.c
+- bsps/mips/malta/start/simple_access.c
+- bsps/mips/shared/clock/clockdrv.c
+- bsps/mips/shared/clock/mips_timer.S
+- bsps/mips/shared/irq/i8259.c
+- bsps/mips/shared/irq/installisrentries.c
+- bsps/mips/shared/irq/irq.c
+- bsps/mips/shared/irq/isr_entries.S
+- bsps/mips/shared/irq/vectorexceptions.c
+- bsps/mips/shared/start/idttlb.S
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/pci/pci_find_device.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

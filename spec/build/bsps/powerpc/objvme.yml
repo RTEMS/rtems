@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+links: []
+source:
+- bsps/powerpc/shared/vme/bspVmeDmaList.c
+- bsps/powerpc/shared/vme/vmeconfig.c
+- bsps/powerpc/shared/vme/vmeTsi148.c
+- bsps/powerpc/shared/vme/vme_universe.c
+- bsps/powerpc/shared/vme/vmeUniverse.c
+type: build

@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- BUILD_TESTS
+- BUILD_BENCHMARKS
+includes:
+- testsuites/support/include
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: dhrystone
+- role: build-dependency
+  uid: linpack
+- role: build-dependency
+  uid: whetstone
+type: build
+use-after:
+- rtemstest
+use-before: []

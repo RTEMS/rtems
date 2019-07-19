@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/utf8proc
+  source:
+  - cpukit/include/utf8proc/utf8proc.h
+links: []
+source:
+- cpukit/libmisc/utf8proc/utf8proc.c
+type: build

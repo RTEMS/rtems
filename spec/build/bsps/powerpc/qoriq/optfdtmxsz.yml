@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 262144
+default-by-variant: []
+description: |
+  maximum size of the FDT blob in bytes
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_FDT_BLOB_SIZE_MAX
+type: build

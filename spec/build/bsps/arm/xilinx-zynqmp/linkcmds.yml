@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    RAM_INT_0 : ORIGIN = ${ZYNQMP_RAM_INT_0_ORIGIN:#010x}, LENGTH = ${ZYNQMP_RAM_INT_0_LENGTH:#010x}
+    RAM_INT_1 : ORIGIN = ${ZYNQMP_RAM_INT_1_ORIGIN:#010x}, LENGTH = ${ZYNQMP_RAM_INT_1_LENGTH:#010x}
+    RAM_MMU   : ORIGIN = ${ZYNQMP_RAM_ORIGIN:#010x}, LENGTH = ${ARM_MMU_TRANSLATION_TABLE_SIZE:#010x}
+    RAM       : ORIGIN = ${ZYNQMP_RAM_ORIGIN:#010x} + ${ARM_MMU_TRANSLATION_TABLE_SIZE:#010x}, LENGTH = ${ZYNQMP_RAM_LENGTH:#010x} - ${ZYNQMP_RAM_ORIGIN:#010x} - ${ARM_MMU_TRANSLATION_TABLE_SIZE:#010x} - ${ZYNQMP_RAM_NOCACHE_LENGTH:#010x}
+    NOCACHE   : ORIGIN = ${ZYNQMP_RAM_LENGTH:#010x} - ${ZYNQMP_RAM_NOCACHE_LENGTH:#010x}, LENGTH = ${ZYNQMP_RAM_NOCACHE_LENGTH:#010x}
+  }
+
+  REGION_ALIAS ("REGION_START",          RAM);
+  REGION_ALIAS ("REGION_VECTOR",         RAM);
+  REGION_ALIAS ("REGION_TEXT",           RAM);
+  REGION_ALIAS ("REGION_TEXT_LOAD",      RAM);
+  REGION_ALIAS ("REGION_RODATA",         RAM);
+  REGION_ALIAS ("REGION_RODATA_LOAD",    RAM);
+  REGION_ALIAS ("REGION_DATA",           RAM);
+  REGION_ALIAS ("REGION_DATA_LOAD",      RAM);
+  REGION_ALIAS ("REGION_FAST_TEXT",      RAM);
+  REGION_ALIAS ("REGION_FAST_TEXT_LOAD", RAM);
+  REGION_ALIAS ("REGION_FAST_DATA",      RAM);
+  REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_BSS",            RAM);
+  REGION_ALIAS ("REGION_WORK",           RAM);
+  REGION_ALIAS ("REGION_STACK",          RAM);
+  REGION_ALIAS ("REGION_NOCACHE",        NOCACHE);
+  REGION_ALIAS ("REGION_NOCACHE_LOAD",   NOCACHE);
+
+  bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+  bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;
+
+  bsp_vector_table_in_start_section = 1;
+
+  bsp_translation_table_base = ORIGIN (RAM_MMU);
+  bsp_translation_table_end = ORIGIN (RAM_MMU) + LENGTH (RAM_MMU);
+
+  INCLUDE linkcmds.armv4
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds
+type: build

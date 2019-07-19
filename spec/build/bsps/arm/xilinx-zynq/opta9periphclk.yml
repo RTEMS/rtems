@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 100000000
+default-by-variant:
+- value: 333333333
+  variants:
+  - arm/xilinx_zynq_zc702.*
+- value: 666666667
+  variants:
+  - arm/xilinx_zynq_zedboard.*
+description: |
+  ARM Cortex-A9 MPCore PERIPHCLK clock frequency in Hz
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_ARM_A9MPCORE_PERIPHCLK
+type: build

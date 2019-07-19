@@ -1,0 +1,71 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- BUILD_LIBDL
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems/rtl
+  source:
+  - cpukit/include/rtems/rtl/dlfcn-shell.h
+  - cpukit/include/rtems/rtl/rap-shell.h
+  - cpukit/include/rtems/rtl/rap.h
+  - cpukit/include/rtems/rtl/rtl-allocator.h
+  - cpukit/include/rtems/rtl/rtl-archive.h
+  - cpukit/include/rtems/rtl/rtl-fwd.h
+  - cpukit/include/rtems/rtl/rtl-indirect-ptr.h
+  - cpukit/include/rtems/rtl/rtl-obj-cache.h
+  - cpukit/include/rtems/rtl/rtl-obj-comp.h
+  - cpukit/include/rtems/rtl/rtl-obj-fwd.h
+  - cpukit/include/rtems/rtl/rtl-obj.h
+  - cpukit/include/rtems/rtl/rtl-shell.h
+  - cpukit/include/rtems/rtl/rtl-sym.h
+  - cpukit/include/rtems/rtl/rtl-trace.h
+  - cpukit/include/rtems/rtl/rtl-unresolved.h
+  - cpukit/include/rtems/rtl/rtl.h
+links:
+- role: build-dependency
+  uid: objdlarm
+- role: build-dependency
+  uid: objdli386
+- role: build-dependency
+  uid: objdlm68k
+- role: build-dependency
+  uid: objdlmips
+- role: build-dependency
+  uid: objdlmoxie
+- role: build-dependency
+  uid: objdlpowerpc
+- role: build-dependency
+  uid: objdlsparc
+source:
+- cpukit/libdl/dlfcn.c
+- cpukit/libdl/dlfcn-shell.c
+- cpukit/libdl/fastlz.c
+- cpukit/libdl/rap.c
+- cpukit/libdl/rap-shell.c
+- cpukit/libdl/rtl-allocator.c
+- cpukit/libdl/rtl-alloc-heap.c
+- cpukit/libdl/rtl-archive.c
+- cpukit/libdl/rtl-bit-alloc.c
+- cpukit/libdl/rtl.c
+- cpukit/libdl/rtl-chain-iterator.c
+- cpukit/libdl/rtl-debugger.c
+- cpukit/libdl/rtl-elf.c
+- cpukit/libdl/rtl-error.c
+- cpukit/libdl/rtl-find-file.c
+- cpukit/libdl/rtl-obj.c
+- cpukit/libdl/rtl-obj-cache.c
+- cpukit/libdl/rtl-obj-comp.c
+- cpukit/libdl/rtl-rap.c
+- cpukit/libdl/rtl-shell.c
+- cpukit/libdl/rtl-string.c
+- cpukit/libdl/rtl-sym.c
+- cpukit/libdl/rtl-trace.c
+- cpukit/libdl/rtl-unresolved.c
+- cpukit/libdl/rtl-unwind-dw2.c
+type: build

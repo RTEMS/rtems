@@ -1,0 +1,100 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/tms570/include/bsp.h
+  - bsps/arm/tms570/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/tms570/include/bsp/irq.h
+  - bsps/arm/tms570/include/bsp/system-clocks.h
+  - bsps/arm/tms570/include/bsp/tms570-pinmux.h
+  - bsps/arm/tms570/include/bsp/tms570-pins.h
+  - bsps/arm/tms570/include/bsp/tms570-pom.h
+  - bsps/arm/tms570/include/bsp/tms570-rti.h
+  - bsps/arm/tms570/include/bsp/tms570-sci-driver.h
+  - bsps/arm/tms570/include/bsp/tms570-sci.h
+  - bsps/arm/tms570/include/bsp/tms570-vim.h
+  - bsps/arm/tms570/include/bsp/tms570.h
+  - bsps/arm/tms570/include/bsp/tms570_hwinit.h
+  - bsps/arm/tms570/include/bsp/tms570_selftest.h
+  - bsps/arm/tms570/include/bsp/tms570_selftest_parity.h
+  - bsps/arm/tms570/include/bsp/tms570lc4357-pins.h
+  - bsps/arm/tms570/include/bsp/tms570ls3137zwt-pins.h
+- destination: ${BSP_INCLUDEDIR}/bsp/ti/herc
+  source:
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_adc.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_ccmsr.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_crc.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_dcan.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_dcc.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_dma.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_dmm.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_efuse.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_emacc.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_emacm.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_emif.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_esm.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_flash.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_flex_ray.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_gio.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_htu.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_i2c.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_iomm.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_lin.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_mdio.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_n2het.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_pbist.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_pcr.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_pll.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_pmm.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_pom.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_rti.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_rtp.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_sci.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_spi.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_stc.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_sys.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_sys2.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_tcr.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_tcram.h
+  - bsps/arm/tms570/include/bsp/ti_herc/reg_vim.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk
+  - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk_intram
+  - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk_sdram
+  - bsps/arm/tms570/start/linkcmds.tms570ls3137_hdk_with_loader
+links: []
+source:
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/tms570/clock/clock.c
+- bsps/arm/tms570/console/printk-support.c
+- bsps/arm/tms570/console/tms570-sci.c
+- bsps/arm/tms570/cpucounter/cpucounterread.c
+- bsps/arm/tms570/irq/irq.c
+- bsps/arm/tms570/start/bspreset.c
+- bsps/arm/tms570/start/bspstart.c
+- bsps/arm/tms570/start/bspstarthooks.c
+- bsps/arm/tms570/start/pinmux.c
+- bsps/arm/tms570/start/tms570-pom.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

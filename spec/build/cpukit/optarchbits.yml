@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
+default: ''
+default-by-variant:
+- value:
+  - '64'
+  variants:
+  - riscv/rv64.*
+- value:
+  - '32'
+  variants:
+  - riscv/griscv
+  - riscv/rv32.*
+description: The architecture word bits for the clang target triple.
+enabled-by:
+- and:
+  - riscv
+  - clang
+format: '{}'
+links: []
+name: ARCH_BITS
+type: build

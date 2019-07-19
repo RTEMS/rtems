@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- and:
+  - RTEMS_NETWORKING
+  - not: RTEMS_SMP
+features: c cprogram
+includes:
+- cpukit/libnetworking
+ldflags: []
+links: []
+source:
+- testsuites/samples/pppd/init.c
+- testsuites/samples/pppd/pppdapp.c
+stlib: []
+target: testsuites/samples/pppd.exe
+type: build
+use-after:
+- pppd
+use-before: []

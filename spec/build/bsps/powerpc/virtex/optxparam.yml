@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: <xparameters_dflt.h>
+default-by-variant: []
+description: |
+  This defines the location of the hardware specific "xparameters.h" file.  in the file system. Specify an absolute path. Do not forget the double quotes
+enabled-by: true
+format: '{}'
+links: []
+name: RTEMS_XPARAMETERS_H
+type: build

@@ -1,0 +1,62 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/include/cmsis_gcc.h
+  - bsps/arm/include/core_cm7.h
+  - bsps/arm/include/core_cmFunc.h
+  - bsps/arm/include/core_cmInstr.h
+  - bsps/arm/include/core_cmSimd.h
+  - bsps/arm/include/uart.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/include/bsp/arm-a8core-start.h
+  - bsps/arm/include/bsp/arm-a9mpcore-clock.h
+  - bsps/arm/include/bsp/arm-a9mpcore-irq.h
+  - bsps/arm/include/bsp/arm-a9mpcore-regs.h
+  - bsps/arm/include/bsp/arm-a9mpcore-start.h
+  - bsps/arm/include/bsp/arm-cp15-start.h
+  - bsps/arm/include/bsp/arm-errata.h
+  - bsps/arm/include/bsp/arm-gic-irq.h
+  - bsps/arm/include/bsp/arm-gic-regs.h
+  - bsps/arm/include/bsp/arm-gic-tm27.h
+  - bsps/arm/include/bsp/arm-gic.h
+  - bsps/arm/include/bsp/arm-pl011-regs.h
+  - bsps/arm/include/bsp/arm-pl011.h
+  - bsps/arm/include/bsp/arm-pl050-regs.h
+  - bsps/arm/include/bsp/arm-pl050.h
+  - bsps/arm/include/bsp/arm-pl111-fb.h
+  - bsps/arm/include/bsp/arm-pl111-regs.h
+  - bsps/arm/include/bsp/arm-release-id.h
+  - bsps/arm/include/bsp/armv7m-irq.h
+  - bsps/arm/include/bsp/clock-armv7m.h
+  - bsps/arm/include/bsp/linker-symbols.h
+  - bsps/arm/include/bsp/lpc-dma.h
+  - bsps/arm/include/bsp/lpc-emc.h
+  - bsps/arm/include/bsp/lpc-i2s.h
+  - bsps/arm/include/bsp/lpc-lcd.h
+  - bsps/arm/include/bsp/lpc-timer.h
+  - bsps/arm/include/bsp/start.h
+  - bsps/arm/include/bsp/zynq-uart-regs.h
+  - bsps/arm/include/bsp/zynq-uart.h
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - bsps/arm/include/libcpu/am335x.h
+  - bsps/arm/include/libcpu/mmu.h
+  - bsps/arm/include/libcpu/omap3.h
+  - bsps/arm/include/libcpu/omap_timer.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/shared/start/linkcmds.armv4
+  - bsps/arm/shared/start/linkcmds.armv7m
+  - bsps/arm/shared/start/linkcmds.base
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

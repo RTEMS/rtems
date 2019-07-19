@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant: []
+description: |
+  copy the FDT blob into the read-only load area via bsp_fdt_copy()
+enabled-by: true
+links: []
+name: BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA
+type: build

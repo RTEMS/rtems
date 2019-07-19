@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/lm32/lm32_evr/include/bsp.h
+  - bsps/lm32/lm32_evr/include/system_conf.h
+  - bsps/lm32/lm32_evr/include/tm27.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/lm32/lm32_evr/start/linkcmds
+links: []
+source:
+- bsps/lm32/shared/btimer/btimer.c
+- bsps/lm32/shared/clock/ckinit.c
+- bsps/lm32/shared/console/console.c
+- bsps/lm32/shared/console/uart.c
+- bsps/lm32/shared/start/bspreset.c
+- bsps/lm32/shared/start/bspstart.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/setvec.c
+type: build

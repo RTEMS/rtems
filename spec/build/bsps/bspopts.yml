@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-header
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+guard: __BSP_OPTIONS_H
+include-headers: []
+install-path: ${BSP_INCLUDEDIR}
+links:
+- role: build-dependency
+  uid: optabi
+- role: build-dependency
+  uid: optasflags
+- role: build-dependency
+  uid: optbsp
+- role: build-dependency
+  uid: optfatalverb
+- role: build-dependency
+  uid: optincludes
+- role: build-dependency
+  uid: optldflags
+- role: build-dependency
+  uid: optldflagsbsp
+- role: build-dependency
+  uid: optmakelegacy
+- role: build-dependency
+  uid: optprintexcpt
+- role: build-dependency
+  uid: optreset
+- role: build-dependency
+  uid: optresetkey
+- role: build-dependency
+  uid: pkgconfig
+- role: build-dependency
+  uid: tst
+- role: build-dependency
+  uid: grpmake
+target: bsps/include/bspopts.h
+type: build

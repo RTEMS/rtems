@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 1
+default-by-variant:
+- value: 2
+  variants:
+  - arm/lpc17xx_ea.*
+- value: 2
+  variants:
+  - arm/lpc40xx_ea.*
+description: |
+  clock divider for default PCLK (PCLK = CCLK / PCLKDIV)
+enabled-by: true
+format: '{}'
+links: []
+name: LPC24XX_PCLKDIV
+type: build

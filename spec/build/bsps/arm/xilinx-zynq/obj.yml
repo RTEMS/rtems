@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/xilinx-zynq/include/bsp.h
+  - bsps/arm/xilinx-zynq/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/xilinx-zynq/include/bsp/cadence-i2c-regs.h
+  - bsps/arm/xilinx-zynq/include/bsp/cadence-i2c.h
+  - bsps/arm/xilinx-zynq/include/bsp/i2c.h
+  - bsps/arm/xilinx-zynq/include/bsp/irq.h
+links: []
+source:
+- bsps/arm/shared/cache/cache-l2c-310.c
+- bsps/arm/shared/clock/clock-a9mpcore.c
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/irq/irq-gic.c
+- bsps/arm/shared/serial/zynq-uart.c
+- bsps/arm/shared/serial/zynq-uart-polled.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/xilinx-zynq/console/console-config.c
+- bsps/arm/xilinx-zynq/console/console-init.c
+- bsps/arm/xilinx-zynq/console/debug-console.c
+- bsps/arm/xilinx-zynq/i2c/cadence-i2c.c
+- bsps/arm/xilinx-zynq/start/bspreset.c
+- bsps/arm/xilinx-zynq/start/bspstart.c
+- bsps/arm/xilinx-zynq/start/bspstarthooks.c
+- bsps/arm/xilinx-zynq/start/bspstartmmu.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

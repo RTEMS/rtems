@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  ## BSP configuration flags for BSP "${ARCH}/${BSP_NAME}"
+
+  ##
+  ## Does this BSP support multiprocessing ?
+  ##
+  HAS_MP = ${RTEMS_HAS_MULTIPROCESSING}
+
+  ##
+  ## Does this BSP support RTEMS's remote debugger ?
+  ##
+  HAS_RDBG = no
+
+  ##
+  ## Does this BSP support RTEMS's posix API ?
+  ##
+  HAS_POSIX_API = ${RTEMS_HAS_POSIX_API}
+
+  ##
+  ## Does this BSP support RTEMS's ITRON API ?
+  ##
+  HAS_ITRON_API = no
+
+  ##
+  ## Does this BSP support RTEMS's CXX API ?
+  ##
+  HAS_CPLUSPLUS = yes
+
+  ##
+  ## Does this BSP support RTEMS's networking ?
+  ##
+  HAS_NETWORKING = ${RTEMS_HAS_NETWORKING}
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+install-path: ${PREFIX}/${ARCH}-rtems${__RTEMS_MAJOR__}/${BSP_NAME}/make
+links: []
+target: bsp.cfg
+type: build

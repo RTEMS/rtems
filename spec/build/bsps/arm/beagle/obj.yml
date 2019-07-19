@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/beagle/include/bsp.h
+  - bsps/arm/beagle/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/beagle/include/bsp/bbb-gpio.h
+  - bsps/arm/beagle/include/bsp/bbb-pwm.h
+  - bsps/arm/beagle/include/bsp/beagleboneblack.h
+  - bsps/arm/beagle/include/bsp/i2c.h
+  - bsps/arm/beagle/include/bsp/irq.h
+  - bsps/arm/beagle/include/bsp/spi.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/beagle/start/linkcmds
+links: []
+source:
+- bsps/arm/beagle/clock/clock.c
+- bsps/arm/beagle/console/console-config.c
+- bsps/arm/beagle/gpio/bbb-gpio.c
+- bsps/arm/beagle/i2c/bbb-i2c.c
+- bsps/arm/beagle/irq/irq.c
+- bsps/arm/beagle/pwm/pwm.c
+- bsps/arm/beagle/rtc/rtc.c
+- bsps/arm/beagle/spi/spi.c
+- bsps/arm/beagle/start/bspdebug.c
+- bsps/arm/beagle/start/bspreset.c
+- bsps/arm/beagle/start/bspstart.c
+- bsps/arm/beagle/start/bspstarthooks.c
+- bsps/arm/beagle/start/bspstartmmu.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/gpio/gpio-support.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bsp-fdt.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

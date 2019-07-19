@@ -1,0 +1,139 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- and:
+  - RTEMS_SMP
+  - or:
+    - BUILD_TESTS
+    - BUILD_SMPTESTS
+includes:
+- testsuites/support/include
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: smp01
+- role: build-dependency
+  uid: smp02
+- role: build-dependency
+  uid: smp03
+- role: build-dependency
+  uid: smp05
+- role: build-dependency
+  uid: smp07
+- role: build-dependency
+  uid: smp08
+- role: build-dependency
+  uid: smp09
+- role: build-dependency
+  uid: smpaffinity01
+- role: build-dependency
+  uid: smpatomic01
+- role: build-dependency
+  uid: smpcache01
+- role: build-dependency
+  uid: smpcapture01
+- role: build-dependency
+  uid: smpcapture02
+- role: build-dependency
+  uid: smpclock01
+- role: build-dependency
+  uid: smpfatal01
+- role: build-dependency
+  uid: smpfatal02
+- role: build-dependency
+  uid: smpfatal03
+- role: build-dependency
+  uid: smpfatal04
+- role: build-dependency
+  uid: smpfatal05
+- role: build-dependency
+  uid: smpfatal06
+- role: build-dependency
+  uid: smpfatal08
+- role: build-dependency
+  uid: smpfatal09
+- role: build-dependency
+  uid: smpipi01
+- role: build-dependency
+  uid: smpload01
+- role: build-dependency
+  uid: smplock01
+- role: build-dependency
+  uid: smpmigration01
+- role: build-dependency
+  uid: smpmigration02
+- role: build-dependency
+  uid: smpmrsp01
+- role: build-dependency
+  uid: smpmulticast01
+- role: build-dependency
+  uid: smpmutex01
+- role: build-dependency
+  uid: smpmutex02
+- role: build-dependency
+  uid: smpopenmp01
+- role: build-dependency
+  uid: smppsxaffinity01
+- role: build-dependency
+  uid: smppsxaffinity02
+- role: build-dependency
+  uid: smppsxmutex01
+- role: build-dependency
+  uid: smppsxsignal01
+- role: build-dependency
+  uid: smpschedaffinity01
+- role: build-dependency
+  uid: smpschedaffinity02
+- role: build-dependency
+  uid: smpschedaffinity03
+- role: build-dependency
+  uid: smpschedaffinity04
+- role: build-dependency
+  uid: smpschedaffinity05
+- role: build-dependency
+  uid: smpschededf01
+- role: build-dependency
+  uid: smpschededf02
+- role: build-dependency
+  uid: smpschededf03
+- role: build-dependency
+  uid: smpschededf04
+- role: build-dependency
+  uid: smpschedsem01
+- role: build-dependency
+  uid: smpscheduler01
+- role: build-dependency
+  uid: smpscheduler02
+- role: build-dependency
+  uid: smpscheduler03
+- role: build-dependency
+  uid: smpscheduler04
+- role: build-dependency
+  uid: smpscheduler05
+- role: build-dependency
+  uid: smpscheduler06
+- role: build-dependency
+  uid: smpscheduler07
+- role: build-dependency
+  uid: smpsignal01
+- role: build-dependency
+  uid: smpstrongapa01
+- role: build-dependency
+  uid: smpswitchextension01
+- role: build-dependency
+  uid: smpthreadlife01
+- role: build-dependency
+  uid: smpthreadpin01
+- role: build-dependency
+  uid: smpunsupported01
+- role: build-dependency
+  uid: smpwakeafter01
+type: build
+use-after:
+- rtemstest
+use-before: []

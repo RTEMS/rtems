@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+- env-append: PKGCONFIG_LDFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -Wl,--gc-sections
+default-by-variant: []
+description: |
+  Flags passed to the linker (GNU ld)
+enabled-by: true
+links: []
+name: LDFLAGS
+type: build

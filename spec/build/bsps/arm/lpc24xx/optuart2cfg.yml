@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant:
+- value: false
+  variants:
+  - arm/lpc23.*
+- value: false
+  variants:
+  - arm/lpc24xx_ncs_.*
+- value: false
+  variants:
+  - arm/.*_plx800_.*
+description: |
+  configuration for UART 2
+enabled-by: true
+links: []
+name: LPC24XX_CONFIG_UART_2
+type: build

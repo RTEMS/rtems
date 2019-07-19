@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- script: |
+    s = ("ATSAM_SDRAM_IS42S16100E_7BLI", 0x00200000)
+    sdram = {
+         "is42s16100e-7bli": s,
+         "is42s16320f-7bl": ("ATSAM_SDRAM_IS42S16320F_7BL", 0x04000000),
+         "mt48lc16m16a2p-6a": ("ATSAM_SDRAM_MT48LC16M16A2P_6A", 0x02000000),
+    }
+    if value:
+        try:
+            s = sdram[value]
+        except:
+            conf.fatal("Unkown SDRAM variant '{}'".format(value))
+    conf.define_cond(s[0], True)
+    conf.env["ATSAM_MEMORY_SDRAM_SIZE"] = s[1]
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: is42s16100e-7bli
+default-by-variant: []
+description: |
+  SDRAM variant
+enabled-by: true
+format: '{}'
+links: []
+name: ATSAM_SDRAM
+type: build

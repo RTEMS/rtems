@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- mips
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/mips/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/mips/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/mips
+  source:
+  - cpukit/score/cpu/mips/include/rtems/mips/idtcpu.h
+  - cpukit/score/cpu/mips/include/rtems/mips/iregdef.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/mips/include/rtems/score/cpu.h
+  - cpukit/score/cpu/mips/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/mips/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/mips/include/rtems/score/mips.h
+links: []
+source:
+- cpukit/score/cpu/mips/cpu_asm.S
+- cpukit/score/cpu/mips/cpu.c
+- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
+- cpukit/score/cpu/no_cpu/cpucounterread.c
+type: build

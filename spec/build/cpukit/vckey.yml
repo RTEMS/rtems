@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: script
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+do-build: |
+  VersionControlKeyHeader.write(bld, "cpukit/include/version-vc-key.h")
+do-configure: null
+enabled-by: true
+links: []
+prepare-build: null
+prepare-configure: null
+type: build

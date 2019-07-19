@@ -1,0 +1,95 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: xilinx_zynqmp_ultra96
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: xilinx-zynqmp
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/xilinx-zynqmp/include/bsp.h
+  - bsps/arm/xilinx-zynqmp/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/xilinx-zynqmp/include/bsp/irq.h
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: optcachedata
+- role: build-dependency
+  uid: optcacheinst
+- role: build-dependency
+  uid: optclkfastidle
+- role: build-dependency
+  uid: optclkuart
+- role: build-dependency
+  uid: optconirq
+- role: build-dependency
+  uid: optconminor
+- role: build-dependency
+  uid: optgentmrfreq
+- role: build-dependency
+  uid: optgentmrusevirt
+- role: build-dependency
+  uid: optint0len
+- role: build-dependency
+  uid: optint0ori
+- role: build-dependency
+  uid: optint1len
+- role: build-dependency
+  uid: optint1ori
+- role: build-dependency
+  uid: ../optmmusz
+- role: build-dependency
+  uid: optnocachelen
+- role: build-dependency
+  uid: optramlen
+- role: build-dependency
+  uid: optramori
+- role: build-dependency
+  uid: optresetvec
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/clock/clock-generic-timer.c
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/irq/irq-gic.c
+- bsps/arm/shared/serial/zynq-uart.c
+- bsps/arm/shared/serial/zynq-uart-polled.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/xilinx-zynqmp/console/console-config.c
+- bsps/arm/xilinx-zynqmp/start/bspreset.c
+- bsps/arm/xilinx-zynqmp/start/bspstart.c
+- bsps/arm/xilinx-zynqmp/start/bspstarthooks.c
+- bsps/arm/xilinx-zynqmp/start/bspstartmmu.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

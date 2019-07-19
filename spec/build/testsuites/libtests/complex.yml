@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/complex/init.c
+- testsuites/libtests/complex/docomplex.c
+- testsuites/libtests/complex/docomplexf.c
+- testsuites/libtests/complex/docomplexl.c
+stlib:
+- m
+target: testsuites/libtests/complex.exe
+type: build
+use-after: []
+use-before: []

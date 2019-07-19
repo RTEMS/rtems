@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: CONS_MODE_UNUSED
+default-by-variant: []
+description: |
+  (BSP--SCC3 UART IF mode) Must be defined if SCC3 is used as a tty (UART) channel. Set it to CONS_MODE_POLLED for polled operation, CONS_MODE_IRQ for interrupt driven (spooled) operation. Set it to CONS_MODE_UNUSED, if not used
+enabled-by: true
+format: '{}'
+links: []
+name: CONS_SCC3_MODE
+type: build

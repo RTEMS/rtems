@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- nios2
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/machine
+  source:
+  - cpukit/score/cpu/nios2/include/machine/elf_machdep.h
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/nios2/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/nios2/include/rtems/score/cpu.h
+  - cpukit/score/cpu/nios2/include/rtems/score/cpu_asm.h
+  - cpukit/score/cpu/nios2/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/nios2/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/nios2/include/rtems/score/nios2-count-zeros.h
+  - cpukit/score/cpu/nios2/include/rtems/score/nios2-utility.h
+  - cpukit/score/cpu/nios2/include/rtems/score/nios2.h
+links: []
+source:
+- cpukit/score/cpu/nios2/nios2-context-initialize.c
+- cpukit/score/cpu/nios2/nios2-context-switch.S
+- cpukit/score/cpu/nios2/nios2-context-validate.S
+- cpukit/score/cpu/nios2/nios2-context-volatile-clobber.S
+- cpukit/score/cpu/nios2/nios2-eic-il-low-level.S
+- cpukit/score/cpu/nios2/nios2-eic-rsie-low-level.S
+- cpukit/score/cpu/nios2/nios2-exception-frame-print.c
+- cpukit/score/cpu/nios2/nios2-fatal-halt.c
+- cpukit/score/cpu/nios2/nios2-iic-irq.c
+- cpukit/score/cpu/nios2/nios2-iic-low-level.S
+- cpukit/score/cpu/nios2/nios2-initialize.c
+- cpukit/score/cpu/nios2/nios2-isr-get-level.c
+- cpukit/score/cpu/nios2/nios2-isr-install-vector.c
+- cpukit/score/cpu/nios2/nios2-isr-is-in-progress.c
+- cpukit/score/cpu/nios2/nios2-isr-set-level.c
+- cpukit/score/cpu/nios2/nios2-mpu-add-region.c
+- cpukit/score/cpu/nios2/nios2-mpu-configuration.c
+- cpukit/score/cpu/nios2/nios2-mpu-descriptor.c
+- cpukit/score/cpu/nios2/nios2-mpu-disable-protected.c
+- cpukit/score/cpu/nios2/nios2-mpu-reset.c
+- cpukit/score/cpu/nios2/nios2-thread-dispatch-disabled.c
+- cpukit/score/cpu/no_cpu/cpucounterfrequency.c
+- cpukit/score/cpu/no_cpu/cpucounterread.c
+- cpukit/score/cpu/no_cpu/cpuidle.c
+type: build

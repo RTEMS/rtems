@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant: []
+description: |
+  If defined, CPU is powered down on fatal exit. Otherwise generate system error which will hand over to debugger, simulator, etc.
+enabled-by: true
+links: []
+name: BSP_POWER_DOWN_AT_FATAL_HALT
+type: build

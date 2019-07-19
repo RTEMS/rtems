@@ -1,0 +1,411 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: atsamv
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: atsam
+includes:
+- bsps/arm/atsam/contrib/libraries/libboard
+- bsps/arm/atsam/contrib/libraries/libboard/include
+- bsps/arm/atsam/contrib/libraries/libchip
+- bsps/arm/atsam/contrib/libraries/libchip/include
+- bsps/arm/atsam/include/libchip
+- bsps/arm/atsam/include/libchip/include
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/atsam/include/bsp.h
+  - bsps/arm/atsam/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/atsam/include/bsp/atsam-clock-config.h
+  - bsps/arm/atsam/include/bsp/atsam-i2c.h
+  - bsps/arm/atsam/include/bsp/atsam-spi.h
+  - bsps/arm/atsam/include/bsp/i2c.h
+  - bsps/arm/atsam/include/bsp/iocopy.h
+  - bsps/arm/atsam/include/bsp/irq.h
+  - bsps/arm/atsam/include/bsp/pin-config.h
+  - bsps/arm/atsam/include/bsp/power.h
+  - bsps/arm/atsam/include/bsp/sc16is752.h
+  - bsps/arm/atsam/include/bsp/spi.h
+- destination: ${BSP_INCLUDEDIR}/libchip
+  source:
+  - bsps/arm/atsam/include/libchip/chip.h
+  - bsps/arm/atsam/include/libchip/compiler.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include
+  source:
+  - bsps/arm/atsam/include/libchip/include/acc.h
+  - bsps/arm/atsam/include/libchip/include/adc.h
+  - bsps/arm/atsam/include/libchip/include/aes.h
+  - bsps/arm/atsam/include/libchip/include/afe_dma.h
+  - bsps/arm/atsam/include/libchip/include/afec.h
+  - bsps/arm/atsam/include/libchip/include/chip.h
+  - bsps/arm/atsam/include/libchip/include/dac_dma.h
+  - bsps/arm/atsam/include/libchip/include/efc.h
+  - bsps/arm/atsam/include/libchip/include/exceptions.h
+  - bsps/arm/atsam/include/libchip/include/flashd.h
+  - bsps/arm/atsam/include/libchip/include/gmac.h
+  - bsps/arm/atsam/include/libchip/include/gmacd.h
+  - bsps/arm/atsam/include/libchip/include/hsmci.h
+  - bsps/arm/atsam/include/libchip/include/icm.h
+  - bsps/arm/atsam/include/libchip/include/isi.h
+  - bsps/arm/atsam/include/libchip/include/iso7816_4.h
+  - bsps/arm/atsam/include/libchip/include/mcan.h
+  - bsps/arm/atsam/include/libchip/include/mcid.h
+  - bsps/arm/atsam/include/libchip/include/mediaLB.h
+  - bsps/arm/atsam/include/libchip/include/mpu.h
+  - bsps/arm/atsam/include/libchip/include/pio.h
+  - bsps/arm/atsam/include/libchip/include/pio_capture.h
+  - bsps/arm/atsam/include/libchip/include/pio_it.h
+  - bsps/arm/atsam/include/libchip/include/pmc.h
+  - bsps/arm/atsam/include/libchip/include/pwmc.h
+  - bsps/arm/atsam/include/libchip/include/qspi.h
+  - bsps/arm/atsam/include/libchip/include/qspi_dma.h
+  - bsps/arm/atsam/include/libchip/include/rstc.h
+  - bsps/arm/atsam/include/libchip/include/rtc.h
+  - bsps/arm/atsam/include/libchip/include/rtt.h
+  - bsps/arm/atsam/include/libchip/include/sdramc.h
+  - bsps/arm/atsam/include/libchip/include/smc.h
+  - bsps/arm/atsam/include/libchip/include/spi.h
+  - bsps/arm/atsam/include/libchip/include/spi_dma.h
+  - bsps/arm/atsam/include/libchip/include/ssc.h
+  - bsps/arm/atsam/include/libchip/include/supc.h
+  - bsps/arm/atsam/include/libchip/include/tc.h
+  - bsps/arm/atsam/include/libchip/include/timetick.h
+  - bsps/arm/atsam/include/libchip/include/trace.h
+  - bsps/arm/atsam/include/libchip/include/trng.h
+  - bsps/arm/atsam/include/libchip/include/twi.h
+  - bsps/arm/atsam/include/libchip/include/twid.h
+  - bsps/arm/atsam/include/libchip/include/uart.h
+  - bsps/arm/atsam/include/libchip/include/uart_dma.h
+  - bsps/arm/atsam/include/libchip/include/usart.h
+  - bsps/arm/atsam/include/libchip/include/usart_dma.h
+  - bsps/arm/atsam/include/libchip/include/usbhs.h
+  - bsps/arm/atsam/include/libchip/include/video.h
+  - bsps/arm/atsam/include/libchip/include/wdt.h
+  - bsps/arm/atsam/include/libchip/include/xdma_hardware_interface.h
+  - bsps/arm/atsam/include/libchip/include/xdmac.h
+  - bsps/arm/atsam/include/libchip/include/xdmad.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/same70
+  source:
+  - bsps/arm/atsam/include/libchip/include/same70/same70.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70j19.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70j20.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70j21.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70n19.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70n20.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70n21.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70q19.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70q20.h
+  - bsps/arm/atsam/include/libchip/include/same70/same70q21.h
+  - bsps/arm/atsam/include/libchip/include/same70/system_same70.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/same70/component
+  source:
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_acc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_aes.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_afec.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_chipid.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_dacc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_efc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_gmac.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_gpbr.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_hsmci.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_icm.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_isi.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_matrix.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_mcan.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_pio.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_pmc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_pwm.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_qspi.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_rstc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_rswdt.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_rtc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_rtt.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_sdramc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_smc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_spi.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_ssc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_supc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_tc.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_trng.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_twihs.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_uart.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_usart.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_usbhs.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_utmi.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_wdt.h
+  - bsps/arm/atsam/include/libchip/include/same70/component/component_xdmac.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/same70/pio
+  source:
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70j19.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70j20.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70j21.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70n19.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70n20.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70n21.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70q19.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70q20.h
+  - bsps/arm/atsam/include/libchip/include/same70/pio/pio_same70q21.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/sams70
+  source:
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70j19.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70j20.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70j21.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70n19.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70n20.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70n21.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70q19.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70q20.h
+  - bsps/arm/atsam/include/libchip/include/sams70/sams70q21.h
+  - bsps/arm/atsam/include/libchip/include/sams70/system_sams70.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/sams70/component
+  source:
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_acc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_aes.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_afec.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_chipid.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_dacc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_efc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_gpbr.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_hsmci.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_icm.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_isi.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_matrix.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_pio.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_pmc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_pwm.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_qspi.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_rstc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_rswdt.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_rtc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_rtt.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_sdramc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_smc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_spi.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_ssc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_supc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_tc.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_trng.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_twihs.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_uart.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_usart.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_usbhs.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_utmi.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_wdt.h
+  - bsps/arm/atsam/include/libchip/include/sams70/component/component_xdmac.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/sams70/pio
+  source:
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70j19.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70j20.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70j21.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70n19.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70n20.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70n21.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70q19.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70q20.h
+  - bsps/arm/atsam/include/libchip/include/sams70/pio/pio_sams70q21.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/samv71
+  source:
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71j19.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71j20.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71j21.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71n19.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71n20.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71n21.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71q19.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71q20.h
+  - bsps/arm/atsam/include/libchip/include/samv71/samv71q21.h
+  - bsps/arm/atsam/include/libchip/include/samv71/system_samv71.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/samv71/component
+  source:
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_acc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_aes.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_afec.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_chipid.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_dacc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_efc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_gmac.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_gpbr.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_hsmci.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_icm.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_isi.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_matrix.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_mcan.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_mlb.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_pio.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_pmc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_pwm.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_qspi.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_rstc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_rswdt.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_rtc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_rtt.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_sdramc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_smc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_spi.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_ssc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_supc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_tc.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_trng.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_twihs.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_uart.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_usart.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_usbhs.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_utmi.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_wdt.h
+  - bsps/arm/atsam/include/libchip/include/samv71/component/component_xdmac.h
+- destination: ${BSP_INCLUDEDIR}/libchip/include/samv71/pio
+  source:
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71j19.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71j20.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71j21.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71n19.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71n20.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71n21.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71q19.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71q20.h
+  - bsps/arm/atsam/include/libchip/include/samv71/pio/pio_samv71q21.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/atsam/start/linkcmds
+  - bsps/arm/atsam/start/linkcmds.intsram
+  - bsps/arm/atsam/start/linkcmds.qspiflash
+  - bsps/arm/atsam/start/linkcmds.sdram
+links:
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: optchgclksram
+- role: build-dependency
+  uid: optchip
+- role: build-dependency
+  uid: optconbaud
+- role: build-dependency
+  uid: optconidx
+- role: build-dependency
+  uid: optconirq
+- role: build-dependency
+  uid: optcontype
+- role: build-dependency
+  uid: optmck
+- role: build-dependency
+  uid: optnocachesz
+- role: build-dependency
+  uid: optoscmain
+- role: build-dependency
+  uid: optqspiflashsz
+- role: build-dependency
+  uid: optsdram
+- role: build-dependency
+  uid: opttcmsz
+- role: build-dependency
+  uid: optusextal
+- role: build-dependency
+  uid: tstatsamv
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: linkcmds
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/atsam/clock/systick-freq.c
+- bsps/arm/atsam/console/console.c
+- bsps/arm/atsam/console/debug-console.c
+- bsps/arm/atsam/contrib/libraries/libboard/resources_v71/system_samv71.c
+- bsps/arm/atsam/contrib/libraries/libboard/source/board_lowlevel.c
+- bsps/arm/atsam/contrib/libraries/libboard/source/board_memories.c
+- bsps/arm/atsam/contrib/libraries/libboard/source/dbg_console.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/acc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/aes.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/afe_dma.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/afec.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/dac_dma.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/efc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/exceptions.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/flashd.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/gmac.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/gmacd.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/hsmci.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/icm.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/isi.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/mcan.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/mediaLB.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/mpu.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/pio.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/pio_capture.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/pio_it.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/pmc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/pwmc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/qspi.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/qspi_dma.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/rstc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/rtc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/rtt.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/sdramc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/spi.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/spi_dma.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/ssc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/supc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/tc.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/trng.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/twi.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/twid.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/uart.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/uart_dma.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/usart.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/usart_dma.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/wdt.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/xdma_hardware_interface.c
+- bsps/arm/atsam/contrib/libraries/libchip/source/xdmad.c
+- bsps/arm/atsam/i2c/atsam_i2c_bus.c
+- bsps/arm/atsam/i2c/atsam_i2c_init.c
+- bsps/arm/atsam/rtc/rtc-config.c
+- bsps/arm/atsam/spi/atsam_spi_bus.c
+- bsps/arm/atsam/spi/atsam_spi_init.c
+- bsps/arm/atsam/spi/sc16is752.c
+- bsps/arm/atsam/start/bspstart.c
+- bsps/arm/atsam/start/bspstarthooks.c
+- bsps/arm/atsam/start/getentropy-trng.c
+- bsps/arm/atsam/start/iocopy.c
+- bsps/arm/atsam/start/pin-config.c
+- bsps/arm/atsam/start/pmc-config.c
+- bsps/arm/atsam/start/power-clock.c
+- bsps/arm/atsam/start/power-rtc.c
+- bsps/arm/atsam/start/power-wait.c
+- bsps/arm/atsam/start/power.c
+- bsps/arm/atsam/start/restart.c
+- bsps/arm/atsam/start/sdram-config.c
+- bsps/arm/shared/cache/cache-v7m.c
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/cpucounter/cpucounter-armv7m.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

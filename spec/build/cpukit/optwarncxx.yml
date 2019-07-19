@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-assign: null
+- env-append: CXXFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: []
+default-by-variant: []
+description: |
+  Warning flags passed to the C++ compiler
+enabled-by: true
+links: []
+name: CXX_WARNING_FLAGS
+type: build

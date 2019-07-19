@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: INPUT
+- env-assign: LINKCMDS_START_DIRECTIVE
+- set-value: ALIGN(8)
+- env-assign: LINKCMDS_ALIGN_DIRECTIVE
+build-type: option
+copyrights:
+- Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
+default: null
+default-by-variant: []
+description: Provides clang support for linker command files.
+enabled-by:
+- clang
+links: []
+name: UNUSED
+type: build

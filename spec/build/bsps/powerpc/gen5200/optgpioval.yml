@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 17105988
+default-by-variant:
+- value: 22356228
+  variants:
+  - powerpc/pm520_ze30
+description: |
+  Defines the bits set in the MPC5200 GPIOPCR register during initialization.
+  Must match the hardware requirements.  Must be consistent with
+  BSP_GPIOPCR_INITMASK.  The bits are cleared via BSP_GPIOPCR_INITMASK and then
+  set via BSP_GPIOPCR_INITVAL.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_GPIOPCR_INITVAL
+type: build

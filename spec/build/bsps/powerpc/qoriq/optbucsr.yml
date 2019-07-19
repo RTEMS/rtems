@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant:
+- value: 20972033
+  variants:
+  - powerpc/qoriq_e6500.*
+description: |
+  initial BUCSR value
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: QORIQ_INITIAL_BUCSR
+type: build

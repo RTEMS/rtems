@@ -1,0 +1,81 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: powerpc
+bsp: ss555
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: ss555
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/ss555/include/bsp.h
+  - bsps/powerpc/ss555/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/ss555/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/ss555/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: optconminor
+- role: build-dependency
+  uid: optprintkminor
+- role: build-dependency
+  uid: optuartsiomode
+- role: build-dependency
+  uid: optuartsterm
+- role: build-dependency
+  uid: optwdgtimeout
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/exceptions/ppc_exc_print.c
+- bsps/powerpc/ss555/clock/clock.c
+- bsps/powerpc/ss555/clock/p_clock.c
+- bsps/powerpc/ss555/console/console.c
+- bsps/powerpc/ss555/dev/console-generic.c
+- bsps/powerpc/ss555/start/bspstart.c
+- bsps/powerpc/ss555/start/irq.c
+- bsps/powerpc/ss555/start/irq_asm.S
+- bsps/powerpc/ss555/start/irq_init.c
+- bsps/powerpc/ss555/start/iss555.c
+- bsps/powerpc/ss555/start/raw_exception.c
+- bsps/powerpc/ss555/start/tm27supp.c
+- bsps/powerpc/ss555/start/vectors.S
+- bsps/powerpc/ss555/start/vectors_init.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/irq/irq-default.c
+- bsps/shared/irq/irq-generic.c
+- bsps/shared/irq/irq-info.c
+- bsps/shared/irq/irq-lock.c
+- bsps/shared/irq/irq-server.c
+- bsps/shared/irq/irq-shell.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

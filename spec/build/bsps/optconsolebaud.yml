@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 115200
+default-by-variant:
+- value: 9600
+  variants:
+  - m68k/m5484FireEngine
+  - powerpc/hsc_cm01
+- value: 19200
+  variants:
+  - m68k/COBRA5475
+description: |
+  Default baud for console and other serial devices.
+enabled-by: true
+format: '{}'
+links: []
+name: BSP_CONSOLE_BAUD
+type: build

@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/psxtests/psxfile01/main.c
+- testsuites/psxtests/psxfile01/test.c
+- testsuites/psxtests/psxfile01/test_cat.c
+- testsuites/psxtests/psxfile01/test_extend.c
+- testsuites/psxtests/psxfile01/test_write.c
+stlib: []
+target: testsuites/psxtests/psxfile01.exe
+type: build
+use-after: []
+use-before: []

@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+links: []
+source:
+- bsps/bfin/shared/mmu.c
+- bsps/bfin/shared/dev/clock.c
+- bsps/bfin/shared/dev/rtc.c
+- bsps/bfin/shared/dev/spi.c
+- bsps/bfin/shared/dev/sport.c
+- bsps/bfin/shared/dev/timer.c
+- bsps/bfin/shared/dev/twi.c
+- bsps/bfin/shared/dev/uart.c
+type: build

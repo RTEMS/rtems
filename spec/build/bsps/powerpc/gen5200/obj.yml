@@ -1,0 +1,117 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/gen5200/include/bsp.h
+  - bsps/powerpc/gen5200/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/gen5200/include/bsp/ata.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm_ops.h
+  - bsps/powerpc/gen5200/include/bsp/i2c.h
+  - bsps/powerpc/gen5200/include/bsp/i2cdrv.h
+  - bsps/powerpc/gen5200/include/bsp/irq.h
+  - bsps/powerpc/gen5200/include/bsp/mpc5200.h
+  - bsps/powerpc/gen5200/include/bsp/mscan-base.h
+  - bsps/powerpc/gen5200/include/bsp/mscan.h
+  - bsps/powerpc/gen5200/include/bsp/nvram.h
+  - bsps/powerpc/gen5200/include/bsp/slicetimer.h
+  - bsps/powerpc/gen5200/include/bsp/u-boot-config.h
+- destination: ${BSP_INCLUDEDIR}/bsp/bestcomm
+  source:
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/bestcomm_api.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/bestcomm_glue.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/bestcomm_priv.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/dma_image.capi.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/dma_image.h
+- destination: ${BSP_INCLUDEDIR}/bsp/bestcomm/${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/include/ppctypes.h
+- destination: ${BSP_INCLUDEDIR}/bsp/bestcomm/${BSP_INCLUDEDIR}/mgt5200
+  source:
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/include/mgt5200/mgt5200.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/include/mgt5200/sdma.h
+- destination: ${BSP_INCLUDEDIR}/bsp/bestcomm/task/api
+  source:
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/task_api/bestcomm_api_mem.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/task_api/bestcomm_cntrl.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/task_api/tasksetup_bdtable.h
+  - bsps/powerpc/gen5200/include/bsp/bestcomm/task_api/tasksetup_general.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/gen5200/start/linkcmds.gen5200_base
+  - bsps/powerpc/gen5200/start/linkcmds.icecube
+  - bsps/powerpc/gen5200/start/linkcmds.pm520_cr825
+  - bsps/powerpc/gen5200/start/linkcmds.pm520_ze30
+links: []
+source:
+- bsps/powerpc/gen5200/ata/ata-dma-pio-single.c
+- bsps/powerpc/gen5200/ata/ata-instance.c
+- bsps/powerpc/gen5200/ata/idecfg.c
+- bsps/powerpc/gen5200/ata/pcmcia_ide.c
+- bsps/powerpc/gen5200/bestcomm/bestcomm_api.c
+- bsps/powerpc/gen5200/bestcomm/bestcomm_glue.c
+- bsps/powerpc/gen5200/bestcomm/dma_image.c
+- bsps/powerpc/gen5200/bestcomm/dma_image.reloc.c
+- bsps/powerpc/gen5200/bestcomm/load_task.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_ata.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_bdtable.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_crc16_dp_0.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_crc16_dp_1.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_fec_rx_bd.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_fec_tx_bd.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_dp_0.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_dp_1.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_dp_2.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_dp_3.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_dp_bd_0.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_dp_bd_1.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_rx_bd.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_gen_tx_bd.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_lpc.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_pci_rx.c
+- bsps/powerpc/gen5200/bestcomm/tasksetup_pci_tx.c
+- bsps/powerpc/gen5200/console/console.c
+- bsps/powerpc/gen5200/dev/mpc5200-ata.c
+- bsps/powerpc/gen5200/i2c/i2c.c
+- bsps/powerpc/gen5200/i2c/i2cdrv.c
+- bsps/powerpc/gen5200/i2c/mpc5200mbus.c
+- bsps/powerpc/gen5200/irq/irq.c
+- bsps/powerpc/gen5200/mscan/mscan-base.c
+- bsps/powerpc/gen5200/mscan/mscan.c
+- bsps/powerpc/gen5200/nvram/nvram.c
+- bsps/powerpc/gen5200/rtc/pcf8563.c
+- bsps/powerpc/gen5200/rtc/todcfg.c
+- bsps/powerpc/gen5200/slicetimer/slicetimer.c
+- bsps/powerpc/gen5200/start/bestcomm.c
+- bsps/powerpc/gen5200/start/bspreset.c
+- bsps/powerpc/gen5200/start/bspstart.c
+- bsps/powerpc/gen5200/start/cpuinit.c
+- bsps/powerpc/gen5200/start/uboot_support.c
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/clock/clock.c
+- bsps/powerpc/shared/mmu/bat.c
+- bsps/powerpc/shared/mmu/mmuAsm.S
+- bsps/powerpc/shared/mmu/pte121.c
+- bsps/powerpc/shared/start/bspidle.c
+- bsps/powerpc/shared/start/memcpy.c
+- bsps/powerpc/shared/start/showbats.c
+- bsps/powerpc/shared/u-boot/uboot_dump_bdinfo.c
+- bsps/powerpc/shared/u-boot/uboot_getenv.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/start/bsp-uboot-board-info.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

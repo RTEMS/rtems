@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/i386/include/i386_io.h
+  - bsps/i386/include/uart.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/i386/include/bsp/apic.h
+  - bsps/i386/include/bsp/irq.h
+  - bsps/i386/include/bsp/irq_asm.h
+  - bsps/i386/include/bsp/realmode_int.h
+  - bsps/i386/include/bsp/smp-imps.h
+  - bsps/i386/include/bsp/tty_drv.h
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - bsps/i386/include/libcpu/byteorder.h
+  - bsps/i386/include/libcpu/cpuModel.h
+  - bsps/i386/include/libcpu/page.h
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

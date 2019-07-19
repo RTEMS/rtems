@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant: []
+description: |
+  if defined, builds in bootflags above the RCHW for setup in a debugger to avoid startup MMU setup
+enabled-by: true
+links: []
+name: MPC55XX_BOOTFLAGS
+type: build

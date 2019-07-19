@@ -1,0 +1,60 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: opteni2c1
+- role: build-dependency
+  uid: opteni2c2
+- role: build-dependency
+  uid: optenuart4
+- role: build-dependency
+  uid: optenuart5
+- role: build-dependency
+  uid: optenusart1
+- role: build-dependency
+  uid: optenusart2
+- role: build-dependency
+  uid: optenusart3
+- role: build-dependency
+  uid: optenusart6
+- role: build-dependency
+  uid: optf10xxx
+- role: build-dependency
+  uid: optf4xxxx
+- role: build-dependency
+  uid: opthclk
+- role: build-dependency
+  uid: optoschse
+- role: build-dependency
+  uid: optpclk1
+- role: build-dependency
+  uid: optpclk2
+- role: build-dependency
+  uid: optsysclk
+- role: build-dependency
+  uid: optusartbaud
+- role: build-dependency
+  uid: ../../linkcmds
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../bspopts
+type: build
+use-after: []
+use-before: []

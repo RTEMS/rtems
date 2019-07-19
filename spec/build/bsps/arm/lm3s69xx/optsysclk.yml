@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0
+default-by-variant:
+- value: 50000000
+  variants:
+  - arm/lm3s.*
+- value: 80000000
+  variants:
+  - arm/lm4f.*
+description: |
+  system clock in Hz
+enabled-by: true
+format: '{}'
+links: []
+name: LM3S69XX_SYSTEM_CLOCK
+type: build

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0
+default-by-variant: []
+description: |
+  PHY address for eTSEC interface 2
+enabled-by: true
+format: '{}'
+links: []
+name: QORIQ_ETSEC_2_PHY_ADDR
+type: build

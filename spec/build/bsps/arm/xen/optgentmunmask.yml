@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant: []
+description: |
+  unmask the timer in the tick handler, since Xen will mask the virtual timer before injecting the interrupt to the guest
+enabled-by: true
+links: []
+name: ARM_GENERIC_TIMER_UNMASK_AT_TICK
+type: build

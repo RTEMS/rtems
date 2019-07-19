@@ -1,0 +1,101 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- BUILD_TESTS
+- BUILD_TMTESTS
+includes:
+- testsuites/support/include
+- testsuites/tmtests/include
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: tm01
+- role: build-dependency
+  uid: tm02
+- role: build-dependency
+  uid: tm03
+- role: build-dependency
+  uid: tm04
+- role: build-dependency
+  uid: tm05
+- role: build-dependency
+  uid: tm06
+- role: build-dependency
+  uid: tm07
+- role: build-dependency
+  uid: tm08
+- role: build-dependency
+  uid: tm09
+- role: build-dependency
+  uid: tm10
+- role: build-dependency
+  uid: tm11
+- role: build-dependency
+  uid: tm12
+- role: build-dependency
+  uid: tm13
+- role: build-dependency
+  uid: tm14
+- role: build-dependency
+  uid: tm15
+- role: build-dependency
+  uid: tm16
+- role: build-dependency
+  uid: tm17
+- role: build-dependency
+  uid: tm18
+- role: build-dependency
+  uid: tm19
+- role: build-dependency
+  uid: tm20
+- role: build-dependency
+  uid: tm21
+- role: build-dependency
+  uid: tm22
+- role: build-dependency
+  uid: tm23
+- role: build-dependency
+  uid: tm24
+- role: build-dependency
+  uid: tm25
+- role: build-dependency
+  uid: tm26
+- role: build-dependency
+  uid: tm27
+- role: build-dependency
+  uid: tm28
+- role: build-dependency
+  uid: tm29
+- role: build-dependency
+  uid: tm30
+- role: build-dependency
+  uid: tm31
+- role: build-dependency
+  uid: tm32
+- role: build-dependency
+  uid: tm33
+- role: build-dependency
+  uid: tm34
+- role: build-dependency
+  uid: tm35
+- role: build-dependency
+  uid: tm36
+- role: build-dependency
+  uid: tmck
+- role: build-dependency
+  uid: tmcontext01
+- role: build-dependency
+  uid: tmfine01
+- role: build-dependency
+  uid: tmonetoone
+- role: build-dependency
+  uid: tmtimer01
+type: build
+use-after:
+- rtemstest
+use-before: []

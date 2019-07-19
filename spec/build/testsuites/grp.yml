@@ -1,0 +1,65 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes:
+- ${BSP_INCLUDES}
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: optada
+- role: build-dependency
+  uid: optall
+- role: build-dependency
+  uid: optbenchmarks
+- role: build-dependency
+  uid: optfs
+- role: build-dependency
+  uid: optlib
+- role: build-dependency
+  uid: optmp
+- role: build-dependency
+  uid: optpsx
+- role: build-dependency
+  uid: optpsxtm
+- role: build-dependency
+  uid: optrhs
+- role: build-dependency
+  uid: optsamples
+- role: build-dependency
+  uid: optsmp
+- role: build-dependency
+  uid: optsp
+- role: build-dependency
+  uid: opttm
+- role: build-dependency
+  uid: ada/grp
+- role: build-dependency
+  uid: benchmarks/grp
+- role: build-dependency
+  uid: fstests/grp
+- role: build-dependency
+  uid: libtests/grp
+- role: build-dependency
+  uid: mptests/grp
+- role: build-dependency
+  uid: psxtests/grp
+- role: build-dependency
+  uid: psxtmtests/grp
+- role: build-dependency
+  uid: rhealstone/grp
+- role: build-dependency
+  uid: samples/grp
+- role: build-dependency
+  uid: smptests/grp
+- role: build-dependency
+  uid: sptests/grp
+- role: build-dependency
+  uid: tmtests/grp
+type: build
+use-after:
+- rtemscpu
+- rtemsbsp
+use-before: []

@@ -1,0 +1,79 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -march=rv32imac
+- -mabi=ilp32
+default-by-variant:
+- value:
+  - -march=rv64imafdc
+  - -mabi=lp64d
+  - -mcmodel=medany
+  variants:
+  - riscv/rv64imafdc_medany
+- value:
+  - -march=rv64imafdc
+  - -mabi=lp64d
+  variants:
+  - riscv/rv64imafdc
+- value:
+  - -march=rv64imafd
+  - -mabi=lp64d
+  - -mcmodel=medany
+  variants:
+  - riscv/rv64imafd_medany
+- value:
+  - -march=rv64imafd
+  - -mabi=lp64d
+  variants:
+  - riscv/rv64imafd
+- value:
+  - -march=rv64imac
+  - -mabi=lp64
+  - -mcmodel=medany
+  variants:
+  - riscv/rv64imac_medany
+- value:
+  - -march=rv64imac
+  - -mabi=lp64
+  variants:
+  - riscv/rv64imac
+- value: []
+  variants:
+  - riscv/rv32imafdc
+- value:
+  - -march=rv32imafd
+  - -mabi=ilp32d
+  variants:
+  - riscv/rv32imafd
+- value:
+  - -march=rv32imafc
+  - -mabi=ilp32f
+  variants:
+  - riscv/rv32imafc
+- value:
+  - -march=rv32im
+  - -mabi=ilp32
+  variants:
+  - riscv/rv32im
+- value:
+  - -march=rv32iac
+  - -mabi=ilp32
+  variants:
+  - riscv/rv32iac
+- value:
+  - -march=rv32i
+  - -mabi=ilp32
+  variants:
+  - riscv/rv32i
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

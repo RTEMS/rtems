@@ -1,0 +1,66 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: mips
+bsp: rbtx4925
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: rbtx4925
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/mips/rbtx4925/include/bsp.h
+  - bsps/mips/rbtx4925/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/mips/rbtx4925/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/mips/rbtx4925/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: opttx49xx
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../tstnolibdl
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/mips/rbtx4925/clock/clockdrv.c
+- bsps/mips/rbtx4925/console/console-io.c
+- bsps/mips/rbtx4925/irq/vectorisrs.c
+- bsps/mips/rbtx4925/start/bspstart.c
+- bsps/mips/rbtx4925/start/inittlb.c
+- bsps/mips/shared/irq/exception.S
+- bsps/mips/shared/irq/installisrentries.c
+- bsps/mips/shared/irq/interruptmask_TX49.c
+- bsps/mips/shared/irq/irq.c
+- bsps/mips/shared/irq/isr_entries.S
+- bsps/mips/shared/irq/vectorexceptions.c
+- bsps/mips/shared/liblnk/lnklib.S
+- bsps/mips/shared/liblnk/pmon.S
+- bsps/mips/shared/start/idtmem.S
+- bsps/mips/shared/start/idttlb.S
+- bsps/mips/shared/timer/gettime.S
+- bsps/mips/shared/timer/timer.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/x86_64/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/libcpu
+  source:
+  - bsps/x86_64/include/libcpu/page.h
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []

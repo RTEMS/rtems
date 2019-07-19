@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/sparc/leon2/include/bsp.h
+  - bsps/sparc/leon2/include/leon.h
+  - bsps/sparc/leon2/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/sparc/leon2/include/bsp/at697_pci.h
+  - bsps/sparc/leon2/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/sparc/leon2/start/linkcmds.at697f
+  - bsps/sparc/leon2/start/linkcmds.leon2
+  - bsps/sparc/shared/start/linkcmds.base
+links: []
+source:
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+- bsps/sparc/leon2/btimer/btimer.c
+- bsps/sparc/leon2/clock/ckinit.c
+- bsps/sparc/leon2/console/console.c
+- bsps/sparc/leon2/console/debugputs.c
+- bsps/sparc/leon2/gnatsupp/gnatsupp.c
+- bsps/sparc/leon2/pci/at697_pci.c
+- bsps/sparc/leon2/start/bspdelay.c
+- bsps/sparc/leon2/start/bspidle.c
+- bsps/sparc/leon2/start/bspstart.c
+- bsps/sparc/leon2/start/cache.c
+- bsps/sparc/leon2/start/setvec.c
+- bsps/sparc/leon2/start/spurious.c
+- bsps/sparc/shared/drvmgr/ambapp_bus_leon2.c
+- bsps/sparc/shared/drvmgr/leon2_amba_bus.c
+- bsps/sparc/shared/gnatcommon.c
+- bsps/sparc/shared/irq/bsp_isr_handler.c
+- bsps/sparc/shared/irq/irq-shared.c
+- bsps/sparc/shared/start/bsp_fatal_exit.c
+- bsps/sparc/shared/start/bsp_fatal_halt.c
+- bsps/sparc/shared/start/bspgetworkarea.c
+type: build

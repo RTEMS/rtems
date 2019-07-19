@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+ada-main: testsuites/ada/samples/base_sp/base_sp.adb
+ada-object-directory: testsuites/ada/samples/base_sp
+adaflags: []
+adaincludes:
+- cpukit/include/adainclude
+- testsuites/ada/support
+build-type: ada-test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/ada/samples/base_sp/init.c
+stlib: []
+target: testsuites/ada/ada_base_sp.exe
+type: build
+use-after: []
+use-before: []

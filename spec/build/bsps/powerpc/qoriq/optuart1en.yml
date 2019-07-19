@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant:
+- value: false
+  variants:
+  - powerpc/qoriq_core_1
+description: |
+  use 1 to enable UART 1, otherwise use 0
+enabled-by: true
+links: []
+name: QORIQ_UART_1_ENABLE
+type: build

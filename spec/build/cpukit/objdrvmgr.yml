@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- riscv
+- sparc
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/drvmgr
+  source:
+  - cpukit/include/drvmgr/drvmgr.h
+  - cpukit/include/drvmgr/drvmgr_confdefs.h
+  - cpukit/include/drvmgr/drvmgr_list.h
+  - cpukit/include/drvmgr/pci_bus.h
+links: []
+source:
+- cpukit/libdrvmgr/drvmgr_by_id.c
+- cpukit/libdrvmgr/drvmgr_by_name.c
+- cpukit/libdrvmgr/drvmgr.c
+- cpukit/libdrvmgr/drvmgr_dev_by_name.c
+- cpukit/libdrvmgr/drvmgr_drvinf.c
+- cpukit/libdrvmgr/drvmgr_for_each_dev.c
+- cpukit/libdrvmgr/drvmgr_for_each_list_dev.c
+- cpukit/libdrvmgr/drvmgr_func.c
+- cpukit/libdrvmgr/drvmgr_func_call.c
+- cpukit/libdrvmgr/drvmgr_init.c
+- cpukit/libdrvmgr/drvmgr_list.c
+- cpukit/libdrvmgr/drvmgr_lock.c
+- cpukit/libdrvmgr/drvmgr_print.c
+- cpukit/libdrvmgr/drvmgr_res.c
+- cpukit/libdrvmgr/drvmgr_rw.c
+- cpukit/libdrvmgr/drvmgr_translate.c
+- cpukit/libdrvmgr/drvmgr_translate_check.c
+- cpukit/libdrvmgr/drvmgr_unregister.c
+- cpukit/libmisc/shell/main_drvmgr.c
+type: build

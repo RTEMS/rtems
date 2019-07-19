@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- BUILD_TESTS
+- BUILD_SAMPLES
+includes:
+- testsuites/support/include
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: basempnode1
+- role: build-dependency
+  uid: basempnode2
+- role: build-dependency
+  uid: basesp
+- role: build-dependency
+  uid: capture
+- role: build-dependency
+  uid: cdtest
+- role: build-dependency
+  uid: fileio
+- role: build-dependency
+  uid: hello
+- role: build-dependency
+  uid: iostream
+- role: build-dependency
+  uid: loopback
+- role: build-dependency
+  uid: minimum
+- role: build-dependency
+  uid: nsecs
+- role: build-dependency
+  uid: paranoia
+- role: build-dependency
+  uid: pppd
+- role: build-dependency
+  uid: ticker
+- role: build-dependency
+  uid: unlimited
+type: build
+use-after:
+- rtemstest
+use-before: []

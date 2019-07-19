@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: false
+default-by-variant:
+- value: true
+  variants:
+  - arm/lm3s3749.*
+- value: true
+  variants:
+  - arm/lm4f.*
+description: |
+  defined if MCU supports UDMA
+enabled-by: true
+links: []
+name: LM3S69XX_HAS_UDMA
+type: build

@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+install-path: ${BSP_LIBDIR}
+links:
+- role: build-dependency
+  uid: objdbgarm
+- role: build-dependency
+  uid: objdbgi386
+source:
+- cpukit/libdebugger/rtems-debugger-block.c
+- cpukit/libdebugger/rtems-debugger-bsp.c
+- cpukit/libdebugger/rtems-debugger-cmd.c
+- cpukit/libdebugger/rtems-debugger-remote.c
+- cpukit/libdebugger/rtems-debugger-remote-tcp.c
+- cpukit/libdebugger/rtems-debugger-server.c
+- cpukit/libdebugger/rtems-debugger-target.c
+- cpukit/libdebugger/rtems-debugger-threads.c
+target: debugger
+type: build

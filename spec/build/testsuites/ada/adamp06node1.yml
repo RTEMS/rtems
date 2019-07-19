@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+ada-main: testsuites/ada/mptests/mp06/node1/mp06_node1.adb
+ada-object-directory: testsuites/ada/mptests/mp06/node1
+adaflags: []
+adaincludes:
+- cpukit/include/adainclude
+- testsuites/ada/support
+- testsuites/ada/mptests/mp06
+build-type: ada-test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by:
+- RTEMS_MULTIPROCESSING
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/ada/mptests/mp06/node1/init.c
+stlib: []
+target: testsuites/ada/ada_mp06_node1.exe
+type: build
+use-after: []
+use-before: []

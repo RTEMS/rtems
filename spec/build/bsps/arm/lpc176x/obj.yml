@@ -1,0 +1,80 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/lpc176x/include/bsp.h
+  - bsps/arm/lpc176x/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/lpc176x/include/bsp/adc-defs.h
+  - bsps/arm/lpc176x/include/bsp/adc.h
+  - bsps/arm/lpc176x/include/bsp/can-defs.h
+  - bsps/arm/lpc176x/include/bsp/can.h
+  - bsps/arm/lpc176x/include/bsp/common-types.h
+  - bsps/arm/lpc176x/include/bsp/dma.h
+  - bsps/arm/lpc176x/include/bsp/gpio-defs.h
+  - bsps/arm/lpc176x/include/bsp/io-defs.h
+  - bsps/arm/lpc176x/include/bsp/io.h
+  - bsps/arm/lpc176x/include/bsp/irq.h
+  - bsps/arm/lpc176x/include/bsp/lpc-clock-config.h
+  - bsps/arm/lpc176x/include/bsp/lpc-gpio.h
+  - bsps/arm/lpc176x/include/bsp/lpc176x.h
+  - bsps/arm/lpc176x/include/bsp/mbed-pinmap.h
+  - bsps/arm/lpc176x/include/bsp/pwmout-defs.h
+  - bsps/arm/lpc176x/include/bsp/pwmout.h
+  - bsps/arm/lpc176x/include/bsp/system-clocks.h
+  - bsps/arm/lpc176x/include/bsp/timer-defs.h
+  - bsps/arm/lpc176x/include/bsp/timer.h
+  - bsps/arm/lpc176x/include/bsp/watchdog-defs.h
+  - bsps/arm/lpc176x/include/bsp/watchdog.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/lpc176x/start/linkcmds.lpc1768_mbed
+  - bsps/arm/lpc176x/start/linkcmds.lpc1768_mbed_ahb_ram
+  - bsps/arm/lpc176x/start/linkcmds.lpc1768_mbed_ahb_ram_eth
+links: []
+source:
+- bsps/arm/lpc176x/btimer/btimer.c
+- bsps/arm/lpc176x/can/can.c
+- bsps/arm/lpc176x/console/console-config.c
+- bsps/arm/lpc176x/gpio/lpc-gpio.c
+- bsps/arm/lpc176x/irq/irq.c
+- bsps/arm/lpc176x/pwm/pwmout.c
+- bsps/arm/lpc176x/rtc/rtc-config.c
+- bsps/arm/lpc176x/start/adc.c
+- bsps/arm/lpc176x/start/bspidle.c
+- bsps/arm/lpc176x/start/bspstart.c
+- bsps/arm/lpc176x/start/bspstarthooks.c
+- bsps/arm/lpc176x/start/dma-copy.c
+- bsps/arm/lpc176x/start/dma.c
+- bsps/arm/lpc176x/start/io.c
+- bsps/arm/lpc176x/start/restart.c
+- bsps/arm/lpc176x/start/system-clocks.c
+- bsps/arm/lpc176x/start/watchdog.c
+- bsps/arm/lpc176x/timer/timer.c
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/clock/clock-nxp-lpc.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/dev/serial/uart-output-char.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

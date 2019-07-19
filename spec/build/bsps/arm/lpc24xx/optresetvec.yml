@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0
+default-by-variant:
+- value: 2147483712
+  variants:
+  - arm/lpc24xx_ncs_rom_ext
+description: |
+  reset vector address for BSP start
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_START_RESET_VECTOR
+type: build

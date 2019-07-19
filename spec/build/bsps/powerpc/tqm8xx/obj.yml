@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/tqm8xx/include/bsp.h
+  - bsps/powerpc/tqm8xx/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/tqm8xx/include/bsp/8xx_immap.h
+  - bsps/powerpc/tqm8xx/include/bsp/irq.h
+  - bsps/powerpc/tqm8xx/include/bsp/spi.h
+  - bsps/powerpc/tqm8xx/include/bsp/tqm.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/shared/start/linkcmds.base
+  - bsps/powerpc/tqm8xx/start/linkcmds
+links: []
+source:
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/clock/clock.c
+- bsps/powerpc/shared/start/bspidle.c
+- bsps/powerpc/tqm8xx/btimer/btimer.c
+- bsps/powerpc/tqm8xx/clock/p_clock.c
+- bsps/powerpc/tqm8xx/console/console.c
+- bsps/powerpc/tqm8xx/irq/irq.c
+- bsps/powerpc/tqm8xx/spi/spi.c
+- bsps/powerpc/tqm8xx/start/bspgetworkarea.c
+- bsps/powerpc/tqm8xx/start/bspstart.c
+- bsps/powerpc/tqm8xx/start/cp.c
+- bsps/powerpc/tqm8xx/start/cpuinit.c
+- bsps/powerpc/tqm8xx/start/dpram.c
+- bsps/powerpc/tqm8xx/start/mmu.c
+- bsps/powerpc/tqm8xx/start/mmutlbtab.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

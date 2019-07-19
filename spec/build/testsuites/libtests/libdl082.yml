@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+install-path: null
+links: []
+source:
+- testsuites/libtests/dl08-o3.c
+- testsuites/libtests/dl08-o5.c
+- testsuites/libtests/dl08-o6-123456789-123456789.c
+target: dl08_2
+type: build

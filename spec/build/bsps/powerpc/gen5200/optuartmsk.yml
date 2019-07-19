@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 1
+default-by-variant:
+- value: 57
+  variants:
+  - powerpc/pm520_ze30
+- value: 7
+  variants:
+  - powerpc/pm520_cr825
+- value: 1
+  variants:
+  - powerpc/icecube
+description: |
+  bit mask to specify the UARTS (PSCs), which should be enabled on this board.  Must match the hardware requirements. PSC1 corresponds to the LSB
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_UART_AVAIL_MASK
+type: build

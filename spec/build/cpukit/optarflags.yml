@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-assign: ARFLAGS
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- crD
+default-by-variant: []
+description: |
+  Flags passed to the library archiver
+enabled-by: true
+links: []
+name: ARFLAGS
+type: build

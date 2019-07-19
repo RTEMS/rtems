@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/lm3s69xx/include/bsp.h
+  - bsps/arm/lm3s69xx/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/lm3s69xx/include/bsp/io.h
+  - bsps/arm/lm3s69xx/include/bsp/irq.h
+  - bsps/arm/lm3s69xx/include/bsp/lm3s69xx.h
+  - bsps/arm/lm3s69xx/include/bsp/ssi.h
+  - bsps/arm/lm3s69xx/include/bsp/syscon.h
+  - bsps/arm/lm3s69xx/include/bsp/uart.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/lm3s69xx/start/linkcmds.lm3s3749
+  - bsps/arm/lm3s69xx/start/linkcmds.lm3s6965
+  - bsps/arm/lm3s69xx/start/linkcmds.lm3s6965_qemu
+links: []
+source:
+- bsps/arm/lm3s69xx/console/console-config.c
+- bsps/arm/lm3s69xx/console/uart.c
+- bsps/arm/lm3s69xx/i2c/ssi.c
+- bsps/arm/lm3s69xx/start/bspstart.c
+- bsps/arm/lm3s69xx/start/bspstarthook.c
+- bsps/arm/lm3s69xx/start/io.c
+- bsps/arm/lm3s69xx/start/syscon.c
+- bsps/arm/shared/clock/clock-armv7m.c
+- bsps/arm/shared/irq/irq-armv7m.c
+- bsps/arm/shared/irq/irq-dispatch-armv7m.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/arm/shared/start/bspreset-armv7m.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

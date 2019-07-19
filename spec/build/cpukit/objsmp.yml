@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+includes: []
+install: []
+links: []
+source:
+- cpukit/score/src/percpustatewait.c
+- cpukit/score/src/profilingsmplock.c
+- cpukit/score/src/schedulerdefaultaskforhelp.c
+- cpukit/score/src/schedulerdefaultpinunpin.c
+- cpukit/score/src/schedulerdefaultsetaffinity.c
+- cpukit/score/src/scheduleredfsmp.c
+- cpukit/score/src/schedulerpriorityaffinitysmp.c
+- cpukit/score/src/schedulerprioritysmp.c
+- cpukit/score/src/schedulersimplesmp.c
+- cpukit/score/src/schedulersmp.c
+- cpukit/score/src/schedulersmpstartidle.c
+- cpukit/score/src/schedulerstrongapa.c
+- cpukit/score/src/smp.c
+- cpukit/score/src/smplock.c
+- cpukit/score/src/smpmulticastaction.c
+- cpukit/score/src/smpunicastaction.c
+- cpukit/score/src/threadunpin.c
+type: build

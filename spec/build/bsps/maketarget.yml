@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  #
+  # Target specific settings.
+  #
+
+  CFLAGS = ${WARNING_FLAGS} ${CC_WARNING_FLAGS} ${OPTIMIZATION_FLAGS} ${ABI_FLAGS}
+  CPPFLAGS =
+  LDFLAGS =
+  LIBS =
+
+  RTEMS_API = ${__RTEMS_MAJOR__}
+  CC = ${ARCH}-rtems${__RTEMS_MAJOR__}-gcc --pipe
+  AS = ${ARCH}-rtems${__RTEMS_MAJOR__}-as
+  AR = ${ARCH}-rtems${__RTEMS_MAJOR__}-ar
+  NM = ${ARCH}-rtems${__RTEMS_MAJOR__}-nm
+  LD = ${ARCH}-rtems${__RTEMS_MAJOR__}-ld
+  SIZE = ${ARCH}-rtems${__RTEMS_MAJOR__}-size
+  STRIP = ${ARCH}-rtems${__RTEMS_MAJOR__}-strip
+  OBJCOPY = ${ARCH}-rtems${__RTEMS_MAJOR__}-objcopy
+  RANLIB = ${ARCH}-rtems${__RTEMS_MAJOR__}-ranlib
+
+  CXX = ${ARCH}-rtems${__RTEMS_MAJOR__}-g++
+
+  export CC
+  export AS
+  export LD
+  export NM
+  export AR
+  export SIZE
+  export OBJCOPY
+
+  export CXX
+
+  RTEMS_HAS_MULTIPROCESSING = ${RTEMS_HAS_MULTIPROCESSING}
+  RTEMS_HAS_POSIX_API = ${RTEMS_HAS_POSIX_API}
+  RTEMS_HAS_ITRON_API = no
+  RTEMS_HAS_NETWORKING = ${RTEMS_HAS_NETWORKING}
+  RTEMS_HAS_RDBG = no
+  RTEMS_HAS_CPLUSPLUS = yes
+  RTEMS_CPU = ${ARCH}
+
+  XCFLAGS=$$(CFLAGS_FOR_TARGET)
+
+  export RTEMS_BSP
+  export RTEMS_CUSTOM
+  export PROJECT_ROOT
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+install-path: ${PREFIX}/${ARCH}-rtems${__RTEMS_MAJOR__}/${BSP_NAME}/make
+links: []
+target: target.cfg
+type: build

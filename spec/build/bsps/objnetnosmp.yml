@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- and:
+  - RTEMS_NETWORKING
+  - not: RTEMS_SMP
+includes:
+- cpukit/libnetworking
+install:
+- destination: ${BSP_INCLUDEDIR}/libchip
+  source:
+  - bsps/include/libchip/greth.h
+links: []
+source:
+- bsps/shared/net/greth2.c
+type: build

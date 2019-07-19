@@ -1,0 +1,104 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: imx7
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: imx
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/imx/include/bsp.h
+  - bsps/arm/imx/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/arm/freescale/imx
+  source:
+  - bsps/arm/imx/include/arm/freescale/imx/imx_ccmvar.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_ecspireg.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_gpcreg.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_i2creg.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_iomuxreg.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_iomuxvar.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_srcreg.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_uartreg.h
+  - bsps/arm/imx/include/arm/freescale/imx/imx_wdogreg.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/imx/include/bsp/imx-gpio.h
+  - bsps/arm/imx/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/imx/start/linkcmds
+  - bsps/arm/imx/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: optcachedata
+- role: build-dependency
+  uid: optcacheinst
+- role: build-dependency
+  uid: optccmahb
+- role: build-dependency
+  uid: optcmmecspi
+- role: build-dependency
+  uid: optcmmipg
+- role: build-dependency
+  uid: optcmmsdhci
+- role: build-dependency
+  uid: optcmmuart
+- role: build-dependency
+  uid: optconirq
+- role: build-dependency
+  uid: optfdtcpyro
+- role: build-dependency
+  uid: optfdtmxsz
+- role: build-dependency
+  uid: optfdtro
+- role: build-dependency
+  uid: optfdtuboot
+- role: build-dependency
+  uid: optresetvec
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/imx/console/console-config.c
+- bsps/arm/imx/gpio/imx-gpio.c
+- bsps/arm/imx/i2c/imx-i2c.c
+- bsps/arm/imx/spi/imx-ecspi.c
+- bsps/arm/imx/start/bspreset.c
+- bsps/arm/imx/start/bspstart.c
+- bsps/arm/imx/start/bspstarthooks.c
+- bsps/arm/imx/start/ccm.c
+- bsps/arm/imx/start/imx_iomux.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cache/cache-v7ar-disable-data.S
+- bsps/arm/shared/clock/clock-generic-timer.c
+- bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
+- bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
+- bsps/arm/shared/irq/irq-gic.c
+- bsps/arm/shared/start/bsp-start-memcpy.S
+- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bsp-fdt.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/stackalloc.c
+type: build

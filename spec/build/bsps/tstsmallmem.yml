@@ -1,0 +1,128 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    flashdisk01: exclude
+    fsdosfsname01: exclude
+    linpack: exclude
+    psxconfig01: exclude
+    psxusleep: exclude
+    record02: exclude
+    sp47: exclude
+    spstkalloc02: exclude
+- set-value: -DPER_ALLOCATION=10
+- append-test-cppflags: sp71
+- set-value: -DMAXIMUM_DISTRIBUTION=10
+- append-test-cppflags: tmck
+- set-value: -DOPERATION_COUNT=3
+- append-test-cppflags: psxtmbarrier01
+- append-test-cppflags: psxtmbarrier02
+- append-test-cppflags: psxtmbarrier03
+- append-test-cppflags: psxtmbarrier04
+- append-test-cppflags: psxtmbarrierattr01
+- append-test-cppflags: psxtmcleanup01
+- append-test-cppflags: psxtmclocknanosleep01
+- append-test-cppflags: psxtmclocknanosleep02
+- append-test-cppflags: psxtmclocknanosleep03
+- append-test-cppflags: psxtmcond01
+- append-test-cppflags: psxtmcond02
+- append-test-cppflags: psxtmcond03
+- append-test-cppflags: psxtmcond04
+- append-test-cppflags: psxtmcond05
+- append-test-cppflags: psxtmcond06
+- append-test-cppflags: psxtmcond07
+- append-test-cppflags: psxtmcond08
+- append-test-cppflags: psxtmcond09
+- append-test-cppflags: psxtmcond10
+- append-test-cppflags: psxtmkey01
+- append-test-cppflags: psxtmkey02
+- append-test-cppflags: psxtmmq01
+- append-test-cppflags: psxtmmqrcvblock01
+- append-test-cppflags: psxtmmqrcvblock02
+- append-test-cppflags: psxtmmutex01
+- append-test-cppflags: psxtmmutex02
+- append-test-cppflags: psxtmmutex03
+- append-test-cppflags: psxtmmutex04
+- append-test-cppflags: psxtmmutex05
+- append-test-cppflags: psxtmmutex06
+- append-test-cppflags: psxtmmutex07
+- append-test-cppflags: psxtmmutexattr01
+- append-test-cppflags: psxtmnanosleep01
+- append-test-cppflags: psxtmnanosleep02
+- append-test-cppflags: psxtmonce01
+- append-test-cppflags: psxtmrwlock01
+- append-test-cppflags: psxtmrwlock02
+- append-test-cppflags: psxtmrwlock03
+- append-test-cppflags: psxtmrwlock04
+- append-test-cppflags: psxtmrwlock05
+- append-test-cppflags: psxtmrwlock06
+- append-test-cppflags: psxtmrwlock07
+- append-test-cppflags: psxtmsem01
+- append-test-cppflags: psxtmsem02
+- append-test-cppflags: psxtmsem03
+- append-test-cppflags: psxtmsem04
+- append-test-cppflags: psxtmsem05
+- append-test-cppflags: psxtmsleep01
+- append-test-cppflags: psxtmsleep02
+- append-test-cppflags: psxtmthread01
+- append-test-cppflags: psxtmthread02
+- append-test-cppflags: psxtmthread03
+- append-test-cppflags: psxtmthread04
+- append-test-cppflags: psxtmthread05
+- append-test-cppflags: psxtmthread06
+- append-test-cppflags: psxtmthreadattr01
+- append-test-cppflags: tm01
+- append-test-cppflags: tm02
+- append-test-cppflags: tm03
+- append-test-cppflags: tm04
+- append-test-cppflags: tm05
+- append-test-cppflags: tm06
+- append-test-cppflags: tm07
+- append-test-cppflags: tm08
+- append-test-cppflags: tm09
+- append-test-cppflags: tm10
+- append-test-cppflags: tm11
+- append-test-cppflags: tm12
+- append-test-cppflags: tm13
+- append-test-cppflags: tm14
+- append-test-cppflags: tm15
+- append-test-cppflags: tm16
+- append-test-cppflags: tm17
+- append-test-cppflags: tm18
+- append-test-cppflags: tm19
+- append-test-cppflags: tm20
+- append-test-cppflags: tm21
+- append-test-cppflags: tm22
+- append-test-cppflags: tm23
+- append-test-cppflags: tm24
+- append-test-cppflags: tm25
+- append-test-cppflags: tm26
+- append-test-cppflags: tm27
+- append-test-cppflags: tm28
+- append-test-cppflags: tm29
+- append-test-cppflags: tm30
+- append-test-cppflags: tm31
+- append-test-cppflags: tm32
+- append-test-cppflags: tm33
+- append-test-cppflags: tm34
+- append-test-cppflags: tm35
+- append-test-cppflags: tm36
+- append-test-cppflags: tmck
+- append-test-cppflags: tmcontext01
+- append-test-cppflags: tmfine01
+- append-test-cppflags: tmonetoone
+- append-test-cppflags: tmtimer01
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links:
+- role: build-dependency
+  uid: tstnoiconv
+- role: build-dependency
+  uid: tstnojffs2
+- role: build-dependency
+  uid: tstnolibdl
+type: build

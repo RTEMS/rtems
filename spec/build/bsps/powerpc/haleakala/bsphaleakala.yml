@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: powerpc
+bsp: haleakala
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: haleakala
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/powerpc/haleakala/include/bsp.h
+  - bsps/powerpc/haleakala/include/mmu_405.h
+  - bsps/powerpc/haleakala/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/powerpc/haleakala/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/powerpc/haleakala/start/linkcmds
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirqdflt
+- role: build-dependency
+  uid: ../../opto1
+- role: build-dependency
+  uid: ../crti
+- role: build-dependency
+  uid: ../crtn
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: optsprg
+- role: build-dependency
+  uid: optvecbase
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../obj
+- role: build-dependency
+  uid: ../objexc
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/powerpc/haleakala/irq/irq.c
+- bsps/powerpc/haleakala/irq/irq_init.c
+- bsps/powerpc/haleakala/start/bspstart.c
+- bsps/powerpc/haleakala/start/mmu_405.c
+- bsps/powerpc/haleakala/start/mmu_405asm.S
+- bsps/powerpc/shared/btimer/btimer-ppc-dec.c
+- bsps/powerpc/shared/cache/cache.c
+- bsps/powerpc/shared/clock/clock-ppc403.c
+- bsps/powerpc/shared/console/console.c
+- bsps/powerpc/shared/console/uart.c
+- bsps/powerpc/shared/irq/ppc-irq-legacy.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-loop.c
+- bsps/shared/start/sbrk.c
+type: build

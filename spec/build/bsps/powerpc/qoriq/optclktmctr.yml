@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 1
+default-by-variant:
+- value: 5
+  variants:
+  - powerpc/qoriq_core_1
+description: |
+  global timer used for the timecounter, 0..3 maps to A0..A3, and 4..7 maps to B0..B3
+enabled-by: true
+format: '{}'
+links: []
+name: QORIQ_CLOCK_TIMECOUNTER
+type: build

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0
+default-by-variant:
+- value: 17
+  variants:
+  - powerpc/mpc8309som
+- value: -1
+  variants:
+  - powerpc/br_uid
+description: |
+  PHY address of network interface 0
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: MPC83XX_NETWORK_INTERFACE_0_PHY_ADDR
+type: build

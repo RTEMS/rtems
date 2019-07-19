@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant: []
+description: |
+  Always defined when on a LEON3 to enable the LEON3 support for determining the CPU core number in an SMP configuration.
+enabled-by: true
+links: []
+name: BSP_LEON3_SMP
+type: build

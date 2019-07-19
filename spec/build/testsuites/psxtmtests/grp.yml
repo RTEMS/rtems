@@ -1,0 +1,131 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+- BUILD_TESTS
+- BUILD_PSXTMTESTS
+includes:
+- testsuites/support/include
+- testsuites/tmtests/include
+install: []
+ldflags:
+- -Wl,--wrap=printf
+- -Wl,--wrap=puts
+links:
+- role: build-dependency
+  uid: psxtmbarrier01
+- role: build-dependency
+  uid: psxtmbarrier02
+- role: build-dependency
+  uid: psxtmbarrier03
+- role: build-dependency
+  uid: psxtmbarrier04
+- role: build-dependency
+  uid: psxtmbarrierattr01
+- role: build-dependency
+  uid: psxtmcleanup01
+- role: build-dependency
+  uid: psxtmclocknanosleep01
+- role: build-dependency
+  uid: psxtmclocknanosleep02
+- role: build-dependency
+  uid: psxtmclocknanosleep03
+- role: build-dependency
+  uid: psxtmcond01
+- role: build-dependency
+  uid: psxtmcond02
+- role: build-dependency
+  uid: psxtmcond03
+- role: build-dependency
+  uid: psxtmcond04
+- role: build-dependency
+  uid: psxtmcond05
+- role: build-dependency
+  uid: psxtmcond06
+- role: build-dependency
+  uid: psxtmcond07
+- role: build-dependency
+  uid: psxtmcond08
+- role: build-dependency
+  uid: psxtmcond09
+- role: build-dependency
+  uid: psxtmcond10
+- role: build-dependency
+  uid: psxtmkey01
+- role: build-dependency
+  uid: psxtmkey02
+- role: build-dependency
+  uid: psxtmmq01
+- role: build-dependency
+  uid: psxtmmqrcvblock01
+- role: build-dependency
+  uid: psxtmmqrcvblock02
+- role: build-dependency
+  uid: psxtmmutex01
+- role: build-dependency
+  uid: psxtmmutex02
+- role: build-dependency
+  uid: psxtmmutex03
+- role: build-dependency
+  uid: psxtmmutex04
+- role: build-dependency
+  uid: psxtmmutex05
+- role: build-dependency
+  uid: psxtmmutex06
+- role: build-dependency
+  uid: psxtmmutex07
+- role: build-dependency
+  uid: psxtmmutexattr01
+- role: build-dependency
+  uid: psxtmnanosleep01
+- role: build-dependency
+  uid: psxtmnanosleep02
+- role: build-dependency
+  uid: psxtmonce01
+- role: build-dependency
+  uid: psxtmrwlock01
+- role: build-dependency
+  uid: psxtmrwlock02
+- role: build-dependency
+  uid: psxtmrwlock03
+- role: build-dependency
+  uid: psxtmrwlock04
+- role: build-dependency
+  uid: psxtmrwlock05
+- role: build-dependency
+  uid: psxtmrwlock06
+- role: build-dependency
+  uid: psxtmrwlock07
+- role: build-dependency
+  uid: psxtmsem01
+- role: build-dependency
+  uid: psxtmsem02
+- role: build-dependency
+  uid: psxtmsem03
+- role: build-dependency
+  uid: psxtmsem04
+- role: build-dependency
+  uid: psxtmsem05
+- role: build-dependency
+  uid: psxtmsleep01
+- role: build-dependency
+  uid: psxtmsleep02
+- role: build-dependency
+  uid: psxtmthread01
+- role: build-dependency
+  uid: psxtmthread02
+- role: build-dependency
+  uid: psxtmthread03
+- role: build-dependency
+  uid: psxtmthread04
+- role: build-dependency
+  uid: psxtmthread05
+- role: build-dependency
+  uid: psxtmthread06
+- role: build-dependency
+  uid: psxtmthreadattr01
+type: build
+use-after:
+- rtemstest
+use-before: []

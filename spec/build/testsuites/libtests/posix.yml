@@ -1,0 +1,66 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/libtests/POSIX/calloc.c
+- testsuites/libtests/POSIX/clock_gettime.c
+- testsuites/libtests/POSIX/close.c
+- testsuites/libtests/POSIX/dup2.c
+- testsuites/libtests/POSIX/fcntl.c
+- testsuites/libtests/POSIX/flockfile.c
+- testsuites/libtests/POSIX/fork.c
+- testsuites/libtests/POSIX/free.c
+- testsuites/libtests/POSIX/fstat.c
+- testsuites/libtests/POSIX/ftrylockfile.c
+- testsuites/libtests/POSIX/funlockfile.c
+- testsuites/libtests/POSIX/getdents.c
+- testsuites/libtests/POSIX/getlogin.c
+- testsuites/libtests/POSIX/getpwnam.c
+- testsuites/libtests/POSIX/getpwuid.c
+- testsuites/libtests/POSIX/gettimeofday.c
+- testsuites/libtests/POSIX/getuid.c
+- testsuites/libtests/POSIX/htonl.c
+- testsuites/libtests/POSIX/iconv.c
+- testsuites/libtests/POSIX/iconv_close.c
+- testsuites/libtests/POSIX/iconv_open.c
+- testsuites/libtests/POSIX/issetugid.c
+- testsuites/libtests/POSIX/kill.c
+- testsuites/libtests/POSIX/longjmp.c
+- testsuites/libtests/POSIX/lseek.c
+- testsuites/libtests/POSIX/lstat.c
+- testsuites/libtests/POSIX/malloc.c
+- testsuites/libtests/POSIX/nanosleep.c
+- testsuites/libtests/POSIX/open.c
+- testsuites/libtests/POSIX/pipe.c
+- testsuites/libtests/POSIX/posix_memalign.c
+- testsuites/libtests/POSIX/read.c
+- testsuites/libtests/POSIX/readv.c
+- testsuites/libtests/POSIX/realloc.c
+- testsuites/libtests/POSIX/setjmp.c
+- testsuites/libtests/POSIX/sigaddset.c
+- testsuites/libtests/POSIX/sigdelset.c
+- testsuites/libtests/POSIX/sigemptyset.c
+- testsuites/libtests/POSIX/sigfillset.c
+- testsuites/libtests/POSIX/sigismember.c
+- testsuites/libtests/POSIX/sigprocmask.c
+- testsuites/libtests/POSIX/stat.c
+- testsuites/libtests/POSIX/unlink.c
+- testsuites/libtests/POSIX/vfork.c
+- testsuites/libtests/POSIX/wait.c
+- testsuites/libtests/POSIX/waitpid.c
+- testsuites/libtests/POSIX/write.c
+- testsuites/libtests/POSIX/writev.c
+stlib: []
+target: testsuites/libtests/POSIX.exe
+type: build
+use-after: []
+use-before: []

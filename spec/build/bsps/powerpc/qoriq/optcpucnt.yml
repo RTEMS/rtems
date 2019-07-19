@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 2
+default-by-variant:
+- value: 24
+  variants:
+  - powerpc/qoriq_e6500.*
+description: |
+  maximum virtual processor count
+enabled-by: true
+format: '{}'
+links: []
+name: QORIQ_CPU_COUNT
+type: build

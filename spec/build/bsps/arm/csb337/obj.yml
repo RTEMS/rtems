@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/csb337/include/at91rm9200.h
+  - bsps/arm/csb337/include/at91rm9200_dbgu.h
+  - bsps/arm/csb337/include/at91rm9200_emac.h
+  - bsps/arm/csb337/include/at91rm9200_gpio.h
+  - bsps/arm/csb337/include/at91rm9200_mem.h
+  - bsps/arm/csb337/include/at91rm9200_pmc.h
+  - bsps/arm/csb337/include/at91rm9200_usart.h
+  - bsps/arm/csb337/include/bits.h
+  - bsps/arm/csb337/include/bsp.h
+  - bsps/arm/csb337/include/font8x16.h
+  - bsps/arm/csb337/include/sed1356.h
+  - bsps/arm/csb337/include/sed1356_16bit.h
+  - bsps/arm/csb337/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/csb337/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/csb337/start/linkcmds.csb337
+  - bsps/arm/csb337/start/linkcmds.csb637
+links: []
+source:
+- bsps/arm/csb337/btimer/btimer.c
+- bsps/arm/csb337/clock/clock.c
+- bsps/arm/csb337/console/dbgu.c
+- bsps/arm/csb337/console/uarts.c
+- bsps/arm/csb337/console/usart.c
+- bsps/arm/csb337/irq/irq.c
+- bsps/arm/csb337/start/bspreset.c
+- bsps/arm/csb337/start/bspstart.c
+- bsps/arm/csb337/start/memmap.c
+- bsps/arm/csb337/start/pmc.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cp15/arm920-mmu.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/legacy-console-control.c
+- bsps/shared/dev/serial/legacy-console-select.c
+- bsps/shared/dev/serial/legacy-console.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/sbrk.c
+type: build

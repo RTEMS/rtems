@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: m68k
+bsp: csb360
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: csb360
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/m68k/csb360/include/bsp.h
+  - bsps/m68k/csb360/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/m68k/csb360/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/m68k/csb360/start/linkcmds
+links:
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirqdflt
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/m68k/csb360/console/console-io.c
+- bsps/m68k/csb360/dev/ckinit.c
+- bsps/m68k/csb360/dev/timer.c
+- bsps/m68k/csb360/dev/timerisr.S
+- bsps/m68k/csb360/start/idle-mcf5272.c
+- bsps/m68k/csb360/start/init5272.c
+- bsps/m68k/shared/memProbe.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-polled.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/bspstart-empty.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/start/setvec.c
+type: build

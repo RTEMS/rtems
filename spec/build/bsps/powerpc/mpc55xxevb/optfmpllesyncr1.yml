@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 7
+default-by-variant: []
+description: |
+  the FMPLL ESYNCR1[CLKCFG] value
+enabled-by: true
+format: '{}'
+links: []
+name: MPC55XX_FMPLL_ESYNCR1_CLKCFG
+type: build

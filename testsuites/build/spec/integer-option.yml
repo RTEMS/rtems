@@ -1,0 +1,25 @@
+active: true
+build-type: option
+derived: false
+enabled-by: []
+format: '{:#010x}'
+header: ''
+level: 1.0
+links: []
+name: INTEGER
+normative: true
+order: 0
+ref: ''
+reviewed: null
+text: ''
+type: build
+default: 1
+default-by-variant: []
+actions:
+- get-integer: null
+- assert-in-interval:
+  - 1
+  - 16
+- assert-power-of-two: null
+- env-assign: null
+- format-and-define: null

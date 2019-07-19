@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: cxx cxxprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/sptests/sptls02/init.cc
+- testsuites/sptests/sptls02/var.cc
+stlib: []
+target: testsuites/sptests/sptls02.exe
+type: build
+use-after: []
+use-before: []

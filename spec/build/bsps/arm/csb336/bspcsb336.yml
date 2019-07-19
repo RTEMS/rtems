@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: csb336
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+enabled-by: true
+family: csb336
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/arm/csb336/include/bsp.h
+  - bsps/arm/csb336/include/mc9328mxl.h
+  - bsps/arm/csb336/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/arm/csb336/include/bsp/irq.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/arm/csb336/start/linkcmds
+  - bsps/arm/csb336/start/linkcmds
+links:
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: objnet
+- role: build-dependency
+  uid: start
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../opto2
+- role: build-dependency
+  uid: ../../bspopts
+source:
+- bsps/arm/csb336/btimer/btimer.c
+- bsps/arm/csb336/clock/clockdrv.c
+- bsps/arm/csb336/console/uart.c
+- bsps/arm/csb336/irq/irq.c
+- bsps/arm/csb336/start/bspstart.c
+- bsps/arm/csb336/start/memmap.c
+- bsps/arm/shared/cache/cache-cp15.c
+- bsps/arm/shared/cp15/arm920-mmu.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/sbrk.c
+type: build

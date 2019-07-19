@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 4998
+default-by-variant: []
+description: |
+  clock configuration for UART 6
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: LPC32XX_CONFIG_U6CLK
+type: build

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- ENABLE_LCD
+includes: []
+install: []
+links: []
+source:
+- bsps/arm/csb337/console/fbcons.c
+- bsps/arm/csb337/console/sed1356.c
+type: build

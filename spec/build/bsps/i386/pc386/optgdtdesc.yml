@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- script: |
+    if "USE_CIRRUS_GD5446" not in conf.env.ENABLE and "USE_VGA" not in conf.env.ENABLE:
+        if "USE_VBE_RM" not in conf.env.ENABLE:
+            conf.fatal(
+                "USE_VBE_RM must be enabled in case USE_CIRRUS_GD5446 and USE_VGA are disabled"
+            )
+        if value:
+            value += 2
+        else:
+            value = 2
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 0
+default-by-variant: []
+description: |
+  Defines how many descriptors in GDT may be allocated for application or driver usage.
+enabled-by: true
+format: '{}'
+links: []
+name: NUM_APP_DRV_GDT_DESCRIPTORS
+type: build

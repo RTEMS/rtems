@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: clang
+- find-program: null
+- env-assign: AS
+- env-assign: CC
+- env-assign: LINK_CC
+- set-value: clang++
+- find-program: null
+- env-assign: CXX
+- env-assign: LINK_CXX
+- set-value: llvm-ar
+- substitute: null
+- find-program: null
+- env-assign: AR
+- set-value: clang
+- env-assign: AS
+- env-assign: ASM_NAME
+- set-value:
+  - -c
+  - -o
+- env-assign: AS_TGT_F
+- set-value:
+  - -o
+- env-assign: ASLNK_TGT_F
+- set-value: --target=${ARCH}${ARCH_BITS}-unknown-rtems${__RTEMS_MAJOR__}
+- substitute: null
+- env-append: ABI_FLAGS
+- script: |
+    load = "ar asm clang clang++"
+    if not is_windows_host:
+        load += " gccdeps"
+    conf.load(load)
+build-type: option
+copyrights:
+- Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by:
+- clang
+links: []
+name: clang
+type: build

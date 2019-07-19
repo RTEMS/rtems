@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+- env-enable: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: true
+default-by-variant: []
+description: |
+  Defined by default. Enables use of the Vesa Bios Extensions - real mode interface, which enables graphical mode and introduce it upon bootup.
+enabled-by: true
+links: []
+name: USE_VBE_RM
+type: build

@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    fsjffs2gc01: exclude
+    jffs2fserror: exclude
+    jffs2fslink: exclude
+    jffs2fspatheval: exclude
+    jffs2fspermission: exclude
+    jffs2fsrdwr: exclude
+    jffs2fsscandir01: exclude
+    jffs2fssymlink: exclude
+    jffs2fstime: exclude
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+type: build

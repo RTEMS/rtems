@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 111111111
+default-by-variant:
+- value: 111111111
+  variants:
+  - arm/xilinx_zynq_zc702.*
+- value: 111111111
+  variants:
+  - arm/xilinx_zynq_zedboard.*
+description: |
+  Zynq cpu_1x clock frequency in Hz
+enabled-by: true
+format: '{}'
+links: []
+name: ZYNQ_CLOCK_CPU_1X
+type: build

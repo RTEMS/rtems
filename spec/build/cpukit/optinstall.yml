@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-value: ${PREFIX}/${ARCH}-rtems${__RTEMS_MAJOR__}/${BSP_NAME}
+- substitute: null
+- env-assign: BSP_PREFIX
+- set-value: ${BSP_PREFIX}/lib
+- substitute: null
+- env-assign: BSP_LIBDIR
+- set-value: ${BSP_LIBDIR}/include
+- substitute: null
+- env-assign: BSP_INCLUDEDIR
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links: []
+name: INSTALL
+type: build
