@@ -41,7 +41,7 @@ rtems_task Init(
   time.ticks  = 0;
 
   status = rtems_clock_set( &time );
-  directive_failed( status, "clock get" );
+  directive_failed( status, "clock set" );
 
   Task_name[ 1 ] = rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( 'T', 'A', '2', ' ' );
