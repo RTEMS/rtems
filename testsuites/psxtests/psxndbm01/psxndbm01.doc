@@ -1,0 +1,36 @@
+This File describes the concepts tested by this test suite.
+
+ndbm.h - routines to manage data files that contain key/data pairs.
+
+test suite name: PSXNDBM 01
+
+- A Simple test to check if NDBM methods are call-able.
+  - Check if able to run the routine to Open Database.
+  - Check if able to run the routine to store a record in database.
+  - Check if able to run the routine to fetch a record from database.
+  - Check if able to run the routine to close the database.
+
+- Test Cases for 'dbm_open()'.
+  - Verify the error when trying to open existing file with 'O_RDWR | O_EXCL'
+    flags.
+  - Verify the error when trying to open file with pathname longer than
+    {PATHMAX}-3 bytes.
+  - Verify the error when trying to open file with only write access.
+
+- Test Cases for 'dbm_store()'.
+  - Verify the error when trying to insert a record using same key with
+    'DBM_INSERT' mode.
+  - Verify the updated record when trying to insert a record using same key
+    with 'DBM_REPLACE' mode.
+  - Verify if able to save more than one record in database.
+
+- Test Cases for 'dbm_fetch()'.
+  - Verify the data fetched from database.
+  - Verify the error when tring to fetch non-existing record.
+
+- Test Cases for 'dbm_delete()'.
+  - Veriy the error when trying to delete non-existing record.
+  - Delete one record and verify results.
+  - Check if correct record is deleted.
+  - Verify if other data is not corrupted during delete.
+  - Empty the databse and verify the value returned by 'dbm_firstkey()'.

@@ -36,6 +36,9 @@ AM_CONDITIONAL([HAS_CPLUSPLUS],[test x"$HAS_CPLUSPLUS" = x"yes"])
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 
+AC_CHECK_HEADER([ndbm.h]. [HAS_NDBM=yes], [HAS_NDBM=no])
+AM_CONDITIONAL(HAS_NDBM,test x"${ac_cv_header_ndbm_h__HAS_NDBM_yes}" = x"yes")
+
 # BSP Test configuration
 RTEMS_TEST_CHECK([psx01])
 RTEMS_TEST_CHECK([psx02])
@@ -110,6 +113,7 @@ RTEMS_TEST_CHECK([psxmsgq02])
 RTEMS_TEST_CHECK([psxmsgq03])
 RTEMS_TEST_CHECK([psxmsgq04])
 RTEMS_TEST_CHECK([psxmutexattr01])
+RTEMS_TEST_CHECK([psxndbm01])
 RTEMS_TEST_CHECK([psxobj01])
 RTEMS_TEST_CHECK([psxonce01])
 RTEMS_TEST_CHECK([psxpasswd01])

@@ -694,6 +694,17 @@ psxmutexattr01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmutexattr01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
+if HAS_NDBM
+if TEST_psxndbm01
+psx_tests += psxndbm01
+psx_screens += psxndbm01/psxndbm01.scn
+psx_docs += psxndbm01/psxndbm01.doc
+psxndbm01_SOURCES = psxndbm01/init.c
+psxndbm01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxndbm01) \
+       $(support_includes)
+endif
+endif
+
 if TEST_psxobj01
 psx_tests += psxobj01
 psx_screens += psxobj01/psxobj01.scn

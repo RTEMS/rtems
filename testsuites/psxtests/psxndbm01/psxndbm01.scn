@@ -1,0 +1,29 @@
+*** PSXNDBM 01 Test ***
+
+Open Database.
+Store Records in Database.
+Fetch Records from Database and check.
+Close Database.
+
+Testcases for 'dbm_open()'.
+Use 'O_CREAT | O_EXCL' to open existing file and confirm error.
+Use path name larger than '{PATH_MAX}-3 bytes.' and confirm error.
+Open file with write access only and confirm error.
+
+Testcases for 'dbm_store()'
+Insert new record with same key using 'DBM_INSERT' mode and confirm error.
+Insert new record with same key using 'DBM_REPLACE' mode and confirm changes.
+Store a new record and confirm that total number of records is successful 2.
+
+Testcases for 'dbm_fetch()'
+Fetch existing records and confirm results.
+Fetch non-existing record and confirm error.
+
+Testcases for 'dbm_delete()'
+Delete non-existing record and confirm error.
+Delete existing record and confirm that total number of records is successful 1.
+Confirm if correct record is deleted.
+Check if the data is not corrupted after usage of 'dbm_delete()'.
+Empty records in database and check results of 'dbm_firstkey()'.
+
+*** END OF TEST PSXNDBM 01 ***
