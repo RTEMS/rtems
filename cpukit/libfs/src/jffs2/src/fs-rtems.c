@@ -1316,30 +1316,6 @@ int rtems_jffs2_initialize(
 //
 //==========================================================================
 
-unsigned char *jffs2_gc_fetch_page(struct jffs2_sb_info *c, 
-				   struct jffs2_inode_info *f, 
-				   unsigned long offset,
-				   unsigned long *priv)
-{
-	int ret;
-	struct super_block *sb = OFNI_BS_2SFFJ(c);
-	unsigned char *gc_buffer = &sb->s_gc_buffer[0];
-
-	ret = jffs2_read_inode_range(c, f, gc_buffer, 
-				     offset & ~(PAGE_CACHE_SIZE-1), PAGE_CACHE_SIZE);
-	if (ret)
-		return ERR_PTR(ret);
-
-	return gc_buffer;
-}
-
-void jffs2_gc_release_page(struct jffs2_sb_info *c,
-			   unsigned char *ptr,
-			   unsigned long *priv)
-{
-	/* Do nothing */
-}
-
 static struct _inode *new_inode(struct super_block *sb)
 {
 

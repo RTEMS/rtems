@@ -136,9 +136,6 @@ struct _inode *jffs2_iget(struct super_block *sb, cyg_uint32 ino);
 void jffs2_iput(struct _inode * i);
 void jffs2_gc_release_inode(struct jffs2_sb_info *c, struct jffs2_inode_info *f);
 struct jffs2_inode_info *jffs2_gc_fetch_inode(struct jffs2_sb_info *c, int inum, int nlink);
-unsigned char *jffs2_gc_fetch_page(struct jffs2_sb_info *c, struct jffs2_inode_info *f, 
-				   unsigned long offset, unsigned long *priv);
-void jffs2_gc_release_page(struct jffs2_sb_info *c, unsigned char *pg, unsigned long *priv);
 
 /* Avoid polluting RTEMS namespace with names not starting in jffs2_ */
 #define os_to_jffs2_mode(x) jffs2_from_os_mode(x)
