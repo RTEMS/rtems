@@ -13,6 +13,13 @@
  *  Germany
  *  <rtems@embedded-brains.de>
  *
+ * Copyright (c) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
+ *
+ *  Czech Technical University in Prague
+ *  Zikova 1903/4
+ *  166 36 Praha 6
+ *  Czech Republic
+ *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
@@ -200,13 +207,44 @@ _start:
 	bne	.L_skip_hyp_svc_switch
 
 	/* Boot loader starts kernel in HYP mode, switch to SVC necessary */
+
 	ldr	r1, =bsp_stack_hyp_size
 	mov	sp, r3
 	sub	r3, r3, r1
-	bl	bsp_start_arm_drop_hyp_mode
+
+	ldr	r2, =bsp_start_hyp_vector_table_begin
+	mcr	p15, 4, r2, c12, c0, 0
+
+	mov	r2, #0
+	mcr	p15, 4, r2, c1, c1, 0
+	mcr	p15, 4, r2, c1, c1, 2
+	mcr	p15, 4, r2, c1, c1, 3
+/*
+ * HSCTLR.TE
+ * optional start of hypervisor handlers in Thumb mode
+ *	orr	r0, #(1 << 30)
+ */
+	mcr	p15, 4, r2, c1, c0, 0	/* HSCTLR */
+	mrc	p15, 4, r2, c1, c1, 1	/* HDCR */
+	and	r2, #0x1f		/* Preserve HPMN */
+	mcr	p15, 4, r2, c1, c1, 1	/* HDCR */
+
+	/* Prepare SVC mode for eret */
+	mrs	r2, cpsr
+	bic	r2, r2, #ARM_PSR_M_MASK
+	orr	r2, r2, #ARM_PSR_M_SVC
+	msr	spsr_cxsf, r2
+
+	adr	r2, .L_hyp_to_svc_return
+	.inst 0xe12ef302	/* msr ELR_hyp, r2 */
+	mov	r2, sp
+	.inst 0xe160006e	/* eret */
+.L_hyp_to_svc_return:
+	mov	sp, r2
 
 .L_skip_hyp_svc_switch:
-#endif
+#endif /* BSP_START_IN_HYP_SUPPORT */
+
 	/* Initialize stack pointer registers for the various modes */
 
 	/* Enter FIQ mode and set up the FIQ stack pointer */

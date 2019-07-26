@@ -45,9 +45,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
-if BSP_START_IN_HYP_SUPPORT
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-in-hyp-support.S
-endif
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspstart.c
