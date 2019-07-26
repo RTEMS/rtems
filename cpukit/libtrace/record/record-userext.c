@@ -30,17 +30,43 @@
 #endif
 
 #include <rtems/record.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 
 bool _Record_Thread_create(
   struct _Thread_Control *executing,
   struct _Thread_Control *created
 )
 {
-  rtems_record_produce(
-    RTEMS_RECORD_THREAD_CREATE,
-    created->Object.id
-  );
+  rtems_record_data data;
+  char              name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
+  rtems_record_item items[ 1 + sizeof( name ) / sizeof( data ) ];
+  size_t            n;
+  size_t            i;
+  size_t            j;
+
+  i = 0;
+  items[ i ].event = RTEMS_RECORD_THREAD_CREATE;
+  items[ i ].data = created->Object.id;
+
+  n = _Thread_Get_name( created, name, sizeof( name ) );
+  j = 0;
+
+  while ( j < n ) {
+    size_t k;
+
+    data = 0;
+
+    for ( k = 0; j < n && k < sizeof( data ); ++k ) {
+      data = ( data << 8 ) | name[ j ];
+      ++j;
+    }
+
+    ++i;
+    items[ i ].event = RTEMS_RECORD_THREAD_NAME;
+    items[ i ].data = data;
+  }
+
+  rtems_record_produce_n( items, i + 1 );
 
   return true;
 }

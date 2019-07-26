@@ -55,7 +55,7 @@ extern "C" {
  * The record version reflects the record event definitions.  It is reported by
  * the RTEMS_RECORD_VERSION event.
  */
-#define RTEMS_RECORD_THE_VERSION 4
+#define RTEMS_RECORD_THE_VERSION 5
 
 /**
  * @brief The items are in 32-bit little-endian format.
@@ -291,6 +291,7 @@ typedef enum {
   RTEMS_RECORD_THREAD_EXIT,
   RTEMS_RECORD_THREAD_EXITTED,
   RTEMS_RECORD_THREAD_ID,
+  RTEMS_RECORD_THREAD_NAME,
   RTEMS_RECORD_THREAD_PRIO_CURRENT_HIGH,
   RTEMS_RECORD_THREAD_PRIO_CURRENT_LOW,
   RTEMS_RECORD_THREAD_PRIO_REAL_HIGH,
@@ -607,7 +608,6 @@ typedef enum {
   RTEMS_RECORD_SYSTEM_508,
   RTEMS_RECORD_SYSTEM_509,
   RTEMS_RECORD_SYSTEM_510,
-  RTEMS_RECORD_SYSTEM_511,
 
   /* There are 512 events reserved for the user */
   RTEMS_RECORD_USER_0,

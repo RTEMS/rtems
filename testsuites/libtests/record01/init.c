@@ -151,6 +151,31 @@ static const rtems_record_item expected_items_12[] = {
   { .event = TE(44, UE(43)), .data = 45 }
 };
 
+#ifdef RTEMS_NETWORKING
+static const rtems_record_item expected_items_13[] = {
+  { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0x9010001 },
+  {
+    .event = TE(0, RTEMS_RECORD_THREAD_NAME),
+    .data = rtems_build_name('I', 'D', 'L', 'E')
+  },
+  { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0xa010001 },
+  {
+    .event = TE(0, RTEMS_RECORD_THREAD_NAME),
+    .data = rtems_build_name('U', 'I', '1', ' ')
+  },
+  { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0xa010002 },
+  {
+    .event = TE(0, RTEMS_RECORD_THREAD_NAME),
+    .data = rtems_build_name('n', 't', 'w', 'k')
+  },
+  { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0xa010003 },
+  {
+    .event = TE(0, RTEMS_RECORD_THREAD_NAME),
+    .data = rtems_build_name('R', 'C', 'R', 'D')
+  }
+};
+#endif
+
 static void init_context(test_context *ctx)
 {
   memset(ctx, 0, sizeof(*ctx));
@@ -521,6 +546,7 @@ static int connect_client(void)
   ssize_t n;
   uint32_t v;
   rtems_record_item item;
+  rtems_record_item items[8];
 
   fd = socket(PF_INET, SOCK_STREAM, 0);
   rtems_test_assert(fd >= 0);
@@ -559,6 +585,12 @@ static int connect_client(void)
   rtems_test_assert(n == (ssize_t) sizeof(item));
   rtems_test_assert(item.event == TE(0, RTEMS_RECORD_FREQUENCY));
   rtems_test_assert(item.data == rtems_counter_frequency());
+
+  n = read(fd, items, sizeof(expected_items_13));
+  rtems_test_assert(n == (ssize_t) sizeof(expected_items_13));
+  rtems_test_assert(
+    memcmp(items, expected_items_13, sizeof(expected_items_13)) == 0
+  );
 
   return fd;
 }

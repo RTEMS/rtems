@@ -30,6 +30,7 @@
 #endif
 
 #include <rtems/record.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems.h>
 
 #include <sys/endian.h>
@@ -165,6 +166,74 @@ static void send_header( int fd )
   (void) write( fd, &header, sizeof( header ) );
 }
 
+typedef struct {
+  int fd;
+  size_t index;
+  rtems_record_item items[ 128 ];
+} thread_names_context;
+
+static void thread_names_produce(
+  thread_names_context *ctx,
+  rtems_record_event    event,
+  rtems_record_data     data
+)
+{
+  size_t i;
+
+  i = ctx->index;
+  ctx->items[ i ].event = RTEMS_RECORD_TIME_EVENT( 0, event );
+  ctx->items[ i ].data = data;
+
+  if (i == RTEMS_ARRAY_SIZE(ctx->items) - 2) {
+    ctx->index = 0;
+    (void) write( ctx->fd, ctx->items, sizeof( ctx->items ) );
+  } else {
+    ctx->index = i + 1;
+  }
+}
+
+static bool thread_names_visitor( rtems_tcb *tcb, void *arg )
+{
+  thread_names_context *ctx;
+  char                  name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
+  size_t                n;
+  size_t                i;
+  rtems_record_data     data;
+
+  ctx = arg;
+  thread_names_produce( ctx, RTEMS_RECORD_THREAD_ID, tcb->Object.id );
+  n = _Thread_Get_name( tcb, name, sizeof( name ) );
+  i = 0;
+
+  while ( i < n ) {
+    size_t j;
+
+    data = 0;
+
+    for ( j = 0; i < n && j < sizeof( data ); ++j ) {
+      data = ( data << 8 ) | name[ i ];
+      ++i;
+    }
+
+    thread_names_produce( ctx, RTEMS_RECORD_THREAD_NAME, data );
+  }
+
+  return false;
+}
+
+static void send_thread_names( int fd )
+{
+  thread_names_context ctx;
+
+  ctx.fd = fd;
+  ctx.index = 0;
+  rtems_task_iterate( thread_names_visitor, &ctx );
+
+  if ( ctx.index > 0 ) {
+    (void) write( ctx.fd, ctx.items, ctx.index * sizeof( ctx.items[ 0 ] ) );
+  }
+}
+
 void rtems_record_server( uint16_t port, rtems_interval period )
 {
   rtems_status_code sc;
@@ -216,6 +285,7 @@ void rtems_record_server( uint16_t port, rtems_interval period )
     wait( RTEMS_NO_WAIT );
     (void) rtems_timer_fire_after( timer, period, wakeup_timer, &self );
     send_header( cd );
+    send_thread_names( cd );
 
     while ( true ) {
       n = rtems_record_writev( cd, &written );
