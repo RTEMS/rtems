@@ -369,12 +369,7 @@ bsp_start_vector_table_end:
 
 _start:
 
-#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
-	bl bsp_start_init_registers_core
-#endif
-
-#ifdef ARM_MULTILIB_VFP
-#ifdef ARM_MULTILIB_HAS_CPACR
+#if defined(ARM_MULTILIB_VFP) && defined(ARM_MULTILIB_HAS_CPACR)
 	/*
 	 * Enable CP10 and CP11 coprocessors for privileged and user mode in
 	 * CPACR (bits 20-23).  Ensure that write to register completes.
@@ -386,12 +381,6 @@ _start:
 	dsb
 	isb
 #endif
-
-#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
-	bl bsp_start_init_registers_vfp
-#endif
-
-#endif /* ARM_MULTILIB_VFP */
 
 	ldr	sp, =_ISR_Stack_area_end
 	ldr	lr, =.Lstart_hook_0_done + 1
