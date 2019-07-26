@@ -49,7 +49,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-init-registers.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/bspstart.c
 
