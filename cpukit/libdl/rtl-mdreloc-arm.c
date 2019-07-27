@@ -279,32 +279,32 @@ rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
     case R_TYPE(V4BX):
       /* Miscellaneous, ignore */
       if (!parsing && rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC)) {
-        printf ("rtl: V4BX %p @ %p in %s\n",
-                (void *)*where, where, rtems_rtl_obj_oname (obj));
+        printf ("rtl: V4BX @ %p in %s\n",
+                where, rtems_rtl_obj_oname (obj));
       }
       break;
 
     case R_TYPE(MOVT_ABS):
     case R_TYPE(MOVW_ABS_NC):
-      insn = *where;
-
-      addend = ((insn >> 4) & 0xf000) | (insn & 0x0fff);
-      if (addend & 0x8000)
-        addend |= 0xffff0000;
-
-      tmp = symvalue + addend;
-
-      if (ELF_R_TYPE(rel->r_info) == R_TYPE(MOVW_ABS_NC))
-        tmp &= 0xffff;
-      else {
-        tmp = (Elf_Sword)tmp >> 16;
-        if (((Elf_Sword)tmp > 0x7fff) || ((Elf_Sword)tmp < -0x8000)) {
-          printf("MOVT_ABS Overflow\n");
-          return rtems_rtl_elf_rel_failure;
-        }
-      }
-
       if (!parsing) {
+        insn = *where;
+
+        addend = ((insn >> 4) & 0xf000) | (insn & 0x0fff);
+        if (addend & 0x8000)
+          addend |= 0xffff0000;
+
+        tmp = symvalue + addend;
+
+        if (ELF_R_TYPE(rel->r_info) == R_TYPE(MOVW_ABS_NC))
+          tmp &= 0xffff;
+        else {
+          tmp = (Elf_Sword)tmp >> 16;
+          if (((Elf_Sword)tmp > 0x7fff) || ((Elf_Sword)tmp < -0x8000)) {
+            printf("MOVT_ABS Overflow\n");
+            return rtems_rtl_elf_rel_failure;
+          }
+        }
+
         *where = (insn & 0xfff0f000) | ((tmp & 0xf000) << 4) | (tmp & 0xfff);
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
