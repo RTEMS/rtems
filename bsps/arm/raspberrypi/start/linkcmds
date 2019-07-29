@@ -14,35 +14,13 @@
  * @brief Raspberry Pi memory map.
  */
 
-/**
- * <table>
- *   <tr><th>Region Name</th><th>Region Begin</th><th>Region Size</th></tr>
- * <tr><td>VECTOR_RAM</td><td>0x08000000</td><td>8k</td></tr>
- * <tr><td>RAM</td><td>0x80008000</td><td>128M</td></tr>
- * </table>
- *
- * <table>
- *   <tr><th>Section Name</th><th>Section Runtime Region</th><th>Section Load Region</th></tr>
- * <tr><td>.start</td><td>RAM</td><td></td></tr>
- * <tr><td>.vector</td><td>VECTOR_RAM</td><td></td></tr>
- * <tr><td>.text</td><td>RAM</td><td>RAM_EXT</td></tr>
- * <tr><td>.rodata</td><td>RAM</td><td>RAM_EXT</td></tr>
- * <tr><td>.data</td><td>RAM</td><td>RAM_EXT</td></tr>
- * <tr><td>.fast</td><td>RAM</td><td>RAM_EXT</td></tr>
- * <tr><td>.bss</td><td>RAM</td><td></td></tr>
- * <tr><td>.work</td><td>RAM</td><td></td></tr>
- * <tr><td>.stack</td><td>RAM</td><td></td></tr>
- * </table>
- */
-
 MEMORY {
-        VECTOR_RAM     (AIW) : ORIGIN = 0x0       , LENGTH = 16k
-	RAM_MMU        (AIW) : ORIGIN = 0x00004000, LENGTH = 16k
-        RAM            (AIW) : ORIGIN = 0x00008000, LENGTH = 128M - 32k
+        RAM_MMU        (AIW) : ORIGIN = 0x00100000, LENGTH = 16k
+        RAM            (AIW) : ORIGIN = 0x00200000, LENGTH = 128M - 2M
 }
 
 REGION_ALIAS ("REGION_START", RAM);
-REGION_ALIAS ("REGION_VECTOR", VECTOR_RAM);
+REGION_ALIAS ("REGION_VECTOR", RAM);
 REGION_ALIAS ("REGION_TEXT", RAM);
 REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
 REGION_ALIAS ("REGION_RODATA", RAM);
@@ -61,7 +39,11 @@ REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM);
 
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
 
-bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1M;
+bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;
+
+bsp_vector_table_in_start_section = 1;
+
 bsp_translation_table_base = ORIGIN (RAM_MMU);
+bsp_translation_table_end = ORIGIN (RAM_MMU) + LENGTH (RAM_MMU);
 
 INCLUDE linkcmds.armv4
