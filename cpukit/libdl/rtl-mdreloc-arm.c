@@ -78,10 +78,27 @@ set_veneer(void* tramopline, Elf_Addr target)
   /*
    * http://shell-storm.org/online/Online-Assembler-and-Disassembler/
    *
-   *  ldr.w pc, [pc]
+   *  Thumb mode:
+   *    ldr.w pc, [pc]
+   *
+   *  ARM mode:
+   *    ldr pc, [pc, #-4]
+   *
    */
   uint32_t* tramp = (uint32_t*) tramopline;
+#if defined(__thumb__)
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
   *tramp++ = 0xf000f8df;
+ #else
+  *tramp++ = 0xf8dff000; /* not tested */
+ #endif
+#else
+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  *tramp++ = 0xe51ff004;
+ #else
+  *tramp++ = 0xe51ff004; /* not tested */
+ #endif
+#endif
   *tramp++ = (uint32_t) target;
   return tramp;
 }
