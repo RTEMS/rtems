@@ -63,7 +63,7 @@ void bsp_fatal_extension(
     executing = _Thread_Get_executing();
 
     if ( executing != NULL ) {
-      char name[ 32 ];
+      char name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
 
       _Thread_Get_name( executing, name, sizeof( name ) );
       printk(

@@ -940,6 +940,15 @@ extern const size_t _Thread_Control_add_on_count;
 extern const size_t _Thread_Initial_thread_count;
 
 /**
+ * @brief The default maximum size of a thread name in characters (including
+ * the terminating '\0' character).
+ *
+ * This is the default value for the application configuration option
+ * CONFIGURE_MAXIMUM_THREAD_NAME_SIZE.
+ */
+#define THREAD_DEFAULT_MAXIMUM_NAME_SIZE 16
+
+/**
  * @brief Maximum size of a thread name in characters (including the
  * terminating '\0' character).
  *

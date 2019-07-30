@@ -250,7 +250,7 @@ static void Stack_check_report_blown_task(
 {
   const Stack_Control *stack = &running->Start.Initial_stack;
   void                *pattern_area = Stack_check_Get_pattern(stack);
-  char                 name[32];
+  char                 name[2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE];
 
   printk("BLOWN STACK!!!\n");
   printk("task control block: 0x%08" PRIxPTR "\n", (intptr_t) running);
