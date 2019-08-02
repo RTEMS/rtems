@@ -16,6 +16,7 @@
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
 #include <bsp/fdt.h>
+#include <bsp/linker-symbols.h>
 
 #include "bspdebug.h"
 
@@ -30,6 +31,10 @@ void bsp_start(void)
   bsp_interrupt_initialize();
   printk("\nRTEMS Beagleboard: %s\n", type);
   printk("        ARM Debug: 0x%08x\n", (intptr_t) bbb_arm_debug_registers());
+  rtems_cache_coherent_add_area(
+      bsp_section_nocacheheap_begin,
+      (uintptr_t) bsp_section_nocacheheap_size
+  );
 }
 
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)

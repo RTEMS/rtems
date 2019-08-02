@@ -11,7 +11,8 @@ MEMORY {
    * have either 256M or 512M memory. We just
    * use 256M for all.
    */
-  RAM      : ORIGIN = 0x80000000, LENGTH = 256M - 4M
+  RAM      : ORIGIN = 0x80000000, LENGTH = 256M - 16M - 4M
+  NOCACHE  : ORIGIN = 0x80000000 + 256M - 16M - 4M, LENGTH = 16M
   RAM_MMU  : ORIGIN = 0x80000000 + 256M - 4M, LENGTH = 16k
 }
 
@@ -30,8 +31,8 @@ REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
 REGION_ALIAS ("REGION_BSS",            RAM);
 REGION_ALIAS ("REGION_WORK",           RAM);
 REGION_ALIAS ("REGION_STACK",          RAM);
-REGION_ALIAS ("REGION_NOCACHE",        RAM);
-REGION_ALIAS ("REGION_NOCACHE_LOAD",   RAM);
+REGION_ALIAS ("REGION_NOCACHE",        NOCACHE);
+REGION_ALIAS ("REGION_NOCACHE_LOAD",   NOCACHE);
 
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
 
