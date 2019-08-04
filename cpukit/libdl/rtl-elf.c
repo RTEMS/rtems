@@ -1593,8 +1593,6 @@ rtems_rtl_elf_load_linkmap (rtems_rtl_obj* obj)
   obj->linkmap->sec_addr[rap_bss] = obj->bss_base;
 
   sd = obj->linkmap->sec_detail;
-  sections = &obj->sections;
-  node = rtems_chain_first (sections);
 
   for (m = 0; m < sect_masks; ++m)
   {
