@@ -156,22 +156,22 @@ static const rtems_record_item expected_items_13[] = {
   { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0x9010001 },
   {
     .event = TE(0, RTEMS_RECORD_THREAD_NAME),
-    .data = rtems_build_name('I', 'D', 'L', 'E')
+    .data = rtems_build_name('E', 'L', 'D', 'I')
   },
   { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0xa010001 },
   {
     .event = TE(0, RTEMS_RECORD_THREAD_NAME),
-    .data = rtems_build_name('U', 'I', '1', ' ')
+    .data = rtems_build_name(' ', '1', 'I', 'U')
   },
   { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0xa010002 },
   {
     .event = TE(0, RTEMS_RECORD_THREAD_NAME),
-    .data = rtems_build_name('n', 't', 'w', 'k')
+    .data = rtems_build_name('k', 'w', 't', 'n')
   },
   { .event = TE(0, RTEMS_RECORD_THREAD_ID), .data = 0xa010003 },
   {
     .event = TE(0, RTEMS_RECORD_THREAD_NAME),
-    .data = rtems_build_name('R', 'C', 'R', 'D')
+    .data = rtems_build_name('D', 'R', 'C', 'R')
   }
 };
 #endif

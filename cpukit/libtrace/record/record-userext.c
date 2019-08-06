@@ -57,7 +57,7 @@ bool _Record_Thread_create(
     data = 0;
 
     for ( k = 0; j < n && k < sizeof( data ); ++k ) {
-      data = ( data << 8 ) | name[ j ];
+      data |= name[ i ] << ( k * 8 );
       ++j;
     }
 
