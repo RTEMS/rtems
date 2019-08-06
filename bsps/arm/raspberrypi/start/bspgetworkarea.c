@@ -47,12 +47,16 @@ extern char WorkAreaBase[];
 
 void bsp_work_area_initialize(void)
 {
-  uintptr_t work_base = (uintptr_t) WorkAreaBase;
-  uintptr_t ram_end;
-  bcm2835_get_vc_memory_entries vc_entry;
+  uintptr_t                      work_base;
+  uintptr_t                      ram_end;
+  bcm2835_get_board_spec_entries spec = { 0 };
+
+  work_base = (uintptr_t) WorkAreaBase;
+
   /*
-   * bcm2835_get_arm_memory_entries arm_entry;
-   * is another alternative how to obtain usable memory size
+   * Get the board revision and use it to determine the size of the
+   * SDRAM. Get the VC memory entry to determine the size of the VC
+   * memory needed.
    */
 
   #ifdef USE_UBOOT
@@ -62,10 +66,22 @@ void bsp_work_area_initialize(void)
     ram_end = (uintptr_t)RamBase + (uintptr_t)RamSize;
   #endif
 
-  memset( &vc_entry, 0, sizeof(vc_entry) );
-  if (bcm2835_mailbox_get_vc_memory( &vc_entry ) >= 0) {
-    if (vc_entry.base > 10 * 1024 *1024)
-      ram_end = ram_end > vc_entry.base? vc_entry.base: ram_end;
+  if (bcm2835_mailbox_get_board_revision( &spec ) >= 0) {
+    uint32_t mem = (spec.spec >> (4 + 4 + 8 + 4)) & 0xf;
+    if (mem < 5) {
+      bcm2835_get_vc_memory_entries vc = { 0 };
+      const uint32_t rpi_mem[5] = {
+        256 * 1024,
+        512 * 1024,
+        1 * 1024,
+        2 * 1024,
+        4 * 1024
+      };
+      ram_end = work_base + rpi_mem[mem];
+      if (bcm2835_mailbox_get_vc_memory( &vc ) >= 0)
+        ram_end -= vc.size;
+    }
   }
+
   bsp_work_area_initialize_default( (void *) work_base, ram_end - work_base );
 }
