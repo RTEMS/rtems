@@ -287,7 +287,6 @@ RTEMS_INLINE_ROUTINE bool _States_Is_interruptible_by_signal (
 )
 {
    return (the_states & STATES_INTERRUPTIBLE_BY_SIGNAL);
-
 }
 
 /**

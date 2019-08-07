@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreStates SuperCore Thread States
+ * @defgroup RTEMSScoreStates Thread States
  *
  * @ingroup RTEMSScore
  *
