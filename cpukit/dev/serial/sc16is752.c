@@ -113,6 +113,18 @@ static void set_efr(sc16is752_context *ctx, uint8_t efr)
   write_reg(ctx, SC16IS752_LCR, &ctx->lcr, 1);
 }
 
+static void set_tlr(sc16is752_context *ctx, uint8_t tlr)
+{
+  uint8_t mcr;
+
+  read_reg(ctx, SC16IS752_MCR, &mcr, 1);
+  mcr |= SC16IS752_MCR_TCR_TLR;
+  write_reg(ctx, SC16IS752_MCR, &mcr, 1);
+  write_reg(ctx, SC16IS752_TLR, &tlr, 1);
+  mcr &= ~SC16IS752_MCR_TCR_TLR;
+  write_reg(ctx, SC16IS752_MCR, &mcr, 1);
+}
+
 static bool set_baud(sc16is752_context *ctx, rtems_termios_baud_t baud)
 {
   uint32_t freq = ctx->input_frequency;
@@ -256,6 +268,8 @@ static bool sc16is752_first_open(
     | SC16IS752_FCR_RX_FIFO_TRG_16
     | SC16IS752_FCR_TX_FIFO_TRG_32;
   write_reg(ctx, SC16IS752_FCR, &fcr, 1);
+
+  set_tlr(ctx, 0);
 
   ctx->ier = SC16IS752_IER_RHR;
   write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
