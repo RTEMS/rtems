@@ -224,6 +224,8 @@ static bool sc16is752_first_open(
     return ok;
   }
 
+  set_efr(ctx, SC16IS752_EFR_ENHANCED_FUNC_ENABLE);
+
   efcr = 0;
 
   switch (ctx->mode) {
@@ -252,7 +254,6 @@ static bool sc16is752_first_open(
 
   ctx->ier = SC16IS752_IER_RHR;
   write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
-  set_efr(ctx, SC16IS752_EFR_ENHANCED_FUNC_ENABLE);
 
   rtems_termios_set_initial_baud(tty, 115200);
   ok = sc16is752_set_attributes(base, term);
