@@ -252,6 +252,11 @@ static bool sc16is752_first_open(
     | SC16IS752_FCR_TX_FIFO_TRG_32;
   write_reg(ctx, SC16IS752_FCR, &fcr, 1);
 
+  fcr = SC16IS752_FCR_FIFO_EN
+    | SC16IS752_FCR_RX_FIFO_TRG_16
+    | SC16IS752_FCR_TX_FIFO_TRG_32;
+  write_reg(ctx, SC16IS752_FCR, &fcr, 1);
+
   ctx->ier = SC16IS752_IER_RHR;
   write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
 
