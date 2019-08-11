@@ -26,6 +26,8 @@
 
 #define TARGET_DEBUG 0
 
+#define ARM_DUMP_ROM_TABLES 0
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -548,10 +550,278 @@ arm_debug_cp14_enable(rtems_debugger_target* target)
 static jmp_buf unlock_abort_jmpbuf;
 static size_t  arm_debug_retries;
 
+static void
+arm_debug_dump_rom_table(uint32_t* rom, size_t depth)
+{
+  uint32_t pidr[7];
+  uint32_t cidr[4];
+  uint32_t memtype;
+  uint32_t pidr4_4KB_count;
+  size_t   r;
+
+  static const char *table_class[16] = {
+    "reserved",
+    "ROM table",
+    "reserved", "reserved",
+    "reserved",
+    "reserved",
+    "reserved",
+    "reserved",
+    "reserved",
+    "CoreSight component",
+    "reserved",
+    "Peripheral Test Block",
+    "reserved",
+    "OptimoDE DESS",
+    "Generic IP component",
+    "PrimeCell or System component"
+  };
+
+  #define ROM_READ(b_, o_, r_) b_[((o_) / sizeof(uint32_t)) + (r_)]
+
+  if (depth > 16) {
+    rtems_debugger_printf("]] rom: too deep\n");
+    return;
+  }
+
+  for (r = 0; r < 4; ++r)
+    pidr[r] = ROM_READ(rom, 0xfe0, r) & 0xff;
+  for (r = 0; r < 3; ++r)
+    pidr[r + 4] = ROM_READ(rom, 0xfd0, r) & 0xff;
+  for (r = 0; r < 4; ++r)
+    cidr[r] = ROM_READ(rom, 0xff0, r) & 0xff;
+  memtype = ROM_READ(rom, 0xfcc, 0);
+
+  pidr4_4KB_count = pidr[4] & (((1 << (7 - 4)) - 1) >> 4);
+
+  rtems_debugger_printf("]] rom = %p\n", rom);
+  rtems_debugger_printf("   PIDR: %08x %08x %08x %08x %08x %08x %08x\n",
+                        pidr[0], pidr[1], pidr[2], pidr[3],
+                        pidr[4], pidr[5], pidr[6]);
+  rtems_debugger_printf("   CIDR: %08x %08x %08x %08x\n",
+                        cidr[0], cidr[1], cidr[2], cidr[3]);
+  rtems_debugger_printf("   4KB count: %u\n", pidr4_4KB_count);
+
+  if ((memtype & 0x01) != 0)
+    rtems_debugger_printf("   MEMTYPE sys memory present on bus\n");
+  else
+    rtems_debugger_printf("   MEMTYPE sys memory not present: dedicated debug bus\n");
+
+  /*
+   * Read ROM table entries until we get 0
+   */
+  for (r = 0; rom[r] != 0; ++r) {
+    uint32_t  romentry = rom[r];
+    uint32_t  c_pidr[7];
+    uint32_t  c_cidr[4];
+    uint32_t* c_base;
+    uint32_t  table_type;
+    size_t    i;
+
+    c_base = (uint32_t*) ((intptr_t) rom + (romentry & 0xFFFFF000));
+
+    /*
+     * Read the IDs.
+     */
+    for (i = 0; i < 4; ++i)
+      c_pidr[i] = ROM_READ(c_base, 0xfe0, i) & 0xff;
+    for (i = 0; i < 3; ++i)
+      c_pidr[i + 4] = ROM_READ(c_base, 0xfd0, i) & 0xff;
+    for (i = 0; i < 4; ++i)
+      c_cidr[i] = ROM_READ(c_base, 0xff0, i) & 0xff;
+
+    table_type = ROM_READ(c_base, 0xfcc, 0);
+
+    rtems_debugger_printf("   > Base: %p, start: 0x%" PRIx32 "\n",
+                          c_base,
+                          /* component may take multiple 4K pages */
+                          (uint32_t)((intptr_t) c_base - 0x1000 * (c_pidr[4] >> 4)));
+    rtems_debugger_printf("     Class is 0x%x, %s\n",
+                          (c_cidr[1] >> 4) & 0xf, table_class[(c_cidr[1] >> 4) & 0xf]);
+
+    if (((c_cidr[1] >> 4) & 0x0f) == 1) {
+      arm_debug_dump_rom_table(c_base, depth + 1);
+    }
+    else if (((c_cidr[1] >> 4) & 0x0f) == 9) {
+      const char* major = "reserved";
+      const char* subtype = "reserved";
+      unsigned    minor = (table_type >> 4) & 0x0f;
+
+      switch (table_type & 0x0f) {
+      case 0:
+        major = "Miscellaneous";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 4:
+          subtype = "Validation component";
+          break;
+        }
+        break;
+      case 1:
+        major = "Trace Sink";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 1:
+          subtype = "Port";
+          break;
+        case 2:
+          subtype = "Buffer";
+          break;
+        case 3:
+          subtype = "Router";
+          break;
+        }
+        break;
+      case 2:
+        major = "Trace Link";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 1:
+          subtype = "Funnel, router";
+          break;
+        case 2:
+          subtype = "Filter";
+          break;
+        case 3:
+          subtype = "FIFO, buffer";
+          break;
+        }
+        break;
+      case 3:
+        major = "Trace Source";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 1:
+          subtype = "Processor";
+          break;
+        case 2:
+          subtype = "DSP";
+          break;
+        case 3:
+          subtype = "Engine/Coprocessor";
+          break;
+        case 4:
+          subtype = "Bus";
+          break;
+        case 6:
+          subtype = "Software";
+          break;
+        }
+        break;
+      case 4:
+        major = "Debug Control";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 1:
+          subtype = "Trigger Matrix";
+          break;
+        case 2:
+          subtype = "Debug Auth";
+          break;
+        case 3:
+          subtype = "Power Requestor";
+          break;
+        }
+        break;
+      case 5:
+        major = "Debug Logic";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 1:
+          subtype = "Processor";
+          break;
+        case 2:
+          subtype = "DSP";
+          break;
+        case 3:
+          subtype = "Engine/Coprocessor";
+          break;
+        case 4:
+          subtype = "Bus";
+          break;
+        case 5:
+          subtype = "Memory";
+        }
+        break;
+      case 6:
+        major = "Perfomance Monitor";
+        switch (minor) {
+        case 0:
+          subtype = "other";
+          break;
+        case 1:
+          subtype = "Processor";
+          break;
+        case 2:
+          subtype = "DSP";
+          break;
+        case 3:
+          subtype = "Engine/Coprocessor";
+          break;
+        case 4:
+          subtype = "Bus";
+          break;
+        case 5:
+          subtype = "Memory";
+          break;
+        }
+        break;
+      }
+
+      rtems_debugger_printf("     Type: 0x%02" PRIx32 ", %s, %s\n",
+                            table_type & 0xff, major, subtype);
+      rtems_debugger_printf("     PID[4..0]: %02x %02x %02x %02x %02x\n",
+                            c_pidr[4], c_pidr[3], c_pidr[2], c_pidr[1], c_pidr[0]);
+
+      if (((c_cidr[1] >> 4) & 0x0f) == 1) {
+        arm_debug_dump_rom_table(c_base, depth + 1);
+      }
+    }
+  }
+}
+
+static int
+arm_debug_rom_discover(uint32_t* rom, uint32_t comp, uint32_t** addr, int* index)
+{
+  size_t r = 0;
+  *addr = 0;
+  while ((rom[r] & 1) != 0) {
+    uint32_t* c_base = (uint32_t*) ((intptr_t) rom + (rom[r] & 0xfffff000));
+    uint32_t  c_cid1 = c_base[0xff4 / sizeof(uint32_t)];
+    uint32_t  type;
+    if (((c_cid1 >> 4) & 0x0f) == 1) {
+      if (arm_debug_rom_discover(c_base, comp, addr, index))
+        return true;
+    }
+    type = c_base[0xfcc / sizeof(uint32_t)] & 0xff;
+    if (comp == type) {
+      if (*index > 0)
+        --(*index);
+      else {
+        *addr = c_base;
+        return true;
+      }
+    }
+    ++r;
+  }
+  return false;
+}
+
 static int
 arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
 {
-  uint32_t rom;
   uint32_t val;
   void*    abort_handler;
   int      rc = -1;
@@ -562,15 +832,29 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
   arm_debug_retries = 5;
 
   /*
-   * The DBGDSAR is a signed offset from DBGDRAR. Both need to be
-   * valid for the debug register address to be valid. Currently there
-   * is no support to decode a ROM table.
+   * The DBGDSAR (DSAR) is a signed offset from DBGDRAR. Both need to
+   * be valid for the debug register address to be valid. Read the
+   * DBGRAR first.
    */
-  ARM_CP14_READ(rom, 1, 0, 0);
-  if ((rom & 3) == 3) {
-    ARM_CP14_READ(val, 2, 0, 0);
-    if ((val & 3) == 3 ) {
-      debug_registers = (void*) ((rom & ~3) + ((int32_t) (val & ~3)));
+  ARM_CP14_READ(val, 1, 0, 0);
+  if ((val & 3) == 3) {
+    uint32_t* rom = (uint32_t*) (val & 0xfffff000);
+    uint32_t* comp_base = NULL;
+    int       core = (int) _SMP_Get_current_processor();
+
+    if (ARM_DUMP_ROM_TABLES)
+      arm_debug_dump_rom_table(rom, 0);
+
+    debug_registers = NULL;
+
+    if (arm_debug_rom_discover(rom, 0x15, &comp_base, &core)) {
+      debug_registers = comp_base;
+      rtems_debugger_printf("rtems-db: ram debug: ROM Base: %p\n", comp_base);
+    } else {
+      ARM_CP14_READ(val, 2, 0, 0);
+      if ((val & 3) == 3 ) {
+        debug_registers = (void*) ((intptr_t) rom + (val & ~3));
+      }
     }
   }
 
@@ -580,6 +864,7 @@ arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
       rtems_debugger_printf("rtems-db: arm debug: no valid register map\n");
       return -1;
     }
+    rtems_debugger_printf("rtems-db: arm debug: BSP Base: %p\n", debug_registers);
   }
 
   /*
