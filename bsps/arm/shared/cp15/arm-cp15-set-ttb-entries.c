@@ -66,7 +66,15 @@ static uint32_t set_translation_table_entries(
   for ( i = istart; i != iend; i = (i + 1U) & index_mask ) {
     void *mva = (void *) (i << ARM_MMU_SECT_BASE_SHIFT);
 #if defined(__ARM_ARCH_7A__)
-    if ((arm_cp15_get_multiprocessor_affinity() & (1 << 30)) == 0) {
+    /*
+     * Bit 31 needs to be 1 to indicate the register implements the
+     * Multiprocessing Extensions register format and the U (bit 30)
+     * is 0.
+     */
+    #define MPIDR_MX_FMT (1 << 31)
+    #define MPIDR_UP     (1 << 30)
+    const uint32_t mpidr = arm_cp15_get_multiprocessor_affinity();
+    if ((mpidr & (MPIDR_MX_FMT | MPIDR_UP)) == MPIDR_MX_FMT) {
       arm_cp15_tlb_invalidate_entry_all_asids(mva);
     }
     else
