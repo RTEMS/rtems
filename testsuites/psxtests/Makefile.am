@@ -415,6 +415,18 @@ psxfchx01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfchx01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
+if HAS_FENV
+if TEST_psxfenv01
+psx_tests += psxfenv01
+psx_screens += psxfenv01/psxfenv01.scn
+psx_docs += psxfenv01/psxfenv01.doc
+psxfenv01_SOURCES = psxfenv01/init.c
+psxfenv01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfenv01) \
+       $(support_includes)
+psxfenv01_LDADD = -lm $(LDADD)
+endif
+endif
+
 if TEST_psxfile01
 psx_tests += psxfile01
 psx_screens += psxfile01/psxfile01.scn

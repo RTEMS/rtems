@@ -1,0 +1,23 @@
+#  COPYRIGHT (c) 2019
+#  On-Line Applications Research Corporation (OAR).
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxfenv01
+
+Directives:
+  fesetenv
+  feclearexcept
+  fetestexcept
+  texceptflag
+  feraiseexcept
+
+Concepts:
+
++ This test exercises the fenv.h methods.
+
++ All tests are disabled if the constant FE_ALL_EXCEPT is not defined.
+

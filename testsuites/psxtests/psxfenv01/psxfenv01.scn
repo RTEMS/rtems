@@ -1,0 +1,7 @@
+*** BEGIN OF TEST PSXFENV 01 ***
+fesetenv(FE_DFL_ENV).
+feclearexcept(FE_ALL_EXCEPT).
+Divide by zero and confirm fetestexcept()
+
+*** END OF TEST PSXFENV 01 ***
+
