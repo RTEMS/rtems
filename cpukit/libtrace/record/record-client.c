@@ -72,20 +72,45 @@ static rtems_record_client_status call_handler(
   );
 }
 
-static void check_overflow(
+static void signal_overflow(
   const rtems_record_client_context *ctx,
   const rtems_record_client_per_cpu *per_cpu,
-  uint32_t                           new_head
+  uint32_t                           data
 )
 {
+  uint64_t bt;
+
+  bt = ( per_cpu->uptime.time_accumulated * ctx->to_bt_scaler ) >> 31;
+  bt += per_cpu->uptime.bt;
+
+  call_handler( ctx, bt, RTEMS_RECORD_PER_CPU_OVERFLOW, data );
+}
+
+static void process_per_cpu_head(
+  rtems_record_client_context *ctx,
+  rtems_record_client_per_cpu *per_cpu,
+  uint64_t                     data
+)
+{
+  uint32_t new_head;
   uint32_t last_tail;
   uint32_t last_head;
   uint32_t capacity;
   uint32_t new_content;
-  uint64_t bt;
+  uint32_t produced;
 
-  last_tail = per_cpu->tail[ per_cpu->index ];
-  last_head = per_cpu->head[ per_cpu->index ];
+  new_head = (uint32_t) data;
+  produced = new_head - per_cpu->tail[ per_cpu->tail_head_index ];
+  per_cpu->head[ per_cpu->tail_head_index ]= new_head;
+  per_cpu->tail_head_index ^= 1;
+
+  if ( produced >= ctx->count ) {
+    signal_overflow( ctx, per_cpu, produced - ctx->count + 1 );
+    return;
+  }
+
+  last_tail = per_cpu->tail[ per_cpu->tail_head_index ];
+  last_head = per_cpu->head[ per_cpu->tail_head_index ];
 
   if ( last_tail == last_head ) {
     return;
@@ -98,15 +123,7 @@ static void check_overflow(
     return;
   }
 
-  bt = ( per_cpu->uptime.time_accumulated * ctx->to_bt_scaler ) >> 31;
-  bt += per_cpu->uptime.bt;
-
-  call_handler(
-    ctx,
-    bt,
-    RTEMS_RECORD_PER_CPU_OVERFLOW,
-    new_content - capacity
-  );
+  signal_overflow( ctx, per_cpu, new_content - capacity );
 }
 
 static rtems_record_client_status visit(
@@ -145,12 +162,10 @@ static rtems_record_client_status visit(
       time = 0;
       break;
     case RTEMS_RECORD_PER_CPU_TAIL:
-      per_cpu->tail[ per_cpu->index ] = (uint32_t) data;
+      per_cpu->tail[ per_cpu->tail_head_index ] = (uint32_t) data;
       break;
     case RTEMS_RECORD_PER_CPU_HEAD:
-      per_cpu->head[ per_cpu->index ]= (uint32_t) data;
-      per_cpu->index ^= 1;
-      check_overflow( ctx, per_cpu, (uint32_t) data );
+      process_per_cpu_head( ctx, per_cpu, data );
       break;
     case RTEMS_RECORD_PER_CPU_COUNT:
       ctx->count = (uint32_t) data;

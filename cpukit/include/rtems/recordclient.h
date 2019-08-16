@@ -75,7 +75,7 @@ typedef struct {
   } uptime;
   uint32_t tail[ 2 ];
   uint32_t head[ 2 ];
-  size_t index;
+  size_t tail_head_index;
 } rtems_record_client_per_cpu;
 
 typedef struct rtems_record_client_context {
