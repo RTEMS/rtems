@@ -81,9 +81,7 @@ typedef struct {
 typedef struct rtems_record_client_context {
   uint64_t to_bt_scaler;
   rtems_record_client_per_cpu per_cpu[ RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ];
-  uint64_t data;
   uint32_t cpu;
-  uint32_t event;
   uint32_t count;
   union {
     rtems_record_item_32 format_32;

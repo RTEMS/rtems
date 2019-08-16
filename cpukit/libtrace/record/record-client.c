@@ -109,18 +109,20 @@ static void check_overflow(
   );
 }
 
-static rtems_record_client_status visit( rtems_record_client_context *ctx )
+static rtems_record_client_status visit(
+  rtems_record_client_context *ctx,
+  uint32_t                     time_event,
+  uint64_t                     data
+)
 {
   rtems_record_client_per_cpu *per_cpu;
   uint32_t                     time;
   rtems_record_event           event;
-  uint64_t                     data;
   uint64_t                     bt;
 
   per_cpu = &ctx->per_cpu[ ctx->cpu ];
-  time = RTEMS_RECORD_GET_TIME( ctx->event );
-  event = RTEMS_RECORD_GET_EVENT( ctx->event );
-  data = ctx->data;
+  time = RTEMS_RECORD_GET_TIME( time_event );
+  event = RTEMS_RECORD_GET_EVENT( time_event );
 
   switch ( event ) {
     case RTEMS_RECORD_PROCESSOR:
@@ -203,10 +205,12 @@ static rtems_record_client_status consume_32(
 
       ctx->todo = sizeof( ctx->item.format_32 );
       ctx->pos = &ctx->item.format_32;
-      ctx->event = ctx->item.format_32.event;
-      ctx->data = ctx->item.format_32.data;
 
-      status = visit( ctx );
+      status = visit(
+        ctx,
+        ctx->item.format_32.event,
+        ctx->item.format_32.data
+      );
 
       if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
         return status;
@@ -241,10 +245,12 @@ static rtems_record_client_status consume_64(
 
       ctx->todo = sizeof( ctx->item.format_64 );
       ctx->pos = &ctx->item.format_64;
-      ctx->event = ctx->item.format_64.event;
-      ctx->data = ctx->item.format_64.data;
 
-      status = visit( ctx );
+      status = visit(
+        ctx,
+        ctx->item.format_64.event,
+        ctx->item.format_64.data
+      );
 
       if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
         return status;
@@ -279,10 +285,12 @@ static rtems_record_client_status consume_swap_32(
 
       ctx->todo = sizeof( ctx->item.format_32 );
       ctx->pos = &ctx->item.format_32;
-      ctx->event = __builtin_bswap32( ctx->item.format_32.event );
-      ctx->data = __builtin_bswap32( ctx->item.format_32.data );
 
-      status = visit( ctx );
+      status = visit(
+        ctx,
+        __builtin_bswap32( ctx->item.format_32.event ),
+        __builtin_bswap32( ctx->item.format_32.data )
+      );
 
       if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
         return status;
@@ -317,10 +325,12 @@ static rtems_record_client_status consume_swap_64(
 
       ctx->todo = sizeof( ctx->item.format_64 );
       ctx->pos = &ctx->item.format_64;
-      ctx->event = __builtin_bswap32( ctx->item.format_64.event );
-      ctx->data = __builtin_bswap64( ctx->item.format_64.data );
 
-      status = visit( ctx );
+      status = visit(
+        ctx,
+        __builtin_bswap32( ctx->item.format_64.event ),
+        __builtin_bswap64( ctx->item.format_64.data )
+      );
 
       if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
         return status;
