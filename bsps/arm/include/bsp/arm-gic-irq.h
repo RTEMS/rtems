@@ -85,6 +85,12 @@ typedef enum {
   ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF
 } arm_gic_irq_software_irq_target_filter;
 
+void arm_gic_trigger_sgi(
+  rtems_vector_number vector,
+  arm_gic_irq_software_irq_target_filter filter,
+  uint8_t targets
+);
+
 static inline rtems_status_code arm_gic_irq_generate_software_irq(
   rtems_vector_number vector,
   arm_gic_irq_software_irq_target_filter filter,
@@ -94,14 +100,7 @@ static inline rtems_status_code arm_gic_irq_generate_software_irq(
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   if (vector <= ARM_GIC_IRQ_SGI_15) {
-    volatile gic_dist *dist = ARM_GIC_DIST;
-
-    dist->icdsgir = GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(filter)
-      | GIC_DIST_ICDSGIR_CPU_TARGET_LIST(targets)
-#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
-      | GIC_DIST_ICDSGIR_NSATT
-#endif
-      | GIC_DIST_ICDSGIR_SGIINTID(vector);
+    arm_gic_trigger_sgi(vector, filter, targets);
   } else {
     sc = RTEMS_INVALID_ID;
   }

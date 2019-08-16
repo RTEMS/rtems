@@ -86,7 +86,18 @@ typedef struct {
 } gic_cpuif;
 
 typedef struct {
+  /* GICD_CTLR */
   uint32_t icddcr;
+/* GICv3 only */
+#define GIC_DIST_ICDDCR_RWP BSP_BIT32(31)
+#define GIC_DIST_ICDDCR_E1NWF BSP_BIT32(7)
+#define GIC_DIST_ICDDCR_DS BSP_BIT32(6)
+#define GIC_DIST_ICDDCR_ARE_NS BSP_BIT32(5)
+#define GIC_DIST_ICDDCR_ARE_S BSP_BIT32(4)
+#define GIC_DIST_ICDDCR_ENABLE_GRP1S BSP_BIT32(2)
+#define GIC_DIST_ICDDCR_ENABLE_GRP1NS BSP_BIT32(1)
+#define GIC_DIST_ICDDCR_ENABLE_GRP0 BSP_BIT32(0)
+/* GICv1/GICv2 */
 #define GIC_DIST_ICDDCR_ENABLE_GRP_1 BSP_BIT32(1)
 #define GIC_DIST_ICDDCR_ENABLE BSP_BIT32(0)
   uint32_t icdictr;
@@ -126,7 +137,9 @@ typedef struct {
   uint8_t icdiptr[256];
   uint32_t reserved_900[192];
   uint32_t icdicfr[64];
-  uint32_t reserved_d00[128];
+  /* GICD_IGRPMODR GICv3 only, reserved in GICv1/GICv2 */
+  uint32_t icdigmr[32];
+  uint32_t reserved_d80[96];
   uint32_t icdsgir;
 #define GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(val) BSP_FLD32(val, 24, 25)
 #define GIC_DIST_ICDSGIR_TARGET_LIST_FILTER_GET(reg) BSP_FLD32GET(reg, 24, 25)
@@ -139,5 +152,66 @@ typedef struct {
 #define GIC_DIST_ICDSGIR_SGIINTID_GET(reg) BSP_FLD32GET(reg, 0, 3)
 #define GIC_DIST_ICDSGIR_SGIINTID_SET(reg, val) BSP_FLD32SET(reg, val, 0, 3)
 } gic_dist;
+
+/* GICv3 only */
+typedef struct {
+  /* GICR_CTLR */
+  uint32_t icrrcr;
+#define GIC_REDIST_ICRRCR_UWP BSP_BIT32(31)
+#define GIC_REDIST_ICRRCR_DPG1S BSP_BIT32(26)
+#define GIC_REDIST_ICRRCR_DPG1NS BSP_BIT32(25)
+#define GIC_REDIST_ICRRCR_DPG0 BSP_BIT32(24)
+#define GIC_REDIST_ICRRCR_RWP BSP_BIT32(4)
+#define GIC_REDIST_ICRRCR_ENABLE_LPI BSP_BIT32(0)
+  uint32_t icriidr;
+  uint64_t icrtyper;
+#define GIC_REDIST_ICRTYPER_AFFINITY_VALUE(val) BSP_FLD64(val, 32, 63)
+#define GIC_REDIST_ICRTYPER_AFFINITY_VALUE_GET(reg) BSP_FLD64GET(reg, 32, 63)
+#define GIC_REDIST_ICRTYPER_AFFINITY_VALUE_SET(reg, val) BSP_FLD64SET(reg, val, 32, 63)
+#define GIC_REDIST_ICRTYPER_COMMON_LPI_AFFINITY(val) BSP_FLD64(val, 24, 25)
+#define GIC_REDIST_ICRTYPER_COMMON_LPI_AFFINITY_GET(reg) BSP_FLD64GET(reg, 24, 25)
+#define GIC_REDIST_ICRTYPER_COMMON_LPI_AFFINITY_SET(reg, val) BSP_FLD64SET(reg, val, 24, 25)
+#define GIC_REDIST_ICRTYPER_CPU_NUMBER(val) BSP_FLD64(val, 8, 23)
+#define GIC_REDIST_ICRTYPER_CPU_NUMBER_GET(reg) BSP_FLD64GET(reg, 8, 23)
+#define GIC_REDIST_ICRTYPER_CPU_NUMBER_SET(reg, val) BSP_FLD64SET(reg, val, 8, 23)
+#define GIC_REDIST_ICRTYPER_DPGS BSP_BIT64(5)
+#define GIC_REDIST_ICRTYPER_LAST BSP_BIT64(4)
+#define GIC_REDIST_ICRTYPER_DIRECT_LPI BSP_BIT64(3)
+#define GIC_REDIST_ICRTYPER_VLPIS BSP_BIT64(1)
+#define GIC_REDIST_ICRTYPER_PLPIS BSP_BIT64(0)
+  uint32_t unused_10;
+  uint32_t icrwaker;
+#define GIC_REDIST_ICRWAKER_CHILDREN_ASLEEP BSP_BIT32(2)
+#define GIC_REDIST_ICRWAKER_PROCESSOR_SLEEP BSP_BIT32(1)
+} gic_redist;
+
+/* GICv3 only */
+typedef struct {
+  uint32_t reserved_0_80[32];
+  /* GICR_IGROUPR0 */
+  uint32_t icspigrpr[32];
+  /* GICR_ISENABLER0 */
+  uint32_t icspiser[32];
+  /* GICR_ICENABLER0 */
+  uint32_t icspicer[32];
+  /* GICR_ISPENDR0 */
+  uint32_t icspispendr[32];
+  /* GICR_ICPENDR0 */
+  uint32_t icspicpendr[32];
+  /* GICR_ISACTIVER0 */
+  uint32_t icspisar[32];
+  /* GICR_ICACTIVER0 */
+  uint32_t icspicar[32];
+  /* GICR_IPRIORITYR */
+  uint8_t icspiprior[32];
+  uint32_t reserved_420_bfc[504];
+  /* GICR_ICFGR0 */
+  uint32_t icspicfgr0;
+  /* GICR_ICFGR1 */
+  uint32_t icspicfgr1;
+  uint32_t reserved_c08_cfc[62];
+  /* GICR_IGRPMODR0 */
+  uint32_t icspigrpmodr[64];
+} gic_sgi_ppi;
 
 #endif /* LIBBSP_ARM_SHARED_ARM_GIC_REGS_H */
