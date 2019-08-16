@@ -105,6 +105,7 @@ static void Init(rtems_task_argument arg)
   cs = rtems_record_client_run(&ctx->client, &header, sizeof(header));
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
   rtems_record_drain(drain_visitor, ctx);
+  rtems_record_client_destroy(&ctx->client);
 
   TEST_END();
   rtems_test_exit(0);

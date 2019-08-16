@@ -35,6 +35,7 @@
 
 #include "recorddata.h"
 
+#include <stdbool.h>
 #include <stddef.h>
 
 #ifdef __cplusplus
@@ -54,7 +55,13 @@ typedef enum {
   RTEMS_RECORD_CLIENT_ERROR_INVALID_MAGIC,
   RTEMS_RECORD_CLIENT_ERROR_UNKNOWN_FORMAT,
   RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_VERSION,
-  RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU
+  RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU,
+  RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU_MAX,
+  RTEMS_RECORD_CLIENT_ERROR_DOUBLE_CPU_MAX,
+  RTEMS_RECORD_CLIENT_ERROR_DOUBLE_PER_CPU_COUNT,
+  RTEMS_RECORD_CLIENT_ERROR_NO_CPU_MAX,
+  RTEMS_RECORD_CLIENT_ERROR_NO_MEMORY,
+  RTEMS_RECORD_CLIENT_ERROR_PER_CPU_ITEMS_OVERFLOW
 } rtems_record_client_status;
 
 typedef rtems_record_client_status ( *rtems_record_client_handler )(
@@ -67,21 +74,69 @@ typedef rtems_record_client_status ( *rtems_record_client_handler )(
 );
 
 typedef struct {
+  /**
+   * @brief Event time to uptime maintenance.
+   */
   struct {
     uint64_t bt;
     uint32_t time_at_bt;
     uint32_t time_last;
     uint32_t time_accumulated;
   } uptime;
+
+  /**
+   * @brief The current or previous ring buffer tail.
+   *
+   * Indexed by the tail_head_index member.
+   */
   uint32_t tail[ 2 ];
+
+  /**
+   * @brief The current or previous ring buffer head.
+   *
+   * Indexed by the tail_head_index member.
+   */
   uint32_t head[ 2 ];
+
+  /**
+   * @brief The index of the tail and head members.
+   *
+   * This index is used to maintain the current and previous tail/head
+   * positions to detect ring buffer overflows.
+   */
   size_t tail_head_index;
+
+  /**
+   * @brief If true, then hold back items for overflow or initial ramp up
+   * processing.
+   */
+  bool hold_back;
+
+  /**
+   * @brief Storage for hold back items.
+   *
+   * In case of a ring buffer overflow, the rtems_record_drain() will push the
+   * complete ring buffer content to the client.  While the items are processed
+   * by the client, new items may overwrite some items being processed.  The
+   * overwritten items can be detected in the following iteration once the next
+   * tail/head information is pushed to the client.
+   *
+   * In case of the initial ramp up, the items are stored in the hold back
+   * buffer to determine the uptime of the first event.
+   */
+  rtems_record_item_64 *items;
+
+  /**
+   * @brief The index for the next hold back item.
+   */
+  size_t item_index;
 } rtems_record_client_per_cpu;
 
 typedef struct rtems_record_client_context {
   uint64_t to_bt_scaler;
   rtems_record_client_per_cpu per_cpu[ RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ];
   uint32_t cpu;
+  uint32_t cpu_count;
   uint32_t count;
   union {
     rtems_record_item_32 format_32;
@@ -126,6 +181,18 @@ rtems_record_client_status rtems_record_client_run(
   rtems_record_client_context *ctx,
   const void                  *buf,
   size_t                       n
+);
+
+/**
+ * @brief Drains all internal buffers and frees the allocated resources.
+ *
+ * The client context must not be used afterwards.  It can be re-initialized
+ * via rtems_record_client_init().
+ *
+ * @param ctx The record client context.
+ */
+void rtems_record_client_destroy(
+  rtems_record_client_context *ctx
 );
 
 /** @} */

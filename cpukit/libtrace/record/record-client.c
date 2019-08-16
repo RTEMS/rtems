@@ -36,7 +36,16 @@
 
 #include <rtems/recordclient.h>
 
+#include <stdlib.h>
 #include <string.h>
+
+#define TIME_MASK ( ( UINT32_C( 1 ) << RTEMS_RECORD_TIME_BITS ) - 1 )
+
+static rtems_record_client_status visit(
+  rtems_record_client_context *ctx,
+  uint32_t                     time_event,
+  uint64_t                     data
+);
 
 static void set_to_bt_scaler(
   rtems_record_client_context *ctx,
@@ -74,16 +83,84 @@ static rtems_record_client_status call_handler(
 
 static void signal_overflow(
   const rtems_record_client_context *ctx,
-  const rtems_record_client_per_cpu *per_cpu,
+  rtems_record_client_per_cpu       *per_cpu,
   uint32_t                           data
 )
 {
-  uint64_t bt;
+  per_cpu->hold_back = true;
+  per_cpu->item_index = 0;
+  call_handler( ctx, 0, RTEMS_RECORD_PER_CPU_OVERFLOW, data );
+}
 
-  bt = ( per_cpu->uptime.time_accumulated * ctx->to_bt_scaler ) >> 31;
-  bt += per_cpu->uptime.bt;
+static void resolve_hold_back(
+  rtems_record_client_context *ctx,
+  rtems_record_client_per_cpu *per_cpu
+)
+{
+  if ( per_cpu->hold_back ) {
+    uint32_t last_head;
+    uint32_t new_head;
+    uint32_t overwritten;
+    uint32_t index;
+    uint32_t first;
+    uint32_t last;
+    uint32_t delta;
+    uint64_t uptime;
 
-  call_handler( ctx, bt, RTEMS_RECORD_PER_CPU_OVERFLOW, data );
+    per_cpu->hold_back = false;
+
+    last_head = per_cpu->head[ per_cpu->tail_head_index ];
+    new_head = per_cpu->head[ per_cpu->tail_head_index ^ 1 ];
+    overwritten = new_head - last_head;
+
+    if ( overwritten >= per_cpu->item_index ) {
+      return;
+    }
+
+    if ( overwritten > 0 ) {
+      call_handler( ctx, 0, RTEMS_RECORD_PER_CPU_OVERFLOW, overwritten );
+    }
+
+    first = RTEMS_RECORD_GET_TIME( per_cpu->items[ overwritten ].event );
+    last = first;
+    delta = 0;
+    uptime = 0;
+
+    for ( index = overwritten; index < per_cpu->item_index; ++index ) {
+      const rtems_record_item_64 *item;
+      rtems_record_event          event;
+      uint32_t                    time;
+
+      item = &per_cpu->items[ index ];
+      event = RTEMS_RECORD_GET_EVENT( item->event );
+      time = RTEMS_RECORD_GET_TIME( item->event );
+      delta += ( time - last ) & TIME_MASK;
+      last = time;
+
+      if (
+        event == RTEMS_RECORD_UPTIME_LOW
+          && index + 1 < per_cpu->item_index
+          && RTEMS_RECORD_GET_EVENT( ( item + 1 )->event )
+            == RTEMS_RECORD_UPTIME_HIGH
+      ) {
+        uptime = (uint32_t) item->data;
+        uptime += ( item + 1 )->data << 32;
+        break;
+      }
+    }
+
+    per_cpu->uptime.bt = uptime - ( ( delta * ctx->to_bt_scaler ) >> 31 );
+    per_cpu->uptime.time_at_bt = first;
+    per_cpu->uptime.time_last = first;
+    per_cpu->uptime.time_accumulated = 0;
+
+    for ( index = overwritten; index < per_cpu->item_index; ++index ) {
+      const rtems_record_item_64 *item;
+
+      item = &per_cpu->items[ index ];
+      visit( ctx, item->event, item->data );
+    }
+  }
 }
 
 static void process_per_cpu_head(
@@ -113,6 +190,12 @@ static void process_per_cpu_head(
   last_head = per_cpu->head[ per_cpu->tail_head_index ];
 
   if ( last_tail == last_head ) {
+    if ( per_cpu->uptime.bt == 0 ) {
+      per_cpu->hold_back = true;
+    } else {
+      resolve_hold_back( ctx, per_cpu );
+    }
+
     return;
   }
 
@@ -120,10 +203,77 @@ static void process_per_cpu_head(
   new_content = new_head - last_head;
 
   if ( new_content <= capacity ) {
+    resolve_hold_back( ctx, per_cpu );
     return;
   }
 
   signal_overflow( ctx, per_cpu, new_content - capacity );
+}
+
+static rtems_record_client_status process_per_cpu_count(
+  rtems_record_client_context *ctx,
+  uint64_t                     data
+)
+{
+  size_t                per_cpu_items;
+  rtems_record_item_64 *items;
+  uint32_t              cpu;
+
+  if ( ctx->count != 0 ) {
+    return RTEMS_RECORD_CLIENT_ERROR_DOUBLE_PER_CPU_COUNT;
+  }
+
+  if ( ctx->cpu_count == 0 ) {
+    return RTEMS_RECORD_CLIENT_ERROR_NO_CPU_MAX;
+  }
+
+  ctx->count = (uint32_t) data;
+
+  /*
+   * The ring buffer capacity plus two items for RTEMS_RECORD_PROCESSOR and
+   * RTEMS_RECORD_PER_CPU_TAIL.
+   */
+  per_cpu_items = ctx->count + 1;
+
+  items = malloc( per_cpu_items * ctx->cpu_count * sizeof( *items ) );
+
+  if ( items == NULL ) {
+    return RTEMS_RECORD_CLIENT_ERROR_NO_MEMORY;
+  }
+
+  for ( cpu = 0; cpu < ctx->cpu_count; ++cpu ) {
+    ctx->per_cpu[ cpu ].items = items;
+    items += per_cpu_items;
+  }
+
+  return RTEMS_RECORD_CLIENT_SUCCESS;
+}
+
+static rtems_record_client_status hold_back(
+  rtems_record_client_context *ctx,
+  rtems_record_client_per_cpu *per_cpu,
+  uint32_t                     time_event,
+  rtems_record_event           event,
+  uint64_t                     data
+)
+{
+  if ( event != RTEMS_RECORD_PER_CPU_HEAD ) {
+    uint32_t item_index;
+
+    item_index = per_cpu->item_index;
+
+    if ( item_index <= ctx->count ) {
+      per_cpu->items[ item_index ].event = time_event;
+      per_cpu->items[ item_index ].data = data;
+      per_cpu->item_index = item_index + 1;
+    } else {
+      return RTEMS_RECORD_CLIENT_ERROR_PER_CPU_ITEMS_OVERFLOW;
+    }
+  } else {
+    return call_handler( ctx, 0, RTEMS_RECORD_GET_EVENT( time_event ), data );
+  }
+
+  return RTEMS_RECORD_CLIENT_SUCCESS;
 }
 
 static rtems_record_client_status visit(
@@ -136,6 +286,7 @@ static rtems_record_client_status visit(
   uint32_t                     time;
   rtems_record_event           event;
   uint64_t                     bt;
+  rtems_record_client_status   status;
 
   per_cpu = &ctx->per_cpu[ ctx->cpu ];
   time = RTEMS_RECORD_GET_TIME( time_event );
@@ -143,7 +294,7 @@ static rtems_record_client_status visit(
 
   switch ( event ) {
     case RTEMS_RECORD_PROCESSOR:
-      if ( data >= RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ) {
+      if ( data >= ctx->cpu_count ) {
         return RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU;
       }
 
@@ -167,8 +318,24 @@ static rtems_record_client_status visit(
     case RTEMS_RECORD_PER_CPU_HEAD:
       process_per_cpu_head( ctx, per_cpu, data );
       break;
+    case RTEMS_RECORD_PROCESSOR_MAXIMUM:
+      if ( data >= RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ) {
+        return RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU_MAX;
+      }
+
+      if ( ctx->cpu_count != 0 ) {
+        return RTEMS_RECORD_CLIENT_ERROR_DOUBLE_CPU_MAX;
+      }
+
+      ctx->cpu_count = (uint32_t) data + 1;
+      break;
     case RTEMS_RECORD_PER_CPU_COUNT:
-      ctx->count = (uint32_t) data;
+      status = process_per_cpu_count( ctx, data );
+
+      if ( status != RTEMS_RECORD_CLIENT_SUCCESS ) {
+        return status;
+      }
+
       break;
     case RTEMS_RECORD_FREQUENCY:
       set_to_bt_scaler( ctx, (uint32_t) data );
@@ -183,11 +350,14 @@ static rtems_record_client_status visit(
       break;
   }
 
+  if ( per_cpu->hold_back ) {
+    return hold_back( ctx, per_cpu, time_event, event, data );
+  }
+
   if ( time != 0 ) {
     uint32_t delta;
 
-    delta = ( time - per_cpu->uptime.time_last )
-      & ( ( UINT32_C( 1 ) << RTEMS_RECORD_TIME_BITS ) - 1 );
+    delta = ( time - per_cpu->uptime.time_last ) & TIME_MASK;
     per_cpu->uptime.time_last = time;
     per_cpu->uptime.time_accumulated += delta;
     bt = ( per_cpu->uptime.time_accumulated * ctx->to_bt_scaler ) >> 31;
@@ -470,4 +640,23 @@ rtems_record_client_status rtems_record_client_run(
 )
 {
   return ( *ctx->consume )( ctx, buf, n );
+}
+
+void rtems_record_client_destroy(
+  rtems_record_client_context *ctx
+)
+{
+  uint32_t cpu;
+
+  for ( cpu = 0; cpu < ctx->cpu_count; ++cpu ) {
+    rtems_record_client_per_cpu *per_cpu;
+
+    ctx->cpu = cpu;
+    per_cpu = &ctx->per_cpu[ cpu ];
+    per_cpu->head[ per_cpu->tail_head_index ^ 1 ] =
+      per_cpu->head[ per_cpu->tail_head_index ];
+    resolve_hold_back( ctx, per_cpu );
+  }
+
+  free( ctx->per_cpu[ 0 ].items );
 }
