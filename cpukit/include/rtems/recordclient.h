@@ -195,6 +195,14 @@ void rtems_record_client_destroy(
   rtems_record_client_context *ctx
 );
 
+static inline void rtems_record_client_set_handler(
+  rtems_record_client_context *ctx,
+  rtems_record_client_handler  handler
+)
+{
+  ctx->handler = handler;
+}
+
 static inline uint64_t rtems_record_client_bintime_to_nanoseconds(
   uint64_t bt
 )
