@@ -299,6 +299,29 @@ static rtems_record_client_status hold_back(
   return RTEMS_RECORD_CLIENT_SUCCESS;
 }
 
+static uint64_t time_bt(
+  const rtems_record_client_context *ctx,
+  rtems_record_client_per_cpu       *per_cpu,
+  uint32_t                           time
+)
+{
+  uint64_t bt;
+
+  if ( time != 0 ) {
+    uint32_t delta;
+
+    delta = ( time - per_cpu->uptime.time_last ) & TIME_MASK;
+    per_cpu->uptime.time_last = time;
+    per_cpu->uptime.time_accumulated += delta;
+    bt = ( per_cpu->uptime.time_accumulated * ctx->to_bt_scaler ) >> 31;
+    bt += per_cpu->uptime.bt;
+  } else {
+    bt = 0;
+  }
+
+  return bt;
+}
+
 static rtems_record_client_status visit(
   rtems_record_client_context *ctx,
   uint32_t                     time_event,
@@ -308,7 +331,6 @@ static rtems_record_client_status visit(
   rtems_record_client_per_cpu *per_cpu;
   uint32_t                     time;
   rtems_record_event           event;
-  uint64_t                     bt;
   rtems_record_client_status   status;
 
   per_cpu = &ctx->per_cpu[ ctx->cpu ];
@@ -377,19 +399,7 @@ static rtems_record_client_status visit(
     return hold_back( ctx, per_cpu, time_event, event, data );
   }
 
-  if ( time != 0 ) {
-    uint32_t delta;
-
-    delta = ( time - per_cpu->uptime.time_last ) & TIME_MASK;
-    per_cpu->uptime.time_last = time;
-    per_cpu->uptime.time_accumulated += delta;
-    bt = ( per_cpu->uptime.time_accumulated * ctx->to_bt_scaler ) >> 31;
-    bt += per_cpu->uptime.bt;
-  } else {
-    bt = 0;
-  }
-
-  return call_handler( ctx, bt, event, data );
+  return call_handler( ctx, time_bt( ctx, per_cpu, time ), event, data );
 }
 
 static rtems_record_client_status consume_32(
