@@ -332,7 +332,7 @@ static rtems_record_client_status visit(
       time = 0;
       break;
     case RTEMS_RECORD_UPTIME_HIGH:
-      per_cpu->uptime.bt += (int64_t) data << 32;
+      per_cpu->uptime.bt += data << 32;
       time = 0;
       break;
     case RTEMS_RECORD_PER_CPU_TAIL:
