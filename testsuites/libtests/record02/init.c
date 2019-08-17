@@ -46,8 +46,7 @@ typedef struct {
 static test_context test_instance;
 
 static rtems_record_client_status client_handler(
-  uint32_t            seconds,
-  uint32_t            nanoseconds,
+  uint64_t            bt,
   uint32_t            cpu,
   rtems_record_event  event,
   uint64_t            data,
@@ -56,7 +55,16 @@ static rtems_record_client_status client_handler(
 {
   (void) arg;
 
-  if ( seconds != 0 && nanoseconds != 0 ) {
+  if ( bt != 0 ) {
+    uint32_t seconds;
+    uint32_t nanoseconds;
+
+    rtems_record_client_bintime_to_seconds_and_nanoseconds(
+      bt,
+      &seconds,
+      &nanoseconds
+    );
+
     printf( "%" PRIu32 ".%09" PRIu32 ":", seconds, nanoseconds );
   } else {
     printf( "*:" );

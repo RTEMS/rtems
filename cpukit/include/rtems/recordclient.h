@@ -65,8 +65,7 @@ typedef enum {
 } rtems_record_client_status;
 
 typedef rtems_record_client_status ( *rtems_record_client_handler )(
-  uint32_t            seconds,
-  uint32_t            nanoseconds,
+  uint64_t            bt,
   uint32_t            cpu,
   rtems_record_event  event,
   uint64_t            data,
@@ -195,6 +194,33 @@ rtems_record_client_status rtems_record_client_run(
 void rtems_record_client_destroy(
   rtems_record_client_context *ctx
 );
+
+static inline uint64_t rtems_record_client_bintime_to_nanoseconds(
+  uint64_t bt
+)
+{
+  uint64_t ns_per_sec;
+  uint64_t nanoseconds;
+
+  ns_per_sec = 1000000000ULL;
+  nanoseconds = ns_per_sec * ( (uint32_t) ( bt >> 32 ) );
+  nanoseconds += ( ns_per_sec * (uint32_t) bt ) >> 32;
+
+  return nanoseconds;
+}
+
+static inline void rtems_record_client_bintime_to_seconds_and_nanoseconds(
+  uint64_t  bt,
+  uint32_t *seconds,
+  uint32_t *nanoseconds
+)
+{
+  uint64_t ns_per_sec;
+
+  ns_per_sec = 1000000000ULL;
+  *seconds = (uint32_t) ( bt >> 32 );
+  *nanoseconds = (uint32_t) ( ( ns_per_sec * (uint32_t) bt ) >> 32 );
+}
 
 /** @} */
 

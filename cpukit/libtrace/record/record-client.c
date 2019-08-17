@@ -88,15 +88,8 @@ static rtems_record_client_status call_handler(
   uint64_t                           data
 )
 {
-  uint32_t seconds;
-  uint32_t nanosec;
-
-  seconds = (uint32_t) ( bt >> 32 );
-  nanosec = (uint32_t) ( ( UINT64_C( 1000000000 ) * (uint32_t) bt ) >> 32 );
-
   return ( *ctx->handler )(
-    seconds,
-    nanosec,
+    bt,
     ctx->cpu,
     event,
     data,
