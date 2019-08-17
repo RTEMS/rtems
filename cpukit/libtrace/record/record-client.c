@@ -47,6 +47,29 @@ static rtems_record_client_status visit(
   uint64_t                     data
 );
 
+static rtems_record_client_status consume_error(
+  rtems_record_client_context *ctx,
+  const void                  *buf,
+  size_t                       n
+)
+{
+  (void) buf;
+  (void) n;
+
+  return ctx->status;
+}
+
+static rtems_record_client_status error(
+  rtems_record_client_context *ctx,
+  rtems_record_client_status   status
+)
+{
+  ctx->status = status;
+  ctx->consume = consume_error;
+
+  return status;
+}
+
 static void set_to_bt_scaler(
   rtems_record_client_context *ctx,
   uint32_t                     frequency
@@ -220,11 +243,11 @@ static rtems_record_client_status process_per_cpu_count(
   uint32_t              cpu;
 
   if ( ctx->count != 0 ) {
-    return RTEMS_RECORD_CLIENT_ERROR_DOUBLE_PER_CPU_COUNT;
+    return error( ctx, RTEMS_RECORD_CLIENT_ERROR_DOUBLE_PER_CPU_COUNT );
   }
 
   if ( ctx->cpu_count == 0 ) {
-    return RTEMS_RECORD_CLIENT_ERROR_NO_CPU_MAX;
+    return error( ctx, RTEMS_RECORD_CLIENT_ERROR_NO_CPU_MAX );
   }
 
   ctx->count = (uint32_t) data;
@@ -238,7 +261,7 @@ static rtems_record_client_status process_per_cpu_count(
   items = malloc( per_cpu_items * ctx->cpu_count * sizeof( *items ) );
 
   if ( items == NULL ) {
-    return RTEMS_RECORD_CLIENT_ERROR_NO_MEMORY;
+    return error( ctx, RTEMS_RECORD_CLIENT_ERROR_NO_MEMORY );
   }
 
   for ( cpu = 0; cpu < ctx->cpu_count; ++cpu ) {
@@ -267,7 +290,7 @@ static rtems_record_client_status hold_back(
       per_cpu->items[ item_index ].data = data;
       per_cpu->item_index = item_index + 1;
     } else {
-      return RTEMS_RECORD_CLIENT_ERROR_PER_CPU_ITEMS_OVERFLOW;
+      return error( ctx, RTEMS_RECORD_CLIENT_ERROR_PER_CPU_ITEMS_OVERFLOW );
     }
   } else {
     return call_handler( ctx, 0, RTEMS_RECORD_GET_EVENT( time_event ), data );
@@ -295,7 +318,7 @@ static rtems_record_client_status visit(
   switch ( event ) {
     case RTEMS_RECORD_PROCESSOR:
       if ( data >= ctx->cpu_count ) {
-        return RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU;
+        return error( ctx, RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU );
       }
 
       ctx->cpu = (uint32_t) data;
@@ -320,11 +343,11 @@ static rtems_record_client_status visit(
       break;
     case RTEMS_RECORD_PROCESSOR_MAXIMUM:
       if ( data >= RTEMS_RECORD_CLIENT_MAXIMUM_CPU_COUNT ) {
-        return RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU_MAX;
+        return error( ctx, RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_CPU_MAX );
       }
 
       if ( ctx->cpu_count != 0 ) {
-        return RTEMS_RECORD_CLIENT_ERROR_DOUBLE_CPU_MAX;
+        return error( ctx, RTEMS_RECORD_CLIENT_ERROR_DOUBLE_CPU_MAX );
       }
 
       ctx->cpu_count = (uint32_t) data + 1;
@@ -342,7 +365,7 @@ static rtems_record_client_status visit(
       break;
     case RTEMS_RECORD_VERSION:
       if ( data != RTEMS_RECORD_THE_VERSION ) {
-        return RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_VERSION;
+        return error( ctx, RTEMS_RECORD_CLIENT_ERROR_UNSUPPORTED_VERSION );
       }
 
       break;
@@ -601,11 +624,11 @@ static rtems_record_client_status consume_init(
 #error "unexpected __BYTE_ORDER__"
 #endif
         default:
-          return RTEMS_RECORD_CLIENT_ERROR_UNKNOWN_FORMAT;
+          return error( ctx, RTEMS_RECORD_CLIENT_ERROR_UNKNOWN_FORMAT );
       }
 
       if ( magic != RTEMS_RECORD_MAGIC ) {
-        return RTEMS_RECORD_CLIENT_ERROR_INVALID_MAGIC;
+        return error( ctx, RTEMS_RECORD_CLIENT_ERROR_INVALID_MAGIC );
       }
 
       return rtems_record_client_run( ctx, buf, n );
