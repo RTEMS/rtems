@@ -106,6 +106,11 @@ typedef struct {
   size_t tail_head_index;
 
   /**
+   * @brief Count of lost items due to ring buffer overflows.
+   */
+  uint32_t overflow;
+
+  /**
    * @brief If true, then hold back items for overflow or initial ramp up
    * processing.
    */
