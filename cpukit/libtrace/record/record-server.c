@@ -184,7 +184,7 @@ static void thread_names_produce(
   ctx->items[ i ].event = RTEMS_RECORD_TIME_EVENT( 0, event );
   ctx->items[ i ].data = data;
 
-  if (i == RTEMS_ARRAY_SIZE(ctx->items) - 2) {
+  if (i == RTEMS_ARRAY_SIZE(ctx->items) - 1) {
     ctx->index = 0;
     (void) write( ctx->fd, ctx->items, sizeof( ctx->items ) );
   } else {
