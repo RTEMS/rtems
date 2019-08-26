@@ -100,6 +100,7 @@ static void Init(rtems_task_argument arg)
   Record_Stream_header header;
   rtems_record_client_status cs;
   int i;
+  uint32_t level;
 
   TEST_BEGIN();
   ctx = &test_instance;
@@ -107,6 +108,35 @@ static void Init(rtems_task_argument arg)
   for (i = 0; i < 10; ++i) {
     rtems_task_wake_after(1);
   }
+
+  rtems_record_line();
+  rtems_record_line_2(RTEMS_RECORD_USER_0, 0);
+  rtems_record_line_3(RTEMS_RECORD_USER_1, 1, RTEMS_RECORD_USER_2, 2);
+  rtems_record_line_arg(0);
+  rtems_record_line_arg_2(0, 1);
+  rtems_record_line_arg_3(0, 1, 2);
+  rtems_record_line_arg_4(0, 1, 2, 3);
+  rtems_record_line_arg_5(0, 1, 2, 3, 4);
+  rtems_record_line_arg_6(0, 1, 2, 3, 4, 5);
+  rtems_record_line_arg_7(0, 1, 2, 3, 4, 5, 6);
+  rtems_record_line_arg_8(0, 1, 2, 3, 4, 5, 6, 7);
+  rtems_record_line_arg_9(0, 1, 2, 3, 4, 5, 6, 7, 8);
+  rtems_record_line_arg_10(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  rtems_record_caller();
+  rtems_record_caller_3(RTEMS_RECORD_USER_0, 0);
+  rtems_record_caller_4(RTEMS_RECORD_USER_1, 1, RTEMS_RECORD_USER_2, 2);
+  rtems_record_caller_arg(0);
+  rtems_record_caller_arg_2(0, 1);
+  rtems_record_caller_arg_3(0, 1, 2);
+  rtems_record_caller_arg_4(0, 1, 2, 3);
+  rtems_record_caller_arg_5(0, 1, 2, 3, 4);
+  rtems_record_caller_arg_6(0, 1, 2, 3, 4, 5);
+  rtems_record_caller_arg_7(0, 1, 2, 3, 4, 5, 6);
+  rtems_record_caller_arg_8(0, 1, 2, 3, 4, 5, 6, 7);
+  rtems_record_caller_arg_9(0, 1, 2, 3, 4, 5, 6, 7, 8);
+  rtems_record_caller_arg_10(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  level = rtems_record_interrupt_disable();
+  rtems_record_interrupt_enable(level);
 
   rtems_record_client_init(&ctx->client, client_handler, NULL);
   _Record_Stream_header_initialize(&header);
@@ -129,7 +159,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS 128
+#define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS 256
 
 #define CONFIGURE_RECORD_EXTENSIONS_ENABLED
 
