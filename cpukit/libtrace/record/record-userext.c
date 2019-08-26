@@ -57,7 +57,10 @@ bool _Record_Thread_create(
     data = 0;
 
     for ( k = 0; j < n && k < sizeof( data ); ++k ) {
-      data |= name[ i ] << ( k * 8 );
+      rtems_record_data c;
+
+      c = (unsigned char) name[ i ];
+      data |= c << ( k * 8 );
       ++j;
     }
 

@@ -211,7 +211,10 @@ static bool thread_names_visitor( rtems_tcb *tcb, void *arg )
     data = 0;
 
     for ( j = 0; i < n && j < sizeof( data ); ++j ) {
-      data |= name[ i ] << ( j * 8 );
+      rtems_record_data c;
+
+      c = (unsigned char) name[ i ];
+      data |= c << ( j * 8 );
       ++i;
     }
 
