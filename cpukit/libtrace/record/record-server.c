@@ -151,7 +151,7 @@ void _Record_Stream_header_initialize( Record_Stream_header *header )
   header->Processor_maximum.data = rtems_scheduler_get_processor_maximum() - 1;
 
   header->Count.event = RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_PER_CPU_COUNT );
-  header->Count.data = _Record_Item_count;
+  header->Count.data = _Record_Configuration.item_count;
 
   header->Frequency.event =
     RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_FREQUENCY );

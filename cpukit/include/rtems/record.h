@@ -32,7 +32,7 @@
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/cpu.h>
-#include <rtems/score/percpudata.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/intr.h>
 #include <rtems/rtems/tasks.h>
@@ -42,19 +42,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-struct Record_Control {
+typedef struct Record_Control {
   Atomic_Uint       head;
   unsigned int      tail;
   unsigned int      mask;
   Watchdog_Control  Watchdog;
   rtems_record_item Header[ 3 ];
   rtems_record_item Items[ RTEMS_ZERO_LENGTH_ARRAY ];
-};
+} Record_Control;
 
-typedef struct Record_Control Record_Control;
-
-typedef RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
-  struct Record_Configured_control Record_Configured_control;
+typedef struct {
+  unsigned int    item_count;
+  size_t          control_size;
+  Record_Control *controls;
+} Record_Configuration;
 
 typedef struct {
   Record_Control        *control;
@@ -63,9 +64,7 @@ typedef struct {
   rtems_interrupt_level  level;
 } rtems_record_context;
 
-PER_CPU_DATA_ITEM_DECLARE( Record_Configured_control, _Record_Per_CPU );
-
-extern const unsigned int _Record_Item_count;
+extern const Record_Configuration _Record_Configuration;
 
 void _Record_Initialize( void );
 

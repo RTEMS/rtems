@@ -2942,14 +2942,18 @@ struct _reent *__getreent(void)
       #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be at least 16"
     #endif
 
-    const unsigned int _Record_Item_count = CONFIGURE_RECORD_PER_PROCESSOR_ITEMS;
-
-    struct Record_Configured_control {
-      Record_Control    Control;
+    typedef struct {
+      RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES ) Record_Control Control;
       rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
-    };
+    } Record_Configured_control;
 
-    PER_CPU_DATA_ITEM( Record_Configured_control, _Record_Per_CPU );
+    static Record_Configured_control _Record_Controls[ _CONFIGURE_MAXIMUM_PROCESSORS ];
+
+    const Record_Configuration _Record_Configuration = {
+      CONFIGURE_RECORD_PER_PROCESSOR_ITEMS,
+      sizeof( Record_Configured_control ),
+      &_Record_Controls[ 0 ].Control
+    };
 
     RTEMS_SYSINIT_ITEM(
       _Record_Initialize,

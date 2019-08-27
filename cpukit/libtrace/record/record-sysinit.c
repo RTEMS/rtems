@@ -39,21 +39,21 @@ static Watchdog_Interval _Record_Tick_interval;
 
 void _Record_Initialize( void )
 {
-  uint32_t  cpu_max;
-  uint32_t  cpu_index;
-  uintptr_t offset;
+  Record_Control *control;
+  uint32_t        cpu_max;
+  uint32_t        cpu_index;
 
+  control = _Record_Configuration.controls;
   cpu_max = rtems_configuration_get_maximum_processors();
-  offset = PER_CPU_DATA_OFFSET( _Record_Per_CPU );
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu;
-    Record_Control  *control;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
-    control = PER_CPU_DATA_GET_BY_OFFSET( cpu, Record_Control, offset );
-    control->mask = _Record_Item_count - 1U;
+    control->mask = _Record_Configuration.item_count - 1U;
     cpu->record = control;
+    control = (Record_Control *)
+      ( (char *) control + _Record_Configuration.control_size );
   }
 }
 
