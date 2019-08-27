@@ -155,6 +155,7 @@ typedef struct rtems_record_client_context {
   );
   rtems_record_client_handler handler;
   void *handler_arg;
+  size_t data_size;
   uint32_t header[ 2 ];
   rtems_record_client_status status;
 } rtems_record_client_context;

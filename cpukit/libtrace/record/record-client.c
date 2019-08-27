@@ -615,22 +615,26 @@ static rtems_record_client_status consume_init(
           ctx->todo = sizeof( ctx->item.format_32 );
           ctx->pos = &ctx->item.format_32;
           ctx->consume = consume_32;
+          ctx->data_size = 4;
           break;
         case RTEMS_RECORD_FORMAT_LE_64:
           ctx->todo = sizeof( ctx->item.format_64 );
           ctx->pos = &ctx->item.format_64;
           ctx->consume = consume_64;
+          ctx->data_size = 8;
           break;
         case RTEMS_RECORD_FORMAT_BE_32:
           ctx->todo = sizeof( ctx->item.format_32 );
           ctx->pos = &ctx->item.format_32;
           ctx->consume = consume_swap_32;
+          ctx->data_size = 4;
           magic = __builtin_bswap32( magic );
           break;
         case RTEMS_RECORD_FORMAT_BE_64:
           ctx->todo = sizeof( ctx->item.format_64 );
           ctx->pos = &ctx->item.format_64;
           ctx->consume = consume_swap_64;
+          ctx->data_size = 8;
           magic = __builtin_bswap32( magic );
           break;
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
@@ -638,23 +642,27 @@ static rtems_record_client_status consume_init(
           ctx->todo = sizeof( ctx->item.format_32 );
           ctx->pos = &ctx->item.format_32;
           ctx->consume = consume_swap_32;
+          ctx->data_size = 4;
           magic = __builtin_bswap32( magic );
           break;
         case RTEMS_RECORD_FORMAT_LE_64:
           ctx->todo = sizeof( ctx->item.format_64 );
           ctx->pos = &ctx->item.format_64;
           ctx->consume = consume_swap_64;
+          ctx->data_size = 8;
           magic = __builtin_bswap32( magic );
           break;
         case RTEMS_RECORD_FORMAT_BE_32:
           ctx->todo = sizeof( ctx->item.format_32 );
           ctx->pos = &ctx->item.format_32;
           ctx->consume = consume_32;
+          ctx->data_size = 4;
           break;
         case RTEMS_RECORD_FORMAT_BE_64:
           ctx->todo = sizeof( ctx->item.format_64 );
           ctx->pos = &ctx->item.format_64;
           ctx->consume = consume_64;
+          ctx->data_size = 8;
           break;
 #else
 #error "unexpected __BYTE_ORDER__"
