@@ -172,6 +172,34 @@ void _Record_Stream_header_initialize( Record_Stream_header *header );
  */
 
 /**
+ * @brief Prepares to add and commit record items in a critical section with
+ * interrupts disabled.
+ *
+ * This function does not disable interrupts.  It must be called with
+ * interrupts disabled.  Interrupts must be disabled until the corresponding
+ * rtems_record_commit_critical() was called.
+ *
+ * @param context The record context which must be used for the following
+ *   rtems_record_add() and rtems_record_commit_critical() calls.  The record
+ *   context may have an arbitrary content at function entry.
+ * @param cpu_self The control of the current processor.
+ */
+RTEMS_INLINE_ROUTINE void rtems_record_prepare_critical(
+  rtems_record_context  *context,
+  const Per_CPU_Control *cpu_self
+)
+{
+  Record_Control *control;
+  unsigned int    head;
+
+  context->now = RTEMS_RECORD_TIME_EVENT( _Record_Now(), 0 );
+  control = cpu_self->record;
+  context->control = control;
+  head = _Record_Head( control );
+  context->head = head;
+}
+
+/**
  * @brief Prepares to add and commit record items.
  *
  * This function disables interrupts.
@@ -226,17 +254,29 @@ RTEMS_INLINE_ROUTINE void rtems_record_add(
 }
 
 /**
- * @brief Commits a set of record items.
+ * @brief Commits a set of record items in a critical section with interrupts
+ * disabled.
  *
- * @param context The record context initialized via rtems_record_prepare().
+ * @param context The record context initialized via
+ *   rtems_record_prepare_critical().
  */
-RTEMS_INLINE_ROUTINE void rtems_record_commit( rtems_record_context *context )
+RTEMS_INLINE_ROUTINE void rtems_record_commit_critical( rtems_record_context *context )
 {
   _Atomic_Store_uint(
     &context->control->head,
     context->head,
     ATOMIC_ORDER_RELEASE
   );
+}
+
+/**
+ * @brief Commits a set of record items.
+ *
+ * @param context The record context initialized via rtems_record_prepare().
+ */
+RTEMS_INLINE_ROUTINE void rtems_record_commit( rtems_record_context *context )
+{
+  rtems_record_commit_critical( context );
   rtems_interrupt_local_enable( context->level );
 }
 

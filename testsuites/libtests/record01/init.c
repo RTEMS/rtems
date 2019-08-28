@@ -265,10 +265,12 @@ static void test_add_2_items(test_context *ctx, Record_Control *control)
 static void test_add_3_items(test_context *ctx, Record_Control *control)
 {
   rtems_record_context rc;
+  rtems_interrupt_level level;
 
   init_context(ctx);
 
-  rtems_record_prepare(&rc);
+  rtems_interrupt_local_disable(level);
+  rtems_record_prepare_critical(&rc, _Per_CPU_Get());
   rtems_test_assert(rc.control == control);
   rtems_test_assert(rc.head == 0);
   rtems_test_assert(_Record_Head(control) == 0);
@@ -290,7 +292,8 @@ static void test_add_3_items(test_context *ctx, Record_Control *control)
 
   rc.now = RTEMS_RECORD_TIME_EVENT(10, 0);
   rtems_record_add(&rc, UE(9), 11);
-  rtems_record_commit(&rc);
+  rtems_record_commit_critical(&rc);
+  rtems_interrupt_local_enable(level);
   rtems_test_assert(rc.head == 3);
   rtems_test_assert(memcmp(control->Items, expected_items_7, ITEM_SIZE) == 0);
   rtems_test_assert(_Record_Head(control) == 3);
