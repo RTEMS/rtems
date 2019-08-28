@@ -30,6 +30,7 @@
 #endif
 
 #include <rtems/record.h>
+#include <rtems/recordserver.h>
 #include <rtems.h>
 
 #include <sys/endian.h>

@@ -35,7 +35,6 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/rtems/intr.h>
-#include <rtems/rtems/tasks.h>
 #include <rtems/counter.h>
 
 #ifdef __cplusplus
@@ -290,39 +289,6 @@ typedef void ( *rtems_record_drain_visitor )(
  * @param arg The argument for the visitor function.
  */
 void rtems_record_drain( rtems_record_drain_visitor visitor, void *arg );
-
-/**
- * @brief Drains the record items on all processors an writes them to the file
- * descriptor.
- *
- * @param fd The file descriptor.
- * @param written Set to true if items were written to the file descriptor,
- *   otherwise set to false.
- *
- * @retval The bytes written to the file descriptor.
- */
-ssize_t rtems_record_writev( int fd, bool *written );
-
-/**
- * @brief Runs a record TCP server loop.
- *
- * @param port The TCP port to listen in host byte order.
- * @param period The drain period in clock ticks.
- */
-void rtems_record_server( uint16_t port, rtems_interval period );
-
-/**
- * @brief Starts a record TCP server task.
- *
- * @param priority The task priority.
- * @param port The TCP port to listen in host byte order.
- * @param period The drain period in clock ticks.
- */
-rtems_status_code rtems_record_start_server(
-  rtems_task_priority priority,
-  uint16_t            port,
-  rtems_interval      period
-);
 
 /** @} */
 

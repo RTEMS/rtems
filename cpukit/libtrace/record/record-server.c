@@ -29,6 +29,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/recordserver.h>
 #include <rtems/record.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems.h>
