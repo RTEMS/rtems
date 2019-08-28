@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2010, 2018 embedded brains GmbH.
+ *  Copyright (C) 2010, 2019 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -369,6 +369,17 @@
   #define RTEMS_PREDICT_FALSE( _exp ) __builtin_expect( ( _exp ), 0 )
 #else
   #define RTEMS_PREDICT_FALSE( _exp ) ( _exp )
+#endif
+
+/**
+ * @brief Returns the return address of the current function.
+ *
+ * @return The return address.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_RETURN_ADDRESS() __builtin_return_address( 0 )
+#else
+  #define RTEMS_RETURN_ADDRESS() NULL
 #endif
 
 #if __cplusplus >= 201103L

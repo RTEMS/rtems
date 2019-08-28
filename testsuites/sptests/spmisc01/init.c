@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2018, 2019 embedded brains GmbH
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -192,6 +192,8 @@ static int concat(void)
 
 static void Init(rtems_task_argument arg)
 {
+  void *p;
+
   TEST_BEGIN();
   rtems_test_assert(inline_func() == 7);
   RTEMS_COMPILER_MEMORY_BARRIER();
@@ -259,6 +261,9 @@ static void Init(rtems_task_argument arg)
   } else {
     rtems_test_assert(true);
   }
+
+  p = RTEMS_RETURN_ADDRESS();
+  (void) p;
 
   TEST_END();
   rtems_test_exit(0);
