@@ -1054,6 +1054,13 @@ typedef void ( *rtems_record_drain_visitor )(
   void                    *arg
 );
 
+void _Record_Drain(
+  Record_Control             *control,
+  uint32_t                    cpu_index,
+  rtems_record_drain_visitor  visitor,
+  void                       *arg
+);
+
 /**
  * @brief Drains the record items on all processors.
  *
