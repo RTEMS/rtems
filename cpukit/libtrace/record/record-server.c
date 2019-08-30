@@ -31,6 +31,7 @@
 
 #include <rtems/recordserver.h>
 #include <rtems/record.h>
+#include <rtems/version.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems.h>
 
@@ -120,8 +121,13 @@ static void wakeup_timer( rtems_id timer, void *arg )
   (void) rtems_timer_reset( timer );
 }
 
-void _Record_Stream_header_initialize( Record_Stream_header *header )
+size_t _Record_Stream_header_initialize( Record_Stream_header *header )
 {
+  rtems_record_item *items;
+  size_t             available;
+  size_t             used;
+  const char        *str;
+
 #if BYTE_ORDER == LITTLE_ENDIAN
 #if __INTPTR_WIDTH__ == 32
   header->format = RTEMS_RECORD_FORMAT_LE_32,
@@ -157,14 +163,74 @@ void _Record_Stream_header_initialize( Record_Stream_header *header )
   header->Frequency.event =
     RTEMS_RECORD_TIME_EVENT( 0, RTEMS_RECORD_FREQUENCY );
   header->Frequency.data = rtems_counter_frequency();
+
+  items = header->Info;
+  available = RTEMS_ARRAY_SIZE( header->Info );
+
+  str = CPU_NAME;
+  used = _Record_String_to_items(
+    RTEMS_RECORD_ARCH,
+    str,
+    strlen( str ),
+    items,
+    available
+  );
+  items += used;
+  available -= used;
+
+  str = CPU_MODEL_NAME;
+  used = _Record_String_to_items(
+    RTEMS_RECORD_MULTILIB,
+    str,
+    strlen( str ),
+    items,
+    available
+  );
+  items += used;
+  available -= used;
+
+  str = rtems_board_support_package();
+  used = _Record_String_to_items(
+    RTEMS_RECORD_BSP,
+    str,
+    strlen( str ),
+    items,
+    available
+  );
+  items += used;
+  available -= used;
+
+  str = rtems_version_control_key();
+  used = _Record_String_to_items(
+    RTEMS_RECORD_VERSION_CONTROL_KEY,
+    str,
+    strlen( str ),
+    items,
+    available
+  );
+  items += used;
+  available -= used;
+
+  str = __VERSION__;
+  used = _Record_String_to_items(
+    RTEMS_RECORD_TOOLS,
+    str,
+    strlen( str ),
+    items,
+    available
+  );
+  items += used;
+
+  return (size_t) ( (char *) items - (char *) header );
 }
 
 static void send_header( int fd )
 {
   Record_Stream_header header;
+  size_t               size;
 
-  _Record_Stream_header_initialize( &header );
-  (void) write( fd, &header, sizeof( header ) );
+  size = _Record_Stream_header_initialize( &header );
+  (void) write( fd, &header, size );
 }
 
 typedef struct {

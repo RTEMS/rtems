@@ -40,36 +40,21 @@ bool _Record_Thread_create(
   rtems_record_data data;
   char              name[ 2 * THREAD_DEFAULT_MAXIMUM_NAME_SIZE ];
   rtems_record_item items[ 1 + sizeof( name ) / sizeof( data ) ];
-  size_t            n;
-  size_t            i;
-  size_t            j;
+  size_t            len;
+  size_t            used;
 
-  i = 0;
-  items[ i ].event = RTEMS_RECORD_THREAD_CREATE;
-  items[ i ].data = created->Object.id;
+  items[ 0 ].event = RTEMS_RECORD_THREAD_CREATE;
+  items[ 0 ].data = created->Object.id;
 
-  n = _Thread_Get_name( created, name, sizeof( name ) );
-  j = 0;
-
-  while ( j < n ) {
-    size_t k;
-
-    data = 0;
-
-    for ( k = 0; j < n && k < sizeof( data ); ++k ) {
-      rtems_record_data c;
-
-      c = (unsigned char) name[ i ];
-      data |= c << ( k * 8 );
-      ++j;
-    }
-
-    ++i;
-    items[ i ].event = RTEMS_RECORD_THREAD_NAME;
-    items[ i ].data = data;
-  }
-
-  rtems_record_produce_n( items, i + 1 );
+  len = _Thread_Get_name( created, name, sizeof( name ) );
+  used = _Record_String_to_items(
+    RTEMS_RECORD_THREAD_NAME,
+    name,
+    len,
+    &items[ 1 ],
+    RTEMS_ARRAY_SIZE( items ) - 1
+  );
+  rtems_record_produce_n( items, used + 1 );
 
   return true;
 }

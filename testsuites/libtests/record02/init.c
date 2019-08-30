@@ -98,6 +98,7 @@ static void Init(rtems_task_argument arg)
 {
   test_context *ctx;
   Record_Stream_header header;
+  size_t size;
   rtems_record_client_status cs;
   int i;
   uint32_t level;
@@ -139,8 +140,8 @@ static void Init(rtems_task_argument arg)
   rtems_record_interrupt_enable(level);
 
   rtems_record_client_init(&ctx->client, client_handler, NULL);
-  _Record_Stream_header_initialize(&header);
-  cs = rtems_record_client_run(&ctx->client, &header, sizeof(header));
+  size = _Record_Stream_header_initialize(&header);
+  cs = rtems_record_client_run(&ctx->client, &header, size);
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
   rtems_record_drain(drain_visitor, ctx);
   rtems_record_client_destroy(&ctx->client);

@@ -160,9 +160,18 @@ typedef struct RTEMS_PACKED {
   rtems_record_item Processor_maximum;
   rtems_record_item Count;
   rtems_record_item Frequency;
+  rtems_record_item Info[64];
 } Record_Stream_header;
 
-void _Record_Stream_header_initialize( Record_Stream_header *header );
+size_t _Record_Stream_header_initialize( Record_Stream_header *header );
+
+size_t _Record_String_to_items(
+  rtems_record_event  event,
+  const char         *str,
+  size_t              len,
+  rtems_record_item  *items,
+  size_t              item_count
+);
 
 void _Record_Caller( void *return_address );
 

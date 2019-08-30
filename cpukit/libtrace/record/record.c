@@ -88,6 +88,42 @@ void rtems_record_produce_n(
   rtems_record_commit( &context );
 }
 
+size_t _Record_String_to_items(
+  rtems_record_event  event,
+  const char         *str,
+  size_t              len,
+  rtems_record_item  *items,
+  size_t              item_count
+)
+{
+  size_t s;
+  size_t i;
+
+  s = 0;
+  i = 0;
+
+  while ( s < len && i < item_count ) {
+    rtems_record_data data;
+    size_t            k;
+
+    data = 0;
+
+    for ( k = 0; s < len && k < sizeof( data ); ++k ) {
+      rtems_record_data c;
+
+      c = (unsigned char) str[ s ];
+      data |= c << ( k * 8 );
+      ++s;
+    }
+
+    items[ i ].event = event;
+    items[ i ].data = data;
+    ++i;
+  }
+
+  return i;
+}
+
 void _Record_Drain(
   Record_Control             *control,
   uint32_t                    cpu_index,
