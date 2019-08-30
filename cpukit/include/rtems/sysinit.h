@@ -26,10 +26,10 @@ extern "C" {
  * digits without a 0x-prefix.  A 0x-prefix is concatenated with the module and
  * order values to form a proper integer literal.
  */
-#define RTEMS_SYSINIT_BSP_WORK_AREAS             000100
-#define RTEMS_SYSINIT_BSP_START                  000200
-#define RTEMS_SYSINIT_CPU_COUNTER                000300
-#define RTEMS_SYSINIT_RECORD                     000400
+#define RTEMS_SYSINIT_RECORD                     000100
+#define RTEMS_SYSINIT_BSP_WORK_AREAS             000200
+#define RTEMS_SYSINIT_BSP_START                  000300
+#define RTEMS_SYSINIT_CPU_COUNTER                000400
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000500
 #define RTEMS_SYSINIT_MP_EARLY                   000600
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000700
