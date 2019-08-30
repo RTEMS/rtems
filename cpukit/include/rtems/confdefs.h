@@ -2943,7 +2943,7 @@ struct _reent *__getreent(void)
     #endif
 
     typedef struct {
-      RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES ) Record_Control Control;
+      Record_Control    Control;
       rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
     } Record_Configured_control;
 
@@ -2951,7 +2951,6 @@ struct _reent *__getreent(void)
 
     const Record_Configuration _Record_Configuration = {
       CONFIGURE_RECORD_PER_PROCESSOR_ITEMS,
-      sizeof( Record_Configured_control ),
       &_Record_Controls[ 0 ].Control
     };
 

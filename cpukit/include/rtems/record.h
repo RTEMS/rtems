@@ -46,12 +46,12 @@ typedef struct Record_Control {
   unsigned int      mask;
   Watchdog_Control  Watchdog;
   rtems_record_item Header[ 3 ];
-  rtems_record_item Items[ RTEMS_ZERO_LENGTH_ARRAY ];
+  RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
+    rtems_record_item Items[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Record_Control;
 
 typedef struct {
   unsigned int    item_count;
-  size_t          control_size;
   Record_Control *controls;
 } Record_Configuration;
 

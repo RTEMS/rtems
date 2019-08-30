@@ -40,20 +40,24 @@ static Watchdog_Interval _Record_Tick_interval;
 void _Record_Initialize( void )
 {
   Record_Control *control;
+  size_t          control_size;
   uint32_t        cpu_max;
   uint32_t        cpu_index;
+  unsigned int    item_count;
 
-  control = _Record_Configuration.controls;
   cpu_max = rtems_configuration_get_maximum_processors();
+  item_count = _Record_Configuration.item_count;
+  control = _Record_Configuration.controls;
+  control_size = sizeof( *control );
+  control_size += sizeof( control->Items[ 0 ] ) * item_count;
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
-    control->mask = _Record_Configuration.item_count - 1U;
+    control->mask = item_count - 1U;
     cpu->record = control;
-    control = (Record_Control *)
-      ( (char *) control + _Record_Configuration.control_size );
+    control = (Record_Control *) ( (char *) control + control_size );
   }
 }
 
