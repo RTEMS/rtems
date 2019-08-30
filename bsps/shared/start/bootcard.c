@@ -46,13 +46,15 @@ void boot_card(
   const char *cmdline
 )
 {
-  rtems_interrupt_level  bsp_isr_level;
+  ISR_Level bsp_isr_level;
 
   /*
-   *  Make sure interrupts are disabled.
+   * Make sure interrupts are disabled.  Directly use the CPU port API to allow
+   * tracing of the higher level interrupt disable/enable routines, e.g.
+   * _ISR_Local_disable() and _ISR_Local_enable().
    */
+  _CPU_ISR_Disable( bsp_isr_level );
   (void) bsp_isr_level;
-  rtems_interrupt_local_disable( bsp_isr_level );
 
   bsp_boot_cmdline = cmdline;
 
