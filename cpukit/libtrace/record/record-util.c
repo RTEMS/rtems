@@ -672,6 +672,546 @@ void _Record_Caller_arg_10(
   rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
 }
 
+void _Record_Entry_2(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1
+)
+{
+  rtems_record_item items[ 3 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_3(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2
+)
+{
+  rtems_record_item items[ 4 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_4(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3
+)
+{
+  rtems_record_item items[ 5 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_5(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4
+)
+{
+  rtems_record_item items[ 6 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_ARG_4;
+  items[ 5 ].data = data_4;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_6(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5
+)
+{
+  rtems_record_item items[ 7 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_ARG_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_ARG_5;
+  items[ 6 ].data = data_5;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_7(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6
+)
+{
+  rtems_record_item items[ 8 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_ARG_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_ARG_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_ARG_6;
+  items[ 7 ].data = data_6;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_8(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6,
+  rtems_record_data   data_7
+)
+{
+  rtems_record_item items[ 9 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_ARG_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_ARG_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_ARG_6;
+  items[ 7 ].data = data_6;
+  items[ 8 ].event = RTEMS_RECORD_ARG_7;
+  items[ 8 ].data = data_7;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_9(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6,
+  rtems_record_data   data_7,
+  rtems_record_data   data_8
+)
+{
+  rtems_record_item items[ 10 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_ARG_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_ARG_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_ARG_6;
+  items[ 7 ].data = data_6;
+  items[ 8 ].event = RTEMS_RECORD_ARG_7;
+  items[ 8 ].data = data_7;
+  items[ 9 ].event = RTEMS_RECORD_ARG_8;
+  items[ 9 ].data = data_8;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Entry_10(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6,
+  rtems_record_data   data_7,
+  rtems_record_data   data_8,
+  rtems_record_data   data_9
+)
+{
+  rtems_record_item items[ 11 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_ARG_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_ARG_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_ARG_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_ARG_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_ARG_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_ARG_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_ARG_6;
+  items[ 7 ].data = data_6;
+  items[ 8 ].event = RTEMS_RECORD_ARG_7;
+  items[ 8 ].data = data_7;
+  items[ 9 ].event = RTEMS_RECORD_ARG_8;
+  items[ 9 ].data = data_8;
+  items[ 10 ].event = RTEMS_RECORD_ARG_9;
+  items[ 10 ].data = data_9;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_2(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1
+)
+{
+  rtems_record_item items[ 3 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_3(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2
+)
+{
+  rtems_record_item items[ 4 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_4(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3
+)
+{
+  rtems_record_item items[ 5 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_5(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4
+)
+{
+  rtems_record_item items[ 6 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_RETURN_4;
+  items[ 5 ].data = data_4;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_6(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5
+)
+{
+  rtems_record_item items[ 7 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_RETURN_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_RETURN_5;
+  items[ 6 ].data = data_5;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_7(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6
+)
+{
+  rtems_record_item items[ 8 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_RETURN_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_RETURN_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_RETURN_6;
+  items[ 7 ].data = data_6;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_8(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6,
+  rtems_record_data   data_7
+)
+{
+  rtems_record_item items[ 9 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_RETURN_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_RETURN_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_RETURN_6;
+  items[ 7 ].data = data_6;
+  items[ 8 ].event = RTEMS_RECORD_RETURN_7;
+  items[ 8 ].data = data_7;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_9(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6,
+  rtems_record_data   data_7,
+  rtems_record_data   data_8
+)
+{
+  rtems_record_item items[ 10 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_RETURN_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_RETURN_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_RETURN_6;
+  items[ 7 ].data = data_6;
+  items[ 8 ].event = RTEMS_RECORD_RETURN_7;
+  items[ 8 ].data = data_7;
+  items[ 9 ].event = RTEMS_RECORD_RETURN_8;
+  items[ 9 ].data = data_8;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
+void _Record_Exit_10(
+  void               *return_address,
+  rtems_record_event  event,
+  rtems_record_data   data_0,
+  rtems_record_data   data_1,
+  rtems_record_data   data_2,
+  rtems_record_data   data_3,
+  rtems_record_data   data_4,
+  rtems_record_data   data_5,
+  rtems_record_data   data_6,
+  rtems_record_data   data_7,
+  rtems_record_data   data_8,
+  rtems_record_data   data_9
+)
+{
+  rtems_record_item items[ 11 ];
+
+  items[ 0 ].event = event;
+  items[ 0 ].data = (rtems_record_data) return_address;
+  items[ 1 ].event = RTEMS_RECORD_RETURN_0;
+  items[ 1 ].data = data_0;
+  items[ 2 ].event = RTEMS_RECORD_RETURN_1;
+  items[ 2 ].data = data_1;
+  items[ 3 ].event = RTEMS_RECORD_RETURN_2;
+  items[ 3 ].data = data_2;
+  items[ 4 ].event = RTEMS_RECORD_RETURN_3;
+  items[ 4 ].data = data_3;
+  items[ 5 ].event = RTEMS_RECORD_RETURN_4;
+  items[ 5 ].data = data_4;
+  items[ 6 ].event = RTEMS_RECORD_RETURN_5;
+  items[ 6 ].data = data_5;
+  items[ 7 ].event = RTEMS_RECORD_RETURN_6;
+  items[ 7 ].data = data_6;
+  items[ 8 ].event = RTEMS_RECORD_RETURN_7;
+  items[ 8 ].data = data_7;
+  items[ 9 ].event = RTEMS_RECORD_RETURN_8;
+  items[ 9 ].data = data_8;
+  items[ 10 ].event = RTEMS_RECORD_RETURN_9;
+  items[ 10 ].data = data_9;
+  rtems_record_produce_n( items, RTEMS_ARRAY_SIZE( items ) );
+}
+
 uint32_t rtems_record_interrupt_disable( void )
 {
   uint32_t             level;

@@ -136,6 +136,28 @@ static void Init(rtems_task_argument arg)
   rtems_record_caller_arg_8(0, 1, 2, 3, 4, 5, 6, 7);
   rtems_record_caller_arg_9(0, 1, 2, 3, 4, 5, 6, 7, 8);
   rtems_record_caller_arg_10(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  rtems_record_entry(RTEMS_RECORD_USER_3);
+  rtems_record_entry_1(RTEMS_RECORD_USER_3, 0);
+  rtems_record_entry_2(RTEMS_RECORD_USER_3, 0, 1);
+  rtems_record_entry_3(RTEMS_RECORD_USER_3, 0, 1, 2);
+  rtems_record_entry_4(RTEMS_RECORD_USER_3, 0, 1, 2, 3);
+  rtems_record_entry_5(RTEMS_RECORD_USER_3, 0, 1, 2, 3, 4);
+  rtems_record_entry_6(RTEMS_RECORD_USER_3, 0, 1, 2, 3, 4, 5);
+  rtems_record_entry_7(RTEMS_RECORD_USER_3, 0, 1, 2, 3, 4, 5, 6);
+  rtems_record_entry_8(RTEMS_RECORD_USER_3, 0, 1, 2, 3, 4, 5, 6, 7);
+  rtems_record_entry_9(RTEMS_RECORD_USER_3, 0, 1, 2, 3, 4, 5, 6, 7, 8);
+  rtems_record_entry_10(RTEMS_RECORD_USER_3, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+  rtems_record_exit(RTEMS_RECORD_USER_4);
+  rtems_record_exit_1(RTEMS_RECORD_USER_4, 0);
+  rtems_record_exit_2(RTEMS_RECORD_USER_4, 0, 1);
+  rtems_record_exit_3(RTEMS_RECORD_USER_4, 0, 1, 2);
+  rtems_record_exit_4(RTEMS_RECORD_USER_4, 0, 1, 2, 3);
+  rtems_record_exit_5(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4);
+  rtems_record_exit_6(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4, 5);
+  rtems_record_exit_7(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4, 5, 6);
+  rtems_record_exit_8(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4, 5, 6, 7);
+  rtems_record_exit_9(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4, 5, 6, 7, 8);
+  rtems_record_exit_10(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   level = rtems_record_interrupt_disable();
   rtems_record_interrupt_enable(level);
 
