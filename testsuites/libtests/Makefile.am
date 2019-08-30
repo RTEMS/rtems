@@ -1160,6 +1160,14 @@ lib_docs += record02/record02.doc
 record02_SOURCES = record02/init.c
 record02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_record02) \
 	$(support_includes)
+record02_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsrecordwrap.a $(LDADD)
+record02_LDFLAGS = $(AM_LDFLAGS)
+record02_LDFLAGS += -Wl,--wrap=aligned_alloc
+record02_LDFLAGS += -Wl,--wrap=calloc
+record02_LDFLAGS += -Wl,--wrap=malloc
+record02_LDFLAGS += -Wl,--wrap=free
+record02_LDFLAGS += -Wl,--wrap=posix_memalign
+record02_LDFLAGS += -Wl,--wrap=realloc
 endif
 
 if TEST_rtmonuse

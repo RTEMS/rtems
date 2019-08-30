@@ -33,6 +33,7 @@
 #include <rtems/recordclient.h>
 #include <rtems.h>
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "tmacros.h"
@@ -92,6 +93,24 @@ static void drain_visitor(
   ctx = arg;
   cs = rtems_record_client_run(&ctx->client, items, count * sizeof(*items));
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
+}
+
+static void call_malloc_functions(void)
+{
+  void *p;
+  int eno;
+
+  p = aligned_alloc(1, 1);
+  free(p);
+  p = calloc(1, 1);
+  free(p);
+  p = malloc(1);
+  free(p);
+  eno = posix_memalign(&p, 32, 32);
+  rtems_test_assert(eno == 0);
+  free(p);
+  p = realloc(NULL, 1);
+  free(p);
 }
 
 static void Init(rtems_task_argument arg)
@@ -161,6 +180,8 @@ static void Init(rtems_task_argument arg)
   level = rtems_record_interrupt_disable();
   rtems_record_interrupt_enable(level);
 
+  call_malloc_functions();
+
   rtems_record_client_init(&ctx->client, client_handler, NULL);
   size = _Record_Stream_header_initialize(&header);
   cs = rtems_record_client_run(&ctx->client, &header, size);
@@ -182,7 +203,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS 256
+#define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS 512
 
 #define CONFIGURE_RECORD_EXTENSIONS_ENABLED
 

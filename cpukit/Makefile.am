@@ -1831,6 +1831,11 @@ project_lib_LIBRARIES += librtemsdefaultconfig.a
 librtemsdefaultconfig_a_SOURCES =
 librtemsdefaultconfig_a_SOURCES += libmisc/dummy/default-configuration.c
 
+project_lib_LIBRARIES += librtemsrecordwrap.a
+
+librtemsrecordwrap_a_SOURCES =
+librtemsrecordwrap_a_SOURCES += libtrace/record/record-wrap-malloc.c
+
 project_lib_LIBRARIES += librtemstest.a
 
 librtemstest_a_SOURCES =
