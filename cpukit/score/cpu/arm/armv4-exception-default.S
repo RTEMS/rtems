@@ -137,8 +137,8 @@ save_more_context:
 	beq	1f
 
 	/* Save VFP context */
-	sub	sp, #(ARM_VFP_CONTEXT_SIZE + 4)
-	add	r4, sp, #4
+	sub	sp, #(ARM_VFP_CONTEXT_SIZE + 8)
+	add	r4, sp, #8
 	bic	r4, r4, #7
 	str	r4, [r3]
 	vmrs	r2, FPSCR
