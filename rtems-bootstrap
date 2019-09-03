@@ -1,0 +1,246 @@
+#! /usr/bin/env python
+
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# Copyright (C) 2013-2019 Chris Johns (chrisj@rtems.org)
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+#
+# RTEMS Tools Project (http://www.rtems.org/)
+#
+
+from __future__ import print_function
+
+import argparse
+import datetime
+import multiprocessing
+import os
+import re
+import sys
+import threading
+import time
+
+version = "1.0"
+
+class error(Exception):
+    """Base class for Builder exceptions."""
+    def set_output(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
+class general_error(error):
+    """Raise for a general error."""
+    def __init__(self, what):
+        self.set_output('error: ' + str(what))
+
+def _collect(path_, file):
+    confs = []
+    for root, dirs, files in os.walk(path_, topdown = True):
+        for f in files:
+            if f == file:
+                confs += [os.path.join(root, f)]
+    return confs
+
+def _grep(file, pattern):
+    rege = re.compile(pattern)
+    try:
+        f = open(file, 'r')
+        matches = [rege.match(l) != None for l in f.readlines()]
+        f.close()
+    except IOError as err:
+        raise general_error('reading: %s' % (file))
+    return True in matches
+
+class command:
+
+    def __init__(self, cmd, cwd):
+        self.exit_code = 0
+        self.thread = None
+        self.output = None
+        self.cmd = cmd
+        self.cwd = cwd
+        self.result = None
+
+    def runner(self):
+
+        import subprocess
+
+        #
+        # Support Python 2.6
+        #
+        if "check_output" not in dir(subprocess):
+            def f(*popenargs, **kwargs):
+                if 'stdout' in kwargs:
+                    raise ValueError('stdout argument not allowed, it will be overridden.')
+                process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
+                output, unused_err = process.communicate()
+                retcode = process.poll()
+                if retcode:
+                    cmd = kwargs.get("args")
+                    if cmd is None:
+                        cmd = popenargs[0]
+                    raise subprocess.CalledProcessError(retcode, cmd)
+                return output
+            subprocess.check_output = f
+
+        self.start_time = datetime.datetime.now()
+        self.exit_code = 0
+        try:
+            try:
+                if os.name == 'nt':
+                    cmd = ['sh', '-c'] + self.cmd
+                else:
+                    cmd = self.cmd
+                self.output = subprocess.check_output(cmd, cwd = self.cwd)
+            except subprocess.CalledProcessError as cpe:
+                self.exit_code = cpe.returncode
+                self.output = cpe.output
+            except OSError as ose:
+                raise general_error('bootstrap failed: %s in %s: %s' % \
+                                        (' '.join(cmd), self.cwd, (str(ose))))
+            except KeyboardInterrupt:
+                pass
+            except:
+                raise
+        except:
+            self.result = sys.exc_info()
+        self.end_time = datetime.datetime.now()
+
+    def run(self):
+        self.thread = threading.Thread(target = self.runner)
+        self.thread.start()
+
+    def is_alive(self):
+        return self.thread and self.thread.is_alive()
+
+    def reraise(self):
+        if self.result is not None:
+            raise self.result[0](self.result[1])
+
+class autoreconf:
+
+    def __init__(self, topdir, configure):
+        self.topdir = topdir
+        self.configure = configure
+        self.cwd = os.path.dirname(self.configure)
+        self.command = command(['autoreconf', '-i', '--no-recursive'], self.cwd)
+        self.command.run()
+
+    def is_alive(self):
+        return self.command.is_alive()
+
+    def post_process(self):
+        if self.command is not None:
+            self.command.reraise()
+            if self.command.exit_code != 0:
+                raise general_error('error: autoreconf: %s' % (' '.join(self.command.cmd)))
+            makefile = os.path.join(self.cwd, 'Makefile.am')
+            if os.path.exists(makefile):
+                if _grep(makefile, 'stamp-h\.in'):
+                    stamp_h = os.path.join(self.cwd, 'stamp-h.in')
+                    try:
+                        t = open(os.path.host(stamp_h), 'w')
+                        t.write('timestamp')
+                        t.close()
+                    except IOError as err:
+                        raise general_error('writing: %s' % (stamp_h))
+
+def generate(topdir, jobs):
+    if type(jobs) is str:
+        jobs = int(jobs)
+    start_time = datetime.datetime.now()
+    confs = _collect(topdir, 'configure.ac')
+    next = 0
+    autoreconfs = []
+    while next < len(confs) or len(autoreconfs) > 0:
+        if next < len(confs) and len(autoreconfs) < jobs:
+            print('%3d/%3d: autoreconf: %s' % \
+                  (next + 1, len(confs), confs[next][len(topdir) + 1:]))
+            autoreconfs += [autoreconf(topdir, confs[next])]
+            next += 1
+        else:
+            for ac in autoreconfs:
+                if not ac.is_alive():
+                    ac.post_process()
+                    autoreconfs.remove(ac)
+                    del ac
+            if len(autoreconfs) >= jobs:
+                time.sleep(1)
+    end_time = datetime.datetime.now()
+    print('Bootstrap time: %s' % (str(end_time - start_time)))
+
+def run(args):
+    try:
+        #
+        # On Windows MSYS2 prepends a path to itself to the environment
+        # path. This means the RTEMS specific automake is not found and which
+        # breaks the bootstrap. We need to remove the prepended path. Also
+        # remove any ACLOCAL paths from the environment.
+        #
+        if os.name == 'nt':
+            cspath = os.environ['PATH'].split(os.pathsep)
+            if 'msys' in cspath[0] and cspath[0].endswith('bin'):
+                os.environ['PATH'] = os.pathsep.join(cspath[1:])
+            if 'ACLOCAL_PATH' in os.environ:
+                #
+                # The clear fails on a current MSYS2 python (Feb 2016). Delete
+                # the entry if the clear fails.
+                #
+                try:
+                    os.environ['ACLOCAL_PATH'].clear()
+                except:
+                    del os.environ['ACLOCAL_PATH']
+
+        argsp = argparse.ArgumentParser(prog = 'rtems-bootstrap',
+                                        description = "Bootstrap in parallel")
+        argsp.add_argument('-j', '--jobs',
+                           help = 'number of jobs to run (default: %(default)s).',
+                           type = int, default = multiprocessing.cpu_count())
+        argsp.add_argument('-r', '--rtems',
+                           type = str, default = os.getcwd(),
+                           help = 'path to the rtems kernel source (default: %(default)s).')
+        argopts = argsp.parse_args(args[1:])
+
+        print('RTEMS Bootstrap, %s' % (version))
+
+        if not os.path.exists(argopts.rtems):
+            raise general_error('path does not exist: %s' % (argopts.rtems))
+        if not os.path.isdir(argopts.rtems):
+            raise general_error('path not a directory: %s' % (argopts.rtems))
+
+        generate(argopts.rtems, argopts.jobs)
+    except general_error as gerr:
+        print(gerr)
+        print('Bootstrap FAILED', file = sys.stderr)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        log.notice('abort: user terminated')
+        sys.exit(1)
+    sys.exit(0)
+
+if __name__ == "__main__":
+    run(sys.argv)
