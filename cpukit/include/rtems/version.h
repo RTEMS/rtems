@@ -60,10 +60,13 @@ int rtems_version_revision( void );
 
 /**
  * @brief Returns the version control key for the current version of code that
- * has been built. The key is specific to the version control system being used
- * and allows the built version to be identified.
+ * has been built.
  *
- * @retval int The version's version control key.
+ * The key is specific to the version control system being used and allows the
+ * built version to be identified.
+ *
+ * @return The version control key or the empty string if no version control
+ * key is available.
  */
 const char *rtems_version_control_key( void );
 

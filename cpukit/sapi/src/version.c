@@ -58,6 +58,6 @@ const char *rtems_version_control_key( void )
 #ifdef RTEMS_VERSION_VC_KEY
   return RTEMS_VERSION_VC_KEY;
 #else
-  return NULL;
+  return "";
 #endif
 }
