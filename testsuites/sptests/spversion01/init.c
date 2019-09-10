@@ -22,13 +22,19 @@ static rtems_task Init(
   rtems_task_argument argument
 )
 {
+  const char *key;
+  const char *valid;
+
   TEST_BEGIN();
+
+  key = rtems_version_control_key();
+  valid = rtems_version_control_key_is_valid(key) ? "valid" : "invalid";
 
   printf("Release  : %s\n", rtems_version());
   printf("Major    : %d\n", rtems_version_major());
   printf("Minor    : %d\n", rtems_version_minor());
   printf("Revision : %d\n", rtems_version_revision());
-  printf("VC Key   : %s\n", rtems_version_control_key());
+  printf("VC Key   : %s (%s)\n", key, valid);
   printf("BSP      : %s\n", rtems_board_support_package());
 
   TEST_END();

@@ -16,6 +16,8 @@
 #ifndef _RTEMS_VERSION_H
 #define _RTEMS_VERSION_H
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -65,10 +67,23 @@ int rtems_version_revision( void );
  * The key is specific to the version control system being used and allows the
  * built version to be identified.
  *
- * @return The version control key or the empty string if no version control
- * key is available.
+ * Use rtems_version_control_key_is_valid() to check if the version control key
+ * is valid.
+ *
+ * @return The version control key.
  */
 const char *rtems_version_control_key( void );
+
+/**
+ * @brief Returns true, if the version control key is valid, otherwise false.
+ *
+ * @retval true The version control key is valid.
+ * @retval false Otherwise.
+ */
+static inline bool rtems_version_control_key_is_valid( const char *key )
+{
+  return key[ 0 ] != '\0';
+}
 
 /**
  * @brief Returns the board support package name.
