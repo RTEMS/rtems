@@ -64,6 +64,18 @@ const char *signal_name(int signo);
 volatile bool      Signal_occurred;
 volatile pthread_t Signal_thread;
 
+static void block_all_signals(void)
+{
+  int               sc;
+  sigset_t          mask;
+
+  sc = sigfillset( &mask );
+  rtems_test_assert( !sc );
+
+  sc = pthread_sigmask( SIG_BLOCK, &mask, NULL );
+  rtems_test_assert( !sc );
+}
+
 void Signal_handler(
   int        signo,
   siginfo_t *info,
@@ -165,6 +177,8 @@ void *POSIX_Init(
 
   TEST_BEGIN();
   puts( "Init - Variation is: " TEST_STRING );
+
+  block_all_signals();
 
   Signal_occurred = false;
 

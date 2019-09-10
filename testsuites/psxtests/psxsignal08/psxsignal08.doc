@@ -1,0 +1,22 @@
+#  COPYRIGHT (c) 2019.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  SPDX-License-Identifier: BSD-2-Clause
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxsignal07
+
+directives:
+
+  sigprocmask
+  sigemptyset
+  sigaddset
+
+concepts:
+
++ Ensure that the initial signal mask is empty (all unmasked).
+
++ Ensure that a Classic API task inherits an empty signal mask.
+
++ Ensure that a Classic API task inherits an non-empty signal mask.

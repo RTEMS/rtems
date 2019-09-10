@@ -36,6 +36,18 @@ extern void _POSIX_signals_Abnormal_termination_handler( int signo );
 volatile int Signal_occurred;
 volatile int Signal_count;
 
+static void block_all_signals(void)
+{
+  int               sc;
+  sigset_t          mask;
+
+  sc = sigfillset( &mask );
+  rtems_test_assert( !sc );
+
+  sc = pthread_sigmask( SIG_BLOCK, &mask, NULL );
+  rtems_test_assert( !sc );
+}
+
 void Handler_1(
   int signo
 )
@@ -107,6 +119,8 @@ void *POSIX_Init(
   rtems_interval start, end;
 
   TEST_BEGIN();
+
+  block_all_signals();
 
   /* set the time of day, and print our buffer in multiple ways */
 

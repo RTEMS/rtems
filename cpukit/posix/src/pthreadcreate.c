@@ -86,7 +86,6 @@ int pthread_create(
   int                                 low_prio;
   Priority_Control                    core_low_prio;
   POSIX_API_Control                  *api;
-  const POSIX_API_Control            *executing_api;
 #endif
 
   if ( !start_routine )
@@ -260,9 +259,6 @@ int pthread_create(
    *  finish initializing the per API structure
    */
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-  executing_api = executing->API_Extensions[ THREAD_API_POSIX ];
-
-  api->signals_unblocked = executing_api->signals_unblocked;
 
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
   api->Sporadic.sched_ss_repl_period =
@@ -376,7 +372,7 @@ void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
 }
 
 static bool _POSIX_Threads_Create_extension(
-  Thread_Control *executing RTEMS_UNUSED,
+  Thread_Control *executing,
   Thread_Control *created
 )
 {
@@ -389,6 +385,53 @@ static bool _POSIX_Threads_Create_extension(
   _Watchdog_Initialize( &api->Sporadic.Timer, _POSIX_Threads_Sporadic_timer );
   _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
 
+#if defined(RTEMS_POSIX_API)
+  /*
+   * There are some subtle rules which need to be followed for
+   * the value of the created thread's signal mask. Because signals
+   * are part of C99 and enhanced by POSIX, both Classic API tasks
+   * and POSIX threads have to have them enabled.
+   *
+   * + Internal system threads should have no signals enabled. They
+   *   have no business executing user signal handlers -- especially IDLE.
+   * + The initial signal mask for other threads needs to follow the
+   *   implication of a pure C99 environment which only has the methods
+   *   raise() and signal(). This implies that all signals are unmasked
+   *   until the thread explicitly uses a POSIX methods to block some.
+   *   This applies to both Classic tasks and POSIX threads created
+   *   as initalization tasks/threads (e.g. before the system is up).
+   * + After the initial threads are created, the signal mask should
+   *   be inherited from the creator.
+   *
+   * NOTE: The default signal mask does not matter for any application
+   *       that does not use POSIX signals.
+   */
+  if ( _Objects_Get_API(created->Object.id) == OBJECTS_INTERNAL_API ) {
+      /*
+       * Ensure internal (especially IDLE) is handled first.
+       *
+       * Block signals for all internal threads -- especially IDLE.
+       */
+      api->signals_unblocked = 0;
+  } else if ( _Objects_Get_API(executing->Object.id) == OBJECTS_INTERNAL_API ) {
+      /*
+       * Threads being created while an internal thread is executing
+       * should only happen for the initialization threads/tasks.
+       *
+       * Default state (signals unblocked) for all Initialization tasks
+       * and POSIX threads. We should not inherit from IDLE which is
+       * what appears to be executing during initialization.
+       */
+      api->signals_unblocked = SIGNAL_ALL_MASK;
+  } else {
+    const POSIX_API_Control            *executing_api;
+    /*
+     * RTEMS is running so follow the POSIX rules to inherit the signal mask.
+     */ 
+    executing_api = executing->API_Extensions[ THREAD_API_POSIX ];
+    api->signals_unblocked = executing_api->signals_unblocked;
+  }
+#endif
   return true;
 }
 

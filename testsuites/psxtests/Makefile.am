@@ -881,6 +881,28 @@ psxsignal06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsignal06) \
 endif
 endif
 
+if HAS_POSIX
+if TEST_psxsignal07
+psx_tests += psxsignal07
+psx_screens += psxsignal07/psxsignal07.scn
+psx_docs += psxsignal07/psxsignal07.doc
+psxsignal07_SOURCES = psxsignal07/main.c psxsignal07/rtems_config.c
+psxsignal07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsignal07) \
+	$(support_includes) -I$(top_srcdir)/include
+endif
+endif
+
+if HAS_POSIX
+if TEST_psxsignal08
+psx_tests += psxsignal08
+psx_screens += psxsignal08/psxsignal08.scn
+psx_docs += psxsignal08/psxsignal08.doc
+psxsignal08_SOURCES = psxsignal08/main.c psxsignal08/rtems_config.c
+psxsignal08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsignal08) \
+	$(support_includes) -I$(top_srcdir)/include
+endif
+endif
+
 if TEST_psxspin01
 psx_tests += psxspin01
 psx_screens += psxspin01/psxspin01.scn

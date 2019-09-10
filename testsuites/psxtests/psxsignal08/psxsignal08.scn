@@ -1,0 +1,7 @@
+** BEGIN OF TEST PSXSIGNAL 8 ***
+Ensure main task's mask equals sigemptyset
+Ensure parent's empty mask is inherited by thread
+Ensure parent's mask with SIGUSR1 mask is inherited by thread
+
+*** END OF TEST PSXSIGNAL 8 ***
+

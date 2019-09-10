@@ -28,6 +28,18 @@ void Install_Signal_Handler(const char *task_name);
 volatile bool      Signal_occurred;
 volatile pthread_t Signal_thread;
 
+static void block_all_signals(void)
+{
+  int               sc;
+  sigset_t          mask;
+
+  sc = sigfillset( &mask );
+  rtems_test_assert( !sc );
+
+  sc = pthread_sigmask( SIG_BLOCK, &mask, NULL );
+  rtems_test_assert( !sc );
+}
+
 void Signal_handler(
   int signo
 )
@@ -139,6 +151,8 @@ void *POSIX_Init(
   TEST_BEGIN();
 
   Signal_occurred = false;
+
+  block_all_signals();
 
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
