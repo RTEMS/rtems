@@ -39,6 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/drvmgr_def_drivers.c
 
 # gnatsupp
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/gnatsupp/gnatsupp.c
