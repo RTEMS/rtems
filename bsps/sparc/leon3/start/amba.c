@@ -34,18 +34,6 @@ struct ambapp_bus ambapp_plb;
 #include <drvmgr/drvmgr.h>
 #include <grlib/ambapp_bus_grlib.h>
 
-extern void gptimer_register_drv (void);
-extern void apbuart_cons_register_drv(void);
-/* All drivers included by BSP, this is overridden by the user by including
- * the drvmgr_confdefs.h. By default the Timer and UART driver are included.
- */
-drvmgr_drv_reg_func drvmgr_drivers[] __attribute__((weak)) =
-{
-  gptimer_register_drv,
-  apbuart_cons_register_drv,
-  NULL /* End array with NULL */
-};
-
 /* Driver resources configuration for AMBA root bus. It is declared weak
  * so that the user may override it, if the defualt settings are not
  * enough.
