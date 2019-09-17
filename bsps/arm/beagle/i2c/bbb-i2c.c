@@ -186,16 +186,16 @@ static int am335x_i2c_reset( bbb_i2c_bus *bus )
 
   bus->con_reg = 0;
   regs->BBB_I2C_CON = bus->con_reg;
-  udelay( 50000 );
+  rtems_counter_delay_nanoseconds(50000000);
 
   regs->BBB_I2C_SYSC = AM335X_I2C_SYSC_SRST;
-  udelay( 1000 );
+  rtems_counter_delay_nanoseconds(1000000);
   regs->BBB_I2C_CON = AM335X_I2C_CON_I2C_EN;
 
   while ( !( regs->BBB_I2C_SYSS & AM335X_I2C_SYSS_RDONE )
           && timeout >= 0 ) {
     --timeout;
-    udelay( 100 );
+    rtems_counter_delay_nanoseconds(100000);
   }
 
   if ( timeout <= 0 ) {

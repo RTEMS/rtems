@@ -17,6 +17,8 @@
 #include <bsp/irq-generic.h>
 #include <bsp/fdt.h>
 #include <bsp/linker-symbols.h>
+#include <bsp/i2c.h>
+#include <rtems/sysinit.h>
 
 #include "bspdebug.h"
 
@@ -41,3 +43,22 @@ uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
   return intr[0];
 }
+
+static void bbb_i2c_0_initialize(void)
+{
+  int err;
+
+  err = am335x_i2c_bus_register(BBB_I2C_0_BUS_PATH,
+                                AM335X_I2C0_BASE,
+                                I2C_BUS_CLOCK_DEFAULT,
+                                BBB_I2C0_IRQ);
+  if (err != 0) {
+    printk("rtems i2c-0: Device could not be registered (%d)", err);
+  }
+}
+
+RTEMS_SYSINIT_ITEM(
+  bbb_i2c_0_initialize,
+  RTEMS_SYSINIT_LAST,
+  RTEMS_SYSINIT_ORDER_LAST
+);

@@ -94,16 +94,6 @@ int am335x_i2c_bus_register(
   rtems_vector_number irq
 );
 
-static inline int bbb_register_i2c_0( void )
-{
-  return am335x_i2c_bus_register(
-    BBB_I2C_0_BUS_PATH,
-    AM335X_I2C0_BASE,
-    I2C_BUS_CLOCK_DEFAULT,
-    BBB_I2C0_IRQ
-  );
-}
-
 static inline int bbb_register_i2c_1( void )
 {
   return am335x_i2c_bus_register(
