@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2017 embedded brains GmbH.
+ * Copyright (C) 2008, 2019 embedded brains GmbH
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -558,6 +558,28 @@ void rtems_interrupt_server_action_prepend(
  */
 void rtems_interrupt_server_entry_submit(
   rtems_interrupt_server_entry *entry
+);
+
+/**
+ * @brief Moves the interrupt server entry to the specified destination
+ * interrupt server.
+ *
+ * Calling this function concurrently with rtems_interrupt_server_entry_submit()
+ * with the same entry or while the entry is enqueued on the previous interrupt
+ * server is undefined behaviour.
+ *
+ * @param[in,out] entry The interrupt server entry.  It must have be initialized
+ *   before the call to this function.
+ * @param destination_server_index The destination interrupt server index.
+ *   Use @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation
+ * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
+ * @retval RTEMS_INVALID_ID The destination interrupt server index is invalid.
+ */
+rtems_status_code rtems_interrupt_server_entry_move(
+  rtems_interrupt_server_entry *entry,
+  uint32_t                      destination_server_index
 );
 
 /**

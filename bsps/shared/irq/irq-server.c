@@ -638,6 +638,23 @@ void rtems_interrupt_server_entry_submit(
   bsp_interrupt_server_trigger(entry);
 }
 
+rtems_status_code rtems_interrupt_server_entry_move(
+  rtems_interrupt_server_entry *entry,
+  uint32_t                      destination_server_index
+)
+{
+  rtems_status_code sc;
+  bsp_interrupt_server_context *s;
+
+  s = bsp_interrupt_server_get_context(destination_server_index, &sc);
+  if (s == NULL) {
+    return sc;
+  }
+
+  entry->server = s;
+  return RTEMS_SUCCESSFUL;
+}
+
 static void bsp_interrupt_server_entry_synchronize_helper(void *arg)
 {
   bsp_interrupt_server_helper_data *hd = arg;
