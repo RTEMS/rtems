@@ -2093,9 +2093,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 
 #ifdef CONFIGURE_INIT
+#if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
+#include <rtems/record.h>
+#endif
 #ifdef CONFIGURE_STACK_CHECKER_ENABLED
 #include <rtems/stackchk.h>
 #endif
+
 #include <rtems/libcsupport.h>
 
 #if defined(BSP_INITIAL_EXTENSION) || \
@@ -2830,8 +2834,6 @@ struct _reent *__getreent(void)
   };
 
   #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
-    #include <rtems/record.h>
-
     #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0
       #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be a power of two"
     #endif
