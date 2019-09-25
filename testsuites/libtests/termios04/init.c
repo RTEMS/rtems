@@ -29,7 +29,6 @@ void write_helper(int fd, const char *c);
 void read_helper(int fd, const char *expected);
 void open_it(void);
 void close_it(void);
-void change_iflag(const char *desc, int mask, int new);
 rtems_task Init(rtems_task_argument argument);
 
 void write_helper(
@@ -90,22 +89,6 @@ void close_it(void)
 
   puts( "close(" TERMIOS_TEST_DRIVER_DEVICE_NAME ") - OK " );
   rc = close( Test_fd );
-  rtems_test_assert( rc == 0 );
-}
-
-void change_iflag( const char *desc, int mask, int new )
-{
-  int            rc;
-  struct termios attr;
-
-  printf( "Changing c_iflag to: %s\n", desc );
-  rc = tcgetattr( Test_fd, &attr );
-  rtems_test_assert( rc == 0 );
-
-  attr.c_iflag &= ~mask;
-  attr.c_iflag |= new;
-
-  rc = tcsetattr( Test_fd, TCSANOW, &attr );
   rtems_test_assert( rc == 0 );
 }
 
