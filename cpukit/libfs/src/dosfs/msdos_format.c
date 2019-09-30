@@ -65,6 +65,7 @@ typedef struct {
   bool     VolLabel_present;
   uint32_t vol_id;
   bool     skip_alignment;
+  char    *sec;
 }  msdos_format_param_t;
 
 /*
@@ -180,11 +181,11 @@ static int msdos_format_fill_sectors
 +---------------------------------------------------------------------------+
 | Input Parameters:                                                         |
 \*-------------------------------------------------------------------------*/
+ msdos_format_param_t *fmt_params,
  const msdos_format_request_param_t *rqdata,
  int         fd,                       /* file descriptor index            */
  uint32_t    start_sector,             /* sector number to fill to         */
  uint32_t    sector_cnt,               /* number of sectors to fill to     */
- uint32_t    sector_size,              /* size of sector                   */
  const char  fill_byte                 /* byte to fill into sectors        */
  )
 /*-------------------------------------------------------------------------*\
@@ -193,22 +194,14 @@ static int msdos_format_fill_sectors
 \*=========================================================================*/
 {
   int ret_val = 0;
-  char *fill_buffer = NULL;
   uint32_t total_sectors = sector_cnt;
   int last_percent = -1;
 
   /*
-   * allocate and fill buffer
+   * fill buffer
    */
   if (ret_val == 0) {
-    fill_buffer = malloc(sector_size);
-    if (fill_buffer == NULL) {
-      errno = ENOMEM;
-      ret_val = -1;
-    }
-    else {
-      memset(fill_buffer,fill_byte,sector_size);
-    }
+    memset(fmt_params->sec,fill_byte,fmt_params->bytes_per_sector);
   }
 
   msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
@@ -224,7 +217,9 @@ static int msdos_format_fill_sectors
         msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL, ".");
       last_percent = percent;
     }
-    ret_val = msdos_format_write_sec(fd,start_sector,sector_size,fill_buffer);
+    ret_val = msdos_format_write_sec(fd,start_sector,
+                                     fmt_params->bytes_per_sector,
+                                     fmt_params->sec);
     start_sector++;
     sector_cnt--;
   }
@@ -235,13 +230,6 @@ static int msdos_format_fill_sectors
     msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_INFO,
                          "filling error on sector: %d\n", start_sector);
 
-  /*
-   * cleanup
-   */
-  if (fill_buffer != NULL) {
-    free(fill_buffer);
-    fill_buffer = NULL;
-  }
   return ret_val;
 }
 
@@ -1016,12 +1004,13 @@ int msdos_format
 |    0, if success, -1 and errno if failed                                  |
 \*=========================================================================*/
 {
-  char                 tmp_sec[FAT_TOTAL_MBR_SIZE];
   struct stat          stat_buf;
   int                  ret_val   = 0;
   int                  fd        = -1;
   int                  i;
   msdos_format_param_t fmt_params;
+
+  memset(&fmt_params, 0, sizeof(fmt_params));
 
   /*
    * open device for writing
@@ -1055,6 +1044,14 @@ int msdos_format
   if (ret_val == 0) {
     ret_val = msdos_format_determine_fmt_params(fd,rqdata,&fmt_params);
   }
+
+  if (ret_val == 0) {
+    fmt_params.sec = malloc(fmt_params.bytes_per_sector);
+    if (fmt_params.sec == NULL) {
+      ret_val = -1;
+    }
+  }
+
   /*
    * if requested, write whole disk/partition with 0xe5
    */
@@ -1062,11 +1059,11 @@ int msdos_format
       (rqdata != NULL) &&
       !(rqdata->quick_format)) {
     ret_val = msdos_format_fill_sectors
-      (rqdata,
+      (&fmt_params,
+       rqdata,
        fd,
        0,                            /* start sector */
        fmt_params.totl_sector_cnt,   /* sector count */
-       fmt_params.bytes_per_sector,
        0xe5);
   }
 
@@ -1082,11 +1079,11 @@ int msdos_format
     ret_val = msdos_format_read_sec(fd,
                                     0,
                                     fmt_params.bytes_per_sector,
-                                    tmp_sec);
+                                    fmt_params.sec);
     if (ret_val == 0) {
       msdos_format_printf (rqdata, MSDOS_FMT_INFO_LEVEL_DETAIL,
                            "generate MRB sector\n");
-      ret_val = msdos_format_gen_mbr(tmp_sec,&fmt_params);
+      ret_val = msdos_format_gen_mbr(fmt_params.sec,&fmt_params);
     }
 
     /*
@@ -1099,7 +1096,7 @@ int msdos_format
       ret_val = msdos_format_write_sec(fd,
                                        0,
                                        fmt_params.bytes_per_sector,
-                                       tmp_sec);
+                                       fmt_params.sec);
     }
     if ((ret_val == 0) &&
         (fmt_params.mbr_copy_sec != 0)) {
@@ -1111,7 +1108,7 @@ int msdos_format
       ret_val = msdos_format_write_sec(fd,
                                        fmt_params.mbr_copy_sec ,
                                        fmt_params.bytes_per_sector,
-                                       tmp_sec);
+                                       fmt_params.sec);
     }
   }
   /*
@@ -1119,7 +1116,7 @@ int msdos_format
    */
   if ((ret_val == 0) &&
       (fmt_params.fsinfo_sec != 0)) {
-      ret_val = msdos_format_gen_fsinfo(tmp_sec);
+      ret_val = msdos_format_gen_fsinfo(fmt_params.sec);
   }
   /*
    * write fsinfo sector
@@ -1129,7 +1126,7 @@ int msdos_format
     ret_val = msdos_format_write_sec(fd,
                                      fmt_params.fsinfo_sec,
                                      fmt_params.bytes_per_sector,
-                                     tmp_sec);
+                                     fmt_params.sec);
   }
   /*
    * write FAT as all empty
@@ -1137,11 +1134,11 @@ int msdos_format
    */
   if (ret_val == 0) {
     ret_val = msdos_format_fill_sectors
-      (rqdata,
+      (&fmt_params,
+       rqdata,
        fd,
        fmt_params.rsvd_sector_cnt,                   /* start sector */
        fmt_params.fat_num*fmt_params.sectors_per_fat,/* sector count */
-       fmt_params.bytes_per_sector,
        0x00);
   }
   /*
@@ -1150,25 +1147,25 @@ int msdos_format
    */
   if (ret_val == 0) {
     ret_val = msdos_format_fill_sectors
-      (rqdata,
+      (&fmt_params,
+       rqdata,
        fd,
        fmt_params.root_dir_start_sec,        /* start sector */
        fmt_params.root_dir_fmt_sec_cnt,      /* sector count */
-       fmt_params.bytes_per_sector,
        0x00);
   }
   /*
    * write volume label to first entry of directory
    */
   if ((ret_val == 0) && fmt_params.VolLabel_present) {
-    memset(tmp_sec,0,sizeof(tmp_sec));
-    memcpy(MSDOS_DIR_NAME(tmp_sec),fmt_params.VolLabel,MSDOS_SHORT_NAME_LEN);
-    *MSDOS_DIR_ATTR(tmp_sec) = MSDOS_ATTR_VOLUME_ID;
+    memset(fmt_params.sec,0,fmt_params.bytes_per_sector);
+    memcpy(MSDOS_DIR_NAME(fmt_params.sec),fmt_params.VolLabel,MSDOS_SHORT_NAME_LEN);
+    *MSDOS_DIR_ATTR(fmt_params.sec) = MSDOS_ATTR_VOLUME_ID;
     ret_val = msdos_format_write_sec
       (fd,
        fmt_params.root_dir_start_sec,
        fmt_params.bytes_per_sector,
-       tmp_sec);
+       fmt_params.sec);
   }
   /*
    * write FAT entry 0 as (0xffffff00|Media_type)EOC,
@@ -1181,31 +1178,31 @@ int msdos_format
     /*
      * empty sector: all clusters are free/do not link further on
      */
-    memset(tmp_sec,0,sizeof(tmp_sec));
+    memset(fmt_params.sec,0,fmt_params.bytes_per_sector);
 
     switch(fmt_params.fattype) {
     case FAT_FAT12:
       /* LSBits of FAT entry 0: media_type */
-      FAT_SET_VAL8(tmp_sec,0,(fmt_params.media_code));
+      FAT_SET_VAL8(fmt_params.sec,0,(fmt_params.media_code));
       /* MSBits of FAT entry 0:0xf, LSBits of FAT entry 1: LSB of EOC */
-      FAT_SET_VAL8(tmp_sec,1,(0x0f | (FAT_FAT12_EOC << 4)));
+      FAT_SET_VAL8(fmt_params.sec,1,(0x0f | (FAT_FAT12_EOC << 4)));
       /* MSBits of FAT entry 1: MSBits of EOC */
-      FAT_SET_VAL8(tmp_sec,2,(FAT_FAT12_EOC >> 4));
+      FAT_SET_VAL8(fmt_params.sec,2,(FAT_FAT12_EOC >> 4));
       break;
 
     case FAT_FAT16:
       /* FAT entry 0: 0xff00|media_type */
-      FAT_SET_VAL8(tmp_sec,0,fmt_params.media_code);
-      FAT_SET_VAL8(tmp_sec,1,0xff);
+      FAT_SET_VAL8(fmt_params.sec,0,fmt_params.media_code);
+      FAT_SET_VAL8(fmt_params.sec,1,0xff);
       /* FAT entry 1: EOC */
-      FAT_SET_VAL16(tmp_sec,2,FAT_FAT16_EOC);
+      FAT_SET_VAL16(fmt_params.sec,2,FAT_FAT16_EOC);
       break;
 
     case FAT_FAT32:
       /* FAT entry 0: 0xffffff00|media_type */
-      FAT_SET_VAL32(tmp_sec,0,0xffffff00|fmt_params.media_code);
+      FAT_SET_VAL32(fmt_params.sec,0,0xffffff00|fmt_params.media_code);
       /* FAT entry 1: Not dirty, no IO error, EOC */
-      FAT_SET_VAL32(tmp_sec,4,0xc0000000|FAT_FAT32_EOC);
+      FAT_SET_VAL32(fmt_params.sec,4,0xc0000000|FAT_FAT32_EOC);
       break;
 
     default:
@@ -1218,7 +1215,7 @@ int msdos_format
        * to root directory, and is end of chain
        * mark this in every copy of the FAT
        */
-      FAT_SET_VAL32(tmp_sec,8,FAT_FAT32_EOC);
+      FAT_SET_VAL32(fmt_params.sec,8,FAT_FAT32_EOC);
     }
 
     start_sector = loc_align_object (fmt_params.rsvd_sector_cnt,
@@ -1232,7 +1229,7 @@ int msdos_format
          start_sector
          + (i * fmt_params.sectors_per_fat),
          fmt_params.bytes_per_sector,
-         tmp_sec);
+         fmt_params.sec);
     }
   }
 
@@ -1248,6 +1245,8 @@ int msdos_format
   if (fd != -1) {
     close(fd);
   }
+
+  free(fmt_params.sec);
 
   return ret_val;
 }
