@@ -517,6 +517,15 @@ static void test_drain(test_context *ctx, Record_Control *control)
 #ifdef RTEMS_NETWORKING
 #define PORT 1234
 
+typedef enum {
+  HEADER_ARCH,
+  HEADER_MULTILIB,
+  HEADER_BSP,
+  HEADER_VERSION_CONTROL_KEY,
+  HEADER_TOOLS,
+  HEADER_LAST
+} header_state;
+
 static uint32_t get_format(void)
 {
   uint32_t format;
@@ -544,6 +553,25 @@ static uint32_t get_format(void)
   return format;
 }
 
+static rtems_record_event hs_to_ev(header_state hs)
+{
+  switch (hs) {
+    case HEADER_ARCH:
+      return RTEMS_RECORD_ARCH;
+    case HEADER_MULTILIB:
+      return RTEMS_RECORD_MULTILIB;
+    case HEADER_BSP:
+      return RTEMS_RECORD_BSP;
+    case HEADER_VERSION_CONTROL_KEY:
+      return RTEMS_RECORD_VERSION_CONTROL_KEY;
+    case HEADER_TOOLS:
+      return RTEMS_RECORD_TOOLS;
+    default:
+      rtems_test_assert(0);
+      return RTEMS_RECORD_EMPTY;
+  }
+}
+
 static int connect_client(void)
 {
   struct sockaddr_in addr;
@@ -553,6 +581,7 @@ static int connect_client(void)
   uint32_t v;
   rtems_record_item item;
   rtems_record_item items[8];
+  header_state hs;
 
   fd = socket(PF_INET, SOCK_STREAM, 0);
   rtems_test_assert(fd >= 0);
@@ -592,8 +621,22 @@ static int connect_client(void)
   rtems_test_assert(item.event == TE(0, RTEMS_RECORD_FREQUENCY));
   rtems_test_assert(item.data == rtems_counter_frequency());
 
-  n = read(fd, items, sizeof(expected_items_13));
-  rtems_test_assert(n == (ssize_t) sizeof(expected_items_13));
+  hs = HEADER_ARCH;
+  while (hs != HEADER_LAST) {
+    n = read(fd, items, sizeof(items[0]));
+    rtems_test_assert(n == (ssize_t) sizeof(items[0]));
+
+    if (items[0].event != hs_to_ev(hs)) {
+      ++hs;
+    }
+
+    rtems_test_assert(hs == HEADER_LAST || items[0].event == hs_to_ev(hs));
+  }
+
+  n = read(fd, &items[1], sizeof(expected_items_13) - sizeof(items[0]));
+  rtems_test_assert(
+    n == (ssize_t) (sizeof(expected_items_13) - sizeof(items[0]))
+  );
   rtems_test_assert(
     memcmp(items, expected_items_13, sizeof(expected_items_13)) == 0
   );
