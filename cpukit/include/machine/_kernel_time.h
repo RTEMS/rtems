@@ -31,13 +31,20 @@
 #include <machine/_timecounter.h>
 
 /* Operations on timespecs */
+#ifndef timespecclear
 #define	timespecclear(tvp)	((tvp)->tv_sec = (tvp)->tv_nsec = 0)
+#endif
+#ifndef timespecisset
 #define	timespecisset(tvp)	((tvp)->tv_sec || (tvp)->tv_nsec)
+#endif
+#ifndef timespeccmp
 #define	timespeccmp(tvp, uvp, cmp)					\
 	(((tvp)->tv_sec == (uvp)->tv_sec) ?				\
 	    ((tvp)->tv_nsec cmp (uvp)->tv_nsec) :			\
 	    ((tvp)->tv_sec cmp (uvp)->tv_sec))
+#endif
 
+#ifndef timespecadd
 #define	timespecadd(tsp, usp, vsp)					\
 	do {								\
 		(vsp)->tv_sec = (tsp)->tv_sec + (usp)->tv_sec;		\
@@ -47,6 +54,8 @@
 			(vsp)->tv_nsec -= 1000000000L;			\
 		}							\
 	} while (0)
+#endif
+#ifndef timespecsub
 #define	timespecsub(tsp, usp, vsp)					\
 	do {								\
 		(vsp)->tv_sec = (tsp)->tv_sec - (usp)->tv_sec;		\
@@ -56,6 +65,7 @@
 			(vsp)->tv_nsec += 1000000000L;			\
 		}							\
 	} while (0)
+#endif
 
 /* Operations on timevals. */
 
