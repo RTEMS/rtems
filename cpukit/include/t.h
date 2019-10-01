@@ -2199,6 +2199,8 @@ typedef void (*T_putchar)(int, void *);
 
 typedef struct {
 	const char *name;
+	char *buf;
+	size_t buf_size;
 	T_putchar putchar;
 	void *putchar_arg;
 	T_verbosity verbosity;

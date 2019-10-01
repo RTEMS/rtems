@@ -47,12 +47,16 @@
 #include "t-test-printf.h"
 #endif /* __rtems__ */
 
-#define T_LINE_SIZE 120
+#define T_LINE_SIZE 128
 
 #define T_SCOPE_SIZE 5
 
 typedef struct {
 	pthread_spinlock_t lock;
+	char *buf;
+	unsigned int buf_mask;
+	atomic_uint buf_head;
+	atomic_uint buf_tail;
 	void (*putchar)(int, void *);
 	void *putchar_arg;
 	T_verbosity verbosity;
@@ -81,18 +85,6 @@ typedef struct {
 
 static T_context T_instance;
 
-static int
-T_do_vprintf(T_context *ctx, char const *fmt, va_list ap)
-{
-	return _IO_Vprintf(ctx->putchar, ctx->putchar_arg, fmt, ap);
-}
-
-int
-T_vprintf(char const *fmt, va_list ap)
-{
-	return T_do_vprintf(&T_instance, fmt, ap);
-}
-
 typedef struct {
 	char *s;
 	size_t n;
@@ -101,13 +93,13 @@ typedef struct {
 static void
 T_putchar_string(int c, void *arg)
 {
-	T_putchar_string_context *ctx;
+	T_putchar_string_context *sctx;
 	char *s;
 	size_t n;
 
-	ctx = arg;
-	s = ctx->s;
-	n = ctx->n;
+	sctx = arg;
+	s = sctx->s;
+	n = sctx->n;
 
 	if (n == 1) {
 		c = '\0';
@@ -119,8 +111,8 @@ T_putchar_string(int c, void *arg)
 		--n;
 	}
 
-	ctx->s = s;
-	ctx->n = n;
+	sctx->s = s;
+	sctx->n = n;
 }
 
 int
@@ -128,17 +120,106 @@ T_snprintf(char *s, size_t n, char const *fmt, ...)
 {
 	va_list ap;
 	int len;
-	T_putchar_string_context ctx = {
+	T_putchar_string_context sctx = {
 		.s = s,
 		.n = n
 	};
 
 	va_start(ap, fmt);
-	len = _IO_Vprintf(T_putchar_string, &ctx, fmt, ap);
+	len = _IO_Vprintf(T_putchar_string, &sctx, fmt, ap);
 	va_end(ap);
 
-	if (ctx.n > 0) {
-		*ctx.s = '\0';
+	if (sctx.n > 0) {
+		*sctx.s = '\0';
+	}
+
+	return len;
+}
+
+static int
+T_vprintf_direct(char const *fmt, va_list ap)
+{
+	T_context *ctx;
+	unsigned int head;
+	unsigned int tail;
+
+	ctx = &T_instance;
+
+	head = atomic_load_explicit(&ctx->buf_head, memory_order_acquire);
+	tail = atomic_load_explicit(&ctx->buf_tail, memory_order_relaxed);
+
+	while (head != tail) {
+		(*ctx->putchar)(ctx->buf[tail], ctx->putchar_arg);
+		tail = (tail + 1) & ctx->buf_mask;
+	}
+
+	atomic_store_explicit(&ctx->buf_tail, tail, memory_order_relaxed);
+
+	return _IO_Vprintf(ctx->putchar, ctx->putchar_arg, fmt, ap);
+}
+
+static int
+T_vprintf_buffered(char const *fmt, va_list ap)
+{
+	unsigned int len;
+	T_context *ctx;
+	char buf[T_LINE_SIZE];
+	T_putchar_string_context sctx = {
+		.s = buf,
+		.n = sizeof(buf)
+	};
+	unsigned int head;
+	unsigned int tail;
+	unsigned int mask;
+	unsigned int capacity;
+
+	len = (unsigned int)_IO_Vprintf(T_putchar_string, &sctx, fmt, ap);
+
+	if (len >= sizeof(buf)) {
+		len = sizeof(buf) - 1;
+	}
+
+	ctx = &T_instance;
+	pthread_spin_lock(&ctx->lock);
+	head = atomic_load_explicit(&ctx->buf_head, memory_order_relaxed);
+	tail = atomic_load_explicit(&ctx->buf_tail, memory_order_relaxed);
+	mask = ctx->buf_mask;
+	capacity = (tail - head - 1) & mask;
+
+	if (len <= capacity) {
+		unsigned int todo;
+		char *c;
+
+		todo = len;
+		c = buf;
+
+		while (todo > 0) {
+			ctx->buf[head] = *c;
+			head = (head + 1) & mask;
+			--todo;
+			++c;
+		}
+
+		atomic_store_explicit(&ctx->buf_head, head,
+		    memory_order_release);
+	} else {
+		/* If it does not fit into the buffer, discard everything */
+		len = 0;
+	}
+
+	pthread_spin_unlock(&ctx->lock);
+	return (int)len;
+}
+
+int
+T_vprintf(char const *fmt, va_list ap)
+{
+	int len;
+
+	if (T_is_runner()) {
+		len = T_vprintf_direct(fmt, ap);
+	} else {
+		len = T_vprintf_buffered(fmt, ap);
 	}
 
 	return len;
@@ -604,6 +685,17 @@ T_do_run_initialize(const T_config *config)
 	pthread_spin_init(&ctx->lock, PTHREAD_PROCESS_PRIVATE);
 
 	ctx->config = config;
+	ctx->buf = config->buf;
+
+	if (config->buf_size > 0 &&
+	    (config->buf_size & (config->buf_size - 1)) == 0) {
+		ctx->buf_mask = config->buf_size - 1;
+	} else {
+		ctx->buf_mask = 0;
+	}
+
+	atomic_store_explicit(&ctx->buf_head, 0, memory_order_relaxed);
+	ctx->buf_tail = 0;
 	ctx->putchar = config->putchar;
 	ctx->putchar_arg = config->putchar_arg;
 	ctx->verbosity = config->verbosity;

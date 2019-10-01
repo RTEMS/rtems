@@ -138,6 +138,8 @@ now(void)
 	return t * SBT_1MS;
 }
 
+static char buffer[512];
+
 static const T_action actions[] = {
 	T_report_hash_sha256,
 	test_action
@@ -145,6 +147,8 @@ static const T_action actions[] = {
 
 static const T_config config = {
 	.name = "ttest01",
+	.buf = buffer,
+	.buf_size = sizeof(buffer),
 	.putchar = test_putchar,
 	.putchar_arg = &test_instance,
 	.verbosity = T_VERBOSE,
