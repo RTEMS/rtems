@@ -1394,11 +1394,13 @@ tc_init(struct timecounter *tc)
 		return;
 	if (tc->tc_quality < 0)
 		return;
+#endif /* __rtems__ */
 	if (tc->tc_quality < timecounter->tc_quality)
 		return;
 	if (tc->tc_quality == timecounter->tc_quality &&
 	    tc->tc_frequency < timecounter->tc_frequency)
 		return;
+#ifndef __rtems__
 	(void)tc->tc_get_timecount(tc);
 	(void)tc->tc_get_timecount(tc);
 #endif /* __rtems__ */

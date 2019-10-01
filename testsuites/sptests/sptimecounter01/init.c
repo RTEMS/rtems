@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -29,31 +29,86 @@
 
 const char rtems_test_name[] = "SPTIMECOUNTER 1";
 
+#define TEST_QUAL 1234
+
+#define TEST_FREQ 1000000
+
 typedef struct {
-  struct timecounter tc_soft;
-  u_int tc_soft_counter;
+  struct timecounter tc;
+  uint32_t counter;
+  struct timecounter tc_2;
+  uint32_t counter_2;
 } test_context;
 
 static test_context test_instance;
 
-static uint32_t test_get_timecount_soft(struct timecounter *tc)
+static uint32_t test_get_timecount(struct timecounter *tc)
 {
   test_context *ctx;
 
-  ctx = RTEMS_CONTAINER_OF(tc, test_context, tc_soft);
-  ++ctx->tc_soft_counter;
+  ctx = RTEMS_CONTAINER_OF(tc, test_context, tc);
+  ++ctx->counter;
 
-  return ctx->tc_soft_counter;
+  return ctx->counter;
+}
+
+static uint32_t test_get_timecount_2(struct timecounter *tc)
+{
+  test_context *ctx;
+
+  ctx = RTEMS_CONTAINER_OF(tc, test_context, tc_2);
+  ++ctx->counter_2;
+
+  return ctx->counter_2;
+}
+
+static void test_install(test_context *ctx)
+{
+  struct timecounter *tc;
+  struct timecounter *tc_2;
+  uint32_t c;
+  uint32_t c_2;
+
+  tc = &ctx->tc;
+  tc_2 = &ctx->tc_2;
+  c = ctx->counter;
+  c_2 = ctx->counter_2;
+
+  tc_2->tc_get_timecount = test_get_timecount_2;
+  tc_2->tc_counter_mask = 0x0fffffff;
+  tc_2->tc_frequency = TEST_FREQ - 1;
+  tc_2->tc_quality = TEST_QUAL;
+  _Timecounter_Install(tc_2);
+  assert(ctx->counter == c);
+  assert(ctx->counter_2 == c_2);
+
+  tc_2->tc_get_timecount = test_get_timecount_2;
+  tc_2->tc_counter_mask = 0x0fffffff;
+  tc_2->tc_frequency = TEST_FREQ - 1;
+  tc_2->tc_quality = TEST_QUAL + 1;
+  _Timecounter_Install(tc_2);
+  assert(ctx->counter == c + 1);
+  assert(ctx->counter_2 == c_2 + 1);
+
+  tc->tc_get_timecount = test_get_timecount;
+  tc->tc_counter_mask = 0x0fffffff;
+  tc->tc_frequency = TEST_FREQ;
+  tc->tc_quality = TEST_QUAL + 1;
+  _Timecounter_Install(tc);
+  assert(ctx->counter == c + 2);
+  assert(ctx->counter_2 == c_2 + 2);
 }
 
 void boot_card(const char *cmdline)
 {
-  test_context *ctx = &test_instance;
-  struct timecounter *tc_soft = &ctx->tc_soft;
-  uint64_t soft_freq = 1000000;
+  test_context *ctx;
+  struct timecounter *tc;
   struct bintime bt;
   struct timeval tv;
   struct timespec ts;
+
+  ctx = &test_instance;
+  tc = &ctx->tc;
 
   TEST_BEGIN();
 
@@ -120,33 +175,35 @@ void boot_card(const char *cmdline)
   assert(bt.sec == 1);
   assert(bt.frac == 0);
 
-  ctx->tc_soft_counter = 0;
-  tc_soft->tc_get_timecount = test_get_timecount_soft;
-  tc_soft->tc_counter_mask = 0x0fffffff;
-  tc_soft->tc_frequency = soft_freq;
-  tc_soft->tc_quality = 1234;
-  _Timecounter_Install(tc_soft);
-  assert(ctx->tc_soft_counter == 1);
+  ctx->counter = 0;
+  tc->tc_get_timecount = test_get_timecount;
+  tc->tc_counter_mask = 0x0fffffff;
+  tc->tc_frequency = TEST_FREQ;
+  tc->tc_quality = TEST_QUAL;
+  _Timecounter_Install(tc);
+  assert(ctx->counter == 1);
 
   rtems_bsd_binuptime(&bt);
-  assert(ctx->tc_soft_counter == 2);
+  assert(ctx->counter == 2);
 
   assert(bt.sec == 1);
   assert(bt.frac == 18446744073708);
 
-  ctx->tc_soft_counter = 0xf0000000 | 1;
+  ctx->counter = 0xf0000000 | 1;
   rtems_bsd_binuptime(&bt);
-  assert(ctx->tc_soft_counter == (0xf0000000 | 2));
+  assert(ctx->counter == (0xf0000000 | 2));
 
   assert(bt.sec == 1);
   assert(bt.frac == 18446744073708);
 
   /* Ensure that the fraction overflows and the second remains constant */
-  ctx->tc_soft_counter = (0xf0000000 | 1) + soft_freq;
+  ctx->counter = (0xf0000000 | 1) + TEST_FREQ;
   rtems_bsd_binuptime(&bt);
-  assert(ctx->tc_soft_counter == (0xf0000000 | 2) + soft_freq);
+  assert(ctx->counter == (0xf0000000 | 2) + TEST_FREQ);
   assert(bt.sec == 1);
   assert(bt.frac == 18446742522092);
+
+  test_install(ctx);
 
   TEST_END();
 
