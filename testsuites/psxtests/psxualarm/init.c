@@ -50,6 +50,14 @@ void *POSIX_Init(
   Init_id = pthread_self();
   printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
 
+  /* Block SIGALRM */
+  status = sigemptyset( &mask );
+  rtems_test_assert( status == 0 );
+  status = sigaddset( &mask, SIGALRM );
+  rtems_test_assert( !status );
+  status = sigprocmask( SIG_BLOCK, &mask, NULL );
+  rtems_test_assert( status == 0 );
+
   /* Validate ualarm is ignored if signal not caught */
   act.sa_handler = Signal_handler;
   act.sa_flags   = 0;
