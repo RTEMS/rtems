@@ -146,7 +146,11 @@ dummy_get_timecount(struct timecounter *tc)
 }
 
 static struct timecounter dummy_timecounter = {
+#ifndef __rtems__
 	dummy_get_timecount, 0, ~0u, 1000000, "dummy", -1000000
+#else /* __rtems__ */
+	dummy_get_timecount, ~(uint32_t)0, 1000000, "dummy", -1000000
+#endif /* __rtems__ */
 };
 
 struct timehands {
@@ -195,9 +199,9 @@ static struct timehands th0 = {
 
 static struct timehands *volatile timehands = &th0;
 struct timecounter *timecounter = &dummy_timecounter;
+#ifndef __rtems__
 static struct timecounter *timecounters = &dummy_timecounter;
 
-#ifndef __rtems__
 int tc_min_ticktock_freq = 1;
 #endif /* __rtems__ */
 
@@ -1359,11 +1363,9 @@ tc_init(struct timecounter *tc)
 		    tc->tc_name, (uintmax_t)tc->tc_frequency,
 		    tc->tc_quality);
 	}
-#endif /* __rtems__ */
 
 	tc->tc_next = timecounters;
 	timecounters = tc;
-#ifndef __rtems__
 	/*
 	 * Set up sysctl tree for this counter.
 	 */
@@ -1566,6 +1568,7 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	}
 	bintime_addx(&th->th_offset, th->th_scale * delta);
 
+#ifndef __rtems__
 	/*
 	 * Hardware latching timecounters may not generate interrupts on
 	 * PPS events, so instead we poll them.  There is a finite risk that
@@ -1576,6 +1579,7 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	 */
 	if (tho->th_counter->tc_poll_pps)
 		tho->th_counter->tc_poll_pps(tho->th_counter);
+#endif /* __rtems__ */
 
 	/*
 	 * Deal with NTP second processing.  The for loop normally

@@ -45,12 +45,14 @@ typedef uint32_t timecounter_fill_vdso_timehands32_t(struct vdso_timehands32 *,
 
 struct timecounter {
 	timecounter_get_t	*tc_get_timecount;
+#ifndef __rtems__
 		/*
 		 * This function reads the counter.  It is not required to
 		 * mask any unimplemented bits out, as long as they are
 		 * constant.
 		 */
 	timecounter_pps_t	*tc_poll_pps;
+#endif /* __rtems__ */
 		/*
 		 * This function is optional.  It will be called whenever the
 		 * timecounter is rewound, and is intended to check for PPS
@@ -64,6 +66,7 @@ struct timecounter {
 	const char		*tc_name;
 		/* Name of the timecounter. */
 	int			tc_quality;
+#ifndef __rtems__
 		/*
 		 * Used to determine if this timecounter is better than
 		 * another timecounter higher means better.  Negative
@@ -80,7 +83,6 @@ struct timecounter {
 		/* Pointer to the timecounter's private parts. */
 	struct timecounter	*tc_next;
 		/* Pointer to the next timecounter. */
-#ifndef __rtems__
 	timecounter_fill_vdso_timehands_t *tc_fill_vdso_timehands;
 	timecounter_fill_vdso_timehands32_t *tc_fill_vdso_timehands32;
 #endif /* __rtems__ */

@@ -38,8 +38,9 @@ static test_context test_instance;
 
 static uint32_t test_get_timecount_soft(struct timecounter *tc)
 {
-  test_context *ctx = tc->tc_priv;
+  test_context *ctx;
 
+  ctx = RTEMS_CONTAINER_OF(tc, test_context, tc_soft);
   ++ctx->tc_soft_counter;
 
   return ctx->tc_soft_counter;
@@ -124,7 +125,6 @@ void boot_card(const char *cmdline)
   tc_soft->tc_counter_mask = 0x0fffffff;
   tc_soft->tc_frequency = soft_freq;
   tc_soft->tc_quality = 1234;
-  tc_soft->tc_priv = ctx;
   _Timecounter_Install(tc_soft);
   assert(ctx->tc_soft_counter == 3);
 
