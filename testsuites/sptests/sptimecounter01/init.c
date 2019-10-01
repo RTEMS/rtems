@@ -126,25 +126,25 @@ void boot_card(const char *cmdline)
   tc_soft->tc_frequency = soft_freq;
   tc_soft->tc_quality = 1234;
   _Timecounter_Install(tc_soft);
-  assert(ctx->tc_soft_counter == 3);
+  assert(ctx->tc_soft_counter == 1);
 
   rtems_bsd_binuptime(&bt);
-  assert(ctx->tc_soft_counter == 4);
+  assert(ctx->tc_soft_counter == 2);
 
   assert(bt.sec == 1);
   assert(bt.frac == 18446744073708);
 
-  ctx->tc_soft_counter = 0xf0000000 | 3;
+  ctx->tc_soft_counter = 0xf0000000 | 1;
   rtems_bsd_binuptime(&bt);
-  assert(ctx->tc_soft_counter == (0xf0000000 | 4));
+  assert(ctx->tc_soft_counter == (0xf0000000 | 2));
 
   assert(bt.sec == 1);
   assert(bt.frac == 18446744073708);
 
   /* Ensure that the fraction overflows and the second remains constant */
-  ctx->tc_soft_counter = (0xf0000000 | 3) + soft_freq;
+  ctx->tc_soft_counter = (0xf0000000 | 1) + soft_freq;
   rtems_bsd_binuptime(&bt);
-  assert(ctx->tc_soft_counter == (0xf0000000 | 4) + soft_freq);
+  assert(ctx->tc_soft_counter == (0xf0000000 | 2) + soft_freq);
   assert(bt.sec == 1);
   assert(bt.frac == 18446742522092);
 

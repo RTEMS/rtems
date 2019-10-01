@@ -1399,9 +1399,9 @@ tc_init(struct timecounter *tc)
 	if (tc->tc_quality == timecounter->tc_quality &&
 	    tc->tc_frequency < timecounter->tc_frequency)
 		return;
+	(void)tc->tc_get_timecount(tc);
+	(void)tc->tc_get_timecount(tc);
 #endif /* __rtems__ */
-	(void)tc->tc_get_timecount(tc);
-	(void)tc->tc_get_timecount(tc);
 	timecounter = tc;
 #ifdef __rtems__
 	tc_windup(NULL);
