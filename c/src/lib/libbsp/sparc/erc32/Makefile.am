@@ -55,8 +55,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/irq/bsp_isr_handler
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/getcurrentprocessor-zero.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/bspsmp.c
 endif
 
 if HAS_NETWORKING
