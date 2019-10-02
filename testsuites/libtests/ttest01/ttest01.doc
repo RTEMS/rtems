@@ -3,10 +3,10 @@ This file describes the directives and concepts tested by this test set.
 test set name: ttest01
 
 The test-*.c files must place the license header at the bottom of the file.
-This allows a copy and past of the test code into documentation sources and
-enables a constent line numbering between the documentation code fragements and
+This allows a copy and paste of the test code into documentation sources and
+enables a constant line numbering between the documentation code fragments and
 the actual test output.  For the same reason the T_TEST_OUTPUT() macros must be
-placed after the actual test cases.  The test source files are dual licensesd
+placed after the actual test cases.  The test source files are dual licensed
 BSD-2-Clause and CC-BY-SA-4.0.
 
 directives:
