@@ -88,10 +88,10 @@ T_report_hash_sha256(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_report_hash_sha256_initialize();
 		break;
-	case T_EVENT_RUN_FINALIZE:
+	case T_EVENT_RUN_FINALIZE_LATE:
 		T_report_hash_sha256_finalize();
 		break;
 	default:

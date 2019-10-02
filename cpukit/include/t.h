@@ -2185,12 +2185,14 @@ void T_free(void *);
 void T_register(void);
 
 typedef enum {
-	T_EVENT_RUN_INITIALIZE,
+	T_EVENT_RUN_INITIALIZE_EARLY,
+	T_EVENT_RUN_INITIALIZE_LATE,
 	T_EVENT_CASE_EARLY,
 	T_EVENT_CASE_BEGIN,
 	T_EVENT_CASE_END,
 	T_EVENT_CASE_LATE,
-	T_EVENT_RUN_FINALIZE
+	T_EVENT_RUN_FINALIZE_EARLY,
+	T_EVENT_RUN_FINALIZE_LATE
 } T_event;
 
 typedef void (*T_action)(T_event, const char *);

@@ -100,7 +100,7 @@ T_check_heap(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_heap_run_initialize();
 		break;
 	case T_EVENT_CASE_END:

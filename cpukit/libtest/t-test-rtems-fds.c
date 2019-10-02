@@ -71,7 +71,7 @@ T_check_file_descriptors(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_open_fds = T_count_open_fds();
 		break;
 	case T_EVENT_CASE_END:

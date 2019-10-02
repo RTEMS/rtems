@@ -645,7 +645,7 @@ T_call_destructors(const T_context *ctx)
 }
 
 static void
-T_call_actions_forward(const T_config *config, T_event event, const char *name)
+T_actions_forward(const T_config *config, T_event event, const char *name)
 {
 	const T_action *actions;
 	size_t n;
@@ -660,7 +660,7 @@ T_call_actions_forward(const T_config *config, T_event event, const char *name)
 }
 
 static void
-T_call_actions_backward(const T_config *config, T_event event,
+T_actions_backward(const T_config *config, T_event event,
     const char *name)
 {
 	const T_action *actions;
@@ -706,10 +706,11 @@ T_do_run_initialize(const T_config *config)
 	ctx->overall_failures = 0;
 
 	T_set_runner(ctx);
-	T_call_actions_forward(config, T_EVENT_RUN_INITIALIZE, config->name);
+	T_actions_forward(config, T_EVENT_RUN_INITIALIZE_EARLY, config->name);
 	T_do_log(ctx, T_QUIET, "A:%s\n", config->name);
 	T_system(ctx);
 	ctx->run_begin_time = (*config->now)();
+	T_actions_forward(config, T_EVENT_RUN_INITIALIZE_LATE, config->name);
 
 	return ctx;
 }
@@ -730,10 +731,10 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	atomic_store_explicit(&ctx->steps, 0, memory_order_relaxed);
 	atomic_store_explicit(&ctx->failures, 0, memory_order_relaxed);
 
-	T_call_actions_forward(config, T_EVENT_CASE_EARLY, tc->name);
+	T_actions_forward(config, T_EVENT_CASE_EARLY, tc->name);
 	T_do_log(ctx, T_NORMAL, "B:%s\n", tc->name);
 	ctx->case_begin_time = (*config->now)();
-	T_call_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
+	T_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
 
 	if (fixture != NULL) {
 		ctx->fixture_context = fixture->initial_context;
@@ -763,7 +764,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 	}
 
 	T_call_destructors(ctx);
-	T_call_actions_backward(config, T_EVENT_CASE_END, tc->name);
+	T_actions_backward(config, T_EVENT_CASE_END, tc->name);
 
 	planned_steps = atomic_fetch_add_explicit(&ctx->planned_steps,
 	    0, memory_order_relaxed);
@@ -793,7 +794,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 	ctx->overall_steps += steps;
 	ctx->overall_failures += failures;
 
-	T_call_actions_backward(config, T_EVENT_CASE_LATE, tc->name);
+	T_actions_backward(config, T_EVENT_CASE_LATE, tc->name);
 }
 
 static void
@@ -829,11 +830,12 @@ T_do_run_finalize(T_context *ctx)
 	T_time_string ts;
 
 	config = ctx->config;
+	T_actions_backward(config, T_EVENT_RUN_FINALIZE_EARLY, config->name);
 	delta = (*config->now)() - ctx->run_begin_time;
 	T_do_log(ctx, T_QUIET, "Z:%s:C:%u:N:%u:F:%u:D:%s\n", config->name,
 	    ctx->overall_cases, ctx->overall_steps, ctx->overall_failures,
 	    T_time_to_string_us(delta, ts));
-	T_call_actions_backward(config, T_EVENT_RUN_FINALIZE, config->name);
+	T_actions_backward(config, T_EVENT_RUN_FINALIZE_LATE, config->name);
 #ifdef __rtems__
 	ctx->runner_thread = NULL;
 	ctx->runner_cpu = NULL;

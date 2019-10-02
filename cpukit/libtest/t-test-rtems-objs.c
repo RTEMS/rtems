@@ -94,7 +94,7 @@ T_check_rtems_barriers(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_barriers_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -127,7 +127,7 @@ T_check_rtems_extensions(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_extensions_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -160,7 +160,7 @@ T_check_rtems_message_queues(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_message_queues_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -193,7 +193,7 @@ T_check_rtems_partitions(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_partitions_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -226,7 +226,7 @@ T_check_rtems_periods(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_periods_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -259,7 +259,7 @@ T_check_rtems_regions(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_regions_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -292,7 +292,7 @@ T_check_rtems_semaphores(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_semaphores_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -329,7 +329,7 @@ T_check_rtems_tasks(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_tasks_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -362,7 +362,7 @@ T_check_rtems_timers(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_rtems_timers_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
@@ -435,7 +435,7 @@ T_check_posix_keys(T_event event, const char *name)
 	(void)name;
 
 	switch (event) {
-	case T_EVENT_RUN_INITIALIZE:
+	case T_EVENT_RUN_INITIALIZE_EARLY:
 		T_posix_keys_run_initialize();
 		break;
 	case T_EVENT_CASE_END:
