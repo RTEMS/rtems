@@ -45,11 +45,20 @@ const char rtems_test_name[] = "TTEST 1";
 
 RTEMS_LINKER_ROSET(t_self_test, const char *);
 
+typedef enum {
+	CENSOR_PASS_THROUGH,
+	CENSOR_DISCARD
+} censor_state;
+
 typedef struct {
 	const char *c;
 	size_t case_begin_count;
 	size_t case_end_count;
 	struct timecounter tc;
+	T_putchar putchar;
+	void *putchar_arg;
+	const char *censor_c;
+	censor_state censor_state;
 } test_context;
 
 static test_context test_instance;
@@ -113,6 +122,76 @@ case_late(const char *name)
 	ctx->c = NULL;
 }
 
+static const char censored_init[] = "A:ttest01\n"
+"S:Platform:RTEMS\n"
+"S:Compiler:*"
+"S:Version:*"
+"S:BSP:*"
+"S:RTEMS_DEBUG:*"
+"S:RTEMS_MULTIPROCESSING:*"
+"S:RTEMS_POSIX_API:*"
+"S:RTEMS_PROFILING:*"
+"S:RTEMS_SMP:*";
+
+static void
+censor_putchar(int c, void *arg)
+{
+	test_context *ctx;
+
+	ctx = arg;
+
+	if (*ctx->censor_c == '\0') {
+		T_putchar discard_putchar;
+		void *discard_putchar_arg;
+
+		(*ctx->putchar)(c, ctx->putchar_arg);
+		T_set_putchar(ctx->putchar, ctx->putchar_arg, &discard_putchar,
+		   &discard_putchar_arg);
+		return;
+	}
+
+	switch (ctx->censor_state) {
+	case CENSOR_PASS_THROUGH:
+		if (*ctx->censor_c == '*') {
+			(*ctx->putchar)('*', ctx->putchar_arg);
+			ctx->censor_state = CENSOR_DISCARD;
+		} else if (c == *ctx->censor_c) {
+			(*ctx->putchar)(c, ctx->putchar_arg);
+			++ctx->censor_c;
+		}
+		break;
+	case CENSOR_DISCARD:
+		if (c == '\n') {
+			(*ctx->putchar)(c, ctx->putchar_arg);
+			ctx->censor_state = CENSOR_PASS_THROUGH;
+			++ctx->censor_c;
+		}
+		break;
+	}
+}
+
+static void
+run_initialize(void)
+{
+	test_context *ctx;
+
+	ctx = &test_instance;
+	ctx->censor_c = censored_init;
+	T_set_putchar(censor_putchar, ctx, &ctx->putchar, &ctx->putchar_arg);
+}
+
+static const char expected_final[] = "Z:ttest01:C:341:N:1316:F:790:D:0.682999\n"
+"Y:ReportHash:SHA256:62d6f3b37299137932ea2c2f0505c8b8f12b95749c81d5af19570e9470203475\n";
+
+static void
+run_finalize(void)
+{
+	test_context *ctx;
+
+	ctx = &test_instance;
+	ctx->c = expected_final;
+}
+
 static void
 test_action(T_event event, const char *name)
 {
@@ -124,6 +203,12 @@ test_action(T_event event, const char *name)
 		break;
 	case T_EVENT_CASE_LATE:
 		case_late(name);
+		break;
+	case T_EVENT_RUN_INITIALIZE_EARLY:
+		run_initialize();
+		break;
+	case T_EVENT_RUN_FINALIZE_EARLY:
+		run_finalize();
 		break;
 	default:
 		break;
