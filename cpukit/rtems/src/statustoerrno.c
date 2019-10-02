@@ -45,6 +45,7 @@ static const int status_code_to_errno [RTEMS_STATUS_CODES_LAST + 1] = {
   [RTEMS_INTERNAL_ERROR]           = EIO,
   [RTEMS_NO_MEMORY]                = ENOMEM,
   [RTEMS_IO_ERROR]                 = EIO,
+  [RTEMS_INTERRUPTED]              = EINTR,
   [RTEMS_PROXY_BLOCKING]           = EIO
 };
 

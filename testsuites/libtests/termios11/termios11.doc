@@ -1,0 +1,23 @@
+#  COPYRIGHT (c) 2019.
+#  On-Line Applications Research Corporation (OAR).
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+test name:  termios10
+
+directives:
+  rtems_termios_register_isig_handler
+
+concepts:
+
++ Verifies signals are not delivered on QUIT and INTR characters
+  as default behavior.
+
++ Verified that signals are delivered when QUIT or INTR characters
+  are entered after rtems_termios_posix_isig_handler()
+  is registered using rtems_termios_register_isig_handler().
+
++ Verifies signals are not delivered on QUIT and INTR characters
+  after the default handler rtems_termios_default_isig_handler()
+  is registered using rtems_termios_register_isig_handler().

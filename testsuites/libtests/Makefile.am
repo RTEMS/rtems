@@ -1489,7 +1489,27 @@ lib_screens += termios09/termios09.scn
 lib_docs += termios09/termios09.doc
 termios09_SOURCES = termios09/init.c
 termios09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_termios09) \
-	$(support_includes)
+	$(support_includes) 
+endif
+
+if TEST_termios10
+lib_tests += termios10
+lib_screens += termios10/termios10.scn
+lib_docs += termios10/termios10.doc
+termios10_SOURCES  = termios10/init.c
+termios10_SOURCES += termios03/termios_testdriver_polled.c
+termios10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_termios10) \
+	$(support_includes) -I$(top_srcdir)/termios03
+endif
+
+if TEST_termios11
+lib_tests += termios11
+lib_screens += termios11/termios11.scn
+lib_docs += termios11/termios11.doc
+termios11_SOURCES  = termios10/init.c
+termios11_SOURCES += termios04/termios_testdriver_intr.c
+termios11_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_termios11) \
+	$(support_includes) -I$(top_srcdir)/termios04 -DINTERRUPT_DRIVEN
 endif
 
 if TEST_top

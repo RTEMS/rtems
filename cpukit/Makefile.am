@@ -250,6 +250,7 @@ librtemscpu_a_SOURCES += libcsupport/src/termios_baudtable.c
 librtemscpu_a_SOURCES += libcsupport/src/termios.c
 librtemscpu_a_SOURCES += libcsupport/src/termiosinitialize.c
 librtemscpu_a_SOURCES += libcsupport/src/termios_num2baud.c
+librtemscpu_a_SOURCES += libcsupport/src/termios_posix_isig_handler.c
 librtemscpu_a_SOURCES += libcsupport/src/termios_setbestbaud.c
 librtemscpu_a_SOURCES += libcsupport/src/termios_setinitialbaud.c
 librtemscpu_a_SOURCES += libcsupport/src/__times.c

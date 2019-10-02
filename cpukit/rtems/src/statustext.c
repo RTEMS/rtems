@@ -53,6 +53,7 @@ static const char *const status_code_text[] = {
   "RTEMS_INTERNAL_ERROR",
   "RTEMS_NO_MEMORY",
   "RTEMS_IO_ERROR",
+  "RTEMS_INTERRUPTED",
   "RTEMS_PROXY_BLOCKING"
 };
 

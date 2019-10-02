@@ -1880,6 +1880,8 @@ extern const rtems_filesystem_mount_configuration
  */
 /**@{**/
 
+struct rtems_termios_tty;
+
 typedef struct rtems_termios_callbacks {
   int    (*firstOpen)(int major, int minor, void *arg);
   int    (*lastClose)(int major, int minor, void *arg);
@@ -1907,6 +1909,114 @@ rtems_status_code rtems_termios_bufsize (
   size_t raw_output    /* raw output buffer size */
 );
 
+/**
+ * @brief Type returned by all input processing (isig) methods
+ */ 
+typedef enum {
+  /**
+   * This indicates that the input character was processed
+   * and possibly placed into the buffer.
+   */
+  RTEMS_TERMIOS_ISIG_WAS_PROCESSED,
+  /**
+   * This indicates that the input character was not processed and
+   * subsequent processing is required.
+   */
+  RTEMS_TERMIOS_ISIG_WAS_NOT_PROCESSED,
+  /**
+   * This indicates that the character was processed and determined
+   * to be one that requires a signal to be raised (e.g. VINTR or
+   * VKILL). The tty must be in the right termios mode for this to
+   * occur. There is no further processing of this character required and
+   * the pending read() operation should be interrupted.
+   */
+  RTEMS_TERMIOS_ISIG_INTERRUPT_READ
+} rtems_termios_isig_status_code;
+
+/**
+ * @brief Type for ISIG (VINTR/VKILL) handler
+ *
+ * This type defines the interface to a method which will process
+ * VKILL and VINTR characters. The user can register a handler to
+ * override the default behavior which is to take no special action
+ * on these characters. The POSIX required behavior is to
+ * generate a SIGINTR or SIGQUIT signal. This behavior is implemented if
+ * the user registers the @ref rtems_termios_posix_isig_handler().
+ *
+ * @param c     character that was input
+ * @param tty   termios structure pointer for this input tty
+ *
+ * @return The value returned is according to that documented
+ *         for @ref rtems_termios_isig_status_code.
+ */
+typedef rtems_termios_isig_status_code (*rtems_termios_isig_handler)(
+  unsigned char             c,
+  struct rtems_termios_tty *tty
+);
+
+/**
+ * @brief Default handler for ISIG (VINTR/VKILL)
+ *
+ * This handler is installed by default by termios. It performs
+ * no actions on receiving the VINTR and VKILL characters. This is
+ * not POSIX conformant behavior but is the historical RTEMS behavior
+ * and avoid any default dependency on signal processing code.
+ *
+ * @param c     character that was input
+ * @param tty   termios structure pointer for this input tty
+ *
+ * The installed ISIG handler is only invoked if the character is
+ * (VKILL or VINTR) and ISIG is enabled. Thus the handler need only
+ * check the character and perform the appropriate action.
+ *
+ * @return The value returned is according to that documented
+ *         for all methods adhering to @ref rtems_termios_isig_handler.
+ */
+rtems_termios_isig_status_code rtems_termios_default_isig_handler(
+  unsigned char             c,
+  struct rtems_termios_tty *tty
+);
+
+/**
+ * @brief POSIX handler for ISIG (VINTR/VKILL)
+ *
+ * This handler is installed by the used to obtain POSIX behavior
+ * upon receiving the VINTR and VKILL characters.  The POSIX required
+ * behavior is to generate a SIGINTR or SIGQUIT signal if ISIG is enabled.
+ *
+ * @param c     character that was input
+ * @param tty   termios structure pointer for this input tty
+ *
+ * @return The value returned is according to that documented
+ *         for all methods adhering to @ref rtems_termios_isig_handler.
+ */
+rtems_termios_isig_status_code rtems_termios_posix_isig_handler(
+  unsigned char             c,
+  struct rtems_termios_tty *tty
+);
+
+/**
+ * @brief Register handler for ISIG (VINTR/VKILL)
+ *
+ * This method is invoked to install an ISIG handler. This may be used
+ * to install @ref rtems_termios_posix_isig_handler() to obtain POSIX
+ * behavior or a custom handler. The handler
+ * @ref rtems_termios_default_isig_handler() is installed by default.
+ *
+ * @param handler entry point of the new ISIG handler
+ *
+ * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful.
+ */
+rtems_status_code rtems_termios_register_isig_handler(
+  rtems_termios_isig_handler handler
+);
+
+int rtems_termios_enqueue_raw_characters(
+  void *ttyp,
+  const char *buf,
+  int   len
+);
+
 rtems_status_code rtems_termios_open (
   rtems_device_major_number      major,
   rtems_device_minor_number      minor,
@@ -1928,12 +2038,6 @@ rtems_status_code rtems_termios_write(
 
 rtems_status_code rtems_termios_ioctl(
   void *arg
-);
-
-int rtems_termios_enqueue_raw_characters(
-  void *ttyp,
-  const char *buf,
-  int   len
 );
 
 int rtems_termios_dequeue_characters(

@@ -1,0 +1,14 @@
+*** BEGIN OF TEST TERMIOS 11 -- Interrupt driven ***
+Exercise default ISIG handler with ISIG enabled
+Test read for VKILL - no signals
+Test read for VQUIT - no signals
+Exercise POSIX ISIG handler with ISIG enabled
+Test read for VKILL - signal caught
+Test read for VQUIT - signal caught
+Exercise default ISIG handler with ISIG enabled
+Test read for VKILL - signal caught
+Test read for VQUIT - signal caught
+Exercise POSIX ISIG handler with ISIG disabled
+Test read for VKILL - signal caught
+Test read for VQUIT - signal caught
+*** END OF TEST TERMIOS 11 -- Interrupt driven ***

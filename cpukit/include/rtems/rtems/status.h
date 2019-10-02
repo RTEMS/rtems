@@ -167,6 +167,12 @@ typedef enum {
    */
   RTEMS_IO_ERROR                 = 27,
   /**
+   *  This is the status used internally to indicate a blocking device
+   *  driver call has been interrupted and should be reflected to the
+   *  called as an INTERRUPTED.
+   */
+  RTEMS_INTERRUPTED              = 28,
+  /**
    *  This is the status is used internally to RTEMS when performing
    *  operations on behalf of remote tasks.  This is referred to as
    *  proxying operations and this status indicates that the operation
@@ -174,7 +180,7 @@ typedef enum {
    *
    *  @note This status will @b NOT be returned to the user.
    */
-  RTEMS_PROXY_BLOCKING           = 28
+  RTEMS_PROXY_BLOCKING           = 29
 } rtems_status_code;
 
 /**
@@ -235,6 +241,7 @@ RTEMS_INLINE_ROUTINE bool rtems_are_statuses_equal(
  *  @retval ENODEV RTEMS_UNSATISFIED
  *  @retval ENOSYS RTEMS_NOT_IMPLEMENTED, RTEMS_NOT_CONFIGURED
  *  @retval ENOMEM RTEMS_NO_MEMORY
+ *  @retval EINTR RTEMS_INTERRUPTED
  */
 int rtems_status_code_to_errno(rtems_status_code sc);
 
