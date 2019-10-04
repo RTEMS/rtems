@@ -24,8 +24,13 @@ T_TEST_OUTPUT(example,
 "E:example:N:5:F:4:D:0.001000\n");
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- * SPDX-License-Identifier: CC-BY-SA-4.0
+ * The license is at the end of the file to be able to use the test code and
+ * output in examples in the documentation.  This is also the reason for the
+ * dual licensing.  The license for RTEMS documentation is CC-BY-SA-4.0.
+ */
+
+/*
+ * SPDX-License-Identifier: BSD-2-Clause OR CC-BY-SA-4.0
  *
  * Copyright (C) 2018, 2019 embedded brains GmbH
  *
