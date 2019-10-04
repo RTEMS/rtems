@@ -1197,8 +1197,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
   RTEMS_SECTION( ".rtemsstack.interrupt.begin" );
 
-  const char _ISR_Stack_area_end[ 0 ]
-    RTEMS_SECTION( ".rtemsstack.interrupt.end" ) = { };
+  RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION(
+    _ISR_Stack_area_end,
+    ".rtemsstack.interrupt.end"
+  );
 #endif
 
 /**
