@@ -1,29 +1,20 @@
 #ifndef __LINUX_MUTEX_H
 #define __LINUX_MUTEX_H
 
-struct mutex { };
+#include <rtems/thread.h>
+
+struct mutex { rtems_mutex r_m; };
 
 #define DEFINE_MUTEX(m) struct mutex m
 
-static inline void mutex_init(struct mutex *m)
-{
-	(void) m;
-}
+#define mutex_init(m) rtems_mutex_init(&(m)->r_m, "JFFS2 Mutex");
 
-static inline void mutex_lock(struct mutex *m)
-{
-	(void) m;
-}
+#define mutex_lock(m) rtems_mutex_lock(&(m)->r_m);
 
-static inline int mutex_lock_interruptible(struct mutex *m)
-{
-	(void) m;
-	return 0;
-}
+#define mutex_lock_interruptible(m) ({ mutex_lock(m); 0; })
 
-static inline void mutex_unlock(struct mutex *m)
-{
-	(void) m;
-}
+#define mutex_unlock(m) rtems_mutex_unlock(&(m)->r_m);
+
+#define mutex_is_locked(m) 1
 
 #endif

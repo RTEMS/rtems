@@ -34,4 +34,7 @@ struct iattr {
 	time_t		ia_ctime;
 };
 
+#define SB_RDONLY 1
+#define sb_rdonly(sb) ((sb)->s_flags & SB_RDONLY)
+
 #endif /* __LINUX_FS_H__ */

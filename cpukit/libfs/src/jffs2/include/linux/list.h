@@ -139,6 +139,14 @@ list_empty( struct list_head *list )
     (_ent_) != (_list_);                 \
     (_ent_) = (_ent_)->next )
 
+/* list_for_each_safe - using _ent_, iterate through list _list_
+   while protecting against removal of list elements */
+
+#define list_for_each_safe( _ent_, _tmp_, _list_ )           \
+    for ( (_ent_) = (_list_)->next, (_tmp_) = (_ent_)->next; \
+    (_ent_) != (_list_);                                     \
+    (_ent_) = (_tmp_), (_tmp_) = (_ent_)->next )
+
 /*
  * list_for_each_entry - this function can be use to iterate over all
  * items in a list* _list_ with it's head at _head_ and link _item_

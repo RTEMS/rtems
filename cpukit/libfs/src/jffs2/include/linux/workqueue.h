@@ -1,10 +1,30 @@
 #ifndef __LINUX_WORKQUEUE_H__
 #define __LINUX_WORKQUEUE_H__
 
-struct work_struct { } ;
+#include <rtems/chain.h>
 
-#define INIT_WORK(x,y,z) /* */
-#define schedule_work(x) do { } while(0)
-#define flush_scheduled_work() do { } while(0)
+struct work_struct { rtems_chain_node node; };
+
+#define queue_delayed_work(workqueue, delayed_work, delay_ms) ({ \
+  jffs2_queue_delayed_work(delayed_work, delay_ms); \
+  0; \
+})
+
+#define INIT_DELAYED_WORK(delayed_work, delayed_workqueue_callback) ({ \
+  _Chain_Initialize_node(&(delayed_work)->work.node); \
+  (delayed_work)->callback = delayed_workqueue_callback; \
+})
+
+#define msecs_to_jiffies(a) (a)
+
+typedef void (*work_callback_t)(struct work_struct *work);
+struct delayed_work {
+	struct work_struct work;
+	uint64_t execution_time;
+	work_callback_t callback;
+};
+
+#define to_delayed_work(work) RTEMS_CONTAINER_OF(work, struct delayed_work, work)
+void jffs2_queue_delayed_work(struct delayed_work *work, int delay_ms);
 
 #endif /* __LINUX_WORKQUEUE_H__ */

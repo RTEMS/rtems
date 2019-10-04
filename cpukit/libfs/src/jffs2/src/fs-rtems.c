@@ -23,12 +23,14 @@
 #include "nodelist.h"
 #include <linux/pagemap.h>
 #include <linux/crc32.h>
+#include <linux/mtd/mtd.h>
 #include "compr.h"
 #include <errno.h>
 #include <string.h>
 #include <assert.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
+#include <rtems/sysinit.h>
 
 /* Ensure that the JFFS2 values are identical to the POSIX defines */
 
@@ -1049,10 +1051,25 @@ static void rtems_jffs2_freenode(const rtems_filesystem_location_info_t *loc)
 	jffs2_iput(inode);
 }
 
+static void jffs2_remove_delayed_work(struct delayed_work *dwork);
+
 static void rtems_jffs2_fsunmount(rtems_filesystem_mount_table_entry_t *mt_entry)
 {
 	rtems_jffs2_fs_info *fs_info = mt_entry->fs_info;
 	struct _inode *root_i = mt_entry->mt_fs_root->location.node_access;
+#ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+	struct jffs2_sb_info *c = JFFS2_SB_INFO(&fs_info->sb);
+
+	/* Remove wbuf delayed work */
+	jffs2_remove_delayed_work(&c->wbuf_dwork);
+
+	/* Flush any pending writes */
+	if (!sb_rdonly(&fs_info->sb)) {
+		jffs2_flush_wbuf_gc(c, 0);
+	}
+#endif
+
+	jffs2_sum_exit(c);
 
 	icache_evict(root_i, NULL);
 	assert(root_i->i_cache_next == NULL);
@@ -1061,6 +1078,12 @@ static void rtems_jffs2_fsunmount(rtems_filesystem_mount_table_entry_t *mt_entry
 
 	rtems_jffs2_free_directory_entries(root_i);
 	free(root_i);
+
+#ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+	jffs2_nand_flash_cleanup(c);
+	free(c->mtd);
+	c->mtd = NULL;
+#endif
 
 	rtems_jffs2_free_fs_info(fs_info, true);
 }
@@ -1212,6 +1235,113 @@ static int calculate_inocache_hashsize(uint32_t flash_size)
 	return hashsize;
 }
 
+/* Chain for holding delayed work */
+rtems_chain_control delayed_work_chain;
+
+/* Lock for protecting the delayed work chain */
+struct mutex delayed_work_mutex;
+
+void jffs2_queue_delayed_work(struct delayed_work *work, int delay_ms)
+{
+	mutex_lock(&delayed_work_mutex);
+	if (rtems_chain_is_node_off_chain(&work->work.node)) {
+		work->execution_time = rtems_clock_get_uptime_nanoseconds() + delay_ms*1000000;
+		rtems_chain_append(&delayed_work_chain, &work->work.node);
+	}
+	mutex_unlock(&delayed_work_mutex);
+}
+
+static void jffs2_remove_delayed_work(struct delayed_work *dwork)
+{
+	struct delayed_work* work;
+	rtems_chain_node*    node;
+
+	mutex_lock(&delayed_work_mutex);
+	if (rtems_chain_is_node_off_chain(&dwork->work.node)) {
+		mutex_unlock(&delayed_work_mutex);
+		return;
+	}
+
+	node = rtems_chain_first(&delayed_work_chain);
+	while (!rtems_chain_is_tail(&delayed_work_chain, node)) {
+		work = (struct delayed_work*) node;
+		rtems_chain_node* next_node = rtems_chain_next(node);
+		if (work == dwork) {
+			rtems_chain_extract(node);
+			mutex_unlock(&delayed_work_mutex);
+			return;
+		}
+		node = next_node;
+	}
+	mutex_unlock(&delayed_work_mutex);
+}
+
+static void process_delayed_work(void)
+{
+	struct delayed_work* work;
+	rtems_chain_node*    node;
+
+	mutex_lock(&delayed_work_mutex);
+
+	if (rtems_chain_is_empty(&delayed_work_chain)) {
+		mutex_unlock(&delayed_work_mutex);
+		return;
+	}
+
+	node = rtems_chain_first(&delayed_work_chain);
+	while (!rtems_chain_is_tail(&delayed_work_chain, node)) {
+		work = (struct delayed_work*) node;
+		rtems_chain_node* next_node = rtems_chain_next(node);
+		if (rtems_clock_get_uptime_nanoseconds() >= work->execution_time) {
+			rtems_chain_extract(node);
+			work->callback(&work->work);
+		}
+		node = next_node;
+	}
+	mutex_unlock(&delayed_work_mutex);
+}
+/* Task for processing delayed work */
+static rtems_task delayed_work_task(
+  rtems_task_argument unused
+)
+{
+	(void)unused;
+	while (1) {
+		process_delayed_work();
+		sleep(1);
+	}
+}
+
+rtems_id delayed_work_task_id;
+
+static void jffs2_init_delayed_work_task(void)
+{
+	/* Initialize chain for delayed work */
+	rtems_chain_initialize_empty(&delayed_work_chain);
+
+	/* Initialize lock for delayed work */
+	mutex_init(&delayed_work_mutex);
+
+	/* Create task for delayed work */
+	rtems_status_code err = rtems_task_create(
+		rtems_build_name( 'J', 'F', 'F', 'S' ),
+		jffs2_config.delayed_write_priority,
+		RTEMS_MINIMUM_STACK_SIZE,
+		RTEMS_DEFAULT_MODES,
+		RTEMS_DEFAULT_ATTRIBUTES,
+		&delayed_work_task_id
+	);
+	if (err != RTEMS_SUCCESSFUL) {
+		printk("JFFS2 delayed work task processor creation failed\n");
+	}
+}
+
+RTEMS_SYSINIT_ITEM(
+  jffs2_init_delayed_work_task,
+  RTEMS_SYSINIT_LIBIO,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
 int rtems_jffs2_initialize(
 	rtems_filesystem_mount_table_entry_t *mt_entry,
 	const void *data
@@ -1237,9 +1367,19 @@ int rtems_jffs2_initialize(
 
 	sb = &fs_info->sb;
 	c = JFFS2_SB_INFO(sb);
+	c->mtd = NULL;
 
 	if (err == 0) {
 		rtems_recursive_mutex_init(&sb->s_mutex, RTEMS_FILESYSTEM_TYPE_JFFS2);
+	}
+
+	/* Start task for delayed work if it hasn't already been started */
+	if (err == 0) {
+		err = rtems_task_start( delayed_work_task_id, delayed_work_task, 0 );
+		/* Task already running from previous mount */
+		if (err == RTEMS_INCORRECT_STATE) {
+			err = 0;
+		}
 	}
 
 	if (err == 0) {
@@ -1263,12 +1403,31 @@ int rtems_jffs2_initialize(
 		sb->s_flash_control = fc;
 		sb->s_compressor_control = jffs2_mount_data->compressor_control;
 
+#ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+		c->mtd = malloc(sizeof(struct mtd_info));
+		if (!c->mtd) {
+			err = -ENOMEM;
+		}
+	}
+
+	if (err == 0) {
+		c->mtd->oobavail = jffs2_flash_get_oob_size(c);
+		c->mtd->oobsize = c->mtd->oobavail;
+		c->mtd->size = fc->flash_size;
+		c->mtd->erasesize = fc->block_size;
+		c->mtd->writesize = fc->write_size;
+#endif
 		c->inocache_hashsize = inocache_hashsize;
 		c->inocache_list = &fs_info->inode_cache[0];
 		c->sector_size = fc->block_size;
 		c->flash_size = fc->flash_size;
 		c->cleanmarker_size = sizeof(struct jffs2_unknown_node);
+#ifdef CONFIG_JFFS2_FS_WRITEBUFFER
+		err = jffs2_nand_flash_setup(c);
+	}
 
+	if (err == 0) {
+#endif
 		err = jffs2_do_mount_fs(c);
 	}
 
@@ -1296,6 +1455,8 @@ int rtems_jffs2_initialize(
 		return 0;
 	} else {
 		if (fs_info != NULL) {
+			free(c->mtd);
+			c->mtd = NULL;
 			rtems_jffs2_free_fs_info(fs_info, do_mount_fs_was_successful);
 		} else {
 			rtems_jffs2_flash_control_destroy(fc);

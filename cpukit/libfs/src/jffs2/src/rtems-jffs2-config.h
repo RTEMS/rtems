@@ -34,3 +34,4 @@
 #define __ECOS 1
 #define KBUILD_MODNAME "JFFS2"
 #define fallthrough __attribute__((__fallthrough__))
+#define CONFIG_JFFS2_FS_WRITEBUFFER
