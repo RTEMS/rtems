@@ -344,6 +344,25 @@
 #endif
 
 /**
+ * @brief Defines a global symbol with the specified name in the specified
+ * section.
+ *
+ * The name must be a valid designator.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( _name, _section ) \
+    __asm__( \
+      ".pushsection \"" _section "\"\n" \
+      "\t.globl " \
+      RTEMS_XSTRING( RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name ) ) "\n" \
+      RTEMS_XSTRING( RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name ) ) ":\n" \
+      "\t.popsection\n" \
+    )
+#else
+  #define RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( _name, section )
+#endif
+
+/**
  * @brief Returns the value of the specified integral expression and tells the
  * compiler that the predicted value is true (1).
  *
