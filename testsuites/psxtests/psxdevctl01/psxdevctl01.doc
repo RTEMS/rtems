@@ -19,5 +19,11 @@ concepts:
 + Ensure that proper error values result when passing different combinations of
   arguments to posix_devctl().
 
-+ Ensure that a requestn is passed through the underlying ioctl() operation
++ Ensure that a request is passed through the underlying ioctl() operation
   to the console device driver and flagged as an error.
+
++ Ensure that the SOCKCLOSE subcommand is supported by posix_devctl()
+  and returns an error on invalid file descriptors.
+
++ Ensure that the SOCKCLOSE subcommand is supported by posix_devctl()
+  and will close a file descriptor.

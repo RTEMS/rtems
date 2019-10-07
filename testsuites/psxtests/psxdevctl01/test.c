@@ -76,6 +76,32 @@ int main(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EBADF );
 
+  puts( "posix_devctl() SOCKCLOSE on invalid file descriptor -- EBADF" );
+  fd = 21;
+  dcmd = SOCKCLOSE;
+  dev_data_ptr = NULL;
+  nbyte = 0;
+  status = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EBADF );
+
+  /*
+   * Create a file, open it, and close it via posix_devctl().
+   * Then verify it is really closed.
+   */
+  puts( "posix_devctl() SOCKCLOSE on valid file descriptor -- OK" );
+  fd = open("tmp_for_close", O_CREAT | O_RDWR, S_IRWXU );
+  rtems_test_assert( fd != -1 );
+
+  dcmd = SOCKCLOSE;
+  dev_data_ptr = NULL;
+  nbyte = 0;
+  status = posix_devctl( fd, dcmd, dev_data_ptr, nbyte, NULL );
+  rtems_test_assert( status == 0 );
+
+  status = close( fd );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EBADF );
   TEST_END();
   exit(0);
 }

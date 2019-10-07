@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Joel Sherrill <joel@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016, 2020 Joel Sherrill <joel@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,6 +33,8 @@
 #include <devctl.h>
 #include <sys/ioctl.h>
 #include <rtems/seterr.h>
+
+#include  <unistd.h>
 
 int posix_devctl(
   int              fd,
@@ -66,6 +69,17 @@ int posix_devctl(
    */
   if (dev_info_ptr != NULL) {
     *dev_info_ptr = 0;
+  }
+
+  /*
+   * The FACE Technical Standard Edition 3.0 and newer requires the SOCKCLOSE
+   * ioctl command. This is because the Security Profile does not include
+   * close() and applications need a way to close sockets. Closing sockets is
+   * a minimum requirement so using close() in the implementation meets that
+   * requirement but also lets the application close other file types.
+   */
+  if (dcmd == SOCKCLOSE ) {
+    return close(fd);
   }
 
   return ioctl(fd, dcmd, dev_data_ptr);
