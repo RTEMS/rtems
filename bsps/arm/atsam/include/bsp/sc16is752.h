@@ -15,6 +15,7 @@
 #ifndef LIBBSP_ARM_ATSAM_SC16IS752_H
 #define LIBBSP_ARM_ATSAM_SC16IS752_H
 
+#include <rtems/irq-extension.h>
 #include <libchip/chip.h>
 
 #include <dev/serial/sc16is752.h>
@@ -26,6 +27,8 @@ extern "C" {
 typedef struct {
   sc16is752_spi_context base;
   Pin irq_pin;
+  rtems_interrupt_server_entry irqs_entry; /* Internal. Don't touch. */
+  rtems_interrupt_server_action irqs_action; /* Internal. Don't touch. */
 } atsam_sc16is752_spi_context;
 
 /**

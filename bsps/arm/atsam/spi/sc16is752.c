@@ -17,34 +17,40 @@
 
 #include <rtems/irq-extension.h>
 
-static void atsam_sc16i752_interrupt(void *arg)
+static void atsam_sc16i752_irqs_handler(void *arg)
 {
   atsam_sc16is752_spi_context *ctx = arg;
 
-  sc16is752_interrupt_handler(&ctx->base.base);
+    sc16is752_interrupt_handler(&ctx->base.base);
+    PIO_EnableIt(&ctx->irq_pin);
+}
 
-  /* Interrupt Status Register shall be read to clear the interrupt flag */
-  ctx->irq_pin.pio->PIO_ISR;
+static void atsam_sc16i752_interrupt(const Pin *pin, void *arg)
+{
+  atsam_sc16is752_spi_context *ctx = arg;
+
+  if(PIO_ItIsActive(&ctx->irq_pin)) {
+    PIO_DisableIt(&ctx->irq_pin);
+    rtems_interrupt_server_entry_submit(&ctx->irqs_entry);
+  }
 }
 
 static bool atsam_sc16is752_install_interrupt(sc16is752_context *base)
 {
   atsam_sc16is752_spi_context *ctx = (atsam_sc16is752_spi_context *)base;
   rtems_status_code sc;
+  uint8_t rv;
 
-  PIO_Configure(&ctx->irq_pin, 1);
+  sc = rtems_interrupt_server_entry_initialize(RTEMS_INTERRUPT_SERVER_DEFAULT,
+    &ctx->irqs_entry);
+  rtems_interrupt_server_action_prepend(&ctx->irqs_entry,
+    &ctx->irqs_action, atsam_sc16i752_irqs_handler, ctx);
+
+  rv = PIO_Configure(&ctx->irq_pin, 1);
+  PIO_ConfigureIt(&ctx->irq_pin, atsam_sc16i752_interrupt, ctx);
   PIO_EnableIt(&ctx->irq_pin);
 
-  sc = rtems_interrupt_server_handler_install(
-    RTEMS_ID_NONE,
-    ctx->irq_pin.id,
-    "Test",
-    RTEMS_INTERRUPT_SHARED,
-    atsam_sc16i752_interrupt,
-    ctx
-  );
-
-  return sc == RTEMS_SUCCESSFUL;
+  return (sc == RTEMS_SUCCESSFUL) && (rv == 1);
 }
 
 static void atsam_sc16is752_remove_interrupt(sc16is752_context *base)
@@ -52,12 +58,8 @@ static void atsam_sc16is752_remove_interrupt(sc16is752_context *base)
   atsam_sc16is752_spi_context *ctx = (atsam_sc16is752_spi_context *)base;
   rtems_status_code sc;
 
-  sc = rtems_interrupt_server_handler_remove(
-    RTEMS_ID_NONE,
-    ctx->irq_pin.id,
-    atsam_sc16i752_interrupt,
-    ctx
-  );
+  PIO_DisableIt(&ctx->irq_pin);
+  sc = PIO_RemoveIt(&ctx->irq_pin, atsam_sc16i752_interrupt, ctx);
   assert(sc == RTEMS_SUCCESSFUL);
 }
 
