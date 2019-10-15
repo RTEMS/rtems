@@ -37,6 +37,8 @@
 
 #include "chip.h"
 
+#include <string.h>
+
 #include <rtems/irq-extension.h>
 #include <rtems/sysinit.h>
 #include <bsp/fatal.h>
@@ -284,4 +286,48 @@ void PIO_ConfigureIt(const Pin *pPin, void (*handler)(const Pin *, void *arg),
 
 	/* Define new source */
 	TRACE_DEBUG("PIO_ConfigureIt: Defining new source #%d.\n\r", _dwNumSources);
+}
+
+/**
+ * Search for a PIO interrupt and remove it if it is there.
+ * \param pPin  Pointer to a Pin instance.
+ * \param handler  Interrupt handler function pointer.
+ * \param arg Pointer to interrupt handler argument
+ * \return RTEMS_SUCCESSFUL if removed.
+ * \return RTEMS_UNSATISFIED if the handler couldn't be found
+ */
+rtems_status_code PIO_RemoveIt(const Pin *pPin,
+    void (*handler)(const Pin *, void *arg), void *arg)
+{
+	InterruptSource *pSource;
+	rtems_interrupt_level level;
+	rtems_status_code sc = RTEMS_UNSATISFIED;
+	uint32_t i;
+	uint32_t j;
+
+	TRACE_DEBUG("PIO_RemoveIt()\n\r");
+
+	rtems_interrupt_disable(level);
+
+	for(i = 0; i < _dwNumSources; ++i) {
+		pSource = &(_aIntSources[_dwNumSources]);
+		if(pSource->pPin == pPin &&
+		    pSource->handler == handler &&
+		    pSource->arg == arg) {
+			if(i + 1 < _dwNumSources) {
+				TRACE_DEBUG("PIO_RemoveIt: Remove #%d.\n\r", i);
+				/* Move remaining sources */
+				memcpy(pSource,
+				    &(_aIntSources[i+1]),
+				    sizeof(_aIntSources[0])*(_dwNumSources-i-1)
+				    );
+			}
+			_dwNumSources--;
+			sc = RTEMS_SUCCESSFUL;
+		}
+	}
+
+	rtems_interrupt_enable(level);
+
+	return sc;
 }

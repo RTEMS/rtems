@@ -66,6 +66,7 @@
  */
 
 #include "pio.h"
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,6 +81,8 @@ extern void PIO_InitializeInterrupts(uint32_t dwPriority);
 extern void PIO_ConfigureIt(const Pin *pPin,
     void (*handler)(const Pin *, void *arg), void *arg);
 
+extern rtems_status_code PIO_RemoveIt(const Pin *pPin,
+    void (*handler)(const Pin *, void *arg), void *arg);
 
 /**
  * Enables the given interrupt source if it has been configured. The status
@@ -101,6 +104,16 @@ static inline void PIO_EnableIt(const Pin *pPin)
 static inline void PIO_DisableIt(const Pin *pPin)
 {
 	pPin->pio->PIO_IDR = pPin->mask;
+}
+
+/**
+ * Check whether a given interrupt source is active.
+ *
+ * \param pPin  Interrupt source to check.
+ */
+static inline bool PIO_ItIsActive(const Pin *pPin)
+{
+	return ((pPin->pio->PIO_IMR & pPin->mask) != 0);
 }
 
 extern void PIO_IT_InterruptHandler(void);
