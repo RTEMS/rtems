@@ -90,24 +90,28 @@ static uint32_t _dwNumSources = 0;
 static void PIO_Interrupt(Pio *pPio, uint32_t id)
 {
 	uint32_t status;
+	uint32_t status_save;
 	size_t i;
 
-	status = pPio->PIO_ISR;
-	status &= pPio->PIO_IMR;
+	do {
+		status = pPio->PIO_ISR;
+		status &= pPio->PIO_IMR;
+		status_save = status;
 
-	for (i = 0; status != 0 && i < MAX_INTERRUPT_SOURCES; ++i) {
-		const InterruptSource *is = &_aIntSources[i];
-		const Pin *pin = is->pPin;;
+		for (i = 0; status != 0 && i < MAX_INTERRUPT_SOURCES; ++i) {
+			const InterruptSource *is = &_aIntSources[i];
+			const Pin *pin = is->pPin;;
 
-		if (pin->id == id) {
-			uint32_t mask = pin->mask;
+			if (pin->id == id) {
+				uint32_t mask = pin->mask;
 
-			if ((status & mask) != 0) {
-				status &= ~mask;
-				(*is->handler)(pin, is->arg);
+				if ((status & mask) != 0) {
+					status &= ~mask;
+					(*is->handler)(pin, is->arg);
+				}
 			}
 		}
-	}
+	} while (status_save != 0);
 }
 
 /*----------------------------------------------------------------------------
