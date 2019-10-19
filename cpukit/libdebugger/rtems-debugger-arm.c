@@ -51,13 +51,13 @@
 /*
  * ARM Variant controls.
  */
-#if defined(__ARM_ARCH_7A__) || \
-    defined(__ARM_ARCH_7R__)
+#if (__ARM_ARCH >= 7) && \
+    (__ARM_ARCH_PROFILE == 'A' || __ARM_ARCH_PROFILE == 'R')
   #define ARM_CP15 1
 #endif
 
-#if (defined(__ARM_ARCH_7M__) || \
-     defined(__ARM_ARCH_7EM__))
+#if (__ARM_ARCH >= 7) && \
+    (__ARM_ARCH_PROFILE == 'M')
   #define ARM_THUMB_ONLY 1
 #else
   #define ARM_THUMB_ONLY 0
@@ -80,7 +80,9 @@
  *
  * If the variant only supports thumb insturctions disable the support.
  */
-#if !ARM_THUMB_ONLY && defined(__thumb__)
+#define NEEDS_THUMB_SWITCH !ARM_THUMB_ONLY && defined(__thumb__)
+
+#if NEEDS_THUMB_SWITCH
   #define ARM_SWITCH_REG       uint32_t arm_switch_reg
   #define ARM_SWITCH_REG_ASM   [arm_switch_reg] "=&r" (arm_switch_reg)
   #define ARM_SWITCH_REG_ASM_L ARM_SWITCH_REG_ASM,
@@ -205,7 +207,7 @@ static const size_t arm_reg_offsets[RTEMS_DEBUGGER_NUMREGS + 1] =
 /**
  * The various status registers.
  */
-#if defined(ARM_MULTILIB_ARCH_V4)
+#if defined(ARM_MULTILIB_ARCH_V4) || defined(ARM_MULTILIB_ARCH_V6M)
  #define FRAME_SR(_frame) (_frame)->register_cpsr
 #elif defined(ARM_MULTILIB_ARCH_V7M)
  #define FRAME_SR(_frame) (_frame)->register_xpsr
@@ -343,7 +345,9 @@ static arm_debug_hwbreak hw_breaks[ARM_HW_BREAKPOINT_MAX];
 /*
  * Use to locally probe and catch exceptions when accessinf suspect addresses.
  */
+#if ARM_CP15
 static void __attribute__((naked)) arm_debug_unlock_abort(void);
+#endif
 
 /*
  * Target debugging support. Use this to debug the backend.
@@ -823,8 +827,11 @@ static int
 arm_debug_mmap_enable(rtems_debugger_target* target, uint32_t dbgdidr)
 {
   uint32_t val;
-  void*    abort_handler;
   int      rc = -1;
+
+#if ARM_CP15
+  void* abort_handler;
+#endif
 
   /*
    * File scope as setjmp/longjmp effect the local stack variables.
@@ -1399,7 +1406,7 @@ target_exception(CPU_Exception_frame* frame)
  * Note, the code currently assumes cp15 has been set up to match the
  *       instruction set being used.
  */
-#define EXCEPTION_ENTRY_EXC_V4()                                        \
+#define EXCEPTION_ENTRY_EXC()                                           \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "sub  sp, %[frame_size]\n"           /* alloc the frame and CPSR */ \
@@ -1444,7 +1451,7 @@ target_exception(CPU_Exception_frame* frame)
 
 #define ARM_CLEAR_THUMB_MODE "bic  r1, r1, %[psr_t]\n" /* clear thumb */
 
-#define EXCEPTION_ENTRY_THREAD_V4(_frame)                               \
+#define EXCEPTION_ENTRY_THREAD(_frame)                                  \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "ldr  lr, [sp]\n"                        /* recover the link reg */ \
@@ -1528,7 +1535,7 @@ target_exception(CPU_Exception_frame* frame)
  * Note, the code currently assumes cp15 has been set up to match the
  *       instruction set being used.
  */
-#define EXCEPTION_EXIT_THREAD_V4(_frame)                                \
+#define EXCEPTION_EXIT_THREAD(_frame)                                   \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "mov  r0, %[i_frame]\n"                         /* get the frame */ \
@@ -1569,38 +1576,22 @@ target_exception(CPU_Exception_frame* frame)
       [i_frame] "r" (_frame)                                            \
     : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "memory")
 
-#define EXCEPTION_EXIT_EXC_V4()                                         \
+#define EXCEPTION_EXIT_EXC()                                            \
   __asm__ volatile(                                                     \
     ASM_ARM_MODE                                                        \
     "ldr  lr, [sp]\n"                        /* recover the link reg */ \
     "add  sp, #4\n"                                                     \
-    "ldm  sp, {r0-r12}\n"            /* restore the trhead's context */ \
+    "ldm  sp, {r0-r12}\n"            /* restore the thread's context */ \
     "add  sp, %[frame_size]\n"                     /* free the frame */ \
     "subs pc, lr, #0\n"                       /* return from the exc */ \
     :                                                                   \
     : [frame_size] "i" (EXCEPTION_FRAME_SIZE)                           \
     : "memory")
 
-/**
- * ARM Variant support.
- */
-#if defined(ARM_MULTILIB_ARCH_V4)
- #define EXCEPTION_ENTRY_EXC()               EXCEPTION_ENTRY_EXC_V4()
- #define EXCEPTION_ENTRY_THREAD(_frame)      EXCEPTION_ENTRY_THREAD_V4(_frame)
- #define EXCEPTION_EXIT_THREAD(_frame)       EXCEPTION_EXIT_THREAD_V4(_frame)
- #define EXCEPTION_EXIT_EXC()                EXCEPTION_EXIT_EXC_V4()
-#elif defined(ARM_MULTILIB_ARCH_V7M)
- #define EXCEPTION_ENTRY_EXC()               (void) arm_switch_reg
- #define EXCEPTION_ENTRY_THREAD(_frame)      (_frame) = NULL
- #define EXCEPTION_EXIT_THREAD(_frame)       (_frame) = NULL
- #define EXCEPTION_EXIT_EXC()                (void) arm_switch_reg
-#else
- #error ARM architecture is not supported.
-#endif
-
 /*
  * This is used to catch faulting accesses.
  */
+#if ARM_CP15
 static void __attribute__((naked))
 arm_debug_unlock_abort(void)
 {
@@ -1610,6 +1601,7 @@ arm_debug_unlock_abort(void)
   EXCEPTION_ENTRY_THREAD(frame);
   longjmp(unlock_abort_jmpbuf, -1);
 }
+#endif
 
 static void __attribute__((naked))
 target_exception_undefined_instruction(void)
