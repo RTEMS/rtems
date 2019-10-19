@@ -65,7 +65,7 @@ static int am335x_i2c_fill_registers(
   /* FIXME: The pin handling should be replaced by a proper pin handling during
    * initialization. This one is heavily board specific. */
 #if ! IS_AM335X
-  printk ("The I2C driver currently only works on Beagle Bone. Please add your pin configs.")
+  printk ("The I2C driver currently only works on Beagle Bone. Please add your pin configs.");
   return EINVAL;
 #endif
   bus->regs = (volatile bbb_i2c_regs *) register_base;
