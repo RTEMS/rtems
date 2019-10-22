@@ -130,15 +130,21 @@ static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
 {
   int node;
-  const uint32_t *val;
-  int len;
+  const fdt32_t *val;
+  int len=0;
 
   node = fdt_path_offset(fdt, "/cpus");
-  val = fdt_getprop(fdt, node, "timebase-frequency", &len);
-  if (val == NULL || len < 4) {
-    bsp_fatal(RISCV_FATAL_NO_TIMEBASE_FREQUENCY_IN_DEVICE_TREE);
-  }
 
+  val = (fdt32_t *) fdt_getprop(fdt, node, "timebase-frequency", &len);
+
+  if (val == NULL || len < 4) {
+    int cpu0 = fdt_subnode_offset(fdt, node, "cpu@0");
+    val = (fdt32_t *) fdt_getprop(fdt, cpu0, "timebase-frequency", &len);
+
+    if (val == NULL || len < 4) {
+      bsp_fatal(RISCV_FATAL_NO_TIMEBASE_FREQUENCY_IN_DEVICE_TREE);
+    }
+  }
   return fdt32_to_cpu(*val);
 }
 

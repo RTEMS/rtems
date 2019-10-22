@@ -36,8 +36,13 @@ RTEMS_BSPOPTS_HELP([RISCV_MAXIMUM_EXTERNAL_INTERRUPTS],[maximum number of extern
 RTEMS_BSPOPTS_SET([RISCV_ENABLE_HTIF_SUPPORT],[*],[])
 RTEMS_BSPOPTS_HELP([RISCV_ENABLE_HTIF_SUPPORT],[enables the HTIF support if defined to a non-zero value, otherwise it is disabled (disabled by default)])
 
+RTEMS_BSPOPTS_SET([RISCV_CONSOLE_MAX_NS16550_DEVICES],[frdme310arty*],[])
 RTEMS_BSPOPTS_SET([RISCV_CONSOLE_MAX_NS16550_DEVICES],[*],[2])
 RTEMS_BSPOPTS_HELP([RISCV_CONSOLE_MAX_NS16550_DEVICES],[maximum number of NS16550 devices supported by the console driver (2 by default)])
+
+RTEMS_BSPOPTS_SET([RISCV_ENABLE_FRDME310ARTY_SUPPORT],[frdme310arty*],[1])
+RTEMS_BSPOPTS_SET([RISCV_ENABLE_FRDME310ARTY_SUPPORT],[*],[])
+RTEMS_BSPOPTS_HELP([RISCV_ENABLE_FRDME310ARTY_SUPPORT],[enables support sifive Freedom E310 Arty board if defined to a non-zero value,otherwise it is disabled (disabled by default)])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 
@@ -53,13 +58,22 @@ case "${RTEMS_BSP}" in
     ;;
 esac
 
+case "${RTEMS_BSP}" in
+  frdm*310arty)
+    RISCV_RAM_REGION_SIZE_DEFAULT=0x10000000
+    ;;
+  *)
+    RISCV_RAM_REGION_SIZE_DEFAULT=0x04000000
+    ;;
+esac
+
 AC_DEFUN([RISCV_LINKCMD],[
 AC_ARG_VAR([$1],[$2])dnl
 [$1]=[$]{[$1]:-[$3]}
 ])
 
 RISCV_LINKCMD([RISCV_RAM_REGION_BEGIN],[begin of the RAM region for linker command file (default is 0x70000000 for 64-bit with -mcmodel=medlow and 0x80000000 for all other)],[${RISCV_RAM_REGION_BEGIN_DEFAULT}])
-RISCV_LINKCMD([RISCV_RAM_REGION_SIZE],[size of the RAM region for linker command file (default 64MiB)],[0x04000000])
+RISCV_LINKCMD([RISCV_RAM_REGION_SIZE],[size of the RAM region for linker command file (default is 256 MiB for frdme310arty and 64 MiB for all other)],[${RISCV_RAM_REGION_SIZE_DEFAULT}])
 
 AC_CONFIG_FILES([
 Makefile

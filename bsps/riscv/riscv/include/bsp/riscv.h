@@ -38,6 +38,10 @@ extern volatile RISCV_CLINT_regs *riscv_clint;
 
 void *riscv_fdt_get_address(const void *fdt, int node);
 
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+uint32_t riscv_get_core_frequency(void);
+#endif
+
 #ifdef RTEMS_SMP
 extern uint32_t riscv_hart_count;
 #else

@@ -28,6 +28,11 @@
 #include <libfdt.h>
 #include <string.h>
 
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+#include <bsp/fe310-uart.h>
+fe310_uart_context driver_context;
+#endif
+
 #if RISCV_ENABLE_HTIF_SUPPORT != 0
 static htif_console_context htif_console_instance;
 #endif
@@ -59,7 +64,18 @@ static int riscv_get_console_node(const void *fdt)
     stdout_path = "";
   }
 
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+  int root;
+  int soc;
+  root = fdt_path_offset(fdt, "/");
+  soc = fdt_subnode_offset(fdt, root, "soc");
+
+  int offset=fdt_subnode_offset(fdt, soc,stdout_path);
+
+  return offset;
+#else
   return fdt_path_offset(fdt, stdout_path);
+#endif
 }
 
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
@@ -193,6 +209,27 @@ static void riscv_console_probe(void)
     }
 #endif
 
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+    if (RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "sifive,uart0")) {
+      fe310_uart_context *ctx ;
+
+      ctx=&driver_context;
+      ctx->regs = (uintptr_t) riscv_fdt_get_address(fdt, node);
+      if (ctx->regs == 0)
+      {
+        bsp_fatal(RISCV_FATAL_NO_NS16550_REG_IN_DEVICE_TREE);
+      }
+
+      if (node == console_node) {
+        riscv_console.context = &ctx->base;
+        riscv_console.putchar = fe310_console_putchar;
+        riscv_console.getchar = fe310_uart_read;
+      }
+
+      rtems_termios_device_context_initialize(&ctx->base, "FE310UART");
+    }
+#endif
+
     node = fdt_next_node(fdt, node, NULL);
   }
 
@@ -224,6 +261,10 @@ rtems_status_code console_initialize(
   size_t i;
 #endif
 
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+  char path[] = "/dev/ttyS0";
+#endif
+
   rtems_termios_initialize();
 
 #if RISCV_ENABLE_HTIF_SUPPORT != 0
@@ -253,6 +294,22 @@ rtems_status_code console_initialize(
       link(path, CONSOLE_DEVICE_NAME);
     }
   }
+#endif
+
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+  fe310_uart_context * ctx = &driver_context;
+
+  rtems_termios_device_install(
+    path,
+    &fe310_uart_handler,
+    NULL,
+    &ctx->base
+  );
+
+  if (&ctx->base == riscv_console.context) {
+    link(path, CONSOLE_DEVICE_NAME);
+  }
+
 #endif
 
   return RTEMS_SUCCESSFUL;
