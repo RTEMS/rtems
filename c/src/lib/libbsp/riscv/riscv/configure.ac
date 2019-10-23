@@ -78,5 +78,6 @@ RISCV_LINKCMD([RISCV_RAM_REGION_SIZE],[size of the RAM region for linker command
 AC_CONFIG_FILES([
 Makefile
 linkcmds:../../../../../../bsps/riscv/riscv/start/linkcmds.in
+linkcmds.base:../../../../../../bsps/riscv/shared/start/linkcmds.base.in
 ])
 AC_OUTPUT
