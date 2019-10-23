@@ -67,6 +67,17 @@ case "${RTEMS_BSP}" in
     ;;
 esac
 
+case "${RTEMS_BSP}" in
+  *clang)
+    RISCV_LINKER_START_DIRECTIVE_DEFAULT="INPUT"
+    RISCV_LINKER_ALIGN_DIRECTIVE_DEFAULT="ALIGN(8)"
+    ;;
+  *)
+    RISCV_LINKER_START_DIRECTIVE_DEFAULT="STARTUP"
+    RISCV_LINKER_ALIGN_DIRECTIVE_DEFAULT="ALIGN_WITH_INPUT"
+    ;;
+esac
+
 AC_DEFUN([RISCV_LINKCMD],[
 AC_ARG_VAR([$1],[$2])dnl
 [$1]=[$]{[$1]:-[$3]}
@@ -74,6 +85,8 @@ AC_ARG_VAR([$1],[$2])dnl
 
 RISCV_LINKCMD([RISCV_RAM_REGION_BEGIN],[begin of the RAM region for linker command file (default is 0x70000000 for 64-bit with -mcmodel=medlow and 0x80000000 for all other)],[${RISCV_RAM_REGION_BEGIN_DEFAULT}])
 RISCV_LINKCMD([RISCV_RAM_REGION_SIZE],[size of the RAM region for linker command file (default is 256 MiB for frdme310arty and 64 MiB for all other)],[${RISCV_RAM_REGION_SIZE_DEFAULT}])
+RISCV_LINKCMD([RISCV_LINKER_START_DIRECTIVE],[GNU LD understands STARTUP directive while LLVM/LLD does not and needs INPUT instead],[${RISCV_LINKER_START_DIRECTIVE_DEFAULT}])
+RISCV_LINKCMD([RISCV_LINKER_ALIGN_DIRECTIVE],[LLD does not support ALIGN_WITH_INPUT directive],[${RISCV_LINKER_ALIGN_DIRECTIVE_DEFAULT}])
 
 AC_CONFIG_FILES([
 Makefile
