@@ -372,6 +372,11 @@ SECTIONS {
 	.debug_addr		 0 : { *(.debug_addr) }
 	.gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
 	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
+	.shstrtab		 0 : { *(.shstrtab) }
+	.strtab		 0 : { *(.strtab) }
+	.symtab		 0 : { *(.symtab) }
+	.symtab_shndx		 0 : { *(.symtab_shndx) }
+	__cap_relocs		 0 : { *(__cap_relocs) }
 
 	/*
 	 * This is a RTEMS specific section to catch all unexpected input
