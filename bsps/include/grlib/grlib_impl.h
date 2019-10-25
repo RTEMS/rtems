@@ -122,6 +122,16 @@ RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
 	return tmp;
 }
 
+RTEMS_INLINE_ROUTINE uint64_t grlib_read_uncached64(uint64_t *address)
+{
+	uint64_t tmp;
+	__asm__ (" ldda [%1]1, %0 "
+	        : "=r"(tmp)
+	        : "r"(address)
+	);
+	return tmp;
+}
+
 #define GRLIB_DMA_IS_CACHE_COHERENT CPU_SPARC_HAS_SNOOPING
 
 #else
