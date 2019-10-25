@@ -140,6 +140,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE = 12,
 
   /**
+   * @brief Fatal source for heap errors.
+   *
+   * The fatal code is the address to a heap error context (Heap_Error_context).
+   */
+  RTEMS_FATAL_SOURCE_HEAP = 13,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for

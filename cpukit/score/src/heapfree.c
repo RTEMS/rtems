@@ -69,7 +69,7 @@
 
     for ( current = pattern_begin; current != pattern_end; ++current ) {
       if ( *current != HEAP_FREE_PATTERN ) {
-        _Heap_Protection_block_error( heap, block );
+        _Heap_Protection_block_error( heap, block, HEAP_ERROR_FREE_PATTERN );
         break;
       }
     }
@@ -89,7 +89,7 @@
     } else if ( next == HEAP_PROTECTION_OBOLUS ) {
       _Heap_Protection_check_free_block( heap, block );
     } else {
-      _Heap_Protection_block_error( heap, block );
+      _Heap_Protection_block_error( heap, block, HEAP_ERROR_DOUBLE_FREE );
     }
 
     return do_free;
@@ -134,7 +134,7 @@ bool _Heap_Free( Heap_Control *heap, void *alloc_begin_ptr )
   _Heap_Protection_block_check( heap, next_block );
 
   if ( !_Heap_Is_prev_used( next_block ) ) {
-    _Heap_Protection_block_error( heap, block );
+    _Heap_Protection_block_error( heap, block, HEAP_ERROR_BAD_USED_BLOCK );
     return false;
   }
 

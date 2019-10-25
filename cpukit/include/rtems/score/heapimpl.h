@@ -379,7 +379,7 @@ Heap_Block *_Heap_Block_allocate(
 #ifndef HEAP_PROTECTION
   #define _Heap_Protection_block_initialize( heap, block ) ((void) 0)
   #define _Heap_Protection_block_check( heap, block ) ((void) 0)
-  #define _Heap_Protection_block_error( heap, block ) ((void) 0)
+  #define _Heap_Protection_block_error( heap, block, reason ) ((void) 0)
   #define _Heap_Protection_free_all_delayed_blocks( heap ) ((void) 0)
 #else
   static inline void _Heap_Protection_block_initialize(
@@ -400,10 +400,11 @@ Heap_Block *_Heap_Block_allocate(
 
   static inline void _Heap_Protection_block_error(
     Heap_Control *heap,
-    Heap_Block *block
+    Heap_Block *block,
+    Heap_Error_reason reason
   )
   {
-    (*heap->Protection.block_error)( heap, block );
+    (*heap->Protection.block_error)( heap, block, reason );
   }
 
   static inline void _Heap_Protection_free_all_delayed_blocks( Heap_Control *heap )

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -39,7 +39,8 @@ static const char *const fatal_source_text[] = {
   "RTEMS_FATAL_SOURCE_EXCEPTION",
   "RTEMS_FATAL_SOURCE_SMP",
   "RTEMS_FATAL_SOURCE_PANIC",
-  "RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE"
+  "RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE",
+  "RTEMS_FATAL_SOURCE_HEAP"
 };
 
 const char *rtems_fatal_source_text( rtems_fatal_source source )

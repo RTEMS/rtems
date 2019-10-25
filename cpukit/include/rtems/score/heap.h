@@ -134,6 +134,62 @@ typedef struct Heap_Control Heap_Control;
 
 typedef struct Heap_Block Heap_Block;
 
+/**
+ * @brief The heap error reason.
+ *
+ * @see _Heap_Protection_block_error().
+ */
+typedef enum {
+  /**
+   * @brief There is an unexpected value in the heap block protector area.
+   */
+  HEAP_ERROR_BROKEN_PROTECTOR,
+
+  /**
+   * @brief There is an unexpected value in the free pattern of a free heap
+   * block.
+   */
+  HEAP_ERROR_FREE_PATTERN,
+
+  /**
+   * @brief There is was an attempt to free the same block twice.
+   */
+  HEAP_ERROR_DOUBLE_FREE,
+
+  /**
+   * @brief The next block of a supposed to be used block does not indicate that
+   * the block is used.
+   */
+  HEAP_ERROR_BAD_USED_BLOCK,
+
+  /**
+   * @brief A supposed to be free block is not inside the heap memory area.
+   */
+  HEAP_ERROR_BAD_FREE_BLOCK
+} Heap_Error_reason;
+
+/**
+ * @brief Context of a heap error.
+ *
+ * @see _Heap_Protection_block_error().
+ */
+typedef struct {
+  /**
+   * @brief The heap of the block.
+   */
+  Heap_Control *heap;
+
+  /**
+   * @brief The heap block causing the error.
+   */
+  Heap_Block *block;
+
+  /**
+   * @brief The heap error reason.
+   */
+  Heap_Error_reason reason;
+} Heap_Error_context;
+
 #ifndef HEAP_PROTECTION
   #define HEAP_PROTECTION_HEADER_SIZE 0
 #else
@@ -153,10 +209,16 @@ typedef struct Heap_Block Heap_Block;
      Heap_Block *block
   );
 
+  typedef void (*_Heap_Protection_error_handler)(
+     Heap_Control *heap,
+     Heap_Block *block,
+     Heap_Error_reason reason
+  );
+
   typedef struct {
     _Heap_Protection_handler block_initialize;
     _Heap_Protection_handler block_check;
-    _Heap_Protection_handler block_error;
+    _Heap_Protection_error_handler block_error;
     void *handler_data;
     Heap_Block *first_delayed_free_block;
     Heap_Block *last_delayed_free_block;

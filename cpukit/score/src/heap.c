@@ -147,17 +147,23 @@
         || block->Protection_end.protector [0] != HEAP_END_PROTECTOR_0
         || block->Protection_end.protector [1] != HEAP_END_PROTECTOR_1
     ) {
-      _Heap_Protection_block_error( heap, block );
+      _Heap_Protection_block_error( heap, block, HEAP_ERROR_BROKEN_PROTECTOR );
     }
   }
 
   static void _Heap_Protection_block_error_default(
     Heap_Control *heap,
-    Heap_Block *block
+    Heap_Block *block,
+    Heap_Error_reason reason
   )
   {
-    /* FIXME */
-    _Terminate( INTERNAL_ERROR_CORE, 0xdeadbeef );
+    Heap_Error_context error_context = {
+      .heap = heap,
+      .block = block,
+      .reason = reason
+    };
+
+    _Terminate( RTEMS_FATAL_SOURCE_HEAP, (uintptr_t) &error_context );
   }
 #endif
 

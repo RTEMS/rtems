@@ -45,7 +45,11 @@
         Heap_Block *next_block_to_free;
 
         if ( !_Heap_Is_block_in_heap( heap, block_to_free ) ) {
-          _Heap_Protection_block_error( heap, block_to_free );
+          _Heap_Protection_block_error(
+            heap,
+            block_to_free,
+            HEAP_ERROR_BAD_FREE_BLOCK
+          );
         }
 
         next_block_to_free =
