@@ -43,6 +43,8 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR],
 [If defined, then do the clock tick processing on the boot processor on behalf
 of all other processors.])
 
+RTEMS_BSPOPTS_SET([ARM_MMU_USE_SMALL_PAGES],[*],[1])
+RTEMS_BSPOPTS_HELP([ARM_MMU_USE_SMALL_PAGES],[use MMU with small pages (4KiB)])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 

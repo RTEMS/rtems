@@ -1,7 +1,7 @@
 MEMORY {
 	/* Waste the first 1MiB for NULL pointer protection */
-	RAM : ORIGIN = 0x00100000, LENGTH = 255M - 16k
-	RAM_MMU : ORIGIN = 0x0fffc000, LENGTH = 16k
+	RAM : ORIGIN = 0x00100000, LENGTH = 0x0fafc000
+	RAM_MMU : ORIGIN = 0x0fbfc000, LENGTH = 0x404000
 }
 
 REGION_ALIAS ("REGION_START", RAM);

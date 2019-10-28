@@ -9,7 +9,7 @@
 
 /*
  * Copyright (c) 2013 Hesham AL-Matary.
- * Copyright (c) 2009-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -28,6 +28,7 @@
 #include <libcpu/arm-cp15.h>
 #include <bsp/start.h>
 #include <bsp/linker-symbols.h>
+#include <bspopts.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -106,16 +107,35 @@ arm_cp15_start_set_translation_table_entries(
   const arm_cp15_start_section_config *config
 )
 {
-  uint32_t i = ARM_MMU_SECT_GET_INDEX(config->begin);
-  uint32_t iend =
-    ARM_MMU_SECT_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(config->end));
-  uint32_t index_mask = (1U << (32 - ARM_MMU_SECT_BASE_SHIFT)) - 1U;
-
   if (config->begin != config->end) {
+    uint32_t i;
+    uint32_t iend;
+    uint32_t index_mask;
+    uint32_t flags;
+#ifdef ARM_MMU_USE_SMALL_PAGES
+    uint32_t *pt;
+
+    pt = &ttb[ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT];
+    i = ARM_MMU_SMALL_PAGE_GET_INDEX(config->begin);
+    iend = ARM_MMU_SMALL_PAGE_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(config->end));
+    index_mask = (1U << (32 - ARM_MMU_SMALL_PAGE_BASE_SHIFT)) - 1U;
+    flags = ARM_MMU_SECT_FLAGS_TO_SMALL_PAGE(config->flags);
+
     while (i != iend) {
-      ttb [i] = (i << ARM_MMU_SECT_BASE_SHIFT) | config->flags;
+      pt[i] = (i << ARM_MMU_SMALL_PAGE_BASE_SHIFT) | flags;
       i = (i + 1U) & index_mask;
     }
+#else
+    i = ARM_MMU_SECT_GET_INDEX(config->begin);
+    iend = ARM_MMU_SECT_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(config->end));
+    index_mask = (1U << (32 - ARM_MMU_SECT_BASE_SHIFT)) - 1U;
+    flags = config->flags;
+
+    while (i != iend) {
+      ttb[i] = (i << ARM_MMU_SECT_BASE_SHIFT) | flags;
+      i = (i + 1U) & index_mask;
+    }
+#endif
   }
 }
 
@@ -127,16 +147,35 @@ arm_cp15_start_setup_translation_table(
   size_t config_count
 )
 {
-  uint32_t dac = ARM_CP15_DAC_DOMAIN(client_domain, ARM_CP15_DAC_CLIENT);
+#ifdef ARM_MMU_USE_SMALL_PAGES
+  uint32_t *pt;
+#endif
+  uint32_t dac;
   size_t i;
 
+  dac = ARM_CP15_DAC_DOMAIN(client_domain, ARM_CP15_DAC_CLIENT);
   arm_cp15_set_domain_access_control(dac);
   arm_cp15_set_translation_table_base(ttb);
 
   /* Initialize translation table with invalid entries */
+#ifdef ARM_MMU_USE_SMALL_PAGES
+  pt = &ttb[ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT];
   for (i = 0; i < ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT; ++i) {
-    ttb [i] = 0;
+    size_t j;
+
+    for (j = 0; j < ARM_MMU_SMALL_PAGE_TABLE_ENTRY_COUNT; ++j) {
+      pt[j] = 0;
+    }
+
+    ttb[i] = (uint32_t) pt | (client_domain << ARM_MMU_SECT_DOMAIN_SHIFT)
+      | ARM_MMU_PAGE_TABLE_DEFAULT;
+    pt += ARM_MMU_SMALL_PAGE_TABLE_ENTRY_COUNT;
   }
+#else
+  for (i = 0; i < ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT; ++i) {
+    ttb[i] = 0;
+  }
+#endif
 
   for (i = 0; i < config_count; ++i) {
     arm_cp15_start_set_translation_table_entries(ttb, &config_table [i]);
