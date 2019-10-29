@@ -60,7 +60,10 @@ static void leon3_counter_initialize(void)
     counter->counter_register = &gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].value;
 
     /* Enable timer just in case no clock driver is configured */
-    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].ctrl |= GPTIMER_TIMER_CTRL_EN;
+    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].reload = 0xffffffff;
+    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].ctrl |= GPTIMER_TIMER_CTRL_EN |
+                                                    GPTIMER_TIMER_CTRL_RS |
+                                                    GPTIMER_TIMER_CTRL_LD;
 
     leon3_counter_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev) /
       (gpt->scaler_reload + 1);
