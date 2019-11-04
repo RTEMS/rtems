@@ -24,7 +24,7 @@
 
 #include <rtems.h>
 
-#include <unistd.h>
+#include <signal.h>
 
 /*
  *  These are directly supported (and completely correct) in the posix api.
