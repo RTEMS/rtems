@@ -769,7 +769,7 @@ sp_screens += spcpuset01/spcpuset01.scn
 sp_docs += spcpuset01/spcpuset01.doc
 spcpuset01_SOURCES = spcpuset01/test.c spcpuset01/init.c
 spcpuset01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spcpuset01) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 
 if HAS_CPLUSPLUS

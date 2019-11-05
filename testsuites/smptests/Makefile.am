@@ -21,7 +21,7 @@ smp_docs += smp01/smp01.doc
 smp01_SOURCES = smp01/init.c smp01/tasks.c smp01/system.h \
 	../support/src/locked_print.c
 smp01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp01) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
@@ -33,7 +33,7 @@ smp_docs += smp02/smp02.doc
 smp02_SOURCES = smp02/init.c smp02/tasks.c smp02/system.h \
 	../support/src/locked_print.c
 smp02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp02) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
@@ -45,7 +45,7 @@ smp_docs += smp03/smp03.doc
 smp03_SOURCES = smp03/init.c smp03/tasks.c smp03/system.h \
 	../support/src/locked_print.c
 smp03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp03) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
@@ -56,7 +56,7 @@ smp_screens += smp05/smp05.scn
 smp_docs += smp05/smp05.doc
 smp05_SOURCES = smp05/init.c ../support/src/locked_print.c
 smp05_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp05) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
@@ -67,7 +67,7 @@ smp_screens += smp07/smp07.scn
 smp_docs += smp07/smp07.doc
 smp07_SOURCES = smp07/init.c ../support/src/locked_print.c
 smp07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp07) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
@@ -79,7 +79,7 @@ smp_docs += smp08/smp08.doc
 smp08_SOURCES = smp08/init.c smp08/tasks.c smp08/system.h \
 	../support/src/locked_print.c
 smp08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp08) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
@@ -90,7 +90,7 @@ smp_screens += smp09/smp09.scn
 smp_docs += smp09/smp09.doc
 smp09_SOURCES = smp09/init.c ../support/src/locked_print.c
 smp09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smp09) \
-	$(support_includes) -DSMPTEST
+	$(support_includes)
 endif
 endif
 
