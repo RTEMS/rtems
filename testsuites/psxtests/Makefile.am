@@ -842,8 +842,7 @@ psx_screens += psxsignal03/psxsignal03.scn
 psx_docs += psxsignal03/psxsignal03.doc
 psxsignal03_SOURCES = psxsignal03/init.c include/pmacros.h
 psxsignal03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsignal03) \
-	$(support_includes) -I$(top_srcdir)/include \
-	-DUSE_USER_SIGNALS_PROCESS
+	$(support_includes) -I$(top_srcdir)/include
 endif
 endif
 
@@ -852,10 +851,9 @@ if TEST_psxsignal04
 psx_tests += psxsignal04
 psx_screens += psxsignal04/psxsignal04.scn
 psx_docs += psxsignal04/psxsignal04.doc
-psxsignal04_SOURCES = psxsignal03/init.c include/pmacros.h
+psxsignal04_SOURCES = psxsignal04/init.c include/pmacros.h
 psxsignal04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsignal04) \
-	$(support_includes) -I$(top_srcdir)/include \
-	-DUSE_REAL_TIME_SIGNALS_PROCESS
+	$(support_includes) -I$(top_srcdir)/include
 endif
 endif
 
