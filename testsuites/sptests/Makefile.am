@@ -1012,22 +1012,10 @@ sp_tests += spfatal15
 sp_screens += spfatal15/spfatal15.scn
 sp_docs += spfatal15/spfatal15.doc
 spfatal15_SOURCES = spfatal_support/init.c \
-	spfatal_support/consume_sems.c spfatal_support/system.h \
+	spfatal_support/system.h \
 	spfatal15/testcase.h
 spfatal15_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal15) \
 	$(support_includes) -I$(top_srcdir)/spfatal15
-endif
-
-if TEST_spfatal16
-sp_tests += spfatal16
-sp_screens += spfatal16/spfatal16.scn
-sp_docs += spfatal16/spfatal16.doc
-spfatal16_SOURCES = spfatal_support/init.c \
-	spfatal_support/consume_sems.c spfatal_support/system.h \
-	spfatal16/testcase.h
-spfatal16_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal16) \
-	$(support_includes) -I$(top_srcdir)/spfatal16 \
-	-DSEMAPHORES_REMAINING=4
 endif
 
 if TEST_spfatal24
