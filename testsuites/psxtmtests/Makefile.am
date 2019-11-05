@@ -184,29 +184,27 @@ psxtmcond08_SOURCES = psxtmcond08/init.c ../tmtests/include/timesys.h \
 	../support/src/tmtests_empty_function.c \
 	../support/src/tmtests_support.c
 psxtmcond08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmcond08) \
-	$(support_includes) -I$(top_srcdir)/../tmtests/include -DUSE_WAIT
+	$(support_includes) -I$(top_srcdir)/../tmtests/include
 endif
 
 if TEST_psxtmcond09
 psxtm_tests += psxtmcond09
 psxtm_docs += psxtmcond09/psxtmcond09.doc
-psxtmcond09_SOURCES = psxtmcond08/init.c ../tmtests/include/timesys.h \
+psxtmcond09_SOURCES = psxtmcond09/init.c ../tmtests/include/timesys.h \
 	../support/src/tmtests_empty_function.c \
 	../support/src/tmtests_support.c
 psxtmcond09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmcond09) \
-	$(support_includes) -I$(top_srcdir)/../tmtests/include \
-	-DUSE_TIMEDWAIT_WITH_VALUE
+	$(support_includes) -I$(top_srcdir)/../tmtests/include
 endif
 
 if TEST_psxtmcond10
 psxtm_tests += psxtmcond10
 psxtm_docs += psxtmcond10/psxtmcond10.doc
-psxtmcond10_SOURCES = psxtmcond08/init.c ../tmtests/include/timesys.h \
+psxtmcond10_SOURCES = psxtmcond10/init.c ../tmtests/include/timesys.h \
 	../support/src/tmtests_empty_function.c \
 	../support/src/tmtests_support.c
 psxtmcond10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmcond10) \
-	$(support_includes) -I$(top_srcdir)/../tmtests/include \
-	-DUSE_TIMEDWAIT_WAIT_VALUE_IN_PAST
+	$(support_includes) -I$(top_srcdir)/../tmtests/include
 endif
 
 if TEST_psxtmkey01
