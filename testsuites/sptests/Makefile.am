@@ -242,9 +242,9 @@ if TEST_sp27a
 sp_tests += sp27a
 sp_screens += sp27a/sp27a.scn
 sp_docs += sp27a/sp27a.doc
-sp27a_SOURCES = sp27/init.c
+sp27a_SOURCES = sp27a/init.c
 sp27a_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sp27a) \
-	$(support_includes) -DUSE_COUNTING_SEMAPHORE
+	$(support_includes)
 endif
 
 if NO_SMP
@@ -430,9 +430,8 @@ if TEST_sp53
 sp_tests += sp53
 sp_screens += sp53/sp53.scn
 sp_docs += sp53/sp53.doc
-sp53_SOURCES = sp52/init.c
-sp53_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sp53) $(support_includes) \
-	-DUSE_TIMER_SERVER
+sp53_SOURCES = sp53/init.c
+sp53_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sp53) $(support_includes)
 endif
 
 if TEST_sp54
@@ -529,9 +528,9 @@ if TEST_sp66
 sp_tests += sp66
 sp_screens += sp66/sp66.scn
 sp_docs += sp66/sp66.doc
-sp66_SOURCES = sp65/init.c
+sp66_SOURCES = sp66/init.c
 sp66_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sp66) $(support_includes) \
-	-I$(top_srcdir)/include -DINHERIT_CEILING
+	-I$(top_srcdir)/include
 endif
 
 if TEST_sp67
@@ -1238,51 +1237,51 @@ spintrcritical01_SOURCES = spintrcritical01/init.c \
 	spintrcritical_support/intrcritical.h
 spintrcritical01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical01) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DFIFO_NO_TIMEOUT
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical02
 sp_tests += spintrcritical02
 sp_screens += spintrcritical02/spintrcritical02.scn
 sp_docs += spintrcritical02/spintrcritical02.doc
-spintrcritical02_SOURCES = spintrcritical01/init.c \
+spintrcritical02_SOURCES = spintrcritical02/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical02_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical02) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DFIFO_WITH_TIMEOUT
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical03
 sp_tests += spintrcritical03
 sp_screens += spintrcritical03/spintrcritical03.scn
 sp_docs += spintrcritical03/spintrcritical03.doc
-spintrcritical03_SOURCES = spintrcritical01/init.c \
+spintrcritical03_SOURCES = spintrcritical03/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical03_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical03) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DPRIORITY_NO_TIMEOUT
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical04
 sp_tests += spintrcritical04
 sp_screens += spintrcritical04/spintrcritical04.scn
 sp_docs += spintrcritical04/spintrcritical04.doc
-spintrcritical04_SOURCES = spintrcritical01/init.c \
+spintrcritical04_SOURCES = spintrcritical04/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical04_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical04) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DPRIORITY_WITH_TIMEOUT
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical05
 sp_tests += spintrcritical05
 sp_screens += spintrcritical05/spintrcritical05.scn
 sp_docs += spintrcritical05/spintrcritical05.doc
-spintrcritical05_SOURCES = spintrcritical01/init.c \
+spintrcritical05_SOURCES = spintrcritical05/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical05_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical05) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DPRIORITY_NO_TIMEOUT_REVERSE
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical06
@@ -1294,18 +1293,18 @@ spintrcritical06_SOURCES = spintrcritical06/init.c \
 	spintrcritical_support/intrcritical.h
 spintrcritical06_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical06) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DPRIORITY_NO_TIMEOUT_FORWARD
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical07
 sp_tests += spintrcritical07
 sp_screens += spintrcritical07/spintrcritical07.scn
 sp_docs += spintrcritical07/spintrcritical07.doc
-spintrcritical07_SOURCES = spintrcritical06/init.c \
+spintrcritical07_SOURCES = spintrcritical07/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical07_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical07) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DPRIORITY_NO_TIMEOUT_REVERSE
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical08
@@ -1353,18 +1352,18 @@ spintrcritical11_SOURCES = spintrcritical11/init.c \
 	spintrcritical_support/intrcritical.h
 spintrcritical11_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical11) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DEVENT_ANY
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical12
 sp_tests += spintrcritical12
 sp_screens += spintrcritical12/spintrcritical12.scn
 sp_docs += spintrcritical12/spintrcritical12.doc
-spintrcritical12_SOURCES = spintrcritical11/init.c \
+spintrcritical12_SOURCES = spintrcritical12/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical12_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical12) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DEVENT_ALL
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical13
@@ -1376,18 +1375,18 @@ spintrcritical13_SOURCES = spintrcritical13/init.c \
 	spintrcritical_support/intrcritical.h
 spintrcritical13_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical13) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DFIRE_AFTER
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical14
 sp_tests += spintrcritical14
 sp_screens += spintrcritical14/spintrcritical14.scn
 sp_docs += spintrcritical14/spintrcritical14.doc
-spintrcritical14_SOURCES = spintrcritical13/init.c \
+spintrcritical14_SOURCES = spintrcritical14/init.c \
 	spintrcritical_support/intrcritical.c
 spintrcritical14_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical14) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support -DSERVER_FIRE_AFTER
+	-I$(top_srcdir)/spintrcritical_support
 endif
 
 if TEST_spintrcritical15
