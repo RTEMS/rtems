@@ -40,17 +40,6 @@ void Put_Source( rtems_fatal_source source );
 
 void force_error(void);
 
-/* need some prototypes for test cases */
-
-rtems_device_driver consume_semaphores_initialize(
-  rtems_device_major_number major RTEMS_UNUSED,
-  rtems_device_minor_number minor RTEMS_UNUSED,
-  void *pargp RTEMS_UNUSED
-);
-
-#define CONSUME_SEMAPHORE_DRIVERS \
-  { consume_semaphores_initialize, NULL, NULL, NULL, NULL, NULL }
-
 #include "testcase.h"
 
 /* configuration information */

@@ -1001,7 +1001,7 @@ sp_tests += spfatal14
 sp_screens += spfatal14/spfatal14.scn
 sp_docs += spfatal14/spfatal14.doc
 spfatal14_SOURCES = spfatal_support/init.c \
-	spfatal_support/consume_sems.c spfatal_support/system.h \
+	spfatal_support/system.h \
 	spfatal14/testcase.h
 spfatal14_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal14) \
 	$(support_includes) -I$(top_srcdir)/spfatal14
