@@ -2,7 +2,6 @@
 #include "config.h"
 #endif
 
-#include <bsp.h>
 #define CYGNUS
 #define NOMAIN
 #define NOSIGNAL
