@@ -17,7 +17,7 @@
 
 #include "tmacros.h"
 #include <rtems/serial_mouse.h>
-#include "termios_testdriver_intr.h"
+#include "../termios04/termios_testdriver_intr.h"
 
 extern const char *Mouse_Type_Short;
 

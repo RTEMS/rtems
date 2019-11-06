@@ -13,7 +13,7 @@
 
 #include <tmacros.h>
 #include "test_support.h"
-#include "termios_testdriver_intr.h"
+#include "../termios04/termios_testdriver_intr.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

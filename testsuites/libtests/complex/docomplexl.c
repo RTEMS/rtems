@@ -14,6 +14,9 @@
   #include "config.h"
 #endif
 
+/* FIXME: Why is this defined? */
+#define NO_LONG_DOUBLE
+
 #ifdef NO_LONG_DOUBLE
   #define PROVIDE_EMPTY_FUNC
 #endif

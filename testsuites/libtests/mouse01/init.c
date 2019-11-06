@@ -22,7 +22,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <rtems/mw_uid.h>
-#include "termios_testdriver_intr.h"
+#include "../termios04/termios_testdriver_intr.h"
 #include "tmacros.h"
 
 const char rtems_test_name[] = "MOUSE 1";
@@ -151,7 +151,6 @@ rtems_task Init(
 /* configuration information */
 
 #include <rtems/serial_mouse.h>
-#include "termios_testdriver_intr.h"
 
 /* NOTICE: the clock driver is explicitly disabled */
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
