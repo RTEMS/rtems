@@ -19,14 +19,14 @@ if TEST_base_mp
 samples += base_mp_node1
 sample_screens += base_mp/base_mp-node1.scn
 sample_docs += base_mp/base_mp-node1.doc
-base_mp_node1_SOURCES = base_mp/init.c base_mp/apptask.c base_mp/system.h
-base_mp_node1_CPPFLAGS = -DNODE_NUMBER=1 $(AM_CPPFLAGS) $(TEST_FLAGS_base_mp) \
+base_mp_node1_SOURCES = base_mp/init1.c base_mp/apptask.c base_mp/system.h
+base_mp_node1_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_base_mp) \
 	$(support_includes)
 samples += base_mp_node2
 sample_screens += base_mp/base_mp-node2.scn
 sample_docs += base_mp/base_mp-node2.doc
-base_mp_node2_SOURCES = base_mp/init.c base_mp/apptask.c base_mp/system.h
-base_mp_node2_CPPFLAGS = -DNODE_NUMBER=2 $(AM_CPPFLAGS) $(TEST_FLAGS_base_mp) \
+base_mp_node2_SOURCES = base_mp/init2.c base_mp/apptask.c base_mp/system.h
+base_mp_node2_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_base_mp) \
 	$(support_includes)
 endif
 endif
@@ -120,7 +120,7 @@ sample_docs += paranoia/paranoia.doc
 paranoia_SOURCES = paranoia/init.c paranoia/paranoia.c \
 	paranoia/system.h
 paranoia_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_paranoia) \
-	$(support_includes) -DCYGNUS -DNOMAIN -DNOSIGNAL
+	$(support_includes)
 paranoia_LDADD = -lm $(LDADD)
 endif
 
