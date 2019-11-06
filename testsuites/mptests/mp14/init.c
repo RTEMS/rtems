@@ -26,6 +26,12 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+/*
+ * This used to be a configuration option.  If there is a real need, it can be
+ * made a configuration option again.
+ */
+#define MAX_LONG_TEST_DURATION 100
+
 uint8_t   my_partition[0x30000] CPU_STRUCTURE_ALIGNMENT;
 
 static rtems_timer_service_routine Stop_Test_TSR(

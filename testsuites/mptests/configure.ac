@@ -28,10 +28,6 @@ RTEMS_CHECK_CPUOPTS([RTEMS_MULTIPROCESSING])
 
 AM_CONDITIONAL(HAS_MP,test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes")
 
-MAX_LONG_TEST_DURATION=${MAX_LONG_TEST_DURATION-100}
-AC_ARG_VAR([MAX_LONG_TEST_DURATION],
-[The longest length of time a "long running" test should run])
-
 # BSP Test configuration
 RTEMS_TEST_CHECK([mp01])
 RTEMS_TEST_CHECK([mp03])

@@ -231,7 +231,7 @@ mp14_node1_SOURCES = mp14/init.c mp14/exit.c mp14/delay.c \
 	mp14/evtask1.c mp14/evtmtask.c mp14/pttask1.c mp14/smtask1.c \
 	mp14/msgtask1.c mp14/system.h
 mp14_node1_CPPFLAGS = -DNODE_NUMBER=1 $(AM_CPPFLAGS) $(TEST_FLAGS_mp14) \
-	$(support_includes) -DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION)
+	$(support_includes)
 mp_tests += mp14_node2
 mp_screens += mp14/mp14-node2.scn
 mp_docs += mp14/mp14-node2.doc
@@ -239,7 +239,7 @@ mp14_node2_SOURCES = mp14/init.c mp14/exit.c mp14/delay.c \
 	mp14/evtask1.c mp14/evtmtask.c mp14/pttask1.c mp14/smtask1.c \
 	mp14/msgtask1.c mp14/system.h
 mp14_node2_CPPFLAGS = -DNODE_NUMBER=2 $(AM_CPPFLAGS) $(TEST_FLAGS_mp14) \
-	$(support_includes) -DMAX_LONG_TEST_DURATION=$(MAX_LONG_TEST_DURATION)
+	$(support_includes)
 endif
 endif
 
