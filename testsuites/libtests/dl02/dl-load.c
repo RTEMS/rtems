@@ -69,7 +69,7 @@ int dl_load_test(void)
   if (!o1)
     return 1;
   o2 = dl_load_obj("/dl02-o2.o");
-  if (!o1)
+  if (!o2)
     return 1;
 
 #if DL_RTL_CMDS
