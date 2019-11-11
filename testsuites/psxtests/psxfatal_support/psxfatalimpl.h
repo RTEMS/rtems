@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 1989-2011.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
@@ -7,21 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <rtems/bspIo.h>
-
-#include <tmacros.h>
-
-rtems_task Init( rtems_task_argument argument );
-
-void force_error( void );
-
-#include "testcase.h"
-
-const char rtems_test_name[] = "SPFATAL " FATAL_ERROR_TEST_NAME;
+const char rtems_test_name[] = "PSXFATAL " FATAL_ERROR_TEST_NAME;
 
 static void print_test_begin_message(void)
 {
@@ -33,8 +19,8 @@ static void print_test_begin_message(void)
   }
 }
 
-rtems_task Init(
-  rtems_task_argument argument
+void *POSIX_Init(
+  void *argument
 )
 {
   print_test_begin_message();
@@ -43,33 +29,27 @@ rtems_task Init(
   rtems_test_exit(0);
 }
 
-#ifdef FATAL_ERROR_EXPECTED_ERROR
-static void Put_Error( uint32_t source, uint32_t error )
+static void Put_Error( rtems_fatal_source source, rtems_fatal_code error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
     printk( rtems_internal_error_text( error ) );
   }
   else if (source == INTERNAL_ERROR_RTEMS_API ){
-    if (error >  RTEMS_NOT_IMPLEMENTED )
-      printk("Unknown Internal RTEMS Error (0x%08" PRIx32 ")", error);
-    else
-      printk( "%s", rtems_status_text( error ) );
+    printk( "%s", rtems_status_text( error ) );
+  }
+  else if (source == INTERNAL_ERROR_POSIX_API ) {
+    printk(
+      "SOURCE=%d ERROR=%" PRIuMAX " %s",
+      source,
+      (uintmax_t) error,
+      strerror( (int) error )
+    );
   }
 }
-#endif
 
 static void Put_Source( rtems_fatal_source source )
 {
   printk( "%s", rtems_fatal_source_text( source ) );
-}
-
-static bool is_expected_error( rtems_fatal_code error )
-{
-#ifdef FATAL_ERROR_EXPECTED_ERROR
-  return error == FATAL_ERROR_EXPECTED_ERROR;
-#else /* FATAL_ERROR_EXPECTED_ERROR */
-  return FATAL_ERROR_EXPECTED_ERROR_CHECK( error );
-#endif /* FATAL_ERROR_EXPECTED_ERROR */
 }
 
 static void Fatal_extension(
@@ -90,11 +70,8 @@ static void Fatal_extension(
   }
 
   if ( always_set_to_false )
-    printk(
-      "ERROR==> Fatal Extension is internal set to true expected false\n"
-    );
+    printk( "ERROR==> Fatal Extension is internal set to true expected false\n" );
 
-#ifdef FATAL_ERROR_EXPECTED_ERROR
   if ( error !=  FATAL_ERROR_EXPECTED_ERROR ) {
     printk( "ERROR==> Fatal Error Expected (");
     Put_Error( source, FATAL_ERROR_EXPECTED_ERROR );
@@ -102,12 +79,11 @@ static void Fatal_extension(
     Put_Error( source, error );
     printk( ")\n" );
   }
-#endif /* FATAL_ERROR_EXPECTED_ERROR */
 
   if (
     source == FATAL_ERROR_EXPECTED_SOURCE
       && !always_set_to_false
-      && is_expected_error( error )
+      && error == FATAL_ERROR_EXPECTED_ERROR
   ) {
     TEST_END();
   }
@@ -133,12 +109,13 @@ static void Fatal_extension(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* always need an Init task, some cases need more tasks */
-#ifndef SPFATAL_TEST_CASE_EXTRA_TASKS
-#define SPFATAL_TEST_CASE_EXTRA_TASKS 0
+#ifndef SPFATAL_TEST_CASE_EXTRA_THREADS
+#define SPFATAL_TEST_CASE_EXTRA_THREADS 0
 #endif
-#define CONFIGURE_MAXIMUM_TASKS \
-  (SPFATAL_TEST_CASE_EXTRA_TASKS + 1)
 
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+#define CONFIGURE_MAXIMUM_POSIX_THREADS \
+  (SPFATAL_TEST_CASE_EXTRA_THREADS + 1)
+
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #include <rtems/confdefs.h>

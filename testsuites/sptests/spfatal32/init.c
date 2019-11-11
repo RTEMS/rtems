@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
  *
@@ -20,8 +26,10 @@
 #define FATAL_ERROR_EXPECTED_SOURCE RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE
 #define FATAL_ERROR_EXPECTED_ERROR  1
 
-void force_error()
+static void force_error(void)
 {
   uintptr_t invalid = 1;
   free((void *) invalid);
 }
+
+#include "../spfatal_support/spfatalimpl.h"

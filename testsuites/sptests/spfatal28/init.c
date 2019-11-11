@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *
@@ -19,7 +25,7 @@
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
-void force_error()
+static void force_error(void)
 {
 #if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   rtems_status_code sc;
@@ -39,3 +45,5 @@ void force_error()
   _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_RESOURCE_IN_USE );
 #endif
 }
+
+#include "../spfatal_support/spfatalimpl.h"

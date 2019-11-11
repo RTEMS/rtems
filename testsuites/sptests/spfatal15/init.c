@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,7 +21,9 @@
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 2
 
-void force_error()
+static void force_error(void)
 {
   /* we will not run this far */
 }
+
+#include "../spfatal_support/spfatalimpl.h"

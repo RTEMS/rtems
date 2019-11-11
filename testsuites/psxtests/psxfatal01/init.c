@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../psxfatal_support/psxfatal.h"
+
 /*
  * Classic API Init task create failure
  */
@@ -31,7 +37,9 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define FATAL_ERROR_EXPECTED_ERROR \
   INTERNAL_ERROR_POSIX_INIT_THREAD_CREATE_FAILED
 
-void force_error(void)
+static void force_error(void)
 {
   /* we will not run this far */
 }
+
+#include "../psxfatal_support/psxfatalimpl.h"

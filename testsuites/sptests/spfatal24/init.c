@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,9 +21,11 @@
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_GXX_KEY_ADD_FAILED
 
-void force_error()
+static void force_error(void)
 {
   pthread_key_t key = -1;
 
   rtems_gxx_setspecific( &key, NULL );
 }
+
+#include "../spfatal_support/spfatalimpl.h"

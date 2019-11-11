@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  *  Classic API Init task create failure
  *
@@ -46,7 +52,9 @@ void *New_stack_allocate_hook(size_t unused)
   return NULL;
 }
 
-void force_error()
+static void force_error(void)
 {
   /* we will not run this far */
 }
+
+#include "../spfatal_support/spfatalimpl.h"

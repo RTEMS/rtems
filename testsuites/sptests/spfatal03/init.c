@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  *  Semaphore Obtain in Critical Section
  *
@@ -19,7 +25,7 @@
 #define FATAL_ERROR_EXPECTED_ERROR       \
           INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
 
-void force_error(void)
+static void force_error(void)
 {
 
   rtems_status_code status;
@@ -44,3 +50,5 @@ void force_error(void)
   rtems_test_assert( 0 );
   /* we will not run this far */
 }
+
+#include "../spfatal_support/spfatalimpl.h"

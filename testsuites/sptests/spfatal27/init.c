@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *
@@ -20,7 +26,9 @@
 #define CONFIGURE_MAXIMUM_POSIX_KEYS (-1)
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS (0)
 
-void force_error()
+static void force_error(void)
 {
   /* we should not reach this */
 }
+
+#include "../spfatal_support/spfatalimpl.h"

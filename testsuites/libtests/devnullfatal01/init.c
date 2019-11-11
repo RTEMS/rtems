@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../../sptests/spfatal_support/spfatal.h"
+
 /*
  *  COPYRIGHT (c) 1989-2010, 2017.
  *  On-Line Applications Research Corporation (OAR).
@@ -15,7 +21,7 @@
 #include <rtems/devnull.h>
 #include "tmacros.h"
 
-void force_error()
+static void force_error(void)
 {
   int status;
 
@@ -27,3 +33,5 @@ void force_error()
   /* A fatal error would be raised in previous call */
   /* we will not run this far */
 }
+
+#include "../../sptests/spfatal_support/spfatalimpl.h"

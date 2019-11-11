@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
@@ -14,7 +20,7 @@
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED
 
-void force_error()
+static void force_error(void)
 {
  __gthread_mutex_t mutex;
 
@@ -23,3 +29,5 @@ void force_error()
     rtems_test_assert( mutex != 0 );
   }
 }
+
+#include "../spfatal_support/spfatalimpl.h"

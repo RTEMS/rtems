@@ -313,11 +313,9 @@ if TEST_devnullfatal01
 lib_tests += devnullfatal01
 lib_screens += devnullfatal01/devnullfatal01.scn
 lib_docs += devnullfatal01/devnullfatal01.doc
-devnullfatal01_SOURCES = ../sptests/spfatal_support/init.c \
-	devnullfatal01/testcase.h
+devnullfatal01_SOURCES = devnullfatal01/init.c
 devnullfatal01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_devnullfatal01) \
-	$(support_includes) -I$(top_srcdir)/../../sptests/spfatal_support \
-	-I$(top_srcdir)/devnullfatal01
+	$(support_includes)
 endif
 
 if DLTESTS

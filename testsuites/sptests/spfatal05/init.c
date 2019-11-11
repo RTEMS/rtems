@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  *  Classic API Init task create failure
  *
@@ -44,7 +50,7 @@ rtems_task EmptyTask(
 {
 }
 
-void force_error()
+static void force_error(void)
 {
   rtems_id          id;
   rtems_status_code status;
@@ -67,3 +73,5 @@ void force_error()
 
   /* we will not run this far */
 }
+
+#include "../spfatal_support/spfatalimpl.h"

@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*  Test __assert_func with NULL function name
  *
  *  COPYRIGHT (c) 1989-2009.
@@ -16,10 +22,12 @@
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
 
-void force_error()
+static void force_error(void)
 {
   Heap_Area area = { .begin = NULL, .size = 0 };
 
   _Workspace_Handler_initialization( &area, 1, NULL );
   /* we will not run this far */
 }
+
+#include "../spfatal_support/spfatalimpl.h"

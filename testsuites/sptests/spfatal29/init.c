@@ -1,3 +1,9 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../spfatal_support/spfatal.h"
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *
@@ -26,7 +32,7 @@ static void timer(rtems_id id, void *arg)
   rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
 }
 
-void force_error()
+static void force_error(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -42,3 +48,5 @@ void force_error()
 
   rtems_task_exit();
 }
+
+#include "../spfatal_support/spfatalimpl.h"
