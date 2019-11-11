@@ -51,7 +51,7 @@ AM_CONDITIONAL(HAS_POSIX,test x"${rtems_cv_RTEMS_POSIX_API}" = x"yes")
 # Must match the list in cpukit.
 AC_MSG_CHECKING([whether CPU supports libdl])
 case $RTEMS_CPU in
-  arm | i386 | m68k | mips | moxie | powerpc | sparc)
+  arm | i386 | m68k | mips | moxie | powerpc | riscv | sparc)
    TEST_LIBDL=yes ;;
   # bfin has an issue to resolve with libdl. See ticket #2252
   bfin)

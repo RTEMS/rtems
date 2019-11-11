@@ -307,7 +307,7 @@ AM_CONDITIONAL([RPCTOOLS],[test "$RPCGEN" = rpcgen \
 # reloc backends
 AC_MSG_CHECKING([whether CPU supports libdl])
 case $RTEMS_CPU in
-  arm | i386 | m68k | mips | moxie | powerpc | sparc)
+  arm | i386 | m68k | mips | moxie | powerpc | riscv | sparc)
    HAVE_LIBDL=yes ;;
   # bfin has an issue to resolve with libdl. See ticket #2252
   bfin)
