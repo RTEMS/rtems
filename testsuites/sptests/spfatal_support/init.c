@@ -11,8 +11,15 @@
 #include "config.h"
 #endif
 
-#define CONFIGURE_INIT
-#include "system.h"
+#include <rtems/bspIo.h>
+
+#include <tmacros.h>
+
+rtems_task Init( rtems_task_argument argument );
+
+void force_error( void );
+
+#include "testcase.h"
 
 const char rtems_test_name[] = "SPFATAL " FATAL_ERROR_TEST_NAME;
 
@@ -36,7 +43,8 @@ rtems_task Init(
   rtems_test_exit(0);
 }
 
-void Put_Error( uint32_t source, uint32_t error )
+#ifdef FATAL_ERROR_EXPECTED_ERROR
+static void Put_Error( uint32_t source, uint32_t error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
     printk( rtems_internal_error_text( error ) );
@@ -48,8 +56,9 @@ void Put_Error( uint32_t source, uint32_t error )
       printk( "%s", rtems_status_text( error ) );
   }
 }
+#endif
 
-void Put_Source( rtems_fatal_source source )
+static void Put_Source( rtems_fatal_source source )
 {
   printk( "%s", rtems_fatal_source_text( source ) );
 }
@@ -63,7 +72,7 @@ static bool is_expected_error( rtems_fatal_code error )
 #endif /* FATAL_ERROR_EXPECTED_ERROR */
 }
 
-void Fatal_extension(
+static void Fatal_extension(
   rtems_fatal_source source,
   bool               always_set_to_false,
   rtems_fatal_code   error
@@ -103,3 +112,33 @@ void Fatal_extension(
     TEST_END();
   }
 }
+
+#define CONFIGURE_INIT
+
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { \
+    NULL,                    /* create  */ \
+    NULL,                    /* start   */ \
+    NULL,                    /* restart */ \
+    NULL,                    /* delete  */ \
+    NULL,                    /* switch  */ \
+    NULL,                    /* begin   */ \
+    NULL,                    /* exitted */ \
+    Fatal_extension          /* fatal   */ \
+  }, \
+  RTEMS_TEST_INITIAL_EXTENSION
+
+/* extra parameters may be in testcase.h */
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+/* always need an Init task, some cases need more tasks */
+#ifndef SPFATAL_TEST_CASE_EXTRA_TASKS
+#define SPFATAL_TEST_CASE_EXTRA_TASKS 0
+#endif
+#define CONFIGURE_MAXIMUM_TASKS \
+  (SPFATAL_TEST_CASE_EXTRA_TASKS + 1)
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#include <rtems/confdefs.h>

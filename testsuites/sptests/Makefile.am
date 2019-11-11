@@ -890,7 +890,7 @@ if TEST_spfatal01
 sp_tests += spfatal01
 sp_screens += spfatal01/spfatal01.scn
 sp_docs += spfatal01/spfatal01.doc
-spfatal01_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal01_SOURCES = spfatal_support/init.c \
 	spfatal01/testcase.h
 spfatal01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal01) \
 	$(support_includes) -I$(top_srcdir)/spfatal01
@@ -900,7 +900,7 @@ if TEST_spfatal02
 sp_tests += spfatal02
 sp_screens += spfatal02/spfatal02.scn
 sp_docs += spfatal02/spfatal02.doc
-spfatal02_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal02_SOURCES = spfatal_support/init.c \
 	spfatal02/testcase.h
 spfatal02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal02) \
 	$(support_includes) -I$(top_srcdir)/spfatal02
@@ -910,7 +910,7 @@ if TEST_spfatal03
 sp_tests += spfatal03
 sp_screens += spfatal03/spfatal03.scn
 sp_docs += spfatal03/spfatal03.doc
-spfatal03_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal03_SOURCES = spfatal_support/init.c \
 	spfatal03/testcase.h
 spfatal03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal03) \
 	$(support_includes) -I$(top_srcdir)/spfatal03
@@ -920,7 +920,7 @@ if TEST_spfatal04
 sp_tests += spfatal04
 sp_screens += spfatal04/spfatal04.scn
 sp_docs += spfatal04/spfatal04.doc
-spfatal04_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal04_SOURCES = spfatal_support/init.c \
 	spfatal04/testcase.h
 spfatal04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal04) \
 	$(support_includes) -I$(top_srcdir)/spfatal04
@@ -930,7 +930,7 @@ if TEST_spfatal05
 sp_tests += spfatal05
 sp_screens += spfatal05/spfatal05.scn
 sp_docs += spfatal05/spfatal05.doc
-spfatal05_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal05_SOURCES = spfatal_support/init.c \
 	spfatal05/testcase.h
 spfatal05_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal05) \
 	$(support_includes) -I$(top_srcdir)/spfatal05
@@ -940,7 +940,7 @@ if TEST_spfatal06
 sp_tests += spfatal06
 sp_screens += spfatal06/spfatal06.scn
 sp_docs += spfatal06/spfatal06.doc
-spfatal06_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal06_SOURCES = spfatal_support/init.c \
 	spfatal06/testcase.h
 spfatal06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal06) \
 	$(support_includes) -I$(top_srcdir)/spfatal06
@@ -950,7 +950,7 @@ if TEST_spfatal08
 sp_tests += spfatal08
 sp_screens += spfatal08/spfatal08.scn
 sp_docs += spfatal08/spfatal08.doc
-spfatal08_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal08_SOURCES = spfatal_support/init.c \
 	spfatal08/testcase.h
 spfatal08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal08) \
 	$(support_includes) -I$(top_srcdir)/spfatal08
@@ -960,7 +960,7 @@ if TEST_spfatal09
 sp_tests += spfatal09
 sp_screens += spfatal09/spfatal09.scn
 sp_docs += spfatal09/spfatal09.doc
-spfatal09_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal09_SOURCES = spfatal_support/init.c \
 	spfatal09/testcase.h
 spfatal09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal09) \
 	$(support_includes) -I$(top_srcdir)/spfatal09
@@ -970,7 +970,7 @@ if TEST_spfatal10
 sp_tests += spfatal10
 sp_screens += spfatal10/spfatal10.scn
 sp_docs += spfatal10/spfatal10.doc
-spfatal10_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal10_SOURCES = spfatal_support/init.c \
 	spfatal10/testcase.h
 spfatal10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal10) \
 	$(support_includes) -I$(top_srcdir)/spfatal10
@@ -980,7 +980,7 @@ if TEST_spfatal11
 sp_tests += spfatal11
 sp_screens += spfatal11/spfatal11.scn
 sp_docs += spfatal11/spfatal11.doc
-spfatal11_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal11_SOURCES = spfatal_support/init.c \
 	spfatal11/testcase.h
 spfatal11_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal11) \
 	$(support_includes) -I$(top_srcdir)/spfatal11
@@ -990,7 +990,7 @@ if TEST_spfatal12
 sp_tests += spfatal12
 sp_screens += spfatal12/spfatal12.scn
 sp_docs += spfatal12/spfatal12.doc
-spfatal12_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal12_SOURCES = spfatal_support/init.c \
 	spfatal12/testcase.h
 spfatal12_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal12) \
 	$(support_includes) -I$(top_srcdir)/spfatal12
@@ -1001,7 +1001,6 @@ sp_tests += spfatal14
 sp_screens += spfatal14/spfatal14.scn
 sp_docs += spfatal14/spfatal14.doc
 spfatal14_SOURCES = spfatal_support/init.c \
-	spfatal_support/system.h \
 	spfatal14/testcase.h
 spfatal14_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal14) \
 	$(support_includes) -I$(top_srcdir)/spfatal14
@@ -1012,7 +1011,6 @@ sp_tests += spfatal15
 sp_screens += spfatal15/spfatal15.scn
 sp_docs += spfatal15/spfatal15.doc
 spfatal15_SOURCES = spfatal_support/init.c \
-	spfatal_support/system.h \
 	spfatal15/testcase.h
 spfatal15_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal15) \
 	$(support_includes) -I$(top_srcdir)/spfatal15
@@ -1022,7 +1020,7 @@ if TEST_spfatal24
 sp_tests += spfatal24
 sp_screens += spfatal24/spfatal24.scn
 sp_docs += spfatal24/spfatal24.doc
-spfatal24_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal24_SOURCES = spfatal_support/init.c \
 	spfatal24/testcase.h
 spfatal24_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal24) \
 	$(support_includes) -I$(top_srcdir)/spfatal24
@@ -1032,7 +1030,7 @@ if TEST_spfatal25
 sp_tests += spfatal25
 sp_screens += spfatal25/spfatal25.scn
 sp_docs += spfatal25/spfatal25.doc
-spfatal25_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal25_SOURCES = spfatal_support/init.c \
 	spfatal25/testcase.h
 spfatal25_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal25) \
 	$(support_includes) -I$(top_srcdir)/spfatal25
@@ -1051,7 +1049,7 @@ if TEST_spfatal27
 sp_tests += spfatal27
 sp_screens += spfatal27/spfatal27.scn
 sp_docs += spfatal27/spfatal27.doc
-spfatal27_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal27_SOURCES = spfatal_support/init.c \
 	spfatal27/testcase.h
 spfatal27_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal27) \
 	$(support_includes) -I$(top_srcdir)/spfatal27
@@ -1061,7 +1059,7 @@ if TEST_spfatal28
 sp_tests += spfatal28
 sp_screens += spfatal28/spfatal28.scn
 sp_docs += spfatal28/spfatal28.doc
-spfatal28_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal28_SOURCES = spfatal_support/init.c \
 	spfatal28/testcase.h
 spfatal28_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal28) \
 	$(support_includes) -I$(top_srcdir)/spfatal28
@@ -1071,7 +1069,7 @@ if TEST_spfatal29
 sp_tests += spfatal29
 sp_screens += spfatal29/spfatal29.scn
 sp_docs += spfatal29/spfatal29.doc
-spfatal29_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal29_SOURCES = spfatal_support/init.c \
 	spfatal29/testcase.h
 spfatal29_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal29) \
 	$(support_includes) -I$(top_srcdir)/spfatal29
@@ -1099,7 +1097,7 @@ if TEST_spfatal32
 sp_tests += spfatal32
 sp_screens += spfatal32/spfatal32.scn
 sp_docs += spfatal32/spfatal32.doc
-spfatal32_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+spfatal32_SOURCES = spfatal_support/init.c \
 	spfatal32/testcase.h
 spfatal32_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal32) \
 	$(support_includes) -I$(top_srcdir)/spfatal32

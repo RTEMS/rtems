@@ -11,10 +11,15 @@
 #include "config.h"
 #endif
 
-#include "tmacros.h"
+#include <rtems/bspIo.h>
 
-#define CONFIGURE_INIT
-#include "system.h"
+#include <tmacros.h>
+
+void *POSIX_Init(void *argument);
+
+void force_error(void);
+
+#include "testcase.h"
 
 const char rtems_test_name[] = "PSXFATAL " FATAL_ERROR_TEST_NAME;
 
@@ -38,7 +43,7 @@ void *POSIX_Init(
   rtems_test_exit(0);
 }
 
-void Put_Error( rtems_fatal_source source, rtems_fatal_code error )
+static void Put_Error( rtems_fatal_source source, rtems_fatal_code error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
     printk( rtems_internal_error_text( error ) );
@@ -56,12 +61,12 @@ void Put_Error( rtems_fatal_source source, rtems_fatal_code error )
   }
 }
 
-void Put_Source( rtems_fatal_source source )
+static void Put_Source( rtems_fatal_source source )
 {
   printk( "%s", rtems_fatal_source_text( source ) );
 }
 
-void Fatal_extension(
+static void Fatal_extension(
   rtems_fatal_source source,
   bool               always_set_to_false,
   rtems_fatal_code   error
@@ -97,3 +102,34 @@ void Fatal_extension(
     TEST_END();
   }
 }
+
+#define CONFIGURE_INIT
+
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { \
+    NULL,                    /* create  */ \
+    NULL,                    /* start   */ \
+    NULL,                    /* restart */ \
+    NULL,                    /* delete  */ \
+    NULL,                    /* switch  */ \
+    NULL,                    /* begin   */ \
+    NULL,                    /* exitted */ \
+    Fatal_extension          /* fatal   */ \
+  }, \
+  RTEMS_TEST_INITIAL_EXTENSION
+
+/* extra parameters may be in testcase.h */
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+/* always need an Init task, some cases need more tasks */
+#ifndef SPFATAL_TEST_CASE_EXTRA_THREADS
+#define SPFATAL_TEST_CASE_EXTRA_THREADS 0
+#endif
+
+#define CONFIGURE_MAXIMUM_POSIX_THREADS \
+  (SPFATAL_TEST_CASE_EXTRA_THREADS + 1)
+
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#include <rtems/confdefs.h>

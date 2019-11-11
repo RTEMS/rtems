@@ -391,7 +391,7 @@ endif
 if TEST_psxfatal01
 psx_tests += psxfatal01
 psx_screens += psxfatal01/psxfatal01.scn
-psxfatal01_SOURCES = psxfatal_support/init.c psxfatal_support/system.h \
+psxfatal01_SOURCES = psxfatal_support/init.c \
 	psxfatal01/testcase.h
 psxfatal01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfatal01) \
 	$(support_includes) -I$(top_srcdir)/psxfatal01
@@ -400,7 +400,7 @@ endif
 if TEST_psxfatal02
 psx_tests += psxfatal02
 psx_screens += psxfatal02/psxfatal02.scn
-psxfatal02_SOURCES = psxfatal_support/init.c psxfatal_support/system.h \
+psxfatal02_SOURCES = psxfatal_support/init.c \
 	psxfatal02/testcase.h
 psxfatal02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfatal02) \
 	$(support_includes) -I$(top_srcdir)/psxfatal02
