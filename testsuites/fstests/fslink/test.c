@@ -24,7 +24,7 @@
 
 #include "fstest.h"
 #include "fs_config.h"
-#include "pmacros.h"
+#include <tmacros.h>
 
 const char rtems_test_name[] = "FSLINK " FILESYSTEM;
 

@@ -27,7 +27,7 @@
 #include "fs_config.h"
 
 #include "fstest.h"
-#include "pmacros.h"
+#include <tmacros.h>
 
 void *volatile prevent_compiler_optimizations;
 

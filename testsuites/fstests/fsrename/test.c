@@ -14,7 +14,7 @@
 #include "fstest.h"
 #include "fs_config.h"
 #include "fstest_support.h"
-#include "pmacros.h"
+#include <tmacros.h>
 
 #include <sys/stat.h>
 #include <fcntl.h>

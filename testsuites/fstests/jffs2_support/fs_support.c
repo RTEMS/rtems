@@ -15,7 +15,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#include "pmacros.h"
+#include <tmacros.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>

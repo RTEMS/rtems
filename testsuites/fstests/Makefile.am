@@ -12,8 +12,7 @@ fs_screens =
 fs_docs =
 
 support_includes = -I$(top_srcdir)/../support/include
-test_includes = -I$(top_srcdir)/support \
-	-I$(top_srcdir)/../psxtests/include
+test_includes = -I$(top_srcdir)/support
 
 if TEST_fsbdpart01
 fs_tests += fsbdpart01
