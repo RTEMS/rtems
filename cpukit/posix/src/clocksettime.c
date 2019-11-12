@@ -32,6 +32,8 @@ int clock_settime(
   const struct timespec *tp
 )
 {
+  bool  retval;
+
   if ( !tp )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
@@ -43,19 +45,25 @@ int clock_settime(
 
     _TOD_Lock();
     _TOD_Acquire( &lock_context );
-    _TOD_Set( tp, &lock_context );
+      retval = _TOD_Set( tp, &lock_context );
     _TOD_Unlock();
+    if ( retval == false ) {
+      rtems_set_errno_and_return_minus_one( EPERM );
+    }
   }
 #ifdef _POSIX_CPUTIME
-  else if ( clock_id == CLOCK_PROCESS_CPUTIME_ID )
+  else if ( clock_id == CLOCK_PROCESS_CPUTIME_ID ) {
     rtems_set_errno_and_return_minus_one( ENOSYS );
+  }
 #endif
 #ifdef _POSIX_THREAD_CPUTIME
-  else if ( clock_id == CLOCK_THREAD_CPUTIME_ID )
+  else if ( clock_id == CLOCK_THREAD_CPUTIME_ID ) {
     rtems_set_errno_and_return_minus_one( ENOSYS );
+  }
 #endif
-  else
+  else {
     rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   return 0;
 }

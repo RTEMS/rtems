@@ -202,6 +202,16 @@ ISR_LOCK_DECLARE( extern, _Timecounter_Lock )
   _ISR_lock_ISR_disable_and_acquire( &_Timecounter_Lock, lock_context )
 
 /**
+ * @brief Releases the timecounter lock.
+ *
+ * @param lock_context The lock context.
+ *
+ * See _Timecounter_Tick_simple().
+ */
+#define _Timecounter_Release(lock_context) \
+   _ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, lock_context)
+
+/**
  * @brief Performs a simple timecounter tick.
  *
  * This is a special purpose tick function for simple timecounter to support

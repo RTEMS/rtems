@@ -1,0 +1,35 @@
+#  COPYRIGHT (c) 1989-2014.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.com/license/LICENSE.
+#
+
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spclock_todhook01
+
+directives:
+  _TOD_Hook_Register
+  _TOD_Hook_Unregister
+  rtems_clock_set 
+  clock_settime 
+  
+
+concepts:
+
+- Verifies that TOD Hooks can be registered
+
+- Verifies that TOD Hooks can be unregistered
+
+- Verifies that an empty TOD Hooks set is properly processed when the TOD is set
+
+- Verifies that TOD Hooks are executed when the TOD is set
+
+- Verifies that a TOD Hook returning an error is properly reported by
+  rtems_clock_set
+
+- Verifies that a TOD Hook returning an error is properly reported by
+  clock_settime

@@ -141,6 +141,9 @@ typedef struct {
   bool is_set;
 } TOD_Control;
 
+/**
+ * @brief TOD Management information
+ */
 extern TOD_Control _TOD;
 
 /**
@@ -174,6 +177,16 @@ static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
 }
 
 /**
+ * @brief Releases the lock context for the timecounter.
+ *
+ * @param lock_context The lock to release.
+ */
+static inline void _TOD_Release( ISR_lock_Context *lock_context )
+{
+  _Timecounter_Release( lock_context );
+}
+
+/**
  * @brief Sets the time of day.
  *
  * The caller must be the owner of the TOD lock.
@@ -183,8 +196,11 @@ static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
  * @param lock_context The ISR lock context used for the corresponding
  *   _TOD_Acquire().  The caller must be the owner of the TOD lock.  This
  *   function will release the TOD lock.
+ *
+ * @retval true on success
+ * @retval false on failure
  */
-void _TOD_Set(
+bool _TOD_Set(
   const struct timespec *tod,
   ISR_lock_Context      *lock_context
 );
@@ -317,6 +333,95 @@ RTEMS_INLINE_ROUTINE bool _TOD_Is_set( void )
 {
   return _TOD.is_set;
 }
+
+/** @} */
+
+/**
+ * @defgroup RTEMSScoreTODHooks Time of Day Handler Action Hooks
+ *
+ * @ingroup RTEMSScoreTOD
+ *
+ * @brief Time of Day Handler Action Hooks
+ *
+ * The following support registering a hook which is invoked
+ * when the TOD is set. These can be used by a paravirtualized
+ * BSP to mirror time changes to the hosting environment or a
+ * regular BSP to program a real-time clock when the RTEMS TOD
+ * is set.
+ *
+ * @{
+ */
+
+/**
+ *  @brief Possible actions where a registered hook could be invoked
+ */
+typedef enum {
+  /**
+   *  @brief Constant to indicate the TOD is being set.
+   */
+  TOD_ACTION_SET_CLOCK
+} TOD_Action;
+
+/**
+ * @brief Structure to manage each TOD action hook
+ */
+typedef struct TOD_Hook {
+  /** This is the chain node portion of an object. */
+  Chain_Node Node;
+
+  /** This is the TOD action hook that is invoked. */
+  bool (*handler)(TOD_Action, const struct timespec *);
+} TOD_Hook;
+
+/**
+ * @brief Set of registered methods for TOD Actions
+ */
+extern Chain_Control _TOD_Hooks;
+
+/**
+ * @brief Add a TOD Action Hook
+ *
+ * This method is used to add a hook to the TOD action set.
+ *
+ * @brief hook is the action hook to register.
+ *
+ * @retval true if the hook is added. 
+ * @retval false if the hook cannot be added. 
+ */
+void _TOD_Hook_Register(
+  TOD_Hook *hook
+);
+
+/**
+ * @brief Remove a TOD Action Hook
+ *
+ * This method is used to remove a hook from the TOD action set.
+ *
+ * @brief hook is the action hook to unregister.
+ *
+ * @retval true if the hook is unregister. 
+ * @retval false if the hook cannot be unregister. 
+ */
+void _TOD_Hook_Unregister(
+  TOD_Hook *hook
+);
+
+/**
+ * @brief Run the TOD Action Hooks
+ *
+ * This method is used to invoke the set of TOD action hooks.
+ *
+ * @brief action is the action which triggered this run.
+ * @brief tod is the current tod
+ *
+ * @retval true if the hooks can be run. 
+ * @retval false if the hook cannot be run. 
+ */
+bool _TOD_Hook_Run(
+  TOD_Action             action,
+  const struct timespec *tod
+);
+
 
 /** @} */
 
