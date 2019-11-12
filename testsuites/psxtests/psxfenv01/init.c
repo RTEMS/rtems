@@ -94,8 +94,10 @@ rtems_task Init(rtems_task_argument ignored)
 
     fegetexceptflag(&excepts,FE_ALL_EXCEPT);
 
+#ifdef FE_DIVBYZERO
     r = feraiseexcept(FE_DIVBYZERO);
     rtems_test_assert( fetestexcept( FE_DIVBYZERO ) );
+#endif
 
     /* Test 'FE_INEXACT' */
     a = 10.0;
