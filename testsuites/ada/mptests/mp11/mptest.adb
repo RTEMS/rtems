@@ -19,11 +19,9 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.MESSAGE_QUEUE;
 with RTEMS.PARTITION;
 with RTEMS.SEMAPHORE;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -37,6 +35,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -81,7 +80,8 @@ package body MPTEST is
          RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             3,
-            RTEMS.GLOBAL + RTEMS.LIMIT,
+            3,
+            RTEMS.GLOBAL,
             MPTEST.QUEUE_ID( 1 ),
             STATUS
          );
@@ -99,6 +99,7 @@ package body MPTEST is
             MPTEST.SEMAPHORE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
+            RTEMS.TASKS.NO_PRIORITY,
             MPTEST.SEMAPHORE_ID( 1 ),
             STATUS
          );

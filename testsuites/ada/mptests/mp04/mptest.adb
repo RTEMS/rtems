@@ -19,8 +19,6 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -34,6 +32,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -86,6 +85,7 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       TID                 : RTEMS.ID;
       PREVIOUS_PRIORITY   : RTEMS.TASKS.PRIORITY;
       PREVIOUS_PRIORITY_1 : RTEMS.TASKS.PRIORITY;

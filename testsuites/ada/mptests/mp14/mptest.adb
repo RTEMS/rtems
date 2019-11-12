@@ -19,19 +19,14 @@
 --
 
 with INTERFACES; use INTERFACES;
-with INTERFACES.C;
-with RTEMS;
 with RTEMS.EVENT;
 with RTEMS.MESSAGE_QUEUE;
 with RTEMS.PARTITION;
 with RTEMS.SEMAPHORE;
-with RTEMS.TASKS;
 with RTEMS.TIMER;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
-
-with System.Storage_Elements; use System.Storage_Elements;
 
 package body MPTEST is
 
@@ -56,14 +51,10 @@ package body MPTEST is
    procedure EXIT_TEST is
       OLD_MODE : RTEMS.MODE;
       STATUS   : RTEMS.STATUS_CODES;
-      procedure BSP_MPCI_PRINT_STATISTICS;
-      pragma Import (C, BSP_MPCI_PRINT_STATISTICS, "MPCI_Print_statistics" );
    begin
  
       RTEMS.TASKS.MODE(RTEMS.NO_PREEMPT, RTEMS.PREEMPT_MASK, OLD_MODE, STATUS);
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_MODE" );
-
-      BSP_MPCI_PRINT_STATISTICS;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
  
@@ -76,7 +67,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
-      INDEX             : RTEMS.UNSIGNED32;
+      pragma Unreferenced(ARGUMENT);
       STATUS            : RTEMS.STATUS_CODES;
       PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
    begin
@@ -150,6 +141,7 @@ package body MPTEST is
             MPTEST.SEMAPHORE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
+            RTEMS.TASKS.NO_PRIORITY,
             MPTEST.SEMAPHORE_ID( 1 ),
             STATUS
          );
@@ -158,6 +150,7 @@ package body MPTEST is
          TEXT_IO.PUT_LINE( "Creating Message Queue (Global)" );
          RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
+            1,
             1,
             RTEMS.GLOBAL,
             MPTEST.QUEUE_ID( 1 ),
@@ -314,9 +307,9 @@ package body MPTEST is
    procedure TEST_TASK ( 
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       REMOTE_NODE : RTEMS.UNSIGNED32;
       REMOTE_TID  : RTEMS.ID;
-      COUNT       : RTEMS.UNSIGNED32;
       EVENT_OUT   : RTEMS.EVENT_SET;
       STATUS      : RTEMS.STATUS_CODES;
    begin
@@ -356,7 +349,7 @@ package body MPTEST is
          TEXT_IO.PUT_LINE( "Sending events to remote task" );
 
          loop
-            exit when MPTEST.STOP_TEST = TRUE;
+            exit when MPTEST.STOP_TEST;
 
             for COUNT in 1 .. MPTEST.EVENT_TASK_DOT_COUNT
             loop
@@ -367,7 +360,7 @@ package body MPTEST is
                );
                TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "EVENT_SEND" );
 
-               exit when MPTEST.STOP_TEST = TRUE;
+               exit when MPTEST.STOP_TEST;
 
             end loop;
 
@@ -380,11 +373,11 @@ package body MPTEST is
       TEXT_IO.PUT_LINE( "Receiving events from remote task" );
 
       loop
-         exit when MPTEST.STOP_TEST = TRUE;
+         exit when MPTEST.STOP_TEST;
 
          for COUNT in 1 .. MPTEST.EVENT_TASK_DOT_COUNT 
          loop 
-            exit when MPTEST.STOP_TEST = TRUE;
+            exit when MPTEST.STOP_TEST;
 
             RTEMS.EVENT.RECEIVE(
                RTEMS.EVENT_16,
@@ -416,7 +409,7 @@ package body MPTEST is
    procedure DELAYED_EVENTS_TASK (  
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT 
    ) is
-      COUNT         : RTEMS.UNSIGNED32;
+      pragma Unreferenced(ARGUMENT);
       PREVIOUS_MODE : RTEMS.MODE;
       EVENTS_OUT    : RTEMS.EVENT_SET;
       STATUS        : RTEMS.STATUS_CODES;
@@ -472,9 +465,7 @@ package body MPTEST is
          TEST_SUPPORT.PUT_DOT( "." );
  
       end loop;
- 
-      MPTEST.EXIT_TEST;
-      
+
    end DELAYED_EVENTS_TASK; 
  
 -- 
@@ -488,17 +479,17 @@ package body MPTEST is
    procedure MESSAGE_QUEUE_TASK (  
       INDEX : in     RTEMS.TASKS.ARGUMENT 
    ) is
-      COUNT          : RTEMS.UNSIGNED32;
       YIELD_COUNT    : RTEMS.UNSIGNED32;
       OVERFLOW_COUNT : RTEMS.UNSIGNED32_POINTER;
       BUFFER_COUNT   : RTEMS.UNSIGNED32_POINTER;
       STATUS         : RTEMS.STATUS_CODES;
+      MESSAGE_SIZE   : RTEMS.SIZE := 0;
    begin
 
-      MPTEST.BUFFERS( INDEX ).FIELD1 := 0;
-      MPTEST.BUFFERS( INDEX ).FIELD2 := 0;
-      MPTEST.BUFFERS( INDEX ).FIELD3 := 0;
-      MPTEST.BUFFERS( INDEX ).FIELD4 := 0;
+      MPTEST.BUFFER_AREAS( INDEX ).FIELD1 := 0;
+      MPTEST.BUFFER_AREAS( INDEX ).FIELD2 := 0;
+      MPTEST.BUFFER_AREAS( INDEX ).FIELD3 := 0;
+      MPTEST.BUFFER_AREAS( INDEX ).FIELD4 := 0;
 
       TEXT_IO.PUT_LINE( "Getting ID of message queue" );
 
@@ -521,46 +512,40 @@ package body MPTEST is
          RTEMS.MESSAGE_QUEUE.SEND(
             MPTEST.QUEUE_ID( 1 ),
             MPTEST.BUFFERS( INDEX ),
+            4,
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
 
-         OVERFLOW_COUNT := RTEMS.TO_UNSIGNED32_POINTER( 
-                              MPTEST.BUFFERS( INDEX ).FIELD1'ADDRESS
-                           );
+         OVERFLOW_COUNT := MPTEST.BUFFER_AREAS( INDEX ).FIELD1'ACCESS;
                 
-         BUFFER_COUNT := RTEMS.TO_UNSIGNED32_POINTER( 
-                              MPTEST.BUFFERS( INDEX ).FIELD2'ADDRESS
-                           );
+         BUFFER_COUNT := MPTEST.BUFFER_AREAS( INDEX ).FIELD2'ACCESS;
                 
       else
 
-         OVERFLOW_COUNT := RTEMS.TO_UNSIGNED32_POINTER( 
-                              MPTEST.BUFFERS( INDEX ).FIELD3'ADDRESS
-                           );
+         OVERFLOW_COUNT := MPTEST.BUFFER_AREAS( INDEX ).FIELD3'ACCESS;
                 
-         BUFFER_COUNT := RTEMS.TO_UNSIGNED32_POINTER( 
-                              MPTEST.BUFFERS( INDEX ).FIELD4'ADDRESS
-                           );
+         BUFFER_COUNT := MPTEST.BUFFER_AREAS( INDEX ).FIELD4'ACCESS;
 
       end if;
 
       loop
 
-         exit when MPTEST.STOP_TEST = TRUE;
+         exit when MPTEST.STOP_TEST;
 
          YIELD_COUNT := 100;
 
          for COUNT in 1 .. MPTEST.MESSAGE_DOT_COUNT
          loop
 
-           exit when MPTEST.STOP_TEST = TRUE;
+           exit when MPTEST.STOP_TEST;
 
             RTEMS.MESSAGE_QUEUE.RECEIVE(
                MPTEST.QUEUE_ID( 1 ),
                MPTEST.BUFFERS( INDEX ),
                RTEMS.DEFAULT_OPTIONS,
                RTEMS.NO_TIMEOUT,
+               MESSAGE_SIZE,
                STATUS
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( 
@@ -578,6 +563,7 @@ package body MPTEST is
             RTEMS.MESSAGE_QUEUE.SEND(
                MPTEST.QUEUE_ID( 1 ),
                MPTEST.BUFFERS( INDEX ),
+               4,
                STATUS
             );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -621,7 +607,6 @@ package body MPTEST is
    procedure PARTITION_TASK (  
       IGNORED : in     RTEMS.TASKS.ARGUMENT 
    ) is
-      COUNT  : RTEMS.UNSIGNED32;
       BUFFER : RTEMS.ADDRESS;
       STATUS : RTEMS.STATUS_CODES;
    begin
@@ -644,12 +629,12 @@ package body MPTEST is
 
       loop
 
-         exit when MPTEST.STOP_TEST = TRUE;
+         exit when MPTEST.STOP_TEST;
 
          for COUNT in 1 .. MPTEST.PARTITION_DOT_COUNT
          loop
 
-            exit when MPTEST.STOP_TEST = TRUE;
+            exit when MPTEST.STOP_TEST;
 
             RTEMS.PARTITION.GET_BUFFER(
                MPTEST.PARTITION_ID( 1 ),
@@ -696,7 +681,7 @@ package body MPTEST is
    procedure SEMAPHORE_TASK (  
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT 
    ) is
-      COUNT          : RTEMS.UNSIGNED32;
+      pragma Unreferenced(ARGUMENT);
       YIELD_COUNT    : RTEMS.UNSIGNED32;
       STATUS         : RTEMS.STATUS_CODES;
    begin
@@ -721,12 +706,12 @@ package body MPTEST is
 
          YIELD_COUNT := 100;
 
-         exit when MPTEST.STOP_TEST = TRUE;
+         exit when MPTEST.STOP_TEST;
 
          for COUNT in 1 .. MPTEST.SEMAPHORE_DOT_COUNT
          loop
 
-            exit when MPTEST.STOP_TEST = TRUE;
+            exit when MPTEST.STOP_TEST;
 
             RTEMS.SEMAPHORE.OBTAIN(
                MPTEST.SEMAPHORE_ID( 1 ),

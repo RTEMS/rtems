@@ -19,7 +19,6 @@
 --
 
 with RTEMS;
-with RTEMS.EVENT;
 with RTEMS.TASKS;
 
 package MPTEST is

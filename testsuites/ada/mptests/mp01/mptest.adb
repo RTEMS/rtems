@@ -19,9 +19,7 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.CLOCK;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -35,6 +33,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       C      : CHARACTER;
       TIME   : RTEMS.TIME_OF_DAY;
       STATUS : RTEMS.STATUS_CODES;
@@ -139,6 +138,7 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       TIME   : RTEMS.TIME_OF_DAY;
       TID    : RTEMS.ID;
       STATUS : RTEMS.STATUS_CODES;

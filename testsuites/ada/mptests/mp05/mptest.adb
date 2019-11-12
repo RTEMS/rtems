@@ -19,10 +19,8 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.FATAL;
 with RTEMS.SIGNAL;
-with RTEMS.TASKS;
 with RTEMS.TIMER;
 with TEST_SUPPORT;
 with TEXT_IO;
@@ -37,6 +35,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -139,6 +138,7 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS  : RTEMS.STATUS_CODES;
    begin
 
@@ -212,9 +212,9 @@ package body MPTEST is
 
       loop
  
-         exit when MPTEST.STOP_TEST = TRUE;
+         exit when MPTEST.STOP_TEST;
 
-         if MPTEST.SIGNAL_CAUGHT = TRUE then
+         if MPTEST.SIGNAL_CAUGHT then
 
             MPTEST.SIGNAL_CAUGHT := FALSE;
             MPTEST.SIGNAL_COUNT  := MPTEST.SIGNAL_COUNT + 1;

@@ -19,10 +19,8 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.MESSAGE_QUEUE;
 with RTEMS.SEMAPHORE;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -36,6 +34,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -63,7 +62,8 @@ package body MPTEST is
          RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             3,
-            RTEMS.GLOBAL + RTEMS.LIMIT,
+            3,
+            RTEMS.GLOBAL,
             MPTEST.QUEUE_ID( 1 ),
             STATUS
          );
@@ -74,6 +74,7 @@ package body MPTEST is
             MPTEST.SEMAPHORE_NAME( 1 ),
             0,
             RTEMS.GLOBAL + RTEMS.PRIORITY,
+            RTEMS.TASKS.NO_PRIORITY,
             MPTEST.SEMAPHORE_ID( 1 ),
             STATUS
          );
@@ -178,14 +179,14 @@ package body MPTEST is
    procedure TEST_TASK_1 (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
-      COUNT               : RTEMS.UNSIGNED32;
-      RECEIVE_BUFFER_AREA : RTEMS.BUFFER;
-      RECEIVE_BUFFER      : RTEMS.BUFFER_POINTER;
+      pragma Unreferenced(ARGUMENT);
+      RECEIVE_BUFFER_AREA : MPTEST.BUFFER;
+      RECEIVE_BUFFER      : RTEMS.ADDRESS;
       STATUS              : RTEMS.STATUS_CODES;
+      MESSAGE_SIZE        : RTEMS.SIZE := 0;
    begin
 
-      RECEIVE_BUFFER :=
-         RTEMS.TO_BUFFER_POINTER( RECEIVE_BUFFER_AREA'ADDRESS );
+      RECEIVE_BUFFER := RECEIVE_BUFFER_AREA'ADDRESS;
 
       TEXT_IO.PUT_LINE( "Getting QID of message queue" );
 
@@ -208,6 +209,7 @@ package body MPTEST is
          RECEIVE_BUFFER,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
+         MESSAGE_SIZE,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -221,6 +223,7 @@ package body MPTEST is
    procedure TEST_TASK_2 (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin 
  

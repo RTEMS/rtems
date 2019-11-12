@@ -19,10 +19,7 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
-with RTEMS.OBJECT;
 with RTEMS.SEMAPHORE;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -36,6 +33,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -61,6 +59,7 @@ package body MPTEST is
             MPTEST.SEMAPHORE_NAME( 1 ),
             1,
             RTEMS.GLOBAL,
+            RTEMS.TASKS.NO_PRIORITY,
             MPTEST.SEMAPHORE_ID( 1 ),
             STATUS
          );
@@ -102,7 +101,7 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
-      DOTS                     : RTEMS.UNSIGNED32;
+      pragma Unreferenced(ARGUMENT);
       COUNT                    : RTEMS.UNSIGNED32;
       STATUS                   : RTEMS.STATUS_CODES;
    begin

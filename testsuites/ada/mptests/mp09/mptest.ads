@@ -24,6 +24,19 @@ with RTEMS.TASKS;
 package MPTEST is
 
 --
+--  Buffer Record similar to that used by RTEMS 3.2.1.  Using this
+--  avoids changes to the test.
+--
+
+   type BUFFER is
+      record
+         FIELD1 : RTEMS.NAME;   -- TEMPORARY UNTIL VARIABLE LENGTH
+         FIELD2 : RTEMS.NAME;
+         FIELD3 : RTEMS.NAME;
+         FIELD4 : RTEMS.NAME;
+      end record;
+
+--
 --  These arrays contain the IDs and NAMEs of all RTEMS tasks created
 --  by this test.
 --
@@ -44,17 +57,17 @@ package MPTEST is
 --  and pointers to those buffers.
 --
 
-   RECEIVE_BUFFER_AREA : RTEMS.BUFFER;
-   BUFFER_AREA_1       : RTEMS.BUFFER;
-   BUFFER_AREA_2       : RTEMS.BUFFER;
-   BUFFER_AREA_3       : RTEMS.BUFFER;
-   BUFFER_AREA_4       : RTEMS.BUFFER;
+   RECEIVE_BUFFER_AREA : MPTEST.BUFFER;
+   BUFFER_AREA_1       : MPTEST.BUFFER;
+   BUFFER_AREA_2       : MPTEST.BUFFER;
+   BUFFER_AREA_3       : MPTEST.BUFFER;
+   BUFFER_AREA_4       : MPTEST.BUFFER;
 
-   RECEIVE_BUFFER : RTEMS.BUFFER_POINTER;
-   BUFFER_1       : RTEMS.BUFFER_POINTER;
-   BUFFER_2       : RTEMS.BUFFER_POINTER;
-   BUFFER_3       : RTEMS.BUFFER_POINTER;
-   BUFFER_4       : RTEMS.BUFFER_POINTER;
+   RECEIVE_BUFFER : RTEMS.ADDRESS;
+   BUFFER_1       : RTEMS.ADDRESS;
+   BUFFER_2       : RTEMS.ADDRESS;
+   BUFFER_3       : RTEMS.ADDRESS;
+   BUFFER_4       : RTEMS.ADDRESS;
 
 --
 --  This variable contains the ID of the remote task with which this
@@ -119,7 +132,7 @@ package MPTEST is
  
    procedure FILL_BUFFER (
       SOURCE : in     STRING;
-      BUFFER :    out RTEMS.BUFFER
+      BUFFER :    out MPTEST.BUFFER
    );
  
 --
@@ -131,7 +144,7 @@ package MPTEST is
 --
  
    procedure PUT_BUFFER (
-      BUFFER : in     RTEMS.BUFFER
+      BUFFER : in     MPTEST.BUFFER
    );
 
 --

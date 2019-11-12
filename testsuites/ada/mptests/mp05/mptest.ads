@@ -19,7 +19,6 @@
 --
 
 with RTEMS;
-with RTEMS.SIGNAL;
 with RTEMS.TASKS;
 
 package MPTEST is

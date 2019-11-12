@@ -15,9 +15,7 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.EVENT;
-with RTEMS.TASKS;
 with RTEMS.TIMER;
 with TEST_SUPPORT;
 with TEXT_IO;
@@ -32,6 +30,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -106,6 +105,7 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       TID         : RTEMS.ID;
       STATUS      : RTEMS.STATUS_CODES;
    begin

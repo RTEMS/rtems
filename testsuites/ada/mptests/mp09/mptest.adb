@@ -19,10 +19,7 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.MESSAGE_QUEUE;
-with RTEMS.OBJECT;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -36,6 +33,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       STATUS : RTEMS.STATUS_CODES;
    begin
 
@@ -48,20 +46,15 @@ package body MPTEST is
       );
       TEXT_IO.PUT_LINE( " ***" );
 
-      MPTEST.RECEIVE_BUFFER :=
-         RTEMS.TO_BUFFER_POINTER( MPTEST.RECEIVE_BUFFER_AREA'ADDRESS );
+      MPTEST.RECEIVE_BUFFER := MPTEST.RECEIVE_BUFFER_AREA'ADDRESS;
 
-      MPTEST.BUFFER_1 :=
-         RTEMS.TO_BUFFER_POINTER( MPTEST.BUFFER_AREA_1'ADDRESS );
+      MPTEST.BUFFER_1 := MPTEST.BUFFER_AREA_1'ADDRESS;
 
-      MPTEST.BUFFER_2 :=
-         RTEMS.TO_BUFFER_POINTER( MPTEST.BUFFER_AREA_2'ADDRESS );
+      MPTEST.BUFFER_2 := MPTEST.BUFFER_AREA_2'ADDRESS;
 
-      MPTEST.BUFFER_3 :=
-         RTEMS.TO_BUFFER_POINTER( MPTEST.BUFFER_AREA_3'ADDRESS );
+      MPTEST.BUFFER_3 := MPTEST.BUFFER_AREA_3'ADDRESS;
 
-      MPTEST.BUFFER_4 :=
-         RTEMS.TO_BUFFER_POINTER( MPTEST.BUFFER_AREA_4'ADDRESS );
+      MPTEST.BUFFER_4 := MPTEST.BUFFER_AREA_4'ADDRESS;
 
       MPTEST.FILL_BUFFER( "123456789012345 ", MPTEST.BUFFER_AREA_1 );
       MPTEST.FILL_BUFFER( "abcdefghijklmno ", MPTEST.BUFFER_AREA_2 );
@@ -79,7 +72,8 @@ package body MPTEST is
          RTEMS.MESSAGE_QUEUE.CREATE(
             MPTEST.QUEUE_NAME( 1 ),
             3,
-            RTEMS.GLOBAL + RTEMS.LIMIT,
+            3,
+            RTEMS.GLOBAL,
             MPTEST.QUEUE_ID( 1 ),
             STATUS
          );
@@ -130,6 +124,7 @@ package body MPTEST is
       RTEMS.MESSAGE_QUEUE.SEND(
          MPTEST.QUEUE_ID( 1 ),
          MPTEST.BUFFER_1,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -148,6 +143,7 @@ package body MPTEST is
       RTEMS.MESSAGE_QUEUE.URGENT(
          MPTEST.QUEUE_ID( 1 ),
          MPTEST.BUFFER_2,
+         16,
          STATUS
       );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_URGENT" );
@@ -166,6 +162,7 @@ package body MPTEST is
       RTEMS.MESSAGE_QUEUE.BROADCAST(
          MPTEST.QUEUE_ID( 1 ),
          MPTEST.BUFFER_3,
+         16,
          BROADCAST_COUNT,
          STATUS
       );
@@ -185,8 +182,8 @@ package body MPTEST is
 --
 
    procedure RECEIVE_MESSAGES is
-      INDEX               : RTEMS.UNSIGNED32;
       STATUS              : RTEMS.STATUS_CODES;
+      MESSAGE_SIZE        : RTEMS.SIZE := 0;
    begin
 
       for INDEX in 1 .. 3
@@ -198,6 +195,7 @@ package body MPTEST is
             MPTEST.RECEIVE_BUFFER,
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
+            MESSAGE_SIZE,
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_RECEIVE" );
@@ -225,19 +223,37 @@ package body MPTEST is
 
    procedure FILL_BUFFER (
       SOURCE : in     STRING;
-      BUFFER :    out RTEMS.BUFFER
+      BUFFER :    out MPTEST.BUFFER
    ) is
-      SOURCE_BUFFER : RTEMS.BUFFER_POINTER;
    begin
 
-      SOURCE_BUFFER := RTEMS.TO_BUFFER_POINTER(
-                          SOURCE( SOURCE'FIRST )'ADDRESS
-                       );
+      BUFFER.FIELD1 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST ),
+         SOURCE( SOURCE'FIRST + 1 ),
+         SOURCE( SOURCE'FIRST + 2 ),
+         SOURCE( SOURCE'FIRST + 3 )
+      );
 
-      BUFFER.FIELD1 := SOURCE_BUFFER.FIELD1;
-      BUFFER.FIELD2 := SOURCE_BUFFER.FIELD2;
-      BUFFER.FIELD3 := SOURCE_BUFFER.FIELD3;
-      BUFFER.FIELD4 := SOURCE_BUFFER.FIELD4;
+      BUFFER.FIELD2 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST + 4 ),
+         SOURCE( SOURCE'FIRST + 5 ),
+         SOURCE( SOURCE'FIRST + 6 ),
+         SOURCE( SOURCE'FIRST + 7 )
+      );
+
+      BUFFER.FIELD3 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST + 8 ),
+         SOURCE( SOURCE'FIRST + 9 ),
+         SOURCE( SOURCE'FIRST + 10 ),
+         SOURCE( SOURCE'FIRST + 11 )
+      );
+
+      BUFFER.FIELD4 := RTEMS.BUILD_NAME(
+         SOURCE( SOURCE'FIRST + 12 ),
+         SOURCE( SOURCE'FIRST + 13 ),
+         SOURCE( SOURCE'FIRST + 14 ),
+         SOURCE( SOURCE'FIRST + 15 )
+      );
 
    end FILL_BUFFER;
 
@@ -250,7 +266,7 @@ package body MPTEST is
 --
 
    procedure PUT_BUFFER (
-      BUFFER : in     RTEMS.BUFFER
+      BUFFER : in     MPTEST.BUFFER
    ) is
    begin
 
@@ -268,8 +284,10 @@ package body MPTEST is
    procedure TEST_TASK (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
-      COUNT   : RTEMS.UNSIGNED32;
-      STATUS  : RTEMS.STATUS_CODES;
+      pragma Unreferenced(ARGUMENT);
+      COUNT        : RTEMS.UNSIGNED32;
+      STATUS       : RTEMS.STATUS_CODES;
+      MESSAGE_SIZE : RTEMS.SIZE := 0;
    begin
 
       RTEMS.TASKS.WAKE_AFTER( 1 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
@@ -322,6 +340,7 @@ package body MPTEST is
          RTEMS.MESSAGE_QUEUE.SEND(
             MPTEST.QUEUE_ID( 1 ),
             MPTEST.BUFFER_1,
+            16,
             STATUS
          );
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "MESSAGE_QUEUE_SEND" );
@@ -340,6 +359,7 @@ package body MPTEST is
             MPTEST.RECEIVE_BUFFER,
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
+            MESSAGE_SIZE,
             STATUS
          );
          TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(

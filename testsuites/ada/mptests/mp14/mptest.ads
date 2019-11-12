@@ -24,6 +24,19 @@ with RTEMS.TASKS;
 package MPTEST is
 
 --
+--  Buffer Record similar to that used by RTEMS 3.2.1.  Using this
+--  avoids changes to the test.
+--
+
+   type BUFFER is
+      record
+         FIELD1 : aliased RTEMS.UNSIGNED32;   -- TEMPORARY UNTIL VARIABLE LENGTH
+         FIELD2 : aliased RTEMS.UNSIGNED32;
+         FIELD3 : aliased RTEMS.UNSIGNED32;
+         FIELD4 : aliased RTEMS.UNSIGNED32;
+      end record;
+
+--
 --  These arrays contain the IDs and NAMEs of all RTEMS tasks created
 --  by this test for passing event sets.
 --
@@ -104,7 +117,7 @@ package MPTEST is
 --  and pointers to those buffers.
 --
 
-   BUFFER_AREAS : array (  RTEMS.UNSIGNED32 range 1 .. 4 ) of RTEMS.BUFFER;
+   BUFFER_AREAS : array (  RTEMS.UNSIGNED32 range 1 .. 4 ) of MPTEST.BUFFER;
    BUFFERS      : array (  RTEMS.UNSIGNED32 range 1 .. 4 ) of RTEMS.ADDRESS;
 
 --
@@ -164,6 +177,13 @@ package MPTEST is
       TIMER_ID        : in     RTEMS.ID;
       IGNORED_ADDRESS : in     RTEMS.ADDRESS 
    );
+   pragma Convention (C, DELAYED_SEND_EVENT);
+
+   procedure STOP_TEST_TSR (
+      IGNORED_ID      : in     RTEMS.ID;
+      IGNORED_ADDRESS : in     RTEMS.ADDRESS
+   );
+   pragma Convention (C, STOP_TEST_TSR);
 
 --
 --  INIT

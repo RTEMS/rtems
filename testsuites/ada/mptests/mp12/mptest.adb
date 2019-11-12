@@ -19,9 +19,7 @@
 --
 
 with INTERFACES; use INTERFACES;
-with RTEMS;
 with RTEMS.PARTITION;
-with RTEMS.TASKS;
 with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
@@ -35,6 +33,7 @@ package body MPTEST is
    procedure INIT (
       ARGUMENT : in     RTEMS.TASKS.ARGUMENT
    ) is
+      pragma Unreferenced(ARGUMENT);
       BUFFER_ADDRESS : RTEMS.ADDRESS;
       STATUS         : RTEMS.STATUS_CODES;
    begin
