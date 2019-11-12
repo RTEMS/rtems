@@ -12,8 +12,7 @@ lib_screens =
 lib_docs =
 
 support_includes = -I$(top_srcdir)/../support/include
-test_includes = -I$(top_srcdir)/support \
-	-I$(top_srcdir)/../psxtests/include
+test_includes = -I$(top_srcdir)/support
 
 if TEST_block01
 lib_tests += block01
