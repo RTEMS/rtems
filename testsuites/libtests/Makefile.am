@@ -91,7 +91,7 @@ block08_SOURCES = block08/init.c block08/system.h \
 	block08/bdbuf_test4_1.c block08/bdbuf_test4_2.c \
 	block08/bdbuf_test4_3.c
 block08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_block08) \
-	$(support_includes) -I$(top_srcdir)/block08
+	$(support_includes)
 endif
 
 if TEST_block09

@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include <bdbuf_tests.h>
+#include "bdbuf_tests.h"
 
 static rtems_task bdbuf_test1_3_thread1(rtems_task_argument arg);
 static rtems_task bdbuf_test1_3_thread2(rtems_task_argument arg);
