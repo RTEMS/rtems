@@ -31,24 +31,18 @@
 
 #include <assert.h>
 
-static void irq_handler(void *arg)
-{
-	/*TODO*/
-}
-
 int fe310_uart_read(rtems_termios_device_context *base)
 {
-	fe310_uart_context * ctx = (fe310_uart_context*) base;
-	  size_t i;
+  fe310_uart_context * ctx = (fe310_uart_context*) base;
 
-	  if (((ctx->regs->rxdata) & TXRXREADY) != 0) {
-	    return -1;
-	  } else {
-	    return ctx->regs->rxdata;
-	}
+  if ((ctx->regs->rxdata & TXRXREADY) != 0) {
+    return -1;
+  } else {
+    return ctx->regs->rxdata;
+  }
 }
 
-static ssize_t fe310_uart_write (
+static void fe310_uart_write (
   rtems_termios_device_context  *base,
   const char                    *buf,
   size_t                        n
@@ -57,32 +51,22 @@ static ssize_t fe310_uart_write (
   fe310_uart_context * ctx = (fe310_uart_context*) base;
   size_t i;
 
-  rtems_status_code sc;
-
-  (ctx->regs)->div = riscv_get_core_frequency()/ 115200 - 1;
-  (ctx->regs)->txctrl |= 1;
-  (ctx->regs)->rxctrl |= 1;
+  ctx->regs->div = riscv_get_core_frequency() / 115200 - 1;
+  ctx->regs->txctrl |= 1;
+  ctx->regs->rxctrl |= 1;
 
   for (i = 0; i < n; ++i) {
-    while (((ctx->regs->txdata) & TXRXREADY) != 0) {
-        ;
+    while ((ctx->regs->txdata & TXRXREADY) != 0) {
+      /* Wait */
     }
+
     ctx->regs->txdata = buf[i];
   }
-  return n;
 }
 
-void fe310_console_putchar(rtems_termios_device_context * context,char c)
+void fe310_console_putchar(rtems_termios_device_context *context, char c)
 {
-	fe310_uart_write ( context, &c,1);
-}
-
-void console_context_init(
-  rtems_termios_device_context *base,
-  int device_tree_node
-)
-{
-	/*TODO*/
+  fe310_uart_write(context, &c, 1);
 }
 
 static bool fe310_uart_first_open (
@@ -97,14 +81,14 @@ static bool fe310_uart_first_open (
 
   /* Configure GPIO to be UART */
 
-  sc = rtems_termios_set_initial_baud (tty, B115200);
+  sc = rtems_termios_set_initial_baud(tty, B115200);
   if ( sc != RTEMS_SUCCESSFUL ) {
     return false;
   }
 
   /* Set up a baud rate and enable tx and rx */
   ctx = (fe310_uart_context *) base;
-  (ctx->regs)->div = riscv_get_core_frequency()/ 115200 - 1;
+  (ctx->regs)->div = riscv_get_core_frequency() / 115200 - 1;
   (ctx->regs)->txctrl |= 1;
   (ctx->regs)->rxctrl |= 1;
   return true;
