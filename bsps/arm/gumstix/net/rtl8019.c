@@ -18,6 +18,7 @@
 #include <assert.h>
 #include <errno.h>
 
+#include <rtems/bspIo.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
