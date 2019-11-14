@@ -20,7 +20,6 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.base
-dist_project_lib_DATA += ../../../../../../bsps/powerpc/t32mppc/start/linkcmds.t32mppc
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
