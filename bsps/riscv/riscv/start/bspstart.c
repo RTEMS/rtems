@@ -32,9 +32,7 @@
 #include <libfdt.h>
 #include <string.h>
 
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
-unsigned int riscv_core_freq;
-#endif
+static uint32_t riscv_core_freq;
 
 void *riscv_fdt_get_address(const void *fdt, int node)
 {
@@ -166,55 +164,39 @@ uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle)
   return UINT32_MAX;
 }
 
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
 static uint32_t get_core_frequency(void)
 {
-	uint32_t node;
-	const char *fdt=bsp_fdt_get();
+#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
+  uint32_t node;
+  const char *fdt;
+  const char *tlclk;
+  int len;
+  const fdt32_t *val;
 
-  char *tlclk;
-	uint32_t len;
+  fdt = bsp_fdt_get();
+  node = fdt_node_offset_by_compatible(fdt, -1,"fixed-clock");
+  tlclk = fdt_getprop(fdt, node, "clock-output-names", &len);
 
-  do
-  {
-    node=fdt_node_offset_by_compatible(fdt, -1,"fixed-clock");
-    uint32_t *val=NULL;
-    if (node>0)
-    {
-      tlclk = fdt_getprop(fdt, node, "clock-output-names", &len);
+  if (strcmp(tlclk,"tlclk") != 0) {
+    bsp_fatal(RISCV_FATAL_NO_TLCLOCK_FREQUENCY_IN_DEVICE_TREE);
+  }
 
-      if (strcmp(tlclk,"tlclk") == 0)
-      {
-        val = fdt_getprop(fdt, node, "clock-frequency", &len);
-		    if(val !=NULL)
-		    {
-			    riscv_core_freq=fdt32_to_cpu(*val);
-          break;
-		    }
-      }
-	  }else
-    {
-      bsp_fatal(RISCV_FATAL_NO_TLCLOCK_FREQUENCY_IN_DEVICE_TREE);
-    }
-
-  } while (node > 0);
-
-	return riscv_core_freq;
-}
-
-inline uint32_t riscv_get_core_frequency(void)
-{
-	return riscv_core_freq;
-}
+  val = fdt_getprop(fdt, node, "clock-frequency", &len);
+  if (val != NULL && len == 4) {
+    return fdt32_to_cpu(*val);
+  }
 #endif
+  return 0;
+}
+
+uint32_t riscv_get_core_frequency(void)
+{
+  return riscv_core_freq;
+}
 
 void bsp_start(void)
 {
   riscv_find_harts();
   bsp_interrupt_initialize();
-
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
-	riscv_core_freq=get_core_frequency();
-#endif
-
+  riscv_core_freq = get_core_frequency();
 }
