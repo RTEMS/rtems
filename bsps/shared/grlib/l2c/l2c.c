@@ -894,9 +894,9 @@ int l2cache_diag_tag( int way, int index, struct l2cache_tag * tag)
 		return L2CACHE_ERR_EINVAL;
 	}
 
-	unsigned int val = l2cache_reg_diagtag(way,index);
-
 	if (tag){
+		unsigned int val = l2cache_reg_diagtag(way,index);
+
 		tag->tag   = l2cache_get_tag(val);
 		tag->valid = l2cache_tag_valid(val);
 		tag->dirty = l2cache_tag_dirty(val);
