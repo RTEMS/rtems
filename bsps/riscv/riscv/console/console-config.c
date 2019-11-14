@@ -161,7 +161,6 @@ static void riscv_console_probe(void)
       ns16550_context *ctx;
       fdt32_t *val;
       int len;
-      int reg_shift;
 
       ctx = &ns16550_instances[ns16550_devices];
       ctx->initial_baud = BSP_CONSOLE_BAUD;
@@ -169,11 +168,7 @@ static void riscv_console_probe(void)
       /* Get register shift property of the UART device */
       val = (fdt32_t *) fdt_getprop(fdt, node, "reg-shift", &len);
 
-      if (val) {
-        reg_shift = fdt32_to_cpu(val[0]);
-      }
-
-      if (reg_shift == 2) {
+      if (val != NULL && fdt32_to_cpu(val[0]) == 2) {
         ctx->get_reg = riscv_console_get_reg_32;
         ctx->set_reg = riscv_console_set_reg_32;
       } else {
