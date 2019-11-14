@@ -46,11 +46,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES +=../../../../../../bsps/riscv/riscv/clock/clockdrv.c
 
 # Timer
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-cpucounter.c
-#else
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
-#endif
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
@@ -63,10 +59,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/console-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/htif.c
-
-#if RISCV_ENABLE_FRDME310ARTY_SUPPORT != 0
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/fe310-uart.c
-#endif
 
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/start/bspsmp.c
