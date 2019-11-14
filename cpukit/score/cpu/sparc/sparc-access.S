@@ -80,7 +80,9 @@ SYM(_st32):
 
 SYM(_st_be64):
 SYM(_st64):
-	std %o1, [%o0]
+	mov %o2, %o3
+	mov %o1, %o2
+	std %o2, [%o0]
 	retl
 	 nop
 
