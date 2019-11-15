@@ -123,12 +123,6 @@ if test X${CLOCK_DRIVER_USE_TSC} = X1 -a X${CLOCK_DRIVER_USE_8254} = X1 ; then
   AC_MSG_ERROR([pc386 both TSC and 8254 specified for clock driver])
 fi
 
-## The PC386 BSP supports SMP configurations if this is enabled.
-RTEMS_BSPOPTS_SET([BSP_HAS_SMP],[*],[1])
-RTEMS_BSPOPTS_HELP([BSP_HAS_SMP],
-[Always defined when on a pc386 to enable the pc386 support for
- determining the CPU core number in an SMP configuration.])
-
 RTEMS_BSPOPTS_SET([BSP_GDB_STUB],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_GDB_STUB],
 [Defined by default. Enables use of the GDB stub for debugging via a
