@@ -26,10 +26,6 @@ RTEMS_BSPOPTS_SET([BSP_MINIMUM_TASK_STACK_SIZE],[*],[1024])
 RTEMS_BSPOPTS_HELP([BSP_MINIMUM_TASK_STACK_SIZE],[Suggested minimum task stack
 			size in bytes])
 
-RTEMS_BSPOPTS_SET([BSP_SMALL_MEMORY],[*],[])
-RTEMS_BSPOPTS_HELP([BSP_SMALL_MEMORY],[disable testsuite
-			samples with high memory demands])
-
 RTEMS_BSPOPTS_SET([LPC176X_OSCILLATOR_MAIN],[*],[12000000U])
 RTEMS_BSPOPTS_HELP([LPC176X_OSCILLATOR_MAIN],[main oscillator frequency in Hz])
 

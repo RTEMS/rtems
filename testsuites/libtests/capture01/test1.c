@@ -25,7 +25,6 @@
 
 #include <rtems.h>
 
-#if !BSP_SMALL_MEMORY
 static volatile int capture_CT1a_deleted;
 static volatile int capture_CT1b_deleted;
 static volatile int capture_CT1c_deleted;
@@ -234,5 +233,3 @@ void capture_test_1 ()
     printf ("error: Test 1: deleting the mutex: %s\n", rtems_status_text (sc));
 
 }
-
-#endif /* BSP_SMALL_MEMORY */

@@ -39,9 +39,6 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-#if BSP_SMALL_MEMORY
-  printf("NO Capture Engine. MEMORY TOO SMALL");
-#else
   rtems_status_code   sc;
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
@@ -91,6 +88,4 @@ rtems_task Init(
 
   TEST_END();
   exit( 0 );
-
-#endif
 }
