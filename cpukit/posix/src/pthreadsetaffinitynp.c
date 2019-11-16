@@ -14,13 +14,14 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define  _GNU_SOURCE
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #if HAVE_DECL_PTHREAD_SETAFFINITY_NP
 
-#define  _GNU_SOURCE
 #include <pthread.h>
 #include <errno.h>
 

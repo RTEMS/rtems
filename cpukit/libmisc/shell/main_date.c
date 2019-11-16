@@ -12,11 +12,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define _XOPEN_SOURCE
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>

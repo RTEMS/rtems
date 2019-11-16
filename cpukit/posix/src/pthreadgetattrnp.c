@@ -14,11 +14,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define  _GNU_SOURCE
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define  _GNU_SOURCE
 #include <pthread.h>
 #include <errno.h>
 #include <string.h>
