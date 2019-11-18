@@ -428,6 +428,7 @@ librtemscpu_a_SOURCES += libfs/src/imfs/imfs_linfile.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_link.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_load_tar.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_make_generic_node.c
+librtemscpu_a_SOURCES += libfs/src/imfs/imfs_make_linfile.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_memfile.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_mknod.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_mount.c

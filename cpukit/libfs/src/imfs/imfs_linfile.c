@@ -95,9 +95,25 @@ static const rtems_filesystem_file_handlers_r IMFS_linfile_handlers = {
   .writev_h = rtems_filesystem_default_writev
 };
 
+static IMFS_jnode_t *IMFS_node_initialize_linfile(
+  IMFS_jnode_t *node,
+  void         *arg
+)
+{
+  IMFS_linearfile_t *linfile;
+  IMFS_linearfile_context *ctx;
+
+  linfile = (IMFS_linearfile_t *) node;
+  ctx = arg;
+  linfile->File.size = ctx->size;
+  linfile->direct = RTEMS_DECONST( void *, ctx->data );
+
+  return node;
+}
+
 const IMFS_node_control IMFS_node_control_linfile = {
   .handlers = &IMFS_linfile_handlers,
-  .node_initialize = IMFS_node_initialize_default,
+  .node_initialize = IMFS_node_initialize_linfile,
   .node_remove = IMFS_node_remove_default,
   .node_destroy = IMFS_node_destroy_default
 };

@@ -135,21 +135,20 @@ int rtems_tarfs_load(
       rtems_filesystem_eval_path_continue( &ctx );
 
       if ( !rtems_filesystem_location_is_null( currentloc ) ) {
-        IMFS_linearfile_t *linfile = (IMFS_linearfile_t *)
-          IMFS_create_node(
-            currentloc,
-            &IMFS_node_control_linfile,
-            sizeof( IMFS_file_t ),
-            rtems_filesystem_eval_path_get_token( &ctx ),
-            rtems_filesystem_eval_path_get_tokenlen( &ctx ),
-            (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
-            NULL
-          );
+        IMFS_linearfile_context linctx = {
+          .data = &tar_image[offset],
+          .size = file_size
+        };
 
-        if ( linfile != NULL ) {
-          linfile->File.size = file_size;
-          linfile->direct    = &tar_image[offset];
-        }
+        IMFS_create_node(
+          currentloc,
+          &IMFS_node_control_linfile,
+          sizeof( IMFS_file_t ),
+          rtems_filesystem_eval_path_get_token( &ctx ),
+          rtems_filesystem_eval_path_get_tokenlen( &ctx ),
+          (file_mode & (S_IRWXU | S_IRWXG | S_IRWXO)) | S_IFREG,
+          &linctx
+        );
       }
 
       nblocks = (((file_size) + 511) & ~511) / 512;

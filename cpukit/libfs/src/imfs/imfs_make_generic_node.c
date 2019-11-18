@@ -40,10 +40,27 @@ IMFS_jnode_t *IMFS_node_initialize_generic(
 }
 
 int IMFS_make_generic_node(
-  const char *path,
-  mode_t mode,
+  const char              *path,
+  mode_t                   mode,
   const IMFS_node_control *node_control,
-  void *context
+  void                    *context
+)
+{
+  return IMFS_make_node(
+    path,
+    mode,
+    node_control,
+    sizeof( IMFS_generic_t ),
+    context
+  );
+}
+
+int IMFS_make_node(
+  const char              *path,
+  mode_t                   mode,
+  const IMFS_node_control *node_control,
+  size_t                   node_size,
+  void                    *context
 )
 {
   int rv = 0;
@@ -75,7 +92,7 @@ int IMFS_make_generic_node(
       IMFS_jnode_t *new_node = IMFS_create_node(
         currentloc,
         node_control,
-        sizeof( IMFS_generic_t ),
+        node_size,
         rtems_filesystem_eval_path_get_token( &ctx ),
         rtems_filesystem_eval_path_get_tokenlen( &ctx ),
         mode,

@@ -317,6 +317,11 @@ typedef struct {
   void         *context;
 } IMFS_generic_t;
 
+typedef struct {
+  const void *data;
+  size_t      size;
+} IMFS_linearfile_context;
+
 static inline IMFS_directory_t *IMFS_iop_to_directory(
   const rtems_libio_t *iop
 )
@@ -591,6 +596,32 @@ static inline bool IMFS_is_imfs_instance(
 {
   return loc->mt_entry->ops->clonenod_h == IMFS_node_clone;
 }
+
+extern int IMFS_make_node(
+  const char              *path,
+  mode_t                   mode,
+  const IMFS_node_control *node_control,
+  size_t                   node_size,
+  void                    *context
+);
+
+/**
+ * @brief Makes a linear IMFS file.
+ *
+ * @param path The path to the new linear IMFS file.
+ * @param mode The file mode permissions.  S_IFREG is set by the function.
+ * @param data The begin of linear file data area.
+ * @param size The size of the linear file data area in bytes.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
+ */
+extern int IMFS_make_linearfile(
+  const char *path,
+  mode_t      mode,
+  const char *data,
+  size_t      size
+);
 
 /** @} */
 

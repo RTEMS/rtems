@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <rtems/imfs.h>
 #include <rtems/shell.h>
 #include <rtems/userenv.h>
 
@@ -31,20 +32,23 @@
 
 const char rtems_test_name[] = "SHELL 1";
 
-static void create_file(const char *name, const char *content)
-{
-  FILE *fp;
-  int rv;
+static const char etc_passwd[] =
+  "moop:foo:1:3:blob:a::c\n"
+  "no:*:2:4::::\n"
+  "zero::3:5::::\n"
+  "shadow:x:4:6::::\n"
+  "invchroot::5:7:::/inv:\n"
+  "chroot::6:8:::/chroot:\n";
 
-  fp = fopen(name, "wx");
-  rtems_test_assert(fp != NULL);
-
-  rv = fputs(content, fp);
-  rtems_test_assert(rv == 0);
-
-  rv = fclose(fp);
-  rtems_test_assert(rv == 0);
-}
+static const char etc_group[] =
+  "A::1:moop,u,v,w,zero\n"
+  "B::2:moop\n"
+  "blub:bar:3:moop\n"
+  "C::4:l,m,n,moop\n"
+  "D::5:moop,moop\n"
+  "E::6:x\n"
+  "E::7:y,z\n"
+  "F::8:s,moop,t\n";
 
 static void test(void)
 {
@@ -64,27 +68,21 @@ static void test(void)
   rv = lstat("/chroot", &st_chroot);
   rtems_test_assert(rv == 0);
 
-  create_file(
+  rv = IMFS_make_linearfile(
     "/etc/passwd",
-    "moop:foo:1:3:blob:a::c\n"
-    "no:*:2:4::::\n"
-    "zero::3:5::::\n"
-    "shadow:x:4:6::::\n"
-    "invchroot::5:7:::/inv:\n"
-    "chroot::6:8:::/chroot:\n"
+    S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH,
+    etc_passwd,
+    sizeof(etc_passwd)
   );
+  rtems_test_assert(rv == 0);
 
-  create_file(
+  rv = IMFS_make_linearfile(
     "/etc/group",
-    "A::1:moop,u,v,w,zero\n"
-    "B::2:moop\n"
-    "blub:bar:3:moop\n"
-    "C::4:l,m,n,moop\n"
-    "D::5:moop,moop\n"
-    "E::6:x\n"
-    "E::7:y,z\n"
-    "F::8:s,moop,t\n"
+    S_IWUSR | S_IRUSR | S_IRGRP | S_IROTH,
+    etc_group,
+    sizeof(etc_group)
   );
+  rtems_test_assert(rv == 0);
 
   sc = rtems_libio_set_private_env();
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
