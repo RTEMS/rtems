@@ -150,8 +150,8 @@ typedef enum {
 	SPW_LS_ERRRST = 0,
 	SPW_LS_ERRWAIT = 1,
 	SPW_LS_READY = 2,
-	SPW_LS_CONNECTING = 3,
-	SPW_LS_STARTED = 4,
+	SPW_LS_STARTED = 3,
+	SPW_LS_CONNECTING = 4,
 	SPW_LS_RUN = 5
 } spw_link_state_t;
 
