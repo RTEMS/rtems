@@ -303,7 +303,6 @@ rtems_status_code PIO_RemoveIt(const Pin *pPin,
 	rtems_interrupt_level level;
 	rtems_status_code sc = RTEMS_UNSATISFIED;
 	uint32_t i;
-	uint32_t j;
 
 	TRACE_DEBUG("PIO_RemoveIt()\n\r");
 
