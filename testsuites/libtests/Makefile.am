@@ -1303,16 +1303,8 @@ tar01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar01_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDADD)
 tar01.tar: Makefile
-	$(AM_V_GEN)rm -rf tar01_fs
-	$(AM_V_GEN)$(MKDIR_P) tar01_fs/home
-	$(AM_V_GEN)(echo "This is a test of loading an RTEMS filesystem from an"; \
-	 echo "initial tar image.") > tar01_fs/home/test_file
-	$(AM_V_GEN)(echo "#! joel"; \
-	 echo "ls -las /dev") > tar01_fs/home/test_script
-	$(AM_V_GEN)chmod +x tar01_fs/home/test_script
-	$(AM_V_GEN)(cd tar01_fs; \
-	 $(LN_S) home/test_file symlink; \
-	 $(PAX) -w -f ../tar01.tar home symlink)
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $(srcdir)/tar01/home $(srcdir)/tar01/symlink
 tar01_tar.c: tar01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar01_tar.h: tar01.tar
@@ -1350,16 +1342,8 @@ tar02_SOURCES = tar02/init.c ../psxtests/psxfile01/test_cat.c \
 tar02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar02) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar02.tar: Makefile
-	$(AM_V_GEN)rm -rf tar02_fs
-	$(AM_V_GEN)$(MKDIR_P) tar02_fs/home
-	$(AM_V_GEN)(echo "This is a test of loading an RTEMS filesystem from an" ; \
-	 echo "initial tar image.") > tar02_fs/home/test_file
-	$(AM_V_GEN)(echo "#! joel" ; \
-	 echo "ls -las /dev") > tar02_fs/home/test_script
-	$(AM_V_GEN)chmod +x tar02_fs/home/test_script
-	$(AM_V_GEN)(cd tar02_fs; \
-	 $(LN_S) home/test_file symlink; \
-	 $(PAX) -w -f ../tar02.tar home symlink)
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $(srcdir)/tar01/home $(srcdir)/tar01/symlink
 tar02_tar.c: tar02.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar02_tar.h: tar02.tar
