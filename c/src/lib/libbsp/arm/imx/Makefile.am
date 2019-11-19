@@ -18,7 +18,7 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../../../../../../bsps/arm/imx/start/linkcmds.imx7
+dist_project_lib_DATA += ../../../../../../bsps/arm/imx/start/linkcmds
 
 ###############################################################################
 #                  LibBSP                                                     #
