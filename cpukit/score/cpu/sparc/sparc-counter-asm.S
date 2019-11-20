@@ -31,8 +31,9 @@ SYM(_SPARC_Counter_read_default):
 	sethi	%hi(_SPARC_Counter + 12), %o1
 	ld	[%o1 + %lo(_SPARC_Counter + 12)], %o0
 	add	%o0, 1, %o0
+	st	%o0, [%o1 + %lo(_SPARC_Counter + 12)]
 	jmp	%o7 + 8
-	 st	%o0, [%o1 + %lo(_SPARC_Counter + 12)]
+	 nop
 
 	PUBLIC(_SPARC_Counter_read_up)
 	PUBLIC(_SPARC_Get_timecount_up)
