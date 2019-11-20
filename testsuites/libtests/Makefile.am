@@ -1489,6 +1489,7 @@ termios09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_termios09) \
 endif
 
 if TEST_termios10
+if HAS_POSIX
 lib_tests += termios10
 lib_screens += termios10/termios10.scn
 lib_docs += termios10/termios10.doc
@@ -1497,8 +1498,10 @@ termios10_SOURCES += termios03/termios_testdriver_polled.c
 termios10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_termios10) \
 	$(support_includes)
 endif
+endif
 
 if TEST_termios11
+if HAS_POSIX
 lib_tests += termios11
 lib_screens += termios11/termios11.scn
 lib_docs += termios11/termios11.doc
@@ -1506,6 +1509,7 @@ termios11_SOURCES  = termios11/init.c
 termios11_SOURCES += termios04/termios_testdriver_intr.c
 termios11_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_termios11) \
 	$(support_includes)
+endif
 endif
 
 if TEST_top
