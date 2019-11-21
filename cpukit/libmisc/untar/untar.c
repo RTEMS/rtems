@@ -70,13 +70,13 @@
 
 #define MAX_NAME_FIELD_SIZE      99
 
+static int _rtems_tar_header_checksum(const char *bufr);
+
 /*
  * This converts octal ASCII number representations into an
  * unsigned long.  Only support 32-bit numbers for now.
- *
- * warning: this code is referenced in the IMFS.
  */
-unsigned long
+static unsigned long
 _rtems_octal2ulong(
   const char *octascii,
   size_t len
@@ -246,26 +246,20 @@ Make_Path(const rtems_printer *printer, const char* filename, bool end_is_dir)
   return 0;
 }
 
-static int
+int
 Untar_ProcessHeader(
-  const char          *bufr,
-  char                *fname,
-  unsigned long       *mode,
-  unsigned long       *file_size,
-  unsigned long       *nblocks,
-  unsigned char       *linkflag,
-  const rtems_printer *printer
+  Untar_HeaderContext *ctx,
+  const char          *bufr
 )
 {
-  char           linkname[100];
   int            sum;
   int            hdr_chksum;
   int            retval = UNTAR_SUCCESSFUL;
 
-  fname[0] = '\0';
-  *file_size = 0;
-  *nblocks = 0;
-  *linkflag = -1;
+  ctx->file_name[0] = '\0';
+  ctx->file_size = 0;
+  ctx->nblocks = 0;
+  ctx->linkflag = -1;
 
   if (strncmp(&bufr[257], "ustar", 5)) {
     return UNTAR_SUCCESSFUL;
@@ -280,57 +274,56 @@ Untar_ProcessHeader(
   sum        = _rtems_tar_header_checksum(bufr);
 
   if (sum != hdr_chksum) {
-    rtems_printf(printer, "untar: file header checksum error\n");
+    rtems_printf(ctx->printer, "untar: file header checksum error\n");
     return UNTAR_INVALID_CHECKSUM;
   }
 
-  strncpy(fname, bufr, MAX_NAME_FIELD_SIZE);
-  fname[MAX_NAME_FIELD_SIZE] = '\0';
+  strlcpy(ctx->file_name, bufr, UNTAR_FILE_NAME_SIZE);
 
-  *mode = strtoul(&bufr[100], NULL, 8);
+  ctx->mode = strtoul(&bufr[100], NULL, 8);
 
-  *linkflag   = bufr[156];
-  *file_size = _rtems_octal2ulong(&bufr[124], 12);
+  ctx->linkflag   = bufr[156];
+  ctx->file_size = _rtems_octal2ulong(&bufr[124], 12);
 
   /*
    * We've decoded the header, now figure out what it contains and do something
    * with it.
    */
-  if (*linkflag == SYMTYPE) {
-    strncpy(linkname, &bufr[157], MAX_NAME_FIELD_SIZE);
-    linkname[MAX_NAME_FIELD_SIZE] = '\0';
-    rtems_printf(printer, "untar: symlink: %s -> %s\n", linkname, fname);
-    symlink(linkname, fname);
-  } else if (*linkflag == REGTYPE) {
-    rtems_printf(printer, "untar: file: %s (s:%i,m:%04o)\n",
-                 fname, (int) *file_size, (int) *mode);
-    *nblocks = (((*file_size) + 511) & ~511) / 512;
-    if (Make_Path(printer, fname, false) < 0) {
+  if (ctx->linkflag == SYMTYPE) {
+    strlcpy(ctx->link_name, &bufr[157], sizeof(ctx->link_name));
+    rtems_printf(ctx->printer, "untar: symlink: %s -> %s\n",
+                 ctx->link_name, ctx->file_path);
+    symlink(ctx->link_name, ctx->file_path);
+  } else if (ctx->linkflag == REGTYPE) {
+    rtems_printf(ctx->printer, "untar: file: %s (s:%lu,m:%04lo)\n",
+                 ctx->file_path, ctx->file_size, ctx->mode);
+    ctx->nblocks = (((ctx->file_size) + 511) & ~511) / 512;
+    if (Make_Path(ctx->printer, ctx->file_path, false) < 0) {
       retval  = UNTAR_FAIL;
     }
-  } else if (*linkflag == DIRTYPE) {
+  } else if (ctx->linkflag == DIRTYPE) {
     int r;
-    rtems_printf(printer, "untar:  dir: %s\n", fname);
-    if (Make_Path(printer, fname, true) < 0) {
+    rtems_printf(ctx->printer, "untar:  dir: %s\n", ctx->file_path);
+    if (Make_Path(ctx->printer, ctx->file_path, true) < 0) {
       retval  = UNTAR_FAIL;
     }
-    r = mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO);
+    r = mkdir(ctx->file_path, S_IRWXU | S_IRWXG | S_IRWXO);
     if (r < 0) {
       if (errno == EEXIST) {
         struct stat stat_buf;
-        if (stat(fname, &stat_buf) == 0) {
+        if (stat(ctx->file_path, &stat_buf) == 0) {
           if (S_ISDIR(stat_buf.st_mode)) {
             r = 0;
           } else {
-            r = unlink(fname);
+            r = unlink(ctx->file_path);
             if (r == 0) {
-              r = mkdir(fname, *mode);
+              r = mkdir(ctx->file_path, ctx->mode);
             }
           }
         }
       }
       if (r < 0) {
-        Print_Error(printer, "mkdir", fname);
+        Print_Error(ctx->printer, "mkdir", ctx->file_path);
         retval = UNTAR_FAIL;
       }
     }
@@ -368,17 +361,17 @@ Untar_FromMemory_Print(
   const rtems_printer *printer
 )
 {
-  int            fd;
-  const char     *tar_ptr = (const char *)tar_buf;
-  const char     *bufr;
-  char           fname[100];
-  int            retval = UNTAR_SUCCESSFUL;
-  unsigned long  ptr;
-  unsigned long  nblocks = 0;
-  unsigned long  file_size = 0;
-  unsigned long  mode = 0;
-  unsigned char  linkflag = 0;
+  int                  fd;
+  const char          *tar_ptr = (const char *)tar_buf;
+  const char          *bufr;
+  char                 buf[UNTAR_FILE_NAME_SIZE];
+  Untar_HeaderContext  ctx;
+  int                  retval = UNTAR_SUCCESSFUL;
+  unsigned long        ptr;
 
+  ctx.file_path = buf;
+  ctx.file_name = buf;
+  ctx.printer = printer;
   rtems_printf(printer, "untar: memory at %p (%zu)\n", tar_buf, size);
 
   ptr = 0;
@@ -392,18 +385,18 @@ Untar_FromMemory_Print(
     bufr = &tar_ptr[ptr];
     ptr += 512;
 
-    retval = Untar_ProcessHeader(bufr, fname, &mode, &file_size,
-                                 &nblocks, &linkflag, printer);
+    retval = Untar_ProcessHeader(&ctx, bufr);
 
     if (retval != UNTAR_SUCCESSFUL)
       break;
 
-    if (linkflag == REGTYPE) {
-      if ((fd = open(fname, O_TRUNC | O_CREAT | O_WRONLY, mode)) == -1) {
-        Print_Error(printer, "open", fname);
-        ptr += 512 * nblocks;
+    if (ctx.linkflag == REGTYPE) {
+      if ((fd = open(ctx.file_path,
+                     O_TRUNC | O_CREAT | O_WRONLY, ctx.mode)) == -1) {
+        Print_Error(printer, "open", ctx.file_path);
+        ptr += 512 * ctx.nblocks;
       } else {
-        unsigned long sizeToGo = file_size;
+        unsigned long sizeToGo = ctx.file_size;
         ssize_t       len;
         ssize_t       i;
         ssize_t       n;
@@ -412,11 +405,11 @@ Untar_FromMemory_Print(
          * Read out the data.  There are nblocks of data where nblocks is the
          * file_size rounded to the nearest 512-byte boundary.
          */
-        for (i = 0; i < nblocks; i++) {
+        for (i = 0; i < ctx.nblocks; i++) {
           len = ((sizeToGo < 512L) ? (sizeToGo) : (512L));
           n = write(fd, &tar_ptr[ptr], len);
           if (n != len) {
-            Print_Error(printer, "write", fname);
+            Print_Error(printer, "write", ctx.file_path);
             retval  = UNTAR_FAIL;
             break;
           }
@@ -487,16 +480,13 @@ Untar_FromFile_Print(
   const rtems_printer *printer
 )
 {
-  int            fd;
-  char           *bufr;
-  ssize_t        n;
-  char           fname[100];
-  int            retval;
-  unsigned long  i;
-  unsigned long  nblocks = 0;
-  unsigned long  file_size = 0;
-  unsigned long  mode = 0;
-  unsigned char  linkflag = 0;
+  int                  fd;
+  char                *bufr;
+  ssize_t              n;
+  int                  retval;
+  unsigned long        i;
+  char                 buf[UNTAR_FILE_NAME_SIZE];
+  Untar_HeaderContext  ctx;
 
   retval = UNTAR_SUCCESSFUL;
 
@@ -510,6 +500,10 @@ Untar_FromFile_Print(
     return(UNTAR_FAIL);
   }
 
+  ctx.file_path = buf;
+  ctx.file_name = buf;
+  ctx.printer = printer;
+
   while (1) {
     /* Read the header */
     /* If the header read fails, we just consider it the end of the tarfile. */
@@ -517,13 +511,12 @@ Untar_FromFile_Print(
       break;
     }
 
-    retval = Untar_ProcessHeader(bufr, fname, &mode, &file_size,
-                                 &nblocks, &linkflag, printer);
+    retval = Untar_ProcessHeader(&ctx, bufr);
 
     if (retval != UNTAR_SUCCESSFUL)
       break;
 
-    if (linkflag == REGTYPE) {
+    if (ctx.linkflag == REGTYPE) {
       int out_fd;
 
       /*
@@ -531,12 +524,12 @@ Untar_FromFile_Print(
        * is the size rounded to the nearest 512-byte boundary.
        */
 
-      if ((out_fd = creat(fname, mode)) == -1) {
-        (void) lseek(fd, SEEK_CUR, 512UL * nblocks);
+      if ((out_fd = creat(ctx.file_path, ctx.mode)) == -1) {
+        (void) lseek(fd, SEEK_CUR, 512UL * ctx.nblocks);
       } else {
-        for (i = 0; i < nblocks; i++) {
+        for (i = 0; i < ctx.nblocks; i++) {
           n = read(fd, bufr, 512);
-          n = MIN(n, file_size - (i * 512UL));
+          n = MIN(n, ctx.file_size - (i * 512UL));
           (void) write(out_fd, bufr, n);
         }
         close(out_fd);
@@ -553,6 +546,8 @@ Untar_FromFile_Print(
 
 void Untar_ChunkContext_Init(Untar_ChunkContext *context)
 {
+  context->base.file_path = context->buf;
+  context->base.file_name = context->buf;
   context->state = UNTAR_CHUNK_HEADER;
   context->done_bytes = 0;
   context->out_fd = -1;
@@ -571,11 +566,12 @@ int Untar_FromChunk_Print(
   size_t remaining;
   size_t consume;
   int retval;
-  unsigned char linkflag;
 
   buf = chunk;
   done = 0;
   todo = chunk_size;
+
+  context->base.printer = printer;
 
   while (todo > 0) {
     switch (context->state) {
@@ -587,13 +583,8 @@ int Untar_FromChunk_Print(
 
         if (context->done_bytes == 512) {
           retval = Untar_ProcessHeader(
-            &context->header[0],
-            &context->fname[0],
-            &context->mode,
-            &context->todo_bytes,
-            &context->todo_blocks,
-            &linkflag,
-            printer
+            &context->base,
+            &context->header[0]
           );
 
           if (retval != UNTAR_SUCCESSFUL) {
@@ -601,15 +592,16 @@ int Untar_FromChunk_Print(
             return retval;
           }
 
-          if (linkflag == REGTYPE) {
-            context->out_fd = creat(&context->fname[0], context->mode);
+          if (context->base.linkflag == REGTYPE) {
+            context->out_fd = creat(context->base.file_path,
+                                    context->base.mode);
 
             if (context->out_fd >= 0) {
               context->state = UNTAR_CHUNK_WRITE;
               context->done_bytes = 0;
             } else {
               context->state = UNTAR_CHUNK_SKIP;
-              context->todo_bytes = 512 * context->todo_blocks;
+              context->base.file_size = 512 * context->base.nblocks;
               context->done_bytes = 0;
             }
           } else {
@@ -619,27 +611,28 @@ int Untar_FromChunk_Print(
 
         break;
       case UNTAR_CHUNK_SKIP:
-        remaining = context->todo_bytes - context->done_bytes;
+        remaining = context->base.file_size - context->done_bytes;
         consume = MIN(remaining, todo);
         context->done_bytes += consume;
 
-        if (context->done_bytes == context->todo_bytes) {
+        if (context->done_bytes == context->base.file_size) {
           context->state = UNTAR_CHUNK_HEADER;
           context->done_bytes = 0;
         }
 
         break;
       case UNTAR_CHUNK_WRITE:
-        remaining = context->todo_bytes - context->done_bytes;
+        remaining = context->base.file_size - context->done_bytes;
         consume = MIN(remaining, todo);
         write(context->out_fd, &buf[done], consume);
         context->done_bytes += consume;
 
-        if (context->done_bytes == context->todo_bytes) {
+        if (context->done_bytes == context->base.file_size) {
           close(context->out_fd);
           context->out_fd = -1;
           context->state = UNTAR_CHUNK_SKIP;
-          context->todo_bytes = 512 * context->todo_blocks - context->todo_bytes;
+          context->base.file_size = 512 * context->base.nblocks
+            - context->base.file_size;
           context->done_bytes = 0;
         }
 
@@ -686,7 +679,7 @@ Untar_FromFile(
  * the archive.  The checksum is computed over the entire
  * header, but the checksum field is substituted with blanks.
  */
-int
+static int
 _rtems_tar_header_checksum(
   const char *bufr
 )

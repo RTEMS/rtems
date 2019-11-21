@@ -48,7 +48,27 @@ int Untar_FromMemory_Print(void *tar_buf, size_t size, const rtems_printer* prin
 int Untar_FromFile(const char *tar_name);
 int Untar_FromFile_Print(const char *tar_name, const rtems_printer* printer);
 
+#define UNTAR_FILE_NAME_SIZE 100
+
 typedef struct {
+  char *file_path;
+  char *file_name;
+  char link_name[UNTAR_FILE_NAME_SIZE];
+  unsigned long mode;
+  unsigned long file_size;
+  unsigned long nblocks;
+  unsigned char linkflag;
+  const rtems_printer *printer;
+} Untar_HeaderContext;
+
+typedef struct {
+  Untar_HeaderContext base;
+
+  /**
+   * @brief File path buffer.
+   */
+  char buf[UNTAR_FILE_NAME_SIZE];
+
   /**
    * @brief Current context state.
    */
@@ -65,29 +85,9 @@ typedef struct {
   char header[512];
 
   /**
-   * @brief Name buffer.
-   */
-  char fname[100];
-
-  /**
    * @brief Number of bytes of overall length are already processed.
    */
   size_t done_bytes;
-
-  /**
-   * @brief Mode of the file.
-   */
-  unsigned long mode;
-
-  /**
-   * @brief Overall amount of bytes to be processed.
-   */
-  unsigned long todo_bytes;
-
-  /**
-   * @brief Overall amount of blocks to be processed.
-   */
-  unsigned long todo_blocks;
 
   /**
    * @brief File descriptor of output file.
@@ -238,20 +238,7 @@ int Untar_FromXzChunk_Print(
   const rtems_printer* printer
 );
 
-/**************************************************************************
- * This converts octal ASCII number representations into an
- * unsigned long.  Only support 32-bit numbers for now.
- *************************************************************************/
-extern unsigned long
-_rtems_octal2ulong(const char *octascii, size_t len);
-
-/************************************************************************
- * Compute the TAR checksum and check with the value in
- * the archive.  The checksum is computed over the entire
- * header, but the checksum field is substituted with blanks.
- ************************************************************************/
-extern int
-_rtems_tar_header_checksum(const char *bufr);
+int Untar_ProcessHeader(Untar_HeaderContext *ctx, const char *bufr);
 
 #ifdef __cplusplus
 }
