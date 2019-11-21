@@ -123,7 +123,7 @@ Stat_Node(const char* path)
  * Make the directory path for a file if it does not exist.
  */
 static int
-Make_Path(const rtems_printer *printer, const char* filename, bool end_is_dir)
+Make_Path(const rtems_printer *printer, const char* filename, int linktype)
 {
   char* copy = strdup(filename);
   char* path = copy;
@@ -216,7 +216,7 @@ Make_Path(const rtems_printer *printer, const char* filename, bool end_is_dir)
             path_end = true;
         }
       }
-      else if (path_end && r == DIRTYPE && !end_is_dir) {
+      else if (path_end && r == DIRTYPE && linktype != DIRTYPE) {
         /*
          * We only handle a directory if at the end of the path and the end is
          * a file. If we cannot remove the directory because it is not empty we
@@ -289,6 +289,11 @@ Untar_ProcessHeader(
    * We've decoded the header, now figure out what it contains and do something
    * with it.
    */
+
+  if (Make_Path(ctx->printer, ctx->file_path, ctx->linkflag) < 0) {
+    retval = UNTAR_FAIL;
+  }
+
   if (ctx->linkflag == SYMTYPE) {
     strlcpy(ctx->link_name, &bufr[157], sizeof(ctx->link_name));
     rtems_printf(ctx->printer, "untar: symlink: %s -> %s\n",
@@ -298,15 +303,9 @@ Untar_ProcessHeader(
     rtems_printf(ctx->printer, "untar: file: %s (s:%lu,m:%04lo)\n",
                  ctx->file_path, ctx->file_size, ctx->mode);
     ctx->nblocks = (((ctx->file_size) + 511) & ~511) / 512;
-    if (Make_Path(ctx->printer, ctx->file_path, false) < 0) {
-      retval  = UNTAR_FAIL;
-    }
   } else if (ctx->linkflag == DIRTYPE) {
     int r;
-    rtems_printf(ctx->printer, "untar:  dir: %s\n", ctx->file_path);
-    if (Make_Path(ctx->printer, ctx->file_path, true) < 0) {
-      retval  = UNTAR_FAIL;
-    }
+    rtems_printf(ctx->printer, "untar: dir: %s\n", ctx->file_path);
     r = mkdir(ctx->file_path, S_IRWXU | S_IRWXG | S_IRWXO);
     if (r < 0) {
       if (errno == EEXIST) {
