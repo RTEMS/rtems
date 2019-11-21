@@ -619,7 +619,7 @@ extern int IMFS_make_node(
 extern int IMFS_make_linearfile(
   const char *path,
   mode_t      mode,
-  const char *data,
+  const void *data,
   size_t      size
 );
 

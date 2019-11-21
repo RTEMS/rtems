@@ -34,7 +34,7 @@
 int IMFS_make_linearfile(
   const char *path,
   mode_t      mode,
-  const char *data,
+  const void *data,
   size_t      size
 )
 {
@@ -47,7 +47,7 @@ int IMFS_make_linearfile(
     path,
     ( mode & ~S_IFMT ) | S_IFREG,
     &IMFS_node_control_linfile,
-    sizeof( IMFS_linearfile_t ),
+    sizeof( IMFS_file_t ),
     &ctx
   );
 }
