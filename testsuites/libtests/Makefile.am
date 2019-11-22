@@ -470,8 +470,8 @@ dl06_SOURCES = dl06/init.c dl06/dl-load.c dl06-tar.c dl06-tar.h
 dl06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl06) $(support_includes)
 dl06/init.c: dl06-tar.o
 dl06-pre.tar: Makefile
-	$(AM_V_at)echo "Something in a file" > dl06_pre_file
-	$(AM_V_GEN)$(PAX) -w -f $@ dl06_pre_file
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/dl06/,, $(srcdir)/dl06/dl06_pre_file
 dl06-pre-tar.c: dl06-pre.tar
 	$(AM_V_GEN)$(BIN2C) -N dl06_tar -C $< $@
 dl06-pre-tar.h: dl06-pre.tar
@@ -574,21 +574,13 @@ dl08-o5.o: dl08/dl-o5.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl08-o6-123456789-123456789.o: dl08/dl-o6-123456789-123456789.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-etc/libdl.conf:
-	mkdir etc; \
-	echo "#" > etc/libdl.conf
-	echo "  # blah blah" >> etc/libdl.conf
-	echo "/libdl08*.a" >> etc/libdl.conf
-	echo "" >> etc/libdl.conf
-	echo "x" >> etc/libdl.conf
-	echo "" >> etc/libdl.conf
 noinst_LIBRARIES = libdl08_1.a libdl08_2.a
 libdl08_1_a_SOURCES = dl08-o2.c dl08-o4.c
 libdl08_2_a_SOURCES = dl08-o3.c dl08-o5.c \
 			dl08-o6-123456789-123456789.c
-dl08.tar: etc/libdl.conf dl08-o1.o libdl08_1.a libdl08_2.a
+dl08.tar: dl08-o1.o libdl08_1.a libdl08_2.a
 	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ $+
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/dl08/,, $(srcdir)/dl08/etc/libdl.conf $+
 dl08-tar.c: dl08.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl08-tar.h: dl08.tar
@@ -602,7 +594,7 @@ dl08$(EXEEXT):  $(dl08_OBJECTS) $(dl08_DEPENDENCIES) dl08-sym.o
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl08.pre dl08-sym.o libdl08_1.a libdl08_2.a dl08-o1.o dl08-o2.o \
 		dl08-o3.o dl08-o4.o dl08-o5.o dl08-o6-123456789-123456789.o \
-		dl08.tar dl08-tar.h etc/libdl.conf
+		dl08.tar dl08-tar.h
 endif
 endif
 
@@ -669,18 +661,12 @@ dl10-o5.o: dl10/dl-o5.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl10-o6.o: dl10/dl-o6.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-etc/libdl-dl10.conf:
-	mkdir etc; \
-	echo "#" > $@
-	echo "  # blah blah" >>  $@
-	echo "/libdl10*.a" >> $@
-	echo "" >> $@
 noinst_LIBRARIES = libdl10_1.a libdl10_2.a
 libdl10_1_a_SOURCES = dl10-o2.c dl10-o4.c
 libdl10_2_a_SOURCES = dl10-o3.c dl10-o5.c dl10-o6.c
-dl10.tar: etc/libdl-dl10.conf dl10-o1.o libdl10_1.a libdl10_2.a
+dl10.tar: dl10-o1.o libdl10_1.a libdl10_2.a
 	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ $+
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/dl10/,, $(srcdir)/dl10/etc/libdl.conf $+
 dl10-tar.c: dl10.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl10-tar.h: dl10.tar

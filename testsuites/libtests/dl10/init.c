@@ -60,14 +60,6 @@ static void Init(rtems_task_argument arg)
     exit (1);
   }
 
-  e = symlink ("libdl-dl10.conf", "/etc/libdl.conf");
-  if (e != 0)
-  {
-    printf ("error: untar failed: %d\n", e);
-    rtems_test_exit (1);
-    exit (1);
-  }
-
   test();
 
   rtems_shell_init_environment ();
