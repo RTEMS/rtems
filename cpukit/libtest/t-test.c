@@ -480,6 +480,20 @@ T_case_name(void)
 	}
 }
 
+static const char *
+T_file(const T_check_context *t)
+{
+	const char *file;
+
+	file = strrchr(t->file, '/');
+
+	if (file == NULL) {
+		return t->file;
+	}
+
+	return file + 1;
+}
+
 void
 T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 {
@@ -502,7 +516,7 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 		     step != T_CHECK_STEP_FROM_FLAGS(t->flags)) {
 			T_add_failure(ctx);
 			T_printf("F:%u:%i:%s:%s:%i:planned step (%u)\n", step,
-			    T_cpu(), T_scope(scope), t->file, t->line,
+			    T_cpu(), T_scope(scope), T_file(t), t->line,
 			    T_CHECK_STEP_FROM_FLAGS(t->flags));
 		} else if (!ok) {
 			T_add_failure(ctx);
@@ -511,10 +525,10 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 				if ((t->flags & T_CHECK_QUIET) == 0) {
 					T_printf("F:%u:%i:%s:%s:%i:",
 					    step, T_cpu(), T_scope(scope),
-					    t->file, t->line);
+					    T_file(t), t->line);
 				} else {
 					T_printf("F:*:%i:%s:%s:%i:", T_cpu(),
-					    T_scope(scope), t->file, t->line);
+					    T_scope(scope), T_file(t), t->line);
 				}
 
 				va_start(ap, fmt);
@@ -530,7 +544,7 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 		} else if ((t->flags & T_CHECK_QUIET) == 0 &&
 		    ctx->verbosity >= T_VERBOSE) {
 			T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(),
-			    T_scope(scope), t->file, t->line);
+			    T_scope(scope), T_file(t), t->line);
 		}
 	} else if (!ok) {
 		T_add_failure(ctx);
