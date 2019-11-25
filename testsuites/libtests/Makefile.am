@@ -987,19 +987,19 @@ if TEST_mghttpd01
 lib_tests += mghttpd01
 lib_screens += mghttpd01/mghttpd01.scn
 lib_docs += mghttpd01/mghttpd01.doc
-mghttpd01_SOURCES = mghttpd01/init.c mghttpd01_tar.c \
-	mghttpd01_tar.h mghttpd01/test-http-client.c \
+mghttpd01_SOURCES = mghttpd01/init.c mghttpd01-tar.c \
+	mghttpd01-tar.h mghttpd01/test-http-client.c \
 	mghttpd01/test-http-client.h
 mghttpd01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mghttpd01) \
 	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
 mghttpd01_LDADD = $(RTEMS_ROOT)cpukit/libmghttpd.a $(LDADD)
-mghttpd01_tar.c: mghttpd01/mghttpd01.tar
+mghttpd01-tar.c: mghttpd01/mghttpd01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-mghttpd01_tar.h: mghttpd01/mghttpd01.tar
+mghttpd01-tar.h: mghttpd01/mghttpd01.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 mghttpd01-tar.o: mghttpd01-tar.c mghttpd01-tar.h
-mghttpd01/init.c: mghttpd01_tar.h
-CLEANFILES += mghttpd01.tar mghttpd01_tar.c mghttpd01_tar.h
+mghttpd01/init.c: mghttpd01-tar.h
+CLEANFILES += mghttpd01.tar mghttpd01-tar.c mghttpd01-tar.h
 endif
 endif
 endif
@@ -1281,9 +1281,9 @@ lib_tests += tar01
 lib_screens += tar01/tar01.scn
 lib_docs += tar01/tar01.doc
 tar01_SOURCES = tar01/init.c ../psxtests/psxfile01/test_cat.c \
-	tar01_tar.c tar01_tar.h tar01_tar_gz.c tar01_tar_gz.h
+	tar01-tar.c tar01-tar.h tar01-tar-gz.c tar01-tar-gz.h
 if TARTEST_XZ
-tar01_SOURCES += tar01_tar_xz.c tar01_tar_xz.h
+tar01_SOURCES += tar01-tar-xz.c tar01-tar-xz.h
 endif
 tar01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
@@ -1291,30 +1291,30 @@ tar01_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDA
 tar01.tar: Makefile
 	@rm -f $@
 	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $(srcdir)/tar01/home $(srcdir)/tar01/symlink
-tar01_tar.c: tar01.tar
+tar01-tar.c: tar01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-tar01_tar.h: tar01.tar
+tar01-tar.h: tar01.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 tar01-tar.o: tar01-tar.c tar01-tar.h
 tar01.tar.gz: tar01.tar
 	$(AM_V_GEN)$(GZIP) < $< > $@
-tar01_tar_gz.c: tar01.tar.gz
+tar01-tar-gz.c: tar01.tar.gz
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-tar01_tar_gz.h: tar01.tar.gz
+tar01-tar-gz.h: tar01.tar.gz
 	$(AM_V_GEN)$(BIN2C) -H $< $@
-CLEANFILES += tar01.tar tar01_tar.c tar01_tar.h \
-	tar01.tar.gz tar01_tar_gz.c tar01_tar_gz.h
+CLEANFILES += tar01.tar tar01-tar.c tar01-tar.h \
+	tar01.tar.gz tar01-tar-gz.c tar01-tar-gz.h
 if TARTEST_XZ
 tar01.tar.xz: tar01.tar
 	$(AM_V_GEN)$(XZ) < $< > $@
-tar01_tar_xz.c: tar01.tar.xz
+tar01-tar-xz.c: tar01.tar.xz
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-tar01_tar_xz.h: tar01.tar.xz
+tar01-tar-xz.h: tar01.tar.xz
 	$(AM_V_GEN)$(BIN2C) -H $< $@
-TAR01_XZ_H = tar01_tar_xz.h
-CLEANFILES += tar01.tar.xz tar01_tar_xz.c tar01_tar_xz.h
+TAR01_XZ_H = tar01-tar-xz.h
+CLEANFILES += tar01.tar.xz tar01-tar-xz.c tar01-tar-xz.h
 endif
-tar01/init.c: tar01_tar.h tar01_tar_gz.h $(TAR01_XZ_H)
+tar01/init.c: tar01-tar.h tar01-tar-gz.h $(TAR01_XZ_H)
 endif
 endif
 
@@ -1324,19 +1324,19 @@ lib_tests += tar02
 lib_screens += tar02/tar02.scn
 lib_docs += tar02/tar02.doc
 tar02_SOURCES = tar02/init.c ../psxtests/psxfile01/test_cat.c \
-	tar02_tar.c tar02_tar.h
+	tar02-tar.c tar02-tar.h
 tar02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar02) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar02.tar: Makefile
 	@rm -f $@
 	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $(srcdir)/tar01/home $(srcdir)/tar01/symlink
-tar02_tar.c: tar02.tar
+tar02-tar.c: tar02.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-tar02_tar.h: tar02.tar
+tar02-tar.h: tar02.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 tar02-tar.o: tar02-tar.c tar02-tar.h
-tar02/init.c: tar02_tar.h
-CLEANFILES += tar02.tar tar02_tar.c tar02_tar.h
+tar02/init.c: tar02-tar.h
+CLEANFILES += tar02.tar tar02-tar.c tar02-tar.h
 endif
 endif
 

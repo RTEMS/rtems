@@ -28,7 +28,7 @@
 
 #include <rtems/imfs.h>
 #include <rtems/error.h>
-#include "mghttpd01_tar.h"
+#include "mghttpd01-tar.h"
 
 #include "test-http-client.h"
 

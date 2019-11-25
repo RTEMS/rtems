@@ -23,10 +23,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "tar01_tar.h"
-#include "tar01_tar_gz.h"
+#include "tar01-tar.h"
+#include "tar01-tar-gz.h"
 #if HAVE_XZ
-#include "tar01_tar_xz.h"
+#include "tar01-tar-xz.h"
 #endif
 
 const char rtems_test_name[] = "TAR 1";

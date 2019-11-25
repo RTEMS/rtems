@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "tar02_tar.h"
+#include "tar02-tar.h"
 
 const char rtems_test_name[] = "TAR 2";
 
