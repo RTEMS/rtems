@@ -329,7 +329,7 @@ dl01/init.c: dl01-tar.o
 dl01.pre: $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
 	@rm -f dl01.pre
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl01-o1.o: dl01/dl-o1.c Makefile
+dl01-o1.o: dl01/dl01-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl01.tar: dl01-o1.o
 	@rm -f $@
@@ -360,9 +360,9 @@ dl02/init.c: dl02-tar.o
 dl02.pre: $(dl02_OBJECTS) $(dl02_DEPENDENCIES)
 	@rm -f dl02.pre
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl02-o1.o: dl02/dl-o1.c Makefile
+dl02-o1.o: dl02/dl02-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl02-o2.o: dl02/dl-o2.c Makefile
+dl02-o2.o: dl02/dl02-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl02.tar: dl02-o1.o dl02-o2.o
 	@rm -f $@
@@ -399,14 +399,14 @@ if TEST_dl04
 lib_tests += dl04
 lib_screens += dl04/dl04.scn
 lib_docs += dl04/dl04.doc
-dl04_SOURCES = dl04/init.c dl04/dl-load.c dl04/dl-cpp.cpp dl04-tar.c \
+dl04_SOURCES = dl04/init.c dl04/dl-load.c dl04/dl-cpp.cc dl04-tar.c \
 	dl04-tar.h
 dl04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl04) $(support_includes)
 dl04/init.c: dl04-tar.o
 dl04.pre: $(dl04_OBJECTS) $(dl04_DEPENDENCIES)
 	@rm -f dl04.pre
 	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl04-o4.o: dl04/dl-o4.cpp Makefile
+dl04-o4.o: dl04/dl04-o4.cc Makefile
 	$(AM_V_GEN)$(CXXCOMPILE) -c -o $@ $<
 dl04.tar: dl04-o4.o
 	@rm -f $@
@@ -433,14 +433,14 @@ if TEST_dl05
 lib_tests += dl05
 lib_screens += dl05/dl05.scn
 lib_docs += dl05/dl05.doc
-dl05_SOURCES = dl05/init.c dl05/dl-load.c dl05/dl-cpp.cpp dl05-tar.c \
+dl05_SOURCES = dl05/init.c dl05/dl-load.c dl05/dl-cpp.cc dl05-tar.c \
 	dl05-tar.h
 dl05_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl05) $(support_includes)
 dl05/init.c: dl05-tar.o
 dl05.pre: $(dl05_OBJECTS) $(dl05_DEPENDENCIES)
 	@rm -f dl05.pre dl05-sym.o
 	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl05-o5.o: dl05/dl-o5.cpp
+dl05-o5.o: dl05/dl05-o5.cc
 	$(AM_V_CXX)$(CXXCOMPILE) -c -o $@ $<
 dl05.tar: dl05-o5.o
 	@rm -f $@
@@ -522,15 +522,15 @@ dl07/init.c: dl07-tar.o
 dl07.pre: $(dl07_OBJECTS) $(dl07_DEPENDENCIES)
 	@rm -f dl07.pre dl07-sym.o
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl07-o1.o: dl07/dl-o1.c Makefile
+dl07-o1.o: dl07/dl07-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl07-o2.o: dl07/dl-o2.c Makefile
+dl07-o2.o: dl07/dl07-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl07-o3.o: dl07/dl-o3.c Makefile
+dl07-o3.o: dl07/dl07-o3.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl07-o4.o: dl07/dl-o4.c Makefile
+dl07-o4.o: dl07/dl07-o4.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl07-o5.o: dl07/dl-o5.c Makefile
+dl07-o5.o: dl07/dl07-o5.c Makefile
 	$(AM_V_CC) $(COMPILE) -c -o $@ $<
 dl07.tar: dl07-o1.o dl07-o2.o dl07-o3.o dl07-o4.o dl07-o5.o
 	@rm -f $@
@@ -562,17 +562,17 @@ dl08/init.c: dl08-tar.o
 dl08.pre: $(dl08_OBJECTS) $(dl08_DEPENDENCIES)
 	@rm -f dl08.pre dl08-syms.o
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl08-o1.o: dl08/dl-o1.c Makefile
+dl08-o1.o: dl08/dl08-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl08-o2.o: dl08/dl-o2.c Makefile
+dl08-o2.o: dl08/dl08-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl08-o3.o: dl08/dl-o3.c Makefile
+dl08-o3.o: dl08/dl08-o3.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl08-o4.o: dl08/dl-o4.c Makefile
+dl08-o4.o: dl08/dl08-o4.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl08-o5.o: dl08/dl-o5.c Makefile
+dl08-o5.o: dl08/dl08-o5.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl08-o6-123456789-123456789.o: dl08/dl-o6-123456789-123456789.c Makefile
+dl08-o6-123456789-123456789.o: dl08/dl08-o6-123456789-123456789.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 noinst_LIBRARIES = libdl08_1.a libdl08_2.a
 libdl08_1_a_SOURCES = dl08-o2.c dl08-o4.c
@@ -609,15 +609,15 @@ dl09/init.c: dl09-tar.o
 dl09.pre: $(dl09_OBJECTS) $(dl09_DEPENDENCIES)
 	@rm -f dl09.pre dl09-syms.o
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl09-o1.o: dl09/dl-o1.c Makefile
+dl09-o1.o: dl09/dl09-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl09-o2.o: dl09/dl-o2.c Makefile
+dl09-o2.o: dl09/dl09-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl09-o3.o: dl09/dl-o3.c Makefile
+dl09-o3.o: dl09/dl09-o3.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl09-o4.o: dl09/dl-o4.c Makefile
+dl09-o4.o: dl09/dl09-o4.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl09-o5.o: dl09/dl-o5.c Makefile
+dl09-o5.o: dl09/dl09-o5.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl09.tar: dl09-o1.o dl09-o2.o dl09-o3.o dl09-o4.o dl09-o5.o
 	@rm -f $@
@@ -649,17 +649,17 @@ dl10/init.c: dl10-tar.o
 dl10.pre: $(dl10_OBJECTS) $(dl10_DEPENDENCIES)
 	@rm -f dl10.pre dl10-syms.o
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-dl10-o1.o: dl10/dl-o1.c Makefile
+dl10-o1.o: dl10/dl10-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl10-o2.o: dl10/dl-o2.c Makefile
+dl10-o2.o: dl10/dl10-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl10-o3.o: dl10/dl-o3.c Makefile
+dl10-o3.o: dl10/dl10-o3.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl10-o4.o: dl10/dl-o4.c Makefile
+dl10-o4.o: dl10/dl10-o4.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl10-o5.o: dl10/dl-o5.c Makefile
+dl10-o5.o: dl10/dl10-o5.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-dl10-o6.o: dl10/dl-o6.c Makefile
+dl10-o6.o: dl10/dl10-o6.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 noinst_LIBRARIES = libdl10_1.a libdl10_2.a
 libdl10_1_a_SOURCES = dl10-o2.c dl10-o4.c
