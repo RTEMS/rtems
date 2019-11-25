@@ -523,8 +523,9 @@ dont_do_the_window:
          * context.
          */
         andcc    %l0, %l5, %g0
-        bne,a    dont_switch_stacks
-         st      %fsr, [%g6 + SPARC_PER_CPU_FSR_OFFSET]
+        beq      dont_switch_stacks
+         nop
+        st      %fsr, [%g6 + SPARC_PER_CPU_FSR_OFFSET]
 #endif
 
 dont_switch_stacks:
