@@ -347,7 +347,8 @@
  * @brief Defines a global symbol with the specified name in the specified
  * section.
  *
- * The name must be a valid designator.
+ * The name must be a valid designator.  The alignment of the symbol depends on
+ * the current location counter of the section.
  */
 #if defined(__GNUC__)
   #define RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( _name, _section ) \
