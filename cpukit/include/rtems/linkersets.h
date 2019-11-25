@@ -32,15 +32,10 @@ extern "C" {
   extern type const RTEMS_LINKER_SET_END( set )[]
 
 #define RTEMS_LINKER_ROSET( set, type ) \
-  RTEMS_LINKER_ROSET_DECLARE( set, type ); \
-  RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( \
-    RTEMS_LINKER_SET_BEGIN( set ), \
-    ".rtemsroset." #set ".begin" \
-  ); \
-  RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( \
-    RTEMS_LINKER_SET_END( set ), \
-    ".rtemsroset." #set ".end" \
-  )
+  type const RTEMS_LINKER_SET_BEGIN( set )[ 0 ] \
+  RTEMS_SECTION( ".rtemsroset." #set ".begin" ) RTEMS_USED; \
+  type const RTEMS_LINKER_SET_END( set )[ 0 ] \
+  RTEMS_SECTION( ".rtemsroset." #set ".end" ) RTEMS_USED
 
 #define RTEMS_LINKER_ROSET_ITEM_DECLARE( set, type, item ) \
   extern type const _Linker_set_##set##_##item
@@ -68,15 +63,10 @@ extern "C" {
   extern type RTEMS_LINKER_SET_END( set )[]
 
 #define RTEMS_LINKER_RWSET( set, type ) \
-  RTEMS_LINKER_RWSET_DECLARE( set, type ); \
-  RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( \
-    RTEMS_LINKER_SET_BEGIN( set ), \
-    ".rtemsrwset." #set ".begin" \
-  ); \
-  RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION( \
-    RTEMS_LINKER_SET_END( set ), \
-    ".rtemsrwset." #set ".end" \
-  )
+  type RTEMS_LINKER_SET_BEGIN( set )[ 0 ] \
+  RTEMS_SECTION( ".rtemsrwset." #set ".begin" ) RTEMS_USED; \
+  type RTEMS_LINKER_SET_END( set )[ 0 ] \
+  RTEMS_SECTION( ".rtemsrwset." #set ".end" ) RTEMS_USED
 
 #define RTEMS_LINKER_RWSET_ITEM_DECLARE( set, type, item ) \
   extern type _Linker_set_##set##_##item
