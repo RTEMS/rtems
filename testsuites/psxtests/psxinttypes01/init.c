@@ -95,11 +95,6 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_test_assert( result_strtoimax == INTMAX_MIN );
   rtems_test_assert( errno == ERANGE );
 
-  puts( "Invalid Input - Send NULL Pointer" );
-  result_strtoimax = strtoimax( NULL, &endptr1, base );
-  rtems_test_assert( result_strtoimax == 0 );
-  rtems_test_assert( errno == EINVAL );
-
   puts( "Invalid Input - Invalid base - Use base = 40" );
   result_strtoimax = strtoimax( nptr1_p, &endptr1, invalid_base );
   rtems_test_assert( result_strtoimax == 0 );
@@ -130,11 +125,6 @@ rtems_task Init(rtems_task_argument ignored)
   result_strtoumax = strtoumax( nptr1_n_errange, &endptr1, base );
   rtems_test_assert( result_strtoumax != 0 );
   rtems_test_assert( errno == ERANGE );
-
-  puts( "Invalid Input - Send NULL Pointer" );
-  result_strtoumax = strtoumax( NULL, &endptr1, base );
-  rtems_test_assert( result_strtoumax == 0 );
-  rtems_test_assert( errno == EINVAL );
 
   puts( "Invalid Input - Invalid base - Use base = 40" );
   result_strtoumax = strtoumax( nptr1_p, &endptr1, invalid_base );
@@ -167,11 +157,6 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_test_assert( result_strtoimax == INTMAX_MIN );
   rtems_test_assert( errno == ERANGE );
 
-  puts( "Invalid Input - Send NULL Pointer" );
-  result_strtoimax = wcstoimax( NULL, &endptr2, base );
-  rtems_test_assert( result_strtoimax == 0 );
-  rtems_test_assert( errno == EINVAL );
-
   puts( "Invalid Input - Invalid base - Use base = 40" );
   result_strtoimax = wcstoimax( nptr2_p, &endptr2, invalid_base );
   rtems_test_assert( result_strtoimax == 0 );
@@ -202,11 +187,6 @@ rtems_task Init(rtems_task_argument ignored)
   result_strtoumax = wcstoumax( nptr2_n_errange, &endptr2, base );
   rtems_test_assert( result_strtoumax != 0 );
   rtems_test_assert( errno == ERANGE );
-
-  puts( "Invalid Input - Send NULL Pointer" );
-  result_strtoumax = wcstoumax( NULL, &endptr2, base );
-  rtems_test_assert( result_strtoumax == 0 );
-  rtems_test_assert( errno == EINVAL );
 
   puts( "Invalid Input - Invalid base - Use base = 40" );
   result_strtoumax = wcstoumax( nptr2_p, &endptr2, invalid_base );

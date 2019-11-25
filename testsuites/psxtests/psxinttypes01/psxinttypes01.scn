@@ -1,4 +1,8 @@
-*** PSXINTTYPE 01 TEST ***
+*** BEGIN OF TEST PSXINTTYPE 01 ***
+*** TEST VERSION: 5.0.0.5c2e7104e7de6ac70fae6e8d1e84c9f36c476d43
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD:
+*** TEST TOOLS: 7.4.1 20190514 (RTEMS 5, RSB a50f0c044ad732db728cc942d5fde82a1faf1d12, Newlib d14714c69)
 
 strtoimax Testcases....
 Valid Inputs - Positive Number
@@ -7,7 +11,6 @@ Valid Inputs - Negative Number
 Final string pointed by endptr
 Valid Input - Positive Number - Number out of Range
 Valid Input - Negative Number - Number out of Range
-Invalid Input - Send NULL Pointer
 Invalid Input - Invalid base - Use base = 40
 
 strtoumax Testcases....
@@ -17,7 +20,6 @@ Valid Inputs - Negative Number
 Final string pointed by endptr
 Valid Input - Positive Number - Number out of Range
 Valid Input - Negative Number - Number out of Range
-Invalid Input - Send NULL Pointer
 Invalid Input - Invalid base - Use base = 40
 
 wcstoimax Testcases....
@@ -27,7 +29,6 @@ Valid Inputs - Negative Number
 Final string pointed by endptr
 Valid Input - Positive Number - Number out of Range
 Valid Input - Negative Number - Number out of Range
-Invalid Input - Send NULL Pointer
 Invalid Input - Invalid base - Use base = 40
 
 wcstoumax Testcases....
@@ -37,7 +38,6 @@ Valid Inputs - Negative Number
 Final string pointed by endptr
 Valid Input - Positive Number - Number out of Range
 Valid Input - Negative Number - Number out of Range
-Invalid Input - Send NULL Pointer
 Invalid Input - Invalid base - Use base = 40
 
-*** END OF PSXINTTYPE 01 TEST ***
+*** END OF TEST PSXINTTYPE 01 ***

@@ -12,7 +12,6 @@ test suite name: PSXINTTYPE 01
 	- checks for output for string having a positive number - Number Out of Range
 	- checks for output for string having a negative number - Number Out of Range
 	- checks for final string pointed by endptr
-	- checks for output for invalid argument - NULL Pointer
 	- checks for output for invalid argument - Invalid Base
 
 - Checks for Strtoumax Test Cases
@@ -21,7 +20,6 @@ test suite name: PSXINTTYPE 01
 	- checks for output for string having a positive number - Number Out of Range
 	- checks for output for string having a negative number - Number Out of Range
 	- checks for final string pointed by endptr
-	- checks for output for invalid argument - NULL Pointer
 	- checks for output for invalid argument - Invalid Base
 
 - Checks for Wcstoimax Testcases
@@ -30,7 +28,6 @@ test suite name: PSXINTTYPE 01
 	- checks for output for string having a positive number - Number Out of Range
 	- checks for output for string having a negative number - Number Out of Range
 	- checks for final string pointed by endptr
-	- checks for output for invalid argument - NULL Pointer
 	- checks for output for invalid argument - Invalid Base
 
 - Checks for Wcstoumax Testcases
@@ -39,5 +36,4 @@ test suite name: PSXINTTYPE 01
 	- checks for output for string having a positive number - Number Out of Range
 	- checks for output for string having a negative number - Number Out of Range
 	- checks for final string pointed by endptr
-	- checks for output for invalid argument - NULL Pointer
 	- checks for output for invalid argument - Invalid Base
