@@ -18,7 +18,7 @@
 #include <unistd.h>
 
 #include <rtems/rtl/rtl.h>
-#include <rtems/untar.h>
+#include <rtems/imfs.h>
 
 #include "dl-load.h"
 
@@ -51,7 +51,7 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
-  te = Untar_FromMemory((void *)TARFILE_START, (size_t)TARFILE_SIZE);
+  te = rtems_tarfs_load("/", (void *)TARFILE_START, (size_t)TARFILE_SIZE);
   if (te != 0)
   {
     printf("untar failed: %d\n", te);
