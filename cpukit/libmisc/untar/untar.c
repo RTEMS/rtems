@@ -1,14 +1,9 @@
 /**
  * @file
-
+ *
  * @brief Untar an Image
+ *
  * @ingroup libmisc_untar_img Untar Image
-
- * FIXME:
- *   1. Symbolic links are not created.
- *   2. Untar_FromMemory uses FILE *fp.
- *   3. How to determine end of archive?
-
  */
 
 /*
@@ -106,142 +101,60 @@ Print_Error(const rtems_printer *printer, const char* message, const char* path)
 }
 
 /*
- * Get the type of node on in the file system if present.
- */
-static int
-Stat_Node(const char* path)
-{
-  struct stat sb;
-  if (stat(path, &sb) < 0)
-    return -1;
-  if (S_ISDIR(sb.st_mode))
-    return DIRTYPE;
-  return REGTYPE;
-}
-
-/*
  * Make the directory path for a file if it does not exist.
  */
 static int
-Make_Path(const rtems_printer *printer, const char* filename, int linktype)
+Make_Path(const rtems_printer *printer, char *path)
 {
-  char* copy = strdup(filename);
-  char* path = copy;
+  char *p;
 
   /*
    * Skip leading path separators.
    */
-  while (*path == '/')
+  while (*path == '/') {
     ++path;
-
-  /*
-   * Any path left?
-   */
-  if (*path != '\0') {
-    bool  path_end = false;
-    char* end = path;
-    int   r;
-
-    /*
-     * Split the path into directory components. Check the node and if a file
-     * and not the end of the path remove it and create a directory. If a
-     * directory and not the end of the path decend into the directory.
-     */
-    while (!path_end) {
-      while (*end != '\0' && *end != '/')
-        ++end;
-
-      /*
-       * Are we at the end of the path?
-       */
-      if (*end == '\0')
-        path_end = true;
-
-      /*
-       * Split the path.
-       */
-      *end = '\0';
-
-      /*
-       * Get the node's status, exists, error, directory or regular? Regular
-       * means not a directory.
-       */
-      r = Stat_Node(path);
-
-      /*
-       * If there are errors other than not existing we are finished.
-       */
-      if (r < 0 && errno != ENOENT) {
-        Print_Error(printer, "stat", path);
-        return -1;
-      }
-
-      /*
-       * If a file remove and create a directory if not the end.
-       */
-      if (r == REGTYPE) {
-        r = unlink(path);
-        if (r < 0) {
-          Print_Error(printer, "unlink", path);
-          free(copy);
-          return -1;
-        }
-        if (!path_end) {
-          r = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
-          if (r < 0) {
-            Print_Error(printer, "mkdir (unlink)", path);
-            free(copy);
-            return -1;
-          }
-        }
-      }
-      else if (r < 0) {
-        /*
-         * Node does not exist which means the rest of the path will not exist.
-         */
-        while (!path_end) {
-          r = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
-          if (r < 0) {
-            Print_Error(printer, "mkdir", path);
-            free(copy);
-            return -1;
-          }
-          if (!path_end) {
-            *end = '/';
-            ++end;
-          }
-          while (*end != '\0' && *end != '/')
-            ++end;
-          if (*end == '\0')
-            path_end = true;
-        }
-      }
-      else if (path_end && r == DIRTYPE && linktype != DIRTYPE) {
-        /*
-         * We only handle a directory if at the end of the path and the end is
-         * a file. If we cannot remove the directory because it is not empty we
-         * raise an error. Otherwise this is a directory and we do nothing
-         * which lets us decend into it.
-         */
-        r = rmdir(path);
-        if (r < 0) {
-          Print_Error(printer, "rmdir", path);
-          free(copy);
-          return -1;
-        }
-      }
-
-      /*
-       * If not the end of the path put back the directory separator.
-       */
-      if (!path_end) {
-        *end = '/';
-        ++end;
-      }
-    }
   }
 
-  free(copy);
+  p = path;
+
+  for (; ; ++p) {
+    if (p[0] == '\0') {
+      return 0;
+    } else if (p[0] != '/') {
+      continue;
+    }
+
+    *p = '\0';
+    if (p[1] == '\0') {
+      /* Speculatively unlink the last component so that it can be re-created */
+      unlink(path);
+      return 0;
+    }
+
+    if (mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO) != 0) {
+      if (errno == EEXIST || errno == EISDIR) {
+        struct stat sb;
+
+        if (stat(path, &sb) != 0) {
+          return -1;
+        }
+
+        if (!S_ISDIR(sb.st_mode)) {
+          if (unlink(path) != 0) {
+            Print_Error(printer, "unlink", path);
+            return -1;
+          }
+
+          if (mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO) != 0) {
+            Print_Error(printer, "mkdir (unlink)", path);
+            return -1;
+          }
+        }
+      }
+    }
+
+    *p = '/';
+  }
 
   return 0;
 }
@@ -252,9 +165,10 @@ Untar_ProcessHeader(
   const char          *bufr
 )
 {
-  int            sum;
-  int            hdr_chksum;
-  int            retval = UNTAR_SUCCESSFUL;
+  int sum;
+  int hdr_chksum;
+  int retval = UNTAR_SUCCESSFUL;
+  int r;
 
   ctx->file_name[0] = '\0';
   ctx->file_size = 0;
@@ -290,7 +204,7 @@ Untar_ProcessHeader(
    * with it.
    */
 
-  if (Make_Path(ctx->printer, ctx->file_path, ctx->linkflag) < 0) {
+  if (Make_Path(ctx->printer, ctx->file_path) != 0) {
     retval = UNTAR_FAIL;
   }
 
@@ -298,33 +212,21 @@ Untar_ProcessHeader(
     strlcpy(ctx->link_name, &bufr[157], sizeof(ctx->link_name));
     rtems_printf(ctx->printer, "untar: symlink: %s -> %s\n",
                  ctx->link_name, ctx->file_path);
-    symlink(ctx->link_name, ctx->file_path);
+    r = symlink(ctx->link_name, ctx->file_path);
+    if (r != 0) {
+      Print_Error(ctx->printer, "symlink", ctx->file_path);
+      retval = UNTAR_FAIL;
+    }
   } else if (ctx->linkflag == REGTYPE) {
     rtems_printf(ctx->printer, "untar: file: %s (s:%lu,m:%04lo)\n",
                  ctx->file_path, ctx->file_size, ctx->mode);
     ctx->nblocks = (((ctx->file_size) + 511) & ~511) / 512;
   } else if (ctx->linkflag == DIRTYPE) {
-    int r;
     rtems_printf(ctx->printer, "untar: dir: %s\n", ctx->file_path);
-    r = mkdir(ctx->file_path, S_IRWXU | S_IRWXG | S_IRWXO);
-    if (r < 0) {
-      if (errno == EEXIST) {
-        struct stat stat_buf;
-        if (stat(ctx->file_path, &stat_buf) == 0) {
-          if (S_ISDIR(stat_buf.st_mode)) {
-            r = 0;
-          } else {
-            r = unlink(ctx->file_path);
-            if (r == 0) {
-              r = mkdir(ctx->file_path, ctx->mode);
-            }
-          }
-        }
-      }
-      if (r < 0) {
-        Print_Error(ctx->printer, "mkdir", ctx->file_path);
-        retval = UNTAR_FAIL;
-      }
+    r = mkdir(ctx->file_path, ctx->mode);
+    if (r != 0) {
+      Print_Error(ctx->printer, "mkdir", ctx->file_path);
+      retval = UNTAR_FAIL;
     }
   }
 

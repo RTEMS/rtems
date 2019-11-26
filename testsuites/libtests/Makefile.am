@@ -1288,9 +1288,9 @@ endif
 tar01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar01_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDADD)
-tar01.tar: Makefile
+tar01.tar: $(srcdir)/tar01/home/test_file $(srcdir)/tar01/home/abc/def/test_script $(srcdir)/tar01/symlink
 	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $(srcdir)/tar01/home $(srcdir)/tar01/symlink
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $+
 tar01-tar.c: tar01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar01-tar.h: tar01.tar
@@ -1327,9 +1327,9 @@ tar02_SOURCES = tar02/init.c ../psxtests/psxfile01/test_cat.c \
 	tar02-tar.c tar02-tar.h
 tar02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar02) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
-tar02.tar: Makefile
+tar02.tar: $(srcdir)/tar01/home/test_file $(srcdir)/tar01/home/abc/def/test_script $(srcdir)/tar01/symlink
 	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $(srcdir)/tar01/home $(srcdir)/tar01/symlink
+	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $+
 tar02-tar.c: tar02.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar02-tar.h: tar02.tar

@@ -85,9 +85,9 @@ void test_untar_from_memory(void)
   test_cat( "/home/test_file", 0, 0 );
 
   /******************/
-  printf( "========= /home/test_script =========\n" );
-  test_cat( "/home/test_script", 0, 0 );
-  test_untar_check_mode("/home/test_script", 0755);
+  printf( "========= /home/abc/def/test_script =========\n" );
+  test_cat( "/home/abc/def/test_script", 0, 0 );
+  test_untar_check_mode("/home/abc/def/test_script", 0755);
 
   /******************/
   printf( "========= /symlink =========\n" );
@@ -133,9 +133,9 @@ void test_untar_from_file(void)
   test_cat( "/dest/home/test_file", 0, 0 );
 
   /******************/
-  printf( "========= /dest/home/test_script =========\n" );
-  test_cat( "/dest/home/test_script", 0, 0 );
-  test_untar_check_mode("/dest/home/test_script", 0755);
+  printf( "========= /dest/home/abc/def/test_script =========\n" );
+  test_cat( "/dest/home/abc/def/test_script", 0, 0 );
+  test_untar_check_mode("/dest/home/abc/def/test_script", 0755);
 
   /******************/
   printf( "========= /dest/symlink =========\n" );
@@ -179,9 +179,9 @@ void test_untar_chunks_from_memory(void)
   test_cat( "/dest2/home/test_file", 0, 0 );
 
   /******************/
-  printf( "========= /dest2/home/test_script =========\n" );
-  test_cat( "/dest2/home/test_script", 0, 0 );
-  test_untar_check_mode("/dest2/home/test_script", 0755);
+  printf( "========= /dest2/home/abc/def/test_script =========\n" );
+  test_cat( "/dest2/home/abc/def/test_script", 0, 0 );
+  test_untar_check_mode("/dest2/home/abc/def/test_script", 0755);
 
   /******************/
   printf( "========= /dest2/symlink =========\n" );
@@ -225,9 +225,9 @@ void test_untar_unzip_tgz(void)
   test_cat( "/dest3/home/test_file", 0, 0 );
 
   /******************/
-  printf( "========= /dest3/home/test_script =========\n" );
-  test_cat( "/dest3/home/test_script", 0, 0 );
-  test_untar_check_mode("/dest3/home/test_script", 0755);
+  printf( "========= /dest3/home/abc/def/test_script =========\n" );
+  test_cat( "/dest3/home/abc/def/test_script", 0, 0 );
+  test_untar_check_mode("/dest3/home/abc/def/test_script", 0755);
 
   /******************/
   printf( "========= /dest3/symlink =========\n" );
@@ -275,9 +275,9 @@ void test_untar_unzip_txz(void)
   test_cat( "/dest4/home/test_file", 0, 0 );
 
   /******************/
-  printf( "========= /dest4/home/test_script =========\n" );
-  test_cat( "/dest4/home/test_script", 0, 0 );
-  test_untar_check_mode("/dest4/home/test_script", 0755);
+  printf( "========= /dest4/home/abc/def/test_script =========\n" );
+  test_cat( "/dest4/home/abc/def/test_script", 0, 0 );
+  test_untar_check_mode("/dest4/home/abc/def/test_script", 0755);
 
   /******************/
   printf( "========= /dest4/symlink =========\n" );
