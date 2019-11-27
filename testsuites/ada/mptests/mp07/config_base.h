@@ -25,6 +25,6 @@
 #define CONFIGURE_MAXIMUM_POSIX_THREADS              10
 #define CONFIGURE_MAXIMUM_POSIX_KEYS                 10
 
-#include <rtems/confdefs.h>
+#include "../../support/initimpl.h"
 
 /* end of include file */

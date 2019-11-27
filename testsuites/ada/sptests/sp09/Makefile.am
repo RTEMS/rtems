@@ -10,7 +10,7 @@ AM_ADAFLAGS += -gnatp
 noinst_PROGRAMS = ada_sp09
 
 ada_sp09_SOURCES = sp09.adb config.h sptest.adb sptest.ads
-ada_sp09_SOURCES += ../../support/init.c
+ada_sp09_SOURCES += init.c
 
 ada_sp09$(EXEEXT): sp09.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@

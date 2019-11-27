@@ -9,7 +9,7 @@ ada_spname01_SOURCES = spname01.adb config.h sptest.adb sptest.ads
 ada_spname01$(EXEEXT): spname01.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-init.$(OBJEXT): ../../support/init.c
+init.$(OBJEXT): init.c
 	$(COMPILE.c) $(AM_CPPFLAGS) -I$(srcdir) -c $<
 
 scndir = $(rtems_ada_testsdir)

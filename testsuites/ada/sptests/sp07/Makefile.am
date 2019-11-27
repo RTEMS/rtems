@@ -6,7 +6,7 @@ include $(top_srcdir)/ada.am
 noinst_PROGRAMS = ada_sp07
 
 ada_sp07_SOURCES = sp07.adb config.h sptest.adb sptest.ads
-ada_sp07_SOURCES += ../../support/init.c
+ada_sp07_SOURCES += init.c
 
 ada_sp07$(EXEEXT): sp07.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@

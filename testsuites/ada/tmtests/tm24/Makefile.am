@@ -5,7 +5,7 @@ include $(top_srcdir)/ada.am
 
 noinst_PROGRAMS = ada_tm24
 ada_tm24_SOURCES = tm24.adb config.h tmtest.adb tmtest.ads
-ada_tm24_SOURCES += ../../support/init.c
+ada_tm24_SOURCES += init.c
 
 ada_tm24$(EXEEXT): tm24.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@

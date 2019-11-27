@@ -7,7 +7,7 @@ AM_ADAFLAGS += -I.
 
 noinst_PROGRAMS = ada_sp19
 ada_sp19_SOURCES = sp19.adb sptest.adb config.h sptest.ads
-ada_sp19_SOURCES += ../../support/init.c
+ada_sp19_SOURCES += init.c
 
 CLEANFILES += sptest.adb
 

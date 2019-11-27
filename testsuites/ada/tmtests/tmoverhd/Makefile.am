@@ -6,7 +6,7 @@ include $(top_srcdir)/ada.am
 noinst_PROGRAMS = ada_tmoverhd
 ada_tmoverhd_SOURCES = tmoverhd.adb config.h tmtest.adb tmtest.ads \
     dummy_rtems.adb dummy_rtems.ads
-ada_tmoverhd_SOURCES += ../../support/init.c
+ada_tmoverhd_SOURCES += init.c
 
 ada_tmoverhd$(EXEEXT): tmoverhd.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@

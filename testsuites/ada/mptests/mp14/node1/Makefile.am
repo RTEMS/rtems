@@ -8,7 +8,7 @@ AM_ADAFLAGS += -I$(srcdir)/..
 noinst_PROGRAMS = mp14_ada_mp14_node1
 mp14_ada_mp14_node1_SOURCES = mp14_node1.adb ../mptest.adb config.h
 mp14_ada_mp14_node1_SOURCES += ../mptest.ads
-mp14_ada_mp14_node1_SOURCES += ../../../support/init.c
+mp14_ada_mp14_node1_SOURCES += init.c
 
 mp14_ada_mp14_node1$(EXEEXT): mp14_node1.adb ../mptest.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
