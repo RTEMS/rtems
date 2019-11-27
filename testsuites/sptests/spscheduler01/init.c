@@ -12,11 +12,11 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#ifdef HAVE_CONFIG_H
-  #include "config.h"
-#endif
-
 #define _GNU_SOURCE
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>

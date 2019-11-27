@@ -30,11 +30,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _XOPEN_SOURCE
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define _XOPEN_SOURCE
 #include <stdlib.h>
 
 int test( void );

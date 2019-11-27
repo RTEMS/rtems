@@ -30,15 +30,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _XOPEN_SOURCE_EXTENDED 1
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define STACK_SIZE (1<<15) // 32KiB
-
-#define _XOPEN_SOURCE_EXTENDED 1
 #include <ucontext.h>
 #include <stdlib.h>
+
+#define STACK_SIZE (1<<15) // 32KiB
 
 int test( void );
 void func( void );

@@ -30,11 +30,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _XOPEN_SOURCE_EXTENDED 1
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#define _XOPEN_SOURCE_EXTENDED 1
 #include <ucontext.h>
 
 int return_value = 0;

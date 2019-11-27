@@ -7,11 +7,11 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define _POSIX_26_C_SOURCE
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#define _POSIX_26_C_SOURCE
 
 #include <devctl.h>
 
