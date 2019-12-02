@@ -204,8 +204,6 @@ rtems_task Task_1(
     region_info.Used.number
   );
 
-rtems_test_pause();
-
   puts_nocr(
     "TA1 - rtems_region_return_segment - return segment to region 1 - "
   );

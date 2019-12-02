@@ -206,8 +206,6 @@ static rtems_task Init(
   puts( "Exercising blocking discipline w/unblock in FIFO order" );
   do_test( RTEMS_FIFO, FALSE );
 
-  rtems_test_pause_and_screen_number( 2 );
-
   puts( "Exercising blocking discipline w/extract in priority order " );
   do_test( RTEMS_PRIORITY, TRUE );
 

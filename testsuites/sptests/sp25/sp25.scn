@@ -27,7 +27,6 @@ TA1 - rtems_region_get_information - 0x32010001
 TA1 - got information - free = 1, used = 8
 TA1 - rtems_region_get_free_information - 0x32010001
 TA1 - got free information - free = 1, used = 0
-<pause>
 TA1 - rtems_region_return_segment - return segment to region 1 - 0xXXXXXXXX
 TA1 - rtems_region_return_segment - return segment to region 1 - 0xXXXXXXXX
 TA1 - rtems_region_return_segment - return segment to region 1 - 0xXXXXXXXX

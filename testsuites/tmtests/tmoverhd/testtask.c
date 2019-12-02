@@ -341,8 +341,6 @@ rtems_task Task_1(
          0
       );
 
-rtems_test_pause();
-
 /* rtems_timer_create */
 
       benchmark_timer_initialize();
@@ -677,8 +675,6 @@ rtems_test_pause();
          0
       );
 
-rtems_test_pause();
-
 /* rtems_event_send */
 
       benchmark_timer_initialize();
@@ -1002,8 +998,6 @@ rtems_test_pause();
          overhead,
          0
       );
-
-rtems_test_pause();
 
 /* rtems_io_initialize */
 

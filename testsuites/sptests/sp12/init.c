@@ -85,8 +85,6 @@ rtems_task Init(
   puts( "INIT - Backward priority queue test" );
   Priority_test_driver( (RTEMS_MAXIMUM_PRIORITY / 2u) + 1u );
 
-rtems_test_pause();
-
   puts( "INIT - Binary Semaphore and Priority Inheritance Test" );
 
   status = rtems_semaphore_delete( Semaphore_id[ 2 ] );
@@ -120,8 +118,6 @@ rtems_test_pause();
   directive_failed( status, "rtems_semaphore_create of priority inherit SM2" );
 
   Priority_test_driver( PRIORITY_INHERIT_BASE_PRIORITY );
-
-rtems_test_pause();
 
   status = rtems_semaphore_delete( Semaphore_id[ 2 ] );
   directive_failed( status, "rtems_semaphore_delete of SM2 #3" );

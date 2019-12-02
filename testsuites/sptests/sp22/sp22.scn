@@ -13,7 +13,6 @@ TA1 - rtems_clock_get_tod - 09:00:04   12/31/1988
 TA1 - rtems_timer_reset - timer 1
 TA1 - rtems_task_suspend( RTEMS_SELF )
 TA1 - rtems_clock_get_tod - 09:00:07   12/31/1988
-<pause>
 TA1 - rtems_timer_fire_after - timer 1 in 3 seconds
 TA1 - rtems_timer_cancel - timer 1
 TA1 - rtems_clock_get_tod - 09:00:07   12/31/1988

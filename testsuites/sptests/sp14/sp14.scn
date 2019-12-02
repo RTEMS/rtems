@@ -8,7 +8,6 @@ ASR - ENTRY - signal => 00000001
 ASR - rtems_task_wake_after - yield processor
 ASR - EXIT  - signal => 00000001
 TA1 - rtems_signal_catch - RTEMS_NO_ASR
-<pause>
 TA1 - rtems_signal_send - RTEMS_SIGNAL_1 to self
 ASR - ENTRY - signal => 00000002
 ASR - rtems_task_wake_after - yield processor

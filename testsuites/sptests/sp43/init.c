@@ -296,9 +296,8 @@ rtems_task Init(
   rtems_test_assert( part == 1 );
 
   /*
-   * Start another screen and do the API/Class min/max routines
+   * API/Class min/max routines
    */
-  rtems_test_pause();
 
   printf( "rtems_object_id_api_minimum returned %d\n",
           rtems_object_id_api_minimum() );
@@ -330,9 +329,8 @@ rtems_task Init(
           rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) );
 
   /*
-   *  Another screen break for the API and class name tests
+   *  API and class name tests
    */
-  rtems_test_pause();
 
   printf( "rtems_object_get_api_name(0) = %s\n", rtems_object_get_api_name(0) );
   printf( "rtems_object_get_api_name(255) = %s\n",
@@ -355,10 +353,8 @@ rtems_task Init(
        OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS));
 
   /*
-   *  Another screen break for the information
+   *  Class information
    */
-
-  rtems_test_pause();
 
   puts( "rtems_object_get_class_information - INVALID_ADDRESS" );
   sc = rtems_object_get_class_information(

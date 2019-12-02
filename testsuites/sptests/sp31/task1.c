@@ -198,8 +198,6 @@ rtems_task Task_1(
 
   Print_time();
 
-  rtems_test_pause();
-
   /*
    *  Reset the time since we do not know how long the user waited
    *  before pressing <cr> at the pause.  This insures that the

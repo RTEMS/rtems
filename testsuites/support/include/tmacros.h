@@ -219,34 +219,6 @@ extern "C" {
 
 #define puts_nocr printf
 
-#ifdef RTEMS_TEST_NO_PAUSE
-#define rtems_test_pause() \
-    do { \
-      printf( "<pause>\n" ); \
-  } while ( 0 )
-
-#define rtems_test_pause_and_screen_number( _screen ) \
-  do { \
-    printf( "<pause - screen %d>\n", (_screen) ); \
-  } while ( 0 )
-#else
-#define rtems_test_pause() \
-  do { \
-    char buffer[ 80 ]; \
-    printf( "<pause>" ); \
-    gets( buffer ); \
-    puts( "" ); \
-  } while ( 0 )
-
-#define rtems_test_pause_and_screen_number( _screen ) \
-  do { \
-    char buffer[ 80 ]; \
-    printf( "<pause - screen %d>", (_screen) ); \
-    gets( buffer ); \
-    puts( "" ); \
-  } while ( 0 )
-#endif
-
 #define put_name( name, crlf ) \
 { int c0, c1, c2, c3; \
   c0 = (name >> 24) & 0xff; \

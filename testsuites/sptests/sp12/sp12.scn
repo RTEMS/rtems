@@ -11,7 +11,6 @@ PRI4 - rtems_semaphore_obtain - wait forever on SM2
 PRI3 - rtems_semaphore_obtain - wait forever on SM2
 PRI2 - rtems_semaphore_obtain - wait forever on SM2
 PRI1 - rtems_semaphore_obtain - wait forever on SM2
-<pause>
 INIT - Binary Semaphore and Priority Inheritance Test
 INIT - rtems_semaphore_create - allocated binary semaphore
 INIT - rtems_semaphore_release - allocated binary semaphore
@@ -35,7 +34,6 @@ PRI5 - rtems_semaphore_obtain - nested
 PRI5 - rtems_semaphore_release - nested
 PRI5 - rtems_semaphore_release - restore priority
 PRI5 - priority of PRI5 is 9
-<pause>
 TA1 - rtems_semaphore_ident - smid => 1a010009
 TA1 - rtems_semaphore_obtain - wait forever on SM2
 TA1 - got SM2
@@ -46,7 +44,6 @@ TA1 - got SM1
 TA1 - rtems_task_wake_after - sleep 5 seconds
 TA2 - rtems_semaphore_obtain - wait forever on SM1
 TA3 - rtems_semaphore_obtain - wait forever on SM2
-<pause>
 TA1 - rtems_semaphore_release - release SM1
 TA1 - rtems_semaphore_obtain - waiting for SM1 with 10 second timeout
 TA2 - got SM1
@@ -62,7 +59,6 @@ TA1 - rtems_task_wake_after - sleep 5 seconds
 TA3 - got SM2
 TA3 - rtems_semaphore_release - release SM2
 TA3 - rtems_semaphore_obtain - wait forever on SM3
-<pause>
 TA1 - rtems_task_delete - delete TA3
 TA1 - rtems_task_wake_after - sleep 5 seconds
 TA4 - rtems_semaphore_obtain - wait forever on SM1

@@ -72,8 +72,6 @@ rtems_task Task_1(
   directive_failed( status, "rtems_clock_get_tod" );
   print_time( "TA1 - rtems_clock_get_tod - ", &time, "\n" );
 
-rtems_test_pause();
-
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
   status = rtems_timer_fire_after(
     Timer_id[ 1 ],
@@ -139,8 +137,6 @@ rtems_test_pause();
     "TA1 - RTEMS_EVENT_4 received - eventout => %08" PRIxrtems_event_set "\n",
     eventout 
   );
-
-rtems_test_pause();
 
   puts( "TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds");
   status = rtems_timer_fire_after(
@@ -234,8 +230,6 @@ rtems_test_pause();
   status = rtems_timer_cancel( Timer_id[ 1 ] );
   directive_failed( status, "rtems_timer_cancel" );
 
-rtems_test_pause();
-
   time.day = 13;
   puts( "TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 1 day" );
   status = rtems_timer_fire_when(
@@ -305,8 +299,6 @@ rtems_test_pause();
     "TA1 - RTEMS_EVENT_11 received - eventout => %08" PRIxrtems_event_set "\n",
      eventout
   );
-
-rtems_test_pause();
 
   puts( "TA1 - rtems_event_send/rtems_event_receive combination" );
   status = rtems_timer_fire_after(

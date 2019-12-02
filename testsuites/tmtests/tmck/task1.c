@@ -74,7 +74,6 @@ rtems_task Task_1(
   uint32_t   index;
 
   check_read_timer();
-rtems_test_pause();
 
   benchmark_timer_initialize();
   end_time = benchmark_timer_read();

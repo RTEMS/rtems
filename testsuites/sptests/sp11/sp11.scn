@@ -16,7 +16,6 @@ TA2 - rtems_event_receive - waiting forever on RTEMS_EVENT_10
 TA1 - RTEMS_EVENT_14 received - eventout => 00004000
 TA1 - rtems_event_send - send RTEMS_EVENT_19 to TA2
 TA1 - rtems_clock_get_tod - 08:15:00   02/12/1988
-<pause>
 TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds
 TA1 - rtems_event_receive - waiting forever on RTEMS_EVENT_18
 TA2 - RTEMS_EVENT_10 received - eventout => 00000400
@@ -34,7 +33,6 @@ TA1 - RTEMS_EVENT_3 received - eventout => 00000008
 TA1 - rtems_event_send - send RTEMS_EVENT_4 to self
 TA1 - rtems_event_receive - RTEMS_EVENT_4 or RTEMS_EVENT_5 - forever and ANY
 TA1 - RTEMS_EVENT_4 received - eventout => 00000010
-<pause>
 TA1 - rtems_event_send - send RTEMS_EVENT_18 to self after 5 seconds
 TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_18
 TA1 - rtems_event_send - send RTEMS_EVENT_8 to self after 60 seconds
@@ -47,7 +45,6 @@ TA1 - RTEMS_EVENT_1 received - eventout => 00000002 - at 08:15:01   02/12/1988
 TA1 - RTEMS_EVENT_1 received - eventout => 00000002 - at 08:15:02   02/12/1988
 TA1 - RTEMS_EVENT_1 received - eventout => 00000002 - at 08:15:03   02/12/1988
 TA1 - rtems_timer_cancel - cancelling timer for event RTEMS_EVENT_1
-<pause>
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 1 day
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 1 day
 TA1 - rtems_event_send - sending RTEMS_EVENT_11 to self in 2 days
@@ -57,7 +54,6 @@ TA1 - rtems_event_send - resending RTEMS_EVENT_11 to self in 2 days
 TA1 - rtems_clock_set - 08:15:03   02/15/1988
 TA1 - rtems_event_receive - waiting forever on RTEMS_EVENT_11
 TA1 - RTEMS_EVENT_11 received - eventout => 00000800
-<pause>
 TA1 - rtems_event_send/rtems_event_receive combination
 TA1 - rtems_clock_set - 08:15:00   02/12/1988
 TA1 - rtems_event_receive all outstanding events
