@@ -90,6 +90,9 @@ static void arm_gt_clock_at_tick(void)
   cval = arm_gt_clock_get_compare_value();
   cval += interval;
   arm_gt_clock_set_compare_value(cval);
+#ifdef ARM_GENERIC_TIMER_UNMASK_AT_TICK
+  arm_gt_clock_set_control(0x1);
+#endif /* ARM_GENERIC_TIMER_UNMASK_AT_TICK */
 }
 
 static void arm_gt_clock_handler_install(void)
