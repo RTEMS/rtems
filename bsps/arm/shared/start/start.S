@@ -40,6 +40,17 @@
 
 	.section	".bsp_start_text", "ax"
 
+#ifdef BSP_START_ZIMAGE_HEADER
+.rept	8
+	mov	r0, r0
+.endr
+	b	.Lafter_header
+	.word	0x016f2818		/* Magic numbers to help the loader */
+	.word	bsp_section_start_begin	/* zImage start address */
+	.word	bsp_section_data_end	/* zImage end address */
+.Lafter_header:
+#endif /* BSP_START_ZIMAGE_HEADER */
+
 #if defined(ARM_MULTILIB_ARCH_V4)
 
 #ifdef BSP_START_IN_HYP_SUPPORT
