@@ -1,6 +1,6 @@
 *** BEGIN OF TEST libdl (RTL) 9 ***
 *** TEST VERSION: 5.0.0.ab08681fe52cad071f3a8d554af28c8bfc53b28f-modified
-*** TEST STATE: EXPECTED-PASS
+*** TEST STATE: EXPECTED_PASS
 *** TEST BUILD: RTEMS_POSIX_API
 *** TEST TOOLS: 7.4.0 20181206 (RTEMS 5, RSB 257c9267cfce362138a265764c6a799c12c6b181, Newlib dc6e94551f09d3a983afd571478d63a09d6f66fa)
 --------------------------------------------------

@@ -28,7 +28,7 @@ rtems_printer rtems_test_printer = {
 
 static const char* const test_state_strings[] =
 {
-  "EXPECTED-PASS",
+  "EXPECTED_PASS",
   "EXPECTED_FAIL",
   "USER_INPUT",
   "INDETERMINATE",
