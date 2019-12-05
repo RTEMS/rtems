@@ -29,8 +29,6 @@
 
 volatile uint32_t Clock_driver_ticks;
 
-void Clock_exit(void);
-
 static rtems_isr clockISR(rtems_vector_number vector) {
 
   Clock_driver_ticks += 1;
@@ -50,7 +48,7 @@ static rtems_isr clockISR(rtems_vector_number vector) {
  *  This routine allows the clock driver to exit by masking the interrupt and
  *  disabling the clock's counter.
  */
-void Clock_exit(void)
+static void Clock_exit(void)
 {
   *(uint32_t volatile *) TCNTL = 0;
 }

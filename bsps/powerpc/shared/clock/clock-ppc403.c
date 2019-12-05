@@ -58,7 +58,7 @@ volatile uint32_t Clock_driver_ticks;
 static uint32_t   pit_value, tick_time;
 static bool       auto_restart;
 
-void Clock_exit( void );
+static void Clock_exit( void );
 
 static inline uint32_t get_itimer(void)
 {

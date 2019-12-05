@@ -59,7 +59,7 @@ void init_hbt(void);
 void enable_hbi(void);
 void disable_hbi(void);
 
-void Clock_exit(void);
+static void Clock_exit(void);
 rtems_isr Clock_isr(rtems_vector_number vector);
 rtems_isr User_Clock_isr(rtems_vector_number vector);
 void Install_clock(rtems_isr_entry clock_isr);
@@ -95,8 +95,6 @@ uint32_t Clock_isrs;              /* ISRs until next tick */
  */
 
 rtems_isr_entry  Old_ticker;
-
-void Clock_exit( void );
 
 static uint32_t mips_timer_rate = 0;
 

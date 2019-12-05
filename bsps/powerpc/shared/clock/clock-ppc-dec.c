@@ -198,17 +198,6 @@ int clockIsOn(void* unused)
 }
 
 /*
- *  Clock_exit
- *
- *  This routine allows the clock driver to exit by masking the interrupt and
- *  disabling the clock's counter.
- */
-void Clock_exit( void )
-{
-  (void) BSP_disconnect_clock_handler ();
-}
-
-/*
  *  Clock_initialize
  *
  *  This routine initializes the clock driver.

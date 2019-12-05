@@ -167,15 +167,6 @@ static int ppc_clock_exception_handler_ppc405(BSP_Exception_frame *frame, unsign
   return 0;
 }
 
-void Clock_exit(void)
-{
-  /* Set the decrementer to the maximum value */
-  ppc_set_decrementer_register( PPC_CLOCK_DECREMENTER_MAX);
-
-  /* Use default clock handler */
-  ppc_clock_tick = ppc_clock_no_tick;
-}
-
 rtems_device_driver Clock_initialize(
   rtems_device_major_number major,
   rtems_device_minor_number minor,

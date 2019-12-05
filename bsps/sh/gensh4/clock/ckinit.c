@@ -24,6 +24,8 @@
 #include <rtems/score/ispsh7750.h>
 #include <rtems/score/iosh7750.h>
 
+static void Clock_exit( void );
+
 extern uint32_t bsp_clicks_per_second;
 
 #ifndef CLOCKPRIO

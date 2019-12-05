@@ -51,7 +51,7 @@ Clock_isr (rtems_vector_number vector)
   rtems_clock_tick();
 }
 
-void
+static void
 Clock_exit (void)
 {
   /*

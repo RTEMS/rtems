@@ -52,7 +52,7 @@ Clock_isr (rtems_vector_number vector)
   }
 }
 
-void
+static void
 Clock_exit(void)
 {
   uint32_t icr;

@@ -48,7 +48,7 @@ uint32_t         Clock_isrs;              /* ISRs until next tick */
  */
 rtems_isr_entry  Old_ticker;
 
-void Clock_exit( void );
+static void Clock_exit( void );
 
 /*
  *  Isr Handler

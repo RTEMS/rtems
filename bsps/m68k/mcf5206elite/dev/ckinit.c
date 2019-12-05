@@ -47,7 +47,7 @@ Clock_isr (rtems_vector_number vector)
       rtems_clock_hook(vector);
 }
 
-void
+static void
 Clock_exit(void)
 {
   /* disable all timer1 interrupts */

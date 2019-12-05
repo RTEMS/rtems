@@ -24,7 +24,7 @@ uint32_t                Clock_isrs;         /* ISRs until next tick */
 volatile uint32_t       Clock_driver_ticks; /* ticks since initialization */
 static rtems_isr_entry  Old_ticker;
 
-void Clock_exit( void );
+static void Clock_exit( void );
 
 static rtems_isr Clock_isr(rtems_vector_number vector)
 {

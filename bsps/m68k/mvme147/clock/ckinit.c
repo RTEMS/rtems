@@ -29,7 +29,7 @@ uint32_t         Clock_isrs;                  /* ISRs until next tick */
 volatile uint32_t         Clock_driver_ticks; /* ticks since initialization */
 rtems_isr_entry  Old_ticker;
 
-void Clock_exit( void );
+static void Clock_exit( void );
 
 /*
  *  ISR Handler

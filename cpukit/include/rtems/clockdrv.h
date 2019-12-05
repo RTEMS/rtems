@@ -39,8 +39,6 @@ rtems_device_driver Clock_initialize(
   void *
 );
 
-void Clock_exit(void);
-
 #ifdef __cplusplus
 }
 #endif

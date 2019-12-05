@@ -123,7 +123,7 @@ static unsigned int sh_clicks_per_tick(
 
 volatile uint32_t   Clock_driver_ticks;
 
-void Clock_exit( void );
+static void Clock_exit( void );
 static rtems_isr Clock_isr( rtems_vector_number vector );
 
 /*

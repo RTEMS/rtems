@@ -42,6 +42,8 @@
 #include <rtems/score/ispsh7045.h>
 #include <rtems/score/iosh7045.h>
 
+static void Clock_exit( void );
+
 extern uint32_t bsp_clicks_per_second;
 
 #define _MTU_COUNTER0_MICROSECOND (Clock_MHZ/16)
