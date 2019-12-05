@@ -194,22 +194,7 @@ rtems_isr Clock_isr(
   #endif
 }
 
-/**
- * @brief Clock_initialize
- *
- * This routine initializes the clock driver.
- *
- * @param[in] major Clock device major number.
- * @param[in] minor Clock device minor number.
- * @param[in] parg  Pointer to optional device driver arguments
- *
- * @retval rtems_device_driver status code
- */
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   Clock_driver_ticks = 0;
 
@@ -240,6 +225,4 @@ rtems_device_driver Clock_initialize(
   #if CLOCK_DRIVER_ISRS_PER_TICK
     Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK_VALUE;
   #endif
-
-  return RTEMS_SUCCESSFUL;
 }

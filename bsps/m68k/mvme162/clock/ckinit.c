@@ -77,13 +77,7 @@ void Clock_exit( void )
 /* Dummy for now. See other m68k BSP's for code examples */
 }
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   Install_clock( Clock_isr );
-
-  return RTEMS_SUCCESSFUL;
 }

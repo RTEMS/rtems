@@ -198,20 +198,7 @@ void Clock_exit( void )
   mips_disable_in_interrupt_mask(~CLOCK_VECTOR_MASK);
 }
 
-/*
- *  Clock_initialize
- *
- *  Device driver entry point for clock tick driver initialization.
- */
-
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   Install_clock( Clock_isr );
-
-  return RTEMS_SUCCESSFUL;
 }
-

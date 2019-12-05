@@ -180,6 +180,7 @@ rtems_task Init(
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 
 /* more one more driver slot than are statically configured */
 #define CONFIGURE_MAXIMUM_DRIVERS 2

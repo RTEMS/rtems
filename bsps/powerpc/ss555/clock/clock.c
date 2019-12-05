@@ -130,13 +130,7 @@ static void Install_clock(rtems_isr_entry clock_isr)
   atexit(Clock_exit);
 }
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   Install_clock( Clock_isr );
-
-  return RTEMS_SUCCESSFUL;
 }

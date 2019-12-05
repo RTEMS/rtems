@@ -1,7 +1,4 @@
 /*
- *  Implementation of the Clock_initialize() functions
- *  prototyped in rtems/c/src/lib/include/clockdrv.h.
- *
  *  This port does not allow the application to select which timer on the
  *  MVME167 to use for the clock, nor does it allow the application to
  *  configure the clock. The clock uses the VMEchip2 Tick Timer #2. This
@@ -147,13 +144,7 @@ void clock_exit( void )
   set_vector( Old_ticker, CLOCK_VECTOR, 1 );
 }
 
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   VMEchip2_T2_initialize();
-
-  return RTEMS_SUCCESSFUL;
 }

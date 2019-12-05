@@ -26,9 +26,9 @@ void do_test_zero_driver(void);
 
 #define PRIurtems_device_major_number PRIu32
 
-#define STUB_DRIVER_MAJOR     0x2
-#define ZERO_DRIVER_MAJOR     0x3
-#define NO_DRIVER_MAJOR       0x4
+#define STUB_DRIVER_MAJOR     1
+#define ZERO_DRIVER_MAJOR     2
+#define NO_DRIVER_MAJOR       3
 #define INVALID_DRIVER_MAJOR  UINT32_MAX
 
 /* driver entries to use with io_register */

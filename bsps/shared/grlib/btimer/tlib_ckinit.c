@@ -163,8 +163,7 @@ static void tlib_clock_timecounter_tick(void)
   priv.ops->timecounter_tick();
 }
 
-/* Return a value not equal to RTEMS_SUCCESFUL to make Clock_initialize fail. */
-static rtems_device_driver tlib_clock_install_isr(rtems_isr *isr)
+static void tlib_clock_install_isr(rtems_isr *isr)
 {
   int flags = 0;
 
@@ -173,8 +172,6 @@ static rtems_device_driver tlib_clock_install_isr(rtems_isr *isr)
   flags = TLIB_FLAGS_BROADCAST;
 #endif
   tlib_irq_register(priv.tlib_tick, isr, NULL, flags);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 #ifndef RTEMS_SMP
@@ -404,13 +401,7 @@ static const struct ops ops_irqamp = {
   } while (0)
 
 #define Clock_driver_support_install_isr( isr ) \
-  do { \
-    rtems_device_driver ret; \
-    ret = tlib_clock_install_isr( isr ); \
-    if (RTEMS_SUCCESSFUL != ret) { \
-      return ret; \
-    } \
-  } while (0)
+  tlib_clock_install_isr( isr )
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
   /* Done by tlib_clock_install_isr() */

@@ -1558,6 +1558,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
   #include <rtems/clockdrv.h>
+
+  #ifdef CONFIGURE_INIT
+    RTEMS_SYSINIT_ITEM(
+      _Clock_Initialize,
+      RTEMS_SYSINIT_DEVICE_DRIVERS,
+      RTEMS_SYSINIT_ORDER_THIRD
+    );
+  #endif
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
@@ -1619,9 +1627,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
       CONSOLE_DRIVER_TABLE_ENTRY,
     #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-      CLOCK_DRIVER_TABLE_ENTRY,
-    #endif
     #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
       RTC_DRIVER_TABLE_ENTRY,
     #endif
@@ -1649,7 +1654,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #ifdef CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
       NULL_DRIVER_TABLE_ENTRY
     #elif !defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
         !defined(CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER) && \

@@ -197,16 +197,7 @@ int clockIsOn(void* unused)
   return 0;
 }
 
-/*
- *  Clock_initialize
- *
- *  This routine initializes the clock driver.
- */
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   rtems_interrupt_level l,tcr;
 

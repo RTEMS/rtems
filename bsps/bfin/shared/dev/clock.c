@@ -53,16 +53,7 @@ static void Clock_exit(void)
   *(uint32_t volatile *) TCNTL = 0;
 }
 
-/*
- *  Clock_initialize
- *
- *  This routine initializes the clock driver.
- */
-rtems_device_driver Clock_initialize(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *pargp
-)
+void _Clock_Initialize( void )
 {
   Clock_driver_ticks = 0;
 
@@ -75,6 +66,4 @@ rtems_device_driver Clock_initialize(
   *(uint32_t volatile *) TCNTL = TCNTL_TMPWR | TCNTL_TAUTORLD | TCNTL_TMREN;
 
   atexit(Clock_exit);
-
-  return RTEMS_SUCCESSFUL;
 }
