@@ -29,6 +29,7 @@
 
 #include <rtems/score/object.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/userextdata.h>
 #include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/config.h>
 #include <rtems/posix/config.h>
@@ -206,7 +207,6 @@ typedef struct {
   #endif
 
   uint32_t                       number_of_initial_extensions;
-  const rtems_extensions_table  *User_extension_table;
   #if defined(RTEMS_MULTIPROCESSING)
     rtems_multiprocessing_table   *User_multiprocessing_table;
   #endif
@@ -302,10 +302,10 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
    (Configuration.do_zero_of_workspace)
 
 #define rtems_configuration_get_number_of_initial_extensions() \
-        (Configuration.number_of_initial_extensions)
+  ((uint32_t) _User_extensions_Initial_count)
 
 #define rtems_configuration_get_user_extension_table() \
-        (Configuration.User_extension_table)
+  (&_User_extensions_Initial_extensions[ 0 ])
 
 #if defined(RTEMS_MULTIPROCESSING)
   #define rtems_configuration_get_user_multiprocessing_table() \

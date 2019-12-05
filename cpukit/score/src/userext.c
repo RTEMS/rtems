@@ -19,24 +19,18 @@
   #include "config.h"
 #endif
 
-#include <rtems/config.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/score/wkspace.h>
 
 void _User_extensions_Handler_initialization(void)
 {
-  User_extensions_Switch_control *initial_extension_switch_controls;
   const User_extensions_Table    *initial_table;
-  uint32_t                        n;
-  uint32_t                        i;
+  User_extensions_Switch_control *initial_switch_controls;
+  size_t                          n;
+  size_t                          i;
 
-  n = rtems_configuration_get_number_of_initial_extensions();
-
-  initial_extension_switch_controls = _Workspace_Allocate_or_fatal_error(
-    n * sizeof( *initial_extension_switch_controls )
-  );
-
-  initial_table = rtems_configuration_get_user_extension_table();
+  initial_table = _User_extensions_Initial_extensions;
+  initial_switch_controls = _User_extensions_Initial_switch_controls;
+  n = _User_extensions_Initial_count;
 
   for ( i = 0 ; i < n ; ++i ) {
     User_extensions_thread_switch_extension callout;
@@ -46,7 +40,7 @@ void _User_extensions_Handler_initialization(void)
     if ( callout != NULL ) {
       User_extensions_Switch_control *c;
 
-      c = &initial_extension_switch_controls[ i ];
+      c = &initial_switch_controls[ i ];
       c->thread_switch = callout;
       _Chain_Initialize_node( &c->Node );
       _Chain_Append_unprotected( &_User_extensions_Switches_list, &c->Node );

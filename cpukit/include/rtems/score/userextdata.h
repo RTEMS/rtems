@@ -53,6 +53,28 @@ typedef struct {
   User_extensions_Table          Callouts;
 }   User_extensions_Control;
 
+/**
+ * @brief The count of initial user extensions.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const size_t _User_extensions_Initial_count;
+
+/**
+ * @brief The table of initial user extensions.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const User_extensions_Table _User_extensions_Initial_extensions[];
+
+/**
+ * @brief A spare switch control for each initial user extension.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern User_extensions_Switch_control
+  _User_extensions_Initial_switch_controls[];
+
 /** @} */
 
 #ifdef __cplusplus

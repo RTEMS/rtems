@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -24,7 +24,6 @@
   #include "config.h"
 #endif
 
-#include <rtems/config.h>
 #include <rtems/score/userextimpl.h>
 
 #include <pthread.h>
@@ -164,9 +163,8 @@ void _User_extensions_Iterate(
 
   executing = _Thread_Get_executing();
 
-  initial_begin = rtems_configuration_get_user_extension_table();
-  initial_end =
-    initial_begin + rtems_configuration_get_number_of_initial_extensions();
+  initial_begin = _User_extensions_Initial_extensions;
+  initial_end = initial_begin + _User_extensions_Initial_count;
 
   if ( direction == CHAIN_ITERATOR_FORWARD ) {
     initial_current = initial_begin;

@@ -2124,7 +2124,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     defined(CONFIGURE_INITIAL_EXTENSIONS) || \
     defined(CONFIGURE_STACK_CHECKER_ENABLED) || \
     (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  static const rtems_extensions_table Configuration_Initial_Extensions[] = {
+  const User_extensions_Table _User_extensions_Initial_extensions[] = {
     #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0 && \
       defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED)
       RECORD_EXTENSION,
@@ -2143,18 +2143,18 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #endif
   };
 
-  #define _CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
-  #define _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
-    RTEMS_ARRAY_SIZE(Configuration_Initial_Extensions)
+  const size_t _User_extensions_Initial_count =
+    RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions );
+
+  User_extensions_Switch_control _User_extensions_Initial_switch_controls[
+    RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions )
+  ];
 
   RTEMS_SYSINIT_ITEM(
     _User_extensions_Handler_initialization,
     RTEMS_SYSINIT_INITIAL_EXTENSIONS,
     RTEMS_SYSINIT_ORDER_MIDDLE
   );
-#else
-  #define _CONFIGURE_INITIAL_EXTENSION_TABLE NULL
-  #define _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
 #if defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
@@ -2487,17 +2487,6 @@ struct _reent *__getreent(void)
   _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS
 
 /**
- * This macro reserves the memory required by the statically configured
- * user extensions.
- */
-#define _CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS \
-  (_CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS == 0 ? 0 : \
-    _Configure_From_workspace( \
-      _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
-        * sizeof(User_extensions_Switch_control) \
-    ))
-
-/**
  * This calculates the memory required for the executive workspace.
  *
  * This is an internal parameter.
@@ -2517,7 +2506,6 @@ struct _reent *__getreent(void)
    _CONFIGURE_MEMORY_FOR_POSIX_SHMS( \
      CONFIGURE_MAXIMUM_POSIX_SHMS) + \
    _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS + \
-   _CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    _CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
    (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
@@ -2923,8 +2911,6 @@ struct _reent *__getreent(void)
         false,
       #endif
     #endif
-    _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,   /* number of static extensions */
-    _CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
     #if defined(RTEMS_MULTIPROCESSING)
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
