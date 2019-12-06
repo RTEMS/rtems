@@ -43,8 +43,6 @@ extern "C" {
 
 #define CPU_SOFTWARE_FP FALSE
 
-#define CPU_CONTEXT_FP_SIZE 0
-
 #define CPU_ALL_TASKS_ARE_FP FALSE
 
 #define CPU_IDLE_TASK_IS_FP FALSE

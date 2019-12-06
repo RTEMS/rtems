@@ -52,88 +52,15 @@ extern "C" {
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
 
-/*
- *  Does the CPU have hardware floating point?
- *
- *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.
- *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is ignored.
- *
- *  If there is a FP coprocessor such as the i387 or mc68881, then
- *  the answer is TRUE.
- *
- *  The macro name "MOXIE_HAS_FPU" should be made CPU specific.
- *  It indicates whether or not this CPU model has FP support.  For
- *  example, it would be possible to have an i386_nofp CPU model
- *  which set this to false to indicate that you have an i386 without
- *  an i387 and wish to leave floating point support out of RTEMS.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_HARDWARE_FP     FALSE
+#define CPU_HARDWARE_FP FALSE
 
-/*
- *  Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
- *
- *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is assumed.
- *  If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
- *
- *  If CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_ALL_TASKS_ARE_FP     FALSE
+#define CPU_SOFTWARE_FP FALSE
 
-/*
- *  Should the IDLE task have a floating point context?
- *
- *  If TRUE, then the IDLE task is created as a RTEMS_FLOATING_POINT task
- *  and it has a floating point context which is switched in and out.
- *  If FALSE, then the IDLE task does not have a floating point context.
- *
- *  Setting this to TRUE negatively impacts the time required to preempt
- *  the IDLE task from an interrupt because the floating point context
- *  must be saved as part of the preemption.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_IDLE_TASK_IS_FP      FALSE
+#define CPU_ALL_TASKS_ARE_FP FALSE
 
-/*
- *  Should the saving of the floating point registers be deferred
- *  until a context switch is made to another different floating point
- *  task?
- *
- *  If TRUE, then the floating point context will not be stored until
- *  necessary.  It will remain in the floating point registers and not
- *  disturned until another floating point task is switched to.
- *
- *  If FALSE, then the floating point context is saved when a floating
- *  point task is switched out and restored when the next floating point
- *  task is restored.  The state of the floating point registers between
- *  those two operations is not specified.
- *
- *  If the floating point context does NOT have to be saved as part of
- *  interrupt dispatching, then it should be safe to set this to TRUE.
- *
- *  Setting this flag to TRUE results in using a different algorithm
- *  for deciding when to save and restore the floating point context.
- *  The deferred FP switch algorithm minimizes the number of times
- *  the FP context is saved and restored.  The FP context is not saved
- *  until a context switch is made to another, different FP task.
- *  Thus in a system with only one FP task, the FP context will never
- *  be saved or restored.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#define CPU_IDLE_TASK_IS_FP FALSE
+
+#define CPU_USE_DEFERRED_FP_SWITCH FALSE
 
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
@@ -242,32 +169,8 @@ typedef struct {
   (_context)->sp
 
 typedef struct {
-    double      some_float_register[2];
-} Context_Control_fp;
-
-typedef struct {
     uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
-
-/*
- *  Nothing prevents the porter from declaring more CPU specific variables.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-
-/*
- *  The size of the floating point context area.  On some CPUs this
- *  will not be a "sizeof" because the format of the floating point
- *  area is not defined -- only the size is.  This is usually on
- *  CPUs with a "floating point save context" instruction.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /*
  *  Amount of extra stack (above minimum stack size) required by
@@ -503,9 +406,6 @@ uint32_t   _CPU_ISR_Get_level( void );
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
 
-#define _CPU_Context_Initialize_fp( _destination ) \
-  memset( *( _destination ), 0, CPU_CONTEXT_FP_SIZE );
-
 /* end of Context handler macros */
 
 /* Fatal Error manager macros */
@@ -579,32 +479,6 @@ void _CPU_Context_switch(
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_NO_RETURN;
-
-/*
- *  _CPU_Context_save_fp
- *
- *  This routine saves the floating point context passed to it.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-void _CPU_Context_save_fp(
-  Context_Control_fp **fp_context_ptr
-);
-
-/*
- *  _CPU_Context_restore_fp
- *
- *  This routine restores the floating point context passed to it.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-void _CPU_Context_restore_fp(
-  Context_Control_fp **fp_context_ptr
-);
 
 /**
  * @brief The set of registers that specifies the complete processor state.

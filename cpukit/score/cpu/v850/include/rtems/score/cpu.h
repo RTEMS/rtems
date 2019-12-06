@@ -41,126 +41,15 @@ extern "C" {
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
 
-/**
- * @def CPU_HARDWARE_FP
- *
- * Does the CPU have hardware floating point?
- *
- * If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.
- * If FALSE, then the RTEMS_FLOATING_POINT task attribute is ignored.
- *
- * If there is a FP coprocessor such as the i387 or mc68881, then
- * the answer is TRUE.
- *
- * The macro name "V850_HAS_FPU" should be made CPU specific.
- * It indicates whether or not this CPU model has FP support.  For
- * example, it would be possible to have an i386_nofp CPU model
- * which set this to false to indicate that you have an i386 without
- * an i387 and wish to leave floating point support out of RTEMS.
- */
+#define CPU_HARDWARE_FP FALSE
 
-/**
- * @def CPU_SOFTWARE_FP
- *
- * Does the CPU have no hardware floating point and GCC provides a
- * software floating point implementation which must be context
- * switched?
- *
- * This feature conditional is used to indicate whether or not there
- * is software implemented floating point that must be context
- * switched.  The determination of whether or not this applies
- * is very tool specific and the state saved/restored is also
- * compiler specific.
- *
- * Port Specific Information:
- *
- * Some v850 models do have IEEE hardware floating point support but
- * they do not have any special registers to save or bit(s) which
- * determine if the FPU is enabled. In short, there appears to be nothing
- * related to the floating point operations which impact the RTEMS
- * thread context switch. Thus from an RTEMS perspective, there is really
- * no FPU to manage.
- */
-#define CPU_HARDWARE_FP     FALSE
-#define CPU_SOFTWARE_FP     FALSE
+#define CPU_SOFTWARE_FP FALSE
 
-/**
- * Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
- *
- * If TRUE, then the RTEMS_FLOATING_POINT task attribute is assumed.
- * If FALSE, then the RTEMS_FLOATING_POINT task attribute is followed.
- *
- * So far, the only CPUs in which this option has been used are the
- * HP PA-RISC and PowerPC.  On the PA-RISC, The HP C compiler and
- * gcc both implicitly used the floating point registers to perform
- * integer multiplies.  Similarly, the PowerPC port of gcc has been
- * seen to allocate floating point local variables and touch the FPU
- * even when the flow through a subroutine (like vfprintf()) might
- * not use floating point formats.
- *
- * If a function which you would not think utilize the FP unit DOES,
- * then one can not easily predict which tasks will use the FP hardware.
- * In this case, this option should be TRUE.
- *
- * If @ref CPU_HARDWARE_FP is FALSE, then this should be FALSE as well.
- *
- * Port Specific Information:
- *
- * This should be false until it has been demonstrated that gcc for the
- * v850 generates FPU code when it is unexpected. But even this would
- * not matter since there are no FP specific registers or bits which
- * would be corrupted if an FP operation occurred in an integer only
- * thread.
- */
-#define CPU_ALL_TASKS_ARE_FP     FALSE
+#define CPU_ALL_TASKS_ARE_FP FALSE
 
-/**
- * Should the IDLE task have a floating point context?
- *
- * If TRUE, then the IDLE task is created as a RTEMS_FLOATING_POINT task
- * and it has a floating point context which is switched in and out.
- * If FALSE, then the IDLE task does not have a floating point context.
- *
- * Setting this to TRUE negatively impacts the time required to preempt
- * the IDLE task from an interrupt because the floating point context
- * must be saved as part of the preemption.
- *
- * Port Specific Information:
- *
- * The IDLE thread should not be using the FPU. Leave this off.
- */
-#define CPU_IDLE_TASK_IS_FP      FALSE
+#define CPU_IDLE_TASK_IS_FP FALSE
 
-/**
- * Should the saving of the floating point registers be deferred
- * until a context switch is made to another different floating point
- * task?
- *
- * If TRUE, then the floating point context will not be stored until
- * necessary.  It will remain in the floating point registers and not
- * disturned until another floating point task is switched to.
- *
- * If FALSE, then the floating point context is saved when a floating
- * point task is switched out and restored when the next floating point
- * task is restored.  The state of the floating point registers between
- * those two operations is not specified.
- *
- * If the floating point context does NOT have to be saved as part of
- * interrupt dispatching, then it should be safe to set this to TRUE.
- *
- * Setting this flag to TRUE results in using a different algorithm
- * for deciding when to save and restore the floating point context.
- * The deferred FP switch algorithm minimizes the number of times
- * the FP context is saved and restored.  The FP context is not saved
- * until a context switch is made to another, different FP task.
- * Thus in a system with only one FP task, the FP context will never
- * be saved or restored.
- *
- * Port Specific Information:
- *
- * See earlier comments. There is no FPU state to manage.
- */
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#define CPU_USE_DEFERRED_FP_SWITCH FALSE
 
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
@@ -276,15 +165,6 @@ typedef struct {
   (_context)->r3_stack_pointer
 
 /**
- * This defines the complete set of floating point registers that must
- * be saved during any context switch from one thread to another.
- */
-typedef struct {
-    /** FPU registers are listed here */
-    double      some_float_register;
-} Context_Control_fp;
-
-/**
  * This defines the set of integer and processor state registers that must
  * be saved during an interrupt.  This set does not include any which are
  * in @ref Context_Control.
@@ -296,20 +176,6 @@ typedef struct {
      */
     uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
-
-/**
- * The size of the floating point context area.  On some CPUs this
- * will not be a "sizeof" because the format of the floating point
- * area is not defined -- only the size is.  This is usually on
- * CPUs with a "floating point save context" instruction.
- *
- * Port Specific Information:
- *
- * The v850 does not need a floating point context but this needs to be
- * defined so confdefs.h.
- */
-/* #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp ) */
-#define CPU_CONTEXT_FP_SIZE 0
 
 /** @} */
 

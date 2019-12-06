@@ -121,8 +121,6 @@
 
 #define CPU_MODES_INTERRUPT_MASK 0x1
 
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
-
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
@@ -238,10 +236,6 @@ typedef struct {
   volatile bool is_executing;
 #endif
 } Context_Control;
-
-typedef struct {
-  /* Not supported */
-} Context_Control_fp;
 
 static inline void _ARM_Data_memory_barrier( void )
 {

@@ -45,12 +45,11 @@ extern "C" {
 
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
 #define CPU_ISR_PASSES_FRAME_POINTER FALSE
-// XXX: Enable FPU support
-#define CPU_HARDWARE_FP     FALSE
-#define CPU_SOFTWARE_FP     FALSE
-#define CPU_ALL_TASKS_ARE_FP     FALSE
-#define CPU_IDLE_TASK_IS_FP      FALSE
-#define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#define CPU_HARDWARE_FP FALSE
+#define CPU_SOFTWARE_FP FALSE
+#define CPU_ALL_TASKS_ARE_FP FALSE
+#define CPU_IDLE_TASK_IS_FP FALSE
+#define CPU_USE_DEFERRED_FP_SWITCH FALSE
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 #define CPU_STACK_GROWS_UP               FALSE
 
@@ -88,17 +87,6 @@ typedef struct {
 
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->rsp
-
-typedef struct {
-  /* XXX: MMX, XMM, others?
-   *
-   * All x87 registers are caller-saved, so callees that make use of the MMX
-   * registers may use the faster femms instruction
-   */
-
-  /** FPU registers are listed here */
-  double      some_float_register;
-} Context_Control_fp;
 
 /*
  * Caller-saved registers for interrupt frames
@@ -152,7 +140,6 @@ typedef struct {
   );
 #endif
 
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 #define CPU_STACK_MINIMUM_SIZE          (1024*4)
@@ -294,14 +281,6 @@ void _CPU_Context_switch(
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_NO_RETURN;
-
-void _CPU_Context_save_fp(
-  Context_Control_fp **fp_context_ptr
-);
-
-void _CPU_Context_restore_fp(
-  Context_Control_fp **fp_context_ptr
-);
 
 typedef struct {
   uint32_t processor_state_register;

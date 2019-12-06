@@ -52,43 +52,9 @@ extern "C" {
  */
 #define CPU_ISR_PASSES_FRAME_POINTER TRUE
 
-/**
- * @def CPU_HARDWARE_FP
- *
- * Does the CPU have hardware floating point?
- *
- * If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.
- * If FALSE, then the RTEMS_FLOATING_POINT task attribute is ignored.
- *
- * If there is a FP coprocessor such as the i387 or mc68881, then
- * the answer is TRUE.
- *
- * The macro name "NO_CPU_HAS_FPU" should be made CPU specific.
- * It indicates whether or not this CPU model has FP support.  For
- * example, it would be possible to have an i386_nofp CPU model
- * which set this to false to indicate that you have an i386 without
- * an i387 and wish to leave floating point support out of RTEMS.
- */
+#define CPU_HARDWARE_FP FALSE
 
-/**
- * @def CPU_SOFTWARE_FP
- *
- * Does the CPU have no hardware floating point and GCC provides a
- * software floating point implementation which must be context
- * switched?
- *
- * This feature conditional is used to indicate whether or not there
- * is software implemented floating point that must be context
- * switched.  The determination of whether or not this applies
- * is very tool specific and the state saved/restored is also
- * compiler specific.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_HARDWARE_FP     FALSE
-#define CPU_SOFTWARE_FP     FALSE
+#define CPU_SOFTWARE_FP FALSE
 
 /**
  * Are all tasks RTEMS_FLOATING_POINT tasks implicitly?
@@ -294,13 +260,6 @@ typedef struct {
   (_context)->sp
 
 /**
- * This defines the complete set of floating point registers that must
- * be saved during any context switch from one thread to another.
- */
-typedef struct {
-} Context_Control_fp;
-
-/**
  * This defines the set of integer and processor state registers that must
  * be saved during an interrupt.  This set does not include any which are
  * in @ref Context_Control.
@@ -354,19 +313,6 @@ extern Context_Control_fp _CPU_Null_fp_context;
  */
 
 /* XXX: if needed, put more variables here */
-
-/**
- * @addtogroup RTEMSScoreCPUlm32Context
- * The size of the floating point context area.  On some CPUs this
- * will not be a "sizeof" because the format of the floating point
- * area is not defined -- only the size is.  This is usually on
- * CPUs with a "floating point save context" instruction.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 
 /**
  * @addtogroup RTEMSScoreCPUlm32Interrupt
@@ -757,40 +703,6 @@ void _CPU_Context_switch(
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_NO_RETURN;
-
-/**
- * This routine saves the floating point context passed to it.
- *
- * @param[in] fp_context_ptr is a pointer to a pointer to a floating
- * point context area
- *
- * @return on output @a *fp_context_ptr will contain the address that
- * should be used with @ref _CPU_Context_restore_fp to restore this context.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-void _CPU_Context_save_fp(
-  Context_Control_fp **fp_context_ptr
-);
-
-/**
- * This routine restores the floating point context passed to it.
- *
- * @param[in] fp_context_ptr is a pointer to a pointer to a floating
- * point context area to restore
- *
- * @return on output @a *fp_context_ptr will contain the address that
- * should be used with @ref _CPU_Context_save_fp to save this context.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-void _CPU_Context_restore_fp(
-  Context_Control_fp **fp_context_ptr
-);
 
 /** @} */
 
