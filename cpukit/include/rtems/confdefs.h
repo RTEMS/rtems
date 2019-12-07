@@ -30,6 +30,7 @@
 #include <rtems/ioimpl.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/context.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
@@ -1315,10 +1316,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #ifdef CONFIGURE_TASK_STACK_FROM_ALLOCATOR
   #define _Configure_From_stackspace(_stack_size) \
-    CONFIGURE_TASK_STACK_FROM_ALLOCATOR(_stack_size)
+    CONFIGURE_TASK_STACK_FROM_ALLOCATOR(_stack_size + CONTEXT_FP_SIZE)
 #else
   #define _Configure_From_stackspace(_stack_size) \
-    _Configure_From_workspace(_stack_size)
+    _Configure_From_workspace(_stack_size + CONTEXT_FP_SIZE)
 #endif
 
 /**
@@ -2313,16 +2314,6 @@ struct _reent *__getreent(void)
  */
 #ifndef CONFIGURE_EXECUTIVE_RAM_SIZE
 
-/*
- * Account for allocating the following per object
- *   + array of object control structures
- *   + local pointer table -- pointer per object plus a zero'th
- *     entry in the local pointer table.
- */
-#define _CONFIGURE_MEMORY_FOR_TASKS(_tasks, _number_FP_tasks) \
-  (_Configure_Max_Objects(_number_FP_tasks) \
-    * _Configure_From_workspace(CONTEXT_FP_SIZE))
-
 /**
  * The following macro is used to calculate the memory allocated by RTEMS
  * for the message buffers associated with a particular message queue.
@@ -2359,41 +2350,12 @@ struct _reent *__getreent(void)
 #endif
 
 /**
- * This defines the formula used to compute the amount of memory
- * reserved for internal task control structures.
- */
-#if CPU_IDLE_TASK_IS_FP == TRUE
-  #define _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS \
-    _CONFIGURE_MEMORY_FOR_TASKS( \
-      _CONFIGURE_IDLE_TASKS_COUNT + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT, \
-      _CONFIGURE_IDLE_TASKS_COUNT + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT \
-    )
-#else
-  #define _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS \
-    _CONFIGURE_MEMORY_FOR_TASKS( \
-      _CONFIGURE_IDLE_TASKS_COUNT + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT, \
-      _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT \
-    )
-#endif
-
-/**
- * This macro accounts for general RTEMS system overhead.
- */
-#define _CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
-  _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS
-
-/**
  * This calculates the memory required for the executive workspace.
  *
  * This is an internal parameter.
  */
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 ( \
-   _CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD + \
-   _CONFIGURE_MEMORY_FOR_TASKS( \
-     _CONFIGURE_TASKS, _CONFIGURE_TASKS) + \
-   _CONFIGURE_MEMORY_FOR_TASKS( \
-     CONFIGURE_MAXIMUM_POSIX_THREADS, CONFIGURE_MAXIMUM_POSIX_THREADS) + \
    _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
    _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \

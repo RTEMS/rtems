@@ -22,6 +22,7 @@
 #define _RTEMS_SCORE_STACKIMPL_H
 
 #include <rtems/score/stack.h>
+#include <rtems/score/context.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -74,15 +75,27 @@ RTEMS_INLINE_ROUTINE uint32_t _Stack_Minimum (void)
  * a valid stack area on this processor, and false otherwise.
  *
  * @param size The stack size to check.
+ * @param is_fp Indicates if the stack is for a floating-point thread.
  *
  * @retval true @a size is large enough.
  * @retval false @a size is not large enough.
  */
-RTEMS_INLINE_ROUTINE bool _Stack_Is_enough (
-  size_t size
+RTEMS_INLINE_ROUTINE bool _Stack_Is_enough(
+  size_t size,
+  bool   is_fp
 )
 {
-  return ( size >= _Stack_Minimum() );
+  size_t minimum;
+
+  minimum = _Stack_Minimum();
+
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+  if ( is_fp ) {
+    minimum += CONTEXT_FP_SIZE;
+  }
+#endif
+
+  return ( size >= minimum );
 }
 
 /**

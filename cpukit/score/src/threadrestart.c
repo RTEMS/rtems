@@ -172,8 +172,6 @@ static void _Thread_Free( Thread_Control *the_thread )
   if ( _Thread_Is_allocated_fp( the_thread ) )
     _Thread_Deallocate_fp();
 #endif
-
-  _Workspace_Free( the_thread->Start.fp_context );
 #endif
 
   _Freechain_Put(

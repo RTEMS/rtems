@@ -43,9 +43,6 @@ bool _Thread_Initialize(
 )
 {
   uintptr_t                tls_size = _TLS_Get_size();
-  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    void                  *fp_area = NULL;
-  #endif
   bool                     extension_status;
   size_t                   i;
   Scheduler_Node          *scheduler_node;
@@ -91,6 +88,13 @@ bool _Thread_Initialize(
   if ( stack_area == NULL ) {
 #endif
     stack_size = _Stack_Ensure_minimum( stack_size );
+
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+    if ( is_fp ) {
+      stack_size += CONTEXT_FP_SIZE;
+    }
+#endif
+
     stack_area = _Stack_Allocate( stack_size );
 
     if ( stack_area == NULL ) {
@@ -99,6 +103,16 @@ bool _Thread_Initialize(
 
     the_thread->Start.allocated_stack = stack_area;
 #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
+  }
+#endif
+
+  /* Allocate floating-point context in stack area */
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+  if ( is_fp ) {
+    the_thread->fp_context = stack_area;
+    the_thread->Start.fp_context = stack_area;
+    stack_size -= CONTEXT_FP_SIZE;
+    stack_area = (char *) stack_area + CONTEXT_FP_SIZE;
   }
 #endif
 
@@ -122,19 +136,6 @@ bool _Thread_Initialize(
       goto failed;
     }
   }
-
-  /*
-   *  Allocate the floating point area for this thread
-   */
-  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    if ( is_fp ) {
-      fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
-      if ( !fp_area )
-        goto failed;
-    }
-    the_thread->fp_context       = fp_area;
-    the_thread->Start.fp_context = fp_area;
-  #endif
 
   /*
    *  Get thread queue heads
@@ -301,16 +302,10 @@ failed:
 #endif
 
   _Workspace_Free( the_thread->Start.tls_area );
-
   _Freechain_Put(
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads
   );
-
-  #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    _Workspace_Free( fp_area );
-  #endif
-
   _Stack_Free( the_thread->Start.allocated_stack );
   return false;
 }

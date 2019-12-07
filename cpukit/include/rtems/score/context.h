@@ -49,7 +49,9 @@ extern "C" {
  *  to store a full floating point context.
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  #define CONTEXT_FP_SIZE CPU_CONTEXT_FP_SIZE
+  #define CONTEXT_FP_SIZE \
+    ( ( CPU_CONTEXT_FP_SIZE + CPU_HEAP_ALIGNMENT - 1 ) \
+      & ~( CPU_HEAP_ALIGNMENT - 1 ) )
 #else
   #define CONTEXT_FP_SIZE 0
 #endif

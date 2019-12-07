@@ -97,6 +97,12 @@ int pthread_create(
     return EINVAL;
 
   /*
+   *  Currently all POSIX threads are floating point if the hardware
+   *  supports it.
+   */
+  is_fp = true;
+
+  /*
    *  Core Thread Initialize ensures we get the minimum amount of
    *  stack space if it is allowed to allocate it itself.
    *
@@ -104,7 +110,7 @@ int pthread_create(
    *        twice the minimum.
    */
   if ( the_attr->stackaddr != NULL ) {
-    if ( !_Stack_Is_enough(the_attr->stacksize) ) {
+    if ( !_Stack_Is_enough( the_attr->stacksize, is_fp ) ) {
       return EINVAL;
     }
 
@@ -190,12 +196,6 @@ int pthread_create(
   if ( the_attr->affinityset == NULL ) {
     return EINVAL;
   }
-
-  /*
-   *  Currently all POSIX threads are floating point if the hardware
-   *  supports it.
-   */
-  is_fp = true;
 
   /*
    *  Allocate the thread control block.
