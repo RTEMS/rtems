@@ -26,6 +26,7 @@
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/userextimpl.h>
@@ -184,7 +185,7 @@ static void _Thread_Free( Thread_Control *the_thread )
    *  Free the rest of the memory associated with this task
    *  and set the associated pointers to NULL for safety.
    */
-  _Thread_Stack_Free( the_thread );
+  _Stack_Free( the_thread->Start.allocated_stack );
 
   _Workspace_Free( the_thread->Start.tls_area );
 

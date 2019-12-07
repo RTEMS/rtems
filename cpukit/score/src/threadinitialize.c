@@ -86,30 +86,21 @@ bool _Thread_Initialize(
       (char *) the_thread + add_on->source_offset;
   }
 
-  /*
-   *  Allocate and Initialize the stack for this thread.
-   */
-  #if !defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
+  /* Allocate the stack for this thread */
+#if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
+  if ( stack_area == NULL ) {
+#endif
     stack_size = _Stack_Ensure_minimum( stack_size );
     stack_area = _Stack_Allocate( stack_size );
 
     if ( stack_area == NULL ) {
       return false;
     }
-  #else
-    if ( stack_area == NULL ) {
-      stack_size = _Stack_Ensure_minimum( stack_size );
-      stack_area = _Stack_Allocate( stack_size );
 
-      if ( stack_area == NULL ) {
-        return false;
-      }
-
-      the_thread->Start.core_allocated_stack = true;
-    } else {
-      the_thread->Start.core_allocated_stack = false;
-    }
-  #endif
+    the_thread->Start.allocated_stack = stack_area;
+#if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
+  }
+#endif
 
   _Stack_Initialize(
      &the_thread->Start.Initial_stack,
@@ -320,6 +311,6 @@ failed:
     _Workspace_Free( fp_area );
   #endif
 
-   _Thread_Stack_Free( the_thread );
+  _Stack_Free( the_thread->Start.allocated_stack );
   return false;
 }

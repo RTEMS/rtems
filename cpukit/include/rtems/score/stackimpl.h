@@ -115,6 +115,15 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
  */
 void *_Stack_Allocate( size_t stack_size );
 
+/**
+ * @brief Free the stack area allocated by _Stack_Allocate().
+ *
+ * Do nothing if the stack area is NULL.
+ *
+ * @param stack_area The stack area to free, or NULL.
+ */
+void _Stack_Free( void *stack_area );
+
 /** @} */
 
 #ifdef __cplusplus

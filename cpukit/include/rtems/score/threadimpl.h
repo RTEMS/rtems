@@ -125,17 +125,6 @@ void _Thread_Create_idle(void);
 void _Thread_Start_multitasking( void ) RTEMS_NO_RETURN;
 
 /**
- * @brief Deallocates thread stack.
- *
- * Deallocate the Thread's stack.
- *
- * @param[out] the_thread The thread to deallocate the stack of.
- */
-void _Thread_Stack_Free(
-  Thread_Control *the_thread
-);
-
-/**
  * @brief Initializes thread.
  *
  * This routine initializes the specified the thread.  It allocates

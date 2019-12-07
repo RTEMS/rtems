@@ -199,10 +199,11 @@ typedef struct {
   uint32_t                             isr_level;
   /** This field is the initial priority. */
   Priority_Control                     initial_priority;
-  #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
-    /** This field indicates whether the SuperCore allocated the stack. */
-    bool                                 core_allocated_stack;
-  #endif
+  /**
+   * @brief This field is a pointer to the allocated stack area, otherwise it
+   * is NULL.
+   */
+  void                                *allocated_stack;
   /** This field is the stack information. */
   Stack_Control                        Initial_stack;
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
