@@ -427,7 +427,6 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
-#define CONFIGURE_MAXIMUM_MRSP_SEMAPHORES 1
 
 /* Lets see when the first RTEMS system hits this limit */
 #define CONFIGURE_MAXIMUM_PROCESSORS 64

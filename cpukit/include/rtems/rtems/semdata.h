@@ -108,9 +108,32 @@ void _Semaphore_MP_Send_extract_proxy (
  * This macro should only be used by <rtems/confdefs.h>.
  *
  * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
- * may be set).
+ *   may be set).
+ * @param scheduler_count The configured scheduler count (only used in SMP
+ *   configurations).
  */
-#define SEMAPHORE_INFORMATION_DEFINE( max ) \
+#if defined(RTEMS_SMP)
+#define SEMAPHORE_INFORMATION_DEFINE( max, scheduler_count ) \
+  typedef union { \
+    Objects_Control Object; \
+    Semaphore_Control Semaphore; \
+    struct { \
+      Objects_Control Object; \
+      MRSP_Control Control; \
+      Priority_Control ceiling_priorities[ scheduler_count ]; \
+    } MRSP; \
+  } Semaphore_Configured_control; \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Semaphore, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_SEMAPHORES, \
+    Semaphore_Configured_control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    _Semaphore_MP_Send_extract_proxy \
+  )
+#else
+#define SEMAPHORE_INFORMATION_DEFINE( max, scheduler_count ) \
   OBJECTS_INFORMATION_DEFINE( \
     _Semaphore, \
     OBJECTS_CLASSIC_API, \
@@ -120,6 +143,7 @@ void _Semaphore_MP_Send_extract_proxy (
     OBJECTS_NO_STRING_NAME, \
     _Semaphore_MP_Send_extract_proxy \
   )
+#endif
 
 /** @} */
 

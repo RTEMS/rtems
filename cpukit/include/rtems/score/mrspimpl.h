@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -31,7 +31,6 @@
 #include <rtems/score/status.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdogimpl.h>
-#include <rtems/score/wkspace.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -302,13 +301,6 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
     return STATUS_INVALID_NUMBER;
   }
 
-  mrsp->ceiling_priorities = _Workspace_Allocate(
-    sizeof( *mrsp->ceiling_priorities ) * scheduler_count
-  );
-  if ( mrsp->ceiling_priorities == NULL ) {
-    return STATUS_NO_MEMORY;
-  }
-
   for ( i = 0 ; i < scheduler_count ; ++i ) {
     const Scheduler_Control *scheduler_of_index;
 
@@ -524,7 +516,6 @@ RTEMS_INLINE_ROUTINE void _MRSP_Destroy(
 {
   _MRSP_Release( mrsp, queue_context );
   _Thread_queue_Destroy( &mrsp->Wait_queue );
-  _Workspace_Free( mrsp->ceiling_priorities );
 }
 
 /** @} */

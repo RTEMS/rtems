@@ -73,7 +73,7 @@ typedef struct {
   /**
    * @brief One ceiling priority per scheduler instance.
    */
-  Priority_Control *ceiling_priorities;
+  Priority_Control ceiling_priorities[ RTEMS_ZERO_LENGTH_ARRAY ];
 } MRSP_Control;
 
 /** @} */

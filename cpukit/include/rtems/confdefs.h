@@ -2000,22 +2000,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
 #endif
 
-/*
- * This macro is calculated to specify the memory required for
- * Classic API Semaphores using MRSP. This is only available in
- * SMP configurations.
- */
-#if !defined(RTEMS_SMP) || \
-  !defined(CONFIGURE_MAXIMUM_MRSP_SEMAPHORES)
-  #define _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES 0
-#else
-  #define _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES \
-    CONFIGURE_MAXIMUM_MRSP_SEMAPHORES * \
-      _Configure_From_workspace( \
-        RTEMS_ARRAY_SIZE(_Scheduler_Table) * sizeof(Priority_Control) \
-      )
-#endif
-
 #ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
   /**
    * This configuration parameter specifies the maximum number of
@@ -2502,7 +2486,6 @@ struct _reent *__getreent(void)
      _CONFIGURE_TASKS, _CONFIGURE_TASKS) + \
    _CONFIGURE_MEMORY_FOR_TASKS( \
      _CONFIGURE_POSIX_THREADS, _CONFIGURE_POSIX_THREADS) + \
-   _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES + \
    _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
    _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
@@ -2786,7 +2769,10 @@ struct _reent *__getreent(void)
   #endif
 
   #if CONFIGURE_MAXIMUM_SEMAPHORES > 0
-    SEMAPHORE_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_SEMAPHORES );
+    SEMAPHORE_INFORMATION_DEFINE(
+      CONFIGURE_MAXIMUM_SEMAPHORES,
+      _CONFIGURE_SCHEDULER_COUNT
+    );
   #endif
 
   #if _CONFIGURE_TIMERS > 0
@@ -3169,6 +3155,10 @@ struct _reent *__getreent(void)
 
 #ifdef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
   #warning "The CONFIGURE_NUMBER_OF_TERMIOS_PORTS configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_MRSP_SEMAPHORES
+  #warning "The CONFIGURE_MAXIMUM_MRSP_SEMAPHORES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS
