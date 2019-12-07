@@ -18,7 +18,8 @@ rtems_monitor_sema_canonical(
     const void            *sema_void
 )
 {
-    const Semaphore_Control *rtems_sema = (const Semaphore_Control *) sema_void;
+    const Semaphore_Control *rtems_sema;
+    uintptr_t flags;
     Thread_Control *owner;
 
     canonical_sema->attribute = 0;
@@ -27,17 +28,20 @@ rtems_monitor_sema_canonical(
     canonical_sema->cur_count = 0;
     canonical_sema->holder_id = 0;
 
+    rtems_sema = (const Semaphore_Control *) sema_void;
+    flags = _Semaphore_Get_flags( rtems_sema );
+
 #if defined(RTEMS_MULTIPROCESSING)
-    if (rtems_sema->is_global) {
+    if ( _Semaphore_Is_global( flags ) ) {
       canonical_sema->attribute |= RTEMS_GLOBAL;
     }
 #endif
 
-    if (rtems_sema->discipline == SEMAPHORE_DISCIPLINE_PRIORITY) {
+    if ( _Semaphore_Get_discipline( flags ) == SEMAPHORE_DISCIPLINE_PRIORITY ) {
       canonical_sema->attribute |= RTEMS_PRIORITY;
     }
 
-    switch ( rtems_sema->variant ) {
+    switch ( _Semaphore_Get_variant( flags ) ) {
       case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
         canonical_sema->attribute |= RTEMS_BINARY_SEMAPHORE
           | RTEMS_INHERIT_PRIORITY;
@@ -63,7 +67,7 @@ rtems_monitor_sema_canonical(
         break;
     }
 
-    switch ( rtems_sema->variant ) {
+    switch ( _Semaphore_Get_variant( flags ) ) {
       case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
         canonical_sema->priority_ceiling = _Scheduler_Unmap_priority(
           _CORE_ceiling_mutex_Get_scheduler( &rtems_sema->Core_control.Mutex ),

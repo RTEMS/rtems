@@ -47,6 +47,7 @@ rtems_status_code rtems_semaphore_create(
   const Scheduler_Control *scheduler;
   bool                     valid;
   Priority_Control         priority;
+  uintptr_t                flags;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -116,29 +117,39 @@ rtems_status_code rtems_semaphore_create(
     return RTEMS_TOO_MANY;
   }
 
-#if defined(RTEMS_MULTIPROCESSING)
-  the_semaphore->is_global = _Attributes_Is_global( attribute_set );
+  flags = _Semaphore_Set_variant( 0, variant );
 
-  if ( _Attributes_Is_global( attribute_set ) &&
-       ! ( _Objects_MP_Allocate_and_open( &_Semaphore_Information, name,
-                            the_semaphore->Object.id, false ) ) ) {
-    _Semaphore_Free( the_semaphore );
-    _Objects_Allocator_unlock();
-    return RTEMS_TOO_MANY;
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Attributes_Is_global( attribute_set ) ) {
+    bool ok;
+
+    ok = _Objects_MP_Allocate_and_open(
+      &_Semaphore_Information,
+      name,
+      the_semaphore->Object.id,
+      false
+    );
+
+    if ( !ok ) {
+      _Semaphore_Free( the_semaphore );
+      _Objects_Allocator_unlock();
+      return RTEMS_TOO_MANY;
+    }
+
+    flags = _Semaphore_Make_global( flags );
   }
 #endif
 
-  executing = _Thread_Get_executing();
-
-  the_semaphore->variant = variant;
-
   if ( _Attributes_Is_priority( attribute_set ) ) {
-    the_semaphore->discipline = SEMAPHORE_DISCIPLINE_PRIORITY;
+    flags = _Semaphore_Set_discipline( flags, SEMAPHORE_DISCIPLINE_PRIORITY );
   } else {
-    the_semaphore->discipline = SEMAPHORE_DISCIPLINE_FIFO;
+    flags = _Semaphore_Set_discipline( flags, SEMAPHORE_DISCIPLINE_FIFO );
   }
 
-  switch ( the_semaphore->variant ) {
+  _Semaphore_Set_flags( the_semaphore, flags );
+  executing = _Thread_Get_executing();
+
+  switch ( variant ) {
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       _CORE_recursive_mutex_Initialize(
@@ -214,8 +225,8 @@ rtems_status_code rtems_semaphore_create(
 #endif
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || variant == SEMAPHORE_VARIANT_COUNTING
       );
       _CORE_semaphore_Initialize(
         &the_semaphore->Core_control.Semaphore,

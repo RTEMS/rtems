@@ -56,15 +56,78 @@ typedef enum {
   SEMAPHORE_DISCIPLINE_FIFO
 } Semaphore_Discipline;
 
-RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
+RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Get_flags(
   const Semaphore_Control *the_semaphore
 )
 {
-  if ( the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY ) {
+  _Assert( _Chain_Is_node_off_chain( &the_semaphore->Object.Node ) );
+  return (uintptr_t) the_semaphore->Object.Node.previous;
+}
+
+RTEMS_INLINE_ROUTINE void _Semaphore_Set_flags(
+  Semaphore_Control *the_semaphore,
+  uintptr_t          flags
+)
+{
+  _Assert( _Chain_Is_node_off_chain( &the_semaphore->Object.Node ) );
+  the_semaphore->Object.Node.previous = (Chain_Node *) flags;
+}
+
+RTEMS_INLINE_ROUTINE Semaphore_Variant _Semaphore_Get_variant(
+  uintptr_t flags
+)
+{
+  return (Semaphore_Discipline) ( flags & 0x7 );
+}
+
+RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_variant(
+  uintptr_t         flags,
+  Semaphore_Variant variant
+)
+{
+  return flags | variant;
+}
+
+RTEMS_INLINE_ROUTINE Semaphore_Discipline _Semaphore_Get_discipline(
+  uintptr_t flags
+)
+{
+  return (Semaphore_Discipline) ( ( flags >> 3 ) & 0x1 );
+}
+
+RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_discipline(
+  uintptr_t            flags,
+  Semaphore_Discipline discipline
+)
+{
+  return flags | ( discipline << 3 );
+}
+
+#if defined(RTEMS_MULTIPROCESSING)
+RTEMS_INLINE_ROUTINE bool _Semaphore_Is_global(
+  uintptr_t flags
+)
+{
+  return ( flags & 0x10 ) != 0;
+}
+
+RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Make_global( uintptr_t flags )
+{
+  return flags | 0x10;
+}
+#endif
+
+RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
+  uintptr_t flags
+)
+{
+  if (
+    _Semaphore_Get_variant( flags ) == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
+  ) {
     return &_Thread_queue_Operations_priority_inherit;
   }
 
-  if ( the_semaphore->discipline == SEMAPHORE_DISCIPLINE_PRIORITY ) {
+  if ( _Semaphore_Get_discipline( flags ) == SEMAPHORE_DISCIPLINE_PRIORITY ) {
     return &_Thread_queue_Operations_priority;
   }
 

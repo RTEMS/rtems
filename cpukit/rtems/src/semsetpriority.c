@@ -47,6 +47,7 @@ static rtems_status_code _Semaphore_Set_priority(
   Priority_Control   core_priority;
   Priority_Control   old_priority;
   Per_CPU_Control   *cpu_self;
+  Semaphore_Variant  variant;
 
   core_priority = _RTEMS_Priority_To_core( scheduler, new_priority, &valid );
   if ( new_priority != RTEMS_CURRENT_PRIORITY && !valid ) {
@@ -59,8 +60,9 @@ static rtems_status_code _Semaphore_Set_priority(
     &the_semaphore->Core_control.Wait_queue,
     queue_context
   );
+  variant = _Semaphore_Get_variant( _Semaphore_Get_flags( the_semaphore ) );
 
-  switch ( the_semaphore->variant ) {
+  switch ( variant ) {
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
       sc = _Semaphore_Is_scheduler_valid(
         &the_semaphore->Core_control.Mutex,
@@ -100,10 +102,10 @@ static rtems_status_code _Semaphore_Set_priority(
 #endif
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
-          || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
-          || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
+          || variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
+          || variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || variant == SEMAPHORE_VARIANT_COUNTING
       );
       old_priority = 0;
       sc = RTEMS_NOT_DEFINED;

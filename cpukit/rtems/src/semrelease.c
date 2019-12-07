@@ -29,6 +29,8 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
   Thread_Control       *executing;
+  uintptr_t             flags;
+  Semaphore_Variant     variant;
   Status_Control        status;
 
   the_semaphore = _Semaphore_Get( id, &queue_context );
@@ -47,8 +49,10 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     &queue_context,
     _Semaphore_Core_mutex_mp_support
   );
+  flags = _Semaphore_Get_flags( the_semaphore );
+  variant = _Semaphore_Get_variant( flags );
 
-  switch ( the_semaphore->variant ) {
+  switch ( variant ) {
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       status = _CORE_recursive_mutex_Surrender(
         &the_semaphore->Core_control.Mutex.Recursive,
@@ -67,7 +71,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
       status = _CORE_recursive_mutex_Surrender(
         &the_semaphore->Core_control.Mutex.Recursive,
-        _Semaphore_Get_operations( the_semaphore ),
+        _Semaphore_Get_operations( flags ),
         executing,
         &queue_context
       );
@@ -75,7 +79,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     case SEMAPHORE_VARIANT_SIMPLE_BINARY:
       status = _CORE_semaphore_Surrender(
         &the_semaphore->Core_control.Semaphore,
-        _Semaphore_Get_operations( the_semaphore ),
+        _Semaphore_Get_operations( flags ),
         1,
         &queue_context
       );
@@ -95,10 +99,10 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
       break;
 #endif
     default:
-      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _Assert( variant == SEMAPHORE_VARIANT_COUNTING );
       status = _CORE_semaphore_Surrender(
         &the_semaphore->Core_control.Semaphore,
-        _Semaphore_Get_operations( the_semaphore ),
+        _Semaphore_Get_operations( flags ),
         UINT32_MAX,
         &queue_context
       );

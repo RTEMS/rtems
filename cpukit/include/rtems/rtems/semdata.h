@@ -38,7 +38,15 @@ extern "C" {
  *  The following defines the control block used to manage each semaphore.
  */
 typedef struct {
-  /** This field is the object management portion of a Semaphore instance. */
+  /**
+   * @brief The object management portion of a semaphore instance.
+   *
+   * A pointer of the node of active semaphores contains the semaphore flags,
+   * see _Semaphore_Get_flags().  The rational for this optimization is a
+   * reduction of the semaphore control size in general and the ability to
+   * allow a configuration dependent size of the semaphore control block, e.g.
+   * for the MrsP semaphores.
+   */
   Objects_Control          Object;
 
   /**
@@ -72,24 +80,6 @@ typedef struct {
     MRSP_Control MRSP;
 #endif
   } Core_control;
-
-  /**
-   * @brief The semaphore variant.
-   *
-   * @see Semaphore_Variant.
-   */
-  unsigned int variant : 3;
-
-  /**
-   * @brief The semaphore thread queue discipline.
-   *
-   * @see Semaphore_Discipline.
-   */
-  unsigned int discipline : 1;
-
-#if defined(RTEMS_MULTIPROCESSING)
-  unsigned int is_global : 1;
-#endif
 }   Semaphore_Control;
 
 /**

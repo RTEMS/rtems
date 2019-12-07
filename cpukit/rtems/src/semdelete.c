@@ -27,6 +27,8 @@ rtems_status_code rtems_semaphore_delete(
 {
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
+  uintptr_t             flags;
+  Semaphore_Variant     variant;
   Status_Control        status;
 
   _Objects_Allocator_lock();
@@ -48,8 +50,10 @@ rtems_status_code rtems_semaphore_delete(
     &the_semaphore->Core_control.Wait_queue,
     &queue_context
   );
+  flags = _Semaphore_Get_flags( the_semaphore );
+  variant = _Semaphore_Get_variant( flags );
 
-  switch ( the_semaphore->variant ) {
+  switch ( variant ) {
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
@@ -71,8 +75,8 @@ rtems_status_code rtems_semaphore_delete(
 #endif
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || variant == SEMAPHORE_VARIANT_COUNTING
       );
       status = STATUS_SUCCESSFUL;
       break;
@@ -89,7 +93,7 @@ rtems_status_code rtems_semaphore_delete(
 
   _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );
 
-  switch ( the_semaphore->variant ) {
+  switch ( variant ) {
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
       _MRSP_Destroy( &the_semaphore->Core_control.MRSP, &queue_context );
@@ -97,15 +101,15 @@ rtems_status_code rtems_semaphore_delete(
 #endif
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
-          || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING
-          || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
-          || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
-          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+        variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
+          || variant == SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING
+          || variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
+          || variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || variant == SEMAPHORE_VARIANT_COUNTING
       );
       _Thread_queue_Flush_critical(
         &the_semaphore->Core_control.Wait_queue.Queue,
-        _Semaphore_Get_operations( the_semaphore ),
+        _Semaphore_Get_operations( flags ),
         _Thread_queue_Flush_status_object_was_deleted,
         &queue_context
       );
@@ -114,7 +118,7 @@ rtems_status_code rtems_semaphore_delete(
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( the_semaphore->is_global ) {
+  if ( _Semaphore_Is_global( flags ) ) {
 
     _Objects_MP_Close( &_Semaphore_Information, id );
 
