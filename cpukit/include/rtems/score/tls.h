@@ -87,15 +87,20 @@ typedef struct {
 /**
  * @brief Gets the TLS size.
  *
- * @return the TLS size.
+ * @return The TLS size.
  */
 static inline uintptr_t _TLS_Get_size( void )
 {
+  uintptr_t size;
+
   /*
-   * Do not use _TLS_Size here since this will lead GCC to assume that this
-   * symbol is not 0 and the tests for 0 will be optimized away.
+   * We must be careful with using _TLS_Size here since this could lead GCC to
+   * assume that this symbol is not 0 and the tests for 0 will be optimized
+   * away.
    */
-  return (uintptr_t) _TLS_BSS_end - (uintptr_t) _TLS_Data_begin;
+  size = (uintptr_t) _TLS_Size;
+  RTEMS_OBFUSCATE_VARIABLE( size );
+  return size;
 }
 
 /**
