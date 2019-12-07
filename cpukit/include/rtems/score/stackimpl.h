@@ -105,6 +105,16 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
   return _Stack_Minimum();
 }
 
+/**
+ * @brief Allocate the requested stack space.
+ *
+ * @param stack_size The stack space that is requested.
+ *
+ * @retval stack_area The allocated stack area.
+ * @retval NULL The allocation failed.
+ */
+void *_Stack_Allocate( size_t stack_size );
+
 /** @} */
 
 #ifdef __cplusplus

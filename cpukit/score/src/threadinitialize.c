@@ -43,8 +43,6 @@ bool _Thread_Initialize(
 )
 {
   uintptr_t                tls_size = _TLS_Get_size();
-  size_t                   actual_stack_size = 0;
-  void                    *stack = NULL;
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     void                  *fp_area = NULL;
   #endif
@@ -92,30 +90,31 @@ bool _Thread_Initialize(
    *  Allocate and Initialize the stack for this thread.
    */
   #if !defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
-    actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
-    if ( !actual_stack_size || actual_stack_size < stack_size )
-      return false;                     /* stack allocation failed */
+    stack_size = _Stack_Ensure_minimum( stack_size );
+    stack_area = _Stack_Allocate( stack_size );
 
-    stack = the_thread->Start.stack;
+    if ( stack_area == NULL ) {
+      return false;
+    }
   #else
-    if ( !stack_area ) {
-      actual_stack_size = _Thread_Stack_Allocate( the_thread, stack_size );
-      if ( !actual_stack_size || actual_stack_size < stack_size )
-        return false;                     /* stack allocation failed */
+    if ( stack_area == NULL ) {
+      stack_size = _Stack_Ensure_minimum( stack_size );
+      stack_area = _Stack_Allocate( stack_size );
 
-      stack = the_thread->Start.stack;
+      if ( stack_area == NULL ) {
+        return false;
+      }
+
       the_thread->Start.core_allocated_stack = true;
     } else {
-      stack = stack_area;
-      actual_stack_size = stack_size;
       the_thread->Start.core_allocated_stack = false;
     }
   #endif
 
   _Stack_Initialize(
      &the_thread->Start.Initial_stack,
-     stack,
-     actual_stack_size
+     stack_area,
+     stack_size
   );
 
   scheduler_index = 0;

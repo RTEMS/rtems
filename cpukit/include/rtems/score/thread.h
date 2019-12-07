@@ -209,8 +209,6 @@ typedef struct {
     /** This field is the initial FP context area address. */
     Context_Control_fp                  *fp_context;
   #endif
-  /** This field is the initial stack area address. */
-  void                                *stack;
   /** The thread-local storage (TLS) area */
   void                                *tls_area;
 } Thread_Start_information;

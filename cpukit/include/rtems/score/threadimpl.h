@@ -125,23 +125,6 @@ void _Thread_Create_idle(void);
 void _Thread_Start_multitasking( void ) RTEMS_NO_RETURN;
 
 /**
- * @brief Allocates the requested stack space for the thread.
- *
- * Allocate the requested stack space for the thread.
- * Set the Start.stack field to the address of the stack.
- *
- * @param[out] the_thread The thread where the stack space is requested.
- * @param stack_size The stack space that is requested.
- *
- * @retval actual Size allocated after any adjustment.
- * @retval zero The allocation failed.
- */
-size_t _Thread_Stack_Allocate(
-  Thread_Control *the_thread,
-  size_t          stack_size
-);
-
-/**
  * @brief Deallocates thread stack.
  *
  * Deallocate the Thread's stack.
