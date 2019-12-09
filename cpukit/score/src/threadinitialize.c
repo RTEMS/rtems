@@ -46,23 +46,6 @@ bool _Thread_Initialize(
   size_t                   scheduler_index;
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
-#if defined(RTEMS_SMP)
-  if ( !config->is_preemptible && rtems_configuration_is_smp_enabled() ) {
-    return false;
-  }
-#endif
-
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-  if (
-    config->isr_level != 0
-#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && rtems_configuration_is_smp_enabled()
-#endif
-  ) {
-    return false;
-  }
-#endif
-
   memset(
     &the_thread->Join_queue,
     0,
@@ -76,25 +59,29 @@ bool _Thread_Initialize(
       (char *) the_thread + add_on->source_offset;
   }
 
-  /* Allocate the stack for this thread */
-#if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
-  if ( config->stack_area == NULL ) {
-#endif
-    stack_size = _Stack_Ensure_minimum( config->stack_size );
-    stack_size = _Stack_Extend_size( stack_size, config->is_fp );
-    stack_area = _Stack_Allocate( stack_size );
+  /* Set everything to perform the error case clean up */
+  scheduler_index = 0;
+  the_thread->Start.allocated_stack = config->allocated_stack;
 
-    if ( stack_area == NULL ) {
-      return false;
-    }
-
-    the_thread->Start.allocated_stack = stack_area;
-#if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
-  } else {
-    stack_area = config->stack_area;
-    stack_size = config->stack_size;
+#if defined(RTEMS_SMP)
+  if ( !config->is_preemptible && rtems_configuration_is_smp_enabled() ) {
+    goto failed;
   }
 #endif
+
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+  if (
+    config->isr_level != 0
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+      && rtems_configuration_is_smp_enabled()
+#endif
+  ) {
+    goto failed;
+  }
+#endif
+
+  stack_area = config->stack_area;
+  stack_size = config->stack_size;
 
   /* Allocate floating-point context in stack area */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
@@ -124,8 +111,6 @@ bool _Thread_Initialize(
      stack_area,
      stack_size
   );
-
-  scheduler_index = 0;
 
   /*
    *  Get thread queue heads

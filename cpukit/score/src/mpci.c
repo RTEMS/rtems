@@ -114,6 +114,7 @@ static void _MPCI_Create_server( void )
     }
   };
   Thread_Configuration config;
+  bool                 ok;
   ISR_lock_Context     lock_context;
 
 
@@ -129,15 +130,24 @@ static void _MPCI_Create_server( void )
 
   memset( &config, 0, sizeof( config ) );
   config.scheduler = &_Scheduler_Table[ 0 ];
-  config.stack_size = _Stack_Minimum()
-    + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
-    + _MPCI_Configuration.extra_mpci_receive_server_stack;
   config.name.name_u32 = _Objects_Build_name( 'M', 'P', 'C', 'I' );
   config.priority = PRIORITY_PSEUDO_ISR;
   config.budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
   config.is_fp = CPU_ALL_TASKS_ARE_FP;
+  config.stack_size = _Stack_Minimum()
+    + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
+    + _MPCI_Configuration.extra_mpci_receive_server_stack;
+  config.stack_size = _Stack_Extend_size( config.stack_size, config.is_fp );
+  config.stack_area = _Stack_Allocate( config.stack_size );
+  _Assert( config.stack_area != NULL );
 
-  _Thread_Initialize( &_Thread_Information, _MPCI_Receive_server_tcb, &config );
+  ok = _Thread_Initialize(
+    &_Thread_Information,
+    _MPCI_Receive_server_tcb,
+    &config
+  );
+  _Assert( ok );
+  (void) ok;
 
   _ISR_lock_ISR_disable( &lock_context );
   _Thread_Start( _MPCI_Receive_server_tcb, &entry, &lock_context );

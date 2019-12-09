@@ -25,6 +25,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/userextimpl.h>
@@ -78,7 +79,6 @@ rtems_status_code rtems_task_create(
     _Attributes_Clear( the_attribute_set, ATTRIBUTES_NOT_SUPPORTED );
 
   memset( &config, 0, sizeof( config ) );
-  config.stack_size = stack_size;
   config.budget_algorithm = _Modes_Is_timeslice( initial_modes ) ?
     THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE
       : THREAD_CPU_BUDGET_ALGORITHM_NONE,
@@ -86,6 +86,8 @@ rtems_status_code rtems_task_create(
   config.name.name_u32 = name;
   config.is_fp = _Attributes_Is_floating_point( the_attribute_set );
   config.is_preemptible = _Modes_Is_preempt( initial_modes );
+  config.stack_size = _Stack_Ensure_minimum( stack_size );
+  config.stack_size = _Stack_Extend_size( config.stack_size, config.is_fp );
 
   /*
    *  Validate the RTEMS API priority and convert it to the core priority range.
@@ -148,11 +150,21 @@ rtems_status_code rtems_task_create(
   }
 #endif
 
+  config.stack_area = _Stack_Allocate( config.stack_size );
+  config.allocated_stack = config.stack_area;
+  status = ( config.stack_area != NULL );
+
   /*
    *  Initialize the core thread for this task.
    */
 
-  status = _Thread_Initialize( &_RTEMS_tasks_Information, the_thread, &config );
+  if ( status ) {
+    status = _Thread_Initialize(
+      &_RTEMS_tasks_Information,
+      the_thread,
+      &config
+    );
+  }
 
   if ( !status ) {
 #if defined(RTEMS_MULTIPROCESSING)

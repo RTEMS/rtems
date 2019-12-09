@@ -21,6 +21,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/config.h>
@@ -29,8 +30,9 @@
 
 static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
 {
-  Thread_Configuration     config;
-  Thread_Control          *idle;
+  Thread_Configuration  config;
+  Thread_Control       *idle;
+  bool                  ok;
 
   memset( &config, 0, sizeof( config ) );
   config.scheduler = _Scheduler_Get_by_CPU( cpu );
@@ -41,7 +43,6 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   }
 #endif
 
-  config.stack_size = rtems_configuration_get_idle_task_stack_size();
   config.priority = _Scheduler_Map_priority(
     config.scheduler,
     config.scheduler->maximum_priority
@@ -50,6 +51,12 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   config.name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
   config.is_fp = CPU_IDLE_TASK_IS_FP;
   config.is_preemptible = true;
+  config.stack_size = _Stack_Ensure_minimum(
+    rtems_configuration_get_idle_task_stack_size()
+  );
+  config.stack_size = _Stack_Extend_size( config.stack_size, config.is_fp );
+  config.stack_area = _Stack_Allocate( config.stack_size );
+  _Assert( config.stack_area != NULL );
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all
@@ -59,7 +66,9 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   idle = _Thread_Internal_allocate();
   _Assert( idle != NULL );
 
-  _Thread_Initialize( &_Thread_Information, idle, &config );
+  ok = _Thread_Initialize( &_Thread_Information, idle, &config );
+  _Assert( ok );
+  (void) ok;
 
   /*
    *  WARNING!!! This is necessary to "kick" start the system and

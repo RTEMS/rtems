@@ -134,14 +134,19 @@ typedef struct {
   const struct _Scheduler_Control *scheduler;
 
   /**
-   * @brief The starting address of the thread area.
+   * @brief The starting address of the stack area.
    */
   void *stack_area;
 
   /**
-   * @brief The size of the thread area in bytes.
+   * @brief The size of the stack area in bytes.
    */
   size_t stack_size;
+
+  /**
+   * @brief The address of the allocated stack area or NULL.
+   */
+  void *allocated_stack;
 
   /**
    * @brief The new thread's priority.

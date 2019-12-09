@@ -120,6 +120,7 @@ int pthread_create(
     config.stack_size = _POSIX_Threads_Ensure_minimum_stack(
       the_attr->stacksize
     );
+    config.stack_size = _Stack_Extend_size( config.stack_size, config.is_fp );
   }
 
   #if 0
@@ -215,14 +216,23 @@ int pthread_create(
     return EAGAIN;
   }
 
+  if ( config.stack_area == NULL ) {
+    config.stack_area = _Stack_Allocate( config.stack_size );
+    config.allocated_stack = config.stack_area;
+  }
+
+  status = ( config.stack_area != NULL );
+
   /*
    *  Initialize the core thread for this task.
    */
-  status = _Thread_Initialize(
-    &_POSIX_Threads_Information,
-    the_thread,
-    &config
-  );
+  if ( status ) {
+    status = _Thread_Initialize(
+      &_POSIX_Threads_Information,
+      the_thread,
+      &config
+    );
+  }
   if ( !status ) {
     _POSIX_Threads_Free( the_thread );
     _Objects_Allocator_unlock();
