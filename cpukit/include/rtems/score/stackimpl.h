@@ -121,6 +121,33 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
 }
 
 /**
+ * @brief Extend the stack size to account for additional data structures
+ *   allocated in the stack area of a thread.
+ *
+ * @param stack_size The stack size.
+ * @param is_fp Indicates if the stack is for a floating-point thread.
+ *
+ * @return The extended stack size.
+ */
+RTEMS_INLINE_ROUTINE size_t _Stack_Extend_size(
+  size_t stack_size,
+  bool   is_fp
+)
+{
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+  if ( is_fp ) {
+    stack_size += CONTEXT_FP_SIZE;
+  }
+#else
+  (void) is_fp;
+#endif
+
+  stack_size += _TLS_Get_allocation_size();
+
+  return stack_size;
+}
+
+/**
  * @brief Allocate the requested stack space.
  *
  * @param stack_size The stack space that is requested.

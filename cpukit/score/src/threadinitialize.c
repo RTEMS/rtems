@@ -76,21 +76,12 @@ bool _Thread_Initialize(
       (char *) the_thread + add_on->source_offset;
   }
 
-  tls_size = _TLS_Get_allocation_size();
-
   /* Allocate the stack for this thread */
 #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
   if ( config->stack_area == NULL ) {
 #endif
     stack_size = _Stack_Ensure_minimum( config->stack_size );
-
-#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    if ( config->is_fp ) {
-      stack_size += CONTEXT_FP_SIZE;
-    }
-#endif
-
-    stack_size += tls_size;
+    stack_size = _Stack_Extend_size( stack_size, config->is_fp );
     stack_area = _Stack_Allocate( stack_size );
 
     if ( stack_area == NULL ) {
@@ -114,6 +105,8 @@ bool _Thread_Initialize(
     stack_area += CONTEXT_FP_SIZE;
   }
 #endif
+
+  tls_size = _TLS_Get_allocation_size();
 
   /* Allocate thread-local storage (TLS) area in stack area */
   if ( tls_size > 0 ) {
