@@ -206,7 +206,6 @@ typedef struct {
     bool                         smp_enabled;
   #endif
 
-  uint32_t                       number_of_initial_extensions;
   #if defined(RTEMS_MULTIPROCESSING)
     rtems_multiprocessing_table   *User_multiprocessing_table;
   #endif
