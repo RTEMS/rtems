@@ -1062,6 +1062,13 @@ Thread_Information name##_Information = { \
   } \
 }
 
+/**
+ * @brief The idle thread stacks.
+ *
+ * Provided by the application via <rtems/confdefs.h>.
+ */
+extern char _Thread_Idle_stacks[];
+
 #if defined(RTEMS_MULTIPROCESSING)
 /**
  * @brief The configured thread control block.

@@ -18,14 +18,14 @@ const char rtems_test_name[] = "SPSTKALLOC";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
-#define MAXIMUM_STACKS 3
+#define MAXIMUM_STACKS 2
 
 typedef struct {
   uint8_t Space[CPU_STACK_MINIMUM_SIZE];
 } StackMemory_t;
 
 int            stackToAlloc = 0;
-StackMemory_t  Stacks[3];
+StackMemory_t  Stacks[MAXIMUM_STACKS];
 void          *StackDeallocated = NULL;
 
 static void *StackAllocator(size_t size)

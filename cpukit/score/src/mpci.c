@@ -135,11 +135,10 @@ static void _MPCI_Create_server( void )
   config.budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
   config.is_fp = CPU_ALL_TASKS_ARE_FP;
   config.stack_size = _Stack_Minimum()
+    + _MPCI_Configuration.extra_mpci_receive_server_stack
     + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
-    + _MPCI_Configuration.extra_mpci_receive_server_stack;
-  config.stack_size = _Stack_Extend_size( config.stack_size, config.is_fp );
-  config.stack_area = _Stack_Allocate( config.stack_size );
-  _Assert( config.stack_area != NULL );
+    + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE;
+  config.stack_area = _MPCI_Receive_server_stack;
 
   ok = _Thread_Initialize(
     &_Thread_Information,

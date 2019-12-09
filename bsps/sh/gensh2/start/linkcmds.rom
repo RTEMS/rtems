@@ -201,6 +201,10 @@ SECTIONS
   _end = . ;
   PROVIDE (end = .);
 
+  .rtemsstackidle (NOLOAD) : {
+    *(SORT(.rtemsstack.idle*))
+  } > ram
+
   _HeapStart = . ;
   . = . + 1024 * 20 ;
   PROVIDE( _HeapEnd = . );

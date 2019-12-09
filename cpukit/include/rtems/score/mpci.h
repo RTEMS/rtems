@@ -162,6 +162,13 @@ typedef struct {
  */
 extern const MPCI_Configuration _MPCI_Configuration;
 
+/**
+ * @brief The MPCI receive server stack.
+ *
+ * Provided by the application via <rtems/confdefs.h>
+ */
+extern char _MPCI_Receive_server_stack[];
+
 /** @} */
 
 #ifdef __cplusplus

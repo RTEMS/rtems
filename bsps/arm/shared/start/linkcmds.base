@@ -261,9 +261,6 @@ SECTIONS {
 	.vector : ALIGN_WITH_INPUT {
 		bsp_section_vector_begin = .;
 		. = . + DEFINED (bsp_vector_table_in_start_section) ? 0 : bsp_vector_table_size;
-	} > REGION_VECTOR AT > REGION_VECTOR
-	.rtemsstack (NOLOAD) : {
-		*(SORT(.rtemsstack.*))
 		bsp_section_vector_end = .;
 	} > REGION_VECTOR AT > REGION_VECTOR
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;
@@ -312,6 +309,13 @@ SECTIONS {
 		bsp_section_bss_end = .;
 	} > REGION_BSS AT > REGION_BSS
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
+
+	.rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_rtemsstack_begin = .;
+		*(SORT_BY_ALIGNMENT (SORT_BY_NAME (.rtemsstack*)))
+		bsp_section_rtemsstack_end = .;
+	} > REGION_WORK AT > REGION_WORK
+	bsp_section_rtemsstack_size = bsp_section_rtemsstack_end - bsp_section_rtemsstack_begin;
 
 	.work : ALIGN_WITH_INPUT {
 		/*

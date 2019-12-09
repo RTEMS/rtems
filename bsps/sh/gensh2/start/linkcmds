@@ -198,6 +198,10 @@ SECTIONS
   _end = . ;
   PROVIDE (end = .);
 
+  .rtemsstackidle (NOLOAD) : {
+    *(SORT(.rtemsstack.idle*))
+  } > ram
+
   _WorkAreaBase = . ;
 
   .rtemsstack (NOLOAD) : {

@@ -51,12 +51,11 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   config.name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
   config.is_fp = CPU_IDLE_TASK_IS_FP;
   config.is_preemptible = true;
-  config.stack_size = _Stack_Ensure_minimum(
-    rtems_configuration_get_idle_task_stack_size()
-  );
-  config.stack_size = _Stack_Extend_size( config.stack_size, config.is_fp );
-  config.stack_area = _Stack_Allocate( config.stack_size );
-  _Assert( config.stack_area != NULL );
+  config.stack_size = rtems_configuration_get_idle_task_stack_size()
+    + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE;
+  config.stack_area = &_Thread_Idle_stacks[
+    _Per_CPU_Get_index( cpu ) * config.stack_size
+  ];
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all

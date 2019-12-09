@@ -1809,6 +1809,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI stack > minimum */
         CONFIGURE_MP_MPCI_TABLE_POINTER         /* ptr to MPCI config table */
       };
+
+      char _MPCI_Receive_server_stack[
+        CONFIGURE_MINIMUM_TASK_STACK_SIZE
+          + CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
+          + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
+          + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE
+      ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
+      RTEMS_SECTION( ".rtemsstack.mpci" );
     #endif
 
     #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
@@ -2379,22 +2387,6 @@ struct _reent *__getreent(void)
 
 /*
  * This macro is calculated to specify the memory required for
- * the Idle tasks(s) stack.
- */
-#define _CONFIGURE_IDLE_TASKS_STACK \
-  (_CONFIGURE_IDLE_TASKS_COUNT * \
-    _Configure_From_stackspace( CONFIGURE_IDLE_TASK_STACK_SIZE ) )
-
-/*
- * This macro is calculated to specify the stack memory required for the MPCI
- * task.
- */
-#define _CONFIGURE_MPCI_RECEIVE_SERVER_STACK \
-  (_CONFIGURE_MPCI_RECEIVE_SERVER_COUNT * \
-    _Configure_From_stackspace(CONFIGURE_MINIMUM_TASK_STACK_SIZE))
-
-/*
- * This macro is calculated to specify the memory required for
  * the stacks of all tasks.
  */
 #define _CONFIGURE_TASKS_STACK \
@@ -2411,8 +2403,6 @@ struct _reent *__getreent(void)
 
 #else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
 
-#define _CONFIGURE_IDLE_TASKS_STACK 0
-#define _CONFIGURE_MPCI_RECEIVE_SERVER_STACK 0
 #define _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS 0
 #define _CONFIGURE_TASKS_STACK 0
 #define _CONFIGURE_POSIX_THREADS_STACK 0
@@ -2433,12 +2423,9 @@ struct _reent *__getreent(void)
  */
 #define _CONFIGURE_STACK_SPACE_SIZE \
   ( \
-    _CONFIGURE_IDLE_TASKS_STACK + \
-    _CONFIGURE_MPCI_RECEIVE_SERVER_STACK + \
     _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS + \
     _CONFIGURE_TASKS_STACK + \
     _CONFIGURE_POSIX_THREADS_STACK + \
-    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK + \
     _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS + \
     CONFIGURE_EXTRA_TASK_STACKS + \
     _CONFIGURE_HEAP_HANDLER_OVERHEAD \
@@ -2563,8 +2550,7 @@ struct _reent *__getreent(void)
 
   const uint32_t _Watchdog_Ticks_per_second = _CONFIGURE_TICKS_PER_SECOND;
 
-  const size_t _Thread_Initial_thread_count = _CONFIGURE_IDLE_TASKS_COUNT +
-    _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT +
+  const size_t _Thread_Initial_thread_count =
     rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) +
     rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS );
 
@@ -2574,6 +2560,13 @@ struct _reent *__getreent(void)
     OBJECTS_INTERNAL_THREADS,
     _CONFIGURE_IDLE_TASKS_COUNT + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT
   );
+
+  char _Thread_Idle_stacks[
+    _CONFIGURE_IDLE_TASKS_COUNT
+      * ( CONFIGURE_IDLE_TASK_STACK_SIZE
+        + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE )
+  ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
+  RTEMS_SECTION( ".rtemsstack.idle" );
 
   #if CONFIGURE_MAXIMUM_BARRIERS > 0
     BARRIER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_BARRIERS );

@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/mpci.h>
+#include <rtems/score/context.h>
 #include <rtems/score/objectdata.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
@@ -35,3 +36,10 @@ const MPCI_Configuration _MPCI_Configuration = {
   STACK_MINIMUM_SIZE,       /* MPCI receive server stack size */
   NULL                      /* pointer to MPCI address table */
 };
+
+char _MPCI_Receive_server_stack[
+  STACK_MINIMUM_SIZE
+    + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
+    + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE
+] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
+RTEMS_SECTION( ".rtemsstack.mpci" );
