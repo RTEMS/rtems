@@ -28,23 +28,16 @@
 #include <rtems/config.h>
 
 bool _Thread_Initialize(
-  Thread_Information                   *information,
-  Thread_Control                       *the_thread,
-  const Scheduler_Control              *scheduler,
-  void                                 *stack_area,
-  size_t                                stack_size,
-  bool                                  is_fp,
-  Priority_Control                      priority,
-  bool                                  is_preemptible,
-  Thread_CPU_budget_algorithms          budget_algorithm,
-  Thread_CPU_budget_algorithm_callout   budget_callout,
-  uint32_t                              isr_level,
-  Objects_Name                          name
+  Thread_Information         *information,
+  Thread_Control             *the_thread,
+  const Thread_Configuration *config
 )
 {
   uintptr_t                tls_size;
   bool                     extension_status;
   size_t                   i;
+  char                    *stack_area;
+  size_t                   stack_size;
   Scheduler_Node          *scheduler_node;
 #if defined(RTEMS_SMP)
   Scheduler_Node          *scheduler_node_for_index;
@@ -54,14 +47,14 @@ bool _Thread_Initialize(
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
 #if defined(RTEMS_SMP)
-  if ( !is_preemptible && rtems_configuration_is_smp_enabled() ) {
+  if ( !config->is_preemptible && rtems_configuration_is_smp_enabled() ) {
     return false;
   }
 #endif
 
 #if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   if (
-    isr_level != 0
+    config->isr_level != 0
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
       && rtems_configuration_is_smp_enabled()
 #endif
@@ -87,12 +80,12 @@ bool _Thread_Initialize(
 
   /* Allocate the stack for this thread */
 #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
-  if ( stack_area == NULL ) {
+  if ( config->stack_area == NULL ) {
 #endif
-    stack_size = _Stack_Ensure_minimum( stack_size );
+    stack_size = _Stack_Ensure_minimum( config->stack_size );
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-    if ( is_fp ) {
+    if ( config->is_fp ) {
       stack_size += CONTEXT_FP_SIZE;
     }
 #endif
@@ -106,16 +99,19 @@ bool _Thread_Initialize(
 
     the_thread->Start.allocated_stack = stack_area;
 #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
+  } else {
+    stack_area = config->stack_area;
+    stack_size = config->stack_size;
   }
 #endif
 
   /* Allocate floating-point context in stack area */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
-  if ( is_fp ) {
-    the_thread->fp_context = stack_area;
-    the_thread->Start.fp_context = stack_area;
+  if ( config->is_fp ) {
+    the_thread->fp_context = ( Context_Control_fp *) stack_area;
+    the_thread->Start.fp_context = ( Context_Control_fp *) stack_area;
     stack_size -= CONTEXT_FP_SIZE;
-    stack_area = (char *) stack_area + CONTEXT_FP_SIZE;
+    stack_area += CONTEXT_FP_SIZE;
   }
 #endif
 
@@ -127,7 +123,7 @@ bool _Thread_Initialize(
     the_thread->Start.tls_area = (void *)
       ( ( (uintptr_t) stack_area + tls_align - 1 ) & ~( tls_align - 1 ) );
     stack_size -= tls_size;
-    stack_area = (char *) stack_area + tls_size;
+    stack_area += tls_size;
   }
 
   _Stack_Initialize(
@@ -156,15 +152,15 @@ bool _Thread_Initialize(
    *  General initialization
    */
 
-  the_thread->is_fp                  = is_fp;
-  the_thread->Start.isr_level        = isr_level;
-  the_thread->Start.is_preemptible   = is_preemptible;
-  the_thread->Start.budget_algorithm = budget_algorithm;
-  the_thread->Start.budget_callout   = budget_callout;
+  the_thread->is_fp                  = config->is_fp;
+  the_thread->Start.isr_level        = config->isr_level;
+  the_thread->Start.is_preemptible   = config->is_preemptible;
+  the_thread->Start.budget_algorithm = config->budget_algorithm;
+  the_thread->Start.budget_callout   = config->budget_callout;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
 
-  switch ( budget_algorithm ) {
+  switch ( config->budget_algorithm ) {
     case THREAD_CPU_BUDGET_ALGORITHM_NONE:
     case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
       break;
@@ -188,8 +184,8 @@ bool _Thread_Initialize(
   while ( scheduler_index < _Scheduler_Count ) {
     Priority_Control priority_for_index;
 
-    if ( scheduler_for_index == scheduler ) {
-      priority_for_index = priority;
+    if ( scheduler_for_index == config->scheduler ) {
+      priority_for_index = config->priority;
       scheduler_node = scheduler_node_for_index;
     } else {
       /*
@@ -226,15 +222,15 @@ bool _Thread_Initialize(
 #else
   scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   _Scheduler_Node_initialize(
-    scheduler,
+    config->scheduler,
     scheduler_node,
     the_thread,
-    priority
+    config->priority
   );
   scheduler_index = 1;
 #endif
 
-  _Priority_Node_initialize( &the_thread->Real_priority, priority );
+  _Priority_Node_initialize( &the_thread->Real_priority, config->priority );
   _Priority_Initialize_one(
     &scheduler_node->Wait.Priority,
     &the_thread->Real_priority
@@ -242,7 +238,7 @@ bool _Thread_Initialize(
 
 #if defined(RTEMS_SMP)
   RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
-  the_thread->Scheduler.home_scheduler = scheduler;
+  the_thread->Scheduler.home_scheduler = config->scheduler;
   _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
   _Processor_mask_Assign(
     &the_thread->Scheduler.Affinity,
@@ -260,7 +256,7 @@ bool _Thread_Initialize(
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;
-  the_thread->Start.initial_priority  = priority;
+  the_thread->Start.initial_priority  = config->priority;
 
   RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
 
@@ -273,7 +269,7 @@ bool _Thread_Initialize(
   /*
    *  Open the object
    */
-  _Objects_Open( &information->Objects, &the_thread->Object, name );
+  _Objects_Open( &information->Objects, &the_thread->Object, config->name );
 
   /*
    *  We assume the Allocator Mutex is locked and dispatching is
@@ -298,7 +294,7 @@ failed:
   }
 #else
   if ( scheduler_index > 0 ) {
-    _Scheduler_Node_destroy( scheduler, scheduler_node );
+    _Scheduler_Node_destroy( config->scheduler, scheduler_node );
   }
 #endif
 

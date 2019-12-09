@@ -30,6 +30,8 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/sysinit.h>
 
+#include <string.h>
+
 rtems_status_code rtems_task_create(
   rtems_name           name,
   rtems_task_priority  initial_priority,
@@ -40,8 +42,7 @@ rtems_status_code rtems_task_create(
 )
 {
   Thread_Control          *the_thread;
-  const Scheduler_Control *scheduler;
-  bool                     is_fp;
+  Thread_Configuration     config;
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_MP_Control      *the_global_object = NULL;
   bool                     is_global;
@@ -49,10 +50,8 @@ rtems_status_code rtems_task_create(
   bool                     status;
   rtems_attribute          the_attribute_set;
   bool                     valid;
-  Priority_Control         priority;
   RTEMS_API_Control       *api;
   ASR_Information         *asr;
-
 
   if ( !id )
    return RTEMS_INVALID_ADDRESS;
@@ -78,10 +77,15 @@ rtems_status_code rtems_task_create(
   the_attribute_set =
     _Attributes_Clear( the_attribute_set, ATTRIBUTES_NOT_SUPPORTED );
 
-  if ( _Attributes_Is_floating_point( the_attribute_set ) )
-    is_fp = true;
-  else
-    is_fp = false;
+  memset( &config, 0, sizeof( config ) );
+  config.stack_size = stack_size;
+  config.budget_algorithm = _Modes_Is_timeslice( initial_modes ) ?
+    THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE
+      : THREAD_CPU_BUDGET_ALGORITHM_NONE,
+  config.isr_level =  _Modes_Get_interrupt_level( initial_modes );
+  config.name.name_u32 = name;
+  config.is_fp = _Attributes_Is_floating_point( the_attribute_set );
+  config.is_preemptible = _Modes_Is_preempt( initial_modes );
 
   /*
    *  Validate the RTEMS API priority and convert it to the core priority range.
@@ -93,9 +97,13 @@ rtems_status_code rtems_task_create(
     }
   }
 
-  scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
+  config.scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
 
-  priority = _RTEMS_Priority_To_core( scheduler, initial_priority, &valid );
+  config.priority = _RTEMS_Priority_To_core(
+    config.scheduler,
+    initial_priority,
+    &valid
+  );
   if ( !valid ) {
     return RTEMS_INVALID_PRIORITY;
   }
@@ -144,22 +152,7 @@ rtems_status_code rtems_task_create(
    *  Initialize the core thread for this task.
    */
 
-  status = _Thread_Initialize(
-    &_RTEMS_tasks_Information,
-    the_thread,
-    scheduler,
-    NULL,
-    stack_size,
-    is_fp,
-    priority,
-    _Modes_Is_preempt(initial_modes)   ? true : false,
-    _Modes_Is_timeslice(initial_modes) ?
-      THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE :
-      THREAD_CPU_BUDGET_ALGORITHM_NONE,
-    NULL,        /* no budget algorithm callout */
-    _Modes_Get_interrupt_level(initial_modes),
-    (Objects_Name) name
-  );
+  status = _Thread_Initialize( &_RTEMS_tasks_Information, the_thread, &config );
 
   if ( !status ) {
 #if defined(RTEMS_MULTIPROCESSING)
