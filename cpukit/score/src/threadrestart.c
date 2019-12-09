@@ -185,8 +185,6 @@ static void _Thread_Free( Thread_Control *the_thread )
    */
   _Stack_Free( the_thread->Start.allocated_stack );
 
-  _Workspace_Free( the_thread->Start.tls_area );
-
 #if defined(RTEMS_SMP)
   _ISR_lock_Destroy( &the_thread->Scheduler.Lock );
   _ISR_lock_Destroy( &the_thread->Wait.Lock.Default );

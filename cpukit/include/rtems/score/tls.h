@@ -134,30 +134,11 @@ static inline uintptr_t _TLS_Get_thread_control_block_area_size(
 }
 
 /**
- * @brief Returns the actual size that has to be allocated for this size and
- *      alignment.
+ * @brief Return the TLS area allocation size.
  *
- * @param size The size for the operation.
- * @param alignment The alignment for the operation.
- *
- * @return The actual allocation size.
+ * @return The TLS area allocation size.
  */
-static inline uintptr_t _TLS_Get_allocation_size(
-  uintptr_t size,
-  uintptr_t alignment
-)
-{
-  uintptr_t allocation_size = 0;
-
-  allocation_size += _TLS_Heap_align_up( size );
-  allocation_size += _TLS_Get_thread_control_block_area_size( alignment );
-
-#ifndef __i386__
-  allocation_size += sizeof(TLS_Dynamic_thread_vector);
-#endif
-
-  return allocation_size;
-}
+uintptr_t _TLS_Get_allocation_size( void );
 
 /**
  * @brief Copies TLS size bytes from the address tls_area and returns a pointer

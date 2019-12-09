@@ -23,7 +23,6 @@
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/tls.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
@@ -36,41 +35,6 @@
 #endif
 
 Heap_Control _Workspace_Area;
-
-static uintptr_t _Workspace_Space_for_TLS( uintptr_t page_size )
-{
-  uintptr_t tls_size;
-  uintptr_t space;
-
-  tls_size = _TLS_Get_size();
-
-  /*
-   * In case we have a non-zero TLS size, then we need a TLS area for each
-   * thread.  These areas are allocated from the workspace.  Ensure that the
-   * workspace is large enough to fulfill all requests known at configuration
-   * time (so excluding the unlimited option).  It is not possible to estimate
-   * the TLS size in the configuration at compile-time.  The TLS size is
-   * determined at application link-time.
-   */
-  if ( tls_size > 0 ) {
-    uintptr_t tls_align = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
-    uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_align );
-
-    /*
-     * Memory allocated with an alignment constraint is allocated from the end
-     * of a free block.  The last allocation may need one free block of minimum
-     * size.
-     */
-    space = _Heap_Min_block_size( page_size );
-
-    space += _Thread_Initial_thread_count
-      * _Heap_Size_with_overhead( page_size, tls_alloc, tls_align );
-  } else {
-    space = 0;
-  }
-
-  return space;
-}
 
 static void _Workspace_Initialize( void )
 {
@@ -97,8 +61,6 @@ void _Workspace_Handler_initialization(
 
   page_size = CPU_HEAP_ALIGNMENT;
   remaining = rtems_configuration_get_work_space_size();
-  remaining += _Workspace_Space_for_TLS( page_size );
-
   init_or_extend = _Heap_Initialize;
   unified = rtems_configuration_get_unified_work_area();
   overhead = _Heap_Area_overhead( page_size );

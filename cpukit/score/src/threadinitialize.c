@@ -42,7 +42,7 @@ bool _Thread_Initialize(
   Objects_Name                          name
 )
 {
-  uintptr_t                tls_size = _TLS_Get_size();
+  uintptr_t                tls_size;
   bool                     extension_status;
   size_t                   i;
   Scheduler_Node          *scheduler_node;
@@ -83,6 +83,8 @@ bool _Thread_Initialize(
       (char *) the_thread + add_on->source_offset;
   }
 
+  tls_size = _TLS_Get_allocation_size();
+
   /* Allocate the stack for this thread */
 #if defined(RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API)
   if ( stack_area == NULL ) {
@@ -95,6 +97,7 @@ bool _Thread_Initialize(
     }
 #endif
 
+    stack_size += tls_size;
     stack_area = _Stack_Allocate( stack_size );
 
     if ( stack_area == NULL ) {
@@ -116,6 +119,17 @@ bool _Thread_Initialize(
   }
 #endif
 
+  /* Allocate thread-local storage (TLS) area in stack area */
+  if ( tls_size > 0 ) {
+    uintptr_t tls_align;
+
+    tls_align = (uintptr_t) _TLS_Alignment;
+    the_thread->Start.tls_area = (void *)
+      ( ( (uintptr_t) stack_area + tls_align - 1 ) & ~( tls_align - 1 ) );
+    stack_size -= tls_size;
+    stack_area = (char *) stack_area + tls_size;
+  }
+
   _Stack_Initialize(
      &the_thread->Start.Initial_stack,
      stack_area,
@@ -123,19 +137,6 @@ bool _Thread_Initialize(
   );
 
   scheduler_index = 0;
-
-  /* Thread-local storage (TLS) area allocation */
-  if ( tls_size > 0 ) {
-    uintptr_t tls_align = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
-    uintptr_t tls_alloc = _TLS_Get_allocation_size( tls_size, tls_align );
-
-    the_thread->Start.tls_area =
-      _Workspace_Allocate_aligned( tls_alloc, tls_align );
-
-    if ( the_thread->Start.tls_area == NULL ) {
-      goto failed;
-    }
-  }
 
   /*
    *  Get thread queue heads
@@ -301,7 +302,6 @@ failed:
   }
 #endif
 
-  _Workspace_Free( the_thread->Start.tls_area );
   _Freechain_Put(
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads

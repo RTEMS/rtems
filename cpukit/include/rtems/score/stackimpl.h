@@ -23,6 +23,7 @@
 
 #include <rtems/score/stack.h>
 #include <rtems/score/context.h>
+#include <rtems/score/tls.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -87,7 +88,8 @@ RTEMS_INLINE_ROUTINE bool _Stack_Is_enough(
 {
   size_t minimum;
 
-  minimum = _Stack_Minimum();
+  minimum = _TLS_Get_allocation_size();
+  minimum += _Stack_Minimum();
 
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( is_fp ) {

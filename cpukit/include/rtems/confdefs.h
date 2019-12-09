@@ -2726,12 +2726,13 @@ struct _reent *__getreent(void)
   uint32_t rtems_minimum_stack_size =
     CONFIGURE_MINIMUM_TASK_STACK_SIZE;
 
+  const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
+
   /**
    * This is the primary Configuration Table for this application.
    */
   const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
-    _CONFIGURE_STACK_SPACE_SIZE,               /* required stack space */
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */

@@ -96,11 +96,6 @@ typedef struct {
   uintptr_t                      work_space_size;
 
   /**
-   * This field specifies the size in bytes of the RTEMS thread stack space.
-   */
-  uintptr_t                      stack_space_size;
-
-  /**
    * This field contains the maximum number of POSIX API
    * key value pairs which are configured for this application.
    *
@@ -191,8 +186,7 @@ extern const rtems_configuration_table Configuration;
 #define rtems_configuration_get_stack_allocator_avoids_work_space() \
         (Configuration.stack_allocator_avoids_work_space)
 
-#define rtems_configuration_get_stack_space_size() \
-        (Configuration.stack_space_size)
+uintptr_t rtems_configuration_get_stack_space_size( void );
 
 #define rtems_configuration_get_work_space_size() \
         (Configuration.work_space_size + \

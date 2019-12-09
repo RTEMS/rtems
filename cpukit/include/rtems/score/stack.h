@@ -58,11 +58,18 @@ typedef struct {
 }   Stack_Control;
 
 /**
- *  This variable contains the the minimum stack size;
+ * @brief The minimum stack size.
  *
- *  @note It is instantiated and set by User Configuration via confdefs.h.
+ * Application provided via <rtems/confdefs.h>.
  */
 extern uint32_t rtems_minimum_stack_size;
+
+/**
+ * @brief The configured stack space size.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const uintptr_t _Stack_Space_size;
 
 /** @} */
 
