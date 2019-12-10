@@ -30,12 +30,13 @@ static rtems_task Init(rtems_task_argument ignored)
     TEST_BEGIN();
 
     _Freechain_Initialize(&fc, &node2, 1, sizeof(node2));
+    rtems_test_assert(!_Freechain_Is_empty(&fc));
     rtems_test_assert(_Chain_Node_count_unprotected(&fc.Free) == 1);
     rtems_test_assert(_Chain_First(&fc.Free) == &node2.Node);
     rtems_test_assert(_Chain_Last(&fc.Free) == &node2.Node);
 
     _Freechain_Initialize(&fc, NULL, 0, sizeof(test_node));
-    rtems_test_assert(_Chain_Is_empty(&fc.Free));
+    rtems_test_assert(_Freechain_Is_empty(&fc));
 
     rtems_test_assert(_Freechain_Get(&fc, NULL, 0, sizeof(test_node)) == NULL);
 
