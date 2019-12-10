@@ -654,10 +654,15 @@ static inline Per_CPU_Control *_Per_CPU_Get_by_index( uint32_t index )
 
 static inline uint32_t _Per_CPU_Get_index( const Per_CPU_Control *cpu )
 {
+#if defined(RTEMS_SMP)
   const Per_CPU_Control_envelope *per_cpu_envelope =
     ( const Per_CPU_Control_envelope * ) cpu;
 
   return ( uint32_t ) ( per_cpu_envelope - &_Per_CPU_Information[ 0 ] );
+#else
+  (void) cpu;
+  return 0;
+#endif
 }
 
 static inline struct _Thread_Control *_Per_CPU_Get_executing(
