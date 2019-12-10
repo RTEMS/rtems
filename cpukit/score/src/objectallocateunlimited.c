@@ -61,18 +61,7 @@ Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information )
   }
 
   if ( the_object != NULL ) {
-    Objects_Maximum objects_per_block;
-    Objects_Maximum block;
-
-    objects_per_block = information->objects_per_block;
-    block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
-
-    if ( block > objects_per_block ) {
-      block /= objects_per_block;
-
-      information->inactive_per_block[ block ]--;
-      information->inactive--;
-    }
+    _Objects_Activate_unlimited( information, the_object );
   }
 
   return the_object;

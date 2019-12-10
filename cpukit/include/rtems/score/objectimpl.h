@@ -937,6 +937,36 @@ RTEMS_INLINE_ROUTINE void _Objects_Free(
   ( *information->free )( information, the_object );
 }
 
+/**
+ * @brief Activate the object.
+ *
+ * This function must be only used in case this objects information supports
+ * unlimited objects.
+ *
+ * @param information The object information block.
+ * @param the_object The object to activate.
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Activate_unlimited(
+  Objects_Information *information,
+  Objects_Control     *the_object
+)
+{
+  Objects_Maximum objects_per_block;
+  Objects_Maximum block;
+
+  _Assert( _Objects_Is_auto_extend( information ) );
+
+  objects_per_block = information->objects_per_block;
+  block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
+
+  if ( block > objects_per_block ) {
+    block /= objects_per_block;
+
+    information->inactive_per_block[ block ]--;
+    information->inactive--;
+  }
+}
+
 /** @} */
 
 #ifdef __cplusplus
