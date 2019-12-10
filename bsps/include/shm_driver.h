@@ -17,6 +17,7 @@
 #ifndef __SHM_h
 #define __SHM_h
 
+#include <rtems.h>
 #include <rtems/clockdrv.h>
 
 #ifdef __cplusplus

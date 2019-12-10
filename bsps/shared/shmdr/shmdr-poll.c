@@ -13,18 +13,29 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/libio.h>
-
-#include <assert.h>
+#include <rtems/score/watchdogimpl.h>
 
 #include "shm_driver.h"
 
-static rtems_timer_service_routine Shm_Poll_TSR(
-  rtems_id  id,
-  void     *ignored_address
-)
+static void Shm_Poll_Set_timer( Watchdog_Control *the_watchdog )
+{
+  Per_CPU_Control  *cpu;
+  ISR_lock_Context  lock_context;
+
+  cpu = _Watchdog_Get_CPU( the_watchdog );
+  _ISR_lock_ISR_disable( &lock_context );
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
+  _Watchdog_Insert(
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ],
+    the_watchdog,
+    cpu->Watchdog.ticks + 1
+  );
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
+}
+
+static void Shm_Poll_TSR( Watchdog_Control *the_watchdog )
 {
   uint32_t tmpfront;
 
@@ -40,18 +51,14 @@ static rtems_timer_service_routine Shm_Poll_TSR(
     Shm_Interrupt_count++;
   }
 
-  (void) rtems_timer_reset( id );
+  Shm_Poll_Set_timer( the_watchdog );
 }
+
+static Watchdog_Control Shm_Poll_Watchdog = WATCHDOG_INITIALIZER(
+  Shm_Poll_TSR
+);
 
 void Shm_install_timer(void)
 {
-  rtems_id          id;
-  rtems_status_code status;
-
-  status = rtems_timer_create( rtems_build_name( 'S', 'H', 'P', 'L' ), &id );
-  assert( !status );
-
-  status = rtems_timer_fire_after( id, 1, Shm_Poll_TSR, NULL );
-  assert( !status );
+  Shm_Poll_Set_timer( &Shm_Poll_Watchdog );
 }
-

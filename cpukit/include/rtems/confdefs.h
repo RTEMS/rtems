@@ -1817,8 +1817,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    */
 
   #ifdef CONFIGURE_MP_APPLICATION
-    #define _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 1
-
     #ifndef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
 
       #ifndef CONFIGURE_MP_NODE_NUMBER
@@ -1868,11 +1866,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
   #else
     #define CONFIGURE_MULTIPROCESSING_TABLE NULL
-    #define _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
     #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
   #endif /* CONFIGURE_MP_APPLICATION */
 #else
-  #define _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
   #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
 #endif /* RTEMS_MULTIPROCESSING */
 /**@}*/ /* end of Multiprocessing Configuration */
@@ -1991,9 +1987,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   /** This specifies the maximum number of Classic API timers. */
   #define CONFIGURE_MAXIMUM_TIMERS             0
 #endif
-
-#define _CONFIGURE_TIMERS \
-  (CONFIGURE_MAXIMUM_TIMERS + _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER)
 
 #ifndef CONFIGURE_MAXIMUM_SEMAPHORES
   /** This specifies the maximum number of Classic API semaphores. */
@@ -2775,8 +2768,8 @@ struct _reent *__getreent(void)
     );
   #endif
 
-  #if _CONFIGURE_TIMERS > 0
-    TIMER_INFORMATION_DEFINE( _CONFIGURE_TIMERS );
+  #if CONFIGURE_MAXIMUM_TIMERS > 0
+    TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_TIMERS );
   #endif
 
   #if _CONFIGURE_TASKS > 0
