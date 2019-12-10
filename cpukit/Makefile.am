@@ -852,6 +852,7 @@ librtemscpu_a_SOURCES += score/src/heapresizeblock.c
 librtemscpu_a_SOURCES += score/src/heapiterate.c
 librtemscpu_a_SOURCES += score/src/heapgreedy.c
 librtemscpu_a_SOURCES += score/src/heapnoextend.c
+librtemscpu_a_SOURCES += score/src/memoryallocate.c
 librtemscpu_a_SOURCES += score/src/objectallocate.c
 librtemscpu_a_SOURCES += score/src/objectclose.c
 librtemscpu_a_SOURCES += score/src/objectextendinformation.c

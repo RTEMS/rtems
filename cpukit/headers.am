@@ -331,6 +331,7 @@ include_rtems_score_HEADERS += include/rtems/score/io.h
 include_rtems_score_HEADERS += include/rtems/score/isr.h
 include_rtems_score_HEADERS += include/rtems/score/isrlevel.h
 include_rtems_score_HEADERS += include/rtems/score/isrlock.h
+include_rtems_score_HEADERS += include/rtems/score/memory.h
 include_rtems_score_HEADERS += include/rtems/score/mpci.h
 include_rtems_score_HEADERS += include/rtems/score/mpciimpl.h
 include_rtems_score_HEADERS += include/rtems/score/mppkt.h
