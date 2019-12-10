@@ -21,6 +21,28 @@
 #include <rtems/score/freechain.h>
 #include <rtems/score/assert.h>
 
+void *_Freechain_Extend(
+  Freechain_Control   *freechain,
+  Freechain_Allocator  allocator,
+  size_t               number_nodes_to_extend,
+  size_t               node_size
+)
+{
+  void *starting_address;
+
+  starting_address = ( *allocator )( number_nodes_to_extend * node_size );
+  number_nodes_to_extend *= ( starting_address != NULL );
+
+  _Chain_Initialize(
+    &freechain->Free,
+    starting_address,
+    number_nodes_to_extend,
+    node_size
+  );
+
+  return starting_address;
+}
+
 void *_Freechain_Get(
   Freechain_Control   *freechain,
   Freechain_Allocator  allocator,
@@ -31,14 +53,9 @@ void *_Freechain_Get(
   _Assert( node_size >= sizeof( Chain_Node ) );
 
   if ( _Chain_Is_empty( &freechain->Free ) && number_nodes_to_extend > 0 ) {
-    void *starting_address;
-
-    starting_address = ( *allocator )( number_nodes_to_extend * node_size );
-    number_nodes_to_extend *= ( starting_address != NULL );
-
-    _Chain_Initialize(
-      &freechain->Free,
-      starting_address,
+    _Freechain_Extend(
+      freechain,
+      allocator,
       number_nodes_to_extend,
       node_size
     );
