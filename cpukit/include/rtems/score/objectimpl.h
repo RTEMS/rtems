@@ -95,6 +95,17 @@ void _Objects_Extend_information(
 );
 
 /**
+ * @brief Free the objects block with the specified index.
+ *
+ * @param information The objects information.
+ * @param block The block index.
+ */
+void _Objects_Free_objects_block(
+  Objects_Information *information,
+  Objects_Maximum      block
+);
+
+/**
  * @brief Shrinks an object class information record.
  *
  * This function shrinks an object class information record.
