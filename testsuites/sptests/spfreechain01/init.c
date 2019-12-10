@@ -35,6 +35,10 @@ static rtems_task Init(rtems_task_argument ignored)
     rtems_test_assert(_Chain_First(&fc.Free) == &node2.Node);
     rtems_test_assert(_Chain_Last(&fc.Free) == &node2.Node);
 
+    node = _Freechain_Pop(&fc);
+    rtems_test_assert(_Freechain_Is_empty(&fc));
+    rtems_test_assert(node == &node2);
+
     _Freechain_Initialize(&fc, NULL, 0, sizeof(test_node));
     rtems_test_assert(_Freechain_Is_empty(&fc));
 

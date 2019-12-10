@@ -92,6 +92,18 @@ RTEMS_INLINE_ROUTINE bool _Freechain_Is_empty(
 }
 
 /**
+ * @brief Pop an item from the freechain.
+ *
+ * The freechain must not be empty.
+ *
+ * @param freechain The freechain control.
+ */
+RTEMS_INLINE_ROUTINE void *_Freechain_Pop( Freechain_Control *freechain )
+{
+  return _Chain_Get_first_unprotected( &freechain->Free );
+}
+
+/**
  * @brief Gets a node from the freechain.
  *
  * @param[in, out] freechain The freechain control.
