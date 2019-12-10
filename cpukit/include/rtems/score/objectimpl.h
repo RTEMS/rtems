@@ -23,7 +23,9 @@
 
 #include <rtems/score/objectdata.h>
 #include <rtems/score/apimutex.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
 
 #ifdef __cplusplus
@@ -142,25 +144,6 @@ void _Objects_Initialize_information( Objects_Information *information );
  */
 unsigned int _Objects_API_maximum_class(
   uint32_t api
-);
-
-/**
- * @brief Allocates an object without locking the allocator mutex.
- *
- * This function can be called in two contexts
- * - the executing thread is the owner of the object allocator mutex, or
- * - in case the system state is not up, e.g. during sequential system
- *   initialization.
- *
- * @param[in, out] information The object information block.
- *
- * @retval object The allocated object.
- * @retval NULL No object available.
- *
- * @see _Objects_Allocate() and _Objects_Free().
- */
-Objects_Control *_Objects_Allocate_unprotected(
-  Objects_Information *information
 );
 
 /**
@@ -703,6 +686,19 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_maximum_index(
 }
 
 /**
+ * @brief Get an inactive object or NULL.
+ *
+ * @retval NULL No inactive object is available.
+ * @retval object An inactive object.
+ */
+RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Get_inactive(
+  Objects_Information *information
+)
+{
+  return (Objects_Control *) _Chain_Get_unprotected( &information->Inactive );
+}
+
+/**
  * @brief Checks if the automatic object extension (unlimited objects) is
  * enabled.
  *
@@ -900,6 +896,33 @@ RTEMS_INLINE_ROUTINE void _Objects_Allocator_unlock( void )
 RTEMS_INLINE_ROUTINE bool _Objects_Allocator_is_owner( void )
 {
   return _RTEMS_Allocator_is_owner();
+}
+
+/**
+ * @brief Allocates an object without locking the allocator mutex.
+ *
+ * This function can be called in two contexts
+ * - the executing thread is the owner of the object allocator mutex, or
+ * - in case the system state is not up, e.g. during sequential system
+ *   initialization.
+ *
+ * @param[in, out] information The object information block.
+ *
+ * @retval object The allocated object.
+ * @retval NULL No object available.
+ *
+ * @see _Objects_Allocate() and _Objects_Free().
+ */
+RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_unprotected(
+  Objects_Information *information
+)
+{
+  _Assert(
+    _Objects_Allocator_is_owner()
+      || !_System_state_Is_up( _System_state_Get() )
+  );
+
+  return ( *information->allocate )( information );
 }
 
 /** @} */

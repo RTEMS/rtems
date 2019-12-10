@@ -2,14 +2,12 @@
  * @file
  *
  * @ingroup RTEMSScoreObject
- *
- * @brief Allocate Object
  */
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2014 embedded brains GmbH
+ * Copyright (C) 1989, 2007 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,11 +35,45 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/objectdata.h>
 #include <rtems/score/objectimpl.h>
 
-Objects_Control *_Objects_Allocate( Objects_Information *information )
+Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information )
 {
-  _RTEMS_Lock_allocator();
+  Objects_Control *the_object;
 
-  return _Objects_Allocate_unprotected( information );
+  _Assert( _Objects_Is_auto_extend( information ) );
+
+  /*
+   *  OK.  The manager should be initialized and configured to have objects.
+   *  With any luck, it is safe to attempt to allocate an object.
+   */
+  the_object = _Objects_Get_inactive( information );
+
+  /*
+   *  If the list is empty then we are out of objects and need to
+   *  extend information base.
+   */
+
+  if ( the_object == NULL ) {
+    _Objects_Extend_information( information );
+    the_object = _Objects_Get_inactive( information );
+  }
+
+  if ( the_object != NULL ) {
+    Objects_Maximum objects_per_block;
+    Objects_Maximum block;
+
+    objects_per_block = information->objects_per_block;
+    block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
+
+    if ( block > objects_per_block ) {
+      block /= objects_per_block;
+
+      information->inactive_per_block[ block ]--;
+      information->inactive--;
+    }
+  }
+
+  return the_object;
 }

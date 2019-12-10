@@ -162,6 +162,8 @@ typedef void ( *Objects_Thread_queue_Extract_callout )(
 );
 #endif
 
+typedef struct Objects_Information Objects_Information;
+
 /**
  * @brief The information structure used to manage each API class of objects.
  *
@@ -171,7 +173,7 @@ typedef void ( *Objects_Thread_queue_Extract_callout )(
  * allocated and pre-initialized instance for each API class providing zero
  * objects, see OBJECTS_INFORMATION_DEFINE_ZERO().
  */
-typedef struct {
+struct Objects_Information {
   /**
    * @brief This is the maximum valid ID of this object API class.
    *
@@ -191,6 +193,14 @@ typedef struct {
    * the table with a larger one on demand.
    */
   Objects_Control **local_table;
+
+  /**
+   * @brief Allocate an object.
+   *
+   * @see _Objects_Allocate_none(), _Objects_Allocate_static(), and
+   *   _Objects_Allocate_unlimited().
+   */
+  Objects_Control *( *allocate )( Objects_Information * );
 
   /**
    * @brief This is the number of object control blocks on the inactive chain.
@@ -288,7 +298,38 @@ typedef struct {
    */
   RBTree_Control Global_by_name;
 #endif
-} Objects_Information;
+};
+
+/**
+ * @brief Always return NULL.
+ *
+ * @param information The objects information.
+ *
+ * @retval NULL Always.
+ */
+Objects_Control *_Objects_Allocate_none( Objects_Information *information );
+
+/**
+ * @brief Return an inactive object or NULL.
+ *
+ * @param information The objects information.
+ *
+ * @retval NULL No inactive object is available.
+ * @retval object An inactive object.
+ */
+Objects_Control *_Objects_Allocate_static( Objects_Information *information );
+
+/**
+ * @brief Return an inactive object or NULL.
+ *
+ * Try to extend the objects information if necessary.
+ *
+ * @param information The objects information.
+ *
+ * @retval NULL No inactive object is available.
+ * @retval object An inactive object.
+ */
+Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information );
 
 #if defined(RTEMS_MULTIPROCESSING)
 #define OBJECTS_INFORMATION_MP( name, extract ) \
@@ -315,6 +356,7 @@ typedef struct {
 Objects_Information name##_Information = { \
   _Objects_Build_id( api, cls, 1, 0 ), \
   NULL, \
+  _Objects_Allocate_none, \
   0, \
   0, \
   0, \
@@ -351,6 +393,8 @@ static type name##_Objects[ _Objects_Maximum_per_allocation( max ) ]; \
 Objects_Information name##_Information = { \
   _Objects_Build_id( api, cls, 1, _Objects_Maximum_per_allocation( max ) ), \
   name##_Local_table, \
+  _Objects_Is_unlimited( max ) ? \
+    _Objects_Allocate_unlimited : _Objects_Allocate_static, \
   0, \
   _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max ) : 0, \
   sizeof( type ), \
