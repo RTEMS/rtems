@@ -91,8 +91,11 @@ _Objects_Information_table[ OBJECTS_APIS_LAST + 1 ];
  * @brief Extends an object class information record.
  *
  * @param information Points to an object class information block.
+ *
+ * @retval 0 The extend operation failed.
+ * @retval block The block index of the new objects block.
  */
-void _Objects_Extend_information(
+Objects_Maximum _Objects_Extend_information(
   Objects_Information *information
 );
 

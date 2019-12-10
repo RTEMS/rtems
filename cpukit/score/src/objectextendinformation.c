@@ -28,18 +28,7 @@
 
 #include <string.h>  /* for memcpy() */
 
-/*
- *  _Objects_Extend_information
- *
- *  This routine extends all object information related data structures.
- *
- *  Input parameters:
- *    information     - object information table
- *
- *  Output parameters:  NONE
- */
-
-void _Objects_Extend_information(
+Objects_Maximum _Objects_Extend_information(
   Objects_Information *information
 )
 {
@@ -98,7 +87,7 @@ void _Objects_Extend_information(
    *  case of 16-bit Ids, this is only 256 object instances.
    */
   if ( new_maximum > OBJECTS_ID_FINAL_INDEX ) {
-    return;
+    return 0;
   }
 
   /*
@@ -108,7 +97,7 @@ void _Objects_Extend_information(
   object_block_size = extend_count * information->object_size;
   new_object_block = _Workspace_Allocate( object_block_size );
   if ( new_object_block == NULL ) {
-    return;
+    return 0;
   }
 
   /*
@@ -157,7 +146,7 @@ void _Objects_Extend_information(
     object_blocks = _Workspace_Allocate( table_size );
     if ( object_blocks == NULL ) {
       _Workspace_Free( new_object_block );
-      return;
+      return 0;
     }
 
     /*
@@ -249,4 +238,6 @@ void _Objects_Extend_information(
 
     the_object = _Addresses_Add_offset( the_object, information->object_size );
   }
+
+  return block;
 }
