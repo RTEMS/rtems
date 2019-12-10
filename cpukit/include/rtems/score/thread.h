@@ -1039,6 +1039,14 @@ Thread_Information name##_Information = { \
   } \
 }
 
+/**
+ * @brief Return an inactive thread object or NULL.
+ *
+ * @retval NULL No inactive object is available.
+ * @retval object An inactive object.
+ */
+Objects_Control *_Thread_Allocate_unlimited( Objects_Information *information );
+
 #define THREAD_INFORMATION_DEFINE( name, api, cls, max ) \
 static Objects_Control * \
 name##_Local_table[ _Objects_Maximum_per_allocation( max ) ]; \
@@ -1051,7 +1059,7 @@ Thread_Information name##_Information = { \
     _Objects_Build_id( api, cls, 1, _Objects_Maximum_per_allocation( max ) ), \
     name##_Local_table, \
     _Objects_Is_unlimited( max ) ? \
-      _Objects_Allocate_unlimited : _Objects_Allocate_static, \
+      _Thread_Allocate_unlimited : _Objects_Allocate_static, \
     _Objects_Is_unlimited( max ) ? \
       _Objects_Free_unlimited : _Objects_Free_static, \
     0, \

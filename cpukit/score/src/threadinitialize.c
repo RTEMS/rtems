@@ -24,7 +24,6 @@
 #include <rtems/score/tls.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
 bool _Thread_Initialize(
@@ -115,15 +114,9 @@ bool _Thread_Initialize(
   /*
    *  Get thread queue heads
    */
-  the_thread->Wait.spare_heads = _Freechain_Get(
-    &information->Thread_queue_heads.Free,
-    _Workspace_Allocate,
-    _Objects_Extend_size( &information->Objects ),
-    _Thread_queue_Heads_size
+  the_thread->Wait.spare_heads = _Freechain_Pop(
+    &information->Thread_queue_heads.Free
   );
-  if ( the_thread->Wait.spare_heads == NULL ) {
-    goto failed;
-  }
   _Thread_queue_Heads_initialize( the_thread->Wait.spare_heads );
 
   /*

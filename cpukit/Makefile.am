@@ -945,6 +945,7 @@ librtemscpu_a_SOURCES += score/src/rbtreeiterate.c
 librtemscpu_a_SOURCES += score/src/rbtreenext.c
 librtemscpu_a_SOURCES += score/src/rbtreepostorder.c
 librtemscpu_a_SOURCES += score/src/rbtreereplace.c
+librtemscpu_a_SOURCES += score/src/threadallocateunlimited.c
 librtemscpu_a_SOURCES += score/src/thread.c
 librtemscpu_a_SOURCES += score/src/threadchangepriority.c
 librtemscpu_a_SOURCES += score/src/threadclearstate.c

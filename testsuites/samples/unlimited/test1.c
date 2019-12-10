@@ -51,6 +51,7 @@ void test1()
     _Objects_Information_table[OBJECTS_CLASSIC_API][OBJECTS_RTEMS_TASKS];
   objects_per_block = the_information->objects_per_block;
   the_information->objects_per_block = 0;
+  the_information->allocate = _Objects_Allocate_static;
 
   while (task_count < MAX_TASKS)
   {
@@ -102,6 +103,7 @@ void test1()
   destroy_all_tasks("TEST1");
 
   the_information->objects_per_block = objects_per_block;
+  the_information->allocate = _Thread_Allocate_unlimited;
 
   printf( " TEST1 : completed\n" );
 }
