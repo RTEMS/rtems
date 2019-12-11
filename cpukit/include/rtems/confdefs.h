@@ -202,15 +202,21 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 /**
  * This is specified to configure the maximum number of POSIX FIFOs.
  */
-#if !defined(CONFIGURE_MAXIMUM_FIFOS)
-  #define CONFIGURE_MAXIMUM_FIFOS 0
+#ifdef CONFIGURE_MAXIMUM_FIFOS
+  #warning "CONFIGURE_MAXIMUM_FIFOS is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
+  #if CONFIGURE_MAXIMUM_FIFOS > 0
+    #define CONFIGURE_IMFS_ENABLE_MKFIFO
+  #endif
 #endif
 
 /**
  * This is specified to configure the maximum number of POSIX named pipes.
  */
-#if !defined(CONFIGURE_MAXIMUM_PIPES)
-  #define CONFIGURE_MAXIMUM_PIPES 0
+#ifdef CONFIGURE_MAXIMUM_PIPES
+  #warning "CONFIGURE_MAXIMUM_PIPES is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
+  #if CONFIGURE_MAXIMUM_PIPES > 0
+    #define CONFIGURE_IMFS_ENABLE_MKFIFO
+  #endif
 #endif
 
 /**
@@ -575,7 +581,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         #else
           &IMFS_mknod_control_memfile,
         #endif
-        #if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
+        #ifdef CONFIGURE_IMFS_ENABLE_MKFIFO
           &IMFS_mknod_control_fifo
         #else
           &IMFS_mknod_control_enosys

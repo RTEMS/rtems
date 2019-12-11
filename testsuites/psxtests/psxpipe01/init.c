@@ -111,7 +111,7 @@ rtems_task Init(
 
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
-#define CONFIGURE_MAXIMUM_PIPES 2
+#define CONFIGURE_IMFS_ENABLE_MKFIFO
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
