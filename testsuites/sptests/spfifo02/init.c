@@ -19,63 +19,13 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-#include <rtems/libcsupport.h>
+#include <rtems/malloc.h>
 
 const char rtems_test_name[] = "SPFIFO 2";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void create_all_barriers(void);
-void delete_barrier(void);
-void create_fifo(void);
-void open_fifo(int expected, int flags);
-
-#define MAXIMUM 10
 #define NUM_OPEN_REQ 26
 
-rtems_id Barriers[MAXIMUM];
-int BarrierCount;
-
-rtems_id Semaphores[MAXIMUM];
-int SemaphoreCount;
-
-void create_all_barriers(void)
-{
-  rtems_status_code status;
-  int               i;
-
-  BarrierCount = 0;
-
-  memset( Barriers, 0, sizeof(Barriers) );
-  for ( i=0 ; i<MAXIMUM ; i++ ) {
-    status = rtems_barrier_create(
-      rtems_build_name( 'B', 'A', 'R', 0x30+i ),
-      RTEMS_BARRIER_MANUAL_RELEASE,
-      0,
-      &Barriers[i]
-    );
-    if ( status == RTEMS_TOO_MANY ) {
-      printf( "%d Barriers created\n", BarrierCount+1 );
-      return;
-    } 
-
-    directive_failed( status, "barrier create" );
-    BarrierCount++;
-  }
-}
-
-void delete_barrier(void)
-{
-  rtems_status_code status;
-  
-  BarrierCount--;
-  printf( "Deleting barrier id=0x%08x\n",
-    (unsigned int)Barriers[BarrierCount] );
-  status = rtems_barrier_delete( Barriers[BarrierCount] );
-  directive_failed( status, "barrier delete" );
-}
-
-void create_fifo(void)
+static void create_fifo(void)
 {
   int status;
 
@@ -83,7 +33,7 @@ void create_fifo(void)
   rtems_test_assert(status == 0);
 }
 
-void open_fifo(int expected, int flags)
+static void open_fifo(int expected, int flags)
 {
   int fd;
 
@@ -98,35 +48,24 @@ void open_fifo(int expected, int flags)
   }
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument argument
 )
 {
-  void *alloc_ptr = (void *)0;
+  void *p;
   int num_opens = 0;
   int index = 0;
 
   TEST_BEGIN();
 
-  puts( "Creating all barriers" );
-  create_all_barriers();
-
   puts( "Creating FIFO" );
   create_fifo();
 
-  alloc_ptr = malloc( malloc_free_space() - 4 );
+  p = rtems_heap_greedy_allocate(NULL, 0);
   puts("Opening FIFO.. expect ENOMEM since no memory is available");
   open_fifo(ENOMEM, O_RDWR);
+  rtems_heap_greedy_free(p);
 
-  free(alloc_ptr);
-  puts( "Opening FIFO.. expect ENOMEM (barrier-1 for pipe could not be created)" );
-  open_fifo(ENOMEM, O_RDWR);
-
-  delete_barrier();
-  puts( "Opening FIFO.. expect ENOMEM (barrier-2 for pipe could not be created" );
-  open_fifo(ENOMEM, O_RDWR);
-
-  delete_barrier();
   puts( "Opening FIFO in RDWR mode. Expect OK" );
   open_fifo(0, O_RDWR);
   ++num_opens;

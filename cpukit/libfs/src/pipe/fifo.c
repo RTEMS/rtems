@@ -27,8 +27,6 @@
 #include <rtems.h>
 #include <rtems/libio_.h>
 #include <rtems/pipe.h>
-#include <rtems/rtems/barrierimpl.h>
-#include <rtems/score/statesimpl.h>
 
 #define LIBIO_ACCMODE(_iop) (rtems_libio_iop_flags(_iop) & LIBIO_FLAGS_READ_WRITE)
 #define LIBIO_NODELAY(_iop) rtems_libio_iop_is_no_delay(_iop)
@@ -46,18 +44,16 @@ static rtems_mutex pipe_mutex = RTEMS_MUTEX_INITIALIZER("Pipes");
 #define PIPE_UNLOCK(_pipe) rtems_mutex_unlock(&(_pipe)->Mutex)
 
 #define PIPE_READWAIT(_pipe)  \
-  ( rtems_barrier_wait(_pipe->readBarrier, RTEMS_NO_TIMEOUT)  \
-   == RTEMS_SUCCESSFUL)
+  rtems_condition_variable_wait(&(_pipe)->readBarrier, &(_pipe)->Mutex)
 
 #define PIPE_WRITEWAIT(_pipe)  \
-  ( rtems_barrier_wait(_pipe->writeBarrier, RTEMS_NO_TIMEOUT)  \
-   == RTEMS_SUCCESSFUL)
+  rtems_condition_variable_wait(&(_pipe)->writeBarrier, &(_pipe)->Mutex)
 
 #define PIPE_WAKEUPREADERS(_pipe) \
-  do {uint32_t n; rtems_barrier_release(_pipe->readBarrier, &n); } while(0)
+  rtems_condition_variable_broadcast(&(_pipe)->readBarrier)
 
 #define PIPE_WAKEUPWRITERS(_pipe) \
-  do {uint32_t n; rtems_barrier_release(_pipe->writeBarrier, &n); } while(0)
+  rtems_condition_variable_broadcast(&(_pipe)->writeBarrier)
 
 /*
  * Alloc pipe control structure, buffer, and resources.
@@ -78,35 +74,19 @@ static int pipe_alloc(
 
   pipe->Size = PIPE_BUF;
   pipe->Buffer = malloc(pipe->Size);
-  if (! pipe->Buffer)
-    goto err_buf;
+  if (pipe->Buffer == NULL) {
+    free(pipe);
+    return -ENOMEM;
+  }
 
-  err = -ENOMEM;
-
-  if (rtems_barrier_create(
-        rtems_build_name ('P', 'I', 'r', c),
-        RTEMS_BARRIER_MANUAL_RELEASE, 0,
-        &pipe->readBarrier) != RTEMS_SUCCESSFUL)
-    goto err_rbar;
-  if (rtems_barrier_create(
-        rtems_build_name ('P', 'I', 'w', c),
-        RTEMS_BARRIER_MANUAL_RELEASE, 0,
-        &pipe->writeBarrier) != RTEMS_SUCCESSFUL)
-    goto err_wbar;
+  rtems_condition_variable_init(&pipe->readBarrier, "Pipe Read");
+  rtems_condition_variable_init(&pipe->writeBarrier, "Pipe Write");
   rtems_mutex_init(&pipe->Mutex, "Pipe");
 
   *pipep = pipe;
   if (c ++ == 'z')
     c = 'a';
   return 0;
-
-err_wbar:
-  rtems_barrier_delete(pipe->readBarrier);
-err_rbar:
-  free(pipe->Buffer);
-err_buf:
-  free(pipe);
-  return err;
 }
 
 /* Called with pipe_semaphore held. */
@@ -114,8 +94,8 @@ static inline void pipe_free(
   pipe_control_t *pipe
 )
 {
-  rtems_barrier_delete(pipe->readBarrier);
-  rtems_barrier_delete(pipe->writeBarrier);
+  rtems_condition_variable_destroy(&pipe->readBarrier);
+  rtems_condition_variable_destroy(&pipe->writeBarrier);
   rtems_mutex_destroy(&pipe->Mutex);
   free(pipe->Buffer);
   free(pipe);
@@ -241,10 +221,7 @@ int fifo_open(
         err = -EINTR;
         /* Wait until a writer opens the pipe */
         do {
-          PIPE_UNLOCK(pipe);
-          if (! PIPE_READWAIT(pipe))
-            goto out_error;
-          PIPE_LOCK(pipe);
+          PIPE_READWAIT(pipe);
         } while (prevCounter == pipe->writerCounter);
       }
       break;
@@ -265,10 +242,7 @@ int fifo_open(
         prevCounter = pipe->readerCounter;
         err = -EINTR;
         do {
-          PIPE_UNLOCK(pipe);
-          if (! PIPE_WRITEWAIT(pipe))
-            goto out_error;
-          PIPE_LOCK(pipe);
+          PIPE_WRITEWAIT(pipe);
         } while (prevCounter == pipe->readerCounter);
       }
       break;
@@ -314,10 +288,7 @@ ssize_t pipe_read(
 
     /* Wait until pipe is no more empty or no writer exists */
     pipe->waitingReaders ++;
-    PIPE_UNLOCK(pipe);
-    if (! PIPE_READWAIT(pipe))
-      ret = -EINTR;
-    PIPE_LOCK(pipe);
+    PIPE_READWAIT(pipe);
     pipe->waitingReaders --;
     if (ret != 0)
       goto out_locked;
@@ -384,10 +355,7 @@ ssize_t pipe_write(
 
       /* Wait until there is chunk bytes space or no reader exists */
       pipe->waitingWriters ++;
-      PIPE_UNLOCK(pipe);
-      if (! PIPE_WRITEWAIT(pipe))
-        ret = -EINTR;
-      PIPE_LOCK(pipe);
+      PIPE_WRITEWAIT(pipe);
       pipe->waitingWriters --;
       if (ret != 0)
         goto out_locked;

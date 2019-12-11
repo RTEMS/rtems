@@ -213,17 +213,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_MAXIMUM_PIPES 0
 #endif
 
-/*
- * This specifies the number of barriers required for the configured
- * number of FIFOs and named pipes.
- */
-#if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
-  #define _CONFIGURE_BARRIERS_FOR_FIFOS \
-    (2 * (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
-#else
-  #define _CONFIGURE_BARRIERS_FOR_FIFOS   0
-#endif
-
 /**
  *  @defgroup ConfigFilesystems Filesystems and Mount Table Configuration
  *
@@ -2041,13 +2030,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_MAXIMUM_BARRIERS               0
 #endif
 
-/*
- * This macro is calculated to specify the number of Classic API
- * Barriers required by the application and configured capabilities.
- */
-#define _CONFIGURE_BARRIERS \
-  (CONFIGURE_MAXIMUM_BARRIERS + _CONFIGURE_BARRIERS_FOR_FIFOS)
-
 #ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
   /**
    * This configuration parameter specifies the maximum number of
@@ -2737,8 +2719,8 @@ struct _reent *__getreent(void)
     _CONFIGURE_IDLE_TASKS_COUNT + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT
   );
 
-  #if _CONFIGURE_BARRIERS > 0
-    BARRIER_INFORMATION_DEFINE( _CONFIGURE_BARRIERS );
+  #if CONFIGURE_MAXIMUM_BARRIERS > 0
+    BARRIER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_BARRIERS );
   #endif
 
   #if CONFIGURE_MAXIMUM_MESSAGE_QUEUES > 0

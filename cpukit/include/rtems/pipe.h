@@ -47,8 +47,8 @@ typedef struct pipe_control {
   unsigned int readerCounter;     /* incremental counters */
   unsigned int writerCounter;     /* for differentiation of successive opens */
   rtems_mutex Mutex;
-  rtems_id readBarrier;   /* wait queues */
-  rtems_id writeBarrier;
+  rtems_condition_variable readBarrier;   /* wait queues */
+  rtems_condition_variable writeBarrier;
 #if 0
   boolean Anonymous;      /* anonymous pipe or FIFO */
 #endif
