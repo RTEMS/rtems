@@ -1812,53 +1812,49 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    */
 
   #ifdef CONFIGURE_MP_APPLICATION
-    #ifndef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
+    #ifndef CONFIGURE_MP_NODE_NUMBER
+      #define CONFIGURE_MP_NODE_NUMBER                NODE_NUMBER
+    #endif
 
-      #ifndef CONFIGURE_MP_NODE_NUMBER
-        #define CONFIGURE_MP_NODE_NUMBER                NODE_NUMBER
-      #endif
+    #ifndef CONFIGURE_MP_MAXIMUM_NODES
+      #define CONFIGURE_MP_MAXIMUM_NODES              2
+    #endif
 
-      #ifndef CONFIGURE_MP_MAXIMUM_NODES
-        #define CONFIGURE_MP_MAXIMUM_NODES              2
-      #endif
+    #ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
+      #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
+    #endif
+    #define _CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
+      _Configure_From_workspace( \
+        (_global_objects) * sizeof(Objects_MP_Control) \
+      )
 
-      #ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
-        #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
-      #endif
-      #define _CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
-        _Configure_From_workspace( \
-          (_global_objects) * sizeof(Objects_MP_Control) \
-        )
+    #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
+      #define CONFIGURE_MP_MAXIMUM_PROXIES            32
+    #endif
+    #define _CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
+      _Configure_From_workspace((_proxies) \
+        * (sizeof(Thread_Proxy_control) \
+          + sizeof(Thread_queue_Configured_heads)))
 
-      #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
-        #define CONFIGURE_MP_MAXIMUM_PROXIES            32
-      #endif
-      #define _CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
-        _Configure_From_workspace((_proxies) \
-          * (sizeof(Thread_Proxy_control) \
-            + sizeof(Thread_queue_Configured_heads)))
+    #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
+      #include <mpci.h>
+      #define CONFIGURE_MP_MPCI_TABLE_POINTER         &MPCI_table
+    #endif
 
-      #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
-        #include <mpci.h>
-        #define CONFIGURE_MP_MPCI_TABLE_POINTER         &MPCI_table
-      #endif
+    #ifdef CONFIGURE_INIT
+      rtems_multiprocessing_table Multiprocessing_configuration = {
+        CONFIGURE_MP_NODE_NUMBER,               /* local node number */
+        CONFIGURE_MP_MAXIMUM_NODES,             /* maximum # nodes */
+        CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,    /* maximum # global objects */
+        CONFIGURE_MP_MAXIMUM_PROXIES,           /* maximum # proxies */
+        CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI stack > minimum */
+        CONFIGURE_MP_MPCI_TABLE_POINTER         /* ptr to MPCI config table */
+      };
+    #endif
 
-      #ifdef CONFIGURE_INIT
-        rtems_multiprocessing_table Multiprocessing_configuration = {
-          CONFIGURE_MP_NODE_NUMBER,               /* local node number */
-          CONFIGURE_MP_MAXIMUM_NODES,             /* maximum # nodes */
-          CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,    /* maximum # global objects */
-          CONFIGURE_MP_MAXIMUM_PROXIES,           /* maximum # proxies */
-          CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI stack > minimum */
-          CONFIGURE_MP_MPCI_TABLE_POINTER         /* ptr to MPCI config table */
-        };
-      #endif
+    #define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
 
-      #define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
-
-      #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
-
-    #endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
+    #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
   #else
     #define CONFIGURE_MULTIPROCESSING_TABLE NULL
     #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
@@ -3131,6 +3127,10 @@ struct _reent *__getreent(void)
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_MOUNT_TABLE
+  #warning "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
   #warning "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
