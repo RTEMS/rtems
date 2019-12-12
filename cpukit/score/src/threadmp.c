@@ -21,7 +21,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/schedulerimpl.h>
-#include <rtems/score/wkspace.h>
 
 #include <string.h>
 
@@ -46,7 +45,6 @@ void _Thread_MP_Handler_initialization (
 )
 {
   size_t    proxy_size;
-  size_t    alloc_size;
   char     *proxies;
   uint32_t  i;
 
@@ -55,9 +53,7 @@ void _Thread_MP_Handler_initialization (
   }
 
   proxy_size = sizeof( Thread_Proxy_control ) + _Thread_queue_Heads_size;
-  alloc_size = maximum_proxies * proxy_size;
-  proxies = _Workspace_Allocate_or_fatal_error( alloc_size );
-  memset( proxies, 0, alloc_size );
+  proxies = (char *) _Thread_MP_Proxies;
 
   _Chain_Initialize(
     &_Thread_MP_Inactive_proxies,

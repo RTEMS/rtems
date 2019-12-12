@@ -1831,10 +1831,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
       #define CONFIGURE_MP_MAXIMUM_PROXIES            32
     #endif
-    #define _CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
-      _Configure_From_workspace((_proxies) \
-        * (sizeof(Thread_Proxy_control) \
-          + sizeof(Thread_queue_Configured_heads)))
 
     #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
       #include <mpci.h>
@@ -1849,6 +1845,18 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #if CONFIGURE_MP_NODE_NUMBER > CONFIGURE_MP_MAXIMUM_NODES
         #error "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
       #endif
+
+      struct Thread_Configured_proxy_control {
+        Thread_Proxy_control Control;
+        Thread_queue_Configured_heads Heads;
+      };
+
+      static Thread_Configured_proxy_control _Thread_MP_Configured_proxies[
+        CONFIGURE_MP_MAXIMUM_PROXIES
+      ];
+
+      Thread_Configured_proxy_control * const _Thread_MP_Proxies =
+        &_Thread_MP_Configured_proxies[ 0 ];
 
       const MPCI_Configuration _MPCI_Configuration = {
         CONFIGURE_MP_NODE_NUMBER,               /* local node number */
@@ -2391,8 +2399,7 @@ struct _reent *__getreent(void)
  */
 #ifdef CONFIGURE_MP_APPLICATION
   #define _CONFIGURE_MEMORY_FOR_MP \
-    (_CONFIGURE_MEMORY_FOR_PROXIES(CONFIGURE_MP_MAXIMUM_PROXIES) + \
-     _CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS))
+     _CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS)
 #else
   #define _CONFIGURE_MEMORY_FOR_MP  0
 #endif

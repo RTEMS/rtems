@@ -20,6 +20,9 @@
 
 #include <rtems/score/mpci.h>
 #include <rtems/score/stack.h>
+#include <rtems/score/thread.h>
+
+Thread_Configured_proxy_control * const _Thread_MP_Proxies;
 
 const MPCI_Configuration _MPCI_Configuration = {
   1,                        /* local node number */

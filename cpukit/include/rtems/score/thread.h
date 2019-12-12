@@ -1065,6 +1065,23 @@ Thread_Information name##_Information = { \
   } \
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ * @brief The configured thread control block.
+ *
+ * This type is defined in <rtems/confdefs.h> and depends on the application
+ * configuration.
+ */
+typedef struct Thread_Configured_proxy_control Thread_Configured_proxy_control;
+
+/**
+ * @brief The configured proxies.
+ *
+ * Provided by the application via <rtems/confdefs.h>.
+ */
+extern Thread_Configured_proxy_control * const _Thread_MP_Proxies;
+#endif
+
 /** @} */
 
 #ifdef __cplusplus
