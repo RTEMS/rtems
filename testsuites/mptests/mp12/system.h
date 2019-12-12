@@ -32,9 +32,9 @@ rtems_task Init(
 #define CONFIGURE_MP_MAXIMUM_PROXIES            0
 
 #define CONFIGURE_MAXIMUM_TASKS               1
-#if ( NODE_NUMBER == 1 )
+#if ( CONFIGURE_MP_NODE_NUMBER == 1 )
 #define CONFIGURE_MAXIMUM_PARTITIONS          1
-#elif ( NODE_NUMBER == 2 )
+#elif ( CONFIGURE_MP_NODE_NUMBER == 2 )
 #define CONFIGURE_MAXIMUM_PARTITIONS          2
 #endif
 
