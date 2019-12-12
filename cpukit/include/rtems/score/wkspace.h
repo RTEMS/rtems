@@ -102,21 +102,6 @@ void _Workspace_Free(
 );
 
 /**
- * @brief Allocates workspace or fails with fatal error.
- *
- * This routine returns the address of a block of memory of @a size
- * bytes.  If a block of the appropriate size cannot be allocated
- * from the workspace, then the internal error handler is invoked.
- *
- * @param size is the desired number of bytes to allocate
- *
- * @return The starting address of the allocated memory.
- */
-void *_Workspace_Allocate_or_fatal_error(
-  size_t  size
-);
-
-/**
  * @brief Duplicates string with memory from the workspace.
  *
  * @param string The pointer to a zero terminated string.

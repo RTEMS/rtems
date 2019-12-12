@@ -270,26 +270,3 @@ void _Workspace_Free(
   #endif
   _Heap_Free( &_Workspace_Area, block );
 }
-
-void *_Workspace_Allocate_or_fatal_error(
-  size_t      size
-)
-{
-  void *memory;
-
-  memory = _Heap_Allocate( &_Workspace_Area, size );
-  #if defined(DEBUG_WORKSPACE)
-    printk(
-      "Workspace_Allocate_or_fatal_error(%d) from %p/%p -> %p\n",
-      size,
-      __builtin_return_address( 0 ),
-      __builtin_return_address( 1 ),
-      memory
-    );
-  #endif
-
-  if ( memory == NULL )
-    _Internal_error( INTERNAL_ERROR_WORKSPACE_ALLOCATION );
-
-  return memory;
-}
