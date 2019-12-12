@@ -51,7 +51,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 14 -- NODE %" PRId32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
   Stop_Test = false;
@@ -90,7 +90,7 @@ rtems_task Init(
 
   Timer_name[ 1 ] = rtems_build_name( 'T', 'M', 'R', ' ' );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Creating Semaphore (Global)" );
     status = rtems_semaphore_create(
       Semaphore_name[ 1 ],
@@ -125,7 +125,7 @@ rtems_task Init(
 
   puts( "Creating Event task (Global)" );
   status = rtems_task_create(
-    Task_name[ Multiprocessing_configuration.node ],
+    Task_name[ rtems_object_get_local_node() ],
     2,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
@@ -140,7 +140,7 @@ rtems_task Init(
 
   puts( "Creating Semaphore task (Global)" );
   status = rtems_task_create(
-    Semaphore_task_name[ Multiprocessing_configuration.node ],
+    Semaphore_task_name[ rtems_object_get_local_node() ],
     2,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
@@ -155,7 +155,7 @@ rtems_task Init(
 
   puts( "Creating Message Queue task (Global)" );
   status = rtems_task_create(
-    Queue_task_name[ Multiprocessing_configuration.node ],
+    Queue_task_name[ rtems_object_get_local_node() ],
     2,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,
@@ -171,7 +171,7 @@ rtems_task Init(
 
   puts( "Creating Partition task (Global)" );
   status = rtems_task_create(
-    Partition_task_name[ Multiprocessing_configuration.node ],
+    Partition_task_name[ rtems_object_get_local_node() ],
     2,
     RTEMS_MINIMUM_STACK_SIZE * 2,
     RTEMS_TIMESLICE,

@@ -51,7 +51,7 @@ int rtems_verror(
 
   #if defined(RTEMS_MULTIPROCESSING)
     if (_System_state_Is_multiprocessing)
-      fprintf(stderr, "[%" PRIu32 "] ", _Configuration_MP_table->node);
+      fprintf(stderr, "[%" PRIu16 "] ", rtems_object_get_local_node());
   #endif
 
   chars_written += vfprintf(stderr, printf_format, arglist);

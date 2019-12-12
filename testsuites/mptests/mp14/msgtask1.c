@@ -53,7 +53,7 @@ rtems_task Message_queue_task(
     rtems_task_wake_after(2);
   }
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
       status = rtems_message_queue_send(
         Queue_id[ 1 ],
         (long (*)[4])Msg_buffer[ index ],
@@ -94,7 +94,7 @@ rtems_task Message_queue_task(
       directive_failed( status, "rtems_message_queue_send" );
 
       if (Stop_Test == false)
-        if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
+        if ( rtems_object_get_local_node() == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
           directive_failed( status, "rtems_task_wake_after" );
 

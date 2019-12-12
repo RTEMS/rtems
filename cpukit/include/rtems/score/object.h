@@ -338,6 +338,15 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
 #define _Objects_Maximum_per_allocation( maximum ) \
   ((Objects_Maximum) ((maximum) & ~OBJECTS_UNLIMITED_OBJECTS))
 
+/**
+ * @brief The local MPCI node number.
+ */
+#if defined(RTEMS_MULTIPROCESSING)
+extern uint16_t _Objects_Local_node;
+#else
+#define _Objects_Local_node ((uint16_t) 1)
+#endif
+
 /** @} */
 /** @} */
 /** @} */

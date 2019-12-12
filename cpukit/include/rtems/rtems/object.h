@@ -357,6 +357,16 @@ rtems_status_code rtems_object_get_class_information(
   rtems_object_api_class_information *info
 );
 
+/**
+ * @brief Get the local MPCI node number.
+ *
+ * @return The local MPCI node number.
+ */
+RTEMS_INLINE_ROUTINE uint16_t rtems_object_get_local_node( void )
+{
+  return _Objects_Local_node;
+}
+
 #ifdef __cplusplus
 }
 #endif

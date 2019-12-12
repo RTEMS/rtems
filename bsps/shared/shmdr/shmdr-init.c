@@ -46,7 +46,7 @@ rtems_mpci_entry Shm_Initialization( void )
   uint32_t                 remaining_memory;
   uint32_t                 local_node;
 
-  local_node = _Configuration_MP_table->node;
+  local_node = rtems_object_get_local_node();
 
   Shm_Get_configuration( local_node, &Shm_Configuration );
 

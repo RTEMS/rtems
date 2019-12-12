@@ -45,7 +45,7 @@ rtems_task Test_task(
 
   Stop_Test = false;
 
-  remote_node = (Multiprocessing_configuration.node == 1) ? 2 : 1;
+  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
@@ -58,7 +58,7 @@ rtems_task Test_task(
     );
   } while ( !rtems_is_status_successful( status ) );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Sending first event to remote task" );
     status = rtems_event_send( remote_tid, RTEMS_EVENT_16 );
     directive_failed( status, "rtems_event_send" );

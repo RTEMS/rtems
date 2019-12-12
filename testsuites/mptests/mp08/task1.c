@@ -39,7 +39,7 @@ rtems_task Test_task(
     );
   } while ( !rtems_is_status_successful( status ) );
 
-  if ( Multiprocessing_configuration.node == 2 ) {
+  if ( rtems_object_get_local_node() == 2 ) {
     status = rtems_semaphore_delete( Semaphore_id[ 1 ] );
     fatal_directive_status(
       status,
@@ -70,7 +70,7 @@ rtems_task Test_task(
       rtems_test_exit( 0 );
     }
 
-    if ( Multiprocessing_configuration.node == 1 && ++count == 1000 ) {
+    if ( rtems_object_get_local_node() == 1 && ++count == 1000 ) {
       status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
       directive_failed( status, "rtems_task_wake_after" );
 

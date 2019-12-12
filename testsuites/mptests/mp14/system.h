@@ -104,8 +104,6 @@ TEST_EXTERN rtems_name Timer_name[ 4 ];       /* event timer names */
 
 TEST_EXTERN uint32_t   Msg_buffer[ 4 ][ 4 ];
 
-extern rtems_multiprocessing_table Multiprocessing_configuration;
-
 TEST_EXTERN volatile bool Stop_Test;
 TEST_EXTERN rtems_id timer_id;
 

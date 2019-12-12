@@ -34,7 +34,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 13 -- NODE %" PRId32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -44,7 +44,7 @@ rtems_task Init(
 
   Semaphore_name[ 1 ] = rtems_build_name( 'S', 'E', 'M', ' ' );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Creating Message Queue (Global)" );
     status = rtems_message_queue_create(
       Queue_name[ 1 ],
@@ -103,7 +103,7 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 2 ], Test_task2, 0 );
   directive_failed( status, "rtems_task_start" );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     status = rtems_task_wake_after( 5 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 

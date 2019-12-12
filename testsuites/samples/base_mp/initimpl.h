@@ -40,7 +40,7 @@ rtems_task Init(
   status = rtems_task_start(
     tid,
     Application_task,
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
   rtems_test_assert(status == RTEMS_SUCCESSFUL);
 

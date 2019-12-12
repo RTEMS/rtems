@@ -3,7 +3,7 @@
 #endif
 
 #include <unistd.h>
-#include <rtems/score/objectimpl.h>
+#include <rtems.h>
 
 /*
  *  4.3.1 Get Process Group IDs, P1003.1b-1993, p. 89
@@ -16,5 +16,5 @@ pid_t getpgrp( void )
    *  this will always be the local node;
    */
 
-  return _Objects_Local_node;
+  return rtems_object_get_local_node();
 }

@@ -102,8 +102,7 @@ uint32_t is_configured_multiprocessing(void)
 
 uint32_t get_node(void)
 {
-  /* XXX HACK -- use public API */
-  return _Objects_Local_node;
+  return rtems_object_get_local_node();
 }
 
 typedef struct {

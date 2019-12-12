@@ -50,7 +50,7 @@ rtems_task Test_task(
   status = rtems_signal_catch( Process_asr, RTEMS_NO_ASR|RTEMS_NO_PREEMPT );
   directive_failed( status, "rtems_signal_catch" );
 
-  if (Multiprocessing_configuration.node == 1) {
+  if (rtems_object_get_local_node() == 1) {
      remote_node = 2;
      remote_signal  = RTEMS_SIGNAL_18;
      expected_signal = RTEMS_SIGNAL_17;
@@ -81,7 +81,7 @@ rtems_task Test_task(
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Sending signal to remote task" );
     do {
       status = rtems_signal_send( remote_tid, remote_signal );

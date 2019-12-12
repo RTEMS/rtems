@@ -49,7 +49,7 @@ rtems_task Test_task(
     );
   } while ( !rtems_is_status_successful( status ) );
 
-  if ( Multiprocessing_configuration.node == 2 ) {
+  if ( rtems_object_get_local_node() == 2 ) {
     status = rtems_message_queue_delete( Queue_id[ 1 ] );
     fatal_directive_status(
       status,

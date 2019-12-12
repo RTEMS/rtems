@@ -11,7 +11,7 @@
 
 #include <unistd.h>
 
-#include <rtems/score/objectimpl.h>
+#include <rtems.h>
 #include <rtems/seterr.h>
 
 /**
@@ -19,7 +19,7 @@
  */
 pid_t getpid( void )
 {
-  return _Objects_Local_node;
+  return rtems_object_get_local_node();
 }
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__GETPID_R)

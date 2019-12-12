@@ -34,7 +34,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 8 -- NODE %" PRIu32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -42,7 +42,7 @@ rtems_task Init(
 
   Semaphore_name[ 1 ] = rtems_build_name( 'S', 'E', 'M', '\0' );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Creating Sempahore (Global)" );
     status = rtems_semaphore_create(
       Semaphore_name[ 1 ],
@@ -56,7 +56,7 @@ rtems_task Init(
 
   puts( "Creating Test_task (Global)" );
   status = rtems_task_create(
-    Task_name[ Multiprocessing_configuration.node ],
+    Task_name[ rtems_object_get_local_node() ],
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,

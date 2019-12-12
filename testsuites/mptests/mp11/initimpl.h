@@ -40,7 +40,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 11 -- NODE %" PRIu32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -50,7 +50,7 @@ rtems_task Init(
 
   Semaphore_name[ 1 ] = rtems_build_name( 'S', 'E', 'M', ' ' );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Attempting to create Test_task (Global)" );
     status = rtems_task_create(
       Task_name[ 1 ],

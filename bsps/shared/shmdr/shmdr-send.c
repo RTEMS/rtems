@@ -46,7 +46,7 @@ rtems_mpci_entry Shm_Send_packet(
   }
   else {
     for( nnum = SHM_FIRST_NODE ; nnum <= SHM_MAXIMUM_NODES ; nnum++ )
-      if ( _Configuration_MP_table->node != nnum ) {
+      if ( rtems_object_get_local_node() != nnum ) {
         struct pkt_cpy *pkt;
 
         tmp_ecb = Shm_Allocate_envelope();

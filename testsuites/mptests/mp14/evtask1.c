@@ -23,8 +23,6 @@
 
 #include "system.h"
 
-extern rtems_multiprocessing_table Multiprocessing_configuration;
-
 rtems_task Test_task(
   rtems_task_argument argument
 )
@@ -35,7 +33,7 @@ rtems_task Test_task(
   rtems_id          remote_tid;
   rtems_event_set   event_out;
 
-  remote_node = ((Multiprocessing_configuration.node == 1) ? 2 : 1);
+  remote_node = ((rtems_object_get_local_node() == 1) ? 2 : 1);
 
   puts( "About to go to sleep!" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
@@ -59,7 +57,7 @@ rtems_task Test_task(
     rtems_task_wake_after(2);
   }
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Sending events to remote task" );
     while ( Stop_Test == false ) {
       for ( count=EVENT_TASK_DOT_COUNT; Stop_Test == false && count; count-- ) {

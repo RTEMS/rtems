@@ -41,7 +41,7 @@ Shm_Print_statistics(void)
     packets_per_second++;
 
   printk( "\n\nSHMDR STATISTICS (NODE %" PRId32 ")\n",
-    Multiprocessing_configuration.node );
+    rtems_object_get_local_node() );
   printk( "TICKS SINCE BOOT = %" PRId32 "\n", ticks );
   printk( "TICKS PER SECOND = %" PRId32 "\n", ticks_per_second );
   printk( "ISRs=%" PRId32 "\n",     Shm_Interrupt_count );

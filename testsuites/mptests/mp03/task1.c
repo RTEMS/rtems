@@ -20,7 +20,7 @@ static void Test_Task_Support(
   rtems_event_set   events;
   rtems_status_code status;
 
-  if ( Multiprocessing_configuration.node == node ) {
+  if ( rtems_object_get_local_node() == node ) {
 
     for ( ; ; ) {
 
@@ -98,7 +98,7 @@ rtems_task Test_task(
   directive_failed( status, "rtems_task_ident" );
 
   puts( "Getting TID of remote task" );
-  remote_node = (Multiprocessing_configuration.node == 1) ? 2 : 1;
+  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
   printf( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
@@ -130,7 +130,7 @@ rtems_task Test_task(
   );
   directive_failed( status, "rtems_timer_fire_after" );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     status = rtems_task_wake_after( 2 * rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
   }

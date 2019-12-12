@@ -80,7 +80,7 @@ rtems_task Test_task(
 
   Stop_Test = false;
 
-  remote_node = (Multiprocessing_configuration.node == 1) ? 2 : 1;
+  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
@@ -94,7 +94,7 @@ rtems_task Test_task(
   } while ( status != RTEMS_SUCCESSFUL );
   directive_failed( status, "rtems_task_ident FAILED!!" );
 
-  if ( Multiprocessing_configuration.node == 1 )
+  if ( rtems_object_get_local_node() == 1 )
     puts( "Sending events to remote task" );
   else
     puts( "Receiving events from remote task" );
@@ -115,7 +115,7 @@ rtems_task Test_task(
 
     event_for_this_iteration = Event_set_table[ count % 32 ];
 
-    if ( Multiprocessing_configuration.node == 1 ) {
+    if ( rtems_object_get_local_node() == 1 ) {
       status = rtems_event_send( remote_tid, event_for_this_iteration );
       directive_failed( status, "rtems_event_send" );
 
@@ -129,7 +129,7 @@ rtems_task Test_task(
         &event_out
       );
       if ( rtems_are_statuses_equal( status, RTEMS_TIMEOUT ) ) {
-        if ( Multiprocessing_configuration.node == 2 )
+        if ( rtems_object_get_local_node() == 2 )
           puts( "\nCorrect behavior if the other node exitted." );
         else
           puts( "\nERROR... node 1 died" );
@@ -146,7 +146,7 @@ rtems_task Test_task(
 
   putchar( '\n' );
 
-  if ( Multiprocessing_configuration.node == 2 ) {
+  if ( rtems_object_get_local_node() == 2 ) {
     /* Flush events */
     puts( "Flushing RTEMS_EVENT_16" );
     (void) rtems_event_receive(RTEMS_EVENT_16, RTEMS_NO_WAIT, 0, &event_out);

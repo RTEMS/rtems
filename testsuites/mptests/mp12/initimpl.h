@@ -42,7 +42,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 12 -- NODE %" PRId32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
    );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -52,7 +52,7 @@ rtems_task Init(
 
   puts( "Got to initialization task" );
 
-  if ( Multiprocessing_configuration.node == 2 )  {
+  if ( rtems_object_get_local_node() == 2 )  {
     status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 

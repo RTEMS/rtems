@@ -22,8 +22,6 @@
 #include "system.h"
 #include "tmacros.h"
 
-extern rtems_multiprocessing_table Multiprocessing_configuration;
-
 rtems_task Test_task(
   rtems_task_argument argument
 )
@@ -39,7 +37,7 @@ rtems_task Test_task(
   directive_failed( status, "rtems_task_ident" );
 
   puts( "Getting TID of remote task" );
-  remote_node = (Multiprocessing_configuration.node == 1) ? 2 : 1;
+  remote_node = (rtems_object_get_local_node() == 1) ? 2 : 1;
   puts_nocr( "Remote task's name is : " );
   put_name( Task_name[ remote_node ], TRUE );
 
@@ -55,7 +53,7 @@ rtems_task Test_task(
 
   status = rtems_task_set_priority(
     remote_tid,
-    Multiprocessing_configuration.node,
+    rtems_object_get_local_node(),
     &previous_priority
   );
   directive_failed( status, "rtems_task_set_priority" );

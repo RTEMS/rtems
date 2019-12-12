@@ -34,7 +34,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 6 -- NODE %" PRId32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -42,7 +42,7 @@ rtems_task Init(
 
   puts( "Creating Test_task (Global)" );
   status = rtems_task_create(
-    Task_name[Multiprocessing_configuration.node],
+    Task_name[rtems_object_get_local_node()],
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,

@@ -23,7 +23,7 @@
 #include <sys/utsname.h>
 #include <inttypes.h>
 
-#include <rtems/score/objectimpl.h>
+#include <rtems.h>
 #include <rtems/seterr.h>
 
 /*
@@ -47,7 +47,11 @@ int uname(
 
   strncpy( name->sysname, "RTEMS", sizeof(name->sysname) );
 
-  snprintf( name->nodename, sizeof(name->nodename), "Node %" PRId16, _Objects_Local_node );
+  snprintf(
+    name->nodename,
+    sizeof(name->nodename),
+    "Node %" PRId16, rtems_object_get_local_node()
+  );
 
   strncpy( name->release, RTEMS_VERSION, sizeof(name->release) );
 

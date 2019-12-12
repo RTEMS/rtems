@@ -22,8 +22,6 @@
 
 #include "system.h"
 
-extern rtems_multiprocessing_table Multiprocessing_configuration;
-
 rtems_task Partition_task(
   rtems_task_argument argument
 )
@@ -59,7 +57,7 @@ rtems_task Partition_task(
       directive_failed( status, "rtems_partition_return_buffer" );
 
       if (Stop_Test == false)
-        if ( Multiprocessing_configuration.node == 1 && --yield_count == 0 ) {
+        if ( rtems_object_get_local_node() == 1 && --yield_count == 0 ) {
           status = rtems_task_wake_after( 1 );
           directive_failed( status, "rtems_task_wake_after" );
           yield_count = 100;

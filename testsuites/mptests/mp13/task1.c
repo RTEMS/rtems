@@ -41,7 +41,7 @@ rtems_task Test_task1(
     );
   } while ( !rtems_is_status_successful( status ) );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Receiving message ..." );
     status = rtems_message_queue_receive(
       Queue_id[ 1 ],

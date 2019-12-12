@@ -40,7 +40,7 @@ rtems_task Test_task2(
 
   directive_failed( status, "rtems_semaphore_ident" );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
     directive_failed( status, "rtems_task_wake_after" );
 

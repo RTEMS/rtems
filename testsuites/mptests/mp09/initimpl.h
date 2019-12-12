@@ -34,7 +34,7 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 9 -- NODE %" PRId32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
@@ -42,7 +42,7 @@ rtems_task Init(
 
   Queue_name[ 1 ] = rtems_build_name( 'M', 'S', 'G', ' ' );
 
-  if ( Multiprocessing_configuration.node == 1 ) {
+  if ( rtems_object_get_local_node() == 1 ) {
     puts( "Creating Message Queue (Global)" );
     status = rtems_message_queue_create(
       Queue_name[ 1 ],
@@ -56,7 +56,7 @@ rtems_task Init(
 
   puts( "Creating Test_task (local)" );
   status = rtems_task_create(
-    Task_name[Multiprocessing_configuration.node],
+    Task_name[rtems_object_get_local_node()],
     1,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_TIMESLICE,

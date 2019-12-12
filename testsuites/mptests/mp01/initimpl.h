@@ -36,10 +36,10 @@ rtems_task Init(
 
   printf(
     "\n\n*** TEST 1 -- NODE %" PRIu32 " ***\n",
-    Multiprocessing_configuration.node
+    rtems_object_get_local_node()
   );
 
-  if ( Multiprocessing_configuration.node != 1 ) c = 'S';
+  if ( rtems_object_get_local_node() != 1 ) c = 'S';
   else                                           c = 'M';
 
   Task_name[ 1 ] = rtems_build_name( c, 'A', '1', ' ' );

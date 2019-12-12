@@ -239,7 +239,7 @@ extern "C" {
 /* macros */
 
 #define Shm_Is_master_node()  \
-  ( SHM_MASTER ==_Configuration_MP_table-> node )
+  ( SHM_MASTER == rtems_object_get_local_node() )
 
 #define Shm_Free_envelope( ecb ) \
   Shm_Locked_queue_Add( FREE_ENV_CB, (ecb) )
