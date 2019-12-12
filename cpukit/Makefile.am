@@ -1064,6 +1064,7 @@ librtemscpu_a_SOURCES += rtems/src/semmp.c
 librtemscpu_a_SOURCES += rtems/src/signalmp.c
 librtemscpu_a_SOURCES += rtems/src/taskmp.c
 librtemscpu_a_SOURCES += score/src/mpci.c
+librtemscpu_a_SOURCES += score/src/mpcidefault.c
 librtemscpu_a_SOURCES += score/src/objectmp.c
 librtemscpu_a_SOURCES += score/src/threadmp.c
 

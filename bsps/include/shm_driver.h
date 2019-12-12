@@ -433,7 +433,7 @@ struct shm_config_info {
 
 typedef struct shm_config_info shm_config_table;
 
-#define SHM_MAXIMUM_NODES Multiprocessing_configuration.maximum_nodes
+#define SHM_MAXIMUM_NODES _MPCI_Configuration.maximum_nodes
 
 /* global variables */
 

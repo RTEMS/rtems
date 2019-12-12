@@ -360,8 +360,7 @@ void rtems_monitor_node_cmd(
   }
 
   if ((new_node >= 1) &&
-    _Configuration_MP_table &&
-    (new_node <= _Configuration_MP_table->maximum_nodes))
+    (new_node <= _MPCI_Configuration.maximum_nodes))
 	rtems_monitor_default_node = new_node;
 }
 #endif

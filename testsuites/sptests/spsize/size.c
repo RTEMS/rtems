@@ -250,10 +250,7 @@ uninitialized =
 
 /*clock.h*/     0                                         +
 
-/*config.h*/
-        #if defined(RTEMS_MULTIPROCESSING)
-                (sizeof _Configuration_MP_table)          +
-        #endif
+/*config.h*/    0                                         +
 
 /*context.h*/   (sizeof _Thread_Dispatch_necessary)        +
 
@@ -433,10 +430,6 @@ uninitialized += (sizeof _CPU_Interrupt_stack_low) +
 
 initialized +=
 /*copyrt.h*/    (strlen(_Copyright_Notice)+1)             +
-
-#if defined(RTEMS_MULTIPROCESSING)
-                (sizeof _Initialization_Default_multiprocessing_table)  +
-#endif
                 (strlen(_RTEMS_version)+1);
 
 

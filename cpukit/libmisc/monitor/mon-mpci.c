@@ -28,13 +28,10 @@ rtems_monitor_mpci_canonical(
     const void           *config_void
 )
 {
-    const rtems_configuration_table *c = &Configuration;
-    rtems_multiprocessing_table *m;
-    rtems_mpci_table *mt;
+    const rtems_multiprocessing_table *m;
+    const rtems_mpci_table *mt;
 
-    m = c->User_multiprocessing_table;
-    if (m == 0)
-        return;
+    m = rtems_configuration_get_user_multiprocessing_table();
     mt = m->User_mpci_table;
 
     canonical_mpci->node = m->node;
@@ -70,19 +67,15 @@ rtems_monitor_mpci_next(
     rtems_id              *next_id
 )
 {
-    const rtems_configuration_table *c = &Configuration;
     int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)
         goto failed;
 
-    if ( ! c->User_multiprocessing_table)
-        goto failed;
-
     _Objects_Allocator_lock();
 
     *next_id += 1;
-    return (void *) c;
+    return &Configuration;
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

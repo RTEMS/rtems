@@ -1842,7 +1842,15 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #endif
 
     #ifdef CONFIGURE_INIT
-      rtems_multiprocessing_table Multiprocessing_configuration = {
+      #if CONFIGURE_MP_NODE_NUMBER < 1
+        #error "CONFIGURE_MP_NODE_NUMBER must be greater than or equal to one"
+      #endif
+
+      #if CONFIGURE_MP_NODE_NUMBER > CONFIGURE_MP_MAXIMUM_NODES
+        #error "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
+      #endif
+
+      const MPCI_Configuration _MPCI_Configuration = {
         CONFIGURE_MP_NODE_NUMBER,               /* local node number */
         CONFIGURE_MP_MAXIMUM_NODES,             /* maximum # nodes */
         CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,    /* maximum # global objects */
@@ -1852,11 +1860,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       };
     #endif
 
-    #define CONFIGURE_MULTIPROCESSING_TABLE    &Multiprocessing_configuration
-
     #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
   #else
-    #define CONFIGURE_MULTIPROCESSING_TABLE NULL
     #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
   #endif /* CONFIGURE_MP_APPLICATION */
 #else
@@ -2877,9 +2882,6 @@ struct _reent *__getreent(void)
       #else
         false,
       #endif
-    #endif
-    #if defined(RTEMS_MULTIPROCESSING)
-      CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
     #ifdef RTEMS_SMP
       _CONFIGURE_MAXIMUM_PROCESSORS,

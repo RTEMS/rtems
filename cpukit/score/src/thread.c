@@ -62,7 +62,7 @@ void _Thread_Handler_initialization(void)
     rtems_configuration_get_stack_allocate_init_hook();
   #if defined(RTEMS_MULTIPROCESSING)
     uint32_t maximum_proxies =
-      _Configuration_MP_table->maximum_proxies;
+      _MPCI_Configuration.maximum_proxies;
   #endif
 
   if ( rtems_configuration_get_stack_allocate_hook() == NULL ||

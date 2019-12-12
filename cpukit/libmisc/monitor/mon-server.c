@@ -221,9 +221,9 @@ rtems_monitor_server_init(
     rtems_status_code status;
 
     if (_System_state_Is_multiprocessing    &&
-        (_Configuration_MP_table->maximum_nodes > 1))
+        (_MPCI_Configuration.maximum_nodes > 1))
     {
-        uint32_t   maximum_nodes = _Configuration_MP_table->maximum_nodes;
+        uint32_t   maximum_nodes = _MPCI_Configuration.maximum_nodes;
 
         /*
          * create the msg que our server will listen

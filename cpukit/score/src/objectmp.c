@@ -161,8 +161,8 @@ void _Objects_MP_Handler_early_initialization(void)
   uint32_t   node;
   uint32_t   maximum_nodes;
 
-  node                   = _Configuration_MP_table->node;
-  maximum_nodes          = _Configuration_MP_table->maximum_nodes;
+  node                   = _MPCI_Configuration.node;
+  maximum_nodes          = _MPCI_Configuration.maximum_nodes;
 
   if ( node < 1 || node > maximum_nodes )
     _Internal_error( INTERNAL_ERROR_INVALID_NODE );
@@ -175,7 +175,7 @@ void _Objects_MP_Handler_initialization( void )
 {
   uint32_t maximum_global_objects;
 
-  maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
+  maximum_global_objects = _MPCI_Configuration.maximum_global_objects;
 
   _Objects_MP_Maximum_global_objects = maximum_global_objects;
 

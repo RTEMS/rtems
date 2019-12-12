@@ -27,7 +27,6 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/config.h>
 #include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
@@ -38,18 +37,6 @@ RTEMS_STATIC_ASSERT(
 #define MPCI_SEMAPHORE_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
 bool _System_state_Is_multiprocessing;
-
-rtems_multiprocessing_table *_Configuration_MP_table;
-
-const rtems_multiprocessing_table
- _Initialization_Default_multiprocessing_table = {
-  1,                        /* local node number */
-  1,                        /* maximum number nodes in system */
-  0,                        /* maximum number global objects */
-  0,                        /* maximum number proxies */
-  STACK_MINIMUM_SIZE,       /* MPCI receive server stack size */
-  NULL                      /* pointer to MPCI address table */
-};
 
 /**
  *  This is the core semaphore which the MPCI Receive Server blocks on.
@@ -72,14 +59,7 @@ static void _MPCI_Handler_early_initialization( void )
    *  In an MP configuration, internally we view single processor
    *  systems as a very restricted multiprocessor system.
    */
-  _Configuration_MP_table = rtems_configuration_get_user_multiprocessing_table();
-
-  if ( _Configuration_MP_table == NULL ) {
-    _Configuration_MP_table = RTEMS_DECONST(
-      rtems_multiprocessing_table *,
-      &_Initialization_Default_multiprocessing_table
-    );
-  } else {
+  if ( _MPCI_Configuration.maximum_nodes > 1 ) {
     _System_state_Is_multiprocessing = true;
   }
 
@@ -92,7 +72,7 @@ static void _MPCI_Handler_initialization( void )
 
   _Objects_MP_Handler_initialization();
 
-  users_mpci_table = _Configuration_MP_table->User_mpci_table;
+  users_mpci_table = _MPCI_Configuration.User_mpci_table;
 
   if ( _System_state_Is_multiprocessing && !users_mpci_table )
     _Internal_error( INTERNAL_ERROR_NO_MPCI );
@@ -152,7 +132,7 @@ static void _MPCI_Create_server( void )
     NULL,        /* allocate the stack */
     _Stack_Minimum() +
       CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
-      _Configuration_MP_table->extra_mpci_receive_server_stack,
+      _MPCI_Configuration.extra_mpci_receive_server_stack,
     CPU_ALL_TASKS_ARE_FP,
     PRIORITY_PSEUDO_ISR,
     false,       /* no preempt */

@@ -221,6 +221,11 @@ typedef MPCI_Entry                 rtems_mpci_entry;
  */
 typedef MPCI_Control               rtems_mpci_table;
 
+/**
+ * @brief Structure which is used to configure an MPCI handler.
+ */
+typedef MPCI_Configuration         rtems_multiprocessing_table;
+
 #endif
 
 /** @} */

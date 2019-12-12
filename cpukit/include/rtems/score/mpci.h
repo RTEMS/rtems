@@ -128,6 +128,40 @@ typedef struct {
   MPCI_receive_entry         receive_packet;
 } MPCI_Control;
 
+/*
+ *  The following records define the Multiprocessor Configuration
+ *  Table.  This table defines the multiprocessor system
+ *  characteristics which must be known by RTEMS in a multiprocessor
+ *  system.
+ */
+typedef struct {
+  /** This is the local node number. */
+  uint32_t            node;
+  /** This is the maximum number of nodes in system. */
+  uint32_t            maximum_nodes;
+  /** This is the maximum number of global objects. */
+  uint32_t            maximum_global_objects;
+  /** This is the maximum number of proxies. */
+  uint32_t            maximum_proxies;
+
+  /**
+   * The MPCI Receive server is assumed to have a stack of at least
+   * minimum stack size.  This field specifies the amount of extra
+   * stack this task will be given in bytes.
+   */
+  uint32_t            extra_mpci_receive_server_stack;
+
+  /** This is a pointer to User/BSP provided MPCI Table. */
+  MPCI_Control       *User_mpci_table;
+} MPCI_Configuration;
+
+/**
+ * @brief The MPCI configuration.
+ *
+ * Provided by the application via <rtems/confdefs.h>.
+ */
+extern const MPCI_Configuration _MPCI_Configuration;
+
 /** @} */
 
 #ifdef __cplusplus
