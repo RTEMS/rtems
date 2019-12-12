@@ -28,8 +28,7 @@ int rtems_printk_printer(
 )
 {
   (void) ignored;
-  vprintk( format, ap );
-  return 0;
+  return vprintk( format, ap );
 }
 
 void rtems_print_printer_printk(
