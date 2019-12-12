@@ -197,17 +197,11 @@ uint32_t _CPU_Counter_frequency(void)
   return BSP_bus_frequency / (BSP_time_base_divisor / 1000);
 }
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
-
 #include <libcpu/spr.h>
 
 SPR_RW(HID1)
 
-void bsp_start( void )
+static void bsp_early( void )
 {
   unsigned char       *stack;
   char                *chpt;
@@ -410,6 +404,17 @@ VpdBufRec          vpdData [] = {
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Exit from bspstart\n");
 #endif
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_early,
+  RTEMS_SYSINIT_BSP_EARLY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+void bsp_start( void )
+{
+  /* Initialization was done by bsp_early() */
 }
 
 static void mvme3100_i2c_initialize(void)

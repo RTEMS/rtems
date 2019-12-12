@@ -27,6 +27,7 @@ extern "C" {
  * order values to form a proper integer literal.
  */
 #define RTEMS_SYSINIT_RECORD                     000100
+#define RTEMS_SYSINIT_BSP_EARLY                  000140
 #define RTEMS_SYSINIT_BSP_WORK_AREAS             000200
 #define RTEMS_SYSINIT_BSP_START                  000300
 #define RTEMS_SYSINIT_CPU_COUNTER                000400

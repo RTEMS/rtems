@@ -173,7 +173,7 @@ uint32_t _CPU_Counter_frequency(void)
   return BSP_bus_frequency / (BSP_time_base_divisor / 1000);
 }
 
-void bsp_start( void )
+static void bsp_early( void )
 {
 #ifdef CONF_VPD
   int i;
@@ -327,6 +327,17 @@ void bsp_start( void )
   printk("Exit from bspstart\n");
 #endif
 
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_early,
+  RTEMS_SYSINIT_BSP_EARLY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+void bsp_start( void )
+{
+  /* Initialization was done by bsp_early() */
 }
 
 unsigned char ReadConfVPD_buff(int offset)

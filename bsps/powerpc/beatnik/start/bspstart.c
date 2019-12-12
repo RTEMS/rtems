@@ -166,13 +166,7 @@ uint32_t _CPU_Counter_frequency(void)
   return BSP_bus_frequency / (BSP_time_base_divisor / 1000);
 }
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
-
-void bsp_start( void )
+static void bsp_early( void )
 {
   unsigned char  *stack;
   char           *chpt;
@@ -363,6 +357,17 @@ void bsp_start( void )
   printk("MSR 0x%lx \n", _read_MSR());
   printk("Exit from bspstart\n");
 #endif
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_early,
+  RTEMS_SYSINIT_BSP_EARLY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+void bsp_start( void )
+{
+  /* Initialization was done by bsp_early() */
 }
 
 RTEMS_SYSINIT_ITEM(
