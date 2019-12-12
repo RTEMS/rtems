@@ -21,7 +21,6 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isrlock.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
 #define OBJECTS_MP_CONTROL_OF_ID_LOOKUP_NODE( node ) \
@@ -185,11 +184,9 @@ void _Objects_MP_Handler_initialization( void )
 
   _Chain_Initialize(
     &_Objects_MP_Inactive_global_objects,
-    _Workspace_Allocate_or_fatal_error(
-      maximum_global_objects * sizeof( Objects_MP_Control )
-    ),
+    &_Objects_MP_Controls[ 0 ],
     maximum_global_objects,
-    sizeof( Objects_MP_Control )
+    sizeof( _Objects_MP_Controls[ 0 ] )
   );
 }
 

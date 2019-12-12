@@ -1823,10 +1823,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
       #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
     #endif
-    #define _CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(_global_objects) \
-      _Configure_From_workspace( \
-        (_global_objects) * sizeof(Objects_MP_Control) \
-      )
 
     #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
       #define CONFIGURE_MP_MAXIMUM_PROXIES            32
@@ -1845,6 +1841,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #if CONFIGURE_MP_NODE_NUMBER > CONFIGURE_MP_MAXIMUM_NODES
         #error "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
       #endif
+
+      Objects_MP_Control _Objects_MP_Controls[
+        CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
+      ];
 
       struct Thread_Configured_proxy_control {
         Thread_Proxy_control Control;
@@ -2393,17 +2393,6 @@ struct _reent *__getreent(void)
   (_Configure_Max_Objects(_number_FP_tasks) \
     * _Configure_From_workspace(CONTEXT_FP_SIZE))
 
-/*
- * This defines the amount of memory configured for the multiprocessing
- * support required by this application.
- */
-#ifdef CONFIGURE_MP_APPLICATION
-  #define _CONFIGURE_MEMORY_FOR_MP \
-     _CONFIGURE_MEMORY_FOR_GLOBAL_OBJECTS(CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS)
-#else
-  #define _CONFIGURE_MEMORY_FOR_MP  0
-#endif
-
 /**
  * The following macro is used to calculate the memory allocated by RTEMS
  * for the message buffers associated with a particular message queue.
@@ -2482,7 +2471,6 @@ struct _reent *__getreent(void)
    _CONFIGURE_MEMORY_FOR_POSIX_SHMS( \
      CONFIGURE_MAXIMUM_POSIX_SHMS) + \
    _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS + \
-   _CONFIGURE_MEMORY_FOR_MP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
    (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
    _CONFIGURE_HEAP_HANDLER_OVERHEAD \

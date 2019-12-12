@@ -19,8 +19,11 @@
 #endif
 
 #include <rtems/score/mpci.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>
+
+Objects_MP_Control _Objects_MP_Controls[ 0 ];
 
 Thread_Configured_proxy_control * const _Thread_MP_Proxies;
 

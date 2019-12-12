@@ -145,6 +145,13 @@ typedef struct {
 } Objects_MP_Control;
 
 /**
+ * @brief The MP object controls.
+ *
+ * Provided by the application via <rtems/confdefs.h>.
+ */
+extern Objects_MP_Control _Objects_MP_Controls[];
+
+/**
  *  The following type defines the callout used when a local task
  *  is extracted from a remote thread queue (i.e. it's proxy must
  *  extracted from the remote queue).
