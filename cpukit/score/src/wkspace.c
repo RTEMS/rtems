@@ -22,11 +22,11 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/percpudata.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/tls.h>
 #include <rtems/posix/pthread.h>
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 
 #include <string.h>
 
@@ -34,18 +34,6 @@
 #if defined(DEBUG_WORKSPACE)
   #include <rtems/bspIo.h>
 #endif
-
-RTEMS_LINKER_RWSET(
-  _Per_CPU_Data,
-#if defined(RTEMS_SMP)
-  /*
-   * In SMP configurations, prevent false cache line sharing of per-processor
-   * data with a proper alignment.
-   */
-  RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
-#endif
-  char
-);
 
 Heap_Control _Workspace_Area;
 
@@ -84,85 +72,20 @@ static uintptr_t _Workspace_Space_for_TLS( uintptr_t page_size )
   return space;
 }
 
-#ifdef RTEMS_SMP
-static void *_Workspace_Allocate_from_areas(
-  Heap_Area *areas,
-  size_t     area_count,
-  uintptr_t  size,
-  uintptr_t  alignment
-)
+static void _Workspace_Initialize( void )
 {
-  size_t i;
-
-  for ( i = 0; i < area_count; ++i ) {
-    Heap_Area *area;
-    uintptr_t  alloc_begin;
-    uintptr_t  alloc_size;
-
-    area = &areas[ i ];
-    alloc_begin = (uintptr_t) area->begin;
-    alloc_begin = ( alloc_begin + alignment - 1 ) & ~( alignment - 1 );
-    alloc_size = size;
-    alloc_size += alloc_begin - (uintptr_t) area->begin;
-
-    if ( area->size >= alloc_size ) {
-      area->begin = (void *) ( alloc_begin + size );
-      area->size -= alloc_size;
-
-      return (void *) alloc_begin;
-    }
-  }
-
-  return NULL;
+  _Workspace_Handler_initialization( _Memory_Get(), _Heap_Extend );
 }
-#endif
 
-static void _Workspace_Allocate_per_CPU_data(
-  Heap_Area *areas,
-  size_t area_count
-)
-{
-#ifdef RTEMS_SMP
-  uintptr_t size;
-
-  size = RTEMS_LINKER_SET_SIZE( _Per_CPU_Data );
-
-  if ( size > 0 ) {
-    Per_CPU_Control *cpu;
-    uint32_t         cpu_index;
-    uint32_t         cpu_max;
-
-    cpu = _Per_CPU_Get_by_index( 0 );
-    cpu->data = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data );
-
-    cpu_max = rtems_configuration_get_maximum_processors();
-
-    for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
-      cpu = _Per_CPU_Get_by_index( cpu_index );
-      cpu->data = _Workspace_Allocate_from_areas(
-        areas,
-        area_count,
-        size,
-        CPU_CACHE_LINE_BYTES
-      );
-
-      if( cpu->data == NULL ) {
-        _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA );
-      }
-
-      memcpy( cpu->data, RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ), size);
-    }
-  }
-#else
-  (void) areas;
-  (void) area_count;
-#endif
-}
+RTEMS_SYSINIT_ITEM(
+  _Workspace_Initialize,
+  RTEMS_SYSINIT_WORKSPACE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 void _Workspace_Handler_initialization(
-  Heap_Area *areas,
-  size_t area_count,
-  Heap_Initialization_or_extend_handler extend
+  const Memory_Information              *mem,
+  Heap_Initialization_or_extend_handler  extend
 )
 {
   Heap_Initialization_or_extend_handler init_or_extend;
@@ -173,10 +96,7 @@ void _Workspace_Handler_initialization(
   uintptr_t                             overhead;
   size_t                                i;
 
-  _Workspace_Allocate_per_CPU_data( areas, area_count );
-
   page_size = CPU_HEAP_ALIGNMENT;
-
   remaining = rtems_configuration_get_work_space_size();
   remaining += _Workspace_Space_for_TLS( page_size );
 
@@ -185,25 +105,27 @@ void _Workspace_Handler_initialization(
   unified = rtems_configuration_get_unified_work_area();
   overhead = _Heap_Area_overhead( page_size );
 
-  for ( i = 0; i < area_count; ++i ) {
-    Heap_Area *area;
+  for ( i = 0; i < _Memory_Get_count( mem ); ++i ) {
+    Memory_Area *area;
+    uintptr_t    free_size;
 
-    area = &areas[ i ];
+    area = _Memory_Get_area( mem, i );
+    free_size = _Memory_Get_free_size( area );
 
     if ( do_zero ) {
-      memset( area->begin, 0, area->size );
+      memset( _Memory_Get_free_begin( area ), 0, free_size );
     }
 
-    if ( area->size > overhead ) {
+    if ( free_size > overhead ) {
       uintptr_t space_available;
       uintptr_t size;
 
       if ( unified ) {
-        size = area->size;
+        size = free_size;
       } else {
         if ( remaining > 0 ) {
-          size = remaining < area->size - overhead ?
-            remaining + overhead : area->size;
+          size = remaining < free_size - overhead ?
+            remaining + overhead : free_size;
         } else {
           size = 0;
         }
@@ -211,13 +133,12 @@ void _Workspace_Handler_initialization(
 
       space_available = ( *init_or_extend )(
         &_Workspace_Area,
-        area->begin,
+        _Memory_Get_free_begin( area ),
         size,
         page_size
       );
 
-      area->begin = (char *) area->begin + size;
-      area->size -= size;
+      _Memory_Consume( area, size );
 
       if ( space_available < remaining ) {
         remaining -= space_available;

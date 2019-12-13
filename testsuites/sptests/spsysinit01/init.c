@@ -71,8 +71,8 @@
 const char rtems_test_name[] = "SPSYSINIT 1";
 
 typedef enum {
-  BSP_WORK_AREAS_PRE,
-  BSP_WORK_AREAS_POST,
+  WORKSPACE_PRE,
+  WORKSPACE_POST,
   BSP_START_PRE,
   BSP_START_POST,
   CPU_COUNTER_PRE,
@@ -200,16 +200,16 @@ static bool info_is_init(const Objects_Information *info, size_t count)
   return _Chain_Node_count_unprotected(&info->Inactive) == count;
 }
 
-FIRST(RTEMS_SYSINIT_BSP_WORK_AREAS)
+FIRST(RTEMS_SYSINIT_WORKSPACE)
 {
   assert(_Workspace_Area.area_begin == 0);
-  next_step(BSP_WORK_AREAS_PRE);
+  next_step(WORKSPACE_PRE);
 }
 
-LAST(RTEMS_SYSINIT_BSP_WORK_AREAS)
+LAST(RTEMS_SYSINIT_WORKSPACE)
 {
   assert(_Workspace_Area.area_begin != 0);
-  next_step(BSP_WORK_AREAS_POST);
+  next_step(WORKSPACE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_BSP_START)

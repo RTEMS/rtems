@@ -78,7 +78,12 @@ rtems_task Init(
 )
 {
   Heap_Control *real_heap;
-  Heap_Area area;
+  Memory_Area area;
+  Memory_Information mem = {
+    .count = 0,
+    .areas = &area
+  };
+
   void *p;
 
   TEST_BEGIN();
@@ -93,9 +98,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  area.begin = &Malloc_Heap [0];
-  area.size  = offset;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
+  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
+  RTEMS_Malloc_Initialize( &mem, NULL );
 
   errno = 0;
   p = malloc( 256 );
@@ -109,9 +113,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  area.begin = &Malloc_Heap [0];
-  area.size  = offset;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
+  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
+  RTEMS_Malloc_Initialize( &mem, NULL );
 
   p = malloc(1);
   rtems_test_assert( p != NULL );
@@ -125,9 +128,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  area.begin = &Malloc_Heap [0];
-  area.size  = offset;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
+  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
+  RTEMS_Malloc_Initialize( &mem, NULL );
 
   errno = 0;
   p = malloc( sizeof( Malloc_Heap ) );
@@ -139,9 +141,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  area.begin = &Malloc_Heap [0];
-  area.size  = offset;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
+  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
+  RTEMS_Malloc_Initialize( &mem, NULL );
 
   p = malloc( 128 );
   rtems_test_assert( p != NULL );
@@ -155,9 +156,8 @@ rtems_task Init(
 
   sbrk_count = -1;
   offset     = 256;
-  area.begin = &Malloc_Heap [0];
-  area.size  = offset;
-  RTEMS_Malloc_Initialize( &area, 1, NULL );
+  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
+  RTEMS_Malloc_Initialize( &mem, NULL );
 
   errno = 0;
   p = malloc( 256 );

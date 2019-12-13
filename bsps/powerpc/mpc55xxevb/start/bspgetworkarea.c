@@ -23,22 +23,17 @@
 #include <bsp/linker-symbols.h>
 
 LINKER_SYMBOL(bsp_section_work_bonus_begin);
-LINKER_SYMBOL(bsp_section_work_bonus_size);
+LINKER_SYMBOL(bsp_section_work_bonus_end);
 
-void bsp_work_area_initialize(void)
+static Memory_Area _Memory_Areas[] = {
+  MEMORY_INITIALIZER(bsp_section_work_begin, bsp_section_work_end),
+  MEMORY_INITIALIZER(bsp_section_work_bonus_begin, bsp_section_work_bonus_end)
+};
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER(_Memory_Areas);
+
+const Memory_Information *_Memory_Get(void)
 {
-  Heap_Area areas [] = {
-    {
-      bsp_section_work_begin,
-      (uintptr_t) bsp_section_work_size
-    }, {
-      bsp_section_work_bonus_begin,
-      (uintptr_t) bsp_section_work_bonus_size
-    }
-  };
-
-  bsp_work_area_initialize_with_table(
-    areas,
-    sizeof(areas) / sizeof(areas [0])
-  );
+  return &_Memory_Information;
 }

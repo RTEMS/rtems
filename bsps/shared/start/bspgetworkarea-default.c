@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * This routine is an implementation of the bsp_work_area_initialize()
+ * This routine is an implementation of the _Memory_Get()
  * that can be used by all BSPs following linkcmds conventions
  * regarding heap, stack, and workspace allocation.
  */
@@ -33,23 +33,37 @@ extern char WorkAreaBase[];
  *  We may get the size information from U-Boot or the linker scripts.
  */
 #ifdef USE_UBOOT
-  #include <bsp/u-boot.h>
-#else
-  extern char RamBase[];
-  extern char RamSize[];
-#endif
+#include <bsp/u-boot.h>
+#include <rtems/sysinit.h>
 
-void bsp_work_area_initialize(void)
+static Memory_Area _Memory_Areas[ 1 ];
+
+static void bsp_memory_initialize( void )
 {
-  uintptr_t work_base = (uintptr_t) WorkAreaBase;
-  uintptr_t ram_end;
+  char *end;
 
-  #ifdef USE_UBOOT
-    ram_end = (uintptr_t) bsp_uboot_board_info.bi_memstart +
-                          bsp_uboot_board_info.bi_memsize;
-  #else
-    ram_end = (uintptr_t)RamBase + (uintptr_t)RamSize;
-  #endif
+  end = (char *) bsp_uboot_board_info.bi_memstart
+    + bsp_uboot_board_info.bi_memsize;
+  _Memory_Initialize( &_Memory_Areas[ 0 ], WorkAreaBase, end );
+}
 
-  bsp_work_area_initialize_default( (void *) work_base, ram_end - work_base );
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+#else /* !USE_UBOOT */
+extern char RamEnd[];
+
+static Memory_Area _Memory_Areas[] = {
+  MEMORY_INITIALIZER(WorkAreaBase, RamEnd)
+};
+#endif /* USE_UBOOT */
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
+
+const Memory_Information *_Memory_Get( void )
+{
+  return &_Memory_Information;
 }

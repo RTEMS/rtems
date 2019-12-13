@@ -32,6 +32,7 @@
 #include <libfdt.h>
 
 #include <rtems/config.h>
+#include <rtems/sysinit.h>
 
 #define TEXT __attribute__((section(".bsp_start_text")))
 #define DATA __attribute__((section(".bsp_start_data")))
@@ -338,11 +339,29 @@ void TEXT qoriq_mmu_config(bool boot_processor, int first_tlb, int scratch_tlb)
 	qoriq_mmu_write_to_tlb1(&context, first_tlb);
 }
 
-void TEXT bsp_work_area_initialize(void)
+static Memory_Area _Memory_Areas[1];
+
+static const Memory_Information _Memory_Information =
+	MEMORY_INFORMATION_INITIALIZER(_Memory_Areas);
+
+static void bsp_memory_initialize(void)
 {
 	const entry *we = &config[WORKSPACE_ENTRY_INDEX];
-	uintptr_t begin = we->begin;
-	uintptr_t end = begin + we->size;
 
-	bsp_work_area_initialize_default((void *) begin, end - begin);
+	_Memory_Initialize_by_size(
+		&_Memory_Areas[0],
+		(void *) we->begin,
+		we->size
+	);
+}
+
+RTEMS_SYSINIT_ITEM(
+	bsp_memory_initialize,
+	RTEMS_SYSINIT_MEMORY,
+	RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+const Memory_Information *_Memory_Get(void)
+{
+	return &_Memory_Information;
 }

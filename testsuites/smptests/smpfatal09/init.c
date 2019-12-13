@@ -31,7 +31,8 @@
 
 #include <rtems.h>
 #include <rtems/score/percpudata.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/memory.h>
+#include <rtems/sysinit.h>
 
 #include <tmacros.h>
 
@@ -41,7 +42,26 @@ const char rtems_test_name[] = "SMPFATAL 9";
 
 static void Init( rtems_task_argument arg )
 {
-  Heap_Area area = { .begin = NULL, .size = 0 };
+  (void) arg;
+}
+
+static void consume_all_memory( void )
+{
+  const Memory_Information *mem;
+  size_t                    i;
+
+  mem = _Memory_Get();
+
+  for ( i = 0; i < _Memory_Get_count( mem ); ++i ) {
+    Memory_Area *area;
+
+    area = _Memory_Get_area( mem, i );
+    _Memory_Consume( area, _Memory_Get_free_size( area ) );
+  }
+}
+
+static void begin_test( void )
+{
   int i;
 
   TEST_BEGIN();
@@ -49,9 +69,14 @@ static void Init( rtems_task_argument arg )
   RTEMS_OBFUSCATE_VARIABLE( i );
   rtems_test_assert( i == 123 );
 
-  _Workspace_Handler_initialization( &area, 1, NULL );
-  rtems_test_assert( 0 );
+  consume_all_memory();
 }
+
+RTEMS_SYSINIT_ITEM(
+  begin_test,
+  RTEMS_SYSINIT_PER_CPU_DATA,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
 
 static void fatal_extension(
   rtems_fatal_source source,

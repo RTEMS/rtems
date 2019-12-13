@@ -28,8 +28,13 @@ extern "C" {
  */
 #define RTEMS_SYSINIT_RECORD                     000100
 #define RTEMS_SYSINIT_BSP_EARLY                  000140
+#define RTEMS_SYSINIT_MEMORY                     000180
+#define RTEMS_SYSINIT_DIRTY_MEMORY               0001c0
 #define RTEMS_SYSINIT_ISR_STACK                  000200
-#define RTEMS_SYSINIT_BSP_WORK_AREAS             000200
+#define RTEMS_SYSINIT_PER_CPU_DATA               000220
+#define RTEMS_SYSINIT_SBRK                       000240
+#define RTEMS_SYSINIT_WORKSPACE                  000260
+#define RTEMS_SYSINIT_MALLOC                     000280
 #define RTEMS_SYSINIT_BSP_START                  000300
 #define RTEMS_SYSINIT_CPU_COUNTER                000400
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000500

@@ -24,11 +24,27 @@
 #include <bsp/bootcard.h>
 #include <bsp/linker-symbols.h>
 
-void bsp_work_area_initialize(void)
-{
-  char *ram_end = (char *) (TQM_BD_INFO.sdram_size - (uint32_t)TopRamReserved);
-  void *area_start = bsp_section_work_begin;
-  uintptr_t area_size = (uintptr_t) ram_end - (uintptr_t) area_start;
+#include <rtems/sysinit.h>
 
-  bsp_work_area_initialize_default( area_start, area_size );
+static Memory_Area _Memory_Areas[1];
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER(_Memory_Areas);
+
+static void bsp_memory_initialize(void)
+{
+  void *end = (void *) (TQM_BD_INFO.sdram_size - (uintptr_t)TopRamReserved);
+
+  _Memory_Initialize(&_Memory_Areas[0], bsp_section_work_begin, end);
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+const Memory_Information *_Memory_Get(void)
+{
+  return &_Memory_Information;
 }

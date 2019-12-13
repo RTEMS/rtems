@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2017 embedded brains GmbH
+ * Copyright (c) 2017, 2019 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -13,15 +13,18 @@
  */
 
 #include <bsp/bootcard.h>
-#include <bsp/arm-cp15-start.h>
 #include <bsp/fdt.h>
 #include <bsp/linker-symbols.h>
+
+#ifdef BSP_FDT_IS_SUPPORTED
+
+#include <bsp/arm-cp15-start.h>
 
 #include <libcpu/arm-cp15.h>
 
 #include <libfdt.h>
 
-#ifdef BSP_FDT_IS_SUPPORTED
+#include <rtems/sysinit.h>
 
 #define AREA_COUNT_MAX 16
 
@@ -29,7 +32,7 @@ static const char memory_path[] = "/memory";
 
 static const char reserved_memory_path[] = "/reserved-memory";
 
-static void adjust_memory_size(const void *fdt, Heap_Area *area)
+static void adjust_memory_size(const void *fdt, Memory_Area *area)
 {
   int node;
 
@@ -70,13 +73,13 @@ static void adjust_memory_size(const void *fdt, Heap_Area *area)
         && (uintptr_t) bsp_section_nocache_end
           < (uintptr_t) bsp_section_work_end
     ) {
-      area->size += size - (uintptr_t) bsp_section_work_end;
+      _Memory_Set_end(area, (void *) (begin + size));
     }
   }
 }
 
-static Heap_Area *find_area(
-  Heap_Area *areas,
+static Memory_Area *find_area(
+  Memory_Area *areas,
   size_t area_count,
   uint32_t begin
 )
@@ -87,8 +90,8 @@ static Heap_Area *find_area(
     uintptr_t b;
     uintptr_t e;
 
-    b = (uintptr_t) areas[i].begin;
-    e = b + (uintptr_t) areas[i].size;
+    b = (uintptr_t) _Memory_Get_begin(&areas[i]);
+    e = (uintptr_t) _Memory_Get_end(&areas[i]);
 
     if (b <= begin && begin < e) {
       return &areas[i];
@@ -100,7 +103,7 @@ static Heap_Area *find_area(
 
 static size_t remove_reserved_memory(
   const void *fdt,
-  Heap_Area *areas,
+  Memory_Area *areas,
   size_t area_count
 )
 {
@@ -118,11 +121,10 @@ static size_t remove_reserved_memory(
     while (node >= 0) {
       int len;
       const void *val;
-      uintptr_t area_begin;
       uintptr_t area_end;
       uintptr_t hole_begin;
       uintptr_t hole_end;
-      Heap_Area *area;
+      Memory_Area *area;
 
       val = fdt_getprop(fdt, node, "reg", &len);
       if (len == 8) {
@@ -133,9 +135,8 @@ static size_t remove_reserved_memory(
       }
 
       area = find_area(areas, area_count, hole_begin);
-      area_begin = (uintptr_t) area->begin;
-      area_end = area_begin + (uintptr_t) area->size;
-      area->size = hole_begin - area_begin;
+      area_end = (uintptr_t) _Memory_Get_end(area);
+      _Memory_Set_end(area, (void *) hole_end);
 
       if (hole_end <= area_end) {
         if (area_count >= AREA_COUNT_MAX) {
@@ -144,8 +145,7 @@ static size_t remove_reserved_memory(
 
         area = &areas[area_count];
         ++area_count;
-        area->begin = (void *) hole_end;
-        area->size = area_end - hole_end;
+        _Memory_Initialize(area, (void *) hole_end, (void *) area_end);
       }
 
       node = fdt_next_subnode(fdt, node);
@@ -155,39 +155,52 @@ static size_t remove_reserved_memory(
   return area_count;
 }
 
-#else /* !BSP_FDT_IS_SUPPORTED */
+static Memory_Area _Memory_Areas[AREA_COUNT_MAX];
 
-#define AREA_COUNT_MAX 1
-
-#endif /* BSP_FDT_IS_SUPPORTED */
-
-void bsp_work_area_initialize(void)
+static void bsp_memory_initialize(void)
 {
-  Heap_Area areas[AREA_COUNT_MAX];
   size_t area_count;
-#ifdef BSP_FDT_IS_SUPPORTED
   const void *fdt;
   size_t i;
-#endif
 
-  areas[0].begin = bsp_section_work_begin;
-  areas[0].size = (uintptr_t) bsp_section_work_size;
+  _Memory_Initialize(
+    &_Memory_Areas[0],
+    bsp_section_work_begin,
+    bsp_section_work_end
+  );
+
   area_count = 1;
-
-#ifdef BSP_FDT_IS_SUPPORTED
   fdt = bsp_fdt_get();
-
-  adjust_memory_size(fdt, &areas[0]);
-  area_count = remove_reserved_memory(fdt, areas, area_count);
+  adjust_memory_size(fdt, &_Memory_Areas[0]);
+  area_count = remove_reserved_memory(fdt, &_Memory_Areas[0], area_count);
 
   for (i = 0; i < area_count; ++i) {
     arm_cp15_set_translation_table_entries(
-      areas[i].begin,
-      (void *) ((uintptr_t) areas[i].begin + areas[i].size),
+      _Memory_Get_begin(&_Memory_Areas[i]),
+      _Memory_Get_end(&_Memory_Areas[i]),
       ARMV7_MMU_READ_WRITE_CACHED
     );
   }
-#endif
+}
 
-  bsp_work_area_initialize_with_table(areas, area_count);
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+#else /* !BSP_FDT_IS_SUPPORTED */
+
+static Memory_Area _Memory_Areas[] = {
+  MEMORY_INITIALIZER(bsp_section_work_begin, bsp_section_work_end)
+};
+
+#endif /* BSP_FDT_IS_SUPPORTED */
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
+
+const Memory_Information *_Memory_Get( void )
+{
+  return &_Memory_Information;
 }

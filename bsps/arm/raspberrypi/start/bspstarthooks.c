@@ -31,6 +31,8 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/arm-cp15-start.h>
 
+#include <rtems/sysinit.h>
+
 #ifdef RTEMS_SMP
 #include <rtems/score/smp.h>
 #endif
@@ -176,15 +178,27 @@ void BSP_START_TEXT_SECTION bsp_start_hook_1(void)
   rpi_video_init();
 }
 
-void bsp_work_area_initialize(void)
+static Memory_Area _Memory_Areas[1];
+
+static void bsp_memory_initialize(void)
 {
-  uintptr_t begin;
-  uintptr_t end;
+  _Memory_Initialize(
+    &_Memory_Areas[0],
+    raspberrypi_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].begin,
+    raspberrypi_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].end
+  );
+}
 
-  begin = raspberrypi_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX]
-          .begin;
-  end = raspberrypi_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX]
-        .end;
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
-  bsp_work_area_initialize_default((void *) begin, end - begin);
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER(_Memory_Areas);
+
+const Memory_Information *_Memory_Get(void)
+{
+  return &_Memory_Information;
 }

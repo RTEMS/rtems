@@ -64,7 +64,12 @@
 #include <errno.h>
 #include <unistd.h>
 
+#include <bsp.h>
 #include <bsp/bootcard.h>
+
+#include <rtems/sysinit.h>
+
+#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 
 #define INVALID_REMAINING_START ((uintptr_t) -1)
 
@@ -83,22 +88,35 @@ extern uintptr_t        BSP_sbrk_policy[] __attribute__((weak));
 
 #define LIMIT_32M  0x02000000
 
-ptrdiff_t bsp_sbrk_init(Heap_Area *area, uintptr_t min_size)
+/**
+ * @brief Gives the BSP a chance to reduce the work area size with sbrk()
+ * adding more later.
+ *
+ * bsp_sbrk_init() may reduce the work area size passed in. The routine
+ * returns the 'sbrk_amount' to be used when extending the heap.  Note that
+ * the return value may be zero.
+ *
+ * In case the @a mem area size is altered, then the remaining size of the
+ * @a mem area must be greater than or equal to @a min_size.
+ */
+static ptrdiff_t bsp_sbrk_init(const Memory_Information *mem, uintptr_t min_size)
 {
   uintptr_t         rval = 0;
   uintptr_t         policy;
   uintptr_t         remaining_end;
+  Memory_Area      *area;
 
-  remaining_start = (uintptr_t) area->begin;
-  remaining_size  = area->size;
-  remaining_end   = remaining_start + remaining_size;
+  area = &mem->areas[ 0 ];
+  remaining_start = (uintptr_t) _Memory_Get_free_begin(area);
+  remaining_size  = _Memory_Get_free_size(area);
+  remaining_end   = (uintptr_t) _Memory_Get_end(area);
 
   if (remaining_start < LIMIT_32M &&
       remaining_end > LIMIT_32M &&
       min_size <= LIMIT_32M - remaining_start) {
     /* clip at LIMIT_32M */
     rval = remaining_end - LIMIT_32M;
-    area->size = LIMIT_32M - remaining_start;
+    _Memory_Set_end(area, (void *) (LIMIT_32M - remaining_start));
     remaining_start = LIMIT_32M;
     remaining_size  = rval;
   }
@@ -106,9 +124,9 @@ ptrdiff_t bsp_sbrk_init(Heap_Area *area, uintptr_t min_size)
   policy = (0 == BSP_sbrk_policy[0] ? (uintptr_t)(-1) : BSP_sbrk_policy[0]);
   switch ( policy ) {
       case (uintptr_t)(-1):
-        area->size      += rval;
-        remaining_start  = (uintptr_t) area->begin + area->size;
-        remaining_size   = 0;
+        _Memory_Set_end(area, (const char *) _Memory_Get_end(area) + rval);
+        remaining_start = (uintptr_t) _Memory_Get_end(area);
+        remaining_size  = 0;
       break;
 
       case 0:
@@ -124,12 +142,7 @@ ptrdiff_t bsp_sbrk_init(Heap_Area *area, uintptr_t min_size)
   return (ptrdiff_t) (rval <= PTRDIFF_MAX ? rval : rval / 2);
 }
 
-/*
- * This is just so the sbrk test can force its magic. All normal applications
- * should just use the default implementation in this file.
- */
-void *sbrk(ptrdiff_t incr) __attribute__ (( weak, alias("bsp_sbrk") ));
-static void *bsp_sbrk(ptrdiff_t incr)
+void *sbrk(ptrdiff_t incr)
 {
   void *rval=(void*)-1;
 
@@ -145,3 +158,25 @@ static void *bsp_sbrk(ptrdiff_t incr)
   #endif
   return rval;
 }
+
+static void bsp_sbrk_initialize(void)
+{
+  uintptr_t overhead = _Heap_Area_overhead(CPU_HEAP_ALIGNMENT);
+  uintptr_t work_space_size = rtems_configuration_get_work_space_size();
+  ptrdiff_t sbrk_amount = bsp_sbrk_init(
+    _Memory_Get(),
+    work_space_size
+      + overhead
+      + (rtems_configuration_get_unified_work_area() ? 0 : overhead)
+  );
+
+  rtems_heap_set_sbrk_amount(sbrk_amount);
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_sbrk_initialize,
+  RTEMS_SYSINIT_SBRK,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+#endif /* CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK */

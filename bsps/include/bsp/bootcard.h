@@ -21,11 +21,10 @@
 #ifndef LIBBSP_SHARED_BOOTCARD_H
 #define LIBBSP_SHARED_BOOTCARD_H
 
-#include <string.h>
-
 #include <rtems/config.h>
 #include <rtems/bspIo.h>
 #include <rtems/malloc.h>
+#include <rtems/score/memory.h>
 #include <rtems/score/wkspace.h>
 
 #include <bspopts.h>
@@ -70,65 +69,6 @@ void bsp_reset(void);
  * executed after RTEMS is initialized.
  */
 void boot_card(const char *cmdline) RTEMS_NO_RETURN;
-
-#ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-  /**
-   * @brief Gives the BSP a chance to reduce the work area size with sbrk()
-   * adding more later.
-   *
-   * bsp_sbrk_init() may reduce the work area size passed in. The routine
-   * returns the 'sbrk_amount' to be used when extending the heap.  Note that
-   * the return value may be zero.
-   *
-   * In case the @a area size is altered, then the remaining size of the
-   * @a area must be greater than or equal to @a min_size.
-   */
-  ptrdiff_t bsp_sbrk_init(Heap_Area *area, uintptr_t min_size);
-#endif
-
-static inline void bsp_work_area_initialize_default(
-  void *area_begin,
-  uintptr_t area_size
-)
-{
-  Heap_Area area = {
-    .begin = area_begin,
-    .size = area_size
-  };
-
-  #if BSP_DIRTY_MEMORY == 1
-    memset(area.begin, 0xCF,  area.size);
-  #endif
-
-  #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-    {
-      uintptr_t overhead = _Heap_Area_overhead(CPU_HEAP_ALIGNMENT);
-      uintptr_t work_space_size = rtems_configuration_get_work_space_size();
-      ptrdiff_t sbrk_amount = bsp_sbrk_init(
-        &area,
-        work_space_size
-          + overhead
-          + (rtems_configuration_get_unified_work_area() ? 0 : overhead)
-      );
-
-      rtems_heap_set_sbrk_amount(sbrk_amount);
-    }
-  #endif
-
-  _Workspace_Handler_initialization(&area, 1, NULL);
-  RTEMS_Malloc_Initialize(&area, 1, NULL);
-}
-
-static inline void bsp_work_area_initialize_with_table(
-  Heap_Area *areas,
-  size_t area_count
-)
-{
-  _Workspace_Handler_initialization(areas, area_count, _Heap_Extend);
-  RTEMS_Malloc_Initialize(areas, area_count, _Heap_Extend);
-}
-
-void bsp_work_area_initialize(void);
 
 struct Per_CPU_Control;
 

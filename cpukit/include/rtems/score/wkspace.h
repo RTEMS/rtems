@@ -24,6 +24,7 @@
 
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/memory.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,14 +54,12 @@ extern Heap_Control _Workspace_Area;
  *
  * This routine performs the initialization necessary for this handler.
  *
- * @param areas The heap area for the new workspace.
- * @param area_count The number of areas for the allocation.
+ * @param mem The memory information
  * @param extend The extension handler for the new workspace.
  */
 void _Workspace_Handler_initialization(
-  Heap_Area *areas,
-  size_t area_count,
-  Heap_Initialization_or_extend_handler extend
+  const Memory_Information              *mem,
+  Heap_Initialization_or_extend_handler  extend
 );
 
 /**

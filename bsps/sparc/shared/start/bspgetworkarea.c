@@ -13,19 +13,33 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 
+#include <rtems/sysinit.h>
+
 /* Tells us where to put the workspace in case remote debugger is present.  */
-extern uint32_t rdb_start;
+extern uintptr_t rdb_start;
 
-/*
- *  This method returns the base address and size of the area which
- *  is to be allocated between the RTEMS Workspace and the C Program
- *  Heap.
- */
-void bsp_work_area_initialize(void)
+static Memory_Area _Memory_Areas[ 1 ];
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
+
+static void bsp_memory_initialize( void )
 {
-  /* Early dynamic memory allocator is placed just above _end  */
-  void *work_area_start = (void *)&end;
-  uintptr_t work_area_size = (uintptr_t)rdb_start - (uintptr_t)work_area_start;
+  void      *begin;
+  uintptr_t  size;
 
-  bsp_work_area_initialize_default(work_area_start, work_area_size);
+  begin = &end;
+  size = rdb_start - (uintptr_t)begin;
+  _Memory_Initialize_by_size( &_Memory_Areas[ 0 ], begin, size );
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+const Memory_Information *_Memory_Get( void )
+{
+  return &_Memory_Information;
 }

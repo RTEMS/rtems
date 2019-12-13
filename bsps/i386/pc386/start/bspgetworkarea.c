@@ -1,8 +1,4 @@
 /*
- *  This routine is an implementation of the bsp_work_area_initialize()
- *  that can be used by all m68k BSPs following linkcmds conventions
- *  regarding heap, stack, and workspace allocation.
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,6 +10,8 @@
 /* #define BSP_GET_WORK_AREA_DEBUG */
 #include <bsp.h>
 #include <bsp/bootcard.h>
+
+#include <rtems/sysinit.h>
 
 #ifdef BSP_GET_WORK_AREA_DEBUG
   #include <rtems/bspIo.h>
@@ -116,17 +114,32 @@ static void bsp_size_memory(void)
   bsp_mem_size = topAddr;
 }
 
-void bsp_work_area_initialize(void)
-{
-  void *area_start;
-  uintptr_t area_size;
+static Memory_Area _Memory_Areas[ 1 ];
 
+static void bsp_memory_initialize( void )
+{
   /*
    *  We need to determine how much memory there is in the system.
    */
   bsp_size_memory();
 
-  area_start = (void *) rtemsWorkAreaStart;
-  area_size  = (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart;
-  bsp_work_area_initialize_default( area_start, area_size );
+  _Memory_Initialize_by_size(
+    &_Memory_Areas[0],
+    (void *) rtemsWorkAreaStart,
+    (uintptr_t) bsp_mem_size - (uintptr_t) rtemsWorkAreaStart
+  );
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER( _Memory_Areas );
+
+const Memory_Information *_Memory_Get( void )
+{
+  return &_Memory_Information;
 }

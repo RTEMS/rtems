@@ -9,15 +9,33 @@
 
 #include <libcpu/powerpc-utility.h>
 
+#include <rtems/sysinit.h>
+
 LINKER_SYMBOL(__rtems_end)
 
-void bsp_work_area_initialize(void)
+static Memory_Area _Memory_Areas[1];
+
+static const Memory_Information _Memory_Information =
+  MEMORY_INFORMATION_INITIALIZER(_Memory_Areas);
+
+static void bsp_memory_initialize(void)
 {
-  uintptr_t work_size;
-  uintptr_t work_area;
+  uintptr_t size;
+  uintptr_t begin;
 
-  work_area = (uintptr_t)__rtems_end;
-  work_size = (uintptr_t)BSP_mem_size - work_area;
+  begin = (uintptr_t)__rtems_end;
+  size = (uintptr_t)BSP_mem_size - begin;
 
-  bsp_work_area_initialize_default((void *) work_area, work_size);
+  _Memory_Initialize_by_size(&_Memory_Areas[0], (void *) begin, size);
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_memory_initialize,
+  RTEMS_SYSINIT_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+const Memory_Information *_Memory_Get(void)
+{
+  return &_Memory_Information;
 }
