@@ -39,8 +39,6 @@
 extern "C" {
 #endif
 
-//#define BSP_GET_WORK_AREA_DEBUG 1
-
 /**
  * @brief Support for simulated clock tick
  */

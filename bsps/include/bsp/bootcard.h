@@ -115,42 +115,7 @@ static inline void bsp_work_area_initialize_default(
     }
   #endif
 
-  /*
-   *  The following may be helpful in debugging what goes wrong when
-   *  you are allocating the Work Area in a new BSP.
-   */
-  #ifdef BSP_GET_WORK_AREA_DEBUG
-    {
-      void *sp = __builtin_frame_address(0);
-      void *end = (char *) area.begin + area.size;
-      printk(
-        "work_area_start = 0x%p\n"
-        "work_area_size = %lu 0x%08lx\n"
-        "end = 0x%p\n"
-        "current stack pointer = 0x%p%s\n",
-        area.begin,
-        (unsigned long) area.size,  /* decimal */
-        (unsigned long) area.size,  /* hexadecimal */
-        end,
-        sp,
-        (uintptr_t) sp >= (uintptr_t) area.begin
-          && (uintptr_t) sp <= (uintptr_t) end ?
-            " OVERLAPS!" : ""
-      );
-    }
-  #endif
-
   _Workspace_Handler_initialization(&area, 1, NULL);
-
-  #ifdef BSP_GET_WORK_AREA_DEBUG
-    printk(
-      "heap_start = 0x%p\n"
-      "heap_size = %lu\n",
-      area.begin,
-      (unsigned long) area.size
-    );
-  #endif
-
   RTEMS_Malloc_Initialize(&area, 1, NULL);
 }
 
