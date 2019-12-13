@@ -306,7 +306,7 @@ const Memory_Information *_Memory_Get( void );
 /**
  * @brief Allocate a memory area from the memory information.
  *
- * It is not possible to free the memory allocated by this function.
+ * It is not possible to free the memory area allocated by this function.
  *
  * @param information The memory information.
  * @param size The size in bytes of the memory area to allocate.
@@ -321,6 +321,15 @@ void *_Memory_Allocate(
   uintptr_t                 size,
   uintptr_t                 alignment
 );
+
+/**
+ * @brief Fill all free memory areas of the memory information with a constant
+ * byte.
+ *
+ * @param information The memory information.
+ * @param c The constant byte to fill the free memory areas.
+ */
+void _Memory_Fill( const Memory_Information *information, int c );
 
 /** @} */
 
