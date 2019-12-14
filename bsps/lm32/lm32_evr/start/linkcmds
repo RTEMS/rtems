@@ -11,6 +11,7 @@ STARTUP(start.o)
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x08000000;
 RamSize = DEFINED(RamSize) ? RamSize : 32M;
+RamEnd = RamBase + RamSize;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 2M;
 
 MEMORY {

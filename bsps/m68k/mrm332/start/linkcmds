@@ -41,7 +41,7 @@ __DYNAMIC  =  0;
 RomBase = DEFINED(RomBase) ? RomBase : 0x90000;
 RamBase = DEFINED(RamBase) ? RamBase : 0x03000;
 RamSize = DEFINED(RamSize) ? RamSize : 0x7d000;
-_RamEnd = RamBase + RamSize;
+RamEnd = RamBase + RamSize;
 
 MEMORY
 {

@@ -15,6 +15,7 @@
 
 RamBase = DEFINED(RamBase) ? RamBase : 0x00800000;
 RamSize = DEFINED(RamSize) ? RamSize : 4M;
+RamEnd = RamBase + RamSize;
 
 MEMORY
 {

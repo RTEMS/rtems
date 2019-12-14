@@ -17,6 +17,7 @@
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize = DEFINED(RamSize) ? RamSize : 16M;
+RamEnd = RamBase + RamSize;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0;
 _FlashBase = DEFINED(_FlashBase) ? _FlashBase : 0x10000000;
 _FlashSize = DEFINED(_FlashSize) ? _FlashSize : 4M ;

@@ -17,6 +17,7 @@ EXTERN(__vectors)
 
 RamBase = DEFINED(RamBase) ? RamBase : 0;
 RamSize = DEFINED(RamSize) ? RamSize : 256M;
+RamEnd = RamBase + RamSize;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
 MEMORY {

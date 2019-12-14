@@ -26,6 +26,7 @@ ext_ram_size	= 0x00080000;		/* size of external RAM */
 
 RamBase = DEFINED(_RamBase) ? RamBase : 0x003F9800;
 RamSize = DEFINED(_RamSize) ? RamSize : 0x00486800;
+RamEnd = RamBase + RamSize;
 HeapSize = DEFINED(_HeapSize) ? HeapSize : 0x0;
 
 SECTIONS

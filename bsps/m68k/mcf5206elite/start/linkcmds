@@ -39,6 +39,7 @@ _SYS_CLOCK_FREQUENCY = DEFINED(_SYS_CLOCK_FREQUENCY) ?
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 RamBase = DEFINED(RamBase) ? RamBase : 0x30000000;
 RamSize = DEFINED(RamSize) ? RamSize : 0x00100000;
+RamEnd = RamBase + RamSize;
 
 /*
  * Setup the memory map of the MCF5206eLITE evaluation board

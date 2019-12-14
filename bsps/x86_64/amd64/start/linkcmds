@@ -28,6 +28,7 @@ RamBase = DEFINED(RamBase)    ? RamBase   :
  */
 RamSize = DEFINED(RamSize)    ? RamSize   :
           DEFINED(_RamSize)   ? _RamSize  : 0x40000000;
+RamEnd = RamBase + RamSize;
 
 SECTIONS
 {

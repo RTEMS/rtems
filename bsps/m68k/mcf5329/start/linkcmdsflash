@@ -18,6 +18,7 @@ _CoreSRamSize = DEFINED(RamSize) ? RamSize : 32K;
 
 RamBase = DEFINED(RamBase) ? RamBase : 0x40000000;
 RamSize = DEFINED(RamSize) ? RamSize : 32M;
+RamEnd = RamBase + RamSize;
 
 _BootFlashBase = DEFINED(_FlashBase) ? _FlashBase : 0x00000000;
 _BootFlashSize = DEFINED(_FlashBase) ? _FlashBase : 2M;

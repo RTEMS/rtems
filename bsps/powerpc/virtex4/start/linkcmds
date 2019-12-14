@@ -16,6 +16,7 @@ EXTERN(__vectors)
 MsgAreaSize       = DEFINED(MsgAreaSize)   ? MsgAreaSize   : 1M;
 RamBase           = DEFINED(RamBase)       ? RamBase       : 0x0;
 RamSize           = DEFINED(RamSize)       ? RamSize       : 128M - MsgAreaSize;
+RamEnd            = RamBase + RamSize;
 HeapSize          = DEFINED(HeapSize)      ? HeapSize      : 0; /* 0=Use def */
 
 

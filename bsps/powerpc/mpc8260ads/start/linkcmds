@@ -19,6 +19,7 @@ EXTERN(__vectors)
  */
 RamBase     = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize     = DEFINED(RamSize) ? RamDiskSize : 0x0800000; /* 8M program ram */
+RamEnd      = RamBase + RamSize;
 HeapSize    = DEFINED(HeapSize) ? HeapSize : 0x0;
 RamDiskBase = DEFINED(RamDiskBase) ? RamDiskBase : 0x0800000;
 RamDiskSize = DEFINED(RamDiskSize) ? RamDiskSize : 0x0800000; /* 8M ram disk */

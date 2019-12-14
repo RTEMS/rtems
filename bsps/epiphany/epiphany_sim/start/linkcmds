@@ -367,6 +367,7 @@ SECTIONS {
 
   RamBase = ORIGIN (REGION_WORK);
   RamSize = LENGTH (REGION_WORK);
+  RamEnd = RamBase + RamSize;
   WorkAreaBase = bsp_section_work_begin;
   HeapSize = 0;
 }

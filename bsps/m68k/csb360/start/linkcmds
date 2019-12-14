@@ -14,6 +14,7 @@
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 RamBase = DEFINED(RamBase) ? RamBase : 0x00100000;
 RamSize = DEFINED(RamSize) ? RamSize : 31M;
+RamEnd = RamBase + RamSize;
 
 /* This is needed for _CPU_ISR_install_vector - 
 *  WARNING: it MUST match BSP_RAMBAR !!!!!!!!!!! */

@@ -25,6 +25,7 @@ bsp_section_align = 32;
 
 RamBase = bsp_ram_start;
 RamSize = bsp_ram_size;
+RamEnd = RamBase + RamSize;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
 /*

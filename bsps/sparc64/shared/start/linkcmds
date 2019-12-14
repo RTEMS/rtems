@@ -12,6 +12,7 @@
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize = DEFINED(RamSize) ? RamSize : 4M;
+RamEnd = RamBase + RamSize;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 1M;
 
 RAM_END = RamBase + RamSize;

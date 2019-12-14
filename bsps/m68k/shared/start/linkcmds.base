@@ -267,6 +267,7 @@ SECTIONS {
 	/* FIXME */
 	RamBase = ORIGIN (REGION_DATA);
 	RamSize = LENGTH (REGION_DATA);
+	RamEnd = RamBase + RamSize;
 	WorkAreaBase = bsp_section_work_begin;
 	HeapSize = 0;
 
