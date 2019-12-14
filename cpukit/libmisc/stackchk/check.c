@@ -513,6 +513,6 @@ static void Stack_check_Prepare_interrupt_stacks( void )
 
 RTEMS_SYSINIT_ITEM(
   Stack_check_Prepare_interrupt_stacks,
-  RTEMS_SYSINIT_BSP_WORK_AREAS,
-  RTEMS_SYSINIT_ORDER_SECOND
+  RTEMS_SYSINIT_ISR_STACK,
+  RTEMS_SYSINIT_ORDER_MIDDLE
 );
