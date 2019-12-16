@@ -395,6 +395,21 @@ Objects_Information *_Objects_Get_information_id(
 );
 
 /**
+ * @brief Returns if the object has a string name.
+ *
+ * @param information The object information table.
+ *
+ * @retval true The object has a string name.
+ * @retval false The object does not have a string name.
+ */
+RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
+  const Objects_Information *information
+)
+{
+  return information->name_length > 0;
+}
+
+/**
  * @brief Gets object name in the form of a C string.
  *
  * This method gets the name of an object and returns its name
@@ -461,10 +476,14 @@ bool _Objects_Set_name(
  * @param information The corresponding object information table.
  * @param[out] the_object The object to operate upon.
  */
-void _Objects_Namespace_remove_u32(
+RTEMS_INLINE_ROUTINE void _Objects_Namespace_remove_u32(
   const Objects_Information *information,
   Objects_Control           *the_object
-);
+)
+{
+  _Assert( !_Objects_Has_string_name( information ) );
+  the_object->name.name_u32 = 0;
+}
 
 /**
  * @brief Removes object with a string name from its namespace.
@@ -501,21 +520,6 @@ void _Objects_Close(
 Objects_Maximum _Objects_Active_count(
   const Objects_Information *information
 );
-
-/**
- * @brief Returns if the object has a string name.
- *
- * @param information The object information table.
- *
- * @retval true The object has a string name.
- * @retval false The object does not have a string name.
- */
-RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
-  const Objects_Information *information
-)
-{
-  return information->name_length > 0;
-}
 
 /**
  * @brief Returns the object's objects per block.

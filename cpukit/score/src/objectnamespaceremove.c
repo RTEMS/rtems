@@ -22,15 +22,6 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
 
-void _Objects_Namespace_remove_u32(
-  const Objects_Information *information,
-  Objects_Control           *the_object
-)
-{
-  _Assert( !_Objects_Has_string_name( information ) );
-  the_object->name.name_u32 = 0;
-}
-
 void _Objects_Namespace_remove_string(
   const Objects_Information *information,
   Objects_Control           *the_object
