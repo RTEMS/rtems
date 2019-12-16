@@ -6,7 +6,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 2015. Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2015, 2019. Chris Johns <chrisj@rtems.org>
  *
  *  COPYRIGHT (c) 2014.
  *  On-Line Applications Research Corporation (OAR).
@@ -36,10 +36,12 @@
 #include <rtems/malloc.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/protectedheap.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/rtems/tasksimpl.h>
 
 #include "cpuuseimpl.h"
 
@@ -194,14 +196,14 @@ task_usage(Thread_Control* thread, void* arg)
   _Timestamp_Add_to(&data->total, &usage);
   _Timestamp_Add_to(&data->current, &current);
 
-  if (thread->Object.id == 0x09010001)
+  if (thread->is_idle)
   {
-    data->idle = usage;
-    data->current_idle = current;
+    _Timestamp_Add_to(&data->idle, &usage);
+    _Timestamp_Add_to(&data->current_idle, &current);
   }
 
   /*
-   * Create the tasks to display soring as we create.
+   * Create the tasks to display sorting as we create.
    */
   for (j = 0; j < data->task_count; j++)
   {
@@ -313,6 +315,9 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
 
     _Timestamp_Set_to_zero(&data->total);
     _Timestamp_Set_to_zero(&data->current);
+    _Timestamp_Set_to_zero(&data->idle);
+    _Timestamp_Set_to_zero(&data->current_idle);
+
     data->stack_size = 0;
 
     _TOD_Get_uptime(&data->uptime);
@@ -421,9 +426,13 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
 
     for (i = 0; i < data->task_count; i++)
     {
-      Thread_Control*   thread = data->tasks[i];
-      Timestamp_Control usage;
-      Timestamp_Control current_usage;
+      Thread_Control*          thread = data->tasks[i];
+      Timestamp_Control        usage;
+      Timestamp_Control        current_usage;
+      Thread_queue_Context     queue_context;
+      const Scheduler_Control *scheduler;
+      Priority_Control         real_priority;
+      Priority_Control         priority;
 
       if (thread == NULL)
         break;
@@ -444,12 +453,19 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
       if (name[0] == '\0')
         snprintf(name, sizeof(name) - 1, "(%p)", thread->Start.Entry.Kinds.Numeric.entry);
 
+      _Thread_queue_Context_initialize(&queue_context);
+      _Thread_Wait_acquire(thread, &queue_context);
+      scheduler = _Thread_Scheduler_get_home(thread);
+      real_priority = thread->Real_priority.priority;
+      priority = _Thread_Get_priority(thread);
+      _Thread_Wait_release(thread, &queue_context);
+
       rtems_printf(data->printer,
-                   " 0x%08" PRIx32 " | %-19s |  %3" PRId64 " |  %3" PRId64 "   | ",
+                   " 0x%08" PRIx32 " | %-19s |  %3" PRId32 " |  %3" PRId32 "   | ",
                    thread->Object.id,
                    name,
-                   _Thread_Get_unmapped_real_priority(thread),
-                   _Thread_Get_unmapped_priority(thread));
+                   _RTEMS_Priority_From_core(scheduler, real_priority),
+                   _RTEMS_Priority_From_core(scheduler, priority));
 
       usage = data->usage[i];
       current_usage = data->current_usage[i];
