@@ -1203,34 +1203,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 /**
- * Configure the very much optional task stack allocator initialization
- */
-#ifndef CONFIGURE_TASK_STACK_ALLOCATOR_INIT
-  #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT NULL
-#endif
-
-/*
- *  Configure the very much optional task stack allocator and deallocator.
- */
-#if !defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
-  && !defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
-  /**
-   * This specifies the task stack allocator method.
-   */
-  #define CONFIGURE_TASK_STACK_ALLOCATOR _Workspace_Allocate
-  /**
-   * This specifies the task stack deallocator method.
-   */
-  #define CONFIGURE_TASK_STACK_DEALLOCATOR _Workspace_Free
-#elif (defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
-  && !defined(CONFIGURE_TASK_STACK_DEALLOCATOR)) \
-    || (!defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
-      && defined(CONFIGURE_TASK_STACK_DEALLOCATOR))
-  #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
-#endif
-/**@}*/ /* end of thread/interrupt stack configuration */
-
-/**
  * @addtogroup Configuration
  */
 /**@{*/
@@ -2728,6 +2700,31 @@ struct _reent *__getreent(void)
 
   const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
+  #if defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
+    && defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
+    #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
+      const bool _Stack_Allocator_avoids_workspace = true;
+    #else
+      const bool _Stack_Allocator_avoids_workspace = false;
+    #endif
+
+    #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+      const Stack_Allocator_initialize _Stack_Allocator_initialize =
+        CONFIGURE_TASK_STACK_ALLOCATOR_INIT;
+    #else
+      const Stack_Allocator_initialize _Stack_Allocator_initialize = NULL;
+    #endif
+
+    const Stack_Allocator_allocate _Stack_Allocator_allocate =
+      CONFIGURE_TASK_STACK_ALLOCATOR;
+
+    const Stack_Allocator_free _Stack_Allocator_free =
+      CONFIGURE_TASK_STACK_DEALLOCATOR;
+  #elif defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
+    || defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
+    #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
+  #endif
+
   /**
    * This is the primary Configuration Table for this application.
    */
@@ -2738,17 +2735,7 @@ struct _reent *__getreent(void)
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
-    CONFIGURE_TASK_STACK_ALLOCATOR_INIT,      /* stack allocator init */
-    CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
-    CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
-      true,
-    #else
-      false,
-    #endif
-    #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE /* true to avoid
-                                                 work space for thread stack
-                                                 allocation */
       true,
     #else
       false,

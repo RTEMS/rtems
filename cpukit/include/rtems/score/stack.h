@@ -58,6 +58,30 @@ typedef struct {
 }   Stack_Control;
 
 /**
+ * @brief The stack allocator initialization handler.
+ *
+ * @param stack_space_size The size of the stack space in bytes.
+ */
+typedef void ( *Stack_Allocator_initialize )( size_t stack_space_size );
+
+/**
+ * @brief Stack allocator allocate handler.
+ *
+ * @param stack_size The size of the stack area to allocate in bytes.
+ *
+ * @retval NULL Not enough memory.
+ * @retval other Pointer to begin of stack area.
+ */
+typedef void *( *Stack_Allocator_allocate )( size_t stack_size );
+
+/**
+ * @brief Stack allocator free handler.
+ *
+ * @param] addr A pointer to previously allocated stack area or NULL.
+ */
+typedef void ( *Stack_Allocator_free )( void *addr );
+
+/**
  * @brief The minimum stack size.
  *
  * Application provided via <rtems/confdefs.h>.
@@ -70,6 +94,34 @@ extern uint32_t rtems_minimum_stack_size;
  * Application provided via <rtems/confdefs.h>.
  */
 extern const uintptr_t _Stack_Space_size;
+
+/**
+ * @brief Indicates if the stack allocator avoids the workspace.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const bool _Stack_Allocator_avoids_workspace;
+
+/**
+ * @brief The stack allocator initialization handler.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const Stack_Allocator_initialize _Stack_Allocator_initialize;
+
+/**
+ * @brief The stack allocator allocate handler.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const Stack_Allocator_allocate _Stack_Allocator_allocate;
+
+/**
+ * @brief The stack allocator free handler.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const Stack_Allocator_free _Stack_Allocator_free;
 
 /** @} */
 

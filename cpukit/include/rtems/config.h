@@ -30,6 +30,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/memory.h>
+#include <rtems/score/stack.h>
 #include <rtems/score/userextdata.h>
 #include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/config.h>
@@ -55,28 +56,19 @@ extern "C" {
   _Objects_Maximum_per_allocation(resource)
 
 /**
- * @brief Task stack allocator initialization hook.
- *
- * @param[in] stack_space_size is the size of the stack space in bytes.
+ * @copydoc Stack_Allocator_initialize
  */
-typedef void (*rtems_stack_allocate_init_hook)( size_t stack_space_size );
+typedef Stack_Allocator_initialize rtems_stack_allocate_init_hook;
 
 /**
- * @brief Task stack allocator hook.
- *
- * @param[in] stack_size is the Size of the task stack in bytes.
- *
- * @retval NULL Not enough memory.
- * @retval other Pointer to task stack.
+ * @copydoc Stack_Allocator_allocate
  */
-typedef void *(*rtems_stack_allocate_hook)( size_t stack_size );
+typedef Stack_Allocator_allocate rtems_stack_allocate_hook;
 
 /**
- * @brief Task stack deallocator hook.
- *
- * @param[in] addr is a pointer to previously allocated task stack.
+ * @copydoc Stack_Allocator_free
  */
-typedef void (*rtems_stack_free_hook)( void *addr );
+typedef Stack_Allocator_free rtems_stack_free_hook;
 
 /*
  *  The following records define the Configuration Table.  The
@@ -130,36 +122,12 @@ typedef struct {
   uint32_t                       idle_task_stack_size;
 
   /**
-   * @brief Optional task stack allocator initialization hook.
-   */
-  rtems_stack_allocate_init_hook stack_allocate_init_hook;
-
-  /**
-   * @brief Optional task stack allocator hook.
-   */
-  rtems_stack_allocate_hook      stack_allocate_hook;
-
-  /**
-   * @brief Optional task stack free hook.
-   */
-  rtems_stack_free_hook          stack_free_hook;
-
-  /**
    * @brief Specifies if a unified work area is used or not.
    *
    * If this element is @a true, then the RTEMS Workspace and the C Program
    * Heap use the same heap, otherwise they use separate heaps.
    */
   bool                           unified_work_area;
-
-  /**
-   * @brief Specifies if the stack allocator avoids the work space.
-   *
-   * If this element is @a true, then the stack allocator must not allocate the
-   * thread stacks from the RTEMS Workspace, otherwise it should allocate the
-   * thread stacks from the RTEMS Workspace.
-   */
-  bool                           stack_allocator_avoids_work_space;
 
   #ifdef RTEMS_SMP
     bool                         smp_enabled;
@@ -183,8 +151,17 @@ extern const rtems_configuration_table Configuration;
 #define rtems_configuration_get_unified_work_area() \
         (Configuration.unified_work_area)
 
+/**
+ * @brief Return if the stack allocator avoids the work space.
+ *
+ * @retval true The stack allocator must not allocate the thread stacks from the
+ * RTEMS Workspace
+ *
+ * @retval false The stack allocator should allocate the thread stacks from the
+ * RTEMS Workspace.
+ */
 #define rtems_configuration_get_stack_allocator_avoids_work_space() \
-        (Configuration.stack_allocator_avoids_work_space)
+  (_Stack_Allocator_avoids_workspace)
 
 uintptr_t rtems_configuration_get_stack_space_size( void );
 
@@ -215,13 +192,13 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
         ((size_t) _ISR_Stack_size)
 
 #define rtems_configuration_get_stack_allocate_init_hook() \
-        (Configuration.stack_allocate_init_hook)
+  (_Stack_Allocator_initialize)
 
 #define rtems_configuration_get_stack_allocate_hook() \
-        (Configuration.stack_allocate_hook)
+  (_Stack_Allocator_allocate)
 
 #define rtems_configuration_get_stack_free_hook() \
-        (Configuration.stack_free_hook)
+  (_Stack_Allocator_free)
 
  /**
   * This macro assists in accessing the field which indicates whether

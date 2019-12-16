@@ -922,6 +922,7 @@ librtemscpu_a_SOURCES += score/src/schedulercbsgetserverid.c
 librtemscpu_a_SOURCES += score/src/schedulercbssetparameters.c
 librtemscpu_a_SOURCES += score/src/schedulercbsreleasejob.c
 librtemscpu_a_SOURCES += score/src/schedulercbsunblock.c
+librtemscpu_a_SOURCES += score/src/stackallocator.c
 librtemscpu_a_SOURCES += score/src/pheapallocate.c
 librtemscpu_a_SOURCES += score/src/pheapextend.c
 librtemscpu_a_SOURCES += score/src/pheapfree.c
