@@ -19,16 +19,13 @@
 #endif
 
 #include <rtems/score/objectimpl.h>
-#include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 
-void _Objects_Free(
+void _Objects_Free_unlimited(
   Objects_Information *information,
   Objects_Control     *the_object
 )
 {
-  _Assert( _Objects_Allocator_is_owner() );
-
   _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 
   if ( _Objects_Is_auto_extend( information ) ) {

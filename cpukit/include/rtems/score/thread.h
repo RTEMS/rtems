@@ -1024,6 +1024,7 @@ Thread_Information name##_Information = { \
     _Objects_Build_id( api, cls, 1, 0 ), \
     NULL, \
     _Objects_Allocate_none, \
+    NULL, \
     0, \
     0, \
     0, \
@@ -1051,6 +1052,8 @@ Thread_Information name##_Information = { \
     name##_Local_table, \
     _Objects_Is_unlimited( max ) ? \
       _Objects_Allocate_unlimited : _Objects_Allocate_static, \
+    _Objects_Is_unlimited( max ) ? \
+      _Objects_Free_unlimited : _Objects_Free_static, \
     0, \
     _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max ) : 0, \
     sizeof( Thread_Configured_control ), \

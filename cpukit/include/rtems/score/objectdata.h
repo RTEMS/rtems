@@ -203,6 +203,16 @@ struct Objects_Information {
   Objects_Control *( *allocate )( Objects_Information * );
 
   /**
+   * @brief Free an object.
+   *
+   * In case _Objects_Allocate_none() is used, then this may be the NULL
+   * pointer.
+   *
+   * @see _Objects_Free_static(), and _Objects_Free_unlimited().
+   */
+  void ( *free )( Objects_Information *, Objects_Control * );
+
+  /**
    * @brief This is the number of object control blocks on the inactive chain.
    *
    * This member is only used if unlimited objects are configured for this API
@@ -331,6 +341,33 @@ Objects_Control *_Objects_Allocate_static( Objects_Information *information );
  */
 Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information );
 
+/**
+ * @brief Free the object.
+ *
+ * Append the object to the inactive chain of the objects information.
+ *
+ * @param information The objects information.
+ * @param the_object The object to free.
+ */
+void _Objects_Free_static(
+  Objects_Information *information,
+  Objects_Control     *the_object
+);
+
+/**
+ * @brief Free the object.
+ *
+ * Append the object to the inactive chain of the objects information and shrink
+ * the objects information if necessary.
+ *
+ * @param information The objects information.
+ * @param the_object The object to free.
+ */
+void _Objects_Free_unlimited(
+  Objects_Information *information,
+  Objects_Control     *the_object
+);
+
 #if defined(RTEMS_MULTIPROCESSING)
 #define OBJECTS_INFORMATION_MP( name, extract ) \
   , \
@@ -357,6 +394,7 @@ Objects_Information name##_Information = { \
   _Objects_Build_id( api, cls, 1, 0 ), \
   NULL, \
   _Objects_Allocate_none, \
+  NULL, \
   0, \
   0, \
   0, \
@@ -395,6 +433,8 @@ Objects_Information name##_Information = { \
   name##_Local_table, \
   _Objects_Is_unlimited( max ) ? \
     _Objects_Allocate_unlimited : _Objects_Allocate_static, \
+  _Objects_Is_unlimited( max ) ? \
+    _Objects_Free_unlimited : _Objects_Free_static, \
   0, \
   _Objects_Is_unlimited( max ) ? _Objects_Maximum_per_allocation( max ) : 0, \
   sizeof( type ), \

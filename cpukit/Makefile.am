@@ -864,6 +864,7 @@ librtemscpu_a_SOURCES += score/src/objectallocateunlimited.c
 librtemscpu_a_SOURCES += score/src/objectclose.c
 librtemscpu_a_SOURCES += score/src/objectextendinformation.c
 librtemscpu_a_SOURCES += score/src/objectfree.c
+librtemscpu_a_SOURCES += score/src/objectfreestatic.c
 librtemscpu_a_SOURCES += score/src/objectgetnext.c
 librtemscpu_a_SOURCES += score/src/objectinitializeinformation.c
 librtemscpu_a_SOURCES += score/src/objectnametoid.c

@@ -188,55 +188,6 @@ unsigned int _Objects_API_maximum_class(
 Objects_Control *_Objects_Allocate( Objects_Information *information );
 
 /**
- * @brief Frees an object.
- *
- * Appends the object to the chain of inactive objects.
- *
- * @param information The object information block.
- * @param[out] the_object The object to free.
- *
- * @see _Objects_Allocate().
- *
- * A typical object deletion code looks like this:
- * @code
- * rtems_status_code some_delete( rtems_id id )
- * {
- *   Some_Control      *some;
- *
- *   // The object allocator mutex protects the executing thread from
- *   // asynchronous thread restart and deletion.
- *   _Objects_Allocator_lock();
- *
- *   // Get the object under protection of the object allocator mutex.
- *   some = (Semaphore_Control *)
- *     _Objects_Get_no_protection( id, &_Some_Information );
- *
- *   if ( some == NULL ) {
- *     _Objects_Allocator_unlock();
- *     return RTEMS_INVALID_ID;
- *   }
- *
- *   // After the object close an object get with this identifier will
- *   // fail.
- *   _Objects_Close( &_Some_Information, &some->Object );
- *
- *   _Some_Delete( some );
- *
- *   // Thread dispatching is enabled.  The object free is only protected
- *   // by the object allocator mutex.
- *   _Objects_Free( &_Some_Information, &some->Object );
- *
- *   _Objects_Allocator_unlock();
- *   return RTEMS_SUCCESSFUL;
- * }
- * @endcode
- */
-void _Objects_Free(
-  Objects_Information *information,
-  Objects_Control     *the_object
-);
-
-/**
  *  This function implements the common portion of the object
  *  identification directives.  This directive returns the object
  *  id associated with name.  If more than one object of this class
@@ -923,6 +874,60 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_unprotected(
   );
 
   return ( *information->allocate )( information );
+}
+
+/**
+ * @brief Frees an object.
+ *
+ * Appends the object to the chain of inactive objects.
+ *
+ * @param information The object information block.
+ * @param[out] the_object The object to free.
+ *
+ * @see _Objects_Allocate().
+ *
+ * A typical object deletion code looks like this:
+ * @code
+ * rtems_status_code some_delete( rtems_id id )
+ * {
+ *   Some_Control      *some;
+ *
+ *   // The object allocator mutex protects the executing thread from
+ *   // asynchronous thread restart and deletion.
+ *   _Objects_Allocator_lock();
+ *
+ *   // Get the object under protection of the object allocator mutex.
+ *   some = (Semaphore_Control *)
+ *     _Objects_Get_no_protection( id, &_Some_Information );
+ *
+ *   if ( some == NULL ) {
+ *     _Objects_Allocator_unlock();
+ *     return RTEMS_INVALID_ID;
+ *   }
+ *
+ *   // After the object close an object get with this identifier will
+ *   // fail.
+ *   _Objects_Close( &_Some_Information, &some->Object );
+ *
+ *   _Some_Delete( some );
+ *
+ *   // Thread dispatching is enabled.  The object free is only protected
+ *   // by the object allocator mutex.
+ *   _Objects_Free( &_Some_Information, &some->Object );
+ *
+ *   _Objects_Allocator_unlock();
+ *   return RTEMS_SUCCESSFUL;
+ * }
+ * @endcode
+ */
+RTEMS_INLINE_ROUTINE void _Objects_Free(
+  Objects_Information *information,
+  Objects_Control     *the_object
+)
+{
+  _Assert( _Objects_Allocator_is_owner() );
+  _Assert( information->free != NULL );
+  ( *information->free )( information, the_object );
 }
 
 /** @} */
