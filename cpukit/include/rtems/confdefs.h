@@ -1599,8 +1599,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #include <libchip/ata.h>
 #endif
 
-#ifndef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
-
 /**
  * This specifies the maximum number of device drivers that
  * can be installed in the system at one time.  It must account
@@ -1663,8 +1661,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   const size_t _IO_Number_of_drivers =
     RTEMS_ARRAY_SIZE( _IO_Driver_address_table );
 #endif
-
-#endif  /* CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE */
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
   /*
@@ -3058,33 +3054,31 @@ struct _reent *__getreent(void)
 #endif
 
 #if !defined(RTEMS_SCHEDSIM)
-  #if !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE)
-    /*
-     *  You must either explicity include or exclude the clock driver.
-     *  It is such a common newbie error to leave it out.  Maybe this
-     *  will put an end to it.
-     *
-     *  NOTE: If you are using the timer driver, it is considered
-     *        mutually exclusive with the clock driver because the
-     *        drivers are assumed to use the same "timer" hardware
-     *        on many boards.
-     */
-    #if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
-      #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
-     #endif
+/*
+ *  You must either explicitly include or exclude the clock driver.
+ *  It is such a common newbie error to leave it out.  Maybe this
+ *  will put an end to it.
+ *
+ *  NOTE: If you are using the timer driver, it is considered
+ *        mutually exclusive with the clock driver because the
+ *        drivers are assumed to use the same "timer" hardware
+ *        on many boards.
+ */
+#if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
+    !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
+    !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
+  #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
+ #endif
 
-    /*
-     * Only one of the following three configuration parameters should be
-     * defined at a time.
-     */
-    #if ((defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) + \
-          defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER) + \
-          defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER)) > 1)
-       #error "CONFIGURATION ERROR: More than one clock/timer driver configuration parameter specified?!?"
-    #endif
-  #endif /* !defined(CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE) */
+/*
+ * Only one of the following three configuration parameters should be
+ * defined at a time.
+ */
+#if ((defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) + \
+      defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER) + \
+      defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER)) > 1)
+   #error "CONFIGURATION ERROR: More than one clock/timer driver configuration parameter specified?!?"
+#endif
 #endif   /* !defined(RTEMS_SCHEDSIM) */
 
 /*
@@ -3117,6 +3111,10 @@ struct _reent *__getreent(void)
 
 #ifdef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
   #warning "The CONFIGURE_HAS_OWN_CONFIGURATION_TABLE configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
+  #warning "The CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
