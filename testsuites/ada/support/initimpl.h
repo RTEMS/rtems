@@ -46,8 +46,6 @@ void check_type(long type, long size, long alignment);
  *  path and can get this file from ".." in the mptests.
  */
 #define CONFIGURE_INIT
-#define CONFIGURE_GNAT_RTEMS
-#define CONFIGURE_MEMORY_OVERHEAD  (256)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
