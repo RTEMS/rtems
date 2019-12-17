@@ -289,7 +289,7 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_FILESYSTEM_DOSFS
 
 /* 1 device file for blkstats + 1 file for writing + 1 mount_dir + stdin + stdout + stderr + device file when mounted */
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 8
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 8
 
 #define CONFIGURE_UNLIMITED_OBJECTS
 #define CONFIGURE_UNIFIED_WORK_AREAS

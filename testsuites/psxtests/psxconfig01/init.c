@@ -45,7 +45,7 @@
 
 const char rtems_test_name[] = "PSXCONFIG 1";
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 23
 #if CONFIGURE_MAXIMUM_POSIX_KEYS > 0
@@ -263,8 +263,8 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_test_assert(rtems_resource_snapshot_equal(&snapshot, &snapshot));
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
-#if CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS > 0
-  for (i = 3; i < CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS; ++i) {
+#if CONFIGURE_MAXIMUM_FILE_DESCRIPTORS > 0
+  for (i = 3; i < CONFIGURE_MAXIMUM_FILE_DESCRIPTORS; ++i) {
     int oflag = O_WRONLY | O_CREAT | O_TRUNC;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
     char path [] = { 'F', 'I', 'L', 'E', 'A' + i, '\0' };
@@ -273,7 +273,7 @@ static rtems_task Init(rtems_task_argument argument)
   }
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
-    snapshot.open_files == CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+    snapshot.open_files == CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
   );
 #endif
 

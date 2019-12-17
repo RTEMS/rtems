@@ -143,13 +143,18 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 #endif
 
+#ifdef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+  #warning "CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS has been renamed to CONFIGURE_MAXIMUM_FILE_DESCRIPTORS since RTEMS 5.1"
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+#endif
+
 /**
  * This macro defines the number of POSIX file descriptors allocated
  * and managed by libio.  These are the "integer" file descriptors that
  * are used by calls like open(2) and read(2).
  */
-#ifndef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
-  #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 3
+#ifndef CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 3
 #endif
 
 /*
@@ -158,7 +163,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define _CONFIGURE_LIBIO_POSIX_KEYS 1
 
 #ifdef CONFIGURE_INIT
-  rtems_libio_t rtems_libio_iops[CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS];
+  rtems_libio_t rtems_libio_iops[CONFIGURE_MAXIMUM_FILE_DESCRIPTORS];
 
   /**
    * When instantiating the configuration tables, this variable is

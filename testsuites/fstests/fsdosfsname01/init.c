@@ -1446,7 +1446,7 @@ size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configu
 
 /* 2 RAM disk device files + 2 mount_dir + stdin + stdout + stderr +
  * 2 for open directories/files  + 4 * 2 for recursive tree compares*/
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS ( 7 + 2 + ( 4 * 2 ) )
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS ( 7 + 2 + ( 4 * 2 ) )
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

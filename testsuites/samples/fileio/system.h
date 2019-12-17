@@ -55,7 +55,7 @@ rtems_task Init(
 /*
  * XXX: these values are higher than needed...
  */
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 20
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 20
 #define CONFIGURE_STACK_CHECKER_ENABLED
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

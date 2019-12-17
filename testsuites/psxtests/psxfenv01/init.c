@@ -116,7 +116,7 @@ rtems_task Init(rtems_task_argument ignored)
 
 #define CONFIGURE_MAXIMUM_TASKS                  1
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 6
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 6
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

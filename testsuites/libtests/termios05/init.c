@@ -153,7 +153,7 @@ rtems_task Init(
   TERMIOS_TEST_DRIVER_TABLE_ENTRY
 
 /* we need to be able to open the test device */
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS             4
 #define CONFIGURE_MAXIMUM_TIMERS            2

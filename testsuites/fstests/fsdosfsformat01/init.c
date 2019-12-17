@@ -511,7 +511,7 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
 /* one active file + stdin + stdout + stderr + device file when mounted */
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_FILESYSTEM_DOSFS
 

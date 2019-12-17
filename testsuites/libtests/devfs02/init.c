@@ -96,7 +96,7 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 2
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 2
 
 /* Make sure that we have enough devices for all BSPs */
 #define CONFIGURE_MAXIMUM_DEVICES 64
