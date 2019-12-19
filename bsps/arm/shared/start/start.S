@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -33,6 +33,7 @@
 
 	/* Global symbols */
 	.globl	_start
+	.globl	bsp_start_hook_0_done
 	.globl	bsp_start_vector_table_begin
 	.globl	bsp_start_vector_table_end
 	.globl	bsp_start_vector_table_size
@@ -388,7 +389,7 @@ _start:
 	 * the start hook 0 address instead corrected by the address offset.
 	 */
 
-	ldr	lr, =.Lstart_hook_0_done
+	ldr	lr, =bsp_start_hook_0_done
 	mov	r0, pc
 	ldr	r1, =.Lget_absolute_pc
 .Lget_absolute_pc:
@@ -402,7 +403,8 @@ _start:
 
 	bx	r7
 
-.Lstart_hook_0_done:
+	/* Allow bsp_start_hook_0() hooks to jump to this label */
+bsp_start_hook_0_done:
 
 	/*
 	 * Initialize the exception vectors.  This includes the exceptions
@@ -483,10 +485,11 @@ _start:
 #endif
 
 	ldr	sp, =_ISR_Stack_area_end
-	ldr	lr, =.Lstart_hook_0_done + 1
+	ldr	lr, =bsp_start_hook_0_done + 1
 	b	bsp_start_hook_0
 
-.Lstart_hook_0_done:
+	/* Allow bsp_start_hook_0() hooks to jump to this label */
+bsp_start_hook_0_done:
 
 	bl	bsp_start_hook_1
 	movs	r0, #0
