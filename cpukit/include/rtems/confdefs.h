@@ -916,8 +916,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_EDF_SMP(dflt, _CONFIGURE_MAXIMUM_PROCESSORS)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_EDF_SMP(dflt)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \

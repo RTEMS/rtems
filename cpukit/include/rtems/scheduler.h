@@ -112,13 +112,17 @@
 #ifdef CONFIGURE_SCHEDULER_EDF_SMP
   #include <rtems/score/scheduleredfsmp.h>
 
+  #ifndef CONFIGURE_MAXIMUM_PROCESSORS
+    #error "CONFIGURE_MAXIMUM_PROCESSORS must be defined to configure the EDF SMP scheduler"
+  #endif
+
   #define SCHEDULER_EDF_SMP_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( EDF_SMP_ ## name )
 
-  #define RTEMS_SCHEDULER_EDF_SMP( name, max_cpu_count ) \
+  #define RTEMS_SCHEDULER_EDF_SMP( name ) \
     static struct { \
       Scheduler_EDF_SMP_Context Base; \
-      Scheduler_EDF_SMP_Ready_queue Ready[ ( max_cpu_count ) + 1 ]; \
+      Scheduler_EDF_SMP_Ready_queue Ready[ CONFIGURE_MAXIMUM_PROCESSORS + 1 ]; \
     } SCHEDULER_EDF_SMP_CONTEXT_NAME( name )
 
   #define RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name ) \
@@ -132,7 +136,7 @@
   /* Provided for backward compatibility */
 
   #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP( name, max_cpu_count ) \
-    RTEMS_SCHEDULER_EDF_SMP( name, max_cpu_count )
+    RTEMS_SCHEDULER_EDF_SMP( name )
 
   #define RTEMS_SCHEDULER_CONTROL_EDF_SMP( name, obj_name ) \
     RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )

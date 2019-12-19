@@ -137,7 +137,7 @@ static void Init(rtems_task_argument arg)
 
 #include <rtems/scheduler.h>
 
-RTEMS_SCHEDULER_EDF_SMP(a, CONFIGURE_MAXIMUM_PROCESSORS);
+RTEMS_SCHEDULER_EDF_SMP(a);
 
 #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
   RTEMS_SCHEDULER_TABLE_EDF_SMP(a, rtems_build_name('E', 'D', 'F', ' '))
