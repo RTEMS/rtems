@@ -93,28 +93,18 @@ SECTIONS
     *(.fini)
     *ecrtn.o(.init)
 
-    /*
-     *  C++ constructors and destructors for static objects.
-     *  PowerPC EABI does not use crtstuff yet, so we build "old-style"
-     *  constructor and destructor lists that begin with the list length
-     *  end terminate with a NULL entry.
-     */
-
-    PROVIDE (__CTOR_LIST__ = .);
-    /* LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2) */
-    *crtbegin.o(.ctors)
-    *(.ctors)
-    *crtend.o(.ctors)
-    LONG(0)
-    PROVIDE (__CTOR_END__ = .);
-
-    PROVIDE (__DTOR_LIST__ = .);
-    /* LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2) */
-    *crtbegin.o(.dtors)
-    *(.dtors)
-    *crtend.o(.dtors)
-    LONG(0)
-    PROVIDE (__DTOR_END__ = .);
+    KEEP (*ecrti.o(.ctors))
+    KEEP (*crtbegin.o(.ctors))
+    KEEP (*crtbegin?.o(.ctors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o *ecrtn.o) .ctors))
+    KEEP (*(SORT(.ctors.*)))
+    KEEP (*(.ctors))
+    KEEP (*ecrti.o(.dtors))
+    KEEP (*crtbegin.o(.dtors))
+    KEEP (*crtbegin?.o(.dtors))
+    KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o *ecrtn.o) .dtors))
+    KEEP (*(SORT(.dtors.*)))
+    KEEP (*(.dtors))
 
     /* Exception frame info */
     *(.eh_frame)
