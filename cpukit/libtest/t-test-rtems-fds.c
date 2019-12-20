@@ -61,7 +61,7 @@ T_check_open_fds(void)
 
 	if (delta != 0) {
 		T_open_fds = open_fds;
-		T_check_true(NULL, false, "file descriptor leak (%+i)", delta);
+		T_check_true(false, NULL, "file descriptor leak (%+i)", delta);
 	}
 }
 
