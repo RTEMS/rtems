@@ -203,8 +203,8 @@ T_TEST_OUTPUT(time_to_string,
 
 T_TEST_OUTPUT(now,
 "B:now\n"
-"L:0.000000000\n"
-"E:now:N:0:F:0:D:0.001000\n");
+"L:0.001000000\n"
+"E:now:N:0:F:0:D:0.003000\n");
 
 T_TEST_OUTPUT(tick,
 "B:tick\n"
@@ -268,8 +268,8 @@ T_TEST_OUTPUT(ticks,
 
 T_TEST_OUTPUT(begin_time,
 "B:begin_time\n"
-"L:time at test case begin 0.325000046\n"
-"E:begin_time:N:0:F:0:D:0.001000\n");
+"L:time at test case begin 0.001000000\n"
+"E:begin_time:N:0:F:0:D:0.002000\n");
 
 /*
  * The license is at the end of the file to be able to use the test code and

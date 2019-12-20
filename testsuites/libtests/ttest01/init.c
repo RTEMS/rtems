@@ -32,8 +32,6 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <rtems/timecounter.h>
-#include <rtems/sysinit.h>
 
 #include "t-self-test.h"
 
@@ -54,7 +52,6 @@ typedef struct {
 	const char *c;
 	size_t case_begin_count;
 	size_t case_end_count;
-	struct timecounter tc;
 	T_putchar putchar;
 	void *putchar_arg;
 	const char *censor_c;
@@ -180,8 +177,8 @@ run_initialize(void)
 	T_set_putchar(censor_putchar, ctx, &ctx->putchar, &ctx->putchar_arg);
 }
 
-static const char expected_final[] = "Z:ttest01:C:341:N:1316:F:790:D:0.682999\n"
-"Y:ReportHash:SHA256:62d6f3b37299137932ea2c2f0505c8b8f12b95749c81d5af19570e9470203475\n";
+static const char expected_final[] = "Z:ttest01:C:341:N:1316:F:790:D:0.685999\n"
+"Y:ReportHash:SHA256:cb5ba027ade5b907d9e988776e393835f34a76cc2381d67bb9db44d986a3fecf\n";
 
 static void
 run_finalize(void)
@@ -225,28 +222,6 @@ now(void)
 	t = _Atomic_Fetch_add_uint(&counter, 1, ATOMIC_ORDER_RELAXED);
 	return t * SBT_1MS;
 }
-
-static uint32_t
-get_timecount(struct timecounter *tc)
-{
-	return 0;
-}
-
-static void
-install_timecounter(void)
-{
-	test_context *ctx;
-
-	ctx = &test_instance;
-	ctx->tc.tc_get_timecount = get_timecount;
-	ctx->tc.tc_counter_mask = 0xffffffff;
-	ctx->tc.tc_frequency = 1000000000;
-	ctx->tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER + 1;
-	rtems_timecounter_install(&ctx->tc);
-}
-
-RTEMS_SYSINIT_ITEM(install_timecounter, RTEMS_SYSINIT_DEVICE_DRIVERS,
-    RTEMS_SYSINIT_ORDER_FIRST);
 
 static char buffer[512];
 

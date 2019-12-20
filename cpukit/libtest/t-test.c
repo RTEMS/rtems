@@ -994,3 +994,14 @@ T_set_putchar(T_putchar new_putchar, void *new_arg, T_putchar *old_putchar,
 	ctx->putchar = new_putchar;
 	ctx->putchar_arg = new_arg;
 }
+
+T_time
+T_now(void)
+{
+	T_context *ctx;
+	const T_config *config;
+
+	ctx = &T_instance;
+	config = ctx->config;
+	return (*config->now)();
+}

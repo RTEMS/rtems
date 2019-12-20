@@ -2146,29 +2146,23 @@ T_time T_seconds_and_nanoseconds_to_time(uint32_t, uint32_t);
 
 void T_time_to_seconds_and_nanoseconds(T_time, uint32_t *, uint32_t *);
 
+T_time T_now(void);
+
 #ifdef __rtems__
-int64_t _Timecounter_Sbinuptime(void);
-
-static inline T_time
-T_now(void)
-{
-	return (T_time)_Timecounter_Sbinuptime();
-}
-
 static inline T_ticks
 T_tick(void)
 {
 	return _CPU_Counter_read();
 }
 #else
-T_time T_now(void);
-
 T_ticks T_tick(void);
 #endif
 
+T_time T_now_clock(void);
+
 T_time T_now_dummy(void);
 
-T_time T_now_via_tick(void);
+T_time T_now_tick(void);
 
 T_time T_case_begin_time(void);
 

@@ -201,16 +201,20 @@ T_time_to_seconds_and_nanoseconds(T_time time, uint32_t *s, uint32_t *ns)
 #endif
 }
 
-#ifndef __rtems__
 T_time
-T_now(void)
+T_now_clock(void)
 {
+#ifndef __rtems__
 	struct timespec tp;
 
 	(void)clock_gettime(CLOCK_MONOTONIC, &tp);
 	return (T_time)tp.tv_sec * (T_time)1000000000 + (T_time)tp.tv_nsec;
+#else /* __rtems__ */
+	return (T_time)_Timecounter_Sbinuptime();
+#endif /* __rtems__ */
 }
 
+#ifndef __rtems__
 T_ticks
 T_tick(void)
 {
@@ -218,16 +222,17 @@ T_tick(void)
 }
 #endif
 
-static atomic_uint dummy_time;
+static atomic_uint T_dummy_time;
 
 T_time
 T_now_dummy(void)
 {
-	return atomic_fetch_add_explicit(&dummy_time, 1, memory_order_relaxed);
+	return atomic_fetch_add_explicit(&T_dummy_time, 1,
+	    memory_order_relaxed);
 }
 
 T_time
-T_now_via_tick(void)
+T_now_tick(void)
 {
 	return T_ticks_to_time(T_tick());
 }
