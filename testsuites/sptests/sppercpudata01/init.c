@@ -25,7 +25,8 @@
 
 const char rtems_test_name[] = "SPPERCPUDATA 1";
 
-static PER_CPU_DATA_ITEM(unsigned char, c) = 1;
+static RTEMS_ALIGNED(CPU_HEAP_ALIGNMENT)
+  PER_CPU_DATA_ITEM(unsigned char, c) = 1;
 
 static PER_CPU_DATA_ITEM(unsigned char, cz);
 
@@ -85,6 +86,7 @@ static void test_initial_values(void)
     cpu = _Per_CPU_Get_by_index(cpu_index);
 
     off = PER_CPU_DATA_OFFSET(c);
+    rtems_test_assert(off % CPU_HEAP_ALIGNMENT == 0);
     c = PER_CPU_DATA_GET_BY_OFFSET(cpu, unsigned char, off);
     rtems_test_assert(*c == 1);
 
@@ -225,6 +227,7 @@ static void test_unique_values(unsigned int v)
     rtems_test_assert(*c == (unsigned char) v);
 
     off = PER_CPU_DATA_OFFSET(c);
+    rtems_test_assert(off % CPU_HEAP_ALIGNMENT == 0);
     c = PER_CPU_DATA_GET_BY_OFFSET(cpu, unsigned char, off);
     rtems_test_assert(*c == (unsigned char) v);
 
