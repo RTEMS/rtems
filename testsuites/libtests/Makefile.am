@@ -1509,6 +1509,7 @@ ttest01_SOURCES += ttest01/test-psx.c
 ttest01_SOURCES += ttest01/test-rtems.c
 ttest01_SOURCES += ttest01/test-simple.c
 ttest01_SOURCES += ttest01/test-step.c
+ttest01_SOURCES += ttest01/test-task-context.c
 ttest01_SOURCES += ttest01/test-time.c
 ttest01_SOURCES += ttest01/test-verbosity.c
 ttest01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ttest01) \

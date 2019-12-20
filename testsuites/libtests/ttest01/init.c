@@ -32,6 +32,7 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/threaddispatch.h>
 
 #include "t-self-test.h"
 
@@ -112,6 +113,10 @@ case_late(const char *name)
 {
 	test_context *ctx;
 
+	if (strcmp(name, "check_task_context") == 0) {
+		_Thread_Dispatch_enable(_Per_CPU_Get());
+	}
+
 	ctx = &test_instance;
 	++ctx->case_end_count;
 	test_assert(ctx->c != NULL);
@@ -177,8 +182,8 @@ run_initialize(void)
 	T_set_putchar(censor_putchar, ctx, &ctx->putchar, &ctx->putchar_arg);
 }
 
-static const char expected_final[] = "Z:ttest01:C:341:N:1316:F:790:D:0.685999\n"
-"Y:ReportHash:SHA256:cb5ba027ade5b907d9e988776e393835f34a76cc2381d67bb9db44d986a3fecf\n";
+static const char expected_final[] = "Z:ttest01:C:342:N:1316:F:791:D:0.687999\n"
+"Y:ReportHash:SHA256:d4c293b499e6e557afcf6123cb604e8976cc5b987021f1f8c9f6193fc38a386e\n";
 
 static void
 run_finalize(void)
@@ -228,6 +233,7 @@ static char buffer[512];
 static const T_action actions[] = {
 	T_report_hash_sha256,
 	test_action,
+	T_check_task_context,
 	T_check_file_descriptors,
 	T_check_rtems_barriers,
 	T_check_rtems_extensions,

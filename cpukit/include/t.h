@@ -2266,6 +2266,8 @@ void T_report_hash_sha256(T_event, const char *);
 void T_check_heap(T_event, const char *);
 
 #ifdef __rtems__
+void T_check_task_context(T_event, const char *);
+
 void T_check_file_descriptors(T_event, const char *);
 
 void T_check_rtems_barriers(T_event, const char *);
