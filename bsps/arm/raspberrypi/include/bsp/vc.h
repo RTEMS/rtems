@@ -138,6 +138,17 @@ int bcm2835_mailbox_get_board_model( bcm2835_get_board_spec_entries *_entries );
 int bcm2835_mailbox_get_board_revision(
   bcm2835_get_board_spec_entries *_entries );
 
+/*
+ * See the official documentation for the format of the revision codes:
+ * https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+ */
+#define BCM2835_REVISION_IS_NEW_STYLE(revision) ((revision & (1 << 23)) != 0)
+#define BCM2835_REVISION_MEMORY_SIZE(revision) ((revision >> 20) & 0x7)
+#define BCM2835_REVISION_MANUFACTURER(revision) ((revision >> 16) & 0xf)
+#define BCM2835_REVISION_PROCESSOR(revision) ((revision >> 12) & 0xf)
+#define BCM2835_REVISION_TYPE(revision) ((revision >> 4) & 0xff)
+#define BCM2835_REVISION_REVISION(revision) ((revision >> 0) & 0xf)
+
 typedef struct {
   uint64_t board_serial;
 } bcm2835_get_board_serial_entries;
