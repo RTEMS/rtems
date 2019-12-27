@@ -24,8 +24,6 @@
 
 #include <libfdt.h>
 
-#define WORKSPACE_ENTRY_INDEX 8
-
 BSP_START_DATA_SECTION static arm_cp15_start_section_config
 imx_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
@@ -68,7 +66,8 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
         size -= 4;
       }
 
-      imx_mmu_config_table[WORKSPACE_ENTRY_INDEX].end = begin + size;
+      imx_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].end =
+        begin + size;
     }
   }
 
@@ -112,8 +111,8 @@ void bsp_work_area_initialize(void)
   uintptr_t begin;
   uintptr_t end;
 
-  begin = imx_mmu_config_table[WORKSPACE_ENTRY_INDEX].begin;
-  end = imx_mmu_config_table[WORKSPACE_ENTRY_INDEX].end;
+  begin = imx_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].begin;
+  end = imx_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].end;
 
   bsp_work_area_initialize_default((void *) begin, end - begin);
 }

@@ -95,6 +95,8 @@ typedef struct {
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
   }
 
+#define ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX 8
+
 BSP_START_DATA_SECTION extern const arm_cp15_start_section_config
   arm_cp15_start_mmu_config_table[];
 
