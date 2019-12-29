@@ -267,16 +267,9 @@ rtems_status_code rtems_semaphore_create(
   return RTEMS_SUCCESSFUL;
 }
 
-static void _Semaphore_Manager_initialization(void)
+static void _Semaphore_Manager_initialization( void )
 {
   _Objects_Initialize_information( &_Semaphore_Information );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  _MPCI_Register_packet_processor(
-    MP_PACKET_SEMAPHORE,
-    _Semaphore_MP_Process_packet
-  );
-#endif
 }
 
 RTEMS_SYSINIT_ITEM(

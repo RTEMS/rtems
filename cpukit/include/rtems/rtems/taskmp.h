@@ -87,16 +87,6 @@ rtems_status_code _RTEMS_tasks_MP_Suspend( rtems_id id );
 rtems_status_code _RTEMS_tasks_MP_Resume( rtems_id id );
 
 /**
- *  @brief _RTEMS_tasks_MP_Process_packet
- *
- *  This routine performs the actions specific to this package for
- *  the request from another node.
- */
-void _RTEMS_tasks_MP_Process_packet (
-  rtems_packet_prefix *the_packet_prefix
-);
-
-/**
  *  @brief _RTEMS_tasks_MP_Send_object_was_deleted
  *
  *  This routine is invoked indirectly by the thread queue

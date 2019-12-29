@@ -89,7 +89,7 @@ rtems_status_code rtems_signal_catch(
 }
 
 #if defined(RTEMS_MULTIPROCESSING)
-static void _Signal_Manager_initialization( void )
+static void _Signal_MP_Initialize( void )
 {
   _MPCI_Register_packet_processor(
     MP_PACKET_SIGNAL,
@@ -98,8 +98,8 @@ static void _Signal_Manager_initialization( void )
 }
 
 RTEMS_SYSINIT_ITEM(
-  _Signal_Manager_initialization,
-  RTEMS_SYSINIT_CLASSIC_SIGNAL,
+  _Signal_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_SIGNAL_MP,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 #endif

@@ -21,6 +21,7 @@
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/statusimpl.h>
+#include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(Semaphore_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
@@ -187,7 +188,7 @@ static void _Semaphore_MP_Send_response_packet (
   }
 }
 
-void _Semaphore_MP_Process_packet (
+static void _Semaphore_MP_Process_packet (
   rtems_packet_prefix  *the_packet_prefix
 )
 {
@@ -295,7 +296,6 @@ void _Semaphore_MP_Send_extract_proxy (
 
 }
 
-#if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_mutex_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id
@@ -309,9 +309,7 @@ void  _Semaphore_Core_mutex_mp_support (
      the_thread
    );
 }
-#endif
 
-#if defined(RTEMS_MULTIPROCESSING)
 void  _Semaphore_Core_semaphore_mp_support (
   Thread_Control *the_thread,
   Objects_Id      id
@@ -325,5 +323,17 @@ void  _Semaphore_Core_semaphore_mp_support (
      the_thread
    );
 }
-#endif
-/* end of file */
+
+static void _Semaphore_MP_Initialize( void )
+{
+  _MPCI_Register_packet_processor(
+    MP_PACKET_SEMAPHORE,
+    _Semaphore_MP_Process_packet
+  );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Semaphore_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_SEMAPHORE_MP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

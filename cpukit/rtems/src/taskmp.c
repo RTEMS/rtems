@@ -24,6 +24,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
+#include <rtems/sysinit.h>
 
 /**
  *  The following data structure defines the packet used to perform
@@ -221,7 +222,7 @@ static void _RTEMS_tasks_MP_Send_response_packet (
  *
  */
 
-void _RTEMS_tasks_MP_Process_packet (
+static void _RTEMS_tasks_MP_Process_packet (
   rtems_packet_prefix  *the_packet_prefix
 )
 {
@@ -312,20 +313,16 @@ void _RTEMS_tasks_MP_Process_packet (
   }
 }
 
-/*
- *  _RTEMS_tasks_MP_Send_object_was_deleted
- *
- *  This routine is not neededby the Tasks since a task
- *  cannot be globally deleted.
- *
- */
+static void _RTEMS_tasks_MP_Initialize( void )
+{
+  _MPCI_Register_packet_processor(
+    MP_PACKET_TASKS,
+    _RTEMS_tasks_MP_Process_packet
+  );
+}
 
-/*
- *  _RTEMS_tasks_MP_Send_extract_proxy
- *
- *  This routine is not neededby the Tasks since a task
- *  cannot be globally deleted.
- *
- */
-
-/* end of file */
+RTEMS_SYSINIT_ITEM(
+  _RTEMS_tasks_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_TASKS_MP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

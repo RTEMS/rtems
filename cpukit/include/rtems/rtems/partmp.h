@@ -100,17 +100,6 @@ rtems_status_code _Partition_MP_Return_buffer(
   void     *buffer
 );
 
-/**
- *
- *  @brief Partition_MP_Process_packet
- *
- *  This routine performs the actions specific to this package for
- *  the request from another node.
- */
-void _Partition_MP_Process_packet (
-  rtems_packet_prefix *the_packet_prefix
-);
-
 /*
  *  @brief Partition_MP_Send_object_was_deleted
  *

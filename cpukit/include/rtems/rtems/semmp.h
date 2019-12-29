@@ -95,16 +95,6 @@ rtems_status_code _Semaphore_MP_Obtain(
 rtems_status_code _Semaphore_MP_Release( rtems_id id );
 
 /**
- *  @brief Semaphore MP Process Packet
- *
- *  This routine performs the actions specific to this package for
- *  the request from another node.
- */
-void _Semaphore_MP_Process_packet (
-  rtems_packet_prefix *the_packet_prefix
-);
-
-/**
  *  @brief Semaphore MP Send Object was Deleted
  *
  *  This routine is invoked indirectly by the thread queue

@@ -167,17 +167,6 @@ rtems_status_code _Message_queue_MP_Urgent(
 );
 
 /**
- *
- * @brief _Message_queue_MP_Process_packet
- *
- * This routine performs the actions specific to this package for
- * the request from another node.
- */
-void _Message_queue_MP_Process_packet (
-  rtems_packet_prefix *the_packet_prefix
-);
-
-/**
  *  @brief _Message_queue_MP_Send_object_was_deleted
  *
  *  This routine is invoked indirectly by the thread queue

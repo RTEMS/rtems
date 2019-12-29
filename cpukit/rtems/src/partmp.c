@@ -23,6 +23,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
+#include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(Partition_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
@@ -206,13 +207,7 @@ static void _Partition_MP_Send_response_packet (
   }
 }
 
-/*
- *
- *  _Partition_MP_Process_packet
- *
- */
-
-void _Partition_MP_Process_packet (
+static void _Partition_MP_Process_packet(
   rtems_packet_prefix  *the_packet_prefix
 )
 {
@@ -326,4 +321,16 @@ void _Partition_MP_Send_extract_proxy (
 
 }
 
-/* end of file */
+static void _Partition_MP_Initialize( void )
+{
+  _MPCI_Register_packet_processor(
+    MP_PACKET_PARTITION,
+    _Partition_MP_Process_packet
+  );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Partition_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_PARTITION_MP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

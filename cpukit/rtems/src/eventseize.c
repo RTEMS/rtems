@@ -101,14 +101,14 @@ rtems_status_code _Event_Seize(
 }
 
 #if defined(RTEMS_MULTIPROCESSING)
-static void _Event_Manager_initialization( void )
+static void _Event_MP_Initialize( void )
 {
   _MPCI_Register_packet_processor( MP_PACKET_EVENT, _Event_MP_Process_packet );
 }
 
 RTEMS_SYSINIT_ITEM(
-  _Event_Manager_initialization,
-  RTEMS_SYSINIT_CLASSIC_EVENT,
+  _Event_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_EVENT_MP,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 #endif

@@ -242,17 +242,10 @@ static User_extensions_Control _RTEMS_tasks_User_extensions = {
   }
 };
 
-static void _RTEMS_tasks_Manager_initialization(void)
+static void _RTEMS_tasks_Manager_initialization( void )
 {
   _Thread_Initialize_information( &_RTEMS_tasks_Information );
   _User_extensions_Add_API_set( &_RTEMS_tasks_User_extensions );
-
-#if defined(RTEMS_MULTIPROCESSING)
-  _MPCI_Register_packet_processor(
-    MP_PACKET_TASKS,
-    _RTEMS_tasks_MP_Process_packet
-  );
-#endif
 }
 
 RTEMS_SYSINIT_ITEM(

@@ -24,6 +24,7 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
   MESSAGE_QUEUE_MP_PACKET_SIZE <= MP_PACKET_MINIMUM_PACKET_SIZE,
@@ -361,13 +362,7 @@ static void _Message_queue_MP_Send_response_packet (
   }
 }
 
-/*
- *
- *  _Message_queue_MP_Process_packet
- *
- */
-
-void _Message_queue_MP_Process_packet (
+static void _Message_queue_MP_Process_packet (
   rtems_packet_prefix   *the_packet_prefix
 )
 {
@@ -590,4 +585,16 @@ void  _Message_queue_Core_message_queue_mp_support(
   );
 }
 
-/* end of file */
+static void _Message_queue_MP_Initialize( void )
+{
+  _MPCI_Register_packet_processor(
+    MP_PACKET_MESSAGE_QUEUE,
+    _Message_queue_MP_Process_packet
+  );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Message_queue_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE_MP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

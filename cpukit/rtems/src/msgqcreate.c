@@ -144,21 +144,9 @@ rtems_status_code rtems_message_queue_create(
   return RTEMS_SUCCESSFUL;
 }
 
-static void _Message_queue_Manager_initialization(void)
+static void _Message_queue_Manager_initialization( void )
 {
-   _Objects_Initialize_information( &_Message_queue_Information);
-
-  /*
-   *  Register the MP Process Packet routine.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  _MPCI_Register_packet_processor(
-    MP_PACKET_MESSAGE_QUEUE,
-    _Message_queue_MP_Process_packet
-  );
-#endif
-
+  _Objects_Initialize_information( &_Message_queue_Information);
 }
 
 RTEMS_SYSINIT_ITEM(
