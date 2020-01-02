@@ -242,6 +242,4 @@ void _Clock_Initialize( void )
     printk("Unable to initialize system clock\n");
     rtems_fatal_error_occurred(1);
   }
-
-  return RTEMS_SUCCESSFUL;
-} /* Clock_initialize */
+}
