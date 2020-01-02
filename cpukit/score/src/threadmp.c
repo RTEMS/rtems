@@ -139,7 +139,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
     receive_packet = _MPCI_Receive_server_tcb->receive_packet;
     source_tid = receive_packet->source_tid;
 
-    executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
+    executing->Wait.return_code = STATUS_PROXY_BLOCKING;
 
     the_proxy->receive_packet = receive_packet;
     the_proxy->Object.id = source_tid;

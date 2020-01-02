@@ -50,12 +50,6 @@ extern "C" {
  */
 
 /**
- *  The following structure contains the information necessary to manage
- *  a thread which it is  waiting for a resource.
- */
-#define THREAD_STATUS_PROXY_BLOCKING 0x1111111
-
-/**
  *  Self for the GNU Ada Run-Time
  */
 extern void *rtems_ada_self;
@@ -1050,23 +1044,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
 )
 {
   return ( the_thread == NULL );
-}
-
-/**
- * @brief Checks if proxy is blocking.
- *
- * status which indicates that a proxy is blocking, and false otherwise.
- *
- * @param code The code for the verification.
- *
- * @retval true Status indicates that a proxy is blocking.
- * @retval false Status indicates that a proxy is not blocking.
- */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_proxy_blocking (
-  uint32_t   code
-)
-{
-  return (code == THREAD_STATUS_PROXY_BLOCKING);
 }
 
 /**
