@@ -109,7 +109,9 @@ bool _Thread_queue_Extract_priority_helper(
   }
 
   mutex = _Thread_Dequeue_priority_node( &the_thread->Priority_node );
-  _Thread_Evaluate_priority( mutex->holder );
+  if ( mutex != NULL ) {
+    _Thread_Evaluate_priority( mutex->holder );
+  }
 
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
     _ISR_Enable( level );

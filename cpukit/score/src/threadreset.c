@@ -48,6 +48,7 @@ void _Thread_Reset(
 )
 {
   CORE_mutex_Control *mutex;
+  ISR_Level              level;
 
   the_thread->resource_count   = 0;
   #if defined(RTEMS_ITRON_API)
@@ -66,18 +67,23 @@ void _Thread_Reset(
       (void) _Watchdog_Remove( &the_thread->Timer );
   }
 
+  _ISR_Disable( level );
   if ( the_thread->Priority_node.waiting_to_hold != NULL ) {
     mutex = _Thread_Dequeue_priority_node( &the_thread->Priority_node );
     _Thread_Evaluate_priority( mutex->holder );
   }
+  _ISR_Enable( level );
 
+  _ISR_Disable( level );
   while ( !_Chain_Is_empty( &the_thread->Priority_node.Inherited_priorities ) ) {
     _Thread_Dequeue_priority_node(
       ((Thread_Priority_node*)_Chain_First(
         &the_thread->Priority_node.Inherited_priorities
       ))
     );
+    _ISR_Flash( level );
   }
+  _ISR_Enable( level );
 
   if ( the_thread->Priority_node.current_priority != the_thread->Start.initial_priority ) {
     the_thread->Priority_node.real_priority = the_thread->Start.initial_priority;
