@@ -41,6 +41,7 @@ void _Objects_Initialize_information(
   maximum_id = information->maximum_id;
 
 #if defined(RTEMS_MULTIPROCESSING)
+  maximum_id &= ~OBJECTS_NODE_MASK;
   maximum_id |= _Objects_Local_node << OBJECTS_NODE_START_BIT;
   information->maximum_id = maximum_id;
 #endif
