@@ -49,9 +49,11 @@ typedef enum {
 
 /**
  * @brief Macro to build a status code from Classic and POSIX API parts.
+ *
+ * Uses a multiplication to preserve the signedness of the POSIX status.
  */
 #define STATUS_BUILD( classic_status, posix_status ) \
-  ( ( ( (unsigned int) ( posix_status ) ) << 8 ) | ( classic_status ) )
+  ( ( ( posix_status ) * 256 ) | ( classic_status ) )
 
 /**
  * @brief Macro to get the Classic API status code.
@@ -62,10 +64,10 @@ typedef enum {
 /**
  * @brief Macro to get the POSIX API status code.
  *
- * Performs an arithmetic shift to reconstruct a negative POSIX status.
+ * Uses a division to preserve the signedness of the POSIX status.
  */
 #define STATUS_GET_POSIX( status ) \
-  ( ( ( (int) ( status ) ) | 0xff ) >> 8 )
+  ( ( status ) / 256 )
 
 /**
  * @brief Status codes.
