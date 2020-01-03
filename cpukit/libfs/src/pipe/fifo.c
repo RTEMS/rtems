@@ -355,8 +355,6 @@ ssize_t pipe_write(
       pipe->waitingWriters ++;
       PIPE_WRITEWAIT(pipe);
       pipe->waitingWriters --;
-      if (ret != 0)
-        goto out_locked;
 
       if (pipe->Readers == 0) {
         ret = -EPIPE;
