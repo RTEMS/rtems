@@ -7,7 +7,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 1989, 2007 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2020 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,31 +38,15 @@
 #include <rtems/score/objectdata.h>
 #include <rtems/score/objectimpl.h>
 
+static void _Objects_Do_extend_information( Objects_Information *information )
+{
+  _Objects_Extend_information( information );
+}
+
 Objects_Control *_Objects_Allocate_unlimited( Objects_Information *information )
 {
-  Objects_Control *the_object;
-
-  _Assert( _Objects_Is_auto_extend( information ) );
-
-  /*
-   *  OK.  The manager should be initialized and configured to have objects.
-   *  With any luck, it is safe to attempt to allocate an object.
-   */
-  the_object = _Objects_Get_inactive( information );
-
-  /*
-   *  If the list is empty then we are out of objects and need to
-   *  extend information base.
-   */
-
-  if ( the_object == NULL ) {
-    _Objects_Extend_information( information );
-    the_object = _Objects_Get_inactive( information );
-  }
-
-  if ( the_object != NULL ) {
-    _Objects_Activate_unlimited( information, the_object );
-  }
-
-  return the_object;
+  return _Objects_Allocate_with_extend(
+    information,
+    _Objects_Do_extend_information
+  );
 }

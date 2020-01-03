@@ -967,6 +967,38 @@ RTEMS_INLINE_ROUTINE void _Objects_Activate_unlimited(
   }
 }
 
+/**
+ * @brief Allocate an object and extend the objects information on demand.
+ *
+ * This function must be only used in case this objects information supports
+ * unlimited objects.
+ *
+ * @param information The object information block.
+ * @param extend The object information extend handler.
+ */
+RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_with_extend(
+  Objects_Information   *information,
+  void                ( *extend )( Objects_Information * )
+)
+{
+  Objects_Control *the_object;
+
+  _Assert( _Objects_Is_auto_extend( information ) );
+
+  the_object = _Objects_Get_inactive( information );
+
+  if ( the_object == NULL ) {
+    ( *extend )( information );
+    the_object = _Objects_Get_inactive( information );
+  }
+
+  if ( the_object != NULL ) {
+    _Objects_Activate_unlimited( information, the_object );
+  }
+
+  return the_object;
+}
+
 /** @} */
 
 #ifdef __cplusplus
