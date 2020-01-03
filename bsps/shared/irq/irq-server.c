@@ -539,6 +539,7 @@ rtems_status_code rtems_interrupt_server_initialize(
 
 #if defined(RTEMS_SMP)
       if (cpu_index > 0) {
+        bsp_interrupt_server_instances = instances;
         return RTEMS_SUCCESSFUL;
       }
 
