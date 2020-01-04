@@ -63,11 +63,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-exc
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/irq/irq.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/arm-pl011.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/console-config.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/console_select.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/usart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fb.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fbcons.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/outch.c

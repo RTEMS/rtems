@@ -18,6 +18,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/termiostypes.h>
 
 #include <stdlib.h>
 
@@ -30,28 +31,20 @@
 #include <bsp/rpi-fb.h>
 
 /*
- *  fbcons_init
- *
- *  This function initializes the fb console to a quiecsent state.
- */
-static void fbcons_init( int minor )
-{
-}
-
-/*
  *  fbcons_open
  *
  *  This function opens a port for communication.
  *
  *  Default state is 9600 baud, 8 bits, No parity, and 1 stop bit.
  */
-static int fbcons_open(
-  int   major,
-  int   minor,
-  void *arg
+static bool fbcons_open(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
+  rtems_libio_open_close_args_t *args
 )
 {
-  return RTEMS_SUCCESSFUL;
+  return true;
 }
 
 /*
@@ -59,13 +52,12 @@ static int fbcons_open(
  *
  *  This function shuts down the requested port.
  */
-static int fbcons_close(
-  int   major,
-  int   minor,
-  void *arg
+static void fbcons_close(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  rtems_libio_open_close_args_t *args
 )
 {
-  return ( RTEMS_SUCCESSFUL );
 }
 
 /*
@@ -73,8 +65,8 @@ static int fbcons_close(
  *
  *  This routine polls out the requested character.
  */
-static void fbcons_write_polled(
-  int  minor,
+void fbcons_write_polled(
+  rtems_termios_device_context *base,
   char c
 )
 {
@@ -90,8 +82,8 @@ static void fbcons_write_polled(
  *  Console Termios output entry point when using polled output.
  *
  */
-static ssize_t fbcons_write_support_polled(
-  int         minor,
+static void fbcons_write_support_polled(
+  rtems_termios_device_context *base,
   const char *buf,
   size_t      len
 )
@@ -102,14 +94,9 @@ static ssize_t fbcons_write_support_polled(
    * poll each byte in the string out of the port.
    */
   while ( nwrite < len ) {
-    fbcons_write_polled( minor, *buf++ );
+    fbcons_write_polled( base, *buf++ );
     nwrite++;
   }
-
-  /*
-   * return the number of bytes written.
-   */
-  return nwrite;
 }
 
 /*
@@ -117,7 +104,9 @@ static ssize_t fbcons_write_support_polled(
  *
  *  Console Termios polling input entry point.
  */
-static int fbcons_inbyte_nonblocking_polled( int minor )
+static int fbcons_inbyte_nonblocking_polled(
+  rtems_termios_device_context *base
+)
 {
   // if( rtems_kbpoll() ) {
   //   int c = getch();
@@ -133,15 +122,17 @@ static int fbcons_inbyte_nonblocking_polled( int minor )
  *  This function sets the UART channel to reflect the requested termios
  *  port settings.
  */
-static int fbcons_set_attributes(
-  int                   minor,
+static bool fbcons_set_attributes(
+  rtems_termios_device_context *base,
   const struct termios *t
 )
 {
-  return 0;
+  return true;
 }
 
-bool fbcons_probe( int minor )
+bool fbcons_probe(
+  rtems_termios_device_context *context
+)
 {
   // rtems_status_code status;
   static bool firstTime = true;
@@ -163,15 +154,12 @@ bool fbcons_probe( int minor )
   return ret;
 }
 
-const console_fns fbcons_fns =
+const rtems_termios_device_handler fbcons_fns =
 {
-  .deviceProbe = libchip_serial_default_probe,     /* deviceProbe */
-  .deviceFirstOpen = fbcons_open,                 /* deviceFirstOpen */
-  .deviceLastClose = fbcons_close,                /* deviceLastClose */
-  .deviceRead = fbcons_inbyte_nonblocking_polled, /* deviceRead */
-  .deviceWrite = fbcons_write_support_polled,     /* deviceWrite */
-  .deviceInitialize = fbcons_init,                /* deviceInitialize */
-  .deviceWritePolled = fbcons_write_polled,       /* deviceWritePolled */
-  .deviceSetAttributes = fbcons_set_attributes,   /* deviceSetAttributes */
-  .deviceOutputUsesInterrupts = FALSE,           /* deviceOutputUsesInterrupts*/
+  .first_open = fbcons_open,
+  .last_close = fbcons_close,
+  .poll_read = fbcons_inbyte_nonblocking_polled,
+  .write = fbcons_write_support_polled,
+  .set_attributes = fbcons_set_attributes,
+  .mode = TERMIOS_POLLED
 };

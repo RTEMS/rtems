@@ -53,12 +53,24 @@
  */
 
 #if (BSP_IS_RPI2 == 1)
-   #define RPI_PERIPHERAL_BASE      0x3F000000
+  #define RPI_PERIPHERAL_BASE    0x3F000000
+  #define BASE_OFFSET            0X3F000000
 #else
-   #define RPI_PERIPHERAL_BASE      0x20000000
+  #define RPI_PERIPHERAL_BASE    0x20000000
+  #define BASE_OFFSET            0X5E000000
 #endif
 
-#define RPI_PERIPHERAL_SIZE         0x01000000
+#define RPI_PERIPHERAL_SIZE      0x01000000
+
+/**
+ * @name Bus to Physical address translation
+ *       Macro.
+ * @{
+ */
+
+#define BUS_TO_PHY(x)            ((x) - BASE_OFFSET)
+
+/** @} */
 
 /**
  * @name Internal ARM Timer Registers
@@ -183,42 +195,6 @@
 #define AUX_MU_BAUD_REG          (BCM2835_AUX_BASE + 0x68)
 
 /** @} */
-
-/**
- * @name UART 0 (PL011) Registers
- *
- * @{
- */
-
-#define BCM2835_UART0_BASE       (RPI_PERIPHERAL_BASE + 0x201000)
-
-#define BCM2835_UART0_DR         (BCM2835_UART0_BASE + 0x00)
-#define BCM2835_UART0_RSRECR     (BCM2835_UART0_BASE + 0x04)
-#define BCM2835_UART0_FR         (BCM2835_UART0_BASE + 0x18)
-#define BCM2835_UART0_ILPR       (BCM2835_UART0_BASE + 0x20)
-#define BCM2835_UART0_IBRD       (BCM2835_UART0_BASE + 0x24)
-#define BCM2835_UART0_FBRD       (BCM2835_UART0_BASE + 0x28)
-#define BCM2835_UART0_LCRH       (BCM2835_UART0_BASE + 0x2C)
-#define BCM2835_UART0_CR         (BCM2835_UART0_BASE + 0x30)
-#define BCM2835_UART0_IFLS       (BCM2835_UART0_BASE + 0x34)
-#define BCM2835_UART0_IMSC       (BCM2835_UART0_BASE + 0x38)
-#define BCM2835_UART0_RIS        (BCM2835_UART0_BASE + 0x3C)
-#define BCM2835_UART0_MIS        (BCM2835_UART0_BASE + 0x40)
-#define BCM2835_UART0_ICR        (BCM2835_UART0_BASE + 0x44)
-#define BCM2835_UART0_DMACR      (BCM2835_UART0_BASE + 0x48)
-#define BCM2835_UART0_ITCR       (BCM2835_UART0_BASE + 0x80)
-#define BCM2835_UART0_ITIP       (BCM2835_UART0_BASE + 0x84)
-#define BCM2835_UART0_ITOP       (BCM2835_UART0_BASE + 0x88)
-#define BCM2835_UART0_TDR        (BCM2835_UART0_BASE + 0x8C)
-
-#define BCM2835_UART0_MIS_RX    0x10
-#define BCM2835_UART0_MIS_TX    0x20
-#define BCM2835_UART0_IMSC_RX   0x10
-#define BCM2835_UART0_IMSC_TX   0x20
-#define BCM2835_UART0_FR_RXFE   0x10
-#define BCM2835_UART0_FR_TXFF   0x20
-#define BCM2835_UART0_ICR_RX    0x10
-#define BCM2835_UART0_ICR_TX    0x20
 
 /** @} */
 

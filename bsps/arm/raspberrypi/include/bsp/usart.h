@@ -32,9 +32,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define USART0_DEFAULT_BAUD 115000
-
-extern const console_fns bcm2835_usart_fns;
+#define PL011_DEFAULT_BAUD 115000
+#define BCM2835_PL011_BASE (RPI_PERIPHERAL_BASE + 0x201000)
 
 #ifdef __cplusplus
 }

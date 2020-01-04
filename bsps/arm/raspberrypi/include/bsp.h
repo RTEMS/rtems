@@ -54,6 +54,8 @@ extern "C" {
 #define BSP_CONSOLE_UART0   0
 #define BSP_CONSOLE_FB      1
 
+void *raspberrypi_get_reg_of_node(const void *fdt, int node);
+
 void rpi_init_cmdline(void);
 const char *rpi_cmdline_get_cached(void);
 const char *rpi_cmdline_get_raw(void);

@@ -24,6 +24,8 @@
 #include <bsp/raspberrypi.h>
 #include <bsp/vc.h>
 
+#include <libfdt.h>
+
 static const struct {
     uint32_t code;
     const char* label;
@@ -85,6 +87,19 @@ static const char* rpi_mem[] =
 };
 
 #define NUMOF(_s) (sizeof(_s) / sizeof(_s[0]))
+
+void *raspberrypi_get_reg_of_node(const void *fdt, int node)
+{
+  int len;
+  const uint32_t *val;
+
+  val = fdt_getprop(fdt, node, "reg", &len);
+  if (val == NULL || len < 4) {
+    return NULL;
+  }
+
+  return (BUS_TO_PHY((void *) fdt32_to_cpu(val[0])));
+}
 
 void bsp_start(void)
 {

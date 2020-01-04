@@ -20,6 +20,7 @@
 #define _FBCONS_H_
 
 #include <libchip/serial.h>
+#include <rtems/termiostypes.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,12 +34,25 @@ extern "C" {
 
 #define FB_CONSOLE 0x50492835
 
-bool fbcons_probe( int minor );
+bool fbcons_probe(
+  rtems_termios_device_context *base
+ );
+
+void fbcons_write_polled(
+  rtems_termios_device_context *base,
+  char c
+);
+
+void output_char_fb(char c);
+
+typedef struct {
+    rtems_termios_device_context base;
+} rpi_fb_context ;
 
 /*
  * Driver function table
  */
-extern const console_fns fbcons_fns;
+extern const rtems_termios_device_handler fbcons_fns;
 
 #ifdef __cplusplus
 }
