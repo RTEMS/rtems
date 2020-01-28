@@ -44,7 +44,7 @@ static const T_config config = {
   .name = "SMPMultiCast",
   .putchar = T_putchar_default,
   .verbosity = T_VERBOSE,
-  .now = T_now
+  .now = T_now_clock
 };
 
 typedef struct {
