@@ -95,7 +95,7 @@ void *POSIX_Init(
     puts( "ERROR -- TSR DID NOT FIRE" );
     rtems_test_exit( 0 );
   }
-  if ( (tsr_status != -1) || (tsr_errno != ENOMEM) ) {
+  if ( (tsr_status != -1) || (tsr_errno != EAGAIN) ) {
     puts( "ERROR -- TSR DID NOT RETURN CORRECT STATUS" );
     printf(
       "status=%d errno=%d --> %s\n",
