@@ -40,11 +40,11 @@ T_do_check_task_context(void)
 {
 	uint32_t v;
 
-	v = _Thread_Dispatch_get_disable_level();
+	v = _Per_CPU_Get_snapshot()->thread_dispatch_disable_level;
 	T_check_true(v == 0, NULL,
 	    "Wrong thread dispatch disabled level (%" PRIu32 ")", v);
 
-	v = _ISR_Nest_level;
+	v = _Per_CPU_Get_snapshot()->isr_nest_level;
 	T_check_true(v == 0, NULL,
 	    "Wrong ISR nest level (%" PRIu32 ")", v);
 
