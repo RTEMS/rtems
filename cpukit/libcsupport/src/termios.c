@@ -1337,23 +1337,16 @@ rtems_status_code rtems_termios_register_isig_handler(
 
 /**
  * @brief Type returned by all input processing (iproc) methods
- */ 
+ */
 typedef enum {
   /**
-   * This indicates that the input character was processed
-   * and the results were placed into the buffer.
+   * This indicates that the input processing can continue.
    */
-  RTEMS_TERMIOS_IPROC_IN_BUFFER,
+  RTEMS_TERMIOS_IPROC_CONTINUE,
   /**
-   * This indicates that the input character was processed
-   * and the result did not go into the buffer.
+   * This indicates that the input processing is done.
    */
-  RTEMS_TERMIOS_IPROC_WAS_PROCESSED,
-  /**
-   * This indicates that the input character was not processed and
-   * subsequent processing is required.
-   */
-  RTEMS_TERMIOS_IPROC_WAS_NOT_PROCESSED,
+  RTEMS_TERMIOS_IPROC_DONE,
   /**
    * This indicates that the character was processed and determined
    * to be one that requires a signal to be raised (e.g. VINTR or
@@ -1361,7 +1354,7 @@ typedef enum {
    * occur. There is no further processing of this character required and
    * the pending read() operation should be interrupted.
    */
-  RTEMS_TERMIOS_IPROC_INTERRUPT_READ
+  RTEMS_TERMIOS_IPROC_INTERRUPT
 } rtems_termios_iproc_status_code;
 
 /*
@@ -1379,12 +1372,10 @@ iproc (unsigned char c, struct rtems_termios_tty *tty)
       rtems_termios_isig_status_code rc;
       rc = (*termios_isig_handler)(c, tty);
       if (rc == RTEMS_TERMIOS_ISIG_INTERRUPT_READ) {
-         return RTEMS_TERMIOS_IPROC_INTERRUPT_READ;
+         return RTEMS_TERMIOS_IPROC_INTERRUPT;
       }
-      if (rc == RTEMS_TERMIOS_ISIG_WAS_PROCESSED) {
-         return RTEMS_TERMIOS_IPROC_IN_BUFFER;
-      }
-      _Assert(rc == RTEMS_TERMIOS_ISIG_WAS_NOT_PROCESSED);
+
+      return RTEMS_TERMIOS_IPROC_CONTINUE;
     }
   }
 
@@ -1394,25 +1385,25 @@ iproc (unsigned char c, struct rtems_termios_tty *tty)
   if ((c != '\0') && (tty->termios.c_lflag & ICANON)) {
     if (c == tty->termios.c_cc[VERASE]) {
       erase (tty, 0);
-      return RTEMS_TERMIOS_IPROC_WAS_PROCESSED;
+      return RTEMS_TERMIOS_IPROC_CONTINUE;
     }
     else if (c == tty->termios.c_cc[VKILL]) {
       erase (tty, 1);
-      return RTEMS_TERMIOS_IPROC_WAS_PROCESSED;
+      return RTEMS_TERMIOS_IPROC_CONTINUE;
     }
     else if (c == tty->termios.c_cc[VEOF]) {
-      return RTEMS_TERMIOS_IPROC_IN_BUFFER;
+      return RTEMS_TERMIOS_IPROC_DONE;
     } else if (c == '\n') {
       if (tty->termios.c_lflag & (ECHO | ECHONL))
         echo (c, tty);
       tty->cbuf[tty->ccount++] = c;
-      return RTEMS_TERMIOS_IPROC_IN_BUFFER;
+      return RTEMS_TERMIOS_IPROC_DONE;
     } else if ((c == tty->termios.c_cc[VEOL]) ||
                (c == tty->termios.c_cc[VEOL2])) {
       if (tty->termios.c_lflag & ECHO)
         echo (c, tty);
       tty->cbuf[tty->ccount++] = c;
-      return RTEMS_TERMIOS_IPROC_IN_BUFFER;
+      return RTEMS_TERMIOS_IPROC_DONE;
     }
   }
 
@@ -1425,9 +1416,8 @@ iproc (unsigned char c, struct rtems_termios_tty *tty)
     if (tty->termios.c_lflag & ECHO)
       echo (c, tty);
     tty->cbuf[tty->ccount++] = c;
-    return RTEMS_TERMIOS_IPROC_IN_BUFFER;
   }
-  return RTEMS_TERMIOS_IPROC_WAS_NOT_PROCESSED;
+  return RTEMS_TERMIOS_IPROC_CONTINUE;
 }
 
 /*
@@ -1456,7 +1446,7 @@ static rtems_termios_iproc_status_code
 siprocPoll (unsigned char c, rtems_termios_tty *tty)
 {
   if (c == '\r' && (tty->termios.c_iflag & IGNCR) != 0) {
-    return RTEMS_TERMIOS_IPROC_WAS_NOT_PROCESSED;
+    return RTEMS_TERMIOS_IPROC_CONTINUE;
   }
 
   /*
@@ -1476,7 +1466,6 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 {
   int                             n;
   rtems_termios_iproc_status_code rc;
-  rtems_termios_iproc_status_code retval = RTEMS_TERMIOS_IPROC_WAS_PROCESSED;
 
   if (tty->termios.c_lflag & ICANON) {
     for (;;) {
@@ -1485,12 +1474,8 @@ fillBufferPoll (struct rtems_termios_tty *tty)
         rtems_task_wake_after (1);
       } else {
         rc = siprocPoll (n, tty);
-        if (rc == RTEMS_TERMIOS_IPROC_IN_BUFFER) {
-          break;
-        }
-        if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT_READ) {
-          retval = RTEMS_TERMIOS_IPROC_INTERRUPT_READ;
-          break;
+        if (rc != RTEMS_TERMIOS_IPROC_CONTINUE) {
+          return rc;
         }
       }
     }
@@ -1519,9 +1504,8 @@ fillBufferPoll (struct rtems_termios_tty *tty)
         rtems_task_wake_after (1);
       } else {
         rc = siprocPoll (n, tty);
-        if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT_READ) {
-          retval = RTEMS_TERMIOS_IPROC_INTERRUPT_READ;
-          break;
+        if (rc != RTEMS_TERMIOS_IPROC_CONTINUE) {
+          return rc;
         }
         if (tty->ccount >= tty->termios.c_cc[VMIN])
           break;
@@ -1530,7 +1514,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
       }
     }
   }
-  return retval;
+  return RTEMS_TERMIOS_IPROC_CONTINUE;
 }
 
 /*
@@ -1587,20 +1571,17 @@ fillBufferQueue (struct rtems_termios_tty *tty)
       /* continue processing new character */
       if (tty->termios.c_lflag & ICANON) {
         rc = siproc (c, tty);
-        /* If the read() should be interrupted, return */
-        if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT_READ) {
-          return RTEMS_TERMIOS_IPROC_INTERRUPT_READ;
-        }
-	/* In canonical mode, input is made available line by line */
-        if (rc == RTEMS_TERMIOS_IPROC_IN_BUFFER) {
-          return RTEMS_TERMIOS_IPROC_IN_BUFFER;
+        if (rc != RTEMS_TERMIOS_IPROC_CONTINUE) {
+          return rc;
         }
       } else {
         rc = siproc (c, tty);
-        /* If the read() should be interrupted, return */
-        if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT_READ) {
-          return RTEMS_TERMIOS_IPROC_INTERRUPT_READ;
+
+        /* in non-canonical mode only stop on interrupt */
+        if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT) {
+          return rc;
         }
+
         if (tty->ccount >= tty->termios.c_cc[VMIN])
           wait = false;
       }
@@ -1635,7 +1616,7 @@ fillBufferQueue (struct rtems_termios_tty *tty)
       }
     }
   }
-  return RTEMS_TERMIOS_IPROC_WAS_PROCESSED;
+  return RTEMS_TERMIOS_IPROC_CONTINUE;
 }
 
 static rtems_status_code
@@ -1647,7 +1628,7 @@ rtems_termios_read_tty (
 )
 {
   uint32_t                         count;
-  rtems_termios_iproc_status_code  rc = RTEMS_TERMIOS_IPROC_WAS_PROCESSED;
+  rtems_termios_iproc_status_code  rc;
 
   count = initial_count;
 
@@ -1658,6 +1639,8 @@ rtems_termios_read_tty (
       rc = fillBufferPoll (tty);
     else
       rc = fillBufferQueue (tty);
+  } else {
+    rc = RTEMS_TERMIOS_IPROC_CONTINUE;
   }
 
   /*
@@ -1675,7 +1658,7 @@ rtems_termios_read_tty (
    * was interrupted. The isig handler can do nothing, have POSIX behavior
    * and cause a signal, or a user defined action.
    */
-  if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT_READ) {
+  if (rc == RTEMS_TERMIOS_IPROC_INTERRUPT) {
     return RTEMS_INTERRUPTED;
   }
 
