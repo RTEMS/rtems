@@ -37,7 +37,14 @@
 
 RTEMS_LINKER_RWSET(
   _Per_CPU_Data,
-  RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES ) char
+#if defined(RTEMS_SMP)
+  /*
+   * In SMP configurations, prevent false cache line sharing of per-processor
+   * data with a proper alignment.
+   */
+  RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
+#endif
+  char
 );
 
 Heap_Control _Workspace_Area;
