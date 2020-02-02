@@ -65,5 +65,5 @@ static void rtems_counter_sysinit( void )
 RTEMS_SYSINIT_ITEM(
   rtems_counter_sysinit,
   RTEMS_SYSINIT_CPU_COUNTER,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

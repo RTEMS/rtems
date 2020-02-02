@@ -80,5 +80,5 @@ static void erc32_install_inter_processor_interrupt( void )
 RTEMS_SYSINIT_ITEM(
   erc32_install_inter_processor_interrupt,
   RTEMS_SYSINIT_BSP_PRE_DRIVERS,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

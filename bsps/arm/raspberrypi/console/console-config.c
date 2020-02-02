@@ -147,5 +147,5 @@ BSP_polling_getchar_function_type BSP_poll_char = NULL;
 RTEMS_SYSINIT_ITEM(
   uart_probe,
   RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

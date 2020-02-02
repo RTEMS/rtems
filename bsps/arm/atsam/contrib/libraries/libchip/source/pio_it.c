@@ -250,7 +250,7 @@ static void PIO_SysInitializeInterrupts(void)
 }
 
 RTEMS_SYSINIT_ITEM(PIO_SysInitializeInterrupts, RTEMS_SYSINIT_BSP_START,
-    RTEMS_SYSINIT_ORDER_LAST);
+    RTEMS_SYSINIT_ORDER_LAST_BUT_5);
 
 /**
  * Configures a PIO or a group of PIO to generate an interrupt on status

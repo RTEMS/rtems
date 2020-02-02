@@ -60,5 +60,5 @@ static void bbb_i2c_0_initialize(void)
 RTEMS_SYSINIT_ITEM(
   bbb_i2c_0_initialize,
   RTEMS_SYSINIT_LAST,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

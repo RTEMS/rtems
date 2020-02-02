@@ -322,5 +322,5 @@ rtems_status_code console_initialize(
 RTEMS_SYSINIT_ITEM(
   riscv_console_probe,
   RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

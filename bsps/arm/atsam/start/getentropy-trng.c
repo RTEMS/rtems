@@ -57,5 +57,5 @@ int getentropy(void *ptr, size_t n)
 RTEMS_SYSINIT_ITEM(
   atsam_trng_enable,
   RTEMS_SYSINIT_DEVICE_DRIVERS,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

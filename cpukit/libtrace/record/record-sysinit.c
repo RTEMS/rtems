@@ -128,5 +128,5 @@ static void _Record_Initialize_watchdogs( void )
 RTEMS_SYSINIT_ITEM(
   _Record_Initialize_watchdogs,
   RTEMS_SYSINIT_DEVICE_DRIVERS,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

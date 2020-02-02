@@ -126,5 +126,5 @@ BSP_polling_getchar_function_type BSP_poll_char = zynqmp_debug_console_in;
 RTEMS_SYSINIT_ITEM(
   zynqmp_debug_console_init,
   RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

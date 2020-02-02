@@ -65,5 +65,5 @@ static void getentropy_init(void)
 RTEMS_SYSINIT_ITEM(
   getentropy_init,
   RTEMS_SYSINIT_DEVICE_DRIVERS,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );
