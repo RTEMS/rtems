@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2020 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -176,7 +176,7 @@ typedef enum {
   RTEMS_SYSINIT_ITEM( \
     x##_last, \
     x, \
-    RTEMS_SYSINIT_ORDER_LAST \
+    RTEMS_SYSINIT_ORDER_LAST_BUT_1 \
   ); \
   static void x##_last(void)
 
@@ -980,6 +980,8 @@ static void *POSIX_Init(void *arg)
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_STACK_CHECKER_ENABLED
+
+#define CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

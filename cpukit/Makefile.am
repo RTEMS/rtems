@@ -1052,6 +1052,7 @@ librtemscpu_a_SOURCES += sapi/src/rbheap.c
 librtemscpu_a_SOURCES += sapi/src/rbtree.c
 librtemscpu_a_SOURCES += sapi/src/rbtreefind.c
 librtemscpu_a_SOURCES += sapi/src/sapirbtreeinsert.c
+librtemscpu_a_SOURCES += sapi/src/sysinitverbose.c
 librtemscpu_a_SOURCES += sapi/src/tcsimpleinstall.c
 librtemscpu_a_SOURCES += sapi/src/version.c
 

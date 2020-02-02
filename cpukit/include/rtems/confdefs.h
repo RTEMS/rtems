@@ -2845,6 +2845,14 @@ struct _reent *__getreent(void)
       RTEMS_SYSINIT_ORDER_MIDDLE
     );
   #endif
+
+  #ifdef CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
+    RTEMS_SYSINIT_ITEM(
+      _Sysinit_Verbose,
+      RTEMS_SYSINIT_RECORD,
+      RTEMS_SYSINIT_ORDER_LAST
+    );
+  #endif
 #endif
 
 #if defined(RTEMS_SMP)

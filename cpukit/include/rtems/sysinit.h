@@ -133,6 +133,12 @@ typedef struct {
 #define RTEMS_SYSINIT_ITEM( handler, module, order ) \
   _RTEMS_SYSINIT_ITEM( handler, module, order )
 
+/**
+ * @brief System initialization handler to enable a verbose system
+ * initialization.
+ */
+void _Sysinit_Verbose( void );
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
