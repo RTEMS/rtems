@@ -90,7 +90,6 @@ void _Workspace_Handler_initialization(
 {
   Heap_Initialization_or_extend_handler init_or_extend;
   uintptr_t                             remaining;
-  bool                                  do_zero;
   bool                                  unified;
   uintptr_t                             page_size;
   uintptr_t                             overhead;
@@ -101,7 +100,6 @@ void _Workspace_Handler_initialization(
   remaining += _Workspace_Space_for_TLS( page_size );
 
   init_or_extend = _Heap_Initialize;
-  do_zero = rtems_configuration_get_do_zero_of_workspace();
   unified = rtems_configuration_get_unified_work_area();
   overhead = _Heap_Area_overhead( page_size );
 
@@ -111,10 +109,6 @@ void _Workspace_Handler_initialization(
 
     area = _Memory_Get_area( mem, i );
     free_size = _Memory_Get_free_size( area );
-
-    if ( do_zero ) {
-      memset( _Memory_Get_free_begin( area ), 0, free_size );
-    }
 
     if ( free_size > overhead ) {
       uintptr_t space_available;

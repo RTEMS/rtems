@@ -29,6 +29,7 @@
 
 #include <rtems/score/object.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/memory.h>
 #include <rtems/score/userextdata.h>
 #include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/config.h>
@@ -148,14 +149,6 @@ typedef struct {
    */
   rtems_stack_free_hook          stack_free_hook;
 
-  /** 
-   * If this element is TRUE, then RTEMS will zero the Executive Workspace.
-   * When this element is FALSE, it is assumed that the BSP or invoking
-   * environment has ensured that memory was cleared before RTEMS was
-   * invoked.
-   */
-  bool                           do_zero_of_workspace;
-
   /**
    * @brief Specifies if a unified work area is used or not.
    *
@@ -241,7 +234,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
   * RTEMS is responsible for zeroing the Executive Workspace.
   */
 #define rtems_configuration_get_do_zero_of_workspace() \
-   (Configuration.do_zero_of_workspace)
+  _Memory_Zero_before_use
 
 #define rtems_configuration_get_number_of_initial_extensions() \
   ((uint32_t) _User_extensions_Initial_count)

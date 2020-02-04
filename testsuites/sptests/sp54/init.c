@@ -50,6 +50,8 @@ static void *Init( uintptr_t ignored )
   );
   fatal_directive_status( status, RTEMS_INVALID_NAME, "rtems_task_ident" );
 
+  rtems_test_assert( rtems_configuration_get_do_zero_of_workspace() );
+
   TEST_END();
   rtems_test_exit(0);
 }

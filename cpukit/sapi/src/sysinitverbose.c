@@ -48,6 +48,7 @@ RTEMS_LINKER_RWSET_ITEM_DECLARE(
 SYSINIT_VERBOSE( BSP_EARLY );
 SYSINIT_VERBOSE( MEMORY );
 SYSINIT_VERBOSE( DIRTY_MEMORY );
+SYSINIT_VERBOSE( ZERO_MEMORY );
 SYSINIT_VERBOSE( ISR_STACK );
 SYSINIT_VERBOSE( PER_CPU_DATA );
 SYSINIT_VERBOSE( SBRK );
@@ -192,9 +193,16 @@ static void _Sysinit_Verbose_DIRTY_MEMORY( void )
   }
 }
 
+static void _Sysinit_Verbose_ZERO_MEMORY( void )
+{
+  if ( !SYSINIT_IS_ADJACENT( DIRTY_MEMORY, ZERO_MEMORY ) ) {
+    printk( "sysinit: ZERO_MEMORY: done\n" );
+  }
+}
+
 static void _Sysinit_Verbose_ISR_STACK( void )
 {
-  if ( !SYSINIT_IS_ADJACENT( DIRTY_MEMORY, ISR_STACK ) ) {
+  if ( !SYSINIT_IS_ADJACENT( ZERO_MEMORY, ISR_STACK ) ) {
     printk( "sysinit: ISR_STACK: done\n" );
   }
 }

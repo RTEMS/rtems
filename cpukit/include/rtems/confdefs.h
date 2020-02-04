@@ -2778,11 +2778,6 @@ struct _reent *__getreent(void)
     CONFIGURE_TASK_STACK_ALLOCATOR_INIT,      /* stack allocator init */
     CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
     CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
-    #ifdef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY /* true to clear memory */
-      true,
-    #else
-      false,
-    #endif
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
       true,
     #else
@@ -2806,6 +2801,16 @@ struct _reent *__getreent(void)
       _CONFIGURE_MAXIMUM_PROCESSORS,
     #endif
   };
+
+  #ifdef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
+    const bool _Memory_Zero_before_use = true;
+
+    RTEMS_SYSINIT_ITEM(
+      _Memory_Zero_free_areas,
+      RTEMS_SYSINIT_ZERO_MEMORY,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
+  #endif
 
   #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
     #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0

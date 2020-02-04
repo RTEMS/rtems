@@ -331,6 +331,19 @@ void *_Memory_Allocate(
  */
 void _Memory_Fill( const Memory_Information *information, int c );
 
+/**
+ * @brief Indicates if the memory is zeroed during system initialization.
+ *
+ * This value is provided via <rtems/confdefs.h> in case
+ * CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY is defined.
+ */
+extern const bool _Memory_Zero_before_use;
+
+/**
+ * @brief Zeros all free memory areas of the system.
+ */
+void _Memory_Zero_free_areas( void );
+
 /** @} */
 
 #ifdef __cplusplus
