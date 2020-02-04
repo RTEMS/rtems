@@ -24,19 +24,6 @@
  */
 const char *bsp_boot_cmdline;
 
-#if BSP_DIRTY_MEMORY == 1
-static void bsp_dirty_memory(void)
-{
-  _Memory_Fill( _Memory_Get(), 0xcf );
-}
-
-RTEMS_SYSINIT_ITEM(
-  bsp_dirty_memory,
-  RTEMS_SYSINIT_DIRTY_MEMORY,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-#endif
-
 RTEMS_SYSINIT_ITEM(
   bsp_start,
   RTEMS_SYSINIT_BSP_START,

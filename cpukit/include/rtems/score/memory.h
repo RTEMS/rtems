@@ -344,6 +344,11 @@ extern const bool _Memory_Zero_before_use;
  */
 void _Memory_Zero_free_areas( void );
 
+/**
+ * @brief Dirty all free memory areas of the system.
+ */
+void _Memory_Dirty_free_areas( void );
+
 /** @} */
 
 #ifdef __cplusplus

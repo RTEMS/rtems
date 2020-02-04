@@ -2802,6 +2802,14 @@ struct _reent *__getreent(void)
     #endif
   };
 
+  #ifdef CONFIGURE_DIRTY_MEMORY
+    RTEMS_SYSINIT_ITEM(
+      _Memory_Dirty_free_areas,
+      RTEMS_SYSINIT_DIRTY_MEMORY,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
+  #endif
+
   #ifdef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
     const bool _Memory_Zero_before_use = true;
 
