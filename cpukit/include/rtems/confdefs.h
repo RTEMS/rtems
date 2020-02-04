@@ -59,7 +59,6 @@
   #undef BSP_INITIAL_EXTENSION
   #undef BSP_INTERRUPT_STACK_SIZE
   #undef BSP_MAXIMUM_DEVICES
-  #undef BSP_ZERO_WORKSPACE_AUTOMATICALLY
   #undef CONFIGURE_BSP_PREREQUISITE_DRIVERS
   #undef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 #else
@@ -1240,12 +1239,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * at system start up?
  */
 #ifndef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
-  #ifdef BSP_ZERO_WORKSPACE_AUTOMATICALLY
-    #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY \
-            BSP_ZERO_WORKSPACE_AUTOMATICALLY
-  #else
-    #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY FALSE
-  #endif
+  #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY FALSE
 #endif
 /**@}*/ /* end of add to group Configuration */
 
