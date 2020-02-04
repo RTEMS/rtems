@@ -80,7 +80,7 @@ rtems_task Init(
   Heap_Control *real_heap;
   Memory_Area area;
   Memory_Information mem = {
-    .count = 0,
+    .count = 1,
     .areas = &area
   };
 
