@@ -1235,15 +1235,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 /**@{*/
 
 /**
- * Should the RTEMS Workspace and C Program Heap be cleared automatically
- * at system start up?
- */
-#ifndef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
-  #define CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY FALSE
-#endif
-/**@}*/ /* end of add to group Configuration */
-
-/**
  * @defgroup ConfigurationMalloc RTEMS Malloc configuration
  *
  * This module contains parameters related to configuration of the RTEMS
@@ -2787,7 +2778,11 @@ struct _reent *__getreent(void)
     CONFIGURE_TASK_STACK_ALLOCATOR_INIT,      /* stack allocator init */
     CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
     CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
-    CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY,   /* true to clear memory */
+    #ifdef CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY /* true to clear memory */
+      true,
+    #else
+      false,
+    #endif
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
       true,
     #else
