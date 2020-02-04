@@ -13,6 +13,7 @@
 #include <sys/statvfs.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #include "fstest.h"
 #include "fs_config.h"
