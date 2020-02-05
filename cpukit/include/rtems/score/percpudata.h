@@ -57,8 +57,7 @@ RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
  * @param item The designator of the item.
  */
 #define PER_CPU_DATA_ITEM_DECLARE( type, item ) \
-  RTEMS_LINKER_RWSET_ITEM_DECLARE( _Per_CPU_Data, type, item ) \
-  RTEMS_SECTION( ".rtemsrwset._Per_CPU_Data.content.1" )
+  RTEMS_LINKER_RWSET_ITEM_DECLARE( _Per_CPU_Data, type, item )
 
 /**
  * @brief Defines a per-CPU item of the specified type.

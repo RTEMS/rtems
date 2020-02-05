@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2020 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -37,8 +37,13 @@ extern "C" {
   type const RTEMS_LINKER_SET_END( set )[ 0 ] \
   RTEMS_SECTION( ".rtemsroset." #set ".end" ) RTEMS_USED
 
+#define RTEMS_LINKER_ROSET_ITEM_ORDERED_DECLARE( set, type, item, order ) \
+  type const _Linker_set_##set##_##item \
+  RTEMS_SECTION( ".rtemsroset." #set ".content.0." RTEMS_XSTRING( order ) )
+
 #define RTEMS_LINKER_ROSET_ITEM_DECLARE( set, type, item ) \
-  extern type const _Linker_set_##set##_##item
+  extern type const _Linker_set_##set##_##item \
+  RTEMS_SECTION( ".rtemsroset." #set ".content.1" )
 
 #define RTEMS_LINKER_ROSET_ITEM_REFERENCE( set, type, item ) \
   static type const * const _Set_reference_##set##_##item \
@@ -68,8 +73,13 @@ extern "C" {
   type RTEMS_LINKER_SET_END( set )[ 0 ] \
   RTEMS_SECTION( ".rtemsrwset." #set ".end" ) RTEMS_USED
 
+#define RTEMS_LINKER_RWSET_ITEM_ORDERED_DECLARE( set, type, item, order ) \
+  extern type _Linker_set_##set##_##item \
+  RTEMS_SECTION( ".rtemsrwset." #set ".content.0." RTEMS_XSTRING( order ) )
+
 #define RTEMS_LINKER_RWSET_ITEM_DECLARE( set, type, item ) \
-  extern type _Linker_set_##set##_##item
+  extern type _Linker_set_##set##_##item \
+  RTEMS_SECTION( ".rtemsrwset." #set ".content.1" )
 
 /*
  * The .rtemsroset is here not a typo.  We must ensure that the references are
