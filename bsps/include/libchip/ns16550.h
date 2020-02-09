@@ -60,7 +60,11 @@ typedef uint8_t (*ns16550_get_reg)(uintptr_t port, uint8_t reg);
 
 typedef void (*ns16550_set_reg)(uintptr_t port, uint8_t reg, uint8_t value);
 
-typedef struct {
+typedef struct ns16550_context ns16550_context;
+
+typedef uint32_t (*ns16550_calculate_baud_divisor)(ns16550_context *ctx, uint32_t baud);
+
+struct ns16550_context{
   rtems_termios_device_context base;
   ns16550_get_reg get_reg;
   ns16550_set_reg set_reg;
@@ -78,7 +82,8 @@ typedef struct {
   size_t out_current;
   const char *out_buf;
   rtems_termios_tty *tty;
-} ns16550_context;
+  ns16550_calculate_baud_divisor calculate_baud_divisor;
+};
 
 extern const rtems_termios_device_handler ns16550_handler_interrupt;
 extern const rtems_termios_device_handler ns16550_handler_polled;

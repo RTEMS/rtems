@@ -112,6 +112,8 @@ static uint32_t NS16550_GetBaudDivisor(ns16550_context *ctx, uint32_t baud)
       NS16550_FRACTIONAL_DIVIDER,
       fractionalDivider
     );
+  } else if (ctx->calculate_baud_divisor != NULL) {
+    baudDivisor = ctx->calculate_baud_divisor(ctx, baud);
   }
 
   return baudDivisor;
