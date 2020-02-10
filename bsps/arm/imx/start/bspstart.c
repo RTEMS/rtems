@@ -89,6 +89,9 @@ static void imx_find_gic(const void *fdt)
   int node;
 
   node = fdt_path_offset(fdt, "/interrupt-controller");
+  if (node < 0) {
+    node = fdt_path_offset(fdt, "/soc/interrupt-controller");
+  }
   imx_gic_dist_base = (uintptr_t) imx_get_reg_of_node(fdt, node);
 }
 
