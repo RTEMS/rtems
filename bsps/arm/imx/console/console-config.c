@@ -253,6 +253,7 @@ static bool imx_uart_first_open(
   regs->ucr1 = IMX_UART_UCR1_UARTEN;
   regs->ucr2 = IMX_UART_UCR2_IRTS | IMX_UART_UCR2_WS | IMX_UART_UCR2_RXEN
     | IMX_UART_UCR2_TXEN | IMX_UART_UCR2_SRST;
+  regs->ucr3 |= IMX_UART_UCR3_ADNIMP | IMX_UART_UCR3_RXDMUXSEL;
 
   rtems_termios_set_initial_baud(tty, 115200);
   imx_uart_set_attributes(base, term);
