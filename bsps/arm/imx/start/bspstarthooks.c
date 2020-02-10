@@ -30,7 +30,7 @@ BSP_START_DATA_SECTION static arm_cp15_start_section_config
 imx_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
   {
-    .begin = 0x07000000U,
+    .begin = 0x00a00000U,
     .end = 0x70000000U,
     .flags = ARMV7_MMU_DEVICE
   }
