@@ -47,9 +47,11 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_ARM_GIC_DIST_BASE 0x31001000
+extern uintptr_t imx_gic_dist_base;
 
-#define BSP_ARM_GIC_CPUIF_BASE 0x31002000
+#define BSP_ARM_GIC_DIST_BASE imx_gic_dist_base
+
+#define BSP_ARM_GIC_CPUIF_BASE (BSP_ARM_GIC_DIST_BASE + 0x1000)
 
 #define BSP_ARM_A9MPCORE_GT_BASE 0
 

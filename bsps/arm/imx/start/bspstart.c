@@ -82,8 +82,19 @@ void arm_generic_timer_get_config(
   *irq = imx_get_irq_of_node(fdt, node, 0) - 16;
 }
 
+uintptr_t imx_gic_dist_base;
+
+static void imx_find_gic(const void *fdt)
+{
+  int node;
+
+  node = fdt_path_offset(fdt, "/interrupt-controller");
+  imx_gic_dist_base = (uintptr_t) imx_get_reg_of_node(fdt, node);
+}
+
 void bsp_start(void)
 {
+  imx_find_gic(bsp_fdt_get());
   bsp_interrupt_initialize();
   rtems_cache_coherent_add_area(
     bsp_section_nocacheheap_begin,
