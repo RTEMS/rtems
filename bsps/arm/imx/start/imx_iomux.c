@@ -109,6 +109,47 @@ static struct iomux_softc iomux_sc_instance;
 
 #define iomux_sc (&iomux_sc_instance);
 
+/* Return true if there is no status or status is "okay" or "ok". */
+static bool
+imx_fdt_node_status_okay(const void *fdt, int node)
+{
+	const void *status;
+	int len;
+
+	status = fdt_getprop(fdt, node, "status", &len);
+	if ((status == NULL) ||
+	    (strncmp(status, "okay", MIN(5, len)) == 0) ||
+	    (strncmp(status, "ok", MIN(3, len)) == 0)) {
+		return true;
+	}
+
+	return false;
+}
+
+/*
+ * Walk through all subnodes and handle "pinctrl-0" if the node is enabled. This
+ * does roughly the same as FreeBSDs fdt_pinctrl_configure_tree but without the
+ * whole open firmware (OF*) functions.
+ */
+static void
+imx_pinctrl_configure_children(const void *fdt, int parent)
+{
+	int node;
+	const uint32_t *phandle;
+	int len;
+
+	fdt_for_each_subnode(node, fdt, parent) {
+		if (imx_fdt_node_status_okay(fdt, node)) {
+			imx_pinctrl_configure_children(fdt, node);
+			phandle = fdt_getprop(fdt, node, "pinctrl-0", &len);
+			if (phandle != NULL && len == sizeof(*phandle)) {
+				imx_iomux_configure_pins(fdt,
+				    fdt32_to_cpu(*phandle));
+			}
+		}
+	}
+}
+
 static void
 imx_iomux_init(void)
 {
@@ -124,6 +165,9 @@ imx_iomux_init(void)
 	}
 	sc = iomux_sc;
 	sc->regs = imx_get_reg_of_node(fdt, node);
+
+	node = fdt_path_offset(fdt, "/");
+	imx_pinctrl_configure_children(fdt, node);
 }
 
 RTEMS_SYSINIT_ITEM(imx_iomux_init, RTEMS_SYSINIT_BSP_START,
