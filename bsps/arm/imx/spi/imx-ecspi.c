@@ -174,12 +174,14 @@ static void imx_ecspi_config(
   uint32_t conreg;
   uint32_t testreg;
   uint32_t configreg;
+  uint32_t dmareg;
   uint32_t cs_bit;
 
   conreg = IMX_ECSPI_CONREG_CHANNEL_MODE(0xf)
     | IMX_ECSPI_CONREG_SMC | IMX_ECSPI_CONREG_EN;
   testreg = regs->testreg;
   configreg = regs->configreg;
+  dmareg = regs->dmareg;
   cs_bit = 1U << cs;
 
   conreg |= imx_ecspi_conreg_divider(bus, speed_hz);
@@ -213,8 +215,11 @@ static void imx_ecspi_config(
     testreg &= ~IMX_ECSPI_TESTREG_LBC;
   }
 
+  dmareg = IMX_ECSPI_DMAREG_TX_THRESHOLD_SET(dmareg, IMX_ECSPI_FIFO_SIZE/2);
+
   regs->conreg = conreg;
   regs->testreg = testreg;
+  regs->dmareg = dmareg;
   regs->configreg = configreg;
 
   bus->conreg = conreg;
@@ -287,7 +292,7 @@ static void imx_ecspi_next_msg(imx_ecspi_bus *bus, volatile imx_ecspi *regs)
     bus->tx_buf = msg->tx_buf;
     imx_ecspi_set_push_pop(bus, msg->len, msg->bits_per_word);
     imx_ecspi_push(bus, regs);
-    regs->intreg = IMX_ECSPI_TE;
+    regs->intreg = IMX_ECSPI_TE | IMX_ECSPI_TDR;
   } else {
     regs->intreg = 0;
     imx_ecspi_done(bus);
