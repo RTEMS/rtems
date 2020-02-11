@@ -16,18 +16,15 @@
 
 const char rtems_test_name[] = "SPREGION_ERR 1";
 
-rtems_name Region_name[ 2 ];    /* array of region names */
-rtems_id   Region_id[ 2 ];      /* array of region ids */
+static rtems_name Region_name[ 2 ];    /* array of region names */
+static rtems_id   Region_id[ 2 ];      /* array of region ids */
 
-uint32_t   Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
+static uint8_t Region_good_area[4096] CPU_STRUCTURE_ALIGNMENT;
 #define Region_bad_area    (void *) 0x00000005
 #define REGION_START_OFFSET 1024
 #define REGION_LENGTH       512
 
-/* to avoid warnings */
-void region_error_tests(void);
-
-void region_error_tests(void)
+static void region_error_tests(void)
 {
   void                   *segment_address_1;
   void                   *segment_address_2;
