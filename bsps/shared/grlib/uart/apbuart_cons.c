@@ -321,7 +321,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	priv->condev.fsname = NULL;
 	/* Get Filesystem name prefix */
 	prefix[0] = '\0';
-	if (drvmgr_get_dev_prefix(dev, prefix)) {
+	if (drvmgr_get_dev_prefix(dev, prefix) == DRVMGR_OK) {
 		/* Got special prefix, this means we have a bus prefix
 		 * And we should use our "bus minor"
 		 */
