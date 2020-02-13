@@ -29,11 +29,9 @@ rtems_monitor_config_canonical(
     const void             *config_void
 )
 {
-    const rtems_configuration_table *c =
-        (const rtems_configuration_table *) config_void;
     rtems_api_configuration_table *r = &Configuration_RTEMS_API;
 
-    canonical_config->work_space_size = c->work_space_size;
+    canonical_config->work_space_size = rtems_configuration_get_work_space_size();
     canonical_config->maximum_tasks = rtems_configuration_get_maximum_tasks();
     canonical_config->maximum_timers = rtems_configuration_get_maximum_timers();
     canonical_config->maximum_semaphores = rtems_configuration_get_maximum_semaphores();
@@ -43,8 +41,8 @@ rtems_monitor_config_canonical(
     canonical_config->maximum_ports = rtems_configuration_get_maximum_ports();
     canonical_config->maximum_periods = rtems_configuration_get_maximum_periods();
     canonical_config->maximum_extensions = rtems_configuration_get_maximum_extensions();
-    canonical_config->microseconds_per_tick = c->microseconds_per_tick;
-    canonical_config->ticks_per_timeslice = c->ticks_per_timeslice;
+    canonical_config->microseconds_per_tick = rtems_configuration_get_microseconds_per_tick();
+    canonical_config->ticks_per_timeslice = rtems_configuration_get_ticks_per_timeslice();
     canonical_config->number_of_initialization_tasks = r->number_of_initialization_tasks;
 }
 
@@ -60,7 +58,6 @@ rtems_monitor_config_next(
     rtems_id              *next_id
 )
 {
-    const rtems_configuration_table *c = &Configuration;
     int n = rtems_object_id_get_index(*next_id);
 
     if (n >= 1)
@@ -69,7 +66,7 @@ rtems_monitor_config_next(
     _Objects_Allocator_lock();
 
     *next_id += 1;
-    return (const void *) c;
+    return (const void *) (uintptr_t) 1;
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;
