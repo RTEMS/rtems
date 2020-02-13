@@ -933,8 +933,8 @@ RTEMS_INLINE_ROUTINE void _Objects_Free(
 )
 {
   _Assert( _Objects_Allocator_is_owner() );
-  _Assert( information->free != NULL );
-  ( *information->free )( information, the_object );
+  _Assert( information->deallocate != NULL );
+  ( *information->deallocate )( information, the_object );
 }
 
 /**

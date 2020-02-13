@@ -210,7 +210,7 @@ struct Objects_Information {
    *
    * @see _Objects_Free_static(), and _Objects_Free_unlimited().
    */
-  void ( *free )( Objects_Information *, Objects_Control * );
+  void ( *deallocate )( Objects_Information *, Objects_Control * );
 
   /**
    * @brief This is the number of object control blocks on the inactive chain.
