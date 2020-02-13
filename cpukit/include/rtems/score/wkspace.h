@@ -75,17 +75,6 @@ void _Workspace_Handler_initialization(
 void *_Workspace_Allocate( size_t size );
 
 /**
- * @brief Allocates aligned memory from workspace.
- *
- * @param size The size of the requested memory.
- * @param alignment The alignment of the requested memory.
- *
- * @retval other The memory area begin.
- * @retval NULL Not enough resources.
- */
-void *_Workspace_Allocate_aligned( size_t size, size_t alignment );
-
-/**
  * @brief Frees memory to the workspace.
  *
  * This function frees the specified block of memory.
