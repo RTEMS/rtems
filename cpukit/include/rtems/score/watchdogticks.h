@@ -50,6 +50,14 @@ typedef uint32_t   Watchdog_Interval;
 extern volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
 
 /**
+ * @brief The watchdog microseconds per tick.
+ *
+ * This constant is defined by the application configuration via
+ * <rtems/confdefs.h>.
+ */
+extern const uint32_t _Watchdog_Microseconds_per_tick;
+
+/**
  * @brief The watchdog nanoseconds per tick.
  *
  * This constant is defined by the application configuration via

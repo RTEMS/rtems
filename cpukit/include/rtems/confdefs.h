@@ -1955,7 +1955,16 @@ extern "C" {
   #error "The CONFIGURE_MICROSECONDS_PER_TICK must be positive"
 #endif
 
-#define _CONFIGURE_TICKS_PER_SECOND (1000000 / CONFIGURE_MICROSECONDS_PER_TICK)
+#ifdef CONFIGURE_INIT
+  const uint32_t _Watchdog_Microseconds_per_tick =
+    CONFIGURE_MICROSECONDS_PER_TICK;
+
+  const uint32_t _Watchdog_Nanoseconds_per_tick =
+    (uint32_t) 1000 * CONFIGURE_MICROSECONDS_PER_TICK;
+
+  const uint32_t _Watchdog_Ticks_per_second =
+    1000000 / CONFIGURE_MICROSECONDS_PER_TICK;
+#endif
 
 /** The configures the number of clock ticks per timeslice. */
 #ifndef CONFIGURE_TICKS_PER_TIMESLICE
@@ -2452,11 +2461,6 @@ struct _reent *__getreent(void)
       sizeof( Thread_queue_Configured_heads );
   #endif
 
-  const uint32_t _Watchdog_Nanoseconds_per_tick =
-    (uint32_t) 1000 * CONFIGURE_MICROSECONDS_PER_TICK;
-
-  const uint32_t _Watchdog_Ticks_per_second = _CONFIGURE_TICKS_PER_SECOND;
-
   const size_t _Thread_Initial_thread_count =
     rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) +
     rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS );
@@ -2622,7 +2626,6 @@ struct _reent *__getreent(void)
    */
   const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
-    CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */

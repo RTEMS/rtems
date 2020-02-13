@@ -87,12 +87,6 @@ typedef struct {
   uintptr_t                      work_space_size;
 
   /** 
-   * This field specifies the number of microseconds which elapse
-   * between clock ticks.  This is the basis for RTEMS timing.
-   */
-  uint32_t                       microseconds_per_tick;
-
-  /** 
    * This field specifies the number of ticks in each task's timeslice.
    */
   uint32_t                       ticks_per_timeslice;
@@ -162,9 +156,9 @@ uintptr_t rtems_configuration_get_stack_space_size( void );
 uint32_t rtems_configuration_get_maximum_extensions( void );
 
 #define rtems_configuration_get_microseconds_per_tick() \
-        (Configuration.microseconds_per_tick)
+        (_Watchdog_Microseconds_per_tick)
 #define rtems_configuration_get_milliseconds_per_tick() \
-        (Configuration.microseconds_per_tick / 1000)
+        (_Watchdog_Microseconds_per_tick / 1000)
 #define rtems_configuration_get_nanoseconds_per_tick() \
         (_Watchdog_Nanoseconds_per_tick)
 
