@@ -261,9 +261,6 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_rtems_api_configuration() \
         (&Configuration_RTEMS_API)
 
-#define rtems_configuration_get_posix_api_configuration() \
-        (&Configuration_POSIX_API)
-
 #ifdef __cplusplus
 }
 #endif
