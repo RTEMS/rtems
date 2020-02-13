@@ -22,17 +22,8 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/interr.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/posix/pthread.h>
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
-
-#include <string.h>
-
-/* #define DEBUG_WORKSPACE */
-#if defined(DEBUG_WORKSPACE)
-  #include <rtems/bspIo.h>
-#endif
 
 Heap_Control _Workspace_Area;
 
@@ -113,39 +104,12 @@ void _Workspace_Handler_initialization(
   _Heap_Protection_set_delayed_free_fraction( &_Workspace_Area, 1 );
 }
 
-void *_Workspace_Allocate(
-  size_t   size
-)
+void *_Workspace_Allocate( size_t size )
 {
-  void *memory;
-
-  memory = _Heap_Allocate( &_Workspace_Area, size );
-  #if defined(DEBUG_WORKSPACE)
-    printk(
-      "Workspace_Allocate(%d) from %p/%p -> %p\n",
-      size,
-      __builtin_return_address( 0 ),
-      __builtin_return_address( 1 ),
-      memory
-    );
-  #endif
-  return memory;
+  return _Heap_Allocate( &_Workspace_Area, size );
 }
 
-/*
- *  _Workspace_Free
- */
-void _Workspace_Free(
-  void *block
-)
+void _Workspace_Free( void *block )
 {
-  #if defined(DEBUG_WORKSPACE)
-    printk(
-      "Workspace_Free(%p) from %p/%p\n",
-      block,
-      __builtin_return_address( 0 ),
-      __builtin_return_address( 1 )
-    );
-  #endif
   _Heap_Free( &_Workspace_Area, block );
 }
