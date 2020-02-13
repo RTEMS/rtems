@@ -87,16 +87,6 @@ typedef struct {
    */
   uintptr_t                      work_space_size;
 
-  /**
-   * This field contains the maximum number of POSIX API
-   * key value pairs which are configured for this application.
-   *
-   * @note There can be potentially be a key/value pair for
-   *       every thread to use every key. But normally this
-   *       many are not needed in a system.
-   */
-  uint32_t                            maximum_key_value_pairs;
-
   /** 
    * This field specifies the number of microseconds which elapse
    * between clock ticks.  This is the basis for RTEMS timing.
