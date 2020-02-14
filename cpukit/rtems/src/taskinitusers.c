@@ -56,7 +56,6 @@ void _RTEMS_tasks_Initialize_user_task( void )
   _Assert( rtems_is_status_successful( return_value ) );
   (void) return_value;
 
-  if ( _Thread_Global_constructor == 0 ) {
-    _Thread_Global_constructor = id;
-  }
+  _Assert( _Thread_Global_constructor == 0 );
+  _Thread_Global_constructor = id;
 }
