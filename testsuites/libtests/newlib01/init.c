@@ -245,6 +245,10 @@ static void test(void)
   int rv;
   rtems_resource_snapshot snapshot;
 
+  rtems_test_assert(fileno(stdout) >= 0);
+  rtems_test_assert(fileno(stdin) >= 0);
+  rtems_test_assert(fileno(stderr) >= 0);
+
   ctx->main_task_id = rtems_task_self();
 
   rtems_resource_snapshot_take(&snapshot);
@@ -274,6 +278,10 @@ static void test(void)
 
   sc = rtems_task_delete(ctx->worker_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(fileno(stdout) >= 0);
+  rtems_test_assert(fileno(stdin) >= 0);
+  rtems_test_assert(fileno(stderr) >= 0);
 
   rv = unlink(&file_path[0]);
   rtems_test_assert(rv == 0);

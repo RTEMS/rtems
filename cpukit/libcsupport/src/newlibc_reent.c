@@ -44,7 +44,10 @@ bool newlib_create_hook(
   }
 #endif
 
-  _REENT_INIT_PTR((creating_task->libc_reent)); /* GCC extension: structure constants */
+  extern void __sinit (struct _reent *s);
+  struct _reent *reent = (struct _reent *) creating_task->libc_reent;
+  _REENT_INIT_PTR((reent)); /* GCC extension: structure constants */
+  __sinit( reent );
 
   return true;
 }
