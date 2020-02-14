@@ -53,10 +53,12 @@ extern "C" {
   #endif
 #endif
 
+typedef struct rtems_user_env_t rtems_user_env_t;
+
 /**
  * @brief User environment.
  */
-typedef struct {
+struct rtems_user_env_t {
   /**
    * @brief The anchor directory for relative paths.
    */
@@ -111,7 +113,7 @@ typedef struct {
    * @brief The list of supplementary group IDs.
    */
   gid_t groups[NGROUPS];
-} rtems_user_env_t;
+};
 
 extern rtems_user_env_t rtems_global_user_env;
 

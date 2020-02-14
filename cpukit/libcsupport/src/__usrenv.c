@@ -24,6 +24,8 @@
 #include <sys/stat.h>
 
 #include <rtems/libio_.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/thread.h>
 
 static int null_handler_open(
   rtems_libio_t *iop,
@@ -249,4 +251,14 @@ rtems_user_env_t rtems_global_user_env = {
   .umask = S_IWGRP | S_IWOTH
 };
 
-pthread_key_t rtems_current_user_env_key;
+rtems_user_env_t *rtems_current_user_env_get(void)
+{
+  Thread_Control *executing = _Thread_Get_executing();
+  rtems_user_env_t *env = executing->user_environment;
+
+  if (env == NULL) {
+    return &rtems_global_user_env;
+  }
+
+  return env;
+}

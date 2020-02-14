@@ -68,6 +68,7 @@ extern "C" {
 #define RTEMS_SYSINIT_POSIX_CLEANUP              001c00
 #define RTEMS_SYSINIT_IDLE_THREADS               001d00
 #define RTEMS_SYSINIT_LIBIO                      001e00
+#define RTEMS_SYSINIT_USER_ENVIRONMENT           001e80
 #define RTEMS_SYSINIT_ROOT_FILESYSTEM            001f00
 #define RTEMS_SYSINIT_DRVMGR                     002000
 #define RTEMS_SYSINIT_MP_SERVER                  002100

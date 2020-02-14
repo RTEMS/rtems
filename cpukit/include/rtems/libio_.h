@@ -336,10 +336,6 @@ void rtems_filesystem_location_free( rtems_filesystem_location_info_t *loc );
  */
 #include <rtems/userenv.h>
 
-void rtems_libio_free_user_env( void *env );
-
-extern pthread_key_t rtems_current_user_env_key;
-
 void rtems_libio_lock( void );
 
 void rtems_libio_unlock( void );

@@ -139,11 +139,6 @@ extern "C" {
   #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 3
 #endif
 
-/*
- * POSIX key count used by the IO library.
- */
-#define _CONFIGURE_LIBIO_POSIX_KEYS 1
-
 #ifdef CONFIGURE_INIT
   rtems_libio_t rtems_libio_iops[CONFIGURE_MAXIMUM_FILE_DESCRIPTORS];
 
@@ -2073,14 +2068,6 @@ struct _reent *__getreent(void)
      (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
 #endif
 
-/*
- * This macro is calculated to specify the total number of
- * POSIX API keys required by the application and configured
- * system capabilities.
- */
-#define _CONFIGURE_POSIX_KEYS \
-  (CONFIGURE_MAXIMUM_POSIX_KEYS + _CONFIGURE_LIBIO_POSIX_KEYS)
-
 /**
  * This configuration parameter specifies the maximum number of
  * POSIX API threads.
@@ -2550,8 +2537,8 @@ struct _reent *__getreent(void)
       CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS;
   #endif
 
-  #if _CONFIGURE_POSIX_KEYS > 0
-    POSIX_KEYS_INFORMATION_DEFINE( _CONFIGURE_POSIX_KEYS );
+  #if CONFIGURE_MAXIMUM_POSIX_KEYS > 0
+    POSIX_KEYS_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_KEYS );
   #endif
 
   #if CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES > 0

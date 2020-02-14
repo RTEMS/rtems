@@ -123,9 +123,6 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
-#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
-
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>

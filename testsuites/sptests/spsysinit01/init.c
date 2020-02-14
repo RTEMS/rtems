@@ -125,6 +125,8 @@ typedef enum {
   IDLE_THREADS_POST,
   LIBIO_PRE,
   LIBIO_POST,
+  USER_ENVIRONMENT_PRE,
+  USER_ENVIRONMENT_POST,
   ROOT_FILESYSTEM_PRE,
   ROOT_FILESYSTEM_POST,
   BSP_PRE_DRIVERS_PRE,
@@ -513,7 +515,7 @@ FIRST(RTEMS_SYSINIT_POSIX_KEYS)
 
 LAST(RTEMS_SYSINIT_POSIX_KEYS)
 {
-  assert(info_is_init(&_POSIX_Keys_Information, 2));
+  assert(info_is_init(&_POSIX_Keys_Information, 1));
   next_step(POSIX_KEYS_POST);
 }
 
@@ -539,6 +541,24 @@ LAST(RTEMS_SYSINIT_LIBIO)
 {
   assert(rtems_libio_iop_free_head == &rtems_libio_iops[0]);
   next_step(LIBIO_POST);
+}
+
+static size_t user_extensions_pre_user_env;
+
+FIRST(RTEMS_SYSINIT_USER_ENVIRONMENT)
+{
+  user_extensions_pre_user_env =
+    _Chain_Node_count_unprotected(&_User_extensions_List.Active);
+  next_step(USER_ENVIRONMENT_PRE);
+}
+
+LAST(RTEMS_SYSINIT_USER_ENVIRONMENT)
+{
+  assert(
+    user_extensions_pre_user_env + 1 ==
+      _Chain_Node_count_unprotected(&_User_extensions_List.Active)
+  );
+  next_step(USER_ENVIRONMENT_POST);
 }
 
 FIRST(RTEMS_SYSINIT_ROOT_FILESYSTEM)
@@ -842,6 +862,18 @@ static void do_cleanup_push_pop(void)
   pthread_cleanup_pop(0);
 }
 
+static void do_posix_key_create(void)
+{
+  pthread_key_t key;
+  int eno;
+
+  eno = pthread_key_create(&key, NULL);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_key_delete(key);
+  rtems_test_assert(eno == 0);
+}
+
 static void do_posix_mq_open(void)
 {
   struct mq_attr attr;
@@ -925,6 +957,11 @@ static void check_config(void)
   rtems_test_assert(config->User_initialization_tasks_table != NULL);
 }
 
+static void do_use_global_user_env(void)
+{
+  rtems_libio_use_global_env();
+}
+
 static void Init(rtems_task_argument arg)
 {
   next_step(INIT_TASK);
@@ -939,10 +976,12 @@ static void Init(rtems_task_argument arg)
   do_task_create();
   do_timer_create();
   do_cleanup_push_pop();
+  do_posix_key_create();
   do_posix_mq_open();
   do_posix_sem_open();
   do_posix_shm_open();
   do_posix_timer_create();
+  do_use_global_user_env();
   check_config();
   TEST_END();
   exit(0);

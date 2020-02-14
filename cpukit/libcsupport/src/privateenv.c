@@ -24,23 +24,15 @@
 
 #include <rtems/libio_.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/userextimpl.h>
+#include <rtems/sysinit.h>
 
 /**
  *  Instantiate a private user environment for the calling thread.
  */
 
-rtems_user_env_t * rtems_current_user_env_get(void)
+static void rtems_libio_free_user_env(rtems_user_env_t *env)
 {
-  void *ptr = pthread_getspecific(rtems_current_user_env_key);
-  if (ptr == NULL) {
-    ptr = &rtems_global_user_env;
-  }
-  return (rtems_user_env_t *) ptr;
-}
-
-void rtems_libio_free_user_env(void *arg)
-{
-  rtems_user_env_t *env = arg;
   bool uses_global_env = env == &rtems_global_user_env;
 
   if (!uses_global_env) {
@@ -72,16 +64,9 @@ rtems_status_code rtems_libio_set_private_env(void)
         !rtems_filesystem_global_location_is_null(new_env->root_directory)
           && !rtems_filesystem_global_location_is_null(new_env->current_directory)
       ) {
-        int eno = pthread_setspecific(
-          rtems_current_user_env_key,
-          new_env
-        );
+        Thread_Control *executing = _Thread_Get_executing();
 
-        if (eno == 0) {
-          rtems_libio_free_user_env(old_env);
-        } else {
-          sc = RTEMS_TOO_MANY;
-        }
+        executing->user_environment = new_env;
       } else {
         sc = RTEMS_UNSATISFIED;
       }
@@ -107,10 +92,48 @@ void rtems_libio_use_global_env(void)
   if (uses_private_env) {
     Thread_Life_state life_state =
       _Thread_Set_life_protection(THREAD_LIFE_PROTECTED);
+    Thread_Control *executing;
 
     rtems_libio_free_user_env(env);
-    pthread_setspecific(rtems_current_user_env_key, NULL);
+    executing = _Thread_Get_executing();
+    executing->user_environment = NULL;
 
     _Thread_Set_life_protection(life_state);
   }
 }
+
+static void rtems_libio_env_thread_terminate(Thread_Control *the_thread)
+{
+  rtems_user_env_t *env = the_thread->user_environment;
+
+  if (env != NULL) {
+    rtems_libio_free_user_env(env);
+  }
+}
+
+static void rtems_libio_env_thread_restart(
+  Thread_Control *executing,
+  Thread_Control *the_thread
+)
+{
+  (void) executing;
+  rtems_libio_env_thread_terminate( the_thread );
+}
+
+static User_extensions_Control rtems_libio_env_extensions = {
+  .Callouts = {
+    .thread_restart = rtems_libio_env_thread_restart,
+    .thread_terminate = rtems_libio_env_thread_terminate
+  }
+};
+
+static void rtems_libio_env_init(void)
+{
+  _User_extensions_Add_API_set(&rtems_libio_env_extensions);
+}
+
+RTEMS_SYSINIT_ITEM(
+  rtems_libio_env_init,
+  RTEMS_SYSINIT_USER_ENVIRONMENT,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

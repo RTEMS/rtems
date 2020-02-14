@@ -1030,15 +1030,6 @@ spfatal26_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal26) \
 	$(support_includes)
 endif
 
-if TEST_spfatal27
-sp_tests += spfatal27
-sp_screens += spfatal27/spfatal27.scn
-sp_docs += spfatal27/spfatal27.doc
-spfatal27_SOURCES = spfatal27/init.c
-spfatal27_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal27) \
-	$(support_includes)
-endif
-
 if TEST_spfatal28
 sp_tests += spfatal28
 sp_screens += spfatal28/spfatal28.scn

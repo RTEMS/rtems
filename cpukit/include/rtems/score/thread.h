@@ -43,6 +43,8 @@
 #include <rtems/score/processormask.h>
 #endif
 
+struct rtems_user_env_t;
+
 struct _pthread_cleanup_context;
 
 struct Per_CPU_Control;
@@ -857,6 +859,11 @@ struct _Thread_Control {
   Thread_Life_control                   Life;
 
   Thread_Capture_control                Capture;
+
+  /**
+   * @brief Pointer to an optional thread-specific POSIX user environment.
+   */
+  struct rtems_user_env_t *user_environment;
 
   /**
    * @brief LIFO list of POSIX cleanup contexts.

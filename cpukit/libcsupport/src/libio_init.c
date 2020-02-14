@@ -49,7 +49,6 @@ static void rtems_libio_init( void )
 {
     uint32_t i;
     rtems_libio_t *iop;
-    int eno;
 
     if (rtems_libio_number_iops > 0)
     {
@@ -59,17 +58,6 @@ static void rtems_libio_init( void )
         iop->data1 = NULL;
         rtems_libio_iop_free_tail = &iop->data1;
     }
-
-  /*
-   *  Create the posix key for user environment.
-   */
-  eno = pthread_key_create(
-    &rtems_current_user_env_key,
-    rtems_libio_free_user_env
-  );
-  if (eno != 0) {
-    _Internal_error( INTERNAL_ERROR_LIBIO_USER_ENV_KEY_CREATE_FAILED );
-  }
 }
 
 RTEMS_SYSINIT_ITEM(
