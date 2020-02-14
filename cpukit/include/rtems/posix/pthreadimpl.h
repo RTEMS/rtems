@@ -20,7 +20,6 @@
 #define _RTEMS_POSIX_PTHREADIMPL_H
 
 #include <rtems/posix/pthread.h>
-#include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/objectimpl.h>

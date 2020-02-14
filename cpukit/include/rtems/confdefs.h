@@ -2155,32 +2155,14 @@ struct _reent *__getreent(void)
 #endif
 
 #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
-  #ifndef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
-    #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
-      #define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
-    #endif
+  #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+    #define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
+  #endif
 
-    #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-      #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-        CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
-    #endif
-
-    #ifdef CONFIGURE_INIT
-      posix_initialization_threads_table POSIX_Initialization_threads[] = {
-        { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT,
-          CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE }
-      };
-    #endif
-
-    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME \
-      POSIX_Initialization_threads
-
-    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
-      RTEMS_ARRAY_SIZE(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME)
-  #endif /* !CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
-#else /* !CONFIGURE_POSIX_INIT_THREAD_TABLE */
-  #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME NULL
-  #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
+  #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+    #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
+      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
+  #endif
 #endif /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
 
 /**
@@ -2755,17 +2737,14 @@ struct _reent *__getreent(void)
  *  then we need to install the code that runs that loop.
  */
 #ifdef CONFIGURE_INIT
-  #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
-      defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
-    posix_initialization_threads_table * const
-      _Configuration_POSIX_Initialization_threads =
-        CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME;
-
-    const size_t _Configuration_POSIX_Initialization_thread_count =
-      CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE;
+  #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE)
+    const posix_initialization_threads_table _POSIX_Threads_User_thread_table = {
+      CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT,
+      CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+    };
 
     RTEMS_SYSINIT_ITEM(
-      _POSIX_Threads_Initialize_user_threads_body,
+      _POSIX_Threads_Initialize_user_thread,
       RTEMS_SYSINIT_POSIX_USER_THREADS,
       RTEMS_SYSINIT_ORDER_MIDDLE
     );
@@ -2988,6 +2967,10 @@ struct _reent *__getreent(void)
 
 #ifdef CONFIGURE_MAXIMUM_PTYS
   #warning "The CONFIGURE_MAXIMUM_PTYS configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
+  #warning "The CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_TERMIOS_DISABLED

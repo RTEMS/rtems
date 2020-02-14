@@ -36,15 +36,32 @@ extern "C" {
  */
 /**@{**/
 
+/**
+ *  For now, we are only allowing the user to specify the entry point
+ *  and stack size for POSIX initialization threads.
+ */
+typedef struct {
+  /** This is the entry point for a POSIX initialization thread. */
+  void       *(*thread_entry)(void *);
+  /** This is the stack size for a POSIX initialization thread. */
+  int       stack_size;
+} posix_initialization_threads_table;
+
 extern const size_t _POSIX_Threads_Minimum_stack_size;
 
 /**
- * @brief POSIX threads initialize user threads body.
+ * @brief Initialization table for the first user POSIX thread.
  *
- * This routine creates and starts all configured user
- * initialization threads.
+ * This table is used by _POSIX_Threads_Initialize_user_thread() and
+ * initialized via <rtems/confdefs.h>.
  */
-extern void _POSIX_Threads_Initialize_user_threads_body(void);
+extern const posix_initialization_threads_table
+  _POSIX_Threads_User_thread_table;
+
+/**
+ * @brief System initialization handler to create the first user POSIX thread.
+ */
+extern void _POSIX_Threads_Initialize_user_thread( void );
 
 /**
  * The following defines the information control block used to manage

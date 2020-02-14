@@ -34,7 +34,6 @@
 #include <rtems/score/userextdata.h>
 #include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/config.h>
-#include <rtems/posix/config.h>
 #include <rtems/extension.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/types.h>
