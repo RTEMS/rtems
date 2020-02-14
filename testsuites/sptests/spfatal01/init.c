@@ -8,30 +8,23 @@
  * Classic API Init task create failure
  */
 
-/*
- *  Way too much stack space.  Should generate a fatal error
- *  on the init task create.
- */
-#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE
-#define CONFIGURE_INIT_TASK_STACK_SIZE 0
-rtems_initialization_tasks_table Initialization_tasks[] = {
-  { rtems_build_name('I', 'N', 'I', ' '),
-    32UL * 1024UL,
-    1,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    Init,
-    RTEMS_DEFAULT_MODES,
-    0
-  }
-};
-#define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
-#define CONFIGURE_INIT_TASK_TABLE_SIZE \
-  sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
-
 #define FATAL_ERROR_TEST_NAME            "1"
 #define FATAL_ERROR_DESCRIPTION          "Classic API Init task create failure"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_RTEMS_INIT_TASK_CREATE_FAILED
+
+static void *stack_allocator(size_t unused)
+{
+  return NULL;
+}
+
+static void stack_deallocator(void *unused)
+{
+}
+
+#define CONFIGURE_TASK_STACK_ALLOCATOR stack_allocator
+
+#define CONFIGURE_TASK_STACK_DEALLOCATOR stack_deallocator
 
 static void force_error(void)
 {

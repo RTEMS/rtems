@@ -1290,13 +1290,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  *
  * Default User Initialization Task Table.  This table guarantees that
  * one user initialization table is defined.
- *
- *  WHEN CONFIGURE_HAS_OWN_INIT_TASK_TABLE is defined, the user is
- *  responsible for defining their own table information and setting the
- *  appropriate variables.
  */
-#if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
-    !defined(CONFIGURE_HAS_OWN_INIT_TASK_TABLE)
+#if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
 
 /**
  * When using the default Classic API Initialization Tasks Table, this is
@@ -1392,13 +1387,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   RTEMS_ARRAY_SIZE(CONFIGURE_INIT_TASK_TABLE)
 
 #else     /* CONFIGURE_RTEMS_INIT_TASKS_TABLE */
-#ifdef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
-
-/*
- * The user application is responsible for defining everything
- * when CONFIGURE_HAS_OWN_INIT_TABLE is defined.
- */
-#else     /* not using standard or providing own Init Task Table */
 
 /*
  * This is the name of the Initialization Task when none is configured.
@@ -1414,8 +1402,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This is the stack size of the Initialization Task when none is configured.
  */
 #define CONFIGURE_INIT_TASK_STACK_SIZE 0
-
-#endif    /* CONFIGURE_HAS_OWN_INIT_TASK_TABLE */
 
 #endif
 /**@}*/  /* end of Classic API Initialization Tasks Table */
@@ -2792,8 +2778,7 @@ struct _reent *__getreent(void)
  *  then we need to install the code that runs that loop.
  */
 #ifdef CONFIGURE_INIT
-  #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) || \
-      defined(CONFIGURE_HAS_OWN_INIT_TASK_TABLE)
+  #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
     RTEMS_SYSINIT_ITEM(
       _RTEMS_tasks_Initialize_user_tasks_body,
       RTEMS_SYSINIT_CLASSIC_USER_TASKS,
@@ -2984,6 +2969,10 @@ struct _reent *__getreent(void)
 
 #ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
   #warning "The CONFIGURE_HAS_OWN_FILESYSTEM_TABLE configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_HAS_OWN_INIT_TABLE
+  #warning "The CONFIGURE_HAS_OWN_INIT_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_MOUNT_TABLE

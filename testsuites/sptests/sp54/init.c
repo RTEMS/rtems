@@ -24,9 +24,10 @@ const char rtems_test_name[] = "SP 54";
 
 static void *Init( uintptr_t ignored )
 {
-  rtems_status_code    status;
-  rtems_task_priority  pri;
-  rtems_id             id;
+  rtems_status_code                    status;
+  rtems_task_priority                  pri;
+  rtems_id                             id;
+  const rtems_api_configuration_table *config;
 
   /*
    *  It is possible that since this thread prints and there is no idle
@@ -52,6 +53,10 @@ static void *Init( uintptr_t ignored )
 
   rtems_test_assert( rtems_configuration_get_do_zero_of_workspace() );
 
+  config = rtems_configuration_get_rtems_api_configuration();
+  rtems_test_assert( config->number_of_initialization_tasks == 0 );
+  rtems_test_assert( config->User_initialization_tasks_table == NULL );
+
   TEST_END();
   rtems_test_exit(0);
 }
@@ -67,21 +72,6 @@ static void *Init( uintptr_t ignored )
  */
 #define CONFIGURE_IDLE_TASK_BODY Init
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
-
-/*
- *  Another odd case to hit.  Since we use the Init task is Idle task
- *  configuration, we can dummy up the initialization task configuration
- *  to have a non-NULL pointer and 0 tasks.
- */
-
-#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE 1
-
-rtems_initialization_tasks_table Initialization_tasks[1] =
-  { { 0, }};
-
-#define CONFIGURE_INIT_TASK_TABLE      Initialization_tasks
-#define CONFIGURE_INIT_TASK_TABLE_SIZE 0
-#define CONFIGURE_INIT_TASK_STACK_SIZE 0
 
 #define CONFIGURE_DIRTY_MEMORY
 
