@@ -2637,11 +2637,6 @@ struct _reent *__getreent(void)
    * This is the primary Configuration Table for this application.
    */
   const rtems_configuration_table Configuration = {
-    #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
-      true,
-    #else
-      false,
-    #endif
     #ifdef RTEMS_SMP
       #ifdef _CONFIGURE_SMP_APPLICATION
         true,
@@ -2655,6 +2650,10 @@ struct _reent *__getreent(void)
   };
 
   const uintptr_t _Workspace_Size = CONFIGURE_EXECUTIVE_RAM_SIZE;
+
+  #ifdef CONFIGURE_UNIFIED_WORK_AREAS
+    const bool _Workspace_Is_unified = true;
+  #endif
 
   #ifdef CONFIGURE_DIRTY_MEMORY
     RTEMS_SYSINIT_ITEM(

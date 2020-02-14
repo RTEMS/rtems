@@ -1,15 +1,6 @@
-/* SPDX-License-Identifier: BSD-2-Clause */
-
-/**
- * @file
- *
- * @ingroup RTEMSScoreWorkspace
- *
- * @brief Constants defined by the application configuration for the idle
- * threads.
- */
-
 /*
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
  * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,41 +25,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_WKSPACEDATA_H
-#define _RTEMS_SCORE_WKSPACEDATA_H
-
-#include <rtems/score/basedefs.h>
-
-#ifdef __cplusplus
-extern "C" {
+#if HAVE_CONFIG_H
+#include "config.h"
 #endif
 
-/**
- * @addtogroup RTEMSScoreWorkspace
- *
- * @{
- */
+#include <rtems/score/wkspacedata.h>
 
-/**
- * @brief The workspace size in bytes.
- *
- * This constant is defined by the application configuration via
- * <rtems/confdefs.h>.
- */
-extern const uintptr_t _Workspace_Size;
-
-/**
- * @brief Indicates if the workspace and C program heap are unified.
- *
- * This constant is defined by the application configuration via
- * <rtems/confdefs.h>.
- */
-extern const bool _Workspace_Is_unified;
-
-/** @} */
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* _RTEMS_SCORE_WKSPACEDATA_H */
+const bool _Workspace_Is_unified = false;

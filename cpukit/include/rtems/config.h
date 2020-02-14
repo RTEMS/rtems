@@ -83,14 +83,6 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
  *     + required number of each object type for each API configured
  */
 typedef struct {
-  /**
-   * @brief Specifies if a unified work area is used or not.
-   *
-   * If this element is @a true, then the RTEMS Workspace and the C Program
-   * Heap use the same heap, otherwise they use separate heaps.
-   */
-  bool                           unified_work_area;
-
   #ifdef RTEMS_SMP
     bool                         smp_enabled;
   #endif
@@ -111,7 +103,7 @@ extern const rtems_configuration_table Configuration;
  */
 
 #define rtems_configuration_get_unified_work_area() \
-        (Configuration.unified_work_area)
+        (_Workspace_Is_unified)
 
 /**
  * @brief Return if the stack allocator avoids the work space.
