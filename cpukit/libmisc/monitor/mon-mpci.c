@@ -75,7 +75,7 @@ rtems_monitor_mpci_next(
     _Objects_Allocator_lock();
 
     *next_id += 1;
-    return &Configuration;
+    return (const void *) (uintptr_t) 1;
 
 failed:
     *next_id = RTEMS_OBJECT_ID_FINAL;

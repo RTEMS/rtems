@@ -2633,20 +2633,14 @@ struct _reent *__getreent(void)
     #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
   #endif
 
-  /**
-   * This is the primary Configuration Table for this application.
-   */
-  const rtems_configuration_table Configuration = {
-    #ifdef RTEMS_SMP
-      #ifdef _CONFIGURE_SMP_APPLICATION
-        true
-      #else
-        false
-      #endif
-    #endif
-  };
-
   #ifdef RTEMS_SMP
+    const bool _SMP_Is_enabled =
+      #ifdef _CONFIGURE_SMP_APPLICATION
+        true;
+      #else
+        false;
+      #endif
+
     const uint32_t _SMP_Processor_configured_maximum =
       _CONFIGURE_MAXIMUM_PROCESSORS;
   #endif
