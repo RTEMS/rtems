@@ -905,6 +905,26 @@ static void do_posix_timer_create(void)
 #endif /* RTEMS_POSIX_API */
 }
 
+static void check_config(void)
+{
+  const rtems_api_configuration_table *config;
+
+  config = rtems_configuration_get_rtems_api_configuration();
+
+  rtems_test_assert(!config->notepads_enabled);
+  rtems_test_assert(config->maximum_tasks == 2);
+  rtems_test_assert(config->maximum_timers == 1);
+  rtems_test_assert(config->maximum_semaphores == 1);
+  rtems_test_assert(config->maximum_message_queues == 1);
+  rtems_test_assert(config->maximum_partitions == 1);
+  rtems_test_assert(config->maximum_regions == 1);
+  rtems_test_assert(config->maximum_ports == 1);
+  rtems_test_assert(config->maximum_periods == 1);
+  rtems_test_assert(config->maximum_barriers == 1);
+  rtems_test_assert(config->number_of_initialization_tasks == 1);
+  rtems_test_assert(config->User_initialization_tasks_table != NULL);
+}
+
 static void Init(rtems_task_argument arg)
 {
   next_step(INIT_TASK);
@@ -923,6 +943,7 @@ static void Init(rtems_task_argument arg)
   do_posix_sem_open();
   do_posix_shm_open();
   do_posix_timer_create();
+  check_config();
   TEST_END();
   exit(0);
 }

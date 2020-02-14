@@ -37,6 +37,24 @@ static rtems_api_configuration_table config;
 const rtems_api_configuration_table *
 rtems_configuration_get_rtems_api_configuration( void )
 {
+  /*
+   * Always initialize the configuration table and do not bother with
+   * synchronization issues.  This function is not performance critical.  The
+   * configuration values are all constants.
+   */
+
+  config.notepads_enabled = false;
+  config.maximum_tasks = rtems_configuration_get_maximum_tasks();
+  config.maximum_timers = rtems_configuration_get_maximum_timers();
+  config.maximum_semaphores = rtems_configuration_get_maximum_semaphores();
+  config.maximum_message_queues =
+    rtems_configuration_get_maximum_message_queues();
+  config.maximum_partitions = rtems_configuration_get_maximum_partitions();
+  config.maximum_regions = rtems_configuration_get_maximum_regions();
+  config.maximum_ports = rtems_configuration_get_maximum_ports();
+  config.maximum_periods = rtems_configuration_get_maximum_periods();
+  config.maximum_barriers = rtems_configuration_get_maximum_barriers();
+
   if ( _RTEMS_tasks_User_task_table.entry_point != NULL ) {
     config.number_of_initialization_tasks = 1;
     config.User_initialization_tasks_table = &_RTEMS_tasks_User_task_table;
