@@ -50,6 +50,7 @@
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/shm.h>
 #include <rtems/posix/timer.h>
+#include <rtems/confdefs/obsolete.h>
 
 #include <limits.h>
 
@@ -125,11 +126,6 @@ extern "C" {
 #endif
 #endif
 
-#ifdef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
-  #warning "CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS has been renamed to CONFIGURE_MAXIMUM_FILE_DESCRIPTORS since RTEMS 5.1"
-  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
-#endif
-
 /**
  * This macro defines the number of POSIX file descriptors allocated
  * and managed by libio.  These are the "integer" file descriptors that
@@ -149,11 +145,6 @@ extern "C" {
   const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE(rtems_libio_iops);
 #endif
 
-#ifdef CONFIGURE_SMP_MAXIMUM_PROCESSORS
-  #warning "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 5.1"
-  #define CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_SMP_MAXIMUM_PROCESSORS
-#endif
-
 /* Ensure that _CONFIGURE_MAXIMUM_PROCESSORS > 1 only in SMP configurations */
 #if defined(CONFIGURE_MAXIMUM_PROCESSORS) && defined(RTEMS_SMP)
   #define _CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_MAXIMUM_PROCESSORS
@@ -161,33 +152,9 @@ extern "C" {
   #define _CONFIGURE_MAXIMUM_PROCESSORS 1
 #endif
 
-#ifdef CONFIGURE_SMP_APPLICATION
-  #warning "CONFIGURE_SMP_APPLICATION is obsolete since RTEMS 5.1"
-#endif
-
 /*
  * This sets up the resources for the FIFOs/pipes.
  */
-
-/**
- * This is specified to configure the maximum number of POSIX FIFOs.
- */
-#ifdef CONFIGURE_MAXIMUM_FIFOS
-  #warning "CONFIGURE_MAXIMUM_FIFOS is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
-  #if CONFIGURE_MAXIMUM_FIFOS > 0
-    #define CONFIGURE_IMFS_ENABLE_MKFIFO
-  #endif
-#endif
-
-/**
- * This is specified to configure the maximum number of POSIX named pipes.
- */
-#ifdef CONFIGURE_MAXIMUM_PIPES
-  #warning "CONFIGURE_MAXIMUM_PIPES is obsolete since RTEMS 5.1; use CONFIGURE_IMFS_ENABLE_MKFIFO instead"
-  #if CONFIGURE_MAXIMUM_PIPES > 0
-    #define CONFIGURE_IMFS_ENABLE_MKFIFO
-  #endif
-#endif
 
 /**
  *  @defgroup ConfigFilesystems Filesystems and Mount Table Configuration
@@ -587,14 +554,6 @@ extern "C" {
 #endif
 /**@}*/ /* end of file system group */
 
-/*
- *  STACK_CHECKER_ON was still available in 4.9 so give a warning for now.
- */
-#if defined(STACK_CHECKER_ON)
-  #define CONFIGURE_STACK_CHECKER_ENABLED
-  #warning "STACK_CHECKER_ON deprecated -- use CONFIGURE_STACK_CHECKER_ENABLED"
-#endif
-
 /**
  * @brief Maximum priority configuration.
  *
@@ -662,21 +621,6 @@ extern "C" {
  *    - CONFIGURE_SCHEDULER_TABLE_ENTRIES
  *    - CONFIGURE_SCHEDULER_USER_PER_THREAD
  */
-
-#ifdef CONFIGURE_SCHEDULER_CONTEXT
-  #warning "CONFIGURE_SCHEDULER_CONTEXT has been renamed to CONFIGURE_SCHEDULER since RTEMS 5.1"
-  #define CONFIGURE_SCHEDULER CONFIGURE_SCHEDULER_CONTEXT
-#endif
-
-#ifdef CONFIGURE_SCHEDULER_CONTROLS
-  #warning "CONFIGURE_SCHEDULER_CONTROLS has been renamed to CONFIGURE_SCHEDULER_TABLE_ENTRIES since RTEMS 5.1"
-  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES CONFIGURE_SCHEDULER_CONTROLS
-#endif
-
-#ifdef CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
-  #warning "CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS has been renamed to CONFIGURE_SCHEDULER_ASSIGNMENTS since RTEMS 5.1"
-  #define CONFIGURE_SCHEDULER_ASSIGNMENTS CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
-#endif
 
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
@@ -1618,12 +1562,6 @@ const Thread_Idle_body _Thread_Idle_body = CONFIGURE_IDLE_TASK_BODY;
     (_CONFIGURE_LIBBLOCK_TASKS * \
     (CONFIGURE_BDBUF_TASK_STACK_SIZE <= CONFIGURE_MINIMUM_TASK_STACK_SIZE ? \
     0 : CONFIGURE_BDBUF_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE))
-
-  #if defined(CONFIGURE_HAS_OWN_BDBUF_TABLE) || \
-      defined(CONFIGURE_BDBUF_BUFFER_SIZE) || \
-      defined(CONFIGURE_BDBUF_BUFFER_COUNT)
-    #error BDBUF Cache does not use a buffer configuration table. Please remove.
-  #endif
 #else
   /** This specifies the number of libblock tasks. */
   #define _CONFIGURE_LIBBLOCK_TASKS 0
@@ -2843,17 +2781,6 @@ struct _reent *__getreent(void)
 #endif   /* !defined(RTEMS_SCHEDSIM) */
 
 /*
- *  These names have been obsoleted so make the user application stop compiling
- */
-#if defined(CONFIGURE_TEST_NEEDS_TIMER_DRIVER) || \
-    defined(CONFIGURE_TEST_NEEDS_CONSOLE_DRIVER) || \
-    defined(CONFIGURE_TEST_NEEDS_CLOCK_DRIVER) || \
-    defined(CONFIGURE_TEST_NEEDS_RTC_DRIVER) || \
-    defined(CONFIGURE_TEST_NEEDS_STUB_DRIVER)
-#error "CONFIGURATION ERROR: CONFIGURE_TEST_XXX constants are obsolete"
-#endif
-
-/*
  *  Validate the configured maximum priority
  */
 #if ((CONFIGURE_MAXIMUM_PRIORITY != 3) && \
@@ -2868,82 +2795,6 @@ struct _reent *__getreent(void)
 
 #if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
   #error "Maximum priority configured higher than supported by target."
-#endif
-
-#ifdef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
-  #warning "The CONFIGURE_HAS_OWN_CONFIGURATION_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE
-  #warning "The CONFIGURE_HAS_OWN_DEVICE_DRIVER_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
-  #warning "The CONFIGURE_HAS_OWN_FILESYSTEM_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_HAS_OWN_INIT_TABLE
-  #warning "The CONFIGURE_HAS_OWN_INIT_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_HAS_OWN_MOUNT_TABLE
-  #warning "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
-  #warning "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
-  #warning "The CONFIGURE_NUMBER_OF_TERMIOS_PORTS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_ADA_TASKS
-  #warning "The CONFIGURE_MAXIMUM_ADA_TASKS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
-  #warning "The CONFIGURE_MAXIMUM_FAKE_ADA_TASKS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_MRSP_SEMAPHORES
-  #warning "The CONFIGURE_MAXIMUM_MRSP_SEMAPHORES configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_BARRIERS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-  #warning "The CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MUTEXES configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_RWLOCKS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_PTYS
-  #warning "The CONFIGURE_MAXIMUM_PTYS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
-  #warning "The CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_TERMIOS_DISABLED
-  #warning "The CONFIGURE_TERMIOS_DISABLED configuration option is obsolete since RTEMS 5.1"
 #endif
 
 /*
@@ -2968,22 +2819,6 @@ struct _reent *__getreent(void)
      (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 256) && \
      (CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK != 512))
   #error "IMFS Memfile block size must be a power of 2 between 16 and 512"
-#endif
-
-#ifdef CONFIGURE_ENABLE_GO
-  #warning "The CONFIGURE_ENABLE_GO configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_GNAT_RTEMS
-  #warning "The CONFIGURE_GNAT_RTEMS configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_GOROUTINES
-  #warning "The CONFIGURE_MAXIMUM_GOROUTINES configuration option is obsolete since RTEMS 5.1"
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_GO_CHANNELS
-  #warning "The CONFIGURE_MAXIMUM_GO_CHANNELS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #endif
