@@ -1002,6 +1002,7 @@ librtemscpu_a_SOURCES += score/src/coretodhookunregister.c
 librtemscpu_a_SOURCES += score/src/watchdogremove.c
 librtemscpu_a_SOURCES += score/src/watchdogtick.c
 librtemscpu_a_SOURCES += score/src/watchdogtickssinceboot.c
+librtemscpu_a_SOURCES += score/src/watchdogtimeslicedefault.c
 librtemscpu_a_SOURCES += score/src/userextaddset.c
 librtemscpu_a_SOURCES += score/src/userext.c
 librtemscpu_a_SOURCES += score/src/userextremoveset.c

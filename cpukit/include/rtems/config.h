@@ -87,11 +87,6 @@ typedef struct {
   uintptr_t                      work_space_size;
 
   /** 
-   * This field specifies the number of ticks in each task's timeslice.
-   */
-  uint32_t                       ticks_per_timeslice;
-
-  /** 
    * This element points to the BSP's optional idle task which may override
    * the default one provided with RTEMS.
    */
@@ -163,7 +158,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
         (_Watchdog_Nanoseconds_per_tick)
 
 #define rtems_configuration_get_ticks_per_timeslice() \
-        (Configuration.ticks_per_timeslice)
+        (_Watchdog_Ticks_per_timeslice)
 
 #define rtems_configuration_get_idle_task() \
         (Configuration.idle_task)

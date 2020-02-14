@@ -1967,9 +1967,15 @@ extern "C" {
 #endif
 
 /** The configures the number of clock ticks per timeslice. */
-#ifndef CONFIGURE_TICKS_PER_TIMESLICE
-  #define CONFIGURE_TICKS_PER_TIMESLICE        50
+#if defined(CONFIGURE_TICKS_PER_TIMESLICE) && \
+  CONFIGURE_TICKS_PER_TIMESLICE != WATCHDOG_TICKS_PER_TIMESLICE_DEFAULT
+
+#ifdef CONFIGURE_INIT
+  const uint32_t _Watchdog_Ticks_per_timeslice =
+    CONFIGURE_TICKS_PER_TIMESLICE;
 #endif
+
+#endif /* CONFIGURE_TICKS_PER_TIMESLICE */
 
 /**@}*/ /* end of General Configuration */
 
@@ -2626,7 +2632,6 @@ struct _reent *__getreent(void)
    */
   const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
-    CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */

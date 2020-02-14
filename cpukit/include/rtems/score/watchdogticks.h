@@ -43,6 +43,11 @@ typedef uint32_t   Watchdog_Interval;
 #define WATCHDOG_NO_TIMEOUT 0
 
 /**
+ * @brief Default value for the watchdog ticks per timeslice.
+ */
+#define WATCHDOG_TICKS_PER_TIMESLICE_DEFAULT 50
+
+/**
  * @brief The watchdog ticks counter.
  *
  * With a 1ms watchdog tick, this counter overflows after 50 days since boot.
@@ -72,6 +77,14 @@ extern const uint32_t _Watchdog_Nanoseconds_per_tick;
  * <rtems/confdefs.h>.
  */
 extern const uint32_t _Watchdog_Ticks_per_second;
+
+/**
+ * @brief The watchdog ticks per timeslice.
+ *
+ * This constant is defined by the application configuration via
+ * <rtems/confdefs.h>.
+ */
+extern const uint32_t _Watchdog_Ticks_per_timeslice;
 
 /** @} */
 
