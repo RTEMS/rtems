@@ -62,13 +62,7 @@ static void consume_all_memory( void )
 
 static void begin_test( void )
 {
-  int i;
-
   TEST_BEGIN();
-  i = *PER_CPU_DATA_GET( _Per_CPU_Get_snapshot(), int, i );
-  RTEMS_OBFUSCATE_VARIABLE( i );
-  rtems_test_assert( i == 123 );
-
   consume_all_memory();
 }
 
