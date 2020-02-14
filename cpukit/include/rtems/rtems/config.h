@@ -55,16 +55,8 @@ typedef struct {
    * This field is the set of Classic API Initialization
    * Tasks which are configured for this application.
    */
-  rtems_initialization_tasks_table *User_initialization_tasks_table;
+  const rtems_initialization_tasks_table *User_initialization_tasks_table;
 } rtems_api_configuration_table;
-
-/**
- *  @brief RTEMS API Configuration Table
- *
- *  This is the RTEMS API Configuration Table expected to be generated
- *  by confdefs.h.
- */
-extern rtems_api_configuration_table Configuration_RTEMS_API;
 
 /**@}*/
 
@@ -85,6 +77,9 @@ uint32_t rtems_configuration_get_maximum_semaphores( void );
 uint32_t rtems_configuration_get_maximum_timers( void );
 
 uint32_t rtems_configuration_get_maximum_tasks( void );
+
+const rtems_api_configuration_table *
+rtems_configuration_get_rtems_api_configuration( void );
 
 #ifdef __cplusplus
 }

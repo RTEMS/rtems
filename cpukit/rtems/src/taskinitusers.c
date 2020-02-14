@@ -18,79 +18,45 @@
 #include "config.h"
 #endif
 
-#include <rtems/config.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/modes.h>
-#include <rtems/score/assert.h>
-#include <rtems/score/stack.h>
 #include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/assert.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/interr.h>
 
-/*
- *  _RTEMS_tasks_Initialize_user_tasks_body
- *
- *  This routine creates and starts all configured user
- *  initialization threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- */
-
-void _RTEMS_tasks_Initialize_user_tasks_body( void )
+void _RTEMS_tasks_Initialize_user_task( void )
 {
-  uint32_t                          index;
-  uint32_t                          maximum;
-  rtems_id                          id;
-  rtems_status_code                 return_value;
-  rtems_initialization_tasks_table *user_tasks;
-  rtems_task_entry                  entry_point;
+  rtems_id                                id;
+  rtems_status_code                       return_value;
+  const rtems_initialization_tasks_table *user_task;
+  rtems_task_entry                        entry_point;
 
-  /*
-   *  Move information into local variables
-   */
-  user_tasks = Configuration_RTEMS_API.User_initialization_tasks_table;
-  maximum    = Configuration_RTEMS_API.number_of_initialization_tasks;
+  user_task = &_RTEMS_tasks_User_task_table;
+  return_value = rtems_task_create(
+    user_task->name,
+    user_task->initial_priority,
+    user_task->stack_size,
+    user_task->mode_set,
+    user_task->attribute_set,
+    &id
+  );
+  if ( !rtems_is_status_successful( return_value ) ) {
+    _Internal_error( INTERNAL_ERROR_RTEMS_INIT_TASK_CREATE_FAILED );
+  }
 
-  /*
-   *  Verify that we have a set of user tasks to iterate
-   */
-  if ( !user_tasks )
-    return;
+  entry_point = user_task->entry_point;
+  if ( entry_point == NULL ) {
+    _Internal_error( INTERNAL_ERROR_RTEMS_INIT_TASK_ENTRY_IS_NULL );
+  }
 
-  /*
-   *  Now iterate over the initialization tasks and create/start them.
-   */
-  for ( index=0 ; index < maximum ; index++ ) {
-    return_value = rtems_task_create(
-      user_tasks[ index ].name,
-      user_tasks[ index ].initial_priority,
-      user_tasks[ index ].stack_size,
-      user_tasks[ index ].mode_set,
-      user_tasks[ index ].attribute_set,
-      &id
-    );
-    if ( !rtems_is_status_successful( return_value ) ) {
-      _Internal_error( INTERNAL_ERROR_RTEMS_INIT_TASK_CREATE_FAILED );
-    }
+  return_value = rtems_task_start(
+    id,
+    entry_point,
+    user_task->argument
+  );
+  _Assert( rtems_is_status_successful( return_value ) );
+  (void) return_value;
 
-    entry_point = user_tasks[ index ].entry_point;
-    if ( entry_point == NULL ) {
-      _Internal_error( INTERNAL_ERROR_RTEMS_INIT_TASK_ENTRY_IS_NULL );
-    }
-
-    return_value = rtems_task_start(
-      id,
-      entry_point,
-      user_tasks[ index ].argument
-    );
-    _Assert( rtems_is_status_successful( return_value ) );
-    (void) return_value;
-
-    if ( _Thread_Global_constructor == 0 ) {
-      _Thread_Global_constructor = id;
-    }
+  if ( _Thread_Global_constructor == 0 ) {
+    _Thread_Global_constructor = id;
   }
 }

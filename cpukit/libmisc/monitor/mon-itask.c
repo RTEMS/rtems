@@ -40,15 +40,17 @@ rtems_monitor_init_task_next(
     rtems_id              *next_id
 )
 {
-    rtems_initialization_tasks_table *itask;
+    const rtems_api_configuration_table *config;
+    const rtems_initialization_tasks_table *itask;
     uint32_t   n = rtems_object_id_get_index(*next_id);
 
-    if (n >= Configuration_RTEMS_API.number_of_initialization_tasks)
+    config = rtems_configuration_get_rtems_api_configuration();
+    if (n >= config->number_of_initialization_tasks)
         goto failed;
 
     _Objects_Allocator_lock();
 
-    itask = Configuration_RTEMS_API.User_initialization_tasks_table + n;
+    itask = config->User_initialization_tasks_table + n;
 
     /*
      * dummy up a fake id and name for this item

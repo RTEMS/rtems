@@ -29,7 +29,9 @@ rtems_monitor_config_canonical(
     const void             *config_void
 )
 {
-    rtems_api_configuration_table *r = &Configuration_RTEMS_API;
+    const rtems_api_configuration_table *r;
+
+    r = rtems_configuration_get_rtems_api_configuration();
 
     canonical_config->work_space_size = rtems_configuration_get_work_space_size();
     canonical_config->maximum_tasks = rtems_configuration_get_maximum_tasks();

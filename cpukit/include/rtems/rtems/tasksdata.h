@@ -53,19 +53,18 @@ typedef struct {
 }  RTEMS_API_Control;
 
 /**
- *  @brief _RTEMS_tasks_Initialize_user_tasks_body
+ * @brief Initialization table for the first user task.
  *
- *  This routine creates and starts all configured user
- *  initialization threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  RTEMS Task Manager
+ * This table is used by _RTEMS_tasks_Initialize_user_task() and initialized
+ * via <rtems/confdefs.h>.
  */
+extern const rtems_initialization_tasks_table _RTEMS_tasks_User_task_table;
 
-extern void _RTEMS_tasks_Initialize_user_tasks_body( void );
+/**
+ * @brief System initialization handler to create and start the first user
+ * task.
+ */
+extern void _RTEMS_tasks_Initialize_user_task( void );
 
 /**
  *  The following instantiates the information control block used to

@@ -104,11 +104,6 @@ extern "C" {
  */
 
 /**
- * This is the Classic API initialization tasks table.
- */
-extern rtems_initialization_tasks_table Initialization_tasks[];
-
-/**
  * This macro determines whether the RTEMS reentrancy support for
  * the Newlib C Library is enabled.
  */
@@ -1362,41 +1357,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_INIT_TASK_ARGUMENTS     0
 #endif
 
-#ifdef CONFIGURE_INIT
-  rtems_initialization_tasks_table Initialization_tasks[] = {
-    { CONFIGURE_INIT_TASK_NAME,
-      CONFIGURE_INIT_TASK_STACK_SIZE,
-      CONFIGURE_INIT_TASK_PRIORITY,
-      CONFIGURE_INIT_TASK_ATTRIBUTES,
-      CONFIGURE_INIT_TASK_ENTRY_POINT,
-      CONFIGURE_INIT_TASK_INITIAL_MODES,
-      CONFIGURE_INIT_TASK_ARGUMENTS
-    }
-  };
-#endif
-
-/**
- * This is the name of the Initialization Tasks Table generated.
- */
-#define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
-
-/*
- * This is the size of the Initialization Tasks Table generated.
- */
-#define CONFIGURE_INIT_TASK_TABLE_SIZE \
-  RTEMS_ARRAY_SIZE(CONFIGURE_INIT_TASK_TABLE)
-
 #else     /* CONFIGURE_RTEMS_INIT_TASKS_TABLE */
-
-/*
- * This is the name of the Initialization Task when none is configured.
- */
-#define CONFIGURE_INIT_TASK_TABLE      NULL
-
-/*
- * This is the size of the Initialization Task when none is configured.
- */
-#define CONFIGURE_INIT_TASK_TABLE_SIZE 0
 
 /*
  * This is the stack size of the Initialization Task when none is configured.
@@ -2580,14 +2541,6 @@ struct _reent *__getreent(void)
     EXTENSION_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_USER_EXTENSIONS );
   #endif
 
-  /**
-   * This is the Classic API Configuration Table.
-   */
-  rtems_api_configuration_table Configuration_RTEMS_API = {
-    CONFIGURE_INIT_TASK_TABLE_SIZE,
-    CONFIGURE_INIT_TASK_TABLE
-  };
-
   #if CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
     POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[
       rtems_resource_maximum_per_allocation(
@@ -2779,8 +2732,18 @@ struct _reent *__getreent(void)
  */
 #ifdef CONFIGURE_INIT
   #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
+    const rtems_initialization_tasks_table _RTEMS_tasks_User_task_table = {
+      CONFIGURE_INIT_TASK_NAME,
+      CONFIGURE_INIT_TASK_STACK_SIZE,
+      CONFIGURE_INIT_TASK_PRIORITY,
+      CONFIGURE_INIT_TASK_ATTRIBUTES,
+      CONFIGURE_INIT_TASK_ENTRY_POINT,
+      CONFIGURE_INIT_TASK_INITIAL_MODES,
+      CONFIGURE_INIT_TASK_ARGUMENTS
+    };
+
     RTEMS_SYSINIT_ITEM(
-      _RTEMS_tasks_Initialize_user_tasks_body,
+      _RTEMS_tasks_Initialize_user_task,
       RTEMS_SYSINIT_CLASSIC_USER_TASKS,
       RTEMS_SYSINIT_ORDER_MIDDLE
     );
