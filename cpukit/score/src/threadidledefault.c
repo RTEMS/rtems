@@ -1,11 +1,3 @@
-/**
- * @file
- *
- * @ingroup RTEMSScoreThread
- *
- * @brief Constants for the idle threads.
- */
-
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
@@ -33,46 +25,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_THREADIDLEDATA_H
-#define _RTEMS_SCORE_THREADIDLEDATA_H
-
-#include <rtems/score/basedefs.h>
-
-#ifdef __cplusplus
-extern "C" {
+#if HAVE_CONFIG_H
+#include "config.h"
 #endif
 
-/**
- * @addtogroup RTEMSScoreThread
- *
- * @{
- */
+#include <rtems/score/threadidledata.h>
+#include <rtems/score/cpu.h>
 
-/**
- * @brief The idle thread stack size in bytes.
- *
- * This constant is defined by the application configuration via
- * <rtems/confdefs.h>.
- */
-extern const size_t _Thread_Idle_stack_size;
-
-/**
- * @brief The idle thread body type.
- */
-typedef void *( *Thread_Idle_body )( uintptr_t );
-
-/**
- * @brief The idle thread body.
- *
- * This constant is defined by the application configuration via
- * <rtems/confdefs.h>.
- */
-extern const Thread_Idle_body _Thread_Idle_body;
-
-/** @} */
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* _RTEMS_SCORE_THREADIDLEDATA_H */
+const Thread_Idle_body _Thread_Idle_body = _CPU_Thread_Idle_body;

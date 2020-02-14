@@ -1092,9 +1092,11 @@ extern "C" {
 #ifndef CONFIGURE_IDLE_TASK_BODY
   #if defined(BSP_IDLE_TASK_BODY)
     #define CONFIGURE_IDLE_TASK_BODY BSP_IDLE_TASK_BODY
-  #else
-    #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
   #endif
+#endif
+
+#if defined(CONFIGURE_INIT) && defined(CONFIGURE_IDLE_TASK_BODY)
+const Thread_Idle_body _Thread_Idle_body = CONFIGURE_IDLE_TASK_BODY;
 #endif
 /**@}*/ /* end of IDLE thread configuration */
 
@@ -2636,7 +2638,6 @@ struct _reent *__getreent(void)
    */
   const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
-    CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
       true,
     #else

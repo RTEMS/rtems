@@ -25,7 +25,6 @@
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/config.h>
 
 #include <string.h>
 
@@ -79,7 +78,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
 
   idle->is_idle = true;
   idle->Start.Entry.adaptor = _Thread_Entry_adaptor_idle;
-  idle->Start.Entry.Kinds.Idle.entry = rtems_configuration_get_idle_task();
+  idle->Start.Entry.Kinds.Idle.entry = _Thread_Idle_body;
 
   _Thread_Load_environment( idle );
 

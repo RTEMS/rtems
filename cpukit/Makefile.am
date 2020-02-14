@@ -956,6 +956,7 @@ librtemscpu_a_SOURCES += score/src/threaddispatch.c
 librtemscpu_a_SOURCES += score/src/threadget.c
 librtemscpu_a_SOURCES += score/src/threadhandler.c
 librtemscpu_a_SOURCES += score/src/threadinitialize.c
+librtemscpu_a_SOURCES += score/src/threadidledefault.c
 librtemscpu_a_SOURCES += score/src/threadloadenv.c
 librtemscpu_a_SOURCES += score/src/threadrestart.c
 librtemscpu_a_SOURCES += score/src/threadsetstate.c

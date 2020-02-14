@@ -87,12 +87,6 @@ typedef struct {
    */
   uintptr_t                      work_space_size;
 
-  /** 
-   * This element points to the BSP's optional idle task which may override
-   * the default one provided with RTEMS.
-   */
-  void                        *(*idle_task)( uintptr_t );
-
   /**
    * @brief Specifies if a unified work area is used or not.
    *
@@ -155,7 +149,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
         (_Watchdog_Ticks_per_timeslice)
 
 #define rtems_configuration_get_idle_task() \
-        (Configuration.idle_task)
+        (_Thread_Idle_entry)
 
 #define rtems_configuration_get_idle_task_stack_size() \
         (_Thread_Idle_stack_size)
