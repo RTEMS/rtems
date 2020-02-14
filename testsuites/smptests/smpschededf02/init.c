@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2020 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -13,10 +13,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-  #include "config.h"
+#include "config.h"
 #endif
 
-#include "tmacros.h"
+#include <tmacros.h>
 
 #include <rtems.h>
 
@@ -30,9 +30,14 @@ const char rtems_test_name[] = "SMPSCHEDEDF 2";
 
 #define A(cpu0, cpu1) ((cpu1 << 1) | cpu0)
 
-#define IDLE UINT8_C(255)
-
-#define NAME rtems_build_name('E', 'D', 'F', ' ')
+typedef enum {
+  T0,
+  T1,
+  T2,
+  T3,
+  T4,
+  IDLE
+} task_index;
 
 typedef struct {
   enum {
@@ -43,7 +48,7 @@ typedef struct {
     KIND_UNBLOCK
   } kind;
 
-  size_t index;
+  task_index index;
 
   struct {
     rtems_task_priority priority;
@@ -102,84 +107,84 @@ typedef struct {
 
 static const test_action test_actions[] = {
   RESET,
-  UNBLOCK(      0,              0, IDLE),
-  UNBLOCK(      1,              0,    1),
-  UNBLOCK(      3,              0,    1),
-  SET_PRIORITY( 1,  P(2),       0,    1),
-  SET_PRIORITY( 3,  P(1),       0,    3),
-  BLOCK(        3,              0,    1),
-  SET_AFFINITY( 1,  A(1, 1),    0,    1),
-  SET_AFFINITY( 1,  A(1, 0),    1,    0),
-  SET_AFFINITY( 1,  A(1, 1),    1,    0),
-  SET_AFFINITY( 1,  A(1, 0),    1,    0),
-  SET_AFFINITY( 1,  A(0, 1),    0,    1),
-  BLOCK(        0,           IDLE,    1),
-  UNBLOCK(      0,              0,    1),
-  BLOCK(        1,              0, IDLE),
-  UNBLOCK(      1,              0,    1),
+  UNBLOCK(      T0,             T0, IDLE),
+  UNBLOCK(      T1,             T0,   T1),
+  UNBLOCK(      T3,             T0,   T1),
+  SET_PRIORITY( T1,  P(2),      T0,   T1),
+  SET_PRIORITY( T3,  P(1),      T0,   T3),
+  BLOCK(        T3,             T0,   T1),
+  SET_AFFINITY( T1,  A(1, 1),   T0,   T1),
+  SET_AFFINITY( T1,  A(1, 0),   T1,   T0),
+  SET_AFFINITY( T1,  A(1, 1),   T1,   T0),
+  SET_AFFINITY( T1,  A(1, 0),   T1,   T0),
+  SET_AFFINITY( T1,  A(0, 1),   T0,   T1),
+  BLOCK(        T0,           IDLE,   T1),
+  UNBLOCK(      T0,             T0,   T1),
+  BLOCK(        T1,             T0, IDLE),
+  UNBLOCK(      T1,             T0,   T1),
   /*
    * Show that FIFO order is honoured across all threads of the same priority.
    */
   RESET,
-  SET_PRIORITY( 1,  P(0),    IDLE, IDLE),
-  SET_PRIORITY( 2,  P(1),    IDLE, IDLE),
-  SET_PRIORITY( 3,  P(1),    IDLE, IDLE),
-  SET_AFFINITY( 3,  A(1, 0), IDLE, IDLE),
-  SET_PRIORITY( 4,  P(1),    IDLE, IDLE),
-  SET_AFFINITY( 4,  A(1, 0), IDLE, IDLE),
-  UNBLOCK(      0,              0, IDLE),
-  UNBLOCK(      1,              0,    1),
-  UNBLOCK(      2,              0,    1),
-  UNBLOCK(      3,              0,    1),
-  UNBLOCK(      4,              0,    1),
-  BLOCK(        1,              0,    2),
-  BLOCK(        2,              3,    0),
-  BLOCK(        3,              4,    0),
+  SET_PRIORITY( T1,  P(0),    IDLE, IDLE),
+  SET_PRIORITY( T2,  P(1),    IDLE, IDLE),
+  SET_PRIORITY( T3,  P(1),    IDLE, IDLE),
+  SET_AFFINITY( T3,  A(1, 0), IDLE, IDLE),
+  SET_PRIORITY( T4,  P(1),    IDLE, IDLE),
+  SET_AFFINITY( T4,  A(1, 0), IDLE, IDLE),
+  UNBLOCK(      T0,             T0, IDLE),
+  UNBLOCK(      T1,             T0,   T1),
+  UNBLOCK(      T2,             T0,   T1),
+  UNBLOCK(      T3,             T0,   T1),
+  UNBLOCK(      T4,             T0,   T1),
+  BLOCK(        T1,             T0,   T2),
+  BLOCK(        T2,             T3,   T0),
+  BLOCK(        T3,             T4,   T0),
   /*
    * Schedule a high priority affine thread directly with a low priority affine
    * thread in the corresponding ready queue.  In this case we, remove the
    * affine ready queue in _Scheduler_EDF_SMP_Allocate_processor().
    */
   RESET,
-  UNBLOCK(      0,              0, IDLE),
-  UNBLOCK(      1,              0,    1),
-  SET_PRIORITY( 1,  P(2),       0,    1),
-  SET_AFFINITY( 3,  A(0, 1),    0,    1),
-  UNBLOCK(      3,              0,    1),
-  SET_PRIORITY( 2,  P(1),       0,    1),
-  SET_AFFINITY( 2,  A(0, 1),    0,    1),
-  UNBLOCK(      2,              0,    2),
-  BLOCK(        1,              0,    2),
-  BLOCK(        2,              0,    3),
+  UNBLOCK(      T0,             T0, IDLE),
+  UNBLOCK(      T1,             T0,   T1),
+  SET_PRIORITY( T1,  P(2),      T0,   T1),
+  SET_AFFINITY( T3,  A(0, 1),   T0,   T1),
+  UNBLOCK(      T3,             T0,   T1),
+  SET_PRIORITY( T2,  P(1),      T0,   T1),
+  SET_AFFINITY( T2,  A(0, 1),   T0,   T1),
+  UNBLOCK(      T2,             T0,   T2),
+  BLOCK(        T1,             T0,   T2),
+  BLOCK(        T2,             T0,   T3),
   /* Force migration of a higher priority one-to-all thread */
   RESET,
-  UNBLOCK(      0,              0, IDLE),
-  SET_AFFINITY( 1,  A(1, 0),    0, IDLE),
-  UNBLOCK(      1,              1,    0),
+  UNBLOCK(      T0,             T0, IDLE),
+  SET_AFFINITY( T1,  A(1, 0),   T0, IDLE),
+  UNBLOCK(      T1,             T1,   T0),
   /*
    * Block a one-to-one thread while having a non-empty affine ready queue on
    * the same processor.
    */
   RESET,
-  SET_AFFINITY( 1,  A(1, 0), IDLE, IDLE),
-  SET_AFFINITY( 3,  A(1, 0), IDLE, IDLE),
-  UNBLOCK(      0,              0, IDLE),
-  UNBLOCK(      1,              1,    0),
-  UNBLOCK(      2,              1,    0),
-  UNBLOCK(      3,              1,    0),
-  BLOCK(        1,              2,    0),
-  BLOCK(        0,              3,    2),
+  SET_AFFINITY( T1,  A(1, 0), IDLE, IDLE),
+  SET_AFFINITY( T3,  A(1, 0), IDLE, IDLE),
+  UNBLOCK(      T0,             T0, IDLE),
+  UNBLOCK(      T1,             T1,   T0),
+  UNBLOCK(      T2,             T1,   T0),
+  UNBLOCK(      T3,             T1,   T0),
+  BLOCK(        T1,             T2,   T0),
+  BLOCK(        T0,             T3,   T2),
   /*
    * Make sure that a one-to-one thread does not get the wrong processor
    * allocated after selecting the highest ready thread.
    */
   RESET,
-  SET_AFFINITY( 1,  A(1, 0), IDLE, IDLE),
-  SET_AFFINITY( 2,  A(1, 0), IDLE, IDLE),
-  UNBLOCK(      0,              0, IDLE),
-  UNBLOCK(      1,              1,    0),
-  UNBLOCK(      2,              1,    0),
-  BLOCK(        0,              1, IDLE),
+  SET_AFFINITY( T1,  A(1, 0), IDLE, IDLE),
+  SET_AFFINITY( T2,  A(1, 0), IDLE, IDLE),
+  UNBLOCK(      T0,             T0, IDLE),
+  UNBLOCK(      T1,             T1,   T0),
+  UNBLOCK(      T2,             T1,   T0),
+  BLOCK(        T0,             T1, IDLE),
   RESET
 };
 
@@ -249,7 +254,7 @@ static void check_cpu_allocations(test_context *ctx, const test_action *action)
   size_t i;
 
   for (i = 0; i < CPU_COUNT; ++i) {
-    size_t e;
+    task_index e;
     const Per_CPU_Control *c;
     const Thread_Control *h;
 
@@ -346,7 +351,7 @@ static void test(void)
 
   for (i = 0; i < TASK_COUNT; ++i) {
     sc = rtems_task_create(
-      NAME,
+      rtems_build_name(' ', ' ', 'T', '0' + i),
       P(i),
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
@@ -359,7 +364,10 @@ static void test(void)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
-  sc = rtems_timer_create(NAME, &ctx->timer_id);
+  sc = rtems_timer_create(
+    rtems_build_name('A', 'C', 'T', 'N'),
+    &ctx->timer_id
+  );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_timer_fire_after(ctx->timer_id, 1, timer, ctx);
