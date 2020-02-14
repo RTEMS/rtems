@@ -2637,7 +2637,6 @@ struct _reent *__getreent(void)
    * This is the primary Configuration Table for this application.
    */
   const rtems_configuration_table Configuration = {
-    CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
       true,
     #else
@@ -2654,6 +2653,8 @@ struct _reent *__getreent(void)
       _CONFIGURE_MAXIMUM_PROCESSORS,
     #endif
   };
+
+  const uintptr_t _Workspace_Size = CONFIGURE_EXECUTIVE_RAM_SIZE;
 
   #ifdef CONFIGURE_DIRTY_MEMORY
     RTEMS_SYSINIT_ITEM(

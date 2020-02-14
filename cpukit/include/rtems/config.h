@@ -34,6 +34,7 @@
 #include <rtems/score/userextdata.h>
 #include <rtems/score/threadidledata.h>
 #include <rtems/score/watchdogticks.h>
+#include <rtems/score/wkspacedata.h>
 #include <rtems/rtems/config.h>
 #include <rtems/extension.h>
 #if defined(RTEMS_MULTIPROCESSING)
@@ -83,11 +84,6 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
  */
 typedef struct {
   /**
-   * This field specifies the size in bytes of the RTEMS Workspace.
-   */
-  uintptr_t                      work_space_size;
-
-  /**
    * @brief Specifies if a unified work area is used or not.
    *
    * If this element is @a true, then the RTEMS Workspace and the C Program
@@ -132,7 +128,7 @@ extern const rtems_configuration_table Configuration;
 uintptr_t rtems_configuration_get_stack_space_size( void );
 
 #define rtems_configuration_get_work_space_size() \
-        (Configuration.work_space_size + \
+        (_Workspace_Size + \
           (rtems_configuration_get_stack_allocator_avoids_work_space() ? \
             0 : rtems_configuration_get_stack_space_size()))
 

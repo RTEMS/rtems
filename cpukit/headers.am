@@ -408,6 +408,7 @@ include_rtems_score_HEADERS += include/rtems/score/watchdog.h
 include_rtems_score_HEADERS += include/rtems/score/watchdogimpl.h
 include_rtems_score_HEADERS += include/rtems/score/watchdogticks.h
 include_rtems_score_HEADERS += include/rtems/score/wkspace.h
+include_rtems_score_HEADERS += include/rtems/score/wkspacedata.h
 include_rtems_trace_HEADERS += include/rtems/trace/rtems-trace-buffer-vars.h
 include_sys_HEADERS += include/sys/_ffcounter.h
 include_sys_HEADERS += include/sys/cdefs_elf.h
