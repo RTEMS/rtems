@@ -18,6 +18,8 @@
 
 #include <stdio.h>
 
+#include <sys/reent.h>
+
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/imfs.h>
@@ -63,11 +65,23 @@ static void wait(void)
 static void worker_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
+  struct _reent *reent = _REENT;
+  FILE *output;
   char buf[1] = { 'x' };
   size_t n;
 
-  stdout = fopen(&file_path[0], "r+");
+  rtems_test_assert(reent->__sdidinit == 0);
+
+  output = stdout = fopen(&file_path[0], "r+");
   rtems_test_assert(stdout != NULL);
+
+  /*
+   * Check newlib's __sinit does not touch our assigned file pointer.
+   */
+  rtems_test_assert(reent->__sdidinit == 0);
+  rtems_test_assert(fflush(stdout) == 0);
+  rtems_test_assert(reent->__sdidinit != 0);
+  rtems_test_assert(stdout == output);
 
   n = fwrite(&buf[0], sizeof(buf), 1, stdout);
   rtems_test_assert(n == 1);
