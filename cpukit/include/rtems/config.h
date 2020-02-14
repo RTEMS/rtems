@@ -30,6 +30,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/memory.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/userextdata.h>
 #include <rtems/score/threadidledata.h>
@@ -85,10 +86,6 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
 typedef struct {
   #ifdef RTEMS_SMP
     bool                         smp_enabled;
-  #endif
-
-  #ifdef RTEMS_SMP
-    uint32_t                     maximum_processors;
   #endif
 } rtems_configuration_table;
 
@@ -204,13 +201,8 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  *
  * @return The configured maximum count of processors.
  */
-#ifdef RTEMS_SMP
-  #define rtems_configuration_get_maximum_processors() \
-        (Configuration.maximum_processors)
-#else
-  #define rtems_configuration_get_maximum_processors() \
-        1
-#endif
+#define rtems_configuration_get_maximum_processors() \
+        (_SMP_Processor_configured_maximum)
 
 #ifdef __cplusplus
 }

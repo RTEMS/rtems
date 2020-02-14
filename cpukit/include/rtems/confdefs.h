@@ -2639,15 +2639,17 @@ struct _reent *__getreent(void)
   const rtems_configuration_table Configuration = {
     #ifdef RTEMS_SMP
       #ifdef _CONFIGURE_SMP_APPLICATION
-        true,
+        true
       #else
-        false,
+        false
       #endif
     #endif
-    #ifdef RTEMS_SMP
-      _CONFIGURE_MAXIMUM_PROCESSORS,
-    #endif
   };
+
+  #ifdef RTEMS_SMP
+    const uint32_t _SMP_Processor_configured_maximum =
+      _CONFIGURE_MAXIMUM_PROCESSORS;
+  #endif
 
   const uintptr_t _Workspace_Size = CONFIGURE_EXECUTIVE_RAM_SIZE;
 

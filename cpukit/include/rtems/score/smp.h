@@ -36,6 +36,19 @@ extern "C" {
  * @{
  */
 
+/**
+ * @brief The configured processor maximum.
+ *
+ * In SMP configurations, this constant is defined by the application
+ * configuration via <rtems/confdefs.h>, otherwise it is a compile-time
+ * constant with the value one.
+ */
+#if defined(RTEMS_SMP)
+  extern const uint32_t _SMP_Processor_configured_maximum;
+#else
+  #define _SMP_Processor_configured_maximum 1
+#endif
+
 #if defined( RTEMS_SMP )
   extern uint32_t _SMP_Processor_maximum;
 
