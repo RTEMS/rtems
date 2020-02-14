@@ -108,25 +108,12 @@ extern "C" {
  */
 extern rtems_initialization_tasks_table Initialization_tasks[];
 
-#if defined(RTEMS_MULTIPROCESSING)
-  /**
-   * This it the distributed multiprocessing configuration table.
-   */
-  extern rtems_multiprocessing_table      Multiprocessing_configuration;
-#endif
-
 /**
  * This macro determines whether the RTEMS reentrancy support for
  * the Newlib C Library is enabled.
  */
 #ifdef RTEMS_SCHEDSIM
   #undef RTEMS_NEWLIB
-#endif
-
-#if (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  #define _CONFIGURE_NEWLIB_EXTENSION 1
-#else
-  #define _CONFIGURE_NEWLIB_EXTENSION 0
 #endif
 
 #ifndef RTEMS_SCHEDSIM
@@ -628,15 +615,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #if defined(STACK_CHECKER_ON)
   #define CONFIGURE_STACK_CHECKER_ENABLED
   #warning "STACK_CHECKER_ON deprecated -- use CONFIGURE_STACK_CHECKER_ENABLED"
-#endif
-
-/**
- * This configures the stack checker user extension.
- */
-#ifdef CONFIGURE_STACK_CHECKER_ENABLED
-  #define _CONFIGURE_STACK_CHECKER_EXTENSION 1
-#else
-  #define _CONFIGURE_STACK_CHECKER_EXTENSION 0
 #endif
 
 /**
