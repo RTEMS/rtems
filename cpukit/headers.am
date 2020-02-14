@@ -389,6 +389,7 @@ include_rtems_score_HEADERS += include/rtems/score/status.h
 include_rtems_score_HEADERS += include/rtems/score/sysstate.h
 include_rtems_score_HEADERS += include/rtems/score/thread.h
 include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
+include_rtems_score_HEADERS += include/rtems/score/threadidledata.h
 include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threadmp.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h

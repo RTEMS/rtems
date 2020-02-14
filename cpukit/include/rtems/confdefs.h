@@ -1139,6 +1139,10 @@ extern "C" {
   #error "CONFIGURE_IDLE_TASK_STACK_SIZE less than CONFIGURE_MINIMUM_TASK_STACK_SIZE"
 #endif
 
+#ifdef CONFIGURE_INIT
+  const size_t _Thread_Idle_stack_size = CONFIGURE_IDLE_TASK_STACK_SIZE;
+#endif
+
 /*
  * Interrupt stack configuration.
  *
@@ -2633,7 +2637,6 @@ struct _reent *__getreent(void)
   const rtems_configuration_table Configuration = {
     CONFIGURE_EXECUTIVE_RAM_SIZE,             /* required RTEMS workspace */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
-    CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
     #ifdef CONFIGURE_UNIFIED_WORK_AREAS       /* true for unified work areas */
       true,
     #else

@@ -32,6 +32,7 @@
 #include <rtems/score/memory.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/userextdata.h>
+#include <rtems/score/threadidledata.h>
 #include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/config.h>
 #include <rtems/extension.h>
@@ -91,13 +92,6 @@ typedef struct {
    * the default one provided with RTEMS.
    */
   void                        *(*idle_task)( uintptr_t );
-
-  /** 
-   * This field specifies the size of the IDLE task's stack.  If less than or
-   * equal to the minimum stack size, then the IDLE task will have the minimum
-   * stack size.
-   */
-  uint32_t                       idle_task_stack_size;
 
   /**
    * @brief Specifies if a unified work area is used or not.
@@ -164,7 +158,7 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
         (Configuration.idle_task)
 
 #define rtems_configuration_get_idle_task_stack_size() \
-        (Configuration.idle_task_stack_size)
+        (_Thread_Idle_stack_size)
 
 #define rtems_configuration_get_interrupt_stack_size() \
         ((size_t) _ISR_Stack_size)

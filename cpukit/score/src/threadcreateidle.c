@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/threadidledata.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
@@ -51,7 +52,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   config.name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
   config.is_fp = CPU_IDLE_TASK_IS_FP;
   config.is_preemptible = true;
-  config.stack_size = rtems_configuration_get_idle_task_stack_size()
+  config.stack_size = _Thread_Idle_stack_size
     + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE;
   config.stack_area = &_Thread_Idle_stacks[
     _Per_CPU_Get_index( cpu ) * config.stack_size
