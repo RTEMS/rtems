@@ -37,19 +37,6 @@ extern "C" {
  */
 
 /**
- * @brief Indicates if SMP is enabled.
- *
- * In SMP configurations, this constant is defined by the application
- * configuration via <rtems/confdefs.h>, otherwise it is a compile-time
- * constant with the value false.
- */
-#if defined(RTEMS_SMP)
-  extern const bool _SMP_Is_enabled;
-#else
-  #define _SMP_Is_enabled false
-#endif
-
-/**
  * @brief The configured processor maximum.
  *
  * In SMP configurations, this constant is defined by the application

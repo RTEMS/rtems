@@ -50,8 +50,6 @@ void Task_switch(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #include <rtems/confdefs.h>
 
 /* global variables */

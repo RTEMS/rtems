@@ -39,8 +39,6 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_TASKS             2
 #define CONFIGURE_MAXIMUM_TIMERS            1
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #include <rtems/confdefs.h>
 
 /* end of include file */

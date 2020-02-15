@@ -158,8 +158,6 @@ rtems_task Init(
 #define CONFIGURE_INIT_TASK_INITIAL_MODES   RTEMS_NO_PREEMPT
 #define CONFIGURE_INIT_TASK_PRIORITY        4
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 /* end of include file */

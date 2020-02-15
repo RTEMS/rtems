@@ -47,8 +47,6 @@ rtems_task Tasks_Aperiodic(
 
 #define CONFIGURE_SCHEDULER_CBS
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #include <rtems/confdefs.h>
 
 #include <rtems/rtems/clock.h>

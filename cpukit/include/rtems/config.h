@@ -151,19 +151,6 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #endif
 
 /**
- * @brief Returns true if the SMP mode of operation is enabled, and false
- * otherwise.
- *
- * In uni-processor configurations this is a compile-time constant which
- * evaluates to false.
- *
- * @retval true SMP mode of operation is enabled.
- * @retval false Otherwise.
- */
-#define rtems_configuration_is_smp_enabled() \
-      (_SMP_Is_enabled)
-
-/**
  * @brief Returns the configured maximum count of processors.
  *
  * The actual number of processors available for the application will be less

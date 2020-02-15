@@ -43,8 +43,6 @@ rtems_task Task_Periodic(
 
 #define CONFIGURE_SCHEDULER_CBS
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #include <rtems/confdefs.h>
 
 #include <rtems/rtems/clock.h>

@@ -49,8 +49,6 @@ void Get_all_counters( void );
 
 #define CONFIGURE_SCHEDULER_EDF
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #include <rtems/confdefs.h>
 
 /* global variables */

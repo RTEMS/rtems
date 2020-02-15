@@ -139,8 +139,6 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 

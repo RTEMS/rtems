@@ -27,8 +27,6 @@ static void test(void)
   rtems_mode mode;
   rtems_id id;
 
-  rtems_test_assert(rtems_configuration_is_smp_enabled());
-
   sc = rtems_task_mode(RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &mode);
   rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
 

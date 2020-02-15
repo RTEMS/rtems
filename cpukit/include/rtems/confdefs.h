@@ -161,18 +161,6 @@ extern "C" {
   #define _CONFIGURE_MAXIMUM_PROCESSORS 1
 #endif
 
-/*
- * An internal define to indicate that this is an SMP application
- * configuration.
- */
-#ifdef RTEMS_SMP
-  #if !defined(CONFIGURE_DISABLE_SMP_CONFIGURATION)
-    #define _CONFIGURE_SMP_APPLICATION
-  #elif _CONFIGURE_MAXIMUM_PROCESSORS > 1
-    #error "CONFIGURE_DISABLE_SMP_CONFIGURATION and CONFIGURE_MAXIMUM_PROCESSORS > 1 makes no sense"
-  #endif
-#endif
-
 #ifdef CONFIGURE_SMP_APPLICATION
   #warning "CONFIGURE_SMP_APPLICATION is obsolete since RTEMS 5.1"
 #endif
@@ -2621,13 +2609,6 @@ struct _reent *__getreent(void)
   #endif
 
   #ifdef RTEMS_SMP
-    const bool _SMP_Is_enabled =
-      #ifdef _CONFIGURE_SMP_APPLICATION
-        true;
-      #else
-        false;
-      #endif
-
     const uint32_t _SMP_Processor_configured_maximum =
       _CONFIGURE_MAXIMUM_PROCESSORS;
   #endif
