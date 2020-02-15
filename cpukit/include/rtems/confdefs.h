@@ -31,7 +31,6 @@
 #include <rtems/sysinit.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/context.h>
-#include <rtems/score/percpu.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/rtems/barrierdata.h>
@@ -51,8 +50,8 @@
 #include <rtems/posix/shm.h>
 #include <rtems/posix/timer.h>
 #include <rtems/confdefs/obsolete.h>
-#include <rtems/confdefs/bsp.h>
 #include <rtems/confdefs/libpci.h>
+#include <rtems/confdefs/percpu.h>
 
 #include <limits.h>
 
@@ -132,13 +131,6 @@ extern "C" {
    * initialized to specify the maximum number of file descriptors.
    */
   const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE(rtems_libio_iops);
-#endif
-
-/* Ensure that _CONFIGURE_MAXIMUM_PROCESSORS > 1 only in SMP configurations */
-#if defined(CONFIGURE_MAXIMUM_PROCESSORS) && defined(RTEMS_SMP)
-  #define _CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_MAXIMUM_PROCESSORS
-#else
-  #define _CONFIGURE_MAXIMUM_PROCESSORS 1
 #endif
 
 /*
@@ -977,130 +969,6 @@ extern "C" {
   #endif
 #endif
 /**@}*/ /* end of Scheduler Configuration */
-
-/**
- * @defgroup ConfigurationIdle IDLE Thread Configuration
- *
- * @addtogroup Configuration
- *
- * This module contains configuration parameters related to the
- * set of IDLE threads. On a uniprocessor system, there is one
- * IDLE thread. On an SMP system, there is one for each core.
- */
-
-/*
- *  If you said the IDLE task was going to do application initialization
- *  and didn't override the IDLE body, then something is amiss.
- */
-#if (defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION) && \
-     !defined(CONFIGURE_IDLE_TASK_BODY))
-  #error "CONFIGURE_ERROR: You did not override the IDLE task body."
-#endif
-
-/**
- * @brief Idle task body configuration.
- *
- * There is a default IDLE thread body provided by RTEMS which
- * has the possibility of being CPU specific.  There may be a
- * BSP specific override of the RTEMS default body and in turn,
- * the application may override and provide its own.
- */
-#ifndef CONFIGURE_IDLE_TASK_BODY
-  #if defined(BSP_IDLE_TASK_BODY)
-    #define CONFIGURE_IDLE_TASK_BODY BSP_IDLE_TASK_BODY
-  #endif
-#endif
-
-#if defined(CONFIGURE_INIT) && defined(CONFIGURE_IDLE_TASK_BODY)
-const Thread_Idle_body _Thread_Idle_body = CONFIGURE_IDLE_TASK_BODY;
-#endif
-/**@}*/ /* end of IDLE thread configuration */
-
-/**
- * @defgroup ConfigurationStackSize Configuration Thread Stack Size
- *
- * @addtogroup Configuration
- *
- * This module contains parameters related to thread and interrupt stacks.
- */
-
-/**
- * By default, use the minimum stack size requested by this port.
- */
-#ifndef CONFIGURE_MINIMUM_TASK_STACK_SIZE
-  #define CONFIGURE_MINIMUM_TASK_STACK_SIZE CPU_STACK_MINIMUM_SIZE
-#endif
-
-/**
- * This specifies the default POSIX thread stack size. By default, it is
- * twice that recommended for the port.
- */
-#ifndef CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
-#define CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE \
-  (2 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-#endif
-
-/**
- * @brief Idle task stack size configuration.
- *
- * By default, the IDLE task will have a stack of minimum size.
- * The BSP or application may override this value.
- */
-#ifndef CONFIGURE_IDLE_TASK_STACK_SIZE
-  #ifdef BSP_IDLE_TASK_STACK_SIZE
-    #define CONFIGURE_IDLE_TASK_STACK_SIZE BSP_IDLE_TASK_STACK_SIZE
-  #else
-    #define CONFIGURE_IDLE_TASK_STACK_SIZE CONFIGURE_MINIMUM_TASK_STACK_SIZE
-  #endif
-#endif
-#if CONFIGURE_IDLE_TASK_STACK_SIZE < CONFIGURE_MINIMUM_TASK_STACK_SIZE
-  #error "CONFIGURE_IDLE_TASK_STACK_SIZE less than CONFIGURE_MINIMUM_TASK_STACK_SIZE"
-#endif
-
-#ifdef CONFIGURE_INIT
-  const size_t _Thread_Idle_stack_size = CONFIGURE_IDLE_TASK_STACK_SIZE;
-#endif
-
-/*
- * Interrupt stack configuration.
- *
- * By default, the interrupt stack will be of minimum size.
- * The BSP or application may override this value.
- */
-
-#ifndef CONFIGURE_INTERRUPT_STACK_SIZE
-  #ifdef BSP_INTERRUPT_STACK_SIZE
-    #define CONFIGURE_INTERRUPT_STACK_SIZE BSP_INTERRUPT_STACK_SIZE
-  #else
-    #define CONFIGURE_INTERRUPT_STACK_SIZE CPU_STACK_MINIMUM_SIZE
-  #endif
-#endif
-
-#if CONFIGURE_INTERRUPT_STACK_SIZE % CPU_INTERRUPT_STACK_ALIGNMENT != 0
-  #error "CONFIGURE_INTERRUPT_STACK_SIZE fails to meet the CPU port interrupt stack alignment"
-#endif
-
-#ifdef CONFIGURE_INIT
-  RTEMS_DEFINE_GLOBAL_SYMBOL(
-    _ISR_Stack_size,
-    CONFIGURE_INTERRUPT_STACK_SIZE
-  );
-
-  char _ISR_Stack_area_begin[
-    _CONFIGURE_MAXIMUM_PROCESSORS * CONFIGURE_INTERRUPT_STACK_SIZE
-  ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
-  RTEMS_SECTION( ".rtemsstack.interrupt.begin" );
-
-  RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION(
-    _ISR_Stack_area_end,
-    ".rtemsstack.interrupt.end"
-  );
-#endif
-
-/**
- * @addtogroup Configuration
- */
-/**@{*/
 
 /**
  * @defgroup ConfigurationMalloc RTEMS Malloc configuration
@@ -2106,12 +1974,6 @@ struct _reent *__getreent(void)
 #define _CONFIGURE_HEAP_HANDLER_OVERHEAD \
   _Configure_Align_up( HEAP_BLOCK_HEADER_SIZE, CPU_HEAP_ALIGNMENT )
 
-/**
- * This calculates the amount of memory reserved for the IDLE tasks.
- * In an SMP system, each CPU core has its own idle task.
- */
-#define _CONFIGURE_IDLE_TASKS_COUNT _CONFIGURE_MAXIMUM_PROCESSORS
-
 /*
  *  Calculate the RAM size based on the maximum number of objects configured.
  */
@@ -2376,15 +2238,8 @@ struct _reent *__getreent(void)
     _Thread,
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
-    _CONFIGURE_IDLE_TASKS_COUNT + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT
+    _CONFIGURE_MAXIMUM_PROCESSORS + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT
   );
-
-  char _Thread_Idle_stacks[
-    _CONFIGURE_IDLE_TASKS_COUNT
-      * ( CONFIGURE_IDLE_TASK_STACK_SIZE
-        + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE )
-  ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
-  RTEMS_SECTION( ".rtemsstack.idle" );
 
   #if CONFIGURE_MAXIMUM_BARRIERS > 0
     BARRIER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_BARRIERS );
@@ -2528,11 +2383,6 @@ struct _reent *__getreent(void)
     #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
   #endif
 
-  #ifdef RTEMS_SMP
-    const uint32_t _SMP_Processor_configured_maximum =
-      _CONFIGURE_MAXIMUM_PROCESSORS;
-  #endif
-
   const uintptr_t _Workspace_Size = CONFIGURE_EXECUTIVE_RAM_SIZE;
 
   #ifdef CONFIGURE_UNIFIED_WORK_AREAS
@@ -2592,16 +2442,6 @@ struct _reent *__getreent(void)
       RTEMS_SYSINIT_ORDER_LAST
     );
   #endif
-#endif
-
-#if defined(RTEMS_SMP)
- /*
-  * Instantiate the Per CPU information based upon the user configuration.
-  */
- #if defined(CONFIGURE_INIT)
-   Per_CPU_Control_envelope _Per_CPU_Information[_CONFIGURE_MAXIMUM_PROCESSORS];
- #endif
-
 #endif
 
 /*
