@@ -150,7 +150,7 @@ rtems_isr Clock_isr(
 
       Clock_driver_timecounter_tick();
 
-      if (!rtems_configuration_is_smp_enabled()) {
+      if (_SMP_Get_processor_maximum() == 1) {
         while (
           _Thread_Heir == _Thread_Executing && _Thread_Executing->is_idle
         ) {
