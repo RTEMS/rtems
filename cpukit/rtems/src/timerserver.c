@@ -181,11 +181,13 @@ static rtems_status_code _Timer_server_Initiate(
     rtems_build_name('T','I','M','E'),
     priority,
     stack_size,
-    rtems_configuration_is_smp_enabled() ?
-      RTEMS_DEFAULT_MODES : /* no preempt is not supported for SMP */
-      RTEMS_NO_PREEMPT,   /* no preempt is like an interrupt */
-                          /* user may want floating point but we need */
-                          /*   system task specified for 0 priority */
+#ifdef RTEMS_SMP
+    RTEMS_DEFAULT_MODES, /* no preempt is not recommended for SMP */
+#else
+    RTEMS_NO_PREEMPT,    /* no preempt is like an interrupt */
+#endif
+    /* user may want floating point but we need */
+    /*   system task specified for 0 priority */
     attribute_set | RTEMS_SYSTEM_TASK,
     &id
   );
