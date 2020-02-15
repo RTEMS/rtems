@@ -27,6 +27,13 @@
   _Configuration_Scheduler_ ## name
 
 #if defined(RTEMS_SMP)
+  #define SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( value ) \
+    , value
+#else
+  #define SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( value )
+#endif
+
+#if defined(RTEMS_SMP)
   /* This object doesn't exist and indicates a configuration error */
   extern const Scheduler_Control RTEMS_SCHEDULER_INVALID_INDEX;
 
@@ -72,6 +79,7 @@
       SCHEDULER_CBS_ENTRY_POINTS, \
       SCHEDULER_CBS_MAXIMUM_PRIORITY, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( true ) \
     }
 
   /* Provided for backward compatibility */
@@ -98,6 +106,7 @@
       SCHEDULER_EDF_ENTRY_POINTS, \
       SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( true ) \
     }
 
   /* Provided for backward compatibility */
@@ -131,6 +140,7 @@
       SCHEDULER_EDF_SMP_ENTRY_POINTS, \
       SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( false ) \
     }
 
   /* Provided for backward compatibility */
@@ -162,6 +172,7 @@
         SCHEDULER_PRIORITY_CONTEXT_NAME( name ).Ready \
       ) - 1, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( true ) \
     }
 
   /* Provided for backward compatibility */
@@ -193,6 +204,7 @@
         SCHEDULER_PRIORITY_AFFINITY_SMP_CONTEXT_NAME( name ).Ready \
       ) - 1, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( false ) \
     }
 
   /* Provided for backward compatibility */
@@ -224,6 +236,7 @@
         SCHEDULER_PRIORITY_SMP_CONTEXT_NAME( name ).Ready \
       ) - 1, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( false ) \
     }
 
   /* Provided for backward compatibility */
@@ -255,6 +268,7 @@
         SCHEDULER_STRONG_APA_CONTEXT_NAME( name ).Ready \
       ) - 1, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( false ) \
     }
 
   /* Provided for backward compatibility */
@@ -282,6 +296,7 @@
       SCHEDULER_SIMPLE_ENTRY_POINTS, \
       SCHEDULER_SIMPLE_MAXIMUM_PRIORITY, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( true ) \
     }
 
   /* Provided for backward compatibility */
@@ -309,6 +324,7 @@
       SCHEDULER_SIMPLE_SMP_ENTRY_POINTS, \
       SCHEDULER_SIMPLE_SMP_MAXIMUM_PRIORITY, \
       ( obj_name ) \
+      SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( false ) \
     }
 
   /* Provided for backward compatibility */

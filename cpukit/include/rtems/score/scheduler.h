@@ -289,6 +289,14 @@ struct _Scheduler_Control {
    * @brief The scheduler name.
    */
   uint32_t name;
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief True if the non-preempt mode for threads is supported by the
+   * scheduler, otherwise false.
+   */
+  bool is_non_preempt_mode_supported;
+#endif
 };
 
 /**

@@ -130,6 +130,24 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
 }
 
 #if defined(RTEMS_SMP)
+/**
+ * @brief Indicate if the thread non-preempt mode is supported by the
+ * scheduler.
+ *
+ * @param scheduler The scheduler instance.
+ *
+ * @return True if the non-preempt mode for threads is supported by the
+ *   scheduler, otherwise false.
+ */
+RTEMS_INLINE_ROUTINE bool _Scheduler_Is_non_preempt_mode_supported(
+  const Scheduler_Control *scheduler
+)
+{
+  return scheduler->is_non_preempt_mode_supported;
+}
+#endif
+
+#if defined(RTEMS_SMP)
 void _Scheduler_Request_ask_for_help( Thread_Control *the_thread );
 
 /**

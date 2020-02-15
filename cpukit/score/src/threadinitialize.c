@@ -63,7 +63,10 @@ bool _Thread_Initialize(
   the_thread->Start.allocated_stack = config->allocated_stack;
 
 #if defined(RTEMS_SMP)
-  if ( !config->is_preemptible && rtems_configuration_is_smp_enabled() ) {
+  if (
+    !config->is_preemptible
+      && !_Scheduler_Is_non_preempt_mode_supported( config->scheduler )
+  ) {
     goto failed;
   }
 #endif

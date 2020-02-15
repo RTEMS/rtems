@@ -41,6 +41,8 @@ rtems_status_code rtems_task_mode(
   bool                needs_asr_dispatching;
   rtems_mode          old_mode;
 
+  executing = _Thread_Get_executing();
+
   if ( !previous_mode_set )
     return RTEMS_INVALID_ADDRESS;
 
@@ -48,7 +50,9 @@ rtems_status_code rtems_task_mode(
   if (
     ( mask & RTEMS_PREEMPT_MASK ) != 0
       && !_Modes_Is_preempt( mode_set )
-      && rtems_configuration_is_smp_enabled()
+      && !_Scheduler_Is_non_preempt_mode_supported(
+        _Thread_Scheduler_get_home( executing )
+      )
   ) {
     return RTEMS_NOT_IMPLEMENTED;
   }
@@ -71,8 +75,7 @@ rtems_status_code rtems_task_mode(
    * impact the executing thread. There should be no errors returned
    * past this point.
    */
- 
-  executing     = _Thread_Get_executing();
+
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
