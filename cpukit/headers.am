@@ -184,6 +184,7 @@ include_rtems_HEADERS += include/rtems/version.h
 include_rtems_HEADERS += include/rtems/vmeintr.h
 include_rtems_HEADERS += include/rtems/watchdogdrv.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/bsp.h
+include_rtems_confdefs_HEADERS += include/rtems/confdefs/libio.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/libpci.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/obsolete.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/percpu.h
