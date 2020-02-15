@@ -51,22 +51,10 @@
 #include <rtems/posix/shm.h>
 #include <rtems/posix/timer.h>
 #include <rtems/confdefs/obsolete.h>
+#include <rtems/confdefs/bsp.h>
 #include <rtems/confdefs/libpci.h>
 
 #include <limits.h>
-
-#ifdef CONFIGURE_DISABLE_BSP_SETTINGS
-  #undef BSP_DEFAULT_UNIFIED_WORK_AREAS
-  #undef BSP_IDLE_TASK_BODY
-  #undef BSP_IDLE_TASK_STACK_SIZE
-  #undef BSP_INITIAL_EXTENSION
-  #undef BSP_INTERRUPT_STACK_SIZE
-  #undef BSP_MAXIMUM_DEVICES
-  #undef CONFIGURE_BSP_PREREQUISITE_DRIVERS
-  #undef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-#else
-  #include <bsp.h>
-#endif
 
 #ifdef RTEMS_NEWLIB
   #include <sys/reent.h>
