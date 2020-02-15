@@ -1343,7 +1343,7 @@ const Thread_Idle_body _Thread_Idle_body = CONFIGURE_IDLE_TASK_BODY;
  * used to specify the initial execution mode of the single Classic API task.
  */
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
-  #ifdef _CONFIGURE_SMP_APPLICATION
+  #ifdef RTEMS_SMP
     #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
   #else
     #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT

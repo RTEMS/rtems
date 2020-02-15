@@ -1,2 +1,3 @@
 #define INHERIT_CEILING
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
 #include "../sp65/sp65impl.h"
