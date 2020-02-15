@@ -265,7 +265,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
   if (
     !_ISR_Is_enabled( level )
 #if defined(RTEMS_SMP) && CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && rtems_configuration_is_smp_enabled()
+      && _SMP_Need_inter_processor_interrupts()
 #endif
   ) {
     _Internal_error( INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT );

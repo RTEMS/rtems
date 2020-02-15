@@ -72,7 +72,7 @@ bool _Thread_Initialize(
   if (
     config->isr_level != 0
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && rtems_configuration_is_smp_enabled()
+      && _SMP_Need_inter_processor_interrupts()
 #endif
   ) {
     goto failed;

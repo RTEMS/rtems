@@ -324,6 +324,21 @@ RTEMS_INLINE_ROUTINE const Processor_mask *_SMP_Get_online_processors( void )
 #endif
 }
 
+/**
+ * @brief Indicate if inter-processor interrupts are needed.
+ *
+ * @return True if inter-processor interrupts are needed for the correct system
+ * operation, otherwise false.
+ */
+RTEMS_INLINE_ROUTINE const bool _SMP_Need_inter_processor_interrupts( void )
+{
+  /*
+   * Use the configured processor maximum instead of the actual to allow
+   * testing on uni-processor systems.
+   */
+  return _SMP_Processor_configured_maximum > 1;
+}
+
 /** @} */
 
 #ifdef __cplusplus

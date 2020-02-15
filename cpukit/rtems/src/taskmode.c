@@ -23,6 +23,7 @@
 #include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
 
@@ -58,7 +59,7 @@ rtems_status_code rtems_task_mode(
     ( mask & RTEMS_INTERRUPT_MASK ) != 0
       && _Modes_Get_interrupt_level( mode_set ) != 0
 #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && rtems_configuration_is_smp_enabled()
+      && _SMP_Need_inter_processor_interrupts()
 #endif
   ) {
     return RTEMS_NOT_IMPLEMENTED;
