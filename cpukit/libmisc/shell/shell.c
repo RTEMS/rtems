@@ -40,21 +40,42 @@
 #include <pthread.h>
 #include <assert.h>
 
+#define SHELL_STD_DEBUG 0
+
+#if SHELL_STD_DEBUG
+static FILE* default_stdout;
+#define shell_std_debug(...) fprintf(default_stdout, __VA_ARGS__)
+#else
+#define shell_std_debug(...)
+#endif
+
 const rtems_shell_env_t rtems_global_shell_env = {
   .magic         = rtems_build_name('S', 'E', 'N', 'V'),
+  .managed       = false,
   .devname       = CONSOLE_DEVICE_NAME,
   .taskname      = "SHGL",
   .exit_shell    = false,
   .forever       = true,
-  .errorlevel    = -1,
   .echo          = false,
   .cwd           = "/",
   .input         = NULL,
   .output        = NULL,
   .output_append = false,
+  .parent_stdin  = NULL,
+  .parent_stdout = NULL,
+  .parent_stderr = NULL,
   .wake_on_end   = RTEMS_ID_NONE,
-  .login_check   = NULL
+  .exit_code     = NULL,
+  .login_check   = NULL,
+  .uid           = 0,
+  .gid           = 0
 };
+
+typedef struct rtems_shell_env_key_handle
+{
+  bool managed;
+  rtems_shell_env_t* env;
+} rtems_shell_env_key_handle;
 
 static pthread_once_t rtems_shell_once = PTHREAD_ONCE_INIT;
 
@@ -64,7 +85,7 @@ static pthread_key_t rtems_shell_current_env_key;
  *  Initialize the shell user/process environment information
  */
 static rtems_shell_env_t *rtems_shell_init_env(
-  rtems_shell_env_t *shell_env_p
+  rtems_shell_env_t *shell_env_parent
 )
 {
   rtems_shell_env_t *shell_env;
@@ -72,11 +93,16 @@ static rtems_shell_env_t *rtems_shell_init_env(
   shell_env = malloc(sizeof(rtems_shell_env_t));
   if ( !shell_env )
     return NULL;
-  if ( !shell_env_p ) {
+
+  if ( shell_env_parent == NULL ) {
+    shell_env_parent = rtems_shell_get_current_env();
+  }
+  if ( shell_env_parent == NULL ) {
     *shell_env = rtems_global_shell_env;
   } else {
-    *shell_env = *shell_env_p;
+    *shell_env = *shell_env_parent;
   }
+  shell_env->managed = true;
   shell_env->taskname = NULL;
 
   return shell_env;
@@ -89,17 +115,20 @@ static void rtems_shell_env_free(
   void *ptr
 )
 {
-  rtems_shell_env_t *shell_env;
-  shell_env = (rtems_shell_env_t *) ptr;
+  if ( ptr != NULL ) {
+    rtems_shell_env_key_handle *handle = (rtems_shell_env_key_handle *) ptr;
+    rtems_shell_env_t *shell_env = handle->env;
 
-  if ( !ptr )
-    return;
+    if ( handle->managed ) {
+      if ( shell_env->input )
+        free((void *)shell_env->input);
+      if ( shell_env->output )
+        free((void *)shell_env->output);
+      free( ptr );
+    }
 
-  if ( shell_env->input )
-    free((void *)shell_env->input);
-  if ( shell_env->output )
-    free((void *)shell_env->output);
-  free( ptr );
+    free( handle );
+  }
 }
 
 static void rtems_shell_create_file(const char *name, const char *content)
@@ -131,6 +160,10 @@ static void rtems_shell_init_once(void)
   struct passwd pwd;
   struct passwd *pwd_res;
 
+#if SHELL_STD_DEBUG
+  default_stdout = stdout;
+#endif
+
   pthread_key_create(&rtems_shell_current_env_key, rtems_shell_env_free);
 
   /* dummy call to init /etc dir */
@@ -156,11 +189,46 @@ void rtems_shell_init_environment(void)
 }
 
 /*
+ * Create a current shell key.
+ */
+static bool rtems_shell_set_shell_env(
+  rtems_shell_env_t* shell_env
+)
+{
+  /*
+   * The shell environment can be managed or it can be provided by a
+   * user. We need to create a handle to hold the env pointer.
+   */
+  rtems_shell_env_key_handle *handle;
+  int eno;
+
+  handle = malloc(sizeof(rtems_shell_env_key_handle));
+  if (handle == NULL) {
+    rtems_error(0, "no memory for shell env key handle)");
+    return false;
+  }
+
+  handle->managed = shell_env->managed;
+  handle->env = shell_env;
+
+  eno = pthread_setspecific(rtems_shell_current_env_key, handle);
+  if (eno != 0) {
+    rtems_error(0, "pthread_setspecific(shell_current_env_key)");
+    return false;
+  }
+
+  return true;
+}
+
+/*
  *  Return the current shell environment
  */
 rtems_shell_env_t *rtems_shell_get_current_env(void)
 {
-  return (rtems_shell_env_t *) pthread_getspecific(rtems_shell_current_env_key);
+  rtems_shell_env_key_handle *handle;
+  handle = (rtems_shell_env_key_handle*)
+    pthread_getspecific(rtems_shell_current_env_key);
+  return handle->env;
 }
 
 /*
@@ -170,15 +238,22 @@ rtems_shell_env_t *rtems_shell_get_current_env(void)
 void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
 {
   rtems_shell_env_t *env = rtems_shell_get_current_env();
-  if (env) {
+  if (env != NULL) {
     *copy = *env;
   }
   else {
-    memset(copy, 0, sizeof(rtems_shell_env_t));
-    copy->magic    = rtems_build_name('S', 'E', 'N', 'V');
-    copy->devname  = CONSOLE_DEVICE_NAME;
-    copy->taskname = "RTSH";
+    *copy = rtems_global_shell_env;
+    copy->magic         = rtems_build_name('S', 'E', 'N', 'V');
+    copy->devname       = CONSOLE_DEVICE_NAME;
+    copy->taskname      = "RTSH";
+    copy->parent_stdout = stdout;
+    copy->parent_stdin  = stdin;
+    copy->parent_stderr = stderr;
   }
+  /*
+   * Duplicated environments are not managed.
+   */
+  copy->managed = false;
 }
 
 /*
@@ -546,9 +621,9 @@ static int rtems_shell_line_editor(
 
 static bool rtems_shell_login(rtems_shell_env_t *env, FILE * in,FILE * out)
 {
-  FILE              *fd;
-  int               c;
-  time_t            t;
+  FILE  *fd;
+  int    c;
+  time_t t;
 
   if (out) {
     if ((env->devname[5]!='p')||
@@ -707,62 +782,64 @@ static bool rtems_shell_init_user_env(void)
 #define RTEMS_SHELL_PROMPT_SIZE       (128)
 
 bool rtems_shell_main_loop(
-  rtems_shell_env_t *shell_env_arg
+  rtems_shell_env_t *shell_env
 )
 {
-  rtems_shell_env_t *shell_env;
-  int                eno;
-  struct termios     term;
-  struct termios     previous_term;
-  char              *prompt = NULL;
-  int                cmd;
-  int                cmd_count = 1; /* assume a script and so only 1 command line */
-  char              *cmds[RTEMS_SHELL_CMD_COUNT];
-  char              *cmd_argv;
-  int                argc;
-  char              *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
-  bool               result = true;
-  bool               input_file = false;
-  int                line = 0;
-  FILE              *stdinToClose = NULL;
-  FILE              *stdoutToClose = NULL;
+  struct termios  term;
+  struct termios  previous_term;
+  char           *prompt = NULL;
+  int             cmd;
+  int             cmd_count = 1; /* assume a script and so only 1 command line */
+  char           *cmds[RTEMS_SHELL_CMD_COUNT];
+  char           *cmd_argv;
+  int             argc;
+  char           *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
+  bool            result = true;
+  bool            input_file = false;
+  int             line = 0;
+  FILE           *stdinToClose = NULL;
+  FILE           *stdoutToClose = NULL;
 
   rtems_shell_init_environment();
 
-  shell_env = rtems_shell_init_env(shell_env_arg);
-  if (shell_env == NULL) {
-    rtems_error(0, "rtems_shell_init_env");
+  if (shell_env->magic != rtems_build_name('S', 'E', 'N', 'V')) {
+    rtems_error(0, "invalid shell environment passed to the main loop)");
     return false;
   }
 
-  eno = pthread_setspecific(rtems_shell_current_env_key, shell_env);
-  if (eno != 0) {
-    rtems_error(0, "pthread_setspecific(shell_current_env_key)");
+  if (!rtems_shell_set_shell_env(shell_env))
     return false;
-  }
 
   if (!rtems_shell_init_user_env()) {
     rtems_error(0, "rtems_shell_init_user_env");
     return false;
   }
 
-  fileno(stdout);
+  shell_std_debug("shell: out: %d %d %s\n",
+                  fileno(stdout), fileno(shell_env->parent_stdout),
+                  shell_env->output);
+  shell_std_debug("     :  in: %d %d %s\n",
+                  fileno(stdin), fileno(shell_env->parent_stdin),
+                  shell_env->input);
 
-  /* fprintf( stderr,
-     "-%s-%s-\n", shell_env->input, shell_env->output );
-  */
-
-  if (shell_env->output && strcmp(shell_env->output, "stdout") != 0) {
-    if (strcmp(shell_env->output, "stderr") == 0) {
-      stdout = stderr;
+  if (shell_env->output != NULL) {
+    if (strcmp(shell_env->output, "stdout") == 0) {
+      if (shell_env->parent_stdout != NULL)
+        stdout = shell_env->parent_stdout;
+    }
+    else if (strcmp(shell_env->output, "stderr") == 0) {
+      if (shell_env->parent_stderr != NULL)
+        stdout = shell_env->parent_stderr;
+      else
+        stdout = stderr;
     } else if (strcmp(shell_env->output, "/dev/null") == 0) {
       fclose (stdout);
     } else {
-      FILE *output = fopen(shell_env_arg->output,
-                           shell_env_arg->output_append ? "a" : "w");
-      if (!output) {
+      FILE *output = fopen(shell_env->output,
+                           shell_env->output_append ? "a" : "w");
+      if (output == NULL) {
         fprintf(stderr, "shell: open output %s failed: %s\n",
-                shell_env_arg->output, strerror(errno));
+                shell_env->output, strerror(errno));
         return false;
       }
       stdout = output;
@@ -770,27 +847,35 @@ bool rtems_shell_main_loop(
     }
   }
 
-  if (shell_env->input && strcmp(shell_env_arg->input, "stdin") != 0) {
-    FILE *input = fopen(shell_env_arg->input, "r");
-    if (!input) {
-      fprintf(stderr, "shell: open input %s failed: %s\n",
-              shell_env_arg->input, strerror(errno));
-      return false;
+  if (shell_env->input != NULL) {
+    if (strcmp(shell_env->input, "stdin") == 0) {
+      if (shell_env->parent_stdin != NULL)
+        stdin = shell_env->parent_stdin;
+    } else {
+      FILE *input = fopen(shell_env->input, "r");
+      if (input == NULL) {
+        fprintf(stderr, "shell: open input %s failed: %s\n",
+                shell_env->input, strerror(errno));
+        if (stdoutToClose != NULL)
+          fclose(stdoutToClose);
+        return false;
+      }
+      stdin = input;
+      stdinToClose = input;
+      shell_env->forever = false;
+      input_file = true;
     }
-    stdin = input;
-    stdinToClose = input;
-    shell_env->forever = false;
-    input_file =true;
   }
-  else {
-    /* make a raw terminal,Linux Manuals */
+
+  if (!input_file) {
+    /* Make a raw terminal, Linux Manuals */
     if (tcgetattr(fileno(stdin), &previous_term) >= 0) {
       term = previous_term;
       term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
       term.c_oflag &= ~OPOST;
       term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
       term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-      term.c_cflag  |= CLOCAL | CREAD;
+      term.c_cflag |= CLOCAL | CREAD;
       term.c_cc[VMIN]  = 1;
       term.c_cc[VTIME] = 0;
       if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
@@ -805,8 +890,13 @@ bool rtems_shell_main_loop(
                 "shell:cannot allocate prompt memory\n");
   }
 
-  setvbuf(stdin,NULL,_IONBF,0); /* Not buffered*/
-  setvbuf(stdout,NULL,_IONBF,0); /* Not buffered*/
+  shell_std_debug("shell: child out: %d in %d\n", fileno(stdout), fileno(stdin));
+  shell_std_debug("shell: child out: %p\n", stdout);
+
+   /* Do not buffer if interactive else leave buffered */
+  if (!input_file)
+    setvbuf(stdin, NULL, _IONBF, 0);
+  setvbuf(stdout, NULL, _IONBF, 0);
 
   /*
    * Allocate the command line buffers.
@@ -869,8 +959,6 @@ bool rtems_shell_main_loop(
         shell_env->exit_shell = false;
 
         for (;;) {
-          int cmd;
-
           /* Prompt section */
           if (prompt) {
             rtems_shell_get_prompt(shell_env, prompt,
@@ -924,7 +1012,11 @@ bool rtems_shell_main_loop(
           memcpy (cmd_argv, cmds[cmd], RTEMS_SHELL_CMD_SIZE);
           if (!rtems_shell_make_args(cmd_argv, &argc, argv,
                                      RTEMS_SHELL_MAXIMUM_ARGUMENTS)) {
-            shell_env->errorlevel = rtems_shell_execute_cmd(argv[0], argc, argv);
+            int exit_code = rtems_shell_execute_cmd(argv[0], argc, argv);
+            if (shell_env->exit_code != NULL)
+              *shell_env->exit_code = exit_code;
+            if (exit_code != 0 && shell_env->exit_on_error)
+              shell_env->exit_shell = true;
           }
 
           /* end exec cmd section */
@@ -974,6 +1066,7 @@ static rtems_status_code rtems_shell_run (
   const char *output,
   bool output_append,
   rtems_id wake_on_end,
+  int *exit_code,
   bool echo,
   rtems_shell_login_check_t login_check
 )
@@ -982,6 +1075,8 @@ static rtems_status_code rtems_shell_run (
   rtems_status_code  sc;
   rtems_shell_env_t *shell_env;
   rtems_name         name;
+
+  rtems_shell_init_environment();
 
   if ( task_name && strlen(task_name) >= 4)
     name = rtems_build_name(
@@ -1008,15 +1103,21 @@ static rtems_status_code rtems_shell_run (
                "allocating shell_env %s in shell_init()",task_name);
    return RTEMS_NO_MEMORY;
   }
+
   shell_env->devname       = devname;
   shell_env->taskname      = task_name;
+
   shell_env->exit_shell    = false;
   shell_env->forever       = forever;
   shell_env->echo          = echo;
-  shell_env->input         = strdup (input);
-  shell_env->output        = strdup (output);
+  shell_env->input         = input == NULL ? NULL : strdup (input);
+  shell_env->output        = output == NULL ? NULL : strdup (output);
   shell_env->output_append = output_append;
+  shell_env->parent_stdin  = stdin;
+  shell_env->parent_stdout = stdout;
+  shell_env->parent_stderr = stderr;
   shell_env->wake_on_end   = wake_on_end;
+  shell_env->exit_code     = exit_code;
   shell_env->login_check   = login_check;
   shell_env->uid           = getuid();
   shell_env->gid           = getgid();
@@ -1024,9 +1125,12 @@ static rtems_status_code rtems_shell_run (
   getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
   sc = rtems_task_start(task_id, rtems_shell_task,
-                          (rtems_task_argument) shell_env);
+                        (rtems_task_argument) shell_env);
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_error(sc,"starting task %s in shell_init()",task_name);
+    free( (void*) shell_env->input );
+    free( (void*) shell_env->output );
+    free( shell_env );
     return sc;
   }
 
@@ -1035,7 +1139,7 @@ static rtems_status_code rtems_shell_run (
     sc = rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT, 0, &out);
   }
 
-  return 0;
+  return sc;
 }
 
 rtems_status_code rtems_shell_init(
@@ -1049,6 +1153,7 @@ rtems_status_code rtems_shell_init(
 )
 {
   rtems_id to_wake = RTEMS_ID_NONE;
+  int exit_code = 0;
 
   if ( wait )
     to_wake = rtems_task_self();
@@ -1064,12 +1169,13 @@ rtems_status_code rtems_shell_init(
     "stdout",                /* output */
     false,                   /* output_append */
     to_wake,                 /* wake_on_end */
+    &exit_code,              /* exit code of command */
     false,                   /* echo */
     login_check              /* login check */
   );
 }
 
-rtems_status_code   rtems_shell_script (
+rtems_status_code rtems_shell_script (
   const char          *task_name,
   size_t               task_stacksize,
   rtems_task_priority  task_priority,
@@ -1080,16 +1186,14 @@ rtems_status_code   rtems_shell_script (
   bool                 echo
 )
 {
-  rtems_id          current_task = RTEMS_INVALID_ID;
+  rtems_id to_wake = RTEMS_ID_NONE;
+  int exit_code = 0;
   rtems_status_code sc;
 
-  if (wait) {
-    sc = rtems_task_ident (RTEMS_SELF, RTEMS_LOCAL, &current_task);
-    if (sc != RTEMS_SUCCESSFUL)
-      return sc;
-  }
+  if ( wait )
+    to_wake = rtems_task_self();
 
-  sc = rtems_shell_run(
+  return rtems_shell_run(
     task_name,       /* task_name */
     task_stacksize,  /* task_stacksize */
     task_priority,   /* task_priority */
@@ -1099,12 +1203,17 @@ rtems_status_code   rtems_shell_script (
     input,           /* input */
     output,          /* output */
     output_append,   /* output_append */
-    current_task,    /* wake_on_end */
+    to_wake,         /* wake_on_end */
+    &exit_code,      /* exit_code */
     echo,            /* echo */
     NULL             /* login check */
   );
-  if (sc != RTEMS_SUCCESSFUL)
-    return sc;
+
+  if (sc == RTEMS_SUCCESSFUL)
+  {
+    /* Place holder until RTEMS 5 is released then the interface for
+     * this call will change. */
+  }
 
   return sc;
 }

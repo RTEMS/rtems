@@ -217,19 +217,24 @@ extern rtems_status_code rtems_shell_script(
 /**
  *  Private environment associated with each shell instance.
  */
-typedef struct {
+typedef struct rtems_shell_env {
   /** 'S','E','N','V': Shell Environment */
   rtems_name magic;
+  bool managed;
   const char *devname;
   const char *taskname;
   bool exit_shell; /* logout */
   bool forever; /* repeat login */
-  int errorlevel;
+  int *exit_code;
+  bool exit_on_error;
   bool echo;
   char cwd[256];
   const char *input;
   const char *output;
   bool output_append;
+  FILE *parent_stdin;
+  FILE *parent_stdout;
+  FILE *parent_stderr;
   rtems_id wake_on_end;
   rtems_shell_login_check_t login_check;
 

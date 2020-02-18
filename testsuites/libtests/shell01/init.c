@@ -46,6 +46,122 @@ static void create_file(const char *name, const char *content)
   rtems_test_assert(rv == 0);
 }
 
+static const char joel_in[] =
+  "#! joel\n"
+  "jtst hello world\n"
+  "jtst 1 2 3 4 5\n";
+
+static const char joel_out_1[] =
+  " 3 'jtst hello world'\n"
+  " 6 'jtst 1 2 3 4 5'\n";
+
+static const char joel_out_2[] =
+  "\n"
+  "RTEMS Shell on (null). Use 'help' to list commands.\n"
+  " 3 'jtst hello world'\n"
+  " 6 'jtst 1 2 3 4 5'\n";
+
+static int joel_test_command(int argc, char** argv)
+{
+  int i;
+  fprintf(stdout, "%2d '", argc);
+  for (i = 0; i < argc; ++i) {
+    fprintf(stdout, argv[i]);
+    if (i < (argc - 1))
+      fprintf(stdout, " ");
+  }
+  fprintf(stdout, "'\n");
+  return 0;
+}
+
+static void test_joel(void)
+{
+  /*
+   * Running a joel script tests the shell main loop.
+   */
+  char buf[sizeof(joel_out_2) + 1];
+  rtems_shell_cmd_t* cmd;
+  FILE *in;
+  FILE *out;
+  FILE *current_stdout = stdout;
+  FILE *current_stdin = stdin;
+  size_t len;
+  rtems_status_code sc;
+
+  /*
+   * Use a private command due to the way the testsuite maps printk onto printf.
+   */
+  cmd = rtems_shell_add_cmd("jtst", "misc", "joel test", joel_test_command);
+  rtems_test_assert(cmd != NULL);
+
+  len = strlen(joel_in);
+
+  in = fopen("/jin", "w");
+  rtems_test_assert(in != NULL);
+  rtems_test_assert(fwrite(joel_in, sizeof(char), len, in) == len);
+  rtems_test_assert(fclose(in) == 0);
+
+  /*
+   * The shell opens the input and output files.
+   */
+  sc = rtems_shell_script(
+    "JTST",
+    8 * 1024,
+    1,
+    "/jin",
+    "/jout",
+    false,
+    true,
+    false);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  out = fopen("/jout", "r");
+  rtems_test_assert(out != NULL);
+  rtems_test_assert(!feof(out));
+  memset(buf, 0, sizeof(buf));
+  len = fread(buf, sizeof(char), sizeof(buf), out);
+  rtems_test_assert(len > 0);
+  rtems_test_assert(strcmp(joel_out_1, buf) == 0);
+  rtems_test_assert(fclose(out) == 0);
+
+  /*
+   * The shell task inherits the parent stdin and stdout
+   */
+  in = fopen("/jin", "r");
+  rtems_test_assert(in != NULL);
+  out = fopen("/jout", "w");
+  rtems_test_assert(out != NULL);
+
+  stdin = in;
+  stdout = out;
+
+  sc = rtems_shell_script(
+    "JTST",
+    8 * 1024,
+    1,
+    "stdin",
+    "stdout",
+    false,
+    true,
+    false);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  stdout = current_stdout;
+  stdin = current_stdin;
+
+  rtems_test_assert(fclose(in) == 0);
+  rtems_test_assert(fclose(out) == 0);
+
+  out = fopen("/jout", "r");
+  rtems_test_assert(out != NULL);
+  rtems_test_assert(!feof(out));
+  memset(buf, 0, sizeof(buf));
+  len = fread(buf, sizeof(char), sizeof(buf), out);
+  rtems_test_assert(len > 0);
+  rtems_test_assert(strcmp(joel_out_2, buf) == 0);
+  rtems_test_assert(fclose(out) == 0);
+}
+
 static void test(void)
 {
   rtems_user_env_t *uenv;
@@ -165,6 +281,7 @@ static void Init(rtems_task_argument arg)
   TEST_BEGIN();
 
   test();
+  test_joel();
 
   TEST_END();
   rtems_test_exit(0);
@@ -173,10 +290,10 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
-#define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+#define CONFIGURE_MAXIMUM_TASKS 3
+#define CONFIGURE_MAXIMUM_POSIX_KEYS 2
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
