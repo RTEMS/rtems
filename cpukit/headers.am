@@ -188,6 +188,7 @@ include_rtems_confdefs_HEADERS += include/rtems/confdefs/libio.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/libpci.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/obsolete.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/percpu.h
+include_rtems_confdefs_HEADERS += include/rtems/confdefs/scheduler.h
 include_rtems_debugger_HEADERS += include/rtems/debugger/rtems-debugger-bsp.h
 include_rtems_debugger_HEADERS += include/rtems/debugger/rtems-debugger-remote.h
 include_rtems_debugger_HEADERS += include/rtems/debugger/rtems-debugger-server.h
