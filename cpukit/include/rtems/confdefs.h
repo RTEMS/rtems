@@ -53,6 +53,7 @@
 #include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
+#include <rtems/confdefs/malloc.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 
@@ -102,45 +103,6 @@ extern "C" {
 #ifdef RTEMS_SCHEDSIM
   #undef RTEMS_NEWLIB
 #endif
-
-/**
- * @defgroup ConfigurationMalloc RTEMS Malloc configuration
- *
- * This module contains parameters related to configuration of the RTEMS
- * Malloc implementation.
- */
-/**@{*/
-#include <rtems/malloc.h>
-
-#ifdef CONFIGURE_INIT
-  /**
-   * This configures the sbrk() support for the malloc family.
-   * By default it is assumed that the BSP provides all available
-   * RAM to the malloc family implementation so sbrk()'ing to get
-   * more memory would always fail anyway.
-   */
-  const rtems_heap_extend_handler rtems_malloc_extend_handler =
-    #ifdef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-      rtems_heap_extend_via_sbrk;
-    #else
-      rtems_heap_null_extend;
-    #endif
-#endif
-
-#ifdef CONFIGURE_INIT
-  /**
-   * This configures the malloc family plugin which dirties memory
-   * allocated.  This is helpful for finding unitialized data structure
-   * problems.
-   */
-  rtems_malloc_dirtier_t rtems_malloc_dirty_helper =
-    #if defined(CONFIGURE_MALLOC_DIRTY)
-      rtems_malloc_dirty_memory;
-    #else
-      NULL;
-    #endif
-#endif
-/**@}*/  /* end of Malloc Configuration */
 
 /**
  * @defgroup ConfigurationHelpers Configuration Helpers
