@@ -61,6 +61,7 @@
 #include <rtems/confdefs/newlib.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
+#include <rtems/confdefs/unlimited.h>
 
 #include <limits.h>
 
@@ -145,93 +146,6 @@ extern "C" {
     _Configure_From_workspace(_stack_size + CONTEXT_FP_SIZE)
 #endif
 /**@}*/
-
-/**
- * This macro specifies that the user wants to use unlimited objects for any
- * classic or posix objects that have not already been given resource limits.
- */
-#if defined(CONFIGURE_UNLIMITED_OBJECTS)
-  #if !defined(CONFIGURE_UNIFIED_WORK_AREAS) && \
-     !defined(CONFIGURE_EXECUTIVE_RAM_SIZE) && \
-     !defined(CONFIGURE_MEMORY_OVERHEAD)
-     #error "CONFIGURE_UNLIMITED_OBJECTS requires a unified work area, an executive RAM size, or a defined workspace memory overhead"
-  #endif
-
-  #if !defined(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  /**
-   * This macro specifies a default allocation size for when auto-extending
-   * unlimited objects if none was given by the user.
-   */
-    #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE 8
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_TASKS)
-    #define CONFIGURE_MAXIMUM_TASKS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_TIMERS)
-    #define CONFIGURE_MAXIMUM_TIMERS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_SEMAPHORES)
-    #define CONFIGURE_MAXIMUM_SEMAPHORES \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_MESSAGE_QUEUES)
-    #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_PARTITIONS)
-    #define CONFIGURE_MAXIMUM_PARTITIONS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_REGIONS)
-    #define CONFIGURE_MAXIMUM_REGIONS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_PORTS)
-    #define CONFIGURE_MAXIMUM_PORTS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_PERIODS)
-    #define CONFIGURE_MAXIMUM_PERIODS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_BARRIERS)
-    #define CONFIGURE_MAXIMUM_BARRIERS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_POSIX_KEYS)
-    #define CONFIGURE_MAXIMUM_POSIX_KEYS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS)
-    #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES)
-    #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_POSIX_SEMAPHORES)
-    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_POSIX_SHMS)
-    #define CONFIGURE_MAXIMUM_POSIX_SHMS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-  #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
-    #define CONFIGURE_MAXIMUM_POSIX_THREADS \
-      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-  #endif
-
-  #ifdef RTEMS_POSIX_API
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_TIMERS)
-      #define CONFIGURE_MAXIMUM_POSIX_TIMERS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
-  #endif /* RTEMS_POSIX_API */
-#endif /* CONFIGURE_UNLIMITED_OBJECTS */
 
 /**
  * @defgroup ConfigurationClassicAPI Classic API Configuration
@@ -863,6 +777,8 @@ extern "C" {
  ******************************************************************
  */
 
+#ifdef CONFIGURE_INIT
+
 /*
  *  Make sure a task/thread of some sort is configured.
  *
@@ -899,6 +815,8 @@ extern "C" {
     #error "Fewer POSIX Key pairs than POSIX Key!"
   #endif
 #endif
+
+#endif /* CONFIGURE_INIT */
 
 #endif
 /* end of include file */
