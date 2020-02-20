@@ -20,6 +20,8 @@
 
 #include <rtems/posix/pthread.h>
 
+const size_t _POSIX_Threads_Minimum_stack_size;
+
 THREAD_INFORMATION_DEFINE_ZERO(
   _POSIX_Threads,
   OBJECTS_POSIX_API,

@@ -37,7 +37,6 @@
 #include <rtems/rtems/ratemondata.h>
 #include <rtems/rtems/regiondata.h>
 #include <rtems/rtems/semdata.h>
-#include <rtems/rtems/tasksdata.h>
 #include <rtems/rtems/timerdata.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>
@@ -61,7 +60,7 @@
 #include <rtems/confdefs/newlib.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
-#include <rtems/confdefs/unlimited.h>
+#include <rtems/confdefs/threads.h>
 
 #include <limits.h>
 
@@ -157,18 +156,6 @@ extern "C" {
  */
 /**@{*/
 
-/** This configures the maximum number of Classic API tasks. */
-#ifndef CONFIGURE_MAXIMUM_TASKS
-  #define CONFIGURE_MAXIMUM_TASKS               0
-#endif
-
-/*
- * This is calculated to account for the maximum number of Classic API
- * tasks used by the application and configured RTEMS capabilities.
- */
-#define _CONFIGURE_TASKS \
-  (CONFIGURE_MAXIMUM_TASKS + _CONFIGURE_LIBBLOCK_TASKS)
-
 #ifndef CONFIGURE_MAXIMUM_TIMERS
   /** This specifies the maximum number of Classic API timers. */
   #define CONFIGURE_MAXIMUM_TIMERS             0
@@ -255,14 +242,6 @@ extern "C" {
   #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
     (CONFIGURE_MAXIMUM_POSIX_KEYS * \
      (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
-#endif
-
-/**
- * This configuration parameter specifies the maximum number of
- * POSIX API threads.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-  #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
 #endif
 
 /*
@@ -478,129 +457,7 @@ extern "C" {
     _CONFIGURE_HEAP_HANDLER_OVERHEAD \
   )
 
-#ifndef CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
-  #define CONFIGURE_MAXIMUM_THREAD_NAME_SIZE THREAD_DEFAULT_MAXIMUM_NAME_SIZE
-#endif
-
 #ifdef CONFIGURE_INIT
-  typedef union {
-    Scheduler_Node Base;
-    #ifdef CONFIGURE_SCHEDULER_CBS
-      Scheduler_CBS_Node CBS;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_EDF
-      Scheduler_EDF_Node EDF;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_EDF_SMP
-      Scheduler_EDF_SMP_Node EDF_SMP;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_PRIORITY
-      Scheduler_priority_Node Priority;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
-      Scheduler_SMP_Node Simple_SMP;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
-      Scheduler_priority_SMP_Node Priority_SMP;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
-      Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_STRONG_APA
-      Scheduler_strong_APA_Node Strong_APA;
-    #endif
-    #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
-      CONFIGURE_SCHEDULER_USER_PER_THREAD User;
-    #endif
-  } Configuration_Scheduler_node;
-
-  #ifdef RTEMS_SMP
-    const size_t _Scheduler_Node_size = sizeof( Configuration_Scheduler_node );
-  #endif
-
-  const size_t _Thread_Maximum_name_size = CONFIGURE_MAXIMUM_THREAD_NAME_SIZE;
-
-  struct Thread_Configured_control {
-    Thread_Control Control;
-    #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
-      void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
-    #endif
-    Configuration_Scheduler_node Scheduler_nodes[ _CONFIGURE_SCHEDULER_COUNT ];
-    RTEMS_API_Control API_RTEMS;
-    #ifdef RTEMS_POSIX_API
-      POSIX_API_Control API_POSIX;
-    #endif
-    #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
-      char name[ CONFIGURE_MAXIMUM_THREAD_NAME_SIZE ];
-    #endif
-    #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
-      struct _reent Newlib;
-    #else
-      struct { /* Empty */ } Newlib;
-    #endif
-  };
-
-  const Thread_Control_add_on _Thread_Control_add_ons[] = {
-    {
-      offsetof( Thread_Configured_control, Control.Scheduler.nodes ),
-      offsetof( Thread_Configured_control, Scheduler_nodes )
-    }, {
-      offsetof(
-        Thread_Configured_control,
-        Control.API_Extensions[ THREAD_API_RTEMS ]
-      ),
-      offsetof( Thread_Configured_control, API_RTEMS )
-    }, {
-      offsetof(
-        Thread_Configured_control,
-        Control.libc_reent
-      ),
-      offsetof( Thread_Configured_control, Newlib )
-    }
-    #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
-      , {
-        offsetof(
-          Thread_Configured_control,
-          Control.Join_queue.Queue.name
-        ),
-        offsetof( Thread_Configured_control, name )
-      }
-    #endif
-    #ifdef RTEMS_POSIX_API
-      , {
-        offsetof(
-          Thread_Configured_control,
-          Control.API_Extensions[ THREAD_API_POSIX ]
-        ),
-        offsetof( Thread_Configured_control, API_POSIX )
-      }
-    #endif
-  };
-
-  const size_t _Thread_Control_add_on_count =
-    RTEMS_ARRAY_SIZE( _Thread_Control_add_ons );
-
-  #if defined(RTEMS_SMP)
-    struct Thread_queue_Configured_heads {
-      Thread_queue_Heads Heads;
-        Thread_queue_Priority_queue Priority[ _CONFIGURE_SCHEDULER_COUNT ];
-    };
-
-    const size_t _Thread_queue_Heads_size =
-      sizeof( Thread_queue_Configured_heads );
-  #endif
-
-  const size_t _Thread_Initial_thread_count =
-    rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) +
-    rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS );
-
-  THREAD_INFORMATION_DEFINE(
-    _Thread,
-    OBJECTS_INTERNAL_API,
-    OBJECTS_INTERNAL_THREADS,
-    _CONFIGURE_MAXIMUM_PROCESSORS + _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT
-  );
-
   #if CONFIGURE_MAXIMUM_BARRIERS > 0
     BARRIER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_BARRIERS );
   #endif
@@ -636,15 +493,6 @@ extern "C" {
     TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_TIMERS );
   #endif
 
-  #if _CONFIGURE_TASKS > 0
-    THREAD_INFORMATION_DEFINE(
-      _RTEMS_tasks,
-      OBJECTS_CLASSIC_API,
-      OBJECTS_RTEMS_TASKS,
-      _CONFIGURE_TASKS
-    );
-  #endif
-
   #if CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
     POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[
       rtems_resource_maximum_per_allocation(
@@ -674,15 +522,6 @@ extern "C" {
     POSIX_SHM_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SHMS );
   #endif
 
-  #if CONFIGURE_MAXIMUM_POSIX_THREADS > 0
-    THREAD_INFORMATION_DEFINE(
-      _POSIX_Threads,
-      OBJECTS_POSIX_API,
-      OBJECTS_POSIX_THREADS,
-      CONFIGURE_MAXIMUM_POSIX_THREADS
-    );
-  #endif
-
   #ifdef RTEMS_POSIX_API
     #if CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS > 0
       const uint32_t _POSIX_signals_Maximum_queued_signals =
@@ -697,9 +536,6 @@ extern "C" {
       POSIX_TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_TIMERS );
     #endif
   #endif
-
-  const size_t _POSIX_Threads_Minimum_stack_size =
-    CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE;
 
   /**
    * This variable specifies the minimum stack size for tasks in an RTEMS
@@ -778,32 +614,6 @@ extern "C" {
  */
 
 #ifdef CONFIGURE_INIT
-
-/*
- *  Make sure a task/thread of some sort is configured.
- *
- *  When analyzing RTEMS to find the smallest possible of memory
- *  that must be allocated, you probably do want to configure 0
- *  tasks/threads so there is a smaller set of calls to _Workspace_Allocate
- *  to analyze.
- */
-#if !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION) \
-  && CONFIGURE_MAXIMUM_TASKS == 0 \
-  && CONFIGURE_MAXIMUM_POSIX_THREADS == 0
-  #error "CONFIGURATION ERROR: No tasks or threads configured!!"
-#endif
-
-#ifndef RTEMS_SCHEDSIM
-/*
- *  Make sure at least one of the initialization task/thread
- *  tables was defined.
- */
-#if !defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
-    !defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) && \
-    !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
-#error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
-#endif
-#endif
 
 /*
  * POSIX Key pair shouldn't be less than POSIX Key, which is highly

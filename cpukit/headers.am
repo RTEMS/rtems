@@ -199,6 +199,7 @@ include_rtems_confdefs_HEADERS += include/rtems/confdefs/newlib.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/obsolete.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/percpu.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/scheduler.h
+include_rtems_confdefs_HEADERS += include/rtems/confdefs/threads.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/unlimited.h
 include_rtems_debugger_HEADERS += include/rtems/debugger/rtems-debugger-bsp.h
 include_rtems_debugger_HEADERS += include/rtems/debugger/rtems-debugger-remote.h
