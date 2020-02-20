@@ -54,6 +54,7 @@
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 #include <rtems/confdefs/threads.h>
+#include <rtems/confdefs/wkspacesupport.h>
 
 #include <limits.h>
 
@@ -99,31 +100,6 @@ extern "C" {
  * the configuration calculations.
  */
 /**@{*/
-
-/**
- * Zero of one returns 0 if the parameter is 0 else 1 is returned.
- */
-#define _Configure_Zero_or_One(_number) ((_number) != 0 ? 1 : 0)
-
-/**
- * General helper to align up a value.
- */
-#define _Configure_Align_up(_val, _align) \
-  (((_val) + (_align) - 1) - ((_val) + (_align) - 1) % (_align))
-
-#define _CONFIGURE_HEAP_MIN_BLOCK_SIZE \
-  _Configure_Align_up(sizeof(Heap_Block), CPU_HEAP_ALIGNMENT)
-
-/**
- * This is a helper macro used in calculations in this file.  It is used
- * to noted when an element is allocated from the RTEMS Workspace and adds
- * a factor to account for heap overhead plus an alignment factor that
- * may be applied.
- */
-#define _Configure_From_workspace(_size) \
-  (uintptr_t) (_Configure_Zero_or_One(_size) * \
-    _Configure_Align_up(_size + HEAP_BLOCK_HEADER_SIZE, \
-      _CONFIGURE_HEAP_MIN_BLOCK_SIZE))
 
 /**
  * This is a helper macro used in stack space calculations in this file.  It
