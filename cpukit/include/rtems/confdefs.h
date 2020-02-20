@@ -26,12 +26,10 @@
  * Include the executive's configuration
  */
 #include <rtems.h>
-#include <rtems/extensiondata.h>
 #include <rtems/ioimpl.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/context.h>
-#include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/rtems/barrierdata.h>
 #include <rtems/rtems/dpmemdata.h>
@@ -52,6 +50,7 @@
 #include <rtems/confdefs/obsolete.h>
 #include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/clock.h>
+#include <rtems/confdefs/extensions.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
@@ -573,68 +572,7 @@ extern "C" {
   #define CONFIGURE_MAXIMUM_BARRIERS               0
 #endif
 
-#ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
-  /**
-   * This configuration parameter specifies the maximum number of
-   * Classic API User Extensions.
-   */
-  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS                 0
-#endif
-
 /**@}*/ /* end of Classic API Configuration */
-
-/*
- *  Initial Extension Set
- */
-
-#ifdef CONFIGURE_INIT
-#if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
-#include <rtems/record.h>
-#endif
-#ifdef CONFIGURE_STACK_CHECKER_ENABLED
-#include <rtems/stackchk.h>
-#endif
-
-#include <rtems/libcsupport.h>
-
-#if defined(BSP_INITIAL_EXTENSION) || \
-    defined(CONFIGURE_INITIAL_EXTENSIONS) || \
-    defined(CONFIGURE_STACK_CHECKER_ENABLED) || \
-    (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
-  const User_extensions_Table _User_extensions_Initial_extensions[] = {
-    #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0 && \
-      defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED)
-      RECORD_EXTENSION,
-    #endif
-    #if !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
-      RTEMS_NEWLIB_EXTENSION,
-    #endif
-    #if defined(CONFIGURE_STACK_CHECKER_ENABLED)
-      RTEMS_STACK_CHECKER_EXTENSION,
-    #endif
-    #if defined(CONFIGURE_INITIAL_EXTENSIONS)
-      CONFIGURE_INITIAL_EXTENSIONS,
-    #endif
-    #if defined(BSP_INITIAL_EXTENSION)
-      BSP_INITIAL_EXTENSION
-    #endif
-  };
-
-  const size_t _User_extensions_Initial_count =
-    RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions );
-
-  User_extensions_Switch_control _User_extensions_Initial_switch_controls[
-    RTEMS_ARRAY_SIZE( _User_extensions_Initial_extensions )
-  ];
-
-  RTEMS_SYSINIT_ITEM(
-    _User_extensions_Handler_initialization,
-    RTEMS_SYSINIT_INITIAL_EXTENSIONS,
-    RTEMS_SYSINIT_ORDER_MIDDLE
-  );
-#endif
-
-#endif
 
 /**
  * @defgroup ConfigurationPOSIXAPI POSIX API Configuration Parameters
@@ -1099,10 +1037,6 @@ extern "C" {
     );
   #endif
 
-  #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
-    EXTENSION_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_USER_EXTENSIONS );
-  #endif
-
   #if CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
     POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[
       rtems_resource_maximum_per_allocation(
@@ -1218,42 +1152,6 @@ extern "C" {
       _Memory_Zero_free_areas,
       RTEMS_SYSINIT_ZERO_MEMORY,
       RTEMS_SYSINIT_ORDER_MIDDLE
-    );
-  #endif
-
-  #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
-    #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0
-      #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be a power of two"
-    #endif
-
-    #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS < 16
-      #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be at least 16"
-    #endif
-
-    typedef struct {
-      Record_Control    Control;
-      rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
-    } Record_Configured_control;
-
-    static Record_Configured_control _Record_Controls[ _CONFIGURE_MAXIMUM_PROCESSORS ];
-
-    const Record_Configuration _Record_Configuration = {
-      CONFIGURE_RECORD_PER_PROCESSOR_ITEMS,
-      &_Record_Controls[ 0 ].Control
-    };
-
-    RTEMS_SYSINIT_ITEM(
-      _Record_Initialize,
-      RTEMS_SYSINIT_RECORD,
-      RTEMS_SYSINIT_ORDER_MIDDLE
-    );
-  #endif
-
-  #ifdef CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
-    RTEMS_SYSINIT_ITEM(
-      _Sysinit_Verbose,
-      RTEMS_SYSINIT_RECORD,
-      RTEMS_SYSINIT_ORDER_LAST
     );
   #endif
 #endif
