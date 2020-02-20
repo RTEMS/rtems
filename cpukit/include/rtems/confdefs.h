@@ -52,6 +52,7 @@
 #include <rtems/confdefs/clock.h>
 #include <rtems/confdefs/extensions.h>
 #include <rtems/confdefs/inittask.h>
+#include <rtems/confdefs/initthread.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
@@ -605,24 +606,6 @@ extern "C" {
   #define _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS 0
 #endif
 
-#ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
-  #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
-    #define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
-  #endif
-
-  #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-    #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
-  #endif
-#endif /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
-
-/**
- * This configuration parameter specifies the stack size of the
- * POSIX API Initialization thread (if used).
- */
-#ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-  #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE    0
-#endif
 /**@}*/  /* end of POSIX API Configuration */
 
 /**
@@ -701,30 +684,12 @@ extern "C" {
 )
 
 /*
- *  Now account for any extra memory that initialization tasks or threads
- *  may have requested.
- */
-
-/*
- * This accounts for any extra memory required by the POSIX API
- * Initialization Thread.
- */
-#if (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > \
-      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE)
-  #define _CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - \
-      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE)
-#else
-  #define _CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART 0
-#endif
-
-/*
  * This macro provides a summation of the various initialization task
  * and thread stack requirements.
  */
 #define _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS \
     (_CONFIGURE_INIT_TASK_STACK_EXTRA + \
-    _CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART)
+    _CONFIGURE_POSIX_INIT_THREAD_STACK_EXTRA)
 
 /*
  * This macro is calculated to specify the memory required for
@@ -1049,25 +1014,6 @@ extern "C" {
     RTEMS_SYSINIT_ITEM(
       _Memory_Zero_free_areas,
       RTEMS_SYSINIT_ZERO_MEMORY,
-      RTEMS_SYSINIT_ORDER_MIDDLE
-    );
-  #endif
-#endif
-
-/*
- *  If the user has configured a set of POSIX Initialization Threads,
- *  then we need to install the code that runs that loop.
- */
-#ifdef CONFIGURE_INIT
-  #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE)
-    const posix_initialization_threads_table _POSIX_Threads_User_thread_table = {
-      CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT,
-      CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-    };
-
-    RTEMS_SYSINIT_ITEM(
-      _POSIX_Threads_Initialize_user_thread,
-      RTEMS_SYSINIT_POSIX_USER_THREADS,
       RTEMS_SYSINIT_ORDER_MIDDLE
     );
   #endif

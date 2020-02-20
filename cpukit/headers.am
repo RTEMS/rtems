@@ -188,6 +188,7 @@ include_rtems_confdefs_HEADERS += include/rtems/confdefs/bsp.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/clock.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/extensions.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/inittask.h
+include_rtems_confdefs_HEADERS += include/rtems/confdefs/initthread.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/libio.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/libpci.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/malloc.h
