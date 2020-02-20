@@ -56,14 +56,11 @@
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
 #include <rtems/confdefs/mpci.h>
+#include <rtems/confdefs/newlib.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 
 #include <limits.h>
-
-#ifdef RTEMS_NEWLIB
-  #include <sys/reent.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,14 +94,6 @@ extern "C" {
  *        support the RTEMS Test Suites into something that can be
  *        used remarkably reliably by most applications.
  */
-
-/**
- * This macro determines whether the RTEMS reentrancy support for
- * the Newlib C Library is enabled.
- */
-#ifdef RTEMS_SCHEDSIM
-  #undef RTEMS_NEWLIB
-#endif
 
 /**
  * @defgroup ConfigurationHelpers Configuration Helpers
@@ -645,13 +634,6 @@ extern "C" {
   );
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
-struct _reent *__getreent(void)
-{
-  return _Thread_Get_executing()->libc_reent;
-}
-#endif
-
 #endif
 
 /**
@@ -1005,9 +987,7 @@ struct _reent *__getreent(void)
     #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
       char name[ CONFIGURE_MAXIMUM_THREAD_NAME_SIZE ];
     #endif
-    #if !defined(RTEMS_SCHEDSIM) \
-      && defined(RTEMS_NEWLIB) \
-      && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
+    #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
       struct _reent Newlib;
     #else
       struct { /* Empty */ } Newlib;
