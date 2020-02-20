@@ -54,6 +54,7 @@
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
+#include <rtems/confdefs/mpci.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 
@@ -425,108 +426,6 @@ extern "C" {
   #endif /* CONFIGURE_INIT */
 #endif
 /**@}*/ /* end of Device Driver Table Configuration */
-
-/**
- * @defgroup ConfigurationMultiprocessing Multiprocessing Configuration
- *
- * @addtogroup Configuration
- *
- * This module contains the parameters related to the Multiprocessing
- * configuration of RTEMS.
- *
- * In a single processor or SMP configuration, only two parameters are
- * needed and they are defaulted. The user should not have to specify
- * any parameters.
- */
-/**@{*/
-
-/**
- * This defines the extra stack space required for the MPCI server thread.
- */
-#ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
-  #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
-#endif
-
-#if defined(RTEMS_MULTIPROCESSING)
-  /*
-   *  Default Multiprocessing Configuration Table.  The defaults are
-   *  appropriate for most of the RTEMS Multiprocessor Test Suite.  Each
-   *  value may be overridden within each test to customize the environment.
-   */
-
-  #ifdef CONFIGURE_MP_APPLICATION
-    #ifndef CONFIGURE_MP_NODE_NUMBER
-      #define CONFIGURE_MP_NODE_NUMBER                NODE_NUMBER
-    #endif
-
-    #ifndef CONFIGURE_MP_MAXIMUM_NODES
-      #define CONFIGURE_MP_MAXIMUM_NODES              2
-    #endif
-
-    #ifndef CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
-      #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS     32
-    #endif
-
-    #ifndef CONFIGURE_MP_MAXIMUM_PROXIES
-      #define CONFIGURE_MP_MAXIMUM_PROXIES            32
-    #endif
-
-    #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
-      #include <mpci.h>
-      #define CONFIGURE_MP_MPCI_TABLE_POINTER         &MPCI_table
-    #endif
-
-    #ifdef CONFIGURE_INIT
-      #if CONFIGURE_MP_NODE_NUMBER < 1
-        #error "CONFIGURE_MP_NODE_NUMBER must be greater than or equal to one"
-      #endif
-
-      #if CONFIGURE_MP_NODE_NUMBER > CONFIGURE_MP_MAXIMUM_NODES
-        #error "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
-      #endif
-
-      Objects_MP_Control _Objects_MP_Controls[
-        CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
-      ];
-
-      struct Thread_Configured_proxy_control {
-        Thread_Proxy_control Control;
-        Thread_queue_Configured_heads Heads;
-      };
-
-      static Thread_Configured_proxy_control _Thread_MP_Configured_proxies[
-        CONFIGURE_MP_MAXIMUM_PROXIES
-      ];
-
-      Thread_Configured_proxy_control * const _Thread_MP_Proxies =
-        &_Thread_MP_Configured_proxies[ 0 ];
-
-      const MPCI_Configuration _MPCI_Configuration = {
-        CONFIGURE_MP_NODE_NUMBER,               /* local node number */
-        CONFIGURE_MP_MAXIMUM_NODES,             /* maximum # nodes */
-        CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS,    /* maximum # global objects */
-        CONFIGURE_MP_MAXIMUM_PROXIES,           /* maximum # proxies */
-        CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK, /* MPCI stack > minimum */
-        CONFIGURE_MP_MPCI_TABLE_POINTER         /* ptr to MPCI config table */
-      };
-
-      char _MPCI_Receive_server_stack[
-        CONFIGURE_MINIMUM_TASK_STACK_SIZE
-          + CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
-          + CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK
-          + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE
-      ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
-      RTEMS_SECTION( ".rtemsstack.mpci" );
-    #endif
-
-    #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
-  #else
-    #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
-  #endif /* CONFIGURE_MP_APPLICATION */
-#else
-  #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
-#endif /* RTEMS_MULTIPROCESSING */
-/**@}*/ /* end of Multiprocessing Configuration */
 
 /**
  * This macro specifies that the user wants to use unlimited objects for any
@@ -1090,10 +989,6 @@ struct _reent *__getreent(void)
 #define _CONFIGURE_TASKS_STACK 0
 #define _CONFIGURE_POSIX_THREADS_STACK 0
 
-#if CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK != 0
-  #error "CONFIGURE_EXECUTIVE_RAM_SIZE defined with request for CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK"
-#endif
-
 #if CONFIGURE_EXTRA_TASK_STACKS != 0
   #error "CONFIGURE_EXECUTIVE_RAM_SIZE defined with request for CONFIGURE_EXTRA_TASK_STACKS"
 #endif
@@ -1522,15 +1417,6 @@ struct _reent *__getreent(void)
     !defined(CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
 #endif
-#endif
-
-/*
- *  If the user is trying to configure a multiprocessing application and
- *  RTEMS was not configured and built multiprocessing, then error out.
- */
-#if defined(CONFIGURE_MP_APPLICATION) && \
-    !defined(RTEMS_MULTIPROCESSING)
-#error "CONFIGURATION ERROR: RTEMS not configured for multiprocessing!!"
 #endif
 
 #if !defined(RTEMS_SCHEDSIM)
