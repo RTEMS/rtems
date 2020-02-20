@@ -50,6 +50,7 @@
 #include <rtems/posix/shm.h>
 #include <rtems/posix/timer.h>
 #include <rtems/confdefs/obsolete.h>
+#include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/percpu.h>
@@ -462,103 +463,6 @@ extern "C" {
   #endif /* CONFIGURE_INIT */
 #endif
 /**@}*/ /* end of Device Driver Table Configuration */
-
-/**
- * @defgroup ConfigurationLibBlock Configuration of LIBBLOCK
- *
- * @addtogroup Configuration
- *
- * This module contains parameters related to the LIBBLOCK buffering
- * and caching subsystem. It requires tasks to swap out data to be
- * written to non-volatile storage.
- */
-/**@{*/
-#ifdef CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
-  #include <rtems/bdbuf.h>
-  /*
-   * configure the bdbuf cache parameters
-   */
-  #ifndef CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS
-    #define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS \
-                              RTEMS_BDBUF_MAX_READ_AHEAD_BLOCKS_DEFAULT
-  #endif
-  #ifndef CONFIGURE_BDBUF_MAX_WRITE_BLOCKS
-    #define CONFIGURE_BDBUF_MAX_WRITE_BLOCKS \
-                              RTEMS_BDBUF_MAX_WRITE_BLOCKS_DEFAULT
-  #endif
-  #ifndef CONFIGURE_SWAPOUT_TASK_PRIORITY
-    #define CONFIGURE_SWAPOUT_TASK_PRIORITY \
-                              RTEMS_BDBUF_SWAPOUT_TASK_PRIORITY_DEFAULT
-  #endif
-  #ifndef CONFIGURE_SWAPOUT_SWAP_PERIOD
-    #define CONFIGURE_SWAPOUT_SWAP_PERIOD \
-                              RTEMS_BDBUF_SWAPOUT_TASK_SWAP_PERIOD_DEFAULT
-  #endif
-  #ifndef CONFIGURE_SWAPOUT_BLOCK_HOLD
-    #define CONFIGURE_SWAPOUT_BLOCK_HOLD \
-                              RTEMS_BDBUF_SWAPOUT_TASK_BLOCK_HOLD_DEFAULT
-  #endif
-  #ifndef CONFIGURE_SWAPOUT_WORKER_TASKS
-    #define CONFIGURE_SWAPOUT_WORKER_TASKS \
-                              RTEMS_BDBUF_SWAPOUT_WORKER_TASKS_DEFAULT
-  #endif
-  #ifndef CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
-    #define CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY \
-                              RTEMS_BDBUF_SWAPOUT_WORKER_TASK_PRIORITY_DEFAULT
-  #endif
-  #ifndef CONFIGURE_BDBUF_TASK_STACK_SIZE
-    #define CONFIGURE_BDBUF_TASK_STACK_SIZE \
-                              RTEMS_BDBUF_TASK_STACK_SIZE_DEFAULT
-  #endif
-  #ifndef CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
-    #define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE \
-                              RTEMS_BDBUF_CACHE_MEMORY_SIZE_DEFAULT
-  #endif
-  #ifndef CONFIGURE_BDBUF_BUFFER_MIN_SIZE
-    #define CONFIGURE_BDBUF_BUFFER_MIN_SIZE \
-                              RTEMS_BDBUF_BUFFER_MIN_SIZE_DEFAULT
-  #endif
-  #ifndef CONFIGURE_BDBUF_BUFFER_MAX_SIZE
-    #define CONFIGURE_BDBUF_BUFFER_MAX_SIZE \
-                              RTEMS_BDBUF_BUFFER_MAX_SIZE_DEFAULT
-  #endif
-  #ifndef CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
-    #define CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY \
-                              RTEMS_BDBUF_READ_AHEAD_TASK_PRIORITY_DEFAULT
-  #endif
-  #ifdef CONFIGURE_INIT
-    const rtems_bdbuf_config rtems_bdbuf_configuration = {
-      CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS,
-      CONFIGURE_BDBUF_MAX_WRITE_BLOCKS,
-      CONFIGURE_SWAPOUT_TASK_PRIORITY,
-      CONFIGURE_SWAPOUT_SWAP_PERIOD,
-      CONFIGURE_SWAPOUT_BLOCK_HOLD,
-      CONFIGURE_SWAPOUT_WORKER_TASKS,
-      CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY,
-      CONFIGURE_BDBUF_TASK_STACK_SIZE,
-      CONFIGURE_BDBUF_CACHE_MEMORY_SIZE,
-      CONFIGURE_BDBUF_BUFFER_MIN_SIZE,
-      CONFIGURE_BDBUF_BUFFER_MAX_SIZE,
-      CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
-    };
-  #endif
-
-  #define _CONFIGURE_LIBBLOCK_TASKS \
-    (1 + CONFIGURE_SWAPOUT_WORKER_TASKS + \
-    (CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS != 0))
-
-  #define _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS \
-    (_CONFIGURE_LIBBLOCK_TASKS * \
-    (CONFIGURE_BDBUF_TASK_STACK_SIZE <= CONFIGURE_MINIMUM_TASK_STACK_SIZE ? \
-    0 : CONFIGURE_BDBUF_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE))
-#else
-  /** This specifies the number of libblock tasks. */
-  #define _CONFIGURE_LIBBLOCK_TASKS 0
-  /** This specifies the extra stack space configured for libblock tasks. */
-  #define _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS 0
-  /** This specifies the number of Classic API semaphores needed by libblock. */
-#endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
-/**@}*/
 
 /**
  * @defgroup ConfigurationMultiprocessing Multiprocessing Configuration
@@ -1243,7 +1147,7 @@ struct _reent *__getreent(void)
     _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS + \
     _CONFIGURE_TASKS_STACK + \
     _CONFIGURE_POSIX_THREADS_STACK + \
-    _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS + \
+    _CONFIGURE_LIBBLOCK_TASKS_STACK_EXTRA + \
     CONFIGURE_EXTRA_TASK_STACKS + \
     _CONFIGURE_HEAP_HANDLER_OVERHEAD \
   )
