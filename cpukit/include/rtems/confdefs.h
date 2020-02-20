@@ -26,7 +26,6 @@
  * Include the executive's configuration
  */
 #include <rtems.h>
-#include <rtems/ioimpl.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/context.h>
@@ -54,6 +53,7 @@
 #include <rtems/confdefs/extensions.h>
 #include <rtems/confdefs/inittask.h>
 #include <rtems/confdefs/initthread.h>
+#include <rtems/confdefs/iodrivers.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
@@ -147,151 +147,6 @@ extern "C" {
 /**@}*/
 
 /**
- * @defgroup ConfigurationDriverTable Device Driver Table Configuration
- *
- * @addtogroup Configuration
- *
- * This group contains parameters related to generating a Device Driver
- * Table.
- *
- * Default Device Driver Table.  Each driver needed by the test is explicitly
- * chosen by the application.  There is always a null driver entry.
- */
-/**@{*/
-
-/**
- * This is an empty device driver slot.
- */
-#define NULL_DRIVER_TABLE_ENTRY \
- { NULL, NULL, NULL, NULL, NULL, NULL }
-
-#if (defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
-    defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER)) || \
-  (defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
-    defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER)) || \
-  (defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER) && \
-    defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER))
-#error "CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER, CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER, and CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER are mutually exclusive"
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-  #include <rtems/console.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-  #include <rtems/btimer.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-  #include <rtems/rtc.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
-  #include <rtems/watchdogdrv.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
-  #include <rtems/framebuffer.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-  #include <rtems/devnull.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
-  #include <rtems/devzero.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
-  /* the ide driver needs the ATA driver */
-  #ifndef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-    #define CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-  #endif
-  #include <libchip/ide_ctrl.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-  #include <libchip/ata.h>
-#endif
-
-/**
- * This specifies the maximum number of device drivers that
- * can be installed in the system at one time.  It must account
- * for both the statically and dynamically installed drivers.
- */
-#ifndef CONFIGURE_MAXIMUM_DRIVERS
-  #define CONFIGURE_MAXIMUM_DRIVERS
-#endif
-
-#ifdef CONFIGURE_INIT
-  rtems_driver_address_table
-    _IO_Driver_address_table[ CONFIGURE_MAXIMUM_DRIVERS ] = {
-    #ifdef CONFIGURE_BSP_PREREQUISITE_DRIVERS
-      CONFIGURE_BSP_PREREQUISITE_DRIVERS,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
-      CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-      CONSOLE_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
-      RTC_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
-      WATCHDOG_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
-      DEVNULL_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
-      DEVZERO_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
-      IDE_CONTROLLER_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-      ATA_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
-      FRAME_BUFFER_DRIVER_TABLE_ENTRY,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_EXTRA_DRIVERS
-      CONFIGURE_APPLICATION_EXTRA_DRIVERS,
-    #endif
-    #ifdef CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
-      NULL_DRIVER_TABLE_ENTRY
-    #elif !defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER) && \
-        !defined(CONFIGURE_APPLICATION_EXTRA_DRIVERS)
-      NULL_DRIVER_TABLE_ENTRY
-    #endif
-  };
-
-  const size_t _IO_Number_of_drivers =
-    RTEMS_ARRAY_SIZE( _IO_Driver_address_table );
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
-  /*
-   * configure the priority of the ATA driver task
-   */
-  #ifndef CONFIGURE_ATA_DRIVER_TASK_PRIORITY
-    #define CONFIGURE_ATA_DRIVER_TASK_PRIORITY ATA_DRIVER_TASK_DEFAULT_PRIORITY
-  #endif
-  #ifdef CONFIGURE_INIT
-    rtems_task_priority rtems_ata_driver_task_priority
-      = CONFIGURE_ATA_DRIVER_TASK_PRIORITY;
-  #endif /* CONFIGURE_INIT */
-#endif
-/**@}*/ /* end of Device Driver Table Configuration */
-
-/**
  * This macro specifies that the user wants to use unlimited objects for any
  * classic or posix objects that have not already been given resource limits.
  */
@@ -377,7 +232,6 @@ extern "C" {
     #endif
   #endif /* RTEMS_POSIX_API */
 #endif /* CONFIGURE_UNLIMITED_OBJECTS */
-
 
 /**
  * @defgroup ConfigurationClassicAPI Classic API Configuration
