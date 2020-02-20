@@ -30,13 +30,6 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/context.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/posix/key.h>
-#include <rtems/posix/mqueue.h>
-#include <rtems/posix/psignal.h>
-#include <rtems/posix/pthread.h>
-#include <rtems/posix/semaphore.h>
-#include <rtems/posix/shm.h>
-#include <rtems/posix/timer.h>
 #include <rtems/confdefs/obsolete.h>
 #include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/clock.h>
@@ -51,6 +44,7 @@
 #include <rtems/confdefs/mpci.h>
 #include <rtems/confdefs/newlib.h>
 #include <rtems/confdefs/objectsclassic.h>
+#include <rtems/confdefs/objectsposix.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 #include <rtems/confdefs/threads.h>
@@ -116,122 +110,6 @@ extern "C" {
 /**@}*/
 
 /**
- * @defgroup ConfigurationPOSIXAPI POSIX API Configuration Parameters
- *
- * This module contains the parameters related to configuration
- * of the POSIX API services.
- */
-/**@{*/
-
-/**
- * This configuration parameter specifies the maximum number of
- * POSIX API keys.
- *
- * POSIX Keys are available whether or not the POSIX API is enabled.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_KEYS
-  #define CONFIGURE_MAXIMUM_POSIX_KEYS 0
-#endif
-
-/*
- * This macro is calculated to specify the memory required for
- * POSIX API key/value pairs.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
-  #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
-    (CONFIGURE_MAXIMUM_POSIX_KEYS * \
-     (CONFIGURE_MAXIMUM_POSIX_THREADS + CONFIGURE_MAXIMUM_TASKS))
-#endif
-
-/*
- * Account for the object control structures plus the name
- * of the object to be duplicated.
- */
-#define _Configure_POSIX_Named_Object_RAM(_number, _size) \
-  (rtems_resource_maximum_per_allocation(_number) \
-    * _Configure_From_workspace(_POSIX_PATH_MAX + 1))
-
-/**
- * This configuration parameter specifies the maximum number of
- * POSIX API message queues.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-  #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 0
-#endif
-
-/*
- * This macro is calculated to specify the memory required for
- * POSIX API message queues.
- */
-#define _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
-  _Configure_POSIX_Named_Object_RAM( \
-     _message_queues, sizeof(POSIX_Message_queue_Control) )
-
-/**
- * This configuration parameter specifies the maximum number of
- * POSIX API semaphores.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-  #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
-#endif
-
-/*
- * This macro is calculated to specify the memory required for
- * POSIX API semaphores.
- */
-#define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
-  _Configure_POSIX_Named_Object_RAM( \
-     _semaphores, sizeof(POSIX_Semaphore_Control) )
-
-/**
- * Configure the maximum number of POSIX shared memory objects.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_SHMS
-  #define CONFIGURE_MAXIMUM_POSIX_SHMS 0
-#endif
-
-/*
- * This macro is calculated to specify the memory required for
- * POSIX API shared memory.
- */
-#define _CONFIGURE_MEMORY_FOR_POSIX_SHMS(_shms) \
-  _Configure_POSIX_Named_Object_RAM(_shms, sizeof(POSIX_Shm_Control) )
-
-/**
- * This configuration parameter specifies the maximum number of
- * POSIX API timers.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_TIMERS
-  #define CONFIGURE_MAXIMUM_POSIX_TIMERS 0
-#endif
-
-#if !defined(RTEMS_POSIX_API) && CONFIGURE_MAXIMUM_POSIX_TIMERS != 0
-  #error "CONFIGURE_MAXIMUM_POSIX_TIMERS must be zero if POSIX API is disabled"
-#endif
-
-/**
- * This configuration parameter specifies the maximum number of
- * POSIX API queued signals.
- */
-#ifndef CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-  #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 0
-#endif
-
-#if !defined(RTEMS_POSIX_API) && CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0
-  #error "CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS must be zero if POSIX API is disabled"
-#endif
-
-#if CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS > 0
-  #define _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS \
-    _Configure_From_workspace( (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS) * \
-      sizeof( POSIX_signals_Siginfo_node ) )
-#else
-  #define _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS 0
-#endif
-
-/**@}*/  /* end of POSIX API Configuration */
-
-/**
  * This is so we can account for tasks with stacks greater than minimum
  * size.  This is in bytes.
  */
@@ -294,13 +172,7 @@ extern "C" {
  */
 #define CONFIGURE_EXECUTIVE_RAM_SIZE \
 ( \
-   _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
-     CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
-   _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
-     CONFIGURE_MAXIMUM_POSIX_SEMAPHORES) + \
-   _CONFIGURE_MEMORY_FOR_POSIX_SHMS( \
-     CONFIGURE_MAXIMUM_POSIX_SHMS) + \
-   _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS + \
+   _CONFIGURE_MEMORY_FOR_POSIX_OBJECTS + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
    (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
    _CONFIGURE_HEAP_HANDLER_OVERHEAD \
@@ -357,50 +229,6 @@ extern "C" {
   )
 
 #ifdef CONFIGURE_INIT
-  #if CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
-    POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[
-      rtems_resource_maximum_per_allocation(
-        CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
-      )
-    ];
-
-    const uint32_t _POSIX_Keys_Key_value_pair_maximum =
-      CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS;
-  #endif
-
-  #if CONFIGURE_MAXIMUM_POSIX_KEYS > 0
-    POSIX_KEYS_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_KEYS );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES > 0
-    POSIX_MESSAGE_QUEUE_INFORMATION_DEFINE(
-      CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
-    );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_POSIX_SEMAPHORES > 0
-    POSIX_SEMAPHORE_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_POSIX_SHMS > 0
-    POSIX_SHM_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_SHMS );
-  #endif
-
-  #ifdef RTEMS_POSIX_API
-    #if CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS > 0
-      const uint32_t _POSIX_signals_Maximum_queued_signals =
-        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS;
-
-      POSIX_signals_Siginfo_node _POSIX_signals_Siginfo_nodes[
-        CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
-      ];
-    #endif
-
-    #if CONFIGURE_MAXIMUM_POSIX_TIMERS > 0
-      POSIX_TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_POSIX_TIMERS );
-    #endif
-  #endif
-
   /**
    * This variable specifies the minimum stack size for tasks in an RTEMS
    * application.
@@ -467,30 +295,6 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-/******************************************************************
- ******************************************************************
- ******************************************************************
- *         CONFIGURATION WARNINGS AND ERROR CHECKING              *
- ******************************************************************
- ******************************************************************
- ******************************************************************
- */
-
-#ifdef CONFIGURE_INIT
-
-/*
- * POSIX Key pair shouldn't be less than POSIX Key, which is highly
- * likely to be error.
- */
-#if (CONFIGURE_MAXIMUM_POSIX_KEYS != 0) && \
-    (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS != 0)
-  #if (CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS < CONFIGURE_MAXIMUM_POSIX_KEYS)
-    #error "Fewer POSIX Key pairs than POSIX Key!"
-  #endif
-#endif
-
-#endif /* CONFIGURE_INIT */
 
 #endif
 /* end of include file */
