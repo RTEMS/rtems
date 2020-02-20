@@ -51,6 +51,7 @@
 #include <rtems/posix/timer.h>
 #include <rtems/confdefs/obsolete.h>
 #include <rtems/confdefs/bdbuf.h>
+#include <rtems/confdefs/clock.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
@@ -298,18 +299,6 @@ extern "C" {
       _Console_simple_task_Initialize,
       RTEMS_SYSINIT_DEVICE_DRIVERS,
       RTEMS_SYSINIT_ORDER_SECOND
-    );
-  #endif
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-  #include <rtems/clockdrv.h>
-
-  #ifdef CONFIGURE_INIT
-    RTEMS_SYSINIT_ITEM(
-      _Clock_Initialize,
-      RTEMS_SYSINIT_DEVICE_DRIVERS,
-      RTEMS_SYSINIT_ORDER_THIRD
     );
   #endif
 #endif
@@ -604,54 +593,6 @@ extern "C" {
 #endif
 
 /**@}*/ /* end of Classic API Configuration */
-
-/**
- * @defgroup ConfigurationGeneral General System Configuration
- *
- * @ingroup Configuration
- *
- * This module contains configuration parameters that are independent
- * of any API but impact general system configuration.
- */
-/**@{*/
-
-/** The configures the number of microseconds per clock tick. */
-#ifndef CONFIGURE_MICROSECONDS_PER_TICK
-  #define CONFIGURE_MICROSECONDS_PER_TICK \
-          RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
-#endif
-
-#if 1000000 % CONFIGURE_MICROSECONDS_PER_TICK != 0
-  #warning "The clock ticks per second is not an integer"
-#endif
-
-#if CONFIGURE_MICROSECONDS_PER_TICK <= 0
-  #error "The CONFIGURE_MICROSECONDS_PER_TICK must be positive"
-#endif
-
-#ifdef CONFIGURE_INIT
-  const uint32_t _Watchdog_Microseconds_per_tick =
-    CONFIGURE_MICROSECONDS_PER_TICK;
-
-  const uint32_t _Watchdog_Nanoseconds_per_tick =
-    (uint32_t) 1000 * CONFIGURE_MICROSECONDS_PER_TICK;
-
-  const uint32_t _Watchdog_Ticks_per_second =
-    1000000 / CONFIGURE_MICROSECONDS_PER_TICK;
-#endif
-
-/** The configures the number of clock ticks per timeslice. */
-#if defined(CONFIGURE_TICKS_PER_TIMESLICE) && \
-  CONFIGURE_TICKS_PER_TIMESLICE != WATCHDOG_TICKS_PER_TIMESLICE_DEFAULT
-
-#ifdef CONFIGURE_INIT
-  const uint32_t _Watchdog_Ticks_per_timeslice =
-    CONFIGURE_TICKS_PER_TIMESLICE;
-#endif
-
-#endif /* CONFIGURE_TICKS_PER_TIMESLICE */
-
-/**@}*/ /* end of General Configuration */
 
 /*
  *  Initial Extension Set
@@ -1418,34 +1359,6 @@ struct _reent *__getreent(void)
 #error "CONFIGURATION ERROR: No initialization tasks or threads configured!!"
 #endif
 #endif
-
-#if !defined(RTEMS_SCHEDSIM)
-/*
- *  You must either explicitly include or exclude the clock driver.
- *  It is such a common newbie error to leave it out.  Maybe this
- *  will put an end to it.
- *
- *  NOTE: If you are using the timer driver, it is considered
- *        mutually exclusive with the clock driver because the
- *        drivers are assumed to use the same "timer" hardware
- *        on many boards.
- */
-#if !defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER) && \
-    !defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER)
-  #error "CONFIGURATION ERROR: Do you want the clock driver or not?!?"
- #endif
-
-/*
- * Only one of the following three configuration parameters should be
- * defined at a time.
- */
-#if ((defined(CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER) + \
-      defined(CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER) + \
-      defined(CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER)) > 1)
-   #error "CONFIGURATION ERROR: More than one clock/timer driver configuration parameter specified?!?"
-#endif
-#endif   /* !defined(RTEMS_SCHEDSIM) */
 
 /*
  * POSIX Key pair shouldn't be less than POSIX Key, which is highly
