@@ -50,6 +50,7 @@
 #include <rtems/confdefs/obsolete.h>
 #include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/clock.h>
+#include <rtems/confdefs/console.h>
 #include <rtems/confdefs/extensions.h>
 #include <rtems/confdefs/inittask.h>
 #include <rtems/confdefs/initthread.h>
@@ -175,30 +176,6 @@ extern "C" {
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
   #include <rtems/console.h>
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
-  #include <rtems/console.h>
-
-  #ifdef CONFIGURE_INIT
-    RTEMS_SYSINIT_ITEM(
-      _Console_simple_Initialize,
-      RTEMS_SYSINIT_DEVICE_DRIVERS,
-      RTEMS_SYSINIT_ORDER_SECOND
-    );
-  #endif
-#endif
-
-#ifdef CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
-  #include <rtems/console.h>
-
-  #ifdef CONFIGURE_INIT
-    RTEMS_SYSINIT_ITEM(
-      _Console_simple_task_Initialize,
-      RTEMS_SYSINIT_DEVICE_DRIVERS,
-      RTEMS_SYSINIT_ORDER_SECOND
-    );
-  #endif
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
