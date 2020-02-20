@@ -51,6 +51,7 @@
 #include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/clock.h>
 #include <rtems/confdefs/extensions.h>
+#include <rtems/confdefs/inittask.h>
 #include <rtems/confdefs/libio.h>
 #include <rtems/confdefs/libpci.h>
 #include <rtems/confdefs/malloc.h>
@@ -142,98 +143,6 @@ extern "C" {
     _Configure_From_workspace(_stack_size + CONTEXT_FP_SIZE)
 #endif
 /**@}*/
-
-/**
- * @defgroup ConfigurationInitTasksTable Initialization Tasks Configuration
- *
- * @addtogroup Configuration
- *
- * This group contains the elements needed to define the Classic API
- * Initialization Tasks Table.
- *
- * Default User Initialization Task Table.  This table guarantees that
- * one user initialization table is defined.
- */
-#if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the name of the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_NAME
-  #define CONFIGURE_INIT_TASK_NAME          rtems_build_name('U', 'I', '1', ' ')
-#endif
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the stack size of the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_STACK_SIZE
-  #define CONFIGURE_INIT_TASK_STACK_SIZE    CONFIGURE_MINIMUM_TASK_STACK_SIZE
-#endif
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the priority of the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_PRIORITY
-  #define CONFIGURE_INIT_TASK_PRIORITY      1
-#endif
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the attributes size of the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_ATTRIBUTES
-  #define CONFIGURE_INIT_TASK_ATTRIBUTES    RTEMS_DEFAULT_ATTRIBUTES
-#endif
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the entry point of the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_ENTRY_POINT
-  #ifdef __cplusplus
-  extern "C" {
-  #endif
-    rtems_task Init (rtems_task_argument );
-  #ifdef __cplusplus
-  }
-  #endif
-  #define CONFIGURE_INIT_TASK_ENTRY_POINT   Init
-  extern const char* bsp_boot_cmdline;
-  #define CONFIGURE_INIT_TASK_ARGUMENTS     ((rtems_task_argument) &bsp_boot_cmdline)
-#endif
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the initial execution mode of the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
-  #ifdef RTEMS_SMP
-    #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
-  #else
-    #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
-  #endif
-#endif
-
-/**
- * When using the default Classic API Initialization Tasks Table, this is
- * used to specify the initial argument to the single Classic API task.
- */
-#ifndef CONFIGURE_INIT_TASK_ARGUMENTS
-  #define CONFIGURE_INIT_TASK_ARGUMENTS     0
-#endif
-
-#else     /* CONFIGURE_RTEMS_INIT_TASKS_TABLE */
-
-/*
- * This is the stack size of the Initialization Task when none is configured.
- */
-#define CONFIGURE_INIT_TASK_STACK_SIZE 0
-
-#endif
-/**@}*/  /* end of Classic API Initialization Tasks Table */
 
 /**
  * @defgroup ConfigurationDriverTable Device Driver Table Configuration
@@ -797,17 +706,6 @@ extern "C" {
  */
 
 /*
- * This accounts for any extra memory required by the Classic API
- * Initialization Task.
- */
-#if (CONFIGURE_INIT_TASK_STACK_SIZE > CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-  #define _CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART \
-      (CONFIGURE_INIT_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE)
-#else
-  #define _CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART 0
-#endif
-
-/*
  * This accounts for any extra memory required by the POSIX API
  * Initialization Thread.
  */
@@ -825,7 +723,7 @@ extern "C" {
  * and thread stack requirements.
  */
 #define _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS \
-    (_CONFIGURE_INITIALIZATION_THREADS_STACKS_CLASSIC_PART + \
+    (_CONFIGURE_INIT_TASK_STACK_EXTRA + \
     _CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART)
 
 /*
@@ -1151,30 +1049,6 @@ extern "C" {
     RTEMS_SYSINIT_ITEM(
       _Memory_Zero_free_areas,
       RTEMS_SYSINIT_ZERO_MEMORY,
-      RTEMS_SYSINIT_ORDER_MIDDLE
-    );
-  #endif
-#endif
-
-/*
- *  If the user has configured a set of Classic API Initialization Tasks,
- *  then we need to install the code that runs that loop.
- */
-#ifdef CONFIGURE_INIT
-  #if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE)
-    const rtems_initialization_tasks_table _RTEMS_tasks_User_task_table = {
-      CONFIGURE_INIT_TASK_NAME,
-      CONFIGURE_INIT_TASK_STACK_SIZE,
-      CONFIGURE_INIT_TASK_PRIORITY,
-      CONFIGURE_INIT_TASK_ATTRIBUTES,
-      CONFIGURE_INIT_TASK_ENTRY_POINT,
-      CONFIGURE_INIT_TASK_INITIAL_MODES,
-      CONFIGURE_INIT_TASK_ARGUMENTS
-    };
-
-    RTEMS_SYSINIT_ITEM(
-      _RTEMS_tasks_Initialize_user_task,
-      RTEMS_SYSINIT_CLASSIC_USER_TASKS,
       RTEMS_SYSINIT_ORDER_MIDDLE
     );
   #endif
