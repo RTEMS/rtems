@@ -196,6 +196,7 @@ include_rtems_confdefs_HEADERS += include/rtems/confdefs/libpci.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/malloc.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/mpci.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/newlib.h
+include_rtems_confdefs_HEADERS += include/rtems/confdefs/objectsclassic.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/obsolete.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/percpu.h
 include_rtems_confdefs_HEADERS += include/rtems/confdefs/scheduler.h

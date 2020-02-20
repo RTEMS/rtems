@@ -30,14 +30,6 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/context.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/rtems/barrierdata.h>
-#include <rtems/rtems/dpmemdata.h>
-#include <rtems/rtems/messagedata.h>
-#include <rtems/rtems/partdata.h>
-#include <rtems/rtems/ratemondata.h>
-#include <rtems/rtems/regiondata.h>
-#include <rtems/rtems/semdata.h>
-#include <rtems/rtems/timerdata.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/psignal.h>
@@ -58,6 +50,7 @@
 #include <rtems/confdefs/malloc.h>
 #include <rtems/confdefs/mpci.h>
 #include <rtems/confdefs/newlib.h>
+#include <rtems/confdefs/objectsclassic.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 #include <rtems/confdefs/threads.h>
@@ -145,76 +138,6 @@ extern "C" {
     _Configure_From_workspace(_stack_size + CONTEXT_FP_SIZE)
 #endif
 /**@}*/
-
-/**
- * @defgroup ConfigurationClassicAPI Classic API Configuration
- *
- * @ingroup Configuration
- *
- * This module contains the parameters related to configuration
- * of the Classic API services.
- */
-/**@{*/
-
-#ifndef CONFIGURE_MAXIMUM_TIMERS
-  /** This specifies the maximum number of Classic API timers. */
-  #define CONFIGURE_MAXIMUM_TIMERS             0
-#endif
-
-#ifndef CONFIGURE_MAXIMUM_SEMAPHORES
-  /** This specifies the maximum number of Classic API semaphores. */
-  #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
-#endif
-
-#ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
-  /**
-   * This configuration parameter specifies the maximum number of
-   * Classic API Message Queues.
-   */
-  #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES             0
-#endif
-
-#ifndef CONFIGURE_MAXIMUM_PARTITIONS
-  /**
-   * This configuration parameter specifies the maximum number of
-   * Classic API Partitions.
-   */
-  #define CONFIGURE_MAXIMUM_PARTITIONS                 0
-#endif
-
-#ifndef CONFIGURE_MAXIMUM_REGIONS
-  /**
-   * This configuration parameter specifies the maximum number of
-   * Classic API Regions.
-   */
-  #define CONFIGURE_MAXIMUM_REGIONS              0
-#endif
-
-#ifndef CONFIGURE_MAXIMUM_PORTS
-  /**
-   * This configuration parameter specifies the maximum number of
-   * Classic API Dual-Ported Memory Ports.
-   */
-  #define CONFIGURE_MAXIMUM_PORTS            0
-#endif
-
-#ifndef CONFIGURE_MAXIMUM_PERIODS
-  /**
-   * This configuration parameter specifies the maximum number of
-   * Classic API Rate Monotonic Periods.
-   */
-  #define CONFIGURE_MAXIMUM_PERIODS              0
-#endif
-
-/**
- * This configuration parameter specifies the maximum number of
- * Classic API Barriers.
- */
-#ifndef CONFIGURE_MAXIMUM_BARRIERS
-  #define CONFIGURE_MAXIMUM_BARRIERS               0
-#endif
-
-/**@}*/ /* end of Classic API Configuration */
 
 /**
  * @defgroup ConfigurationPOSIXAPI POSIX API Configuration Parameters
@@ -458,41 +381,6 @@ extern "C" {
   )
 
 #ifdef CONFIGURE_INIT
-  #if CONFIGURE_MAXIMUM_BARRIERS > 0
-    BARRIER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_BARRIERS );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_MESSAGE_QUEUES > 0
-    MESSAGE_QUEUE_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_MESSAGE_QUEUES );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_PARTITIONS > 0
-    PARTITION_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_PARTITIONS );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_PERIODS > 0
-    RATE_MONOTONIC_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_PERIODS );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_PORTS > 0
-    DUAL_PORTED_MEMORY_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_PORTS );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_REGIONS > 0
-    REGION_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_REGIONS );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_SEMAPHORES > 0
-    SEMAPHORE_INFORMATION_DEFINE(
-      CONFIGURE_MAXIMUM_SEMAPHORES,
-      _CONFIGURE_SCHEDULER_COUNT
-    );
-  #endif
-
-  #if CONFIGURE_MAXIMUM_TIMERS > 0
-    TIMER_INFORMATION_DEFINE( CONFIGURE_MAXIMUM_TIMERS );
-  #endif
-
   #if CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS > 0
     POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[
       rtems_resource_maximum_per_allocation(
