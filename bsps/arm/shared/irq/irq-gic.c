@@ -152,6 +152,7 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
   volatile gic_dist *dist = ARM_GIC_DIST;
+  uint32_t id;
 
   while ((dist->icddcr & GIC_DIST_ICDDCR_ENABLE) == 0) {
     /* Wait */
@@ -160,6 +161,11 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
 #ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
   dist->icdigr[0] = 0xffffffff;
 #endif
+
+  /* Initialize Peripheral Private Interrupts (PPIs) */
+  for (id = 0; id < 32; ++id) {
+    gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
+  }
 
   cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
   cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
