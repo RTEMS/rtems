@@ -1239,7 +1239,7 @@ const Thread_Idle_body _Thread_Idle_body = CONFIGURE_IDLE_TASK_BODY;
  * may be applied.
  */
 #define _Configure_From_workspace(_size) \
-  (ssize_t) (_Configure_Zero_or_One(_size) * \
+  (uintptr_t) (_Configure_Zero_or_One(_size) * \
     _Configure_Align_up(_size + HEAP_BLOCK_HEADER_SIZE, \
       _CONFIGURE_HEAP_MIN_BLOCK_SIZE))
 
