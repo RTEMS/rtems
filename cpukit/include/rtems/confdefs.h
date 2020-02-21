@@ -1255,13 +1255,6 @@ const Thread_Idle_body _Thread_Idle_body = CONFIGURE_IDLE_TASK_BODY;
   #define _Configure_From_stackspace(_stack_size) \
     _Configure_From_workspace(_stack_size + CONTEXT_FP_SIZE)
 #endif
-
-/**
- * Do not use the unlimited bit as part of the multiplication
- * for memory usage.
- */
-#define _Configure_Max_Objects(_max) \
-  (_Configure_Zero_or_One(_max) * rtems_resource_maximum_per_allocation(_max))
 /**@}*/
 
 /**
@@ -2069,7 +2062,7 @@ struct _reent *__getreent(void)
  * of the object to be duplicated.
  */
 #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
-  (_Configure_Max_Objects(_number) \
+  (rtems_resource_maximum_per_allocation(_number) \
     * _Configure_From_workspace(_POSIX_PATH_MAX + 1))
 
 /**
@@ -2293,7 +2286,7 @@ struct _reent *__getreent(void)
  * the stacks of all tasks.
  */
 #define _CONFIGURE_TASKS_STACK \
-  (_Configure_Max_Objects( _CONFIGURE_TASKS ) * \
+  (rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) * \
     _Configure_From_stackspace( CONFIGURE_MINIMUM_TASK_STACK_SIZE ) )
 
 /*
@@ -2301,7 +2294,7 @@ struct _reent *__getreent(void)
  * the stacks of all POSIX threads.
  */
 #define _CONFIGURE_POSIX_THREADS_STACK \
-  (_Configure_Max_Objects( CONFIGURE_MAXIMUM_POSIX_THREADS ) * \
+  (rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS ) * \
     _Configure_From_stackspace( CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE ) )
 
 #else /* CONFIGURE_EXECUTIVE_RAM_SIZE */
