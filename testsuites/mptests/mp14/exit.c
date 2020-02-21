@@ -18,6 +18,8 @@
 #include "config.h"
 #endif
 
+#include <mpci.h>
+
 #include "system.h"
 
 void Exit_test( void )
