@@ -736,6 +736,24 @@ rtems_status_code rtems_scheduler_get_maximum_priority(
   rtems_task_priority *priority
 );
 
+/**
+ * @brief Map a task priority to the corresponding POSIX thread priority.
+ *
+ * @param scheduler_id Identifier of the scheduler instance.
+ * @param priority The task priority to map.
+ * @param[out] posix_priority Pointer to a POSIX thread priority value.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a posix_priority parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid scheduler instance identifier.
+ * @retval RTEMS_INVALID_PRIORITY Invalid task priority.
+ */
+rtems_status_code rtems_scheduler_map_priority_to_posix(
+  rtems_id             scheduler_id,
+  rtems_task_priority  priority,
+  int                 *posix_priority
+);
+
 /**@}*/
 
 #ifdef __cplusplus

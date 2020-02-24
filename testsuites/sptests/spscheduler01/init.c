@@ -1,11 +1,5 @@
 /*
- * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -497,6 +491,49 @@ static void test_scheduler_get_max_prio(void)
   rtems_test_assert(priority == 255);
 }
 
+static void test_scheduler_map_to_posix(void)
+{
+  rtems_status_code sc;
+  int posix_priority;
+  rtems_id scheduler_id;
+
+  posix_priority = 123;
+  sc = rtems_scheduler_map_priority_to_posix(invalid_id, 1, &posix_priority);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+  rtems_test_assert(posix_priority == 123);
+
+  sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_map_priority_to_posix(scheduler_id, 1, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  posix_priority = 123;
+  sc = rtems_scheduler_map_priority_to_posix(scheduler_id, 0, &posix_priority);
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+  rtems_test_assert(posix_priority == 123);
+
+  posix_priority = 123;
+  sc = rtems_scheduler_map_priority_to_posix(scheduler_id, 255, &posix_priority);
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+  rtems_test_assert(posix_priority == 123);
+
+  posix_priority = 123;
+  sc = rtems_scheduler_map_priority_to_posix(scheduler_id, 256, &posix_priority);
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+  rtems_test_assert(posix_priority == 123);
+
+  posix_priority = 123;
+  sc = rtems_scheduler_map_priority_to_posix(scheduler_id, 1, &posix_priority);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(posix_priority == 254);
+
+  posix_priority = 123;
+  sc = rtems_scheduler_map_priority_to_posix(scheduler_id, 254, &posix_priority);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(posix_priority == 1);
+}
+
 static void test_scheduler_get_processors(void)
 {
   rtems_status_code sc;
@@ -625,6 +662,7 @@ static void Init(rtems_task_argument arg)
   test_task_get_set_scheduler();
   test_scheduler_ident();
   test_scheduler_get_max_prio();
+  test_scheduler_map_to_posix();
   test_scheduler_get_processors();
   test_scheduler_add_remove_processors();
   test_task_get_priority();
