@@ -534,6 +534,49 @@ static void test_scheduler_map_to_posix(void)
   rtems_test_assert(posix_priority == 1);
 }
 
+static void test_scheduler_map_from_posix(void)
+{
+  rtems_status_code sc;
+  rtems_task_priority priority;
+  rtems_id scheduler_id;
+
+  priority = 123;
+  sc = rtems_scheduler_map_priority_from_posix(invalid_id, 1, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+  rtems_test_assert(priority == 123);
+
+  sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_map_priority_from_posix(scheduler_id, 1, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  priority = 123;
+  sc = rtems_scheduler_map_priority_from_posix(scheduler_id, -1, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+  rtems_test_assert(priority == 123);
+
+  priority = 123;
+  sc = rtems_scheduler_map_priority_from_posix(scheduler_id, 0, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+  rtems_test_assert(priority == 123);
+
+  priority = 123;
+  sc = rtems_scheduler_map_priority_from_posix(scheduler_id, 255, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+  rtems_test_assert(priority == 123);
+
+  priority = 123;
+  sc = rtems_scheduler_map_priority_from_posix(scheduler_id, 1, &priority);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(priority == 254);
+
+  priority = 123;
+  sc = rtems_scheduler_map_priority_from_posix(scheduler_id, 254, &priority);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(priority == 1);
+}
+
 static void test_scheduler_get_processors(void)
 {
   rtems_status_code sc;
@@ -663,6 +706,7 @@ static void Init(rtems_task_argument arg)
   test_scheduler_ident();
   test_scheduler_get_max_prio();
   test_scheduler_map_to_posix();
+  test_scheduler_map_from_posix();
   test_scheduler_get_processors();
   test_scheduler_add_remove_processors();
   test_task_get_priority();
