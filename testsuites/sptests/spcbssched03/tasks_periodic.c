@@ -19,6 +19,8 @@
 
 #include "system.h"
 
+#include <rtems/bspIo.h>
+
 /* forward declarations to avoid warnings */
 void overrun_handler_task_4(rtems_cbs_server_id server_id);
 
