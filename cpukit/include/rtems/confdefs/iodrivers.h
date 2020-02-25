@@ -93,6 +93,8 @@
   #define CONFIGURE_MAXIMUM_DRIVERS
 #endif
 
+#define NULL_DRIVER_TABLE_ENTRY { NULL, NULL, NULL, NULL, NULL, NULL }
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -141,7 +143,7 @@ _IO_Driver_address_table[ CONFIGURE_MAXIMUM_DRIVERS ] = {
       && !defined(CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER) \
       && !defined(CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER) \
       && !defined(CONFIGURE_APPLICATION_EXTRA_DRIVERS) )
-    { NULL, NULL, NULL, NULL, NULL, NULL }
+    NULL_DRIVER_TABLE_ENTRY
   #endif
 };
 
