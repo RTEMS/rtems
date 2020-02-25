@@ -22,7 +22,6 @@
 #include <rtems/config.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>
-#include <rtems/ioimpl.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/sysstate.h>
 
@@ -117,18 +116,6 @@ RTEMS_SYSINIT_ITEM(
 RTEMS_SYSINIT_ITEM(
   _Thread_Create_idle,
   RTEMS_SYSINIT_IDLE_THREADS,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-
-/* Initialize I/O drivers.
- *
- * Driver Manager note:
- * All drivers may not be registered yet. Drivers will dynamically
- * be initialized when registered in level 2,3 and 4.
- */
-RTEMS_SYSINIT_ITEM(
-  _IO_Initialize_all_drivers,
-  RTEMS_SYSINIT_DEVICE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 

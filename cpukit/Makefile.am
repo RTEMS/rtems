@@ -1054,6 +1054,7 @@ librtemscpu_a_SOURCES += sapi/src/getconfigmax.c
 librtemscpu_a_SOURCES += sapi/src/getversionstring.c
 librtemscpu_a_SOURCES += sapi/src/interrtext.c
 librtemscpu_a_SOURCES += sapi/src/io.c
+librtemscpu_a_SOURCES += sapi/src/iodefault.c
 librtemscpu_a_SOURCES += sapi/src/ioclose.c
 librtemscpu_a_SOURCES += sapi/src/iocontrol.c
 librtemscpu_a_SOURCES += sapi/src/ioinitialize.c
