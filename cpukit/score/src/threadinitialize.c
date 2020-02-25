@@ -256,7 +256,9 @@ bool _Thread_Initialize(
   if ( extension_status )
     return true;
 
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
 failed:
+#endif
 
 #if defined(RTEMS_SMP)
   while ( scheduler_index > 0 ) {
