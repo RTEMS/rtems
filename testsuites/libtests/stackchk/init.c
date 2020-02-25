@@ -26,6 +26,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/bspIo.h>
+
 const char rtems_test_name[] = "STACKCHK";
 
 rtems_task Init(
