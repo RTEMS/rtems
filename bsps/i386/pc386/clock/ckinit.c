@@ -170,7 +170,7 @@ static void clockOn(void)
   outport_byte(TIMER_CNTR0, pc386_clock_click_count >> 8 & 0xff);
   rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 
-  bsp_interrupt_vector_enable( BSP_PERIODIC_TIMER - BSP_IRQ_VECTOR_BASE );
+  bsp_interrupt_vector_enable( BSP_PERIODIC_TIMER );
 
   /*
    * Now calibrate cycles per tick. Do this every time we
