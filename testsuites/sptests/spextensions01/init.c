@@ -453,8 +453,12 @@ static void test(void)
 #endif
 
   active_extensions = 4;
+#ifdef RTEMS_SMP
+  assert(counter == 12);
+#else
   assert(counter == 10);
   counter = 12;
+#endif
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),

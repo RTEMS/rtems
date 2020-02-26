@@ -386,7 +386,16 @@ static inline void _User_extensions_Thread_switch(
     _ISR_lock_ISR_disable( &lock_context );
     _Per_CPU_Acquire( cpu_self, &lock_context );
 
+    executing = cpu_self->ancestor;
+    cpu_self->ancestor = heir;
     node = _Chain_Immutable_first( chain );
+
+    /*
+     * An executing thread equal to the heir thread may happen in two
+     * situations.  Firstly, in case context switch extensions are created after
+     * system initialization.  Secondly, during a thread self restart.
+     */
+    if ( executing != heir ) {
 #endif
 
     while ( node != tail ) {
@@ -398,6 +407,8 @@ static inline void _User_extensions_Thread_switch(
     }
 
 #if defined(RTEMS_SMP)
+    }
+
     _Per_CPU_Release( cpu_self, &lock_context );
     _ISR_lock_ISR_enable( &lock_context );
 #endif

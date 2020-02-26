@@ -297,10 +297,15 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
 
     _ISR_Local_enable( level );
 
+#if !defined(RTEMS_SMP)
     _User_extensions_Thread_switch( executing, heir );
+#endif
     _Thread_Save_fp( executing );
     _Context_Switch( &executing->Registers, &heir->Registers );
     _Thread_Restore_fp( executing );
+#if defined(RTEMS_SMP)
+    _User_extensions_Thread_switch( NULL, executing );
+#endif
 
     /*
      * We have to obtain this value again after the context switch since the

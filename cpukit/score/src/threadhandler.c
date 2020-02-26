@@ -97,6 +97,10 @@ void _Thread_Handler( void )
    */
   _Thread_Restore_fp( executing );
 
+#if defined(RTEMS_SMP)
+  _User_extensions_Thread_switch( NULL, executing );
+#endif
+
   /*
    * Do not use the level of the thread control block, since it has a
    * different format.

@@ -529,6 +529,13 @@ typedef struct Per_CPU_Control {
     } Scheduler;
 
     /**
+     * @brief The ancestor of the executing thread.
+     *
+     * This member is used by _User_extensions_Thread_switch().
+     */
+    struct _Thread_Control *ancestor;
+
+    /**
      * @brief Begin of the per-CPU data area.
      *
      * Contains items defined via PER_CPU_DATA_ITEM().

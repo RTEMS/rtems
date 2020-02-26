@@ -295,8 +295,8 @@ static void Stack_check_report_blown_task(
  *  rtems_stack_checker_switch_extension
  */
 void rtems_stack_checker_switch_extension(
-  Thread_Control *running RTEMS_UNUSED,
-  Thread_Control *heir RTEMS_UNUSED
+  Thread_Control *running,
+  Thread_Control *heir
 )
 {
   bool sp_ok;
@@ -306,6 +306,22 @@ void rtems_stack_checker_switch_extension(
   /*
    *  Check for an out of bounds stack pointer or an overwrite
    */
+#if defined(RTEMS_SMP)
+  sp_ok = Stack_check_Frame_pointer_in_range( heir );
+
+  if ( !sp_ok ) {
+    pattern_ok = Stack_check_Is_sanity_pattern_valid(
+      &heir->Start.Initial_stack
+    );
+    Stack_check_report_blown_task( heir, pattern_ok );
+  }
+
+  pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
+
+  if ( !pattern_ok ) {
+    Stack_check_report_blown_task( running, pattern_ok );
+  }
+#else
   sp_ok = Stack_check_Frame_pointer_in_range( running );
 
   pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
@@ -313,6 +329,7 @@ void rtems_stack_checker_switch_extension(
   if ( !sp_ok || !pattern_ok ) {
     Stack_check_report_blown_task( running, pattern_ok );
   }
+#endif
 
   stack = &Stack_check_Interrupt_stack[ _SMP_Get_current_processor() ];
 
@@ -329,7 +346,10 @@ void rtems_stack_checker_switch_extension(
  */
 bool rtems_stack_checker_is_blown( void )
 {
-  rtems_stack_checker_switch_extension( _Thread_Get_executing(), NULL );
+  Thread_Control *executing;
+
+  executing = _Thread_Get_executing();
+  rtems_stack_checker_switch_extension( executing, executing );
 
   /*
    * The Stack Pointer and the Pattern Area are OK so return false.
