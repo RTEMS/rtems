@@ -6,6 +6,8 @@
 
 include: testdata/small-memory-testsuite.tcfg
 
+exclude: fileio
+exclude: mghttpd01
 exclude: pppd
 # psxaio02 when debug
 exclude: psxaio02
