@@ -208,6 +208,34 @@ static void symbolic_link_test (void)
   rtems_test_assert (status == 0);
 }
 
+static void rename_file_twice_test (void)
+{
+  const char *name01 = "name01";
+  const char *name02 = "name02";
+  const char *name03 = "name03";
+  mode_t      mode;
+  int         fd;
+  int         status;
+
+  puts ("\nRename file twice\n");
+
+  mode = S_IRWXU | S_IRWXG | S_IRWXO;
+  fd = creat (name01, mode);
+  rtems_test_assert (fd >= 0);
+  status = close (fd);
+  rtems_test_assert (status == 0);
+
+  EXPECT_EQUAL (0, rename, name01, name02);
+  EXPECT_EQUAL (0, rename, name02, name03);
+
+  errno = 0;
+  EXPECT_EQUAL (-1, unlink, name01);
+  rtems_test_assert (errno == ENOENT);
+  EXPECT_EQUAL (-1, unlink, name02);
+  rtems_test_assert (errno == ENOENT);
+  EXPECT_EQUAL (0, unlink, name03);
+}
+
 static void same_file_test (void)
 {
   int fd;
@@ -1221,6 +1249,7 @@ static void filesystem_test (void)
 void test (void)
 {
   symbolic_link_test ();
+  rename_file_twice_test ();
   same_file_test ();
   directory_test ();
   arg_test ();
