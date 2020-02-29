@@ -207,6 +207,15 @@ typedef void (*IMFS_node_control_destroy)( IMFS_jnode_t *node );
 void IMFS_node_destroy_default( IMFS_jnode_t *node );
 
 /**
+ * @brief Does nothing.
+ *
+ * @param node The IMFS node.
+ *
+ * @see IMFS_node_control.
+ */
+void IMFS_do_nothing_destroy( IMFS_jnode_t *node );
+
+/**
  * @brief IMFS node control.
  */
 typedef struct {
@@ -318,6 +327,11 @@ typedef struct {
   const void *data;
   size_t      size;
 } IMFS_linearfile_context;
+
+static inline IMFS_jnode_t *IMFS_iop_to_node( const rtems_libio_t *iop )
+{
+  return (IMFS_jnode_t *) iop->pathinfo.node_access;
+}
 
 static inline IMFS_directory_t *IMFS_iop_to_directory(
   const rtems_libio_t *iop
@@ -594,6 +608,92 @@ static inline bool IMFS_is_imfs_instance(
   return loc->mt_entry->ops->clonenod_h == IMFS_node_clone;
 }
 
+/**
+ * @brief Initializer for an IMFS node control.
+ *
+ * @param handlers The file system node handlers.
+ * @param init The node initialization method.
+ * @param destroy The node destruction method.
+ */
+#define IMFS_NODE_CONTROL_INITIALIZER( handlers, init, destroy ) \
+  { \
+    ( handlers ), \
+    ( init ), \
+    IMFS_node_remove_default, \
+    ( destroy ) \
+  }
+
+/**
+ * @brief Initializer for an IMFS node.
+ *
+ * Initialize the node control with IMFS_NODE_CONTROL_INITIALIZER().
+ *
+ * @param node_control The node control of the IMFS node.
+ * @param name The name of the IMFS node.
+ * @param namelen The length of the name of the IMFS node.
+ * @param mode The mode of the IMFS node.
+ *
+ * @see IMFS_node_preinitialize().
+ */
+#define IMFS_NODE_INITIALIZER( node_control, name, namelen, mode ) \
+  { \
+    { NULL, NULL }, \
+    NULL, \
+    ( name ), \
+    ( namelen ), \
+    ( mode ), \
+    0, \
+    0, \
+    0, \
+    0, \
+    0, \
+    0, \
+    0, \
+    ( node_control ) \
+  }
+
+/**
+ * @brief Preinitializes an IMFS node.
+ *
+ * Initialize the node control with IMFS_NODE_CONTROL_INITIALIZER().
+ *
+ * @param node The IMFS node to preinitialize.
+ * @param node_control The node control of the IMFS node.
+ * @param name The name of the IMFS node.
+ * @param namelen The length of the name of the IMFS node.
+ * @param mode The mode of the IMFS node.
+ *
+ * @see IMFS_NODE_INITIALIZER().
+ */
+static inline void IMFS_node_preinitialize(
+  IMFS_jnode_t            *node,
+  const IMFS_node_control *node_control,
+  const char              *name,
+  size_t                   namelen,
+  mode_t                   mode
+)
+{
+  node->control = node_control;
+  node->name = name;
+  node->namelen = namelen;
+  node->st_mode = mode;
+}
+
+/**
+ * @brief Adds an IMFS node.
+ *
+ * Initialize the node with IMFS_NODE_INITIALIZER(), IMFS_node_preinitialize(),
+ * IMFS_GENERIC_NODE_INITIALIZER(), or IMFS_generic_node_preinitialize().
+ *
+ * @param path The path of parent directories for the IMFS node to add.
+ * @param node The IMFS node to add.
+ * @param arg The argument passed to the node initialization method.
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The @c errno indicates the error.
+ */
+int IMFS_add_node( const char *path, IMFS_jnode_t *node, void *arg );
+
 extern int IMFS_make_node(
   const char              *path,
   mode_t                   mode,
@@ -638,20 +738,56 @@ extern int IMFS_make_linearfile(
  * @{
  */
 
+/* Provided for backward compatibility */
+#define IMFS_GENERIC_INITIALIZER( handlers, init, destroy ) \
+  IMFS_NODE_CONTROL_INITIALIZER( handlers, init, destroy )
+
 /**
  * @brief Initializer for a generic node control.
  *
- * @param[in] handlers The file system node handlers.
- * @param[in] init The node initialization method.
- * @param[in] destroy The node destruction method.
+ * @param handlers The file system node handlers.
+ * @param init The node initialization method.
+ * @param destroy The node destruction method.
  */
-#define IMFS_GENERIC_INITIALIZER( handlers, init, destroy ) \
-  { \
-    ( handlers ), \
-    ( init ), \
-    IMFS_node_remove_default, \
-    ( destroy ) \
-  }
+#define IMFS_GENERIC_CONTROL_INITIALIZER( handlers, init, destroy ) \
+  IMFS_NODE_CONTROL_INITIALIZER( handlers, init, destroy )
+
+/**
+ * @brief Initializer for a generic node.
+ *
+ * Initialize the node control with IMFS_GENERIC_CONTROL_INITIALIZER().
+ *
+ * @param node_control The node control of the IMFS generic node.
+ * @param name The name of the IMFS generic node.
+ * @param namelen The length of the name of the IMFS generic node.
+ * @param mode The mode of the IMFS generic node.
+ */
+#define IMFS_GENERIC_NODE_INITIALIZER( node_control, name, namelen, mode ) \
+  { IMFS_NODE_INITIALIZER( node_control, name, namelen, mode ), NULL }
+
+/**
+ * @brief Preinitializes a generic IMFS node.
+ *
+ * Initialize the node control with IMFS_GENERIC_CONTROL_INITIALIZER().
+ *
+ * @param node The generic IMFS node to preinitialize.
+ * @param node_control The node control of the generic IMFS node.
+ * @param name The name of the generic IMFS node.
+ * @param namelen The length of the name of the generic IMFS node.
+ * @param mode The mode of the generic IMFS node.
+ *
+ * @see IMFS_GENERIC_NODE_INITIALIZER().
+ */
+static inline void IMFS_generic_node_preinitialize(
+  IMFS_generic_t          *node,
+  const IMFS_node_control *node_control,
+  const char              *name,
+  size_t                   namelen,
+  mode_t                   mode
+)
+{
+  IMFS_node_preinitialize( &node->Node, node_control, name, namelen, mode );
+}
 
 /**
  * @brief Makes a generic IMFS node.
@@ -692,7 +828,8 @@ extern int IMFS_make_linearfile(
  *   IMFS_node_destroy_default(node);
  * }
  *
- * static const IMFS_node_control some_node_control = IMFS_GENERIC_INITIALIZER(
+ * static const IMFS_node_control
+ * some_node_control = IMFS_GENERIC_CONTROL_INITIALIZER(
  *   &some_node_handlers,
  *   some_node_init,
  *   some_node_destroy

@@ -18,12 +18,10 @@
  */
 
 #if HAVE_CONFIG_H
-  #include "config.h"
+#include "config.h"
 #endif
 
 #include <rtems/imfs.h>
-
-#include <stdlib.h>
 
 IMFS_jnode_t *IMFS_initialize_node(
   IMFS_jnode_t *node,
@@ -105,7 +103,7 @@ IMFS_jnode_t *IMFS_node_remove_default(
   return node;
 }
 
-void IMFS_node_destroy_default( IMFS_jnode_t *node )
+void IMFS_do_nothing_destroy( IMFS_jnode_t *node )
 {
-  free( node );
+  (void) node;
 }
