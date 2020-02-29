@@ -33,6 +33,7 @@ IMFS_jnode_t *IMFS_create_node(
 )
 {
   IMFS_jnode_t *allocated_node;
+  char         *allocated_name;
   IMFS_jnode_t *node;
 
   allocated_node = calloc( 1, node_size + namelen );
@@ -42,18 +43,18 @@ IMFS_jnode_t *IMFS_create_node(
     return NULL;
   }
 
+  allocated_name = (char *) allocated_node + node_size;
+  allocated_name = memcpy( allocated_name, name, namelen );
   node = IMFS_initialize_node(
     allocated_node,
     node_control,
-    (char *) allocated_node + node_size,
+    allocated_name,
     namelen,
     mode,
     arg
   );
   if ( node != NULL ) {
     IMFS_jnode_t *parent = parentloc->node_access;
-
-    memcpy( RTEMS_DECONST( char *, node->name ), name, namelen );
 
     /*
      *  This node MUST have a parent, so put it in that directory list.
