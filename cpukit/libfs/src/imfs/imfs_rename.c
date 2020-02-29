@@ -23,6 +23,29 @@
 #include <string.h>
 #include <stdlib.h>
 
+typedef struct {
+  IMFS_node_control Base;
+  const IMFS_node_control *replaced;
+  char name[ RTEMS_ZERO_LENGTH_ARRAY ];
+} IMFS_renamed_control;
+
+static void IMFS_restore_replaced_control( IMFS_jnode_t *node )
+{
+  const IMFS_node_control *base;
+  IMFS_renamed_control    *control;
+
+  base = RTEMS_DECONST( IMFS_node_control *, node->control );
+  control = (IMFS_renamed_control *) base;
+  node->control = control->replaced;
+  free( control );
+}
+
+static void IMFS_renamed_destroy( IMFS_jnode_t *node )
+{
+  IMFS_restore_replaced_control( node );
+  ( *node->control->node_destroy )( node );
+}
+
 int IMFS_rename(
   const rtems_filesystem_location_info_t *oldparentloc,
   const rtems_filesystem_location_info_t *oldloc,
@@ -31,14 +54,17 @@ int IMFS_rename(
   size_t namelen
 )
 {
-  IMFS_jnode_t *node = oldloc->node_access;
-  IMFS_jnode_t *new_parent = newparentloc->node_access;
-  char *allocated_name;
+  IMFS_jnode_t         *node;
+  IMFS_jnode_t         *new_parent;
+  IMFS_renamed_control *control;
 
   /*
    * FIXME: Due to insufficient checks we can create inaccessible nodes with
    * this operation.
    */
+
+  node = oldloc->node_access;
+  new_parent = newparentloc->node_access;
 
   if ( node->Parent == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -48,20 +74,23 @@ int IMFS_rename(
     rtems_set_errno_and_return_minus_one( ENAMETOOLONG );
   }
 
-  allocated_name = malloc( namelen );
-  if ( allocated_name == NULL ) {
+  control = malloc( sizeof( *control ) + namelen );
+  if ( control == NULL ) {
     rtems_set_errno_and_return_minus_one( ENOMEM );
   }
 
-  memcpy( allocated_name, name, namelen );
+  memcpy( control->name, name, namelen );
 
-  if ( ( node->flags & IMFS_NODE_FLAG_NAME_ALLOCATED ) != 0 ) {
-    free( RTEMS_DECONST( char *, node->name ) );
+  if ( node->control->node_destroy == IMFS_renamed_destroy ) {
+    IMFS_restore_replaced_control( node );
   }
 
-  node->name = allocated_name;
+  control->Base = *node->control;
+  control->Base.node_destroy = IMFS_renamed_destroy;
+  control->replaced = node->control;
+  node->control = &control->Base;
+  node->name = control->name;
   node->namelen = namelen;
-  node->flags |= IMFS_NODE_FLAG_NAME_ALLOCATED;
 
   IMFS_remove_from_directory( node );
   IMFS_add_to_directory( new_parent, node );

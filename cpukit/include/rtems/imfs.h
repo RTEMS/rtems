@@ -244,7 +244,6 @@ struct IMFS_jnode_tt {
   IMFS_jnode_t       *Parent;                /* Parent node */
   const char         *name;                  /* "basename" (not \0 terminated) */
   uint16_t            namelen;               /* Length of "basename" */
-  uint16_t            flags;                 /* Node flags */
   mode_t              st_mode;               /* File mode */
   unsigned short      reference_count;
   nlink_t             st_nlink;              /* Link count */
@@ -257,8 +256,6 @@ struct IMFS_jnode_tt {
   time_t              stat_ctime;            /* Time of last status change */
   const IMFS_node_control *control;
 };
-
-#define IMFS_NODE_FLAG_NAME_ALLOCATED 0x1
 
 typedef struct {
   IMFS_jnode_t                          Node;
