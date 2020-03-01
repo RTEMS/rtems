@@ -1,16 +1,33 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2018, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <rtems/console.h>
 #include <rtems/bspIo.h>
@@ -24,6 +41,7 @@
 #define CONSOLE_SIMPLE_TASK_MAX_JUNK_SIZE 80
 
 typedef struct {
+  IMFS_jnode_t Node;
   RTEMS_INTERRUPT_LOCK_MEMBER( buf_lock )
   rtems_mutex output_mutex;
   rtems_id task;
@@ -48,6 +66,13 @@ static size_t _Console_simple_task_Available(
   return ( cons->head - cons->tail ) % CONSOLE_SIMPLE_TASK_BUFFER_SIZE;
 }
 
+static Console_simple_task_Control *_Console_simple_task_Iop_to_control(
+  const rtems_libio_t *iop
+)
+{
+  return (Console_simple_task_Control *) IMFS_iop_to_node( iop );
+}
+
 static ssize_t _Console_simple_task_Write(
   rtems_libio_t *iop,
   const void    *buffer,
@@ -58,7 +83,7 @@ static ssize_t _Console_simple_task_Write(
   const char                  *buf;
   size_t                       todo;
 
-  cons = IMFS_generic_get_context_by_iop( iop );
+  cons = _Console_simple_task_Iop_to_control( iop );
   buf = buffer;
   todo = count;
 
@@ -137,7 +162,7 @@ static int _Console_simple_task_Fsync( rtems_libio_t *iop )
 {
   Console_simple_task_Control *cons;
 
-  cons = IMFS_generic_get_context_by_iop( iop );
+  cons = _Console_simple_task_Iop_to_control( iop );
   _Console_simple_task_Put_chars( cons );
 
   return 0;
@@ -161,10 +186,10 @@ static const rtems_filesystem_file_handlers_r _Console_simple_task_Handlers = {
 };
 
 static const IMFS_node_control
-_Console_simple_task_Node_control = IMFS_GENERIC_INITIALIZER(
+_Console_simple_task_Node_control = IMFS_NODE_CONTROL_INITIALIZER(
   &_Console_simple_task_Handlers,
-  IMFS_node_initialize_generic,
-  IMFS_node_destroy_default
+  IMFS_node_initialize_default,
+  IMFS_do_nothing_destroy
 );
 
 static void _Console_simple_task_Task( rtems_task_argument arg )
@@ -187,21 +212,26 @@ static void _Console_simple_task_Task( rtems_task_argument arg )
   }
 }
 
+static const char _Console_simple_task_Name[] = "console";
+
 void _Console_simple_task_Initialize( void )
 {
   Console_simple_task_Control *cons;
 
   cons = &_Console_simple_task_Instance;
 
+  IMFS_node_preinitialize(
+    &cons->Node,
+    &_Console_simple_task_Node_control,
+    _Console_simple_task_Name,
+    sizeof( _Console_simple_task_Name ) - 1,
+    S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO
+  );
+
   rtems_interrupt_lock_initialize( &cons->buf_lock, "Console" );
   rtems_mutex_init( &cons->output_mutex, "Console" );
 
-  IMFS_make_generic_node(
-    CONSOLE_DEVICE_NAME,
-    S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
-    &_Console_simple_task_Node_control,
-    cons
-  );
+  IMFS_add_node( "/dev", &cons->Node, NULL );
 
   rtems_task_create(
     rtems_build_name('C', 'O', 'N', 'S'),
