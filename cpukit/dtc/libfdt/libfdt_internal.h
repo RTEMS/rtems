@@ -91,7 +91,9 @@ enum {
 	 *
 	 * With this assumption enabled, normal device trees produced by libfdt
 	 * and the compiler should be handled safely. Malicious device trees and
-	 * complete garbage may cause libfdt to behave badly or crash.
+	 * complete garbage may cause libfdt to behave badly or crash. Truncated
+	 * device trees (e.g. those only partially loaded) can also cause
+	 * problems.
 	 *
 	 * Note: Only checks that relate exclusively to the device tree itself
 	 * (not the parameters passed to libfdt) are disabled by this
@@ -130,8 +132,15 @@ enum {
 	ASSUME_NO_ROLLBACK	= 1 << 3,
 
 	/*
-	 * This assumes that the device tree components appear in the correct
-	 * order. As such it disables a check in fdt_open_into() and removes the
+	 * This assumes that the device tree components appear in a 'convenient'
+	 * order, i.e. the memory reservation block first, then the structure
+	 * block and finally the string block.
+	 *
+	 * This order is not specified by the device-tree specification,
+	 * but is expected by libfdt. The device-tree compiler always created
+	 * device trees with this order.
+	 *
+	 * This assumption disables a check in fdt_open_into() and removes the
 	 * ability to fix the problem there. This is safe if you know that the
 	 * device tree is correctly ordered. See fdt_blocks_misordered_().
 	 */
