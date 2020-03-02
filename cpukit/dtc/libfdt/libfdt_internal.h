@@ -58,7 +58,7 @@ static inline struct fdt_reserve_entry *fdt_mem_rsv_w_(void *fdt, int n)
 
 /*
  * Defines assumptions which can be enabled. Each of these can be enabled
- * individually. For maximum saftey, don't enable any assumptions!
+ * individually. For maximum safety, don't enable any assumptions!
  *
  * For minimal code size and no safety, use ASSUME_PERFECT at your own risk.
  * You should have another method of validating the device tree, such as a
@@ -121,8 +121,8 @@ enum {
 	ASSUME_LATEST		= 1 << 2,
 
 	/*
-	 * This assume that it is OK for a failed additional to the device tree
-	 * due to lack of space or some other problem can skip any rollback
+	 * This assumes that it is OK for a failed addition to the device tree,
+	 * due to lack of space or some other problem, to skip any rollback
 	 * steps (such as dropping the property name from the string table).
 	 * This is safe to enable in most circumstances, even though it may
 	 * leave the tree in a sub-optimal state.
