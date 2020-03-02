@@ -402,7 +402,7 @@ static const struct fdt_property *fdt_get_property_namelen_(const void *fdt,
 		const struct fdt_property *prop;
 
 		prop = fdt_get_property_by_offset_(fdt, offset, lenp);
-		if (!can_assume(VALID_DTB) && !prop) {
+		if (!can_assume(LIBFDT_FLAWLESS) && !prop) {
 			offset = -FDT_ERR_INTERNAL;
 			break;
 		}
@@ -634,7 +634,7 @@ int fdt_node_depth(const void *fdt, int nodeoffset)
 
 	err = fdt_supernode_atdepth_offset(fdt, nodeoffset, 0, &nodedepth);
 	if (err)
-		return (can_assume(VALID_INPUT) || err < 0) ? err :
+		return (can_assume(LIBFDT_FLAWLESS) || err < 0) ? err :
 			-FDT_ERR_INTERNAL;
 	return nodedepth;
 }
