@@ -537,6 +537,13 @@ extern void IMFS_eval_path(
 );
 
 /**
+ * @brief IMFS device filesystem evaluation node support.
+ */
+extern void IMFS_eval_path_devfs(
+  rtems_filesystem_eval_path_context_t *ctx
+);
+
+/**
  * @brief Create a new IMFS link node.
  * 
  * The following rouine creates a new link node under parent with the

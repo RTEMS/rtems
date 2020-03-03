@@ -13,21 +13,17 @@
 
 #include <tmacros.h>
 #include "test_support.h"
-#include <rtems/devfs.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 #include "test_driver.h"
-#include <rtems/devnull.h>
 
 const char rtems_test_name[] = "DEVFS 4";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument argument
 )
 {
@@ -87,9 +83,6 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-/* Make sure that we have enough devices for all BSPs */
-#define CONFIGURE_MAXIMUM_DEVICES 64
 
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 

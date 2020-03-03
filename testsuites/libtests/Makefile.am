@@ -271,24 +271,6 @@ devfs01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_devfs01) \
 	$(support_includes)
 endif
 
-if TEST_devfs02
-lib_tests += devfs02
-lib_screens += devfs02/devfs02.scn
-lib_docs += devfs02/devfs02.doc
-devfs02_SOURCES = devfs02/init.c
-devfs02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_devfs02) \
-	$(support_includes)
-endif
-
-if TEST_devfs03
-lib_tests += devfs03
-lib_screens += devfs03/devfs03.scn
-lib_docs += devfs03/devfs03.doc
-devfs03_SOURCES = devfs03/init.c
-devfs03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_devfs03) \
-	$(support_includes)
-endif
-
 if TEST_devfs04
 lib_tests += devfs04
 lib_screens += devfs04/devfs04.scn

@@ -239,8 +239,6 @@ void i386_stub_glue_init_breakin(void);
 int i386_stub_glue_uart(void);
 void breakpoint(void);
 
-#define BSP_MAXIMUM_DEVICES 6
-
 /*
  * Debug helper methods
  */

@@ -65,6 +65,10 @@
   #error "The CONFIGURE_BDBUF_BUFFER_COUNT configuration option is obsolete since RTEMS 4.10.0"
 #endif
 
+#ifdef CONFIGURE_MAXIMUM_DEVICES
+  #warning "The CONFIGURE_MAXIMUM_DEVICES configuration option is obsolete since RTEMS 5.1"
+#endif
+
 #ifdef CONFIGURE_ENABLE_GO
   #warning "The CONFIGURE_ENABLE_GO configuration option is obsolete since RTEMS 5.1"
 #endif

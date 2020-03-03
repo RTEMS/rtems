@@ -13,21 +13,18 @@
 
 #include <tmacros.h>
 #include "test_support.h"
-#include <rtems/devfs.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 #include "test_driver.h"
 #include <rtems/devnull.h>
 
 const char rtems_test_name[] = "DEVICEIO 1";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument argument
 )
 {

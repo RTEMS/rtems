@@ -69,9 +69,6 @@ extern "C" {
 /* Maximum supported APBUARTs by BSP */
 #define BSP_NUMBER_OF_TERMIOS_PORTS 8
 
-/* Make sure maximum number of consoles fit in filesystem */
-#define BSP_MAXIMUM_DEVICES 8
-
 /* GRLIB driver functions */
 
 extern void BSP_shared_interrupt_mask(int irq);

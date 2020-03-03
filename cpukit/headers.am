@@ -82,7 +82,6 @@ include_rtems_HEADERS += include/rtems/config.h
 include_rtems_HEADERS += include/rtems/console.h
 include_rtems_HEADERS += include/rtems/counter.h
 include_rtems_HEADERS += include/rtems/cpuuse.h
-include_rtems_HEADERS += include/rtems/devfs.h
 include_rtems_HEADERS += include/rtems/deviceio.h
 include_rtems_HEADERS += include/rtems/devnull.h
 include_rtems_HEADERS += include/rtems/devzero.h
