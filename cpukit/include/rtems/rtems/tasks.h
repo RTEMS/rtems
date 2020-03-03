@@ -21,6 +21,7 @@
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/smp.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -600,7 +601,7 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
  *
  * @return The index of the current processor.
  */
-uint32_t rtems_scheduler_get_processor( void );
+#define rtems_scheduler_get_processor() _SMP_Get_current_processor()
 
 /**
  * @brief Returns the index of the current processor.
@@ -633,7 +634,7 @@ rtems_get_current_processor( void )
  *
  * @see rtems_scheduler_add_processor() and rtems_scheduler_remove_processor().
  */
-RTEMS_CONST uint32_t rtems_scheduler_get_processor_maximum( void );
+#define rtems_scheduler_get_processor_maximum() _SMP_Get_processor_maximum()
 
 /**
  * @brief Returns the processor maximum supported by the system.
