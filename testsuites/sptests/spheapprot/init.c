@@ -30,7 +30,11 @@
 const char rtems_test_name[] = "SPHEAPPROT";
 
 #ifdef HEAP_PROTECTION
-  static void test_heap_block_error(Heap_Control *heap, Heap_Block *block)
+  static void test_heap_block_error(
+     Heap_Control *heap,
+     Heap_Block *block,
+     Heap_Error_reason reason
+  )
   {
     bool *error = heap->Protection.handler_data;
 
