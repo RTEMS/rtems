@@ -453,6 +453,15 @@ static void test(void)
 #endif
 
   active_extensions = 4;
+
+  /*
+   * In SMP configurations, the context switch from the system initialization
+   * context to the initialization task is visible to the context switch
+   * extensions.
+   *
+   * In uniprocessor configurations, this is not the case and two counter
+   * increments are missing.
+   */
 #ifdef RTEMS_SMP
   assert(counter == 12);
 #else
