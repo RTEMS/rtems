@@ -732,14 +732,14 @@ static inline bool rtems_filesystem_location_is_instance_root(
 }
 
 static inline const char *rtems_filesystem_eval_path_get_path(
-  rtems_filesystem_eval_path_context_t *ctx
+  const rtems_filesystem_eval_path_context_t *ctx
 )
 {
   return ctx->path;
 }
 
 static inline size_t rtems_filesystem_eval_path_get_pathlen(
-  rtems_filesystem_eval_path_context_t *ctx
+  const rtems_filesystem_eval_path_context_t *ctx
 )
 {
   return ctx->pathlen;
@@ -763,14 +763,14 @@ static inline void rtems_filesystem_eval_path_clear_path(
 }
 
 static inline const char *rtems_filesystem_eval_path_get_token(
-  rtems_filesystem_eval_path_context_t *ctx
+  const rtems_filesystem_eval_path_context_t *ctx
 )
 {
   return ctx->token;
 }
 
 static inline size_t rtems_filesystem_eval_path_get_tokenlen(
-  rtems_filesystem_eval_path_context_t *ctx
+  const rtems_filesystem_eval_path_context_t *ctx
 )
 {
   return ctx->tokenlen;
