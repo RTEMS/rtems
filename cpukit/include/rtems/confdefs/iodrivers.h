@@ -65,10 +65,6 @@
   #include <rtems/console.h>
 #endif
 
-#ifdef CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
-  #include <rtems/btimer.h>
-#endif
-
 #ifdef CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
   #include <rtems/rtc.h>
 #endif

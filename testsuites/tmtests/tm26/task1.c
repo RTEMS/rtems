@@ -17,6 +17,7 @@
 
 #define CONFIGURE_INIT
 #include <rtems.h>
+#include <rtems/btimer.h>
 #include "system.h"
 #include "fptest.h"
 #include <tmacros.h>

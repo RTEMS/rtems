@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/btimer.h>
+
 #define CONFIGURE_INIT
 #include "system.h"
 

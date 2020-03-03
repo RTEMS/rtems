@@ -21,6 +21,7 @@
 #include "system.h"
 
 #include <bsp.h>
+#include <rtems/btimer.h>
 #include <rtems/score/schedulerpriorityimpl.h>
 
 #define _RTEMS_TMTEST27
