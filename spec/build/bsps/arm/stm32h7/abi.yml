@@ -1,0 +1,20 @@
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+default:
+- -mthumb
+- -mcpu=cortex-m7
+- -mfpu=fpv5-d16
+- -mfloat-abi=hard
+default-by-variant: []
+enabled-by: true
+links: []
+name: ABI_FLAGS
+description: |
+  ABI flags
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

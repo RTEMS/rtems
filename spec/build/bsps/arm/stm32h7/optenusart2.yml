@@ -1,0 +1,16 @@
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+default: true
+default-by-variant: []
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_CONSOLE_ENABLE_USART2
+description: |
+  Enable USART2 device in console driver.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

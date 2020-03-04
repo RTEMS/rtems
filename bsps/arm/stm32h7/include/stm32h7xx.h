@@ -38,6 +38,9 @@
 #ifndef STM32H7xx_H
 #define STM32H7xx_H
 
+#ifdef __rtems__
+#include <bspopts.h>
+#endif /* __rtems__ */
 #ifdef __cplusplus
  extern "C" {
 #endif /* __cplusplus */

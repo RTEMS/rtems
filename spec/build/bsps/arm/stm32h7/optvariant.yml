@@ -1,0 +1,29 @@
+actions:
+- get-string: null
+- script: |
+    variants = ["STM32H742xx", "STM32H743xx", "STM32H745xx", "STM32H747xx",
+    "STM32H750xx", "STM32H753xx", "STM32H755xx", "STM32H757xx", "STM32H7A3xx",
+    "STM32H7A3xxQ", "STM32H7B0xx", "STM32H7B0xxQ", "STM32H7B3xx", "STM32H7B3xxQ"]
+    if value not in variants:
+        conf.fatal(
+            "STM32H7 chip variant '{}' is not one of {}".format(
+                value, variants
+            )
+        )
+    conf.define_cond(value, True)
+build-type: option
+default: STM32H743xx
+default-by-variant: []
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_VARIANT
+description: |
+  Select the STM32H7 series chip variant out of STM32H742xx, STM32H743xx,
+  STM32H745xx, STM32H747xx, STM32H750xx, STM32H753xx, STM32H755xx, STM32H757xx,
+  STM32H7A3xx, STM32H7A3xxQ, STM32H7B0xx, STM32H7B0xxQ, STM32H7B3xx, and
+  STM32H7B3xxQ.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

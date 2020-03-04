@@ -1,0 +1,92 @@
+build-type: config-file
+content: |
+  MEMORY {
+    NULL        : ORIGIN = 0x00000000, LENGTH = ${STM32H7_MEMORY_NULL_SIZE:#010x}
+    ITCM        : ORIGIN = ${STM32H7_MEMORY_NULL_SIZE:#010x}, LENGTH = ${STM32H7_MEMORY_ITCM_SIZE:#010x}
+    FLASH       : ORIGIN = 0x08000000, LENGTH = ${STM32H7_MEMORY_FLASH_SIZE:#010x}
+    DTCM        : ORIGIN = 0x20000000, LENGTH = ${STM32H7_MEMORY_DTCM_SIZE:#010x}
+    SRAM_AXI    : ORIGIN = 0x24000000, LENGTH = ${STM32H7_MEMORY_SRAM_AXI_SIZE:#010x}
+    SRAM_1      : ORIGIN = 0x30000000, LENGTH = ${STM32H7_MEMORY_SRAM_1_SIZE:#010x}
+    SRAM_2      : ORIGIN = 0x30020000, LENGTH = ${STM32H7_MEMORY_SRAM_2_SIZE:#010x}
+    SRAM_3      : ORIGIN = 0x30040000, LENGTH = ${STM32H7_MEMORY_SRAM_3_SIZE:#010x}
+    SRAM_4      : ORIGIN = 0x38000000, LENGTH = ${STM32H7_MEMORY_SRAM_4_SIZE:#010x}
+    SRAM_BACKUP : ORIGIN = 0x38800000, LENGTH = ${STM32H7_MEMORY_SRAM_BACKUP_SIZE:#010x}
+    PERIPHERAL  : ORIGIN = 0x40000000, LENGTH = ${STM32H7_MEMORY_PERIPHERAL_SIZE:#010x}
+    NOR         : ORIGIN = 0x60000000, LENGTH = ${STM32H7_MEMORY_NOR_SIZE:#010x}
+    SDRAM_1     : ORIGIN = 0x70000000, LENGTH = ${STM32H7_MEMORY_SDRAM_1_SIZE:#010x}
+    NAND        : ORIGIN = 0x80000000, LENGTH = ${STM32H7_MEMORY_NAND_SIZE:#010x}
+    QUADSPI     : ORIGIN = 0x90000000, LENGTH = ${STM32H7_MEMORY_QUADSPI_SIZE:#010x}
+    SDRAM_2     : ORIGIN = 0xd0000000, LENGTH = ${STM32H7_MEMORY_SDRAM_2_SIZE:#010x}
+  }
+
+  stm32h7_memory_null_begin = ORIGIN (NULL);
+  stm32h7_memory_null_end = ORIGIN (NULL) + LENGTH (NULL);
+  stm32h7_memory_null_size = LENGTH (NULL);
+
+  stm32h7_memory_itcm_begin = ORIGIN (ITCM);
+  stm32h7_memory_itcm_end = ORIGIN (ITCM) + LENGTH (ITCM);
+  stm32h7_memory_itcm_size = LENGTH (ITCM);
+
+  stm32h7_memory_flash_begin = ORIGIN (FLASH);
+  stm32h7_memory_flash_end = ORIGIN (FLASH) + LENGTH (FLASH);
+  stm32h7_memory_flash_size = LENGTH (FLASH);
+
+  stm32h7_memory_dtcm_begin = ORIGIN (DTCM);
+  stm32h7_memory_dtcm_end = ORIGIN (DTCM) + LENGTH (DTCM);
+  stm32h7_memory_dtcm_size = LENGTH (DTCM);
+
+  stm32h7_memory_sram_axi_begin = ORIGIN (SRAM_AXI);
+  stm32h7_memory_sram_axi_end = ORIGIN (SRAM_AXI) + LENGTH (SRAM_AXI);
+  stm32h7_memory_sram_axi_size = LENGTH (SRAM_AXI);
+
+  stm32h7_memory_sram_1_begin = ORIGIN (SRAM_1);
+  stm32h7_memory_sram_1_end = ORIGIN (SRAM_1) + LENGTH (SRAM_1);
+  stm32h7_memory_sram_1_size = LENGTH (SRAM_1);
+
+  stm32h7_memory_sram_2_begin = ORIGIN (SRAM_2);
+  stm32h7_memory_sram_2_end = ORIGIN (SRAM_2) + LENGTH (SRAM_2);
+  stm32h7_memory_sram_2_size = LENGTH (SRAM_2);
+
+  stm32h7_memory_sram_3_begin = ORIGIN (SRAM_3);
+  stm32h7_memory_sram_3_end = ORIGIN (SRAM_3) + LENGTH (SRAM_3);
+  stm32h7_memory_sram_3_size = LENGTH (SRAM_3);
+
+  stm32h7_memory_sram_4_begin = ORIGIN (SRAM_4);
+  stm32h7_memory_sram_4_end = ORIGIN (SRAM_4) + LENGTH (SRAM_4);
+  stm32h7_memory_sram_4_size = LENGTH (SRAM_4);
+
+  stm32h7_memory_sram_backup_begin = ORIGIN (SRAM_BACKUP);
+  stm32h7_memory_sram_backup_end = ORIGIN (SRAM_BACKUP) + LENGTH (SRAM_BACKUP);
+  stm32h7_memory_sram_backup_size = LENGTH (SRAM_BACKUP);
+
+  stm32h7_memory_peripheral_begin = ORIGIN (PERIPHERAL);
+  stm32h7_memory_peripheral_end = ORIGIN (PERIPHERAL) + LENGTH (PERIPHERAL);
+  stm32h7_memory_peripheral_size = LENGTH (PERIPHERAL);
+
+  stm32h7_memory_nor_begin = ORIGIN (NOR);
+  stm32h7_memory_nor_end = ORIGIN (NOR) + LENGTH (NOR);
+  stm32h7_memory_nor_size = LENGTH (NOR);
+
+  stm32h7_memory_sdram_1_begin = ORIGIN (SDRAM_1);
+  stm32h7_memory_sdram_1_end = ORIGIN (SDRAM_1) + LENGTH (SDRAM_1);
+  stm32h7_memory_sdram_1_size = LENGTH (SDRAM_1);
+
+  stm32h7_memory_nand_begin = ORIGIN (NAND);
+  stm32h7_memory_nand_end = ORIGIN (NAND) + LENGTH (NAND);
+  stm32h7_memory_nand_size = LENGTH (NAND);
+
+  stm32h7_memory_quadspi_begin = ORIGIN (QUADSPI);
+  stm32h7_memory_quadspi_end = ORIGIN (QUADSPI) + LENGTH (QUADSPI);
+  stm32h7_memory_quadspi_size = LENGTH (QUADSPI);
+
+  stm32h7_memory_sdram_2_begin = ORIGIN (SDRAM_2);
+  stm32h7_memory_sdram_2_end = ORIGIN (SDRAM_2) + LENGTH (SDRAM_2);
+  stm32h7_memory_sdram_2_size = LENGTH (SDRAM_2);
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

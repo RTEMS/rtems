@@ -1,0 +1,16 @@
+actions:
+- get-integer: null
+- env-assign: null
+build-type: option
+default: 0x10000
+default-by-variant: []
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: STM32H7_MEMORY_SRAM_4_SIZE
+description: |
+  Size of the SRAM 4 (D3 domain) in bytes.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
