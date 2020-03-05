@@ -66,8 +66,7 @@ typedef struct IMFS_jnode_tt IMFS_jnode_t;
  *  @endcode
  */
 #define IMFS_MEMFILE_DEFAULT_BYTES_PER_BLOCK     128
-  extern int imfs_rq_memfile_bytes_per_block;
-  extern int imfs_memfile_bytes_per_block;
+  extern const int imfs_memfile_bytes_per_block;
 
 #define IMFS_MEMFILE_BYTES_PER_BLOCK imfs_memfile_bytes_per_block
 #define IMFS_MEMFILE_BLOCK_SLOTS \

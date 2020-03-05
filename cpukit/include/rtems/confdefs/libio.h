@@ -196,7 +196,7 @@ static const devFS_data _Filesystem_Root_data = {
   #error "CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK must be a power of two between 16 and 512"
 #endif
 
-int imfs_rq_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
+const int imfs_memfile_bytes_per_block = CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK;
 
 static IMFS_fs_info_t _IMFS_fs_info;
 

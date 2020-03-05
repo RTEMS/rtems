@@ -19,8 +19,6 @@
 
 #include <rtems/imfs.h>
 
-int imfs_memfile_bytes_per_block;
-
 int IMFS_stat_file(
   const rtems_filesystem_location_info_t *loc,
   struct stat *buf
