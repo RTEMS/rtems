@@ -35,7 +35,7 @@ REGION_ALIAS ("REGION_NVRAM", EMPTY);
 
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
 
-PSIM = 0x0c000000;
+PSIM = 0xfc000000;
 
 /* Allocate the maximum size to the small data area */
 bsp_section_small_data_area_size = 65536;
