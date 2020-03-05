@@ -71,11 +71,6 @@ IMFS_jnode_t *IMFS_node_initialize_default(
 }
 
 const IMFS_mknod_control IMFS_mknod_control_enosys = {
-  {
-    .handlers = &rtems_filesystem_handlers_default,
-    .node_initialize = IMFS_node_initialize_enosys,
-    .node_remove = IMFS_node_remove_default,
-    .node_destroy = IMFS_node_destroy_default
-  },
+  { .node_initialize = IMFS_node_initialize_enosys },
   .node_size = sizeof( IMFS_jnode_t )
 };
