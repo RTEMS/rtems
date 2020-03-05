@@ -32,15 +32,13 @@ IMFS_jnode_t *IMFS_initialize_node(
   void *arg
 )
 {
-  struct timeval tv;
+  time_t now;
 
   if ( namelen > IMFS_NAME_MAX ) {
     errno = ENAMETOOLONG;
 
     return NULL;
   }
-
-  gettimeofday( &tv, 0 );
 
   /*
    *  Fill in the basic information
@@ -62,9 +60,10 @@ IMFS_jnode_t *IMFS_initialize_node(
    *  Now set all the times.
    */
 
-  node->stat_atime  = (time_t) tv.tv_sec;
-  node->stat_mtime  = (time_t) tv.tv_sec;
-  node->stat_ctime  = (time_t) tv.tv_sec;
+  now = _IMFS_get_time();
+  node->stat_atime = now;
+  node->stat_mtime = now;
+  node->stat_ctime = now;
 
   return (*node_control->node_initialize)( node, arg );
 }
