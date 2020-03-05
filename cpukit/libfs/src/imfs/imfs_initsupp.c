@@ -27,27 +27,33 @@ int IMFS_initialize_support(
   const void                           *data
 )
 {
-  const IMFS_mount_data *mount_data = data;
-  IMFS_fs_info_t *fs_info = mount_data->fs_info;
-  IMFS_jnode_t *root_node;
+  const IMFS_mount_data   *mount_data;
+  IMFS_fs_info_t          *fs_info;
+  const IMFS_node_control *node_control;
+  IMFS_jnode_t            *root_node;
 
+  mount_data = data;
+
+  fs_info = mount_data->fs_info;
   fs_info->mknod_controls = mount_data->mknod_controls;
+  node_control = &mount_data->mknod_controls->directory->node_control;
+  root_node = &fs_info->Root_directory.Node;
+
+  mt_entry->fs_info = fs_info;
+  mt_entry->ops = mount_data->ops;
+  mt_entry->pathconf_limits_and_options = &IMFS_LIMITS_AND_OPTIONS;
+  mt_entry->mt_fs_root->location.node_access = root_node;
+  mt_entry->mt_fs_root->location.handlers = node_control->handlers;
 
   root_node = IMFS_initialize_node(
-    &fs_info->Root_directory.Node,
-    &fs_info->mknod_controls->directory->node_control,
+    root_node,
+    node_control,
     "",
     0,
     (S_IFDIR | 0755),
     NULL
   );
   IMFS_assert( root_node != NULL );
-
-  mt_entry->fs_info = fs_info;
-  mt_entry->ops = mount_data->ops;
-  mt_entry->pathconf_limits_and_options = &IMFS_LIMITS_AND_OPTIONS;
-  mt_entry->mt_fs_root->location.node_access = root_node;
-  IMFS_Set_handlers( &mt_entry->mt_fs_root->location );
 
   return 0;
 }
