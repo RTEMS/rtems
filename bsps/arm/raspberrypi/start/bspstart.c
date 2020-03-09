@@ -23,6 +23,7 @@
 #include <bsp/stackalloc.h>
 #include <bsp/raspberrypi.h>
 #include <bsp/vc.h>
+#include <bsp/fdt.h>
 
 #include <libfdt.h>
 
@@ -100,6 +101,29 @@ void *raspberrypi_get_reg_of_node(const void *fdt, int node)
 
   return (BUS_TO_PHY((void *) fdt32_to_cpu(val[0])));
 }
+
+#ifdef BSP_FDT_IS_SUPPORTED
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
+{
+  uint32_t controller = intr[0];
+  uint32_t source = intr[1];
+
+  switch ( controller ) {
+    case 0:
+        return source + BCM2835_IRQ_ID_BASIC_BASE_ID;
+        break;
+    case 1:
+        return source + BCM2835_IRQ_SET1_MIN;
+        break;
+    case 2:
+        return source + BCM2835_IRQ_SET2_MIN;
+        break;
+    default:
+        return BSP_INTERRUPT_VECTOR_INVALID;
+        break;
+  }
+}
+#endif /* BSP_FDT_IS_SUPPORTED */
 
 void bsp_start(void)
 {
