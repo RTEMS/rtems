@@ -1,15 +1,26 @@
 /*
- * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2012, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -32,7 +43,7 @@
 const char rtems_test_name[] = "FSCLOSE 1";
 
 typedef enum {
-  ACTION_ClOSE,
+  ACTION_CLOSE,
   ACTION_FCNTL,
   ACTION_FDATASYNC,
   ACTION_FCHDIR,
@@ -328,7 +339,7 @@ static void worker_task(rtems_task_argument arg)
     wait();
 
     switch (ctx->action) {
-      case ACTION_ClOSE:
+      case ACTION_CLOSE:
         ctx->wait_in_close = true;
         rv = close(ctx->fd);
         rtems_test_assert(rv == 0);
@@ -460,25 +471,48 @@ static void test_close(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  for (ac = ACTION_ClOSE; ac <= ACTION_WRITEV; ++ac) {
+  for (ac = ACTION_CLOSE; ac <= ACTION_WRITEV; ++ac) {
+    rtems_libio_t *iop;
+    unsigned int flags;
+    unsigned int expected_flags;
+
     ctx->action = ac;
     ctx->fd = open(path, O_RDWR);
     rtems_test_assert(ctx->fd >= 0);
+    iop = rtems_libio_iop(ctx->fd);
 
     wakeup_worker(ctx);
     rv = close(ctx->fd);
     rtems_test_assert(rv == -1);
 
-    if (ac == ACTION_ClOSE) {
+    if (ac == ACTION_CLOSE) {
       rtems_test_assert(errno == EBADF);
+
+      flags = rtems_libio_iop_hold(iop);
+      expected_flags = LIBIO_FLAGS_READ_WRITE;
+      rtems_test_assert(flags == expected_flags);
+      flags = rtems_libio_iop_flags(iop);
+      expected_flags = LIBIO_FLAGS_REFERENCE_INC | LIBIO_FLAGS_READ_WRITE;
+      rtems_test_assert(flags == expected_flags);
     } else {
       rtems_test_assert(errno == EBUSY);
     }
 
     wakeup_worker(ctx);
+
+    if (ac == ACTION_CLOSE) {
+      flags = rtems_libio_iop_flags(iop);
+      expected_flags = LIBIO_FLAGS_REFERENCE_INC;
+      rtems_test_assert(flags == expected_flags);
+      rtems_libio_iop_drop(iop);
+      flags = rtems_libio_iop_flags(iop);
+      expected_flags = 0;
+      rtems_test_assert(flags == expected_flags);
+    }
+
     rv = close(ctx->fd);
 
-    if (ac == ACTION_ClOSE) {
+    if (ac == ACTION_CLOSE) {
       rtems_test_assert(rv == -1);
       rtems_test_assert(errno == EBADF);
     } else {

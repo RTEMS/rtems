@@ -2110,7 +2110,7 @@ rtems_termios_imfs_open (rtems_libio_t *iop,
 
   memset (&args, 0, sizeof (args));
   args.iop = iop;
-  args.flags = iop->flags;
+  args.flags = rtems_libio_iop_flags (iop);
   args.mode = mode;
 
   rtems_termios_obtain ();
@@ -2162,7 +2162,7 @@ rtems_termios_imfs_read (rtems_libio_t *iop, void *buffer, size_t count)
     args.iop = iop;
     args.buffer = buffer;
     args.count = count;
-    args.flags = iop->flags;
+    args.flags = rtems_libio_iop_flags (iop);
 
     sc = rtems_termios_linesw[tty->t_line].l_read (tty, &args);
     tty->tty_rcvwakeup = false;
@@ -2202,7 +2202,7 @@ rtems_termios_imfs_write (rtems_libio_t *iop, const void *buffer, size_t count)
     args.iop = iop;
     args.buffer = RTEMS_DECONST (void *, buffer);
     args.count = count;
-    args.flags = iop->flags;
+    args.flags = rtems_libio_iop_flags (iop);
 
     sc = rtems_termios_linesw[tty->t_line].l_write (tty, &args);
     rtems_mutex_unlock (&tty->osem);

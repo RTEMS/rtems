@@ -85,28 +85,6 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
 extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
 
 /**
- * @brief Sets the iop flags to the specified flags together with
- * LIBIO_FLAGS_OPEN.
- *
- * Use this once a file descriptor allocated via rtems_libio_allocate() is
- * fully initialized.
- *
- * @param[in] iop The iop.
- * @param[in] flags The flags.
- */
-static inline void rtems_libio_iop_flags_initialize(
-  rtems_libio_t *iop,
-  uint32_t       flags
-)
-{
-  _Atomic_Store_uint(
-    &iop->flags,
-    LIBIO_FLAGS_OPEN | flags,
-    ATOMIC_ORDER_RELEASE
-  );
-}
-
-/**
  * @brief Sets the specified flags in the iop.
  *
  * @param[in] iop The iop.
@@ -222,7 +200,7 @@ static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
 
 #define rtems_libio_check_is_open(_iop) \
   do {                                               \
-      if (((_iop)->flags & LIBIO_FLAGS_OPEN) == 0) { \
+      if ((rtems_libio_iop_flags(_iop) & LIBIO_FLAGS_OPEN) == 0) { \
           errno = EBADF;                             \
           return -1;                                 \
       }                                              \

@@ -34,7 +34,7 @@ int rtems_deviceio_open(
   rtems_libio_open_close_args_t args;
 
   args.iop = iop;
-  args.flags = iop->flags;
+  args.flags = rtems_libio_iop_flags( iop );
   args.mode = mode;
 
   status = rtems_io_open( major, minor, &args );
@@ -75,7 +75,7 @@ ssize_t rtems_deviceio_read(
   args.offset = iop->offset;
   args.buffer = buf;
   args.count = nbyte;
-  args.flags = iop->flags;
+  args.flags = rtems_libio_iop_flags( iop );
   args.bytes_moved = 0;
 
   status = rtems_io_read( major, minor, &args );
@@ -103,7 +103,7 @@ ssize_t rtems_deviceio_write(
   args.offset = iop->offset;
   args.buffer = RTEMS_DECONST( void *, buf );
   args.count = nbyte;
-  args.flags = iop->flags;
+  args.flags = rtems_libio_iop_flags( iop );
   args.bytes_moved = 0;
 
   status = rtems_io_write( major, minor, &args );

@@ -87,7 +87,7 @@ rtems_bsdnet_makeFdForSocket (void *so)
   iop->pathinfo.handlers = &socket_handlers;
   iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
   rtems_filesystem_location_add_to_mt_entry(&iop->pathinfo);
-  rtems_libio_iop_flags_initialize(iop, LIBIO_FLAGS_READ_WRITE);
+  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_OPEN | LIBIO_FLAGS_READ_WRITE);
   return fd;
 }
 
@@ -739,14 +739,18 @@ rtems_bsdnet_write (rtems_libio_t *iop, const void *buffer, size_t count)
 static int
 so_ioctl (rtems_libio_t *iop, struct socket *so, uint32_t   command, void *buffer)
 {
+	unsigned int nonblock;
+
 	switch (command) {
 	case FIONBIO:
+		nonblock = rtems_libio_fcntl_flags (O_NONBLOCK);
+
 		if (*(int *)buffer) {
-			iop->flags |= O_NONBLOCK;
+			rtems_libio_iop_flags_set (iop, nonblock);
 			so->so_state |= SS_NBIO;
 		}
 		else {
-			iop->flags &= ~O_NONBLOCK;
+			rtems_libio_iop_flags_clear (iop, nonblock);
 			so->so_state &= ~SS_NBIO;
 		}
 		return 0;

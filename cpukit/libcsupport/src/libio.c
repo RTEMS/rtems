@@ -134,11 +134,24 @@ void rtems_libio_free(
   rtems_libio_t *iop
 )
 {
+  size_t zero;
+
   rtems_filesystem_location_free( &iop->pathinfo );
 
   rtems_libio_lock();
 
-  iop = memset( iop, 0, sizeof( *iop ) );
+  /*
+   * Clear everything except the reference count part.  At this point in time
+   * there may be still some holders of this file descriptor.
+   */
+  rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_REFERENCE_INC - 1U );
+  zero = offsetof( rtems_libio_t, offset );
+  memset( (char *) iop + zero, 0, sizeof( *iop ) - zero );
+
+  /*
+   * Append it to the free list.  This increases the likelihood that a use
+   * after close is detected.
+   */
   *rtems_libio_iop_free_tail = iop;
   rtems_libio_iop_free_tail = &iop->data1;
 

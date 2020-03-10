@@ -1318,8 +1318,8 @@ extern const rtems_filesystem_limits_and_options_t
  * to (eg: offset, driver, pathname should be in that)
  */
 struct rtems_libio_tt {
-  off_t                                   offset;    /* current offset into file */
   Atomic_Uint                             flags;
+  off_t                                   offset;    /* current offset into file */
   rtems_filesystem_location_info_t        pathinfo;
   uint32_t                                data0;     /* private to "driver" */
   void                                   *data1;     /* ... */

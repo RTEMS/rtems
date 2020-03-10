@@ -286,14 +286,14 @@ int shm_open( const char *name, int oflag, mode_t mode )
   iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
   rtems_filesystem_location_add_to_mt_entry( &iop->pathinfo );
 
-  flags = LIBIO_FLAGS_CLOSE_ON_EXEC;
+  flags = LIBIO_FLAGS_OPEN | LIBIO_FLAGS_CLOSE_ON_EXEC;
   if ( (oflag & O_ACCMODE) == O_RDONLY ) {
     flags |= LIBIO_FLAGS_READ;
   } else {
     flags |= LIBIO_FLAGS_READ_WRITE;
   }
 
-  rtems_libio_iop_flags_initialize( iop, flags );
+  rtems_libio_iop_flags_set( iop, flags );
 
   return fd;
 }
