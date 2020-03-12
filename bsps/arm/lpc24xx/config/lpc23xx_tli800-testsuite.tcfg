@@ -65,5 +65,6 @@ exclude: termios
 exclude: tmcontext01
 exclude: tmfine01
 exclude: top
+exclude: ttest01
 exclude: utf8proc01
 
