@@ -43,4 +43,5 @@ exclude: spstkalloc02
 exclude: sptls02
 exclude: syscall01
 exclude: telnetd01
+exclude: ttest01
 exclude: utf8proc01
