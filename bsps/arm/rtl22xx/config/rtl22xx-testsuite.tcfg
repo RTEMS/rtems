@@ -5,9 +5,11 @@
 #
 
 include: testdata/disable-iconv-tests.tcfg
+exclude: dl10
 exclude: fileio
 exclude: fsdosfsname01
 exclude: linpack
 exclude: iostream
 exclude: rtems++
+exclude: ttest01
 exclude: utf8proc01
