@@ -23,7 +23,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef void ( *IO_Put_char )(int c, void *arg);
+typedef void ( *IO_Put_char )( int c, void *arg );
 
 int _IO_Printf(
   IO_Put_char  put_char,
@@ -37,6 +37,31 @@ int _IO_Vprintf(
   void        *arg,
   char const  *fmt,
   va_list      ap
+);
+
+/**
+ * @brief Outputs the source buffer in base64 encoding.
+ *
+ * After word length of output characters produced by the encoding a word break
+ * is produced.
+ *
+ * @param put_char The put character function.
+ * @param arg The argument passed to the put character function.
+ * @param src The pointer to the source buffer begin.
+ * @param srclen The length of the source buffer in bytes.
+ * @param wordbreak The word break string.
+ * @param wordlen The word length in bytes.  If the word length is less than
+ *   four, then a word length of four will be used.
+ *
+ * @return The count of output characters.
+ */
+int _IO_Base64(
+  IO_Put_char  put_char,
+  void        *arg,
+  const void  *src,
+  size_t       len,
+  const char  *wordbreak,
+  int          wordlen
 );
 
 #ifdef __cplusplus
