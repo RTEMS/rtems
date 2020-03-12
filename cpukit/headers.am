@@ -139,6 +139,7 @@ include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/record.h
 include_rtems_HEADERS += include/rtems/recordclient.h
 include_rtems_HEADERS += include/rtems/recorddata.h
+include_rtems_HEADERS += include/rtems/recorddump.h
 include_rtems_HEADERS += include/rtems/recordserver.h
 include_rtems_HEADERS += include/rtems/ringbuf.h
 include_rtems_HEADERS += include/rtems/rtc.h

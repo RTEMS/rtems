@@ -1,7 +1,7 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2018, 2019 embedded brains GmbH
+ * Copyright (C) 2018, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,6 +32,7 @@
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/interr.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/counter.h>
@@ -95,22 +96,21 @@ void _Record_Thread_begin( struct _Thread_Control *executing );
 
 void _Record_Thread_exitted( struct _Thread_Control *executing );
 
+void _Record_Fatal_dump_base64(
+  Internal_errors_Source source,
+  bool                   always_set_to_false,
+  Internal_errors_t      code
+);
+
+void _Record_Fatal_dump_base64_zlib(
+  Internal_errors_Source source,
+  bool                   always_set_to_false,
+  Internal_errors_t      code
+);
+
 void _Record_Thread_terminate(
   struct _Thread_Control *executing
 );
-
-#define RECORD_EXTENSION \
-  { \
-    _Record_Thread_create, \
-    _Record_Thread_start, \
-    _Record_Thread_restart, \
-    _Record_Thread_delete, \
-    _Record_Thread_switch, \
-    _Record_Thread_begin, \
-    _Record_Thread_exitted, \
-    NULL, \
-    _Record_Thread_terminate \
-  }
 
 RTEMS_INLINE_ROUTINE unsigned int _Record_Index(
   const Record_Control *control,

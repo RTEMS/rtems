@@ -1,7 +1,7 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2018, 2019 embedded brains GmbH
+ * Copyright (C) 2018, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -94,17 +94,10 @@ static void drain_visitor(
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
 }
 
-static void Init(rtems_task_argument arg)
+static void generate_events(void)
 {
-  test_context *ctx;
-  Record_Stream_header header;
-  size_t size;
-  rtems_record_client_status cs;
   int i;
   uint32_t level;
-
-  TEST_BEGIN();
-  ctx = &test_instance;
 
   for (i = 0; i < 10; ++i) {
     rtems_task_wake_after(1);
@@ -160,6 +153,19 @@ static void Init(rtems_task_argument arg)
   rtems_record_exit_10(RTEMS_RECORD_USER_4, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   level = rtems_record_interrupt_disable();
   rtems_record_interrupt_enable(level);
+}
+
+static void Init(rtems_task_argument arg)
+{
+  test_context *ctx;
+  Record_Stream_header header;
+  size_t size;
+  rtems_record_client_status cs;
+
+  TEST_BEGIN();
+  ctx = &test_instance;
+
+  generate_events();
 
   rtems_record_client_init(&ctx->client, client_handler, NULL);
   size = _Record_Stream_header_initialize(&header);
@@ -167,6 +173,12 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(cs == RTEMS_RECORD_CLIENT_SUCCESS);
   rtems_record_drain(drain_visitor, ctx);
   rtems_record_client_destroy(&ctx->client);
+
+  generate_events();
+
+  _Record_Fatal_dump_base64(RTEMS_FATAL_SOURCE_APPLICATION, false, 123);
+
+  generate_events();
 
   TEST_END();
   rtems_test_exit(0);
@@ -182,9 +194,11 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS 256
+#define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS 512
 
 #define CONFIGURE_RECORD_EXTENSIONS_ENABLED
+
+#define CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
 
 #define CONFIGURE_INIT
 

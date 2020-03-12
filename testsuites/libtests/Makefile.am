@@ -1124,6 +1124,7 @@ lib_docs += record02/record02.doc
 record02_SOURCES = record02/init.c
 record02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_record02) \
 	$(support_includes)
+record02_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDADD)
 endif
 
 if TEST_rtmonuse

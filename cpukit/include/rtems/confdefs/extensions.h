@@ -79,7 +79,23 @@ extern "C" {
   const User_extensions_Table _User_extensions_Initial_extensions[] = {
     #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0 \
       && defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED)
-      RECORD_EXTENSION,
+      {
+        _Record_Thread_create,
+        _Record_Thread_start,
+        _Record_Thread_restart,
+        _Record_Thread_delete,
+        _Record_Thread_switch,
+        _Record_Thread_begin,
+        _Record_Thread_exitted,
+        #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
+          _Record_Fatal_dump_base64_zlib,
+        #elif defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64)
+          _Record_Fatal_dump_base64,
+        #else
+          NULL,
+        #endif
+        _Record_Thread_terminate
+      },
     #endif
     #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
       RTEMS_NEWLIB_EXTENSION,
