@@ -7,6 +7,7 @@
 include: testdata/disable-iconv-tests.tcfg
 exclude: cdtest
 exclude: dl05
+exclude: dl10
 exclude: fileio
 exclude: fsdosfsname01
 exclude: iostream
