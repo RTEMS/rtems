@@ -135,6 +135,16 @@ extern int putk(const char *s);
  */
 extern void rtems_putc(char c);
 
+/**
+ * @brief Puts the character via rtems_putc().
+ *
+ * This is a compatibility function to support an internal API.
+ *
+ * @param c The character to put.
+ * @param arg Ignored.
+ */
+void rtems_put_char( int c, void *arg );
+
 /**@}*/
 
 #ifdef __cplusplus

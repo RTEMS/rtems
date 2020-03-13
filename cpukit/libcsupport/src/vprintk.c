@@ -26,12 +26,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/score/io.h>
 
-static void vprintk_putchar( int c, void *arg )
-{
-  rtems_putc((char) c);
-}
-
 int vprintk( const char *fmt, va_list ap )
 {
-  return _IO_Vprintf( vprintk_putchar, NULL, fmt, ap );
+  return _IO_Vprintf( rtems_put_char, NULL, fmt, ap );
 }
