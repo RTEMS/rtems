@@ -60,7 +60,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc
 
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
-include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/virtex/headers.am
