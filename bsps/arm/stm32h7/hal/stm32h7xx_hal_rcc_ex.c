@@ -51,8 +51,8 @@
   */
 
 /* Private function prototypes -----------------------------------------------*/
-static HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLL2InitTypeDef *pll2, uint32_t Divider);
-static HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLL3InitTypeDef *pll3, uint32_t Divider);
+static HAL_StatusTypeDef RCCEx_PLL2_Config(const RCC_PLL2InitTypeDef *pll2, uint32_t Divider);
+static HAL_StatusTypeDef RCCEx_PLL3_Config(const RCC_PLL3InitTypeDef *pll3, uint32_t Divider);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Functions Exported Functions
@@ -95,7 +95,7 @@ static HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLL3InitTypeDef *pll3, uint32_t D
   *
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
+HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(const RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 {
   uint32_t tmpreg;
   uint32_t tickstart;
@@ -3191,7 +3191,7 @@ __weak void HAL_RCCEx_CRS_ErrorCallback(uint32_t Error)
   *
   * @retval HAL status
   */
-static HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLL2InitTypeDef *pll2, uint32_t Divider)
+static HAL_StatusTypeDef RCCEx_PLL2_Config(const RCC_PLL2InitTypeDef *pll2, uint32_t Divider)
 {
 
   uint32_t tickstart;
@@ -3296,7 +3296,7 @@ static HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLL2InitTypeDef *pll2, uint32_t D
   *
   * @retval HAL status
   */
-static HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLL3InitTypeDef *pll3, uint32_t Divider)
+static HAL_StatusTypeDef RCCEx_PLL3_Config(const RCC_PLL3InitTypeDef *pll3, uint32_t Divider)
 {
   uint32_t tickstart;
   HAL_StatusTypeDef status = HAL_OK;
