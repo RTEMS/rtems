@@ -609,6 +609,8 @@ void _ARMV7M_Pendable_service_call( void );
 
 void _ARMV7M_Supervisor_call( void );
 
+void _ARMV7M_Clock_handler( void );
+
 #endif /* ASM */
 
 #endif /* ARM_MULTILIB_ARCH_V7M */

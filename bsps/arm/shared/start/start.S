@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008, 2019 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008, 2020 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -456,13 +456,13 @@ bsp_start_vector_table_begin:
 	.word	_ARMV7M_Exception_default /* Reserved */
 	.word	_ARMV7M_Exception_default /* Reserved */
 	.word	_ARMV7M_Exception_default /* Reserved */
-	.word	_ARMV7M_Exception_default /* SVC */
+	.word	_ARMV7M_Supervisor_call /* SVC */
 	.word	_ARMV7M_Exception_default /* Debug Monitor */
 	.word	_ARMV7M_Exception_default /* Reserved */
-	.word	_ARMV7M_Exception_default /* PendSV */
-	.word	_ARMV7M_Exception_default /* SysTick */
+	.word	_ARMV7M_Pendable_service_call /* PendSV */
+	.word	_ARMV7M_Clock_handler /* SysTick */
 	.rept	BSP_INTERRUPT_VECTOR_MAX + 1
-	.word	_ARMV7M_Exception_default /* IRQ */
+	.word	_ARMV7M_NVIC_Interrupt_dispatch /* IRQ */
 	.endr
 
 bsp_start_vector_table_end:
