@@ -81,6 +81,17 @@ SECTIONS {
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.fini : ALIGN_WITH_INPUT {
 		KEEP (*(.fini))
+
+		/*
+		 * If requested, align the size of the combined start and text
+		 * section to the next power of two to meet MPU region
+		 * alignment requirements.
+		 */
+		. = DEFINED (bsp_align_text_and_rodata_end_to_power_of_2) ?
+		    bsp_section_start_begin
+		    + ALIGN (. - bsp_section_start_begin,
+		    1 << LOG2CEIL (. - bsp_section_start_begin)) : .;
+
 		bsp_section_text_end = .;
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
@@ -248,6 +259,16 @@ SECTIONS {
 		*(set_pseudo_*);
 
 		KEEP (*(SORT(.rtemsroset.*)))
+
+		/*
+		 * If requested, align the size of the rodata section to the
+		 * next power of two to meet MPU region alignment requirements.
+		 */
+		. = DEFINED (bsp_align_text_and_rodata_end_to_power_of_2) ?
+		    bsp_section_rodata_begin
+		    + ALIGN (. - bsp_section_rodata_begin,
+		    1 << LOG2CEIL (. - bsp_section_rodata_begin)) : .;
+
 		bsp_section_rodata_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
