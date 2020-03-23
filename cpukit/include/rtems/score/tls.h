@@ -58,6 +58,16 @@ extern char _TLS_BSS_size[];
 
 extern char _TLS_Size[];
 
+/**
+ * @brief The TLS section alignment.
+ *
+ * This symbol is provided by the linker command file as the maximum alignment
+ * of the .tdata and .tbss sections.  The linker ensures that the first TLS
+ * output section is aligned to the maximum alignment of all TLS output
+ * sections, see function _bfd_elf_tls_setup() in bfd/elflink.c of the GNU
+ * Binutils sources.  The linker command file must take into account the case
+ * that the .tdata section is empty and the .tbss section is non-empty.
+ */
 extern char _TLS_Alignment[];
 
 typedef struct {
