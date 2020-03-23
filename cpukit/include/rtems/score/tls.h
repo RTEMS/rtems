@@ -73,10 +73,12 @@ typedef struct {
 typedef struct TLS_Thread_control_block {
 #ifdef __i386__
   struct TLS_Thread_control_block *tcb;
-#else
+#else /* !__i386__ */
   TLS_Dynamic_thread_vector *dtv;
+#if CPU_SIZEOF_POINTER == 4
   uintptr_t reserved;
 #endif
+#endif /* __i386__ */
 } TLS_Thread_control_block;
 
 typedef struct {
