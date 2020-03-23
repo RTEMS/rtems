@@ -60,8 +60,32 @@
 #endif
 
 #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
+  #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0
+    #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be a power of two"
+  #endif
+
+  #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS < 16
+    #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be at least 16"
+  #endif
+
+  #if defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED) \
+    || defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64) \
+    || defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB)
+    #define _CONFIGURE_RECORD_NEED_EXTENSION
+  #endif
+
   #include <rtems/confdefs/percpu.h>
   #include <rtems/record.h>
+#else
+  #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED
+    #warning "CONFIGURE_RECORD_EXTENSIONS_ENABLED defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
+  #endif
+  #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64
+    #warning "CONFIGURE_RECORD_FATAL_DUMP_BASE64 defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
+  #endif
+  #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
+    #warning "CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB defined without CONFIGURE_RECORD_PER_PROCESSOR_ITEMS"
+  #endif
 #endif
 
 #ifdef CONFIGURE_STACK_CHECKER_ENABLED
@@ -72,21 +96,25 @@
 extern "C" {
 #endif
 
-#if defined(BSP_INITIAL_EXTENSION) \
- || defined(CONFIGURE_INITIAL_EXTENSIONS) \
- || defined(CONFIGURE_STACK_CHECKER_ENABLED) \
- || defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY)
+#if defined(_CONFIGURE_RECORD_NEED_EXTENSION) \
+  || defined(_CONFIGURE_ENABLE_NEWLIB_REENTRANCY) \
+  || defined(CONFIGURE_STACK_CHECKER_ENABLED) \
+  || defined(CONFIGURE_INITIAL_EXTENSIONS) \
+  || defined(BSP_INITIAL_EXTENSION)
   const User_extensions_Table _User_extensions_Initial_extensions[] = {
-    #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0 \
-      && defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED)
+    #ifdef _CONFIGURE_RECORD_NEED_EXTENSION
       {
-        _Record_Thread_create,
-        _Record_Thread_start,
-        _Record_Thread_restart,
-        _Record_Thread_delete,
-        _Record_Thread_switch,
-        _Record_Thread_begin,
-        _Record_Thread_exitted,
+        #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED
+          _Record_Thread_create,
+          _Record_Thread_start,
+          _Record_Thread_restart,
+          _Record_Thread_delete,
+          _Record_Thread_switch,
+          _Record_Thread_begin,
+          _Record_Thread_exitted,
+        #else
+           NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+        #endif
         #ifdef CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
           _Record_Fatal_dump_base64_zlib,
         #elif defined(CONFIGURE_RECORD_FATAL_DUMP_BASE64)
@@ -94,7 +122,11 @@ extern "C" {
         #else
           NULL,
         #endif
-        _Record_Thread_terminate
+        #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED
+          _Record_Thread_terminate
+        #else
+          NULL
+        #endif
       },
     #endif
     #ifdef _CONFIGURE_ENABLE_NEWLIB_REENTRANCY
@@ -130,14 +162,6 @@ extern "C" {
 #endif
 
 #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
-  #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0
-    #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be a power of two"
-  #endif
-
-  #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS < 16
-    #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be at least 16"
-  #endif
-
   typedef struct {
     Record_Control    Control;
     rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
