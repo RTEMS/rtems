@@ -30,7 +30,6 @@
 #include "stm32h7xx.h"
 #include "Legacy/stm32_hal_legacy.h"
 #include <stddef.h>
-#include <math.h>
 
 /* Exported types ------------------------------------------------------------*/
 
