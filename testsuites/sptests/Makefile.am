@@ -1961,7 +1961,7 @@ if TEST_sptls02
 sp_tests += sptls02
 sp_screens += sptls02/sptls02.scn
 sp_docs += sptls02/sptls02.doc
-sptls02_SOURCES = sptls02/init.cc
+sptls02_SOURCES = sptls02/init.cc sptls02/var.cc
 sptls02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sptls02) \
 	$(support_includes)
 endif
