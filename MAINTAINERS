@@ -52,6 +52,7 @@ Pavel Pisa                 ppisa@pikron.com
 Christian Mauderer         christian.mauderer@embedded-brains.de
 Hesham Almatary            heshamelmatary@gmail.com
 Amaan Cheval               amaan@rtems.org
+Vijay Kumar Banerjee       vijay@rtems.org
 
 Localized Write Permission
 ==========================
@@ -60,4 +61,5 @@ beagle                     Ben Gras (beng@rtems.org)
 tms570                     Pavel Pisa (pisa@cmp.felk.cvut.cz)
 raspberrypi                Pavel Pisa (pisa@cmp.felk.cvut.cz)
 x86_64                     Amaan Cheval (amaan@rtems.org)
+beagle                     Vijay Kumar Banerjee (vijay@rtems.org)
 
