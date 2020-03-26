@@ -589,8 +589,6 @@ rtems_status_code rtems_interrupt_server_entry_move(
  * this function within the context of an interrupt server is undefined
  * behaviour.  No error checking is performed.
  *
- * @param[in] server_index The interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
  * @param[in] entry The interrupt server entry to destroy.  It must have been
  *   initialized via rtems_interrupt_server_entry_initialize().
  */
