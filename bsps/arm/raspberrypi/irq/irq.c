@@ -32,6 +32,8 @@
 #include <rtems/bspIo.h>
 #include <strings.h>
 
+#include <rtems/inttypes.h>
+
 #ifdef RTEMS_SMP
 #include <rtems/score/smp.h>
 #include <rtems/score/smpimpl.h>
@@ -157,7 +159,7 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
 
 void bsp_interrupt_handler_default(rtems_vector_number vector)
 {
-    printk("spurious interrupt: %lu\n", vector);
+    printk("spurious interrupt: %" PRIdrtems_vector_number "\n", vector);
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)

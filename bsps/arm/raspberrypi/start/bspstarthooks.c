@@ -184,7 +184,9 @@ static void bsp_memory_initialize(void)
 {
   _Memory_Initialize(
     &_Memory_Areas[0],
+    (void *)
     raspberrypi_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].begin,
+    (void *)
     raspberrypi_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].end
   );
 }
