@@ -48,6 +48,9 @@ uint32_t imx_ccm_perclk_hz(void);
 uint32_t imx_ccm_sdhci_hz(void);
 uint32_t imx_ccm_uart_hz(void);
 uint32_t imx_ccm_ahb_hz(void);
+#ifdef __rtems__
+uint32_t imx_ccm_ecspi_hz(void);
+#endif /* __rtems__ */
 
 #ifndef __rtems__
 void imx_ccm_usb_enable(device_t _usbdev);

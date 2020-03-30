@@ -27,6 +27,11 @@ uint32_t imx_ccm_uart_hz(void)
   return IMX_CCM_UART_HZ;
 }
 
+uint32_t imx_ccm_ecspi_hz(void)
+{
+  return IMX_CCM_ECSPI_HZ;
+}
+
 uint32_t imx_ccm_ahb_hz(void)
 {
   return IMX_CCM_AHB_HZ;

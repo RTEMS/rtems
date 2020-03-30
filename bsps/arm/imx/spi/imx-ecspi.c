@@ -435,7 +435,7 @@ int spi_bus_register_imx(const char *bus_path, const char *alias_or_path)
     return -1;
   }
 
-  bus->base.max_speed_hz = imx_ccm_ipg_hz();
+  bus->base.max_speed_hz = imx_ccm_ecspi_hz();
   bus->base.delay_usecs = 1;
   bus->regs = imx_get_reg_of_node(fdt, node);
   bus->irq = imx_get_irq_of_node(fdt, node, 0);
