@@ -273,12 +273,6 @@ static const IMFS_mount_data IMFS_root_mount_data = {
   &IMFS_root_mknod_controls
 };
 
-#if defined(CONFIGURE_FILESYSTEM_DEVFS) \
-  && !defined(CONFIGURE_FILESYSTEM_ENTRY_DEVFS)
-  #define CONFIGURE_FILESYSTEM_ENTRY_DEVFS \
-    { RTEMS_FILESYSTEM_TYPE_DEVFS, devFS_initialize }
-#endif
-
 #if defined(CONFIGURE_FILESYSTEM_DOSFS) \
   && !defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS)
   #define CONFIGURE_FILESYSTEM_ENTRY_DOSFS \
@@ -323,9 +317,6 @@ static const IMFS_mount_data IMFS_root_mount_data = {
 
 const rtems_filesystem_table_t rtems_filesystem_table[] = {
   { "/", IMFS_initialize_support },
-  #ifdef CONFIGURE_FILESYSTEM_ENTRY_DEVFS
-    CONFIGURE_FILESYSTEM_ENTRY_DEVFS,
-  #endif
   #ifdef CONFIGURE_FILESYSTEM_ENTRY_DOSFS
     CONFIGURE_FILESYSTEM_ENTRY_DOSFS,
   #endif

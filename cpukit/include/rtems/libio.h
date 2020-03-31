@@ -1590,7 +1590,6 @@ extern int rtems_mkdir(const char *path, mode_t mode);
 
 #define RTEMS_FILESYSTEM_TYPE_IMFS "imfs"
 #define RTEMS_FILESYSTEM_TYPE_MINIIMFS "mimfs"
-#define RTEMS_FILESYSTEM_TYPE_DEVFS "devfs"
 #define RTEMS_FILESYSTEM_TYPE_FTPFS "ftpfs"
 #define RTEMS_FILESYSTEM_TYPE_TFTPFS "tftpfs"
 #define RTEMS_FILESYSTEM_TYPE_NFS "nfs"
@@ -1723,7 +1722,6 @@ int unmount(
  *
  * To mount a standard file system instance one of the following defines should
  * be used to select the file system type
- * - RTEMS_FILESYSTEM_TYPE_DEVFS,
  * - RTEMS_FILESYSTEM_TYPE_DOSFS,
  * - RTEMS_FILESYSTEM_TYPE_FTPFS,
  * - RTEMS_FILESYSTEM_TYPE_IMFS,
@@ -1736,7 +1734,6 @@ int unmount(
  * Only configured or registered file system types are available.  You can add
  * file system types to your application configuration with the following
  * configuration options
- * - CONFIGURE_FILESYSTEM_DEVFS,
  * - CONFIGURE_FILESYSTEM_DOSFS,
  * - CONFIGURE_FILESYSTEM_FTPFS,
  * - CONFIGURE_FILESYSTEM_IMFS,
