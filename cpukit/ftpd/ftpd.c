@@ -2068,7 +2068,7 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
  * Output parameters:
  *    returns RTEMS_SUCCESSFUL on successful start of the daemon.
  */
-int
+rtems_status_code
 rtems_ftpd_start(const struct rtems_ftpd_configuration* config)
 {
   rtems_status_code   sc;

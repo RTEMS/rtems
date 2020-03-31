@@ -66,11 +66,13 @@ struct rtems_ftpd_configuration
 #define TRANSIENT       4       /* transient negative completion */
 #define ERROR           5       /* permanent negative completion */
 
-int rtems_ftpd_start(const struct rtems_ftpd_configuration *config);
+rtems_status_code rtems_ftpd_start(
+  const struct rtems_ftpd_configuration *config
+);
 
 extern struct rtems_ftpd_configuration rtems_ftpd_configuration;
 
-int rtems_initialize_ftpd(void);
+rtems_status_code rtems_initialize_ftpd(void);
 
 #ifdef __cplusplus
 }

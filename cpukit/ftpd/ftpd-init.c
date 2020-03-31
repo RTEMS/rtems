@@ -12,7 +12,7 @@
 
 #include <rtems/ftpd.h>
 
-int rtems_initialize_ftpd( void )
+rtems_status_code rtems_initialize_ftpd( void )
 {
   rtems_ftpd_configuration.verbose = true;
   return rtems_ftpd_start( &rtems_ftpd_configuration );
