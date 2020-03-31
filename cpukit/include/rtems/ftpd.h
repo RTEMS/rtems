@@ -57,15 +57,6 @@ struct rtems_ftpd_configuration
    bool                    verbose;            /* Say hello! */
 };
 
-/*
- * Reply codes.
- */
-#define PRELIM          1       /* positive preliminary */
-#define COMPLETE        2       /* positive completion */
-#define CONTINUE        3       /* positive intermediate */
-#define TRANSIENT       4       /* transient negative completion */
-#define ERROR           5       /* permanent negative completion */
-
 rtems_status_code rtems_ftpd_start(
   const struct rtems_ftpd_configuration *config
 );
