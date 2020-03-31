@@ -35,8 +35,6 @@ void *POSIX_Init (void *argument);
 #define CONFIGURE_EXTRA_TASK_STACKS            (5 * RTEMS_MINIMUM_STACK_SIZE)
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE (5 * RTEMS_MINIMUM_STACK_SIZE)
 
-#define CONFIGURE_MALLOC_STATISTICS
-
 #include <rtems/confdefs.h>
 
 /* global variables */
