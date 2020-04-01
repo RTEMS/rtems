@@ -95,7 +95,7 @@ extern const uint8_t LL_RCC_PrescTable[16];
                                                                      (( __REG__              ) << LL_RCC_REG_SHIFT)  | \
                                                                      (((__CLK__) >> (__POS__)) << LL_RCC_CONFIG_SHIFT)))
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_Private_Macros RCC Private Macros
   * @{
   */
@@ -104,7 +104,7 @@ extern const uint8_t LL_RCC_PrescTable[16];
   */
 #endif /*USE_FULL_LL_DRIVER*/
 /* Exported types ------------------------------------------------------------*/
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_Exported_Types RCC Exported Types
   * @{
   */
@@ -1517,7 +1517,7 @@ typedef struct
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_EC_PERIPH_FREQUENCY Peripheral clock frequency
   * @{
   */
@@ -6248,7 +6248,7 @@ __STATIC_INLINE uint32_t LL_RCC_IsEnableIT_LSECSS(void)
   * @}
   */
 
-#if defined(USE_FULL_LL_DRIVER)
+#if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_EF_Init De-initialization function
   * @{
   */
