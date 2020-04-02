@@ -356,8 +356,10 @@ HAL_StatusTypeDef HAL_ETH_Init(ETH_HandleTypeDef *heth)
   /*------------------ MAC, MTL and DMA default Configuration ----------------*/
   ETH_MACDMAConfig(heth);
 
+#ifndef __rtems__
   /* SET DSL to 64 bit */
   MODIFY_REG(heth->Instance->DMACCR, ETH_DMACCR_DSL, ETH_DMACCR_DSL_64BIT);
+#endif /* __rtems__ */
 
   /* Set Receive Buffers Length (must be a multiple of 4) */
   if ((heth->Init.RxBuffLen % 0x4U) != 0x0U)
@@ -427,6 +429,7 @@ HAL_StatusTypeDef HAL_ETH_DeInit(ETH_HandleTypeDef *heth)
   return HAL_OK;
 }
 
+#ifndef __rtems__
 /**
   * @brief  Initializes the ETH MSP.
   * @param  heth: pointer to a ETH_HandleTypeDef structure that contains
@@ -441,6 +444,7 @@ __weak void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
   the HAL_ETH_MspInit could be implemented in the user file
   */
 }
+#endif /* __rtems__ */
 
 /**
   * @brief  DeInitializes ETH MSP.
@@ -2635,6 +2639,7 @@ static void ETH_MAC_MDIO_ClkConfig(ETH_HandleTypeDef *heth)
   */
 static void ETH_DMATxDescListInit(ETH_HandleTypeDef *heth)
 {
+#ifndef __rtems__
   ETH_DMADescTypeDef *dmatxdesc;
   uint32_t i;
 
@@ -2661,6 +2666,7 @@ static void ETH_DMATxDescListInit(ETH_HandleTypeDef *heth)
 
   /* Set Transmit Descriptor Tail pointer */
   WRITE_REG(heth->Instance->DMACTDTPR, (uint32_t) heth->Init.TxDesc);
+#endif /* __rtems__ */
 }
 
 /**
@@ -2672,6 +2678,7 @@ static void ETH_DMATxDescListInit(ETH_HandleTypeDef *heth)
   */
 static void ETH_DMARxDescListInit(ETH_HandleTypeDef *heth)
 {
+#ifndef __rtems__
   ETH_DMADescTypeDef *dmarxdesc;
   uint32_t i;
 
@@ -2704,6 +2711,7 @@ static void ETH_DMARxDescListInit(ETH_HandleTypeDef *heth)
 
   /* Set Receive Descriptor Tail pointer Address */
   WRITE_REG(heth->Instance->DMACRDTPR, ((uint32_t)(heth->Init.RxDesc + (((uint32_t)(ETH_RX_DESC_CNT - 1))*sizeof(ETH_DMADescTypeDef)))));
+#endif /* __rtems__ */
 }
 
 /**
