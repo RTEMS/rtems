@@ -133,7 +133,7 @@ static void qoriq_clock_initialize(void)
   uint32_t interval = (uint32_t) (((uint64_t) timer_frequency
     * (uint64_t) rtems_configuration_get_microseconds_per_tick()) / 1000000);
 
-  qoriq_clock->bcr = GTBCR_COUNT(interval);
+  qoriq_clock->bcr = GTBCR_COUNT(interval - 1);
 
   qoriq_timecounter->bcr = GTBCR_COUNT(0xffffffff);
 
