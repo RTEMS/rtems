@@ -182,7 +182,7 @@ rtems_isr Clock_isr(
       if ( !Clock_driver_isrs ) {
         Clock_driver_timecounter_tick();
 
-        Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK;
+        Clock_driver_isrs = CLOCK_DRIVER_ISRS_PER_TICK_VALUE;
       }
       Clock_driver_isrs--;
     #else
