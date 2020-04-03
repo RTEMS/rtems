@@ -18,7 +18,7 @@
  */
 
 #if !defined (_RTEMS_RFS_DIR_HASH_H_)
-#define _RTEMS_RFS_DIR_HAS_H_
+#define _RTEMS_RFS_DIR_HASH_H_
 
 #include <stddef.h>
 #include <stdint.h>
