@@ -23,6 +23,8 @@
 #ifndef LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
 #define LIBBSP_ARM_SHARED_LINKER_SYMBOLS_H
 
+#include <rtems/score/basedefs.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -123,19 +125,23 @@ LINKER_SYMBOL(bsp_start_vector_table_size)
 LINKER_SYMBOL(bsp_translation_table_base)
 LINKER_SYMBOL(bsp_translation_table_end)
 
-#define BSP_FAST_TEXT_SECTION __attribute__((section(".bsp_fast_text")))
+#define BSP_FAST_TEXT_SECTION \
+  RTEMS_SECTION(".bsp_fast_text")
 
-#define BSP_FAST_DATA_SECTION __attribute__((section(".bsp_fast_data")))
+#define BSP_FAST_DATA_SECTION \
+  RTEMS_SECTION(".bsp_fast_data")
 
-#define BSP_NOCACHE_SECTION __attribute__((section(".bsp_nocache")))
+#define BSP_NOCACHE_SECTION \
+  RTEMS_SECTION(".bsp_nocache")
 
 #define BSP_NOCACHE_SUBSECTION(subsection) \
-  __attribute__((section(".bsp_nocache." # subsection)))
+  RTEMS_SECTION(".bsp_nocache." # subsection)
 
-#define BSP_NOCACHENOLOAD_SECTION __attribute__((section(".bsp_noload_nocache")))
+#define BSP_NOCACHENOLOAD_SECTION \
+  RTEMS_SECTION(".bsp_noload_nocache")
 
 #define BSP_NOCACHENOLOAD_SUBSECTION(subsection) \
-  __attribute__((section(".bsp_noload_nocache." # subsection)))
+  RTEMS_SECTION(".bsp_noload_nocache." # subsection)
 
 /** @} */
 
