@@ -1014,6 +1014,7 @@ librtemscpu_a_SOURCES += score/src/chainnodecount.c
 librtemscpu_a_SOURCES += score/src/debugisthreaddispatchingallowed.c
 librtemscpu_a_SOURCES += score/src/interr.c
 librtemscpu_a_SOURCES += score/src/isr.c
+librtemscpu_a_SOURCES += score/src/isrstackareaend.c
 librtemscpu_a_SOURCES += score/src/wkspace.c
 librtemscpu_a_SOURCES += score/src/wkspaceisunifieddefault.c
 librtemscpu_a_SOURCES += score/src/wkstringduplicate.c
