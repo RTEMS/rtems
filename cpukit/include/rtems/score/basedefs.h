@@ -322,21 +322,38 @@
   extern char _name[]
 
 /**
+ * @brief Constructs a symbol name.
+ *
+ * @param _name The user defined name of the symbol.  The name shall be a valid
+ *   designator.  On the name a macro expansion is performed.
+ */
+#if defined(__USER_LABEL_PREFIX__)
+  #define RTEMS_SYMBOL_NAME( _name ) \
+    RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name )
+#else
+  /* Helper to perform the macro expansion */
+  #define _RTEMS_SYMBOL_NAME( _name ) _name
+
+  #define RTEMS_SYMBOL_NAME( _name ) _RTEMS_SYMBOL_NAME( _name )
+#endif
+
+/**
  * @brief Defines a global symbol with the specified name and value.
  *
- * This macro must be placed at file scope.
+ * This macro shall be placed at file scope.
  *
- * The name must be a valid designator.
- *
- * On the value parameters macro expansion is performed and afterwards it is
- * stringified.  It must expand to an integer literal understood by the
- * assembler.
+ * @param _name The user defined name of the symbol.  The name shall be a valid
+ *   designator.  On the name a macro expansion is performed and afterwards it
+ *   is stringified.
+ * @param _value The value of the symbol.  On the value a macro expansion is
+ *   performed and afterwards it is stringified.  It shall expand to an integer
+ *   expression understood by the assembler.
  */
 #if defined(__GNUC__)
   #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value ) \
     __asm__( \
-      "\t.globl " RTEMS_XSTRING( __USER_LABEL_PREFIX__ ) #_name \
-      "\n\t.set " RTEMS_XSTRING( __USER_LABEL_PREFIX__ ) #_name \
+      "\t.globl " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) \
+      "\n\t.set " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) \
       ", " RTEMS_STRING( _value ) "\n" \
     )
 #else
@@ -355,8 +372,8 @@
     __asm__( \
       ".pushsection \"" _section "\"\n" \
       "\t.globl " \
-      RTEMS_XSTRING( RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name ) ) "\n" \
-      RTEMS_XSTRING( RTEMS_XCONCAT( __USER_LABEL_PREFIX__, _name ) ) ":\n" \
+      RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) "\n" \
+      RTEMS_XSTRING( RTEMS_SYMBOL_NAME( _name ) ) ":\n" \
       "\t.popsection\n" \
     )
 #else
