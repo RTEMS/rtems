@@ -98,6 +98,11 @@ char _ISR_Stack_area_begin[
 ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
 RTEMS_SECTION( ".rtemsstack.interrupt.begin" );
 
+RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION(
+  _ISR_Stack_area_end,
+  ".rtemsstack.interrupt.end"
+);
+
 /* Thread stack size configuration */
 
 #ifndef CONFIGURE_MINIMUM_TASK_STACK_SIZE
