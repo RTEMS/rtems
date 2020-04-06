@@ -9,6 +9,7 @@ include: testdata/disable-jffs2-tests.tcfg
 exclude: flashdisk01
 exclude: fsdosfsname01
 exclude: linpack
+exclude: record02
 exclude: spstkalloc02
 exclude: sp47
 exclude: psxusleep
