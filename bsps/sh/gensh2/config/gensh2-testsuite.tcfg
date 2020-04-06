@@ -9,4 +9,5 @@ exclude: fileio
 exclude: fsdosfsname01
 exclude: iostream
 exclude: linpack
+exclude: record02
 exclude: utf8proc01

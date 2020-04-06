@@ -6,3 +6,4 @@
 
 include: testdata/disable-iconv-tests.tcfg
 exclude: fsdosfsname01
+exclude: record02

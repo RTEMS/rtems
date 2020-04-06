@@ -18,6 +18,7 @@ exclude: linpack
 exclude: mghttpd01
 exclude: pppd
 exclude: psxconfig01
+exclude: record02
 exclude: sp16
 exclude: sp25
 exclude: sp48

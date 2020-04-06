@@ -11,5 +11,6 @@ exclude: fsdosfsname01
 exclude: linpack
 exclude: iostream
 exclude: rtems++
+exclude: record02
 exclude: ttest01
 exclude: utf8proc01
