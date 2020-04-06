@@ -36,56 +36,6 @@ SECTIONS
   .gnu.version   : { *(.gnu.version)	}
   .gnu.version_d   : { *(.gnu.version_d)	}
   .gnu.version_r   : { *(.gnu.version_r)	}
-  .rel.init      : { *(.rel.init)		}
-  .rela.init     : { *(.rela.init)	}
-  .rel.text      :
-    {
-      *(.rel.text)
-      *(.rel.text.*)
-      *(.rel.gnu.linkonce.t*)
-    }
-  .rela.text     :
-    {
-      *(.rela.text)
-      *(.rela.text.*)
-      *(.rela.gnu.linkonce.t*)
-    }
-  .rel.fini      : { *(.rel.fini)		}
-  .rela.fini     : { *(.rela.fini)	}
-  .rel.rodata    :
-    {
-      *(.rel.rodata)
-      *(.rel.rodata.*)
-      *(.rel.gnu.linkonce.r*)
-    }
-  .rela.rodata   :
-    {
-      *(.rela.rodata)
-      *(.rela.rodata.*)
-      *(.rela.gnu.linkonce.r*)
-    }
-  .rel.data      :
-    {
-      *(.rel.data)
-      *(.rel.data.*)
-      *(.rel.gnu.linkonce.d*)
-    }
-  .rela.data     :
-    {
-      *(.rela.data)
-      *(.rela.data.*)
-      *(.rela.gnu.linkonce.d*)
-    }
-  .rel.ctors     : { *(.rel.ctors)	}
-  .rela.ctors    : { *(.rela.ctors)	}
-  .rel.dtors     : { *(.rel.dtors)	}
-  .rela.dtors    : { *(.rela.dtors)	}
-  .rel.got       : { *(.rel.got)		}
-  .rela.got      : { *(.rela.got)		}
-  .rel.bss       : { *(.rel.bss)		}
-  .rela.bss      : { *(.rela.bss)		}
-  .rel.plt       : { *(.rel.plt)		}
-  .rela.plt      : { *(.rela.plt)		}
   /* Internal text space or external memory */
   .text 0x4000 : AT (0x4000)
   {
@@ -168,8 +118,25 @@ SECTIONS
   _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
   _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
   _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
-  
-  .data	  : AT (ADDR (.tbss) + SIZEOF (.tbss))
+ 
+  .rela.dyn : AT (ADDR (.tbss) + SIZEOF (.tbss))
+  {
+    *(.rela.init)
+    *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+    *(.rela.fini)
+    *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+    *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+    *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+    *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+    *(.rela.ctors)
+    *(.rela.dtors)
+    *(.rela.got)
+    *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+    *(.rela.rtemsroset*)
+    *(.rela.rtemsrwset*)
+  } > ram
+
+  .data	  : AT (ADDR (.rela.dyn) + SIZEOF (.rela.dyn))
   {
      PROVIDE (__data_start = .) ;
     data_start = . ;
@@ -193,6 +160,9 @@ SECTIONS
    . = ALIGN (16);
   .dynamic	  : { *(.dynamic) 	} >ram
   .jcr        : { *(.jcr)     } > ram
+  .got		  : { *(.got) 		} >ram
+  .plt   	  : { *(.plt) 		} >ram
+  .dynrel	  : { *(.dynrel)	} >ram
   .shbss      : { *(.shbss)  } > ram
   .bss        :
   {
