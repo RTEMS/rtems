@@ -99,10 +99,6 @@ RTEMS_DECLARE_GLOBAL_SYMBOL(a_global_symbol);
 
 RTEMS_DEFINE_GLOBAL_SYMBOL(a_global_symbol, 0xabc);
 
-RTEMS_DECLARE_GLOBAL_SYMBOL(a_second_symbol);
-
-RTEMS_DEFINE_GLOBAL_SYMBOL_IN_SECTION(a_second_symbol, ".rtemsroset.dummy");
-
 RTEMS_STATIC_ASSERT(0 != 1, zero_neq_one);
 
 static int array[3];
@@ -215,9 +211,6 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(printflike_func("%i", 0) == 56);
   rtems_test_assert(obfuscate_variable(63) == 63);
   rtems_test_assert((uintptr_t)a_global_symbol == 0xabc);
-  p = a_second_symbol;
-  RTEMS_OBFUSCATE_VARIABLE(p);
-  rtems_test_assert((uintptr_t)p != 0);
   rtems_test_assert(RTEMS_ARRAY_SIZE(array) == 3);
   rtems_test_assert(sizeof(zero_length_array_struct) == 4);
   container_of();
