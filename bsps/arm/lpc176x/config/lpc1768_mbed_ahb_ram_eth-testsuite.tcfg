@@ -88,6 +88,7 @@ exclude: psxconfig01
 exclude: psxkey07
 exclude: psxkey08
 exclude: psxsignal02
+exclude: psxsignal07
 exclude: rbheap01
 exclude: read
 exclude: readv
