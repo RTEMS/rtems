@@ -1,4 +1,4 @@
-This File describes the concepts tested by this test suite.
+﻿This File describes the concepts tested by this test suite.
 
 inttypes.h - fixed size integer types
 
@@ -37,3 +37,11 @@ test suite name: PSXINTTYPE 01
 	- checks for output for string having a negative number - Number Out of Range
 	- checks for final string pointed by endptr
 	- checks for output for invalid argument - Invalid Base
+
+- Checks for imaxabs Testcases
+	- checks for output with an input with any negative number
+	- checks for output with an input with any positive number
+
+- Checks for imaxdiv Testcases
+	- checks for the output quotient and remainder with input with positive numbers
+

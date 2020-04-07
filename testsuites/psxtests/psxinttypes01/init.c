@@ -6,6 +6,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
+ * Copyright (C) 2020, Eshan Dhawan
  * Copyright (C) 2019, Aditya Upadhyay and Vaibhav Gupta
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,10 +65,31 @@ rtems_task Init(rtems_task_argument ignored)
   wchar_t  *nptr2_n_errange = L"-9999999999999999999999";
   wchar_t  *endptr2         = NULL;
 
-  intmax_t  result_strtoimax;
+  intmax_t  result_strtoimax, result_imaxabs, input_1, input_2;
+  imaxdiv_t result_exp, result_imaxdiv;
   uintmax_t result_strtoumax;
 
   TEST_BEGIN();
+
+  /* Test for imaxabs */
+  input_1 = -10;
+  result_imaxabs = 10;
+  rtems_test_assert( imaxabs(input_1) == result_imaxabs );
+
+  input_1 = 10;
+  result_imaxabs = 10;
+  rtems_test_assert( imaxabs(input_1) == result_imaxabs );
+
+  /* Test for imaxdiv */
+  input_1 = 10;
+  input_2 = 3;
+  result_exp.quot = input_1 / input_2;
+  result_exp.rem =  input_1 % input_2;
+  result_imaxdiv = imaxdiv( input_1, input_2 );
+  rtems_test_assert(
+    result_imaxdiv.quot == result_exp.quot &&
+    result_imaxdiv.rem == result_exp.rem
+  );
 
   /* Test for strtoimax  */
   puts( "\nstrtoimax Testcases...." );
