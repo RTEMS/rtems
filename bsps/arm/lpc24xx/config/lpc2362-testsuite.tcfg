@@ -37,6 +37,8 @@ exclude: paranoia
 exclude: pppd
 exclude: psxaio01
 exclude: psxaio02
+exclude: psxaio03
+exclude: psxsignal07
 exclude: record01
 exclude: rtems++
 exclude: shell01
