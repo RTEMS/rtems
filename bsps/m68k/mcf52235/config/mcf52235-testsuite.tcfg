@@ -25,6 +25,7 @@ exclude: mghttpd01
 exclude: monitor02
 exclude: paranoia
 exclude: pppd
+exclude: sp16
 exclude: spstkalloc02
 exclude: sptimecounter02
 exclude: sptimecounter03
