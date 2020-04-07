@@ -28,6 +28,8 @@ exclude: fileio
 exclude: loopback
 exclude: psxaio01
 exclude: psxaio02
+exclude: psxaio03
+exclude: psxsignal07
 exclude: sp16
 exclude: sp25
 exclude: sp42
