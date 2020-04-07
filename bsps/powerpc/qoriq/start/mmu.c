@@ -350,7 +350,7 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 		uint32_t mas1 = 0;
 
 		PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, mas0);
-		asm volatile ("tlbre");
+		ppc_tlbre();
 
 		mas1 = PPC_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS1);
 		if ((mas1 & FSL_EIS_MAS1_V) != 0) {
@@ -361,7 +361,10 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 				mas3 &= ~(clear & mask);
 				mas3 |= set & mask;
 				PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3, mas3);
-				asm volatile ("msync; isync; tlbwe; isync" : : : "memory");
+				ppc_msync();
+				ppc_synchronize_instructions();
+				ppc_tlbwe();
+				ppc_synchronize_instructions();
 			}
 		}
 	}

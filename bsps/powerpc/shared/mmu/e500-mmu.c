@@ -75,6 +75,7 @@
 #include <stdio.h>
 
 #include <libcpu/e500_mmu.h>
+#include <libcpu/powerpc-utility.h>
 
 #define TLBIVAX_TLBSEL  (1<<(63-60))
 #define TLBIVAX_INV_ALL  (1<<(63-61))
@@ -215,7 +216,7 @@ rtems_e500_prtlb(rtems_e500_tlb_idx key, int quiet, FILE *f)
 
   seltlb( key );
 
-  asm volatile("tlbre");
+  ppc_tlbre();
 
   /* not manipulating MAS0, skip reading it */
   mas1 = _read_MAS1();
@@ -433,13 +434,11 @@ rtems_interrupt_level lvl;
   _write_MAS3(mas3);
   _write_MAS4(mas4);
 
-  asm volatile(
-    "  sync\n"
-    "  isync\n"
-    "  tlbwe\n"
-    "  sync\n"
-    "  isync\n"
-  );
+  ppc_synchronize_data();
+  ppc_synchronize_instructions();
+  ppc_tlbwe();
+  ppc_synchronize_data();
+  ppc_synchronize_instructions();
 
   rtems_interrupt_enable(lvl);
 
@@ -536,7 +535,7 @@ rtems_interrupt_level lvl;
 
     _write_MAS6( FSL_EIS_MAS6_SPID0(pid) | (as ? FSL_EIS_MAS6_SAS : 0 ) );
 
-    asm volatile("tlbsx 0, %0"::"r"(ea));
+    ppc_tlbsx((void *)(uintptr_t) ea);
 
     mas1 = _read_MAS1();
 
@@ -608,18 +607,16 @@ rtems_interrupt_level lvl;
 
   seltlb(key);
 
-  asm volatile("tlbre");
+  ppc_tlbre();
 
   /* read old entries */
   _write_MAS1( _read_MAS1() & ~FSL_EIS_MAS1_V );
 
-  asm volatile(
-    "  sync\n"
-    "  isync\n"
-    "  tlbwe\n"
-    "  sync\n"
-    "  isync\n"
-  );
+  ppc_synchronize_data();
+  ppc_synchronize_instructions();
+  ppc_tlbwe();
+  ppc_synchronize_data();
+  ppc_synchronize_instructions();
 
   /* update cache */
   if ( E500_SELTLB_1 & key )

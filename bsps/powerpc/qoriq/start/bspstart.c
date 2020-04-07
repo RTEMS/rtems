@@ -93,9 +93,6 @@ static void initialize_frequency_parameters(void)
   #endif
 }
 
-#define MTIVPR(base) \
-  __asm__ volatile ("mtivpr %0" : : "r" (base))
-
 #ifdef __powerpc64__
 #define VECTOR_TABLE_ENTRY_SIZE 32
 #else
@@ -117,7 +114,7 @@ void qoriq_initialize_exceptions(void *interrupt_stack_begin)
   );
 
   addr = (uintptr_t) bsp_exc_vector_base;
-  MTIVPR(addr);
+  ppc_mtivpr((void *) addr);
   MTIVOR(BOOKE_IVOR0,  addr);
   MTIVOR(BOOKE_IVOR1,  addr);
   MTIVOR(BOOKE_IVOR2,  addr);

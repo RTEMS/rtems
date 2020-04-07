@@ -860,6 +860,79 @@ static inline uint32_t ppc_fsl_system_version_mnrev(uint32_t svr)
   return (svr >> 0) & 0xf;
 }
 
+static inline void ppc_msync(void)
+{
+  __asm__ volatile (
+    ".machine push\n"
+    ".machine e500\n"
+    "msync\n"
+    ".machine pop"
+    :
+    :
+    : "memory"
+  );
+}
+
+static inline void ppc_tlbre(void)
+{
+  __asm__ volatile (
+    ".machine push\n"
+    ".machine e500\n"
+    "tlbre\n"
+    ".machine pop"
+    :
+    :
+    : "memory"
+  );
+}
+
+static inline void ppc_tlbwe(void)
+{
+  __asm__ volatile (
+    ".machine push\n"
+    ".machine e500\n"
+    "tlbwe\n"
+    ".machine pop"
+    :
+    :
+    : "memory"
+  );
+}
+
+static inline void ppc_tlbsx(void *addr)
+{
+  __asm__ volatile (
+    ".machine push\n"
+    ".machine e500\n"
+    "tlbsx 0, %0\n"
+    ".machine pop"
+    :
+    : "r" (addr)
+    : "memory"
+  );
+}
+
+static inline void ppc_mtivpr(void *prefix)
+{
+  __asm__ volatile (
+    ".machine push\n"
+    ".machine e500\n"
+    "mtivpr %0\n"
+    ".machine pop"
+    :
+    : "r" (prefix)
+  );
+}
+
+#define ppc_mtivor(x, vec) __asm__ volatile ( \
+    ".machine push\n" \
+    ".machine e500\n" \
+    "mtivor" RTEMS_XSTRING(x) " %0\n" \
+    ".machine pop" \
+    : \
+    : "r" (vec) \
+  )
+
 void ppc_code_copy(void *dest, const void *src, size_t n);
 
 /* FIXME: Do not use this function */
