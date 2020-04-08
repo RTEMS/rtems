@@ -176,7 +176,7 @@ static void _Thread_Free( Thread_Control *the_thread )
 #endif
 #endif
 
-  _Freechain_Put(
+  _Freechain_Push(
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads
   );

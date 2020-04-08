@@ -275,7 +275,7 @@ failed:
   }
 #endif
 
-  _Freechain_Put(
+  _Freechain_Push(
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads
   );
