@@ -383,7 +383,7 @@ MMUoff:	blr
 flush_tlb:
 	lis	r11,0x1000
 1:	addic.  r11,r11,-0x1000
-	tlbie	r11
+	tlbie	r11, 0
 	bnl	1b
 /* tlbsync is not implemented on 601, so use sync which seems to be a superset
  * of tlbsync in all cases and do not bother with CPU dependant code

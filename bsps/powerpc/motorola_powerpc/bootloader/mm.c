@@ -199,7 +199,7 @@ void _handler(int vec, ctxt *p) {
 			flushva |= ((hte[i].key<<21)&0xf0000000)
 			  | ((hte[i].key<<22)&0x0fc00000);
 			hte[i].key=0;
-			asm volatile("sync; tlbie %0; sync" : : "r" (flushva));
+			asm volatile("sync; tlbie %0, 0; sync" : : "r" (flushva));
 		found:
 			hte[i].rpn = rpn;
 			asm volatile("eieio": : );
@@ -583,7 +583,7 @@ void vflush(map *virtmap) {
 			  | ((p[i].key<<22)&0x0fc00000);
 			if (va>=virtmap->base && va<=virtmap->end) {
 				p[i].key=0;
-				asm volatile("sync; tlbie %0; sync" : :
+				asm volatile("sync; tlbie %0, 0; sync" : :
 					     "r" (va));
 			}
 		}

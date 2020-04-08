@@ -122,9 +122,10 @@
  * instructions in order to flush all TLBs.
  * On the 750 and 7400, there are 128 two way I and D TLBs,
  * indexed by EA[14:19]. Hence calling
- *   tlbie rx
+ *   tlbie rx, 0
  * where rx scans 0x00000, 0x01000, 0x02000, ... 0x3f000
- * is sufficient to do the job
+ * is sufficient to do the job. The 0 in the tlbie instruction is the L operand
+ * which selects a 4KiB page size.
  */
 #define NUM_TLB_PER_WAY 64      /* 750 and 7400 have 128 two way TLBs */
 #define FLUSH_EA_RANGE	(NUM_TLB_PER_WAY<<LD_PG_SIZE)
@@ -640,7 +641,7 @@ triv121PgTblActivate (Triv121PgTbl pt)
     /* Now flush all TLBs, starting with the topmost index */
     "	lis		%[tmp2], %[ea_range]@h\n"
     "2:	addic.	%[tmp2], %[tmp2], -%[pg_sz]\n"    /* address the next one (decrementing) */
-    "	tlbie	%[tmp2]\n"             /* invalidate & repeat */
+    "	tlbie	%[tmp2], 0\n"             /* invalidate & repeat */
     "	bgt		2b\n"
     "	eieio	\n"
     "	tlbsync \n"
@@ -872,7 +873,7 @@ triv121UnmapEa (unsigned long ea)
   pte->v = 0;
   do_dssall ();
   __asm__ volatile ("	sync		\n\t"
-                "	tlbie %0	\n\t"
+                "	tlbie %0, 0	\n\t"
                 "	eieio		\n\t"
                 "	tlbsync		\n\t"
                 "	sync		\n\t"::"r" (ea):"memory");
@@ -960,7 +961,7 @@ triv121ChangeEaAttributes (unsigned long ea, int wimg, int pp)
     pte->wimg = wimg;
   if (pp >= 0)
     pte->pp = pp;
-  __asm__ volatile ("tlbie %0; eieio"::"r" (ea):"memory");
+  __asm__ volatile ("tlbie %0, 0; eieio"::"r" (ea):"memory");
   pte->v = 1;
   __asm__ volatile ("tlbsync; sync":::"memory");
 

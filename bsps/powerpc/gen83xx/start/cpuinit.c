@@ -133,7 +133,7 @@ static void clear_mmu_regs( void)
 
   /* Clear TLBs */
   for (i = 0;i < 32;i++) {
-    __asm__ volatile( "tlbie %0\n" : : "r" (i << (31 - 19)));
+    __asm__ volatile( "tlbie %0, 0\n" : : "r" (i << (31 - 19)));
   }
 }
 

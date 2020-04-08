@@ -165,7 +165,7 @@ typedef struct _MMU_context {
 /* invalidate a TLB entry */
 static inline void _tlbie(unsigned long va)
 {
-	asm volatile ("tlbie %0" : : "r"(va));
+	asm volatile ("tlbie %0, 0" : : "r"(va));
 }
 
 extern void _tlbia(void);		/* invalidate all TLB entries */

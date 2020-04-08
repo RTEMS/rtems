@@ -775,7 +775,7 @@ TLB_init:					/* Initialize translation lookaside buffers (TLBs) */
 	xor	r29, r29, r29
 
 TLB_init_loop:
-	tlbie	r29
+	tlbie	r29, 0
 	tlbsync
 	addi	r29, r29, 0x1000
 	addi	r30, r30, 0x01

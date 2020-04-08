@@ -193,7 +193,7 @@ _return_to_ppcbug:
 flush_tlbs:
 	lis	r20, 0x1000
 1:	addic.	r20, r20, -0x1000
-	tlbie	r20
+	tlbie	r20, 0
 	bgt	1b
 	sync
 	blr
