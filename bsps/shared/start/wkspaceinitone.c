@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreWorkspace
  *
- * @brief This source file contains the definition of ::_Workspace_Area and the
- *   Workspace Handler system initialization.
+ * @brief This source file contains the _Workspace_Handler_initialization()
+ *   implementation which supports exactly one memory area.
  */
 
 /*
@@ -38,13 +38,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/wkspace.h>
-#include <rtems/sysinit.h>
+#include <rtems/score/wkspaceinitone.h>
 
-Heap_Control _Workspace_Area;
-
-RTEMS_SYSINIT_ITEM(
-  _Workspace_Handler_initialization,
-  RTEMS_SYSINIT_WORKSPACE,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
+void _Workspace_Handler_initialization( void )
+{
+  _Workspace_Initialize_for_one_area();
+}

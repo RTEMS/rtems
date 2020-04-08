@@ -108,4 +108,5 @@ source:
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
+- bsps/shared/start/wkspaceinitone.c
 type: build

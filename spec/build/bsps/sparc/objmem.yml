@@ -10,5 +10,6 @@ includes: []
 install: []
 links: []
 source:
+- bsps/shared/start/wkspaceinitone.c
 - bsps/sparc/shared/start/bspgetworkarea.c
 type: build

@@ -20,8 +20,6 @@
 #define _RTEMS_SCORE_WKSPACE_H
 
 #include <rtems/score/heap.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/memory.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,17 +40,11 @@ extern "C" {
 extern Heap_Control _Workspace_Area;
 
 /**
- * @brief Initilizes the workspace handler.
+ * @brief Initializes the workspace handler.
  *
  * This routine performs the initialization necessary for this handler.
- *
- * @param mem The memory information
- * @param extend The extension handler for the new workspace.
  */
-void _Workspace_Handler_initialization(
-  const Memory_Information              *mem,
-  Heap_Initialization_or_extend_handler  extend
-);
+void _Workspace_Handler_initialization( void );
 
 /**
  * @brief Allocates a memory block of the specified size from the workspace.

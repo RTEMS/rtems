@@ -11,4 +11,5 @@ install: []
 links: []
 source:
 - bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/wkspaceinitone.c
 type: build
