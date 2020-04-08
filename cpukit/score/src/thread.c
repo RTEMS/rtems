@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/freechainimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/scheduler.h>

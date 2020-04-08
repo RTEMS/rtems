@@ -36,6 +36,7 @@
 #endif
 
 #include <rtems/score/thread.h>
+#include <rtems/score/freechainimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
 

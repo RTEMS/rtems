@@ -19,7 +19,7 @@
 
 #include <rtems/posix/key.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/freechain.h>
+#include <rtems/score/freechainimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/percpu.h>
 

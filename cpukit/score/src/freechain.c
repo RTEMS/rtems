@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/freechain.h>
+#include <rtems/score/freechainimpl.h>
 #include <rtems/score/assert.h>
 
 void *_Freechain_Extend(

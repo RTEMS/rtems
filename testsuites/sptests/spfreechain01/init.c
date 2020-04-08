@@ -12,7 +12,7 @@
 
 #include <tmacros.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/freechain.h>
+#include <rtems/score/freechainimpl.h>
 
 const char rtems_test_name[] = "SPFREECHAIN 1";
 

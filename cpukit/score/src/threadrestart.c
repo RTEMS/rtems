@@ -25,6 +25,7 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/freechainimpl.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
