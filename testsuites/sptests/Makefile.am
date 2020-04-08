@@ -1409,7 +1409,7 @@ if TEST_spmisc01
 sp_tests += spmisc01
 sp_screens += spmisc01/spmisc01.scn
 sp_docs += spmisc01/spmisc01.doc
-spmisc01_SOURCES = spmisc01/init.c
+spmisc01_SOURCES = spmisc01/init.c spmisc01/strong.c
 spmisc01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spmisc01) \
 	$(support_includes)
 endif

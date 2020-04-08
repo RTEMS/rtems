@@ -21,6 +21,8 @@
 
 #include <tmacros.h>
 
+#include "spmisc01.h"
+
 const char rtems_test_name[] = "SPMISC 1";
 
 RTEMS_INLINE_ROUTINE int inline_func(void)
@@ -69,6 +71,16 @@ typedef struct {
 static int alias_func(void) RTEMS_ALIAS(noinline_func);
 
 int weak_alias_func(void) RTEMS_WEAK_ALIAS(noinline_func);
+
+RTEMS_WEAK int weak_or_strong(void)
+{
+  return 99;
+}
+
+RTEMS_WEAK int weak_2(void)
+{
+  return 111;
+}
 
 static char aligned_variable RTEMS_ALIGNED(64);
 
@@ -205,6 +217,9 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(sizeof(packed_struct) == 5);
   rtems_test_assert(alias_func() == 14);
   rtems_test_assert(weak_alias_func() == 14);
+  pull_in_strong();
+  rtems_test_assert(weak_or_strong() == 77);
+  rtems_test_assert(weak_2() == 111);
   rtems_test_assert(((uintptr_t) &aligned_variable) % 64 == 0);
   rtems_test_assert(offsetof(aligned_member_struct, aligned_member) % 64 == 0);
   unreachable();

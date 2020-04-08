@@ -198,6 +198,18 @@
 #endif
 
 /**
+ * @brief Instructs the compiler to define a weak function.
+ *
+ * Use this attribute for function definitions.  Do not use it for function
+ * declarations.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_WEAK __attribute__((__weak__))
+#else
+  #define RTEMS_WEAK
+#endif
+
+/**
  * @brief Instructs the compiler to generate a weak alias to the specified
  * target function.
  */
