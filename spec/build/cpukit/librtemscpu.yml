@@ -675,7 +675,6 @@ source:
 - cpukit/libcsupport/src/malloc.c
 - cpukit/libcsupport/src/malloc_deferred.c
 - cpukit/libcsupport/src/malloc_dirtier.c
-- cpukit/libcsupport/src/malloc_initialize.c
 - cpukit/libcsupport/src/malloc_walk.c
 - cpukit/libcsupport/src/mallocdirtydefault.c
 - cpukit/libcsupport/src/mallocextenddefault.c

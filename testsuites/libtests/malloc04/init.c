@@ -78,15 +78,22 @@ rtems_task Init(
 )
 {
   Heap_Control *real_heap;
-  Memory_Area area;
-  Memory_Information mem = {
-    .count = 1,
-    .areas = &area
-  };
+  const Memory_Information *mem;
+  Memory_Area *area;
+  size_t i;
 
   void *p;
 
   TEST_BEGIN();
+
+  mem = _Memory_Get();
+
+  for ( i = 0; i < _Memory_Get_count( mem ); ++i ) {
+    area = _Memory_Get_area( mem, i );
+    _Memory_Initialize( area, NULL, NULL );
+  }
+
+  area = _Memory_Get_area( mem, 0 );
 
   /* Safe information on real heap */
   real_heap = malloc_get_heap_pointer();
@@ -98,8 +105,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
-  RTEMS_Malloc_Initialize( &mem, NULL );
+  _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
+  _Malloc_Initialize();
 
   errno = 0;
   p = malloc( 256 );
@@ -113,8 +120,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
-  RTEMS_Malloc_Initialize( &mem, NULL );
+  _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
+  _Malloc_Initialize();
 
   p = malloc(1);
   rtems_test_assert( p != NULL );
@@ -128,8 +135,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
-  RTEMS_Malloc_Initialize( &mem, NULL );
+  _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
+  _Malloc_Initialize();
 
   errno = 0;
   p = malloc( sizeof( Malloc_Heap ) );
@@ -141,8 +148,8 @@ rtems_task Init(
 
   sbrk_count = 0;
   offset     = 256;
-  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
-  RTEMS_Malloc_Initialize( &mem, NULL );
+  _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
+  _Malloc_Initialize();
 
   p = malloc( 128 );
   rtems_test_assert( p != NULL );
@@ -156,8 +163,8 @@ rtems_task Init(
 
   sbrk_count = -1;
   offset     = 256;
-  _Memory_Initialize_by_size( &area, &Malloc_Heap[ 0 ], offset );
-  RTEMS_Malloc_Initialize( &mem, NULL );
+  _Memory_Initialize_by_size( area, &Malloc_Heap[ 0 ], offset );
+  _Malloc_Initialize();
 
   errno = 0;
   p = malloc( 256 );

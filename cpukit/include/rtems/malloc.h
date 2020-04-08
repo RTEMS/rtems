@@ -19,7 +19,6 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <rtems/libcsupport.h> /* for malloc_walk() */
-#include <rtems/score/memory.h>
 
 #include <stdint.h>
 
@@ -43,10 +42,7 @@ extern "C" {
  */
 extern Heap_Control *RTEMS_Malloc_Heap;
 
-Heap_Control *RTEMS_Malloc_Initialize(
-  const Memory_Information              *mem,
-  Heap_Initialization_or_extend_handler  extend
-);
+void _Malloc_Initialize( void );
 
 void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount );
 

@@ -11,5 +11,6 @@ install: []
 links: []
 source:
 - bsps/powerpc/shared/start/bspgetworkarea.c
+- bsps/shared/start/mallocinitone.c
 - bsps/shared/start/wkspaceinitone.c
 type: build

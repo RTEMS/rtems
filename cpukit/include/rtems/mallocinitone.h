@@ -5,12 +5,12 @@
  *
  * @ingroup MallocSupport
  *
- * @brief This source file provides the C Program Heap control along with the
- *   system initialization handler.
+ * @brief This header file provides the implementation of
+ *   _Malloc_Initialize_for_one_area().
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2012, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,23 +34,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#ifndef _RTEMS_MALLOCINITONE_H
+#define _RTEMS_MALLOCINITONE_H
 
 #include <rtems/malloc.h>
-#include <rtems/sysinit.h>
-#include <rtems/score/wkspacedata.h>
+#include <rtems/score/assert.h>
+#include <rtems/score/heapimpl.h>
 
-Heap_Control *RTEMS_Malloc_Heap;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-void _Malloc_Initialize( void )
+/**
+ * @ingroup MallocSupport
+ *
+ * @brief Initializes the separate C Program Heap with support for exactly one
+ *   memory area.
+ *
+ * This implementation should be used by BSPs which provide exactly one memory
+ * area via _Memory_Get() to implement _Workspace_Malloc_initialize_separate().
+ */
+RTEMS_INLINE_ROUTINE Heap_Control *_Malloc_Initialize_for_one_area(
+  Heap_Control *heap
+)
 {
-  RTEMS_Malloc_Heap = ( *_Workspace_Malloc_initializer )();
+  const Memory_Information *mem;
+  Memory_Area              *area;
+  uintptr_t                 space_available;
+
+  mem = _Memory_Get();
+  _Assert( _Memory_Get_count( mem ) == 1 );
+
+  RTEMS_Malloc_Heap = heap;
+  area = _Memory_Get_area( mem, 0 );
+  space_available = _Heap_Initialize(
+    heap,
+    _Memory_Get_free_begin( area ),
+    _Memory_Get_free_size( area ),
+    CPU_HEAP_ALIGNMENT
+  );
+
+  if ( space_available > 0 ) {
+    _Memory_Consume( area, _Memory_Get_free_size( area ) );
+  } else {
+    _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_HEAP );
+  }
+
+  return heap;
 }
 
-RTEMS_SYSINIT_ITEM(
-  _Malloc_Initialize,
-  RTEMS_SYSINIT_MALLOC,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _RTEMS_MALLOCINITONE_H */

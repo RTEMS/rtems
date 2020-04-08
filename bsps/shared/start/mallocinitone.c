@@ -5,8 +5,8 @@
  *
  * @ingroup MallocSupport
  *
- * @brief This source file provides the C Program Heap control along with the
- *   system initialization handler.
+ * @brief This source file contains the _Workspace_Malloc_initialize_separate()
+ *   implementation which supports exactly one memory area.
  */
 
 /*
@@ -38,19 +38,12 @@
 #include "config.h"
 #endif
 
-#include <rtems/malloc.h>
-#include <rtems/sysinit.h>
+#include <rtems/mallocinitone.h>
 #include <rtems/score/wkspacedata.h>
 
-Heap_Control *RTEMS_Malloc_Heap;
+static Heap_Control _Malloc_Heap;
 
-void _Malloc_Initialize( void )
+Heap_Control *_Workspace_Malloc_initialize_separate( void )
 {
-  RTEMS_Malloc_Heap = ( *_Workspace_Malloc_initializer )();
+  return _Malloc_Initialize_for_one_area( &_Malloc_Heap );
 }
-
-RTEMS_SYSINIT_ITEM(
-  _Malloc_Initialize,
-  RTEMS_SYSINIT_MALLOC,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
