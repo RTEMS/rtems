@@ -43,8 +43,6 @@
 #include <rtems/score/riscv-utility.h>
 #include <rtems/score/smpimpl.h>
 
-rtems_interrupt_lock GRLIB_IrqCtrl_Lock;
-
 #if defined(RTEMS_SMP)
 /* Interrupt to CPU map. Default to CPU0 since in BSS. */
 const unsigned char GRLIB_irq_to_cpu[32] __attribute__((weak));
