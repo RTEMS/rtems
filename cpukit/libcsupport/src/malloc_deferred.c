@@ -27,13 +27,8 @@
 
 #include "malloc_p.h"
 
-#include <rtems/chain.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threaddispatch.h>
-
-static RTEMS_CHAIN_DEFINE_EMPTY( _Malloc_GC_list );
-
-RTEMS_INTERRUPT_LOCK_DEFINE( static, _Malloc_GC_lock, "Malloc GC" )
 
 Malloc_System_state _Malloc_System_state( void )
 {
@@ -52,28 +47,12 @@ Malloc_System_state _Malloc_System_state( void )
   }
 }
 
-static void *_Malloc_Get_deferred_free( void )
+RTEMS_WEAK void _Malloc_Process_deferred_frees( void )
 {
-  rtems_interrupt_lock_context lock_context;
-  void *p;
-
-  rtems_interrupt_lock_acquire( &_Malloc_GC_lock, &lock_context );
-  p = rtems_chain_get_unprotected( &_Malloc_GC_list );
-  rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
-
-  return p;
-}
-
-void _Malloc_Process_deferred_frees( void )
-{
-  rtems_chain_node *to_be_freed;
-
   /*
-   *  If some free's have been deferred, then do them now.
+   * Do nothing by default.  If free() is used by the application, then a
+   * strong implementation of this function will be provided.
    */
-  while ( ( to_be_freed = _Malloc_Get_deferred_free() ) != NULL ) {
-    free( to_be_freed );
-  }
 }
 
 void *rtems_heap_allocate_aligned_with_boundary(
@@ -123,19 +102,6 @@ void *rtems_heap_allocate_aligned_with_boundary(
     (*rtems_malloc_dirty_helper)( p, size );
 
   return p;
-}
-
-void _Malloc_Deferred_free( void *p )
-{
-  rtems_interrupt_lock_context lock_context;
-  rtems_chain_node *node;
-
-  node = (rtems_chain_node *) p;
-
-  rtems_interrupt_lock_acquire( &_Malloc_GC_lock, &lock_context );
-  rtems_chain_initialize_node( node );
-  rtems_chain_append_unprotected( &_Malloc_GC_list, node );
-  rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
 }
 
 void *rtems_malloc( size_t size )
