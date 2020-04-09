@@ -150,6 +150,12 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
   const Stack_Allocator_free _Stack_Allocator_free =
     CONFIGURE_TASK_STACK_DEALLOCATOR;
+
+  RTEMS_SYSINIT_ITEM(
+    _Stack_Allocator_do_initialize,
+    RTEMS_SYSINIT_DIRTY_MEMORY,
+    RTEMS_SYSINIT_ORDER_MIDDLE
+  );
 #elif defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   || defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
   #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"

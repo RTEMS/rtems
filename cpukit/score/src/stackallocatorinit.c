@@ -1,7 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
- * Copyright (C) 2019 embedded brains GmbH
+ * @ingroup RTEMSScoreStack
+ *
+ * @brief Stack Allocator Initialization
+ */
+
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,10 +38,23 @@
 #endif
 
 #include <rtems/score/stack.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/interr.h>
+#include <rtems/config.h>
 
-const bool _Stack_Allocator_avoids_workspace = false;
+void _Stack_Allocator_do_initialize( void )
+{
+  rtems_stack_allocate_init_hook init_hook;
 
-const Stack_Allocator_allocate _Stack_Allocator_allocate = _Workspace_Allocate;
+  if (
+    rtems_configuration_get_stack_allocate_hook() == NULL
+      || rtems_configuration_get_stack_free_hook() == NULL
+  ) {
+    _Internal_error( INTERNAL_ERROR_BAD_STACK_HOOK );
+  }
 
-const Stack_Allocator_free _Stack_Allocator_free = _Workspace_Free;
+  init_hook = rtems_configuration_get_stack_allocate_init_hook();
+
+  if ( init_hook  != NULL ) {
+    (*init_hook )( rtems_configuration_get_stack_space_size() );
+  }
+}

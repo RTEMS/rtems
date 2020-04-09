@@ -123,6 +123,13 @@ extern const Stack_Allocator_allocate _Stack_Allocator_allocate;
  */
 extern const Stack_Allocator_free _Stack_Allocator_free;
 
+/**
+ * @brief Do the stack allocator initialization during system initialize.
+ *
+ * This function is used to initialize application provided stack allocators.
+ */
+void _Stack_Allocator_do_initialize( void );
+
 /** @} */
 
 #ifdef __cplusplus

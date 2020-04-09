@@ -20,10 +20,8 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/freechainimpl.h>
-#include <rtems/score/interr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/scheduler.h>
-#include <rtems/score/wkspace.h>
 
 #define THREAD_OFFSET_ASSERT( field ) \
   RTEMS_STATIC_ASSERT( \
@@ -59,23 +57,9 @@ void _Thread_Initialize_information( Thread_Information *information )
 
 void _Thread_Handler_initialization(void)
 {
-  rtems_stack_allocate_init_hook stack_allocate_init_hook =
-    rtems_configuration_get_stack_allocate_init_hook();
-  #if defined(RTEMS_MULTIPROCESSING)
-    uint32_t maximum_proxies =
-      _MPCI_Configuration.maximum_proxies;
-  #endif
-
-  if ( rtems_configuration_get_stack_allocate_hook() == NULL ||
-       rtems_configuration_get_stack_free_hook() == NULL)
-    _Internal_error( INTERNAL_ERROR_BAD_STACK_HOOK );
-
-  if ( stack_allocate_init_hook != NULL )
-    (*stack_allocate_init_hook)( rtems_configuration_get_stack_space_size() );
-
-  #if defined(RTEMS_MULTIPROCESSING)
-    _Thread_MP_Handler_initialization( maximum_proxies );
-  #endif
+#if defined(RTEMS_MULTIPROCESSING)
+  _Thread_MP_Handler_initialization( _MPCI_Configuration.maximum_proxies );
+#endif
 
   /*
    *  Initialize the internal class of threads.  We need an IDLE thread
