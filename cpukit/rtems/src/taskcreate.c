@@ -146,8 +146,8 @@ rtems_status_code rtems_task_create(
   }
 #endif
 
+  config.stack_free = _Stack_Free;
   config.stack_area = _Stack_Allocate( config.stack_size );
-  config.allocated_stack = config.stack_area;
   status = ( config.stack_area != NULL );
 
   /*

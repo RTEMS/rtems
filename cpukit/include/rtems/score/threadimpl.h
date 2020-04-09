@@ -144,9 +144,11 @@ typedef struct {
   size_t stack_size;
 
   /**
-   * @brief The address of the allocated stack area or NULL.
+   * @brief This member contains the handler to free the stack.
+   *
+   * It shall not be NULL.  Use _Stack_Free_nothing() if nothing is to free.
    */
-  void *allocated_stack;
+  void ( *stack_free )( void * );
 
   /**
    * @brief The new thread's priority.

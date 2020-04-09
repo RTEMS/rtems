@@ -166,6 +166,13 @@ void *_Stack_Allocate( size_t stack_size );
  */
 void _Stack_Free( void *stack_area );
 
+/**
+ * @brief This function does nothing.
+ *
+ * @param stack_area is not used.
+ */
+void _Stack_Free_nothing( void *stack_area );
+
 /** @} */
 
 #ifdef __cplusplus

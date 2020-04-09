@@ -218,8 +218,10 @@ int pthread_create(
   }
 
   if ( config.stack_area == NULL ) {
+    config.stack_free = _Stack_Free;
     config.stack_area = _Stack_Allocate( config.stack_size );
-    config.allocated_stack = config.stack_area;
+  } else {
+    config.stack_free = _Stack_Free_nothing;
   }
 
   status = ( config.stack_area != NULL );

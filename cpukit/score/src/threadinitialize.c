@@ -36,8 +36,8 @@ bool _Thread_Initialize(
   uintptr_t                tls_size;
   bool                     extension_status;
   size_t                   i;
-  char                    *stack_area;
-  size_t                   stack_size;
+  char                    *stack_begin;
+  char                    *stack_end;
   Scheduler_Node          *scheduler_node;
 #if defined(RTEMS_SMP)
   Scheduler_Node          *scheduler_node_for_index;
@@ -61,7 +61,7 @@ bool _Thread_Initialize(
 
   /* Set everything to perform the error case clean up */
   scheduler_index = 0;
-  the_thread->Start.allocated_stack = config->allocated_stack;
+  the_thread->Start.stack_free = config->stack_free;
 
 #if defined(RTEMS_SMP)
   if (
@@ -83,16 +83,15 @@ bool _Thread_Initialize(
   }
 #endif
 
-  stack_area = config->stack_area;
-  stack_size = config->stack_size;
+  stack_begin = config->stack_area;
+  stack_end = stack_begin + config->stack_size;
 
   /* Allocate floating-point context in stack area */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( config->is_fp ) {
-    the_thread->fp_context = ( Context_Control_fp *) stack_area;
-    the_thread->Start.fp_context = ( Context_Control_fp *) stack_area;
-    stack_size -= CONTEXT_FP_SIZE;
-    stack_area += CONTEXT_FP_SIZE;
+    stack_end -= CONTEXT_FP_SIZE;
+    the_thread->fp_context = (Context_Control_fp *) stack_end;
+    the_thread->Start.fp_context = (Context_Control_fp *) stack_end;
   }
 #endif
 
@@ -102,17 +101,16 @@ bool _Thread_Initialize(
   if ( tls_size > 0 ) {
     uintptr_t tls_align;
 
+    stack_end -= tls_size;
     tls_align = (uintptr_t) _TLS_Alignment;
     the_thread->Start.tls_area = (void *)
-      ( ( (uintptr_t) stack_area + tls_align - 1 ) & ~( tls_align - 1 ) );
-    stack_size -= tls_size;
-    stack_area += tls_size;
+      ( ( (uintptr_t) stack_end + tls_align - 1 ) & ~( tls_align - 1 ) );
   }
 
   _Stack_Initialize(
-     &the_thread->Start.Initial_stack,
-     stack_area,
-     stack_size
+    &the_thread->Start.Initial_stack,
+    stack_begin,
+    stack_end - stack_begin
   );
 
   /*
@@ -279,6 +277,6 @@ failed:
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads
   );
-  _Stack_Free( the_thread->Start.allocated_stack );
+  ( *the_thread->Start.stack_free )( the_thread->Start.Initial_stack.area );
   return false;
 }

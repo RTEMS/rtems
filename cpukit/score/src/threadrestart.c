@@ -185,7 +185,7 @@ static void _Thread_Free( Thread_Control *the_thread )
    *  Free the rest of the memory associated with this task
    *  and set the associated pointers to NULL for safety.
    */
-  _Stack_Free( the_thread->Start.allocated_stack );
+  ( *the_thread->Start.stack_free )( the_thread->Start.Initial_stack.area );
 
 #if defined(RTEMS_SMP)
   _ISR_lock_Destroy( &the_thread->Scheduler.Lock );

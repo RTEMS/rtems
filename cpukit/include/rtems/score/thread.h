@@ -194,10 +194,9 @@ typedef struct {
   /** This field is the initial priority. */
   Priority_Control                     initial_priority;
   /**
-   * @brief This field is a pointer to the allocated stack area, otherwise it
-   * is NULL.
+   * @brief This field points to the handler which should free the stack.
    */
-  void                                *allocated_stack;
+  void                              ( *stack_free )( void * );
   /** This field is the stack information. */
   Stack_Control                        Initial_stack;
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
