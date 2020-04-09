@@ -1599,7 +1599,9 @@ source:
 - cpukit/score/src/watchdogtick.c
 - cpukit/score/src/watchdogtickssinceboot.c
 - cpukit/score/src/watchdogtimeslicedefault.c
+- cpukit/score/src/wkspaceallocate.c
 - cpukit/score/src/wkspace.c
+- cpukit/score/src/wkspacefree.c
 - cpukit/score/src/wkspaceisunifieddefault.c
 - cpukit/score/src/wkspacemallocinitdefault.c
 - cpukit/score/src/wkspacemallocinitunified.c

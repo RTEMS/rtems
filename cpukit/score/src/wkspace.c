@@ -13,7 +13,6 @@
 
 /*
  * Copyright (C) 2012, 2020 embedded brains GmbH (http://www.embedded-brains.de)
- * Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -125,18 +124,4 @@ void _Workspace_Handler_initialization(
   }
 
   _Heap_Protection_set_delayed_free_fraction( &_Workspace_Area, 1 );
-}
-
-void *_Workspace_Allocate( size_t size )
-{
-  return _Heap_Allocate( &_Workspace_Area, size );
-}
-
-void _Workspace_Free( void *block )
-{
-  bool ok;
-
-  ok = _Heap_Free( &_Workspace_Area, block );
-  _Assert( ok );
-  (void) ok;
 }
