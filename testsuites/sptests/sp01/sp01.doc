@@ -9,6 +9,7 @@
 test name:  sp01
 
 directives:
+  rtems_task_construct
   rtems_task_create
   rtems_task_start
   rtems_task_wake_after

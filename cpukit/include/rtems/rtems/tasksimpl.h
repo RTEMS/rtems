@@ -42,6 +42,17 @@ extern "C" {
  */
 void _RTEMS_tasks_Initialize_user_tasks( void );
 
+typedef rtems_status_code ( *RTEMS_tasks_Prepare_stack )(
+  Thread_Configuration *,
+  const rtems_task_config *
+);
+
+rtems_status_code _RTEMS_tasks_Create(
+  const rtems_task_config   *config,
+  rtems_id                  *id,
+  RTEMS_tasks_Prepare_stack  prepare_stack
+);
+
 RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
 {
   _Objects_Allocator_lock();

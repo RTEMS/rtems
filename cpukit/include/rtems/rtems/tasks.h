@@ -21,6 +21,7 @@
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/context.h>
 #include <rtems/score/smp.h>
 
 #ifdef __cplusplus
@@ -172,6 +173,189 @@ rtems_status_code rtems_task_create(
  * allocated task storage area.
  */
 #define RTEMS_TASK_STORAGE_ALIGNMENT CPU_HEAP_ALIGNMENT
+
+/**
+ * @brief Returns the recommended task storage area size for the specified size
+ *   and task attributes.
+ *
+ * @param _size is the size dedicated to the task stack and thread-local
+ *   storage in bytes.
+ *
+ * @param _attributes is the attribute set of the task using the storage area.
+ *
+ * @return The recommended task storage area size calculated from the input
+ *   parameters is returned.
+ */
+#if CPU_ALL_TASKS_ARE_FP == TRUE
+  #define RTEMS_TASK_STORAGE_SIZE( _size, _attributes ) \
+    ( ( _size ) + CONTEXT_FP_SIZE )
+#else
+  #define RTEMS_TASK_STORAGE_SIZE( _size, _attributes ) \
+    ( ( _size ) + \
+      ( ( ( _attributes ) & RTEMS_FLOATING_POINT ) != 0 ? \
+        CONTEXT_FP_SIZE : 0 ) )
+#endif
+
+/**
+ * @brief This structure defines the configuration of a task constructed by
+ *   rtems_task_construct().
+ */
+typedef struct {
+  /**
+   * @brief This member defines the name of the task.
+   */
+  rtems_name name;
+
+  /**
+   * @brief This member defines the initial priority of the task.
+   */
+  rtems_task_priority initial_priority;
+
+  /**
+   * @brief This member shall point to the task storage area begin.
+   *
+   * The task storage area will contain the task stack, the thread-local storage,
+   * and the floating-point context on architectures with a separate
+   * floating-point context.
+   *
+   * The task storage area begin address and size should be aligned by
+   * #RTEMS_TASK_STORAGE_ALIGNMENT.  To avoid memory waste, use RTEMS_ALIGNED()
+   * and #RTEMS_TASK_STORAGE_ALIGNMENT to enforce the recommended alignment of a
+   * statically allocated task storage area.
+   */
+  void *storage_area;
+
+  /**
+   * @brief This member defines size of the task storage area in bytes.
+   *
+   * Use the RTEMS_TASK_STORAGE_SIZE() macro to determine the recommended task
+   * storage area size.
+   */
+  size_t storage_size;
+
+  /**
+   * @brief This member defines the maximum thread-local storage size supported
+   *   by the task storage area.
+   *
+   * Use RTEMS_ALIGN_UP() and #RTEMS_TASK_STORAGE_ALIGNMENT to adjust the size to
+   * meet the minimum alignment requirement of a thread-local storage area used
+   * to construct a task.
+   *
+   * If the value is less than the actual thread-local storage size, then the
+   * task construction by rtems_task_construct() fails.
+   *
+   * If the is less than the task storage area size, then the task construction
+   * by rtems_task_construct() fails.
+   *
+   * The actual thread-local storage size is determined when the application
+   * executable is linked.  The ``rtems-exeinfo`` command line tool included in
+   * the RTEMS Tools can be used to obtain the thread-local storage size and
+   * alignment of an application executable.
+   *
+   * The application may configure the maximum thread-local storage size for all
+   * threads explicitly through the #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
+   * configuration option.
+   */
+  size_t maximum_thread_local_storage_size;
+
+  /**
+   * @brief This member defines the optional handler to free the task storage
+   *   area.
+   *
+   * It is called on exactly two mutually exclusive occasions.  Firstly, when the
+   * task construction aborts due to a failed task create extension, or secondly,
+   * when the task is deleted.  It is called from task context under protection
+   * of the object allocator lock.  It is allowed to call free() in this handler.
+   * If handler is NULL, then no action will be performed.
+   */
+  void ( *storage_free )( void * );
+
+  /**
+   * @brief This member defines the initial modes of the task.
+   */
+  rtems_mode initial_modes;
+
+  /**
+   * @brief This member defines the attributes of the task.
+   */
+  rtems_attribute attributes;
+} rtems_task_config;
+
+/**
+ * @brief Constructs a task from the specified the task configuration.
+ *
+ * In contrast to tasks created by rtems_task_create(), the tasks constructed
+ * by this directive use a user-provided task storage area.  The task storage
+ * area contains the task stack, the thread-local storage, and the
+ * floating-point context on architectures with a separate floating-point
+ * context.
+ *
+ * This directive is intended for applications which do not want to use the
+ * RTEMS Workspace and instead statically allocate all operating system
+ * resources.  It is not recommended to use rtems_task_create() and
+ * rtems_task_construct() together in an application.  It is also not
+ * recommended to use rtems_task_construct() for drivers or general purpose
+ * libraries.  The reason for these recommendations is that the task
+ * configuration needs settings which can be only given with a through
+ * knowledge of the application resources.
+ *
+ * An application based solely on static allocation can avoid any runtime
+ * memory allocators.  This can simplfiy the application architecture as well
+ * as any analysis that may be required.
+ *
+ * The stack space estimate done by <rtems/confdefs.h> assumes that all tasks
+ * are created by rtems_task_create().  The estimate can be adjusted to take
+ * user-provided task storage areas into account through the
+ * #CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE application
+ * configuration option.
+ *
+ * The #CONFIGURE_MAXIMUM_TASKS should include tasks constructed by
+ * rtems_task_construct().
+ *
+ * @param config is the task configuration.
+ *
+ * @param[out] id is the pointer to an object identifier variable.  The
+ *   identifier of the constructed task object will be stored in this variable,
+ *   in case of a successful operation.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The id parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_NAME The task name was invalid.
+ *
+ * @retval ::RTEMS_INVALID_PRIORITY The initial task priority was invalid.
+ *
+ * @retval ::RTEMS_INVALID_SIZE The thread-local storage size is greater than
+ *   the maximum thread-local storage size specified in the task configuration.
+ *   The thread-local storage size is determined by the thread-local variables
+ *   used by the application and #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE.
+ *
+ * @retval ::RTEMS_INVALID_SIZE The task storage area was too small to provide
+ *   a task stack of the configured minimum size, see
+ *   #CONFIGURE_MINIMUM_TASK_STACK_SIZE. The task storage area contains the
+ *   task stack, the thread-local storage, and the floating-point context on
+ *   architectures with a separate floating-point context.
+ *
+ * @retval ::RTEMS_TOO_MANY There was no inactive task object available to
+ *   construct a task.
+ *
+ * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
+ *   inactive global object available to construct a global task.
+ *
+ * @retval ::RTEMS_UNSATISFIED One of the task create extensions failed during
+ *   the task construction.
+ *
+ * @retval ::RTEMS_UNSATISFIED In SMP configurations, the non-preemption mode
+ *   was not supported.
+ *
+ * @retval ::RTEMS_UNSATISFIED In SMP configurations, the interrupt level mode
+ *   was not supported.
+ */
+rtems_status_code rtems_task_construct(
+  const rtems_task_config *config,
+  rtems_id                *id
+);
 
 /**
  * @brief RTEMS Task Name to Id

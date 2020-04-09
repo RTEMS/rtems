@@ -901,6 +901,28 @@
  */
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS
 
+/**
+ * @brief This configuration option is an integer define.
+ *
+ * The value of this configuration option defines the minimum count of Classic
+ * API Tasks which are constructed by rtems_task_construct().
+ *
+ * @par Default Value
+ * The default value is 0.
+ *
+ * @par Value Constraints
+ * The value of this configuration option shall be greater than or equal to 0
+ * and less than or equal to #CONFIGURE_MAXIMUM_TASKS.
+ *
+ * @par Notes
+ * By default, the calculation for the required memory in the RTEMS Workspace
+ * for tasks assumes that all Classic API Tasks are created by
+ * rtems_task_create().  This configuration option can be used to reduce the
+ * required memory for the system-provided task storage areas since tasks
+ * constructed by rtems_task_construct() use a user-provided task storage area.
+ */
+#define CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE
+
 /** @} */
 
 /**
