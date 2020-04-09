@@ -32,6 +32,4 @@
 #include <rtems/score/stack.h>
 #include <rtems/score/wkspace.h>
 
-const bool _Stack_Allocator_avoids_workspace = false;
-
-const Stack_Allocator_allocate _Stack_Allocator_allocate = _Workspace_Allocate;
+const Stack_Allocator_free _Stack_Allocator_free = _Workspace_Free;
