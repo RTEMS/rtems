@@ -96,16 +96,19 @@ static rtems_task Init(
   /* error cases in clock_gettime and clock_settime */
 
   puts( "Init: clock_gettime - EINVAL (NULL timespec)" );
+  errno = 0;
   sc = clock_gettime( CLOCK_REALTIME, NULL );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_gettime - EINVAL (invalid clockid)" );
+  errno = 0;
   sc = clock_gettime( (clockid_t)-1, &tv );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_settime - EINVAL (invalid clockid)" );
+  errno = 0;
   sc = clock_settime( (clockid_t)-1, &tv );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
@@ -115,6 +118,23 @@ static rtems_task Init(
   tv.tv_nsec = 0;
   printf( ctime( &tv.tv_sec ) );
   puts( "Init: clock_settime - before 1988 EINVAL" );
+  errno = 0;
+  sc = clock_settime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  puts( "Init: clock_settime - invalid nanoseconds EINVAL" );
+  tv.tv_sec = 946681200;
+  tv.tv_nsec = 2000000000;
+  errno = 0;
+  sc = clock_settime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  puts( "Init: clock_settime - far future EINVAL" );
+  tv.tv_sec = 17179869184;
+  tv.tv_nsec = 0;
+  errno = 0;
   sc = clock_settime( CLOCK_REALTIME, &tv );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
@@ -122,11 +142,13 @@ static rtems_task Init(
   /* exercise clock_getres */
 
   puts( "Init: clock_getres - EINVAL (invalid clockid)" );
+  errno = 0;
   sc = clock_getres( (clockid_t) -1, &tv );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
   puts( "Init: clock_getres - EINVAL (NULL resolution)" );
+  errno = 0;
   sc = clock_getres( CLOCK_REALTIME, NULL );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
@@ -196,6 +218,7 @@ static rtems_task Init(
   tv.tv_sec = 0;
   tv.tv_nsec = TOD_NANOSECONDS_PER_SECOND * 2;
   puts( "Init: nanosleep - EINVAL (too many nanoseconds)" );
+  errno = 0;
   sc = nanosleep ( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
@@ -204,6 +227,7 @@ static rtems_task Init(
   tv.tv_sec = -1;
   tv.tv_nsec = 0;
   puts( "Init: nanosleep - negative seconds - EINVAL" );
+  errno = 0;
   sc = nanosleep ( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
@@ -212,6 +236,7 @@ static rtems_task Init(
   tv.tv_sec = 0;
   tv.tv_nsec = -1;
   puts( "Init: nanosleep - negative nanoseconds - EINVAL" );
+  errno = 0;
   sc = nanosleep ( &tv, &tr );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );

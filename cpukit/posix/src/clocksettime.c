@@ -40,9 +40,6 @@ int clock_settime(
   if ( clock_id == CLOCK_REALTIME ) {
     ISR_lock_Context lock_context;
 
-    if ( tp->tv_sec < TOD_SECONDS_1970_THROUGH_1988 )
-      rtems_set_errno_and_return_minus_one( EINVAL );
-
     _TOD_Lock();
     _TOD_Acquire( &lock_context );
       status = _TOD_Set( tp, &lock_context );
