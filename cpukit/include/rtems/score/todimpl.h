@@ -18,6 +18,7 @@
 #ifndef _RTEMS_SCORE_TODIMPL_H
 #define _RTEMS_SCORE_TODIMPL_H
 
+#include <rtems/score/status.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/watchdog.h>
@@ -197,10 +198,10 @@ static inline void _TOD_Release( ISR_lock_Context *lock_context )
  *   _TOD_Acquire().  The caller must be the owner of the TOD lock.  This
  *   function will release the TOD lock.
  *
- * @retval true on success
- * @retval false on failure
+ * @retval STATUS_SUCCESSFUL Successful operation.
+ * @retval other Some error occurred.
  */
-bool _TOD_Set(
+Status_Control _TOD_Set(
   const struct timespec *tod,
   ISR_lock_Context      *lock_context
 );
@@ -370,7 +371,7 @@ typedef struct TOD_Hook {
   Chain_Node Node;
 
   /** This is the TOD action hook that is invoked. */
-  bool (*handler)(TOD_Action, const struct timespec *);
+  Status_Control ( *handler )( TOD_Action, const struct timespec * );
 } TOD_Hook;
 
 /**
@@ -384,9 +385,6 @@ extern Chain_Control _TOD_Hooks;
  * This method is used to add a hook to the TOD action set.
  *
  * @brief hook is the action hook to register.
- *
- * @retval true if the hook is added. 
- * @retval false if the hook cannot be added. 
  */
 void _TOD_Hook_Register(
   TOD_Hook *hook
@@ -398,9 +396,6 @@ void _TOD_Hook_Register(
  * This method is used to remove a hook from the TOD action set.
  *
  * @brief hook is the action hook to unregister.
- *
- * @retval true if the hook is unregister. 
- * @retval false if the hook cannot be unregister. 
  */
 void _TOD_Hook_Unregister(
   TOD_Hook *hook
@@ -411,13 +406,13 @@ void _TOD_Hook_Unregister(
  *
  * This method is used to invoke the set of TOD action hooks.
  *
- * @brief action is the action which triggered this run.
- * @brief tod is the current tod
+ * @brief action The action which triggered this run.
+ * @brief tod The current time of day.
  *
- * @retval true if the hooks can be run. 
- * @retval false if the hook cannot be run. 
+ * @retval STATUS_SUCCESSFUL Successful operation.
+ * @retval other Some error occurred.
  */
-bool _TOD_Hook_Run(
+Status_Control _TOD_Hook_Run(
   TOD_Action             action,
   const struct timespec *tod
 );

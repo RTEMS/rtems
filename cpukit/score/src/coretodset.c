@@ -22,7 +22,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/watchdogimpl.h>
 
-bool _TOD_Set(
+Status_Control _TOD_Set(
   const struct timespec *tod,
   ISR_lock_Context      *lock_context
 )
@@ -31,14 +31,14 @@ bool _TOD_Set(
   uint64_t        tod_as_ticks;
   uint32_t        cpu_max;
   uint32_t        cpu_index;
-  bool            retval;
+  Status_Control  status;
 
   _Assert( _TOD_Is_owner() );
 
-  retval = _TOD_Hook_Run( TOD_ACTION_SET_CLOCK, tod );
-  if ( retval == false ) {
+  status = _TOD_Hook_Run( TOD_ACTION_SET_CLOCK, tod );
+  if ( status != STATUS_SUCCESSFUL ) {
     _TOD_Release( lock_context );
-    return false;
+    return status;
   }
 
   timespec2bintime( tod, &tod_as_bintime );
@@ -75,5 +75,5 @@ bool _TOD_Set(
 
   _TOD.is_set = true;
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }

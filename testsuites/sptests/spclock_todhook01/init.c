@@ -78,7 +78,7 @@ static struct timespec tod_set;
 static bool hook1_executed;
 static bool hook2_executed;
 
-static bool tod_hook1(
+static Status_Control tod_hook1(
   TOD_Action             action,
   const struct timespec *tod
 )
@@ -90,10 +90,10 @@ static bool tod_hook1(
 
   hook1_executed = true;
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }
 
-static bool tod_hook2(
+static Status_Control tod_hook2(
   TOD_Action             action,
   const struct timespec *tod
 )
@@ -105,7 +105,7 @@ static bool tod_hook2(
 
   hook2_executed = true;
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }
 
 /*
@@ -219,7 +219,7 @@ static void do_positive_case(int i)
 
 static bool hook_error_executed;
 
-static bool tod_hook_error(
+static Status_Control tod_hook_error(
   TOD_Action             action,
   const struct timespec *tod
 )
@@ -231,7 +231,7 @@ static bool tod_hook_error(
 
   hook_error_executed = true;
 
-  return false;
+  return STATUS_NOT_OWNER;
 }
 /*
  * Execute one negative test case.
@@ -274,7 +274,7 @@ static void do_negative_case(bool use_posix)
       0
     );
     status = rtems_clock_set( &time );
-    rtems_test_assert( status == RTEMS_IO_ERROR );
+    rtems_test_assert( status == RTEMS_NOT_OWNER_OF_RESOURCE );
   } else {
     int rc;
 

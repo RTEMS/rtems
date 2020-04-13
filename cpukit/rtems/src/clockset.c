@@ -26,7 +26,7 @@ rtems_status_code rtems_clock_set(
   const rtems_time_of_day *tod
 )
 {
-  bool retval;
+  Status_Control status;
 
   if ( !tod )
     return RTEMS_INVALID_ADDRESS;
@@ -41,13 +41,10 @@ rtems_status_code rtems_clock_set(
 
     _TOD_Lock();
     _TOD_Acquire( &lock_context );
-    retval = _TOD_Set( &tod_as_timespec, &lock_context );
+    status = _TOD_Set( &tod_as_timespec, &lock_context );
     _TOD_Unlock();
 
-    if ( retval == true ) {
-      return RTEMS_SUCCESSFUL;
-    }
-    return RTEMS_IO_ERROR;
+    return STATUS_GET_CLASSIC( status );
   }
 
   return RTEMS_INVALID_CLOCK;

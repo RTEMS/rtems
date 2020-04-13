@@ -42,31 +42,35 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/chainimpl.h>
 
-bool _TOD_Hook_Run(
+Status_Control _TOD_Hook_Run(
   TOD_Action             action,
   const struct timespec *tod
 )
 {
-  Chain_Node        *the_node;
-  bool               retval = true;
+  const Chain_Node *the_node;
+  Status_Control    status;
+
+  status = STATUS_SUCCESSFUL;
 
   /*
    * This is assumed to be called only from _TOD_Set() which is supposed
-   * to be called only while holding the TOD lock. 
+   * to be called only while holding the TOD lock.
    */
   _Assert( _TOD_Is_owner() );
 
-  for ( the_node = _Chain_First( &_TOD_Hooks );
-        !_Chain_Is_tail( &_TOD_Hooks, the_node ) ;
-        the_node = the_node->next ) {
-    TOD_Hook *the_hook = (TOD_Hook *) the_node;
- 
-    retval = (the_hook->handler)( action, tod );
-    if ( retval == false ) {
+  for (
+    the_node = _Chain_Immutable_first( &_TOD_Hooks );
+    !_Chain_Is_tail( &_TOD_Hooks, the_node );
+    the_node = _Chain_Immutable_next( the_node )
+  ) {
+    const TOD_Hook *the_hook;
+
+    the_hook = (const TOD_Hook *) the_node;
+    status = ( *the_hook->handler )( action, tod );
+    if ( status != STATUS_SUCCESSFUL ) {
       break;
     }
   }
 
-  return retval;
+  return status;
 }
-

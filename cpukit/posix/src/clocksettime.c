@@ -32,7 +32,7 @@ int clock_settime(
   const struct timespec *tp
 )
 {
-  bool  retval;
+  Status_Control status;
 
   if ( !tp )
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -45,10 +45,11 @@ int clock_settime(
 
     _TOD_Lock();
     _TOD_Acquire( &lock_context );
-      retval = _TOD_Set( tp, &lock_context );
+      status = _TOD_Set( tp, &lock_context );
     _TOD_Unlock();
-    if ( retval == false ) {
-      rtems_set_errno_and_return_minus_one( EPERM );
+
+    if ( status != STATUS_SUCCESSFUL ) {
+      rtems_set_errno_and_return_minus_one( STATUS_GET_POSIX( status ) );
     }
   }
 #ifdef _POSIX_CPUTIME
