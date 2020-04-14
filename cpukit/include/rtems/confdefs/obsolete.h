@@ -102,7 +102,7 @@
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE
-  #error "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
+  #error "The CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
