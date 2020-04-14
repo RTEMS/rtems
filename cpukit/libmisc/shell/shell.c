@@ -43,8 +43,9 @@
 #define SHELL_STD_DEBUG 0
 
 #if SHELL_STD_DEBUG
-static FILE* default_stdout;
-#define shell_std_debug(...) fprintf(default_stdout, __VA_ARGS__)
+#include <rtems/bspIo.h>
+#define shell_std_debug(...) \
+  do { printk("shell[%08x]: ", rtems_task_self()); printk(__VA_ARGS__); } while (0)
 #else
 #define shell_std_debug(...)
 #endif
@@ -124,7 +125,7 @@ static void rtems_shell_env_free(
         free((void *)shell_env->input);
       if ( shell_env->output )
         free((void *)shell_env->output);
-      free( ptr );
+      free( shell_env );
     }
 
     free( handle );
@@ -160,10 +161,6 @@ static void rtems_shell_init_once(void)
   struct passwd pwd;
   struct passwd *pwd_res;
 
-#if SHELL_STD_DEBUG
-  default_stdout = stdout;
-#endif
-
   pthread_key_create(&rtems_shell_current_env_key, rtems_shell_env_free);
 
   /* dummy call to init /etc dir */
@@ -189,7 +186,7 @@ void rtems_shell_init_environment(void)
 }
 
 /*
- * Create a current shell key.
+ * Set the shell env into the current thread's shell key.
  */
 static bool rtems_shell_set_shell_env(
   rtems_shell_env_t* shell_env
@@ -213,11 +210,37 @@ static bool rtems_shell_set_shell_env(
 
   eno = pthread_setspecific(rtems_shell_current_env_key, handle);
   if (eno != 0) {
-    rtems_error(0, "pthread_setspecific(shell_current_env_key)");
+    rtems_error(0, "pthread_setspecific(shell_current_env_key): set");
     return false;
   }
 
   return true;
+}
+
+/*
+ * Clear the current thread's shell key.
+ */
+static void rtems_shell_clear_shell_env(void)
+{
+  int eno;
+
+  /*
+   * Run the destructor manually.
+   */
+  rtems_shell_env_free(pthread_getspecific(rtems_shell_current_env_key));
+
+  /*
+   * Clear the key
+   */
+  eno = pthread_setspecific(rtems_shell_current_env_key, NULL);
+  if (eno != 0)
+    rtems_error(0, "pthread_setspecific(shell_current_env_key): clear");
+
+  /*
+   * Clear stdin and stdout file pointers of they will be closed
+   */
+  stdin = NULL;
+  stdout = NULL;
 }
 
 /*
@@ -228,7 +251,7 @@ rtems_shell_env_t *rtems_shell_get_current_env(void)
   rtems_shell_env_key_handle *handle;
   handle = (rtems_shell_env_key_handle*)
     pthread_getspecific(rtems_shell_current_env_key);
-  return handle->env;
+  return handle == NULL ? NULL : handle->env;
 }
 
 /*
@@ -239,6 +262,7 @@ void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
 {
   rtems_shell_env_t *env = rtems_shell_get_current_env();
   if (env != NULL) {
+    shell_std_debug("dup: existing parent\n");
     *copy = *env;
   }
   else {
@@ -249,6 +273,10 @@ void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
     copy->parent_stdout = stdout;
     copy->parent_stdin  = stdin;
     copy->parent_stderr = stderr;
+    shell_std_debug("dup: global: copy: %p out: %d (%p) in: %d (%p)\n",
+                    copy,
+                    fileno(copy->parent_stdout), copy->parent_stdout,
+                    fileno(copy->parent_stdin), copy->parent_stdin);
   }
   /*
    * Duplicated environments are not managed.
@@ -278,14 +306,21 @@ static int rtems_shell_line_editor(
   int          up;
   int          cmd = -1;
   int          inserting = 1;
+  int          in_fileno = fileno(in);
+  int          out_fileno = fileno(out);
 
-  output = (out && isatty(fileno(in)));
+  /*
+   * Only this task can use this file descriptor because calling
+   * fileno will block if another thread call made a call on this
+   * descriptor.
+   */
+  output = (out && isatty(in_fileno));
 
   col = last_col = 0;
 
-  tcdrain(fileno(in));
+  tcdrain(in_fileno);
   if (out)
-    tcdrain(fileno(out));
+    tcdrain(out_fileno);
 
   if (output && prompt)
     fprintf(out, "\r%s", prompt);
@@ -631,9 +666,9 @@ static bool rtems_shell_login(rtems_shell_env_t *env, FILE * in,FILE * out)
         (env->devname[7]!='y')) {
       fd = fopen("/etc/issue","r");
       if (fd) {
-        while ((c=fgetc(fd))!=EOF) {
+        while ((c = fgetc(fd)) != EOF) {
           if (c=='@')  {
-            switch(c=fgetc(fd)) {
+            switch (c = fgetc(fd)) {
               case 'L':
                 fprintf(out,"%s", env->devname);
                 break;
@@ -812,59 +847,53 @@ bool rtems_shell_main_loop(
 
   if (!rtems_shell_init_user_env()) {
     rtems_error(0, "rtems_shell_init_user_env");
+    rtems_shell_clear_shell_env();
     return false;
   }
 
-  shell_std_debug("shell: out: %d %d %s\n",
-                  fileno(stdout), fileno(shell_env->parent_stdout),
-                  shell_env->output);
-  shell_std_debug("     :  in: %d %d %s\n",
-                  fileno(stdin), fileno(shell_env->parent_stdin),
-                  shell_env->input);
+  shell_std_debug("env: %p\n", shell_env);
 
-  if (shell_env->output != NULL) {
-    if (strcmp(shell_env->output, "stdout") == 0) {
-      if (shell_env->parent_stdout != NULL)
-        stdout = shell_env->parent_stdout;
+  if (shell_env->output == NULL || strcmp(shell_env->output, "stdout") == 0) {
+    if (shell_env->parent_stdout != NULL)
+      stdout = shell_env->parent_stdout;
+  }
+  else if (strcmp(shell_env->output, "stderr") == 0) {
+    if (shell_env->parent_stderr != NULL)
+      stdout = shell_env->parent_stderr;
+    else
+      stdout = stderr;
+  } else if (strcmp(shell_env->output, "/dev/null") == 0) {
+    fclose (stdout);
+  } else {
+    FILE *output = fopen(shell_env->output,
+                         shell_env->output_append ? "a" : "w");
+    if (output == NULL) {
+      fprintf(stderr, "shell: open output %s failed: %s\n",
+              shell_env->output, strerror(errno));
+      rtems_shell_clear_shell_env();
+      return false;
     }
-    else if (strcmp(shell_env->output, "stderr") == 0) {
-      if (shell_env->parent_stderr != NULL)
-        stdout = shell_env->parent_stderr;
-      else
-        stdout = stderr;
-    } else if (strcmp(shell_env->output, "/dev/null") == 0) {
-      fclose (stdout);
-    } else {
-      FILE *output = fopen(shell_env->output,
-                           shell_env->output_append ? "a" : "w");
-      if (output == NULL) {
-        fprintf(stderr, "shell: open output %s failed: %s\n",
-                shell_env->output, strerror(errno));
-        return false;
-      }
-      stdout = output;
-      stdoutToClose = output;
-    }
+    stdout = output;
+    stdoutToClose = output;
   }
 
-  if (shell_env->input != NULL) {
-    if (strcmp(shell_env->input, "stdin") == 0) {
-      if (shell_env->parent_stdin != NULL)
-        stdin = shell_env->parent_stdin;
-    } else {
-      FILE *input = fopen(shell_env->input, "r");
-      if (input == NULL) {
-        fprintf(stderr, "shell: open input %s failed: %s\n",
-                shell_env->input, strerror(errno));
-        if (stdoutToClose != NULL)
-          fclose(stdoutToClose);
-        return false;
-      }
-      stdin = input;
-      stdinToClose = input;
-      shell_env->forever = false;
-      input_file = true;
+  if (shell_env->input == NULL || strcmp(shell_env->input, "stdin") == 0) {
+    if (shell_env->parent_stdin != NULL)
+      stdin = shell_env->parent_stdin;
+  } else {
+    FILE *input = fopen(shell_env->input, "r");
+    if (input == NULL) {
+      fprintf(stderr, "shell: open input %s failed: %s\n",
+              shell_env->input, strerror(errno));
+      if (stdoutToClose != NULL)
+        fclose(stdoutToClose);
+      rtems_shell_clear_shell_env();
+      return false;
     }
+    stdin = input;
+    stdinToClose = input;
+    shell_env->forever = false;
+    input_file = true;
   }
 
   if (!input_file) {
@@ -880,18 +909,18 @@ bool rtems_shell_main_loop(
       term.c_cc[VTIME] = 0;
       if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
         fprintf(stderr,
-                "shell:cannot set terminal attributes(%s)\n",shell_env->devname);
+                "shell: cannot set terminal attributes(%s)\n",shell_env->devname);
       }
     }
     cmd_count = RTEMS_SHELL_CMD_COUNT;
     prompt = malloc(RTEMS_SHELL_PROMPT_SIZE);
     if (!prompt)
         fprintf(stderr,
-                "shell:cannot allocate prompt memory\n");
+                "shell: cannot allocate prompt memory\n");
   }
 
-  shell_std_debug("shell: child out: %d in %d\n", fileno(stdout), fileno(stdin));
-  shell_std_debug("shell: child out: %p\n", stdout);
+  shell_std_debug("child out: %d (%p)\n", fileno(stdout), stdout);
+  shell_std_debug("child  in: %d (%p)\n", fileno(stdin), stdin);
 
    /* Do not buffer if interactive else leave buffered */
   if (!input_file)
@@ -973,8 +1002,10 @@ bool rtems_shell_main_loop(
           if (cmd == -1)
             continue; /* empty line */
 
-          if (cmd == -2)
+          if (cmd == -2) {
+            result = false;
             break; /*EOF*/
+          }
 
           line++;
 
@@ -1027,6 +1058,7 @@ bool rtems_shell_main_loop(
         fflush( stdout );
         fflush( stderr );
       }
+      shell_std_debug("end: %d %d\n", result, shell_env->forever);
     } while (result && shell_env->forever);
 
   }
@@ -1037,6 +1069,9 @@ bool rtems_shell_main_loop(
     free (cmd_argv);
   if (prompt)
     free (prompt);
+
+  shell_std_debug("child in-to-close: %p\n", stdinToClose);
+  shell_std_debug("child out-to-close: %p\n", stdoutToClose);
 
   if (stdinToClose) {
     fclose( stdinToClose );
@@ -1051,6 +1086,7 @@ bool rtems_shell_main_loop(
   }
   if ( stdoutToClose )
     fclose( stdoutToClose );
+  rtems_shell_clear_shell_env();
   return result;
 }
 
@@ -1104,6 +1140,8 @@ static rtems_status_code rtems_shell_run (
    return RTEMS_NO_MEMORY;
   }
 
+  shell_std_debug("run: env: %p\n", shell_env);
+
   shell_env->devname       = devname;
   shell_env->taskname      = task_name;
 
@@ -1124,6 +1162,11 @@ static rtems_status_code rtems_shell_run (
 
   getcwd(shell_env->cwd, sizeof(shell_env->cwd));
 
+  shell_std_debug("run out: %d (%p)\n",
+                  fileno(shell_env->parent_stdout), shell_env->parent_stdout);
+  shell_std_debug("run  in: %d (%p)\n",
+                  fileno(shell_env->parent_stdin), shell_env->parent_stdin);
+
   sc = rtems_task_start(task_id, rtems_shell_task,
                         (rtems_task_argument) shell_env);
   if (sc != RTEMS_SUCCESSFUL) {
@@ -1138,6 +1181,8 @@ static rtems_status_code rtems_shell_run (
     rtems_event_set out;
     sc = rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT, 0, &out);
   }
+
+  shell_std_debug("run: end: sc:%d ec:%d\n", sc, *exit_code);
 
   return sc;
 }
@@ -1190,10 +1235,12 @@ rtems_status_code rtems_shell_script (
   int exit_code = 0;
   rtems_status_code sc;
 
+  shell_std_debug("script: in: %s out: %s\n", input, output);
+
   if ( wait )
     to_wake = rtems_task_self();
 
-  return rtems_shell_run(
+  sc = rtems_shell_run(
     task_name,       /* task_name */
     task_stacksize,  /* task_stacksize */
     task_priority,   /* task_priority */
@@ -1214,6 +1261,8 @@ rtems_status_code rtems_shell_script (
     /* Place holder until RTEMS 5 is released then the interface for
      * this call will change. */
   }
+
+  shell_std_debug("script: end: %d\n", sc);
 
   return sc;
 }
