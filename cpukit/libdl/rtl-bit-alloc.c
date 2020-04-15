@@ -17,7 +17,7 @@
  * should be small and the minimum allocator a 32bit work or higher.
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

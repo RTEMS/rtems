@@ -15,7 +15,7 @@
  * A simple RTL command to aid using the RTL.
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

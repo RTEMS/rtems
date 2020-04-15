@@ -12,7 +12,7 @@
  * is freely granted, provided that this notice is preserved.
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

@@ -12,8 +12,8 @@
  *       https://github.com/oetr/FPGA-I2C-Slave
  */
 
-#if HAVE_CONFIG_H
-  #include "config.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
 #include <dev/i2c/i2c.h>

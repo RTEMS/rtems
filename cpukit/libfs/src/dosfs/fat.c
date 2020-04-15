@@ -10,7 +10,7 @@
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

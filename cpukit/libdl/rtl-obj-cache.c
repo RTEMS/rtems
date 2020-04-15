@@ -14,7 +14,7 @@
  *        object file in a buffer to localise read performance.
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

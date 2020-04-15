@@ -21,7 +21,7 @@
  * This code is based on code by: Jose Rufino - IST
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

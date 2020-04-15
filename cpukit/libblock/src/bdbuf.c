@@ -27,7 +27,7 @@
  */
 #define RTEMS_BDBUF_TRACE 0
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 #include <limits.h>

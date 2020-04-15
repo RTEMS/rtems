@@ -20,8 +20,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#if HAVE_CONFIG_H
-  #include "config.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
 #include <dev/i2c/gpio-nxp-pca9535.h>

@@ -10,8 +10,8 @@
  *    http://www.opengroup.org/onlinepubs/009695399/basedefs/sys/statvfs.h.html
  */
 
-#if HAVE_CONFIG_H
-  #include "config.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
 #include <sys/statvfs.h>

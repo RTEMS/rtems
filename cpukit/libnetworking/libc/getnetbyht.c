@@ -43,7 +43,7 @@
  * from getnetent.c	1.1 (Coimbra) 93/06/02
  */
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 

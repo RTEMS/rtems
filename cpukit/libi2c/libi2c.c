@@ -48,7 +48,7 @@
  * adaptations to also handle SPI devices
  * by Thomas Doerfler, embedded brains GmbH, Puchheim, Germany
  */
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
