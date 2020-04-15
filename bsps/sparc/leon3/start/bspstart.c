@@ -22,7 +22,6 @@
 #include <bsp.h>
 #include <leon.h>
 #include <bsp/bootcard.h>
-#include <drvmgr/drvmgr.h>
 #include <rtems/sysinit.h>
 
 #if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)

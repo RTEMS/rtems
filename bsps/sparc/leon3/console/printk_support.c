@@ -17,11 +17,8 @@
 
 #include <bsp.h>
 #include <leon.h>
-#include <rtems/libio.h>
+#include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <stdio.h>
 #include <grlib/apbuart.h>
 
 int leon3_debug_uart_index __attribute__((weak)) = 0;
@@ -99,8 +96,6 @@ static void bsp_out_char(char c)
  *  To support printk
  */
 
-#include <rtems/bspIo.h>
-
 BSP_output_char_function_type BSP_output_char = bsp_out_char;
 
 static int bsp_in_char(void)
@@ -108,7 +103,7 @@ static int bsp_in_char(void)
   int tmp;
 
   if (leon3_debug_uart == NULL)
-    return EOF;
+    return -1;
 
   while ((tmp = apbuart_inbyte_nonblocking(leon3_debug_uart)) < 0)
     ;
