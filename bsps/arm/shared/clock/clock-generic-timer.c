@@ -148,7 +148,8 @@ static void arm_gt_clock_initialize(void)
   uint64_t cval;
   struct timecounter *tc;
 
-  frequency = arm_gt_clock_instance.interval;
+  tc = &arm_gt_clock_instance.tc;
+  frequency = tc->tc_frequency;
   us_per_tick = rtems_configuration_get_microseconds_per_tick();
   interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
   cval = arm_gt_clock_get_count();
@@ -158,10 +159,8 @@ static void arm_gt_clock_initialize(void)
   arm_gt_clock_gt_init(cval);
   arm_gt_clock_secondary_initialization(cval);
 
-  tc = &arm_gt_clock_instance.tc;
   tc->tc_get_timecount = arm_gt_clock_get_timecount;
   tc->tc_counter_mask = 0xffffffff;
-  tc->tc_frequency = frequency;
   tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
   rtems_timecounter_install(tc);
 }
@@ -178,12 +177,19 @@ CPU_Counter_ticks _CPU_Counter_read(void)
 
 static void arm_gt_clock_early_init(void)
 {
+  uint32_t frequency;
   arm_gt_clock_set_control(0x3);
 
   arm_generic_timer_get_config(
-    &arm_gt_clock_instance.interval,
+    &frequency,
     &arm_gt_clock_instance.irq
   );
+
+  /*
+   * Used by _CPU_Counter_frequency() before arm_gt_clock_initialize() is
+   * called.
+   */
+  arm_gt_clock_instance.tc.tc_frequency = frequency;
 }
 
 RTEMS_SYSINIT_ITEM(
