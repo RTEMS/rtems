@@ -2209,6 +2209,8 @@ void T_putchar_default(int, void *);
 
 int T_main(const T_config *);
 
+void T_make_runner(void);
+
 bool T_is_runner(void);
 
 void T_run_initialize(const T_config *);

@@ -330,7 +330,7 @@ T_scope(char *buf)
 }
 
 static void
-T_set_runner(T_context *ctx)
+T_do_make_runner(T_context *ctx)
 {
 #ifdef __rtems__
 	ISR_Level level;
@@ -351,6 +351,12 @@ T_set_runner(T_context *ctx)
 	ctx->runner_valid = true;
 	ctx->runner_thread = pthread_self();
 #endif
+}
+
+void
+T_make_runner(void)
+{
+	T_do_make_runner(&T_instance);
 }
 
 int
@@ -719,7 +725,7 @@ T_do_run_initialize(const T_config *config)
 	ctx->overall_steps = 0;
 	ctx->overall_failures = 0;
 
-	T_set_runner(ctx);
+	T_do_make_runner(ctx);
 	T_actions_forward(config, T_EVENT_RUN_INITIALIZE_EARLY, config->name);
 	T_do_log(ctx, T_QUIET, "A:%s\n", config->name);
 	T_system(ctx);
