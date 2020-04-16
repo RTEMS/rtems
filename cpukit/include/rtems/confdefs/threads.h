@@ -48,8 +48,11 @@
 #include <rtems/confdefs/scheduler.h>
 #include <rtems/confdefs/unlimited.h>
 #include <rtems/score/thread.h>
-#include <rtems/posix/threadsup.h>
 #include <rtems/rtems/tasksdata.h>
+
+#ifdef RTEMS_POSIX_API
+  #include <rtems/posix/threadsup.h>
+#endif
 
 #ifndef CONFIGURE_MAXIMUM_TASKS
   #define CONFIGURE_MAXIMUM_TASKS 0
