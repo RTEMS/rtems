@@ -43,7 +43,6 @@
 #ifdef CONFIGURE_INIT
 
 #include <rtems/confdefs/bsp.h>
-#include <rtems/libio.h>
 #include <rtems/sysinit.h>
 
 #ifdef CONFIGURE_FILESYSTEM_ALL
@@ -86,6 +85,15 @@
   #define CONFIGURE_IMFS_DISABLE_UTIME
 #endif
 
+#ifndef CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 3
+#endif
+
+#if !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM) || \
+  CONFIGURE_MAXIMUM_FILE_DESCRIPTORS > 0
+  #include <rtems/libio.h>
+#endif
+
 #ifdef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
   #ifdef CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
     #error "CONFIGURE_APPLICATION_DISABLE_FILESYSTEM cannot be used together with CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM"
@@ -122,9 +130,9 @@
   #ifdef CONFIGURE_FILESYSTEM_TFTPFS
     #error "CONFIGURE_APPLICATION_DISABLE_FILESYSTEM cannot be used together with CONFIGURE_FILESYSTEM_TFTPFS"
   #endif
+#else
+  #include <rtems/imfs.h>
 #endif
-
-#include <rtems/imfs.h>
 
 #ifdef CONFIGURE_FILESYSTEM_DOSFS
 #include <rtems/dosfs.h>
@@ -316,13 +324,11 @@ RTEMS_SYSINIT_ITEM(
 
 #endif /* !CONFIGURE_APPLICATION_DISABLE_FILESYSTEM */
 
-#ifndef CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
-  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 3
+#if CONFIGURE_MAXIMUM_FILE_DESCRIPTORS > 0
+  rtems_libio_t rtems_libio_iops[ CONFIGURE_MAXIMUM_FILE_DESCRIPTORS ];
+
+  const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE( rtems_libio_iops );
 #endif
-
-rtems_libio_t rtems_libio_iops[ CONFIGURE_MAXIMUM_FILE_DESCRIPTORS ];
-
-const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE( rtems_libio_iops );
 
 #ifdef __cplusplus
 }
