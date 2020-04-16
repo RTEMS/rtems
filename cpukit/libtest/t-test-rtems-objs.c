@@ -1,7 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
- * Copyright (C) 2018 embedded brains GmbH
+ * @ingroup RTEMSTestFramework
+ *
+ * @brief RTEMS Objects Support for Test Framework
+ */
+
+/*
+ * Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,15 +35,15 @@
 
 #undef __STRICT_ANSI__
 
+#include "t-test-rtems.h"
+
 #include <rtems/test.h>
 
 #include <inttypes.h>
 
-#include <rtems/score/objectimpl.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/posix/keyimpl.h>
 
-static Objects_Maximum
+Objects_Maximum
 T_objects_count(Objects_APIs api, uint16_t cls)
 {
 	const Objects_Information *information;
@@ -56,7 +64,7 @@ T_objects_count(Objects_APIs api, uint16_t cls)
 	return count;
 }
 
-static void
+void
 T_objects_check(Objects_APIs api, uint16_t cls,
     Objects_Maximum *expected, const char *name)
 {
@@ -367,79 +375,6 @@ T_check_rtems_timers(T_event event, const char *name)
 		break;
 	case T_EVENT_CASE_END:
 		T_rtems_timers_case_end();
-		break;
-	default:
-		break;
-	};
-}
-
-static Objects_Maximum T_posix_key_count;
-
-static ssize_t T_posix_key_value_count;
-
-static POSIX_Keys_Control *
-T_get_next_posix_key(Objects_Id *id)
-{
-	return (POSIX_Keys_Control *)
-	    _Objects_Get_next(*id, &_POSIX_Keys_Information, id);
-}
-
-static ssize_t
-T_get_active_posix_key_value_pairs(void)
-{
-	ssize_t count;
-	Objects_Id id;
-	POSIX_Keys_Control *the_key;
-
-	count = 0;
-	id = OBJECTS_ID_INITIAL_INDEX;
-
-	while ((the_key = T_get_next_posix_key(&id)) != NULL ) {
-		count += (ssize_t)
-		    _Chain_Node_count_unprotected(&the_key->Key_value_pairs);
-		_Objects_Allocator_unlock();
-	}
-
-	return count;
-}
-
-static void
-T_posix_keys_run_initialize(void)
-{
-	T_posix_key_count = T_objects_count(OBJECTS_POSIX_API,
-	    OBJECTS_POSIX_KEYS);
-	T_posix_key_value_count = T_get_active_posix_key_value_pairs();
-}
-
-static void
-T_posix_keys_case_end(void)
-{
-	ssize_t count;
-	ssize_t delta;
-
-	T_objects_check(OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS,
-	    &T_posix_key_count, "POSIX key");
-
-	count = T_get_active_posix_key_value_pairs();
-	delta = count - T_posix_key_value_count;
-
-	if (delta != 0) {
-		T_posix_key_value_count = count;
-		T_check_true(false, NULL, "POSIX key value pair leak (%zi)", delta);
-	}
-}
-
-void
-T_check_posix_keys(T_event event, const char *name)
-{
-	(void)name;
-
-	switch (event) {
-	case T_EVENT_RUN_INITIALIZE_EARLY:
-		T_posix_keys_run_initialize();
-		break;
-	case T_EVENT_CASE_END:
-		T_posix_keys_case_end();
 		break;
 	default:
 		break;
