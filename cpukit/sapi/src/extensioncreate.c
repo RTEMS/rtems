@@ -32,15 +32,21 @@ rtems_status_code rtems_extension_create(
 {
   Extension_Control *the_extension;
 
-  if ( !id )
-    return RTEMS_INVALID_ADDRESS;
-
-  if ( !rtems_is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
+  }
+
+  if ( extension_table == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if ( id == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
 
   the_extension = _Extension_Allocate();
 
-  if ( !the_extension ) {
+  if ( the_extension == NULL ) {
     _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }

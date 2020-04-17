@@ -73,6 +73,11 @@ rtems_task Init(
   Extension_name[ 1 ] =  rtems_build_name( 'E', 'X', 'T', '1' );
   Extension_name[ 2 ] =  rtems_build_name( 'E', 'X', 'T', '2' );
 
+  puts  ( "rtems_extension_create - bad table -- RTEMS_INVALID_ADDRESS" );
+  status = rtems_extension_create( 0xa5a5a5a5, NULL, &id );
+  fatal_directive_status(
+    status, RTEMS_INVALID_ADDRESS, "rtems_extension_create" );
+
   puts  ( "rtems_extension_create - bad id pointer -- RTEMS_INVALID_ADDRESS" );
   status = rtems_extension_create( 0xa5a5a5a5, &Extensions, NULL );
   fatal_directive_status(
