@@ -6,6 +6,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
+ * Copyright (C) 2020 Eshan Dhawan
  * Copyright (C) 2019 Vaibhav Gupta
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,11 +47,12 @@
 #include <string.h>
 #include <rtems/test.h>
 #include <tmacros.h>
+#include <float.h>
 
 const char rtems_test_name[] = "PSXFENV 01";
 
 /* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
+rtems_task Init( rtems_task_argument ignored );
 
 /* Test Function Begins */
 rtems_task Init(rtems_task_argument ignored)
@@ -62,42 +64,92 @@ rtems_task Init(rtems_task_argument ignored)
 
   /*
    * 'FE_ALL_EXCEPT' will be defined only when 'feclearexcept()',
-   * 'fegetexceptflag()', 'feraiseexcept()', 'fesetexceptflag()' and
-   * 'fetestexcept()' functions are supported by the architecture.
+   * fegetexceptflag() , feraiseexcept(), fesetexceptflag() and
+   * fetestexcept() functions are supported by the architecture.
    * Hence their testcases can be wrapped under #ifdef and #endif.
    */
   #ifdef FE_ALL_EXCEPT /* floating-point exceptions */
-    puts( "fesetenv(FE_DFL_ENV)." );
-    r = fesetenv(FE_DFL_ENV);
-    if (r)
-      printf("fesetenv ==> %d\n", r);
+    r = fesetenv( FE_DFL_ENV );
+    if ( r ) {
+      printf( "fesetenv ==> %d\n", r);
+    }
     rtems_test_assert( r == 0 );
 
-    /* Test 'feclearexcept()' and 'fetestexcept()' in one go. */
-    puts( "feclearexcept(FE_ALL_EXCEPT)." );
-    r = feclearexcept(FE_ALL_EXCEPT);
-    if (r)
-      printf("feclearexcept ==> 0x%x\n", r);
+    /* Test feclearexcept() and fetestexcept() in one go. */
+    r = feclearexcept( FE_ALL_EXCEPT );
+    if ( r ) {
+      printf( "feclearexcept ==> 0x%x\n", r );
+    }
     rtems_test_assert( r == 0 );
 
     r = fetestexcept( FE_ALL_EXCEPT );
-    if (r)
-      printf("fetestexcept ==> 0x%x\n", r);
+    if ( r ) {
+      printf( "fetestexcept ==> 0x%x\n", r );
+    }
     rtems_test_assert( r == 0 );
 
-    /* Test 'FE_DIVBYZERO' */
-    puts( "Divide by zero and confirm fetestexcept()" );
+    /* Test 'FE_DIVBYZERO'
+     * Divide by zero and confirm fetestexcept() */
     a = 0.0;
     b = 1.0;
     c = b/a;
     (void) c;
+    /* Test fegetexceptflag() and fesetexceptflag() */
+    r = fegetexceptflag( &excepts, FE_ALL_EXCEPT );
+    if ( r ) {
+      printf( "fegetexceptflag ==> 0x%x\n", r );
+    }
+    rtems_test_assert( r == 0 );
 
-    fegetexceptflag(&excepts,FE_ALL_EXCEPT);
+    r = fesetexceptflag( &excepts, FE_ALL_EXCEPT );
+    if ( r ) {
+      printf( "fesetexceptflag ==> 0x%x\n", r );
+    }
+    rtems_test_assert( r == 0 );
 
-#ifdef FE_DIVBYZERO
-    r = feraiseexcept(FE_DIVBYZERO);
+    /* Test for fegetround() and fesetround()
+     * They have four main macros to be tested separated by ifdef
+     * Since not all architectures support them
+     * The test case gets and sets the rounding directions */
+  #ifdef FE_TONEAREST /* Rounding direction TONEAREST */
+    rtems_test_assert( fegetround() == FE_TONEAREST );
+  #endif /*rounding direction TONEAREST */
+  #ifdef FE_TOWARDZERO /* rounding direction TOWARDZERO */
+    r = fesetround( FE_TOWARDZERO );
+    if ( r ) {
+      printf( "fesetround ==> 0x%x\n", r );
+    }
+    rtems_test_assert( r == 0 );
+    rtems_test_assert( fegetround() == FE_TOWARDZERO );
+  #endif/*rounding direction TOWARDZERO */
+  #ifdef FE_DOWNWARD /* rounding direction DOWNWARD */
+    r = fesetround( FE_DOWNWARD );
+    if ( r ) {
+      printf( "fesetround ==> 0x%x\n", r );
+    }
+    rtems_test_assert( r == 0 );
+    rtems_test_assert( fegetround() == FE_DOWNWARD );
+  #endif /* rounding direction DOWNWARD */
+  #ifdef FE_UPWARD /* rounding direction UPWARD */
+    r = fesetround( FE_UPWARD );
+    if ( r ) {
+      printf( "fesetround ==> 0x%x\n", r );
+    }
+    rtems_test_assert( r == 0 );
+    rtems_test_assert( fegetround() == FE_UPWARD );
+  #endif /* rounding direction upward */
+  #ifdef FE_TONEAREST /* rounding direction TONEAREST */
+    r = fesetround( FE_TONEAREST );
+    if ( r ) {
+      printf( "fesetround ==> 0x%x\n", r );
+    }
+    rtems_test_assert( r == 0 );
+  #endif /* rounding direction TONEAREST */
+
+  #ifdef FE_DIVBYZERO /* divide by zero exeption */
+    r = feraiseexcept( FE_DIVBYZERO ) ;
     rtems_test_assert( fetestexcept( FE_DIVBYZERO ) );
-#endif
+  #endif /* divide by zero exeption */
 
     /* Test 'FE_INEXACT' */
     a = 10.0;

@@ -1,4 +1,4 @@
-#  COPYRIGHT (c) 2019
+﻿#  COPYRIGHT (c) 2019
 #  On-Line Applications Research Corporation (OAR).
 #
 # SPDX-License-Identifier: BSD-2-Clause
@@ -12,8 +12,11 @@ Directives:
   fesetenv
   feclearexcept
   fetestexcept
-  texceptflag
   feraiseexcept
+  fesetexeptflag
+  fegetexeptflag
+  fegetround
+  fesetround
 
 Concepts:
 
