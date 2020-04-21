@@ -25,17 +25,6 @@
 
 .LCTOC1 = .+32768
 
-	.extern	FUNC_NAME(atexit)
-	.globl	FUNC_NAME(__atexit)
-	.section ".sdata","aw"
-	.align	2
-FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
-	.long	FUNC_NAME(atexit)@fixup	/* and that it is to register __do_global_dtors */
-
-	.section ".fixup","aw"
-	.align	2
-	.long	FUNC_NAME(__atexit)
-
 	.section ".got2","aw"
 .Ltable = .-.LCTOC1
 	.long	.LCTOC1			/* address we think .LCTOC1 is loaded at */

@@ -186,23 +186,6 @@
 .L_D2:
 	.previous
 
-/*
- * Tell C's eabi-ctor's that we have an atexit function,
- * and that it is to register __do_global_dtors.
- */
-	EXTERN_PROC(atexit)
-	PUBLIC_VAR(__atexit)
-	.section ".sdata","aw"
-	.align	2
-SYM(__atexit):
-	EXT_PROC_REF(atexit)@fixup
-	.previous
-
-	.section ".fixup","aw"
-	.align	2
-	EXT_SYM_REF(__atexit)
-	.previous
-
 /* That should do it */
 
 /*
