@@ -621,7 +621,7 @@ void _CPU_Context_save_fp(
     __asm__ __volatile__(                      \
       "fldcw %0"                               \
       ::"m"((*(fp_context_pp))->fpucw)         \
-      :"fpcr"                                  \
+      :"memory"                                \
     );                                         \
     __builtin_ia32_ldmxcsr(_Thread_Executing->fp_context->mxcsr);  \
   } while (0)
@@ -640,7 +640,7 @@ void _CPU_Context_restore_fp(
       :                                               \
       :"st","st(1)","st(2)","st(3)",                  \
        "st(4)","st(5)","st(6)","st(7)",               \
-       "fpsr","fpcr"                                  \
+       "fpsr","memory"                                \
     );                                                \
 	if ( _Thread_Executing->fp_context ) {            \
 	  _CPU_Context_restore_fp(&_Thread_Executing->fp_context); \

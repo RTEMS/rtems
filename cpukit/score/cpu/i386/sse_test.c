@@ -229,7 +229,7 @@ fp_ld(Context_Control_sse *p_ctxt, int i)
 #define FPUCLOBBER \
 	"st","st(1)","st(2)","st(3)",   \
 	"st(4)","st(5)","st(6)","st(7)",\
-	"fpsr","fpcr"
+	"fpsr","memory"
 
 /* There seems to be no way to say that mxcsr was clobbered */
 
