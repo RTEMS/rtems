@@ -404,7 +404,11 @@ void _SPARC_Set_TBR( uint32_t new_tbr );
 static inline uint32_t sparc_disable_interrupts(void)
 {
   register uint32_t psr __asm__("g1"); /* return value of trap handler */
+#ifdef __FIX_LEON3FT_TN0018
+  __asm__ volatile ( "ta %1\n\tnop\n\t" : "=r" (psr) : "i" (SPARC_SWTRAP_IRQDIS));
+#else
   __asm__ volatile ( "ta %1\n\t" : "=r" (psr) : "i" (SPARC_SWTRAP_IRQDIS));
+#endif
   return psr;
 }
 

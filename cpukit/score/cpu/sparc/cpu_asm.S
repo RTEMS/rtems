@@ -23,6 +23,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
+#include <libcpu/grlib-tn-0018.h>
 
 #if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
   #define FP_FRAME_OFFSET_FO_F1 (SPARC_MINIMUM_STACK_FRAME_SIZE + 0)
@@ -895,11 +896,13 @@ simple_return:
         save                               ! Back to ISR dispatch window
 
 good_task_window:
+        TN0018_WAIT_IFLUSH %l3,%l4         ! GRLIB-TN-0018 work around macro
 
         mov     %l0, %psr                  !  **** DISABLE TRAPS ****
         nop; nop; nop
                                            !  and restore condition codes.
         ld      [%g1 + ISF_G1_OFFSET], %g1 ! restore g1
+        TN0018_FIX %l3,%l4                 ! GRLIB-TN-0018 work around macro
         jmp     %l1                        ! transfer control and
         rett    %l2                        ! go back to tasks window
 

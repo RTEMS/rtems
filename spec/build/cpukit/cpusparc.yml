@@ -13,6 +13,7 @@ install:
   source:
   - cpukit/score/cpu/sparc/include/libcpu/access.h
   - cpukit/score/cpu/sparc/include/libcpu/byteorder.h
+  - cpukit/score/cpu/sparc/include/libcpu/grlib-tn-0018.h
 - destination: ${BSP_INCLUDEDIR}/machine
   source:
   - cpukit/score/cpu/sparc/include/machine/elf_machdep.h

@@ -22,6 +22,7 @@
  */
 
 #include <rtems/asm.h>
+#include <libcpu/grlib-tn-0018.h>
 
         .section    ".text"
         /*
@@ -247,11 +248,17 @@ done_flushing:
          *  Restore the global registers we used
          */
 
-        mov     %l3, %g1
         mov     %l4, %g2
         mov     %l5, %g3
+
+        TN0018_WAIT_IFLUSH %l4,%l5
+        TN0018_WRITE_PSR %g1
+
+        mov     %l3, %g1
         mov     %l6, %g4
         mov     %l7, %g5
+
+        TN0018_FIX %l4,%l5
 
         jmpl    %l2, %g0
         rett    %l2 + 4
