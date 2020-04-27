@@ -1,8 +1,9 @@
 /**
  * @file
  * 
- * @brief Obtain RWLock for reading
  * @ingroup RTEMSScoreRWLock
+ *
+ * @brief Obtain RWLock for reading
  */
 
 /*

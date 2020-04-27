@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Watchdog Insert
  * @ingroup RTEMSScoreWatchdog
+ *
+ * @brief Watchdog Insert
  */
 
 /*

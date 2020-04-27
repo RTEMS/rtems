@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Canceling Execution of a Thread
  * @ingroup POSIXAPI
+ *
+ * @brief Canceling Execution of a Thread
  */
 
 /*

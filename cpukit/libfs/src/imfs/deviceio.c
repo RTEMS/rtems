@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Device Node Handlers
  * @ingroup IMFS
+ *
+ * @brief IMFS Device Node Handlers
  */
 
 /*

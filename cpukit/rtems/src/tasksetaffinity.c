@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief  RTEMS Task Set Affinity
  * @ingroup ClassicTasks Tasks
+ *
+ * @brief  RTEMS Task Set Affinity
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get Pointer to Next Object that is Active
  * @ingroup RTEMSScoreObject
+ *
+ * @brief Get Pointer to Next Object that is Active
  */
 
 /*

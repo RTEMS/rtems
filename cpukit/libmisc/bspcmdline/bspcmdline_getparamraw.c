@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtain Pointer to the Entire Matching Argument
  * @ingroup BSPCommandLine BSP Command Line Helpers
+ *
+ * @brief Obtain Pointer to the Entire Matching Argument
  */
 
 /*

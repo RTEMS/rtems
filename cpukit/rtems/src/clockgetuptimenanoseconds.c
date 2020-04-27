@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Returns the system uptime in seconds.
  * @ingroup ClassicClock Clocks
+ *
+ * @brief Returns the system uptime in seconds.
  */
 
 /*

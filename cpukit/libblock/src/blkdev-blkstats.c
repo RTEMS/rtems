@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Block Device Statistics Command
  * @ingroup rtems_blkdev Block Device Management
+ *
+ * @brief Block Device Statistics Command
  */
 
 /*

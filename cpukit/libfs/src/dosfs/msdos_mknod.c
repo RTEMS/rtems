@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Routine for Node Creation in MSDOS Filesystem
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Routine for Node Creation in MSDOS Filesystem
  */
 
 /*

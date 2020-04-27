@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Suspends Process until Asynchronous I/O Operation completes
  * @ingroup POSIXAPI
+ *
+ * @brief Suspends Process until Asynchronous I/O Operation completes
  */
 
 /*

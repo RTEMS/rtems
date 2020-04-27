@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Block Routines
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File Systems Block Routines
  * 
  * These functions manage blocks in the RFS file system. A block is an area of
  * the media and its size is set for a each specific media. The block size is

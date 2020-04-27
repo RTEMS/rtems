@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get Configurable System Variables
  * @ingroup POSIXAPI
+ *
+ * @brief Get Configurable System Variables
  */
 
 /*

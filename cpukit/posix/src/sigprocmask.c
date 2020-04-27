@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Examine and Change Blocked Signals
  * @ingroup POSIXAPI
+ *
+ * @brief Examine and Change Blocked Signals
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Dump Buffer
  * @ingroup libmisc_dumpbuf Print Memory Buffer
+ *
+ * @brief Dump Buffer
  */
 
 /*

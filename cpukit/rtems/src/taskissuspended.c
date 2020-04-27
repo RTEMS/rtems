@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief rtems_task_is_suspended
  * @ingroup ClassicTasks Tasks
+ *
+ * @brief rtems_task_is_suspended
  */
 
 /*

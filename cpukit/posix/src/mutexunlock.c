@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Locking and Unlocking a Mutex
  * @ingroup POSIXAPI
+ *
+ * @brief Locking and Unlocking a Mutex
  */
 
 /*

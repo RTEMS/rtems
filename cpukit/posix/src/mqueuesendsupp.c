@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Message Queue and Send Support
  * @ingroup POSIXAPI
+ *
+ * @brief POSIX Message Queue and Send Support
  */
 
 /*

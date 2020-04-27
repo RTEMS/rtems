@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Gets the Thread Creation Stack Attributes in the attr 
  * @ingroup POSIXAPI
+ *
+ * @brief Function Gets the Thread Creation Stack Attributes in the attr 
  */
 
 /*

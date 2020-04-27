@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Creates New POSIX semaphore or Opens an existing Semaphore
  * @ingroup POSIXAPI
+ *
+ * @brief Function Creates New POSIX semaphore or Opens an existing Semaphore
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System sets file access and modification times
  * @ingroup LibIOFSOps File System Operations  
+ *
+ * @brief RTEMS Default File System sets file access and modification times
  */
 
 /*

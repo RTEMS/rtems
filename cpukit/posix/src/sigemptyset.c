@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Manipulate Signal Sets
  * @ingroup POSIXAPI
+ *
+ * @brief Manipulate Signal Sets
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Retrieves the Specified Clock Time
  * @ingroup POSIXAPI
+ *
+ * @brief Retrieves the Specified Clock Time
  */
 
 /*

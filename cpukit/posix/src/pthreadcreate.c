@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Starts a New Thread in The Calling Process
  * @ingroup POSIXAPI
+ *
+ * @brief Function Starts a New Thread in The Calling Process
  */
 
 /*

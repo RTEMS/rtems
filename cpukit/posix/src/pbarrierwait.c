@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Wait at a Barrier
  * @ingroup POSIXAPI
+ *
+ * @brief Wait at a Barrier
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Event Manager Initialization
  * @ingroup ClassicEvent Events
+ *
+ * @brief Event Manager Initialization
  */
 
 /*

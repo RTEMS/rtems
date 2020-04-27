@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Allocate and Initialize Per CPU Structures
  * @ingroup PerCPU
+ *
+ * @brief Allocate and Initialize Per CPU Structures
  */
 
 /*

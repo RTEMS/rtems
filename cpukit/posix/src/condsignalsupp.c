@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Implements wake up version of the "signal" operation
  * @ingroup POSIX_COND_VARS Condition Variables
+ *
+ * @brief Implements wake up version of the "signal" operation
  */
 
 /*

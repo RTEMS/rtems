@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief rtems_semaphore_create
  * @ingroup ClassicSem Semaphores
+ *
+ * @brief rtems_semaphore_create
  */
 
 /*

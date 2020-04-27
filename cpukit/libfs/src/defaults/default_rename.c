@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System Rename Files
  * @ingroup LibIOFSOps File System Operations  
+ *
+ * @brief RTEMS Default File System Rename Files
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Destroy Condition Attribute
  * @ingroup POSIXAPI
+ *
+ * @brief Destroy Condition Attribute
  */
 
 /*

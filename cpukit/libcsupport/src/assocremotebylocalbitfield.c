@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Assoc Routines
  * @ingroup Associativity Routines
+ *
+ * @brief RTEMS Assoc Routines
  */
 
 /*

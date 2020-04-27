@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Scheduler EDF Release Job
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler EDF Release Job
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief rtems_region_create
  * @ingroup ClassicRegion Regions
+ *
+ * @brief rtems_region_create
  */
 
 /*

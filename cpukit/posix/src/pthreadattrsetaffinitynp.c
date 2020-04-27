@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Pthread Attribute Set Affinity
  * @ingroup POSIXAPI
+ *
+ * @brief Pthread Attribute Set Affinity
  */
 
 /*

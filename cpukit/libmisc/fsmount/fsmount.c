@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief File System Mount Functions
  * @ingroup rtems_fstab File System Mount Support
+ *
+ * @brief File System Mount Functions
  */
 
 /*

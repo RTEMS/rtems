@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Attempt to Obtain a Read Lock on a RWLock Instance
  * @ingroup POSIXAPI
+ *
+ * @brief Attempt to Obtain a Read Lock on a RWLock Instance
  */
 
 /*

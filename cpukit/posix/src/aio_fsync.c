@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Syncing of all Outstanding Asynchronous I/O Operations
  * @ingroup POSIXAPI
+ *
+ * @brief Syncing of all Outstanding Asynchronous I/O Operations
  */
 
 /*

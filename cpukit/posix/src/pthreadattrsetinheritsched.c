@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function sets the inheritsched Attribute in the attr Argument
  * @ingroup POSIXAPI
+ *
+ * @brief Function sets the inheritsched Attribute in the attr Argument
  */
 
 /*

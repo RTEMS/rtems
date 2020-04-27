@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief CPU Usage Report
  * @ingroup libmisc_cpuuse CPU Usage
+ *
+ * @brief CPU Usage Report
  */
 
 /*

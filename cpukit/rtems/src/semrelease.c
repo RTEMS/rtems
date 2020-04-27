@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Semaphore Release
  * @ingroup ClassicSem Semaphores
+ *
+ * @brief RTEMS Semaphore Release
  *
  * This file contains the implementation of the Classic API directive
  * rtems_semaphore_release().

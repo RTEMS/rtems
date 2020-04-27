@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Returns Clock ID for CPU time clock of the thread 
  * @ingroup POSIXAPI
+ *
+ * @brief Returns Clock ID for CPU time clock of the thread 
  */
 
 /*

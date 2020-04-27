@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Enable the Monitor to Show bdbuf Information
  * @ingroup rtems_bdpart
+ *
+ * @brief Enable the Monitor to Show bdbuf Information
  *
  * This module inspects the bdbuf data structures,
  * assuming they are static, but in fact they are used very

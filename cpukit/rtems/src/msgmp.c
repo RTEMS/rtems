@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Multiprocessing Support for the Message Queue Manager
  * @ingroup ClassicMsgMP Message Queue MP Support
+ *
+ * @brief Multiprocessing Support for the Message Queue Manager
  */
 
 /*

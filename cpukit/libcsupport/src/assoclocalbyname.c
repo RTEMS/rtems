@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Associate Local by Name
  * @ingroup Associativity Routines
+ *
+ * @brief RTEMS Associate Local by Name
  */
 
 /*

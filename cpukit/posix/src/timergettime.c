@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Fetches State of POSIX Per-Process Timers
  * @ingroup POSIXAPI
+ *
+ * @brief Function Fetches State of POSIX Per-Process Timers
  */
 
 /*

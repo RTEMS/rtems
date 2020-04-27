@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Function Installs signal Handler
  * @ingroup POSIXAPI
+ *
+ * @brief POSIX Function Installs signal Handler
  */
 
 /*

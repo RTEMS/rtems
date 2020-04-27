@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Load Tarfs
  * @ingroup IMFS
+ *
+ * @brief RTEMS Load Tarfs
  */
 
 /*

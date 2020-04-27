@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX 1003.1b 6.6.2 - Synchronize the Data of a File
  * @ingroup libcsupport
+ *
+ * @brief POSIX 1003.1b 6.6.2 - Synchronize the Data of a File
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Suspend Process Execution
  * @ingroup POSIXAPI
+ *
+ * @brief Suspend Process Execution
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Deletes a POSIX Interval Timer
  * @ingroup POSIXAPI
+ *
+ * @brief Deletes a POSIX Interval Timer
  */
 
 /*

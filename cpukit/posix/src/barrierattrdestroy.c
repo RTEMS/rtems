@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function shall Destroy a Barrier Attribues Object
  * @ingroup POSIXAPI
+ *
+ * @brief Function shall Destroy a Barrier Attribues Object
  */
 
 /*

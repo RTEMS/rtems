@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set IMFS File Access and Modification Times
  * @ingroup IMFS
+ *
+ * @brief Set IMFS File Access and Modification Times
  */
 
 /*

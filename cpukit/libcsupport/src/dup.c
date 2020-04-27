@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
  * @ingroup libcsupport
+ *
+ * @brief POSIX 1003.1b 6.2.1 Duplicate an Open File Descriptor
  */
 
 /*

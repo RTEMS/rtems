@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Trace Support
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File Systems Trace Support
  */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>

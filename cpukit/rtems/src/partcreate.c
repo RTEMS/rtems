@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Partition Create
  * @ingroup ClassicPart Partitions
+ *
+ * @brief RTEMS Partition Create
  */
 
 /*

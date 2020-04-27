@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Limits and Options
  * @ingroup IMFS
+ *
+ * @brief IMFS Limits and Options
  */
 
 /*

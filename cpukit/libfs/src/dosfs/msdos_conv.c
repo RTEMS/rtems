@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MDOS Date Conversion
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief MDOS Date Conversion
  */
 
 /*

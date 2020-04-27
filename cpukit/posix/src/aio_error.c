@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Returns the error status for the Asynchronous I/O request
  * @ingroup POSIXAPI
+ *
+ * @brief Returns the error status for the Asynchronous I/O request
  */
 
 /*

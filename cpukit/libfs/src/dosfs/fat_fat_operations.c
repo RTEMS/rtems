@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief General operations on File Allocation Table
  * @ingroup libfs_ffo Fat Fat Operations
+ *
+ * @brief General operations on File Allocation Table
  */
 
 /*

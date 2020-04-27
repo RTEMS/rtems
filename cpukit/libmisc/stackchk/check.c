@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Stack Overflow Check User Extension Set
  * @ingroup libmisc_stackchk Stack Checker Mechanism
+ *
+ * @brief Stack Overflow Check User Extension Set
  *
  * NOTE:  This extension set automatically determines at
  *         initialization time whether the stack for this

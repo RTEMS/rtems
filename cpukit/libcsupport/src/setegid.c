@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get Real User, Effective User, Ral Group, and Effective Group IDs
  * @ingroup libcsupport
+ *
+ * @brief Get Real User, Effective User, Ral Group, and Effective Group IDs
  */
 
 /*

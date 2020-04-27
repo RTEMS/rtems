@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Scheduler EDF Unblock
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler EDF Unblock
  */
 
 /*

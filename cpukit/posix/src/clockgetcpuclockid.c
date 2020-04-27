@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Returns Clock ID of CPU-time Clock of process specified 
  * @ingroup POSIXAPI
+ *
+ * @brief Function Returns Clock ID of CPU-time Clock of process specified 
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Change Owner
  * @ingroup IMFS
+ *
+ * @brief IMFS Change Owner
  */
 
 /*

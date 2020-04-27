@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MSDOS Filesystem Initialization
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief MSDOS Filesystem Initialization
  */
 
 /*

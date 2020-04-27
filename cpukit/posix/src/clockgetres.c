@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Returns the Resolution of any Clock
  * @ingroup POSIXAPI
+ *
+ * @brief Function Returns the Resolution of any Clock
  */
 
 /*

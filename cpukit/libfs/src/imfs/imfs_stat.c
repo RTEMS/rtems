@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Stat
  * @ingroup IMFS
+ *
+ * @brief IMFS Stat
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Unlocks a Spin Lock Object
  * @ingroup POSIXAPI
+ *
+ * @brief Function Unlocks a Spin Lock Object
  */
 
 /*

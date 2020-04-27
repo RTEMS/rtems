@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System creates a special or ordinary file
  * @ingroup LibIOFSOps File System Operations  
+ *
+ * @brief RTEMS Default File System creates a special or ordinary file
  */
 
 /*

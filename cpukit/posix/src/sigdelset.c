@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Deleted Signal from Set
  * @ingroup POSIXAPI
+ *
+ * @brief Deleted Signal from Set
  */
 
 /*

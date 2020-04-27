@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Call Fat-File Close Routine
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Call Fat-File Close Routine
  */
 
 /*

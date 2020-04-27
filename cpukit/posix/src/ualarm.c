@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Schedule Alarm
  * @ingroup POSIXAPI
+ *
+ * @brief Schedule Alarm
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Simple Schedule Determine Heir
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Simple Schedule Determine Heir
  */
 
 /*

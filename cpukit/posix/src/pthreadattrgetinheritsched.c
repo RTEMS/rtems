@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Thread Creation Scheduling Attributes
  * @ingroup POSIXAPI
+ *
+ * @brief Thread Creation Scheduling Attributes
  */
 
 /*

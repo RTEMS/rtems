@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Adds Signal from Set
  * @ingroup POSIXAPI
+ *
+ * @brief Function Adds Signal from Set
  */
 
 /*

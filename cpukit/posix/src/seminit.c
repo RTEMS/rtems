@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initializing of an Unnamed Semaphore
  * @ingroup POSIXAPI
+ *
+ * @brief Initializing of an Unnamed Semaphore
  */
 
 /*

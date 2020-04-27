@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Mount Prot XDR
  * @ingroup libfs_nfsclient_mount_prot Mount Prot
+ *
+ * @brief Mount Prot XDR
  */
 
 /*

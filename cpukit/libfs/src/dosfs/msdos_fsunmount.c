@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Shut Down MSDOS FileSystem
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Shut Down MSDOS FileSystem
  */
 
 /*

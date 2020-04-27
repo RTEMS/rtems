@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Waiting on a Condition
  * @ingroup POSIXAPI
+ *
+ * @brief Waiting on a Condition
  */
 
 /*

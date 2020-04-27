@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Name to ID
  * @ingroup POSIXAPI
+ *
+ * @brief POSIX Name to ID
  */
 
 /*

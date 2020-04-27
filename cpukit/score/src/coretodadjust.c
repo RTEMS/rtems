@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Adjust the Time of Time
  * @ingroup RTEMSScoreTOD
+ *
+ * @brief Adjust the Time of Time
  */
 
 /*

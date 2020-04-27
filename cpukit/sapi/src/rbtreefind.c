@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Find the control structure of the tree containing the given node
  * @ingroup RTEMSScorertems_rbtree
+ *
+ * @brief Find the control structure of the tree containing the given node
  */
 
 /*

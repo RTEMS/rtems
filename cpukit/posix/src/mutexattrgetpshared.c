@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtaining process-shared Attribute Value from the Attributes Object
  * @ingroup POSIXAPI
+ *
+ * @brief Obtaining process-shared Attribute Value from the Attributes Object
  */
 
 /*

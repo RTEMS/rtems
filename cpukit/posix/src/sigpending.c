@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Examine Pending Signals
  * @ingroup POSIXAPI
+ *
+ * @brief Examine Pending Signals
  */
 
 /*

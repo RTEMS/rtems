@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Translate sched_param into SuperCore Terms
  * @ingroup POSIX_PTHREAD Private POSIX Threads
+ *
+ * @brief Translate sched_param into SuperCore Terms
  */
 
 /*

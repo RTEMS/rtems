@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Create Barrier
  * @ingroup ClassicBarrier Barriers
+ *
+ * @brief RTEMS Create Barrier
  */
 
 /*

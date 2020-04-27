@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief XDR Implementation Using mbuf Buffers
  * @ingroup libfs
+ *
+ * @brief XDR Implementation Using mbuf Buffers
  *
  * xdr_mbuf is derived from xdr_mem
  */

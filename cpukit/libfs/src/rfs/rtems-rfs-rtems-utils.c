@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set of Utility Functions to Support RTEMS RFS on RTEMS
  * @ingroup rtems_rfs
+ *
+ * @brief Set of Utility Functions to Support RTEMS RFS on RTEMS
  */
 
 /*

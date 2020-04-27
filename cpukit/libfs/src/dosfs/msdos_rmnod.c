@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Remove Node from MSDOS Directory
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Remove Node from MSDOS Directory
  */
 
 /*

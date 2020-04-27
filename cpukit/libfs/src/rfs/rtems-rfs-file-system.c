@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Open
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File Systems Open
  * 
  * Open the file system by reading the superblock and then the group data.
  */

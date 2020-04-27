@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief _Scheduler_CBS_Get_parameters
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief _Scheduler_CBS_Get_parameters
  */
 
 /*

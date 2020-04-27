@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Unmount an IMFS
  * @ingroup IMFS
+ *
+ * @brief Unmount an IMFS
  */
 
 /*

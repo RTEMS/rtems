@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Tasks MP Send Process Packet
  * @ingroup ClassicTaskMP Task MP Support
+ *
+ * @brief RTEMS Tasks MP Send Process Packet
  */
 
 /*

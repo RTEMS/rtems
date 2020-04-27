@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Node Removal Handler
  * @ingroup IMFS
+ *
+ * @brief IMFS Node Removal Handler
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS File System Interface for RTEMS
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File System Interface for RTEMS
  */
 
 /*

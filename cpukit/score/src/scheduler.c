@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Scheduler Initialize
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler Initialize
  */
 
 /*

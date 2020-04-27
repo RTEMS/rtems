@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Opens a Serial Port Directly, and Interprets Serial Data
  * @ingroup libmisc_mouse Mouse Parser Engine
+ *
+ * @brief Opens a Serial Port Directly, and Interprets Serial Data
  */
 
 /*

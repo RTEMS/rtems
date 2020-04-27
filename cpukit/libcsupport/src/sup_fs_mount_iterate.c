@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Mount table entry visitor.
  * @ingroup Termios Termios
+ *
+ * @brief Mount table entry visitor.
  */
 
 /*

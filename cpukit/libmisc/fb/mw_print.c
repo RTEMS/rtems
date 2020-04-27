@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MicroWindows Print
  * @ingroup libmisc_fb_mw Input Devices for MicroWindows
+ *
+ * @brief MicroWindows Print
  */
 
 /*

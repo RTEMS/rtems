@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Yield Processor
  * @ingroup POSIXAPI
+ *
+ * @brief Yield Processor
  */
 
 /*

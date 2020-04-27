@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Notify Process that a Message is Available on a Queue
  * @ingroup POSIX_MQUEUE
+ *
+ * @brief Notify Process that a Message is Available on a Queue
  */
 
 /*

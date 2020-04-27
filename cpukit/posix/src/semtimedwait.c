@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Lock a Semaphore
  * @ingroup POSIX_SEMAPHORE POSIX Semaphores Support
+ *
+ * @brief Lock a Semaphore
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initialize a Mutex
  * @ingroup POSIXAPI
+ *
+ * @brief Initialize a Mutex
  */
 
 /*

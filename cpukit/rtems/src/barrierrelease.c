@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Barrier Release
  * @ingroup ClassicBarrier Barriers
+ *
+ * @brief RTEMS Barrier Release
  */
 
 /*

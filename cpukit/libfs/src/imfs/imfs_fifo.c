@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief FIFO Support
  * @ingroup IMFS
+ *
+ * @brief FIFO Support
  */
 
 /*

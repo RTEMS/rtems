@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief FIFO/Pipe Support
  * @ingroup FIFO_PIPE
+ *
+ * @brief FIFO/Pipe Support
  */
 
 /*

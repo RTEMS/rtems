@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Pthread Get Affinity
  * @ingroup POSIXAPI
+ *
+ * @brief Pthread Get Affinity
  */
 
 /*

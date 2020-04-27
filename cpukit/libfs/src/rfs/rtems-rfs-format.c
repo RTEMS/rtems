@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Format
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File Systems Format
  * 
  * Format the file system ready for use.
  */

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Rename a MSDOS FileSystem Node
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Rename a MSDOS FileSystem Node
  */
 
 /*

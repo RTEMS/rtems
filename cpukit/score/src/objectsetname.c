@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set Objects Name
  * @ingroup RTEMSScoreObject
+ *
+ * @brief Set Objects Name
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initialises a RWLock Attributes object attr with the default value
  * @ingroup POSIXAPI
+ *
+ * @brief Initialises a RWLock Attributes object attr with the default value
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Message Queue Attributes
  * @ingroup POSIXAPI
+ *
+ * @brief Message Queue Attributes
  */
 
 /*

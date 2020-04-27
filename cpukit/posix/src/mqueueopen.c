@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Creates a new POSIX Message Queue or Opens an Existing Queue 
  * @ingroup POSIXAPI
+ *
+ * @brief Creates a new POSIX Message Queue or Opens an Existing Queue 
  */
 
 /*

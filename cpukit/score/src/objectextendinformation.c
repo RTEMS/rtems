@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Extend Set of Objects
  * @ingroup RTEMSScoreObject
+ *
+ * @brief Extend Set of Objects
  */
 
 /*

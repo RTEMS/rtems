@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Asynchronously reads Data from a File
  * @ingroup POSIXAPI
+ *
+ * @brief Asynchronously reads Data from a File
  */
 
 /*

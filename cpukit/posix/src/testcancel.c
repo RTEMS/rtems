@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Setting test on Cancelability State 
  * @ingroup POSIXAPI
+ *
+ * @brief Setting test on Cancelability State 
  */
 
 /*

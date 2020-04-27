@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Mutex Timed Lock
  * @ingroup POSIXAPI
+ *
+ * @brief Mutex Timed Lock
  */
 
 /*

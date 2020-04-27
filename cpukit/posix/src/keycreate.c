@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Thread-Specific Data Key Create
  * @ingroup POSIXAPI
+ *
+ * @brief Thread-Specific Data Key Create
  */
 
 /*

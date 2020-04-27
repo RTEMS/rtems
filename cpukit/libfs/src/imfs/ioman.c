@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Register IO Name
  * @ingroup ClassicIO
+ *
+ * @brief RTEMS Register IO Name
  */
 
 /*

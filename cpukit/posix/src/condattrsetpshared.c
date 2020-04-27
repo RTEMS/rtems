@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set the Process-Shared Condition Variable Attributes
  * @ingroup POSIXAPI
+ *
+ * @brief Set the Process-Shared Condition Variable Attributes
  */
 
 /*

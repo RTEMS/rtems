@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Thread Queue Flush
  * @ingroup RTEMSScoreThreadQ
+ *
+ * @brief Thread Queue Flush
  */
 
 /*

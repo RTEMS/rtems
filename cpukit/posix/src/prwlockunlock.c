@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Releases a lock held on RWLock object referenced by rwlock 
  * @ingroup POSIXAPI
+ *
+ * @brief Function Releases a lock held on RWLock object referenced by rwlock 
  */
 
 /*

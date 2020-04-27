@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Thread Attributes Creation
  * @ingroup POSIXAPI
+ *
+ * @brief Thread Attributes Creation
  */
 
 /*

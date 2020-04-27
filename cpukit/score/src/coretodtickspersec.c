@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Convert Ticks To Seconds
  * @ingroup RTEMSScoreTOD
+ *
+ * @brief Convert Ticks To Seconds
  */
 
 /*  COPYRIGHT (c) 1989-2014.

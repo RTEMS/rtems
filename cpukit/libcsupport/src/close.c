@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX 1003.1b 6.3.1 - Close a File
  * @ingroup libcsupport
+ *
+ * @brief POSIX 1003.1b 6.3.1 - Close a File
  */
 
 /*

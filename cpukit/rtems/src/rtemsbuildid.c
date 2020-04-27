@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Build Object Id
  * @ingroup ClassicClassInfo Object Class Information
+ *
+ * @brief Build Object Id
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief CBS Scheduler Budget Handler
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief CBS Scheduler Budget Handler
  */
 
 /*

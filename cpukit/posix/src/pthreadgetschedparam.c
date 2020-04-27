@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Gets Scheduling Policy and Parameters of Individual Threads
  * @ingroup POSIXAPI
+ *
+ * @brief Gets Scheduling Policy and Parameters of Individual Threads
  */
 
 /*

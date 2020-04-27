@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Scheduler EDF Initialize and Support
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler EDF Initialize and Support
  */
 
 /*

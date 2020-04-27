@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get API Portion of Object Id
  * @ingroup ClassicClassInfo Object Class Information
+ *
+ * @brief Get API Portion of Object Id
  */
 
 /*

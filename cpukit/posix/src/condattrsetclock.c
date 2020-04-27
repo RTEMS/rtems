@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set the Clock Condition Variable Attributes
  * @ingroup POSIXAPI
+ *
+ * @brief Set the Clock Condition Variable Attributes
  */
 
 /*

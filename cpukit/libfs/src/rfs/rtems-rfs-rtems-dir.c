@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS RFS Directory Access Routines
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS RFS Directory Access Routines
  */
 /*
  *  COPYRIGHT (c) 2010 Chris Johns <chrisj@rtems.org>

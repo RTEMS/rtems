@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set Name of Object
  * @ingroup ClassicClassInfo Object Class Information
+ *
+ * @brief Set Name of Object
  */
 
 /*

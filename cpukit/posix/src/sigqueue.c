@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Queue a Signal to a Process
  * @ingroup POSIXAPI
+ *
+ * @brief Queue a Signal to a Process
  */
 
 /*

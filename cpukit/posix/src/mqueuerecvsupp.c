@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Message Queue Receive Support
  * @ingroup POSIX_MQUEUE_P Message Queues Private Support Information
+ *
+ * @brief POSIX Message Queue Receive Support
  */
 
 /*

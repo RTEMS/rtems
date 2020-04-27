@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System sends a message to another user
  * @ingroup LibIOFSOps File System Operations 
+ *
+ * @brief RTEMS Default File System sends a message to another user
  */
 
 /*

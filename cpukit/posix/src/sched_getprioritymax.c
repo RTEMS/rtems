@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Returns the Appropriate Maximum for Scheduling policy
  * @ingroup POSIXAPI
+ *
+ * @brief Returns the Appropriate Maximum for Scheduling policy
  */
 
 /*

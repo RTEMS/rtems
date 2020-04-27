@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Block Device IMFS
  * @ingroup libblock
+ *
+ * @brief Block Device IMFS
  */
 
 /*

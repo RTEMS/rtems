@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initialization of Conditional Attributes
  * @ingroup POSIXAPI
+ *
+ * @brief Initialization of Conditional Attributes
  */
 
 /*

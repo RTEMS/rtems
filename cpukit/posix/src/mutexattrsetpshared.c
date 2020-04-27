@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function sets Current pshared Attribute for Mutex Attributes Object
  * @ingroup POSIXAPI
+ *
+ * @brief Function sets Current pshared Attribute for Mutex Attributes Object
  */
 
 /*

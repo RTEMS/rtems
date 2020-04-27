@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Miscellaneous Routines Implementation for MSDOS FileSystem
  * @ingroup libfs
+ *
+ * @brief Miscellaneous Routines Implementation for MSDOS FileSystem
  */
 
 /*

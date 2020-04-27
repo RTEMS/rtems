@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Actual request being processed
  * @ingroup POSIXAPI
+ *
+ * @brief Actual request being processed
  */
 
 /*

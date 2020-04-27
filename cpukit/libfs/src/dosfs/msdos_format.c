@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS MSDOS Format Functionality
  * @ingroup libfs
+ *
+ * @brief RTEMS MSDOS Format Functionality
  *
  * This function formats a disk partition conforming to MS-DOS conventions
  */

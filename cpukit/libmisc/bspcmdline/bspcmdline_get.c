@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtain Pointer to BSP Boot Command String
  * @ingroup BSPCommandLine BSP Command Line Helpers
+ *
+ * @brief Obtain Pointer to BSP Boot Command String
  */
 
 /*

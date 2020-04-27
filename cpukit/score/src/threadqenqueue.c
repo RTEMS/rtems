@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Thread Queue Operations
  * @ingroup RTEMSScoreThreadQ
+ *
+ * @brief Thread Queue Operations
  */
 
 /*

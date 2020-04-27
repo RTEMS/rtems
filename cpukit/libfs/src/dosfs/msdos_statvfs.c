@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtain MS-DOS filesystem information
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Obtain MS-DOS filesystem information
  */
 
 /*

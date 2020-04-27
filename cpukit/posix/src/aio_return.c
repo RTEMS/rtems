@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Final return status for Asynchronous I/O request pointed to by aiobcp
  * @ingroup POSIXAPI
+ *
+ * @brief Final return status for Asynchronous I/O request pointed to by aiobcp
  */
 
 /*

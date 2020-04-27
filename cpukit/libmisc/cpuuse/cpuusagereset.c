@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief CPU Usage Reset
  * @ingroup libmisc_cpuuse CPU Usage
+ *
+ * @brief CPU Usage Reset
  */
 
 /*

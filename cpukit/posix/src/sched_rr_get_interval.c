@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Limits for Scheduling Parameter
  * @ingroup POSIXAPI
+ *
+ * @brief Limits for Scheduling Parameter
  */
 
 /*

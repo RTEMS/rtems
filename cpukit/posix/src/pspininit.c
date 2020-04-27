@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Function Initializes a Spinlock Instance
  * @ingroup POSIXAPI
+ *
+ * @brief POSIX Function Initializes a Spinlock Instance
  */
 
 /*

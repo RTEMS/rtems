@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Timer Server Fire When Directive
  * @ingroup ClassicTimer Timers
+ *
+ * @brief RTEMS Timer Server Fire When Directive
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtain the System Uptime
  * @ingroup ClassicClock Clocks
+ *
+ * @brief Obtain the System Uptime
  */
 
 /*

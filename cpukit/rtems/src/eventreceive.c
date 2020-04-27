@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief  Constant used to receive the set of currently pending events in
  * @ingroup ClassicEventSet Event Set
+ *
+ * @brief  Constant used to receive the set of currently pending events in
  */
 
 /*

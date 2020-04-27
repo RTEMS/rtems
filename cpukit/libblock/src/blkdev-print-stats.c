@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Prints the Block Device Statistics
  * @ingroup rtems_blkdev Block Device Management
+ *
+ * @brief Prints the Block Device Statistics
  */
 
 /*

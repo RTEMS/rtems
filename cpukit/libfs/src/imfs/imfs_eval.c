@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Evaluation IMFS Node Support
  * @ingroup IMFS
+ *
+ * @brief Evaluation IMFS Node Support
  */
 
 /*

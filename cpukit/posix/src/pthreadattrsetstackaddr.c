@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Sets the Thread Creation stackaddr Attribute in the attr Object
  * @ingroup POSIXAPI
+ *
+ * @brief Sets the Thread Creation stackaddr Attribute in the attr Object
  */
 
 /*

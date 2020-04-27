@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Pthread Get Attribute
  * @ingroup POSIXAPI
+ *
+ * @brief Pthread Get Attribute
  */
 
 /*

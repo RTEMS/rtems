@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Create a Per-Process Timer
  * @ingroup POSIX_PRIV_TIMERS Timers
+ *
+ * @brief Create a Per-Process Timer
  */
 
 /*

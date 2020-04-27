@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Suspends Execution of calling thread until Time elapses
  * @ingroup POSIXAPI
+ *
+ * @brief Suspends Execution of calling thread until Time elapses
  */
 
 /*

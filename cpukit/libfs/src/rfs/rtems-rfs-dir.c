@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS File Systems Directory Routines
  * @ingroup rtems_rfs
+ *
+ * @brief RTEMS File Systems Directory Routines
  *
  * These functions manage blocks in the directory format. A directory entry is
  * a variable length record in the block. The entry consists of a length, hash

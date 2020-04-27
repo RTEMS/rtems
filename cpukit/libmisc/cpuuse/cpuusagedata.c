@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief CPU Usage Data
  * @ingroup libmisc_cpuuse CPU Usage
+ *
+ * @brief CPU Usage Data
  *
  * CPU Usage Reporter - Shared Data
  */

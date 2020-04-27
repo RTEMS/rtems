@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set Time of Clock
  * @ingroup POSIXAPI
+ *
+ * @brief Set Time of Clock
  */
 
 /*

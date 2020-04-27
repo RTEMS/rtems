@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set Scheduling Parameters
  * @ingroup POSIXAPI
+ *
+ * @brief Set Scheduling Parameters
  */
 
 /*

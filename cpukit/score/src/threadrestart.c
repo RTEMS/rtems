@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Restart Thread 
  * @ingroup RTEMSScoreThread
+ *
+ * @brief Restart Thread 
  */
 
 /*

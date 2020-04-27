@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Examine and/or change the calling thread's signal mask
  * @ingroup POSIXAPI
+ *
+ * @brief Examine and/or change the calling thread's signal mask
  */
 
 /*

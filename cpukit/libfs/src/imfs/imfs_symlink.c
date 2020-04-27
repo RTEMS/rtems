@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Create a New Symbolic Link Node
  * @ingroup IMFS
+ *
+ * @brief IMFS Create a New Symbolic Link Node
  */
 
 /*

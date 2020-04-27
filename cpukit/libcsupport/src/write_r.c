@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX 1003.1b 6.4.2 - Write to a File
  * @ingroup libcsupport
+ *
+ * @brief POSIX 1003.1b 6.4.2 - Write to a File
  */
 
 /*

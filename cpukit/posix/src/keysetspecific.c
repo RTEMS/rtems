@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set Specific Key
  * @ingroup POSIXAPI
+ *
+ * @brief Set Specific Key
  */
 
 /*

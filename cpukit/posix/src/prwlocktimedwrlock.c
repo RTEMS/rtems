@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function applies a Write lock to RWLock referenced by rwlock 
  * @ingroup POSIXAPI
+ *
+ * @brief Function applies a Write lock to RWLock referenced by rwlock 
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MSDOS Directory Handlers Implementation
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief MSDOS Directory Handlers Implementation
  */
 
 /*

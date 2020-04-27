@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Condition Variables Wait Support
  * @ingroup POSIX_COND_VARS
+ *
+ * @brief POSIX Condition Variables Wait Support
  */
 
 /*

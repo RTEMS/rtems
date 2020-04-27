@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function sets scheduling policy and parameters of the thread
  * @ingroup POSIXAPI
+ *
+ * @brief Function sets scheduling policy and parameters of the thread
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MicroWindows UID
  * @ingroup libmisc_fb_mw Input Devices for MicroWindows
+ *
+ * @brief MicroWindows UID
  *
  * This module implements the input devices interface used by MicroWindows
  * in an embedded system environment.  It uses the RTEMS message queue as

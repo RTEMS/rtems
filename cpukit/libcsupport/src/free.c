@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief calloc()
  * @ingroup libcsupport
+ *
+ * @brief calloc()
  */
 
 /*

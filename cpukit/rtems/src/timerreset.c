@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Timer Reset
  * @ingroup ClassicTimer Timers
+ *
+ * @brief RTEMS Timer Reset
  */
 
 /*

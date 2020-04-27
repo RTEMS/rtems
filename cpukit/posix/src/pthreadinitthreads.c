@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Threads Initialize User Threads Body
  * @ingroup POSIX_PTHREAD
+ *
+ * @brief POSIX Threads Initialize User Threads Body
  */
 
 /*

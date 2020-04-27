@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Manage Partitions of a Disk Device
  * @ingroup rtems_bdpart
+ *
+ * @brief Manage Partitions of a Disk Device
  */
 
 /*

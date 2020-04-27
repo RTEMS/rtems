@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Arms or Disarms the Timer Identified by timerid 
  * @ingroup POSIXAPI
+ *
+ * @brief Function Arms or Disarms the Timer Identified by timerid 
  */
 
 /*

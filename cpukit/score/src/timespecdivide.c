@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Divide Timespec By Integer
  * @ingroup Timespec
+ *
+ * @brief Divide Timespec By Integer
  */
 
 /*

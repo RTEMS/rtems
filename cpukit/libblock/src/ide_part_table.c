@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Library supporting "MS-DOS-style" Partition Table
  * @ingroup libblock
+ *
+ * @brief Library supporting "MS-DOS-style" Partition Table
  */
 
 /*

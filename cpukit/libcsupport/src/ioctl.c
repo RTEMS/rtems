@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief ioctl() system call
  * @ingroup libcsupport
+ *
+ * @brief ioctl() system call
  */
 
 /*

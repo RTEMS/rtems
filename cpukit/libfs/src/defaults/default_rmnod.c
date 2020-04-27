@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default Filesystem - Default Remove Node
  * @ingroup libfs
+ *
+ * @brief RTEMS Default Filesystem - Default Remove Node
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Partition_MP_Send_process_packet
  * @ingroup ClassicPartMP Partition MP Support
+ *
+ * @brief Partition_MP_Send_process_packet
  */
 
 /*

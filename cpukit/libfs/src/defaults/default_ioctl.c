@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System controls a STREAMS device
  * @ingroup LibIOFSOps File System Operations 
+ *
+ * @brief RTEMS Default File System controls a STREAMS device
  */
 
 /*

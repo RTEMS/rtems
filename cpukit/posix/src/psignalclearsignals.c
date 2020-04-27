@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Signals Clear Signals
  * @ingroup POSIX_SIGNALS POSIX Signals Support
+ *
+ * @brief POSIX Signals Clear Signals
  */
 
 /*

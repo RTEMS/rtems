@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Create a Period
  * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ *
+ * @brief Create a Period
  */
 
 /*

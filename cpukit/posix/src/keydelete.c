@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Deletes Thread-specific Data Key Previously Returned by keycreate.c
  * @ingroup POSIXAPI
+ *
+ * @brief Deletes Thread-specific Data Key Previously Returned by keycreate.c
  */
 
 /*

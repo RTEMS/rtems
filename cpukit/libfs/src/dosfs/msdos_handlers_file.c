@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief File Operations Table for MSDOS FileSystem
  * @ingroup libfs
+ *
+ * @brief File Operations Table for MSDOS FileSystem
  */
 
 /*

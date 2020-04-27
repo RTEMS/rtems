@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Remove a Message Queue
  * @ingroup POSIX_MQUEUE Message Queues
+ *
+ * @brief Remove a Message Queue
  */
 
 /*

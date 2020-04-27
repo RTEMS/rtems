@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Sock Mbuf
  * @ingroup libfs
+ *
+ * @brief Sock Mbuf
  */
 
 /*

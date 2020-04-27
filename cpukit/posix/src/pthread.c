@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Private Support Information for POSIX Threads
  * @ingroup POSIX_PTHREADS Private Threads
+ *
+ * @brief Private Support Information for POSIX Threads
  */
 
 /*

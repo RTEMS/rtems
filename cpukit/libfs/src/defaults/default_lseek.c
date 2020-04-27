@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System reposits the read/write file offset
  * @ingroup LibIOFSOps File System Operations  
+ *
+ * @brief RTEMS Default File System reposits the read/write file offset
  */
 
 /*

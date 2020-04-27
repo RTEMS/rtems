@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Flash Disk Block Device Implementation
  * @ingroup libblock
+ *
+ * @brief Flash Disk Block Device Implementation
  */
 
 /*

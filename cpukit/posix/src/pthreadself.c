@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function returns the ID of the Calling Thread 
  * @ingroup POSIXAPI
+ *
+ * @brief Function returns the ID of the Calling Thread 
  */
 
 /*

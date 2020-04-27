@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Block Device Disk Management Initialize
  * @ingroup rtems_disk Block Device Disk Management
+ *
+ * @brief Block Device Disk Management Initialize
  */
 
 /*

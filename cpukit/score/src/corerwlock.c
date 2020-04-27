@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief
  * @ingroup RTEMSScoreRWLock
+ *
+ * @brief
  */
 
 /*

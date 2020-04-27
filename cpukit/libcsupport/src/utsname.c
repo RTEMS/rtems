@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get System Name
  * @ingroup utsname Service
+ *
+ * @brief Get System Name
  */
 
 /*

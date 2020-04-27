@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Cleanup Support
  * @ingroup POSIXAPI
+ *
+ * @brief POSIX Cleanup Support
  */
 
 /*

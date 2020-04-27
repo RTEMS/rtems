@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Scheduler Priority Block
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler Priority Block
  */
 
 /*

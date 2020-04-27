@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Change IMFS File Mode
  * @ingroup IMFS
+ *
+ * @brief Change IMFS File Mode
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default Filesystem - Default Freenode
  * @ingroup libfs
+ *
+ * @brief RTEMS Default Filesystem - Default Freenode
  */
 
 /*

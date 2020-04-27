@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Create a new MSDOS FileSystem node
  * @ingroup libfs_msdos MSDOS FileSystem
+ *
+ * @brief Create a new MSDOS FileSystem node
  */
 
 /*

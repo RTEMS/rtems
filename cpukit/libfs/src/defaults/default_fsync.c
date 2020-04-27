@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System Synchronises changes to a file
  * @ingroup LibIOFSOps File System Operations 
+ *
+ * @brief RTEMS Default File System Synchronises changes to a file
  */
 
 /*

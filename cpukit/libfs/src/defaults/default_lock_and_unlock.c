@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System locks and unlocks rtems filesystem
  * @ingroup LibIOFSOps File System Operations 
+ *
+ * @brief RTEMS Default File System locks and unlocks rtems filesystem
  */
 
 /*

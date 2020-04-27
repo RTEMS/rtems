@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Mutex Initialization Scheduling Attributes
  * @ingroup POSIXAPI
+ *
+ * @brief Mutex Initialization Scheduling Attributes
  */
 
 /*

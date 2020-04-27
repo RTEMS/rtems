@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initiates system termination
  * @ingroup RTEMSScoreIntErr
+ *
+ * @brief Initiates system termination
  */
 
 /*

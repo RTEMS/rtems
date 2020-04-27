@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtain Current Time of Day (Classic TOD)
  * @ingroup ClassicClock Clocks
+ *
+ * @brief Obtain Current Time of Day (Classic TOD)
  */
 
 /*

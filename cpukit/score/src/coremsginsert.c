@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Insert a Message into the Message Queue
  * @ingroup RTEMSScoreMessageQueue
+ *
+ * @brief Insert a Message into the Message Queue
  */
 
 /*

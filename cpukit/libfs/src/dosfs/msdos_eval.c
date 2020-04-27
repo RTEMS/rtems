@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MSDOS Evaluation Routines
  * @ingroup libfs
+ *
+ * @brief MSDOS Evaluation Routines
  */
 
 /*

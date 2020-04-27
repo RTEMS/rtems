@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RPC Multiplexor for a Multitasking Environment
  * @ingroup libfs
+ *
+ * @brief RPC Multiplexor for a Multitasking Environment
  *
  * This code funnels arbitrary task's UDP/RPC requests
  * through one socket to arbitrary servers.

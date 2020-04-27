@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Creates Child process Of The Calling process
  * @ingroup POSIXAPI
+ *
+ * @brief Creates Child process Of The Calling process
  */
 
 /*

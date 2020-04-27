@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Rename
  * @ingroup IMFS
+ *
+ * @brief IMFS Rename
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Destroy Mutex Attributes Object
  * @ingroup POSIXAPI
+ *
+ * @brief Destroy Mutex Attributes Object
  */
 
 /*

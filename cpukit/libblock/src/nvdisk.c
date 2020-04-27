@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Non-Volatile Disk Block Device Implementation
  * @ingroup libblock
+ *
+ * @brief Non-Volatile Disk Block Device Implementation
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Change Root Directory
  * @ingroup libcsupport
+ *
+ * @brief Change Root Directory
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RFS File system Initialization
  * @ingroup rtems_rfs
+ *
+ * @brief RFS File system Initialization
  *
  * RTEMS File System
  *

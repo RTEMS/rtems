@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default Filesystem - Default Ftruncate Directory
  * @ingroup libfs
+ *
+ * @brief RTEMS Default Filesystem - Default Ftruncate Directory
  */
 
 /*

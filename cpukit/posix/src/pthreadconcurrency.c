@@ -5,8 +5,9 @@
 /**
  * @file
  *
- * @brief Pthread Get/Set Concurrency
  * @ingroup POSIXAPI
+ *
+ * @brief Pthread Get/Set Concurrency
  *
  * Per the Open Group specification, when user pthreads are mapped 1:1
  * onto kernel threads, the implementation simply tracks an internal

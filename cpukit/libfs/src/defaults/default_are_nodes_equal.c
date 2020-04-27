@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System has nodes equal
  * @ingroup LibIOFSOps File System Operations 
+ *
+ * @brief RTEMS Default File System has nodes equal
  */
 
 /*

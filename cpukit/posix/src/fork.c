@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Inoperable implementation of fork() for POSIX threads
  * @ingroup POSIXAPI
+ *
+ * @brief Inoperable implementation of fork() for POSIX threads
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Create an IMFS Node
  * @ingroup IMFS
+ *
+ * @brief Create an IMFS Node
  */
 /*
  *  COPYRIGHT (c) 1989-2010.

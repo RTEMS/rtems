@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Create an Anonymous Pipe
  * @ingroup FIFO_PIPE
+ *
+ * @brief Create an Anonymous Pipe
  */
 
 /*

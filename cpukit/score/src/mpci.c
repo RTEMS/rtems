@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Multiprocessing Communications Interface (MPCI) Handler
  * @ingroup RTEMSScoreMPCI
+ *
+ * @brief Multiprocessing Communications Interface (MPCI) Handler
  */
 
 /*

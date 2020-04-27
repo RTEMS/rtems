@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default Filesystem succeeds synchronizing file's in-core state
  * @ingroup LibIOFSOps File System Operations 
+ *
+ * @brief RTEMS Default Filesystem succeeds synchronizing file's in-core state
  */
 
 /*

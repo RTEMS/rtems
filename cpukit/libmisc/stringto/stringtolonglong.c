@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Convert String to Long Long (with validation)
  * @ingroup libmisc_conv_help Conversion Helpers
+ *
+ * @brief Convert String to Long Long (with validation)
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set the Timer
  * @ingroup POSIXAPI
+ *
+ * @brief Set the Timer
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initializing and Destroying a Mutex
  * @ingroup POSIXAPI
+ *
+ * @brief Initializing and Destroying a Mutex
  */
 
 /*

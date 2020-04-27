@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief  RTEMS Start Task
  * @ingroup ClassicTasks Tasks
+ *
+ * @brief  RTEMS Start Task
  */
 
 /*

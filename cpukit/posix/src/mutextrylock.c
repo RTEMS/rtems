@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Try to Lock Mutex
  * @ingroup POSIXAPI
+ *
+ * @brief Try to Lock Mutex
  */
 
 /*

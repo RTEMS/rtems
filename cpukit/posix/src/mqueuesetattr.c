@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Set Message Queue Attributes
  * @ingroup POSIX_MQUEUE
+ *
+ * @brief Set Message Queue Attributes
  */
 
 /*

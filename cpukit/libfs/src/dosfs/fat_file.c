@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief General operations on "fat-file"
  * @ingroup libfs_ff Fat File
+ *
+ * @brief General operations on "fat-file"
  */
 
 /*

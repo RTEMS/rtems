@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Detaching a Thread
  * @ingroup POSIXAPI
+ *
+ * @brief Detaching a Thread
  */
 
 /*

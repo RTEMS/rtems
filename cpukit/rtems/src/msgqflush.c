@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief rtems_message_queue_flush
  * @ingroup ClassicMessageQueue Message Queues
+ *
+ * @brief rtems_message_queue_flush
  */
 
 /*

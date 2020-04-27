@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Condition variable Attributes structure
  * @ingroup POSIXAPI
+ *
+ * @brief Condition variable Attributes structure
  */
 
 /*

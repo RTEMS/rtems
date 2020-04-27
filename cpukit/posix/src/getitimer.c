@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function Gets Value of an Interval Timer
  * @ingroup POSIXAPI
+ *
+ * @brief Function Gets Value of an Interval Timer
  */
 
 /*

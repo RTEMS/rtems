@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Multiprocessing Communications Interface (MPCI) Default Configuration
  * @ingroup RTEMSScoreMPCI
+ *
+ * @brief Multiprocessing Communications Interface (MPCI) Default Configuration
  */
 
 /*

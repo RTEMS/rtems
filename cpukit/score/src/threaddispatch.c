@@ -1,8 +1,9 @@
 /**
  * @file
  * 
- * @brief Dispatch Thread
  * @ingroup RTEMSScoreThread
+ *
+ * @brief Dispatch Thread
  */
 
 /*

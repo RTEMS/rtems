@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Sends a signal Asynchronously directed to a thread
  * @ingroup POSIXAPI
+ *
+ * @brief Sends a signal Asynchronously directed to a thread
  */
 
 /*

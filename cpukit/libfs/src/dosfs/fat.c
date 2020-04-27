@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Low-level Operations on a Volume with a DOSFS FAT filesystem
  * @ingroup libfs
+ *
+ * @brief Low-level Operations on a Volume with a DOSFS FAT filesystem
  */
 
 /*

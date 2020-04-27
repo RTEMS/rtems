@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get Lowest Valid Class Value
  * @ingroup ClassicClassInfo Object Class Information
+ *
+ * @brief Get Lowest Valid Class Value
  */
 
 /*

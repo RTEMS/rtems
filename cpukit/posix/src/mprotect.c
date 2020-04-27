@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Change Memory Protection
  * @ingroup POSIXAPI
+ *
+ * @brief Change Memory Protection
  *
  * 12.2.3 Change Memory Protection, P1003.1b-1996, p. 277.
  *

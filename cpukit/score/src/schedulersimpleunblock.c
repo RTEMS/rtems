@@ -1,8 +1,9 @@
 /**
  * @file
  * 
- * @brief Scheduler Simple Handler / Unblock
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Scheduler Simple Handler / Unblock
  */
 
 /*

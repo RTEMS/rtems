@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief _execve()
  * @ingroup POSIXAPI
+ *
+ * @brief _execve()
  *
  * The Newlib C Library contains all of the exec*() variants and assumes
  * the underlying OS support provides _execve(). This single method

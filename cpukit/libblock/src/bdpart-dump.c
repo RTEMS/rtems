@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Prints the Partition Table @a Partitions with @a Count Partitions
  * @ingroup rtems_bdpart
+ *
+ * @brief Prints the Partition Table @a Partitions with @a Count Partitions
  */
 
 /*

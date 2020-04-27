@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief access() - POSIX 1003.1b 5.6.3 - File Accessibility
  * @ingroup libcsupport
+ *
+ * @brief access() - POSIX 1003.1b 5.6.3 - File Accessibility
  */
 
 /*

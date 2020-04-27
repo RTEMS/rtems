@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief IMFS Memory File Handlers
  * @ingroup IMFS
+ *
+ * @brief IMFS Memory File Handlers
  */
 
 /*

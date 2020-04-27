@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System mounts a filesystem
  * @ingroup LibIOFSOps File System Operations  
+ *
+ * @brief RTEMS Default File System mounts a filesystem
  */
 
 /*

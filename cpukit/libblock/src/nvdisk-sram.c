@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Provide SRAM support for the NV Disk
  * @ingroup libblock
+ *
+ * @brief Provide SRAM support for the NV Disk
  */
 
 /*

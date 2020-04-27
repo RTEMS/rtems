@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Sets Scheduling policy Attributes of Thread Attributes Object
  * @ingroup POSIXAPI
+ *
+ * @brief Sets Scheduling policy Attributes of Thread Attributes Object
  */
 
 /*

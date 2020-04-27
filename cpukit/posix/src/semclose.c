@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Close a Named Semaphore
  * @ingroup POSIX_SEMAPHORE
+ *
+ * @brief Close a Named Semaphore
  */
 
 /*

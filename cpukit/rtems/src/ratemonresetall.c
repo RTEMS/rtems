@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief rtems_rate_monotonic_reset_all_statistics
  * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ *
+ * @brief rtems_rate_monotonic_reset_all_statistics
  */
 
 /*

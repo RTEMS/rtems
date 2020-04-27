@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function queues I/O request described by buffer pointed by aiocb 
  * @ingroup POSIXAPI
+ *
+ * @brief Function queues I/O request described by buffer pointed by aiocb 
  */
 
 /*

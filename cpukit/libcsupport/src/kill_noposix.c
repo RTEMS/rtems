@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Kill No POSIX
  * @ingroup libcsupport
+ *
+ * @brief Kill No POSIX
  *
  *  Marginal implementations of some POSIX API routines
  *  to be used when POSIX is disabled.

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Default File System Truncates a file to indicated length
  * @ingroup LibIOFSOps File System Operations  
+ *
+ * @brief RTEMS Default File System Truncates a file to indicated length
  */
 
 /*

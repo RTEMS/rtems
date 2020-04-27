@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Obtain COPY of the Right Hand Side of the Matching Argument
  * @ingroup BSPCommandLine BSP Command Line Helpers
+ *
+ * @brief Obtain COPY of the Right Hand Side of the Matching Argument
  */
 
 /*

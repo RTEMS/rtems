@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function closes the Message Queue 
  * @ingroup POSIXAPI
+ *
+ * @brief Function closes the Message Queue 
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Sets the Thread Creation Stacksize Attribute in the attr object 
  * @ingroup POSIXAPI
+ *
+ * @brief Sets the Thread Creation Stacksize Attribute in the attr object 
  */
 
 /*

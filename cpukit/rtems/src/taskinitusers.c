@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief _RTEMS_tasks_Initialize_user_tasks_body
  * @ingroup ClassicTasks Tasks
+ *
+ * @brief _RTEMS_tasks_Initialize_user_tasks_body
  */
 
 /*

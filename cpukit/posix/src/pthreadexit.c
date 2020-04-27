@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Thread Exit Shared Helper
  * @ingroup POSIX_THREAD Thread API Extension
+ *
+ * @brief POSIX Thread Exit Shared Helper
  */
 
 /*

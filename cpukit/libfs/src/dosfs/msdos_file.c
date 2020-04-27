@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief MSDOS File Handlers Implementation
  * @ingroup libfs
+ *
+ * @brief MSDOS File Handlers Implementation
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Rate Monotonic Reset Statistics
  * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ *
+ * @brief RTEMS Rate Monotonic Reset Statistics
  */
 
 /*

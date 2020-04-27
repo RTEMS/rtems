@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Get the Value of a Semaphore
  * @ingroup POSIX_SEMAPHORE
+ *
+ * @brief Get the Value of a Semaphore
  */
 
 /*

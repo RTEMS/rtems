@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Thread-Specific Data Management
  * @ingroup POSIXAPI
+ *
+ * @brief Thread-Specific Data Management
  */
 
 /*

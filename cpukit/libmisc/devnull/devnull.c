@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Null Device Driver Init Routine
  * @ingroup libmisc_devnull Device Driver
+ *
+ * @brief Null Device Driver Init Routine
  *
  * Derived from rtems' stub driver.
  */

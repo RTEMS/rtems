@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Common IO Control Primitive
  * @ingroup rtems_blkdev
+ *
+ * @brief Common IO Control Primitive
  */
 
 /*

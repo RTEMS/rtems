@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Devzero
  * @ingroup libmisc_devnull Device Driver
+ *
+ * @brief Devzero
  */
 
 /*

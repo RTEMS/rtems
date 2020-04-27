@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief  _realloc_r Implementation
  * @ingroup libcsupport
+ *
+ * @brief  _realloc_r Implementation
  */
 
 /*

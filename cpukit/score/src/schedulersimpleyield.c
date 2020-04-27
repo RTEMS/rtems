@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Simple Schedule Yield CPU
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief Simple Schedule Yield CPU
  */
 
 /*

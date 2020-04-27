@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Initialize Object Information
  * @ingroup RTEMSScoreObject
+ *
+ * @brief Initialize Object Information
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Unmount this Instance of IMFS
  * @ingroup IMFS
+ *
+ * @brief Unmount this Instance of IMFS
  */
 
 /*

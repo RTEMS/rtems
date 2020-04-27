@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Support Call to function Enables Locking of Mutex Object 
  * @ingroup POSIXAPI
+ *
+ * @brief Support Call to function Enables Locking of Mutex Object 
  */
 
 /*

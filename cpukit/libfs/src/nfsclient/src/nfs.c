@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief NFS Client Implementation for RTEMS
  * @ingroup libfs
+ *
+ * @brief NFS Client Implementation for RTEMS
  *
  * Hooks Into the RTEMS NFS Filesystem
  */

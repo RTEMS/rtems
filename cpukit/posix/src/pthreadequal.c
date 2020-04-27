@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Compare Thread IDs
  * @ingroup POSIXAPI
+ *
+ * @brief Compare Thread IDs
  */
 
 /*

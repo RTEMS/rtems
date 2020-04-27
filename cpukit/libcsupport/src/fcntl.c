@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX 1003.1b 6.5.2 - File Control
  * @ingroup libcsupport
+ *
+ * @brief POSIX 1003.1b 6.5.2 - File Control
  */
 
 /*

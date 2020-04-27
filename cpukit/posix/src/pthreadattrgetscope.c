@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Function gets the Contentionscope Attribute in the attr object 
  * @ingroup POSIXAPI
+ *
+ * @brief Function gets the Contentionscope Attribute in the attr object 
  */
 
 /*

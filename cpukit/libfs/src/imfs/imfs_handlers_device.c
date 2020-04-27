@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Device Operations Table
  * @ingroup IMFS
+ *
+ * @brief Device Operations Table
  */
 
 /*

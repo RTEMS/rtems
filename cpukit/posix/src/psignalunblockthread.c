@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief POSIX Signals Thread Unlock
  * @ingroup POSIX_SIGNALS
+ *
+ * @brief POSIX Signals Thread Unlock
  */
 
 /*

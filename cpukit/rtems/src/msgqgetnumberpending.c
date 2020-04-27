@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RTEMS Message Queue Get Number Pending
  * @ingroup ClassicMessageQueue Message Queues
+ *
+ * @brief RTEMS Message Queue Get Number Pending
  */
 
 /*

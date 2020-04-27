@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief Synchronously Accept a Signal
  * @ingroup POSIXAPI
+ *
+ * @brief Synchronously Accept a Signal
  */
 
 /*

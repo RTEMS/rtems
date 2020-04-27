@@ -1,8 +1,9 @@
 /**
  * @file
  *
- * @brief RWLock Attributes Set Process Shared
  * @ingroup POSIXAPI
+ *
+ * @brief RWLock Attributes Set Process Shared
  */
 
 /*
