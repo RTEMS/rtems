@@ -1,6 +1,7 @@
 #include <sys/cdefs.h>
 
 #include <errno.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -119,6 +120,14 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
   return rtems_rtl_elf_rel_no_error;
 }
 
+#define RTEMS_RTL_MIPS_HI16_MAX (128)
+
+static struct {
+  Elf_Addr* where_hi16;
+  Elf_Addr  ahl;
+} mips_hi16_list[RTEMS_RTL_MIPS_HI16_MAX];
+static size_t mips_hi16_list_cnt;
+
 /*
  * 1. _gp_disp symbol are not considered in this file.
  * 2. There is a local/external column;
@@ -136,14 +145,12 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Word            symvalue)
 {
   Elf_Addr *where;
-  Elf_Word  tmp;
+  Elf_Word tmp;
   Elf_Word addend = (Elf_Word)0;
   Elf_Word local = 0;
+  Elf_Addr *where_hi16;
+  Elf_Addr ahl;
   uint32_t t;
-
-
-  static Elf_Addr *where_hi16;
-  static Elf_Addr ahl;
 
   where = (Elf_Addr *)(sect->base + rel->r_offset);
   addend = *where;
@@ -205,14 +212,19 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
       *where |= tmp & 0x03ffffff;
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: R_MIPS_26 local=%lu @ %p in %s\n",
+        printf ("rtl: R_MIPS_26 local=%" PRIu32 " @ %p in %s\n",
                 local, (void *)*(where), rtems_rtl_obj_oname (obj));
       break;
 
     case R_TYPE(HI16):
-      ahl = addend << 16;
-      where_hi16 = where;
-
+      if (mips_hi16_list_cnt >= RTEMS_RTL_MIPS_HI16_MAX) {
+        rtems_rtl_set_error (ENOMEM,
+                             "%s: too many MIPS_HI16 relocs", sect->name);
+        return false;
+      }
+      mips_hi16_list[mips_hi16_list_cnt].where_hi16 = where;
+      mips_hi16_list[mips_hi16_list_cnt].ahl = addend << 16;
+      ++mips_hi16_list_cnt;
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
         printf ("rtl: R_MIPS_HI16 %p @ %p in %s\n",
@@ -220,26 +232,35 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
       break;
 
     case R_TYPE(LO16):
-      //ahl += (int16_t)addend;
-      t = ahl + (int16_t)addend;
+      t = (int16_t) addend;
       tmp = symvalue;
-      if (tmp == 0)
+      if (tmp == 0) {
+        rtems_rtl_set_error (EINVAL,
+                             "%s: symvalue is 0 in MIPS_LO16", sect->name);
         return rtems_rtl_elf_rel_failure;
+      }
 
+      /* reloc low part */
       addend &= 0xffff0000;
       addend |= (uint16_t)(t + tmp);
       *where = addend;
 
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("*where %lx where %p\n", *where, where);
+      if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+        printf("*where %x where %p\n", *where, where);
 
-      addend = *where_hi16;
-      addend &= 0xffff0000;
-      addend |= ((t + tmp) - (int16_t)(t + tmp)) >> 16;
-      *where_hi16 = addend;
-
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("*where_hi %lx where_hi %p\n", *where_hi16, where_hi16);
+      /* reloc hi parts */
+      while (mips_hi16_list_cnt != 0) {
+        --mips_hi16_list_cnt;
+        ahl = mips_hi16_list[mips_hi16_list_cnt].ahl;
+        where_hi16 = mips_hi16_list[mips_hi16_list_cnt].where_hi16;
+        addend = *(where_hi16);
+        addend &= 0xffff0000;
+        addend |= ((ahl + t + tmp) - (int16_t) (ahl + t + tmp)) >> 16;
+        *(where_hi16) = addend;
+        if (rtems_rtl_trace(RTEMS_RTL_TRACE_RELOC))
+          printf("*where_hi %x where_hi %p ahl=%08x\n",
+                 *(where_hi16), where_hi16, ahl);
+      }
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
         printf ("rtl: R_MIPS_LO16 %p @ %p in %s\n",
@@ -266,12 +287,12 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
       break;
 
     default:
-      printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
+      printf ("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32 ", offset = %p, "
               "contents = %p\n",
               ELF_R_SYM(rel->r_info), (uint32_t) ELF_R_TYPE(rel->r_info),
               (void *)rel->r_offset, (void *)*where);
       rtems_rtl_set_error (EINVAL,
-                           "%s: Unsupported relocation type %ld "
+                           "%s: Unsupported relocation type %" PRIu32
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
       return rtems_rtl_elf_rel_failure;
