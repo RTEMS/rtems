@@ -71,8 +71,11 @@ static void test_create_heap_with_gaps(void)
   void *p5 = test_allocate_block();
   /* void *p6 = */ test_allocate_block();
   _Heap_Free( &TestHeap, p1 );
+  _Heap_Protection_free_all_delayed_blocks( &TestHeap );
   _Heap_Free( &TestHeap, p3 );
+  _Heap_Protection_free_all_delayed_blocks( &TestHeap );
   _Heap_Free( &TestHeap, p5 );
+  _Heap_Protection_free_all_delayed_blocks( &TestHeap );
 }
 
 static void *test_fill_heap(void)
