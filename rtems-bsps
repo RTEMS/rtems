@@ -1,49 +1,320 @@
-#! /bin/sh
+#! /usr/bin/env python
+#
+# RTEMS (http://www.rtems.org/)
+# Copyright 2020 Chris Johns (chrisj@rtems.org)
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
 
-top=$(dirname $0)
-base="${top}/bsps"
-base_e=$(echo ${base} | sed -e 's/\//\\\//g')
+from __future__ import print_function
 
-last_arch=""
+import argparse
+import os
+import os.path
+import sys
 
-cfg_list=$(LANG=C LC_COLLATE=C find ${base} -mindepth 3 -name \*.cfg | sort)
+rtems_version = 5
 
-max_bsp_len=0
-arch_count=0
-bsp_count=0
 
-for bsp_path in ${cfg_list};
-do
-  arch=$(echo ${bsp_path} | sed -e "s/${base_e}*\///" -e 's/\/.*//')
-  bsp=$(echo ${bsp_path} | sed -e "s/.*\///" -e 's/\.cfg//')
-  len=${#bsp}
-  if test "${last_arch}" != "${arch}"; then
-    arch_count=$(expr ${arch_count} + 1)
-    last_arch=${arch}
-  fi
-  if [ $len -gt $max_bsp_len ]; then
-    max_bsp_len=$len
-  fi
-  bsp_count=$(expr ${bsp_count} + 1)
-done
+class ArchBsps:
+    """Collects and processes the BSPs for a range of architectures
+    creating output in text, markdown and HTML ir pandoc is installed"""
+    def __init__(self, path='.', trace=False):
+        self.trace = trace
+        self._output = []
+        self.top = os.path.realpath(path)
+        self.base = os.path.join(self.top, 'bsps')
+        self.configs = []
+        self.archs = {}
+        self._collect('.cfg')
+        self._process()
 
-max_bsp_len=$(expr ${max_bsp_len} + 2)
-last_arch=""
+    def _clear(self):
+        """Clears the output."""
+        self._output = []
 
-echo "RTEMS 5"
-echo " Architectures: ${arch_count}"
-echo " BSP Count: ${bsp_count}"
-for bsp_path in ${cfg_list};
-do
- arch=$(echo ${bsp_path} | sed -e "s/${base_e}*\///" -e 's/\/.*//')
- bsp=$(echo ${bsp_path} | sed -e "s/.*\///" -e 's/\.cfg//')
- path=$(echo ${bsp_path} | sed -e "s/\/config.*//")
- if test "${last_arch}" != "${arch}"; then
-   echo "${arch}:"
-   last_arch=${arch}
- fi
- spaces=$(echo ${bsp} | awk '{ printf("%*s", '${max_bsp_len}' -length(), " "); }')
- echo " ${bsp}${spaces}${path}"
-done
+    def _out(self, line=''):
+        """Output a line to the output buffer."""
+        self._output += [line]
 
-exit 0
+    def _collect(self, ext):
+        """Collect the config files from the source tree."""
+        self.configs = []
+        for root, dirs, files in os.walk(self.base, topdown=True):
+            for f in files:
+                if os.path.splitext(f)[1] == ext:
+                    self.configs += [os.path.join(root, f)]
+
+    def _process(self):
+        """Process the collected list of config files."""
+        self.archs = {}
+        for cfg in self.configs:
+            config_path = cfg[len(self.base) + 1:]
+            config_parts = config_path.split(os.sep)
+            if len(config_parts) == 4:
+                arch = config_parts[0]
+                family = config_parts[1]
+                bsp = os.path.splitext(config_parts[3])[0]
+                if arch not in self.archs:
+                    self.archs[arch] = {}
+                if family not in self.archs[arch]:
+                    self.archs[arch][family] = {}
+                self.archs[arch][family][bsp] = config_path
+
+    def _max_arch_len(self):
+        """Finds the longest arch label"""
+        maxlen = 0
+        for arch in self.archs:
+            if len(arch) > maxlen:
+                maxlen = len(arch)
+        return maxlen
+
+    def _max_family_len(self):
+        """Finds the longest family label"""
+        maxlen = 0
+        for arch in self.archs:
+            for family in self.archs[arch]:
+                if len(family) > maxlen:
+                    maxlen = len(family)
+        return maxlen
+
+    def _max_bsp_len(self):
+        """Finds the longest BSP label"""
+        maxlen = 0
+        for arch in self.archs:
+            for family in self.archs[arch]:
+                for bsp in self.archs[arch][family]:
+                    if len(bsp) > maxlen:
+                        maxlen = len(bsp)
+        return maxlen
+
+    def _max_bsp_path_len(self):
+        """Finds the longest BSP path"""
+        maxlen = 0
+        for arch in self.archs:
+            for family in self.archs[arch]:
+                for bsp in self.archs[arch][family]:
+                    if len(self.archs[arch][family][bsp]) > maxlen:
+                        maxlen = len(self.archs[arch][family][bsp])
+        return maxlen
+
+    def title(self):
+        """Returns the output's title"""
+        return 'RTEMS %d Board Support Packages' % (rtems_version)
+
+    def output(self):
+        """Return the output"""
+        return self._output
+
+    def architectures(self):
+        """Returns the number of architectures we have"""
+        return len(self.archs)
+
+    def families(self, arch=None):
+        """Returns the number of BSP families we have for an architecture. If
+        you supply an architecture the count is the families in the
+        architure.
+
+        """
+        if arch is not None:
+            return len(self.archs[arch])
+        count = 0
+        for arch in self.archs:
+            count += len(self.archs[arch])
+        return count
+
+    def bsps(self, arch=None, family=None):
+        """Returns the number of BSPs we have for an architecture or a family"""
+        count = 0
+        if arch is not None and family is not None:
+            count = len(self.archs[arch][family])
+        elif arch is None and family is not None:
+            for arch in self.archs:
+                if family in self.archs[arch]:
+                    count = len(self.archs[arch][family])
+                    break
+        elif arch is not None and family is None:
+            count = 0
+            for family in self.archs[arch]:
+                count += len(self.archs[arch][family])
+        else:
+            for arch in self.archs:
+                for family in self.archs[arch]:
+                    count += len(self.archs[arch][family])
+        return count
+
+    def text(self, arch_selector=None, family_selector=None, show_path=False):
+        """Generate plain text output"""
+        self._clear()
+        self._out(self.title())
+        self._out()
+        self._out('Architectures: %d' % (self.architectures()))
+        self._out('BSP Families: %d' % (self.families()))
+        self._out('BSPs: %d' % (self.bsps()))
+        max_family = self._max_family_len()
+        max_bsp = self._max_bsp_len()
+        if arch_selector is None:
+            archs_matcher = []
+        else:
+            archs_matcher = [a.strip() for a in arch_selector.split(',')]
+        if family_selector is None:
+            family_matcher = []
+        else:
+            family_matcher = [f.strip() for f in family_selector.split(',')]
+        for arch in sorted(self.archs.keys()):
+            if arch_selector is None or arch in archs_matcher:
+                first = True
+                for family in sorted(self.archs[arch].keys()):
+                    if family_selector is None or family in family_matcher:
+                        if first:
+                            self._out()
+                            self._out('%s: (families:%d bsps:%d)' % \
+                                      (arch,
+                                       self.families(arch=arch),
+                                       self.bsps(arch=arch)))
+                            first = False
+                        for bsp in sorted(self.archs[arch][family].keys()):
+                            if show_path:
+                                p = os.path.join('bsps',
+                                                 self.archs[arch][family][bsp])
+                                self._out(' %-*s %-*s %s' % \
+                                          (max_bsp, bsp, max_family, family, p))
+                            else:
+                                self._out(' %-*s %s' % (max_bsp, bsp, family))
+
+    def markdown(self,
+                 arch_selector=None,
+                 family_selector=None,
+                 show_path=False,
+                 show_title=False):
+        """Generates markdown output"""
+        self._clear()
+        if show_title:
+            self._out('# ' + self.title())
+            self._out()
+        self._out('**Architectures:** %d  ' % (self.architectures()))
+        self._out('**BSP Families:** %d  ' % (self.families()))
+        self._out('**BSPs:** %d  ' % (self.bsps()))
+        max_arch = self._max_arch_len()
+        max_family = self._max_family_len()
+        max_bsp = self._max_bsp_len()
+        max_bsp_path = self._max_bsp_path_len() + 4
+        if arch_selector is None:
+            archs_matcher = []
+        else:
+            archs_matcher = [a.strip() for a in arch_selector.split(',')]
+        if family_selector is None:
+            family_matcher = []
+        else:
+            family_matcher = [f.strip() for f in family_selector.split(',')]
+        for arch in sorted(self.archs.keys()):
+            if arch_selector is None or arch in archs_matcher:
+                first = True
+                for family in sorted(self.archs[arch].keys()):
+                    if family_selector is None or family in family_matcher:
+                        if first:
+                            fbs = 'families:%-2d bsps:%-3d' % \
+                                (self.families(arch=arch),
+                                 self.bsps(arch=arch))
+                            if max_family < len(fbs):
+                                max_fb = len(fbs)
+                            else:
+                                max_fb = max_family
+                            self._out()
+                            if show_path:
+                                self._out('%-*s |%-*s |' %
+                                          (max_bsp, arch, max_fb, fbs))
+                                self._out('%s-|%s-|-%s' %
+                                          ('-' * max_bsp, '-' * max_fb,
+                                           '-' * max_bsp_path))
+                            else:
+                                self._out('%-*s |%s' % (max_bsp, arch, fbs))
+                                self._out('%s-|-%s' %
+                                          ('-' * max_bsp, '-' * max_fb))
+                            first = False
+                        for bsp in sorted(self.archs[arch][family].keys()):
+                            if show_path:
+                                p = os.path.join('bsps',
+                                                 self.archs[arch][family][bsp])
+                                self._out('%-*s |%-*s |%s' % \
+                                          (max_bsp, bsp, max_fb, family, p))
+                            else:
+                                self._out('%-*s |%s' % (max_bsp, bsp, family))
+
+
+def run(args):
+    """Runs the command"""
+    argsp = argparse.ArgumentParser(
+        prog='rtems-bsps',
+        description='List the BSP and architectures in RTEMS')
+    argsp.add_argument('-a',
+                       '--arch',
+                       help='Output the BSPs in an architecture',
+                       type=str,
+                       default=None)
+    argsp.add_argument('-f',
+                       '--family',
+                       help='Output the BSPs in an architecture family',
+                       type=str,
+                       default=None)
+    argsp.add_argument('-p',
+                       '--paths',
+                       help='Show the BSP paths in the output',
+                       action='store_true')
+    argsp.add_argument('-m',
+                       '--markdown',
+                       help='Output list in markdown format',
+                       action='store_true')
+    argsp.add_argument('-T',
+                       '--title',
+                       help='Output a title in the markdown format',
+                       action='store_true')
+    argsp.add_argument('-v',
+                       '--trace',
+                       help='Verbose or trace for debugging',
+                       action='store_true')
+
+    argopts = argsp.parse_args(args[1:])
+
+    if argopts.arch is not None and argopts.family is not None:
+        print('error: arch or family, not both at once', file=sys.stderr)
+        sys.exit(1)
+
+    ab = ArchBsps(trace=argopts.trace)
+
+    if argopts.markdown:
+        ab.markdown(arch_selector=argopts.arch,
+                    family_selector=argopts.family,
+                    show_path=argopts.paths,
+                    show_title=argopts.title)
+    else:
+        ab.text(arch_selector=argopts.arch,
+                family_selector=argopts.family,
+                show_path=argopts.paths)
+
+    print(os.linesep.join(ab.output()))
+
+
+if __name__ == "__main__":
+    run(sys.argv)
