@@ -18,6 +18,8 @@
 #include "config.h"
 #endif
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include <rtems/config.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/rtems/clock.h>
