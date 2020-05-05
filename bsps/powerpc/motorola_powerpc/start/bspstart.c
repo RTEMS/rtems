@@ -219,7 +219,7 @@ static void bsp_early( void )
   myBoard = getMotorolaBoard();
 
   printk("-----------------------------------------\n");
-  printk("Welcome to %s on %s\n", _RTEMS_version,
+  printk("Welcome to %s on %s\n", rtems_get_version_string(),
                                     motorolaBoardToString(myBoard));
   printk("-----------------------------------------\n");
 #ifdef SHOW_MORE_INIT_SETTINGS

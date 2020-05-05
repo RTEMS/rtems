@@ -231,7 +231,7 @@ VpdBufRec          vpdData [] = {
   myCpu = get_ppc_cpu_type();
   myCpuRevision = get_ppc_cpu_revision();
 
-  printk("Welcome to %s\n", _RTEMS_version);
+  printk("Welcome to %s\n", rtems_get_version_string());
   printk("BSP: %s, CVS Release ($Name$)\n", "mvme3100");
 
   /*

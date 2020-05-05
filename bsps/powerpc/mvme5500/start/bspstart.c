@@ -227,7 +227,7 @@ static void bsp_early( void )
    * More PCI1 memory mapping to be done after BSP_pgtbl_activate.
    */
   printk("-----------------------------------------\n");
-  printk("Welcome to %s on MVME5500-0163\n", _RTEMS_version );
+  printk("Welcome to %s on MVME5500-0163\n", rtems_get_version_string() );
   printk("-----------------------------------------\n");
 
   BSP_mem_size         =  probeMemoryEnd();
