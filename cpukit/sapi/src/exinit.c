@@ -38,9 +38,8 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/wkspace.h>
 
-const char _Copyright_Notice[] =
-"COPYRIGHT (c) 1989-2008.\n\
-On-Line Applications Research Corporation (OAR).\n";
+RTEMS_SECTION(".rtemsroset.copyright") const char _Copyright_Notice[] =
+  "Copyright (C) 1989, 2020 RTEMS Project and contributors";
 
 static Objects_Information *
 _Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
