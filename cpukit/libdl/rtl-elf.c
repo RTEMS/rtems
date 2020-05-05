@@ -1717,7 +1717,7 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
    * 1. See if there are any common variables and if there are add a
    *    common section.
    * 2. Add up the common.
-   * 3.
+   * 3. The load the symbols.
    */
   if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_common, &common))
     return false;
