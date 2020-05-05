@@ -7,7 +7,7 @@ AC_DEFUN([RTEMS_TEST_CHECK],
  AC_MSG_CHECKING([${RTEMS_CPU}/${RTEMS_BSP} $1 test])
  tcheck="${RTEMS_SOURCE_ROOT}/testsuites/rtems-test-check"
  tdata="${RTEMS_BSP}-testsuite.tcfg"
- tincludes="${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/config:${RTEMS_SOURCE_ROOT}/testsuites"
+ tincludes="${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}:${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}:${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/config:${RTEMS_SOURCE_ROOT}/testsuites"
  if test -f $tcheck; then
   check_result=`$tcheck exclude ${RTEMS_BSP} $tdata $tincludes $1`
  else
