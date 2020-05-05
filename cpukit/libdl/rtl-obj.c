@@ -60,7 +60,6 @@ static const rtems_rtl_loader_table loaders[RTEMS_RTL_LOADERS] =
   { .check     = rtems_rtl_rap_file_check,
     .load      = rtems_rtl_rap_file_load,
     .unload    = rtems_rtl_rap_file_unload,
-    .unload    = rtems_rtl_rap_file_unload,
     .signature = rtems_rtl_rap_file_sig },
 #endif
 #if RTEMS_RTL_ELF_LOADER
