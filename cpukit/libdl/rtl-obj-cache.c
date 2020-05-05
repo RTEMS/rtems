@@ -80,7 +80,7 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
   struct stat sb;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
-    printf ("rtl: cache: %2d: fd=%d offset=%" PRIdoff_t "length=%zu area=[%"
+    printf ("rtl: cache: %2d: fd=%d offset=%" PRIdoff_t " length=%zu area=[%"
             PRIdoff_t ",%" PRIdoff_t "] cache=[%" PRIdoff_t ",%" PRIdoff_t "] size=%zu\n",
             fd, cache->fd, offset, *length,
             offset, offset + *length,
@@ -95,7 +95,7 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
 
   if (cache->fd == fd)
   {
-    if (offset > cache->file_size)
+    if (offset >= cache->file_size)
     {
       rtems_rtl_set_error (EINVAL, "offset past end of file: offset=%i size=%i",
                            (int) offset, (int) cache->file_size);
@@ -110,6 +110,7 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
       *length = cache->file_size - offset;
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
         printf ("rtl: cache: %2d: truncate length=%d\n", fd, (int) *length);
+
     }
   }
 
@@ -175,8 +176,8 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
     }
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
-      printf ("rtl: cache: %2d: seek: offset=%" PRIdoff_t "buffer_offset=%zu"
-              "read=%zu cache=[%" PRIdoff_t ",%" PRIdoff_t "] "
+      printf ("rtl: cache: %2d: seek: offset=%" PRIdoff_t " buffer_offset=%zu"
+              " read=%zu cache=[%" PRIdoff_t ",%" PRIdoff_t "] "
               "dist=%" PRIdoff_t "\n",
               fd, offset + buffer_offset, buffer_offset, buffer_read,
               offset, offset + buffer_read,
