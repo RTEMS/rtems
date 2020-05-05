@@ -326,6 +326,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
         if (!symsect)
         {
           free (symname_buffer);
+          rtems_rtl_set_error (EINVAL, "symsect not found: %d", info >> 8);
           return false;
         }
 
@@ -389,8 +390,12 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
                   r, (int) type, offset, (int) addend,
                   symname, (uintmax_t) symtype, (uintmax_t) symvalue);
 
-        if (!rtems_rtl_elf_relocate_rela (obj, &rela, targetsect,
-                                          symname, symtype, symvalue))
+        if (rtems_rtl_elf_relocate_rela (obj,
+                                         &rela,
+                                         targetsect,
+                                         symname,
+                                         symtype,
+                                         symvalue) == rtems_rtl_elf_rel_failure)
         {
           free (symname_buffer);
           return false;
@@ -409,8 +414,12 @@ rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
                   r, (int) type, offset,
                   symname, (uintmax_t) symtype, (uintmax_t) symvalue);
 
-        if (rtems_rtl_elf_relocate_rel (obj, &rel, targetsect,
-                                         symname, symtype, symvalue) == rtems_rtl_elf_rel_failure)
+        if (rtems_rtl_elf_relocate_rel (obj,
+                                        &rel,
+                                        targetsect,
+                                        symname,
+                                        symtype,
+                                        symvalue) == rtems_rtl_elf_rel_failure)
         {
           free (symname_buffer);
           return false;
