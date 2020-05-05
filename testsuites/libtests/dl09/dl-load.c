@@ -165,17 +165,33 @@ static void dl_object_close (objects* o)
   free (o->space);
 }
 
+/*
+ * Private architecture back end call.
+ */
+extern size_t rtems_rtl_elf_relocate_tramp_max_size (void);
+static size_t dl_alloc_size (void)
+{
+  /*
+   * If the max tramp size is 0 there is no tramp support, so
+   * return 0.
+   */
+  if (rtems_rtl_elf_relocate_tramp_max_size () == 0)
+    return 0;
+  return MBYTES(32);
+}
+
 int dl_load_test(void)
 {
-  object_def od[5] = { { "/dl09-o1.o", true,  MBYTES(32) },
-                       { "/dl09-o2.o", true,  MBYTES(32) },
-                       { "/dl09-o3.o", true,  MBYTES(32) },
-                       { "/dl09-o4.o", true,  MBYTES(32) },
+  object_def od[5] = { { "/dl09-o1.o", true,  dl_alloc_size () },
+                       { "/dl09-o2.o", true,  dl_alloc_size () },
+                       { "/dl09-o3.o", true,  dl_alloc_size () },
+                       { "/dl09-o4.o", true,  dl_alloc_size () },
                        { "/dl09-o5.o", false, 0          } };
   objects o[5] = { 0 };
   size_t  i;
 
   printf ("Test source (link in strstr): %s\n", dl_localise_file (__FILE__));
+  printf ("Allocation size: %zu\n", dl_alloc_size ());
 
 #if DL09_DEBUG_TRACE
   rtems_rtl_trace_set_mask (DL09_DEBUG_TRACE);
