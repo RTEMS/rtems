@@ -6,6 +6,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#define DL06_DEBUG_TRACING 0
+
 #include <stdio.h>
 
 #include <dlfcn.h>
