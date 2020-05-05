@@ -48,7 +48,7 @@ extern RTEMS_DEPRECATED const char _RTEMS_version[];
 /**
  *  The following is the extern for the RTEMS copyright string.
  */
-extern const char _Copyright_Notice[];
+extern RTEMS_DEPRECATED const char _Copyright_Notice[];
 
 typedef RTEMS_DEPRECATED uint32_t RTEMS_MAXIMUM_NAME_LENGTH;
 /* The use of this define is deprecated, use sizeof(rtems_name) instead */
