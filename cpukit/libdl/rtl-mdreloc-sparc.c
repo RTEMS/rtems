@@ -232,8 +232,11 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
    * We use the fact that relocation types are an `enum'
    * Note: R_SPARC_6 is currently numerically largest.
    */
-  if (type > R_TYPE(6))
+  if (type > R_TYPE(TLS_TPOFF64)) {
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf("rtl: invalid reloc type: %d\n", (int) type);
     return rtems_rtl_elf_rel_failure;
+  }
 
   value = rela->r_addend;
 
