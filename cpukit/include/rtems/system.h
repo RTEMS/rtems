@@ -46,8 +46,9 @@ extern RTEMS_DEPRECATED const char _RTEMS_version[];
  */
 extern const char _Copyright_Notice[];
 
-/** This macro defines the maximum length of a Classic API name. */
-#define RTEMS_MAXIMUM_NAME_LENGTH sizeof(rtems_name)
+typedef RTEMS_DEPRECATED uint32_t RTEMS_MAXIMUM_NAME_LENGTH;
+/* The use of this define is deprecated, use sizeof(rtems_name) instead */
+#define RTEMS_MAXIMUM_NAME_LENGTH sizeof(RTEMS_MAXIMUM_NAME_LENGTH)
 
 #endif /* ASM */
 
