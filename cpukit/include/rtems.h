@@ -64,6 +64,11 @@ extern "C" {
 #endif
 
 /**
+ * @brief Returns the pointer to the RTEMS copyright notice.
+ */
+const char *rtems_get_copyright_notice(void);
+
+/**
  * @brief Returns the pointer to the RTEMS version string.
  */
 const char *rtems_get_version_string(void);

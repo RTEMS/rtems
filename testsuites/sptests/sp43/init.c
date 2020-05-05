@@ -131,6 +131,7 @@ rtems_task Init(
   TEST_BEGIN();
 
   printf( "RTEMS Version: %s\n", rtems_get_version_string() );
+  printf( "RTEMS Copyright Notice: %s\n", rtems_get_copyright_notice() );
 
   main_task = rtems_task_self();
 

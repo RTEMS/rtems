@@ -683,7 +683,12 @@ static bool rtems_shell_login(rtems_shell_env_t *env, FILE * in,FILE * out)
                 fprintf(out,"RTEMS");
                 break;
               case 'V':
-                fprintf(out,"%s\n%s",rtems_get_version_string(), _Copyright_Notice);
+                fprintf(
+                  out,
+                  "%s\n%s",
+                  rtems_get_version_string(),
+                  rtems_get_copyright_notice()
+                );
                 break;
               case '@':
                 fprintf(out,"@");
@@ -738,7 +743,12 @@ static bool rtems_shell_login(rtems_shell_env_t *env, FILE * in,FILE * out)
                 fprintf(out,rtems_get_version_string());
                 break;
               case 'v':
-                fprintf(out,"%s\n%s",rtems_get_version_string(),_Copyright_Notice);
+                fprintf(
+                  out,
+                  "%s\n%s",
+                  rtems_get_version_string(),
+                  rtems_get_copyright_notice()
+                );
 	        break;
 	      case '%':fprintf(out,"%%");
 	        break;
