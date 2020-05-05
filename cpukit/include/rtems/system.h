@@ -22,6 +22,10 @@
 
 #include <rtems/score/cpu.h>
 
+#ifndef _RTEMS_H
+#warning "This header file is deprecated and will be removed in RTEMS 6"
+#endif
+
 /**
  *  @defgroup RTEMSScoreSystem System Information
  *
