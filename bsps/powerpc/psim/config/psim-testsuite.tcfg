@@ -1,0 +1,22 @@
+#
+# PSIM RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+expected-fail: fsimfsgeneric01
+expected-fail: block11
+expected-fail: rbheap01
+expected-fail: termios01
+expected-fail: ttest01
+expected-fail: psx12
+expected-fail: psxchroot01
+expected-fail: psxfenv01
+expected-fail: psximfs02
+expected-fail: psxpipe01
+expected-fail: spextensions01
+expected-fail: spfatal31
+expected-fail: spfifo02
+expected-fail: spmountmgr01
+expected-fail: spprivenv01
+expected-fail: spstdthreads01
