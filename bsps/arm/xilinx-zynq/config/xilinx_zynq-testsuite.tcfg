@@ -1,0 +1,12 @@
+#
+# Xilinx Zynq RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+
+expected-fail: dl06
+expected-fail: ttest01
+expected-fail: psxfenv01
+expected-fail: spconsole01
+expected-fail: spcpucounter01
