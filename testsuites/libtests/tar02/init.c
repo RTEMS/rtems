@@ -32,8 +32,8 @@ const char rtems_test_name[] = "TAR 2";
 rtems_task Init(rtems_task_argument argument);
 void test_tarfs_load(void);
 
-#define TARFILE_START tar02_tar
-#define TARFILE_SIZE  tar02_tar_size
+#define TARFILE_START tar01_tar
+#define TARFILE_SIZE  tar01_tar_size
 
 static const char file[] = "/home/test_file";
 

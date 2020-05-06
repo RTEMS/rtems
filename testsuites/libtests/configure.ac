@@ -30,7 +30,6 @@ RTEMS_CHECK_CXX(RTEMS_BSP)
 RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 
-AC_PROG_LN_S
 AC_PATH_PROG([PAX],[pax],no)
 AC_PATH_PROG([GZIP],[gzip],no)
 AC_PATH_PROG([XZ],[xz],no)
@@ -39,7 +38,7 @@ AS_IF([test "x$PAX" = "xno"],[
 	AC_MSG_ERROR([pax is missing.])
 ])
 
-AM_CONDITIONAL(TARTESTS,test "$as_ln_s" = "ln -s" && test -n "$PAX" && test -n "$GZIP")
+AM_CONDITIONAL(TARTESTS,test -n "$PAX" && test -n "$GZIP")
 AM_CONDITIONAL(TARTEST_XZ,test -n "$XZ")
 
 AM_CONDITIONAL(HAS_CXX,test "$rtems_cv_HAS_CPLUSPLUS" = "yes")

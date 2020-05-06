@@ -1271,15 +1271,12 @@ endif
 tar01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar01_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDADD)
-tar01.tar: $(srcdir)/tar01/home/test_file $(srcdir)/tar01/home/abc/def/test_script $(srcdir)/tar01/symlink
-	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $+
-tar01-tar.c: tar01.tar
+tar01-tar.c: tar01/tar01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-tar01-tar.h: tar01.tar
+tar01-tar.h: tar01/tar01.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 tar01-tar.o: tar01-tar.c tar01-tar.h
-tar01.tar.gz: tar01.tar
+tar01.tar.gz: tar01/tar01.tar
 	$(AM_V_GEN)$(GZIP) < $< > $@
 tar01-tar-gz.c: tar01.tar.gz
 	$(AM_V_GEN)$(BIN2C) -C $< $@
@@ -1288,7 +1285,7 @@ tar01-tar-gz.h: tar01.tar.gz
 CLEANFILES += tar01.tar tar01-tar.c tar01-tar.h \
 	tar01.tar.gz tar01-tar-gz.c tar01-tar-gz.h
 if TARTEST_XZ
-tar01.tar.xz: tar01.tar
+tar01.tar.xz: tar01/tar01.tar
 	$(AM_V_GEN)$(XZ) < $< > $@
 tar01-tar-xz.c: tar01.tar.xz
 	$(AM_V_GEN)$(BIN2C) -C $< $@
@@ -1310,12 +1307,9 @@ tar02_SOURCES = tar02/init.c ../psxtests/psxfile01/test_cat.c \
 	tar02-tar.c tar02-tar.h
 tar02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar02) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
-tar02.tar: $(srcdir)/tar01/home/test_file $(srcdir)/tar01/home/abc/def/test_script $(srcdir)/tar01/symlink
-	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ -s ,$(srcdir)/tar01/,, $+
-tar02-tar.c: tar02.tar
+tar02-tar.c: tar01/tar01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
-tar02-tar.h: tar02.tar
+tar02-tar.h: tar01/tar01.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 tar02-tar.o: tar02-tar.c tar02-tar.h
 tar02/init.c: tar02-tar.h
