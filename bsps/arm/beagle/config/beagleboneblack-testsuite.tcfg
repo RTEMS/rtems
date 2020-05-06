@@ -1,0 +1,17 @@
+#
+# Beagleboneblack RTEMS Test Database.
+#
+# Format is one line per test that is _NOT_ built.
+#
+
+expected-fail: dl06
+expected-fail: i2c01
+expected-fail: psxfenv01
+expected-fail: spcache01
+expected-fail: spintrcritical05
+expected-fail: spintrcritical10
+expected-fail: spintrcritical20
+expected-fail: spintrcritical21
+expected-fail: spsysinit01
+expected-fail: tmcontext01
+expected-fail: tmtimer01
