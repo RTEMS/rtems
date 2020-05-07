@@ -20,20 +20,20 @@
 
 #include <signal.h>
 
-rtems_termios_isig_status_code rtems_termios_posix_isig_handler(
+rtems_termios_iproc_status_code rtems_termios_posix_isig_handler(
   unsigned char             c,
   struct rtems_termios_tty *tty
 )
 {
-  if (c == tty->termios.c_cc[VINTR]) {
-    raise(SIGINT);
-    return RTEMS_TERMIOS_ISIG_INTERRUPT_READ;
+  int sig;
+
+  if ( c == tty->termios.c_cc[ VQUIT ] ) {
+    sig = SIGQUIT;
+  } else {
+    sig = SIGINT;
   }
 
-  if (c == tty->termios.c_cc[VQUIT]) {
-    raise(SIGQUIT);
-    return RTEMS_TERMIOS_ISIG_INTERRUPT_READ;
-  }
+  (void) raise( sig );
 
-  return RTEMS_TERMIOS_ISIG_WAS_NOT_PROCESSED;
+  return RTEMS_TERMIOS_IPROC_INTERRUPT;
 }

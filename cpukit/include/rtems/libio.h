@@ -1904,28 +1904,37 @@ rtems_status_code rtems_termios_bufsize (
 );
 
 /**
- * @brief Type returned by all input processing (isig) methods
- */ 
+ * @brief The status code returned by all Termios input processing (iproc)
+ * functions and input signal (isig) handlers.
+ */
 typedef enum {
   /**
-   * This indicates that the input character was processed
-   * and possibly placed into the buffer.
+   * @brief This status indicates that the input processing can continue.
+   *
+   * Input signal handlers shall return this status if no signal was raised and
+   * the input processing can continue.
    */
-  RTEMS_TERMIOS_ISIG_WAS_PROCESSED,
+  RTEMS_TERMIOS_IPROC_CONTINUE,
+
   /**
-   * This indicates that the input character was not processed and
-   * subsequent processing is required.
+   * @brief This status indicates that the input processing should stop due to
+   * a signal.
+   *
+   * This indicates that the character was processed and determined to be one
+   * that requires a signal to be raised (e.g. VINTR or VKILL).  The tty must
+   * be in the right Termios mode for this to occur.  There is no further
+   * processing of this character required and the pending read() operation
+   * should be interrupted.
    */
-  RTEMS_TERMIOS_ISIG_WAS_NOT_PROCESSED,
+  RTEMS_TERMIOS_IPROC_INTERRUPT,
+
   /**
-   * This indicates that the character was processed and determined
-   * to be one that requires a signal to be raised (e.g. VINTR or
-   * VKILL). The tty must be in the right termios mode for this to
-   * occur. There is no further processing of this character required and
-   * the pending read() operation should be interrupted.
+   * @brief This status indicates that the input processing is done.
+   *
+   * This status shall not be returned by input processing signal handlers.
    */
-  RTEMS_TERMIOS_ISIG_INTERRUPT_READ
-} rtems_termios_isig_status_code;
+  RTEMS_TERMIOS_IPROC_DONE
+} rtems_termios_iproc_status_code;
 
 /**
  * @brief Type for ISIG (VINTR/VKILL) handler
@@ -1941,9 +1950,9 @@ typedef enum {
  * @param tty   termios structure pointer for this input tty
  *
  * @return The value returned is according to that documented
- *         for @ref rtems_termios_isig_status_code.
+ *         for @ref rtems_termios_iproc_status_code.
  */
-typedef rtems_termios_isig_status_code (*rtems_termios_isig_handler)(
+typedef rtems_termios_iproc_status_code (*rtems_termios_isig_handler)(
   unsigned char             c,
   struct rtems_termios_tty *tty
 );
@@ -1966,7 +1975,7 @@ typedef rtems_termios_isig_status_code (*rtems_termios_isig_handler)(
  * @return The value returned is according to that documented
  *         for all methods adhering to @ref rtems_termios_isig_handler.
  */
-rtems_termios_isig_status_code rtems_termios_default_isig_handler(
+rtems_termios_iproc_status_code rtems_termios_default_isig_handler(
   unsigned char             c,
   struct rtems_termios_tty *tty
 );
@@ -1984,7 +1993,7 @@ rtems_termios_isig_status_code rtems_termios_default_isig_handler(
  * @return The value returned is according to that documented
  *         for all methods adhering to @ref rtems_termios_isig_handler.
  */
-rtems_termios_isig_status_code rtems_termios_posix_isig_handler(
+rtems_termios_iproc_status_code rtems_termios_posix_isig_handler(
   unsigned char             c,
   struct rtems_termios_tty *tty
 );

@@ -1311,12 +1311,12 @@ static rtems_termios_isig_handler termios_isig_handler =
  * This is the default method to process VKILL or VQUIT characters if
  * ISIG processing is enabled. Note that it does nothing.
  */
-rtems_termios_isig_status_code rtems_termios_default_isig_handler(
+rtems_termios_iproc_status_code rtems_termios_default_isig_handler(
   unsigned char c,
   struct rtems_termios_tty *tty
 )
 {
-  return RTEMS_TERMIOS_ISIG_WAS_NOT_PROCESSED;
+  return RTEMS_TERMIOS_IPROC_CONTINUE;
 }
 
 /*
@@ -1335,28 +1335,6 @@ rtems_status_code rtems_termios_register_isig_handler(
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * @brief Type returned by all input processing (iproc) methods
- */
-typedef enum {
-  /**
-   * This indicates that the input processing can continue.
-   */
-  RTEMS_TERMIOS_IPROC_CONTINUE,
-  /**
-   * This indicates that the input processing is done.
-   */
-  RTEMS_TERMIOS_IPROC_DONE,
-  /**
-   * This indicates that the character was processed and determined
-   * to be one that requires a signal to be raised (e.g. VINTR or
-   * VKILL). The tty must be in the right termios mode for this to
-   * occur. There is no further processing of this character required and
-   * the pending read() operation should be interrupted.
-   */
-  RTEMS_TERMIOS_IPROC_INTERRUPT
-} rtems_termios_iproc_status_code;
-
 /*
  * Process a single input character
  */
@@ -1369,13 +1347,7 @@ iproc (unsigned char c, struct rtems_termios_tty *tty)
    */
   if ((tty->termios.c_lflag & ISIG)) {
     if ((c == tty->termios.c_cc[VINTR]) || (c == tty->termios.c_cc[VQUIT])) {
-      rtems_termios_isig_status_code rc;
-      rc = (*termios_isig_handler)(c, tty);
-      if (rc == RTEMS_TERMIOS_ISIG_INTERRUPT_READ) {
-         return RTEMS_TERMIOS_IPROC_INTERRUPT;
-      }
-
-      return RTEMS_TERMIOS_IPROC_CONTINUE;
+      return (*termios_isig_handler)(c, tty);
     }
   }
 
