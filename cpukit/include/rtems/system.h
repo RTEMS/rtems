@@ -37,15 +37,6 @@
 extern "C" {
 #endif
 
-#ifndef ASM
-
-/**
- *  The following is the extern for the RTEMS copyright string.
- */
-extern RTEMS_DEPRECATED const char _Copyright_Notice[];
-
-#endif /* ASM */
-
 #ifdef __cplusplus
 }
 #endif

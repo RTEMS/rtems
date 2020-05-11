@@ -8,7 +8,8 @@
  */
 
 #include <rtems/version.h>
-#include <rtems/system.h>
+#include <rtems/score/copyrt.h>
+#include <rtems/score/cpu.h>
 
 #include <bspopts.h>
 
