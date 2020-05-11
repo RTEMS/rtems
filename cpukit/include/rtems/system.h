@@ -44,10 +44,6 @@ extern "C" {
  */
 extern RTEMS_DEPRECATED const char _Copyright_Notice[];
 
-typedef RTEMS_DEPRECATED uint32_t RTEMS_MAXIMUM_NAME_LENGTH;
-/* The use of this define is deprecated, use sizeof(rtems_name) instead */
-#define RTEMS_MAXIMUM_NAME_LENGTH sizeof(RTEMS_MAXIMUM_NAME_LENGTH)
-
 #endif /* ASM */
 
 #ifdef __cplusplus
