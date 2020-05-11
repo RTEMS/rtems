@@ -166,7 +166,6 @@ include_rtems_HEADERS += include/rtems/status-checks.h
 include_rtems_HEADERS += include/rtems/stdio-redirect.h
 include_rtems_HEADERS += include/rtems/stringto.h
 include_rtems_HEADERS += include/rtems/sysinit.h
-include_rtems_HEADERS += include/rtems/system.h
 include_rtems_HEADERS += include/rtems/telnetd.h
 include_rtems_HEADERS += include/rtems/termios_printk.h
 include_rtems_HEADERS += include/rtems/termios_printk_cnf.h

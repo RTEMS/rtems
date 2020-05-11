@@ -26,7 +26,6 @@
  */
 /** @{ */
 
-#include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
