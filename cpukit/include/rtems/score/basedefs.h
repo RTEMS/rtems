@@ -549,12 +549,6 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
 #define RTEMS_XSTRING( _x ) RTEMS_STRING( _x )
 
 #ifndef ASM
-  #ifdef RTEMS_DEPRECATED_TYPES
-    typedef bool boolean RTEMS_DEPRECATED;
-    typedef float single_precision RTEMS_DEPRECATED;
-    typedef double double_precision RTEMS_DEPRECATED;
-  #endif
-
   /**
    * XXX: Eventually proc_ptr needs to disappear!!!
    */
