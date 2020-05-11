@@ -41,6 +41,16 @@ extern "C" {
  */
 extern const char _Copyright_Notice[];
 
+/**
+ * @brief This constant provides the RTEMS version string.
+ *
+ * The constant name does not follow the naming conventions.  Do not change it
+ * for backward compatibility reasons.
+ *
+ * @see rtems_get_version_string()
+ */
+extern const char _RTEMS_version[];
+
 #ifdef __cplusplus
 }
 #endif

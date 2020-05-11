@@ -19,9 +19,8 @@
 #include "config.h"
 #endif
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 #include <rtems.h>
+#include <rtems/score/copyrt.h>
 
 const char *rtems_get_version_string(void)
 {

@@ -39,12 +39,6 @@ extern "C" {
 
 #ifndef ASM
 
-/*
- * The use of this variable is deprecated, use rtems_get_version_string()
- * instead.
- */
-extern RTEMS_DEPRECATED const char _RTEMS_version[];
-
 /**
  *  The following is the extern for the RTEMS copyright string.
  */
