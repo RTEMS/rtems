@@ -40,6 +40,7 @@ int pthread_getattr_np(
   ISR_lock_Context              lock_context;
   Thread_CPU_budget_algorithms  budget_algorithm;
   const Scheduler_Control      *scheduler;
+  Priority_Control              priority;
   bool                          ok;
 
   if ( attr == NULL ) {
@@ -66,15 +67,12 @@ int pthread_getattr_np(
   }
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
-  attr->schedparam.sched_priority = _POSIX_Priority_From_core(
-    scheduler,
-    _Thread_Get_priority( the_thread )
-  );
   _POSIX_Threads_Get_sched_param_sporadic(
     the_thread,
     scheduler,
     &attr->schedparam
   );
+  priority = the_thread->Real_priority.priority;
 
   if ( _Thread_Is_joinable( the_thread ) ) {
     attr->detachstate = PTHREAD_CREATE_JOINABLE;
@@ -97,6 +95,10 @@ int pthread_getattr_np(
   attr->is_initialized = true;
   attr->contentionscope = PTHREAD_SCOPE_PROCESS;
   attr->cputime_clock_allowed = 1;
+  attr->schedparam.sched_priority = _POSIX_Priority_From_core(
+    scheduler,
+    priority
+  );
   attr->schedpolicy =
     _POSIX_Thread_Translate_to_sched_policy( budget_algorithm );
 
