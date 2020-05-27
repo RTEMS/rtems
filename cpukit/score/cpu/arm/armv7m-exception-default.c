@@ -40,13 +40,20 @@ void __attribute__((naked)) _ARMV7M_Exception_default( void )
     "stm sp, {r0-r12}\n"
     "tst lr, #4\n"          /* Check if bit 2 of LR is zero. If so, PSR.Z = 1 */
     "itte eq\n"             /* IF bit 2 of LR is zero... (PSR.Z == 1) */
-    "mrseq r0, msp\n"       /* THEN we were using MSP. */
-    "addeq r0, %[cpufsz]\n" /* THEN, set r0 = old MSP value. */
-    "mrsne r0, psp\n"       /* ELSE it's not zero; we were using PSP. */
-    "add r2, r0, %[v7mlroff]\n"
-    "add r1, sp, %[cpulroff]\n"
-    "ldm r2, {r3-r5}\n"     /* Grab LR, PC and PSR from the stack.. */
-    "stm r1, {r3-r5}\n"     /* ..and store them in our CPU_Exception_frame. */
+    "mrseq r3, msp\n"       /* THEN we were using MSP */
+    "addeq r3, %[cpufsz]\n" /* THEN, set r3 = old MSP value */
+    "mrsne r3, psp\n"       /* ELSE it is not zero; we were using PSP */
+    "add r2, r3, %[v7mlroff]\n"
+    "add r1, sp, %[cpuspoff]\n"
+    "ldm r2, {r4-r6}\n"     /* Grab LR, PC and xPSR from the stack */
+    "tst lr, #16\n"         /* Check if we have an FP state on the frame */
+    "ite eq\n"
+    "addeq r3, #104\n"      /* Back to previous SP with FP state */
+    "addne r3, #32\n"       /* Back to previous SP without FP state */
+    "tst r6, #512\n"        /* Check xPSR if the SP was aligned */
+    "it ne\n"
+    "addne r3, #4\n"        /* Undo alignment */
+    "stm r1, {r3-r6}\n"     /* Store to CPU_Exception_frame */
     "mrs r1, ipsr\n"
     "str r1, [sp, %[cpuvecoff]]\n"
 
@@ -85,7 +92,7 @@ void __attribute__((naked)) _ARMV7M_Exception_default( void )
     "b _ARM_Exception_default\n"
     :
     : [cpufsz] "i" (sizeof(CPU_Exception_frame)),
-      [cpulroff] "i" (offsetof(CPU_Exception_frame, register_lr)),
+      [cpuspoff] "i" (offsetof(CPU_Exception_frame, register_sp)),
       [v7mlroff] "i" (offsetof(ARMV7M_Exception_frame, register_lr)),
       [cpuvecoff] "J" (offsetof(CPU_Exception_frame, vector)),
       [cpuvfpoff] "i" (ARM_EXCEPTION_FRAME_VFP_CONTEXT_OFFSET),
