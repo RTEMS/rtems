@@ -89,13 +89,6 @@ typedef Objects_Id       rtems_id;
  */
 #define RTEMS_ID_NONE OBJECTS_ID_NONE
 
-#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
-/**
- * @brief Public name for task floating point context area.
- */
-typedef Context_Control_fp         rtems_context_fp RTEMS_DEPRECATED;
-#endif
-
 #if (CPU_ISR_PASSES_FRAME_POINTER == TRUE)
 /**
  * @brief Defines the format of the interrupt stack frame as it appears to a
