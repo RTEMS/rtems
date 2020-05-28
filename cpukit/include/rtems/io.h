@@ -1,228 +1,483 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @brief Classic Input/Output Manager API
- * 
- * This file emulates the old Classic RTEMS IO manager directives
- * which register names using the in-memory filesystem.
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief This header file defines the IO Manager API.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ */
+
+/* Generated from spec:/rtems/io/if/header */
 
 #ifndef _RTEMS_IO_H
 #define _RTEMS_IO_H
 
+#include <stdint.h>
 #include <rtems/rtems/status.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/* Generated from spec:/rtems/io/if/group */
+
 /**
- * @defgroup ClassicIO Input/Output
+ * @defgroup RTEMSAPIClassicIO I/O Manager
  *
  * @ingroup RTEMSAPIClassic
  *
+ * @brief The Input/Output (I/O) Manager provides a well-defined mechanism for
+ *   accessing device drivers and a structured methodology for organizing
+ *   device drivers.
  */
-/**@{**/
 
-typedef uint32_t rtems_device_major_number;
+/* Generated from spec:/rtems/io/if/device-driver */
 
-typedef uint32_t rtems_device_minor_number;
-
+/**
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief This type shall be used in device driver entry declarations and
+ *   definitions.
+ *
+ * Device driver entries return an #rtems_status_code status code. This type
+ * definition helps to document device driver entries in the source code.
+ */
 typedef rtems_status_code rtems_device_driver;
 
-typedef rtems_device_driver (*rtems_device_driver_entry)(
+/* Generated from spec:/rtems/io/if/device-major-number */
+
+/**
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief This integer type represents the major number of devices.
+ *
+ * The major number of a device is determined by rtems_io_register_driver() and
+ * the application configuration (see #CONFIGURE_MAXIMUM_DRIVERS) .
+ */
+typedef uint32_t rtems_device_major_number;
+
+/* Generated from spec:/rtems/io/if/device-minor-number */
+
+/**
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief This integer type represents the minor number of devices.
+ *
+ * The minor number of devices is managed by the device driver.
+ */
+typedef uint32_t rtems_device_minor_number;
+
+/* Generated from spec:/rtems/io/if/device-driver-entry */
+
+/**
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief Device driver entries shall have this type.
+ */
+typedef rtems_device_driver ( *rtems_device_driver_entry )(
   rtems_device_major_number,
   rtems_device_minor_number,
   void *
 );
 
+/* Generated from spec:/rtems/io/if/driver-address-table */
+
+/**
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief This structure contains the device driver entries.
+ *
+ * This structure is used to register a device driver via
+ * rtems_io_register_driver().
+ */
 typedef struct {
+  /**
+   * @brief This member is the device driver initialization entry.
+   *
+   * This entry is called by rtems_io_initialize().
+   */
   rtems_device_driver_entry initialization_entry;
+
+  /**
+   * @brief This member is the device driver open entry.
+   *
+   * This entry is called by rtems_io_open().
+   */
   rtems_device_driver_entry open_entry;
+
+  /**
+   * @brief This member is the device driver close entry.
+   *
+   * This entry is called by rtems_io_close().
+   */
   rtems_device_driver_entry close_entry;
+
+  /**
+   * @brief This member is the device driver read entry.
+   *
+   * This entry is called by rtems_io_read().
+   */
   rtems_device_driver_entry read_entry;
+
+  /**
+   * @brief This member is the device driver write entry.
+   *
+   * This entry is called by rtems_io_write().
+   */
   rtems_device_driver_entry write_entry;
+
+  /**
+   * @brief This member is the device driver control entry.
+   *
+   * This entry is called by rtems_io_control().
+   */
   rtems_device_driver_entry control_entry;
 } rtems_driver_address_table;
 
-/**
- * @name Device Driver Maintainance
- */
-/**@{**/
+/* Generated from spec:/rtems/io/if/register-driver */
 
 /**
- * @brief Registers and initializes the device with the device driver table
- * @a driver_table and major number @a major.
+ * @ingroup RTEMSAPIClassicIO
  *
- * If the major number equals zero a major number will be obtained.  The major
- * number of the registered driver will be returned in @a registered_major.
+ * @brief Registers and initializes the device with the specified device driver
+ *   address table and device major number in the Device Driver Table.
  *
- * After a successful registration rtems_io_initialize() will be called to
- * initialize the device.
+ * If the device major number equals zero a device major number will be
+ * obtained.  The device major number of the registered driver will be
+ * returned.
  *
- * @retval RTEMS_SUCCESSFUL Device successfully registered and initialized.
- * @retval RTEMS_INVALID_ADDRESS Pointer to driver table or to registered
- * major number are invalid.  Device driver table is empty.
- * @retval RTEMS_INVALID_NUMBER Invalid major number.
- * @retval RTEMS_TOO_MANY No major number available.
- * @retval RTEMS_RESOURCE_IN_USE Major number in use.
- * @retval RTEMS_CALLED_FROM_ISR Called from interrupt context.
- * @retval * Status code depends on rtems_io_initialize().
+ * After a successful registration, the rtems_io_initialize() directive will be
+ * called to initialize the device.
+ *
+ * @param major is the device major number.  Use a value of zero to let the
+ *   system obtain a device major number automatically.
+ *
+ * @param driver_table is the device driver address table.
+ *
+ * @param[out] registered_major is the pointer to a device major number
+ *   variable.  The device major number of the registered device will be stored
+ *   in this variable, in case of a successful operation.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The device major number of the device was
+ *   NULL.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The device driver address table was empty.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number of the device was out
+ *   of range, see #CONFIGURE_MAXIMUM_DRIVERS.
+ *
+ * @retval ::RTEMS_TOO_MANY The system was unable to obtain a device major
+ *   number.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The device major number was already in use.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from interrupt
+ *   context.
+ *
+ * @return Other status codes may be returned by rtems_io_initialize().
  */
 rtems_status_code rtems_io_register_driver(
-  rtems_device_major_number major,
+  rtems_device_major_number         major,
   const rtems_driver_address_table *driver_table,
-  rtems_device_major_number *registered_major
+  rtems_device_major_number        *registered_major
 );
 
+/* Generated from spec:/rtems/io/if/unregister-driver */
+
 /**
- * @brief Unregister a driver from the device driver table.
+ * @ingroup RTEMSAPIClassicIO
  *
- * @param[in] major is the device major number.
+ * @brief Removes a device driver specified by the device major number from the
+ *   Device Driver Table.
  *
- * @retval RTEMS_SUCCESSFUL Device driver successfully unregistered.
- * @retval RTEMS_UNSATISFIED Invalid major number.
- * @retval RTEMS_CALLED_FROM_ISR Called from interrupt context.
+ * Currently no specific checks are made and the driver is not closed.
+ *
+ * @param major is the major number of the device.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The device major number was invalid.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from interrupt
+ *   context.
  */
 rtems_status_code rtems_io_unregister_driver(
   rtems_device_major_number major
 );
 
+/* Generated from spec:/rtems/io/if/initialize */
+
 /**
- * @brief Registers the name @a device_name in the file system for the device
- * with number tuple @a major and @a minor.
- * 
- * This assumes that all registered devices are character devices.
+ * @ingroup RTEMSAPIClassicIO
  *
- * @retval RTEMS_SUCCESSFUL Name successfully registered.
- * @retval RTEMS_TOO_MANY Name already in use or other errors. 
+ * @brief Initializes the device specified by the device major and minor
+ *   numbers.
+ *
+ * This directive calls the device driver initialization entry registered in
+ * the Device Driver Table for the specified device major number.
+ *
+ * This directive is automatically invoked for each device driver defined by
+ * the application configuration during the system initialization and via the
+ * rtems_io_register_driver() directive.
+ *
+ * A device driver initialization entry is responsible for initializing all
+ * hardware and data structures associated with a device.  If necessary, it can
+ * allocate memory to be used during other operations.
+ *
+ * @param major is the major number of the device.
+ *
+ * @param minor is the minor number of the device.
+ *
+ * @param argument is the argument passed to the device driver initialization
+ *   entry.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number was invalid.
+ *
+ * @return Other status codes may be returned by the device driver
+ *   initialization entry.
+ */
+rtems_status_code rtems_io_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *argument
+);
+
+/* Generated from spec:/rtems/io/if/register-name */
+
+/**
+ * @ingroup RTEMSAPIClassicIO
+ *
+ * @brief Registers the device specified by the device major and minor numbers
+ *   in the file system under the specified name.
+ *
+ * The device is registered as a character device.
+ *
+ * @param device_name is the device name in the file system.
+ *
+ * @param major is the device major number.
+ *
+ * @param minor is the device minor number.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_TOO_MANY The name was already in use or other errors
+ *   occurred.
  */
 rtems_status_code rtems_io_register_name(
-  const char *device_name,
+  const char               *device_name,
   rtems_device_major_number major,
   rtems_device_minor_number minor
 );
 
-/** @} */
+/* Generated from spec:/rtems/io/if/open */
 
 /**
- * @brief IO driver initialization.
+ * @ingroup RTEMSAPIClassicIO
  *
- * This routine is the initialization directive of the IO manager.
+ * @brief Opens the device specified by the device major and minor numbers.
  *
- * @param[in] major is the device drive number
- * @param[in] minor is the device number
- * @param[in] argument is the pointer to the argument(s)
+ * This directive calls the device driver open entry registered in the Device
+ * Driver Table for the specified device major number.
  *
- * @return status code
- */
-rtems_status_code rtems_io_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
-);
-
-/**
- * @brief Opening for the IO manager.
- *  
- * Opens a device driver with the number @a major.
+ * The open entry point is commonly used by device drivers to provide exclusive
+ * access to a device.
  *
- * @param[in] major is the device driver number.
- * @param[in] minor is the device number.
- * @param[in] argument is the pointer to the argument(s).
+ * @param major is the major number of the device.
  *
- * @return Status code.
+ * @param minor is the minor number of the device.
+ *
+ * @param argument is the argument passed to the device driver close entry.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number was invalid.
+ *
+ * @return Other status codes may be returned by the device driver open entry.
  */
 rtems_status_code rtems_io_open(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *argument
 );
 
+/* Generated from spec:/rtems/io/if/close */
+
 /**
- * @brief Closing for the IO manager.
- *  
- * This routine is the close directive of the IO manager.
+ * @ingroup RTEMSAPIClassicIO
  *
- * @param[in] major is the device driver number.
- * @param[in] minor is the device number.
- * @param[in] argument is the pointer to the argument(s).
+ * @brief Closes the device specified by the device major and minor numbers.
  *
- * @return Status code.
+ * This directive calls the device driver close entry registered in the Device
+ * Driver Table for the specified device major number.
+ *
+ * The close entry point is commonly used by device drivers to relinquish
+ * exclusive access to a device.
+ *
+ * @param major is the major number of the device.
+ *
+ * @param minor is the minor number of the device.
+ *
+ * @param argument is the argument passed to the device driver close entry.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number was invalid.
+ *
+ * @return Other status codes may be returned by the device driver close entry.
  */
 rtems_status_code rtems_io_close(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *argument
 );
 
+/* Generated from spec:/rtems/io/if/read */
+
 /**
- * @brief Reading for the IO manager.
- *  
- * This routine is the read directive of the IO manager.
+ * @ingroup RTEMSAPIClassicIO
  *
- * @param[in] major is the device driver number.
- * @param[in] minor is the device number.
- * @param[in] argument is the pointer to the argument(s).
+ * @brief Reads from the device specified by the device major and minor
+ *   numbers.
  *
- * @return Status code.
+ * This directive calls the device driver read entry registered in the Device
+ * Driver Table for the specified device major number.
+ *
+ * Read operations typically require a buffer address as part of the argument
+ * parameter block.  The contents of this buffer will be replaced with data
+ * from the device.
+ *
+ * @param major is the major number of the device.
+ *
+ * @param minor is the minor number of the device.
+ *
+ * @param argument is the argument passed to the device driver read entry.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number was invalid.
+ *
+ * @return Other status codes may be returned by the device driver read entry.
  */
 rtems_status_code rtems_io_read(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *argument
 );
 
+/* Generated from spec:/rtems/io/if/write */
+
 /**
- * @brief Writing for the IO manager.
- *  
- * This routine is the write directive of the IO manager.
+ * @ingroup RTEMSAPIClassicIO
  *
- * @param[in] major is the device driver number.
- * @param[in] minor is the device number.
- * @param[in] argument is the pointer to the argument(s).
+ * @brief Writes to the device specified by the device major and minor numbers.
  *
- * @return Status code.
+ * This directive calls the device driver write entry registered in the Device
+ * Driver Table for the specified device major number.
+ *
+ * Write operations typically require a buffer address as part of the argument
+ * parameter block.  The contents of this buffer will be sent to the device.
+ *
+ * @param major is the major number of the device.
+ *
+ * @param minor is the minor number of the device.
+ *
+ * @param argument is the argument passed to the device driver write entry.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number was invalid.
+ *
+ * @return Other status codes may be returned by the device driver write entry.
  */
 rtems_status_code rtems_io_write(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *argument
 );
+
+/* Generated from spec:/rtems/io/if/control */
 
 /**
- * @brief Control for the IO manager.
- *  
- * This routine is the control directive of the IO manager.
+ * @ingroup RTEMSAPIClassicIO
  *
- * @param[in] major is the device driver number.
- * @param[in] minor is the device number.
- * @param[in] argument is the pointer to the argument(s).
+ * @brief Controls the device specified by the device major and minor numbers.
  *
- * @return Status code.
+ * This directive calls the device driver I/O control entry registered in the
+ * Device Driver Table for the specified device major number.
+ *
+ * The exact functionality of the driver entry called by this directive is
+ * driver dependent.  It should not be assumed that the control entries of two
+ * device drivers are compatible.  For example, an RS-232 driver I/O control
+ * operation may change the baud of a serial line, while an I/O control
+ * operation for a floppy disk driver may cause a seek operation.
+ *
+ * @param major is the major number of the device.
+ *
+ * @param minor is the minor number of the device.
+ *
+ * @param argument is the argument passed to the device driver I/O control
+ *   entry.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The device major number was invalid.
+ *
+ * @return Other status codes may be returned by the device driver I/O control
+ *   entry.
  */
 rtems_status_code rtems_io_control(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *argument
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                     *argument
 );
-
-/** @} */
-
-/** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-/* end of include file */
+#endif /* _RTEMS_IO_H */
