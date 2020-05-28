@@ -55,8 +55,6 @@ extern "C" {
  */
 /**@{*/
 
-typedef struct timespec rtems_rate_monotonic_period_time_t RTEMS_DEPRECATED;
-
 /**
  *  The following enumerated type defines the states in which a
  *  period may be.
