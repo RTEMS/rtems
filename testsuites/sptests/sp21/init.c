@@ -21,7 +21,6 @@ const char rtems_test_name[] = "SP 21";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 void do_test_io_manager(void);
-void do_test_io_lookup_name(void);
 void do_test_zero_driver(void);
 
 #define PRIurtems_device_major_number PRIu32
@@ -193,24 +192,6 @@ void do_test_io_manager(void)
   puts( "rtems_io_unregister_driver - RTEMS_SUCCESSFUL" );
 }
 
-void do_test_io_lookup_name(void)
-{
-  rtems_status_code    sc;
-  rtems_driver_name_t  info;
-
-  puts( "rtems_io_lookup_name( \"\", &info ) - RTEMS_UNSATISFIED" );
-  sc = rtems_io_lookup_name( "", &info );
-  fatal_directive_status( sc, RTEMS_UNSATISFIED, "lookup empty string" );
-  
-  puts( "rtems_io_lookup_name( \"/dev\", &info ) - RTEMS_UNSATISFIED" );
-  sc = rtems_io_lookup_name( "/dev", &info );
-  fatal_directive_status( sc, RTEMS_UNSATISFIED, "lookup empty string" );
-
-  puts( "rtems_io_lookup_name( \"/dev/null\", &info ) - RTEMS_SUCCESSFUL" );
-  sc = rtems_io_lookup_name( "/dev/null", &info );
-  directive_failed( sc, "lookup /dev/null" );
-}
-
 void do_test_zero_driver(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -257,8 +238,6 @@ rtems_task Init(
   TEST_BEGIN();
 
   do_test_io_manager();
-
-  do_test_io_lookup_name();
 
   do_test_zero_driver();
 

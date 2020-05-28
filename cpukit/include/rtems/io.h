@@ -4,7 +4,7 @@
  * @brief Classic Input/Output Manager API
  * 
  * This file emulates the old Classic RTEMS IO manager directives
- * which register and lookup names using the in-memory filesystem.
+ * which register names using the in-memory filesystem.
  */
 
 /*
@@ -230,21 +230,6 @@ rtems_status_code rtems_io_control(
 /** @} */
 
 /** @} */
-
-typedef struct {
-    const char               *device_name;
-    size_t                    device_name_length;
-    rtems_device_major_number major;
-    rtems_device_minor_number minor;
-} rtems_driver_name_t;
-
-/**
- * @deprecated Use stat() instead.
- */
-rtems_status_code rtems_io_lookup_name(
-    const char           *name,
-    rtems_driver_name_t  *device_info
-) RTEMS_DEPRECATED;
 
 #ifdef __cplusplus
 }

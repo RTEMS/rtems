@@ -45,24 +45,3 @@ rtems_status_code rtems_io_register_name(
 
   return RTEMS_SUCCESSFUL;
 }
-
-rtems_status_code rtems_io_lookup_name(
-  const char           *name,
-  rtems_driver_name_t  *device_info
-)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  struct stat st;
-  int rv = stat( name, &st );
-
-  if ( rv == 0 && S_ISCHR( st.st_mode ) ) {
-    device_info->device_name = name;
-    device_info->device_name_length = strlen( name );
-    device_info->major = rtems_filesystem_dev_major_t( st.st_rdev );
-    device_info->minor = rtems_filesystem_dev_minor_t( st.st_rdev );
-  } else {
-    sc = RTEMS_UNSATISFIED;
-  }
-
-  return sc;
-}
