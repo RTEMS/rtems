@@ -89,12 +89,6 @@ extern "C" {
 #define RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT
 #endif
 
-/*
- * Only provided for backward compatiblity to not break application
- * configurations.
- */
-typedef void *Thread RTEMS_DEPRECATED;
-
 /**
  *  @brief Type of the numeric argument of a thread entry function with at
  *  least one numeric argument.
