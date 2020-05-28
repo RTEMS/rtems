@@ -89,11 +89,6 @@ typedef Objects_Id       rtems_id;
  */
 #define RTEMS_ID_NONE OBJECTS_ID_NONE
 
-/**
- * @brief Public name for task context area.
- */
-typedef Context_Control            rtems_context RTEMS_DEPRECATED;
-
 #if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
 /**
  * @brief Public name for task floating point context area.
