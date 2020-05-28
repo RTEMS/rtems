@@ -622,21 +622,6 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
 #define rtems_scheduler_get_processor_maximum() _SMP_Get_processor_maximum()
 
 /**
- * @brief Returns the processor maximum supported by the system.
- *
- * @return The processor maximum supported by the system.
- *
- * @deprecated
- *
- * Use rtems_scheduler_get_processor_maximum() instead.
- */
-RTEMS_DEPRECATED RTEMS_INLINE_ROUTINE uint32_t
-rtems_get_processor_count( void )
-{
-  return rtems_scheduler_get_processor_maximum();
-}
-
-/**
  * @brief Gets the set of processors owned by the specified scheduler instance.
  *
  * @param[in] scheduler_id Identifier of the scheduler instance.
