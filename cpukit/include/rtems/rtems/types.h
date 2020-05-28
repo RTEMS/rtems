@@ -103,12 +103,6 @@ typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 #endif
 
 /**
- * @brief Information structure returned by the Heap Handler via the Region
- * Manager.
- */
-typedef Heap_Information_block region_information_block RTEMS_DEPRECATED;
-
-/**
  * @brief Used to manage and manipulate intervals specified by
  * @ref ClassicRTEMSSecTime "clock ticks".
  */
