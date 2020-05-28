@@ -109,14 +109,6 @@ typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 typedef Watchdog_Interval rtems_interval;
 
 /**
- * @brief Represents the CPU usage per thread.
- *
- * When using nanoseconds granularity timing, RTEMS may internally use a
- * variety of representations.
- */
-typedef struct timespec rtems_thread_cpu_usage_t RTEMS_DEPRECATED;
-
-/**
  * @brief Data structure to manage and manipulate calendar
  * @ref ClassicRTEMSSecTime "time".
  */
