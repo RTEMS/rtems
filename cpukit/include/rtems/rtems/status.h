@@ -1,267 +1,378 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup ClassicStatus
- *
- * This include file contains the status codes returned from the
- * executive directives.
+ * @brief This header file provides the status codes of Classic API directives
+ *   and support functions.
  */
 
-/* COPYRIGHT (c) 1989-2013.
- * On-Line Applications Research Corporation (OAR).
+/*
+ * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ */
+
+/* Generated from spec:/rtems/status/if/header */
 
 #ifndef _RTEMS_RTEMS_STATUS_H
 #define _RTEMS_RTEMS_STATUS_H
 
-#include <rtems/score/basedefs.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- *  @defgroup ClassicStatus Status Codes
- *
- *  @ingroup RTEMSAPIClassic
- *
- *  This encapsulates functionality related to the status codes returned
- *  by Classic API directives.
- */
-/**@{*/
+/* Generated from spec:/rtems/status/if/group */
 
 /**
- *  @brief Classic API Status
+ * @defgroup RTEMSAPIClassicStatus Directive Status Codes
  *
- *  This enumerates the possible status values returned b
- *  Classic API directives.
+ * @ingroup RTEMSAPIClassic
+ *
+ * @brief This group contains the Classic API directive status codes and
+ *   support functions.
+ */
+
+/* Generated from spec:/rtems/status/if/code */
+
+/**
+ * @ingroup RTEMSAPIClassicStatus
+ *
+ * @brief This enumeration provides status codes for directives of the Classic
+ *   API.
  */
 typedef enum {
   /**
-   *  This is the status to indicate successful completion.
+   * @brief This status code indicates successful completion of a requested
+   *   operation.
    */
-  RTEMS_SUCCESSFUL               =  0,
+  RTEMS_SUCCESSFUL = 0,
+
   /**
-   *  This is the status to indicate that a thread exited.
+   * @brief This status code indicates that a thread exitted.
    */
-  RTEMS_TASK_EXITTED             =  1,
+  RTEMS_TASK_EXITTED = 1,
+
   /**
-   *  This is the status to indicate multiprocessing is not configured.
+   * @brief This status code indicates that multiprocessing was not configured.
    */
-  RTEMS_MP_NOT_CONFIGURED        =  2,
+  RTEMS_MP_NOT_CONFIGURED = 2,
+
   /**
-   *  This is the status to indicate that the object name was invalid.
+   * @brief This status code indicates that an object name was invalid.
    */
-  RTEMS_INVALID_NAME             =  3,
+  RTEMS_INVALID_NAME = 3,
+
   /**
-   *  This is the status to indicate that the object Id was invalid.
+   * @brief This status code indicates that an object identifier was invalid.
    */
-  RTEMS_INVALID_ID               =  4,
+  RTEMS_INVALID_ID = 4,
+
   /**
-   *  This is the status to indicate you have attempted to create too many
-   *  instances of a particular object class.
+   * @brief This status code indicates you have attempted to create too many
+   *   instances of a particular object class.
    */
-  RTEMS_TOO_MANY                 =  5,
+  RTEMS_TOO_MANY = 5,
+
   /**
-   *  This is the status to indicate that a blocking directive timed out.
+   * @brief This status code indicates that a blocking directive timed out.
    */
-  RTEMS_TIMEOUT                  =  6,
+  RTEMS_TIMEOUT = 6,
+
   /**
-   *  This is the status to indicate the the object was deleted
-   *  while the task was blocked waiting.
+   * @brief This status code indicates the object was deleted while the thread
+   *   was blocked waiting.
    */
-  RTEMS_OBJECT_WAS_DELETED       =  7,
+  RTEMS_OBJECT_WAS_DELETED = 7,
+
   /**
-   *  This is the status to indicate that the specified size was invalid.
+   * @brief This status code indicates that a specified size was invalid.
    */
-  RTEMS_INVALID_SIZE             =  8,
+  RTEMS_INVALID_SIZE = 8,
+
   /**
-   *  This is the status to indicate that the specified address is invalid.
+   * @brief This status code indicates that a specified address was invalid.
    */
-  RTEMS_INVALID_ADDRESS          =  9,
+  RTEMS_INVALID_ADDRESS = 9,
+
   /**
-   *  This is the status to indicate that the specified number was invalid.
+   * @brief This status code indicates that a specified number was invalid.
    */
-  RTEMS_INVALID_NUMBER           = 10,
+  RTEMS_INVALID_NUMBER = 10,
+
   /**
-   *  This is the status to indicate that the item has not been initialized.
+   * @brief This status code indicates that the item has not been initialized.
    */
-  RTEMS_NOT_DEFINED              = 11,
+  RTEMS_NOT_DEFINED = 11,
+
   /**
-   *  This is the status to indicate that the object still has
-   *  resources in use.
+   * @brief This status code indicates that the object still had resources in
+   *   use.
    */
-  RTEMS_RESOURCE_IN_USE          = 12,
+  RTEMS_RESOURCE_IN_USE = 12,
+
   /**
-   *  This is the status to indicate that the request was not satisfied.
+   * @brief This status code indicates that the request was not satisfied.
    */
-  RTEMS_UNSATISFIED              = 13,
+  RTEMS_UNSATISFIED = 13,
+
   /**
-   *  This is the status to indicate that a thread is in wrong state
-   *  was in the wrong execution state for the requested operation.
+   * @brief This status code indicates that an object was in wrong state for the
+   *   requested operation.
    */
-  RTEMS_INCORRECT_STATE          = 14,
+  RTEMS_INCORRECT_STATE = 14,
+
   /**
-   *  This is the status to indicate thread was already suspended.
+   * @brief This status code indicates that the thread was already suspended.
    */
-  RTEMS_ALREADY_SUSPENDED        = 15,
+  RTEMS_ALREADY_SUSPENDED = 15,
+
   /**
-   *  This is the status to indicate that the operation is illegal
-   *  on calling thread.
+   * @brief This status code indicates that the operation was illegal on the
+   *   calling thread.
    */
-  RTEMS_ILLEGAL_ON_SELF          = 16,
+  RTEMS_ILLEGAL_ON_SELF = 16,
+
   /**
-   *  This is the status to indicate illegal for remote object.
+   * @brief This status code indicates that the operation was illegal on a remote
+   *   object.
    */
   RTEMS_ILLEGAL_ON_REMOTE_OBJECT = 17,
+
   /**
-   *  This is the status to indicate that the operation should not be
-   *  called from from this excecution environment.
+   * @brief This status code indicates that the operation should not be called
+   *   from this execution environment.
    */
-  RTEMS_CALLED_FROM_ISR          = 18,
+  RTEMS_CALLED_FROM_ISR = 18,
+
   /**
-   *  This is the status to indicate that an invalid thread priority
-   *  was provided.
+   * @brief This status code indicates that an invalid thread priority was
+   *   provided.
    */
-  RTEMS_INVALID_PRIORITY         = 19,
+  RTEMS_INVALID_PRIORITY = 19,
+
   /**
-   *  This is the status to indicate that the specified date/time was invalid.
+   * @brief This status code indicates that a specified date or time was invalid.
    */
-  RTEMS_INVALID_CLOCK            = 20,
+  RTEMS_INVALID_CLOCK = 20,
+
   /**
-   *  This is the status to indicate that the specified node Id was invalid.
+   * @brief This status code indicates that a specified node identifier was
+   *   invalid.
    */
-  RTEMS_INVALID_NODE             = 21,
+  RTEMS_INVALID_NODE = 21,
+
   /**
-   *  This is the status to indicate that the directive was not configured.
+   * @brief This status code indicates that the directive was not configured.
    */
-  RTEMS_NOT_CONFIGURED           = 22,
+  RTEMS_NOT_CONFIGURED = 22,
+
   /**
-   *  This is the status to indicate that the caller is not the
-   *  owner of the resource.
+   * @brief This status code indicates that the caller was not the owner of the
+   *   resource.
    */
-  RTEMS_NOT_OWNER_OF_RESOURCE    = 23,
+  RTEMS_NOT_OWNER_OF_RESOURCE = 23,
+
   /**
-   *  This is the status to indicate the the directive or requested
-   *  portion of the directive is not implemented.  This is a hint
-   *  that you have stumbled across an opportunity to submit code
-   *  to the RTEMS Project.
-   */
-  RTEMS_NOT_IMPLEMENTED          = 24,
-  /**
-   *  This is the status to indicate that an internal RTEMS inconsistency
-   *  was detected.
-   */
-  RTEMS_INTERNAL_ERROR           = 25,
-  /**
-   *  This is the status to indicate that the directive attempted to allocate
-   *  memory but was unable to do so.
-   */
-  RTEMS_NO_MEMORY                = 26,
-  /**
-   *  This is the status to indicate an driver IO error.
-   */
-  RTEMS_IO_ERROR                 = 27,
-  /**
-   *  This is the status used internally to indicate a blocking device
-   *  driver call has been interrupted and should be reflected to the
-   *  called as an INTERRUPTED.
-   */
-  RTEMS_INTERRUPTED              = 28,
-  /**
-   *  This is the status is used internally to RTEMS when performing
-   *  operations on behalf of remote tasks.  This is referred to as
-   *  proxying operations and this status indicates that the operation
-   *  could not be completed immediately and the "proxy is blocking."
+   * @brief This status code indicates the directive or requested portion of the
+   *   directive is not implemented.
    *
-   *  @note This status will @b NOT be returned to the user.
+   * This is a hint that you have stumbled across an opportunity to submit code
+   * to the RTEMS Project.
    */
-  RTEMS_PROXY_BLOCKING           = 29
+  RTEMS_NOT_IMPLEMENTED = 24,
+
+  /**
+   * @brief This status code indicates that an internal RTEMS inconsistency was
+   *   detected.
+   */
+  RTEMS_INTERNAL_ERROR = 25,
+
+  /**
+   * @brief This status code indicates that the directive attempted to allocate
+   *   memory but was unable to do so.
+   */
+  RTEMS_NO_MEMORY = 26,
+
+  /**
+   * @brief This status code indicates a device driver IO error.
+   */
+  RTEMS_IO_ERROR = 27,
+
+  /**
+   * @brief This status code is used internally by the implementation to indicate
+   *   a blocking device driver call has been interrupted and should be reflected
+   *   to the caller as interrupted.
+   */
+  RTEMS_INTERRUPTED = 28,
+
+  /**
+   * @brief This status code is used internally by the implementation when
+   *   performing operations on behalf of remote tasks.
+   *
+   * This is referred to as proxying operations and this status indicates that
+   * the operation could not be completed immediately and the proxy is blocking.
+   *
+   * This status will not be returned to the user.
+   */
+  RTEMS_PROXY_BLOCKING = 29
 } rtems_status_code;
 
+/* Generated from spec:/rtems/status/if/code-to-errno */
+
 /**
- *  This is the lowest valid value for a Classic API status code.
+ * @ingroup RTEMSAPIClassicStatus
+ *
+ * @brief Maps the RTEMS status code to a POSIX error number.
+ *
+ * @param status_code is the status code to map.
+ *
+ * @retval 0 The status code was ::RTEMS_SUCCESSFUL.
+ *
+ * @retval EBADF The status code was ::RTEMS_INVALID_NUMBER.
+ *
+ * @retval EBUSY The status code was ::RTEMS_RESOURCE_IN_USE.
+ *
+ * @retval EINTR The status code was ::RTEMS_INTERRUPTED.
+ *
+ * @retval EINVAL The status code was ::RTEMS_INVALID_CLOCK,
+ *   ::RTEMS_INVALID_NAME, or ::RTEMS_INVALID_NODE.
+ *
+ * @retval EIO The status code was ::RTEMS_ALREADY_SUSPENDED,
+ *   ::RTEMS_CALLED_FROM_ISR, ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT,
+ *   ::RTEMS_ILLEGAL_ON_SELF, ::RTEMS_INCORRECT_STATE, ::RTEMS_INTERNAL_ERROR,
+ *   ::RTEMS_INVALID_ADDRESS, ::RTEMS_INVALID_ID, ::RTEMS_INVALID_PRIORITY,
+ *   ::RTEMS_INVALID_SIZE, ::RTEMS_IO_ERROR, ::RTEMS_MP_NOT_CONFIGURED,
+ *   ::RTEMS_NOT_DEFINED, ::RTEMS_OBJECT_WAS_DELETED, ::RTEMS_PROXY_BLOCKING,
+ *   ::RTEMS_TASK_EXITTED, or ::RTEMS_TOO_MANY.
+ *
+ * @retval ENODEV The status code was ::RTEMS_UNSATISFIED.
+ *
+ * @retval ENOMEM The status code was ::RTEMS_NO_MEMORY.
+ *
+ * @retval ENOSYS The status code was ::RTEMS_NOT_CONFIGURED or
+ *   ::RTEMS_NOT_IMPLEMENTED.
+ *
+ * @retval EPERM The status code was ::RTEMS_NOT_OWNER_OF_RESOURCE.
+ *
+ * @retval ETIMEDOUT The status code was ::RTEMS_TIMEOUT.
+ */
+int rtems_status_code_to_errno( rtems_status_code status_code );
+
+/* Generated from spec:/rtems/status/if/first */
+
+/**
+ * @ingroup RTEMSAPIClassicStatus
+ *
+ * @brief This constant represents the lowest valid value for a Classic API
+ *   directive status code.
  */
 #define RTEMS_STATUS_CODES_FIRST RTEMS_SUCCESSFUL
 
-/**
- *  This is the highest valid value for a Classic API status code.
- */
-#define RTEMS_STATUS_CODES_LAST  RTEMS_PROXY_BLOCKING
+/* Generated from spec:/rtems/status/if/is-equal */
 
 /**
- *  @brief Checks if the status code is equal to RTEMS_SUCCESSFUL.
+ * @ingroup RTEMSAPIClassicStatus
  *
- *  This function returns TRUE if the status code is equal to RTEMS_SUCCESSFUL,
- *  and FALSE otherwise.
+ * @brief Checks if the status codes are equal.
+ *
+ * @param left_status_code is the left hand side status code.
+ *
+ * @param right_status_code is the right hand side status code.
+ *
+ * @return Returns true, if the left hand side status code is equal to the
+ *   right hand side status code, otherwise false.
  */
-RTEMS_INLINE_ROUTINE bool rtems_is_status_successful(
-  rtems_status_code code
+static inline bool rtems_are_statuses_equal(
+  rtems_status_code left_status_code,
+  rtems_status_code right_status_code
 )
 {
-  return (code == RTEMS_SUCCESSFUL);
+  return left_status_code == right_status_code;
 }
 
+/* Generated from spec:/rtems/status/if/is-successful */
+
 /**
- *  @brief Checks if the status code1 is equal to code2.
+ * @ingroup RTEMSAPIClassicStatus
  *
- *  This function returns TRUE if the status code1 is equal to code2,
- *  and FALSE otherwise.
+ * @brief Checks if the status code is ::RTEMS_SUCCESSFUL.
+ *
+ * @param status_code is the status code.
+ *
+ * @return Returns true, if the status code is equal to ::RTEMS_SUCCESSFUL,
+ *   otherwise false.
  */
-RTEMS_INLINE_ROUTINE bool rtems_are_statuses_equal(
-  rtems_status_code code1,
-  rtems_status_code code2
-)
+static inline bool rtems_is_status_successful( rtems_status_code status_code )
 {
-   return (code1 == code2);
+  return status_code == RTEMS_SUCCESSFUL;
 }
 
-/**
- *  @brief RTEMS Status Code to Errno Mapping Function
- *
- *  This function recieves an RTEMS status code and returns an
- *  errno error code. The retval values show the mappings between
- *  rtems_status_codes and errno error codes.
- *
- *  @retval 0 RTEMS_SUCCESSFUL
- *  @retval EIO RTEMS_TASK_EXITED, RTEMS_MP_NOT_CONFIGURED, RTEMS_INVALID_ID,
- *   RTEMS_TOO_MANY, RTEMS_OBJECT_WAS_DELETED, RTEMS_INVALID_SIZE,
- *   RTEMS_INVALID_ADDRESS, RTEMS_NOT_DEFINED, RTEMS_INCORRECT_STATE,
- *   RTEMS_ILLEGAL_ON_SELF, RTEMS_ILLEGAL_ON_REMOTE_OBJECT,
- *   RTEMS_CALLED_FROM_ISR, RTEMS_INVALID_PRIORITY, RTEMS_INTERNAL_ERROR,
- *   RTEMS_IO_ERROR, RTEMS_PROXY_BLOCKING
- *  @retval EINVAL RTEMS_INVALID_NAME, RTEMS_INVALID_CLOCK, RTEMS_INVALID_NODE
- *  @retval ETIMEDOUT RTEMS_TIMEOUT
- *  @retval EBADF RTEMS_INVALID_NUMBER
- *  @retval EBUSY RTEMS_RESOURCE_IN_USE
- *  @retval ENODEV RTEMS_UNSATISFIED
- *  @retval ENOSYS RTEMS_NOT_IMPLEMENTED, RTEMS_NOT_CONFIGURED
- *  @retval ENOMEM RTEMS_NO_MEMORY
- *  @retval EINTR RTEMS_INTERRUPTED
- */
-int rtems_status_code_to_errno(rtems_status_code sc);
+/* Generated from spec:/rtems/status/if/last */
 
 /**
- * @brief Returns a text for a status code.
+ * @ingroup RTEMSAPIClassicStatus
+ *
+ * @brief This constant represents the highest valid value for a Classic API
+ *   directive status code.
+ */
+#define RTEMS_STATUS_CODES_LAST RTEMS_PROXY_BLOCKING
+
+/* Generated from spec:/rtems/status/if/text */
+
+/**
+ * @ingroup RTEMSAPIClassicStatus
+ *
+ * @brief Maps the status code to a descriptive text.
  *
  * The text for each status code is the enumerator constant.
  *
- * @param[in] code The status code.
+ * @param status_code is the status code.
  *
- * @retval text The status code text.
- * @retval "?" The passed status code is invalid.
+ * @retval "?" The status code is invalid.
+ *
+ * @return Returns a text describing the status code, if the status code is
+ *   valid.
  */
-const char *rtems_status_text( rtems_status_code code );
-
-/**@}*/
+const char *rtems_status_text( rtems_status_code status_code );
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-/* end of include file */
+#endif /* _RTEMS_RTEMS_STATUS_H */
