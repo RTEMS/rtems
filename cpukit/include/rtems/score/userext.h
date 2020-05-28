@@ -26,8 +26,6 @@ extern "C" {
 
 struct _Thread_Control;
 
-typedef void User_extensions_routine RTEMS_DEPRECATED;
-
 /**
  * @defgroup RTEMSScoreUserExt User Extension Handler
  *

@@ -26,9 +26,6 @@
 extern "C" {
 #endif
 
-typedef User_extensions_routine
-  rtems_extension RTEMS_DEPRECATED;
-
 /**
  * @defgroup ClassicUserExtensions User Extensions
  *
