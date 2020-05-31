@@ -115,9 +115,10 @@ extern "C" {
 #define I386_CONTEXT_CONTROL_EDI_OFFSET 20
 #define I386_CONTEXT_CONTROL_GS_0_OFFSET 24
 #define I386_CONTEXT_CONTROL_GS_1_OFFSET 28
+#define I386_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 32
 
 #ifdef RTEMS_SMP
-  #define I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 32
+  #define I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 36
 #endif
 
 /* structures */
@@ -136,6 +137,7 @@ typedef struct {
   uint32_t    esi;        /* extended source index register            */
   uint32_t    edi;        /* extended destination index flags register */
   segment_descriptors gs; /* gs segment descriptor                     */
+  uint32_t isr_dispatch_disable;
 #ifdef RTEMS_SMP
   volatile bool is_executing;
 #endif

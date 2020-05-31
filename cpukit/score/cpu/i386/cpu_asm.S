@@ -51,6 +51,8 @@
 
 SYM (_CPU_Context_switch):
         movl      RUNCONTEXT_ARG(esp),eax  /* eax = running threads context */
+        GET_SELF_CPU_CONTROL edx           /* edx has address for per_CPU information */
+        movl      PER_CPU_ISR_DISPATCH_DISABLE(edx),ecx
         pushf                              /* push eflags */
         popl      REG_EFLAGS(eax)          /* save eflags */
         movl      esp,REG_ESP(eax)         /* save stack pointer */
@@ -58,26 +60,29 @@ SYM (_CPU_Context_switch):
         movl      ebx,REG_EBX(eax)         /* save ebx */
         movl      esi,REG_ESI(eax)         /* save source register */
         movl      edi,REG_EDI(eax)         /* save destination register */
+        movl      ecx, I386_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(eax)
 
-#ifdef RTEMS_SMP
-        /* The executing context no longer executes on this processor */
-        movb      $0, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)
-#endif
-
+        movl      eax,ecx                  /* ecx = running threads context */
         movl      HEIRCONTEXT_ARG(esp),eax /* eax = heir threads context */
 
 #ifdef RTEMS_SMP
-        /* Wait for heir context to stop execution */
-1:
-        movb      I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax), bl
-        testb     bl, bl
-        jne       1b
+      /*
+       * The executing thread no longer executes on this processor.  Switch
+       * the stack to the temporary interrupt stack of this processor.  Mark
+       * the context of the executing thread as not executing.
+       */
+        leal      PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE(edx),esp
+        movb      $0, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(ecx)
 
-        /* The heir context executes now on this processor */
-        movb      $1, I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)
+.L_check_is_executing:
+        lock bts  $0,I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET(eax)  /* Indicator in carry flag */
+        jc        .L_get_potential_new_heir
 #endif
 
-restore:
+/* Start restoring context */
+.L_restore:
+        movl      I386_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(eax),ecx
+        movl      ecx,PER_CPU_ISR_DISPATCH_DISABLE(edx)
         pushl     REG_EFLAGS(eax)          /* push eflags */
         popf                               /* restore eflags */
         movl      REG_ESP(eax),esp         /* restore stack pointer */
@@ -110,7 +115,35 @@ restore:
 
 SYM (_CPU_Context_restore):
         movl      NEWCONTEXT_ARG(esp),eax  /* eax = running threads context */
-        jmp       restore
+        GET_SELF_CPU_CONTROL edx           /* edx has address for per_CPU information */
+        jmp       .L_restore
+
+#ifdef RTEMS_SMP
+
+.L_get_potential_new_heir:
+
+        /* We may have a new heir */
+
+        /* Read the executing and heir */
+        movl    PER_CPU_OFFSET_EXECUTING(edx),ebx
+        movl    PER_CPU_OFFSET_HEIR(edx),esi
+
+        /*
+         * Update the executing only if necessary to avoid cache line
+         * monopolization.
+         */
+        cmp     esi,ebx
+        je      .L_check_is_executing
+
+        /* Calculate the heir context pointer */
+        addl    esi,eax
+        subl    ebx,eax
+
+        /* Update the executing */
+        movl    esi,PER_CPU_OFFSET_EXECUTING(edx)
+
+        jmp     .L_check_is_executing
+#endif
 
 /*void _CPU_Context_save_fp_context( &fp_context_ptr )
  *  void _CPU_Context_restore_fp_context( &fp_context_ptr )
