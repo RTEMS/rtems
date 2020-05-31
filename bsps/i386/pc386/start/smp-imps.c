@@ -768,7 +768,17 @@ static void bsp_inter_processor_interrupt(void *arg)
 
   smp_apic_ack();
 
+  /*
+   * Disallow nesting.
+   */
+   __asm__ __volatile__("cli");
+
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
+
+   /*
+   * Allow nesting.
+   */
+   __asm__ __volatile__("sti");
 }
 
 void
