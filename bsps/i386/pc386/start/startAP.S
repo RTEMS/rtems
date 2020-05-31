@@ -73,9 +73,12 @@ app_processor_start:
  */
 .align 4
 app_cpu_start:
-	.long   0
+        .long   0
 app_cpu_stack:
-	.long   0
+        .long   0
+app_gdt_descr:
+        .word   0   /* GDT size */
+        .long   0   /* GDT location */
 
 setup_processor:
         movw    %cs, %ax                   # Initialize the rest of
@@ -87,7 +90,7 @@ setup_processor:
         | Bare PC machines boot in real mode! We have to turn protected mode on.
         +---------------------------------------------------------------------*/
 
-        lgdt    gdtptr - app_processor_start  # load Global Descriptor Table
+        lgdt    app_gdt_descr - app_processor_start  # load Global Descriptor Table
 
         movl    %cr0, %eax
         orl     $CR0_PE, %eax
@@ -113,33 +116,3 @@ start_32bit:
         movl    $0, app_cpu_stack
         /* Switch to the higher level initialization routines */
         ret
-
-/*----------------------------------------------------------------------------+
-| DATA section
-+----------------------------------------------------------------------------*/
-
-/**************************
-* GLOBAL DESCRIPTOR TABLE *
-**************************/
-
-        .p2align 4
-gdtptr:
-        /* we use the NULL descriptor to store the GDT pointer - a trick quite
-           nifty due to: Robert Collins (rcollins@x86.org) */
-        .word   gdtlen - 1
-        .long   gdtptr
-        .word   0x0000
-
-        /* code segment */
-        .word   0xffff, 0
-        .byte   0, 0x9f, 0xcf, 0
-
-        /* data segment */
-        .word   0xffff, 0
-        .byte   0, 0x93, 0xcf, 0
-
-     	/* gs segment */
-        .word 0xffff, 0
-        .byte 0, 0x92, 0xcf, 0
-
-        .set    gdtlen, . - gdtptr      # length of GDT

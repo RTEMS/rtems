@@ -20,5 +20,11 @@
 #include <bspopts.h>
 
 #define IDT_SIZE (256)
-#define NUM_SYSTEM_GDT_DESCRIPTORS 4
+/* We have 3 fixed segments (NULL, text, data) + a GS segment for TLS */
+#ifdef RTEMS_SMP
+/* Need one GS segment for each processor (x86 can have up to 256 processors) */
+#define NUM_SYSTEM_GDT_DESCRIPTORS 3+256
+#else
+#define NUM_SYSTEM_GDT_DESCRIPTORS 3+1
+#endif
 #define GDT_SIZE (NUM_SYSTEM_GDT_DESCRIPTORS + NUM_APP_DRV_GDT_DESCRIPTORS)

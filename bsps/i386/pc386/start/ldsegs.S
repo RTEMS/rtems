@@ -191,9 +191,11 @@ SYM (_Global_descriptor_table):
 	.word 0xffff, 0
 	.byte 0, 0x92, 0xcf, 0
 
-	/* gs segment */
+	/* gs segment(s) */
+	.rept (NUM_SYSTEM_GDT_DESCRIPTORS - 3)
 	.word 0xffff, 0
 	.byte 0, 0x92, 0xcf, 0
+	.endr
 
         /* allocated space for user segments */
         .rept (GDT_SIZE - NUM_SYSTEM_GDT_DESCRIPTORS)

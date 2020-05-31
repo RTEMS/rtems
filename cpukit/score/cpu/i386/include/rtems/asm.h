@@ -38,6 +38,7 @@
 #endif
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/i386.h>
+#include <rtems/score/percpu.h>
 
 /**
  * @defgroup RTEMSScoreCPUi386ASM i386 Assembler Support
@@ -145,6 +146,31 @@
 
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
+
+#ifdef RTEMS_SMP
+.macro GET_CPU_ID REG
+    .set  LAPIC_ID,         0x20
+    .set  LAPIC_ID_SHIFT,   0x18L
+    movl     imps_lapic_addr,\REG
+    movl     LAPIC_ID(\REG),\REG
+    shrl     $LAPIC_ID_SHIFT,\REG                /* LAPIC_ID in REG */
+    movb     imps_apic_cpu_map(\REG),\REG        /* CPU ID in REG */
+.endm
+
+.macro GET_SELF_CPU_CONTROL REG
+    GET_CPU_ID \REG
+    shll     $PER_CPU_CONTROL_SIZE_LOG2,\REG     /* Calculate offset for CPU structure */
+    leal     _Per_CPU_Information(\REG),\REG     /* Address of info for current CPU in REG */
+.endm
+#else
+.macro GET_CPU_ID REG
+    movl  $0,\REG
+.endm
+
+.macro GET_SELF_CPU_CONTROL REG
+    leal     _Per_CPU_Information, \REG
+.endm
+#endif
 
 /**@}**/
 

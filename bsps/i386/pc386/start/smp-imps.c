@@ -83,6 +83,7 @@
 #include <assert.h>
 
 extern void _pc386_delay(void);
+extern uint32_t* gdtdesc;
 
 /* #define KERNEL_PRINT(_format)       printk(_format) */
 
@@ -258,10 +259,10 @@ boot_cpu(imps_processor *proc)
    * under the 1MB boundary.
    */
 
-  uint32_t *reset;
+  volatile uint32_t *reset;
 
   bootaddr = (512-64)*1024;
-  reset= (uint32_t *)bootaddr;
+  reset= (volatile uint32_t *)bootaddr;
 
   memcpy(
     (char *) bootaddr,
@@ -269,9 +270,14 @@ boot_cpu(imps_processor *proc)
     (size_t)_binary_appstart_bin_size
   );
 
+  /* Pass start function, stack region and gdtdescr to AP
+   * see startAP.S for location */
   reset[1] = (uint32_t)secondary_cpu_initialize;
   reset[2] = (uint32_t)_Per_CPU_Get_by_index(apicid)->interrupt_stack_high;
-
+  memcpy(
+  	(char*) &reset[3],
+  	&gdtdesc,
+  	6);
   /*
    *  Generic CPU startup sequence starts here.
    */
@@ -325,8 +331,6 @@ boot_cpu(imps_processor *proc)
   CMOS_WRITE_BYTE(CMOS_RESET_CODE, 0);
   *((volatile unsigned *) bios_reset_vector) = 0;
 
-  printk("\n");
-
   return success;
 }
 
@@ -359,6 +363,7 @@ add_processor(imps_processor *proc)
 
     /* AP booted successfully, increase number of available cores */
     imps_num_cpus++;
+    printk("#%d  Application Processor (AP)\n", imps_apic_cpu_map[apicid]);
   }
 }
 

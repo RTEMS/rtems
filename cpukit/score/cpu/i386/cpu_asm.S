@@ -85,12 +85,13 @@ restore:
         movl      REG_EBX(eax),ebx         /* restore ebx */
         movl      REG_ESI(eax),esi         /* restore source register */
         movl      REG_EDI(eax),edi         /* restore destination register */
-        movl      REG_GS_0(eax), ecx       /* restore gs segment */
+        GET_CPU_ID ecx
+        movl      REG_GS_0(eax), edx       /* restore gs segment */
+        movl      edx, _Global_descriptor_table+24(,ecx,8)
         movl      REG_GS_1(eax), edx
-        movl      ecx, _Global_descriptor_table + 24
-        movl      edx, _Global_descriptor_table + 28
-        movl      $24, ecx
-        mov       ecx, gs
+        movl      edx, _Global_descriptor_table+28(,ecx,8)
+        leal      24(,ecx,8), edx
+        movl      edx, gs
         ret
 
 /*
