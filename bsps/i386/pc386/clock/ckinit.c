@@ -73,7 +73,7 @@ extern volatile uint32_t Clock_driver_ticks;
     Processor_mask targets;                                         \
     _Processor_mask_Assign(&targets, _SMP_Get_online_processors()); \
     _Processor_mask_Clear(&targets, _SMP_Get_current_processor());  \
-    _SMP_Multicast_action(&targets, Clock_isr, NULL);               \
+    _SMP_Multicast_action(&targets, rtems_timecounter_tick, NULL);               \
   } while (0)
 #endif
 
