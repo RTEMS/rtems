@@ -118,7 +118,7 @@ appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DSMP_SECONDARY_CORE -o $@ -c $<
 
 appstart.$(OBJEXT): appcpustart.$(OBJEXT)
-	$(LD) -r -N -T $(top_srcdir)/../../../../../../bsps/i386/pc386/start/linkcmds \
+	$(LD) -N  \
 	    -Ttext 0x70000 -e app_processor_start -nostdlib \
 	    -o appstart_tmp.exe $<
 	$(OBJCOPY) -O binary appstart_tmp.exe appstart.bin
