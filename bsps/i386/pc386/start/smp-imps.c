@@ -309,6 +309,11 @@ boot_cpu(imps_processor *proc)
   }
 
   /*
+   *  Wait until AP is in protected mode before starting the next AP
+   */
+  while (reset[2] != 0);
+
+  /*
    *  Generic CPU startup sequence ends here, the rest is cleanup.
    */
 
@@ -342,12 +347,17 @@ add_processor(imps_processor *proc)
     printk("#0  BootStrap Processor (BSP)\n");
     return;
   }
+  /* Setup the apic/cpu maps before booting the APs
+   * otherwise calls to _Get_current_processor can deliver
+   * wrong values if the BSP gets interrupted
+   */
+  imps_cpu_apic_map[imps_num_cpus] = apicid;
+  imps_apic_cpu_map[apicid] = imps_num_cpus;
   if (boot_cpu(proc)) {
 
     /*  XXXXX  add OS-specific setup for secondary CPUs here */
 
-    imps_cpu_apic_map[imps_num_cpus] = apicid;
-    imps_apic_cpu_map[apicid] = imps_num_cpus;
+    /* AP booted successfully, increase number of available cores */
     imps_num_cpus++;
   }
 }

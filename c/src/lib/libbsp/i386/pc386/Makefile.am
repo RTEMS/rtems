@@ -114,8 +114,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/getcpuid.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/smp-imps.c
 
 project_lib_DATA += appstart.$(OBJEXT)
-appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S
-	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DSMP_SECONDARY_CORE -o $@ -c $<
+appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/startAP.S
+	$(CPPASCOMPILE) $(AM_CPPFLAGS) -o $@ -c $<
 
 appstart.$(OBJEXT): appcpustart.$(OBJEXT)
 	$(LD) -N  \
