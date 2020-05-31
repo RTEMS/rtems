@@ -233,6 +233,9 @@ extern unsigned char imps_apic_cpu_map[IMPS_MAX_CPUS];
 extern char _binary_appstart_bin_start[];
 extern char _binary_appstart_bin_size[];
 
+/** @brief base address of the local apic. Usually 0xFEE00000 */
+extern unsigned imps_lapic_addr;
+
 /*
  *  Defines that use variables
  */

@@ -252,6 +252,13 @@ uint32_t BSP_irq_count_dump(FILE *f);
 void raw_idt_notify(void);
 void C_dispatch_isr(int vector);
 
+#ifdef RTEMS_SMP
+  /* CPU specific functions used by the SMP API */
+  int imps_probe(void);
+  void ipi_install_irq(void);
+  int send_ipi(unsigned int dst, unsigned int v);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

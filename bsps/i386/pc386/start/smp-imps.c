@@ -85,6 +85,9 @@
 extern void _pc386_delay(void);
 extern uint32_t* gdtdesc;
 
+static int lapic_dummy = 0;
+unsigned imps_lapic_addr = ((unsigned)(&lapic_dummy)) - LAPIC_ID;
+
 /* #define KERNEL_PRINT(_format)       printk(_format) */
 
 static void CMOS_WRITE_BYTE(
@@ -220,7 +223,7 @@ get_checksum(unsigned start, int length)
 /*
  *  APIC ICR write and status check function.
  */
-static int
+int
 send_ipi(unsigned int dst, unsigned int v)
 {
   int to, send_status;
@@ -698,7 +701,7 @@ imps_force(int ncpus)
  *
  *  Function finished.
  */
-static int
+int
 imps_probe(void)
 {
   /*
@@ -768,7 +771,8 @@ static void bsp_inter_processor_interrupt(void *arg)
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
-static void ipi_install_irq(void)
+void
+ipi_install_irq(void)
 {
   rtems_status_code status;
 
@@ -801,34 +805,4 @@ static void secondary_cpu_initialize(void)
 #endif
 
   _SMP_Start_multitasking_on_secondary_processor( _Per_CPU_Get() );
-}
-
-uint32_t _CPU_SMP_Initialize( void )
-{
-  /* XXX need to deal with finding too many cores */
-
-  return (uint32_t) imps_probe();
-}
-
-void _CPU_SMP_Prepare_start_multitasking( void )
-{
-  /* Do nothing */
-}
-
-bool _CPU_SMP_Start_processor( uint32_t cpu_index )
-{
-  (void) cpu_index;
-
-  return true;
-}
-
-void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
-{
-  if ( cpu_count > 1 )
-    ipi_install_irq();
-}
-
-void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
-{
-  send_ipi( target_processor_index, 0x30 );
 }

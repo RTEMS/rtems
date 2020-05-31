@@ -110,8 +110,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/ata/idecfg.c
 endif
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/getcpuid.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/smp-imps.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspsmp.c
 
 project_lib_DATA += appstart.$(OBJEXT)
 appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/startAP.S
