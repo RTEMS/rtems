@@ -25,17 +25,19 @@
 #endif
 
 /* Stack frame we use for intermediate storage               */
-#define ARG_OFF	0
-#define MSK_OFF 4        /* not used any more                */
-#define EBX_OFF 8        /* ebx                              */
-#define EBP_OFF 12       /* code restoring ebp/esp relies on */
-#define ESP_OFF 16       /* esp being on top of ebp!         */
+#define ARG_OFF  0
+#define EBX_OFF  4        /* ebx                              */
+#define EBP_OFF  8       /* code restoring ebp/esp relies on */
+#define ESP_OFF 12       /* esp being on top of ebp!         */
 #ifdef __SSE__
+#ifdef RTEMS_SMP
+#error SMP with SSE support has not been tested. Use at your own risk.
+#endif
 /* need to be on 16 byte boundary for SSE, add 12 to do that */
 #define FRM_SIZ (20+12+512)
 #define SSE_OFF 32
 #else
-#define FRM_SIZ 20
+#define FRM_SIZ 16
 #endif
 
 	BEGIN_CODE
@@ -59,7 +61,7 @@ SYM (_ISR_Handler):
 	 *  NOTE:  If the previous values of the segment registers are
 	 *         pushed, do not forget to adjust SAVED_REGS.
 	 *
-	 *  NOTE:  Make sure the exit code which restores these
+	 *  NOTE:  Make sure the Lthread_dispatch_done code restores these
 	 *         when this type of code is needed.
 	 */
 
@@ -72,17 +74,15 @@ SYM (_ISR_Handler):
 	/*
 	 * Establish an aligned stack frame
 	 *   original sp
-         *   saved ebx
 	 *   saved ebp
-	 *   saved irq mask
+	 *   saved ebx
 	 *   vector arg to BSP_dispatch_isr   <- aligned SP
 	 */
 	movl      esp, eax
 	subl      $FRM_SIZ, esp
-	andl      $ - CPU_STACK_ALIGNMENT, esp
-	movl      ebx, EBX_OFF(esp)
 	movl      eax, ESP_OFF(esp)
 	movl      ebp, EBP_OFF(esp)
+	movl      ebx, EBX_OFF(esp)
 
 	/*
 	 * GCC versions starting with 4.3 no longer place the cld
@@ -100,10 +100,10 @@ SYM (_ISR_Handler):
 	/* We save SSE here (on the task stack) because we possibly
 	 * call other C-code (besides the ISR, namely _Thread_Dispatch())
 	 */
-    /*  don't wait here; a possible exception condition will eventually be
-     *  detected when the task resumes control and executes a FP instruction
+	/*  don't wait here; a possible exception condition will eventually be
+	 *  detected when the task resumes control and executes a FP instruction
 	fwait
-     */
+	 */
 	fxsave SSE_OFF(esp)
 	fninit                          /* clean-slate FPU                */
 	movl   $0x1f80, ARG_OFF(esp)	/* use ARG_OFF as scratch space   */
@@ -118,15 +118,9 @@ PUBLIC (ISR_STOP)
 ISR_STOP:
 .check_stack_switch:
 	movl      esp, ebp                  /* ebp = previous stack pointer */
+	andl      $ - CPU_STACK_ALIGNMENT, esp  /* Make sure esp is 16 byte aligned */
 
-#ifdef RTEMS_SMP
-	call      SYM(_CPU_SMP_Get_current_processor)
-	sall      $PER_CPU_CONTROL_SIZE_LOG2, eax
-	addl      $SYM(_Per_CPU_Information), eax
-	movl      eax, ebx
-#else
-	movl      $SYM(_Per_CPU_Information), ebx
-#endif
+	GET_SELF_CPU_CONTROL ebx
 
 	/* is this the outermost interrupt? */
 	cmpl      $0, PER_CPU_ISR_NEST_LEVEL(ebx)
@@ -161,32 +155,48 @@ nested:
 	 */
 	movl      ebp, esp
 
-	decl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one less ISR nest level */
-	                                    /* If interrupts are nested, */
-	                                    /*   then dispatching is disabled */
-
+	/*
+	 * Thread dispatching is necessary and allowed if and only if
+	 *   dispatch_necessary == 1 and
+	 *   isr_dispatch_disable == 0 and
+	 *   thread_dispatch_disable_level == 0.
+	 *
+	 * Otherwise, continue with .Lthread_dispatch_done
+	 */
+	movl      PER_CPU_DISPATCH_NEEDED(ebx), eax
+	xorl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx), eax
 	decl      PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx)
-	                                    /* unnest multitasking */
-	                                    /* Is dispatch disabled */
-	jne       .exit                     /* Yes, then exit */
+	orl       PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx), eax
+	orl       PER_CPU_ISR_DISPATCH_DISABLE(ebx), eax
+	decl      PER_CPU_ISR_NEST_LEVEL(ebx)  /* one less ISR nest level */
 
-	cmpb      $0, PER_CPU_DISPATCH_NEEDED(ebx)
-	                                    /* Is task switch necessary? */
-	jne       .schedule                 /* Yes, then call the scheduler */
-	jmp       .exit                     /* No, exit */
+	cmpl      $0, eax
+	jne       .Lthread_dispatch_done    /* Is task switch necessary? */
 
-.schedule:
-	/*
-	 * the scratch registers have already been saved and we are already
-	 * back on the thread system stack. So we can call _Thread_Dispatch
-	 * directly
-	 */
-	call      _Thread_Dispatch
-	/*
-	 * fall through exit to restore complete contex (scratch registers
-	 * eip, CS, Flags).
-	 */
-.exit:
+.Ldo_thread_dispatch:
+	  /* Set ISR dispatch disable and thread dispatch disable level to one */
+	  movl    $1, PER_CPU_ISR_DISPATCH_DISABLE(ebx)
+	  movl    $1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(ebx)
+	  /* Call Thread_Do_dispatch(), this function will enable interrupts */
+	  push    $EFLAGS_INTR_ENABLE      /* Set interrupt flag manually */
+	  push    ebx
+	  call    _Thread_Do_dispatch
+
+      /* Disable interrupts */
+	  cli
+	  addl    $8, esp
+	  /* Sometimes after returning from _Thread_Do_dispatch current CPU and ebx ptr are different */
+	  GET_SELF_CPU_CONTROL ebx
+	  cmpb    $0, PER_CPU_DISPATCH_NEEDED(ebx)
+	  jne     .Ldo_thread_dispatch
+
+	  /* We are done with thread dispatching */
+	  movl    $0, PER_CPU_ISR_DISPATCH_DISABLE(ebx)
+	 /*
+	  * fall through Lthread_dispatch_done to restore complete contex (scratch registers
+	  * eip, CS, Flags).
+	  */
+.Lthread_dispatch_done:
 
 #ifdef __SSE__
 	fwait

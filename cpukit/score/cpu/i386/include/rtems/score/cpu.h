@@ -264,25 +264,27 @@ typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
 extern cpuExcHandlerType _currentExcHandler;
 extern void rtems_exception_init_mngt(void);
 
-#ifdef RTEMS_SMP
-  /* Throw compile-time error to indicate incomplete support */
-  #error "i386 targets do not support SMP.\
- See: https://devel.rtems.org/ticket/3335"
-
-  /*
-   * This size must match the size of the CPU_Interrupt_frame, which must be
-   * used in the SMP context switch code, which is incomplete at the moment.
-   */
-  #define CPU_INTERRUPT_FRAME_SIZE 4
-#endif
-
 /*
  * This port does not pass any frame info to the
  * interrupt handler.
  */
 
 typedef struct {
-  uint32_t todo_replace_with_apt_registers;
+/* allow for 16B alignment (worst case 12 Bytes more) and isr right after pushfl */
+  uint32_t reserved[3];
+/* registers saved by _ISR_Handler */
+  uint32_t isr_vector;
+  uint32_t ebx;
+  uint32_t ebp;
+  uint32_t esp;
+/* registers saved by rtems_irq_prologue_##_vector */
+  uint32_t edx;
+  uint32_t ecx;
+  uint32_t eax;
+/* registers saved by CPU */
+  uint32_t eip;
+  uint32_t cs;
+  uint32_t eflags;
 } CPU_Interrupt_frame;
 
 typedef enum {

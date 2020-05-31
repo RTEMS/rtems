@@ -29,6 +29,8 @@
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
+#define CPU_INTERRUPT_FRAME_SIZE 52
+
 #ifndef ASM
 
 #ifdef __cplusplus
