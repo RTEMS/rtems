@@ -81,10 +81,10 @@ static void signal_send(test_context *ctx, test_state new_state)
 {
   rtems_status_code sc;
 
+  change_state(ctx, new_state);
   sc = rtems_signal_send(ctx->consumer, TEST_SIGNAL);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  change_state(ctx, new_state);
 }
 
 static void check_consumer_processor(const test_context *ctx)
