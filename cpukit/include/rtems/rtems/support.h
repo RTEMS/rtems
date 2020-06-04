@@ -16,6 +16,7 @@
 #define _RTEMS_RTEMS_SUPPORT_H
 
 #include <rtems/rtems/types.h>
+#include <rtems/score/heapinfo.h>
 #include <rtems/config.h>
 
 #ifdef __cplusplus

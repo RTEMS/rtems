@@ -21,6 +21,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/heapinfo.h>
 
 #ifdef __cplusplus
 extern "C" {
