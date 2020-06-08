@@ -43,10 +43,18 @@ teardown(void *ctx)
 	T_log(T_QUIET, "teardown end");
 }
 
+static void
+scope(void *ctx, char *buf, size_t n)
+{
+
+	strlcpy(buf, "/More", n);
+}
+
 static const T_fixture fixture = {
 	.setup = setup,
 	.stop = stop,
 	.teardown = teardown,
+	.scope = scope,
 	.initial_context = &initial_value
 };
 
@@ -62,18 +70,18 @@ T_TEST_CASE_FIXTURE(fixture, &fixture)
 T_TEST_OUTPUT(fixture,
 "B:fixture\n"
 "L:setup begin\n"
-"P:0:0:UI1:test-fixture.c:13\n"
-"P:1:0:UI1:test-fixture.c:14\n"
-"P:2:0:UI1:test-fixture.c:18\n"
+"P:0:0:UI1/More:test-fixture.c:13\n"
+"P:1:0:UI1/More:test-fixture.c:14\n"
+"P:2:0:UI1/More:test-fixture.c:18\n"
 "L:setup end\n"
-"P:3:0:UI1:test-fixture.c:55\n"
-"F:4:0:UI1:test-fixture.c:56:test fails and we stop the test case\n"
+"P:3:0:UI1/More:test-fixture.c:63\n"
+"F:4:0:UI1/More:test-fixture.c:64:test fails and we stop the test case\n"
 "L:stop begin\n"
-"P:5:0:UI1:test-fixture.c:28\n"
+"P:5:0:UI1/More:test-fixture.c:28\n"
 "L:stop end\n"
 "L:teardown begin\n"
-"P:6:0:UI1:test-fixture.c:40\n"
-"P:7:0:UI1:test-fixture.c:42\n"
+"P:6:0:UI1/More:test-fixture.c:40\n"
+"P:7:0:UI1/More:test-fixture.c:42\n"
 "L:teardown end\n"
 "E:fixture:N:8:F:1:D:0.001000\n");
 

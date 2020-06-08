@@ -62,6 +62,7 @@ typedef struct T_fixture {
 	void (*setup)(void *);
 	void (*stop)(void *);
 	void (*teardown)(void *);
+	void (*scope)(void *, char *, size_t);
 	void *initial_context;
 } T_fixture;
 

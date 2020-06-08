@@ -183,7 +183,7 @@ run_initialize(void)
 }
 
 static const char expected_final[] = "Z:ttest01:C:342:N:1316:F:791:D:0.687999\n"
-"Y:ReportHash:SHA256:d4c293b499e6e557afcf6123cb604e8976cc5b987021f1f8c9f6193fc38a386e\n";
+"Y:ReportHash:SHA256:efd7b69ac3ec0cac31fa147008bba87a077e6d53c0cfb8a836a4de2ae90ecc27\n";
 
 static void
 run_finalize(void)

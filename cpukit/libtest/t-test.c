@@ -49,7 +49,7 @@
 
 #define T_LINE_SIZE 128
 
-#define T_SCOPE_SIZE 5
+#define T_SCOPE_SIZE 64
 
 typedef struct {
 	pthread_spinlock_t lock;
@@ -285,9 +285,10 @@ T_thread_name(const Thread_Control *th, char *buf)
 #endif
 
 static const char *
-T_scope(char *buf)
+T_scope(T_context *ctx, char *buf)
 {
 	const char *r;
+	const T_case_context *tc;
 
 #if defined(__rtems__)
 	ISR_Level level;
@@ -325,6 +326,20 @@ T_scope(char *buf)
 	buf[1] = '\0';
 	r = buf;
 #endif
+
+	tc = ctx->current_case;
+	if (tc != NULL) {
+		const T_fixture *fixture;
+
+		fixture = tc->fixture;
+		if (fixture != NULL && fixture->scope != NULL) {
+			size_t n;
+
+			n = strlen(r);
+			(*fixture->scope)(ctx->fixture_context, buf + n,
+			    T_SCOPE_SIZE - n);
+		}
+	}
 
 	return r;
 }
@@ -522,7 +537,7 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 		     step != T_CHECK_STEP_FROM_FLAGS(t->flags)) {
 			T_add_failure(ctx);
 			T_printf("F:%u:%i:%s:%s:%i:planned step (%u)\n", step,
-			    T_cpu(), T_scope(scope), T_file(t), t->line,
+			    T_cpu(), T_scope(ctx, scope), T_file(t), t->line,
 			    T_CHECK_STEP_FROM_FLAGS(t->flags));
 		} else if (!ok) {
 			T_add_failure(ctx);
@@ -530,11 +545,12 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 			if (ctx->verbosity >= T_NORMAL) {
 				if ((t->flags & T_CHECK_QUIET) == 0) {
 					T_printf("F:%u:%i:%s:%s:%i:",
-					    step, T_cpu(), T_scope(scope),
+					    step, T_cpu(), T_scope(ctx, scope),
 					    T_file(t), t->line);
 				} else {
 					T_printf("F:*:%i:%s:%s:%i:", T_cpu(),
-					    T_scope(scope), T_file(t), t->line);
+					    T_scope(ctx, scope), T_file(t),
+					    t->line);
 				}
 
 				va_start(ap, fmt);
@@ -550,12 +566,12 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 		} else if ((t->flags & T_CHECK_QUIET) == 0 &&
 		    ctx->verbosity >= T_VERBOSE) {
 			T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(),
-			    T_scope(scope), T_file(t), t->line);
+			    T_scope(ctx, scope), T_file(t), t->line);
 		}
 	} else if (!ok) {
 		T_add_failure(ctx);
 
-		T_printf("F:*:%i:%s:*:*:", T_cpu(), T_scope(scope));
+		T_printf("F:*:%i:%s:*:*:", T_cpu(), T_scope(ctx, scope));
 
 		va_start(ap, fmt);
 		T_vprintf(fmt, ap);
@@ -802,7 +818,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 
 			T_printf("F:*:%i:%s:*:*:actual steps (%u), "
 			    "planned steps (%u)\n", T_cpu(),
-			    T_scope(scope), steps, planned_steps);
+			    T_scope(ctx, scope), steps, planned_steps);
 		}
 	}
 
