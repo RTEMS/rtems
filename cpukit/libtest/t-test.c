@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2018, 2019 embedded brains GmbH
+ * Copyright (C) 2018, 2020 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -62,7 +62,8 @@ typedef struct {
 	T_verbosity verbosity;
 	const T_case_context *registered_cases;
 	const T_case_context *current_case;
-	void *fixture_context;
+	T_fixture_node *fixtures;
+	T_fixture_node case_fixture;
 	LIST_HEAD(, T_destructor) destructors;
 	T_time case_begin_time;
 	atomic_uint planned_steps;
@@ -288,7 +289,7 @@ static const char *
 T_scope(T_context *ctx, char *buf)
 {
 	const char *r;
-	const T_case_context *tc;
+	T_fixture_node *node;
 
 #if defined(__rtems__)
 	ISR_Level level;
@@ -327,19 +328,23 @@ T_scope(T_context *ctx, char *buf)
 	r = buf;
 #endif
 
-	tc = ctx->current_case;
-	if (tc != NULL) {
+	node = &ctx->case_fixture;
+
+	do {
 		const T_fixture *fixture;
 
-		fixture = tc->fixture;
+		fixture = node->fixture;
+
 		if (fixture != NULL && fixture->scope != NULL) {
 			size_t n;
 
 			n = strlen(r);
-			(*fixture->scope)(ctx->fixture_context, buf + n,
+			(*fixture->scope)(node->context, buf + n,
 			    T_SCOPE_SIZE - n);
 		}
-	}
+
+		node = node->previous;
+	} while (node != NULL);
 
 	return r;
 }
@@ -421,18 +426,20 @@ T_add_failure(T_context *ctx)
 static void
 T_stop(T_context *ctx)
 {
-	const T_case_context *tc;
+	T_fixture_node *node;
 
-	tc = ctx->current_case;
+	node = ctx->fixtures;
 
-	if (tc != NULL) {
+	while (node != NULL) {
 		const T_fixture *fixture;
 
-		fixture = tc->fixture;
+		fixture = node->fixture;
 
 		if (fixture != NULL && fixture->stop != NULL) {
-			(*fixture->stop)(ctx->fixture_context);
+			(*fixture->stop)(node->context);
 		}
+
+		node = node->next;
 	}
 
 	longjmp(ctx->case_begin_context, 1);
@@ -478,13 +485,13 @@ T_set_verbosity(T_verbosity verbosity)
 void *
 T_fixture_context(void)
 {
-	return T_instance.fixture_context;
+	return T_instance.fixtures->context;
 }
 
 void
 T_set_fixture_context(void *context)
 {
-	T_instance.fixture_context = context;
+	T_instance.fixtures->context = context;
 }
 
 const char *
@@ -730,6 +737,7 @@ T_do_run_initialize(const T_config *config)
 		ctx->buf_mask = 0;
 	}
 
+	ctx->fixtures = &ctx->case_fixture;
 	atomic_store_explicit(&ctx->buf_head, 0, memory_order_relaxed);
 	ctx->buf_tail = 0;
 	ctx->putchar = config->putchar;
@@ -761,6 +769,7 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	fixture = tc->fixture;
 	ctx->verbosity = config->verbosity;
 	ctx->current_case = tc;
+	ctx->fixtures = &ctx->case_fixture;
 	LIST_INIT(&ctx->destructors);
 	atomic_store_explicit(&ctx->planned_steps, UINT_MAX,
 	    memory_order_relaxed);
@@ -773,10 +782,11 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	T_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
 
 	if (fixture != NULL) {
-		ctx->fixture_context = fixture->initial_context;
+		ctx->case_fixture.fixture = fixture;
+		ctx->case_fixture.context = fixture->initial_context;
 
 		if (fixture->setup != NULL) {
-			(*fixture->setup)(ctx->fixture_context);
+			(*fixture->setup)(ctx->case_fixture.context);
 		}
 	}
 }
@@ -785,7 +795,7 @@ static void
 T_do_case_end(T_context *ctx, const T_case_context *tc)
 {
 	const T_config *config;
-	const T_fixture *fixture;
+	T_fixture_node *node;
 	unsigned int planned_steps;
 	unsigned int steps;
 	unsigned int failures;
@@ -793,10 +803,22 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 	T_time_string ts;
 
 	config = ctx->config;
-	fixture = tc->fixture;
+	node = ctx->fixtures;
+	ctx->fixtures = NULL;
 
-	if (fixture != NULL && fixture->teardown != NULL) {
-		(*fixture->teardown)(ctx->fixture_context);
+	while (node != NULL) {
+		const T_fixture *fixture;
+		T_fixture_node *dead;
+
+		fixture = node->fixture;
+
+		if (fixture != NULL && fixture->teardown != NULL) {
+			(*fixture->teardown)(node->context);
+		}
+
+		dead = node;
+		node = node->next;
+		memset(dead, 0, sizeof(*dead));
 	}
 
 	T_call_destructors(ctx);
@@ -1026,4 +1048,50 @@ T_now(void)
 	ctx = &T_instance;
 	config = ctx->config;
 	return (*config->now)();
+}
+
+void *
+T_push_fixture(T_fixture_node *node, const T_fixture *fixture)
+{
+	T_context *ctx;
+	T_fixture_node *old;
+	void *context;
+
+	ctx = &T_instance;
+	old = ctx->fixtures;
+	old->previous = node;
+	node->next = old;
+	node->previous = NULL;
+	node->fixture = fixture;
+	context = fixture->initial_context;
+	node->context = context;
+	ctx->fixtures = node;
+
+	if (fixture != NULL && fixture->setup != NULL) {
+		(*fixture->setup)(context);
+	}
+
+	return context;
+}
+
+void
+T_pop_fixture(void)
+{
+	T_context *ctx;
+	T_fixture_node *node;
+	const T_fixture *fixture;
+	T_fixture_node *next;
+
+	ctx = &T_instance;
+	node = ctx->fixtures;
+	next = node->next;
+	next->previous = NULL;
+	ctx->fixtures = next;
+	fixture = node->fixture;
+
+	if (fixture != NULL && fixture->teardown != NULL) {
+		(*fixture->teardown)(node->context);
+	}
+
+	memset(node, 0, sizeof(*node));
 }

@@ -66,6 +66,13 @@ typedef struct T_fixture {
 	void *initial_context;
 } T_fixture;
 
+typedef struct T_fixture_node {
+	struct T_fixture_node *next;
+	struct T_fixture_node *previous;
+	const T_fixture *fixture;
+	void *context;
+} T_fixture_node;
+
 #define T_ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
 
 /*
@@ -2231,6 +2238,10 @@ void T_set_putchar(T_putchar, void *, T_putchar *, void **);
 void *T_fixture_context(void);
 
 void T_set_fixture_context(void *);
+
+void *T_push_fixture(T_fixture_node *, const T_fixture *);
+
+void T_pop_fixture(void);
 
 #ifdef __rtems__
 #define T_TEST_CASE_FIXTURE(name, fixture)			\

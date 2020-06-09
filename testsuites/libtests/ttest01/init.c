@@ -182,8 +182,8 @@ run_initialize(void)
 	T_set_putchar(censor_putchar, ctx, &ctx->putchar, &ctx->putchar_arg);
 }
 
-static const char expected_final[] = "Z:ttest01:C:342:N:1316:F:791:D:0.687999\n"
-"Y:ReportHash:SHA256:efd7b69ac3ec0cac31fa147008bba87a077e6d53c0cfb8a836a4de2ae90ecc27\n";
+static const char expected_final[] = "Z:ttest01:C:342:N:1329:F:791:D:0.687999\n"
+"Y:ReportHash:SHA256:e5c3847558c805663117be13ef27fd89579f595148b8515c42a38bd1b9dd79c2\n";
 
 static void
 run_finalize(void)

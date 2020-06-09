@@ -58,9 +58,77 @@ static const T_fixture fixture = {
 	.initial_context = &initial_value
 };
 
+static int initial_value_2 = 7;
+
+static int counter_2;
+
+static void
+setup_2(void *ctx)
+{
+	int *c;
+
+	T_log(T_QUIET, "setup 2 begin");
+	T_eq_ptr(ctx, &initial_value_2);
+	T_eq_ptr(ctx, T_fixture_context());
+	c = ctx;
+	counter_2 = *c;
+	T_set_fixture_context(&counter_2);
+	T_eq_ptr(&counter_2, T_fixture_context());
+	T_log(T_QUIET, "setup 2 end");
+}
+
+static void
+stop_2(void *ctx)
+{
+	int *c;
+
+	T_log(T_QUIET, "stop 2 begin");
+	T_eq_ptr(ctx, &counter_2);
+	c = ctx;
+	++(*c);
+	T_log(T_QUIET, "stop 2 end");
+}
+
+static void
+teardown_2(void *ctx)
+{
+	int *c;
+
+	T_log(T_QUIET, "teardown 2 begin");
+	T_eq_ptr(ctx, &counter_2);
+	c = ctx;
+	T_eq_int(*c, 8);
+	T_log(T_QUIET, "teardown 2 end");
+}
+
+static void
+scope_2(void *ctx, char *buf, size_t n)
+{
+
+	strlcpy(buf, "/AndMore", n);
+}
+
+static const T_fixture fixture_2 = {
+	.setup = setup_2,
+	.stop = stop_2,
+	.teardown = teardown_2,
+	.scope = scope_2,
+	.initial_context = &initial_value_2
+};
+
+static T_fixture_node node;
+
 T_TEST_CASE_FIXTURE(fixture, &fixture)
 {
+	void *ctx;
+
 	T_assert_true(true, "all right");
+	ctx = T_push_fixture(&node, &fixture_2);
+	T_eq_ptr(ctx, &initial_value_2);
+	++counter_2;
+	T_pop_fixture();
+	ctx = T_push_fixture(&node, &fixture_2);
+	T_eq_ptr(ctx, &initial_value_2);
 	T_assert_true(false, "test fails and we stop the test case");
 	T_log(T_QUIET, "not reached");
 }
@@ -74,16 +142,39 @@ T_TEST_OUTPUT(fixture,
 "P:1:0:UI1/More:test-fixture.c:14\n"
 "P:2:0:UI1/More:test-fixture.c:18\n"
 "L:setup end\n"
-"P:3:0:UI1/More:test-fixture.c:63\n"
-"F:4:0:UI1/More:test-fixture.c:64:test fails and we stop the test case\n"
+"P:3:0:UI1/More:test-fixture.c:125\n"
+"L:setup 2 begin\n"
+"P:4:0:UI1/More/AndMore:test-fixture.c:71\n"
+"P:5:0:UI1/More/AndMore:test-fixture.c:72\n"
+"P:6:0:UI1/More/AndMore:test-fixture.c:76\n"
+"L:setup 2 end\n"
+"P:7:0:UI1/More/AndMore:test-fixture.c:127\n"
+"L:teardown 2 begin\n"
+"P:8:0:UI1/More:test-fixture.c:98\n"
+"P:9:0:UI1/More:test-fixture.c:100\n"
+"L:teardown 2 end\n"
+"L:setup 2 begin\n"
+"P:10:0:UI1/More/AndMore:test-fixture.c:71\n"
+"P:11:0:UI1/More/AndMore:test-fixture.c:72\n"
+"P:12:0:UI1/More/AndMore:test-fixture.c:76\n"
+"L:setup 2 end\n"
+"P:13:0:UI1/More/AndMore:test-fixture.c:131\n"
+"F:14:0:UI1/More/AndMore:test-fixture.c:132:test fails and we stop the test case\n"
+"L:stop 2 begin\n"
+"P:15:0:UI1/More/AndMore:test-fixture.c:86\n"
+"L:stop 2 end\n"
 "L:stop begin\n"
-"P:5:0:UI1/More:test-fixture.c:28\n"
+"P:16:0:UI1/More/AndMore:test-fixture.c:28\n"
 "L:stop end\n"
+"L:teardown 2 begin\n"
+"P:17:0:UI1/More/AndMore:test-fixture.c:98\n"
+"P:18:0:UI1/More/AndMore:test-fixture.c:100\n"
+"L:teardown 2 end\n"
 "L:teardown begin\n"
-"P:6:0:UI1/More:test-fixture.c:40\n"
-"P:7:0:UI1/More:test-fixture.c:42\n"
+"P:19:0:UI1/More:test-fixture.c:40\n"
+"P:20:0:UI1/More:test-fixture.c:42\n"
 "L:teardown end\n"
-"E:fixture:N:8:F:1:D:0.001000\n");
+"E:fixture:N:21:F:1:D:0.001000\n");
 
 /*
  * The license is at the end of the file to be able to use the test code and
@@ -94,7 +185,7 @@ T_TEST_OUTPUT(fixture,
 /*
  * SPDX-License-Identifier: BSD-2-Clause OR CC-BY-SA-4.0
  *
- * Copyright (C) 2018, 2019 embedded brains GmbH
+ * Copyright (C) 2018, 2020 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
