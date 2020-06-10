@@ -29,7 +29,7 @@
 #include <rtems/bspIo.h>
 
 #include <bsp.h>
-#include <bsp/arm-pl011.h>
+#include <dev/serial/arm-pl011.h>
 #include <bsp/console-termios.h>
 #include <bsp/irq-generic.h>
 

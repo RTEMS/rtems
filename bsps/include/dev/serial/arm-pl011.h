@@ -25,7 +25,7 @@
 
 #include <rtems/termiostypes.h>
 
-#include <bsp/arm-pl011-regs.h>
+#include <dev/serial/arm-pl011-regs.h>
 
 #ifdef __cplusplus
 extern "C" {

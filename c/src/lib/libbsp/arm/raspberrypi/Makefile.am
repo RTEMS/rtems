@@ -64,7 +64,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/irq/irq.c
 
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/arm-pl011.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/arm-pl011.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/console-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fb.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fbcons.c

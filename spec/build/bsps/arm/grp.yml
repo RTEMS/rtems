@@ -26,8 +26,6 @@ install:
   - bsps/arm/include/bsp/arm-gic-regs.h
   - bsps/arm/include/bsp/arm-gic-tm27.h
   - bsps/arm/include/bsp/arm-gic.h
-  - bsps/arm/include/bsp/arm-pl011-regs.h
-  - bsps/arm/include/bsp/arm-pl011.h
   - bsps/arm/include/bsp/arm-pl050-regs.h
   - bsps/arm/include/bsp/arm-pl050.h
   - bsps/arm/include/bsp/arm-pl111-fb.h

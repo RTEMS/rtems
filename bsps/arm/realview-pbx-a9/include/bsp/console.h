@@ -15,7 +15,7 @@
 #ifndef LIBBSP_ARM_REALVIEW_PBX_A9_BSP_CONSOLE_H
 #define LIBBSP_ARM_REALVIEW_PBX_A9_BSP_CONSOLE_H
 
-#include <bsp/arm-pl011.h>
+#include <dev/serial/arm-pl011.h>
 
 #ifdef __cplusplus
 extern "C" {

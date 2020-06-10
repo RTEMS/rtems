@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-gic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xen/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/arm-pl011.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/arm-pl011.c
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 

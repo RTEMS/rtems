@@ -12,7 +12,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp/arm-pl011.h>
+#include <dev/serial/arm-pl011.h>
 
 static volatile pl011 *pl011_get_regs(rtems_termios_device_context *base)
 {

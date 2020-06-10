@@ -21,6 +21,11 @@ include_bsp_HEADERS += ../../bsps/include/bsp/u-boot.h
 include_bsp_HEADERS += ../../bsps/include/bsp/uart-output-char.h
 include_bsp_HEADERS += ../../bsps/include/bsp/utility.h
 
+include_dev_serialdir = $(includedir)/dev/serial
+include_dev_serial_HEADERS =
+include_dev_serial_HEADERS += ../../bsps/include/dev/serial/arm-pl011-regs.h
+include_dev_serial_HEADERS += ../../bsps/include/dev/serial/arm-pl011.h
+
 include_grlibdir = $(includedir)/grlib
 include_grlib_HEADERS =
 include_grlib_HEADERS += ../../bsps/include/grlib/ahbstat.h

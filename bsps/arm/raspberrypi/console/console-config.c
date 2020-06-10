@@ -25,13 +25,13 @@
 #include <libchip/serial.h>
 #include <libfdt.h>
 #include <libchip/ns16550.h>
+#include <dev/serial/arm-pl011.h>
 
 #include <bspopts.h>
 #include <bsp/usart.h>
 #include <bsp/raspberrypi.h>
 #include <bsp/fbcons.h>
 #include <bsp.h>
-#include <bsp/arm-pl011.h>
 #include <bsp/console-termios.h>
 #include <bsp/fdt.h>
 #include <bsp/fatal.h>

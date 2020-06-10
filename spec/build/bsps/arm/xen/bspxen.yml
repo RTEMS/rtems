@@ -60,7 +60,6 @@ source:
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/irq/irq-gic.c
-- bsps/arm/shared/serial/arm-pl011.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xen/console/console.c
 - bsps/arm/xen/start/bspstart.c
