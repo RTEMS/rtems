@@ -67,7 +67,7 @@ BEGIN_CODE
 	.globl pc386_delay
 pc386_delay:
 _pc386_delay:
-#ifdef 	DELAY_USE_OUTB
+#ifdef DELAY_USE_OUTB
 	outb	al, $0x80	# about 1uS delay on most machines
 #else
 	movl	$0x200, eax

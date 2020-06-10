@@ -101,7 +101,7 @@ speakl:	jmp	speakl             # and SPIN!!!
 	cld
 
 	/* Save multiboot info if we detect a multiboot loader */
-	cmp 	$0x2badb002,eax
+	cmp     $0x2badb002,eax
 	jne	2f
 
 	/* We have multiboot info; let's hope DS and ES are OK... */
@@ -111,7 +111,7 @@ speakl:	jmp	speakl             # and SPIN!!!
 	movl	(esi), eax
 	movl	eax, ebx
 	movl	$SYM(_boot_multiboot_info), edi
- 	/* save flags, always present */
+        /* save flags, always present */
 	movsd
 	/* flag 1 is memory */
 	and	$1, eax
