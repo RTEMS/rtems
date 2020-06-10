@@ -1376,7 +1376,6 @@ tc_init(struct timecounter *tc)
 		return;
 #ifndef __rtems__
 	(void)tc->tc_get_timecount(tc);
-	(void)tc->tc_get_timecount(tc);
 #endif /* __rtems__ */
 	timecounter = tc;
 #ifdef __rtems__
@@ -1691,7 +1690,6 @@ sysctl_kern_timecounter_hardware(SYSCTL_HANDLER_ARGS)
 			continue;
 
 		/* Warm up new timecounter. */
-		(void)newtc->tc_get_timecount(newtc);
 		(void)newtc->tc_get_timecount(newtc);
 
 		timecounter = newtc;
@@ -2246,7 +2244,6 @@ inittimecounter(void *dummy)
 #endif
 
 	/* warm up new timecounter (again) and get rolling. */
-	(void)timecounter->tc_get_timecount(timecounter);
 	(void)timecounter->tc_get_timecount(timecounter);
 	mtx_lock_spin(&tc_setclock_mtx);
 	tc_windup(NULL);
