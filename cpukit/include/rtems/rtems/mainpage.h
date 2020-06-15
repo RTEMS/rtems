@@ -651,7 +651,7 @@
  */
 
 /**
- * @addtogroup ClassicTasks
+ * @addtogroup RTEMSAPIClassicTasks
  *
  * @section ClassicTasksSecTaskDefinition Task Definition
  *
