@@ -199,27 +199,6 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_semaphore_create - RTEMS_INVALID_NUMBER" );
 
-  /*
-   *  The check for an object being global is only made if
-   *  multiprocessing is enabled.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  status = rtems_semaphore_create(
-    Semaphore_name[ 3 ],
-    1,
-    RTEMS_GLOBAL,
-    RTEMS_NO_PRIORITY,
-    &Junk_id
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_MP_NOT_CONFIGURED,
-    "rtems_semaphore_create of mp not configured"
-  );
-#endif
-  puts( "TA1 - rtems_semaphore_create - RTEMS_MP_NOT_CONFIGURED" );
-
   status = rtems_semaphore_delete( 100 );
   fatal_directive_status(
     status,

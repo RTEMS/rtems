@@ -126,28 +126,6 @@ void test_partition_errors(void)
     );
   }
 
-  /*
-   *  The check for an object being global is only made if
-   *  multiprocessing is enabled.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  status = rtems_partition_create(
-    Partition_name[ 1 ],
-    Partition_good_area,
-    128,
-    64,
-    RTEMS_GLOBAL,
-    &junk_id
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_MP_NOT_CONFIGURED,
-    "rtems_partition_create of global"
-  );
-#endif
-  puts( "TA1 - rtems_partition_create - RTEMS_MP_NOT_CONFIGURED" );
-
 #if defined(_C3x) || defined(_C4x)
   puts( "TA1 - rtems_partition_create - RTEMS_INVALID_ADDRESS - SKIPPED" );
 #else

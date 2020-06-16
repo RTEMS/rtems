@@ -84,7 +84,7 @@ rtems_task Init(
      1,
      RTEMS_MINIMUM_STACK_SIZE * 2,
      RTEMS_PREEMPT|RTEMS_TIMESLICE,
-     RTEMS_DEFAULT_ATTRIBUTES,
+     RTEMS_GLOBAL,
      &Task_id[ 2 ]
   );
   directive_failed( status, "rtems_task_create of TA2" );

@@ -98,27 +98,6 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_message_queue_create - Q 1 - RTEMS_INVALID_NAME" );
 
-  /*
-   *  The check for an object being global is only made if
-   *  multiprocessing is enabled.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  status = rtems_message_queue_create(
-    Queue_name[ 1 ],
-    1,
-    MESSAGE_SIZE,
-    RTEMS_GLOBAL,
-    &Junk_id
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_MP_NOT_CONFIGURED,
-    "rtems_message_queue_create of mp not configured"
-  );
-#endif
-  puts( "TA1 - rtems_message_queue_create - Q 1 - RTEMS_MP_NOT_CONFIGURED" );
-
   /* not enough memory for messages */
   status = rtems_message_queue_create(
     Queue_name[ 1 ],

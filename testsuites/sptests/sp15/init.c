@@ -71,7 +71,7 @@ rtems_task Init(
     Area_2,
     274,
     128,
-    RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_GLOBAL,
     &Partition_id[ 2 ]
   );
   directive_failed( status, "rtems_partition_create of PT2" );

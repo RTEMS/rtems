@@ -105,7 +105,7 @@ rtems_task Init(
     Queue_name[ 3 ],
     100,
     MESSAGE_SIZE,
-    RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_GLOBAL,
     &Queue_id[ 3 ]
   );
   directive_failed( status, "rtems_message_queue_create of Q3" );

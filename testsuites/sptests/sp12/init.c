@@ -73,7 +73,7 @@ rtems_task Init(
   status = rtems_semaphore_create(
     Semaphore_name[ 3 ],
     1,
-    RTEMS_DEFAULT_ATTRIBUTES,
+    RTEMS_GLOBAL,
     RTEMS_NO_PRIORITY,
     &Semaphore_id[ 3 ]
   );

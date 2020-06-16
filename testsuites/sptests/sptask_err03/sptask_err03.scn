@@ -14,5 +14,4 @@ TA1 - rtems_task_create - 8 created - RTEMS_SUCCESSFUL
 TA1 - rtems_task_create - 9 created - RTEMS_SUCCESSFUL
 TA1 - rtems_task_create - 10 created - RTEMS_SUCCESSFUL
 TA1 - rtems_task_create - 11 - RTEMS_TOO_MANY
-TA1 - rtems_task_create - RTEMS_MP_NOT_CONFIGURED
 *** END TEST TASK ERROR 03 ***

@@ -52,9 +52,11 @@ rtems_status_code rtems_message_queue_create(
     return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( (is_global = _Attributes_Is_global( attribute_set ) ) &&
-       !_System_state_Is_multiprocessing )
-    return RTEMS_MP_NOT_CONFIGURED;
+  if ( !_System_state_Is_multiprocessing ) {
+    attribute_set = _Attributes_Clear( attribute_set, RTEMS_GLOBAL );
+  }
+
+  is_global = _Attributes_Is_global( attribute_set );
 #endif
 
   if ( count == 0 )

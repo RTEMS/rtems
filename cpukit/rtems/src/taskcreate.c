@@ -111,15 +111,11 @@ rtems_status_code rtems_task_create(
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( _Attributes_Is_global( the_attribute_set ) ) {
+  if ( !_System_state_Is_multiprocessing ) {
+    the_attribute_set = _Attributes_Clear( the_attribute_set, RTEMS_GLOBAL );
+  }
 
-    is_global = true;
-
-    if ( !_System_state_Is_multiprocessing )
-      return RTEMS_MP_NOT_CONFIGURED;
-
-  } else
-    is_global = false;
+  is_global = _Attributes_Is_global( the_attribute_set );
 #endif
 
   /*

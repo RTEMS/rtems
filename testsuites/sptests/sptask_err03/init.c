@@ -228,27 +228,5 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_task_create - 11 - RTEMS_TOO_MANY" );
 
-  /*
-   *  The check for an object being global is only made if
-   *  multiprocessing is enabled.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  status = rtems_task_create(
-    task_name,
-    4,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_GLOBAL,
-    &Junk_id
-  );
-  fatal_directive_status(
-    status,
-    RTEMS_MP_NOT_CONFIGURED,
-    "rtems_task_create of global task in a single cpu system"
-  );
-#endif
-  puts( "TA1 - rtems_task_create - RTEMS_MP_NOT_CONFIGURED" );
- 
   TEST_END();
 }
