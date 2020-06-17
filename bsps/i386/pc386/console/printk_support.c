@@ -29,6 +29,28 @@
 
 rtems_device_minor_number BSPPrintkPort = 0;
 
+static bool serialInit;
+static bool serialOK;
+
+static bool serialValid(console_tbl *port)
+{
+  if (port->pDeviceFns) {
+    if (!serialInit) {
+      serialOK = true;
+      if (port->pDeviceFns->deviceProbe != NULL) {
+        if (!port->pDeviceFns->deviceProbe( BSPPrintkPort ))
+          serialOK = false;
+        else if (port->pDeviceFns->deviceInitialize != NULL)
+          port->pDeviceFns->deviceInitialize( BSPPrintkPort );
+        else
+          serialOK = false;
+      }
+      serialInit = true;
+    }
+  }
+  return serialOK;
+}
+
 void BSP_outch(char ch);
 int BSP_inch(void);
 
@@ -42,10 +64,12 @@ void BSP_outch(char ch)
 
   if ( !isVga ) {
     console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
-    if (port->pDeviceFns && port->pDeviceFns->deviceWritePolled) {
-      port->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
+    if (serialValid(port)) {
+      if (port->pDeviceFns->deviceWritePolled) {
+        port->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
+      }
+      return;
     }
-    return;
   }
 
   #if BSP_ENABLE_VGA
@@ -65,11 +89,13 @@ int BSP_inch(void)
 
   if ( !isVga ) {
     console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
-    if (port->pDeviceFns && port->pDeviceFns->deviceRead) {
-      do {
-        result = port->pDeviceFns->deviceRead( BSPPrintkPort );
-      } while (result == -1);
-      return result;
+    if (serialValid(port)) {
+      if (port->pDeviceFns->deviceRead) {
+        do {
+          result = port->pDeviceFns->deviceRead( BSPPrintkPort );
+        } while (result == -1);
+        return result;
+      }
     }
   }
 

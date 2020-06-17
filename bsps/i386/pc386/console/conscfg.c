@@ -46,15 +46,14 @@
 
   #define CLOCK_RATE    (115200 * 16)
 
-  static uint8_t com_get_register(uint32_t addr, uint8_t i)
+  static uint8_t com_get_register(uintptr_t addr, uint8_t i)
   {
-    register uint8_t val;
-
+    uint8_t val;
     inport_byte( (addr + i), val );
     return val;
   }
 
-  static void com_set_register(uint32_t addr, uint8_t i, uint8_t val)
+  static void com_set_register(uintptr_t addr, uint8_t i, uint8_t val)
   {
     outport_byte( (addr + i), val );
   }
