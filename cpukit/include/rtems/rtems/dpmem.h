@@ -1,148 +1,340 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup ClassicDPMEM
- *
- * @brief Classic Dual Ported Memory Manager API
+ * @brief This header file defines the Dual-Ported Memory Manager API.
  */
 
-/* COPYRIGHT (c) 1989-2008.
- * On-Line Applications Research Corporation (OAR).
+/*
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://www.rtems.org/bugs.html
+ *
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
+ *
+ * https://docs.rtems.org
+ */
+
+/* Generated from spec:/rtems/dpmem/if/header */
 
 #ifndef _RTEMS_RTEMS_DPMEM_H
 #define _RTEMS_RTEMS_DPMEM_H
 
-#include <rtems/rtems/types.h>
+#include <stdint.h>
 #include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- *  @defgroup ClassicDPMEM Dual Ported Memory
- *
- *  @ingroup RTEMSAPIClassic
- *
- *  This encapsulates functionality related to the
- *  Classic API Dual Ported Memory Manager.
- */
-/**@{*/
+/* Generated from spec:/rtems/dpmem/if/group */
 
 /**
- * @brief Creates a port into a dual-ported memory area.
+ * @defgroup RTEMSAPIClassicDPMem Dual-Ported Memory Manager
  *
- * This routine implements the rtems_port_create directive. The port
- * will have the name @a name. The port maps onto an area of dual ported
- * memory of length bytes which has internal_start and external_start
- * as the internal and external starting addresses, respectively.
- * It returns the id of the created port in ID.
+ * @ingroup RTEMSAPIClassic
  *
- * @param[in] name is the user defined port name
- * @param[in] internal_start is the internal start address of port
- * @param[in] external_start is the external start address of port
- * @param[in] length is the physical length in bytes
- * @param[out] id is the address of port id to set
+ * @brief The Dual-Ported Memory Manager provides a mechanism for converting
+ *   addresses between internal and external representations for multiple
+ *   dual-ported memory areas (DPMA).
+ */
+
+/* Generated from spec:/rtems/dpmem/if/create */
+
+/**
+ * @ingroup RTEMSAPIClassicDPMem
  *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error. If successful, the id will
- *         be filled in with the port id.
+ * @brief Creates a port.
+ *
+ * @param name is the object name of the port.
+ *
+ * @param internal_start is the internal start address of the memory area.
+ *
+ * @param external_start is the external start address of the memory area.
+ *
+ * @param length is the length in bytes of the memory area.
+ *
+ * @param[out] id is the pointer to an object identifier variable.  When the
+ *   directive call is successful, the identifier of the created port will be
+ *   stored in this variable.
+ *
+ * This directive creates a port which resides on the local node.  The port has
+ * the user-defined object name specified in ``name``.  The assigned object
+ * identifier is returned in ``id``.  This identifier is used to access the
+ * port with other dual-ported memory port related directives.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``internal_start`` parameter was not
+ *   properly aligned.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``external_start`` parameter was not
+ *   properly aligned.
+ *
+ * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
+ *   port.  The number of port available to the application is configured
+ *   through the #CONFIGURE_MAXIMUM_PORTS application configuration option.
+ *
+ * @par Notes
+ * @parblock
+ * The ``internal_start`` and ``external_start`` parameters must be on a
+ * boundary defined by the target processor architecture.
+ *
+ * For control and maintenance of the port, RTEMS allocates a DPCB from the
+ * local DPCB free pool and initializes it.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The number of ports available to the application is configured through the
+ *   #CONFIGURE_MAXIMUM_PORTS application configuration option.
+ *
+ * * Where the object class corresponding to the directive is configured to use
+ *   unlimited objects, the directive may allocate memory from the RTEMS
+ *   Workspace.
+ * @endparblock
  */
 rtems_status_code rtems_port_create(
-  rtems_name    name,
-  void         *internal_start,
-  void         *external_start,
-  uint32_t      length,
-  rtems_id     *id
+  rtems_name name,
+  void      *internal_start,
+  void      *external_start,
+  uint32_t   length,
+  rtems_id  *id
 );
 
+/* Generated from spec:/rtems/dpmem/if/ident */
+
 /**
- * @brief RTEMS Port Name to Id
+ * @ingroup RTEMSAPIClassicDPMem
  *
- * This routine implements the rtems_port_ident directive. This directive
- * returns the port ID associated with name. If more than one port is
- * named name, then the port to which the ID belongs is arbitrary.
+ * @brief Identifies a port by the object name.
  *
- * @param[in] name is the user defined port name
- * @param[out] id is the pointer to port id
+ * @param name is the object name to look up.
  *
- * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
+ * @param[out] id is the pointer to an object identifier variable.  When the
+ *   directive call is successful, the object identifier of an object with the
+ *   specified name will be stored in this variable.
+ *
+ * This directive obtains a port identifier associated with the port name
+ * specified in ``name``.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was 0.
+ *
+ * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
+ *   the local node.
+ *
+ * @par Notes
+ * @parblock
+ * If the port name is not unique, then the port identifier will match the
+ * first port with that name in the search order.  However, this port
+ * identifier is not guaranteed to correspond to the desired port.
+ *
+ * The objects are searched from lowest to the highest index.  Only the local
+ * node is searched.
+ *
+ * The port identifier is used with other dual-ported memory related directives
+ * to access the port.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
-rtems_status_code rtems_port_ident(
-  rtems_name    name,
-  rtems_id     *id
-);
+rtems_status_code rtems_port_ident( rtems_name name, rtems_id *id );
+
+/* Generated from spec:/rtems/dpmem/if/delete */
 
 /**
- * @brief RTEMS Delete Port
+ * @ingroup RTEMSAPIClassicDPMem
  *
- * This routine implements the rtems_port_delete directive. It deletes
- * the port associated with ID.
+ * @brief Deletes the port.
  *
- * @param[in] id is the dual-ported memory area id
+ * @param id is the port identifier.
  *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error.
+ * This directive deletes the port specified by ``id``.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no port associated with the identifier
+ *   specified by ``id``.
+ *
+ * @par Notes
+ * The DPCB for the deleted port is reclaimed by RTEMS.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The calling task does not have to be the task that created the object.
+ *   Any local task that knows the object identifier can delete the object.
+ *
+ * * Where the object class corresponding to the directive is configured to use
+ *   unlimited objects, the directive may free memory to the RTEMS Workspace.
+ * @endparblock
  */
-rtems_status_code rtems_port_delete(
-  rtems_id   id
-);
+rtems_status_code rtems_port_delete( rtems_id id );
+
+/* Generated from spec:/rtems/dpmem/if/external-to-internal */
 
 /**
- * @brief RTEMS Port External to Internal
+ * @ingroup RTEMSAPIClassicDPMem
  *
- * This routine implements the rtems_port_external_to_internal directive.
- * It returns the internal port address which maps to the provided
- * external port address for the specified port ID. If the given external
- * address is an invalid dual-ported address, then the internal address is
- * set to the given external address.
+ * @brief Converts the external address to the internal address.
  *
- * @param[in] id is the id of dp memory object
- * @param[in] external is the external address
- * @param[out] internal is the pointer of internal address to set
+ * @param id is the port identifier.
  *
- * @retval RTEMS_SUCCESSFUL
+ * @param external is the external address to convert.
+ *
+ * @param[out] internal is the pointer to a pointer variable.  When the
+ *   directive call is successful, the external address associated with the
+ *   internal address will be stored in this variable.
+ *
+ * This directive converts a dual-ported memory address from external to
+ * internal representation for the specified port.  If the given external
+ * address is invalid for the specified port, then the internal address is set
+ * to the given external address.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NAME The ``id`` parameter was invalid.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``internal`` parameter was NULL.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_port_external_to_internal(
-  rtems_id     id,
-  void        *external,
-  void       **internal
+  rtems_id id,
+  void    *external,
+  void   **internal
 );
+
+/* Generated from spec:/rtems/dpmem/if/internal-to-external */
 
 /**
- * @brief RTEMS Port Internal to External
+ * @ingroup RTEMSAPIClassicDPMem
  *
- * This routine implements the Port_internal_to_external directive.
- * It returns the external port address which maps to the provided
- * internal port address for the specified port ID. If the given
- * internal address is an invalid dual-ported address, then the
- * external address is set to the given internal address.
+ * @brief Converts the internal address to the external address.
  *
- * @param[in] id is the id of dual-ported memory object
- * @param[in] internal is the internal address to set
- * @param[in] external is the pointer to external address
+ * @param id is the port identifier.
  *
- * @retval RTEMS_SUCCESSFUL and the external will be filled in
- * with the external addresses
+ * @param internal is the internal address to convert.
+ *
+ * @param[out] external is the pointer to a pointer variable.  When the
+ *   directive call is successful, the external address associated with the
+ *   internal address will be stored in this variable.
+ *
+ * This directive converts a dual-ported memory address from internal to
+ * external representation so that it can be passed to owner of the DPMA
+ * represented by the specified port.  If the given internal address is an
+ * invalid dual-ported address, then the external address is set to the given
+ * internal address.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_NAME The ``id`` parameter was invalid.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``external`` parameter was NULL.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_port_internal_to_external(
-  rtems_id     id,
-  void        *internal,
-  void       **external
+  rtems_id id,
+  void    *internal,
+  void   **external
 );
-
-/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-/* end of include file */
+#endif /* _RTEMS_RTEMS_DPMEM_H */
