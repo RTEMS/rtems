@@ -1,22 +1,58 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup ClassicEvent
+ * @ingroup RTEMSAPIClassicEvent
  *
- * @brief Classic Event Manager API
+ * @brief This header file provides the Event Manager API.
  */
 
-/* COPYRIGHT (c) 1989-2008.
- * On-Line Applications Research Corporation (OAR).
+/*
+ * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ */
+
+/* Generated from spec:/rtems/event/if/header */
 
 #ifndef _RTEMS_RTEMS_EVENT_H
 #define _RTEMS_RTEMS_EVENT_H
 
+#include <stdint.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -25,451 +61,494 @@
 extern "C" {
 #endif
 
-/**
- *  @defgroup ClassicEventSet Event Set
- *
- *  @ingroup ClassicEvent
- *
- *  @{
- */
+/* Generated from spec:/rtems/event/if/group */
 
 /**
- *  @brief Integer type to hold an event set of up to 32 events represented as
- *  a bit field.
+ * @defgroup RTEMSAPIClassicEvent Event Manager
+ *
+ * @ingroup RTEMSAPIClassic
+ *
+ * @brief The Event Manager provides a high performance method of inter-task
+ *   communication and synchronization.
  */
-typedef uint32_t   rtems_event_set;
+
+/* Generated from spec:/rtems/event/if/all-events */
 
 /**
- *  @brief Constant used to send or receive all events.
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents all events of an event set.
+ *
+ * This event set constant is equal to the bitwise or of #RTEMS_EVENT_0,
+ * #RTEMS_EVENT_1, #RTEMS_EVENT_2, #RTEMS_EVENT_3, #RTEMS_EVENT_4,
+ * #RTEMS_EVENT_5, #RTEMS_EVENT_6, #RTEMS_EVENT_7, #RTEMS_EVENT_8,
+ * #RTEMS_EVENT_9, #RTEMS_EVENT_10, #RTEMS_EVENT_11, #RTEMS_EVENT_12,
+ * #RTEMS_EVENT_13, #RTEMS_EVENT_14, #RTEMS_EVENT_15, #RTEMS_EVENT_16,
+ * #RTEMS_EVENT_17, #RTEMS_EVENT_18, #RTEMS_EVENT_19, #RTEMS_EVENT_20,
+ * #RTEMS_EVENT_21, #RTEMS_EVENT_22, #RTEMS_EVENT_23, #RTEMS_EVENT_24,
+ * #RTEMS_EVENT_25, #RTEMS_EVENT_26, #RTEMS_EVENT_27, #RTEMS_EVENT_28,
+ * #RTEMS_EVENT_29, #RTEMS_EVENT_30, and #RTEMS_EVENT_31.
  */
-#define RTEMS_ALL_EVENTS  0xFFFFFFFF
+#define RTEMS_ALL_EVENTS 0xffffffff
 
-/** @brief Defines the bit in the event set associated with event 0. */
-#define RTEMS_EVENT_0     0x00000001
-/** @brief Defines the bit in the event set associated with event 1. */
-#define RTEMS_EVENT_1     0x00000002
-/** @brief Defines the bit in the event set associated with event 2. */
-#define RTEMS_EVENT_2     0x00000004
-/** @brief Defines the bit in the event set associated with event 3. */
-#define RTEMS_EVENT_3     0x00000008
-/** @brief Defines the bit in the event set associated with event 4. */
-#define RTEMS_EVENT_4     0x00000010
-/** @brief Defines the bit in the event set associated with event 5. */
-#define RTEMS_EVENT_5     0x00000020
-/** @brief Defines the bit in the event set associated with event 6. */
-#define RTEMS_EVENT_6     0x00000040
-/** @brief Defines the bit in the event set associated with event 7. */
-#define RTEMS_EVENT_7     0x00000080
-/** @brief Defines the bit in the event set associated with event 8. */
-#define RTEMS_EVENT_8     0x00000100
-/** @brief Defines the bit in the event set associated with event 9. */
-#define RTEMS_EVENT_9     0x00000200
-/** @brief Defines the bit in the event set associated with event 10. */
-#define RTEMS_EVENT_10    0x00000400
-/** @brief Defines the bit in the event set associated with event 11. */
-#define RTEMS_EVENT_11    0x00000800
-/** @brief Defines the bit in the event set associated with event 12. */
-#define RTEMS_EVENT_12    0x00001000
-/** @brief Defines the bit in the event set associated with event 13. */
-#define RTEMS_EVENT_13    0x00002000
-/** @brief Defines the bit in the event set associated with event 14. */
-#define RTEMS_EVENT_14    0x00004000
-/** @brief Defines the bit in the event set associated with event 15. */
-#define RTEMS_EVENT_15    0x00008000
-/** @brief Defines the bit in the event set associated with event 16. */
-#define RTEMS_EVENT_16    0x00010000
-/** @brief Defines the bit in the event set associated with event 17. */
-#define RTEMS_EVENT_17    0x00020000
-/** @brief Defines the bit in the event set associated with event 18. */
-#define RTEMS_EVENT_18    0x00040000
-/** @brief Defines the bit in the event set associated with event 19. */
-#define RTEMS_EVENT_19    0x00080000
-/** @brief Defines the bit in the event set associated with event 20. */
-#define RTEMS_EVENT_20    0x00100000
-/** @brief Defines the bit in the event set associated with event 21. */
-#define RTEMS_EVENT_21    0x00200000
-/** @brief Defines the bit in the event set associated with event 22. */
-#define RTEMS_EVENT_22    0x00400000
-/** @brief Defines the bit in the event set associated with event 23. */
-#define RTEMS_EVENT_23    0x00800000
-/** @brief Defines the bit in the event set associated with event 24. */
-#define RTEMS_EVENT_24    0x01000000
-/** @brief Defines the bit in the event set associated with event 25. */
-#define RTEMS_EVENT_25    0x02000000
-/** @brief Defines the bit in the event set associated with event 26. */
-#define RTEMS_EVENT_26    0x04000000
-/** @brief Defines the bit in the event set associated with event 27. */
-#define RTEMS_EVENT_27    0x08000000
-/** @brief Defines the bit in the event set associated with event 29. */
-#define RTEMS_EVENT_28    0x10000000
-/** @brief Defines the bit in the event set associated with event 29. */
-#define RTEMS_EVENT_29    0x20000000
-/** @brief Defines the bit in the event set associated with event 30. */
-#define RTEMS_EVENT_30    0x40000000
-/** @brief Defines the bit in the event set associated with event 31. */
-#define RTEMS_EVENT_31    0x80000000
-
-/** @} */
+/* Generated from spec:/rtems/event/if/event-00 */
 
 /**
- *  @defgroup ClassicEvent Events
+ * @ingroup RTEMSAPIClassicEvent
  *
- *  @ingroup RTEMSAPIClassic
- *
- *  @brief The event manager provides a high performance method of intertask
- *  communication and synchronization.
- *
- *  An event flag is used by a task (or ISR) to inform another task of the
- *  occurrence of a significant situation. Thirty-two event flags are
- *  associated with each task. A collection of one or more event flags is
- *  referred to as an event set. The data type rtems_event_set is used to
- *  manage event sets.
- *
- *  The application developer should remember the following key characteristics
- *  of event operations when utilizing the event manager:
- *
- *  - Events provide a simple synchronization facility.
- *  - Events are aimed at tasks.
- *  - Tasks can wait on more than one event simultaneously.
- *  - Events are independent of one another.
- *  - Events do not hold or transport data.
- *  - Events are not queued. In other words, if an event is sent more than once
- *    to a task before being received, the second and subsequent send
- *    operations to that same task have no effect.
- *
- *  An event set is posted when it is directed (or sent) to a task. A pending
- *  event is an event that has been posted but not received. An event condition
- *  is used to specify the event set which the task desires to receive and the
- *  algorithm which will be used to determine when the request is satisfied. An
- *  event condition is satisfied based upon one of two algorithms which are
- *  selected by the user. The @ref RTEMS_EVENT_ANY algorithm states that an
- *  event condition is satisfied when at least a single requested event is
- *  posted.  The @ref RTEMS_EVENT_ALL algorithm states that an event condition
- *  is satisfied when every requested event is posted.
- *
- *  An event set or condition is built by a bitwise or of the desired events.
- *  The set of valid events is @ref RTEMS_EVENT_0 through @ref RTEMS_EVENT_31.
- *  If an event is not explicitly specified in the set or condition, then it is
- *  not present. Events are specifically designed to be mutually exclusive,
- *  therefore bitwise or and addition operations are equivalent as long as each
- *  event appears exactly once in the event set list.
- *
- *  For example, when sending the event set consisting of @ref RTEMS_EVENT_6,
- *  @ref RTEMS_EVENT_15, and @ref RTEMS_EVENT_31, the event parameter to the
- *  rtems_event_send() directive should be @ref RTEMS_EVENT_6 |
- *  @ref RTEMS_EVENT_15 | @ref RTEMS_EVENT_31.
- *
- *  @{
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 0.
  */
+#define RTEMS_EVENT_0 0x00000001
+
+/* Generated from spec:/rtems/event/if/event-01 */
 
 /**
- *  @brief Constant used to receive the set of currently pending events in
- *  rtems_event_receive().
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 1.
  */
-#define RTEMS_PENDING_EVENTS      0
+#define RTEMS_EVENT_1 0x00000002
+
+/* Generated from spec:/rtems/event/if/event-02 */
 
 /**
- * @brief Sends an Event Set to the Target Task
+ * @ingroup RTEMSAPIClassicEvent
  *
- * This directive sends an event set @a event_in to the task specified by
- * @a id.
- *
- * Based upon the state of the target task, one of the following situations
- * applies. The target task is
- * - blocked waiting for events.
- * If the waiting task's input event condition is
- * - satisfied, then the task is made ready for execution.
- * - not satisfied, then the event set is posted but left pending and the
- * task remains blocked.
- * - not waiting for events.
- * - The event set is posted and left pending.
- *
- * Identical events sent to a task are not queued. In other words, the second,
- * and subsequent, posting of an event to a task before it can perform an
- * rtems_event_receive() has no effect.
- *
- * The calling task will be preempted if it has preemption enabled and a
- * higher priority task is unblocked as the result of this directive.
- *
- * Sending an event set to a global task which does not reside on the local
- * node will generate a request telling the remote node to send the event set
- * to the appropriate task.
- *
- * @param[in] id Identifier of the target task. Specifying @ref RTEMS_SELF
- * results in the event set being sent to the calling task.
- * @param[in] event_in Event set sent to the target task.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID Invalid task identifier.
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 2.
  */
-rtems_status_code rtems_event_send (
-  rtems_id        id,
-  rtems_event_set event_in
-);
+#define RTEMS_EVENT_2 0x00000004
+
+/* Generated from spec:/rtems/event/if/event-03 */
 
 /**
- * @brief Receives pending events.
+ * @ingroup RTEMSAPIClassicEvent
  *
- * This directive attempts to receive the event condition specified in
- * @a event_in. If @a event_in is set to @ref RTEMS_PENDING_EVENTS, then the
- * current pending events are returned in @a event_out and left pending. The
- * @ref RTEMS_WAIT and @ref RTEMS_NO_WAIT options in the @a option_set
- * parameter are used to specify whether or not the task is willing to wait
- * for the event condition to be satisfied. The @ref RTEMS_EVENT_ANY and @ref
- * RTEMS_EVENT_ALL are used in the @a option_set parameter to specify whether
- * at least a single event or the complete event set is necessary to satisfy
- * the event condition. The @a event_out parameter is returned to the calling
- * task with the value that corresponds to the events in @a event_in that were
- * satisfied.
- *
- * A task can determine the pending event set by using a value of
- * @ref RTEMS_PENDING_EVENTS for the input event set @a event_in. The pending
- * events are returned to the calling task but the event set is left
- * unaltered.
- *
- * A task can receive all of the currently pending events by using the a value
- * of @ref RTEMS_ALL_EVENTS for the input event set @a event_in and
- * @ref RTEMS_NO_WAIT | @ref RTEMS_EVENT_ANY for the option set @a option_set.
- * The pending events are returned to the calling task and the event set is
- * cleared. If no events are pending then the @ref RTEMS_UNSATISFIED status
- * code will be returned.
- *
- * If pending events satisfy the event condition, then @a event_out is set to
- * the satisfied events and the pending events in the event condition are
- * cleared.  If the event condition is not satisfied and @ref RTEMS_NO_WAIT is
- * specified, then @a event_out is set to the currently satisfied events.  If
- * the calling task chooses to wait, then it will block waiting for the event
- * condition.
- *
- * If the calling task must wait for the event condition to be satisfied, then
- * the timeout parameter is used to specify the maximum interval to wait. If
- * it is set to @ref RTEMS_NO_TIMEOUT, then the calling task will wait forever.
- *
- * This directive only affects the events specified in @a event_in. Any
- * pending events that do not correspond to any of the events specified in
- * @a event_in will be left pending.
- *
- * A clock tick is required to support the wait with time out functionality of
- * this directive.
- *
- * @param[in] event_in Set of requested events (input events).
- * @param[in] option_set Use a bitwise or of the following options
- * - @ref RTEMS_WAIT - task will wait for event (default),
- * - @ref RTEMS_NO_WAIT - task should not wait,
- * - @ref RTEMS_EVENT_ALL - return after all events (default), and
- * - @ref RTEMS_EVENT_ANY - return after any events.
- * @param[in] ticks Time out in ticks. Use @ref RTEMS_NO_TIMEOUT to wait
- * without a time out (potentially forever).
- * @param[out] event_out Set of received events (output events).
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_UNSATISFIED Input events not satisfied (only with the
- * @ref RTEMS_NO_WAIT option).
- * @retval RTEMS_INVALID_ADDRESS The @a event_out pointer is @c NULL.
- * @retval RTEMS_TIMEOUT Timed out waiting for events.
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 3.
  */
-rtems_status_code rtems_event_receive (
+#define RTEMS_EVENT_3 0x00000008
+
+/* Generated from spec:/rtems/event/if/event-04 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 4.
+ */
+#define RTEMS_EVENT_4 0x00000010
+
+/* Generated from spec:/rtems/event/if/event-05 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 5.
+ */
+#define RTEMS_EVENT_5 0x00000020
+
+/* Generated from spec:/rtems/event/if/event-06 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 6.
+ */
+#define RTEMS_EVENT_6 0x00000040
+
+/* Generated from spec:/rtems/event/if/event-07 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 7.
+ */
+#define RTEMS_EVENT_7 0x00000080
+
+/* Generated from spec:/rtems/event/if/event-08 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 8.
+ */
+#define RTEMS_EVENT_8 0x00000100
+
+/* Generated from spec:/rtems/event/if/event-09 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 9.
+ */
+#define RTEMS_EVENT_9 0x00000200
+
+/* Generated from spec:/rtems/event/if/event-10 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 10.
+ */
+#define RTEMS_EVENT_10 0x00000400
+
+/* Generated from spec:/rtems/event/if/event-11 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 11.
+ */
+#define RTEMS_EVENT_11 0x00000800
+
+/* Generated from spec:/rtems/event/if/event-12 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 12.
+ */
+#define RTEMS_EVENT_12 0x00001000
+
+/* Generated from spec:/rtems/event/if/event-13 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 13.
+ */
+#define RTEMS_EVENT_13 0x00002000
+
+/* Generated from spec:/rtems/event/if/event-14 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 14.
+ */
+#define RTEMS_EVENT_14 0x00004000
+
+/* Generated from spec:/rtems/event/if/event-15 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 15.
+ */
+#define RTEMS_EVENT_15 0x00008000
+
+/* Generated from spec:/rtems/event/if/event-16 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 16.
+ */
+#define RTEMS_EVENT_16 0x00010000
+
+/* Generated from spec:/rtems/event/if/event-17 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 17.
+ */
+#define RTEMS_EVENT_17 0x00020000
+
+/* Generated from spec:/rtems/event/if/event-18 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 18.
+ */
+#define RTEMS_EVENT_18 0x00040000
+
+/* Generated from spec:/rtems/event/if/event-19 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 19.
+ */
+#define RTEMS_EVENT_19 0x00080000
+
+/* Generated from spec:/rtems/event/if/event-20 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 20.
+ */
+#define RTEMS_EVENT_20 0x00100000
+
+/* Generated from spec:/rtems/event/if/event-21 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 21.
+ */
+#define RTEMS_EVENT_21 0x00200000
+
+/* Generated from spec:/rtems/event/if/event-22 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 22.
+ */
+#define RTEMS_EVENT_22 0x00400000
+
+/* Generated from spec:/rtems/event/if/event-23 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 23.
+ */
+#define RTEMS_EVENT_23 0x00800000
+
+/* Generated from spec:/rtems/event/if/event-24 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 24.
+ */
+#define RTEMS_EVENT_24 0x01000000
+
+/* Generated from spec:/rtems/event/if/event-25 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 25.
+ */
+#define RTEMS_EVENT_25 0x02000000
+
+/* Generated from spec:/rtems/event/if/event-26 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 26.
+ */
+#define RTEMS_EVENT_26 0x04000000
+
+/* Generated from spec:/rtems/event/if/event-27 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 27.
+ */
+#define RTEMS_EVENT_27 0x08000000
+
+/* Generated from spec:/rtems/event/if/event-28 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 28.
+ */
+#define RTEMS_EVENT_28 0x10000000
+
+/* Generated from spec:/rtems/event/if/event-29 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 29.
+ */
+#define RTEMS_EVENT_29 0x20000000
+
+/* Generated from spec:/rtems/event/if/event-30 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 30.
+ */
+#define RTEMS_EVENT_30 0x40000000
+
+/* Generated from spec:/rtems/event/if/event-31 */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant represents the bit in the event set
+ *   associated with event 31.
+ */
+#define RTEMS_EVENT_31 0x80000000
+
+/* Generated from spec:/rtems/event/if/pending-events */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This event set constant indicates that rtems_event_receive() shall
+ *   return the set of pending events.
+ */
+#define RTEMS_PENDING_EVENTS 0
+
+/* Generated from spec:/rtems/event/if/set */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief This integer type represents a bit field which can hold exactly 32
+ *   individual events.
+ */
+typedef uint32_t rtems_event_set;
+
+/* Generated from spec:/rtems/event/if/system-network-close */
+
+/**
+ * @brief This event set constant represents the reserved system event for a
+ *   network socket close.
+ */
+#define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
+
+/* Generated from spec:/rtems/event/if/system-network-sbwait */
+
+/**
+ * @brief This event set constant represents the reserved system event for a
+ *   network socket buffer wait usage.
+ */
+#define RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT RTEMS_EVENT_24
+
+/* Generated from spec:/rtems/event/if/system-network-sosleep */
+
+/**
+ * @brief This event set constant represents the reserved system event for a
+ *   network socket sleep.
+ */
+#define RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP RTEMS_EVENT_25
+
+/* Generated from spec:/rtems/event/if/system-receive */
+
+/**
+ * @brief Receives or gets a system event set from the executing task.
+ *
+ * This directive performs the same actions as the rtems_event_receive()
+ * directive except that it operates with a different set of events for each
+ * task.
+ *
+ * @param event_in is the event set of interest.  Use #RTEMS_PENDING_EVENTS to
+ *   get the pending events.
+ *
+ * @param option_set is the option set.
+ *
+ * @param ticks is the timeout in clock ticks if the #RTEMS_WAIT option was
+ *   set.  Use #RTEMS_NO_TIMEOUT to wait potentially forever.
+ *
+ * @param event_out is the pointer to an event set.  The received or pending
+ *   events are stored in the referenced event set if the operation was
+ *   successful.
+ */
+rtems_status_code rtems_event_system_receive(
   rtems_event_set  event_in,
   rtems_option     option_set,
   rtems_interval   ticks,
   rtems_event_set *event_out
 );
 
-/** @} */
+/* Generated from spec:/rtems/event/if/system-send */
 
 /**
- * @defgroup ClassicEventSystem System Events
+ * @brief Sends the system event set to the task.
  *
- * @ingroup ClassicEvent
+ * @param id is the identifier of the target task to receive the event set.
  *
- * System events are similar to normal events.  They offer a second set of
- * events.  These events are intended for internal RTEMS use and should not be
- * used by applications (with the exception of the transient system event).
- *
- * The event @ref RTEMS_EVENT_SYSTEM_TRANSIENT is used for transient usage.
- * See also @ref ClassicEventTransient.  This event may be used by every entity
- * that fulfils its usage pattern.
- */
-/**@{**/
-
-/**
- * @brief Reserved system event for network SBWAIT usage.
- */
-#define RTEMS_EVENT_SYSTEM_NETWORK_SBWAIT RTEMS_EVENT_24
-
-/**
- * @brief Reserved system event for network SOSLEEP usage.
- */
-#define RTEMS_EVENT_SYSTEM_NETWORK_SOSLEEP RTEMS_EVENT_25
-
-/**
- * @brief Reserved system event for network socket close.
- */
-#define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
-
-/**
- * @brief Reserved system event to resume server threads, e.g timer or
- * interrupt server.
- */
-#define RTEMS_EVENT_SYSTEM_SERVER_RESUME RTEMS_EVENT_29
-
-/**
- * @brief Reserved system event for the server threads, e.g timer or interrupt
- * server.
- */
-#define RTEMS_EVENT_SYSTEM_SERVER RTEMS_EVENT_30
-
-/**
- * @brief Reserved system event for transient usage.
- */
-#define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31
-
-/**
- * @brief See rtems_event_send().
+ * @param event_in is the event set to send.
  */
 rtems_status_code rtems_event_system_send(
-  rtems_id id,
+  rtems_id        id,
   rtems_event_set event_in
 );
 
-/**
- * @brief See rtems_event_receive().
- */
-rtems_status_code rtems_event_system_receive(
-  rtems_event_set event_in,
-  rtems_option option_set,
-  rtems_interval ticks,
-  rtems_event_set *event_out
-);
-
-/** @} */
+/* Generated from spec:/rtems/event/if/system-server */
 
 /**
- * @defgroup ClassicEventTransient Transient Event
- *
- * @ingroup ClassicEvent
- *
- * The transient event can be used by a client task to issue a request to
- * another task or interrupt service (server).  The server can send the
- * transient event to the client task to notify about a request completion, see
- * rtems_event_transient_send().  The client task can wait for the transient
- * event reception with rtems_event_transient_receive().
- *
- * The user of the transient event must ensure that this event is not pending
- * once the request is finished or cancelled.  A successful reception of the
- * transient event with rtems_event_transient_receive() will clear the
- * transient event.  If a reception with timeout is used the transient event
- * state is undefined after a timeout return status.  The transient event can
- * be cleared unconditionally with the non-blocking
- * rtems_event_transient_clear().
- *
- * @msc
- *   hscale="1.6";
- *   M [label="Main Task"], IDLE [label="Idle Task"], S [label="Server"], TIME [label="System Tick Handler"];
- *   |||;
- *   --- [label="sequence with request completion"];
- *   M box M [label="prepare request\nissue request\nrtems_event_transient_receive()"];
- *   M=>>IDLE [label="blocking operation"];
- *   IDLE=>>S [label="request completion"];
- *   S box S [label="rtems_event_transient_send()"];
- *   S=>>M [label="task is ready again"];
- *   M box M [label="finish request"];
- *   |||;
- *   --- [label="sequence with early request completion"];
- *   M box M [label="prepare request\nissue request"];
- *   M=>>S [label="request completion"];
- *   S box S [label="rtems_event_transient_send()"];
- *   S=>>M [label="transient event is now pending"];
- *   M box M [label="rtems_event_transient_receive()\nfinish request"];
- *   |||;
- *   --- [label="sequence with timeout event"];
- *   M box M [label="prepare request\nissue request\nrtems_event_transient_receive()"];
- *   M=>>IDLE [label="blocking operation"];
- *   IDLE=>>TIME [label="timeout expired"];
- *   TIME box TIME [label="cancel blocking operation"];
- *   TIME=>>M [label="task is ready again"];
- *   M box M [label="cancel request\nrtems_event_transient_clear()"];
- * @endmsc
- *
- * Suppose you have a task that wants to issue a certain request and then waits
- * for request completion.  It can create a request structure and store its
- * task identifier there.  Now it can place the request on a work queue of
- * another task (or interrupt handler).  Afterwards the task waits for the
- * reception of the transient event.  Once the server task is finished with the
- * request it can send the transient event to the waiting task and wake it up.
- *
- * @code
- * #include <assert.h>
- * #include <rtems.h>
- *
- * typedef struct {
- *   rtems_id task_id;
- *   bool work_done;
- * } request;
- *
- * void server(rtems_task_argument arg)
- * {
- *   rtems_status_code sc;
- *   request *req = (request *) arg;
- *
- *   req->work_done = true;
- *
- *   sc = rtems_event_transient_send(req->task_id);
- *   assert(sc == RTEMS_SUCCESSFUL);
- *
- *   rtems_task_exit();
- * }
- *
- * void issue_request_and_wait_for_completion(void)
- * {
- *   rtems_status_code sc;
- *   rtems_id id;
- *   request req;
- *
- *   req.task_id = rtems_task_self();
- *   req.work_done = false;
- *
- *   sc = rtems_task_create(
- *     rtems_build_name('S', 'E', 'R', 'V'),
- *     1,
- *     RTEMS_MINIMUM_STACK_SIZE,
- *     RTEMS_DEFAULT_MODES,
- *     RTEMS_DEFAULT_ATTRIBUTES,
- *     &id
- *   );
- *   assert(sc == RTEMS_SUCCESSFUL);
- *
- *   sc = rtems_task_start(id, server, (rtems_task_argument) &req);
- *   assert(sc == RTEMS_SUCCESSFUL);
- *
- *   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
- *   assert(sc == RTEMS_SUCCESSFUL);
- *
- *   assert(req.work_done);
- * }
- * @endcode
+ * @brief This event set constant represents the reserved system event for
+ *   server thread usage, for example the timer or interrupt server.
  */
-/**@{**/
+#define RTEMS_EVENT_SYSTEM_SERVER RTEMS_EVENT_30
+
+/* Generated from spec:/rtems/event/if/system-server-resume */
 
 /**
- * @brief See rtems_event_system_send().
- *
- * The system event @ref RTEMS_EVENT_SYSTEM_TRANSIENT will be sent.
+ * @brief This event set constant represents the reserved system event to
+ *   resume a server thread, for example the timer or interrupt server.
  */
-RTEMS_INLINE_ROUTINE rtems_status_code rtems_event_transient_send(
-  rtems_id id
-)
+#define RTEMS_EVENT_SYSTEM_SERVER_RESUME RTEMS_EVENT_29
+
+/* Generated from spec:/rtems/event/if/system-transient */
+
+/**
+ * @brief This event set constant represents the reserved system event for
+ *   transient usage.
+ */
+#define RTEMS_EVENT_SYSTEM_TRANSIENT RTEMS_EVENT_31
+
+/* Generated from spec:/rtems/event/if/transient-clear */
+
+/**
+ * @brief Clears the transient event.
+ */
+static inline void rtems_event_transient_clear( void )
 {
-  return rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_TRANSIENT );
+  rtems_event_set event_out;
+
+  (void) rtems_event_system_receive(
+    RTEMS_EVENT_SYSTEM_TRANSIENT,
+    RTEMS_EVENT_ALL | RTEMS_NO_WAIT,
+    0,
+    &event_out
+  );
 }
 
+/* Generated from spec:/rtems/event/if/transient-receive */
+
 /**
- * @brief See rtems_event_system_receive().
+ * @brief Receives the transient event.
  *
- * The system event @ref RTEMS_EVENT_SYSTEM_TRANSIENT will be received.
+ * @param option_set is the option set.
+ *
+ * @param ticks is the optional timeout in clock ticks.
  */
-RTEMS_INLINE_ROUTINE rtems_status_code rtems_event_transient_receive(
-  rtems_option option_set,
+static inline rtems_status_code rtems_event_transient_receive(
+  rtems_option   option_set,
   rtems_interval ticks
 )
 {
@@ -483,28 +562,168 @@ RTEMS_INLINE_ROUTINE rtems_status_code rtems_event_transient_receive(
   );
 }
 
-/**
- * @brief See rtems_event_system_receive().
- *
- * The system event @ref RTEMS_EVENT_SYSTEM_TRANSIENT will be cleared.
- */
-RTEMS_INLINE_ROUTINE void rtems_event_transient_clear( void )
-{
-  rtems_event_set event_out;
+/* Generated from spec:/rtems/event/if/transient-send */
 
-  rtems_event_system_receive(
-    RTEMS_EVENT_SYSTEM_TRANSIENT,
-    RTEMS_EVENT_ALL | RTEMS_NO_WAIT,
-    0,
-    &event_out
-  );
+/**
+ * @brief Sends the transient event to the task.
+ *
+ * @param id is the identifier of the task to receive the transient event.
+ */
+static inline rtems_status_code rtems_event_transient_send( rtems_id id )
+{
+  return rtems_event_system_send( id, RTEMS_EVENT_SYSTEM_TRANSIENT );
 }
 
-/** @} */
+/* Generated from spec:/rtems/event/if/send */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief Sends the event set to the task.
+ *
+ * This directive sends the event set, ``event_in``, to the target task
+ * identified by ``id``.  Based upon the state of the target task, one of the
+ * following situations applies:
+ *
+ * * The target task is blocked waiting for events, then
+ *
+ *   * if the waiting task's input event condition is satisfied, then the task
+ *     is made ready for execution, or
+ *
+ *   * otherwise, the event set is posted but left pending and the task remains
+ *     blocked.
+ *
+ * * The target task is not waiting for events, then the event set is posted
+ *   and left pending.
+ *
+ * Events can be sent by tasks or an ISR.
+ *
+ * Specifying #RTEMS_SELF for ``id`` results in the event set being sent to the
+ * calling task.
+ *
+ * The event set to send shall be built by a *bitwise or* of the desired
+ * events. The set of valid events is #RTEMS_EVENT_0 through #RTEMS_EVENT_31.
+ * If an event is not explicitly specified in the set, then it is not present.
+ *
+ * Identical events sent to a task are not queued.  In other words, the second,
+ * and subsequent, posting of an event to a task before it can perform an
+ * rtems_event_receive() has no effect.
+ *
+ * The calling task will be preempted if it has preemption enabled and a higher
+ * priority task is unblocked as the result of this directive.
+ *
+ * Sending an event set to a global task which does not reside on the local
+ * node will generate a request telling the remote node to send the event set
+ * to the appropriate task.
+ *
+ * @param id is the identifier of the target task to receive the event set.
+ *
+ * @param event_in is the event set to send.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no task with the specified identifier.
+ */
+rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
+
+/* Generated from spec:/rtems/event/if/receive */
+
+/**
+ * @ingroup RTEMSAPIClassicEvent
+ *
+ * @brief Receives or gets an event set from the calling task.
+ *
+ * This directive can be used to
+ *
+ * * get the pending events of the calling task, or
+ *
+ * * receive events.
+ *
+ * To **get the pending events** use the constant #RTEMS_PENDING_EVENTS for the
+ * ``event_in`` parameter.  The pending events are returned to the calling task
+ * but the event set of the task is left unaltered.  The ``option_set`` and
+ * ``ticks`` parameters are ignored in this case.  The directive returns
+ * immediately and does not block.
+ *
+ * To **receive events** you have to define an input event condition and some
+ * options.  The **option set** specified in ``option_set`` defines
+ *
+ * * if the task will wait or poll for the events, and
+ *
+ * * if the task wants to receive all or any of the input events.
+ *
+ * The option set is built through a *bitwise or* of the option constants
+ * described below.
+ *
+ * The task can **wait** or **poll** for the events.
+ *
+ * * **Waiting** for events is the default and can be emphasized through the
+ *   use of the #RTEMS_WAIT option.  The ``ticks`` parameter defines how long
+ *   the task is willing to wait.  Use #RTEMS_NO_TIMEOUT to wait potentially
+ *   forever, otherwise set a timeout interval in clock ticks.
+ *
+ * * Not waiting for events (**polling**) is selected by the #RTEMS_NO_WAIT
+ *   option.  If this option is defined, then the ``ticks`` parameter is
+ *   ignored.
+ *
+ * The task can receive **all** or **any** of the input events specified in
+ * ``event_in``.
+ *
+ * * Receiving **all** input events is the default and can be emphasized
+ *   through the use of the #RTEMS_EVENT_ALL option.
+ *
+ * * Receiving **any** of the input events is selected by the #RTEMS_EVENT_ANY
+ *   option.
+ *
+ * This directive shall be called by a task.  Calling this directive from
+ * interrupt context is undefined behaviour.
+ *
+ * This directive only affects the events specified in ``event_in``. Any
+ * pending events that do not correspond to any of the events specified in
+ * ``event_in`` will be left pending.
+ *
+ * To receive all events use the event set constant #RTEMS_ALL_EVENTS for the
+ * ``event_in`` parameter.  Do not confuse this event set constant with the
+ * directive option #RTEMS_EVENT_ALL.
+ *
+ * A task can **receive all of the pending events** by calling the directive
+ * with a value of #RTEMS_ALL_EVENTS for the ``event_in`` parameter and the
+ * bitwise or of the #RTEMS_NO_WAIT and #RTEMS_EVENT_ANY options for the
+ * ``option_set`` parameter.  The pending events are returned and the event set
+ * of the task is cleared.  If no events are pending then the
+ * ::RTEMS_UNSATISFIED status code will be returned.
+ *
+ * @param event_in is the event set of interest.  Use #RTEMS_PENDING_EVENTS to
+ *   get the pending events.
+ *
+ * @param option_set is the option set.
+ *
+ * @param ticks is the timeout in clock ticks if the #RTEMS_WAIT option is set.
+ *   Use #RTEMS_NO_TIMEOUT to wait potentially forever.
+ *
+ * @param event_out is the pointer to an event set.  The received or pending
+ *   events are stored in the referenced event set if the operation was
+ *   successful.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``event_out`` parameter was NULL.
+ *
+ * @retval ::RTEMS_UNSATISFIED The events of interest were not immediately
+ *   available.
+ *
+ * @retval ::RTEMS_TIMEOUT The events of interest were not available within the
+ *   specified timeout interval.
+ */
+rtems_status_code rtems_event_receive(
+  rtems_event_set  event_in,
+  rtems_option     option_set,
+  rtems_interval   ticks,
+  rtems_event_set *event_out
+);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
-/* end of include file */
+#endif /* _RTEMS_RTEMS_EVENT_H */
