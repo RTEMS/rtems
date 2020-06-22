@@ -29,7 +29,7 @@ extern "C" {
 /**
  * @defgroup rtems_interrupt_extension Interrupt Manager Extension
  *
- * @ingroup ClassicINTR
+ * @ingroup RTEMSAPIClassicIntr
  *
  * In addition to the Classic API interrupt handler with a handle are
  * supported.  You can also install multiple shared handler for one interrupt
