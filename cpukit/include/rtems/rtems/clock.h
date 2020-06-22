@@ -1,161 +1,500 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup ClassicClock
- *
- * This include file contains all the constants and structures associated
- * with the Clock Manager. This manager provides facilities to set, obtain,
- * and continually update the current date and time.
- *
- * This manager provides directives to:
- *
- * - set the current date and time
- * - obtain the current date and time
- * - announce a clock tick
- * - obtain the system uptime
+ * @brief This header file defines the Clock Manager API.
  */
 
-/* COPYRIGHT (c) 1989-2013.
- * On-Line Applications Research Corporation (OAR).
+/*
+ * Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://www.rtems.org/bugs.html
+ *
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
+ *
+ * https://docs.rtems.org
+ */
+
+/* Generated from spec:/rtems/clock/if/header */
 
 #ifndef _RTEMS_RTEMS_CLOCK_H
 #define _RTEMS_RTEMS_CLOCK_H
 
+#include <stdbool.h>
+#include <stdint.h>
+#include <time.h>
+#include <rtems/config.h>
+#include <sys/_timespec.h>
+#include <sys/_timeval.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
-#include <rtems/config.h>
-
-/**
- *  @defgroup ClassicClock Clocks
- *
- *  @ingroup RTEMSAPIClassic
- *
- *  This encapsulates functionality related to the Classic API Clock
- *  Manager.
- */
-/**@{*/
+#include <rtems/score/watchdogticks.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * @brief Obtain Current Time of Day (Classic TOD)
- *
- * This routine implements the rtems_clock_get_tod directive. It returns
- * the current time of day in the format defined by RTEID.
- *
- * Clock Manager - rtems_clock_get_tod
- *
- * @param[in] time_buffer points to the time of day structure
- *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error. If successful, the time_buffer will
- *         be filled in with the current time of day.
- */
-rtems_status_code rtems_clock_get_tod(
-  rtems_time_of_day *time_buffer
-);
+/* Generated from spec:/rtems/clock/if/group */
 
 /**
- * @brief Obtain TOD in struct timeval Format
+ * @defgroup RTEMSAPIClassicClock Clock Manager
  *
- * This routine implements the rtems_clock_get_tod_timeval
- * directive.
+ * @ingroup RTEMSAPIClassic
  *
- * @param[in] time points to the struct timeval variable to fill in
- *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error. If successful, the time will
- *         be filled in with the current time of day.
+ * @brief The Clock Manager provides support for time of day and other time
+ *   related capabilities.
  */
-rtems_status_code rtems_clock_get_tod_timeval(
-  struct timeval *time
-);
+
+/* Generated from spec:/rtems/clock/if/set */
 
 /**
- * @brief Obtain Seconds Since Epoch
+ * @ingroup RTEMSAPIClassicClock
  *
- * This routine implements the rtems_clock_get_seconds_since_epoch
- * directive.
+ * @brief Sets the CLOCK_REALTIME to the time of day.
  *
- * @param[in] the_interval points to the interval variable to fill in
+ * @param time_of_day is the time of day to set the clock.
  *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error. If successful, the time_buffer will
- *         be filled in with the current time of day.
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``time_of_day`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_CLOCK The time of day specified by ``time_of_day``
+ *   was invalid.
+ *
+ * @par Notes
+ * @parblock
+ * The date, time, and ticks specified by ``time_of_day`` are all
+ * range-checked, and an error is returned if any one is out of its valid
+ * range.
+ *
+ * RTEMS can represent time points of this clock in nanoseconds ranging from
+ * 1988-01-01T00:00:00.000000000Z to 2514-05-31T01:53:03.999999999Z.  The
+ * future uptime of the system shall be in this range, otherwise the system
+ * behaviour is undefined.
+ *
+ * The specified time is based on the configured clock tick rate, see the
+ * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
+ *
+ * Setting the time forward will fire all CLOCK_REALTIME timers which are
+ * scheduled at a time point before or at the time set by the directive.  This
+ * may unblock tasks, which may preempt the calling task. User-provided timer
+ * routines will execute in the context of the caller.
+ *
+ * It is allowed to call this directive from within interrupt context, however,
+ * this is not recommended since an arbitrary number of timers may fire.
+ *
+ * The directive shall be called at least once to enable the service of
+ * CLOCK_REALTIME related directives.  If the clock is not set at least once,
+ * they may return an error status.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive may change the priority of another task which may preempt
+ *   the calling task.
+ *
+ * * The directive may unblock another task which may preempt the calling task.
+ * @endparblock
+ */
+rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );
+
+/* Generated from spec:/rtems/clock/if/get-tod */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time of day associated with the current CLOCK_REALTIME.
+ *
+ * @param time_of_day is the pointer to a RTEMS time of day variable.  When the
+ *   directive call is successful, the time of day associated with the
+ *   CLOCK_REALTIME at some point during the directive call will be stored in
+ *   this variable.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``time_of_day`` parameter was NULL.
+ *
+ * @retval ::RTEMS_NOT_DEFINED The CLOCK_REALTIME was not set.  It can be set
+ *   with rtems_clock_set().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
+
+/* Generated from spec:/rtems/clock/if/get-tod-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the seconds and microseconds elapsed since the Unix epoch and
+ *   the current CLOCK_REALTIME.
+ *
+ * @param[out] time_of_day is the pointer to a timeval structure variable.
+ *   When the directive call is successful, the seconds and microseconds
+ *   elapsed since the Unix epoch and the CLOCK_REALTIME at some point during
+ *   the directive call will be stored in this variable.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``time_of_day`` parameter was NULL.
+ *
+ * @retval ::RTEMS_NOT_DEFINED The CLOCK_REALTIME was not set.  It can be set
+ *   with rtems_clock_set().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
+
+/* Generated from spec:/rtems/clock/if/get-seconds-since-epoch */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the seconds elapsed since the RTEMS epoch and the current
+ *   CLOCK_REALTIME.
+ *
+ * @param[out] seconds_since_rtems_epoch is the pointer to an interval
+ *   variable.  When the directive call is successful, the seconds elapsed
+ *   since the RTEMS epoch and the CLOCK_REALTIME at some point during the
+ *   directive call will be stored in this variable.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``seconds_since_rtems_epoch`` parameter
+ *   was NULL.
+ *
+ * @retval ::RTEMS_NOT_DEFINED The CLOCK_REALTIME was not set.  It can be set
+ *   with rtems_clock_set().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
  */
 rtems_status_code rtems_clock_get_seconds_since_epoch(
-  rtems_interval *the_interval
+  rtems_interval *seconds_since_rtems_epoch
 );
 
-/**
- * @brief Gets the current ticks counter value.
- *
- * @return The current tick counter value.  With a 1ms clock tick, this counter
- * overflows after 50 days since boot.
- */
-RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_get_ticks_since_boot(void)
-{
-  return _Watchdog_Ticks_since_boot;
-}
+/* Generated from spec:/rtems/clock/if/get-ticks-per-second */
 
 /**
- * @brief Returns the ticks counter value delta ticks in the future.
+ * @ingroup RTEMSAPIClassicClock
  *
- * @param[in] delta The ticks delta value.
+ * @brief Gets the number of clock ticks per second configured for the
+ *   application.
  *
- * @return The tick counter value delta ticks in the future.
+ * @return Returns the number of clock ticks per second configured for this
+ *   application.
+ *
+ * @par Notes
+ * The number of clock ticks per second is defined indirectly by the
+ * #CONFIGURE_MICROSECONDS_PER_TICK configuration option.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
-RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_tick_later(
-  rtems_interval delta
-)
+rtems_interval rtems_clock_get_ticks_per_second( void );
+
+/* Generated from spec:/rtems/clock/if/get-ticks-per-second-macro */
+#define rtems_clock_get_ticks_per_second() _Watchdog_Ticks_per_second
+
+/* Generated from spec:/rtems/clock/if/get-ticks-since-boot */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the number of clock ticks since some time point during the
+ *   system initialization or the last overflow of the clock tick counter.
+ *
+ * @return Returns the number of clock ticks since some time point during the
+ *   system initialization or the last overflow of the clock tick counter.
+ *
+ * @par Notes
+ * With a 1ms clock tick, this counter overflows after 50 days since boot.
+ * This is the historical measure of uptime in an RTEMS system.  The newer
+ * service rtems_clock_get_uptime() is another and potentially more accurate
+ * way of obtaining similar information.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_interval rtems_clock_get_ticks_since_boot( void );
+
+/* Generated from spec:/rtems/clock/if/get-ticks-since-boot-macro */
+#define rtems_clock_get_ticks_since_boot() _Watchdog_Ticks_since_boot
+
+/* Generated from spec:/rtems/clock/if/get-uptime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the seconds and nanoseconds elapsed since some time point during
+ *   the system initialization using CLOCK_MONOTONIC.
+ *
+ * @param[out] uptime is the pointer to a timeval structure variable.  When the
+ *   directive call is successful, the seconds and nanoseconds elapsed since
+ *   some time point during the system initialization and some point during the
+ *   directive call using CLOCK_MONOTONIC will be stored in this variable.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``uptime`` parameter was NULL.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+rtems_status_code rtems_clock_get_uptime( struct timespec *uptime );
+
+/* Generated from spec:/rtems/clock/if/get-uptime-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the seconds and microseconds elapsed since some time point
+ *   during the system initialization using CLOCK_MONOTONIC.
+ *
+ * @param[out] uptime is the pointer to a timeval structure variable.  The
+ *   seconds and microseconds elapsed since some time point during the system
+ *   initialization and some point during the directive call using
+ *   CLOCK_MONOTONIC will be stored in this variable.  The pointer shall be
+ *   valid, otherwise the behaviour is undefined.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_uptime_timeval( struct timeval *uptime );
+
+/* Generated from spec:/rtems/clock/if/get-uptime-seconds */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the seconds elapsed since some time point during the system
+ *   initialization using CLOCK_MONOTONIC.
+ *
+ * @return Returns the seconds elapsed since some time point during the system
+ *   initialization and some point during the directive call using
+ *   CLOCK_MONOTONIC.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+time_t rtems_clock_get_uptime_seconds( void );
+
+/* Generated from spec:/rtems/clock/if/get-uptime-nanoseconds */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the nanoseconds elapsed since some time point during the system
+ *   initialization using CLOCK_MONOTONIC.
+ *
+ * @return Returns the nanoseconds elapsed since some time point during the
+ *   system initialization and some point during the directive call using
+ *   CLOCK_MONOTONIC.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+uint64_t rtems_clock_get_uptime_nanoseconds( void );
+
+/* Generated from spec:/rtems/clock/if/tick-later */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets a clock tick value which is at least delta clock ticks in the
+ *   future.
+ *
+ * @param delta is the delta value in clock ticks.
+ *
+ * @return Returns a clock tick counter value which is at least ``delta`` clock
+ *   ticks in the future.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+static inline rtems_interval rtems_clock_tick_later( rtems_interval delta )
 {
   return _Watchdog_Ticks_since_boot + delta;
 }
 
+/* Generated from spec:/rtems/clock/if/tick-later-usec */
+
 /**
- * @brief Returns the ticks counter value at least delta microseconds in the
- * future.
+ * @ingroup RTEMSAPIClassicClock
  *
- * @param[in] delta_in_usec The delta value in microseconds.
+ * @brief Gets a clock tick value which is at least delta microseconds in the
+ *   future.
  *
- * @return The tick counter value at least delta microseconds in the future.
+ * @param delta_in_usec is the delta value in microseconds.
+ *
+ * @return Returns a clock tick counter value which is at least
+ *   ``delta_in_usec`` microseconds in the future.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
  */
-RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_tick_later_usec(
+static inline rtems_interval rtems_clock_tick_later_usec(
   rtems_interval delta_in_usec
 )
 {
-  rtems_interval us_per_tick = rtems_configuration_get_microseconds_per_tick();
+  rtems_interval us_per_tick;
+
+  us_per_tick = rtems_configuration_get_microseconds_per_tick();
 
   /*
-   * Add one additional tick, since we don't know the time to the clock next
-   * tick.
+   * Add one additional tick, since we do not know the time to the clock
+   * next tick.
    */
-  return _Watchdog_Ticks_since_boot
-    + (delta_in_usec + us_per_tick - 1) / us_per_tick + 1;
+  return _Watchdog_Ticks_since_boot + 1
+    + ( delta_in_usec + us_per_tick - 1 ) / us_per_tick;
 }
 
+/* Generated from spec:/rtems/clock/if/tick-before */
+
 /**
- * @brief Returns true if the current ticks counter value indicates a time
- * before the time specified by the tick value and false otherwise.
+ * @ingroup RTEMSAPIClassicClock
  *
- * @param[in] tick The tick value.
+ * @brief Indicates if the current clock tick counter is before the ticks.
  *
- * This can be used to write busy loops with a timeout.
+ * @param ticks is the ticks value to check.
+ *
+ * @return Returns true, if current clock tick counter indicates a time before
+ *   the time in ticks, otherwise returns false.
+ *
+ * @par Notes
+ * @parblock
+ * This directive can be used to write busy loops with a timeout.
  *
  * @code
  * status busy( void )
  * {
- *   rtems_interval timeout = rtems_clock_tick_later_usec( 10000 );
+ *   rtems_interval timeout;
+ *
+ *   timeout = rtems_clock_tick_later_usec( 10000 );
  *
  *   do {
  *     if ( ok() ) {
@@ -166,112 +505,37 @@ RTEMS_INLINE_ROUTINE rtems_interval rtems_clock_tick_later_usec(
  *   return timeout;
  * }
  * @endcode
+ * @endparblock
  *
- * @retval true The current ticks counter value indicates a time before the
- * time specified by the tick value.
- * @retval false Otherwise.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
  */
-RTEMS_INLINE_ROUTINE bool rtems_clock_tick_before(
-  rtems_interval tick
-)
+static inline bool rtems_clock_tick_before( rtems_interval ticks )
 {
-  return (int32_t) ( tick - _Watchdog_Ticks_since_boot ) > 0;
+  return (int32_t) ( ticks - _Watchdog_Ticks_since_boot ) > 0;
 }
 
-/**
- * @brief Obtain Ticks Per Seconds
- *
- * This routine implements the rtems_clock_get_ticks_per_second
- * directive.
- *
- * @retval This method returns the number of ticks per second. It cannot
- *         fail since RTEMS is always configured to know the number of
- *         ticks per second.
- */
-rtems_interval rtems_clock_get_ticks_per_second(void);
-
-/* Optimized variant for C/C++ without function call overhead */
-#define rtems_clock_get_ticks_per_second() ( _Watchdog_Ticks_per_second )
+/* Generated from spec:/rtems/clock/if/tick */
 
 /**
- * @brief Set the Current TOD
+ * @brief Announces a clock tick.
  *
- * This routine implements the rtems_clock_set directive. It sets
- * the current time of day to that in the time_buffer record.
- *
- * @param[in] time_buffer points to the new TOD
- *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error.
- *
- * @note Activities scheduled based upon the current time of day
- *       may be executed immediately if the time is moved forward.
- */
-rtems_status_code rtems_clock_set(
-  const rtems_time_of_day *time_buffer
-);
-
-/**
- * @brief Announce a Clock Tick
- *
- * This routine implements the rtems_clock_tick directive. It is invoked
- * to inform RTEMS of the occurrence of a clock tick.
- *
- * @retval This directive always returns RTEMS_SUCCESSFUL.
- *
- * @note This method is typically called from an ISR and is the basis
- *       for all timeouts and delays. This routine only works for leap-years
- *       through 2099.
+ * @par Notes
+ * The directive is a legacy interface.  It should not be called by
+ * applications directly.  A Clock Driver may call this directive.
  */
 rtems_status_code rtems_clock_tick( void );
-
-/**
- * @brief Obtain the System Uptime
- *
- * This directive returns the system uptime.
- *
- * @param[in] uptime is a pointer to the time structure
- *
- * @retval This method returns RTEMS_SUCCESSFUL if there was not an
- *         error. Otherwise, a status code is returned indicating the
- *         source of the error. If successful, the @a uptime will be
- *         filled in.
- */
-rtems_status_code rtems_clock_get_uptime(
-  struct timespec *uptime
-);
-
-/**
- * @brief Gets the System Uptime in the Struct Timeval Format
- *
- * @param[out] uptime is a pointer to a struct timeval structure.
- *
- * @retval This methods returns the system uptime.
- *
- * @note Pointer must not be NULL.
- */
-void rtems_clock_get_uptime_timeval( struct timeval *uptime );
-
-/**
- * @brief Returns the system uptime in seconds.
- *
- * @retval The system uptime in seconds.
- */
-time_t rtems_clock_get_uptime_seconds( void );
-
-/**
- * @brief Returns the system uptime in nanoseconds.
- *
- * @retval The system uptime in nanoseconds.
- */
-uint64_t rtems_clock_get_uptime_nanoseconds( void );
 
 #ifdef __cplusplus
 }
 #endif
 
-/**@}*/
-
-#endif
-/* end of include file */
+#endif /* _RTEMS_RTEMS_CLOCK_H */
