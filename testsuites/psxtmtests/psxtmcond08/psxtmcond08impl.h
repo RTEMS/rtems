@@ -40,7 +40,7 @@
 
 #include <pthread.h>
 
-const char rtems_test_name[] = "PSXTMCOND 08";
+const char rtems_test_name[] = "PSXTMCOND " TEST_NUMBER;
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
