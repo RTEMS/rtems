@@ -1,338 +1,586 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup ClassicClassInfo
- *
- * This include file defines Classic API interfaces to Object Services.
+ * @brief This header file provides the Object Services API.
  */
 
-/* COPYRIGHT (c) 1989-2013.
- * On-Line Applications Research Corporation (OAR).
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1988, 2009 On-Line Applications Research Corporation (OAR)
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ */
+
+/* Generated from spec:/rtems/object/if/header */
 
 #ifndef _RTEMS_RTEMS_OBJECT_H
 #define _RTEMS_RTEMS_OBJECT_H
 
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
-#include <rtems/score/object.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/object.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- *  @defgroup ClassicClassInfo Object Class Information
- *
- *  @ingroup RTEMSAPIClassic
- *
- *  This encapsulates functionality related to the Classic API Object
- *  Class Services.
- */
-/**@{*/
+/* Generated from spec:/rtems/object/if/group */
 
 /**
- *  This structure is used to return information to the application
- *  about the objects configured for a specific API/Class combination.
+ * @defgroup RTEMSAPIClassicObject Object Services
+ *
+ * @ingroup RTEMSAPIClassic
+ *
+ * @brief RTEMS provides a collection of services to assist in the management
+ *   and usage of the objects created and utilized via other managers.  These
+ *   services assist in the manipulation of RTEMS objects independent of the
+ *   API used to create them.
+ */
+
+/* Generated from spec:/rtems/object/if/api-class-information */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief This structure is used to return information to the application about
+ *   the objects configured for a specific API/Class combination.
  */
 typedef struct {
-  /** This field is the minimum valid object Id for this class. */
-  rtems_id  minimum_id;
-  /** This field is the maximum valid object Id for this class. */
-  rtems_id  maximum_id;
-  /** This field is the number of object instances configured for this class. */
-  uint32_t  maximum;
-  /** This field indicates if the class is configured for auto-extend. */
-  bool      auto_extend;
-  /** This field is the number of currently unallocated objects. */
-  uint32_t  unallocated;
+  /**
+   * @brief This member contains the minimum valid object identifier for this
+   *   class.
+   */
+  rtems_id minimum_id;
+
+  /**
+   * @brief This member contains the maximum valid object identifier for this
+   *   class.
+   */
+  rtems_id maximum_id;
+
+  /**
+   * @brief This member contains the maximum number of active objects configured
+   *   for this class.
+   */
+  uint32_t maximum;
+
+  /**
+   * @brief This member is true, if this class is configured for automatic object
+   *   extension, otherwise it is false.
+   */
+  bool auto_extend;
+
+  /**
+   * @brief This member contains the number of currently inactive objects of this
+   *   class.
+   */
+  uint32_t unallocated;
 } rtems_object_api_class_information;
 
+/* Generated from spec:/rtems/object/if/id-final */
+
 /**
- * @brief Build Object Id
+ * @ingroup RTEMSAPIClassicObject
  *
- * This function returns an object id composed of the
- * specified @a api, @a class, @a node,
- * and @a index.
+ * @brief This constant represents the highest object identifier value.
+ */
+#define RTEMS_OBJECT_ID_FINAL OBJECTS_ID_FINAL
+
+/* Generated from spec:/rtems/object/if/id-final-index */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
  *
- * @param[in] _api indicates the api to use for the Id
- * @param[in] _class indicates the class to use for the Id
- * @param[in] _node indicates the node to use for the Id
- * @param[in] _index indicates the index to use for the Id
+ * @brief This constant represents the highest value for the index component of
+ *   an object identifier.
+ */
+#define RTEMS_OBJECT_ID_FINAL_INDEX OBJECTS_ID_FINAL_INDEX
+
+/* Generated from spec:/rtems/object/if/id-initial */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
  *
- * @retval This method returns an object Id built from the
- *         specified values.
+ * @brief Builds the object identifier with the lowest index from the API,
+ *   class, and MPCI node components.
  *
- * @note A body is also provided.
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * @param _api is the API of the object identifier to build.
+ *
+ * @param _class is the class of the object identifier to build.
+ *
+ * @param _node is the MPCI node of the object identifier to build.
+ *
+ * @return Returns the object identifier with the lowest index built from the
+ *   API, class, and MPCI node components.
+ */
+#define RTEMS_OBJECT_ID_INITIAL( _api, _class, _node ) \
+  OBJECTS_ID_INITIAL( _api, _class, _node )
+
+/* Generated from spec:/rtems/object/if/id-initial-index */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief This constant represents the lowest value for the index component of
+ *   an object identifier.
+ */
+#define RTEMS_OBJECT_ID_INITIAL_INDEX OBJECTS_ID_INITIAL_INDEX
+
+/* Generated from spec:/rtems/object/if/search-all-nodes */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief This constant indicates that an object name to identifier search
+ *   should search through all MPCI nodes of the system.
+ */
+#define RTEMS_SEARCH_ALL_NODES OBJECTS_SEARCH_ALL_NODES
+
+/* Generated from spec:/rtems/object/if/search-local-node */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief This constant indicates that an object name to identifier search
+ *   should search only the local MPCI node of the system.
+ */
+#define RTEMS_SEARCH_LOCAL_NODE OBJECTS_SEARCH_LOCAL_NODE
+
+/* Generated from spec:/rtems/object/if/search-other-nodes */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief This constant indicates that an object name to identifier search
+ *   should search through all MPCI nodes of the system except the local node.
+ */
+#define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
+
+/* Generated from spec:/rtems/object/if/who-am-i */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief This constant indicates that an object name to identifier search is
+ *   being asked for the identifier of the currently executing task.
+ */
+#define RTEMS_WHO_AM_I OBJECTS_WHO_AM_I
+
+/* Generated from spec:/rtems/object/if/build-id */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief Builds the object identifier from the API, class, MPCI node, and
+ *   index components.
+ *
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * @param _api is the API of the object identifier to build.
+ *
+ * @param _class is the class of the object identifier to build.
+ *
+ * @param _node is the MPCI node of the object identifier to build.
+ *
+ * @param _index is the index of the object identifier to build.
+ *
+ * @return Returns the object identifier built from the API, class, MPCI node,
+ *   and index components.
  */
 #define rtems_build_id( _api, _class, _node, _index ) \
   _Objects_Build_id( _api, _class, _node, _index )
 
-/**
- * @brief Build Thirty-Two Bit Object Name
- *
- * RTEMS Object Helper -- Build an Object Id
- *
- * This function returns an object name composed of the four characters
- * C1, C2, C3, and C4.
- *
- * @param[in] _C1 is the first character of the name
- * @param[in] _C2 is the second character of the name
- * @param[in] _C3 is the third character of the name
- * @param[in] _C4 is the fourth character of the name
- *
- * @note This must be implemented as a macro for use in
- *       Configuration Tables. A body is also provided.
- *
- */
-#define rtems_build_name( _C1, _C2, _C3, _C4 ) \
-  _Objects_Build_name( _C1, _C2, _C3, _C4 )
+/* Generated from spec:/rtems/object/if/build-name */
 
 /**
- * @brief Obtain Name of Object
+ * @ingroup RTEMSAPIClassicObject
  *
- * This directive returns the name associated with the specified
- * object ID.
+ * @brief Builds the object name composed of the four characters.
  *
- * @param[in] id is the Id of the object to obtain the name of.
- * @param[out] name will be set to the name of the object
+ * This directive takes the four characters provided as arguments and composes
+ * a 32-bit object name with ``_c1`` in the most significant 8-bits and ``_c4``
+ * in the least significant 8-bits.
  *
- * @note The object must be have a name of the 32-bit form.
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval @a *name will contain user defined object name
- * @retval @a RTEMS_SUCCESSFUL - if successful
- * @retval error code - if unsuccessful
+ * @param _c1 is the first character of the name.
+ *
+ * @param _c2 is the second character of the name.
+ *
+ * @param _c3 is the third character of the name.
+ *
+ * @param _c4 is the fourth character of the name.
+ *
+ * @return Returns the object name composed of the four characters.
+ */
+#define rtems_build_name( _c1, _c2, _c3, _c4 ) \
+  _Objects_Build_name( _c1, _c2, _c3, _c4 )
+
+/* Generated from spec:/rtems/object/if/get-classic-name */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief Gets the object name associated with the object identifier.
+ *
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * @param id is the object identifier to get the name.
+ *
+ * @param[out] name is the pointer to an object name variable.  The object name
+ *   associated with the object identifier will be stored in this variable, in
+ *   case of a successful operation.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``name`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no object information available for the
+ *   object identifier.
+ *
+ * @retval ::RTEMS_INVALID_ID The object name associated with the object
+ *   identifier was a string.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no object associated with the object
+ *   identifier.
  */
 rtems_status_code rtems_object_get_classic_name(
-  rtems_id      id,
-  rtems_name   *name
+  rtems_id    id,
+  rtems_name *name
 );
 
-/**
- * @brief Obtain Object Name as String
- *
- * This directive returns the name associated with the specified
- * object ID.
- *
- * @param[in] id is the Id of the object to obtain the name of
- * @param[in] length is the length of the output name buffer
- * @param[out] name will be set to the name of the object
- *
- * @retval @a *name will contain user defined object name
- * @retval @a name - if successful
- * @retval @a NULL - if unsuccessful
- */
-char *rtems_object_get_name(
-  rtems_id       id,
-  size_t         length,
-  char          *name
-);
+/* Generated from spec:/rtems/object/if/get-name */
 
 /**
- * @brief Set Name of Object
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method allows the caller to set the name of an
- * object. This can be used to set the name of objects
- * which do not have a naming scheme per their API.
+ * @brief Gets the object name associated with the object identifier as a
+ *   string.
  *
- * RTEMS Object Helper -- Set Name of Object as String
+ * The object name is stored in the name buffer.  If the name buffer length is
+ * greater than zero, then the stored object name will be ``NUL`` terminated.
+ * The stored object name may be truncated to fit the length.  There is no
+ * indication if a truncation occurred.  Every attempt is made to return name
+ * as a printable string even if the object has the Classic API 32-bit integer
+ * style name.
  *
- * @param[in] id is the Id of the object to obtain the name of
- * @param[out] name will be set to the name of the object
+ * This directive may cause the calling task to be preempted due to an obtain
+ * and release of the object allocator mutex.
  *
- * @retval @a *name will contain user defined object name
- * @retval @a RTEMS_SUCCESSFUL - if successful
- * @retval error code - if unsuccessful
+ * @param id is the object identifier to get the name.
+ *
+ * @param length is the buffer length in bytes.
+ *
+ * @param[out] name is the pointer to a buffer of the specified length.
+ *
+ * @retval NULL The ``length`` parameter was 0.
+ *
+ * @retval NULL The ``name`` parameter was NULL.
+ *
+ * @retval NULL There was no object information available for the object
+ *   identifier.
+ *
+ * @retval NULL There was no object associated with the object identifier.
+ *
+ * @return Returns the ``name`` parameter value, if there is an object name
+ *   associated with the object identifier.
  */
-rtems_status_code rtems_object_set_name(
-  rtems_id       id,
-  const char    *name
-);
+char *rtems_object_get_name( rtems_id id, size_t length, char *name );
+
+/* Generated from spec:/rtems/object/if/set-name */
 
 /**
- * @brief Get API Portion of Object Id
+ * @ingroup RTEMSAPIClassicObject
  *
- * RTEMS Object Helper -- Extract API From Id
+ * @brief Sets the object name of the object associated with the object
+ *   identifier.
  *
- * This function returns the API portion of the Id.
+ * This directive will set the object name based upon the user string.
  *
- * @param[in] _id is the Id of the object to obtain the API from
+ * This directive may cause the calling task to be preempted due to an obtain
+ * and release of the object allocator mutex.
  *
- * @retval This method returns the API portion of the provided
- *         @a _id.
+ * This directive can be used to set the name of objects which do not have a
+ * naming scheme per their API.
  *
- * @note This method does NOT validate the @a _id provided.
+ * If the object specified by ``id`` is of a class that has a string name, this
+ * directive will free the existing name to the RTEMS Workspace and allocate
+ * enough memory from the RTEMS Workspace to make a copy of the string located
+ * at ``name``.
  *
- * @note A body is also provided.
+ * If the object specified by ``id`` is of a class that has a 32-bit integer
+ * style name, then the first four characters in ``name`` will be used to
+ * construct the name.
+ *
+ * @param id is the object identifier of the object to set the name.
+ *
+ * @param name is the object name to set.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``name`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no object information available for the
+ *   object identifier.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no object associated with the object
+ *   identifier.
+ *
+ * @retval ::RTEMS_NO_MEMORY There was no memory available to duplicate the
+ *   name.
  */
-#define rtems_object_id_get_api( _id ) \
-  _Objects_Get_API( _id )
+rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
+
+/* Generated from spec:/rtems/object/if/id-get-api */
 
 /**
- * @brief Get Class Portion of Object Id
+ * @ingroup RTEMSAPIClassicObject
  *
- * This function returns the class portion of the @a _id ID.
+ * @brief Gets the API component of the object identifier.
  *
- * @param[in] _id is the Id of the object to obtain the class from
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval This method returns the class portion of the provided
- *         @a _id.
+ * This directive does not validate the object identifier provided in ``_id``.
  *
- * @note This method does NOT validate the @a _id provided.
+ * A body is also provided.
  *
- * @note A body is also provided.
+ * @param _id is the object identifier with the API component to get.
+ *
+ * @return Returns the API component of the object identifier.
  */
-#define rtems_object_id_get_class( _id ) \
-  _Objects_Get_class( _id )
+#define rtems_object_id_get_api( _id ) _Objects_Get_API( _id )
+
+/* Generated from spec:/rtems/object/if/id-get-class */
 
 /**
- * @brief Get Node Portion of Object Id
+ * @ingroup RTEMSAPIClassicObject
  *
- * This function returns the node portion of the ID.
+ * @brief Gets the class component of the object identifier.
  *
- * @param[in] _id is the Id of the object to obtain the node from
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval This method returns the node portion of the provided
- *          @a _id.
+ * This directive does not validate the object identifier provided in ``_id``.
  *
- * @note This method does NOT validate the @a _id provided.
+ * A body is also provided.
  *
- * @note A body is also provided.
+ * @param _id is the object identifier with the class component to get.
+ *
+ * @return Returns the class component of the object identifier.
  */
-#define rtems_object_id_get_node( _id ) \
-  _Objects_Get_node( _id )
+#define rtems_object_id_get_class( _id ) _Objects_Get_class( _id )
+
+/* Generated from spec:/rtems/object/if/id-get-node */
 
 /**
- * @brief Get Index Portion of Object Id
+ * @ingroup RTEMSAPIClassicObject
  *
- * This function returns the index portion of the ID.
+ * @brief Gets the MPCI node component of the object identifier.
  *
- * @param[in] _id is the Id of the object to obtain the index from
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval This method returns the index portion of the provided
- *         @a _id.
+ * This directive does not validate the object identifier provided in ``_id``.
  *
- * @note This method does NOT validate the @a _id provided.
+ * A body is also provided.
  *
- * @note A body is also provided.
+ * @param _id is the object identifier with the MPCI node component to get.
+ *
+ * @return Returns the MPCI node component of the object identifier.
  */
-#define rtems_object_id_get_index( _id ) \
-  _Objects_Get_index( _id )
+#define rtems_object_id_get_node( _id ) _Objects_Get_node( _id )
+
+/* Generated from spec:/rtems/object/if/id-get-index */
 
 /**
- * @brief Get Lowest Valid API Index
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns the lowest valid value for the API
- * portion of an RTEMS object Id.
+ * @brief Gets the index component of the object identifier.
  *
- * @retval This method returns the least valid value for
- *         the API portion of an RTEMS object Id.
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @note A body is also provided.
+ * This directive does not validate the object identifier provided in ``_id``.
+ *
+ * A body is also provided.
+ *
+ * @param _id is the object identifier with the index component to get.
+ *
+ * @return Returns the index component of the object identifier.
  */
-#define rtems_object_id_api_minimum() \
-  OBJECTS_INTERNAL_API
+#define rtems_object_id_get_index( _id ) _Objects_Get_index( _id )
+
+/* Generated from spec:/rtems/object/if/id-api-minimum */
 
 /**
- * @brief Get Highest Valid API Index
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns the highest valid value for the API
- * portion of an RTEMS object Id.
+ * @brief Gets the lowest valid value for the API component of an object
+ *   identifier.
  *
- * @retval This method returns the greatest valid value for
- *         the API portion of an RTEMS object Id.
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @note A body is also provided.
+ * A body is also provided.
+ *
+ * @return Returns the lowest valid value for the API component of an object
+ *   identifier.
  */
-#define rtems_object_id_api_maximum() \
-  OBJECTS_APIS_LAST
+#define rtems_object_id_api_minimum() OBJECTS_INTERNAL_API
+
+/* Generated from spec:/rtems/object/if/id-api-maximum */
 
 /**
- * @brief Get Lowest Valid Class Value
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns the lowest valid value Class for the
- * specified @a api. Each API supports a different number
- * of object classes.
+ * @brief Gets the highest valid value for the API component of an object
+ *   identifier.
  *
- * @param[in] api is the API to obtain the minimum class of
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval This method returns the least valid value for
- *         class number for the specified @a api.
- * RTEMS Object Helper -- Get Least Valid Class for an API
+ * A body is also provided.
+ *
+ * @return Returns the highest valid value for the API component of an object
+ *   identifier.
  */
-int rtems_object_api_minimum_class(
-  int api
-);
+#define rtems_object_id_api_maximum() OBJECTS_APIS_LAST
+
+/* Generated from spec:/rtems/object/if/api-minimum-class */
 
 /**
- * @brief Get Highest Valid Class Value
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns the highest valid value Class for the
- * specified @a api. Each API supports a different number
- * of object classes.
+ * @brief Gets the lowest valid class value of the object API.
  *
- * @param[in] api is the API to obtain the maximum class of
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval This method returns the greatet valid value for
- *         class number for the specified @a api.
+ * @param api is the object API to get the lowest valid class value.
+ *
+ * @retval -1 The object API was invalid.
+ *
+ * @return Returns the lowest valid class value of the object API.
  */
-int rtems_object_api_maximum_class(
-  int api
-);
+int rtems_object_api_minimum_class( int api );
+
+/* Generated from spec:/rtems/object/if/api-maximum-class */
 
 /**
- * @brief Get API Name
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns a string containing the name of the
- * specified @a api.
+ * @brief Gets the highest valid class value of the object API.
  *
- * @param[in] api is the API to obtain the name of
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval If successful, this method returns the name of
- *         the specified @a api. Otherwise, it returns
- *         the string "BAD API"
+ * @param api is the object API to get the highest valid class value.
+ *
+ * @retval 0 The object API was invalid.
+ *
+ * @return Returns the highest valid class value of the object API.
  */
-const char *rtems_object_get_api_name(
-  int api
-);
+int rtems_object_api_maximum_class( int api );
+
+/* Generated from spec:/rtems/object/if/get-api-name */
 
 /**
- * @brief Get Class Name
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns a string containing the name of the
- * @a class from the specified @a api.
+ * @brief Gets a descriptive name of the object API.
  *
- * @param[in] the_api is the API for the class
- * @param[in] the_class is the class to obtain the name of
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval If successful, this method returns the name of
- *         the specified @a class. Otherwise, it returns
- *         the string "BAD CLASS"
+ * The string returned is from constant space.  Do not modify or free it.
+ *
+ * @param api is the object API to get the name.
+ *
+ * @retval "BAD API" The API was invalid.
+ *
+ * @return Returns a descriptive name of the API, if the API was valid.
  */
-const char *rtems_object_get_api_class_name(
-  int the_api,
-  int the_class
-);
+const char *rtems_object_get_api_name( int api );
+
+/* Generated from spec:/rtems/object/if/get-api-class-name */
 
 /**
- * @brief Get Class Information
+ * @ingroup RTEMSAPIClassicObject
  *
- * This method returns a string containing the name of the
- * @a the_class from the specified @a api.
+ * @brief Gets a descriptive name of the object class of the object API.
  *
- * @param[in] the_api is the API for the class
- * @param[in] the_class is the class to obtain information about
- * @param[in] info points to the information structure to fill in
+ * This directive is strictly local and does not impact task scheduling.
  *
- * @retval If successful, this method returns the name of
- *         RTEMS_SUCCESSFUL with @a *info filled in. Otherwise,
- *         a status is returned to indicate the error.
+ * The string returned is from constant space.  Do not modify or free it.
  *
+ * @param the_api is the object API of the object class.
+ *
+ * @param the_class is the object class of the object API to get the name.
+ *
+ * @retval "BAD API" The API was invalid.
+ *
+ * @retval "BAD CLASS" The class of the API was invalid.
+ *
+ * @return Returns a descriptive name of the class of the API, if the class of
+ *   the API and the API were valid.
+ */
+const char *rtems_object_get_api_class_name( int the_api, int the_class );
+
+/* Generated from spec:/rtems/object/if/get-class-information */
+
+/**
+ * @ingroup RTEMSAPIClassicObject
+ *
+ * @brief Gets the object class information of the object class of the object
+ *   API.
+ *
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * @param the_api is the object API of the object class.
+ *
+ * @param the_class is the object class of the object API to get the class
+ *   information.
+ *
+ * @param info is the pointer to an object class information variable.  The
+ *   object class information of the class of the API will be stored in this
+ *   variable, in case of a successful operation.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``info`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The class of the API or the API was invalid.
  */
 rtems_status_code rtems_object_get_class_information(
   int                                 the_api,
@@ -340,80 +588,24 @@ rtems_status_code rtems_object_get_class_information(
   rtems_object_api_class_information *info
 );
 
+/* Generated from spec:/rtems/object/if/get-local-node */
+
 /**
- * @brief Get the local MPCI node number.
+ * @ingroup RTEMSAPIClassicObject
  *
- * @return The local MPCI node number.
+ * @brief Gets the local MPCI node number.
+ *
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * @return Returns the local MPCI node number.
  */
-RTEMS_INLINE_ROUTINE uint16_t rtems_object_get_local_node( void )
+static inline uint16_t rtems_object_get_local_node( void )
 {
   return _Objects_Local_node;
 }
-
-/**********************************************************************
- *      CONSTANTS WHICH MAY BE USED IN OBJECT NAME TO ID SEARCHES
- **********************************************************************/
-
-/**
- * @brief Indicates that a search is across all nodes.
- */
-#define RTEMS_SEARCH_ALL_NODES   OBJECTS_SEARCH_ALL_NODES
-
-/**
- * @brief Indicates that a search is across all nodes except the one the call
- * is made from.
- */
-#define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
-
-/**
- * @brief Indicates that the search is to be restricted to the local node.
- */
-#define RTEMS_SEARCH_LOCAL_NODE  OBJECTS_SEARCH_LOCAL_NODE
-
-/**
- * @brief Indicates that the caller wants to obtain the name of the currently
- * executing thread.
- *
- * This constant is only meaningful when obtaining the name of a task.
- */
-#define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
-
-/**********************************************************************
- *        Parameters and return Id's for _Objects_Get_next
- **********************************************************************/
-
-/**
- * @brief Lowest valid index value for the index portion of an object
- * identifier.
- */
-#define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
-
-/**
- * @brief Maximum valid index value for the index portion of an object
- * identifier.
- */
-#define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
-
-/**
- * @brief Returns the identifier of the object with the lowest valid index
- * value.
- *
- * The object is specified by the API @a _api, the object class @a _class and
- * the node @a _node where the object resides.
- */
-#define RTEMS_OBJECT_ID_INITIAL(_api, _class, _node) \
-   OBJECTS_ID_INITIAL(_api, _class, _node)
-
-/**
- * @brief Maximum valid object identifier.
- */
-#define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
 
 #ifdef __cplusplus
 }
 #endif
 
-/**@}*/
-
-#endif
-/* end of include file */
+#endif /* _RTEMS_RTEMS_OBJECT_H */
