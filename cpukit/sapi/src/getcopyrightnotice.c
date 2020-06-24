@@ -39,7 +39,7 @@
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-#include <rtems.h>
+#include <rtems/config.h>
 #include <rtems/score/copyrt.h>
 
 const char *rtems_get_copyright_notice( void )

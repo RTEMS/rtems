@@ -27,6 +27,7 @@
  *  the configuration table.
  */
 
+#include <rtems/score/cpu.h>
 #include <rtems/score/object.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/memory.h>
@@ -163,6 +164,22 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  */
 #define rtems_configuration_get_maximum_processors() \
         (_SMP_Processor_configured_maximum)
+
+/**
+ * @brief Returns the pointer to the RTEMS copyright notice.
+ */
+const char *rtems_get_copyright_notice(void);
+
+/**
+ * @brief Returns the pointer to the RTEMS version string.
+ */
+const char *rtems_get_version_string(void);
+
+/**
+ * @brief Indicates whether this processor variant has hardware floating point
+ * support.
+ */
+#define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
 
 #ifdef __cplusplus
 }

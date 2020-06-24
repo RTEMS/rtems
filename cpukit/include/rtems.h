@@ -62,22 +62,6 @@
 extern "C" {
 #endif
 
-/**
- * @brief Returns the pointer to the RTEMS copyright notice.
- */
-const char *rtems_get_copyright_notice(void);
-
-/**
- * @brief Returns the pointer to the RTEMS version string.
- */
-const char *rtems_get_version_string(void);
-
-/**
- * @brief Indicates whether this processor variant has hardware floating point
- * support.
- */
-#define RTEMS_HAS_HARDWARE_FP CPU_HARDWARE_FP
-
 /**********************************************************************
  *      CONSTANTS WHICH MAY BE USED IN OBJECT NAME TO ID SEARCHES
  **********************************************************************/
