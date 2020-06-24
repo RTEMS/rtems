@@ -21,14 +21,14 @@
 #include <rtems/score/objectimpl.h>
 
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
-  Objects_Information *information,
-  uint32_t             name,
-  uint32_t             node,
-  Objects_Id          *id
+  const Objects_Information *information,
+  uint32_t                   name,
+  uint32_t                   node,
+  Objects_Id                *id
 )
 {
   bool                       search_local_node;
-  Objects_Control           *the_object;
+  const Objects_Control     *the_object;
   Objects_Maximum            maximum;
   Objects_Maximum            index;
 #if defined(RTEMS_MULTIPROCESSING)

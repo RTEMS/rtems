@@ -150,10 +150,10 @@ void _Objects_MP_Close (
  * @retval OBJECTS_INVALID_NAME There is no global object with this name.
  */
 Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
-  Objects_Information *information,
-  Objects_Name         the_name,
-  uint32_t             nodes_to_search,
-  Objects_Id          *the_id
+  const Objects_Information *information,
+  Objects_Name               the_name,
+  uint32_t                   nodes_to_search,
+  Objects_Id                *the_id
 );
 
 /**

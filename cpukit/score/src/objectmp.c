@@ -284,10 +284,10 @@ void _Objects_MP_Close (
 }
 
 Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search(
-  Objects_Information *information,
-  Objects_Name         the_name,
-  uint32_t             nodes_to_search,
-  Objects_Id          *the_id
+  const Objects_Information *information,
+  Objects_Name               the_name,
+  uint32_t                   nodes_to_search,
+  Objects_Id                *the_id
 )
 {
   Objects_Name_or_id_lookup_errors  status;
