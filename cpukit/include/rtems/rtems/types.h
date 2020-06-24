@@ -86,6 +86,13 @@ typedef CPU_Interrupt_frame        rtems_interrupt_frame;
 typedef Watchdog_Interval rtems_interval;
 
 /**
+ * @brief Constant for indefinite wait.
+ *
+ * This is actually an illegal interval value.
+ */
+#define RTEMS_NO_TIMEOUT  ((rtems_interval) WATCHDOG_NO_TIMEOUT)
+
+/**
  * @brief Data structure to manage and manipulate calendar
  * @ref ClassicRTEMSSecTime "time".
  */

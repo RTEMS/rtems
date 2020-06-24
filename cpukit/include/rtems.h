@@ -62,13 +62,6 @@ extern "C" {
 #endif
 
 /**
- * @brief Constant for indefinite wait.
- *
- * This is actually an illegal interval value.
- */
-#define RTEMS_NO_TIMEOUT  ((rtems_interval) WATCHDOG_NO_TIMEOUT)
-
-/**
  * @brief An MPCI must support packets of at least this size.
  */
 #define RTEMS_MINIMUM_PACKET_SIZE  MP_PACKET_MINIMUM_PACKET_SIZE
