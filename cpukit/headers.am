@@ -276,6 +276,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/modesimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/mp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/msgmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/object.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/objectimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/options.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/optionsimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/part.h

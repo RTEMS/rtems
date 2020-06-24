@@ -745,6 +745,7 @@ librtemscpu_a_SOURCES += rtems/src/regionreturnsegment.c
 librtemscpu_a_SOURCES += rtems/src/rtemsbuildid.c
 librtemscpu_a_SOURCES += rtems/src/rtemsbuildname.c
 librtemscpu_a_SOURCES += rtems/src/rtemsmaxprio.c
+librtemscpu_a_SOURCES += rtems/src/rtemsnametoid.c
 librtemscpu_a_SOURCES += rtems/src/rtemsobjectapimaximumclass.c
 librtemscpu_a_SOURCES += rtems/src/rtemsobjectapiminimumclass.c
 librtemscpu_a_SOURCES += rtems/src/rtemsobjectgetapiclassname.c

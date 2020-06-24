@@ -3,14 +3,13 @@
 /**
  * @file
  *
- * @ingroup ClassicDPMEMImpl
+ * @ingroup ClassicObjectImpl
  *
- * @brief rtems_port_ident() Implementation
+ * @brief _RTEMS_Name_to_id() Implementation
  */
 
 /*
  * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
- * Copyright (C) 1989 On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,18 +37,19 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/objectimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
-rtems_status_code rtems_port_ident(
-  rtems_name  name,
-  rtems_id   *id
+rtems_status_code _RTEMS_Name_to_id(
+  uint32_t                   name,
+  uint32_t                   node,
+  Objects_Id                *id,
+  const Objects_Information *information
 )
 {
-  return _RTEMS_Name_to_id(
-    name,
-    OBJECTS_SEARCH_ALL_NODES,
-    id,
-    &_Dual_ported_memory_Information
-  );
+  Objects_Name_or_id_lookup_errors status;
+
+  status = _Objects_Name_to_id_u32( name, node, id, information );
+
+  return _Status_Object_name_errors_to_status[ status ];
 }

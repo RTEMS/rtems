@@ -221,26 +221,29 @@ typedef enum {
 #define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
 
 /**
- * @brief Converts an object name to an Id.
+ * @brief Searches an object of the specified class with the specified name on
+ *   the specified set of nodes.
  *
- * This method converts an object name to an Id.  It performs a look up
+ * This method converts an object name to an identifier.  It performs a look up
  * using the object information block for this object class.
  *
- * @param information points to an object class information block.
  * @param name is the name of the object to find.
  * @param node is the set of nodes to search.
- * @param[out] id will contain the Id if the search is successful.
+ * @param[out] id is the pointer to an object identifier variable or NULL.  The
+ *   object identifier will be stored in the referenced variable, if the
+ *   operation was successful.
+ * @param information is the pointer to an object class information block.
  *
- * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The operations was successful
- *      @a id contains the ID.
- * @retval OBJECTS_INVALID_NAME The name was invalid.
- * @retval OBJECTS_INVALID_ID The id is not 0 before the operation.
+ * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The operations was successful.
+ * @retval OBJECTS_INVALID_ADDRESS The id parameter was NULL.
+ * @retval OBJECTS_INVALID_NAME No object exists with the specified name on the
+ *   specified node set.
  */
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
-  const Objects_Information *information,
   uint32_t                   name,
   uint32_t                   node,
-  Objects_Id                *id
+  Objects_Id                *id,
+  const Objects_Information *information
 );
 
 typedef enum {

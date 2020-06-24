@@ -3,14 +3,13 @@
 /**
  * @file
  *
- * @ingroup ClassicDPMEMImpl
+ * @ingroup ClassicObjectImpl
  *
- * @brief rtems_port_ident() Implementation
+ * @brief Implementation Interfaces for Classic Objects
  */
 
 /*
  * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
- * Copyright (C) 1989 On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,22 +33,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifndef _RTEMS_RTEMS_OBJECTIMPL_H
+#define _RTEMS_RTEMS_OBJECTIMPL_H
+
+#include <rtems/score/objectimpl.h>
+#include <rtems/rtems/status.h>
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#include <rtems/rtems/dpmemimpl.h>
-#include <rtems/rtems/objectimpl.h>
+/**
+ * @defgroup ClassicObjectImpl Classic Object Implementation
+ *
+ * @ingroup RTEMSInternalClassic
+ *
+ * @{
+ */
 
-rtems_status_code rtems_port_ident(
-  rtems_name  name,
-  rtems_id   *id
-)
-{
-  return _RTEMS_Name_to_id(
-    name,
-    OBJECTS_SEARCH_ALL_NODES,
-    id,
-    &_Dual_ported_memory_Information
-  );
+/**
+ * @brief Calls _Objects_Name_to_id_u32() and converts the status.
+ *
+ * @param name is the name of the object to find.
+ * @param node is the set of nodes to search.
+ * @param[out] id is the pointer to an object identifier variable or NULL.  The
+ *   object identifier will be stored in the referenced variable, if the
+ *   operation was successful.
+ * @param information is the pointer to an object class information block.
+ *
+ * @retval RTEMS_SUCCESSFUL The operations was successful.
+ * @retval RTEMS_INVALID_ADDRESS The id parameter was NULL.
+ * @retval RTEMS_INVALID_NAME No object exists with the specified name on the
+ *   specified node set.
+ */
+rtems_status_code _RTEMS_Name_to_id(
+  uint32_t                   name,
+  uint32_t                   node,
+  Objects_Id                *id,
+  const Objects_Information *information
+);
+
+/** @} */
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* _RTEMS_RTEMS_OBJECTIMPL_H */
