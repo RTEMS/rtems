@@ -62,65 +62,6 @@
 extern "C" {
 #endif
 
-/**********************************************************************
- *      CONSTANTS WHICH MAY BE USED IN OBJECT NAME TO ID SEARCHES
- **********************************************************************/
-
-/**
- * @brief Indicates that a search is across all nodes.
- */
-#define RTEMS_SEARCH_ALL_NODES   OBJECTS_SEARCH_ALL_NODES
-
-/**
- * @brief Indicates that a search is across all nodes except the one the call
- * is made from.
- */
-#define RTEMS_SEARCH_OTHER_NODES OBJECTS_SEARCH_OTHER_NODES
-
-/**
- * @brief Indicates that the search is to be restricted to the local node.
- */
-#define RTEMS_SEARCH_LOCAL_NODE  OBJECTS_SEARCH_LOCAL_NODE
-
-/**
- * @brief Indicates that the caller wants to obtain the name of the currently
- * executing thread.
- *
- * This constant is only meaningful when obtaining the name of a task.
- */
-#define RTEMS_WHO_AM_I           OBJECTS_WHO_AM_I
-
-/**********************************************************************
- *        Parameters and return Id's for _Objects_Get_next
- **********************************************************************/
-
-/**
- * @brief Lowest valid index value for the index portion of an object
- * identifier.
- */
-#define RTEMS_OBJECT_ID_INITIAL_INDEX        OBJECTS_ID_INITIAL_INDEX
-
-/**
- * @brief Maximum valid index value for the index portion of an object
- * identifier.
- */
-#define RTEMS_OBJECT_ID_FINAL_INDEX          OBJECTS_ID_FINAL_INDEX
-
-/**
- * @brief Returns the identifier of the object with the lowest valid index
- * value.
- *
- * The object is specified by the API @a _api, the object class @a _class and
- * the node @a _node where the object resides.
- */
-#define RTEMS_OBJECT_ID_INITIAL(_api, _class, _node) \
-   OBJECTS_ID_INITIAL(_api, _class, _node)
-
-/**
- * @brief Maximum valid object identifier.
- */
-#define RTEMS_OBJECT_ID_FINAL                OBJECTS_ID_FINAL
-
 /**
  * @brief Minimum stack size which every thread must exceed.
  *
