@@ -325,6 +325,7 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search(
 
   if ( the_global_object != NULL ) {
     *the_id = the_global_object->id;
+    _Assert( the_global_object->name.name_u32 != 0 );
     status = OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
   } else {
     status = OBJECTS_INVALID_NAME;

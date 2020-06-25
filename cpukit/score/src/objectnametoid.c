@@ -40,9 +40,6 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   if ( !id )
     return OBJECTS_INVALID_ADDRESS;
 
-  if ( name == 0 )
-    return OBJECTS_INVALID_NAME;
-
   maximum = _Objects_Get_maximum_index( information );
   search_local_node = false;
 
@@ -61,6 +58,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
 
       if ( name == the_object->name.name_u32 ) {
         *id = the_object->id;
+        _Assert( name != 0 );
         return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
       }
     }
