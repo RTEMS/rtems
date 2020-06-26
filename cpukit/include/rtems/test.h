@@ -2243,6 +2243,29 @@ void *T_push_fixture(T_fixture_node *, const T_fixture *);
 
 void T_pop_fixture(void);
 
+/**
+ * @brief Gets the scope for nested fixtures.
+ *
+ * This function should help implementing scope fixture methods.  The parameter
+ * layout allows efficient code generation for this method.
+ *
+ * @param desc is the description table.  It shall be a NULL-terminated array
+ *   which references arrays of descriptive strings.
+ *
+ * @param buf is the buffer for the scope string.
+ *
+ * @param n is the size of the scope buffer in characters.
+ *
+ * @param second_indices is an array of indices defining which descriptive
+ *   string is used for each entry in the description table.
+ */
+void T_get_scope(
+  const char * const * const *desc,
+  char *buf,
+  size_t n,
+  const size_t *second_indices
+);
+
 #ifdef __rtems__
 #define T_TEST_CASE_FIXTURE(name, fixture)			\
 void T_case_body_##name(void);					\

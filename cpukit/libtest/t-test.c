@@ -1095,3 +1095,42 @@ T_pop_fixture(void)
 
 	memset(node, 0, sizeof(*node));
 }
+
+void
+T_get_scope(const char * const * const *desc, char *buf, size_t n,
+    const size_t *second_indices)
+{
+	size_t i;
+
+	i = 0;
+
+	while (true) {
+		const char * const *desc2;
+		size_t m;
+
+		desc2 = desc[i];
+
+		if (desc2 == NULL) {
+			return;
+		}
+
+		if (n > 1) {
+			buf[0] = '/';
+			--n;
+			++buf;
+		} else {
+			return;
+		}
+
+		m = strlcpy(buf, desc2[second_indices[i]], n);
+
+		if (m < n) {
+			n -= m;
+			buf += m;
+		} else {
+			return;
+		}
+
+		++i;
+	}
+}
