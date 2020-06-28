@@ -29,28 +29,29 @@ int shm_unlink( const char *name )
   _Objects_Allocator_lock();
 
   shm = _POSIX_Shm_Get_by_name( name, 0, &obj_err );
-  switch ( obj_err ) {
-    case OBJECTS_GET_BY_NAME_INVALID_NAME:
-      err = ENOENT;
-      break;
+  if ( shm ) {
+    _Objects_Namespace_remove_string(
+      &_POSIX_Shm_Information,
+      &shm->Object
+    );
 
-    case OBJECTS_GET_BY_NAME_NAME_TOO_LONG:
-      err = ENAMETOOLONG;
-      break;
+    if ( shm->reference_count == 0 ) {
+      /* Only remove the shm object if no references exist to it. Otherwise,
+       * the shm object will be freed later in _POSIX_Shm_Attempt_delete */
+      _POSIX_Shm_Free( shm );
+    }
+  } else {
+    switch ( obj_err ) {
+      case OBJECTS_GET_BY_NAME_NAME_TOO_LONG:
+        err = ENAMETOOLONG;
+        break;
 
-    case OBJECTS_GET_BY_NAME_NO_OBJECT:
-    default:
-      _Objects_Namespace_remove_string(
-        &_POSIX_Shm_Information,
-        &shm->Object
-      );
-
-      if ( shm->reference_count == 0 ) {
-        /* Only remove the shm object if no references exist to it. Otherwise,
-         * the shm object will be freed later in _POSIX_Shm_Attempt_delete */
-        _POSIX_Shm_Free( shm );
-      }
-      break;
+      case OBJECTS_GET_BY_NAME_INVALID_NAME:
+      case OBJECTS_GET_BY_NAME_NO_OBJECT:
+      default:
+        err = ENOENT;
+        break;
+    }
   }
 
   _Objects_Allocator_unlock();
