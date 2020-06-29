@@ -249,6 +249,13 @@ extern "C" {
  */
 #define CPU_MAXIMUM_PROCESSORS 32
 
+/**
+ * The following define determines whether or not this CPU port will use
+ * libc global constructors and destructors instead of _init/_fini functions
+ * depending on .ctors and .dtors linker sections.
+ */
+#define CPU_USE_LIBC_INIT_FINI_ARRAY TRUE
+
 /*
  *  Processor defined structures required for cpukit/score.
  *

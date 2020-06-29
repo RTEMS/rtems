@@ -17,11 +17,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-/* FIXME: These defines are a blatant hack */
-
   #if defined(__USE_INIT_FINI__)
-    #if defined(__ARM_EABI__) || defined(__riscv) \
-      || defined(__or1k__) || defined(__or1knd__)
+    #if CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE
       #define FINI_SYMBOL __libc_fini_array
     #else
       #define FINI_SYMBOL _fini

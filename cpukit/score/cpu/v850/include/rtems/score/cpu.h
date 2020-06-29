@@ -493,6 +493,8 @@ void _CPU_Context_Initialize(
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
+#define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
+
 /* functions */
 
 /**

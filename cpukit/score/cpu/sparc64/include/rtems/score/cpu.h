@@ -801,6 +801,8 @@ void _CPU_Context_Initialize(
 
 /* end of Fatal Error manager macros */
 
+#define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
+
 /* Bitfield handler macros */
 
 /*

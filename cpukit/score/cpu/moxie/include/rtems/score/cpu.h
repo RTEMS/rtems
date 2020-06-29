@@ -427,6 +427,8 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
+#define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
+
 /* functions */
 
 /*

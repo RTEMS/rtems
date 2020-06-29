@@ -805,6 +805,9 @@ void _CPU_Context_Initialize(
 #endif /* ASM */
 
 #ifndef ASM
+
+#define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
+
 /* Bitfield handler macros */
 
 #define CPU_USE_GENERIC_BITFIELD_CODE FALSE

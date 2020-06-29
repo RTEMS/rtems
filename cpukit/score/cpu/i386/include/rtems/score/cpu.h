@@ -503,6 +503,8 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
 
 /* end of Fatal Error manager macros */
 
+#define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
+
 /*
  *  Bitfield handler macros
  *

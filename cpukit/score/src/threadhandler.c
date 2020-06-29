@@ -28,9 +28,13 @@
  *  Conditional magic to determine what style of C++ constructor
  *  initialization this target and compiler version uses.
  */
+RTEMS_STATIC_ASSERT(
+  CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE
+    || CPU_USE_LIBC_INIT_FINI_ARRAY == FALSE,
+  CPU_USE_LIBC_INIT_FINI_ARRAY
+);
 #if defined(__USE_INIT_FINI__)
-  #if defined(__ARM_EABI__) || defined(__riscv) \
-    || defined(__or1k__) || defined(__or1knd__)
+  #if CPU_USE_LIBC_INIT_FINI_ARRAY == TRUE
     #define INIT_NAME __libc_init_array
   #else
     #define INIT_NAME _init

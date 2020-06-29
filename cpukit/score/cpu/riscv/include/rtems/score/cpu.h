@@ -219,6 +219,8 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
+#define CPU_USE_LIBC_INIT_FINI_ARRAY TRUE
+
 #define CPU_MAXIMUM_PROCESSORS 32
 
 typedef uint16_t Priority_bit_map_Word;
