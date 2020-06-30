@@ -34,7 +34,7 @@ import os
 import os.path
 import sys
 
-rtems_version = 5
+rtems_version = 6
 
 
 class ArchBsps:
