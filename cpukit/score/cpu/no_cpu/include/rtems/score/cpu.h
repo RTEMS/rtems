@@ -250,9 +250,10 @@ extern "C" {
 #define CPU_MAXIMUM_PROCESSORS 32
 
 /**
- * The following define determines whether or not this CPU port will use
- * libc global constructors and destructors instead of _init/_fini functions
- * depending on .ctors and .dtors linker sections.
+ * The following define determines whether or not this CPU port will use the C
+ * library support to run the global constructors and destructors on
+ * architectures that use .init_array and .fini_array sections.  If defined to
+ * FALSE, then the _init() and _fini() functions will be used.
  */
 #define CPU_USE_LIBC_INIT_FINI_ARRAY TRUE
 
