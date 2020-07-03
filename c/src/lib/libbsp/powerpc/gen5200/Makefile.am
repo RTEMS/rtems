@@ -18,9 +18,6 @@ rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.brs5l
-dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.brs6l
-dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.dp2
 dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.gen5200_base
 dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.icecube
 dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.pm520_cr825
