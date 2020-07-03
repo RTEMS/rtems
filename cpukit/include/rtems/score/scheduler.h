@@ -30,12 +30,7 @@ extern "C" {
 struct Per_CPU_Control;
 
 /**
- * @defgroup RTEMSScoreScheduler Scheduler Handler
- *
- * @ingroup RTEMSScore
- *
- * This handler encapsulates functionality related to managing sets of threads
- * that are ready for execution.
+ * @addtogroup RTEMSScoreScheduler
  *
  * @{
  */
@@ -300,22 +295,24 @@ struct _Scheduler_Control {
 };
 
 /**
- * @brief Registered schedulers.
+ * @brief This table contains the configured schedulers.
  *
- * Application provided via <rtems/confdefs.h>.
+ * The table is defined by <rtems/confdefs.h> through the
+ * #CONFIGURE_SCHEDULER_TABLE_ENTRIES application configuration option.
  *
  * @see _Scheduler_Count.
  */
 extern const Scheduler_Control _Scheduler_Table[];
 
 /**
- * @brief Count of registered schedulers.
+ * @brief This constant contains the count of configured schedulers.
  *
- * Application provided via <rtems/confdefs.h> on SMP configurations.
+ * In SMP configurations, the constant is defined by <rtems/confdefs.h> through
+ * the count of entries of the #CONFIGURE_SCHEDULER_TABLE_ENTRIES application
+ * configuration option.
  *
- * It is very important that this is a compile-time constant on uni-processor
- * configurations (in this case RTEMS_SMP is not defined) so that the compiler
- * can optimize the some loops away
+ * In uniprocessor configurations, this is a compile time constant set to one.
+ * This is important so that the compiler can optimize some loops away.
  *
  * @see _Scheduler_Table.
  */

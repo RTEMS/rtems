@@ -34,7 +34,34 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSScoreScheduler
+ * @defgroup RTEMSScoreScheduler Scheduler Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This handler encapsulates functionality related to managing sets of
+ *   threads that are ready for execution.
+ *
+ * Schedulers are used by the system to manage sets of threads that are ready
+ * for execution.  A scheduler consists of
+ *
+ * * a scheduler algorithm implementation,
+ *
+ * * a scheduler index and an associated name, and
+ *
+ * * a set of processors owned by the scheduler (may be empty, but never
+ *   overlaps with a set owned by another scheduler).
+ *
+ * Each thread uses exactly one scheduler as its home scheduler.  Threads may
+ * temporarily use another scheduler due to actions of locking protocols.
+ *
+ * All properties of a scheduler can be configured and controlled by the user.
+ * Some properties are fixed at link time (defined by application configuration
+ * options), other properties can be changed at runtime through directive
+ * calls.
+ *
+ * The scheduler index, name, and initial processor set are defined for a
+ * particular application by the application configuration.  The schedulers are
+ * registered in the ::_Scheduler_Table which has ::_Scheduler_Count entries.
  *
  * @{
  */
