@@ -6,8 +6,7 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 
 RTEMS_CPU = powerpc
 
-CPU_CFLAGS = -mcpu=8540 -meabi -msdata=sysv -fno-common -mstrict-align \
-	-mspe -mabi=spe -mfloat-gprs=double
+CPU_CFLAGS = -mcpu=8540 -msoft-float -meabi -msdata=sysv -fno-common -mstrict-align
 
 CFLAGS_OPTIMIZE_V = -O2 -g
 CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections

@@ -1,6 +1,0 @@
-MEMORY {
-	STARTROM : ORIGIN = 0x0, LENGTH = 32k
-	ROM : ORIGIN = 0x40000, LENGTH = 768k
-}
-
-INCLUDE linkcmds.mpc5674f_rsm6_base

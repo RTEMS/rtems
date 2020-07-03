@@ -1,5 +1,0 @@
-#
-# This is the set of tests which are known to not link on this BSP
-#
-
-include: testdata/small-memory-testsuite.tcfg

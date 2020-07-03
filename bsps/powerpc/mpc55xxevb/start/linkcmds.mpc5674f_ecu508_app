@@ -1,8 +1,0 @@
-MEMORY {
-	/* Let space for the binary image library header */
-	ROM : ORIGIN = 0x00101000, LENGTH = 3064k
-}
-
-REGION_ALIAS ("STARTROM", ROM);
-
-INCLUDE linkcmds.mpc5674f_ecu508

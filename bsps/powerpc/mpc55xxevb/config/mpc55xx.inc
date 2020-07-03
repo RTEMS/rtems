@@ -11,10 +11,7 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 
 RTEMS_CPU = powerpc
 
-CPU_CFLAGS_FLOAT ?= -msoft-float -mno-spe
-
-# FIXME
-CPU_CFLAGS = -mcpu=8540 -meabi -msdata=sysv -fno-common $(CPU_CFLAGS_FLOAT) \
+CPU_CFLAGS = -mcpu=8540 -msoft-float -meabi -msdata=sysv -fno-common \
     -mstrict-align
 
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
