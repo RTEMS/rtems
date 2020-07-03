@@ -226,9 +226,11 @@ get_checksum(unsigned start, int length)
 int
 send_ipi(unsigned int dst, unsigned int v)
 {
-  int to, send_status;
+  int to, send_status, apicid;
 
-  IMPS_LAPIC_WRITE(LAPIC_ICR+0x10, (dst << 24));
+  apicid = imps_cpu_apic_map[dst];
+
+  IMPS_LAPIC_WRITE(LAPIC_ICR+0x10, (apicid << 24));
   IMPS_LAPIC_WRITE(LAPIC_ICR, v);
 
   /* Wait for send to finish */
@@ -251,9 +253,11 @@ static int
 boot_cpu(imps_processor *proc)
 {
   int apicid = proc->apic_id, success = 1;
+  int cpuid;
   unsigned bootaddr;
   unsigned bios_reset_vector = PHYS_TO_VIRTUAL(BIOS_RESET_VECTOR);
 
+  cpuid = imps_apic_cpu_map[apicid];
   /*
    * Copy boot code for secondary CPUs here.  Find it in between
    * "patch_code_start" and "patch_code_end" symbols.  The other CPUs
@@ -276,7 +280,7 @@ boot_cpu(imps_processor *proc)
   /* Pass start function, stack region and gdtdescr to AP
    * see startAP.S for location */
   reset[1] = (uint32_t)secondary_cpu_initialize;
-  reset[2] = (uint32_t)_Per_CPU_Get_by_index(apicid)->interrupt_stack_high;
+  reset[2] = (uint32_t)_Per_CPU_Get_by_index(cpuid)->interrupt_stack_high;
   memcpy(
   	(char*) &reset[3],
   	&gdtdesc,
@@ -295,13 +299,13 @@ boot_cpu(imps_processor *proc)
 
   /* assert INIT IPI */
   send_ipi(
-    apicid,
+    cpuid,
     LAPIC_ICR_TM_LEVEL | LAPIC_ICR_LEVELASSERT | LAPIC_ICR_DM_INIT
   );
   UDELAY(10000);
 
   /* de-assert INIT IPI */
-  send_ipi(apicid, LAPIC_ICR_TM_LEVEL | LAPIC_ICR_DM_INIT);
+  send_ipi(cpuid, LAPIC_ICR_TM_LEVEL | LAPIC_ICR_DM_INIT);
 
   UDELAY(10000);
 
@@ -312,7 +316,7 @@ boot_cpu(imps_processor *proc)
   if (proc->apic_ver >= APIC_VER_NEW) {
     int i;
     for (i = 1; i <= 2; i++) {
-      send_ipi(apicid, LAPIC_ICR_DM_SIPI | ((bootaddr >> 12) & 0xFF));
+      send_ipi(cpuid, LAPIC_ICR_DM_SIPI | ((bootaddr >> 12) & 0xFF));
       UDELAY(1000);
     }
   }
