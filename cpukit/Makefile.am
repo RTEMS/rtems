@@ -1591,19 +1591,6 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 
 endif
 
-if CPU_EPIPHANY
-
-include $(srcdir)/score/cpu/epiphany/headers.am
-
-librtemscpu_a_SOURCES += score/cpu/epiphany/cpu.c
-librtemscpu_a_SOURCES += score/cpu/epiphany/epiphany-context-initialize.c
-librtemscpu_a_SOURCES += score/cpu/epiphany/epiphany-context-switch.S
-librtemscpu_a_SOURCES += score/cpu/epiphany/epiphany-exception-handler.S
-librtemscpu_a_SOURCES += score/cpu/epiphany/setjmp.S
-librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
-
-endif
-
 if CPU_I386
 
 include $(srcdir)/score/cpu/i386/headers.am
