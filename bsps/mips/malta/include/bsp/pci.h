@@ -110,7 +110,7 @@ int indirect_pci_write_config_dword(
 /* Can these be moved to the rtems pci.h? */
 int FindPCIbridge( int mybus, struct pcibridge *pb );
 
-const pci_config_access_functions pci_indirect_functions;
+extern const pci_config_access_functions pci_indirect_functions;
 
 void     pci_out_le32( uint32_t base, uint32_t addr, uint32_t val);
 void     pci_out_32( uint32_t base, uint32_t addr, uint32_t val);

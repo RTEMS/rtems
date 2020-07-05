@@ -251,9 +251,8 @@ void BSP_i8259s_init(void)
 #define PCI__GEN(bus, off, num)		(((off)^((bus) << 7))+((num) << 4))
 #define PCI_INTR_ACK(bus)		PCI__GEN(bus, 0x0c34, 0)
 
-volatile uint8_t  master;
-volatile uint8_t  slave;
-volatile uint8_t  temp;
+static volatile uint8_t  master;
+static volatile uint8_t  slave;
 
 void bsp_show_interrupt_regs(void);
 void bsp_show_interrupt_regs() {
