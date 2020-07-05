@@ -7,6 +7,7 @@ AC_REQUIRE([RTEMS_INCLUDES])dnl
 AC_CACHE_CHECK([whether BSP supports networking],
   rtems_cv_HAS_NETWORKING,
   [dnl
+    case "$host" in
     # Newer architecture ports that should only use new TCP/IP stack
     x86_64*)
       rtems_cv_HAS_NETWORKING="no"
