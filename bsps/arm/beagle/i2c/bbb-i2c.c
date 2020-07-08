@@ -199,7 +199,7 @@ static int am335x_i2c_reset( bbb_i2c_bus *bus )
   }
 
   if ( timeout <= 0 ) {
-    puts( "ERROR: Timeout in soft-reset\n" );
+    debug_print( "ERROR: Timeout in soft-reset\n" );
     return ETIMEDOUT;
   }
 
