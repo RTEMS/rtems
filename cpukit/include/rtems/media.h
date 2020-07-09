@@ -281,6 +281,9 @@ typedef enum {
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_IO_ERROR In the inquiry state this will abort the action.
+ * @retval RTEMS_INCORRECT_STATE In the failed state this will cause a retry.
+ * Make sure to have a retry counter or similar to avoid endless loops if you
+ * use this value.
  */
 typedef rtems_status_code (*rtems_media_listener)(
   rtems_media_event event,

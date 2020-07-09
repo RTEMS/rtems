@@ -420,26 +420,30 @@ static rtems_status_code process_event(
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_status_code sc_retry = RTEMS_SUCCESSFUL;
   rtems_media_state state = RTEMS_MEDIA_STATE_FAILED;
   char *dest = NULL;
 
-  sc = notify(event, RTEMS_MEDIA_STATE_INQUIRY, src, NULL);
-  if (sc == RTEMS_SUCCESSFUL) {
-    state = RTEMS_MEDIA_STATE_READY;
-  } else {
-    state = RTEMS_MEDIA_STATE_ABORTED;
-  }
-
-  sc = (*worker)(state, src, &dest, worker_arg);
-  if (state == RTEMS_MEDIA_STATE_READY) {
+  do {
+    sc = notify(event, RTEMS_MEDIA_STATE_INQUIRY, src, NULL);
     if (sc == RTEMS_SUCCESSFUL) {
-      state = RTEMS_MEDIA_STATE_SUCCESS;
+      state = RTEMS_MEDIA_STATE_READY;
     } else {
-      state = RTEMS_MEDIA_STATE_FAILED;
+      state = RTEMS_MEDIA_STATE_ABORTED;
     }
-  }
 
-  notify(event, state, src, dest);
+    sc = (*worker)(state, src, &dest, worker_arg);
+    if (state == RTEMS_MEDIA_STATE_READY) {
+      if (sc == RTEMS_SUCCESSFUL) {
+        state = RTEMS_MEDIA_STATE_SUCCESS;
+      } else {
+        state = RTEMS_MEDIA_STATE_FAILED;
+      }
+    }
+
+    sc_retry = notify(event, state, src, dest);
+  } while (state == RTEMS_MEDIA_STATE_FAILED
+    && sc_retry == RTEMS_INCORRECT_STATE);
   remember_event(event, state, src, dest);
 
   if (state == RTEMS_MEDIA_STATE_SUCCESS) {
