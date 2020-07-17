@@ -95,6 +95,12 @@ typedef struct T_fixture_node {
  * @{
  */
 
+#ifdef __cplusplus
+#define T_NO_RETURN [[ noreturn ]]
+#else
+#define T_NO_RETURN _Noreturn
+#endif
+
 typedef struct T_case_context {
 	const char *name;
 	void (*body)(void);
@@ -2242,6 +2248,8 @@ void T_set_fixture_context(void *);
 void *T_push_fixture(T_fixture_node *, const T_fixture *);
 
 void T_pop_fixture(void);
+
+T_NO_RETURN void T_stop(void);
 
 /**
  * @brief Gets the scope for nested fixtures.

@@ -423,8 +423,8 @@ T_add_failure(T_context *ctx)
 	    memory_order_relaxed);
 }
 
-static void
-T_stop(T_context *ctx)
+T_NO_RETURN static void
+T_do_stop(T_context *ctx)
 {
 	T_fixture_node *node;
 
@@ -443,6 +443,12 @@ T_stop(T_context *ctx)
 	}
 
 	longjmp(ctx->case_begin_context, 1);
+}
+
+T_NO_RETURN void
+T_stop(void)
+{
+	T_do_stop(&T_instance);
 }
 
 void T_plan(unsigned int planned_steps)
@@ -568,7 +574,7 @@ T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
 			}
 
 			if ((t->flags & T_CHECK_STOP) != 0) {
-				T_stop(ctx);
+				T_do_stop(ctx);
 			}
 		} else if ((t->flags & T_CHECK_QUIET) == 0 &&
 		    ctx->verbosity >= T_VERBOSE) {
