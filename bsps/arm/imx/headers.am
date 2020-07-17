@@ -19,4 +19,5 @@ include_arm_freescale_imx_HEADERS += ../../../../../../bsps/arm/imx/include/arm/
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../../bsps/arm/imx/include/bsp/imx-gpio.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/imx/include/bsp/irq.h

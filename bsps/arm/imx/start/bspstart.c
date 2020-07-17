@@ -47,7 +47,7 @@ rtems_vector_number imx_get_irq_of_node(
 
   val = fdt_getprop(fdt, node, "interrupts", &len);
   if (val == NULL || len < (int) ((index + 1) * 12)) {
-    return UINT32_MAX;
+    return BSP_INTERRUPT_VECTOR_INVALID;
   }
 
   return fdt32_to_cpu(val[index * 3 + 1]) + MAGIC_IRQ_OFFSET;

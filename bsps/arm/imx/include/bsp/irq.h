@@ -28,6 +28,7 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 159
+#define BSP_INTERRUPT_VECTOR_INVALID (UINT32_MAX)
 
 #ifdef __cplusplus
 }
