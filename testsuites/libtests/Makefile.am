@@ -1493,6 +1493,15 @@ ttest01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ttest01) \
 	$(support_includes)
 endif
 
+if TEST_ttest02
+lib_tests += ttest02
+lib_screens += ttest02/ttest02.scn
+lib_docs += ttest02/ttest02.doc
+ttest02_SOURCES = ttest02/init.c
+ttest02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ttest02) \
+	$(support_includes)
+endif
+
 if TEST_tztest
 lib_tests += tztest
 lib_screens += tztest/tztest.scn

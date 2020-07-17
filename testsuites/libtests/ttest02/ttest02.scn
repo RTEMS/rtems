@@ -1,0 +1,37 @@
+*** BEGIN OF TEST TTEST 2 ***
+*** TEST VERSION: 6.0.0.133fcd71c16b87b5c3924c04039a125be9affcfa
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_SMP
+*** TEST TOOLS: 10.0.1 20200406 (RTEMS 6, RSB b69f54d51740810dc54a50662f5da4d4ba0ddd18, Newlib ece49e4)
+A:TTEST 2
+S:Platform:RTEMS
+S:Compiler:10.0.1 20200406 (RTEMS 6, RSB b69f54d51740810dc54a50662f5da4d4ba0ddd18, Newlib ece49e4)
+S:Version:6.0.0.133fcd71c16b87b5c3924c04039a125be9affcfa
+S:BSP:leon3
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:TestInterruptTimeout
+P:0:0:UI1:init.c:130
+E:TestInterruptTimeout:N:1:F:0:D:0.042180
+B:TestInterruptFatal
+P:0:0:UI1:init.c:137
+E:TestInterruptFatal:N:1:F:0:D:0.000360
+B:TestInterruptDone
+P:0:0:UI1:init.c:114
+P:1:0:UI1:init.c:114
+P:2:0:UI1:init.c:114
+P:3:0:UI1:init.c:114
+P:4:0:UI1:init.c:114
+P:5:0:UI1:init.c:114
+P:6:0:UI1:init.c:114
+P:7:0:UI1:init.c:114
+P:8:0:UI1:init.c:114
+P:9:0:UI1:init.c:114
+E:TestInterruptDone:N:10:F:0:D:1.233900
+Z:TTEST 2:C:3:N:12:F:0:D:1.277400
+Y:ReportHash:SHA256:308c997b3220d239738a11dac4133d9f987a34b3f5f9baf1158d1a54f85cc647
+
+*** END OF TEST TTEST 2 ***

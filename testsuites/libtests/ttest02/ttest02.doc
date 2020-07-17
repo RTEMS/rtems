@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: ttest02
+
+directives:
+
+  - T_interrupt_test()
+
+concepts:
+
+  - Ensure that the interrupt test works.

@@ -2360,6 +2360,36 @@ void T_busy(uint_fast32_t);
 
 uint_fast32_t T_get_one_clock_tick_busy(void);
 
+typedef enum {
+	T_INTERRUPT_TEST_INITIAL,
+	T_INTERRUPT_TEST_ACTION,
+	T_INTERRUPT_TEST_BLOCKED,
+	T_INTERRUPT_TEST_CONTINUE,
+	T_INTERRUPT_TEST_DONE,
+	T_INTERRUPT_TEST_EARLY,
+	T_INTERRUPT_TEST_INTERRUPT,
+	T_INTERRUPT_TEST_LATE,
+	T_INTERRUPT_TEST_TIMEOUT
+} T_interrupt_test_state;
+
+typedef struct {
+	void (*prepare)(void *);
+	void (*action)(void *);
+	T_interrupt_test_state (*interrupt)(void *);
+	void (*blocked)(void *);
+	uint32_t max_iteration_count;
+} T_interrupt_test_config;
+
+T_interrupt_test_state T_interrupt_test_change_state(T_interrupt_test_state,
+    T_interrupt_test_state);
+
+T_interrupt_test_state T_interrupt_test_get_state(void);
+
+void T_interrupt_test_busy_wait_for_interrupt(void);
+
+T_interrupt_test_state T_interrupt_test(const T_interrupt_test_config *config,
+    void *arg);
+
 void T_report_hash_sha256(T_event, const char *);
 
 void T_check_heap(T_event, const char *);
