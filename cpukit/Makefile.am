@@ -1858,6 +1858,7 @@ librtemstest_a_SOURCES += libtest/testparallel.c
 librtemstest_a_SOURCES += libtest/testwrappers.c
 librtemstest_a_SOURCES += libtest/t-test.c
 librtemstest_a_SOURCES += libtest/t-test-busy.c
+librtemstest_a_SOURCES += libtest/t-test-busy-tick.c
 librtemstest_a_SOURCES += libtest/t-test-checks.c
 librtemstest_a_SOURCES += libtest/t-test-checks-eno.c
 librtemstest_a_SOURCES += libtest/t-test-checks-psx.c

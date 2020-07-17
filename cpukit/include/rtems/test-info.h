@@ -304,12 +304,6 @@ void rtems_test_parallel(
  */
 void rtems_test_busy_cpu_usage(time_t seconds, long nanoseconds);
 
-/**
- * @brief Returns a count value for T_busy() which yields roughly a
- * duration of one clock tick.
- */
-uint_fast32_t rtems_test_get_one_tick_busy_count(void);
-
 /** @} */
 
 #ifdef __cplusplus

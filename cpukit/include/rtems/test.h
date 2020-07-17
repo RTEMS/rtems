@@ -2263,6 +2263,8 @@ void T_case_body_##name(void)
 
 void T_busy(uint_fast32_t);
 
+uint_fast32_t T_get_one_clock_tick_busy(void);
+
 void T_report_hash_sha256(T_event, const char *);
 
 void T_check_heap(T_event, const char *);

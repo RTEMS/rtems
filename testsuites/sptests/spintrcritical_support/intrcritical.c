@@ -71,7 +71,7 @@ void interrupt_critical_section_test_support_initialize(
     rtems_test_assert( sc == RTEMS_SUCCESSFUL );
   }
 
-  m = rtems_test_get_one_tick_busy_count();
+  m = T_get_one_clock_tick_busy();
 
   interrupt_critical.minimum = 0;
   interrupt_critical.maximum = m;
