@@ -2294,6 +2294,9 @@ void T_pop_fixture(void);
 
 T_NO_RETURN void T_stop(void);
 
+#define T_unreachable() \
+    do { T_true(false, "Unreachable"); T_stop(); } while (0)
+
 /**
  * @brief Gets the scope for nested fixtures.
  *
