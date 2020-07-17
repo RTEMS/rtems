@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2018, 2019 embedded brains GmbH
+ * Copyright (C) 2017, 2020 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -2260,6 +2260,8 @@ void T_case_body_##name(void)
 #endif /* __rtems__ */
 
 #define T_TEST_CASE(name) T_TEST_CASE_FIXTURE(name, NULL)
+
+void T_busy(uint_fast32_t);
 
 void T_report_hash_sha256(T_event, const char *);
 

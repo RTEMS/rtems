@@ -13,6 +13,7 @@
 
 #include <tmacros.h>
 #include <intrcritical.h>
+#include <rtems/test.h>
 
 #define INTERRUPT_CRITICAL_NAME rtems_build_name( 'I', 'C', 'R', 'I' )
 
@@ -49,7 +50,7 @@ static bool interrupt_critical_busy_wait( void )
     interrupt_critical.maximum_current = max - 1;
   }
 
-  rtems_test_busy( max );
+  T_busy( max );
 
   return reset;
 }

@@ -19,6 +19,7 @@
 
 #include <rtems/test-info.h>
 #include <rtems.h>
+#include <rtems/test.h>
 #include <rtems/score/threadimpl.h>
 
 static uint_fast32_t estimate_busy_loop_maximum( void )
@@ -45,21 +46,6 @@ static uint_fast32_t wait_for_tick_change( void )
   return now;
 }
 
-/*
- * It is important that we use actually use the same rtems_test_busy() function
- * at the various places, since otherwise the obtained maximum value might be
- * wrong.  So, the compiler must not inline this function.
- */
-RTEMS_NO_INLINE void rtems_test_busy( uint_fast32_t count )
-{
-  uint_fast32_t i = 0;
-
-  do {
-    __asm__ volatile ("");
-    ++i;
-  } while ( i < count );
-}
-
 uint_fast32_t rtems_test_get_one_tick_busy_count( void )
 {
   uint_fast32_t last;
@@ -78,7 +64,7 @@ uint_fast32_t rtems_test_get_one_tick_busy_count( void )
 
   while ( true ) {
     last = wait_for_tick_change();
-    rtems_test_busy( b );
+    T_busy( b );
     now = rtems_clock_get_ticks_since_boot();
 
     if ( now != last ) {
@@ -94,7 +80,7 @@ uint_fast32_t rtems_test_get_one_tick_busy_count( void )
     m = ( a + b ) / 2;
 
     last = wait_for_tick_change();
-    rtems_test_busy( m );
+    T_busy( m );
     now = rtems_clock_get_ticks_since_boot();
 
     if ( now != last ) {
