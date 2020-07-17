@@ -24,7 +24,7 @@
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #include <cstdio>
 #include <cstdlib>

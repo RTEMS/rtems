@@ -30,7 +30,7 @@
 
 #include <rtems.h>
 #include <rtems/counter.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/timecounter.h>

@@ -9,7 +9,7 @@
 #include "dl-load.h"
 
 #include <inttypes.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 int rtems_main_o5 (void)
 {

@@ -35,7 +35,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <inttypes.h>
 #include <stdio.h>
 #include <errno.h>

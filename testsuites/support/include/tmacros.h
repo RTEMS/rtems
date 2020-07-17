@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/error.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <rtems/score/threaddispatch.h>
 
 #include <buffer_test_io.h>

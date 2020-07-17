@@ -27,7 +27,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <tmacros.h>
 
 #include <sys/stat.h>

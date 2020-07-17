@@ -22,7 +22,7 @@
 
 #include <bsp.h>
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <rtems/score/heapimpl.h>
 
 #include <tmacros.h>

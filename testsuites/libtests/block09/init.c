@@ -35,7 +35,7 @@
 
 #include <rtems.h>
 #include <rtems/bdbuf.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #include <bsp.h>
 

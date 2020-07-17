@@ -17,7 +17,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <rtems.h>
 #include <rtems/score/threadimpl.h>
 

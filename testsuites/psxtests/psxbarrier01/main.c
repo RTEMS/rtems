@@ -12,7 +12,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <bsp.h>
 #include <pmacros.h>
 

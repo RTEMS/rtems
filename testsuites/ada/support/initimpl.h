@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #include <rtems.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <rtems/score/threadimpl.h>
 
 /*

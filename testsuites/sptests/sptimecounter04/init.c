@@ -18,7 +18,7 @@
 
 #include <time.h>
 #include <rtems.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <rtems/timespec.h>
 
 #include "tmacros.h"

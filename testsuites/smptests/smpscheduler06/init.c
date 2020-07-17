@@ -17,7 +17,7 @@
 #endif
 
 #include <rtems.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 void Init(rtems_task_argument arg);
 

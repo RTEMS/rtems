@@ -24,7 +24,7 @@
 
 #if __rtems__
 #include <bsp.h> /* for device driver prototypes */
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 const char rtems_test_name[] = "MATHL";
 #endif

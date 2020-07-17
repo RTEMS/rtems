@@ -19,7 +19,7 @@
 #include <rtems/score/smplock.h>
 #include <rtems/score/smplockmcs.h>
 #include <rtems/score/smplockseq.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <rtems.h>
 
 #include "tmacros.h"

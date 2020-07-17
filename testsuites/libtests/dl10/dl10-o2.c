@@ -10,7 +10,7 @@
 #include "dl-o2.h"
 #include "dl-o3.h"
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
 

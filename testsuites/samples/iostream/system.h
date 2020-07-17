@@ -12,7 +12,7 @@
  */
 
 #include <rtems.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 /* configuration information */
 

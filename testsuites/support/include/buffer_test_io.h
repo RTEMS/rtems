@@ -5,7 +5,7 @@
 #ifndef __BUFFER_TEST_IO_h
 #define __BUFFER_TEST_IO_h
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #ifdef __cplusplus
 extern "C" {

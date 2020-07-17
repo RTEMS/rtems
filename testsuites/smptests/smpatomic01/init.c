@@ -22,7 +22,7 @@
 #include <rtems/score/smpbarrier.h>
 #include <rtems.h>
 #include <rtems/bsd.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <limits.h>
 #include <string.h>
 

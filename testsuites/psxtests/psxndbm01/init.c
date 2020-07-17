@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <sys/stat.h>   /* contains definitions of 'file_mode' */
 #include <string.h>
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 #include <tmacros.h>
 
 const char rtems_test_name[] = "PSXNDBM 01";

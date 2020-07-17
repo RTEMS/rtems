@@ -10,7 +10,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 int __wrap_printf(const char* format, ...);
 int __wrap_puts(const char *str);

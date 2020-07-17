@@ -24,7 +24,7 @@
 #include <sched.h>
 #include <stdio.h>
 
-#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 const char rtems_test_name[] = "TMFINE 1";
 
