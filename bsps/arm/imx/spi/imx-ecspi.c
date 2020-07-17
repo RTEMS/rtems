@@ -14,6 +14,7 @@
 
 #include <bsp.h>
 #include <bsp/fdt.h>
+#include <bsp/imx-gpio.h>
 #include <libfdt.h>
 #include <arm/freescale/imx/imx_ccmvar.h>
 #include <arm/freescale/imx/imx_ecspireg.h>
@@ -23,6 +24,8 @@
 #include <sys/endian.h>
 
 #define IMX_ECSPI_FIFO_SIZE 64
+#define IMX_ECSPI_MAX_CHIPSELECTS 4
+#define IMX_ECSPI_CS_NONE IMX_ECSPI_MAX_CHIPSELECTS
 
 typedef struct imx_ecspi_bus imx_ecspi_bus;
 
@@ -44,6 +47,10 @@ struct imx_ecspi_bus {
   void (*pop)(imx_ecspi_bus *, volatile imx_ecspi *);
   rtems_id task_id;
   rtems_vector_number irq;
+  struct {
+    struct imx_gpio_pin pin;
+    bool valid;
+  } cspins[IMX_ECSPI_MAX_CHIPSELECTS];
 };
 
 static bool imx_ecspi_is_rx_fifo_not_empty(volatile imx_ecspi *regs)
@@ -126,6 +133,27 @@ static void imx_ecspi_push(imx_ecspi_bus *bus, volatile imx_ecspi *regs)
   while (bus->todo > 0 && bus->in_transfer < IMX_ECSPI_FIFO_SIZE) {
     (*bus->push)(bus, regs);
     ++bus->in_transfer;
+  }
+}
+
+/* Call with IMX_ECSPI_CS_NONE for @a cs to set all to idle */
+static void
+imx_ecspi_set_chipsel(imx_ecspi_bus *bus, uint32_t cs)
+{
+  size_t i;
+
+  /* Currently this is fixed active low */
+  static const uint32_t idle = 1;
+  static const uint32_t select = 0;
+
+  for (i = 0; i < IMX_ECSPI_MAX_CHIPSELECTS; ++i) {
+    if (bus->cspins[i].valid) {
+      if (i != cs) {
+        imx_gpio_set_output(&bus->cspins[i].pin, idle);
+      } else {
+        imx_gpio_set_output(&bus->cspins[cs].pin, select);
+      }
+    }
   }
 }
 
@@ -286,6 +314,11 @@ static void imx_ecspi_next_msg(imx_ecspi_bus *bus, volatile imx_ecspi *regs)
         msg->cs
       );
     }
+    if ((msg->mode & SPI_NO_CS) != 0) {
+      imx_ecspi_set_chipsel(bus, IMX_ECSPI_CS_NONE);
+    } else {
+      imx_ecspi_set_chipsel(bus, msg->cs);
+    }
 
     bus->todo = msg->len;
     bus->rx_buf = msg->rx_buf;
@@ -323,6 +356,37 @@ static void imx_ecspi_interrupt(void *arg)
   }
 }
 
+static int imx_ecspi_check_messages(
+  imx_ecspi_bus *bus,
+  const spi_ioc_transfer *msg,
+  uint32_t size)
+{
+  while(size > 0) {
+    if (msg->delay_usecs != 0) {
+      return -EINVAL;
+    }
+    if (msg->bits_per_word > 32) {
+      return -EINVAL;
+    }
+    if ((msg->mode &
+        ~(SPI_CPHA | SPI_CPOL | SPI_LOOP | SPI_NO_CS)) != 0) {
+      return -EINVAL;
+    }
+    if ((msg->mode & SPI_NO_CS) == 0 &&
+        (msg->cs > IMX_ECSPI_MAX_CHIPSELECTS || !bus->cspins[msg->cs].valid)) {
+      return -EINVAL;
+    }
+    if (msg->cs_change != 0) {
+      return -EINVAL;
+    }
+
+    ++msg;
+    --size;
+  }
+
+  return 0;
+}
+
 static int imx_ecspi_transfer(
   spi_bus *base,
   const spi_ioc_transfer *msgs,
@@ -330,16 +394,22 @@ static int imx_ecspi_transfer(
 )
 {
   imx_ecspi_bus *bus;
+  int rv;
 
   bus = (imx_ecspi_bus *) base;
 
-  bus->msg_todo = n;
-  bus->msg = &msgs[0];
-  bus->task_id = rtems_task_self();
+  rv = imx_ecspi_check_messages(bus, msgs, n);
 
-  imx_ecspi_next_msg(bus, bus->regs);
-  rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  return 0;
+  if (rv == 0) {
+    bus->msg_todo = n;
+    bus->msg = &msgs[0];
+    bus->task_id = rtems_task_self();
+
+    imx_ecspi_next_msg(bus, bus->regs);
+    rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    imx_ecspi_set_chipsel(bus, IMX_ECSPI_CS_NONE);
+  }
+  return rv;
 }
 
 static void imx_ecspi_destroy(spi_bus *base)
@@ -356,6 +426,14 @@ static int imx_ecspi_init(imx_ecspi_bus *bus, const void *fdt, int node)
   rtems_status_code sc;
   int len;
   const uint32_t *val;
+  size_t i;
+
+  for (i = 0; i < IMX_ECSPI_MAX_CHIPSELECTS; ++i) {
+    rtems_status_code sc_gpio = imx_gpio_init_from_fdt_property(
+        &bus->cspins[i].pin, node, "cs-gpios", IMX_GPIO_MODE_OUTPUT, i);
+    bus->cspins[i].valid = (sc_gpio == RTEMS_SUCCESSFUL);
+  }
+  imx_ecspi_set_chipsel(bus, IMX_ECSPI_CS_NONE);
 
   imx_ecspi_config(
     bus,
@@ -436,7 +514,7 @@ int spi_bus_register_imx(const char *bus_path, const char *alias_or_path)
   }
 
   bus->base.max_speed_hz = imx_ccm_ecspi_hz();
-  bus->base.delay_usecs = 1;
+  bus->base.delay_usecs = 0;
   bus->regs = imx_get_reg_of_node(fdt, node);
   bus->irq = imx_get_irq_of_node(fdt, node, 0);
 
