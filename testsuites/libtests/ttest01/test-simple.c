@@ -1,4 +1,4 @@
-#include <t.h>
+#include <rtems/test.h>
 
 static int add(int a, int b)
 {

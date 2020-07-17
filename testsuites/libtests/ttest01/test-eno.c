@@ -1,4 +1,4 @@
-#include <t.h>
+#include <rtems/test.h>
 #include <errno.h>
 
 T_TEST_CASE(test_eno)

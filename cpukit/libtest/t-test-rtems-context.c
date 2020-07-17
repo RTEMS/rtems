@@ -27,7 +27,7 @@
 
 #undef __STRICT_ANSI__
 
-#include <t.h>
+#include <rtems/test.h>
 
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/percpu.h>

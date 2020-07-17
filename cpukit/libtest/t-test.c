@@ -27,7 +27,7 @@
 
 #define _GNU_SOURCE
 
-#include <t.h>
+#include <rtems/test.h>
 
 #include <sys/queue.h>
 #include <limits.h>

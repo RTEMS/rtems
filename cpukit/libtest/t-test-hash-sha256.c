@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <t.h>
+#include <rtems/test.h>
 
 #if defined(__rtems__)
 #include <sha256.h>

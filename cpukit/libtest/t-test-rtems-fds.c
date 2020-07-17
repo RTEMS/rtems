@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <t.h>
+#include <rtems/test.h>
 
 #include <rtems/libio_.h>
 

@@ -1,4 +1,4 @@
-#include <t.h>
+#include <rtems/test.h>
 
 static void
 destroy(T_destructor *dtor)

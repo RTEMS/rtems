@@ -33,7 +33,7 @@
 
 #include <string.h>
 
-#include <t.h>
+#include <rtems/test.h>
 #include <tmacros.h>
 
 #define CPU_COUNT 32

@@ -1,4 +1,4 @@
-#include <t.h>
+#include <rtems/test.h>
 
 #include <sys/types.h>
 

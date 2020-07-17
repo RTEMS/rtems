@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <t.h>
+#include <rtems/test.h>
 
 #include <sys/time.h>
 #include <string.h>
