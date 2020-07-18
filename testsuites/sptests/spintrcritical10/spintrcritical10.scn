@@ -1,5 +1,28 @@
-*** TEST INTERRUPT CRITICAL SECTION 10 ***
-Init - Trying to generate any satisfied before timeout while blocking on event
-Init - Trying to generate all satisfied before timeout while blocking on event
-Init - Trying to generate timeout before all satisfied while blocking on event
-*** END OF TEST INTERRUPT CRITICAL SECTION 10 ***
+*** BEGIN OF TEST SPINTRCRITICAL 10 ***
+*** TEST VERSION: 6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+A:SPINTRCRITICAL 10
+S:Platform:RTEMS
+S:Compiler:10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+S:Version:6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+S:BSP:realview_pbx_a9_qemu
+S:RTEMS_DEBUG:1
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:1
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:EventTimeoutBeforeSatisfied
+P:0:0:UI1:init.c:306
+E:EventTimeoutBeforeSatisfied:N:1:F:0:D:0.062089
+B:EventAnySatisfyBeforeTimeout
+P:0:0:UI1:init.c:139
+E:EventAnySatisfyBeforeTimeout:N:1:F:0:D:0.009101
+B:EventAllSatisfyBeforeTimeout
+P:0:0:UI1:init.c:224
+E:EventAllSatisfyBeforeTimeout:N:1:F:0:D:0.008658
+Z:SPINTRCRITICAL 10:C:3:N:3:F:0:D:0.081653
+Y:ReportHash:SHA256:e2da8e487b37934523fa5810dc7d76f8ca736168d3019b09db80edb40dffff34
+
+*** END OF TEST SPINTRCRITICAL 10 ***

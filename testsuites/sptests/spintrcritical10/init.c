@@ -2,7 +2,7 @@
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2013 embedded brains GmbH.
+ *  Copyright (c) 2013, 2020 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -14,12 +14,14 @@
 #endif
 
 #include <tmacros.h>
-#include <intrcritical.h>
+#include <rtems/test.h>
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/rtems/eventimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 10";
+
+#define MAX_ITERATION_COUNT 10000
 
 #define GREEN RTEMS_EVENT_0
 
@@ -30,9 +32,7 @@ const char rtems_test_name[] = "SPINTRCRITICAL 10";
 #define DEADBEEF 0xdeadbeef
 
 typedef struct {
-  rtems_id timer;
   Thread_Control *thread;
-  bool hit;
 } test_context;
 
 static bool blocks_for_event(Thread_Wait_flags flags)
@@ -47,15 +47,20 @@ static bool interrupts_blocking_op(Thread_Wait_flags flags)
     flags == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK);
 }
 
-static void any_satisfy_before_timeout(rtems_id timer, void *arg)
+static T_interrupt_test_state any_satisfy_before_timeout_interrupt(void *arg)
 {
   rtems_status_code sc;
   test_context *ctx = arg;
   Thread_Control *thread = ctx->thread;
   Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
+  T_interrupt_test_state state;
 
   if (blocks_for_event(flags)) {
-    ctx->hit = interrupts_blocking_op(flags);
+    if (interrupts_blocking_op(flags)) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_LATE;
+    }
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
@@ -85,7 +90,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
-    if (ctx->hit) {
+    if (state == T_INTERRUPT_TEST_DONE) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
           == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
@@ -93,17 +98,19 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     }
 
     rtems_test_assert(thread->Wait.count == EVENTS);
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
   }
 
-  sc = rtems_timer_reset(timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  return state;
 }
 
-static bool test_body_any_satisfy_before_timeout(void *arg)
+static void any_satisfy_before_timeout_action(void *arg)
 {
-  test_context *ctx = arg;
   rtems_status_code sc;
   rtems_event_set out;
+
+  (void) arg;
 
   out = DEADBEEF;
   sc = rtems_event_receive(EVENTS, RTEMS_EVENT_ANY | RTEMS_WAIT, 1, &out);
@@ -114,45 +121,38 @@ static bool test_body_any_satisfy_before_timeout(void *arg)
   sc = rtems_event_receive(EVENTS, RTEMS_EVENT_ANY | RTEMS_NO_WAIT, 0, &out);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(out == RED);
-
-  return ctx->hit;
 }
 
-static void test_any_satisfy_before_timeout(test_context *ctx)
+static const T_interrupt_test_config any_satisfy_before_timeout_config = {
+  .action = any_satisfy_before_timeout_action,
+  .interrupt = any_satisfy_before_timeout_interrupt,
+  .max_iteration_count = MAX_ITERATION_COUNT
+};
+
+T_TEST_CASE(EventAnySatisfyBeforeTimeout)
 {
-  rtems_status_code sc;
+  test_context ctx;
+  T_interrupt_test_state state;
 
-  puts(
-    "Init - Trying to generate any satisfied before timeout "
-    "while blocking on event"
-  );
-
-  ctx->hit = false;
-
-  sc = rtems_timer_fire_after(ctx->timer, 1, any_satisfy_before_timeout, ctx);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  interrupt_critical_section_test(
-    test_body_any_satisfy_before_timeout,
-    ctx,
-    NULL
-  );
-
-  sc = rtems_timer_cancel(ctx->timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(ctx->hit);
+  ctx.thread = _Thread_Get_executing();
+  state = T_interrupt_test(&any_satisfy_before_timeout_config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
 }
 
-static void all_satisfy_before_timeout(rtems_id timer, void *arg)
+static T_interrupt_test_state all_satisfy_before_timeout_interrupt(void *arg)
 {
   rtems_status_code sc;
   test_context *ctx = arg;
   Thread_Control *thread = ctx->thread;
   Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
+  T_interrupt_test_state state;
 
   if (blocks_for_event(flags)) {
-    ctx->hit = interrupts_blocking_op(flags);
+    if (interrupts_blocking_op(flags)) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_LATE;
+    }
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
@@ -182,7 +182,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     );
     rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
-    if (ctx->hit) {
+    if (state == T_INTERRUPT_TEST_DONE) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
           == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
@@ -190,15 +190,15 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     }
 
     rtems_test_assert(thread->Wait.count == EVENTS);
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
   }
 
-  sc = rtems_timer_reset(timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  return state;
 }
 
-static bool test_body_all_satisfy_before_timeout(void *arg)
+static void all_satisfy_before_timeout_action(void *arg)
 {
-  test_context *ctx = arg;
   rtems_status_code sc;
   rtems_event_set out;
 
@@ -206,45 +206,38 @@ static bool test_body_all_satisfy_before_timeout(void *arg)
   sc = rtems_event_receive(EVENTS, RTEMS_EVENT_ALL | RTEMS_WAIT, 1, &out);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(out == EVENTS);
-
-  return ctx->hit;
 }
 
-static void test_all_satisfy_before_timeout(test_context *ctx)
+static const T_interrupt_test_config all_satisfy_before_timeout_config = {
+  .action = all_satisfy_before_timeout_action,
+  .interrupt = all_satisfy_before_timeout_interrupt,
+  .max_iteration_count = MAX_ITERATION_COUNT
+};
+
+T_TEST_CASE(EventAllSatisfyBeforeTimeout)
 {
-  rtems_status_code sc;
+  test_context ctx;
+  T_interrupt_test_state state;
 
-  puts(
-    "Init - Trying to generate all satisfied before timeout "
-    "while blocking on event"
-  );
-
-  ctx->hit = false;
-
-  sc = rtems_timer_fire_after(ctx->timer, 1, all_satisfy_before_timeout, ctx);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  interrupt_critical_section_test(
-    test_body_all_satisfy_before_timeout,
-    ctx,
-    NULL
-  );
-
-  sc = rtems_timer_cancel(ctx->timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(ctx->hit);
+  ctx.thread = _Thread_Get_executing();
+  state = T_interrupt_test(&all_satisfy_before_timeout_config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
 }
 
-static void timeout_before_satisfied(rtems_id timer, void *arg)
+static T_interrupt_test_state timeout_before_satisfied_interrupt(void *arg)
 {
   rtems_status_code sc;
   test_context *ctx = arg;
   Thread_Control *thread = ctx->thread;
   Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
+  T_interrupt_test_state state;
 
   if (blocks_for_event(flags)) {
-    ctx->hit = interrupts_blocking_op(flags);
+    if (interrupts_blocking_op(flags)) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_LATE;
+    }
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
@@ -266,7 +259,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     );
     rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_TIMEOUT);
 
-    if (ctx->hit) {
+    if (state == T_INTERRUPT_TEST_DONE) {
       rtems_test_assert(
         _Thread_Wait_flags_get(thread)
           == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
@@ -274,15 +267,15 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     }
 
     rtems_test_assert(thread->Wait.count == EVENTS);
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
   }
 
-  sc = rtems_timer_reset(timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  return state;
 }
 
-static bool test_body_timeout_before_all_satisfy(void *arg)
+static void timeout_before_satisfied_action(void *arg)
 {
-  test_context *ctx = arg;
   rtems_event_set out;
   rtems_status_code sc;
 
@@ -295,56 +288,27 @@ static bool test_body_timeout_before_all_satisfy(void *arg)
   sc = rtems_event_receive(EVENTS, RTEMS_EVENT_ALL | RTEMS_NO_WAIT, 0, &out);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(out == EVENTS);
-
-  return ctx->hit;
 }
 
-static void test_timeout_before_all_satisfy(test_context *ctx)
+static const T_interrupt_test_config timeout_before_satisfied_config = {
+  .action = timeout_before_satisfied_action,
+  .interrupt = timeout_before_satisfied_interrupt,
+  .max_iteration_count = MAX_ITERATION_COUNT
+};
+
+T_TEST_CASE(EventTimeoutBeforeSatisfied)
 {
-  rtems_status_code sc;
+  test_context ctx;
+  T_interrupt_test_state state;
 
-  puts(
-    "Init - Trying to generate timeout before all satisfied "
-    "while blocking on event"
-  );
-
-  ctx->hit = false;
-
-  sc = rtems_timer_fire_after(ctx->timer, 1, timeout_before_satisfied, ctx);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  interrupt_critical_section_test(
-    test_body_timeout_before_all_satisfy,
-    ctx,
-    NULL
-  );
-
-  sc = rtems_timer_cancel(ctx->timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(ctx->hit);
+  ctx.thread = _Thread_Get_executing();
+  state = T_interrupt_test(&timeout_before_satisfied_config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
 }
 
-static rtems_task Init(
-  rtems_task_argument ignored
-)
+static rtems_task Init( rtems_task_argument argument )
 {
-  rtems_status_code sc;
-  test_context ctx = {
-    .thread = _Thread_Get_executing()
-  };
-
-  TEST_BEGIN();
-
-  sc = rtems_timer_create(rtems_build_name('T', 'I', 'M', 'R'), &ctx.timer);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  test_any_satisfy_before_timeout(&ctx);
-  test_all_satisfy_before_timeout(&ctx);
-  test_timeout_before_all_satisfy(&ctx);
-
-  TEST_END();
-  rtems_test_exit(0);
+  rtems_test_run( argument, TEST_STATE );
 }
 
 /* configuration information */
@@ -353,8 +317,6 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS       1
-#define CONFIGURE_MAXIMUM_TIMERS      1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
