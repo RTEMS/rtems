@@ -304,6 +304,20 @@ void rtems_test_parallel(
  */
 void rtems_test_busy_cpu_usage(time_t seconds, long nanoseconds);
 
+/**
+ * @brief Runs the test cases of the RTEMS Test Framework using a default
+ *   configuration in the context of a task.
+ *
+ * The application must provide rtems_test_name.
+ *
+ * @param arg is the task argument.
+ * @param state is the test state.
+ */
+RTEMS_NO_RETURN void rtems_test_run(
+  rtems_task_argument    arg,
+  const RTEMS_TEST_STATE state
+);
+
 /** @} */
 
 #ifdef __cplusplus

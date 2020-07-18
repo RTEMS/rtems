@@ -1855,6 +1855,7 @@ librtemstest_a_SOURCES += libtest/testbeginend.c
 librtemstest_a_SOURCES += libtest/testbusy.c
 librtemstest_a_SOURCES += libtest/testextension.c
 librtemstest_a_SOURCES += libtest/testparallel.c
+librtemstest_a_SOURCES += libtest/testrun.c
 librtemstest_a_SOURCES += libtest/testwrappers.c
 librtemstest_a_SOURCES += libtest/t-test.c
 librtemstest_a_SOURCES += libtest/t-test-busy.c
