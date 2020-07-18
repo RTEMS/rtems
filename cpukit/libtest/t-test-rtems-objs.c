@@ -76,7 +76,8 @@ T_objects_check(Objects_APIs api, uint16_t cls,
 
 	if (delta != 0) {
 		*expected = count;
-		T_check_true(false, NULL, "%s leak (%" PRIi32 ")", name, delta);
+		T_check(&T_special, false, "%s leak (%" PRIi32 ")", name,
+		    delta);
 	}
 }
 

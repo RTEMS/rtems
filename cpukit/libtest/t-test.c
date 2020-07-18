@@ -86,6 +86,12 @@ typedef struct {
 
 static T_context T_instance;
 
+const T_check_context T_special = {
+	.file = "*",
+	.line = -1,
+	.flags = T_CHECK_FMT | T_CHECK_QUIET
+};
+
 typedef struct {
 	char *s;
 	size_t n;
@@ -462,7 +468,8 @@ void T_plan(unsigned int planned_steps)
 	success = atomic_compare_exchange_strong_explicit(&ctx->planned_steps,
 	    &expected, planned_steps, memory_order_relaxed,
 	    memory_order_relaxed);
-	T_check_true(success, NULL, "planned steps (%u) already set", expected);
+	T_check(&T_special, success, "planned steps (%u) already set",
+	    expected);
 }
 
 void
@@ -529,68 +536,65 @@ T_file(const T_check_context *t)
 }
 
 void
-T_check_true(bool ok, const T_check_context *t, const char *fmt, ...)
+T_check(const T_check_context *t, bool ok, ...)
 {
 	T_context *ctx;
 	va_list ap;
 	char scope[T_SCOPE_SIZE];
+	unsigned int step;
 
 	ctx = &T_instance;
 
-	if (t != NULL) {
-		unsigned int step;
+	if ((t->flags & T_CHECK_QUIET) == 0) {
+		step = T_fetch_add_step(ctx);
+	} else {
+		step = UINT_MAX;
+	}
 
-		if ((t->flags & T_CHECK_QUIET) == 0) {
-			step = T_fetch_add_step(ctx);
-		} else {
-			step = UINT_MAX;
-		}
-
-		if ((t->flags & T_CHECK_STEP_FLAG) != 0 &&
-		     step != T_CHECK_STEP_FROM_FLAGS(t->flags)) {
-			T_add_failure(ctx);
-			T_printf("F:%u:%i:%s:%s:%i:planned step (%u)\n", step,
-			    T_cpu(), T_scope(ctx, scope), T_file(t), t->line,
-			    T_CHECK_STEP_FROM_FLAGS(t->flags));
-		} else if (!ok) {
-			T_add_failure(ctx);
-
-			if (ctx->verbosity >= T_NORMAL) {
-				if ((t->flags & T_CHECK_QUIET) == 0) {
-					T_printf("F:%u:%i:%s:%s:%i:",
-					    step, T_cpu(), T_scope(ctx, scope),
-					    T_file(t), t->line);
-				} else {
-					T_printf("F:*:%i:%s:%s:%i:", T_cpu(),
-					    T_scope(ctx, scope), T_file(t),
-					    t->line);
-				}
-
-				va_start(ap, fmt);
-				T_vprintf(fmt, ap);
-				va_end(ap);
-
-				T_printf("\n");
-			}
-
-			if ((t->flags & T_CHECK_STOP) != 0) {
-				T_do_stop(ctx);
-			}
-		} else if ((t->flags & T_CHECK_QUIET) == 0 &&
-		    ctx->verbosity >= T_VERBOSE) {
-			T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(),
-			    T_scope(ctx, scope), T_file(t), t->line);
-		}
+	if ((t->flags & T_CHECK_STEP_FLAG) != 0 &&
+	     step != T_CHECK_STEP_FROM_FLAGS(t->flags)) {
+		T_add_failure(ctx);
+		T_printf("F:%u:%i:%s:%s:%i:planned step (%u)\n", step,
+		    T_cpu(), T_scope(ctx, scope), T_file(t), t->line,
+		    T_CHECK_STEP_FROM_FLAGS(t->flags));
 	} else if (!ok) {
 		T_add_failure(ctx);
 
-		T_printf("F:*:%i:%s:*:*:", T_cpu(), T_scope(ctx, scope));
+		if (ctx->verbosity >= T_NORMAL) {
+			if ((t->flags & T_CHECK_QUIET) == 0) {
+				T_printf("F:%u:%i:%s:%s:%i",
+				    step, T_cpu(), T_scope(ctx, scope),
+				    T_file(t), t->line);
+			} else if (t->line >= 0) {
+				T_printf("F:*:%i:%s:%s:%i", T_cpu(),
+				    T_scope(ctx, scope), T_file(t),
+				    t->line);
+			} else {
+				T_printf("F:*:%i:%s:%s:*", T_cpu(),
+				    T_scope(ctx, scope), T_file(t));
+			}
 
-		va_start(ap, fmt);
-		T_vprintf(fmt, ap);
-		va_end(ap);
+			if ((t->flags & T_CHECK_FMT) != 0) {
+				const char *fmt;
 
-		T_printf("\n");
+				T_printf(":");
+
+				va_start(ap, ok);
+				fmt = va_arg(ap, const char *);
+				T_vprintf(fmt, ap);
+				va_end(ap);
+			}
+
+			T_printf("\n");
+		}
+
+		if ((t->flags & T_CHECK_STOP) != 0) {
+			T_do_stop(ctx);
+		}
+	} else if ((t->flags & T_CHECK_QUIET) == 0 &&
+	    ctx->verbosity >= T_VERBOSE) {
+		T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(),
+		    T_scope(ctx, scope), T_file(t), t->line);
 	}
 }
 

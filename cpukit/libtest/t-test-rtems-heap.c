@@ -79,7 +79,7 @@ T_heap_case_end(void)
 			where = "workspace";
 		}
 
-		T_check_true(ok, NULL, "memory leak in %s", where);
+		T_check(&T_special, ok, "memory leak in %s", where);
 		memcpy(&ctx->workspace_info, &info, sizeof(info));
 	}
 
@@ -88,7 +88,7 @@ T_heap_case_end(void)
 		ok = memcmp(&info, &ctx->heap_info, sizeof(info)) == 0;
 
 		if (!ok) {
-			T_check_true(ok, NULL, "memory leak in heap");
+			T_check(&T_special, ok, "memory leak in heap");
 			memcpy(&ctx->heap_info, &info, sizeof(info));
 		}
 	}

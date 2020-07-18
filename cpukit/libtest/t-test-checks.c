@@ -30,299 +30,299 @@
 #include <inttypes.h>
 
 void
-T_check_eq_ptr(const void *a, const T_check_context_msg *t, const void *e)
+T_check_eq_ptr(const T_check_context_msg *t, const void *a, const void *e)
 {
-	T_check_true(a == e, &t->base, "%s", t->msg);
+	T_check(&t->base, a == e, "%s", t->msg);
 }
 
 void
-T_check_ne_ptr(const void *a, const T_check_context_msg *t, const void *e)
+T_check_ne_ptr(const T_check_context_msg *t, const void *a, const void *e)
 {
-	T_check_true(a != e, &t->base, "%s", t->msg);
+	T_check(&t->base, a != e, "%s", t->msg);
 }
 
 void
-T_check_null(const void *a, const T_check_context_msg *t)
+T_check_null(const T_check_context_msg *t, const void *a)
 {
-	T_check_true(a == NULL, &t->base, "%s == NULL", t->msg);
+	T_check(&t->base, a == NULL, "%s == NULL", t->msg);
 }
 
 void
-T_check_not_null(const void *a, const T_check_context_msg *t)
+T_check_not_null(const T_check_context_msg *t, const void *a)
 {
-	T_check_true(a != NULL, &t->base, "%s != NULL", t->msg);
+	T_check(&t->base, a != NULL, "%s != NULL", t->msg);
 }
 
 void
-T_check_eq_mem(const void *a, const T_check_context_msg *t, const void *e,
+T_check_eq_mem(const T_check_context_msg *t, const void *a, const void *e,
     size_t n)
 {
-	T_check_true(memcmp(a, e, n) == 0, &t->base, "%s", t->msg);
+	T_check(&t->base, memcmp(a, e, n) == 0, "%s", t->msg);
 }
 
 void
-T_check_ne_mem(const void *a, const T_check_context_msg *t, const void *e,
+T_check_ne_mem(const T_check_context_msg *t, const void *a, const void *e,
     size_t n)
 {
-	T_check_true(memcmp(a, e, n) != 0, &t->base, "%s", t->msg);
+	T_check(&t->base, memcmp(a, e, n) != 0, "%s", t->msg);
 }
 
 void
-T_check_eq_str(const char *a, const T_check_context *t, const char *e)
+T_check_eq_str(const T_check_context *t, const char *a, const char *e)
 {
-	T_check_true(strcmp(a, e) == 0, t, "\"%s\" == \"%s\"", a, e);
+	T_check(t, strcmp(a, e) == 0, "\"%s\" == \"%s\"", a, e);
 }
 
 void
-T_check_ne_str(const char *a, const T_check_context *t, const char *e)
+T_check_ne_str(const T_check_context *t, const char *a, const char *e)
 {
-	T_check_true(strcmp(a, e) != 0, t, "\"%s\" != \"%s\"", a, e);
+	T_check(t, strcmp(a, e) != 0, "\"%s\" != \"%s\"", a, e);
 }
 
 void
-T_check_eq_nstr(const char *a, const T_check_context *t, const char *e, size_t n)
+T_check_eq_nstr(const T_check_context *t, const char *a, const char *e, size_t n)
 {
-	T_check_true(strncmp(a, e, n) == 0, t, "\"%.*s\" == \"%.*s\"", (int)n, a,
+	T_check(t, strncmp(a, e, n) == 0, "\"%.*s\" == \"%.*s\"", (int)n, a,
 	    (int)n, e);
 }
 
 void
-T_check_ne_nstr(const char *a, const T_check_context *t, const char *e, size_t n)
+T_check_ne_nstr(const T_check_context *t, const char *a, const char *e, size_t n)
 {
-	T_check_true(strncmp(a, e, n) != 0, t, "\"%.*s\" != \"%.*s\"", (int)n, a,
+	T_check(t, strncmp(a, e, n) != 0, "\"%.*s\" != \"%.*s\"", (int)n, a,
 	    (int)n, e);
 }
 
 void
-T_check_eq_char(char a, const T_check_context *t, char e)
+T_check_eq_char(const T_check_context *t, char a, char e)
 {
-	T_check_true(a == e, t, "'%c' == '%c'", a, e);
+	T_check(t, a == e, "'%c' == '%c'", a, e);
 }
 
 void
-T_check_ne_char(char a, const T_check_context *t, char e)
+T_check_ne_char(const T_check_context *t, char a, char e)
 {
-	T_check_true(a != e, t, "'%c' != '%c'", a, e);
+	T_check(t, a != e, "'%c' != '%c'", a, e);
 }
 
 void
-T_check_eq_int(int a, const T_check_context *t, int e)
+T_check_eq_int(const T_check_context *t, int a, int e)
 {
-	T_check_true(a == e, t, "%i == %i", a, e);
+	T_check(t, a == e, "%i == %i", a, e);
 }
 
 void
-T_check_ne_int(int a, const T_check_context *t, int e)
+T_check_ne_int(const T_check_context *t, int a, int e)
 {
-	T_check_true(a != e, t, "%i != %i", a, e);
+	T_check(t, a != e, "%i != %i", a, e);
 }
 
 void
-T_check_ge_int(int a, const T_check_context *t, int e)
+T_check_ge_int(const T_check_context *t, int a, int e)
 {
-	T_check_true(a >= e, t, "%i >= %i", a, e);
+	T_check(t, a >= e, "%i >= %i", a, e);
 }
 
 void
-T_check_gt_int(int a, const T_check_context *t, int e)
+T_check_gt_int(const T_check_context *t, int a, int e)
 {
-	T_check_true(a > e, t, "%i > %i", a, e);
+	T_check(t, a > e, "%i > %i", a, e);
 }
 
 void
-T_check_le_int(int a, const T_check_context *t, int e)
+T_check_le_int(const T_check_context *t, int a, int e)
 {
-	T_check_true(a <= e, t, "%i <= %i", a, e);
+	T_check(t, a <= e, "%i <= %i", a, e);
 }
 
 void
-T_check_lt_int(int a, const T_check_context *t, int e)
+T_check_lt_int(const T_check_context *t, int a, int e)
 {
-	T_check_true(a < e, t, "%i < %i", a, e);
+	T_check(t, a < e, "%i < %i", a, e);
 }
 
 void
-T_check_eq_uint(unsigned int a, const T_check_context *t, unsigned int e)
+T_check_eq_uint(const T_check_context *t, unsigned int a, unsigned int e)
 {
-	T_check_true(a == e, t, "%u == %u", a, e);
+	T_check(t, a == e, "%u == %u", a, e);
 }
 
 void
-T_check_ne_uint(unsigned int a, const T_check_context *t, unsigned int e)
+T_check_ne_uint(const T_check_context *t, unsigned int a, unsigned int e)
 {
-	T_check_true(a != e, t, "%u != %u", a, e);
+	T_check(t, a != e, "%u != %u", a, e);
 }
 
 void
-T_check_ge_uint(unsigned int a, const T_check_context *t, unsigned int e)
+T_check_ge_uint(const T_check_context *t, unsigned int a, unsigned int e)
 {
-	T_check_true(a >= e, t, "%u >= %u", a, e);
+	T_check(t, a >= e, "%u >= %u", a, e);
 }
 
 void
-T_check_gt_uint(unsigned int a, const T_check_context *t, unsigned int e)
+T_check_gt_uint(const T_check_context *t, unsigned int a, unsigned int e)
 {
-	T_check_true(a > e, t, "%u > %u", a, e);
+	T_check(t, a > e, "%u > %u", a, e);
 }
 
 void
-T_check_le_uint(unsigned int a, const T_check_context *t, unsigned int e)
+T_check_le_uint(const T_check_context *t, unsigned int a, unsigned int e)
 {
-	T_check_true(a <= e, t, "%u <= %u", a, e);
+	T_check(t, a <= e, "%u <= %u", a, e);
 }
 
 void
-T_check_lt_uint(unsigned int a, const T_check_context *t, unsigned int e)
+T_check_lt_uint(const T_check_context *t, unsigned int a, unsigned int e)
 {
-	T_check_true(a < e, t, "%u < %u", a, e);
+	T_check(t, a < e, "%u < %u", a, e);
 }
 
 void
-T_check_eq_long(long a, const T_check_context *t, long e)
+T_check_eq_long(const T_check_context *t, long a, long e)
 {
-	T_check_true(a == e, t, "%li == %li", a, e);
+	T_check(t, a == e, "%li == %li", a, e);
 }
 
 void
-T_check_ne_long(long a, const T_check_context *t, long e)
+T_check_ne_long(const T_check_context *t, long a, long e)
 {
-	T_check_true(a != e, t, "%li != %li", a, e);
+	T_check(t, a != e, "%li != %li", a, e);
 }
 
 void
-T_check_ge_long(long a, const T_check_context *t, long e)
+T_check_ge_long(const T_check_context *t, long a, long e)
 {
-	T_check_true(a >= e, t, "%li >= %li", a, e);
+	T_check(t, a >= e, "%li >= %li", a, e);
 }
 
 void
-T_check_gt_long(long a, const T_check_context *t, long e)
+T_check_gt_long(const T_check_context *t, long a, long e)
 {
-	T_check_true(a > e, t, "%li > %li", a, e);
+	T_check(t, a > e, "%li > %li", a, e);
 }
 
 void
-T_check_le_long(long a, const T_check_context *t, long e)
+T_check_le_long(const T_check_context *t, long a, long e)
 {
-	T_check_true(a <= e, t, "%li <= %li", a, e);
+	T_check(t, a <= e, "%li <= %li", a, e);
 }
 
 void
-T_check_lt_long(long a, const T_check_context *t, long e)
+T_check_lt_long(const T_check_context *t, long a, long e)
 {
-	T_check_true(a < e, t, "%li < %li", a, e);
+	T_check(t, a < e, "%li < %li", a, e);
 }
 
 void
-T_check_eq_ulong(unsigned long a, const T_check_context *t, unsigned long e)
+T_check_eq_ulong(const T_check_context *t, unsigned long a, unsigned long e)
 {
-	T_check_true(a == e, t, "%lu == %lu", a, e);
+	T_check(t, a == e, "%lu == %lu", a, e);
 }
 
 void
-T_check_ne_ulong(unsigned long a, const T_check_context *t, unsigned long e)
+T_check_ne_ulong(const T_check_context *t, unsigned long a, unsigned long e)
 {
-	T_check_true(a != e, t, "%lu != %lu", a, e);
+	T_check(t, a != e, "%lu != %lu", a, e);
 }
 
 void
-T_check_ge_ulong(unsigned long a, const T_check_context *t, unsigned long e)
+T_check_ge_ulong(const T_check_context *t, unsigned long a, unsigned long e)
 {
-	T_check_true(a >= e, t, "%lu >= %lu", a, e);
+	T_check(t, a >= e, "%lu >= %lu", a, e);
 }
 
 void
-T_check_gt_ulong(unsigned long a, const T_check_context *t, unsigned long e)
+T_check_gt_ulong(const T_check_context *t, unsigned long a, unsigned long e)
 {
-	T_check_true(a > e, t, "%lu > %lu", a, e);
+	T_check(t, a > e, "%lu > %lu", a, e);
 }
 
 void
-T_check_le_ulong(unsigned long a, const T_check_context *t, unsigned long e)
+T_check_le_ulong(const T_check_context *t, unsigned long a, unsigned long e)
 {
-	T_check_true(a <= e, t, "%lu <= %lu", a, e);
+	T_check(t, a <= e, "%lu <= %lu", a, e);
 }
 
 void
-T_check_lt_ulong(unsigned long a, const T_check_context *t, unsigned long e)
+T_check_lt_ulong(const T_check_context *t, unsigned long a, unsigned long e)
 {
-	T_check_true(a < e, t, "%lu < %lu", a, e);
+	T_check(t, a < e, "%lu < %lu", a, e);
 }
 
 void
-T_check_eq_ll(long long a, const T_check_context *t, long long e)
+T_check_eq_ll(const T_check_context *t, long long a, long long e)
 {
-	T_check_true(a == e, t, "%lli == %lli", a, e);
+	T_check(t, a == e, "%lli == %lli", a, e);
 }
 
 void
-T_check_ne_ll(long long a, const T_check_context *t, long long e)
+T_check_ne_ll(const T_check_context *t, long long a, long long e)
 {
-	T_check_true(a != e, t, "%lli != %lli", a, e);
+	T_check(t, a != e, "%lli != %lli", a, e);
 }
 
 void
-T_check_ge_ll(long long a, const T_check_context *t, long long e)
+T_check_ge_ll(const T_check_context *t, long long a, long long e)
 {
-	T_check_true(a >= e, t, "%lli >= %lli", a, e);
+	T_check(t, a >= e, "%lli >= %lli", a, e);
 }
 
 void
-T_check_gt_ll(long long a, const T_check_context *t, long long e)
+T_check_gt_ll(const T_check_context *t, long long a, long long e)
 {
-	T_check_true(a > e, t, "%lli > %lli", a, e);
+	T_check(t, a > e, "%lli > %lli", a, e);
 }
 
 void
-T_check_le_ll(long long a, const T_check_context *t, long long e)
+T_check_le_ll(const T_check_context *t, long long a, long long e)
 {
-	T_check_true(a <= e, t, "%lli <= %lli", a, e);
+	T_check(t, a <= e, "%lli <= %lli", a, e);
 }
 
 void
-T_check_lt_ll(long long a, const T_check_context *t, long long e)
+T_check_lt_ll(const T_check_context *t, long long a, long long e)
 {
-	T_check_true(a < e, t, "%lli < %lli", a, e);
+	T_check(t, a < e, "%lli < %lli", a, e);
 }
 
 void
-T_check_eq_ull(unsigned long long a, const T_check_context *t,
+T_check_eq_ull(const T_check_context *t, unsigned long long a,
     unsigned long long e)
 {
-	T_check_true(a == e, t, "%llu == %llu", a, e);
+	T_check(t, a == e, "%llu == %llu", a, e);
 }
 
 void
-T_check_ne_ull(unsigned long long a, const T_check_context *t,
+T_check_ne_ull(const T_check_context *t, unsigned long long a,
     unsigned long long e)
 {
-	T_check_true(a != e, t, "%llu != %llu", a, e);
+	T_check(t, a != e, "%llu != %llu", a, e);
 }
 
 void
-T_check_ge_ull(unsigned long long a, const T_check_context *t,
+T_check_ge_ull(const T_check_context *t, unsigned long long a,
     unsigned long long e)
 {
-	T_check_true(a >= e, t, "%llu >= %llu", a, e);
+	T_check(t, a >= e, "%llu >= %llu", a, e);
 }
 
 void
-T_check_gt_ull(unsigned long long a, const T_check_context *t,
+T_check_gt_ull(const T_check_context *t, unsigned long long a,
     unsigned long long e)
 {
-	T_check_true(a > e, t, "%llu > %llu", a, e);
+	T_check(t, a > e, "%llu > %llu", a, e);
 }
 
 void
-T_check_le_ull(unsigned long long a, const T_check_context *t,
+T_check_le_ull(const T_check_context *t, unsigned long long a,
     unsigned long long e)
 {
-	T_check_true(a <= e, t, "%llu <= %llu", a, e);
+	T_check(t, a <= e, "%llu <= %llu", a, e);
 }
 
 void
-T_check_lt_ull(unsigned long long a, const T_check_context *t,
+T_check_lt_ull(const T_check_context *t, unsigned long long a,
     unsigned long long e)
 {
-	T_check_true(a < e, t, "%llu < %llu", a, e);
+	T_check(t, a < e, "%llu < %llu", a, e);
 }

@@ -38,14 +38,14 @@ T_putchar_default(int c, void *arg)
 }
 
 void
-T_check_rsc(uint32_t a, const T_check_context *t, uint32_t e)
+T_check_rsc(const T_check_context *t, uint32_t a, uint32_t e)
 {
-	T_check_true(a == e, t, "%s == %s", rtems_status_text(a),
+	T_check(t, a == e, "%s == %s", rtems_status_text(a),
 	    rtems_status_text(e));
 }
 
 void
-T_check_rsc_success(uint32_t a, const T_check_context *t)
+T_check_rsc_success(const T_check_context *t, uint32_t a)
 {
-	T_check_rsc(a, t, RTEMS_SUCCESSFUL);
+	T_check_rsc(t, a, RTEMS_SUCCESSFUL);
 }

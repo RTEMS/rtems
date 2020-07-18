@@ -93,7 +93,8 @@ T_posix_keys_case_end(void)
 
 	if (delta != 0) {
 		T_posix_key_value_count = count;
-		T_check_true(false, NULL, "POSIX key value pair leak (%zi)", delta);
+		T_check(&T_special, false, "POSIX key value pair leak (%zi)",
+		    delta);
 	}
 }
 

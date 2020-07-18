@@ -114,7 +114,9 @@ void T_case_register(T_case_context *);
 
 #define T_CHECK_QUIET 2U
 
-#define T_CHECK_STEP_FLAG 4U
+#define T_CHECK_FMT 4U
+
+#define T_CHECK_STEP_FLAG 8U
 
 #define T_CHECK_STEP_TO_FLAGS(step) ((unsigned int)(step) << 8)
 
@@ -133,13 +135,15 @@ typedef struct {
 	const char *msg;
 } T_check_context_msg;
 
-void T_check_true(bool, const T_check_context *, const char *, ...);
+void T_check(const T_check_context *, bool, ...);
+
+extern const T_check_context T_special;
 
 #define T_flags_true(a, flags, ...)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_true(a, &T_check_instance, __VA_ARGS__);		\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check(&T_check_instance, a, __VA_ARGS__);		\
 }
 
 #define T_flags_eq(a, e, flags, ...) \
@@ -148,484 +152,486 @@ void T_check_true(bool, const T_check_context *, const char *, ...);
 #define T_flags_ne(a, e, flags, ...) \
     T_flags_true((a) != (e), flags, __VA_ARGS__)
 
-void T_check_eq_ptr(const void *, const T_check_context_msg *, const void *);
+void T_check_eq_ptr(const T_check_context_msg *, const void *, const void *);
 
 #define T_flags_eq_ptr(a, e, flags, sa, se)				\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
-	    { T_FILE_NAME, __LINE__, flags }, sa " == " se };		\
-	T_check_eq_ptr(a, &T_check_instance, e);			\
+	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT },		\
+	    sa " == " se };						\
+	T_check_eq_ptr(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_ptr(const void *, const T_check_context_msg *, const void *);
+void T_check_ne_ptr(const T_check_context_msg *, const void *, const void *);
 
 #define T_flags_ne_ptr(a, e, flags, sa, se)				\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
-	    { T_FILE_NAME, __LINE__, flags }, sa " != " se };		\
-	T_check_ne_ptr(a, &T_check_instance, e);			\
+	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT },		\
+	    sa " != " se };						\
+	T_check_ne_ptr(&T_check_instance, a, e);			\
 }
 
-void T_check_null(const void *, const T_check_context_msg *);
+void T_check_null(const T_check_context_msg *, const void *);
 
 #define T_flags_null(a, flags, sa)					\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
-	    { T_FILE_NAME, __LINE__, flags }, sa };			\
-	T_check_null(a, &T_check_instance);				\
+	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT }, sa };	\
+	T_check_null(&T_check_instance, a);				\
 }
 
-void T_check_not_null(const void *, const T_check_context_msg *);
+void T_check_not_null(const T_check_context_msg *, const void *);
 
 #define T_flags_not_null(a, flags, sa)					\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
-	    { T_FILE_NAME, __LINE__, flags }, sa };			\
-	T_check_not_null(a, &T_check_instance);				\
+	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT }, sa };	\
+	T_check_not_null(&T_check_instance, a);				\
 }
 
-void T_check_eq_mem(const void *, const T_check_context_msg *, const void *,
+void T_check_eq_mem(const T_check_context_msg *, const void *, const void *,
     size_t);
 
 #define T_flags_eq_mem(a, e, n, flags, sa, se, sn)			\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
-	    { T_FILE_NAME, __LINE__, flags },				\
+	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT },		\
 	    "memcmp(" sa ", " se ", " sn ") == 0" };			\
-	T_check_eq_mem(a, &T_check_instance, e, n);			\
+	T_check_eq_mem(&T_check_instance, a, e, n);			\
 }
 
-void T_check_ne_mem(const void *, const T_check_context_msg *, const void *,
+void T_check_ne_mem(const T_check_context_msg *, const void *, const void *,
     size_t);
 
 #define T_flags_ne_mem(a, e, n, flags, sa, se, sn)			\
 {									\
 	static const T_check_context_msg T_check_instance = {		\
-	    { T_FILE_NAME, __LINE__, flags },				\
+	    { T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT },		\
 	    "memcmp(" sa ", " se ", " sn ") != 0" };			\
-	T_check_ne_mem(a, &T_check_instance, e, n);			\
+	T_check_ne_mem(&T_check_instance, a, e, n);			\
 }
 
-void T_check_eq_str(const char *, const T_check_context *, const char *);
+void T_check_eq_str(const T_check_context *, const char *, const char *);
 
 #define T_flags_eq_str(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_str(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_str(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_str(const char *, const T_check_context *, const char *);
+void T_check_ne_str(const T_check_context *, const char *, const char *);
 
 #define T_flags_ne_str(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_str(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_str(&T_check_instance, a, e);			\
 }
 
-void T_check_eq_nstr(const char *, const T_check_context *, const char *,
+void T_check_eq_nstr(const T_check_context *, const char *, const char *,
     size_t);
 
 #define T_flags_eq_nstr(a, e, n, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_nstr(a, &T_check_instance, e, n);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_nstr(&T_check_instance, a, e, n);			\
 }
 
-void T_check_ne_nstr(const char *, const T_check_context *, const char *,
+void T_check_ne_nstr(const T_check_context *, const char *, const char *,
     size_t);
 
 #define T_flags_ne_nstr(a, e, n, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_nstr(a, &T_check_instance, e, n);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_nstr(&T_check_instance, a, e, n);			\
 }
 
-void T_check_eq_char(char, const T_check_context *, char);
+void T_check_eq_char(const T_check_context *, char, char);
 
 #define T_flags_eq_char(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_char(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_char(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_char(char, const T_check_context *, char);
+void T_check_ne_char(const T_check_context *, char, char);
 
 #define T_flags_ne_char(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_char(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_char(&T_check_instance, a, e);			\
 }
 
-void T_check_eq_int(int, const T_check_context *, int);
+void T_check_eq_int(const T_check_context *, int, int);
 
 #define T_flags_eq_int(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_int(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_int(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_int(int, const T_check_context *, int);
+void T_check_ne_int(const T_check_context *, int, int);
 
 #define T_flags_ne_int(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_int(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_int(&T_check_instance, a, e);			\
 }
 
-void T_check_ge_int(int, const T_check_context *, int);
+void T_check_ge_int(const T_check_context *, int, int);
 
 #define T_flags_ge_int(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ge_int(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ge_int(&T_check_instance, a, e);			\
 }
 
-void T_check_gt_int(int, const T_check_context *, int);
+void T_check_gt_int(const T_check_context *, int, int);
 
 #define T_flags_gt_int(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_gt_int(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_gt_int(&T_check_instance, a, e);			\
 }
 
-void T_check_le_int(int, const T_check_context *, int);
+void T_check_le_int(const T_check_context *, int, int);
 
 #define T_flags_le_int(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_le_int(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_le_int(&T_check_instance, a, e);			\
 }
 
-void T_check_lt_int(int, const T_check_context *, int);
+void T_check_lt_int(const T_check_context *, int, int);
 
 #define T_flags_lt_int(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_lt_int(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_lt_int(&T_check_instance, a, e);			\
 }
 
-void T_check_eq_uint(unsigned int, const T_check_context *, unsigned int);
+void T_check_eq_uint(const T_check_context *, unsigned int, unsigned int);
 
 #define T_flags_eq_uint(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_uint(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_uint(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_uint(unsigned int, const T_check_context *, unsigned int);
+void T_check_ne_uint(const T_check_context *, unsigned int, unsigned int);
 
 #define T_flags_ne_uint(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_uint(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_uint(&T_check_instance, a, e);			\
 }
 
-void T_check_ge_uint(unsigned int, const T_check_context *, unsigned int);
+void T_check_ge_uint(const T_check_context *, unsigned int, unsigned int);
 
 #define T_flags_ge_uint(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ge_uint(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ge_uint(&T_check_instance, a, e);			\
 }
 
-void T_check_gt_uint(unsigned int, const T_check_context *, unsigned int);
+void T_check_gt_uint(const T_check_context *, unsigned int, unsigned int);
 
 #define T_flags_gt_uint(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_gt_uint(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_gt_uint(&T_check_instance, a, e);			\
 }
 
-void T_check_le_uint(unsigned int, const T_check_context *, unsigned int);
+void T_check_le_uint(const T_check_context *, unsigned int, unsigned int);
 
 #define T_flags_le_uint(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_le_uint(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_le_uint(&T_check_instance, a, e);			\
 }
 
-void T_check_lt_uint(unsigned int, const T_check_context *, unsigned int);
+void T_check_lt_uint(const T_check_context *, unsigned int, unsigned int);
 
 #define T_flags_lt_uint(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_lt_uint(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_lt_uint(&T_check_instance, a, e);			\
 }
 
-void T_check_eq_long(long, const T_check_context *, long);
+void T_check_eq_long(const T_check_context *, long, long);
 
 #define T_flags_eq_long(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_long(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_long(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_long(long, const T_check_context *, long);
+void T_check_ne_long(const T_check_context *, long, long);
 
 #define T_flags_ne_long(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_long(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_long(&T_check_instance, a, e);			\
 }
 
-void T_check_ge_long(long, const T_check_context *, long);
+void T_check_ge_long(const T_check_context *, long, long);
 
 #define T_flags_ge_long(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ge_long(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ge_long(&T_check_instance, a, e);			\
 }
 
-void T_check_gt_long(long, const T_check_context *, long);
+void T_check_gt_long(const T_check_context *, long, long);
 
 #define T_flags_gt_long(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_gt_long(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_gt_long(&T_check_instance, a, e);			\
 }
 
-void T_check_le_long(long, const T_check_context *, long);
+void T_check_le_long(const T_check_context *, long, long);
 
 #define T_flags_le_long(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_le_long(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_le_long(&T_check_instance, a, e);			\
 }
 
-void T_check_lt_long(long, const T_check_context *, long);
+void T_check_lt_long(const T_check_context *, long, long);
 
 #define T_flags_lt_long(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_lt_long(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_lt_long(&T_check_instance, a, e);			\
 }
 
-void T_check_eq_ulong(unsigned long, const T_check_context *, unsigned long);
+void T_check_eq_ulong(const T_check_context *, unsigned long, unsigned long);
 
 #define T_flags_eq_ulong(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_ulong(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_ulong(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_ulong(unsigned long, const T_check_context *, unsigned long);
+void T_check_ne_ulong(const T_check_context *, unsigned long, unsigned long);
 
 #define T_flags_ne_ulong(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_ulong(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_ulong(&T_check_instance, a, e);			\
 }
 
-void T_check_ge_ulong(unsigned long, const T_check_context *, unsigned long);
+void T_check_ge_ulong(const T_check_context *, unsigned long, unsigned long);
 
 #define T_flags_ge_ulong(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ge_ulong(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ge_ulong(&T_check_instance, a, e);			\
 }
 
-void T_check_gt_ulong(unsigned long, const T_check_context *, unsigned long);
+void T_check_gt_ulong(const T_check_context *, unsigned long, unsigned long);
 
 #define T_flags_gt_ulong(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_gt_ulong(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_gt_ulong(&T_check_instance, a, e);			\
 }
 
-void T_check_le_ulong(unsigned long, const T_check_context *, unsigned long);
+void T_check_le_ulong(const T_check_context *, unsigned long, unsigned long);
 
 #define T_flags_le_ulong(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_le_ulong(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_le_ulong(&T_check_instance, a, e);			\
 }
 
-void T_check_lt_ulong(unsigned long, const T_check_context *, unsigned long);
+void T_check_lt_ulong(const T_check_context *, unsigned long, unsigned long);
 
 #define T_flags_lt_ulong(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_lt_ulong(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_lt_ulong(&T_check_instance, a, e);			\
 }
 
-void T_check_eq_ll(long long, const T_check_context *, long long);
+void T_check_eq_ll(const T_check_context *, long long, long long);
 
 #define T_flags_eq_ll(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_ll(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_ll(&T_check_instance, a, e);				\
 }
 
-void T_check_ne_ll(long long, const T_check_context *, long long);
+void T_check_ne_ll(const T_check_context *, long long, long long);
 
 #define T_flags_ne_ll(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_ll(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_ll(&T_check_instance, a, e);				\
 }
 
-void T_check_ge_ll(long long, const T_check_context *, long long);
+void T_check_ge_ll(const T_check_context *, long long, long long);
 
 #define T_flags_ge_ll(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ge_ll(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ge_ll(&T_check_instance, a, e);				\
 }
 
-void T_check_gt_ll(long long, const T_check_context *, long long);
+void T_check_gt_ll(const T_check_context *, long long, long long);
 
 #define T_flags_gt_ll(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_gt_ll(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_gt_ll(&T_check_instance, a, e);				\
 }
 
-void T_check_le_ll(long long, const T_check_context *, long long);
+void T_check_le_ll(const T_check_context *, long long, long long);
 
 #define T_flags_le_ll(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_le_ll(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_le_ll(&T_check_instance, a, e);				\
 }
 
-void T_check_lt_ll(long long, const T_check_context *, long long);
+void T_check_lt_ll(const T_check_context *, long long, long long);
 
 #define T_flags_lt_ll(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_lt_ll(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_lt_ll(&T_check_instance, a, e);				\
 }
 
-void T_check_eq_ull(unsigned long long, const T_check_context *,
+void T_check_eq_ull(const T_check_context *, unsigned long long,
     unsigned long long);
 
 #define T_flags_eq_ull(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eq_ull(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eq_ull(&T_check_instance, a, e);			\
 }
 
-void T_check_ne_ull(unsigned long long, const T_check_context *,
+void T_check_ne_ull(const T_check_context *, unsigned long long,
     unsigned long long);
 
 #define T_flags_ne_ull(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ne_ull(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ne_ull(&T_check_instance, a, e);			\
 }
 
-void T_check_ge_ull(unsigned long long, const T_check_context *,
+void T_check_ge_ull(const T_check_context *, unsigned long long,
     unsigned long long);
 
 #define T_flags_ge_ull(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_ge_ull(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_ge_ull(&T_check_instance, a, e);			\
 }
 
-void T_check_gt_ull(unsigned long long, const T_check_context *,
+void T_check_gt_ull(const T_check_context *, unsigned long long,
     unsigned long long);
 
 #define T_flags_gt_ull(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_gt_ull(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_gt_ull(&T_check_instance, a, e);			\
 }
 
-void T_check_le_ull(unsigned long long, const T_check_context *,
+void T_check_le_ull(const T_check_context *, unsigned long long,
     unsigned long long);
 
 #define T_flags_le_ull(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_le_ull(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_le_ull(&T_check_instance, a, e);			\
 }
 
-void T_check_lt_ull(unsigned long long, const T_check_context *,
+void T_check_lt_ull(const T_check_context *, unsigned long long,
     unsigned long long);
 
 #define T_flags_lt_ull(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_lt_ull(a, &T_check_instance, e);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_lt_ull(&T_check_instance, a, e);			\
 }
 
-void T_check_eno(int, const T_check_context *, int);
+void T_check_eno(const T_check_context *, int, int);
 
 #define T_flags_eno(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eno(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eno(&T_check_instance, a, e);				\
 }
 
-void T_check_eno_success(int, const T_check_context *);
+void T_check_eno_success(const T_check_context *, int);
 
 #define T_flags_eno_success(a, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_eno_success(a, &T_check_instance);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_eno_success(&T_check_instance, a);			\
 }
 
-void T_check_psx_error(int, const T_check_context *, int);
+void T_check_psx_error(const T_check_context *, int, int);
 
 #define T_flags_psx_error(a, eno, flags)				\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_psx_error(a, &T_check_instance, eno);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_psx_error(&T_check_instance, a, eno);			\
 }
 
-void T_check_psx_success(int, const T_check_context *);
+void T_check_psx_success(const T_check_context *, int);
 
 #define T_flags_psx_success(a, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_psx_success(a, &T_check_instance);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_psx_success(&T_check_instance, a);			\
 }
 
 /** @} */
@@ -2064,22 +2070,22 @@ const char *T_strerror(int);
 /** @} */
 
 #ifdef __rtems__
-void T_check_rsc(uint32_t, const T_check_context *, uint32_t);
+void T_check_rsc(const T_check_context *, uint32_t, uint32_t);
 
 #define T_flags_rsc(a, e, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_rsc(a, &T_check_instance, e);				\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_rsc(&T_check_instance, a, e);				\
 }
 
-void T_check_rsc_success(uint32_t, const T_check_context *);
+void T_check_rsc_success(const T_check_context *, uint32_t);
 
 #define T_flags_rsc_success(a, flags)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, flags };				\
-	T_check_rsc_success(a, &T_check_instance);			\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_rsc_success(&T_check_instance, a);			\
 }
 
 /**

@@ -134,12 +134,12 @@ const char *T_strerror(int eno)
 	}
 }
 
-void T_check_eno(int a, const T_check_context *t, int e)
+void T_check_eno(const T_check_context *t, int a, int e)
 {
-	T_check_true(a == e, t, "%s == %s", T_strerror(a), T_strerror(e));
+	T_check(t, a == e, "%s == %s", T_strerror(a), T_strerror(e));
 }
 
-void T_check_eno_success(int a, const T_check_context *t)
+void T_check_eno_success(const T_check_context *t, int a)
 {
-	T_check_eno(a, t, 0);
+	T_check_eno(t, a, 0);
 }
