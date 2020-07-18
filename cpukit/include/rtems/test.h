@@ -114,6 +114,7 @@ void T_case_register(T_case_context *);
 
 #define T_CHECK_QUIET 2U
 
+/* If you change this value, you have to adjust T_VA_ARGS_KIND() as well */
 #define T_CHECK_FMT 4U
 
 #define T_CHECK_STEP_FLAG 8U
@@ -135,22 +136,46 @@ typedef struct {
 	const char *msg;
 } T_check_context_msg;
 
+#define T_VA_ARGS_FIRST(...) T_VA_ARGS_FIRST_SELECT(__VA_ARGS__, throw_away)
+#define T_VA_ARGS_FIRST_SELECT(first, ...) first
+
+/*
+ * The T_VA_ARGS_MORE() supports up to nine arguments.  It expands to nothing
+ * if only one argument is given.  It expands to a comma and the second and
+ * following arguments if at least two arguments are present.  The 4U shall
+ * correspond to T_CHECK_FMT.
+ */
+#define T_VA_ARGS_MORE(...) \
+    T_VA_ARGS_XEXPAND(T_VA_ARGS_KIND(__VA_ARGS__), __VA_ARGS__)
+#define T_VA_ARGS_XEXPAND(kind, ...) T_VA_ARGS_EXPAND(kind, __VA_ARGS__)
+#define T_VA_ARGS_EXPAND(kind, ...) T_VA_ARGS_EXPAND_##kind(__VA_ARGS__)
+#define T_VA_ARGS_EXPAND_0U(first)
+#define T_VA_ARGS_EXPAND_4U(first, ...) , __VA_ARGS__
+#define T_VA_ARGS_KIND(...) \
+    T_VA_ARGS_SELECT(__VA_ARGS__, \
+    4U, 4U, 4U, 4U, 4U, 4U, 4U, 4U, 0U, throw_away)
+#define T_VA_ARGS_SELECT(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, ...) a10
+
 void T_check(const T_check_context *, bool, ...);
 
 extern const T_check_context T_special;
 
-#define T_flags_true(a, flags, ...)					\
+#define T_flags_true(flags, ...)					\
 {									\
 	static const T_check_context T_check_instance = {		\
-	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
-	T_check(&T_check_instance, a, __VA_ARGS__);		\
+	    T_FILE_NAME, __LINE__, 					\
+	    (flags) | T_VA_ARGS_KIND(__VA_ARGS__) };			\
+	T_check(&T_check_instance,					\
+	    T_VA_ARGS_FIRST(__VA_ARGS__) T_VA_ARGS_MORE(__VA_ARGS__));	\
 }
 
-#define T_flags_eq(a, e, flags, ...) \
-    T_flags_true((a) == (e), flags, __VA_ARGS__)
+#define T_flags_eq(flags, a, ...) \
+    T_flags_true(flags, \
+    (a) == (T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
 
-#define T_flags_ne(a, e, flags, ...) \
-    T_flags_true((a) != (e), flags, __VA_ARGS__)
+#define T_flags_ne(flags, a, ...) \
+    T_flags_true(flags, \
+    (a) != (T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
 
 void T_check_eq_ptr(const T_check_context_msg *, const void *, const void *);
 
@@ -658,19 +683,28 @@ T_verbosity T_set_verbosity(T_verbosity);
  * @{
  */
 
-#define T_true(a, ...) T_flags_true(a, 0, __VA_ARGS__)
-#define T_assert_true(a, ...) T_flags_true(a, T_CHECK_STOP, __VA_ARGS__)
-#define T_quiet_true(a, ...) T_flags_true(a, T_CHECK_QUIET, __VA_ARGS__)
-#define T_step_true(s, a, ...) T_flags_true(a, T_CHECK_STEP(s), __VA_ARGS__)
-#define T_step_assert_true(s, a, ...) \
-    T_flags_true(a, T_CHECK_STEP(s) | T_CHECK_STOP, __VA_ARGS__)
+#define T_true(...) T_flags_true(0, __VA_ARGS__)
+#define T_assert_true(...) T_flags_true(T_CHECK_STOP, __VA_ARGS__)
+#define T_quiet_true(...) T_flags_true(T_CHECK_QUIET, __VA_ARGS__)
+#define T_step_true(s, ...) T_flags_true(T_CHECK_STEP(s), __VA_ARGS__)
+#define T_step_assert_true(s, ...) \
+    T_flags_true(T_CHECK_STEP(s) | T_CHECK_STOP, __VA_ARGS__)
 
-#define T_false(a, ...) T_flags_true(!(a), 0, __VA_ARGS__)
-#define T_assert_false(a, ...) T_flags_true(!(a), T_CHECK_STOP, __VA_ARGS__)
-#define T_quiet_false(a, ...) T_flags_true(!(a), T_CHECK_QUIET, __VA_ARGS__)
-#define T_step_false(s, a, ...) T_flags_true(!(a), T_CHECK_STEP(s), __VA_ARGS__)
-#define T_step_assert_false(s, a, ...) \
-    T_flags_true(!(a), T_CHECK_STEP(s) | T_CHECK_STOP, __VA_ARGS__)
+#define T_false(...) \
+    T_flags_true(0, \
+    !(T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
+#define T_assert_false(...) \
+    T_flags_true(T_CHECK_STOP, \
+    !(T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
+#define T_quiet_false(...) \
+    T_flags_true(T_CHECK_QUIET, \
+    !(T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
+#define T_step_false(s, ...) \
+    T_flags_true(T_CHECK_STEP(s), \
+    !(T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
+#define T_step_assert_false(s, ...) \
+    T_flags_true(T_CHECK_STEP(s) | T_CHECK_STOP, \
+    !(T_VA_ARGS_FIRST(__VA_ARGS__)) T_VA_ARGS_MORE(__VA_ARGS__))
 
 /** @} */
 
@@ -684,19 +718,19 @@ T_verbosity T_set_verbosity(T_verbosity);
  * @{
  */
 
-#define T_eq(a, e, ...) T_flags_eq(a, e, 0, __VA_ARGS__)
-#define T_assert_eq(a, e, ...) T_flags_eq(a, e, T_CHECK_STOP, __VA_ARGS__)
-#define T_quiet_eq(a, e, ...) T_flags_eq(a, e, T_CHECK_QUIET, __VA_ARGS__)
-#define T_step_eq(s, a, e, ...) T_flags_eq(a, e, T_CHECK_STEP(s), __VA_ARGS__)
-#define T_step_assert_eq(s, a, e, ...) \
-    T_flags_eq(a, e, T_CHECK_STEP(s) | T_CHECK_STOP, __VA_ARGS__)
+#define T_eq(a, ...) T_flags_eq(0, a, __VA_ARGS__)
+#define T_assert_eq(a, ...) T_flags_eq(T_CHECK_STOP, a, __VA_ARGS__)
+#define T_quiet_eq(a, ...) T_flags_eq(T_CHECK_QUIET, a, __VA_ARGS__)
+#define T_step_eq(s, a, ...) T_flags_eq(T_CHECK_STEP(s), a, __VA_ARGS__)
+#define T_step_assert_eq(s, a, ...) \
+    T_flags_eq(T_CHECK_STEP(s) | T_CHECK_STOP, a, __VA_ARGS__)
 
-#define T_ne(a, e, ...) T_flags_ne(a, e, 0, __VA_ARGS__)
-#define T_assert_ne(a, e, ...) T_flags_ne(a, e, T_CHECK_STOP, __VA_ARGS__)
-#define T_quiet_ne(a, e, ...) T_flags_ne(a, e, T_CHECK_QUIET, __VA_ARGS__)
-#define T_step_ne(s, a, e, ...) T_flags_ne(a, e, T_CHECK_STEP(s), __VA_ARGS__)
-#define T_step_assert_ne(s, a, e, ...) \
-    T_flags_ne(a, e, T_CHECK_STEP(s) | T_CHECK_STOP, __VA_ARGS__)
+#define T_ne(a, ...) T_flags_ne(0, a, __VA_ARGS__)
+#define T_assert_ne(a, ...) T_flags_ne(T_CHECK_STOP, a, __VA_ARGS__)
+#define T_quiet_ne(a, ...) T_flags_ne(T_CHECK_QUIET, a, __VA_ARGS__)
+#define T_step_ne(s, a, ...) T_flags_ne(T_CHECK_STEP(s), a, __VA_ARGS__)
+#define T_step_assert_ne(s, a, ...) \
+    T_flags_ne(T_CHECK_STEP(s) | T_CHECK_STOP, a, __VA_ARGS__)
 
 /** @} */
 
@@ -2117,9 +2151,12 @@ void T_check_rsc_success(const T_check_context *, uint32_t);
 
 void T_plan(unsigned int);
 
-#define T_step(s, ...) T_flags_true(true, T_CHECK_STEP(s), __VA_ARGS__)
-#define T_step_assert(s, ...) \
-    T_flags_true(true, T_CHECK_STEP(s) | T_CHECK_STOP, __VA_ARGS__)
+#define T_step(...) \
+    T_flags_true(T_CHECK_STEP(T_VA_ARGS_FIRST(__VA_ARGS__)), \
+    true T_VA_ARGS_MORE(__VA_ARGS__))
+#define T_step_assert(...) \
+    T_flags_true(T_CHECK_STEP(T_VA_ARGS_FIRST(__VA_ARGS__)) | T_CHECK_STOP, \
+    true T_VA_ARGS_MORE(__VA_ARGS__))
 
 /**
  * @defgroup RTEMSTestFrameworkTime Time Services

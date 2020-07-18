@@ -2880,6 +2880,18 @@ T_TEST_CASE(check_lt_sz)
 	T_assert_lt_sz((size_t)12, (size_t)12);
 }
 
+T_TEST_CASE(check_false_no_fmt)
+{
+	T_false(false);
+	T_false(true);
+	T_quiet_false(false);
+	T_quiet_false(true);
+	T_step_false(2, false);
+	T_step_false(3, true);
+	T_assert_false(false);
+	T_assert_false(true);
+}
+
 #include "t-self-test.h"
 
 T_TEST_OUTPUT(step_assert_true,
@@ -5382,6 +5394,17 @@ T_TEST_OUTPUT(check_lt_sz,
 "P:4:0:UI1:test-checks.c:2879\n"
 "F:5:0:UI1:test-checks.c:2880:12 < 12\n"
 "E:check_lt_sz:N:6:F:4:D:0.001000\n");
+
+T_TEST_OUTPUT(check_false_no_fmt,
+"B:check_false_no_fmt\n"
+"P:0:0:UI1:test-checks.c:2885\n"
+"F:1:0:UI1:test-checks.c:2886\n"
+"F:*:0:UI1:test-checks.c:2888\n"
+"P:2:0:UI1:test-checks.c:2889\n"
+"F:3:0:UI1:test-checks.c:2890\n"
+"P:4:0:UI1:test-checks.c:2891\n"
+"F:5:0:UI1:test-checks.c:2892\n"
+"E:check_false_no_fmt:N:6:F:4:D:0.001000\n");
 
 /*
  * The license is at the end of the file to be able to use the test code and
