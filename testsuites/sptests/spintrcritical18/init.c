@@ -1,11 +1,5 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2012, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -16,8 +10,8 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 18";
 
@@ -29,22 +23,22 @@ const char rtems_test_name[] = "SPINTRCRITICAL 18";
 
 #define PRIORITY_HIGH 1
 
-#define ASSERT_SC(sc) rtems_test_assert( (sc) == RTEMS_SUCCESSFUL )
-
 typedef struct {
   rtems_id middle_priority_task;
   rtems_id high_priority_task;
   bool high_priority_task_activated;
+  volatile bool early;
+  volatile bool switching;
+  volatile bool late;
+  long potential_hits;
 } test_context;
 
-static test_context global_ctx;
-
-static void wake_up(rtems_id task)
+static void wake_up( rtems_id task )
 {
   rtems_status_code sc;
 
   sc = rtems_event_send( task, WAKE_UP );
-  ASSERT_SC( sc );
+  T_quiet_rsc_success( sc );
 }
 
 static void wait_for_wake_up( void )
@@ -58,18 +52,40 @@ static void wait_for_wake_up( void )
     RTEMS_NO_TIMEOUT,
     &events
   );
-  ASSERT_SC( sc );
-  rtems_test_assert( events == WAKE_UP );
+  T_quiet_rsc_success( sc );
+  T_quiet_eq_u32( events, WAKE_UP );
 }
 
-static void active_high_priority_task( rtems_id timer, void *arg )
+static T_interrupt_test_state active_high_priority_task( void *arg )
 {
-  /* The arg is NULL */
-  test_context *ctx = &global_ctx;
+  test_context *ctx = arg;
+  T_interrupt_test_state state;
 
-  rtems_test_assert( !ctx->high_priority_task_activated );
+  state = T_interrupt_test_get_state();
+
+  if ( state != T_INTERRUPT_TEST_ACTION ) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
+
+  T_quiet_false( ctx->high_priority_task_activated );
   ctx->high_priority_task_activated = true;
   wake_up( ctx->high_priority_task );
+
+  if ( ctx->early ) {
+    state = T_INTERRUPT_TEST_EARLY;
+  } else if ( ctx->late ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    ++ctx->potential_hits;
+
+    if ( ctx->potential_hits > 13 ) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_CONTINUE;
+    }
+  }
+
+  return state;
 }
 
 static void middle_priority_task( rtems_task_argument arg )
@@ -78,8 +94,9 @@ static void middle_priority_task( rtems_task_argument arg )
 
   while ( true ) {
     wait_for_wake_up();
+    ctx->late = true;
 
-    rtems_test_assert( !ctx->high_priority_task_activated );
+    T_quiet_false( ctx->high_priority_task_activated );
   }
 }
 
@@ -90,26 +107,60 @@ static void high_priority_task( rtems_task_argument arg )
   while ( true ) {
     wait_for_wake_up();
 
-    rtems_test_assert( ctx->high_priority_task_activated );
+    T_quiet_true( ctx->high_priority_task_activated );
     ctx->high_priority_task_activated = false;
   }
 }
 
-static bool test_body( void *arg )
+static void prepare( void *arg )
 {
   test_context *ctx = arg;
 
-  wake_up( ctx->middle_priority_task );
-
-  return false;
+  ctx->early = true;
+  ctx->switching = false;
+  ctx->late = false;
 }
 
-static void Init( rtems_task_argument ignored )
+static void action( void *arg )
 {
-  test_context *ctx = &global_ctx;
+  test_context *ctx = arg;
+
+  ctx->early = false;
+  wake_up( ctx->middle_priority_task );
+}
+
+static void blocked( void *arg )
+{
+  test_context *ctx = arg;
+  T_interrupt_test_state state;
+
+  state = T_interrupt_test_change_state(
+    T_INTERRUPT_TEST_ACTION,
+    T_INTERRUPT_TEST_LATE
+  );
+
+  if ( state == T_INTERRUPT_TEST_ACTION ) {
+    ctx->switching = true;
+    T_busy( 100 );
+    ctx->switching = false;
+  }
+}
+
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = active_high_priority_task,
+  .blocked = blocked,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE(InterruptDuringThreadDispatch)
+{
+  T_interrupt_test_state state;
+  test_context ctx;
   rtems_status_code sc;
 
-  TEST_BEGIN();
+  memset( &ctx, 0, sizeof( ctx ) );
 
   sc = rtems_task_create(
     rtems_build_name( 'H', 'I', 'G', 'H' ),
@@ -117,16 +168,16 @@ static void Init( rtems_task_argument ignored )
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->high_priority_task
+    &ctx.high_priority_task
   );
-  ASSERT_SC(sc);
+  T_assert_rsc_success( sc );
 
   sc = rtems_task_start(
-    ctx->high_priority_task,
+    ctx.high_priority_task,
     high_priority_task,
-    (rtems_task_argument) ctx
+    (rtems_task_argument) &ctx
   );
-  ASSERT_SC(sc);
+  T_assert_rsc_success( sc );
 
   sc = rtems_task_create(
     rtems_build_name( 'M', 'I', 'D', 'L' ),
@@ -134,22 +185,30 @@ static void Init( rtems_task_argument ignored )
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->middle_priority_task
+    &ctx.middle_priority_task
   );
-  ASSERT_SC(sc);
+  T_assert_rsc_success( sc );
 
   sc = rtems_task_start(
-    ctx->middle_priority_task,
+    ctx.middle_priority_task,
     middle_priority_task,
-    (rtems_task_argument) ctx
+    (rtems_task_argument) &ctx
   );
-  ASSERT_SC(sc);
+  T_assert_rsc_success( sc );
 
-  interrupt_critical_section_test( test_body, ctx, active_high_priority_task );
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
 
-  TEST_END();
+  sc = rtems_task_delete( ctx.high_priority_task );
+  T_rsc_success( sc );
 
-  rtems_test_exit( 0 );
+  sc = rtems_task_delete( ctx.middle_priority_task );
+  T_rsc_success( sc );
+}
+
+static rtems_task Init( rtems_task_argument argument )
+{
+  rtems_test_run( argument, TEST_STATE );
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -158,8 +217,6 @@ static void Init( rtems_task_argument ignored )
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_MAXIMUM_TASKS 3
-#define CONFIGURE_MAXIMUM_TIMERS 1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_LOW
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
