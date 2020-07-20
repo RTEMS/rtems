@@ -1240,9 +1240,7 @@ if TEST_spintrcritical08
 sp_tests += spintrcritical08
 sp_screens += spintrcritical08/spintrcritical08.scn
 sp_docs += spintrcritical08/spintrcritical08.doc
-spintrcritical08_SOURCES = spintrcritical08/init.c \
-	spintrcritical_support/intrcritical.c \
-	spintrcritical_support/intrcritical.h
+spintrcritical08_SOURCES = spintrcritical08/init.c
 spintrcritical08_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical08) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
