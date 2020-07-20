@@ -29,10 +29,11 @@
 
 #ifdef BSP_FDT_BLOB_READ_ONLY
 static const uint32_t
-bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)] = { 0xdeadbeef };
+bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)] CPU_STRUCTURE_ALIGNMENT =
+  { 0xdeadbeef };
 #else
 static uint32_t
-bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)];
+bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)] CPU_STRUCTURE_ALIGNMENT;
 #endif
 
 void bsp_fdt_copy(const void *src)
@@ -48,6 +49,7 @@ void bsp_fdt_copy(const void *src)
 
   if (s != d) {
     size_t m = MIN(sizeof(bsp_fdt_blob), fdt_totalsize(src));
+    size_t aligned_size = roundup2(m, CPU_CACHE_LINE_BYTES);
     size_t n = (m + sizeof(*d) - 1) / sizeof(*d);
     size_t i;
 
@@ -55,7 +57,7 @@ void bsp_fdt_copy(const void *src)
       d[i] = s[i];
     }
 
-    rtems_cache_flush_multiple_data_lines(d, m);
+    rtems_cache_flush_multiple_data_lines(d, aligned_size);
   }
 }
 
