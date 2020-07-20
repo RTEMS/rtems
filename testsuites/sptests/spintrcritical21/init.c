@@ -1,6 +1,8 @@
 /*
  *  Classic API Signal to Task from ISR
  *
+ *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,67 +15,74 @@
 #include "config.h"
 #endif
 
-#define CONFIGURE_INIT
-#include "system.h"
-
-#include <intrcritical.h>
+#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/rtems/eventimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 21";
 
-/*
- *  ERROR CHECKING NOTE:
- *
- *  We are either at dispatch disable level 1 or 2.  Either way, it is
- *  safer not to check the dispatch level explicitly so we are using
- *  fatal_directive_check_status_only() not directive_failed().
- */
+#define MAX_ITERATION_COUNT 10000
 
-static volatile bool case_hit;
+typedef struct {
+  rtems_id        main_task;
+  Thread_Control *main_thread;
+  rtems_id        other_task;
+} test_context;
 
-static rtems_id main_task;
-
-static Thread_Control *main_thread;
-
-static rtems_id other_task;
-
-static bool is_case_hit( void )
+static bool is_blocked( Thread_Wait_flags flags )
 {
-  return _Thread_Wait_flags_get( main_thread)
+  return flags == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_BLOCKED );
+}
+
+static bool interrupts_blocking_op( Thread_Wait_flags flags )
+{
+  return flags
     == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
 }
 
-static rtems_timer_service_routine test_event_from_isr(
-  rtems_id  timer,
-  void     *arg
+static T_interrupt_test_state event_from_isr_interrupt(
+  void *arg
 )
 {
-  rtems_status_code     status;
+  test_context           *ctx;
+  T_interrupt_test_state state;
+  Thread_Wait_flags      flags;
+  rtems_status_code      status;
 
-  if ( is_case_hit() ) {
+  ctx = arg;
+  flags = _Thread_Wait_flags_get( ctx->main_thread );
+
+  if ( interrupts_blocking_op( flags ) ) {
     /*
      *  This event send hits the critical section but sends to
      *  another task so doesn't impact this critical section.
      */
-    status = rtems_event_send( other_task, 0x02 );
-    fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
+    status = rtems_event_send( ctx->other_task, 0x02 );
+    T_quiet_rsc_success( status );
 
     /*
      *  This event send hits the main task but doesn't satisfy
      *  it's blocking condition so it will still block
      */
-    status = rtems_event_send( main_task, 0x02 );
-    fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
+    status = rtems_event_send( ctx->main_task, 0x02 );
+    T_quiet_rsc_success( status );
 
-    case_hit = true;
+    state = T_INTERRUPT_TEST_DONE;
+  } else if ( is_blocked( flags ) ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
   }
-  status = rtems_event_send( main_task, 0x01 );
-  fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
+
+  status = rtems_event_send( ctx->main_task, 0x01 );
+  T_quiet_rsc_success( status );
+
+  return state;
 }
 
-static bool test_body_event_from_isr( void *arg )
+static void event_from_isr_action( void *arg )
 {
   rtems_status_code status;
   rtems_event_set   out;
@@ -81,52 +90,23 @@ static bool test_body_event_from_isr( void *arg )
   (void) arg;
 
   status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 0, &out );
-  rtems_test_assert( status == RTEMS_SUCCESSFUL );
-
-  return case_hit;
+  T_quiet_rsc_success( status );
 }
 
-static rtems_timer_service_routine test_event_with_timeout_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
+static const T_interrupt_test_config event_from_isr_config = {
+  .action = event_from_isr_action,
+  .interrupt = event_from_isr_interrupt,
+  .max_iteration_count = MAX_ITERATION_COUNT
+};
+
+T_TEST_CASE(EventFromISR)
 {
-  rtems_status_code     status;
+  test_context           ctx;
+  T_interrupt_test_state state;
+  rtems_status_code      status;
 
-  if ( is_case_hit() ) {
-    /*
-     *  We want to catch the task while it is blocking.  Otherwise
-     *  just send and make it happy.
-     */
-    case_hit = true;
-  }
-  status = rtems_event_send( main_task, 0x01 );
-  fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL, "event send" );
-}
-
-static bool test_body_event_with_timeout_from_isr( void *arg )
-{
-  rtems_status_code status;
-  rtems_event_set   out;
-
-  (void) arg;
-
-  status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
-  rtems_test_assert( status == RTEMS_SUCCESSFUL || status == RTEMS_TIMEOUT );
-
-  return case_hit;
-}
-
-rtems_task Init(
-  rtems_task_argument argument
-)
-{
-  rtems_status_code     status;
-
-  TEST_BEGIN();
-
-  main_task = rtems_task_self();
-  main_thread = _Thread_Get_executing();
+  ctx.main_task = rtems_task_self();
+  ctx.main_thread = _Thread_Get_executing();
 
   status = rtems_task_create(
     0xa5a5a5a5,
@@ -134,47 +114,93 @@ rtems_task Init(
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &other_task
+    &ctx.other_task
   );
-  directive_failed( status, "rtems_task_create" );
+  T_assert_rsc_success( status );
 
-  /*
-   * Test Event send successful from ISR -- receive is forever
-   */
+  state = T_interrupt_test( &event_from_isr_config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
 
-  case_hit = false;
-  interrupt_critical_section_test(
-    test_body_event_from_isr,
-    NULL,
-    test_event_from_isr
-  );
-
-  printf(
-    "Event sent from ISR hitting synchronization point has %soccurred\n",
-    case_hit ? "" : "NOT "
-  );
-
-  rtems_test_assert( case_hit );
-
-  /*
-   * Test Event send successful from ISR -- receive has timeout
-   */
-
-  case_hit = false;
-  interrupt_critical_section_test(
-    test_body_event_with_timeout_from_isr,
-    NULL,
-    test_event_with_timeout_from_isr
-  );
-
-  printf(
-    "Event sent from ISR (with timeout) hitting synchronization "
-      "point has %soccurred\n",
-    case_hit ? "" : "NOT "
-  );
-
-  rtems_test_assert( case_hit );
-
-  TEST_END();
-  rtems_test_exit( 0 );
+  status = rtems_task_delete( ctx.other_task );
+  T_rsc_success( status );
 }
+
+static T_interrupt_test_state event_with_timeout_from_isr_interrupt(
+  void *arg
+)
+{
+  test_context           *ctx;
+  T_interrupt_test_state  state;
+  Thread_Wait_flags       flags;
+  rtems_status_code       status;
+
+  ctx = arg;
+  flags = _Thread_Wait_flags_get( ctx->main_thread );
+
+  if ( interrupts_blocking_op( flags ) ) {
+    /*
+     *  We want to catch the task while it is blocking.  Otherwise
+     *  just send and make it happy.
+     */
+    state = T_INTERRUPT_TEST_DONE;
+  } else if ( is_blocked( flags ) ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
+  }
+
+  status = rtems_event_send( ctx->main_task, 0x01 );
+  T_quiet_rsc_success( status );
+
+  return state;
+}
+
+static void event_with_timeout_from_isr_action( void *arg )
+{
+  rtems_status_code status;
+  rtems_event_set   out;
+
+  (void) arg;
+
+  status = rtems_event_receive( 0x01, RTEMS_DEFAULT_OPTIONS, 1, &out );
+  T_quiet_true( status == RTEMS_SUCCESSFUL || status == RTEMS_TIMEOUT );
+}
+
+static const T_interrupt_test_config event_with_timeout_from_isr_config = {
+  .action = event_with_timeout_from_isr_action,
+  .interrupt = event_with_timeout_from_isr_interrupt,
+  .max_iteration_count = MAX_ITERATION_COUNT
+};
+
+T_TEST_CASE( EventWithTimeoutFromISR )
+{
+  test_context           ctx;
+  T_interrupt_test_state state;
+
+  ctx.main_task = rtems_task_self();
+  ctx.main_thread = _Thread_Get_executing();
+  ctx.other_task = 0xdeadbeef;
+
+  state = T_interrupt_test( &event_with_timeout_from_isr_config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
+}
+
+static rtems_task Init( rtems_task_argument argument )
+{
+  rtems_test_run( argument, TEST_STATE );
+}
+
+#define CONFIGURE_INIT
+
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_MICROSECONDS_PER_TICK   1000
+
+#define CONFIGURE_MAXIMUM_TASKS             2
+
+#include <rtems/confdefs.h>
