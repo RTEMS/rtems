@@ -761,6 +761,8 @@ T_verbosity T_set_verbosity(T_verbosity);
 #define T_null(a) T_flags_null(a, 0, #a)
 #define T_assert_null(a) T_flags_null(a, T_CHECK_STOP, #a)
 #define T_quiet_null(a) T_flags_null(a, T_CHECK_QUIET, #a)
+#define T_quiet_assert_null(a) \
+    T_flags_null(a, T_CHECK_QUIET | T_CHECK_STOP, #a)
 #define T_step_null(s, a) T_flags_null(a, T_CHECK_STEP(s), #a)
 #define T_step_assert_null(s, a) \
     T_flags_null(a, T_CHECK_STEP(s) | T_CHECK_STOP, #a)
@@ -768,6 +770,8 @@ T_verbosity T_set_verbosity(T_verbosity);
 #define T_not_null(a) T_flags_not_null(a, 0, #a)
 #define T_assert_not_null(a) T_flags_not_null(a, T_CHECK_STOP, #a)
 #define T_quiet_not_null(a) T_flags_not_null(a, T_CHECK_QUIET, #a)
+#define T_quiet_assert_not_null(a) \
+    T_flags_not_null(a, T_CHECK_QUIET | T_CHECK_STOP, #a)
 #define T_step_not_null(s, a) T_flags_not_null(a, T_CHECK_STEP(s), #a)
 #define T_step_assert_not_null(s, a) \
     T_flags_not_null(a, T_CHECK_STEP(s) | T_CHECK_STOP, #a)
