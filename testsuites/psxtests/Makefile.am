@@ -525,8 +525,7 @@ if TEST_psxintrcritical01
 psx_tests += psxintrcritical01
 psx_screens += psxintrcritical01/psxintrcritical01.scn
 psx_docs += psxintrcritical01/psxintrcritical01.doc
-psxintrcritical01_SOURCES = psxintrcritical01/init.c \
-	../sptests/spintrcritical_support/intrcritical.c
+psxintrcritical01_SOURCES = psxintrcritical01/init.c
 psxintrcritical01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_psxintrcritical01) $(support_includes) \
 	-I$(top_srcdir)/../sptests/spintrcritical_support

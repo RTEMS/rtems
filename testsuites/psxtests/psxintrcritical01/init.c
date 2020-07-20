@@ -1,4 +1,6 @@
 /*
+ *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -11,73 +13,122 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <string.h>
 #include <time.h>
+
+#include <rtems/test.h>
+#include <rtems/simple-test.h>
 
 const char rtems_test_name[] = "PSXINTRCRITICAL 1";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
-
-#define TEST_NAME          "01"
-#define TEST_STRING        "POSIX Timer"
-
-static timer_t           Timer;
-static struct itimerspec TimerParams;
+typedef struct {
+  timer_t           timer;
+  struct itimerspec spec;
+  volatile bool early;
+  volatile bool late;
+  long early_count;
+  long late_count;
+  long potential_hits;
+} test_context;
 
 #define POSIX_TIMER_RELATIVE 0
 
-static bool test_body( void *arg )
+static void prepare(void *arg)
 {
+  test_context *ctx;
+
+  ctx = arg;
+  ctx->early = false;
+  ctx->late = false;
+}
+
+static void action(void *arg)
+{
+  test_context *ctx;
   int rv;
 
-  (void) arg;
+  ctx = arg;
+  ctx->early = true;
+  rv = timer_settime(ctx->timer, POSIX_TIMER_RELATIVE, &ctx->spec, NULL);
+  ctx->late = true;
+  T_quiet_psx_success(rv);
 
-  rv = timer_settime(Timer, POSIX_TIMER_RELATIVE, &TimerParams, NULL);
-  rtems_test_assert( rv == 0 );
-
-  return false;
+  while (T_interrupt_test_get_state() == T_INTERRUPT_TEST_ACTION) {
+    /* Wait */
+  }
 }
 
-static rtems_timer_service_routine test_release_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
+static T_interrupt_test_state interrupt(void *arg)
 {
-  test_body( NULL );
-}
+  test_context *ctx;
+  T_interrupt_test_state state;
+  int rv;
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
-{
-  int sc;
+  state = T_interrupt_test_get_state();
 
-  TEST_BEGIN();
-
-  puts( "Init - Trying to generate timer fire from ISR while firing" );
-  puts( "Init - Variation is: " TEST_STRING );
-
-  puts( "Init - There is no way for the test to know if it hits the case" );
-
-  /* create POSIX Timer */
-  sc = timer_create (CLOCK_REALTIME, NULL, &Timer);
-  if ( sc == -1 ) {
-    perror ("Error in timer creation\n");
-    rtems_test_exit(0);
+  if (state != T_INTERRUPT_TEST_ACTION) {
+    return T_INTERRUPT_TEST_EARLY;
   }
 
+  ctx = arg;
+  rv = timer_settime(ctx->timer, POSIX_TIMER_RELATIVE, &ctx->spec, NULL);
+  T_quiet_psx_success(rv);
+
+  if (ctx->late) {
+    ++ctx->late_count;
+    return T_INTERRUPT_TEST_LATE;
+  } else if (ctx->early) {
+    ++ctx->early_count;
+    return T_INTERRUPT_TEST_EARLY;
+  } else {
+    ++ctx->potential_hits;
+
+    if (ctx->potential_hits > 13) {
+      return T_INTERRUPT_TEST_DONE;
+    } else {
+      return T_INTERRUPT_TEST_CONTINUE;
+    }
+  }
+}
+
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE(PSXSetTimerInterrupt)
+{
+  test_context ctx;
+  int sc;
+  T_interrupt_test_state state;
+
+  memset(&ctx, 0, sizeof(ctx));
+
+  /* create POSIX Timer */
+  sc = timer_create (CLOCK_REALTIME, NULL, &ctx.timer);
+  T_psx_success(sc);
+
   /* we don't care if it ever fires */
-  TimerParams.it_interval.tv_sec  = 10;
-  TimerParams.it_interval.tv_nsec = 0;
-  TimerParams.it_value.tv_sec     = 10;
-  TimerParams.it_value.tv_nsec    = 0;
+  ctx.spec.it_interval.tv_sec  = 10;
+  ctx.spec.it_value.tv_sec     = 10;
 
-  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
+  state = T_interrupt_test(&config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
 
-  TEST_END();
-  rtems_test_exit(0);
+  T_log(T_NORMAL, "early count = %ld", ctx.early_count);
+  T_log(T_NORMAL, "late count = %ld", ctx.late_count);
+  T_log(T_NORMAL, "potential hits = %ld", ctx.potential_hits);
+  T_gt_int(ctx.potential_hits, 0);
+
+  sc = timer_delete(ctx.timer);
+  T_psx_success(sc);
+}
+
+static rtems_task Init(rtems_task_argument arg)
+{
+  rtems_test_run(arg, TEST_STATE);
 }
 
 /* configuration information */
@@ -86,9 +137,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_TIMERS         1
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS   1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
