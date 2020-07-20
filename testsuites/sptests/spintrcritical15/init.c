@@ -1,4 +1,6 @@
 /*
+ *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -11,89 +13,133 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <rtems/test.h>
+#include <rtems/test-info.h>
+
+#include <rtems/score/threadimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 15";
-
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_task Secondary_task(rtems_task_argument ignored);
 
 #define INIT_PRIORITY      2
 #define BLOCKER_PRIORITY   1
 
-rtems_id Secondary_task_id;
-rtems_id Semaphore;
+typedef struct {
+  rtems_id secondary_task_id;
+  rtems_id semaphore;
+  Thread_Control *main_thread;
+} test_context;
 
-rtems_task Secondary_task(
-  rtems_task_argument ignored
-)
+static rtems_task Secondary_task( rtems_task_argument arg )
 {
-  rtems_status_code     sc;
+  test_context      *ctx;
+  rtems_status_code  sc;
+
+  ctx = (test_context *) arg;
 
   while (1) {
-    sc = rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
-    fatal_directive_status( sc, RTEMS_TIMEOUT, "rtems_semaphore_obtain" );
+    sc = rtems_semaphore_obtain( ctx->semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
+    T_quiet_rsc( sc, RTEMS_TIMEOUT );
   }
 }
 
-static bool test_body( void *arg )
+static T_interrupt_test_state interrupt(void *arg)
 {
-  rtems_status_code sc;
+  test_context           *ctx;
+  Thread_Wait_flags       flags;
+  T_interrupt_test_state  state;
 
-  (void) arg;
+  ctx = arg;
+  flags = _Thread_Wait_flags_get( ctx->main_thread );
 
-  sc = rtems_task_restart( Secondary_task_id, 1 );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  if (
+    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK )
+  ) {
+    state = T_INTERRUPT_TEST_DONE;
+  } else if (
+    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_BLOCKED )
+  ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
+  }
 
-  sc = rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
-  rtems_test_assert( sc == RTEMS_TIMEOUT );
-
-  return false;
+  return state;
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+static void prepare( void *arg )
 {
-  rtems_status_code     sc;
+  test_context      *ctx;
+  rtems_status_code  sc;
 
-  TEST_BEGIN();
-  puts(
-    "Init - Trying to generate timeout of a thread while another is blocking\n"
-    "Init -   on the same thread queue\n"
-    "Init - There is no way for the test to know if it hits the case"
-  );
+  ctx = arg;
+  sc = rtems_task_restart( ctx->secondary_task_id, (rtems_task_argument) ctx );
+  T_quiet_rsc_success( sc );
+}
 
-  puts( "Init - rtems_semaphore_create - OK" );
+static void action( void *arg )
+{
+  test_context      *ctx;
+  rtems_status_code  sc;
+
+  ctx = arg;
+  sc = rtems_semaphore_obtain( ctx->semaphore, RTEMS_DEFAULT_OPTIONS, 1 );
+  T_quiet_rsc( sc, RTEMS_TIMEOUT );
+}
+
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE( SemaphoreObtainBlockedInterrupt )
+{
+  test_context           ctx;
+  rtems_status_code      sc;
+  T_interrupt_test_state state;
+
+  ctx.main_thread = _Thread_Get_executing();
+
   sc = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', ' ' ),
     0,
     RTEMS_DEFAULT_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
-    &Semaphore
+    &ctx.semaphore
   );
-  directive_failed( sc, "rtems_semaphore_create of SM1" );
+  T_assert_rsc_success( sc );
 
-  puts( "Init - rtems_task_create - OK" );
   sc = rtems_task_create(
     rtems_build_name( 'B', 'L', 'C', 'K' ),
     BLOCKER_PRIORITY,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_NO_PREEMPT,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &Secondary_task_id
+    &ctx.secondary_task_id
   );
-  directive_failed( sc, "rtems_task_create" );
+  T_assert_rsc_success( sc );
 
-  sc = rtems_task_start( Secondary_task_id, Secondary_task, 0 );
-  directive_failed( sc, "rtems_task_start" );
+  sc = rtems_task_start(
+    ctx.secondary_task_id,
+    Secondary_task,
+    (rtems_task_argument) &ctx
+  );
+  T_assert_rsc_success( sc );
 
-  interrupt_critical_section_test( test_body, NULL, NULL );
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
 
-  TEST_END();
-  rtems_test_exit(0);
+  sc = rtems_task_delete( ctx.secondary_task_id );
+  T_rsc_success( sc );
+
+  sc = rtems_semaphore_delete( ctx.semaphore );
+  T_rsc_success( sc );
+}
+
+static rtems_task Init( rtems_task_argument argument )
+{
+  rtems_test_run( argument, TEST_STATE );
 }
 
 /* configuration information */
@@ -103,7 +149,6 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS          2
 #define CONFIGURE_MAXIMUM_SEMAPHORES     1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INIT_TASK_PRIORITY  INIT_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_PREEMPT

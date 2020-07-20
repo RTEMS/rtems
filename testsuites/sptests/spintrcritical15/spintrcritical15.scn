@@ -1,7 +1,27 @@
-*** TEST INTERRUPT CRITICAL SECTION 15 ***
-Init - Trying to generate timeout of a thread while another is blocking
-Init -   on the same thread queue
-Init - There is no way for the test to know if it hits the case
-Init - rtems_semaphore_create - OK
-Init - rtems_task_create - OK
-*** END OF TEST INTERRUPT CRITICAL SECTION 15 ***
+*** BEGIN OF TEST SPINTRCRITICAL 15 ***
+*** TEST VERSION: 6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+A:SPINTRCRITICAL 15
+S:Platform:RTEMS
+S:Compiler:10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+S:Version:6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+S:BSP:realview_pbx_a9_qemu
+S:RTEMS_DEBUG:1
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:1
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:SemaphoreObtainBlockedInterrupt
+P:0:0:UI1:init.c:111
+P:1:0:UI1:init.c:121
+P:2:0:UI1:init.c:128
+P:3:0:UI1:init.c:131
+P:4:0:UI1:init.c:134
+P:5:0:UI1:init.c:137
+E:SemaphoreObtainBlockedInterrupt:N:6:F:0:D:0.063907
+Z:SPINTRCRITICAL 15:C:1:N:6:F:0:D:0.065120
+Y:ReportHash:SHA256:198a9452944e985b137ec4b427be51cef71af413f6e3bfdf03a2f29a9bd81259
+
+*** END OF TEST SPINTRCRITICAL 15 ***
