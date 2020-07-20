@@ -1,4 +1,6 @@
 /*
+ *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -11,24 +13,20 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <string.h>
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
-
-rtems_id Main_task;
+#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #if defined(EVENT_ANY)
   #define TEST_NAME          "11"
-  #define TEST_STRING        "Event Any condition"
+  #define TEST_STRING        Any
   #define EVENTS_TO_SEND     0x1
   #define EVENTS_TO_RECEIVE  0x3
 
 #elif defined(EVENT_ALL)
   #define TEST_NAME          "12"
-  #define TEST_STRING        "Event All condition"
+  #define TEST_STRING        All
   #define EVENTS_TO_SEND     0x3
   #define EVENTS_TO_RECEIVE  0x3
 
@@ -39,41 +37,88 @@ rtems_id Main_task;
 
 const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
-rtems_timer_service_routine test_release_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
+typedef struct {
+  rtems_id      main_task;
+  long          potential_hits;
+  volatile bool early;
+  volatile bool late;
+} test_context;
+
+static T_interrupt_test_state interrupt( void *arg )
 {
-  (void) rtems_event_send( Main_task, EVENTS_TO_SEND );
+  test_context           *ctx;
+  T_interrupt_test_state  state;
+  rtems_status_code       sc;
+
+  state = T_interrupt_test_get_state();
+
+  if ( state != T_INTERRUPT_TEST_ACTION ) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
+
+  ctx = arg;
+  sc = rtems_event_send( ctx->main_task, EVENTS_TO_SEND );
+  T_quiet_rsc_success( sc );
+
+  if ( ctx->early ) {
+    state = T_INTERRUPT_TEST_EARLY;
+  } else if ( ctx->late ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    ++ctx->potential_hits;
+    state = T_INTERRUPT_TEST_CONTINUE;
+  }
+
+  return state;
 }
 
-static bool test_body( void *arg )
+static void prepare( void *arg )
 {
-  rtems_event_set out;
+  test_context    *ctx;
+  rtems_event_set  out;
 
-  (void) arg;
-
-  rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
-
-  return false;
+  ctx = arg;
+  ctx->early = true;
+  ctx->late = false;
+  (void ) rtems_event_receive( RTEMS_PENDING_EVENTS, RTEMS_NO_WAIT, 0, &out );
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+static void action( void *arg )
 {
-  TEST_BEGIN();
+  test_context    *ctx;
+  rtems_event_set  out;
 
-  puts( "Init - Test may not be able to detect case is hit reliably" );
-  puts( "Init - Trying to generate event send from ISR while blocking" );
-  puts( "Init - Variation is: " TEST_STRING );
+  ctx = arg;
+  ctx->early = false;
+  (void ) rtems_event_receive( EVENTS_TO_RECEIVE, RTEMS_EVENT_ANY, 1, &out );
+  ctx->late = true;
+}
 
-  Main_task = rtems_task_self();
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 1000
+};
 
-  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
+T_TEST_CASE( RTEMS_XCONCAT( EventReceiveInterrupt, TEST_STRING ) )
+{
+  test_context           ctx;
+  T_interrupt_test_state state;
 
-  TEST_END();
-  rtems_test_exit(0);
+  memset( &ctx, 0, sizeof( ctx ) );
+  ctx.main_task = rtems_task_self();
+
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_TIMEOUT );
+
+  T_log( T_NORMAL, "potential hits = %ld", ctx.potential_hits );
+  T_gt_long( ctx.potential_hits, 0 );
+}
+
+static rtems_task Init( rtems_task_argument argument )
+{
+  rtems_test_run( argument, TEST_STATE );
 }
 
 /* configuration information */
@@ -81,10 +126,7 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS       2
-#define CONFIGURE_MAXIMUM_TIMERS      1
-#define CONFIGURE_MAXIMUM_SEMAPHORES  1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+#define CONFIGURE_MAXIMUM_TASKS       1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

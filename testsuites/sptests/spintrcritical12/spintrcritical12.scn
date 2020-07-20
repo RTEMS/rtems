@@ -1,6 +1,24 @@
-*** TEST INTERRUPT CRITICAL SECTION 12 ***
-Init - Test may not be able to detect case is hit reliably
-Init - Trying to generate event send from ISR while blocking
-Init - Variation is: Event All condition
-Support - rtems_timer_create - creating timer 1
-*** END OF TEST INTERRUPT CRITICAL SECTION 12 ***
+*** BEGIN OF TEST SPINTRCRITICAL 12 ***
+*** TEST VERSION: 6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+A:SPINTRCRITICAL 12
+S:Platform:RTEMS
+S:Compiler:10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+S:Version:6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+S:BSP:realview_pbx_a9_qemu
+S:RTEMS_DEBUG:1
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:1
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:EventReceiveInterruptAll
+P:0:0:UI1:spintrcritical11impl.h:113
+L:potential hits = 999
+P:1:0:UI1:spintrcritical11impl.h:116
+E:EventReceiveInterruptAll:N:2:F:0:D:1.057546
+Z:SPINTRCRITICAL 12:C:1:N:2:F:0:D:1.058728
+Y:ReportHash:SHA256:3b2267f65c7604b1fbf3da33492b23a658b32021755868bcf69b04fe69c7f85d
+
+*** END OF TEST SPINTRCRITICAL 12 ***

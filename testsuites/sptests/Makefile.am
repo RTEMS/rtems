@@ -1270,9 +1270,7 @@ if TEST_spintrcritical11
 sp_tests += spintrcritical11
 sp_screens += spintrcritical11/spintrcritical11.scn
 sp_docs += spintrcritical11/spintrcritical11.doc
-spintrcritical11_SOURCES = spintrcritical11/init.c \
-	spintrcritical_support/intrcritical.c \
-	spintrcritical_support/intrcritical.h
+spintrcritical11_SOURCES = spintrcritical11/init.c
 spintrcritical11_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical11) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
@@ -1282,8 +1280,7 @@ if TEST_spintrcritical12
 sp_tests += spintrcritical12
 sp_screens += spintrcritical12/spintrcritical12.scn
 sp_docs += spintrcritical12/spintrcritical12.doc
-spintrcritical12_SOURCES = spintrcritical12/init.c \
-	spintrcritical_support/intrcritical.c
+spintrcritical12_SOURCES = spintrcritical12/init.c
 spintrcritical12_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical12) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
