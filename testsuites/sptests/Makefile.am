@@ -1190,9 +1190,7 @@ if TEST_spintrcritical01
 sp_tests += spintrcritical01
 sp_screens += spintrcritical01/spintrcritical01.scn
 sp_docs += spintrcritical01/spintrcritical01.doc
-spintrcritical01_SOURCES = spintrcritical01/init.c \
-	spintrcritical_support/intrcritical.c \
-	spintrcritical_support/intrcritical.h
+spintrcritical01_SOURCES = spintrcritical01/init.c
 spintrcritical01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical01) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
@@ -1202,8 +1200,7 @@ if TEST_spintrcritical02
 sp_tests += spintrcritical02
 sp_screens += spintrcritical02/spintrcritical02.scn
 sp_docs += spintrcritical02/spintrcritical02.doc
-spintrcritical02_SOURCES = spintrcritical02/init.c \
-	spintrcritical_support/intrcritical.c
+spintrcritical02_SOURCES = spintrcritical02/init.c
 spintrcritical02_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical02) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
@@ -1213,8 +1210,7 @@ if TEST_spintrcritical03
 sp_tests += spintrcritical03
 sp_screens += spintrcritical03/spintrcritical03.scn
 sp_docs += spintrcritical03/spintrcritical03.doc
-spintrcritical03_SOURCES = spintrcritical03/init.c \
-	spintrcritical_support/intrcritical.c
+spintrcritical03_SOURCES = spintrcritical03/init.c
 spintrcritical03_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical03) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
@@ -1224,8 +1220,7 @@ if TEST_spintrcritical04
 sp_tests += spintrcritical04
 sp_screens += spintrcritical04/spintrcritical04.scn
 sp_docs += spintrcritical04/spintrcritical04.doc
-spintrcritical04_SOURCES = spintrcritical04/init.c \
-	spintrcritical_support/intrcritical.c
+spintrcritical04_SOURCES = spintrcritical04/init.c
 spintrcritical04_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical04) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
@@ -1235,8 +1230,7 @@ if TEST_spintrcritical05
 sp_tests += spintrcritical05
 sp_screens += spintrcritical05/spintrcritical05.scn
 sp_docs += spintrcritical05/spintrcritical05.doc
-spintrcritical05_SOURCES = spintrcritical05/init.c \
-	spintrcritical_support/intrcritical.c
+spintrcritical05_SOURCES = spintrcritical05/init.c
 spintrcritical05_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical05) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support

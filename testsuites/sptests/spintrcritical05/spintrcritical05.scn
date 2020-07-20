@@ -1,6 +1,24 @@
-*** TEST INTERRUPT CRITICAL SECTION 05 ***
-Init - Trying to generate semaphore release from ISR while blocking
-Init - Variation is: Priority/Without Timeout (Reverse)
-Support - rtems_timer_create - creating timer 1
-Init - Case hit
-*** END OF TEST INTERRUPT CRITICAL SECTION 05 ***
+*** BEGIN OF TEST SPINTRCRITICAL 5 ***
+*** TEST VERSION: 6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+A:SPINTRCRITICAL 5
+S:Platform:RTEMS
+S:Compiler:10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+S:Version:6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+S:BSP:realview_pbx_a9_qemu
+S:RTEMS_DEBUG:1
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:1
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:SemaphoreReleasePriorityWithoutTimeoutReverse
+P:0:0:UI1:spintrcritical01impl.h:133
+P:1:0:UI1:spintrcritical01impl.h:136
+P:2:0:UI1:spintrcritical01impl.h:139
+E:SemaphoreReleasePriorityWithoutTimeoutReverse:N:3:F:0:D:0.992161
+Z:SPINTRCRITICAL 5:C:1:N:3:F:0:D:0.993438
+Y:ReportHash:SHA256:577ac55f827103c83e8a851796041d45d9545e7f02e49417fdb0b876108c6327
+
+*** END OF TEST SPINTRCRITICAL 5 ***

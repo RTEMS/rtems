@@ -17,7 +17,7 @@
 #include <time.h>
 
 #include <rtems/test.h>
-#include <rtems/simple-test.h>
+#include <rtems/test-info.h>
 
 const char rtems_test_name[] = "PSXINTRCRITICAL 1";
 
@@ -53,20 +53,15 @@ static void action(void *arg)
   ctx->late = true;
   T_quiet_psx_success(rv);
 
-  while (T_interrupt_test_get_state() == T_INTERRUPT_TEST_ACTION) {
-    /* Wait */
-  }
+  T_interrupt_test_busy_wait_for_interrupt();
 }
 
 static T_interrupt_test_state interrupt(void *arg)
 {
   test_context *ctx;
-  T_interrupt_test_state state;
   int rv;
 
-  state = T_interrupt_test_get_state();
-
-  if (state != T_INTERRUPT_TEST_ACTION) {
+  if (T_interrupt_test_get_state() != T_INTERRUPT_TEST_ACTION) {
     return T_INTERRUPT_TEST_EARLY;
   }
 
