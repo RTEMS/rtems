@@ -1,6 +1,0 @@
-*** TEST INTERRUPT CRITICAL SECTION 06 ***
-Init - Trying to generate semaphore release from ISR while blocking
-Init - There is no way for the test to know if it hits the case
-Init - Variation is: Priority/Restart Search Task (Forward)
-Support - rtems_timer_create - creating timer 1
-*** END OF TEST INTERRUPT CRITICAL SECTION 06 ***

@@ -1236,29 +1236,6 @@ spintrcritical05_CPPFLAGS = $(AM_CPPFLAGS) \
 	-I$(top_srcdir)/spintrcritical_support
 endif
 
-if TEST_spintrcritical06
-sp_tests += spintrcritical06
-sp_screens += spintrcritical06/spintrcritical06.scn
-sp_docs += spintrcritical06/spintrcritical06.doc
-spintrcritical06_SOURCES = spintrcritical06/init.c \
-	spintrcritical_support/intrcritical.c \
-	spintrcritical_support/intrcritical.h
-spintrcritical06_CPPFLAGS = $(AM_CPPFLAGS) \
-	$(TEST_FLAGS_spintrcritical06) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support
-endif
-
-if TEST_spintrcritical07
-sp_tests += spintrcritical07
-sp_screens += spintrcritical07/spintrcritical07.scn
-sp_docs += spintrcritical07/spintrcritical07.doc
-spintrcritical07_SOURCES = spintrcritical07/init.c \
-	spintrcritical_support/intrcritical.c
-spintrcritical07_CPPFLAGS = $(AM_CPPFLAGS) \
-	$(TEST_FLAGS_spintrcritical07) $(support_includes) \
-	-I$(top_srcdir)/spintrcritical_support
-endif
-
 if TEST_spintrcritical08
 sp_tests += spintrcritical08
 sp_screens += spintrcritical08/spintrcritical08.scn
