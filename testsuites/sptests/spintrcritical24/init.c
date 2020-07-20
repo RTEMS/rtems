@@ -1,11 +1,5 @@
 /*
- * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2017, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -17,24 +11,28 @@
 #endif
 
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 
 #include <rtems/imfs.h>
-
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <rtems/libio_.h>
+#include <rtems/test-info.h>
+#include <rtems/test.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 24";
 
 typedef struct {
   int fd;
+  rtems_libio_t *iop;
+  long early_count;
+  long late_count;
+  long potential_hit_count;
   long append_count;
   long no_append_count;
+  volatile bool closed;
 } test_context;
-
-static test_context test_instance;
 
 static const char path[] = "generic";
 
@@ -43,6 +41,7 @@ static int handler_close(rtems_libio_t *iop)
   test_context *ctx;
 
   ctx = IMFS_generic_get_context_by_iop(iop);
+  ctx->closed = true;
 
   if (rtems_libio_iop_is_append(iop)) {
     ++ctx->append_count;
@@ -67,67 +66,120 @@ static const IMFS_node_control node_control = {
   .node_destroy = IMFS_node_destroy_default
 };
 
-static void do_fcntl(rtems_id timer, void *arg)
+static T_interrupt_test_state interrupt(void *arg)
 {
-  /* The arg is NULL */
   test_context *ctx;
+  T_interrupt_test_state state;
   int rv;
+  unsigned int flags;
 
-  ctx = &test_instance;
+  state = T_interrupt_test_get_state();
+
+  if (state != T_INTERRUPT_TEST_ACTION) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
+
+  ctx = arg;
+  flags = rtems_libio_iop_flags_set(ctx->iop, 0);
+
+  if ((flags & LIBIO_FLAGS_OPEN) != 0) {
+    ++ctx->early_count;
+    state = T_INTERRUPT_TEST_EARLY;
+  } else if (ctx->closed) {
+    ++ctx->late_count;
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    ++ctx->potential_hit_count;
+
+    if (ctx->potential_hit_count >= 13) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_CONTINUE;
+    }
+  }
 
   rv = fcntl(ctx->fd, F_SETFL, O_APPEND);
 
   if (rv != 0) {
-    rtems_test_assert(rv == -1);
-    rtems_test_assert(errno == EBADF);
+    T_quiet_psx_error(rv, EBADF);
   }
+
+  return state;
 }
 
-static bool test_body(void *arg)
+static void prepare(void *arg)
+{
+  test_context *ctx;
+
+  ctx = arg;
+
+  ctx->fd = open(path, O_RDWR);
+  T_quiet_ge_int(ctx->fd, 0);
+
+  ctx->closed = false;
+  ctx->iop = rtems_libio_iop(ctx->fd);
+}
+
+static void action(void *arg)
 {
   test_context *ctx;
   int rv;
 
   ctx = arg;
 
-  ctx->fd = open(path, O_RDWR);
-  rtems_test_assert(ctx->fd >= 0);
-
   rv = close(ctx->fd);
-  rtems_test_assert(rv == 0);
+  T_quiet_psx_success(rv);
 
-  return false;
+  T_interrupt_test_busy_wait_for_interrupt();
 }
 
-static void test(test_context *ctx)
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE(CloseInterrupt)
 {
+  test_context ctx;
   const char *path = "generic";
   int rv;
+  T_interrupt_test_state state;
+
+  memset(&ctx, 0, sizeof(ctx));
 
   rv = IMFS_make_generic_node(
     path,
     S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
     &node_control,
-    ctx
+    &ctx
   );
-  rtems_test_assert(rv == 0);
+  T_psx_success(rv);
 
-  interrupt_critical_section_test(test_body, ctx, do_fcntl);
+  state = T_interrupt_test(&config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
+
+  T_log(T_NORMAL, "early count = %ld", ctx.early_count);
+  T_log(T_NORMAL, "late count = %ld", ctx.late_count);
+  T_log(T_NORMAL, "potential hit count = %ld", ctx.potential_hit_count);
+  T_log(T_NORMAL, "append count = %ld", ctx.append_count);
+  T_log(T_NORMAL, "no append count = %ld", ctx.no_append_count);
 
   /* There is no reliable indicator if the test case has been hit */
-  rtems_test_assert(ctx->append_count > 0);
-  rtems_test_assert(ctx->no_append_count > 0);
+  T_gt_int(ctx.early_count, 0);
+  T_gt_int(ctx.late_count, 0);
+  T_gt_int(ctx.potential_hit_count, 0);
+  T_gt_int(ctx.append_count, 0);
+  T_gt_int(ctx.no_append_count, 0);
 
   rv = unlink(path);
-  rtems_test_assert(rv == 0);
+  T_psx_success(rv);
 }
 
 static void Init(rtems_task_argument arg)
 {
-  TEST_BEGIN();
-  test(&test_instance);
-  TEST_END();
-  rtems_test_exit(0);
+  rtems_test_run(arg, TEST_STATE);
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -138,8 +190,6 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_TIMERS 1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
