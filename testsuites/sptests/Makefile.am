@@ -1320,9 +1320,7 @@ if TEST_spintrcritical16
 sp_tests += spintrcritical16
 sp_screens += spintrcritical16/spintrcritical16.scn
 sp_docs += spintrcritical16/spintrcritical16.doc
-spintrcritical16_SOURCES = spintrcritical16/init.c \
-	spintrcritical_support/intrcritical.c \
-	spintrcritical_support/intrcritical.h
+spintrcritical16_SOURCES = spintrcritical16/init.c
 spintrcritical16_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical16) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support

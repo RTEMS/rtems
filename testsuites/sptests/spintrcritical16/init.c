@@ -1,4 +1,6 @@
 /*
+ *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -11,88 +13,128 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #include <rtems/score/threadimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 16";
 
-static Thread_Control *Main_TCB;
+typedef struct {
+  Thread_Control *thread;
+  rtems_id        semaphore;
+} test_context;
 
-static rtems_id Semaphore;
-
-static bool case_hit;
-
-static bool interrupts_blocking_op(void)
+static T_interrupt_test_state interrupt( void *arg )
 {
-  Thread_Wait_flags flags = _Thread_Wait_flags_get( Main_TCB );
-
-  return
-    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
-}
-
-static rtems_timer_service_routine test_release_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
-{
-  if ( interrupts_blocking_op() ) {
-    case_hit = true;
-    (void) rtems_semaphore_release( Semaphore );
-  }
-
-  if ( Main_TCB->Wait.queue != NULL ) {
-    _Thread_Timeout( &Main_TCB->Timer.Watchdog );
-  }
-}
-
-static bool test_body( void *arg )
-{
+  test_context *ctx;
+  T_interrupt_test_state state;
+  Thread_Wait_flags flags;
   rtems_status_code sc;
 
-  (void) arg;
+  state = T_interrupt_test_get_state();
 
-  sc = rtems_semaphore_obtain( Semaphore, RTEMS_DEFAULT_OPTIONS, 2 );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL || sc == RTEMS_TIMEOUT );
+  if (state != T_INTERRUPT_TEST_ACTION) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
 
-  return case_hit;
+  ctx = arg;
+  flags = _Thread_Wait_flags_get( ctx->thread );
+
+  if (
+    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK )
+  ) {
+    state = T_INTERRUPT_TEST_DONE;
+  } else if (
+    flags == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_BLOCKED )
+  ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
+  }
+
+  sc = rtems_semaphore_release( ctx->semaphore );
+  T_quiet_rsc_success( sc );
+
+  return state;
 }
 
-static rtems_task Init(
-  rtems_task_argument ignored
-)
+static void prepare( void *arg )
 {
-  rtems_status_code     sc;
+  test_context *ctx;
+  rtems_status_code sc;
 
-  TEST_BEGIN();
-  puts(
-    "Init - Trying to generate timeout of a thread that had its blocking\n"
-    "Init -   request satisfied while blocking but before time timeout"
+  ctx = arg;
+
+  do {
+    sc = rtems_semaphore_obtain( ctx->semaphore, RTEMS_NO_WAIT, 0 );
+  } while ( sc == RTEMS_SUCCESSFUL );
+}
+
+static void action( void *arg )
+{
+  test_context *ctx;
+  rtems_status_code sc;
+
+  ctx = arg;
+  sc = rtems_semaphore_obtain( ctx->semaphore, RTEMS_DEFAULT_OPTIONS, 2 );
+  T_quiet_rsc_success( sc );
+}
+
+static void blocked( void *arg )
+{
+  test_context *ctx;
+  rtems_status_code sc;
+
+  T_interrupt_test_change_state(
+    T_INTERRUPT_TEST_ACTION,
+    T_INTERRUPT_TEST_LATE
   );
 
-  puts( "Init - rtems_semaphore_create - OK" );
+  ctx = arg;
+  sc = rtems_semaphore_release( ctx->semaphore );
+  T_quiet_rsc_success( sc );
+}
+
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .blocked = blocked,
+  .max_iteration_count = 10000
+};
+
+/*
+ * Trying to generate timeout of a thread that had its blocking request
+ * satisfied while blocking but before time timeout.
+ */
+T_TEST_CASE( SemaphoreSatisfyBeforeTimeout )
+{
+  test_context ctx;
+  rtems_status_code sc;
+  T_interrupt_test_state state;
+
+  ctx.thread = _Thread_Get_executing();
+
   sc = rtems_semaphore_create(
     rtems_build_name( 'S', 'M', '1', ' ' ),
     0,
     RTEMS_DEFAULT_ATTRIBUTES,
     RTEMS_NO_PRIORITY,
-    &Semaphore
+    &ctx.semaphore
   );
-  directive_failed( sc, "rtems_semaphore_create of SM1" );
+  T_assert_rsc_success( sc );
 
-  Main_TCB  = _Thread_Get_executing();
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
 
-  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
+  sc = rtems_semaphore_delete( ctx.semaphore );
+  T_rsc_success( sc );
+}
 
-  if ( case_hit ) {
-    puts( "Init - Case hit" );
-    TEST_END();
-  } else
-    puts( "Init - Case not hit - ran too long" );
-
-
-  rtems_test_exit(0);
+static rtems_task Init( rtems_task_argument argument )
+{
+  rtems_test_run( argument, TEST_STATE );
 }
 
 /* configuration information */
@@ -101,9 +143,7 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS          1
-#define CONFIGURE_MAXIMUM_TIMERS         1
 #define CONFIGURE_MAXIMUM_SEMAPHORES     1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
