@@ -1,4 +1,6 @@
 /*
+ *  Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -11,17 +13,19 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <string.h>
+
+#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #if defined(FIRE_AFTER)
   #define TEST_NAME          "13"
-  #define TEST_STRING        "Timer Fire After"
+  #define TEST_STRING        TimerFireAfterInterrupt
   #define TEST_DIRECTIVE     rtems_timer_fire_after
 
 #elif defined(SERVER_FIRE_AFTER)
   #define TEST_NAME          "14"
-  #define TEST_STRING        "Timer Server Fire After"
+  #define TEST_STRING        TimerServerFireAfterInterrupt
   #define TEST_DIRECTIVE     rtems_timer_server_fire_after
 
 #else
@@ -30,71 +34,117 @@
 
 const char rtems_test_name[] = "SPINTRCRITICAL " TEST_NAME;
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-rtems_timer_service_routine test_release_from_isr(rtems_id  timer, void *arg);
-rtems_timer_service_routine TimerMethod(rtems_id  timer, void *arg);
+typedef struct {
+  rtems_id timer;
+  long potential_hits;
+  volatile bool early;
+  volatile bool late;
+} test_context;
 
-rtems_id Timer;
-
-rtems_timer_service_routine TimerMethod(
+static rtems_timer_service_routine TimerMethod(
   rtems_id  timer,
   void     *arg
 )
 {
-}
-
-rtems_timer_service_routine test_release_from_isr(
-  rtems_id  timer,
-  void     *arg
-)
-{
-  (void) rtems_timer_fire_after( Timer, 10, TimerMethod, NULL );
-}
-
-static bool test_body( void *arg )
-{
-  rtems_status_code sc;
-
+  (void) timer;
   (void) arg;
-
-  sc = TEST_DIRECTIVE( Timer, 10, TimerMethod, NULL );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  return false;
 }
 
-rtems_task Init(
-  rtems_task_argument ignored
-)
+static T_interrupt_test_state interrupt( void *arg )
 {
-  rtems_status_code     sc;
+  test_context           *ctx;
+  rtems_status_code       sc;
+  T_interrupt_test_state  state;
 
-  TEST_BEGIN();
+  state = T_interrupt_test_get_state();
 
-  puts( "Init - Trying to generate timer fire from ISR while firing" );
-  puts( "Init - Variation is: " TEST_STRING );
+  if ( state != T_INTERRUPT_TEST_ACTION ) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
 
-  puts( "Init - There is no way for the test to know if it hits the case" );
+  ctx = arg;
+  sc = TEST_DIRECTIVE( ctx->timer, 10, TimerMethod, NULL );
+  T_quiet_rsc_success( sc );
 
-  #if defined(SERVER_FIRE_AFTER)
-   /* initiate timer server */
-    sc = rtems_timer_initiate_server(
-      RTEMS_MINIMUM_PRIORITY,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_ATTRIBUTES
-    );
-    directive_failed( sc, "rtems_timer_initiate_server" );
-  #endif
+  if ( ctx->early ) {
+    state = T_INTERRUPT_TEST_EARLY;
+  } else if ( ctx->late ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else {
+    ++ctx->potential_hits;
 
-  puts( "Init - rtems_timer_create - OK" );
-  sc = rtems_timer_create( rtems_build_name( 'P', 'E', 'R', '1' ), &Timer);
-  directive_failed( sc, "rtems_timer_create" );
+    if ( ctx->potential_hits > 13 ) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_CONTINUE;
+    }
+  }
 
-  interrupt_critical_section_test( test_body, NULL, test_release_from_isr );
+  return state;
+}
 
-  TEST_END();
-  rtems_test_exit(0);
+static void prepare( void *arg )
+{
+  test_context *ctx;
+
+  ctx = arg;
+  ctx->early = true;
+  ctx->late = false;
+}
+
+static void action( void *arg )
+{
+  test_context      *ctx;
+  rtems_status_code  sc;
+
+  ctx = arg;
+  ctx->early = false;
+  sc = TEST_DIRECTIVE( ctx->timer, 10, TimerMethod, NULL );
+  T_quiet_rsc_success( sc );
+  ctx->late = true;
+
+  T_interrupt_test_busy_wait_for_interrupt();
+}
+
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE( TEST_STRING )
+{
+  test_context           ctx;
+  rtems_status_code      sc;
+  T_interrupt_test_state state;
+
+  memset( &ctx, 0, sizeof( ctx ) );
+
+  sc = rtems_timer_create(
+    rtems_build_name( 'P', 'E', 'R', '1' ),
+    &ctx.timer
+  );
+  T_assert_rsc_success( sc );
+
+  state = T_interrupt_test( &config, &ctx );
+  T_eq_int( state, T_INTERRUPT_TEST_DONE );
+
+  sc = rtems_timer_delete( ctx.timer );
+  T_rsc_success( sc );
+}
+
+static rtems_task Init( rtems_task_argument argument )
+{
+#if defined(SERVER_FIRE_AFTER)
+  (void) rtems_timer_initiate_server(
+    RTEMS_MINIMUM_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_ATTRIBUTES
+  );
+#endif
+
+  rtems_test_run( argument, TEST_STATE );
 }
 
 /* configuration information */
@@ -107,8 +157,7 @@ rtems_task Init(
 #else
   #define CONFIGURE_MAXIMUM_TASKS     2
 #endif
-#define CONFIGURE_MAXIMUM_TIMERS      2
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+#define CONFIGURE_MAXIMUM_TIMERS      1
 #define CONFIGURE_MICROSECONDS_PER_TICK  1000
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

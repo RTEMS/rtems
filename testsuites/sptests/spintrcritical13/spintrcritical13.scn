@@ -1,7 +1,24 @@
-*** TEST INTERRUPT CRITICAL SECTION 13 ***
-Init - Trying to generate timer fire from ISR while firing
-Init - Variation is: Timer Fire After
-Init - There is no way for the test to know if it hits the case
-Init - rtems_timer_create - OK
-Support - rtems_timer_create - creating timer 1
-*** END OF TEST INTERRUPT CRITICAL SECTION 13 ***
+*** BEGIN OF TEST SPINTRCRITICAL 13 ***
+*** TEST VERSION: 6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+A:SPINTRCRITICAL 13
+S:Platform:RTEMS
+S:Compiler:10.0.1 20200406 (RTEMS 6, RSB bec88a6dd856892c3e66e4598252ea07d7a0d762, Newlib ece49e4)
+S:Version:6.0.0.929e49a54ab4d2d18c9fb8d03610614f63e25b8d
+S:BSP:realview_pbx_a9_qemu
+S:RTEMS_DEBUG:1
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:1
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:TimerFireAfterInterrupt
+P:0:0:UI1:spintrcritical13impl.h:131
+P:1:0:UI1:spintrcritical13impl.h:134
+P:2:0:UI1:spintrcritical13impl.h:137
+E:TimerFireAfterInterrupt:N:3:F:0:D:0.116053
+Z:SPINTRCRITICAL 13:C:1:N:3:F:0:D:0.117144
+Y:ReportHash:SHA256:66bf247c36962dc930b099cc4979215b4cadb41edd8925097a91e8e7a4356725
+
+*** END OF TEST SPINTRCRITICAL 13 ***
