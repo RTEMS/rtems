@@ -1,11 +1,5 @@
 /*
- * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2015, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -16,8 +10,8 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <rtems/test.h>
+#include <rtems/test-info.h>
 
 #include <string.h>
 
@@ -33,17 +27,22 @@ typedef struct {
   Scheduler_priority_Node *scheduler_node;
   rtems_task_priority priority_task;
   rtems_task_priority priority_interrupt;
-  bool done;
+  volatile bool early;
+  volatile bool late;
 } test_context;
 
-static test_context ctx_instance;
-
-static void change_priority(rtems_id timer, void *arg)
+static T_interrupt_test_state interrupt(void *arg)
 {
-  /* The arg is NULL */
-  test_context *ctx = &ctx_instance;
+  test_context *ctx = arg;
+  T_interrupt_test_state state;
   rtems_interrupt_lock_context lock_context;
   unsigned int next_priority;
+
+  state = T_interrupt_test_get_state();
+
+  if (state != T_INTERRUPT_TEST_ACTION) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
 
   rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
 
@@ -67,16 +66,34 @@ static void change_priority(rtems_id timer, void *arg)
       priority_interrupt,
       &previous
     );
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(previous == priority_task);
+    T_quiet_rsc_success(sc);
+    T_quiet_eq_u32(previous, priority_task);
 
-    ctx->done = true;
+    state = T_INTERRUPT_TEST_DONE;
   } else {
     rtems_interrupt_lock_release(&ctx->lock, &lock_context);
+
+    if ( ctx->early ) {
+      state = T_INTERRUPT_TEST_EARLY;
+    } else if ( ctx->late ) {
+      state = T_INTERRUPT_TEST_LATE;
+    } else {
+      state = T_INTERRUPT_TEST_CONTINUE;
+    }
   }
+
+  return state;
 }
 
-static bool test_body(void *arg)
+static void prepare(void *arg)
+{
+  test_context *ctx = arg;
+
+  ctx->early = true;
+  ctx->late = false;
+}
+
+static void action(void *arg)
 {
   test_context *ctx = arg;
   rtems_status_code sc;
@@ -96,44 +113,55 @@ static bool test_body(void *arg)
 
   rtems_interrupt_lock_release(&ctx->lock, &lock_context);
 
+  ctx->early = false;
   sc = rtems_task_set_priority(
     ctx->task_id,
     priority_task,
     &previous
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(previous == priority_last);
+  T_quiet_rsc_success(RTEMS_SUCCESSFUL);
+  T_quiet_eq_u32(previous, priority_last);
+  ctx->late = true;
 
-  if (ctx->done) {
+  if (T_interrupt_test_get_state() == T_INTERRUPT_TEST_DONE) {
     sc = rtems_task_set_priority(
       ctx->task_id,
       RTEMS_CURRENT_PRIORITY,
       &previous
     );
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(previous == priority_interrupt);
+    T_quiet_rsc_success(sc);
+    T_quiet_eq_u32(previous, priority_interrupt);
   }
-
-  return ctx->done;
 }
 
-static void Init(rtems_task_argument arg)
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE(TaskSetPriorityInterrupt)
 {
-  test_context *ctx = &ctx_instance;
+  test_context ctx;
+  T_interrupt_test_state state;
 
-  TEST_BEGIN();
-
-  rtems_interrupt_lock_initialize(&ctx->lock, "Test");
-  ctx->priority_task = 1;
-  ctx->task_id = rtems_task_self();
-  ctx->scheduler_node =
+  memset(&ctx, 0, sizeof(ctx));
+  rtems_interrupt_lock_initialize(&ctx.lock, "Test");
+  ctx.priority_task = 1;
+  ctx.task_id = rtems_task_self();
+  ctx.scheduler_node =
     _Scheduler_priority_Thread_get_node(_Thread_Get_executing());
 
-  interrupt_critical_section_test(test_body, ctx, change_priority);
-  rtems_test_assert(ctx->done);
+  state = T_interrupt_test(&config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
 
-  TEST_END();
-  rtems_test_exit(0);
+  rtems_interrupt_lock_destroy(&ctx.lock);
+}
+
+static rtems_task Init(rtems_task_argument argument)
+{
+  rtems_test_run(argument, TEST_STATE);
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -142,8 +170,6 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_TIMERS 1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 /* We use internal data structures of this scheduler in this test */
 #define CONFIGURE_SCHEDULER_PRIORITY
