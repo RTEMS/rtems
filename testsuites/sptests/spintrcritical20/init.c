@@ -1,11 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2013, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -16,8 +10,11 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
-#include <intrcritical.h>
+#include <string.h>
+
+#include <rtems/test.h>
+#include <rtems/test-info.h>
+
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/rtems/semimpl.h>
@@ -36,9 +33,9 @@ typedef struct {
   bool thread_queue_was_null;
   bool status_was_successful;
   bool status_was_timeout;
+  volatile bool early;
+  volatile bool late;
 } test_context;
-
-static test_context ctx_instance;
 
 static void semaphore_task(rtems_task_argument arg)
 {
@@ -52,37 +49,59 @@ static void semaphore_task(rtems_task_argument arg)
       RTEMS_WAIT,
       RTEMS_NO_TIMEOUT
     );
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL || sc == RTEMS_TIMEOUT);
+    T_quiet_true(sc == RTEMS_SUCCESSFUL || sc == RTEMS_TIMEOUT);
   }
 }
 
-static void release_semaphore(rtems_id timer, void *arg)
-{
-  /* The arg is NULL */
-  test_context *ctx = &ctx_instance;
-  rtems_status_code sc = rtems_semaphore_release(ctx->semaphore_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-}
-
-static bool test_body(void *arg)
+static T_interrupt_test_state interrupt(void *arg)
 {
   test_context *ctx = arg;
-  int busy;
+  T_interrupt_test_state state;
+  rtems_status_code sc;
+
+  state = T_interrupt_test_get_state();
+
+  if (state != T_INTERRUPT_TEST_ACTION) {
+    return T_INTERRUPT_TEST_CONTINUE;
+  }
+
+  sc = rtems_semaphore_release(ctx->semaphore_id);
+  T_quiet_rsc_success(sc);
+
+  if ( ctx->early ) {
+    state = T_INTERRUPT_TEST_EARLY;
+  } else if ( ctx->late ) {
+    state = T_INTERRUPT_TEST_LATE;
+  } else if (
+    ctx->thread_queue_was_null
+      && ctx->status_was_successful
+      && ctx->status_was_timeout
+  ) {
+    state = T_INTERRUPT_TEST_DONE;
+  } else {
+    state = T_INTERRUPT_TEST_CONTINUE;
+  }
+
+  return state;
+}
+
+static void prepare(void *arg)
+{
+  test_context *ctx = arg;
+
+  ctx->early = true;
+  ctx->late = false;
+}
+
+static void action(void *arg)
+{
+  test_context *ctx = arg;
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Thread_Dispatch_disable();
+  ctx->early = false;
 
-  rtems_test_assert(
-    _Thread_Wait_get_status( ctx->semaphore_task_tcb ) == STATUS_SUCCESSFUL
-  );
-
-  /*
-   * Spend some time to make it more likely that we hit the test condition
-   * below.
-   */
-  for (busy = 0; busy < 1000; ++busy) {
-    __asm__ volatile ("");
-  }
+  T_quiet_rsc_success(_Thread_Wait_get_status( ctx->semaphore_task_tcb ));
 
   if (ctx->semaphore_task_tcb->Wait.queue == NULL) {
     ctx->thread_queue_was_null = true;
@@ -98,34 +117,40 @@ static bool test_body(void *arg)
       ctx->status_was_timeout = true;
       break;
     default:
-      rtems_test_assert(0);
+      T_unreachable();
       break;
   }
 
+  ctx->late = true;
   _Thread_Dispatch_enable(cpu_self);
 
-  return ctx->thread_queue_was_null
-    && ctx->status_was_successful
-    && ctx->status_was_timeout;
+  T_interrupt_test_busy_wait_for_interrupt();
 }
 
-static void Init(rtems_task_argument ignored)
+static const T_interrupt_test_config config = {
+  .prepare = prepare,
+  .action = action,
+  .interrupt = interrupt,
+  .max_iteration_count = 10000
+};
+
+T_TEST_CASE(SemaphoreObtainTimeoutInterrupt)
 {
-  test_context *ctx = &ctx_instance;
+  test_context ctx;
   rtems_status_code sc;
+  T_interrupt_test_state state;
 
-  TEST_BEGIN();
-
-  ctx->master_task = rtems_task_self();
+  memset(&ctx, 0, sizeof(ctx));
+  ctx.master_task = rtems_task_self();
 
   sc = rtems_semaphore_create(
     rtems_build_name('S', 'E', 'M', 'A'),
     1,
     RTEMS_COUNTING_SEMAPHORE,
     0,
-    &ctx->semaphore_id
+    &ctx.semaphore_id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  T_assert_rsc_success(sc);
 
   sc = rtems_task_create(
     rtems_build_name('S', 'E', 'M', 'A'),
@@ -133,26 +158,34 @@ static void Init(rtems_task_argument ignored)
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->semaphore_task
+    &ctx.semaphore_task
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  T_assert_rsc_success(sc);
 
   sc = rtems_task_start(
-    ctx->semaphore_task,
+    ctx.semaphore_task,
     semaphore_task,
-    (rtems_task_argument) ctx
+    (rtems_task_argument) &ctx
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  T_assert_rsc_success(sc);
 
-  interrupt_critical_section_test(test_body, ctx, release_semaphore);
+  state = T_interrupt_test(&config, &ctx);
+  T_eq_int(state, T_INTERRUPT_TEST_DONE);
 
-  rtems_test_assert(ctx->thread_queue_was_null);
-  rtems_test_assert(ctx->status_was_successful);
-  rtems_test_assert(ctx->status_was_timeout);
+  T_true(ctx.thread_queue_was_null);
+  T_true(ctx.status_was_successful);
+  T_true(ctx.status_was_timeout);
 
-  TEST_END();
+  sc = rtems_task_delete(ctx.semaphore_task);
+  T_rsc_success(sc);
 
-  rtems_test_exit(0);
+  sc = rtems_semaphore_delete(ctx.semaphore_id);
+  T_rsc_success(sc);
+}
+
+static rtems_task Init(rtems_task_argument argument)
+{
+  rtems_test_run(argument, TEST_STATE);
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -162,8 +195,6 @@ static void Init(rtems_task_argument ignored)
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 #define CONFIGURE_MAXIMUM_TASKS 2
-#define CONFIGURE_MAXIMUM_TIMERS 1
-#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
 #define CONFIGURE_INIT_TASK_PRIORITY PRIORITY_MASTER
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES

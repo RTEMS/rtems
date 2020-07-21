@@ -1340,8 +1340,7 @@ if TEST_spintrcritical20
 sp_tests += spintrcritical20
 sp_screens += spintrcritical20/spintrcritical20.scn
 sp_docs += spintrcritical20/spintrcritical20.doc
-spintrcritical20_SOURCES = spintrcritical20/init.c \
-	spintrcritical_support/intrcritical.c
+spintrcritical20_SOURCES = spintrcritical20/init.c
 spintrcritical20_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_spintrcritical20) $(support_includes) \
 	-I$(top_srcdir)/spintrcritical_support
