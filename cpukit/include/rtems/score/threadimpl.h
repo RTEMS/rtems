@@ -211,14 +211,38 @@ bool _Thread_Initialize(
 );
 
 /**
- * @brief Initializes thread and executes it.
+ * @brief Starts the specified thread.
  *
- * This routine initializes the executable information for a thread
- * and makes it ready to execute.  After this routine executes, the
- * thread competes with all other threads for CPU time.
+ * If the thread is not in the dormant state, the routine returns with a value
+ * of false and performs no actions except enabling interrupts as indicated by
+ * the ISR lock context.
  *
- * @param the_thread The thread to be started.
- * @param entry The thread entry information.
+ * Otherwise, this routine initializes the executable information for the
+ * thread and makes it ready to execute.  After the call of this routine, the
+ * thread competes with all other ready threads for CPU time.
+ *
+ * Then the routine enables the local interrupts as indicated by the ISR lock
+ * context.
+ *
+ * Then the thread start user extensions are called with thread dispatching
+ * disabled and interrupts enabled after making the thread ready.  Please note
+ * that in SMP configurations, the thread switch and begin user extensions may
+ * be called in parallel on another processor.
+ *
+ * Then thread dispatching is enabled and other threads may execute before the
+ * routine returns.
+ *
+ * @param[in, out] the_thread is the thread to start.
+ *
+ * @param entry is the thread entry information.
+ *
+ * @param[in, out] is the ISR lock context which shall be used to disable the
+ *   local interrupts before the call of this routine.
+ *
+ * @retval true The thread was in the dormant state and was sucessefully
+ *   started.
+ *
+ * @retval false Otherwise.
  */
 bool _Thread_Start(
   Thread_Control                 *the_thread,
