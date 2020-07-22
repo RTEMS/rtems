@@ -83,9 +83,9 @@ SYM (_CPU_Context_switch):
 .L_restore:
         movl      I386_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE(eax),ecx
         movl      ecx,PER_CPU_ISR_DISPATCH_DISABLE(edx)
+        movl      REG_ESP(eax),esp         /* restore stack pointer */
         pushl     REG_EFLAGS(eax)          /* push eflags */
         popf                               /* restore eflags */
-        movl      REG_ESP(eax),esp         /* restore stack pointer */
         movl      REG_EBP(eax),ebp         /* restore base pointer */
         movl      REG_EBX(eax),ebx         /* restore ebx */
         movl      REG_ESI(eax),esi         /* restore source register */
