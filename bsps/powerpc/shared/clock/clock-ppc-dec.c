@@ -98,15 +98,21 @@ void clockOn(void* unused)
 static void clockHandler(void)
 {
   #if (CLOCK_DRIVER_USE_FAST_IDLE == 1)
-    rtems_interrupt_level level;
-    uint32_t tb;
+    rtems_interrupt_level  level;
+    uint32_t               tb;
+    Per_CPU_Control       *cpu_self;
 
     rtems_interrupt_disable(level);
 
     tb = ppc_time_base();
     rtems_timecounter_tick();
+    cpu_self = _Per_CPU_Get();
 
-    while ( _Thread_Heir == _Thread_Executing && _Thread_Executing->is_idle ) {
+    while (
+      cpu_self->thread_dispatch_disable_level == cpu_self->isr_nest_level
+        && cpu_self->heir == cpu_self->executing
+        && cpu_self->executing->is_idle
+    ) {
       tb += Clock_Decrementer_value;
       ppc_set_time_base( tb );
       rtems_timecounter_tick();

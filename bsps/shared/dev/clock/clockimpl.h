@@ -143,16 +143,23 @@ rtems_isr Clock_isr(
 
   #if CLOCK_DRIVER_USE_FAST_IDLE
     {
-      struct timecounter *tc = _Timecounter;
-      uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
-      uint32_t interval = (uint32_t)
-        ((tc->tc_frequency * us_per_tick) / 1000000);
-
       Clock_driver_timecounter_tick();
 
       if (_SMP_Get_processor_maximum() == 1) {
+        struct timecounter *tc;
+        uint64_t            us_per_tick;
+        uint32_t            interval;
+        Per_CPU_Control    *cpu_self;
+
+        cpu_self = _Per_CPU_Get();
+        tc = _Timecounter;
+        us_per_tick = rtems_configuration_get_microseconds_per_tick();
+        interval = (uint32_t) ((tc->tc_frequency * us_per_tick) / 1000000);
+
         while (
-          _Thread_Heir == _Thread_Executing && _Thread_Executing->is_idle
+          cpu_self->thread_dispatch_disable_level == cpu_self->isr_nest_level
+            && cpu_self->heir == cpu_self->executing
+            && cpu_self->executing->is_idle
         ) {
           ISR_lock_Context lock_context;
 
