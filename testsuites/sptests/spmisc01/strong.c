@@ -31,6 +31,8 @@
 
 #include "spmisc01.h"
 
+#include <rtems.h>
+
 int weak_or_strong(void)
 {
   return 77;
