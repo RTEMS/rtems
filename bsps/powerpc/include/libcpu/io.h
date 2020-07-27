@@ -50,7 +50,7 @@
  * Acts as a barrier to ensure all previous I/O accesses have
  * completed before any further ones are issued.
  */
-static inline void eieio(void)
+static inline void io_eieio(void)
 {
 	__asm__ __volatile__ ("eieio");
 }
@@ -59,9 +59,9 @@ static inline void eieio(void)
 /* Enforce in-order execution of data I/O.
  * No distinction between read/write on PPC; use eieio for all three.
  */
-#define iobarrier_rw() eieio()
-#define iobarrier_r()  eieio()
-#define iobarrier_w()  eieio()
+#define iobarrier_rw() io_eieio()
+#define iobarrier_r()  io_eieio()
+#define iobarrier_w()  io_eieio()
 
 /*
  * 8, 16 and 32 bit, big and little endian I/O operations, with barrier.
