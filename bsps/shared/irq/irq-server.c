@@ -7,13 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2019 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -21,6 +15,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <rtems.h>
 #include <rtems/chain.h>
@@ -30,54 +25,43 @@
 
 #define BSP_INTERRUPT_SERVER_MANAGEMENT_VECTOR (BSP_INTERRUPT_VECTOR_MAX + 1)
 
-typedef struct {
-  RTEMS_INTERRUPT_LOCK_MEMBER(lock);
-  rtems_chain_control entries;
-  rtems_id server;
-  unsigned errors;
-} bsp_interrupt_server_context;
+static rtems_interrupt_server_control bsp_interrupt_server_default;
 
-#if defined(RTEMS_SMP)
-static bsp_interrupt_server_context *bsp_interrupt_server_instances;
-#else
-static bsp_interrupt_server_context bsp_interrupt_server_instance;
-#endif
+static rtems_chain_control bsp_interrupt_server_chain =
+  RTEMS_CHAIN_INITIALIZER_EMPTY(bsp_interrupt_server_chain);
 
-static bsp_interrupt_server_context *bsp_interrupt_server_get_context(
+static rtems_interrupt_server_control *bsp_interrupt_server_get_context(
   uint32_t server_index,
   rtems_status_code *sc
 )
 {
-#if defined(RTEMS_SMP)
-  if (bsp_interrupt_server_instances == NULL) {
-    *sc = RTEMS_INCORRECT_STATE;
-    return NULL;
-  }
-#else
-  if (bsp_interrupt_server_instance.server == RTEMS_ID_NONE) {
-    *sc = RTEMS_INCORRECT_STATE;
-    return NULL;
-  }
-#endif
+  rtems_chain_node *node;
 
-  if (server_index >= rtems_scheduler_get_processor_maximum()) {
-    *sc = RTEMS_INVALID_ID;
-    return NULL;
+  bsp_interrupt_lock();
+  node = rtems_chain_first(&bsp_interrupt_server_chain);
+
+  while (node != rtems_chain_tail(&bsp_interrupt_server_chain)) {
+    rtems_interrupt_server_control *s;
+
+    s = RTEMS_CONTAINER_OF(node, rtems_interrupt_server_control, node);
+    if (s->index == server_index) {
+      bsp_interrupt_unlock();
+      return s;
+    }
+
+    node = rtems_chain_next(node);
   }
 
-  *sc = RTEMS_SUCCESSFUL;
-#if defined(RTEMS_SMP)
-  return &bsp_interrupt_server_instances[server_index];
-#else
-  return &bsp_interrupt_server_instance;
-#endif
+  bsp_interrupt_unlock();
+  *sc = RTEMS_INVALID_ID;
+  return NULL;
 }
 
 static void bsp_interrupt_server_trigger(void *arg)
 {
   rtems_interrupt_lock_context lock_context;
   rtems_interrupt_server_entry *e = arg;
-  bsp_interrupt_server_context *s = e->server;
+  rtems_interrupt_server_control *s = e->server;
 
   if (bsp_interrupt_is_valid_vector(e->vector)) {
     bsp_interrupt_vector_disable(e->vector);
@@ -137,7 +121,7 @@ static rtems_interrupt_server_entry *bsp_interrupt_server_query_entry(
 }
 
 typedef struct {
-  bsp_interrupt_server_context *server;
+  rtems_interrupt_server_control *server;
   rtems_vector_number vector;
   rtems_option options;
   rtems_interrupt_handler handler;
@@ -281,7 +265,7 @@ static void bsp_interrupt_server_remove_helper(void *arg)
 }
 
 static rtems_status_code bsp_interrupt_server_call_helper(
-  bsp_interrupt_server_context *s,
+  rtems_interrupt_server_control *s,
   rtems_vector_number vector,
   rtems_option options,
   rtems_interrupt_handler handler,
@@ -314,7 +298,7 @@ static rtems_status_code bsp_interrupt_server_call_helper(
 }
 
 static rtems_interrupt_server_entry *bsp_interrupt_server_get_entry(
-  bsp_interrupt_server_context *s
+  rtems_interrupt_server_control *s
 )
 {
   rtems_interrupt_lock_context lock_context;
@@ -337,7 +321,7 @@ static rtems_interrupt_server_entry *bsp_interrupt_server_get_entry(
 
 static void bsp_interrupt_server_task(rtems_task_argument arg)
 {
-  bsp_interrupt_server_context *s = (bsp_interrupt_server_context *) arg;
+  rtems_interrupt_server_control *s = (rtems_interrupt_server_control *) arg;
 
   while (true) {
     rtems_event_set events;
@@ -377,7 +361,7 @@ rtems_status_code rtems_interrupt_server_handler_install(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -402,7 +386,7 @@ rtems_status_code rtems_interrupt_server_handler_remove(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -464,7 +448,7 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
 {
   rtems_status_code sc;
   bsp_interrupt_server_handler_iterate_helper_data hihd;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -487,6 +471,86 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
   );
 }
 
+/*
+ * The default server is statically allocated.  Just clear the structure so
+ * that it can be re-initialized.
+ */
+static void bsp_interrupt_server_destroy_default(
+  rtems_interrupt_server_control *s
+)
+{
+  memset(s, 0, sizeof(*s));
+}
+
+#if defined(RTEMS_SMP)
+static void bsp_interrupt_server_destroy_secondary(
+  rtems_interrupt_server_control *s
+)
+{
+  free(s);
+}
+#endif
+
+static rtems_status_code bsp_interrupt_server_create(
+  rtems_interrupt_server_control *s,
+  rtems_task_priority priority,
+  size_t stack_size,
+  rtems_mode modes,
+  rtems_attribute attributes,
+  uint32_t cpu_index
+)
+{
+  rtems_status_code sc;
+#if defined(RTEMS_SMP)
+  rtems_id scheduler;
+  cpu_set_t cpu;
+#endif
+
+  rtems_interrupt_lock_initialize(&s->lock, "Interrupt Server");
+  rtems_chain_initialize_empty(&s->entries);
+
+  sc = rtems_task_create(
+    rtems_build_name('I', 'R', 'Q', 'S'),
+    priority,
+    stack_size,
+    modes,
+    attributes,
+    &s->server
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return sc;
+  }
+
+#if defined(RTEMS_SMP)
+  sc = rtems_scheduler_ident_by_processor(cpu_index, &scheduler);
+  if (sc != RTEMS_SUCCESSFUL) {
+    /* Do not start an interrupt server on a processor without a scheduler */
+    return RTEMS_SUCCESSFUL;
+  }
+
+  sc = rtems_task_set_scheduler(s->server, scheduler, priority);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+
+  /* Set the task to processor affinity on a best-effort basis */
+  CPU_ZERO(&cpu);
+  CPU_SET(cpu_index, &cpu);
+  (void) rtems_task_set_affinity(s->server, sizeof(cpu), &cpu);
+#else
+  (void) cpu_index;
+#endif
+
+  rtems_chain_append_unprotected(&bsp_interrupt_server_chain, &s->node);
+
+  sc = rtems_task_start(
+    s->server,
+    bsp_interrupt_server_task,
+    (rtems_task_argument) s
+  );
+  _Assert(sc == RTEMS_SUCCESSFUL);
+
+  return sc;
+}
+
 rtems_status_code rtems_interrupt_server_initialize(
   rtems_task_priority priority,
   size_t stack_size,
@@ -495,95 +559,164 @@ rtems_status_code rtems_interrupt_server_initialize(
   uint32_t *server_count
 )
 {
+  rtems_status_code sc;
+  rtems_interrupt_server_control *s;
   uint32_t cpu_index;
+#if defined(RTEMS_SMP)
   uint32_t cpu_count;
-  uint32_t dummy;
-  bsp_interrupt_server_context *instances;
+#endif
 
-  if (server_count == NULL) {
-    server_count = &dummy;
+  cpu_index = 0;
+  s = &bsp_interrupt_server_default;
+
+  bsp_interrupt_lock();
+
+  if (s->server != 0) {
+    sc = RTEMS_INCORRECT_STATE;
+    goto done;
   }
 
+  s->destroy = bsp_interrupt_server_destroy_default;
+  sc = bsp_interrupt_server_create(
+    s,
+    priority,
+    stack_size,
+    modes,
+    attributes,
+    cpu_index
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    goto done;
+  }
+
+  cpu_index = 1;
+
+#if defined(RTEMS_SMP)
   cpu_count = rtems_scheduler_get_processor_maximum();
 
-#if defined(RTEMS_SMP)
-  instances = calloc(cpu_count, sizeof(*instances));
-  if (instances == NULL) {
-    return RTEMS_NO_MEMORY;
-  }
-#else
-  instances = &bsp_interrupt_server_instance;
-#endif
+  while (cpu_index < cpu_count) {
+    s = calloc(1, sizeof(*s));
 
-  for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
-    bsp_interrupt_server_context *s = &instances[cpu_index];
-    rtems_status_code sc;
-#if defined(RTEMS_SMP)
-    rtems_id scheduler;
-    cpu_set_t cpu;
-#endif
+    if (s == NULL) {
+      sc = RTEMS_NO_MEMORY;
+      goto done;
+    }
 
-    rtems_interrupt_lock_initialize(&s->lock, "Interrupt Server");
-    rtems_chain_initialize_empty(&s->entries);
-
-    sc = rtems_task_create(
-      rtems_build_name('I', 'R', 'Q', 'S'),
+    s->destroy = bsp_interrupt_server_destroy_secondary;
+    s->index = cpu_index;
+    sc = bsp_interrupt_server_create(
+      s,
       priority,
       stack_size,
       modes,
       attributes,
-      &s->server
+      cpu_index
     );
     if (sc != RTEMS_SUCCESSFUL) {
-      *server_count = cpu_index;
-
-#if defined(RTEMS_SMP)
-      if (cpu_index > 0) {
-        bsp_interrupt_server_instances = instances;
-        return RTEMS_SUCCESSFUL;
-      }
-
-      free(instances);
-#endif
-
-      return RTEMS_TOO_MANY;
+      goto done;
     }
 
-#if defined(RTEMS_SMP)
-    sc = rtems_scheduler_ident_by_processor(cpu_index, &scheduler);
-    if (sc != RTEMS_SUCCESSFUL) {
-      /* Do not start an interrupt server on a processor without a scheduler */
-      continue;
-    }
-
-    sc = rtems_task_set_scheduler(s->server, scheduler, priority);
-    _Assert(sc == RTEMS_SUCCESSFUL);
-
-    /* Set the task to processor affinity on a best-effort basis */
-    CPU_ZERO(&cpu);
-    CPU_SET(cpu_index, &cpu);
-    (void) rtems_task_set_affinity(s->server, sizeof(cpu), &cpu);
+    ++cpu_index;
+  }
 #endif
 
-    sc = rtems_task_start(
-      s->server,
-      bsp_interrupt_server_task,
-      (rtems_task_argument) s
-    );
-    _Assert(sc == RTEMS_SUCCESSFUL);
+done:
+  bsp_interrupt_unlock();
+
+  if (server_count != NULL) {
+    *server_count = cpu_index;
   }
 
-#if defined(RTEMS_SMP)
-  bsp_interrupt_server_instances = instances;
-#endif
-  *server_count = cpu_index;
+  return sc;
+}
 
+rtems_status_code rtems_interrupt_server_create(
+  rtems_interrupt_server_control      *s,
+  const rtems_interrupt_server_config *config,
+  uint32_t                            *server_index
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_create(
+    config->name,
+    config->priority,
+    config->storage_size,
+    config->modes,
+    config->attributes,
+    &s->server
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return sc;
+  }
+
+  rtems_interrupt_lock_initialize(&s->lock, "Interrupt Server");
+  rtems_chain_initialize_empty(&s->entries);
+  s->destroy = config->destroy;
+  s->index = rtems_object_id_get_index(s->server)
+    + rtems_scheduler_get_processor_maximum();
+  *server_index = s->index;
+
+  bsp_interrupt_lock();
+  rtems_chain_initialize_node(&s->node);
+  rtems_chain_append_unprotected(&bsp_interrupt_server_chain, &s->node);
+  bsp_interrupt_unlock();
+
+  sc = rtems_task_start(
+    s->server,
+    bsp_interrupt_server_task,
+    (rtems_task_argument) s
+  );
+  _Assert(sc == RTEMS_SUCCESSFUL);
+
+  return sc;
+}
+
+static void bsp_interrupt_server_destroy_helper(void *arg)
+{
+  bsp_interrupt_server_helper_data *hd = arg;
+  rtems_interrupt_server_control *s = hd->server;
+  rtems_status_code sc;
+
+  bsp_interrupt_lock();
+  rtems_chain_extract_unprotected(&s->node);
+  bsp_interrupt_unlock();
+
+  if (s->destroy != NULL) {
+    (*s->destroy)(s);
+  }
+
+  sc = rtems_event_transient_send(hd->task);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  rtems_task_exit();
+}
+
+rtems_status_code rtems_interrupt_server_delete(uint32_t server_index)
+{
+  rtems_status_code sc;
+  rtems_interrupt_server_control *s;
+
+  s = bsp_interrupt_server_get_context(server_index, &sc);
+  if (s == NULL) {
+    return sc;
+  }
+
+  bsp_interrupt_server_call_helper(
+    s,
+    BSP_INTERRUPT_SERVER_MANAGEMENT_VECTOR,
+    0,
+    NULL,
+    NULL,
+    bsp_interrupt_server_destroy_helper
+  );
   return RTEMS_SUCCESSFUL;
 }
 
 static void bsp_interrupt_server_entry_initialize(
   rtems_interrupt_server_entry *entry,
-  bsp_interrupt_server_context *s
+  rtems_interrupt_server_control *s
 )
 {
   rtems_chain_set_off_chain(&entry->node);
@@ -611,7 +744,7 @@ rtems_status_code rtems_interrupt_server_entry_initialize(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -645,7 +778,7 @@ rtems_status_code rtems_interrupt_server_entry_move(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(destination_server_index, &sc);
   if (s == NULL) {
@@ -667,7 +800,7 @@ void rtems_interrupt_server_entry_destroy(
   rtems_interrupt_server_entry *entry
 )
 {
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
   rtems_interrupt_lock_context lock_context;
 
   s = entry->server;
@@ -698,7 +831,7 @@ rtems_status_code rtems_interrupt_server_request_initialize(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -727,8 +860,8 @@ static void bsp_interrupt_server_handler_move_helper(void *arg)
   e = bsp_interrupt_server_query_entry(hd->vector, &trigger_options);
   if (e != NULL) {
     rtems_interrupt_lock_context lock_context;
-    bsp_interrupt_server_context *src = e->server;
-    bsp_interrupt_server_context *dst = hihd->arg;
+    rtems_interrupt_server_control *src = e->server;
+    rtems_interrupt_server_control *dst = hihd->arg;
     bool pending;
 
     /* The source server is only used in SMP configurations for the lock */
@@ -763,8 +896,8 @@ rtems_status_code rtems_interrupt_server_move(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *src;
-  bsp_interrupt_server_context *dst;
+  rtems_interrupt_server_control *src;
+  rtems_interrupt_server_control *dst;
   bsp_interrupt_server_handler_iterate_helper_data hihd;
 
   src = bsp_interrupt_server_get_context(source_server_index, &sc);
@@ -810,7 +943,7 @@ static void bsp_interrupt_server_entry_suspend_helper(void *arg)
 rtems_status_code rtems_interrupt_server_suspend(uint32_t server_index)
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -831,7 +964,7 @@ rtems_status_code rtems_interrupt_server_suspend(uint32_t server_index)
 rtems_status_code rtems_interrupt_server_resume(uint32_t server_index)
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);
   if (s == NULL) {
@@ -858,7 +991,7 @@ rtems_status_code rtems_interrupt_server_set_affinity(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_context *s;
+  rtems_interrupt_server_control *s;
   rtems_id scheduler;
 
   s = bsp_interrupt_server_get_context(server_index, &sc);

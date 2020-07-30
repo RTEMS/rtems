@@ -9,13 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (C) 2008, 2019 embedded brains GmbH
- *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2008, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -260,6 +254,76 @@ typedef struct rtems_interrupt_server_action {
 #define RTEMS_INTERRUPT_SERVER_DEFAULT 0
 
 /**
+ * @brief An interrupt server control.
+ *
+ * This structure must be treated as an opaque data type.  Members must not be
+ * accessed directly.
+ *
+ * @see rtems_interrupt_server_create()
+ */
+typedef struct rtems_interrupt_server_control {
+  RTEMS_INTERRUPT_LOCK_MEMBER( lock )
+  rtems_chain_control          entries;
+  rtems_id                     server;
+  unsigned long                errors;
+  uint32_t                     index;
+  rtems_chain_node             node;
+  void ( *destroy )( struct rtems_interrupt_server_control * );
+} rtems_interrupt_server_control;
+
+/**
+ * @brief An interrupt server configuration.
+ *
+ * @see rtems_interrupt_server_create()
+ */
+typedef struct {
+  /**
+   * @brief The task name of the interrupt server.
+   */
+  rtems_name name;
+
+  /**
+   * @brief The initial task priority of the interrupt server.
+   */
+  rtems_task_priority priority;
+
+  /**
+   * @brief The task storage area of the interrupt server.
+   *
+   * It shall be NULL for interrupt servers created by
+   * rtems_interrupt_server_create().
+   */
+  void *storage_area;
+
+  /**
+   * @brief The task storage size of the interrupt server.
+   *
+   * For interrupt servers created by rtems_interrupt_server_create() this is
+   * the task stack size.
+   */
+  size_t storage_size;
+
+  /**
+   * @brief The initial task modes of the interrupt server.
+   */
+  rtems_mode modes;
+
+  /**
+   * @brief The task attributes of the interrupt server.
+   */
+  rtems_attribute attributes;
+
+  /**
+   * @brief An optional handler to destroy the interrupt server control handed
+   *   over to rtems_interrupt_server_create().
+   *
+   * This handler is called in the context of the interrupt server to be
+   * deleted, see also rtems_interrupt_server_delete().
+   */
+  void ( *destroy )( rtems_interrupt_server_control * );
+} rtems_interrupt_server_config;
+
+/**
  * @brief An interrupt server entry.
  *
  * This structure must be treated as an opaque data type.  Members must not be
@@ -309,16 +373,19 @@ typedef struct {
  *
  * The server count pointer @a server_count may be @a NULL.
  *
+ * The task name of interrupt servers created by this function is
+ * rtems_build_name( 'I', 'R', 'Q', 'S' ).
+ *
  * This function may block.
  *
- * @see rtems_task_create().
+ * @retval RTEMS_SUCCESSFUL The operation was successful.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_NO_MEMORY Not enough memory.
- * @retval RTEMS_TOO_MANY No free task available to create at least one server task.
- * @retval RTEMS_UNSATISFIED Task stack size too large.
- * @retval RTEMS_INVALID_PRIORITY Invalid task priority.
+ * @retval RTEMS_INCORRECT_STATE The interrupt servers were already initialized.
+ *
+ * @return The function uses rtems_task_create().  If this operation is not
+ *   successful, then its status code is returned.
+ *
+ * @see rtems_interrupt_server_create() and rtems_interrupt_server_delete().
  */
 rtems_status_code rtems_interrupt_server_initialize(
   rtems_task_priority priority,
@@ -327,6 +394,54 @@ rtems_status_code rtems_interrupt_server_initialize(
   rtems_attribute attributes,
   uint32_t *server_count
 );
+
+/**
+ * @brief Creates an interrupt server.
+ *
+ * This function may block.
+ *
+ * @param[out] control is the interrupt server control.  The ownership of this
+ *   structure is transferred from the caller of this function to the interrupt
+ *   server management.
+ *
+ * @param config is the interrupt server configuration.
+ *
+ * @param[out] server_index is the pointer to a server index variable.  The
+ *   index of the built interrupt server will be stored in the referenced
+ *   variable if the operation was successful.
+ *
+ * @retval RTEMS_SUCCESSFUL The operation was successful.
+ *
+ * @return The function uses rtems_task_create().  If this operation is not
+ *   successful, then its status code is returned.
+ *
+ * @see rtems_interrupt_server_initialize() and
+ *   rtems_interrupt_server_delete().
+ */
+rtems_status_code rtems_interrupt_server_create(
+  rtems_interrupt_server_control      *control,
+  const rtems_interrupt_server_config *config,
+  uint32_t                            *server_index
+);
+
+/**
+ * @brief Destroys the interrupt server.
+ *
+ * This function may block.
+ *
+ * The interrupt server deletes itself, so after the return of the function the
+ * interrupt server may be still in the termination process depending on the
+ * task priorities of the system.
+ *
+ * @param server_index is the index of the interrupt server to destroy.  Use
+ *   ::RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ *
+ * @retval RTEMS_SUCCESSFUL The operation was successful.
+ * @retval RTEMS_INVALID_ID The interrupt server index was invalid.
+ *
+ * @see rtems_interrupt_server_create()
+ */
+rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
 
 /**
  * @brief Installs the interrupt handler routine @a handler for the interrupt
