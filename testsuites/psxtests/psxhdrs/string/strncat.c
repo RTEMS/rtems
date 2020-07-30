@@ -45,7 +45,7 @@
    char buffer[SIZE] = "computer";
    char *result;
 
-   result = strncat( buffer, " program", 3 );
+   result = strncat( buffer, " program", sizeof( buffer ) - 1 );
 
    return ( result != NULL );
  }
