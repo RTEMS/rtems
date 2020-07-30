@@ -5,7 +5,3 @@ include_HEADERS += ../../../../../../bsps/lm32/lm32_evr/include/bsp.h
 include_HEADERS += include/bspopts.h
 include_HEADERS += ../../../../../../bsps/lm32/lm32_evr/include/system_conf.h
 include_HEADERS += ../../../../../../bsps/lm32/lm32_evr/include/tm27.h
-
-include_bspdir = $(includedir)/bsp
-include_bsp_HEADERS =
-include_bsp_HEADERS += ../../../../../../bsps/lm32/lm32_evr/include/bsp/irq.h
