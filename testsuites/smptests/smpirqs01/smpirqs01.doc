@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpirqs01
+
+directives:
+
+  - rtems_interrupt_server_delete()
+  - rtems_interrupt_server_initialize()
+
+concepts:
+
+  - Ensure that the interrupt server initialization with more than one
+    processor works.

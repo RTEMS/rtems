@@ -60,6 +60,8 @@ links:
 - role: build-dependency
   uid: smpipi01
 - role: build-dependency
+  uid: smpirqs01
+- role: build-dependency
   uid: smpload01
 - role: build-dependency
   uid: smplock01

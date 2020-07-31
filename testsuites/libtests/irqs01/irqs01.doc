@@ -1,0 +1,16 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: irqs01
+
+directives:
+
+  - rtems_interrupt_server_create()
+  - rtems_interrupt_server_delete()
+  - rtems_interrupt_server_initialize()
+  - rtems_interrupt_server_request_destroy()
+  - rtems_interrupt_server_request_initialize()
+  - rtems_interrupt_server_request_submit()
+
+concepts:
+
+  - Ensure that the interrupt server works.

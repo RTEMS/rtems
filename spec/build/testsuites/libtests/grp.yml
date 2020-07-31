@@ -157,6 +157,8 @@ links:
 - role: build-dependency
   uid: iconvopen
 - role: build-dependency
+  uid: irqs01
+- role: build-dependency
   uid: kill
 - role: build-dependency
   uid: libfdt01
