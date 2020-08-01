@@ -365,26 +365,23 @@ rtems_status_code spi_memdrv_read
     rc = rtems_libi2c_send_addr(minor,TRUE);
   }
 
-  if (off >= mem_param_ptr->mem_size) {
+  if (rc == RTEMS_SUCCESSFUL) {
     /*
      * HACK: beyond size of memory array? then read status register instead
      */
-    /*
-     * send read status register command
-     */
-    if (rc == RTEMS_SUCCESSFUL) {
+    if (off >= mem_param_ptr->mem_size) {
+      /*
+       * send read status register command
+       */
       cmdbuf[0] = SPI_MEM_CMD_RDSR;
       ret_cnt = rtems_libi2c_write_bytes(minor,cmdbuf,1);
       if (ret_cnt < 0) {
 	rc = -ret_cnt;
       }
-    }
-  }
-  else {
-    /*
-     * send read command and address
-     */
-    if (rc == RTEMS_SUCCESSFUL) {
+    } else {
+      /*
+       * send read command and address
+       */
       cmdbuf[0] = SPI_MEM_CMD_READ;
       if (mem_param_ptr->mem_size > 0x10000 /* 256*256 */) {
 	cmdbuf[1] = (off >> 16) & 0xff;
