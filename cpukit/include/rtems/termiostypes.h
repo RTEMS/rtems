@@ -596,8 +596,6 @@ int rtems_termios_poll(
 
 #define RTEMS_TERMIOS_NUMBER_BAUD_RATES 25
 
-extern rtems_mutex rtems_termios_ttyMutex;
-
 #ifdef __cplusplus
 }
 #endif

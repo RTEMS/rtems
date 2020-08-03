@@ -24,8 +24,6 @@
 
 #include <rtems/termiostypes.h>
 
-rtems_mutex rtems_termios_ttyMutex = RTEMS_MUTEX_INITIALIZER( "termios" );
-
 void
 rtems_termios_device_lock_acquire_default(
   rtems_termios_device_context *ctx,

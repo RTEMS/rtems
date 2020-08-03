@@ -113,6 +113,9 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument);
 #define TERMIOS_RX_PROC_EVENT      RTEMS_EVENT_1
 #define TERMIOS_RX_TERMINATE_EVENT RTEMS_EVENT_0
 
+static rtems_mutex rtems_termios_ttyMutex =
+  RTEMS_MUTEX_INITIALIZER( "termios" );
+
 static void
 rtems_termios_obtain (void)
 {
