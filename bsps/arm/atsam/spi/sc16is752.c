@@ -41,7 +41,7 @@ static bool atsam_sc16is752_install_interrupt(sc16is752_context *base)
   rtems_status_code sc;
   uint8_t rv;
 
-  sc = rtems_interrupt_server_entry_initialize(RTEMS_INTERRUPT_SERVER_DEFAULT,
+  sc = rtems_interrupt_server_entry_initialize(ctx->irqs_index,
     &ctx->irqs_entry);
   rtems_interrupt_server_action_prepend(&ctx->irqs_entry,
     &ctx->irqs_action, atsam_sc16i752_irqs_handler, ctx);
@@ -64,24 +64,19 @@ static void atsam_sc16is752_remove_interrupt(sc16is752_context *base)
 }
 
 int atsam_sc16is752_spi_create(
-  atsam_sc16is752_spi_context *ctx,
-  const char *device_path,
-  sc16is752_mode mode,
-  uint32_t input_frequency,
-  const char *spi_path,
-  uint8_t spi_chip_select,
-  uint32_t spi_speed_hz,
-  const Pin *irq_pin
+  atsam_sc16is752_spi_context      *ctx,
+  const atsam_sc16is752_spi_config *config
 )
 {
-  ctx->base.base.mode = mode;
-  ctx->base.base.input_frequency = input_frequency;
+  ctx->base.base.mode = config->mode;
+  ctx->base.base.input_frequency = config->input_frequency;
   ctx->base.base.install_irq = atsam_sc16is752_install_interrupt;
   ctx->base.base.remove_irq = atsam_sc16is752_remove_interrupt;
-  ctx->base.spi_path = spi_path;
-  ctx->base.cs = spi_chip_select;
-  ctx->base.speed_hz = spi_speed_hz;
-  ctx->irq_pin = *irq_pin;
+  ctx->base.spi_path = config->spi_path;
+  ctx->base.cs = config->spi_chip_select;
+  ctx->base.speed_hz = config->spi_speed_hz;
+  ctx->irq_pin = config->irq_pin;
+  ctx->irqs_index = config->server_index;
 
-  return sc16is752_spi_create(&ctx->base, device_path);
+  return sc16is752_spi_create(&ctx->base, config->device_path);
 }
