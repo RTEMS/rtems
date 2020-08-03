@@ -12,8 +12,6 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <assert.h>
-
 #include <rtems/score/smpimpl.h>
 
 #include <libcpu/arm-cp15.h>
@@ -42,7 +40,8 @@ void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
       bsp_inter_processor_interrupt,
       NULL
     );
-    assert(sc == RTEMS_SUCCESSFUL);
+    _Assert(sc == RTEMS_SUCCESSFUL);
+    (void) sc;
 
 #if defined(BSP_DATA_CACHE_ENABLED) || defined(BSP_INSTRUCTION_CACHE_ENABLED)
     /* Enable unified L2 cache */
