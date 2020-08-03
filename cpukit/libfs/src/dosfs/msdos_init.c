@@ -103,10 +103,12 @@ int rtems_dosfs_initialize(
     int                                rc = 0;
     const rtems_dosfs_mount_options   *mount_options = data;
     rtems_dosfs_convert_control       *converter;
+    bool                               converter_created = false;
 
 
     if (mount_options == NULL || mount_options->converter == NULL) {
         converter = rtems_dosfs_create_default_converter();
+        converter_created = true;
     } else {
         converter = mount_options->converter;
     }
@@ -117,6 +119,9 @@ int rtems_dosfs_initialize(
                                       &msdos_file_handlers,
                                       &msdos_dir_handlers,
                                       converter);
+        if (rc != 0 && converter_created) {
+            (*converter->handler->destroy)(converter);
+        }
     } else {
         errno = ENOMEM;
         rc = -1;

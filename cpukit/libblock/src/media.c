@@ -508,6 +508,7 @@ static rtems_status_code mount_worker(
     if (rv != 0) {
       rmdir(mount_path);
       free(mount_path);
+      (*mount_options.converter->handler->destroy)(mount_options.converter);
 
       return RTEMS_IO_ERROR;
     }
