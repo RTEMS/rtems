@@ -430,7 +430,11 @@
  * doesn't allow flexible array members.  Use the GNU extension which is also
  * supported by other compilers.
  */
-#define RTEMS_ZERO_LENGTH_ARRAY 0
+#if __STDC_VERSION__ >= 199409L
+  #define RTEMS_ZERO_LENGTH_ARRAY
+#else
+  #define RTEMS_ZERO_LENGTH_ARRAY 0
+#endif
 
 /**
  * @brief Returns a pointer to the container of a specified member pointer.
