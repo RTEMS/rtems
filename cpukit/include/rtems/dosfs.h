@@ -214,6 +214,9 @@ typedef struct {
   /**
    * @brief Converter implementation for new file system instance.
    *
+   * Note: If you pass a converter to mount, you have to destroy it yourself if
+   * mount failed. In a good case it is destroyed at unmount.
+   *
    * Before converters have been added to the RTEMS implementation of the FAT
    * file system, the implementation was:
    * - Short names were saved in code page format (as is still the case).
@@ -270,6 +273,10 @@ typedef struct {
    *       RTEMS_FILESYSTEM_READ_WRITE,
    *       &mount_opts
    *     );
+   *
+   *     if (rv != 0) {
+   *       (*mount_opts.converter->handler->destroy)(mount_opts.converter);
+   *     }
    *   } else {
    *     rv = -1;
    *     errno = ENOMEM;
