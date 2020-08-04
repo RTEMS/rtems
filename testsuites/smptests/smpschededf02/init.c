@@ -216,6 +216,12 @@ static void set_affinity(rtems_id id, uint32_t cpu_set_32)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+/*
+ * The goal of the reset() function is to bring back a defined initial system
+ * state for each test case.  All tasks of the test shall be suspended.  The
+ * idle threads shall be ordered in the scheduled chain according to the CPU
+ * index.
+ */
 static void reset(test_context *ctx)
 {
   rtems_status_code sc;
@@ -236,7 +242,13 @@ static void reset(test_context *ctx)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL || sc == RTEMS_INCORRECT_STATE);
   }
 
-  /* Order the idle threads explicitly */
+  /*
+   * Order the idle threads explicitly.  Test cases may move the idle threads
+   * around.  We have to ensure that the idle threads are ordered according to
+   * the CPU index, otherwise the processor allocations cannot be specified for
+   * a test case.  The idle threads of a scheduler have all the same priority,
+   * so we have to take the FIFO ordering within a priority group into account.
+   */
   for (i = 0; i < CPU_COUNT; ++i) {
     const Per_CPU_Control *c;
     const Thread_Control *h;
