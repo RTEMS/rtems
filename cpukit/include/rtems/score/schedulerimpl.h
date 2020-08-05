@@ -956,6 +956,10 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
   return idle;
 }
 
+/**
+ * @brief This enumeration defines what a scheduler should do with a node which
+ * could be scheduled.
+ */
 typedef enum {
   SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE,
   SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE,
@@ -963,21 +967,41 @@ typedef enum {
 } Scheduler_Try_to_schedule_action;
 
 /**
- * @brief Tries to schedule this scheduler node.
+ * @brief Tries to schedule the scheduler node.
  *
- * @param context The scheduler instance context.
- * @param[in, out] node The node which wants to get scheduled.
- * @param idle A potential idle thread used by a potential victim node.
- * @param get_idle_thread Function to get an idle thread.
+ * When a scheduler needs to schedule a node, it shall use this function to
+ * determine what it shall do with the node.  The node replaces a victim node if
+ * it can be scheduled.
  *
- * @retval true This node can be scheduled.
- * @retval false This node cannot be scheduled.
+ * This function uses the state of the node and the scheduler state of the owner
+ * thread to determine what shall be done.  Each scheduler maintains its nodes
+ * independent of other schedulers.  This function ensures that a thread is
+ * scheduled by at most one scheduler.  If a node requires an executing thread
+ * due to some locking protocol and the owner thread is already scheduled by
+ * another scheduler, then an idle thread shall be attached to the node.
+ *
+ * @param[in, out] context is the scheduler context.
+ * @param[in, out] node is the node which could be scheduled.
+ * @param idle is an idle thread used by the victim node or NULL.
+ * @param get_idle_thread points to a function to get an idle thread.
+ *
+ * @retval SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE The node shall be scheduled.
+ *
+ * @retval SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE The node shall be
+ *   scheduled and the provided idle thread shall be attached to the node.  This
+ *   action is returned, if the node cannot use the owner thread and shall use
+ *   an idle thread instead.  In this case, the idle thread is provided by the
+ *   victim node.
+ *
+ * @retval SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK The node shall be blocked.  This
+ *   action is returned, if the owner thread is already scheduled by another
+ *   scheduler.
  */
 RTEMS_INLINE_ROUTINE Scheduler_Try_to_schedule_action
 _Scheduler_Try_to_schedule_node(
   Scheduler_Context         *context,
   Scheduler_Node            *node,
-  Thread_Control            *idle,
+  const Thread_Control      *idle,
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
