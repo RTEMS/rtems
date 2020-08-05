@@ -20,7 +20,7 @@
  *	
  * The license and distribution terms for this file may be	
  * found in the file LICENSE in this distribution or at	
- * http://www.rtems.org/license/LICENSE.	
+ * http://www.rtems.org/license/LICENSE.
  */
  
 #ifndef _RTEMS_SCORE_SCHEDULERSTRONGAPA_H
@@ -65,7 +65,24 @@ typedef struct {
    * @brief Chain of all the nodes present in
    * the system. Accounts for ready and scheduled nodes.
    */
-  Chain_Control all_nodes;
+  Chain_Control All_nodes;
+ 
+  /**
+   * @brief Queue for this context
+   */
+  Scheduler_strong_APA_Queue *queue;
+   
+  /**
+   * @brief Pointer to structure with array of
+   * boolean visited values
+   */ 
+  Scheduler_strong_APA_Visited *visited;
+   
+  /**
+   * @brief Pointer to structure with array of 
+   * caller corresponding to a CPU
+   */ 
+  Scheduler_strong_APA_Caller *caller;
 } Scheduler_strong_APA_Context;
 
 /**
@@ -86,30 +103,42 @@ typedef struct {
    * @brief The associated affinity set of this node.
    */
   Processor_mask Affinity;
-  
-  /**
-   * @brief The associated affinity set of this node to be used while unpinning the node.
-   */
-  Processor_mask Unpin_affinity;
 } Scheduler_strong_APA_Node;
 
 /**
  * @brief CPU structure to be used while traversing in the FIFO Queue
  */
-typedef struct Scheduler_strong_APA_CPU
+typedef struct
 {
   /**
-   * @brief Chain node for 
-   * _Scheduler_strong_APA_Get_highest_ready::Queue
-   * and _Scheduler_strong_APA_Get_lowest_scheduled::Queue
-   */
-  Chain_Node node;
-
-  /**
-   * @brief cpu associated with the node
+   * @brief Array of Cpu to be used for the queue operations 
    */	
-  Per_CPU_Control cpu;
-}Scheduler_strong_APA_CPU;
+  Per_CPU_Control Cpu[ RTEMS_ZERO_LENGTH_ARRAY ];
+} Scheduler_strong_APA_Queue;
+
+/**
+ * @brief Caller corresponding to a Cpu in Scheduler_strong_APA_Queue
+ */
+typedef struct
+{
+  /**
+   * @brief Array of caller each corresponding to the
+   * Scheduler_strong_APA_Queue::Cpu at the same index 
+   */	
+  Scheduler_strong_APA_Node *caller[ RTEMS_ZERO_LENGTH_ARRAY ];
+} Scheduler_strong_APA_Caller;
+
+/**
+ * @brief  to a Cpu in Scheduler_strong_APA_Queue
+ */
+typedef struct
+{
+  /**
+   * @brief Array of boolean each corresponding to the visited status of 
+   * Scheduler_strong_APA_Queue::Cpu at the same index 
+   */	
+  bool *visited[ RTEMS_ZERO_LENGTH_ARRAY ];
+} Scheduler_strong_APA_Visited;
 
 /**
  * @brief Entry points for the Strong APA Scheduler.
@@ -127,8 +156,8 @@ typedef struct Scheduler_strong_APA_CPU
     _Scheduler_strong_APA_Ask_for_help, \
     _Scheduler_strong_APA_Reconsider_help_request, \
     _Scheduler_strong_APA_Withdraw_node, \
-    _Scheduler_strong_APA_Pin, \
-    _Scheduler_strong_APA_Unpin, \
+    _Scheduler_default_Pin_or_unpin, \
+    _Scheduler_default_Pin_or_unpin, \
     _Scheduler_strong_APA_Add_processor, \
     _Scheduler_strong_APA_Remove_processor, \
     _Scheduler_strong_APA_Node_initialize, \
@@ -253,38 +282,6 @@ void _Scheduler_strong_APA_Withdraw_node(
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
   Thread_Scheduler_state   next_state
-);
-
-/**
- * @brief Pins a node to a cpu
- *
- * @param scheduler The scheduler control instance.
- * @param thread Thread corresponding to @node
- * @param node_base node which gets pinned
- * @param cpu processor that the node gets pinned to
- */ 
-void _Scheduler_strong_APA_Pin(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *thread,
-  Scheduler_Node          *node_base,
-  struct Per_CPU_Control  *cpu
-);
-
-/**
- * @brief Unpins a node
- *
- * and sets it affinity back to normal.
- *
- * @param scheduler The scheduler control instance.
- * @param thread Thread corresponding to @node
- * @param node_base node which gets unpinned
- * @param cpu processor that the node gets unpinned from : UNUSED
- */ 
-void _Scheduler_strong_APA_Unpin(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *thread,
-  Scheduler_Node          *node_base,
-  struct Per_CPU_Control  *cpu
 );
 
 /**

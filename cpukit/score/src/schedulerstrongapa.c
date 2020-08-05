@@ -21,7 +21,7 @@
  *	
  * The license and distribution terms for this file may be	
  * found in the file LICENSE in this distribution or at	
- * http://www.rtems.org/license/LICENSE.	
+ * http://www.rtems.org/license/LICENSE.
  */
  
 #ifdef HAVE_CONFIG_H
@@ -68,25 +68,27 @@ static inline bool _Scheduler_strong_APA_Has_ready( Scheduler_Context *context )
 {
   Scheduler_strong_APA_Context *self = _Scheduler_strong_APA_Get_self( context );
 	
-  bool 			ret;
-  const Chain_Node      *tail;
-  Chain_Node 		*next;
+  bool               ret;
+  const Chain_Node  *tail;
+  Chain_Node        *next;
+  Scheduler_strong_APA_Node *node;
   
   tail = _Chain_Immutable_tail( &self->allNodes );
   next = _Chain_First( &self->allNodes );
   
-  ret=false;
+  ret = false;
   
   while ( next != tail ) {
-     Scheduler_strong_APA_Node *node;
-       
-     node = (Scheduler_strong_APA_Node *) next;
+    node = (Scheduler_strong_APA_Node *) next;
      
-     if( _Scheduler_SMP_Node_state( &node->Base.Base ) 
-     == SCHEDULER_SMP_NODE_READY ) {
-       ret=true;
-       break;
-     }
+    if ( 
+    _Scheduler_SMP_Node_state( &node->Base.Base ) == SCHEDULER_SMP_NODE_READY 
+    ) {
+      ret = true;
+      break;
+    }
+    
+    next = _Chain_Next( next );
   }
   
   return ret;
@@ -100,18 +102,17 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_highest_ready(
   //Plan for this function: (Pseudo Code):
   Scheduler_strong_APA_Context *self=_Scheduler_strong_APA_Get_self( context );
 	
-  CPU			*Qcpu;
-  Thread_Control 	*thread;
-  Per_CPU_Control 	*thread_cpu;
-  Per_CPU_Control 	*curr_CPU;
-  Per_CPU_Control	*assigned_cpu;
-  Scheduler_Node	*ret;
-  Priority_Control	max_priority;
-  Priority_Control	curr_priority;
-  Chain_Control 	Queue;
-  bool			visited[10];	//Temporary Compilation Fix
-  
-  
+  CPU              *Qcpu;
+  Thread_Control   *thread;
+  Per_CPU_Control  *thread_cpu;
+  Per_CPU_Control  *curr_CPU;
+  Per_CPU_Control  *assigned_cpu;
+  Scheduler_Node   *ret;
+  Priority_Control  max_priority;
+  Priority_Control  curr_priority;
+  Scheduler_SMP_Node_state curr_state;
+  Chain_Control     Queue;
+  bool              visited[10];	//Temporary Compilation Fix
   
   thread = filter->user;	
   thread_cpu = _Thread_Get_CPU( thread );
@@ -119,14 +120,13 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_highest_ready(
   //Implement the BFS Algorithm for task departure
   //to get the highest ready task for a particular CPU
   
-  
   max_priority = _Scheduler_Node_get_priority( filter );
   max_priority = SCHEDULER_PRIORITY_PURIFY( max_priority );
 
-  ret=filter;
+  ret = filter;
 
-  const Chain_Node          *tail;
-  Chain_Node                *next;
+  const Chain_Node *tail;
+  Chain_Node       *next;
   
   _Chain_Initialize_empty(&Queue);
   
@@ -147,42 +147,41 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_highest_ready(
      while ( next != tail ) {
        Scheduler_strong_APA_Node *node;
        node = (Scheduler_strong_APA_Node *) next;
+       curr_state = _Scheduler_SMP_Node_state( &node->Base.Base );
     
-       if( _Processor_mask_Is_set( &node->affinity, _Per_CPU_Get_index( curr_CPU ) ) ) {
-       //Checks if the thread_CPU is in the affinity set of the node
+       if ( 
+         _Processor_mask_Is_set(&node->affinity, _Per_CPU_Get_index( curr_CPU))
+         ) {
+           //Checks if the thread_CPU is in the affinity set of the node
            
-         if(_Scheduler_SMP_Node_state( &node->Base.Base ) 
-            == SCHEDULER_SMP_NODE_SCHEDULED) {
-             
-            assigned_cpu = _Thread_Get_CPU( node->Base.Base.user );
+            if ( curr_state == SCHEDULER_SMP_NODE_SCHEDULED) {
+              assigned_cpu = _Thread_Get_CPU( node->Base.Base.user );
             
-            if(visited[ _Per_CPU_Get_index( assigned_cpu ) ] == false) {
-              Qcpu = rtems_malloc( sizeof(CPU) );	
-              //rtems_malloc does not return a errnum in case of failure
-	      Qcpu->cpu=*assigned_cpu;
+              if ( visited[ _Per_CPU_Get_index( assigned_cpu ) ] == false) {
+                Qcpu = rtems_malloc( sizeof(CPU) );	
+                //rtems_malloc does not return a errnum in case of failure
+	        Qcpu->cpu=*assigned_cpu;
 	      
-	      _Chain_Initialize_node( &Qcpu->node );
-	      _Chain_Append_unprotected( &Queue, &Qcpu->node ); 
-	      //Insert thread_CPU in the Queue 
-	      visited[ _Per_CPU_Get_index (assigned_cpu) ]=true;
-            } 
-          }
-          else if(_Scheduler_SMP_Node_state( &node->Base.Base ) 
-           == SCHEDULER_SMP_NODE_READY) {
-            curr_priority = _Scheduler_Node_get_priority( (Scheduler_Node *) next );
-  	    curr_priority = SCHEDULER_PRIORITY_PURIFY( curr_priority );
+	        _Chain_Initialize_node( &Qcpu->node );
+	        _Chain_Append_unprotected( &Queue, &Qcpu->node ); 
+	        //Insert thread_CPU in the Queue 
+	        visited[ _Per_CPU_Get_index (assigned_cpu) ]=true;
+              } 
+            } else if ( curr_state == SCHEDULER_SMP_NODE_READY) {
+                curr_priority = _Scheduler_Node_get_priority( (Scheduler_Node *) next );
+  	        curr_priority = SCHEDULER_PRIORITY_PURIFY( curr_priority );
   		
-            if(curr_priority<max_priority) {
-              max_priority=curr_priority;
-  	      ret=&node->Base.Base;
-  	    }
-          }
-    	}
+                if ( curr_priority<max_priority) {
+                  max_priority = curr_priority;
+  	          ret = &node->Base.Base;
+  	        }
+              }
+    	    }
        next = _Chain_Next( next );
      }
   }
   
-  if( ret != filter)
+  if ( ret != filter)
   {
     //Backtrack on the path from
     //thread_cpu to ret, shifting along every task.
@@ -204,43 +203,55 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_lowest_scheduled(
   uint32_t	cpu_max;
   uint32_t	cpu_index;
   CPU		*Qcpu;
+  Priority_Control  filter_priority;
   
-  Per_CPU_Control	*curr_CPU;
-  Thread_Control	*curr_thread;
-  Scheduler_Node    	*curr_node;
-  Scheduler_Node    	*ret;
-  Chain_Control		Queue;
-  Priority_Control	max_priority;
-  Priority_Control	curr_priority;
-  bool			visited[10];	//Temporary Compilation Fix
+  Per_CPU_Control *curr_CPU;
+  Thread_Control  *curr_thread;
+  Scheduler_Node  *curr_node;
+  Scheduler_Node  *ret;
+  Chain_Control    Queue;
+  Priority_Control max_priority;
+  Priority_Control curr_priority;
+  bool             *visited;
+  
+  
+  Scheduler_strong_APA_Context *self;
+  
+  self = _Scheduler_strong_APA_Get_self( context );
+   
+  visited = self->visited->visited;
   
   Scheduler_strong_APA_Node	*Scurr_node; //Current Strong_APA_Node
   Scheduler_strong_APA_Node	*filter_node;
   
-  ret=NULL; //To remove compiler warning. 
+  ret = NULL; //To remove compiler warning. 
   //ret would always point to the node with the lowest priority
   //node unless the affinity of filter_base is NULL.
        
   filter_node = _Scheduler_strong_APA_Node_downcast( filter_base );
   
-  max_priority = 300;//Max (Lowest) priority encountered so far.
+  max_priority_num = 0;//Max (Lowest) priority encountered so far.
+  
+  _Assert( !_Processor_mask_Zero( &filter_node->affinity ) );
   
   cpu_max = _SMP_Get_processor_maximum();
   _Chain_Initialize_empty(&Queue);
   
   for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) { 
-    if( (  _Processor_mask_Is_set( &filter_node->affinity , cpu_index)
-     && visited[ cpu_index ] == false ) ) { 
-          //Checks if the thread_CPU is in the affinity set of the node
+    visited[ cpu_index ] = false;
+    
+    //Checks if the thread_CPU is in the affinity set of the node
+    if ( _Processor_mask_Is_set( &filter_node->affinity, cpu_index)) { 
       Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-      if( _Per_CPU_Is_processor_online( cpu ) ) {
+         
+      if ( _Per_CPU_Is_processor_online( cpu ) ) {
         Qcpu = rtems_malloc( sizeof(CPU) ); //No errornum returned in case of failure
-        Qcpu->cpu=*cpu;
+        Qcpu->cpu = *cpu;
   
         _Chain_Initialize_node( &Qcpu->node );
         _Chain_Append_unprotected( &Queue, &Qcpu->node );
-         //Insert cpu in the Queue
-        visited[ cpu_index ]=true;
+        //Insert cpu in the Queue
+        visited[ cpu_index ] = true;
       }
     }
   }
@@ -250,45 +261,46 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_lowest_scheduled(
     curr_CPU = &Qcpu->cpu;
     curr_thread = curr_CPU->executing;
 
-    curr_node = (Scheduler_Node *) _Chain_First( &curr_thread->Scheduler.Scheduler_nodes );
-    
-    //How to check if the thread is not participating
-    //in helping on this processor?
+    curr_node = _Thread_Scheduler_get_home_node( curr_thread );
   
     curr_priority = _Scheduler_Node_get_priority( curr_node );
     curr_priority = SCHEDULER_PRIORITY_PURIFY( curr_priority );   
       
-    if(curr_priority < max_priority) {
+    if ( curr_priority > max_priority_num) {
       ret = curr_node;
-      max_priority = curr_priority;
+      max_priority_num = curr_priority;
+      
+      if( curr_priority > SCHEDULER_PRIORITY_PURIFY( _Scheduler_Node_get_priority( filter_base ) ) )
+      {
+      	cpu_to_preempt=curr_CPU;
+      }
     }
     
-    Scurr_node = _Scheduler_strong_APA_Node_downcast( curr_node ); 
-    if( !curr_thread->is_idle ) {
+    Scurr_node = _Scheduler_strong_APA_Node_downcast( curr_node );
+    if ( !curr_thread->is_idle ) {
       for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
-        if( _Processor_mask_Is_set( &Scurr_node->affinity , cpu_index ) ) { 
+        if ( _Processor_mask_Is_set( &Scurr_node->affinity, cpu_index ) ) { 
           //Checks if the thread_CPU is in the affinity set of the node
           Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-          if( _Per_CPU_Is_processor_online( cpu ) && visited[ cpu_index ] == false ) {
+          if ( _Per_CPU_Is_processor_online( cpu ) && visited[ cpu_index ] == false ) {
           
             Qcpu = rtems_malloc( sizeof(CPU) );
-	    Qcpu->cpu=*cpu;
+	    Qcpu->cpu = *cpu;
 	      
 	    _Chain_Initialize_node( &Qcpu->node );
 	    _Chain_Append_unprotected( &Queue, &Qcpu->node ); 
 	    //Insert the cpu in the affinty set of curr_thread in the Queue
-            visited[ cpu_index ]=true;
+            visited[ cpu_index ] = true;
           }
         }  
       }
     }
   }
   
-  Priority_Control  filter_priority;
   filter_priority = _Scheduler_Node_get_priority( filter_base );
   filter_priority = SCHEDULER_PRIORITY_PURIFY( filter_priority );   
  
-  if( ret->Priority.value < filter_priority ) {
+  if ( ret->Priority.value < filter_priority ) {
     //Lowest priority task found has higher priority 
     // than filter_base.
     //So, filter_base remains unassigned
@@ -307,8 +319,8 @@ static inline void _Scheduler_strong_APA_Extract_from_scheduled(
   Scheduler_Node    *node_to_extract
 )
 {
-  Scheduler_strong_APA_Context     	*self;
-  Scheduler_strong_APA_Node        	*node;
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *node;
 
   self = _Scheduler_strong_APA_Get_self( context );
   node = _Scheduler_strong_APA_Node_downcast( node_to_extract );
@@ -322,8 +334,8 @@ static inline void _Scheduler_strong_APA_Extract_from_ready(
   Scheduler_Node    *node_to_extract
 )
 {
-  Scheduler_strong_APA_Context     *self;
-  Scheduler_strong_APA_Node        *node;
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *node;
 
   self = _Scheduler_strong_APA_Get_self( context );
   node = _Scheduler_strong_APA_Node_downcast( node_to_extract );
@@ -370,14 +382,31 @@ static inline void  _Scheduler_strong_APA_Move_from_ready_to_scheduled(
   //Note: The node still stays in the allNodes chain
 }
 
+static inline void _Scheduler_strong_APA_Set_scheduled(
+  _Scheduler_strong_APA_Context *self,
+  _Scheduler_strong_APA_Node    *scheduled,
+  const Per_CPU_Control         *cpu
+)
+{
+  self->CPU[ _Per_CPU_Get_index( cpu ) ].scheduled = scheduled;
+}
+
+static inline Scheduler_EDF_SMP_Node *_Scheduler_strong_APA_Get_scheduled(
+  const _Scheduler_strong_APA_Context *self,
+  uint8_t                              cpu
+)
+{
+  return self->CPU[ cpu ].scheduled;
+}
+
 static inline void _Scheduler_strong_APA_Insert_ready(
   Scheduler_Context *context,
   Scheduler_Node    *node_base,
   Priority_Control   insert_priority
 )
 {
-  Scheduler_strong_APA_Context     *self;
-  Scheduler_strong_APA_Node        *node;
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *node;
 
   self = _Scheduler_strong_APA_Get_self( context );
   node = _Scheduler_strong_APA_Node_downcast( node_base );
@@ -394,7 +423,7 @@ static inline void _Scheduler_strong_APA_Allocate_processor(
   Per_CPU_Control   *victim_cpu
 )
 {
-  Scheduler_strong_APA_Node        *scheduled;
+  Scheduler_strong_APA_Node *scheduled;
  
   (void) victim_base;
   scheduled = _Scheduler_strong_APA_Node_downcast( scheduled_base );
@@ -635,8 +664,8 @@ void _Scheduler_strong_APA_Pin(
   struct Per_CPU_Control  *cpu
 )
 {
-  Scheduler_strong_APA_Node 	*node;
-  uint32_t                 	pin_cpu;
+  Scheduler_strong_APA_Node *node;
+  uint32_t                   pin_cpu;
 
   (void) scheduler;
   node = _Scheduler_strong_APA_Node_downcast( node_base );
@@ -742,9 +771,9 @@ bool _Scheduler_strong_APA_Set_affinity(
   const Processor_mask    *affinity
 )
 {
-  Scheduler_Context     	*context;
-  Scheduler_strong_APA_Node 	*node;
-  Processor_mask          	local_affinity;
+  Scheduler_Context         *context;
+  Scheduler_strong_APA_Node *node;
+  Processor_mask             local_affinity;
  
   context = _Scheduler_Get_context( scheduler );
   _Processor_mask_And( &local_affinity, &context->Processors, affinity );
