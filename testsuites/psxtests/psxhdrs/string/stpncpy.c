@@ -40,12 +40,11 @@
 
  int test( void )
  {
-   char *dest = "Hello world";
-   char *src = "Dude";
-   size_t num = 2;
+   char src[] = "Dude";
+   char dest[ sizeof( src ) ];
    char *result;
 
-   result = stpncpy( dest, src, num );
+   result = stpncpy( dest, src, sizeof( dest ) );
 
    return ( result != NULL );
  }

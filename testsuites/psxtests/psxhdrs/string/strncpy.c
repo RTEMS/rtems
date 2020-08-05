@@ -35,16 +35,15 @@
  #endif
 
  #include <string.h>
-
  int test( void );
 
  int test( void )
  {
-   char *dest = "Hello";
-   char *src = "World";
+   char src[] = "World";
+   char dest[ sizeof( src ) ];
    char *result;
 
-   result = strncpy( dest, src, 3 );
+   result = strncpy( dest, src, sizeof( dest ) );
 
    return ( result != NULL );
  }
