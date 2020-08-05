@@ -231,7 +231,7 @@ typedef struct {
   const char *bus_path;
 } sc16is752_i2c_context;
 
-const rtems_termios_device_handler sc16is752_termios_handler;
+extern const rtems_termios_device_handler sc16is752_termios_handler;
 
 /**
  * @brief The interrupt handler for receive and transmit operations.
