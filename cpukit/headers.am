@@ -86,7 +86,6 @@ include_rtems_HEADERS += include/rtems/devnull.h
 include_rtems_HEADERS += include/rtems/devzero.h
 include_rtems_HEADERS += include/rtems/diskdevs.h
 include_rtems_HEADERS += include/rtems/dosfs.h
-include_rtems_HEADERS += include/rtems/doxygen-appl-config.h
 include_rtems_HEADERS += include/rtems/dumpbuf.h
 include_rtems_HEADERS += include/rtems/endian.h
 include_rtems_HEADERS += include/rtems/error.h
