@@ -47,6 +47,10 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/smpimpl.h>
+#endif
+
 typedef T_interrupt_test_state (*T_interrupt_test_handler)(void *);
 
 #define T_INTERRUPT_SAMPLE_COUNT 8
@@ -61,6 +65,10 @@ typedef struct {
 	T_interrupt_test_state (*interrupt)(void *);
 	void (*blocked)(void *);
 	void *arg;
+#ifdef RTEMS_SMP
+	Per_CPU_Job job;
+	Per_CPU_Job_context job_context;
+#endif
 	Watchdog_Control wdg;
 	User_extensions_Control ext;
 	T_fixture_node node;
@@ -199,11 +207,31 @@ T_interrupt_do_nothing(void *arg)
 	(void)arg;
 }
 
+#ifdef RTEMS_SMP
+static void
+T_interrupt_blocked(void *arg)
+{
+	T_interrupt_context *ctx;
+
+	ctx = arg;
+	(*ctx->blocked)(ctx->arg);
+}
+#endif
+
 static void T_interrupt_thread_switch(Thread_Control *, Thread_Control *);
 
 static T_interrupt_context T_interrupt_instance = {
 	.interrupt = T_interrupt_continue,
 	.blocked = T_interrupt_do_nothing,
+#ifdef RTEMS_SMP
+	.job = {
+		.context = &T_interrupt_instance.job_context
+	},
+	.job_context = {
+		.handler = T_interrupt_blocked,
+		.arg = &T_interrupt_instance
+	},
+#endif
 	.wdg = WATCHDOG_INITIALIZER(T_interrupt_watchdog),
 	.ext = {
 		.Callouts = {
@@ -263,7 +291,24 @@ T_interrupt_thread_switch(Thread_Control *executing, Thread_Control *heir)
 		state = _Atomic_Load_uint(&ctx->state, ATOMIC_ORDER_RELAXED);
 
 		if (state != T_INTERRUPT_TEST_INITIAL) {
+#ifdef RTEMS_SMP
+			Per_CPU_Control *cpu_self;
+
+			/*
+			 * In SMP configurations, the thread switch extension
+			 * runs in a very restricted environment.  Interrupts
+			 * are disabled and the caller owns the per-CPU lock.
+			 * In order to avoid deadlocks at SMP lock level, we
+			 * have to use an SMP job which runs later in the
+			 * context of the inter-processor interrupt.
+			 */
+			cpu_self = _Per_CPU_Get();
+			_Per_CPU_Add_job(cpu_self, &ctx->job);
+			_SMP_Send_message(_Per_CPU_Get_index(cpu_self),
+			    SMP_MESSAGE_PERFORM_JOBS);
+#else
 			(*ctx->blocked)(ctx->arg);
+#endif
 		}
 	}
 }

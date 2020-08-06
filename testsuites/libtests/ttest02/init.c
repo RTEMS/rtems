@@ -152,6 +152,60 @@ T_TEST_CASE(TestInterruptFatal)
 	T_unreachable();
 }
 
+static void
+suspend(void *arg)
+{
+	rtems_status_code sc;
+	rtems_id *id;
+
+	id = arg;
+	sc = rtems_task_suspend(*id);
+	T_step_rsc_success(1, sc);
+}
+
+static T_interrupt_test_state
+do_nothing(void *arg)
+{
+	(void)arg;
+	return T_INTERRUPT_TEST_ACTION;
+}
+
+static void
+resume(void *arg)
+{
+	T_interrupt_test_state state;
+
+	state = T_interrupt_test_change_state(T_INTERRUPT_TEST_ACTION,
+	    T_INTERRUPT_TEST_DONE);
+
+	if (state == T_INTERRUPT_TEST_ACTION) {
+		rtems_status_code sc;
+		rtems_id *id;
+
+		id = arg;
+		sc = rtems_task_resume(*id);
+		T_step_rsc_success(0, sc);
+	}
+}
+
+static const T_interrupt_test_config blocked_config = {
+	.action = suspend,
+	.interrupt = do_nothing,
+	.blocked = resume,
+	.max_iteration_count = 10000
+};
+
+T_TEST_CASE(TestInterruptBlocked)
+{
+	T_interrupt_test_state state;
+	rtems_id id;
+
+	T_plan(3);
+	id = rtems_task_self();
+	state = T_interrupt_test(&blocked_config, &id);
+	T_step_eq_int(2, state, T_INTERRUPT_TEST_DONE);
+}
+
 const char rtems_test_name[] = "TTEST 2";
 
 static void
