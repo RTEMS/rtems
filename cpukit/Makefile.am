@@ -1874,6 +1874,7 @@ librtemstest_a_SOURCES += libtest/t-test-rtems-measure.c
 librtemstest_a_SOURCES += libtest/t-test-rtems-objs.c
 librtemstest_a_SOURCES += libtest/t-test-rtems-posix-keys.c
 librtemstest_a_SOURCES += libtest/t-test-time.c
+librtemstest_a_SOURCES += libtest/t-test-thread-switch.c
 
 project_lib_LIBRARIES += libftpd.a
 

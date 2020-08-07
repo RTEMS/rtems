@@ -83,6 +83,14 @@ typedef struct T_fixture_node {
 #define T_FILE_NAME __FILE__
 #endif
 
+#if defined(__GNUC__) || __STDC_VERSION__ >= 199409L
+#define T_ZERO_LENGTH_ARRAY
+#define T_ZERO_LENGTH_ARRAY_EXTENSION(n) (n)
+#else
+#define T_ZERO_LENGTH_ARRAY 1
+#define T_ZERO_LENGTH_ARRAY_EXTENSION(n) ((n) - 1)
+#endif
+
 /** @} */
 
 /**
@@ -2389,6 +2397,43 @@ void T_interrupt_test_busy_wait_for_interrupt(void);
 
 T_interrupt_test_state T_interrupt_test(const T_interrupt_test_config *config,
     void *arg);
+
+typedef struct {
+	uint32_t executing;
+	uint32_t heir;
+	uint32_t cpu;
+	T_time instant;
+} T_thread_switch_event;
+
+typedef struct {
+	size_t recorded;
+	size_t capacity;
+	uint64_t switches;
+	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY];
+} T_thread_switch_log;
+
+typedef struct {
+	T_thread_switch_log log;
+	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY_EXTENSION(2)];
+} T_thread_switch_log_2;
+
+typedef struct {
+	T_thread_switch_log log;
+	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY_EXTENSION(4)];
+} T_thread_switch_log_4;
+
+typedef struct {
+	T_thread_switch_log log;
+	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY_EXTENSION(10)];
+} T_thread_switch_log_10;
+
+T_thread_switch_log *T_thread_switch_record(T_thread_switch_log *);
+
+T_thread_switch_log *T_thread_switch_record_2(T_thread_switch_log_2 *);
+
+T_thread_switch_log *T_thread_switch_record_4(T_thread_switch_log_4 *);
+
+T_thread_switch_log *T_thread_switch_record_10(T_thread_switch_log_10 *);
 
 void T_report_hash_sha256(T_event, const char *);
 

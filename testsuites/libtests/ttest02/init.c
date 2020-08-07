@@ -32,6 +32,8 @@
 #include <rtems/test.h>
 #include <rtems/test-info.h>
 
+#include <string.h>
+
 #include <rtems.h>
 
 static void
@@ -204,6 +206,70 @@ T_TEST_CASE(TestInterruptBlocked)
 	id = rtems_task_self();
 	state = T_interrupt_test(&blocked_config, &id);
 	T_step_eq_int(2, state, T_INTERRUPT_TEST_DONE);
+}
+
+T_TEST_CASE(TestThreadSwitch)
+{
+	T_thread_switch_log_2 log_2;
+	T_thread_switch_log_4 log_4;
+	T_thread_switch_log_10 log_10;
+	T_thread_switch_log *log;
+	uint32_t executing;
+	uint32_t heir;
+	size_t i;
+
+	memset(&log_2, 0xff, sizeof(log_2));
+	log = T_thread_switch_record_2(&log_2);
+	T_null(log);
+	T_eq_sz(log_2.log.recorded, 0);
+	T_eq_sz(log_2.log.capacity, 2);
+	T_eq_u64(log_2.log.switches, 0);
+
+	memset(&log_4, 0xff, sizeof(log_4));
+	log = T_thread_switch_record_4(&log_4);
+	T_eq_ptr(log, &log_2.log);
+	T_eq_sz(log_4.log.recorded, 0);
+	T_eq_sz(log_4.log.capacity, 4);
+	T_eq_u64(log_4.log.switches, 0);
+
+	memset(&log_10, 0xff, sizeof(log_10));
+	log = T_thread_switch_record_10(&log_10);
+	T_eq_ptr(log, &log_4.log);
+	T_eq_sz(log_10.log.recorded, 0);
+	T_eq_sz(log_10.log.capacity, 10);
+	T_eq_u64(log_10.log.switches, 0);
+
+	for (i = 0; i < 6; ++i) {
+		rtems_status_code sc;
+
+		sc = rtems_task_wake_after(2);
+		T_rsc_success(sc);
+	}
+
+	log = T_thread_switch_record(NULL);
+	T_eq_ptr(log, &log_10.log);
+	T_eq_sz(log->recorded, 10);
+	T_eq_sz(log->capacity, 10);
+	T_eq_u64(log->switches, 12);
+	executing = rtems_task_self();
+	T_eq_u32(log->events[0].executing, executing);
+	T_ne_u32(log->events[0].heir, 0);
+	heir = log->events[0].heir;
+	T_eq_u32(log->events[0].cpu, 0);
+	T_ne_u64(log->events[0].instant, 0);
+
+	for (i = 1; i < 10; ++i) {
+		uint32_t tmp;
+
+		tmp = executing;
+		executing = heir;
+		heir = tmp;
+
+		T_eq_u32(log->events[i].executing, executing);
+		T_eq_u32(log->events[i].heir, heir);
+		T_eq_u32(log->events[i].cpu, 0);
+		T_gt_u64(log->events[i].instant, log->events[i - 1].instant);
+	}
 }
 
 const char rtems_test_name[] = "TTEST 2";
