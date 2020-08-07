@@ -352,7 +352,7 @@ T_interrupt_teardown(void *arg)
 	ctx->arg = NULL;
 }
 
-static T_fixture T_interrupt_fixture = {
+static const T_fixture T_interrupt_fixture = {
 	.teardown = T_interrupt_teardown,
 	.initial_context = &T_interrupt_instance
 };
