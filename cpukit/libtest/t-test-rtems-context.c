@@ -29,16 +29,43 @@
 
 #include <rtems/test.h>
 
+#include <rtems.h>
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/threaddispatch.h>
 
 #include <inttypes.h>
 
+#ifdef RTEMS_SMP
+static rtems_id T_runner_scheduler;
+#endif
+
+static rtems_task_priority T_runner_priority;
+
+static void
+T_initialize_runner_properties(void)
+{
+	rtems_status_code sc;
+
+#ifdef RTEMS_SMP
+	sc = rtems_task_get_scheduler(RTEMS_SELF, &T_runner_scheduler);
+	T_quiet_rsc_success(sc);
+#endif
+
+	sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY,
+	    &T_runner_priority);
+	T_quiet_rsc_success(sc);
+}
+
 static void
 T_do_check_task_context(void)
 {
+	rtems_task_priority prio;
+	rtems_status_code sc;
 	uint32_t v;
+#ifdef RTEMS_SMP
+	rtems_id id;
+#endif
 
 	v = _Per_CPU_Get_snapshot()->thread_dispatch_disable_level;
 	T_check(&T_special, v == 0,
@@ -51,6 +78,23 @@ T_do_check_task_context(void)
 	v = _ISR_Get_level();
 	T_check(&T_special, v == 0,
 	    "Wrong ISR level (%" PRIu32 ")", v);
+
+#ifdef RTEMS_SMP
+	id = 0;
+	sc = rtems_task_get_scheduler(RTEMS_SELF, &id);
+	T_quiet_rsc_success(sc);
+	T_check(&T_special, id == T_runner_scheduler,
+	    "Wrong runner scheduler, expected ID %08" PRIx32 ", actual ID %08"
+	    PRIx32, T_runner_scheduler, id);
+#endif
+
+	prio = 0;
+	sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY,
+	    &prio);
+	T_quiet_rsc_success(sc);
+	T_check(&T_special, prio == T_runner_priority,
+	    "Wrong runner priority, expected %" PRIu32 ", actual %"
+	    PRIu32, T_runner_priority, prio);
 }
 
 void
@@ -60,6 +104,8 @@ T_check_task_context(T_event event, const char *name)
 
 	switch (event) {
 	case T_EVENT_RUN_INITIALIZE_LATE:
+		T_initialize_runner_properties();
+		/* Fall through */
 	case T_EVENT_CASE_END:
 		T_do_check_task_context();
 		break;
