@@ -234,12 +234,16 @@ static void rtems_shell_clear_shell_env(void)
   eno = pthread_setspecific(rtems_shell_current_env_key, NULL);
   if (eno != 0)
     rtems_error(0, "pthread_setspecific(shell_current_env_key): clear");
+}
 
-  /*
-   * Clear stdin and stdout file pointers of they will be closed
-   */
+/*
+ * Clear stdin, stdout and stderr file pointers so they will not be closed.
+ */
+static void rtems_shell_clear_shell_std_handles(void)
+{
   stdin = NULL;
   stdout = NULL;
+  stderr = NULL;
 }
 
 /*
@@ -775,6 +779,7 @@ void rtems_shell_print_env(
 {
   if ( !shell_env ) {
     printk( "shell_env is NULL\n" );
+
     return;
   }
   printk( "shell_env=%p\n"
@@ -797,6 +802,7 @@ static rtems_task rtems_shell_task(rtems_task_argument task_argument)
   rtems_shell_env_t *shell_env = (rtems_shell_env_t*) task_argument;
   rtems_id           wake_on_end = shell_env->wake_on_end;
   rtems_shell_main_loop( shell_env );
+  rtems_shell_clear_shell_std_handles();
   if (wake_on_end != RTEMS_INVALID_ID)
     rtems_event_send (wake_on_end, RTEMS_EVENT_1);
   rtems_task_exit();
@@ -872,6 +878,11 @@ bool rtems_shell_main_loop(
     else
       stdout = stderr;
   } else if (strcmp(shell_env->output, "/dev/null") == 0) {
+    if (stdout == NULL) {
+      fprintf(stderr, "shell: stdout is NULLs\n");
+      rtems_shell_clear_shell_env();
+      return false;
+    }
     fclose (stdout);
   } else {
     FILE *output = fopen(shell_env->output,
@@ -906,6 +917,13 @@ bool rtems_shell_main_loop(
   }
 
   if (!input_file) {
+    if (stdin == NULL) {
+      fprintf(stderr, "shell: stdin is NULLs\n");
+      if (stdoutToClose != NULL)
+        fclose(stdoutToClose);
+      rtems_shell_clear_shell_env();
+      return false;
+    }
     /* Make a raw terminal, Linux Manuals */
     if (tcgetattr(fileno(stdin), &previous_term) >= 0) {
       term = previous_term;
@@ -967,7 +985,7 @@ bool rtems_shell_main_loop(
          *  keep on trucking.
          */
         if (shell_env->login_check != NULL) {
-          result = rtems_shell_login(shell_env, stdin,stdout);
+          result = rtems_shell_login(shell_env, stdin, stdout);
         } else {
           setuid(shell_env->uid);
           setgid(shell_env->gid);
