@@ -130,7 +130,11 @@ static inline void rtems_printer_task_initialize(
   rtems_printer_task_context *context
 )
 {
-  memset( context, 0, sizeof( *context ) );
+  /*
+   * Some C++ compiler think that the structure is complex enough to need a
+   * proper constructor. Cast to void * to silence a warning.
+   */
+  memset( (void *) context, 0, sizeof( *context ) );
 }
 
 static inline void rtems_printer_task_set_stack_size(
