@@ -96,28 +96,6 @@ static void* dl_load_obj(const char* name, bool has_unresolved)
   return handle;
 }
 
-static void dl_close (void* handle)
-{
-  int r;
-  printf ("handle: %p closing\n", handle);
-  r = dlclose (handle);
-  if (r != 0)
-    printf("dlclose failed: %s\n", dlerror());
-  rtems_test_assert (r == 0);
-}
-
-static int dl_call (void* handle, const char* func)
-{
-  call_sig call = dlsym (handle, func);
-  if (call == NULL)
-  {
-    printf("dlsym failed: symbol not found: %s\n", func);
-    return 1;
-  }
-  call ();
-  return 0;
-}
-
 int dl_load_test(void)
 {
   void* o1;
