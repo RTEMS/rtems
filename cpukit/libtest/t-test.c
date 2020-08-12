@@ -244,9 +244,26 @@ T_cpu(void)
 #endif
 }
 
+size_t
+T_str_copy(char *dst, const char *src, size_t n)
+{
+	size_t i;
+
+	i = 0;
+
+	while (*src != '\0' && i < n) {
+		*dst = *src;
+		++dst;
+		++src;
+		++i;
+	}
+
+	return i;
+}
+
 #if defined(__rtems__)
-static const char *
-T_object_name_to_string(Objects_Name name, char *buf)
+static size_t
+T_object_name_to_string(char *dst, Objects_Name name, size_t n)
 {
 	uint32_t on;
 	size_t i;
@@ -260,18 +277,18 @@ T_object_name_to_string(Objects_Name name, char *buf)
 
 		c = (unsigned char)(on >> s);
 
-		if (c >= '!' && c <= '~') {
-			buf[i] = (char)c;
+		if (c >= '!' && c <= '~' && i < n) {
+			*dst = (char)c;
+			++dst;
 			++i;
 		}
 	}
 
-	buf[i] = '\0';
-	return buf;
+	return i;
 }
 
-static const char *
-T_thread_name(const Thread_Control *th, char *buf)
+static size_t
+T_thread_name(char *dst, const Thread_Control *th, size_t n)
 {
 	if (th != NULL) {
 		const char *name;
@@ -279,23 +296,21 @@ T_thread_name(const Thread_Control *th, char *buf)
 		name = th->Join_queue.Queue.name;
 
 		if (name != NULL && name[0] != '\0') {
-			return name;
-		} else {
-			return T_object_name_to_string(th->Object.name, buf);
+			return T_str_copy(dst, name, n);
 		}
-	} else {
-		buf[0] = '?';
-		buf[1] = '\0';
-		return buf;
+
+		return T_object_name_to_string(dst, th->Object.name, n);
 	}
+
+	return T_str_copy(dst, "?", n);
 }
 #endif
 
-static const char *
-T_scope(T_context *ctx, char *buf)
+static size_t
+T_scope(T_context *ctx, char *dst, size_t n)
 {
-	const char *r;
 	T_fixture_node *node;
+	size_t len;
 
 #if defined(__rtems__)
 	ISR_Level level;
@@ -309,31 +324,26 @@ T_scope(T_context *ctx, char *buf)
 
 		executing = _Per_CPU_Get_executing(cpu_self);
 		_ISR_Local_enable(level);
-		r = T_thread_name(executing, buf);
+		len = T_thread_name(dst, executing, n);
 	} else {
 		_ISR_Local_enable(level);
-		buf[0] = 'I';
-		buf[1] = 'S';
-		buf[2] = 'R';
-		buf[3] = '\0';
-		r = buf;
+		len = T_str_copy(dst, "ISR", n);
 	}
+
 #elif defined(__linux__)
 	static __thread char name[128];
-
-	(void)buf;
 
 	if (name[0] == '\0') {
 		pthread_getname_np(pthread_self(), name, sizeof(name));
 	}
 
-	r = &name[0];
+	len = T_str_copy(dst, name, n);
 #else
-	buf[0] = '?';
-	buf[1] = '\0';
-	r = buf;
+	len = T_str_copy(dst, "?", n);
 #endif
 
+	dst += len;
+	n -= len;
 	node = &ctx->case_fixture;
 
 	do {
@@ -342,17 +352,18 @@ T_scope(T_context *ctx, char *buf)
 		fixture = node->fixture;
 
 		if (fixture != NULL && fixture->scope != NULL) {
-			size_t n;
+			size_t m;
 
-			n = strlen(r);
-			(*fixture->scope)(node->context, buf + n,
-			    T_SCOPE_SIZE - n);
+			m = (*fixture->scope)(node->context, dst, n);
+			dst += m;
+			n -= m;
+			len += m;
 		}
 
 		node = node->previous;
 	} while (node != NULL);
 
-	return r;
+	return len;
 }
 
 static void
@@ -541,6 +552,7 @@ T_check(const T_check_context *t, bool ok, ...)
 	T_context *ctx;
 	va_list ap;
 	char scope[T_SCOPE_SIZE];
+	size_t len;
 	unsigned int step;
 
 	ctx = &T_instance;
@@ -551,27 +563,28 @@ T_check(const T_check_context *t, bool ok, ...)
 		step = UINT_MAX;
 	}
 
+	len = T_scope(ctx, scope, sizeof(scope) - 1);
+	scope[len] = '\0';
+
 	if ((t->flags & T_CHECK_STEP_FLAG) != 0 &&
 	     step != T_CHECK_STEP_FROM_FLAGS(t->flags)) {
 		T_add_failure(ctx);
 		T_printf("F:%u:%i:%s:%s:%i:planned step (%u)\n", step,
-		    T_cpu(), T_scope(ctx, scope), T_file(t), t->line,
-		    T_CHECK_STEP_FROM_FLAGS(t->flags));
+		    T_cpu(), scope, T_file(t),
+		    t->line, T_CHECK_STEP_FROM_FLAGS(t->flags));
 	} else if (!ok) {
 		T_add_failure(ctx);
 
 		if (ctx->verbosity >= T_NORMAL) {
 			if ((t->flags & T_CHECK_QUIET) == 0) {
 				T_printf("F:%u:%i:%s:%s:%i",
-				    step, T_cpu(), T_scope(ctx, scope),
-				    T_file(t), t->line);
+				    step, T_cpu(), scope, T_file(t), t->line);
 			} else if (t->line >= 0) {
-				T_printf("F:*:%i:%s:%s:%i", T_cpu(),
-				    T_scope(ctx, scope), T_file(t),
-				    t->line);
+				T_printf("F:*:%i:%s:%s:%i", T_cpu(), scope,
+				    T_file(t), t->line);
 			} else {
-				T_printf("F:*:%i:%s:%s:*", T_cpu(),
-				    T_scope(ctx, scope), T_file(t));
+				T_printf("F:*:%i:%s:%s:*", T_cpu(), scope,
+				    T_file(t));
 			}
 
 			if ((t->flags & T_CHECK_FMT) != 0) {
@@ -593,8 +606,8 @@ T_check(const T_check_context *t, bool ok, ...)
 		}
 	} else if ((t->flags & T_CHECK_QUIET) == 0 &&
 	    ctx->verbosity >= T_VERBOSE) {
-		T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(),
-		    T_scope(ctx, scope), T_file(t), t->line);
+		T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(), scope, T_file(t),
+		    t->line);
 	}
 }
 
@@ -847,10 +860,13 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 
 		if (ctx->verbosity >= T_NORMAL) {
 			char scope[T_SCOPE_SIZE];
+			size_t len;
 
+			len = T_scope(ctx, scope, sizeof(scope) - 1);
+			scope[len] = '\0';
 			T_printf("F:*:%i:%s:*:*:actual steps (%u), "
 			    "planned steps (%u)\n", T_cpu(),
-			    T_scope(ctx, scope), steps, planned_steps);
+			    scope, steps, planned_steps);
 		}
 	}
 
@@ -1106,12 +1122,14 @@ T_pop_fixture(void)
 	memset(node, 0, sizeof(*node));
 }
 
-void
+size_t
 T_get_scope(const char * const * const *desc, char *buf, size_t n,
     const size_t *second_indices)
 {
+	size_t c;
 	size_t i;
 
+	c = n;
 	i = 0;
 
 	while (true) {
@@ -1121,26 +1139,22 @@ T_get_scope(const char * const * const *desc, char *buf, size_t n,
 		desc2 = desc[i];
 
 		if (desc2 == NULL) {
-			return;
+			break;
 		}
 
-		if (n > 1) {
+		if (c > 1) {
 			buf[0] = '/';
-			--n;
+			--c;
 			++buf;
 		} else {
-			return;
+			break;
 		}
 
-		m = strlcpy(buf, desc2[second_indices[i]], n);
-
-		if (m < n) {
-			n -= m;
-			buf += m;
-		} else {
-			return;
-		}
-
+		m = T_str_copy(buf, desc2[second_indices[i]], c);
+		buf += m;
+		c -= m;
 		++i;
 	}
+
+	return n - c;
 }

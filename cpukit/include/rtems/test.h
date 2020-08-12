@@ -62,7 +62,7 @@ typedef struct T_fixture {
 	void (*setup)(void *);
 	void (*stop)(void *);
 	void (*teardown)(void *);
-	void (*scope)(void *, char *, size_t);
+	size_t (*scope)(void *, char *, size_t);
 	void *initial_context;
 } T_fixture;
 
@@ -2324,13 +2324,18 @@ T_NO_RETURN void T_stop(void);
  *
  * @param second_indices is an array of indices defining which descriptive
  *   string is used for each entry in the description table.
+ *
+ * @return Returns the characters consumed from the buffer for the produced
+ *   scope.
  */
-void T_get_scope(
+size_t T_get_scope(
   const char * const * const *desc,
   char *buf,
   size_t n,
   const size_t *second_indices
 );
+
+size_t T_str_copy(char *, const char *, size_t);
 
 #ifdef __rtems__
 #define T_TEST_CASE_FIXTURE(name, fixture)			\

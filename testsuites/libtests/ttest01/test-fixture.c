@@ -43,11 +43,11 @@ teardown(void *ctx)
 	T_log(T_QUIET, "teardown end");
 }
 
-static void
+static size_t
 scope(void *ctx, char *buf, size_t n)
 {
 
-	strlcpy(buf, "/More", n);
+	return T_str_copy(buf, "/More", n);
 }
 
 static const T_fixture fixture = {
@@ -101,11 +101,11 @@ teardown_2(void *ctx)
 	T_log(T_QUIET, "teardown 2 end");
 }
 
-static void
+static size_t
 scope_2(void *ctx, char *buf, size_t n)
 {
 
-	strlcpy(buf, "/AndMore", n);
+	return T_str_copy(buf, "/AndMore", n);
 }
 
 static const T_fixture fixture_2 = {
