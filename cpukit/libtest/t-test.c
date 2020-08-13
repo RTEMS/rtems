@@ -143,14 +143,11 @@ T_snprintf(char *s, size_t n, char const *fmt, ...)
 	return len;
 }
 
-static int
-T_vprintf_direct(char const *fmt, va_list ap)
+static void
+T_output_buffer_drain(T_context *ctx)
 {
-	T_context *ctx;
 	unsigned int head;
 	unsigned int tail;
-
-	ctx = &T_instance;
 
 	head = atomic_load_explicit(&ctx->buf_head, memory_order_acquire);
 	tail = atomic_load_explicit(&ctx->buf_tail, memory_order_relaxed);
@@ -161,32 +158,16 @@ T_vprintf_direct(char const *fmt, va_list ap)
 	}
 
 	atomic_store_explicit(&ctx->buf_tail, tail, memory_order_relaxed);
-
-	return _IO_Vprintf(ctx->putchar, ctx->putchar_arg, fmt, ap);
 }
 
-static int
-T_vprintf_buffered(char const *fmt, va_list ap)
+static unsigned int
+T_output_buffer_fill(T_context *ctx, const char *buf, unsigned int len)
 {
-	unsigned int len;
-	T_context *ctx;
-	char buf[T_LINE_SIZE];
-	T_putchar_string_context sctx = {
-		.s = buf,
-		.n = sizeof(buf)
-	};
 	unsigned int head;
 	unsigned int tail;
 	unsigned int mask;
 	unsigned int capacity;
 
-	len = (unsigned int)_IO_Vprintf(T_putchar_string, &sctx, fmt, ap);
-
-	if (len >= sizeof(buf)) {
-		len = sizeof(buf) - 1;
-	}
-
-	ctx = &T_instance;
 	pthread_spin_lock(&ctx->lock);
 	head = atomic_load_explicit(&ctx->buf_head, memory_order_relaxed);
 	tail = atomic_load_explicit(&ctx->buf_tail, memory_order_relaxed);
@@ -195,7 +176,7 @@ T_vprintf_buffered(char const *fmt, va_list ap)
 
 	if (len <= capacity) {
 		unsigned int todo;
-		char *c;
+		const char *c;
 
 		todo = len;
 		c = buf;
@@ -215,7 +196,36 @@ T_vprintf_buffered(char const *fmt, va_list ap)
 	}
 
 	pthread_spin_unlock(&ctx->lock);
-	return (int)len;
+	return len;
+}
+
+static int
+T_vprintf_direct(char const *fmt, va_list ap)
+{
+	T_context *ctx;
+
+	ctx = &T_instance;
+	T_output_buffer_drain(ctx);
+	return _IO_Vprintf(ctx->putchar, ctx->putchar_arg, fmt, ap);
+}
+
+static int
+T_vprintf_buffered(char const *fmt, va_list ap)
+{
+	char buf[T_LINE_SIZE];
+	T_putchar_string_context sctx = {
+		.s = buf,
+		.n = sizeof(buf)
+	};
+	unsigned int len;
+
+	len = (unsigned int)_IO_Vprintf(T_putchar_string, &sctx, fmt, ap);
+
+	if (len >= sizeof(buf)) {
+		len = sizeof(buf) - 1;
+	}
+
+	return (int)T_output_buffer_fill(&T_instance, buf, len);
 }
 
 int
