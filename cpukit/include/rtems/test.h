@@ -673,6 +673,8 @@ int T_printf(char const *, ...);
 
 int T_vprintf(char const *, va_list);
 
+int T_puts(const char *, size_t);
+
 int T_snprintf(char *, size_t, const char *, ...);
 
 void T_log(T_verbosity, char const *, ...);

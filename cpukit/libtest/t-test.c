@@ -277,6 +277,30 @@ T_vprintf(char const *fmt, va_list ap)
 }
 
 static int
+T_do_puts(T_context *ctx, const char *buf, size_t len)
+{
+	if (T_do_is_runner(ctx)) {
+		size_t i;
+
+		T_output_buffer_drain(ctx);
+
+		for (i = 0; i < len; ++i) {
+			(*ctx->putchar)(buf[i], ctx->putchar_arg);
+		}
+	} else {
+		len = T_output_buffer_fill(ctx, buf, len);
+	}
+
+	return (int)len;
+}
+
+int
+T_puts(const char *buf, size_t len)
+{
+	return T_do_puts(&T_instance, buf, len);
+}
+
+static int
 T_cpu(void)
 {
 #if defined(__rtems__)
