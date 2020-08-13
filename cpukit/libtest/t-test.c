@@ -49,8 +49,6 @@
 
 #define T_LINE_SIZE 128
 
-#define T_SCOPE_SIZE 64
-
 typedef struct {
 	pthread_spinlock_t lock;
 	char *buf;
@@ -938,6 +936,17 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 }
 
 static void
+T_check_steps(unsigned int planned_steps, unsigned int steps,
+    unsigned int failures)
+{
+	if (planned_steps != UINT_MAX && planned_steps != steps &&
+	    failures == 0) {
+		T_check(&T_special, false, "actual steps (%u), "
+		    "planned steps (%u)", steps, planned_steps);
+	}
+}
+
+static void
 T_do_case_end(T_context *ctx, const T_case_context *tc)
 {
 	const T_config *config;
@@ -976,23 +985,9 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 	    memory_order_relaxed);
 	failures = atomic_fetch_add_explicit(&ctx->failures, 0,
 	    memory_order_relaxed);
+	T_check_steps(planned_steps, steps, failures);
 
-	if (planned_steps != UINT_MAX && planned_steps != steps &&
-	    failures == 0) {
-		++failures;
-
-		if (ctx->verbosity >= T_NORMAL) {
-			char scope[T_SCOPE_SIZE];
-			size_t len;
-
-			len = T_scope(ctx, scope, sizeof(scope) - 1);
-			scope[len] = '\0';
-			T_printf("F:*:%i:%s:*:*:actual steps (%u), "
-			    "planned steps (%u)\n", T_cpu(),
-			    scope, steps, planned_steps);
-		}
-	}
-
+	failures = atomic_load_explicit(&ctx->failures, memory_order_relaxed);
 	delta = (*config->now)() - ctx->case_begin_time;
 	T_do_log(ctx, T_QUIET, "E:%s:N:%u:F:%u:D:%s\n",
 	    tc->name, steps, failures, T_time_to_string_us(delta, ts));
