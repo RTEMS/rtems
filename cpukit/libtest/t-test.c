@@ -92,6 +92,40 @@ const T_check_context T_special = {
 	.flags = T_CHECK_FMT | T_CHECK_QUIET
 };
 
+static bool
+T_do_is_runner(T_context *ctx)
+{
+	bool is_runner;
+#ifdef __rtems__
+	ISR_Level level;
+	const Per_CPU_Control *cpu_self;
+#endif
+
+#ifdef __rtems__
+	_ISR_Local_disable(level);
+	cpu_self = _Per_CPU_Get();
+
+	if (ctx->runner_thread != NULL) {
+		is_runner = cpu_self->isr_nest_level == 0 &&
+		    _Per_CPU_Get_executing(cpu_self) == ctx->runner_thread;
+	} else {
+		is_runner = cpu_self == ctx->runner_cpu;
+	}
+
+	_ISR_Local_enable(level);
+#else
+	is_runner = ctx->runner_valid &&
+	    pthread_equal(pthread_self(), ctx->runner_thread) != 0;
+#endif
+
+	return is_runner;
+}
+
+bool T_is_runner(void)
+{
+	return T_do_is_runner(&T_instance);
+}
+
 typedef struct {
 	char *s;
 	size_t n;
@@ -950,36 +984,6 @@ T_main(const T_config *config)
 	T_do_run_all(ctx);
 
 	return T_do_run_finalize(ctx) ? 0 : 1;
-}
-
-bool T_is_runner(void)
-{
-	T_context *ctx;
-	bool is_runner;
-#ifdef __rtems__
-	ISR_Level level;
-	const Per_CPU_Control *cpu_self;
-#endif
-
-	ctx = &T_instance;
-#ifdef __rtems__
-	_ISR_Local_disable(level);
-	cpu_self = _Per_CPU_Get();
-
-	if (ctx->runner_thread != NULL) {
-		is_runner = cpu_self->isr_nest_level == 0 &&
-		    _Per_CPU_Get_executing(cpu_self) == ctx->runner_thread;
-	} else {
-		is_runner = cpu_self == ctx->runner_cpu;
-	}
-
-	_ISR_Local_enable(level);
-#else
-	is_runner = ctx->runner_valid &&
-	    pthread_equal(pthread_self(), ctx->runner_thread) != 0;
-#endif
-
-	return is_runner;
 }
 
 #ifdef __rtems__
