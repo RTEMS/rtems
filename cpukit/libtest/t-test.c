@@ -614,14 +614,36 @@ T_file(const T_check_context *t)
 	return file + 1;
 }
 
+static const char T_planned_step_fmt[] = "planned step (%u)";
+
+static void
+T_check_putc(int c, void *arg)
+{
+	T_putchar_string_context *sctx;
+	size_t n;
+
+	sctx = arg;
+	n = sctx->n;
+
+	if (n > 0) {
+		char *s;
+
+		s = sctx->s;
+		*s = (char)c;
+		sctx->s = s + 1;
+		sctx->n = n - 1;
+	}
+}
+
 void
 T_check(const T_check_context *t, bool ok, ...)
 {
 	T_context *ctx;
 	va_list ap;
-	char scope[T_SCOPE_SIZE];
-	size_t len;
+	char line[T_LINE_SIZE];
 	unsigned int step;
+	int line_number;
+	const char *fmt;
 
 	ctx = &T_instance;
 
@@ -631,52 +653,85 @@ T_check(const T_check_context *t, bool ok, ...)
 		step = UINT_MAX;
 	}
 
-	len = T_scope(ctx, scope, sizeof(scope) - 1);
-	scope[len] = '\0';
+	va_start(ap, ok);
+	line[0] = '\0';
+	line_number = -1;
+	fmt = NULL;
 
 	if ((t->flags & T_CHECK_STEP_FLAG) != 0 &&
 	     step != T_CHECK_STEP_FROM_FLAGS(t->flags)) {
 		T_add_failure(ctx);
-		T_printf("F:%u:%i:%s:%s:%i:planned step (%u)\n", step,
-		    T_cpu(), scope, T_file(t),
-		    t->line, T_CHECK_STEP_FROM_FLAGS(t->flags));
+		line[0] = 'F';
+		line_number = t->line;
+		fmt = T_planned_step_fmt;
 	} else if (!ok) {
 		T_add_failure(ctx);
 
 		if (ctx->verbosity >= T_NORMAL) {
-			if ((t->flags & T_CHECK_QUIET) == 0) {
-				T_printf("F:%u:%i:%s:%s:%i",
-				    step, T_cpu(), scope, T_file(t), t->line);
-			} else if (t->line >= 0) {
-				T_printf("F:*:%i:%s:%s:%i", T_cpu(), scope,
-				    T_file(t), t->line);
-			} else {
-				T_printf("F:*:%i:%s:%s:*", T_cpu(), scope,
-				    T_file(t));
-			}
+			line[0] = 'F';
+			line_number = t->line;
 
 			if ((t->flags & T_CHECK_FMT) != 0) {
-				const char *fmt;
-
-				T_printf(":");
-
-				va_start(ap, ok);
 				fmt = va_arg(ap, const char *);
-				T_vprintf(fmt, ap);
-				va_end(ap);
 			}
-
-			T_printf("\n");
-		}
-
-		if ((t->flags & T_CHECK_STOP) != 0) {
-			T_do_stop(ctx);
 		}
 	} else if ((t->flags & T_CHECK_QUIET) == 0 &&
 	    ctx->verbosity >= T_VERBOSE) {
-		T_printf("P:%u:%i:%s:%s:%i\n", step, T_cpu(), scope, T_file(t),
-		    t->line);
+		line[0] = 'P';
+		line_number = t->line;
 	}
+
+	if (line[0] != '\0') {
+		T_putchar_string_context sctx;
+		size_t chunk;
+
+		sctx.n = sizeof(line) - 1;
+		sctx.s = &line[1];
+		T_check_putc(':', &sctx);
+
+		if (step != UINT_MAX) {
+			_IO_Printf(T_check_putc, &sctx, "%u", step);
+		} else {
+			T_check_putc('*', &sctx);
+		}
+
+		_IO_Printf(T_check_putc, &sctx, ":%i:", T_cpu());
+		chunk = T_scope(ctx, sctx.s, sctx.n);
+		sctx.s += chunk;
+		sctx.n -= chunk;
+		T_check_putc(':', &sctx);
+		chunk = T_str_copy(sctx.s, T_file(t), sctx.n);
+		sctx.s += chunk;
+		sctx.n -= chunk;
+		T_check_putc(':', &sctx);
+
+		if (line_number >= 0) {
+			_IO_Printf(T_check_putc, &sctx, "%i", line_number);
+		} else {
+			T_check_putc('*', &sctx);
+		}
+
+		if (fmt != NULL) {
+			if (fmt == T_planned_step_fmt) {
+				T_check_putc(':', &sctx);
+				_IO_Printf(T_check_putc, &sctx, fmt,
+				    T_CHECK_STEP_FROM_FLAGS(t->flags));
+			} else {
+				T_check_putc(':', &sctx);
+				_IO_Vprintf(T_check_putc, &sctx, fmt, ap);
+			}
+		}
+
+		T_check_putc('\n', &sctx);
+		line[sizeof(line) - 1] = '\n';
+		T_puts(&line[0], sizeof(line) - sctx.n);
+	}
+
+	if (!ok && (t->flags & T_CHECK_STOP) != 0) {
+		T_do_stop(ctx);
+	}
+
+	va_end(ap);
 }
 
 static void
