@@ -2168,12 +2168,17 @@ void T_check_rsc_success(const T_check_context *, uint32_t);
 
 void T_plan(unsigned int);
 
-#define T_step(...) \
-    T_flags_true(T_CHECK_STEP(T_VA_ARGS_FIRST(__VA_ARGS__)), \
-    true T_VA_ARGS_MORE(__VA_ARGS__))
-#define T_step_assert(...) \
-    T_flags_true(T_CHECK_STEP(T_VA_ARGS_FIRST(__VA_ARGS__)) | T_CHECK_STOP, \
-    true T_VA_ARGS_MORE(__VA_ARGS__))
+void T_check_step(const T_check_context *, unsigned int);
+
+#define T_flags_step(a, flags)						\
+{									\
+	static const T_check_context T_check_instance = {		\
+	    T_FILE_NAME, __LINE__, (flags) | T_CHECK_FMT };		\
+	T_check_step(&T_check_instance, a);				\
+}
+
+#define T_step(e) T_flags_step(e, 0)
+#define T_step_assert(e) T_flags_step(e, T_CHECK_STOP)
 
 /**
  * @defgroup RTEMSTestFrameworkTime Time Services

@@ -28,10 +28,10 @@ T_TEST_CASE(double_plan)
 
 T_TEST_CASE(steps)
 {
-	T_step(0, "a");
+	T_step(0);
 	T_plan(3);
-	T_step(1, "b");
-	T_step(2, "c");
+	T_step(1);
+	T_step(2);
 }
 
 #include "t-self-test.h"

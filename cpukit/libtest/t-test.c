@@ -551,6 +551,17 @@ void T_plan(unsigned int planned_steps)
 }
 
 void
+T_check_step(const T_check_context *t, unsigned int expected)
+{
+	T_check_context tt;
+
+	tt = *t;
+	tt.flags |= T_CHECK_STEP(expected);
+	T_check(&tt, true, "actual step is not equal to expected step (%u)",
+	    expected);
+}
+
+void
 T_case_register(T_case_context *tc)
 {
 	T_context *ctx;

@@ -432,17 +432,17 @@ static Per_CPU_Job job_order_jobs[TEST_JOB_ORDER_JOBS];
 
 static void job_order_handler_0(void *arg)
 {
-  T_step(1, "invalid job order");
+  T_step(1);
 }
 
 static void job_order_handler_1(void *arg)
 {
-  T_step(2, "invalid job order");
+  T_step(2);
 }
 
 static void job_order_handler_2(void *arg)
 {
-  T_step(3, "invalid job order");
+  T_step(3);
 }
 
 static const Per_CPU_Job_context job_order_contexts[TEST_JOB_ORDER_JOBS] = {
@@ -464,7 +464,7 @@ T_TEST_CASE(JobOrder)
     _Per_CPU_Add_job(cpu_self, &job_order_jobs[i]);
   }
 
-  T_step(0, "wrong job processing time");
+  T_step(0);
   _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
   _Thread_Dispatch_enable(cpu_self);
 }
@@ -475,13 +475,13 @@ static Per_CPU_Job add_job_in_job_jobs[TEST_ADD_JOB_IN_JOB_JOBS];
 
 static void add_job_in_job_handler_0(void *arg)
 {
-  T_step(1, "invalid job order");
+  T_step(1);
   _Per_CPU_Add_job(_Per_CPU_Get(), &add_job_in_job_jobs[1]);
 }
 
 static void add_job_in_job_handler_1(void *arg)
 {
-  T_step(3, "invalid job order");
+  T_step(3);
 }
 
 static const Per_CPU_Job_context
@@ -503,9 +503,9 @@ T_TEST_CASE(AddJobInJob)
   }
 
   _Per_CPU_Add_job(cpu_self, &add_job_in_job_jobs[0]);
-  T_step(0, "wrong job processing time");
+  T_step(0);
   _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
-  T_step(2, "wrong job processing time");
+  T_step(2);
   _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
   _Thread_Dispatch_enable(cpu_self);
 }

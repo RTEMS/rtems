@@ -4,7 +4,7 @@ static void
 destroy(T_destructor *dtor)
 {
 	(void)dtor;
-	T_step(0, "destroy");
+	T_step(0);
 }
 
 T_TEST_CASE(destructor)
