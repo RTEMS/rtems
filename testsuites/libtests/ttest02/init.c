@@ -134,6 +134,7 @@ static void
 fatal(void *arg)
 {
 	(void)arg;
+	T_plan(1);
 	T_step(0);
 	T_stop();
 }
@@ -149,7 +150,6 @@ T_TEST_CASE(TestInterruptFatal)
 {
 	Atomic_Uint action_state;
 
-	T_plan(1);
 	T_interrupt_test(&fatal_config, &action_state);
 	T_unreachable();
 }
@@ -161,6 +161,7 @@ suspend(void *arg)
 	rtems_id *id;
 
 	id = arg;
+	T_plan(2);
 	sc = rtems_task_suspend(*id);
 	T_step_rsc_success(1, sc);
 }
@@ -202,10 +203,10 @@ T_TEST_CASE(TestInterruptBlocked)
 	T_interrupt_test_state state;
 	rtems_id id;
 
-	T_plan(3);
+	T_plan(1);
 	id = rtems_task_self();
 	state = T_interrupt_test(&blocked_config, &id);
-	T_step_eq_int(2, state, T_INTERRUPT_TEST_DONE);
+	T_step_eq_int(0, state, T_INTERRUPT_TEST_DONE);
 }
 
 T_TEST_CASE(TestThreadSwitch)

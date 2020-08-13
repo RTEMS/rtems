@@ -68,6 +68,7 @@ typedef struct {
 	atomic_uint steps;
 	atomic_uint failures;
 	jmp_buf case_begin_context;
+	unsigned int fixture_steps;
 	unsigned int overall_cases;
 	unsigned int overall_steps;
 	unsigned int overall_failures;
@@ -633,6 +634,32 @@ T_check_putc(int c, void *arg)
 	}
 }
 
+static void
+T_check_print_steps(T_context *ctx, T_putchar_string_context *sctx,
+    unsigned int step)
+{
+	T_fixture_node *node;
+
+	node = &ctx->case_fixture;
+
+	while (true) {
+		node = node->previous;
+
+		if (node != NULL) {
+			_IO_Printf(T_check_putc, sctx, "%u.",
+			    node->next_steps);
+		} else {
+			break;
+		}
+	}
+
+	if (step != UINT_MAX) {
+		_IO_Printf(T_check_putc, sctx, "%u", step);
+	} else {
+		T_check_putc('*', sctx);
+	}
+}
+
 void
 T_check(const T_check_context *t, bool ok, ...)
 {
@@ -686,13 +713,7 @@ T_check(const T_check_context *t, bool ok, ...)
 		sctx.n = sizeof(line) - 1;
 		sctx.s = &line[1];
 		T_check_putc(':', &sctx);
-
-		if (step != UINT_MAX) {
-			_IO_Printf(T_check_putc, &sctx, "%u", step);
-		} else {
-			T_check_putc('*', &sctx);
-		}
-
+		T_check_print_steps(ctx, &sctx, step);
 		_IO_Printf(T_check_putc, &sctx, ":%i:", T_cpu());
 		chunk = T_scope(ctx, sctx.s, sctx.n);
 		sctx.s += chunk;
@@ -887,8 +908,6 @@ T_do_run_initialize(const T_config *config)
 	ctx->putchar = config->putchar;
 	ctx->putchar_arg = config->putchar_arg;
 	ctx->verbosity = config->verbosity;
-	atomic_store_explicit(&ctx->steps, 0, memory_order_relaxed);
-	atomic_store_explicit(&ctx->failures, 0, memory_order_relaxed);
 	ctx->overall_cases = 0;
 	ctx->overall_steps = 0;
 	ctx->overall_failures = 0;
@@ -919,6 +938,7 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	    memory_order_relaxed);
 	atomic_store_explicit(&ctx->steps, 0, memory_order_relaxed);
 	atomic_store_explicit(&ctx->failures, 0, memory_order_relaxed);
+	ctx->fixture_steps = 0;
 
 	T_actions_forward(config, T_EVENT_CASE_EARLY, tc->name);
 	T_do_log(ctx, T_NORMAL, "B:%s\n", tc->name);
@@ -950,33 +970,18 @@ static void
 T_do_case_end(T_context *ctx, const T_case_context *tc)
 {
 	const T_config *config;
-	T_fixture_node *node;
 	unsigned int planned_steps;
 	unsigned int steps;
 	unsigned int failures;
 	T_time delta;
 	T_time_string ts;
 
-	config = ctx->config;
-	node = ctx->fixtures;
-	ctx->fixtures = NULL;
-
-	while (node != NULL) {
-		const T_fixture *fixture;
-		T_fixture_node *dead;
-
-		fixture = node->fixture;
-
-		if (fixture != NULL && fixture->teardown != NULL) {
-			(*fixture->teardown)(node->context);
-		}
-
-		dead = node;
-		node = node->next;
-		memset(dead, 0, sizeof(*dead));
+	while (ctx->fixtures != NULL) {
+		T_pop_fixture();
 	}
 
 	T_call_destructors(ctx);
+	config = ctx->config;
 	T_actions_backward(config, T_EVENT_CASE_END, tc->name);
 
 	planned_steps = atomic_fetch_add_explicit(&ctx->planned_steps,
@@ -989,6 +994,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 
 	failures = atomic_load_explicit(&ctx->failures, memory_order_relaxed);
 	delta = (*config->now)() - ctx->case_begin_time;
+	steps += ctx->fixture_steps;
 	T_do_log(ctx, T_QUIET, "E:%s:N:%u:F:%u:D:%s\n",
 	    tc->name, steps, failures, T_time_to_string_us(delta, ts));
 
@@ -1179,6 +1185,12 @@ T_push_fixture(T_fixture_node *node, const T_fixture *fixture)
 	node->fixture = fixture;
 	context = fixture->initial_context;
 	node->context = context;
+	node->next_planned_steps = atomic_exchange_explicit(
+	    &ctx->planned_steps, UINT_MAX, memory_order_relaxed);
+	node->next_steps = atomic_exchange_explicit(&ctx->steps, 0,
+	    memory_order_relaxed);
+	node->failures = atomic_fetch_add_explicit(&ctx->failures, 0,
+	    memory_order_relaxed);
 	ctx->fixtures = node;
 
 	if (fixture != NULL && fixture->setup != NULL) {
@@ -1199,12 +1211,27 @@ T_pop_fixture(void)
 	ctx = &T_instance;
 	node = ctx->fixtures;
 	next = node->next;
-	next->previous = NULL;
 	ctx->fixtures = next;
 	fixture = node->fixture;
 
 	if (fixture != NULL && fixture->teardown != NULL) {
 		(*fixture->teardown)(node->context);
+	}
+
+	if (next != NULL) {
+		unsigned int planned_steps;
+		unsigned int steps;
+		unsigned int failures;
+
+		next->previous = NULL;
+		planned_steps = atomic_exchange_explicit(&ctx->planned_steps,
+		    node->next_planned_steps, memory_order_relaxed);
+		steps = atomic_exchange_explicit(&ctx->steps, node->next_steps,
+		    memory_order_relaxed);
+		failures = atomic_fetch_add_explicit(&ctx->failures, 0,
+		    memory_order_relaxed);
+		ctx->fixture_steps += steps;
+		T_check_steps(planned_steps, steps, node->failures - failures);
 	}
 
 	memset(node, 0, sizeof(*node));

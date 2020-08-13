@@ -71,6 +71,9 @@ typedef struct T_fixture_node {
 	struct T_fixture_node *previous;
 	const T_fixture *fixture;
 	void *context;
+	unsigned int next_planned_steps;
+	unsigned int next_steps;
+	unsigned int failures;
 } T_fixture_node;
 
 #define T_ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
