@@ -49,7 +49,7 @@ typedef struct {
 	RTEMS_INTERRUPT_LOCK_MEMBER(lock)
 	T_thread_switch_log *active;
 	User_extensions_Control ext;
-	T_fixture_node node;
+	T_destructor dtor;
 } T_thread_switch_context;
 
 static void T_thread_switch_recorder(Thread_Control *, Thread_Control *);
@@ -66,18 +66,13 @@ static T_thread_switch_context T_thread_switch_instance = {
 };
 
 static void
-T_thread_switch_teardown(void *arg)
+T_thread_switch_destroy(T_destructor *dtor)
 {
 	T_thread_switch_context *ctx;
 
-	ctx = arg;
+	ctx = RTEMS_CONTAINER_OF(dtor, T_thread_switch_context, dtor);
 	_User_extensions_Remove_set(&ctx->ext);
 }
-
-static const T_fixture T_thread_switch_fixture = {
-	.teardown = T_thread_switch_teardown,
-	.initial_context = &T_thread_switch_instance
-};
 
 static void
 T_thread_switch_recorder(Thread_Control *executing, Thread_Control *heir)
@@ -125,9 +120,9 @@ T_thread_switch_record(T_thread_switch_log *log)
 
 	ctx = &T_thread_switch_instance;
 
-	if (ctx->node.fixture == NULL) {
+	if (_Chain_Is_node_off_chain(&ctx->ext.Node)) {
 		_User_extensions_Add_set(&ctx->ext);
-		T_push_fixture(&ctx->node, &T_thread_switch_fixture);
+		T_add_destructor(&ctx->dtor, T_thread_switch_destroy);
 	}
 
 	if (log != NULL) {
