@@ -550,6 +550,21 @@ void T_plan(unsigned int planned_steps)
 	    expected);
 }
 
+const T_fixture T_empty_fixture;
+
+void
+T_push_plan(T_fixture_node *node, unsigned int planned_steps)
+{
+	T_push_fixture(node, &T_empty_fixture);
+	T_plan(planned_steps);
+}
+
+void
+T_pop_plan(void)
+{
+	T_pop_fixture();
+}
+
 void
 T_check_step(const T_check_context *t, unsigned int expected)
 {

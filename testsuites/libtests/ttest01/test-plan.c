@@ -34,6 +34,19 @@ T_TEST_CASE(steps)
 	T_step(2);
 }
 
+static T_fixture_node nested_plan_node;
+
+T_TEST_CASE(nested_plan)
+{
+	T_plan(2);
+	T_step(0);
+	T_push_plan(&nested_plan_node, 2);
+	T_step(0);
+	T_step(1);
+	T_pop_plan();
+	T_step(1);
+}
+
 #include "t-self-test.h"
 
 T_TEST_OUTPUT(wrong_step,
@@ -64,6 +77,14 @@ T_TEST_OUTPUT(steps,
 "P:1:0:UI1:test-plan.c:33\n"
 "P:2:0:UI1:test-plan.c:34\n"
 "E:steps:N:3:F:0:D:0.001000\n");
+
+T_TEST_OUTPUT(nested_plan,
+"B:nested_plan\n"
+"P:0:0:UI1:test-plan.c:42\n"
+"P:1.0:0:UI1:test-plan.c:44\n"
+"P:1.1:0:UI1:test-plan.c:45\n"
+"P:1:0:UI1:test-plan.c:47\n"
+"E:nested_plan:N:4:F:0:D:0.001000\n");
 
 /*
  * The license is at the end of the file to be able to use the test code and

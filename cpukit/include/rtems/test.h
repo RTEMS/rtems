@@ -2168,6 +2168,12 @@ void T_check_rsc_success(const T_check_context *, uint32_t);
 
 void T_plan(unsigned int);
 
+extern const T_fixture T_empty_fixture;
+
+void T_push_plan(T_fixture_node *, unsigned int);
+
+void T_pop_plan(void);
+
 void T_check_step(const T_check_context *, unsigned int);
 
 #define T_flags_step(a, flags)						\
