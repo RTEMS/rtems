@@ -156,7 +156,7 @@ typedef uint32_t   rtems_attribute;
  *  This attribute constant indicates that the Classic API Barrier
  *  instance created will use an automatic release protocol.
  */
-#define RTEMS_BARRIER_AUTOMATIC_RELEASE 0x00000010
+#define RTEMS_BARRIER_AUTOMATIC_RELEASE 0x00000200
 
 /**
  *  This attribute constant indicates that the Classic API Barrier
