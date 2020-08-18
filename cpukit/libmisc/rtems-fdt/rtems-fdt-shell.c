@@ -338,7 +338,7 @@ rtems_fdt_shell_set (int argc, char *argv[])
   if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
     return 1;
 
-  if (isdigit (argv[mask_arg][0]))
+  if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
@@ -380,7 +380,7 @@ rtems_fdt_shell_cl (int argc, char *argv[])
   if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
     return 1;
 
-  if (isdigit (argv[mask_arg][0]))
+  if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
@@ -426,7 +426,7 @@ rtems_fdt_shell_up (int argc, char *argv[])
   if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
     return 1;
 
-  if (isdigit (argv[mask_arg][0]))
+  if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {
@@ -473,7 +473,7 @@ rtems_fdt_shell_tst (int argc, char *argv[])
   if (!rtems_fdt_get_value32 (argv[1], "reg", sizeof (uint32_t), &address))
     return 1;
 
-  if (isdigit (argv[mask_arg][0]))
+  if (isdigit ((unsigned char) argv[mask_arg][0]))
     mask = strtoul (argv[mask_arg], 0, 0);
   else
   {

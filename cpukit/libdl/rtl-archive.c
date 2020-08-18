@@ -516,13 +516,13 @@ rtems_rtl_archives_load_config (rtems_rtl_archives* archives)
       {
         size_t ls = strlen (&s[r]);
         size_t b = 0;
-        while (b < ls && isspace (s[r + b]))
+        while (b < ls && isspace ((unsigned char) s[r + b]))
         {
           s[r + b] = '\0';
           ++b;
         }
         b = ls - 1;
-        while (b > 0 && isspace (s[r + b]))
+        while (b > 0 && isspace ((unsigned char) s[r + b]))
         {
           s[r + b] = '\0';
           --b;
