@@ -17,8 +17,6 @@ links:
 - role: build-dependency
   uid: optgzip
 - role: build-dependency
-  uid: optpax
-- role: build-dependency
   uid: optrtemsld
 - role: build-dependency
   uid: optrtemssyms

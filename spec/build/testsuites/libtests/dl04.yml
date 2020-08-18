@@ -10,7 +10,7 @@ do-build: |
   objs = []
   objs.append(self.cxx(bld, bic, path + "dl04-o4.cc"))
   tar = path + "dl04.tar"
-  self.pax(bld, objs, [path], tar)
+  self.tar(bld, objs, [path], tar)
   tar_c, tar_h = self.bin2c(bld, tar)
   objs = []
   objs.append(self.cc(bld, bic, tar_c))

@@ -405,22 +405,23 @@ class Item(object):
         bld(rule="${XZ} < ${SRC} > ${TGT}", source=source, target=target)
         return target
 
-    def pax(self, bld, source, remove, target):
+    def tar(self, bld, source, remove, target):
         def run(task):
+            import tarfile
+
+            tar = tarfile.TarFile(
+                task.outputs[0].abspath(), "w", format=tarfile.USTAR_FORMAT
+            )
             srcpath = bld.path.abspath() + "/"
             bldpath = bld.bldnode.abspath() + "/"
-            cmd = [bld.env.PAX[0], "-w", "-f", task.outputs[0].abspath()]
-            for r in remove:
-                cmd.extend(
-                    [
-                        "-s",
-                        "," + srcpath + r + ",,",
-                        "-s",
-                        "," + bldpath + r + ",,",
-                    ]
-                )
-            cmd.extend([i.abspath() for i in task.inputs])
-            return task.exec_command(cmd)
+            for src in task.inputs:
+                src = src.abspath()
+                dst = src
+                for r in remove:
+                    dst = src.replace(srcpath + r, "").replace(bldpath + r, "")
+                tar.add(src, dst)
+            tar.close()
+            return 0
 
         bld(rule=run, source=source, target=target)
         return target

@@ -18,7 +18,7 @@ do-build: |
   objs.append(self.ar(bld, lib_objs, path + "libdl10_2.a"))
   objs.append(self.cc(bld, bic, path + "dl10-o1.c"))
   tar = path + "dl10.tar"
-  self.pax(bld, [path + "etc/libdl.conf"] + objs, [path], tar)
+  self.tar(bld, [path + "etc/libdl.conf"] + objs, [path], tar)
   tar_c, tar_h = self.bin2c(bld, tar)
   objs = []
   objs.append(self.cc(bld, bic, tar_c))

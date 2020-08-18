@@ -7,7 +7,7 @@ cppflags: []
 do-build: |
   path = "testsuites/libtests/dl06/"
   pre_tar = path + "dl06-pre.tar"
-  self.pax(bld, path + "dl06_pre_file", [path], pre_tar)
+  self.tar(bld, path + "dl06_pre_file", [path], pre_tar)
   pre_tar_c, pre_tar_h = self.bin2c(bld, pre_tar, name="dl06_tar")
   objs = []
   objs.append(self.cc(bld, bic, pre_tar_c))
@@ -22,7 +22,7 @@ do-build: |
   dl06_rap = path + "dl06.rap"
   self.rtems_rap(bld, dl06_pre, objs, ["m"], dl06_rap)
   tar = path + "dl06.tar"
-  self.pax(bld, dl06_rap, [path], tar)
+  self.tar(bld, dl06_rap, [path], tar)
   tar_c, tar_h = self.bin2c(bld, tar)
   objs.append(self.cc(bld, bic, tar_c))
   objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL06_CPPFLAGS))
