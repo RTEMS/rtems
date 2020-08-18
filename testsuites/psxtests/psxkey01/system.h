@@ -41,7 +41,7 @@
 #endif
 
 TEST_EXTERN pthread_t        Init_id;
-TEST_EXTERN pthread_key_t    Key_id[CONFIGURE_MAXIMUM_POSIX_KEYS - 1];
+TEST_EXTERN pthread_key_t    Key_id[ CONFIGURE_MAXIMUM_POSIX_KEYS ];
 TEST_EXTERN uint32_t         Data_array[ CONFIGURE_MAXIMUM_TASKS ];
 
 #undef TEST_EXTERN
