@@ -201,6 +201,15 @@ pragma Elaborate_Body (RTEMS);
    Inherit_Priority        : constant RTEMS.Attribute := 16#00000040#;
    No_Priority_Ceiling     : constant RTEMS.Attribute := 16#00000000#;
    Priority_Ceiling        : constant RTEMS.Attribute := 16#00000080#;
+   No_Multiprocessor_Resource_Sharing
+                           : constant RTEMS.Attribute := 16#00000000#;
+   Multiprocessor_Resource_Sharing
+                           : constant RTEMS.Attribute := 16#00000100#;
+   Barrier_Manual_Release  : constant RTEMS.Attribute := 16#00000000#;
+   Barrier_Automatic_Release
+                           : constant RTEMS.Attribute := 16#00000200#;
+   Application_Task        : constant RTEMS.Attribute := 16#00000000#;
+   System_Task             : constant RTEMS.Attribute := 16#00008000#;
 
    function Interrupt_Level (
       Level : in     RTEMS.Unsigned32
