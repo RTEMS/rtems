@@ -169,7 +169,9 @@ static void test_isr_level( void )
 
 static void test_isr_locks( void )
 {
+#if defined(RTEMS_SMP)
   static const char name[] = "test";
+#endif
   ISR_Level normal_interrupt_level = _ISR_Get_level();
   ISR_lock_Control initialized = ISR_LOCK_INITIALIZER( name );
   ISR_lock_Control zero_initialized;
