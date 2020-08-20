@@ -122,6 +122,8 @@ void zynq_uart_initialize(rtems_termios_device_context *base)
   uint32_t brgr = 0x3e;
   uint32_t bauddiv = 0x6;
 
+  zynq_uart_reset_tx_flush(ctx);
+
   zynq_cal_baud_rate(ZYNQ_UART_DEFAULT_BAUD, &brgr, &bauddiv, regs->mode);
 
   regs->control &= ~(ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN);
