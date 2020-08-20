@@ -149,7 +149,7 @@ T_TEST_CASE(TaskSetPriorityInterrupt)
   rtems_task_priority prio;
 
   sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio);
-  T_rsc_success(RTEMS_SUCCESSFUL);
+  T_rsc_success(sc);
 
   memset(&ctx, 0, sizeof(ctx));
   rtems_interrupt_lock_initialize(&ctx.lock, "Test");
@@ -164,7 +164,7 @@ T_TEST_CASE(TaskSetPriorityInterrupt)
   rtems_interrupt_lock_destroy(&ctx.lock);
 
   sc = rtems_task_set_priority(RTEMS_SELF, prio, &prio);
-  T_rsc_success(RTEMS_SUCCESSFUL);
+  T_rsc_success(sc);
 }
 
 static rtems_task Init(rtems_task_argument argument)
