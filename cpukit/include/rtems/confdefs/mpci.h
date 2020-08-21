@@ -6,9 +6,6 @@
  * @ingroup RTEMSApplicationConfiguration
  *
  * @brief Evaluate MPCI Configuration Options
- *
- * This header file defines _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT for use by
- * other configuration header files.
  */
 
 /*
@@ -49,6 +46,8 @@
 
 #ifdef CONFIGURE_MP_APPLICATION
 
+#include <rtems/confdefs/threads.h>
+
 #ifndef CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
   #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
 #endif
@@ -82,8 +81,6 @@
 #if CONFIGURE_MP_NODE_NUMBER > CONFIGURE_MP_MAXIMUM_NODES
   #error "CONFIGURE_MP_NODE_NUMBER must be less than or equal to CONFIGURE_MP_MAXIMUM_NODES"
 #endif
-
-#define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -126,10 +123,6 @@ RTEMS_SECTION( ".rtemsstack.mpci" );
 }
 #endif
 
-#else /* CONFIGURE_MP_APPLICATION */
-
-#define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
-
 #endif /* CONFIGURE_MP_APPLICATION */
 
 #else /* RTEMS_MULTIPROCESSING */
@@ -137,8 +130,6 @@ RTEMS_SECTION( ".rtemsstack.mpci" );
 #ifdef CONFIGURE_MP_APPLICATION
   #error "CONFIGURE_MP_APPLICATION must not be defined if multiprocessing is disabled"
 #endif
-
-#define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
 
 #endif /* RTEMS_MULTIPROCESSING */
 

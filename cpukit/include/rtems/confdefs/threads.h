@@ -44,7 +44,6 @@
 
 #include <rtems/confdefs/bdbuf.h>
 #include <rtems/confdefs/extensions.h>
-#include <rtems/confdefs/mpci.h>
 #include <rtems/confdefs/percpu.h>
 #include <rtems/confdefs/scheduler.h>
 #include <rtems/confdefs/unlimited.h>
@@ -196,6 +195,12 @@ const size_t _Thread_Control_add_on_count =
 const size_t _Thread_Initial_thread_count =
   rtems_resource_maximum_per_allocation( _CONFIGURE_TASKS ) +
   rtems_resource_maximum_per_allocation( CONFIGURE_MAXIMUM_POSIX_THREADS );
+
+#if defined(RTEMS_MULTIPROCESSING) && defined(CONFIGURE_MP_APPLICATION)
+  #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
+#else
+  #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
+#endif
 
 THREAD_INFORMATION_DEFINE(
   _Thread,
