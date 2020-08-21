@@ -531,7 +531,7 @@ static bool _Thread_queue_MP_set_callout(
   the_proxy = (Thread_Proxy_control *) the_thread;
   mp_callout = queue_context->mp_callout;
   _Assert( mp_callout != NULL );
-  the_proxy->thread_queue_callout = queue_context->mp_callout;
+  the_proxy->thread_queue_callout = mp_callout;
   return true;
 }
 #endif
