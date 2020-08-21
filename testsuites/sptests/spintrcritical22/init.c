@@ -61,7 +61,7 @@ static T_interrupt_test_state release_semaphore(void *arg)
     sem = &ctx->semaphore_control->Core_control.Semaphore;
     rtems_test_assert(sem->count == 0);
   } else {
-    if (flags == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_BLOCKED)) {
+    if (flags == (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_BLOCKED)) {
       state = T_INTERRUPT_TEST_LATE;
     } else {
       state = T_INTERRUPT_TEST_EARLY;
