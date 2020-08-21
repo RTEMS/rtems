@@ -20,6 +20,8 @@
 
 #include "system.h"
 
+#include <rtems/bspIo.h>
+
 rtems_timer_service_routine Delayed_send_event(
   rtems_id  ignored_id,
   void     *ignored_address
