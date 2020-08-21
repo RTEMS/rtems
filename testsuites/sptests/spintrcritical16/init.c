@@ -46,7 +46,7 @@ static T_interrupt_test_state interrupt( void *arg )
   ) {
     state = T_INTERRUPT_TEST_DONE;
   } else if (
-    flags == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_BLOCKED )
+    flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_BLOCKED )
   ) {
     state = T_INTERRUPT_TEST_LATE;
   } else {
