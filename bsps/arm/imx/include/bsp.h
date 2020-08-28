@@ -57,8 +57,6 @@ extern uintptr_t imx_gic_dist_base;
 
 #define BSP_ARM_A9MPCORE_SCU_BASE 0
 
-void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
-
 void *imx_get_reg_of_node(const void *fdt, int node);
 
 int imx_iomux_configure_pins(const void *fdt, uint32_t phandle);

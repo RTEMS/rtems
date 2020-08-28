@@ -1,8 +1,16 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
- * Copyright (C) 2019 DornerWorks
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
+ * @ingroup RTEMSBSPsARMShared
+ *
+ * @brief ARM-specific clock driver functions.
+ */
+
+/*
+ * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,36 +34,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
-#include <bsp/bootcard.h>
-#include <bsp/irq-generic.h>
-#include <bsp/linker-symbols.h>
+#include <libcpu/arm-cp15.h>
 #include <dev/clock/arm-generic-timer.h>
 
-#include <libcpu/arm-cp15.h>
-
-void arm_generic_timer_get_config( uint32_t *frequency, uint32_t *irq )
+uint64_t arm_gt_clock_get_compare_value(void)
 {
-  *frequency = arm_cp15_get_counter_frequency();
-
 #ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
-  *irq = GUEST_TIMER_VIRT_PPI;
+  return arm_cp15_get_counter_pl1_virtual_compare_value();
 #else
-  *irq = GUEST_TIMER_PHYS_NS_PPI;
+  return arm_cp15_get_counter_pl1_physical_compare_value();
 #endif
 }
 
-/*
- *  bsp_start
- *
- *  This routine does the bulk of the system initialization.
- */
-
-void bsp_start( void )
+void arm_gt_clock_set_compare_value(uint64_t cval)
 {
-  bsp_interrupt_initialize();
-  rtems_cache_coherent_add_area(
-    bsp_section_nocacheheap_begin,
-    (uintptr_t) bsp_section_nocacheheap_size
-  );
+#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
+  arm_cp15_set_counter_pl1_virtual_compare_value(cval);
+#else
+  arm_cp15_set_counter_pl1_physical_compare_value(cval);
+#endif
+}
+
+uint64_t arm_gt_clock_get_count(void)
+{
+#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
+  return arm_cp15_get_counter_virtual_count();
+#else
+  return arm_cp15_get_counter_physical_count();
+#endif
+}
+
+void arm_gt_clock_set_control(uint32_t ctl)
+{
+#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
+  arm_cp15_set_counter_pl1_virtual_timer_control(ctl);
+#else
+  arm_cp15_set_counter_pl1_physical_timer_control(ctl);
+#endif
 }

@@ -16,17 +16,16 @@
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
+#include <dev/clock/arm-generic-timer.h>
 
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
 #include <rtems/score/smpimpl.h>
 
-#include <libcpu/arm-cp15.h>
-
 /*
- * Clock driver using the ARMv7-AR Generic Timer.  The BSP must provide the
- * following function via <bsp.h>:
+ * Clock driver using the ARMv7-AR/AArch64 Generic Timer.  The BSP must provide the
+ * following function:
  *
  * void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
  *
@@ -44,42 +43,6 @@ static arm_gt_clock_context arm_gt_clock_instance;
 
 /* This is defined in dev/clock/clockimpl.h */
 void Clock_isr(rtems_irq_hdl_param arg);
-
-static inline uint64_t arm_gt_clock_get_compare_value(void)
-{
-#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
-  return arm_cp15_get_counter_pl1_virtual_compare_value();
-#else
-  return arm_cp15_get_counter_pl1_physical_compare_value();
-#endif
-}
-
-static inline void arm_gt_clock_set_compare_value(uint64_t cval)
-{
-#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
-  arm_cp15_set_counter_pl1_virtual_compare_value(cval);
-#else
-  arm_cp15_set_counter_pl1_physical_compare_value(cval);
-#endif
-}
-
-static inline uint64_t arm_gt_clock_get_count(void)
-{
-#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
-  return arm_cp15_get_counter_virtual_count();
-#else
-  return arm_cp15_get_counter_physical_count();
-#endif
-}
-
-static inline void arm_gt_clock_set_control(uint32_t ctl)
-{
-#ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
-  arm_cp15_set_counter_pl1_virtual_timer_control(ctl);
-#else
-  arm_cp15_set_counter_pl1_physical_timer_control(ctl);
-#endif
-}
 
 static void arm_gt_clock_at_tick(void)
 {

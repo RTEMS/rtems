@@ -17,6 +17,9 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/xen/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/dev/clock
+  source:
+  - bsps/include/dev/clock/arm-generic-timer.h
 links:
 - role: build-dependency
   uid: ../grp
@@ -56,7 +59,8 @@ links:
   uid: ../../bspopts
 source:
 - bsps/arm/shared/cache/cache-cp15.c
-- bsps/arm/shared/clock/clock-generic-timer.c
+- bsps/shared/dev/clock/arm-generic-timer.c
+- bsps/arm/shared/clock/arm-generic-timer-aarch32.c
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/irq/irq-gic.c

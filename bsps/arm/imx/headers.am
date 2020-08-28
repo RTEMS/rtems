@@ -21,3 +21,7 @@ include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../../../../../bsps/arm/imx/include/bsp/imx-gpio.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/imx/include/bsp/irq.h
+
+include_dev_clockdir = $(includedir)/dev/clock
+include_dev_clock_HEADERS =
+include_dev_clock_HEADERS += ../../../../../../bsps/include/dev/clock/arm-generic-timer.h

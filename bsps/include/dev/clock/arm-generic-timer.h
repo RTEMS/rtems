@@ -1,18 +1,16 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
- * @ingroup RTEMSBSPsARMZynqMP
- * @brief Global BSP definitions.
+ *
+ * @ingroup RTEMSBSPsShared
+ *
+ * @brief Header defining architecture-specific clock functions.
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2013, 2014 embedded brains GmbH
- *
- * Copyright (C) 2019 DornerWorks
- *
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
- *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,57 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_ARM_XILINX_ZYNQMP_BSP_H
-#define LIBBSP_ARM_XILINX_ZYNQMP_BSP_H
+#include <rtems/score/basedefs.h>
 
 /**
- * @defgroup RTEMSBSPsARMZynqMP Xilinx Zynq UltraScale+ MPSoC
+ * This function returns the current compare value for the ARM General Purpose
+ * Timer.
  *
- * @ingroup RTEMSBSPsARM
- *
- * @brief Xilinx Zynq UltraScale+ MPSoC Board Support Package.
- *
- * @{
+ * @return The current compare value.
  */
-
-#include <bspopts.h>
-
-#define BSP_FEATURE_IRQ_EXTENSION
-
-#ifndef ASM
-
-#include <rtems.h>
-
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-#define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
-
-#define BSP_ARM_GIC_DIST_BASE 0xf9010000
-
-#define BSP_ARM_A9MPCORE_SCU_BASE 0
-
-#define BSP_ARM_A9MPCORE_GT_BASE 0
+uint64_t arm_gt_clock_get_compare_value(void);
 
 /**
- * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
+ * This function sets the current compare value for the ARM General Purpose
+ * Timer.
  *
- * Provide in the application to override the defaults in the BSP.
+ * @param[in] cval The value to set as the compare value
  */
-BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void);
+void arm_gt_clock_set_compare_value(uint64_t cval);
 
-void zynqmp_debug_console_flush(void);
+/**
+ * This function returns the count for the ARM General Purpose Timer.
+ *
+ * @return The current count.
+ */
+uint64_t arm_gt_clock_get_count(void);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+/**
+ * This function sets the control register for the ARM General Purpose Timer.
+ *
+ * @param[in] ctl The value to set to the control register
+ */
+void arm_gt_clock_set_control(uint32_t ctl);
 
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_ARM_XILINX_ZYNQMP_BSP_H */
+/**
+ * This function gets the frequency and IRQ number used by the ARM General
+ * Purpose Timer.
+ *
+ * @param[out] frequency The frequency at which the timer will fire.
+ * @param[out] irq The number of the IRQ on which the timer will fire.
+ */
+void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);

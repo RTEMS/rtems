@@ -64,7 +64,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart-polled.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-generic-timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/arm-generic-timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/arm-generic-timer-aarch32.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c

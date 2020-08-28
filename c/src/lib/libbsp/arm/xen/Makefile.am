@@ -29,7 +29,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcp
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 # clock
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-generic-timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/arm-generic-timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/arm-generic-timer-aarch32.c
 # cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 # irq

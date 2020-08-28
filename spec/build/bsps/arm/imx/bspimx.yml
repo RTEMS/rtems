@@ -29,6 +29,9 @@ install:
   source:
   - bsps/arm/imx/include/bsp/imx-gpio.h
   - bsps/arm/imx/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/dev/clock
+  source:
+  - bsps/include/dev/clock/arm-generic-timer.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/imx/start/linkcmds
@@ -88,7 +91,8 @@ source:
 - bsps/arm/imx/start/imx_iomux.c
 - bsps/arm/shared/cache/cache-cp15.c
 - bsps/arm/shared/cache/cache-v7ar-disable-data.S
-- bsps/arm/shared/clock/clock-generic-timer.c
+- bsps/shared/dev/clock/arm-generic-timer.c
+- bsps/arm/shared/clock/arm-generic-timer-aarch32.c
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/irq/irq-gic.c

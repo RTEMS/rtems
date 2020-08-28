@@ -71,8 +71,6 @@ extern "C" {
 #define BSP_XEN_VPL011_BASE 0x22000000
 #define BSP_XEN_VPL011_LENGTH 0x1000
 
-void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
-
 BSP_START_TEXT_SECTION void bsp_xen_setup_mmu_and_cache(void);
 
 #ifdef __cplusplus

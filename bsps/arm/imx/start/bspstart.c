@@ -18,6 +18,7 @@
 #include <bsp/fdt.h>
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
+#include <dev/clock/arm-generic-timer.h>
 
 #include <libfdt.h>
 
