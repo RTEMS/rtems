@@ -21,6 +21,13 @@ include_bsp_HEADERS += ../../bsps/include/bsp/u-boot.h
 include_bsp_HEADERS += ../../bsps/include/bsp/uart-output-char.h
 include_bsp_HEADERS += ../../bsps/include/bsp/utility.h
 
+include_dev_irqdir = $(includedir)/dev/irq
+include_dev_irq_HEADERS =
+include_dev_irq_HEADERS += ../../bsps/include/dev/irq/arm-gic-irq.h
+include_dev_irq_HEADERS += ../../bsps/include/dev/irq/arm-gic-regs.h
+include_dev_irq_HEADERS += ../../bsps/include/dev/irq/arm-gic-tm27.h
+include_dev_irq_HEADERS += ../../bsps/include/dev/irq/arm-gic.h
+
 include_dev_serialdir = $(includedir)/dev/serial
 include_dev_serial_HEADERS =
 include_dev_serial_HEADERS += ../../bsps/include/dev/serial/arm-pl011-regs.h

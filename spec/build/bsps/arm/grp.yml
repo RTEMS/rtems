@@ -22,10 +22,6 @@ install:
   - bsps/arm/include/bsp/arm-a9mpcore-start.h
   - bsps/arm/include/bsp/arm-cp15-start.h
   - bsps/arm/include/bsp/arm-errata.h
-  - bsps/arm/include/bsp/arm-gic-irq.h
-  - bsps/arm/include/bsp/arm-gic-regs.h
-  - bsps/arm/include/bsp/arm-gic-tm27.h
-  - bsps/arm/include/bsp/arm-gic.h
   - bsps/arm/include/bsp/arm-pl050-regs.h
   - bsps/arm/include/bsp/arm-pl050.h
   - bsps/arm/include/bsp/arm-pl111-fb.h
@@ -42,6 +38,12 @@ install:
   - bsps/arm/include/bsp/start.h
   - bsps/arm/include/bsp/zynq-uart-regs.h
   - bsps/arm/include/bsp/zynq-uart.h
+- destination: ${BSP_INCLUDEDIR}/dev/irq
+  source:
+  - bsps/include/dev/irq/arm-gic-irq.h
+  - bsps/include/dev/irq/arm-gic-regs.h
+  - bsps/include/dev/irq/arm-gic-tm27.h
+  - bsps/include/dev/irq/arm-gic.h
 - destination: ${BSP_INCLUDEDIR}/libcpu
   source:
   - bsps/arm/include/libcpu/am335x.h

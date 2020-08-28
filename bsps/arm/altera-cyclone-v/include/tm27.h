@@ -33,7 +33,7 @@
  * @brief Intel Cyclone V TM27 Support.
  */
 
-#include <bsp/arm-gic-tm27.h>
+#include <dev/irq/arm-gic-tm27.h>
 
 /** @} */
 

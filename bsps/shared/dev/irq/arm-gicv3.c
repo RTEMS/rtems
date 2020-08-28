@@ -25,11 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp/arm-gic.h>
-
-#include <rtems/score/armv4.h>
-
-#include <libcpu/arm-cp15.h>
+#include <dev/irq/arm-gic.h>
 
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
@@ -37,6 +33,34 @@
 
 #define PRIORITY_DEFAULT 127
 
+#define MPIDR_AFFINITY2(val) BSP_FLD64(val, 16, 23)
+#define MPIDR_AFFINITY2_GET(reg) BSP_FLD64GET(reg, 16, 23)
+#define MPIDR_AFFINITY2_SET(reg, val) BSP_FLD64SET(reg, val, 16, 23)
+#define MPIDR_AFFINITY1(val) BSP_FLD64(val, 8, 15)
+#define MPIDR_AFFINITY1_GET(reg) BSP_FLD64GET(reg, 8, 15)
+#define MPIDR_AFFINITY1_SET(reg, val) BSP_FLD64SET(reg, val, 8, 15)
+#define MPIDR_AFFINITY0(val) BSP_FLD64(val, 0, 7)
+#define MPIDR_AFFINITY0_GET(reg) BSP_FLD64GET(reg, 0, 7)
+#define MPIDR_AFFINITY0_SET(reg, val) BSP_FLD64SET(reg, val, 0, 7)
+
+#define ICC_SGIR_AFFINITY3(val) BSP_FLD64(val, 48, 55)
+#define ICC_SGIR_AFFINITY3_GET(reg) BSP_FLD64GET(reg, 48, 55)
+#define ICC_SGIR_AFFINITY3_SET(reg, val) BSP_FLD64SET(reg, val, 48, 55)
+#define ICC_SGIR_IRM BSP_BIT32(40)
+#define ICC_SGIR_AFFINITY2(val) BSP_FLD64(val, 32, 39)
+#define ICC_SGIR_AFFINITY2_GET(reg) BSP_FLD64GET(reg, 32, 39)
+#define ICC_SGIR_AFFINITY2_SET(reg, val) BSP_FLD64SET(reg, val, 32, 39)
+#define ICC_SGIR_INTID(val) BSP_FLD64(val, 24, 27)
+#define ICC_SGIR_INTID_GET(reg) BSP_FLD64GET(reg, 24, 27)
+#define ICC_SGIR_INTID_SET(reg, val) BSP_FLD64SET(reg, val, 24, 27)
+#define ICC_SGIR_AFFINITY1(val) BSP_FLD64(val, 16, 23)
+#define ICC_SGIR_AFFINITY1_GET(reg) BSP_FLD64GET(reg, 16, 23)
+#define ICC_SGIR_AFFINITY1_SET(reg, val) BSP_FLD64SET(reg, val, 16, 23)
+#define ICC_SGIR_CPU_TARGET_LIST(val) BSP_FLD64(val, 0, 15)
+#define ICC_SGIR_CPU_TARGET_LIST_GET(reg) BSP_FLD64GET(reg, 0, 15)
+#define ICC_SGIR_CPU_TARGET_LIST_SET(reg, val) BSP_FLD64SET(reg, val, 0, 15)
+
+#ifdef ARM_MULTILIB_ARCH_V4
 /* cpuif->iccicr */
 #define ICC_CTLR    "p15, 0, %0, c12, c12, 4"
 
@@ -60,39 +84,7 @@
 #define ICC_IGRPEN0 "p15, 0, %0, c12, c12, 6"
 #define ICC_IGRPEN1 "p15, 0, %0, c12, c12, 7"
 
-#define ICC_SGI1    "p15, 0, %Q0, %R0, c12"
-
-#define ICC_SGIR_AFFINITY3(val) BSP_FLD64(val, 48, 55)
-#define ICC_SGIR_AFFINITY3_GET(reg) BSP_FLD64GET(reg, 48, 55)
-#define ICC_SGIR_AFFINITY3_SET(reg, val) BSP_FLD64SET(reg, val, 48, 55)
-#define ICC_SGIR_IRM BSP_BIT32(40)
-#define ICC_SGIR_AFFINITY2(val) BSP_FLD64(val, 32, 39)
-#define ICC_SGIR_AFFINITY2_GET(reg) BSP_FLD64GET(reg, 32, 39)
-#define ICC_SGIR_AFFINITY2_SET(reg, val) BSP_FLD64SET(reg, val, 32, 39)
-#define ICC_SGIR_INTID(val) BSP_FLD64(val, 24, 27)
-#define ICC_SGIR_INTID_GET(reg) BSP_FLD64GET(reg, 24, 27)
-#define ICC_SGIR_INTID_SET(reg, val) BSP_FLD64SET(reg, val, 24, 27)
-#define ICC_SGIR_AFFINITY1(val) BSP_FLD64(val, 16, 23)
-#define ICC_SGIR_AFFINITY1_GET(reg) BSP_FLD64GET(reg, 16, 23)
-#define ICC_SGIR_AFFINITY1_SET(reg, val) BSP_FLD64SET(reg, val, 16, 23)
-#define ICC_SGIR_CPU_TARGET_LIST(val) BSP_FLD64(val, 0, 15)
-#define ICC_SGIR_CPU_TARGET_LIST_GET(reg) BSP_FLD64GET(reg, 0, 15)
-#define ICC_SGIR_CPU_TARGET_LIST_SET(reg, val) BSP_FLD64SET(reg, val, 0, 15)
-
 #define MPIDR       "p15, 0, %0, c0, c0, 5"
-
-#define MPIDR_AFFINITY3(val) BSP_FLD64(val, 25, 29)
-#define MPIDR_AFFINITY3_GET(reg) BSP_FLD64GET(reg, 25, 29)
-#define MPIDR_AFFINITY3_SET(reg, val) BSP_FLD64SET(reg, val, 25, 29)
-#define MPIDR_AFFINITY2(val) BSP_FLD64(val, 16, 23)
-#define MPIDR_AFFINITY2_GET(reg) BSP_FLD64GET(reg, 16, 23)
-#define MPIDR_AFFINITY2_SET(reg, val) BSP_FLD64SET(reg, val, 16, 23)
-#define MPIDR_AFFINITY1(val) BSP_FLD64(val, 8, 15)
-#define MPIDR_AFFINITY1_GET(reg) BSP_FLD64GET(reg, 8, 15)
-#define MPIDR_AFFINITY1_SET(reg, val) BSP_FLD64SET(reg, val, 8, 15)
-#define MPIDR_AFFINITY0(val) BSP_FLD64(val, 0, 7)
-#define MPIDR_AFFINITY0_GET(reg) BSP_FLD64GET(reg, 0, 7)
-#define MPIDR_AFFINITY0_SET(reg, val) BSP_FLD64SET(reg, val, 0, 7)
 
 #define READ_SR(SR_NAME) \
 ({ \
@@ -104,23 +96,52 @@
 #define WRITE_SR(SR_NAME, VALUE) \
     __asm__ volatile("mcr    " SR_NAME "  \n" : : "r" (VALUE) );
 
+#define ICC_SGI1    "p15, 0, %Q0, %R0, c12"
 #define WRITE64_SR(SR_NAME, VALUE) \
     __asm__ volatile("mcrr    " SR_NAME "  \n" : : "r" (VALUE) );
+
+#else /* ARM_MULTILIB_ARCH_V4 */
+
+/* AArch64 GICv3 registers are not named in GCC */
+#define ICC_IGRPEN0 "S3_0_C12_C12_6, %0"
+#define ICC_IGRPEN1 "S3_0_C12_C12_7, %0"
+#define ICC_PMR     "S3_0_C4_C6_0, %0"
+#define ICC_EOIR1   "S3_0_C12_C12_1, %0"
+#define ICC_SRE     "S3_0_C12_C12_5, %0"
+#define ICC_BPR0    "S3_0_C12_C8_3, %0"
+#define ICC_CTLR    "S3_0_C12_C12_4, %0"
+#define ICC_IAR1    "%0, S3_0_C12_C12_0"
+#define MPIDR       "%0, mpidr_el1"
+#define MPIDR_AFFINITY3(val) BSP_FLD64(val, 32, 39)
+#define MPIDR_AFFINITY3_GET(reg) BSP_FLD64GET(reg, 32, 39)
+#define MPIDR_AFFINITY3_SET(reg, val) BSP_FLD64SET(reg, val, 32, 39)
+
+#define ICC_SGI1    "S3_0_C12_C11_5, %0"
+#define WRITE64_SR(SR_NAME, VALUE) \
+    __asm__ volatile("msr    " SR_NAME "  \n" : : "r" (VALUE) );
+#define WRITE_SR(SR_NAME, VALUE) WRITE64_SR(SR_NAME, VALUE)
+
+#define READ_SR(SR_NAME) \
+({ \
+  uint64_t value; \
+  __asm__ volatile("mrs    " SR_NAME : "=&r" (value) ); \
+  value; \
+})
+
+
+#endif /* ARM_MULTILIB_ARCH_V4 */
 
 #define ARM_GIC_REDIST ((volatile gic_redist *) BSP_ARM_GIC_REDIST_BASE)
 #define ARM_GIC_SGI_PPI (((volatile gic_sgi_ppi *) ((char*)BSP_ARM_GIC_REDIST_BASE + (1 << 16))))
 
-void bsp_interrupt_dispatch(void)
+void gicv3_interrupt_dispatch(void)
 {
   uint32_t icciar = READ_SR(ICC_IAR1);
   rtems_vector_number vector = GIC_CPUIF_ICCIAR_ACKINTID_GET(icciar);
   rtems_vector_number spurious = 1023;
 
   if (vector != spurious) {
-    uint32_t psr = _ARMV4_Status_irq_enable();
-    bsp_interrupt_handler_dispatch(vector);
-
-    _ARMV4_Status_restore(psr);
+    arm_interrupt_handler_dispatch(vector);
 
     WRITE_SR(ICC_EOIR1, icciar);
   }
@@ -199,10 +220,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   uint32_t id_count = get_id_count(dist);
   uint32_t id;
 
-  arm_cp15_set_exception_handler(
-    ARM_EXCEPTION_IRQ,
-    _ARMV4_Exception_interrupt
-  );
+  arm_interrupt_facility_set_exception_handler();
 
   dist->icddcr = GIC_DIST_ICDDCR_ARE_NS | GIC_DIST_ICDDCR_ARE_S
                | GIC_DIST_ICDDCR_ENABLE_GRP1S | GIC_DIST_ICDDCR_ENABLE_GRP1NS
@@ -319,11 +337,18 @@ void arm_gic_trigger_sgi(
    * ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
    * ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_EXCEPT_SELF,
    * ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF */
-  uint32_t mpidr = READ_SR(MPIDR);
-  uint64_t value = ICC_SGIR_AFFINITY3(MPIDR_AFFINITY3_GET(mpidr))
-                 | ICC_SGIR_AFFINITY2(MPIDR_AFFINITY2_GET(mpidr))
+#ifndef ARM_MULTILIB_ARCH_V4
+  uint64_t mpidr;
+#else
+  uint32_t mpidr;
+#endif
+  mpidr = READ_SR(MPIDR);
+  uint64_t value = ICC_SGIR_AFFINITY2(MPIDR_AFFINITY2_GET(mpidr))
                  | ICC_SGIR_INTID(vector)
                  | ICC_SGIR_AFFINITY1(MPIDR_AFFINITY1_GET(mpidr))
                  | ICC_SGIR_CPU_TARGET_LIST(1);
+#ifndef ARM_MULTILIB_ARCH_V4
+  value |= ICC_SGIR_AFFINITY3(MPIDR_AFFINITY3_GET(mpidr));
+#endif
   WRITE64_SR(ICC_SGI1, value);
 }

@@ -23,7 +23,7 @@
 #ifndef LIBBSP_ARM_SHARED_ARM_GIC_H
 #define LIBBSP_ARM_SHARED_ARM_GIC_H
 
-#include <bsp/arm-gic-regs.h>
+#include <dev/irq/arm-gic-regs.h>
 
 #include <stdbool.h>
 

@@ -31,7 +31,7 @@
 #include <bsp/start.h>
 #include <bsp/arm-a9mpcore-regs.h>
 #include <bsp/arm-errata.h>
-#include <bsp/arm-gic-irq.h>
+#include <dev/irq/arm-gic-irq.h>
 
 #ifdef __cplusplus
 extern "C" {

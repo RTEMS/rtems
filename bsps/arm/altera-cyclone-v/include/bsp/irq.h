@@ -27,7 +27,7 @@
 #include <rtems/irq-extension.h>
 
 #include <bsp/arm-a9mpcore-irq.h>
-#include <bsp/arm-gic-irq.h>
+#include <dev/irq/arm-gic-irq.h>
 #include <bsp/alt_interrupt_common.h>
 
 #ifdef __cplusplus

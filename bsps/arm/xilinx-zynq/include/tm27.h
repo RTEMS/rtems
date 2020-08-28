@@ -44,6 +44,6 @@
  * @brief Interrupt Mechanisms for tm27 test
  */
 
-#include <bsp/arm-gic-tm27.h>
+#include <dev/irq/arm-gic-tm27.h>
 
 #endif /* __tm27_h */

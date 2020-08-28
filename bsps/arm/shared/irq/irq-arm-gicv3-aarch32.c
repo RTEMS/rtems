@@ -1,18 +1,16 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
- * @ingroup zynqmp_tm27
- * @brief Interrupt mechanisms for tm27 test.
+ *
+ * @ingroup RTEMSBSPsARMShared
+ *
+ * @brief ARM-specific IRQ handlers.
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2013 embedded brains GmbH
- *
- * Copyright (C) 2019 DornerWorks
- *
- * Written by Jeff Kubascik <jeff.kubascik@dornerworks.com>
- *        and Josh Whitehead <josh.whitehead@dornerworks.com>
+ * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,19 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_TMTEST27
-#error "This is an RTEMS internal file you must not include directly."
-#endif
+#include <libcpu/arm-cp15.h>
+#include <dev/irq/arm-gic-irq.h>
+#include <bsp/irq-generic.h>
+#include <rtems/score/armv4.h>
 
-#ifndef __tm27_h
-#define __tm27_h
+void arm_interrupt_handler_dispatch(rtems_vector_number vector)
+{
+  uint32_t psr = _ARMV4_Status_irq_enable();
+  bsp_interrupt_handler_dispatch(vector);
 
-/**
- * @defgroup zynqmp_tm27 TM27 Test Support
- * @ingroup RTEMSBSPsARMZynqMP
- * @brief Interrupt Mechanisms for tm27 test
- */
+  _ARMV4_Status_restore(psr);
+}
 
-#include <dev/irq/arm-gic-tm27.h>
+void arm_interrupt_facility_set_exception_handler(void)
+{
+  arm_cp15_set_exception_handler(
+    ARM_EXCEPTION_IRQ,
+    _ARMV4_Exception_interrupt
+  );
+}
 
-#endif /* __tm27_h */
+void bsp_interrupt_dispatch(void)
+{
+  gicv3_interrupt_dispatch();
+}

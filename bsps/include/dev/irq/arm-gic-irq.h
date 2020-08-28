@@ -24,7 +24,7 @@
 #define LIBBSP_ARM_SHARED_ARM_GIC_IRQ_H
 
 #include <bsp.h>
-#include <bsp/arm-gic.h>
+#include <dev/irq/arm-gic.h>
 #include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
@@ -107,6 +107,25 @@ static inline rtems_status_code arm_gic_irq_generate_software_irq(
 
   return sc;
 }
+
+/**
+ * This architecture-specific function sets the exception vector for handling
+ * IRQs.
+ */
+void arm_interrupt_facility_set_exception_handler(void);
+
+/**
+ * This architecture-specific function dispatches a triggered IRQ.
+ *
+ * @param[in] vector The vector on which the IRQ occurred.
+ */
+void arm_interrupt_handler_dispatch(rtems_vector_number vector);
+
+/**
+ * This is the GICv3 interrupt dispatcher that is to be called from the
+ * architecture-specific implementation of the IRQ handler.
+ */
+void gicv3_interrupt_dispatch(void);
 
 static inline uint32_t arm_gic_irq_processor_count(void)
 {

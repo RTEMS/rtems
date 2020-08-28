@@ -33,6 +33,6 @@
 #ifndef __tm27_h
 #define __tm27_h
 
-#include <bsp/arm-gic-tm27.h>
+#include <dev/irq/arm-gic-tm27.h>
 
 #endif /* __tm27_h */

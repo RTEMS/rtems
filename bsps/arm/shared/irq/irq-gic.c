@@ -12,7 +12,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp/arm-gic.h>
+#include <dev/irq/arm-gic.h>
 
 #include <rtems/score/armv4.h>
 
