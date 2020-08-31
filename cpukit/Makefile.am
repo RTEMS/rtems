@@ -165,6 +165,7 @@ librtemscpu_a_SOURCES += libcsupport/src/lchown.c
 librtemscpu_a_SOURCES += libcsupport/src/libio.c
 librtemscpu_a_SOURCES += libcsupport/src/libio_exit.c
 librtemscpu_a_SOURCES += libcsupport/src/libio_init.c
+librtemscpu_a_SOURCES += libcsupport/src/libiozeroiops.c
 librtemscpu_a_SOURCES += libcsupport/src/link.c
 librtemscpu_a_SOURCES += libcsupport/src/lseek.c
 librtemscpu_a_SOURCES += libcsupport/src/lstat.c
