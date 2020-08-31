@@ -336,6 +336,18 @@ void _Thread_Life_action_handler(
 
   _Thread_State_acquire( executing, lock_context );
 
+  /*
+   * The executing thread runs with thread dispatching disabled right now.
+   * Other threads may have suspended the executing thread.  The thread life
+   * handler may run in parallel with _Thread_Add_life_change_request() which
+   * may have set STATES_LIFE_IS_CHANGING.
+   */
+  _Assert(
+    executing->current_state == STATES_READY
+      || executing->current_state == STATES_SUSPENDED
+      || executing->current_state == STATES_LIFE_IS_CHANGING
+  );
+
   _Thread_Change_life_locked(
     executing,
     THREAD_LIFE_PROTECTED | THREAD_LIFE_RESTARTING,
@@ -347,10 +359,6 @@ void _Thread_Life_action_handler(
 
   _Assert(
     _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
-  );
-  _Assert(
-    executing->current_state == STATES_READY
-      || executing->current_state == STATES_SUSPENDED
   );
 
   _User_extensions_Destroy_iterators( executing );
