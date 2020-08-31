@@ -210,24 +210,22 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
 {
-#ifdef QORIQ_IS_HYPERVISOR_GUEST
-  (void) cpu_count;
-#else
-  if (cpu_count > 1) {
-    rtems_status_code sc;
+#ifndef QORIQ_IS_HYPERVISOR_GUEST
+  rtems_status_code sc;
 
-    sc = rtems_interrupt_handler_install(
-      QORIQ_IRQ_IPI_0 + IPI_INDEX,
-      "IPI",
-      RTEMS_INTERRUPT_UNIQUE,
-      bsp_inter_processor_interrupt,
-      NULL
-    );
-    if (sc != RTEMS_SUCCESSFUL) {
-      bsp_fatal(QORIQ_FATAL_SMP_IPI_HANDLER_INSTALL);
-    }
+  sc = rtems_interrupt_handler_install(
+    QORIQ_IRQ_IPI_0 + IPI_INDEX,
+    "IPI",
+    RTEMS_INTERRUPT_UNIQUE,
+    bsp_inter_processor_interrupt,
+    NULL
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    bsp_fatal(QORIQ_FATAL_SMP_IPI_HANDLER_INSTALL);
   }
 #endif
+
+  (void) cpu_count;
 }
 
 void _CPU_SMP_Prepare_start_multitasking(void)

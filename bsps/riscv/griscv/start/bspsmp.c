@@ -55,18 +55,15 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 
 uint32_t _CPU_SMP_Initialize(void)
 {
-  if ( rtems_configuration_get_maximum_processors() > 1 ) {
-    GRLIB_Cpu_Unmask_interrupt(GRLIB_mp_irq, _CPU_SMP_Get_current_processor());
+  GRLIB_Cpu_Unmask_interrupt(GRLIB_mp_irq, _CPU_SMP_Get_current_processor());
 
-    rtems_interrupt_handler_install(
-      GRLIB_mp_irq,
-      "IPI",
-      RTEMS_INTERRUPT_SHARED,
-      bsp_inter_processor_interrupt,
-      NULL
-    );
-
-  }
+  rtems_interrupt_handler_install(
+    GRLIB_mp_irq,
+    "IPI",
+    RTEMS_INTERRUPT_SHARED,
+    bsp_inter_processor_interrupt,
+    NULL
+  );
 
   return grlib_get_cpu_count(GRLIB_IrqCtrl_Regs);
 }

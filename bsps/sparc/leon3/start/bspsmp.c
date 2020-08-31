@@ -60,10 +60,8 @@ uint32_t _CPU_SMP_Initialize( void )
   if ( !leon3_data_cache_snooping_enabled() )
     bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR );
 
-  if ( rtems_configuration_get_maximum_processors() > 1 ) {
-    LEON_Unmask_interrupt(LEON3_mp_irq);
-    set_vector(bsp_inter_processor_interrupt, LEON_TRAP_TYPE(LEON3_mp_irq), 1);
-  }
+  LEON_Unmask_interrupt(LEON3_mp_irq);
+  set_vector(bsp_inter_processor_interrupt, LEON_TRAP_TYPE(LEON3_mp_irq), 1);
 
   return leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
 }
