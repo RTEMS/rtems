@@ -24,6 +24,7 @@ actions:
     spintrcritical21: exclude
     spintrcritical22: exclude
     spintrcritical23: exclude
+    spintrcritical24: exclude
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
