@@ -107,7 +107,7 @@ static uint32_t set_translation_table_entries(
     #define MPIDR_UP     (1 << 30)
     const uint32_t mpidr = arm_cp15_get_multiprocessor_affinity();
     if ((mpidr & (MPIDR_MX_FMT | MPIDR_UP)) == MPIDR_MX_FMT) {
-      arm_cp15_tlb_invalidate_entry_all_asids(mva);
+      arm_cp15_tlb_invalidate_entry_all_asids_inner_shareable(mva);
     }
     else
 #endif
