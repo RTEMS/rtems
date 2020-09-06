@@ -45,7 +45,7 @@ void htif_console_putchar(rtems_termios_device_context *base, char c);
 
 int htif_console_getchar(rtems_termios_device_context *base);
 
-const rtems_termios_device_handler htif_console_handler;
+extern const rtems_termios_device_handler htif_console_handler;
 
 #ifdef __cplusplus
 }
