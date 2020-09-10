@@ -165,6 +165,15 @@ rtems_status_code rtems_task_create(
 );
 
 /**
+ * @brief This constant defines the recommended alignment of a task storage
+ *   area in bytes.
+ *
+ * Use it with RTEMS_ALIGNED() to define the alignment of a statically
+ * allocated task storage area.
+ */
+#define RTEMS_TASK_STORAGE_ALIGNMENT CPU_HEAP_ALIGNMENT
+
+/**
  * @brief RTEMS Task Name to Id
  *
  * This routine implements the rtems_task_ident directive.

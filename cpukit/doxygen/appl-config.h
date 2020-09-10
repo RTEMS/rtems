@@ -804,6 +804,43 @@
 /**
  * @brief This configuration option is an integer define.
  *
+ * If the value of this configuration option is greater than zero, then it
+ * defines the maximum thread-local storage size, otherwise the thread-local
+ * storage size is defined by the linker depending on the thread-local storage
+ * objects used by the application in the statically-linked executable.
+ *
+ * @par Default Value
+ * The default value is 0.
+ *
+ * @par Value Constraints
+ * The value of this configuration option shall be greater than or equal to 0
+ * and less than or equal to <a
+ * href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
+ *
+ * @par Notes
+ * @parblock
+ * This configuration option can be used to reserve space for the dynamic
+ * linking of modules with thread-local storage objects.
+ *
+ * If the thread-local storage size defined by the thread-local storage objects
+ * used by the application in the statically-linked executable is greater than
+ * a non-zero value of this configuration option, then a fatal error will occur
+ * during system initialization.
+ *
+ * Use RTEMS_ALIGN_UP() and #RTEMS_TASK_STORAGE_ALIGNMENT to adjust the size to
+ * meet the minimum alignment requirement of a thread-local storage area.
+ *
+ * The actual thread-local storage size is determined when the application
+ * executable is linked.  The ``rtems-exeinfo`` command line tool included in
+ * the RTEMS Tools can be used to obtain the thread-local storage size and
+ * alignment of an application executable.
+ * @endparblock
+ */
+#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
+
+/**
+ * @brief This configuration option is an integer define.
+ *
  * The value of this configuration option defines the maximum number of Classic
  * API Timers that can be concurrently active.
  *

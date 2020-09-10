@@ -954,6 +954,16 @@ extern const size_t _Thread_Initial_thread_count;
 extern const size_t _Thread_Maximum_name_size;
 
 /**
+ * @brief If this constant is greater than zero, then it defines the maximum
+ * thread-local storage size, otherwise the thread-local storage size is defined
+ * by the linker depending on the thread-local storage objects used by the
+ * application in the statically-linked executable.
+ *
+ * This value is provided via <rtems/confdefs.h>.
+ */
+extern const size_t _Thread_Maximum_TLS_size;
+
+/**
  * @brief The configured thread control block.
  *
  * This type is defined in <rtems/confdefs.h> and depends on the application

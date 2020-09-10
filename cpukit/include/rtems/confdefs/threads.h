@@ -84,6 +84,10 @@
   #define CONFIGURE_MAXIMUM_THREAD_NAME_SIZE THREAD_DEFAULT_MAXIMUM_NAME_SIZE
 #endif
 
+#ifndef CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
+  #define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE 0
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -124,6 +128,9 @@ typedef union {
 #endif
 
 const size_t _Thread_Maximum_name_size = CONFIGURE_MAXIMUM_THREAD_NAME_SIZE;
+
+const size_t _Thread_Maximum_TLS_size =
+  CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE;
 
 struct Thread_Configured_control {
   Thread_Control Control;

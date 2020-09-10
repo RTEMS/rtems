@@ -257,6 +257,8 @@ links:
 - role: build-dependency
   uid: spfatal32
 - role: build-dependency
+  uid: spfatal33
+- role: build-dependency
   uid: spfifo01
 - role: build-dependency
   uid: spfifo02

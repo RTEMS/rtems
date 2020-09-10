@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,54 +29,27 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/tls.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/thread.h>
+#include "../spfatal_support/spfatal.h"
 
-static uintptr_t _TLS_Allocation_size;
+#define FATAL_ERROR_TEST_NAME       "33"
+#define FATAL_ERROR_DESCRIPTION     "provoke too large TLS size"
+#define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_CORE
+#define FATAL_ERROR_EXPECTED_ERROR  INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
 
-uintptr_t _TLS_Get_allocation_size( void )
+static _Thread_local short tls;
+
+static void force_error(void)
 {
-  uintptr_t size;
-  uintptr_t allocation_size;
-  uintptr_t alignment;
+  long var;
 
-  size = _TLS_Get_size();
+  var = tls;
+  RTEMS_OBFUSCATE_VARIABLE( var );
+  tls = var;
 
-  if ( size == 0 ) {
-    return 0;
-  }
-
-  allocation_size = _TLS_Allocation_size;
-
-  if ( allocation_size == 0 ) {
-    allocation_size = _TLS_Heap_align_up( size );
-    alignment = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
-
-    /*
-     * The stack allocator does not support aligned allocations.  Allocate
-     * enough to do the alignment manually.
-     */
-    if ( alignment > CPU_HEAP_ALIGNMENT ) {
-      allocation_size += alignment;
-    }
-
-    allocation_size += _TLS_Get_thread_control_block_area_size( alignment );
-
-#ifndef __i386__
-    allocation_size += sizeof(TLS_Dynamic_thread_vector);
-#endif
-
-    if ( _Thread_Maximum_TLS_size != 0 ) {
-      if ( allocation_size <= _Thread_Maximum_TLS_size ) {
-        allocation_size = _Thread_Maximum_TLS_size;
-      } else {
-        _Internal_error( INTERNAL_ERROR_TOO_LARGE_TLS_SIZE );
-      }
-    }
-
-    _TLS_Allocation_size = allocation_size;
-  }
-
-  return allocation_size;
+  /* Not reached */
+  rtems_test_assert( 0 );
 }
+
+#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE 1
+
+#include "../spfatal_support/spfatalimpl.h"

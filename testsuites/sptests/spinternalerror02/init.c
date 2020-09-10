@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2020 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Donierstr. 4
@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA
+    error - 3 == INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
   );
 }
 

@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal33
+
+directives:
+
+  - _TLS_Get_allocation_size()
+
+concepts:
+
+  - Provoke a too large TLS size.
