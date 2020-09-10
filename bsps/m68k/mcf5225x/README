@@ -41,7 +41,6 @@ TODO:
 
 *) Add drivers for I2C, ADC, FEC
 *) Support for LWIP
-*) Update the coverhd.h (calling overheads) page 21 of the BSP guide
 *) Recover the 1K stack space reserved in linkcmds used for board startup.
 
 ============================================================================
