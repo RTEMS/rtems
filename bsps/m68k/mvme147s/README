@@ -81,8 +81,5 @@ To be done:
 
 Other notes:
 
- * All the timing tests and sp tests have been run except tmoverhd.
-   The test hangs during the pause (where the task should be suspended
-   until a return). Maybe the rtems_initialize_executive is no more
-   reentrant with this bsp. 
+ * All the timing tests and sp tests have been run
 

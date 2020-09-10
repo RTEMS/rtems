@@ -64,7 +64,6 @@ RTEMS_TEST_CHECK([tmck])
 RTEMS_TEST_CHECK([tmcontext01])
 RTEMS_TEST_CHECK([tmfine01])
 RTEMS_TEST_CHECK([tmonetoone])
-RTEMS_TEST_CHECK([tmoverhd])
 RTEMS_TEST_CHECK([tmtimer01])
 
 AC_CONFIG_FILES([Makefile])

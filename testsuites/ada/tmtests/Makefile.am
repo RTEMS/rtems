@@ -27,6 +27,5 @@ _SUBDIRS += tm25
 _SUBDIRS += tm28
 _SUBDIRS += tm29
 _SUBDIRS += tmck
-_SUBDIRS += tmoverhd
 
 include $(top_srcdir)/../automake/subdirs.am

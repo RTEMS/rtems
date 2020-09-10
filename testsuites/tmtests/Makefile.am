@@ -374,16 +374,6 @@ tmonetoone_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tmonetoone) \
 	$(support_includes)
 endif
 
-if TEST_tmoverhd
-tm_tests += tmoverhd
-tm_docs += tmoverhd/tmoverhd.doc
-tmoverhd_SOURCES = tmoverhd/testtask.c tmoverhd/empty.c \
-	tmoverhd/system.h tmoverhd/dumrtems.h include/timesys.h \
-	../support/src/tmtests_empty_function.c
-tmoverhd_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tmoverhd) \
-	$(support_includes) -I$(top_srcdir)/include
-endif
-
 if TEST_tmtimer01
 tm_tests += tmtimer01
 tm_screens += tmtimer01/tmtimer01.scn
