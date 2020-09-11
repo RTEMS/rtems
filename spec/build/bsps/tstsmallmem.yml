@@ -9,6 +9,7 @@ actions:
     record02: exclude
     sp47: exclude
     spstkalloc02: exclude
+    validation-0: exclude
 - set-value: -DPER_ALLOCATION=10
 - append-test-cppflags: sp71
 - set-value: -DMAXIMUM_DISTRIBUTION=10

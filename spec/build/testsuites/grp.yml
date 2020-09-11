@@ -35,6 +35,8 @@ links:
 - role: build-dependency
   uid: opttm
 - role: build-dependency
+  uid: optvalidation
+- role: build-dependency
   uid: ada/grp
 - role: build-dependency
   uid: benchmarks/grp
@@ -58,6 +60,8 @@ links:
   uid: sptests/grp
 - role: build-dependency
   uid: tmtests/grp
+- role: build-dependency
+  uid: validation/grp
 type: build
 use-after:
 - rtemscpu

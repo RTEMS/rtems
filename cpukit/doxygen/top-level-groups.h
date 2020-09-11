@@ -42,3 +42,9 @@
  *
  * @brief RTEMS Implementation.
  */
+
+/**
+ * @defgroup RTEMSTestSuites Test Suites
+ *
+ * @brief Collection of Test Suites
+ */
