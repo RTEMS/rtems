@@ -60,7 +60,6 @@ bool _Thread_Initialize(
   }
 
   /* Set everything to perform the error case clean up */
-  scheduler_index = 0;
   the_thread->Start.stack_free = config->stack_free;
 
 #if defined(RTEMS_SMP)
@@ -153,6 +152,7 @@ bool _Thread_Initialize(
   scheduler_node = NULL;
   scheduler_node_for_index = the_thread->Scheduler.nodes;
   scheduler_for_index = &_Scheduler_Table[ 0 ];
+  scheduler_index = 0;
 
   while ( scheduler_index < _Scheduler_Count ) {
     Priority_Control priority_for_index;
@@ -255,10 +255,6 @@ bool _Thread_Initialize(
   if ( extension_status )
     return true;
 
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-failed:
-#endif
-
 #if defined(RTEMS_SMP)
   while ( scheduler_index > 0 ) {
     scheduler_node_for_index = (Scheduler_Node *)
@@ -277,6 +273,11 @@ failed:
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads
   );
+
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+failed:
+#endif
+
   ( *the_thread->Start.stack_free )( the_thread->Start.Initial_stack.area );
   return false;
 }
