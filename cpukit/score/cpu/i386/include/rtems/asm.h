@@ -154,7 +154,7 @@
     movl     imps_lapic_addr,\REG
     movl     LAPIC_ID(\REG),\REG
     shrl     $LAPIC_ID_SHIFT,\REG                /* LAPIC_ID in REG */
-    movb     imps_apic_cpu_map(\REG),\REG        /* CPU ID in REG */
+    movzbl   imps_apic_cpu_map(\REG),\REG        /* CPU ID in REG */
 .endm
 
 .macro GET_SELF_CPU_CONTROL REG
