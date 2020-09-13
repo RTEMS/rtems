@@ -93,7 +93,7 @@ SYM(_start):
 #endif
 
 	li	a0, 0
-	j	boot_card
+	tail	boot_card
 
 #ifdef RTEMS_SMP
 
