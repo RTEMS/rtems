@@ -4,6 +4,7 @@ autom4te.cache
 config.h.in
 configure
 doc
+/*.ini
 .lock*
 Makefile.in
 *.pyc
