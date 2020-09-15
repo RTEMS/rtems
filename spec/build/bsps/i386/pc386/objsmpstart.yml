@@ -12,7 +12,7 @@ do-build: |
   startAP_exe = startAP + ".exe"
   ldflags = "-N -Ttext 0x70000 -e app_processor_start -nostdlib"
   bld(
-      rule="${LD} " + ldflags + " -o ${TGT} -r ${SRC}",
+      rule="${LD} " + ldflags + " -o ${TGT} ${SRC}",
       source=startAP_o,
       target=startAP_exe,
   )
