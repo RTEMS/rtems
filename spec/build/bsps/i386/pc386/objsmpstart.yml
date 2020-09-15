@@ -6,6 +6,13 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 do-build: |
+  from waflib import TaskGen
+
+  @TaskGen.feature("i386objcopy")
+  @TaskGen.after("process_rule")
+  def process_i386objcopy(self):
+      self.compiled_tasks = self.tasks
+
   startAP = "bsps/i386/pc386/start/startAP"
   startAP_o = startAP + ".o"
   self.asm(bld, bic, startAP + ".S", startAP_o)
@@ -27,10 +34,8 @@ do-build: |
       rule="${OBJCOPY} -I binary -O elf32-i386 -B i386 ${SRC} ${TGT}",
       source=appstart_bin,
       target=appstart_o,
-  )
-  bld.objects(
-      source=appstart_o,
-      target=self.uid,
+      name=self.uid,
+      features="i386objcopy c",
   )
   bic.objects.append(self.uid)
 do-configure: null
