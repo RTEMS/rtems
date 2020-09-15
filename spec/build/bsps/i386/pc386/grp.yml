@@ -20,6 +20,8 @@ links:
 - role: build-dependency
   uid: objsmp
 - role: build-dependency
+  uid: objsmpstart
+- role: build-dependency
   uid: objvga
 - role: build-dependency
   uid: optvberm

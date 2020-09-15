@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+asflags: []
+build-type: script
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+do-build: |
+  startAP = "bsps/i386/pc386/start/startAP"
+  startAP_o = startAP + ".o"
+  self.asm(bld, bic, startAP + ".S", startAP_o)
+  startAP_exe = startAP + ".exe"
+  ldflags = "-N -Ttext 0x70000 -e app_processor_start -nostdlib"
+  bld(
+      rule="${LD} " + ldflags + " -o ${TGT} -r ${SRC}",
+      source=startAP_o,
+      target=startAP_exe,
+  )
+  appstart_bin = "appstart.bin"
+  bld(
+      rule="${OBJCOPY} -O binary ${SRC} ${TGT}",
+      source=startAP_exe,
+      target=appstart_bin,
+  )
+  appstart_o = "appstart.o"
+  bld(
+      rule="${OBJCOPY} -I binary -O elf32-i386 -B i386 ${SRC} ${TGT}",
+      source=appstart_bin,
+      target=appstart_o,
+  )
+  bld.objects(
+      source=appstart_o,
+      target=self.uid,
+  )
+  bic.objects.append(self.uid)
+do-configure: null
+enabled-by:
+- RTEMS_SMP
+includes: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../optobjcopy
+prepare-build: null
+prepare-configure: null
+stlib: []
+type: build
+use-after: []
+use-before: []

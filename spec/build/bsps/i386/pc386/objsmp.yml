@@ -11,6 +11,6 @@ includes: []
 install: []
 links: []
 source:
-- bsps/i386/pc386/start/getcpuid.c
+- bsps/i386/pc386/start/bspsmp.c
 - bsps/i386/pc386/start/smp-imps.c
 type: build
