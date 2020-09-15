@@ -35,9 +35,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-
-#include <bspopts.h>
-
 /*---------------------------------------------------------------------------+
 | Constants
 +----------------------------------------------------------------------------*/
@@ -48,13 +45,6 @@
 .set HDRSTART,      HEADERADDR  # address of start of bin2boot header
 .set HDROFF,        0x24        # offset into bin2boot header of start32 addr
 .set STACKOFF,      0x200-0x10  # offset to load into %esp, from start of image
-
-/* #define NEW_GAS */
-#ifdef NEW_GAS
-  #define LJMPL ljmpl
-#else
-  #define LJMPL ljmp
-#endif
 
 /*----------------------------------------------------------------------------+
 | CODE section
@@ -95,7 +85,7 @@ setup_processor:
         movl    %cr0, %eax
         orl     $CR0_PE, %eax
         movl    %eax, %cr0              # turn on protected mode
-        LJMPL   $PROT_CODE_SEG, $start_32bit     # flush prefetch queue, and reload %cs
+        ljmpl   $PROT_CODE_SEG, $start_32bit     # flush prefetch queue, and reload %cs
 
 .code32
 start_32bit:
