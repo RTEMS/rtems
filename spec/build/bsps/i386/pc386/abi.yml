@@ -10,30 +10,25 @@ default:
 - -mtune=pentium4
 - -march=pentium4
 - -msse3
-- -mtune=i386
 default-by-variant:
 - value:
   - -mtune=pentiumpro
   - -march=pentium
-  - -mtune=i386
   variants:
   - i386/pc686
 - value:
   - -mtune=pentium
   - -march=pentium
   - -msse2
-  - -mtune=i386
   variants:
   - i386/pc586-sse
 - value:
   - -mtune=pentium
   - -march=pentium
-  - -mtune=i386
   variants:
   - i386/pc586
 - value:
   - -mtune=i486
-  - -mtune=i386
   variants:
   - i386/pc486
 - value:
