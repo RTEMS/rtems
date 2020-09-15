@@ -24,6 +24,8 @@ links:
 - role: build-dependency
   uid: objvga
 - role: build-dependency
+  uid: optrelocaddr
+- role: build-dependency
   uid: optvberm
 - role: build-dependency
   uid: objvgacir
