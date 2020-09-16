@@ -40,6 +40,8 @@ try:
 except:
     import ConfigParser as configparser
 
+from waflib.TaskGen import after, before_method, feature
+
 is_windows_host = os.name == "nt" or sys.platform in ["msys", "cygwin"]
 default_prefix = "/opt/rtems/6"
 compilers = ["gcc", "clang"]
@@ -149,6 +151,31 @@ def _is_enabled(enabled, enabled_by):
     return enabled_by in enabled
 
 
+def _asm_explicit_target(self, node):
+    task = self.create_task(
+        "asm", node, self.bld.bldnode.make_node(self.target)
+    )
+    try:
+        self.compiled_tasks.append(task)
+    except AttributeError:
+        self.compiled_tasks = [task]
+    return task
+
+
+@feature("asm_explicit_target")
+@before_method("process_source")
+def _enable_asm_explicit_target(self):
+    self.mappings = dict(self.mappings)  # Copy
+    self.mappings[".S"] = _asm_explicit_target
+
+
+@after("apply_link")
+@feature("cprogram", "cxxprogram")
+def process_start_files(self):
+    if getattr(self, "start_files", False):
+        self.link_task.dep_nodes.extend(self.bld.start_files)
+
+
 class Item(object):
     def __init__(self, uid, data):
         self.uid = uid
@@ -241,17 +268,15 @@ class Item(object):
         for install in self.data["install"]:
             bld.install_files(install["destination"], install["source"])
 
-    def asm(self, bld, bic, source, target=None, deps=[], cppflags=[]):
+    def asm(self, bld, bic, source, target=None):
         if target is None:
             target = os.path.splitext(source)[0] + ".o"
         bld(
             asflags=self.data["asflags"],
-            before=["cstlib"],
-            cppflags=cppflags + self.data["cppflags"],
-            features="asm c",
+            cppflags=self.data["cppflags"],
+            features="asm_explicit_target asm c",
             includes=bic.includes + self.data["includes"],
-            rule="${CC} ${ASFLAGS} ${CPPFLAGS} ${DEFINES_ST:DEFINES} ${CPPPATH_ST:INCPATHS} -c ${SRC[0]} -o ${TGT}",
-            source=[source] + deps,
+            source=[source],
             target=target,
         )
         return target
@@ -532,7 +557,12 @@ class StartFileItem(Item):
         super(StartFileItem, self).__init__(uid, data)
 
     def do_build(self, bld, bic):
-        self.asm(bld, bic, self.data["source"], self.get(bld, "target"))
+        tgt = self.asm(bld, bic, self.data["source"], self.get(bld, "target"))
+        node = bld.bldnode.make_node(tgt)
+        try:
+            bld.start_files.append(node)
+        except AttributeError:
+            bld.start_files = [node]
         self.install_target(bld)
 
 
@@ -626,6 +656,7 @@ class TestProgramItem(Item):
             install_path=None,
             ldflags=bic.ldflags + self.data["ldflags"],
             source=self.data["source"],
+            start_files=True,
             stlib=self.data["stlib"],
             target=self.get(bld, "target"),
             use=self.data["use-before"] + bic.use + self.data["use-after"],
