@@ -235,6 +235,21 @@
   ( ( _value ) & ~( ( _alignment ) - 1 ) )
 
 /**
+ * @brief Returns the specified value aligned up to the specified alignment.
+ *
+ * @param _value is the value to align up.
+ *
+ * @param _alignment is the desired alignment in bytes.  The alignment shall be
+ *   a power of two, otherwise the returned value is undefined.  The alignment
+ *   parameter is evaluated twice.
+ *
+ * @return The specified value aligned up to the specified alignment is
+ *   returned.
+ */
+#define RTEMS_ALIGN_UP( _value, _alignment ) \
+  ( ( ( _value ) + ( _alignment ) - 1 ) & ~( ( _alignment ) - 1 ) )
+
+/**
  * @brief Instructs the compiler to enforce the specified alignment.
  */
 #if defined(__GNUC__)
