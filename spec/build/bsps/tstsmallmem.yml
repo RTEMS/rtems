@@ -11,6 +11,7 @@ actions:
     sp47: exclude
     spstkalloc02: exclude
     terminate: exclude
+    unit-no-clock-0: exclude
     userext: exclude
     validation-0: exclude
     validation-1: exclude

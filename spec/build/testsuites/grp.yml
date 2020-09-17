@@ -35,6 +35,8 @@ links:
 - role: build-dependency
   uid: opttm
 - role: build-dependency
+  uid: optunit
+- role: build-dependency
   uid: optvalidation
 - role: build-dependency
   uid: ada/grp
@@ -60,6 +62,8 @@ links:
   uid: sptests/grp
 - role: build-dependency
   uid: tmtests/grp
+- role: build-dependency
+  uid: unit/grp
 - role: build-dependency
   uid: validation/grp
 - role: build-dependency
