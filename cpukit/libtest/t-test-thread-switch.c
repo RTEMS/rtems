@@ -72,6 +72,7 @@ T_thread_switch_destroy(T_destructor *dtor)
 
 	ctx = RTEMS_CONTAINER_OF(dtor, T_thread_switch_context, dtor);
 	_User_extensions_Remove_set(&ctx->ext);
+	_Chain_Set_off_chain(&ctx->ext.Node);
 }
 
 static void
