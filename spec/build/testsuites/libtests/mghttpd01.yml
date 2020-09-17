@@ -17,6 +17,7 @@ enabled-by:
 - and:
   - RTEMS_NETWORKING
   - RTEMS_POSIX_API
+  - not: TEST_MGHTTPD01_EXCLUDE
 includes:
 - cpukit/libnetworking
 - testsuites/libtests/mghttpd01
