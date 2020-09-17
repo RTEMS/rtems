@@ -300,7 +300,7 @@ typedef struct {
  * knowledge of the application resources.
  *
  * An application based solely on static allocation can avoid any runtime
- * memory allocators.  This can simplfiy the application architecture as well
+ * memory allocators.  This can simplify the application architecture as well
  * as any analysis that may be required.
  *
  * The stack space estimate done by <rtems/confdefs.h> assumes that all tasks
