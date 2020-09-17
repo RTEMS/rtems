@@ -636,7 +636,7 @@ class LibraryItem(Item):
 class TestProgramItem(Item):
     def __init__(self, uid, data):
         super(TestProgramItem, self).__init__(uid, data)
-        name = uid.split("/")[-1].upper()
+        name = uid.split("/")[-1].upper().replace("-", "_")
         self.exclude = "TEST_" + name + "_EXCLUDE"
         self.cppflags = "TEST_" + name + "_CPPFLAGS"
 
@@ -958,7 +958,9 @@ class OptionItem(Item):
         self._do_append_test_cppflags(conf, name, "-DTEST_STATE_BENCHMARK=1")
 
     def _test_state_exclude(self, conf, name):
-        conf.env.append_value("ENABLE", "TEST_" + name.upper() + "_EXCLUDE")
+        conf.env.append_value(
+            "ENABLE", "TEST_" + name.upper().replace("-", "_") + "_EXCLUDE"
+        )
 
     def _test_state_expected_fail(self, conf, name):
         self._do_append_test_cppflags(
