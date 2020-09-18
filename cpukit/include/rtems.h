@@ -24,7 +24,6 @@
  * 
  * @brief RTEMS Classic API definitions and modules.
  */
-/** @{ */
 
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -56,30 +55,6 @@
 #endif
 
 #include <rtems/rtems/support.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
- * @brief An MPCI must support packets of at least this size.
- */
-#define RTEMS_MINIMUM_PACKET_SIZE  MP_PACKET_MINIMUM_PACKET_SIZE
-
-/**
- * @brief Defines the count of @c uint32_t numbers in a packet which must be
- * converted to native format in a heterogeneous system.
- *
- * In packets longer than this value, some of the extra data may be a user
- * message buffer which is not automatically endian swapped.
- */
-#define RTEMS_MINIMUN_HETERO_CONVERSION  MP_PACKET_MINIMUN_HETERO_CONVERSION
-
-#ifdef __cplusplus
-}
-#endif
-
-/** @} */
 
 #endif
 /* end of include file */
