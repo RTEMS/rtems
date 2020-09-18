@@ -3101,7 +3101,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 		priv->hwsup.irq_num = 0;
 
 	/* Construct hardware version identification */
-	priv->hwsup.hw_version = pnpinfo->device << 16 | pnpinfo->apb_slv->ver;
+	priv->hwsup.hw_version = pnpinfo->device << 16 | pnpinfo->apb_slv->common.ver;
 
 	if ((pnpinfo->device == GAISLER_SPW2) ||
 	    (pnpinfo->device == GAISLER_SPW2_DMA)) {

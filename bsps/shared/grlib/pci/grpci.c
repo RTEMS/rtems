@@ -513,7 +513,7 @@ static int grpci_init(struct grpci_priv *priv)
 	ahb = ainfo->info.ahb_slv;
 
 	/* Found PCI core, init private structure */
-	priv->irq = apb->irq;
+	priv->irq = apb->common.irq;
 	priv->regs = (struct grpci_regs *)apb->start;
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 

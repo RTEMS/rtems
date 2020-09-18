@@ -665,7 +665,7 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
 	priv->dmamode = SATCAN_DMA_MODE_SYSTEM;
 
 	/* Register interrupt handler */
-	rtems_interrupt_handler_install(d.irq, "satcan",
+	rtems_interrupt_handler_install(d.common.irq, "satcan",
 			RTEMS_INTERRUPT_SHARED,
 			satcan_interrupt_handler, NULL);
 

@@ -292,7 +292,7 @@ STATIC int l4stat_init(struct l4stat_priv *priv)
 	dev_id = ainfo->id.device;
 
 	/* Check if rev 1 of core (only rev 0 supported) */
-	if (apb->ver != 0) {
+	if (apb->common.ver != 0) {
 		DBG("L4STAT rev 0 only supported.\n");
 		return L4STAT_ERR_ERROR;
 	}

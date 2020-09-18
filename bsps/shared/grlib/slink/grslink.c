@@ -183,7 +183,7 @@ static int SLINK_getaddr(int *base, int *irq)
 
 	if (ambapp_find_apbslv(&ambapp_plb,VENDOR_GAISLER,GAISLER_SLINK,&c) == 1) {
 		*base = c.start;
-		*irq = c.irq;
+		*irq = c.common.irq;
 		return 0;
 	}
 	return -1;

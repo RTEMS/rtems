@@ -53,7 +53,7 @@ int rtems_leon_open_eth_driver_attach(
   {
     ahb = DEV_TO_AHB(adev);
     base_addr = ahb->start[0];
-    eth_irq = ahb->irq;
+    eth_irq = ahb->common.irq;
 
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;

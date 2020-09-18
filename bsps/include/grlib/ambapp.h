@@ -35,18 +35,6 @@ extern "C" {
 /* Max supported AHB buses */
 #define AHB_BUS_MAX 6
 
-struct ambapp_dev {
-	struct ambapp_dev *next;	/* Next */
-	struct ambapp_dev *prev;	/* Previous Device. If (this == 
-					 * rev->child) prev is bus bridge */
-	struct ambapp_dev *children;	/* Points to first device on sub-bus */
-	void *owner;			/* Owner of this AMBA device */
-	unsigned char dev_type;		/* AHB MST, AHB SLV or APB SLV*/
-	unsigned char vendor;		/* Vendor ID */
-	unsigned short device;		/* Device ID */
-	int devinfo[0];			/* Device info (APB/AHB dep. on type) */
-};
-
 #define AMBAPP_FLAG_FFACT_DIR	0x100	/* Frequency factor direction, 0=down, 1=up */
 #define AMBAPP_FLAG_FFACT	0x0f0	/* Frequency factor against top bus */
 #define AMBAPP_FLAG_MBUS	0x00c
@@ -55,7 +43,7 @@ struct ambapp_dev {
 /* Get APB or AHB information from a AMBA device */
 #define DEV_TO_APB(adev) ((struct ambapp_apb_info *)((adev)->devinfo))
 #define DEV_TO_AHB(adev) ((struct ambapp_ahb_info *)((adev)->devinfo))
-#define DEV_TO_COMMON(adev) ((struct ambapp_common_info *)((adev)->devinfo))
+#define DEV_TO_COMMON(adev) (((adev)->devinfo))
 
 struct ambapp_common_info {
 	unsigned char irq;
@@ -64,10 +52,7 @@ struct ambapp_common_info {
 };
 
 struct ambapp_apb_info {
-	/* COMMON */
-	unsigned char irq;
-	unsigned char ver;
-	unsigned char ahbidx;	/* AHB Bus Index */
+	struct ambapp_common_info common;
 
 	/* APB SPECIFIC */
 	unsigned int start;
@@ -75,10 +60,7 @@ struct ambapp_apb_info {
 };
 
 struct ambapp_ahb_info {
-	/* COMMON */
-	unsigned char irq;
-	unsigned char ver;
-	unsigned char ahbidx;	/* AHB Bus Index */
+	struct ambapp_common_info common;
 
 	/* AHB SPECIFIC */
 	unsigned int start[4];
@@ -86,6 +68,20 @@ struct ambapp_ahb_info {
 	char type[4];		/* type[N] Determine type of start[N]-mask[N],
 				 * 2=AHB Memory Space, 3=AHB I/O Space */
 	unsigned int custom[3];
+};
+
+struct ambapp_dev {
+	struct ambapp_dev *next;	/* Next */
+	struct ambapp_dev *prev;	/* Previous Device. If (this ==
+					 * rev->child) prev is bus bridge */
+	struct ambapp_dev *children;	/* Points to first device on sub-bus */
+	void *owner;			/* Owner of this AMBA device */
+	unsigned char dev_type;		/* AHB MST, AHB SLV or APB SLV*/
+	unsigned char vendor;		/* Vendor ID */
+	unsigned short device;		/* Device ID */
+
+	/* Device info (APB/AHB dep. on type) */
+	struct ambapp_common_info devinfo[0];
 };
 
 /* Describes a complete AMBA Core. Each device may consist of 3 interfaces */

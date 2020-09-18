@@ -74,7 +74,7 @@ static int ASCS_get_addr(int *base, int *irq) {
   
   if(ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_ASCS, &core) == 1) {
     *base = core.start;
-    *irq = core.irq;
+    *irq = core.common.irq;
     DBG("ASCS_get_addr: Registerd ASCS core at 0x%x with irq %i\n",core.start, core.irq);
     return 0;
   }

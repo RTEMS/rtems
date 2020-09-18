@@ -730,8 +730,8 @@ static int grpci2_init(struct grpci2_priv *priv)
 	ahb = ainfo->info.ahb_slv;
 
 	/* Found PCI core, init private structure */
-	priv->irq = apb->irq;
-	priv->ver = apb->ver;
+	priv->irq = apb->common.irq;
+	priv->ver = apb->common.ver;
 	priv->regs = (struct grpci2_regs *)apb->start;
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 	priv->irq_mode = (priv->regs->sts_cap & STS_IRQMODE) >> STS_IRQMODE_BIT;

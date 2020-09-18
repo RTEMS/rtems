@@ -54,7 +54,7 @@ static unsigned int ambapp_freq_calc(
       else
         freq_hz = freq_hz / ffact;
     }
-    return ambapp_freq_calc(abus, ahb->ahbidx, freq_hz, inverse);
+    return ambapp_freq_calc(abus, ahb->common.ahbidx, freq_hz, inverse);
   } else {
     /* Unknown bridge, impossible to calc frequency */
     return 0;

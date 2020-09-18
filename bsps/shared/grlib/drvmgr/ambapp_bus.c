@@ -418,17 +418,17 @@ static void ambapp_dev_info(
 	str1 = str2 = str3 = "";
 	if (core->ahb_mst) {
 		str1 = "AHBMST ";
-		ver = core->ahb_mst->ver;
+		ver = core->ahb_mst->common.ver;
 		ambapp_bus_freq_get(dev, DEV_AHB_MST, &ahbmst_freq);
 	}
 	if (core->ahb_slv) {
 		str2 = "AHBSLV ";
-		ver = core->ahb_slv->ver;
+		ver = core->ahb_slv->common.ver;
 		ambapp_bus_freq_get(dev, DEV_AHB_SLV, &ahbslv_freq);
 	}
 	if (core->apb_slv) {
 		str3 = "APBSLV";
-		ver = core->apb_slv->ver;
+		ver = core->apb_slv->common.ver;
 		ambapp_bus_freq_get(dev, DEV_APB_SLV, &apbslv_freq);
 	}
 
@@ -505,7 +505,7 @@ static int ambapp_dev_fixup(struct drvmgr_dev *dev, struct amba_dev_info *pnp)
 		int core;
 
 		devs_to_register[0] = dev;
-		subcores = (pnp->info.ahb_slv->ver & 0x7) + 1;
+		subcores = (pnp->info.ahb_slv->common.ver & 0x7) + 1;
 		for(core = 1; core < subcores; core++) {
 			drvmgr_alloc_dev(&newdev, sizeof(*pnpinfo));
 			memcpy(newdev, dev, sizeof(*newdev));
@@ -599,22 +599,22 @@ static void ambapp_core_register(
 		pnpinfo->info.ahb_mst = (struct ambapp_ahb_info *)
 						ahb_mst->devinfo;
 		ambapp_alloc_dev(ahb_mst, (void *)newdev);
-		if ( pnpinfo->info.ahb_mst->irq )
-			pnpinfo->info.irq = pnpinfo->info.ahb_mst->irq;
+		if ( pnpinfo->info.ahb_mst->common.irq )
+			pnpinfo->info.irq = pnpinfo->info.ahb_mst->common.irq;
 	}
 	if ( ahb_slv ) {
 		pnpinfo->info.ahb_slv = (struct ambapp_ahb_info *)
 					ahb_slv->devinfo;
 		ambapp_alloc_dev(ahb_slv, (void *)newdev);
-		if ( pnpinfo->info.ahb_slv->irq )
-			pnpinfo->info.irq = pnpinfo->info.ahb_slv->irq;
+		if ( pnpinfo->info.ahb_slv->common.irq )
+			pnpinfo->info.irq = pnpinfo->info.ahb_slv->common.irq;
 	}
 	if ( apb_slv ) {
 		pnpinfo->info.apb_slv = (struct ambapp_apb_info *)
 					apb_slv->devinfo;
 		ambapp_alloc_dev(apb_slv, (void *)newdev);
-		if ( pnpinfo->info.apb_slv->irq )
-			pnpinfo->info.irq = pnpinfo->info.apb_slv->irq;
+		if ( pnpinfo->info.apb_slv->common.irq )
+			pnpinfo->info.irq = pnpinfo->info.apb_slv->common.irq;
 	}
 	if ( pnpinfo->info.irq == 0 )
 		pnpinfo->info.irq = -1; /* indicate no IRQ */

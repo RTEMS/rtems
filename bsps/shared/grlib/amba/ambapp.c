@@ -71,9 +71,9 @@ static void ambapp_ahb_dev_init(
   dev->vendor = ambapp_pnp_vendor(ahb->id);
   dev->device = ambapp_pnp_device(ahb->id);
   ahb_info = DEV_TO_AHB(dev);
-  ahb_info->ver = ambapp_pnp_ver(ahb->id);
-  ahb_info->irq = ambapp_pnp_irq(ahb->id);
-  ahb_info->ahbidx = ahbidx;
+  ahb_info->common.ver = ambapp_pnp_ver(ahb->id);
+  ahb_info->common.irq = ambapp_pnp_irq(ahb->id);
+  ahb_info->common.ahbidx = ahbidx;
   ahb_info->custom[0] = (unsigned int)ahb->custom[0];
   ahb_info->custom[1] = (unsigned int)ahb->custom[1];
   ahb_info->custom[2] = (unsigned int)ahb->custom[2];
@@ -116,9 +116,9 @@ static void ambapp_apb_dev_init(
   dev->vendor = ambapp_pnp_vendor(apb->id);
   dev->device = ambapp_pnp_device(apb->id);
   apb_info = DEV_TO_APB(dev);
-  apb_info->ver = ambapp_pnp_ver(apb->id);
-  apb_info->irq = ambapp_pnp_irq(apb->id);
-  apb_info->ahbidx = ahbidx;
+  apb_info->common.ver = ambapp_pnp_ver(apb->id);
+  apb_info->common.irq = ambapp_pnp_irq(apb->id);
+  apb_info->common.ahbidx = ahbidx;
   apb_info->start = ambapp_pnp_apb_start(apb->iobar, base);
   apb_info->mask = ambapp_pnp_apb_mask(apb->iobar);
 }
@@ -223,7 +223,7 @@ static int ambapp_scan2(
 
     /* Is it a AHB/AHB Bridge ? */
     if (((dev->device == GAISLER_AHB2AHB) &&
-        (dev->vendor == VENDOR_GAISLER) && (ahb_info->ver > 0)) ||
+        (dev->vendor == VENDOR_GAISLER) && (ahb_info->common.ver > 0)) ||
         ((dev->device == GAISLER_L2CACHE) &&
         (dev->vendor == VENDOR_GAISLER)) ||
         ((dev->device == GAISLER_GRIOMMU) &&
