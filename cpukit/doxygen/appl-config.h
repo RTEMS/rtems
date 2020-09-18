@@ -43,7 +43,8 @@
  */
 
 /**
- * @defgroup RTEMSApplConfigBlockDeviceCacheConfiguration Block Device Cache Configuration
+ * @defgroup RTEMSApplConfigBlockDeviceCacheConfiguration \
+ *   Block Device Cache Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -281,7 +282,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigBSPRelatedConfigurationOptions BSP Related Configuration Options
+ * @defgroup RTEMSApplConfigBSPRelatedConfigurationOptions \
+ *   BSP Related Configuration Options
  *
  * @ingroup RTEMSApplConfig
  *
@@ -926,7 +928,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigClassicAPIInitializationTaskConfiguration Classic API Initialization Task Configuration
+ * @defgroup RTEMSApplConfigClassicAPIInitializationTaskConfiguration \
+ *   Classic API Initialization Task Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -1084,7 +1087,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigDeviceDriverConfiguration Device Driver Configuration
+ * @defgroup RTEMSApplConfigDeviceDriverConfiguration \
+ *   Device Driver Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -1583,7 +1587,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigEventRecordingConfiguration Event Recording Configuration
+ * @defgroup RTEMSApplConfigEventRecordingConfiguration \
+ *   Event Recording Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -2209,7 +2214,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigGeneralSystemConfiguration General System Configuration
+ * @defgroup RTEMSApplConfigGeneralSystemConfiguration \
+ *   General System Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -2965,7 +2971,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigMultiprocessingConfiguration Multiprocessing Configuration
+ * @defgroup RTEMSApplConfigMultiprocessingConfiguration \
+ *   Multiprocessing Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -3529,7 +3536,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigPOSIXInitializationThreadConfiguration POSIX Initialization Thread Configuration
+ * @defgroup RTEMSApplConfigPOSIXInitializationThreadConfiguration \
+ *   POSIX Initialization Thread Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -3610,7 +3618,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigGeneralSchedulerConfiguration General Scheduler Configuration
+ * @defgroup RTEMSApplConfigGeneralSchedulerConfiguration \
+ *   General Scheduler Configuration
  *
  * @ingroup RTEMSApplConfig
  *
@@ -4111,7 +4120,8 @@
 /** @} */
 
 /**
- * @defgroup RTEMSApplConfigTaskStackAllocatorConfiguration Task Stack Allocator Configuration
+ * @defgroup RTEMSApplConfigTaskStackAllocatorConfiguration \
+ *   Task Stack Allocator Configuration
  *
  * @ingroup RTEMSApplConfig
  *
