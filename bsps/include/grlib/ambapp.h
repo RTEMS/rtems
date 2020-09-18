@@ -56,11 +56,6 @@ struct ambapp_dev {
 #define DEV_TO_APB(adev) ((struct ambapp_apb_info *)((adev)->devinfo))
 #define DEV_TO_AHB(adev) ((struct ambapp_ahb_info *)((adev)->devinfo))
 #define DEV_TO_COMMON(adev) ((struct ambapp_common_info *)((adev)->devinfo))
-/* Convert address of ambapp_apb_info/ambapp_ahb_info into ambapp_dev */
-#define APB_TO_DEV(apb_info) ((struct ambapp_dev *)(unsigned int(apb_info) - \
-				offsetof(struct ambapp_dev, devinfo)))
-#define AHB_TO_DEV(ahb_info) ((struct ambapp_dev *)(unsigned int(ahb_info) - \
-				offsetof(struct ambapp_dev, devinfo)))
 
 struct ambapp_common_info {
 	unsigned char irq;
