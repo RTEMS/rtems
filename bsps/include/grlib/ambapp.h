@@ -35,11 +35,6 @@ extern "C" {
 /* Max supported AHB buses */
 #define AHB_BUS_MAX 6
 
-struct ambapp_dev;
-struct ambapp_core;
-struct ambapp_apb_info;
-struct ambapp_ahb_info;
-
 struct ambapp_dev {
 	struct ambapp_dev *next;	/* Next */
 	struct ambapp_dev *prev;	/* Previous Device. If (this == 
