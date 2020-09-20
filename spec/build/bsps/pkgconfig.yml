@@ -23,8 +23,8 @@ content: |
   Version: ${RTEMS_VERSION}
   Description: RTEMS BSP ${ARCH}/${BSP_NAME}
   Cflags: $${ABI_FLAGS} -I$${includedir}
-  Ldflags: -L$${libdir} ${PKGCONFIG_LDFLAGS}
-  Libs: -L$${libdir} ${PKGCONFIG_LDFLAGS}
+  Ldflags: -B$${libdir} ${PKGCONFIG_LDFLAGS}
+  Libs: -B$${libdir} ${PKGCONFIG_LDFLAGS}
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
