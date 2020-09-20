@@ -12,7 +12,6 @@ default:
 - -msoft-float
 - -meabi
 - -msdata=sysv
-- -fno-common
 default-by-variant: []
 description: |
   ABI flags

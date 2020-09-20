@@ -12,14 +12,12 @@ default:
 - -msoft-float
 - -meabi
 - -msdata=sysv
-- -fno-common
 - -mstrict-align
 default-by-variant:
 - value:
   - -D__ppc_generic
   - -mcpu=e6500
   - -m64
-  - -fno-common
   variants:
   - powerpc/qoriq_e6500_64
 - value:
@@ -27,7 +25,6 @@ default-by-variant:
   - -mcpu=e6500
   - -m32
   - -msdata=sysv
-  - -fno-common
   variants:
   - powerpc/qoriq_e6500_32
 description: |

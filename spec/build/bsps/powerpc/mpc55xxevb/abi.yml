@@ -12,7 +12,6 @@ default:
 - -msoft-float
 - -meabi
 - -msdata=sysv
-- -fno-common
 - -mstrict-align
 default-by-variant: []
 description: |

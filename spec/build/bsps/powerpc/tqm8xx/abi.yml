@@ -13,7 +13,6 @@ default:
 - -fno-strict-aliasing
 - -meabi
 - -msdata=sysv
-- -fno-common
 default-by-variant: []
 description: |
   ABI flags
