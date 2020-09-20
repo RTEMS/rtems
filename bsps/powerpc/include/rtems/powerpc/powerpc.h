@@ -282,12 +282,6 @@ extern "C" {
 #define PPC_INTERRUPT_MAX       125
 #define PPC_USE_MULTIPLE	1
 
-#elif defined(__ppc_generic)
-
-#else
-
-#error "Unsupported CPU Model"
-
 #endif
 
 /*

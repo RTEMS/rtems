@@ -32,8 +32,6 @@ links:
 - role: build-dependency
   uid: optmvme2100
 - role: build-dependency
-  uid: optppcgeneric
-- role: build-dependency
   uid: optqemu
 - role: build-dependency
   uid: optsbrk

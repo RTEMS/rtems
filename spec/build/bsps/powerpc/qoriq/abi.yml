@@ -7,7 +7,6 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
-- -D__ppc_generic
 - -mcpu=8540
 - -msoft-float
 - -meabi
@@ -15,13 +14,11 @@ default:
 - -mstrict-align
 default-by-variant:
 - value:
-  - -D__ppc_generic
   - -mcpu=e6500
   - -m64
   variants:
   - powerpc/qoriq_e6500_64
 - value:
-  - -D__ppc_generic
   - -mcpu=e6500
   - -m32
   - -msdata=sysv
