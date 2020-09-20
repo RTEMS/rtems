@@ -19,7 +19,7 @@ do-build: |
         if f != "-meabi":
             flags += " " + f
   asmflags = "-DASM " + flags
-  cflags = "-msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -mstring -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata " + flags
+  cflags = "-msoft-float -mstrict-align -fno-builtin -Wall -mmultiple -O2 -fomit-frame-pointer -ffixed-r13 -mno-sdata " + flags
   source = []
   source.append(cc(self, bld, bic, asmflags, "bsps/powerpc/motorola_powerpc/bootloader/head.S"))
   source.append(cc(self, bld, bic, asmflags, "bsps/powerpc/motorola_powerpc/bootloader/exception.S"))
