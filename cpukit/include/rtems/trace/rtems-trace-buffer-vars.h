@@ -16,6 +16,9 @@
 #if !defined (_RTEMS_TRACE_BUFFER_VARS_H_)
 #define _RTEMS_TRACE_BUFFER_VARS_H_
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -42,6 +45,28 @@ typedef struct
 
 typedef __rtld_trace_sig_arg rtems_trace_sig_arg;
 typedef __rtld_trace_sig rtems_trace_sig;
+
+/*
+ * Trace linker data.
+ */
+extern uint32_t __rtld_trace_names_size;
+extern const char *const __rtld_trace_names[];
+extern uint32_t __rtld_trace_enables_size;
+extern const uint32_t __rtld_trace_enables[];
+extern uint32_t __rtld_trace_triggers_size;
+extern const uint32_t __rtld_trace_triggers[];
+extern const __rtld_trace_sig __rtld_trace_signatures[];
+
+/*
+ * Trace buffer generator data.
+ */
+extern const bool __rtld_tbg_present;
+extern const uint32_t __rtld_tbg_mode;
+extern const uint32_t __rtld_tbg_buffer_size;
+extern uint32_t __rtld_tbg_buffer[];
+extern volatile uint32_t __rtld_tbg_buffer_in;
+extern volatile bool __rtld_tbg_finished;
+extern volatile bool __rtld_tbg_triggered;
 
 /**
  * Returns the number of trace functions.

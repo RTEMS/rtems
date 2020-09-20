@@ -893,6 +893,7 @@ source:
 - cpukit/libmisc/capture/capture-cli.c
 - cpukit/libmisc/capture/capture_support.c
 - cpukit/libmisc/capture/capture_user_extension.c
+- cpukit/libmisc/capture/rtems-trace-buffer-default.c
 - cpukit/libmisc/capture/rtems-trace-buffer-vars.c
 - cpukit/libmisc/cpuuse/cpuinforeport.c
 - cpukit/libmisc/cpuuse/cpuusagedata.c
