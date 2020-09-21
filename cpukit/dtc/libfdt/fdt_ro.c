@@ -157,8 +157,8 @@ int fdt_generate_phandle(const void *fdt, uint32_t *phandle)
 
 static const struct fdt_reserve_entry *fdt_mem_rsv(const void *fdt, int n)
 {
-	int offset = n * sizeof(struct fdt_reserve_entry);
-	int absoffset = fdt_off_mem_rsvmap(fdt) + offset;
+	unsigned int offset = n * sizeof(struct fdt_reserve_entry);
+	unsigned int absoffset = fdt_off_mem_rsvmap(fdt) + offset;
 
 	if (!can_assume(VALID_INPUT)) {
 		if (absoffset < fdt_off_mem_rsvmap(fdt))
