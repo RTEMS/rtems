@@ -51,7 +51,6 @@ bool _CORE_message_queue_Initialize(
 {
   size_t message_buffering_required = 0;
   size_t aligned_message_size;
-  size_t align_mask;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
@@ -62,8 +61,10 @@ bool _CORE_message_queue_Initialize(
    * Align up the maximum message size to be an integral multiple of the
    * pointer size.
    */
-  align_mask = sizeof(uintptr_t) - 1;
-  aligned_message_size = ( maximum_message_size + align_mask ) & ~align_mask;
+  aligned_message_size = RTEMS_ALIGN_UP(
+    maximum_message_size,
+    sizeof( uintptr_t )
+  );
 
   /*
    * Check for an integer overflow.  It can occur while aligning up the maximum
