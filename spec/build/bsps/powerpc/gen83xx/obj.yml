@@ -40,6 +40,7 @@ source:
 - bsps/powerpc/gen83xx/start/bsprestart.c
 - bsps/powerpc/gen83xx/start/bspstart.c
 - bsps/powerpc/gen83xx/start/cpuinit.c
+- bsps/powerpc/gen83xx/start/uboot_support.c
 - bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 - bsps/powerpc/shared/cache/cache.c
 - bsps/powerpc/shared/clock/clock.c
