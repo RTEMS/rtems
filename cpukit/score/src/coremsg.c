@@ -35,11 +35,6 @@ bool _CORE_message_queue_Initialize(
 {
   size_t buffer_size;
 
-  the_message_queue->maximum_pending_messages   = maximum_pending_messages;
-  the_message_queue->number_of_pending_messages = 0;
-  the_message_queue->maximum_message_size       = maximum_message_size;
-  _CORE_message_queue_Set_notify( the_message_queue, NULL );
-
   /* Make sure the message size computation does not overflow */
   if ( maximum_message_size > MESSAGE_SIZE_LIMIT ) {
     return false;
@@ -64,19 +59,12 @@ bool _CORE_message_queue_Initialize(
     return false;
   }
 
-  /*
-   *  Initialize the pool of inactive messages, pending messages,
-   *  and set of waiting threads.
-   */
-  _Chain_Initialize (
-    &the_message_queue->Inactive_messages,
-    the_message_queue->message_buffers,
-    (size_t) maximum_pending_messages,
-    buffer_size
-  );
+  the_message_queue->maximum_pending_messages   = maximum_pending_messages;
+  the_message_queue->number_of_pending_messages = 0;
+  the_message_queue->maximum_message_size       = maximum_message_size;
 
+  _CORE_message_queue_Set_notify( the_message_queue, NULL );
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
-
   _Thread_queue_Object_initialize( &the_message_queue->Wait_queue );
 
   if ( discipline == CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY ) {
@@ -84,6 +72,13 @@ bool _CORE_message_queue_Initialize(
   } else {
     the_message_queue->operations = &_Thread_queue_Operations_FIFO;
   }
+
+  _Chain_Initialize (
+    &the_message_queue->Inactive_messages,
+    the_message_queue->message_buffers,
+    (size_t) maximum_pending_messages,
+    buffer_size
+  );
 
   return true;
 }
