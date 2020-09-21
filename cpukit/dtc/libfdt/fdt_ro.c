@@ -53,7 +53,7 @@ const char *fdt_get_string(const void *fdt, int stroffset, int *lenp)
 
 	err = -FDT_ERR_BADOFFSET;
 	absoffset = stroffset + fdt_off_dt_strings(fdt);
-	if (absoffset >= totalsize)
+	if (absoffset >= (unsigned)totalsize)
 		goto fail;
 	len = totalsize - absoffset;
 
@@ -61,7 +61,7 @@ const char *fdt_get_string(const void *fdt, int stroffset, int *lenp)
 		if (stroffset < 0)
 			goto fail;
 		if (can_assume(LATEST) || fdt_version(fdt) >= 17) {
-			if (stroffset >= fdt_size_dt_strings(fdt))
+			if ((unsigned)stroffset >= fdt_size_dt_strings(fdt))
 				goto fail;
 			if ((fdt_size_dt_strings(fdt) - stroffset) < len)
 				len = fdt_size_dt_strings(fdt) - stroffset;
