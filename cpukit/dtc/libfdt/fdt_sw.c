@@ -152,6 +152,9 @@ int fdt_resize(void *fdt, void *buf, int bufsize)
 
 	FDT_SW_PROBE(fdt);
 
+	if (bufsize < 0)
+		return -FDT_ERR_NOSPACE;
+
 	headsize = fdt_off_dt_struct(fdt) + fdt_size_dt_struct(fdt);
 	tailsize = fdt_size_dt_strings(fdt);
 
@@ -159,7 +162,7 @@ int fdt_resize(void *fdt, void *buf, int bufsize)
 	    headsize + tailsize > fdt_totalsize(fdt))
 		return -FDT_ERR_INTERNAL;
 
-	if ((headsize + tailsize) > bufsize)
+	if ((headsize + tailsize) > (unsigned)bufsize)
 		return -FDT_ERR_NOSPACE;
 
 	oldtail = (char *)fdt + fdt_totalsize(fdt) - tailsize;
