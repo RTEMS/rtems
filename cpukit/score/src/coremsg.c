@@ -19,28 +19,12 @@
 #endif
 
 #include <rtems/score/coremsgimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/wkspace.h>
 
-/*
- *  size_t_mult32_with_overflow
- *
- *  This method multiplies two size_t 32-bit numbers and checks
- *  for overflow.  It returns false if an overflow occurred and
- *  the result is bad.
- */
-static inline bool size_t_mult32_with_overflow(
-  size_t  a,
-  size_t  b,
-  size_t *c
-)
-{
-  long long x = (long long)a*b;
-
-  if ( x > SIZE_MAX )
-    return false;
-  *c = (size_t) x;
-  return true;
-}
+#define MESSAGE_SIZE_LIMIT \
+  ( SIZE_MAX - sizeof( uintptr_t ) + 1 \
+    - sizeof( CORE_message_queue_Buffer_control ) )
 
 bool _CORE_message_queue_Initialize(
   CORE_message_queue_Control     *the_message_queue,
@@ -49,48 +33,36 @@ bool _CORE_message_queue_Initialize(
   size_t                          maximum_message_size
 )
 {
-  size_t message_buffering_required = 0;
-  size_t aligned_message_size;
+  size_t buffer_size;
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
   the_message_queue->number_of_pending_messages = 0;
   the_message_queue->maximum_message_size       = maximum_message_size;
   _CORE_message_queue_Set_notify( the_message_queue, NULL );
 
-  /*
-   * Align up the maximum message size to be an integral multiple of the
-   * pointer size.
-   */
-  aligned_message_size = RTEMS_ALIGN_UP(
-    maximum_message_size,
-    sizeof( uintptr_t )
+  /* Make sure the message size computation does not overflow */
+  if ( maximum_message_size > MESSAGE_SIZE_LIMIT ) {
+    return false;
+  }
+
+  buffer_size = RTEMS_ALIGN_UP( maximum_message_size, sizeof( uintptr_t ) );
+  _Assert( buffer_size >= maximum_message_size );
+
+  buffer_size += sizeof( CORE_message_queue_Buffer_control );
+  _Assert( buffer_size >= sizeof( CORE_message_queue_Buffer_control ) );
+
+  /* Make sure the memory allocation size computation does not overflow */
+  if ( maximum_pending_messages > SIZE_MAX / buffer_size ) {
+    return false;
+  }
+
+  the_message_queue->message_buffers = _Workspace_Allocate(
+    (size_t) maximum_pending_messages * buffer_size
   );
 
-  /*
-   * Check for an integer overflow.  It can occur while aligning up the maximum
-   * message size.
-   */
-  if (aligned_message_size < maximum_message_size)
+  if ( the_message_queue->message_buffers == NULL ) {
     return false;
-
-  /*
-   *  Calculate how much total memory is required for message buffering and
-   *  check for overflow on the multiplication.
-   */
-  if ( !size_t_mult32_with_overflow(
-        (size_t) maximum_pending_messages,
-        aligned_message_size + sizeof(CORE_message_queue_Buffer_control),
-        &message_buffering_required ) ) 
-    return false;
-
-  /*
-   *  Attempt to allocate the message memory
-   */
-  the_message_queue->message_buffers = (CORE_message_queue_Buffer *)
-     _Workspace_Allocate( message_buffering_required );
-
-  if (the_message_queue->message_buffers == 0)
-    return false;
+  }
 
   /*
    *  Initialize the pool of inactive messages, pending messages,
@@ -100,7 +72,7 @@ bool _CORE_message_queue_Initialize(
     &the_message_queue->Inactive_messages,
     the_message_queue->message_buffers,
     (size_t) maximum_pending_messages,
-    aligned_message_size + sizeof( CORE_message_queue_Buffer_control )
+    buffer_size
   );
 
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
