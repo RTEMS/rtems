@@ -292,6 +292,7 @@ install:
   - cpukit/include/rtems/rtems/mp.h
   - cpukit/include/rtems/rtems/msgmp.h
   - cpukit/include/rtems/rtems/object.h
+  - cpukit/include/rtems/rtems/objectimpl.h
   - cpukit/include/rtems/rtems/options.h
   - cpukit/include/rtems/rtems/optionsimpl.h
   - cpukit/include/rtems/rtems/part.h
