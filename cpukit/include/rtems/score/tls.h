@@ -85,7 +85,11 @@ typedef struct TLS_Thread_control_block {
   struct TLS_Thread_control_block *tcb;
 #else /* !__i386__ */
   TLS_Dynamic_thread_vector *dtv;
-#if CPU_SIZEOF_POINTER == 4
+/*
+ * GCC under AArch64/LP64 expects a 16 byte TCB at the beginning of the TLS
+ * data segment and indexes into it accordingly for TLS variable addresses.
+ */
+#if CPU_SIZEOF_POINTER == 4 || defined(AARCH64_MULTILIB_ARCH_V8)
   uintptr_t reserved;
 #endif
 #endif /* __i386__ */

@@ -458,6 +458,8 @@ install:
 install-path: ${BSP_LIBDIR}
 links:
 - role: build-dependency
+  uid: cpuaarch64
+- role: build-dependency
   uid: cpuarm
 - role: build-dependency
   uid: cpubfin
