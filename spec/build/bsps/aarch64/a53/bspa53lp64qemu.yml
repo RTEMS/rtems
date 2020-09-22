@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: aarch64
+bsp: a53_lp64_qemu
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+cppflags: []
+enabled-by: true
+family: a53
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: linkcmds_lp64
+source: []
+type: build

@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    # expected to fail, don't compile these
+    minimum: exclude
+
+    # test broken under 64bit due to SIZE_MAX differences
+    validation-0: exclude
+
+    # don't compile due to toolchain issues
+    spconfig01: exclude
+    spmisc01: exclude
+
+    # tests that are passing intermittently
+    spcpucounter01: exclude
+    rtmonuse: exclude
+    sp37: exclude
+    sp68: exclude
+    sp04: exclude
+    sp20: exclude
+    sp69: exclude
+    rtmonusxtimes01: exclude
+    spedfsched02: exclude
+    psxtimes01: exclude
+    sprmsched01: exclude
+    sptimecounter02: exclude
+    sptimecounter04: exclude
+    ttest02: exclude
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+default: null
+default-by-variant: []
+enabled-by: true
+links:
+- role: build-dependency
+  uid: ../../tstnoiconv
+- role: build-dependency
+  uid: ../../tstnojffs2
+- role: build-dependency
+  uid: ../../tstnolibdl
+- role: build-dependency
+  uid: ../../tstnorfs
+description: ''
+type: build
+build-type: option

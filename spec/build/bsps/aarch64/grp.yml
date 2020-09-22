@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/clock
+  source:
+  - bsps/include/dev/clock/arm-generic-timer.h
+- destination: ${BSP_INCLUDEDIR}/dev/irq
+  source:
+  - bsps/include/dev/irq/arm-gic-irq.h
+  - bsps/include/dev/irq/arm-gic-regs.h
+  - bsps/include/dev/irq/arm-gic-tm27.h
+  - bsps/include/dev/irq/arm-gic.h
+- destination: ${BSP_LIBDIR}
+  source:
+  - bsps/aarch64/shared/start/linkcmds.base
+ldflags: []
+links: []
+type: build
+use-after: []
+use-before: []
