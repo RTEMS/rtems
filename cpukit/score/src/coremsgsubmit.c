@@ -36,8 +36,8 @@ Status_Control _CORE_message_queue_Submit(
   Thread_queue_Context             *queue_context
 )
 {
-  CORE_message_queue_Buffer_control *the_message;
-  Thread_Control                    *the_thread;
+  CORE_message_queue_Buffer *the_message;
+  Thread_Control            *the_thread;
 
   if ( size > the_message_queue->maximum_message_size ) {
     _CORE_message_queue_Release( the_message_queue, queue_context );

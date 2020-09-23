@@ -23,8 +23,13 @@
 #include <rtems/score/wkspace.h>
 
 #define MESSAGE_SIZE_LIMIT \
-  ( SIZE_MAX - sizeof( uintptr_t ) + 1 \
-    - sizeof( CORE_message_queue_Buffer_control ) )
+  ( SIZE_MAX - sizeof( uintptr_t ) + 1 - sizeof( CORE_message_queue_Buffer ) )
+
+RTEMS_STATIC_ASSERT(
+  offsetof( CORE_message_queue_Buffer, buffer )
+    == sizeof( CORE_message_queue_Buffer ),
+  CORE_MESSAGE_QUEUE_BUFFER_OFFSET
+);
 
 Status_Control _CORE_message_queue_Initialize(
   CORE_message_queue_Control     *the_message_queue,
@@ -43,8 +48,8 @@ Status_Control _CORE_message_queue_Initialize(
   buffer_size = RTEMS_ALIGN_UP( maximum_message_size, sizeof( uintptr_t ) );
   _Assert( buffer_size >= maximum_message_size );
 
-  buffer_size += sizeof( CORE_message_queue_Buffer_control );
-  _Assert( buffer_size >= sizeof( CORE_message_queue_Buffer_control ) );
+  buffer_size += sizeof( CORE_message_queue_Buffer );
+  _Assert( buffer_size >= sizeof( CORE_message_queue_Buffer ) );
 
   /* Make sure the memory allocation size computation does not overflow */
   if ( maximum_pending_messages > SIZE_MAX / buffer_size ) {

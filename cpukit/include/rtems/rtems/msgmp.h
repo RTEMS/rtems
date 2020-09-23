@@ -71,13 +71,12 @@ typedef struct {
   rtems_option                       option_set;
   Objects_Id                         proxy_id;
   uint32_t                           count;
-  size_t                             size;
-  uint32_t                           pad0;
-  CORE_message_queue_Buffer          Buffer;
+  uint32_t                           size;
+  uint32_t                           buffer[ RTEMS_ZERO_LENGTH_ARRAY ];
 }   Message_queue_MP_Packet;
 
 #define MESSAGE_QUEUE_MP_PACKET_SIZE \
-  offsetof(Message_queue_MP_Packet, Buffer.buffer)
+  offsetof(Message_queue_MP_Packet, buffer)
 
 RTEMS_INLINE_ROUTINE bool _Message_queue_MP_Is_remote( Objects_Id id )
 {

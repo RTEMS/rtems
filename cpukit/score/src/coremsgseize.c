@@ -33,20 +33,16 @@ Status_Control _CORE_message_queue_Seize(
   Thread_queue_Context       *queue_context
 )
 {
-  CORE_message_queue_Buffer_control *the_message;
+  CORE_message_queue_Buffer *the_message;
 
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
   if ( the_message != NULL ) {
     the_message_queue->number_of_pending_messages -= 1;
 
-    *size_p = the_message->Contents.size;
+    *size_p = the_message->size;
     executing->Wait.count =
       _CORE_message_queue_Get_message_priority( the_message );
-    _CORE_message_queue_Copy_buffer(
-      the_message->Contents.buffer,
-      buffer,
-      *size_p
-    );
+    _CORE_message_queue_Copy_buffer( the_message->buffer, buffer, *size_p );
 
     #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
       /*

@@ -68,37 +68,34 @@ extern "C" {
 typedef struct CORE_message_queue_Control CORE_message_queue_Control;
 
 /**
- *  @brief Data types needed to manipulate the contents of message buffers.
- *
- *  The following defines the data types needed to manipulate
- *  the contents of message buffers.
- *
- *  @note  The buffer field is normally longer than a single uint32_t
- *         but since messages are variable length we just make a ptr to 1.
+ * @brief The structure is used to organize message buffers of a message queue.
  */
 typedef struct {
-  /** This field is the size of this message. */
-  size_t      size;
-  /** This field contains the actual message. */
-  uint32_t    buffer[1];
-} CORE_message_queue_Buffer;
+  /**
+   * @brief This member is used to enqueue the buffer in the pending or free
+   *   buffer queue of a message queue.
+   */
+  Chain_Node Node;
 
-/**
- *  @brief The organization of a message buffer.
- *
- *  The following records define the organization of a message
- *  buffer.
- */
-typedef struct {
-  /** This element allows this structure to be placed on chains. */
-  Chain_Node                 Node;
-  #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-    /** This field is the priority of this message. */
-    int                        priority;
-  #endif
-  /** This field points to the contents of the message. */
-  CORE_message_queue_Buffer  Contents;
-}   CORE_message_queue_Buffer_control;
+  /** @brief This member defines the size of this message. */
+  size_t size;
+
+#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
+  /** @brief This member defines the priority of this message. */
+  int priority;
+#endif
+
+  /**
+   * @brief This member contains the actual message.
+   *
+   * This is a zero-length array since the maximum message size is defined by
+   * the user.  Use a size_t array to make sure that the member offset is at
+   * the structure end.  This enables a more efficient memcpy() on 64-bit
+   * targets and makes it easier to inspect the message buffers with a
+   * debugger.
+   */
+  size_t buffer[ RTEMS_ZERO_LENGTH_ARRAY ];
+} CORE_message_queue_Buffer;
 
 /**
  *  @brief The possible blocking disciplines for a message queue.

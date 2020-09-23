@@ -151,10 +151,10 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
        */
 
       if (buffer) {
-          the_packet->Buffer.size = *size_p;
+          the_packet->size = *size_p;
           _CORE_message_queue_Copy_buffer(
             buffer,
-            the_packet->Buffer.buffer,
+            the_packet->buffer,
             *size_p
           );
       }
@@ -407,7 +407,7 @@ static void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_receive(
         the_packet->Prefix.id,
-        the_packet->Buffer.buffer,
+        the_packet->buffer,
         &the_packet->size,
         the_packet->option_set,
         the_packet->Prefix.timeout
@@ -430,7 +430,7 @@ static void _Message_queue_MP_Process_packet (
            the_packet->size;
 
         _CORE_message_queue_Copy_buffer(
-          the_packet->Buffer.buffer,
+          the_packet->buffer,
           the_thread->Wait.return_argument_second.mutable_object,
           the_packet->size
         );
@@ -443,8 +443,8 @@ static void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_send(
         the_packet->Prefix.id,
-        the_packet->Buffer.buffer,
-        the_packet->Buffer.size
+        the_packet->buffer,
+        the_packet->size
       );
 
       _Message_queue_MP_Send_response_packet(
@@ -466,8 +466,8 @@ static void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_urgent(
         the_packet->Prefix.id,
-        the_packet->Buffer.buffer,
-        the_packet->Buffer.size
+        the_packet->buffer,
+        the_packet->size
       );
 
       _Message_queue_MP_Send_response_packet(
@@ -481,8 +481,8 @@ static void _Message_queue_MP_Process_packet (
 
       the_packet->Prefix.return_code = rtems_message_queue_broadcast(
         the_packet->Prefix.id,
-        the_packet->Buffer.buffer,
-        the_packet->Buffer.size,
+        the_packet->buffer,
+        the_packet->size,
         &the_packet->count
       );
 

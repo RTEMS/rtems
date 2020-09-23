@@ -71,7 +71,7 @@
 #define CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( _messages, _size ) \
   _Configure_From_workspace( \
     ( _messages ) * ( _Configure_Align_up( _size, sizeof( uintptr_t ) ) \
-        + sizeof( CORE_message_queue_Buffer_control ) ) )
+        + sizeof( CORE_message_queue_Buffer ) ) )
 
 #ifndef CONFIGURE_MESSAGE_BUFFER_MEMORY
   #define CONFIGURE_MESSAGE_BUFFER_MEMORY 0

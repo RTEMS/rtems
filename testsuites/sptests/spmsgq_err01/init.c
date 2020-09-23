@@ -101,8 +101,7 @@ rtems_task Init(
   /* not enough memory for messages */
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    SIZE_MAX
-      / ( sizeof( uintptr_t ) + sizeof( CORE_message_queue_Buffer_control ) ),
+    SIZE_MAX / ( sizeof( uintptr_t ) + sizeof( CORE_message_queue_Buffer ) ),
     1,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]

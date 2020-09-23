@@ -27,11 +27,11 @@ static bool _CORE_message_queue_Order(
   const Chain_Node *right
 )
 {
-   const int                               *left_priority;
-   const CORE_message_queue_Buffer_control *right_message;
+   const int                       *left_priority;
+   const CORE_message_queue_Buffer *right_message;
 
    left_priority = (const int *) left;
-   right_message = (const CORE_message_queue_Buffer_control *) right;
+   right_message = (const CORE_message_queue_Buffer *) right;
 
    return *left_priority <
      _CORE_message_queue_Get_message_priority( right_message );
@@ -39,20 +39,20 @@ static bool _CORE_message_queue_Order(
 #endif
 
 void _CORE_message_queue_Insert_message(
-  CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Buffer_control *the_message,
-  const void                        *content_source,
-  size_t                             content_size,
-  CORE_message_queue_Submit_types    submit_type
+  CORE_message_queue_Control      *the_message_queue,
+  CORE_message_queue_Buffer       *the_message,
+  const void                      *content_source,
+  size_t                           content_size,
+  CORE_message_queue_Submit_types  submit_type
 )
 {
   Chain_Control *pending_messages;
 
-  the_message->Contents.size = content_size;
+  the_message->size = content_size;
 
   _CORE_message_queue_Copy_buffer(
     content_source,
-    the_message->Contents.buffer,
+    the_message->buffer,
     content_size
   );
 

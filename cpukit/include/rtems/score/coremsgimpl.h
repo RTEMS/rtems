@@ -276,7 +276,7 @@ Status_Control _CORE_message_queue_Seize(
  */
 void _CORE_message_queue_Insert_message(
   CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Buffer_control *the_message,
+  CORE_message_queue_Buffer         *the_message,
   const void                        *content_source,
   size_t                             content_size,
   CORE_message_queue_Submit_types    submit_type
@@ -426,12 +426,12 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Copy_buffer (
  * @retval pointer The allocated message buffer.
  * @retval NULL The inactive message buffer chain is empty.
  */
-RTEMS_INLINE_ROUTINE CORE_message_queue_Buffer_control *
+RTEMS_INLINE_ROUTINE CORE_message_queue_Buffer *
 _CORE_message_queue_Allocate_message_buffer (
     CORE_message_queue_Control *the_message_queue
 )
 {
-   return (CORE_message_queue_Buffer_control *)
+   return (CORE_message_queue_Buffer *)
      _Chain_Get_unprotected( &the_message_queue->Inactive_messages );
 }
 
@@ -445,8 +445,8 @@ _CORE_message_queue_Allocate_message_buffer (
  * @param[out] the_message The message to be freed.
  */
 RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
-  CORE_message_queue_Control        *the_message_queue,
-  CORE_message_queue_Buffer_control *the_message
+  CORE_message_queue_Control *the_message_queue,
+  CORE_message_queue_Buffer  *the_message
 )
 {
   _Chain_Append_unprotected( &the_message_queue->Inactive_messages, &the_message->Node );
@@ -466,7 +466,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Free_message_buffer (
  *       disabled if no API requires it.
  */
 RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
-  const CORE_message_queue_Buffer_control *the_message
+  const CORE_message_queue_Buffer *the_message
 )
 {
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
@@ -488,11 +488,11 @@ RTEMS_INLINE_ROUTINE int _CORE_message_queue_Get_message_priority (
  * @retval NULL The message queue is empty.
  */
 RTEMS_INLINE_ROUTINE
-  CORE_message_queue_Buffer_control *_CORE_message_queue_Get_pending_message (
+  CORE_message_queue_Buffer *_CORE_message_queue_Get_pending_message (
   CORE_message_queue_Control *the_message_queue
 )
 {
-  return (CORE_message_queue_Buffer_control *)
+  return (CORE_message_queue_Buffer *)
     _Chain_Get_unprotected( &the_message_queue->Pending_messages );
 }
 
