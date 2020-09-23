@@ -786,6 +786,7 @@ librtemscpu_a_SOURCES += rtems/src/statustext.c
 librtemscpu_a_SOURCES += rtems/src/statustoerrno.c
 librtemscpu_a_SOURCES += rtems/src/systemeventreceive.c
 librtemscpu_a_SOURCES += rtems/src/systemeventsend.c
+librtemscpu_a_SOURCES += rtems/src/taskconstruct.c
 librtemscpu_a_SOURCES += rtems/src/taskcreate.c
 librtemscpu_a_SOURCES += rtems/src/taskdelete.c
 librtemscpu_a_SOURCES += rtems/src/taskexit.c
