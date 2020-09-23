@@ -335,6 +335,7 @@ include_rtems_score_HEADERS += include/rtems/score/copyrt.h
 include_rtems_score_HEADERS += include/rtems/score/corebarrier.h
 include_rtems_score_HEADERS += include/rtems/score/corebarrierimpl.h
 include_rtems_score_HEADERS += include/rtems/score/coremsg.h
+include_rtems_score_HEADERS += include/rtems/score/coremsgbuffer.h
 include_rtems_score_HEADERS += include/rtems/score/coremsgimpl.h
 include_rtems_score_HEADERS += include/rtems/score/coremutex.h
 include_rtems_score_HEADERS += include/rtems/score/coremuteximpl.h

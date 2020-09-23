@@ -337,6 +337,7 @@ install:
   - cpukit/include/rtems/score/corebarrier.h
   - cpukit/include/rtems/score/corebarrierimpl.h
   - cpukit/include/rtems/score/coremsg.h
+  - cpukit/include/rtems/score/coremsgbuffer.h
   - cpukit/include/rtems/score/coremsgimpl.h
   - cpukit/include/rtems/score/coremutex.h
   - cpukit/include/rtems/score/coremuteximpl.h

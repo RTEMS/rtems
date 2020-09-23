@@ -21,7 +21,7 @@
 #ifndef _RTEMS_SCORE_COREMSG_H
 #define _RTEMS_SCORE_COREMSG_H
 
-#include <rtems/score/chain.h>
+#include <rtems/score/coremsgbuffer.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
@@ -43,13 +43,6 @@ extern "C" {
  * @{
  */
 
-/**
- *  This macro is defined when an API is enabled that requires that the
- *  Message Queue Handler include support for priority based enqueuing
- *  of messages.
- */
-#define RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY
-
 #if defined(RTEMS_POSIX_API)
   /**
    *  This macro is defined when an API is enabled that requires that the
@@ -66,36 +59,6 @@ extern "C" {
 #define RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND
 
 typedef struct CORE_message_queue_Control CORE_message_queue_Control;
-
-/**
- * @brief The structure is used to organize message buffers of a message queue.
- */
-typedef struct {
-  /**
-   * @brief This member is used to enqueue the buffer in the pending or free
-   *   buffer queue of a message queue.
-   */
-  Chain_Node Node;
-
-  /** @brief This member defines the size of this message. */
-  size_t size;
-
-#if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
-  /** @brief This member defines the priority of this message. */
-  int priority;
-#endif
-
-  /**
-   * @brief This member contains the actual message.
-   *
-   * This is a zero-length array since the maximum message size is defined by
-   * the user.  Use a size_t array to make sure that the member offset is at
-   * the structure end.  This enables a more efficient memcpy() on 64-bit
-   * targets and makes it easier to inspect the message buffers with a
-   * debugger.
-   */
-  size_t buffer[ RTEMS_ZERO_LENGTH_ARRAY ];
-} CORE_message_queue_Buffer;
 
 /**
  *  @brief The possible blocking disciplines for a message queue.
