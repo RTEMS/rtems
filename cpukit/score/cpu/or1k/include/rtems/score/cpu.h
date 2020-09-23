@@ -35,8 +35,6 @@ extern "C" {
 #include <rtems/score/basedefs.h>
 #ifndef ASM
 #include <rtems/bspIo.h>
-#include <stdint.h>
-#include <stdio.h> /* for printk */
 #endif
 
 /* conditional compilation parameters */
