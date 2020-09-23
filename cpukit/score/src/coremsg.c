@@ -26,7 +26,7 @@
   ( SIZE_MAX - sizeof( uintptr_t ) + 1 \
     - sizeof( CORE_message_queue_Buffer_control ) )
 
-bool _CORE_message_queue_Initialize(
+Status_Control _CORE_message_queue_Initialize(
   CORE_message_queue_Control     *the_message_queue,
   CORE_message_queue_Disciplines  discipline,
   uint32_t                        maximum_pending_messages,
@@ -37,7 +37,7 @@ bool _CORE_message_queue_Initialize(
 
   /* Make sure the message size computation does not overflow */
   if ( maximum_message_size > MESSAGE_SIZE_LIMIT ) {
-    return false;
+    return STATUS_MESSAGE_QUEUE_INVALID_SIZE;
   }
 
   buffer_size = RTEMS_ALIGN_UP( maximum_message_size, sizeof( uintptr_t ) );
@@ -48,7 +48,7 @@ bool _CORE_message_queue_Initialize(
 
   /* Make sure the memory allocation size computation does not overflow */
   if ( maximum_pending_messages > SIZE_MAX / buffer_size ) {
-    return false;
+    return STATUS_MESSAGE_QUEUE_INVALID_NUMBER;
   }
 
   the_message_queue->message_buffers = _Workspace_Allocate(
@@ -56,7 +56,7 @@ bool _CORE_message_queue_Initialize(
   );
 
   if ( the_message_queue->message_buffers == NULL ) {
-    return false;
+    return STATUS_MESSAGE_QUEUE_NO_MEMORY;
   }
 
   the_message_queue->maximum_pending_messages   = maximum_pending_messages;
@@ -80,5 +80,5 @@ bool _CORE_message_queue_Initialize(
     buffer_size
   );
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }

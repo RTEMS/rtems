@@ -71,24 +71,25 @@ typedef int CORE_message_queue_Submit_types;
 /**
  * @brief Initializes a message queue.
  *
- * This package is the implementation of the CORE Message Queue Handler.
- * This core object provides task synchronization and communication functions
- * via messages passed to queue objects.
+ * @param[out] the_message_queue is the message queue to initialize.
  *
- * This routine initializes @a the_message_queue
- *        based on the parameters passed.
+ * @param discipline is the blocking discipline for the message queue.
  *
- * @param[out] the_message_queue The message queue to initialize.
- * @param discipline The blocking discipline for the message queue.
- * @param maximum_pending_messages The maximum number of messages
- *        that will be allowed to pend at any given time.
- * @param maximum_message_size The size of the largest message that
- *        may be sent to this message queue instance.
+ * @param maximum_pending_messages is the maximum number of messages that will
+ *   be allowed to be pending at any given time.
  *
- * @retval true The message queue can be initialized.
- * @retval false Memory for the pending messages cannot be allocated.
+ * @param maximum_message_size is the size of the largest message that may be
+ *   sent to this message queue instance.
+ *
+ * @retval STATUS_SUCCESSFUL The message queue was initialized.
+ *
+ * @retval STATUS_MESSAGE_QUEUE_INVALID_SIZE Calculations with the maximum
+ *   pending messages or maximum message size produced an integer overflow.
+ *
+ * @retval STATUS_MESSAGE_QUEUE_NO_MEMORY There was not enough memory to
+ *   allocate the message buffers.
  */
-bool _CORE_message_queue_Initialize(
+Status_Control _CORE_message_queue_Initialize(
   CORE_message_queue_Control     *the_message_queue,
   CORE_message_queue_Disciplines  discipline,
   uint32_t                        maximum_pending_messages,

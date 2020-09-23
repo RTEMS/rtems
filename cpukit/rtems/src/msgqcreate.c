@@ -41,6 +41,7 @@ rtems_status_code rtems_message_queue_create(
 {
   Message_queue_Control          *the_message_queue;
   CORE_message_queue_Disciplines  discipline;
+  Status_Control                  status;
 #if defined(RTEMS_MULTIPROCESSING)
   bool                            is_global;
 #endif
@@ -107,12 +108,14 @@ rtems_status_code rtems_message_queue_create(
   else
     discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO;
 
-  if ( ! _CORE_message_queue_Initialize(
-           &the_message_queue->message_queue,
-           discipline,
-           count,
-           max_message_size
-         ) ) {
+  status = _CORE_message_queue_Initialize(
+    &the_message_queue->message_queue,
+    discipline,
+    count,
+    max_message_size
+  );
+
+  if ( status != STATUS_SUCCESSFUL ) {
 #if defined(RTEMS_MULTIPROCESSING)
     if ( is_global )
         _Objects_MP_Close(
@@ -121,7 +124,7 @@ rtems_status_code rtems_message_queue_create(
 
     _Message_queue_Free( the_message_queue );
     _Objects_Allocator_unlock();
-    return RTEMS_UNSATISFIED;
+    return STATUS_GET_CLASSIC( status );
   }
 
   _Objects_Open(

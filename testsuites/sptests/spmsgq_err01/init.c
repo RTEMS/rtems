@@ -101,8 +101,9 @@ rtems_task Init(
   /* not enough memory for messages */
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    INT_MAX,
-    MESSAGE_SIZE,
+    SIZE_MAX
+      / ( sizeof( uintptr_t ) + sizeof( CORE_message_queue_Buffer_control ) ),
+    1,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
   );
@@ -123,10 +124,10 @@ rtems_task Init(
   );
   fatal_directive_status(
     status,
-    RTEMS_UNSATISFIED,
-    "rtems_message_queue_create unsatisfied"
+    RTEMS_INVALID_NUMBER,
+    "rtems_message_queue_create invalid number"
   );
-  puts( "TA1 - rtems_message_queue_create - Q 2 - RTEMS_UNSATISFIED #2" );
+  puts( "TA1 - rtems_message_queue_create - Q 2 - RTEMS_INVALID_NUMBER" );
 
   status = rtems_message_queue_create(
     Queue_name[ 1 ],

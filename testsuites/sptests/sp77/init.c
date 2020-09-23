@@ -32,7 +32,7 @@ rtems_task Init(
       &id
   );
   
-  fatal_directive_check_status_only(status , RTEMS_UNSATISFIED ,
+  fatal_directive_check_status_only(status , RTEMS_INVALID_SIZE ,
 				    "attempt to create message queue return: ");  
   TEST_END();
 

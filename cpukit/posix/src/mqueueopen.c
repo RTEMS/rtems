@@ -60,6 +60,7 @@ static mqd_t _POSIX_Message_queue_Create(
 {
   POSIX_Message_queue_Control  *the_mq;
   char                         *name;
+  Status_Control                status;
 
   /* length of name has already been validated */
 
@@ -97,14 +98,14 @@ static mqd_t _POSIX_Message_queue_Create(
    *  Joel: Cite POSIX or OpenGroup on above statement so we can determine
    *        if it is a real requirement.
    */
-  if (
-    !_CORE_message_queue_Initialize(
-      &the_mq->Message_queue,
-      CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
-      attr->mq_maxmsg,
-      attr->mq_msgsize
-    )
-  ) {
+  status = _CORE_message_queue_Initialize(
+    &the_mq->Message_queue,
+    CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
+    attr->mq_maxmsg,
+    attr->mq_msgsize
+  );
+
+  if ( status != STATUS_SUCCESSFUL ) {
     _POSIX_Message_queue_Free( the_mq );
     _Workspace_Free( name );
     rtems_set_errno_and_return_value( ENOSPC, MQ_OPEN_FAILED );
