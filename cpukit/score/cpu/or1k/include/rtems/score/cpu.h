@@ -33,9 +33,6 @@ extern "C" {
 #include <rtems/score/or1k.h>            /* pick up machine definitions */
 #include <rtems/score/or1k-utility.h>
 #include <rtems/score/basedefs.h>
-#ifndef ASM
-#include <rtems/bspIo.h>
-#endif
 
 /* conditional compilation parameters */
 
@@ -425,7 +422,6 @@ void _CPU_Context_Initialize(
 #include <inttypes.h>
 
 #define _CPU_Fatal_halt(_source, _error ) \
-        printk("Fatal Error %d.%" PRId32 " Halted\n",_source, _error); \
         _OR1KSIM_CPU_Halt(); \
         for(;;)
 
