@@ -280,6 +280,7 @@ librtemscpu_a_SOURCES += libmisc/capture/capture.c
 librtemscpu_a_SOURCES += libmisc/capture/capture-cli.c
 librtemscpu_a_SOURCES += libmisc/capture/capture_support.c
 librtemscpu_a_SOURCES += libmisc/capture/capture_user_extension.c
+librtemscpu_a_SOURCES += libmisc/capture/rtems-trace-buffer-default.c
 librtemscpu_a_SOURCES += libmisc/capture/rtems-trace-buffer-vars.c
 librtemscpu_a_SOURCES += libmisc/cpuuse/cpuinforeport.c
 librtemscpu_a_SOURCES += libmisc/cpuuse/cpuusagedata.c
