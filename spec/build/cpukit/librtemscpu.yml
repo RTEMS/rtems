@@ -1198,6 +1198,7 @@ source:
 - cpukit/rtems/src/modes.c
 - cpukit/rtems/src/msg.c
 - cpukit/rtems/src/msgqbroadcast.c
+- cpukit/rtems/src/msgqconstruct.c
 - cpukit/rtems/src/msgqcreate.c
 - cpukit/rtems/src/msgqdelete.c
 - cpukit/rtems/src/msgqflush.c
@@ -1376,6 +1377,7 @@ source:
 - cpukit/score/src/coremsginsert.c
 - cpukit/score/src/coremsgseize.c
 - cpukit/score/src/coremsgsubmit.c
+- cpukit/score/src/coremsgwkspace.c
 - cpukit/score/src/coremutexseize.c
 - cpukit/score/src/corerwlock.c
 - cpukit/score/src/corerwlockobtainread.c

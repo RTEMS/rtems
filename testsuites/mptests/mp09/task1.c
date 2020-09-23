@@ -49,7 +49,20 @@ rtems_task Test_task(
     );
   } while ( !rtems_is_status_successful( status ) );
 
+  status = rtems_message_queue_ident(
+    Queue_name[ 2 ],
+    RTEMS_SEARCH_ALL_NODES,
+    &Queue_id[ 2 ]
+  );
+  directive_failed( status, "rtems_message_queue_ident" );
+
   if ( rtems_object_get_local_node() == 2 ) {
+    status = rtems_message_queue_delete( Queue_id[ 2 ] );
+    fatal_directive_status(
+      status,
+      RTEMS_ILLEGAL_ON_REMOTE_OBJECT,
+      "rtems_message_queue_delete"
+    );
     status = rtems_message_queue_delete( Queue_id[ 1 ] );
     fatal_directive_status(
       status,
@@ -102,6 +115,9 @@ rtems_task Test_task(
 
     puts( "Deleting Message queue" );
     status = rtems_message_queue_delete( Queue_id[ 1 ] );
+    directive_failed( status, "rtems_message_queue_delete" );
+
+    status = rtems_message_queue_delete( Queue_id[ 2 ] );
     directive_failed( status, "rtems_message_queue_delete" );
   }
 

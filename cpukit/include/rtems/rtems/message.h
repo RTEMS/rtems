@@ -21,6 +21,7 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/coremsgbuffer.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,6 +36,136 @@ extern "C" {
  *  Manager.
  */
 /**@{*/
+
+/**
+ * @brief This structure defines the configuration of a message queue
+ *   constructed by rtems_message_queue_construct().
+ */
+typedef struct {
+  /**
+   * @brief This member defines the name of the message queue.
+   */
+  rtems_name name;
+
+  /**
+   * @brief This member defines the maximum number of pending messages supported
+   *   by the message queue.
+   */
+  uint32_t maximum_pending_messages;
+
+  /**
+   * @brief This member defines the maximum message size supported by the message
+   *   queue.
+   */
+  size_t maximum_message_size;
+
+  /**
+   * @brief This member shall point to the message buffer storage area begin.
+   *
+   * The message buffer storage area for the message queue shall be an array of
+   * the type defined by RTEMS_MESSAGE_QUEUE_BUFFER() with a maximum message size
+   * equal to the maximum message size of this configuration.
+   */
+  void *storage_area;
+
+  /**
+   * @brief This member defines size of the message buffer storage area in bytes.
+   */
+  size_t storage_size;
+
+  /**
+   * @brief This member defines the optional handler to free the message buffer
+   *   storage area.
+   *
+   * It is called when the message queue is deleted.  It is called from task
+   * context under protection of the object allocator lock.  It is allowed to
+   * call free() in this handler.  If handler is NULL, then no action will be
+   * performed.
+   */
+  void ( *storage_free )( void * );
+
+  /**
+   * @brief This member defines the attributes of the message queue.
+   */
+  rtems_attribute attributes;
+} rtems_message_queue_config;
+
+/**
+ * @brief Defines a structure which can be used as a message queue buffer for
+ *   messages of the specified maximum size.
+ *
+ * Use this macro to define the message buffer storage area for
+ * rtems_message_queue_construct().
+ *
+ * @param _maximum_message_size is the maximum message size in bytes.
+ */
+#define RTEMS_MESSAGE_QUEUE_BUFFER( _maximum_message_size ) \
+  struct { \
+    CORE_message_queue_Buffer _buffer; \
+    char _message[ _maximum_message_size ]; \
+  }
+
+/**
+ * @brief Constructs a message queue from the specified the message queue
+ *   configuration.
+ *
+ * In contrast to message queues created by rtems_message_queue_create(), the
+ * message queues constructed by this directive use a user-provided message
+ * buffer storage area.
+ *
+ * This directive is intended for applications which do not want to use the
+ * RTEMS Workspace and instead statically allocate all operating system
+ * resources.  An application based solely on static allocation can avoid any
+ * runtime memory allocators.  This can simplify the application architecture
+ * as well as any analysis that may be required.
+ *
+ * The value for #CONFIGURE_MESSAGE_BUFFER_MEMORY should not include memory for
+ * message queues constructed by rtems_message_queue_construct().
+ *
+ * @param config is the message queue configuration.
+ *
+ * @param[out] id is the pointer to an object identifier variable.  The
+ *   identifier of the constructed message queue object will be stored in this
+ *   variable, in case of a successful operation.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The id parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_NAME The message queue name in the configuration was
+ *   invalid.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The maximum number of pending messages in the
+ *   configuration was zero.
+ *
+ * @retval ::RTEMS_INVALID_SIZE The maximum message size in the configuration
+ *   was zero.
+ *
+ * @retval ::RTEMS_TOO_MANY There was no inactive message queue object
+ *   available to construct a message queue.
+ *
+ * @retval ::RTEMS_TOO_MANY In multiprocessing configurations, there was no
+ *   inactive global object available to construct a global message queue.
+ *
+ * @retval ::RTEMS_INVALID_SIZE The maximum message size in the configuration
+ *   was too big and resulted in integer overflows in calculations carried out
+ *   to determine the size of the message buffer area.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The maximum number of pending messages in the
+ *   configuration was too big and resulted in integer overflows in
+ *   calculations carried out to determine the size of the message buffer area.
+ *
+ * @retval ::RTEMS_UNSATISFIED The message queue storage area begin pointer in
+ *   the configuration was NULL.
+ *
+ * @retval ::RTEMS_UNSATISFIED The message queue storage area size in the
+ *   configuration was not equal to the size calculated from the maximum number
+ *   of pending messages and the maximum message size.
+ */
+rtems_status_code rtems_message_queue_construct(
+  const rtems_message_queue_config *config,
+  rtems_id                         *id
+);
 
 /**
  * @brief RTEMS Create Message Queue

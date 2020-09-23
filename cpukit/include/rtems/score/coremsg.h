@@ -124,6 +124,16 @@ struct CORE_message_queue_Control {
    *  as part of destroying it.
    */
   CORE_message_queue_Buffer         *message_buffers;
+
+  /**
+   * @brief This member contains the optional message buffer storage area free
+   * handler.
+   *
+   * It may be NULL.  In this case no action is performed to free the message
+   * buffer storage area.
+   */
+  void                            ( *free_message_buffers )( void * );
+
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
     /** This is the routine invoked when the message queue transitions
      *  from zero (0) messages pending to one (1) message pending.

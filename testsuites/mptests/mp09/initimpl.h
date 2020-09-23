@@ -26,6 +26,23 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#if CONFIGURE_MP_NODE_NUMBER == 1
+
+#define MESSAGE_SIZE 1
+
+static RTEMS_MESSAGE_QUEUE_BUFFER( MESSAGE_SIZE ) buffers[ 1 ];
+
+static const rtems_message_queue_config config = {
+  .name = rtems_build_name( 'M', 'S', 'G', '2' ),
+  .maximum_pending_messages = RTEMS_ARRAY_SIZE( buffers ),
+  .maximum_message_size = MESSAGE_SIZE,
+  .storage_area = buffers,
+  .storage_size = sizeof( buffers ),
+  .attributes = RTEMS_GLOBAL
+};
+
+#endif
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -40,10 +57,17 @@ rtems_task Init(
   Task_name[ 1 ] = rtems_build_name( '1', '1', '1', ' ' );
   Task_name[ 2 ] = rtems_build_name( '2', '2', '2', ' ' );
 
-  Queue_name[ 1 ] = rtems_build_name( 'M', 'S', 'G', ' ' );
+  Queue_name[ 1 ] = rtems_build_name( 'M', 'S', 'G', '1' );
+  Queue_name[ 2 ] = rtems_build_name( 'M', 'S', 'G', '2' );
 
   if ( rtems_object_get_local_node() == 1 ) {
     puts( "Creating Message Queue (Global)" );
+
+#if CONFIGURE_MP_NODE_NUMBER == 1
+    status = rtems_message_queue_construct( &config, &Queue_id[ 2 ] );
+    directive_failed( status, "rtems_message_queue_construct" );
+#endif
+
     status = rtems_message_queue_create(
       Queue_name[ 1 ],
       3,

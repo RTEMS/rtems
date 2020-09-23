@@ -69,6 +69,54 @@ extern "C" {
 typedef int CORE_message_queue_Submit_types;
 
 /**
+ * @brief This handler shall allocate the message buffer storage area for a
+ *   message queue.
+ *
+ * The handler shall set the CORE_message_queue_Control::free_message_buffers
+ * member.
+ *
+ * @param[out] the_message_queue is the message queue control.
+ *
+ * @param size is the message buffer storage area size to allocate.
+ *
+ * @param arg is the handler argument.
+ *
+ * @retval NULL The allocation failed.
+ *
+ * @return Otherwise the pointer to the allocated message buffer storage area
+ *   begin shall be returned.
+ */
+typedef void *( *CORE_message_queue_Allocate_buffers )(
+  CORE_message_queue_Control *the_message_queue,
+  size_t                      size,
+  const void                 *arg
+);
+
+/**
+ * @brief This handler allocates the message buffer storage area for a message
+ *   queue from the RTEMS Workspace.
+ *
+ * The handler sets the CORE_message_queue_Control::free_message_buffers
+ * to _Workspace_Free().
+ *
+ * @param[out] the_message_queue is the message queue control.
+ *
+ * @param size is the message buffer storage area size to allocate.
+ *
+ * @param arg is the unused handler argument.
+ *
+ * @retval NULL The allocation failed.
+ *
+ * @return Otherwise the pointer to the allocated message buffer storage area
+ *   begin is returned.
+ */
+void *_CORE_message_queue_Workspace_allocate(
+  CORE_message_queue_Control *the_message_queue,
+  size_t                      size,
+  const void                 *arg
+);
+
+/**
  * @brief Initializes a message queue.
  *
  * @param[out] the_message_queue is the message queue to initialize.
@@ -81,19 +129,26 @@ typedef int CORE_message_queue_Submit_types;
  * @param maximum_message_size is the size of the largest message that may be
  *   sent to this message queue instance.
  *
+ * @param allocate_buffers is the message buffer storage area allocation
+ *   handler.
+ *
+ * @param arg is the message buffer storage area allocation handler argument.
+ *
  * @retval STATUS_SUCCESSFUL The message queue was initialized.
  *
  * @retval STATUS_MESSAGE_QUEUE_INVALID_SIZE Calculations with the maximum
  *   pending messages or maximum message size produced an integer overflow.
  *
- * @retval STATUS_MESSAGE_QUEUE_NO_MEMORY There was not enough memory to
- *   allocate the message buffers.
+ * @retval STATUS_MESSAGE_QUEUE_NO_MEMORY The message buffer storage area
+ *   allocation failed.
  */
 Status_Control _CORE_message_queue_Initialize(
-  CORE_message_queue_Control     *the_message_queue,
-  CORE_message_queue_Disciplines  discipline,
-  uint32_t                        maximum_pending_messages,
-  size_t                          maximum_message_size
+  CORE_message_queue_Control          *the_message_queue,
+  CORE_message_queue_Disciplines       discipline,
+  uint32_t                             maximum_pending_messages,
+  size_t                               maximum_message_size,
+  CORE_message_queue_Allocate_buffers  allocate_buffers,
+  const void                          *arg
 );
 
 /**

@@ -102,7 +102,9 @@ static mqd_t _POSIX_Message_queue_Create(
     &the_mq->Message_queue,
     CORE_MESSAGE_QUEUE_DISCIPLINES_FIFO,
     attr->mq_maxmsg,
-    attr->mq_msgsize
+    attr->mq_msgsize,
+    _CORE_message_queue_Workspace_allocate,
+    NULL
   );
 
   if ( status != STATUS_SUCCESSFUL ) {

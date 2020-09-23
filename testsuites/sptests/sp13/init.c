@@ -28,6 +28,17 @@
 
 const char rtems_test_name[] = "SP 13";
 
+static RTEMS_MESSAGE_QUEUE_BUFFER( MESSAGE_SIZE ) Queue_3_buffers[ 100 ];
+
+static const rtems_message_queue_config Queue_3_config = {
+  .name = rtems_build_name( 'Q', '3', ' ', ' ' ),
+  .maximum_pending_messages = RTEMS_ARRAY_SIZE( Queue_3_buffers ),
+  .maximum_message_size = MESSAGE_SIZE,
+  .storage_area = Queue_3_buffers,
+  .storage_size = sizeof( Queue_3_buffers ),
+  .attributes = RTEMS_GLOBAL
+};
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -101,14 +112,8 @@ rtems_task Init(
   );
   directive_failed( status, "rtems_message_queue_create of Q2" );
 
-  status = rtems_message_queue_create(
-    Queue_name[ 3 ],
-    100,
-    MESSAGE_SIZE,
-    RTEMS_GLOBAL,
-    &Queue_id[ 3 ]
-  );
-  directive_failed( status, "rtems_message_queue_create of Q3" );
+  status = rtems_message_queue_construct( &Queue_3_config, &Queue_id[ 3 ] );
+  directive_failed( status, "rtems_message_queue_construct of Q3" );
 
   rtems_task_exit();
 }

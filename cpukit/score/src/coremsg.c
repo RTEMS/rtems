@@ -20,7 +20,6 @@
 
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/wkspace.h>
 
 #define MESSAGE_SIZE_LIMIT \
   ( SIZE_MAX - sizeof( uintptr_t ) + 1 - sizeof( CORE_message_queue_Buffer ) )
@@ -32,10 +31,12 @@ RTEMS_STATIC_ASSERT(
 );
 
 Status_Control _CORE_message_queue_Initialize(
-  CORE_message_queue_Control     *the_message_queue,
-  CORE_message_queue_Disciplines  discipline,
-  uint32_t                        maximum_pending_messages,
-  size_t                          maximum_message_size
+  CORE_message_queue_Control          *the_message_queue,
+  CORE_message_queue_Disciplines       discipline,
+  uint32_t                             maximum_pending_messages,
+  size_t                               maximum_message_size,
+  CORE_message_queue_Allocate_buffers  allocate_buffers,
+  const void                          *arg
 )
 {
   size_t buffer_size;
@@ -56,8 +57,10 @@ Status_Control _CORE_message_queue_Initialize(
     return STATUS_MESSAGE_QUEUE_INVALID_NUMBER;
   }
 
-  the_message_queue->message_buffers = _Workspace_Allocate(
-    (size_t) maximum_pending_messages * buffer_size
+  the_message_queue->message_buffers = ( *allocate_buffers )(
+    the_message_queue,
+    (size_t) maximum_pending_messages * buffer_size,
+    arg
   );
 
   if ( the_message_queue->message_buffers == NULL ) {

@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueueImpl
+ * @ingroup RTEMSScoreMessageQueue
  *
  * @brief This source file contains the implementation of
- *   rtems_message_queue_create().
+ *   _CORE_message_queue_Workspace_allocate().
  */
 
 /*
@@ -38,30 +38,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/messageimpl.h>
 #include <rtems/score/coremsgimpl.h>
+#include <rtems/score/wkspace.h>
 
-#include <string.h>
-
-rtems_status_code rtems_message_queue_create(
-  rtems_name       name,
-  uint32_t         count,
-  size_t           max_message_size,
-  rtems_attribute  attribute_set,
-  rtems_id        *id
+void *_CORE_message_queue_Workspace_allocate(
+  CORE_message_queue_Control *the_message_queue,
+  size_t                      size,
+  const void                 *arg
 )
 {
-  rtems_message_queue_config config;
-
-  memset( &config, 0, sizeof( config ) );
-  config.name = name;
-  config.maximum_pending_messages = count;
-  config.maximum_message_size = max_message_size;
-  config.attributes = attribute_set;
-
-  return _Message_queue_Create(
-    &config,
-    id,
-    _CORE_message_queue_Workspace_allocate
-  );
+  (void) arg;
+  the_message_queue->free_message_buffers = _Workspace_Free;
+  return _Workspace_Allocate( size );
 }

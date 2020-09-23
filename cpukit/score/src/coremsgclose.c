@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/wkspace.h>
 
 static Thread_Control *_CORE_message_queue_Was_deleted(
   Thread_Control       *the_thread,
@@ -50,7 +49,11 @@ void _CORE_message_queue_Close(
     queue_context
   );
 
-  (void) _Workspace_Free( the_message_queue->message_buffers );
+  if ( the_message_queue->free_message_buffers != NULL ) {
+    ( *the_message_queue->free_message_buffers )(
+      the_message_queue->message_buffers
+    );
+  }
 
   _Thread_queue_Destroy( &the_message_queue->Wait_queue );
 }

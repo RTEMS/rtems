@@ -34,11 +34,14 @@ void Send_messages( void );
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS               2
-#define CONFIGURE_MAXIMUM_TIMERS              1
-#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES      1
-#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 3, 16 )
+#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TIMER 1
+
+#if CONFIGURE_MP_NODE_NUMBER == 1
+  #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 2
+  #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE( 3, 16 )
+#endif
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -49,8 +52,8 @@ void Send_messages( void );
 TEST_EXTERN rtems_id   Task_id[ 4 ];     /* array of task ids */
 TEST_EXTERN rtems_name Task_name[ 4 ];   /* array of task names */
 
-TEST_EXTERN rtems_id   Queue_id[ 2 ];    /* array of message queue ids */
-TEST_EXTERN rtems_name Queue_name[ 2 ];  /* array of message queue names */
+TEST_EXTERN rtems_id   Queue_id[ 3 ];    /* array of message queue ids */
+TEST_EXTERN rtems_name Queue_name[ 3 ];  /* array of message queue names */
 
 extern char buffer1[16];
 extern char buffer2[16];

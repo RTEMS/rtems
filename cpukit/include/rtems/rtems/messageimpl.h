@@ -101,6 +101,23 @@ RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Allocate( void )
     _Objects_Allocate( &_Message_queue_Information );
 }
 
+/**
+ * @brief Creates a message queue.
+ *
+ * @param config is the message queue configuration.
+ *
+ * @param[out] id contains the object identifier if the operation was
+ *   successful.
+ *
+ * @param allocate_buffers is the message buffer storage area allocation
+ *   handler.
+ */
+rtems_status_code _Message_queue_Create(
+  const rtems_message_queue_config    *config,
+  rtems_id                            *id,
+  CORE_message_queue_Allocate_buffers  allocate_buffers
+);
+
 /**@}*/
 
 #ifdef __cplusplus
