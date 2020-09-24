@@ -16,7 +16,21 @@ rtems_monitor_queue_canonical(
 {
     const Message_queue_Control *rtems_queue = (const Message_queue_Control *) queue_void;
 
-    canonical_queue->attributes = rtems_queue->attribute_set;
+    canonical_queue->attributes = 0;
+
+    if (
+      rtems_queue->message_queue.operations
+        == &_Thread_queue_Operations_priority
+    ) {
+      canonical_queue->attributes |= RTEMS_PRIORITY;
+    }
+
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( rtems_queue->is_global ) {
+      canonical_queue->attributes |= RTEMS_GLOBAL;
+    }
+#endif
+
     canonical_queue->maximum_message_size = rtems_queue->message_queue.maximum_message_size;
     canonical_queue->maximum_pending_messages = rtems_queue->message_queue.maximum_pending_messages;
     canonical_queue->number_of_pending_messages = rtems_queue->message_queue.number_of_pending_messages;

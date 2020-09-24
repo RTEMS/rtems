@@ -60,7 +60,7 @@ rtems_status_code rtems_message_queue_delete(
   );
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( _Attributes_Is_global( the_message_queue->attribute_set ) ) {
+  if ( the_message_queue->is_global ) {
     _Objects_MP_Close(
       &_Message_queue_Information,
       the_message_queue->Object.id

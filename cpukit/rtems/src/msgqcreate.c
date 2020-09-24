@@ -53,11 +53,11 @@ rtems_status_code rtems_message_queue_create(
     return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( !_System_state_Is_multiprocessing ) {
-    attribute_set = _Attributes_Clear( attribute_set, RTEMS_GLOBAL );
+  if ( _System_state_Is_multiprocessing ) {
+    is_global = _Attributes_Is_global( attribute_set );
+  } else {
+    is_global = false;
   }
-
-  is_global = _Attributes_Is_global( attribute_set );
 #endif
 
   if ( count == 0 )
@@ -99,9 +99,9 @@ rtems_status_code rtems_message_queue_create(
     _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
-#endif
 
-  the_message_queue->attribute_set = attribute_set;
+  the_message_queue->is_global = is_global;
+#endif
 
   if (_Attributes_Is_priority( attribute_set ) )
     discipline = CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY;

@@ -40,8 +40,10 @@ typedef struct {
   Objects_Control             Object;
   /** This field is the instance of the SuperCore Message Queue. */
   CORE_message_queue_Control  message_queue;
-  /** This field is the attribute set as defined by the API. */
-  rtems_attribute             attribute_set;
+#if defined(RTEMS_MULTIPROCESSING)
+  /** This field is true if the message queue is offered globally */
+  bool                        is_global;
+#endif
 }   Message_queue_Control;
 
 /**
