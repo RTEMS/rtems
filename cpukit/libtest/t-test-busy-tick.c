@@ -99,7 +99,6 @@ T_get_one_clock_tick_busy(void)
 		}
 
 		b *= 2;
-		last = now;
 	}
 
 	/* Find a good value */
