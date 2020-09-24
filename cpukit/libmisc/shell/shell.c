@@ -621,11 +621,16 @@ static int rtems_shell_line_editor(
           if (col > 0)
           {
             int clen = strlen (line);
+            int bs;
 
             strcpy (line, line + col);
             if (output) {
               fprintf(out,"\r%s%*c", prompt, clen, ' ');
               fprintf(out,"\r%s%s", prompt, line);
+
+              for (bs = 0; bs < strlen(line); bs++) {
+                fputc('\b', out);
+              }
             }
             col = 0;
           }
