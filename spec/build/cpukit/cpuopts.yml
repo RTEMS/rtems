@@ -48,6 +48,8 @@ links:
 - role: build-dependency
   uid: optposix
 - role: build-dependency
+  uid: optprofiling
+- role: build-dependency
   uid: optsmp
 - role: build-dependency
   uid: optlibdl
