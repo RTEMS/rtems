@@ -62,6 +62,8 @@ links:
   uid: tmtests/grp
 - role: build-dependency
   uid: validation/grp
+- role: build-dependency
+  uid: testopts
 type: build
 use-after:
 - rtemscpu

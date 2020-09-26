@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-header
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+guard: _RTEMS_TESTOPTS_H
+include-headers: []
+install-path: ${BSP_INCLUDEDIR}/rtems
+links:
+- role: build-dependency
+  uid: optverbosity
+target: cpukit/include/rtems/testopts.h
+type: build

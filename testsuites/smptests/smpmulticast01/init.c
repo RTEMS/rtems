@@ -34,6 +34,7 @@
 #include <string.h>
 
 #include <rtems/test.h>
+#include <rtems/testopts.h>
 #include <tmacros.h>
 
 #define CPU_COUNT 32
@@ -43,7 +44,7 @@ const char rtems_test_name[] = "SMPMULTICAST 1";
 static const T_config config = {
   .name = "SMPMultiCast",
   .putchar = T_putchar_default,
-  .verbosity = T_VERBOSE,
+  .verbosity = RTEMS_TEST_VERBOSITY,
   .now = T_now_clock
 };
 

@@ -49,6 +49,7 @@
 #include <rtems/sysinit.h>
 
 #include <rtems/test.h>
+#include <rtems/testopts.h>
 
 /**
  * @defgroup RTEMSTestSuiteTestsuitesValidation0 spec:/testsuites/validation-0
@@ -88,7 +89,7 @@ static const T_config test_config = {
   .buf = buffer,
   .buf_size = sizeof( buffer ),
   .putchar = rtems_put_char,
-  .verbosity = T_VERBOSE,
+  .verbosity = RTEMS_TEST_VERBOSITY,
   .now = T_now_clock,
   .action_count = T_ARRAY_SIZE( actions ),
   .actions = actions

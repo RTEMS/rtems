@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- script: |
+    verbosities = {
+        "Verbose": "T_VERBOSE",
+        "Normal": "T_NORMAL",
+        "Quiet": "T_QUIET",
+    }
+    name = self.data["name"]
+    try:
+        conf.define(name, verbosities[value], quote=False)
+    except KeyError:
+        conf.fatal("The value of {} shall be one of {}".format(
+                   name, verbosities.keys()))
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: Normal
+default-by-variant: []
+description: |
+  Sets the test verbosity of the RTEMS Test Framework.  Valid values are
+  "Verbose", "Normal", and "Quiet".  For normal tests runs you can use a
+  verbosity of "Normal".  If you need a more detailed output, then you can set
+  it to "Verbose".  For example, in case a regression ocurred.  Reducing the
+  verbosity level can significantly reduce the test duration especially on
+  targets with a slow serial output device.  All verbosity levels produce
+  enough output to notice failed test cases.  In particular, the begin and end
+  of test information is not affected by the verbosity level.
+enabled-by: true
+format: '{}'
+links: []
+name: RTEMS_TEST_VERBOSITY
+type: build
