@@ -60,17 +60,6 @@ typedef struct {
 /**@{**/
 
 /**
- * @brief Returns @c RTEMS_IO_ERROR.
- *
- * @retval RTEMS_IO_ERROR Only this one.
- */
-rtems_status_code rtems_io_driver_io_error(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void *arg
-);
-
-/**
  * @brief Registers and initializes the device with the device driver table
  * @a driver_table and major number @a major.
  *
