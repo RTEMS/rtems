@@ -1355,12 +1355,13 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.setenv(variant)
     arch, bsp_name = variant.split("/")
     bsp_base = bsp_map.get(bsp_name, bsp_name)
+    arch_bsp = arch + "/" + bsp_base
 
     conf.env["ARCH"] = arch
     conf.env["BSP_BASE"] = bsp_base
     conf.env["BSP_NAME"] = bsp_name
     conf.env["DEST_OS"] = "rtems"
-    conf.env["ENABLE"] = [get_compiler(conf, cp, variant), arch, variant]
+    conf.env["ENABLE"] = [get_compiler(conf, cp, variant), arch, arch_bsp]
     conf.env["TOP"] = conf.path.abspath()
     conf.env["TOPGROUP"] = top_group
     conf.env["VARIANT"] = variant
