@@ -1340,8 +1340,8 @@ def check_compiler(ctx, compiler):
 
 def get_compiler(conf, cp, variant):
     try:
-        value = cp.get(conf.variant, "COMPILER")
-        cp.remove_option(conf.variant, "COMPILER")
+        value = cp.get(variant, "COMPILER")
+        cp.remove_option(variant, "COMPILER")
         value = no_unicode(value)
         check_compiler(conf, value)
     except configparser.NoOptionError:
