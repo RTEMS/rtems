@@ -912,7 +912,7 @@ class OptionItem(Item):
             value = cic.cp.getboolean(conf.variant, name)
             cic.add_option(name)
         except configparser.NoOptionError:
-            value = self.default_value(conf.variant)
+            value = self.default_value(conf.env.ARCH_BSP)
         except ValueError as ve:
             conf.fatal(
                 "Invalid value for configuration option {}: {}".format(name, ve)
@@ -928,7 +928,7 @@ class OptionItem(Item):
             value = cic.cp.get(conf.variant, name)
             cic.add_option(name)
         except configparser.NoOptionError:
-            value = self.default_value(conf.variant)
+            value = self.default_value(conf.env.ARCH_BSP)
             if value is None:
                 return value
         try:
@@ -947,7 +947,7 @@ class OptionItem(Item):
             cic.add_option(name)
             value = no_unicode(value)
         except configparser.NoOptionError:
-            value = self.default_value(conf.variant)
+            value = self.default_value(conf.env.ARCH_BSP)
         return value
 
     def _script(self, conf, cic, value, arg):
@@ -1358,6 +1358,7 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     arch_bsp = arch + "/" + bsp_base
 
     conf.env["ARCH"] = arch
+    conf.env["ARCH_BSP"] = arch_bsp
     conf.env["BSP_BASE"] = bsp_base
     conf.env["BSP_NAME"] = bsp_name
     conf.env["DEST_OS"] = "rtems"
