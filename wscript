@@ -1362,7 +1362,11 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.env["BSP_BASE"] = bsp_base
     conf.env["BSP_NAME"] = bsp_name
     conf.env["DEST_OS"] = "rtems"
+
+    # For the enabled-by evaluation we have to use the base BSP defined by the
+    # build specification and not the BSP name provided by the user.
     conf.env["ENABLE"] = [get_compiler(conf, cp, variant), arch, arch_bsp]
+
     conf.env["TOP"] = conf.path.abspath()
     conf.env["TOPGROUP"] = top_group
     conf.env["VARIANT"] = variant
