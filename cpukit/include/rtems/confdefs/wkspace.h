@@ -126,6 +126,9 @@ const uintptr_t _Workspace_Size = CONFIGURE_EXECUTIVE_RAM_SIZE;
 
 #ifdef CONFIGURE_UNIFIED_WORK_AREAS
   const bool _Workspace_Is_unified = true;
+
+  struct Heap_Control *( * const _Workspace_Malloc_initializer )( void ) =
+    _Workspace_Malloc_initialize_unified;
 #endif
 
 uint32_t rtems_minimum_stack_size = CONFIGURE_MINIMUM_TASK_STACK_SIZE;

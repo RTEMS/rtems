@@ -669,6 +669,7 @@ source:
 - cpukit/libcsupport/src/mallocextenddefault.c
 - cpukit/libcsupport/src/mallocfreespace.c
 - cpukit/libcsupport/src/mallocgetheapptr.c
+- cpukit/libcsupport/src/mallocheap.c
 - cpukit/libcsupport/src/mallocinfo.c
 - cpukit/libcsupport/src/malloc_initialize.c
 - cpukit/libcsupport/src/_malloc_r.c
@@ -1575,6 +1576,8 @@ source:
 - cpukit/score/src/watchdogtimeslicedefault.c
 - cpukit/score/src/wkspace.c
 - cpukit/score/src/wkspaceisunifieddefault.c
+- cpukit/score/src/wkspacemallocinitdefault.c
+- cpukit/score/src/wkspacemallocinitunified.c
 - cpukit/score/src/wkstringduplicate.c
 target: rtemscpu
 type: build

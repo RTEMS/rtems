@@ -43,7 +43,7 @@ extern "C" {
  */
 extern Heap_Control *RTEMS_Malloc_Heap;
 
-void RTEMS_Malloc_Initialize(
+Heap_Control *RTEMS_Malloc_Initialize(
   const Memory_Information              *mem,
   Heap_Initialization_or_extend_handler  extend
 );

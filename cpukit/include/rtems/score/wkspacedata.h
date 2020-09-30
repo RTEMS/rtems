@@ -43,6 +43,8 @@
 extern "C" {
 #endif
 
+struct Heap_Control;
+
 /**
  * @addtogroup RTEMSScoreWorkspace
  *
@@ -64,6 +66,30 @@ extern const uintptr_t _Workspace_Size;
  * <rtems/confdefs.h>.
  */
 extern const bool _Workspace_Is_unified;
+
+/**
+ * @brief Initializes the C Program Heap separated from the RTEMS Workspace.
+ *
+ * @return Returns the heap control used for the C Program Heap.
+ */
+struct Heap_Control *_Workspace_Malloc_initialize_separate( void );
+
+/**
+ * @brief Initializes the C Program Heap so that it is unified with the RTEMS
+ * Workspace.
+ *
+ * @return Returns the heap control used for the C Program Heap.
+ */
+struct Heap_Control *_Workspace_Malloc_initialize_unified( void );
+
+/**
+ * @brief This constant provides the C Program Heap initialization handler.
+ *
+ * This constant is defined by the application configuration option
+ * #CONFIGURE_UNIFIED_WORK_AREAS via <rtems/confdefs.h> or a default
+ * configuration.
+ */
+extern struct Heap_Control *( * const _Workspace_Malloc_initializer )( void );
 
 /** @} */
 
