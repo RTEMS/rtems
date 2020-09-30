@@ -23,6 +23,8 @@
 
 #include "tmacros.h"
 
+#include <rtems/stackchk.h>
+
 const char rtems_test_name[] = "SHA";
 
 static const char *const test_vectors[] = {
@@ -170,6 +172,7 @@ static void Init(rtems_task_argument arg)
 
   test_sha256();
   test_sha512();
+  rtems_stack_checker_report_usage();
 
   TEST_END();
   rtems_test_exit(0);
@@ -180,9 +183,17 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
+#define CONFIGURE_STACK_CHECKER_ENABLED
+
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+/*
+ * The SHA512_Update() function may need a lot of stack space if the compiler
+ * optimization is disabled.
+ */
+#define CONFIGURE_INIT_TASK_STACK_SIZE (32 * 1024)
 
 #define CONFIGURE_INIT
 
