@@ -63,12 +63,12 @@ rtems_status_code _Message_queue_Create(
   bool                            is_global;
 #endif
 
-  if ( id == NULL ) {
-    return RTEMS_INVALID_ADDRESS;
-  }
-
   if ( !rtems_is_name_valid( config->name ) ) {
     return RTEMS_INVALID_NAME;
+  }
+
+  if ( id == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
   }
 
   if ( config->maximum_pending_messages == 0 ) {

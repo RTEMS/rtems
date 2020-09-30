@@ -38,14 +38,17 @@ rtems_status_code rtems_partition_create(
 {
   Partition_Control *the_partition;
 
-  if ( !rtems_is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
+  }
 
-  if ( !starting_address )
+  if ( id == NULL ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-  if ( !id )
+  if ( starting_address == NULL ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
   if ( length == 0 )
     return RTEMS_INVALID_SIZE;

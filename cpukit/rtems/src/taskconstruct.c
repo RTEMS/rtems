@@ -96,11 +96,13 @@ rtems_status_code _RTEMS_tasks_Create(
   RTEMS_API_Control       *api;
   ASR_Information         *asr;
 
-  if ( !id )
-   return RTEMS_INVALID_ADDRESS;
-
-  if ( !rtems_is_name_valid( config->name ) )
+  if ( !rtems_is_name_valid( config->name ) ) {
     return RTEMS_INVALID_NAME;
+  }
+
+  if ( id == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
 
   /*
    *  Core Thread Initialize insures we get the minimum amount of
