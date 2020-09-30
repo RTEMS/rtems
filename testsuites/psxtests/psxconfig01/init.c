@@ -186,7 +186,7 @@ static rtems_task Init(rtems_task_argument argument);
 
 #include <rtems/confdefs.h>
 
-typedef struct {
+typedef struct RTEMS_ALIGNED(RTEMS_PARTITION_ALIGNMENT) {
   uint64_t data [16];
 } area;
 

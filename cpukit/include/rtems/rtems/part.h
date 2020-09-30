@@ -36,6 +36,15 @@ extern "C" {
 /**@{*/
 
 /**
+ * @brief This constant defines the minimum alignment of a partition buffer in
+ *   bytes.
+ *
+ * Use it with RTEMS_ALIGNED() to define the alignment of partition buffer
+ * types or statically allocated partition buffer areas.
+ */
+#define RTEMS_PARTITION_ALIGNMENT CPU_SIZEOF_POINTER
+
+/**
  *  @brief RTEMS Partition Create
  *
  *  Partition Manager

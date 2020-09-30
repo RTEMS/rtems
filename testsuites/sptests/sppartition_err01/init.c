@@ -16,17 +16,18 @@
 
 const char rtems_test_name[] = "SPPARTITION_ERR 1";
 
-uint32_t Other_Memory;
+static uint32_t Other_Memory;
 
-TEST_EXTERN rtems_name Partition_name[ 2 ]; /* array of partition names */
-TEST_EXTERN rtems_id   Partition_id[ 2 ];   /* array of partition ids */
+static rtems_name Partition_name[ 2 ]; /* array of partition names */
 
-TEST_EXTERN uint8_t   Partition_good_area[256] CPU_STRUCTURE_ALIGNMENT;
+static rtems_id   Partition_id[ 2 ];   /* array of partition ids */
+
+static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
+  Partition_good_area[ 256 ];
+
 #define Partition_bad_area (void *) 0x00000005
 
-void test_partition_errors(void);
-
-void test_partition_errors(void)
+static void test_partition_errors(void)
 {
   void              *buffer_address_1;
   void              *buffer_address_2;
@@ -152,7 +153,7 @@ void test_partition_errors(void)
     Partition_name[ 1 ],
     Partition_good_area,
     128,
-    35,
+    RTEMS_PARTITION_ALIGNMENT - 1,
     RTEMS_DEFAULT_ATTRIBUTES,
     &junk_id
   );
