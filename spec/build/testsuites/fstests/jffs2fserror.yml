@@ -13,10 +13,10 @@ ldflags: []
 links: []
 source:
 - testsuites/fstests/fserror/test.c
-stlib:
-- jffs2
+stlib: []
 target: testsuites/fstests/jffs2_fserror.exe
 type: build
 use-after: []
 use-before:
 - testjffs2
+- jffs2

@@ -15,9 +15,9 @@ source:
 - testsuites/fstests/fsjffs2gc01/init.c
 - testsuites/fstests/jffs2_support/fs_support.c
 - testsuites/fstests/support/fstest_support.c
-stlib:
-- jffs2
+stlib: []
 target: testsuites/fstests/fsjffs2gc01.exe
 type: build
 use-after: []
-use-before: []
+use-before:
+- jffs2
