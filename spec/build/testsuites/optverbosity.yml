@@ -20,7 +20,7 @@ default: Normal
 default-by-variant: []
 description: |
   Sets the test verbosity of the RTEMS Test Framework.  Valid values are
-  "Verbose", "Normal", and "Quiet".  For normal tests runs you can use a
+  "Verbose", "Normal", and "Quiet".  For normal test runs you can use a
   verbosity of "Normal".  If you need a more detailed output, then you can set
   it to "Verbose".  For example, in case a regression ocurred.  Reducing the
   verbosity level can significantly reduce the test duration especially on
