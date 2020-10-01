@@ -9,8 +9,19 @@ copyrights:
 default: false
 default-by-variant: []
 description: |
-  Enable the message passing based multiprocessing support (MPCI); do not confuse this with the SMP support
-enabled-by: true
+  If set to "True", then the message passing based multiprocessing support
+  (MPCI) is enabled, otherwise it is disabled.  Do not confuse this with the
+  SMP support which is enabled by the RTEMS_SMP option.
+enabled-by:
+- m68k/mvme147s
+- powerpc/psim
+- powerpc/qoriq_core_0
+- powerpc/qoriq_core_1
+- sparc/gr712rc
+- sparc/gr740
+- sparc/leon3
+- sparc/ut699
+- sparc/ut700
 links: []
 name: RTEMS_MULTIPROCESSING
 type: build
