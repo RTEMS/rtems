@@ -101,19 +101,31 @@ _start:
          * Get current per-CPU control and store it in PL1 only Thread ID
          * Register (TPIDRPRW).
          */
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	ldr	w1, =_Per_CPU_Information
+#else
 	ldr	x1, =_Per_CPU_Information
+#endif
 	add	x1, x1, x7, asl #PER_CPU_CONTROL_SIZE_LOG2
 	mcr	p15, 0, x1, c13, c0, 4
 
 #endif
 
 	/* Calculate interrupt stack area end for current processor */
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	ldr	w1, =_ISR_Stack_size
+#else
 	ldr	x1, =_ISR_Stack_size
+#endif
 #ifdef RTEMS_SMP
 	add	x3, x7, #1
 	mul	x1, x1, x3
 #endif
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	ldr	w2, =_ISR_Stack_area_begin
+#else
 	ldr	x2, =_ISR_Stack_area_begin
+#endif
 	add	x3, x1, x2
 
 	/* Save original DAIF value */
@@ -135,7 +147,11 @@ _start:
 	 * Normal operation for RTEMS on AArch64 uses SPx and runs on EL1
 	 * Exception operation (synchronous errors, IRQ, FIQ, System Errors) uses SP0
 	*/
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	ldr	w1, =bsp_stack_exception_size
+#else
 	ldr	x1, =bsp_stack_exception_size
+#endif
 	/* Switch to SP0 and set exception stack */
 	msr	spsel, #0
 	mov	sp, x3
