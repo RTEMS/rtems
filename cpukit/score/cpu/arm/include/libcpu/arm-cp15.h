@@ -2308,6 +2308,38 @@ arm_cp15_set_counter_virtual_offset(uint64_t val)
   );
 }
 
+/* Diagnostic Control Register */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_diagnostic_control(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c15, c0, 1\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* Diagnostic Control Register */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_diagnostic_control(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c15, c0, 1\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
 /**
  * @brief Sets the @a section_flags for the address range [@a begin, @a end).
  *
