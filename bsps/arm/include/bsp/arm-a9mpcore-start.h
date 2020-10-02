@@ -123,6 +123,20 @@ arm_a9mpcore_start_enable_smp_in_auxiliary_control(void)
   actlr |= ARM_CORTEX_A9_ACTL_SMP | ARM_CORTEX_A9_ACTL_FW;
   arm_cp15_set_auxiliary_control(actlr);
 }
+
+BSP_START_TEXT_SECTION static inline void
+arm_a9mpcore_start_errata_845369_handler(void)
+{
+  uint32_t diag;
+
+  /*
+   * Workaround for Errata 845369: Under Very Rare Timing Circumstances
+   * Transition into Streaming Mode Might Create Data Corruption.
+   */
+  diag = arm_cp15_get_diagnostic_control();
+  diag |= 1U << 22;
+  arm_cp15_set_diagnostic_control(diag);
+}
 #endif
 
 BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
@@ -138,6 +152,7 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
   }
 
 #ifdef RTEMS_SMP
+  arm_a9mpcore_start_errata_845369_handler();
   arm_a9mpcore_start_enable_smp_in_auxiliary_control();
 #endif
 
