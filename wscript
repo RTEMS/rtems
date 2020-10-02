@@ -688,7 +688,7 @@ class OptionItem(Item):
     @staticmethod
     def _is_variant(variants, variant):
         for pattern in variants:
-            if re.search("^" + pattern + "$", variant):
+            if re.match(pattern + "$", variant):
                 return True
         return False
 
@@ -1499,7 +1499,7 @@ def is_in_white_list(variant, white_list):
     if not white_list:
         return True
     for pattern in white_list:
-        if re.search(pattern, variant):
+        if re.match(pattern + "$", variant):
             return True
     return False
 
