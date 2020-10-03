@@ -1,0 +1,16 @@
+# Copyright (c) 2019 Chris Johns <chrisj@rtems.org>
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: rcxx01
+
+directives:
+
+  rtems::thread::thread
+  rtems::thread::attributes
+
+concepts:
+
++ Create a thread using the default method, ie like std::thread.
+* Create a thread with changed attributes.

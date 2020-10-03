@@ -1,0 +1,13 @@
+*** BEGIN OF TEST RCXX 1 ***
+*** TEST VERSION: 5.0.0.7ba04a62227286dcd3da20ea7319d9c64b8f5fd1
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD:
+*** TEST TOOLS: 7.5.0 20191114 (RTEMS 5, RSB ceb811fa19ddcfdd449a8da8f1107e6e592727b6, Newlib d14714c69)
+Thread: start: default
+ 1 D
+Thread: start: attr
+ 2 R
+Thread: end: default
+Thread: end: attr
+
+*** END OF TEST RCXX 1 ***
