@@ -258,6 +258,13 @@ RTEMS_CPUOPT([__RTEMS_REVISION__],
 
 _RTEMS_CPUOPT_FINI
 
+_RTEMS_TESTOPT_INIT
+RTEMS_TESTOPT([RTEMS_TEST_VERBOSITY],
+  [true],
+  [T_NORMAL],
+  [RTEMS Test Framework verbosity])
+_RTEMS_TESTOPT_FINI
+
 AC_ENABLE_MULTILIB([Makefile],[..])
 
 # libmisc/shell/* wants to assign file descriptors to stdio file descriptors.
