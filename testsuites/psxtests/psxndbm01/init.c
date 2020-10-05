@@ -89,6 +89,7 @@ rtems_task Init(rtems_task_argument ignored)
 
   int i;
   char *test_strings;
+  char hello_string[] = "hello";
 
   DBM *db;
 
@@ -217,14 +218,9 @@ rtems_task Init(rtems_task_argument ignored)
   rtems_test_assert( strcmp( (const char*)get_phone_no.dptr, PHONE_NO2 ) == 0 );
 
   puts( "Fetch non-existing record and confirm error." );
-  test_strings = (char*)malloc(6);
-  strncpy( test_strings, "Hello", 5 );
-
-  test_strings[5] = '\0';
-
 /* The data pointed by test_string is now pointed by key.dptr */
-  key.dptr = test_strings;
-  key.dsize = sizeof( test_strings );
+  key.dptr = hello_string;
+  key.dsize = strlen( hello_string ) + 1;
   get_phone_no = dbm_fetch( db, key );
   rtems_test_assert( get_phone_no.dptr == NULL );
   dbm_close( db );
@@ -239,7 +235,6 @@ rtems_task Init(rtems_task_argument ignored)
 
   puts( "Delete non-existing record and confirm error." );
   rtems_test_assert( dbm_delete( db, key ) != 0 );
-  free( test_strings );
   rtems_test_assert( count_no_of_records( db ) == 2);
 
   puts( "Delete existing record and "
