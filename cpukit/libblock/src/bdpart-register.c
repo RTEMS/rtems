@@ -38,7 +38,7 @@ static char *create_logical_disk_name( const char *disk_name, char **marker)
   char *logical_disk_name = malloc( disk_name_size + RTEMS_BDPART_NUMBER_SIZE);
 
   if (logical_disk_name != NULL) {
-    strncpy( logical_disk_name, disk_name, disk_name_size);
+    memcpy( logical_disk_name, disk_name, disk_name_size);
     *marker = logical_disk_name + disk_name_size;
   }
 
