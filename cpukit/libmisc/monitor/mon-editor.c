@@ -339,7 +339,8 @@ rtems_monitor_line_editor (
             {
               int end;
               int bs;
-              strcpy (&buffer[pos], &buffer[pos + 1]);
+              memmove (&buffer[pos], &buffer[pos + 1],
+                       strlen (&buffer[pos + 1]) + 1);
               fprintf(stdout,"\r%s $ %s", monitor_prompt, buffer);
               end = (int) strlen (buffer);
               for (bs = 0; bs < (end - pos); bs++)
