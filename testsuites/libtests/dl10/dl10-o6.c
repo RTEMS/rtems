@@ -7,6 +7,7 @@
  */
 
 #include "dl-load.h"
+#include "dl-o5.h"
 
 #include <inttypes.h>
 #include <rtems/test-info.h>
