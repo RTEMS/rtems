@@ -81,7 +81,7 @@ static ctrace_tasks tasks;
  * Add a name.
  */
 static void
-ctrace_task_name_add (rtems_id id, const rtems_name* name)
+ctrace_task_name_add (rtems_id id, const rtems_name name)
 {
   if (tasks.tasks == NULL)
   {
@@ -97,7 +97,7 @@ ctrace_task_name_add (rtems_id id, const rtems_name* name)
       {
         if (tasks.tasks[t].id == id)
         {
-          tasks.tasks[t].name = *name;
+          tasks.tasks[t].name = name;
           break;
         }
       }
@@ -111,7 +111,7 @@ ctrace_task_name_add (rtems_id id, const rtems_name* name)
         }
         if (tasks.tasks != NULL)
         {
-          tasks.tasks[tasks.count].name = *name;
+          tasks.tasks[tasks.count].name = name;
           tasks.tasks[tasks.count].id = id;
           ++tasks.count;
         }
@@ -349,7 +349,7 @@ rtems_capture_print_trace_records (int total, bool csv)
         cpu->recs = rtems_capture_record_extract (cpu->recs,
                                                   &task_rec,
                                                   sizeof (task_rec));
-        ctrace_task_name_add (rec_out->task_id, &task_rec.name);
+        ctrace_task_name_add (rec_out->task_id, task_rec.name);
         rtems_capture_print_record_task (cpu_out, rec_out, &task_rec);
       }
       else
