@@ -589,10 +589,9 @@ static rtems_task disp_hcms29xx_update_task
 				    RTEMS_WAIT,RTEMS_NO_TIMEOUT);
       }
       if (rc == RTEMS_SUCCESSFUL) {
-	strncpy(softc_ptr->disp_param.disp_buffer,
-		softc_ptr->disp_param.trns_buffer,
-		sizeof(softc_ptr->disp_param.disp_buffer));
-	softc_ptr->disp_param.disp_buffer[sizeof(softc_ptr->disp_param.disp_buffer)-1] = '\0';
+        strlcpy(softc_ptr->disp_param.disp_buffer,
+                softc_ptr->disp_param.trns_buffer,
+                sizeof(softc_ptr->disp_param.disp_buffer));
 	softc_ptr->disp_param.disp_buf_cnt =
 	  (int) strlen(softc_ptr->disp_param.disp_buffer);
       }
