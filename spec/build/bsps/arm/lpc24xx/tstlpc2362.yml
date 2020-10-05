@@ -15,6 +15,7 @@ actions:
     mdosfsfserror: exclude
     mdosfsfsrdwr: exclude
     mghttpd01: exclude
+    monitor: exclude
     monitor02: exclude
     paranoia: exclude
     pppd: exclude
