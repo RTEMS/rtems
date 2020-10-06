@@ -30,6 +30,7 @@ actions:
     psxaio01: exclude
     psxaio02: exclude
     psxaio03: exclude
+    psxfile01: exclude
     psxmsgq01: exclude
     psxsignal07: exclude
     record01: exclude

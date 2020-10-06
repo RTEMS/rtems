@@ -22,6 +22,7 @@ actions:
     psxaio01: exclude
     psxaio02: exclude
     psxaio03: exclude
+    psxmsgq01: exclude
     psxsignal07: exclude
     record01: exclude
     rtems: exclude
