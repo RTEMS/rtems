@@ -1887,7 +1887,7 @@ static void convert_uri_to_file_name(struct mg_connection *conn, char *buf,
         *root = conn->ctx->config[DOCUMENT_ROOT];
   char *p;
   int match_len;
-  char gz_path[PATH_MAX];
+  char gz_path[PATH_MAX + 3];
   char const* accept_encoding;
 
   // Using buf_len - 1 because memmove() for PATH_INFO may shift part
@@ -3021,7 +3021,7 @@ static void handle_file_request(struct mg_connection *conn, const char *path,
   int64_t cl, r1, r2;
   struct vec mime_vec;
   int n;
-  char gz_path[PATH_MAX];
+  char gz_path[PATH_MAX + 3];
   char const* encoding = "";
 
   get_mime_type(conn->ctx, path, &mime_vec);
