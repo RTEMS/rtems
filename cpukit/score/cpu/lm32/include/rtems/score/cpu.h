@@ -702,9 +702,7 @@ void _CPU_Context_switch(
  *
  * XXX document implementation including references if appropriate
  */
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 /** @} */
 

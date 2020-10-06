@@ -290,8 +290,7 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
   _CPU_Context_restore( (_the_context) );
 
-void _CPU_Fatal_halt( uint32_t _source, uint32_t _error )
-  RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t _source, uint32_t _error );
 
 /**
  * @brief CPU initialization.
@@ -310,9 +309,7 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 

@@ -46,8 +46,7 @@ extern "C" {
  *
  * This directive does not return.
  */
-void rtems_initialize_executive(void)
-  RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void rtems_initialize_executive( void );
 
 /**
  * @brief Shutdown the RTEMS environment.
@@ -57,9 +56,7 @@ void rtems_initialize_executive(void)
  * shutdown and multitasking halted.  The system is terminated with a fatal
  * source of RTEMS_FATAL_SOURCE_EXIT and the specified result code.
  */
-void rtems_shutdown_executive(
-  uint32_t   result
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void rtems_shutdown_executive( uint32_t result );
 
 #ifdef __cplusplus
 }

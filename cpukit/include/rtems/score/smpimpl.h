@@ -124,9 +124,9 @@ extern Processor_mask _SMP_Online_processors;
  *
  * @param cpu_self The current processor control.
  */
-void _SMP_Start_multitasking_on_secondary_processor(
+RTEMS_NO_RETURN void _SMP_Start_multitasking_on_secondary_processor(
   Per_CPU_Control *cpu_self
-) RTEMS_NO_RETURN;
+);
 
 /**
  * @brief Interrupts handler for inter-processor interrupts.

@@ -213,7 +213,7 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) )
 
-extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, uint32_t error );
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
@@ -393,9 +393,7 @@ void _CPU_Context_switch(
  *
  */
 
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.

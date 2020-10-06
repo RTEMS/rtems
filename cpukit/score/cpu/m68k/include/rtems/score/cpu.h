@@ -595,9 +595,9 @@ void _CPU_Context_switch(
   Context_Control  *heir
 );
 
-void _CPU_Context_Restart_self(
+RTEMS_NO_RETURN void _CPU_Context_Restart_self(
   Context_Control  *the_context
-) RTEMS_NO_RETURN;
+);
 
 /*
  *  _CPU_Context_save_fp

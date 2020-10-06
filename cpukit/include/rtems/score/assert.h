@@ -78,9 +78,6 @@ extern "C" {
   #if !defined( RTEMS_SCHEDSIM )
     /* normal build is newlib. */
 
-    void __assert_func(const char *, int, const char *, const char *)
-      RTEMS_NO_RETURN;
-
     #define _Assert( _e ) \
        ( ( _e ) ? \
          ( void ) 0 : \

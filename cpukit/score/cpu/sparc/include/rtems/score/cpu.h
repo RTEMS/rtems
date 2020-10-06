@@ -912,8 +912,7 @@ void _CPU_Context_Initialize(
  * location or a register, optionally disables interrupts, and
  * halts/stops the CPU.
  */
-extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
-  RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, uint32_t error );
 
 /* end of Fatal Error manager macros */
 
@@ -1001,9 +1000,7 @@ void _CPU_Context_switch(
  *
  * @param[in] new_context is the context to restore
  */
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( void );

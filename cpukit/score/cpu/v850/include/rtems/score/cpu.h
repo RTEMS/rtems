@@ -543,9 +543,7 @@ void _CPU_Context_switch(
  *
  * This is implemented in assembly on the v850.
  */
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 /* XXX this should be possible to remove */
 #if 0

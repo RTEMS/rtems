@@ -280,9 +280,7 @@ void _CPU_Context_switch(
   Context_Control  *heir
 );
 
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 typedef struct {
   uint32_t processor_state_register;

@@ -586,9 +586,7 @@ void _CPU_Context_switch(
  *  efficient manner.  It may simply be a label in _CPU_Context_switch.
  */
 
-void _CPU_Context_restore(
-  Context_Control *new_context
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 /*
  *  @brief This routine saves the floating point context passed to it.

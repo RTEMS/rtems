@@ -396,7 +396,7 @@ extern unsigned int leon3_timer_prescaler;
 /* GRLIB extended IRQ controller register */
 void leon3_ext_irq_init(void);
 
-void leon3_power_down_loop(void) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void leon3_power_down_loop(void);
 
 static inline uint32_t leon3_get_cpu_count(
   volatile struct irqmp_regs *irqmp

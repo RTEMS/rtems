@@ -261,10 +261,10 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  *
  * @see rtems_fatal() and _Internal_error().
  */
-void _Terminate(
+RTEMS_NO_RETURN void _Terminate(
   Internal_errors_Source  the_source,
   Internal_errors_t       the_error
-) RTEMS_NO_RETURN;
+);
 
 /**
  * @brief Terminates the system with an INTERNAL_ERROR_CORE fatal source and
@@ -274,7 +274,7 @@ void _Terminate(
  *
  * @see _Terminate().
  */
-void _Internal_error( Internal_errors_Core_list core_error ) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _Internal_error( Internal_errors_Core_list core_error );
 
 #ifdef __cplusplus
 }

@@ -430,7 +430,7 @@ rtems_status_code rtems_task_delete(
   rtems_id   id
 );
 
-void rtems_task_exit( void ) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void rtems_task_exit( void );
 
 /**
  * @brief RTEMS Task Mode

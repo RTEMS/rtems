@@ -322,8 +322,7 @@ void _CPU_ISR_install_vector(
  */
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
-void _CPU_Context_restore( Context_Control *new_context )
-  RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 
 #ifdef RTEMS_SMP
   uint32_t _CPU_SMP_Initialize( void );

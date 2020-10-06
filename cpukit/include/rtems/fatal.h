@@ -16,7 +16,7 @@
 #ifndef _RTEMS_FATAL_H
 #define _RTEMS_FATAL_H
 
-#include <rtems/score/basedefs.h> /* RTEMS_NO_RETURN */
+#include <rtems/score/basedefs.h>
 #include <rtems/extension.h>
 
 #ifdef __cplusplus
@@ -68,9 +68,7 @@ static inline void rtems_exception_frame_print(
  *
  * @see _Terminate().
  */
-void rtems_fatal_error_occurred(
-  uint32_t   the_error
-) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void rtems_fatal_error_occurred( uint32_t the_error );
 
 /**
  * @brief Terminates the system.

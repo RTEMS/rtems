@@ -94,9 +94,11 @@
  *  can impact the code generated following calls to
  *  rtems_fatal_error_occurred and _Terminate.
  */
-#if defined(RTEMS_SCHEDSIM)
-  #define RTEMS_NO_RETURN
-#elif defined(__GNUC__) && !defined(RTEMS_DEBUG)
+#if __cplusplus >= 201103L
+  #define RTEMS_NO_RETURN [[noreturn]]
+#elif __STDC_VERSION__ >= 201112L
+  #define RTEMS_NO_RETURN _Noreturn
+#elif defined(__GNUC__)
   #define RTEMS_NO_RETURN __attribute__((__noreturn__))
 #else
   #define RTEMS_NO_RETURN

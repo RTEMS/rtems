@@ -122,7 +122,7 @@ void _Thread_Create_idle(void);
  * part of initialization and its invocation is the last act of
  * the non-multitasking part of the system initialization.
  */
-void _Thread_Start_multitasking( void ) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void _Thread_Start_multitasking( void );
 
 /**
  * @brief The configuration of a new thread to initialize.
@@ -259,11 +259,11 @@ bool _Thread_Start(
  * @param entry The start entry information for @a executing.
  * @param lock_context The lock context.
  */
-void _Thread_Restart_self(
+RTEMS_NO_RETURN void _Thread_Restart_self(
   Thread_Control                 *executing,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context
-) RTEMS_NO_RETURN;
+);
 
 /**
  * @brief Restarts the thread.

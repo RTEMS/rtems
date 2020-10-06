@@ -68,7 +68,7 @@ void bsp_reset(void);
  * This style of initialization ensures that the C++ global constructors are
  * executed after RTEMS is initialized.
  */
-void boot_card(const char *cmdline) RTEMS_NO_RETURN;
+RTEMS_NO_RETURN void boot_card(const char *cmdline);
 
 struct Per_CPU_Control;
 
