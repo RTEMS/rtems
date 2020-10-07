@@ -35,13 +35,20 @@
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
+
+/* Generated from spec:/rtems/if/header */
 
 #ifndef _RTEMS_H
 #define _RTEMS_H
@@ -78,6 +85,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Generated from spec:/rtems/if/group */
 
 /**
  * @defgroup RTEMSAPIClassic Classic
