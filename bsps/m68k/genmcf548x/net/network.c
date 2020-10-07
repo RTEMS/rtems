@@ -615,7 +615,7 @@ void mcf548x_fec_irq_handler(rtems_vector_number vector)
     sc->rxFIFOError++;
   }
   /*
-   * fatal error ocurred?
+   * fatal error occurred?
    */
   if (ievent & (MCF548X_FEC_EIR_RFERR | MCF548X_FEC_EIR_XFERR)) {
     MCF548X_FEC_EIMR(chan) &=~(MCF548X_FEC_EIMR_RFERR | MCF548X_FEC_EIMR_XFERR);

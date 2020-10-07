@@ -22,7 +22,7 @@ description: |
   Sets the test verbosity of the RTEMS Test Framework.  Valid values are
   "Verbose", "Normal", and "Quiet".  For normal test runs you can use a
   verbosity of "Normal".  If you need a more detailed output, then you can set
-  it to "Verbose".  For example, in case a regression ocurred.  Reducing the
+  it to "Verbose".  For example, in case a regression occurred.  Reducing the
   verbosity level can significantly reduce the test duration especially on
   targets with a slow serial output device.  All verbosity levels produce
   enough output to notice failed test cases.  In particular, the begin and end

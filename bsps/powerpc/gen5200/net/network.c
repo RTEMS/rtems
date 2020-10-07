@@ -528,7 +528,7 @@ static void mpc5200_fec_irq_handler(rtems_irq_hdl_param handle)
     self->rxFIFOError++;
   }
   /*
-   * fatal error ocurred?
+   * fatal error occurred?
    */
   if (ievent & (FEC_INTR_XFIFO_ERR | FEC_INTR_RFIFO_ERR)) {
     mpc5200.imask &= ~(FEC_INTR_XFERREN | FEC_INTR_RFERREN);
