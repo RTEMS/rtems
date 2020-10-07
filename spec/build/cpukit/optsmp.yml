@@ -13,7 +13,6 @@ description: |
 enabled-by:
 - arm/altcycv_devkit
 - arm/imx7
-- arm/raspberrypi
 - arm/raspberrypi2
 - arm/realview_pbx_a9_qemu
 - arm/xilinx_zynq_a9_qemu
