@@ -10,7 +10,18 @@ default: false
 default-by-variant: []
 description: |
   Enable the legacy TCP/IP network support
-enabled-by: true
+enabled-by:
+  not:
+  - aarch64
+  - powerpc/qoriq_e6500_64
+  - riscv/rv64imac
+  - riscv/rv64imac_medany
+  - riscv/rv64imafd
+  - riscv/rv64imafd_medany
+  - riscv/rv64imafdc
+  - riscv/rv64imafdc_medany
+  - sparc64
+  - x86_64
 links: []
 name: RTEMS_NETWORKING
 type: build
