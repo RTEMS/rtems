@@ -28,12 +28,17 @@
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 /**
@@ -41,6 +46,8 @@
  *
  * @ingroup RTEMSAPI
  */
+
+/* Generated from spec:/acfg/if/group-bdbuf */
 
 /**
  * @defgroup RTEMSApplConfigBlockDeviceCacheConfiguration \
@@ -53,6 +60,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/appl-needs-libblock */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -70,6 +79,8 @@
  * Device Cache is used for example by the RFS and DOSFS filesystems.
  */
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+
+/* Generated from spec:/acfg/if/bdbuf-buffer-max-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -92,6 +103,8 @@
  */
 #define CONFIGURE_BDBUF_BUFFER_MAX_SIZE
 
+/* Generated from spec:/acfg/if/bdbuf-buffer-min-size */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -108,6 +121,8 @@
  */
 #define CONFIGURE_BDBUF_BUFFER_MIN_SIZE
 
+/* Generated from spec:/acfg/if/bdbuf-cache-memory-size */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -123,6 +138,8 @@
  * href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
  */
 #define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
+
+/* Generated from spec:/acfg/if/bdbuf-max-read-ahead-blocks */
 
 /**
  * @brief This configuration option is an integer define.
@@ -145,6 +162,8 @@
  */
 #define CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS
 
+/* Generated from spec:/acfg/if/bdbuf-max-write-blocks */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -161,6 +180,8 @@
  */
 #define CONFIGURE_BDBUF_MAX_WRITE_BLOCKS
 
+/* Generated from spec:/acfg/if/bdbuf-read-ahead-task-priority */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -174,6 +195,8 @@
  * priority.  The set of valid task priorities is scheduler-specific.
  */
 #define CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
+
+/* Generated from spec:/acfg/if/bdbuf-task-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -202,6 +225,8 @@
  */
 #define CONFIGURE_BDBUF_TASK_STACK_SIZE
 
+/* Generated from spec:/acfg/if/bdbuf-swapout-block-hold */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -217,6 +242,8 @@
  * href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  */
 #define CONFIGURE_SWAPOUT_BLOCK_HOLD
+
+/* Generated from spec:/acfg/if/bdbuf-swapout-swap-period */
 
 /**
  * @brief This configuration option is an integer define.
@@ -234,6 +261,8 @@
  */
 #define CONFIGURE_SWAPOUT_SWAP_PERIOD
 
+/* Generated from spec:/acfg/if/bdbuf-swapout-task-priority */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -247,6 +276,8 @@
  * priority.  The set of valid task priorities is scheduler-specific.
  */
 #define CONFIGURE_SWAPOUT_TASK_PRIORITY
+
+/* Generated from spec:/acfg/if/bdbuf-swapout-worker-tasks */
 
 /**
  * @brief This configuration option is an integer define.
@@ -263,6 +294,8 @@
  * href="https://en.cppreference.com/w/c/types/integer">UINT32_MAX</a>.
  */
 #define CONFIGURE_SWAPOUT_WORKER_TASKS
+
+/* Generated from spec:/acfg/if/bdbuf-swapout-worker-taskp-riority */
 
 /**
  * @brief This configuration option is an integer define.
@@ -281,6 +314,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-bsp */
+
 /**
  * @defgroup RTEMSApplConfigBSPRelatedConfigurationOptions \
  *   BSP Related Configuration Options
@@ -294,6 +329,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/bsp-idle-task-body */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -320,6 +357,8 @@
  * components off to save power during extended periods of no task activity.
  */
 #define BSP_IDLE_TASK_BODY
+
+/* Generated from spec:/acfg/if/bsp-idle-task-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -351,6 +390,8 @@
  */
 #define BSP_IDLE_TASK_STACK_SIZE
 
+/* Generated from spec:/acfg/if/bsp-initial-extension */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -375,6 +416,8 @@
  * other initial user extensions.
  */
 #define BSP_INITIAL_EXTENSION
+
+/* Generated from spec:/acfg/if/bsp-interrupt-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -408,6 +451,8 @@
  */
 #define BSP_INTERRUPT_STACK_SIZE
 
+/* Generated from spec:/acfg/if/bsp-prerequisite-drivers */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -434,6 +479,8 @@
  */
 #define CONFIGURE_BSP_PREREQUISITE_DRIVERS
 
+/* Generated from spec:/acfg/if/disable-bsp-settings */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -457,6 +504,8 @@
  * enabled.
  */
 #define CONFIGURE_DISABLE_BSP_SETTINGS
+
+/* Generated from spec:/acfg/if/malloc-bsp-supports-sbrk */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -484,6 +533,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-classic */
+
 /**
  * @defgroup RTEMSApplConfigClassicAPIConfiguration Classic API Configuration
  *
@@ -493,6 +544,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/max-barriers */
 
 /**
  * @brief This configuration option is an integer define.
@@ -528,6 +581,8 @@
  * Objects</a>.
  */
 #define CONFIGURE_MAXIMUM_BARRIERS
+
+/* Generated from spec:/acfg/if/max-message-queues */
 
 /**
  * @brief This configuration option is an integer define.
@@ -565,6 +620,8 @@
  */
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES
 
+/* Generated from spec:/acfg/if/max-partitions */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -599,6 +656,8 @@
  * Objects</a>.
  */
 #define CONFIGURE_MAXIMUM_PARTITIONS
+
+/* Generated from spec:/acfg/if/max-periods */
 
 /**
  * @brief This configuration option is an integer define.
@@ -635,6 +694,8 @@
  */
 #define CONFIGURE_MAXIMUM_PERIODS
 
+/* Generated from spec:/acfg/if/max-ports */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -670,6 +731,8 @@
  */
 #define CONFIGURE_MAXIMUM_PORTS
 
+/* Generated from spec:/acfg/if/max-regions */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -704,6 +767,8 @@
  * Objects</a>.
  */
 #define CONFIGURE_MAXIMUM_REGIONS
+
+/* Generated from spec:/acfg/if/max-semaphores */
 
 /**
  * @brief This configuration option is an integer define.
@@ -748,6 +813,8 @@
  * @endparblock
  */
 #define CONFIGURE_MAXIMUM_SEMAPHORES
+
+/* Generated from spec:/acfg/if/max-tasks */
 
 /**
  * @brief This configuration option is an integer define.
@@ -803,6 +870,8 @@
  */
 #define CONFIGURE_MAXIMUM_TASKS
 
+/* Generated from spec:/acfg/if/max-thread-local-storage-size */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -840,6 +909,8 @@
  */
 #define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
 
+/* Generated from spec:/acfg/if/max-timers */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -875,6 +946,8 @@
  */
 #define CONFIGURE_MAXIMUM_TIMERS
 
+/* Generated from spec:/acfg/if/max-user-extensions */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -903,6 +976,8 @@
  */
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS
 
+/* Generated from spec:/acfg/if/min-tasks-with-user-provided-storage */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -927,6 +1002,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-classicinit */
+
 /**
  * @defgroup RTEMSApplConfigClassicAPIInitializationTaskConfiguration \
  *   Classic API Initialization Task Configuration
@@ -938,6 +1015,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/init-task-arguments */
 
 /**
  * @brief This configuration option is an integer define.
@@ -954,6 +1033,8 @@
  */
 #define CONFIGURE_INIT_TASK_ARGUMENTS
 
+/* Generated from spec:/acfg/if/init-task-attributes */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -967,6 +1048,8 @@
  * The value of this configuration option shall be a valid task attribute set.
  */
 #define CONFIGURE_INIT_TASK_ATTRIBUTES
+
+/* Generated from spec:/acfg/if/init-task-entrypoint */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -987,6 +1070,8 @@
  */
 #define CONFIGURE_INIT_TASK_ENTRY_POINT
 
+/* Generated from spec:/acfg/if/init-task-initial-modes */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -1001,6 +1086,8 @@
  * The value of this configuration option shall be a valid task mode set.
  */
 #define CONFIGURE_INIT_TASK_INITIAL_MODES
+
+/* Generated from spec:/acfg/if/init-task-name */
 
 /**
  * @brief This configuration option is an integer define.
@@ -1020,6 +1107,8 @@
  */
 #define CONFIGURE_INIT_TASK_NAME
 
+/* Generated from spec:/acfg/if/init-task-priority */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -1034,6 +1123,8 @@
  * priority.  The set of valid task priorities is scheduler-specific.
  */
 #define CONFIGURE_INIT_TASK_PRIORITY
+
+/* Generated from spec:/acfg/if/init-task-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -1057,6 +1148,8 @@
  * @endparblock
  */
 #define CONFIGURE_INIT_TASK_STACK_SIZE
+
+/* Generated from spec:/acfg/if/rtems-init-tasks-table */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1086,6 +1179,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-devdrv */
+
 /**
  * @defgroup RTEMSApplConfigDeviceDriverConfiguration \
  *   Device Driver Configuration
@@ -1097,6 +1192,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/appl-does-not-need-clock-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1128,6 +1225,8 @@
  */
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
+/* Generated from spec:/acfg/if/appl-extra-drivers */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -1152,6 +1251,8 @@
  */
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS
 
+/* Generated from spec:/acfg/if/appl-needs-ata-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1171,6 +1272,8 @@
  * @endparblock
  */
 #define CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
+
+/* Generated from spec:/acfg/if/appl-needs-clock-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1200,6 +1303,8 @@
  * @endparblock
  */
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+/* Generated from spec:/acfg/if/appl-needs-console-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1233,6 +1338,8 @@
  */
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
+/* Generated from spec:/acfg/if/appl-needs-framebuffer-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1254,6 +1361,8 @@
  */
 #define CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
 
+/* Generated from spec:/acfg/if/appl-needs-ide-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1274,6 +1383,8 @@
  */
 #define CONFIGURE_APPLICATION_NEEDS_IDE_DRIVER
 
+/* Generated from spec:/acfg/if/appl-needs-null-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1288,6 +1399,8 @@
  * This device driver is supported by all BSPs.
  */
 #define CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
+
+/* Generated from spec:/acfg/if/appl-needs-rtc-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1309,6 +1422,8 @@
  * @endparblock
  */
 #define CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
+
+/* Generated from spec:/acfg/if/appl-needs-simple-console-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1345,6 +1460,8 @@
  * @endparblock
  */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+
+/* Generated from spec:/acfg/if/appl-needs-simple-task-console-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1391,6 +1508,8 @@
  */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
 
+/* Generated from spec:/acfg/if/appl-needs-stub-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1406,6 +1525,8 @@
  * is primarily a test fixture. It is supported by all BSPs.
  */
 #define CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+
+/* Generated from spec:/acfg/if/appl-needs-timer-driver */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1436,6 +1557,8 @@
  */
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
+/* Generated from spec:/acfg/if/appl-needs-watchdog-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1457,6 +1580,8 @@
  */
 #define CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
 
+/* Generated from spec:/acfg/if/appl-needs-zero-driver */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1471,6 +1596,8 @@
  * This device driver is supported by all BSPs.
  */
 #define CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
+
+/* Generated from spec:/acfg/if/appl-prerequisite-drivers */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -1497,6 +1624,8 @@
  */
 #define CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
 
+/* Generated from spec:/acfg/if/ata-driver-task-priority */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -1514,6 +1643,8 @@
  * #CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER is defined.
  */
 #define CONFIGURE_ATA_DRIVER_TASK_PRIORITY
+
+/* Generated from spec:/acfg/if/max-drivers */
 
 /**
  * @brief This configuration option is an integer define.
@@ -1586,6 +1717,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-eventrecord */
+
 /**
  * @defgroup RTEMSApplConfigEventRecordingConfiguration \
  *   Event Recording Configuration
@@ -1596,6 +1729,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/record-extensions-enabled */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1617,6 +1752,8 @@
  * begin, exitted and terminate events.
  */
 #define CONFIGURE_RECORD_EXTENSIONS_ENABLED
+
+/* Generated from spec:/acfg/if/record-fatal-dump-base64 */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1643,6 +1780,8 @@
  */
 #define CONFIGURE_RECORD_FATAL_DUMP_BASE64
 
+/* Generated from spec:/acfg/if/record-fatal-dump-base64-zlib */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1666,6 +1805,8 @@
  * to produce crash dumps.
  */
 #define CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
+
+/* Generated from spec:/acfg/if/record-per-processor-items */
 
 /**
  * @brief This configuration option is an integer define.
@@ -1701,6 +1842,8 @@
 #define CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
 
 /** @} */
+
+/* Generated from spec:/acfg/if/group-filesystem */
 
 /**
  * @defgroup RTEMSApplConfigFilesystemConfiguration Filesystem Configuration
@@ -1752,6 +1895,8 @@
  * @{
  */
 
+/* Generated from spec:/acfg/if/appl-disable-filesystem */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1769,6 +1914,8 @@
  * be disabled to reduce the memory footprint of an application.
  */
 #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+/* Generated from spec:/acfg/if/filesystem-all */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1796,6 +1943,8 @@
  */
 #define CONFIGURE_FILESYSTEM_ALL
 
+/* Generated from spec:/acfg/if/filesystem-dosfs */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1813,6 +1962,8 @@
  */
 #define CONFIGURE_FILESYSTEM_DOSFS
 
+/* Generated from spec:/acfg/if/filesystem-ftpfs */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1825,6 +1976,8 @@
  * enabled.
  */
 #define CONFIGURE_FILESYSTEM_FTPFS
+
+/* Generated from spec:/acfg/if/filesystem-imfs */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1845,6 +1998,8 @@
  */
 #define CONFIGURE_FILESYSTEM_IMFS
 
+/* Generated from spec:/acfg/if/filesystem-jffs2 */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1858,6 +2013,8 @@
  */
 #define CONFIGURE_FILESYSTEM_JFFS2
 
+/* Generated from spec:/acfg/if/filesystem-nfs */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1870,6 +2027,8 @@
  * enabled.
  */
 #define CONFIGURE_FILESYSTEM_NFS
+
+/* Generated from spec:/acfg/if/filesystem-rfs */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1888,6 +2047,8 @@
  */
 #define CONFIGURE_FILESYSTEM_RFS
 
+/* Generated from spec:/acfg/if/filesystem-tftpfs */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1901,6 +2062,8 @@
  */
 #define CONFIGURE_FILESYSTEM_TFTPFS
 
+/* Generated from spec:/acfg/if/imfs-disable-chmod */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1912,6 +2075,8 @@
  * changing the mode of files.
  */
 #define CONFIGURE_IMFS_DISABLE_CHMOD
+
+/* Generated from spec:/acfg/if/imfs-disable-chown */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1925,6 +2090,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_CHOWN
 
+/* Generated from spec:/acfg/if/imfs-disable-link */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1936,6 +2103,8 @@
  * links.
  */
 #define CONFIGURE_IMFS_DISABLE_LINK
+
+/* Generated from spec:/acfg/if/imfs-disable-mknod */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1949,6 +2118,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_MKNOD
 
+/* Generated from spec:/acfg/if/imfs-disable-mknod-device */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1960,6 +2131,8 @@
  * making device files.
  */
 #define CONFIGURE_IMFS_DISABLE_MKNOD_DEVICE
+
+/* Generated from spec:/acfg/if/imfs-disable-mknod-file */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1973,6 +2146,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_MKNOD_FILE
 
+/* Generated from spec:/acfg/if/imfs-disable-mount */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -1984,6 +2159,8 @@
  * mounting other filesystems.
  */
 #define CONFIGURE_IMFS_DISABLE_MOUNT
+
+/* Generated from spec:/acfg/if/imfs-disable-readdir */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -1998,6 +2175,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_READDIR
 
+/* Generated from spec:/acfg/if/imfs-disable-readlink */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2009,6 +2188,8 @@
  * reading symbolic links.
  */
 #define CONFIGURE_IMFS_DISABLE_READLINK
+
+/* Generated from spec:/acfg/if/imfs-disable-rename */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2022,6 +2203,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_RENAME
 
+/* Generated from spec:/acfg/if/imfs-disable-rmnod */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2033,6 +2216,8 @@
  * removing files.
  */
 #define CONFIGURE_IMFS_DISABLE_RMNOD
+
+/* Generated from spec:/acfg/if/imfs-disable-symlink */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2046,6 +2231,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_SYMLINK
 
+/* Generated from spec:/acfg/if/imfs-disable-unmount */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2057,6 +2244,8 @@
  * unmounting other filesystems.
  */
 #define CONFIGURE_IMFS_DISABLE_UNMOUNT
+
+/* Generated from spec:/acfg/if/imfs-disable-utime */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2070,6 +2259,8 @@
  */
 #define CONFIGURE_IMFS_DISABLE_UTIME
 
+/* Generated from spec:/acfg/if/imfs-enable-mkfifo */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2081,6 +2272,8 @@
  * support making FIFOs (no support for mkfifo()).
  */
 #define CONFIGURE_IMFS_ENABLE_MKFIFO
+
+/* Generated from spec:/acfg/if/imfs-memfile-bytes-per-block */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2127,6 +2320,8 @@
  * @endparblock
  */
 #define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+
+/* Generated from spec:/acfg/if/use-devfs-as-base-filesystem */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2177,6 +2372,8 @@
  */
 #define CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 
+/* Generated from spec:/acfg/if/use-miniimfs-as-base-filesystem */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2213,6 +2410,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-general */
+
 /**
  * @defgroup RTEMSApplConfigGeneralSystemConfiguration \
  *   General System Configuration
@@ -2223,6 +2422,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/dirty-memory */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2248,6 +2449,8 @@
  */
 #define CONFIGURE_DIRTY_MEMORY
 
+/* Generated from spec:/acfg/if/disable-newlib-reentrancy */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2265,6 +2468,8 @@
  * option is enabled.
  */
 #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+/* Generated from spec:/acfg/if/executive-ram-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2298,6 +2503,8 @@
  */
 #define CONFIGURE_EXECUTIVE_RAM_SIZE
 
+/* Generated from spec:/acfg/if/extra-task-stacks */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -2327,6 +2534,8 @@
  */
 #define CONFIGURE_EXTRA_TASK_STACKS
 
+/* Generated from spec:/acfg/if/initial-extensions */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -2346,6 +2555,8 @@
  * extensions.
  */
 #define CONFIGURE_INITIAL_EXTENSIONS
+
+/* Generated from spec:/acfg/if/interrupt-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2393,6 +2604,8 @@
  */
 #define CONFIGURE_INTERRUPT_STACK_SIZE
 
+/* Generated from spec:/acfg/if/malloc-dirty */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2411,6 +2624,8 @@
  * initialization.
  */
 #define CONFIGURE_MALLOC_DIRTY
+
+/* Generated from spec:/acfg/if/max-file-descriptors */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2442,6 +2657,8 @@
  */
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
 
+/* Generated from spec:/acfg/if/max-processors */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -2469,6 +2686,8 @@
  * @endparblock
  */
 #define CONFIGURE_MAXIMUM_PROCESSORS
+
+/* Generated from spec:/acfg/if/max-thread-name-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2507,6 +2726,8 @@
  */
 #define CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
 
+/* Generated from spec:/acfg/if/memory-overhead */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -2541,6 +2762,8 @@
  * #CONFIGURE_MESSAGE_BUFFER_MEMORY.
  */
 #define CONFIGURE_MEMORY_OVERHEAD
+
+/* Generated from spec:/acfg/if/message-buffer-memory */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2617,6 +2840,8 @@
  */
 #define CONFIGURE_MESSAGE_BUFFER_MEMORY
 
+/* Generated from spec:/acfg/if/microseconds-per-tick */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -2663,6 +2888,8 @@
  * @endparblock
  */
 #define CONFIGURE_MICROSECONDS_PER_TICK
+
+/* Generated from spec:/acfg/if/min-task-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2711,6 +2938,8 @@
  */
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE
 
+/* Generated from spec:/acfg/if/stack-checker-enabled */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2732,6 +2961,8 @@
  */
 #define CONFIGURE_STACK_CHECKER_ENABLED
 
+/* Generated from spec:/acfg/if/ticks-per-time-slice */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -2751,6 +2982,8 @@
  * configured, see #CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER.
  */
 #define CONFIGURE_TICKS_PER_TIMESLICE
+
+/* Generated from spec:/acfg/if/unified-work-areas */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2776,6 +3009,8 @@
  * @endparblock
  */
 #define CONFIGURE_UNIFIED_WORK_AREAS
+
+/* Generated from spec:/acfg/if/unlimited-allocation-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -2805,6 +3040,8 @@
  */
 #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE
 
+/* Generated from spec:/acfg/if/unlimited-objects */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2829,6 +3066,8 @@
  */
 #define CONFIGURE_UNLIMITED_OBJECTS
 
+/* Generated from spec:/acfg/if/verbose-system-init */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -2844,6 +3083,8 @@
  * printk() function is used to print the information.
  */
 #define CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
+
+/* Generated from spec:/acfg/if/zero-workspace-automatically */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2866,6 +3107,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-idle */
+
 /**
  * @defgroup RTEMSApplConfigIdleTaskConfiguration Idle Task Configuration
  *
@@ -2875,6 +3118,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/idle-task-body */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -2900,6 +3145,8 @@
  * @endparblock
  */
 #define CONFIGURE_IDLE_TASK_BODY
+
+/* Generated from spec:/acfg/if/idle-task-init-appl */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -2940,6 +3187,8 @@
  */
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
+/* Generated from spec:/acfg/if/idle-task-stack-size */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -2970,6 +3219,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-mpci */
+
 /**
  * @defgroup RTEMSApplConfigMultiprocessingConfiguration \
  *   Multiprocessing Configuration
@@ -2985,6 +3236,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/mp-extra-server-stack */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3018,6 +3271,8 @@
  */
 #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
 
+/* Generated from spec:/acfg/if/mp-appl */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -3036,6 +3291,8 @@
  * compile time error in the configuration file will occur.
  */
 #define CONFIGURE_MP_APPLICATION
+
+/* Generated from spec:/acfg/if/mp-max-global-objects */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3062,6 +3319,8 @@
  */
 #define CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
 
+/* Generated from spec:/acfg/if/mp-max-nodes */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3081,6 +3340,8 @@
  * defined.
  */
 #define CONFIGURE_MP_MAXIMUM_NODES
+
+/* Generated from spec:/acfg/if/mp-max-proxies */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3110,6 +3371,8 @@
  */
 #define CONFIGURE_MP_MAXIMUM_PROXIES
 
+/* Generated from spec:/acfg/if/mp-mpci-table-pointer */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -3134,6 +3397,8 @@
  * @endparblock
  */
 #define CONFIGURE_MP_MPCI_TABLE_POINTER
+
+/* Generated from spec:/acfg/if/mp-node-number */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3164,6 +3429,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-posix */
+
 /**
  * @defgroup RTEMSApplConfigPOSIXAPIConfiguration POSIX API Configuration
  *
@@ -3176,6 +3443,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/max-posix-keys */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3211,6 +3480,8 @@
  * Objects</a>.
  */
 #define CONFIGURE_MAXIMUM_POSIX_KEYS
+
+/* Generated from spec:/acfg/if/max-posix-key-value-pairs */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3254,6 +3525,8 @@
  */
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
 
+/* Generated from spec:/acfg/if/max-posix-message-queues */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3294,6 +3567,8 @@
  */
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
 
+/* Generated from spec:/acfg/if/max-posix-queued-signals */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3332,6 +3607,8 @@
  * @endparblock
  */
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
+
+/* Generated from spec:/acfg/if/max-posix-semaphores */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3378,6 +3655,8 @@
  */
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
 
+/* Generated from spec:/acfg/if/max-posix-shms */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3416,6 +3695,8 @@
  * Objects</a>.
  */
 #define CONFIGURE_MAXIMUM_POSIX_SHMS
+
+/* Generated from spec:/acfg/if/max-posix-threads */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3464,6 +3745,8 @@
  */
 #define CONFIGURE_MAXIMUM_POSIX_THREADS
 
+/* Generated from spec:/acfg/if/max-posix-timers */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3508,6 +3791,8 @@
  */
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS
 
+/* Generated from spec:/acfg/if/min-posix-thread-stack-size */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3535,6 +3820,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-posixinit */
+
 /**
  * @defgroup RTEMSApplConfigPOSIXInitializationThreadConfiguration \
  *   POSIX Initialization Thread Configuration
@@ -3546,6 +3833,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/posix-init-thread-entry-point */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -3565,6 +3854,8 @@
  * option.
  */
 #define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+
+/* Generated from spec:/acfg/if/posix-init-thread-stack-size */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3588,6 +3879,8 @@
  * @endparblock
  */
 #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+
+/* Generated from spec:/acfg/if/posix-init-thread-table */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -3616,6 +3909,8 @@
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 /** @} */
+
+/* Generated from spec:/acfg/if/group-schedgeneral */
 
 /**
  * @defgroup RTEMSApplConfigGeneralSchedulerConfiguration \
@@ -3651,6 +3946,8 @@
  * @{
  */
 
+/* Generated from spec:/acfg/if/cbs-max-servers */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -3680,6 +3977,8 @@
  * #CONFIGURE_SCHEDULER_CBS is defined.
  */
 #define CONFIGURE_CBS_MAXIMUM_SERVERS
+
+/* Generated from spec:/acfg/if/max-priority */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3737,6 +4036,8 @@
  */
 #define CONFIGURE_MAXIMUM_PRIORITY
 
+/* Generated from spec:/acfg/if/scheduler-assignments */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -3772,6 +4073,8 @@
  */
 #define CONFIGURE_SCHEDULER_ASSIGNMENTS
 
+/* Generated from spec:/acfg/if/scheduler-cbs */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -3797,6 +4100,8 @@
  */
 #define CONFIGURE_SCHEDULER_CBS
 
+/* Generated from spec:/acfg/if/scheduler-edf */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -3820,6 +4125,8 @@
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_EDF
+
+/* Generated from spec:/acfg/if/scheduler-edf-smp */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -3851,6 +4158,8 @@
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_EDF_SMP
+
+/* Generated from spec:/acfg/if/scheduler-name */
 
 /**
  * @brief This configuration option is an integer define.
@@ -3911,6 +4220,8 @@
  */
 #define CONFIGURE_SCHEDULER_NAME
 
+/* Generated from spec:/acfg/if/scheduler-priority */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -3940,6 +4251,8 @@
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_PRIORITY
+
+/* Generated from spec:/acfg/if/scheduler-priority-affinity-smp */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -3972,6 +4285,8 @@
  */
 #define CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
 
+/* Generated from spec:/acfg/if/scheduler-priority-smp */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -4002,6 +4317,8 @@
  */
 #define CONFIGURE_SCHEDULER_PRIORITY_SMP
 
+/* Generated from spec:/acfg/if/scheduler-simple */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -4025,6 +4342,8 @@
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_SIMPLE
+
+/* Generated from spec:/acfg/if/scheduler-simple-smp */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -4054,6 +4373,8 @@
  */
 #define CONFIGURE_SCHEDULER_SIMPLE_SMP
 
+/* Generated from spec:/acfg/if/scheduler-strong-apa */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -4076,6 +4397,8 @@
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_STRONG_APA
+
+/* Generated from spec:/acfg/if/scheduler-user */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -4119,6 +4442,8 @@
 
 /** @} */
 
+/* Generated from spec:/acfg/if/group-stackalloc */
+
 /**
  * @defgroup RTEMSApplConfigTaskStackAllocatorConfiguration \
  *   Task Stack Allocator Configuration
@@ -4133,6 +4458,8 @@
  *
  * @{
  */
+
+/* Generated from spec:/acfg/if/task-stack-allocator */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -4162,6 +4489,8 @@
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR
 
+/* Generated from spec:/acfg/if/task-stack-no-workspace */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -4177,6 +4506,8 @@
  * configured, see #CONFIGURE_TASK_STACK_ALLOCATOR.
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
+
+/* Generated from spec:/acfg/if/task-stack-allocator-init */
 
 /**
  * @brief This configuration option is an initializer define.
@@ -4207,6 +4538,8 @@
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_INIT
 
+/* Generated from spec:/acfg/if/task-stack-deallocator */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -4234,6 +4567,8 @@
  * @endparblock
  */
 #define CONFIGURE_TASK_STACK_DEALLOCATOR
+
+/* Generated from spec:/acfg/if/task-stack-from-alloc */
 
 /**
  * @brief This configuration option is an initializer define.
