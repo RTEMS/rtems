@@ -56,21 +56,24 @@ namespace rtems
   void
   runtime_error_check (const rtems_status_code sc)
   {
-    if (sc != RTEMS_SUCCESSFUL)
+    if (sc != RTEMS_SUCCESSFUL) {
       throw runtime_error (sc);
+    }
   }
 
   void
   runtime_error_check (const rtems_status_code sc, const std::string& what)
   {
-    if (sc != RTEMS_SUCCESSFUL)
+    if (sc != RTEMS_SUCCESSFUL) {
       throw runtime_error (sc, what);
+    }
   }
 
   void
   runtime_error_check (const rtems_status_code sc, const char* what)
   {
-    if (sc != RTEMS_SUCCESSFUL)
+    if (sc != RTEMS_SUCCESSFUL) {
       throw runtime_error (sc, what);
+    }
   }
 };

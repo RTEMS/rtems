@@ -60,8 +60,9 @@ namespace rtems
     void
     system_error_check (int ec, const char* what)
     {
-      if (ec != 0)
+      if (ec != 0) {
         throw std::system_error (ec, std::system_category(), what);
+      }
     }
 
     attributes::attributes ()
@@ -206,8 +207,9 @@ namespace rtems
       if (!scheduler.empty ()) {
         char sname[4] = { ' ', ' ', ' ', ' ' };
         for (size_t c = 0; c < sizeof (sname); ++c) {
-          if (c >= scheduler.length ())
+          if (c >= scheduler.length ()) {
             break;
+          }
           sname[c] = scheduler[c];
         }
         rtems_name scheduler_name = rtems_build_name (sname[0],
@@ -285,8 +287,9 @@ namespace rtems
       runtime_error_check (::rtems_task_get_scheduler (RTEMS_SELF, &scheduler_id));
 #if HAVE_GET_SCHEDULER_NAME
       char name[5];
-      if (!get_scheduler_name (scheduler_id, &name[0]))
+      if (!get_scheduler_name (scheduler_id, &name[0])) {
         system_error_check (ENOENT, "get scheduler name");
+      }
       scheduler = name;
 #endif
     }
@@ -328,8 +331,9 @@ namespace rtems
     thread&
     thread::operator= (thread&& thread_)
     {
-      if (joinable ())
+      if (joinable ()) {
         std::terminate ();
+      }
       swap(thread_);
       return *this;
     }
@@ -346,6 +350,26 @@ namespace rtems
       return !(id_ == id());
     }
 
+    void
+    thread::join()
+    {
+      if (!joinable()) {
+        system_error_check (EINVAL, "join");
+      }
+      system_error_check (::pthread_join (id_.id_, nullptr), "join");
+      id_ = id();
+    }
+
+    void
+    thread::detach()
+    {
+      if (!joinable()) {
+        system_error_check (EINVAL, "detach");
+      }
+      system_error_check (::pthread_detach (id_.id_), "detach");
+      id_ = id();
+    }
+
     thread::state_base::~state_base () = default;
 
     void
@@ -358,14 +382,10 @@ namespace rtems
       system_error_check (::pthread_attr_init (&pattr),
                           "attribute init");
 
-      system_error_check (::pthread_attr_setdetachstate (&pattr,
-                                                         PTHREAD_CREATE_DETACHED),
-                          "set detached state");
-
       struct sched_param param;
       param.sched_priority = attr.get_priority ();
       system_error_check (::pthread_attr_setschedparam (&pattr, &param),
-                          "set ");
+                          "set sched param");
 
       int spolicy;
       switch (attr.get_scheduler_policy ()) {
@@ -385,10 +405,12 @@ namespace rtems
       system_error_check (::pthread_attr_setschedpolicy (&pattr, spolicy),
                           "set scheduler policy");
 
-      if (attr.get_scheduler_attr () == attributes::sched_inherit)
+      if (attr.get_scheduler_attr () == attributes::sched_inherit) {
         ::pthread_attr_setinheritsched (&pattr, PTHREAD_INHERIT_SCHED);
-      else
+      }
+      else {
         ::pthread_attr_setinheritsched (&pattr, PTHREAD_EXPLICIT_SCHED);
+      }
 
       system_error_check (::pthread_attr_setstacksize(&pattr,
                                                       attr.get_stack_size ()),

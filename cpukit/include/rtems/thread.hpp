@@ -321,6 +321,10 @@ namespace rtems
 
       bool joinable() const noexcept;
 
+      void join();
+
+      void detach();
+
       /*
        * Constrain use. These are not available.
        */
