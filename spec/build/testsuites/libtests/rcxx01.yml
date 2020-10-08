@@ -13,6 +13,9 @@ links: []
 source:
 - testsuites/libtests/rcxx01/init.c
 - testsuites/libtests/rcxx01/thread.cpp
+- testsuites/libtests/rcxx01/user-example-1.cpp
+- testsuites/libtests/rcxx01/user-example-2.cpp
+- testsuites/libtests/rcxx01/user-example-3.cpp
 stlib: []
 target: testsuites/libtests/rcxx01.exe
 type: build

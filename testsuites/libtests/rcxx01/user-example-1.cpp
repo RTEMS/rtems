@@ -25,65 +25,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <chrono>
+#include <iostream>
 
-#include <bsp.h>
+#include <rtems/thread.hpp>
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include "tmacros.h"
-
-const char rtems_test_name[] = "RCXX 1";
-
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-
-void rcxx_run_test(void);
-
-rtems_task Init(
-  rtems_task_argument ignored
-)
+static void wait_for(size_t seconds)
 {
-  TEST_BEGIN();
-
-  rcxx_run_test();
-
-  TEST_END();
-  rtems_test_exit( 0 );
+  while (seconds--) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << "Seconds: " << seconds << std::endl;
+  }
 }
 
-/* configuration information */
+void example_1()
+{
+  std::cout << "Start example 1" << std::endl;
 
-#include <rtems/serial_mouse.h>
+  rtems::thread::thread t(wait_for, 5);
+  t.join();
 
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
-
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
-
-#define CONFIGURE_MEMORY_OVERHEAD (2024)
-
-#define CONFIGURE_MAXIMUM_TASKS  1
-#define CONFIGURE_MAXIMUM_POSIX_THREADS 5
-
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_INIT_TASK_STACK_SIZE (10U * 1024U)
-
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
-
-#define CONFIGURE_INIT
-
-#include <rtems/confdefs.h>
-
-/* end of file */
+  std::cout << "End example 1" << std::endl;
+}

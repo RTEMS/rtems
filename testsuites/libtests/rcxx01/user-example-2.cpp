@@ -25,65 +25,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <chrono>
+#include <iostream>
 
-#include <bsp.h>
+#include <rtems/thread.hpp>
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include "tmacros.h"
-
-const char rtems_test_name[] = "RCXX 1";
-
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-
-void rcxx_run_test(void);
-
-rtems_task Init(
-  rtems_task_argument ignored
-)
+static void wait_for(std::string me, size_t seconds, size_t announce)
 {
-  TEST_BEGIN();
-
-  rcxx_run_test();
-
-  TEST_END();
-  rtems_test_exit( 0 );
+  size_t count = 0;
+  while (count < seconds) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    if ((count % announce) == 0)
+      std::cout << me << ": " << count << std::endl;
+    count++;
+  }
 }
 
-/* configuration information */
+void example_2()
+{
+  std::cout << "Start example 2" << std::endl;
 
-#include <rtems/serial_mouse.h>
+  rtems::thread::attributes attr;
+  attr.set_stack_size(16 * 1024);
 
-#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+  attr.set_priority(100);
+  attr.set_name("T1");
+  rtems::thread::thread t1(attr, wait_for, "T1", 10, 1);
 
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
+  attr.set_priority(101);
+  attr.set_name("T2");
+  rtems::thread::thread t2(attr, wait_for, "T2", 10, 2);
 
-#define CONFIGURE_MEMORY_OVERHEAD (2024)
+  attr.set_priority(attr.get_priority());
+  attr.set_name("T3");
+  rtems::thread::thread t3(attr, wait_for, "T3", 15, 3);
 
-#define CONFIGURE_MAXIMUM_TASKS  1
-#define CONFIGURE_MAXIMUM_POSIX_THREADS 5
+  t1.join();
+  t2.join();
+  t3.join();
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
-
-#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_INIT_TASK_STACK_SIZE (10U * 1024U)
-
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
-
-#define CONFIGURE_INIT
-
-#include <rtems/confdefs.h>
-
-/* end of file */
+  std::cout << "End example 2" << std::endl;
+}

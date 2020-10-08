@@ -36,6 +36,10 @@ using namespace std::chrono_literals;
 
 extern "C" void rcxx_run_test(void);
 
+void example_1();
+void example_2();
+void example_3();
+
 struct test_thread
 {
   test_thread();
@@ -96,13 +100,22 @@ bool test_thread::running()
   return finished == false;
 }
 
+void test_1()
+{
+  test_thread tt;
+  tt.start();
+  while (tt.running())
+    std::this_thread::sleep_for(1s);
+}
+
 void rcxx_run_test(void)
 {
   try {
-    test_thread tt;
-    tt.start();
-    while (tt.running())
-      std::this_thread::sleep_for(1s);
+    test_1();
+    /* From the user manual */
+    example_1();
+    example_2();
+    example_3();
   } catch (...) {
     std::cout << "Thread: ouch" << std::endl;
     throw;
