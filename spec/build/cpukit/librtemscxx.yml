@@ -8,10 +8,10 @@ cxxflags: [-std=c++17]
 enabled-by: true
 includes: []
 install:
-- destination: ${BSP_INCLUDEDIR}
+- destination: ${BSP_INCLUDEDIR}/rtems
   source:
-  - cpukit/include/rtems/c++/error
-  - cpukit/include/rtems/c++/thread
+  - cpukit/include/rtems/error.hpp
+  - cpukit/include/rtems/thread.hpp
 install-path: ${BSP_LIBDIR}
 links: []
 source:
