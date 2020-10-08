@@ -50,19 +50,19 @@ namespace rtems
   {
     const rtems_status_code sc;
   public:
-    runtime_error (const rtems_status_code sc);
-    runtime_error (const rtems_status_code sc, const std::string& what);
-    runtime_error (const rtems_status_code sc, const char* what);
-    ~runtime_error ();
+    runtime_error(const rtems_status_code sc);
+    runtime_error(const rtems_status_code sc, const std::string& what);
+    runtime_error(const rtems_status_code sc, const char* what);
+    ~runtime_error();
   };
 
   /**
    * Throw a rtems::runtime_error exception if the RTEMS status code is
    * not RTEMS_SUCCESSFUL.
    */
-  void runtime_error_check (const rtems_status_code sc);
-  void runtime_error_check (const rtems_status_code sc, const std::string& what);
-  void runtime_error_check (const rtems_status_code sc, const char* what);
+  void runtime_error_check(const rtems_status_code sc);
+  void runtime_error_check(const rtems_status_code sc, const std::string& what);
+  void runtime_error_check(const rtems_status_code sc, const char* what);
 };
 
 #endif

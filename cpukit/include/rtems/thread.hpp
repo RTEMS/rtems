@@ -83,14 +83,14 @@ namespace rtems
        * executing thread. The stack size is set to the configured minimum
        * stack size.
        */
-      attributes ();
+      attributes();
 
       /*
        * Copy construct the thread attributes.
        *
        * @param attr The attributes to copy.
        */
-      attributes (const attributes& attr);
+      attributes(const attributes& attr);
 
       /**
        * Set the name of the thread. The thread is a classic API thread and
@@ -98,7 +98,7 @@ namespace rtems
        *
        * @param name The name as a string.
        */
-      void set_name (const std::string& name);
+      void set_name(const std::string& name);
 
       /**
        * Set the name of the thread. The thread is a classic API thread and
@@ -106,28 +106,28 @@ namespace rtems
        *
        * @param name The name as a string.
        */
-      void set_name (const char* name);
+      void set_name(const char* name);
 
       /**
        * Get the name of the thread.
        *
        * @retval const std::string& The name of the thread.
        */
-      const std::string& get_name () const;
+      const std::string& get_name() const;
 
       /**
        * Set the priority of the thread.
        *
        * @param priority The POSIX API priority of the thread.
        */
-      void set_priority (int priority);
+      void set_priority(int priority);
 
       /**
        * Get the POSIX API priority of the thread.
        *
        * @retval int The POSIX API thread priority.
        */
-      int get_priority () const;
+      int get_priority() const;
 
       /**
        * Set the stack size. If the size is less than the configured minimum
@@ -135,38 +135,38 @@ namespace rtems
        *
        * @param size The stack size in bytes.
        */
-      void set_stack_size (size_t size);
+      void set_stack_size(size_t size);
 
       /**
        * Get the stack size.
        *
        * @retval size_t The stack size in bytes.
        */
-      size_t get_stack_size () const;
+      size_t get_stack_size() const;
 
       /**
        * Set the scheduler name. If not set no scheduler is set.
        *
        * @parrm scheduler The name of the scheduler.
        */
-      void set_scheduler (const std::string& scheduler);
+      void set_scheduler(const std::string& scheduler);
 
       /**
        * Set the scheduler name. If not set no scheduler is set.
        */
-      void set_scheduler (const char* scheduler);
+      void set_scheduler(const char* scheduler);
 
       /**
        * Get scheduler name.
        */
-      const std::string& get_scheduler ();
+      const std::string& get_scheduler();
 
       /**
        * Get the attributes' scheduler attribute for the thread.
        *
        * @return sched_attr The attributes' scheduler attribute
        */
-      sched_attr get_scheduler_attr () const;
+      sched_attr get_scheduler_attr() const;
 
       /**
        * Set the scheduler policy for the thread. This call sets the
@@ -174,12 +174,12 @@ namespace rtems
        *
        * @param policy The scheduler policy.
        */
-      void set_scheduler_policy (sched_policy policy);
+      void set_scheduler_policy(sched_policy policy);
 
       /**
        * Get the scheduler policy for the thread.
        */
-      sched_policy get_scheduler_policy () const;
+      sched_policy get_scheduler_policy() const;
 
       /**
        * Commit any changes to the executing thread.
@@ -187,7 +187,7 @@ namespace rtems
        * @note only the priority and attribute of a thread can be changed. The
        * name and stack size are ignored.
        */
-      void commit ();
+      void commit();
 
       /**
        * Update the attribute values from the executing thread. The attributes
@@ -197,18 +197,18 @@ namespace rtems
        * this method is called. Except for the name and stack size any local
        * changes made will lost then the update call is made.
        */
-      void update ();
+      void update();
 
       /**
        * Copy operator.
        */
-      attributes& operator= (const attributes& attr);
+      attributes& operator=(const attributes& attr);
 
       /**
        * The comparison operator does not check the name or stack size
        * of a thread.
        */
-      bool operator== (const attributes& attr) const;
+      bool operator==(const attributes& attr) const;
 
     private:
       std::string  name;        /**< Name of the thread */
@@ -243,7 +243,7 @@ namespace rtems
      */
     class thread
     {
-      friend void* thread_generic_entry (void* arg);
+      friend void* thread_generic_entry(void* arg);
 
       /**
        * Base state class to interface to derived template of the thread
@@ -251,9 +251,9 @@ namespace rtems
        */
       struct state_base
       {
-        virtual ~state_base ();
-        virtual const attributes get_attributes () = 0;
-        virtual void run () = 0;
+        virtual ~state_base();
+        virtual const attributes get_attributes() = 0;
+        virtual void run() = 0;
       };
 
       /**
@@ -278,23 +278,23 @@ namespace rtems
        */
       class id {
       public:
-        id () noexcept : id_ (0) { }
-        explicit id (pthread_t id_) : id_ (id_) { }
+        id() noexcept : id_(0) { }
+        explicit id(pthread_t id_) : id_(id_) { }
       private:
         pthread_t id_;
 
         friend class thread;
-        friend bool operator== (thread::id l, thread::id r) noexcept;
+        friend bool operator==(thread::id l, thread::id r) noexcept;
 
         template<class CharT, class Traits>
         friend std::basic_ostream<CharT, Traits>&
-        operator<< (std::basic_ostream<CharT, Traits>& out, thread::id id_);
+        operator<<(std::basic_ostream<CharT, Traits>& out, thread::id id_);
       };
 
       /**
        * The default thread constructions.
        */
-      thread () noexcept = default;
+      thread() noexcept = default;
 
       /**
        * The std::thread equivalent constructor. The attributes will be the
@@ -302,7 +302,7 @@ namespace rtems
        * configured minimum stack size.
        */
       template<typename F, typename... Args>
-      explicit thread (F&& func, Args&&... args);
+      explicit thread(F&& func, Args&&... args);
 
       /**
        * Create a thread with the provided attributes. The entry point and
@@ -310,12 +310,12 @@ namespace rtems
        */
       template <typename A, typename F, typename ...Args,
                 class = enable_if_attributes<A>>
-      explicit thread (A&& attr, F&& func, Args&&... args);
+      explicit thread(A&& attr, F&& func, Args&&... args);
 
       /**
        * Move the thread id to this instance.
        */
-      thread& operator= (thread&& thread_);
+      thread& operator=(thread&& thread_);
 
       void swap(thread& thread_) noexcept;
 
@@ -328,10 +328,10 @@ namespace rtems
       /*
        * Constrain use. These are not available.
        */
-      thread (thread&) = delete;
-      thread (const thread&) = delete;
-      thread (const thread&&) = delete;
-      thread& operator= (const thread&) = delete;
+      thread(thread&) = delete;
+      thread(const thread&) = delete;
+      thread(const thread&&) = delete;
+      thread& operator=(const thread&) = delete;
 
       std::thread::id get_id() const noexcept;
 
@@ -349,20 +349,20 @@ namespace rtems
         Parms p;
 
         template<size_t Index>
-        static std::__tuple_element_t<Index, Parms>&& declval ();
+        static std::__tuple_element_t<Index, Parms>&& declval();
 
         template<size_t... Ind>
-        auto invoke (std::_Index_tuple<Ind...>)
-          noexcept (noexcept (std::invoke (declval<Ind>()...)))
-          -> decltype (std::invoke (declval<Ind> ()...)) {
-          return std::invoke (std::get<Ind> (std::move (p))...);
+        auto invoke(std::_Index_tuple<Ind...>)
+          noexcept(noexcept(std::invoke(declval<Ind>()...)))
+          -> decltype(std::invoke(declval<Ind>()...)) {
+          return std::invoke(std::get<Ind>(std::move(p))...);
         }
 
         using indices =
           typename std::_Build_index_tuple<std::tuple_size<Parms>::value>::__type;
 
-        void run () {
-          invoke (indices ());
+        void run() {
+          invoke(indices());
         }
       };
 
@@ -376,17 +376,17 @@ namespace rtems
         const attributes attr;
         Invoker          i;
 
-        state (const attributes& attr, Invoker&& i)
-          : attr (attr),
-            i (std::forward<Invoker> (i)) {
+        state(const attributes& attr, Invoker&& i)
+          : attr(attr),
+            i(std::forward<Invoker>(i)) {
         }
 
-        const attributes get_attributes () override {
+        const attributes get_attributes() override {
           return attr;
         }
 
-        void run () override {
-          i.run ();
+        void run() override {
+          i.run();
         }
       };
 
@@ -396,9 +396,9 @@ namespace rtems
        */
       template<typename Invoker>
       static state_ptr
-      make_state (const attributes& attr, Invoker&& i) {
+      make_state(const attributes& attr, Invoker&& i) {
         using state_impl = state<Invoker>;
-        return state_ptr{ new state_impl (attr, std::forward<Invoker> (i)) };
+        return state_ptr{ new state_impl(attr, std::forward<Invoker>(i)) };
       }
 
       /**
@@ -413,11 +413,11 @@ namespace rtems
        */
       template<typename F, typename... Args>
       static invoker<decayed_tuple<F, Args...>>
-      make_invoker (F&& func, Args&&... args)
+      make_invoker(F&& func, Args&&... args)
       {
         return {
           decayed_tuple<F, Args...> {
-            std::forward<F> (func), std::forward<Args> (args)...
+            std::forward<F>(func), std::forward<Args>(args)...
           }
         };
       }
@@ -425,55 +425,55 @@ namespace rtems
       /**
        * Create and start the thread.
        */
-      void start_thread (state_ptr s);
+      void start_thread(state_ptr s);
     };
 
     template <class T>
     inline typename std::decay<T>::type
-    decay_copy (T&& t) {
-      return std::forward<T> (t);
+    decay_copy(T&& t) {
+      return std::forward<T>(t);
     }
 
     template<typename F, typename... Args>
-    thread::thread (F&& func, Args&&... args)
-      : id_ (0)  {
+    thread::thread(F&& func, Args&&... args)
+      : id_(0)  {
       attributes attr;
-      start_thread (
-        make_state (attr,
-                    make_invoker (decay_copy (std::forward<F> (func)),
-                                  decay_copy (std::forward<Args> (args))...))
+      start_thread(
+        make_state(attr,
+                   make_invoker(decay_copy(std::forward<F>(func)),
+                                decay_copy(std::forward<Args>(args))...))
       );
     }
 
     template<typename A, typename F, typename... Args,
              class = thread::enable_if_attributes<A>>
-    thread::thread (A&& attr, F&& func, Args&&... args)
-      : id_ (0) {
-      start_thread (
-        make_state (attr,
-                    make_invoker (decay_copy (std::forward<F> (func)),
-                                  decay_copy (std::forward<Args> (args))...))
+    thread::thread(A&& attr, F&& func, Args&&... args)
+      : id_(0) {
+      start_thread(
+        make_state(attr,
+                   make_invoker(decay_copy(std::forward<F>(func)),
+                                decay_copy(std::forward<Args>(args))...))
       );
     }
 
     inline std::thread::id thread::get_id() const noexcept {
-      return std::thread::id (id_.id_);
+      return std::thread::id(id_.id_);
     }
 
     inline bool
-    operator== (thread::id l, thread::id r) noexcept {
+    operator==(thread::id l, thread::id r) noexcept {
       return l.id_ == r.id_;
     }
 
     inline bool
-    operator!= (thread::id l, thread::id r) noexcept {
+    operator!=(thread::id l, thread::id r) noexcept {
       return !(l == r);
     }
 
     template<class C, class T>
     inline std::basic_ostream<C, T>&
-    operator<< (std::basic_ostream<C, T>& out, thread::id id_) {
-      return out << std::thread::id (id_.id_);
+    operator<<(std::basic_ostream<C, T>& out, thread::id id_) {
+      return out << std::thread::id(id_.id_);
     }
   };
 };
