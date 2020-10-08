@@ -171,7 +171,7 @@ static void grlib_clock_initialize(void)
   volatile struct irqmp_timestamp_regs *irqmp_ts =
     &GRLIB_IrqCtrl_Regs->timestamp[0];
 
-    if (!grlib_irqmp_has_timestamp(irqmp_ts)) {
+    if (!irqmp_has_timestamp(irqmp_ts)) {
       bsp_fatal(GRLIB_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT);
     }
 #endif

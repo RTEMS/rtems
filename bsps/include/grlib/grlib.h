@@ -16,6 +16,8 @@
 #ifndef __GRLIB_H__
 #define __GRLIB_H__
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -50,6 +52,13 @@ struct irqmp_timestamp_regs {
   volatile unsigned int assertion;   /* 0x08 */
   volatile unsigned int ack;         /* 0x0c */
 };
+
+static inline bool irqmp_has_timestamp(
+  volatile struct irqmp_timestamp_regs *irqmp_ts
+)
+{
+  return (irqmp_ts->control >> 27) > 0;
+}
 
 /* IRQMP and IRQAMP interrupt controllers */
 struct irqmp_regs {

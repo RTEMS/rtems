@@ -126,7 +126,7 @@ static rtems_device_driver tlib_clock_find_timer(void)
     volatile struct irqmp_timestamp_regs *irqmp_ts;
 
     irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
-    if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+    if (irqmp_has_timestamp(irqmp_ts)) {
       priv.ops = &ops_irqamp;
       return RTEMS_SUCCESSFUL;
     }

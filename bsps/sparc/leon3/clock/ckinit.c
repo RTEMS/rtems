@@ -176,13 +176,13 @@ static void leon3_clock_initialize(void)
     tc->tc_frequency = leon3_up_counter_frequency();
 
 #ifdef RTEMS_PROFILING
-    if (!leon3_irqmp_has_timestamp(irqmp_ts)) {
+    if (!irqmp_has_timestamp(irqmp_ts)) {
       bsp_fatal(LEON3_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT);
     }
 #endif
 
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
-  } else if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+  } else if (irqmp_has_timestamp(irqmp_ts)) {
     /* Use the interrupt controller timestamp counter if available */
     tc->tc_get_timecount = _SPARC_Get_timecount_up;
     tc->tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);

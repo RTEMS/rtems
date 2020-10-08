@@ -43,7 +43,7 @@ static void leon3_counter_initialize(void)
     counter->read = _SPARC_Counter_read_asr23;
 
     leon3_counter_frequency = leon3_up_counter_frequency();
-  } else if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+  } else if (irqmp_has_timestamp(irqmp_ts)) {
     /* Use the interrupt controller timestamp counter if available */
     counter->read_isr_disabled = _SPARC_Counter_read_up;
     counter->read = _SPARC_Counter_read_up;
