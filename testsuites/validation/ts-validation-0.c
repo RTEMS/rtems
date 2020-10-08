@@ -32,12 +32,17 @@
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -47,9 +52,10 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
+#include <rtems/test-info.h>
+#include <rtems/testopts.h>
 
 #include <rtems/test.h>
-#include <rtems/testopts.h>
 
 /**
  * @defgroup RTEMSTestSuiteTestsuitesValidation0 spec:/testsuites/validation-0
@@ -64,8 +70,6 @@
  *
  * @{
  */
-
-#include <rtems/test-info.h>
 
 const char rtems_test_name[] = "Validation0";
 
