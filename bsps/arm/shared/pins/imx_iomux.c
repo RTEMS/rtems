@@ -72,6 +72,7 @@
 #else /* __rtems__ */
 #include <bsp.h>
 #include <bsp/fdt.h>
+#include <bsp/imx-iomux.h>
 #include <rtems/sysinit.h>
 #include <errno.h>
 #include <libfdt.h>
@@ -162,6 +163,10 @@ imx_iomux_init(void)
 	if (node < 0) {
 		node = fdt_node_offset_by_compatible(fdt, -1,
 		    "fsl,imx6ul-iomuxc");
+	}
+	if (node < 0) {
+		node = fdt_node_offset_by_compatible(fdt, -1,
+		    "nxp,imxrt1050-iomuxc");
 	}
 	sc = iomux_sc;
 	sc->regs = imx_get_reg_of_node(fdt, node);

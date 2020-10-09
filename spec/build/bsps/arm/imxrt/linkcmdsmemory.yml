@@ -1,0 +1,67 @@
+build-type: config-file
+content: |
+  MEMORY {
+    NULL           : ORIGIN = 0x00000000, LENGTH = ${IMXRT_MEMORY_NULL_SIZE:#010x}
+    ITCM           : ORIGIN = ${IMXRT_MEMORY_NULL_SIZE:#010x}, LENGTH = 512k - ${IMXRT_MEMORY_NULL_SIZE:#010x}
+    DTCM           : ORIGIN = 0x20000000, LENGTH = 512k
+    OCRAM          : ORIGIN = 0x20200000, LENGTH = 512k
+    PERIPHERAL     : ORIGIN = 0x40000000, LENGTH = 0x20000000
+    FLEXSPI_CONFIG : ORIGIN = 0x60000000, LENGTH = ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x}
+    FLEXSPI_IVT    : ORIGIN = 0x60000000 + ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}
+    FLEXSPI        : ORIGIN = 0x60000000 + ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x} + ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_FLEXSPI_FLASH_SIZE:#010x} - ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x} - ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}
+    FLEXSPI_FIFO   : ORIGIN = 0x7F800000, LENGTH = 8M
+    SDRAM          : ORIGIN = ${IMXRT_MEMORY_SDRAM_BASE:#010x}, LENGTH = ${IMXRT_MEMORY_SDRAM_SIZE:#010x} - ${IMXRT_MEMORY_SDRAM_NOCACHE_SIZE:#010x}
+    SDRAM_NOCACHE  : ORIGIN = ${IMXRT_MEMORY_SDRAM_BASE:#010x} + ${IMXRT_MEMORY_SDRAM_SIZE:#010x} - ${IMXRT_MEMORY_SDRAM_NOCACHE_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_SDRAM_NOCACHE_SIZE:#010x}
+  }
+
+  imxrt_memory_null_begin = ORIGIN (NULL);
+  imxrt_memory_null_end = ORIGIN (NULL) + LENGTH (NULL);
+  imxrt_memory_null_size = LENGTH (NULL);
+
+  imxrt_memory_itcm_begin = ORIGIN (ITCM);
+  imxrt_memory_itcm_end = ORIGIN (ITCM) + LENGTH (ITCM);
+  imxrt_memory_itcm_size = LENGTH (ITCM);
+
+  imxrt_memory_dtcm_begin = ORIGIN (DTCM);
+  imxrt_memory_dtcm_end = ORIGIN (DTCM) + LENGTH (DTCM);
+  imxrt_memory_dtcm_size = LENGTH (DTCM);
+
+  imxrt_memory_ocram_begin = ORIGIN (OCRAM);
+  imxrt_memory_ocram_end = ORIGIN (OCRAM) + LENGTH (OCRAM);
+  imxrt_memory_ocram_size = LENGTH (OCRAM);
+
+  imxrt_memory_peripheral_begin = ORIGIN (PERIPHERAL);
+  imxrt_memory_peripheral_end = ORIGIN (PERIPHERAL) + LENGTH (PERIPHERAL);
+  imxrt_memory_peripheral_size = LENGTH (PERIPHERAL);
+
+  imxrt_memory_flexspi_config_begin = ORIGIN (FLEXSPI_CONFIG);
+  imxrt_memory_flexspi_config_end = ORIGIN (FLEXSPI_CONFIG) + LENGTH (FLEXSPI_CONFIG);
+  imxrt_memory_flexspi_config_size = LENGTH (FLEXSPI_CONFIG);
+
+  imxrt_memory_flexspi_ivt_begin = ORIGIN (FLEXSPI_IVT);
+  imxrt_memory_flexspi_ivt_end = ORIGIN (FLEXSPI_IVT) + LENGTH (FLEXSPI_IVT);
+  imxrt_memory_flexspi_ivt_size = LENGTH (FLEXSPI_IVT);
+
+  imxrt_memory_flexspi_begin = ORIGIN (FLEXSPI);
+  imxrt_memory_flexspi_end = ORIGIN (FLEXSPI) + LENGTH (FLEXSPI);
+  imxrt_memory_flexspi_size = LENGTH (FLEXSPI);
+
+  imxrt_memory_flexspi_fifo_begin = ORIGIN (FLEXSPI_FIFO);
+  imxrt_memory_flexspi_fifo_end = ORIGIN (FLEXSPI_FIFO) + LENGTH (FLEXSPI_FIFO);
+  imxrt_memory_flexspi_fifo_size = LENGTH (FLEXSPI_FIFO);
+
+  imxrt_memory_sdram_begin = ORIGIN (SDRAM);
+  imxrt_memory_sdram_end = ORIGIN (SDRAM) + LENGTH (SDRAM);
+  imxrt_memory_sdram_size = LENGTH (SDRAM);
+
+  imxrt_memory_sdram_nocache_begin = ORIGIN (SDRAM_NOCACHE);
+  imxrt_memory_sdram_nocache_end = ORIGIN (SDRAM_NOCACHE) + LENGTH (SDRAM_NOCACHE);
+  imxrt_memory_sdram_nocache_size = LENGTH (SDRAM_NOCACHE);
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds.memory
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

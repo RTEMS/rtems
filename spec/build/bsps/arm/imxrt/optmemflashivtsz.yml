@@ -1,0 +1,18 @@
+actions:
+- get-integer: null
+- env-assign: null
+build-type: option
+default: 0x1000
+default-by-variant: []
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: IMXRT_MEMORY_FLASH_IVT_SIZE
+description: |
+  Size of the image vector table, boot data structure, device configuration data
+  and similar program image header information. Take a look at the i.MX RT1050
+  Processor Reference Manual chapter 9.7 "Program image" for details.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
