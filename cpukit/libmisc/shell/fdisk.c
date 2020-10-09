@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2009
+ * Copyright (c) 2009, 2020
  * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
+ * Dornierstr. 4
+ * 82178 Puchheim
  * Germany
  * <rtems@embedded-brains.de>
  *
@@ -61,13 +61,8 @@ static const char rtems_bdpart_shell_usage [] =
   "\tcreates a logical disk for each partition of the disk\n"
   "\n"
   "fdisk DISK_NAME unregister\n"
-  "\tdeletes the logical disks associated with the partitions of the disk\n"
-  "\n"
-  "fdisk DISK_NAME mount\n"
-  "\tmounts the file system of each partition of the disk\n"
-  "\n"
-  "fdisk DISK_NAME unmount\n"
-  "\tunmounts the file system of each partition of the disk\n"
+  "\tdeletes the logical disks associated with the partitions\n"
+  "\tof the disk\n"
   "\n"
   "option values:\n"
   "\tDISK_NAME: absolute path to disk device like '/dev/hda'\n"
@@ -84,14 +79,11 @@ static int rtems_bdpart_shell_main( int argc, char **argv)
   unsigned dist [RTEMS_BDPART_PARTITION_NUMBER_HINT];
   size_t count = RTEMS_BDPART_PARTITION_NUMBER_HINT;
   const char *disk_name = NULL;
-  const char *mount_base = "/mnt";
   bool do_create = false;
   bool do_read = false;
   bool do_write = false;
   bool do_register = false;
   bool do_unregister = false;
-  bool do_mount = false;
-  bool do_unmount = false;
   bool do_dump = false;
 
   if (argc < 2) {
@@ -112,12 +104,6 @@ static int rtems_bdpart_shell_main( int argc, char **argv)
     } else if (strcmp( argv [2], "unregister") == 0) {
       do_read = true;
       do_unregister = true;
-    } else if (strcmp( argv [2], "mount") == 0) {
-      do_read = true;
-      do_mount = true;
-    } else if (strcmp( argv [2], "unmount") == 0) {
-      do_read = true;
-      do_unmount = true;
     } else {
       RTEMS_BDPART_SHELL_ERROR( "unexpected option: %s", argv [2]);
     }
@@ -248,18 +234,6 @@ static int rtems_bdpart_shell_main( int argc, char **argv)
     /* Unregister partitions */
     sc = rtems_bdpart_unregister( disk_name, pt, count);
     RTEMS_BDPART_SHELL_ERROR_SC( sc, "cannot unregister partitions of '%s'", disk_name);
-  }
-
-  if (do_mount) {
-    /* Mount partitions */
-    sc = rtems_bdpart_mount( disk_name, pt, count, mount_base);
-    RTEMS_BDPART_SHELL_ERROR_SC( sc, "cannot mount partitions of '%s' to '%s'", disk_name, mount_base);
-  }
-
-  if (do_unmount) {
-    /* Unmount partitions */
-    sc = rtems_bdpart_unmount( disk_name, pt, count, mount_base);
-    RTEMS_BDPART_SHELL_ERROR_SC( sc, "cannot unmount partitions of '%s'", disk_name);
   }
 
   if (do_dump) {

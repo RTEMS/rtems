@@ -539,7 +539,6 @@ source:
 - cpukit/libblock/src/bdbuf.c
 - cpukit/libblock/src/bdpart-create.c
 - cpukit/libblock/src/bdpart-dump.c
-- cpukit/libblock/src/bdpart-mount.c
 - cpukit/libblock/src/bdpart-read.c
 - cpukit/libblock/src/bdpart-register.c
 - cpukit/libblock/src/bdpart-sort.c

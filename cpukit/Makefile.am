@@ -44,7 +44,6 @@ librtemscpu_a_SOURCES += dtc/libfdt/fdt_wip.c
 librtemscpu_a_SOURCES += libblock/src/bdbuf.c
 librtemscpu_a_SOURCES += libblock/src/bdpart-create.c
 librtemscpu_a_SOURCES += libblock/src/bdpart-dump.c
-librtemscpu_a_SOURCES += libblock/src/bdpart-mount.c
 librtemscpu_a_SOURCES += libblock/src/bdpart-read.c
 librtemscpu_a_SOURCES += libblock/src/bdpart-register.c
 librtemscpu_a_SOURCES += libblock/src/bdpart-sort.c

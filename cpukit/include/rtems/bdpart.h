@@ -7,13 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2009, 2012 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -300,37 +294,6 @@ rtems_status_code rtems_bdpart_unregister(
   const char *disk_name,
   const rtems_bdpart_partition *partitions,
   size_t count
-);
-
-/**
- * @brief Mounts all supported file systems inside the logical disks derived
- * from the partitions of the physical disk device with name @a disk_name.
- *
- * For each partition in the partition table @a partitions with @a count
- * partitions it will be checked if it contains a supported file system.  In
- * this case a mount point derived from the disk name will be created in the
- * mount base path @a mount_base.  The file system will be mounted there.  The
- * partition number equals the partition table index plus one.  The mount point
- * name for each partition will be the concatenation of the mount base path,
- * the disk device file name and the parition number.
- *
- * @see rtems_bdpart_read().
- */
-rtems_status_code rtems_bdpart_mount(
-  const char *disk_name,
-  const rtems_bdpart_partition *partitions,
-  size_t count,
-  const char *mount_base
-);
-
-/**
- * @brief Unmounts all file systems mounted with rtems_bdpart_mount().
- */
-rtems_status_code rtems_bdpart_unmount(
-  const char *disk_name,
-  const rtems_bdpart_partition *partitions,
-  size_t count,
-  const char *mount_base
 );
 
 /**
