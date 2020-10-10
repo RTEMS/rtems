@@ -33,6 +33,7 @@ actions:
     psxfile01: exclude
     psxmsgq01: exclude
     psxsignal07: exclude
+    rcxx01: exclude
     record01: exclude
     rtems: exclude
     shell01: exclude

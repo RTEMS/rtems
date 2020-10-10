@@ -25,6 +25,7 @@ actions:
     psxmsgq01: exclude
     psxsignal07: exclude
     record01: exclude
+    rcxx01: exclude
     rtems: exclude
     shell01: exclude
     sp16: exclude

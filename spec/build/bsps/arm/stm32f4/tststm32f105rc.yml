@@ -7,6 +7,7 @@ actions:
     mghttpd01: exclude
     monitor02: exclude
     pppd: exclude
+    rcxx01: exclude
     rtems: exclude
     utf8proc01: exclude
 build-type: option

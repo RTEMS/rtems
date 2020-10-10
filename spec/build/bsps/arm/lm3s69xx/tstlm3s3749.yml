@@ -15,6 +15,7 @@ actions:
     monitor02: exclude
     paranoia: exclude
     pppd: exclude
+    rcxx01: exclude
     record01: exclude
     rtems: exclude
     shell01: exclude

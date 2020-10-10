@@ -14,6 +14,7 @@ actions:
     psxaio02: exclude
     psxaio03: exclude
     psxsignal07: exclude
+    rcxx01: exclude
     sp16: exclude
     sp25: exclude
     sp42: exclude
