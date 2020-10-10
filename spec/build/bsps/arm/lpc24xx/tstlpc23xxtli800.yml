@@ -8,6 +8,7 @@ actions:
     crypt01: exclude
     fileio: exclude
     fsdosfsformat01: exclude
+    fsdosfssync01: exclude
     fsdosfswrite01: exclude
     fsrfsbitmap01: exclude
     fsrofs01: exclude

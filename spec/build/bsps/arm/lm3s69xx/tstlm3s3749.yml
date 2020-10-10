@@ -9,6 +9,7 @@ actions:
     ftp01: exclude
     iostream: exclude
     loopback: exclude
+    math: exclude
     mdosfsfserror: exclude
     mdosfsfsrdwr: exclude
     mghttpd01: exclude

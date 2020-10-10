@@ -4,8 +4,10 @@ actions:
     block08: exclude
     capture: exclude
     cdtest: exclude
+    complex: exclude
     fileio: exclude
     fsdosfsformat01: exclude
+    fsdosfswrite01: exclude
     fsrfsbitmap01: exclude
     fsrofs01: exclude
     ftp01: exclude
@@ -13,7 +15,10 @@ actions:
     loopback: exclude
     math: exclude
     mdosfsfserror: exclude
+    mdosfsfspatheval: exclude
     mdosfsfsrdwr: exclude
+    mdosfsfsscandir01: exclude
+    mdosfsfstime: exclude
     mghttpd01: exclude
     monitor: exclude
     monitor02: exclude

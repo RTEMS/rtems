@@ -2,6 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
     fileio: exclude
+    fsdosfssync01: exclude
     ftp01: exclude
     iostream: exclude
     mghttpd01: exclude
