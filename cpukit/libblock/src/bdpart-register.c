@@ -38,6 +38,7 @@ static char *create_logical_disk_name( const char *disk_name, char **marker)
   char *logical_disk_name = malloc( disk_name_size + RTEMS_BDPART_NUMBER_SIZE);
 
   if (logical_disk_name != NULL) {
+    /* The string is NUL terminated by (A) ... */
     memcpy( logical_disk_name, disk_name, disk_name_size);
     *marker = logical_disk_name + disk_name_size;
   }
@@ -53,6 +54,7 @@ static rtems_status_code update_logical_disk_name(
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int rv = 0;
 
+  /* ... (A) */
   rv = snprintf( logical_disk_marker, RTEMS_BDPART_NUMBER_SIZE, "%zu", i + 1);
   if (rv >= RTEMS_BDPART_NUMBER_SIZE) {
     sc = RTEMS_INVALID_NAME;
