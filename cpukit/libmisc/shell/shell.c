@@ -620,7 +620,9 @@ static int rtems_shell_line_editor(
         case 21:                        /* Control-U */
           if (col > 0)
           {
-            int clen = strlen (line);
+            /* strlen() returns size_t but fprintf("%*...") below requires
+             * int! */
+            int clen = (int) strlen (line);
             int bs;
 
             strcpy (line, line + col);
