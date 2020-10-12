@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+  not: RTEMS_SMP
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/libchip
+  source:
+  - bsps/include/libchip/am29lv160.h
+  - bsps/include/libchip/mc146818a.h
+  - bsps/include/libchip/mc68681.h
+  - bsps/include/libchip/z85c30.h
+links: []
+source:
+- bsps/shared/dev/flash/am29lv160.c
+- bsps/shared/dev/rtc/mc146818a.c
+- bsps/shared/dev/rtc/mc146818a_ioreg.c
+- bsps/shared/dev/serial/mc68681_baud.c
+- bsps/shared/dev/serial/mc68681.c
+- bsps/shared/dev/serial/mc68681_reg2.c
+- bsps/shared/dev/serial/mc68681_reg4.c
+- bsps/shared/dev/serial/mc68681_reg8.c
+- bsps/shared/dev/serial/mc68681_reg.c
+- bsps/shared/dev/serial/z85c30.c
+- bsps/shared/dev/serial/z85c30_reg.c
+type: build

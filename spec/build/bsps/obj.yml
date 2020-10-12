@@ -26,7 +26,6 @@ install:
   - bsps/include/bsp/utility.h
 - destination: ${BSP_INCLUDEDIR}/libchip
   source:
-  - bsps/include/libchip/am29lv160.h
   - bsps/include/libchip/ata.h
   - bsps/include/libchip/ata_internal.h
   - bsps/include/libchip/disp_hcms29xx.h
@@ -39,8 +38,6 @@ install:
   - bsps/include/libchip/ide_ctrl_cfg.h
   - bsps/include/libchip/ide_ctrl_io.h
   - bsps/include/libchip/m48t08.h
-  - bsps/include/libchip/mc146818a.h
-  - bsps/include/libchip/mc68681.h
   - bsps/include/libchip/ns16550.h
   - bsps/include/libchip/ns16550_p.h
   - bsps/include/libchip/rtc.h
@@ -51,7 +48,6 @@ install:
   - bsps/include/libchip/spi-memdrv.h
   - bsps/include/libchip/spi-sd-card.h
   - bsps/include/libchip/wd80x3.h
-  - bsps/include/libchip/z85c30.h
 - destination: ${BSP_INCLUDEDIR}/dev/serial
   source:
   - bsps/include/dev/serial/arm-pl011-regs.h
@@ -67,10 +63,11 @@ links:
   uid: objnet
 - role: build-dependency
   uid: objnetnosmp
+- role: build-dependency
+  uid: objnosmp
 source:
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c
-- bsps/shared/dev/flash/am29lv160.c
 - bsps/shared/dev/i2c/i2c-2b-eeprom.c
 - bsps/shared/dev/i2c/i2c-ds1621.c
 - bsps/shared/dev/i2c/i2c-sc620.c
@@ -92,21 +89,11 @@ source:
 - bsps/shared/dev/rtc/m48t08_reg4.c
 - bsps/shared/dev/rtc/m48t08_reg8.c
 - bsps/shared/dev/rtc/m48t08_reg.c
-- bsps/shared/dev/rtc/mc146818a.c
-- bsps/shared/dev/rtc/mc146818a_ioreg.c
 - bsps/shared/dev/rtc/rtcprobe.c
 - bsps/shared/dev/serial/arm-pl011.c
-- bsps/shared/dev/serial/mc68681_baud.c
-- bsps/shared/dev/serial/mc68681.c
-- bsps/shared/dev/serial/mc68681_reg2.c
-- bsps/shared/dev/serial/mc68681_reg4.c
-- bsps/shared/dev/serial/mc68681_reg8.c
-- bsps/shared/dev/serial/mc68681_reg.c
 - bsps/shared/dev/serial/ns16550.c
 - bsps/shared/dev/serial/ns16550-context.c
 - bsps/shared/dev/serial/serprobe.c
-- bsps/shared/dev/serial/z85c30.c
-- bsps/shared/dev/serial/z85c30_reg.c
 - bsps/shared/start/bootcard.c
 - bsps/shared/rtems-version.c
 type: build
