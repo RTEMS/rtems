@@ -39,6 +39,7 @@ exclude: record01
 exclude: rtems++
 exclude: shell01
 exclude: sp47
+exclude: spcxx01
 exclude: spstkalloc02
 exclude: sptls02
 exclude: syscall01
