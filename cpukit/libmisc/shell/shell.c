@@ -288,6 +288,16 @@ void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
 }
 
 /*
+ *  Move a string in a buffer to the left (e.g. when a character
+ *  is deleted). The string must be NUL-terminated and the
+ *  NUL-character will be moved too.
+ */
+static void rtems_shell_move_left(char *start, size_t offset)
+{
+  memmove(start, start + offset, strlen(start + offset) + 1);
+}
+
+/*
  *  Get a line of user input with modest features
  */
 static int rtems_shell_line_editor(
@@ -393,7 +403,7 @@ static int rtems_shell_line_editor(
           {
             int end;
             int bs;
-            strcpy (&line[col], &line[col + 1]);
+            rtems_shell_move_left(line + col, 1);
             if (output) {
               fprintf(out,"\r%s%s ", prompt, line);
               end = (int) strlen (line);
@@ -432,7 +442,7 @@ static int rtems_shell_line_editor(
         case 4:                         /* Control-D */
           if (strlen(line)) {
             if (col < strlen(line)) {
-              strcpy (line + col, line + col + 1);
+              rtems_shell_move_left(line + col, 1);
               if (output) {
                 int bs;
                 fprintf(out,"%s \b", line + col);
@@ -508,7 +518,7 @@ static int rtems_shell_line_editor(
           {
             int bs;
             col--;
-            strcpy (line + col, line + col + 1);
+            rtems_shell_move_left(line + col, 1);
             if (output) {
               fprintf(out,"\b%s \b", line + col);
               for (bs = 0; bs < ((int) strlen (line) - col); bs++)
@@ -625,7 +635,7 @@ static int rtems_shell_line_editor(
             int clen = (int) strlen (line);
             int bs;
 
-            strcpy (line, line + col);
+            rtems_shell_move_left(line, col);
             if (output) {
               fprintf(out,"\r%s%*c", prompt, clen, ' ');
               fprintf(out,"\r%s%s", prompt, line);
