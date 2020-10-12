@@ -32,6 +32,7 @@
 //
 
 #include <signal.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -282,7 +283,7 @@ static void delete_editor(struct editor *ed) {
 }
 
 static struct editor *find_editor(struct env *env, char *filename) {
-  char fn[FILENAME_MAX];
+  char fn[PATH_MAX];
   struct editor *ed = env->current;
   struct editor *start = ed;
 
