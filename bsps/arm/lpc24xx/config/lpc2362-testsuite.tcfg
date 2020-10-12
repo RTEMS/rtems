@@ -31,6 +31,7 @@ exclude: loopback
 exclude: math
 exclude: mdosfs_fserror
 exclude: mghttpd01
+exclude: monitor
 exclude: monitor02
 exclude: mdosfs_fsrdwr
 exclude: paranoia
@@ -38,6 +39,7 @@ exclude: pppd
 exclude: psxaio01
 exclude: psxaio02
 exclude: psxaio03
+exclude: psxmsgq01
 exclude: psxsignal07
 exclude: record01
 exclude: rtems++
