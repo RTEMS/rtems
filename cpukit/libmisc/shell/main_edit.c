@@ -283,11 +283,13 @@ static void delete_editor(struct editor *ed) {
 }
 
 static struct editor *find_editor(struct env *env, char *filename) {
-  char fn[PATH_MAX];
+  char fnbuf[PATH_MAX];
+  char *fn = fnbuf;
   struct editor *ed = env->current;
   struct editor *start = ed;
 
-  if (!realpath(filename, fn)) strncpy(fn, filename, FILENAME_MAX);
+  /* Note: When realpath() == NULL, usually the file doesn't exist */
+  if (!realpath(filename, fn)) { fn = filename; }
 
   do {
     if (strcmp(fn, ed->filename) == 0) return ed;
@@ -298,7 +300,7 @@ static struct editor *find_editor(struct env *env, char *filename) {
 
 static int new_file(struct editor *ed, char *filename) {
   if (*filename) {
-    strncpy(ed->filename, filename, FILENAME_MAX);
+    strlcpy(ed->filename, filename, sizeof(ed->filename));
   } else {
     sprintf(ed->filename, "Untitled-%d", ++ed->env->untitled);
     ed->newfile = 1;
@@ -1776,8 +1778,8 @@ static void save_editor(struct editor *ed) {
         return;
       }
     }
-    strncpy(
-      ed->filename, (const char*) ed->env->linebuf, FILENAME_MAX);
+    strlcpy(
+      ed->filename, (const char*) ed->env->linebuf, sizeof(ed->filename));
     ed->newfile = 0;
   }
 
