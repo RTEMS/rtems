@@ -422,14 +422,15 @@ static void test_creating_invalid_directories( void )
   unsigned int index;
   int          rc;
   char         dirname[MAX_NAME_LENGTH_INVALID + MOUNT_DIR_SIZE + 1];
-
+  int          len;
 
   for ( index = 0; index < NUMBER_OF_DIRECTORIES_INVALID; ++index ) {
-    snprintf( dirname,
-              sizeof( dirname ),
-              "%s/%s",
-              MOUNT_DIR,
-              DIRECTORY_NAMES_INVALID[index] );
+    len = snprintf( dirname,
+                    sizeof( dirname ),
+                    "%s/%s",
+                    MOUNT_DIR,
+                    DIRECTORY_NAMES_INVALID[index] );
+    rtems_test_assert( len < sizeof( dirname ) );
     rc = mkdir( dirname, S_IRWXU | S_IRWXG | S_IRWXO );
     rtems_test_assert( rc == -1 );
   }
