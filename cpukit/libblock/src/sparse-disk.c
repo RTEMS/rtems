@@ -111,22 +111,43 @@ static int sparse_disk_compare( const void *aa, const void *bb )
   }
 }
 
+static rtems_sparse_disk_key *sparse_disk_find_block(
+  const rtems_sparse_disk *sparse_disk,
+  rtems_blkdev_bnum        block
+)
+{
+  rtems_sparse_disk_key key = { .block = block };
+
+  return bsearch(
+    &key,
+    sparse_disk->key_table,
+    sparse_disk->used_count,
+    sizeof( rtems_sparse_disk_key ),
+    sparse_disk_compare
+  );
+}
+
 static rtems_sparse_disk_key *sparse_disk_get_new_block(
   rtems_sparse_disk      *sparse_disk,
-  const rtems_blkdev_bnum block )
+  const rtems_blkdev_bnum block
+)
 {
   rtems_sparse_disk_key *key;
 
-  if ( sparse_disk->used_count < sparse_disk->blocks_with_buffer ) {
-    key        = &sparse_disk->key_table[sparse_disk->used_count];
-    key->block = block;
-    ++sparse_disk->used_count;
-    qsort( sparse_disk->key_table, sparse_disk->used_count,
-           sizeof( rtems_sparse_disk_key ), sparse_disk_compare );
-  } else
+  if ( sparse_disk->used_count >= sparse_disk->blocks_with_buffer ) {
     return NULL;
+  }
 
-  return key;
+  key = &sparse_disk->key_table[ sparse_disk->used_count ];
+  key->block = block;
+  ++sparse_disk->used_count;
+  qsort(
+    sparse_disk->key_table,
+    sparse_disk->used_count,
+    sizeof( rtems_sparse_disk_key ),
+    sparse_disk_compare
+  );
+  return sparse_disk_find_block( sparse_disk, block );
 }
 
 static int sparse_disk_read_block(
@@ -135,23 +156,13 @@ static int sparse_disk_read_block(
   uint8_t                 *buffer,
   const size_t             buffer_size )
 {
-  rtems_sparse_disk_key *key;
-  rtems_sparse_disk_key  block_key = {
-    .block = block,
-    .data  = NULL
-  };
   size_t                 bytes_to_copy = sparse_disk->media_block_size;
+  rtems_sparse_disk_key *key;
 
   if ( buffer_size < bytes_to_copy )
     bytes_to_copy = buffer_size;
 
-  key = bsearch(
-    &block_key,
-    sparse_disk->key_table,
-    sparse_disk->used_count,
-    sizeof( rtems_sparse_disk_key ),
-    sparse_disk_compare
-    );
+  key = sparse_disk_find_block( sparse_disk, block );
 
   if ( NULL != key )
     memcpy( buffer, key->data, bytes_to_copy );
@@ -167,14 +178,10 @@ static int sparse_disk_write_block(
   const uint8_t          *buffer,
   const size_t            buffer_size )
 {
-  unsigned int           i;
+  size_t                 bytes_to_copy = sparse_disk->media_block_size;
   bool                   block_needs_writing = false;
   rtems_sparse_disk_key *key;
-  rtems_sparse_disk_key  block_key           = {
-    .block = block,
-    .data  = NULL
-  };
-  size_t                 bytes_to_copy = sparse_disk->media_block_size;
+  size_t                 i;
 
   if ( buffer_size < bytes_to_copy )
     bytes_to_copy = buffer_size;
@@ -183,13 +190,7 @@ static int sparse_disk_write_block(
    * If the read method does not find a block it will deliver the fill pattern anyway.
    */
 
-  key = bsearch(
-    &block_key,
-    sparse_disk->key_table,
-    sparse_disk->used_count,
-    sizeof( rtems_sparse_disk_key ),
-    sparse_disk_compare
-    );
+  key = sparse_disk_find_block( sparse_disk, block );
 
   if ( NULL == key ) {
     for ( i = 0; ( !block_needs_writing ) && ( i < bytes_to_copy ); ++i ) {
