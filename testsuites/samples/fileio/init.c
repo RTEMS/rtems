@@ -630,7 +630,7 @@ static void fileio_start_shell(void)
   printf(" =========================\n");
   rtems_shell_init(
     "SHLL",                          /* task_name */
-    RTEMS_MINIMUM_STACK_SIZE * 4,    /* task_stacksize */
+    RTEMS_MINIMUM_STACK_SIZE * 5,    /* task_stacksize */
     100,                             /* task_priority */
     "/dev/foobar",                   /* devname */
     /* device is currently ignored by the shell if it is not a pty */
