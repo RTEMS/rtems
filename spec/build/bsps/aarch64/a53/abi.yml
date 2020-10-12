@@ -14,9 +14,9 @@ default-by-variant:
   - -mabi=ilp32
   variants:
   - aarch64/a53_ilp32_qemu
+description: |
+  ABI flags
 enabled-by: true
 links: []
 name: ABI_FLAGS
-description: |
-  ABI flags
 type: build

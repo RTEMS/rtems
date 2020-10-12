@@ -9,10 +9,10 @@ copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: 1073741824
 default-by-variant: []
+description: |
+  base address of memory area available to the BSP
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: BSP_A53_RAM_BASE
-description: |
-  base address of memory area available to the BSP
 type: build

@@ -7,8 +7,8 @@ actions:
     loopback: exclude
     mghttpd01: exclude
     monitor02: exclude
-    rcxx01: exclude
     pppd: exclude
+    rcxx01: exclude
     syscall01: exclude
     utf8proc01: exclude
 build-type: option

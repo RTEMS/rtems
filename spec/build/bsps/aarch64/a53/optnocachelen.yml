@@ -9,10 +9,10 @@ copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: 1048576
 default-by-variant: []
+description: |
+  length of nocache RAM region
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: BSP_A53_NOCACHE_LENGTH
-description: |
-  length of nocache RAM region
 type: build

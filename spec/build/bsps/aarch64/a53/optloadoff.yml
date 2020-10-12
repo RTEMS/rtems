@@ -9,10 +9,10 @@ copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: 32768
 default-by-variant: []
+description: |
+  offset of RAM region from memory area base
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: BSP_A53_LOAD_OFFSET
-description: |
-  offset of RAM region from memory area base
 type: build

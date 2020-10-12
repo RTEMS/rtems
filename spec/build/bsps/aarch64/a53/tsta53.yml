@@ -26,10 +26,12 @@ actions:
     sptimecounter02: exclude
     sptimecounter04: exclude
     ttest02: exclude
+build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: null
 default-by-variant: []
+description: ''
 enabled-by: true
 links:
 - role: build-dependency
@@ -40,6 +42,4 @@ links:
   uid: ../../tstnolibdl
 - role: build-dependency
   uid: ../../tstnorfs
-description: ''
 type: build
-build-type: option

@@ -4,7 +4,8 @@ cflags: []
 copyrights:
 - Copyright (C) 2020 Chris Johns (http://contemporary.software)
 cppflags: []
-cxxflags: [-std=c++17]
+cxxflags:
+- -std=c++17
 enabled-by: true
 includes: []
 install:
