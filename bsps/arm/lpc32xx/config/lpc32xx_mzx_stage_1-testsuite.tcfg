@@ -20,4 +20,5 @@ exclude: monitor02
 exclude: pppd
 exclude: rtems++
 exclude: sp71
+exclude: ttest01
 exclude: utf8proc01
