@@ -1260,6 +1260,8 @@ int rtems_filesystem_default_mmap(
 /**
  * @defgroup LibIO IO Library
  *
+ * @ingroup RTEMSImpl
+ *
  * @brief Provides system call and file system interface definitions.
  *
  * General purpose communication channel for RTEMS to allow UNIX/POSIX
