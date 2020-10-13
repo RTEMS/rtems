@@ -96,7 +96,7 @@ extern "C" {
  *
  * @ingroup RTEMSAPI
  *
- * @brief This group contains the Classic API groups.
+ * @brief This group contains the Classic API managers.
  */
 
 #ifdef __cplusplus
