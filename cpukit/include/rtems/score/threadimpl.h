@@ -1072,21 +1072,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
 }
 
 /**
- * @brief Checks if the thread is NULL.
- *
- * @param the_thread The thread for the verification.
- *
- * @retval true The thread is @c NULL.
- * @retval false The thread is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _Thread_Is_null (
-  const Thread_Control *the_thread
-)
-{
-  return ( the_thread == NULL );
-}
-
-/**
  * @brief Gets the maximum number of internal threads.
  *
  * @return The maximum number of internal threads.

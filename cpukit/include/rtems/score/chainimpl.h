@@ -167,23 +167,6 @@ RTEMS_INLINE_ROUTINE bool _Chain_Are_nodes_equal(
 }
 
 /**
- * @brief Checks if the chain node pointer is NULL.
- *
- * This function returns true if the_node is NULL and false otherwise.
- *
- * @param the_node The node pointer to check.
- *
- * @retval true @a the_node is @c NULL.
- * @retval false @a the_node is not @c NULL.
- */
-RTEMS_INLINE_ROUTINE bool _Chain_Is_null_node(
-  const Chain_Node *the_node
-)
-{
-  return (the_node == NULL);
-}
-
-/**
  * @brief Returns pointer to chain head.
  *
  * This function returns a pointer to the head node on the chain.

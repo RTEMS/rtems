@@ -77,7 +77,7 @@ rtems_status_code rtems_signal_catch(
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
 
-  if ( !_ASR_Is_null_handler( asr_handler ) ) {
+  if ( asr_handler != NULL ) {
     asr->mode_set = mode_set;
     asr->handler = asr_handler;
   } else {

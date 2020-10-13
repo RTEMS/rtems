@@ -45,19 +45,6 @@ RTEMS_INLINE_ROUTINE void _ASR_Initialize (
   memset(asr, 0, sizeof(*asr));
 }
 
-/**
- *  @brief ASR_Is_null_handler
- *
- *  This function returns TRUE if the given asr_handler is NULL and
- *  FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _ASR_Is_null_handler (
-  rtems_asr_entry asr_handler
-)
-{
-  return asr_handler == NULL;
-}
-
 RTEMS_INLINE_ROUTINE rtems_signal_set _ASR_Swap_signals( ASR_Information *asr )
 {
   rtems_signal_set new_signals_posted;

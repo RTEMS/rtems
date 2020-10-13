@@ -53,7 +53,7 @@ rtems_status_code rtems_signal_send(
 
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
-  if ( _ASR_Is_null_handler( asr->handler ) ) {
+  if ( asr->handler == NULL ) {
     _Thread_State_release( the_thread, &lock_context );
     return RTEMS_NOT_DEFINED;
   }

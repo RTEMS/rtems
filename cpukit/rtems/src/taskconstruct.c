@@ -180,7 +180,7 @@ rtems_status_code _RTEMS_tasks_Create(
   if ( is_global ) {
     the_global_object = _Objects_MP_Allocate_global_object();
 
-    if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
+    if ( the_global_object == NULL ) {
       _RTEMS_tasks_Free( the_thread );
       _Objects_Allocator_unlock();
       return RTEMS_TOO_MANY;

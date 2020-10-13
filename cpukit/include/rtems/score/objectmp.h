@@ -190,21 +190,6 @@ Objects_MP_Control *_Objects_MP_Allocate_global_object( void );
  */
 void _Objects_MP_Free_global_object( Objects_MP_Control *the_object );
 
-/**
- * @brief Checks if the global object is NULL or not.
- *
- * @param the_object The object to check if it is NULL.
- *
- * @retval true @a the_object is NULL.
- * @retval false @a the_object is not NULL.
- */
-RTEMS_INLINE_ROUTINE bool _Objects_MP_Is_null_global_object (
-  Objects_MP_Control *the_object
-)
-{
-  return( the_object == NULL );
-}
-
 /** @} */
 
 #ifdef __cplusplus

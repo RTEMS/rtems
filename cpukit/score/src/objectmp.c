@@ -231,13 +231,14 @@ bool _Objects_MP_Allocate_and_open (
   bool                 is_fatal_error
 )
 {
-  Objects_MP_Control  *the_global_object;
+  Objects_MP_Control *the_global_object;
 
   the_global_object = _Objects_MP_Allocate_global_object();
-  if ( _Objects_MP_Is_null_global_object( the_global_object ) ) {
 
-    if ( is_fatal_error == false )
+  if ( the_global_object == NULL ) {
+    if ( !is_fatal_error ) {
       return false;
+    }
 
     _Internal_error( INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS );
   }

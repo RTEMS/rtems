@@ -234,7 +234,7 @@ RTEMS_INLINE_ROUTINE bool rtems_chain_is_null_node(
   const rtems_chain_node *the_node
 )
 {
-  return _Chain_Is_null_node( the_node );
+  return the_node == NULL;
 }
 
 /**
