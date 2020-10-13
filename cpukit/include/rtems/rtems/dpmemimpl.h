@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicDPMEMImpl Dual Ported Memory Manager Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */

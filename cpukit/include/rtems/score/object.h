@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup RTEMSScore SuperCore
  *
- * @ingroup RTEMSInternal
+ * @ingroup RTEMSImpl
  *
  * @brief Provides services for all APIs.
  *

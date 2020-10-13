@@ -30,7 +30,7 @@
 /**
  * @defgroup POSIXAPI RTEMS POSIX API
  *
- * @ingroup RTEMSInternal
+ * @ingroup RTEMSImpl
  *
  * RTEMS POSIX API definitions and modules.
  *

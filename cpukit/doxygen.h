@@ -1,7 +1,7 @@
 /**
- * @defgroup RTEMSInternalClassic Classic
+ * @defgroup RTEMSImplClassic Classic
  * 
- * @ingroup RTEMSInternal
+ * @ingroup RTEMSImpl
  *
  * @brief Classic
  */

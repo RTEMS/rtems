@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup libcsupport Standard C Library Support
  *
- * @ingroup RTEMSInternal
+ * @ingroup RTEMSImpl
  *
  * @brief RTEMS Specific Support for the Standard C Library
  *

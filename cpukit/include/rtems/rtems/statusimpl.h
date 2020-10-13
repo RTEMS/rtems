@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicStatusImpl Classic Status Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */

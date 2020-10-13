@@ -38,9 +38,9 @@
  */
 
 /**
- * @defgroup RTEMSInternal Internal
+ * @defgroup RTEMSImpl Implementation
  *
- * @brief RTEMS Implementation.
+ * @brief This group contains the RTEMS implementation components.
  */
 
 /**

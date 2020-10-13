@@ -45,7 +45,7 @@
 /**
  * @defgroup RTEMSApplicationConfiguration Application Configuration
  *
- * @ingroup RTEMSInternal
+ * @ingroup RTEMSImpl
  *
  * @brief Evaluation of Application Configuration Options
  *

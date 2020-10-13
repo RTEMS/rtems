@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicAttributesImpl Classic Attributes Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */

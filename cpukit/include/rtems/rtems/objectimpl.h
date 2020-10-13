@@ -46,7 +46,7 @@ extern "C" {
 /**
  * @defgroup ClassicObjectImpl Classic Object Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */

@@ -28,7 +28,7 @@ extern "C" {
 /**
  *  @defgroup ClassicMessageQueueImpl Classic Message Queue Implementation
  *
- *  @ingroup RTEMSInternalClassic
+ *  @ingroup RTEMSImplClassic
  *
  *  @{
  */

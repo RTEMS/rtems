@@ -27,7 +27,7 @@ extern "C" {
 /**
  * @defgroup ClassicSignalImpl Signals Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  */
 /**@{*/
 

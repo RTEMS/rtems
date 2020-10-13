@@ -29,7 +29,7 @@ extern "C" {
 /**
  * @defgroup ClassicTasksImpl Classic Tasks Manager Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */

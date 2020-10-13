@@ -29,7 +29,7 @@ extern "C" {
 /**
  *  @defgroup ClassicBarrierImpl Classic Barrier Implementation
  *
- *  @ingroup RTEMSInternalClassic
+ *  @ingroup RTEMSImplClassic
  *
  *  @{
  */

@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicASRImpl Classic ASR Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */

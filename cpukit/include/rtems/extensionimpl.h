@@ -28,7 +28,7 @@ extern "C" {
 /**
  * @defgroup ClassicUserExtensionsImpl User Extensions Implementation
  *
- * @ingroup RTEMSInternalClassic
+ * @ingroup RTEMSImplClassic
  *
  * @{
  */
