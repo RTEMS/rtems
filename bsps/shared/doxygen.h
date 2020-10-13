@@ -1,8 +1,7 @@
 /**
  * @defgroup RTEMSBSPs Board Support Packages
  *
- * @brief Board Support Packages and Support Modules
- * (BSPs).
+ * @brief This group contains the Board Support Packages (BSPs).
  */
 
 /**
@@ -10,7 +9,8 @@
  *
  * @ingroup RTEMSBSPs
  *
- * @brief Shared Support for Board Support Packages
+ * @brief This group contains the architecture-independent support modules
+ *   shared across all BSPs.
  */
 
 /**
@@ -18,5 +18,5 @@
  *
  * @ingroup RTEMSBSPsShared
  *
- * @brief Console Driver Support for Board Support Packages.
+ * @brief This group contains the console driver support modules.
  */

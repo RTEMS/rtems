@@ -28,13 +28,14 @@
 /**
  * @defgroup RTEMSAPI API
  *
- * @brief API
+ * @brief This group contains the Application Programming Interfaces (APIs) of
+ *   RTEMS.
  */
 
 /**
  * @defgroup RTEMSDeviceDrivers Device Drivers
  *
- * @brief Device Drivers
+ * @brief This group contains the device drivers.
  */
 
 /**
@@ -46,5 +47,5 @@
 /**
  * @defgroup RTEMSTestSuites Test Suites
  *
- * @brief Collection of Test Suites
+ * @brief This group contains the test suites.
  */
