@@ -33,12 +33,6 @@ extern "C" {
  */
 
 /**
- *  This constant is passed as the event_in to the
- *  rtems_event_receive directive to determine which events are pending.
- */
-#define EVENT_CURRENT  0
-
-/**
  *  The following constant is the value of an event set which
  *  has no events pending.
  */
