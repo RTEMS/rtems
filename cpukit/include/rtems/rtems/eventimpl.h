@@ -52,14 +52,6 @@ rtems_status_code _Event_Surrender(
   ISR_lock_Context  *lock_context
 );
 
-/**
- *  @brief Timeout Event
- */
-void _Event_Timeout(
-  Objects_Id  id,
-  void       *arg
-);
-
 RTEMS_INLINE_ROUTINE void _Event_Initialize( Event_Control *event )
 {
   event->pending_events = 0;
