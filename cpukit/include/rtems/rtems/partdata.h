@@ -33,39 +33,71 @@ extern "C" {
  */
 
 /**
- *  The following defines the control block used to manage each partition.
+ * @brief The Partition Control Block (PTCB) represents a partition.
  */
 typedef struct {
-  /** This field is the object management portion of a Partition instance. */
-  Objects_Control     Object;
-  /** This field is the lock of the Partition. */
-  ISR_LOCK_MEMBER(    Lock )
-  /** This field is the physical starting address of the Partition. */
-  void               *starting_address;
-  /** This field is the size of the Partition in bytes. */
-  uintptr_t           length;
-  /** This field is the size of each buffer in bytes */
-  size_t              buffer_size;
-  /** This field is the attribute set provided at create time. */
-  rtems_attribute     attribute_set;
-  /** This field is the of allocated buffers. */
-  uintptr_t           number_of_used_blocks;
-  /** This field is the chain used to manage unallocated buffers. */
-  Chain_Control       Memory;
-}   Partition_Control;
+  /**
+   * @brief This member turns the PTCB into an object.
+   */
+  Objects_Control Object;
+
+  /**
+   * @brief This lock protects the chain of unallocated buffers and the number
+   *   of allocated buffers.
+   */
+  ISR_LOCK_MEMBER( Lock )
+
+  /**
+   * @brief This member contains the physical starting address of the buffer
+   *   area.
+   */
+  void *starting_address;
+
+  /**
+   * @brief This member contains the size of the buffer area in bytes.
+   */
+  uintptr_t length;
+
+  /**
+   * @brief This member contains the size of each buffer in bytes.
+  */
+  size_t buffer_size;
+
+  /**
+   * @brief This member contains the attribute set provided at creation time.
+   */
+  rtems_attribute attribute_set;
+
+  /**
+   * @brief This member contains the count of allocated buffers.
+   */
+  uintptr_t number_of_used_blocks;
+
+  /**
+   * @brief This chain is used to manage unallocated buffers.
+   */
+  Chain_Control Memory;
+} Partition_Control;
 
 /**
- * @brief The Classic Partition objects information.
+ * @brief The Partition Manager objects information is used to manage the
+ *   objects of this class.
+ *
+ * If #CONFIGURE_MAXIMUM_PARTITIONS is greater than zero, then the object
+ * information is defined by PARTITION_INFORMATION_DEFINE(), otherwise it is
+ * defined by OBJECTS_INFORMATION_DEFINE_ZERO().
  */
 extern Objects_Information _Partition_Information;
 
 #if defined(RTEMS_MULTIPROCESSING)
 /**
- *  @brief Partition_MP_Send_extract_proxy
+ * @brief Sends the extract proxy request.
  *
- *  This routine is invoked when a task is deleted and it
- *  has a proxy which must be removed from a thread queue and
- *  the remote node must be informed of this.
+ * This routine is invoked when a task is deleted and it has a proxy which must
+ * be removed from a thread queue and the remote node must be informed of this.
+ *
+ * @param[in, out] the_thread is the thread proxy.
+ * @param id is the partition identifier.
  */
 void _Partition_MP_Send_extract_proxy (
   Thread_Control *the_thread,
@@ -74,21 +106,20 @@ void _Partition_MP_Send_extract_proxy (
 #endif
 
 /**
- * @brief Macro to define the objects information for the Classic Partition
- * objects.
+ * @brief Defines the Partition Manager objects information.
  *
- * This macro should only be used by <rtems/confdefs.h>.
+ * This macro should only be used by <rtems/confdefs/objectsclassic.h>.
  *
- * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
- * may be set).
+ * @param _max is the configured object maximum (the #OBJECTS_UNLIMITED_OBJECTS
+ *   flag may be set).
  */
-#define PARTITION_INFORMATION_DEFINE( max ) \
+#define PARTITION_INFORMATION_DEFINE( _max ) \
   OBJECTS_INFORMATION_DEFINE( \
     _Partition, \
     OBJECTS_CLASSIC_API, \
     OBJECTS_RTEMS_PARTITIONS, \
     Partition_Control, \
-    max, \
+    _max, \
     OBJECTS_NO_STRING_NAME, \
     _Partition_MP_Send_extract_proxy \
   )

@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicPartImpl Classic Partition Manager Implementation
+ * @defgroup ClassicPartImpl Partition Manager Implementation
  *
  * @ingroup RTEMSImplClassic
  *
@@ -177,6 +177,14 @@ RTEMS_INLINE_ROUTINE void _Partition_Free (
   _Objects_Free( &_Partition_Information, &the_partition->Object );
 }
 
+/**
+ * @brief Calls _Objects_Get() using the ::_Partition_Information.
+ *
+ * @param id is the object identifier.
+ * @param[out] lock_context is the lock context.
+ *
+ * @return See _Objects_Get().
+ */
 RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get(
   Objects_Id         id,
   ISR_lock_Context  *lock_context
@@ -189,6 +197,13 @@ RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get(
   );
 }
 
+/**
+ * @brief Acquires the partition lock in an ISR disabled section.
+ *
+ * @param[in, out] the_partition is the partition control block.
+ *
+ * @param[in, out] lock_context is the lock context set up by _Partition_Get().
+ */
 RTEMS_INLINE_ROUTINE void _Partition_Acquire_critical(
   Partition_Control *the_partition,
   ISR_lock_Context  *lock_context
@@ -197,6 +212,13 @@ RTEMS_INLINE_ROUTINE void _Partition_Acquire_critical(
   _ISR_lock_Acquire( &the_partition->Lock, lock_context );
 }
 
+/**
+ * @brief Releases the partition lock and restores the ISR level.
+ *
+ * @param[in, out] the_partition is the partition control block.
+ *
+ * @param[in, out] lock_context is the lock context set up by _Partition_Get().
+ */
 RTEMS_INLINE_ROUTINE void _Partition_Release(
   Partition_Control *the_partition,
   ISR_lock_Context  *lock_context
