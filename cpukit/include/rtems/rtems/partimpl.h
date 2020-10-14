@@ -19,7 +19,6 @@
 #define _RTEMS_RTEMS_PARTIMPL_H
 
 #include <rtems/rtems/partdata.h>
-#include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/objectimpl.h>
 
@@ -34,27 +33,6 @@ extern "C" {
  *
  * @{
  */
-
-/**
- *  @brief Checks whether is on a valid buffer boundary for the_partition.
- *
- *  This function returns TRUE if the_buffer is on a valid buffer
- *  boundary for the_partition, and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_on_boundary (
-  void              *the_buffer,
-  Partition_Control *the_partition
-)
-{
-  intptr_t offset;
-
-  offset = _Addresses_Subtract(
-    the_buffer,
-    the_partition->starting_address
-  );
-
-  return ((offset % the_partition->buffer_size) == 0);
-}
 
 RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned(
   uint32_t buffer_size

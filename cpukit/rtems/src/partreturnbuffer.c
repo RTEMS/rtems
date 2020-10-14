@@ -24,6 +24,21 @@
 #include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
 
+static bool _Partition_Is_address_on_buffer_boundary(
+  const Partition_Control *the_partition,
+  const void              *the_buffer
+)
+{
+  intptr_t offset;
+
+  offset = _Addresses_Subtract(
+    the_buffer,
+    the_partition->starting_address
+  );
+
+  return ( offset % the_partition->buffer_size ) == 0;
+}
+
 static bool _Partition_Is_address_a_buffer_begin(
    const Partition_Control *the_partition,
    const void              *the_buffer
@@ -36,7 +51,7 @@ static bool _Partition_Is_address_a_buffer_begin(
   ending   = _Addresses_Add_offset( starting, the_partition->length );
 
   return _Addresses_Is_in_range( the_buffer, starting, ending )
-    && _Partition_Is_buffer_on_boundary( the_buffer, the_partition );
+    && _Partition_Is_address_on_buffer_boundary( the_partition, the_buffer );
 }
 
 static void _Partition_Free_buffer(
