@@ -673,10 +673,12 @@ typedef struct {
    */
   RBTree_Control Key_value_pairs;
 
+#if defined(RTEMS_SMP)
   /**
    * @brief Lock to protect the tree operations.
    */
-  ISR_LOCK_MEMBER( Lock )
+  ISR_lock_Control Lock;
+#endif
 } Thread_Keys_information;
 
 /**

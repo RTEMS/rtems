@@ -465,10 +465,12 @@ typedef struct Per_CPU_Control {
    * @brief Watchdog state for this processor.
    */
   struct {
+#if defined(RTEMS_SMP)
     /**
      * @brief Protects all watchdog operations on this processor.
      */
-    ISR_LOCK_MEMBER( Lock )
+    ISR_lock_Control Lock;
+#endif
 
     /**
      * @brief Watchdog ticks on this processor used for monotonic clock

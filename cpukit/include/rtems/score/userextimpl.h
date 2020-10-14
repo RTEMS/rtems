@@ -60,11 +60,13 @@ typedef struct {
    */
   Chain_Iterator_registry Iterators;
 
+#if defined(RTEMS_SMP)
   /**
    * @brief Lock to protect User_extensions_List::Active and
    * User_extensions_List::Iterators.
    */
-  ISR_LOCK_MEMBER( Lock )
+  ISR_lock_Control Lock;
+#endif
 } User_extensions_List;
 
 /**

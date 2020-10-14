@@ -297,12 +297,12 @@ typedef struct {
  * this structure at the begin of its context structure.
  */
 typedef struct Scheduler_Context {
+#if defined(RTEMS_SMP)
   /**
    * @brief Lock to protect this scheduler instance.
    */
-  ISR_LOCK_MEMBER( Lock )
+  ISR_lock_Control Lock;
 
-#if defined(RTEMS_SMP)
   /**
    * @brief The set of processors owned by this scheduler instance.
    */

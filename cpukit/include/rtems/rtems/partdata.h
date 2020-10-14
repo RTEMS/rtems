@@ -41,11 +41,13 @@ typedef struct {
    */
   Objects_Control Object;
 
+#if defined(RTEMS_SMP)
   /**
    * @brief This lock protects the chain of unallocated buffers and the number
    *   of allocated buffers.
    */
-  ISR_LOCK_MEMBER( Lock )
+  ISR_lock_Control Lock;
+#endif
 
   /**
    * @brief This member contains the base address of the buffer area.

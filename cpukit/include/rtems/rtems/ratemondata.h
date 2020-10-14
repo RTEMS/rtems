@@ -71,10 +71,12 @@ typedef struct {
   /** This field is the object management portion of a Period instance. */
   Objects_Control                         Object;
 
+#if defined(RTEMS_SMP)
   /**
    * @brief Protects the rate monotonic period state.
    */
-  ISR_LOCK_MEMBER(                        Lock )
+  ISR_lock_Control                        Lock;
+#endif
 
   /** This is the timer used to provide the unblocking mechanism. */
   Watchdog_Control                        Timer;
