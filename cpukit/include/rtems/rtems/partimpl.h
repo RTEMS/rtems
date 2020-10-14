@@ -36,20 +36,6 @@ extern "C" {
  */
 
 /**
- *  @brief Allocate a buffer from the_partition.
- *
- *  This function attempts to allocate a buffer from the_partition.
- *  If successful, it returns the address of the allocated buffer.
- *  Otherwise, it returns NULL.
- */
-RTEMS_INLINE_ROUTINE void *_Partition_Allocate_buffer (
-   Partition_Control *the_partition
-)
-{
-  return _Chain_Get_unprotected( &the_partition->Memory );
-}
-
-/**
  *  @brief Frees the_buffer to the_partition.
  *
  *  This routine frees the_buffer to the_partition.

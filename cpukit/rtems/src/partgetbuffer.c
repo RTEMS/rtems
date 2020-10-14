@@ -21,6 +21,12 @@
 #endif
 
 #include <rtems/rtems/partimpl.h>
+#include <rtems/score/chainimpl.h>
+
+static void *_Partition_Allocate_buffer( Partition_Control *the_partition )
+{
+  return _Chain_Get_unprotected( &the_partition->Memory );
+}
 
 rtems_status_code rtems_partition_get_buffer(
   rtems_id   id,
