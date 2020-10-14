@@ -32,12 +32,6 @@ extern "C" {
  * @{
  */
 
-/**
- *  The following constant is the value of an event set which
- *  has no events pending.
- */
-#define EVENT_SETS_NONE_PENDING 0
-
 rtems_status_code _Event_Seize(
   rtems_event_set    event_in,
   rtems_option       option_set,
@@ -68,7 +62,7 @@ void _Event_Timeout(
 
 RTEMS_INLINE_ROUTINE void _Event_Initialize( Event_Control *event )
 {
-  event->pending_events = EVENT_SETS_NONE_PENDING;
+  event->pending_events = 0;
 }
 
 /**
