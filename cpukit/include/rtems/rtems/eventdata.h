@@ -30,7 +30,13 @@ extern "C" {
  * @{
  */
 
+/**
+ * @brief This structure is used to manage a set of events.
+ */
 typedef struct {
+  /**
+   * @brief The member contains the pending events.
+   */
   rtems_event_set pending_events;
 } Event_Control;
 
