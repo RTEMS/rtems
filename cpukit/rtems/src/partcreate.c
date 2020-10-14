@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicPart Partitions
+ * @ingroup ClassicPartImpl
  *
- * @brief RTEMS Partition Create
+ * @brief This source file contains the implementation of
+ *   rtems_partition_create().
  */
 
 /*

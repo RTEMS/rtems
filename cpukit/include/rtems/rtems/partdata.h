@@ -3,7 +3,8 @@
  *
  * @ingroup ClassicPartImpl
  *
- * @brief Classic Partition Manager Data Structures
+ * @brief This header file provides the API used by the Application
+ *   Configuration to define the Partition Manager information.
  */
 
 /* COPYRIGHT (c) 1989-2008.

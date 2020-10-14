@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicPart
+ * @ingroup ClassicPartImpl
  *
- * @brief Classic Partition Information with Zero Objects
+ * @brief This source file contains a definition of ::_Partition_Information
+ *   with zero objects.
  */
 
 /*

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Get Partition Buffer
- *  @ingroup ClassicPart
+ * @ingroup ClassicPartImpl
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_partition_get_buffer().
  */
 
 /*

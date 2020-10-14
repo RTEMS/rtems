@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicPartMP Partition MP Support
+ * @ingroup ClassicPartMP
  *
- * @brief Partition_MP_Send_process_packet
+ * @brief This source file contains the implementation of the Partition Manager
+ *   MPCI support.
  */
 
 /*

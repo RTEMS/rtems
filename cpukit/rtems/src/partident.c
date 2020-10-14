@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup ClassicPartitionImpl
+ * @ingroup ClassicPartImpl
  *
- * @brief rtems_partition_ident() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_partition_ident().
  */
 
 /*

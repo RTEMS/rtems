@@ -3,7 +3,8 @@
  *
  * @ingroup ClassicPartImpl
  *
- * @brief Classic Partition Manager Implementation
+ * @brief This header file provides interfaces used by the Partition Manager
+ *   implementation.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Delete Partition
- *  @ingroup ClassicPart
+ * @ingroup ClassicPartImpl
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_partition_delete().
  */
 
 /*

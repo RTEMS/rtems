@@ -1,7 +1,13 @@
+/**
+ * @file
+ *
+ * @ingroup ClassicPartImpl
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_partition_return_buffer().
+ */
+
 /*
- *  Partition Manager
- *
- *
  *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
