@@ -22,10 +22,8 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/support.h>
-#include <rtems/score/threaddispatch.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/sysinit.h>
-
 
 rtems_status_code rtems_partition_create(
   rtems_name       name,
