@@ -23,6 +23,8 @@
 #include <rtems/bspIo.h>
 #include <bsp.h>
 
+#include <rtems.h>
+
 /* to align the pointer to the (next) page boundary */
 #define PAGE_ALIGN(addr)	(((addr) + PAGE_MASK) & ~PAGE_MASK)
 
@@ -401,7 +403,7 @@ setup_hw(void)
 	}
 #endif
 
-	printk("\nRTEMS 4.x/PPC load: ");
+	printk("\nRTEMS " RTEMS_VERSION "/PPC load: ");
 	timer = 0;
 	cp = bd->cmd_line+strlen(bd->cmd_line);
 	while (timer++ < 5*1000) {
