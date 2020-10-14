@@ -21,6 +21,15 @@
 #endif
 
 #include <rtems/rtems/partimpl.h>
+#include <rtems/score/chainimpl.h>
+
+static void _Partition_Free_buffer(
+  Partition_Control *the_partition,
+  void              *the_buffer
+)
+{
+  _Chain_Append_unprotected( &the_partition->Memory, the_buffer );
+}
 
 rtems_status_code rtems_partition_return_buffer(
   rtems_id  id,

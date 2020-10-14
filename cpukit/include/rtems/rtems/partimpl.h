@@ -36,19 +36,6 @@ extern "C" {
  */
 
 /**
- *  @brief Frees the_buffer to the_partition.
- *
- *  This routine frees the_buffer to the_partition.
- */
-RTEMS_INLINE_ROUTINE void _Partition_Free_buffer (
-  Partition_Control *the_partition,
-  Chain_Node        *the_buffer
-)
-{
-  _Chain_Append_unprotected( &the_partition->Memory, the_buffer );
-}
-
-/**
  *  @brief Checks whether is on a valid buffer boundary for the_partition.
  *
  *  This function returns TRUE if the_buffer is on a valid buffer
