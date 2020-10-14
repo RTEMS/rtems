@@ -19,7 +19,6 @@
 #define _RTEMS_RTEMS_PARTIMPL_H
 
 #include <rtems/rtems/partdata.h>
-#include <rtems/score/chainimpl.h>
 #include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
@@ -44,30 +43,6 @@ extern "C" {
 RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Allocate ( void )
 {
   return (Partition_Control *) _Objects_Allocate( &_Partition_Information );
-}
-
-RTEMS_INLINE_ROUTINE void _Partition_Initialize(
-  Partition_Control *the_partition,
-  void              *starting_address,
-  uint32_t           length,
-  uint32_t           buffer_size,
-  rtems_attribute    attribute_set
-)
-{
-  the_partition->starting_address      = starting_address;
-  the_partition->length                = length;
-  the_partition->buffer_size           = buffer_size;
-  the_partition->attribute_set         = attribute_set;
-  the_partition->number_of_used_blocks = 0;
-
-  _Chain_Initialize(
-    &the_partition->Memory,
-    starting_address,
-    length / buffer_size,
-    buffer_size
-  );
-
-  _ISR_lock_Initialize( &the_partition->Lock, "Partition" );
 }
 
 /**

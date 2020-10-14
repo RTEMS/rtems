@@ -23,8 +23,33 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/sysinit.h>
+
+static void _Partition_Initialize(
+  Partition_Control *the_partition,
+  void              *starting_address,
+  uintptr_t          length,
+  size_t             buffer_size,
+  rtems_attribute    attribute_set
+)
+{
+  the_partition->starting_address      = starting_address;
+  the_partition->length                = length;
+  the_partition->buffer_size           = buffer_size;
+  the_partition->attribute_set         = attribute_set;
+  the_partition->number_of_used_blocks = 0;
+
+  _Chain_Initialize(
+    &the_partition->Memory,
+    starting_address,
+    length / buffer_size,
+    buffer_size
+  );
+
+  _ISR_lock_Initialize( &the_partition->Lock, "Partition" );
+}
 
 rtems_status_code rtems_partition_create(
   rtems_name       name,
