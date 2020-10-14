@@ -69,8 +69,13 @@ rtems_status_code rtems_partition_create(
   if ( buffer_size < sizeof( Chain_Node ) )
     return RTEMS_INVALID_SIZE;
 
-  if ( !_Partition_Is_buffer_area_aligned( starting_address ) )
+  /*
+   * Ensure that the buffer area starting address is aligned on a pointer
+   * boundary so that each buffer begin meets the chain node alignment.
+   */
+  if ( (uintptr_t) starting_address % CPU_SIZEOF_POINTER != 0 ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( !_System_state_Is_multiprocessing ) {

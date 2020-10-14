@@ -34,13 +34,6 @@ extern "C" {
  * @{
  */
 
-RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_area_aligned(
-  const void *starting_address
-)
-{
-  return (((uintptr_t) starting_address) % CPU_SIZEOF_POINTER) == 0;
-}
-
 /**
  *  @brief Allocates a partition control block from the
  *  inactive chain of free partition control blocks.
