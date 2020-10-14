@@ -21,7 +21,23 @@
 #endif
 
 #include <rtems/rtems/partimpl.h>
+#include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
+
+static bool _Partition_Is_address_a_buffer_begin(
+   const Partition_Control *the_partition,
+   const void              *the_buffer
+)
+{
+  void *starting;
+  void *ending;
+
+  starting = the_partition->starting_address;
+  ending   = _Addresses_Add_offset( starting, the_partition->length );
+
+  return _Addresses_Is_in_range( the_buffer, starting, ending )
+    && _Partition_Is_buffer_on_boundary( the_buffer, the_partition );
+}
 
 static void _Partition_Free_buffer(
   Partition_Control *the_partition,
@@ -51,7 +67,7 @@ rtems_status_code rtems_partition_return_buffer(
 
   _Partition_Acquire_critical( the_partition, &lock_context );
 
-  if ( !_Partition_Is_buffer_valid( buffer, the_partition ) ) {
+  if ( !_Partition_Is_address_a_buffer_begin( the_partition, buffer ) ) {
     _Partition_Release( the_partition, &lock_context );
     return RTEMS_INVALID_ADDRESS;
   }

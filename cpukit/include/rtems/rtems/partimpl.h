@@ -56,29 +56,6 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_on_boundary (
   return ((offset % the_partition->buffer_size) == 0);
 }
 
-/**
- *  @brief Checks whether the_buffer is a valid buffer from the_partition.
- *
- *  This function returns TRUE if the_buffer is a valid buffer from
- *  the_partition, otherwise FALSE is returned.
- */
-RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_valid (
-   Chain_Node        *the_buffer,
-   Partition_Control *the_partition
-)
-{
-  void *starting;
-  void *ending;
-
-  starting = the_partition->starting_address;
-  ending   = _Addresses_Add_offset( starting, the_partition->length );
-
-  return (
-    _Addresses_Is_in_range( the_buffer, starting, ending ) &&
-    _Partition_Is_buffer_on_boundary( the_buffer, the_partition )
-  );
-}
-
 RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned(
   uint32_t buffer_size
 )
