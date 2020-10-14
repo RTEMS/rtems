@@ -34,18 +34,6 @@ extern "C" {
  */
 
 /**
- *  @brief Allocates a partition control block from the
- *  inactive chain of free partition control blocks.
- *
- *  This function allocates a partition control block from
- *  the inactive chain of free partition control blocks.
- */
-RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Allocate ( void )
-{
-  return (Partition_Control *) _Objects_Allocate( &_Partition_Information );
-}
-
-/**
  * @brief Calls _Objects_Get() using the ::_Partition_Information.
  *
  * @param id is the object identifier.

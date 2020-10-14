@@ -27,6 +27,11 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/sysinit.h>
 
+static Partition_Control *_Partition_Allocate( void )
+{
+  return (Partition_Control *) _Objects_Allocate( &_Partition_Information );
+}
+
 static void _Partition_Initialize(
   Partition_Control *the_partition,
   void              *starting_address,
