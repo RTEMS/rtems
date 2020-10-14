@@ -58,8 +58,13 @@ rtems_status_code rtems_partition_create(
   if ( length < buffer_size )
     return RTEMS_INVALID_SIZE;
 
-  if ( !_Partition_Is_buffer_size_aligned( buffer_size ) )
+  /*
+   * Ensure that the buffer size is an integral multiple of the pointer size so
+   * that each buffer begin meets the chain node alignment.
+   */
+  if ( buffer_size % CPU_SIZEOF_POINTER != 0 ) {
     return RTEMS_INVALID_SIZE;
+  }
 
   if ( buffer_size < sizeof( Chain_Node ) )
     return RTEMS_INVALID_SIZE;

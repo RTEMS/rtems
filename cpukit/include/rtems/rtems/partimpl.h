@@ -34,13 +34,6 @@ extern "C" {
  * @{
  */
 
-RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned(
-  uint32_t buffer_size
-)
-{
-  return (buffer_size % CPU_SIZEOF_POINTER) == 0;
-}
-
 RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_area_aligned(
   const void *starting_address
 )
