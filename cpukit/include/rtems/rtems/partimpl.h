@@ -137,20 +137,6 @@ RTEMS_INLINE_ROUTINE void _Partition_Destroy(
 }
 
 /**
- *  @brief Frees a partition control block to the
- *  inactive chain of free partition control blocks.
- *
- *  This routine frees a partition control block to the
- *  inactive chain of free partition control blocks.
- */
-RTEMS_INLINE_ROUTINE void _Partition_Free (
-   Partition_Control *the_partition
-)
-{
-  _Objects_Free( &_Partition_Information, &the_partition->Object );
-}
-
-/**
  * @brief Calls _Objects_Get() using the ::_Partition_Information.
  *
  * @param id is the object identifier.
