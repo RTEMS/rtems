@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicEventSystem
+ * @ingroup ClassicEventImpl
  *
- * @brief rtems_event_system_receive() implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_event_system_receive().
  */
 
 /*

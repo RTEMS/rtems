@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Event MP Support
- *  @ingroup ClassicEventMP
+ * @ingroup ClassicEventMP
+ *
+ * @brief This source file contains the implementation of the task event MPCI
+ *   support.
  */
 
 /*

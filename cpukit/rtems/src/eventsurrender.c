@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Surrender Event
- *  @ingroup ClassicEvent
+ * @ingroup ClassicEventImpl
+ *
+ * @brief This source file contains the implementation of
+ *   _Event_Surrender().
  */
 
 /*

@@ -3,7 +3,7 @@
  *
  * @ingroup ClassicEventImpl
  *
- * @brief Classic Event Manager Implementation
+ * @brief This header file provides interfaces used by the event implementation.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

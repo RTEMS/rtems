@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicEvent Events
+ * @ingroup ClassicEventImpl
  *
- * @brief Event Manager Initialization
+ * @brief This source file contains the implementation of
+ *   _Event_Seize() and the task event MPCI support system initialization.
  */
 
 /*

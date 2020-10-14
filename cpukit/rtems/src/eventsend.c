@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Sends an Event Set to the Target Task
- *  @ingroup ClassicEvent
+ * @ingroup ClassicEventImpl
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_event_send().
  */
 
 /*

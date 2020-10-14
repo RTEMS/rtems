@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicEventSet Event Set
+ * @ingroup ClassicEventImpl
  *
- * @brief  Constant used to receive the set of currently pending events in
+ * @brief This source file contains the implementation of
+ *   rtems_event_receive().
  */
 
 /*

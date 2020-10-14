@@ -3,7 +3,8 @@
  *
  * @ingroup ClassicEventImpl
  *
- * @brief Classic Event Manager Data Structures
+ * @brief This header file provides the API used by the Application
+ *   Configuration to define the configured Thread Control Block (TCB).
  */
 
 /* COPYRIGHT (c) 1989-2008.
