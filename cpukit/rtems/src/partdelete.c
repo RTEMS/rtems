@@ -72,7 +72,7 @@ rtems_status_code rtems_partition_delete(
   }
 #endif
 
-  _Partition_Destroy( the_partition );
+  _ISR_lock_Destroy( &the_partition->Lock );
   _Objects_Free( &_Partition_Information, &the_partition->Object );
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;

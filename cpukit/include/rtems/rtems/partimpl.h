@@ -129,13 +129,6 @@ RTEMS_INLINE_ROUTINE void _Partition_Initialize(
   _ISR_lock_Initialize( &the_partition->Lock, "Partition" );
 }
 
-RTEMS_INLINE_ROUTINE void _Partition_Destroy(
-  Partition_Control *the_partition
-)
-{
-  _ISR_lock_Destroy( &the_partition->Lock );
-}
-
 /**
  * @brief Calls _Objects_Get() using the ::_Partition_Information.
  *
