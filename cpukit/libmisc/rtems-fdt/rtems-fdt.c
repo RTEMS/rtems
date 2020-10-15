@@ -248,48 +248,46 @@ rtems_fdt_index_find_by_name(rtems_fdt_index* index,
 {
   int         min = 0;
   int         max = index->num_entries;
-  char        path[256];
-  const char* cmp_name = name;
-
   /*
    * Handle trailing slash case.
    */
-  int namelen = strlen(name);
+  size_t namelen = strlen(name);
   if (namelen > 0 && name[namelen-1] == '/')
   {
     namelen--;
-
-    if (namelen >= (int)sizeof(path) - 1)
-    {
-      namelen = sizeof(path) - 1;
-    }
-
-    strncpy(path, name, namelen);
-    path[namelen] = 0;
-    cmp_name = path;
   }
 
   /* Binary search for the name. */
   while (min < max)
   {
     int middle = (min + max) / 2;
-    int cmp = strcmp(cmp_name, index->entries[middle].name);
+    int cmp = strncmp(name, index->entries[middle].name, namelen);
+    if (cmp == 0)
+    {
+      /* 'namelen' characters are equal but 'index->entries[middle].name' */
+      /* could have additional characters. */
+      if (index->entries[middle].name[namelen] == '\0')
+      {
+        /* Found it. */
+        return index->entries[middle].offset;
+      }
+      else
+      {
+         /* 'index->entries[middle].name' is longer than 'name'. */
+         cmp = -1;
+      }
+    }
     if (cmp < 0)
     {
       /* Look lower than here. */
       max = middle;
     }
-    else if (cmp > 0)
+    else
     {
       /* Look higher than here. */
       min = middle + 1;
     }
-    else
-    {
-      /* Found it. */
-      return index->entries[middle].offset;
-    }
-  }
+ }
 
   /* Didn't find it. */
   return -FDT_ERR_NOTFOUND;
