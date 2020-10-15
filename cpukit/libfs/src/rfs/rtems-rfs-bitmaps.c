@@ -34,6 +34,12 @@
 #include <stdlib.h>
 #include <rtems/rfs/rtems-rfs-bitmaps.h>
 
+#define rtems_rfs_bitmap_check(_c, _sm) \
+   _Assert(_sm >= _c->search_bits && \
+           _sm < (_c->search_bits + \
+             rtems_rfs_bitmap_elements(rtems_rfs_bitmap_elements(_c->size))))
+
+
 /**
  * Test a bit in an element. If set return true else return false.
  *
@@ -220,6 +226,7 @@ rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
     index  = rtems_rfs_bitmap_map_index (bit);
     offset = rtems_rfs_bitmap_map_offset (bit);
     search_map[index] = rtems_rfs_bitmap_set (search_map[index], 1 << offset);
+    rtems_rfs_bitmap_check(control, &search_map[index]);
   }
 
   return 0;
@@ -260,6 +267,7 @@ rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
   index             = rtems_rfs_bitmap_map_index (bit);
   offset            = rtems_rfs_bitmap_map_offset(bit);
   search_map[index] = rtems_rfs_bitmap_clear (search_map[index], 1 << offset);
+  rtems_rfs_bitmap_check(control, &search_map[index]);
   rtems_rfs_buffer_mark_dirty (control->buffer);
   control->free++;
 
@@ -599,6 +607,7 @@ rtems_rfs_bitmap_create_search (rtems_rfs_bitmap_control* control)
   size = control->size;
   bit = 0;
 
+  rtems_rfs_bitmap_check(control, search_map);
   *search_map = RTEMS_RFS_BITMAP_ELEMENT_CLEAR;
   while (size)
   {
@@ -633,8 +642,12 @@ rtems_rfs_bitmap_create_search (rtems_rfs_bitmap_control* control)
     if (bit == (rtems_rfs_bitmap_element_bits () - 1))
     {
       bit = 0;
-      search_map++;
-      *search_map = RTEMS_RFS_BITMAP_ELEMENT_CLEAR;
+      if (size > 0)
+      {
+        search_map++;
+        rtems_rfs_bitmap_check(control, search_map);
+        *search_map = RTEMS_RFS_BITMAP_ELEMENT_CLEAR;
+      }
     }
     else
       bit++;
