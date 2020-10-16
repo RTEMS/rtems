@@ -217,7 +217,11 @@ pin_labels:
 
 #include "fsl_common.h"
 #include "fsl_iomuxc.h"
+#ifndef __rtems__
 #include "pin_mux.h"
+#else /* __rtems__ */
+#include "fsl_pin_mux.h"
+#endif /* __rtems__ */
 
 /* FUNCTION ************************************************************************************************************
  * 

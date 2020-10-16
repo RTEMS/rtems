@@ -105,11 +105,13 @@ typedef struct _boot_data_ {
   uint32_t placeholder;		/* placehoder to make even 0x10 size */
 }BOOT_DATA_T;
 
+#ifndef __rtems__
 #if defined(BOARD_FLASH_SIZE)
 #define FLASH_SIZE            BOARD_FLASH_SIZE
 #else
 #error "Please define macro BOARD_FLASH_SIZE"
 #endif
+#endif /* __rtems__ */
 #define PLUGIN_FLAG           (uint32_t)0
 
 /* External Variables */

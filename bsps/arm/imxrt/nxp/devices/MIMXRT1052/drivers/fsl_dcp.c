@@ -1212,8 +1212,12 @@ status_t DCP_HASH_Init(DCP_Type *base, dcp_handle_t *handle, dcp_hash_ctx_t *ctx
     status_t status;
 
     dcp_hash_ctx_internal_t *ctxInternal;
+#ifndef __rtems__
     /* compile time check for the correct structure size */
     BUILD_ASSURE(sizeof(dcp_hash_ctx_t) >= sizeof(dcp_hash_ctx_internal_t), dcp_hash_ctx_t_size);
+#else /* __rtems__ */
+    assert(sizeof(dcp_hash_ctx_t) >= sizeof(dcp_hash_ctx_internal_t));
+#endif /* __rtems__ */
     uint32_t i;
 
     status = dcp_hash_check_input_args(base, ctx, algo);

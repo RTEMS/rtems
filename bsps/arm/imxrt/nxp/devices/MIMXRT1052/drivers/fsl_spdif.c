@@ -811,6 +811,7 @@ void SPDIF_TransferRxHandleIRQ(SPDIF_Type *base, spdif_handle_t *handle)
     }
 }
 
+#ifndef __rtems__
 #if defined(SPDIF)
 void SPDIF_DriverIRQHandler(void)
 {
@@ -826,3 +827,4 @@ void SPDIF_DriverIRQHandler(void)
     SDK_ISR_EXIT_BARRIER;
 }
 #endif
+#endif /* __rtems__ */
