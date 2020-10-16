@@ -125,6 +125,21 @@ arm_a9mpcore_start_enable_smp_in_auxiliary_control(void)
 }
 
 BSP_START_TEXT_SECTION static inline void
+arm_a9mpcore_start_errata_794072_handler(void)
+{
+  uint32_t diag;
+
+  /*
+   * Workaround for Errata 794072: A short loop including a DMB instruction
+   * might cause a denial of service on another which executes a CP15 broadcast
+   * operation.
+   */
+  diag = arm_cp15_get_diagnostic_control();
+  diag |= 1U << 4;
+  arm_cp15_set_diagnostic_control(diag);
+}
+
+BSP_START_TEXT_SECTION static inline void
 arm_a9mpcore_start_errata_845369_handler(void)
 {
   uint32_t diag;
@@ -152,6 +167,7 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_0(void)
   }
 
 #ifdef RTEMS_SMP
+  arm_a9mpcore_start_errata_794072_handler();
   arm_a9mpcore_start_errata_845369_handler();
   arm_a9mpcore_start_enable_smp_in_auxiliary_control();
 #endif
