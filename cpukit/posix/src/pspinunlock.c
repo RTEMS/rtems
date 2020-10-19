@@ -40,7 +40,7 @@ int pthread_spin_unlock( pthread_spinlock_t *lock )
 #if defined(RTEMS_PROFILING)
   /* This is a hack to get around the lock profiling statistics */
   unused_stats.total_section_time = 0;
-  unused_stats.max_section_time = 0;
+  unused_stats.max_section_time = UINT32_MAX;
   unused_context.stats = &unused_stats;
   unused_context.acquire_instant = 0;
 #endif
