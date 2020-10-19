@@ -682,6 +682,8 @@ static void bsp_interrupt_server_destroy_helper(void *arg)
   rtems_chain_extract_unprotected(&s->node);
   bsp_interrupt_unlock();
 
+  rtems_interrupt_lock_destroy(&s->lock);
+
   if (s->destroy != NULL) {
     (*s->destroy)(s);
   }
