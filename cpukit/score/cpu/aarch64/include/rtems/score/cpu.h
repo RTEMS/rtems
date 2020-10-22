@@ -488,7 +488,10 @@ typedef struct {
 #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
   uint32_t _register_lr_top;
 #endif
-  uint64_t register_sp;
+  uintptr_t register_sp;
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+  uint32_t _register_sp_top;
+#endif
   void *register_pc;
 #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
   uint32_t _register_pc_top;
