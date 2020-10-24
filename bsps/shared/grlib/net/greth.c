@@ -25,6 +25,7 @@
 #include <rtems/bspIo.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
@@ -721,10 +722,13 @@ void ipalign(struct mbuf *m)
   unsigned int tmp = 0;
 
   if ((((int) m->m_data) & 2) && (m->m_len)) {
+#if CPU_LITTLE_ENDIAN == TRUE
+    memmove((caddr_t)(((int) m->m_data) + 2), m->m_data, m->m_len);
+#else
     last = (unsigned int *) ((((int) m->m_data) + m->m_len + 8) & ~3);
     first = (unsigned int *) (((int) m->m_data) & ~3);
 		/* tmp = *first << 16; */
-		asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(first) );
+		tmp = GRETH_MEM_LOAD(first);
 		tmp = tmp << 16;
     first++;
     do {
@@ -733,12 +737,12 @@ void ipalign(struct mbuf *m)
 			 ** Load with forced cache miss
 			 * data = *first; 
 			 */
-      asm volatile (" lda [%1] 1, %0\n" : "=r"(data) : "r"(first) );
+      data = GRETH_MEM_LOAD(first);
       *first = tmp | (data >> 16);
       tmp = data << 16;
       first++;
     } while (first <= last);
-
+#endif
     m->m_data = (caddr_t)(((int) m->m_data) + 2);
   }
 }
@@ -756,7 +760,6 @@ greth_Daemon (void *arg)
     SPIN_IRQFLAGS(flags);
     int first;
     int tmp;
-    unsigned int addr;
 
     for (;;)
       {
@@ -836,14 +839,11 @@ again:
 #ifdef CPU_U32_FIX
                             if(!dp->gbit_mac) {
                                     /* OVERRIDE CACHED ETHERNET HEADER FOR NON-SNOOPING SYSTEMS */
-                                    addr = (unsigned int)eh;
-                                    asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr) );
-                                    addr+=4;
-                                    asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr) );
-                                    addr+=4;
-                                    asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr) );
-                                    addr+=4;
-                                    asm volatile (" lda [%1] 1, %0\n" : "=r"(tmp) : "r"(addr) );
+                                    tmp = GRETH_MEM_LOAD((uintptr_t)eh);
+                                    tmp = GRETH_MEM_LOAD(4+(uintptr_t)eh);
+                                    tmp = GRETH_MEM_LOAD(8+(uintptr_t)eh);
+                                    tmp = GRETH_MEM_LOAD(12+(uintptr_t)eh);
+				    (void)tmp;
 
                                     ipalign(m);	/* Align packet on 32-bit boundary */
                             }

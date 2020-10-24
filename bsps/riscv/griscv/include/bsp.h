@@ -75,6 +75,20 @@ extern void BSP_shared_interrupt_mask(int irq);
 extern void BSP_shared_interrupt_clear(int irq);
 extern void BSP_shared_interrupt_unmask(int irq);
 
+/*
+ * Network driver configuration for greth
+ */
+struct rtems_bsdnet_ifconfig;
+extern int rtems_griscv_greth_driver_attach(
+  struct rtems_bsdnet_ifconfig *config,
+  int attach
+);
+
+#define RTEMS_BSP_NETWORK_DRIVER_NAME "gr_eth1"
+#define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_griscv_greth_driver_attach
+#define GRETH_SUPPORTED
+#define CPU_U32_FIX
+
 #ifdef __cplusplus
 }
 #endif

@@ -21,6 +21,7 @@
 #include <rtems/bspIo.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
@@ -514,6 +515,9 @@ void ipalign(struct mbuf *m)
   unsigned int tmp;
 
   if ((((int) m->m_data) & 2) && (m->m_len)) {
+#if CPU_LITTLE_ENDIAN == TRUE
+    memmove((caddr_t)(((int) m->m_data) + 2), m->m_data, m->m_len);
+#else
     last = (unsigned int *) ((((int) m->m_data) + m->m_len + 8) & ~3);
     first = (unsigned int *) (((int) m->m_data) & ~3);
     tmp = GRETH_MEM_LOAD(first);
@@ -529,7 +533,7 @@ void ipalign(struct mbuf *m)
       tmp = data << 16;
       first++;
     } while (first <= last);
-
+#endif
     m->m_data = (caddr_t)(((int) m->m_data) + 2);
   }
 }

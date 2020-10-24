@@ -64,6 +64,12 @@ if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/griscv/start/bspsmp.c
 endif
 
+if HAS_NETWORKING
+if !HAS_SMP
+librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/griscv/net/griscv_greth.c
+endif
+endif
+
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/grlib-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
