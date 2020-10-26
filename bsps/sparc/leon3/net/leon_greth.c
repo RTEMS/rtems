@@ -42,7 +42,7 @@ int rtems_leon_greth_driver_attach(
   if (adev) {
     apb = DEV_TO_APB(adev);
     base_addr = apb->start;
-    eth_irq = apb->irq;
+    eth_irq = apb->common.irq;
 
     /* clear control register and reset NIC */
     *(volatile int *) base_addr = 0;
