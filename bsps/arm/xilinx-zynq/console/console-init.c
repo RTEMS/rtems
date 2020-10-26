@@ -28,7 +28,7 @@
 #include <rtems/console.h>
 
 #include <bsp.h>
-#include <bsp/zynq-uart.h>
+#include <dev/serial/zynq-uart.h>
 
 rtems_status_code console_initialize(
   rtems_device_major_number major,

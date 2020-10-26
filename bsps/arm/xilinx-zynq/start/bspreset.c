@@ -27,7 +27,7 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
-#include <bsp/zynq-uart.h>
+#include <dev/serial/zynq-uart.h>
 
 void bsp_reset(void)
 {

@@ -52,6 +52,8 @@ install:
   source:
   - bsps/include/dev/serial/arm-pl011-regs.h
   - bsps/include/dev/serial/arm-pl011.h
+  - bsps/include/dev/serial/zynq-uart-regs.h
+  - bsps/include/dev/serial/zynq-uart.h
 - destination: ${BSP_INCLUDEDIR}/rtems/zilog
   source:
   - bsps/include/rtems/zilog/z8036.h
@@ -94,6 +96,8 @@ source:
 - bsps/shared/dev/serial/ns16550.c
 - bsps/shared/dev/serial/ns16550-context.c
 - bsps/shared/dev/serial/serprobe.c
+- bsps/shared/dev/serial/zynq-uart.c
+- bsps/shared/dev/serial/zynq-uart-polled.c
 - bsps/shared/start/bootcard.c
 - bsps/shared/rtems-version.c
 type: build

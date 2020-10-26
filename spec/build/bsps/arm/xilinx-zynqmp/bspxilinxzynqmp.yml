@@ -80,8 +80,6 @@ source:
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/irq/irq-gic.c
-- bsps/arm/shared/serial/zynq-uart.c
-- bsps/arm/shared/serial/zynq-uart-polled.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xilinx-zynqmp/console/console-config.c
 - bsps/arm/xilinx-zynqmp/start/bspreset.c

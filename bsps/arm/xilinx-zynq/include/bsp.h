@@ -54,7 +54,7 @@
 
 #include <bsp/default-initial-extension.h>
 #include <bsp/start.h>
-#include <bsp/zynq-uart.h>
+#include <dev/serial/zynq-uart.h>
 
 #ifdef __cplusplus
 extern "C" {

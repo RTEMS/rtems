@@ -44,6 +44,9 @@ extern "C" {
  * @defgroup zynq_uart UART Support
  * @ingroup RTEMSBSPsARMZynq
  * @brief UART Support
+ *
+ * This driver operates an instance of the Cadence UART present in the
+ * family of Xilinx Zynq SoCs.
  */
 
 typedef struct {
@@ -56,6 +59,10 @@ typedef struct {
 extern const rtems_termios_device_handler zynq_uart_handler;
 
 #define ZYNQ_UART_DEFAULT_BAUD 115200
+
+#ifndef ZYNQ_CLOCK_UART
+#define ZYNQ_CLOCK_UART 100000000
+#endif
 
 void zynq_uart_initialize(rtems_termios_device_context *base);
 

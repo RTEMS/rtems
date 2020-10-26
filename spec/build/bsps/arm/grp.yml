@@ -36,8 +36,6 @@ install:
   - bsps/arm/include/bsp/lpc-lcd.h
   - bsps/arm/include/bsp/lpc-timer.h
   - bsps/arm/include/bsp/start.h
-  - bsps/arm/include/bsp/zynq-uart-regs.h
-  - bsps/arm/include/bsp/zynq-uart.h
 - destination: ${BSP_INCLUDEDIR}/dev/irq
   source:
   - bsps/include/dev/irq/arm-gic-irq.h

@@ -35,7 +35,7 @@
 #include <rtems/sysinit.h>
 
 #include <bsp/irq.h>
-#include <bsp/zynq-uart.h>
+#include <dev/serial/zynq-uart.h>
 
 #include <bspopts.h>
 

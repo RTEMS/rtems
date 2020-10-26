@@ -32,6 +32,8 @@ include_dev_serialdir = $(includedir)/dev/serial
 include_dev_serial_HEADERS =
 include_dev_serial_HEADERS += ../../bsps/include/dev/serial/arm-pl011-regs.h
 include_dev_serial_HEADERS += ../../bsps/include/dev/serial/arm-pl011.h
+include_dev_serial_HEADERS += ../../bsps/include/dev/serial/zynq-uart-regs.h
+include_dev_serial_HEADERS += ../../bsps/include/dev/serial/zynq-uart.h
 
 include_grlibdir = $(includedir)/grlib
 include_grlib_HEADERS =

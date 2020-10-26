@@ -62,8 +62,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/console-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/console-init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/debug-console.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/zynq-uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/zynq-uart-polled.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-a9mpcore.c

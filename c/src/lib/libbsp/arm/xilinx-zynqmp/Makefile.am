@@ -60,8 +60,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-gic.c
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynqmp/console/console-config.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/zynq-uart-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/zynq-uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/zynq-uart-polled.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/arm-generic-timer.c

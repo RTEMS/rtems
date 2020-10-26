@@ -29,7 +29,7 @@
 #include <rtems/sysinit.h>
 
 #include <bsp.h>
-#include <bsp/zynq-uart.h>
+#include <dev/serial/zynq-uart.h>
 
 #include <bspopts.h>
 

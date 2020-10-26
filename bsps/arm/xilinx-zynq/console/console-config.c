@@ -26,7 +26,7 @@
  */
 
 #include <bsp/irq.h>
-#include <bsp/zynq-uart.h>
+#include <dev/serial/zynq-uart.h>
 
 zynq_uart_context zynq_uart_instances[2] = {
   {

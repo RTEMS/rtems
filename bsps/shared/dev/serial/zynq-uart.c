@@ -25,8 +25,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp/zynq-uart.h>
-#include <bsp/zynq-uart-regs.h>
+#include <dev/serial/zynq-uart.h>
+#include <dev/serial/zynq-uart-regs.h>
 #include <bsp/irq.h>
 
 #include <bspopts.h>
