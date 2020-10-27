@@ -43,7 +43,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/ccm.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/imx_iomux.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/pins/imx_iomux.c
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/arm-a9mpcore-smp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspsmp.c

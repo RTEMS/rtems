@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <bsp/fdt.h>
 #include <bsp/imx-gpio.h>
+#include <bsp/imx-iomux.h>
 #include <libfdt.h>
 #include <arm/freescale/imx/imx_ccmvar.h>
 #include <arm/freescale/imx/imx_ecspireg.h>

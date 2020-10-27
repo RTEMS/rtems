@@ -59,8 +59,6 @@ extern uintptr_t imx_gic_dist_base;
 
 void *imx_get_reg_of_node(const void *fdt, int node);
 
-int imx_iomux_configure_pins(const void *fdt, uint32_t phandle);
-
 rtems_vector_number imx_get_irq_of_node(
   const void *fdt,
   int node,
