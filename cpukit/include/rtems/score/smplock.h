@@ -201,6 +201,7 @@ static inline void _SMP_lock_Set_name(
 #if defined(RTEMS_PROFILING)
   lock->Stats.name = name;
 #else
+  (void) lock;
   (void) name;
 #endif
 }
