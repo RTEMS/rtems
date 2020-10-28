@@ -1109,9 +1109,9 @@ def is_one_item_newer(ctx, path, mtime):
 def must_update_item_cache(ctx, path, cache_file):
     try:
         mtime = os.path.getmtime(cache_file)
-        return is_one_item_newer(ctx, path, mtime)
     except:
         return True
+    return is_one_item_newer(ctx, path, mtime)
 
 
 def load_from_yaml(load, ctx, data_by_uid, base, path):
