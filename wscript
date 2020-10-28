@@ -1090,9 +1090,12 @@ class BuildItemContext(object):
 
 def is_one_item_newer(ctx, path, mtime):
     try:
+        mtime2 = os.path.getmtime(path)
+        if mtime <= mtime2:
+            return True
         names = os.listdir(path)
     except Exception as e:
-        ctx.fatal("Cannot list build specification directory: {}".format(e))
+        ctx.fatal("Cannot access build specification directory: {}".format(e))
     for name in names:
         path2 = os.path.join(path, name)
         if name.endswith(".yml") and not name.startswith("."):
