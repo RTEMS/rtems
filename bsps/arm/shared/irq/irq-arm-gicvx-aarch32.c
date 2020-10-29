@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsAArch64Shared
+ * @ingroup RTEMSBSPsARMShared
  *
- * @brief AArch64-specific ARM GICv3 handlers.
+ * @brief ARM-specific IRQ handlers.
  */
 
 /*
@@ -34,31 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <libcpu/arm-cp15.h>
 #include <dev/irq/arm-gic-irq.h>
 #include <bsp/irq-generic.h>
-#include <rtems/score/cpu_irq.h>
+#include <rtems/score/armv4.h>
 
 void arm_interrupt_handler_dispatch(rtems_vector_number vector)
 {
-  uint32_t interrupt_level = _CPU_ISR_Get_level();
-  AArch64_interrupt_enable(1);
+  uint32_t psr = _ARMV4_Status_irq_enable();
   bsp_interrupt_handler_dispatch(vector);
-  _CPU_ISR_Set_level(interrupt_level);
+
+  _ARMV4_Status_restore(psr);
 }
 
 void arm_interrupt_facility_set_exception_handler(void)
 {
-  AArch64_set_exception_handler(
-    AARCH64_EXCEPTION_SPx_IRQ,
-    _AArch64_Exception_interrupt_no_nest
-  );
-  AArch64_set_exception_handler(
-    AARCH64_EXCEPTION_SP0_IRQ,
-    _AArch64_Exception_interrupt_nest
+  arm_cp15_set_exception_handler(
+    ARM_EXCEPTION_IRQ,
+    _ARMV4_Exception_interrupt
   );
 }
 
 void bsp_interrupt_dispatch(void)
 {
-  gicv3_interrupt_dispatch();
+  gicvx_interrupt_dispatch();
 }

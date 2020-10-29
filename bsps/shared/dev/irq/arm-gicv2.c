@@ -14,10 +14,6 @@
 
 #include <dev/irq/arm-gic.h>
 
-#include <rtems/score/armv4.h>
-
-#include <libcpu/arm-cp15.h>
-
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
@@ -53,7 +49,7 @@
 #define CPUIF_ICCICR GIC_CPUIF_ICCICR_ENABLE
 #endif
 
-void bsp_interrupt_dispatch(void)
+void gicvx_interrupt_dispatch(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
   uint32_t icciar = cpuif->icciar;
@@ -61,11 +57,7 @@ void bsp_interrupt_dispatch(void)
   rtems_vector_number spurious = 1023;
 
   if (vector != spurious) {
-    uint32_t psr = _ARMV4_Status_irq_enable();
-
-    bsp_interrupt_handler_dispatch(vector);
-
-    _ARMV4_Status_restore(psr);
+    arm_interrupt_handler_dispatch(vector);
 
     cpuif->icceoir = icciar;
   }
@@ -117,10 +109,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   uint32_t id_count = get_id_count(dist);
   uint32_t id;
 
-  arm_cp15_set_exception_handler(
-    ARM_EXCEPTION_IRQ,
-    _ARMV4_Exception_interrupt
-  );
+  arm_interrupt_facility_set_exception_handler();
 
   for (id = 0; id < id_count; id += 32) {
 #ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0

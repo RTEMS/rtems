@@ -122,10 +122,10 @@ void arm_interrupt_facility_set_exception_handler(void);
 void arm_interrupt_handler_dispatch(rtems_vector_number vector);
 
 /**
- * This is the GICv3 interrupt dispatcher that is to be called from the
+ * This is the GICv1/GICv2/GICv3 interrupt dispatcher that is to be called from the
  * architecture-specific implementation of the IRQ handler.
  */
-void gicv3_interrupt_dispatch(void);
+void gicvx_interrupt_dispatch(void);
 
 static inline uint32_t arm_gic_irq_processor_count(void)
 {

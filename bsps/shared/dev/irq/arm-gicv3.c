@@ -134,7 +134,7 @@
 #define ARM_GIC_REDIST ((volatile gic_redist *) BSP_ARM_GIC_REDIST_BASE)
 #define ARM_GIC_SGI_PPI (((volatile gic_sgi_ppi *) ((char*)BSP_ARM_GIC_REDIST_BASE + (1 << 16))))
 
-void gicv3_interrupt_dispatch(void)
+void gicvx_interrupt_dispatch(void)
 {
   uint32_t icciar = READ_SR(ICC_IAR1);
   rtems_vector_number vector = GIC_CPUIF_ICCIAR_ACKINTID_GET(icciar);

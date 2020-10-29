@@ -30,7 +30,7 @@ source:
 - bsps/shared/start/sbrk.c
 - bsps/shared/dev/irq/arm-gicv3.c
 - bsps/shared/irq/irq-default-handler.c
-- bsps/aarch64/shared/irq/irq-arm-gicv3-aarch64.c
+- bsps/aarch64/shared/irq/irq-arm-gicvx-aarch64.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/clock/arm-generic-timer.c
 - bsps/aarch64/shared/clock/arm-generic-timer-aarch64.c
