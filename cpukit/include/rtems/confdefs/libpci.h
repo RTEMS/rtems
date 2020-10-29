@@ -21,6 +21,10 @@
 #error "Do not include this file directly, use <rtems/confdefs.h> instead"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /*
  *  Select PCI Configuration Library
  */
@@ -66,5 +70,9 @@
     void (*pci_config_lib_register)(void *config) = PCI_LIB_CONFIG;
   #endif
 #endif
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* _RTEMS_CONFDEFS_LIBPCI_H */
