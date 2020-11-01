@@ -13,6 +13,9 @@ default-by-variant:
 - value: 268435456
   variants:
   - riscv/frdme310arty
+- value: 16777216
+  variants:
+  - riscv/griscv
 description: ''
 enabled-by: true
 format: '{:#010x}'
