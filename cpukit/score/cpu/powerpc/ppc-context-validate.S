@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2020 embedded brains GmbH.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -99,6 +99,7 @@
   #define VTMP_OFFSET VOFFSET(12)
   #define VTMP2_OFFSET VOFFSET(13)
   #define VRSAVE_OFFSET VOFFSET(14)
+  #define VRSAVE2_OFFSET (VOFFSET(14) + 4)
   #define VSCR_OFFSET (VOFFSET(14) + 12)
   #define ALTIVECEND VOFFSET(15)
 #else
@@ -161,6 +162,13 @@ _CPU_Context_validate:
 #endif
 
 #ifdef PPC_MULTILIB_ALTIVEC
+	mfvrsave	r0
+	stw	r0, VRSAVE_OFFSET(r1)
+	li	r0, 0xffffffff
+	mtvrsave	r0
+	mfvscr	v0
+	li	r0, VSCR_OFFSET
+	stvewx	v0, r1, r0
 	li	r0, V20_OFFSET
 	stvx	v20, r1, r0
 	li	r0, V21_OFFSET
@@ -185,11 +193,6 @@ _CPU_Context_validate:
 	stvx	v30, r1, r0
 	li	r0, V31_OFFSET
 	stvx	v31, r1, r0
-	mfvscr	v0
-	li	r0, VSCR_OFFSET
-	stvewx	v0, r1, r0
-	mfvrsave	r0
-	stw	r0, VRSAVE_OFFSET(r1)
 #endif
 
 	/* Fill */
@@ -337,8 +340,10 @@ _CPU_Context_validate:
 	FILL_V 29
 	FILL_V 30
 	FILL_V 31
+#ifndef __PPC_VRSAVE__
 	addi	r4, r3, 0x700
 	mtvrsave	r4
+#endif
 #endif
 
 	/* Check */
@@ -516,6 +521,15 @@ check:
 
 #ifdef PPC_MULTILIB_ALTIVEC
 .macro CHECK_V i
+#ifdef __PPC_VRSAVE__
+	mfvrsave	r4
+.if	(31 - \i) > 15
+	andis.	r5, r4, 1 << (31 - \i - 16)
+.else
+	andi.	r5, r4, 1 << (31 - \i)
+.endif
+	beq	1f
+#endif
 	li	r4, VTMP_OFFSET
 	stvx	\i, r1, r4
 	lwz	r5, VTMP_OFFSET(r1)
@@ -534,9 +548,43 @@ check:
 	addi	r4, r3, 0x600 + \i
 	cmpw	r5, r4
 	bne	restore
+#ifdef __PPC_VRSAVE__
+	mfvrsave	r4
+.if	(31 - \i) > 15
+	xoris	r4, r4, 1 << (31 - \i - 16)
+.else
+	xori	r4, r4, 1 << (31 - \i)
+.endif
+	mtvrsave	r4
+	b	2f
+1:
+.if	(31 - \i) > 15
+	oris	r4, r4, 1 << (31 - \i - 16)
+.else
+	ori	r4, r4, 1 << (31 - \i)
+.endif
+	mtvrsave	r4
+	addi	r4, r3, 0x300 + \i
+	stw	r4, VTMP_OFFSET(r1)
+	addi	r4, r3, 0x400 + \i
+	stw	r4, VTMP_OFFSET + 4(r1)
+	addi	r4, r3, 0x500 + \i
+	stw	r4, VTMP_OFFSET + 8(r1)
+	addi	r4, r3, 0x600 + \i
+	stw	r4, VTMP_OFFSET + 12(r1)
+	li	r4, VTMP_OFFSET
+	lvx	\i, r1, r4
+2:
+#endif
 .endm
 
 	/* Check VSCR */
+#ifdef __PPC_VRSAVE__
+	mfvrsave	r4
+	stw	r4, VRSAVE2_OFFSET(r1)
+	oris	r4, r4, 0x8000
+	mtvrsave	r4
+#endif
 	li	r4, VTMP_OFFSET
 	stvx	v0, r1, r4
 	mfvscr	v0
@@ -548,6 +596,10 @@ check:
 	bne	restore
 	li	r4, VTMP_OFFSET
 	lvx	v0, r1, r4
+#ifdef __PPC_VRSAVE__
+	lwz	r4, VRSAVE2_OFFSET(r1)
+	mtvrsave	r4
+#endif
 
 	CHECK_V 0
 	CHECK_V 1
@@ -582,9 +634,15 @@ check:
 	CHECK_V 30
 	CHECK_V 31
 	mfvrsave	r5
+#ifdef __PPC_VRSAVE__
+	addi	r5, r5, 1
+	cmplwi	r0, r5, 1
+	bgt	restore
+#else
 	addi	r4, r3, 0x700
 	cmpw	r5, r4
 	bne	restore
+#endif
 #endif
 
 	mtcr	r29
@@ -595,7 +653,7 @@ check:
 restore:
 
 #ifdef PPC_MULTILIB_ALTIVEC
-	lwz	r0, VRSAVE_OFFSET(r1)
+	li	r0, 0xffffffff
 	mtvrsave	r0
 	li	r0, V31_OFFSET
 	lvx	v31, r1, r0
@@ -621,6 +679,11 @@ restore:
 	lvx	v21, r1, r0
 	li	r0, V20_OFFSET
 	lvx	v20, r1, r0
+	li	r0, VSCR_OFFSET
+	lvewx	v0, r1, r0
+	mtvscr	v0
+	lwz	r0, VRSAVE_OFFSET(r1)
+	mtvrsave	r0
 #endif
 
 #ifdef PPC_MULTILIB_FPU

@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (c) 2011, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2020 embedded brains GmbH.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -173,8 +173,15 @@ ppc_exc_interrupt:
 	evstdd	SCRATCH_5_REGISTER, PPC_EXC_ACC_OFFSET(r1)
 #endif
 
-#ifdef PPC_MULTILIB_ALTIVEC
 	/* Save volatile AltiVec context */
+#ifdef PPC_MULTILIB_ALTIVEC
+#ifdef __PPC_VRSAVE__
+	mfvrsave	SCRATCH_0_REGISTER
+	cmpwi	SCRATCH_0_REGISTER, 0
+	bne	.Laltivec_save
+
+.Laltivec_save_continue:
+#else /* __PPC_VRSAVE__ */
 	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(0)
 	stvx	v0, r1, SCRATCH_0_REGISTER
 	mfvscr	v0
@@ -218,7 +225,8 @@ ppc_exc_interrupt:
 	stvx	v19, r1, SCRATCH_0_REGISTER
 	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VSCR_OFFSET
 	stvewx	v0, r1, SCRATCH_0_REGISTER
-#endif
+#endif /* __PPC_VRSAVE__ */
+#endif /* PPC_MULTILIB_ALTIVEC */
 
 #ifdef PPC_MULTILIB_FPU
 	/* Save volatile FPU context */
@@ -334,8 +342,15 @@ ppc_exc_interrupt:
 
 .Lthread_dispatch_done:
 
-#ifdef PPC_MULTILIB_ALTIVEC
 	/* Restore volatile AltiVec context */
+#ifdef PPC_MULTILIB_ALTIVEC
+#ifdef __PPC_VRSAVE__
+	mfvrsave	SCRATCH_0_REGISTER
+	cmpwi	SCRATCH_0_REGISTER, 0
+	bne	.Laltivec_restore
+
+.Laltivec_restore_continue:
+#else /* __PPC_VRSAVE__ */
 	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VSCR_OFFSET
 	lvewx	v0, r1, SCRATCH_0_REGISTER
 	mtvscr	v0
@@ -379,7 +394,8 @@ ppc_exc_interrupt:
 	lvx	v18, r1, SCRATCH_0_REGISTER
 	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(19)
 	lvx	v19, r1, SCRATCH_0_REGISTER
-#endif
+#endif /* __PPC_VRSAVE__ */
+#endif /* PPC_MULTILIB_ALTIVEC */
 
 #ifdef PPC_MULTILIB_FPU
 	/* Restore volatile FPU context */
@@ -477,6 +493,169 @@ ppc_exc_interrupt:
 
 	/* Return */
 	rfi
+
+#if defined(PPC_MULTILIB_ALTIVEC) && defined(__PPC_VRSAVE__)
+.Laltivec_save:
+
+	/*
+	 * Let X be VRSAVE, calculate:
+	 *
+	 * Y = 0x77777777
+	 * Z = X & Y
+	 * Z = Z + Y
+	 * X = X | Z
+	 *
+	 * Afterwards, we have in X for each group of four VR registers:
+	 *
+	 * 0111b, if VRSAVE group of four registers == 0
+	 * 1XXXb, if VRSAVE group of four registers != 0
+	 */
+	lis	SCRATCH_5_REGISTER, 0x7777
+	ori	SCRATCH_5_REGISTER, SCRATCH_5_REGISTER, 0x7777
+	and	SCRATCH_6_REGISTER, SCRATCH_0_REGISTER, SCRATCH_5_REGISTER
+	add	SCRATCH_6_REGISTER, SCRATCH_5_REGISTER, SCRATCH_6_REGISTER
+	or	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, SCRATCH_6_REGISTER
+	mtcr	SCRATCH_0_REGISTER
+
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(0)
+	stvx	v0, r1, SCRATCH_0_REGISTER
+
+	/* Move VCSR to V0 */
+	mfvscr	v0
+
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(1)
+	stvx	v1, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(2)
+	stvx	v2, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(3)
+	stvx	v3, r1, SCRATCH_0_REGISTER
+
+	/* Save VCSR using V0 */
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VSCR_OFFSET
+	stvewx	v0, r1, SCRATCH_0_REGISTER
+
+	bf	4, .Laltivec_save_v8
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(4)
+	stvx	v4, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(5)
+	stvx	v5, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(6)
+	stvx	v6, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(7)
+	stvx	v7, r1, SCRATCH_0_REGISTER
+
+.Laltivec_save_v8:
+
+	bf	8, .Laltivec_save_v12
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(8)
+	stvx	v8, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(9)
+	stvx	v9, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(10)
+	stvx	v10, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(11)
+	stvx	v11, r1, SCRATCH_0_REGISTER
+
+.Laltivec_save_v12:
+
+	bf	12, .Laltivec_save_v16
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(12)
+	stvx	v12, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(13)
+	stvx	v13, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(14)
+	stvx	v14, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(15)
+	stvx	v15, r1, SCRATCH_0_REGISTER
+
+.Laltivec_save_v16:
+
+	bf	16, .Laltivec_save_continue
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(16)
+	stvx	v16, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(17)
+	stvx	v17, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(18)
+	stvx	v18, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(19)
+	stvx	v19, r1, SCRATCH_0_REGISTER
+
+	b	.Laltivec_save_continue
+
+.Laltivec_restore:
+
+	/* Load VCSR using V0 */
+	li	SCRATCH_5_REGISTER, PPC_EXC_MIN_VSCR_OFFSET
+	lvewx	v0, r1, SCRATCH_5_REGISTER
+
+	/* See comment at .Laltivec_save */
+	lis	SCRATCH_5_REGISTER, 0x7777
+	ori	SCRATCH_5_REGISTER, SCRATCH_5_REGISTER, 0x7777
+	and	SCRATCH_6_REGISTER, SCRATCH_0_REGISTER, SCRATCH_5_REGISTER
+	add	SCRATCH_6_REGISTER, SCRATCH_5_REGISTER, SCRATCH_6_REGISTER
+	or	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, SCRATCH_6_REGISTER
+	mtcr	SCRATCH_0_REGISTER
+
+	/* Restore VCR using V0 */
+	mtvscr	v0
+
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(0)
+	lvx	v0, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(1)
+	lvx	v1, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(2)
+	lvx	v2, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(3)
+	lvx	v3, r1, SCRATCH_0_REGISTER
+
+	bf	4, .Laltivec_restore_v8
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(4)
+	lvx	v4, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(5)
+	lvx	v5, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(6)
+	lvx	v6, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(7)
+	lvx	v7, r1, SCRATCH_0_REGISTER
+
+.Laltivec_restore_v8:
+
+	bf	8, .Laltivec_restore_v12
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(8)
+	lvx	v8, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(9)
+	lvx	v9, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(10)
+	lvx	v10, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(11)
+	lvx	v11, r1, SCRATCH_0_REGISTER
+
+.Laltivec_restore_v12:
+
+	bf	12, .Laltivec_restore_v16
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(12)
+	lvx	v12, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(13)
+	lvx	v13, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(14)
+	lvx	v14, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(15)
+	lvx	v15, r1, SCRATCH_0_REGISTER
+
+.Laltivec_restore_v16:
+
+	bf	16, .Laltivec_restore_continue
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(16)
+	lvx	v16, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(17)
+	lvx	v17, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(18)
+	lvx	v18, r1, SCRATCH_0_REGISTER
+	li	SCRATCH_0_REGISTER, PPC_EXC_MIN_VR_OFFSET(19)
+	lvx	v19, r1, SCRATCH_0_REGISTER
+
+	b	.Laltivec_restore_continue
+#endif /* PPC_MULTILIB_ALTIVEC && __PPC_VRSAVE__ */
 
 /* Symbol provided for debugging and tracing */
 ppc_exc_interrupt_end:

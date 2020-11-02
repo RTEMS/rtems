@@ -29,7 +29,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010, 2017 embedded brains GmbH.
+ *  Copyright (c) 2010, 2020 embedded brains GmbH.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -246,6 +246,13 @@ typedef struct {
   uint32_t isr_dispatch_disable;
   uint32_t reserved_for_alignment;
   #if defined(PPC_MULTILIB_ALTIVEC)
+    #if !defined(__powerpc64__)
+      uint32_t reserved_for_alignment_2[4];
+    #endif
+    uint32_t vrsave;
+    uint32_t reserved_for_alignment_3[2];
+    /* This field must take stvewx/lvewx requirements into account */
+    uint32_t vscr;
     uint8_t v20[16];
     uint8_t v21[16];
     uint8_t v22[16];
@@ -258,7 +265,6 @@ typedef struct {
     uint8_t v29[16];
     uint8_t v30[16];
     uint8_t v31[16];
-    uint32_t vrsave;
   #elif defined(__ALTIVEC__)
     /*
      * 12 non-volatile vector registers, cache-aligned area for vscr/vrsave
@@ -373,8 +379,16 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #define PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE PPC_CONTEXT_GPR_OFFSET( 32 )
 
 #ifdef PPC_MULTILIB_ALTIVEC
+  #ifdef __powerpc64__
+    #define PPC_CONTEXT_OFFSET_VRSAVE \
+      ( PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE + 8 )
+  #else
+    #define PPC_CONTEXT_OFFSET_VRSAVE \
+      ( PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE + 24 )
+  #endif
+  #define PPC_CONTEXT_OFFSET_VSCR ( PPC_CONTEXT_OFFSET_VRSAVE + 12 )
   #define PPC_CONTEXT_OFFSET_V( v ) \
-    ( ( ( v ) - 20 ) * 16 + PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE + 8)
+    ( ( ( v ) - 20 ) * 16 + PPC_CONTEXT_OFFSET_VRSAVE + 16)
   #define PPC_CONTEXT_OFFSET_V20 PPC_CONTEXT_OFFSET_V( 20 )
   #define PPC_CONTEXT_OFFSET_V21 PPC_CONTEXT_OFFSET_V( 21 )
   #define PPC_CONTEXT_OFFSET_V22 PPC_CONTEXT_OFFSET_V( 22 )
@@ -387,9 +401,8 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
   #define PPC_CONTEXT_OFFSET_V29 PPC_CONTEXT_OFFSET_V( 29 )
   #define PPC_CONTEXT_OFFSET_V30 PPC_CONTEXT_OFFSET_V( 30 )
   #define PPC_CONTEXT_OFFSET_V31 PPC_CONTEXT_OFFSET_V( 31 )
-  #define PPC_CONTEXT_OFFSET_VRSAVE PPC_CONTEXT_OFFSET_V( 32 )
   #define PPC_CONTEXT_OFFSET_F( f ) \
-    ( ( ( f ) - 14 ) * 8 + PPC_CONTEXT_OFFSET_VRSAVE + 8 )
+    ( ( ( f ) - 14 ) * 8 + PPC_CONTEXT_OFFSET_V( 32 ) )
 #else
   #define PPC_CONTEXT_OFFSET_F( f ) \
     ( ( ( f ) - 14 ) * 8 + PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE + 8 )
@@ -419,7 +432,7 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #if defined(PPC_MULTILIB_FPU)
   #define PPC_CONTEXT_VOLATILE_SIZE PPC_CONTEXT_OFFSET_F( 32 )
 #elif defined(PPC_MULTILIB_ALTIVEC)
-  #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_OFFSET_VRSAVE + 4)
+  #define PPC_CONTEXT_VOLATILE_SIZE PPC_CONTEXT_OFFSET_V( 33 )
 #elif defined(__ALTIVEC__)
   #define PPC_CONTEXT_VOLATILE_SIZE \
     (PPC_CONTEXT_GPR_OFFSET( 32 ) + 8 \

@@ -23,7 +23,7 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2011, 2017 embedded brains GmbH
+ *  Copyright (c) 2011, 2020 embedded brains GmbH
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
@@ -267,6 +267,10 @@ PROC (_CPU_Context_switch_no_return):
 	isync
 #endif
 
+#if defined(PPC_MULTILIB_ALTIVEC) && defined(__PPC_VRSAVE__)
+	mfvrsave	r9
+#endif
+
 	/* Align to a cache line */
 	CLEAR_RIGHT_IMMEDIATE	r3, r3, PPC_DEFAULT_CACHE_LINE_POWER
 	CLEAR_RIGHT_IMMEDIATE	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
@@ -284,6 +288,14 @@ PROC (_CPU_Context_switch_no_return):
 	mfmsr	r6
 #endif  /* END PPC_DISABLE_MSR_ACCESS */
 	mfcr	r7
+#ifdef PPC_MULTILIB_ALTIVEC
+#ifdef __PPC_VRSAVE__
+	/* Mark v0 as used since we need it to get the VSCR */
+	oris	r8, r9, 0x8000
+	mtvrsave	r8
+#endif
+	mfvscr	v0
+#endif
 	mflr	r8
 	lwz	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
 
@@ -356,6 +368,16 @@ PROC (_CPU_Context_switch_no_return):
 	stw	r11, PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r3)
 
 #ifdef PPC_MULTILIB_ALTIVEC
+	li	r10, PPC_CONTEXT_OFFSET_VSCR
+	stvewx	v0, r3, r10
+
+#ifdef __PPC_VRSAVE__
+	stw	r9, PPC_CONTEXT_OFFSET_VRSAVE(r3)
+	andi.	r9, r9, 0xfff
+	bne	.Laltivec_save
+
+.Laltivec_save_continue:
+#else /* __PPC_VRSAVE__ */
 	li	r9, PPC_CONTEXT_OFFSET_V20
 	stvx	v20, r3, r9
 	li	r9, PPC_CONTEXT_OFFSET_V21
@@ -397,7 +419,8 @@ PROC (_CPU_Context_switch_no_return):
 	stvx	v31, r3, r9
 	mfvrsave	r9
 	stw	r9, PPC_CONTEXT_OFFSET_VRSAVE(r3)
-#endif
+#endif /* __PPC_VRSAVE__ */
+#endif /* PPC_MULTILIB_ALTIVEC */
 
 #ifdef PPC_MULTILIB_FPU
 	stfd	f14, PPC_CONTEXT_OFFSET_F14(r3)
@@ -461,6 +484,14 @@ restore_context:
 	PPC_REG_LOAD	r1, PPC_CONTEXT_OFFSET_GPR1(r5)
 	PPC_REG_LOAD	r8, PPC_CONTEXT_OFFSET_LR(r5)
 
+#ifdef PPC_MULTILIB_ALTIVEC
+	li	r10, PPC_CONTEXT_OFFSET_VSCR
+	lvewx	v0, r5, r10
+#ifdef __PPC_VRSAVE__
+	lwz	r9, PPC_CONTEXT_OFFSET_VRSAVE(r5)
+#endif
+#endif
+
 	PPC_GPR_LOAD	r14, PPC_CONTEXT_OFFSET_GPR14(r5)
 	PPC_GPR_LOAD	r15, PPC_CONTEXT_OFFSET_GPR15(r5)
 
@@ -494,6 +525,15 @@ restore_context:
 	lwz	r11, PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r5)
 
 #ifdef PPC_MULTILIB_ALTIVEC
+	mtvscr	v0
+
+#ifdef __PPC_VRSAVE__
+	mtvrsave	r9
+	andi.	r9, r9, 0xfff
+	bne	.Laltivec_restore
+
+.Laltivec_restore_continue:
+#else /* __PPC_VRSAVE__ */
 	li	r9, PPC_CONTEXT_OFFSET_V20
 	lvx	v20, r5, r9
 	li	r9, PPC_CONTEXT_OFFSET_V21
@@ -520,7 +560,8 @@ restore_context:
 	lvx	v31, r5, r9
 	lwz	r9, PPC_CONTEXT_OFFSET_VRSAVE(r5)
 	mtvrsave	r9
-#endif
+#endif /* __PPC_VRSAVE__ */
+#endif /* PPC_MULTILIB_ALTIVEC */
 
 #ifdef PPC_MULTILIB_FPU
 	lfd	f14, PPC_CONTEXT_OFFSET_F14(r5)
@@ -567,6 +608,13 @@ PROC (_CPU_Context_restore):
 	li	r3, 0
 #endif
 
+#if defined(PPC_MULTILIB_ALTIVEC) && defined(__PPC_VRSAVE__)
+	/* Mark v0 as used since we need it to get the VSCR */
+	mfvrsave	r9
+	oris	r8, r9, 0x8000
+	mtvrsave	r8
+#endif
+
 	b	restore_context
 
 #ifdef RTEMS_SMP
@@ -595,3 +643,105 @@ PROC (_CPU_Context_restore):
 
 	b	.Lcheck_is_executing
 #endif
+
+#if defined(PPC_MULTILIB_ALTIVEC) && defined(__PPC_VRSAVE__)
+.Laltivec_save:
+
+	/*
+	 * Let X be VRSAVE, calculate:
+	 *
+	 * Z = X & 0x777
+	 * Z = Z + 0x777
+	 * X = X | Z
+	 *
+	 * Afterwards, we have in X for each group of four non-volatile VR
+	 * registers:
+	 *
+	 * 0111b, if VRSAVE group of four registers == 0
+	 * 1XXXb, if VRSAVE group of four registers != 0
+	 */
+	andi.	r10, r9, 0x777
+	addi	r10, r10, 0x777
+	or	r9, r9, r10
+	mtcr	r9
+
+	bf	20, .Laltivec_save_v24
+	li	r9, PPC_CONTEXT_OFFSET_V20
+	stvx	v20, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V21
+	stvx	v21, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V22
+	stvx	v22, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V23
+	stvx	v23, r3, r9
+
+.Laltivec_save_v24:
+
+	bf	24, .Laltivec_save_v28
+	li	r9, PPC_CONTEXT_OFFSET_V24
+	stvx	v24, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V25
+	stvx	v25, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V26
+	stvx	v26, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V27
+	stvx	v27, r3, r9
+
+.Laltivec_save_v28:
+
+	bf	28, .Laltivec_save_continue
+	li	r9, PPC_CONTEXT_OFFSET_V28
+	stvx	v28, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V29
+	stvx	v29, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V30
+	stvx	v30, r3, r9
+	li	r9, PPC_CONTEXT_OFFSET_V31
+	stvx	v31, r3, r9
+
+	b	.Laltivec_save_continue
+
+.Laltivec_restore:
+
+	/* See comment at .Laltivec_save */
+	andi.	r10, r9, 0x777
+	addi	r10, r10, 0x777
+	or	r9, r9, r10
+	mtcr	r9
+
+	bf	20, .Laltivec_restore_v24
+	li	r9, PPC_CONTEXT_OFFSET_V20
+	lvx	v20, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V21
+	lvx	v21, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V22
+	lvx	v22, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V23
+	lvx	v23, r5, r9
+
+.Laltivec_restore_v24:
+
+	bf	24, .Laltivec_restore_v28
+	li	r9, PPC_CONTEXT_OFFSET_V24
+	lvx	v24, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V25
+	lvx	v25, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V26
+	lvx	v26, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V27
+	lvx	v27, r5, r9
+
+.Laltivec_restore_v28:
+
+	bf	28, .Laltivec_restore_continue
+	li	r9, PPC_CONTEXT_OFFSET_V28
+	lvx	v28, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V29
+	lvx	v29, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V30
+	lvx	v30, r5, r9
+	li	r9, PPC_CONTEXT_OFFSET_V31
+	lvx	v31, r5, r9
+
+	b	.Laltivec_restore_continue
+#endif /* PPC_MULTILIB_ALTIVEC && __PPC_VRSAVE__ */
