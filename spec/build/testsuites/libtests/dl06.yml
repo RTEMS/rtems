@@ -24,6 +24,7 @@ do-build: |
   tar = path + "dl06.tar"
   self.tar(bld, dl06_rap, [path], tar)
   tar_c, tar_h = self.bin2c(bld, tar)
+  objs = []
   objs.append(self.cc(bld, bic, tar_c))
   objs.append(self.cc(bld, bic, path + "init.c", deps=[tar_h], cppflags=bld.env.TEST_DL06_CPPFLAGS))
   objs.append(dl_load_o)
