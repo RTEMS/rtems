@@ -32,9 +32,16 @@ from __future__ import print_function
 import argparse
 import os
 import os.path
+import re
 import sys
 
 rtems_version = 6
+
+
+_BUILD_TYPE_BSP = re.compile(r"build-type:\s*bsp\n")
+_ARCH = re.compile(r"arch:\s*(\S+)\n")
+_FAMILY = re.compile(r"family:\s*(\S+)\n")
+_BSP = re.compile(r"bsp:\s*(\S+)\n")
 
 
 class ArchBsps:
@@ -44,10 +51,10 @@ class ArchBsps:
         self.trace = trace
         self._output = []
         self.top = os.path.realpath(path)
-        self.base = os.path.join(self.top, 'bsps')
+        self.base = os.path.join(self.top, 'spec', 'build', 'bsps')
         self.configs = []
         self.archs = {}
-        self._collect('.cfg')
+        self._collect('.yml')
         self._process()
 
     def _clear(self):
@@ -70,17 +77,15 @@ class ArchBsps:
         """Process the collected list of config files."""
         self.archs = {}
         for cfg in self.configs:
-            config_path = cfg[len(self.base) + 1:]
-            config_parts = config_path.split(os.sep)
-            if len(config_parts) == 4:
-                arch = config_parts[0]
-                family = config_parts[1]
-                bsp = os.path.splitext(config_parts[3])[0]
-                if arch not in self.archs:
-                    self.archs[arch] = {}
-                if family not in self.archs[arch]:
-                    self.archs[arch][family] = {}
-                self.archs[arch][family][bsp] = config_path
+            with open(cfg, 'r') as cfg_file:
+                content = cfg_file.read()
+                if _BUILD_TYPE_BSP.search(content):
+                    arch = _ARCH.search(content).group(1)
+                    family = _FAMILY.search(content).group(1)
+                    bsp = _BSP.search(content).group(1)
+                    self.archs.setdefault(arch, {})
+                    self.archs[arch].setdefault(family, {})
+                    self.archs[arch][family][bsp] = cfg[len(self.base) + 1:]
 
     def _max_arch_len(self):
         """Finds the longest arch label"""
