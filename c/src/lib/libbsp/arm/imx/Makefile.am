@@ -66,7 +66,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7ar-disable-data.S
 
 # GPIO
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/gpio/imx-gpio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/pins/imx-gpio.c
 
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/i2c/imx-i2c.c

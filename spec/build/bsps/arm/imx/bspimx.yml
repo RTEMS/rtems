@@ -28,7 +28,7 @@ install:
   - bsps/arm/imx/include/arm/freescale/imx/imx_wdogreg.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/arm/imx/include/bsp/imx-gpio.h
+  - bsps/arm/shared/include/bsp/imx-gpio.h
   - bsps/arm/imx/include/bsp/irq.h
   - bsps/arm/shared/include/bsp/imx-iomux.h
 - destination: ${BSP_INCLUDEDIR}/dev/clock
@@ -83,7 +83,7 @@ links:
   uid: ../../bspopts
 source:
 - bsps/arm/imx/console/console-config.c
-- bsps/arm/imx/gpio/imx-gpio.c
+- bsps/arm/shared/pins/imx-gpio.c
 - bsps/arm/imx/i2c/imx-i2c.c
 - bsps/arm/imx/spi/imx-ecspi.c
 - bsps/arm/imx/start/bspreset.c
