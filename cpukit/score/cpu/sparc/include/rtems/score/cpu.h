@@ -692,27 +692,6 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER 511
 
 /**
- * This is the bit step in a vector number to indicate it is being installed
- * as a synchronous trap.
- */
-#define SPARC_SYNCHRONOUS_TRAP_BIT_MASK     0x100
-
-/**
- * This macro indicates that @a _trap as an asynchronous trap.
- */
-#define SPARC_ASYNCHRONOUS_TRAP( _trap )    (_trap)
-
-/**
- * This macro indicates that @a _trap as a synchronous trap.
- */
-#define SPARC_SYNCHRONOUS_TRAP( _trap )     ((_trap) + 256 )
-
-/**
- * This macro returns the real hardware vector number associated with @a _trap.
- */
-#define SPARC_REAL_TRAP_NUMBER( _trap )     ((_trap) % 256)
-
-/**
  * This is defined if the port has a special way to report the ISR nesting
  * level.  Most ports maintain the variable _ISR_Nest_level.
  */

@@ -167,6 +167,45 @@ extern "C" {
 #define SPARC_SWTRAP_IRQDIS_FP 11
 #endif
 
+/**
+ * @brief This is the bit step in a vector number to indicate it is being
+ *   installed as a synchronous trap.
+ */
+#define SPARC_SYNCHRONOUS_TRAP_BIT_MASK 0x100
+
+/**
+ * @brief Maps the real hardware vector number to the associated asynchronous
+ *   trap number.
+ *
+ * @param _vector is the real hardware vector number to map.
+ *
+ * @return Returns the asynchronous trap number associated with the real
+ *   hardware vector number.
+ */
+#define SPARC_ASYNCHRONOUS_TRAP( _vector ) ( _vector )
+
+/**
+ * @brief Maps the real hardware vector number to the associated synchronous
+ *   trap number.
+ *
+ * @param _vector is the real hardware vector number to map.
+ *
+ * @return Returns the synchronous trap number associated with the
+ *   real hardware vector number.
+ */
+#define SPARC_SYNCHRONOUS_TRAP( _vector ) ( ( _vector ) + 256 )
+
+/**
+ * @brief Maps the synchronous or asynchronous trap number to the associated
+ *   real hardware vector number.
+ *
+ * @param _trap is the synchronous or asynchronous trap number to map.
+ *
+ * @return Returns the real hardware vector number associated with the
+ *   synchronous or asynchronous trap number.
+ */
+#define SPARC_REAL_TRAP_NUMBER( _trap ) ( ( _trap ) % 256 )
+
 #ifndef ASM
 
 /**
@@ -411,7 +450,7 @@ static inline uint32_t _LEON3_Get_current_processor( void )
   return asr17 >> LEON3_ASR17_PROCESSOR_INDEX_SHIFT;
 }
 
-#endif
+#endif /* ASM */
 
 #ifdef __cplusplus
 }
