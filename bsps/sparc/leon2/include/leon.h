@@ -84,9 +84,7 @@ extern "C" {
 
 #define LEON_TRAP_SOURCE( _trap ) ((_trap) - 0x10)
 
-#define LEON_INT_TRAP( _trap ) \
-  ( (_trap) >= LEON_TRAP_TYPE( LEON_INTERRUPT_CORRECTABLE_MEMORY_ERROR ) && \
-    (_trap) <= LEON_TRAP_TYPE( LEON_INTERRUPT_EMPTY6 ) )
+#define LEON_INT_TRAP( _trap ) SPARC_IS_INTERRUPT_TRAP( _trap )
 
 /*
  *  Structure for LEON memory mapped registers.

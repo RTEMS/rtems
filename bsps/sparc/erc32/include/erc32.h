@@ -87,9 +87,7 @@ extern "C" {
 
 #define ERC32_TRAP_SOURCE( _trap ) ((_trap) - 0x10)
 
-#define ERC32_Is_MEC_Trap( _trap ) \
-  ( (_trap) >= ERC32_TRAP_TYPE( ERC32_INTERRUPT_MASKED_ERRORS ) && \
-    (_trap) <= ERC32_TRAP_TYPE( ERC32_INTERRUPT_WATCHDOG_TIMEOUT ) )
+#define ERC32_Is_MEC_Trap( _trap ) SPARC_IS_INTERRUPT_TRAP( _trap )
 
 /*
  *  Structure for ERC32 memory mapped registers.

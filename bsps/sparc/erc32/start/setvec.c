@@ -37,8 +37,6 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 )
 {
   rtems_isr_entry previous_isr;
-  uint32_t        real_trap;
-  uint32_t        source;
 
   if ( type ) {
     rtems_interrupt_catch( handler, vector, &previous_isr );
@@ -50,11 +48,10 @@ rtems_isr_entry set_vector(                   /* returns old vector */
     );
   }
 
-  real_trap = SPARC_REAL_TRAP_NUMBER( vector );
+  if ( SPARC_IS_INTERRUPT_TRAP( vector ) ) {
+    uint32_t source;
 
-  if ( ERC32_Is_MEC_Trap( real_trap ) ) {
-
-    source = ERC32_TRAP_SOURCE( real_trap );
+    source = ERC32_TRAP_SOURCE( SPARC_REAL_TRAP_NUMBER( vector ) );
 
     ERC32_Clear_interrupt( source );
     ERC32_Unmask_interrupt( source );

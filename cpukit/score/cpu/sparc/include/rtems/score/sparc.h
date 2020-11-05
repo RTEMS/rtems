@@ -206,6 +206,23 @@ extern "C" {
  */
 #define SPARC_REAL_TRAP_NUMBER( _trap ) ( ( _trap ) % 256 )
 
+/**
+ * @brief Checks if the real hardware vector number, synchronous trap number,
+ *   or asynchronous trap number is an interrupt trap.
+ *
+ * Interrupt traps are defined by Table 7-1 "Exception and Interrupt Request
+ * Priority and tt Values" in "The SPARC Architecture Manual: Version 8".
+ *
+ * @param _trap is the real hardware vector number, synchronous trap number, or
+ *   asynchronous trap number to check.
+ *
+ * @return Returns true, if the real hardware vector number, synchronous trap
+ *   number, or asynchronous trap number is an interrupt trap, otherwise false.
+ */
+#define SPARC_IS_INTERRUPT_TRAP( _trap ) \
+  ( SPARC_REAL_TRAP_NUMBER( _trap ) >= 0x11 && \
+    SPARC_REAL_TRAP_NUMBER( _trap ) <= 0x1f )
+
 #ifndef ASM
 
 /**

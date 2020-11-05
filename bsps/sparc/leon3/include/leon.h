@@ -46,9 +46,7 @@ extern "C" {
 
 #define LEON_TRAP_SOURCE( _trap ) ((_trap) - 0x10)
 
-#define LEON_INT_TRAP( _trap ) \
-  ( (_trap) >= 0x11 && \
-    (_trap) <= 0x1F )
+#define LEON_INT_TRAP( _trap ) SPARC_IS_INTERRUPT_TRAP( _trap )
 
 /* /\* */
 /*  *  This is used to manipulate the on-chip registers. */

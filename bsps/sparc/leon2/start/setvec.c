@@ -43,19 +43,16 @@ rtems_isr_entry set_vector(                   /* returns old vector */
 )
 {
   rtems_isr_entry previous_isr;
-  uint32_t      real_trap;
-  uint32_t      source;
 
   if ( type )
     rtems_interrupt_catch( handler, vector, &previous_isr );
   else
     _CPU_ISR_install_raw_handler( vector, handler, (void *)&previous_isr );
 
-  real_trap = SPARC_REAL_TRAP_NUMBER( vector );
+  if ( SPARC_IS_INTERRUPT_TRAP( vector ) ) {
+    uint32_t source;
 
-  if ( LEON_INT_TRAP( real_trap ) ) {
-
-    source = LEON_TRAP_SOURCE( real_trap );
+    source = LEON_TRAP_SOURCE( SPARC_REAL_TRAP_NUMBER( vector ) );
 
     LEON_Clear_interrupt( source );
     LEON_Unmask_interrupt( source );
