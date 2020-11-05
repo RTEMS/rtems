@@ -5,6 +5,10 @@ copyrights:
 enabled-by: true
 includes: []
 install:
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/include/bsp/linker-symbols.h
+  - bsps/aarch64/include/bsp/start.h
 - destination: ${BSP_INCLUDEDIR}/dev/clock
   source:
   - bsps/include/dev/clock/arm-generic-timer.h
