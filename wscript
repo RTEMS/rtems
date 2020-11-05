@@ -1135,8 +1135,8 @@ def load_from_yaml(load, ctx, data_by_uid, base, path):
 
 
 def load_items_in_directory(ctx, ctors, path):
-    f = ctx.path.make_node(
-        "build/c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
+    f = ctx.bldnode.make_node(
+        "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
     )
     f.parent.mkdir()
     cache_file = f.abspath()
