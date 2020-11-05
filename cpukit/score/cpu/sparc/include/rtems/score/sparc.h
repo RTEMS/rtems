@@ -240,6 +240,18 @@ extern "C" {
 #define SPARC_INTERRUPT_TRAP_TO_SOURCE( _trap ) \
   ( SPARC_REAL_TRAP_NUMBER( _trap ) - 0x10 )
 
+/**
+ * @brief Maps the interrupt source number to the associated asynchronous trap
+ *   number.
+ *
+ * @param _source is the interrupt source number to map.
+ *
+ * @return Returns the asynchronous trap number associated with the interrupt
+ *   source number.
+ */
+#define SPARC_INTERRUPT_SOURCE_TO_TRAP( _source ) \
+  ( SPARC_ASYNCHRONOUS_TRAP( _source ) + 0x10 )
+
 #ifndef ASM
 
 /**

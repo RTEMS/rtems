@@ -42,7 +42,7 @@ extern "C" {
  *        significant nibble of the trap type.
  */
 
-#define LEON_TRAP_TYPE( _source ) SPARC_ASYNCHRONOUS_TRAP((_source) + 0x10)
+#define LEON_TRAP_TYPE( _source ) SPARC_INTERRUPT_SOURCE_TO_TRAP( _source )
 
 #define LEON_TRAP_SOURCE( _trap ) SPARC_INTERRUPT_TRAP_TO_SOURCE( _trap )
 
