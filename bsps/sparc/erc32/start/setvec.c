@@ -51,7 +51,7 @@ rtems_isr_entry set_vector(                   /* returns old vector */
   if ( SPARC_IS_INTERRUPT_TRAP( vector ) ) {
     uint32_t source;
 
-    source = ERC32_TRAP_SOURCE( SPARC_REAL_TRAP_NUMBER( vector ) );
+    source = SPARC_INTERRUPT_TRAP_TO_SOURCE( vector );
 
     ERC32_Clear_interrupt( source );
     ERC32_Unmask_interrupt( source );

@@ -223,6 +223,23 @@ extern "C" {
   ( SPARC_REAL_TRAP_NUMBER( _trap ) >= 0x11 && \
     SPARC_REAL_TRAP_NUMBER( _trap ) <= 0x1f )
 
+/**
+ * @brief Maps the interrupt trap number to the associated interrupt source
+ *   number.
+ *
+ * Interrupt trap numbers are real hardware vector numbers, synchronous trap
+ * numbers, and asynchronous trap numbers for which SPARC_IS_INTERRUPT_TRAP()
+ * returns true.
+ *
+ * @param _trap is the real hardware vector number, synchronous trap number, or
+ *   asynchronous trap number to map.
+ *
+ * @return Returns the interrupt source number associated with the interrupt
+ *   trap number.
+ */
+#define SPARC_INTERRUPT_TRAP_TO_SOURCE( _trap ) \
+  ( SPARC_REAL_TRAP_NUMBER( _trap ) - 0x10 )
+
 #ifndef ASM
 
 /**

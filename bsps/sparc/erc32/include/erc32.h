@@ -85,7 +85,7 @@ extern "C" {
 
 #define ERC32_TRAP_TYPE( _source ) SPARC_ASYNCHRONOUS_TRAP((_source) + 0x10)
 
-#define ERC32_TRAP_SOURCE( _trap ) ((_trap) - 0x10)
+#define ERC32_TRAP_SOURCE( _trap ) SPARC_INTERRUPT_TRAP_TO_SOURCE( _trap )
 
 #define ERC32_Is_MEC_Trap( _trap ) SPARC_IS_INTERRUPT_TRAP( _trap )
 
