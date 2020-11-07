@@ -52,7 +52,7 @@
 #define GMII_ECR         0x18  // Expanded Control Register
 #define GMII_ICSR        0x1B  // Interrupt Control/Status Register
 #define GMII_FC          0x1C  // Function Control
-#define GMII_LCSR        0x1D  // LinkMD® Control/Status Register
+#define GMII_LCSR        0x1D  // LinkMD(R) Control/Status Register
 #define GMII_PC1R        0x1E  // PHY Control 1 Register
 #define GMII_PC2R        0x1F  // PHY Control 2 Register
 
