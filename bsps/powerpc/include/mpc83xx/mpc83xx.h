@@ -668,7 +668,7 @@ typedef struct m83xxUSB_DRRegisters_ {
   volatile uint32_t cdpr1; /* 0x3_1140 Crypto-channel 1 current descriptor pointer register R 0x0000_0000_0000_0000 14.6.1.3/14-90 */
   volatile uint32_t */
 0x3_1180--0x3_11BF
-  DBn /*   volatile; uint32_t ff1, */ /* 0x3_1148 Crypto-channel 1 fetch FIFO address register W 0x0000_0000_0000_0000 14.6.1.4/14-90 Crypto-channel 1 descriptor buffers [0–7] R 0x0000_0000_0000_0000 14.6.1.5/14-91 */
+  DBn /*   volatile; uint32_t ff1, */ /* 0x3_1148 Crypto-channel 1 fetch FIFO address register W 0x0000_0000_0000_0000 14.6.1.4/14-90 Crypto-channel 1 descriptor buffers [0..7] R 0x0000_0000_0000_0000 14.6.1.5/14-91 */
   /* Channel 2-4: FIXME: same layout as channel 1*/
   /* Data Encryption Standard Execution Unit (DEU) */
   volatile uint32_t deumr; /* 0x3_2000 DEU mode register R/W 0x0000_0000_0000_0000 14.5.2.1/14-35 */
