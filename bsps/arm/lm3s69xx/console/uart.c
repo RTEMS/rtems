@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 Eugeniy Meshcheryakov <eugen@debian.org>
+ * Copyright (c) 2013 Eugeniy Meshcheryakov <eugen@debian.org>
  *
  * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
  *
