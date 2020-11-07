@@ -855,8 +855,8 @@ static int pelican_start(occan_priv *priv){
 #endif
 
 	/* core already in reset mode,
-	 *  ¤ Exit reset mode 
-	 *  ¤ Enter Single/Dual mode filtering.
+	 *  * Exit reset mode
+	 *  * Enter Single/Dual mode filtering.
 	 */
 	WRITE_REG(priv, &priv->regs->mode, (priv->single_mode << 3));
 

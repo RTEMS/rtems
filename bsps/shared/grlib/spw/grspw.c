@@ -1475,10 +1475,10 @@ static rtems_device_driver grspw_control(
 
 			/* Get timeout from userspace
 			 *  timeout:
-			 *   ¤  -1	   = Default timeout
-			 *   ¤  less than -1 = forever
-			 *   ¤  0	    = no wait, proceed if link is up
-			 *   ¤  positive     = specifies number of system clock ticks that 
+			 *   *  -1	   = Default timeout
+			 *   *  less than -1 = forever
+			 *   *  0	    = no wait, proceed if link is up
+			 *   *  positive     = specifies number of system clock ticks that
 			 *		     startup will wait for link to enter ready mode.
 			 */
 			timeout = (int)ioarg->buffer;
