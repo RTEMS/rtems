@@ -262,7 +262,7 @@ static int _BSP_get_char(void)
 BSP_polling_getchar_function_type BSP_poll_char = _BSP_get_char;
 
 /*
- * init USART 0¡£8 bit, 1 Stop,No checkout, BPS115200
+ * init USART 0: 8 bit, 1 Stop,No checkout, BPS115200
  */
 void UART0_Ini(void)
 {
