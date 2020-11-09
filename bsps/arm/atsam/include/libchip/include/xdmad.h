@@ -241,6 +241,10 @@ extern eXdmadRC XDMAD_StartTransfer(sXdmad *pXdmad, uint32_t dwChannel);
 
 extern void XDMAD_DoNothingCallback(uint32_t Channel, void *pArg, uint32_t status);
 
+extern bool XDMAD_UpdateStatusFromCallback(sXdmad *pXdmad,
+		uint32_t Channel,
+		uint32_t status);
+
 extern eXdmadRC XDMAD_SetCallback(sXdmad *pXdmad,
 								   uint32_t dwChannel,
 								   XdmadTransferCallback fCallback,
