@@ -132,9 +132,66 @@ static uint32_t XDMAD_AllocateXdmacChannel(sXdmad *pXdmad,
 	return XDMAD_ALLOC_FAILED;
 }
 
+/*
+ * Update the internal xdmad state. Returns true if further processing in the
+ * callback is recommended.
+ *
+ * In an earlier version of the API this has been done by the interrupt handler
+ * directly. But in some cases the application might want to process some of the
+ * other interrupts too. Therefore the user callback should now decide itself
+ * whether this is necessary or not.
+ */
+bool XDMAD_UpdateStatusFromCallback(sXdmad *pXdmad,
+		uint32_t Channel,
+		uint32_t status)
+{
+	Xdmac *pXdmac;
+	uint32_t xdmaGlobalChStatus;
+	bool bExec;
+
+	bExec = false;
+	pXdmac = pXdmad->pXdmacs;
+	xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(pXdmac);
+
+	if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << Channel)) == 0) {
+		uint32_t xdmaChannelIntMask;
+		sXdmadChannel *pCh;
+
+		pCh = &pXdmad->XdmaChannels[Channel];
+
+		xdmaChannelIntMask = XDMAC_GetChannelItMask(pXdmac, Channel);
+		status &= xdmaChannelIntMask;
+
+		if (status & XDMAC_CIS_BIS) {
+			if ((xdmaChannelIntMask & XDMAC_CIM_LIM) == 0) {
+				pCh->state = XDMAD_STATE_DONE;
+				bExec = true;
+			}
+		}
+
+		if (status & XDMAC_CIS_LIS) {
+			pCh->state = XDMAD_STATE_DONE;
+			bExec = true;
+		}
+
+		if (status & XDMAC_CIS_DIS) {
+			pCh->state = XDMAD_STATE_DONE;
+			bExec = true;
+		}
+	} else {
+		/* Block end interrupt for LLI dma mode */
+		if (XDMAC_GetChannelIsr(pXdmac, Channel) & XDMAC_CIS_BIS) {
+			bExec = true;
+		}
+	}
+
+	return bExec;
+}
+
 void XDMAD_DoNothingCallback(uint32_t Channel, void *pArg, uint32_t status)
 {
-	/* Do nothing */
+	/* Do nothing except status update */
+	XDMAD_UpdateStatusFromCallback((sXdmad *)pArg, Channel, status);
 }
 
 /*----------------------------------------------------------------------------
@@ -157,6 +214,7 @@ static void XDMAD_SysInitialize(void)
 
 	for (j = 0; j < pXdmad->numChannels; j ++) {
 		pXdmad->XdmaChannels[j].fCallback = XDMAD_DoNothingCallback;
+		pXdmad->XdmaChannels[j].pArg = (void *)pXdmad;
 	}
 
 	sc = rtems_interrupt_handler_install(
