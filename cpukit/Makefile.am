@@ -479,6 +479,7 @@ librtemscpu_a_SOURCES += libtrace/record/record-dump-zfatal.c
 librtemscpu_a_SOURCES += libtrace/record/record-dump-base64.c
 librtemscpu_a_SOURCES += libtrace/record/record-dump-zbase64.c
 librtemscpu_a_SOURCES += libtrace/record/record-server.c
+librtemscpu_a_SOURCES += libtrace/record/record-stream-header.c
 librtemscpu_a_SOURCES += libtrace/record/record-sysinit.c
 librtemscpu_a_SOURCES += libtrace/record/record-text.c
 librtemscpu_a_SOURCES += libtrace/record/record-userext.c
