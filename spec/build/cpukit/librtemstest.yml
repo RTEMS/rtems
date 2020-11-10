@@ -30,6 +30,7 @@ source:
 - cpukit/libtest/t-test-rtems-fds.c
 - cpukit/libtest/t-test-rtems-heap.c
 - cpukit/libtest/t-test-rtems-measure.c
+- cpukit/libtest/t-test-rtems-memory.c
 - cpukit/libtest/t-test-rtems-posix-keys.c
 - cpukit/libtest/t-test-rtems-objs.c
 - cpukit/libtest/t-test-time.c

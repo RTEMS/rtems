@@ -2463,6 +2463,12 @@ void T_report_hash_sha256(T_event, const char *);
 void T_check_heap(T_event, const char *);
 
 #ifdef __rtems__
+void T_memory_action(T_event, const char *);
+
+void *T_memory_allocate(size_t);
+
+void T_memory_deallocate(void *);
+
 void T_check_task_context(T_event, const char *);
 
 void T_check_file_descriptors(T_event, const char *);
