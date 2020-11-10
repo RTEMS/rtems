@@ -43,7 +43,6 @@ typedef struct {
 } load_context;
 
 struct T_measure_runtime_context {
-	T_destructor destructor;
 	size_t sample_count;
 	T_ticks *samples;
 	size_t cache_line_size;
@@ -52,6 +51,9 @@ struct T_measure_runtime_context {
 	rtems_id runner;
 	uint32_t load_count;
 	load_context *load_contexts;
+#ifdef RTEMS_SMP
+	cpu_set_t cpus;
+#endif
 };
 
 static unsigned int
@@ -127,34 +129,28 @@ load_worker(rtems_task_argument arg)
 }
 
 static void
-destroy_worker(const T_measure_runtime_context *ctx)
+destroy(void *ptr)
 {
+	const T_measure_runtime_context *ctx;
 	uint32_t load;
+
+	ctx = ptr;
 
 	for (load = 0; load < ctx->load_count; ++load) {
 		const load_context *lctx;
 
 		lctx = &ctx->load_contexts[load];
 
-		if (lctx->chunk != ctx->chunk) {
-			free(RTEMS_DEVOLATILE(unsigned int *, lctx->chunk));
-		}
-
 
 		if (lctx->id != 0) {
-			rtems_task_delete(lctx->id);
+			(void)rtems_task_delete(lctx->id);
 		}
 	}
-}
 
-static void
-destroy(T_destructor *dtor)
-{
-	T_measure_runtime_context *ctx;
-
-	ctx = (T_measure_runtime_context *)dtor;
-	destroy_worker(ctx);
-	free(ctx);
+#ifdef RTEMS_SMP
+	(void)rtems_task_set_affinity(RTEMS_SELF, sizeof(ctx->cpus),
+	    &ctx->cpus);
+#endif
 }
 
 static void *
@@ -166,7 +162,7 @@ add_offset(const volatile void *p, uintptr_t o)
 static void *
 align_up(const volatile void *p, uintptr_t a)
 {
-	return (void *)(((uintptr_t)p + a - 1) & ~(a - 1));
+	return (void *)RTEMS_ALIGN_UP((uintptr_t)p, a);
 }
 
 T_measure_runtime_context *
@@ -178,7 +174,6 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 	size_t chunk_size;
 	size_t load_size;
 	uint32_t load_count;
-	bool success;
 	uint32_t i;
 #ifdef RTEMS_SMP
 	cpu_set_t cpu;
@@ -203,12 +198,20 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 	load_count = rtems_scheduler_get_processor_maximum();
 	load_size = load_count * sizeof(ctx->load_contexts[0]);
 
-	ctx = malloc(sizeof(*ctx) + sample_size + load_size + chunk_size +
-	    2 * cache_line_size);
+	ctx = T_zalloc(sizeof(*ctx) + sample_size + load_size + chunk_size +
+	    2 * cache_line_size, destroy);
 
 	if (ctx == NULL) {
 		return NULL;
 	}
+
+#ifdef RTEMS_SMP
+	(void)rtems_task_get_affinity(RTEMS_SELF, sizeof(ctx->cpus),
+	    &ctx->cpus);
+	CPU_ZERO(&cpu);
+	CPU_SET(0, &cpu);
+	(void)rtems_task_set_affinity(RTEMS_SELF, sizeof(cpu), &cpu);
+#endif
 
 	ctx->sample_count = config->sample_count;
 	ctx->samples = add_offset(ctx, sizeof(*ctx));
@@ -221,45 +224,39 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 	ctx->samples = align_up(ctx->samples, cache_line_size);
 	ctx->chunk = align_up(ctx->chunk, cache_line_size);
 
-	memset(ctx->load_contexts, 0, load_size);
-	success = true;
-
 	for (i = 0; i < load_count; ++i) {
 		rtems_status_code sc;
 		rtems_id id;
 		load_context *lctx;
-#ifdef RTEMS_SMP
-		rtems_task_priority priority;
+		rtems_task_priority max_prio;
 		rtems_id scheduler;
 
 		sc = rtems_scheduler_ident_by_processor(i, &scheduler);
 		if (sc != RTEMS_SUCCESSFUL) {
 			continue;
 		}
-#endif
+
 
 		sc = rtems_task_create(rtems_build_name('L', 'O', 'A', 'D'),
-		    RTEMS_MAXIMUM_PRIORITY - 1, RTEMS_MINIMUM_STACK_SIZE,
-		    RTEMS_DEFAULT_MODES, RTEMS_DEFAULT_ATTRIBUTES, &id);
+		    1, RTEMS_MINIMUM_STACK_SIZE, RTEMS_DEFAULT_MODES,
+		    RTEMS_DEFAULT_ATTRIBUTES, &id);
 		if (sc != RTEMS_SUCCESSFUL) {
-			success = false;
-			break;
+			return NULL;
 		}
 
 		lctx = &ctx->load_contexts[i];
-
 		lctx->master = ctx;
 		lctx->id = id;
 
-		lctx->chunk = malloc(chunk_size);
+		lctx->chunk = T_malloc(chunk_size);
 		if (lctx->chunk == NULL) {
 			lctx->chunk = ctx->chunk;
 		}
 
-#ifdef RTEMS_SMP
-		(void)rtems_scheduler_get_maximum_priority(scheduler, &priority);
-		(void)rtems_task_set_scheduler(id, scheduler, priority - 1);
+		(void)rtems_scheduler_get_maximum_priority(scheduler, &max_prio);
+		(void)rtems_task_set_scheduler(id, scheduler, max_prio - 1);
 
+#ifdef RTEMS_SMP
 		CPU_ZERO(&cpu);
 		CPU_SET((int)i, &cpu);
 		(void)rtems_task_set_affinity(id, sizeof(cpu), &cpu);
@@ -272,18 +269,6 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 		suspend_worker(lctx);
 	}
 
-	if (success) {
-#ifdef RTEMS_SMP
-		CPU_ZERO(&cpu);
-		CPU_SET(0, &cpu);
-		(void)rtems_task_set_affinity(RTEMS_SELF, sizeof(cpu), &cpu);
-#endif
-	} else {
-		destroy(&ctx->destructor);
-		return NULL;
-	}
-
-	T_add_destructor(&ctx->destructor, destroy);
 	return ctx;
 }
 
