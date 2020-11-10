@@ -1135,9 +1135,11 @@ def load_from_yaml(load, ctx, data_by_uid, base, path):
 
 
 def load_items_in_directory(ctx, ctors, path):
-    f = ctx.bldnode.make_node(
-        "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
-    )
+    p = "c4che/" + re.sub(r"[^\w]", "_", path) + ".pickle"
+    try:
+        f = ctx.bldnode.make_node(p)
+    except AttributeError:
+        f = ctx.path.make_node("build/" + p)
     f.parent.mkdir()
     cache_file = f.abspath()
     data_by_uid = {}
