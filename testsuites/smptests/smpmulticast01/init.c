@@ -295,7 +295,7 @@ static void test_broadcast_body(
 
     clear_ids_by_worker(ctx, worker_index);
     cpu_self = _Thread_Dispatch_disable();
-    _SMP_Multicast_action(NULL, action, &ctx->id[worker_index][0]);
+    _SMP_Broadcast_action(action, &ctx->id[worker_index][0]);
     _Thread_Dispatch_enable(cpu_self);
   }
 }
