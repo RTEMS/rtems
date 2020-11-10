@@ -2286,6 +2286,8 @@ typedef struct {
 	void *putchar_arg;
 	T_verbosity verbosity;
 	T_time (*now)(void);
+	void *(*allocate)(size_t);
+	void (*deallocate)(void *);
 	size_t action_count;
 	const T_action *actions;
 } T_config;

@@ -1299,3 +1299,89 @@ T_get_scope(const char * const * const *desc, char *buf, size_t n,
 
 	return n - c;
 }
+
+#ifdef __BIGGEST_ALIGNMENT__
+#define T_BIGGEST_ALIGNMENT __BIGGEST_ALIGNMENT__
+#else
+#define T_BIGGEST_ALIGNMENT sizeof(long long)
+#endif
+
+typedef struct __attribute__((__aligned__(T_BIGGEST_ALIGNMENT))) {
+	T_destructor base;
+	void (*destroy)(void *);
+} T_malloc_destructor;
+
+static void
+T_malloc_destroy(T_destructor *base)
+{
+	T_malloc_destructor *dtor;
+
+	dtor = (T_malloc_destructor *)(uintptr_t)base;
+
+	if (dtor->destroy != NULL) {
+		(*dtor->destroy)(dtor + 1);
+	}
+
+	(*T_instance.config->deallocate)(dtor);
+}
+
+static void *
+T_do_malloc(size_t size, void (*destroy)(void *))
+{
+	T_malloc_destructor *dtor;
+	size_t new_size;
+
+	new_size = sizeof(*dtor) + size;
+	if (new_size <= size) {
+		return NULL;
+	}
+
+	if (T_instance.config->allocate == NULL) {
+		return NULL;
+	}
+
+	dtor = (*T_instance.config->allocate)(new_size);
+	if (dtor != NULL) {
+		dtor->destroy = destroy;
+		T_add_destructor(&dtor->base, T_malloc_destroy);
+		++dtor;
+	}
+
+	return dtor;
+}
+
+void *
+T_malloc(size_t size)
+{
+	return T_do_malloc(size, NULL);
+}
+
+void *
+T_calloc(size_t nelem, size_t elsize)
+{
+	return T_zalloc(nelem * elsize, NULL);
+}
+
+void *
+T_zalloc(size_t size, void (*destroy)(void *))
+{
+	void *p;
+
+	p = T_do_malloc(size, destroy);
+	if (p != NULL) {
+		p = memset(p, 0, size);
+	}
+
+	return p;
+}
+
+void
+T_free(void *ptr)
+{
+	T_malloc_destructor *dtor;
+
+	dtor = ptr;
+	--dtor;
+	T_remove_destructor(&dtor->base);
+	(*T_instance.config->deallocate)(dtor);
+}

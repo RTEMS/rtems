@@ -40,6 +40,8 @@
 #include <rtems/test-info.h>
 #include <rtems/test.h>
 
+#include <stdlib.h>
+
 static char buffer[ 512 ];
 
 static const T_action actions[] = {
@@ -65,6 +67,8 @@ static const T_config config = {
   .putchar = T_putchar_default,
   .verbosity = T_VERBOSE,
   .now = T_now_clock,
+  .allocate = malloc,
+  .deallocate = free,
   .action_count = T_ARRAY_SIZE( actions ),
   .actions = actions
 };

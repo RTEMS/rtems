@@ -1877,7 +1877,6 @@ librtemstest_a_SOURCES += libtest/t-test-checks-eno.c
 librtemstest_a_SOURCES += libtest/t-test-checks-psx.c
 librtemstest_a_SOURCES += libtest/t-test-hash-sha256.c
 librtemstest_a_SOURCES += libtest/t-test-interrupt.c
-librtemstest_a_SOURCES += libtest/t-test-malloc.c
 librtemstest_a_SOURCES += libtest/t-test-rtems.c
 librtemstest_a_SOURCES += libtest/t-test-rtems-context.c
 librtemstest_a_SOURCES += libtest/t-test-rtems-fds.c

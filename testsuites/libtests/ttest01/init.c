@@ -28,6 +28,7 @@
 #include <rtems/test.h>
 
 #include <sys/time.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <rtems.h>
@@ -255,6 +256,8 @@ static const T_config config = {
 	.putchar_arg = &test_instance,
 	.verbosity = T_VERBOSE,
 	.now = now,
+	.allocate = malloc,
+	.deallocate = free,
 	.action_count = T_ARRAY_SIZE(actions),
 	.actions = actions
 };
