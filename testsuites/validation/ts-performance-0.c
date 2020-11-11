@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesPerformance0
  */
 
 /*
@@ -53,12 +53,13 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidation0 spec:/testsuites/validation-0
+ * @defgroup RTEMSTestSuiteTestsuitesPerformance0 \
+ *   spec:/testsuites/performance-0
  *
  * @ingroup RTEMSTestSuites
  *
- * @brief This general purpose validation test suite provides enough resources
- *   to run basic tests for all specified managers and functions.
+ * @brief This general purpose performance test suite provides enough resources
+ *   to run basic performance tests for all specified managers and functions.
  *
  * In SMP configurations, up to three scheduler instances using the SMP EDF
  * scheduler are provided using up to four processors.
@@ -66,7 +67,7 @@
  * @{
  */
 
-const char rtems_test_name[] = "Validation0";
+const char rtems_test_name[] = "Performance0";
 
 #include "ts-default.h"
 
