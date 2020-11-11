@@ -478,7 +478,7 @@ get_maximum_retries(const T_measure_runtime_request *req)
 }
 
 static void
-measure_valid_cache(T_measure_runtime_context *ctx,
+measure_full_cache(T_measure_runtime_context *ctx,
     const T_measure_runtime_request *req)
 {
 	size_t sample_count;
@@ -488,7 +488,7 @@ measure_valid_cache(T_measure_runtime_context *ctx,
 	size_t i;
 	T_time begin;
 
-	measure_variant_begin(req->name, "ValidCache");
+	measure_variant_begin(req->name, "FullCache");
 	begin = T_now();
 	sample_count = ctx->sample_count;
 	samples = ctx->samples;
@@ -803,11 +803,11 @@ T_measure_runtime(T_measure_runtime_context *ctx,
     const T_measure_runtime_request *req)
 {
 	/*
-	 * Do ValidCache variant before HotCache to get a good overall cache
+	 * Do FullCache variant before HotCache to get a good overall cache
 	 * state for the HotCache variant.
 	 */
-	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_VALID_CACHE) == 0) {
-		measure_valid_cache(ctx, req);
+	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_FULL_CACHE) == 0) {
+		measure_full_cache(ctx, req);
 	}
 
 	if ((req->flags & T_MEASURE_RUNTIME_DISABLE_HOT_CACHE) == 0) {
