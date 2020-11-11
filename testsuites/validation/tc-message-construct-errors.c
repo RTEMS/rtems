@@ -32,11 +32,10 @@
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
