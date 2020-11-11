@@ -948,7 +948,7 @@ T_do_run_initialize(const T_config *config)
 	return ctx;
 }
 
-static void
+static bool
 T_do_case_begin(T_context *ctx, const T_case_context *tc)
 {
 	const T_config *config;
@@ -969,16 +969,23 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	T_actions_forward(config, T_EVENT_CASE_EARLY, tc->name);
 	T_do_log(ctx, T_NORMAL, "B:%s\n", tc->name);
 	ctx->case_begin_time = (*config->now)();
-	T_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
 
-	if (fixture != NULL) {
-		ctx->case_fixture.fixture = fixture;
-		ctx->case_fixture.context = fixture->initial_context;
+	if (setjmp(ctx->case_begin_context) == 0) {
+		T_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
 
-		if (fixture->setup != NULL) {
-			(*fixture->setup)(ctx->case_fixture.context);
+		if (fixture != NULL) {
+			ctx->case_fixture.fixture = fixture;
+			ctx->case_fixture.context = fixture->initial_context;
+
+			if (fixture->setup != NULL) {
+				(*fixture->setup)(ctx->case_fixture.context);
+			}
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
 static void
@@ -1034,9 +1041,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 static void
 T_run_case(T_context *ctx, const T_case_context *tc)
 {
-	T_do_case_begin(ctx, tc);
-
-	if (setjmp(ctx->case_begin_context) == 0) {
+	if (T_do_case_begin(ctx, tc)) {
 		(*tc->body)();
 	}
 
@@ -1140,7 +1145,7 @@ T_run_by_name(const char *name)
 
 static T_case_context default_case;
 
-void
+bool
 T_case_begin(const char *name, const T_fixture *fixture)
 {
 	T_case_context *tc;
@@ -1148,7 +1153,7 @@ T_case_begin(const char *name, const T_fixture *fixture)
 	tc = &default_case;
 	tc->name = name;
 	tc->fixture = fixture;
-	T_do_case_begin(&T_instance, tc);
+	return T_do_case_begin(&T_instance, tc);
 }
 
 void
