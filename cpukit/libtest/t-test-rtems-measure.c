@@ -708,8 +708,8 @@ measure_load_variant(T_measure_runtime_context *ctx,
 	T_time begin;
 	size_t token;
 
-	measure_variant_begin(req->name, "Load");
-	T_printf("M:L:%" PRIu32 "\n", load + 1);
+	T_printf("M:B:%s\n", req->name);
+	T_printf("M:V:Load/%" PRIu32 "\n", load + 1);
 	begin = T_now();
 	sample_count = ctx->sample_count;
 	samples = ctx->samples;
