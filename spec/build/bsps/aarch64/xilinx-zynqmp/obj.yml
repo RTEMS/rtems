@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/aarch64/xilinx-zynqmp/include/bsp.h
+  - bsps/aarch64/xilinx-zynqmp/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/aarch64/xilinx-zynqmp/include/bsp/irq.h
+links: []
+source:
+- bsps/aarch64/shared/cache/cache.c
+- bsps/aarch64/xilinx-zynqmp/console/console.c
+- bsps/aarch64/xilinx-zynqmp/start/bspstart.c
+- bsps/aarch64/xilinx-zynqmp/start/bspstarthooks.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/bspreset-arm-psci.c
+- bsps/shared/start/sbrk.c
+- bsps/shared/dev/irq/arm-gicv2.c
+- bsps/aarch64/shared/irq/irq-arm-gicvx-aarch64.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/clock/arm-generic-timer.c
+- bsps/aarch64/shared/clock/arm-generic-timer-aarch64.c
+type: build

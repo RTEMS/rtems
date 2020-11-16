@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+default:
+- -mcpu=cortex-a53
+default-by-variant:
+- value:
+  - -mcpu=cortex-a53
+  - -mabi=ilp32
+  variants:
+  - aarch64/xilinx_zynqmp_ilp32
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

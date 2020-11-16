@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: aarch64
+bsp: xilinx_zynqmp_lp64
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+cppflags: []
+enabled-by: true
+family: xilinx-zynqmp
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: tstqemu
+- role: build-dependency
+  uid: linkcmds_lp64
+source: []
+type: build

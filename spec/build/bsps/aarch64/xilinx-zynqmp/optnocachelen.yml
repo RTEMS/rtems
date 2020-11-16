@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+default: 0x100000
+default-by-variant: []
+description: |
+  length of nocache RAM region
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: BSP_XILINX_ZYNQMP_NOCACHE_LENGTH
+type: build

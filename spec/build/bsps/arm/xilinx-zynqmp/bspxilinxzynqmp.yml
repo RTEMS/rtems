@@ -40,7 +40,7 @@ links:
 - role: build-dependency
   uid: optconirq
 - role: build-dependency
-  uid: optconminor
+  uid: ../../optconminor
 - role: build-dependency
   uid: optgentmrfreq
 - role: build-dependency

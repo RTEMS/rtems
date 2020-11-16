@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- set-test-state:
+    # expected to fail
+    minimum: exclude
+
+    # test broken under 64bit due to SIZE_MAX differences
+    validation-0: expected-fail
+
+    # don't compile due to toolchain issues
+    spconfig01: exclude
+    spmisc01: exclude
+
+    # tests that are passing intermittently
+    spcpucounter01: indeterminate
+    rtmonuse: indeterminate
+    sp37: indeterminate
+    sp68: indeterminate
+    sp04: indeterminate
+    sp20: indeterminate
+    sp69: indeterminate
+    rtmonusxtimes01: indeterminate
+    spedfsched02: indeterminate
+    spedfsched04: indeterminate
+    psxtimes01: indeterminate
+    sprmsched01: indeterminate
+    sptimecounter02: indeterminate
+    sptimecounter04: indeterminate
+    ttest02: indeterminate
+
+    # tests that pass nominally, but fail under Qemu when the host is under
+    # heavy load
+    psx12: indeterminate
+    spintrcritical03: indeterminate
+    spintrcritical04: indeterminate
+    spintrcritical05: indeterminate
+build-type: option
+copyrights:
+- Copyright (C) 2020 On-Line Applications Research (OAR)
+default: null
+default-by-variant: []
+description: ''
+enabled-by: true
+links:
+- role: build-dependency
+  uid: ../../tstnoiconv
+- role: build-dependency
+  uid: ../../tstnojffs2
+- role: build-dependency
+  uid: ../../tstnolibdl
+- role: build-dependency
+  uid: ../../tstnorfs
+type: build
