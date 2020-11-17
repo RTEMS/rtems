@@ -12,20 +12,28 @@ actions:
     spmisc01: exclude
 
     # tests that are passing intermittently
-    spcpucounter01: exclude
-    rtmonuse: exclude
-    sp37: exclude
-    sp68: exclude
-    sp04: exclude
-    sp20: exclude
-    sp69: exclude
-    rtmonusxtimes01: exclude
-    spedfsched02: exclude
-    psxtimes01: exclude
-    sprmsched01: exclude
-    sptimecounter02: exclude
-    sptimecounter04: exclude
-    ttest02: exclude
+    spcpucounter01: indeterminate
+    rtmonuse: indeterminate
+    sp37: indeterminate
+    sp68: indeterminate
+    sp04: indeterminate
+    sp20: indeterminate
+    sp69: indeterminate
+    rtmonusxtimes01: indeterminate
+    spedfsched02: indeterminate
+    spedfsched04: indeterminate
+    psxtimes01: indeterminate
+    sprmsched01: indeterminate
+    sptimecounter02: indeterminate
+    sptimecounter04: indeterminate
+    ttest02: indeterminate
+
+    # tests that pass nominally, but fail under Qemu when the host is under
+    # heavy load
+    psx12: indeterminate
+    spintrcritical03: indeterminate
+    spintrcritical04: indeterminate
+    spintrcritical05: indeterminate
 build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
