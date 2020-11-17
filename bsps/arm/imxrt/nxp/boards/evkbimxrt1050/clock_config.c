@@ -30,7 +30,11 @@ processor_version: 0.0.0
 board: IMXRT1050-EVKB
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
+#ifndef __rtems__
 #include "clock_config.h"
+#else /* __rtems__ */
+#include "fsl_clock_config.h"
+#endif /* __rtems__ */
 #include "fsl_iomuxc.h"
 
 /*******************************************************************************
@@ -41,7 +45,11 @@ board: IMXRT1050-EVKB
  * Variables
  ******************************************************************************/
 /* System clock frequency. */
+#ifndef __rtems__
 extern uint32_t SystemCoreClock;
+#else /* __rtems__ */
+uint32_t SystemCoreClock;
+#endif /* __rtems__ */
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -216,6 +224,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetDiv(kCLOCK_Usdhc2Div, 1);
     /* Set Usdhc2 clock source. */
     CLOCK_SetMux(kCLOCK_Usdhc2Mux, 0);
+#ifndef __rtems__
 /* In SDK projects, SDRAM (configured by SEMC) will be initialized in either debug script or dcd.
  * With this macro SKIP_SYSCLK_INIT, system pll (selected to be SEMC source clock in SDK projects) will be left
  * unchanged.
@@ -242,6 +251,7 @@ void BOARD_BootClockRUN(void)
     /* Set Flexspi clock source. */
     CLOCK_SetMux(kCLOCK_FlexspiMux, 1);
 #endif
+#endif /* __rtems__ */
     /* Disable CSI clock gate. */
     CLOCK_DisableClock(kCLOCK_Csi);
     /* Set CSI_PODF. */
@@ -353,6 +363,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetMux(kCLOCK_Pll3SwMux, 0);
     /* Init ARM PLL. */
     CLOCK_InitArmPll(&armPllConfig_BOARD_BootClockRUN);
+#ifndef __rtems__
     /* In SDK projects, SDRAM (configured by SEMC) will be initialized in either debug script or dcd.
      * With this macro SKIP_SYSCLK_INIT, system pll (selected to be SEMC source clock in SDK projects) will be left
      * unchanged. Note: If another clock source is selected for SEMC, user may want to avoid changing that clock as
@@ -389,6 +400,7 @@ void BOARD_BootClockRUN(void)
     /* Disable Usb1 PLL output for USBPHY1. */
     CCM_ANALOG->PLL_USB1 &= ~CCM_ANALOG_PLL_USB1_EN_USB_CLKS_MASK;
 #endif
+#endif /* __rtems__ */
     /* DeInit Audio PLL. */
     CLOCK_DeinitAudioPll();
     /* Bypass Audio PLL. */

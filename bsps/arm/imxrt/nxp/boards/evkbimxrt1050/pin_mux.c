@@ -270,6 +270,9 @@ BOARD_InitDEBUG_UARTPins:
  * Description   : Configures pin routing and optionally pin electrical features.
  *
  * END ****************************************************************************************************************/
+#ifdef __rtems__
+BSP_START_TEXT_SECTION
+#endif /* __rtems__ */
 void BOARD_InitDEBUG_UARTPins(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03u */
 
@@ -355,6 +358,9 @@ BOARD_InitSDRAMPins:
  * Description   : Configures pin routing and optionally pin electrical features.
  *
  * END ****************************************************************************************************************/
+#ifdef __rtems__
+BSP_START_TEXT_SECTION
+#endif /* __rtems__ */
 void BOARD_InitSDRAMPins(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03u */
 
