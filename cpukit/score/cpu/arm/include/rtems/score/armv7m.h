@@ -22,6 +22,9 @@
 #define RTEMS_SCORE_ARMV7M_H
 
 #include <rtems/score/cpu.h>
+#ifndef ASM
+#include <rtems/score/assert.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -347,6 +350,24 @@ typedef struct {
     0 \
   }
 
+/**
+ * Higher level region configuration.
+ *
+ * Allows to configure with begin and end which is more convenient for
+ * calculating the sizes from linker command file. Note that you still have to
+ * follow the following rules:
+ *
+ * - Begin address has to be aligned to 0x20 (lower 5 bits set to 0)
+ * - Sizes can only be a value of 2^x with a minimum of 32 Byte. If you have an
+ *   end address that is not aligned, the region will get bigger.
+ * - Later regions have higher priority.
+ */
+typedef struct {
+  const void *begin;
+  const void *end;
+  uint32_t rasr;
+} ARMV7M_MPU_Region_config;
+
 typedef struct {
   uint32_t dhcsr;
   uint32_t dcrsr;
@@ -610,6 +631,88 @@ void _ARMV7M_Pendable_service_call( void );
 void _ARMV7M_Supervisor_call( void );
 
 void _ARMV7M_Clock_handler( void );
+
+static inline uint32_t _ARMV7M_MPU_Get_region_size(uintptr_t size)
+{
+  if ((size & (size - 1)) == 0) {
+    return ARMV7M_MPU_RASR_SIZE(30 - __builtin_clz(size));
+  } else {
+    return ARMV7M_MPU_RASR_SIZE(31 - __builtin_clz(size));
+  }
+}
+
+static inline void _ARMV7M_MPU_Set_region(
+  volatile ARMV7M_MPU *mpu,
+  uint32_t region,
+  uint32_t rasr,
+  const void *begin,
+  const void *end
+)
+{
+  uintptr_t size;
+  uint32_t rbar;
+
+  RTEMS_OBFUSCATE_VARIABLE(begin);
+  RTEMS_OBFUSCATE_VARIABLE(end);
+  size = (uintptr_t) end - (uintptr_t) begin;
+
+  if ( size > 0 ) {
+    rbar = (uintptr_t) begin | region | ARMV7M_MPU_RBAR_VALID;
+    rasr |= _ARMV7M_MPU_Get_region_size(size);
+  } else {
+    rbar = region;
+    rasr = 0;
+  }
+
+  mpu->rbar = rbar;
+  mpu->rasr = rasr;
+}
+
+static inline void _ARMV7M_MPU_Disable_region(
+  volatile ARMV7M_MPU *mpu,
+  uint32_t region
+)
+{
+  mpu->rbar = ARMV7M_MPU_RBAR_VALID | region;
+  mpu->rasr = 0;
+}
+
+static inline void _ARMV7M_MPU_Setup(
+  const ARMV7M_MPU_Region_config *cfg,
+  size_t cfg_count
+)
+{
+  volatile ARMV7M_MPU *mpu;
+  volatile ARMV7M_SCB *scb;
+  uint32_t region_count;
+  uint32_t region;
+
+  mpu = _ARMV7M_MPU;
+  scb = _ARMV7M_SCB;
+
+  mpu->ctrl = 0;
+
+  _ARM_Data_synchronization_barrier();
+  _ARM_Instruction_synchronization_barrier();
+
+  region_count = ARMV7M_MPU_TYPE_DREGION_GET(mpu->type);
+
+  _Assert(cfg_count <= region_count);
+
+  for (region = 0; region < cfg_count; ++region) {
+    _ARMV7M_MPU_Set_region(mpu, region, cfg->rasr, cfg->begin, cfg->end);
+  }
+
+  for (region = cfg_count; region < region_count; ++region) {
+    _ARMV7M_MPU_Disable_region(mpu, region);
+  }
+
+  mpu->ctrl = ARMV7M_MPU_CTRL_ENABLE | ARMV7M_MPU_CTRL_PRIVDEFENA;
+  scb->shcsr |= ARMV7M_SCB_SHCSR_MEMFAULTENA;
+
+  _ARM_Data_synchronization_barrier();
+  _ARM_Instruction_synchronization_barrier();
+}
 
 #endif /* ASM */
 

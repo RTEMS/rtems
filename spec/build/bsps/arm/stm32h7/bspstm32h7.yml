@@ -167,6 +167,7 @@ install:
   source:
   - bsps/arm/stm32h7/include/stm32h7/hal.h
   - bsps/arm/stm32h7/include/stm32h7/memory.h
+  - bsps/arm/stm32h7/include/stm32h7/mpu-config.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/stm32h7/start/bsp_specs
@@ -396,6 +397,7 @@ source:
 - bsps/arm/stm32h7/start/bspstarthooks.c
 - bsps/arm/stm32h7/start/ext-mem-ctl.c
 - bsps/arm/stm32h7/start/getentropy-rng.c
+- bsps/arm/stm32h7/start/mpu-config.c
 - bsps/arm/stm32h7/start/stm32h7-config.c
 - bsps/arm/stm32h7/start/stm32h7-hal.c
 - bsps/arm/stm32h7/start/stm32h7-hal-eth.c

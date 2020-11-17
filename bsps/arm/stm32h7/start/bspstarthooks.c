@@ -31,6 +31,7 @@
 #include <bsp/start.h>
 #include <stm32h7/hal.h>
 #include <stm32h7/memory.h>
+#include <stm32h7/mpu-config.h>
 #include <rtems/score/armv7m.h>
 
 #include <string.h>
@@ -83,123 +84,6 @@ static void init_peripheral_clocks(void)
   }
 }
 
-static uint32_t get_region_size(uintptr_t size)
-{
-  if ((size & (size - 1)) == 0) {
-    return ARMV7M_MPU_RASR_SIZE(30 - __builtin_clz(size));
-  } else {
-    return ARMV7M_MPU_RASR_SIZE(31 - __builtin_clz(size));
-  }
-}
-
-static void set_region(
-  volatile ARMV7M_MPU *mpu,
-  uint32_t region,
-  uint32_t rasr,
-  const void *begin,
-  const void *end
-)
-{
-  uintptr_t size;
-  uint32_t rbar;
-
-  RTEMS_OBFUSCATE_VARIABLE(begin);
-  RTEMS_OBFUSCATE_VARIABLE(end);
-  size = (uintptr_t) end - (uintptr_t) begin;
-
-  if ( size > 0 ) {
-    rbar = (uintptr_t) begin | region | ARMV7M_MPU_RBAR_VALID;
-    rasr |= get_region_size(size);
-  } else {
-    rbar = region;
-    rasr = 0;
-  }
-
-  mpu->rbar = rbar;
-  mpu->rasr = rasr;
-}
-
-static void init_mpu(void)
-{
-  volatile ARMV7M_MPU *mpu;
-  volatile ARMV7M_SCB *scb;
-  uint32_t region_count;
-  uint32_t region;
-
-  mpu = _ARMV7M_MPU;
-  scb = _ARMV7M_SCB;
-
-  region_count = ARMV7M_MPU_TYPE_DREGION_GET(mpu->type);
-
-  for (region = 0; region < region_count; ++region) {
-    mpu->rbar = ARMV7M_MPU_RBAR_VALID | region;
-    mpu->rasr = 0;
-  }
-
-  set_region(
-    mpu,
-    0,
-    ARMV7M_MPU_RASR_XN
-      | ARMV7M_MPU_RASR_AP(0x3)
-      | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
-      | ARMV7M_MPU_RASR_ENABLE,
-    stm32h7_memory_sram_axi_begin,
-    stm32h7_memory_sram_axi_end
-  );
-  set_region(
-    mpu,
-    1,
-    ARMV7M_MPU_RASR_XN
-      | ARMV7M_MPU_RASR_AP(0x3)
-      | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
-      | ARMV7M_MPU_RASR_ENABLE,
-    stm32h7_memory_sdram_1_begin,
-    stm32h7_memory_sdram_1_end
-  );
-  set_region(
-    mpu,
-    2,
-    ARMV7M_MPU_RASR_AP(0x5)
-      | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
-      | ARMV7M_MPU_RASR_ENABLE,
-    bsp_section_start_begin,
-    bsp_section_text_end
-  );
-  set_region(
-    mpu,
-    3,
-    ARMV7M_MPU_RASR_XN
-      | ARMV7M_MPU_RASR_AP(0x5)
-      | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
-      | ARMV7M_MPU_RASR_ENABLE,
-    bsp_section_rodata_begin,
-    bsp_section_rodata_end
-  );
-  set_region(
-    mpu,
-    4,
-    ARMV7M_MPU_RASR_XN
-      | ARMV7M_MPU_RASR_AP(0x3)
-      | ARMV7M_MPU_RASR_TEX(0x2)
-      | ARMV7M_MPU_RASR_ENABLE,
-    bsp_section_nocache_begin,
-    bsp_section_nocachenoload_end
-  );
-  set_region(
-    mpu,
-    region - 1,
-    ARMV7M_MPU_RASR_XN | ARMV7M_MPU_RASR_ENABLE,
-    stm32h7_memory_null_begin,
-    stm32h7_memory_null_end
-  );
-
-  mpu->ctrl = ARMV7M_MPU_CTRL_ENABLE | ARMV7M_MPU_CTRL_PRIVDEFENA;
-  scb->shcsr |= ARMV7M_SCB_SHCSR_MEMFAULTENA;
-
-  _ARM_Data_synchronization_barrier();
-  _ARM_Instruction_synchronization_barrier();
-}
-
 void bsp_start_hook_0(void)
 {
   if ((RCC->AHB3ENR & RCC_AHB3ENR_FMCEN) == 0) {
@@ -226,7 +110,7 @@ void bsp_start_hook_0(void)
     SCB_EnableDCache();
   }
 
-  init_mpu();
+  _ARMV7M_MPU_Setup(stm32h7_config_mpu_region, stm32h7_config_mpu_region_count);
 }
 
 void bsp_start_hook_1(void)
