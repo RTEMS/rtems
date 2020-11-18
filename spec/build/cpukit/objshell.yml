@@ -56,6 +56,9 @@ source:
 - cpukit/libmisc/shell/main_halt.c
 - cpukit/libmisc/shell/main_help.c
 - cpukit/libmisc/shell/main_hexdump.c
+- cpukit/libmisc/shell/main_i2cdetect.c
+- cpukit/libmisc/shell/main_i2cget.c
+- cpukit/libmisc/shell/main_i2cset.c
 - cpukit/libmisc/shell/main_id.c
 - cpukit/libmisc/shell/main_ln.c
 - cpukit/libmisc/shell/main_logoff.c
@@ -82,6 +85,7 @@ source:
 - cpukit/libmisc/shell/main_rtrace.c
 - cpukit/libmisc/shell/main_setenv.c
 - cpukit/libmisc/shell/main_sleep.c
+- cpukit/libmisc/shell/main_spi.c
 - cpukit/libmisc/shell/main_stackuse.c
 - cpukit/libmisc/shell/main_time.c
 - cpukit/libmisc/shell/main_top.c
