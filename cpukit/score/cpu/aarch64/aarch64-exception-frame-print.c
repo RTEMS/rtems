@@ -65,7 +65,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
     "X11  = 0x%016" PRIx64  " X28  = 0x%016" PRIx64 "\n"
     "X12  = 0x%016" PRIx64  " FP   = 0x%016" PRIx64 "\n"
     "X13  = 0x%016" PRIx64  " LR   = 0x%016" PRIxPTR "\n"
-    "X14  = 0x%016" PRIx64  " SP   = 0x%016" PRIx64 "\n"
+    "X14  = 0x%016" PRIx64  " SP   = 0x%016" PRIxPTR "\n"
     "X15  = 0x%016" PRIx64  " PC   = 0x%016" PRIxPTR "\n"
     "X16  = 0x%016" PRIx64  " DAIF = 0x%016" PRIx64 "\n"
     "VEC  = 0x%016" PRIxPTR " CPSR = 0x%016" PRIx64 "\n"
@@ -84,7 +84,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
     frame->register_x11, frame->register_x28,
     frame->register_x12, frame->register_fp,
     frame->register_x13, (intptr_t)frame->register_lr,
-    frame->register_x14, frame->register_sp,
+    frame->register_x14, (intptr_t)frame->register_sp,
     frame->register_x15, (intptr_t)frame->register_pc,
     frame->register_x16, frame->register_daif,
     (intptr_t) frame->vector, frame->register_cpsr,
