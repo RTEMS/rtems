@@ -1048,6 +1048,58 @@
  */
 #define CONFIGURE_INIT_TASK_ATTRIBUTES
 
+/* Generated from spec:/acfg/if/init-task-construct-storage-size */
+
+/**
+ * @brief This configuration option is an integer define.
+ *
+ * The value of this configuration option defines the task storage size of the
+ * Classic API initialization task.
+ *
+ * @par Default Value
+ * The default value is 0.
+ *
+ * @par Value Constraints
+ * @parblock
+ * The value of this configuration option shall satisfy all of the following
+ * constraints:
+ *
+ * * It shall be greater than or equal to #CONFIGURE_MINIMUM_TASK_STACK_SIZE.
+ *
+ * * It shall be defined using RTEMS_TASK_STORAGE_SIZE().
+ * @endparblock
+ *
+ * @par Notes
+ * @parblock
+ * If this configuration option is specified, then
+ *
+ * * a task storage area of the specified size is statically allocated by
+ *   ``<rtems/confdefs.h>`` for the Classic API initialization task,
+ *
+ * * the Classic API initialization task is constructed by
+ *   rtems_task_construct() instead of using rtems_task_create(),
+ *
+ * * the maximum thread-local storage size defined by
+ *   #CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE is used for the Classic API
+ *   initialization task,
+ *
+ * * the Classic API initialization task should be accounted for in
+ *   #CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE, and
+ *
+ * * the task storage area used for the Classic API initialization task is not
+ *   reclaimed by the system, if the task is deleted.
+ *
+ * The
+ *
+ * * #CONFIGURE_INIT_TASK_STACK_SIZE and
+ *
+ * * ``CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE``
+ *
+ * configuration options are mutually exclusive.
+ * @endparblock
+ */
+#define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
+
 /* Generated from spec:/acfg/if/init-task-entrypoint */
 
 /**
@@ -1144,6 +1196,17 @@
  * * It shall be small enough so that the task stack space calculation carried
  *   out by ``<rtems/confdefs.h>`` does not overflow an integer of type <a
  *   href="https://en.cppreference.com/w/c/types/integer">uintptr_t</a>.
+ * @endparblock
+ *
+ * @par Notes
+ * @parblock
+ * The
+ *
+ * * ``CONFIGURE_INIT_TASK_STACK_SIZE`` and
+ *
+ * * #CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
+ *
+ * configuration options are mutually exclusive.
  * @endparblock
  */
 #define CONFIGURE_INIT_TASK_STACK_SIZE

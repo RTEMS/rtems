@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal34
+
+directives:
+
+  - _RTEMS_tasks_Construct_user_task()
+
+concepts:
+
+  - Provoke a Classic API initialization task construct failure.

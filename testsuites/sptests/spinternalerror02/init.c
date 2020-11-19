@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
+    error - 3 == INTERNAL_ERROR_RTEMS_INIT_TASK_CONSTRUCT_FAILED
   );
 }
 

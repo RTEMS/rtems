@@ -1284,6 +1284,7 @@ source:
 - cpukit/rtems/src/systemeventreceive.c
 - cpukit/rtems/src/systemeventsend.c
 - cpukit/rtems/src/taskconstruct.c
+- cpukit/rtems/src/taskconstructuser.c
 - cpukit/rtems/src/taskcreate.c
 - cpukit/rtems/src/taskdelete.c
 - cpukit/rtems/src/taskexit.c

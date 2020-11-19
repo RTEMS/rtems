@@ -1,0 +1,8 @@
+*** BEGIN OF TEST SPFATAL 34 ***
+*** TEST VERSION: 6.0.0.be2dc00ae7b5db5381da49a3ec42f2088fa66bc9
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD:
+*** TEST TOOLS: 10.2.1 20200918 (RTEMS 6, RSB 3ce72f014292bbb4e6b3bab9ede9e0b4a71ef5a8, Newlib 749cbcc)
+Fatal error (Classic API Init task construct failure) hit
+
+*** END OF TEST SPFATAL 34 ***
