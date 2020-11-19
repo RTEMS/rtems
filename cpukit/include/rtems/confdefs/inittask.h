@@ -100,6 +100,27 @@ extern "C" {
   #define CONFIGURE_INIT_TASK_ARGUMENTS 0
 #endif
 
+/*
+ * Ignore the following warnings from g++ and clang in the static assertion
+ * below:
+ *
+ * warning: the address of 'void Init()' will never be NULL [-Waddress]
+ *
+ * warning: comparison of function 'Init' not equal to a null pointer is always
+ * true [-Wtautological-pointer-compare]
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waddress"
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wtautological-pointer-compare"
+
+RTEMS_STATIC_ASSERT(
+  CONFIGURE_INIT_TASK_ENTRY_POINT != NULL,
+  CONFIGURE_INIT_TASK_ENTRY_POINT_MUST_NOT_BE_NULL
+);
+
+#pragma GCC diagnostic pop
+
 const rtems_initialization_tasks_table _RTEMS_tasks_User_task_table = {
   CONFIGURE_INIT_TASK_NAME,
   CONFIGURE_INIT_TASK_STACK_SIZE,
