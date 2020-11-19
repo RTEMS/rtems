@@ -39,7 +39,7 @@ links:
 - role: build-dependency
   uid: optclkfastidle
 - role: build-dependency
-  uid: optmmusmallpages
+  uid: ../optmmusmallpages
 - role: build-dependency
   uid: optresetvec
 - role: build-dependency
