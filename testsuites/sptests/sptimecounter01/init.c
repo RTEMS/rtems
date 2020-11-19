@@ -210,6 +210,17 @@ void boot_card(const char *cmdline)
   _Terminate(RTEMS_FATAL_SOURCE_EXIT, 0);
 }
 
+static void *stack_allocate(size_t size)
+{
+  (void) size;
+  return NULL;
+}
+
+static void stack_free(void *ptr)
+{
+  (void) ptr;
+}
+
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
@@ -224,9 +235,9 @@ void boot_card(const char *cmdline)
 
 #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER 0
 
-#define CONFIGURE_TASK_STACK_ALLOCATOR NULL
+#define CONFIGURE_TASK_STACK_ALLOCATOR stack_allocate
 
-#define CONFIGURE_TASK_STACK_DEALLOCATOR NULL
+#define CONFIGURE_TASK_STACK_DEALLOCATOR stack_free
 
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 

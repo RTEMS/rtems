@@ -38,19 +38,11 @@
 #endif
 
 #include <rtems/score/stack.h>
-#include <rtems/score/interr.h>
 #include <rtems/config.h>
 
 void _Stack_Allocator_do_initialize( void )
 {
   rtems_stack_allocate_init_hook init_hook;
-
-  if (
-    rtems_configuration_get_stack_allocate_hook() == NULL
-      || rtems_configuration_get_stack_free_hook() == NULL
-  ) {
-    _Internal_error( INTERNAL_ERROR_BAD_STACK_HOOK );
-  }
 
   init_hook = rtems_configuration_get_stack_allocate_init_hook();
 

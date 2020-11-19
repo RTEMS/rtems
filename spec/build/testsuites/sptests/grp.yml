@@ -227,8 +227,6 @@ links:
 - role: build-dependency
   uid: spfatal05
 - role: build-dependency
-  uid: spfatal06
-- role: build-dependency
   uid: spfatal09
 - role: build-dependency
   uid: spfatal10

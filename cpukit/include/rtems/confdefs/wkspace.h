@@ -137,6 +137,12 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
 #if defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   && defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
+  /* Ignore potential warnings from the static assertions below */
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Waddress"
+  #pragma GCC diagnostic ignored "-Wpragmas"
+  #pragma GCC diagnostic ignored "-Wtautological-pointer-compare"
+
   #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
     const bool _Stack_Allocator_avoids_workspace = true;
   #else
@@ -150,8 +156,18 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
     const Stack_Allocator_initialize _Stack_Allocator_initialize = NULL;
   #endif
 
+  RTEMS_STATIC_ASSERT(
+    CONFIGURE_TASK_STACK_ALLOCATOR != NULL,
+    CONFIGURE_TASK_STACK_ALLOCATOR_MUST_NOT_BE_NULL
+  );
+
   const Stack_Allocator_allocate _Stack_Allocator_allocate =
     CONFIGURE_TASK_STACK_ALLOCATOR;
+
+  RTEMS_STATIC_ASSERT(
+    CONFIGURE_TASK_STACK_DEALLOCATOR != NULL,
+    CONFIGURE_TASK_STACK_DEALLOCATOR_MUST_NOT_BE_NULL
+  );
 
   const Stack_Allocator_free _Stack_Allocator_free =
     CONFIGURE_TASK_STACK_DEALLOCATOR;
@@ -161,6 +177,8 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
     RTEMS_SYSINIT_DIRTY_MEMORY,
     RTEMS_SYSINIT_ORDER_MIDDLE
   );
+
+  #pragma GCC diagnostic pop
 #elif defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   || defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
   #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"

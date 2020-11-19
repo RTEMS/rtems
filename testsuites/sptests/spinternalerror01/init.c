@@ -58,6 +58,17 @@ static void *idle_body(uintptr_t ignored)
   return NULL;
 }
 
+static void *stack_allocate(size_t size)
+{
+  (void) size;
+  return NULL;
+}
+
+static void stack_free(void *ptr)
+{
+  (void) ptr;
+}
+
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { .fatal = fatal_extension }, \
   RTEMS_TEST_INITIAL_EXTENSION
@@ -76,9 +87,9 @@ static void *idle_body(uintptr_t ignored)
 
 #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER 0
 
-#define CONFIGURE_TASK_STACK_ALLOCATOR NULL
+#define CONFIGURE_TASK_STACK_ALLOCATOR stack_allocate
 
-#define CONFIGURE_TASK_STACK_DEALLOCATOR NULL
+#define CONFIGURE_TASK_STACK_DEALLOCATOR stack_free
 
 #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
