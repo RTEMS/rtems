@@ -35,11 +35,22 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <rtems/chain.h>
-#include <rtems/sysinit.h>
 #include <rtems/test-info.h>
 #include <rtems/testopts.h>
 
 #include <rtems/test.h>
+
+#define MAX_TLS_SIZE RTEMS_ALIGN_UP( 64, RTEMS_TASK_STORAGE_ALIGNMENT )
+
+#define MAX_TASKS 32
+
+#define TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+
+#define TASK_STORAGE_SIZE \
+  RTEMS_TASK_STORAGE_SIZE( \
+    MAX_TLS_SIZE + RTEMS_MINIMUM_STACK_SIZE, \
+    TASK_ATTRIBUTES \
+  )
 
 static char buffer[ 512 ];
 
@@ -70,11 +81,27 @@ static const T_config test_config = {
   .actions = actions
 };
 
-static void runner_task( rtems_task_argument arg )
+static rtems_chain_control free_task_storage =
+  RTEMS_CHAIN_INITIALIZER_EMPTY( free_task_storage );
+
+static union {
+  RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) char
+    storage[ TASK_STORAGE_SIZE ];
+  rtems_chain_node node;
+} task_storage[ MAX_TASKS ];
+
+static void Init( rtems_task_argument arg )
 {
   int exit_code;
 
   (void) arg;
+
+  rtems_chain_initialize(
+    &free_task_storage,
+    task_storage,
+    RTEMS_ARRAY_SIZE( task_storage ),
+    sizeof( task_storage[ 0 ] )
+  );
 
   rtems_test_begin( rtems_test_name, TEST_STATE );
   T_register();
@@ -86,40 +113,6 @@ static void runner_task( rtems_task_argument arg )
 
   rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, (uint32_t) exit_code );
 }
-
-#define MAX_TLS_SIZE RTEMS_ALIGN_UP( 64, RTEMS_TASK_STORAGE_ALIGNMENT )
-
-#define ATTRIBUTES RTEMS_FLOATING_POINT
-
-#define TASK_STORAGE_SIZE \
-  RTEMS_TASK_STORAGE_SIZE( \
-    MAX_TLS_SIZE + RTEMS_MINIMUM_STACK_SIZE, \
-    ATTRIBUTES \
-  )
-
-#define MAX_TASKS 32
-
-RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
-static char runner_task_storage[ TASK_STORAGE_SIZE ];
-
-static const rtems_task_config runner_task_config = {
-  .name = rtems_build_name( 'R', 'U', 'N', ' ' ),
-  .initial_priority = 1,
-  .storage_area = runner_task_storage,
-  .storage_size = sizeof( runner_task_storage ),
-  .maximum_thread_local_storage_size = MAX_TLS_SIZE,
-  .initial_modes = RTEMS_DEFAULT_MODES,
-  .attributes = ATTRIBUTES
-};
-
-static rtems_chain_control free_task_storage =
-  RTEMS_CHAIN_INITIALIZER_EMPTY( free_task_storage );
-
-static union {
-  RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) char
-    storage[ TASK_STORAGE_SIZE ];
-  rtems_chain_node node;
-} task_storage[ MAX_TASKS ];
 
 static void *task_stack_allocate( size_t size )
 {
@@ -138,35 +131,6 @@ static void task_stack_deallocate( void *stack )
   );
 }
 
-static void init_runner_task( void )
-{
-  rtems_id id;
-  rtems_status_code sc;
-
-  rtems_chain_initialize(
-    &free_task_storage,
-    task_storage,
-    RTEMS_ARRAY_SIZE( task_storage ),
-    sizeof( task_storage[ 0 ] )
-  );
-
-  sc = rtems_task_construct( &runner_task_config, &id );
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 1 );
-  }
-
-  sc = rtems_task_start( id, runner_task, 0 );
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 1 );
-  }
-}
-
-RTEMS_SYSINIT_ITEM(
-  init_runner_task,
-  RTEMS_SYSINIT_CLASSIC_USER_TASKS,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_PROCESSORS 4
@@ -183,7 +147,8 @@ RTEMS_SYSINIT_ITEM(
 
 #define CONFIGURE_MAXIMUM_TASKS ( 1 + MAX_TASKS )
 
-#define CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE 1
+#define CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE \
+  CONFIGURE_MAXIMUM_TASKS
 
 #define CONFIGURE_MAXIMUM_TIMERS 3
 
@@ -197,15 +162,21 @@ RTEMS_SYSINIT_ITEM(
 
 #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
-#define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
-
-#define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
+#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE MAX_TLS_SIZE
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
 
 #define CONFIGURE_TASK_STACK_ALLOCATOR task_stack_allocate
 
 #define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_deallocate
+
+#define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT_TASK_ATTRIBUTES TASK_ATTRIBUTES
+
+#define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+#define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE TASK_STORAGE_SIZE
 
 #if defined(RTEMS_SMP)
 
