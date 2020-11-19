@@ -150,10 +150,19 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
   #endif
 
   #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+    RTEMS_STATIC_ASSERT(
+      CONFIGURE_TASK_STACK_ALLOCATOR_INIT != NULL,
+      CONFIGURE_TASK_STACK_ALLOCATOR_INIT_MUST_NOT_BE_NULL
+    );
+
     const Stack_Allocator_initialize _Stack_Allocator_initialize =
       CONFIGURE_TASK_STACK_ALLOCATOR_INIT;
-  #else
-    const Stack_Allocator_initialize _Stack_Allocator_initialize = NULL;
+
+    RTEMS_SYSINIT_ITEM(
+      _Stack_Allocator_do_initialize,
+      RTEMS_SYSINIT_DIRTY_MEMORY,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
   #endif
 
   RTEMS_STATIC_ASSERT(
@@ -171,12 +180,6 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
   const Stack_Allocator_free _Stack_Allocator_free =
     CONFIGURE_TASK_STACK_DEALLOCATOR;
-
-  RTEMS_SYSINIT_ITEM(
-    _Stack_Allocator_do_initialize,
-    RTEMS_SYSINIT_DIRTY_MEMORY,
-    RTEMS_SYSINIT_ORDER_MIDDLE
-  );
 
   #pragma GCC diagnostic pop
 #elif defined(CONFIGURE_TASK_STACK_ALLOCATOR) \

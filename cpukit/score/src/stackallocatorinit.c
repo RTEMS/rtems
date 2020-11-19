@@ -45,8 +45,5 @@ void _Stack_Allocator_do_initialize( void )
   rtems_stack_allocate_init_hook init_hook;
 
   init_hook = rtems_configuration_get_stack_allocate_init_hook();
-
-  if ( init_hook  != NULL ) {
-    (*init_hook )( rtems_configuration_get_stack_space_size() );
-  }
+  ( *init_hook )( rtems_configuration_get_stack_space_size() );
 }
