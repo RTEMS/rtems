@@ -285,23 +285,6 @@ int rtems_object_api_maximum_class(
   int api
 );
 
-
-/**
- * @brief Get Highest Valid Class Value
- *
- * This method returns the lowest valid value Class for the
- * specified @a api. Each API supports a different number
- * of object classes.
- *
- * @param[in] api is the API to obtain the maximum class of
- *
- * @retval This method returns the least valid value for
- *         class number for the specified @a api.
- */
-int rtems_object_id_api_maximum_class(
-  int api
-);
-
 /**
  * @brief Get API Name
  *
