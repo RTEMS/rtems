@@ -823,6 +823,15 @@ extern "C" {
   #define RTEMS_UNUSED
 #endif
 
+/* Generated from spec:/rtems/basedefs/if/compiler-unused-attribute */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Provided for backward compatibility.
+ */
+#define RTEMS_COMPILER_UNUSED_ATTRIBUTE RTEMS_UNUSED
+
 /* Generated from spec:/rtems/basedefs/if/used */
 
 /**
@@ -835,15 +844,6 @@ extern "C" {
 #else
   #define RTEMS_USED
 #endif
-
-/* Generated from spec:/rtems/basedefs/if/compiler-used-attribute */
-
-/**
- * @ingroup RTEMSAPIBaseDefs
- *
- * @brief Provided for backward compatibility.
- */
-#define RTEMS_COMPILER_USED_ATTRIBUTE RTEMS_USED
 
 /* Generated from spec:/rtems/basedefs/if/warn-unused-result */
 
