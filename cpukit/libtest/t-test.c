@@ -67,6 +67,7 @@ typedef struct {
 	atomic_uint planned_steps;
 	atomic_uint steps;
 	atomic_uint failures;
+	bool case_begin_context_valid;
 	jmp_buf case_begin_context;
 	unsigned int fixture_steps;
 	unsigned int overall_cases;
@@ -507,6 +508,37 @@ T_add_failure(T_context *ctx)
 	    memory_order_relaxed);
 }
 
+static void
+T_actions_forward(const T_config *config, T_event event, const char *name)
+{
+	const T_action *actions;
+	size_t n;
+	size_t i;
+
+	actions = config->actions;
+	n = config->action_count;
+
+	for (i = 0; i < n; ++i) {
+		(*actions[i])(event, name);
+	}
+}
+
+static void
+T_actions_backward(const T_config *config, T_event event,
+    const char *name)
+{
+	const T_action *actions;
+	size_t n;
+	size_t i;
+
+	actions = config->actions;
+	n = config->action_count;
+
+	for (i = 0; i < n; ++i) {
+		(*actions[n - i - 1])(event, name);
+	}
+}
+
 T_NO_RETURN static void
 T_do_stop(T_context *ctx)
 {
@@ -516,17 +548,26 @@ T_do_stop(T_context *ctx)
 
 	while (node != NULL) {
 		const T_fixture *fixture;
+		void *node_context;
 
 		fixture = node->fixture;
+		node_context = node->context;
+		node = node->next;
 
 		if (fixture != NULL && fixture->stop != NULL) {
-			(*fixture->stop)(node->context);
+			(*fixture->stop)(node_context);
 		}
-
-		node = node->next;
 	}
 
-	longjmp(ctx->case_begin_context, 1);
+	if (T_do_is_runner(ctx) && ctx->case_begin_context_valid) {
+		longjmp(ctx->case_begin_context, 1);
+	} else {
+		T_actions_backward(ctx->config, T_EVENT_CASE_STOP,
+		    T_case_name());
+#ifdef __GNUC__
+		__builtin_unreachable();
+#endif
+	}
 }
 
 T_NO_RETURN void
@@ -878,37 +919,6 @@ T_call_destructors(const T_context *ctx)
 #endif
 }
 
-static void
-T_actions_forward(const T_config *config, T_event event, const char *name)
-{
-	const T_action *actions;
-	size_t n;
-	size_t i;
-
-	actions = config->actions;
-	n = config->action_count;
-
-	for (i = 0; i < n; ++i) {
-		(*actions[i])(event, name);
-	}
-}
-
-static void
-T_actions_backward(const T_config *config, T_event event,
-    const char *name)
-{
-	const T_action *actions;
-	size_t n;
-	size_t i;
-
-	actions = config->actions;
-	n = config->action_count;
-
-	for (i = 0; i < n; ++i) {
-		(*actions[n - i - 1])(event, name);
-	}
-}
-
 static T_context *
 T_do_run_initialize(const T_config *config)
 {
@@ -948,7 +958,7 @@ T_do_run_initialize(const T_config *config)
 	return ctx;
 }
 
-static bool
+static void
 T_do_case_begin(T_context *ctx, const T_case_context *tc)
 {
 	const T_config *config;
@@ -969,23 +979,16 @@ T_do_case_begin(T_context *ctx, const T_case_context *tc)
 	T_actions_forward(config, T_EVENT_CASE_EARLY, tc->name);
 	T_do_log(ctx, T_NORMAL, "B:%s\n", tc->name);
 	ctx->case_begin_time = (*config->now)();
+	T_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
 
-	if (setjmp(ctx->case_begin_context) == 0) {
-		T_actions_forward(config, T_EVENT_CASE_BEGIN, tc->name);
+	if (fixture != NULL) {
+		ctx->case_fixture.fixture = fixture;
+		ctx->case_fixture.context = fixture->initial_context;
 
-		if (fixture != NULL) {
-			ctx->case_fixture.fixture = fixture;
-			ctx->case_fixture.context = fixture->initial_context;
-
-			if (fixture->setup != NULL) {
-				(*fixture->setup)(ctx->case_fixture.context);
-			}
+		if (fixture->setup != NULL) {
+			(*fixture->setup)(ctx->case_fixture.context);
 		}
-
-		return true;
 	}
-
-	return false;
 }
 
 static void
@@ -1041,10 +1044,13 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 static void
 T_run_case(T_context *ctx, const T_case_context *tc)
 {
-	if (T_do_case_begin(ctx, tc)) {
+	if (setjmp(ctx->case_begin_context) == 0) {
+		ctx->case_begin_context_valid = true;
+		T_do_case_begin(ctx, tc);
 		(*tc->body)();
 	}
 
+	ctx->case_begin_context_valid = false;
 	T_do_case_end(ctx, tc);
 }
 
@@ -1145,7 +1151,7 @@ T_run_by_name(const char *name)
 
 static T_case_context default_case;
 
-bool
+void
 T_case_begin(const char *name, const T_fixture *fixture)
 {
 	T_case_context *tc;
@@ -1153,7 +1159,7 @@ T_case_begin(const char *name, const T_fixture *fixture)
 	tc = &default_case;
 	tc->name = name;
 	tc->fixture = fixture;
-	return T_do_case_begin(&T_instance, tc);
+	T_do_case_begin(&T_instance, tc);
 }
 
 void

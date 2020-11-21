@@ -2270,6 +2270,7 @@ typedef enum {
 	T_EVENT_CASE_BEGIN,
 	T_EVENT_CASE_END,
 	T_EVENT_CASE_LATE,
+	T_EVENT_CASE_STOP,
 	T_EVENT_RUN_FINALIZE_EARLY,
 	T_EVENT_RUN_FINALIZE_LATE
 } T_event;
@@ -2306,7 +2307,7 @@ void T_run_all(void);
 
 void T_run_by_name(const char *);
 
-bool T_case_begin(const char *, const T_fixture *);
+void T_case_begin(const char *, const T_fixture *);
 
 void T_case_end(void);
 
