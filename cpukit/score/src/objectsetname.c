@@ -25,7 +25,7 @@
 
 #include <string.h>
 
-bool _Objects_Set_name(
+Status_Control _Objects_Set_name(
   const Objects_Information *information,
   Objects_Control           *the_object,
   const char                *name
@@ -38,7 +38,7 @@ bool _Objects_Set_name(
     length = strnlen( name, information->name_length );
     dup = _Workspace_String_duplicate( name, length );
     if ( dup == NULL ) {
-      return false;
+      return STATUS_NO_MEMORY;
     }
 
     the_object->name.name_p = dup;
@@ -60,5 +60,5 @@ bool _Objects_Set_name(
       _Objects_Build_name( c[ 0 ], c[ 1 ], c[ 2 ], c[ 3 ] );
   }
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }

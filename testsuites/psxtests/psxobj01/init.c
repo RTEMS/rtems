@@ -37,7 +37,7 @@ static rtems_task Init(
   Objects_Control           *the_object;
   char                       name[64];
   size_t                     name_len;
-  bool                       bc;
+  Status_Control             status;
 
   TEST_BEGIN();
 
@@ -70,12 +70,12 @@ static rtems_task Init(
   puts( "INIT - _Objects_Set_name fails - out of memory" );
   rtems_workspace_greedy_allocate( NULL, 0 );
 
-  bc = _Objects_Set_name(
+  status = _Objects_Set_name(
     &Test_Information,
     &_Thread_Get_executing()->Object,
     name
   );
-  rtems_test_assert( bc == false );
+  rtems_test_assert( status == STATUS_NO_MEMORY );
 
   TEST_END();
   rtems_test_exit(0);
