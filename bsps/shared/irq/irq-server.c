@@ -506,9 +506,6 @@ static rtems_status_code bsp_interrupt_server_create(
   cpu_set_t cpu;
 #endif
 
-  rtems_interrupt_lock_initialize(&s->lock, "Interrupt Server");
-  rtems_chain_initialize_empty(&s->entries);
-
   sc = rtems_task_create(
     rtems_build_name('I', 'R', 'Q', 'S'),
     priority,
@@ -518,23 +515,30 @@ static rtems_status_code bsp_interrupt_server_create(
     &s->server
   );
   if (sc != RTEMS_SUCCESSFUL) {
+    (*s->destroy)(s);
     return sc;
   }
 
+  rtems_interrupt_lock_initialize(&s->lock, "Interrupt Server");
+  rtems_chain_initialize_empty(&s->entries);
+
 #if defined(RTEMS_SMP)
   sc = rtems_scheduler_ident_by_processor(cpu_index, &scheduler);
-  if (sc != RTEMS_SUCCESSFUL) {
-    /* Do not start an interrupt server on a processor without a scheduler */
-    return RTEMS_SUCCESSFUL;
+
+  /*
+   * If a scheduler exists for the processor, then move it to this scheduler
+   * and try to set the affinity to the processor, otherwise keep the scheduler
+   * of the executing thread.
+   */
+  if (sc == RTEMS_SUCCESSFUL) {
+    sc = rtems_task_set_scheduler(s->server, scheduler, priority);
+    _Assert(sc == RTEMS_SUCCESSFUL);
+
+    /* Set the task to processor affinity on a best-effort basis */
+    CPU_ZERO(&cpu);
+    CPU_SET(cpu_index, &cpu);
+    (void) rtems_task_set_affinity(s->server, sizeof(cpu), &cpu);
   }
-
-  sc = rtems_task_set_scheduler(s->server, scheduler, priority);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-
-  /* Set the task to processor affinity on a best-effort basis */
-  CPU_ZERO(&cpu);
-  CPU_SET(cpu_index, &cpu);
-  (void) rtems_task_set_affinity(s->server, sizeof(cpu), &cpu);
 #else
   (void) cpu_index;
 #endif
