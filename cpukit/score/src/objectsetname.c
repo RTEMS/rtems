@@ -41,6 +41,7 @@ Status_Control _Objects_Set_name(
       return STATUS_NO_MEMORY;
     }
 
+    _Workspace_Free( the_object->name.name_p );
     the_object->name.name_p = dup;
   } else {
     char c[ 4 ];
