@@ -8,8 +8,7 @@ copyrights:
 cppflags: []
 enabled-by: true
 family: imxrt
-includes:
-  - bsps/arm/shared/include
+includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
@@ -92,14 +91,14 @@ install:
   - bsps/arm/imxrt/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/arm/freescale/imx
   source:
-  - bsps/arm/shared/include/arm/freescale/imx/imx_iomuxreg.h
-  - bsps/arm/shared/include/arm/freescale/imx/imx_iomuxvar.h
+  - bsps/arm/include/arm/freescale/imx/imx_iomuxreg.h
+  - bsps/arm/include/arm/freescale/imx/imx_iomuxvar.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/arm/imxrt/include/bsp/flash-headers.h
   - bsps/arm/imxrt/include/bsp/irq.h
-  - bsps/arm/shared/include/bsp/imx-gpio.h
-  - bsps/arm/shared/include/bsp/imx-iomux.h
+  - bsps/arm/include/bsp/imx-gpio.h
+  - bsps/arm/include/bsp/imx-iomux.h
 - destination: ${BSP_INCLUDEDIR}/imxrt
   source:
   - bsps/arm/imxrt/include/imxrt/imxrt1050.dtsi

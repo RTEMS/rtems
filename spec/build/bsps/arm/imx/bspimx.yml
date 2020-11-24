@@ -8,8 +8,7 @@ copyrights:
 cppflags: []
 enabled-by: true
 family: imx
-includes:
-  - bsps/arm/shared/include
+includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}
   source:
@@ -21,16 +20,16 @@ install:
   - bsps/arm/imx/include/arm/freescale/imx/imx_ecspireg.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_gpcreg.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_i2creg.h
-  - bsps/arm/shared/include/arm/freescale/imx/imx_iomuxreg.h
-  - bsps/arm/shared/include/arm/freescale/imx/imx_iomuxvar.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_srcreg.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_uartreg.h
   - bsps/arm/imx/include/arm/freescale/imx/imx_wdogreg.h
+  - bsps/arm/include/arm/freescale/imx/imx_iomuxreg.h
+  - bsps/arm/include/arm/freescale/imx/imx_iomuxvar.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/arm/shared/include/bsp/imx-gpio.h
   - bsps/arm/imx/include/bsp/irq.h
-  - bsps/arm/shared/include/bsp/imx-iomux.h
+  - bsps/arm/include/bsp/imx-gpio.h
+  - bsps/arm/include/bsp/imx-iomux.h
 - destination: ${BSP_INCLUDEDIR}/dev/clock
   source:
   - bsps/include/dev/clock/arm-generic-timer.h
