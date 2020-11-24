@@ -119,6 +119,8 @@ links:
 - role: build-dependency
   uid: ../../optconsoleirq
 - role: build-dependency
+  uid: optfsledmaemlm
+- role: build-dependency
   uid: optlinkcmds
 - role: build-dependency
   uid: optmemflashcfgsz

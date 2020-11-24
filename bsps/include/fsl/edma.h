@@ -1,29 +1,40 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsPowerPCMPC55XX
+ * @ingroup RTEMSBSPsSharedFslEDMA
  *
- * @brief Enhanced Direct Memory Access (eDMA).
+ * @brief Freescale / NXP Enhanced Direct Memory Access (eDMA).
  */
 
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2008-2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBCPU_POWERPC_MPC55XX_EDMA_H
-#define LIBCPU_POWERPC_MPC55XX_EDMA_H
+#ifndef LIBBSP_SHARED_FSL_EDMA_H
+#define LIBBSP_SHARED_FSL_EDMA_H
 
-#include <mpc55xx/regs.h>
+#include <fsl/regs-edma.h>
 
 #include <rtems.h>
 #include <rtems/chain.h>
@@ -32,7 +43,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if MPC55XX_CHIP_FAMILY == 551
+#ifdef LIBBSP_ARM_IMXRT_BSP_H
+  #define EDMA_CHANNEL_COUNT 32U
+#elif MPC55XX_CHIP_FAMILY == 551
   #define EDMA_CHANNEL_COUNT 16U
 #elif MPC55XX_CHIP_FAMILY == 564
   #define EDMA_CHANNEL_COUNT 16U
@@ -46,20 +59,27 @@ extern "C" {
 
 #define EDMA_CHANNELS_PER_MODULE 64U
 
-#if EDMA_MODULE_COUNT == 1
-  #define EDMA_TCD_BY_CHANNEL_INDEX(channel_index) \
-    (&EDMA.TCD[(channel_index)])
-#elif EDMA_MODULE_COUNT == 2
-  #define EDMA_TCD_BY_CHANNEL_INDEX(channel_index) \
-    ((channel_index) < EDMA_CHANNELS_PER_MODULE ? \
-      &EDMA_A.TCD[(channel_index)] \
-        : &EDMA_B.TCD[(channel_index) - EDMA_CHANNELS_PER_MODULE])
-#else
-  #error "unsupported module count"
+volatile struct fsl_edma_tcd *fsl_edma_tcd_of_channel_index(unsigned index);
+unsigned fsl_edma_channel_index_of_tcd(volatile struct fsl_edma_tcd *edma_tcd);
+
+#ifdef LIBBSP_POWERPC_MPC55XXEVB_BSP_H
+  #error Legacy stuff. Move to compatibility layer.
+  #if EDMA_MODULE_COUNT == 1
+    #define EDMA_TCD_BY_CHANNEL_INDEX(channel_index) \
+      (&EDMA.TCD[(channel_index)])
+  #elif EDMA_MODULE_COUNT == 2
+    #define EDMA_TCD_BY_CHANNEL_INDEX(channel_index) \
+      ((channel_index) < EDMA_CHANNELS_PER_MODULE ? \
+        &EDMA_A.TCD[(channel_index)] \
+          : &EDMA_B.TCD[(channel_index) - EDMA_CHANNELS_PER_MODULE])
+  #else
+    #error "unsupported module count"
+  #endif
 #endif
 
-/* FIXME: These values are only valid for the MPC5566 and MPC5674F */
+#ifdef LIBBSP_POWERPC_MPC55XXEVB_BSP_H
 typedef enum {
+/* FIXME: These values are only valid for the MPC5566 and MPC5674F */
   EDMA_EQADC_A_FISR0_CFFF0 = 0,
   EDMA_EQADC_A_FISR0_RFDF0 = 1,
   EDMA_EQADC_A_FISR1_CFFF1 = 2,
@@ -155,15 +175,16 @@ typedef enum {
     EDMA_DECFILTER_H_IB = 64 + 26,
     EDMA_DECFILTER_H_OB = 64 + 27
   #endif
-} edma_channel;
+} fsl_edma_channel;
+#endif
 
-typedef struct edma_channel_context {
+typedef struct fsl_edma_channel_context {
   rtems_chain_node node;
-  volatile struct tcd_t *edma_tcd;
-  void (*done)(struct edma_channel_context *, uint32_t);
-} edma_channel_context;
+  volatile struct fsl_edma_tcd *edma_tcd;
+  void (*done)(struct fsl_edma_channel_context *, uint32_t);
+} fsl_edma_channel_context;
 
-void mpc55xx_edma_init(void);
+void fsl_edma_init(void);
 
 /**
  * @brief Obtains an eDMA channel.
@@ -171,14 +192,18 @@ void mpc55xx_edma_init(void);
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_RESOURCE_IN_USE The channel is already in use.
  */
-rtems_status_code mpc55xx_edma_obtain_channel_by_tcd(
-  volatile struct tcd_t *edma_tcd
+rtems_status_code fsl_edma_obtain_channel_by_tcd(
+  volatile struct fsl_edma_tcd *edma_tcd
 );
 
-void mpc55xx_edma_release_channel_by_tcd(volatile struct tcd_t *edma_tcd);
+void fsl_edma_release_channel_by_tcd(volatile struct fsl_edma_tcd *edma_tcd);
 
 /**
- * @brief Obtains an eDMA channel and registers the channel context.
+ * @brief Obtains a specific eDMA channel and registers the channel context.
+ *
+ * Tries to obtain the channel specified in the @a ctx.
+ *
+ * @a irq_priority will be ignored on all targets but MPC55xx based ones.
  *
  * The done handler of the channel context will be called
  * - during minor or major loop completions if interrupts are enabled in the
@@ -191,12 +216,33 @@ void mpc55xx_edma_release_channel_by_tcd(volatile struct tcd_t *edma_tcd);
  * @retval RTEMS_RESOURCE_IN_USE The channel is already in use.
  * @retval RTEMS_IO_ERROR Unable to install interrupt handler for this channel.
  */
-rtems_status_code mpc55xx_edma_obtain_channel(
-  edma_channel_context *ctx,
+rtems_status_code fsl_edma_obtain_channel(
+  fsl_edma_channel_context *ctx,
   unsigned irq_priority
 );
 
-void mpc55xx_edma_release_channel(edma_channel_context *ctx);
+/**
+ * @brief Obtains a free eDMA channel and registers the channel context.
+ *
+ * Tries to obtain the next free DMA channel. The tcd field of @a ctx will be
+ * set accordingly.
+ *
+ * The done handler of the channel context will be called
+ * - during minor or major loop completions if interrupts are enabled in the
+ *   corresponding TCD, or
+ * - in case a channel error occurs.
+ *
+ * An error status value not equal to zero indicates an error.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_RESOURCE_IN_USE No channels left.
+ * @retval RTEMS_IO_ERROR Unable to install interrupt handler.
+ */
+rtems_status_code fsl_edma_obtain_next_free_channel(
+  fsl_edma_channel_context *ctx
+);
+
+void fsl_edma_release_channel(fsl_edma_channel_context *ctx);
 
 /**
  * @brief Copies a source TCD to an eDMA TCD.
@@ -207,9 +253,9 @@ void mpc55xx_edma_release_channel(edma_channel_context *ctx);
  * This function can be used to start the channel if the START flags is
  * set in the source TCD.
  */
-void mpc55xx_edma_copy(
-  volatile struct tcd_t *edma_tcd,
-  const struct tcd_t *source_tcd
+void fsl_edma_copy(
+  volatile struct fsl_edma_tcd *edma_tcd,
+  const struct fsl_edma_tcd *source_tcd
 );
 
 /**
@@ -218,112 +264,112 @@ void mpc55xx_edma_copy(
  * The DONE flag of the eDMA TCD is cleared before the actual copy operation.
  * This enables the setting of channel link or scatter/gather options.
  */
-void mpc55xx_edma_copy_and_enable_hardware_requests(
-  volatile struct tcd_t *edma_tcd,
-  const struct tcd_t *source_tcd
+void fsl_edma_copy_and_enable_hardware_requests(
+  volatile struct fsl_edma_tcd *edma_tcd,
+  const struct fsl_edma_tcd *source_tcd
 );
 
-void mpc55xx_edma_sg_link(
-  volatile struct tcd_t *edma_tcd,
-  const struct tcd_t *source_tcd
+void fsl_edma_sg_link(
+  volatile struct fsl_edma_tcd *edma_tcd,
+  const struct fsl_edma_tcd *source_tcd
 );
 
-static inline volatile struct EDMA_tag *mpc55xx_edma_by_tcd(
-  volatile struct tcd_t *edma_tcd
+static inline volatile struct fsl_edma *fsl_edma_by_tcd(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  return (volatile struct EDMA_tag *)
+  return (volatile struct fsl_edma *)
     ((uintptr_t) edma_tcd & ~(uintptr_t) 0x1fff);
 }
 
-static inline unsigned mpc55xx_edma_channel_by_tcd(
-  volatile struct tcd_t *edma_tcd
+static inline unsigned fsl_edma_channel_by_tcd(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
 
   return edma_tcd - &edma->TCD[0];
 }
 
-static inline void mpc55xx_edma_enable_hardware_requests(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_enable_hardware_requests(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->SERQR.R = (uint8_t) channel;
+  edma->SERQR = (uint8_t) channel;
 }
 
-static inline void mpc55xx_edma_disable_hardware_requests(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_disable_hardware_requests(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->CERQR.R = (uint8_t) channel;
+  edma->CERQR = (uint8_t) channel;
 }
 
-static inline void mpc55xx_edma_enable_error_interrupts(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_enable_error_interrupts(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->SEEIR.R = (uint8_t) channel;
+  edma->SEEIR = (uint8_t) channel;
 }
 
-static inline void mpc55xx_edma_disable_error_interrupts(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_disable_error_interrupts(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->CEEIR.R = (uint8_t) channel;
+  edma->CEEIR = (uint8_t) channel;
 }
 
-static inline void mpc55xx_edma_set_start(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_set_start(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->SSBR.R = (uint8_t) channel;
+  edma->SSBR = (uint8_t) channel;
 }
 
-static inline void mpc55xx_edma_clear_done(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_clear_done(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->CDSBR.R = (uint8_t) channel;
+  edma->CDSBR = (uint8_t) channel;
 }
 
-static inline void mpc55xx_edma_clear_interrupts(
-  volatile struct tcd_t *edma_tcd
+static inline void fsl_edma_clear_interrupts(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  volatile struct EDMA_tag *edma = mpc55xx_edma_by_tcd(edma_tcd);
+  volatile struct fsl_edma *edma = fsl_edma_by_tcd(edma_tcd);
   unsigned channel = edma_tcd - &edma->TCD[0];
 
-  edma->CIRQR.R = (uint8_t) channel;
+  edma->CIRQR = (uint8_t) channel;
 }
 
-static inline bool mpc55xx_edma_is_done(
-  volatile struct tcd_t *edma_tcd
+static inline bool fsl_edma_is_done(
+  volatile struct fsl_edma_tcd *edma_tcd
 )
 {
-  return edma_tcd->BMF.B.DONE;
+  return ((edma_tcd->BMF & EDMA_TCD_BMF_DONE) != 0);
 }
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* LIBCPU_POWERPC_MPC55XX_EDMA_H */
+#endif /* LIBBSP_SHARED_FSL_EDMA_H */

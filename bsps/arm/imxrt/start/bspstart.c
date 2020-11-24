@@ -35,6 +35,7 @@
 #include <bsp/irq.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/flash-headers.h>
+#include <fsl/edma.h>
 
 #include <fsl_clock.h>
 #include <libfdt.h>
@@ -139,3 +140,5 @@ RTEMS_SYSINIT_ITEM(imxrt_lpi2c_init, RTEMS_SYSINIT_DEVICE_DRIVERS,
     RTEMS_SYSINIT_ORDER_MIDDLE);
 RTEMS_SYSINIT_ITEM(imxrt_ffec_init, RTEMS_SYSINIT_DEVICE_DRIVERS,
     RTEMS_SYSINIT_ORDER_MIDDLE);
+RTEMS_SYSINIT_ITEM(fsl_edma_init, RTEMS_SYSINIT_DEVICE_DRIVERS,
+    RTEMS_SYSINIT_ORDER_FIRST);
