@@ -119,7 +119,7 @@ arm_cp15_start_set_translation_table_entries(
 
     pt = &ttb[ARM_MMU_TRANSLATION_TABLE_ENTRY_COUNT];
     i = ARM_MMU_SMALL_PAGE_GET_INDEX(config->begin);
-    iend = ARM_MMU_SMALL_PAGE_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(config->end));
+    iend = ARM_MMU_SMALL_PAGE_GET_INDEX(ARM_MMU_SMALL_PAGE_MVA_ALIGN_UP(config->end));
     index_mask = (1U << (32 - ARM_MMU_SMALL_PAGE_BASE_SHIFT)) - 1U;
     flags = ARM_MMU_SECT_FLAGS_TO_SMALL_PAGE(config->flags);
 
