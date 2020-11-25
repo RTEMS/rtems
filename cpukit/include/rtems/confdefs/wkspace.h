@@ -137,7 +137,15 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
 #if defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   && defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
-  /* Ignore potential warnings from the static assertions below */
+  /*
+   * Ignore the following warnings from g++ and clang in the static assertions
+   * below:
+   *
+   * warning: the address of 'f()' will never be NULL [-Waddress]
+   *
+   * warning: comparison of function 'f' not equal to a null pointer is always
+   * true [-Wtautological-pointer-compare]
+   */
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Waddress"
   #pragma GCC diagnostic ignored "-Wpragmas"
