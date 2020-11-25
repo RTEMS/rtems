@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensionsImpl
+ * @ingroup RTEMSImplClassicUserExt
  *
  * @brief Classic User Extensions Implementation
  */
@@ -26,9 +26,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicUserExtensionsImpl User Extensions Implementation
+ * @defgroup RTEMSImplClassicUserExt User Extensions Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the User Extensions Manager implementation.
  *
  * @{
  */

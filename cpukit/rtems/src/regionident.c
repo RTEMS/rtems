@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicRegionImpl
+ * @ingroup RTEMSImplClassicRegion
  *
  * @brief rtems_region_ident() Implementation
  */

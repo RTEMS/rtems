@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicEventImpl
+ * @ingroup RTEMSImplClassicEvent
  *
  * @brief This header file provides interfaces used by the event implementation.
  */
@@ -25,9 +25,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicEventImpl Event Implementation
+ * @defgroup RTEMSImplClassicEvent Event Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Event Manager implementation.
  *
  * @{
  */

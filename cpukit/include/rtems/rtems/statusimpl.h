@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicStatusImpl
+ * @ingroup RTEMSImplClassicStatus
  *
  * @brief Classic Status Implementation
  */
@@ -25,9 +25,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicStatusImpl Classic Status Implementation
+ * @defgroup RTEMSImplClassicStatus Directive Status
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the implementation to support directive status
+ *   codes.
  *
  * @{
  */

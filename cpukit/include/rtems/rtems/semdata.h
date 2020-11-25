@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicSemImpl
+ * @ingroup RTEMSImplClassicSemaphore
  *
  * @brief Classic Semaphore Manager Data Structures
  */
@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicSemImpl
+ * @addtogroup RTEMSImplClassicSemaphore
  *
  * @{
  */

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicModesImpl
+ * @ingroup RTEMSImplClassicModes
  *
  * @brief Classic Modes Implementation
  */
@@ -25,9 +25,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicModesImpl Classic Modes Implementation
+ * @defgroup RTEMSImplClassicModes Task Modes
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the implementation to support task modes.
  *
  * @{
  */

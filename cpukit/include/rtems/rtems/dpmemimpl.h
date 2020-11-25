@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicDPMEMImpl
+ * @ingroup RTEMSImplClassicDPMem
  *
  * @brief Dual Ported Memory Manager Implementation
  */
@@ -25,9 +25,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicDPMEMImpl Dual Ported Memory Manager Implementation
+ * @defgroup RTEMSImplClassicDPMem Dual-Ported Memory Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Dual-Ported Memory Manager implementation.
  *
  * @{
  */

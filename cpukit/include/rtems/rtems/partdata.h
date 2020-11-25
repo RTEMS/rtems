@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicPartImpl
+ * @ingroup RTEMSImplClassicPartition
  *
  * @brief This header file provides the API used by the Application
  *   Configuration to define the Partition Manager information.
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicPartImpl
+ * @addtogroup RTEMSImplClassicPartition
  *
  * @{
  */

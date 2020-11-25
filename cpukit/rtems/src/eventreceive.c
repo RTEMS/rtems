@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicEventImpl
+ * @ingroup RTEMSImplClassicEvent
  *
  * @brief This source file contains the implementation of
  *   rtems_event_receive().

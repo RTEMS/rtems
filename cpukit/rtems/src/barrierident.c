@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicBarrierImpl
+ * @ingroup RTEMSImplClassicBarrier
  *
  * @brief rtems_barrier_ident() Implementation
  */

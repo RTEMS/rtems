@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicEventMP
+ * @ingroup RTEMSImplClassicEventMP
  *
  * @brief This source file contains the implementation of the task event MPCI
  *   support.

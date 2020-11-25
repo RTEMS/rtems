@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicASRImpl
+ * @ingroup RTEMSImplClassicASR
  *
  * @brief Classic ASR Implementation
  */
@@ -26,9 +26,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicASRImpl Classic ASR Implementation
+ * @defgroup RTEMSImplClassicASR Asynchronous Signal Routine (ASR)
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the implementation to support asynchronous signal
+ *   routines.
  *
  * @{
  */

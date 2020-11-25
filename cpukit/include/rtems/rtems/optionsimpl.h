@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicOptionsImpl
+ * @ingroup RTEMSImplClassicOptions
  *
  * @brief Classic Options Implementation
  */
@@ -24,9 +24,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicOptionsImpl Classic Options Implementation
+ * @defgroup RTEMSImplClassicOptions Directive Options
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the implementation to support directive options.
  *
  * @{
  */

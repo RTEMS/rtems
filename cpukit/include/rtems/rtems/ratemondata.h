@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicRateMonImpl
+ * @ingroup RTEMSImplClassicRateMonotonic
  *
  * @brief Classic Rate Monotonic Scheduler Data Structures
  */
@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicRateMonImpl
+ * @addtogroup RTEMSImplClassicRateMonotonic
  *
  * @{
  */

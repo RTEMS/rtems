@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensionsImpl
+ * @ingroup RTEMSImplClassicUserExt
  *
  * @brief Classic User Extensions Data Structures
  */
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicUserExtensionsImpl
+ * @addtogroup RTEMSImplClassicUserExt
  *
  * @{
  */

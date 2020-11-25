@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTimerImpl
+ * @ingroup RTEMSImplClassicTimer
  *
  * @brief rtems_timer_ident() Implementation
  */

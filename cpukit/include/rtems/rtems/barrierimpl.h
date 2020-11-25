@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicBarrierImpl
+ * @ingroup RTEMSImplClassicBarrier
  *
  * @brief Classic Barrier Manager Implementation
  */
@@ -27,11 +27,13 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicBarrierImpl Classic Barrier Implementation
+ * @defgroup RTEMSImplClassicBarrier Barrier Manager
  *
- *  @ingroup RTEMSImplClassic
+ * @ingroup RTEMSImplClassic
  *
- *  @{
+ * @brief This group contains the Barrier Manager implementation.
+ *
+ * @{
  */
 
 /**

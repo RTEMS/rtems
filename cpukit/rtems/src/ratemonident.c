@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicRateMonImpl
+ * @ingroup RTEMSImplClassicRateMonotonic
  *
  * @brief rtems_rate_monotonic_ident() Implementation
  */

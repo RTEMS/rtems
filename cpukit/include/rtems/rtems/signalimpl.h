@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicSignalImpl
+ * @ingroup RTEMSImplClassicSignal
  *
  * @brief Signals Implementation
  */
@@ -25,11 +25,14 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicSignalImpl Signals Implementation
+ * @defgroup RTEMSImplClassicSignal Signal Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Signal Manager implementation.
+ *
+ * @{
  */
-/**@{*/
 
 void _Signal_Action_handler(
   Thread_Control   *executing,

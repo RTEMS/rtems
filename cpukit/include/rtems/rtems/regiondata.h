@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicRegionImpl
+ * @ingroup RTEMSImplClassicRegion
  *
  * @brief Classic Region Manager Data Structures
  */
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicRegionImpl
+ * @addtogroup RTEMSImplClassicRegion
  *
  * @{
  */

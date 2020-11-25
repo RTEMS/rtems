@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicRateMonImpl
+ * @ingroup RTEMSImplClassicRateMonotonic
  *
  * @brief Classic Rate Monotonic Scheduler Implementation
  */
@@ -32,9 +32,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicRateMonImpl Classic Rate Monotonic Scheduler Implementation
+ * @defgroup RTEMSImplClassicRateMonotonic Rate Monotonic Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Rate Monotonic Manager implementation.
  *
  * @{
  */

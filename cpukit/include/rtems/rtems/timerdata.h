@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTimerImpl
+ * @ingroup RTEMSImplClassicTimer
  *
  * @brief Classic Partition Manager Data Structures
  */
@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicTimerImpl
+ * @addtogroup RTEMSImplClassicTimer
  *
  * @{
  */

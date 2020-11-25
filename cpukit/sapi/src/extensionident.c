@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensionsImpl
+ * @ingroup RTEMSImplClassicUserExt
  *
  * @brief rtems_extension_ident() Implementation
  */

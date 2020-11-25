@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicObjectImpl
+ * @ingroup RTEMSImplClassicObject
  *
  * @brief _RTEMS_Name_to_id() Implementation
  */

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTasksImpl
+ * @ingroup RTEMSImplClassicTask
  */
 
 /*

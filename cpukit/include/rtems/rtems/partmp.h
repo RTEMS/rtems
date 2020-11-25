@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicPartitionMP
+ *
  * @brief MP Support in Partition Manager
  *
  * This include file contains all the constants and structures associated
@@ -29,14 +31,16 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicPartMP Partition MP Support
+ * @defgroup RTEMSImplClassicPartitionMP \
+ *   Partition Manager Multiprocessing (MP) Support
  *
- *  @ingroup ClassicMP
+ * @ingroup RTEMSImplClassicPartition
  *
- *  This encapsulates functionality related to the transparent multiprocessing
- *  support within the Classic API Partition Manager.
+ * @brief This group contains the implementation to support the Partition Manager
+ *   in multiprocessing (MP) configurations.
+ *
+ * @{
  */
-/*{*/
 
 /**
  *  The following enumerated type defines the list of

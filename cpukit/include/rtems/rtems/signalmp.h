@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Signal MP Support
+ * @ingroup RTEMSImplClassicSignalMP
  *
  * This include file contains all the constants and structures associated
  * with the Multiprocessing Support in the Signal Manager.
@@ -29,14 +29,16 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicSignalMP Signal MP Support
+ * @defgroup RTEMSImplClassicSignalMP \
+ *   Signal Manager Multiprocessing (MP) Support
  *
- *  @ingroup ClassicMP
+ * @ingroup RTEMSImplClassicSignal
  *
- *  This encapsulates functionality related to the transparent multiprocessing
- *  support within the Classic API Signal Manager.
+ * @brief This group contains the implementation to support the Signal Manager
+ *   in multiprocessing (MP) configurations.
+ *
+ * @{
  */
-/*{*/
 
 /*
  *  @brief Signal_MP_Send_process_packet

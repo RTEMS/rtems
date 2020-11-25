@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicDPMEMImpl
+ * @ingroup RTEMSImplClassicDPMem
  *
  * @brief rtems_port_ident() Implementation
  */

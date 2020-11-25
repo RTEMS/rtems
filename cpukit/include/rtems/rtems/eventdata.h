@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicEventImpl
+ * @ingroup RTEMSImplClassicEvent
  *
  * @brief This header file provides the API used by the Application
  *   Configuration to define the configured Thread Control Block (TCB).
@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicEventImpl
+ * @addtogroup RTEMSImplClassicEvent
  *
  * @{
  */

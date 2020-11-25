@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicASRImpl
+ * @ingroup RTEMSImplClassicASR
  *
  * @brief Classic ASR Data Structures
  */
@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicASRImpl
+ * @addtogroup RTEMSImplClassicASR
  *
  * @{
  */

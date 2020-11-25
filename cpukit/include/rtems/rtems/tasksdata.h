@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTasksImpl
+ * @ingroup RTEMSImplClassicTask
  *
  * @brief Classic Tasks Manager Data Structures
  */
@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicTasksImpl
+ * @addtogroup RTEMSImplClassicTask
  *
  * @{
  */

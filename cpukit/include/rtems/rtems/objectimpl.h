@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicObjectImpl
+ * @ingroup RTEMSImplClassicObject
  *
  * @brief Implementation Interfaces for Classic Objects
  */
@@ -44,9 +44,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicObjectImpl Classic Object Implementation
+ * @defgroup RTEMSImplClassicObject Object Services
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Object Services implementation.
  *
  * @{
  */

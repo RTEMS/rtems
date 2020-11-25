@@ -1,12 +1,4 @@
 /**
- * @defgroup RTEMSImplClassic Classic
- * 
- * @ingroup RTEMSImpl
- *
- * @brief Classic
- */
-
-/**
  * @defgroup RTEMSAPIIO IO
  *
  * @ingroup RTEMSAPI

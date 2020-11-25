@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueueImpl
+ * @ingroup RTEMSImplClassicMessage
  *
  * @brief rtems_message_queue_ident() Implementation
  */

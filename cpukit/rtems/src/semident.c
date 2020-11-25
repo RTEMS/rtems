@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicSemImpl
+ * @ingroup RTEMSImplClassicSemaphore
  *
  * @brief rtems_semaphore_ident() Implementation
  */

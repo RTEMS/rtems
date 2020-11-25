@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueueImpl
+ * @ingroup RTEMSImplClassicMessage
  *
  * @brief This source file contains the implementation of
  *   rtems_message_queue_create().

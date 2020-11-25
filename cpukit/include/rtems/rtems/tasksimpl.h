@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTasksImpl
+ * @ingroup RTEMSImplClassicTask
  *
  * @brief Classic Tasks Manager Implementation
  */
@@ -27,9 +27,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicTasksImpl Classic Tasks Manager Implementation
+ * @defgroup RTEMSImplClassicTask Task Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Task Manager implementation.
  *
  * @{
  */

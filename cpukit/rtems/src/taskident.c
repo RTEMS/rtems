@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTasksImpl
+ * @ingroup RTEMSImplClassicTask
  *
  * @brief rtems_task_ident() Implementation
  */

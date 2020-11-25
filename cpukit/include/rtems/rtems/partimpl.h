@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicPartImpl
+ * @ingroup RTEMSImplClassicPartition
  *
  * @brief This header file provides interfaces used by the Partition Manager
  *   implementation.
@@ -26,9 +26,11 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicPartImpl Partition Manager Implementation
+ * @defgroup RTEMSImplClassicPartition Partition Manager
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Partition Manager implementation.
  *
  * @{
  */

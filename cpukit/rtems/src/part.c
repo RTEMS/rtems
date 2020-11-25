@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicPartImpl
+ * @ingroup RTEMSImplClassicPartition
  *
  * @brief This source file contains a definition of ::_Partition_Information
  *   with zero objects.

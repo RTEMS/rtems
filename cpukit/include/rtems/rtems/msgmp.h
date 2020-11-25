@@ -1,6 +1,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicMessageMP
+ *
  * @brief Message Manager MP Support
  *
  * This include file contains all the constants and structures associated
@@ -29,14 +31,16 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicMsgMP Message Queue MP Support
+ * @defgroup RTEMSImplClassicMessageMP \
+ *   Message Manager Multiprocessing (MP) Support
  *
- *  @ingroup ClassicMP
+ * @ingroup RTEMSImplClassicMessage
  *
- *  This encapsulates functionality related to the transparent multiprocessing
- *  support within the Classic API Message Queue Manager.
+ * @brief This group contains the implementation to support the Message Manager
+ *   in multiprocessing (MP) configurations.
+ *
+ * @{
  */
-/*{*/
 
 /**
  *  The following enumerated type defines the list of

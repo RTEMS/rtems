@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTaskMP
+ * @ingroup RTEMSImplClassicTaskMP
  *
  * This include file contains all the constants and structures associated
  * with the multiprocessing support in the task manager.
@@ -29,14 +29,16 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicTaskMP Task MP Support
+ * @defgroup RTEMSImplClassicTaskMP \
+ *   Task Manager Multiprocessing (MP) Support
  *
- *  @ingroup ClassicMP
+ * @ingroup RTEMSImplClassicTask
  *
- *  This encapsulates functionality related to the transparent multiprocessing
- *  support within the Classic API Task Manager.
+ * @brief This group contains the implementation to support the Task Manager
+ *   in multiprocessing (MP) configurations.
+ *
+ * @{
  */
-/**@{*/
 
 /**
  *  The following enumerated type defines the list of

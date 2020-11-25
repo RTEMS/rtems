@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicPartImpl
+ * @ingroup RTEMSImplClassicPartition
  *
  * @brief This source file contains the implementation of
  *   rtems_partition_ident().

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueueImpl
+ * @ingroup RTEMSImplClassicMessage
  *
  * @brief Classic Message Queue Manager Implementation
  */
@@ -26,11 +26,13 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup ClassicMessageQueueImpl Classic Message Queue Implementation
+ * @defgroup RTEMSImplClassicMessage Message Manager
  *
- *  @ingroup RTEMSImplClassic
+ * @ingroup RTEMSImplClassic
  *
- *  @{
+ * @brief This group contains the Message Manager implementation.
+ *
+ * @{
  */
 
 /**

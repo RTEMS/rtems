@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicDPMEMImpl
+ * @ingroup RTEMSImplClassicDPMem
  *
  * @brief Classic Dual Ported Memory Manager Data Structures
  */
@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicDPMEMImpl
+ * @addtogroup RTEMSImplClassicDPMem
  *
  * @{
  */

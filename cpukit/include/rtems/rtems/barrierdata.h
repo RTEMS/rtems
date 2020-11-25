@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicBarrierImpl
+ * @ingroup RTEMSImplClassicBarrier
  *
  * @brief Classic Barrier Manager Data Structures
  */
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ClassicBarrierImpl
+ * @addtogroup RTEMSImplClassicBarrier
  *
  * @{
  */

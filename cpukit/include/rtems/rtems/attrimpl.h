@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicAttributesImpl
+ * @ingroup RTEMSImplClassicAttr
  *
  * @brief Classic Attributes Implementation
  */
@@ -26,9 +26,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicAttributesImpl Classic Attributes Implementation
+ * @defgroup RTEMSImplClassicAttr Directive Attributes
  *
  * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the implementation to support directive
+ *   attributes.
  *
  * @{
  */
