@@ -34,7 +34,8 @@ extern "C" {
  *
  * @ingroup RTEMSScoreSchedulerPrioritySMP
  *
- * @brief Deterministic Priority Affinity SMP Scheduler
+ * @brief This group contains the Deterministic Priority Affinity SMP Scheduler
+ *   implementation.
  *
  * This is an extension of the Deterministic Priority SMP Scheduler. which
  * is an implementation of the global fixed priority scheduler (G-FP). 

@@ -35,13 +35,15 @@ extern "C" {
  *
  * @ingroup RTEMSScoreISR
  *
- * @brief Low-level lock to protect critical sections accessed by threads and
- * interrupt service routines.
+ * @brief This group contains the ISR locks implementation.
  *
- * On single processor configurations the ISR locks degrade to simple ISR
+ * The ISR locks are low-level locks to protect critical sections accessed by
+ * threads and interrupt service routines.
+ *
+ * In uniprocessor configurations the ISR locks degrade to simple ISR
  * disable/enable sequences.  No additional storage or objects are required.
  *
- * This synchronization primitive is supported on SMP configurations.  Here SMP
+ * This synchronization primitive is supported in SMP configurations.  Here SMP
  * locks are used.
  *
  * @{

@@ -33,7 +33,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Stack Handler
+ * @brief This group contains the Stack Handler implementation.
  *
  * This handler encapsulates functionality which is used in the management
  * of thread stacks.

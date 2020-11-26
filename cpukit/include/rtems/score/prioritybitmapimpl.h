@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScorePriority
+ * @ingroup RTEMSScorePriorityBitmap
  *
  * @brief Inlined Routines in the Priority Handler Bit Map Implementation
  *

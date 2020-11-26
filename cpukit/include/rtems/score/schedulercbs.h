@@ -35,11 +35,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreSchedulerCBS CBS Scheduler
+ * @defgroup RTEMSScoreSchedulerCBS Constant Bandwidth Server (CBS) Scheduler
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief CBS Scheduler.
+ * @brief This group contains the Constant Bandwidth Server (CBS) Scheduler
+ *   implementation.
  *
  * @{
  */

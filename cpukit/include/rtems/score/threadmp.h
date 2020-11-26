@@ -32,11 +32,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreThreadMP Thread Handler Multiprocessing Support
+ * @defgroup RTEMSScoreThreadMP Thread Handler Multiprocessing (MP) Support
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreThread
  *
- * @brief Thread Handler Multiprocessing Support
+ * @brief This group contains the implementation to support the Thread Handler
+ *   in multiprocessing (MP) configurations.
  *
  * This handler encapsulates functionality which is related to managing
  * threads in a multiprocessor system configuration.  This handler must

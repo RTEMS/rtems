@@ -28,9 +28,9 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScorePriorityBitmap Bitmap Priority Thread Routines
+ * @defgroup RTEMSScorePriorityBitmap Priority Bitmap
  *
- * @brief Bitmap Priority Thread Routines
+ * @brief This group contains the implementation to support priority bitmaps.
  *
  * @ingroup RTEMSScore
  *

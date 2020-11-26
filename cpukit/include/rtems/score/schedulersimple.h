@@ -32,7 +32,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief Simple Priority Scheduler
+ * @brief This group contains the Simple Priority Scheduler implementation.
  *
  * @{
  */

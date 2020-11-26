@@ -25,7 +25,7 @@
  *
  * @ingroup RTEMSScore
  *
- * @brief Functionality for Abstraction of Thread Context Management
+ * @brief This group contains the Context Handler implementation.
  *
  * This handler encapsulates functionality which abstracts thread context
  * management in a portable manner.

@@ -36,7 +36,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreSchedulerSMP
  *
- * @brief Strong APA Scheduler
+ * @brief This group contains the Strong APA Scheduler implementation.
  *
  * This is an implementation of the global fixed priority scheduler (G-FP).  It
  * uses one ready chain per priority to ensure constant time insert operations.

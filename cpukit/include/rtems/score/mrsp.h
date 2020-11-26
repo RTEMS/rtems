@@ -34,11 +34,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup RTEMSScoreMRSP Multiprocessor Resource Sharing Protocol Handler
+ * @defgroup RTEMSScoreMRSP Multiprocessor Resource Sharing Protocol (MrsP)
  *
  * @ingroup RTEMSScore
  *
- * @brief Multiprocessor Resource Sharing Protocol (MrsP).
+ * @brief This group contains the implementation to support the Multiprocessor
+ *   Resource Sharing Protocol (MrsP) .
  *
  * The Multiprocessor Resource Sharing Protocol (MrsP) is defined in A.  Burns
  * and A.J.  Wellings, A Schedulability Compatible Multiprocessor Resource

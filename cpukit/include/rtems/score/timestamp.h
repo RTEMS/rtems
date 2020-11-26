@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup SuperCoreTimeStamp
+ * @ingroup RTEMSScoreTimestamp
  *
  * @brief Helpers for Manipulating Timestamps
  *
@@ -21,11 +21,11 @@
 #define _RTEMS_SCORE_TIMESTAMP_H
 
 /**
- * @defgroup SuperCoreTimeStamp Score Timestamp
+ * @defgroup RTEMSScoreTimestamp Timestamp Handler
  *
  * @ingroup RTEMSScore
  *
- * @brief Score Timestamp
+ * @brief This group contains the Timestamp Handler implementation.
  *
  * This handler encapsulates functionality related to manipulating
  * SuperCore Timestamps.  SuperCore Timestamps may be used to

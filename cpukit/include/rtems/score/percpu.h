@@ -78,14 +78,16 @@ struct _Thread_Control;
 struct Scheduler_Context;
 
 /**
- *  @defgroup PerCPU RTEMS Per CPU Information
+ * @defgroup RTEMSScorePerCPU Per-CPU Information
  *
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScore
  *
- *  This defines the per CPU state information required by RTEMS
- *  and the BSP.  In an SMP configuration, there will be multiple
- *  instances of this data structure -- one per CPU -- and the
- *  current CPU number will be used as the index.
+ * @brief This group contains the implementation of the per-CPU information.
+ *
+ * The per-CPU information encapsulates state which is maintained for each
+ * configured processor in the system.  There will be one instance of a
+ * ::Per_CPU_Control in the ::_Per_CPU_Information table for each configured
+ * processor in the system.
  */
 
 /**@{*/

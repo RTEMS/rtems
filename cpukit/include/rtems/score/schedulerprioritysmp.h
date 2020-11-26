@@ -36,7 +36,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreSchedulerSMP
  *
- * @brief Deterministic Priority SMP Scheduler
+ * @brief This group contains the Deterministic Priority SMP Scheduler implementation.
  *
  * This is an implementation of the global fixed priority scheduler (G-FP).  It
  * uses one ready chain per priority to ensure constant time insert operations.

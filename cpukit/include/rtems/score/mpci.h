@@ -32,7 +32,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief MPCI Handler
+ * @brief This group contains the MPCI Handler implementation.
  *
  * The MPCI Handler encapsulates functionality which is related to the
  * generation, receipt, and processing of remote operations in a

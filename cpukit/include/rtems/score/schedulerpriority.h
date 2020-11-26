@@ -34,7 +34,8 @@ extern "C" {
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief Deterministic Priority Scheduler
+ * @brief This group contains the Deterministic Priority Scheduler
+ *   implementation.
  *
  * @{
  */

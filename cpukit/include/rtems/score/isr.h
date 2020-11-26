@@ -30,13 +30,12 @@
  *
  * @ingroup RTEMSScore
  *
- * @brief ISR Handler
+ * @brief This group contains the ISR Handler implementation.
  *
  * This handler encapsulates functionality which provides the foundation
  * ISR services used in all of the APIs supported by RTEMS.
  *
- * The ISR Nest level counter variable is maintained as part of the
- * per cpu data structure.
+ * The ::_ISR_Nest_level variable is maintained by @ref RTEMSScorePerCPU.
  *
  * @{
  */

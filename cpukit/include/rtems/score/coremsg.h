@@ -35,7 +35,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Message Queue Handler
+ * @brief This group contains the Message Queue Handler implementation.
  *
  * This handler encapsulates functionality which provides the foundation
  * Message Queue services used in all of the APIs supported by RTEMS.

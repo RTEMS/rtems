@@ -24,7 +24,7 @@
  *
  * @ingroup RTEMSScore
  *
- * @brief Support for atomic operations.
+ * @brief This group contains the atomic operations implementation.
  *
  * Atomic operations can be used to implement low-level synchronization
  * primitives on SMP systems, like spin locks.  All atomic operations are

@@ -28,10 +28,9 @@
  *
  * @ingroup RTEMSScore
  *
- * @brief Internal Error Handler
+ * @brief This group contains the Internal Error Handler implementation.
  *
- * This handler encapsulates functionality which provides the foundation
- * Semaphore services used in all of the APIs supported by RTEMS.
+ * This handler encapsulates functionality to terminate the system.
  *
  * @{
  */

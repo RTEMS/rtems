@@ -32,7 +32,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreSchedulerSMP
  *
- * @brief Simple Priority SMP Scheduler
+ * @brief This group contains the Simple Priority SMP Scheduler implementation.
  *
  * The Simple Priority SMP Scheduler allocates a processor for the processor
  * count highest priority ready threads.  The thread priority and position in

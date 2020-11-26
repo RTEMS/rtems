@@ -42,7 +42,7 @@ struct Scheduler_Node;
  *
  * @ingroup RTEMSScore
  *
- * @brief Thread Queue Handler
+ * @brief This group contains the Thread Queue Handler implementation.
  *
  * This handler provides the capability to have threads block in
  * ordered sets. The sets may be ordered using the FIFO or priority

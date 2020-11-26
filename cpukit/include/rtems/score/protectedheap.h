@@ -30,7 +30,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreHeap
  *
- * @brief Provides protected heap services.
+ * @brief This group contains the Protected Heap Handler implementation.
  *
  * The @ref ScoreAllocatorMutex is used to protect the heap accesses.
  *

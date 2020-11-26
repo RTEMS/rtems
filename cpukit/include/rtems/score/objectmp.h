@@ -32,11 +32,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreObjectMP Object Handler Multiprocessing Support
+ * @defgroup RTEMSScoreObjectMP Object Handler Multiprocessing (MP) Support
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreObject
  *
- * @brief Object Handler Multiprocessing Support
+ * @brief This group contains the implementation to support the Object Handler
+ *   in multiprocessing (MP) configurations.
  *
  * This handler encapsulates functionality which is used to manage
  * objects which have been declared to be globally visible.  This handler

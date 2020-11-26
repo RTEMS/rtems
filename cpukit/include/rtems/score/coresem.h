@@ -34,7 +34,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Semaphore Handler
+ * @brief This group contains the Semaphore Handler implementation.
  *
  * This handler encapsulates functionality which provides the foundation
  * Semaphore services used in all of the APIs supported by RTEMS.

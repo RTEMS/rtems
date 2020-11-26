@@ -23,6 +23,16 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * @defgroup RTEMSScoreIO IO Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This group contains the IO Handler implementation.
+ *
+ * @{
+ */
+
 typedef void ( *IO_Put_char )( int c, void *arg );
 
 int _IO_Printf(
@@ -63,6 +73,8 @@ int _IO_Base64(
   const char  *wordbreak,
   int          wordlen
 );
+
+/** @} */ 
 
 #ifdef __cplusplus
 }

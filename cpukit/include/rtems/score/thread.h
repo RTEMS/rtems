@@ -62,7 +62,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Thread Handler
+ * @brief This group contains the Thread Handler implementation.
  *
  * This handler encapsulates functionality related to the management of
  * threads.  This includes the creation, deletion, and scheduling of threads.

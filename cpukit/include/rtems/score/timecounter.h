@@ -38,7 +38,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Timecounter Handler.
+ * @brief This group contains the Timecounter Handler implementation.
  *
  * @{
  */

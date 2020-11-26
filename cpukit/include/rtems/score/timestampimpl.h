@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup SuperCoreTimeStamp
+ * @ingroup RTEMSScoreTimestamp
  *
  * @brief Helpers for Manipulating Timestamps
  *

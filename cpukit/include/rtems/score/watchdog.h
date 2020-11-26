@@ -37,7 +37,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Watchdog Handler
+ * @brief This group contains the Watchdog Handler implementation.
  *
  * This handler encapsulates functionality related to the scheduling of
  * watchdog functions to be called at specific times in the future.

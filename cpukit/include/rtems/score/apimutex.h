@@ -27,7 +27,10 @@
  *
  * @ingroup RTEMSScore
  *
- * @brief Provides routines to ensure mutual exclusion on API level.
+ * @brief This group contains the API Mutex Handler implementation.
+ *
+ * This handler provides routines to ensure mutual exclusion in a thread
+ * context at the API level.
  *
  * @{
  */

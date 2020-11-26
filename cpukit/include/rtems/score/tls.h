@@ -36,7 +36,8 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Thread-local storage (TLS) support.
+ * @brief This group contains the implementation to support thread-local
+ *   storage (TLS).
  *
  * Variants I and II are according to Ulrich Drepper, "ELF Handling For
  * Thread-Local Storage".

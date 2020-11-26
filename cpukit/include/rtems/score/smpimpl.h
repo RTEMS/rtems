@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreSMPImpl
+ * @ingroup RTEMSScoreSMP
  *
  * @brief SuperCore SMP Implementation
  */

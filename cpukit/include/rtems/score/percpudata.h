@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup PerCPUData
+ * @ingroup RTEMSScorePerCPUData
  *
- * @brief Definition of custom per-CPU items.
+ * @brief This header file provides the Flexible Per-CPU Data API.
  */
 
 /*
@@ -31,14 +31,15 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup PerCPUData Flexible Per-CPU Data
+ * @defgroup RTEMSScorePerCPUData Flexible Per-CPU Data
  *
- * @ingroup PerCPU
+ * @ingroup RTEMSScorePerCPU
  *
- * @brief Flexible Per-CPU Data
+ * @brief This group contains the implementation to support flexible per-CPU
+ *   data.
  *
- * Provides the definition of custom per-CPU items.  The items are collected in
- * a special linker set.  During system initialization the content of the
+ * Macros to define custom per-CPU items are provided.  The items are collected
+ * in a special linker set.  During system initialization the content of the
  * linker set is duplicated for all secondary processors using memory allocated
  * from the workspace.  The begin and end of the per-CPU data area is cache
  * line aligned (CPU_CACHE_LINE_BYTES).

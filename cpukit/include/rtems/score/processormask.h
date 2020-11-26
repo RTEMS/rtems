@@ -38,7 +38,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Processor Mask
+ * @brief This group contains the implementation to support processor masks.
  *
  * The processor mask provides a bit map large enough to provide one bit for
  * each processor in the system.  It is a fixed size internal data type

@@ -35,7 +35,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief SMP Scheduler
+ * @brief This group contains the SMP Scheduler implementation.
  *
  * @{
  */

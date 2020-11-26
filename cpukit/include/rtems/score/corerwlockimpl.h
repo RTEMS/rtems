@@ -28,13 +28,14 @@
 #include <rtems/score/watchdog.h>
 
 /**
- * @defgroup RTEMSScoreRWLock ScoreRWLock
- * 
+ * @defgroup RTEMSScoreRWLock Read-Write Lock
+ *
  * @ingroup RTEMSScore
- * 
- * @brief ScoreRWLock
+ *
+ * @brief This group contains the Read-Write Lock implementation.
+ *
+ * @{
  */
-/** @{ */
 
 #ifdef __cplusplus
 extern "C" {

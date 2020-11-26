@@ -48,8 +48,10 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Low level handler to provide memory areas for higher level memory
- * handlers such as the Workspace Handler.
+ * @brief This group contains the Memory Handler implementation.
+ *
+ * The Memory Handler provides memory areas supplied by the BSP to higher level memory
+ * consumers such as the @ref RTEMSScoreWorkspace and the @ref MallocSupport.
  *
  * @{
  */

@@ -32,7 +32,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Support for Address Manipulation
+ * @brief This group contains the Address Handler implementation.
  *
  * This handler encapsulates functionality which abstracts address
  * manipulation in a portable manner.

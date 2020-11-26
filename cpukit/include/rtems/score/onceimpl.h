@@ -30,11 +30,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup RTEMSScoreOnce Once Functions.
+ * @defgroup RTEMSScoreOnce Execute Once Support
  *
  * @ingroup RTEMSScore
  *
- * @brief The _Once() function for pthread_once() and rtems_gxx_once().
+ * @brief This group contains the implementation to execute a routine only
+ *   once.
  *
  * @{
  */

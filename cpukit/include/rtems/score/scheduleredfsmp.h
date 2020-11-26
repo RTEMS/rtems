@@ -26,11 +26,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreSchedulerSMPEDF EDF Priority SMP Scheduler
+ * @defgroup RTEMSScoreSchedulerSMPEDF Earliest Deadline First (EDF) Priority SMP Scheduler
  *
  * @ingroup RTEMSScoreSchedulerSMP
  *
- * @brief EDF Priority SMP Scheduler
+ * @brief This group contains the Earliest Deadline First (EDF) Priority SMP
+ *   Scheduler implementation.
  *
  * @{
  */

@@ -19,11 +19,12 @@
 #include <rtems/score/basedefs.h>
 
 /**
- * @defgroup RTEMSScoreCPUAtomic Atomic Operations CPU
+ * @defgroup RTEMSScoreAtomicCPU C11/C++11 Atomic Operations
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreAtomic
  *
- * @brief Atomic Operations CPU API
+ * @brief This group contains the atomic operations implementation using
+ *   functions provided by the C11/C++11.
  *
  * @{
  */

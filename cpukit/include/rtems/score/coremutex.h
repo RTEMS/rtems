@@ -40,7 +40,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Mutex Handler
+ * @brief This group contains the Mutex Handler implementation.
  *
  * This handler encapsulates functionality which provides the foundation
  * Mutex services used in all of the APIs supported by RTEMS.

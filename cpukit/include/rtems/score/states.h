@@ -31,7 +31,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief SuperCore Thread States
+ * @brief This group contains the implementation to support thread states.
  *
  * This handler encapsulates functionality which relates to the management of
  * the state bitmap associated with each thread.

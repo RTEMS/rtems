@@ -29,7 +29,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Provides Data Structures Chain Node and Chain Control
+ * @brief This group contains the Chain Handler implementation.
  *
  * The Chain Handler is used to manage sets of entities.  This handler
  * provides two data structures.  The Chain Node data structure is included

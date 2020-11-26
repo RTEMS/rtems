@@ -35,8 +35,10 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * This handler encapsulates functionality related to the management of
- * the RTEMS Executive Workspace.
+ * @brief This group contains the Workspace Handler implementation.
+ *
+ * This handler encapsulates functionality related to the management of the
+ * RTEMS Workspace.
  *
  * @{
  */

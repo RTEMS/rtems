@@ -33,11 +33,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RTEMSScoreMPPacket MP Packet Handler
+ * @defgroup RTEMSScoreMPPacket Multiprocessing (MP) Packet Handler
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreMPCI
  *
- * @brief MP Packte Handler
+ * @brief This group contains the Multiprocessing (MP) Packet Handler
+ *   implementation.
  *
  * This handler encapsulates the primary definition of MPCI packets.  This
  * handler defines the part of the packet that is common to all remote

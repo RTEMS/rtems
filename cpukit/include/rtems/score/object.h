@@ -34,9 +34,9 @@ extern "C" {
  *
  * @ingroup RTEMSImpl
  *
- * @brief Provides services for all APIs.
+ * @brief This group contains the SuperCore implementation.
  *
- * @{
+ * The SuperCore provides services for all APIs.
  */
 
 /**
@@ -44,15 +44,16 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Provides CPU architecture dependent services.
- *
- * @{
+ * @brief This group contains the implementation to support a processor
+ *   architecture.
  */
 
 /**
  * @defgroup RTEMSScoreObject Object Handler
  *
  * @ingroup RTEMSScore
+ *
+ * @brief This group contains the Object Handler implementation.
  *
  * @{
  */
@@ -347,8 +348,6 @@ extern uint16_t _Objects_Local_node;
 #define _Objects_Local_node ((uint16_t) 1)
 #endif
 
-/** @} */
-/** @} */
 /** @} */
 
 #ifdef __cplusplus

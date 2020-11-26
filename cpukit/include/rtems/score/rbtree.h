@@ -33,7 +33,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Red-Black Tree Handler.
+ * @brief This group contains the Red-Black Tree Handler implementation.
  *
  * The Red-Black Tree Handler is used to manage sets of entities.  This handler
  * provides two data structures.  The rbtree Node data structure is included

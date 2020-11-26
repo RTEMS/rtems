@@ -34,7 +34,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief The Heap Handler provides a heap.
+ * @brief This group contains the Heap Handler implementation.
  *
  * A heap is a doubly linked list of variable size blocks which are allocated
  * using the first fit method.  Garbage collection is performed each time a

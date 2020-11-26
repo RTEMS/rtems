@@ -29,7 +29,7 @@ extern "C" {
  *
  * @ingroup RTEMSScore
  *
- * @brief Management of the internal system state of RTEMS.
+ * @brief This group contains the System State Handler implementation.
  *
  * @{
  */

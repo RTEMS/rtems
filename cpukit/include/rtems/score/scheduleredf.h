@@ -37,7 +37,7 @@ extern "C" {
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief EDF Scheduler
+ * @brief This group contains the EDF Scheduler implementation.
  *
  * @{
  */
