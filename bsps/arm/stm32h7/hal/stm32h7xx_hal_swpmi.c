@@ -177,6 +177,7 @@
 
 
 /** @defgroup SWPMI SWPMI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL SWPMI module driver
   * @{
   */
@@ -214,10 +215,12 @@ static HAL_StatusTypeDef SWPMI_WaitOnFlagSetUntilTimeout(SWPMI_HandleTypeDef *hs
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup SWPMI_Exported_Functions SWPMI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SWPMI_Exported_Group1 Initialization/de-initialization methods
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -589,6 +592,7 @@ HAL_StatusTypeDef HAL_SWPMI_UnRegisterCallback(SWPMI_HandleTypeDef        *hswpm
   */
 
 /** @defgroup SWPMI_Exported_Group2 IO operation methods
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief SWPMI Transmit/Receive functions
   *
 @verbatim
@@ -1270,6 +1274,7 @@ HAL_StatusTypeDef HAL_SWPMI_DisableLoopback(SWPMI_HandleTypeDef *hswpmi)
   */
 
 /** @defgroup SWPMI_Exported_Group3 SWPMI IRQ handler and callbacks
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief  SWPMI  IRQ handler.
  *
 @verbatim
@@ -1535,6 +1540,7 @@ __weak void HAL_SWPMI_ErrorCallback(SWPMI_HandleTypeDef *hswpmi)
   */
 
 /** @defgroup SWPMI_Exported_Group4 Peripheral Control methods
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   SWPMI control functions
   *
 @verbatim
@@ -1582,6 +1588,7 @@ uint32_t HAL_SWPMI_GetError(SWPMI_HandleTypeDef *hswpmi)
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup SWPMI_Private_Functions SWPMI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

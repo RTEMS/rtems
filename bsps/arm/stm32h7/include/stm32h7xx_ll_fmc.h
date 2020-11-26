@@ -172,6 +172,7 @@ extern "C" {
 /* Exported typedef ----------------------------------------------------------*/
 
 /** @defgroup FMC_LL_Exported_typedef FMC Low Layer Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -451,10 +452,12 @@ typedef struct
   */
 
 /** @defgroup FMC_LL_NOR_SRAM_Controller FMC NOR/SRAM Controller
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FMC_NORSRAM_Bank FMC NOR/SRAM Bank
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NORSRAM_BANK1                       ((uint32_t)0x00000000)
@@ -466,6 +469,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Data_Address_Bus_Multiplexing FMC Data Address Bus Multiplexing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_DATA_ADDRESS_MUX_DISABLE            ((uint32_t)0x00000000)
@@ -475,6 +479,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Memory_Type FMC Memory Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_MEMORY_TYPE_SRAM                    ((uint32_t)0x00000000)
@@ -485,6 +490,7 @@ typedef struct
   */
 
 /** @defgroup FMC_NORSRAM_Data_Width FMC NORSRAM Data Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NORSRAM_MEM_BUS_WIDTH_8             ((uint32_t)0x00000000)
@@ -495,6 +501,7 @@ typedef struct
   */
 
 /** @defgroup FMC_NORSRAM_Flash_Access FMC NOR/SRAM Flash Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NORSRAM_FLASH_ACCESS_ENABLE         ((uint32_t)0x00000040)
@@ -504,6 +511,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Burst_Access_Mode FMC Burst Access Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_BURST_ACCESS_MODE_DISABLE           ((uint32_t)0x00000000)
@@ -513,6 +521,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Wait_Signal_Polarity FMC Wait Signal Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_WAIT_SIGNAL_POLARITY_LOW            ((uint32_t)0x00000000)
@@ -522,6 +531,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Wait_Timing FMC Wait Timing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_WAIT_TIMING_BEFORE_WS               ((uint32_t)0x00000000)
@@ -531,6 +541,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Write_Operation FMC Write Operation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_WRITE_OPERATION_DISABLE             ((uint32_t)0x00000000)
@@ -540,6 +551,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Wait_Signal FMC Wait Signal
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_WAIT_SIGNAL_DISABLE                 ((uint32_t)0x00000000)
@@ -549,6 +561,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Extended_Mode FMC Extended Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_EXTENDED_MODE_DISABLE               ((uint32_t)0x00000000)
@@ -558,6 +571,7 @@ typedef struct
   */
 
 /** @defgroup FMC_AsynchronousWait FMC Asynchronous Wait
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_ASYNCHRONOUS_WAIT_DISABLE           ((uint32_t)0x00000000)
@@ -567,6 +581,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Page_Size FMC Page Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_PAGE_SIZE_NONE                      ((uint32_t)0x00000000)
@@ -579,6 +594,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Write_Burst FMC Write Burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_WRITE_BURST_DISABLE                 ((uint32_t)0x00000000)
@@ -588,6 +604,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Continous_Clock FMC Continuous Clock
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_CONTINUOUS_CLOCK_SYNC_ONLY          ((uint32_t)0x00000000)
@@ -597,6 +614,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Write_FIFO FMC Write FIFO
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_WRITE_FIFO_DISABLE                  ((uint32_t)FMC_BCR1_WFDIS)
@@ -606,6 +624,7 @@ typedef struct
   */
 
   /** @defgroup FMC_Access_Mode FMC Access Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_ACCESS_MODE_A                       ((uint32_t)0x00000000)
@@ -622,9 +641,11 @@ typedef struct
 
 
 /** @defgroup FMC_LL_NAND_Controller FMC NAND Controller
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup FMC_NAND_Bank FMC NAND Bank
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NAND_BANK3                          ((uint32_t)0x00000100)
@@ -633,6 +654,7 @@ typedef struct
   */
 
 /** @defgroup FMC_Wait_feature FMC Wait feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NAND_WAIT_FEATURE_DISABLE           ((uint32_t)0x00000000)
@@ -642,6 +664,7 @@ typedef struct
   */
 
 /** @defgroup FMC_PCR_Memory_Type FMC PCR Memory Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_PCR_MEMORY_TYPE_NAND                ((uint32_t)0x00000008)
@@ -650,6 +673,7 @@ typedef struct
   */
 
 /** @defgroup FMC_NAND_Data_Width FMC NAND Data Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NAND_MEM_BUS_WIDTH_8                ((uint32_t)0x00000000)
@@ -659,6 +683,7 @@ typedef struct
   */
 
 /** @defgroup FMC_ECC FMC ECC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NAND_ECC_DISABLE                    ((uint32_t)0x00000000)
@@ -668,6 +693,7 @@ typedef struct
   */
 
 /** @defgroup FMC_ECC_Page_Size FMC ECC Page Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_NAND_ECC_PAGE_SIZE_256BYTE          ((uint32_t)0x00000000)
@@ -685,9 +711,11 @@ typedef struct
   */
 
 /** @defgroup FMC_LL_SDRAM_Controller FMC SDRAM Controller
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup FMC_SDRAM_Bank FMC SDRAM Bank
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_BANK1                         ((uint32_t)0x00000000)
@@ -697,6 +725,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Column_Bits_number FMC SDRAM Column Bits number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_COLUMN_BITS_NUM_8             ((uint32_t)0x00000000)
@@ -708,6 +737,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Row_Bits_number FMC SDRAM Row Bits number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_ROW_BITS_NUM_11               ((uint32_t)0x00000000)
@@ -718,6 +748,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Memory_Bus_Width FMC SDRAM Memory Bus Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_MEM_BUS_WIDTH_8               ((uint32_t)0x00000000)
@@ -728,6 +759,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Internal_Banks_Number FMC SDRAM Internal Banks Number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_INTERN_BANKS_NUM_2            ((uint32_t)0x00000000)
@@ -737,6 +769,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_CAS_Latency FMC SDRAM CAS Latency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_CAS_LATENCY_1                 ((uint32_t)0x00000080)
@@ -747,6 +780,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Write_Protection FMC SDRAM Write Protection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_WRITE_PROTECTION_DISABLE      ((uint32_t)0x00000000)
@@ -756,6 +790,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Clock_Period FMC SDRAM Clock Period
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_CLOCK_DISABLE                 ((uint32_t)0x00000000)
@@ -766,6 +801,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Read_Burst FMC SDRAM Read Burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_RBURST_DISABLE                ((uint32_t)0x00000000)
@@ -775,6 +811,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Read_Pipe_Delay FMC SDRAM Read Pipe Delay
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_RPIPE_DELAY_0                 ((uint32_t)0x00000000)
@@ -785,6 +822,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Command_Mode FMC SDRAM Command Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_CMD_NORMAL_MODE               ((uint32_t)0x00000000)
@@ -799,6 +837,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Command_Target FMC SDRAM Command Target
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_CMD_TARGET_BANK2              FMC_SDCMR_CTB2
@@ -809,6 +848,7 @@ typedef struct
   */
 
 /** @defgroup FMC_SDRAM_Mode_Status FMC SDRAM Mode Status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_SDRAM_NORMAL_MODE                   ((uint32_t)0x00000000)
@@ -824,6 +864,7 @@ typedef struct
 
 
 /** @defgroup FMC_LL_Interrupt_definition FMC Low Layer Interrupt definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_IT_RISING_EDGE                      ((uint32_t)0x00000008)
@@ -835,6 +876,7 @@ typedef struct
   */
 
 /** @defgroup FMC_LL_Flag_definition FMC Low Layer Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FMC_FLAG_RISING_EDGE                    ((uint32_t)0x00000001)
@@ -858,6 +900,7 @@ typedef struct
   
 /* Private macro -------------------------------------------------------------*/
 /** @defgroup FMC_LL_Private_Macros FMC_LL  Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
   /**
@@ -872,6 +915,7 @@ typedef struct
   */
 #define __FMC_DISABLE()  (FMC_Bank1_R->BTCR[0] &= ~FMC_BCR1_FMCEN)
 /** @defgroup FMC_LL_NOR_Macros FMC NOR/SRAM Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief macros to handle NOR device enable/disable and read/write operations
   * @{
   */
@@ -897,6 +941,7 @@ typedef struct
   */
 
 /** @defgroup FMC_LL_NAND_Macros FMC NAND Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief macros to handle NAND device enable/disable
  *  @{
  */
@@ -921,6 +966,7 @@ typedef struct
   */
 
 /** @defgroup FMC_LL_NAND_Interrupt FMC NAND Interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief macros to handle NAND interrupts
   * @{
   */
@@ -982,6 +1028,7 @@ typedef struct
 
 
 /** @defgroup FMC_LL_SDRAM_Interrupt FMC SDRAM Interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief macros to handle SDRAM interrupts
   * @{
   */
@@ -1041,13 +1088,16 @@ typedef struct
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup FMC_LL_Private_Functions FMC LL Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 
 /** @defgroup FMC_LL_NORSRAM  NOR SRAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 /** @defgroup FMC_LL_NORSRAM_Private_Functions_Group1 NOR SRAM Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 HAL_StatusTypeDef  FMC_NORSRAM_Init(FMC_NORSRAM_TypeDef *Device, FMC_NORSRAM_InitTypeDef *Init);
@@ -1059,6 +1109,7 @@ HAL_StatusTypeDef  FMC_NORSRAM_DeInit(FMC_NORSRAM_TypeDef *Device, FMC_NORSRAM_E
   */
 
 /** @defgroup FMC_LL_NORSRAM_Private_Functions_Group2 NOR SRAM Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 HAL_StatusTypeDef  FMC_NORSRAM_WriteOperation_Enable(FMC_NORSRAM_TypeDef *Device, uint32_t Bank);
@@ -1071,9 +1122,11 @@ HAL_StatusTypeDef  FMC_NORSRAM_WriteOperation_Disable(FMC_NORSRAM_TypeDef *Devic
   */
 
 /** @defgroup FMC_LL_NAND NAND
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 /** @defgroup FMC_LL_NAND_Private_Functions_Group1 NAND Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 HAL_StatusTypeDef  FMC_NAND_Init(FMC_NAND_TypeDef *Device, FMC_NAND_InitTypeDef *Init);
@@ -1085,6 +1138,7 @@ HAL_StatusTypeDef  FMC_NAND_DeInit(FMC_NAND_TypeDef *Device, uint32_t Bank);
   */
 
 /** @defgroup FMC_LL_NAND_Private_Functions_Group2 NAND Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 HAL_StatusTypeDef  FMC_NAND_ECC_Enable(FMC_NAND_TypeDef *Device, uint32_t Bank);
@@ -1099,9 +1153,11 @@ HAL_StatusTypeDef  FMC_NAND_GetECC(FMC_NAND_TypeDef *Device, uint32_t *ECCval, u
 
 
 /** @defgroup FMC_LL_SDRAM SDRAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 /** @defgroup FMC_LL_SDRAM_Private_Functions_Group1 SDRAM Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 HAL_StatusTypeDef  FMC_SDRAM_Init(FMC_SDRAM_TypeDef *Device, FMC_SDRAM_InitTypeDef *Init);
@@ -1112,6 +1168,7 @@ HAL_StatusTypeDef  FMC_SDRAM_DeInit(FMC_SDRAM_TypeDef *Device, uint32_t Bank);
   */
 
 /** @defgroup FMC_LL_SDRAM_Private_Functions_Group2 SDRAM Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @{
   */
 HAL_StatusTypeDef  FMC_SDRAM_WriteProtection_Enable(FMC_SDRAM_TypeDef *Device, uint32_t Bank);

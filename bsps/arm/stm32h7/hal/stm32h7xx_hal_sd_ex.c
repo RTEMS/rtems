@@ -39,6 +39,7 @@
   */
 
 /** @defgroup SDEx SDEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SD Extended HAL module driver
   * @{
   */

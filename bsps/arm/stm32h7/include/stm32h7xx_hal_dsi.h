@@ -34,6 +34,7 @@ extern "C" {
   */
 
 /** @defgroup DSI DSI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DSI HAL module driver
   * @{
   */
@@ -348,9 +349,11 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DSI_Exported_Constants DSI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup DSI_DCS_Command DSI DCS Command
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_ENTER_IDLE_MODE       0x39U
@@ -402,6 +405,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Video_Mode_Type DSI Video Mode Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_VID_MODE_NB_PULSES    0U
@@ -412,6 +416,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Color_Mode DSI Color Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_COLOR_MODE_FULL       0x00000000U
@@ -421,6 +426,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_ShutDown DSI ShutDown
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_DISPLAY_ON            0x00000000U
@@ -430,6 +436,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_Command DSI LP Command
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_COMMAND_DISABLE    0x00000000U
@@ -439,6 +446,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_HFP DSI LP HFP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_HFP_DISABLE        0x00000000U
@@ -448,6 +456,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_HBP DSI LP HBP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_HBP_DISABLE        0x00000000U
@@ -457,6 +466,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_VACT DSI LP VACT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_VACT_DISABLE       0x00000000U
@@ -466,6 +476,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_VFP DSI LP VFP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_VFP_DISABLE       0x00000000U
@@ -475,6 +486,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_VBP DSI LP VBP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_VBP_DISABLE       0x00000000U
@@ -484,6 +496,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_VSYNC DSI LP VSYNC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_VSYNC_DISABLE     0x00000000U
@@ -493,6 +506,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_FBTA_acknowledge DSI FBTA Acknowledge
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_FBTAA_DISABLE        0x00000000U
@@ -502,6 +516,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_TearingEffectSource DSI Tearing Effect Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_TE_DSILINK           0x00000000U
@@ -511,6 +526,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_TearingEffectPolarity DSI Tearing Effect Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_TE_RISING_EDGE       0x00000000U
@@ -520,6 +536,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Vsync_Polarity DSI Vsync Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_VSYNC_FALLING        0x00000000U
@@ -529,6 +546,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_AutomaticRefresh DSI Automatic Refresh
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_AR_DISABLE           0x00000000U
@@ -538,6 +556,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_TE_AcknowledgeRequest DSI TE Acknowledge Request
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_TE_ACKNOWLEDGE_DISABLE 0x00000000U
@@ -547,6 +566,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_AcknowledgeRequest DSI Acknowledge Request
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_ACKNOWLEDGE_DISABLE   0x00000000U
@@ -556,6 +576,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenShortWriteNoP DSI LP LPGen Short Write NoP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GSW0P_DISABLE     0x00000000U
@@ -565,6 +586,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenShortWriteOneP DSI LP LPGen Short Write OneP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GSW1P_DISABLE     0x00000000U
@@ -574,6 +596,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenShortWriteTwoP DSI LP LPGen Short Write TwoP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GSW2P_DISABLE     0x00000000U
@@ -583,6 +606,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenShortReadNoP DSI LP LPGen Short Read NoP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GSR0P_DISABLE     0x00000000U
@@ -592,6 +616,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenShortReadOneP DSI LP LPGen Short Read OneP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GSR1P_DISABLE     0x00000000U
@@ -601,6 +626,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenShortReadTwoP DSI LP LPGen Short Read TwoP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GSR2P_DISABLE     0x00000000U
@@ -610,6 +636,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPGenLongWrite DSI LP LPGen LongWrite
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_GLW_DISABLE       0x00000000U
@@ -619,6 +646,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPDcsShortWriteNoP DSI LP LPDcs Short Write NoP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_DSW0P_DISABLE     0x00000000U
@@ -628,6 +656,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPDcsShortWriteOneP DSI LP LPDcs Short Write OneP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_DSW1P_DISABLE     0x00000000U
@@ -637,6 +666,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPDcsShortReadNoP DSI LP LPDcs Short Read NoP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_DSR0P_DISABLE     0x00000000U
@@ -646,6 +676,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPDcsLongWrite DSI LP LPDcs Long Write
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_DLW_DISABLE       0x00000000U
@@ -655,6 +686,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LP_LPMaxReadPacket DSI LP LPMax Read Packet
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LP_MRDP_DISABLE      0x00000000U
@@ -664,6 +696,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_HS_PrespMode DSI HS Presp Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_HS_PM_DISABLE        0x00000000U
@@ -674,6 +707,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
 
 
 /** @defgroup DSI_Automatic_Clk_Lane_Control DSI Automatic Clk Lane Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_AUTO_CLK_LANE_CTRL_DISABLE 0x00000000U
@@ -683,6 +717,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Number_Of_Lanes DSI Number Of Lanes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_ONE_DATA_LANE          0U
@@ -692,6 +727,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_FlowControl DSI Flow Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_FLOW_CONTROL_CRC_RX    DSI_PCR_CRCRXE
@@ -707,6 +743,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Color_Coding DSI Color Coding
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_RGB565                 0x00000000U /*!< The values 0x00000001 and 0x00000002 can also be used for the RGB565 color mode configuration */
@@ -717,6 +754,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LooselyPacked DSI Loosely Packed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_LOOSELY_PACKED_ENABLE  DSI_LCOLCR_LPE
@@ -726,6 +764,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_HSYNC_Polarity DSI HSYNC Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_HSYNC_ACTIVE_HIGH       0x00000000U
@@ -735,6 +774,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_VSYNC_Active_Polarity DSI VSYNC Active Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_VSYNC_ACTIVE_HIGH       0x00000000U
@@ -744,6 +784,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_DATA_ENABLE_Polarity DSI DATA ENABLE Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_DATA_ENABLE_ACTIVE_HIGH 0x00000000U
@@ -753,6 +794,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_PLL_IDF DSI PLL IDF
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_PLL_IN_DIV1             0x00000001U
@@ -767,6 +809,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_PLL_ODF DSI PLL ODF
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_PLL_OUT_DIV1            0x00000000U
@@ -778,6 +821,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Flags DSI Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_FLAG_TE                 DSI_WISR_TEIF
@@ -793,6 +837,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Interrupts DSI Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_IT_TE                   DSI_WIER_TEIE
@@ -805,6 +850,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_SHORT_WRITE_PKT_Data_Type DSI SHORT WRITE PKT Data Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_DCS_SHORT_PKT_WRITE_P0  0x00000005U /*!< DCS short write, no parameters      */
@@ -817,6 +863,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_LONG_WRITE_PKT_Data_Type DSI LONG WRITE PKT Data Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_DCS_LONG_PKT_WRITE      0x00000039U /*!< DCS long write     */
@@ -826,6 +873,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_SHORT_READ_PKT_Data_Type DSI SHORT READ PKT Data Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_DCS_SHORT_PKT_READ      0x00000006U /*!< DCS short read                     */
@@ -837,6 +885,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Error_Data_Type DSI Error Data Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_DSI_ERROR_NONE              0U
@@ -858,6 +907,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Lane_Group DSI Lane Group
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_CLOCK_LANE              0x00000000U
@@ -867,6 +917,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Communication_Delay DSI Communication Delay
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_SLEW_RATE_HSTX          0x00000000U
@@ -877,6 +928,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_CustomLane DSI CustomLane
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_SWAP_LANE_PINS          0x00000000U
@@ -886,6 +938,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_Lane_Select DSI Lane Select
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_CLK_LANE                0x00000000U
@@ -896,6 +949,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
   */
 
 /** @defgroup DSI_PHY_Timing DSI PHY Timing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_TCLK_POST               0x00000000U
@@ -917,6 +971,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup DSI_Exported_Macros DSI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1118,6 +1173,7 @@ typedef  void (*pDSI_CallbackTypeDef)(DSI_HandleTypeDef *hdsi);  /*!< pointer to
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DSI_Exported_Functions DSI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_DSI_Init(DSI_HandleTypeDef *hdsi, DSI_PLLInitTypeDef *PLLInit);
@@ -1198,6 +1254,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup DSI_Private_Types DSI Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1207,6 +1264,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup DSI_Private_Defines DSI Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1216,6 +1274,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup DSI_Private_Variables DSI Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1225,6 +1284,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup DSI_Private_Constants DSI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DSI_MAX_RETURN_PKT_SIZE (0x00000037U) /*!< Maximum return packet configuration */
@@ -1234,6 +1294,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DSI_Private_Macros DSI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DSI_PLL_NDIV(NDIV)                       ((10U <= (NDIV)) && ((NDIV) <= 125U))
@@ -1318,6 +1379,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup DSI_Private_Functions_Prototypes DSI Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1327,6 +1389,7 @@ HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DSI_Private_Functions DSI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

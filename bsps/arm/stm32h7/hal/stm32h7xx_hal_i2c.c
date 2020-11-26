@@ -312,6 +312,7 @@
   */
 
 /** @defgroup I2C I2C
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief I2C HAL module driver
   * @{
   */
@@ -322,6 +323,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /** @defgroup I2C_Private_Define I2C Private Define
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIMING_CLEAR_MASK   (0xF0FFFFFFU)  /*!< I2C TIMING clear register Mask */
@@ -370,6 +372,7 @@
 /* Private function prototypes -----------------------------------------------*/
 
 /** @defgroup I2C_Private_Functions I2C Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Private functions to handle DMA transfer */
@@ -428,10 +431,12 @@ static void I2C_ConvertOtherXferOptions(I2C_HandleTypeDef *hi2c);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup I2C_Exported_Functions I2C Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2C_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -977,6 +982,7 @@ HAL_StatusTypeDef HAL_I2C_UnRegisterAddrCallback(I2C_HandleTypeDef *hi2c)
   */
 
 /** @defgroup I2C_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Data transfers functions
  *
 @verbatim
@@ -4300,6 +4306,7 @@ HAL_StatusTypeDef HAL_I2C_Master_Abort_IT(I2C_HandleTypeDef *hi2c, uint16_t DevA
   */
 
 /** @defgroup I2C_IRQ_Handler_and_Callbacks IRQ Handler and Callbacks
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
@@ -4539,6 +4546,7 @@ __weak void HAL_I2C_AbortCpltCallback(I2C_HandleTypeDef *hi2c)
   */
 
 /** @defgroup I2C_Exported_Functions_Group3 Peripheral State, Mode and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State, Mode and Error functions
  *
 @verbatim

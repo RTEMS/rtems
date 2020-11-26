@@ -33,6 +33,7 @@ extern "C" {
   */
 
 /** @defgroup IRDAEx IRDAEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief IRDA Extended HAL module driver
   * @{
   */
@@ -40,10 +41,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup IRDAEx_Extended_Exported_Constants IRDAEx Extended Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IRDAEx_Word_Length IRDAEx Word Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_WORDLENGTH_7B                  USART_CR1_M1   /*!< 7-bit long frame */
@@ -62,6 +65,7 @@ extern "C" {
 /* Private macros ------------------------------------------------------------*/
 
 /** @defgroup IRDAEx_Private_Macros IRDAEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

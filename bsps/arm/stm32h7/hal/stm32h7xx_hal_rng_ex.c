@@ -41,6 +41,7 @@
 /* Private types -------------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /*  Health test control register information to use in CCM algorithm */
@@ -56,6 +57,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Constants RNG Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RNG_TIMEOUT_VALUE     2U

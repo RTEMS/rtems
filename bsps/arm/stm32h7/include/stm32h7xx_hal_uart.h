@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup UART_Exported_Types UART Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -296,10 +297,12 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup UART_Exported_Constants UART Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UART_State_Definition UART State Code Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_UART_STATE_RESET         0x00000000U    /*!< Peripheral is not initialized
@@ -324,6 +327,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Error_Definition   UART Error Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_UART_ERROR_NONE             ((uint32_t)0x00000000U)    /*!< No error                */
@@ -342,6 +346,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Stop_Bits   UART Number of Stop Bits
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_STOPBITS_0_5                    USART_CR2_STOP_0                     /*!< UART frame with 0.5 stop bit  */
@@ -353,6 +358,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Parity  UART Parity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_PARITY_NONE                    0x00000000U                        /*!< No parity   */
@@ -363,6 +369,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Hardware_Flow_Control UART Hardware Flow Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_HWCONTROL_NONE                  0x00000000U                          /*!< No hardware control       */
@@ -374,6 +381,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Mode UART Transfer Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_MODE_RX                        USART_CR1_RE                    /*!< RX mode        */
@@ -384,6 +392,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_State  UART State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_STATE_DISABLE                  0x00000000U         /*!< UART disabled  */
@@ -393,6 +402,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Over_Sampling UART Over Sampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_OVERSAMPLING_16                0x00000000U         /*!< Oversampling by 16 */
@@ -402,6 +412,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_OneBit_Sampling UART One Bit Sampling Method
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ONE_BIT_SAMPLE_DISABLE         0x00000000U         /*!< One-bit sampling disable */
@@ -411,6 +422,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_ClockPrescaler  UART Clock Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_PRESCALER_DIV1    0x00000000U  /*!< fclk_pres = fclk     */
@@ -430,6 +442,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_AutoBaud_Rate_Mode    UART Advanced Feature AutoBaud Rate Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_AUTOBAUDRATE_ONSTARTBIT    0x00000000U           /*!< Auto Baud rate detection on start bit            */
@@ -441,6 +454,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Receiver_Timeout UART Receiver Timeout
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_RECEIVER_TIMEOUT_DISABLE       0x00000000U                /*!< UART Receiver Timeout disable */
@@ -450,6 +464,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_LIN    UART Local Interconnection Network mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_LIN_DISABLE                    0x00000000U                /*!< Local Interconnect Network disable */
@@ -459,6 +474,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_LIN_Break_Detection  UART LIN Break Detection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_LINBREAKDETECTLENGTH_10B       0x00000000U                /*!< LIN 10-bit break detection length */
@@ -468,6 +484,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_DMA_Tx    UART DMA Tx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_DMA_TX_DISABLE                 0x00000000U                /*!< UART DMA TX disabled */
@@ -477,6 +494,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_DMA_Rx   UART DMA Rx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_DMA_RX_DISABLE                 0x00000000U                 /*!< UART DMA RX disabled */
@@ -486,6 +504,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Half_Duplex_Selection  UART Half Duplex Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_HALF_DUPLEX_DISABLE            0x00000000U                 /*!< UART half-duplex disabled */
@@ -495,6 +514,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_WakeUp_Methods   UART WakeUp Methods
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_WAKEUPMETHOD_IDLELINE          0x00000000U                 /*!< UART wake-up on idle line    */
@@ -504,6 +524,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Request_Parameters UART Request Parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_AUTOBAUD_REQUEST               USART_RQR_ABRRQ        /*!< Auto-Baud Rate Request      */
@@ -516,6 +537,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Advanced_Features_Initialization_Type  UART Advanced Feature Initialization Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_NO_INIT                 0x00000000U          /*!< No advanced feature initialization       */
@@ -532,6 +554,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Tx_Inv UART Advanced Feature TX Pin Active Level Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_TXINV_DISABLE       0x00000000U             /*!< TX pin active level inversion disable */
@@ -541,6 +564,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Rx_Inv UART Advanced Feature RX Pin Active Level Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_RXINV_DISABLE       0x00000000U             /*!< RX pin active level inversion disable */
@@ -550,6 +574,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Data_Inv  UART Advanced Feature Binary Data Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_DATAINV_DISABLE     0x00000000U             /*!< Binary data inversion disable */
@@ -559,6 +584,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Rx_Tx_Swap UART Advanced Feature RX TX Pins Swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_SWAP_DISABLE        0x00000000U             /*!< TX/RX pins swap disable */
@@ -568,6 +594,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Overrun_Disable  UART Advanced Feature Overrun Disable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_OVERRUN_ENABLE      0x00000000U             /*!< RX overrun enable  */
@@ -577,6 +604,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_AutoBaudRate_Enable  UART Advanced Feature Auto BaudRate Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_AUTOBAUDRATE_DISABLE   0x00000000U          /*!< RX Auto Baud rate detection enable  */
@@ -586,6 +614,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_DMA_Disable_on_Rx_Error   UART Advanced Feature DMA Disable On Rx Error
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_DMA_ENABLEONRXERROR    0x00000000U          /*!< DMA enable on Reception Error  */
@@ -595,6 +624,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_MSB_First   UART Advanced Feature MSB First
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_MSBFIRST_DISABLE    0x00000000U             /*!< Most significant bit sent/received first disable */
@@ -604,6 +634,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Stop_Mode_Enable   UART Advanced Feature Stop Mode Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_STOPMODE_DISABLE    0x00000000U             /*!< UART stop mode disable */
@@ -613,6 +644,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Mute_Mode   UART Advanced Feature Mute Mode Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_ADVFEATURE_MUTEMODE_DISABLE    0x00000000U             /*!< UART mute mode disable */
@@ -622,6 +654,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_CR2_ADDRESS_LSB_POS    UART Address-matching LSB Position In CR2 Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_CR2_ADDRESS_LSB_POS             24U                                /*!< UART address-matching LSB position in CR2 register */
@@ -630,6 +663,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_WakeUp_from_Stop_Selection   UART WakeUp From Stop Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_WAKEUP_ON_ADDRESS              0x00000000U             /*!< UART wake-up on address                         */
@@ -640,6 +674,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_DriverEnable_Polarity      UART DriverEnable Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_DE_POLARITY_HIGH               0x00000000U             /*!< Driver enable signal is active high */
@@ -649,6 +684,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_CR1_DEAT_ADDRESS_LSB_POS    UART Driver Enable Assertion Time LSB Position In CR1 Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_CR1_DEAT_ADDRESS_LSB_POS       21U      /*!< UART Driver Enable assertion time LSB position in CR1 register */
@@ -657,6 +693,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_CR1_DEDT_ADDRESS_LSB_POS    UART Driver Enable DeAssertion Time LSB Position In CR1 Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_CR1_DEDT_ADDRESS_LSB_POS       16U      /*!< UART Driver Enable de-assertion time LSB position in CR1 register */
@@ -665,6 +702,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Interruption_Mask    UART Interruptions Flag Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_IT_MASK                        0x001FU  /*!< UART interruptions flags mask */
@@ -673,6 +711,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_TimeOut_Value    UART polling-based communications time-out value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_UART_TIMEOUT_VALUE              0x1FFFFFFU  /*!< UART polling-based communications time-out value */
@@ -681,6 +720,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Flags     UART Status Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0xXXXX
   *           - 0xXXXX  : Flag mask in the ISR register
   * @{
@@ -717,6 +757,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_Interrupt_definition   UART Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 000ZZZZZ0XXYYYYYb
   *           - YYYYY  : Interrupt source position in the XX register (5bits)
   *           - XX  : Interrupt source register (2bits)
@@ -761,6 +802,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
   */
 
 /** @defgroup UART_IT_CLEAR_Flags  UART Interruption Clear Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define UART_CLEAR_PEF                       USART_ICR_PECF            /*!< Parity Error Clear Flag           */
@@ -786,6 +828,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup UART_Exported_Macros UART Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1150,6 +1193,7 @@ typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup UART_Private_Macros   UART Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief  Get UART clok division factor from clock prescaler value.

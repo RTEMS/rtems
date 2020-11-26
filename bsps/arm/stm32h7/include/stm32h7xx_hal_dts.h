@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DTS_Exported_Types DTS Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -111,10 +112,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DTS_Exported_Constants DTS Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DTS_TriggerConfig  DTS Trigger Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* @brief No Hardware trigger detection */
@@ -136,6 +139,7 @@ typedef struct
   */
 
 /** @defgroup DTS_Quick_Measurement  DTS Quick Measurement
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_QUICKMEAS_ENABLE    DTS_CFGR1_Q_MEAS_OPT      /*!< Enable the Quick Measure (Measure without calibration) */
@@ -145,6 +149,7 @@ typedef struct
   */
 
 /** @defgroup DTS_Reference_Clock_Selection   DTS Reference Clock Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_REFCLKSEL_LSE   DTS_CFGR1_REFCLK_SEL          /*!< Low speed REF clock (LSE) */
@@ -154,6 +159,7 @@ typedef struct
   */
 
 /** @defgroup DTS_Sampling_Time   DTS Sampling Time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_SMP_TIME_1_CYCLE     DTS_CFGR1_TS1_SMP_TIME_0                                                                                   /*!< 1 clock cycle for the sampling time  */
@@ -175,6 +181,7 @@ typedef struct
   * @}
   */
 /** @defgroup DTS_Flag_Definitions DTS Flag Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_FLAG_TS1_ITE   DTS_SR_TS1_ITEF   /*!< Interrupt flag for end of measure for DTS1 */
@@ -189,6 +196,7 @@ typedef struct
   */
 
 /** @defgroup DTS_Interrupts_Definitions DTS Interrupts Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_IT_TS1_ITE  DTS_ITENR_TS1_ITEEN   /*!< Enable interrupt flag for end of measure for DTS1 */
@@ -206,6 +214,7 @@ typedef struct
   */
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup DTS_Exported_Macros DTS Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -401,9 +410,11 @@ void              HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts);
 /* Private types -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup DTS_Private_Constants DTS Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup DTS_ExtiLine DTS EXTI Lines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DTS_EXTI_LINE_DTS1           (EXTI_IMR3_IM88)  /*!< EXTI line 88 connected to DTS1 output */
@@ -416,10 +427,12 @@ void              HAL_DTS_AsyncHighCallback(DTS_HandleTypeDef *hdts);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DTS_Private_Macros DTS Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DTS_IS_DTS_Definitions  DTS Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DTS_QUICKMEAS(__SEL__)   (((__SEL__) == DTS_QUICKMEAS_DISABLE) || \

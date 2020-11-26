@@ -39,10 +39,12 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SDEx_Exported_Types SDEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SDEx_Exported_Types_Group1 SD Card Internal DMA Buffer structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */ 
 typedef enum
@@ -64,10 +66,12 @@ typedef enum
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SDEx_Exported_Functions SDEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
   
 /** @defgroup SDEx_Exported_Functions_Group1 MultiBuffer functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_SDEx_ConfigDMAMultiBuffer(SD_HandleTypeDef *hsd, uint32_t * pDataBuffer0, uint32_t * pDataBuffer1, uint32_t BufferSize);

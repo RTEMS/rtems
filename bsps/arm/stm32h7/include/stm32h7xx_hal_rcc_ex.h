@@ -38,6 +38,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Types RCCEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -332,10 +333,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Constants  RCCEx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCCEx_Periph_Clock_Selection  RCCEx Periph Clock Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -437,6 +440,7 @@ typedef struct
 
 
 /** @defgroup RCC_PLL2_Clock_Output  RCC PLL2 Clock Output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL2_DIVP                RCC_PLLCFGR_DIVP2EN
@@ -448,6 +452,7 @@ typedef struct
   */
 
 /** @defgroup RCC_PLL3_Clock_Output  RCC PLL3 Clock Output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL3_DIVP                RCC_PLLCFGR_DIVP3EN
@@ -459,6 +464,7 @@ typedef struct
   */
 
 /** @defgroup RCC_PLL2_VCI_Range  RCC PLL2 VCI Range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL2VCIRANGE_0                RCC_PLLCFGR_PLL2RGE_0        /*!< Clock range frequency between 1 and 2 MHz  */
@@ -472,6 +478,7 @@ typedef struct
 
 
 /** @defgroup RCC_PLL2_VCO_Range  RCC PLL2 VCO Range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL2VCOWIDE                 (0x00000000U)
@@ -482,6 +489,7 @@ typedef struct
   */
 
 /** @defgroup RCC_PLL3_VCI_Range  RCC PLL3 VCI Range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL3VCIRANGE_0                RCC_PLLCFGR_PLL3RGE_0         /*!< Clock range frequency between 1 and 2 MHz  */
@@ -495,6 +503,7 @@ typedef struct
 
 
 /** @defgroup RCC_PLL3_VCO_Range  RCC PLL3 VCO Range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_PLL3VCOWIDE                 (0x00000000U)
@@ -505,6 +514,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART16_Clock_Source  RCCEx USART1/6 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USART16SEL)
@@ -542,6 +552,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART1_Clock_Source  RCCEx USART1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART1CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -555,6 +566,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART6_Clock_Source  RCCEx USART6 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART6CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -570,6 +582,7 @@ typedef struct
 
 #if defined(UART9)
 /** @defgroup RCCEx_UART9_Clock_Source  RCCEx UART9 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART9CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -585,6 +598,7 @@ typedef struct
 
 #if defined(USART10)
 /** @defgroup RCCEx_USART10_Clock_Source  RCCEx USART10 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART10CLKSOURCE_D2PCLK2   RCC_USART16CLKSOURCE_D2PCLK2
@@ -599,6 +613,7 @@ typedef struct
 #endif /* USART10 */
 
 /** @defgroup RCCEx_USART234578_Clock_Source  RCCEx USART2/3/4/5/7/8 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USART28SEL)
@@ -626,6 +641,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART2_Clock_Source  RCCEx USART2 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART2CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -640,6 +656,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_USART3_Clock_Source  RCCEx USART3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_USART3CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -654,6 +671,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART4_Clock_Source  RCCEx UART4 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART4CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -668,6 +686,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART5_Clock_Source  RCCEx UART5 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART5CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -682,6 +701,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART7_Clock_Source  RCCEx UART7 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART7CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -696,6 +716,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_UART8_Clock_Source  RCCEx UART8 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_UART8CLKSOURCE_D2PCLK1   RCC_USART234578CLKSOURCE_D2PCLK1
@@ -710,6 +731,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPUART1_Clock_Source  RCCEx LPUART1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPUART1SEL)
@@ -737,6 +759,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_I2C123_Clock_Source  RCCEx I2C1/2/3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (RCC_D2CCIP2R_I2C123SEL)
@@ -757,6 +780,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_I2C1_Clock_Source  RCCEx I2C1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_I2C1CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
@@ -769,6 +793,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_I2C2_Clock_Source  RCCEx I2C2 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_I2C2CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
@@ -781,6 +806,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_I2C3_Clock_Source  RCCEx I2C3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_I2C3CLKSOURCE_D2PCLK1     RCC_I2C123CLKSOURCE_D2PCLK1
@@ -793,6 +819,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_I2C4_Clock_Source  RCCEx I2C4 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_I2C4SEL)
@@ -814,6 +841,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_RNG_Clock_Source  RCCEx RNG Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_RNGSEL)
@@ -834,6 +862,7 @@ typedef struct
 #if defined(HRTIM1)
 
 /** @defgroup RCCEx_HRTIM1_Clock_Source RCC Extended HRTIM1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_HRTIM1CLK_TIMCLK                (0x00000000U)
@@ -845,6 +874,7 @@ typedef struct
 #endif /*HRTIM1*/
 
 /** @defgroup RCCEx_USB_Clock_Source  RCCEx USB Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USBSEL)
@@ -862,6 +892,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SAI1_Clock_Source SAI1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SAI1SEL)
@@ -883,6 +914,7 @@ typedef struct
 
 #if defined(SAI3)
 /** @defgroup RCCEx_SAI23_Clock_Source SAI2/3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI23CLKSOURCE_PLL         (0x00000000U)
@@ -895,6 +927,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SAI2_Clock_Source SAI2 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI2CLKSOURCE_PLL         RCC_SAI23CLKSOURCE_PLL
@@ -908,6 +941,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SAI3_Clock_Source SAI3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI3CLKSOURCE_PLL         RCC_SAI23CLKSOURCE_PLL
@@ -922,6 +956,7 @@ typedef struct
 
 #if defined(RCC_CDCCIP1R_SAI2ASEL)
 /** @defgroup RCCEx_SAI2_Clock_A Source SAI2A Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI2ACLKSOURCE_PLL         (0x00000000U)
@@ -937,6 +972,7 @@ typedef struct
 
 #if defined(RCC_CDCCIP1R_SAI2BSEL)
 /** @defgroup RCCEx_SAI2_Block_B Clock_Source SAI2B Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI2BCLKSOURCE_PLL         (0x00000000U)
@@ -952,6 +988,7 @@ typedef struct
 
 
 /** @defgroup RCCEx_SPI123_Clock_Source SPI1/2/3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPI123SEL)
@@ -972,6 +1009,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI1_Clock_Source SPI1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI1CLKSOURCE_PLL         RCC_SPI123CLKSOURCE_PLL
@@ -985,6 +1023,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI2_Clock_Source SPI2 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI2CLKSOURCE_PLL         RCC_SPI123CLKSOURCE_PLL
@@ -998,6 +1037,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI3_Clock_Source SPI3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI3CLKSOURCE_PLL         RCC_SPI123CLKSOURCE_PLL
@@ -1011,6 +1051,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI45_Clock_Source SPI4/5 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPI45SEL)
@@ -1037,6 +1078,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI4_Clock_Source SPI4 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI4CLKSOURCE_D2PCLK1     RCC_SPI45CLKSOURCE_D2PCLK1
@@ -1051,6 +1093,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI5_Clock_Source SPI5 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SPI5CLKSOURCE_D2PCLK1     RCC_SPI45CLKSOURCE_D2PCLK1
@@ -1065,6 +1108,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SPI6_Clock_Source SPI6 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_SPI6SEL)
@@ -1095,6 +1139,7 @@ typedef struct
 
 #if defined(SAI4_Block_A)
 /** @defgroup RCCEx_SAI4A_Clock_Source SAI4A Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI4ACLKSOURCE_PLL         (0x00000000U)
@@ -1112,6 +1157,7 @@ typedef struct
 
 #if defined(SAI4_Block_B)
 /** @defgroup RCCEx_SAI4B_Clock_Source SAI4B Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_SAI4BCLKSOURCE_PLL         (0x00000000U)
@@ -1127,6 +1173,7 @@ typedef struct
 
 
 /** @defgroup RCCEx_LPTIM1_Clock_Source  RCCEx LPTIM1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_LPTIM1SEL)
@@ -1155,6 +1202,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPTIM2_Clock_Source  RCCEx LPTIM2 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPTIM2SEL)
@@ -1182,6 +1230,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPTIM345_Clock_Source  RCCEx LPTIM3/4/5 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPTIM345SEL)
@@ -1209,6 +1258,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_LPTIM3_Clock_Source  RCCEx LPTIM3 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_LPTIM3CLKSOURCE_D3PCLK1       RCC_LPTIM345CLKSOURCE_D3PCLK1
@@ -1223,6 +1273,7 @@ typedef struct
   */
 #if defined(LPTIM4)
 /** @defgroup RCCEx_LPTIM4_Clock_Source  RCCEx LPTIM4 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_LPTIM4CLKSOURCE_D3PCLK1       RCC_LPTIM345CLKSOURCE_D3PCLK1
@@ -1238,6 +1289,7 @@ typedef struct
 
 #if defined(LPTIM5)
 /** @defgroup RCCEx_LPTIM5_Clock_Source  RCCEx LPTIM5 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_LPTIM5CLKSOURCE_D3PCLK1       RCC_LPTIM345CLKSOURCE_D3PCLK1
@@ -1254,6 +1306,7 @@ typedef struct
 
 #if defined(QUADSPI)
 /** @defgroup RCCEx_QSPI_Clock_Source  RCCEx QSPI Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_QSPICLKSOURCE_D1HCLK       (0x00000000U)
@@ -1269,6 +1322,7 @@ typedef struct
 
 #if defined(OCTOSPI1) || defined(OCTOSPI2)
 /** @defgroup RCCEx_OSPI_Clock_Source  RCCEx OSPI Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_OSPICLKSOURCE_CDHCLK       (0x00000000U)
@@ -1286,6 +1340,7 @@ typedef struct
 
 #if defined(DSI)
 /** @defgroup RCCEx_DSI_Clock_Source  RCCEx DSI Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_DSICLKSOURCE_PHY       (0x00000000U)
@@ -1297,6 +1352,7 @@ typedef struct
 #endif /* DSI */
 
 /** @defgroup RCCEx_FMC_Clock_Source  RCCEx FMC Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_FMCSEL)
@@ -1320,6 +1376,7 @@ typedef struct
 
 #if defined(FDCAN1) || defined(FDCAN2)
 /** @defgroup RCCEx_FDCAN_Clock_Source  RCCEx FDCAN Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_FDCANSEL)
@@ -1338,6 +1395,7 @@ typedef struct
 
 
 /** @defgroup RCCEx_SDMMC_Clock_Source  RCCEx SDMMC Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_SDMMCSEL)
@@ -1353,6 +1411,7 @@ typedef struct
 
 
 /** @defgroup RCCEx_ADC_Clock_Source  RCCEx ADC Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_ADCSEL_0)
@@ -1369,6 +1428,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_SWPMI1_Clock_Source  RCCEx SWPMI1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SWPSEL)
@@ -1385,6 +1445,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_DFSDM1_Clock_Source  RCCEx DFSDM1 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_DFSDM1SEL)
@@ -1402,6 +1463,7 @@ typedef struct
 
 #if defined(DFSDM2_BASE)
 /** @defgroup RCCEx_DFSDM2_Clock_Source  RCCEx DFSDM2 Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_DFSDM2CLKSOURCE_SRDPCLK4       (0x00000000U)
@@ -1414,6 +1476,7 @@ typedef struct
 #endif /* DFSDM2 */
 
 /** @defgroup RCCEx_SPDIFRX_Clock_Source  RCCEx SPDIFRX Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPDIFSEL_0)
@@ -1432,6 +1495,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CEC_Clock_Source  RCCEx CEC Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_CECSEL_0)
@@ -1449,6 +1513,7 @@ typedef struct
 
 
 /** @defgroup RCCEx_CLKP_Clock_Source  RCCEx CLKP Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_CKPERSEL_0)
@@ -1465,6 +1530,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_TIM_Prescaler_Selection RCCEx TIM Prescaler Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_TIMPRES_DESACTIVATED        (0x00000000U)
@@ -1477,6 +1543,7 @@ typedef struct
 #if defined(DUAL_CORE)
 
 /** @defgroup RCCEx_RCC_BootCx RCCEx RCC BootCx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_BOOT_C1        RCC_GCR_BOOT_C1
@@ -1489,6 +1556,7 @@ typedef struct
 
 #if defined(DUAL_CORE)
 /** @defgroup RCCEx_RCC_WWDGx  RCCEx RCC WWDGx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_WWDG1        RCC_GCR_WW1RSC
@@ -1501,6 +1569,7 @@ typedef struct
 #else
 
 /** @defgroup RCCEx_RCC_WWDGx  RCCEx RCC WWDGx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_WWDG1        RCC_GCR_WW1RSC
@@ -1512,6 +1581,7 @@ typedef struct
 #endif /*DUAL_CORE*/
 
 /** @defgroup RCCEx_EXTI_LINE_LSECSS  RCC LSE CSS external interrupt line
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_EXTI_LINE_LSECSS           EXTI_IMR1_IM18        /*!< External interrupt line 19 connected to the LSE CSS EXTI Line */
@@ -1520,6 +1590,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_Status RCCEx CRS Status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_NONE                   (0x00000000U)
@@ -1534,6 +1605,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_SynchroSource RCCEx CRS SynchroSource
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_SYNC_SOURCE_PIN       (0x00000000U)                            /*!< Synchro Signal source external pin, Available on STM32H7 Rev.B and above devices only */
@@ -1547,6 +1619,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_SynchroDivider RCCEx CRS SynchroDivider
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_SYNC_DIV1        (0x00000000U)           /*!< Synchro Signal not divided (default) */
@@ -1562,6 +1635,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_SynchroPolarity RCCEx CRS SynchroPolarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_SYNC_POLARITY_RISING   (0x00000000U) /*!< Synchro Active on rising edge (default) */
@@ -1571,6 +1645,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_ReloadValueDefault RCCEx CRS ReloadValueDefault
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_RELOADVALUE_DEFAULT    (0x0000BB7FU) /*!< The reset value of the RELOAD field corresponds
@@ -1580,6 +1655,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_ErrorLimitDefault RCCEx CRS ErrorLimitDefault
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_ERRORLIMIT_DEFAULT     (0x00000022U) /*!< Default Frequency error limit */
@@ -1588,6 +1664,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_HSI48CalibrationDefault RCCEx CRS HSI48CalibrationDefault
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_HSI48CALIBRATION_DEFAULT (0x00000020U) /*!< The default value is 32, which corresponds to the middle of the trimming interval.
@@ -1598,6 +1675,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_FreqErrorDirection RCCEx CRS FreqErrorDirection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_FREQERRORDIR_UP        (0x00000000U)   /*!< Upcounting direction, the actual frequency is above the target */
@@ -1607,6 +1685,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_Interrupt_Sources RCCEx CRS Interrupt Sources
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_IT_SYNCOK              CRS_CR_SYNCOKIE       /*!< SYNC event OK */
@@ -1622,6 +1701,7 @@ typedef struct
   */
 
 /** @defgroup RCCEx_CRS_Flags RCCEx CRS Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RCC_CRS_FLAG_SYNCOK            CRS_ISR_SYNCOKF       /*!< SYNC event OK flag     */
@@ -1644,6 +1724,7 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Macros RCCEx Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3375,6 +3456,7 @@ typedef struct
 
 #if defined(HRTIM1)
 /** @defgroup RCCEx_HRTIMx_Clock_Config RCC Extended HRTIMx Clock Config
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief  Macro to configure the HRTIM1 prescaler clock source.
@@ -3644,6 +3726,7 @@ typedef struct
                                                } while(0)
 
  /** @defgroup RCCEx_CRS_Extended_Features RCCEx CRS Extended Features
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -3756,6 +3839,7 @@ void     HAL_RCCEx_CRS_ErrorCallback(uint32_t Error);
   * @{
   */
 /** @defgroup RCCEx_IS_RCC_Definitions RCC Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

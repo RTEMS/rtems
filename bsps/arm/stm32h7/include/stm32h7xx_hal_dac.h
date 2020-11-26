@@ -41,6 +41,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Types DAC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -173,10 +174,12 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Constants DAC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DAC_Error_Code DAC Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_DAC_ERROR_NONE              0x00U    /*!< No error                          */
@@ -193,6 +196,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_trigger_selection DAC trigger selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_TRIGGER_NONE                0x00000000U                                                                       /*!< Conversion is automatic once the DAC_DHRxxxx register has been loaded, and not by external trigger */
@@ -227,6 +231,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_output_buffer DAC output buffer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_OUTPUTBUFFER_ENABLE            0x00000000U
@@ -237,6 +242,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_Channel_selection DAC Channel selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_CHANNEL_1                      0x00000000U
@@ -246,6 +252,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_data_alignment DAC data alignment
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_ALIGN_12B_R                    0x00000000U
@@ -257,6 +264,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_flags_definition DAC flags definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_FLAG_DMAUDR1                   (DAC_SR_DMAUDR1)
@@ -267,6 +275,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_IT_definition  DAC IT definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_IT_DMAUDR1                   (DAC_SR_DMAUDR1)
@@ -277,6 +286,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_ConnectOnChipPeripheral DAC ConnectOnChipPeripheral
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_CHIPCONNECT_EXTERNAL       (1UL << 0)
@@ -288,6 +298,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_UserTrimming DAC User Trimming
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_TRIMMING_FACTORY        (0x00000000UL)        /*!< Factory trimming */
@@ -297,6 +308,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_SampleAndHold DAC power mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DAC_SAMPLEANDHOLD_DISABLE     (0x00000000UL)
@@ -312,6 +324,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Macros DAC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -420,6 +433,7 @@ typedef void (*pDAC_CallbackTypeDef)(DAC_HandleTypeDef *hdac);
 /* Private macro -------------------------------------------------------------*/
 
 /** @defgroup DAC_Private_Macros DAC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DAC_OUTPUT_BUFFER_STATE(STATE) (((STATE) == DAC_OUTPUTBUFFER_ENABLE) || \
@@ -516,6 +530,7 @@ uint32_t HAL_DAC_GetError(DAC_HandleTypeDef *hdac);
   */
 
 /** @defgroup DAC_Private_Functions DAC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void DAC_DMAConvCpltCh1(DMA_HandleTypeDef *hdma);

@@ -93,6 +93,7 @@
   */
 
 /** @defgroup FLASH FLASH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief FLASH HAL module driver
   * @{
   */
@@ -116,10 +117,12 @@ FLASH_ProcessTypeDef pFlash;
 /* Exported functions ---------------------------------------------------------*/
 
 /** @defgroup FLASH_Exported_Functions FLASH Exported functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FLASH_Exported_Functions_Group1 Programming operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Programming operation functions
  *
 @verbatim
@@ -681,6 +684,7 @@ __weak void HAL_FLASH_OperationErrorCallback(uint32_t ReturnValue)
   */
 
 /** @defgroup FLASH_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Management functions
  *
 @verbatim
@@ -836,6 +840,7 @@ HAL_StatusTypeDef HAL_FLASH_OB_Launch(void)
   */
 
 /** @defgroup FLASH_Exported_Functions_Group3 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral Errors functions
  *
 @verbatim

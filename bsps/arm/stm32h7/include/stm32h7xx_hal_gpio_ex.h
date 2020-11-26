@@ -40,10 +40,12 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup GPIOEx_Exported_Constants GPIO Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GPIO_Alternate_function_selection GPIO Alternate Function Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -329,6 +331,7 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup GPIOEx_Exported_Macros GPIO Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -337,6 +340,7 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup GPIOEx_Exported_Functions GPIO Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -346,6 +350,7 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup GPIOEx_Private_Constants GPIO Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -372,9 +377,11 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup GPIOEx_Private_Macros GPIO Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup GPIOEx_Get_Port_Index GPIO Get Port Index
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define GPIO_GET_INDEX(__GPIOx__)  (((__GPIOx__) == (GPIOA))? 0UL :\
@@ -392,6 +399,7 @@ extern "C" {
   */
 
 /** @defgroup GPIOEx_IS_Alternat_function_selection GPIO Check Alternate Function
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -404,6 +412,7 @@ extern "C" {
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup GPIOEx_Private_Functions GPIO Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

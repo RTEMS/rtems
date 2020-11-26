@@ -40,6 +40,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup QSPI_Exported_Types QSPI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -221,10 +222,12 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup QSPI_Exported_Constants QSPI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup QSPI_ErrorCode QSPI Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_QSPI_ERROR_NONE             0x00000000U /*!< No error                 */
@@ -240,6 +243,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_SampleShifting QSPI Sample Shifting
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_SAMPLE_SHIFTING_NONE      0x00000000U                   /*!<No clock cycle shift to sample data*/
@@ -249,6 +253,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_ChipSelectHighTime QSPI ChipSelect High Time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_CS_HIGH_TIME_1_CYCLE      0x00000000U                                         /*!<nCS stay high for at least 1 clock cycle between commands*/
@@ -264,6 +269,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_ClockMode QSPI Clock Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_CLOCK_MODE_0              0x00000000U                    /*!<Clk stays low while nCS is released*/
@@ -273,6 +279,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_Flash_Select QSPI Flash Select
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_FLASH_ID_1                0x00000000U                 /*!<FLASH 1 selected*/
@@ -282,6 +289,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
   /** @defgroup QSPI_DualFlash_Mode QSPI Dual Flash Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_DUALFLASH_ENABLE          ((uint32_t)QUADSPI_CR_DFM) /*!<Dual-flash mode enabled*/
@@ -291,6 +299,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_AddressSize QSPI Address Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_ADDRESS_8_BITS            0x00000000U                      /*!<8-bit address*/
@@ -302,6 +311,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_AlternateBytesSize QSPI Alternate Bytes Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_ALTERNATE_BYTES_8_BITS    0x00000000U                      /*!<8-bit alternate bytes*/
@@ -313,6 +323,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_InstructionMode QSPI Instruction Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #define QSPI_INSTRUCTION_NONE          0x00000000U                     /*!<No instruction*/
@@ -324,6 +335,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_AddressMode QSPI Address Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #define QSPI_ADDRESS_NONE              0x00000000U                      /*!<No address*/
@@ -335,6 +347,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_AlternateBytesMode QSPI Alternate Bytes Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
 * @{
 */
 #define QSPI_ALTERNATE_BYTES_NONE      0x00000000U                      /*!<No alternate bytes*/
@@ -346,6 +359,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_DataMode QSPI Data Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_DATA_NONE                 0x00000000U                     /*!<No data*/
@@ -357,6 +371,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_DdrMode QSPI DDR Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_DDR_MODE_DISABLE          0x00000000U                  /*!<Double data rate mode disabled*/
@@ -366,6 +381,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_DdrHoldHalfCycle QSPI DDR Data Output Delay
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_DDR_HHC_ANALOG_DELAY      0x00000000U                  /*!<Delay the data output using analog delay in DDR mode*/
@@ -375,6 +391,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_SIOOMode QSPI Send Instruction Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_SIOO_INST_EVERY_CMD       0x00000000U                  /*!<Send instruction on every transaction*/
@@ -384,6 +401,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_MatchMode QSPI Match Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_MATCH_MODE_AND            0x00000000U                /*!<AND match mode between unmasked bits*/
@@ -393,6 +411,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_AutomaticStop QSPI Automatic Stop
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_AUTOMATIC_STOP_DISABLE    0x00000000U                 /*!<AutoPolling stops only with abort or QSPI disabling*/
@@ -402,6 +421,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_TimeOutActivation QSPI Timeout Activation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_TIMEOUT_COUNTER_DISABLE   0x00000000U                 /*!<Timeout counter disabled, nCS remains active*/
@@ -411,6 +431,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_Flags QSPI Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_FLAG_BUSY                 QUADSPI_SR_BUSY /*!<Busy flag: operation is ongoing*/
@@ -424,6 +445,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_Interrupts QSPI Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_IT_TO                     QUADSPI_CR_TOIE /*!<Interrupt on the timeout flag*/
@@ -436,6 +458,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
   */
 
 /** @defgroup QSPI_Timeout_definition QSPI Timeout definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief QSPI Timeout definition
   * @{
   */
@@ -450,6 +473,7 @@ typedef void (*pQSPI_CallbackTypeDef)(QSPI_HandleTypeDef *hqspi);
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup QSPI_Exported_Macros QSPI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief Reset QSPI handle state.
@@ -637,6 +661,7 @@ HAL_StatusTypeDef     HAL_QSPI_SetFlashID      (QSPI_HandleTypeDef *hqspi, uint3
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup QSPI_Private_Macros QSPI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_QSPI_CLOCK_PRESCALER(PRESCALER) ((PRESCALER) <= 0xFFU)

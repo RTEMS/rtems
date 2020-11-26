@@ -40,10 +40,12 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup I2CEx_Exported_Constants I2C Extended Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2CEx_Analog_Filter I2C Extended Analog Filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_ANALOGFILTER_ENABLE         0x00000000U
@@ -53,6 +55,7 @@ extern "C" {
   */
 
 /** @defgroup I2CEx_FastModePlus I2C Extended Fast Mode Plus
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_FASTMODEPLUS_PB6            SYSCFG_PMCR_I2C_PB6_FMP                        /*!< Enable Fast Mode Plus on PB6       */
@@ -93,6 +96,7 @@ void HAL_I2CEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup I2CEx_Private_Constants I2C Extended Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -102,6 +106,7 @@ void HAL_I2CEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup I2CEx_Private_Macro I2C Extended Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_I2C_ANALOG_FILTER(FILTER)    (((FILTER) == I2C_ANALOGFILTER_ENABLE) || \
@@ -149,6 +154,7 @@ void HAL_I2CEx_DisableFastModePlus(uint32_t ConfigFastModePlus);
 
 /* Private Functions ---------------------------------------------------------*/
 /** @defgroup I2CEx_Private_Functions I2C Extended Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Private functions are defined in stm32h7xx_hal_i2c_ex.c file */

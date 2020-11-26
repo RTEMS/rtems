@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup PSSI_Exported_Types PSSI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -127,10 +128,12 @@ typedef enum
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup PSSI_Exported_Constants PSSI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PSSI_Error_Code PSSI Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_PSSI_ERROR_NONE             0x00000000U /*!< No error                */
@@ -147,6 +150,7 @@ typedef enum
   */
 
 /** @defgroup PSSI_DATA_WIDTH PSSI Data Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -158,6 +162,7 @@ typedef enum
   */
 
 /** @defgroup PSSI_BUS_WIDTH PSSI Bus Width
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -167,6 +172,7 @@ typedef enum
   * @}
   */
 /** @defgroup PSSI_MODE PSSI mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_PSSI_UNIDIRECTIONAL         0x00000000U /*!< Uni-directional mode */
@@ -176,6 +182,7 @@ typedef enum
   */
 
 /** @defgroup PSSI_ControlSignal Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_PSSI_DE_RDY_DISABLE           (0x0U << PSSI_CR_DERDYCFG_Pos) /*!< Neither DE nor RDY are enabled */
@@ -193,6 +200,7 @@ typedef enum
 
 
 /** @defgroup PSSI_Data_Enable_Polarity Data Enable Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_PSSI_DEPOL_ACTIVE_LOW         0x0U            /*!< Active Low */
@@ -201,6 +209,7 @@ typedef enum
   * @}
   */
 /** @defgroup PSSI_Reday_Polarity Reday Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_PSSI_RDYPOL_ACTIVE_LOW        0x0U            /*!< Active Low */
@@ -210,6 +219,7 @@ typedef enum
   */
 
 /** @defgroup PSSI_Clock_Polarity Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_PSSI_FALLING_EDGE             0x0U            /*!< Fallling Edge */
@@ -222,6 +232,7 @@ typedef enum
 
 
 /** @defgroup PSSI_DEFINITION PSSI definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -247,6 +258,7 @@ typedef enum
   */
 
 /** @defgroup PSSI_Interrupts PSSI Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -264,6 +276,7 @@ typedef enum
   */
 /* Exported macros ------------------------------------------------------------*/
 /** @defgroup PSSI_Exported_Macros PSSI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -35,12 +35,14 @@ extern "C" {
 #if defined (MDMA)
 
 /** @defgroup MDMA_LL MDMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup MDMA_LL_Private_Variables MDMA Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Array used to get the MDMA channel register offset versus channel index LL_MDMA_CHANNEL_x */
@@ -70,6 +72,7 @@ static const uint32_t LL_MDMA_CH_OFFSET_TAB[] =
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup MDMA_LL_Private_Constants MDMA Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -81,6 +84,7 @@ static const uint32_t LL_MDMA_CH_OFFSET_TAB[] =
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup MDMA_LL_ES_INIT MDMA Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -249,10 +253,12 @@ typedef struct
 #endif /*USE_FULL_LL_DRIVER*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup MDMA_LL_Exported_Constants MDMA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDMA_LL_EC_CHANNEL CHANNEL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_CHANNEL_0                   0x00000000U
@@ -277,6 +283,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_WORD_ENDIANNESS Word Endianness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_WORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for words */
@@ -287,6 +294,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_HALFWORD_ENDIANNESS Half Word Endianness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_HALFWORD_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for half words */
@@ -297,6 +305,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_BYTE_ENDIANNESS Byte Endianness
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BYTE_ENDIANNESS_PRESERVE     0x00000000U  /*!< Little endianess preserved for bytes */
@@ -307,6 +316,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_PRIORITY Transfer Priority level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_PRIORITY_LOW               0x00000000U               /*!< Priority level : Low       */
@@ -318,6 +328,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_BUFF_WRITE_MODE Bufferable Write Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BUFF_WRITE_DISABLE         0x00000000U               /*!< destination write operation is non-bufferable */
@@ -327,6 +338,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_REQUEST_MODE Request Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_REQUEST_MODE_HW            0x00000000U               /*!< Request mode is Hardware    */
@@ -336,6 +348,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_TRIGGER_MODE Trigger Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BUFFER_TRANSFER          0x00000000U               /*!< Each MDMA request (SW or HW) triggers a buffer transfer */
@@ -347,6 +360,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_PADDING_ALIGNMENT_MODE Padding Alignment Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DATAALIGN_RIGHT          0x00000000U              /*!< Right Aligned, padded w/ 0s (default) */
@@ -358,6 +372,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_PACKING_MODE Transfer Packing
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_PACK_DISABLE          0x00000000U              /*!< Packing disabled */
@@ -367,6 +382,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_BURST Transfer Destination Burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_BURST_SINGLE        0x00000000U                               /*!< Single transfer */
@@ -382,6 +398,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_BURST Transfer Source Burst
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_BURST_SINGLE        0x00000000U                                /*!< Single transfer */
@@ -397,6 +414,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_INC_OFFSET_SIZE Destination Increment Offset Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_INC_OFFSET_BYTE        0x00000000U                           /*!< offset is Byte (8-bit)         */
@@ -408,6 +426,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_INC_OFFSET_SIZE Source Increment Offset Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_INC_OFFSET_BYTE        0x00000000U                           /*!< offset is Byte (8-bit)         */
@@ -419,6 +438,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_DATA_SIZE Destination Data Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_DATA_SIZE_BYTE       0x00000000U                            /*!< Destination data size is Byte        */
@@ -430,6 +450,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_DATA_SIZE Source Data Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_DATA_SIZE_BYTE       0x00000000U                            /*!< Source data size is Byte        */
@@ -441,6 +462,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_INC_MODE Destination Increment Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_DEST_FIXED               0x00000000U                            /*!< Destination address pointer is fixed */
@@ -451,6 +473,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_INC_MODE Source Increment Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_FIXED                0x00000000U                            /*!< Destination address pointer is fixed */
@@ -461,6 +484,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_BLK_RPT_DEST_ADDR_UPDATE_MODE Block Repeat Destination address Update Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BLK_RPT_DEST_ADDR_INCREMENT   0x00000000U                       /*!< Destination address pointer is incremented after each block transfer by Destination Update Value */
@@ -470,6 +494,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_BLK_RPT_ADDR_UPDATE_MODE Source Block Repeat address Update Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_BLK_RPT_SRC_ADDR_INCREMENT   0x00000000U                        /*!< Source address pointer is incremented after each block transfer by Source Update Value */
@@ -479,6 +504,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_DEST_BUS Destination BUS Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  LL_MDMA_DEST_BUS_SYSTEM_AXI    0x00000000U                             /*!< System/AXI bus is used as destination */
@@ -488,6 +514,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_SRC_BUS Source BUS Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_SRC_BUS_SYSTEM_AXI     0x00000000U                             /*!< System/AXI bus is used as source */
@@ -497,6 +524,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_HW_TRIGGER_SELCTION HW Trigger Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_REQ_DMA1_STREAM0_TC          0x00000000U    /*!< MDMA HW Trigger (request) is DMA1 Stream 0 Transfer Complete Flag   */
@@ -552,6 +580,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EC_XFER_ERROR_DIRECTION Transfer Error Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MDMA_READ_ERROR                       0x00000000U                /*!< Last transfer error on the channel was a related to a read access    */
@@ -566,10 +595,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup MDMA_LL_Exported_Macros MDMA Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDMA_LL_EM_WRITE_READ Common Write and read registers macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -593,6 +624,7 @@ typedef struct
   */
 
 /** @defgroup MDMA_LL_EM_CONVERT_DMAxCHANNELy Convert MDMAxChannely
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -660,10 +692,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
  /** @defgroup MDMA_LL_Exported_Functions MDMA Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDMA_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -3377,6 +3411,7 @@ __STATIC_INLINE uint32_t LL_MDMA_GetXferErrorLSBAddress(MDMA_TypeDef *MDMAx, uin
   */
 
 /** @defgroup MDMA_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3863,6 +3898,7 @@ __STATIC_INLINE void LL_MDMA_ClearFlag_TC(MDMA_TypeDef *MDMAx, uint32_t Channel)
   */
 
 /** @defgroup MDMA_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4322,6 +4358,7 @@ __STATIC_INLINE uint32_t LL_MDMA_IsEnabledIT_TC(MDMA_TypeDef *MDMAx, uint32_t Ch
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup MDMA_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

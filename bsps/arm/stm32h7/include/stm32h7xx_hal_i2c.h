@@ -38,10 +38,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup I2C_Exported_Types I2C Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2C_Configuration_Structure_definition I2C Configuration Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  I2C Configuration Structure definition
   * @{
   */
@@ -79,6 +81,7 @@ typedef struct
   */
 
 /** @defgroup HAL_state_structure_definition HAL state structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL State structure definition
   * @note  HAL I2C State value coding follow below described bitmap :\n
   *          b7-b6  Error information\n
@@ -128,6 +131,7 @@ typedef enum
   */
 
 /** @defgroup HAL_mode_structure_definition HAL mode structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL Mode structure definition
   * @note  HAL I2C Mode value coding follow below described bitmap :\n
   *          b7     (not used)\n
@@ -159,6 +163,7 @@ typedef enum
   */
 
 /** @defgroup I2C_Error_Code_definition I2C Error Code definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  I2C Error Code definition
   * @{
   */
@@ -180,6 +185,7 @@ typedef enum
   */
 
 /** @defgroup I2C_handle_Structure_definition I2C handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  I2C handle Structure definition
   * @{
   */
@@ -273,10 +279,12 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup I2C_Exported_Constants I2C Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2C_XFEROPTIONS  I2C Sequential Transfer Options
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_FIRST_FRAME                 ((uint32_t)I2C_SOFTEND_MODE)
@@ -296,6 +304,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_ADDRESSING_MODE I2C Addressing Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_ADDRESSINGMODE_7BIT         (0x00000001U)
@@ -305,6 +314,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_DUAL_ADDRESSING_MODE I2C Dual Addressing Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_DUALADDRESS_DISABLE         (0x00000000U)
@@ -314,6 +324,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_OWN_ADDRESS2_MASKS I2C Own Address2 Masks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_OA2_NOMASK                  ((uint8_t)0x00U)
@@ -329,6 +340,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_GENERAL_CALL_ADDRESSING_MODE I2C General Call Addressing Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_GENERALCALL_DISABLE         (0x00000000U)
@@ -338,6 +350,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_NOSTRETCH_MODE I2C No-Stretch Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_NOSTRETCH_DISABLE           (0x00000000U)
@@ -347,6 +360,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_MEMORY_ADDRESS_SIZE I2C Memory Address Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_MEMADD_SIZE_8BIT            (0x00000001U)
@@ -356,6 +370,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_XFERDIRECTION I2C Transfer Direction Master Point of View
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_DIRECTION_TRANSMIT          (0x00000000U)
@@ -365,6 +380,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_RELOAD_END_MODE I2C Reload End Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  I2C_RELOAD_MODE                I2C_CR2_RELOAD
@@ -375,6 +391,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_START_STOP_MODE I2C Start or Stop Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  I2C_NO_STARTSTOP               (0x00000000U)
@@ -386,6 +403,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_Interrupt_configuration_definition I2C Interrupt configuration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief I2C Interrupt definition
   *        Elements values convention: 0xXXXXXXXX
   *           - XXXXXXXX  : Interrupt control mask
@@ -403,6 +421,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
   */
 
 /** @defgroup I2C_Flag_definition I2C Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2C_FLAG_TXE                    I2C_ISR_TXE
@@ -432,6 +451,7 @@ typedef  void (*pI2C_AddrCallbackTypeDef)(I2C_HandleTypeDef *hi2c, uint8_t Trans
 /* Exported macros -----------------------------------------------------------*/
 
 /** @defgroup I2C_Exported_Macros I2C Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -676,6 +696,7 @@ uint32_t             HAL_I2C_GetError(I2C_HandleTypeDef *hi2c);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup I2C_Private_Constants I2C Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -685,6 +706,7 @@ uint32_t             HAL_I2C_GetError(I2C_HandleTypeDef *hi2c);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup I2C_Private_Macro I2C Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -757,6 +779,7 @@ uint32_t             HAL_I2C_GetError(I2C_HandleTypeDef *hi2c);
 
 /* Private Functions ---------------------------------------------------------*/
 /** @defgroup I2C_Private_Functions I2C Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Private functions are defined in stm32h7xx_hal_i2c.c file */

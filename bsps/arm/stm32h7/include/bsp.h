@@ -37,6 +37,16 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSBSPsARMSTM32H7 STM32H7
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief STM32H7 Board Support Package.
+ *
+ * @{
+ */
+
 #define BSP_FEATURE_IRQ_EXTENSION
 
 #define BSP_ARMV7M_IRQ_PRIORITY_DEFAULT (13 << 4)
@@ -46,6 +56,8 @@ extern "C" {
 #define BSP_ARMV7M_SYSTICK_FREQUENCY stm32h7_systick_frequency()
 
 uint32_t stm32h7_systick_frequency(void);
+
+/** @} */
 
 #ifdef __cplusplus
 }

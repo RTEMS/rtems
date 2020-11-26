@@ -36,12 +36,14 @@ extern "C" {
 #if defined (BDMA) || defined (BDMA1) || defined (BDMA2)
 
 /** @defgroup BDMA_LL BDMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup BDMA_LL_Private_Variables BDMA Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Array used to get the BDMA channel register offset versus channel index LL_BDMA_CHANNEL_x */
@@ -69,6 +71,7 @@ static const uint8_t LL_BDMA_CH_OFFSET_TAB[] =
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup BDMA_LL_ES_INIT BDMA Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -145,9 +148,11 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup BDMA_LL_Exported_Constants BDMA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup BDMA_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_BDMA_WriteReg function
   * @{
   */
@@ -184,6 +189,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_BDMA_ReadReg function
   * @{
   */
@@ -224,6 +230,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_BDMA_ReadReg and  LL_BDMA_WriteReg functions
   * @{
   */
@@ -235,6 +242,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_CHANNEL CHANNEL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_CHANNEL_0                  0x00000000U /*!< DMA Channel 0  */
@@ -253,6 +261,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_DIRECTION Transfer Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_DIRECTION_PERIPH_TO_MEMORY 0x00000000U              /*!< Peripheral to memory direction       */
@@ -263,6 +272,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_MODE Transfer mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_MODE_NORMAL                0x00000000U              /*!< Normal Mode                          */
@@ -272,6 +282,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_DOUBLEBUFFER_MODE DOUBLE BUFFER MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_DOUBLEBUFFER_MODE_DISABLE  0x00000000U              /*!< Disable double buffering mode        */
@@ -281,6 +292,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_PERIPH Peripheral increment mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_PERIPH_INCREMENT           BDMA_CCR_PINC            /*!< Peripheral increment mode Enable     */
@@ -290,6 +302,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_MEMORY Memory increment mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_MEMORY_INCREMENT           BDMA_CCR_MINC            /*!< Memory increment mode Enable         */
@@ -299,6 +312,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_PDATAALIGN Peripheral data alignment
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_PDATAALIGN_BYTE            0x00000000U              /*!< Peripheral data alignment : Byte     */
@@ -309,6 +323,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_MDATAALIGN Memory data alignment
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_MDATAALIGN_BYTE            0x00000000U              /*!< Memory data alignment : Byte         */
@@ -319,6 +334,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EC_PRIORITY Transfer Priority level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_PRIORITY_LOW               0x00000000U              /*!< Priority level : Low                 */
@@ -330,6 +346,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_CURRENTTARGETMEM CURRENTTARGETMEM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_BDMA_CURRENTTARGETMEM0          0x00000000U              /*!< Set CurrentTarget Memory to Memory 0 */
@@ -340,10 +357,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup BDMA_LL_Exported_Macros BDMA Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup BDMA_LL_EM_WRITE_READ Common Write and read registers macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -367,6 +386,7 @@ typedef struct
   */
 
 /** @defgroup BDMA_LL_EM_CONVERT_DMAxCHANNELy Convert BDMAxChannely
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -461,10 +481,12 @@ LL_BDMA_CHANNEL_7)
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup BDMA_LL_Exported_Functions BDMA Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
 /** @defgroup BDMA_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1460,6 +1482,7 @@ __STATIC_INLINE uint32_t LL_BDMA_GetPeriphRequest(BDMA_TypeDef *BDMAx, uint32_t 
 
 
 /** @defgroup BDMA_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -2170,6 +2193,7 @@ __STATIC_INLINE void LL_BDMA_ClearFlag_TE7(BDMA_TypeDef *BDMAx)
   */
 
 /** @defgroup BDMA_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -2376,6 +2400,7 @@ __STATIC_INLINE uint32_t LL_BDMA_IsEnabledIT_TE(BDMA_TypeDef *BDMAx, uint32_t Ch
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup BDMA_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -54,6 +54,7 @@
   */
 
 /** @defgroup I2CEx I2CEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief I2C Extended HAL module driver
   * @{
   */
@@ -68,10 +69,12 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup I2CEx_Exported_Functions I2C Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2CEx_Exported_Functions_Group1 Extended features functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended features functions
  *
 @verbatim

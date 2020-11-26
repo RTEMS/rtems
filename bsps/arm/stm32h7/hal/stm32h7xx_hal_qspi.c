@@ -234,6 +234,7 @@
   */
 
 /** @defgroup QSPI QSPI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief QSPI HAL module driver
   * @{
   */
@@ -243,6 +244,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /** @defgroup QSPI_Private_Constants QSPI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define QSPI_FUNCTIONAL_MODE_INDIRECT_WRITE 0x00000000U                     /*!<Indirect write mode*/
@@ -255,6 +257,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /** @defgroup QSPI_Private_Macros QSPI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_QSPI_FUNCTIONAL_MODE(MODE) (((MODE) == QSPI_FUNCTIONAL_MODE_INDIRECT_WRITE) || \
@@ -278,10 +281,12 @@ static void QSPI_Config(QSPI_HandleTypeDef *hqspi, QSPI_CommandTypeDef *cmd, uin
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup QSPI_Exported_Functions QSPI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup QSPI_Exported_Functions_Group1 Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -465,6 +470,7 @@ __weak void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef *hqspi)
   */
 
 /** @defgroup QSPI_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief QSPI Transmit/Receive functions
   *
 @verbatim
@@ -2104,6 +2110,7 @@ HAL_StatusTypeDef HAL_QSPI_UnRegisterCallback (QSPI_HandleTypeDef *hqspi, HAL_QS
   */
 
 /** @defgroup QSPI_Exported_Functions_Group3 Peripheral Control and State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   QSPI control and State functions
   *
 @verbatim
@@ -2352,6 +2359,7 @@ HAL_StatusTypeDef HAL_QSPI_SetFlashID(QSPI_HandleTypeDef *hqspi, uint32_t FlashI
   */
 
 /** @defgroup QSPI_Private_Functions QSPI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

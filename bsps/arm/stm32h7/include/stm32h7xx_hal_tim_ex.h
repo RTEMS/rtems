@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup TIMEx_Exported_Types TIM Extended Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -84,10 +85,12 @@ TIMEx_BreakInputConfigTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup TIMEx_Exported_Constants TIM Extended Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIMEx_Remap TIM Extended Remapping
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TIM1_ETR_GPIO        0x00000000U                                                 /* !< TIM1_ETR is connected to GPIO */
@@ -141,6 +144,7 @@ TIMEx_BreakInputConfigTypeDef;
 #if defined(TIM_BREAK_INPUT_SUPPORT)
 
 /** @defgroup TIMEx_Break_Input TIM Extended Break input
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAKINPUT_BRK     0x00000001U                                      /* !< Timer break input  */
@@ -150,6 +154,7 @@ TIMEx_BreakInputConfigTypeDef;
   */
 
 /** @defgroup TIMEx_Break_Input_Source TIM Extended Break input source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAKINPUTSOURCE_BKIN     0x00000001U                               /* !< An external source (GPIO) is connected to the BKIN pin  */
@@ -161,6 +166,7 @@ TIMEx_BreakInputConfigTypeDef;
   */
 
 /** @defgroup TIMEx_Break_Input_Source_Enable TIM Extended Break input source enabling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAKINPUTSOURCE_DISABLE     0x00000000U                            /* !< Break input source is disabled */
@@ -170,6 +176,7 @@ TIMEx_BreakInputConfigTypeDef;
   */
 
 /** @defgroup TIMEx_Break_Input_Source_Polarity TIM Extended Break input polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAKINPUTSOURCE_POLARITY_LOW     0x00000001U                       /* !< Break input source is active low */
@@ -180,6 +187,7 @@ TIMEx_BreakInputConfigTypeDef;
 #endif /* TIM_BREAK_INPUT_SUPPORT */
 
 /** @defgroup TIMEx_Timer_Input_Selection TIM Extended Timer input selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TIM1_TI1_GPIO                          0x00000000U                               /* !< TIM1_TI1 is connected to GPIO */
@@ -248,6 +256,7 @@ TIMEx_BreakInputConfigTypeDef;
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup TIMEx_Exported_Macros TIM Extended Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -258,6 +267,7 @@ TIMEx_BreakInputConfigTypeDef;
 
 /* Private macro -------------------------------------------------------------*/
 /** @defgroup TIMEx_Private_Macros TIM Extended Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_TIM_BREAKINPUT(__BREAKINPUT__)  (((__BREAKINPUT__) == TIM_BREAKINPUT_BRK)  || \

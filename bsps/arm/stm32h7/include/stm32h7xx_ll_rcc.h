@@ -38,12 +38,14 @@ extern "C" {
 #if defined(RCC)
 
 /** @defgroup RCC_LL RCC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup RCC_LL_Private_Variables RCC Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 extern const uint8_t LL_RCC_PrescTable[16];
@@ -97,6 +99,7 @@ extern const uint8_t LL_RCC_PrescTable[16];
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_Private_Macros RCC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -106,10 +109,12 @@ extern const uint8_t LL_RCC_PrescTable[16];
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_Exported_Types RCC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LL_ES_CLOCK_FREQ Clocks Frequency Structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -149,10 +154,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RCC_LL_Exported_Constants RCC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCC_LL_EC_OSC_VALUES Oscillator Values adaptation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Defines used to adapt values of different oscillators
   * @note     These values could be modified in the user environment according to
   *           HW set-up.
@@ -195,6 +202,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_HSIDIV  HSI oscillator divider
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_HSI_DIV1                   RCC_CR_HSIDIV_1
@@ -206,6 +214,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_LSEDRIVE  LSE oscillator drive capability
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_LSEDRIVE_LOW                (uint32_t)(0x00000000U)
@@ -217,6 +226,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SYS_CLKSOURCE  System clock switch
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_SYS_CLKSOURCE_HSI           RCC_CFGR_SW_HSI
@@ -228,6 +238,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SYS_CLKSOURCE_STATUS  System clock switch status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_SYS_CLKSOURCE_STATUS_HSI    RCC_CFGR_SWS_HSI   /*!< HSI used as system clock */
@@ -239,6 +250,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SYSWAKEUP_CLKSOURCE  System wakeup clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_SYSWAKEUP_CLKSOURCE_HSI     (uint32_t)(0x00000000U)
@@ -248,6 +260,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_KERWAKEUP_CLKSOURCE  Kernel wakeup clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_KERWAKEUP_CLKSOURCE_HSI     (uint32_t)(0x00000000U)
@@ -257,6 +270,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SYSCLK_DIV  System prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CFGR_D1CPRE_DIV1)
@@ -285,6 +299,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_AHB_DIV  AHB prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CFGR_HPRE_DIV1)
@@ -313,6 +328,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_APB1_DIV  APB low-speed prescaler (APB1)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CFGR_D2PPRE1_DIV1)
@@ -333,6 +349,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_APB2_DIV  APB low-speed prescaler (APB2)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CFGR_D2PPRE2_DIV1)
@@ -353,6 +370,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_APB3_DIV  APB low-speed prescaler (APB3)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CFGR_D1PPRE_DIV1)
@@ -373,6 +391,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_APB4_DIV  APB low-speed prescaler (APB4)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CFGR_D3PPRE_DIV1)
@@ -393,6 +412,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_MCOxSOURCE  MCO source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_MCO1SOURCE_HSI              (uint32_t)((RCC_CFGR_MCO1>>16U) | 0x00000000U)
@@ -411,6 +431,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_MCOx_DIV  MCO prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_MCO1_DIV_1                  (uint32_t)((RCC_CFGR_MCO1PRE>>16U) | RCC_CFGR_MCO1PRE_0)
@@ -449,6 +470,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_RTC_HSEDIV  HSE prescaler for RTC clock
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_RTC_NOCLOCK                  (uint32_t)(0x00000000U)
@@ -519,6 +541,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_USARTx_CLKSOURCE  Peripheral USART clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USART16SEL)
@@ -563,6 +586,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_LPUARTx_CLKSOURCE  Peripheral LPUART clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPUART1SEL)
@@ -585,6 +609,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_I2Cx_CLKSOURCE  Peripheral I2C clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (RCC_D2CCIP2R_I2C123SEL)
@@ -614,6 +639,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_LPTIMx_CLKSOURCE  Peripheral LPTIM clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_LPTIM1SEL)
@@ -673,6 +699,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SAIx_CLKSOURCE  Peripheral SAI clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SAI1SEL)
@@ -730,6 +757,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SDMMC_CLKSOURCE  Peripheral SDMMC clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_SDMMCSEL)
@@ -744,6 +772,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_RNG_CLKSOURCE  Peripheral RNG clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_RNGSEL)
@@ -762,6 +791,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_USB_CLKSOURCE  Peripheral USB clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_USBSEL)
@@ -780,6 +810,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_CEC_CLKSOURCE  Peripheral CEC clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_CECSEL)
@@ -797,6 +828,7 @@ typedef struct
 
 #if defined(DSI)
 /** @defgroup RCC_LL_EC_DSI_CLKSOURCE  Peripheral DSI clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_DSI_CLKSOURCE_PHY               (0x00000000U)
@@ -807,6 +839,7 @@ typedef struct
 #endif /* DSI */
 
 /** @defgroup RCC_LL_EC_DFSDM_CLKSOURCE  Peripheral DFSDM clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_DFSDM1SEL)
@@ -822,6 +855,7 @@ typedef struct
 
 #if defined(DFSDM2_BASE)
 /** @defgroup RCC_LL_EC_DFSDM2_CLKSOURCE  Peripheral DFSDM2 clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_DFSDM2_CLKSOURCE_PCLK4          (0x00000000U)
@@ -832,6 +866,7 @@ typedef struct
 #endif /* DFSDM2_BASE */
 
 /** @defgroup RCC_LL_EC_FMC_CLKSOURCE  Peripheral FMC clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_FMCSEL)
@@ -851,6 +886,7 @@ typedef struct
 
 #if defined(QUADSPI)
 /** @defgroup RCC_LL_EC_QSPI_CLKSOURCE  Peripheral QSPI clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_QSPI_CLKSOURCE_HCLK             (0x00000000U)
@@ -865,6 +901,7 @@ typedef struct
 
 #if defined(OCTOSPI1) || defined(OCTOSPI2)
 /** @defgroup RCC_LL_EC_OSPI_CLKSOURCE  Peripheral OSPI clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_OSPI_CLKSOURCE_HCLK             (0x00000000U)
@@ -878,6 +915,7 @@ typedef struct
 
 
 /** @defgroup RCC_LL_EC_CLKP_CLKSOURCE  Peripheral CLKP clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_CKPERSEL)
@@ -894,6 +932,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SPIx_CLKSOURCE  Peripheral SPI clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPI123SEL)
@@ -945,6 +984,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SPDIF_CLKSOURCE  Peripheral SPDIF clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPDIFSEL)
@@ -964,6 +1004,7 @@ typedef struct
 
 #if defined(FDCAN1) || defined(FDCAN2)
 /** @defgroup RCC_LL_EC_FDCAN_CLKSOURCE  Peripheral FDCAN clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_FDCANSEL)
@@ -981,6 +1022,7 @@ typedef struct
 #endif /*FDCAN1 || FDCAN2*/
 
 /** @defgroup RCC_LL_EC_SWP_CLKSOURCE  Peripheral SWP clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SWPSEL)
@@ -995,6 +1037,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_ADC_CLKSOURCE  Peripheral ADC clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_ADCSEL)
@@ -1011,6 +1054,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_USARTx_CLKSOURCE  Peripheral USART get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (RCC_D2CCIP2R_USART16SEL)
@@ -1030,6 +1074,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_LPUARTx_CLKSOURCE  Peripheral LPUART get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_LPUART1SEL)
@@ -1042,6 +1087,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_I2Cx_CLKSOURCE  Peripheral I2C get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_I2C123SEL)
@@ -1059,6 +1105,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_LPTIMx_CLKSOURCE  Peripheral LPTIM get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP2R_LPTIM1SEL)
@@ -1082,6 +1129,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SAIx_CLKSOURCE  Peripheral SAI get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SAI1SEL)
@@ -1109,6 +1157,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SDMMC_CLKSOURCE  Peripheral SDMMC get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_SDMMCSEL)
@@ -1121,6 +1170,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_RNG_CLKSOURCE  Peripheral RNG get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (RCC_D2CCIP2R_RNGSEL)
@@ -1133,6 +1183,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_USB_CLKSOURCE  Peripheral USB get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (RCC_D2CCIP2R_USBSEL)
@@ -1145,6 +1196,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_CEC_CLKSOURCE  Peripheral CEC get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (RCC_D2CCIP2R_CECSEL)
@@ -1158,6 +1210,7 @@ typedef struct
 
 #if defined(DSI)
 /** @defgroup RCC_LL_EC_DSI_CLKSOURCE  Peripheral DSI get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_DSI_CLKSOURCE             RCC_D1CCIPR_DSISEL
@@ -1167,6 +1220,7 @@ typedef struct
 #endif /* DSI */
 
 /** @defgroup RCC_LL_EC_DFSDM_CLKSOURCE  Peripheral DFSDM get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_DFSDM1SEL)
@@ -1180,6 +1234,7 @@ typedef struct
 
 #if defined(DFSDM2_BASE)
 /** @defgroup RCC_LL_EC_DFSDM2_CLKSOURCE  Peripheral DFSDM2 get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_DFSDM2_CLKSOURCE          RCC_SRDCCIPR_DFSDM2SEL
@@ -1190,6 +1245,7 @@ typedef struct
 
 
 /** @defgroup RCC_LL_EC_FMC_CLKSOURCE  Peripheral FMC get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_FMCSEL)
@@ -1203,6 +1259,7 @@ typedef struct
 
 #if defined(QUADSPI)
 /** @defgroup RCC_LL_EC_QSPI_CLKSOURCE  Peripheral QSPI get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_QSPI_CLKSOURCE            RCC_D1CCIPR_QSPISEL
@@ -1213,6 +1270,7 @@ typedef struct
 
 #if defined(OCTOSPI1) || defined(OCTOSPI2)
 /** @defgroup RCC_LL_EC_OSPI_CLKSOURCE  Peripheral OSPI get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_OSPI_CLKSOURCE            RCC_CDCCIPR_OCTOSPISEL
@@ -1222,6 +1280,7 @@ typedef struct
 #endif /* OCTOSPI1 || OCTOSPI2 */
 
 /** @defgroup RCC_LL_EC_CLKP_CLKSOURCE  Peripheral CLKP get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D1CCIPR_CKPERSEL)
@@ -1234,6 +1293,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SPIx_CLKSOURCE  Peripheral SPI get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPI123SEL)
@@ -1256,6 +1316,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_SPDIF_CLKSOURCE  Peripheral SPDIF get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SPDIFSEL)
@@ -1269,6 +1330,7 @@ typedef struct
 
 #if defined(FDCAN1) || defined(FDCAN2)
 /** @defgroup RCC_LL_EC_FDCAN_CLKSOURCE  Peripheral FDCAN get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_FDCANSEL)
@@ -1282,6 +1344,7 @@ typedef struct
 #endif /*FDCAN1 || FDCAN2*/
 
 /** @defgroup RCC_LL_EC_SWP_CLKSOURCE  Peripheral SWP get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D2CCIP1R_SWPSEL)
@@ -1294,6 +1357,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_ADC_CLKSOURCE  Peripheral ADC get clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_D3CCIPR_ADCSEL)
@@ -1306,6 +1370,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_RTC_CLKSOURCE  RTC clock source selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_RTC_CLKSOURCE_NONE          (uint32_t)(0x00000000U)
@@ -1317,6 +1382,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_TIM_CLKPRESCALER  Timers clocks prescalers selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_TIM_PRESCALER_TWICE          (uint32_t)(0x00000000U)
@@ -1327,6 +1393,7 @@ typedef struct
 
 #if defined(HRTIM1)
 /** @defgroup RCC_LL_EC_HRTIM_CLKSOURCE  High Resolution Timers clock selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_HRTIM_CLKSOURCE_TIM          (uint32_t)(0x00000000U)           /* HRTIM Clock source is same as other timers */
@@ -1337,6 +1404,7 @@ typedef struct
 #endif /* HRTIM1 */
 
 /** @defgroup RCC_LL_EC_PLLSOURCE   All PLLs entry clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_PLLSOURCE_HSI               RCC_PLLCKSELR_PLLSRC_HSI
@@ -1348,6 +1416,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_PLLINPUTRANGE   All PLLs input range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_PLLINPUTRANGE_1_2           (uint32_t)(0x00000000U)
@@ -1359,6 +1428,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EC_PLLVCORANGE   All PLLs VCO range
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_PLLVCORANGE_WIDE            (uint32_t)(0x00000000U)      /* VCO output range: 192 to 836 MHz   OR  128 to 544 MHz (*) */
@@ -1374,10 +1444,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup RCC_LL_Exported_Macros RCC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCC_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1400,6 +1472,7 @@ typedef struct
   */
 
 /** @defgroup RCC_LL_EM_CALC_FREQ Calculate frequencies
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1519,6 +1592,7 @@ typedef struct
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_EC_PERIPH_FREQUENCY Peripheral clock frequency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_RCC_PERIPH_FREQUENCY_NO         0x00000000U                 /*!< No clock enabled for the peripheral            */
@@ -1534,10 +1608,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RCC_LL_Exported_Functions RCC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCC_LL_EF_HSE HSE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1630,6 +1706,7 @@ __STATIC_INLINE uint32_t LL_RCC_HSE_IsReady(void)
   */
 
 /** @defgroup RCC_LL_EF_HSI HSI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1789,6 +1866,7 @@ __STATIC_INLINE uint32_t LL_RCC_HSI_GetCalibTrimming(void)
   */
 
 /** @defgroup RCC_LL_EF_CSI CSI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1922,6 +2000,7 @@ __STATIC_INLINE uint32_t LL_RCC_CSI_GetCalibTrimming(void)
   */
 
 /** @defgroup RCC_LL_EF_HSI48 HSI48
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1973,6 +2052,7 @@ __STATIC_INLINE uint32_t LL_RCC_HSI48_GetCalibration(void)
 #if defined(RCC_CR_D1CKRDY)
 
 /** @defgroup RCC_LL_EF_D1CLK D1CKREADY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1992,6 +2072,7 @@ __STATIC_INLINE uint32_t LL_RCC_D1CK_IsReady(void)
 #else
 
 /** @defgroup RCC_LL_EF_CPUCLK CPUCKREADY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2014,6 +2095,7 @@ __STATIC_INLINE uint32_t LL_RCC_CPUCK_IsReady(void)
 #if defined(RCC_CR_D2CKRDY)
 
 /** @defgroup RCC_LL_EF_D2CLK D2CKREADY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2032,6 +2114,7 @@ __STATIC_INLINE uint32_t LL_RCC_D2CK_IsReady(void)
 #else
 
 /** @defgroup RCC_LL_EF_CDCLK CDCKREADY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2051,6 +2134,7 @@ __STATIC_INLINE uint32_t LL_RCC_CDCK_IsReady(void)
 #endif /* RCC_CR_D2CKRDY */
 
 /** @defgroup RCC_LL_EF_SYSTEM_WIDE_RESET RESET
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RCC_GCR_WW1RSC)
@@ -2103,6 +2187,7 @@ __STATIC_INLINE uint32_t LL_RCC_WWDG2_IsSystemReset(void)
 
 #if defined(DUAL_CORE)
 /** @defgroup RCC_LL_EF_BOOT_CPU CPU
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2152,6 +2237,7 @@ __STATIC_INLINE uint32_t LL_RCC_IsCM7BootForced(void)
 #endif  /*DUAL_CORE*/
 
 /** @defgroup RCC_LL_EF_LSE LSE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2288,6 +2374,7 @@ __STATIC_INLINE uint32_t LL_RCC_LSE_IsReady(void)
   */
 
 /** @defgroup RCC_LL_EF_LSI LSI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2326,6 +2413,7 @@ __STATIC_INLINE uint32_t LL_RCC_LSI_IsReady(void)
   */
 
 /** @defgroup RCC_LL_EF_System System
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2663,6 +2751,7 @@ __STATIC_INLINE uint32_t LL_RCC_GetAPB4Prescaler(void)
   */
 
 /** @defgroup RCC_LL_EF_MCO MCO
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2727,6 +2816,7 @@ __STATIC_INLINE void LL_RCC_ConfigMCO(uint32_t MCOxSource, uint32_t MCOxPrescale
   */
 
 /** @defgroup RCC_LL_EF_Peripheral_Clock_Source Peripheral Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3894,6 +3984,7 @@ __STATIC_INLINE uint32_t LL_RCC_GetADCClockSource(uint32_t Periph)
   */
 
 /** @defgroup RCC_LL_EF_RTC RTC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4135,6 +4226,7 @@ __STATIC_INLINE uint32_t LL_RCC_GetRTC_HSEPrescaler(void)
   */
 
 /** @defgroup RCC_LL_EF_TIM_CLOCK_PRESCALER TIM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4169,6 +4261,7 @@ __STATIC_INLINE uint32_t LL_RCC_GetTIMPrescaler(void)
 
 #if defined(HRTIM1)
 /** @defgroup RCC_LL_EF_HRTIM_SET_CLOCK_SOURCE HRTIM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4204,6 +4297,7 @@ __STATIC_INLINE uint32_t LL_RCC_GetHRTIMClockSource(void)
 #endif /* HRTIM1 */
 
 /** @defgroup RCC_LL_EF_PLL PLL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5180,6 +5274,7 @@ __STATIC_INLINE void LL_RCC_PLL3_SetFRACN(uint32_t FRACN)
 
 
 /** @defgroup RCC_LL_EF_FLAG_Management FLAG Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5942,6 +6037,7 @@ __STATIC_INLINE void LL_C2_RCC_ClearResetFlags(void)
   */
 
 /** @defgroup RCC_LL_EF_IT_Management IT Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -6250,6 +6346,7 @@ __STATIC_INLINE uint32_t LL_RCC_IsEnableIT_LSECSS(void)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup RCC_LL_EF_Init De-initialization function
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void LL_RCC_DeInit(void);
@@ -6258,6 +6355,7 @@ void LL_RCC_DeInit(void);
   */
 
 /** @defgroup RCC_LL_EF_Get_Freq Get system and peripherals clocks frequency functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 uint32_t    LL_RCC_CalcPLLClockFreq(uint32_t PLLInputFreq, uint32_t M, uint32_t N, uint32_t FRACN, uint32_t PQR);

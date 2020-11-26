@@ -38,6 +38,7 @@
   */
 #if defined (CRYP)
 /** @defgroup CRYPEx CRYPEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CRYP Extension HAL module driver.
   * @{
   */
@@ -81,6 +82,7 @@
   */
 
 /** @defgroup CRYPEx_Exported_Functions_Group1 Extended AES processing functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    CRYPEx Extended processing functions.
   *
 @verbatim

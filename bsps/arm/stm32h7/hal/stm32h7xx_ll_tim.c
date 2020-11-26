@@ -182,6 +182,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup TIM_LL_Private_Functions TIM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static ErrorStatus OC1Config(TIM_TypeDef *TIMx, LL_TIM_OC_InitTypeDef *TIM_OCInitStruct);

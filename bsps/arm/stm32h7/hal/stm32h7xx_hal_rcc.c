@@ -74,6 +74,7 @@
   */
 
 /** @defgroup RCC  RCC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RCC HAL module driver
   * @{
   */
@@ -84,6 +85,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /** @defgroup RCC_Private_Macros RCC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MCO1_CLK_ENABLE()     __HAL_RCC_GPIOA_CLK_ENABLE()
@@ -99,6 +101,7 @@
   */
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup RCC_Private_Variables RCC Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -109,10 +112,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup RCC_Exported_Functions RCC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RCC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -1211,6 +1216,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef  *RCC_ClkInitStru
   */
 
 /** @defgroup RCC_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   RCC clocks control functions
  *
 @verbatim

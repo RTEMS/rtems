@@ -38,6 +38,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup FLASH_Exported_Types FLASH Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -84,10 +85,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup FLASH_Exported_Constants FLASH Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FLASH_Error_Code FLASH Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    FLASH Error Code
   * @{
   */
@@ -138,6 +141,7 @@ typedef struct
   */
 
 /** @defgroup FLASH_Type_Program FLASH Type Program
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_TYPEPROGRAM_FLASHWORD  0x01U        /*!< Program a flash word at a specified address */
@@ -149,6 +153,7 @@ typedef struct
   */
 
 /** @defgroup FLASH_Flag_definition FLASH Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief Flag definition
   * @{
   */
@@ -251,6 +256,7 @@ typedef struct
   */
 
 /** @defgroup FLASH_Interrupt_definition FLASH Interrupt definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief FLASH Interrupt definition
   * @{
   */
@@ -321,6 +327,7 @@ typedef struct
 
 #if defined (FLASH_CR_PSIZE)
 /** @defgroup FLASH_Program_Parallelism FLASH Program Parallelism
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_PSIZE_BYTE           0x00000000U       /*!< Flash program/erase by 8 bits  */
@@ -334,6 +341,7 @@ typedef struct
 
 
 /** @defgroup FLASH_Keys FLASH Keys
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_KEY1                 0x45670123U
@@ -345,6 +353,7 @@ typedef struct
   */
 
 /** @defgroup FLASH_Sectors FLASH Sectors
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FLASH_SECTOR_0             0U       /*!< Sector Number 0   */
@@ -487,6 +496,7 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup FLASH_Exported_Macros FLASH Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -740,6 +750,7 @@ uint32_t HAL_FLASH_GetError(void);
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup FLASH_Private_Variables FLASH Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 extern FLASH_ProcessTypeDef pFlash;
@@ -748,6 +759,7 @@ extern FLASH_ProcessTypeDef pFlash;
   */
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup FLASH_Private_Constants FLASH Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -757,6 +769,7 @@ extern FLASH_ProcessTypeDef pFlash;
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup FLASH_Private_Macros FLASH Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -803,6 +816,7 @@ extern FLASH_ProcessTypeDef pFlash;
   */
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup FLASH_Private_Functions FLASH Private functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout, uint32_t Bank);

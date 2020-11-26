@@ -183,6 +183,7 @@
   */
 
 /** @defgroup I2S I2S
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief I2S HAL module driver
   * @{
   */
@@ -195,6 +196,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup I2S_Private_Functions I2S Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void               I2S_DMATxCplt(DMA_HandleTypeDef *hdma);
@@ -215,10 +217,12 @@ static HAL_StatusTypeDef  I2S_WaitFlagStateUntilTimeout(I2S_HandleTypeDef *hi2s,
 /* Exported functions ---------------------------------------------------------*/
 
 /** @defgroup I2S_Exported_Functions I2S Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup  I2S_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -718,6 +722,7 @@ HAL_StatusTypeDef HAL_I2S_UnRegisterCallback(I2S_HandleTypeDef *hi2s, HAL_I2S_Ca
   */
 
 /** @defgroup I2S_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief Data transfers functions
   *
 @verbatim
@@ -1613,6 +1618,7 @@ __weak void HAL_I2S_ErrorCallback(I2S_HandleTypeDef *hi2s)
   */
 
 /** @defgroup I2S_Exported_Functions_Group3 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Peripheral State functions
   *
 @verbatim

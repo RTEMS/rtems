@@ -35,6 +35,7 @@ extern "C" {
 #if defined (GPIOA) || defined (GPIOB) || defined (GPIOC) || defined (GPIOD) || defined (GPIOE) || defined (GPIOF) || defined (GPIOG) || defined (GPIOH) || defined (GPIOI) || defined (GPIOJ) || defined (GPIOK)
 
 /** @defgroup GPIO_LL GPIO
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -44,6 +45,7 @@ extern "C" {
 /* Private macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup GPIO_LL_Private_Macros GPIO Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -55,6 +57,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup GPIO_LL_ES_INIT GPIO Exported Init structures
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -99,10 +102,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup GPIO_LL_Exported_Constants GPIO Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GPIO_LL_EC_PIN PIN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_GPIO_PIN_0                      GPIO_BSRR_BS0 /*!< Select pin 0 */
@@ -132,6 +137,7 @@ typedef struct
   */
 
 /** @defgroup GPIO_LL_EC_MODE Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_GPIO_MODE_INPUT                 (0x00000000U) /*!< Select input mode */
@@ -143,6 +149,7 @@ typedef struct
   */
 
 /** @defgroup GPIO_LL_EC_OUTPUT Output Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_GPIO_OUTPUT_PUSHPULL            (0x00000000U) /*!< Select push-pull as output type */
@@ -152,6 +159,7 @@ typedef struct
   */
 
 /** @defgroup GPIO_LL_EC_SPEED Output Speed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_GPIO_SPEED_FREQ_LOW             (0x00000000U) /*!< Select I/O low output speed    */
@@ -168,6 +176,7 @@ typedef struct
 
 
 /** @defgroup GPIO_LL_EC_PULL Pull Up Pull Down
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_GPIO_PULL_NO                    (0x00000000U) /*!< Select I/O no pull */
@@ -178,6 +187,7 @@ typedef struct
   */
 
 /** @defgroup GPIO_LL_EC_AF Alternate Function
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_GPIO_AF_0                       (0x0000000U) /*!< Select alternate function 0 */
@@ -206,10 +216,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup GPIO_LL_Exported_Macros GPIO Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GPIO_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -239,10 +251,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup GPIO_LL_Exported_Functions GPIO Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GPIO_LL_EF_Port_Configuration Port Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -763,6 +777,7 @@ __STATIC_INLINE uint32_t LL_GPIO_IsAnyPinLocked(GPIO_TypeDef *GPIOx)
   */
 
 /** @defgroup GPIO_LL_EF_Data_Access Data Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -951,6 +966,7 @@ __STATIC_INLINE void LL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup GPIO_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

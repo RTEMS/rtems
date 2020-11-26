@@ -29,6 +29,7 @@
 #if defined (LTDC) && defined (DSI)
 
 /** @defgroup LTDCEx LTDCEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief LTDC HAL module driver
   * @{
   */
@@ -41,10 +42,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup LTDCEx_Exported_Functions LTDC Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LTDCEx_Exported_Functions_Group1 Initialization and Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Initialization and Configuration functions
   *
 @verbatim

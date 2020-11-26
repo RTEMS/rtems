@@ -50,6 +50,7 @@
   */
 
 /** @defgroup CRC CRC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CRC HAL module driver.
   * @{
   */
@@ -62,6 +63,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup CRC_Private_Functions CRC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 static uint32_t CRC_Handle_8(CRC_HandleTypeDef *hcrc, uint8_t pBuffer[], uint32_t BufferLength);
@@ -73,10 +75,12 @@ static uint32_t CRC_Handle_16(CRC_HandleTypeDef *hcrc, uint16_t pBuffer[], uint3
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup CRC_Exported_Functions CRC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions.
  *
 @verbatim
@@ -250,6 +254,7 @@ __weak void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc)
   */
 
 /** @defgroup CRC_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    management functions.
  *
 @verbatim
@@ -385,6 +390,7 @@ uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t
   */
 
 /** @defgroup CRC_Exported_Functions_Group3 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Peripheral State functions.
  *
 @verbatim

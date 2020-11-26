@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup USART_Exported_Types USART Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -212,10 +213,12 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup USART_Exported_Constants USART Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USART_Error_Definition   USART Error Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_USART_ERROR_NONE             ((uint32_t)0x00000000U)    /*!< No error                  */
@@ -234,6 +237,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Stop_Bits  USART Number of Stop Bits
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_STOPBITS_0_5                   USART_CR2_STOP_0                     /*!< USART frame with 0.5 stop bit  */
@@ -245,6 +249,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Parity    USART Parity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_PARITY_NONE                   0x00000000U                      /*!< No parity   */
@@ -255,6 +260,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Mode   USART Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_MODE_RX                       USART_CR1_RE                    /*!< RX mode        */
@@ -265,6 +271,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Over_Sampling USART Over Sampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_OVERSAMPLING_16               0x00000000U         /*!< Oversampling by 16 */
@@ -274,6 +281,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Clock  USART Clock
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_CLOCK_DISABLE                 0x00000000U       /*!< USART clock disable */
@@ -283,6 +291,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Clock_Polarity  USART Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_POLARITY_LOW                  0x00000000U      /*!< Driver enable signal is active high */
@@ -292,6 +301,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Clock_Phase   USART Clock Phase
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_PHASE_1EDGE                   0x00000000U      /*!< USART frame phase on first clock transition  */
@@ -301,6 +311,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Last_Bit  USART Last Bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_LASTBIT_DISABLE               0x00000000U      /*!< USART frame last data bit clock pulse not output to SCLK pin */
@@ -310,6 +321,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_ClockPrescaler  USART Clock Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_PRESCALER_DIV1    0x00000000U  /*!< fclk_pres = fclk     */
@@ -330,6 +342,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Request_Parameters  USART Request Parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_RXDATA_FLUSH_REQUEST        USART_RQR_RXFRQ        /*!< Receive Data flush Request  */
@@ -339,6 +352,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Flags      USART Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0xXXXX
   *           - 0xXXXX  : Flag mask in the ISR register
   * @{
@@ -367,6 +381,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Interrupt_definition USART Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0000ZZZZ0XXYYYYYb
   *           - YYYYY  : Interrupt source position in the XX register (5bits)
   *           - XX  : Interrupt source register (2bits)
@@ -398,6 +413,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_IT_CLEAR_Flags    USART Interruption Clear Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_CLEAR_PEF                       USART_ICR_PECF            /*!< Parity Error Clear Flag             */
@@ -414,6 +430,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
   */
 
 /** @defgroup USART_Interruption_Mask    USART Interruption Flags Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_IT_MASK                             0x001FU     /*!< USART interruptions flags mask */
@@ -431,6 +448,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup USART_Exported_Macros USART Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -685,6 +703,7 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup USART_Private_Macros   USART Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

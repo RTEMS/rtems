@@ -35,6 +35,7 @@ extern "C" {
 #if defined(CRS)
 
 /** @defgroup CRS_LL CRS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -46,10 +47,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRS_LL_Exported_Constants CRS Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRS_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_CRS_ReadReg function
   * @{
   */
@@ -65,6 +68,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_CRS_ReadReg and  LL_CRS_WriteReg functions
   * @{
   */
@@ -77,6 +81,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EC_SYNC_DIV Synchronization Signal Divider
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRS_SYNC_DIV_1                  0x00000000U                               /*!< Synchro Signal not divided (default) */
@@ -92,6 +97,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EC_SYNC_SOURCE Synchronization Signal Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRS_SYNC_SOURCE_GPIO            0x00000000U             /*!< Synchro Signal soucre GPIO */
@@ -102,6 +108,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EC_SYNC_POLARITY Synchronization Signal Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRS_SYNC_POLARITY_RISING        0x00000000U           /*!< Synchro Active on rising edge (default) */
@@ -111,6 +118,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EC_FREQERRORDIR Frequency Error Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRS_FREQ_ERROR_DIR_UP           0x00000000U         /*!< Upcounting direction, the actual frequency is above the target */
@@ -120,6 +128,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EC_DEFAULTVALUES Default Values
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -151,10 +160,12 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CRS_LL_Exported_Macros CRS Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRS_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -179,6 +190,7 @@ extern "C" {
   */
 
 /** @defgroup CRS_LL_EM_Exported_Macros_Calculate_Reload Exported_Macros_Calculate_Reload
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -205,10 +217,12 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRS_LL_Exported_Functions CRS Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRS_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -461,6 +475,7 @@ __STATIC_INLINE void LL_CRS_ConfigSynchronization(uint32_t HSI48CalibrationValue
   */
 
 /** @defgroup CRS_LL_EF_CRS_Management CRS_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -502,6 +517,7 @@ __STATIC_INLINE uint32_t LL_CRS_GetFreqErrorCapture(void)
   */
 
 /** @defgroup CRS_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -621,6 +637,7 @@ __STATIC_INLINE void LL_CRS_ClearFlag_ESYNC(void)
   */
 
 /** @defgroup CRS_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -750,6 +767,7 @@ __STATIC_INLINE uint32_t LL_CRS_IsEnabledIT_ESYNC(void)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup CRS_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup ADCEx_Exported_Types ADC Extended Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -211,10 +212,12 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup ADCEx_Exported_Constants ADC Extended Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADC_injected_external_trigger_source ADC group injected trigger source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* ADC group regular trigger sources for all ADC instances */
@@ -245,6 +248,7 @@ typedef struct
   */
 
 /** @defgroup ADC_injected_external_trigger_edge ADC group injected trigger edge (when external trigger is selected)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_EXTERNALTRIGINJECCONV_EDGE_NONE           (0x00000000UL)        /*!< Injected conversions hardware trigger detection disabled                             */
@@ -256,6 +260,7 @@ typedef struct
   */
 
 /** @defgroup ADC_HAL_EC_CHANNEL_SINGLE_DIFF_ENDING  Channel - Single or differential ending
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_SINGLE_ENDED                (LL_ADC_SINGLE_ENDED)         /*!< ADC channel ending set to single ended (literal also used to set calibration mode) */
@@ -265,6 +270,7 @@ typedef struct
   */
 
 /** @defgroup ADC_HAL_EC_OFFSET_NB  ADC instance - Offset number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_OFFSET_NONE              (ADC_OFFSET_4 + 1U) /*!< ADC offset disabled: no offset correction for the selected ADC channel */
@@ -277,6 +283,7 @@ typedef struct
   */
 
 /** @defgroup ADC_INJ_SEQ_RANKS  ADC group injected - Sequencer ranks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_INJECTED_RANK_1                (LL_ADC_INJ_RANK_1) /*!< ADC group injected sequencer rank 1 */
@@ -288,6 +295,7 @@ typedef struct
   */
 
 /** @defgroup ADC_HAL_EC_MULTI_MODE  Multimode - Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_MODE_INDEPENDENT               (LL_ADC_MULTI_INDEPENDENT)                                          /*!< ADC dual mode disabled (ADC independent mode) */
@@ -300,6 +308,7 @@ typedef struct
 #define ADC_DUALMODE_REGINTERL_INJECSIMULT (LL_ADC_MULTI_DUAL_REG_INT_INJ_SIM) /*!< ADC dual mode enabled: Combined group regular interleaved + group injected simultaneous */
 
 /** @defgroup ADCEx_Dual_Mode_Data_Format ADC Extended Dual Mode Data Formatting
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_DUALMODEDATAFORMAT_DISABLED      (0x00000000UL)                       /*!< Dual ADC mode without data packing: ADCx_CDR and ADCx_CDR2 registers not used */
@@ -310,6 +319,7 @@ typedef struct
   */
 
 /** @defgroup ADC_HAL_EC_MULTI_TWOSMP_DELAY  Multimode - Delay between two sampling phases
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_TWOSAMPLINGDELAY_1CYCLE        (LL_ADC_MULTI_TWOSMP_DELAY_1CYCLE_5)   /*!< ADC multimode delay between two sampling phases: 1 ADC clock cycle */
@@ -330,6 +340,7 @@ typedef struct
   */
 
 /** @defgroup ADC_HAL_EC_GROUPS  ADC instance - Groups
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_REGULAR_GROUP                  (LL_ADC_GROUP_REGULAR)           /*!< ADC group regular (available on all STM32 devices) */
@@ -340,6 +351,7 @@ typedef struct
   */
 
 /** @defgroup ADC_CFGR_fields ADCx CFGR fields
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_CFGR_FIELDS    (ADC_CFGR_AWD1CH  | ADC_CFGR_JAUTO   | ADC_CFGR_JAWD1EN |\
@@ -353,6 +365,7 @@ typedef struct
   */
 
 /** @defgroup ADC_SMPR1_fields ADCx SMPR1 fields
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_SMPR1_FIELDS    (ADC_SMPR1_SMP9 | ADC_SMPR1_SMP8 | ADC_SMPR1_SMP7 |\
@@ -364,6 +377,7 @@ typedef struct
   */
 
 /** @defgroup ADC_CFGR_fields_2 ADCx CFGR sub fields
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* ADC_CFGR fields of parameters that can be updated when no conversion
@@ -375,6 +389,7 @@ typedef struct
 
 #if defined(DFSDM1_Channel0)
 /** @defgroup ADC_HAL_EC_REG_DFSDM_TRANSFER ADC group regular - DFSDM transfer of ADC conversion data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_DFSDM_MODE_DISABLE     (0x00000000UL)                     /*!< ADC conversions are not transferred by DFSDM. */
@@ -391,6 +406,7 @@ typedef struct
 /* Exported macros -----------------------------------------------------------*/
 
 /** @defgroup ADCEx_Exported_Macro ADC Extended Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -418,6 +434,7 @@ typedef struct
 /* Private macros ------------------------------------------------------------*/
 
 /** @defgroup ADCEx_Private_Macro_internal_HAL_driver ADC Extended Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Macro reserved for internal HAL driver usage, not intended to be used in   */

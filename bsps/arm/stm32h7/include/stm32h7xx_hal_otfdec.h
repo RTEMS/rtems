@@ -40,10 +40,12 @@
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup OTFDEC_Exported_Types OTFDEC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OTFDEC_Exported_Types_Group1 OTFDEC region configuration definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -67,6 +69,7 @@ typedef struct
   */
 
 /** @defgroup OTFDEC_Exported_Types_Group2 OTFDEC Peripheral handle definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -135,10 +138,12 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup OTFDEC_Exported_Constants OTFDEC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OTFDEC_Interrupts    OTFDEC Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OTFDEC_SEC_ERROR_INT     (OTFDEC_IER_SEIE                                  )  /*!< OTFDEC security error interrupt                  */
@@ -153,6 +158,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
   */
 
 /** @defgroup OTFDEC_Region_Enable   OTFDEC Region Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OTFDEC_REG_CONFIGR_REG_DISABLE   0x00000000U                /*!< OTFDEC region encryption or on-the-fly decryption disable */
@@ -162,6 +168,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
   */
 
 /** @defgroup OTFDEC_Region_Configuration_Lock    OTFDEC Region Configuration Lock
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OTFDEC_REG_CONFIGR_LOCK_DISABLE   0x00000000U                     /*!< OTFDEC region configuration lock disable */
@@ -171,6 +178,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
   */
 
 /** @defgroup OTFDEC_Region_Operating_Mode    OTFDEC Region Operating Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define OTFDEC_REG_MODE_INSTRUCTION_ACCESSES_ONLY              0x00000000U                /*!< Only instruction accesses are decrypted                                   */
@@ -182,6 +190,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
   */
 
 /** @defgroup OTFDEC_Error_Definition   OTFDEC Error Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_OTFDEC_ERROR_NONE             ((uint32_t)0x00000000U)    /*!< No error                         */
@@ -196,6 +205,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
   */
 
 /** @defgroup OTFDEC_Regions_Index   OTFDEC Regions Index
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  OTFDEC_REGION1            ((uint32_t)0x00000000U)    /*!< OTFDEC region 1 */
@@ -212,6 +222,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup OTFDEC_Exported_Macros OTFDEC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -272,6 +283,7 @@ typedef  void (*pOTFDEC_CallbackTypeDef)(OTFDEC_HandleTypeDef *hotfdec); /*!< po
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup OTFDEC_Exported_Functions OTFDEC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -333,6 +345,7 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup OTFDEC_Private_Types OTFDEC Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -342,6 +355,7 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup OTFDEC_Private_Variables OTFDEC Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -351,6 +365,7 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup OTFDEC_Private_Constants OTFDEC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -359,6 +374,7 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup OTFDEC_Private_Macros OTFDEC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -417,6 +433,7 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionGetConfig(OTFDEC_HandleTypeDef *hotfdec, uint
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup OTFDEC_Private_Functions OTFDEC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

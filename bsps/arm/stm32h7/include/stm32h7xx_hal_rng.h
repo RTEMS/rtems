@@ -35,6 +35,7 @@ extern "C" {
 #if defined (RNG)
 
 /** @defgroup RNG RNG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RNG HAL module driver
   * @{
   */
@@ -42,10 +43,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup RNG_Exported_Types RNG Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RNG_Exported_Types_Group1 RNG Init Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -58,6 +61,7 @@ typedef struct
   */
 
 /** @defgroup RNG_Exported_Types_Group2 RNG State Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -75,6 +79,7 @@ typedef enum
   */
 
 /** @defgroup RNG_Exported_Types_Group3 RNG Handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (USE_HAL_RNG_REGISTER_CALLBACKS == 1)
@@ -136,10 +141,12 @@ typedef  void (*pRNG_ReadyDataCallbackTypeDef)(RNG_HandleTypeDef *hrng, uint32_t
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RNG_Exported_Constants RNG Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RNG_Exported_Constants_Group1 RNG Interrupt definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RNG_IT_DRDY  RNG_SR_DRDY  /*!< Data Ready interrupt  */
@@ -150,6 +157,7 @@ typedef  void (*pRNG_ReadyDataCallbackTypeDef)(RNG_HandleTypeDef *hrng, uint32_t
   */
 
 /** @defgroup RNG_Exported_Constants_Group2 RNG Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RNG_FLAG_DRDY   RNG_SR_DRDY  /*!< Data ready                 */
@@ -160,6 +168,7 @@ typedef  void (*pRNG_ReadyDataCallbackTypeDef)(RNG_HandleTypeDef *hrng, uint32_t
   */
 
 /** @defgroup RNG_Exported_Constants_Group3 RNG Clock Error Detection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RNG_CED_ENABLE          0x00000000U /*!< Clock error detection Enabled  */
@@ -169,6 +178,7 @@ typedef  void (*pRNG_ReadyDataCallbackTypeDef)(RNG_HandleTypeDef *hrng, uint32_t
   */
 
 /** @defgroup RNG_Error_Definition   RNG Error Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  HAL_RNG_ERROR_NONE             0x00000000U    /*!< No error             */
@@ -189,6 +199,7 @@ typedef  void (*pRNG_ReadyDataCallbackTypeDef)(RNG_HandleTypeDef *hrng, uint32_t
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup RNG_Exported_Macros RNG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -290,10 +301,12 @@ typedef  void (*pRNG_ReadyDataCallbackTypeDef)(RNG_HandleTypeDef *hrng, uint32_t
 #endif  /* CONDRST */
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RNG_Exported_Functions RNG Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RNG_Exported_Functions_Group1 Initialization and configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_RNG_Init(RNG_HandleTypeDef *hrng);
@@ -315,6 +328,7 @@ HAL_StatusTypeDef HAL_RNG_UnRegisterReadyDataCallback(RNG_HandleTypeDef *hrng);
   */
 
 /** @defgroup RNG_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_RNG_GenerateRandomNumber(RNG_HandleTypeDef *hrng, uint32_t *random32bit);
@@ -330,6 +344,7 @@ void HAL_RNG_ReadyDataCallback(RNG_HandleTypeDef *hrng, uint32_t random32bit);
   */
 
 /** @defgroup RNG_Exported_Functions_Group3 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_RNG_StateTypeDef HAL_RNG_GetState(RNG_HandleTypeDef *hrng);
@@ -344,6 +359,7 @@ uint32_t             HAL_RNG_GetError(RNG_HandleTypeDef *hrng);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RNG_Private_Macros RNG Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_RNG_IT(IT) (((IT) == RNG_IT_CEI) || \

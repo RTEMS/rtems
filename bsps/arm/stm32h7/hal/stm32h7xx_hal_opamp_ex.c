@@ -32,6 +32,7 @@
   */
 
 /** @defgroup OPAMPEx OPAMPEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief OPAMP Extended HAL module driver
   * @{
   */
@@ -46,10 +47,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup OPAMPEx_Exported_Functions OPAMP Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMPEx_Exported_Functions_Group1 Extended Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended operation functions
   *
 @verbatim
@@ -368,6 +371,7 @@ HAL_StatusTypeDef HAL_OPAMPEx_SelfCalibrateAll(OPAMP_HandleTypeDef *hopamp1, OPA
   */
 
 /** @defgroup OPAMPEx_Exported_Functions_Group2 Peripheral Control functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral Control functions 
  *
 @verbatim   

@@ -47,6 +47,7 @@
   */
 
 /** @defgroup ADCEx ADCEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief ADC Extended HAL module driver
   * @{
   */
@@ -57,6 +58,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /** @defgroup ADCEx_Private_Constants ADC Extended Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -87,10 +89,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup ADCEx_Exported_Functions ADC Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADCEx_Exported_Functions_Group1 Extended Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended IO operation functions
   *
 @verbatim
@@ -1719,6 +1723,7 @@ HAL_StatusTypeDef HAL_ADCEx_RegularMultiModeStop_DMA(ADC_HandleTypeDef *hadc)
   */
 
 /** @defgroup ADCEx_Exported_Functions_Group2 ADC Extended Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    ADC Extended Peripheral Control functions
   *
 @verbatim

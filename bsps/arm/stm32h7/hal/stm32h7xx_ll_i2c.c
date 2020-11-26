@@ -34,6 +34,7 @@
 #if defined (I2C1) || defined (I2C2) || defined (I2C3) || defined (I2C4)
 
 /** @defgroup I2C_LL I2C
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

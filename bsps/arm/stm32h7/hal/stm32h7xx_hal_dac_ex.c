@@ -72,6 +72,7 @@
 #if defined(DAC1) || defined(DAC2)
 
 /** @defgroup DACEx DACEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DAC Extended HAL module driver
   * @{
   */
@@ -84,10 +85,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DACEx_Exported_Functions DACEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DACEx_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Extended IO operation functions
   *
 @verbatim
@@ -747,6 +750,7 @@ uint32_t HAL_DACEx_GetTrimOffset(DAC_HandleTypeDef *hdac, uint32_t Channel)
   */
 
 /** @defgroup DACEx_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Extended Peripheral Control functions
   *
 @verbatim
@@ -788,6 +792,7 @@ uint32_t HAL_DACEx_DualGetValue(DAC_HandleTypeDef *hdac)
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DACEx_Private_Functions DACEx private functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Extended private functions
   * @{
   */

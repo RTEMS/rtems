@@ -39,10 +39,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRCEx_Exported_Constants CRC Extended Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRCEx_Input_Data_Inversion Input Data Inversion Modes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CRC_INPUTDATA_INVERSION_NONE               0x00000000U     /*!< No input data inversion            */
@@ -54,6 +56,7 @@ extern "C" {
   */
 
 /** @defgroup CRCEx_Output_Data_Inversion Output Data Inversion Modes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define CRC_OUTPUTDATA_INVERSION_DISABLE         0x00000000U       /*!< No output data inversion       */
@@ -68,6 +71,7 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CRCEx_Exported_Macros CRC Extended Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -99,6 +103,7 @@ extern "C" {
 
 /* Private macros --------------------------------------------------------*/
 /** @defgroup CRCEx_Private_Macros CRC Extended Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

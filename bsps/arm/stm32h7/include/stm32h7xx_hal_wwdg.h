@@ -39,6 +39,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup WWDG_Exported_Types WWDG Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -104,10 +105,12 @@ typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp);  /*!< pointer t
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup WWDG_Exported_Constants WWDG Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup WWDG_Interrupt_definition WWDG Interrupt definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define WWDG_IT_EWI                         WWDG_CFR_EWI  /*!< Early wakeup interrupt */
@@ -116,6 +119,7 @@ typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp);  /*!< pointer t
   */
 
 /** @defgroup WWDG_Flag_definition WWDG Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief WWDG Flag definition
   * @{
   */
@@ -125,6 +129,7 @@ typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp);  /*!< pointer t
   */
 
 /** @defgroup WWDG_Prescaler WWDG Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define WWDG_PRESCALER_1                    0x00000000u                              /*!< WWDG counter clock = (PCLK1/4096)/1 */
@@ -140,6 +145,7 @@ typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp);  /*!< pointer t
   */
 
 /** @defgroup WWDG_EWI_Mode WWDG Early Wakeup Interrupt Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define WWDG_EWI_DISABLE                    0x00000000u       /*!< EWI Disable */
@@ -155,6 +161,7 @@ typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp);  /*!< pointer t
 /* Private macros ------------------------------------------------------------*/
 
 /** @defgroup WWDG_Private_Macros WWDG Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_WWDG_PRESCALER(__PRESCALER__)    (((__PRESCALER__) == WWDG_PRESCALER_1)  || \
@@ -180,6 +187,7 @@ typedef void (*pWWDG_CallbackTypeDef)(WWDG_HandleTypeDef *hppp);  /*!< pointer t
 /* Exported macros ------------------------------------------------------------*/
 
 /** @defgroup WWDG_Exported_Macros WWDG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

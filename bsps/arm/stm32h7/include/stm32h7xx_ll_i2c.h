@@ -35,6 +35,7 @@ extern "C" {
 #if defined (I2C1) || defined (I2C2) || defined (I2C3) || defined (I2C4)
 
 /** @defgroup I2C_LL I2C
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -43,6 +44,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup I2C_LL_Private_Constants I2C Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -52,6 +54,7 @@ extern "C" {
 /* Private macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup I2C_LL_Private_Macros I2C Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -62,6 +65,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup I2C_LL_ES_INIT I2C Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -109,10 +113,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup I2C_LL_Exported_Constants I2C Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2C_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_I2C_WriteReg function
   * @{
   */
@@ -130,6 +136,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_I2C_ReadReg function
   * @{
   */
@@ -153,6 +160,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_I2C_ReadReg and  LL_I2C_WriteReg functions
   * @{
   */
@@ -168,6 +176,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_PERIPHERAL_MODE Peripheral Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_MODE_I2C                    0x00000000U              /*!< I2C Master or Slave mode                                    */
@@ -179,6 +188,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_ANALOGFILTER_SELECTION Analog Filter Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_ANALOGFILTER_ENABLE          0x00000000U             /*!< Analog filter is enabled.  */
@@ -188,6 +198,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_ADDRESSING_MODE Master Addressing Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_ADDRESSING_MODE_7BIT         0x00000000U              /*!< Master operates in 7-bit addressing mode. */
@@ -197,6 +208,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_OWNADDRESS1 Own Address 1 Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_OWNADDRESS1_7BIT             0x00000000U             /*!< Own address 1 is a 7-bit address. */
@@ -206,6 +218,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_OWNADDRESS2 Own Address 2 Masks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_OWNADDRESS2_NOMASK           I2C_OAR2_OA2NOMASK      /*!< Own Address2 No mask.                                */
@@ -221,6 +234,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_I2C_ACKNOWLEDGE Acknowledge Generation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_ACK                          0x00000000U              /*!< ACK is sent after current received byte. */
@@ -230,6 +244,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_ADDRSLAVE Slave Address Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_ADDRSLAVE_7BIT               0x00000000U              /*!< Slave Address in 7-bit. */
@@ -239,6 +254,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_REQUEST Transfer Request Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_REQUEST_WRITE                0x00000000U              /*!< Master request a write transfer. */
@@ -248,6 +264,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_MODE Transfer End Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_MODE_RELOAD                  I2C_CR2_RELOAD                                      /*!< Enable I2C Reload mode.                                   */
@@ -263,6 +280,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_GENERATE Start And Stop Generation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_GENERATE_NOSTARTSTOP         0x00000000U                                                                /*!< Don't Generate Stop and Start condition.                */
@@ -278,6 +296,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_DIRECTION Read Write Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_DIRECTION_WRITE              0x00000000U              /*!< Write transfer request by master, slave enters receiver mode.  */
@@ -287,6 +306,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_DMA_REG_DATA DMA Register Data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_DMA_REG_DATA_TRANSMIT        0x00000000U              /*!< Get address of data register used for transmission */
@@ -296,6 +316,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_SMBUS_TIMEOUTA_MODE SMBus TimeoutA Mode SCL SDA Timeout
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_SMBUS_TIMEOUTA_MODE_SCL_LOW      0x00000000U          /*!< TimeoutA is used to detect SCL low level timeout.              */
@@ -305,6 +326,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EC_SMBUS_TIMEOUT_SELECTION SMBus Timeout Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_I2C_SMBUS_TIMEOUTA               I2C_TIMEOUTR_TIMOUTEN                                   /*!< TimeoutA enable bit                                */
@@ -320,10 +342,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup I2C_LL_Exported_Macros I2C Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2C_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -348,6 +372,7 @@ typedef struct
   */
 
 /** @defgroup I2C_LL_EM_CONVERT_TIMINGS Convert SDA SCL timings
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -375,10 +400,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup I2C_LL_Exported_Functions I2C Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup I2C_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1234,6 +1261,7 @@ __STATIC_INLINE uint32_t LL_I2C_IsEnabledSMBusTimeout(I2C_TypeDef *I2Cx, uint32_
   */
 
 /** @defgroup I2C_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1497,6 +1525,7 @@ __STATIC_INLINE uint32_t LL_I2C_IsEnabledIT_ERR(I2C_TypeDef *I2Cx)
   */
 
 /** @defgroup I2C_LL_EF_FLAG_management FLAG_management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1824,6 +1853,7 @@ __STATIC_INLINE void LL_I2C_ClearSMBusFlag_ALERT(I2C_TypeDef *I2Cx)
   */
 
 /** @defgroup I2C_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2192,6 +2222,7 @@ __STATIC_INLINE void LL_I2C_TransmitData8(I2C_TypeDef *I2Cx, uint8_t Data)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup I2C_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

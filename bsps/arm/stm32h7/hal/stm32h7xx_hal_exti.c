@@ -133,6 +133,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines ------------------------------------------------------------*/
 /** @defgroup EXTI_Private_Constants EXTI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EXTI_MODE_OFFSET                    0x04U   /* 0x10: offset between CPU IMR/EMR registers */

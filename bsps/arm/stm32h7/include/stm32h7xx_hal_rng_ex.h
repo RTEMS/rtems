@@ -36,12 +36,14 @@ extern "C" {
 #if defined (RNG_CR_CONDRST)
 
 /** @defgroup RNGEx RNGEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RNG Extension HAL module driver
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup RNGEx_Exported_Types RNGEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RNGEx Exported types
   * @{
   */
@@ -67,10 +69,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RNGEX_Exported_Constants RNGEX Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RNGEX_Clock_Divider_Factor  Value used to configure an internal
+  * @ingroup RTEMSBSPsARMSTM32H7
  *            programmable divider acting on the incoming RNG clock
   * @{
   */
@@ -110,6 +114,7 @@ typedef struct
   */
 
 /** @defgroup RNGEX_NIST_Compliance  NIST Compliance configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RNG_NIST_COMPLIANT     (0x00000000UL) /*!< NIST compliant configuration*/
@@ -125,6 +130,7 @@ typedef struct
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Types RNGEx Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -134,6 +140,7 @@ typedef struct
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Variables RNGEx Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -143,6 +150,7 @@ typedef struct
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Constants RNGEx Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -152,6 +160,7 @@ typedef struct
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Macros RNGEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -189,6 +198,7 @@ typedef struct
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Functions RNGEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -198,6 +208,7 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RNGEx_Exported_Functions RNGEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

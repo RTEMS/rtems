@@ -273,6 +273,7 @@
 #ifdef HAL_DFSDM_MODULE_ENABLED
 
 /** @defgroup DFSDM DFSDM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DFSDM HAL driver module
   * @{
   */
@@ -280,6 +281,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup DFSDM_Private_Define DFSDM Private Define
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 #define DFSDM_FLTCR1_MSB_RCH_OFFSET     8
@@ -297,6 +299,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup DFSDM_Private_Variables DFSDM Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static __IO uint32_t                v_dfsdm1ChannelCounter = 0;
@@ -311,6 +314,7 @@ static DFSDM_Channel_HandleTypeDef *a_dfsdm2ChannelHandle[DFSDM2_CHANNEL_NUMBER]
 
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup DFSDM_Private_Functions DFSDM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static uint32_t DFSDM_GetInjChannelsNbr(uint32_t Channels);
@@ -330,10 +334,12 @@ static void     DFSDM_DMAError(DMA_HandleTypeDef *hdma);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DFSDM_Exported_Functions DFSDM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group1_Channel Channel initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Channel initialization and de-initialization functions
  *
 @verbatim
@@ -728,6 +734,7 @@ HAL_StatusTypeDef HAL_DFSDM_Channel_UnRegisterCallback(DFSDM_Channel_HandleTypeD
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group2_Channel Channel operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Channel operation functions
  *
 @verbatim
@@ -1384,6 +1391,7 @@ HAL_StatusTypeDef HAL_DFSDM_ChannelModifyOffset(DFSDM_Channel_HandleTypeDef *hdf
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group3_Channel Channel state function
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Channel state function
  *
 @verbatim
@@ -1412,6 +1420,7 @@ HAL_DFSDM_Channel_StateTypeDef HAL_DFSDM_ChannelGetState(DFSDM_Channel_HandleTyp
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group1_Filter Filter initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Filter initialization and de-initialization functions
  *
 @verbatim
@@ -1875,6 +1884,7 @@ HAL_StatusTypeDef HAL_DFSDM_Filter_UnRegisterAwdCallback(DFSDM_Filter_HandleType
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group2_Filter Filter control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Filter control functions
  *
 @verbatim
@@ -1977,6 +1987,7 @@ HAL_StatusTypeDef HAL_DFSDM_FilterConfigInjChannel(DFSDM_Filter_HandleTypeDef *h
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group3_Filter Filter operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Filter operation functions
  *
 @verbatim
@@ -3395,6 +3406,7 @@ __weak void HAL_DFSDM_FilterErrorCallback(DFSDM_Filter_HandleTypeDef *hdfsdm_fil
   */
 
 /** @defgroup DFSDM_Exported_Functions_Group4_Filter Filter state functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Filter state functions
  *
 @verbatim

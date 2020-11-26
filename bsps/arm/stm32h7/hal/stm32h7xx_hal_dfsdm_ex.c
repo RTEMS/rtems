@@ -33,6 +33,7 @@
 #if defined(DFSDM_CHDLYR_PLSSKP)
 
 /** @defgroup DFSDMEx DFSDMEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DFSDM Extended HAL module driver
   * @{
   */
@@ -45,10 +46,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup DFSDMEx_Exported_Functions DFSDM Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DFSDMEx_Exported_Functions_Group1_Channel Extended channel operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DFSDM extended channel operation functions
  *
 @verbatim

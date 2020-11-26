@@ -122,6 +122,7 @@
 #ifdef HAL_SDRAM_MODULE_ENABLED
 
 /** @defgroup SDRAM SDRAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SDRAM driver modules
   * @{
   */
@@ -143,10 +144,12 @@ static void SDRAM_DMAError   (MDMA_HandleTypeDef *hmdma);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SDRAM_Exported_Functions SDRAM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SDRAM_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
   @verbatim
@@ -354,6 +357,7 @@ __weak void HAL_SDRAM_DMA_XferErrorCallback(MDMA_HandleTypeDef *hmdma)
   */
 
 /** @defgroup SDRAM_Exported_Functions_Group2 Input and Output functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Input Output and memory control functions
   *
   @verbatim
@@ -987,6 +991,7 @@ HAL_StatusTypeDef HAL_SDRAM_RegisterDmaCallback(SDRAM_HandleTypeDef *hsdram, HAL
   */
 
 /** @defgroup SDRAM_Exported_Functions_Group3 Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   management functions
  *
 @verbatim
@@ -1193,6 +1198,7 @@ uint32_t HAL_SDRAM_GetModeStatus(SDRAM_HandleTypeDef *hsdram)
   */
 
 /** @defgroup SDRAM_Exported_Functions_Group4 State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions
  *
 @verbatim

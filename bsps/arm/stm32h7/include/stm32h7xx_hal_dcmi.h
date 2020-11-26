@@ -40,6 +40,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DCMI_Exported_Types DCMI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -184,10 +185,12 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DCMI_Exported_Constants DCMI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DCMI_Error_Code DCMI Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_DCMI_ERROR_NONE             (0x00000000U)  /*!< No error              */
@@ -203,6 +206,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Capture_Mode DCMI Capture Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_MODE_CONTINUOUS           (0x00000000U)  /*!< The received data are transferred continuously
@@ -214,6 +218,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Synchronization_Mode DCMI Synchronization Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_SYNCHRO_HARDWARE        (0x00000000U)   /*!< Hardware synchronization data capture (frame/line start/stop)
@@ -226,6 +231,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_PIXCK_Polarity DCMI PIXCK Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_PCKPOLARITY_FALLING    (0x00000000U)      /*!< Pixel clock active on Falling edge */
@@ -236,6 +242,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_VSYNC_Polarity DCMI VSYNC Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_VSPOLARITY_LOW     (0x00000000U)     /*!< Vertical synchronization active Low  */
@@ -246,6 +253,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_HSYNC_Polarity DCMI HSYNC Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_HSPOLARITY_LOW     (0x00000000U)     /*!< Horizontal synchronization active Low  */
@@ -256,6 +264,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_MODE_JPEG DCMI MODE JPEG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_JPEG_DISABLE   (0x00000000U)    /*!< Mode JPEG Disabled  */
@@ -266,6 +275,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Capture_Rate DCMI Capture Rate
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_CR_ALL_FRAME            (0x00000000U)      /*!< All frames are captured        */
@@ -277,6 +287,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Extended_Data_Mode DCMI Extended Data Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_EXTEND_DATA_8B     (0x00000000U)                       /*!< Interface captures 8-bit data on every pixel clock  */
@@ -289,6 +300,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Window_Coordinate DCMI Window Coordinate
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_WINDOW_COORDINATE    (0x3FFFU)  /*!< Window coordinate */
@@ -298,6 +310,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Window_Height DCMI Window Height
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_WINDOW_HEIGHT    (0x1FFFU)  /*!< Window Height */
@@ -307,6 +320,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_interrupt_sources  DCMI interrupt sources
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_IT_FRAME    ((uint32_t)DCMI_IER_FRAME_IE)    /*!< Capture complete interrupt      */
@@ -319,6 +333,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Flags DCMI Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -349,6 +364,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Byte_Select_Mode DCMI Byte Select Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_BSM_ALL                 (0x00000000U) /*!< Interface captures all received data */
@@ -361,6 +377,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Byte_Select_Start DCMI Byte Select Start
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_OEBS_ODD               (0x00000000U) /*!< Interface captures first data from the frame/line start, second one being dropped */
@@ -371,6 +388,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Line_Select_Mode DCMI Line Select Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_LSM_ALL                 (0x00000000U) /*!< Interface captures all received lines */
@@ -381,6 +399,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   */
 
 /** @defgroup DCMI_Line_Select_Start DCMI Line Select Start
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_OELS_ODD               (0x00000000U) /*!< Interface captures first line from the frame start, second one being dropped */
@@ -396,6 +415,7 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup DCMI_Exported_Macros DCMI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -584,6 +604,7 @@ uint32_t              HAL_DCMI_GetError(DCMI_HandleTypeDef *hdcmi);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup DCMI_Private_Constants DCMI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DCMI_MIS_INDEX        ((uint32_t)0x1000) /*!< DCMI MIS register index */
@@ -593,6 +614,7 @@ uint32_t              HAL_DCMI_GetError(DCMI_HandleTypeDef *hdcmi);
   */
 /* Private macro -------------------------------------------------------------*/
 /** @defgroup DCMI_Private_Macros DCMI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DCMI_CAPTURE_MODE(MODE)(((MODE) == DCMI_MODE_CONTINUOUS) || \

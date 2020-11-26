@@ -79,6 +79,7 @@
   */
 
 /** @defgroup FLASHEx  FLASHEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief FLASH HAL Extension module driver
   * @{
   */
@@ -99,6 +100,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup FLASHEx_Private_Functions FLASHEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void FLASH_MassErase(uint32_t VoltageRange, uint32_t Banks);
@@ -135,10 +137,12 @@ static uint32_t FLASH_OB_OTP_GetLock(void);
 
 /* Exported functions ---------------------------------------------------------*/
 /** @defgroup FLASHEx_Exported_Functions FLASHEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FLASHEx_Exported_Functions_Group1 Extended IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Extended IO operation functions
  *
 @verbatim

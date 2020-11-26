@@ -39,10 +39,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup HCD_Exported_Types HCD Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HCD_Exported_Types_Group1 HCD State Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -64,6 +66,7 @@ typedef USB_OTG_HCStateTypeDef  HCD_HCStateTypeDef;
   */
 
 /** @defgroup HCD_Exported_Types_Group2 HCD Handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (USE_HAL_HCD_REGISTER_CALLBACKS == 1U)
@@ -102,10 +105,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup HCD_Exported_Constants HCD Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HCD_Speed HCD Speed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HCD_SPEED_HIGH               USBH_HS_SPEED
@@ -117,6 +122,7 @@ typedef struct
   */
 
 /** @defgroup HCD_PHY_Module HCD PHY Module
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HCD_PHY_ULPI                 1U
@@ -126,6 +132,7 @@ typedef struct
   */
 
 /** @defgroup HCD_Error_Code_definition HCD Error Code definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HCD Error Code definition
   * @{
   */
@@ -143,6 +150,7 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup HCD_Exported_Macros HCD Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief macros to handle interrupts and specific clock configurations
  * @{
  */
@@ -168,6 +176,7 @@ typedef struct
   */
 
 /** @defgroup HCD_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef      HAL_HCD_Init(HCD_HandleTypeDef *hhcd);
@@ -186,6 +195,7 @@ void                  HAL_HCD_MspDeInit(HCD_HandleTypeDef *hhcd);
 
 #if (USE_HAL_HCD_REGISTER_CALLBACKS == 1U)
 /** @defgroup HAL_HCD_Callback_ID_enumeration_definition HAL USB OTG HCD Callback ID enumeration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL USB OTG HCD Callback ID enumeration definition
   * @{
   */
@@ -206,6 +216,7 @@ typedef enum
   */
 
 /** @defgroup HAL_HCD_Callback_pointer_definition HAL USB OTG HCD Callback pointer definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL USB OTG HCD Callback pointer definition
   * @{
   */
@@ -286,6 +297,7 @@ uint32_t                HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup HCD_Private_Macros HCD Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
@@ -295,6 +307,7 @@ uint32_t                HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup HCD_Private_Functions_Prototypes HCD Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -304,6 +317,7 @@ uint32_t                HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup HCD_Private_Functions HCD Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

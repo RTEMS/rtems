@@ -33,6 +33,7 @@ extern "C" {
   */
 
 /** @defgroup EXTI EXTI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief EXTI HAL module driver
   * @{
   */
@@ -40,6 +41,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /** @defgroup EXTI_Exported_Types EXTI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -84,10 +86,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup EXTI_Exported_Constants EXTI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup EXTI_Line  EXTI Line
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EXTI_LINE_0                         (EXTI_GPIO     | EXTI_EVENT | EXTI_REG1 | EXTI_TARGET_MSK_ALL     | 0x00U)
@@ -233,6 +237,7 @@ typedef struct
   */
 
 /** @defgroup EXTI_Mode  EXTI Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EXTI_MODE_NONE                      0x00000000U
@@ -249,6 +254,7 @@ typedef struct
   */
 
 /** @defgroup EXTI_Trigger  EXTI Trigger
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define EXTI_TRIGGER_NONE                   0x00000000U
@@ -260,6 +266,7 @@ typedef struct
   */
 
 /** @defgroup EXTI_GPIOSel  EXTI GPIOSel
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief
   * @{
   */
@@ -280,6 +287,7 @@ typedef struct
   */
 
 /** @defgroup EXTI_PendClear_Source  EXTI PendClear Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief
   * @{
   */
@@ -306,6 +314,7 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup EXTI_Exported_Macros EXTI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -315,6 +324,7 @@ typedef struct
 
 /* Private constants --------------------------------------------------------*/
 /** @defgroup EXTI_Private_Constants EXTI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -390,6 +400,7 @@ typedef struct
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup EXTI_Private_Macros EXTI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_EXTI_PROPERTY(__LINE__)      ((((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_DIRECT) || \
@@ -454,11 +465,13 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup EXTI_Exported_Functions EXTI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    EXTI Exported Functions
   * @{
   */
 
 /** @defgroup EXTI_Exported_Functions_Group1 Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Configuration functions
   * @{
   */
@@ -473,6 +486,7 @@ HAL_StatusTypeDef HAL_EXTI_GetHandle(EXTI_HandleTypeDef *hexti, uint32_t ExtiLin
   */
 
 /** @defgroup EXTI_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IO operation functions
   * @{
   */

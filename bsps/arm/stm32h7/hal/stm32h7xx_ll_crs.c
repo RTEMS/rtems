@@ -29,6 +29,7 @@
 #if defined(CRS)
 
 /** @defgroup CRS_LL CRS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

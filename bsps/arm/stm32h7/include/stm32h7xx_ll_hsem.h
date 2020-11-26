@@ -35,6 +35,7 @@ extern "C" {
 #if defined(HSEM)
 
 /** @defgroup HSEM_LL HSEM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -47,10 +48,12 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup HSEM_LL_Exported_Constants HSEM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HSEM_LL_EC_COREID COREID Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_HSEM_COREID_NONE             0U
@@ -64,6 +67,7 @@ extern "C" {
   */
 
 /** @defgroup HSEM_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_HSEM_ReadReg function
   * @{
   */
@@ -115,10 +119,12 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup HSEM_LL_Exported_Macros HSEM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HSEM_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -148,10 +154,12 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup HSEM_LL_Exported_Functions HSEM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HSEM_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -309,6 +317,7 @@ __STATIC_INLINE void LL_HSEM_ResetAllLock(HSEM_TypeDef *HSEMx, uint32_t key, uin
   */
 
 /** @defgroup HSEM_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -594,6 +603,7 @@ __STATIC_INLINE uint32_t LL_HSEM_IsEnabledIT_C2IER(HSEM_TypeDef *HSEMx, uint32_t
   */
 
 /** @defgroup HSEM_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

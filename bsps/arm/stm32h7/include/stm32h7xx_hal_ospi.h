@@ -40,6 +40,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup OSPI_Exported_Types OSPI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -296,10 +297,12 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup OSPI_Exported_Constants OSPI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OSPI_State OSPI State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_STATE_RESET                 ((uint32_t)0x00000000U)      /*!< Initial state                                                          */
@@ -320,6 +323,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_ErrorCode OSPI Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ERROR_NONE                  ((uint32_t)0x00000000U)                                         /*!< No error                                   */
@@ -336,6 +340,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_DualQuad OSPI Dual-Quad
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_DUALQUAD_DISABLE            ((uint32_t)0x00000000U)                                         /*!< Dual-Quad mode disabled */
@@ -345,6 +350,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_MemoryType OSPI Memory Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_MEMTYPE_MICRON              ((uint32_t)0x00000000U)                                         /*!< Micron mode       */
@@ -357,6 +363,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_FreeRunningClock OSPI Free Running Clock
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_FREERUNCLK_DISABLE          ((uint32_t)0x00000000U)                                         /*!< CLK is not free running               */
@@ -366,6 +373,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_ClockMode OSPI Clock Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_CLOCK_MODE_0                ((uint32_t)0x00000000U)                                         /*!< CLK must stay low while nCS is high  */
@@ -375,6 +383,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_WrapSize OSPI Wrap-Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_WRAP_NOT_SUPPORTED          ((uint32_t)0x00000000U)                                         /*!< wrapped reads are not supported by the memory   */
@@ -387,6 +396,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_SampleShifting OSPI Sample Shifting
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_SAMPLE_SHIFTING_NONE        ((uint32_t)0x00000000U)                                         /*!< No shift        */
@@ -396,6 +406,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_DelayHoldQuarterCycle OSPI Delay Hold Quarter Cycle
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_DHQC_DISABLE                ((uint32_t)0x00000000U)                                         /*!< No Delay             */
@@ -405,6 +416,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_DelayBlockBypass OSPI Delay Block Bypaas
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_DELAY_BLOCK_USED            ((uint32_t)0x00000000U)                                         /*!< Sampling clock is delayed by the delay block */
@@ -414,6 +426,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_OperationType OSPI Operation Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_OPTYPE_COMMON_CFG           ((uint32_t)0x00000000U)                                         /*!< Common configuration (indirect or auto-polling mode) */
@@ -425,6 +438,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_FlashID OSPI Flash Id
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_FLASH_ID_1                  ((uint32_t)0x00000000U)                                         /*!< FLASH 1 selected */
@@ -434,6 +448,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_InstructionMode OSPI Instruction Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_INSTRUCTION_NONE            ((uint32_t)0x00000000U)                                         /*!< No instruction               */
@@ -446,6 +461,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_InstructionSize OSPI Instruction Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_INSTRUCTION_8_BITS          ((uint32_t)0x00000000U)                                         /*!< 8-bit instruction  */
@@ -457,6 +473,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_InstructionDtrMode OSPI Instruction DTR Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_INSTRUCTION_DTR_DISABLE     ((uint32_t)0x00000000U)                                         /*!< DTR mode disabled for instruction phase */
@@ -466,6 +483,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AddressMode OSPI Address Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ADDRESS_NONE                ((uint32_t)0x00000000U)                                         /*!< No address               */
@@ -478,6 +496,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AddressSize OSPI Address Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ADDRESS_8_BITS              ((uint32_t)0x00000000U)                                         /*!< 8-bit address  */
@@ -489,6 +508,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AddressDtrMode OSPI Address DTR Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ADDRESS_DTR_DISABLE         ((uint32_t)0x00000000U)                                         /*!< DTR mode disabled for address phase */
@@ -498,6 +518,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AlternateBytesMode OSPI Alternate Bytes Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ALTERNATE_BYTES_NONE        ((uint32_t)0x00000000U)                                         /*!< No alternate bytes               */
@@ -510,6 +531,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AlternateBytesSize OSPI Alternate Bytes Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ALTERNATE_BYTES_8_BITS      ((uint32_t)0x00000000U)                                         /*!< 8-bit alternate bytes  */
@@ -521,6 +543,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AlternateBytesDtrMode OSPI Alternate Bytes DTR Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_ALTERNATE_BYTES_DTR_DISABLE ((uint32_t)0x00000000U)                                         /*!< DTR mode disabled for alternate bytes phase */
@@ -530,6 +553,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_DataMode OSPI Data Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_DATA_NONE                   ((uint32_t)0x00000000U)                                         /*!< No data               */
@@ -542,6 +566,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_DataDtrMode OSPI Data DTR Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_DATA_DTR_DISABLE            ((uint32_t)0x00000000U)                                         /*!< DTR mode disabled for data phase */
@@ -551,6 +576,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_DQSMode OSPI DQS Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_DQS_DISABLE                 ((uint32_t)0x00000000U)                                         /*!< DQS disabled */
@@ -560,6 +586,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_SIOOMode OSPI SIOO Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_SIOO_INST_EVERY_CMD         ((uint32_t)0x00000000U)                                         /*!< Send instruction on every transaction       */
@@ -569,6 +596,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_WriteZeroLatency OSPI Hyperbus Write Zero Latency Activation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_LATENCY_ON_WRITE            ((uint32_t)0x00000000U)                                         /*!< Latency on write accesses    */
@@ -578,6 +606,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_LatencyMode OSPI Hyperbus Latency Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_VARIABLE_LATENCY            ((uint32_t)0x00000000U)                                         /*!< Variable initial latency */
@@ -587,6 +616,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AddressSpace OSPI Hyperbus Address Space
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_MEMORY_ADDRESS_SPACE        ((uint32_t)0x00000000U)                                         /*!< HyperBus memory mode   */
@@ -596,6 +626,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_MatchMode OSPI Match Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_MATCH_MODE_AND              ((uint32_t)0x00000000U)                                         /*!< AND match mode between unmasked bits */
@@ -605,6 +636,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_AutomaticStop OSPI Automatic Stop
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_AUTOMATIC_STOP_DISABLE      ((uint32_t)0x00000000U)                                         /*!< AutoPolling stops only with abort or OSPI disabling */
@@ -614,6 +646,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_TimeOutActivation OSPI Timeout Activation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_TIMEOUT_COUNTER_DISABLE     ((uint32_t)0x00000000U)                                         /*!< Timeout counter disabled, nCS remains active               */
@@ -623,6 +656,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_Flags OSPI Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_FLAG_BUSY                   OCTOSPI_SR_BUSY                                                 /*!< Busy flag: operation is ongoing                                                                          */
@@ -636,6 +670,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_Interrupts OSPI Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_IT_TO                       OCTOSPI_CR_TOIE                                                 /*!< Interrupt on the timeout flag           */
@@ -648,6 +683,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPI_Timeout_definition OSPI Timeout definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPI_TIMEOUT_DEFAULT_VALUE       ((uint32_t)5000U)                                               /* 5 s */
@@ -656,6 +692,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
   */
 
 /** @defgroup OSPIM_IOPort OSPI IO Manager IO Port
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_OSPIM_IOPORT_1_LOW             ((uint32_t)(OCTOSPIM_PCR_IOLEN | 0x1U))                          /*!< Port 1 - IO[3:0] */
@@ -683,6 +720,7 @@ typedef void (*pOSPI_CallbackTypeDef)(OSPI_HandleTypeDef *hospi);
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup OSPI_Exported_Macros OSPI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief Reset OSPI handle state.

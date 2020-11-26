@@ -161,6 +161,7 @@
   */
 
 /** @defgroup UART UART
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL UART module driver
   * @{
   */
@@ -170,6 +171,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup UART_Private_Constants UART Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_CR1_FIELDS  ((uint32_t)(USART_CR1_M | USART_CR1_PCE | USART_CR1_PS | \
@@ -223,10 +225,12 @@ static void UART_RxISR_16BIT_FIFOEN(UART_HandleTypeDef *huart);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup UART_Exported_Functions UART Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UART_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -939,6 +943,7 @@ HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UAR
   */
 
 /** @defgroup UART_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief UART Transmit/Receive functions
   *
 @verbatim
@@ -2528,6 +2533,7 @@ __weak void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UART_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   UART control functions
   *
 @verbatim
@@ -2772,6 +2778,7 @@ HAL_StatusTypeDef HAL_LIN_SendBreak(UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UART_Exported_Functions_Group4 Peripheral State and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   UART Peripheral State functions
   *
 @verbatim
@@ -2822,6 +2829,7 @@ uint32_t HAL_UART_GetError(UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UART_Private_Functions UART Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

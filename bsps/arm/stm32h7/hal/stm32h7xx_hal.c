@@ -40,6 +40,7 @@
   */
 
 /** @defgroup HAL  HAL
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL module driver.
   * @{
   */
@@ -66,6 +67,7 @@
 /* Exported variables --------------------------------------------------------*/
 
 /** @defgroup HAL_Exported_Variables HAL Exported Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #ifndef __rtems__
@@ -81,10 +83,12 @@ HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup HAL_Private_Functions  HAL Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HAL_Group1 Initialization and de-initialization Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and de-initialization functions
  *
 @verbatim
@@ -301,6 +305,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 
 /** @defgroup HAL_Group2 HAL Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    HAL Control functions
  *
 @verbatim

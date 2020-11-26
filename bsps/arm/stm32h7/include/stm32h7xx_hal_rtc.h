@@ -33,11 +33,13 @@ extern "C" {
   */
 
 /** @defgroup RTC RTC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup RTC_Exported_Types RTC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -283,10 +285,12 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup RTC_Exported_Constants RTC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTC_Hour_Formats_Definitions RTC Hour Formats Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_HOURFORMAT_24              0x00000000u
@@ -296,6 +300,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Output_selection_Definitions RTC Output Selection Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_OUTPUT_DISABLE             0x00000000u
@@ -310,6 +315,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Output_Polarity_Definitions RTC Output Polarity Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_OUTPUT_POLARITY_HIGH       0x00000000u
@@ -319,6 +325,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Output_Type_ALARM_OUT RTC Output Type ALARM OUT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RTC_CR_TAMPALRM_TYPE)
@@ -337,6 +344,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Output_PullUp_ALARM_OUT RTC Output Pull-Up ALARM OUT
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RTC_CR_TAMPALRM_PU)
@@ -348,6 +356,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Output_ALARM_OUT_Remap RTC Output ALARM OUT Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RTC_CR_OUT2EN)
@@ -364,6 +373,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_AM_PM_Definitions RTC AM PM Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_HOURFORMAT12_AM            ((uint8_t)0x00)
@@ -373,6 +383,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_DayLightSaving_Definitions RTC DayLight Saving Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_DAYLIGHTSAVING_SUB1H       RTC_CR_SUB1H
@@ -383,6 +394,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_StoreOperation_Definitions RTC Store Operation Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_STOREOPERATION_RESET        0x00000000u
@@ -392,6 +404,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Input_parameter_format_definitions RTC Input Parameter Format Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_FORMAT_BIN                  0x00000000u
@@ -401,6 +414,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Month_Date_Definitions RTC Month Date Definitions (in BCD format)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_MONTH_JANUARY                   ((uint8_t)0x01)
@@ -421,6 +435,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_WeekDay_Definitions RTC WeekDay Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_WEEKDAY_MONDAY                  ((uint8_t)0x01)
@@ -436,6 +451,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_AlarmDateWeekDay_Definitions RTC Alarm Date WeekDay Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ALARMDATEWEEKDAYSEL_DATE      0x00000000u
@@ -446,6 +462,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_AlarmMask_Definitions RTC Alarm Mask Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ALARMMASK_NONE                0x00000000u
@@ -462,6 +479,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Alarms_Definitions RTC Alarms Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_ALARM_A                       RTC_CR_ALRAE
@@ -471,6 +489,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Alarm_Sub_Seconds_Masks_Definitions RTC Alarm Sub Seconds Masks Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /*!< All Alarm SS fields are masked. There is no comparison on sub seconds for Alarm */
@@ -511,6 +530,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Interrupts_Definitions RTC Interrupts Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define RTC_IT_TS                         RTC_CR_TSIE         /*!< Enable Timestamp Interrupt               */
@@ -522,6 +542,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Flags_Definitions RTC Flags Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RTC_ICSR_RECALPF)
@@ -571,6 +592,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Clear_Flags_Definitions RTC Clear Flags Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RTC_SCR_CITSF)
@@ -596,6 +618,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
   */
 
 /** @defgroup RTC_Flags_Definitions RTC Flags Definitions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined(RTC_ISR_RECALPF)
@@ -650,6 +673,7 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup RTC_Exported_Macros RTC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -999,10 +1023,12 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup RTC_Exported_Functions RTC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Initialization and de-initialization functions  ****************************/
@@ -1022,6 +1048,7 @@ HAL_StatusTypeDef HAL_RTC_UnRegisterCallback(RTC_HandleTypeDef *hrtc, HAL_RTC_Ca
   */
 
 /** @defgroup RTC_Exported_Functions_Group2 RTC Time and Date functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* RTC Time and Date functions ************************************************/
@@ -1034,6 +1061,7 @@ HAL_StatusTypeDef HAL_RTC_GetDate(RTC_HandleTypeDef *hrtc, RTC_DateTypeDef *sDat
   */
 
 /** @defgroup RTC_Exported_Functions_Group3 RTC Alarm functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* RTC Alarm functions ********************************************************/
@@ -1049,6 +1077,7 @@ HAL_StatusTypeDef HAL_RTC_PollForAlarmAEvent(RTC_HandleTypeDef *hrtc, uint32_t T
   */
 
 /** @defgroup  RTC_Exported_Functions_Group4 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Peripheral Control functions ***********************************************/
@@ -1058,6 +1087,7 @@ HAL_StatusTypeDef HAL_RTC_WaitForSynchro(RTC_HandleTypeDef *hrtc);
   */
 
 /** @defgroup RTC_Exported_Functions_Group5 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Peripheral State functions *************************************************/
@@ -1074,6 +1104,7 @@ HAL_RTCStateTypeDef HAL_RTC_GetState(RTC_HandleTypeDef *hrtc);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup RTC_Private_Constants RTC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Masks Definition */
@@ -1105,10 +1136,12 @@ HAL_RTCStateTypeDef HAL_RTC_GetState(RTC_HandleTypeDef *hrtc);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup RTC_Private_Macros RTC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup RTC_IS_RTC_Definitions RTC Private macros to check input parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1214,6 +1247,7 @@ HAL_RTCStateTypeDef HAL_RTC_GetState(RTC_HandleTypeDef *hrtc);
 
 /* Private functions -------------------------------------------------------------*/
 /** @defgroup RTC_Private_Functions RTC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef  RTC_EnterInitMode(RTC_HandleTypeDef *hrtc);

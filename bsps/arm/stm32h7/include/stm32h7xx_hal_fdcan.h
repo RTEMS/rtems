@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup FDCAN_Exported_Types FDCAN Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -790,10 +791,12 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup FDCAN_Exported_Constants FDCAN Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HAL_FDCAN_Error_Code HAL FDCAN Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_FDCAN_ERROR_NONE            ((uint32_t)0x00000000U) /*!< No error                                                               */
@@ -830,6 +833,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_frame_format FDCAN Frame Format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_FRAME_CLASSIC   ((uint32_t)0x00000000U)                         /*!< Classic mode                      */
@@ -840,6 +844,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_operating_mode FDCAN Operating Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_MODE_NORMAL               ((uint32_t)0x00000000U) /*!< Normal mode               */
@@ -852,6 +857,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_clock_calibration FDCAN Clock Calibration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CLOCK_CALIBRATION_DISABLE ((uint32_t)0x00000000U) /*!< Disable Clock Calibration */
@@ -861,6 +867,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_clock_divider FDCAN Clock Divider
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CLOCK_DIV1  ((uint32_t)0x00000000U) /*!< Divide kernel clock by 1  */
@@ -884,6 +891,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_calibration_field_length FDCAN Calibration Field Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CALIB_FIELD_LENGTH_32 ((uint32_t)0x00000000U)       /*!< Calibration field length is 32 bits */
@@ -893,6 +901,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_calibration_state FDCAN Calibration State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CLOCK_NOT_CALIBRATED       ((uint32_t)0x00000000U) /*!< Clock not calibrated       */
@@ -903,6 +912,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_calibration_counter FDCAN Calibration Counter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CALIB_TIME_QUANTA_COUNTER  ((uint32_t)0x00000000U) /*!< Time Quanta Counter             */
@@ -913,6 +923,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_data_field_size FDCAN Data Field Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_DATA_BYTES_8  ((uint32_t)0x00000004U) /*!< 8 bytes data field  */
@@ -928,6 +939,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_txFifoQueue_Mode FDCAN Tx FIFO/Queue Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TX_FIFO_OPERATION  ((uint32_t)0x00000000U)     /*!< FIFO mode  */
@@ -937,6 +949,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_id_type FDCAN ID Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_STANDARD_ID ((uint32_t)0x00000000U) /*!< Standard ID element */
@@ -946,6 +959,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_frame_type FDCAN Frame Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_DATA_FRAME   ((uint32_t)0x00000000U)  /*!< Data frame   */
@@ -955,6 +969,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_data_length_code FDCAN Data Length Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_DLC_BYTES_0  ((uint32_t)0x00000000U) /*!< 0 bytes data field  */
@@ -978,6 +993,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_error_state_indicator FDCAN Error State Indicator
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_ESI_ACTIVE  ((uint32_t)0x00000000U) /*!< Transmitting node is error active  */
@@ -987,6 +1003,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_bit_rate_switching FDCAN Bit Rate Switching
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_BRS_OFF ((uint32_t)0x00000000U) /*!< FDCAN frames transmitted/received without bit rate switching */
@@ -996,6 +1013,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_format FDCAN format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CLASSIC_CAN ((uint32_t)0x00000000U) /*!< Frame transmitted/received in Classic CAN format */
@@ -1005,6 +1023,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_EFC FDCAN Event FIFO control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_NO_TX_EVENTS    ((uint32_t)0x00000000U) /*!< Do not store Tx events */
@@ -1014,6 +1033,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_filter_type FDCAN Filter Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_FILTER_RANGE         ((uint32_t)0x00000000U) /*!< Range filter from FilterID1 to FilterID2                        */
@@ -1025,6 +1045,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_filter_config FDCAN Filter Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_FILTER_DISABLE       ((uint32_t)0x00000000U) /*!< Disable filter element                                    */
@@ -1040,6 +1061,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Tx_location FDCAN Tx Location
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TX_BUFFER0  ((uint32_t)0x00000001U) /*!< Add message to Tx Buffer 0  */
@@ -1079,6 +1101,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Rx_location FDCAN Rx Location
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_RX_FIFO0    ((uint32_t)0x00000040U) /*!< Get received message from Rx FIFO 0    */
@@ -1152,6 +1175,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_event_type FDCAN Event Type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TX_EVENT             ((uint32_t)0x00400000U) /*!< Tx event                              */
@@ -1161,6 +1185,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_hp_msg_storage FDCAN High Priority Message Storage
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_HP_STORAGE_NO_FIFO  ((uint32_t)0x00000000U) /*!< No FIFO selected         */
@@ -1172,6 +1197,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_protocol_error_code FDCAN protocol error code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_PROTOCOL_ERROR_NONE      ((uint32_t)0x00000000U) /*!< No error occurred         */
@@ -1187,6 +1213,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_communication_state FDCAN communication state
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_COM_STATE_SYNC ((uint32_t)0x00000000U) /*!< Node is synchronizing on CAN communication */
@@ -1198,6 +1225,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_FIFO_watermark FDCAN FIFO watermark
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_CFG_TX_EVENT_FIFO ((uint32_t)0x00000000U) /*!< Tx event FIFO */
@@ -1208,6 +1236,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Rx_FIFO_operation_mode FDCAN FIFO operation mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_RX_FIFO_BLOCKING  ((uint32_t)0x00000000U) /*!< Rx FIFO blocking mode  */
@@ -1217,6 +1246,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Non_Matching_Frames FDCAN non-matching frames
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_ACCEPT_IN_RX_FIFO0 ((uint32_t)0x00000000U) /*!< Accept in Rx FIFO 0 */
@@ -1227,6 +1257,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Reject_Remote_Frames FDCAN reject remote frames
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_FILTER_REMOTE ((uint32_t)0x00000000U) /*!< Filter remote frames */
@@ -1236,6 +1267,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Interrupt_Line FDCAN interrupt line
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_INTERRUPT_LINE0 ((uint32_t)0x00000001U) /*!< Interrupt Line 0 */
@@ -1245,6 +1277,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Timestamp FDCAN timestamp
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TIMESTAMP_INTERNAL ((uint32_t)0x00000001U) /*!< Timestamp counter value incremented according to TCP */
@@ -1254,6 +1287,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Timestamp_Prescaler FDCAN timestamp prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TIMESTAMP_PRESC_1  ((uint32_t)0x00000000U) /*!< Timestamp counter time unit in equal to CAN bit time                 */
@@ -1277,6 +1311,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Timeout_Operation FDCAN timeout operation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TIMEOUT_CONTINUOUS    ((uint32_t)0x00000000U) /*!< Timeout continuous operation        */
@@ -1288,6 +1323,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_Reference_Message_Payload FDCAN TT reference message payload
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_REF_MESSAGE_NO_PAYLOAD  ((uint32_t)0x00000000U)      /*!< Reference message has no additional payload  */
@@ -1297,6 +1333,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_Repeat_Factor FDCAN TT repeat factor
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_REPEAT_EVERY_CYCLE      ((uint32_t)0x00000000U) /*!< Trigger valid for all cycles   */
@@ -1311,6 +1348,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_Trigger_Type FDCAN TT trigger type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_TX_REF_TRIGGER         ((uint32_t)0x00000000U) /*!< Transmit reference message in strictly time-triggered operation                                                     */
@@ -1329,6 +1367,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_Time_Mark_Event_Internal FDCAN TT time mark event internal
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_TM_NO_INTERNAL_EVENT  ((uint32_t)0x00000000U) /*!< No action                                               */
@@ -1338,6 +1377,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_Time_Mark_Event_External FDCAN TT time mark event external
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_TM_NO_EXTERNAL_EVENT  ((uint32_t)0x00000000U) /*!< No action                                                       */
@@ -1347,6 +1387,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_operation_mode FDCAN Operation Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_COMMUNICATION_LEVEL1    ((uint32_t)0x00000001U) /*!< Time triggered communication, level 1 */
@@ -1357,6 +1398,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_operation FDCAN TT Operation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_STRICTLY_TT_OPERATION     ((uint32_t)0x00000000U)     /*!< Strictly time-triggered operation                    */
@@ -1366,6 +1408,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_time_master FDCAN TT Time Master
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_SLAVE            ((uint32_t)0x00000000U)    /*!< Time slave            */
@@ -1375,6 +1418,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_external_clk_sync FDCAN TT External Clock Synchronization
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_EXT_CLK_SYNC_DISABLE ((uint32_t)0x00000000U)      /*!< External clock synchronization in Level 0,2 disabled */
@@ -1384,6 +1428,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_global_time_filtering FDCAN TT Global Time Filtering
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_GLOB_TIME_FILT_DISABLE ((uint32_t)0x00000000U)      /*!< Global time filtering in Level 0,2 disabled */
@@ -1393,6 +1438,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_auto_clk_calibration FDCAN TT Automatic Clock Calibration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_AUTO_CLK_CALIB_DISABLE ((uint32_t)0x00000000U)     /*!< Automatic clock calibration in Level 0,2 disabled */
@@ -1402,6 +1448,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_event_trig_polarity FDCAN TT Event Trigger Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_EVT_TRIG_POL_RISING  ((uint32_t)0x00000000U)      /*!< Rising edge trigger  */
@@ -1411,6 +1458,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_basic_cycle_number FDCAN TT Basic Cycle Number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_CYCLES_PER_MATRIX_1  ((uint32_t)0x00000000U) /*!< 1 Basic Cycle per Matrix   */
@@ -1425,6 +1473,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_cycle_start_sync FDCAN TT Cycle Start Sync
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_NO_SYNC_PULSE          ((uint32_t)0x00000000U) /*!< No sync pulse                      */
@@ -1435,6 +1484,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_stop_watch_trig_selection FDCAN TT Stop Watch Trigger Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_STOP_WATCH_TRIGGER_0 ((uint32_t)0x00000000U) /*!< TIM2 selected as stop watch trigger  */
@@ -1446,6 +1496,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_event_trig_selection FDCAN TT Event Trigger Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_EVENT_TRIGGER_0 ((uint32_t)0x00000000U) /*!< TIM2 selected as event trigger  */
@@ -1457,6 +1508,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_stop_watch_source FDCAN TT Stop Watch Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_STOP_WATCH_DISABLED    ((uint32_t)0x00000000U) /*!< Stop Watch disabled                                                        */
@@ -1468,6 +1520,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_stop_watch_polarity FDCAN TT Stop Watch Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_STOP_WATCH_RISING  ((uint32_t)0x00000000U) /*!< Selected stop watch source is captured at rising edge of fdcan1_swt  */
@@ -1477,6 +1530,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_time_mark_source FDCAN TT Time Mark Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_REG_TIMEMARK_DIABLED  ((uint32_t)0x00000000U) /*!< No Register Time Mark Interrupt generated               */
@@ -1488,6 +1542,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_error_level FDCAN TT Error Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_NO_ERROR     ((uint32_t)0x00000000U) /*!< Severity 0 - No Error     */
@@ -1499,6 +1554,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_master_state FDCAN TT Master State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_MASTER_OFF          ((uint32_t)0x00000000U) /*!< Master_Off, no master properties relevant */
@@ -1510,6 +1566,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TT_sync_state FDCAN TT Synchronization State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_OUT_OF_SYNC   ((uint32_t)0x00000000U) /*!< Out of Synchronization         */
@@ -1521,6 +1578,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup Interrupt_Masks Interrupt masks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IR_MASK ((uint32_t)0x3FCFFFFFU) /*!< FDCAN interrupts mask */
@@ -1530,6 +1588,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_flags FDCAN Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_FLAG_TX_COMPLETE             FDCAN_IR_TC             /*!< Transmission Completed                                */
@@ -1567,10 +1626,12 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Interrupts FDCAN Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FDCAN_Tx_Interrupts FDCAN Tx Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_TX_COMPLETE           FDCAN_IE_TCE   /*!< Transmission Completed                                */
@@ -1581,6 +1642,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Rx_Interrupts FDCAN Rx Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_RX_HIGH_PRIORITY_MSG  FDCAN_IE_HPME  /*!< High priority message received                        */
@@ -1590,6 +1652,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Counter_Interrupts FDCAN Counter Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_TIMESTAMP_WRAPAROUND  FDCAN_IE_TSWE  /*!< Timestamp counter wrapped around                      */
@@ -1599,6 +1662,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Clock_Calibration_Interrupts Clock Calibration Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_CALIB_STATE_CHANGED  (FDCANCCU_IE_CSCE << 30) /*!< Clock calibration state changed           */
@@ -1608,6 +1672,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Tx_Event_Fifo_Interrupts FDCAN Tx Event FIFO Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_TX_EVT_FIFO_ELT_LOST  FDCAN_IE_TEFLE /*!< Tx Event FIFO element lost                 */
@@ -1619,6 +1684,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Rx_Fifo0_Interrupts FDCAN Rx FIFO 0 Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_RX_FIFO0_MESSAGE_LOST FDCAN_IE_RF0LE /*!< Rx FIFO 0 message lost                 */
@@ -1630,6 +1696,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Rx_Fifo1_Interrupts FDCAN Rx FIFO 1 Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_RX_FIFO1_MESSAGE_LOST FDCAN_IE_RF1LE /*!< Rx FIFO 1 message lost                 */
@@ -1641,6 +1708,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Error_Interrupts FDCAN Error Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_RAM_ACCESS_FAILURE      FDCAN_IE_MRAFE /*!< Message RAM access failure occurred              */
@@ -1654,6 +1722,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_Error_Status_Interrupts FDCAN Error Status Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_IT_ERROR_PASSIVE FDCAN_IE_EPE /*!< Error_Passive status changed */
@@ -1668,6 +1737,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTflags FDCAN TT Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_FLAG_BASIC_CYCLE_START    FDCAN_TTIR_SBC  /*!< Start of Basic Cycle             */
@@ -1694,10 +1764,12 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTInterrupts FDCAN TT Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FDCAN_TTScheduleSynchronization_Interrupts FDCAN TT Schedule Synchronization Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_IT_BASIC_CYCLE_START  FDCAN_TTIE_SBCE /*!< Start of Basic Cycle           */
@@ -1709,6 +1781,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTTimeMark_Interrupts FDCAN TT Time Mark Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_IT_REG_TIME_MARK  FDCAN_TTIE_RTMIE /*!< Register Time Mark Interrupt     */
@@ -1718,6 +1791,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTStopWatch_Interrupt FDCAN TT Stop Watch Interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_IT_STOP_WATCH FDCAN_TTIE_SWEE /*!< Stop Watch Event */
@@ -1726,6 +1800,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTGlobalTime_Interrupts FDCAN TT Global Time Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_IT_GLOBAL_TIME_WRAP FDCAN_TTIE_GTWE  /*!< Global Time Wrap          */
@@ -1735,6 +1810,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTDisturbingError_Interrupts FDCAN TT Disturbing Error Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_IT_GLOBAL_TIME_ERROR  FDCAN_TTIE_GTEE /*!< Global Time Error   */
@@ -1748,6 +1824,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
   */
 
 /** @defgroup FDCAN_TTFatalError_Interrupts FDCAN TT Fatal Error Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define FDCAN_TT_IT_INIT_WATCH_TRIGGER   FDCAN_TTIE_IWTE /*!< Initialization Watch Trigger */
@@ -1768,6 +1845,7 @@ typedef  void (*pFDCAN_TT_GlobalTimeCallbackTypeDef)(FDCAN_HandleTypeDef *hfdcan
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup FDCAN_Exported_Macros FDCAN Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2123,6 +2201,7 @@ HAL_FDCAN_StateTypeDef HAL_FDCAN_GetState(FDCAN_HandleTypeDef *hfdcan);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup FDCAN_Private_Types FDCAN Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2132,6 +2211,7 @@ HAL_FDCAN_StateTypeDef HAL_FDCAN_GetState(FDCAN_HandleTypeDef *hfdcan);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup FDCAN_Private_Variables FDCAN Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2141,6 +2221,7 @@ HAL_FDCAN_StateTypeDef HAL_FDCAN_GetState(FDCAN_HandleTypeDef *hfdcan);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup FDCAN_Private_Constants FDCAN Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2150,6 +2231,7 @@ HAL_FDCAN_StateTypeDef HAL_FDCAN_GetState(FDCAN_HandleTypeDef *hfdcan);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup FDCAN_Private_Macros FDCAN Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_FDCAN_FRAME_FORMAT(FORMAT) (((FORMAT) == FDCAN_FRAME_CLASSIC  ) || \
@@ -2381,6 +2463,7 @@ HAL_FDCAN_StateTypeDef HAL_FDCAN_GetState(FDCAN_HandleTypeDef *hfdcan);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup FDCAN_Private_Functions_Prototypes FDCAN Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2390,6 +2473,7 @@ HAL_FDCAN_StateTypeDef HAL_FDCAN_GetState(FDCAN_HandleTypeDef *hfdcan);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup FDCAN_Private_Functions FDCAN Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -212,6 +212,7 @@
 #if defined (HASH)
 
 /** @defgroup HASH  HASH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HASH HAL module driver.
   * @{
   */
@@ -221,10 +222,12 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup HASH_Private_Constants HASH Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HASH_Digest_Calculation_Status HASH Digest Calculation Status
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_DIGEST_CALCULATION_NOT_STARTED       ((uint32_t)0x00000000U) /*!< DCAL not set after input data written in DIN register */
@@ -234,6 +237,7 @@
   */
 
 /** @defgroup HASH_Number_Of_CSR_Registers HASH Number of Context Swap Registers
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_NUMBER_OF_CSR_REGISTERS              54U     /*!< Number of Context Swap Registers */
@@ -242,6 +246,7 @@
   */
 
 /** @defgroup HASH_TimeOut_Value HASH TimeOut Value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_TIMEOUTVALUE                         1000U   /*!< Time-out value  */
@@ -250,6 +255,7 @@
   */
 
 /** @defgroup HASH_DMA_Suspension_Words_Limit HASH DMA suspension words limit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HASH_DMA_SUSPENSION_WORDS_LIMIT             20U   /*!< Number of words below which DMA suspension is aborted */
@@ -265,6 +271,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup HASH_Private_Functions HASH Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void HASH_DMAXferCplt(DMA_HandleTypeDef *hdma);
@@ -280,10 +287,12 @@ static HAL_StatusTypeDef HMAC_Processing(HASH_HandleTypeDef *hhash, uint32_t Tim
   */
 
 /** @defgroup HASH_Exported_Functions HASH Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HASH_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization, configuration and call-back functions.
  *
 @verbatim
@@ -718,6 +727,7 @@ HAL_StatusTypeDef status = HAL_OK;
   */
 
 /** @defgroup HASH_Exported_Functions_Group2 HASH processing functions in polling mode
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   HASH processing functions using polling mode.
  *
 @verbatim
@@ -863,6 +873,7 @@ HAL_StatusTypeDef HAL_HASH_SHA1_Accmlt_End(HASH_HandleTypeDef *hhash, uint8_t *p
   */
 
 /** @defgroup HASH_Exported_Functions_Group3 HASH processing functions in interrupt mode
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   HASH processing functions using interrupt mode.
  *
 @verbatim
@@ -1025,6 +1036,7 @@ void HAL_HASH_IRQHandler(HASH_HandleTypeDef *hhash)
   */
 
 /** @defgroup HASH_Exported_Functions_Group4 HASH processing functions in DMA mode
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   HASH processing functions using DMA mode.
  *
 @verbatim
@@ -1118,6 +1130,7 @@ HAL_StatusTypeDef HAL_HASH_SHA1_Finish(HASH_HandleTypeDef *hhash, uint8_t* pOutB
   */
 
 /** @defgroup HASH_Exported_Functions_Group5 HMAC processing functions in polling mode
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   HMAC processing functions using polling mode.
  *
 @verbatim
@@ -1178,6 +1191,7 @@ HAL_StatusTypeDef HAL_HMAC_SHA1_Start(HASH_HandleTypeDef *hhash, uint8_t *pInBuf
 
 
 /** @defgroup HASH_Exported_Functions_Group6 HMAC processing functions in interrupt mode
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   HMAC processing functions using interrupt mode.
  *
 @verbatim
@@ -1237,6 +1251,7 @@ HAL_StatusTypeDef HAL_HMAC_SHA1_Start_IT(HASH_HandleTypeDef *hhash, uint8_t *pIn
 
 
 /** @defgroup HASH_Exported_Functions_Group7 HMAC processing functions in DMA mode
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   HMAC processing functions using DMA modes.
  *
 @verbatim
@@ -1313,6 +1328,7 @@ HAL_StatusTypeDef HAL_HMAC_SHA1_Start_DMA(HASH_HandleTypeDef *hhash, uint8_t *pI
   */
 
 /** @defgroup HASH_Exported_Functions_Group8 Peripheral states functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions.
  *
 @verbatim
@@ -1612,6 +1628,7 @@ uint32_t HAL_HASH_GetError(HASH_HandleTypeDef *hhash)
   */
 
 /** @defgroup HASH_Private_Functions HASH Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

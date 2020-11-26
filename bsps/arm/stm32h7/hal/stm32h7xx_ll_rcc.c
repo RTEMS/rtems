@@ -77,6 +77,7 @@ const uint8_t LL_RCC_PrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7,
 
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup RCC_LL_Private_Functions RCC Private functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 uint32_t RCC_GetSystemClockFreq(void);

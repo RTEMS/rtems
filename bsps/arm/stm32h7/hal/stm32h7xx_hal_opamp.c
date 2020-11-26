@@ -215,6 +215,7 @@
   */
 
 /** @defgroup OPAMP OPAMP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief OPAMP module driver
   * @{
   */
@@ -252,10 +253,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup OPAMP_Exported_Functions OPAMP Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup OPAMP_Exported_Functions_Group1 Initialization and de-initialization functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions 
  *
 @verbatim
@@ -510,6 +513,7 @@ __weak void HAL_OPAMP_MspDeInit(OPAMP_HandleTypeDef *hopamp)
 
 
 /** @defgroup OPAMP_Exported_Functions_Group2 IO operation functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   IO operation functions 
  *
 @verbatim   
@@ -833,6 +837,7 @@ HAL_StatusTypeDef HAL_OPAMP_SelfCalibrate(OPAMP_HandleTypeDef *hopamp)
   */
 
 /** @defgroup OPAMP_Exported_Functions_Group3 Peripheral Control functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral Control functions 
  *
 @verbatim   
@@ -974,6 +979,7 @@ HAL_OPAMP_TrimmingValueTypeDef HAL_OPAMP_GetTrimOffset (OPAMP_HandleTypeDef *hop
 
 
 /** @defgroup OPAMP_Exported_Functions_Group4 Peripheral State functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions 
  *
 @verbatim   

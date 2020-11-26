@@ -48,6 +48,7 @@
   */
 
 /** @defgroup UARTEx UARTEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief UART Extended HAL module driver
   * @{
   */
@@ -57,6 +58,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup UARTEX_Private_Constants UARTEx Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* UART RX FIFO depth */
@@ -72,6 +74,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup UARTEx_Private_Functions UARTEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void UARTEx_Wakeup_AddressConfig(UART_HandleTypeDef *huart, UART_WakeUpTypeDef WakeUpSelection);
@@ -83,10 +86,12 @@ static void UARTEx_SetNbDataToProcess(UART_HandleTypeDef *huart);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup UARTEx_Exported_Functions  UARTEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup UARTEx_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Initialization and Configuration Functions
   *
 @verbatim
@@ -245,6 +250,7 @@ HAL_StatusTypeDef HAL_RS485Ex_Init(UART_HandleTypeDef *huart, uint32_t Polarity,
   */
 
 /** @defgroup UARTEx_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief Extended functions
   *
 @verbatim
@@ -314,6 +320,7 @@ __weak void HAL_UARTEx_TxFifoEmptyCallback(UART_HandleTypeDef *huart)
   */
 
 /** @defgroup UARTEx_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Peripheral Control functions
   *
 @verbatim

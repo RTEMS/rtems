@@ -154,6 +154,7 @@
 #if defined(ETH)
 
 /** @defgroup ETH ETH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief ETH HAL module driver
   * @{
   */
@@ -196,6 +197,7 @@
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup ETH_Private_Macros ETH Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Helper macros for TX descriptor handling */
@@ -216,6 +218,7 @@
   */
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup ETH_Private_Functions   ETH Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void ETH_MAC_MDIO_ClkConfig(ETH_HandleTypeDef *heth);
@@ -235,10 +238,12 @@ static void ETH_InitCallbacksToDefault(ETH_HandleTypeDef *heth);
 
 /* Exported functions ---------------------------------------------------------*/
 /** @defgroup ETH_Exported_Functions ETH Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ETH_Exported_Functions_Group1 Initialization and deinitialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -732,6 +737,7 @@ HAL_StatusTypeDef HAL_ETH_DescAssignMemory(ETH_HandleTypeDef *heth, uint32_t Ind
   */
 
 /** @defgroup ETH_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief ETH Transmit and Receive functions
   *
 @verbatim
@@ -1865,6 +1871,7 @@ HAL_StatusTypeDef HAL_ETH_WritePHYRegister(ETH_HandleTypeDef *heth, uint32_t PHY
   */
 
 /** @defgroup ETH_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   ETH control functions
   *
 @verbatim
@@ -2309,6 +2316,7 @@ HAL_StatusTypeDef HAL_ETH_SetWakeUpFilter(ETH_HandleTypeDef *heth, uint32_t *pFi
   */
 
 /** @defgroup ETH_Exported_Functions_Group4 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   ETH State and Errors functions
   *
 @verbatim

@@ -117,6 +117,7 @@
 #ifdef HAL_NAND_MODULE_ENABLED
 
 /** @defgroup NAND NAND
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief NAND HAL module driver
   * @{
   */
@@ -129,10 +130,12 @@
 /* Exported functions ---------------------------------------------------------*/
 
 /** @defgroup NAND_Exported_Functions NAND Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup NAND_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
   @verbatim
@@ -356,6 +359,7 @@ __weak void HAL_NAND_ITCallback(NAND_HandleTypeDef *hnand)
   */
 
 /** @defgroup NAND_Exported_Functions_Group2 Input and Output functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Input Output and memory control functions
   *
   @verbatim
@@ -1979,6 +1983,7 @@ HAL_StatusTypeDef HAL_NAND_UnRegisterCallback (NAND_HandleTypeDef *hnand, HAL_NA
   */
 
 /** @defgroup NAND_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   management functions
  *
 @verbatim
@@ -2100,6 +2105,7 @@ HAL_StatusTypeDef  HAL_NAND_GetECC(NAND_HandleTypeDef *hnand, uint32_t *ECCval, 
 
 
 /** @defgroup NAND_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions
  *
 @verbatim

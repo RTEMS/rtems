@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup IRDA_Exported_Types IRDA Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -232,10 +233,12 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup IRDA_Exported_Constants IRDA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IRDA_State_Definition IRDA State Code Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_IRDA_STATE_RESET                0x00000000U   /*!< Peripheral is not initialized
@@ -260,6 +263,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Error_Definition IRDA Error Code Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_IRDA_ERROR_NONE                 ((uint32_t)0x00000000U)          /*!< No error                */
@@ -277,6 +281,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Parity IRDA Parity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_PARITY_NONE                    0x00000000U                      /*!< No parity   */
@@ -287,6 +292,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Transfer_Mode IRDA Transfer Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_MODE_RX                        USART_CR1_RE                   /*!< RX mode        */
@@ -297,6 +303,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Low_Power IRDA Low Power
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_POWERMODE_NORMAL               0x00000000U       /*!< IRDA normal power mode */
@@ -306,6 +313,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_ClockPrescaler IRDA Clock Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_PRESCALER_DIV1    0x00000000U  /*!< fclk_pres = fclk     */
@@ -325,6 +333,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_State IRDA State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_STATE_DISABLE                  0x00000000U     /*!< IRDA disabled  */
@@ -334,6 +343,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Mode IRDA Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_MODE_DISABLE                   0x00000000U      /*!< Associated UART disabled in IRDA mode */
@@ -343,6 +353,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_One_Bit IRDA One Bit Sampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_ONE_BIT_SAMPLE_DISABLE         0x00000000U       /*!< One-bit sampling disabled */
@@ -352,6 +363,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_DMA_Tx IRDA DMA Tx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_DMA_TX_DISABLE                 0x00000000U       /*!< IRDA DMA TX disabled */
@@ -361,6 +373,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_DMA_Rx IRDA DMA Rx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_DMA_RX_DISABLE                 0x00000000U       /*!< IRDA DMA RX disabled */
@@ -370,6 +383,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Request_Parameters IRDA Request Parameters
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_AUTOBAUD_REQUEST            USART_RQR_ABRRQ        /*!< Auto-Baud Rate Request      */
@@ -380,6 +394,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Flags IRDA Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0xXXXX
   *           - 0xXXXX  : Flag mask in the ISR register
   * @{
@@ -401,6 +416,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Interrupt_definition IRDA Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0000ZZZZ0XXYYYYYb
   *           - YYYYY  : Interrupt source position in the XX register (5bits)
   *           - XX  : Interrupt source register (2bits)
@@ -434,6 +450,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_IT_CLEAR_Flags IRDA Interruption Clear Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_CLEAR_PEF                       USART_ICR_PECF            /*!< Parity Error Clear Flag          */
@@ -447,6 +464,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
   */
 
 /** @defgroup IRDA_Interruption_Mask IRDA interruptions flags mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IRDA_IT_MASK  0x001FU  /*!< IRDA Interruptions flags mask  */
@@ -464,6 +482,7 @@ typedef  void (*pIRDA_CallbackTypeDef)(IRDA_HandleTypeDef *hirda);  /*!< pointer
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup IRDA_Exported_Macros IRDA Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

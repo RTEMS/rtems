@@ -40,10 +40,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup JPEG_Exported_Types JPEG Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup JPEG_Configuration_Structure_definition JPEG Configuration for encoding Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG encoding configuration Structure definition
   * @{
   */
@@ -67,6 +69,7 @@ typedef struct
   */
 
 /** @defgroup HAL_JPEG_state_structure_definition HAL JPEG state structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL JPEG State structure definition
   * @{
   */
@@ -87,6 +90,7 @@ typedef enum
 
 
 /** @defgroup JPEG_handle_Structure_definition JPEG handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG handle Structure definition
   * @{
   */
@@ -164,6 +168,7 @@ typedef struct
 
 #if (USE_HAL_JPEG_REGISTER_CALLBACKS == 1)
 /** @defgroup HAL_JPEG_Callback_ID_enumeration_definition HAL JPEG Callback ID enumeration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL JPEG Callback ID enumeration definition
   * @{
   */
@@ -182,6 +187,7 @@ typedef enum
   */
 
 /** @defgroup HAL_JPEG_Callback_pointer_definition HAL JPEG Callback pointer definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL JPEG Callback pointer definition
   * @{
   */
@@ -205,10 +211,12 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup JPEG_Exported_Constants JPEG Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup JPEG_Error_Code_definition JPEG Error Code definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG Error Code definition
   * @{
   */
@@ -226,6 +234,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
   */
 
 /** @defgroup JPEG_Quantization_Table_Size JPEG Quantization Table Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG Quantization Table Size
   * @{
   */
@@ -236,6 +245,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
 
 
 /** @defgroup JPEG_ColorSpace JPEG ColorSpace
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG Color Space
   * @{
   */
@@ -250,6 +260,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
 
 
 /** @defgroup JPEG_ChromaSubsampling JPEG Chrominance Sampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG Chrominance Sampling
   * @{
   */
@@ -262,6 +273,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
   */
 
 /** @defgroup JPEG_ImageQuality JPEG Image Quality
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  JPEG Min and Max Image Quality
   * @{
   */
@@ -273,6 +285,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
   */
 
 /** @defgroup JPEG_Interrupt_configuration_definition JPEG Interrupt configuration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief JPEG Interrupt definition
   * @{
   */
@@ -287,6 +300,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
   */
 
 /** @defgroup JPEG_Flag_definition JPEG Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief JPEG Flags definition
   * @{
   */
@@ -304,6 +318,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
   */
 
 /** @defgroup JPEG_PROCESS_PAUSE_RESUME_definition JPEG Process Pause Resume definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief JPEG process pause, resume definition
   * @{
   */
@@ -320,6 +335,7 @@ typedef  void (*pJPEG_DataReadyCallbackTypeDef)(JPEG_HandleTypeDef *hjpeg, uint8
 /* Exported macro ------------------------------------------------------------*/
 
 /** @defgroup JPEG_Exported_Macros JPEG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -561,6 +577,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup JPEG_Private_Types JPEG Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -570,6 +587,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup JPEG_Private_Defines JPEG Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -579,6 +597,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup JPEG_Private_Variables JPEG Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -588,6 +607,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup JPEG_Private_Constants JPEG Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -597,6 +617,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup JPEG_Private_Macros JPEG Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -620,6 +641,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup JPEG_Private_Functions_Prototypes JPEG Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -629,6 +651,7 @@ uint32_t               HAL_JPEG_GetError(JPEG_HandleTypeDef *hjpeg);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup JPEG_Private_Functions JPEG Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

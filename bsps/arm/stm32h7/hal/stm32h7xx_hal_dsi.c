@@ -251,6 +251,7 @@ static HAL_StatusTypeDef DSI_ShortWrite(DSI_HandleTypeDef *hdsi,
   */
 
 /** @defgroup DSI_Group1 Initialization and Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Initialization and Configuration functions
   *
 @verbatim
@@ -762,6 +763,7 @@ HAL_StatusTypeDef HAL_DSI_UnRegisterCallback(DSI_HandleTypeDef *hdsi, HAL_DSI_Ca
   */
 
 /** @defgroup DSI_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    IO operation functions
   *
 @verbatim
@@ -945,6 +947,7 @@ __weak void HAL_DSI_ErrorCallback(DSI_HandleTypeDef *hdsi)
   */
 
 /** @defgroup DSI_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral Control functions
   *
 @verbatim
@@ -2644,6 +2647,7 @@ HAL_StatusTypeDef HAL_DSI_SetContentionDetectionOff(DSI_HandleTypeDef *hdsi, Fun
   */
 
 /** @defgroup DSI_Group4 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral State and Errors functions
   *
 @verbatim

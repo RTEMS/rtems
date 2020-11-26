@@ -143,6 +143,7 @@
   */
 
 /** @defgroup USART USART
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL USART Synchronous module driver
   * @{
   */
@@ -152,6 +153,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup USART_Private_Constants USART Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_DUMMY_DATA          ((uint16_t) 0xFFFF)           /*!< USART transmitted dummy data                     */
@@ -212,10 +214,12 @@ static void USART_RxISR_16BIT_FIFOEN(USART_HandleTypeDef *husart);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup USART_Exported_Functions USART Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USART_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -659,6 +663,7 @@ HAL_StatusTypeDef HAL_USART_UnRegisterCallback(USART_HandleTypeDef *husart, HAL_
   */
 
 /** @defgroup USART_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   USART Transmit and Receive functions
   *
 @verbatim
@@ -2427,6 +2432,7 @@ __weak void HAL_USART_AbortCpltCallback(USART_HandleTypeDef *husart)
   */
 
 /** @defgroup USART_Exported_Functions_Group4 Peripheral State and Error functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   USART Peripheral State and Error functions
   *
 @verbatim
@@ -2474,6 +2480,7 @@ uint32_t HAL_USART_GetError(USART_HandleTypeDef *husart)
   */
 
 /** @defgroup USART_Private_Functions USART Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

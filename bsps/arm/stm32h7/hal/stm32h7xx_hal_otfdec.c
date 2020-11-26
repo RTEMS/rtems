@@ -132,6 +132,7 @@
   */
 
 /** @defgroup OTFDEC OTFDEC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief OTFDEC HAL module driver.
   * @{
   */
@@ -156,6 +157,7 @@
   */
 
 /** @defgroup OTFDEC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions.
  *
 @verbatim
@@ -456,6 +458,7 @@ HAL_StatusTypeDef HAL_OTFDEC_UnRegisterCallback(OTFDEC_HandleTypeDef *hotfdec, H
   */
 
 /** @defgroup OTFDEC_Exported_Functions_Group2  OTFDEC IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   OTFDEC IRQ handler.
  *
 @verbatim
@@ -526,6 +529,7 @@ __weak void HAL_OTFDEC_ErrorCallback(OTFDEC_HandleTypeDef *hotfdec)
 
 
 /** @defgroup OTFDEC_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral control functions.
  *
 @verbatim
@@ -875,6 +879,7 @@ HAL_StatusTypeDef HAL_OTFDEC_RegionDisable(OTFDEC_HandleTypeDef *hotfdec, uint32
   */
 
 /** @defgroup OTFDEC_Exported_Functions_Group4 Peripheral State and Status functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions.
  *
 @verbatim

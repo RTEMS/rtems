@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup HSEM_Exported_Macros HSEM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -118,6 +119,7 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup HSEM_Exported_Functions HSEM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -176,6 +178,7 @@ void HAL_HSEM_IRQHandler(void);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup HSEM_Private_Macros HSEM Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

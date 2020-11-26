@@ -92,6 +92,7 @@
   */
 
 /** @defgroup HSEM HSEM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HSEM HAL module driver
   * @{
   */
@@ -120,10 +121,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup HSEM_Exported_Functions  HSEM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HSEM_Exported_Functions_Group1 Take and Release functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    HSEM Take and Release functions
   *
 @verbatim
@@ -260,6 +263,7 @@ void HAL_HSEM_ReleaseAll(uint32_t Key, uint32_t CoreID)
   */
 
 /** @defgroup HSEM_Exported_Functions_Group2 HSEM Set and Get Key functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    HSEM Set and Get Key functions.
   *
 @verbatim
@@ -301,6 +305,7 @@ uint32_t HAL_HSEM_GetClearKey(void)
   */
 
 /** @defgroup HSEM_Exported_Functions_Group3 HSEM IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    HSEM Notification functions.
   *
 @verbatim

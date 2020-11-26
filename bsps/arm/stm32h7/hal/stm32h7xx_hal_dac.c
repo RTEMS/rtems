@@ -308,6 +308,7 @@
 #if defined(DAC1) || defined(DAC2)
 
 /** @defgroup DAC DAC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DAC driver modules
   * @{
   */
@@ -330,10 +331,12 @@
 /* Exported functions -------------------------------------------------------*/
 
 /** @defgroup DAC_Exported_Functions DAC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DAC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -492,6 +495,7 @@ __weak void HAL_DAC_MspDeInit(DAC_HandleTypeDef *hdac)
   */
 
 /** @defgroup DAC_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    IO operation functions
   *
 @verbatim
@@ -955,6 +959,7 @@ __weak void HAL_DAC_DMAUnderrunCallbackCh1(DAC_HandleTypeDef *hdac)
   */
 
 /** @defgroup DAC_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Peripheral Control functions
   *
 @verbatim
@@ -1169,6 +1174,7 @@ HAL_StatusTypeDef HAL_DAC_ConfigChannel(DAC_HandleTypeDef *hdac, DAC_ChannelConf
   */
 
 /** @defgroup DAC_Exported_Functions_Group4 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Peripheral State and Errors functions
   *
 @verbatim

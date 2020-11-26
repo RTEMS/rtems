@@ -39,10 +39,12 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup MMCEx_Exported_Types MMCEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MMCEx_Exported_Types_Group1 MMC Internal DMA Buffer structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */ 
 typedef enum
@@ -64,10 +66,12 @@ typedef enum
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup MMCEx_Exported_Functions MMCEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
   
 /** @defgroup MMCEx_Exported_Functions_Group1 MultiBuffer functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_MMCEx_ConfigDMAMultiBuffer(MMC_HandleTypeDef *hmmc, uint32_t * pDataBuffer0, uint32_t * pDataBuffer1, uint32_t BufferSize);

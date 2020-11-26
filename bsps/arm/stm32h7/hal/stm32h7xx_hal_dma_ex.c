@@ -56,6 +56,7 @@
   */
 
 /** @defgroup DMAEx DMAEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMA Extended HAL module driver
   * @{
   */

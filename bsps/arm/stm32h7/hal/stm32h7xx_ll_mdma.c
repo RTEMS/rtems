@@ -34,6 +34,7 @@
 #if defined (MDMA)
 
 /** @defgroup MDMA_LL MDMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

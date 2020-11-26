@@ -221,6 +221,7 @@
   */
 
 /** @defgroup SAI SAI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SAI HAL module driver
   * @{
   */
@@ -229,6 +230,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /** @defgroup SAI_Private_Typedefs  SAI Private Typedefs
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -242,6 +244,7 @@ typedef enum
 
 /* Private define ------------------------------------------------------------*/
 /** @defgroup SAI_Private_Constants  SAI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SAI_FIFO_SIZE            8U
@@ -255,6 +258,7 @@ typedef enum
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup SAI_Private_Functions  SAI Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void SAI_FillFifo(SAI_HandleTypeDef *hsai);
@@ -282,10 +286,12 @@ static void SAI_DMAAbort(DMA_HandleTypeDef *hdma);
 
 /* Exported functions ---------------------------------------------------------*/
 /** @defgroup SAI_Exported_Functions SAI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SAI_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -1042,6 +1048,7 @@ HAL_StatusTypeDef HAL_SAI_UnRegisterCallback(SAI_HandleTypeDef        *hsai,
   */
 
 /** @defgroup SAI_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Data transfers functions
   *
 @verbatim
@@ -2203,6 +2210,7 @@ __weak void HAL_SAI_ErrorCallback(SAI_HandleTypeDef *hsai)
   */
 
 /** @defgroup SAI_Exported_Functions_Group3 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral State functions
   *
 @verbatim

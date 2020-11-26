@@ -37,6 +37,7 @@
   */
 
 /** @defgroup CRCEx CRCEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CRC Extended HAL module driver
   * @{
   */
@@ -51,10 +52,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup CRCEx_Exported_Functions CRC Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRCEx_Exported_Functions_Group1 Extended Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended Initialization and Configuration functions.
   *
 @verbatim

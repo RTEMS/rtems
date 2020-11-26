@@ -164,6 +164,7 @@
   */
 
 /** @defgroup LPTIM LPTIM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief LPTIM HAL module driver.
   * @{
   */
@@ -193,10 +194,12 @@ static HAL_StatusTypeDef LPTIM_WaitForFlag(LPTIM_HandleTypeDef *hlptim, uint32_t
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup LPTIM_Exported_Functions LPTIM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group1 Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions.
  *
 @verbatim
@@ -443,6 +446,7 @@ __weak void HAL_LPTIM_MspDeInit(LPTIM_HandleTypeDef *hlptim)
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group2 LPTIM Start-Stop operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Start-Stop operation functions.
  *
 @verbatim
@@ -1729,6 +1733,7 @@ HAL_StatusTypeDef HAL_LPTIM_Counter_Stop_IT(LPTIM_HandleTypeDef *hlptim)
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group3 LPTIM Read operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief  Read operation functions.
  *
 @verbatim
@@ -1787,6 +1792,7 @@ uint32_t HAL_LPTIM_ReadCompare(LPTIM_HandleTypeDef *hlptim)
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group4 LPTIM IRQ handler and callbacks
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief  LPTIM  IRQ handler.
  *
 @verbatim
@@ -2255,6 +2261,7 @@ HAL_StatusTypeDef HAL_LPTIM_UnRegisterCallback(LPTIM_HandleTypeDef        *hlpti
   */
 
 /** @defgroup LPTIM_Group5 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions.
  *
 @verbatim
@@ -2291,6 +2298,7 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(LPTIM_HandleTypeDef *hlptim)
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup LPTIM_Private_Functions LPTIM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1)

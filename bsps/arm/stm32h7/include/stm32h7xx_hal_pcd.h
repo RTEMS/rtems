@@ -40,6 +40,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup PCD_Exported_Types PCD Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -146,10 +147,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup PCD_Exported_Constants PCD Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PCD_Speed PCD Speed
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PCD_SPEED_HIGH               USBD_HS_SPEED
@@ -160,6 +163,7 @@ typedef struct
   */
 
 /** @defgroup PCD_PHY_Module PCD PHY Module
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PCD_PHY_ULPI                 1U
@@ -170,6 +174,7 @@ typedef struct
   */
 
 /** @defgroup PCD_Error_Code_definition PCD Error Code definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  PCD Error Code definition
   * @{
   */
@@ -187,6 +192,7 @@ typedef struct
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup PCD_Exported_Macros PCD Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief macros to handle interrupts and specific clock configurations
  * @{
  */
@@ -233,6 +239,7 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef *hpcd);
 
 #if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
 /** @defgroup HAL_PCD_Callback_ID_enumeration_definition HAL USB OTG PCD Callback ID enumeration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL USB OTG PCD Callback ID enumeration definition
   * @{
   */
@@ -255,6 +262,7 @@ typedef enum
   */
 
 /** @defgroup HAL_PCD_Callback_pointer_definition HAL USB OTG PCD Callback pointer definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL USB OTG PCD Callback pointer definition
   * @{
   */
@@ -357,9 +365,11 @@ PCD_StateTypeDef HAL_PCD_GetState(PCD_HandleTypeDef *hpcd);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup PCD_Private_Constants PCD Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup USB_EXTI_Line_Interrupt USB EXTI line interrupt
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS)
@@ -411,6 +421,7 @@ PCD_StateTypeDef HAL_PCD_GetState(PCD_HandleTypeDef *hpcd);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup PCD_Private_Macros PCD Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 

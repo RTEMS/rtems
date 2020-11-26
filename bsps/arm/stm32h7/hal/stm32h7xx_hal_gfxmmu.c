@@ -143,6 +143,7 @@
 #ifdef HAL_GFXMMU_MODULE_ENABLED
 #if defined(GFXMMU)
 /** @defgroup GFXMMU GFXMMU
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief GFXMMU HAL driver module
   * @{
   */
@@ -157,10 +158,12 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup GFXMMU_Exported_Functions GFXMMU Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and de-initialization functions 
  *
 @verbatim
@@ -492,6 +495,7 @@ HAL_StatusTypeDef HAL_GFXMMU_UnRegisterCallback(GFXMMU_HandleTypeDef        *hgf
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group2 Operations functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    GFXMMU operation functions
  *
 @verbatim
@@ -823,6 +827,7 @@ __weak void HAL_GFXMMU_ErrorCallback(GFXMMU_HandleTypeDef *hgfxmmu)
   */
 
 /** @defgroup GFXMMU_Exported_Functions_Group3 State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    GFXMMU state functions
  *
 @verbatim

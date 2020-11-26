@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup I2S_Exported_Types I2S Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -174,9 +175,11 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup I2S_Exported_Constants I2S Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @defgroup I2S_Error I2S Error
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */ 
 #define HAL_I2S_ERROR_NONE               (0x00000000UL)  /*!< No error                          */
@@ -196,6 +199,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Mode I2S Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_MODE_SLAVE_TX                (0x00000000UL)
@@ -209,6 +213,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Standard I2S Standard
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_STANDARD_PHILIPS             (0x00000000UL)
@@ -221,6 +226,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Data_Format I2S Data Format
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_DATAFORMAT_16B               (0x00000000UL)
@@ -232,6 +238,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_MCLK_Output I2S MCLK Output
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_MCLKOUTPUT_ENABLE            (SPI_I2SCFGR_MCKOE)
@@ -241,6 +248,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Audio_Frequency I2S Audio Frequency
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_AUDIOFREQ_192K               (192000UL)
@@ -258,6 +266,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_FullDuplex_Mode I2S FullDuplex Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_CPOL_LOW                     (0x00000000UL)
@@ -267,6 +276,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_MSB_LSB_Transmission I2S MSB LSB Transmission
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_FIRSTBIT_MSB                 (0x00000000UL)
@@ -276,6 +286,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_WSInversion I2S Word Select Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_WS_INVERSION_DISABLE         (0x00000000UL)
@@ -285,6 +296,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Data_24Bit_Alignment Data Padding 24Bit
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_DATA_24BIT_ALIGNMENT_RIGHT   (0x00000000UL)
@@ -294,6 +306,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Master_Keep_IO_State Keep IO State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_MASTER_KEEP_IO_STATE_DISABLE (0x00000000U)
@@ -303,6 +316,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Interrupts_Definition I2S Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_IT_RXP                       SPI_IER_RXPIE
@@ -316,6 +330,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
   */
 
 /** @defgroup I2S_Flags_Definition I2S Flags Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define I2S_FLAG_RXP                     SPI_SR_RXP       /* I2S status flag : Rx-Packet available flag                 */
@@ -335,6 +350,7 @@ typedef  void (*pI2S_CallbackTypeDef)(I2S_HandleTypeDef *hi2s); /*!< pointer to 
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup I2S_Exported_macros I2S Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -517,6 +533,7 @@ uint32_t HAL_I2S_GetError(I2S_HandleTypeDef *hi2s);
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup I2S_Private_Constants I2S Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -526,6 +543,7 @@ uint32_t HAL_I2S_GetError(I2S_HandleTypeDef *hi2s);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup I2S_Private_Macros I2S Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

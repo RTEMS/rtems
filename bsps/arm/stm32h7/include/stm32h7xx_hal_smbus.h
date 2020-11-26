@@ -38,10 +38,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SMBUS_Exported_Types SMBUS Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMBUS_Configuration_Structure_definition SMBUS Configuration Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SMBUS Configuration Structure definition
   * @{
   */
@@ -90,6 +92,7 @@ typedef struct
   */
 
 /** @defgroup HAL_state_definition HAL state definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  HAL State definition
   * @{
   */
@@ -108,6 +111,7 @@ typedef struct
   */
 
 /** @defgroup SMBUS_Error_Code_definition SMBUS Error Code definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SMBUS Error Code definition
   * @{
   */
@@ -129,6 +133,7 @@ typedef struct
   */
 
 /** @defgroup SMBUS_handle_Structure_definition SMBUS handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  SMBUS handle Structure definition
   * @{
   */
@@ -205,10 +210,12 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup SMBUS_Exported_Constants SMBUS Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMBUS_Analog_Filter SMBUS Analog Filter
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_ANALOGFILTER_ENABLE               (0x00000000U)
@@ -218,6 +225,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_addressing_mode SMBUS addressing mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_ADDRESSINGMODE_7BIT               (0x00000001U)
@@ -227,6 +235,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_dual_addressing_mode SMBUS dual addressing mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -237,6 +246,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_own_address2_masks SMBUS ownaddress2 masks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -254,6 +264,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
 
 
 /** @defgroup SMBUS_general_call_addressing_mode SMBUS general call addressing mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_GENERALCALL_DISABLE               (0x00000000U)
@@ -263,6 +274,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_nostretch_mode SMBUS nostretch mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_NOSTRETCH_DISABLE                 (0x00000000U)
@@ -272,6 +284,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_packet_error_check_mode SMBUS packet error check mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_PEC_DISABLE                       (0x00000000U)
@@ -281,6 +294,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_peripheral_mode SMBUS peripheral mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMBUS_PERIPHERAL_MODE_SMBUS_HOST        I2C_CR1_SMBHEN
@@ -291,6 +305,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_ReloadEndMode_definition SMBUS ReloadEndMode definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -303,6 +318,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_StartStopMode_definition SMBUS StartStopMode definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -315,6 +331,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_XferOptions_definition SMBUS XferOptions definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -341,6 +358,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_Interrupt_configuration_definition SMBUS Interrupt configuration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SMBUS Interrupt definition
   *        Elements values convention: 0xXXXXXXXX
   *           - XXXXXXXX  : Interrupt control mask
@@ -362,6 +380,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
   */
 
 /** @defgroup SMBUS_Flag_definition SMBUS Flag definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief Flag definition
   *        Elements values convention: 0xXXXXYYYY
   *           - XXXXXXXX  : Flag mask
@@ -394,6 +413,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
 
 /* Exported macros ------------------------------------------------------------*/
 /** @defgroup SMBUS_Exported_Macros SMBUS Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -530,6 +550,7 @@ typedef  void (*pSMBUS_AddrCallbackTypeDef)(SMBUS_HandleTypeDef *hsmbus, uint8_t
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SMBUS_Private_Macro SMBUS Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -714,6 +735,7 @@ uint32_t HAL_SMBUS_GetError(SMBUS_HandleTypeDef *hsmbus);
 
 /* Private Functions ---------------------------------------------------------*/
 /** @defgroup SMBUS_Private_Functions SMBUS Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Private functions are defined in stm32h7xx_hal_smbus.c file */

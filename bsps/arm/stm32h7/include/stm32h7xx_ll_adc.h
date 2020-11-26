@@ -35,6 +35,7 @@ extern "C" {
 #if defined (ADC1) || defined (ADC2) || defined (ADC3)
 
 /** @defgroup ADC_LL ADC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -43,6 +44,7 @@ extern "C" {
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup ADC_LL_Private_Constants ADC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -386,6 +388,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup ADC_LL_Private_Macros ADC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -408,6 +411,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup ADC_LL_ES_INIT ADC Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -601,10 +605,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup ADC_LL_Exported_Constants ADC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADC_LL_EC_FLAG ADC flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_ADC_ReadReg function
   * @{
   */
@@ -646,6 +652,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_IT ADC interruptions for configuration (interruption enable or disable)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_ADC_ReadReg and  LL_ADC_WriteReg functions
   * @{
   */
@@ -665,6 +672,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REGISTERS  ADC registers compliant with specific purpose
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* List of ADC registers intended to be used (most commonly) with             */
@@ -677,6 +685,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_COMMON_CLOCK_SOURCE  ADC common - Clock source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_CLOCK_SYNC_PCLK_DIV1        (ADC_CCR_CKMODE_0)                                    /*!< ADC synchronous clock derived from AHB clock without prescaler */
@@ -699,6 +708,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_COMMON_PATH_INTERNAL  ADC common - Measurement path to internal channels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Note: Other measurement paths to internal channels may be available        */
@@ -715,6 +725,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_BOOST_MODE ADC instance - Boost mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_BOOST_MODE_6MHZ25   (0x00000000UL)                                            /*!< Boost mode is configured for frequency <= 6.25Mhz           */
@@ -727,6 +738,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_CALIBRATION_OFFSET_LINEARITY  ADC instance - Calibration mode for offset and linearity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_CALIB_OFFSET                (ADC_CALIB_FACTOR_OFFSET_REGOFFSET)                      /*!< Calibration of ADC offset. Duration of calibration of offset duration: 1280 ADC clock cycles. For devices with differential mode available: Calibration of offset is specific to each of single-ended and differential modes. */
@@ -737,6 +749,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_CALIBRATION_LINEARITY_WORD  ADC instance - Calibration linearity words
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_CALIB_LINEARITY_WORD1       (ADC_CR_LINCALRDYW1)    /*!< ADC calibration linearity word 1 */
@@ -750,6 +763,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_RESOLUTION  ADC instance - Resolution
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_RESOLUTION_16B              (0x00000000UL)                                   /*!< ADC resolution 16 bits */
@@ -766,6 +780,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_LEFT_BIT_SHIFT   ADC left Shift
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_LEFT_BIT_SHIFT_NONE  (0x00000000UL)                                                                       /*!< ADC no bit shift left applied on the final ADC convesion data */
@@ -789,6 +804,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_LP_MODE  ADC instance - Low power mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_LP_MODE_NONE                (0x00000000UL)                      /*!< No ADC low power mode activated */
@@ -798,6 +814,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_OFFSET_NB  ADC instance - Offset number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_OFFSET_1                    ADC_OFR1_REGOFFSET /*!< ADC offset number 1: ADC channel and offset level to which the offset programmed will be applied (independently of channel mapped on ADC group regular or group injected) */
@@ -809,6 +826,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_OFFSET_SIGNED_SATURATION ADC instance - Offset signed saturation mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_OFFSET_SIGNED_SATURATION_DISABLE   (0x00000000UL)   /*!< ADC offset signed saturation is disabled (among ADC selected offset number 1, 2, 3 or 4) */
@@ -818,6 +836,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_OFFSET_RSHIFT ADC instance - Offset right shift
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_OFFSET_RSHIFT_DISABLE   (0x00000000UL)      /*!< ADC offset right shift is disabled (among ADC selected offset number 1, 2, 3 or 4) */
@@ -826,6 +845,7 @@ typedef struct
   * @}
   */
 /** @defgroup ADC_LL_EC_GROUPS  ADC instance - Groups
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_GROUP_REGULAR               (0x00000001UL) /*!< ADC group regular (available on all STM32 devices) */
@@ -836,6 +856,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_CHANNEL  ADC instance - Channel number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_CHANNEL_0                   (ADC_CHANNEL_0_NUMBER  | ADC_CHANNEL_0_SMP  | ADC_CHANNEL_0_BITFIELD ) /*!< ADC external channel (channel connected to GPIO pin) ADCx_IN0  */
@@ -880,6 +901,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_TRIGGER_SOURCE  ADC group regular - Trigger source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_TRIG_SOFTWARE          (0x00000000UL)                                                                                                    /*!< ADC group regular conversion trigger internal: SW start. */
@@ -909,6 +931,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_TRIGGER_EDGE  ADC group regular - Trigger edge
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_TRIG_EXT_RISING         (                   ADC_CFGR_EXTEN_0)   /*!< ADC group regular conversion trigger polarity set to rising edge */
@@ -919,6 +942,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_CONTINUOUS_MODE  ADC group regular - Continuous mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_CONV_SINGLE             (0x00000000UL)          /*!< ADC conversions are performed in single mode: one conversion per trigger */
@@ -928,6 +952,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_DATA_TRANSFER_MODE  ADC group regular - Data transfer mode of ADC conversion data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_DR_TRANSFER             (0x00000000UL)                        /*!< ADC conversions are transferred to DR rigister */
@@ -939,6 +964,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_OVR_DATA_BEHAVIOR  ADC group regular - Overrun behavior on conversion data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_OVR_DATA_PRESERVED      (0x00000000UL)         /*!< ADC group regular behavior in case of overrun: data preserved */
@@ -948,6 +974,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_SEQ_SCAN_LENGTH  ADC group regular - Sequencer scan length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_SEQ_SCAN_DISABLE        (0x00000000UL)                                              /*!< ADC group regular sequencer disable (equivalent to sequencer of 1 rank: ADC conversion on only 1 channel) */
@@ -971,6 +998,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_SEQ_DISCONT_MODE  ADC group regular - Sequencer discontinuous mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_SEQ_DISCONT_DISABLE     (0x00000000UL)                                                               /*!< ADC group regular sequencer discontinuous mode disable */
@@ -987,6 +1015,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_REG_SEQ_RANKS  ADC group regular - Sequencer ranks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_REG_RANK_1                  (ADC_SQR1_REGOFFSET | ADC_REG_RANK_1_SQRX_BITOFFSET_POS)  /*!< ADC group regular sequencer rank 1 */
@@ -1010,6 +1039,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_TRIGGER_SOURCE  ADC group injected - Trigger source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_TRIG_SOFTWARE           (0x00000000UL)                                                                                                         /*!< ADC group injected conversion trigger internal: SW start. */
@@ -1039,6 +1069,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_TRIGGER_EDGE  ADC group injected - Trigger edge
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_TRIG_EXT_RISING         (                    ADC_JSQR_JEXTEN_0) /*!< ADC group injected conversion trigger polarity set to rising edge */
@@ -1049,6 +1080,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_TRIG_AUTO  ADC group injected - Automatic trigger mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_TRIG_INDEPENDENT        (0x00000000UL)         /*!< ADC group injected conversion trigger independent. Setting mandatory if ADC group injected injected trigger source is set to an external trigger. */
@@ -1058,6 +1090,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_CONTEXT_QUEUE  ADC group injected - Context queue mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_QUEUE_2CONTEXTS_LAST_ACTIVE (0x00000000UL)         /* Group injected sequence context queue is enabled and can contain up to 2 contexts. When all contexts have been processed, the queue maintains the last context active perpetually. */
@@ -1068,6 +1101,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_SEQ_SCAN_LENGTH  ADC group injected - Sequencer scan length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_SEQ_SCAN_DISABLE        (0x00000000UL)                  /*!< ADC group injected sequencer disable (equivalent to sequencer of 1 rank: ADC conversion on only 1 channel) */
@@ -1079,6 +1113,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_SEQ_DISCONT_MODE  ADC group injected - Sequencer discontinuous mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_SEQ_DISCONT_DISABLE     (0x00000000UL)         /*!< ADC group injected sequencer discontinuous mode disable */
@@ -1088,6 +1123,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_INJ_SEQ_RANKS  ADC group injected - Sequencer ranks
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_INJ_RANK_1                  (ADC_JDR1_REGOFFSET | ADC_INJ_RANK_1_JSQR_BITOFFSET_POS) /*!< ADC group injected sequencer rank 1 */
@@ -1099,6 +1135,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_CHANNEL_SAMPLINGTIME  Channel - Sampling time
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_SAMPLINGTIME_1CYCLE_5       (0x00000000UL)                                              /*!< Sampling time 1.5 ADC clock cycles */
@@ -1114,6 +1151,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_CHANNEL_SINGLE_DIFF_ENDING  Channel - Single or differential ending
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_SINGLE_ENDED                (                  ADC_CALFACT_CALFACT_S)         /*!< ADC channel ending set to single ended (literal also used to set calibration mode) */
@@ -1124,6 +1162,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_AWD_NUMBER Analog watchdog - Analog watchdog number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_AWD1                        (ADC_AWD_CR1_CHANNEL_MASK  | ADC_AWD_CR1_REGOFFSET) /*!< ADC analog watchdog number 1 */
@@ -1134,6 +1173,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_AWD_CHANNELS  Analog watchdog - Monitored channels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_AWD_DISABLE                 (0x00000000UL)                                                                                      /*!< ADC analog watchdog monitoring disabled */
@@ -1220,6 +1260,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_AWD_THRESHOLDS  Analog watchdog - Thresholds
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_AWD_THRESHOLD_HIGH          (0x1UL)                     /*!< ADC analog watchdog threshold high */
@@ -1229,6 +1270,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_OVS_SCOPE  Oversampling - Oversampling scope
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_OVS_DISABLE                 (0x00000000UL)                                        /*!< ADC oversampling disabled. */
@@ -1241,6 +1283,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_OVS_DISCONT_MODE  Oversampling - Discontinuous mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_OVS_REG_CONT                (0x00000000UL)         /*!< ADC oversampling discontinuous mode: continuous mode (all conversions of oversampling ratio are done from 1 trigger) */
@@ -1250,6 +1293,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_OVS_SHIFT  Oversampling - Data shift
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_OVS_SHIFT_NONE              (0x00000000UL)                                                              /*!< ADC oversampling no shift (sum of the ADC conversions data is not divided to result as the ADC oversampling conversion data) */
@@ -1269,6 +1313,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_MULTI_MODE  Multimode - Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_MULTI_INDEPENDENT           (0x00000000UL)                                                      /*!< ADC dual mode disabled (ADC independent mode) */
@@ -1284,6 +1329,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_MULTI_DMA_TRANSFER  Multimode - DMA transfer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_MULTI_REG_DMA_EACH_ADC        (0x00000000UL)                      /*!< ADC multimode group regular conversions are transferred by DMA: each ADC uses its own DMA channel, with its individual DMA transfer settings */
@@ -1294,6 +1340,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_MULTI_TWOSMP_DELAY  Multimode - Delay between two sampling phases
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_MULTI_TWOSMP_DELAY_1CYCLE_5           (0x00000000UL)                                                          /*!< ADC multimode delay between two sampling phases: 1.5 ADC clock cycle for all resolution                    */
@@ -1314,6 +1361,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EC_MULTI_MASTER_SLAVE  Multimode - ADC master or slave
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_ADC_MULTI_MASTER                (                    ADC_CDR_RDATA_MST) /*!< In multimode, selection among several ADC instances: ADC master */
@@ -1326,6 +1374,7 @@ typedef struct
 
 
 /** @defgroup ADC_LL_EC_HW_DELAYS  Definitions of ADC hardware constraints delays
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @note   Only ADC peripheral HW delays are defined in ADC LL driver driver,
   *         not timeout values.
   *         For details on delays values, refer to descriptions in source code
@@ -1399,10 +1448,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup ADC_LL_Exported_Macros ADC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADC_LL_EM_WRITE_READ Common write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1427,6 +1478,7 @@ typedef struct
   */
 
 /** @defgroup ADC_LL_EM_HELPER_MACRO ADC helper macro
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2255,10 +2307,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup ADC_LL_Exported_Functions ADC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADC_LL_EF_DMA_Management ADC DMA management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2315,6 +2369,7 @@ __STATIC_INLINE uint32_t LL_ADC_DMA_GetRegAddr(ADC_TypeDef *ADCx, uint32_t Regis
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_Common Configuration of ADC hierarchical scope: common to several ADC instances
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2452,6 +2507,7 @@ __STATIC_INLINE uint32_t LL_ADC_GetCommonPathInternalCh(ADC_Common_TypeDef *ADCx
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_Instance Configuration of ADC hierarchical scope: ADC instance
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3030,6 +3086,7 @@ __STATIC_INLINE uint32_t LL_ADC_GetOffsetSignedSaturation(ADC_TypeDef *ADCx, uin
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_Group_Regular Configuration of ADC hierarchical scope: group regular
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3682,6 +3739,7 @@ __STATIC_INLINE uint32_t LL_ADC_REG_GetOverrun(ADC_TypeDef *ADCx)
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_Group_Injected Configuration of ADC hierarchical scope: group injected
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4403,6 +4461,7 @@ __STATIC_INLINE void LL_ADC_INJ_ConfigQueueContext(ADC_TypeDef *ADCx,
   */
 
 /** @defgroup ADC_LL_EF_Configuration_Channels Configuration of ADC hierarchical scope: channels
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4703,6 +4762,7 @@ __STATIC_INLINE uint32_t LL_ADC_GetChannelSingleDiff(ADC_TypeDef *ADCx, uint32_t
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_AnalogWatchdog Configuration of ADC transversal scope: analog watchdog
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5137,6 +5197,7 @@ __STATIC_INLINE uint32_t LL_ADC_GetAnalogWDThresholds(ADC_TypeDef *ADCx, uint32_
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_oversampling Configuration of ADC transversal scope: oversampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5316,6 +5377,7 @@ __STATIC_INLINE uint32_t LL_ADC_GetOverSamplingShift(ADC_TypeDef *ADCx)
   */
 
 /** @defgroup ADC_LL_EF_Configuration_ADC_Multimode Configuration of ADC hierarchical scope: multimode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -5596,6 +5658,7 @@ __STATIC_INLINE uint32_t LL_ADC_GetMultiTwoSamplingDelay(ADC_Common_TypeDef *ADC
   * @}
   */
 /** @defgroup ADC_LL_EF_Operation_ADC_Instance Operation on ADC hierarchical scope: ADC instance
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -5833,6 +5896,7 @@ __STATIC_INLINE uint32_t LL_ADC_IsCalibrationOnGoing(ADC_TypeDef *ADCx)
   */
 
 /** @defgroup ADC_LL_EF_Operation_ADC_Group_Regular Operation on ADC hierarchical scope: group regular
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -6028,6 +6092,7 @@ __STATIC_INLINE uint32_t LL_ADC_REG_ReadMultiConversionData32(ADC_Common_TypeDef
   */
 
 /** @defgroup ADC_LL_EF_Operation_ADC_Group_Injected Operation on ADC hierarchical scope: group injected
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -6267,6 +6332,7 @@ __STATIC_INLINE uint8_t LL_ADC_INJ_ReadConversionData8(ADC_TypeDef *ADCx, uint32
   */
 
 /** @defgroup ADC_LL_EF_FLAG_Management ADC flag management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -6787,6 +6853,7 @@ __STATIC_INLINE uint32_t LL_ADC_IsActiveFlag_SLV_AWD3(ADC_Common_TypeDef *ADCxy_
   */
 
 /** @defgroup ADC_LL_EF_IT_Management ADC IT management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -7170,6 +7237,7 @@ __STATIC_INLINE uint32_t LL_ADC_IsEnabledIT_AWD3(ADC_TypeDef *ADCx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup ADC_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

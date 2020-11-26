@@ -39,6 +39,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup SWPMI_Exported_Types SWPMI Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -154,11 +155,13 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SWPMI_Exported_Constants SWPMI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /**
   * @defgroup SWPMI_Error_Code SWPMI Error Code Bitmap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_SWPMI_ERROR_NONE                  ((uint32_t)0x00000000) /*!< No error              */
@@ -177,6 +180,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
   */
 
 /** @defgroup SWPMI_Voltage_Class SWPMI Voltage Class
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SWPMI_VOLTAGE_CLASS_C                ((uint32_t)0x00000000)
@@ -186,6 +190,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
   */
 
 /** @defgroup SWPMI_Tx_Buffering_Mode SWPMI Tx Buffering Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SWPMI_TX_NO_SOFTWAREBUFFER           ((uint32_t)0x00000000)
@@ -196,6 +201,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
   */
 
 /** @defgroup SWPMI_Rx_Buffering_Mode SWPMI Rx Buffering Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SWPMI_RX_NO_SOFTWAREBUFFER           ((uint32_t)0x00000000)
@@ -206,6 +212,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
   */
 
 /** @defgroup SWPMI_Flags SWPMI Status Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0xXXXXXXXX
   *           - 0xXXXXXXXX  : Flag mask in the ISR register
   * @{
@@ -227,6 +234,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
   */
 
 /** @defgroup SWPMI_Interrupt_definition SWPMI Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0xXXXX
   *           - 0xXXXX  : Flag mask in the IER register
   * @{
@@ -251,6 +259,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup SWPMI_Exported_Macros SWPMI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -410,6 +419,7 @@ typedef void (*pSWPMI_CallbackTypeDef)(SWPMI_HandleTypeDef *hswpmi);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SWPMI_Exported_Functions SWPMI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Initialization/de-initialization functions  ********************************/
@@ -454,6 +464,7 @@ uint32_t               HAL_SWPMI_GetError(SWPMI_HandleTypeDef *hswpmi);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup SWPMI_Private_Types SWPMI Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -463,6 +474,7 @@ uint32_t               HAL_SWPMI_GetError(SWPMI_HandleTypeDef *hswpmi);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup SWPMI_Private_Variables SWPMI Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -472,6 +484,7 @@ uint32_t               HAL_SWPMI_GetError(SWPMI_HandleTypeDef *hswpmi);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup SWPMI_Private_Constants SWPMI Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -481,6 +494,7 @@ uint32_t               HAL_SWPMI_GetError(SWPMI_HandleTypeDef *hswpmi);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SWPMI_Private_Macros SWPMI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

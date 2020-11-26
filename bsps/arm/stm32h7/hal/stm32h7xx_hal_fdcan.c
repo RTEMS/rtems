@@ -190,6 +190,7 @@
   */
 
 /** @defgroup FDCAN FDCAN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief FDCAN HAL module driver
   * @{
   */
@@ -253,10 +254,12 @@ static void FDCAN_CopyMessageToRAM(FDCAN_HandleTypeDef *hfdcan, FDCAN_TxHeaderTy
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup FDCAN_Exported_Functions FDCAN Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -1605,6 +1608,7 @@ HAL_StatusTypeDef HAL_FDCAN_UnRegisterTTGlobalTimeCallback(FDCAN_HandleTypeDef *
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group2 Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    FDCAN Configuration functions.
  *
 @verbatim
@@ -2538,6 +2542,7 @@ HAL_StatusTypeDef HAL_FDCAN_DisableEdgeFiltering(FDCAN_HandleTypeDef *hfdcan)
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group3 Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Control functions
  *
 @verbatim
@@ -3389,6 +3394,7 @@ HAL_StatusTypeDef HAL_FDCAN_ExitRestrictedOperationMode(FDCAN_HandleTypeDef *hfd
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group4 TT Configuration and control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    TT Configuration and control functions
  *
 @verbatim
@@ -4886,6 +4892,7 @@ HAL_StatusTypeDef HAL_FDCAN_TT_GetOperationStatus(FDCAN_HandleTypeDef *hfdcan, F
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group5 Interrupts management
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Interrupts management
  *
 @verbatim
@@ -5605,6 +5612,7 @@ void HAL_FDCAN_IRQHandler(FDCAN_HandleTypeDef *hfdcan)
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group6 Callback functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   FDCAN Callback functions
  *
 @verbatim
@@ -5949,6 +5957,7 @@ __weak void HAL_FDCAN_TT_GlobalTimeCallback(FDCAN_HandleTypeDef *hfdcan, uint32_
   */
 
 /** @defgroup FDCAN_Exported_Functions_Group7 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   FDCAN Peripheral State functions
  *
 @verbatim

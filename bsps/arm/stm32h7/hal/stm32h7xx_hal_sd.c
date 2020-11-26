@@ -284,6 +284,7 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup SD_Private_Functions SD Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static uint32_t SD_InitCard       (SD_HandleTypeDef *hsd);

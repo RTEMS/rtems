@@ -191,6 +191,7 @@ all interrupt callbacks are set to the corresponding weak functions:
   */
 
 /** @defgroup TIM TIM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief TIM HAL module driver
   * @{
   */
@@ -231,10 +232,12 @@ static HAL_StatusTypeDef TIM_SlaveTimer_SetConfig(TIM_HandleTypeDef *htim,
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup TIM_Exported_Functions TIM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIM_Exported_Functions_Group1 TIM Time Base functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Time Base functions
   *
 @verbatim
@@ -567,6 +570,7 @@ HAL_StatusTypeDef HAL_TIM_Base_Stop_DMA(TIM_HandleTypeDef *htim)
   */
 
 /** @defgroup TIM_Exported_Functions_Group2 TIM Output Compare functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM Output Compare functions
   *
 @verbatim
@@ -1144,6 +1148,7 @@ HAL_StatusTypeDef HAL_TIM_OC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   */
 
 /** @defgroup TIM_Exported_Functions_Group3 TIM PWM functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM PWM functions
   *
 @verbatim
@@ -1722,6 +1727,7 @@ HAL_StatusTypeDef HAL_TIM_PWM_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel
   */
 
 /** @defgroup TIM_Exported_Functions_Group4 TIM Input Capture functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM Input Capture functions
   *
 @verbatim
@@ -2257,6 +2263,7 @@ HAL_StatusTypeDef HAL_TIM_IC_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel)
   */
 
 /** @defgroup TIM_Exported_Functions_Group5 TIM One Pulse functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM One Pulse functions
   *
 @verbatim
@@ -2571,6 +2578,7 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Out
   */
 
 /** @defgroup TIM_Exported_Functions_Group6 TIM Encoder functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM Encoder functions
   *
 @verbatim
@@ -3158,6 +3166,7 @@ HAL_StatusTypeDef HAL_TIM_Encoder_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Cha
   * @}
   */
 /** @defgroup TIM_Exported_Functions_Group7 TIM IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM IRQ handler management
   *
 @verbatim
@@ -3372,6 +3381,7 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
   */
 
 /** @defgroup TIM_Exported_Functions_Group8 TIM Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM Peripheral Control functions
   *
 @verbatim
@@ -5056,6 +5066,7 @@ uint32_t HAL_TIM_ReadCapturedValue(TIM_HandleTypeDef *htim, uint32_t Channel)
   */
 
 /** @defgroup TIM_Exported_Functions_Group9 TIM Callbacks functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    TIM Callbacks functions
   *
 @verbatim
@@ -5722,6 +5733,7 @@ HAL_StatusTypeDef HAL_TIM_UnRegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_Ca
   */
 
 /** @defgroup TIM_Exported_Functions_Group10 TIM Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   TIM Peripheral State functions
   *
 @verbatim
@@ -5805,6 +5817,7 @@ HAL_TIM_StateTypeDef HAL_TIM_Encoder_GetState(TIM_HandleTypeDef *htim)
   */
 
 /** @defgroup TIM_Private_Functions TIM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

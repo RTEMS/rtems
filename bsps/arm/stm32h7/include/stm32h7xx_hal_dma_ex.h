@@ -38,6 +38,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DMAEx_Exported_Types DMAEx Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMAEx Exported types
   * @{
   */
@@ -99,11 +100,13 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup DMAEx_Exported_Constants DMA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx Exported constants
   * @{
   */
 
 /** @defgroup DMAEx_MUX_SyncSignalID_selection DMAEx MUX SyncSignalID selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX SyncSignalID selection
   * @{
   */
@@ -138,6 +141,7 @@ typedef struct
   */
 
 /** @defgroup DMAEx_MUX_SyncPolarity_selection DMAEx MUX SyncPolarity selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX SyncPolarity selection
   * @{
   */
@@ -152,6 +156,7 @@ typedef struct
 
 
 /** @defgroup DMAEx_MUX_SignalGeneratorID_selection DMAEx MUX SignalGeneratorID selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX SignalGeneratorID selection
   * @{
   */
@@ -207,6 +212,7 @@ typedef struct
   */
 
 /** @defgroup DMAEx_MUX_RequestGeneneratorPolarity_selection DMAEx MUX RequestGeneneratorPolarity selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx MUX RequestGeneneratorPolarity selection
   * @{
   */
@@ -225,11 +231,13 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DMAEx_Exported_Functions DMAEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   DMAEx Exported functions
   * @{
   */
 
 /** @defgroup DMAEx_Exported_Functions_Group1 Extended features functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief   Extended features functions
   * @{
   */
@@ -253,6 +261,7 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DMAEx_Private_Macros DMA Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    DMAEx private macros
   * @{
   */
@@ -288,6 +297,7 @@ void HAL_DMAEx_MUX_IRQHandler(DMA_HandleTypeDef *hdma);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup DMAEx_Private_Functions DMAEx Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMAEx Private functions
   * @{
   */

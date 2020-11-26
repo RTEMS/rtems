@@ -100,6 +100,7 @@
   */
 
 /** @defgroup DMA DMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief DMA HAL module driver
   * @{
   */

@@ -309,6 +309,7 @@
   */
 
 /** @defgroup ADC ADC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief ADC HAL module driver
   * @{
   */
@@ -319,6 +320,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /** @defgroup ADC_Private_Constants ADC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ADC_CFGR_FIELDS_1  ((uint32_t)(ADC_CFGR_RES    |\
@@ -358,10 +360,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup ADC_Exported_Functions ADC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ADC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    ADC Initialization and Configuration functions
   *
 @verbatim
@@ -1213,6 +1217,7 @@ HAL_StatusTypeDef HAL_ADC_UnRegisterCallback(ADC_HandleTypeDef *hadc, HAL_ADC_Ca
   */
 
 /** @defgroup ADC_Exported_Functions_Group2 ADC Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    ADC IO operation functions
   *
 @verbatim
@@ -2610,6 +2615,7 @@ __weak void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
   */
 
 /** @defgroup ADC_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripheral Control functions
   *
 @verbatim
@@ -3135,6 +3141,7 @@ HAL_StatusTypeDef HAL_ADC_AnalogWDGConfig(ADC_HandleTypeDef *hadc, ADC_AnalogWDG
   */
 
 /** @defgroup ADC_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    ADC Peripheral State functions
   *
 @verbatim
@@ -3192,6 +3199,7 @@ uint32_t HAL_ADC_GetError(ADC_HandleTypeDef *hadc)
   */
 
 /** @defgroup ADC_Private_Functions ADC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

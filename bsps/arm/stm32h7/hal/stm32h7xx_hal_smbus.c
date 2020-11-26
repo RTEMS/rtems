@@ -172,6 +172,7 @@
   */
 
 /** @defgroup SMBUS SMBUS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SMBUS HAL module driver
   * @{
   */
@@ -181,6 +182,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup SMBUS_Private_Define SMBUS Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIMING_CLEAR_MASK   (0xF0FFFFFFUL)     /*!< SMBUS TIMING clear register Mask */
@@ -222,10 +224,12 @@ static void SMBUS_TransferConfig(struct __SMBUS_HandleTypeDef *hsmbus,  uint16_t
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup SMBUS_Exported_Functions SMBUS Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SMBUS_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -858,6 +862,7 @@ HAL_StatusTypeDef HAL_SMBUS_UnRegisterAddrCallback(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /** @defgroup SMBUS_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Data transfers functions
  *
 @verbatim
@@ -1549,6 +1554,7 @@ HAL_StatusTypeDef HAL_SMBUS_IsDeviceReady(SMBUS_HandleTypeDef *hsmbus, uint16_t 
   */
 
 /** @defgroup SMBUS_IRQ_Handler_and_Callbacks IRQ Handler and Callbacks
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
@@ -1744,6 +1750,7 @@ __weak void HAL_SMBUS_ErrorCallback(SMBUS_HandleTypeDef *hsmbus)
   */
 
 /** @defgroup SMBUS_Exported_Functions_Group3 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State and Errors functions
  *
 @verbatim

@@ -221,6 +221,7 @@
   */
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup UTILS_LL_Private_Functions UTILS Private functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static uint32_t    UTILS_GetPLLOutputFrequency(uint32_t PLL_InputFrequency, LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct);

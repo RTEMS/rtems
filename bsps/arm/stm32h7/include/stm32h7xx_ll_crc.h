@@ -35,6 +35,7 @@ extern "C" {
 #if defined(CRC)
 
 /** @defgroup CRC_LL CRC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -46,10 +47,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CRC_LL_Exported_Constants CRC Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_LL_EC_POLYLENGTH Polynomial length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_POLYLENGTH_32B              0x00000000U                              /*!< 32 bits Polynomial size */
@@ -61,6 +64,7 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_INDATA_REVERSE Input Data Reverse
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_INDATA_REVERSE_NONE         0x00000000U                              /*!< Input Data bit order not affected */
@@ -72,6 +76,7 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_OUTDATA_REVERSE Output Data Reverse
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_OUTDATA_REVERSE_NONE        0x00000000U                               /*!< Output Data bit order not affected */
@@ -81,6 +86,7 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_Default_Polynomial_Value    Default CRC generating polynomial value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Normal representation of this polynomial value is
   *           X^32 + X^26 + X^23 + X^22 + X^16 + X^12 + X^11 + X^10 +X^8 + X^7 + X^5 + X^4 + X^2 + X + 1 .
   * @{
@@ -91,6 +97,7 @@ extern "C" {
   */
 
 /** @defgroup CRC_LL_EC_Default_InitValue    Default CRC computation initialization value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_CRC_DEFAULT_CRC_INITVALUE       0xFFFFFFFFU                               /*!< Default CRC computation initialization value */
@@ -104,10 +111,12 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup CRC_LL_Exported_Macros CRC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -138,10 +147,12 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CRC_LL_Exported_Functions CRC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CRC_LL_EF_Configuration CRC Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -312,6 +323,7 @@ __STATIC_INLINE uint32_t LL_CRC_GetPolynomialCoef(CRC_TypeDef *CRCx)
   */
 
 /** @defgroup CRC_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -431,6 +443,7 @@ __STATIC_INLINE void LL_CRC_Write_IDR(CRC_TypeDef *CRCx, uint32_t InData)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup CRC_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

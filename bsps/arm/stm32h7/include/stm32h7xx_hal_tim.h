@@ -38,6 +38,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup TIM_Exported_Types TIM Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -418,10 +419,12 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup TIM_Exported_Constants TIM Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup TIM_ClearInput_Source TIM Clear Input Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLEARINPUTSOURCE_NONE           0x00000000U   /*!< OCREF_CLR is disabled */
@@ -431,6 +434,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_DMA_Base_address TIM DMA Base Address
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_DMABASE_CR1                    0x00000000U
@@ -466,6 +470,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Event_Source TIM Event Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_EVENTSOURCE_UPDATE              TIM_EGR_UG     /*!< Reinitialize the counter and generates an update of the registers */
@@ -482,6 +487,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Input_Channel_Polarity TIM Input Channel polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  TIM_INPUTCHANNELPOLARITY_RISING      0x00000000U                       /*!< Polarity for TIx source */
@@ -492,6 +498,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_ETR_Polarity TIM ETR Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_ETRPOLARITY_INVERTED              TIM_SMCR_ETP                      /*!< Polarity for ETR source */
@@ -501,6 +508,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_ETR_Prescaler TIM ETR Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_ETRPRESCALER_DIV1                 0x00000000U                       /*!< No prescaler is used */
@@ -512,6 +520,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Counter_Mode TIM Counter Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_COUNTERMODE_UP                 0x00000000U                          /*!< Counter used as up-counter   */
@@ -524,6 +533,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Update_Interrupt_Flag_Remap TIM Update Interrupt Flag Remap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_UIFREMAP_DISABLE               0x00000000U                          /*!< Update interrupt flag remap disabled */
@@ -533,6 +543,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_ClockDivision TIM Clock Division
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLOCKDIVISION_DIV1             0x00000000U                          /*!< Clock division: tDTS=tCK_INT   */
@@ -543,6 +554,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_State TIM Output Compare State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OUTPUTSTATE_DISABLE            0x00000000U                          /*!< Capture/Compare 1 output disabled */
@@ -552,6 +564,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_AutoReloadPreload TIM Auto-Reload Preload
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_AUTORELOAD_PRELOAD_DISABLE                0x00000000U               /*!< TIMx_ARR register is not buffered */
@@ -562,6 +575,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Fast_State TIM Output Fast State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OCFAST_DISABLE                 0x00000000U                          /*!< Output Compare fast disable */
@@ -571,6 +585,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_N_State TIM Complementary Output Compare State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OUTPUTNSTATE_DISABLE           0x00000000U                          /*!< OCxN is disabled  */
@@ -580,6 +595,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_Polarity TIM Output Compare Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OCPOLARITY_HIGH                0x00000000U                          /*!< Capture/Compare output polarity  */
@@ -589,6 +605,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_N_Polarity TIM Complementary Output Compare Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OCNPOLARITY_HIGH               0x00000000U                          /*!< Capture/Compare complementary output polarity */
@@ -598,6 +615,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_Idle_State TIM Output Compare Idle State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OCIDLESTATE_SET                TIM_CR2_OIS1                         /*!< Output Idle state: OCx=1 when MOE=0 */
@@ -607,6 +625,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_N_Idle_State TIM Complementary Output Compare Idle State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OCNIDLESTATE_SET               TIM_CR2_OIS1N                        /*!< Complementary output Idle state: OCxN=1 when MOE=0 */
@@ -616,6 +635,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Input_Capture_Polarity TIM Input Capture Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  TIM_ICPOLARITY_RISING             TIM_INPUTCHANNELPOLARITY_RISING      /*!< Capture triggered by rising edge on timer input                  */
@@ -626,6 +646,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Encoder_Input_Polarity TIM Encoder Input Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  TIM_ENCODERINPUTPOLARITY_RISING   TIM_INPUTCHANNELPOLARITY_RISING      /*!< Encoder input with rising edge polarity  */
@@ -635,6 +656,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Input_Capture_Selection TIM Input Capture Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_ICSELECTION_DIRECTTI           TIM_CCMR1_CC1S_0                     /*!< TIM Input 1, 2, 3 or 4 is selected to be
@@ -647,6 +669,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Input_Capture_Prescaler TIM Input Capture Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_ICPSC_DIV1                     0x00000000U                          /*!< Capture performed each time an edge is detected on the capture input */
@@ -658,6 +681,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_One_Pulse_Mode TIM One Pulse Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OPMODE_SINGLE                  TIM_CR1_OPM                          /*!< Counter stops counting at the next update event */
@@ -667,6 +691,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Encoder_Mode TIM Encoder Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_ENCODERMODE_TI1                      TIM_SMCR_SMS_0                                                      /*!< Quadrature encoder mode 1, x2 mode, counts up/down on TI1FP1 edge depending on TI2FP2 level  */
@@ -677,6 +702,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Interrupt_definition TIM interrupt Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_IT_UPDATE                      TIM_DIER_UIE                         /*!< Update interrupt            */
@@ -692,6 +718,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Commutation_Source  TIM Commutation Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_COMMUTATION_TRGI              TIM_CR2_CCUS                          /*!< When Capture/compare control bits are preloaded, they are updated by setting the COMG bit or when an rising edge occurs on trigger input */
@@ -701,6 +728,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_DMA_sources TIM DMA Sources
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_DMA_UPDATE                     TIM_DIER_UDE                         /*!< DMA request is triggered by the update event */
@@ -715,6 +743,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Flag_definition TIM Flag Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_FLAG_UPDATE                    TIM_SR_UIF                           /*!< Update interrupt flag         */
@@ -738,6 +767,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Channel TIM Channel
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CHANNEL_1                      0x00000000U                          /*!< Capture/compare channel 1 identifier      */
@@ -752,6 +782,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Clock_Source TIM Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLOCKSOURCE_ETRMODE2    TIM_SMCR_ETPS_1      /*!< External clock source mode 2                          */
@@ -774,6 +805,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Clock_Polarity TIM Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLOCKPOLARITY_INVERTED           TIM_ETRPOLARITY_INVERTED           /*!< Polarity for ETRx clock sources */
@@ -786,6 +818,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Clock_Prescaler TIM Clock Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLOCKPRESCALER_DIV1                 TIM_ETRPRESCALER_DIV1           /*!< No prescaler is used                                                     */
@@ -797,6 +830,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_ClearInput_Polarity TIM Clear Input Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLEARINPUTPOLARITY_INVERTED           TIM_ETRPOLARITY_INVERTED      /*!< Polarity for ETRx pin */
@@ -806,6 +840,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_ClearInput_Prescaler TIM Clear Input Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CLEARINPUTPRESCALER_DIV1              TIM_ETRPRESCALER_DIV1         /*!< No prescaler is used                                                   */
@@ -817,6 +852,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_OSSR_Off_State_Selection_for_Run_mode_state TIM OSSR OffState Selection for Run mode state
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OSSR_ENABLE                          TIM_BDTR_OSSR                  /*!< When inactive, OC/OCN outputs are enabled (still controlled by the timer)           */
@@ -826,6 +862,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_OSSI_Off_State_Selection_for_Idle_mode_state TIM OSSI OffState Selection for Idle mode state
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OSSI_ENABLE                          TIM_BDTR_OSSI                  /*!< When inactive, OC/OCN outputs are enabled (still controlled by the timer)           */
@@ -834,6 +871,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   * @}
   */
 /** @defgroup TIM_Lock_level  TIM Lock level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_LOCKLEVEL_OFF                  0x00000000U                          /*!< LOCK OFF     */
@@ -845,6 +883,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Break_Input_enable_disable TIM Break Input Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAK_ENABLE                   TIM_BDTR_BKE                         /*!< Break input BRK is enabled  */
@@ -854,6 +893,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Break_Polarity TIM Break Input Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAKPOLARITY_LOW              0x00000000U                          /*!< Break input BRK is active low  */
@@ -863,6 +903,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Break2_Input_enable_disable TIM Break input 2 Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAK2_DISABLE                 0x00000000U                          /*!< Break input BRK2 is disabled  */
@@ -872,6 +913,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Break2_Polarity TIM Break Input 2 Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAK2POLARITY_LOW             0x00000000U                          /*!< Break input BRK2 is active low   */
@@ -881,6 +923,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_AOE_Bit_Set_Reset TIM Automatic Output Enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_AUTOMATICOUTPUT_DISABLE        0x00000000U                          /*!< MOE can be set only by software */
@@ -891,6 +934,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Group_Channel5 Group Channel 5 and Channel 1, 2 or 3
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_GROUPCH5_NONE                  0x00000000U                          /* !< No effect of OC5REF on OC1REFC, OC2REFC and OC3REFC */
@@ -902,6 +946,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Master_Mode_Selection TIM Master Mode Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TRGO_RESET            0x00000000U                                      /*!< TIMx_EGR.UG bit is used as trigger output (TRGO)              */
@@ -917,6 +962,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Master_Mode_Selection_2 TIM Master Mode Selection 2 (TRGO2)
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TRGO2_RESET                          0x00000000U                                                         /*!< TIMx_EGR.UG bit is used as trigger output (TRGO2)              */
@@ -940,6 +986,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Master_Slave_Mode TIM Master/Slave Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_MASTERSLAVEMODE_ENABLE         TIM_SMCR_MSM                         /*!< No action */
@@ -949,6 +996,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Slave_Mode TIM Slave mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_SLAVEMODE_DISABLE                0x00000000U                                        /*!< Slave mode disabled           */
@@ -962,6 +1010,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Output_Compare_and_PWM_modes TIM Output Compare and PWM Modes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_OCMODE_TIMING                   0x00000000U                                              /*!< Frozen                                 */
@@ -983,6 +1032,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Trigger_Selection TIM Trigger Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TS_ITR0          0x00000000U                                                       /*!< Internal Trigger 0 (ITR0)              */
@@ -1009,6 +1059,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Trigger_Polarity TIM Trigger Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TRIGGERPOLARITY_INVERTED           TIM_ETRPOLARITY_INVERTED               /*!< Polarity for ETRx trigger sources             */
@@ -1021,6 +1072,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Trigger_Prescaler TIM Trigger Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TRIGGERPRESCALER_DIV1             TIM_ETRPRESCALER_DIV1             /*!< No prescaler is used                                                       */
@@ -1032,6 +1084,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_TI1_Selection TIM TI1 Input Selection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_TI1SELECTION_CH1               0x00000000U                          /*!< The TIMx_CH1 pin is connected to TI1 input */
@@ -1041,6 +1094,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_DMA_Burst_Length TIM DMA Burst Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_DMABURSTLENGTH_1TRANSFER       0x00000000U                          /*!< The transfer is done to 1 register starting trom TIMx_CR1 + TIMx_DCR.DBA   */
@@ -1066,6 +1120,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup DMA_Handle_index TIM DMA Handle Index
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_DMA_ID_UPDATE                ((uint16_t) 0x0000)       /*!< Index of the DMA handle used for Update DMA requests */
@@ -1080,6 +1135,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup Channel_CC_State TIM Capture/Compare Channel State
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_CCx_ENABLE                   0x00000001U                            /*!< Input or output channel is enabled */
@@ -1091,6 +1147,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
   */
 
 /** @defgroup TIM_Break_System TIM Break System
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define TIM_BREAK_SYSTEM_ECC                 SYSCFG_CFGR2_ECCL   /*!< Enables and locks the ECC error signal with Break Input of TIM1/8/15/16/17 */
@@ -1108,6 +1165,7 @@ typedef  void (*pTIM_CallbackTypeDef)(TIM_HandleTypeDef *htim);  /*!< pointer to
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup TIM_Exported_Macros TIM Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1671,6 +1729,7 @@ mode.
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup TIM_Private_Constants TIM Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* The counter of a timer instance is disabled only if all the CCx and CCxN
@@ -1684,6 +1743,7 @@ mode.
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup TIM_Private_Macros TIM Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_TIM_CLEARINPUT_SOURCE(__MODE__)  (((__MODE__) == TIM_CLEARINPUTSOURCE_NONE)      || \
@@ -2162,6 +2222,7 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim);
   */
 
 /** @defgroup TIM_Exported_Functions_Group8 TIM Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Peripheral Control functions
   * @{
   */
@@ -2196,6 +2257,7 @@ uint32_t HAL_TIM_ReadCapturedValue(TIM_HandleTypeDef *htim, uint32_t Channel);
   */
 
 /** @defgroup TIM_Exported_Functions_Group9 TIM Callbacks functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   TIM Callbacks functions
   * @{
   */
@@ -2223,6 +2285,7 @@ HAL_StatusTypeDef HAL_TIM_UnRegisterCallback(TIM_HandleTypeDef *htim, HAL_TIM_Ca
   */
 
 /** @defgroup TIM_Exported_Functions_Group10 TIM Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief  Peripheral State functions
   * @{
   */
@@ -2244,6 +2307,7 @@ HAL_TIM_StateTypeDef HAL_TIM_Encoder_GetState(TIM_HandleTypeDef *htim);
 
 /* Private functions----------------------------------------------------------*/
 /** @defgroup TIM_Private_Functions TIM Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 void TIM_Base_SetConfig(TIM_TypeDef *TIMx, TIM_Base_InitTypeDef *Structure);

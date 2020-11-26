@@ -48,6 +48,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL CORTEX
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -61,10 +62,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup CORTEX_LL_Exported_Constants CORTEX Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORTEX_LL_EC_CLKSOURCE_HCLK SYSTICK Clock Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SYSTICK_CLKSOURCE_HCLK_DIV8     0x00000000UL                /*!< AHB clock divided by 8 selected as SysTick clock source.*/
@@ -74,6 +77,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_FAULT Handler Fault type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_HANDLER_FAULT_USG               SCB_SHCSR_USGFAULTENA_Msk              /*!< Usage fault */
@@ -86,6 +90,7 @@ extern "C" {
 #if __MPU_PRESENT
 
 /** @defgroup CORTEX_LL_EC_CTRL_HFNMI_PRIVDEF MPU Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_CTRL_HFNMI_PRIVDEF_NONE     0x00000000UL                                      /*!< Disable NMI and privileged SW access */
@@ -97,6 +102,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_REGION MPU Region Number
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_REGION_NUMBER0              0x00UL /*!< REGION Number 0  */
@@ -122,6 +128,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_REGION_SIZE MPU Region Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_REGION_SIZE_32B             (0x04UL << MPU_RASR_SIZE_Pos) /*!< 32B Size of the MPU protection region */
@@ -157,6 +164,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_REGION_PRIVILEDGES MPU Region Privileges
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_REGION_NO_ACCESS            (0x00UL << MPU_RASR_AP_Pos) /*!< No access*/
@@ -170,6 +178,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_TEX MPU TEX Level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_TEX_LEVEL0                  (0x00UL << MPU_RASR_TEX_Pos) /*!< b000 for TEX bits */
@@ -181,6 +190,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_INSTRUCTION_ACCESS MPU Instruction Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_INSTRUCTION_ACCESS_ENABLE   0x00UL            /*!< Instruction fetches enabled */
@@ -190,6 +200,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_SHAREABLE_ACCESS MPU Shareable Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_ACCESS_SHAREABLE            MPU_RASR_S_Msk   /*!< Shareable memory attribute */
@@ -199,6 +210,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_CACHEABLE_ACCESS MPU Cacheable Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_ACCESS_CACHEABLE            MPU_RASR_C_Msk   /*!< Cacheable memory attribute */
@@ -208,6 +220,7 @@ extern "C" {
   */
 
 /** @defgroup CORTEX_LL_EC_BUFFERABLE_ACCESS MPU Bufferable Access
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_MPU_ACCESS_BUFFERABLE           MPU_RASR_B_Msk   /*!< Bufferable memory attribute */
@@ -224,10 +237,12 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup CORTEX_LL_Exported_Functions CORTEX Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup CORTEX_LL_EF_SYSTICK SYSTICK
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -302,6 +317,7 @@ __STATIC_INLINE uint32_t LL_SYSTICK_IsEnabledIT(void)
   */
 
 /** @defgroup CORTEX_LL_EF_LOW_POWER_MODE LOW POWER MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -380,6 +396,7 @@ __STATIC_INLINE void LL_LPM_DisableEventOnPend(void)
   */
 
 /** @defgroup CORTEX_LL_EF_HANDLER HANDLER
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -418,6 +435,7 @@ __STATIC_INLINE void LL_HANDLER_DisableFault(uint32_t Fault)
   */
 
 /** @defgroup CORTEX_LL_EF_MCU_INFO MCU INFO
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -477,6 +495,7 @@ __STATIC_INLINE uint32_t LL_CPUID_GetRevision(void)
 
 #if __MPU_PRESENT
 /** @defgroup CORTEX_LL_EF_MPU MPU
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

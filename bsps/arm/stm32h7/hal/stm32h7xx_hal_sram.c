@@ -123,6 +123,7 @@
 #ifdef HAL_SRAM_MODULE_ENABLED
 
 /** @defgroup SRAM SRAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SRAM driver modules
   * @{
   */
@@ -145,10 +146,12 @@ static void SRAM_DMAError   (MDMA_HandleTypeDef *hmdma);
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup SRAM_Exported_Functions SRAM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SRAM_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions.
   *
   @verbatim
@@ -322,6 +325,7 @@ __weak void HAL_SRAM_DMA_XferErrorCallback(MDMA_HandleTypeDef *hmdma)
   */
 
 /** @defgroup SRAM_Exported_Functions_Group2 Input Output and memory control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Input Output and memory control functions
   *
   @verbatim
@@ -907,6 +911,7 @@ HAL_StatusTypeDef HAL_SRAM_RegisterDmaCallback(SRAM_HandleTypeDef *hsram, HAL_SR
   */
 
 /** @defgroup SRAM_Exported_Functions_Group3 Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Control functions
  *
 @verbatim
@@ -994,6 +999,7 @@ HAL_StatusTypeDef HAL_SRAM_WriteOperation_Disable(SRAM_HandleTypeDef *hsram)
   */
 
 /** @defgroup SRAM_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions
  *
 @verbatim

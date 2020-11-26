@@ -224,6 +224,7 @@
   */
 
 /** @defgroup JPEG JPEG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief JPEG HAL module driver.
   * @{
   */
@@ -456,10 +457,12 @@ static void JPEG_MDMAOutAbortCallback(MDMA_HandleTypeDef *hmdma);
   */
 
 /** @defgroup JPEG_Exported_Functions JPEG Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup JPEG_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and de-initialization functions.
   *
 @verbatim
@@ -1072,6 +1075,7 @@ HAL_StatusTypeDef HAL_JPEG_UnRegisterDataReadyCallback(JPEG_HandleTypeDef *hjpeg
   */
 
 /** @defgroup JPEG_Exported_Functions_Group2 Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    JPEG Configuration functions.
   *
 @verbatim
@@ -1484,6 +1488,7 @@ HAL_StatusTypeDef  HAL_JPEG_SetUserQuantTables(JPEG_HandleTypeDef *hjpeg, uint8_
   */
 
 /** @defgroup JPEG_Exported_Functions_Group3 encoding/decoding processing functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   processing functions.
   *
 @verbatim
@@ -2290,6 +2295,7 @@ HAL_StatusTypeDef HAL_JPEG_Abort(JPEG_HandleTypeDef *hjpeg)
   */
 
 /** @defgroup JPEG_Exported_Functions_Group4 JPEG Decode/Encode callback functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   JPEG process callback functions.
   *
 @verbatim
@@ -2419,6 +2425,7 @@ __weak void HAL_JPEG_DataReadyCallback(JPEG_HandleTypeDef *hjpeg, uint8_t *pData
 
 
 /** @defgroup JPEG_Exported_Functions_Group5 JPEG IRQ handler management
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   JPEG IRQ handler.
   *
 @verbatim
@@ -2470,6 +2477,7 @@ void HAL_JPEG_IRQHandler(JPEG_HandleTypeDef *hjpeg)
   */
 
 /** @defgroup JPEG_Exported_Functions_Group6 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Peripheral State functions.
   *
 @verbatim

@@ -249,6 +249,7 @@
   */
 
 /** @defgroup MMC MMC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief MMC HAL module driver
   * @{
   */
@@ -270,6 +271,7 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup MMC_Private_Functions MMC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static uint32_t MMC_InitCard(MMC_HandleTypeDef *hmmc);

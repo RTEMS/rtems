@@ -39,10 +39,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup USARTEx_Exported_Constants USARTEx Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USARTEx_Word_Length USARTEx Word Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_WORDLENGTH_7B                  ((uint32_t)USART_CR1_M1)   /*!< 7-bit long USART frame */
@@ -53,6 +55,7 @@ extern "C" {
   */
 
 /** @defgroup USARTEx_Slave_Select_management USARTEx Slave Select Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define USART_NSS_HARD                        0x00000000U          /*!< SPI slave selection depends on NSS input pin              */
@@ -63,6 +66,7 @@ extern "C" {
 
 
 /** @defgroup USARTEx_Slave_Mode USARTEx Synchronous Slave mode enable
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    USART SLAVE mode
   * @{
   */
@@ -73,6 +77,7 @@ extern "C" {
   */
 
 /** @defgroup USARTEx_FIFO_mode USARTEx FIFO  mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    USART FIFO  mode
   * @{
   */
@@ -83,6 +88,7 @@ extern "C" {
   */
 
 /** @defgroup USARTEx_TXFIFO_threshold_level USARTEx TXFIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    USART TXFIFO level
   * @{
   */
@@ -97,6 +103,7 @@ extern "C" {
   */
 
 /** @defgroup USARTEx_RXFIFO_threshold_level USARTEx RXFIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    USART RXFIFO level
   * @{
   */
@@ -116,6 +123,7 @@ extern "C" {
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup USARTEx_Private_Macros USARTEx Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

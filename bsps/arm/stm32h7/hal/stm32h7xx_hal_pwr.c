@@ -152,6 +152,7 @@
   */
 
 /** @defgroup PWR PWR
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief PWR HAL module driver
   * @{
   */
@@ -166,6 +167,7 @@
   */
 
 /** @defgroup PWR_PVD_Mode_Mask PWR PVD Mode Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if !defined (DUAL_CORE)
@@ -190,10 +192,12 @@
 /* Private functions ---------------------------------------------------------*/
 
 /** @defgroup PWR_Exported_Functions PWR Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_Exported_Functions_Group1 Initialization and De-Initialization Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and De-Initialization functions
   *
 @verbatim
@@ -258,6 +262,7 @@ void HAL_PWR_DisableBkUpAccess (void)
   */
 
 /** @defgroup PWR_Exported_Functions_Group2 Peripheral Control Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Power Control functions
   *
 @verbatim
@@ -777,6 +782,7 @@ void HAL_PWR_DisableSEVOnPend (void)
   */
 
 /** @defgroup PWR_Exported_Functions_Group3 Interrupt Handling Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Interrupt Handling functions
   *
 @verbatim

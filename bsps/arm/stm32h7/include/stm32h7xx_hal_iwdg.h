@@ -33,11 +33,13 @@ extern "C" {
   */
 
 /** @defgroup IWDG IWDG
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Types IWDG Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -74,10 +76,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Constants IWDG Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IWDG_Prescaler IWDG Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IWDG_PRESCALER_4                0x00000000u                                     /*!< IWDG prescaler set to 4   */
@@ -93,6 +97,7 @@ typedef struct
   */
 
 /** @defgroup IWDG_Window_option IWDG Window option
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IWDG_WINDOW_DISABLE             IWDG_WINR_WIN
@@ -107,6 +112,7 @@ typedef struct
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Macros IWDG Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -131,10 +137,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup IWDG_Exported_Functions  IWDG Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup IWDG_Exported_Functions_Group1 Initialization and Start functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Initialization/Start functions  ********************************************/
@@ -144,6 +152,7 @@ HAL_StatusTypeDef HAL_IWDG_Init(IWDG_HandleTypeDef *hiwdg);
   */
 
 /** @defgroup IWDG_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* I/O operation functions ****************************************************/
@@ -158,6 +167,7 @@ HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup IWDG_Private_Constants IWDG Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -175,6 +185,7 @@ HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *hiwdg);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup IWDG_Private_Macros IWDG Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -62,6 +62,7 @@
   */
 
 /** @defgroup PCD PCD
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief PCD HAL module driver
   * @{
   */
@@ -75,6 +76,7 @@
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup PCD_Private_Macros PCD Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PCD_MIN(a, b)  (((a) < (b)) ? (a) : (b))
@@ -85,6 +87,7 @@
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup PCD_Private_Functions PCD Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS)
@@ -98,10 +101,12 @@ static HAL_StatusTypeDef PCD_EP_OutSetupPacket_int(PCD_HandleTypeDef *hpcd, uint
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup PCD_Exported_Functions PCD Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PCD_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -968,6 +973,7 @@ HAL_StatusTypeDef HAL_PCD_UnRegisterLpmCallback(PCD_HandleTypeDef *hpcd)
   */
 
 /** @defgroup PCD_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Data transfers functions
  *
 @verbatim
@@ -1593,6 +1599,7 @@ __weak void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
   */
 
 /** @defgroup PCD_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   management functions
  *
 @verbatim
@@ -1946,6 +1953,7 @@ HAL_StatusTypeDef HAL_PCD_DeActivateRemoteWakeup(PCD_HandleTypeDef *hpcd)
   */
 
 /** @defgroup PCD_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions
  *
 @verbatim

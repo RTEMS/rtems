@@ -39,6 +39,7 @@ extern "C" {
 
 /* Exported typedef ----------------------------------------------------------*/
 /** @defgroup NOR_Exported_Types NOR Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -148,6 +149,7 @@ typedef void (*pNOR_CallbackTypeDef)(NOR_HandleTypeDef *hnor);
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup NOR_Exported_Macros NOR Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /** @brief Reset NOR handle state
@@ -242,6 +244,7 @@ HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(NOR_HandleTypeDef *hnor, uint32_t Addres
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup NOR_Private_Constants NOR Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* NOR device IDs addresses */
@@ -274,6 +277,7 @@ HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(NOR_HandleTypeDef *hnor, uint32_t Addres
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup NOR_Private_Macros NOR Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**

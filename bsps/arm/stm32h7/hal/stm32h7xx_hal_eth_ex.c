@@ -30,6 +30,7 @@
 #if defined(ETH)
 
 /** @defgroup ETHEx ETHEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief ETH HAL Extended module driver
   * @{
   */
@@ -38,6 +39,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup ETHEx_Private_Constants ETHEx Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define ETH_MACL4CR_MASK     (ETH_MACL3L4CR_L4PEN | ETH_MACL3L4CR_L4SPM | \
@@ -66,10 +68,12 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Exported functions ---------------------------------------------------------*/
 /** @defgroup ETHEx_Exported_Functions ETH Extended Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup ETHEx_Exported_Functions_Group1 Extended features functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Extended features functions
  *
 @verbatim

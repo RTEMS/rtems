@@ -158,6 +158,7 @@
   */
 
 /** @defgroup PWREx PWREx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief PWR Extended HAL module driver
   * @{
   */
@@ -172,6 +173,7 @@
   */
 
 /** @defgroup PWREx_AVD_Mode_Mask PWR Extended AVD Mode Mask
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define AVD_MODE_IT              (0x00010000U)
@@ -184,6 +186,7 @@
   */
 
 /** @defgroup PWREx_REG_SET_TIMEOUT PWR Extended Flag Setting Time Out Value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define PWR_FLAG_SETTING_DELAY   (1000U)
@@ -192,6 +195,7 @@
   */
 
 /** @defgroup PWREx_WakeUp_Pins_Offsets PWREx Wake-Up Pins masks and offsets
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Wake-Up Pins EXTI register mask */
@@ -217,10 +221,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup PWREx_Exported_Functions PWREx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWREx_Exported_Functions_Group1 Power Supply Control Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Power supply control functions
   *
 @verbatim
@@ -549,6 +555,7 @@ uint32_t HAL_PWREx_GetStopModeVoltageRange (void)
   */
 
 /** @defgroup PWREx_Exported_Functions_Group2 Low Power Control Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Low power control functions
   *
 @verbatim
@@ -1501,6 +1508,7 @@ __weak void HAL_PWREx_WKUP6_Callback (void)
   */
 
 /** @defgroup PWREx_Exported_Functions_Group3 Peripherals control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Peripherals control functions
   *
 @verbatim
@@ -1766,6 +1774,7 @@ void HAL_PWREx_DisableAnalogBooster (void)
   */
 
 /** @defgroup PWREx_Exported_Functions_Group4 Power Monitoring functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Power Monitoring functions
   *
 @verbatim

@@ -91,6 +91,7 @@
   */
 
 /** @defgroup RAMECC RAMECC
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief RAMECC HAL module driver
   * @{
   */

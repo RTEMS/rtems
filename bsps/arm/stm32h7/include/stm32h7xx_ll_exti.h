@@ -35,6 +35,7 @@ extern "C" {
 #if defined (EXTI)
 
 /** @defgroup EXTI_LL EXTI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -44,6 +45,7 @@ extern "C" {
 /* Private Macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup EXTI_LL_Private_Macros EXTI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -53,6 +55,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup EXTI_LL_ES_INIT EXTI Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -84,10 +87,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup EXTI_LL_Exported_Constants EXTI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup EXTI_LL_EC_LINE LINE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_EXTI_LINE_0                 EXTI_IMR1_IM0           /*!< Extended line 0 */
@@ -209,6 +214,7 @@ typedef struct
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 
 /** @defgroup EXTI_LL_EC_MODE Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_EXTI_MODE_IT               ((uint8_t)0x01U)      /*!< Cortex-M7 Interrupt Mode  */
@@ -230,6 +236,7 @@ typedef struct
   */
 
 /** @defgroup EXTI_LL_EC_TRIGGER Edge Trigger
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_EXTI_TRIGGER_NONE            ((uint8_t)0x00U) /*!< No Trigger Mode */
@@ -242,6 +249,7 @@ typedef struct
   */
 
 /** @defgroup EXTI_LL_D3_PEND_CLR D3 Pend Clear Source
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_EXTI_D3_PEND_CLR_DMACH6      ((uint8_t)0x00U) /*!< DMA ch6 event selected as D3 domain pendclear source */
@@ -270,10 +278,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup EXTI_LL_Exported_Macros EXTI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup EXTI_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -305,9 +315,11 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup EXTI_LL_Exported_Functions EXTI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 /** @defgroup EXTI_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1061,6 +1073,7 @@ __STATIC_INLINE uint32_t LL_C2_EXTI_IsEnabledIT_64_95(uint32_t ExtiLine)
   */
 
 /** @defgroup EXTI_LL_EF_Event_Management Event_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1809,6 +1822,7 @@ __STATIC_INLINE uint32_t LL_C2_EXTI_IsEnabledEvent_64_95(uint32_t ExtiLine)
   */
 
 /** @defgroup EXTI_LL_EF_Rising_Trigger_Management Rising_Trigger_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2043,6 +2057,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledRisingTrig_64_95(uint32_t ExtiLine)
   */
 
 /** @defgroup EXTI_LL_EF_Falling_Trigger_Management Falling_Trigger_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2276,6 +2291,7 @@ __STATIC_INLINE uint32_t LL_EXTI_IsEnabledFallingTrig_64_95(uint32_t ExtiLine)
   */
 
 /** @defgroup EXTI_LL_EF_Software_Interrupt_Management Software_Interrupt_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2361,6 +2377,7 @@ __STATIC_INLINE void LL_EXTI_GenerateSWI_64_95(uint32_t ExtiLine)
   */
 
 /** @defgroup EXTI_LL_EF_Flag_Management Flag_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3123,6 +3140,7 @@ __STATIC_INLINE uint32_t LL_D3_EXTI_GetPendClearSel_48_63(uint32_t ExtiLine)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup EXTI_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{,
   */
 

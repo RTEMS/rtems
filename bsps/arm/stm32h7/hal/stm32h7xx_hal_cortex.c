@@ -87,6 +87,7 @@
   */
 
 /** @defgroup CORTEX CORTEX
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief CORTEX HAL module driver
   * @{
   */
@@ -101,11 +102,13 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup CORTEX_Exported_Functions CORTEX Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 
 /** @defgroup CORTEX_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -235,6 +238,7 @@ uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb)
   */
 
 /** @defgroup CORTEX_Exported_Functions_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Cortex control functions
  *
 @verbatim

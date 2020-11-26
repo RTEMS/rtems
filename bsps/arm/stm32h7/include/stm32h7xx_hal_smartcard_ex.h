@@ -44,6 +44,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_Transmission_Completion_Indication SMARTCARD Transmission Completion Indication
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_TCBGT      SMARTCARD_IT_TCBGT /*!< SMARTCARD transmission complete before guard time */
@@ -53,6 +54,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_Advanced_Features_Initialization_Type SMARTCARD advanced feature initialization type
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_ADVFEATURE_NO_INIT                 0x00000000U    /*!< No advanced feature initialization                  */
@@ -69,6 +71,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_FIFO_mode SMARTCARD FIFO mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    SMARTCARD FIFO mode
   * @{
   */
@@ -79,6 +82,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_TXFIFO_threshold_level SMARTCARD TXFIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    SMARTCARD TXFIFO level
   * @{
   */
@@ -93,6 +97,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_RXFIFO_threshold_level SMARTCARD RXFIFO threshold level
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    SMARTCARD RXFIFO level
   * @{
   */
@@ -107,6 +112,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_Flags SMARTCARD Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 0xXXXX
   *           - 0xXXXX  : Flag mask in the ISR register
   * @{
@@ -136,6 +142,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_Interrupt_definition SMARTCARD Interrupts Definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   *        Elements values convention: 000ZZZZZ0XXYYYYYb
   *           - YYYYY  : Interrupt source position in the XX register (5 bits)
   *           - XX  : Interrupt source register (2 bits)
@@ -171,6 +178,7 @@ extern "C" {
   */
 
 /** @defgroup SMARTCARDEx_IT_CLEAR_Flags SMARTCARD Interruption Clear Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define SMARTCARD_CLEAR_PEF                 USART_ICR_PECF    /*!< SMARTCARD parity error clear flag          */
@@ -193,6 +201,7 @@ extern "C" {
 /* Exported macros -----------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup SMARTCARDEx_Private_Macros SMARTCARD Extended Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

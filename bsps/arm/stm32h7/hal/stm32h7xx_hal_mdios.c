@@ -134,6 +134,7 @@
   */
 #if defined (MDIOS)
 /** @defgroup MDIOS  MDIOS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HAL MDIOS module driver
   * @{
   */
@@ -159,10 +160,12 @@ static void MDIOS_InitCallbacksToDefault(MDIOS_HandleTypeDef *hmdios);
 /* Private functions ---------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup MDIOS_Exported_Functions MDIOS Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MDIOS_Exported_Functions_Group1 Initialization/de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief    Initialization and Configuration functions
   *
 @verbatim
@@ -530,6 +533,7 @@ HAL_StatusTypeDef HAL_MDIOS_UnRegisterCallback(MDIOS_HandleTypeDef *hmdios, HAL_
   */
 
 /** @defgroup MDIOS_Exported_Functions_Group2 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief MDIOS Read/Write functions
   *
 @verbatim
@@ -886,6 +890,7 @@ __weak void HAL_MDIOS_WakeUpCallback(MDIOS_HandleTypeDef *hmdios)
   */
 
 /** @defgroup MDIOS_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   MDIOS control functions
   *
 @verbatim

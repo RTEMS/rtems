@@ -36,12 +36,14 @@ extern "C" {
 #if defined (DMA1) || defined (DMA2)
 
 /** @defgroup DMA_LL DMA
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup DMA_LL_Private_Variables DMA Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Array used to get the DMA stream register offset versus stream index LL_DMA_STREAM_x */
@@ -77,6 +79,7 @@ static const uint8_t LL_DMA_STR_OFFSET_TAB[] =
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA_LL_ES_INIT DMA Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -180,10 +183,12 @@ typedef struct
 #endif /*USE_FULL_LL_DRIVER*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DMA_LL_Exported_Constants DMA Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA_LL_EC_STREAM STREAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_STREAM_0                   0x00000000U
@@ -201,6 +206,7 @@ typedef struct
 
 
 /** @defgroup DMA_LL_EC_DIRECTION DIRECTION
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_DIRECTION_PERIPH_TO_MEMORY 0x00000000U               /*!< Peripheral to memory direction */
@@ -211,6 +217,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_MODE MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_MODE_NORMAL                0x00000000U               /*!< Normal Mode                  */
@@ -221,6 +228,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_DOUBLEBUFFER_MODE DOUBLE BUFFER MODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_DOUBLEBUFFER_MODE_DISABLE  0x00000000U               /*!< Disable double buffering mode */
@@ -230,6 +238,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_PERIPH PERIPH
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_PERIPH_NOINCREMENT         0x00000000U               /*!< Peripheral increment mode Disable */
@@ -239,6 +248,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_MEMORY MEMORY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_MEMORY_NOINCREMENT         0x00000000U               /*!< Memory increment mode Disable */
@@ -248,6 +258,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_PDATAALIGN PDATAALIGN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_PDATAALIGN_BYTE            0x00000000U               /*!< Peripheral data alignment : Byte     */
@@ -258,6 +269,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_MDATAALIGN MDATAALIGN
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_MDATAALIGN_BYTE            0x00000000U               /*!< Memory data alignment : Byte     */
@@ -268,6 +280,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_OFFSETSIZE OFFSETSIZE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_OFFSETSIZE_PSIZE           0x00000000U               /*!< Peripheral increment offset size is linked to the PSIZE           */
@@ -277,6 +290,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_PRIORITY PRIORITY
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_PRIORITY_LOW               0x00000000U               /*!< Priority level : Low       */
@@ -289,6 +303,7 @@ typedef struct
 
 
 /** @defgroup DMA_LL_EC_MBURST MBURST
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_MBURST_SINGLE              0x00000000U                             /*!< Memory burst single transfer configuration      */
@@ -300,6 +315,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_PBURST PBURST
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_PBURST_SINGLE              0x00000000U                             /*!< Peripheral burst single transfer configuration      */
@@ -311,6 +327,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_FIFOMODE DMA_LL_FIFOMODE
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_FIFOMODE_DISABLE           0x00000000U                             /*!< FIFO mode disable (direct mode is enabled) */
@@ -320,6 +337,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_FIFOSTATUS_0 FIFOSTATUS 0
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_FIFOSTATUS_0_25            0x00000000U                             /*!< 0 < fifo_level < 1/4    */
@@ -333,6 +351,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_FIFOTHRESHOLD FIFOTHRESHOLD
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_FIFOTHRESHOLD_1_4          0x00000000U                             /*!< FIFO threshold 1 quart full configuration  */
@@ -344,6 +363,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EC_CURRENTTARGETMEM CURRENTTARGETMEM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_DMA_CURRENTTARGETMEM0          0x00000000U                             /*!< Set CurrentTarget Memory to Memory 0  */
@@ -358,10 +378,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup DMA_LL_Exported_Macros DMA Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA_LL_EM_WRITE_READ Common Write and read registers macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -385,6 +407,7 @@ typedef struct
   */
 
 /** @defgroup DMA_LL_EM_CONVERT_DMAxCHANNELy Convert DMAxStreamy
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -452,10 +475,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup DMA_LL_Exported_Functions DMA Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  * @{
  */
 
 /** @defgroup DMA_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -1984,6 +2009,7 @@ __STATIC_INLINE uint32_t LL_DMA_GetMemory1Address(DMA_TypeDef *DMAx, uint32_t St
   */
 
 /** @defgroup DMA_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2872,6 +2898,7 @@ __STATIC_INLINE void LL_DMA_ClearFlag_FE7(DMA_TypeDef *DMAx)
   */
 
 /** @defgroup DMA_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3211,6 +3238,7 @@ __STATIC_INLINE uint32_t LL_DMA_IsEnabledIT_FE(DMA_TypeDef *DMAx, uint32_t Strea
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup DMA_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -41,6 +41,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup DMA2D_Exported_Types DMA2D Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MAX_DMA2D_LAYER  2U  /*!< DMA2D maximum number of layers */
@@ -180,10 +181,12 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup DMA2D_Exported_Constants DMA2D Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup DMA2D_Error_Code DMA2D Error Code
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_DMA2D_ERROR_NONE        0x00000000U  /*!< No error             */
@@ -200,6 +203,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Mode DMA2D Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_M2M                   0x00000000U                         /*!< DMA2D memory to memory transfer mode */
@@ -213,6 +217,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Output_Color_Mode DMA2D Output Color Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_OUTPUT_ARGB8888       0x00000000U                           /*!< ARGB8888 DMA2D color mode */
@@ -225,6 +230,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Input_Color_Mode DMA2D Input Color Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_INPUT_ARGB8888        0x00000000U  /*!< ARGB8888 color mode */
@@ -244,6 +250,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Alpha_Mode DMA2D Alpha Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_NO_MODIF_ALPHA        0x00000000U  /*!< No modification of the alpha channel value */
@@ -255,6 +262,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Alpha_Inverted DMA2D Alpha Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_REGULAR_ALPHA         0x00000000U  /*!< No modification of the alpha channel value */
@@ -264,6 +272,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_RB_Swap DMA2D Red and Blue Swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_RB_REGULAR            0x00000000U  /*!< Select regular mode (RGB or ARGB) */
@@ -275,6 +284,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
 
 
 /** @defgroup DMA2D_Line_Offset_Mode DMA2D Line Offset Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_LOM_PIXELS            0x00000000U   /*!< Line offsets expressed in pixels */
@@ -284,6 +294,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Bytes_Swap DMA2D Bytes Swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_BYTES_REGULAR         0x00000000U      /*!< Bytes in regular order in output FIFO */
@@ -293,6 +304,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Chroma_Sub_Sampling DMA2D Chroma Sub Sampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_NO_CSS               0x00000000U  /*!< No chroma sub-sampling 4:4:4 */
@@ -303,6 +315,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_CLUT_CM DMA2D CLUT Color Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_CCM_ARGB8888          0x00000000U  /*!< ARGB8888 DMA2D CLUT color mode */
@@ -312,6 +325,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Interrupts DMA2D Interrupts
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_IT_CE                 DMA2D_CR_CEIE            /*!< Configuration Error Interrupt */
@@ -325,6 +339,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Flags DMA2D Flags
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_FLAG_CE               DMA2D_ISR_CEIF           /*!< Configuration Error Interrupt Flag */
@@ -338,6 +353,7 @@ typedef  void (*pDMA2D_CallbackTypeDef)(DMA2D_HandleTypeDef * hdma2d); /*!< Poin
   */
 
 /** @defgroup DMA2D_Aliases DMA2D API Aliases
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_DMA2D_DisableCLUT       HAL_DMA2D_CLUTLoading_Abort    /*!< Aliased to HAL_DMA2D_CLUTLoading_Abort for compatibility with legacy code */
@@ -366,6 +382,7 @@ typedef enum
   */
 /* Exported macros ------------------------------------------------------------*/
 /** @defgroup DMA2D_Exported_Macros DMA2D Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -565,6 +582,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_Maximum_Line_WaterMark DMA2D Maximum Line Watermark
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_LINE_WATERMARK_MAX            DMA2D_LWR_LW       /*!< DMA2D maximum line watermark */
@@ -573,6 +591,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_Color_Value DMA2D Color Value
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_COLOR_VALUE                 0x000000FFU  /*!< Color value mask */
@@ -581,6 +600,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_Max_Layer DMA2D Maximum Number of Layers
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_MAX_LAYER         2U         /*!< DMA2D maximum number of layers */
@@ -589,6 +609,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_Layers DMA2D Layers
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_BACKGROUND_LAYER             0x00000000U   /*!< DMA2D Background Layer (layer 0) */
@@ -598,6 +619,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_Offset DMA2D Offset
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_OFFSET                DMA2D_FGOR_LO            /*!< maximum Line Offset */
@@ -606,6 +628,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_Size DMA2D Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_PIXEL                 (DMA2D_NLR_PL >> 16U)    /*!< DMA2D maximum number of pixels per line */
@@ -615,6 +638,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
   */
 
 /** @defgroup DMA2D_CLUT_Size DMA2D CLUT Size
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define DMA2D_CLUT_SIZE             (DMA2D_FGPFCCR_CS >> 8U)  /*!< DMA2D maximum CLUT size */
@@ -629,6 +653,7 @@ uint32_t               HAL_DMA2D_GetError(DMA2D_HandleTypeDef *hdma2d);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup DMA2D_Private_Macros DMA2D Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define IS_DMA2D_LAYER(LAYER)                 (((LAYER) == DMA2D_BACKGROUND_LAYER) || ((LAYER) == DMA2D_FOREGROUND_LAYER))

@@ -33,6 +33,7 @@
 #if defined (EXTI)
 
 /** @defgroup EXTI_LL EXTI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

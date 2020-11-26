@@ -35,6 +35,7 @@ extern "C" {
 #if defined (PWR)
 
 /** @defgroup PWR_LL PWR
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -42,10 +43,12 @@ extern "C" {
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup PWR_LL_Private_Constants PWR Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_LL_WAKEUP_PIN_OFFSET Wake-Up Pins register offsets Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_PWR_WriteReg function
   * @{
   */
@@ -62,10 +65,12 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup PWR_LL_Exported_Constants PWR Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_PWR_WriteReg function
   * @{
   */
@@ -84,6 +89,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_PWR_ReadReg function
   * @{
   */
@@ -141,6 +147,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_MODE_PWR Power mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (PWR_CPUCR_PDDS_D2)
@@ -180,6 +187,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_REGU_VOLTAGE Run mode Regulator Voltage Scaling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #if defined (PWR_CPUCR_PDDS_D2)
@@ -198,6 +206,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_STOP_MODE_REGU_VOLTAGE Stop mode Regulator Voltage Scaling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_REGU_VOLTAGE_SVOS_SCALE5   PWR_CR1_SVOS_0                    /*!< Select voltage scale 5 when system enters STOP mode */
@@ -208,6 +217,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_REGU_MODE_DS_MODE  Regulator Mode In Deep Sleep Mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_REGU_DSMODE_MAIN           0x00000000U   /*!< Voltage Regulator in main mode during deepsleep mode      */
@@ -217,6 +227,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_PVDLEVEL Power Digital Voltage Level Detector
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_PVDLEVEL_0   PWR_CR1_PLS_LEV0  /*!< Voltage threshold detected by PVD 1.95 V */
@@ -232,6 +243,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_AVDLEVEL Power Analog Voltage Level Detector
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_AVDLEVEL_0   PWR_CR1_ALS_LEV0  /*!< Analog Voltage threshold detected by AVD 1.7 V */
@@ -244,6 +256,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_BATT_CHARG_RESISTOR Battery Charge Resistor
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_BATT_CHARG_RESISTOR_5K     0x00000000U   /*!< Charge the Battery through a 5 kO resistor    */
@@ -253,6 +266,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_WAKEUP_PIN  Wakeup Pins
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_WAKEUP_PIN1    PWR_WKUPEPR_WKUPEN1  /*!< Wake-Up pin 1 : PA0  */
@@ -266,6 +280,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_WAKEUP_PIN_PULL  Wakeup Pins pull configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_WAKEUP_PIN_NOPULL      0x00000000UL   /*!< Configure Wake-Up pin in no pull   */
@@ -276,6 +291,7 @@ extern "C" {
   */
 
 /** @defgroup PWR_LL_EC_SUPPLY_PWR Power supply source configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_PWR_LDO_SUPPLY                     PWR_CR3_LDOEN                                                               /*!< Core domains are suppplied from the LDO                                                                     */
@@ -298,10 +314,12 @@ extern "C" {
   */
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup PWR_LL_Exported_Macros PWR Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_LL_EM_WRITE_READ Common write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -328,10 +346,12 @@ extern "C" {
   */
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup PWR_LL_Exported_Functions PWR Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup PWR_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1822,6 +1842,7 @@ __STATIC_INLINE uint32_t LL_PWR_GetWakeUpPinPull(uint32_t WakeUpPin)
   */
 
 /** @defgroup PWR_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2213,6 +2234,7 @@ __STATIC_INLINE void LL_PWR_ClearFlag_WU1(void)
 
 #if defined (USE_FULL_LL_DRIVER)
 /** @defgroup PWR_LL_EF_Init De-initialization function
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_PWR_DeInit(void);

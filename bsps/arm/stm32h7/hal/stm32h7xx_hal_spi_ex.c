@@ -30,6 +30,7 @@
   */
 
 /** @defgroup SPIEx SPIEx
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief SPI Extended HAL module driver
   * @{
   */
@@ -43,10 +44,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup SPIEx_Exported_Functions SPIEx Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SPIEx_Exported_Functions_Group1 IO operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   Data transfers functions
   *
 @verbatim

@@ -107,6 +107,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup IWDG_Private_Defines IWDG Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Status register need 5 RC LSI divided by prescaler clock to be updated. With

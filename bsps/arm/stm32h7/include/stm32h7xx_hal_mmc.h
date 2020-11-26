@@ -38,10 +38,12 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup MMC_Exported_Types MMC Exported Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MMC_Exported_Types_Group1 MMC State enumeration structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -60,6 +62,7 @@ typedef enum
   */
 
 /** @defgroup MMC_Exported_Types_Group2 MMC Card State enumeration structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef uint32_t HAL_MMC_CardStateTypeDef;
@@ -78,6 +81,7 @@ typedef uint32_t HAL_MMC_CardStateTypeDef;
   */
 
 /** @defgroup MMC_Exported_Types_Group3 MMC Handle Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define MMC_InitTypeDef      SDMMC_InitTypeDef
@@ -162,6 +166,7 @@ typedef struct
   */
 
 /** @defgroup MMC_Exported_Types_Group4 Card Specific Data: CSD Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -210,6 +215,7 @@ typedef struct
   */
 
 /** @defgroup MMC_Exported_Types_Group5 Card Identification Data: CID Register
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef struct
@@ -232,6 +238,7 @@ typedef struct
 
 #if defined (USE_HAL_MMC_REGISTER_CALLBACKS) && (USE_HAL_MMC_REGISTER_CALLBACKS == 1U)
 /** @defgroup MMC_Exported_Types_Group6 MMC Callback ID enumeration definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef enum
@@ -253,6 +260,7 @@ typedef enum
   */
 
 /** @defgroup MMC_Exported_Types_Group7 MMC Callback pointer definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
@@ -266,12 +274,14 @@ typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup MMC_Exported_Constants Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 #define MMC_BLOCKSIZE   ((uint32_t)512U) /*!< Block size is 512 bytes */
 
 /** @defgroup MMC_Exported_Constansts_Group1 MMC Error status enumeration Structure definition
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define HAL_MMC_ERROR_NONE                     SDMMC_ERROR_NONE                    /*!< No error                                                      */
@@ -319,6 +329,7 @@ typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
   */
 
 /** @defgroup MMC_Exported_Constansts_Group2 MMC context enumeration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define   MMC_CONTEXT_NONE                 ((uint32_t)0x00000000U)  /*!< None                             */
@@ -334,6 +345,7 @@ typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
   */
 
 /** @defgroup MMC_Exported_Constansts_Group3 MMC Voltage mode
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -349,6 +361,7 @@ typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
   */
 
 /** @defgroup MMC_Exported_Constansts_Group4 MMC Memory Cards
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define  MMC_LOW_CAPACITY_CARD     ((uint32_t)0x00000000U)   /*!< MMC Card Capacity <=2Gbytes   */
@@ -364,6 +377,7 @@ typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup MMC_Exported_macros MMC Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief macros to handle interrupts and specific clock configurations
  * @{
  */
@@ -585,10 +599,12 @@ typedef void (*pMMC_CallbackTypeDef)           (MMC_HandleTypeDef *hmmc);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup MMC_Exported_Functions MMC Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup MMC_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_MMC_Init(MMC_HandleTypeDef *hmmc);
@@ -602,6 +618,7 @@ void HAL_MMC_MspDeInit(MMC_HandleTypeDef *hmmc);
   */
 
 /** @defgroup MMC_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Blocking mode: Polling */
@@ -633,6 +650,7 @@ HAL_StatusTypeDef HAL_MMC_UnRegisterCallback(MMC_HandleTypeDef *hmmc, HAL_MMC_Ca
   */
 
 /** @defgroup MMC_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_MMC_ConfigWideBusOperation(MMC_HandleTypeDef *hmmc, uint32_t WideMode);
@@ -642,6 +660,7 @@ HAL_StatusTypeDef HAL_MMC_ConfigSpeedBusOperation(MMC_HandleTypeDef *hmmc, uint3
   */
 
 /** @defgroup MMC_Exported_Functions_Group4 MMC card related functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_MMC_CardStateTypeDef HAL_MMC_GetCardState(MMC_HandleTypeDef *hmmc);
@@ -653,6 +672,7 @@ HAL_StatusTypeDef HAL_MMC_GetCardInfo(MMC_HandleTypeDef *hmmc, HAL_MMC_CardInfoT
   */
 
 /** @defgroup MMC_Exported_Functions_Group5 Peripheral State and Errors functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_MMC_StateTypeDef HAL_MMC_GetState(MMC_HandleTypeDef *hmmc);
@@ -662,6 +682,7 @@ uint32_t HAL_MMC_GetError(MMC_HandleTypeDef *hmmc);
   */
 
 /** @defgroup MMC_Exported_Functions_Group6 Perioheral Abort management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 HAL_StatusTypeDef HAL_MMC_Abort(MMC_HandleTypeDef *hmmc);
@@ -672,6 +693,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private types -------------------------------------------------------------*/
 /** @defgroup MMC_Private_Types MMC Private Types
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -681,6 +703,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup MMC_Private_Defines MMC Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -690,6 +713,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup MMC_Private_Variables MMC Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -699,6 +723,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private constants ---------------------------------------------------------*/
 /** @defgroup MMC_Private_Constants MMC Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -708,6 +733,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup MMC_Private_Macros MMC Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -717,6 +743,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private functions prototypes ----------------------------------------------*/
 /** @defgroup MMC_Private_Functions_Prototypes MMC Private Functions Prototypes
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -726,6 +753,7 @@ HAL_StatusTypeDef HAL_MMC_Abort_IT(MMC_HandleTypeDef *hmmc);
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup MMC_Private_Functions MMC Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

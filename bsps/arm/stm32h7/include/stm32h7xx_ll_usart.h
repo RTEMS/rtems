@@ -35,12 +35,14 @@ extern "C" {
 #if defined (USART1) || defined (USART2) || defined (USART3) || defined (USART6) || defined (UART4) || defined (UART5) || defined (UART7) || defined (UART8) || defined (UART9) || defined (USART10)
 
 /** @defgroup USART_LL USART
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup USART_LL_Private_Variables USART Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /* Array used to get the USART prescaler division decimal values versus @ref USART_LL_EC_PRESCALER values */
@@ -67,6 +69,7 @@ static const uint32_t USART_PRESCALER_TAB[] =
 /* Private macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup USART_LL_Private_Macros USART Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -77,6 +80,7 @@ static const uint32_t USART_PRESCALER_TAB[] =
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup USART_LL_ES_INIT USART Exported Init structures
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -166,10 +170,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup USART_LL_Exported_Constants USART Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USART_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_USART_WriteReg function
   * @{
   */
@@ -193,6 +199,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_USART_ReadReg function
   * @{
   */
@@ -229,6 +236,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_USART_ReadReg and  LL_USART_WriteReg functions
   * @{
   */
@@ -254,6 +262,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_FIFOTHRESHOLD FIFO Threshold
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_FIFOTHRESHOLD_1_8              0x00000000U /*!< FIFO reaches 1/8 of its depth */
@@ -267,6 +276,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_DIRECTION Communication Direction
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_DIRECTION_NONE                 0x00000000U                        /*!< Transmitter and Receiver are disabled */
@@ -278,6 +288,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_PARITY Parity Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_PARITY_NONE                    0x00000000U                          /*!< Parity control disabled */
@@ -288,6 +299,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_WAKEUP Wakeup
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_WAKEUP_IDLELINE                0x00000000U           /*!<  USART wake up from Mute mode on Idle Line */
@@ -297,6 +309,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_DATAWIDTH Datawidth
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_DATAWIDTH_7B                   USART_CR1_M1            /*!< 7 bits word length : Start bit, 7 data bits, n stop bits */
@@ -307,6 +320,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_OVERSAMPLING Oversampling
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_OVERSAMPLING_16                0x00000000U            /*!< Oversampling by 16 */
@@ -317,6 +331,7 @@ typedef struct
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup USART_LL_EC_CLOCK Clock Signal
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -328,6 +343,7 @@ typedef struct
 #endif /*USE_FULL_LL_DRIVER*/
 
 /** @defgroup USART_LL_EC_LASTCLKPULSE Last Clock Pulse
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_LASTCLKPULSE_NO_OUTPUT         0x00000000U           /*!< The clock pulse of the last data bit is not output to the SCLK pin */
@@ -337,6 +353,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_PHASE Clock Phase
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_PHASE_1EDGE                    0x00000000U           /*!< The first clock transition is the first data capture edge */
@@ -346,6 +363,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_POLARITY Clock Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_POLARITY_LOW                   0x00000000U           /*!< Steady low value on SCLK pin outside transmission window*/
@@ -355,6 +373,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_PRESCALER Clock Source Prescaler
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_PRESCALER_DIV1                 0x00000000U                                                                   /*!< Input clock not devided   */
@@ -374,6 +393,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_STOPBITS Stop Bits
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_STOPBITS_0_5                   USART_CR2_STOP_0                           /*!< 0.5 stop bit */
@@ -385,6 +405,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_TXRX TX RX Pins Swap
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_TXRX_STANDARD                  0x00000000U           /*!< TX/RX pins are used as defined in standard pinout */
@@ -394,6 +415,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_RXPIN_LEVEL RX Pin Active Level Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_RXPIN_LEVEL_STANDARD           0x00000000U           /*!< RX pin signal works using the standard logic levels */
@@ -403,6 +425,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_TXPIN_LEVEL TX Pin Active Level Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_TXPIN_LEVEL_STANDARD           0x00000000U           /*!< TX pin signal works using the standard logic levels */
@@ -412,6 +435,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_BINARY_LOGIC Binary Data Inversion
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_BINARY_LOGIC_POSITIVE          0x00000000U           /*!< Logical data from the data register are send/received in positive/direct logic. (1=H, 0=L) */
@@ -421,6 +445,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_BITORDER Bit Order
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_BITORDER_LSBFIRST              0x00000000U           /*!< data is transmitted/received with data bit 0 first, following the start bit */
@@ -430,6 +455,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_AUTOBAUD_DETECT_ON Autobaud Detection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_AUTOBAUD_DETECT_ON_STARTBIT    0x00000000U                                 /*!< Measurement of the start bit is used to detect the baud rate */
@@ -441,6 +467,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_ADDRESS_DETECT Address Length Detection
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_ADDRESS_DETECT_4B              0x00000000U           /*!< 4-bit address detection method selected */
@@ -450,6 +477,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_HWCONTROL Hardware Control
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_HWCONTROL_NONE                 0x00000000U                          /*!< CTS and RTS hardware flow control disabled */
@@ -461,6 +489,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_WAKEUP_ON Wakeup Activation
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_WAKEUP_ON_ADDRESS              0x00000000U                             /*!< Wake up active on address match */
@@ -471,6 +500,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_IRDA_POWER IrDA Power
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_IRDA_POWER_NORMAL              0x00000000U           /*!< IrDA normal power mode */
@@ -480,6 +510,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_LINBREAK_DETECT LIN Break Detection Length
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_LINBREAK_DETECT_10B            0x00000000U           /*!< 10-bit break detection method selected */
@@ -489,6 +520,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_DE_POLARITY Driver Enable Polarity
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_DE_POLARITY_HIGH               0x00000000U           /*!< DE signal is active high */
@@ -498,6 +530,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EC_DMA_REG_DATA DMA Register Data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_USART_DMA_REG_DATA_TRANSMIT          0x00000000U          /*!< Get address of data register used for transmission */
@@ -512,10 +545,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup USART_LL_Exported_Macros USART Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USART_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -540,6 +575,7 @@ typedef struct
   */
 
 /** @defgroup USART_LL_EM_Exported_Macros_Helper Exported_Macros_Helper
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -600,10 +636,12 @@ typedef struct
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup USART_LL_Exported_Functions USART Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup USART_LL_EF_Configuration Configuration functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1991,6 +2029,7 @@ __STATIC_INLINE uint32_t LL_USART_GetBlockLength(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_Configuration_IRDA Configuration functions related to Irda feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2098,6 +2137,7 @@ __STATIC_INLINE uint32_t LL_USART_GetIrdaPrescaler(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_Configuration_Smartcard Configuration functions related to Smartcard feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2274,6 +2314,7 @@ __STATIC_INLINE uint32_t LL_USART_GetSmartcardGuardTime(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_Configuration_HalfDuplex Configuration functions related to Half Duplex feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2321,6 +2362,7 @@ __STATIC_INLINE uint32_t LL_USART_IsEnabledHalfDuplex(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_Configuration_SPI_SLAVE Configuration functions related to SPI Slave feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -2409,6 +2451,7 @@ __STATIC_INLINE uint32_t LL_USART_IsEnabledSPISlaveSelect(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_Configuration_LIN Configuration functions related to LIN feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2487,6 +2530,7 @@ __STATIC_INLINE uint32_t LL_USART_IsEnabledLIN(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_Configuration_DE Configuration functions related to Driver Enable feature
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2619,6 +2663,7 @@ __STATIC_INLINE uint32_t LL_USART_GetDESignalPolarity(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_AdvancedConfiguration Advanced Configurations services
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -2903,6 +2948,7 @@ __STATIC_INLINE void LL_USART_ConfigMultiProcessMode(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -3430,6 +3476,7 @@ __STATIC_INLINE void LL_USART_ClearFlag_WKUP(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4089,6 +4136,7 @@ __STATIC_INLINE uint32_t LL_USART_IsEnabledIT_RXFT(USART_TypeDef *USARTx)
   */
 
 /** @defgroup USART_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4224,6 +4272,7 @@ __STATIC_INLINE uint32_t LL_USART_DMA_GetRegAddr(USART_TypeDef *USARTx, uint32_t
   */
 
 /** @defgroup USART_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4278,6 +4327,7 @@ __STATIC_INLINE void LL_USART_TransmitData9(USART_TypeDef *USARTx, uint16_t Valu
   */
 
 /** @defgroup USART_LL_EF_Execution Execution
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -4350,6 +4400,7 @@ __STATIC_INLINE void LL_USART_RequestTxDataFlush(USART_TypeDef *USARTx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup USART_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 ErrorStatus LL_USART_DeInit(USART_TypeDef *USARTx);

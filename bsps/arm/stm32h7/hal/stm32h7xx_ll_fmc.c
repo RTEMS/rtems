@@ -63,6 +63,7 @@
 #if (((defined HAL_NOR_MODULE_ENABLED || defined HAL_SRAM_MODULE_ENABLED)) || defined HAL_NAND_MODULE_ENABLED || defined HAL_SDRAM_MODULE_ENABLED)
 
 /** @defgroup FMC_LL  FMC Low Layer
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief FMC driver modules
   * @{
   */
@@ -71,6 +72,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /** @defgroup FMC_LL_Private_Constants FMC Low Layer Private Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -139,11 +141,13 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup FMC_LL_Exported_Functions FMC Low Layer Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 
 /** @defgroup FMC_LL_Exported_Functions_NORSRAM FMC Low Layer NOR SRAM Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief  NORSRAM Controller functions
   *
   @verbatim
@@ -168,6 +172,7 @@
   */
 
 /** @defgroup FMC_LL_NORSRAM_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
   @verbatim
@@ -472,6 +477,7 @@ HAL_StatusTypeDef FMC_NORSRAM_WriteOperation_Disable(FMC_NORSRAM_TypeDef *Device
 
 
 /** @defgroup FMC_LL_Exported_Functions_NAND FMC Low Layer NAND Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    NAND Controller functions
   *
   @verbatim
@@ -497,6 +503,7 @@ HAL_StatusTypeDef FMC_NORSRAM_WriteOperation_Disable(FMC_NORSRAM_TypeDef *Device
   */
 
 /** @defgroup FMC_LL_NAND_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -637,6 +644,7 @@ HAL_StatusTypeDef FMC_NAND_DeInit(FMC_NAND_TypeDef *Device, uint32_t Bank)
   */
 
 /** @defgroup HAL_FMC_NAND_Group2 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   management functions
   *
 @verbatim
@@ -743,6 +751,7 @@ HAL_StatusTypeDef FMC_NAND_GetECC(FMC_NAND_TypeDef *Device, uint32_t *ECCval, ui
 
 
 /** @defgroup FMC_LL_SDRAM
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    SDRAM Controller functions
   *
   @verbatim

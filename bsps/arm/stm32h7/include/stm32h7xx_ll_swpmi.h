@@ -34,6 +34,7 @@ extern "C" {
 
 
 /** @defgroup SWPMI_LL SWPMI
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -43,6 +44,7 @@ extern "C" {
 /* Private macros ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup SWPMI_LL_Private_Macros SWPMI Private Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 /**
@@ -53,6 +55,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup SWPMI_LL_ES_INIT SWPMI Exported Init structure
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -91,10 +94,12 @@ typedef struct
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SWPMI_LL_Exported_Constants SWPMI Exported Constants
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SWPMI_LL_EC_CLEAR_FLAG Clear Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_SWPMI_WriteReg function
   * @{
   */
@@ -110,6 +115,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EC_GET_FLAG Get Flags Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Flags defines which can be used with LL_SWPMI_ReadReg function
   * @{
   */
@@ -129,6 +135,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EC_IT IT Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    IT defines which can be used with LL_SWPMI_ReadReg and  LL_SWPMI_WriteReg functions
   * @{
   */
@@ -146,6 +153,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EC_SW_BUFFER_RX SW BUFFER RX
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SWPMI_SW_BUFFER_RX_SINGLE ((uint32_t)0x00000000)  /*!< Single software buffer mode for reception */
@@ -155,6 +163,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EC_SW_BUFFER_TX SW BUFFER TX
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SWPMI_SW_BUFFER_TX_SINGLE ((uint32_t)0x00000000)  /*!< Single software buffer mode for transmission */
@@ -164,6 +173,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EC_VOLTAGE_CLASS VOLTAGE CLASS
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SWPMI_VOLTAGE_CLASS_C     ((uint32_t)0x00000000)  /*!< SWPMI_IO uses directly VDD voltage to operate in class C          */
@@ -173,6 +183,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EC_DMA_REG_DATA DMA register data
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 #define LL_SWPMI_DMA_REG_DATA_TRANSMIT     (uint32_t)0       /*!< Get address of data register used for transmission */
@@ -187,10 +198,12 @@ typedef struct
 
 /* Exported macro ------------------------------------------------------------*/
 /** @defgroup SWPMI_LL_Exported_Macros SWPMI Exported Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SWPMI_LL_EM_WRITE_READ Common Write and read registers Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -215,6 +228,7 @@ typedef struct
   */
 
 /** @defgroup SWPMI_LL_EM_BitRate Bit rate calculation helper Macros
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -237,10 +251,12 @@ typedef struct
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SWPMI_LL_Exported_Functions SWPMI Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup SWPMI_LL_EF_Configuration Configuration
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -466,6 +482,7 @@ __STATIC_INLINE uint32_t LL_SWPMI_GetVoltageClass(SWPMI_TypeDef *SWPMIx)
   */
 
 /** @defgroup SWPMI_LL_EF_FLAG_Management FLAG_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -698,6 +715,7 @@ __STATIC_INLINE void LL_SWPMI_ClearFlag_RDY(SWPMI_TypeDef *SWPMIx)
   */
 
 /** @defgroup SWPMI_LL_EF_IT_Management IT_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1036,6 +1054,7 @@ __STATIC_INLINE uint32_t LL_SWPMI_IsEnabledIT_RXBF(SWPMI_TypeDef *SWPMIx)
   */
 
 /** @defgroup SWPMI_LL_EF_DMA_Management DMA_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1138,6 +1157,7 @@ __STATIC_INLINE uint32_t LL_SWPMI_DMA_GetRegAddr(SWPMI_TypeDef *SWPMIx, uint32_t
   */
 
 /** @defgroup SWPMI_LL_EF_Data_Management Data_Management
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -1208,6 +1228,7 @@ __STATIC_INLINE void LL_SWPMI_DisableTXBypass(SWPMI_TypeDef *SWPMIx)
 
 #if defined(USE_FULL_LL_DRIVER) || defined(__rtems__)
 /** @defgroup SWPMI_LL_EF_Init Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 

@@ -201,6 +201,7 @@
   */
 
 /** @defgroup COMP COMP
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief COMP HAL module driver
   * @{
   */
@@ -237,10 +238,12 @@
 /* Exported functions --------------------------------------------------------*/
 
 /** @defgroup COMP_Exported_Functions COMP Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup COMP_Exported_Functions_Group1 Initialization/de-initialization functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and de-initialization functions. 
  *
 @verbatim    
@@ -728,6 +731,7 @@ HAL_StatusTypeDef HAL_COMP_UnRegisterCallback(COMP_HandleTypeDef *hcomp, HAL_COM
   */
 
 /** @defgroup COMP_Exported_Functions_Group2 Start-Stop operation functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Start-Stop operation functions. 
  *
 @verbatim   
@@ -1070,6 +1074,7 @@ void HAL_COMP_IRQHandler(COMP_HandleTypeDef *hcomp)
   */
 
 /** @defgroup COMP_Exported_Functions_Group3 Peripheral Control functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Management functions.
  *
 @verbatim   
@@ -1185,6 +1190,7 @@ __weak void HAL_COMP_TriggerCallback(COMP_HandleTypeDef *hcomp)
   */
 
 /** @defgroup COMP_Exported_Functions_Group4 Peripheral State functions 
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions. 
  *
 @verbatim   

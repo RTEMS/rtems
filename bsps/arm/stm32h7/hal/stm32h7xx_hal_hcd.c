@@ -65,6 +65,7 @@
 #if defined (USB_OTG_FS) || defined (USB_OTG_HS)
 
 /** @defgroup HCD HCD
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief HCD HAL module driver
   * @{
   */
@@ -75,6 +76,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup HCD_Private_Functions HCD Private Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 static void HCD_HC_IN_IRQHandler(HCD_HandleTypeDef *hhcd, uint8_t chnum);
@@ -87,10 +89,12 @@ static void HCD_Port_IRQHandler(HCD_HandleTypeDef *hhcd);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup HCD_Exported_Functions HCD Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup HCD_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief    Initialization and Configuration functions
  *
 @verbatim
@@ -327,6 +331,7 @@ __weak void  HAL_HCD_MspDeInit(HCD_HandleTypeDef *hhcd)
   */
 
 /** @defgroup HCD_Exported_Functions_Group2 Input and Output operation functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   *  @brief   HCD IO operation functions
   *
 @verbatim
@@ -982,6 +987,7 @@ HAL_StatusTypeDef HAL_HCD_UnRegisterHC_NotifyURBChangeCallback(HCD_HandleTypeDef
   */
 
 /** @defgroup HCD_Exported_Functions_Group3 Peripheral Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Management functions
  *
 @verbatim
@@ -1041,6 +1047,7 @@ HAL_StatusTypeDef HAL_HCD_ResetPort(HCD_HandleTypeDef *hhcd)
   */
 
 /** @defgroup HCD_Exported_Functions_Group4 Peripheral State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions
  *
 @verbatim

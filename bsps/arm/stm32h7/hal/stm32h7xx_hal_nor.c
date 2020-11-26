@@ -114,6 +114,7 @@
 #ifdef HAL_NOR_MODULE_ENABLED
 
 /** @defgroup NOR NOR
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief NOR driver modules
   * @{
   */
@@ -122,6 +123,7 @@
 /* Private define ------------------------------------------------------------*/
 
 /** @defgroup NOR_Private_Defines NOR Private Defines
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -161,6 +163,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /** @defgroup NOR_Private_Variables NOR Private Variables
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
@@ -173,10 +176,12 @@ static uint32_t uwNORMemoryDataWidth  = NOR_MEMORY_8B;
 /* Private functions ---------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup NOR_Exported_Functions NOR Exported Functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @{
   */
 
 /** @defgroup NOR_Exported_Functions_Group1 Initialization and de-initialization functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Initialization and Configuration functions
   *
   @verbatim
@@ -345,6 +350,7 @@ __weak void HAL_NOR_MspWait(NOR_HandleTypeDef *hnor, uint32_t Timeout)
   */
 
 /** @defgroup NOR_Exported_Functions_Group2 Input and Output functions
+  * @ingroup RTEMSBSPsARMSTM32H7
   * @brief    Input Output and memory control functions
   *
   @verbatim
@@ -1085,6 +1091,7 @@ HAL_StatusTypeDef HAL_NOR_UnRegisterCallback (NOR_HandleTypeDef *hnor, HAL_NOR_C
   */
 
 /** @defgroup NOR_Exported_Functions_Group3 NOR Control functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   management functions
  *
 @verbatim
@@ -1172,6 +1179,7 @@ HAL_StatusTypeDef HAL_NOR_WriteOperation_Disable(NOR_HandleTypeDef *hnor)
   */
 
 /** @defgroup NOR_Exported_Functions_Group4 NOR State functions
+  * @ingroup RTEMSBSPsARMSTM32H7
  *  @brief   Peripheral State functions
  *
 @verbatim
