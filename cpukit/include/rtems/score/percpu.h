@@ -617,7 +617,7 @@ typedef struct {
  *
  *  This is an array of per CPU core information.
  */
-extern Per_CPU_Control_envelope _Per_CPU_Information[] CPU_STRUCTURE_ALIGNMENT;
+extern CPU_STRUCTURE_ALIGNMENT Per_CPU_Control_envelope _Per_CPU_Information[];
 
 #define _Per_CPU_Acquire( cpu, lock_context ) \
   _ISR_lock_Acquire( &( cpu )->Lock, lock_context )
