@@ -19,15 +19,15 @@
 #ifndef _RTEMS_SETERR_H
 #define _RTEMS_SETERR_H
 
-/**
- *  @defgroup RTEMSScoreSetErr Set Errno
- *
- *  @ingroup RTEMSScore
- *
- */
-/**@{*/
-
 #include <errno.h>
+
+/**
+ * @defgroup RTEMSAPISetErrno Set Errno
+ *
+ * @ingroup RTEMSAPI
+ *
+ * @{
+ */
 
 /**
  *  This is a helper macro which will set the variable errno and return
