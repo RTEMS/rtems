@@ -24,6 +24,7 @@
 
 #include <bsp.h>
 #include <bsp/lpc32xx.h>
+#include <rtems/rtems/clockimpl.h>
 
 #include <time.h>
 

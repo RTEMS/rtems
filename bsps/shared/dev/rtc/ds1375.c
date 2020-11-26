@@ -54,6 +54,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/rtc.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/rtems/clockimpl.h>
 #include <libchip/rtc.h>
 #include <libchip/ds1375-rtc.h>
 

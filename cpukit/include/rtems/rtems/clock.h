@@ -267,36 +267,6 @@ time_t rtems_clock_get_uptime_seconds( void );
  */
 uint64_t rtems_clock_get_uptime_nanoseconds( void );
 
-/**
- * @brief TOD Validate
- *
- * This support function returns true if @a the_tod contains
- * a valid time of day, and false otherwise.
- *
- * @param[in] the_tod is the TOD structure to validate
- *
- * @retval This method returns true if the TOD is valid and false otherwise.
- *
- * @note This routine only works for leap-years through 2099.
- */
-bool _TOD_Validate(
-  const rtems_time_of_day *the_tod
-);
-
-/**
- * @brief TOD to Seconds
- *
- * This function returns the number seconds between the epoch and @a the_tod.
- *
- * @param[in] the_tod is the TOD structure to convert to seconds
- *
- * @retval This method returns the number of seconds since epoch represented
- *         by @a the_tod
- */
-Watchdog_Interval _TOD_To_seconds(
-  const rtems_time_of_day *the_tod
-);
-
 #ifdef __cplusplus
 }
 #endif

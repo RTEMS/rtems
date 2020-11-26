@@ -20,6 +20,7 @@
 #include <bsp.h>
 #include <libcpu/rtcRegs.h>
 #include <rtems/score/todimpl.h>
+#include <rtems/rtems/clockimpl.h>
 
 /* The following are inside RTEMS -- we are violating visibility!!!
  * Perhaps an API could be defined to get days since 1 Jan.

@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <rtems.h>
+#include <rtems/rtems/clockimpl.h>
 
 const char rtems_test_name[] = "SP 2038";
 

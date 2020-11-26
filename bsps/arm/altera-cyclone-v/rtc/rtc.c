@@ -33,6 +33,7 @@
 #include <libchip/rtc.h>
 #include <assert.h>
 #include <rtems/score/todimpl.h>
+#include <rtems/rtems/clockimpl.h>
 #include <sys/filio.h>
 #include <fcntl.h>
 #include <string.h>

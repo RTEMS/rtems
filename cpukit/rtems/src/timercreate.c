@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/rtems/timerimpl.h>
-#include <rtems/rtems/clock.h>
+#include <rtems/rtems/clockimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/assert.h>

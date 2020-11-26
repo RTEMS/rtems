@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/clock.h>
+#include <rtems/rtems/clockimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 

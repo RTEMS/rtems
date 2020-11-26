@@ -12,6 +12,7 @@
 #include <rtems/rtc.h>
 #include <rtems/tod.h>
 #include <rtems/libio.h>
+#include <rtems/rtems/clockimpl.h>
 
 #include <libchip/rtc.h>
 
