@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicEvent
  *
- * @brief This header file provides interfaces used by the event implementation.
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicEvent.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

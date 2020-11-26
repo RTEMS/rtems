@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Semaphore MP Support
- *  @ingroup ClassicSEM
+ * @ingroup RTEMSImplClassicSemaphoreMP
+ *
+ * @brief This source file contains the implementation to support the Semaphore
+ *   Manager in multiprocessing (MP) configurations.
  */
 
 /*

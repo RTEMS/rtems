@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Barrier Wait
- *  @ingroup ClassicBarrier
+ * @ingroup RTEMSImplClassicBarrier
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_barrier_wait().
  */
 
 /*

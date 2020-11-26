@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Interrupt Catch
- *  @ingroup ClassicINTR
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_interrupt_catch().
  */
 
 /*

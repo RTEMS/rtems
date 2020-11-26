@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicSignal
  *
- * @brief Signals Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicSignal.
  */
 
 /* COPYRIGHT (c) 1989-2008.

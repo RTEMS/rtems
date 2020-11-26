@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_task_set_scheduler().
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *

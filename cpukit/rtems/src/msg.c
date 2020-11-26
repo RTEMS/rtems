@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueue
+ * @ingroup RTEMSImplClassicMessage
  *
- * @brief Classic Message Queue Information with Zero Objects
+ * @brief This source file contains a definition of the
+ *   ::_Message_queue_Information with zero objects.
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueue Message Queues
+ * @ingroup RTEMSImplClassicMessage
  *
- * @brief RTEMS Message Queue Get Number Pending
+ * @brief This source file contains the implementation of
+ *   rtems_message_queue_get_number_pending().
  */
 
 /*

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_task_get_priority().
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *

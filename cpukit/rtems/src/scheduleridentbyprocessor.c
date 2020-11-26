@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_scheduler_ident_by_processor().
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
  *

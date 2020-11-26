@@ -1,10 +1,9 @@
 /**
  * @file
  *
- * @ingroup ClassicMP
+ * @ingroup RTEMSImplClassic
  *
- * This include file contains all the constants and structures associated
- * with the Multiprocessing Manager.
+ * @brief This header file provides parts of the multiprocessing (MP) API.
  */
 
 /* COPYRIGHT (c) 1989-2013.
@@ -21,7 +20,7 @@
 #include <rtems/score/mppkt.h>
 
 /**
- *  @defgroup ClassicMP Multiprocessing
+ *  @defgroup RTEMSAPIClassicMP Multiprocessing
  *
  *  @ingroup RTEMSAPIClassic
  *

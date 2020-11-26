@@ -1,10 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicPartMP
+ * @ingroup RTEMSImplClassicPartitionMP
  *
- * @brief This source file contains the implementation of the Partition Manager
- *   MPCI support.
+ * @brief This source file contains the implementation to support the Partition
+ *   Manager in multiprocessing (MP) configurations.
  */
 
 /*

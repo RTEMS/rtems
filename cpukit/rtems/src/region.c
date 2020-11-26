@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicRegion
+ * @ingroup RTEMSImplClassicRegion
  *
- * @brief Classic Region Information with Zero Objects
+ * @brief This source file contains a definition of the ::_Region_Information
+ *   with zero objects.
  */
 
 /*

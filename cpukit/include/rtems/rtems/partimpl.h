@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSImplClassicPartition
  *
- * @brief This header file provides interfaces used by the Partition Manager
- *   implementation.
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicPartition.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

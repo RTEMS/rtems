@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Delete Timer
- *  @ingroup ClassicTimer
+ * @ingroup RTEMSImplClassicTimer
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_timer_delete().
  */
 
 /*

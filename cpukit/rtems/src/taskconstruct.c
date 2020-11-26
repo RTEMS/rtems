@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTasks
+ * @ingroup RTEMSImplClassicTask
  *
- * @brief RTEMS Task Create from Config
+ * @brief This source file contains the implementation of
+ *   rtems_task_construct() and the Task Manager system initialization.
  */
 
 /*

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicMessage
  *
- * @brief Classic Message Queue Manager Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicMessage.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

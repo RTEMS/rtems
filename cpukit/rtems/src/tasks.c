@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Task API Extensions
- *  @ingroup ClassicTasks
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains a definition of the
+ *   ::_RTEMS_tasks_Information with zero objects.
  */
 
 /*

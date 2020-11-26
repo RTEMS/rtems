@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicClassInfo Object Class Information
+ * @ingroup RTEMSImplClassicObject
  *
- * @brief Set Name of Object
+ * @brief This source file contains the implementation of
+ *   rtems_object_set_name().
  */
 
 /*

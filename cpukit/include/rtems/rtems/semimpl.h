@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicSemaphore
  *
- * @brief Classic Semaphore Manager Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicSemaphore.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

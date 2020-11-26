@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Obtain Name of Object
- *  @ingroup ClassicClassInfo
+ * @ingroup RTEMSImplClassicObject
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_object_get_classic_name().
  */
 
 /*

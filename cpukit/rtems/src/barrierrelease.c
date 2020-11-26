@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicBarrier Barriers
+ * @ingroup RTEMSImplClassicBarrier
  *
- * @brief RTEMS Barrier Release
+ * @brief This source file contains the implementation of
+ *   rtems_barrier_release().
  */
 
 /*

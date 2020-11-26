@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicAttr
  *
- * @brief Classic Attributes Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicAttr support.
  */
 
 /*

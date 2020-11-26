@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicRateMon
+ * @ingroup RTEMSImplClassicRateMonotonic
  *
- * @brief Classic Rate Monotonic Information with Zero Objects
+ * @brief This source file contains a definition of the
+ *   ::_Rate_monotonic_Information with zero objects.
  */
 
 /*

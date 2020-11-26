@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicTask
  *
- * @brief Classic Tasks Manager Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicTask.
  */
 
 /*  COPYRIGHT (c) 1989-2014.

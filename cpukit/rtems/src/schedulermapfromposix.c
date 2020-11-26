@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTasks
+ * @ingroup RTEMSImplClassic
  *
- * @brief Implementation of rtems_scheduler_map_priority_from_posix().
+ * @brief This source file contains the implementation of
+ *   rtems_scheduler_map_priority_from_posix().
  */
 
 /*

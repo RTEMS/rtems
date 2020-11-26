@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicRegion Regions
+ * @ingroup RTEMSImplClassicRegion
  *
- * @brief rtems_region_create
+ * @brief This source file contains the implementation of
+ *   rtems_region_create() and the Region Manager system initialization.
  */
 
 /*

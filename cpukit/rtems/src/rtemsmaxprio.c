@@ -2,6 +2,9 @@
  * @file
  *
  * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains the implementation of
+ *   _RTEMS_Maximum_priority().
  */
 
 /*

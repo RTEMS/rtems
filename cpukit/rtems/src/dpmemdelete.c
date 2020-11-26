@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Delete Port
- *  @ingroup ClassicDPMEM
+ * @ingroup RTEMSImplClassicDPMem
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_port_delete().
  */
 
 /*

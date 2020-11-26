@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Create Port
- *  @ingroup ClassicDPMEM
+ * @ingroup RTEMSImplClassicDPMem
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_port_create() and the Dual-Ported Memory Manager system
+ *   initialization.
  */
 
 /*

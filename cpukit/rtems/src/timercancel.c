@@ -1,7 +1,13 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassicTimer
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_timer_cancel().
+ */
+
 /*
- *  Timer Manager - rtems_timer_cancel directive
- *
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTaskMP Task MP Support
+ * @ingroup RTEMSImplClassicTaskMP
  *
- * @brief RTEMS Tasks MP Send Process Packet
+ * @brief This source file contains the implementation to support the Task
+ *   Manager in multiprocessing (MP) configurations.
  */
 
 /*

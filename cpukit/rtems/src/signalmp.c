@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Signal MP Support
- *  @ingroup ClassicSignalMP
+ * @ingroup RTEMSImplClassicSignalMP
+ *
+ * @brief This source file contains the implementation to support the Signal
+ *   Manager in multiprocessing (MP) configurations.
  */
 
 /*

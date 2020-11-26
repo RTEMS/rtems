@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Delete Task
- *  @ingroup ClassicTasks
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_task_delete().
  */
 
 /*

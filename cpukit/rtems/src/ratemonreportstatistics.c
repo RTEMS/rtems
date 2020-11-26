@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Report Rate Monotonic Statistics
- *  @ingroup ClassicRateMon
+ * @ingroup RTEMSImplClassicRateMonotonic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_rate_monotonic_report_statistics_with_plugin().
  */
 
 /*

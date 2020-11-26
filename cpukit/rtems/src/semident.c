@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicSemaphore
  *
- * @brief rtems_semaphore_ident() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_semaphore_ident().
  */
 
 /*

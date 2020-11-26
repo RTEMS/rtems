@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSImplClassicSemaphoreMP
  *
- * This include file contains all the constants and structures associated
- * with the Multiprocessing Support in the Semaphore Manager.
+ * @brief This header file provides the implementation interfaces of the
+ *   @ref RTEMSImplClassicSemaphoreMP.
  */
 
 /* COPYRIGHT (c) 1989-2013.

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Urgent Message Queue
- *  @ingroup ClassicMessageQueue
+ * @ingroup RTEMSImplClassicMessage
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_message_queue_urgent().
  */
 
 /*

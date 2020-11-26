@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Message Queue Receive
- *  @ingroup ClassicMessageQueue
+ * @ingroup RTEMSImplClassicMessage
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_message_queue_receive().
  */
 
 /*

@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSImplClassicTaskMP
  *
- * This include file contains all the constants and structures associated
- * with the multiprocessing support in the task manager.
+ * @brief This header file provides the implementation interfaces of the
+ *   @ref RTEMSImplClassicTaskMP.
  */
 
 /* COPYRIGHT (c) 1989-2013.

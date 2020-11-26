@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Obtain Ticks Per Seconds
- *  @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_clock_get_ticks_per_second().
  */
 
 /*

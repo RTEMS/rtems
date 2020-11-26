@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicSem Semaphores
+ * @ingroup RTEMSImplClassicSemaphore
  *
- * @brief rtems_semaphore_create
+ * @brief This source file contains the implementation of
+ *   rtems_semaphore_create() and the Semaphore Manager system initialization.
  */
 
 /*

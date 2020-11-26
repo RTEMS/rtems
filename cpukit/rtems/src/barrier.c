@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicBarrier
+ * @ingroup RTEMSImplClassicBarrier
  *
- * @brief Classic Barrier Information with Zero Objects
+ * @brief This source file contains a definition of the ::_Barrier_Information
+ *   with zero objects.
  */
 
 /*

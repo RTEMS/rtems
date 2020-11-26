@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicClassInfo Object Class Information
+ * @ingroup RTEMSImplClassicObject
  *
- * @brief Get Lowest Valid Class Value
+ * @brief This source file contains the implementation of
+ *   rtems_object_api_minimum_class().
  */
 
 /*

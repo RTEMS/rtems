@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueue Message Queues
+ * @ingroup RTEMSImplClassicMessage
  *
- * @brief rtems_message_queue_send
+ * @brief This source file contains the implementation of
+ *   rtems_message_queue_send().
  */
 
 /*

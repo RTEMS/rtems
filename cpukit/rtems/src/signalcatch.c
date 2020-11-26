@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Catch Signal
- *  @ingroup ClassicSignal
+ * @ingroup RTEMSImplClassicSignal
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_signal_catch() and the Signal Manager multiprocessing (MP) support
+ *   system initialization.
  */
 
 /*

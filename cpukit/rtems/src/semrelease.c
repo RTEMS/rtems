@@ -1,12 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicSem Semaphores
+ * @ingroup RTEMSImplClassicSemaphore
  *
- * @brief RTEMS Semaphore Release
- *
- * This file contains the implementation of the Classic API directive
- * rtems_semaphore_release().
+ * @brief This source file contains the implementation of
+ *   rtems_semaphore_release().
  */
 
 /*

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup ClassicTasks
+ * @ingroup RTEMSImplClassicTask
  *
  * @brief This source file contains the implementation of
  *   _RTEMS_tasks_Construct_user_task().

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTimer
+ * @ingroup RTEMSImplClassicTimer
  *
- * @brief Classic Timer Information with Zero Objects
+ * @brief This source file contains a definition of the ::_Timer_Information
+ *   with zero objects.
  */
 
 /*

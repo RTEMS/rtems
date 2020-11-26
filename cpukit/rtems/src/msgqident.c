@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicMessage
  *
- * @brief rtems_message_queue_ident() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_message_queue_ident().
  */
 
 /*

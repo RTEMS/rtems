@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicBarrier
  *
- * @brief rtems_barrier_ident() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_barrier_ident().
  */
 
 /*

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Gets the System Uptime in the Struct Timeval Format
- *  @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_clock_get_uptime_timeval().
  */
 
 /*

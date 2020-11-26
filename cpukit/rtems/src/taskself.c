@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Get Self Task Id
- *  @ingroup ClassicTasks
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_task_self().
  */
 
 /*

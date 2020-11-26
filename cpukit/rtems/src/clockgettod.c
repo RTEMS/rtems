@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicClock Clocks
+ * @ingroup RTEMSImplClassicClock
  *
- * @brief Obtain Current Time of Day (Classic TOD)
+ * @brief This source file contains the implementation of
+ *   rtems_clock_get_tod().
  */
 
 /*

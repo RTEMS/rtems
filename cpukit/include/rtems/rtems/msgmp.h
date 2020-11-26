@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSImplClassicMessageMP
  *
- * @brief Message Manager MP Support
- *
- * This include file contains all the constants and structures associated
- * with the Multiprocessing Support in the Message Manager.
+ * @brief This header file provides the implementation interfaces of the
+ *   @ref RTEMSImplClassicMessageMP.
  */
 
 /* COPYRIGHT (c) 1989-2013.

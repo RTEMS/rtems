@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicTimer
  *
- * @brief Classic Timer Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicTimer.
  */
 
 /*

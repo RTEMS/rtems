@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Status Mapping Arrays
- *  @ingroup ClassicStatus
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_status_code_to_errno().
  */
 
 /*  COPYRIGHT (c) 1989-2013.

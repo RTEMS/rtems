@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicRateMonotonic
  *
- * @brief rtems_rate_monotonic_ident() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_rate_monotonic_ident().
  */
 
 /*

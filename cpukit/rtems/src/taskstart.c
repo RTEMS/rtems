@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTasks Tasks
+ * @ingroup RTEMSImplClassicTask
  *
- * @brief  RTEMS Start Task
+ * @brief This source file contains the implementation of
+ *   rtems_task_start().
  */
 
 /*

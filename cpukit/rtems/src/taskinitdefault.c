@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains a definition of
+ *   ::_RTEMS_tasks_User_task_table without a task entry.
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

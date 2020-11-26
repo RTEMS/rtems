@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicModes
  *
- * @brief Classic Modes Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicModes support.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

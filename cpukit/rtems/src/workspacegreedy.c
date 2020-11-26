@@ -1,8 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Greedy Allocate that Empties the Workspace and Free
- *  @ingroup ClassicRTEMS
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_workspace_greedy_allocate(),
+ *   rtems_workspace_greedy_allocate_all_except_largest(), and
+ *   rtems_workspace_greedy_free().
  */
 
 /*

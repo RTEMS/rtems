@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get Class Name
- *  @ingroup ClassicClassInfo
+ * @ingroup RTEMSImplClassicObject
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_object_get_api_class_name().
  */
 
 /*

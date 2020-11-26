@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicRegion
  *
- * @brief Classic Region Manager Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicRegion.
  */
 
 /* COPYRIGHT (c) 1989-2008.

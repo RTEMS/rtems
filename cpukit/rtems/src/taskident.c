@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicTask
  *
- * @brief rtems_task_ident() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_task_ident().
  */
 
 /*

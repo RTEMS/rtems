@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSImplClassicObject
  *
- * @brief Implementation Interfaces for Classic Objects
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicObject.
  */
 
 /*

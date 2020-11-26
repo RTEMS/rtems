@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief TOD Validate
- *  @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   _TOD_Validate().
  */
 
 /*

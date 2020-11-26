@@ -4,7 +4,8 @@
  * @ingroup RTEMSImplClassicEvent
  *
  * @brief This source file contains the implementation of
- *   _Event_Seize() and the task event MPCI support system initialization.
+ *   _Event_Seize() and the Event Manager multiprocessing (MP) support system
+ *   initialization.
  */
 
 /*

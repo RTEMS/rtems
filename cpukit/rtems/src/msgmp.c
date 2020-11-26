@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicMsgMP Message Queue MP Support
+ * @ingroup RTEMSImplClassicMessageMP
  *
- * @brief Multiprocessing Support for the Message Queue Manager
+ * @brief This source file contains the implementation to support the Message
+ *   Manager in multiprocessing (MP) configurations.
  */
 
 /*

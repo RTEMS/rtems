@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Announce a Clock Tick
- *  @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_clock_tick().
  */
 
 /*

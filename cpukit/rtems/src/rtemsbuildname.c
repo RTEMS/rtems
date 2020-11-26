@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Build Thirty-Two Bit Object Name
- *  @ingroup ClassicClassInfo
+ * @ingroup RTEMSImplClassicObject
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_build_name() as a binding for languages other than C/C++.
  */
 
 /*

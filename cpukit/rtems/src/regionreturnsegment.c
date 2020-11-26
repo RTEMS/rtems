@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Return Region Segment
- *  @ingroup ClassicRegion
+ * @ingroup RTEMSImplClassicRegion
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_region_return_segment().
  */
 
 /*

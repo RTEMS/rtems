@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get Class Portion of Object Id
- *  @ingroup ClassicClassInfo
+ * @ingroup RTEMSImplClassicObject
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_object_id_get_class() as a binding for languages other than C/C++.
  */
 
 /*

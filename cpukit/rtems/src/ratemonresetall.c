@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicRateMon Rate Monotonic Scheduler
+ * @ingroup RTEMSImplClassicRateMonotonic
  *
- * @brief rtems_rate_monotonic_reset_all_statistics
+ * @brief This source file contains the implementation of
+ *   rtems_rate_monotonic_reset_all_statistics().
  */
 
 /*

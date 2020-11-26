@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTasks Tasks
+ * @ingroup RTEMSImplClassicTask
  *
- * @brief  RTEMS Task Set Affinity
+ * @brief This source file contains the implementation of
+ *   rtems_task_set_affinity().
  */
 
 /*

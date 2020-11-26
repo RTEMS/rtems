@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief TOD to Seconds
- *  @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   _TOD_To_seconds().
  */
 
 /*

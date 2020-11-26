@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicClock Clocks
+ * @ingroup RTEMSImplClassicClock
  *
- * @brief Returns the system uptime in seconds.
+ * @brief This source file contains the implementation of
+ *   rtems_clock_get_uptime_nanoseconds().
  */
 
 /*

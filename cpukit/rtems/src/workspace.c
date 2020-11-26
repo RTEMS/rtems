@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Workspace Support
- *  @ingroup ClassicRTEMSWorkspace
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_workspace_get_information(), rtems_workspace_allocate(), and
+ *   rtems_workspace_free().
  */
 
 /*

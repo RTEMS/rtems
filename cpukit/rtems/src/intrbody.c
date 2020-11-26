@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Interrupt Support
- *  @ingroup ClassicINTR
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   directive bindings of the Interrupt Manager for languages other than
+ *   C/C++.
  */
 
 /*

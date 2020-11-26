@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Delete Semaphore
- *  @ingroup ClassicSem
+ * @ingroup RTEMSImplClassicSemaphore
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_semaphore_delete().
  */
 
 /*

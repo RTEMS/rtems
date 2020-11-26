@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicASR
  *
- * @brief Classic ASR Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicASR support.
  */
 
 /* COPYRIGHT (c) 1989-2008.

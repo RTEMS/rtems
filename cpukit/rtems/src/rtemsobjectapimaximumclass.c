@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get Highest Valid Class Value
- *  @ingroup ClassicClassInfo
+ * @ingroup RTEMSImplClassicObject
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_object_api_maximum_class().
  */
 
 /*

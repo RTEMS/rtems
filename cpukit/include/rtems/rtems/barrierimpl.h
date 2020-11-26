@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicBarrier
  *
- * @brief Classic Barrier Manager Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicBarrier.
  */
 
 /*

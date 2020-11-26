@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTasks Tasks
+ * @ingroup RTEMSImplClassicTask
  *
- * @brief _RTEMS_tasks_Initialize_user_tasks_body
+ * @brief This source file contains the implementation of
+ *   _RTEMS_tasks_Initialize_user_task().
  */
 
 /*

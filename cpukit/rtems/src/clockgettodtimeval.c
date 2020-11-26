@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Obtain TOD in struct timeval Format
- *  @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_clock_get_tod_timeval().
  */
 
 /*

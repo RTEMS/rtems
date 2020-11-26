@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicDPMEM
+ * @ingroup RTEMSImplClassicDPMem
  *
- * @brief Classic Dual Ported Memory Information with Zero Objects
+ * @brief This source file contains a definition of
+ *   ::_Dual_ported_memory_Information with zero objects.
  */
 
 /*

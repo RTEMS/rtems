@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicSem
+ * @ingroup RTEMSImplClassicSemaphore
  *
- * @brief Classic Semaphore Information with Zero Objects
+ * @brief This source file contains a definition of the
+ *   ::_Semaphore_Information with zero objects.
  */
 
 /*

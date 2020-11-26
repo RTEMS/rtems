@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get Highest Valid API Index
- *  @ingroup ClassicClassInfo
+ * @ingroup RTEMSImplClassicObject
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_object_id_api_maximum() as a binding for languages other than C/C++.
  */
 
 /*

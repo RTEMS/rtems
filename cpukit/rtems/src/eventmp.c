@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSImplClassicEventMP
  *
- * @brief This source file contains the implementation of the task event MPCI
- *   support.
+ * @brief This source file contains the implementation to support the Event
+ *   Manager in multiprocessing (MP) configurations.
  */
 
 /*

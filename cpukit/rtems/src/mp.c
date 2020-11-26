@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief MP Support
- *  @ingroup ClassicMP
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation to support the Classic
+ *   API in multiprocessing (MP) configurations.
  */
 
 /*

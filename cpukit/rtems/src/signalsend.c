@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Send Signal
- *  @ingroup ClassicSignal
+ * @ingroup RTEMSImplClassicSignal
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_signal_send().
  */
 
 /*

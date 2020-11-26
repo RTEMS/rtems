@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Process Region Queue
- *  @ingroup ClassicRegion
+ * @ingroup RTEMSImplClassicRegion
+ *
+ * @brief This source file contains the implementation of
+ *   _Region_Process_queue().
  */
 
 /*

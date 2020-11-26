@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Port Internal to External
- *  @ingroup ClassicDPMEM
+ * @ingroup RTEMSImplClassicDPMem
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_port_internal_to_external().
  */
 
 /*

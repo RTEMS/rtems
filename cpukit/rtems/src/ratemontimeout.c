@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Rate Monotonic Timeout
- *  @ingroup ClassicRateMon
+ * @ingroup RTEMSImplClassicRateMonotonic
+ *
+ * @brief This source file contains the implementation of
+ *   _Rate_monotonic_Timeout().
  */
 
 /*

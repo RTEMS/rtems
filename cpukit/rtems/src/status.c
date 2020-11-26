@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Status Mapping Arrays
- *  @ingroup ClassicStatus
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the definition of
+ *   ::_Status_Object_name_errors_to_status.
  */
 
 /*  COPYRIGHT (c) 1989-2013.

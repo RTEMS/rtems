@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicDPMem
  *
- * @brief Dual Ported Memory Manager Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicDPMem
  */
 
 /*  COPYRIGHT (c) 1989-2008.

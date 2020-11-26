@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicBarrier Barriers
+ * @ingroup RTEMSImplClassicBarrier
  *
- * @brief RTEMS Create Barrier
+ * @brief This source file contains the implementation of
+ *   rtems_barrier_create() and the Barrier Manager system initialization.
  */
 
 /*

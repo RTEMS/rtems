@@ -1,7 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicClock
+ * @ingroup RTEMSImplClassicClock
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_clock_get_uptime_seconds().
  */
 
 /*

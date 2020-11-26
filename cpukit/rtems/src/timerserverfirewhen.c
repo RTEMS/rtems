@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTimer Timers
+ * @ingroup RTEMSImplClassicTimer
  *
- * @brief RTEMS Timer Server Fire When Directive
+ * @brief This source file contains the implementation of
+ *   rtems_timer_server_fire_when().
  */
 
 /*

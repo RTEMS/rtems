@@ -1,15 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  Timer Manager - rtems_timer_initiate_server directive along with
- *  the Timer Server Body and support routines
+ * @ingroup RTEMSImplClassicTimer
  *
- *  @note Data specific to the Timer Server is declared in this
- *        file as the Timer Server so it does not have to be in the
- *        minimum footprint.  It is only really required when
- *        task-based timers are used.  Since task-based timers can
- *        not be started until the server is initiated, this structure
- *        does not have to be initialized until then.
+ * @brief This source file contains the implementation of
+ *   rtems_timer_initiate_server().
  */
 
 /*  COPYRIGHT (c) 1989-2008.

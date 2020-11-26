@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Get Region Free Information
- *  @ingroup ClassicRegion
+ * @ingroup RTEMSImplClassicRegion
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_region_get_free_information().
  */
 
 /*

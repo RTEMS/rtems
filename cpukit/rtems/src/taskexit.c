@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassicTask
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_task_exit().
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
  *

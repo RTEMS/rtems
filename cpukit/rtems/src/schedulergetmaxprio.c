@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_scheduler_get_maximum_priority().
+ */
+
+/*
  * Copyright (C) 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without

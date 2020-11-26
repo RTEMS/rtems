@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Create Message Queue
- *  @ingroup ClassicMessageQueue
+ * @ingroup RTEMSImplClassicMessage
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_message_queue_construct().
  */
 
 /*

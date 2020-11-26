@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicClassInfo Object Class Information
+ * @ingroup RTEMSImplClassicObject
  *
- * @brief Build Object Id
+ * @brief This source file contains the implementation of
+ *   rtems_build_id() as a binding for languages other than C/C++.
  */
 
 /*

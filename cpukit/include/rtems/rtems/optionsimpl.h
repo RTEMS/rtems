@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicOptions
  *
- * @brief Classic Options Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicOptions support.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicRateMonotonic
  *
- * @brief Classic Rate Monotonic Scheduler Implementation
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicRateMonotonic.
  */
 
 /*  COPYRIGHT (c) 1989-2008.

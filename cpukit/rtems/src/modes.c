@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Body for RTEMS_INTERRUPT_LEVEL Macro
- *  @ingroup ClassicModes
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_interrupt_level_body() and the definition of ::rtems_interrupt_mask
+ *   to support languages other than C/C++.
  */
-
 
 /*
  *  COPYRIGHT (c) 1989-2012.

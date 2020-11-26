@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Timer Server Fire After
- *  @ingroup ClassicTimer
+ * @ingroup RTEMSImplClassicTimer
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_timer_server_fire_after().
  */
 
 /*

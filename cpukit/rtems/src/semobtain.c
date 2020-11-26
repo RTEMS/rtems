@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief RTEMS Obtain Semaphore
- *  @ingroup ClassicSem
+ * @ingroup RTEMSImplClassicSemaphore
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_semaphore_obtain().
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicTimer Timers
+ * @ingroup RTEMSImplClassicTimer
  *
- * @brief RTEMS Timer Reset
+ * @brief This source file contains the implementation of
+ *   rtems_timer_reset().
  */
 
 /*

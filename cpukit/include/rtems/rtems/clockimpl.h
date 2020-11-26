@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSImplClassicClock
  *
- * @brief This header file provides interfaces used by the Clock Manager
- *   implementation.
+ * @brief This header file provides the implementation interfaces of
+ *   the @ref RTEMSImplClassicClock.
  */
 
 /* COPYRIGHT (c) 1989-2013.
