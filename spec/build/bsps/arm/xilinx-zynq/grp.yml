@@ -42,7 +42,7 @@ links:
 - role: build-dependency
   uid: optint1ori
 - role: build-dependency
-  uid: ../optmmusz
+  uid: ../optmmusmallpages
 - role: build-dependency
   uid: optnocachelen
 - role: build-dependency

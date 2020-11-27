@@ -2,11 +2,23 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-boolean: null
 - define-condition: null
+- script: |
+    if conf.is_defined("ARM_MMU_TRANSLATION_TABLE_SIZE"):
+        conf.fatal("ARM_MMU_TRANSLATION_TABLE_SIZE already defined by conflicting option.")
+
+    tbl_sz = 16 * 1024
+    if value:
+        tbl_sz += 4 * 1024 * 1024
+
+    conf.env["ARM_MMU_TRANSLATION_TABLE_SIZE"] = tbl_sz
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: true
-default-by-variant: []
+default: false
+default-by-variant:
+- value: true
+  variants:
+  - arm/realview_pbx_a9_qemu
 description: |
   Use MMU with small pages (4KiB)
 enabled-by: true
