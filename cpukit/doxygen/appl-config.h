@@ -1057,7 +1057,9 @@
  * Classic API initialization task.
  *
  * @par Default Value
- * The default value is 0.
+ * This configuration option has no default value.  If it is not specified,
+ * then the Classic API initialization task will be created with the stack size
+ * defined by the #CONFIGURE_INIT_TASK_STACK_SIZE configuration option.
  *
  * @par Value Constraints
  * @parblock
@@ -1087,7 +1089,7 @@
  *   #CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE, and
  *
  * * the task storage area used for the Classic API initialization task is not
- *   reclaimed by the system, if the task is deleted.
+ *   reclaimed by the system if the task is deleted.
  *
  * The
  *
