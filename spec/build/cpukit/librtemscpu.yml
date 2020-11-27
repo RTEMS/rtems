@@ -1460,7 +1460,6 @@ source:
 - cpukit/score/src/pheapgetfreeinfo.c
 - cpukit/score/src/pheapgetinfo.c
 - cpukit/score/src/pheapgetsize.c
-- cpukit/score/src/pheapinit.c
 - cpukit/score/src/pheapiterate.c
 - cpukit/score/src/pheapresizeblock.c
 - cpukit/score/src/pheapwalk.c

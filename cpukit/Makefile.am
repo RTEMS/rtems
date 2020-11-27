@@ -948,7 +948,6 @@ librtemscpu_a_SOURCES += score/src/pheapgetsize.c
 librtemscpu_a_SOURCES += score/src/pheapgetblocksize.c
 librtemscpu_a_SOURCES += score/src/pheapgetfreeinfo.c
 librtemscpu_a_SOURCES += score/src/pheapgetinfo.c
-librtemscpu_a_SOURCES += score/src/pheapinit.c
 librtemscpu_a_SOURCES += score/src/pheapresizeblock.c
 librtemscpu_a_SOURCES += score/src/pheapwalk.c
 librtemscpu_a_SOURCES += score/src/pheapiterate.c
