@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreISR
  *
- * @brief ISR Is In Progress Default Implementation
+ * @brief This source file contains the default implementation of
+ *   _ISR_Is_in_progress().
  */
 
 /*

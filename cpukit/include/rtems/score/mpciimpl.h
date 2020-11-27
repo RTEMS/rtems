@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreMPCI
  *
- * @brief MPCI Layer Implementation
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMPCI which are only used by the implementation.
  */
 
 /*

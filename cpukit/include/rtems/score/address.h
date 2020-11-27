@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreAddress
  *
- * @brief Information Required to Manipulate Physical Addresses
- *
- * This include file contains the information required to manipulate
- * physical addresses.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreAddress.
  */
 
 /*

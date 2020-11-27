@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreHeap
  *
- * @brief Heap Handler API.
+ * @brief This source file contains the implementation of
+ *   _Heap_Greedy_allocate(), _Heap_Greedy_allocate_all_except_largest(), and
+ *   _Heap_Greedy_free().
  */
 
 /*

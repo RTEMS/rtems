@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief Inlined Routines Associated with the Manipulation of the Scheduler
- *
- * This inline file contains all of the inlined routines associated with
- * the manipulation of the scheduler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreScheduler which are only used by the implementation.
  */
 
 /*

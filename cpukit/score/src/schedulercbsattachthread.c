@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Attach Scheduler CBS Thread
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerCBS
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Attach_thread().
  */
 
 /*

@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSScoreStack
+ *
+ * @brief This source file contains a definition of ::_Stack_Allocator_free
+ *   which frees the thread stacks to the RTEMS Workspace.
+ */
+
+/*
  * Copyright (C) 2019 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without

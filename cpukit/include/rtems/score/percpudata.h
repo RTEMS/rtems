@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScorePerCPUData
  *
- * @brief This header file provides the Flexible Per-CPU Data API.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScorePerCPUData.
  */
 
 /*

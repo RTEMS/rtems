@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreWatchdog
  *
- * @brief Watchdog Insert
+ * @brief This source file contains the implementation of
+ *   _Watchdog_Insert().
  */
 
 /*

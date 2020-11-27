@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Scheduler Default Node Initialization Operation
- *
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_default_Node_initialize().
  */
 
 /*

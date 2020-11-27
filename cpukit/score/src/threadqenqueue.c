@@ -1,9 +1,16 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreThreadQ
+ * @ingroup RTEMSScoreThreadQueue
  *
- * @brief Thread Queue Operations
+ * @brief This source file contains the implementation of
+ *   _Thread_queue_Deadlock_fatal(), _Thread_queue_Deadlock_status(),
+ *   _Thread_queue_Do_dequeue(), _Thread_queue_Enqueue(),
+ *   _Thread_queue_Enqueue_do_nothing_extra(), _Thread_queue_Enqueue_sticky(),
+ *   _Thread_queue_Extract(), _Thread_queue_Extract_critical(),
+ *   _Thread_queue_Extract_locked(), _Thread_queue_Path_acquire_critical(),
+ *   _Thread_queue_Path_release_critical(), _Thread_queue_Surrender(),
+ *   _Thread_queue_Surrender_sticky(), and _Thread_queue_Unblock_critical().
  */
 
 /*

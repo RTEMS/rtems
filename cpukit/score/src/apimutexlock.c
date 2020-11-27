@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Acquires the specified API mutex.
- *
  * @ingroup RTEMSScoreAPIMutex
+ *
+ * @brief This source file contains the implementation of
+ *   _API_Mutex_Lock().
  */
 
 /*

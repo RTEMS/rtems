@@ -1,8 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Workspace Handler Support
- *  @ingroup RTEMSScoreWorkspace
+ * @ingroup RTEMSScoreWorkspace
+ *
+ * @brief This source file contains the definition of ::_Workspace_Area, the
+ *   implementation of _Workspace_Handler_initialization(),
+ *   _Workspace_Allocate(), and _Workspace_Free(), and the Workspace Handler
+ *   system initialization.
  */
 
 /*

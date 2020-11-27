@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreProtHeap
  *
- * @brief Protected Heap Handler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreProtHeap.
  */
 
 /*

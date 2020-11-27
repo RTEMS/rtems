@@ -3,7 +3,18 @@
  *
  * @ingroup RTEMSScoreMPCI
  *
- * @brief Multiprocessing Communications Interface (MPCI) Handler
+ * @brief This source file contains the definition of
+ *   ::_System_state_Is_multiprocessing, ::_MPCI_Semaphore,
+ *   ::_MPCI_Remote_blocked_threads, ::_MPCI_table, ::_MPCI_Receive_server_tcb,
+ *   ::_MPCI_Packet_processors and the implementation of
+ *   _MPCI_Register_packet_processor(), _MPCI_Get_packet(),
+ *   _MPCI_Send_process_packet(), _MPCI_Send_request_packet(),
+ *   _MPCI_Send_response_packet(), _MPCI_Receive_packet(),
+ *   _MPCI_Process_response(), _MPCI_Receive_server(), _MPCI_Announce(),
+ *   _MPCI_Internal_packets_Send_process_packet(),
+ *   _MPCI_Internal_packets_Process_packet(),
+ *   _MPCI_Internal_packets_Get_packet(), and the MPCI Handler system
+ *   initialization.
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Flush Messages Routine
- *
  * @ingroup RTEMSScoreMessageQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_message_queue_Flush().
  */
 
 /*

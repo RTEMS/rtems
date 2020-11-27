@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Divide Timespec By Integer
+ * @ingroup RTEMSScoreTimespec
  *
- * @ingroup Timespec
+ * @brief This source file contains the implementation of
+ *   _Timespec_Divide_by_integer().
  */
 
 /*

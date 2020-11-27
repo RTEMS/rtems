@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Set Time of Day Given a Timestamp
- *
  * @ingroup RTEMSScoreTOD
+ *
+ * @brief This source file contains the implementation of
+ *   _TOD_Set().
  */
 
 /*  COPYRIGHT (c) 1989-2007.

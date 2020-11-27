@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_default_Pin_or_unpin().
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH
  *

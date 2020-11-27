@@ -3,11 +3,9 @@
  *
  * @ingroup RTEMSScoreWatchdog
  *
- * @brief Constants and Structures Associated with Watchdog Timers
- *
- * This include file contains all the constants and structures associated
- * with watchdog timers.   This Handler provides mechanisms which can be
- * used to initialize and manipulate watchdog timers.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreWatchdog which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*
@@ -40,7 +38,9 @@ extern "C" {
  * @brief This group contains the Watchdog Handler implementation.
  *
  * This handler encapsulates functionality related to the scheduling of
- * watchdog functions to be called at specific times in the future.
+ * watchdog functions to be called at specific times in the future.  It
+ * provides mechanisms which can be used to initialize and manipulate watchdog
+ * timers.
  *
  * @note This handler does not have anything to do with hardware watchdog
  *       timers.

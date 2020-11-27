@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreProtHeap
  *
- * @brief _Heap_Iterate() implementation.
+ * @brief This source file contains the implementation of
+ *   _Protected_heap_Iterate().
  */
 
 /*

@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreRBTree
  *
- * @brief Constants and Structures Associated with the Red-Black Tree Handler
- *
- * This include file contains all the constants and structures associated
- * with the Red-Black Tree Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreRBTree which are used by the implementation, the
+ *   @ref RTEMSImplApplConfig, and the API.
  */
 
 /*

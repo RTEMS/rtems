@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreIntErr
  *
- * @brief Constants and Prototypes Related to the Internal Error Handler
- *
- * This include file contains constants and prototypes related
- * to the Internal Error Handler.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreIntErr.
  */
 
 /*

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreOnce
+ *
+ * @brief This source file contains the implementation of
+ *   _Once(), _Once_Lock(), and _Once_Unlock().
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

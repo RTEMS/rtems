@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreHeap
  *
- * @brief _Heap_Iterate() implementation.
+ * @brief This source file contains the implementation of
+ *   _Heap_Iterate().
  */
 
 /*

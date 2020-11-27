@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreSchedulerDPS
  *
- * @brief Thread Manipulation with the Priority-Based Scheduler
- *
- * This include file contains all the constants and structures associated
- * with the manipulation of threads for the priority-based scheduler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSchedulerDPS which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

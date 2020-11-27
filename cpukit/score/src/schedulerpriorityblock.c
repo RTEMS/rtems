@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerPriority
  *
- * @brief Scheduler Priority Block
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_Block().
  */
 
 /*

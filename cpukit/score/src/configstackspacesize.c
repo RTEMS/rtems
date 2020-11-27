@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_configuration_get_stack_space_size().
+ */
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreChain
  *
- * @brief Chain Handler API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreChain which are used by the implementation and the API.
  */
 
 /*

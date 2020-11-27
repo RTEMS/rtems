@@ -1,9 +1,10 @@
-/*
+/**
  * @file
  *
- * @brief Priority Bit Map Implementation
- *
  * @ingroup RTEMSScorePriorityBitmap
+ *
+ * @brief This source file contains the definition of
+ *   ::_Bitfield_Leading_zeros.
  */
 
 /*

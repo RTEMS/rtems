@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Initialize Object Information
+ * @brief This source file contains the implementation of
+ *   _Objects_Initialize_information().
  */
 
 /*

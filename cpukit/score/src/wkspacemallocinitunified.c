@@ -5,7 +5,7 @@
  *
  * @ingroup RTEMSScoreWorkspace
  *
- * @brief This source file provides the implementation of
+ * @brief This source file contains the implementation of
  *   _Workspace_Malloc_initialize_unified().
  */
 

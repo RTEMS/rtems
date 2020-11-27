@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Manually releases the Barrier
- *
  * @ingroup RTEMSScoreBarrier
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_barrier_Do_flush().
  */
 
 /*

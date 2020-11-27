@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Get_CPU_time_used().
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *

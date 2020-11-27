@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreWorkspace
+ *
+ * @brief This source file contains the default definition of
+ *   ::_Workspace_Is_unified.
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

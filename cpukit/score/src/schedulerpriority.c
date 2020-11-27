@@ -1,8 +1,11 @@
-/*
- *  @file
+/**
+ * @file
  *
- *  @brief Initialize Scheduler Priority
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerPriority
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_Initialize() and
+ *   _Scheduler_priority_Node_initialize().
  */
 
 /*

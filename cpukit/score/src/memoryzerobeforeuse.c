@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreMemory
+ *
+ * @brief This source file contains the definition of
+ *   ::_Memory_Zero_before_use.
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Initializes the Time of Day Handler
- *
  * @ingroup RTEMSScoreTOD
+ *
+ * @brief This source file contains the definition of ::_TOD and the
+ *   implementation of _TOD_Lock(), _TOD_Unlock(), and _TOD_Is_owner().
  */
 
 /*  COPYRIGHT (c) 1989-2014.

@@ -5,7 +5,8 @@
  *
  * @ingroup RTEMSScoreStack
  *
- * @brief _Stack_Free_nothing() Implementation
+ * @brief This source file contains the implementation of
+ *   _Stack_Free_nothing().
  */
 
 /*

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreTOD
  *
- * @brief Adjust the Time of Time
+ * @brief This source file contains the implementation of
+ *   _TOD_Adjust().
  */
 
 /*

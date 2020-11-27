@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreObjectMP
  *
- * @brief Data Associated with the Manipulation of Global RTEMS Objects
- *
- * This include file contains all the constants and structures associated
- * with the manipulation of Global RTEMS Objects.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreObjectMP.
  */
 
 /*

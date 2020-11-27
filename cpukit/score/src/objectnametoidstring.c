@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Object ID to Name
+ * @brief This source file contains the implementation of
+ *   _Objects_Get_by_name().
  */
 
 /*

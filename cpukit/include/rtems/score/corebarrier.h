@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreBarrier
  *
- * @brief Constants and Structures Associated with the Barrier Handler
- *
- * This include file contains all the constants and structures associated
- * with the Barrier Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreBarrier which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

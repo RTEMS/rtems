@@ -1,3 +1,14 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreSMPLock
+ *
+ * @brief This source file contains the implementation of
+ *   _SMP_lock_Initialize(), _SMP_lock_Destroy(), _SMP_lock_Acquire(),
+ *   _SMP_lock_Release(), _SMP_lock_ISR_disable_and_acquire(),
+ *   _SMP_lock_Release_and_ISR_enable(), and _SMP_lock_Is_owner().
+ */
+
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *

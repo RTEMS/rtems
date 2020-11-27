@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Initialize the ISR handler
- *  @ingroup RTEMSScoreISR
+ * @ingroup RTEMSScoreISR
+ *
+ * @brief This source file contains the definition of ::_ISR_Vector_table and
+ *   the implementation of _ISR_Handler_initialization().
  */
 
 /*

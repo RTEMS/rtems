@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScorePriority
  *
- * @brief Priority Handler API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScorePriority which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

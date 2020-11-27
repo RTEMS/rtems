@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreSemaphore
  *
- * @brief Inlined Routines Associated with the SuperCore Semaphore
- *
- * This include file contains all of the inlined routines associated
- * with the SuperCore semaphore.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSemaphore which are only used by the implementation.
  */
 
 /*

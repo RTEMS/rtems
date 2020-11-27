@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreIO
+ *
+ * @brief This source file contains the implementation of
+ *   _IO_Vprintf().
+ */
+
 /*-
  * SPDX-License-Identifier: BSD-3-Clause
  *

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreThread
  *
- * @brief Constants and Structures Related with Thread Dispatch
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreThread related to thread dispatching.
  */
 
 /*

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_Get_affinity().
+ */
+
 /*
  * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *

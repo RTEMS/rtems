@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreHeap
  *
- * @brief Heap Handler implementation.
+ * @brief This source file contains the implementation of
+ *   _Heap_Walk().
  */
 
 /*

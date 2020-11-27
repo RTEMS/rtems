@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerEDF
  *
- * @brief Scheduler EDF Initialize and Support
+ * @brief This source file contains the implementation of
+ *   _Scheduler_EDF_Initialize().
  */
 
 /*

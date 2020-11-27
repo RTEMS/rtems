@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Flush Waiting Threads.
- *
  * @ingroup RTEMSScoreMessageQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_message_queue_Flush_waiting_threads().
  */
 
 /*

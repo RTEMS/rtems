@@ -2,6 +2,9 @@
  * @file
  *
  * @ingroup RTEMSScoreAPIMutex
+ *
+ * @brief This source file contains the implementation of
+ *   _API_Mutex_Is_owner().
  */
 
 /*

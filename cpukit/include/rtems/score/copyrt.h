@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSSuperCoreCopyright
  *
- * @brief Copyright Notice for RTEMS
- *
- * This include file contains the copyright notice for RTEMS
- * which is included in every binary copy of the executive.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreCopyright.
  */
 
 /*

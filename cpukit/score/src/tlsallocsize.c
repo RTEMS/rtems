@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreTLS
+ *
+ * @brief This source file contains the implementation of
+ *   _TLS_Get_allocation_size().
+ */
+
 /*
  * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *

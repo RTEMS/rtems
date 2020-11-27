@@ -1,3 +1,13 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Sched_Count(), _Sched_Index(), _Sched_Name_to_index(), and
+ *   _Sched_Processor_count().
+ */
+
 /*
  * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
  *

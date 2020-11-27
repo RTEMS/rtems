@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief SMP Scheduler Implementation
- *
  * @ingroup RTEMSScoreSchedulerSMP
+ *
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSchedulerSMP which are only used by the implementation.
  */
 
 /*

@@ -1,8 +1,17 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Objects MP Support
- *  @ingroup RTEMSScoreObjectMP
+ * @ingroup RTEMSScoreObjectMP
+ *
+ * @brief This source file contains the definition of
+ *   ::_Objects_Local_node, ::_Objects_Maximum_nodes,
+ *   ::_Objects_MP_Maximum_global_objects and the implementation of
+ *   _Objects_MP_Handler_early_initialization(),
+ *   _Objects_MP_Handler_initialization(), _Objects_MP_Open(),
+ *   _Objects_MP_Allocate_and_open(), _Objects_MP_Close(),
+ *   _Objects_MP_Global_name_search(), _Objects_MP_Is_remote(),
+ *   _Objects_MP_Allocate_global_object(), and
+ *   _Objects_MP_Free_global_object().
  */
 
 /*

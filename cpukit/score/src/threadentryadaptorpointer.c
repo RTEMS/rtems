@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Entry_adaptor_pointer().
+ */
+
 /*
  * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
  *

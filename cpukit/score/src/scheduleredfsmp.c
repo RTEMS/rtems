@@ -1,9 +1,17 @@
 /**
  * @file
  *
- * @brief EDF SMP Scheduler Implementation
- *
  * @ingroup RTEMSScoreSchedulerSMPEDF
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_EDF_SMP_Add_processor(), _Scheduler_EDF_SMP_Ask_for_help(),
+ *   _Scheduler_EDF_SMP_Block(), _Scheduler_EDF_SMP_Initialize(),
+ *   _Scheduler_EDF_SMP_Node_initialize(), _Scheduler_EDF_SMP_Pin(),
+ *   _Scheduler_EDF_SMP_Reconsider_help_request(),
+ *   _Scheduler_EDF_SMP_Remove_processor(), _Scheduler_EDF_SMP_Set_affinity(),
+ *   _Scheduler_EDF_SMP_Start_idle(), _Scheduler_EDF_SMP_Unblock(),
+ *   _Scheduler_EDF_SMP_Unpin(), _Scheduler_EDF_SMP_Update_priority(),
+ *   _Scheduler_EDF_SMP_Withdraw_node(), and _Scheduler_EDF_SMP_Yield().
  */
 
 /*

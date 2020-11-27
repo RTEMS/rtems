@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreRWLock
  *
- * @brief RWLock Obtain for Writing
+ * @brief This source file contains the implementation of
+ *   _CORE_RWLock_Seize_for_writing().
  */
 
 /*

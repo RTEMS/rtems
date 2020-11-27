@@ -1,3 +1,14 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_default_Ask_for_help(),
+ *   _Scheduler_default_Reconsider_help_request(), and
+ *   _Scheduler_default_Withdraw_node().
+ */
+
 /*
  * Copyright (c) 2014, 2016 embedded brains GmbH
  *

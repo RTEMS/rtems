@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief Handles Scheduler Nodes.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreScheduler related to scheduler nodes which are used by the
+ *   implementation and the @ref RTEMSImplApplConfig.
  */
 
 /*

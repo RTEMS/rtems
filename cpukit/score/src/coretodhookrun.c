@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Run TOD Hook Set
- *
  * @ingroup RTEMSScoreTODHooks
+ *
+ * @brief This source file contains the implementation of
+ *   _TOD_Hook_Run().
  */
 
 /*

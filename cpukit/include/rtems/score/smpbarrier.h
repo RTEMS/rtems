@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSMPBarrier
  *
- * @brief SMP Barrier API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSMPBarrier.
  */
 
 /*

@@ -1,3 +1,14 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThreadQueue
+ *
+ * @brief This source file contains the definition of
+ *   ::_Thread_queue_Operations_default, ::_Thread_queue_Operations_FIFO,
+ *   ::_Thread_queue_Operations_priority, and
+ *   ::_Thread_queue_Operations_priority_inherit.
+ */
+
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *

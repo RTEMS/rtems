@@ -1,5 +1,10 @@
 /**
- *  @file
+ * @file
+ *
+ * @ingroup RTEMSScoreTimespec
+ *
+ * @brief This source file contains the implementation of
+ *   _Timespec_To_ticks().
  */
 
 /*

@@ -3,12 +3,9 @@
  *
  * @ingroup RTEMSScoreMutex
  *
- * @brief CORE Mutex API
- *
- * This include file contains all the constants and structures associated with
- * the Mutex Handler.  A mutex is an enhanced version of the standard Dijkstra
- * binary semaphore used to provide synchronization and mutual exclusion
- * capabilities.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMutex which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*
@@ -43,7 +40,9 @@ extern "C" {
  * @brief This group contains the Mutex Handler implementation.
  *
  * This handler encapsulates functionality which provides the foundation
- * Mutex services used in all of the APIs supported by RTEMS.
+ * Mutex services used in all of the APIs supported by RTEMS.  A mutex is an
+ * enhanced version of the standard Dijkstra binary semaphore used to provide
+ * synchronization and mutual exclusion capabilities.
  *
  * @{
  */

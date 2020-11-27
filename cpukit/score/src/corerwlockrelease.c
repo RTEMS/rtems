@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Releases the RWLock
- *
  * @ingroup RTEMSScoreRWLock
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_RWLock_Surrender().
  */
 
 /*

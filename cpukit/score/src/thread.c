@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Initialize Thread Handler
- *  @ingroup RTEMSScoreThread
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains static assertions related to the Thread
+ *   Handler and the implementation of _Thread_Initialize_information() and
+ *   _Thread_Handler_initialization().
  */
 
 /*

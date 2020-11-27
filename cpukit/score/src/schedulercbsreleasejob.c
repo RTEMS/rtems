@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Scheduler CBS Release Job
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Release_job().
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @brief _Scheduler_CBS_Get_parameters
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Get_parameters().
  */
 
 /*

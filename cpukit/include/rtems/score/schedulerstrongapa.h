@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSchedulerStrongAPA
  *
- * @brief Strong APA Scheduler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSchedulerStrongAPA.
  */
 
 /*

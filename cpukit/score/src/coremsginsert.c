@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreMessageQueue
  *
- * @brief Insert a Message into the Message Queue
+ * @brief This source file contains the implementation of
+ *   _CORE_message_queue_Insert_message().
  */
 
 /*

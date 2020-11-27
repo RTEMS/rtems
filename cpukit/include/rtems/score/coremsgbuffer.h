@@ -5,8 +5,9 @@
  *
  * @ingroup RTEMSScoreMessageQueue
  *
- * @brief This header file defines the buffer data structure used by the
- *   Message Queue Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMessageQueue which are used by the implementation, the
+ *   @ref RTEMSImplApplConfig, and the API.
  */
 
 /*

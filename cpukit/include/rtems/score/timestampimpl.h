@@ -3,9 +3,8 @@
  *
  * @ingroup RTEMSScoreTimestamp
  *
- * @brief Helpers for Manipulating Timestamps
- *
- * This include file contains helpers for manipulating timestamps.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreTimestamp which are only used by the implementation.
  */
 
 /*

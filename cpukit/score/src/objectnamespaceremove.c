@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Removes Object from Namespace
+ * @ingroup RTEMSScoreObject
  *
- * @ingroup RTEMSScore
+ * @brief This source file contains the implementation of
+ *   _Objects_Namespace_remove_string().
  */
 
 /*

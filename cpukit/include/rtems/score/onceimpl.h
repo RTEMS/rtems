@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreOnce
  *
- * @brief Once API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreOnce.
  */
 
 /*

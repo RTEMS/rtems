@@ -1,9 +1,19 @@
 /**
  * @file
  *
- * @brief Deterministic Priority Affinity SMP Scheduler Implementation
- *
  * @ingroup RTEMSScoreSchedulerPriorityAffinitySMP
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_affinity_SMP_Add_processor(),
+ *   _Scheduler_priority_affinity_SMP_Ask_for_help(),
+ *   _Scheduler_priority_affinity_SMP_Block(),
+ *   _Scheduler_priority_affinity_SMP_Node_initialize(),
+ *   _Scheduler_priority_affinity_SMP_Reconsider_help_request(),
+ *   _Scheduler_priority_affinity_SMP_Remove_processor(),
+ *   _Scheduler_priority_affinity_SMP_Set_affinity(),
+ *   _Scheduler_priority_affinity_SMP_Unblock(),
+ *   _Scheduler_priority_affinity_SMP_Update_priority(), and
+ *   _Scheduler_priority_affinity_SMP_Withdraw_node().
  */
 
 /*

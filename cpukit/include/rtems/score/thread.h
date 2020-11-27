@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreThread
  *
- * @brief Constants and Structures Related with the Thread Control Block
- *
- * This include file contains all constants and structures associated
- * with the thread control block.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreThread which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

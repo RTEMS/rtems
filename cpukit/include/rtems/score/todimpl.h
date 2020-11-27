@@ -2,8 +2,10 @@
  * @file
  *
  * @ingroup RTEMSScoreTOD
+ * @ingroup RTEMSScoreTODHooks
  *
- * @brief Time of Day Handler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreTOD and the @ref RTEMSScoreTODHooks.
  */
 
 /*

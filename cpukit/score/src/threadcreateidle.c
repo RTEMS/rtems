@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Create Idle Thread
- *  @ingroup RTEMSScoreThread
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Create_idle().
  */
 
 /*

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Initialize CORE Barrier
- *  @ingroup RTEMSScoreBarrier
+ * @ingroup RTEMSScoreBarrier
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_barrier_Initialize().
  */
 
 /*

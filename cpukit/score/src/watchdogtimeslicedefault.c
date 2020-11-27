@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreWatchdog
+ *
+ * @brief This source file contains the default definition of
+ *   ::_Watchdog_Ticks_per_timeslice.
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

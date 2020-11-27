@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreStack
  *
- * @brief Inlined Routines from the Stack Handler
- *
- * This file contains the static inline implementation of the inlined
- * routines from the Stack Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreStack which are only used by the implementation.
  */
 
 /*

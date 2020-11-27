@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreAPIMutex
+ * @ingroup RTEMSScoreSyslockMutex
  *
- * @brief Structures for the implementation of mutexes.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSyslockMutex.
  */
 
 /*
@@ -25,15 +26,21 @@
 
 #include <rtems/score/threadqimpl.h>
 
-/**
- * @addtogroup RTEMSScoreAPIMutex
- *
- * @{
- */
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup RTEMSScoreSyslockMutex System Lock Mutex Support
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief The System Lock Mutex Support helps to implement directives which use
+ *   data structures compatible with the data structures defined by the Newlib
+ *   provided <sys/lock.h> header file.
+ *
+ * @{
+ */
 
 typedef struct {
   Thread_queue_Syslock_queue Queue;
@@ -44,10 +51,10 @@ typedef struct {
   unsigned int nest_level;
 } Mutex_recursive_Control;
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
-/** @} */
 
 #endif /* _RTEMS_SCORE_MUTEXIMPL_H */

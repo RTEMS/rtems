@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Broadcast a Message to the Message Queue
- *  @ingroup RTEMSScoreMessageQueue
+ * @ingroup RTEMSScoreMessageQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_message_queue_Broadcast().
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Unblocks a Thread from the Queue
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Unblock().
  */
 
 /*

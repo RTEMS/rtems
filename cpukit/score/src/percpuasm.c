@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScorePerCPU
+ *
+ * @brief This source file contains the static assertions for defines used in
+ *   assembler files.
+ */
+
 /*
  * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
  *

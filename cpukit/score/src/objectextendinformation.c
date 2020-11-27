@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Extend Set of Objects
+ * @brief This source file contains the implementation of
+ *   _Objects_Extend_information().
  */
 
 /*

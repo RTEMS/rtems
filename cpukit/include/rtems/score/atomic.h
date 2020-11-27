@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreAtomic
  *
- * @brief Atomic Operations API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreAtomic.
  */
 
 /*

@@ -1,3 +1,14 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThreadQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_queue_Add_timeout_ticks(), _Thread_queue_Add_timeout_timespec(),
+ *   _Thread_queue_Add_timeout_monotonic_timespec(), and
+ *   _Thread_queue_Add_timeout_realtime_timespec().
+ */
+
 /*
  * Copyright (c) 2016, 2017 embedded brains GmbH
  *

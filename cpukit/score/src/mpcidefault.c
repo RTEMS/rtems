@@ -3,7 +3,10 @@
  *
  * @ingroup RTEMSScoreMPCI
  *
- * @brief Multiprocessing Communications Interface (MPCI) Default Configuration
+ * @brief This source file contains a definition of
+ *   ::_Objects_MP_Controls, ::_Thread_MP_Proxies, and
+ *   ::_MPCI_Receive_server_stack for an application configuration with only
+ *   the local MPCI node and no MP objects.
  */
 
 /*

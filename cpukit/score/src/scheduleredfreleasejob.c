@@ -1,9 +1,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerEDF
  *
- * @brief Scheduler EDF Release Job
+ * @brief This source file contains the implementation of
+ *   _Scheduler_EDF_Map_priority(), _Scheduler_EDF_Unmap_priority(),
+ *   _Scheduler_EDF_Release_job(), and _Scheduler_EDF_Cancel_job().
  */
 
 /*

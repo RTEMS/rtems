@@ -1,8 +1,10 @@
-/*
- *  @file
+/**
+ * @file
  *
- *  @brief Object id to name
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScoreObject
+ *
+ * @brief This source file contains the implementation of
+ *   _Objects_Id_to_name().
  */
 
 /*

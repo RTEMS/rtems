@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Default Scheduler Release Job Operation
- *
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_default_Release_job() and _Scheduler_default_Cancel_job().
  */
 
 /*

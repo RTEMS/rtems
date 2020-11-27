@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Object Get Local
- *  @ingroup RTEMSScoreObject
+ * @ingroup RTEMSScoreObject
+ *
+ * @brief This source file contains the implementation of
+ *   _Objects_Get().
  */
 
 /*

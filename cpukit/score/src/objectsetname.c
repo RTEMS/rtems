@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Set Objects Name
+ * @brief This source file contains the implementation of
+ *   _Objects_Set_name().
  */
 
 /*

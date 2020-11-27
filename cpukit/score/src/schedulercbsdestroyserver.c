@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Scheduler CBS Destroy Server
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Destroy_server().
  */
 
 /*

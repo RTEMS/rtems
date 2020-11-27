@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreWatchdog
+ *
+ * @brief This source file contains the implementation of
+ *   _Watchdog_Do_tickle() and _Watchdog_Tick().
+ */
+
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *

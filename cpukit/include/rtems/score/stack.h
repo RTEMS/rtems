@@ -3,11 +3,9 @@
  *
  * @ingroup RTEMSScoreStack
  *
- * @brief Information About the Thread Stack Handler
- *
- * This include file contains all information about the thread
- * Stack Handler.  This Handler provides mechanisms which can be used to
- * initialize and utilize stacks.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreStack which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*
@@ -36,7 +34,8 @@ extern "C" {
  * @brief This group contains the Stack Handler implementation.
  *
  * This handler encapsulates functionality which is used in the management
- * of thread stacks.
+ * of thread stacks.  It provides mechanisms which can be used to initialize
+ * and utilize stacks.
  *
  * @{
  */

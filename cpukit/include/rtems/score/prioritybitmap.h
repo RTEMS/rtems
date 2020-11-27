@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScorePriorityBitmap
  *
- * @brief Manipulation Routines for the Bitmap Priority Queue Implementation
- *
- * This include file contains all thread priority manipulation routines for
- * the bit map priority queue implementation.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScorePriorityBitmap which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

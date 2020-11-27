@@ -3,10 +3,10 @@
  *
  * @ingroup RTEMSScoreISR
  *
- * @brief ISR Level Type
+ * @brief This header file provides the ::ISR_Level related interfaces of the
+ *   @ref RTEMSScoreISR.
  *
- * This include file defines the ISR Level type.  It exists to
- * simplify include dependencies.  It is part of the ISR Handler.
+ * This header file exists to simplify include dependencies.
  */
 
 /*

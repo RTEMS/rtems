@@ -1,9 +1,12 @@
 /**
  * @file
- * 
+ *
  * @ingroup RTEMSScoreThread
  *
- * @brief Dispatch Thread
+ * @brief This source file contains the definition of ::_Thread_Allocated_fp
+ *   and ::_User_extensions_Switches_list and the implementation of
+ *   _Thread_Dispatch(), _Thread_Dispatch_direct(), _Thread_Dispatch_enable(),
+ *   and _Thread_Do_dispatch().
  */
 
 /*

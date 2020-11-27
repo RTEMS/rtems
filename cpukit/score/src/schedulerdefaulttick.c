@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Default Scheduler At Tick Handler
- *
  * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_default_Tick().
  */
 
 /*

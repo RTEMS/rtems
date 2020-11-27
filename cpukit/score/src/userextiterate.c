@@ -1,9 +1,17 @@
 /**
  * @file
  *
- * @brief User Extension Iteration Helpers
- *
  * @ingroup RTEMSScoreUserExt
+ *
+ * @brief This source file contains the definition of ::_User_extensions_List
+ *   and the implementation of _User_extensions_Fatal_visitor(),
+ *   _User_extensions_Iterate(), _User_extensions_Thread_begin_visitor(),
+ *   _User_extensions_Thread_create_visitor(),
+ *   _User_extensions_Thread_delete_visitor(),
+ *   _User_extensions_Thread_exitted_visitor(),
+ *   _User_extensions_Thread_restart_visitor(),
+ *   _User_extensions_Thread_start_visitor(), and
+ *   _User_extensions_Thread_terminate_visitor().
  */
 
 /*

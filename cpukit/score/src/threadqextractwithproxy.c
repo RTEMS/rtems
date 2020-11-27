@@ -1,13 +1,10 @@
 /**
- *  @brief _Thread_queue_Extract_with_proxy
+ * @file
  *
- *  This routine extracts the_thread from the_thread_queue
- *  and ensures that if there is a proxy for this task on
- *  another node, it is also dealt with. A proxy is a data
- *  data that is on the thread queue on the remote node and
- *  acts as a proxy for the local thread. If the local thread
- *  was waiting on a remote operation, then the remote side
- *  of the operation must be cleaned up.
+ * @ingroup RTEMSScoreThreadQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_queue_Extract_with_proxy().
  */
 
 /*

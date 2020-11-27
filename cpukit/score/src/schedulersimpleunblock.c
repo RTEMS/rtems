@@ -1,9 +1,10 @@
 /**
  * @file
- * 
- * @ingroup RTEMSScoreScheduler
  *
- * @brief Scheduler Simple Handler / Unblock
+ * @ingroup RTEMSScoreSchedulerSimple
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_simple_Unblock().
  */
 
 /*

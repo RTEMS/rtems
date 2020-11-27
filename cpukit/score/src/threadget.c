@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Maps Thread IDs to TCB Pointer
- *
  * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Get().
  */
 
 /*

@@ -3,11 +3,9 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Constants and Structures Associated with the Object Handler
- *
- * This include file contains all the constants and structures associated
- * with the Object Handler.  This Handler provides mechanisms which
- * can be used to initialize and manipulate all objects which have ids.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreObject which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*
@@ -54,6 +52,9 @@ extern "C" {
  * @ingroup RTEMSScore
  *
  * @brief This group contains the Object Handler implementation.
+ *
+ * This handler provides mechanisms which can be used to initialize and
+ * manipulate all objects which have identifiers.
  *
  * @{
  */

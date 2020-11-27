@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get As Nanoseconds
- *  @ingroup Timespec
+ * @ingroup RTEMSScoreTimespec
+ *
+ * @brief This source file contains the implementation of
+ *   _Timespec_Get_as_nanoseconds().
  */
 
 /*

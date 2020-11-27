@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Scheduler Simple Functions
+ * @ingroup RTEMSScoreSchedulerSimple
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_simple_Initialize().
  */
 
 /*

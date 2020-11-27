@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Detach from the CBS Server
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Detach_thread().
  */
 
 /*

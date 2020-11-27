@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreWatchdog
  *
- * @brief Inlined Routines in the Watchdog Handler
- *
- * This file contains the static inline implementation of all inlined
- * routines in the Watchdog Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreWatchdog which are only used by the implementation.
  */
 
 /*

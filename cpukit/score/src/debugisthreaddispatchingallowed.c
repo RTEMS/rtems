@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This source file contains the implementation of
+ *   _Debug_Is_thread_dispatching_allowed().
+ */
 /*
  * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *

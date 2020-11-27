@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Get Information of an Object from an ID
+ * @ingroup RTEMSScoreObject
  *
- * @ingroup RTEMSScore
+ * @brief This source file contains the implementation of
+ *   _Objects_Get_information_id().
  */
 
 /*

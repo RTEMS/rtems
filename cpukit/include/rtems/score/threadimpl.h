@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreThread
  *
- * @brief Inlined Routines from the Thread Handler
- *
- * This file contains the macro implementation of the inlined
- * routines from the Thread handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreThread which are only used by the implementation.
  */
 
 /*

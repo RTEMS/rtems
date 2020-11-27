@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Inlined Routines in the Object Handler
- *
- * This include file contains the static inline implementation of all
- * of the inlined routines in the Object Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreObject which are only used by the implementation.
  */
 
 /*

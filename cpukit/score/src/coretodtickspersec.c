@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreTOD
  *
- * @brief Convert Ticks To Seconds
+ * @brief This source file contains the implementation of
+ *   TOD_TICKS_PER_SECOND_method().
  */
 
 /*  COPYRIGHT (c) 1989-2014.

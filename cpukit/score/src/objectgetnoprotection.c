@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief  Get Object without Dispatching Protection
- *  @ingroup RTEMSScoreObject
+ * @ingroup RTEMSScoreObject
+ *
+ * @brief This source file contains the implementation of
+ *   _Objects_Get_no_protection().
  */
 
 /*

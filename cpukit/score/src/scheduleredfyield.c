@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Scheduler EDF Yield
+ * @ingroup RTEMSScoreSchedulerEDF
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_EDF_Yield().
  */
 
 /*

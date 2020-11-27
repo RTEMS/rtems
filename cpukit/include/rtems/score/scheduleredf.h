@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreSchedulerEDF
  *
- * @brief Data Related to the Manipulation of Threads for the EDF Scheduler
- *
- * This include file contains all the constants and structures associated
- * with the manipulation of threads for the EDF scheduler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSchedulerEDF which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

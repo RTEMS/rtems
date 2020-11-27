@@ -1,3 +1,14 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreSMPLock
+ *
+ * @brief This source file contains the implementation of
+ *   _SMP_lock_Stats_destroy(), _SMP_lock_Stats_register_or_max_section_time(),
+ *   _SMP_lock_Stats_iteration_start(), _SMP_lock_Stats_iteration_next(), and
+ *   _SMP_lock_Stats_iteration_stop().
+ */
+
 /*
  * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *

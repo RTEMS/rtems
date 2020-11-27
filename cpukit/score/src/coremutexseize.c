@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Seize Mutex with Blocking
- *  @ingroup RTEMSScoreMutex
+ * @ingroup RTEMSScoreMutex
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_mutex_Seize_slow().
  */
 
 /*

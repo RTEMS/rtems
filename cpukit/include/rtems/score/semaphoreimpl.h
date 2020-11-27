@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreSemaphore
+ * @ingroup RTEMSScoreSyslockSemaphore
  *
- * @brief Semaphore Implementation
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSyslockSemaphore.
  */
 
 /*
@@ -29,7 +30,13 @@
 #include <rtems/score/threadqimpl.h>
 
 /**
- * @addtogroup RTEMSScoreSemaphore
+ * @defgroup RTEMSScoreSyslockSemaphore System Lock Semaphore Support
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief The System Lock Semaphore Support helps to implement directives which
+ *   use data structures compatible with the data structures defined by the
+ *   Newlib provided <sys/lock.h> header file.
  *
  * @{
  */

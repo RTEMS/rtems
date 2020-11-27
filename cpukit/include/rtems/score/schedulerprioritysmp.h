@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreSchedulerPrioritySMP
  *
- * @brief Deterministic Priority SMP Scheduler API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSchedulerPrioritySMP which are used by the implementation
+ *   and the @ref RTEMSImplApplConfig.
  */
 
 /*

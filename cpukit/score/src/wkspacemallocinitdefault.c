@@ -5,8 +5,8 @@
  *
  * @ingroup RTEMSScoreWorkspace
  *
- * @brief This source file provides the default definition of
- * _Workspace_Malloc_initializer.
+ * @brief This source file contains the default definition of
+ *   ::_Workspace_Malloc_initializer.
  */
 
 /*

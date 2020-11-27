@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Object API Maximum Class
- *  @ingroup RTEMSScoreObject
+ * @ingroup RTEMSScoreObject
+ *
+ * @brief This source file contains the implementation of
+ *   _Objects_API_maximum_class().
  */
 
 /*

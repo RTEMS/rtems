@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Duplicates String with Memory from the Workspace
- *
  * @ingroup RTEMSScoreWorkspace
+ *
+ * @brief This source file contains the implementation of
+ *   _Workspace_String_duplicate().
  */
 
 /*

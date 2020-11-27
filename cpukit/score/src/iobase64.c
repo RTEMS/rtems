@@ -1,5 +1,14 @@
 /* SPDX-License-Identifier: ISC */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreIO
+ *
+ * @brief This source file contains the implementation of
+ *   _IO_Base64().
+ */
+
 /*
  * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 2004, 2005, 2007, 2009  Internet Systems Consortium, Inc. ("ISC")

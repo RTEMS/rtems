@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSchedulerSMPSimple
  *
- * @brief Simple SMP Scheduler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSchedulerSMPSimple.
  */
 
 /*

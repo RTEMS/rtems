@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Subtract Two Timespec
- *  @ingroup Timespec
+ * @ingroup RTEMSScoreTimespec
+ *
+ * @brief This source file contains the implementation of
+ *   _Timespec_Subtract().
  */
 
 /*

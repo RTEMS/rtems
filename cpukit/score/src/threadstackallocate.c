@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreStack
  *
- * @brief Stack Allocate Helper
+ * @brief This source file contains the implementation of
+ *   _Stack_Allocate().
  */
 
 /*

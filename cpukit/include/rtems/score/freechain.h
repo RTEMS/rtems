@@ -3,8 +3,11 @@
  *
  * @ingroup RTEMSScoreFreechain
  *
- * @brief Freechain Handler API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreFreechain which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
+
 /*
  * Copyright (c) 2013 Gedare Bloom.
  *

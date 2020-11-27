@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  This include file defines the per CPU information required
- *  by RTEMS.
+ * @ingroup RTEMSScorePerCPU
+ *
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScorePerCPU.
  */
 
 /*

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreHeap
  *
- * @brief Heap Handler Information API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreBarrier which are used by the implementation and the API.
  */
 
 /*

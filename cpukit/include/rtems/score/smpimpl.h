@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSMP
  *
- * @brief SuperCore SMP Implementation
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSMP which are only used by the implementation.
  */
 
 /*

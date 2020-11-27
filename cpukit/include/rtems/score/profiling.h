@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreProfiling
  *
- * @brief Profiling Support API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreProfiling.
  */
 
 /*

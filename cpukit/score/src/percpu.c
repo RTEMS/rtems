@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup PerCPU
+ * @ingroup RTEMSScorePerCPU
  *
- * @brief Allocate and Initialize Per CPU Structures
+ * @brief This source file contains a definition of ::_Per_CPU_Information and
+ *   the implementation of _Per_CPU_State_change().
  */
 
 /*

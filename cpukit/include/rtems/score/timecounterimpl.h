@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreTimecounter
  *
- * @brief Timecounter Implementation
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreTimecounter which are only used by the implementation.
  */
 
 /*

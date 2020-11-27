@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreIntErr
  *
- * @brief Initiates system termination
+ * @brief This source file contains the definition of ::_System_state_Current
+ *   and ::_Internal_errors_What_happened and implementation of _Terminate() and
+ *   _Internal_error().
  */
 
 /*

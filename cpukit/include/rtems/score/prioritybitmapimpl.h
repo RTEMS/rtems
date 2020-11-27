@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScorePriorityBitmap
  *
- * @brief Inlined Routines in the Priority Handler Bit Map Implementation
- *
- * This file contains the static inline implementation of all inlined
- * routines in the Priority Handler bit map implementation
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScorePriorityBitmap which are only used by the implementation.
  */
 
 /*

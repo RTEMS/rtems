@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreStack
  *
- * @brief Deallocate Thread Stack
+ * @brief This source file contains the implementation of
+ *   _Stack_Free().
  */
 
 /*

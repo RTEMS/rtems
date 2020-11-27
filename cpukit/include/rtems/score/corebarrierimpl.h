@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreBarrier
  *
- * @brief Inlined Routines Associated with the SuperCore Barrier
- *
- * This include file contains all of the inlined routines associated
- * with the SuperCore barrier.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreBarrier which are only used by the implementation.
  */
 
 /*

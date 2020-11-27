@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreRBTree
  *
- * @brief _RBTree_Replace_node() implementation.
+ * @brief This source file contains the implementation of
+ *   _RBTree_Replace_node().
  */
 
 /*

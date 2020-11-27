@@ -1,7 +1,10 @@
 /**
  * @file
  *
- * @brief Shrink an Object Class Information Record
+ * @ingroup RTEMSScoreObject
+ *
+ * @brief This source file contains the implementation of
+ *   _Objects_Free_objects_block() and _Objects_Shrink_information().
  */
 
 /*

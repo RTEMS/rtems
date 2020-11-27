@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Thread Queue First
- *  @ingroup RTEMSScoreThreadQ
+ * @ingroup RTEMSScoreThreadQueue
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_queue_First().
  */
 
 /*

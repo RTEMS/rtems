@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreRWLock
  *
- * @brief Inlined Routines Associated with the SuperCore RWLock
- *
- * This include file contains all of the inlined routines associated
- * with the SuperCore RWLock.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreRWLock which are only used by the implementation.
  */
 
 /*

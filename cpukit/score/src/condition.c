@@ -1,3 +1,15 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This source file contains the implementation of
+ *   _Condition_Wait(), _Condition_Wait_timed(), _Condition_Wait_recursive(),
+ *   _Condition_Wait_recursive_timed(),
+ *   _Condition_Wait_recursive_timed_ticks(), _Condition_Signal(), and
+ *   _Condition_Broadcast().
+ */
+
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *

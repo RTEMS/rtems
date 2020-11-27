@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreMemory
  *
- * @brief Memory Handler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreMemory.
  */
 
 /*

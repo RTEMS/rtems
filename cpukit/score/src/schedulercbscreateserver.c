@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Scheduler CBS Create Server
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerCBS
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Create_server().
  */
 
 /*

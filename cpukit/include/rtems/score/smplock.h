@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSMPLock
  *
- * @brief SMP Lock API
+ * @brief This header file provides the main interfaces of the
+ *   @ref RTEMSScoreSMPLock.
  */
 
 /*

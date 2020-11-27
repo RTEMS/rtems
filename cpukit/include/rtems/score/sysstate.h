@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSysState
  *
- * @brief System State Handler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSysState.
  */
 
 /*

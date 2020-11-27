@@ -1,6 +1,17 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSScorePerCPU
+ * @ingroup RTEMSScoreSMP
+ *
+ * @brief This source file contains the implementation of _Per_CPU_Add_job(),
+ *   _Per_CPU_Perform_jobs(), _Per_CPU_Wait_for_job(), _SMP_Broadcast_action(),
+ *   _SMP_Multicast_action(), _SMP_Othercast_action(), and _SMP_Synchronize().
+ */
+
+/*
  * Copyright (C) 2019 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without

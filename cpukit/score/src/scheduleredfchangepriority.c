@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Scheduler EDF Extract
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerEDF
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_EDF_Update_priority().
  */
 
 /*

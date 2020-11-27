@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreSchedulerSimple
  *
- * @brief Manipulation of Threads Simple-Priority-Based Ready Queue
- *
- * This include file contains all the constants and structures associated
- * with the manipulation of threads on a simple-priority-based ready queue.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSchedulerSimple which are used by the implementation and
+ *   the @ref RTEMSImplApplConfig.
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Remove Hook from TOD Hook Set
- *
  * @ingroup RTEMSScoreTODHooks
+ *
+ * @brief This source file contains the implementation of
+ *   _TOD_Hook_Unregister().
  */
 
 /*
@@ -40,7 +41,7 @@
 
 #include <rtems/score/todimpl.h>
 #include <rtems/score/chainimpl.h>
- 
+
 void _TOD_Hook_Unregister(
   TOD_Hook *hook
 )
@@ -48,7 +49,7 @@ void _TOD_Hook_Unregister(
   /*
    * At this time, this method does NOT have a Classic or POSIX API
    * that exports it. Any use of this method will be a direct call.
-   * It should only be called while NOT holding the TOD lock. 
+   * It should only be called while NOT holding the TOD lock.
    */
   _Assert( !_TOD_Is_owner() );
 

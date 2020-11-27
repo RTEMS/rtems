@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreSMPBarrier
+ *
+ * @brief This source file contains the implementation of
+ *   _SMP_barrier_Wait().
+ */
+
 /*
  * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
  *

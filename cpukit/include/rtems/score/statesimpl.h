@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreStates
  *
- * @brief Inlined Routines Associated with Thread State Information
- *
- * This file contains the static inline implementation of the inlined
- * routines associated with thread state information.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreStates which are only used by the implementation.
  */
 
 /*

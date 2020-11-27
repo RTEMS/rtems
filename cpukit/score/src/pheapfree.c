@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreProtHeap
  *
- * @brief Protected Heap Handler implementation.
+ * @brief This source file contains the implementation of
+ *   _Protected_heap_Free().
  */
 
 /*

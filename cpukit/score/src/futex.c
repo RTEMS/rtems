@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This source file contains the implementation of
+ *   _Futex_Wait() and _Futex_Wake().
+ */
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *

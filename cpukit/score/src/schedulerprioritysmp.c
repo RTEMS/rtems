@@ -3,7 +3,17 @@
  *
  * @ingroup RTEMSScoreSchedulerPrioritySMP
  *
- * @brief Deterministic Priority SMP Scheduler Implementation
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_SMP_Add_processor(),
+ *   _Scheduler_priority_SMP_Ask_for_help(), _Scheduler_priority_SMP_Block(),
+ *   _Scheduler_priority_SMP_Initialize(),
+ *   _Scheduler_priority_SMP_Node_initialize(),
+ *   _Scheduler_priority_SMP_Reconsider_help_request(),
+ *   _Scheduler_priority_SMP_Remove_processor(),
+ *   _Scheduler_priority_SMP_Unblock(),
+ *   _Scheduler_priority_SMP_Update_priority(),
+ *   _Scheduler_priority_SMP_Withdraw_node(), and
+ *   _Scheduler_priority_SMP_Yield().
  */
 
 /*

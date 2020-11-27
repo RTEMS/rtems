@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreMemory
+ *
+ * @brief This source file contains the implementation of
+ *   _Memory_Dirty_free_areas().
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

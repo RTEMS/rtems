@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreRWLock
  *
- * @brief
+ * @brief This source file contains the implementation of
+ *   _CORE_RWLock_Initialize().
  */
 
 /*

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Clear Thread state
- *  @ingroup RTEMSScoreThread
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Clear_state_locked() and _Thread_Clear_state().
  */
 
 /*

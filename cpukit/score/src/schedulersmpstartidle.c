@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_SMP_Start_idle().
+ */
+
 /*
  * Copyright (c) 2013, 2017 embedded brains GmbH.
  *

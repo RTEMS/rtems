@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScorePerCPU
+ *
+ * @brief This source file contains the implementation of
+ *   _Per_CPU_State_wait_for_non_initial_state().
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *

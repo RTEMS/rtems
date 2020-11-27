@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Allocate Object
+ * @brief This source file contains the implementation of
+ *   _Objects_Allocate().
  */
 
 /*

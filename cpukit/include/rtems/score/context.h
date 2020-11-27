@@ -3,9 +3,8 @@
  *
  * @ingroup RTEMSScoreContext
  *
- * @brief Information About Each Thread's Context
- *
- * This include file contains all information about each thread's context.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreContext.
  */
 
 /*

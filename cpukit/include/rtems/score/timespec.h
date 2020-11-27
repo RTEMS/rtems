@@ -3,7 +3,8 @@
  *
  * @ingroup Timespec
  *
- * @brief Contains Helpers for Manipulating Timespecs.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreTimespec.
  */
 
 /*

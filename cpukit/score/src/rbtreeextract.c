@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreRBTree
+ *
+ * @brief This source file contains the implementation of
+ *   _RBTree_Extract().
+ */
+
 /*
  *  Copyright (c) 2010 Gedare Bloom.
  *

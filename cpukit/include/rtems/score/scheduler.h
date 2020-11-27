@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief Constants and Structures Associated with the Scheduler
- *
- * This include file contains all the constants and structures associated
- * with the scheduler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreScheduler which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

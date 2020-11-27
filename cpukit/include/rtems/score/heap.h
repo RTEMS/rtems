@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreHeap
  *
- * @brief Heap Handler API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreHeap which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

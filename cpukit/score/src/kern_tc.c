@@ -1,3 +1,20 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreTimecounter
+ *
+ * @brief This source file contains the definition of
+ *  ::_Timecounter, ::_Timecounter_Time_second, and ::_Timecounter_Time_uptime
+ *  and the implementation of _Timecounter_Binuptime(),
+ *  _Timecounter_Nanouptime(), _Timecounter_Microuptime(),
+ *  _Timecounter_Bintime(), _Timecounter_Nanotime(), _Timecounter_Microtime(),
+ *  _Timecounter_Getbinuptime(), _Timecounter_Getnanouptime(),
+ *  _Timecounter_Getmicrouptime(), _Timecounter_Getbintime(),
+ *  _Timecounter_Getnanotime(), _Timecounter_Getmicrotime(),
+ *  _Timecounter_Getboottime(), _Timecounter_Getboottimebin(), and
+ *  _Timecounter_Install().
+ */
+
 /*-
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):

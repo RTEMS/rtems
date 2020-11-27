@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Iterates Over All Threads
- *  @ingroup RTEMSScoreThread
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_iterate_over_all_threads().
  */
 
 /*

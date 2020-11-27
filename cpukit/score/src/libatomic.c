@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreAtomic
+ *
+ * @brief This source file contains the implementation of
+ *   _Libatomic_Protect_start() and _Libatomic_Protect_end().
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *

@@ -3,7 +3,15 @@
  *
  * @ingroup RTEMSScoreSchedulerStrongAPA
  *
- * @brief Strong APA Scheduler Implementation
+ * @brief This source file contains the implementation of
+ *   _Scheduler_strong_APA_Add_processor(),
+ *   _Scheduler_strong_APA_Ask_for_help(), _Scheduler_strong_APA_Block(),
+ *   _Scheduler_strong_APA_Initialize(),
+ *   _Scheduler_strong_APA_Node_initialize(),
+ *   _Scheduler_strong_APA_Reconsider_help_request(),
+ *   _Scheduler_strong_APA_Remove_processor(), _Scheduler_strong_APA_Unblock(),
+ *   _Scheduler_strong_APA_Update_priority(),
+ *   _Scheduler_strong_APA_Withdraw_node(), and _Scheduler_strong_APA_Yield().
  */
 
 /*

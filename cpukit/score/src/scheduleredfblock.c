@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Removes the Thread from Ready Queue
+ * @ingroup RTEMSScoreSchedulerEDF
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_EDF_Block().
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Removes Thread from Thread Queue
+ * @ingroup RTEMSScoreSchedulerPriority
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_Update_priority().
  */
 
 /*

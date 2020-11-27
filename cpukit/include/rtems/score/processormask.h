@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Processor Mask API
- *
  * @ingroup RTEMSScoreProcessorMask
+ *
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreProcessorMask.
  */
 
 /*

@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Removes a Thread from the Simple Queue
+ * @ingroup RTEMSScoreSchedulerSimple
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_simple_Update_priority().
  */
 
 /*

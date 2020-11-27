@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Timespec Less Than Operator
- *  @ingroup Timespec
+ * @ingroup RTEMSScoreTimespec
+ *
+ * @brief This source file contains the implementation of
+ *   _Timespec_Less_than().
  */
 
 /*

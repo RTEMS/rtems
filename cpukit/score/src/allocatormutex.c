@@ -1,3 +1,13 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreAPIMutex
+ *
+ * @brief This source file contains the implementation of
+ *   _RTEMS_Lock_allocator(), _RTEMS_Unlock_allocator(), and
+ *   _RTEMS_Allocator_is_owner().
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
  *

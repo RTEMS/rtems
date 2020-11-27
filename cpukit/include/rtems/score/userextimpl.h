@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreUserExt
  *
- * @brief User Extension Handler API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreUserExt which are only used by the implementation.
  */
 
 /*

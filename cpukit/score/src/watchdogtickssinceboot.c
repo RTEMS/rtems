@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Watchdog Ticks Since Boot
- *  @ingroup RTEMSScoreWatchdog
+ * @ingroup RTEMSScoreWatchdog
+ *
+ * @brief This source file contains the definition of
+ *   ::_Watchdog_Ticks_since_boot.
  */
 
 /*

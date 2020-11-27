@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreSchedulerPriorityAffinitySMP
  *
- * @brief Deterministic Priority Affinity SMP Scheduler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSchedulerPriorityAffinitySMP.
  */
 
 /*

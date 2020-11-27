@@ -3,13 +3,8 @@
  *
  * @ingroup RTEMSScoreMPPacket
  *
- * @brief Specification for the Packet Handler
- *
- * This package is the specification for the Packet Handler.
- * This handler defines the basic packet and provides
- * mechanisms to utilize packets based on this prefix.
- * Packets are the fundamental basis for messages passed between
- * nodes in an MP system.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreMPPacket.
  */
 
 /*
@@ -42,7 +37,9 @@ extern "C" {
  *
  * This handler encapsulates the primary definition of MPCI packets.  This
  * handler defines the part of the packet that is common to all remote
- * operations.
+ * operations.  It defines the basic packet and provides mechanisms to utilize
+ * packets based on this prefix.  Packets are the fundamental basis for
+ * messages passed between nodes in an MP system.
  *
  * @{
  */

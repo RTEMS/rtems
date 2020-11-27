@@ -1,9 +1,11 @@
 /**
  * @file
  *
- * @brief Processor Mask Implementation
- *
  * @ingroup RTEMSScoreProcessorMask
+ *
+ * @brief This source file contains the definition of
+ *   ::_Processor_mask_The_one_and_only and the implementation of
+ *   _Processor_mask_Copy().
  */
 
 /*

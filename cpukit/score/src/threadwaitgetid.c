@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Wait_get_id().
+ */
+
 /*
  * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *

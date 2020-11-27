@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerSimple
  *
- * @brief Simple Schedule Determine Heir
+ * @brief This source file contains the implementation of
+ *   _Scheduler_simple_Schedule().
  */
 
 /*

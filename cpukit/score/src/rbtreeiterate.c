@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreRBTree
  *
- * @brief _RBTree_Iterate() implementation.
+ * @brief This source file contains the implementation of
+ *   _RBTree_Iterate().
  */
 
 /*

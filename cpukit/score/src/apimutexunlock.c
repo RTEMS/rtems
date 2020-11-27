@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Releases the Specified API Mutex
- *
  * @ingroup RTEMSScoreAPIMutex
+ *
+ * @brief This source file contains the implementation of
+ *   _API_Mutex_Unlock().
  */
 
 /*

@@ -1,9 +1,13 @@
 /**
  * @file
  *
- * @brief Changes the Priority of a Thread
- *
  * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Priority_add(), _Thread_Priority_and_sticky_update(),
+ *   _Thread_Priority_changed(), _Thread_Priority_perform_actions(),
+ *   _Thread_Priority_remove(), _Thread_Priority_replace(), and
+ *   _Thread_Priority_update().
  */
 
 /*

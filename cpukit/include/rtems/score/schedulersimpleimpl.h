@@ -3,11 +3,8 @@
  *
  * @ingroup RTEMSScoreSchedulerSimple
  *
- * @brief Inlined Routines Associated with the Manipulation of the
- * Priority-Based Scheduling Structures
- *
- * This inline file contains all of the inlined routines associated with
- * the manipulation of the priority-based scheduling structures.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreSchedulerSimple which are only used by the implementation.
  */
 
 /*

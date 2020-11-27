@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreThreadMP
  *
- * @brief Multiprocessing Portion of the Thread Package
- *
- * This include file contains the specification for all routines
- * and data specific to the multiprocessing portion of the thread package.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreThreadMP.
  */
 
 /*

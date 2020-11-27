@@ -1,8 +1,15 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Thread Queue Initialize
- *  @ingroup RTEMSScoreThreadQ
+ * @ingroup RTEMSScoreThreadQueue
+ *
+ * @brief This source file contains static assertions related to the Thread
+ *   Queue Handler, the definition of ::_Thread_queue_Object_name, and the
+ *   implementation of _Thread_queue_Acquire(),
+ *   _Thread_queue_Do_acquire_critical(), _Thread_queue_Initialize(),
+ *   _Thread_queue_MP_callout_do_nothing(), _Thread_queue_Object_initialize(),
+ *   _Thread_queue_Queue_get_name_and_id(), _Thread_queue_Release(), and
+ *   _Thread_queue_Release_critical().
  */
 
 /*

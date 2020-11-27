@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Set Parameters for CBS Scheduling
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Set_parameters().
  */
 
 /*

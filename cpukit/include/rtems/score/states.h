@@ -3,9 +3,9 @@
  *
  * @ingroup RTEMSScoreStates
  *
- * @brief Thread Execution State Information
- *
- * This include file defines thread execution state information.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreStates which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

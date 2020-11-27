@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreProfiling
+ *
+ * @brief This source file contains the implementation of
+ *   _Profiling_Outer_most_interrupt_entry_and_exit().
+ */
+
 /*
  * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreChain
+ *
+ * @brief This source file contains the implementation of
+ *   _Chain_Node_count_unprotected().
+ */
 /*
  * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
  *

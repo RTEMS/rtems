@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreMutex
  *
- * @brief CORE Mutex Implementation
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMutex which are only used by the implementation.
  */
 
 /*

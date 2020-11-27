@@ -3,14 +3,8 @@
  *
  * @ingroup RTEMSScoreRBTree
  *
- * @brief Inlined Routines Associated with Red-Black Trees
- *
- * This include file contains the bodies of the routines which are
- * associated with Red-Black Trees and inlined.
- *
- * @note  The routines in this file are ordered from simple
- *        to complex.  No other RBTree Handler routine is referenced
- *        unless it has already been defined.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreRBTree which are only used by the implementation.
  */
 
 /*

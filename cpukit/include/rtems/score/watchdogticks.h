@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreWatchdog
  *
- * @brief Constants for the watchdog ticks.
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreWatchdog related to watchdog ticks which are used by the
+ *   implementation and the @ref RTEMSImplApplConfig.
  */
 
 /*

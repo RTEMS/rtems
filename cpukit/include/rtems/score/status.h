@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreStatus
+ *
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreStatus.
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *
@@ -23,6 +32,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup RTEMSScoreStatus Operation Status Support
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This group contains the Operation Status Support implementation.
+ *
+ * @{
+ */
 
 /**
  * @brief Status code parts for the Classic API.
@@ -132,6 +151,8 @@ typedef enum {
   STATUS_UNSATISFIED =
     STATUS_BUILD( STATUS_CLASSIC_UNSATISFIED, EAGAIN )
 } Status_Control;
+
+/** @} */
 
 #ifdef __cplusplus
 }

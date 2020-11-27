@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Thread Handler
- *  @ingroup RTEMSScoreThread
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the definition of
+ *   ::_Thread_Global_constructor and the implementation of _Thread_Handler().
  */
 
 /*

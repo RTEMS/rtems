@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreScheduler
  *
- * @brief Scheduler Initialize
+ * @brief This source file contains the implementation of
+ *   _Scheduler_Handler_initialization().
  */
 
 /*

@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Object Name To Id
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScoreObject
+ *
+ * @brief This source file contains the implementation of
+ *   _Objects_Name_to_id_u32().
  */
 
 /*

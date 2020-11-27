@@ -1,10 +1,12 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Initialize Thread
+ * @ingroup RTEMSScoreThread
  *
- *  @ingroup RTEMSScoreThread
+ * @brief This source file contains the implementation of
+ *   _Thread_Initialize().
  */
+
 /*
  *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).

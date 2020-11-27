@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Scheduler CBS Get Remaining Budget
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerCBS
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Get_remaining_budget().
  */
 
 /*

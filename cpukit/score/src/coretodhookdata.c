@@ -1,14 +1,15 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @brief TOD Hook Set
- *
  * @ingroup RTEMSScoreTODHooks
+ *
+ * @brief This source file contains the definition of
+ *   ::_TOD_Hooks.
  */
 
 /*
- *  SPDX-License-Identifier: BSD-2-Clause
- *
  *  COPYRIGHT (c) 2019.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -40,6 +41,5 @@
 
 #include <rtems/score/todimpl.h>
 #include <rtems/score/chainimpl.h>
- 
-Chain_Control _TOD_Hooks = CHAIN_INITIALIZER_EMPTY(_TOD_Hooks);
 
+Chain_Control _TOD_Hooks = CHAIN_INITIALIZER_EMPTY( _TOD_Hooks );

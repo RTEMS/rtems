@@ -1,9 +1,10 @@
 /**
  * @file
- * 
+ *
  * @ingroup RTEMSScoreRWLock
  *
- * @brief Obtain RWLock for reading
+ * @brief This source file contains the implementation of
+ *   _CORE_RWLock_Seize_for_reading().
  */
 
 /*

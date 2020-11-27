@@ -1,8 +1,15 @@
 /**
- *  @file
+ * @file
  *
- *  @brief SMP Support
- *  @ingroup RTEMSScore
+ * @ingroup RTEMSScoreSMP
+ *
+ * @brief This source file contains the definition of ::_SMP_Online_processors
+ *   and ::_SMP_Processor_maximum and the implementation of
+ *   _SMP_Handler_initialize(), _SMP_Request_shutdown(),
+ *   _SMP_Request_start_multitasking(), _SMP_Send_message(),
+ *   _SMP_Send_message_broadcast(), _SMP_Send_message_multicast(),
+ *   _SMP_Should_start_processor(), and
+ *   _SMP_Start_multitasking_on_secondary_processor().
  */
 
 /*

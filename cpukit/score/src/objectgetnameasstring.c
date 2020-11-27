@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Extracts a Node from a Chain
+ * @ingroup RTEMSScoreObject
  *
- * @ingroup RTEMSScore
+ * @brief This source file contains the implementation of
+ *   _Objects_Name_to_string() and _Objects_Get_name_as_string().
  */
 
 /*

@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreAPIMutex
  *
- * @brief API Mutex Handler API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreAPIMutex.
  */
 
 /*

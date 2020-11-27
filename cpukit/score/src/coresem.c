@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Core Semaphore Initialize
- *  @ingroup RTEMSScoreSemaphore
+ * @ingroup RTEMSScoreSemaphore
+ *
+ * @brief This source file contains the implementation of
+ *   _CORE_semaphore_Initialize().
  */
 
 /*

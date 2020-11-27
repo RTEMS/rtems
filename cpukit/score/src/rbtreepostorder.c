@@ -3,8 +3,8 @@
  *
  * @ingroup RTEMSScoreRBTree
  *
- * @brief _RBTree_Postorder_first() and _RBTree_Postorder_next()
- * implementation.
+ * @brief This source file contains the implementation of
+ *   _RBTree_Postorder_next() and _RBTree_Postorder_first().
  */
 
 /*

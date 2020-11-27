@@ -3,11 +3,8 @@
  *
  * @ingroup RTEMSScoreWorkspace
  *
- * @brief Information Related to the RAM Workspace
- *
- * This include file contains information related to the
- * RAM Workspace.  This Handler provides mechanisms which can be used to
- * define, initialize and manipulate the workspace.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreWorkspace which are only used by the implementation.
  */
 
 /*
@@ -38,7 +35,8 @@ extern "C" {
  * @brief This group contains the Workspace Handler implementation.
  *
  * This handler encapsulates functionality related to the management of the
- * RTEMS Workspace.
+ * RTEMS Workspace.  It provides mechanisms which can be used to define,
+ * initialize and manipulate the RTEMS Workspace.
  *
  * @{
  */

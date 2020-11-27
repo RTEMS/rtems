@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreWatchdog
  *
- * @brief Remove Watchdog
+ * @brief This source file contains the implementation of
+ *   _Watchdog_Remove().
  */
 
 /*

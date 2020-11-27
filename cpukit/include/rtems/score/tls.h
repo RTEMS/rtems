@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreTLS
  *
- * @brief Thread-Local Storage (TLS)
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreTLS.
  */
 
 /*

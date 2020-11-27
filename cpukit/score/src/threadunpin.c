@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Do_unpin().
+ */
+
 /*
  * Copyright (c) 2018 embedded brains GmbH
  *

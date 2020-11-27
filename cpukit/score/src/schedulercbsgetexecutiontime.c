@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Get Thread Execution Info
+ * @ingroup RTEMSScoreSchedulerCBS
  *
- * @ingroup RTEMSScoreScheduler
+ * @brief This source file contains the implementation of
+ *   _Scheduler_CBS_Get_execution_time().
  */
 
 /*

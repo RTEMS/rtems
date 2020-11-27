@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreAssert
  *
- * @brief Information for the Assert Handler
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreAssert.
  */
 
 /*

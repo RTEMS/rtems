@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief EDF SMP Scheduler API
- *
  * @ingroup RTEMSScoreSchedulerSMPEDF
+ *
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreSchedulerSMPEDF.
  */
 
 /*

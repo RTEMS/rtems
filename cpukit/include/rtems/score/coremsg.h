@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreMessageQueue
  *
- * @brief Constants and Structures Associated with the Message Queue Handler.
- *
- * This include file contains all the constants and structures associated
- * with the Message queue Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMessageQueue which are only used by the implementation.
  */
 
 /*

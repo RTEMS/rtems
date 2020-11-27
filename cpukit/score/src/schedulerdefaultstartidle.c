@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_default_Start_idle().
+ */
+
 /*
  * Copyright (c) 2013-2014 embedded brains GmbH
  *

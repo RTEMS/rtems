@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Add to a Timespec
- *  @ingroup Timespec
+ * @ingroup RTEMSScoreTimespec
+ *
+ * @brief This source file contains the implementation of
+ *   _Timespec_Add_to().
  */
 
 /*

@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreMPCI
  *
- * @brief MPCI Layer API
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMPCI which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

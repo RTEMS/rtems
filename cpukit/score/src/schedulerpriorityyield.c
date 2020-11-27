@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Scheduler Priority Yield
- *  @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerPriority
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_Yield().
  */
 
 /*

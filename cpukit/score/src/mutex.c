@@ -1,3 +1,15 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This source file contains the implementation of
+ *   _Mutex_Acquire(), _Mutex_Acquire_timed(), _Mutex_Acquire_timed_ticks(),
+ *   _Mutex_Try_acquire(), _Mutex_Release(), _Mutex_recursive_Acquire(),
+ *   _Mutex_recursive_Acquire_timed(), _Mutex_recursive_Try_acquire(), and
+ *   _Mutex_recursive_Release().
+ */
+
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *

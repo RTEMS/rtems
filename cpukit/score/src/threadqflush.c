@@ -1,9 +1,13 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreThreadQ
+ * @ingroup RTEMSScoreThreadQueue
  *
- * @brief Thread Queue Flush
+ * @brief This source file contains the implementation of
+ *   _Thread_queue_Flush_default_filter(),
+ *   _Thread_queue_Flush_status_object_was_deleted(),
+ *   _Thread_queue_Flush_status_unavailable(), and
+ *   _Thread_queue_Flush_critical().
  */
 
 /*

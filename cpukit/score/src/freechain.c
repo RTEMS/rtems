@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreFreechain
  *
- * @brief Freechain Handler Implementation
+ * @brief This source file contains the implementation of
+ *   _Freechain_Extend(), _Freechain_Get(), and _Freechain_Put().
  */
 
 /*

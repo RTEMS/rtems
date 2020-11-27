@@ -3,7 +3,10 @@
  *
  * @ingroup RTEMSScoreThread
  *
- * @brief Restart Thread 
+ * @brief This source file contains the implementation of _Thread_Cancel(),
+ *   _Thread_Change_life(), _Thread_Close(), _Thread_Exit(), _Thread_Join(),
+ *   _Thread_Kill_zombies(), _Thread_Restart_other(), _Thread_Restart_self(),
+ *   and _Thread_Set_life_protection().
  */
 
 /*

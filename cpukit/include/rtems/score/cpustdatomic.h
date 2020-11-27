@@ -1,7 +1,8 @@
 /**
  * @file
  * 
- * @brief Atomic Operations CPU API
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreAtomicCPU.
  */
 
 /*

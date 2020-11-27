@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the default definition of
+ *   ::_Thread_Idle_body.
+ */
+
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *

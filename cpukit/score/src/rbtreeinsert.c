@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreRBTree
+ *
+ * @brief This source file contains the implementation of
+ *   _RBTree_Insert_color().
+ */
+
 /*
  *  Copyright (c) 2010-2012 Gedare Bloom.
  *

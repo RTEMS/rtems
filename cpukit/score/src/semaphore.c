@@ -1,3 +1,13 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This source file contains the implementation of
+ *   _Semaphore_Wait(), _Semaphore_Wait_timed_ticks(), _Semaphore_Try_wait(),
+ *   _Semaphore_Post(), and _Semaphore_Post_binary().
+ */
+
 /*
  * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *

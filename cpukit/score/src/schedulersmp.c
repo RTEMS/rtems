@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreScheduler
+ *
+ * @brief This source file contains the implementation of
+ *   _Scheduler_Request_ask_for_help().
+ */
+
 /*
  * Copyright (c) 2014, 2017 embedded brains GmbH.
  *

@@ -1,11 +1,12 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreScheduler
+ * @ingroup RTEMSScoreSchedulerPriority
  *
- * @brief Priority Scheduler Schedule Method
+ * @brief This source file contains the implementation of
+ *   _Scheduler_priority_Schedule().
  */
- 
+
 /*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).

@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Set_name() and _Thread_Get_name().
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH.
  *

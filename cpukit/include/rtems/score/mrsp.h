@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreMRSP
  *
- * @brief Definitions for Multiprocessor Resource Sharing Protocol (MrsP).
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMRSP which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

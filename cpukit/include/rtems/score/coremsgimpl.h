@@ -3,10 +3,9 @@
  *
  * @ingroup RTEMSScoreMessageQueue
  *
- * @brief Inlined Routines in the Core Message Handler
- *
- * This include file contains the static inline implementation of all
- * inlined routines in the Core Message Handler.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreMessageQueue which are used by the implementation and the
+ *   @ref RTEMSImplApplConfig.
  */
 
 /*

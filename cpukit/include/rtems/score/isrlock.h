@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreISRLocks
  *
- * @brief ISR Locks
+ * @brief This header file provides the interfaces of the
+ *   @ref RTEMSScoreISRLocks.
  */
 
 /*

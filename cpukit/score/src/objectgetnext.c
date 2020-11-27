@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Get Pointer to Next Object that is Active
+ * @brief This source file contains the implementation of
+ *   _Objects_Get_next().
  */
 
 /*

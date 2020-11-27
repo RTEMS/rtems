@@ -3,10 +3,8 @@
  *
  * @ingroup RTEMSScoreThreadQueue
  *
- * @brief Constants and Structures Associated with the Manipulation of Objects
- *
- * This include file contains all the constants and structures associated
- * with the manipulation of objects.
+ * @brief This header file provides interfaces of the
+ *   @ref RTEMSScoreThreadQueue which are only used by the implementation.
  */
 
 /*
@@ -1078,7 +1076,11 @@ void _Thread_queue_Extract( Thread_Control *the_thread );
  *
  * This routine extracts the_thread from the_thread_queue
  * and ensures that if there is a proxy for this task on
- * another node, it is also dealt with.
+ * another node, it is also dealt with. A proxy is a data
+ * data that is on the thread queue on the remote node and
+ * acts as a proxy for the local thread. If the local thread
+ * was waiting on a remote operation, then the remote side
+ * of the operation must be cleaned up.
  *
  * @param[in, out] the_thread The pointer to a thread control block that
  *     is to be removed

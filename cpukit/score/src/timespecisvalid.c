@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Is Timespec Valid
- *  @ingroup Timespec
+ * @ingroup RTEMSScoreTimespec
+ *
+ * @brief This source file contains the implementation of
+ *   _Timespec_Is_valid().
  */
 
 /*

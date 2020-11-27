@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Initialize a Chain Header
- *
  * @ingroup RTEMSScoreChain
+ *
+ * @brief This source file contains the implementation of
+ *   _Chain_Initialize().
  */
 
 /*

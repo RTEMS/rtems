@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Thread Wait Timeout
- *
  * @ingroup RTEMSScoreThread
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_Continue() and _Thread_Timeout().
  */
 
 /*

@@ -1,8 +1,11 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Distributed MP Support
- *  @ingroup RTEMSScoreThreadMP
+ * @ingroup RTEMSScoreThreadMP
+ *
+ * @brief This source file contains the implementation of
+ *   _Thread_MP_Handler_initialization(), _Thread_MP_Allocate_proxy(),
+ *   _Thread_MP_Find_proxy(), _Thread_MP_Free_proxy().
  */
 
 /*
