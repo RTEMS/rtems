@@ -40,8 +40,8 @@
 #include <setjmp.h>
 
 typedef struct rtems_shell_dd_globals_t {
-  IO	in, out;		/* input/output state */
-  STAT	st;			/* statistics */
+  rtems_shell_dd_IO	in, out;		/* input/output state */
+  rtems_shell_dd_STAT	st;			/* statistics */
   void	(*cfunc)(struct rtems_shell_dd_globals_t* globals);		/* conversion function */
   uintmax_t cpy_cnt;		/* # of blocks to copy */
   u_int	ddflags;		/* conversion options */

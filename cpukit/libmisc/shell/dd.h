@@ -61,7 +61,7 @@ typedef struct {
 	const char	*name;		/* name */
 	int		fd;		/* file descriptor */
 	off_t		offset;		/* # of blocks to skip */
-} IO;
+} rtems_shell_dd_IO;
 
 typedef struct {
 	uintmax_t	in_full;	/* # of full input blocks */
@@ -72,7 +72,7 @@ typedef struct {
 	uintmax_t	swab;		/* # of odd-length swab blocks */
 	uintmax_t	bytes;		/* # of bytes written */
 	double		start;		/* start time of dd */
-} STAT;
+} rtems_shell_dd_STAT;
 
 /* Flags (in ddflags). */
 #define	C_ASCII		0x00001

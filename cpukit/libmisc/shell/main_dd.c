@@ -86,7 +86,7 @@ __FBSDID("$FreeBSD: src/bin/dd/dd.c,v 1.43 2004/08/15 19:10:05 rwatson Exp $");
 
 static void dd_close(rtems_shell_dd_globals* globals);
 static void dd_in(rtems_shell_dd_globals* globals);
-static void getfdtype(rtems_shell_dd_globals* globals, IO *);
+static void getfdtype(rtems_shell_dd_globals* globals, rtems_shell_dd_IO *);
 static void setup(rtems_shell_dd_globals* globals);
 
 #if RTEMS_REMOVED
@@ -299,7 +299,7 @@ setup(rtems_shell_dd_globals* globals)
 }
 
 static void
-getfdtype(rtems_shell_dd_globals* globals, IO *io)
+getfdtype(rtems_shell_dd_globals* globals, rtems_shell_dd_IO *io)
 {
 	struct stat sb;
 #if RTEMS_REMOVED
