@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensions
+ * @ingroup RTEMSImplClassicUserExt
  *
- * @brief User Extensions Implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_extension_delete().
  */
 
 /*

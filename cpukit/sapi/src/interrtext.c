@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Returns a text for an internal error code.
+ * @ingroup RTEMSImplClassic
  *
- * @ingroup ClassicFatal
+ * @brief This source file contains the implementation of
+ *   rtems_internal_error_text().
  */
 
 /*

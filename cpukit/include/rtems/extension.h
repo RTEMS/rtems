@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensions
+ * @ingroup RTEMSImplClassicUserExt
  *
  * @brief User Extensions API.
  */
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicUserExtensions User Extensions
+ * @defgroup RTEMSAPIClassicUserExt User Extensions Manager
  *
  * @ingroup RTEMSAPIClassic
  *
@@ -35,7 +35,7 @@ extern "C" {
  * augment the executive by allowing them to supply extension routines which
  * are invoked at critical system events.
  *
- * @section ClassicUserExtensionsSets Extension Sets
+ * @section RTEMSAPIClassicUserExtSets Extension Sets
  *
  * An @ref User_extensions_Table "extension set" is defined as a set of
  * routines which are invoked at each of the critical system events at which
@@ -75,7 +75,7 @@ extern "C" {
  * Extension switches do not effect the context switch overhead if no switch
  * handler is installed.
  *
- * @section ClassicUserExtensionsTCB Task Control Block Area
+ * @section RTEMSAPIClassicUserExtTCB Task Control Block Area
  *
  * RTEMS provides for a pointer to a user-defined data area for each extension
  * set to be linked to each task's control block (TCB). This area is only
@@ -114,7 +114,7 @@ extern "C" {
  * buffers and use the partition manager's allocation and deallocation
  * directives to obtain and release the extension buffers.
  *
- * @section ClassicUserExtensionsOrder Order of Invokation
+ * @section RTEMSAPIClassicUserExtOrder Order of Invokation
  *
  * When one of the critical system events occur, the user extensions are
  * invoked in either @a forward or @a reverse order. Forward order indicates

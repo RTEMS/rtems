@@ -1,7 +1,9 @@
 /**
  * @file
  * 
- * @brief Chain API
+ * @ingroup RTEMSAPIClassicChains
+ *
+ * @brief This header file provides the Chains API.
  */
 
 /*
@@ -26,13 +28,15 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicChains Chains
+ * @defgroup RTEMSAPIClassicChains Chains
  *
  * @ingroup RTEMSAPIClassic
  *
- * @brief Chain API
+ * @brief The chain container provides data structures and directives to manage
+ *   user-defined data structures in doubly-linked lists.
+ *
+ * @{
  */
-/**@{**/
 
 typedef Chain_Node rtems_chain_node;
 

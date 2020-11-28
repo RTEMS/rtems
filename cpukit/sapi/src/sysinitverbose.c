@@ -1,6 +1,15 @@
-/*
- * SPDX-License-Identifier: BSD-2-Clause
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the implementation of
+ *   _Sysinit_Verbose().
+ */
+
+/*
  * Copyright (C) 2020 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without

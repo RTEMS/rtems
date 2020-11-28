@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScorertems_rbtree
+ * @ingroup RTEMSAPIClassicRBTrees
  *
- * @brief Find the control structure of the tree containing the given node
+ * @brief This source file contains the implementation of
+ *   rtems_rbtree_find().
  */
 
 /*

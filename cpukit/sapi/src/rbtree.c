@@ -1,8 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Initialize a Red-Black Tree
- *  @ingroup ClassicRBTrees
+ * @ingroup RTEMSAPIClassicRBTrees
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_rbtree_initialize().
  */
 
 /*

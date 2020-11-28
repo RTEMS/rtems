@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIClassic
+ * @ingroup RTEMSImplClassic
  *
- * @brief rtems_get_copyright_notice() Implementation
+ * @brief This source file contains the implementation of
+ *   rtems_get_copyright_notice().
  */
 
 /*

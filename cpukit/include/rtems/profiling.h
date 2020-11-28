@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup Profiling
+ * @ingroup RTEMSAPIProfiling
  *
- * @brief Profiling API
+ * @brief This header file provides the Profiling Support API.
  */
 
 /*
@@ -32,7 +32,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup Profiling Profiling Support
+ * @defgroup RTEMSAPIProfiling Profiling Support
  *
  * @ingroup RTEMSAPI
  *

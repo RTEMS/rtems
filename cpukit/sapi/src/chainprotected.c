@@ -1,3 +1,15 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPIClassicChains
+ *
+ * @brief This source file contains the implementation of rtems_chain_append(),
+ *   rtems_chain_append_with_empty_check(), rtems_chain_extract(),
+ *   rtems_chain_get(), rtems_chain_get_with_empty_check(),
+ *   rtems_chain_insert(), rtems_chain_prepend(), and
+ *   rtems_chain_prepend_with_empty_check().
+ */
+
 /*
  * Copyright (c) 2013, 2016 embedded brains GmbH.  All rights reserved.
  *

@@ -1,14 +1,18 @@
 /**
  * @file
  *
- * @brief Creates the version strings from the various pieces of version
- * information. The main version number is part of the build system and is
- * stamped into rtems/score/cpuopts.h. The version control key string is
- * extracted from the version control tool when the code is being built and is
- * updated if it has changed. The key may indicate there are local
- * modification.
- *
  * @ingroup RTEMSAPIClassicVersion
+ *
+ * @brief This source file contains the implementation of rtems_version(),
+ *   rtems_version_control_key(), rtems_version_major(), rtems_version_minor(),
+ *   and rtems_version_revision().
+ *
+ * The version strings are created from the various pieces of version
+ * information.  The main version number is part of the build system and is
+ * stamped into <rtems/score/cpuopts.h>.  The version control key string is
+ * extracted from the version control tool when the code is being built and is
+ * updated if it has changed.  It is defined in "version-vc-key.h".  The key
+ * may indicate there are local modification.
  */
 
 /*

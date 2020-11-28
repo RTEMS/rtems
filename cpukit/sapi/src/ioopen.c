@@ -1,14 +1,12 @@
 /**
  * @file
  *
- * @brief Opening for The IO Manager
+ * @ingroup RTEMSImplClassicIO
  *
- * @ingroup ClassicIO
+ * @brief This source file contains the implementation of rtems_io_open().
  */
 
 /*
- *  Input/Output Manager - Open Device
- *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *

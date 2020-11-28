@@ -1,9 +1,12 @@
 /**
  * @file
  *
- * @ingroup RBHeap
+ * @ingroup RTEMSAPIRBHeap
  *
- * @brief Red-Black Tree Heap implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_rbheap_allocate(), rtems_rbheap_extend_descriptors_never(),
+ *   rtems_rbheap_extend_descriptors_with_malloc(), rtems_rbheap_free(), and
+ *   rtems_rbheap_initialize().
  */
 
 /*

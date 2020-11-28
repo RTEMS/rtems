@@ -1,9 +1,12 @@
 /**
  * @file
  *
- * @brief Initialization Manager
+ * @ingroup RTEMSImplClassic
  *
- * @ingroup ClassicRTEMS
+ * @brief This source file contains the definition of ::_Copyright_Notice,
+ *   ::_Objects_Information_table, the flexible per-CPU data linker set limits,
+ *   the system initialization linker set limits and the implementation of
+ *   rtems_initialize_executive().
  */
 
 /*

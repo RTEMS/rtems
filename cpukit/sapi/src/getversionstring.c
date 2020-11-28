@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Get the RTEMS Version as a String
+ * @ingroup RTEMSImplClassic
  *
- * @ingroup ClassicRTEMS
+ * @brief This source file contains the implementation of
+ *   rtems_get_version_string().
  */
 
 /*

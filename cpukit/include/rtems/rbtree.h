@@ -1,12 +1,9 @@
 /**
  * @file
  * 
- * @brief Constants and Structures Associated with the RBTree API in RTEMS
- * 
- * This include file contains all the constants and structures associated
- * with the RBTree API in RTEMS. The rbtree is a Red Black Tree that
- * is part of the Super Core. This is the published interface to that
- * code.
+ * @ingroup RTEMSAPIClassicRBTrees
+ *
+ * @brief This header file provides the Red-Black Trees API.
  */
 
 /*
@@ -27,11 +24,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup ClassicRBTrees Red-Black Trees
+ * @defgroup RTEMSAPIRBTrees Red-Black Trees
  *
  * @ingroup RTEMSAPIClassic
  *
- * @brief A Red-Black Tree container.
+ * @brief The red-black tree container provides data structures and directives
+ *   to manage user-defined data structures in red-black trees.
  *
  * The red-black tree container offers no internal protection against
  * concurrent access.  The user must ensure that at most one thread at once can

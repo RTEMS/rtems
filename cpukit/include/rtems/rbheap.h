@@ -1,7 +1,9 @@
 /**
  * @file
  *
- * @brief Red-Black Tree Heap API
+ * @ingroup RTEMSAPIRBHeap
+ *
+ * @brief This header file provides the Red-Black Tree Heap API.
  */
 
 /*
@@ -30,11 +32,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup RBHeap Red-Black Tree Heap
+ * @defgroup RTEMSAPIRBHeap Red-Black Tree Heap
  *
- * @ingroup RTEMSAPIClassic
+ * @ingroup RTEMSAPI
  *
- * @brief Red-Black Tree Heap API.
+ * @brief The red-black tree heap provides a memory allocator using a red-black
+ *   tree to maintain blocks of memory.
  *
  * The red-black tree heap provides a memory allocator suitable to implement
  * the malloc() and free() interface.  It uses a first-fit allocation strategy.

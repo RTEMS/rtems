@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Implementation of rtems_fatal_source_text()
+ * @ingroup RTEMSImplClassic
  *
- * @ingroup ClassicFatal
+ * @brief This source file contains the implementation of
+ *   rtems_fatal_source_text().
  */
 
 /*

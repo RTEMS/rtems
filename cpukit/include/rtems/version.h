@@ -1,7 +1,9 @@
 /**
  * @file
  *
- * @brief Version API.
+ * @ingroup RTEMSAPIClassicVersion
+ *
+ * @brief This header file provides the Version API.
  */
 
 /*
@@ -29,8 +31,9 @@ extern "C" {
  *
  * @brief The Version API provides functions to return the version or parts of
  * the version of RTEMS you are using.
+ *
+ * @{
  */
-/**@{**/
 
 /**
  * @brief Returns the version string.

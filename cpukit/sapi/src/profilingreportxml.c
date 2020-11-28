@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPIProfiling
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_profiling_report_xml().
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *

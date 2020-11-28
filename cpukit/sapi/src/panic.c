@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup ErrorPanicSupport
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_panic().
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
  *

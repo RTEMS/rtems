@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @brief Unregister a Driver from the Device Driver Table.
+ * @ingroup RTEMSImplClassicIO
  *
- * @ingroup ClassicIO
+ * @brief This source file contains the implementation of
+ *   rtems_io_unregister_driver().
  */
 
 /*

@@ -1,7 +1,10 @@
 /**
  * @file
  *
- * @brief Classic Input/Output Manager Implementation API
+ * @ingroup RTEMSImplClassicIO
+ *
+ * @brief This header file provides interfaces used by the I/O Manager
+ *   implementation.
  */
 
 /*
@@ -22,6 +25,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup RTEMSImplClassicIO I/O Manager
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the I/O Manager implementation.
+ *
+ * @{
+ */
 
 extern const size_t _IO_Number_of_drivers;
 
@@ -57,6 +70,8 @@ RTEMS_INLINE_ROUTINE void _IO_Driver_registration_release(
     lock_context
   );
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

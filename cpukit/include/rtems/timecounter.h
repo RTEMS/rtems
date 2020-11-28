@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup SAPITimecounter
+ * @ingroup RTEMSAPIClassicTimecounter
  *
- * @brief Timecounter API
+ * @brief This header file provides the Timecounter Support API.
  */
 
 /*
@@ -31,9 +31,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup SAPITimecounter Timecounter Support
+ * @defgroup RTEMSAPIClassicTimecounter Timecounter Support
  *
  * @ingroup RTEMSAPIClassic
+ *
+ * @brief The timecounter support provides directives to implement clock device
+ *   drivers.
  *
  * @{
  */

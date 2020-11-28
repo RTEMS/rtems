@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicIO
+ * @ingroup RTEMSImplClassicIO
  *
- * @brief Classic Input/Output Manager implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_io_register_driver().
  */
 
 /*

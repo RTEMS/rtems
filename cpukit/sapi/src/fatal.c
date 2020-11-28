@@ -1,10 +1,10 @@
 /**
  * @file
  *
- * @brief Invokes the internal error handler with a source of
- *        INTERNAL_ERROR_RTEMS_API and is internal set to false.
+ * @ingroup RTEMSImplClassic
  *
- * @ingroup ClassicFatal
+ * @brief This source file contains the implementation of
+ *   rtems_fatal_error_occurred().
  */
 
 /*

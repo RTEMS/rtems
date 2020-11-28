@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPIClassicTimecounter
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_timecounter_simple_install().
+ */
+
 /*
  * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
  *

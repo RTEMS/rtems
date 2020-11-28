@@ -1,9 +1,11 @@
 /**
  * @file
  *
- * @brief Initialization of Device Drivers
+ * @ingroup RTEMSImplClassicIO
  *
- * @ingroup ClassicIO
+ * @brief This source file contains the definition of
+ *   ::_IO_All_drivers_initialized and implementation of
+ *   _IO_Initialize_all_drivers().
  */
 
 /*

@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @ingroup ClassicIO
+ * @ingroup RTEMSImplClassicIO
  *
- * @brief This file contains definitions of IO drivers data structures for the
- * default application configuration.
+ * @brief This source file contains a definition of ::_IO_Driver_address_table
+ *   and ::_IO_Number_of_drivers with zero drivers.
  */
 
 /*

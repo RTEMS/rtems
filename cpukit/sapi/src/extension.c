@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensions
+ * @ingroup RTEMSImplClassicUserExt
  *
- * @brief Extension Manager Information with Zero Objects
+ * @brief This source file contains a definition of the
+ *   ::_Extension_Information with zero objects.
  */
 
 /*

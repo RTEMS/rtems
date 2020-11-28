@@ -30,9 +30,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup ClassicCounter Free-Running Counter and Busy Wait Delay
+ * @defgroup RTEMSAPICounter Free-Running Counter and Busy Wait Delay
  *
- * @ingroup RTEMSAPIClassic
+ * @ingroup RTEMSAPI
  *
  * @brief Free-running counter and busy wait delay functions.
  *

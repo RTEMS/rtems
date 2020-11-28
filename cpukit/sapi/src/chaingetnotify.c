@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicChains
+ * @ingroup RTEMSAPIClassicChains
  *
- * @brief rtems_chain_get_with_notification() implementation.
+ * @brief This source file contains the implementation of
+ *   rtems_chain_get_with_notification().
  */
 
 /*

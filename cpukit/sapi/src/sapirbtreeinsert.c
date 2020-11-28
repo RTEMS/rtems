@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPIClassicRBTrees
+ *
+ * @brief This source file contains the implementation of
+ *   rtems_rbtree_insert().
+ */
+
 /*
  *  Copyright (c) 2010-2012 Gedare Bloom.
  *
