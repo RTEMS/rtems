@@ -24,9 +24,6 @@
 #define _RTEMS_SCORE_MRSP_H
 
 #include <rtems/score/cpuopts.h>
-
-#if defined(RTEMS_SMP)
-
 #include <rtems/score/threadq.h>
 
 #ifdef __cplusplus
@@ -57,6 +54,8 @@ extern "C" {
  * @{
  */
 
+#if defined(RTEMS_SMP)
+
 /**
  * @brief MrsP control block.
  */
@@ -77,12 +76,12 @@ typedef struct {
   Priority_Control ceiling_priorities[ RTEMS_ZERO_LENGTH_ARRAY ];
 } MRSP_Control;
 
+#endif /* RTEMS_SMP */
+
 /** @} */
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
-#endif /* RTEMS_SMP */
 
 #endif /* _RTEMS_SCORE_MRSP_H */
