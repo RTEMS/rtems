@@ -1352,7 +1352,6 @@ source:
 - cpukit/sapi/src/iounregisterdriver.c
 - cpukit/sapi/src/iowrite.c
 - cpukit/sapi/src/panic.c
-- cpukit/sapi/src/posixapi.c
 - cpukit/sapi/src/profilingiterate.c
 - cpukit/sapi/src/profilingreportxml.c
 - cpukit/sapi/src/rbheap.c

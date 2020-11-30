@@ -37,24 +37,6 @@
  */
 /**@{**/
 
-/**
- * @brief POSIX API Fatal domains.
- */
-typedef enum {
-  POSIX_FD_PTHREAD,      /**< A pthread thread error. */
-  POSIX_FD_PTHREAD_ONCE  /**< A pthread once error. */
-} POSIX_Fatal_domain;
-
-/**
- * @brief POSIX API Fatal error.
- *
- * A common method of rasing a POSIX API fatal error.
- *
- * @param[in] domain The POSIX error domain.
- * @param[in] eno The error number as defined in errno.h.
- */
-void _POSIX_Fatal_error( POSIX_Fatal_domain domain, int eno );
-
 extern const int _POSIX_Get_by_name_error_table[ 3 ];
 
 RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(

@@ -1077,7 +1077,6 @@ librtemscpu_a_SOURCES += sapi/src/ioregisterdriver.c
 librtemscpu_a_SOURCES += sapi/src/iounregisterdriver.c
 librtemscpu_a_SOURCES += sapi/src/iowrite.c
 librtemscpu_a_SOURCES += sapi/src/panic.c
-librtemscpu_a_SOURCES += sapi/src/posixapi.c
 librtemscpu_a_SOURCES += sapi/src/profilingiterate.c
 librtemscpu_a_SOURCES += sapi/src/profilingreportxml.c
 librtemscpu_a_SOURCES += sapi/src/rbheap.c
