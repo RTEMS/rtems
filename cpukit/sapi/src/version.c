@@ -24,8 +24,8 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
 #include <rtems/version.h>
+#include <rtems/score/cpuopts.h>
 
 #include "version-vc-key.h"
 
