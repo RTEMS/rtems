@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Configuration Options Workspace Support Macros
+ * @brief This header file provides support macros to evaluate configuration
+ *   options related to the RTEMS Workspace configuration.
  */
 
 /*

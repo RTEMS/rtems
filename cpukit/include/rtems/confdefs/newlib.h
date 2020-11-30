@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Newlib Configuration Options
+ * @brief This header file evaluates configuration options related to the
+ *   Newlib C Library configuration.
  *
  * This header file defines _CONFIGURE_ENABLE_NEWLIB_REENTRANCY for use by other
  * configuration header files.

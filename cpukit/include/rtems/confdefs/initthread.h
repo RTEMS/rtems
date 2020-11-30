@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate POSIX Initialization Thread Configuration Options
+ * @brief This header file evaluates configuration options related to the POSIX
+ *   initialization thread configuration.
  *
  * This header file defines _CONFIGURE_POSIX_INIT_THREAD_STACK_EXTRA for use by
  * other configuration header files.

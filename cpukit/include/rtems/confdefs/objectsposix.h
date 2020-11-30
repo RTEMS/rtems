@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate POSIX API Objects Configuration Options
+ * @brief This header file evaluates configuration options related to the POSIX
+ *   API objects configuration.
  *
  * For the POSIX thread objects configuration see <rtems/confdefs/threads.h>.
  */

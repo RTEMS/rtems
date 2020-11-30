@@ -3,14 +3,15 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSApplConfig
  *
- * @brief Evaluate Configuration Options
+ * @brief This header file evaluates the application configuration options
+ *   defined by the application.
  *
  * This header file includes a couple of header files which evaluate the
  * configuration options specified by the application.  The macros and defines
- * used to configure the system are documented in the Configuring a System
- * chapter of the Classic API User's Guide.
+ * used to configure the system are documented in @ref RTEMSApplConfig and the
+ * "Configuring a System" chapter of the "RTEMS Classic API User's Guide".
  */
 
 /*
@@ -43,14 +44,12 @@
 #define __CONFIGURATION_TEMPLATE_h
 
 /**
- * @defgroup RTEMSApplicationConfiguration Application Configuration
+ * @defgroup RTEMSImplApplConfig Application Configuration
  *
  * @ingroup RTEMSImpl
  *
- * @brief Evaluation of Application Configuration Options
- *
- * This group contains header files which evaluate the configuration options
- * specified by the application.
+ * @brief The application configuration defines system parameters according to
+ *   configuration options (defines) provided by the application.
  *
  * @{
  */

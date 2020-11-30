@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Block Device Cache Configuration Options
+ * @brief This header file evaluates configuration options related to the block
+ *   device cache configuration.
  *
  * It defines
  *

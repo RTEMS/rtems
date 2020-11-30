@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Per-CPU Configuration Options
+ * @brief This header file evaluates configuration options related to the
+ *   per-CPU configuration.
  *
  * Since the idle thread stack size (CONFIGURE_IDLE_TASK_STACK_SIZE) depends on
  * CONFIGURE_MINIMUM_TASK_STACK_SIZE, the POSIX-specific

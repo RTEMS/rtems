@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Classic API Objects Configuration Options
+ * @brief This header file evaluates configuration options related to the
+ *   Classic API objects configuration.
  *
  * For the task objects configuration see <rtems/confdefs/threads.h>.
  */

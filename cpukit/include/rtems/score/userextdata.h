@@ -3,7 +3,10 @@
  *
  * @ingroup RTEMSScoreUserExt
  *
- * @brief User Extension Handler Data Structures
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define
+ *   ::_User_extensions_Initial_count, ::_User_extensions_Initial_extensions,
+ *   and ::_User_extensions_Initial_switch_controls.
  */
 
 /*

@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate IO Library Configuration Options
+ * @brief This header file evaluates configuration options related to the I/O
+ *   library configuration.
  */
 
 /*

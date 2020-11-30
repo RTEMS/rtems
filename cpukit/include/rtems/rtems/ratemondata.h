@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicRateMonotonic
  *
- * @brief Classic Rate Monotonic Scheduler Data Structures
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define ::_Rate_monotonic_Information.
  */
 
 /* COPYRIGHT (c) 1989-2009, 2016.

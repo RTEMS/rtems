@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicMessageQueue
+ * @ingroup RTEMSImplClassicMessage
  *
- * @brief Classic Message Queue Manager API
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define ::_Message_queue_Information.
  */
 
 /* COPYRIGHT (c) 1989-2013.

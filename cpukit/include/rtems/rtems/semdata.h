@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicSemaphore
  *
- * @brief Classic Semaphore Manager Data Structures
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define ::_Semaphore_Information.
  */
 
 /*

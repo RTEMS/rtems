@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Scheduler Configuration Options
+ * @brief This header file evaluates configuration options related to the
+ *   scheduler configuration.
  */
 
 /*

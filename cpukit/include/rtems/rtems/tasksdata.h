@@ -3,7 +3,10 @@
  *
  * @ingroup RTEMSImplClassicTask
  *
- * @brief Classic Tasks Manager Data Structures
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define the
+ *   ::_RTEMS_tasks_User_task_table, the ::_RTEMS_tasks_User_task_config,
+ *   ::_RTEMS_tasks_Information, and ultimately ::Thread_Configured_control.
  */
 
 /*

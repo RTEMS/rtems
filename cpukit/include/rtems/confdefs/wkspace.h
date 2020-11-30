@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Workspace Configuration Options
+ * @brief This header file evaluates configuration options related to the RTEMS
+ *   Workspace configuration.
  */
 
 /*

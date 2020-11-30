@@ -5,8 +5,9 @@
  *
  * @ingroup RTEMSScoreWorkspace
  *
- * @brief Constants defined by the application configuration for the idle
- * threads.
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define ::_Workspace_Size,
+ *   ::_Workspace_Is_unified, and ::_Workspace_Malloc_initializer.
  */
 
 /*

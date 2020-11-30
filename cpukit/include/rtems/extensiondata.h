@@ -3,7 +3,8 @@
  *
  * @ingroup RTEMSImplClassicUserExt
  *
- * @brief Classic User Extensions Data Structures
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define ::_Extension_Information.
  */
 
 /*

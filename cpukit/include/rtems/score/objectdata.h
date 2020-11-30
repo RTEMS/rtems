@@ -3,7 +3,10 @@
  *
  * @ingroup RTEMSScoreObject
  *
- * @brief Object Handler Data Structures
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define instances of
+ *   ::Objects_Information, ::_Objects_MP_Controls, and ultimately
+ *   ::Thread_Configured_control.
  */
 
 /*

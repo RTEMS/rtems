@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate Unlimited Objects Configuration Options
+ * @brief This header file evaluates configuration options related to the
+ *   unlimited objects configuration.
  */
 
 /*

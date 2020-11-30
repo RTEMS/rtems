@@ -3,7 +3,9 @@
  *
  * @ingroup RTEMSScoreThread
  *
- * @brief Constants for the idle threads.
+ * @brief This header file provides data structures used by the implementation
+ *   and the @ref RTEMSImplApplConfig to define ::_Thread_Idle_stack_size and
+ *   ::_Thread_Idle_body.
  */
 
 /*

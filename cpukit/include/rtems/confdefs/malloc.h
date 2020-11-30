@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate C Program Heap Configuration Options
+ * @brief This header file evaluates configuration options related to the C
+ *   Program Heap configuration.
  */
 
 /*

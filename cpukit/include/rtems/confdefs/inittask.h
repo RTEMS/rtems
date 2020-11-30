@@ -3,9 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief Evaluate User Initialization Task Configuration Options
+ * @brief This header file evaluates configuration options related to the
+ *   Classic API initialization task configuration.
  *
  * This header file defines _CONFIGURE_INIT_TASK_STACK_EXTRA for use by other
  * configuration header files.

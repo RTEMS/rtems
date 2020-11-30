@@ -9,9 +9,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSApplicationConfiguration
+ * @ingroup RTEMSImplApplConfig
  *
- * @brief This header file evaluates PCI library configuration options.
+ * @brief This header file evaluates configuration options related to the PCI
+ *   library configuration.
  */
 
 #ifndef _RTEMS_CONFDEFS_LIBPCI_H
