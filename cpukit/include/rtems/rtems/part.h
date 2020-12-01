@@ -247,9 +247,9 @@ rtems_status_code rtems_partition_create(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ADDRESS The id parameter was NULL.
+ * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
  *
- * @retval ::RTEMS_INVALID_NAME The name parameter was 0.
+ * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was 0.
  *
  * @retval ::RTEMS_INVALID_NAME There was no object with the specified name on
  *   the specified nodes.
@@ -270,7 +270,7 @@ rtems_status_code rtems_partition_ident(
  *
  * @brief Deletes the partition.
  *
- * This directive deletes the partition specified by the id parameter.  The
+ * This directive deletes the partition specified by the ``id`` parameter.  The
  * partition cannot be deleted if any of its buffers are still allocated.  The
  * PTCB for the deleted partition is reclaimed by RTEMS.
  *
