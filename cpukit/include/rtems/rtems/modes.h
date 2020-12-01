@@ -138,8 +138,8 @@ extern "C" {
  *
  * @param _interrupt_level is the interrupt level to map.
  *
- * @return null Returns the processor-dependent task mode interrupt level
- *   associated with the interrupt level.
+ * @return Returns the processor-dependent task mode interrupt level associated
+ *   with the interrupt level.
  */
 #define RTEMS_INTERRUPT_LEVEL( _interrupt_level ) \
   ( ( _interrupt_level ) & RTEMS_INTERRUPT_MASK )
