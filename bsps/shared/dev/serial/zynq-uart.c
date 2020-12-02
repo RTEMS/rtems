@@ -142,25 +142,71 @@ static bool zynq_uart_set_attributes(
   const struct termios *term
 )
 {
-#if 0
-  volatile zynq_uart *regs = zynq_uart_get_regs(minor);
+  zynq_uart_context *ctx = (zynq_uart_context *) context;
+  volatile zynq_uart *regs = ctx->regs;
   uint32_t brgr = 0;
   uint32_t bauddiv = 0;
+  uint32_t mode = 0;
   int rc;
 
   rc = zynq_cal_baud_rate(115200, &brgr, &bauddiv, regs->mode);
   if (rc != 0)
     return rc;
 
+  /*
+   * Configure the mode register
+   */
+  mode |= ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL);
+
+  /*
+   * Parity
+   */
+  mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE);
+  if (term->c_cflag & PARENB) {
+    if (!(term->c_cflag & PARODD)) {
+      mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_ODD);
+    } else {
+      mode |= ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_EVEN);
+    }
+  }
+
+  /*
+   * Character Size
+   */
+  switch (term->c_cflag & CSIZE)
+  {
+  case CS5:
+    return false;
+  case CS6:
+    mode |= ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_6);
+    break;
+  case CS7:
+    mode |= ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_7);
+    break;
+  case CS8:
+  default:
+    mode |= ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8);
+    break;
+  }
+
+  /*
+   * Stop Bits
+   */
+  if (term->c_cflag & CSTOPB) {
+    /* 2 stop bits */
+    mode |= ZYNQ_UART_MODE_NBSTOP(ZYNQ_UART_MODE_NBSTOP_STOP_2);
+  } else {
+    /* 1 stop bit */
+    mode |= ZYNQ_UART_MODE_NBSTOP(ZYNQ_UART_MODE_NBSTOP_STOP_1);
+  }
+
   regs->control &= ~(ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN);
+  regs->mode = mode;
   regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
   regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
   regs->control |= ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN;
 
   return true;
-#else
-  return false;
-#endif
 }
 
 const rtems_termios_device_handler zynq_uart_handler = {
