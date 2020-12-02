@@ -20,7 +20,7 @@
 #define _RTEMS_SCORE_TIMESTAMPIMPL_H
 
 /**
- * @addtogroup SuperCoreTimeStamp
+ * @addtogroup RTEMSScoreTimestamp
  *
  * @{
  */
