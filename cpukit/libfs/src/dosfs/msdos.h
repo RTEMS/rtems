@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @brief The MSDOS Filesystem Constants/Data Structures/Prototypes
+ * @ingroup DOSFS
  *
- * @ingroup libfs_msdos
+ * @brief The MSDOS Filesystem Constants/Data Structures/Prototypes
  */
 
 /*
@@ -29,15 +29,15 @@
 #include "fat.h"
 #include "fat_file.h"
 
-/**
- *  @defgroup libfs_msdos MSDOS FileSystem
- *
- *  @ingroup libfs
- */
-/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @addtogroup DOSFS
+ *
+ * @{
+ */
 
 #define MSDOS_NAME_NOT_FOUND_ERR  0x7D01
 
@@ -487,8 +487,9 @@ int msdos_sync(rtems_libio_t *iop);
 
 uint8_t msdos_lfn_checksum(const void *entry);
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
 #endif /* __DOSFS_MSDOS_H__ */

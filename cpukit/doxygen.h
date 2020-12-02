@@ -39,14 +39,6 @@
  */
 
 /**
- * @defgroup libfs libfs
- * 
- * @ingroup FileSystemTypesAndMount
- * 
- * @brief libfs
- */
-
-/**
  * @defgroup libmisc_mouse Serial Mouse
  *
  * @ingroup RTEMSDeviceDrivers

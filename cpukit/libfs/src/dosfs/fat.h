@@ -3,7 +3,7 @@
  *
  * @brief Constants/Data Structures/Prototypes on a Volume with FAT Filesystem
  *
- * @ingroup libfs_dosfs
+ * @ingroup DOSFS
  *
  * Constants/Data Structures/Prototypes for Low-Level
  * Operations on a Volume with FAT Filesystem
@@ -31,15 +31,15 @@
 #include <errno.h>
 #include <rtems/bdbuf.h>
 
-/**
- *  @defgroup libfs_dosfs FAT FileSystem
- *
- *  @ingroup libfs
- */
-/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @addtogroup DOSFS
+ *
+ * @{
+ */
 
 #ifndef RC_OK
 #define RC_OK 0
@@ -546,8 +546,9 @@ fat_free_unique_ino(fat_fs_info_t                        *fs_info,
 int
 fat_sync(fat_fs_info_t *fs_info);
 
+/** @} */
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
 #endif /* __DOSFS_FAT_H__ */

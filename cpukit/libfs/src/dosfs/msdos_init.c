@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs
+ * @ingroup DOSFS
  *
  * @brief Init Routine for MSDOS
  */
