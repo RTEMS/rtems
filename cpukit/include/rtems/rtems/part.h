@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplClassicPart
+ * @ingroup RTEMSImplClassicPartition
  *
  * @brief This header file provides the Partition Manager API.
  */
