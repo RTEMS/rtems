@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSAPIClassicEvent
+ * @ingroup RTEMSImplClassicEvent
  *
  * @brief This header file provides the Event Manager API.
  */
