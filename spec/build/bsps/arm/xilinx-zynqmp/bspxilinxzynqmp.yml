@@ -72,6 +72,8 @@ links:
 - role: build-dependency
   uid: ../../objdevspizynq
 - role: build-dependency
+  uid: ../../objdevspixil
+- role: build-dependency
   uid: ../../opto2
 - role: build-dependency
   uid: linkcmds
