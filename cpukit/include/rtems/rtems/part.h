@@ -292,8 +292,8 @@ rtems_status_code rtems_partition_ident(
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ID There was no partition with the specified
- *   identifier.
+ * @retval ::RTEMS_INVALID_ID There was no partition associated with the
+ *   identifier specified by ``id``.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The partition resided on a remote
  *   node.
@@ -333,8 +333,8 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ID There was no partition with the specified
- *   identifier.
+ * @retval ::RTEMS_INVALID_ID There was no partition associated with the
+ *   identifier specified by ``id``.
  *
  * @retval ::RTEMS_INVALID_ADDRESS The ``buffer`` parameter was NULL.
  *
@@ -368,8 +368,8 @@ rtems_status_code rtems_partition_get_buffer( rtems_id id, void **buffer );
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ID There was no partition with the specified
- *   identifier.
+ * @retval ::RTEMS_INVALID_ID There was no partition associated with the
+ *   identifier specified by ``id``.
  *
  * @retval ::RTEMS_INVALID_ADDRESS The buffer referenced by ``buffer`` was not
  *   in the partition.

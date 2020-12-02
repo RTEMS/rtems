@@ -622,7 +622,8 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_ID There was no task with the specified identifier.
+ * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
+ *   specified by ``id``.
  */
 rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
 
