@@ -50,7 +50,6 @@ extern void test3(void);
 #define TASK_ALLOCATION_SIZE     (5)
 #define CONFIGURE_UNLIMITED_OBJECTS
 #define CONFIGURE_UNLIMITED_ALLOCATION_SIZE TASK_ALLOCATION_SIZE
-#define CONFIGURE_INIT_TASK_STACK_SIZE (8 * 1024)
 
 
 #include <rtems/confdefs.h>
