@@ -274,6 +274,7 @@ install:
   - cpukit/include/rtems/rtems/barrierimpl.h
   - cpukit/include/rtems/rtems/cache.h
   - cpukit/include/rtems/rtems/clock.h
+  - cpukit/include/rtems/rtems/clockimpl.h
   - cpukit/include/rtems/rtems/config.h
   - cpukit/include/rtems/rtems/dpmem.h
   - cpukit/include/rtems/rtems/dpmemdata.h
