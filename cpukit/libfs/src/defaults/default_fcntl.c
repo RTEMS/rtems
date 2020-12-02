@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs
+ * @ingroup LibIOFSHandler
  *
  * @brief RTEMS Default Filesystem - Default FCNTL
  */

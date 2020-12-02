@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs
+ * @ingroup LibIOFSOps
  *
  * @brief RTEMS Default Filesystem - Default Readlink
  */
