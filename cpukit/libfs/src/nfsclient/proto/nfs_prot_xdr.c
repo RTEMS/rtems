@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs_nfsclient_nfs_prot NFS Prot
+ * @ingroup RTEMSFileSystemNFSProt NFS Prot
  *
  * @brief NFS Prot XDR
  */

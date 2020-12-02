@@ -3,7 +3,7 @@
  *
  * @brief Nfsclient Mount Prot
  *
- * @ingroup rtems-nfsclient
+ * @ingroup RTEMSFileSystemNFSMountProt
  */
 
 #ifndef _MOUNT_PROT_H_RPCGEN
@@ -11,15 +11,17 @@
 
 #include <rpc/rpc.h>
 
-/**
- *  @defgroup libfs_nfsclient_mount_prot Mount Prot
- *
- *  @ingroup libfs
- */
-/**@{*/
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup RTEMSFileSystemNFSMountProt Mount Prot
+ *
+ * @ingroup RTEMSFileSystemNFS
+ *
+ * @{
+ */
 
 #define MNTPATHLEN 1024
 #define MNTNAMLEN 255
@@ -145,8 +147,9 @@ extern bool_t xdr_exportnode ();
 
 #endif /* K&R C */
 
+/**@}*/
+
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
 #endif /* !_MOUNT_PROT_H_RPCGEN */

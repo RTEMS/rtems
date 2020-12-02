@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs
+ * @ingroup RTEMSFileSystemNFS
  *
  * @brief NFS Client Implementation for RTEMS
  *

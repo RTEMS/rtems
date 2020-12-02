@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs
+ * @ingroup RTEMSFileSystemNFS
  *
  * @brief Sock Mbuf
  */

@@ -47,14 +47,6 @@
  */
 
 /**
- * @defgroup nfsclient nfs Client
- * 
- * @ingroup FileSystemTypesAndMount
- * 
- * @brief nfs Client
- */
-
-/**
  * @defgroup libmisc_mouse Serial Mouse
  *
  * @ingroup RTEMSDeviceDrivers

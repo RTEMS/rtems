@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @brief Public Interface to the NFS Client Library for RTEMS
+ * @ingroup RTEMSFileSystemNFS
  *
- * @ingroup rtems-nfsclient
+ * @brief This header file provides interfaces of the NFSv2 client.
  */
 
 /*
@@ -57,9 +57,10 @@
 #define LIB_RTEMS_NFS_CLIENT_H
 
 /**
- * @defgroup rtems-nfsclient NFS Client Library
+ * @defgroup RTEMSFileSystemNFS NFSv2 Client
  *
- * @ingroup nfsclient
+ * @ingroup FileSystemTypesAndMount
+ *
  * @{
  */
 

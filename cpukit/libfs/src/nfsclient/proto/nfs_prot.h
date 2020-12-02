@@ -9,9 +9,9 @@
 #include <rpc/rpc.h>
 
 /**
- *  @defgroup libfs_nfsclient_nfs_prot NFS Prot
+ *  @defgroup RTEMSFileSystemNFSProt NFS Prot
  *
- *  @ingroup nfsclient
+ *  @ingroup RTEMSFileSystemNFS
  */
 /**@{*/
 #ifdef __cplusplus

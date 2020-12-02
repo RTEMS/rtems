@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup libfs
+ * @ingroup RTEMSFileSystemNFS
  *
  * @brief RPC Multiplexor for a Multitasking Environment
  *
