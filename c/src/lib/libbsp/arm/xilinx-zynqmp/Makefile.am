@@ -70,6 +70,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/arm-generic-tim
 
 # SPI
 librtemsbsp_a_SOURCES +=  ../../../../../../bsps/shared/dev/spi/cadence-spi.c
+librtemsbsp_a_SOURCES +=  ../../../../../../bsps/shared/dev/spi/xilinx-axi-spi.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c

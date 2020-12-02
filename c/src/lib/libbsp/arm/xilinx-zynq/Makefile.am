@@ -74,6 +74,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/i2c/cadence-i2c.
 
 # SPI
 librtemsbsp_a_SOURCES +=  ../../../../../../bsps/shared/dev/spi/cadence-spi.c
+librtemsbsp_a_SOURCES +=  ../../../../../../bsps/shared/dev/spi/xilinx-axi-spi.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c

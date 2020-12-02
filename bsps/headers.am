@@ -43,6 +43,8 @@ include_dev_spidir = $(includedir)/dev/spi
 include_dev_spi_HEADERS =
 include_dev_spi_HEADERS += ../../bsps/include/dev/spi/cadence-spi-regs.h
 include_dev_spi_HEADERS += ../../bsps/include/dev/spi/cadence-spi.h
+include_dev_spi_HEADERS += ../../bsps/include/dev/spi/xilinx-axi-spi-regs.h
+include_dev_spi_HEADERS += ../../bsps/include/dev/spi/xilinx-axi-spi.h
 
 include_grlibdir = $(includedir)/grlib
 include_grlib_HEADERS =
