@@ -70,6 +70,8 @@ links:
 - role: build-dependency
   uid: ../../objdevserialzynq
 - role: build-dependency
+  uid: ../../objdevspizynq
+- role: build-dependency
   uid: ../../opto2
 - role: build-dependency
   uid: linkcmds

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2021 German Aerospace Center (DLR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/dev/spi
+  source:
+  - bsps/include/dev/spi/cadence-spi-regs.h
+  - bsps/include/dev/spi/cadence-spi.h
+links: []
+source:
+- bsps/shared/dev/spi/cadence-spi.c
+type: build
