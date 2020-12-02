@@ -30,7 +30,7 @@ extern "C" {
 /**
  * @defgroup RTEMSScoreMPPacket Multiprocessing (MP) Packet Handler
  *
- * @ingroup RTEMSScoreMPCI
+ * @ingroup RTEMSScore
  *
  * @brief This group contains the Multiprocessing (MP) Packet Handler
  *   implementation.
