@@ -40,7 +40,7 @@ uint32_t zynq_uart_input_clock(void)
   return ZYNQ_CLOCK_UART;
 }
 
-static int zynq_cal_baud_rate(uint32_t  baudrate,
+int zynq_cal_baud_rate(uint32_t  baudrate,
                               uint32_t* brgr,
                               uint32_t* bauddiv,
                               uint32_t  modereg)

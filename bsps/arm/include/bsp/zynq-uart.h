@@ -71,6 +71,13 @@ void zynq_uart_write_polled(
   */
 void zynq_uart_reset_tx_flush(zynq_uart_context *ctx);
 
+int zynq_cal_baud_rate(
+  uint32_t  baudrate,
+  uint32_t* brgr,
+  uint32_t* bauddiv,
+  uint32_t  modereg
+);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
