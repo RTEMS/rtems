@@ -68,6 +68,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/zynq-uart-poll
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/arm-generic-timer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/arm-generic-timer-aarch32.c
 
+# SPI
+librtemsbsp_a_SOURCES +=  ../../../../../../bsps/shared/dev/spi/cadence-spi.c
+
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
