@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by:
+- RTEMS_SMP
+includes: []
+install: []
+links: []
+source:
+- bsps/arm/fvp/start/bspsmp.c
+- bsps/arm/shared/start/arm-a9mpcore-smp.c
+type: build

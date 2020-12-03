@@ -12,6 +12,7 @@ description: |
   Enable the Symmetric Multiprocessing (SMP) support
 enabled-by:
 - arm/altcycv_devkit
+- arm/fvp_cortex_r52
 - arm/imx7
 - arm/raspberrypi2
 - arm/realview_pbx_a9_qemu

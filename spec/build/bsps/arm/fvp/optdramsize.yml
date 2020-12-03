@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-uint32: null
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 33554432
+default-by-variant:
+- value: 33553408
+  variants:
+  - arm/fvp_cortex_r52
+description: |
+  Defines the size in bytes of the DRAM.  Increasing the size may increase the
+  startup time of the FVP.  The size must take the size of the NULL pointer
+  protection area into account (ARM_FVP_MEMORY_NULL_SIZE).
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: ARM_FVP_MEMORY_DRAM_SIZE
+type: build

@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  MEMORY {
+    NULL : ORIGIN = 0x00000000, LENGTH = ${ARM_FVP_MEMORY_NULL_SIZE:#010x}
+    DRAM : ORIGIN = ${ARM_FVP_MEMORY_DRAM_BEGIN:#010x}, LENGTH = ${ARM_FVP_MEMORY_DRAM_SIZE:#010x}
+    DEVICE : ORIGIN = ${ARM_FVP_MEMORY_DEVICE_BEGIN:#010x}, LENGTH = ${ARM_FVP_MEMORY_DEVICE_SIZE:#010x}
+  }
+
+  arm_fvp_memory_null_begin = ORIGIN (NULL);
+  arm_fvp_memory_null_end = ORIGIN (NULL) + LENGTH (NULL);
+  arm_fvp_memory_null_size = LENGTH (NULL);
+
+  arm_fvp_memory_dram_begin = ORIGIN (DRAM);
+  arm_fvp_memory_dram_end = ORIGIN (DRAM) + LENGTH (DRAM);
+  arm_fvp_memory_dram_size = LENGTH (DRAM);
+
+  arm_fvp_memory_device_begin = ORIGIN (DEVICE);
+  arm_fvp_memory_device_end = ORIGIN (DEVICE) + LENGTH (DEVICE);
+  arm_fvp_memory_device_size = LENGTH (DEVICE);
+
+  REGION_ALIAS ("REGION_START", DRAM);
+  REGION_ALIAS ("REGION_VECTOR", DRAM);
+  REGION_ALIAS ("REGION_TEXT", DRAM);
+  REGION_ALIAS ("REGION_TEXT_LOAD", DRAM);
+  REGION_ALIAS ("REGION_RODATA", DRAM);
+  REGION_ALIAS ("REGION_RODATA_LOAD", DRAM);
+  REGION_ALIAS ("REGION_DATA", DRAM);
+  REGION_ALIAS ("REGION_DATA_LOAD", DRAM);
+  REGION_ALIAS ("REGION_FAST_TEXT", DRAM);
+  REGION_ALIAS ("REGION_FAST_TEXT_LOAD", DRAM);
+  REGION_ALIAS ("REGION_FAST_DATA", DRAM);
+  REGION_ALIAS ("REGION_FAST_DATA_LOAD", DRAM);
+  REGION_ALIAS ("REGION_BSS", DRAM);
+  REGION_ALIAS ("REGION_WORK", DRAM);
+  REGION_ALIAS ("REGION_STACK", DRAM);
+  REGION_ALIAS ("REGION_NOCACHE", DRAM);
+  REGION_ALIAS ("REGION_NOCACHE_LOAD", DRAM);
+
+  bsp_section_xbarrier_align = DEFINED (bsp_section_xbarrier_align) ? bsp_section_xbarrier_align : 64;
+  bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 64;
+  bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 64;
+
+  bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
+
+  INCLUDE linkcmds.armv4
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds
+type: build

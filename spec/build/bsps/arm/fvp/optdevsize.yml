@@ -1,19 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
+- assert-uint32: null
+- env-assign: null
 - format-and-define: null
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant:
-- value: 100000000
-  variants:
-  - arm/fvp_cortex_r52
+default: 354418688
+default-by-variant: []
 description: |
-  Defines the frequency in Hz of the ARM Generic Timer.
-format: '{}'
+  Defines the size in bytes of the device area.
 enabled-by: true
+format: '{:#010x}'
 links: []
-name: ARM_GENERIC_TIMER_FREQ
+name: ARM_FVP_MEMORY_DEVICE_SIZE
 type: build

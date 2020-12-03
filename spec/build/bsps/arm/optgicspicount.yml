@@ -1,19 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - get-integer: null
-- format-and-define: null
+- define: null
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default: null
-default-by-variant:
-- value: 100000000
-  variants:
-  - arm/fvp_cortex_r52
+default: 64
+default-by-variant: []
 description: |
-  Defines the frequency in Hz of the ARM Generic Timer.
-format: '{}'
+  Defines the count of Shared Peripheral Interrupts (SPIs) supported by the
+  interrupt controller.
 enabled-by: true
+format: '{}'
 links: []
-name: ARM_GENERIC_TIMER_FREQ
+name: BSP_ARM_SHARED_PERIPHERAL_INTERRUPT_COUNT
 type: build
