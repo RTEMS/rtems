@@ -34,9 +34,6 @@ bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_sectio
 
 bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
 
-bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
-bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
-
 SECTIONS {
 
   .vector : ALIGN_WITH_INPUT {

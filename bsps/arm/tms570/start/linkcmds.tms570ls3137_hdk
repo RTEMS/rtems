@@ -24,9 +24,6 @@ REGION_ALIAS ("REGION_STACK", RAM_INT);
 REGION_ALIAS ("REGION_NOCACHE", RAM_INT);
 REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM_INT);
 
-bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 1024;
-bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
-
 bsp_int_vec_overlay_start = ORIGIN(RAM_INT_VEC);
 
 INCLUDE linkcmds.armv4
