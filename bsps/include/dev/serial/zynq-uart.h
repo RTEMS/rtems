@@ -60,10 +60,6 @@ extern const rtems_termios_device_handler zynq_uart_handler;
 
 #define ZYNQ_UART_DEFAULT_BAUD 115200
 
-#ifndef ZYNQ_CLOCK_UART
-#define ZYNQ_CLOCK_UART 100000000
-#endif
-
 void zynq_uart_initialize(rtems_termios_device_context *base);
 
 int zynq_uart_read_polled(rtems_termios_device_context *base);
