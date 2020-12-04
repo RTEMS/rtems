@@ -22,17 +22,16 @@
 
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT 32
 
-#if defined(__ARM_ARCH_7A__)
-/* Some/many ARM Cortex-A cores have L1 data line length 64 bytes */
-#define CPU_MAXIMAL_CACHE_ALIGNMENT 64
+#ifdef ARM_MULTILIB_CACHE_LINE_MAX_64
+  #define CPU_MAXIMAL_CACHE_ALIGNMENT 64
 #endif
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
 #define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
 
-#if __ARM_ARCH >= 7 && (__ARM_ARCH_PROFILE == 65 || __ARM_ARCH_PROFILE == 82)
-#define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
+#if __ARM_ARCH >= 7
+  #define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
 #endif
 
 static inline void _CPU_cache_flush_1_data_line(const void *d_addr)
@@ -51,9 +50,9 @@ _CPU_cache_flush_data_range(
     d_addr,
     n_bytes
   );
-  #if !defined(__ARM_ARCH_7A__)
+#if __ARM_ARCH < 7
   arm_cp15_drain_write_buffer();
-  #endif
+#endif
  _ARM_Data_synchronization_barrier();
 }
 
@@ -109,22 +108,22 @@ static inline void _CPU_cache_unfreeze_instruction(void)
 static inline void _CPU_cache_flush_entire_data(void)
 {
   _ARM_Data_synchronization_barrier();
-  #if defined(__ARM_ARCH_7A__)
+#if __ARM_ARCH >= 7
   arm_cp15_data_cache_clean_all_levels();
-  #else
+#else
   arm_cp15_data_cache_clean_and_invalidate();
   arm_cp15_drain_write_buffer();
-  #endif
+#endif
   _ARM_Data_synchronization_barrier();
 }
 
 static inline void _CPU_cache_invalidate_entire_data(void)
 {
-  #if defined(__ARM_ARCH_7A__)
+#if __ARM_ARCH >= 7
   arm_cp15_data_cache_invalidate_all_levels();
-  #else
+#else
   arm_cp15_data_cache_invalidate();
-  #endif
+#endif
 }
 
 static inline void _CPU_cache_enable_data(void)
