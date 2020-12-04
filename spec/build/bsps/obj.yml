@@ -24,6 +24,10 @@ install:
   - bsps/include/bsp/u-boot.h
   - bsps/include/bsp/uart-output-char.h
   - bsps/include/bsp/utility.h
+- destination: ${BSP_INCLUDEDIR}/ofw
+  source:
+  - bsps/include/ofw/ofw.h
+  - bsps/include/ofw/ofw_compat.h
 - destination: ${BSP_INCLUDEDIR}/libchip
   source:
   - bsps/include/libchip/ata.h
@@ -96,4 +100,5 @@ source:
 - bsps/shared/dev/serial/serprobe.c
 - bsps/shared/start/bootcard.c
 - bsps/shared/rtems-version.c
+- bsps/shared/ofw/ofw.c
 type: build
