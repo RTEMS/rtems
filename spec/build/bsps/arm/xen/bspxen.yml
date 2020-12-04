@@ -28,7 +28,7 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
-  uid: optgentmrusevirt
+  uid: ../optgtusevirt
 - role: build-dependency
   uid: optgentmunmask
 - role: build-dependency

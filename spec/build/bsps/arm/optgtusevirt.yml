@@ -8,8 +8,9 @@ copyrights:
 default: false
 default-by-variant: []
 description: |
-  ARM generic timer frequency in Hz
+  If set to true, then the clock driver uses the Virtual Timer of the ARM
+  Generic Timer, otherwise it uses the Physical Timer (EL1).
 enabled-by: true
 links: []
-name: ARM_GENERIC_TIMER_FREQ
+name: ARM_GENERIC_TIMER_USE_VIRTUAL
 type: build
