@@ -1,0 +1,29 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: openfirmware01
+
+directives:
+
+  - rtems_ofw_peer
+  - rtems_ofw_child
+  - rtems_ofw_parent
+  - rtems_ofw_get_prop_len
+  - rtems_ofw_get_prop
+  - rtems_ofw_get_enc_prop
+  - rtems_ofw_has_prop
+  - rtems_ofw_search_prop
+  - rtems_ofw_search_enc_prop
+  - rtems_ofw_get_prop_alloc
+  - rtems_ofw_get_prop_alloc_multi
+  - rtems_ofw_get_enc_prop_alloc
+  - rtems_ofw_get_enc_prop_alloc_multi
+  - rtems_ofw_free
+  - rtems_ofw_next_prop
+  - rtems_ofw_set_prop
+  - rtems_ofw_canon
+  - rtems_ofw_find_device
+  - rtems_ofw_package_to_path
+
+concepts:
+
+  - Ensure that some openfimware functions work as expected.

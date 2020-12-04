@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 Niteesh G S
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags:
+- -Wl,--wrap=bsp_fdt_get
+links: []
+source:
+- testsuites/libtests/ofw01/init.c
+- testsuites/libtests/ofw01/some.c
+stlib: []
+target: testsuites/libtests/ofw01.exe
+type: build
+use-after: []
+use-before: []

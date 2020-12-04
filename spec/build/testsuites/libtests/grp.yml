@@ -316,6 +316,8 @@ links:
   uid: write
 - role: build-dependency
   uid: writev
+- role: build-dependency
+  uid: ofw01
 type: build
 use-after:
 - rtemstest
