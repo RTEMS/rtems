@@ -161,90 +161,90 @@
  * Push x1-x21 on to the stack, need 19-21 because they're modified without
  * obeying PCS
  */
-	stp lr,		x1,	[sp, #-16]!
-	stp x2,		x3,	[sp, #-16]!
-	stp x4,		x5,	[sp, #-16]!
-	stp x6,		x7,	[sp, #-16]!
-	stp x8,		x9,	[sp, #-16]!
-	stp x10,	x11,	[sp, #-16]!
-	stp x12,	x13,	[sp, #-16]!
-	stp x14,	x15,	[sp, #-16]!
-	stp x16,	x17,	[sp, #-16]!
-	stp x18,	x19,	[sp, #-16]!
-	stp x20,	x21,	[sp, #-16]!
+	stp lr,		x1,	[sp, #-0x10]!
+	stp x2,		x3,	[sp, #-0x10]!
+	stp x4,		x5,	[sp, #-0x10]!
+	stp x6,		x7,	[sp, #-0x10]!
+	stp x8,		x9,	[sp, #-0x10]!
+	stp x10,	x11,	[sp, #-0x10]!
+	stp x12,	x13,	[sp, #-0x10]!
+	stp x14,	x15,	[sp, #-0x10]!
+	stp x16,	x17,	[sp, #-0x10]!
+	stp x18,	x19,	[sp, #-0x10]!
+	stp x20,	x21,	[sp, #-0x10]!
 /*
  * Push q0-q31 on to the stack, need everything because parts of every register
  * are volatile/corruptible
  */
-	stp q0,		q1,	[sp, #-32]!
-	stp q2,		q3,	[sp, #-32]!
-	stp q4,		q5,	[sp, #-32]!
-	stp q6,		q7,	[sp, #-32]!
-	stp q8,		q9,	[sp, #-32]!
-	stp q10,	q11,	[sp, #-32]!
-	stp q12,	q13,	[sp, #-32]!
-	stp q14,	q15,	[sp, #-32]!
-	stp q16,	q17,	[sp, #-32]!
-	stp q18,	q19,	[sp, #-32]!
-	stp q20,	q21,	[sp, #-32]!
-	stp q22,	q23,	[sp, #-32]!
-	stp q24,	q25,	[sp, #-32]!
-	stp q26,	q27,	[sp, #-32]!
-	stp q28,	q29,	[sp, #-32]!
-	stp q30,	q31,	[sp, #-32]!
+	stp q0,		q1,	[sp, #-0x20]!
+	stp q2,		q3,	[sp, #-0x20]!
+	stp q4,		q5,	[sp, #-0x20]!
+	stp q6,		q7,	[sp, #-0x20]!
+	stp q8,		q9,	[sp, #-0x20]!
+	stp q10,	q11,	[sp, #-0x20]!
+	stp q12,	q13,	[sp, #-0x20]!
+	stp q14,	q15,	[sp, #-0x20]!
+	stp q16,	q17,	[sp, #-0x20]!
+	stp q18,	q19,	[sp, #-0x20]!
+	stp q20,	q21,	[sp, #-0x20]!
+	stp q22,	q23,	[sp, #-0x20]!
+	stp q24,	q25,	[sp, #-0x20]!
+	stp q26,	q27,	[sp, #-0x20]!
+	stp q28,	q29,	[sp, #-0x20]!
+	stp q30,	q31,	[sp, #-0x20]!
 /* Get exception LR for PC and spsr */
 	mrs x0, ELR_EL1
 	mrs x1, SPSR_EL1
 /* Push pc and spsr */
-	stp x0,		x1,	[sp, #-16]!
+	stp x0,		x1,	[sp, #-0x10]!
 /* Get fpcr and fpsr */
 	mrs x0, FPSR
 	mrs x1, FPCR
 /* Push fpcr and fpsr */
-	stp x0,		x1,	[sp, #-16]!
+	stp x0,		x1,	[sp, #-0x10]!
 .endm
 
 /* Must match inverse order of .push_interrupt_context */
 .macro pop_interrupt_context
 /* Pop fpcr and fpsr */
-	ldp x0,		x1,	[sp], #16
+	ldp x0,		x1,	[sp], #0x10
 /* Restore fpcr and fpsr */
 	msr FPCR, x1
 	msr FPSR, x0
 /* Pop pc and spsr */
-	ldp x0,		x1,	[sp], #16
+	ldp x0,		x1,	[sp], #0x10
 /* Restore exception LR for PC and spsr */
 	msr SPSR_EL1, x1
 	msr ELR_EL1, x0
 /* Pop q0-q31 */
-	ldp q30,	q31,	[sp], #32
-	ldp q28,	q29,	[sp], #32
-	ldp q26,	q27,	[sp], #32
-	ldp q24,	q25,	[sp], #32
-	ldp q22,	q23,	[sp], #32
-	ldp q20,	q21,	[sp], #32
-	ldp q18,	q19,	[sp], #32
-	ldp q16,	q17,	[sp], #32
-	ldp q14,	q15,	[sp], #32
-	ldp q12,	q13,	[sp], #32
-	ldp q10,	q11,	[sp], #32
-	ldp q8,		q9,	[sp], #32
-	ldp q6,		q7,	[sp], #32
-	ldp q4,		q5,	[sp], #32
-	ldp q2,		q3,	[sp], #32
-	ldp q0,		q1,	[sp], #32
+	ldp q30,	q31,	[sp], #0x20
+	ldp q28,	q29,	[sp], #0x20
+	ldp q26,	q27,	[sp], #0x20
+	ldp q24,	q25,	[sp], #0x20
+	ldp q22,	q23,	[sp], #0x20
+	ldp q20,	q21,	[sp], #0x20
+	ldp q18,	q19,	[sp], #0x20
+	ldp q16,	q17,	[sp], #0x20
+	ldp q14,	q15,	[sp], #0x20
+	ldp q12,	q13,	[sp], #0x20
+	ldp q10,	q11,	[sp], #0x20
+	ldp q8,		q9,	[sp], #0x20
+	ldp q6,		q7,	[sp], #0x20
+	ldp q4,		q5,	[sp], #0x20
+	ldp q2,		q3,	[sp], #0x20
+	ldp q0,		q1,	[sp], #0x20
 /* Pop x1-x21 */
-	ldp x20,	x21,	[sp], #16
-	ldp x18,	x19,	[sp], #16
-	ldp x16,	x17,	[sp], #16
-	ldp x14,	x15,	[sp], #16
-	ldp x12,	x13,	[sp], #16
-	ldp x10,	x11,	[sp], #16
-	ldp x8,		x9,	[sp], #16
-	ldp x6,		x7,	[sp], #16
-	ldp x4,		x5,	[sp], #16
-	ldp x2,		x3,	[sp], #16
-	ldp lr,		x1,	[sp], #16
+	ldp x20,	x21,	[sp], #0x10
+	ldp x18,	x19,	[sp], #0x10
+	ldp x16,	x17,	[sp], #0x10
+	ldp x14,	x15,	[sp], #0x10
+	ldp x12,	x13,	[sp], #0x10
+	ldp x10,	x11,	[sp], #0x10
+	ldp x8,		x9,	[sp], #0x10
+	ldp x6,		x7,	[sp], #0x10
+	ldp x4,		x5,	[sp], #0x10
+	ldp x2,		x3,	[sp], #0x10
+	ldp lr,		x1,	[sp], #0x10
 /* Must clear reservations here to ensure consistency with atomic operations */
 	clrex
 .endm

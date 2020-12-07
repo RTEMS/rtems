@@ -43,29 +43,29 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 
-#define FRAME_OFFSET_X4 0
-#define FRAME_OFFSET_X5 8
-#define FRAME_OFFSET_X6 16
-#define FRAME_OFFSET_X7 24
-#define FRAME_OFFSET_X8 32
-#define FRAME_OFFSET_X9 40
-#define FRAME_OFFSET_X10 48
-#define FRAME_OFFSET_X11 56
-#define FRAME_OFFSET_LR 64
+#define FRAME_OFFSET_X4  0x00
+#define FRAME_OFFSET_X5  0x08
+#define FRAME_OFFSET_X6  0x10
+#define FRAME_OFFSET_X7  0x18
+#define FRAME_OFFSET_X8  0x20
+#define FRAME_OFFSET_X9  0x28
+#define FRAME_OFFSET_X10 0x30
+#define FRAME_OFFSET_X11 0x38
+#define FRAME_OFFSET_LR  0x40
 
 #ifdef AARCH64_MULTILIB_VFP
-  #define FRAME_OFFSET_V8 72
-  #define FRAME_OFFSET_V9 88
-  #define FRAME_OFFSET_V10 104
-  #define FRAME_OFFSET_V11 120
-  #define FRAME_OFFSET_V12 136
-  #define FRAME_OFFSET_V13 152
-  #define FRAME_OFFSET_V14 168
-  #define FRAME_OFFSET_V15 184
+  #define FRAME_OFFSET_V8  0x48
+  #define FRAME_OFFSET_V9  0x58
+  #define FRAME_OFFSET_V10 0x68
+  #define FRAME_OFFSET_V11 0x78
+  #define FRAME_OFFSET_V12 0x88
+  #define FRAME_OFFSET_V13 0x98
+  #define FRAME_OFFSET_V14 0xA8
+  #define FRAME_OFFSET_V15 0xB8
 
-  #define FRAME_SIZE (FRAME_OFFSET_V15 + 16)
+  #define FRAME_SIZE (FRAME_OFFSET_V15 + 0x10)
 #else
-  #define FRAME_SIZE (FRAME_OFFSET_LR + 8)
+  #define FRAME_SIZE (FRAME_OFFSET_LR + 0x08)
 #endif
 
 	.section	.text

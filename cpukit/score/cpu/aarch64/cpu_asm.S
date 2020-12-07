@@ -78,9 +78,9 @@ DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
 #ifdef AARCH64_MULTILIB_VFP
 	add	x5, x0, #AARCH64_CONTEXT_CONTROL_D8_OFFSET
 	stp d8,  d9,  [x5]
-	stp d10, d11, [x5, #16]
-	stp d12, d13, [x5, #32]
-	stp d14, d15, [x5, #48]
+	stp d10, d11, [x5, #0x10]
+	stp d12, d13, [x5, #0x20]
+	stp d14, d15, [x5, #0x30]
 #endif
 
 	str	x3, [x0, #AARCH64_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
@@ -102,9 +102,9 @@ DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
 #ifdef AARCH64_MULTILIB_VFP
 	add	x5, x1, #AARCH64_CONTEXT_CONTROL_D8_OFFSET
 	ldp d8,  d9,  [x5]
-	ldp d10, d11, [x5, #16]
-	ldp d12, d13, [x5, #32]
-	ldp d14, d15, [x5, #48]
+	ldp d10, d11, [x5, #0x10]
+	ldp d12, d13, [x5, #0x20]
+	ldp d14, d15, [x5, #0x30]
 #endif
 
 	msr	TPIDR_EL0, x3

@@ -74,7 +74,7 @@
  */
 	blr x0
 /* Pop x0,lr from stack */
-	ldp x0,	lr,	[sp],	#16
+	ldp x0,	lr,	[sp],	#0x10
 /* Return from exception */
 	eret
 	nop
@@ -129,7 +129,7 @@ Vector_table_el3:
  * using SP0.
  */
 curr_el_sp0_sync:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_sp0_sync_get_pc	/* Get current execution address */
 curr_el_sp0_sync_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -137,7 +137,7 @@ curr_el_sp0_sync_get_pc:		/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for IRQ exceptions from the current EL using SP0. */
 curr_el_sp0_irq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_sp0_irq_get_pc	/* Get current execution address */
 curr_el_sp0_irq_get_pc:			/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -145,7 +145,7 @@ curr_el_sp0_irq_get_pc:			/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for FIQ exceptions from the current EL using SP0. */
 curr_el_sp0_fiq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_sp0_fiq_get_pc	/* Get current execution address */
 curr_el_sp0_fiq_get_pc:			/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -156,7 +156,7 @@ curr_el_sp0_fiq_get_pc:			/* The current PC is now in LR */
  * SP0.
  */
 curr_el_sp0_serror:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_sp0_serror_get_pc	/* Get current execution address */
 curr_el_sp0_serror_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -167,7 +167,7 @@ curr_el_sp0_serror_get_pc:		/* The current PC is now in LR */
  * the current SP.
  */
 curr_el_spx_sync:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_spx_sync_get_pc	/* Get current execution address */
 curr_el_spx_sync_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -178,7 +178,7 @@ curr_el_spx_sync_get_pc:		/* The current PC is now in LR */
  * current SP.
  */
 curr_el_spx_irq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_spx_irq_get_pc	/* Get current execution address */
 curr_el_spx_irq_get_pc:			/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -189,7 +189,7 @@ curr_el_spx_irq_get_pc:			/* The current PC is now in LR */
  * current SP.
  */
 curr_el_spx_fiq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_spx_fiq_get_pc	/* Get current execution address */
 curr_el_spx_fiq_get_pc:			/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -200,7 +200,7 @@ curr_el_spx_fiq_get_pc:			/* The current PC is now in LR */
  * the current SP.
  */
 curr_el_spx_serror:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_spx_serror_get_pc	/* Get current execution address */
 curr_el_spx_serror_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -210,7 +210,7 @@ curr_el_spx_serror_get_pc:		/* The current PC is now in LR */
  * The exception handler for synchronous exceptions from a lower EL (AArch64).
  */
 lower_el_aarch64_sync:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl lower_el_aarch64_sync_get_pc	/* Get current execution address */
 lower_el_aarch64_sync_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -218,7 +218,7 @@ lower_el_aarch64_sync_get_pc:		/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for IRQ exceptions from a lower EL (AArch64). */
 lower_el_aarch64_irq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl lower_el_aarch64_irq_get_pc	/* Get current execution address */
 lower_el_aarch64_irq_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -226,7 +226,7 @@ lower_el_aarch64_irq_get_pc:		/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for FIQ exceptions from a lower EL (AArch64). */
 lower_el_aarch64_fiq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl lower_el_aarch64_fiq_get_pc	/* Get current execution address */
 lower_el_aarch64_fiq_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -237,7 +237,7 @@ lower_el_aarch64_fiq_get_pc:		/* The current PC is now in LR */
  */
 lower_el_aarch64_serror:
 /* Push x0,lr on to the stack */
-	stp x0,	lr,	[sp, #-16]!
+	stp x0,	lr,	[sp, #-0x10]!
 /* Get current execution address */
 	bl lower_el_aarch64_serror_get_pc
 lower_el_aarch64_serror_get_pc:		/* The current PC is now in LR */
@@ -248,7 +248,7 @@ lower_el_aarch64_serror_get_pc:		/* The current PC is now in LR */
  * The exception handler for the synchronous exception from a lower EL(AArch32).
  */
 lower_el_aarch32_sync:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl lower_el_aarch32_sync_get_pc	/* Get current execution address */
 lower_el_aarch32_sync_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -256,7 +256,7 @@ lower_el_aarch32_sync_get_pc:		/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for the IRQ exception from a lower EL (AArch32). */
 lower_el_aarch32_irq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl lower_el_aarch32_irq_get_pc	/* Get current execution address */
 lower_el_aarch32_irq_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -264,7 +264,7 @@ lower_el_aarch32_irq_get_pc:		/* The current PC is now in LR */
 .balign 0x80
 /* The exception handler for the FIQ exception from a lower EL (AArch32). */
 lower_el_aarch32_fiq:
-	stp x0,	lr,	[sp, #-16]!	/* Push x0,lr on to the stack */
+	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl lower_el_aarch32_fiq_get_pc	/* Get current execution address */
 lower_el_aarch32_fiq_get_pc:		/* The current PC is now in LR */
 	JUMP_HANDLER
@@ -276,7 +276,7 @@ lower_el_aarch32_fiq_get_pc:		/* The current PC is now in LR */
  */
 lower_el_aarch32_serror:
 /* Push x0,lr on to the stack */
-	stp x0,	lr,	[sp, #-16]!
+	stp x0,	lr,	[sp, #-0x10]!
 /* Get current execution address */
 	bl lower_el_aarch32_serror_get_pc
 lower_el_aarch32_serror_get_pc	:		/* The current PC is now in LR */
@@ -311,7 +311,7 @@ bsp_start_vector_table_end:
  * safe because this will never return
  */
 	msr spsel, #1
-	ldp x0,	lr, [sp], #16
+	ldp x0,	lr, [sp], #0x10
 	msr spsel, #0
 /* Save LR */
 	str lr, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_LR_OFFSET]
@@ -349,7 +349,7 @@ bsp_start_vector_table_end:
 /* Push the start of the context */
 	bl .push_exception_context_start
 /* Save original sp in x0 for .push_exception_context_finish */
-	add x0, sp, #(AARCH64_EXCEPTION_FRAME_SIZE + 16)
+	add x0, sp, #(AARCH64_EXCEPTION_FRAME_SIZE + 0x10)
 /* Push the remainder of the context */
 	bl .push_exception_context_finish
 /* Save sp (exception frame) into x0 for handler */
