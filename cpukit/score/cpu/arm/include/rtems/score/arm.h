@@ -1,7 +1,9 @@
 /**
  * @file
  *
- * @brief ARM Assembler Support API
+ * @ingroup RTEMSScoreCPUARM
+ *
+ * @brief This header file provides defines derived from ARM multilib defines.
  */
 
 /*
@@ -26,8 +28,9 @@ extern "C" {
 
 /**
  * @addtogroup RTEMSScoreCPUARM
+ *
+ * @{
  */
-/**@{**/
 
 #if defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__)
   #define CPU_MODEL_NAME "ARMv7M"
@@ -40,10 +43,7 @@ extern "C" {
   #define ARM_MULTILIB_ARCH_V4
 #endif
 
-#if defined(__ARM_ARCH_7A__) \
-  || defined(__ARM_ARCH_7R__) \
-  || defined(__ARM_ARCH_7M__) \
-  || defined(__ARM_ARCH_7EM__)
+#if __ARM_ARCH >= 7
   #define ARM_MULTILIB_HAS_WFI
   #define ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
   #define ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
@@ -51,18 +51,17 @@ extern "C" {
 
 #ifndef ARM_DISABLE_THREAD_ID_REGISTER_USE
   #if defined(__ARM_ARCH_7A__) \
-    || defined(__ARM_ARCH_7R__)
+    || defined(__ARM_ARCH_7R__) \
+    || __ARM_ARCH >= 8
     #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   #endif
 #endif
 
-#if defined(__ARM_ARCH_7A__)
+#if defined(__ARM_ARCH_7A__) || __ARM_ARCH >= 8
   #define ARM_MULTILIB_CACHE_LINE_MAX_64
 #endif
 
-#if defined(__ARM_ARCH_7A__) \
-  || defined(__ARM_ARCH_7M__) \
-  || defined(__ARM_ARCH_7EM__)
+#if __ARM_ARCH >= 7
   #define ARM_MULTILIB_HAS_CPACR
 #endif
 
