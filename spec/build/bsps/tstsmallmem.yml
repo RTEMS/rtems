@@ -4,6 +4,7 @@ actions:
     flashdisk01: exclude
     fsdosfsname01: exclude
     linpack: exclude
+    performance-0: exclude
     psxconfig01: exclude
     psxusleep: exclude
     record02: exclude
