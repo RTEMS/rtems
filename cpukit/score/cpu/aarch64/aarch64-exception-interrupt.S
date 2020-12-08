@@ -255,7 +255,7 @@ _AArch64_Exception_interrupt_nest:
 Save volatile regs on interrupt stack
 Execute irq handler
 Restore volatile regs from interrupt stack
-Exception return
+Return to embedded exception vector code
 */
 
 /* Push interrupt context */
@@ -281,7 +281,7 @@ Execute interrupt handler
 Switch to thread stack
 Call thread dispatch
 Restore volatile registers from thread stack
-Return to dispatch
+Return to embedded exception vector code
 */
 
 

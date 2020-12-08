@@ -54,7 +54,22 @@
 
 /*
  * This is the exception vector table and the pointers to the default
- * exceptions handlers.
+ * exceptions handlers. Each vector in the table has space for up to 32
+ * instructions. The space of the last two instructions in each vector is used
+ * for the exception handler pointer.
+ *
+ * The operation of all exceptions is as follows:
+ * * An exception occurs
+ * * A vector is chosen based on the exception type and machine state
+ * * Execution begins at the chosen vector
+ * * X0 and LR are pushed onto the current stack
+ * * An unconditional branch and link is taken to the next instruction to get
+ *   the PC
+ * * The exception handler pointer (EHP) is retrieved from the current vector using
+ *   the PC
+ * * Branch and link to the EHP
+ * * X0 and LR are popped from the current stack after returning from the EHP
+ * * The exception returns to the previous execution state
  */
 
 /*
