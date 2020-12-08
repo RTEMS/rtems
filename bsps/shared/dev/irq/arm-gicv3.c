@@ -131,8 +131,17 @@
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
-#define ARM_GIC_REDIST ((volatile gic_redist *) BSP_ARM_GIC_REDIST_BASE)
-#define ARM_GIC_SGI_PPI (((volatile gic_sgi_ppi *) ((char*)BSP_ARM_GIC_REDIST_BASE + (1 << 16))))
+static volatile gic_redist *gicv3_get_redist(uint32_t cpu_index)
+{
+  return (volatile gic_redist *)
+    (BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000);
+}
+
+static volatile gic_sgi_ppi *gicv3_get_sgi_ppi(uint32_t cpu_index)
+{
+  return (volatile gic_sgi_ppi *)
+    (BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000 + 0x10000);
+}
 
 void gicvx_interrupt_dispatch(void)
 {
@@ -149,30 +158,29 @@ void gicvx_interrupt_dispatch(void)
 
 void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  volatile gic_dist *dist = ARM_GIC_DIST;
-  volatile gic_sgi_ppi *sgi_ppi = ARM_GIC_SGI_PPI;
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  /* TODO(kmoore) This could use some cleanup and integration
-   * Vectors below 32 are currently routed through the redistributor */
   if (vector >= 32) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
     gic_id_enable(dist, vector);
   } else {
+    volatile gic_sgi_ppi *sgi_ppi =
+      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
     sgi_ppi->icspiser[0] = 1 << (vector % 32);
   }
 }
 
 void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  volatile gic_dist *dist = ARM_GIC_DIST;
-  volatile gic_sgi_ppi *sgi_ppi = ARM_GIC_SGI_PPI;
-
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   if (vector >= 32) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
     gic_id_disable(dist, vector);
   } else {
+    volatile gic_sgi_ppi *sgi_ppi =
+      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
     sgi_ppi->icspicer[0] = 1 << (vector % 32);
   }
 }
@@ -187,21 +195,22 @@ static inline uint32_t get_id_count(volatile gic_dist *dist)
   return id_count;
 }
 
-static void init_cpu_interface(void)
+static void gicv3_init_cpu_interface(void)
 {
+  uint32_t cpu_index = _SMP_Get_current_processor();
   uint32_t sre_value = 0x7;
   WRITE_SR(ICC_SRE, sre_value);
   WRITE_SR(ICC_PMR, GIC_CPUIF_ICCPMR_PRIORITY(0xff));
   WRITE_SR(ICC_BPR0, GIC_CPUIF_ICCBPR_BINARY_POINT(0x0));
 
-  volatile gic_redist *redist = ARM_GIC_REDIST;
+  volatile gic_redist *redist = gicv3_get_redist(cpu_index);
   uint32_t waker = redist->icrwaker;
   uint32_t waker_mask = GIC_REDIST_ICRWAKER_PROCESSOR_SLEEP;
   waker &= ~waker_mask;
   redist->icrwaker = waker;
 
   /* Set interrupt group to 1NS for SGI/PPI interrupts routed through the redistributor */
-  volatile gic_sgi_ppi *sgi_ppi = ARM_GIC_SGI_PPI;
+  volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
   sgi_ppi->icspigrpr[0] = 0xffffffff;
   sgi_ppi->icspigrpmodr[0] = 0;
   for (int id = 0; id < 32; id++) {
@@ -243,7 +252,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     gic_id_set_targets(dist, id, 0x01);
   }
 
-  init_cpu_interface();
+  gicv3_init_cpu_interface();
   return RTEMS_SUCCESSFUL;
 }
 
@@ -256,8 +265,7 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
     /* Wait */
   }
 
-#error modify init_cpu_interface to use correct offsets for each CPU
-  init_cpu_interface();
+  gicv3_init_cpu_interface();
 }
 #endif
 
@@ -269,12 +277,13 @@ rtems_status_code arm_gic_irq_set_priority(
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   if (bsp_interrupt_is_valid_vector(vector)) {
-    if (vector < 32) {
-      volatile gic_sgi_ppi *sgi_ppi = ARM_GIC_SGI_PPI;
-      sgi_ppi->icspiprior[vector] = priority;
-    } else {
+    if (vector >= 32) {
       volatile gic_dist *dist = ARM_GIC_DIST;
       gic_id_set_priority(dist, vector, priority);
+    } else {
+      volatile gic_sgi_ppi *sgi_ppi =
+        gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+      sgi_ppi->icspiprior[vector] = priority;
     }
   } else {
     sc = RTEMS_INVALID_ID;
@@ -291,12 +300,13 @@ rtems_status_code arm_gic_irq_get_priority(
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   if (bsp_interrupt_is_valid_vector(vector)) {
-    if (vector < 32) {
-      volatile gic_sgi_ppi *sgi_ppi = ARM_GIC_SGI_PPI;
-      *priority = sgi_ppi->icspiprior[vector];
-    } else {
+    if (vector >= 32) {
       volatile gic_dist *dist = ARM_GIC_DIST;
       *priority = gic_id_get_priority(dist, vector);
+    } else {
+      volatile gic_sgi_ppi *sgi_ppi =
+        gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+      *priority = sgi_ppi->icspiprior[vector];
     }
   } else {
     sc = RTEMS_INVALID_ID;
