@@ -138,11 +138,22 @@ CPU_Counter_ticks _CPU_Counter_read(void)
   return (uint32_t) arm_gt_clock_get_count();
 }
 
+static void arm_gt_system_init(void)
+{
+#ifdef ARM_GENERIC_TIMER_SYSTEM_BASE
+  volatile uint32_t *cntcr;
+
+  cntcr = (volatile uint32_t *) ARM_GENERIC_TIMER_SYSTEM_BASE;
+  *cntcr = ARM_GENERIC_TIMER_SYSTEM_CNTCR;
+#endif
+}
+
 static void arm_gt_clock_early_init(void)
 {
   uint32_t frequency;
-  arm_gt_clock_set_control(0x3);
 
+  arm_gt_system_init();
+  arm_gt_clock_set_control(0x3);
   arm_generic_timer_get_config(
     &frequency,
     &arm_gt_clock_instance.irq

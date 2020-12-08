@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default: 709033984
+default-by-variant:
+- value: 2856517632
+  variants:
+  - arm/fvp_cortex_r52
+description: |
+  Defines the base address of the memory-mapped system level ARM Generic Timer.
+format: '{:#010x}'
+enabled-by: true
+links: []
+name: ARM_GENERIC_TIMER_SYSTEM_BASE
+type: build
