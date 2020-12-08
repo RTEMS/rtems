@@ -16,7 +16,7 @@ links:
 - role: build-dependency
   uid: objsmp
 - role: build-dependency
-  uid: optenhyp
+  uid: ../optstarthyp
 - role: build-dependency
   uid: opti2ciomode
 - role: build-dependency

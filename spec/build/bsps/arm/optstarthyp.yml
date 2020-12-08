@@ -8,7 +8,8 @@ copyrights:
 default: true
 default-by-variant: []
 description: |
-  Support start of BSP in ARM HYP mode
+  If set to true, then the a system start in hypervisor mode (EL2) is
+  supported, otherwise it is unsupported.
 enabled-by: true
 links: []
 name: BSP_START_IN_HYP_SUPPORT
