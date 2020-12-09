@@ -26,9 +26,16 @@ void bsp_fatal_extension(
     printk(
       "\n"
       "*** FATAL ***\n"
-      "fatal source: %i (%s)\n",
+      "fatal source: %i (%s)\n"
+      #ifdef RTEMS_SMP
+        "CPU: %" PRIu32 "\n"
+      #endif
+      ,
       source,
       rtems_fatal_source_text( source )
+      #ifdef RTEMS_SMP
+        , rtems_scheduler_get_processor()
+      #endif
     );
   #endif
 
