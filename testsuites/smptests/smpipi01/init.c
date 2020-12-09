@@ -118,6 +118,8 @@ static void test_send_message_while_processing_a_message(
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
     if (cpu_index != cpu_index_self) {
+      Per_CPU_Control *cpu_self;
+
       ctx->jobs[0][0].context = &barrier_0_job_context;
       _Per_CPU_Add_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0][0]);
       _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
@@ -142,6 +144,11 @@ static void test_send_message_while_processing_a_message(
       rtems_test_assert(ctx->counters[cpu_index].value == 2);
 
       ctx->counters[cpu_index].value = 0;
+
+      /* Ensure that the second job is done and can be reused */
+      cpu_self = _Thread_Dispatch_disable();
+      _Per_CPU_Wait_for_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0][1]);
+      _Thread_Dispatch_enable(cpu_self);
     }
   }
 }
