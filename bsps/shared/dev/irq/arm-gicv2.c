@@ -261,7 +261,7 @@ void bsp_interrupt_get_affinity(
 void arm_gic_trigger_sgi(
   rtems_vector_number vector,
   arm_gic_irq_software_irq_target_filter filter,
-  uint8_t targets
+  uint32_t targets
 )
 {
   volatile gic_dist *dist = ARM_GIC_DIST;

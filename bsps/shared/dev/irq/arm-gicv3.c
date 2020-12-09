@@ -340,7 +340,7 @@ void bsp_interrupt_get_affinity(
 void arm_gic_trigger_sgi(
   rtems_vector_number vector,
   arm_gic_irq_software_irq_target_filter filter,
-  uint8_t targets
+  uint32_t targets
 )
 {
   /* TODO(kmoore) Handle filter:
@@ -356,7 +356,7 @@ void arm_gic_trigger_sgi(
   uint64_t value = ICC_SGIR_AFFINITY2(MPIDR_AFFINITY2_GET(mpidr))
                  | ICC_SGIR_INTID(vector)
                  | ICC_SGIR_AFFINITY1(MPIDR_AFFINITY1_GET(mpidr))
-                 | ICC_SGIR_CPU_TARGET_LIST(1);
+                 | ICC_SGIR_CPU_TARGET_LIST(targets);
 #ifndef ARM_MULTILIB_ARCH_V4
   value |= ICC_SGIR_AFFINITY3(MPIDR_AFFINITY3_GET(mpidr));
 #endif

@@ -88,13 +88,13 @@ typedef enum {
 void arm_gic_trigger_sgi(
   rtems_vector_number vector,
   arm_gic_irq_software_irq_target_filter filter,
-  uint8_t targets
+  uint32_t targets
 );
 
 static inline rtems_status_code arm_gic_irq_generate_software_irq(
   rtems_vector_number vector,
   arm_gic_irq_software_irq_target_filter filter,
-  uint8_t targets
+  uint32_t targets
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;

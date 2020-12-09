@@ -60,6 +60,6 @@ void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
   arm_gic_irq_generate_software_irq(
     ARM_GIC_IRQ_SGI_0,
     ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
-    (uint8_t) (1U << target_processor_index)
+    1U << target_processor_index
   );
 }

@@ -31,6 +31,7 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <libcpu/arm-cp15.h>
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
@@ -79,8 +80,8 @@ static inline void Cause_tm27_intr(void)
 {
   rtems_status_code sc = arm_gic_irq_generate_software_irq(
     ARM_GIC_TM27_IRQ_LOW,
-    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF,
-    0
+    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
+    1U << (arm_cp15_get_multiprocessor_affinity() & 0xff)
   );
   assert(sc == RTEMS_SUCCESSFUL);
 }
@@ -94,8 +95,8 @@ static inline void Lower_tm27_intr(void)
 {
   rtems_status_code sc = arm_gic_irq_generate_software_irq(
     ARM_GIC_TM27_IRQ_HIGH,
-    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF,
-    0
+    ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
+    1U << (arm_cp15_get_multiprocessor_affinity() & 0xff)
   );
   assert(sc == RTEMS_SUCCESSFUL);
 }
