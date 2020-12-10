@@ -49,7 +49,7 @@
 #define CPUIF_ICCICR GIC_CPUIF_ICCICR_ENABLE
 #endif
 
-void gicvx_interrupt_dispatch(void)
+void bsp_interrupt_dispatch(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
   uint32_t icciar = cpuif->icciar;

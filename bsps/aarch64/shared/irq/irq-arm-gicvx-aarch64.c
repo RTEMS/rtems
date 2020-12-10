@@ -57,8 +57,3 @@ void arm_interrupt_facility_set_exception_handler(void)
     _AArch64_Exception_interrupt_nest
   );
 }
-
-void bsp_interrupt_dispatch(void)
-{
-  gicvx_interrupt_dispatch();
-}

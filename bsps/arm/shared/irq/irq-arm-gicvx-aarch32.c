@@ -54,8 +54,3 @@ void arm_interrupt_facility_set_exception_handler(void)
     _ARMV4_Exception_interrupt
   );
 }
-
-void bsp_interrupt_dispatch(void)
-{
-  gicvx_interrupt_dispatch();
-}

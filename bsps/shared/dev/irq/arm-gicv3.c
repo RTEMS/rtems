@@ -143,7 +143,7 @@ static volatile gic_sgi_ppi *gicv3_get_sgi_ppi(uint32_t cpu_index)
     ((uintptr_t)BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000 + 0x10000);
 }
 
-void gicvx_interrupt_dispatch(void)
+void bsp_interrupt_dispatch(void)
 {
   uint32_t icciar = READ_SR(ICC_IAR1);
   rtems_vector_number vector = GIC_CPUIF_ICCIAR_ACKINTID_GET(icciar);
