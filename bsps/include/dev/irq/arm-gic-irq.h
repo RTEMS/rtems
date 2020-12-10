@@ -116,12 +116,7 @@ void arm_interrupt_handler_dispatch(rtems_vector_number vector);
  */
 void gicvx_interrupt_dispatch(void);
 
-static inline uint32_t arm_gic_irq_processor_count(void)
-{
-  volatile gic_dist *dist = ARM_GIC_DIST;
-
-  return GIC_DIST_ICDICTR_CPU_NUMBER_GET(dist->icdictr) + 1;
-}
+uint32_t arm_gic_irq_processor_count(void);
 
 void arm_gic_irq_initialize_secondary_cpu(void);
 

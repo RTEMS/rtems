@@ -354,3 +354,30 @@ void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
 #endif
   WRITE64_SR(ICC_SGI1, value);
 }
+
+uint32_t arm_gic_irq_processor_count(void)
+{
+  volatile gic_dist *dist = ARM_GIC_DIST;
+  uint32_t cpu_count;
+
+  if ((dist->icddcr & GIC_DIST_ICDDCR_ARE_S) == 0) {
+    cpu_count = GIC_DIST_ICDICTR_CPU_NUMBER_GET(dist->icdictr) + 1;
+  } else {
+    int i;
+
+    /* Assume that an interrupt export port exists */
+    cpu_count = 0;
+
+    for (i = 0; i < CPU_MAXIMUM_PROCESSORS; ++i) {
+      volatile gic_redist *redist = gicv3_get_redist(i);
+
+      if ((redist->icrtyper & GIC_REDIST_ICRTYPER_LAST) != 0) {
+        break;
+      }
+
+      ++cpu_count;
+    }
+  }
+
+  return cpu_count;
+}
