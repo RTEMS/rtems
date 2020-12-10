@@ -79,28 +79,17 @@ void bsp_interrupt_get_affinity(
   Processor_mask *affinity
 );
 
-typedef enum {
-  ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
-  ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_EXCEPT_SELF,
-  ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF
-} arm_gic_irq_software_irq_target_filter;
-
-void arm_gic_trigger_sgi(
-  rtems_vector_number vector,
-  arm_gic_irq_software_irq_target_filter filter,
-  uint32_t targets
-);
+void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets);
 
 static inline rtems_status_code arm_gic_irq_generate_software_irq(
   rtems_vector_number vector,
-  arm_gic_irq_software_irq_target_filter filter,
   uint32_t targets
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   if (vector <= ARM_GIC_IRQ_SGI_15) {
-    arm_gic_trigger_sgi(vector, filter, targets);
+    arm_gic_trigger_sgi(vector, targets);
   } else {
     sc = RTEMS_INVALID_ID;
   }

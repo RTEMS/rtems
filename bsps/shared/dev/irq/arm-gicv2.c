@@ -258,15 +258,11 @@ void bsp_interrupt_get_affinity(
   _Processor_mask_From_uint32_t(affinity, targets, 0);
 }
 
-void arm_gic_trigger_sgi(
-  rtems_vector_number vector,
-  arm_gic_irq_software_irq_target_filter filter,
-  uint32_t targets
-)
+void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
 
-  dist->icdsgir = GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(filter)
+  dist->icdsgir = GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(0)
     | GIC_DIST_ICDSGIR_CPU_TARGET_LIST(targets)
 #ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
     | GIC_DIST_ICDSGIR_NSATT

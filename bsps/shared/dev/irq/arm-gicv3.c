@@ -337,16 +337,8 @@ void bsp_interrupt_get_affinity(
   _Processor_mask_From_uint32_t(affinity, targets, 0);
 }
 
-void arm_gic_trigger_sgi(
-  rtems_vector_number vector,
-  arm_gic_irq_software_irq_target_filter filter,
-  uint32_t targets
-)
+void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
 {
-  /* TODO(kmoore) Handle filter:
-   * ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_IN_LIST,
-   * ARM_GIC_IRQ_SOFTWARE_IRQ_TO_ALL_EXCEPT_SELF,
-   * ARM_GIC_IRQ_SOFTWARE_IRQ_TO_SELF */
 #ifndef ARM_MULTILIB_ARCH_V4
   uint64_t mpidr;
 #else
