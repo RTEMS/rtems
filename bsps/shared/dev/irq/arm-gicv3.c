@@ -134,13 +134,13 @@
 static volatile gic_redist *gicv3_get_redist(uint32_t cpu_index)
 {
   return (volatile gic_redist *)
-    (BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000);
+    ((uintptr_t)BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000);
 }
 
 static volatile gic_sgi_ppi *gicv3_get_sgi_ppi(uint32_t cpu_index)
 {
   return (volatile gic_sgi_ppi *)
-    (BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000 + 0x10000);
+    ((uintptr_t)BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000 + 0x10000);
 }
 
 void gicvx_interrupt_dispatch(void)
