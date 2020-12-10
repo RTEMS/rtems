@@ -276,8 +276,6 @@ static inline uint32_t arm_interrupt_disable( void )
   uint32_t level;
 
 #if defined(ARM_MULTILIB_ARCH_V4)
-  uint32_t arm_switch_reg;
-
   /*
    * Disable only normal interrupts (IRQ).
    *
@@ -292,6 +290,16 @@ static inline uint32_t arm_interrupt_disable( void )
    * operating system support for a FIQ, she can trigger a software interrupt and
    * service the request in a two-step process.
    */
+#if __ARM_ARCH >= 7
+  __asm__ volatile (
+    "mrs %0, cpsr\n"
+    "cpsid i\n"
+    "isb"
+    : "=&r" (level)
+  );
+#else
+  uint32_t arm_switch_reg;
+
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
@@ -300,6 +308,7 @@ static inline uint32_t arm_interrupt_disable( void )
     ARM_SWITCH_BACK
     : [arm_switch_reg] "=&r" (arm_switch_reg), [level] "=&r" (level)
   );
+#endif
 #elif defined(ARM_MULTILIB_ARCH_V7M)
   uint32_t basepri = 0x80;
 
