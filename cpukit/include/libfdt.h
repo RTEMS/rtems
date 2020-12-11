@@ -126,12 +126,10 @@ static inline void *fdt_offset_ptr_w(void *fdt, int offset, int checklen)
 uint32_t fdt_next_tag(const void *fdt, int offset, int *nextoffset);
 
 /*
- * Alignment helpers:
- *     These helpers access words from a device tree blob.  They're
- *     built to work even with unaligned pointers on platforms (ike
- *     ARM) that don't like unaligned loads and stores
+ * External helpers to access words from a device tree blob. They're built
+ * to work even with unaligned pointers on platforms (such as ARMv5) that don't
+ * like unaligned loads and stores.
  */
-
 static inline uint32_t fdt32_ld(const fdt32_t *p)
 {
 	const uint8_t *bp = (const uint8_t *)p;
