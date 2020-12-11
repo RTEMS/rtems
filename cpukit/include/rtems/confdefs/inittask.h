@@ -46,6 +46,10 @@
 
 #ifdef CONFIGURE_INIT
 
+#define _CONFIGURE_ASSERT_NOT_NULL( _type, _value ) \
+  ( ( _value ) != NULL ? ( _value ) : \
+    ( _type ) sizeof( int[ ( _value ) != NULL ? 1 : -1 ] ) )
+
 #ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #include <rtems/confdefs/percpu.h>
@@ -94,8 +98,8 @@ extern "C" {
 #endif
 
 /*
- * Ignore the following warnings from g++ and clang in the static assertion
- * below:
+ * Ignore the following warnings from g++ and clang in the uses of
+ * _CONFIGURE_ASSERT_NOT_NULL() below:
  *
  * warning: the address of 'void Init()' will never be NULL [-Waddress]
  *
@@ -106,13 +110,6 @@ extern "C" {
 #pragma GCC diagnostic ignored "-Waddress"
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wtautological-pointer-compare"
-
-RTEMS_STATIC_ASSERT(
-  CONFIGURE_INIT_TASK_ENTRY_POINT != NULL,
-  CONFIGURE_INIT_TASK_ENTRY_POINT_MUST_NOT_BE_NULL
-);
-
-#pragma GCC diagnostic pop
 
 #ifdef CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
 
@@ -139,7 +136,10 @@ const RTEMS_tasks_User_task_config _RTEMS_tasks_User_task_config = {
     CONFIGURE_INIT_TASK_INITIAL_MODES,
     CONFIGURE_INIT_TASK_ATTRIBUTES,
   },
-  CONFIGURE_INIT_TASK_ENTRY_POINT,
+  _CONFIGURE_ASSERT_NOT_NULL(
+    rtems_task_entry,
+    CONFIGURE_INIT_TASK_ENTRY_POINT
+  ),
   CONFIGURE_INIT_TASK_ARGUMENTS
 };
 
@@ -167,7 +167,10 @@ const rtems_initialization_tasks_table _RTEMS_tasks_User_task_table = {
   CONFIGURE_INIT_TASK_STACK_SIZE,
   CONFIGURE_INIT_TASK_PRIORITY,
   CONFIGURE_INIT_TASK_ATTRIBUTES,
-  CONFIGURE_INIT_TASK_ENTRY_POINT,
+  _CONFIGURE_ASSERT_NOT_NULL(
+    rtems_task_entry,
+    CONFIGURE_INIT_TASK_ENTRY_POINT
+  ),
   CONFIGURE_INIT_TASK_INITIAL_MODES,
   CONFIGURE_INIT_TASK_ARGUMENTS
 };
@@ -179,6 +182,8 @@ RTEMS_SYSINIT_ITEM(
 );
 
 #endif /* CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE */
+
+#pragma GCC diagnostic pop
 
 #ifdef __cplusplus
 }
