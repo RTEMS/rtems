@@ -20,7 +20,8 @@ default-by-variant:
   variants:
   - arm/realview_pbx_a9_qemu
 description: |
-  Use MMU with small pages (4KiB)
+  If set to true, then the MMU is configured to use small pages (4KiB),
+  otherwise it uses sections (1MiB).
 enabled-by: true
 links: []
 name: ARM_MMU_USE_SMALL_PAGES
