@@ -700,7 +700,13 @@ static inline void _ARMV7M_MPU_Setup(
   _Assert(cfg_count <= region_count);
 
   for (region = 0; region < cfg_count; ++region) {
-    _ARMV7M_MPU_Set_region(mpu, region, cfg->rasr, cfg->begin, cfg->end);
+    _ARMV7M_MPU_Set_region(
+      mpu,
+      region,
+      cfg[region].rasr,
+      cfg[region].begin,
+      cfg[region].end
+    );
   }
 
   for (region = cfg_count; region < region_count; ++region) {
