@@ -199,6 +199,8 @@ static int spi_bus_ioctl(
           arg,
           IOCPARM_LEN(command) / sizeof(struct spi_ioc_transfer)
         );
+      } else if (bus->ioctl != NULL) {
+        err = (*bus->ioctl)(bus, command, arg);
       } else {
         err = -EINVAL;
       }
@@ -300,6 +302,7 @@ static int spi_bus_do_init(
   bus->transfer = spi_bus_transfer_default;
   bus->setup = spi_bus_setup_default;
   bus->destroy = destroy;
+  bus->ioctl = NULL;
   bus->bits_per_word = 8;
 
   return 0;

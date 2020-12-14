@@ -141,6 +141,13 @@ struct spi_bus {
    * devices.
    */
   uint16_t delay_usecs;
+
+  /**
+   * @brief Driver specific ioctl.
+   *
+   * @param[in] bus The bus control.
+   */
+  int (*ioctl)(spi_bus *bus, ioctl_command_t command, void *arg);
 };
 
 /**
