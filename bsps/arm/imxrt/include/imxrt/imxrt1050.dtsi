@@ -225,7 +225,7 @@
 			reg = <0x40300000 0x00100000>;
 			ranges;
 
-			lpspi1: lpspi@40394000 {
+			lpspi1: spi@40394000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpspi";
@@ -235,7 +235,7 @@
 				rtems,path = "/dev/spi1";
 			};
 
-			lpspi2: lpspi@40398000 {
+			lpspi2: spi@40398000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpspi";
@@ -245,7 +245,7 @@
 				rtems,path = "/dev/spi2";
 			};
 
-			lpspi3: lpspi@4039c000 {
+			lpspi3: spi@4039c000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpspi";
@@ -255,7 +255,7 @@
 				rtems,path = "/dev/spi3";
 			};
 
-			lpspi4: lpspi@403a0000 {
+			lpspi4: spi@403a0000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpspi";
@@ -265,7 +265,7 @@
 				rtems,path = "/dev/spi4";
 			};
 
-			lpi2c1: lpi2c@403f0000 {
+			lpi2c1: i2c@403f0000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpi2c";
@@ -275,7 +275,7 @@
 				rtems,path = "/dev/i2c1";
 			};
 
-			lpi2c2: lpi2c@403f4000 {
+			lpi2c2: i2c@403f4000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpi2c";
@@ -285,7 +285,7 @@
 				rtems,path = "/dev/i2c2";
 			};
 
-			lpi2c3: lpi2c@403f8000 {
+			lpi2c3: i2c@403f8000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpi2c";
@@ -295,7 +295,7 @@
 				rtems,path = "/dev/i2c3";
 			};
 
-			lpi2c4: lpi2c@403fc000 {
+			lpi2c4: i2c@403fc000 {
 				#address-cells = <1>;
 				#size-cells = <0>;
 				compatible = "nxp,imxrt-lpi2c";
