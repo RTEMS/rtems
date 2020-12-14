@@ -339,13 +339,13 @@ extern "C" {
 /**
  * @ingroup RTEMSAPIBaseDefs
  *
- * @brief Stringifies _x without expanding.
+ * @brief Stringifies the arguments without expanding them.
  *
- * @param _x is the token to stringify.
+ * @param ... are the arguments to stringify.
  *
- * @return Returns the stringification of the token _x.
+ * @return Returns the stringification of the arguments.
  */
-#define RTEMS_STRING( _x ) #_x
+#define RTEMS_STRING( ... ) #__VA_ARGS__
 
 /* Generated from spec:/rtems/basedefs/if/typeof-refx */
 
@@ -913,13 +913,13 @@ extern "C" {
 /**
  * @ingroup RTEMSAPIBaseDefs
  *
- * @brief Stringifies the expansion of _x.
+ * @brief Stringifies the expansion of the arguments.
  *
- * @param _x is the token expand and stringify.
+ * @param ... are the arguments to expand and stringify.
  *
- * @return Returns the stringification of the expansion of token _x.
+ * @return Returns the stringification of the expansion of the arguments.
  */
-#define RTEMS_XSTRING( _x ) RTEMS_STRING( _x )
+#define RTEMS_XSTRING( ... ) RTEMS_STRING( __VA_ARGS__ )
 
 /* Generated from spec:/rtems/basedefs/if/define-global-symbol */
 
