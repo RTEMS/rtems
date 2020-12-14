@@ -65,6 +65,23 @@
 			reg = <0x40000000 0x00100000>;
 			ranges;
 
+			edma: dma-controller@400e8000 {
+				/*
+				 * FIXME: The driver currently doesn't use
+				 * these. So only keep it here so that others
+				 * can reference the channel numbers.
+				 */
+				compatible = "fsl,imxrt-edma";
+				/*
+				 * Use DMA cells just like Linux:
+				 * First cell is the DMAMUX which is allways 0
+				 * in our case. Second one is the request
+				 * source.
+				 */
+				#dma-cells = <2>;
+				reg = <0x400e8000 0x4000>;
+			};
+
 			gpio5: gpio@400c0000 {
 				compatible = "fsl,imxrt-gpio",
 				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
@@ -135,6 +152,8 @@
 				interrupts = <20>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS1";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 2>, <&edma 0 3>;
 			};
 
 			lpuart2: uart@40188000 {
@@ -143,6 +162,8 @@
 				interrupts = <21>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS2";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 66>, <&edma 0 67>;
 			};
 
 			lpuart3: uart@4018c000 {
@@ -151,6 +172,8 @@
 				interrupts = <22>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS3";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 4>, <&edma 0 5>;
 			};
 
 			lpuart4: uart@40190000 {
@@ -159,6 +182,8 @@
 				interrupts = <23>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS4";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 68>, <&edma 0 69>;
 			};
 
 			lpuart5: uart@40194000 {
@@ -167,6 +192,8 @@
 				interrupts = <24>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS5";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 6>, <&edma 0 7>;
 			};
 
 			lpuart6: uart@40198000 {
@@ -175,6 +202,8 @@
 				interrupts = <25>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS6";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 70>, <&edma 0 71>;
 			};
 
 			lpuart7: uart@4019c000 {
@@ -183,6 +212,8 @@
 				interrupts = <26>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS7";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 8>, <&edma 0 9>;
 			};
 
 			lpuart8: uart@401a0000 {
@@ -191,6 +222,8 @@
 				interrupts = <27>;
 				status = "disabled";
 				rtems,path = "/dev/ttyS8";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 72>, <&edma 0 73>;
 			};
 
 			iomuxc: pinctrl@401f8000 {
@@ -233,6 +266,8 @@
 				interrupts = <32>;
 				status = "disabled";
 				rtems,path = "/dev/spi1";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 14>, <&edma 0 13>;
 			};
 
 			lpspi2: spi@40398000 {
@@ -243,6 +278,8 @@
 				interrupts = <33>;
 				status = "disabled";
 				rtems,path = "/dev/spi2";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 78>, <&edma 0 77>;
 			};
 
 			lpspi3: spi@4039c000 {
@@ -253,6 +290,8 @@
 				interrupts = <34>;
 				status = "disabled";
 				rtems,path = "/dev/spi3";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 16>, <&edma 0 15>;
 			};
 
 			lpspi4: spi@403a0000 {
@@ -263,6 +302,8 @@
 				interrupts = <35>;
 				status = "disabled";
 				rtems,path = "/dev/spi4";
+				dma-names = "tx", "rx";
+				dmas = <&edma 0 80>, <&edma 0 79>;
 			};
 
 			lpi2c1: i2c@403f0000 {
@@ -273,6 +314,7 @@
 				interrupts = <28>;
 				status = "disabled";
 				rtems,path = "/dev/i2c1";
+				dmas = <&edma 0 17>;
 			};
 
 			lpi2c2: i2c@403f4000 {
@@ -283,6 +325,7 @@
 				interrupts = <29>;
 				status = "disabled";
 				rtems,path = "/dev/i2c2";
+				dmas = <&edma 0 81>;
 			};
 
 			lpi2c3: i2c@403f8000 {
@@ -293,6 +336,7 @@
 				interrupts = <30>;
 				status = "disabled";
 				rtems,path = "/dev/i2c3";
+				dmas = <&edma 0 18>;
 			};
 
 			lpi2c4: i2c@403fc000 {
@@ -303,6 +347,7 @@
 				interrupts = <31>;
 				status = "disabled";
 				rtems,path = "/dev/i2c4";
+				dmas = <&edma 0 82>;
 			};
 		};
 	};
