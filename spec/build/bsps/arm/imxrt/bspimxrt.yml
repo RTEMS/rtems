@@ -103,6 +103,7 @@ install:
   source:
   - bsps/arm/imxrt/include/imxrt/imxrt1050.dtsi
   - bsps/arm/imxrt/include/imxrt/imxrt1050-pinfunc.h
+  - bsps/arm/imxrt/include/imxrt/lpspi.h
   - bsps/arm/imxrt/include/imxrt/memory.h
   - bsps/arm/imxrt/include/imxrt/mpu-config.h
 - destination: ${BSP_LIBDIR}

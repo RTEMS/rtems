@@ -34,6 +34,7 @@
 #include <dev/spi/spi.h>
 #include <fsl_clock.h>
 #include <libfdt.h>
+#include <imxrt/lpspi.h>
 
 struct imxrt_lpspi_bus {
   spi_bus base;
@@ -471,6 +472,24 @@ static clock_ip_name_t imxrt_lpspi_clock_ip(volatile LPSPI_Type *regs)
   return kCLOCK_IpInvalid;
 }
 
+static int imxrt_lpspi_ioctl(spi_bus *base, ioctl_command_t command, void *arg)
+{
+  struct imxrt_lpspi_bus *bus;
+  bus = (struct imxrt_lpspi_bus *) base;
+  int err = 0;
+
+  switch (command) {
+    case IMXRT_LPSPI_GET_REGISTERS:
+      *(volatile LPSPI_Type**)arg = bus->regs;
+      break;
+    default:
+      err = -EINVAL;
+      break;
+  }
+
+  return err;
+}
+
 void imxrt_lpspi_init(void)
 {
   const void *fdt;
@@ -523,6 +542,7 @@ void imxrt_lpspi_init(void)
       bus->base.transfer = imxrt_lpspi_transfer;
       bus->base.destroy = imxrt_lpspi_destroy;
       bus->base.setup = imxrt_lpspi_setup;
+      bus->base.ioctl = imxrt_lpspi_ioctl;
 
       eno = spi_bus_register(&bus->base, bus_path);
       if (eno != 0) {
