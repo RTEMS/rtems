@@ -30,6 +30,8 @@ install:
   - cpukit/score/cpu/arm/include/rtems/score/paravirt.h
 links: []
 source:
+- cpukit/score/cpu/arm/aarch32-psma-init.c
+- cpukit/score/cpu/arm/aarch32-psma-init-default.c
 - cpukit/score/cpu/arm/__aeabi_read_tp.c
 - cpukit/score/cpu/arm/arm-context-validate.S
 - cpukit/score/cpu/arm/arm-context-volatile-clobber.S
