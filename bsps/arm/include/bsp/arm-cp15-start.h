@@ -74,6 +74,10 @@ typedef struct {
     .end = (uint32_t) bsp_section_bss_end, \
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
   }, { \
+    .begin = (uint32_t) bsp_section_rtemsstack_begin, \
+    .end = (uint32_t) bsp_section_rtemsstack_end, \
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
+  }, { \
     .begin = (uint32_t) bsp_section_work_begin, \
     .end = (uint32_t) bsp_section_work_end, \
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
