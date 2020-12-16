@@ -118,7 +118,6 @@ install:
   - cpukit/include/rtems/iosupp.h
   - cpukit/include/rtems/irq-extension.h
   - cpukit/include/rtems/irq.h
-  - cpukit/include/rtems/jffs2.h
   - cpukit/include/rtems/libcsupport.h
   - cpukit/include/rtems/libi2c.h
   - cpukit/include/rtems/libio.h
