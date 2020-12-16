@@ -389,6 +389,8 @@ class Item(object):
                 ]
                 cmd.extend(self.adaflags)
                 cmd.extend(["-I" + i.path_from(cwd) for i in self.adaincludes])
+                cmd.append("-cargs")
+                cmd.extend(self.env.ABI_FLAGS)
                 cmd.append("-largs")
                 cmd.extend([o.path_from(cwd) for o in self.objs])
                 cmd.extend(self.env.LINKFLAGS)
