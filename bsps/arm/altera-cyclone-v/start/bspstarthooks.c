@@ -35,8 +35,6 @@
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
 {
-  arm_cp15_instruction_cache_invalidate();
-  arm_cp15_data_cache_invalidate_all_levels();
   arm_a9mpcore_start_hook_0();
 }
 

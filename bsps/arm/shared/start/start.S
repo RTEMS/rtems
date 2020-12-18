@@ -31,6 +31,8 @@
 #include <bspopts.h>
 #include <bsp/irq.h>
 
+#include <dev/cache/arm-data-cache-loop-set-way.h>
+
 	/* Global symbols */
 	.globl	_start
 	.globl	bsp_start_hook_0_done
@@ -390,15 +392,46 @@ _start:
 #if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8
 	/*
 	 * Set VBAR to the vector table in the start section and make sure
-	 * SCTLR[V] is cleared.  Afterwards, exceptions are handled by RTEMS.
+	 * SCTLR[M, I, A, C, V] are cleared.  Afterwards, exceptions are
+	 * handled by RTEMS.
 	 */
 	ldr	r0, =bsp_start_vector_table_begin
 	dsb
 	mcr	p15, 0, r0, c12, c0, 0
 	mrc	p15, 0, r0, c1, c0, 0
-	bic	r1, r0, #0x2000
+	bic	r1, r0, #0x2800
+	bic	r1, r1, #0x7
 	mcr	p15, 0, r1, c1, c0, 0
 	isb
+
+	/* Check previous SCTLR[C] and initialize data caches */
+	tst	r0, #0x4
+	bne	.Lclean_invalidate_data_caches
+
+	/*
+	 * Invalidate the sets and ways of all data or unified cache levels
+	 * using DCISW (Data Cache line Invalidate by Set/Way).
+	 */
+	ARM_DATA_CACHE_LOOP_SET_WAY c6
+	b	.Ldata_caches_initialized
+
+.Lclean_invalidate_data_caches:
+
+	/*
+	 * Clean and invalidate the sets and ways of all data or unified cache
+	 * levels using DCCISW (Data Cache line Clean and Invalidate by
+	 * Set/Way).
+	 */
+	ARM_DATA_CACHE_LOOP_SET_WAY c14
+
+.Ldata_caches_initialized:
+
+	/*
+	 * Invalidate the instruction cache levels using ICIALLU (Instruction
+	 * Cache Invalidate All to PoU).
+	 */
+	mov	r0, #0
+	mcr	p15, 0, r0, c7, c5, 0
 #endif
 
 	/*
