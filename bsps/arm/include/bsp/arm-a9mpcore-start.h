@@ -30,33 +30,13 @@
 #include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/arm-a9mpcore-regs.h>
+#include <bsp/arm-cp15-start.h>
 #include <bsp/arm-errata.h>
 #include <dev/irq/arm-gic-irq.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-BSP_START_TEXT_SECTION static inline void
-arm_a9mpcore_start_set_vector_base(void)
-{
-  /*
-   * Do not use bsp_vector_table_begin == 0, since this will get optimized away.
-  */
-  if (bsp_vector_table_end != bsp_vector_table_size) {
-    uint32_t ctrl;
-
-    /*
-     * For now we assume that every Cortex-A9 MPCore has the Security Extensions.
-     * Later it might be necessary to evaluate the ID_PFR1 register.
-     */
-    arm_cp15_set_vector_base_address(bsp_vector_table_begin);
-
-    ctrl = arm_cp15_get_control();
-    ctrl &= ~ARM_CP15_CTRL_V;
-    arm_cp15_set_control(ctrl);
-  }
-}
 
 BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_scu_invalidate(
   volatile a9mpcore_scu *scu,
@@ -88,9 +68,10 @@ arm_a9mpcore_start_on_secondary_processor(void)
 {
   uint32_t ctrl;
 
-  arm_a9mpcore_start_set_vector_base();
-
   arm_gic_irq_initialize_secondary_cpu();
+
+  /* Change the VBAR from the start to the normal vector table */
+  arm_cp15_set_vector_base_address(bsp_vector_table_begin);
 
   ctrl = arm_cp15_start_setup_mmu_and_cache(
     0,
@@ -194,7 +175,6 @@ BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_global_timer(void)
 BSP_START_TEXT_SECTION static inline void arm_a9mpcore_start_hook_1(void)
 {
   arm_a9mpcore_start_global_timer();
-  arm_a9mpcore_start_set_vector_base();
 }
 
 #ifdef __cplusplus

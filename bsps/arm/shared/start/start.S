@@ -377,6 +377,20 @@ _start:
 
 #endif /* ARM_MULTILIB_VFP */
 
+#if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8
+	/*
+	 * Set VBAR to the vector table in the start section and make sure
+	 * SCTLR[V] is cleared.  Afterwards, exceptions are handled by RTEMS.
+	 */
+	ldr	r0, =bsp_start_vector_table_begin
+	dsb
+	mcr	p15, 0, r0, c12, c0, 0
+	mrc	p15, 0, r0, c1, c0, 0
+	bic	r1, r0, #0x2000
+	mcr	p15, 0, r1, c1, c0, 0
+	isb
+#endif
+
 	/*
 	 * Invoke the start hook 0.
 	 *
@@ -414,7 +428,7 @@ bsp_start_hook_0_done:
 	stmdb	sp!, {r4, r5, r6}
 
 	ldr	r0, =bsp_vector_table_begin
-	adr	r1, bsp_start_vector_table_begin
+	ldr	r1, =bsp_start_vector_table_begin
 	cmp	r0, r1
 	beq	.Lvector_table_copy_done
 	ldmia	r1!, {r2-r9}
@@ -423,6 +437,18 @@ bsp_start_hook_0_done:
 	stmia	r0!, {r2-r9}
 
 .Lvector_table_copy_done:
+
+#if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8
+	/*
+	 * This code path is only executed by the primary processor.  Set the
+	 * VBAR to the normal vector table.  For secondary processors, this is
+	 * done by bsp_start_hook_0().
+	 */
+	ldr	r0, =bsp_vector_table_begin
+	dsb
+	mcr	p15, 0, r0, c12, c0, 0
+	isb
+#endif
 
 	ldmia	sp!, {r0, r1, r2}
 

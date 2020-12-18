@@ -15,7 +15,6 @@ install:
   - bsps/arm/include/uart.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/arm/include/bsp/arm-a8core-start.h
   - bsps/arm/include/bsp/arm-a9mpcore-clock.h
   - bsps/arm/include/bsp/arm-a9mpcore-irq.h
   - bsps/arm/include/bsp/arm-a9mpcore-regs.h
