@@ -159,12 +159,11 @@ _start:
 
 	/*
 	 * We do not save the context since we do not return to the boot
-	 * loader but preserve r1 and r2 to allow access to bootloader parameters
+	 * loader.  Boot loaders may pass the device tree in r2.  Do not touch
+	 * r2 until bsp_fdt_copy() is called.
 	 */
-#ifndef BSP_START_NEEDS_REGISTER_INITIALIZATION
-	mov	r5, r1		/* machine type number or ~0 for DT boot */
-	mov	r6, r2		/* physical address of ATAGs or DTB */
-#else /* BSP_START_NEEDS_REGISTER_INITIALIZATION */
+
+#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
 	mov	r0, #0
 	mov	r1, #0
 	mov	r2, #0
@@ -215,8 +214,8 @@ _start:
 	add	r3, r7, #1
 	mul	r1, r1, r3
 #endif
-	ldr	r2, =_ISR_Stack_area_begin
-	add	r3, r1, r2
+	ldr	r0, =_ISR_Stack_area_begin
+	add	r3, r1, r0
 
 	/* Save original CPSR value */
 	mrs	r4, cpsr
@@ -235,35 +234,35 @@ _start:
 	mov	sp, r3
 	sub	r3, r3, r1
 
-	ldr	r2, =bsp_start_hyp_vector_table_begin
-	mcr	p15, 4, r2, c12, c0, 0
+	ldr	r0, =bsp_start_hyp_vector_table_begin
+	mcr	p15, 4, r0, c12, c0, 0
 
-	mov	r2, #0
-	mcr	p15, 4, r2, c1, c1, 0
-	mcr	p15, 4, r2, c1, c1, 2
-	mcr	p15, 4, r2, c1, c1, 3
+	mov	r0, #0
+	mcr	p15, 4, r0, c1, c1, 0
+	mcr	p15, 4, r0, c1, c1, 2
+	mcr	p15, 4, r0, c1, c1, 3
 /*
  * HSCTLR.TE
  * optional start of hypervisor handlers in Thumb mode
  *	orr	r0, #(1 << 30)
  */
-	mcr	p15, 4, r2, c1, c0, 0	/* HSCTLR */
-	mrc	p15, 4, r2, c1, c1, 1	/* HDCR */
-	and	r2, #0x1f		/* Preserve HPMN */
-	mcr	p15, 4, r2, c1, c1, 1	/* HDCR */
+	mcr	p15, 4, r0, c1, c0, 0	/* HSCTLR */
+	mrc	p15, 4, r0, c1, c1, 1	/* HDCR */
+	and	r0, #0x1f		/* Preserve HPMN */
+	mcr	p15, 4, r0, c1, c1, 1	/* HDCR */
 
 	/* Prepare SVC mode for eret */
-	mrs	r2, cpsr
-	bic	r2, r2, #ARM_PSR_M_MASK
-	orr	r2, r2, #ARM_PSR_M_SVC
-	msr	spsr_cxsf, r2
+	mrs	r0, cpsr
+	bic	r0, r0, #ARM_PSR_M_MASK
+	orr	r0, r0, #ARM_PSR_M_SVC
+	msr	spsr_cxsf, r0
 
-	adr	r2, .L_hyp_to_svc_return
-	.inst 0xe12ef302	/* msr ELR_hyp, r2 */
-	mov	r2, sp
+	ldr	r0, =.L_hyp_to_svc_return
+	.inst 0xe12ef300	/* msr ELR_hyp, r0 */
+	mov	r0, sp
 	.inst 0xe160006e	/* eret */
 .L_hyp_to_svc_return:
-	mov	sp, r2
+	mov	sp, r0
 
 .L_skip_hyp_svc_switch:
 #endif /* BSP_START_IN_HYP_SUPPORT */
@@ -320,7 +319,7 @@ _start:
 	cmp	r7, #0
 	bne	1f
 #endif
-	mov	r0, r6
+	mov	r0, r2
 	bl	bsp_fdt_copy
 1:
 #endif
@@ -413,7 +412,6 @@ _start:
 	 * instruction as a very limited address range of 2KiB.  Use a bx to
 	 * the start hook 0 address instead corrected by the address offset.
 	 */
-
 	ldr	lr, =bsp_start_hook_0_done
 	mov	r0, pc
 	ldr	r1, =.Lget_absolute_pc
@@ -421,11 +419,6 @@ _start:
 	sub	r1, r0
 	ldr	r7, =bsp_start_hook_0
 	add	r7, r1
-
-	mov	r0, r4		/* original CPSR value */
-	mov	r1, r5		/* machine type number or ~0 for DT boot */
-	mov	r2, r6		/* physical address of ATAGs or DTB */
-
 	bx	r7
 
 	/* Allow bsp_start_hook_0() hooks to jump to this label */
@@ -435,8 +428,6 @@ bsp_start_hook_0_done:
 	 * Initialize the exception vectors.  This includes the exceptions
 	 * vectors and the pointers to the default exception handlers.
 	 */
-
-	stmdb	sp!, {r4, r5, r6}
 
 	ldr	r0, =bsp_vector_table_begin
 	ldr	r1, =bsp_start_vector_table_begin
@@ -460,8 +451,6 @@ bsp_start_hook_0_done:
 	mcr	p15, 0, r0, c12, c0, 0
 	isb
 #endif
-
-	ldmia	sp!, {r0, r1, r2}
 
 	SWITCH_FROM_ARM_TO_THUMB	r3
 
