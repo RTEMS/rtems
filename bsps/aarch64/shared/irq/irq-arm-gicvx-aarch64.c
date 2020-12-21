@@ -36,7 +36,6 @@
 
 #include <dev/irq/arm-gic-irq.h>
 #include <bsp/irq-generic.h>
-#include <rtems/score/cpu_irq.h>
 
 void arm_interrupt_handler_dispatch(rtems_vector_number vector)
 {

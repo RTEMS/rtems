@@ -31,6 +31,12 @@
 #include <bsp/irq-generic.h>
 #include <bsp/start.h>
 
+#ifdef ARM_MULTILIB_ARCH_V4
+#include <rtems/score/armv4.h>
+#else
+#include <rtems/score/cpu_irq.h>
+#endif
+
 #define PRIORITY_DEFAULT 127
 
 #define MPIDR_AFFINITY2(val) BSP_FLD64(val, 16, 23)
