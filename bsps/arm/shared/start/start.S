@@ -181,6 +181,17 @@ _start:
 	mov	r13, #0
 #endif
 
+#if __ARM_ARCH >= 7
+	/*
+	 * Write to BPIALL (Branch Predictor Invalidate All) to invalidate all
+	 * branch predictors.  There is no need to use BPIALLIS (Branch
+	 * Predictor Invalidate All, Inner Shareable) since this code is
+	 * executed on all processors used by RTEMS.
+	 */
+	mov	r0, #0
+	mcr	p15, 0, r0, c7, c5, 6
+#endif
+
 #ifdef RTEMS_SMP
 	/* Read MPIDR and get current processor index */
 	mrc	p15, 0, r7, c0, c0, 5

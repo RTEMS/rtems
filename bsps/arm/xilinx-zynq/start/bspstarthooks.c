@@ -66,7 +66,6 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
    * are required there.
    */
   arm_cp15_data_cache_invalidate_all_levels();
-  arm_cp15_branch_predictor_invalidate_all();
   arm_cp15_tlb_invalidate();
   arm_cp15_flush_prefetch_buffer();
   arm_a9mpcore_start_hook_0();
