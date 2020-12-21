@@ -432,7 +432,16 @@ _start:
 	 */
 	mov	r0, #0
 	mcr	p15, 0, r0, c7, c5, 0
+
+#if __ARM_ARCH_PROFILE == 'A'
+	/*
+	 * Invalidate the TLB using ITLBIALL (Instruction TLB Invalidate All).
+	 */
+	mov	r0, #0
+	mcr	p15, 0, r0, c8, c7, 0
+	isb
 #endif
+#endif /* (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8 */
 
 	/*
 	 * Invoke the start hook 0.

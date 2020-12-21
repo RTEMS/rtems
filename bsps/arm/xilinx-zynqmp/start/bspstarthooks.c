@@ -30,17 +30,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define ARM_CP15_TEXT_SECTION BSP_START_TEXT_SECTION
-
 #include <bsp.h>
 #include <bsp/start.h>
 
-#include <libcpu/arm-cp15.h>
-
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
-  arm_cp15_tlb_invalidate();
-  _ARM_Instruction_synchronization_barrier();
+  /* Nothing to do */
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)

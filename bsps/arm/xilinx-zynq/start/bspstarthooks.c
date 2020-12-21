@@ -31,12 +31,8 @@
 #include <bsp/start.h>
 #include <bsp/arm-a9mpcore-start.h>
 
-#include <libcpu/arm-cp15.h>
-
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
-  arm_cp15_tlb_invalidate();
-  _ARM_Instruction_synchronization_barrier()
   arm_a9mpcore_start_hook_0();
 }
 

@@ -74,8 +74,6 @@ void rpi_start_rtems_on_secondary_processor(void)
     (uint32_t *) bsp_translation_table_base
   );
 
-  arm_cp15_tlb_invalidate();
-
   ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
   ctrl &= ~ARM_CP15_CTRL_V;
   arm_cp15_set_control(ctrl);
