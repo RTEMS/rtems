@@ -1678,6 +1678,7 @@ target_exception_data_abort(void)
 }
 
 #if ARM_CP15
+#if __ARM_ARCH_PROFILE == 'A'
 /**
  * The init value for the text section.
  */
@@ -1701,6 +1702,12 @@ rtems_debugger_target_set_mmu(void)
                                            text_end,
                                            ARMV7_MMU_DATA_READ_WRITE_CACHED);
 }
+#else
+static void
+rtems_debugger_target_set_mmu(void)
+{
+}
+#endif
 
 static void
 rtems_debugger_target_set_vectors(void)
