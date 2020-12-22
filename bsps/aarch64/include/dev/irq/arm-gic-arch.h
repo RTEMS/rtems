@@ -34,10 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dev/irq/arm-gic-irq.h>
+#ifndef _RTEMS_DEV_IRQ_ARM_GIC_AARCH64_H
+#define _RTEMS_DEV_IRQ_ARM_GIC_AARCH64_H
+
+#include <rtems/score/cpu.h>
+
 #include <bsp/irq-generic.h>
 
-void arm_interrupt_handler_dispatch(rtems_vector_number vector)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+static inline void arm_interrupt_handler_dispatch(rtems_vector_number vector)
 {
   uint32_t interrupt_level = _CPU_ISR_Get_level();
   AArch64_interrupt_enable(1);
@@ -45,7 +53,7 @@ void arm_interrupt_handler_dispatch(rtems_vector_number vector)
   _CPU_ISR_Set_level(interrupt_level);
 }
 
-void arm_interrupt_facility_set_exception_handler(void)
+static inline void arm_interrupt_facility_set_exception_handler(void)
 {
   AArch64_set_exception_handler(
     AARCH64_EXCEPTION_SPx_IRQ,
@@ -56,3 +64,9 @@ void arm_interrupt_facility_set_exception_handler(void)
     _AArch64_Exception_interrupt_nest
   );
 }
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _RTEMS_DEV_IRQ_ARM_GIC_AARCH64_H */

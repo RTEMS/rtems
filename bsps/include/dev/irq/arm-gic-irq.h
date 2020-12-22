@@ -97,19 +97,6 @@ static inline rtems_status_code arm_gic_irq_generate_software_irq(
   return sc;
 }
 
-/**
- * This architecture-specific function sets the exception vector for handling
- * IRQs.
- */
-void arm_interrupt_facility_set_exception_handler(void);
-
-/**
- * This architecture-specific function dispatches a triggered IRQ.
- *
- * @param[in] vector The vector on which the IRQ occurred.
- */
-void arm_interrupt_handler_dispatch(rtems_vector_number vector);
-
 uint32_t arm_gic_irq_processor_count(void);
 
 void arm_gic_irq_initialize_secondary_cpu(void);

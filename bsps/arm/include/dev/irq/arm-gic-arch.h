@@ -34,12 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef _RTEMS_DEV_IRQ_ARM_GIC_ARM_H
+#define _RTEMS_DEV_IRQ_ARM_GIC_ARM_H
+
 #include <libcpu/arm-cp15.h>
-#include <dev/irq/arm-gic-irq.h>
 #include <bsp/irq-generic.h>
 #include <rtems/score/armv4.h>
 
-void arm_interrupt_handler_dispatch(rtems_vector_number vector)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+static inline void arm_interrupt_handler_dispatch(rtems_vector_number vector)
 {
   uint32_t psr = _ARMV4_Status_irq_enable();
   bsp_interrupt_handler_dispatch(vector);
@@ -47,10 +53,16 @@ void arm_interrupt_handler_dispatch(rtems_vector_number vector)
   _ARMV4_Status_restore(psr);
 }
 
-void arm_interrupt_facility_set_exception_handler(void)
+static inline void arm_interrupt_facility_set_exception_handler(void)
 {
   arm_cp15_set_exception_handler(
     ARM_EXCEPTION_IRQ,
     _ARMV4_Exception_interrupt
   );
 }
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _RTEMS_DEV_IRQ_ARM_GIC_ARM_H */

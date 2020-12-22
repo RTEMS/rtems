@@ -36,7 +36,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/irq/arm-gicv2.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-arm-gicvx-aarch32.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xen/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c

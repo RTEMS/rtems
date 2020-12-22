@@ -14,6 +14,7 @@ install:
   - bsps/include/dev/clock/arm-generic-timer.h
 - destination: ${BSP_INCLUDEDIR}/dev/irq
   source:
+  - bsps/aarch64/include/dev/irq/arm-gic-arch.h
   - bsps/include/dev/irq/arm-gic-irq.h
   - bsps/include/dev/irq/arm-gic-regs.h
   - bsps/include/dev/irq/arm-gic-tm27.h

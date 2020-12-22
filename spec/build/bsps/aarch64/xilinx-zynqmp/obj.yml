@@ -29,7 +29,6 @@ source:
 - bsps/shared/start/bspreset-arm-psci.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/dev/irq/arm-gicv2.c
-- bsps/aarch64/shared/irq/irq-arm-gicvx-aarch64.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/clock/arm-generic-timer.c

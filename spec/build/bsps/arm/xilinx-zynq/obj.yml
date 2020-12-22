@@ -25,7 +25,6 @@ source:
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/shared/dev/irq/arm-gicv2.c
-- bsps/arm/shared/irq/irq-arm-gicvx-aarch32.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xilinx-zynq/console/console-config.c
 - bsps/arm/xilinx-zynq/console/console-init.c
