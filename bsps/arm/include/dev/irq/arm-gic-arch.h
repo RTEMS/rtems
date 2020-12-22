@@ -37,7 +37,6 @@
 #ifndef _RTEMS_DEV_IRQ_ARM_GIC_ARM_H
 #define _RTEMS_DEV_IRQ_ARM_GIC_ARM_H
 
-#include <libcpu/arm-cp15.h>
 #include <bsp/irq-generic.h>
 #include <rtems/score/armv4.h>
 
@@ -55,10 +54,10 @@ static inline void arm_interrupt_handler_dispatch(rtems_vector_number vector)
 
 static inline void arm_interrupt_facility_set_exception_handler(void)
 {
-  arm_cp15_set_exception_handler(
-    ARM_EXCEPTION_IRQ,
-    _ARMV4_Exception_interrupt
-  );
+  /*
+   * There is no need to install _ARMV4_Exception_interrupt() since this
+   * handler is already set by start.S.
+   */
 }
 
 #ifdef __cplusplus
