@@ -21,6 +21,10 @@ include_bsp_HEADERS += ../../bsps/include/bsp/u-boot.h
 include_bsp_HEADERS += ../../bsps/include/bsp/uart-output-char.h
 include_bsp_HEADERS += ../../bsps/include/bsp/utility.h
 
+include_dev_clockdir = $(includedir)/dev/clock
+include_dev_clock_HEADERS =
+include_dev_clock_HEADERS += ../../bsps/include/dev/clock/arm-generic-timer.h
+
 include_dev_irqdir = $(includedir)/dev/irq
 include_dev_irq_HEADERS =
 include_dev_irq_HEADERS += ../../bsps/include/dev/irq/arm-gic-irq.h

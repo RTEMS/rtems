@@ -8,7 +8,3 @@ include_HEADERS += ../../../../../../bsps/arm/xen/include/tm27.h
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../../../../../bsps/arm/xen/include/bsp/irq.h
-
-include_dev_clockdir = $(includedir)/dev/clock
-include_dev_clock_HEADERS =
-include_dev_clock_HEADERS += ../../../../../../bsps/include/dev/clock/arm-generic-timer.h

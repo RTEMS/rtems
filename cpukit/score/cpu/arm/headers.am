@@ -2,6 +2,8 @@
 include_libcpu_HEADERS += score/cpu/arm/include/libcpu/arm-cp15.h
 include_machine_HEADERS += score/cpu/arm/include/machine/elf_machdep.h
 include_rtems_HEADERS += score/cpu/arm/include/rtems/asm.h
+include_rtems_score_HEADERS += score/cpu/arm/include/rtems/score/aarch32-pmsa.h
+include_rtems_score_HEADERS += score/cpu/arm/include/rtems/score/aarch32-system-registers.h
 include_rtems_score_HEADERS += score/cpu/arm/include/rtems/score/arm.h
 include_rtems_score_HEADERS += score/cpu/arm/include/rtems/score/armv4.h
 include_rtems_score_HEADERS += score/cpu/arm/include/rtems/score/armv7m.h
