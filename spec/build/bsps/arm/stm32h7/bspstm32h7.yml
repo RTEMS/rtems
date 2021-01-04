@@ -398,7 +398,11 @@ source:
 - bsps/arm/stm32h7/start/ext-mem-ctl.c
 - bsps/arm/stm32h7/start/getentropy-rng.c
 - bsps/arm/stm32h7/start/mpu-config.c
-- bsps/arm/stm32h7/start/stm32h7-config.c
+- bsps/arm/stm32h7/start/stm32h7-config-clk.c
+- bsps/arm/stm32h7/start/stm32h7-config-fls.c
+- bsps/arm/stm32h7/start/stm32h7-config-osc.c
+- bsps/arm/stm32h7/start/stm32h7-config-per.c
+- bsps/arm/stm32h7/start/stm32h7-config-pwr.c
 - bsps/arm/stm32h7/start/stm32h7-hal.c
 - bsps/arm/stm32h7/start/stm32h7-hal-eth.c
 - bsps/arm/stm32h7/start/stm32h7-hal-uart.c
