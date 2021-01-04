@@ -31,21 +31,6 @@
 
 #include <stm32h7/hal.h>
 
-static const stm32h7_uart_config stm32h7_uart5_config = {
-  .gpio = {
-    .regs = GPIOD,
-    .config = {
-      .Pin = GPIO_PIN_1 | GPIO_PIN_2,
-      .Mode = GPIO_MODE_AF_PP,
-      .Pull = GPIO_NOPULL,
-      .Speed = GPIO_SPEED_FREQ_LOW,
-      .Alternate = GPIO_AF8_UART5
-    }
-  },
-  .irq = UART5_IRQn,
-  .device_index = 4
-};
-
 stm32h7_uart_context stm32h7_uart5_instance = {
   .uart = {
     .Instance = UART5,

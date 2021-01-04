@@ -31,19 +31,17 @@
 
 #include <stm32h7/hal.h>
 
-stm32h7_uart_context stm32h7_usart3_instance = {
-  .uart = {
-    .Instance = USART3,
-    .Init.BaudRate = BSP_CONSOLE_BAUD,
-    .Init.WordLength = UART_WORDLENGTH_8B,
-    .Init.StopBits = UART_STOPBITS_1,
-    .Init.Parity = UART_PARITY_NONE,
-    .Init.Mode = UART_MODE_TX_RX,
-    .Init.HwFlowCtl = UART_HWCONTROL_NONE,
-    .Init.OverSampling = UART_OVERSAMPLING_16,
-    .Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE,
-    .Init.ClockPrescaler = UART_PRESCALER_DIV1,
-    .AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT
+const stm32h7_uart_config stm32h7_uart8_config = {
+  .gpio = {
+    .regs = GPIOE,
+    .config = {
+      .Pin = GPIO_PIN_0 | GPIO_PIN_1,
+      .Mode = GPIO_MODE_AF_PP,
+      .Pull = GPIO_NOPULL,
+      .Speed = GPIO_SPEED_FREQ_LOW,
+      .Alternate = GPIO_AF8_UART8
+    }
   },
-  .config = &stm32h7_usart3_config
+  .irq = UART8_IRQn,
+  .device_index = 7
 };

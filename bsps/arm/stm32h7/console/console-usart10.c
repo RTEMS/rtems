@@ -33,21 +33,6 @@
 
 #ifdef USART10
 
-static const stm32h7_uart_config stm32h7_usart10_config = {
-  .gpio = {
-    .regs = GPIOB,
-    .config = {
-      .Pin = GPIO_PIN_15 | GPIO_PIN_14,
-      .Mode = GPIO_MODE_AF_PP,
-      .Pull = GPIO_NOPULL,
-      .Speed = GPIO_SPEED_FREQ_LOW,
-      .Alternate = GPIO_AF11_USART10
-    }
-  },
-  .irq = USART10_IRQn,
-  .device_index = 9
-};
-
 stm32h7_uart_context stm32h7_usart10_instance = {
   .uart = {
     .Instance = USART10,

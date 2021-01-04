@@ -31,21 +31,6 @@
 
 #include <stm32h7/hal.h>
 
-static const stm32h7_uart_config stm32h7_uart4_config = {
-  .gpio = {
-    .regs = GPIOH,
-    .config = {
-      .Pin = GPIO_PIN_13 | GPIO_PIN_14,
-      .Mode = GPIO_MODE_AF_PP,
-      .Pull = GPIO_NOPULL,
-      .Speed = GPIO_SPEED_FREQ_LOW,
-      .Alternate = GPIO_AF6_UART4
-    }
-  },
-  .irq = UART4_IRQn,
-  .device_index = 3
-};
-
 stm32h7_uart_context stm32h7_uart4_instance = {
   .uart = {
     .Instance = UART4,

@@ -112,23 +112,43 @@ int stm32h7_uart_polled_read(rtems_termios_device_context *base);
 
 extern stm32h7_uart_context stm32h7_usart1_instance;
 
+extern const stm32h7_uart_config stm32h7_usart1_config;
+
 extern stm32h7_uart_context stm32h7_usart2_instance;
+
+extern const stm32h7_uart_config stm32h7_usart2_config;
 
 extern stm32h7_uart_context stm32h7_usart3_instance;
 
+extern const stm32h7_uart_config stm32h7_usart3_config;
+
 extern stm32h7_uart_context stm32h7_uart4_instance;
+
+extern const stm32h7_uart_config stm32h7_uart4_config;
 
 extern stm32h7_uart_context stm32h7_uart5_instance;
 
+extern const stm32h7_uart_config stm32h7_uart5_config;
+
 extern stm32h7_uart_context stm32h7_usart6_instance;
+
+extern const stm32h7_uart_config stm32h7_usart6_config;
 
 extern stm32h7_uart_context stm32h7_uart7_instance;
 
+extern const stm32h7_uart_config stm32h7_uart7_config;
+
 extern stm32h7_uart_context stm32h7_uart8_instance;
+
+extern const stm32h7_uart_config stm32h7_uart8_config;
 
 extern stm32h7_uart_context stm32h7_uart9_instance;
 
+extern const stm32h7_uart_config stm32h7_uart9_config;
+
 extern stm32h7_uart_context stm32h7_usart10_instance;
+
+extern const stm32h7_uart_config stm32h7_usart10_config;
 
 extern const uint32_t stm32h7_config_pwr_regulator_voltagescaling;
 
