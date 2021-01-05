@@ -20,7 +20,7 @@
 #include <rtems/score/nios2-utility.h>
 #include <rtems/score/percpu.h>
 
-bool _ISR_Is_in_progress( void )
+RTEMS_WEAK bool _ISR_Is_in_progress( void )
 {
   if ( _Nios2_Has_internal_interrupt_controller() ) {
     return _ISR_Nest_level != 0;
