@@ -574,6 +574,7 @@ class ObjectsItem(Item):
 
     def do_build(self, bld, bic):
         bld.objects(
+            asflags=self.data["cppflags"],
             cflags=self.data["cflags"],
             cppflags=self.data["cppflags"],
             cxxflags=self.data["cxxflags"],
