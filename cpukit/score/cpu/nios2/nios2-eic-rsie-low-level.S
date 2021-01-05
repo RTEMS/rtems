@@ -40,7 +40,6 @@
 	.section	.text
 
 	.extern	_Per_CPU_Information
-	.extern	_Thread_Dispatch_disable_level
 
 	.globl	_Nios2_ISR_Dispatch_with_shadow_preemptive
 
@@ -81,11 +80,11 @@ _Nios2_ISR_Dispatch_with_shadow_preemptive:
 
 	/* Increment ISR nest level and thread dispatch disable level */
 	ldw	r9, %gprel(_Per_CPU_Information + PER_CPU_ISR_NEST_LEVEL)(gp)
-	ldw	r10, %gprel(_Thread_Dispatch_disable_level)(gp)
+	ldw	r10, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 	addi	r11, r9, 1
 	addi	r10, r10, 1
 	stw	r11, %gprel(_Per_CPU_Information + PER_CPU_ISR_NEST_LEVEL)(gp)
-	stw	r10, %gprel(_Thread_Dispatch_disable_level)(gp)
+	stw	r10, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 
 	/* Switch to interrupt stack if necessary */
 	bne	r9, zero, switch_to_interrupt_stack_done
@@ -114,11 +113,11 @@ switch_to_interrupt_stack_done:
 
 	/* Decrement ISR nest level and thread dispatch disable level */
 	ldw	r9, %gprel(_Per_CPU_Information + PER_CPU_ISR_NEST_LEVEL)(gp)
-	ldw	r10, %gprel(_Thread_Dispatch_disable_level)(gp)
+	ldw	r10, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 	subi	r9, r9, 1
 	subi	r10, r10, 1
 	stw	r9, %gprel(_Per_CPU_Information + PER_CPU_ISR_NEST_LEVEL)(gp)
-	stw	r10, %gprel(_Thread_Dispatch_disable_level)(gp)
+	stw	r10, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 
 	/*
 	 * Restore stack pointer.  If the ISR nest level is greater than one,

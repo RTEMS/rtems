@@ -41,7 +41,6 @@
 	.section	.text
 
 	.extern	_Per_CPU_Information
-	.extern	_Thread_Dispatch_disable_level
 	.extern	_Nios2_Thread_dispatch_disabled
 	.extern	_Nios2_ISR_Status_interrupts_disabled
 
@@ -50,7 +49,7 @@
 _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 
 	/* Load thread dispatch disable level */
-	ldw	r16, %gprel(_Thread_Dispatch_disable_level)(gp)
+	ldw	r16, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 
 	/* Load high level handler address and argument */
 	ldw	r8, 4(et)
@@ -58,7 +57,7 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 
 	/* Increment and store thread dispatch disable level */
 	addi	r9, r16, 1
-	stw	r9, %gprel(_Thread_Dispatch_disable_level)(gp)
+	stw	r9, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 
 	/* Call high level handler with argument */
 	callr	r8
@@ -81,7 +80,7 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	 * problems if someone deletes or restarts the interrupted thread while
 	 * we are in the thread dispatch helper.
 	 */
-	stw	r16, %gprel(_Thread_Dispatch_disable_level)(gp)
+	stw	r16, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 
 	/* Is thread dispatch allowed? */
 	bne	r16, zero, no_thread_dispatch
