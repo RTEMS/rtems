@@ -455,7 +455,13 @@ RTEMS_INLINE_ROUTINE uintptr_t _Heap_Area_overhead(
     page_size = CPU_ALIGNMENT;
   }
 
-  return 2 * (page_size - 1) + HEAP_BLOCK_HEADER_SIZE;
+  /*
+   * Account for a potential alignment of the area begin address to a page
+   * boundary, the first block, and the last block.  The last block consists
+   * only of a block header.
+   */
+  return page_size - 1 + _Heap_Min_block_size( page_size ) +
+    HEAP_BLOCK_HEADER_SIZE;
 }
 
 /**
