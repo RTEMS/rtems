@@ -14,6 +14,7 @@ default-by-variant:
   - -mabi=ilp32
   variants:
   - aarch64/xilinx_zynqmp_ilp32_qemu
+  - aarch64/xilinx_zynqmp_ilp32_zu3eg
 description: |
   ABI flags
 enabled-by: true

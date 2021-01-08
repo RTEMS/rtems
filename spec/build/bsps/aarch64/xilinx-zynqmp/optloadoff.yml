@@ -8,7 +8,11 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: 32768
-default-by-variant: []
+default-by-variant:
+- value: 0x0
+  variants:
+  - aarch64/xilinx_zynqmp_lp64_zu3eg
+  - aarch64/xilinx_zynqmp_ilp32_zu3eg
 description: |
   offset of RAM region from memory area base
 enabled-by: true
