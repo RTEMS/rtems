@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 embedded brains GmbH
+ * Copyright (c) 2011, 2021 embedded brains GmbH
  *
  * Copyright (c) 2006 Kolja Waschk (rtemsdev/ixo.de)
  *
@@ -20,6 +20,7 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/nios2-utility.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/tls.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -44,9 +45,12 @@ void _CPU_Context_Initialize(
   if ( mpu_config != NULL ) {
     Nios2_MPU_Region_descriptor desc = {
       .index = mpu_config->data_index_for_stack_protection,
-      /* FIXME: Brocken stack allocator */
-      .base = (void *) ((int) stack_area_begin & ~((1 << mpu_config->data_region_size_log2) - 1)),
-      .end = (char *) stack_area_begin + stack_area_size,
+      .base = stack_area_begin,
+      .end = (const void *) RTEMS_ALIGN_UP(
+        (uintptr_t) stack_area_begin + stack_area_size +
+          _TLS_Get_allocation_size(),
+        1U << mpu_config->data_region_size_log2
+      ),
       .perm = NIOS2_MPU_DATA_PERM_SVR_READWRITE_USER_NONE,
       .data = true,
       .cacheable = mpu_config->enable_data_cache_for_stack,
@@ -64,5 +68,12 @@ void _CPU_Context_Initialize(
       /* The task stack allocator must ensure that the stack area is valid */
       _Terminate( INTERNAL_ERROR_CORE, 0xdeadbeef );
     }
+  }
+
+  if ( tls_area != NULL ) {
+    context->r23 = (uintptr_t) tls_area +
+      _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment ) +
+       0x7000;
+    _TLS_TCB_before_TLS_block_initialize( tls_area );
   }
 }
