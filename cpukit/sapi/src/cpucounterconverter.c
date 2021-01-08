@@ -42,19 +42,20 @@ int64_t rtems_counter_ticks_to_sbintime( rtems_counter_ticks ticks )
 
 rtems_counter_ticks rtems_counter_sbintime_to_ticks( int64_t sbt )
 {
-  return (rtems_counter_ticks) (((uint64_t) sbt * from_sbt_scaler) >> 31);
+  return (rtems_counter_ticks) (((uint64_t) sbt * from_sbt_scaler) >> 32);
 }
 
 void rtems_counter_initialize_converter( uint32_t frequency )
 {
   uint64_t ns_per_s = UINT64_C(1000000000);
   uint64_t bin_per_s = UINT64_C(1) << 32;
+  uint64_t bin_freq = (uint64_t) frequency << 32;
 
   to_ns_scaler = ((ns_per_s << 32) + frequency - 1) / frequency;
-  from_ns_scaler = ((UINT64_C(1) << 32) * frequency + ns_per_s - 1) / ns_per_s;
+  from_ns_scaler = (bin_freq + ns_per_s - 1) / ns_per_s;
 
   to_sbt_scaler = ((bin_per_s << 31) + frequency - 1) / frequency;
-  from_sbt_scaler = ((UINT64_C(1) << 31) * frequency + bin_per_s - 1) / bin_per_s;
+  from_sbt_scaler = (bin_freq + bin_per_s - 1) / bin_per_s;
 }
 
 static void rtems_counter_sysinit( void )
