@@ -98,6 +98,31 @@ _start:
 #endif
 	msr SCTLR_EL1, x0
 
+#ifdef BSP_START_IN_HYP_SUPPORT
+	/* Drop from EL2 to EL1 */
+
+	/* Configure HCR_EL2 */
+	mrs x0, HCR_EL2
+	/* Set EL1 Execution state to AArch64 */
+	orr x0, x0, #(1<<31)
+	/* Disable ID traps */
+	bic x0, x0, #(1<<15)
+	bic x0, x0, #(1<<16)
+	bic x0, x0, #(1<<17)
+	bic x0, x0, #(1<<18)
+	msr HCR_EL2, x0
+
+	/* Set to EL1h mode for eret */
+	mov x0, #0b00101
+	msr SPSR_EL2, x0
+
+	/* Set EL1 entry point */
+	adr x0, _el1_start
+	msr ELR_EL2, x0
+	eret
+_el1_start:
+#endif
+
 #ifdef RTEMS_SMP
 	/* Read MPIDR and get current processor index */
         mrs	x7, mpidr_el1
