@@ -11,7 +11,6 @@ actions:
     # tests that are passing intermittently
     spcpucounter01: indeterminate
     rtmonuse: indeterminate
-    sp37: indeterminate
     sp68: indeterminate
     sp04: indeterminate
     sp20: indeterminate
