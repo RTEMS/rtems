@@ -215,10 +215,14 @@ void AArch64_interrupt_flash( uint64_t level );
 #else
 static inline uint64_t AArch64_interrupt_disable( void )
 {
-  uint64_t level = _CPU_ISR_Get_level();
+  uint64_t level;
+
   __asm__ volatile (
+    "mrs %[level], DAIF\n"
     "msr DAIFSet, #0x2\n"
+    : [level] "=&r" (level)
   );
+
   return level;
 }
 
@@ -250,7 +254,7 @@ static inline void AArch64_interrupt_flash( uint64_t level )
 
 RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint64_t level )
 {
-  return ( level & AARCH64_PSTATE_I ) == 0;
+  return level == 0;
 }
 
 void _CPU_Context_Initialize(

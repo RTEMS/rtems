@@ -166,7 +166,7 @@ uint64_t _CPU_ISR_Get_level( void )
     : [level] "=&r" (level)
   );
 
-  return level & AARCH64_PSTATE_I;
+  return ( level & AARCH64_PSTATE_I ) != 0;
 }
 
 void _CPU_ISR_install_vector(
