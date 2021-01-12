@@ -43,12 +43,15 @@
 	.extern	_Per_CPU_Information
 	.extern	_Nios2_ISR_Status_interrupts_disabled
 
-	.globl	_Nios2_ISR_Dispatch_with_shadow_non_preemptive
+	.globl	_Nios2_ISR_Dispatch_with_shadow_register_set
 
-_Nios2_ISR_Dispatch_with_shadow_non_preemptive:
+_Nios2_ISR_Dispatch_with_shadow_register_set:
 
 	/* Load thread dispatch disable level */
 	ldw	r16, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
+
+	/* Read status */
+	rdctl	r18, status
 
 	/* Load high level handler address and argument */
 	ldw	r8, 4(et)
@@ -58,6 +61,15 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	addi	r17, r16, 1
 	stw	r17, %gprel(_Per_CPU_Information + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)(gp)
 
+	/*
+	 * Enable higher level interrupts.  This is safe since status.RSIE is
+	 * always 0 and thread dispatching is disabled right above.  Higher
+	 * priority interrupts shall not share shadow register sets with lower
+	 * priority interrupts.
+	 */
+	ori	r5, r18, 1
+	wrctl	status, r5
+
 	/* Call high level handler with argument */
 	callr	r8
 
@@ -66,9 +78,6 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 
 	/* Load the thread dispatch after ISR disable indicator */
 	ldw	r13, %gprel(_Per_CPU_Information + PER_CPU_ISR_DISPATCH_DISABLE)(gp)
-
-	/* Read status */
-	rdctl	r14, status
 
 	/* Fix return address */
 	subi	ea, ea, 4
@@ -84,10 +93,10 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	or	r15, r12, r16
 
 	/*
-	 * Get the previous register set from r14.  If it is zero, then this is
+	 * Get the previous register set from r18.  If it is zero, then this is
 	 * the outermost interrupt.  Or it to the thread dispatch status (r15).
 	 */
-	andhi	r12, r14, 0x3f
+	andhi	r12, r18, 0x3f
 	or	r15, r12, r15
 
 	/*

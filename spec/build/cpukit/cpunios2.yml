@@ -31,7 +31,6 @@ source:
 - cpukit/score/cpu/nios2/nios2-context-validate.S
 - cpukit/score/cpu/nios2/nios2-context-volatile-clobber.S
 - cpukit/score/cpu/nios2/nios2-eic-il-low-level.S
-- cpukit/score/cpu/nios2/nios2-eic-rsie-low-level.S
 - cpukit/score/cpu/nios2/nios2-exception-frame-print.c
 - cpukit/score/cpu/nios2/nios2-fatal-halt.c
 - cpukit/score/cpu/nios2/nios2-iic-irq.c

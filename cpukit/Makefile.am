@@ -1677,7 +1677,6 @@ librtemscpu_a_SOURCES += score/cpu/nios2/nios2-context-switch.S
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-context-validate.S
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-context-volatile-clobber.S
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-eic-il-low-level.S
-librtemscpu_a_SOURCES += score/cpu/nios2/nios2-eic-rsie-low-level.S
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-exception-frame-print.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-fatal-halt.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-iic-low-level.S
