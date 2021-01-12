@@ -106,11 +106,6 @@ extern "C" {
  *
  * There is no need to save the global pointer (gp) since it is a system wide
  * constant and set-up with the C runtime environment.
- *
- * The @a thread_dispatch_disabled field is used for the external interrupt
- * controller (EIC) support.
- *
- * @see _Nios2_Thread_dispatch_disabled
  */
 typedef struct {
   uint32_t r16;
@@ -125,7 +120,14 @@ typedef struct {
   uint32_t status;
   uint32_t sp;
   uint32_t ra;
-  uint32_t thread_dispatch_disabled;
+
+  /**
+   * @brief This member is used for the external interrupt controller (EIC) support.
+   *
+   * It corresponds to Per_CPU_Control::isr_dispatch_disable.
+   */
+  uint32_t isr_dispatch_disable;
+
   uint32_t stack_mpubase;
   uint32_t stack_mpuacc;
 } Context_Control;

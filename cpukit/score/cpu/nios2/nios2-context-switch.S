@@ -15,17 +15,17 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/nios2-utility.h>
 
-	.extern	_Nios2_Thread_dispatch_disabled
+	.extern	_Per_CPU_Information
 
 	.globl	_CPU_Context_switch
 	.globl	_CPU_Context_restore
 
 _CPU_Context_switch:
 
-	ldw	r9, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
+	ldw	r9, %gprel(_Per_CPU_Information + PER_CPU_ISR_DISPATCH_DISABLE)(gp)
 	rdctl	r8, status
 	stw	r16, NIOS2_CONTEXT_OFFSET_R16(r4)
 	stw	r17, NIOS2_CONTEXT_OFFSET_R17(r4)
@@ -39,11 +39,11 @@ _CPU_Context_switch:
 	stw	r8, NIOS2_CONTEXT_OFFSET_STATUS(r4)
 	stw	sp, NIOS2_CONTEXT_OFFSET_SP(r4)
 	stw	ra, NIOS2_CONTEXT_OFFSET_RA(r4)
-	stw	r9, NIOS2_CONTEXT_OFFSET_THREAD_DISPATCH_DISABLED(r4)
+	stw	r9, NIOS2_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r4)
 
 restore:
 
-	ldw	r10, NIOS2_CONTEXT_OFFSET_THREAD_DISPATCH_DISABLED(r5)
+	ldw	r10, NIOS2_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r5)
 	ldw	r16, NIOS2_CONTEXT_OFFSET_R16(r5)
 	ldw	r17, NIOS2_CONTEXT_OFFSET_R17(r5)
 	ldw	r18, NIOS2_CONTEXT_OFFSET_R18(r5)
@@ -53,7 +53,7 @@ restore:
 	ldw	r22, NIOS2_CONTEXT_OFFSET_R22(r5)
 	ldw	r23, NIOS2_CONTEXT_OFFSET_R23(r5)
 	ldw	fp, NIOS2_CONTEXT_OFFSET_FP(r5)
-	stw	r10, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
+	stw	r10, %gprel(_Per_CPU_Information + PER_CPU_ISR_DISPATCH_DISABLE)(gp)
 	ldw	r11, NIOS2_CONTEXT_OFFSET_STATUS(r5)
 	ldw	sp, NIOS2_CONTEXT_OFFSET_SP(r5)
 	ldw	ra, NIOS2_CONTEXT_OFFSET_RA(r5)

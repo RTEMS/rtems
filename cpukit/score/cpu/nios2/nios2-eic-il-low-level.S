@@ -41,7 +41,6 @@
 	.section	.text
 
 	.extern	_Per_CPU_Information
-	.extern	_Nios2_Thread_dispatch_disabled
 	.extern	_Nios2_ISR_Status_interrupts_disabled
 
 	.globl	_Nios2_ISR_Dispatch_with_shadow_non_preemptive
@@ -65,8 +64,8 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	/* Load thread dispatch necessary */
 	ldb	r12, %gprel(_Per_CPU_Information + PER_CPU_DISPATCH_NEEDED)(gp)
 
-	/* Load Nios II specific thread dispatch disabled */
-	ldw	r13, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
+	/* Load thread dispatch after ISR disable indicator */
+	ldw	r13, %gprel(_Per_CPU_Information + PER_CPU_ISR_DISPATCH_DISABLE)(gp)
 
 	/* Read status */
 	rdctl	r14, status
@@ -92,14 +91,14 @@ _Nios2_ISR_Dispatch_with_shadow_non_preemptive:
 	andhi	r14, r14, 0x3f
 	bne	r14, zero, no_thread_dispatch
 
-	/* Is Nios II specific thread dispatch allowed? */
+	/* Is thread dispatch after ISR allowed? */
 	bne	r13, zero, no_thread_dispatch
 
 	/* Obtain stack frame in normal register set */
 	rdprs	r15, sp, -FRAME_SIZE
 
-	/* Disable Nios II specific thread dispatch */
-	stw	r12, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
+	/* Disable thread dispatch after ISR */
+	stw	r12, %gprel(_Per_CPU_Information + PER_CPU_ISR_DISPATCH_DISABLE)(gp)
 
 	/* Save context */
 	stw	sstatus, FRAME_OFFSET_STATUS(r15)
@@ -184,8 +183,8 @@ do_thread_dispatch:
 	/* Is thread dispatch necessary? */
 	bne	r13, zero, enable_interrupts_before_thread_dispatch
 
-	/* Enable Nios II specific thread dispatch */
-	stw	zero, %gprel(_Nios2_Thread_dispatch_disabled)(gp)
+	/* Enable thread dispatch after ISR */
+	stw	zero, %gprel(_Per_CPU_Information + PER_CPU_ISR_DISPATCH_DISABLE)(gp)
 
 	/* Restore remaining volatile register */
 	ldw	r13, FRAME_OFFSET_R13(sp)

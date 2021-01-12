@@ -47,7 +47,7 @@
 #define NIOS2_CONTEXT_OFFSET_STATUS 36
 #define NIOS2_CONTEXT_OFFSET_SP 40
 #define NIOS2_CONTEXT_OFFSET_RA 44
-#define NIOS2_CONTEXT_OFFSET_THREAD_DISPATCH_DISABLED 48
+#define NIOS2_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE 48
 #define NIOS2_CONTEXT_OFFSET_STACK_MPUBASE 52
 #define NIOS2_CONTEXT_OFFSET_STACK_MPUACC 56
 
@@ -142,17 +142,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-/**
- * @brief Nios II specific thread dispatch disabled indicator.
- *
- * This global variable is used by the interrupt dispatch support for the
- * external interrupt controller (EIC) with shadow registers.  This makes it
- * possible to do the thread dispatch after an interrupt without disabled
- * interrupts and thus probably reduce the maximum interrupt latency.  Its
- * purpose is to prevent unbounded stack usage of the interrupted thread.
- */
-extern uint32_t _Nios2_Thread_dispatch_disabled;
 
 /**
  * @brief This global symbol specifies the status register mask used to disable
