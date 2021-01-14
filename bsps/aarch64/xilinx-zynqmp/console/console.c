@@ -46,11 +46,11 @@
 static zynq_uart_context zynqmp_uart_instances[2] = {
   {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 0" ),
-    .regs = (volatile struct zynq_uart *) 0xff000000,
+    .regs = (volatile struct zynq_uart *) 0xff010000,
     .irq = ZYNQMP_IRQ_UART_0
   }, {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 1" ),
-    .regs = (volatile struct zynq_uart *) 0xff010000,
+    .regs = (volatile struct zynq_uart *) 0xff000000,
     .irq = ZYNQMP_IRQ_UART_1
   }
 };
