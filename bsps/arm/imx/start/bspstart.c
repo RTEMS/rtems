@@ -19,6 +19,7 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 #include <dev/clock/arm-generic-timer.h>
+#include <libcpu/arm-cp15.h>
 
 #include <libfdt.h>
 
@@ -59,6 +60,60 @@ uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
   return intr[1] + MAGIC_IRQ_OFFSET;
 }
 
+static bool imx_is_imx6(const void *fdt)
+{
+  /*
+   * At the moment: Check for some compatible strings that should be there
+   * somewhere in every fdt.
+   *
+   * FIXME: It would be nice if some CPU-ID could be used instead. But I didn't
+   * find one.
+   */
+  int node;
+
+  node = fdt_node_offset_by_compatible(fdt, -1, "fsl,imx6ul");
+  if (node >= 0) {
+    return true;
+  }
+
+  node = fdt_node_offset_by_compatible(fdt, -1, "fsl,imx6ull");
+  if (node >= 0) {
+    return true;
+  }
+
+  return false;
+}
+
+#define SYSCNT_CNTCR          (0x0)
+#define SYSCNT_CNTCR_ENABLE   (1 << 0)
+#define SYSCNT_CNTCR_HDBG     (1 << 1)
+#define SYSCNT_CNTCR_FCREQ(n) (1 << (8 + (n)))
+#define SYSCNT_CNTFID(n)      (0x20 + 4 * (n))
+
+static uint32_t imx_syscnt_enable_and_return_frequency(const void *fdt)
+{
+  uint32_t freq;
+  volatile void *syscnt_base;
+
+  /* That's not in the usual FDTs. Sorry for falling back to a magic value. */
+  if (imx_is_imx6(fdt)) {
+    syscnt_base = (void *)0x021dc000;
+  } else {
+    syscnt_base = (void *)0x306c0000;
+  }
+
+  freq = *(uint32_t *)(syscnt_base + SYSCNT_CNTFID(0));
+
+  arm_cp15_set_counter_frequency(freq);
+
+  *(uint32_t *)(syscnt_base + SYSCNT_CNTCR) =
+    SYSCNT_CNTCR_ENABLE |
+    SYSCNT_CNTCR_HDBG |
+    SYSCNT_CNTCR_FCREQ(0);
+
+  return freq;
+}
+
 void arm_generic_timer_get_config(
   uint32_t *frequency,
   uint32_t *irq
@@ -76,7 +131,11 @@ void arm_generic_timer_get_config(
   if (val != NULL && len >= 4) {
     *frequency = fdt32_to_cpu(val[0]);
   } else {
-    bsp_fatal(IMX_FATAL_GENERIC_TIMER_FREQUENCY);
+    /*
+     * Normally clock-frequency would be provided by the boot loader. If it
+     * didn't add one, we have to initialize the system counter ourself.
+     */
+    *frequency = imx_syscnt_enable_and_return_frequency(fdt);
   }
 
   /* FIXME: Figure out how Linux gets a proper IRQ number */
