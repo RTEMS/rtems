@@ -29,9 +29,9 @@
 
 const char rtems_test_name[] = "BLOCK 14";
 
-#define ACTION_COUNT 7
+#define ACTION_COUNT 16
 
-#define BLOCK_COUNT 6
+#define BLOCK_COUNT 14
 
 #define DISK_PATH "/disk"
 
@@ -42,50 +42,104 @@ typedef struct {
     rtems_blkdev_bnum block,
     rtems_bdbuf_buffer **bd_ptr
   );
+  void (*peek)(
+    rtems_disk_device *dd,
+    rtems_blkdev_bnum block,
+    uint32_t nr_blocks
+  );
   rtems_status_code expected_get_status;
   rtems_status_code (*release)(rtems_bdbuf_buffer *bd);
 } test_action;
 
 static const test_action actions [ACTION_COUNT] = {
-  { 0, rtems_bdbuf_read, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
-  { 1, rtems_bdbuf_read, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
-  { 2, rtems_bdbuf_read, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
-  { 0, rtems_bdbuf_read, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
-  { 4, rtems_bdbuf_get, RTEMS_SUCCESSFUL, rtems_bdbuf_sync },
-  { 5, rtems_bdbuf_read, RTEMS_IO_ERROR, rtems_bdbuf_release },
-  { 5, rtems_bdbuf_get, RTEMS_SUCCESSFUL, rtems_bdbuf_sync }
+  /* normal read ahead */
+  { 0, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+  { 1, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+  { 2, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+
+  /* re-read a cached block */
+  { 0, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+
+  /* cause some writes */
+  { 4, rtems_bdbuf_get, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_sync },
+  { 5, rtems_bdbuf_read, NULL, RTEMS_IO_ERROR, rtems_bdbuf_release },
+  { 5, rtems_bdbuf_get, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_sync },
+
+  /* interrupt normal read ahead with a peek */
+  { 9, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+  { 13, NULL, rtems_bdbuf_peek, 0, NULL },
+  { 10, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+  { 11, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+  { 12, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+
+  /* peek with hit */
+  { 6, NULL, rtems_bdbuf_peek, 0, NULL },
+  { 6, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
+
+  /* (wrong) peek with reading different block */
+  { 8, NULL, rtems_bdbuf_peek, 0, NULL },
+  { 7, rtems_bdbuf_read, NULL, RTEMS_SUCCESSFUL, rtems_bdbuf_release },
 };
 
-#define STATS(a, b, c, d, e, f, g, h) \
+#define STATS(a, b, c, d, e, f, g, h, i) \
   { \
     .read_hits = a, \
     .read_misses = b, \
     .read_ahead_transfers = c, \
-    .read_blocks = d, \
-    .read_errors = e, \
-    .write_transfers = f, \
-    .write_blocks = g, \
-    .write_errors = h \
+    .read_ahead_peeks = d, \
+    .read_blocks = e, \
+    .read_errors = f, \
+    .write_transfers = g, \
+    .write_blocks = h, \
+    .write_errors = i \
   }
 
 static const rtems_blkdev_stats expected_stats [ACTION_COUNT] = {
-  STATS(0, 1, 0, 1, 0, 0, 0, 0),
-  STATS(0, 2, 1, 3, 0, 0, 0, 0),
-  STATS(1, 2, 2, 4, 0, 0, 0, 0),
-  STATS(2, 2, 2, 4, 0, 0, 0, 0),
-  STATS(2, 2, 2, 4, 0, 1, 1, 0),
-  STATS(2, 3, 2, 5, 1, 1, 1, 0),
-  STATS(2, 3, 2, 5, 1, 2, 2, 1)
+  STATS(0, 1, 0, 0, 1, 0, 0, 0, 0),
+  STATS(0, 2, 1, 0, 3, 0, 0, 0, 0),
+  STATS(1, 2, 2, 0, 4, 0, 0, 0, 0),
+
+  STATS(2, 2, 2, 0, 4, 0, 0, 0, 0),
+
+  STATS(2, 2, 2, 0, 4, 0, 1, 1, 0),
+  STATS(2, 3, 2, 0, 5, 1, 1, 1, 0),
+  STATS(2, 3, 2, 0, 5, 1, 2, 2, 1),
+
+  STATS(2, 4, 2, 0, 6, 1, 2, 2, 1),
+  STATS(2, 4, 3, 1, 7, 1, 2, 2, 1),
+  STATS(2, 5, 3, 1, 8, 1, 2, 2, 1),
+  STATS(2, 6, 4, 1, 10, 1, 2, 2, 1),
+  STATS(3, 6, 4, 1, 10, 1, 2, 2, 1),
+
+  STATS(3, 6, 5, 2, 11, 1, 2, 2, 1),
+  STATS(4, 6, 5, 2, 11, 1, 2, 2, 1),
+
+  STATS(4, 6, 6, 3, 12, 1, 2, 2, 1),
+  STATS(4, 7, 6, 3, 13, 1, 2, 2, 1),
 };
 
 static const int expected_block_access_counts [ACTION_COUNT] [BLOCK_COUNT] = {
-   { 1, 0, 0, 0, 0, 0 },
-   { 1, 1, 1, 0, 0, 0 },
-   { 1, 1, 1, 1, 0, 0 },
-   { 1, 1, 1, 1, 0, 0 },
-   { 1, 1, 1, 1, 1, 0 },
-   { 1, 1, 1, 1, 1, 1 },
-   { 1, 1, 1, 1, 1, 2 }
+   { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+   { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+   { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+   { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+   { 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+   { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+   { 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+   { 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 0, 0, 0, 0 },
+   { 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 0, 0, 0, 1 },
+   { 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 1, 0, 0, 1 },
+   { 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 1, 1, 1, 1 },
+   { 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 1, 1, 1, 1 },
+
+   { 1, 1, 1, 1, 1, 2, 1, 0, 0, 1, 1, 1, 1, 1 },
+   { 1, 1, 1, 1, 1, 2, 1, 0, 0, 1, 1, 1, 1, 1 },
+
+   { 1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 1 },
+   { 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1 },
 };
 
 static int block_access_counts [BLOCK_COUNT];
@@ -132,10 +186,16 @@ static void test_actions(rtems_disk_device *dd)
 
     printf("action %i\n", i);
 
-    sc = (*action->get)(dd, action->block, &bd);
-    rtems_test_assert(sc == action->expected_get_status);
+    if (action->get != NULL) {
+      sc = (*action->get)(dd, action->block, &bd);
+      rtems_test_assert(sc == action->expected_get_status);
+    }
 
-    if (sc == RTEMS_SUCCESSFUL) {
+    if (action->peek != NULL) {
+      (*action->peek)(dd, action->block, 1);
+    }
+
+    if (sc == RTEMS_SUCCESSFUL && action->release != NULL) {
       sc = (*action->release)(bd);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
     }

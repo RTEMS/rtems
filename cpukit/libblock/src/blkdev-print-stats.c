@@ -47,6 +47,7 @@ void rtems_blkdev_print_stats(
      " READ HITS            | %" PRIu32 "\n"
      " READ MISSES          | %" PRIu32 "\n"
      " READ AHEAD TRANSFERS | %" PRIu32 "\n"
+     " READ AHEAD PEEKS     | %" PRIu32 "\n"
      " READ BLOCKS          | %" PRIu32 "\n"
      " READ ERRORS          | %" PRIu32 "\n"
      " WRITE TRANSFERS      | %" PRIu32 "\n"
@@ -59,6 +60,7 @@ void rtems_blkdev_print_stats(
      stats->read_hits,
      stats->read_misses,
      stats->read_ahead_transfers,
+     stats->read_ahead_peeks,
      stats->read_blocks,
      stats->read_errors,
      stats->write_transfers,

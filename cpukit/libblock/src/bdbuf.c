@@ -2019,6 +2019,23 @@ rtems_bdbuf_read_ahead_reset (rtems_disk_device *dd)
 }
 
 static void
+rtems_bdbuf_read_ahead_add_to_chain (rtems_disk_device *dd)
+{
+  rtems_status_code sc;
+  rtems_chain_control *chain = &bdbuf_cache.read_ahead_chain;
+
+  if (rtems_chain_is_empty (chain))
+  {
+    sc = rtems_event_send (bdbuf_cache.read_ahead_task,
+                           RTEMS_BDBUF_READ_AHEAD_WAKE_UP);
+    if (sc != RTEMS_SUCCESSFUL)
+      rtems_bdbuf_fatal (RTEMS_BDBUF_FATAL_RA_WAKE_UP);
+  }
+
+  rtems_chain_append_unprotected (chain, &dd->read_ahead.node);
+}
+
+static void
 rtems_bdbuf_check_read_ahead_trigger (rtems_disk_device *dd,
                                       rtems_blkdev_bnum  block)
 {
@@ -2026,18 +2043,8 @@ rtems_bdbuf_check_read_ahead_trigger (rtems_disk_device *dd,
       && dd->read_ahead.trigger == block
       && !rtems_bdbuf_is_read_ahead_active (dd))
   {
-    rtems_status_code sc;
-    rtems_chain_control *chain = &bdbuf_cache.read_ahead_chain;
-
-    if (rtems_chain_is_empty (chain))
-    {
-      sc = rtems_event_send (bdbuf_cache.read_ahead_task,
-                             RTEMS_BDBUF_READ_AHEAD_WAKE_UP);
-      if (sc != RTEMS_SUCCESSFUL)
-        rtems_bdbuf_fatal (RTEMS_BDBUF_FATAL_RA_WAKE_UP);
-    }
-
-    rtems_chain_append_unprotected (chain, &dd->read_ahead.node);
+    dd->read_ahead.nr_blocks = RTEMS_DISK_READ_AHEAD_SIZE_AUTO;
+    rtems_bdbuf_read_ahead_add_to_chain(dd);
   }
 }
 
@@ -2110,6 +2117,24 @@ rtems_bdbuf_read (rtems_disk_device   *dd,
   *bd_ptr = bd;
 
   return sc;
+}
+
+void
+rtems_bdbuf_peek (rtems_disk_device *dd,
+                  rtems_blkdev_bnum block,
+                  uint32_t nr_blocks)
+{
+  rtems_bdbuf_lock_cache ();
+
+  if (bdbuf_cache.read_ahead_enabled && nr_blocks > 0)
+  {
+    rtems_bdbuf_read_ahead_reset(dd);
+    dd->read_ahead.next = block;
+    dd->read_ahead.nr_blocks = nr_blocks;
+    rtems_bdbuf_read_ahead_add_to_chain(dd);
+  }
+
+  rtems_bdbuf_unlock_cache ();
 }
 
 static rtems_status_code
@@ -2952,18 +2977,33 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
 
         if (bd != NULL)
         {
-          uint32_t transfer_count = dd->block_count - block;
+          uint32_t transfer_count = dd->read_ahead.nr_blocks;
+          uint32_t blocks_until_end_of_disk = dd->block_count - block;
           uint32_t max_transfer_count = bdbuf_config.max_read_ahead_blocks;
 
-          if (transfer_count >= max_transfer_count)
-          {
-            transfer_count = max_transfer_count;
-            dd->read_ahead.trigger = block + transfer_count / 2;
-            dd->read_ahead.next = block + transfer_count;
-          }
-          else
-          {
-            dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
+          if (transfer_count == RTEMS_DISK_READ_AHEAD_SIZE_AUTO) {
+            transfer_count = blocks_until_end_of_disk;
+
+            if (transfer_count >= max_transfer_count)
+            {
+              transfer_count = max_transfer_count;
+              dd->read_ahead.trigger = block + transfer_count / 2;
+              dd->read_ahead.next = block + transfer_count;
+            }
+            else
+            {
+              dd->read_ahead.trigger = RTEMS_DISK_READ_AHEAD_NO_TRIGGER;
+            }
+          } else {
+            if (transfer_count > blocks_until_end_of_disk) {
+              transfer_count = blocks_until_end_of_disk;
+            }
+
+            if (transfer_count > max_transfer_count) {
+              transfer_count = max_transfer_count;
+            }
+
+            ++dd->stats.read_ahead_peeks;
           }
 
           ++dd->stats.read_ahead_transfers;

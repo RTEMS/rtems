@@ -540,6 +540,29 @@ rtems_bdbuf_read (
 );
 
 /**
+ * @brief Give a hint which blocks should be cached next.
+ *
+ * Provide a hint to the read ahead mechanism which blocks should be cached
+ * next. This overwrites the default linear pattern. You should use it in (for
+ * example) a file system to tell bdbuf where the next part of a fragmented file
+ * is. If you know the length of the file, you can provide that too.
+ *
+ * Before you can use this function, the rtems_bdbuf_init() routine must be
+ * called at least once to initialize everything. Otherwise you might get
+ * unexpected results.
+ *
+ * @param dd [in] The disk device.
+ * @param block [in] Linear media block number.
+ * @param nr_blocks [in] Number of consecutive blocks that can be pre-fetched.
+ */
+void
+rtems_bdbuf_peek (
+  rtems_disk_device *dd,
+  rtems_blkdev_bnum block,
+  uint32_t nr_blocks
+);
+
+/**
  * Release the buffer obtained by a read call back to the cache. If the buffer
  * was obtained by a get call and was not already in the cache the release
  * modified call should be used. A buffer released with this call obtained by a

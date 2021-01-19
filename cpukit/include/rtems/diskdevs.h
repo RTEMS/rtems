@@ -59,6 +59,11 @@ typedef int (*rtems_block_device_ioctl)(
 #define RTEMS_DISK_READ_AHEAD_NO_TRIGGER ((rtems_blkdev_bnum) -1)
 
 /**
+ * @brief Size value to set number of blocks based on config and disk size.
+ */
+#define RTEMS_DISK_READ_AHEAD_SIZE_AUTO (0)
+
+/**
  * @brief Block device read-ahead control.
  */
 typedef struct {
@@ -71,7 +76,8 @@ typedef struct {
    * @brief Block value to trigger the read-ahead request.
    *
    * A value of @ref RTEMS_DISK_READ_AHEAD_NO_TRIGGER will disable further
-   * read-ahead requests since no valid block can have this value.
+   * read-ahead requests (except the ones triggered by @a rtems_bdbuf_peek)
+   * since no valid block can have this value.
    */
   rtems_blkdev_bnum trigger;
 
@@ -82,6 +88,14 @@ typedef struct {
    * be arbitrary.
    */
   rtems_blkdev_bnum next;
+
+  /**
+   * @brief Size of the next read-ahead request in blocks.
+   *
+   * A value of @ref RTEMS_DISK_READ_AHEAD_SIZE_AUTO will try to read the rest
+   * of the disk but at most the configured max_read_ahead_blocks.
+   */
+  uint32_t nr_blocks;
 } rtems_blkdev_read_ahead;
 
 /**
@@ -110,9 +124,15 @@ typedef struct {
   /**
    * @brief Read-ahead transfer count.
    *
-   * Each read-ahead transfer may read multiple blocks.
+   * Each read-ahead transfer may read multiple blocks. This counts all
+   * transfers (including peeks).
    */
   uint32_t read_ahead_transfers;
+
+  /**
+   * @brief Read-ahead transfers caused by a peek.
+   */
+  uint32_t read_ahead_peeks;
 
   /**
    * @brief Count of blocks transfered from the device.

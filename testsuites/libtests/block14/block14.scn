@@ -6,19 +6,30 @@ action 3
 action 4
 action 5
 action 6
+action 7
+action 8
+action 9
+action 10
+action 11
+action 12
+action 13
+action 14
+action 15
 -------------------------------------------------------------------------------
                                DEVICE STATISTICS
 ----------------------+--------------------------------------------------------
  MEDIA BLOCK SIZE     | 0
  MEDIA BLOCK COUNT    | 1
  BLOCK SIZE           | 2
- READ HITS            | 2
- READ MISSES          | 3
- READ AHEAD TRANSFERS | 2
- READ BLOCKS          | 5
+ READ HITS            | 4
+ READ MISSES          | 7
+ READ AHEAD TRANSFERS | 6
+ READ AHEAD PEEKS     | 3
+ READ BLOCKS          | 13
  READ ERRORS          | 1
  WRITE TRANSFERS      | 2
  WRITE BLOCKS         | 2
  WRITE ERRORS         | 1
 ----------------------+--------------------------------------------------------
+
 *** END OF TEST BLOCK 14 ***
