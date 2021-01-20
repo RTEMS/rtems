@@ -765,7 +765,7 @@ static void test_mrsp_nested_obtain_error(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_obtain(id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
 
   sc = rtems_semaphore_release(id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

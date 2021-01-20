@@ -391,18 +391,26 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
 }
 
 /**
- * @brief Seizes the MrsP control.
+ * @brief Seizes the MrsP mutex.
  *
- * @param[in, out] mrsp The MrsP control to seize the control of.
- * @param[in, out] executing The currently executing thread.
- * @param wait Indicates whether the calling thread is willing to wait.
- * @param queue_context The thread queue context.
+ * @param[in, out] mrsp is the MrsP mutex to seize.
  *
- * @retval STATUS_SUCCESSFUL The operation succeeded.
- * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the executing
- *      thread exceeds the ceiling priority.
- * @retval STATUS_UNAVAILABLE The executing thread is already the owner of
- *      the MrsP control.  Seizing it is not possible.
+ * @param[in, out] executing is the currently executing thread.
+ *
+ * @param wait shall be true, if the executing thread is willing to wait,
+ *   otherwise it shall be false.
+ *
+ * @param[in, out] queue_context is the thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval STATUS_UNAVAILABLE Seizing the mutex was not immmediately possible.
+ *
+ * @retval STATUS_DEADLOCK The executing thread was already the owner of
+ *   the mutex.
+ *
+ * @retval STATUS_MUTEX_CEILING_VIOLATED The current priority of the executing
+ *   thread exceeds the ceiling priority of the mutex.
  */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
   MRSP_Control         *mrsp,
@@ -422,7 +430,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
     status = _MRSP_Claim_ownership( mrsp, executing, queue_context );
   } else if ( owner == executing ) {
     _MRSP_Release( mrsp, queue_context );
-    status = STATUS_UNAVAILABLE;
+    status = STATUS_DEADLOCK;
   } else if ( wait ) {
     status = _MRSP_Wait_for_ownership( mrsp, executing, queue_context );
   } else {
