@@ -301,8 +301,11 @@ fat_file_read(
     uint32_t       ofs = 0;
     uint32_t       save_ofs;
     uint32_t       sec = 0;
+    uint32_t       sec_peek = 0;
     uint32_t       byte = 0;
     uint32_t       c = 0;
+    uint32_t       blk = 0;
+    uint32_t       blk_cnt = 0;
 
     /* it couldn't be removed - otherwise cache update will be broken */
     if (count == 0)
@@ -345,19 +348,27 @@ fat_file_read(
         c = MIN(count, (fs_info->vol.bpc - ofs));
 
         sec = fat_cluster_num_to_sector_num(fs_info, cur_cln);
+
+        save_cln = cur_cln;
+        rc = fat_get_fat_cluster(fs_info, cur_cln, &cur_cln);
+        if ( rc != RC_OK )
+            return rc;
+
+        sec_peek = fat_cluster_num_to_sector_num(fs_info, cur_cln);
+        blk = fat_sector_num_to_block_num (fs_info, sec_peek);
+        blk_cnt = fs_info->vol.bpc >> fs_info->vol.bytes_per_block_log2;
+        if (blk_cnt == 0)
+            blk_cnt = 1;
+        fat_block_peek(fs_info, blk, blk_cnt);
+
         sec += (ofs >> fs_info->vol.sec_log2);
         byte = ofs & (fs_info->vol.bps - 1);
-
         ret = _fat_block_read(fs_info, sec, byte, c, buf + cmpltd);
         if ( ret < 0 )
             return -1;
 
         count -= c;
         cmpltd += c;
-        save_cln = cur_cln;
-        rc = fat_get_fat_cluster(fs_info, cur_cln, &cur_cln);
-        if ( rc != RC_OK )
-            return rc;
 
         ofs = 0;
     }

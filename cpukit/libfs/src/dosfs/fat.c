@@ -200,6 +200,16 @@ _fat_block_read(
     return cmpltd;
 }
 
+void
+fat_block_peek(
+    fat_fs_info_t                        *fs_info,
+    const uint32_t                        blk,
+    const uint32_t                        blk_cnt
+    )
+{
+    rtems_bdbuf_peek(fs_info->vol.dd, blk, blk_cnt);
+}
+
 static ssize_t
 fat_block_write(
     fat_fs_info_t                        *fs_info,

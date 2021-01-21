@@ -499,6 +499,11 @@ _fat_block_read(fat_fs_info_t                        *fs_info,
                 uint32_t                              count,
                 void                                 *buff);
 
+void
+fat_block_peek(fat_fs_info_t                        *fs_info,
+               const uint32_t                        blk,
+               const uint32_t                        blk_cnt);
+
 ssize_t
 fat_cluster_write(fat_fs_info_t                    *fs_info,
                     uint32_t                          start_cln,
