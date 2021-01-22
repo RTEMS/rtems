@@ -144,6 +144,8 @@ links:
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
+  uid: ../../objdevfsledma
+- role: build-dependency
   uid: ../../opto2
 - role: build-dependency
   uid: linkcmds

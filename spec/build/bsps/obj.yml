@@ -28,10 +28,6 @@ install:
   source:
   - bsps/include/ofw/ofw.h
   - bsps/include/ofw/ofw_compat.h
-- destination: ${BSP_INCLUDEDIR}/fsl
-  source:
-  - bsps/include/fsl/edma.h
-  - bsps/include/fsl/regs-edma.h
 - destination: ${BSP_INCLUDEDIR}/libchip
   source:
   - bsps/include/libchip/ata.h
@@ -76,7 +72,6 @@ links:
 source:
 - bsps/shared/dev/display/disp_hcms29xx.c
 - bsps/shared/dev/display/font_hcms29xx.c
-- bsps/shared/dev/dma/fsl-edma.c
 - bsps/shared/dev/i2c/i2c-2b-eeprom.c
 - bsps/shared/dev/i2c/i2c-ds1621.c
 - bsps/shared/dev/i2c/i2c-sc620.c
