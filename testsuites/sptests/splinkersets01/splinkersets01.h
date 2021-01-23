@@ -33,9 +33,9 @@ RTEMS_LINKER_RWSET_DECLARE(test_content_rw, char);
 
 RTEMS_LINKER_ROSET_DECLARE(test_content_ro, char);
 
-RTEMS_LINKER_RWSET_ITEM_DECLARE(test_rw, const int *, a1);
+RTEMS_LINKER_RWSET_ITEM_ORDERED_DECLARE(test_rw, const int *, a1, 1);
 
-RTEMS_LINKER_ROSET_ITEM_DECLARE(test_ro, const int *, ca2);
+RTEMS_LINKER_ROSET_ITEM_ORDERED_DECLARE(test_ro, const int *, ca2, OC);
 
 RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern int content_rw_1);
 RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern char content_rw_2);
