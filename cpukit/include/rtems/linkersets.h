@@ -38,7 +38,7 @@ extern "C" {
   RTEMS_SECTION( ".rtemsroset." #set ".end" ) RTEMS_USED
 
 #define RTEMS_LINKER_ROSET_ITEM_ORDERED_DECLARE( set, type, item, order ) \
-  type const _Linker_set_##set##_##item \
+  extern type const _Linker_set_##set##_##item \
   RTEMS_SECTION( ".rtemsroset." #set ".content.0." RTEMS_XSTRING( order ) )
 
 #define RTEMS_LINKER_ROSET_ITEM_DECLARE( set, type, item ) \
