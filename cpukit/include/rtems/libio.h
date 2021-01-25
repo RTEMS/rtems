@@ -1613,6 +1613,7 @@ struct rtems_filesystem_mount_table_entry_tt {
   rtems_filesystem_global_location_t    *mt_fs_root;
   bool                                   mounted;
   bool                                   writeable;
+  bool                                   no_regular_file_mknod;
   const rtems_filesystem_limits_and_options_t *pathconf_limits_and_options;
 
   /*

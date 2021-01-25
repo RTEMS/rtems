@@ -34,7 +34,7 @@ static void create_regular_file(
 )
 {
   int rv = 0;
-  const rtems_filesystem_location_info_t *currentloc = 
+  const rtems_filesystem_location_info_t *currentloc =
     rtems_filesystem_eval_path_get_currentloc( ctx );
   const char *token = rtems_filesystem_eval_path_get_token( ctx );
   size_t tokenlen = rtems_filesystem_eval_path_get_tokenlen( ctx );
@@ -85,10 +85,15 @@ static int do_open(
     | (make ? RTEMS_FS_MAKE : 0)
     | (exclusive ?  RTEMS_FS_EXCLUSIVE : 0);
   rtems_filesystem_eval_path_context_t ctx;
+  const rtems_filesystem_location_info_t *currentloc;
+  bool create_reg_file;
 
   rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
 
-  if ( rtems_filesystem_eval_path_has_token( &ctx ) ) {
+  currentloc = rtems_filesystem_eval_path_get_currentloc( &ctx );
+  create_reg_file = !currentloc->mt_entry->no_regular_file_mknod;
+
+  if ( create_reg_file && rtems_filesystem_eval_path_has_token( &ctx ) ) {
     create_regular_file( &ctx, mode );
   }
 
@@ -99,11 +104,9 @@ static int do_open(
 #endif
 
   if ( write_access || open_dir ) {
-    const rtems_filesystem_location_info_t *currentloc =
-      rtems_filesystem_eval_path_get_currentloc( &ctx );
     mode_t type = rtems_filesystem_location_type( currentloc );
 
-    if ( write_access && S_ISDIR( type ) ) {
+    if ( create_reg_file && write_access && S_ISDIR( type ) ) {
       rtems_filesystem_eval_path_error( &ctx, EISDIR );
     }
 
