@@ -5,6 +5,7 @@ actions:
     fsdosfsname01: exclude
     linpack: exclude
     record02: exclude
+    utf8proc01: exclude
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

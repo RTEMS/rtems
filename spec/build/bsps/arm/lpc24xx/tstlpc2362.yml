@@ -5,6 +5,7 @@ actions:
     capture: exclude
     cdtest: exclude
     complex: exclude
+    crypt01: exclude
     fileio: exclude
     fsdosfsformat01: exclude
     fsdosfswrite01: exclude
@@ -43,6 +44,7 @@ actions:
     sptls02: exclude
     syscall01: exclude
     telnetd01: exclude
+    termios: exclude
     tmcontext01: exclude
     tmfine01: exclude
     top: exclude

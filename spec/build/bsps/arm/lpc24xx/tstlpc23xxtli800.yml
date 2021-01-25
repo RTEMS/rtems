@@ -8,6 +8,7 @@ actions:
     crypt01: exclude
     fileio: exclude
     fsdosfsformat01: exclude
+    fsdosfsname02: exclude
     fsdosfssync01: exclude
     fsdosfswrite01: exclude
     fsrfsbitmap01: exclude
@@ -34,6 +35,7 @@ actions:
     psxfile01: exclude
     psxmsgq01: exclude
     psxsignal07: exclude
+    psxtimer01: exclude
     rcxx01: exclude
     record01: exclude
     rtems: exclude
