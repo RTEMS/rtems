@@ -112,10 +112,11 @@ const char *rtems_get_copyright_notice( void );
  * @brief Indicates if the RTEMS Workspace is configured to be zeroed during
  *   system initialization for this application.
  *
- * See #CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY.
- *
  * @return Returns true, if the RTEMS Workspace is configured to be zeroed
  *   during system initialization for this application, otherwise false.
+ *
+ * @par Notes
+ * See #CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY.
  */
 #define rtems_configuration_get_do_zero_of_workspace() _Memory_Zero_before_use
 
@@ -126,9 +127,10 @@ const char *rtems_get_copyright_notice( void );
  *
  * @brief Gets the IDLE task entry of this application.
  *
- * See #CONFIGURE_IDLE_TASK_BODY.
- *
  * @return Returns the IDLE task entry of this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_IDLE_TASK_BODY.
  */
 #define rtems_configuration_get_idle_task() _Thread_Idle_body
 
@@ -139,9 +141,10 @@ const char *rtems_get_copyright_notice( void );
  *
  * @brief Gets the IDLE task stack size in bytes of this application.
  *
- * See #CONFIGURE_IDLE_TASK_STACK_SIZE.
- *
  * @return Returns the IDLE task stack size in bytes of this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_IDLE_TASK_STACK_SIZE.
  */
 #define rtems_configuration_get_idle_task_stack_size() _Thread_Idle_stack_size
 
@@ -152,9 +155,10 @@ const char *rtems_get_copyright_notice( void );
  *
  * @brief Gets the interrupt stack size in bytes of this application.
  *
- * See #CONFIGURE_INTERRUPT_STACK_SIZE.
- *
  * @return Returns the interrupt stack size in bytes of this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_INTERRUPT_STACK_SIZE.
  */
 #define rtems_configuration_get_interrupt_stack_size() \
   ((size_t) _ISR_Stack_size)
@@ -167,10 +171,11 @@ const char *rtems_get_copyright_notice( void );
  * @brief Gets the maximum number of Classic API User Extensions configured for
  *   this application.
  *
- * See #CONFIGURE_MAXIMUM_USER_EXTENSIONS.
- *
  * @return Returns the maximum number of Classic API User Extensions configured
  *   for this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_USER_EXTENSIONS.
  */
 uint32_t rtems_configuration_get_maximum_extensions( void );
 
@@ -182,15 +187,18 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the maximum number of processors configured for this
  *   application.
  *
+ * @return Returns the maximum number of processors configured for this
+ *   application.
+ *
+ * @par Notes
+ * @parblock
  * The actual number of processors available to the application is returned by
  * rtems_scheduler_get_processor_maximum() which less than or equal to the
  * configured maximum number of processors (#CONFIGURE_MAXIMUM_PROCESSORS).
  *
  * In uniprocessor configurations, this macro is a compile time constant which
  * evaluates to one.
- *
- * @return Returns the maximum number of processors configured for this
- *   application.
+ * @endparblock
  */
 #define rtems_configuration_get_maximum_processors() \
   _SMP_Processor_configured_maximum
@@ -203,10 +211,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the number of microseconds per clock tick configured for this
  *   application.
  *
- * See #CONFIGURE_MICROSECONDS_PER_TICK.
- *
  * @return Returns the number of microseconds per clock tick configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MICROSECONDS_PER_TICK.
  */
 #define rtems_configuration_get_microseconds_per_tick() \
   _Watchdog_Microseconds_per_tick
@@ -219,10 +228,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the number of milliseconds per clock tick configured for this
  *   application.
  *
- * See #CONFIGURE_MICROSECONDS_PER_TICK.
- *
  * @return Returns the number of milliseconds per clock tick configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MICROSECONDS_PER_TICK.
  */
 #define rtems_configuration_get_milliseconds_per_tick() \
   ( _Watchdog_Microseconds_per_tick / 1000 )
@@ -235,10 +245,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the number of microseconds per clock tick configured for this
  *   application.
  *
- * See #CONFIGURE_MICROSECONDS_PER_TICK.
- *
  * @return Returns the number of microseconds per clock tick configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MICROSECONDS_PER_TICK.
  */
 #define rtems_configuration_get_nanoseconds_per_tick() \
   _Watchdog_Nanoseconds_per_tick
@@ -251,10 +262,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the number of initial extensions configured for this
  *   application.
  *
- * See #CONFIGURE_INITIAL_EXTENSIONS.
- *
  * @return Returns the number of initial extensions configured for this
  *   application.
+ *
+ * @par Notes
+ * See #CONFIGURE_INITIAL_EXTENSIONS.
  */
 #define rtems_configuration_get_number_of_initial_extensions() \
   ((uint32_t) _User_extensions_Initial_count)
@@ -267,10 +279,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the thread stack allocator allocate hook configured for this
  *   application.
  *
- * See #CONFIGURE_TASK_STACK_ALLOCATOR.
- *
  * @return Returns the thread stack allocator allocate hook configured for this
  *   application.
+ *
+ * @par Notes
+ * See #CONFIGURE_TASK_STACK_ALLOCATOR.
  */
 #define rtems_configuration_get_stack_allocate_hook() _Stack_Allocator_allocate
 
@@ -282,10 +295,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the thread stack allocator initialization hook configured for
  *   this application.
  *
- * See #CONFIGURE_TASK_STACK_ALLOCATOR_INIT.
- *
  * @return Returns the thread stack allocator initialization hook configured
  *   for this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_TASK_STACK_ALLOCATOR_INIT.
  */
 #define rtems_configuration_get_stack_allocate_init_hook() \
   _Stack_Allocator_initialize
@@ -298,10 +312,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Indicates if the thread stack allocator is configured to avoid the
  *   RTEMS Workspace for this application.
  *
- * See #CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE.
- *
  * @return Returns true, if the thread stack allocator is configured to avoid
  *   the RTEMS Workspace for this application, otherwise false.
+ *
+ * @par Notes
+ * See #CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE.
  */
 #define rtems_configuration_get_stack_allocator_avoids_work_space() \
   _Stack_Allocator_avoids_workspace
@@ -314,10 +329,11 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * @brief Gets the thread stack allocator free hook configured for this
  *   application.
  *
- * See #CONFIGURE_TASK_STACK_DEALLOCATOR.
- *
  * @return Returns the thread stack allocator free hook configured for this
  *   application.
+ *
+ * @par Notes
+ * See #CONFIGURE_TASK_STACK_DEALLOCATOR.
  */
 #define rtems_configuration_get_stack_free_hook() _Stack_Allocator_free
 
@@ -341,10 +357,11 @@ uintptr_t rtems_configuration_get_stack_space_size( void );
  *
  * @brief Gets the clock ticks per timeslice configured for this application.
  *
- * See #CONFIGURE_TICKS_PER_TIMESLICE.
- *
  * @return Returns the clock ticks per timeslice configured for this
  *   application.
+ *
+ * @par Notes
+ * See #CONFIGURE_TICKS_PER_TIMESLICE.
  */
 #define rtems_configuration_get_ticks_per_timeslice() \
   _Watchdog_Ticks_per_timeslice
@@ -357,10 +374,11 @@ uintptr_t rtems_configuration_get_stack_space_size( void );
  * @brief Indicates if the RTEMS Workspace and C Program Heap are configured to
  *   be unified for this application.
  *
- * See #CONFIGURE_UNIFIED_WORK_AREAS.
- *
  * @return Returns true, if the RTEMS Workspace and C Program Heap are
  *   configured to be unified for this application, otherwise false.
+ *
+ * @par Notes
+ * See #CONFIGURE_UNIFIED_WORK_AREAS.
  */
 #define rtems_configuration_get_unified_work_area() _Workspace_Is_unified
 
@@ -438,12 +456,13 @@ const char *rtems_get_version_string( void );
  *
  * @brief Indicates if the resource is unlimited.
  *
- * This function is implemented as a macro and can be used to define compile
- * time constants.
- *
  * @param _resource is the resource number.
  *
  * @return Returns true, if the resource is unlimited, otherwise false.
+ *
+ * @par Notes
+ * This function is implemented as a macro and can be used to define compile
+ * time constants.
  */
 #define rtems_resource_is_unlimited( _resource ) \
   _Objects_Is_unlimited( _resource )
@@ -455,12 +474,13 @@ const char *rtems_get_version_string( void );
  *
  * @brief Gets the maximum number per allocation of a resource number.
  *
- * This function is implemented as a macro and can be used to define compile
- * time constants.
- *
  * @param _resource is the resource number.
  *
  * @return Returns the maximum number per allocation of a resource number.
+ *
+ * @par Notes
+ * This function is implemented as a macro and can be used to define compile
+ * time constants.
  */
 #define rtems_resource_maximum_per_allocation( _resource ) \
   _Objects_Maximum_per_allocation( _resource )
@@ -510,13 +530,14 @@ typedef Stack_Allocator_free rtems_stack_free_hook;
  * @brief Augments the resource number so that it indicates an unlimited
  *   resource.
  *
- * This function is implemented as a macro and can be used to define compile
- * time constants.
- *
  * @param _resource is the resource number to augment.
  *
  * @return Returns the resource number augmented to indicate an unlimited
  *   resource.
+ *
+ * @par Notes
+ * This function is implemented as a macro and can be used to define compile
+ * time constants.
  */
 #define rtems_resource_unlimited( _resource ) \
   ( ( _resource ) | RTEMS_UNLIMITED_OBJECTS )

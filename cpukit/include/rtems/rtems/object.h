@@ -145,8 +145,6 @@ typedef struct {
  * @brief Builds the object identifier with the lowest index from the API,
  *   class, and MPCI node components.
  *
- * This directive is strictly local and does not impact task scheduling.
- *
  * @param _api is the API of the object identifier to build.
  *
  * @param _class is the class of the object identifier to build.
@@ -155,6 +153,9 @@ typedef struct {
  *
  * @return Returns the object identifier with the lowest index built from the
  *   API, class, and MPCI node components.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 #define RTEMS_OBJECT_ID_INITIAL( _api, _class, _node ) \
   OBJECTS_ID_INITIAL( _api, _class, _node )
@@ -217,8 +218,6 @@ typedef struct {
  * @brief Builds the object identifier from the API, class, MPCI node, and
  *   index components.
  *
- * This directive is strictly local and does not impact task scheduling.
- *
  * @param _api is the API of the object identifier to build.
  *
  * @param _class is the class of the object identifier to build.
@@ -229,6 +228,9 @@ typedef struct {
  *
  * @return Returns the object identifier built from the API, class, MPCI node,
  *   and index components.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 #define rtems_build_id( _api, _class, _node, _index ) \
   _Objects_Build_id( _api, _class, _node, _index )
@@ -240,12 +242,6 @@ typedef struct {
  *
  * @brief Builds the object name composed of the four characters.
  *
- * This directive takes the four characters provided as arguments and composes
- * a 32-bit object name with ``_c1`` in the most significant 8-bits and ``_c4``
- * in the least significant 8-bits.
- *
- * This directive is strictly local and does not impact task scheduling.
- *
  * @param _c1 is the first character of the name.
  *
  * @param _c2 is the second character of the name.
@@ -254,7 +250,14 @@ typedef struct {
  *
  * @param _c4 is the fourth character of the name.
  *
+ * This directive takes the four characters provided as arguments and composes
+ * a 32-bit object name with ``_c1`` in the most significant 8-bits and ``_c4``
+ * in the least significant 8-bits.
+ *
  * @return Returns the object name composed of the four characters.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 #define rtems_build_name( _c1, _c2, _c3, _c4 ) \
   _Objects_Build_name( _c1, _c2, _c3, _c4 )
@@ -265,8 +268,6 @@ typedef struct {
  * @ingroup RTEMSAPIClassicObject
  *
  * @brief Gets the object name associated with the object identifier.
- *
- * This directive is strictly local and does not impact task scheduling.
  *
  * @param id is the object identifier to get the name.
  *
@@ -286,6 +287,9 @@ typedef struct {
  *
  * @retval ::RTEMS_INVALID_ID There was no object associated with the object
  *   identifier.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 rtems_status_code rtems_object_get_classic_name(
   rtems_id    id,
@@ -300,21 +304,18 @@ rtems_status_code rtems_object_get_classic_name(
  * @brief Gets the object name associated with the object identifier as a
  *   string.
  *
+ * @param id is the object identifier to get the name.
+ *
+ * @param length is the buffer length in bytes.
+ *
+ * @param[out] name is the pointer to a buffer of the specified length.
+ *
  * The object name is stored in the name buffer.  If the name buffer length is
  * greater than zero, then the stored object name will be ``NUL`` terminated.
  * The stored object name may be truncated to fit the length.  There is no
  * indication if a truncation occurred.  Every attempt is made to return name
  * as a printable string even if the object has the Classic API 32-bit integer
  * style name.
- *
- * This directive may cause the calling task to be preempted due to an obtain
- * and release of the object allocator mutex.
- *
- * @param id is the object identifier to get the name.
- *
- * @param length is the buffer length in bytes.
- *
- * @param[out] name is the pointer to a buffer of the specified length.
  *
  * @retval NULL The ``length`` parameter was 0.
  *
@@ -327,6 +328,10 @@ rtems_status_code rtems_object_get_classic_name(
  *
  * @return Returns the ``name`` parameter value, if there is an object name
  *   associated with the object identifier.
+ *
+ * @par Notes
+ * This directive may cause the calling task to be preempted due to an obtain
+ * and release of the object allocator mutex.
  */
 char *rtems_object_get_name( rtems_id id, size_t length, char *name );
 
@@ -338,8 +343,27 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  * @brief Sets the object name of the object associated with the object
  *   identifier.
  *
+ * @param id is the object identifier of the object to set the name.
+ *
+ * @param name is the object name to set.
+ *
  * This directive will set the object name based upon the user string.
  *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``name`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no object information available for the
+ *   object identifier.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no object associated with the object
+ *   identifier.
+ *
+ * @retval ::RTEMS_NO_MEMORY There was no memory available to duplicate the
+ *   name.
+ *
+ * @par Notes
+ * @parblock
  * This directive may cause the calling task to be preempted due to an obtain
  * and release of the object allocator mutex.
  *
@@ -354,23 +378,7 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  * If the object specified by ``id`` is of a class that has a 32-bit integer
  * style name, then the first four characters in ``name`` will be used to
  * construct the name.
- *
- * @param id is the object identifier of the object to set the name.
- *
- * @param name is the object name to set.
- *
- * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
- *
- * @retval ::RTEMS_INVALID_ADDRESS The ``name`` parameter was NULL.
- *
- * @retval ::RTEMS_INVALID_ID There was no object information available for the
- *   object identifier.
- *
- * @retval ::RTEMS_INVALID_ID There was no object associated with the object
- *   identifier.
- *
- * @retval ::RTEMS_NO_MEMORY There was no memory available to duplicate the
- *   name.
+ * @endparblock
  */
 rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
 
@@ -381,15 +389,18 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the API component of the object identifier.
  *
+ * @param _id is the object identifier with the API component to get.
+ *
+ * @return Returns the API component of the object identifier.
+ *
+ * @par Notes
+ * @parblock
  * This directive is strictly local and does not impact task scheduling.
  *
  * This directive does not validate the object identifier provided in ``_id``.
  *
  * A body is also provided.
- *
- * @param _id is the object identifier with the API component to get.
- *
- * @return Returns the API component of the object identifier.
+ * @endparblock
  */
 #define rtems_object_id_get_api( _id ) _Objects_Get_API( _id )
 
@@ -400,15 +411,18 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the class component of the object identifier.
  *
+ * @param _id is the object identifier with the class component to get.
+ *
+ * @return Returns the class component of the object identifier.
+ *
+ * @par Notes
+ * @parblock
  * This directive is strictly local and does not impact task scheduling.
  *
  * This directive does not validate the object identifier provided in ``_id``.
  *
  * A body is also provided.
- *
- * @param _id is the object identifier with the class component to get.
- *
- * @return Returns the class component of the object identifier.
+ * @endparblock
  */
 #define rtems_object_id_get_class( _id ) _Objects_Get_class( _id )
 
@@ -419,15 +433,18 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the MPCI node component of the object identifier.
  *
+ * @param _id is the object identifier with the MPCI node component to get.
+ *
+ * @return Returns the MPCI node component of the object identifier.
+ *
+ * @par Notes
+ * @parblock
  * This directive is strictly local and does not impact task scheduling.
  *
  * This directive does not validate the object identifier provided in ``_id``.
  *
  * A body is also provided.
- *
- * @param _id is the object identifier with the MPCI node component to get.
- *
- * @return Returns the MPCI node component of the object identifier.
+ * @endparblock
  */
 #define rtems_object_id_get_node( _id ) _Objects_Get_node( _id )
 
@@ -438,15 +455,18 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the index component of the object identifier.
  *
+ * @param _id is the object identifier with the index component to get.
+ *
+ * @return Returns the index component of the object identifier.
+ *
+ * @par Notes
+ * @parblock
  * This directive is strictly local and does not impact task scheduling.
  *
  * This directive does not validate the object identifier provided in ``_id``.
  *
  * A body is also provided.
- *
- * @param _id is the object identifier with the index component to get.
- *
- * @return Returns the index component of the object identifier.
+ * @endparblock
  */
 #define rtems_object_id_get_index( _id ) _Objects_Get_index( _id )
 
@@ -458,12 +478,15 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  * @brief Gets the lowest valid value for the API component of an object
  *   identifier.
  *
+ * @return Returns the lowest valid value for the API component of an object
+ *   identifier.
+ *
+ * @par Notes
+ * @parblock
  * This directive is strictly local and does not impact task scheduling.
  *
  * A body is also provided.
- *
- * @return Returns the lowest valid value for the API component of an object
- *   identifier.
+ * @endparblock
  */
 #define rtems_object_id_api_minimum() OBJECTS_INTERNAL_API
 
@@ -475,12 +498,15 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  * @brief Gets the highest valid value for the API component of an object
  *   identifier.
  *
+ * @return Returns the highest valid value for the API component of an object
+ *   identifier.
+ *
+ * @par Notes
+ * @parblock
  * This directive is strictly local and does not impact task scheduling.
  *
  * A body is also provided.
- *
- * @return Returns the highest valid value for the API component of an object
- *   identifier.
+ * @endparblock
  */
 #define rtems_object_id_api_maximum() OBJECTS_APIS_LAST
 
@@ -491,13 +517,14 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the lowest valid class value of the object API.
  *
- * This directive is strictly local and does not impact task scheduling.
- *
  * @param api is the object API to get the lowest valid class value.
  *
  * @retval -1 The object API was invalid.
  *
  * @return Returns the lowest valid class value of the object API.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 int rtems_object_api_minimum_class( int api );
 
@@ -508,13 +535,14 @@ int rtems_object_api_minimum_class( int api );
  *
  * @brief Gets the highest valid class value of the object API.
  *
- * This directive is strictly local and does not impact task scheduling.
- *
  * @param api is the object API to get the highest valid class value.
  *
  * @retval 0 The object API was invalid.
  *
  * @return Returns the highest valid class value of the object API.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 int rtems_object_api_maximum_class( int api );
 
@@ -525,15 +553,18 @@ int rtems_object_api_maximum_class( int api );
  *
  * @brief Gets a descriptive name of the object API.
  *
- * This directive is strictly local and does not impact task scheduling.
- *
- * The string returned is from constant space.  Do not modify or free it.
- *
  * @param api is the object API to get the name.
  *
  * @retval "BAD API" The API was invalid.
  *
  * @return Returns a descriptive name of the API, if the API was valid.
+ *
+ * @par Notes
+ * @parblock
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * The string returned is from constant space.  Do not modify or free it.
+ * @endparblock
  */
 const char *rtems_object_get_api_name( int api );
 
@@ -543,10 +574,6 @@ const char *rtems_object_get_api_name( int api );
  * @ingroup RTEMSAPIClassicObject
  *
  * @brief Gets a descriptive name of the object class of the object API.
- *
- * This directive is strictly local and does not impact task scheduling.
- *
- * The string returned is from constant space.  Do not modify or free it.
  *
  * @param the_api is the object API of the object class.
  *
@@ -558,6 +585,13 @@ const char *rtems_object_get_api_name( int api );
  *
  * @return Returns a descriptive name of the class of the API, if the class of
  *   the API and the API were valid.
+ *
+ * @par Notes
+ * @parblock
+ * This directive is strictly local and does not impact task scheduling.
+ *
+ * The string returned is from constant space.  Do not modify or free it.
+ * @endparblock
  */
 const char *rtems_object_get_api_class_name( int the_api, int the_class );
 
@@ -568,8 +602,6 @@ const char *rtems_object_get_api_class_name( int the_api, int the_class );
  *
  * @brief Gets the object class information of the object class of the object
  *   API.
- *
- * This directive is strictly local and does not impact task scheduling.
  *
  * @param the_api is the object API of the object class.
  *
@@ -585,6 +617,9 @@ const char *rtems_object_get_api_class_name( int the_api, int the_class );
  * @retval ::RTEMS_INVALID_ADDRESS The ``info`` parameter was NULL.
  *
  * @retval ::RTEMS_INVALID_NUMBER The class of the API or the API was invalid.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 rtems_status_code rtems_object_get_class_information(
   int                                 the_api,
@@ -599,9 +634,10 @@ rtems_status_code rtems_object_get_class_information(
  *
  * @brief Gets the local MPCI node number.
  *
- * This directive is strictly local and does not impact task scheduling.
- *
  * @return Returns the local MPCI node number.
+ *
+ * @par Notes
+ * This directive is strictly local and does not impact task scheduling.
  */
 static inline uint16_t rtems_object_get_local_node( void )
 {

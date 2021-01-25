@@ -190,10 +190,11 @@ rtems_configuration_get_rtems_api_configuration( void );
  * @brief Gets the maximum number of Classic API Barriers configured for this
  *   application.
  *
- * See #CONFIGURE_MAXIMUM_BARRIERS.
- *
  * @return Returns the maximum number of Classic API Barriers configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_BARRIERS.
  */
 uint32_t rtems_configuration_get_maximum_barriers( void );
 
@@ -205,10 +206,11 @@ uint32_t rtems_configuration_get_maximum_barriers( void );
  * @brief Gets the maximum number of Classic API Message Queues configured for
  *   this application.
  *
- * See #CONFIGURE_MAXIMUM_MESSAGE_QUEUES.
- *
  * @return Returns the maximum number of Classic API Message Queues configured
  *   for this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_MESSAGE_QUEUES.
  */
 uint32_t rtems_configuration_get_maximum_message_queues( void );
 
@@ -220,10 +222,11 @@ uint32_t rtems_configuration_get_maximum_message_queues( void );
  * @brief Gets the maximum number of Classic API Partitions configured for this
  *   application.
  *
- * See #CONFIGURE_MAXIMUM_PARTITIONS.
- *
  * @return Returns the maximum number of Classic API Partitions configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_PARTITIONS.
  */
 uint32_t rtems_configuration_get_maximum_partitions( void );
 
@@ -235,10 +238,11 @@ uint32_t rtems_configuration_get_maximum_partitions( void );
  * @brief Gets the maximum number of Classic API Rate Monotonic Periods
  *   configured for this application.
  *
- * See #CONFIGURE_MAXIMUM_PERIODS.
- *
  * @return Returns the maximum number of Classic API Rate Monotonic Periods
  *   configured for this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_PERIODS.
  */
 uint32_t rtems_configuration_get_maximum_periods( void );
 
@@ -250,10 +254,11 @@ uint32_t rtems_configuration_get_maximum_periods( void );
  * @brief Gets the maximum number of Classic API Dual-Ported Memories
  *   configured for this application.
  *
- * See #CONFIGURE_MAXIMUM_PORTS.
- *
  * @return Returns the maximum number of Classic API Dual-Ported Memories
  *   configured for this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_PORTS.
  */
 uint32_t rtems_configuration_get_maximum_ports( void );
 
@@ -265,10 +270,11 @@ uint32_t rtems_configuration_get_maximum_ports( void );
  * @brief Gets the maximum number of Classic API Regions configured for this
  *   application.
  *
- * See #CONFIGURE_MAXIMUM_REGIONS.
- *
  * @return Returns the maximum number of Classic API Regions configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_REGIONS.
  */
 uint32_t rtems_configuration_get_maximum_regions( void );
 
@@ -280,10 +286,11 @@ uint32_t rtems_configuration_get_maximum_regions( void );
  * @brief Gets the maximum number of Classic API Semaphores configured for this
  *   application.
  *
- * See #CONFIGURE_MAXIMUM_SEMAPHORES.
- *
  * @return Returns the maximum number of Classic API Semaphores configured for
  *   this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_SEMAPHORES.
  */
 uint32_t rtems_configuration_get_maximum_semaphores( void );
 
@@ -295,10 +302,11 @@ uint32_t rtems_configuration_get_maximum_semaphores( void );
  * @brief Gets the maximum number of Classic API Tasks configured for this
  *   application.
  *
- * See #CONFIGURE_MAXIMUM_TASKS.
- *
  * @return Returns the maximum number of Classic API Tasks configured for this
  *   application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_TASKS.
  */
 uint32_t rtems_configuration_get_maximum_tasks( void );
 
@@ -310,10 +318,11 @@ uint32_t rtems_configuration_get_maximum_tasks( void );
  * @brief Gets the maximum number of Classic API Timers configured for this
  *   application.
  *
- * See #CONFIGURE_MAXIMUM_TIMERS.
- *
  * @return Returns the maximum number of Classic API Timers configured for this
  *   application.
+ *
+ * @par Notes
+ * See #CONFIGURE_MAXIMUM_TIMERS.
  */
 uint32_t rtems_configuration_get_maximum_timers( void );
 

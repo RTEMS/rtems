@@ -88,6 +88,7 @@ extern "C" {
  *
  * @brief This type represents Classic API attributes.
  *
+ * @par Notes
  * Attributes are primarily used when creating objects.
  */
 typedef uint32_t rtems_attribute;
@@ -162,6 +163,7 @@ typedef uint32_t rtems_attribute;
  *   by rtems_task_create() or rtems_task_construct() shall be able to use the
  *   floating point hardware.
  *
+ * @par Notes
  * On some architectures, there will be a floating point context associated
  * with this task.
  */
@@ -175,6 +177,7 @@ typedef uint32_t rtems_attribute;
  * @brief This attribute constant indicates that the Classic API object shall
  *   be a global resource in a multiprocessing network.
  *
+ * @par Notes
  * This attribute does not refer to SMP systems.
  */
 #define RTEMS_GLOBAL 0x00000002
@@ -188,6 +191,7 @@ typedef uint32_t rtems_attribute;
  *   created by rtems_semaphore_create() shall use the Priority Inheritance
  *   Protocol.
  *
+ * @par Notes
  * The semaphore shall be a binary semaphore (#RTEMS_BINARY_SEMAPHORE).
  */
 #define RTEMS_INHERIT_PRIORITY 0x00000040
@@ -200,6 +204,7 @@ typedef uint32_t rtems_attribute;
  * @brief This attribute constant indicates that the Classic API object shall
  *   be a local resource in a multiprocessing network.
  *
+ * @par Notes
  * This attribute does not refer to SMP systems.
  */
 #define RTEMS_LOCAL 0x00000000
@@ -213,6 +218,7 @@ typedef uint32_t rtems_attribute;
  *   created by rtems_semaphore_create() shall use the Multiprocessor Resource
  *   Sharing Protocol.
  *
+ * @par Notes
  * The semaphore shall be a binary semaphore (#RTEMS_BINARY_SEMAPHORE).
  */
 #define RTEMS_MULTIPROCESSOR_RESOURCE_SHARING 0x00000100
@@ -226,6 +232,7 @@ typedef uint32_t rtems_attribute;
  *   by rtems_task_create() or rtems_task_construct() will not use the floating
  *   point hardware.
  *
+ * @par Notes
  * If the architecture permits it, then the FPU will be disabled when the task
  * is executing.
  */
@@ -283,6 +290,7 @@ typedef uint32_t rtems_attribute;
  *   created by rtems_semaphore_create() shall use the Priority Ceiling
  *   Protocol.
  *
+ * @par Notes
  * The semaphore shall be a binary semaphore (#RTEMS_BINARY_SEMAPHORE).
  */
 #define RTEMS_PRIORITY_CEILING 0x00000080
