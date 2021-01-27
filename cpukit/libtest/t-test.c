@@ -1232,7 +1232,7 @@ T_push_fixture(T_fixture_node *node, const T_fixture *fixture)
 	    memory_order_relaxed);
 	ctx->fixtures = node;
 
-	if (fixture != NULL && fixture->setup != NULL) {
+	if (fixture->setup != NULL) {
 		(*fixture->setup)(context);
 	}
 
