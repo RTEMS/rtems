@@ -1002,6 +1002,8 @@ T_check_steps(unsigned int planned_steps, unsigned int steps,
 	}
 }
 
+static void T_do_pop_fixture(T_context *);
+
 static void
 T_do_case_end(T_context *ctx, const T_case_context *tc)
 {
@@ -1013,7 +1015,7 @@ T_do_case_end(T_context *ctx, const T_case_context *tc)
 	T_time_string ts;
 
 	while (ctx->fixtures != NULL) {
-		T_pop_fixture();
+		T_do_pop_fixture(ctx);
 	}
 
 	T_call_destructors(ctx);
@@ -1237,15 +1239,13 @@ T_push_fixture(T_fixture_node *node, const T_fixture *fixture)
 	return context;
 }
 
-void
-T_pop_fixture(void)
+static void
+T_do_pop_fixture(T_context *ctx)
 {
-	T_context *ctx;
 	T_fixture_node *node;
 	const T_fixture *fixture;
 	T_fixture_node *next;
 
-	ctx = &T_instance;
 	node = ctx->fixtures;
 	next = node->next;
 	ctx->fixtures = next;
@@ -1272,6 +1272,12 @@ T_pop_fixture(void)
 	}
 
 	memset(node, 0, sizeof(*node));
+}
+
+void
+T_pop_fixture(void)
+{
+	T_do_pop_fixture(&T_instance);
 }
 
 size_t
