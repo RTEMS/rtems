@@ -83,6 +83,8 @@
 
 #include <rtems.h>
 
+#include <sys/param.h>
+
 #if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threaddispatch.h>
@@ -437,22 +439,19 @@ size_t rtems_cache_get_maximal_line_size( void )
 #if defined(CPU_MAXIMAL_CACHE_ALIGNMENT)
   return CPU_MAXIMAL_CACHE_ALIGNMENT;
 #endif
-  size_t max_line_size = 0;
+  size_t data_line_size =
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
-  {
-    size_t data_line_size = CPU_DATA_CACHE_ALIGNMENT;
-    if ( max_line_size < data_line_size )
-      max_line_size = data_line_size;
-  }
+    CPU_DATA_CACHE_ALIGNMENT;
+#else
+    0;
 #endif
+  size_t instruction_line_size =
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
-  {
-    size_t instruction_line_size = CPU_INSTRUCTION_CACHE_ALIGNMENT;
-    if ( max_line_size < instruction_line_size )
-      max_line_size = instruction_line_size;
-  }
+    CPU_INSTRUCTION_CACHE_ALIGNMENT;
+#else
+    0;
 #endif
-  return max_line_size;
+  return MAX( data_line_size, instruction_line_size );
 }
 
 /*
