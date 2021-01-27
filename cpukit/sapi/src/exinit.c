@@ -42,7 +42,7 @@
 #include <rtems/score/wkspace.h>
 
 RTEMS_SECTION(".rtemsroset.copyright") const char _Copyright_Notice[] =
-  "Copyright (C) 1989, 2020 RTEMS Project and contributors";
+  "Copyright (C) 1989, 2021 RTEMS Project and contributors";
 
 static Objects_Information *
 _Internal_Objects[ OBJECTS_INTERNAL_CLASSES_LAST + 1 ];
