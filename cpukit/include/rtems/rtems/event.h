@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -479,6 +479,18 @@ typedef uint32_t rtems_event_set;
  * This directive performs the same actions as the rtems_event_receive()
  * directive except that it operates with a different set of events for each
  * task.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The timeout functionality of the directive requires a clock tick.
+ * @endparblock
  */
 rtems_status_code rtems_event_system_receive(
   rtems_event_set  event_in,
@@ -495,6 +507,20 @@ rtems_status_code rtems_event_system_receive(
  * @param id is the identifier of the target task to receive the event set.
  *
  * @param event_in is the event set to send.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may unblock another task which may preempt the calling task.
+ * @endparblock
  */
 rtems_status_code rtems_event_system_send(
   rtems_id        id,
@@ -529,6 +555,18 @@ rtems_status_code rtems_event_system_send(
 
 /**
  * @brief Clears the transient event.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 static inline void rtems_event_transient_clear( void )
 {
@@ -550,6 +588,18 @@ static inline void rtems_event_transient_clear( void )
  * @param option_set is the option set.
  *
  * @param ticks is the optional timeout in clock ticks.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The timeout functionality of the directive requires a clock tick.
+ * @endparblock
  */
 static inline rtems_status_code rtems_event_transient_receive(
   rtems_option   option_set,
@@ -572,6 +622,20 @@ static inline rtems_status_code rtems_event_transient_receive(
  * @brief Sends the transient event to the task.
  *
  * @param id is the identifier of the task to receive the transient event.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may unblock another task which may preempt the calling task.
+ * @endparblock
  */
 static inline rtems_status_code rtems_event_transient_send( rtems_id id )
 {
@@ -631,6 +695,20 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  * node will generate a request telling the remote node to send the event set
  * to the appropriate task.
  * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may unblock another task which may preempt the calling task.
+ * @endparblock
  */
 rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
 
@@ -661,33 +739,38 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * To **get the pending events** use the constant #RTEMS_PENDING_EVENTS for the
  * ``event_in`` parameter.  The pending events are returned to the calling task
- * but the event set of the task is left unaltered.  The ``option_set`` and
- * ``ticks`` parameters are ignored in this case.  The directive returns
+ * but the event set of the calling task is left unaltered.  The ``option_set``
+ * and ``ticks`` parameters are ignored in this case.  The directive returns
  * immediately and does not block.
  *
  * To **receive events** you have to define an input event condition and some
- * options.  The **option set** specified in ``option_set`` defines
+ * options.
  *
- * * if the task will wait or poll for the events, and
+ * The **option set** specified in ``option_set`` is built through a *bitwise
+ * or* of the option constants described below.  Not all combinations of
+ * options are allowed.  Some options are mutually exclusive.  If mutually
+ * exclusive options are combined, the behaviour is undefined.  Options not
+ * mentioned below are not evaluated by this directive and have no effect.
+ * Default options can be selected by using the #RTEMS_DEFAULT_OPTIONS
+ * constant.  The option set defines
  *
- * * if the task wants to receive all or any of the input events.
+ * * if the calling task will wait or poll for the events, and
  *
- * The option set is built through a *bitwise or* of the option constants
- * described below.
+ * * if the calling task wants to receive all or any of the input events.
  *
- * The task can **wait** or **poll** for the events.
+ * The calling task can **wait** or **poll** for the events.
  *
  * * **Waiting** for events is the default and can be emphasized through the
  *   use of the #RTEMS_WAIT option.  The ``ticks`` parameter defines how long
- *   the task is willing to wait.  Use #RTEMS_NO_TIMEOUT to wait potentially
- *   forever, otherwise set a timeout interval in clock ticks.
+ *   the calling task is willing to wait.  Use #RTEMS_NO_TIMEOUT to wait
+ *   potentially forever, otherwise set a timeout interval in clock ticks.
  *
  * * Not waiting for events (**polling**) is selected by the #RTEMS_NO_WAIT
  *   option.  If this option is defined, then the ``ticks`` parameter is
  *   ignored.
  *
- * The task can receive **all** or **any** of the input events specified in
- * ``event_in``.
+ * The calling task can receive **all** or **any** of the input events
+ * specified in ``event_in``.
  *
  * * Receiving **all** input events is the default and can be emphasized
  *   through the use of the #RTEMS_EVENT_ALL option.
@@ -707,9 +790,6 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  *
  * @par Notes
  * @parblock
- * This directive shall be called by a task.  Calling this directive from
- * interrupt context is undefined behaviour.
- *
  * This directive only affects the events specified in ``event_in``. Any
  * pending events that do not correspond to any of the events specified in
  * ``event_in`` will be left pending.
@@ -724,6 +804,18 @@ rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
  * ``option_set`` parameter.  The pending events are returned and the event set
  * of the task is cleared.  If no events are pending then the
  * ::RTEMS_UNSATISFIED status code will be returned.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The timeout functionality of the directive requires a clock tick.
  * @endparblock
  */
 rtems_status_code rtems_event_receive(
