@@ -79,6 +79,14 @@ rtems_status_code rtems_task_construct(
   return _RTEMS_tasks_Create( config, id, _RTEMS_tasks_Prepare_user_stack );
 }
 
+static void _RTEMS_tasks_Free( Thread_Control *the_thread )
+{
+  Thread_Information *information;
+
+  information = _Thread_Get_objects_information( the_thread );
+  _Objects_Free( &information->Objects, &the_thread->Object );
+}
+
 rtems_status_code _RTEMS_tasks_Create(
   const rtems_task_config   *config,
   rtems_id                  *id,

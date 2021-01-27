@@ -67,22 +67,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_RTEMS_tasks_Allocate(void)
 }
 
 /**
- *  @brief Frees a task control block.
- *
- *  This routine frees a task control block to the
- *  inactive chain of free task control blocks.
- */
-RTEMS_INLINE_ROUTINE void _RTEMS_tasks_Free (
-  Thread_Control *the_task
-)
-{
-  _Objects_Free(
-    _Objects_Get_information_id( the_task->Object.id ),
-    &the_task->Object
-  );
-}
-
-/**
  * @brief Converts the RTEMS API priority to the corresponding SuperCore
  * priority and validates it.
  *

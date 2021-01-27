@@ -130,16 +130,16 @@ static void _Thread_Add_to_zombie_chain( Thread_Control *the_thread )
 
 static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
+  Thread_Information *information;
+
 #if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   if ( _Thread_Owns_resources( the_thread ) ) {
     _Internal_error( INTERNAL_ERROR_RESOURCE_IN_USE );
   }
 #endif
 
-  _Objects_Close(
-    _Objects_Get_information_id( the_thread->Object.id ),
-    &the_thread->Object
-  );
+  information = _Thread_Get_objects_information( the_thread );
+  _Objects_Close( &information->Objects, &the_thread->Object );
 
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
@@ -157,8 +157,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 
 static void _Thread_Free( Thread_Control *the_thread )
 {
-  Thread_Information *information = (Thread_Information *)
-    _Objects_Get_information_id( the_thread->Object.id );
+  Thread_Information *information;
 
   _User_extensions_Thread_delete( the_thread );
   _User_extensions_Destroy_iterators( the_thread );
@@ -179,6 +178,7 @@ static void _Thread_Free( Thread_Control *the_thread )
 #endif
 #endif
 
+  information = _Thread_Get_objects_information( the_thread );
   _Freechain_Push(
     &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads

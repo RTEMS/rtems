@@ -847,6 +847,30 @@ RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information_by_id(
 }
 
 /**
+ * @brief Gets the thread object information of the thread.
+ *
+ * @param the_thread is the thread to get the thread object information.
+ *
+ * @return Returns the thread object information of the thread.
+ */
+RTEMS_INLINE_ROUTINE Thread_Information *_Thread_Get_objects_information(
+  Thread_Control *the_thread
+)
+{
+  size_t              the_api;
+  Thread_Information *information;
+
+  the_api = (size_t) _Objects_Get_API( the_thread->Object.id );
+  _Assert( _Objects_Is_api_valid( the_api ) );
+
+  information = (Thread_Information *)
+    _Objects_Information_table[ the_api ][ 1 ];
+  _Assert( information != NULL );
+
+  return information;
+}
+
+/**
  * @brief Gets a thread by its identifier.
  *
  * @see _Objects_Get().
