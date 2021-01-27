@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -192,9 +192,9 @@ typedef struct {
  *
  * @param id is the timer identifier.
  *
- * @param[out] the_info is the pointer to a timer information variable.  The
- *   information about the timer will be stored in this variable, in case of a
- *   successful operation.
+ * @param[out] the_info is the pointer to a timer information variable.  When
+ *   the directive call is successful, the information about the timer will be
+ *   stored in this variable.
  *
  * This directive returns information about the timer.
  *
@@ -205,8 +205,19 @@ typedef struct {
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by ``id``.
  *
- * @par Notes
- * This directive will not cause the running task to be preempted.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_timer_get_information(
   rtems_id                 id,
@@ -255,37 +266,54 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )( rtem
  *
  * @brief Creates a timer.
  *
- * @param name is the name of the timer.
+ * @param name is the object name of the timer.
  *
- * @param[out] id is the pointer to an object identifier variable.  The
- *   identifier of the created timer object will be stored in this variable, in
- *   case of a successful operation.
+ * @param[out] id is the pointer to an object identifier variable.  When the
+ *   directive call is successful, the identifier of the created timer will be
+ *   stored in this variable.
  *
- * This directive creates a timer.  The assigned object identifier is returned
- * in ``id``.  This identifier is used to access the timer with other timer
- * related directives.
+ * This directive creates a timer which resides on the local node.  The timer
+ * has the user-defined object name specified in ``name``.  The assigned object
+ * identifier is returned in ``id``.  This identifier is used to access the
+ * timer with other timer related directives.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval ::RTEMS_INVALID_NAME The timer name was invalid.
+ * @retval ::RTEMS_INVALID_NAME The ``name`` parameter was invalid.
  *
  * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
  *
  * @retval ::RTEMS_TOO_MANY There was no inactive object available to create a
- *   new timer.  The number of timers available to the application is
- *   configured through the #CONFIGURE_MAXIMUM_TIMERS configuration option.
+ *   timer.  The number of timers available to the application is configured
+ *   through the #CONFIGURE_MAXIMUM_TIMERS application configuration option.
  *
  * @par Notes
  * @parblock
- * This directive may cause the calling task to be preempted due to an obtain
- * and release of the object allocator mutex.
+ * The processor used to maintain the timer is the processor of the calling
+ * task at some point during the timer creation.
  *
  * For control and maintenance of the timer, RTEMS allocates a TMCB from the
  * local TMCB free pool and initializes it.
+ * @endparblock
  *
- * In SMP configurations, the processor of the currently executing thread
- * determines the processor used for the created timer.  During the life-time
- * of the timer this processor is used to manage the timer internally.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The number of timers available to the application is configured through
+ *   the #CONFIGURE_MAXIMUM_TIMERS application configuration option.
+ *
+ * * Where the object class corresponding to the directive is configured to use
+ *   unlimited objects, the directive may allocate memory from the RTEMS
+ *   Workspace.
  * @endparblock
  */
 rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
@@ -299,11 +327,11 @@ rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  The object
- *   identifier of an object with the specified name will be stored in this
- *   variable, in case of a successful operation.
+ * @param[out] id is the pointer to an object identifier variable.  When the
+ *   directive call is successful, the object identifier of an object with the
+ *   specified name will be stored in this variable.
  *
- * This directive obtains the timer identifier associated with the timer name
+ * This directive obtains a timer identifier associated with the timer name
  * specified in ``name``.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
@@ -319,11 +347,22 @@ rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
  * @parblock
  * If the timer name is not unique, then the timer identifier will match the
  * first timer with that name in the search order.  However, this timer
- * identifier is not guaranteed to correspond to the desired timer.  The timer
- * identifier is used with other timer related directives to access the timer.
+ * identifier is not guaranteed to correspond to the desired timer.
  *
  * The objects are searched from lowest to the highest index.  Only the local
  * node is searched.
+ *
+ * The timer identifier is used with other timer related directives to access
+ * the timer.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
@@ -337,8 +376,8 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  *
  * @param id is the timer identifier.
  *
- * This directive cancels the timer specified in the ``id`` parameter.  This
- * timer will be reinitiated by the next invocation of rtems_timer_reset(),
+ * This directive cancels the timer specified by ``id``.  This timer will be
+ * reinitiated by the next invocation of rtems_timer_reset(),
  * rtems_timer_fire_after(), or rtems_timer_fire_when() with the same timer
  * identifier.
  *
@@ -347,8 +386,19 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by ``id``.
  *
- * @par Notes
- * This directive will not cause the running task to be preempted.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_timer_cancel( rtems_id id );
 
@@ -361,8 +411,8 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  *
  * @param id is the timer identifier.
  *
- * This directive deletes the timer specified by the ``id`` parameter.  If the
- * timer is running, it is automatically canceled.
+ * This directive deletes the timer specified by ``id``.  If the timer is
+ * running, it is automatically canceled.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -370,14 +420,25 @@ rtems_status_code rtems_timer_cancel( rtems_id id );
  *   specified by ``id``.
  *
  * @par Notes
- * @parblock
- * This directive may cause the calling task to be preempted due to an obtain
- * and release of the object allocator mutex.
- *
  * The TMCB for the deleted timer is reclaimed by RTEMS.
  *
- * A timer can be deleted by a task other than the task which created the
- * timer.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The calling task does not have to be the task that created the object.
+ *   Any local task that knows the object identifier can delete the object.
+ *
+ * * Where the object class corresponding to the directive is configured to use
+ *   unlimited objects, the directive may free memory to the RTEMS Workspace.
  * @endparblock
  */
 rtems_status_code rtems_timer_delete( rtems_id id );
@@ -413,8 +474,19 @@ rtems_status_code rtems_timer_delete( rtems_id id );
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by ``id``.
  *
- * @par Notes
- * This directive will not cause the running task to be preempted.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_timer_fire_after(
   rtems_id                          id,
@@ -457,8 +529,19 @@ rtems_status_code rtems_timer_fire_after(
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by ``id``.
  *
- * @par Notes
- * This directive will not cause the running task to be preempted.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_timer_fire_when(
   rtems_id                          id,
@@ -501,12 +584,27 @@ rtems_status_code rtems_timer_fire_when(
  *   create the Timer Server task.
  *
  * @par Notes
- * @parblock
- * This directive may cause the calling task to be preempted due to an obtain
- * and release of the object allocator mutex.
- *
  * The Timer Server task is created using the rtems_task_create() directive and
  * must be accounted for when configuring the system.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The number of timers available to the application is configured through
+ *   the #CONFIGURE_MAXIMUM_TIMERS application configuration option.
+ *
+ * * Where the object class corresponding to the directive is configured to use
+ *   unlimited objects, the directive may allocate memory from the RTEMS
+ *   Workspace.
  * @endparblock
  */
 rtems_status_code rtems_timer_initiate_server(
@@ -548,8 +646,19 @@ rtems_status_code rtems_timer_initiate_server(
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by ``id``.
  *
- * @par Notes
- * This directive will not cause the running task to be preempted.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_timer_server_fire_after(
   rtems_id                          id,
@@ -594,8 +703,19 @@ rtems_status_code rtems_timer_server_fire_after(
  * @retval ::RTEMS_INVALID_ID There was no timer associated with the identifier
  *   specified by ``id``.
  *
- * @par Notes
- * This directive will not cause the running task to be preempted.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_timer_server_fire_when(
   rtems_id                          id,
@@ -629,14 +749,26 @@ rtems_status_code rtems_timer_server_fire_when(
  *
  * @par Notes
  * @parblock
- * This directive will not cause the running task to be preempted.
- *
  * If the timer has not been used or the last usage of this timer was by a
  * rtems_timer_fire_when() or rtems_timer_server_fire_when() directive, then
  * the ::RTEMS_NOT_DEFINED error is returned.
  *
  * Restarting a cancelled after timer results in the timer being reinitiated
  * with its previous timer service routine and interval.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_timer_reset( rtems_id id );
