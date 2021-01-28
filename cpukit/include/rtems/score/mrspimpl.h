@@ -367,9 +367,8 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   if ( status == STATUS_SUCCESSFUL ) {
     _MRSP_Replace_priority( mrsp, executing, &ceiling_priority );
   } else {
-    Thread_queue_Context  queue_context;
-    Per_CPU_Control      *cpu_self;
-    int                   sticky_level_change;
+    Per_CPU_Control *cpu_self;
+    int              sticky_level_change;
 
     if ( status != STATUS_DEADLOCK ) {
       sticky_level_change = -1;
@@ -377,12 +376,12 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
       sticky_level_change = 0;
     }
 
-    _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
-    _MRSP_Remove_priority( executing, &ceiling_priority, &queue_context );
+    _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
+    _MRSP_Remove_priority( executing, &ceiling_priority, queue_context );
     cpu_self = _Thread_Dispatch_disable_critical(
-      &queue_context.Lock_context.Lock_context
+      &queue_context->Lock_context.Lock_context
     );
-    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
     _Thread_Priority_and_sticky_update( executing, sticky_level_change );
     _Thread_Dispatch_enable( cpu_self );
   }
