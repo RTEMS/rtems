@@ -19,18 +19,44 @@
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
+#include <rtems/score/thread.h>
 #include <grlib/apbuart.h>
 
 int leon3_debug_uart_index __attribute__((weak)) = 0;
 struct apbuart_regs *leon3_debug_uart = NULL;
 
-/* Before UART driver has registered (or when no UART is available), calls to
- * printk that gets to bsp_out_char() will be filling data into the
- * pre_printk_dbgbuf[] buffer, hopefully the buffer can help debugging the
- * early BSP boot.. At least the last printk() will be caught.
+/*
+ * Before UART driver is available, use the idle stack to buffer early uses of
+ * printk().
  */
-static char pre_printk_dbgbuf[32] = {0};
-static int pre_printk_pos = 0;
+static size_t bsp_debug_uart_pre_init_buf_index;
+
+static void bsp_debug_uart_pre_init_out(char c)
+{
+  size_t i;
+
+  i = bsp_debug_uart_pre_init_buf_index;
+
+  if (i < _Thread_Idle_stack_size) {
+    bsp_debug_uart_pre_init_buf_index = i + 1;
+    _Thread_Idle_stacks[i] = c;
+  }
+}
+
+static void bsp_debug_uart_discard(char c)
+{
+  (void) c;
+}
+
+static void bsp_debug_uart_output_char(char c)
+{
+  apbuart_outbyte_polled(leon3_debug_uart, c, 1, 1);
+}
+
+static int bsp_debug_uart_poll_char(void)
+{
+  return apbuart_inbyte_nonblocking(leon3_debug_uart);
+}
 
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
@@ -62,14 +88,29 @@ static void bsp_debug_uart_init(void)
   adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_APBUART,
                                  ambapp_find_by_idx, (void *)&i);
-  if (adev) {
-    /* Found a matching debug console, initialize debug uart if present
-     * for printk
+  if (adev != NULL) {
+    size_t i;
+    size_t n;
+
+    /*
+     * Found a matching debug console, initialize debug UART if present for
+     * printk().
      */
     apb = (struct ambapp_apb_info *)adev->devinfo;
     leon3_debug_uart = (struct apbuart_regs *)apb->start;
     leon3_debug_uart->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
     leon3_debug_uart->status = 0;
+
+    BSP_poll_char = bsp_debug_uart_poll_char;
+    BSP_output_char = bsp_debug_uart_output_char;
+
+    n = bsp_debug_uart_pre_init_buf_index;
+
+    for (i = 0; i < n; ++i) {
+      rtems_putc(_Thread_Idle_stacks[i]);
+    }
+  } else {
+    BSP_output_char = bsp_debug_uart_discard;
   }
 }
 
@@ -79,35 +120,6 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_FOURTH
 );
 
-/* putchar/getchar for printk */
-static void bsp_out_char(char c)
-{
-  if (leon3_debug_uart == NULL) {
-    /* Local debug buffer when UART driver has not registered */
-    pre_printk_dbgbuf[pre_printk_pos++] = c;
-    pre_printk_pos = pre_printk_pos & (sizeof(pre_printk_dbgbuf)-1);
-    return;
-  }
+BSP_output_char_function_type BSP_output_char = bsp_debug_uart_pre_init_out;
 
-  apbuart_outbyte_polled(leon3_debug_uart, c, 1, 1);
-}
-
-/*
- *  To support printk
- */
-
-BSP_output_char_function_type BSP_output_char = bsp_out_char;
-
-static int bsp_in_char(void)
-{
-  int tmp;
-
-  if (leon3_debug_uart == NULL)
-    return -1;
-
-  while ((tmp = apbuart_inbyte_nonblocking(leon3_debug_uart)) < 0)
-    ;
-  return tmp;
-}
-
-BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;
+BSP_polling_getchar_function_type BSP_poll_char;
