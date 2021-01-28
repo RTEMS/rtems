@@ -35,11 +35,11 @@
  */
 static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
-  return (rtems_vector_number) BSP_INTERRUPT_VECTOR_MIN <= vector
-    && ((vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX_STD &&
-        LEON3_IrqCtrl_EIrq == 0) ||
-       (vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX_EXT &&
-        LEON3_IrqCtrl_EIrq != 0));
+  if (LEON3_IrqCtrl_EIrq != 0) {
+    return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
+  } else {
+    return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
+  }
 }
 
 void bsp_interrupt_set_affinity(
