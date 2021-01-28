@@ -331,7 +331,7 @@ RTEMS_INLINE_ROUTINE const Processor_mask *_SMP_Get_online_processors( void )
  * @return True if inter-processor interrupts are needed for the correct system
  * operation, otherwise false.
  */
-RTEMS_INLINE_ROUTINE const bool _SMP_Need_inter_processor_interrupts( void )
+RTEMS_INLINE_ROUTINE bool _SMP_Need_inter_processor_interrupts( void )
 {
   /*
    * Use the configured processor maximum instead of the actual to allow
