@@ -692,13 +692,12 @@ void _Scheduler_EDF_SMP_Pin(
 
   (void) scheduler;
   node = _Scheduler_EDF_SMP_Node_downcast( node_base );
-  rqi = (uint8_t) _Per_CPU_Get_index( cpu ) + 1;
 
   _Assert(
     _Scheduler_SMP_Node_state( &node->Base.Base ) == SCHEDULER_SMP_NODE_BLOCKED
   );
 
-  node = _Scheduler_EDF_SMP_Node_downcast( node_base );
+  rqi = (uint8_t) _Per_CPU_Get_index( cpu ) + 1;
   node->ready_queue_index = rqi;
   node->pinning_ready_queue_index = rqi;
 }
