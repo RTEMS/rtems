@@ -80,7 +80,7 @@ RTEMS_INLINE_ROUTINE Semaphore_Variant _Semaphore_Get_variant(
   uintptr_t flags
 )
 {
-  return (Semaphore_Discipline) ( flags & 0x7 );
+  return (Semaphore_Variant) ( flags & 0x7 );
 }
 
 RTEMS_INLINE_ROUTINE uintptr_t _Semaphore_Set_variant(
