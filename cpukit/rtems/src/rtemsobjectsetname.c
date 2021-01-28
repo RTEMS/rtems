@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/rtems/object.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/objectimpl.h>
 
@@ -58,5 +59,5 @@ rtems_status_code rtems_object_set_name(
 
   status = _Objects_Set_name( information, the_object, name );
   _Objects_Allocator_unlock();
-  return STATUS_GET_CLASSIC( status );
+  return _Status_Get( status );
 }

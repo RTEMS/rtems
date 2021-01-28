@@ -22,6 +22,7 @@
 
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/sysinit.h>
@@ -154,7 +155,7 @@ rtems_status_code _Message_queue_Create(
 
     _Message_queue_Free( the_message_queue );
     _Objects_Allocator_unlock();
-    return STATUS_GET_CLASSIC( status );
+    return _Status_Get( status );
   }
 
   _Objects_Open(

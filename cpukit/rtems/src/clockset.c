@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/rtems/clockimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/config.h>
 
@@ -46,7 +47,7 @@ rtems_status_code rtems_clock_set(
     status = _TOD_Set( &tod_as_timespec, &lock_context );
     _TOD_Unlock();
 
-    return STATUS_GET_CLASSIC( status );
+    return _Status_Get( status );
   }
 
   return RTEMS_INVALID_CLOCK;
