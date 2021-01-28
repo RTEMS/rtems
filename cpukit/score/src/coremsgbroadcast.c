@@ -31,8 +31,7 @@ Status_Control _CORE_message_queue_Broadcast(
   Thread_queue_Context       *queue_context
 )
 {
-  Thread_Control             *the_thread;
-  uint32_t                    number_broadcasted;
+  uint32_t number_broadcasted;
 
   if ( size > the_message_queue->maximum_message_size ) {
     _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
@@ -44,15 +43,13 @@ Status_Control _CORE_message_queue_Broadcast(
   _CORE_message_queue_Acquire_critical( the_message_queue, queue_context );
 
   while (
-    ( the_thread =
-      _CORE_message_queue_Dequeue_receiver(
-        the_message_queue,
-        buffer,
-        size,
-        0,
-        queue_context
-      )
-    )
+    _CORE_message_queue_Dequeue_receiver(
+      the_message_queue,
+      buffer,
+      size,
+      0,
+      queue_context
+    ) != NULL
   ) {
     number_broadcasted += 1;
 
