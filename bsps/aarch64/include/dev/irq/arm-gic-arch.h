@@ -38,6 +38,7 @@
 #define _RTEMS_DEV_IRQ_ARM_GIC_AARCH64_H
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/cpu_irq.h>
 
 #include <bsp/irq-generic.h>
 
