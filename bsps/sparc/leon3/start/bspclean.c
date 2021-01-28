@@ -21,7 +21,6 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
-#include <rtems/bspIo.h>
 #include <rtems/score/smpimpl.h>
 
 void bsp_fatal_extension(
@@ -30,12 +29,13 @@ void bsp_fatal_extension(
   rtems_fatal_code code
 )
 {
-  /* On SMP we must wait for all other CPUs not requesting a fatal halt, they
+#if defined(RTEMS_SMP)
+  /*
+   * On SMP we must wait for all other CPUs not requesting a fatal halt, they
    * are responding to another CPU's fatal request. These CPUs goes into
    * power-down. The CPU requesting fatal halt waits for the others and then
    * handles the system shutdown via the normal procedure.
    */
-  #ifdef RTEMS_SMP
   if ((source == RTEMS_FATAL_SOURCE_SMP) &&
       (code == SMP_FATAL_SHUTDOWN_RESPONSE)) {
     leon3_power_down_loop(); /* CPU didn't start shutdown sequence .. */
@@ -66,18 +66,16 @@ void bsp_fatal_extension(
       }
     }
   }
-  #endif
+#endif
 
-  #if (BSP_PRINT_EXCEPTION_CONTEXT)
-    if ( source == RTEMS_FATAL_SOURCE_EXCEPTION ) {
-      rtems_exception_frame_print( (const rtems_exception_frame *) code );
-    }
-  #endif
+#if BSP_PRINT_EXCEPTION_CONTEXT
+  if ( source == RTEMS_FATAL_SOURCE_EXCEPTION ) {
+    rtems_exception_frame_print( (const rtems_exception_frame *) code );
+  }
+#endif
 
-  /*
-   *  If user wants to implement custom reset/reboot it can be done here
-   */
-  #if (BSP_RESET_BOARD_AT_EXIT)
-    bsp_reset();
-  #endif
+#if BSP_RESET_BOARD_AT_EXIT
+  /* If user wants to implement custom reset/reboot it can be done here */
+  bsp_reset();
+#endif
 }
