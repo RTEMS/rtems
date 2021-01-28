@@ -98,12 +98,6 @@ ISR_LOCK_DEFINE(, _Timecounter_Lock, "Timecounter")
 #define printf(...)
 #define bcopy(x, y, z) memcpy(y, x, z);
 #define log(...)
-static inline int
-builtin_fls(int x)
-{
-        return x ? sizeof(x) * 8 - __builtin_clz(x) : 0;
-}
-#define fls(x) builtin_fls(x)
 /* FIXME: https://devel.rtems.org/ticket/2348 */
 #define ntp_update_second(a, b) do { (void) a; (void) b; } while (0)
 
