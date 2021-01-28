@@ -148,7 +148,7 @@ RTEMS_INLINE_ROUTINE Watchdog_State _Watchdog_Get_state(
   const Watchdog_Control *the_watchdog
 )
 {
-  return RB_COLOR( &the_watchdog->Node.RBTree, Node );
+  return (Watchdog_State) RB_COLOR( &the_watchdog->Node.RBTree, Node );
 }
 
 /**
