@@ -137,7 +137,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Watchdog_index _Timer_Watchdog_header_index(
   Timer_Classes the_class
 )
 {
-  return ( the_class & TIMER_CLASS_BIT_TIME_OF_DAY );
+  return (Per_CPU_Watchdog_index) ( the_class & TIMER_CLASS_BIT_TIME_OF_DAY );
 }
 
 RTEMS_INLINE_ROUTINE Watchdog_Interval _Timer_Get_CPU_ticks(
