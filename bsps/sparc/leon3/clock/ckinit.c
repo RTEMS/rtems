@@ -130,10 +130,10 @@ static void leon3_tc_do_tick(void)
     } \
   } while (0)
 
-#define Clock_driver_support_install_isr( _new ) \
-  bsp_clock_handler_install(_new)
+#define Clock_driver_support_install_isr(isr) \
+  bsp_clock_handler_install(isr)
 
-static void bsp_clock_handler_install(rtems_isr *new)
+static void bsp_clock_handler_install(rtems_interrupt_handler isr)
 {
   rtems_status_code sc;
 
@@ -141,7 +141,7 @@ static void bsp_clock_handler_install(rtems_isr *new)
     clkirq,
     "Clock",
     RTEMS_INTERRUPT_UNIQUE,
-    new,
+    isr,
     NULL
   );
   if (sc != RTEMS_SUCCESSFUL) {
@@ -233,6 +233,8 @@ static void leon3_clock_initialize(void)
   leon3_clock_initialize()
 
 #define Clock_driver_timecounter_tick() leon3_tc_do_tick()
+
+#define BSP_FEATURE_IRQ_EXTENSION
 
 #include "../../../shared/dev/clock/clockimpl.h"
 
