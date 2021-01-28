@@ -86,6 +86,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
         status == STATUS_SUCCESSFUL
           || status == STATUS_MAXIMUM_COUNT_EXCEEDED
       );
+      (void) status;
       status = STATUS_SUCCESSFUL;
       break;
 #if defined(RTEMS_SMP)
