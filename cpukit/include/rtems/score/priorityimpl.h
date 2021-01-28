@@ -613,7 +613,9 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract(
   } else {
     Priority_Node *min;
 
+    /* The aggregation is non-empty, so the minimum node exists. */
     min = _Priority_Get_minimum_node( aggregation );
+    _Assert( min != NULL );
 
     if ( node->priority < min->priority ) {
       aggregation->Node.priority = min->priority;
@@ -684,7 +686,12 @@ RTEMS_INLINE_ROUTINE void _Priority_Changed(
 
   _Priority_Plain_changed( aggregation, node );
 
+  /*
+   * There is at least the changed node in the aggregation, so the minimum node
+   * exists.
+   */
   min = _Priority_Get_minimum_node( aggregation );
+  _Assert( min != NULL );
 
   if ( min->priority != aggregation->Node.priority ) {
     aggregation->Node.priority = min->priority;
