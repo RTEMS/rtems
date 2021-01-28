@@ -1,9 +1,0 @@
-%rename endfile old_endfile
-%rename startfile old_startfile
-
-*startfile:
-%{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: crtbegin.o%s}}
-
-*endfile:
-%{!qrtems: %(old_endfile)} %{!nostdlib: %{qrtems: crtend.o%s}}

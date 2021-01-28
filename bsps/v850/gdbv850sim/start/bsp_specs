@@ -1,5 +1,0 @@
-%rename startfile old_startfile
-
-*startfile:
-%{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: }}

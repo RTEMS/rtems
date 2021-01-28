@@ -1,9 +1,0 @@
-%rename endfile old_endfile
-%rename startfile old_startfile
-
-*startfile:
-%{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: ecrti%O%s rtems_crti%O%s crtbegin.o%s -u __vectors}}
-
-*endfile:
-%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
