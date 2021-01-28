@@ -99,49 +99,49 @@ Status_Control _CORE_message_queue_Submit(
     return STATUS_SUCCESSFUL;
   }
 
-  #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
+#if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
+  _CORE_message_queue_Release( the_message_queue, queue_context );
+  return STATUS_TOO_MANY;
+#else
+  /*
+   *  No message buffers were available so we may need to return an
+   *  overflow error or block the sender until the message is placed
+   *  on the queue.
+   */
+  if ( !wait ) {
     _CORE_message_queue_Release( the_message_queue, queue_context );
     return STATUS_TOO_MANY;
-  #else
-    /*
-     *  No message buffers were available so we may need to return an
-     *  overflow error or block the sender until the message is placed
-     *  on the queue.
-     */
-    if ( !wait ) {
-      _CORE_message_queue_Release( the_message_queue, queue_context );
-      return STATUS_TOO_MANY;
-    }
+  }
 
-    /*
-     *  Do NOT block on a send if the caller is in an ISR.  It is
-     *  deadly to block in an ISR.
-     */
-    if ( _ISR_Is_in_progress() ) {
-      _CORE_message_queue_Release( the_message_queue, queue_context );
-      return STATUS_MESSAGE_QUEUE_WAIT_IN_ISR;
-    }
+  /*
+   *  Do NOT block on a send if the caller is in an ISR.  It is
+   *  deadly to block in an ISR.
+   */
+  if ( _ISR_Is_in_progress() ) {
+    _CORE_message_queue_Release( the_message_queue, queue_context );
+    return STATUS_MESSAGE_QUEUE_WAIT_IN_ISR;
+  }
 
-    /*
-     *  WARNING!! executing should NOT be used prior to this point.
-     *  Thus the unusual choice to open a new scope and declare
-     *  it as a variable.  Doing this emphasizes how dangerous it
-     *  would be to use this variable prior to here.
-     */
-    executing->Wait.return_argument_second.immutable_object = buffer;
-    executing->Wait.option = (uint32_t) size;
-    executing->Wait.count = submit_type;
+  /*
+   *  WARNING!! executing should NOT be used prior to this point.
+   *  Thus the unusual choice to open a new scope and declare
+   *  it as a variable.  Doing this emphasizes how dangerous it
+   *  would be to use this variable prior to here.
+   */
+  executing->Wait.return_argument_second.immutable_object = buffer;
+  executing->Wait.option = (uint32_t) size;
+  executing->Wait.count = submit_type;
 
-    _Thread_queue_Context_set_thread_state(
-      queue_context,
-      STATES_WAITING_FOR_MESSAGE
-    );
-    _Thread_queue_Enqueue(
-      &the_message_queue->Wait_queue.Queue,
-      the_message_queue->operations,
-      executing,
-      queue_context
-    );
-    return _Thread_Wait_get_status( executing );
-  #endif
+  _Thread_queue_Context_set_thread_state(
+    queue_context,
+    STATES_WAITING_FOR_MESSAGE
+  );
+  _Thread_queue_Enqueue(
+    &the_message_queue->Wait_queue.Queue,
+    the_message_queue->operations,
+    executing,
+    queue_context
+  );
+  return _Thread_Wait_get_status( executing );
+#endif
 }
