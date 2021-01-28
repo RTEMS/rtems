@@ -44,6 +44,9 @@ uint16_t rtems_jffs2_compressor_rtime_compress(
 
 	(void) self;
 
+	if (*dstlen <= 3)
+		return -1;
+
 	memset(positions,0,sizeof(positions));
 
 	while (pos < (*sourcelen) && outpos <= (*dstlen)-2) {
