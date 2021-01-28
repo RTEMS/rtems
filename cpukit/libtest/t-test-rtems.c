@@ -40,8 +40,8 @@ T_putchar_default(int c, void *arg)
 void
 T_check_rsc(const T_check_context *t, uint32_t a, uint32_t e)
 {
-	T_check(t, a == e, "%s == %s", rtems_status_text(a),
-	    rtems_status_text(e));
+	T_check(t, a == e, "%s == %s", rtems_status_text((rtems_status_code)a),
+	    rtems_status_text((rtems_status_code)e));
 }
 
 void

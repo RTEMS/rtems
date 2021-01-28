@@ -252,7 +252,7 @@ T_interrupt_test_change_state(T_interrupt_test_state expected_state,
 	_Atomic_Compare_exchange_uint(&ctx->state, &expected,
 	    desired_state, ATOMIC_ORDER_RELAXED, ATOMIC_ORDER_RELAXED);
 
-	return expected;
+	return (T_interrupt_test_state)expected;
 }
 
 T_interrupt_test_state
@@ -261,7 +261,8 @@ T_interrupt_test_get_state(void)
 	T_interrupt_context *ctx;
 
 	ctx = &T_interrupt_instance;
-	return _Atomic_Load_uint(&ctx->state, ATOMIC_ORDER_RELAXED);
+	return (T_interrupt_test_state)_Atomic_Load_uint(&ctx->state,
+	    ATOMIC_ORDER_RELAXED);
 }
 
 void
@@ -288,7 +289,8 @@ T_interrupt_thread_switch(Thread_Control *executing, Thread_Control *heir)
 	if (ctx->self == executing) {
 		T_interrupt_test_state state;
 
-		state = _Atomic_Load_uint(&ctx->state, ATOMIC_ORDER_RELAXED);
+		state = (T_interrupt_test_state)_Atomic_Load_uint(&ctx->state,
+		    ATOMIC_ORDER_RELAXED);
 
 		if (state != T_INTERRUPT_TEST_INITIAL) {
 #ifdef RTEMS_SMP
@@ -433,7 +435,8 @@ T_interrupt_test(const T_interrupt_test_config *config, void *arg)
 		T_busy(busy);
 		(*config->action)(arg);
 
-		state = _Atomic_Exchange_uint(&ctx->state,
+		state = (T_interrupt_test_state)
+		    _Atomic_Exchange_uint(&ctx->state,
 		    T_INTERRUPT_TEST_INITIAL, ATOMIC_ORDER_RELAXED);
 
 		if (state == T_INTERRUPT_TEST_DONE) {
