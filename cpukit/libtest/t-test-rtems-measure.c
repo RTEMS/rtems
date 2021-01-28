@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2018 embedded brains GmbH
+ * Copyright (C) 2018, 2021 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include <rtems.h>
+#include <rtems/score/assert.h>
 
 #define WAKEUP_EVENT RTEMS_EVENT_0
 
@@ -78,27 +79,42 @@ static void
 wait_for_worker(void)
 {
 	rtems_event_set events;
+	rtems_status_code sc;
 
-	(void)rtems_event_receive(WAKEUP_EVENT, RTEMS_EVENT_ALL | RTEMS_WAIT,
+	sc = rtems_event_receive(WAKEUP_EVENT, RTEMS_EVENT_ALL | RTEMS_WAIT,
 	    RTEMS_NO_TIMEOUT, &events);
+	_Assert(sc == RTEMS_SUCCESSFUL);
+	(void)sc;
 }
 
 static void
 wakeup_master(const T_measure_runtime_context *ctx)
 {
-	(void)rtems_event_send(ctx->runner, WAKEUP_EVENT);
+	rtems_status_code sc;
+
+	sc = rtems_event_send(ctx->runner, WAKEUP_EVENT);
+	_Assert(sc == RTEMS_SUCCESSFUL);
+	(void)sc;
 }
 
 static void
 suspend_worker(const load_context *lctx)
 {
-	(void)rtems_task_suspend(lctx->id);
+	rtems_status_code sc;
+
+	sc = rtems_task_suspend(lctx->id);
+	_Assert(sc == RTEMS_SUCCESSFUL);
+	(void)sc;
 }
 
 static void
 restart_worker(const load_context *lctx)
 {
-	(void)rtems_task_restart(lctx->id, (rtems_task_argument)lctx);
+	rtems_status_code sc;
+
+	sc = rtems_task_restart(lctx->id, (rtems_task_argument)lctx);
+	_Assert(sc == RTEMS_SUCCESSFUL);
+	(void)sc;
 	wait_for_worker();
 }
 
@@ -133,6 +149,7 @@ destroy(void *ptr)
 {
 	const T_measure_runtime_context *ctx;
 	uint32_t load;
+	rtems_status_code sc;
 
 	ctx = ptr;
 
@@ -143,13 +160,17 @@ destroy(void *ptr)
 
 
 		if (lctx->id != 0) {
-			(void)rtems_task_delete(lctx->id);
+			sc = rtems_task_delete(lctx->id);
+			_Assert(sc == RTEMS_SUCCESSFUL);
+			(void)sc;
 		}
 	}
 
 #ifdef RTEMS_SMP
-	(void)rtems_task_set_affinity(RTEMS_SELF, sizeof(ctx->cpus),
+	sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(ctx->cpus),
 	    &ctx->cpus);
+	_Assert(sc == RTEMS_SUCCESSFUL);
+	(void)sc;
 #endif
 }
 
@@ -175,6 +196,7 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 	size_t load_size;
 	uint32_t load_count;
 	uint32_t i;
+	rtems_status_code sc;
 #ifdef RTEMS_SMP
 	cpu_set_t cpu;
 #endif
@@ -206,11 +228,15 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 	}
 
 #ifdef RTEMS_SMP
-	(void)rtems_task_get_affinity(RTEMS_SELF, sizeof(ctx->cpus),
+	sc = rtems_task_get_affinity(RTEMS_SELF, sizeof(ctx->cpus),
 	    &ctx->cpus);
+	_Assert(sc == RTEMS_SUCCESSFUL);
+	(void)sc;
 	CPU_ZERO(&cpu);
 	CPU_SET(0, &cpu);
-	(void)rtems_task_set_affinity(RTEMS_SELF, sizeof(cpu), &cpu);
+	sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpu), &cpu);
+	_Assert(sc == RTEMS_SUCCESSFUL || sc == RTEMS_INVALID_NUMBER);
+	(void)sc;
 #endif
 
 	ctx->sample_count = config->sample_count;
@@ -253,17 +279,25 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 			lctx->chunk = ctx->chunk;
 		}
 
-		(void)rtems_scheduler_get_maximum_priority(scheduler, &max_prio);
-		(void)rtems_task_set_scheduler(id, scheduler, max_prio - 1);
+		sc = rtems_scheduler_get_maximum_priority(scheduler, &max_prio);
+		_Assert(sc == RTEMS_SUCCESSFUL);
+		(void)sc;
+		sc = rtems_task_set_scheduler(id, scheduler, max_prio - 1);
+		_Assert(sc == RTEMS_SUCCESSFUL);
+		(void)sc;
 
 #ifdef RTEMS_SMP
 		CPU_ZERO(&cpu);
 		CPU_SET((int)i, &cpu);
-		(void)rtems_task_set_affinity(id, sizeof(cpu), &cpu);
+		sc = rtems_task_set_affinity(id, sizeof(cpu), &cpu);
+		_Assert(sc == RTEMS_SUCCESSFUL || sc == RTEMS_INVALID_NUMBER);
+		(void)sc;
 #endif
 
-		(void)rtems_task_start(id, load_worker,
+		sc = rtems_task_start(id, load_worker,
 		    (rtems_task_argument)lctx);
+		_Assert(sc == RTEMS_SUCCESSFUL);
+		(void)sc;
 
 		wait_for_worker();
 		suspend_worker(lctx);
