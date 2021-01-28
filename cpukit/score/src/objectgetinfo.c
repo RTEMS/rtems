@@ -52,14 +52,15 @@ Objects_Information *_Objects_Get_information(
     return NULL;
 
   /*
-   *  In a multprocessing configuration, we may access remote objects.
-   *  Thus we may have 0 local instances and still have a valid object
-   *  pointer.
+   * In a multiprocessing configuration, we may access remote objects.
+   * Thus we may have 0 local instances and still have a valid object
+   * pointer.
    */
-  #if !defined(RTEMS_MULTIPROCESSING)
-    if ( _Objects_Get_maximum_index( info ) == 0 )
-      return NULL;
-  #endif
+#if !defined(RTEMS_MULTIPROCESSING)
+  if ( _Objects_Get_maximum_index( info ) == 0 ) {
+    return NULL;
+  }
+#endif
 
   return info;
 }
