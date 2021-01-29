@@ -55,7 +55,7 @@ typedef struct {
 typedef enum {
   OBJECTS_INTERNAL_NO_CLASS = 0,
 
-  /* Must be one, see __Thread_Get_objects_information() */
+  /* Must be one, see _Thread_Get_objects_information_by_id() */
   OBJECTS_INTERNAL_THREADS = 1
 } Objects_Internal_API;
 
@@ -66,7 +66,7 @@ typedef enum {
 typedef enum {
   OBJECTS_CLASSIC_NO_CLASS = 0,
 
-  /* Must be one, see __Thread_Get_objects_information() */
+  /* Must be one, see _Thread_Get_objects_information_by_id() */
   OBJECTS_RTEMS_TASKS = 1,
 
   OBJECTS_RTEMS_TIMERS,
@@ -87,7 +87,7 @@ typedef enum {
 typedef enum {
   OBJECTS_POSIX_NO_CLASS = 0,
 
-  /* Must be one, see __Thread_Get_objects_information() */
+  /* Must be one, see _Thread_Get_objects_information_by_id() */
   OBJECTS_POSIX_THREADS = 1,
 
   OBJECTS_POSIX_KEYS,

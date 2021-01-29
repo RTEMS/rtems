@@ -117,7 +117,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_MP_Is_remote( Objects_Id id )
 {
   Objects_Information *information;
 
-  information = _Thread_Get_objects_information( id );
+  information = _Thread_Get_objects_information_by_id( id );
   if ( information == NULL ) {
     return false;
   }

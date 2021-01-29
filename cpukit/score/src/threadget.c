@@ -34,7 +34,7 @@ Thread_Control *_Thread_Get(
     return _Thread_Executing;
   }
 
-  information = _Thread_Get_objects_information( id );
+  information = _Thread_Get_objects_information_by_id( id );
   if ( information == NULL ) {
     return NULL;
   }

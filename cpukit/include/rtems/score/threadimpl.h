@@ -814,14 +814,18 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Priority_highest(
 }
 
 /**
- * @brief Gets object information for the object id.
+ * @brief Gets the thread object information for the API of the object
+ *   identifier.
  *
- * @param id The id of the object information.
+ * @param id is an object identifier which defines the API to get the
+ *   associated thread objects information.
  *
- * @retval pointer The object information for this id.
- * @retval NULL The object id is not valid.
+ * @retval NULL The object identifier had an invalid API.
+ *
+ * @return Returns the thread object information associated with the API of the
+ *   object identifier.
  */
-RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information(
+RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information_by_id(
   Objects_Id id
 )
 {
