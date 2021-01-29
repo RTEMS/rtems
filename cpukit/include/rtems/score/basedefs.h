@@ -748,6 +748,17 @@ extern "C" {
   #define RTEMS_SECTION( _section )
 #endif
 
+/* Generated from spec:/rtems/basedefs/if/static-analysis */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief It is defined if a static analysis run is performed.
+ */
+#if defined(__COVERITY__)
+  #define RTEMS_STATIC_ANALYSIS
+#endif
+
 /* Generated from spec:/rtems/basedefs/if/static-assert */
 
 /**

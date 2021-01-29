@@ -46,9 +46,9 @@ extern "C" {
 
 /**
  * @brief Assertion similar to assert() controlled via RTEMS_DEBUG instead of
- * NDEBUG.
+ *   NDEBUG and static analysis runs.
  */
-#if defined( RTEMS_DEBUG )
+#if defined( RTEMS_DEBUG ) || defined( RTEMS_STATIC_ANALYSIS )
 
   /**
    * @brief Macro with method name used in assert output
