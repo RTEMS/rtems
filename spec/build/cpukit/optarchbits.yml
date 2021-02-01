@@ -11,11 +11,13 @@ default-by-variant:
 - value:
   - '64'
   variants:
+  - riscv/noel64.*
   - riscv/rv64.*
 - value:
   - '32'
   variants:
   - riscv/griscv
+  - riscv/noel32.*
   - riscv/rv32.*
 description: The architecture word bits for the clang target triple.
 enabled-by:

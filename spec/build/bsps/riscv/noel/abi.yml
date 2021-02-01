@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- split: null
+- env-append: null
+build-type: option
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default:
+- -march=rv32ima
+- -mabi=ilp32
+default-by-variant:
+- value:
+  - -march=rv64imafdc
+  - -mabi=lp64d
+  variants:
+  - riscv/noel64imafdc
+- value:
+  - -march=rv64imafd
+  - -mabi=lp64d
+  variants:
+  - riscv/noel64imafd
+- value:
+  - -march=rv64imac
+  - -mabi=lp64
+  variants:
+  - riscv/noel64imac
+- value:
+  - -march=rv64im
+  - -mabi=lp64
+  variants:
+  - riscv/noel64im
+- value:
+  - -march=rv32imafd
+  - -mabi=ilp32d
+  variants:
+  - riscv/noel32imafd
+- value:
+  - -march=rv32im
+  - -mabi=ilp32
+  variants:
+  - riscv/noel32im
+description: |
+  ABI flags
+enabled-by: true
+links: []
+name: ABI_FLAGS
+type: build

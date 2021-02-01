@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: ../../obj
+- role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
+  uid: ../../optclang
+- role: build-dependency
+  uid: ../../optconsolebaud
+- role: build-dependency
+  uid: ../../optgcc
+- role: build-dependency
+  uid: ../grp
+- role: build-dependency
+  uid: ../optrambegin
+- role: build-dependency
+  uid: ../optramsize
+- role: build-dependency
+  uid: abi
+- role: build-dependency
+  uid: obj
+- role: build-dependency
+  uid: objsmp
+- role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
+  uid: ../optextirqmax
+- role: build-dependency
+  uid: ../../optfdtcpyro
+- role: build-dependency
+  uid: ../../optfdtmxsz
+- role: build-dependency
+  uid: ../../optfdtro
+- role: build-dependency
+  uid: ../../optfdtuboot
+- role: build-dependency
+  uid: ../../optconsoleirq
+- role: build-dependency
+  uid: ../linkcmds
+- role: build-dependency
+  uid: ../linkcmdsbase
+- role: build-dependency
+  uid: ../start
+- role: build-dependency
+  uid: ../../bspopts
+- role: build-dependency
+  uid: optapbuartmax
+type: build
+use-after: []
+use-before: []

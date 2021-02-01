@@ -1,14 +1,13 @@
-/* SPDX-License-Identifier: BSD-2-Clause */
-
 /**
  * @file
  *
- * @ingroup RTEMSBSPsRISCVGeneric
+ * @ingroup RTEMSBSPsRISCVNOEL
  *
  * @brief Global BSP definitions.
  */
 
 /*
+ * Copyright (c) 2021 Cobham Gaisler AB.
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -38,15 +37,15 @@
  * SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_RISCV_GENERIC_H
-#define LIBBSP_RISCV_GENERIC_H
+#ifndef LIBBSP_RISCV_NOEL_H
+#define LIBBSP_RISCV_NOEL_H
 
 /**
- * @defgroup RTEMSBSPsRISCVGeneric Generic
+ * @defgroup RTEMSBSPsRISCVNOEL NOEL-V
  *
  * @ingroup RTEMSBSPsRISCV
  *
- * @brief Generic RISC-V Board Support Package.
+ * @brief NOEL-V RISC-V Board Support Package.
  *
  * @{
  */
@@ -74,4 +73,4 @@ extern "C" {
 
 /** @} */
 
-#endif /* LIBBSP_RISCV_GENERIC_H */
+#endif /* LIBBSP_RISCV_NOEL_H */

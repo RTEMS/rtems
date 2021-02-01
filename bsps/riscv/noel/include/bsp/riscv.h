@@ -1,20 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-/**
- * @file
- *
- * @ingroup RTEMSBSPsRISCVGeneric
- *
- * @brief Global BSP definitions.
- */
-
 /*
- *
- * Copyright (c) 2015 University of York.
- * Hesham Almatary <hesham@alumni.york.ac.uk>
- *
- * COPYRIGHT (c) 1989-1999.
- * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,40 +25,37 @@
  * SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_RISCV_GENERIC_H
-#define LIBBSP_RISCV_GENERIC_H
+#ifndef BSP_RISCV_H
+#define BSP_RISCV_H
 
-/**
- * @defgroup RTEMSBSPsRISCVGeneric Generic
- *
- * @ingroup RTEMSBSPsRISCV
- *
- * @brief Generic RISC-V Board Support Package.
- *
- * @{
- */
+#include <bsp.h>
 
-#include <rtems.h>
-#include <rtems/clockdrv.h>
-#include <rtems/console.h>
-
-#include <bspopts.h>
-#include <bsp/default-initial-extension.h>
-
-#include <rtems/devnull.h>
+#include <rtems/score/cpuimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define BSP_FEATURE_IRQ_EXTENSION
+extern volatile RISCV_CLINT_regs *riscv_clint;
 
-#define BSP_FDT_IS_SUPPORTED
+void *riscv_fdt_get_address(const void *fdt, int node);
+
+uint32_t riscv_get_core_frequency(void);
+
+#ifdef RTEMS_SMP
+extern uint32_t riscv_hart_count;
+#else
+#define riscv_hart_count 1
+#endif
+
+uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle);
+
+#if RISCV_ENABLE_HTIF_SUPPORT != 0
+void htif_poweroff(void);
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 
-/** @} */
-
-#endif /* LIBBSP_RISCV_GENERIC_H */
+#endif /* BSP_RISCV_H */

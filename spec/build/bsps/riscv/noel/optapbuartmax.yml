@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2022 Cobham Gaisler AB
+default: 2
+default-by-variant: []
+description: |
+  maximum number of APBUART devices supported by the console driver (2 by default)
+enabled-by: true
+format: '{}'
+links: []
+name: RISCV_CONSOLE_MAX_APBUART_DEVICES
+type: build

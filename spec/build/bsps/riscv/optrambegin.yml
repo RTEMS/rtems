@@ -16,6 +16,9 @@ default-by-variant:
 - value: 1879048192
   variants:
   - riscv/rv64.*
+- value: 0
+  variants:
+  - riscv/noel.*
 - value: 1073741824
   variants:
   - riscv/griscv

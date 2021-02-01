@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/riscv/noel/include/bsp.h
+  - bsps/riscv/noel/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/riscv/noel/include/bsp/irq.h
+  - bsps/riscv/noel/include/bsp/riscv.h
+links: []
+source:
+- bsps/riscv/riscv/clock/clockdrv.c
+- bsps/riscv/noel/console/console-config.c
+- bsps/riscv/riscv/irq/irq.c
+- bsps/riscv/noel/start/bsp_fatal_halt.c
+- bsps/riscv/riscv/start/bspstart.c
+- bsps/riscv/shared/start/bspgetworkarea.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bsp-fdt.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/grlib/uart/apbuart_polled.c
+- bsps/shared/grlib/uart/apbuart_termios.c
+type: build
