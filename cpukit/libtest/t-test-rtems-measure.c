@@ -251,7 +251,6 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 	ctx->chunk = align_up(ctx->chunk, cache_line_size);
 
 	for (i = 0; i < load_count; ++i) {
-		rtems_status_code sc;
 		rtems_id id;
 		load_context *lctx;
 		rtems_task_priority max_prio;
