@@ -662,8 +662,8 @@ typedef struct {
  * @brief This type represents the thread life state.
  *
  * The thread life state is orthogonal to the thread state used for
- * synchronization primitives and blocking operations.  They reflect the state
- * changes triggered with thread restart and delete requests.
+ * synchronization primitives and blocking operations.  The thread life state
+ * reflects changes triggered by thread restart and delete requests.
  *
  * The individual state flags must be a power of two to allow use of bit
  * operations to manipulate and evaluate the thread life state.
