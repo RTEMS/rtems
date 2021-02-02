@@ -22,9 +22,14 @@
 
 #include <rtems/rtems/clock.h>
 
+static rtems_interval _RTEMS_Clock_get_ticks_per_second( void )
+{
+  return rtems_clock_get_ticks_per_second();
+}
+
 #undef rtems_clock_get_ticks_per_second
 
-rtems_interval rtems_clock_get_ticks_per_second(void)
+rtems_interval rtems_clock_get_ticks_per_second( void )
 {
-  return _Watchdog_Ticks_per_second;
+  return _RTEMS_Clock_get_ticks_per_second();
 }
