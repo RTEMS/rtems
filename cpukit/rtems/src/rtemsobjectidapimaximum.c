@@ -20,15 +20,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectimpl.h>
+#include <rtems/rtems/object.h>
 
-/*
- * This is implemented as a macro. This body is provided to support
- * bindings from non-C based languages.
- */
-int rtems_object_id_api_maximum(void);
-
-int rtems_object_id_api_maximum(void)
+static int _RTEMS_Object_id_api_maximum( void )
 {
-  return OBJECTS_APIS_LAST;
+  return rtems_object_id_api_maximum();
+}
+
+#undef rtems_object_id_api_maximum
+
+int rtems_object_id_api_maximum( void )
+{
+  return _RTEMS_Object_id_api_maximum();
 }

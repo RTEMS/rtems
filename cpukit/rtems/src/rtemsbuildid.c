@@ -20,25 +20,26 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectimpl.h>
+#include <rtems/rtems/object.h>
 
-/*
- * This is implemented as a macro. This body is provided to support
- * bindings from non-C based languages.
- */
-Objects_Id rtems_build_id(
-  uint32_t api,
-  uint32_t class,
-  uint32_t node,
-  uint32_t index
-);
-
-Objects_Id rtems_build_id(
+static rtems_id _RTEMS_Build_id(
   uint32_t api,
   uint32_t class,
   uint32_t node,
   uint32_t index
 )
 {
-  return _Objects_Build_id( api, class, node, index );
+  return rtems_build_id( api, class, node, index );
+}
+
+#undef rtems_build_id
+
+rtems_id rtems_build_id(
+  uint32_t api,
+  uint32_t class,
+  uint32_t node,
+  uint32_t index
+)
+{
+  return _RTEMS_Build_id( api, class, node, index );
 }

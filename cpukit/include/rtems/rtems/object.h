@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 1988, 2009 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -154,8 +154,14 @@ typedef struct {
  * @return Returns the object identifier with the lowest index built from the
  *   API, class, and MPCI node components.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 #define RTEMS_OBJECT_ID_INITIAL( _api, _class, _node ) \
   OBJECTS_ID_INITIAL( _api, _class, _node )
@@ -218,20 +224,36 @@ typedef struct {
  * @brief Builds the object identifier from the API, class, MPCI node, and
  *   index components.
  *
- * @param _api is the API of the object identifier to build.
+ * @param api is the API of the object identifier to build.
  *
- * @param _class is the class of the object identifier to build.
+ * @param the_class is the class of the object identifier to build.
  *
- * @param _node is the MPCI node of the object identifier to build.
+ * @param node is the MPCI node of the object identifier to build.
  *
- * @param _index is the index of the object identifier to build.
+ * @param index is the index of the object identifier to build.
  *
  * @return Returns the object identifier built from the API, class, MPCI node,
  *   and index components.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
+rtems_id rtems_build_id(
+  uint32_t api,
+  uint32_t the_class,
+  uint32_t node,
+  uint32_t index
+);
+
+/* Generated from spec:/rtems/object/if/build-id-macro */
 #define rtems_build_id( _api, _class, _node, _index ) \
   _Objects_Build_id( _api, _class, _node, _index )
 
@@ -242,23 +264,34 @@ typedef struct {
  *
  * @brief Builds the object name composed of the four characters.
  *
- * @param _c1 is the first character of the name.
+ * @param c1 is the first character of the name.
  *
- * @param _c2 is the second character of the name.
+ * @param c2 is the second character of the name.
  *
- * @param _c3 is the third character of the name.
+ * @param c3 is the third character of the name.
  *
- * @param _c4 is the fourth character of the name.
+ * @param c4 is the fourth character of the name.
  *
  * This directive takes the four characters provided as arguments and composes
- * a 32-bit object name with ``_c1`` in the most significant 8-bits and ``_c4``
+ * a 32-bit object name with ``c1`` in the most significant 8-bits and ``c4``
  * in the least significant 8-bits.
  *
  * @return Returns the object name composed of the four characters.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
+rtems_name rtems_build_name( char c1, char c2, char c3, char c4 );
+
+/* Generated from spec:/rtems/object/if/build-name-macro */
 #define rtems_build_name( _c1, _c2, _c3, _c4 ) \
   _Objects_Build_name( _c1, _c2, _c3, _c4 )
 
@@ -288,8 +321,14 @@ typedef struct {
  * @retval ::RTEMS_INVALID_ID There was no object associated with the object
  *   identifier.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_object_get_classic_name(
   rtems_id    id,
@@ -329,9 +368,14 @@ rtems_status_code rtems_object_get_classic_name(
  * @return Returns the ``name`` parameter value, if there is an object name
  *   associated with the object identifier.
  *
- * @par Notes
- * This directive may cause the calling task to be preempted due to an obtain
- * and release of the object allocator mutex.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 char *rtems_object_get_name( rtems_id id, size_t length, char *name );
 
@@ -364,9 +408,6 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  *
  * @par Notes
  * @parblock
- * This directive may cause the calling task to be preempted due to an obtain
- * and release of the object allocator mutex.
- *
  * This directive can be used to set the name of objects which do not have a
  * naming scheme per their API.
  *
@@ -379,6 +420,19 @@ char *rtems_object_get_name( rtems_id id, size_t length, char *name );
  * style name, then the first four characters in ``name`` will be used to
  * construct the name.
  * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
 
@@ -389,19 +443,27 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the API component of the object identifier.
  *
- * @param _id is the object identifier with the API component to get.
+ * @param id is the object identifier with the API component to get.
  *
  * @return Returns the API component of the object identifier.
  *
  * @par Notes
+ * This directive does not validate the object identifier provided in ``id``.
+ *
+ * @par Constraints
  * @parblock
- * This directive is strictly local and does not impact task scheduling.
+ * The following constraints apply to this directive:
  *
- * This directive does not validate the object identifier provided in ``_id``.
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
  *
- * A body is also provided.
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
+int rtems_object_id_get_api( rtems_id id );
+
+/* Generated from spec:/rtems/object/if/id-get-api-macro */
 #define rtems_object_id_get_api( _id ) _Objects_Get_API( _id )
 
 /* Generated from spec:/rtems/object/if/id-get-class */
@@ -411,19 +473,27 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the class component of the object identifier.
  *
- * @param _id is the object identifier with the class component to get.
+ * @param id is the object identifier with the class component to get.
  *
  * @return Returns the class component of the object identifier.
  *
  * @par Notes
+ * This directive does not validate the object identifier provided in ``id``.
+ *
+ * @par Constraints
  * @parblock
- * This directive is strictly local and does not impact task scheduling.
+ * The following constraints apply to this directive:
  *
- * This directive does not validate the object identifier provided in ``_id``.
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
  *
- * A body is also provided.
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
+int rtems_object_id_get_class( rtems_id id );
+
+/* Generated from spec:/rtems/object/if/id-get-class-macro */
 #define rtems_object_id_get_class( _id ) _Objects_Get_class( _id )
 
 /* Generated from spec:/rtems/object/if/id-get-node */
@@ -433,19 +503,27 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the MPCI node component of the object identifier.
  *
- * @param _id is the object identifier with the MPCI node component to get.
+ * @param id is the object identifier with the MPCI node component to get.
  *
  * @return Returns the MPCI node component of the object identifier.
  *
  * @par Notes
+ * This directive does not validate the object identifier provided in ``id``.
+ *
+ * @par Constraints
  * @parblock
- * This directive is strictly local and does not impact task scheduling.
+ * The following constraints apply to this directive:
  *
- * This directive does not validate the object identifier provided in ``_id``.
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
  *
- * A body is also provided.
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
+int rtems_object_id_get_node( rtems_id id );
+
+/* Generated from spec:/rtems/object/if/id-get-node-macro */
 #define rtems_object_id_get_node( _id ) _Objects_Get_node( _id )
 
 /* Generated from spec:/rtems/object/if/id-get-index */
@@ -455,19 +533,27 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @brief Gets the index component of the object identifier.
  *
- * @param _id is the object identifier with the index component to get.
+ * @param id is the object identifier with the index component to get.
  *
  * @return Returns the index component of the object identifier.
  *
  * @par Notes
+ * This directive does not validate the object identifier provided in ``id``.
+ *
+ * @par Constraints
  * @parblock
- * This directive is strictly local and does not impact task scheduling.
+ * The following constraints apply to this directive:
  *
- * This directive does not validate the object identifier provided in ``_id``.
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
  *
- * A body is also provided.
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
+int rtems_object_id_get_index( rtems_id id );
+
+/* Generated from spec:/rtems/object/if/id-get-index-macro */
 #define rtems_object_id_get_index( _id ) _Objects_Get_index( _id )
 
 /* Generated from spec:/rtems/object/if/id-api-minimum */
@@ -481,13 +567,20 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  * @return Returns the lowest valid value for the API component of an object
  *   identifier.
  *
- * @par Notes
+ * @par Constraints
  * @parblock
- * This directive is strictly local and does not impact task scheduling.
+ * The following constraints apply to this directive:
  *
- * A body is also provided.
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
+int rtems_object_id_api_minimum( void );
+
+/* Generated from spec:/rtems/object/if/id-api-minimum-macro */
 #define rtems_object_id_api_minimum() OBJECTS_INTERNAL_API
 
 /* Generated from spec:/rtems/object/if/id-api-maximum */
@@ -501,13 +594,20 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  * @return Returns the highest valid value for the API component of an object
  *   identifier.
  *
- * @par Notes
+ * @par Constraints
  * @parblock
- * This directive is strictly local and does not impact task scheduling.
+ * The following constraints apply to this directive:
  *
- * A body is also provided.
+ * * The directive is implemented by a macro and may be called from within
+ *   C/C++ constant expressions.  In addition, a function implementation of the
+ *   directive exists for bindings to other programming languages.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
+int rtems_object_id_api_maximum( void );
+
+/* Generated from spec:/rtems/object/if/id-api-maximum-macro */
 #define rtems_object_id_api_maximum() OBJECTS_APIS_LAST
 
 /* Generated from spec:/rtems/object/if/api-minimum-class */
@@ -523,8 +623,14 @@ rtems_status_code rtems_object_set_name( rtems_id id, const char *name );
  *
  * @return Returns the lowest valid class value of the object API.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 int rtems_object_api_minimum_class( int api );
 
@@ -541,8 +647,14 @@ int rtems_object_api_minimum_class( int api );
  *
  * @return Returns the highest valid class value of the object API.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 int rtems_object_api_maximum_class( int api );
 
@@ -560,10 +672,15 @@ int rtems_object_api_maximum_class( int api );
  * @return Returns a descriptive name of the API, if the API was valid.
  *
  * @par Notes
- * @parblock
- * This directive is strictly local and does not impact task scheduling.
- *
  * The string returned is from constant space.  Do not modify or free it.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_object_get_api_name( int api );
@@ -587,10 +704,15 @@ const char *rtems_object_get_api_name( int api );
  *   the API and the API were valid.
  *
  * @par Notes
- * @parblock
- * This directive is strictly local and does not impact task scheduling.
- *
  * The string returned is from constant space.  Do not modify or free it.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 const char *rtems_object_get_api_class_name( int the_api, int the_class );
@@ -618,8 +740,14 @@ const char *rtems_object_get_api_class_name( int the_api, int the_class );
  *
  * @retval ::RTEMS_INVALID_NUMBER The class of the API or the API was invalid.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_object_get_class_information(
   int                                 the_api,
@@ -636,8 +764,14 @@ rtems_status_code rtems_object_get_class_information(
  *
  * @return Returns the local MPCI node number.
  *
- * @par Notes
- * This directive is strictly local and does not impact task scheduling.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 static inline uint16_t rtems_object_get_local_node( void )
 {

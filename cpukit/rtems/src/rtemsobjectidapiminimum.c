@@ -20,15 +20,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectimpl.h>
+#include <rtems/rtems/object.h>
 
-/*
- * This is implemented as a macro. This body is provided to support
- * bindings from non-C based languages.
- */
-int rtems_object_id_api_minimum(void);
-
-int rtems_object_id_api_minimum(void)
+static int _RTEMS_Object_id_api_minimum( void )
 {
-  return OBJECTS_INTERNAL_API;
+  return rtems_object_id_api_minimum();
+}
+
+#undef rtems_object_id_api_minimum
+
+int rtems_object_id_api_minimum( void )
+{
+  return _RTEMS_Object_id_api_minimum();
 }

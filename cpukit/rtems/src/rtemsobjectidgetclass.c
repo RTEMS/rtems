@@ -20,19 +20,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/objectimpl.h>
+#include <rtems/rtems/object.h>
 
-/*
- * This is implemented as a macro. This body is provided to support
- * bindings from non-C based languages.
- */
-int rtems_object_id_get_class(
-  Objects_Id id
-);
-
-int rtems_object_id_get_class(
-  Objects_Id id
-)
+static int _RTEMS_Object_id_get_class( rtems_id id )
 {
-  return _Objects_Get_class( id );
+  return rtems_object_id_get_class( id );
+}
+
+#undef rtems_object_id_get_class
+
+int rtems_object_id_get_class( rtems_id id )
+{
+  return _RTEMS_Object_id_get_class( id );
 }

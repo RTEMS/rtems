@@ -20,33 +20,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/types.h>
+#include <rtems/rtems/object.h>
 
-/*
- *  Undefine since this is normally a macro and we want a real body in
- *  the library for other language bindings.
- */
+static rtems_name _RTEMS_Build_name( char c1, char c2, char c3, char c4 )
+{
+  return rtems_build_name( c1, c2, c3, c4 );
+}
+
 #undef rtems_build_name
 
-/*
- *  Prototype it to avoid warnings
- */
-rtems_name rtems_build_name(
-  char C1,
-  char C2,
-  char C3,
-  char C4
-);
-
-/*
- *  Now define a real body
- */
-rtems_name rtems_build_name(
-  char C1,
-  char C2,
-  char C3,
-  char C4
-)
+rtems_id rtems_build_name( char c1, char c2, char c3, char c4 )
 {
-  return _Objects_Build_name( C1, C2, C3, C4 );
+  return _RTEMS_Build_name( c1, c2, c3, c4 );
 }

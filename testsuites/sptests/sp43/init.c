@@ -22,21 +22,13 @@ const char rtems_test_name[] = "SP 43";
 
 /* These functions have both macro and function incarnations */
 #undef rtems_build_id
-extern rtems_id rtems_build_id(int api,int class,int node,int index);
 #undef rtems_build_name
-extern rtems_name rtems_build_name(char C1,char C2,char C3,char C4);
 #undef rtems_object_id_api_maximum
-extern int rtems_object_id_api_maximum(void);
 #undef rtems_object_id_api_minimum
-extern int rtems_object_id_api_minimum(void);
 #undef rtems_object_id_get_api
-extern int rtems_object_id_get_api(rtems_id id);
 #undef rtems_object_id_get_class
-extern int rtems_object_id_get_class(rtems_id id);
 #undef rtems_object_id_get_index
-extern int rtems_object_id_get_index(rtems_id id);
 #undef rtems_object_id_get_node
-extern int rtems_object_id_get_node(rtems_id id);
 
 void print_class_info(
   int                                 api,
