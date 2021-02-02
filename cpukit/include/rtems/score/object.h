@@ -242,10 +242,10 @@ typedef enum {
  *  @param[in] _C4 is the fourth character of the name
  */
 #define  _Objects_Build_name( _C1, _C2, _C3, _C4 ) \
-  ( (uint32_t)(_C1) << 24 | \
-    (uint32_t)(_C2) << 16 | \
-    (uint32_t)(_C3) << 8 | \
-    (uint32_t)(_C4) )
+  ( (uint32_t) (uint8_t) (_C1) << 24 | \
+    (uint32_t) (uint8_t) (_C2) << 16 | \
+    (uint32_t) (uint8_t) (_C3) << 8 | \
+    (uint8_t) (_C4) )
 
 /**
  * @brief Returns the API portion of the ID.
