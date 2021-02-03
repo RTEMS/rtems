@@ -110,6 +110,8 @@ links:
 - role: build-dependency
   uid: psxfilelock01
 - role: build-dependency
+  uid: psxftw01
+- role: build-dependency
   uid: psxgetattrnp01
 - role: build-dependency
   uid: psxgetrusage01

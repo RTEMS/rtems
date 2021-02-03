@@ -453,6 +453,32 @@ psxfilelock01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfilelock01) \
 	$(support_includes)
 endif
 
+if TEST_psxftw01
+psx_tests += psxftw01
+psx_screens += psxftw01/psxftw01.scn
+psx_docs += psxftw01/psxftw01.doc
+psxftw01_SOURCES = psxftw01/init.c psxfile01/test_cat.c \
+	psxftw01-tar.c psxftw01-tar.h psxftw01-tar-gz.c psxftw01-tar-gz.h
+
+psxftw01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxftw01) \
+	$(support_includes) $(test_includes) -I$(top_srcdir)/include
+psxftw01_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDADD)
+psxftw01-tar.c: psxftw01/psxftw01.tar
+	$(AM_V_GEN)$(BIN2C) -C $< $@
+psxftw01-tar.h: psxftw01/psxftw01.tar
+	$(AM_V_GEN)$(BIN2C) -H $< $@
+psxftw01-tar.o: psxftw01-tar.c psxftw01-tar.h
+psxftw01.tar.gz: psxftw01/psxftw01.tar
+	$(AM_V_GEN)$(GZIP) < $< > $@
+psxftw01-tar-gz.c: psxftw01.tar.gz
+	$(AM_V_GEN)$(BIN2C) -C $< $@
+psxftw01-tar-gz.h: psxftw01.tar.gz
+	$(AM_V_GEN)$(BIN2C) -H $< $@
+CLEANFILES += psxftw01.tar psxftw01-tar.c psxftw01-tar.h \
+	psxftw01.tar.gz psxftw01-tar-gz.c psxftw01-tar-gz.h
+psxftw01/init.c: psxftw01-tar.h psxftw01-tar-gz.h $(TAR01_XZ_H)
+endif
+
 if TEST_psxgetattrnp01
 psx_tests += psxgetattrnp01
 psx_screens += psxgetattrnp01/psxgetattrnp01.scn

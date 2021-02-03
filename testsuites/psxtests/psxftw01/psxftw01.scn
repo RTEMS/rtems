@@ -1,0 +1,8 @@
+*** BEGIN OF TEST psxftw01 ***
+
+untar: memory at 0x12608c (10240)
+untar: file: home/test_file (s:73,m:0644)
+untar: file: home/abc/def/test_script (s:21,m:0755)
+untar: symlink: home/test_file -> symlink
+
+*** END OF TEST psxftw01 ***

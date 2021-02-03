@@ -1,0 +1,16 @@
+﻿#  COPYRIGHT (c) 2019
+#  On-Line Applications Research Corporation (OAR).
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxftw01
+
+Directives:
+nftw
+
+Concepts:
+
++ This test exercises the ftw.h methods.
