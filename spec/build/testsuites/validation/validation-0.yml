@@ -12,6 +12,7 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-message-construct-errors.c
+- testsuites/validation/tc-object.c
 - testsuites/validation/tc-task-construct-errors.c
 - testsuites/validation/ts-validation-0.c
 stlib: []
