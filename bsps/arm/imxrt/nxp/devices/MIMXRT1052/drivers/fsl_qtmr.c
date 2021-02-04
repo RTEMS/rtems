@@ -6,6 +6,11 @@
  */
 
 #include "fsl_qtmr.h"
+#ifdef __rtems__
+#include <bsp.h>
+#include <bsp/irq.h>
+#include <libfdt.h>
+#endif /* __rtems__ */
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
@@ -56,6 +61,41 @@ static uint32_t QTMR_GetInstance(TMR_Type *base)
     return instance;
 }
 
+#ifdef __rtems__
+TMR_Type *QTMR_get_regs_from_fdt(const void *fdt, int node)
+{
+    int rv;
+    TMR_Type *regs;
+
+    rv = fdt_node_check_compatible(fdt, node, "nxp,imxrt-qtimer");
+    if (rv != 0) {
+        return NULL;
+    }
+    regs = imx_get_reg_of_node(fdt, node);
+    return regs;
+}
+
+rtems_vector_number QTMR_get_IRQ_from_fdt(const void *fdt, int node)
+{
+    int rv;
+    rtems_vector_number irq;
+
+    rv = fdt_node_check_compatible(fdt, node, "nxp,imxrt-qtimer");
+    if (rv != 0) {
+        return BSP_INTERRUPT_VECTOR_INVALID;
+    }
+    irq = imx_get_irq_of_node(fdt, node, 0);
+    return irq;
+}
+
+uint32_t QTMR_get_src_clk(TMR_Type *base)
+{
+    (void) base;
+
+    return CLOCK_GetFreq(kCLOCK_IpgClk);
+}
+
+#endif /* __rtems__ */
 /*!
  * brief Ungates the Quad Timer clock and configures the peripheral for basic operation.
  *

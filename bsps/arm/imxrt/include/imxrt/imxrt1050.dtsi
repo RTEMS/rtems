@@ -101,6 +101,30 @@
 			reg = <0x40100000 0x00100000>;
 			ranges;
 
+			qtimer4: timer@401e8000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401e8000 0x4000>;
+				interrupts = <136>;
+			};
+
+			qtimer3: timer@401e4000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401e4000 0x4000>;
+				interrupts = <135>;
+			};
+
+			qtimer2: timer@401e0000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401e0000 0x4000>;
+				interrupts = <134>;
+			};
+
+			qtimer1: timer@401dc000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401dc000 0x4000>;
+				interrupts = <133>;
+			};
+
 			gpio4: gpio@401c4000 {
 				compatible = "fsl,imxrt-gpio",
 				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";

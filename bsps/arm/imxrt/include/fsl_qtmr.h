@@ -8,6 +8,9 @@
 #define _FSL_QTMR_H_
 
 #include "fsl_common.h"
+#ifdef __rtems__
+#include <rtems.h>
+#endif /* __rtems__ */
 
 /*!
  * @addtogroup qtmr
@@ -177,6 +180,37 @@ extern "C" {
  * @name Initialization and deinitialization
  * @{
  */
+#ifdef __rtems__
+/*!
+ * @brief Return the timer base based on a FDT node.
+ *
+ * @param fdt      Pointer to the fdt
+ * @param node     The FDT node
+ *
+ * @return Pointer to the timer. NULL on error (for example if node isn't
+ *         compatible).
+ */
+TMR_Type *QTMR_get_regs_from_fdt(const void *fdt, int node);
+
+/*!
+ * @brief Return the timer IRQ vector based on a FDT node.
+ *
+ * @param fdt      Pointer to the fdt
+ * @param node     The FDT node
+ *
+ * @return IRQ vector number. BSP_INTERRUPT_VECTOR_INVALID on error.
+ */
+rtems_vector_number QTMR_get_IRQ_from_fdt(const void *fdt, int node);
+
+/*!
+ * @brief Return the clock source frequency of the quad timer.
+ *
+ * @param base     Quad Timer peripheral base address.
+ *
+ * @return IRQ vector number. BSP_INTERRUPT_VECTOR_INVALID on error.
+ */
+uint32_t QTMR_get_src_clk(TMR_Type *base);
+#endif /* __rtems__ */
 
 /*!
  * @brief Ungates the Quad Timer clock and configures the peripheral for basic operation.
