@@ -11,6 +11,10 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/validation/tc-barrier-create.c
+- testsuites/validation/tc-barrier-delete.c
+- testsuites/validation/tc-barrier-release.c
+- testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-message-construct-errors.c
 - testsuites/validation/tc-object.c
 - testsuites/validation/tc-task-construct-errors.c
