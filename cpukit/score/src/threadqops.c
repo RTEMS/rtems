@@ -219,16 +219,16 @@ static void _Thread_queue_FIFO_extract(
 }
 
 static Thread_Control *_Thread_queue_FIFO_first(
-  Thread_queue_Heads *heads
+  const Thread_queue_Heads *heads
 )
 {
-  Chain_Control  *fifo;
-  Chain_Node     *first;
-  Scheduler_Node *scheduler_node;
+  const Chain_Control  *fifo;
+  const Chain_Node     *first;
+  const Scheduler_Node *scheduler_node;
 
   fifo = &heads->Heads.Fifo;
   _Assert( !_Chain_Is_empty( fifo ) );
-  first = _Chain_First( fifo );
+  first = _Chain_Immutable_first( fifo );
   scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY_NODE( first );
 
   return _Scheduler_Node_get_owner( scheduler_node );
@@ -589,7 +589,7 @@ static void _Thread_queue_Priority_extract(
 }
 
 static Thread_Control *_Thread_queue_Priority_first(
-  Thread_queue_Heads *heads
+  const Thread_queue_Heads *heads
 )
 {
   Thread_queue_Priority_queue *priority_queue;
