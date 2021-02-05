@@ -69,7 +69,7 @@
  */
 
 typedef enum {
-  RtemsTaskReqConstructErrors_Pre_Id_Id,
+  RtemsTaskReqConstructErrors_Pre_Id_Valid,
   RtemsTaskReqConstructErrors_Pre_Id_Null,
   RtemsTaskReqConstructErrors_Pre_Id_NA
 } RtemsTaskReqConstructErrors_Pre_Id;
@@ -119,12 +119,12 @@ typedef enum {
 
 typedef enum {
   RtemsTaskReqConstructErrors_Post_Status_Ok,
-  RtemsTaskReqConstructErrors_Post_Status_InvAddress,
+  RtemsTaskReqConstructErrors_Post_Status_InvAddr,
   RtemsTaskReqConstructErrors_Post_Status_InvName,
   RtemsTaskReqConstructErrors_Post_Status_InvPrio,
   RtemsTaskReqConstructErrors_Post_Status_InvSize,
   RtemsTaskReqConstructErrors_Post_Status_TooMany,
-  RtemsTaskReqConstructErrors_Post_Status_Unsatisfied,
+  RtemsTaskReqConstructErrors_Post_Status_Unsat,
   RtemsTaskReqConstructErrors_Post_Status_NA
 } RtemsTaskReqConstructErrors_Post_Status;
 
@@ -164,7 +164,7 @@ static RtemsTaskReqConstructErrors_Context
   RtemsTaskReqConstructErrors_Instance;
 
 static const char * const RtemsTaskReqConstructErrors_PreDesc_Id[] = {
-  "Id",
+  "Valid",
   "Null",
   "NA"
 };
@@ -263,7 +263,7 @@ static void RtemsTaskReqConstructErrors_Pre_Id_Prepare(
 )
 {
   switch ( state ) {
-    case RtemsTaskReqConstructErrors_Pre_Id_Id: {
+    case RtemsTaskReqConstructErrors_Pre_Id_Valid: {
       ctx->id = &ctx->id_value;
       break;
     }
@@ -476,7 +476,7 @@ static void RtemsTaskReqConstructErrors_Post_Status_Check(
       break;
     }
 
-    case RtemsTaskReqConstructErrors_Post_Status_InvAddress: {
+    case RtemsTaskReqConstructErrors_Post_Status_InvAddr: {
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       T_null( ctx->id );
       T_eq_u32( ctx->id_value, 0xffffffff );
@@ -507,7 +507,7 @@ static void RtemsTaskReqConstructErrors_Post_Status_Check(
       break;
     }
 
-    case RtemsTaskReqConstructErrors_Post_Status_Unsatisfied: {
+    case RtemsTaskReqConstructErrors_Post_Status_Unsat: {
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
       T_eq_u32( ctx->id_value, 0xffffffff );
       break;
@@ -602,16 +602,14 @@ static const uint8_t RtemsTaskReqConstructErrors_TransitionMap[][ 1 ] = {
     RtemsTaskReqConstructErrors_Post_Status_Ok
   }, {
 #if defined(RTEMS_SMP)
-    RtemsTaskReqConstructErrors_Post_Status_Unsatisfied
+    RtemsTaskReqConstructErrors_Post_Status_Unsat
 #else
     RtemsTaskReqConstructErrors_Post_Status_Ok
 #endif
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_Unsatisfied
+    RtemsTaskReqConstructErrors_Post_Status_Unsat
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_Unsatisfied
-  }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvSize
+    RtemsTaskReqConstructErrors_Post_Status_Unsat
   }, {
     RtemsTaskReqConstructErrors_Post_Status_InvSize
   }, {
@@ -635,7 +633,7 @@ static const uint8_t RtemsTaskReqConstructErrors_TransitionMap[][ 1 ] = {
   }, {
     RtemsTaskReqConstructErrors_Post_Status_InvSize
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_TooMany
+    RtemsTaskReqConstructErrors_Post_Status_InvSize
   }, {
     RtemsTaskReqConstructErrors_Post_Status_TooMany
   }, {
@@ -667,6 +665,8 @@ static const uint8_t RtemsTaskReqConstructErrors_TransitionMap[][ 1 ] = {
   }, {
     RtemsTaskReqConstructErrors_Post_Status_TooMany
   }, {
+    RtemsTaskReqConstructErrors_Post_Status_TooMany
+  }, {
     RtemsTaskReqConstructErrors_Post_Status_InvPrio
   }, {
     RtemsTaskReqConstructErrors_Post_Status_InvPrio
@@ -987,197 +987,197 @@ static const uint8_t RtemsTaskReqConstructErrors_TransitionMap[][ 1 ] = {
   }, {
     RtemsTaskReqConstructErrors_Post_Status_InvName
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsTaskReqConstructErrors_Post_Status_InvAddress
+    RtemsTaskReqConstructErrors_Post_Status_InvAddr
   }, {
     RtemsTaskReqConstructErrors_Post_Status_InvName
   }, {
@@ -2210,7 +2210,7 @@ T_TEST_CASE_FIXTURE(
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsTaskReqConstructErrors_Pre_Id_Id;
+    ctx->pcs[ 0 ] = RtemsTaskReqConstructErrors_Pre_Id_Valid;
     ctx->pcs[ 0 ] < RtemsTaskReqConstructErrors_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {

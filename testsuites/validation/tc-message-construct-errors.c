@@ -114,12 +114,12 @@ typedef enum {
 
 typedef enum {
   RtemsMessageReqConstructErrors_Post_Status_Ok,
-  RtemsMessageReqConstructErrors_Post_Status_InvAddress,
+  RtemsMessageReqConstructErrors_Post_Status_InvAddr,
   RtemsMessageReqConstructErrors_Post_Status_InvName,
-  RtemsMessageReqConstructErrors_Post_Status_InvNumber,
+  RtemsMessageReqConstructErrors_Post_Status_InvNum,
   RtemsMessageReqConstructErrors_Post_Status_InvSize,
   RtemsMessageReqConstructErrors_Post_Status_TooMany,
-  RtemsMessageReqConstructErrors_Post_Status_Unsatisfied,
+  RtemsMessageReqConstructErrors_Post_Status_Unsat,
   RtemsMessageReqConstructErrors_Post_Status_NA
 } RtemsMessageReqConstructErrors_Post_Status;
 
@@ -429,7 +429,7 @@ static void RtemsMessageReqConstructErrors_Post_Status_Check(
       break;
     }
 
-    case RtemsMessageReqConstructErrors_Post_Status_InvAddress: {
+    case RtemsMessageReqConstructErrors_Post_Status_InvAddr: {
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       T_null( ctx->id );
       T_eq_u32( ctx->id_value, 0xffffffff );
@@ -442,7 +442,7 @@ static void RtemsMessageReqConstructErrors_Post_Status_Check(
       break;
     }
 
-    case RtemsMessageReqConstructErrors_Post_Status_InvNumber: {
+    case RtemsMessageReqConstructErrors_Post_Status_InvNum: {
       T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
       T_eq_u32( ctx->id_value, 0xffffffff );
       break;
@@ -460,7 +460,7 @@ static void RtemsMessageReqConstructErrors_Post_Status_Check(
       break;
     }
 
-    case RtemsMessageReqConstructErrors_Post_Status_Unsatisfied: {
+    case RtemsMessageReqConstructErrors_Post_Status_Unsat: {
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
       T_eq_u32( ctx->id_value, 0xffffffff );
       break;
@@ -521,107 +521,11 @@ static const uint8_t RtemsMessageReqConstructErrors_TransitionMap[][ 1 ] = {
   {
     RtemsMessageReqConstructErrors_Post_Status_Ok
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_Unsatisfied
+    RtemsMessageReqConstructErrors_Post_Status_Unsat
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_Unsatisfied
+    RtemsMessageReqConstructErrors_Post_Status_Unsat
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_Unsatisfied
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNumber
+    RtemsMessageReqConstructErrors_Post_Status_Unsat
   }, {
     RtemsMessageReqConstructErrors_Post_Status_TooMany
   }, {
@@ -663,6 +567,102 @@ static const uint8_t RtemsMessageReqConstructErrors_TransitionMap[][ 1 ] = {
   }, {
     RtemsMessageReqConstructErrors_Post_Status_TooMany
   }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvNum
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_InvSize
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
+    RtemsMessageReqConstructErrors_Post_Status_TooMany
+  }, {
     RtemsMessageReqConstructErrors_Post_Status_InvName
   }, {
     RtemsMessageReqConstructErrors_Post_Status_InvName
@@ -807,149 +807,149 @@ static const uint8_t RtemsMessageReqConstructErrors_TransitionMap[][ 1 ] = {
   }, {
     RtemsMessageReqConstructErrors_Post_Status_InvName
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddress
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr
   }, {
     RtemsMessageReqConstructErrors_Post_Status_InvName
   }, {
