@@ -43,6 +43,35 @@
 
 #include <rtems/score/threadimpl.h>
 
+T_thread_timer_state
+T_get_thread_timer_state(uint32_t id)
+{
+	Thread_Control *the_thread;
+	ISR_lock_Context lock_context;
+	T_thread_timer_state state;
+
+	the_thread = _Thread_Get(id, &lock_context);
+	if (the_thread == NULL) {
+		return T_THREAD_TIMER_NO_THREAD;
+	}
+
+	switch (_Watchdog_Get_state(&the_thread->Timer.Watchdog)) {
+		case WATCHDOG_SCHEDULED_BLACK:
+		case WATCHDOG_SCHEDULED_RED:
+			state = T_THREAD_TIMER_SCHEDULED;
+			break;
+		case WATCHDOG_PENDING:
+			state = T_THREAD_TIMER_PENDING;
+			break;
+		default:
+			state = T_THREAD_TIMER_INACTIVE;
+			break;
+	}
+
+	_ISR_lock_ISR_enable(&lock_context);
+	return state;
+}
+
 Objects_Maximum
 T_objects_count(Objects_APIs api, uint16_t cls)
 {

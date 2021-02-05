@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2017, 2020 embedded brains GmbH
+ * Copyright (C) 2017, 2021 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -2503,6 +2503,15 @@ void T_check_posix_shms(T_event, const char *);
 void T_check_posix_threads(T_event, const char *);
 
 void T_check_posix_timers(T_event, const char *);
+
+typedef enum {
+	T_THREAD_TIMER_NO_THREAD,
+	T_THREAD_TIMER_SCHEDULED,
+	T_THREAD_TIMER_PENDING,
+	T_THREAD_TIMER_INACTIVE
+} T_thread_timer_state;
+
+T_thread_timer_state T_get_thread_timer_state(uint32_t);
 #endif /* __rtems__ */
 
 /**
