@@ -496,16 +496,17 @@ typedef Thread_Control *( *Thread_queue_Surrender_operation )(
 );
 
 /**
- * @brief Thread queue first operation.
+ * @brief Gets the first thread on the queue.
  *
- * @param[in] heads The thread queue heads.
+ * @param heads are heads of the thread queue.
  *
- * @retval NULL No thread is present on the thread queue.
- * @retval first The first thread of the thread queue according to the insert
- * order.  This thread remains on the thread queue.
+ * @retval NULL No thread is enqueued on the thread queue.
+ *
+ * @return Returns the first thread on the thread queue according to the queue
+ *   order.  This thread remains on the thread queue.
  */
 typedef Thread_Control *( *Thread_queue_First_operation )(
-  Thread_queue_Heads *heads
+  const Thread_queue_Heads *heads
 );
 
 /**
