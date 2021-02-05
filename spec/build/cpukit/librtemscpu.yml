@@ -419,6 +419,7 @@ install:
   - cpukit/include/rtems/score/threadmp.h
   - cpukit/include/rtems/score/threadq.h
   - cpukit/include/rtems/score/threadqimpl.h
+  - cpukit/include/rtems/score/threadqops.h
   - cpukit/include/rtems/score/timecounter.h
   - cpukit/include/rtems/score/timecounterimpl.h
   - cpukit/include/rtems/score/timespec.h

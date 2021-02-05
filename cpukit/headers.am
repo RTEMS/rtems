@@ -419,6 +419,7 @@ include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
 include_rtems_score_HEADERS += include/rtems/score/threadmp.h
 include_rtems_score_HEADERS += include/rtems/score/threadq.h
 include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
+include_rtems_score_HEADERS += include/rtems/score/threadqops.h
 include_rtems_score_HEADERS += include/rtems/score/timecounter.h
 include_rtems_score_HEADERS += include/rtems/score/timecounterimpl.h
 include_rtems_score_HEADERS += include/rtems/score/timespec.h
