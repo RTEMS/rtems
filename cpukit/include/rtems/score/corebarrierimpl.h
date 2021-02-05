@@ -33,7 +33,14 @@ extern "C" {
  * @{
  */
 
-#define CORE_BARRIER_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+/**
+ * @brief These thread queue operations are used for core barriers.
+ *
+ * They are a specialization of ::_Thread_queue_Operations_FIFO.  The only
+ * difference is that the extract operation decrements
+ * CORE_barrier_Control::number_of_waiting_threads.
+ */
+extern const Thread_queue_Operations _CORE_barrier_Thread_queue_operations;
 
 /**
  *  @brief Initializes the core barrier.

@@ -28,10 +28,9 @@ uint32_t _CORE_barrier_Do_flush(
   Thread_queue_Context      *queue_context
 )
 {
-  the_barrier->number_of_waiting_threads = 0;
   return _Thread_queue_Flush_critical(
     &the_barrier->Wait_queue.Queue,
-    CORE_BARRIER_TQ_OPERATIONS,
+    &_CORE_barrier_Thread_queue_operations,
     filter,
     queue_context
   );

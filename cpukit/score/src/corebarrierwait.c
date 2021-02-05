@@ -23,6 +23,36 @@
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadqops.h>
+
+static void _CORE_barrier_Thread_queue_extract(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  CORE_barrier_Control *the_barrier;
+
+  the_barrier = RTEMS_CONTAINER_OF(
+    queue,
+    CORE_barrier_Control,
+    Wait_queue.Queue
+  );
+  --the_barrier->number_of_waiting_threads;
+  _Thread_queue_FIFO_extract(
+    &the_barrier->Wait_queue.Queue,
+    the_thread,
+    queue_context
+  );
+}
+
+const Thread_queue_Operations _CORE_barrier_Thread_queue_operations = {
+  .priority_actions = _Thread_queue_Do_nothing_priority_actions,
+  .enqueue = _Thread_queue_FIFO_enqueue,
+  .extract = _CORE_barrier_Thread_queue_extract,
+  .surrender = _Thread_queue_FIFO_surrender,
+  .first = _Thread_queue_FIFO_first
+};
 
 Status_Control _CORE_barrier_Seize(
   CORE_barrier_Control *the_barrier,
@@ -52,7 +82,7 @@ Status_Control _CORE_barrier_Seize(
     );
     _Thread_queue_Enqueue(
       &the_barrier->Wait_queue.Queue,
-      CORE_BARRIER_TQ_OPERATIONS,
+      &_CORE_barrier_Thread_queue_operations,
       executing,
       queue_context
     );
