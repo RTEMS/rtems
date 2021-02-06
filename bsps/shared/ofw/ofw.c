@@ -509,11 +509,12 @@ static phandle_t rtems_ofw_get_effective_phandle(
 {
   phandle_t child;
   phandle_t ref;
+  int node_offset;
 
-  for (child = rtems_ofw_child(node); child != 0; child = rtems_ofw_peer(child)) {
-    ref = rtems_ofw_get_effective_phandle(child, xref);
-    if (ref != -1)
-      return ref;
+  node_offset = fdt_path_offset(fdtp, "/");
+
+  while ((node_offset = fdt_next_node(fdtp, node_offset, NULL)) > 0) {
+    child = rtems_fdt_offset_to_phandle(node_offset);
 
     if (rtems_ofw_get_enc_prop(child, "phandle", &ref, sizeof(ref)) == -1 &&
         rtems_ofw_get_enc_prop(child, "ibm,phandle", &ref, sizeof(ref)) == -1 &&
