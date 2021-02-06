@@ -313,7 +313,7 @@ ssize_t rtems_ofw_get_prop_alloc(
     }
 
     if (rtems_ofw_get_prop(node, propname, *buf, len) == -1) {
-      rtems_ofw_free(buf);
+      rtems_ofw_free(*buf);
       *buf = NULL;
       return -1;
     }
@@ -344,7 +344,7 @@ ssize_t rtems_ofw_get_prop_alloc_multi(
     }
 
     if (rtems_ofw_get_prop(node, propname, *buf, len) == -1) {
-      rtems_ofw_free(buf);
+      rtems_ofw_free(*buf);
       *buf = NULL;
       return -1;
     }
@@ -373,7 +373,7 @@ ssize_t rtems_ofw_get_enc_prop_alloc(
     }
 
     if (rtems_ofw_get_enc_prop(node, propname, *buf, len) == -1) {
-      rtems_ofw_free(buf);
+      rtems_ofw_free(*buf);
       *buf = NULL;
       return -1;
     }
@@ -404,7 +404,7 @@ ssize_t rtems_ofw_get_enc_prop_alloc_multi(
     }
 
     if (rtems_ofw_get_enc_prop(node, propname, *buf, len) == -1) {
-      rtems_ofw_free(buf);
+      rtems_ofw_free(*buf);
       *buf = NULL;
       return -1;
     }
@@ -614,7 +614,7 @@ int rtems_ofw_get_reg(
     offset = rtems_fdt_phandle_to_offset(parent);
     ptr = fdt_getprop(fdtp, offset, "ranges", &len);
 
-    if (len < 0) {
+    if (ptr == NULL) {
       break;
     }
 
