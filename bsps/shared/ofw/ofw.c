@@ -198,7 +198,15 @@ ssize_t rtems_ofw_get_prop(
 
   if (prop == NULL && strcmp(propname, "name") == 0) {
     prop = fdt_get_name(fdtp, offset, &len);
-    strncpy(buf, prop, bufsize);
+
+    /* Node name's are 1-31 chars in length consisting of only
+     * ascii chars and are null terminated */
+    strlcpy(buf, prop, bufsize);
+
+    /* Return the length of the name including the null byte
+     * rather than the amount copied.
+     * This is the behaviour in libBSD ofw_fdt_getprop
+     */
     return len + 1;
   }
 
