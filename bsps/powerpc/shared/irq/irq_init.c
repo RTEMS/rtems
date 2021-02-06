@@ -310,7 +310,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 #endif
     known_cpi_isa_bridge = 1;
   }
-  if ( currentBoard == MVME_2300 ) {
+  if ( currentBoard == MVME_2300 || currentBoard == MVME_2600_2700_W_MVME761 ) {
     /* nothing to do for W83C553 bridge */
     known_cpi_isa_bridge = 1;
   }

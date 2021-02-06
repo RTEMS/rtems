@@ -214,7 +214,7 @@ int BSP_setup_the_pic(rtems_irq_global_settings* config)
    	/*
      * Must enable PCI/ISA bridge IRQ
      */
-   	openpic_enable_irq (BSP_PCI_ISA_BRIDGE_IRQ);
+    openpic_enable_irq (BSP_PCI_ISA_BRIDGE_IRQ - BSP_PCI_IRQ_LOWEST_OFFSET);
 #endif
 #endif
 
