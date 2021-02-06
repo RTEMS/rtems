@@ -162,7 +162,7 @@ ssize_t rtems_ofw_get_prop_len(
     return len + 1;
   }
 
-  if (prop == NULL && strcmp(propname, "/chosen") == 0) {
+  if (prop == NULL && offset == fdt_path_offset(fdtp, "/chosen")) {
     if (strcmp(propname, "fdtbootcpu") == 0)
       return sizeof(pcell_t);
     if (strcmp(propname, "fdtmemreserv") == 0)
@@ -210,7 +210,7 @@ ssize_t rtems_ofw_get_prop(
     return len + 1;
   }
 
-  if (prop == NULL && strcmp(propname, "/chosen") == 0) {
+  if (prop == NULL && offset == fdt_path_offset(fdtp, "/chosen")) {
     if (strcmp(propname, "fdtbootcpu") == 0) {
       cpuid = cpu_to_fdt32(fdt_boot_cpuid_phys(fdtp));
       len = sizeof(cpuid);
@@ -240,7 +240,7 @@ ssize_t rtems_ofw_get_enc_prop(
 {
   ssize_t rv;
 
-  assert(len % 4 == 0);
+  assert(len % sizeof(pcell_t) == 0);
   rv = rtems_ofw_get_prop(node, prop, buf, len);
 
   if (rv < 0) {
