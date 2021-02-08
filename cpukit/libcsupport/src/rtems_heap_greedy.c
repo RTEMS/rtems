@@ -30,7 +30,20 @@ void *rtems_heap_greedy_allocate(
   size_t block_count
 )
 {
+  Heap_Control *heap = RTEMS_Malloc_Heap;
+  size_t size = 128 * 1024 * 1024;
   void *opaque;
+
+  while ( size > 0 ) {
+    opaque = (*rtems_malloc_extend_handler)( heap, size );
+    if ( opaque == NULL ) {
+      size >>= 1;
+    } else {
+      if ( rtems_malloc_dirty_helper != NULL ) {
+	(*rtems_malloc_dirty_helper)( opaque, size );
+      }
+    }
+  }
 
   _RTEMS_Lock_allocator();
   opaque = _Heap_Greedy_allocate( RTEMS_Malloc_Heap, block_sizes, block_count );
