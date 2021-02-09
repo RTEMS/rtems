@@ -68,6 +68,19 @@ void *rtems_heap_extend_via_sbrk(
   size_t alloc_size
 );
 
+/**
+ * @brief Greedy allocate that empties the sbrk memory
+ *
+ * Afterwards all the sbrk avialable memory will have been allocated
+ * to the provided heap.
+ *
+ * @see rtems_heap_extend_via_sbrk().
+ */
+void rtems_heap_sbrk_greedy_allocate(
+  Heap_Control *heap,
+  size_t alloc_size
+);
+
 void *rtems_heap_null_extend(
   Heap_Control *heap,
   size_t alloc_size

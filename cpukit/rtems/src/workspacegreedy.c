@@ -33,15 +33,20 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/wkspace.h>
 
+#define SBRK_ALLOC_SIZE (128 * 1024UL * 1024UL)
+
 void *rtems_workspace_greedy_allocate(
   const uintptr_t *block_sizes,
   size_t block_count
 )
 {
+  Heap_Control *heap = &_Workspace_Area;
   void *opaque;
 
+  rtems_heap_sbrk_greedy_allocate( heap, SBRK_ALLOC_SIZE );
+
   _RTEMS_Lock_allocator();
-  opaque = _Heap_Greedy_allocate( &_Workspace_Area, block_sizes, block_count );
+  opaque = _Heap_Greedy_allocate( heap, block_sizes, block_count );
   _RTEMS_Unlock_allocator();
 
   return opaque;
@@ -51,11 +56,14 @@ void *rtems_workspace_greedy_allocate_all_except_largest(
   uintptr_t *allocatable_size
 )
 {
+  Heap_Control *heap = &_Workspace_Area;
   void *opaque;
+
+  rtems_heap_sbrk_greedy_allocate( heap, SBRK_ALLOC_SIZE );
 
   _RTEMS_Lock_allocator();
   opaque = _Heap_Greedy_allocate_all_except_largest(
-    &_Workspace_Area,
+    heap,
     allocatable_size
   );
   _RTEMS_Unlock_allocator();

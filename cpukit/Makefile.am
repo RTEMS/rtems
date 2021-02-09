@@ -217,6 +217,7 @@ librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_extend.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_extend_via_sbrk.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_greedy.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_null_extend.c
+librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_sbrk_greedy.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_memalign.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_mkdir.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_putc.c
