@@ -10,7 +10,7 @@
 /*
  * Copyright (C) 2014 Paval Pisa
  * Copyright (C) 2011, 2013 On-Line Applications Research Corporation (OAR)
- * Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -154,6 +154,25 @@ extern "C" {
   #define RTEMS_ALIGNED( _alignment ) __attribute__(( __aligned__( _alignment ) ))
 #else
   #define RTEMS_ALIGNED( _alignment )
+#endif
+
+/* Generated from spec:/rtems/basedefs/if/alignof */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Gets the alignment requirement of the type.
+ *
+ * @param _type_name is the type name to get the alignment requirement for.
+ *
+ * @return Returns the alignment requirement of the type.
+ */
+#if __cplusplus >= 201103L
+  #define RTEMS_ALIGNOF( _type_name ) alignof( _type_name )
+#elif __STDC_VERSION__ >= 201112L
+  #define RTEMS_ALIGNOF( _type_name ) _Alignof( _type_name )
+#else
+  #define RTEMS_ALIGNOF( _type_name ) sizeof( _type_name )
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/alloc-align */
