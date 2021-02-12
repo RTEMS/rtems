@@ -32,6 +32,7 @@
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/malloc.h>
 
 #define SBRK_ALLOC_SIZE (128 * 1024UL * 1024UL)
 
