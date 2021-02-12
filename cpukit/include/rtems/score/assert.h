@@ -99,6 +99,36 @@ extern "C" {
 #endif
 
 /**
+ * @brief Assert if unused return value is equal.
+ *
+ * Assert whether @a _var and @a _val are equal and ensure @a _var is
+ * marked as used when not building for debug.
+ *
+ * @param _var The return value to be checked.
+ * @param _val Indicates what @a _var is supposed to be.
+ */
+#define _Assert_Unused_variable_equals(_var,_val) \
+        do { \
+          _Assert((_var) == (_val)); \
+          (void) (_var); \
+        } while (0)
+
+/**
+ * @brief Assert if unused return value is not equal.
+ *
+ * Assert whether @a _var and @a _val are not equal and ensure @a _var
+ * is marked as used when not building for debug.
+ *
+ * @param _var The return value to be checked.
+ * @param _val Indicates what @a _var is not supposed to be.
+ */
+#define _Assert_Unused_variable_unequal(_var,_val) \
+         do { \
+          _Assert((_var) != (_val)); \
+           (void) (_var); \
+        } while (0)
+
+/**
  * @brief Returns true if thread dispatching is allowed.
  *
  * Thread dispatching can be repressed via _Thread_Disable_dispatch() or
