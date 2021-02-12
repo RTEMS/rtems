@@ -92,9 +92,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-generic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
-include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am

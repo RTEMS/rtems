@@ -50,6 +50,11 @@ extern int  BSP_disable_irq_at_pic(const rtems_irq_number irqLine);
  */
 extern int  BSP_setup_the_pic(rtems_irq_global_settings* config);
 
+/*
+ * Set up for the irq-generic.h interface.
+ */
+int BSP_rtems_irq_generic_set(rtems_irq_global_settings* config);
+
 /* IRQ dispatcher to be defined by the PIC driver; note that it MUST
  * implement shared interrupts.
  * Note also that the exception frame passed to this handler is not very

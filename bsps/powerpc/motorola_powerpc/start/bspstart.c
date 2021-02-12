@@ -27,6 +27,7 @@
 #include <bsp/pci.h>
 #include <bsp/openpic.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <libcpu/bat.h>
 #include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
@@ -334,10 +335,8 @@ static void bsp_early( void )
    */
   bsp_clicks_per_usec 	 = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
-  /*
-   * Initalize RTEMS IRQ system
-   */
-  BSP_rtems_irq_mng_init(0);
+  /* Initialize interrupt support */
+  bsp_interrupt_initialize();
 
   /* Activate the page table mappings only after
    * initializing interrupts because the irq_mng_init()
