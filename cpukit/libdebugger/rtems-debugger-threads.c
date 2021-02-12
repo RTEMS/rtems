@@ -148,9 +148,9 @@ int
 rtems_debugger_thread_find_index(rtems_id id)
 {
   rtems_debugger_threads* threads = rtems_debugger->threads;
-  rtems_debugger_thread*  current = rtems_debugger_thread_current(threads);
   int                     r = -1;
   if (threads != NULL) {
+    rtems_debugger_thread* current = rtems_debugger_thread_current(threads);
     size_t i;
     for (i = 0; i < threads->current.level; ++i) {
       if (id == 0 || current[i].id == id) {
@@ -347,8 +347,11 @@ rtems_debugger_thread_system_resume(bool detaching)
   rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_debugger_thread*  current;
   int                     r = 0;
+  if (threads == NULL) {
+    return r;
+  }
   current = rtems_debugger_thread_current(threads);
-  if (threads != NULL && current != NULL) {
+  if (current != NULL) {
     size_t i;
     if (rtems_debugger_verbose())
       rtems_debugger_printf("rtems-db: sys:    : resuming\n");
@@ -430,8 +433,13 @@ rtems_debugger_thread_continue_all(void)
   rtems_debugger_threads* threads = rtems_debugger->threads;
   rtems_debugger_thread*  current;
   int                     r = 0;
+  if (threads == NULL) {
+    r = -1;
+    errno = EIO;
+    return r;
+  }
   current = rtems_debugger_thread_current(threads);
-  if (threads != NULL && current != NULL) {
+  if (current != NULL) {
     size_t i;
     for (i = 0; i < threads->current.level; ++i) {
       rtems_debugger_thread* thread = &current[i];
