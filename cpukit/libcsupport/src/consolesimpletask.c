@@ -217,6 +217,7 @@ static const char _Console_simple_task_Name[] = "console";
 void _Console_simple_task_Initialize( void )
 {
   Console_simple_task_Control *cons;
+  rtems_status_code status;
 
   cons = &_Console_simple_task_Instance;
 
@@ -233,7 +234,7 @@ void _Console_simple_task_Initialize( void )
 
   IMFS_add_node( "/dev", &cons->Node, NULL );
 
-  rtems_task_create(
+  status = rtems_task_create(
     rtems_build_name('C', 'O', 'N', 'S'),
     RTEMS_MAXIMUM_PRIORITY - 1,
     RTEMS_MINIMUM_STACK_SIZE,
@@ -241,10 +242,12 @@ void _Console_simple_task_Initialize( void )
     RTEMS_DEFAULT_MODES,
     &cons->task
   );
+  _Assert_Unused_variable_equals(status, RTEMS_SUCCESSFUL);
 
-  rtems_task_start(
+  status = rtems_task_start(
     cons->task,
     _Console_simple_task_Task,
     (rtems_task_argument) cons
   );
+  _Assert_Unused_variable_equals(status, RTEMS_SUCCESSFUL);
 }
