@@ -171,17 +171,19 @@ int
 rtems_debugger_target_swbreak_control(bool insert, DB_UINT addr, DB_UINT kind)
 {
   rtems_debugger_target*         target = rtems_debugger->target;
-  rtems_debugger_target_swbreak* swbreaks = target->swbreaks.block;
+  rtems_debugger_target_swbreak* swbreaks;
   size_t                         swbreak_size;
   uint8_t*                       loc = (void*) addr;
   size_t                         i;
   int                            r;
 
-  if (target == NULL || swbreaks == NULL || kind != target->breakpoint_size) {
+  if (target == NULL || target->swbreaks.block == NULL ||
+      kind != target->breakpoint_size) {
     errno = EIO;
     return -1;
   }
 
+  swbreaks = target->swbreaks.block;
   swbreak_size =
     sizeof(rtems_debugger_target_swbreak) + target->breakpoint_size;
 
