@@ -19,9 +19,17 @@
 #ifndef BSP_POWERPC_IRQ_H
 #define BSP_POWERPC_IRQ_H
 
+#ifndef BSP_SHARED_HANDLER_SUPPORT
 #define BSP_SHARED_HANDLER_SUPPORT      1
+#endif
+
 #include <rtems/irq.h>
-#include <bsp/irq-default.h>
+
+/*
+ * Switch to using the generic support. Remove this when all BSPs have
+ * been converted.
+ */
+#define BSP_POWERPC_IRQ_GENERIC_SUPPORT 1
 
 /*
  * 8259 edge/level control definitions at VIA
@@ -107,6 +115,8 @@ extern "C" {
 #define BSP_IRQ_NUMBER			(BSP_MISC_IRQ_MAX_OFFSET + 1)
 #define BSP_LOWEST_OFFSET		(BSP_ISA_IRQ_LOWEST_OFFSET)
 #define BSP_MAX_OFFSET			(BSP_MISC_IRQ_MAX_OFFSET)
+#define BSP_INTERRUPT_VECTOR_MIN	(BSP_LOWEST_OFFSET)
+#define BSP_INTERRUPT_VECTOR_MAX	(BSP_MAX_OFFSET)
 /*
  * Some ISA IRQ symbolic name definition
  */
@@ -190,6 +200,9 @@ int BSP_irq_ack_at_i8259s           	(const rtems_irq_number irqLine);
  * function to check if a particular irq is enabled at 8259 level. After calling
  */
 int BSP_irq_enabled_at_i8259s        	(const rtems_irq_number irqLine);
+
+unsigned short BSP_irq_suspend_i8259s(unsigned short mask);
+void BSP_irq_resume_i8259s(unsigned short in_progress_save);
 
 extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 extern void BSP_i8259s_init(void);

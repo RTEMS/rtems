@@ -10,7 +10,7 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
-  uid: ../../objirqdflt
+  uid: ../../objirq
 - role: build-dependency
   uid: ../crti
 - role: build-dependency

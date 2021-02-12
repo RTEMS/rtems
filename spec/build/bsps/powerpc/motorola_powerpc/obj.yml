@@ -39,7 +39,7 @@ source:
 - bsps/powerpc/shared/irq/irq_init.c
 - bsps/powerpc/shared/irq/openpic.c
 - bsps/powerpc/shared/irq/openpic_i8259_irq.c
-- bsps/powerpc/shared/irq/ppc-irq-legacy.c
+- bsps/powerpc/shared/irq/ppc-irq-generic.c
 - bsps/powerpc/shared/mmu/bat.c
 - bsps/powerpc/shared/mmu/mmuAsm.S
 - bsps/powerpc/shared/mmu/pte121.c
@@ -57,5 +57,6 @@ source:
 - bsps/powerpc/shared/start/zerobss.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c
 type: build

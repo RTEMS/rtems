@@ -280,6 +280,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   int known_cpi_isa_bridge = 0;
 #endif
   int i;
+  int r;
 
   /*
    * First initialize the Interrupt management hardware
@@ -351,7 +352,19 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     initial_config.irqBase	= BSP_LOWEST_OFFSET;
     initial_config.irqPrioTbl	= irqPrioTable;
 
-    if (!BSP_rtems_irq_mngt_set(&initial_config)) {
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+#ifdef TRACE_IRQ_INIT
+    printk("RTEMS IRQ management: irq-generic\n");
+#endif
+    r = BSP_rtems_irq_generic_set(&initial_config);
+#else
+#ifdef TRACE_IRQ_INIT
+    printk("RTEMS IRQ management: legacy\n");
+#endif
+    r = BSP_rtems_irq_mngt_set(&initial_config);
+#endif
+
+    if (!r) {
       /*
        * put something here that will show the failure...
        */

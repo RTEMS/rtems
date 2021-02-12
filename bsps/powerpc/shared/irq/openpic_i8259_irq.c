@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq_supp.h>
+#include <bsp/irq-generic.h>
 #ifndef BSP_HAS_NO_VME
 #include <bsp/VMEConfig.h>
 #endif
@@ -234,15 +235,15 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 #if BSP_ISA_IRQ_NUMBER > 0
   register unsigned isaIntr;                  /* boolean */
   register unsigned oldMask = 0;	      /* old isa pic masks */
-  register unsigned newMask;                  /* new isa pic masks */
 #endif
 
   if (excNum == ASM_DEC_VECTOR) {
-
-  	bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, default_rtems_entry.hdl);
-
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+    bsp_interrupt_handler_dispatch(BSP_DECREMENTER);
+#else
+    bsp_irq_dispatch_list(rtems_hdl_tbl, BSP_DECREMENTER, default_rtems_entry.hdl);
+#endif
     return 0;
-
   }
 
 #if BSP_PCI_IRQ_NUMBER > 0
@@ -274,7 +275,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 
 #if BSP_ISA_IRQ_NUMBER > 0
 #ifdef BSP_PCI_ISA_BRIDGE_IRQ
-#if 0 == BSP_PCI_IRQ_NUMBER 
+#if 0 == BSP_PCI_IRQ_NUMBER
 #error "Configuration Error -- BSP w/o PCI IRQs MUST NOT define BSP_PCI_ISA_BRIDGE_IRQ"
 #endif
   isaIntr = (irq == BSP_PCI_ISA_BRIDGE_IRQ);
@@ -289,11 +290,7 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
     /*
      * store current PIC mask
      */
-    oldMask = i8259s_cache;
-    newMask = oldMask | irq_mask_or_tbl [irq];
-    i8259s_cache = newMask;
-    outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
+    oldMask = BSP_irq_suspend_i8259s(irq_mask_or_tbl [irq]);
     BSP_irq_ack_at_i8259s (irq);
 #if BSP_PCI_IRQ_NUMBER > 0
 	if ( OpenPIC )
@@ -303,13 +300,15 @@ int C_dispatch_irq_handler (BSP_Exception_frame *frame, unsigned int excNum)
 #endif
 
   /* dispatch handlers */
+#ifdef BSP_POWERPC_IRQ_GENERIC_SUPPORT
+  bsp_interrupt_handler_dispatch(irq);
+#else
   bsp_irq_dispatch_list(rtems_hdl_tbl, irq, default_rtems_entry.hdl);
+#endif
 
 #if BSP_ISA_IRQ_NUMBER > 0
   if (isaIntr)  {
-    i8259s_cache = oldMask;
-    outport_byte(PIC_MASTER_IMR_IO_PORT, i8259s_cache & 0xff);
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, ((i8259s_cache & 0xff00) >> 8));
+    BSP_irq_resume_i8259s(oldMask);
   }
   else
 #endif
