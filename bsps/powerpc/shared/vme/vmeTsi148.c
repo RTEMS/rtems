@@ -46,6 +46,7 @@
  */
 
 #include <rtems.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <bsp/irq.h>
@@ -2352,8 +2353,10 @@ static uint32_t
 vme_attr(uint32_t xfer_mode)
 {
 uint32_t vme_mode;
-	if ( am2omode(xfer_mode, &vme_mode) )
+unsigned long ul;
+	if ( am2omode(xfer_mode, &ul) )
 		return BSP_VMEDMA_STATUS_UNSUP;
+	vme_mode = (uint32_t) ul;
 
 	/* am2omode may set prefetch and other bits */
 	vme_mode &= TSI_DXAT_OTAT_MSK;
@@ -2405,11 +2408,11 @@ static void
 tsi_desc_dump(DmaDescriptor p)
 {
 VmeTsi148DmaListDescriptor d = p;
-		printf("   DSA: 0x%08lx%08lx\n", ld_be32(&d->dsau),  ld_be32(&d->dsal));
-		printf("   DDA: 0x%08lx%08lx\n", ld_be32(&d->ddau),  ld_be32(&d->ddal));
-		printf("   NLA: 0x%08lx%08lx\n", ld_be32(&d->dnlau), ld_be32(&d->dnlal));
-		printf("   SAT: 0x%08lx              DAT: 0x%08lx\n", ld_be32(&d->dsat), ld_be32(&d->ddat));
-		printf("   CNT: 0x%08lx\n",      ld_be32(&d->dcnt));
+		printf("   DSA: 0x%08" PRIx32 "%08" PRIx32 "\n", ld_be32(&d->dsau),  ld_be32(&d->dsal));
+		printf("   DDA: 0x%08" PRIx32 "%08" PRIx32 "\n", ld_be32(&d->ddau),  ld_be32(&d->ddal));
+		printf("   NLA: 0x%08" PRIx32 "%08" PRIx32 "\n", ld_be32(&d->dnlau), ld_be32(&d->dnlal));
+		printf("   SAT: 0x%08" PRIx32 "              DAT: 0x%08" PRIx32 "\n", ld_be32(&d->dsat), ld_be32(&d->ddat));
+		printf("   CNT: 0x%08" PRIx32 "\n",      ld_be32(&d->dcnt));
 }
 
 

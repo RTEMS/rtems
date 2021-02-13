@@ -1301,6 +1301,7 @@ static uint32_t
 xfer_mode2dctl(uint32_t xfer_mode)
 {
 uint32_t dctl;
+unsigned long ul;
 
 	/* Check requested bus mode */
 
@@ -1323,8 +1324,9 @@ uint32_t dctl;
 		return BSP_VMEDMA_STATUS_UNSUP;
 
 	/* Luckily DCTL bits match MCTL bits so we can use am2mode */
-	if ( am2mode( 1, xfer_mode, &dctl ) )
+	if ( am2mode( 1, xfer_mode, &ul ) )
 		return BSP_VMEDMA_STATUS_UNSUP;
+	dctl = (uint32_t) ul;
 
 	/* However, the book says that for DMA VAS==5 [which would
 	 * be a CSR access] is reserved. Tests indicate that
@@ -1959,7 +1961,7 @@ unsigned long 		linten;
 #else
 			vmeUniverseIntDisable(lvl);
 #endif
-			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08" PRIx32 " -- DISABLING\n", lvl, status);
+			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08lx -- DISABLING\n", lvl, status);
 		} else if (!(ip=universeHdlTbl[status & UNIV_VIRQ_STATID_MASK])) {
 #ifdef BSP_PIC_DO_EOI
 			linten &= ~msk;
@@ -1967,7 +1969,7 @@ unsigned long 		linten;
 			vmeUniverseIntDisable(lvl);
 #endif
 				/* TODO: log error message - RTEMS has no logger :-( */
-			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08" PRIx32 " -- DISABLING\n", lvl, status);
+			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08lx -- DISABLING\n", lvl, status);
 		} else {
 				/* dispatch handler, it must clear the IRQ at the device */
 				ip->isr(ip->usrData, status&UNIV_VIRQ_STATID_MASK);

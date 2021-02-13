@@ -47,6 +47,7 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -71,7 +72,7 @@ typedef struct VMEDmaListNodeRec_ {
 static void
 lprint(VMEDmaListNode d)
 {
-	printf("n 0x%08lx, p: 0x%08lx, n: 0x%08lx d: 0x%08lx\n",
+	printf("n 0x%08" PRIu32", p: 0x%08" PRIu32 ", n: 0x%08" PRIu32 " d: 0x%08" PRIu32 "\n",
 		(uint32_t)d, (uint32_t)d->p, (uint32_t)d->n, (uint32_t)d->d);
 }
 #endif
