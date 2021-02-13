@@ -25,15 +25,23 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-void nullFunc(void) {}
-static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
-					      0,
-					      (rtems_irq_enable) nullFunc,
-					      (rtems_irq_disable) nullFunc,
-					      (rtems_irq_is_enabled) nullFunc};
-static void Install_tm27_vector(void (*_handler)(void))
+static void null_irq_enable(const rtems_irq_connect_data* a) { (void) a; }
+static void null_irq_disable(const rtems_irq_connect_data* a) { (void) a; }
+static int null_irq_is_enabled(const rtems_irq_connect_data* a) { (void) a; return 0; }
+
+static rtems_irq_connect_data clockIrqData =
 {
-  clockIrqData.hdl = _handler;
+ .name = BSP_DECREMENTER,
+ .hdl = 0,
+ .handle = 0,
+ .on = null_irq_enable,
+ .off = null_irq_disable,
+ .isOn = null_irq_is_enabled
+};
+
+static void Install_tm27_vector(rtems_isr (*_handler)(rtems_vector_number))
+{
+  clockIrqData.hdl = (rtems_irq_hdl) _handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
 	printk("Error installing clock interrupt handler!\n");
 	rtems_fatal_error_occurred(1);
