@@ -604,9 +604,9 @@ static Thread_Control *_Thread_queue_Priority_first(
   const Thread_queue_Heads *heads
 )
 {
-  Thread_queue_Priority_queue *priority_queue;
-  Priority_Node               *first;
-  Scheduler_Node              *scheduler_node;
+  const Thread_queue_Priority_queue *priority_queue;
+  Priority_Node                     *first;
+  Scheduler_Node                    *scheduler_node;
 
 #if defined(RTEMS_SMP)
   _Assert( !_Chain_Is_empty( &heads->Heads.Fifo ) );
