@@ -90,6 +90,14 @@ _start:
 #endif
 #endif
 
+	/* Initialize SCTLR_EL1 */
+	mov x0, XZR
+#if defined(RTEMS_DEBUG)
+	/* Enable Stack alignment checking */
+	orr x0, x0, #(1<<3)
+#endif
+	msr SCTLR_EL1, x0
+
 #ifdef RTEMS_SMP
 	/* Read MPIDR and get current processor index */
         mrs	x7, mpidr_el1

@@ -76,7 +76,7 @@
  * TODO(kmoore) The current implementation here assumes that SP is not
  * misaligned.
  */
-	.macro	JUMP_HANDLER
+	.macro	JUMP_HANDLER_SHORT
 /* Mask to use in BIC, lower 7 bits */
 	mov x0, #0x7f
 /* LR contains PC, mask off to the base of the current vector */
@@ -113,6 +113,10 @@
 	nop
 	nop
 	nop
+	.endm
+
+	.macro	JUMP_HANDLER
+	JUMP_HANDLER_SHORT
 	nop
 	.endm
 
@@ -182,10 +186,12 @@ curr_el_sp0_serror_get_pc:		/* The current PC is now in LR */
  * the current SP.
  */
 curr_el_spx_sync:
+	msr SCTLR_EL1, XZR
 	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
 	bl curr_el_spx_sync_get_pc	/* Get current execution address */
 curr_el_spx_sync_get_pc:		/* The current PC is now in LR */
-	JUMP_HANDLER
+/* Use short jump handler since this has an extra instruction to clear SCTLR */
+	JUMP_HANDLER_SHORT
 	JUMP_TARGET_SPx
 .balign 0x80
 /*
