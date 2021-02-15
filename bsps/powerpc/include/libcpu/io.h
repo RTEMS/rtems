@@ -107,6 +107,7 @@ static inline void out_be16(volatile uint16_t *addr, uint16_t val)
 	__asm__ __volatile__("sth%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }
 
+#ifndef in_le32
 static inline uint32_t in_le32(const volatile uint32_t *addr)
 {
 	uint32_t ret;
@@ -115,7 +116,9 @@ static inline uint32_t in_le32(const volatile uint32_t *addr)
 			     "r" (addr), "m" (*addr));
 	return ret;
 }
+#endif
 
+#ifndef in_be32
 static inline uint32_t in_be32(const volatile uint32_t *addr)
 {
 	uint32_t ret;
@@ -123,17 +126,22 @@ static inline uint32_t in_be32(const volatile uint32_t *addr)
 	__asm__ __volatile__("lwz%U1%X1 %0,%1; eieio" : "=r" (ret) : "m" (*addr));
 	return ret;
 }
+#endif
 
+#ifndef out_le32
 static inline void out_le32(volatile uint32_t *addr, uint32_t val)
 {
 	__asm__ __volatile__("stwbrx %1,0,%2; eieio" : "=m" (*addr) :
 			     "r" (val), "r" (addr));
 }
+#endif
 
+#ifndef out_be32
 static inline void out_be32(volatile uint32_t *addr, uint32_t val)
 {
 	__asm__ __volatile__("stw%U0%X0 %1,%0; eieio" : "=m" (*addr) : "r" (val));
 }
+#endif
 
 #endif /* ASM */
 #endif /* _LIBCPU_IO_H */
