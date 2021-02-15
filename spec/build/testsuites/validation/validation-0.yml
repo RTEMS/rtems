@@ -17,6 +17,8 @@ source:
 - testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-message-construct-errors.c
 - testsuites/validation/tc-object.c
+- testsuites/validation/tc-signal-catch.c
+- testsuites/validation/tc-signal-send.c
 - testsuites/validation/tc-task-construct-errors.c
 - testsuites/validation/ts-validation-0.c
 stlib: []
