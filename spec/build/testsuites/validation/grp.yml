@@ -14,6 +14,8 @@ links:
   uid: performance-0
 - role: build-dependency
   uid: validation-0
+- role: build-dependency
+  uid: validation-1
 type: build
 use-after:
 - rtemstest

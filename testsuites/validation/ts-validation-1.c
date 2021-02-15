@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidation1
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,22 +55,20 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidation0 spec:/testsuites/validation-0
+ * @defgroup RTEMSTestSuiteTestsuitesValidation1 spec:/testsuites/validation-1
  *
  * @ingroup RTEMSTestSuites
  *
  * @brief This general purpose validation test suite provides enough resources
- *   to run basic tests for all specified managers and functions.
- *
- * In SMP configurations, up to three scheduler instances using the SMP EDF
- * scheduler are provided using up to four processors.
+ *   to run basic tests for all specified managers and functions in a
+ *   configuration with exactly one processor.
  *
  * @{
  */
 
-const char rtems_test_name[] = "Validation0";
+const char rtems_test_name[] = "Validation1";
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 4
+#define CONFIGURE_MAXIMUM_PROCESSORS 1
 
 #include "ts-default.h"
 

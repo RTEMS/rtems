@@ -11,6 +11,7 @@ actions:
     sp47: exclude
     spstkalloc02: exclude
     validation-0: exclude
+    validation-1: exclude
 - set-value: -DPER_ALLOCATION=10
 - append-test-cppflags: sp71
 - set-value: -DMAXIMUM_DISTRIBUTION=10

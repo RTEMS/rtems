@@ -133,8 +133,6 @@ static void task_stack_deallocate( void *stack )
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 4
-
 #define CONFIGURE_MAXIMUM_BARRIERS 3
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 3
@@ -178,7 +176,7 @@ static void task_stack_deallocate( void *stack )
 
 #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE TASK_STORAGE_SIZE
 
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) && CONFIGURE_MAXIMUM_PROCESSORS == 4
 
 #define CONFIGURE_SCHEDULER_EDF_SMP
 
