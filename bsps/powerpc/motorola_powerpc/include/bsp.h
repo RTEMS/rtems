@@ -115,6 +115,10 @@ extern "C" {
 #endif
 #endif
 
+/*
+ * The BSP has PCI devices. Enable support in LibBSD.
+ */
+#define BSP_HAS_PCI
 
 /*
  *  Base address definitions for several devices
