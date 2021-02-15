@@ -44,6 +44,9 @@ extern void set_L2CR(unsigned);
 extern Triv121PgTbl BSP_pgtbl_setup(unsigned int *);
 extern void			BSP_pgtbl_activate(Triv121PgTbl);
 
+#define PPC_MIN_BAT_SIZE (128 * 1024)
+static char cc_memory[PPC_MIN_BAT_SIZE] RTEMS_ALIGNED(PPC_MIN_BAT_SIZE);
+
 SPR_RW(SPRG1)
 
 #if defined(DEBUG_BATS)
@@ -350,6 +353,9 @@ static void bsp_early( void )
     /* finally, switch off DBAT3 */
     setdbat(3, 0, 0, 0, 0);
   }
+
+  setdbat(3, (intptr_t) &cc_memory[0], (intptr_t) &cc_memory[0], PPC_MIN_BAT_SIZE, IO_PAGE);
+  rtems_cache_coherent_add_area(&cc_memory[0], PPC_MIN_BAT_SIZE);
 
 #if defined(DEBUG_BATS)
   ShowBATS();
