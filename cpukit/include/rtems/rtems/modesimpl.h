@@ -99,32 +99,6 @@ RTEMS_INLINE_ROUTINE void _Modes_Set_interrupt_level (
   _ISR_Set_level( _Modes_Get_interrupt_level( mode_set ) );
 }
 
-/**
- *  @brief Changes the modes in old_mode_set indicated by
- *  mask to the requested values in new_mode_set.
- *
- *  This routine changes the modes in old_mode_set indicated by
- *  mask to the requested values in new_mode_set.  The resulting
- *  mode set is returned in out_mode_set and the modes that changed
- *  is returned in changed.
- */
-RTEMS_INLINE_ROUTINE void _Modes_Change (
-  rtems_mode  old_mode_set,
-  rtems_mode  new_mode_set,
-  rtems_mode  mask,
-  rtems_mode *out_mode_set,
-  rtems_mode *changed
-)
-{
-  rtems_mode _out_mode;
-
-  _out_mode      =  old_mode_set;
-  _out_mode     &= ~mask;
-  _out_mode     |= new_mode_set & mask;
-  *changed       = _out_mode ^ old_mode_set;
-  *out_mode_set  = _out_mode;
-}
-
 #ifdef __cplusplus
 }
 #endif
