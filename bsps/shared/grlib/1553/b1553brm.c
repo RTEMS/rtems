@@ -994,8 +994,8 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
 	unsigned int i=0;
 	unsigned short ctrl, oper, cw1, cw2;
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *) arg;
-	unsigned int *data = ioarg->buffer;
-	struct bc_msg *cmd_list = (struct bc_msg *) ioarg->buffer;
+	unsigned int *data;
+	struct bc_msg *cmd_list;
   	brm_priv *brm;
 	struct drvmgr_dev *dev;
 	rtems_device_driver ret;
@@ -1012,6 +1012,9 @@ static rtems_device_driver brm_control(rtems_device_major_number major, rtems_de
 		DBG("brm_control: invalid argument\n");
 		return RTEMS_INVALID_NAME;
 	}
+
+        data = ioarg->buffer;
+        cmd_list = (struct bc_msg *) ioarg->buffer;
 
 	ioarg->ioctl_return = 0;
 	switch (ioarg->command) {
