@@ -21,7 +21,6 @@
 #endif
 
 #include <rtems/rtems/tasksdata.h>
-#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/score/schedulerimpl.h>
@@ -125,21 +124,20 @@ rtems_status_code rtems_task_mode(
    */
   needs_asr_dispatching = false;
   if ( mask & RTEMS_ASR_MASK ) {
-    bool is_asr_enabled = !_Modes_Is_asr_disabled( mode_set );
+    bool prev_asr_is_enabled;
 
     _Thread_State_acquire( executing, &lock_context );
 
-    if ( is_asr_enabled != asr->is_enabled ) {
-      asr->is_enabled = is_asr_enabled;
+    prev_asr_is_enabled = asr->is_enabled;
+    asr->is_enabled = !_Modes_Is_asr_disabled( mode_set );
 
-      if ( _ASR_Swap_signals( asr ) != 0 ) {
-        needs_asr_dispatching = true;
-        _Thread_Add_post_switch_action(
-          executing,
-          &api->Signal_action,
-          _Signal_Action_handler
-        );
-      }
+    if (
+      !prev_asr_is_enabled &&
+        asr->is_enabled &&
+        asr->signals_pending != 0
+    ) {
+      needs_asr_dispatching = true;
+      _Thread_Append_post_switch_action( executing, &api->Signal_action );
     }
 
     _Thread_State_release( executing, &lock_context );

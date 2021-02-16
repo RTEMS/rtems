@@ -265,7 +265,6 @@ install:
   source:
   - cpukit/include/rtems/rtems/asr.h
   - cpukit/include/rtems/rtems/asrdata.h
-  - cpukit/include/rtems/rtems/asrimpl.h
   - cpukit/include/rtems/rtems/attr.h
   - cpukit/include/rtems/rtems/attrimpl.h
   - cpukit/include/rtems/rtems/barrier.h

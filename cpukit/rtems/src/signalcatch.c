@@ -22,7 +22,6 @@
 #endif
 
 #include <rtems/rtems/signalimpl.h>
-#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasksdata.h>
 #include <rtems/score/threadimpl.h>
 
@@ -41,12 +40,19 @@ rtems_status_code rtems_signal_catch(
   executing = _Thread_State_acquire_for_executing( &lock_context );
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
+  asr->handler = asr_handler;
+  asr->mode_set = mode_set;
 
-  if ( asr_handler != NULL ) {
-    asr->mode_set = mode_set;
-    asr->handler = asr_handler;
-  } else {
-    _ASR_Initialize( asr );
+  if ( asr_handler == NULL ) {
+    Chain_Node *node;
+
+    asr->signals_pending = 0;
+    node = &api->Signal_action.Node;
+
+    if ( !_Chain_Is_node_off_chain( node ) ) {
+      _Chain_Extract_unprotected( node );
+      _Chain_Set_off_chain( node );
+    }
   }
 
   _Thread_State_release( executing, &lock_context );

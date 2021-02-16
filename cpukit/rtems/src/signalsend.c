@@ -21,14 +21,13 @@
 #endif
 
 #include <rtems/rtems/signalimpl.h>
-#include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/tasksdata.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 
 #include <rtems/sysinit.h>
 
-void _Signal_Action_handler(
+static void _Signal_Action_handler(
   Thread_Control   *executing,
   Thread_Action    *action,
   ISR_lock_Context *lock_context
@@ -41,23 +40,20 @@ void _Signal_Action_handler(
 
   (void) action;
 
-  /*
-   *  Signal Processing
-   */
-
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
-  signal_set = _ASR_Get_posted_signals( asr );
 
-  if ( signal_set == 0 ) {
-    return;
-  }
+  /* Get and clear the pending signals */
+  signal_set = asr->signals_pending;
+  _Assert( signal_set != 0 );
+  asr->signals_pending = 0;
 
   _Thread_State_release( executing, lock_context );
 
   rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
 
-  (*asr->handler)( signal_set );
+  /* Call the ASR handler in the ASR processing mode */
+  ( *asr->handler )( signal_set );
 
   rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
 
@@ -98,10 +94,12 @@ rtems_status_code rtems_signal_send(
     return RTEMS_NOT_DEFINED;
   }
 
+  /* Make the signals of the set pending */
+  asr->signals_pending |= signal_set;
+
   if ( asr->is_enabled ) {
     Per_CPU_Control *cpu_self;
 
-    _ASR_Post_signals( signal_set, &asr->signals_posted );
     _Thread_Add_post_switch_action(
       the_thread,
       &api->Signal_action,
@@ -111,7 +109,6 @@ rtems_status_code rtems_signal_send(
     _Thread_State_release( the_thread, &lock_context );
     _Thread_Dispatch_enable( cpu_self );
   } else {
-    _ASR_Post_signals( signal_set, &asr->signals_pending );
     _Thread_State_release( the_thread, &lock_context );
   }
 

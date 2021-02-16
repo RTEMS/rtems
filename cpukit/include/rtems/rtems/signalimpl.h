@@ -31,17 +31,7 @@ extern "C" {
  * @ingroup RTEMSImplClassic
  *
  * @brief This group contains the Signal Manager implementation.
- *
- * @{
  */
-
-void _Signal_Action_handler(
-  Thread_Control   *executing,
-  Thread_Action    *action,
-  ISR_lock_Context *lock_context
-);
-
-/**@}*/
 
 #ifdef __cplusplus
 }
