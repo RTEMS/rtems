@@ -22,6 +22,7 @@
 #endif
 
 #include <rtems/rtems/signalimpl.h>
+#include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/tasksdata.h>
 #include <rtems/score/threadimpl.h>
 
@@ -37,7 +38,21 @@ rtems_status_code rtems_signal_catch(
   ASR_Information    *asr;
   ISR_lock_Context    lock_context;
 
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+  if ( !_Modes_Is_interrupt_level_supported( mode_set ) ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
+
   executing = _Thread_State_acquire_for_executing( &lock_context );
+
+#if defined(RTEMS_SMP)
+  if ( !_Modes_Is_preempt_mode_supported( mode_set, executing ) ) {
+    _Thread_State_release( executing, &lock_context );
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
+
   api = executing->API_Extensions[ THREAD_API_RTEMS ];
   asr = &api->Signal;
   asr->handler = asr_handler;

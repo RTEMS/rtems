@@ -50,11 +50,8 @@ rtems_status_code rtems_task_mode(
 
 #if defined(RTEMS_SMP)
   if (
-    ( mask & RTEMS_PREEMPT_MASK ) != 0
-      && !_Modes_Is_preempt( mode_set )
-      && !_Scheduler_Is_non_preempt_mode_supported(
-        _Thread_Scheduler_get_home( executing )
-      )
+    ( mask & RTEMS_PREEMPT_MASK ) != 0 &&
+    !_Modes_Is_preempt_mode_supported( mode_set, executing )
   ) {
     return RTEMS_NOT_IMPLEMENTED;
   }
@@ -62,11 +59,8 @@ rtems_status_code rtems_task_mode(
 
 #if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   if (
-    ( mask & RTEMS_INTERRUPT_MASK ) != 0
-      && _Modes_Get_interrupt_level( mode_set ) != 0
-#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && _SMP_Need_inter_processor_interrupts()
-#endif
+    ( mask & RTEMS_INTERRUPT_MASK ) != 0 &&
+    !_Modes_Is_interrupt_level_supported( mode_set )
   ) {
     return RTEMS_NOT_IMPLEMENTED;
   }

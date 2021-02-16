@@ -19,6 +19,9 @@
 #define _RTEMS_RTEMS_MODESIMPL_H
 
 #include <rtems/rtems/modes.h>
+#include <rtems/score/schedulerimpl.h>
+#include <rtems/score/smpimpl.h>
+#include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,6 +87,51 @@ RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
 {
   return ( mode_set & RTEMS_INTERRUPT_MASK );
 }
+
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+/**
+ * @brief Checks if support for the interrupt level is implemented.
+ *
+ * @param mode_set is the mode set which specifies the interrupt level to
+ *   check.
+ *
+ * @return Returns true, if support for the interrupt level is implemented,
+ *   otherwise returns false.
+ */
+RTEMS_INLINE_ROUTINE bool _Modes_Is_interrupt_level_supported(
+  rtems_mode mode_set
+)
+{
+  return _Modes_Get_interrupt_level( mode_set ) == 0
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+    || !_SMP_Need_inter_processor_interrupts()
+#endif
+    ;
+}
+#endif
+
+#if defined(RTEMS_SMP)
+/**
+ * @brief Checks if support for the preempt mode is implemented.
+ *
+ * @param mode_set is the mode set which specifies the preempt mode to check.
+ *
+ * @param the_thread is the thread to check.
+ *
+ * @return Returns true, if support for the preempt mode is implemented,
+ *   otherwise returns false.
+ */
+RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt_mode_supported(
+  rtems_mode            mode_set,
+  const Thread_Control *the_thread
+)
+{
+  return _Modes_Is_preempt( mode_set ) ||
+    _Scheduler_Is_non_preempt_mode_supported(
+      _Thread_Scheduler_get_home( the_thread )
+    );
+}
+#endif
 
 #ifdef __cplusplus
 }
