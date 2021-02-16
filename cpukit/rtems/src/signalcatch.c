@@ -57,12 +57,10 @@ void _Signal_Action_handler(
 
   _Thread_State_release( executing, lock_context );
 
-  asr->nest_level += 1;
   rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
 
   (*asr->handler)( signal_set );
 
-  asr->nest_level -= 1;
   rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
 
   _Thread_State_acquire( executing, lock_context );

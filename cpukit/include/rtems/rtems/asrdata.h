@@ -46,8 +46,6 @@ typedef struct {
   rtems_signal_set  signals_posted;
   /** This field indicates the signal set that is pending. */
   rtems_signal_set  signals_pending;
-  /** This field indicates if nest level of signals being processed */
-  uint32_t          nest_level;
 }   ASR_Information;
 
 /** @} */
