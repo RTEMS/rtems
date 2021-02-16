@@ -619,7 +619,7 @@ static rtems_device_driver rt_write(rtems_device_major_number major, rtems_devic
 static rtems_device_driver rt_control(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
     rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *) arg;
-    unsigned int *data = ioarg->buffer;
+    unsigned int *data;
 
     rt_priv *rt;
     struct drvmgr_dev *dev;
@@ -635,6 +635,8 @@ static rtems_device_driver rt_control(rtems_device_major_number major, rtems_dev
         DBG("rt_control: invalid argument\n");
         return RTEMS_INVALID_NAME;
     }
+
+    data = ioarg->buffer;
 
     ioarg->ioctl_return = 0;
     switch (ioarg->command) {
