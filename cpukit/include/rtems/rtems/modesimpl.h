@@ -22,6 +22,7 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/config.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -132,6 +133,27 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt_mode_supported(
     );
 }
 #endif
+
+/**
+ * @brief Applies the timeslice mode to the thread.
+ *
+ * @param mode_set is the mode set which specifies the timeslice mode for the
+ *   thread.
+ *
+ * @param[out] the_thread is the thread to apply the timeslice mode.
+ */
+RTEMS_INLINE_ROUTINE void _Modes_Apply_timeslice_to_thread(
+  rtems_mode      mode_set,
+  Thread_Control *the_thread
+)
+{
+  if ( _Modes_Is_timeslice( mode_set ) ) {
+    the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+    the_thread->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
+  } else {
+    the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+  }
+}
 
 #ifdef __cplusplus
 }

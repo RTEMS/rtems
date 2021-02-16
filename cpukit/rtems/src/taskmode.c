@@ -27,7 +27,6 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/config.h>
 
 rtems_status_code rtems_task_mode(
   rtems_mode  mode_set,
@@ -98,13 +97,8 @@ rtems_status_code rtems_task_mode(
     executing->is_preemptible = is_preempt_enabled;
   }
 
-  if ( mask & RTEMS_TIMESLICE_MASK ) {
-    if ( _Modes_Is_timeslice(mode_set) ) {
-      executing->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
-      executing->cpu_time_budget =
-        rtems_configuration_get_ticks_per_timeslice();
-    } else
-      executing->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+  if ( ( mask & RTEMS_TIMESLICE_MASK ) != 0 ) {
+    _Modes_Apply_timeslice_to_thread( mode_set, executing );
   }
 
   if ( ( mask & RTEMS_INTERRUPT_MASK ) != 0 ) {
