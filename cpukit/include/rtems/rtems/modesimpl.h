@@ -36,20 +36,6 @@ extern "C" {
  */
 
 /**
- *  @brief Checks if any of the mode flags in mask are set in mode_set.
- *
- *  This function returns TRUE if any of the mode flags in mask
- *  are set in mode_set, and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Modes_Mask_changed (
-  rtems_mode mode_set,
-  rtems_mode masks
-)
-{
-   return ( mode_set & masks ) ? true : false;
-}
-
-/**
  *  @brief Checks if mode_set says that Asynchronous Signal Processing is disabled.
  *
  *  This function returns TRUE if mode_set indicates that Asynchronous
