@@ -655,13 +655,15 @@ void grspw_hw_support(void *d, struct grspw_hw_sup *hw)
 void grspw_addr_ctrl(void *d, struct grspw_addr_config *cfg)
 {
 	struct grspw_priv *priv = d;
-	struct grspw_regs *regs = priv->regs;
+	struct grspw_regs *regs;
 	unsigned int ctrl, nodeaddr;
 	SPIN_IRQFLAGS(irqflags);
 	int i;
 
 	if (!priv || !cfg)
 		return;
+
+        regs = priv->regs;
 
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
