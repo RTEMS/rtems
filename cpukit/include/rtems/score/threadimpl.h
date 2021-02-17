@@ -1236,11 +1236,16 @@ RTEMS_INLINE_ROUTINE void _Thread_Action_initialize(
 }
 
 /**
- * @brief Adds a post switch action to the thread with the given handler.
+ * @brief Adds the post switch action to the thread.
  *
- * @param[in, out] the_thread The thread.
- * @param[in,  out] action The action to add.
- * @param handler The handler for the action.
+ * The caller shall own the thread state lock.  A thread dispatch is
+ * requested.
+ *
+ * @param[in, out] the_thread is the thread of the action.
+ *
+ * @param[in, out] action is the action to add.
+ *
+ * @param handler is the handler for the action.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
   Thread_Control        *the_thread,
@@ -1259,6 +1264,31 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
   _Thread_Dispatch_request( _Per_CPU_Get(), cpu_of_thread );
 
   _Chain_Append_if_is_off_chain_unprotected(
+    &the_thread->Post_switch_actions.Chain,
+    &action->Node
+  );
+}
+
+/**
+ * @brief Appends the post switch action to the thread.
+ *
+ * The caller shall own the thread state lock.  The action shall be inactive.
+ * The handler of the action shall be already set.  A thread dispatch is not
+ * requested.
+ *
+ * @param[in, out] the_thread is the thread of the action.
+ *
+ * @param[in, out] action is the action to add.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Append_post_switch_action(
+  Thread_Control *the_thread,
+  Thread_Action  *action
+)
+{
+  _Assert( _Thread_State_is_owner( the_thread ) );
+  _Assert( action->handler != NULL );
+
+  _Chain_Append_unprotected(
     &the_thread->Post_switch_actions.Chain,
     &action->Node
   );
