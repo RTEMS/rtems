@@ -51,11 +51,11 @@ void _Signal_Action_handler(
   asr = &api->Signal;
   signal_set = _ASR_Get_posted_signals( asr );
 
-  _Thread_State_release( executing, lock_context );
-
   if ( signal_set == 0 ) {
     return;
   }
+
+  _Thread_State_release( executing, lock_context );
 
   asr->nest_level += 1;
   rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
@@ -64,6 +64,8 @@ void _Signal_Action_handler(
 
   asr->nest_level -= 1;
   rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
+
+  _Thread_State_acquire( executing, lock_context );
 }
 
 rtems_status_code rtems_signal_catch(

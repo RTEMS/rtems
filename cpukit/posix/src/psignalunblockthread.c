@@ -159,6 +159,8 @@ static void _POSIX_signals_Action_handler(
   }
 
   executing->Wait.return_code = hold_errno;
+
+  _Thread_State_acquire( executing, lock_context );
 }
 
 static bool _POSIX_signals_Unblock_thread_done(

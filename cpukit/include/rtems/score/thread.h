@@ -594,20 +594,23 @@ typedef enum {
 typedef struct Thread_Action Thread_Action;
 
 /**
- * @brief Thread action handler.
+ * @brief This type defines the prototype of thread action handlers.
  *
  * The thread action handler will be called with interrupts disabled and a
- * corresponding lock acquired, e.g. _Thread_State_acquire().  The handler must
- * release the corresponding lock, e.g. _Thread_State_release().  So, the
- * corresponding lock may be used to protect private data used by the
- * particular action.
+ * corresponding lock acquired, e.g. _Thread_State_acquire().  The handler may
+ * release the corresponding lock, e.g. _Thread_State_release().  If the lock
+ * is released, it shall be acquired before the handler returns using the lock
+ * context.  The lock may be used to protect private data used by the action.
  *
  * Since the action is passed to the handler additional data may be accessed
  * via RTEMS_CONTAINER_OF().
  *
- * @param[in] the_thread The thread performing the action.
- * @param[in] action The thread action.
- * @param[in] lock_context The lock context to use for the lock release.
+ * @param[in, out] the_thread is the thread performing the action.
+ *
+ * @param[in, out] action is the thread action.
+ *
+ * @param[in, out] lock_context is the lock context to use for the optional
+ *   lock release and acquire.
  */
 typedef void ( *Thread_Action_handler )(
   Thread_Control   *the_thread,

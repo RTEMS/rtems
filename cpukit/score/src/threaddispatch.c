@@ -249,10 +249,7 @@ static void _Thread_Run_post_switch_actions( Thread_Control *executing )
 
   while ( action != NULL ) {
     _Chain_Set_off_chain( &action->Node );
-
     ( *action->handler )( executing, action, &lock_context );
-
-    _Thread_State_acquire( executing, &lock_context );
     action = _Thread_Get_post_switch_action( executing );
   }
 
