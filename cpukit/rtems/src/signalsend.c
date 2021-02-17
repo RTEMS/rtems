@@ -26,6 +26,44 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
 
+#include <rtems/sysinit.h>
+
+void _Signal_Action_handler(
+  Thread_Control   *executing,
+  Thread_Action    *action,
+  ISR_lock_Context *lock_context
+)
+{
+  RTEMS_API_Control *api;
+  ASR_Information   *asr;
+  rtems_signal_set   signal_set;
+  rtems_mode      prev_mode;
+
+  (void) action;
+
+  /*
+   *  Signal Processing
+   */
+
+  api = executing->API_Extensions[ THREAD_API_RTEMS ];
+  asr = &api->Signal;
+  signal_set = _ASR_Get_posted_signals( asr );
+
+  if ( signal_set == 0 ) {
+    return;
+  }
+
+  _Thread_State_release( executing, lock_context );
+
+  rtems_task_mode( asr->mode_set, RTEMS_ALL_MODE_MASKS, &prev_mode );
+
+  (*asr->handler)( signal_set );
+
+  rtems_task_mode( prev_mode, RTEMS_ALL_MODE_MASKS, &prev_mode );
+
+  _Thread_State_acquire( executing, lock_context );
+}
+
 rtems_status_code rtems_signal_send(
   rtems_id          id,
   rtems_signal_set  signal_set
@@ -79,3 +117,19 @@ rtems_status_code rtems_signal_send(
 
   return RTEMS_SUCCESSFUL;
 }
+
+#if defined(RTEMS_MULTIPROCESSING)
+static void _Signal_MP_Initialize( void )
+{
+  _MPCI_Register_packet_processor(
+    MP_PACKET_SIGNAL,
+    _Signal_MP_Process_packet
+  );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Signal_MP_Initialize,
+  RTEMS_SYSINIT_CLASSIC_SIGNAL_MP,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+#endif
