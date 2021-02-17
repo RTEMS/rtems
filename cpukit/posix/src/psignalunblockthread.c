@@ -112,12 +112,6 @@ static void _POSIX_signals_Action_handler(
   hold_errno = executing->Wait.return_code;
 
   /*
-   * api may be NULL in case of a thread close in progress
-   */
-  if ( !api )
-    return;
-
-  /*
    *  In case the executing thread is blocked or about to block on something
    *  that uses the thread wait information, then this is a kernel bug.
    */
