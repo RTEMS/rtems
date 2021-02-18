@@ -320,7 +320,10 @@ static int rtems_shell_line_editor(
   int          cmd = -1;
   int          inserting = 1;
   int          in_fileno = fileno(in);
-  int          out_fileno = fileno(out);
+  int          out_fileno;
+
+  _Assert(out != NULL);
+  out_fileno = fileno(out);
 
   /*
    * Only this task can use this file descriptor because calling
