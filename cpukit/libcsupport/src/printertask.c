@@ -117,6 +117,8 @@ static void printer_task( rtems_task_argument arg )
 {
   rtems_printer_task_context *ctx;
   int                         fd;
+  int                         err;
+  rtems_status_code           sc;
 
   ctx = (rtems_printer_task_context *) arg;
   fd = ctx->fd;
@@ -141,8 +143,10 @@ static void printer_task( rtems_task_argument arg )
           printer_task_append_buffer( ctx, &ctx->free_buffers, buffer );
           break;
         case ACTION_DRAIN:
-          fsync(fd);
-          rtems_event_transient_send( buffer->action_data.task );
+          err = fsync(fd);
+          _Assert_Unused_variable_equals(err, 0);
+          sc = rtems_event_transient_send( buffer->action_data.task );
+          _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
           break;
       }
     }
@@ -185,7 +189,8 @@ int rtems_print_printer_task(
   printer->context = ctx;
   printer->printer = printer_task_printer;
 
-  rtems_task_start( ctx->task, printer_task, (rtems_task_argument) ctx );
+  sc = rtems_task_start( ctx->task, printer_task, (rtems_task_argument) ctx );
+  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
 
   return 0;
 }
