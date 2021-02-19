@@ -170,6 +170,7 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
   char                    name[RTEMS_DEBUGGER_THREAD_NAME_SIZE];
   bool                    exclude = false;
   size_t                  i;
+  int                     sc;
 
   /*
    * The only time the threads pointer is NULL is a realloc error so we stop
@@ -272,7 +273,8 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
     /*
      * Read the target registers into the thread register array.
      */
-    rtems_debugger_target_read_regs(thread);
+    sc = rtems_debugger_target_read_regs(thread);
+    _Assert_Unused_variable_equals(sc, 0);
 
     if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_VERBOSE))
       rtems_debugger_printf("rtems-db: sys: thd: %08" PRIx32 ": signal: %d\n",
