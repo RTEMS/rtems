@@ -95,6 +95,7 @@ void setgrent(void)
 void endgrent(void)
 {
   grp_context *ctx = grp_get_context();
+  int          sc;
 
   if (ctx == NULL)
     return;
@@ -104,5 +105,6 @@ void endgrent(void)
   }
 
   free(ctx);
-  pthread_setspecific(grp_key, NULL);
+  sc = pthread_setspecific(grp_key, NULL);
+  _Assert_Unused_variable_equals(sc, 0);
 }
