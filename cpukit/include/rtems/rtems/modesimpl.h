@@ -19,7 +19,6 @@
 #define _RTEMS_RTEMS_MODESIMPL_H
 
 #include <rtems/rtems/modes.h>
-#include <rtems/score/isrlevel.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,19 +83,6 @@ RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
 )
 {
   return ( mode_set & RTEMS_INTERRUPT_MASK );
-}
-
-/**
- *  @brief Sets the current interrupt level to that specified in the mode_set.
- *
- *  This routine sets the current interrupt level to that specified
- *  in the mode_set.
- */
-RTEMS_INLINE_ROUTINE void _Modes_Set_interrupt_level (
-  rtems_mode mode_set
-)
-{
-  _ISR_Set_level( _Modes_Get_interrupt_level( mode_set ) );
 }
 
 #ifdef __cplusplus

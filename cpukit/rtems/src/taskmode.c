@@ -23,6 +23,7 @@
 #include <rtems/rtems/tasksdata.h>
 #include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/signalimpl.h>
+#include <rtems/score/isrlevel.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
@@ -112,11 +113,8 @@ rtems_status_code rtems_task_mode(
       executing->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
   }
 
-  /*
-   *  Set the new interrupt level
-   */
-  if ( mask & RTEMS_INTERRUPT_MASK ) {
-    _Modes_Set_interrupt_level( mode_set );
+  if ( ( mask & RTEMS_INTERRUPT_MASK ) != 0 ) {
+    _ISR_Set_level( _Modes_Get_interrupt_level( mode_set ) );
   }
 
   /*
