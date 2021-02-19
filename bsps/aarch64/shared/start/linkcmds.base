@@ -43,8 +43,6 @@ STARTUP (start.o)
 
 bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 16;
 
-bsp_set_align = DEFINED (bsp_set_align) ? bsp_set_align : 8;
-
 bsp_stack_exception_size = DEFINED (bsp_stack_exception_size) ? bsp_stack_exception_size : 0;
 bsp_stack_exception_size = ALIGN (bsp_stack_exception_size, bsp_stack_align);
 
@@ -245,7 +243,7 @@ SECTIONS {
 	.got : ALIGN_WITH_INPUT {
 		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
-	.rtemsroset : ALIGN_WITH_INPUT SUBALIGN(bsp_set_align) {
+	.rtemsroset : ALIGN_WITH_INPUT {
 		/* Special FreeBSD linker set sections */
 		__start_set_sysctl_set = .;
 		*(set_sysctl_*);
@@ -299,7 +297,7 @@ SECTIONS {
 	.data1 : ALIGN_WITH_INPUT {
 		*(.data1)
 	} > REGION_DATA AT > REGION_DATA_LOAD
-	.rtemsrwset : ALIGN_WITH_INPUT SUBALIGN(bsp_set_align) {
+	.rtemsrwset : ALIGN_WITH_INPUT {
 		KEEP (*(SORT(.rtemsrwset.*)))
 		bsp_section_data_end = .;
 	} > REGION_DATA AT > REGION_DATA_LOAD

@@ -60,7 +60,6 @@ content: |
 
   OUTPUT_FORMAT ("elf32-littleaarch64")
   OUTPUT_ARCH (aarch64:ilp32)
-  bsp_set_align = 4;
 
   INCLUDE linkcmds.base
 copyrights:
