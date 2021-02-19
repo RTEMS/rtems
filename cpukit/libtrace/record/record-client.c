@@ -124,6 +124,7 @@ static void resolve_hold_back(
     uint32_t last;
     uint32_t delta;
     uint64_t uptime;
+    rtems_record_client_status status;
 
     last_head = per_cpu->head[ per_cpu->tail_head_index ];
     last_tail = per_cpu->tail[ per_cpu->tail_head_index ];
@@ -192,7 +193,8 @@ static void resolve_hold_back(
       const rtems_record_item_64 *item;
 
       item = &per_cpu->items[ index ];
-      visit( ctx, item->event, item->data );
+      status = visit( ctx, item->event, item->data );
+      _Assert_Unused_variable_equals(status, RTEMS_RECORD_CLIENT_SUCCESS);
     }
   }
 }
