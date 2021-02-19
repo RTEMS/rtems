@@ -59,7 +59,6 @@
 #include <stddef.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
-#include <rtems/rtems/tasks.h>
 #include <rtems/rtems/types.h>
 #include <rtems/score/watchdogticks.h>
 

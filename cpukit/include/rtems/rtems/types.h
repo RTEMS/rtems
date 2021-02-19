@@ -7,8 +7,8 @@
  */
 
 /*
- * Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
- * Copyright (C) 2006, 2008 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -253,6 +253,15 @@ typedef uint32_t rtems_name;
    */
   typedef MP_packet_Prefix rtems_packet_prefix;
 #endif
+
+/* Generated from spec:/rtems/type/if/priority */
+
+/**
+ * @ingroup RTEMSAPIClassicTypes
+ *
+ * @brief This integer type represents task priorities of the Classic API.
+ */
+typedef uint32_t rtems_task_priority;
 
 /* Generated from spec:/rtems/type/if/time-of-day */
 
