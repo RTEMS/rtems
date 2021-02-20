@@ -13,7 +13,7 @@ default-by-variant:
   - -mcpu=cortex-a53
   - -mabi=ilp32
   variants:
-  - aarch64/xilinx_zynqmp_ilp32
+  - aarch64/xilinx_zynqmp_ilp32_qemu
 description: |
   ABI flags
 enabled-by: true

@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: aarch64
-bsp: xilinx_zynqmp_ilp32
+bsp: xilinx_zynqmp_ilp32_qemu
 build-type: bsp
 cflags: []
 copyrights:
