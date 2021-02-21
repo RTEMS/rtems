@@ -36,6 +36,7 @@
 
 #ifdef __rtems__
 #include <rtems/score/cpu.h>
+#include <rtems/rtems/status.h>
 #endif
 
 #ifdef __cplusplus
@@ -2512,6 +2513,10 @@ typedef enum {
 } T_thread_timer_state;
 
 T_thread_timer_state T_get_thread_timer_state(uint32_t);
+
+void *T_seize_objects(rtems_status_code (*)(void *, uint32_t *), void *);
+
+void T_surrender_objects(void **, rtems_status_code (*)(uint32_t));
 #endif /* __rtems__ */
 
 /**

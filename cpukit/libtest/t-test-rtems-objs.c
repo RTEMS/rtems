@@ -410,3 +410,57 @@ T_check_rtems_timers(T_event event, const char *name)
 		break;
 	};
 }
+
+void *
+T_seize_objects(rtems_status_code (*create)(void *, uint32_t *), void *arg)
+{
+	void *objects;
+
+	objects = NULL;
+
+	while (true) {
+		rtems_status_code sc;
+		rtems_id id;
+
+		id = 0;
+		sc = (*create)(arg, &id);
+
+		if (sc == RTEMS_SUCCESSFUL) {
+			const Objects_Information *info;
+			Objects_Control *obj;
+
+			info = _Objects_Get_information_id(id);
+			T_quiet_assert_not_null(info);
+			obj = _Objects_Get_no_protection(id, info);
+			T_quiet_assert_not_null(obj);
+			obj->Node.next = objects;
+			objects = obj;
+		} else {
+			T_quiet_rsc(sc, RTEMS_TOO_MANY);
+			break;
+		}
+	}
+
+	return objects;
+}
+
+void
+T_surrender_objects(void **objects_p, rtems_status_code (*delete)(uint32_t))
+{
+	void *objects;
+
+	objects = *objects_p;
+	*objects_p = NULL;
+
+	while (objects != NULL) {
+		Objects_Control *obj;
+		rtems_status_code sc;
+
+		obj = objects;
+		objects = _Chain_Next(&obj->Node);
+		_Chain_Set_off_chain(&obj->Node);
+
+		sc = (*delete)(obj->id);
+		T_quiet_rsc_success(sc);
+	}
+}
