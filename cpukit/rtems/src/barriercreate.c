@@ -34,34 +34,35 @@ rtems_status_code rtems_barrier_create(
   rtems_id            *id
 )
 {
-  Barrier_Control         *the_barrier;
-  CORE_barrier_Attributes  the_attributes;
+  Barrier_Control *the_barrier;
+  uint32_t         maximum_count;
 
-  if ( !rtems_is_name_valid( name ) )
+  if ( !rtems_is_name_valid( name ) ) {
     return RTEMS_INVALID_NAME;
+  }
 
-  if ( !id )
+  if ( id == NULL ) {
     return RTEMS_INVALID_ADDRESS;
+  }
 
-  /* Initialize core barrier attributes */
   if ( _Attributes_Is_barrier_automatic( attribute_set ) ) {
-    the_attributes.discipline = CORE_BARRIER_AUTOMATIC_RELEASE;
-    if ( maximum_waiters == 0 )
+    if ( maximum_waiters == 0 ) {
       return RTEMS_INVALID_NUMBER;
-  } else
-    the_attributes.discipline = CORE_BARRIER_MANUAL_RELEASE;
-  the_attributes.maximum_count = maximum_waiters;
+    }
+
+    maximum_count = maximum_waiters;
+  } else {
+    maximum_count = CORE_BARRIER_MANUAL_RELEASE_MAXIMUM_COUNT;
+  }
 
   the_barrier = _Barrier_Allocate();
 
-  if ( !the_barrier ) {
+  if ( the_barrier == NULL ) {
     _Objects_Allocator_unlock();
     return RTEMS_TOO_MANY;
   }
 
-  the_barrier->attribute_set = attribute_set;
-
-  _CORE_barrier_Initialize( &the_barrier->Barrier, &the_attributes );
+  _CORE_barrier_Initialize( &the_barrier->Barrier, maximum_count );
 
   *id = _Objects_Open_u32( &_Barrier_Information, &the_barrier->Object, name );
   _Objects_Allocator_unlock();

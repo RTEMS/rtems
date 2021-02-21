@@ -61,21 +61,22 @@ Status_Control _CORE_barrier_Seize(
   Thread_queue_Context *queue_context
 )
 {
-  uint32_t number_of_waiting_threads;
+  uint32_t new_number_of_waiting_threads;
 
   _CORE_barrier_Acquire_critical( the_barrier, queue_context );
 
-  number_of_waiting_threads = the_barrier->number_of_waiting_threads;
-  ++number_of_waiting_threads;
+  /*
+   * In theory, this calculation can overflow.  If this happens, then about 4
+   * billion threads are accidentally released.  Currently, the system limit
+   * for threads is a bit lower with three times OBJECTS_INDEX_MASK - 1.
+   */
+  new_number_of_waiting_threads = the_barrier->number_of_waiting_threads + 1;
 
-  if (
-    _CORE_barrier_Is_automatic( &the_barrier->Attributes )
-      && number_of_waiting_threads == the_barrier->Attributes.maximum_count
-  ) {
+  if ( new_number_of_waiting_threads == the_barrier->maximum_count ) {
     _CORE_barrier_Surrender( the_barrier, queue_context );
     return STATUS_BARRIER_AUTOMATICALLY_RELEASED;
   } else {
-    the_barrier->number_of_waiting_threads = number_of_waiting_threads;
+    the_barrier->number_of_waiting_threads = new_number_of_waiting_threads;
     _Thread_queue_Context_set_thread_state(
       queue_context,
       STATES_WAITING_FOR_BARRIER

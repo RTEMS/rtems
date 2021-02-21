@@ -23,13 +23,12 @@
 #include <rtems/score/corebarrierimpl.h>
 
 void _CORE_barrier_Initialize(
-  CORE_barrier_Control       *the_barrier,
-  CORE_barrier_Attributes    *the_barrier_attributes
+  CORE_barrier_Control *the_barrier,
+  uint32_t              maximum_count
 )
 {
-
-  the_barrier->Attributes                = *the_barrier_attributes;
   the_barrier->number_of_waiting_threads = 0;
+  the_barrier->maximum_count = maximum_count;
 
   _Thread_queue_Object_initialize( &the_barrier->Wait_queue );
 }

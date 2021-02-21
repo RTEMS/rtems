@@ -40,50 +40,30 @@ extern "C" {
  */
 
 /**
- *  Flavors of barriers.
- */
-typedef enum {
-  /** This specifies that the barrier will automatically release when
-   *  the user specified number of threads have arrived at the barrier.
-   */
-  CORE_BARRIER_AUTOMATIC_RELEASE,
-  /** This specifies that the user will have to manually release the barrier
-   *  in order to release the waiting threads.
-   */
-  CORE_BARRIER_MANUAL_RELEASE
-}   CORE_barrier_Disciplines;
-
-/**
- *  The following defines the control block used to manage the
- *  attributes of each barrier.
+ * @brief This control block is used to manage a barrier.
  */
 typedef struct {
-  /** This field indicates whether the barrier is automatic or manual.
+  /**
+   * @brief This member is used to manage the set of tasks which are
+   *   blocked waiting for the barrier to be released.
    */
-  CORE_barrier_Disciplines  discipline;
-  /** This element indicates the number of threads which must arrive at the
-   *  barrier to trip the automatic release.
-   */
-  uint32_t                  maximum_count;
-}   CORE_barrier_Attributes;
+  Thread_queue_Control Wait_queue;
 
-/**
- *  The following defines the control block used to manage each
- *  barrier.
- */
-typedef struct {
-  /** This field is the Waiting Queue used to manage the set of tasks
-   *  which are blocked waiting for the barrier to be released.
+  /**
+   * @brief This member contains the current number of thread waiting at the
+   *   barrier to be released.
    */
-  Thread_queue_Control     Wait_queue;
-  /** This element is the set of attributes which define this instance's
-   *  behavior.
+  uint32_t number_of_waiting_threads;
+
+  /**
+   * @brief This member indicates the number of threads which must arrive at
+   *   the barrier to trip the automatic release.
+   *
+   * Use ::CORE_BARRIER_MANUAL_RELEASE_MAXIMUM_COUNT to indicate a manual
+   * release barrier.
    */
-  CORE_barrier_Attributes  Attributes;
-  /** This element contains the current number of thread waiting for this
-   *  barrier to be released. */
-  uint32_t                 number_of_waiting_threads;
-}   CORE_barrier_Control;
+  uint32_t maximum_count;
+} CORE_barrier_Control;
 
 /** @} */
 
