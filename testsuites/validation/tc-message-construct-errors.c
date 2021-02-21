@@ -95,10 +95,10 @@ typedef enum {
 } RtemsMessageReqConstructErrors_Pre_MaxSize;
 
 typedef enum {
-  RtemsMessageReqConstructErrors_Pre_Queues_Avail,
-  RtemsMessageReqConstructErrors_Pre_Queues_None,
-  RtemsMessageReqConstructErrors_Pre_Queues_NA
-} RtemsMessageReqConstructErrors_Pre_Queues;
+  RtemsMessageReqConstructErrors_Pre_Free_Yes,
+  RtemsMessageReqConstructErrors_Pre_Free_No,
+  RtemsMessageReqConstructErrors_Pre_Free_NA
+} RtemsMessageReqConstructErrors_Pre_Free;
 
 typedef enum {
   RtemsMessageReqConstructErrors_Pre_Area_Valid,
@@ -135,7 +135,7 @@ typedef struct {
 
   rtems_id id_value;
 
-  Chain_Control message_queues;
+  void *seized_objects;
 
   /**
    * @brief This member defines the pre-condition states for the next action.
@@ -178,9 +178,9 @@ static const char * const RtemsMessageReqConstructErrors_PreDesc_MaxSize[] = {
   "NA"
 };
 
-static const char * const RtemsMessageReqConstructErrors_PreDesc_Queues[] = {
-  "Avail",
-  "None",
+static const char * const RtemsMessageReqConstructErrors_PreDesc_Free[] = {
+  "Yes",
+  "No",
   "NA"
 };
 
@@ -201,7 +201,7 @@ static const char * const * const RtemsMessageReqConstructErrors_PreDesc[] = {
   RtemsMessageReqConstructErrors_PreDesc_Name,
   RtemsMessageReqConstructErrors_PreDesc_MaxPending,
   RtemsMessageReqConstructErrors_PreDesc_MaxSize,
-  RtemsMessageReqConstructErrors_PreDesc_Queues,
+  RtemsMessageReqConstructErrors_PreDesc_Free,
   RtemsMessageReqConstructErrors_PreDesc_Area,
   RtemsMessageReqConstructErrors_PreDesc_AreaSize,
   NULL
@@ -214,10 +214,31 @@ static const char * const * const RtemsMessageReqConstructErrors_PreDesc[] = {
 #define MAX_MESSAGE_SIZE 1
 
 static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
-  exhaust_buffers[ MAX_MESSAGE_QUEUES ][ MAX_PENDING_MESSAGES ];
+  buffers_to_seize[ MAX_MESSAGE_QUEUES ][ MAX_PENDING_MESSAGES ];
 
 static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
   buffers[ MAX_PENDING_MESSAGES ];
+
+static rtems_status_code Create( void *arg, uint32_t *id )
+{
+  rtems_message_queue_config config;
+  size_t                    *i;
+
+  i = arg;
+  T_quiet_lt_sz( *i, MAX_MESSAGE_QUEUES );
+
+  memset( &config, 0, sizeof( config ) );
+  config.name = rtems_build_name( 'S', 'I', 'Z', 'E' );
+  config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+  config.maximum_message_size = MAX_MESSAGE_SIZE;
+  config.storage_size = sizeof( buffers_to_seize[ *i ] );
+  config.storage_area = buffers_to_seize[ *i ];
+  config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
+
+  ++(*i);
+
+  return rtems_message_queue_construct( &config, id );
+}
 
 static void RtemsMessageReqConstructErrors_Pre_Id_Prepare(
   RtemsMessageReqConstructErrors_Context *ctx,
@@ -313,58 +334,26 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
   }
 }
 
-static void RtemsMessageReqConstructErrors_Pre_Queues_Prepare(
-  RtemsMessageReqConstructErrors_Context   *ctx,
-  RtemsMessageReqConstructErrors_Pre_Queues state
+static void RtemsMessageReqConstructErrors_Pre_Free_Prepare(
+  RtemsMessageReqConstructErrors_Context *ctx,
+  RtemsMessageReqConstructErrors_Pre_Free state
 )
 {
-  rtems_message_queue_config config;
-  size_t                     i;
+  size_t i;
 
   switch ( state ) {
-    case RtemsMessageReqConstructErrors_Pre_Queues_Avail: {
+    case RtemsMessageReqConstructErrors_Pre_Free_Yes: {
       /* Nothing to do */
       break;
     }
 
-    case RtemsMessageReqConstructErrors_Pre_Queues_None: {
-      memset( &config, 0, sizeof( config ) );
-      config.name = rtems_build_name( 'M', 'S', 'G', 'Q' );
-      config.maximum_pending_messages = MAX_PENDING_MESSAGES;
-      config.maximum_message_size = MAX_MESSAGE_SIZE;
-      config.storage_size = sizeof( exhaust_buffers[ 0 ] );
-      config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
-
+    case RtemsMessageReqConstructErrors_Pre_Free_No: {
       i = 0;
-
-      while ( i < MAX_MESSAGE_QUEUES ) {
-        rtems_status_code sc;
-        rtems_id          id;
-
-        config.storage_area = exhaust_buffers[ i ];
-
-        sc = rtems_message_queue_construct( &config, &id );
-
-        if ( sc == RTEMS_SUCCESSFUL ) {
-          Objects_Control           *obj;
-          const Objects_Information *info;
-
-          info = _Objects_Get_information_id( id );
-          T_quiet_assert_not_null( info );
-          obj = _Objects_Get_no_protection( id, info );
-          T_quiet_assert_not_null( obj );
-          _Chain_Append_unprotected( &ctx->message_queues, &obj->Node );
-        } else {
-          T_quiet_rsc( sc, RTEMS_TOO_MANY );
-          break;
-        }
-
-        ++i;
-      }
+      ctx->seized_objects = T_seize_objects( Create, &i );
       break;
     }
 
-    case RtemsMessageReqConstructErrors_Pre_Queues_NA:
+    case RtemsMessageReqConstructErrors_Pre_Free_NA:
       break;
   }
 }
@@ -471,22 +460,6 @@ static void RtemsMessageReqConstructErrors_Post_Status_Check(
   }
 }
 
-static void RtemsMessageReqConstructErrors_Setup(
-  RtemsMessageReqConstructErrors_Context *ctx
-)
-{
-  _Chain_Initialize_empty( &ctx->message_queues );
-}
-
-static void RtemsMessageReqConstructErrors_Setup_Wrap( void *arg )
-{
-  RtemsMessageReqConstructErrors_Context *ctx;
-
-  ctx = arg;
-  ctx->in_action_loop = false;
-  RtemsMessageReqConstructErrors_Setup( ctx );
-}
-
 static size_t RtemsMessageReqConstructErrors_Scope(
   void  *arg,
   char  *buf,
@@ -510,7 +483,7 @@ static size_t RtemsMessageReqConstructErrors_Scope(
 }
 
 static T_fixture RtemsMessageReqConstructErrors_Fixture = {
-  .setup = RtemsMessageReqConstructErrors_Setup_Wrap,
+  .setup = NULL,
   .stop = NULL,
   .teardown = NULL,
   .scope = RtemsMessageReqConstructErrors_Scope,
@@ -1103,7 +1076,7 @@ static const struct {
   uint8_t Pre_Name_NA : 1;
   uint8_t Pre_MaxPending_NA : 1;
   uint8_t Pre_MaxSize_NA : 1;
-  uint8_t Pre_Queues_NA : 1;
+  uint8_t Pre_Free_NA : 1;
   uint8_t Pre_Area_NA : 1;
   uint8_t Pre_AreaSize_NA : 1;
 } RtemsMessageReqConstructErrors_TransitionInfo[] = {
@@ -1705,16 +1678,7 @@ static void RtemsMessageReqConstructErrors_Cleanup(
   RtemsMessageReqConstructErrors_Context *ctx
 )
 {
-  Chain_Node *node;
-
-  while ( ( node = _Chain_Get_unprotected( &ctx->message_queues ) ) ) {
-    Objects_Control   *obj;
-    rtems_status_code  sc;
-
-    obj = (Objects_Control *) node;
-    sc = rtems_message_queue_delete( obj->id );
-    T_quiet_rsc_success( sc );
-  }
+  T_surrender_objects( &ctx->seized_objects, rtems_message_queue_delete );
 }
 
 /**
@@ -1743,7 +1707,7 @@ T_TEST_CASE_FIXTURE(
         * RtemsMessageReqConstructErrors_Pre_Name_NA
         * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
         * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-        * RtemsMessageReqConstructErrors_Pre_Queues_NA
+        * RtemsMessageReqConstructErrors_Pre_Free_NA
         * RtemsMessageReqConstructErrors_Pre_Area_NA
         * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
     }
@@ -1758,7 +1722,7 @@ T_TEST_CASE_FIXTURE(
         index += ( RtemsMessageReqConstructErrors_Pre_Name_NA - 1 )
           * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
           * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-          * RtemsMessageReqConstructErrors_Pre_Queues_NA
+          * RtemsMessageReqConstructErrors_Pre_Free_NA
           * RtemsMessageReqConstructErrors_Pre_Area_NA
           * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
       }
@@ -1772,7 +1736,7 @@ T_TEST_CASE_FIXTURE(
           ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
           index += ( RtemsMessageReqConstructErrors_Pre_MaxPending_NA - 1 )
             * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-            * RtemsMessageReqConstructErrors_Pre_Queues_NA
+            * RtemsMessageReqConstructErrors_Pre_Free_NA
             * RtemsMessageReqConstructErrors_Pre_Area_NA
             * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
         }
@@ -1785,19 +1749,19 @@ T_TEST_CASE_FIXTURE(
           if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_MaxSize_NA ) {
             ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
             index += ( RtemsMessageReqConstructErrors_Pre_MaxSize_NA - 1 )
-              * RtemsMessageReqConstructErrors_Pre_Queues_NA
+              * RtemsMessageReqConstructErrors_Pre_Free_NA
               * RtemsMessageReqConstructErrors_Pre_Area_NA
               * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
           }
 
           for (
-            ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Queues_Avail;
-            ctx->pcs[ 4 ] < RtemsMessageReqConstructErrors_Pre_Queues_NA;
+            ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Free_Yes;
+            ctx->pcs[ 4 ] < RtemsMessageReqConstructErrors_Pre_Free_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_Queues_NA ) {
-              ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Queues_NA;
-              index += ( RtemsMessageReqConstructErrors_Pre_Queues_NA - 1 )
+            if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_Free_NA ) {
+              ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Free_NA;
+              index += ( RtemsMessageReqConstructErrors_Pre_Free_NA - 1 )
                 * RtemsMessageReqConstructErrors_Pre_Area_NA
                 * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
             }
@@ -1845,7 +1809,7 @@ T_TEST_CASE_FIXTURE(
                   ctx,
                   ctx->pcs[ 3 ]
                 );
-                RtemsMessageReqConstructErrors_Pre_Queues_Prepare(
+                RtemsMessageReqConstructErrors_Pre_Free_Prepare(
                   ctx,
                   ctx->pcs[ 4 ]
                 );
