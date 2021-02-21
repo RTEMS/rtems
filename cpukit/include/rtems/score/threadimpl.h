@@ -164,9 +164,9 @@ typedef struct {
   Thread_CPU_budget_algorithm_callout budget_callout;
 
   /**
-   * @brief Name of the object for the thread.
+   * @brief 32-bit unsigned integer name of the object for the thread.
    */
-  Objects_Name name;
+  uint32_t name;
 
   /**
    * @brief The thread's initial ISR level.

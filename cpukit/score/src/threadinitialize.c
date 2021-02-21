@@ -241,10 +241,7 @@ bool _Thread_Initialize(
 
   _Thread_Action_control_initialize( &the_thread->Post_switch_actions );
 
-  /*
-   *  Open the object
-   */
-  _Objects_Open( &information->Objects, &the_thread->Object, config->name );
+  _Objects_Open_u32( &information->Objects, &the_thread->Object, config->name );
 
   /*
    *  We assume the Allocator Mutex is locked and dispatching is

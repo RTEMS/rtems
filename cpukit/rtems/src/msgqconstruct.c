@@ -158,13 +158,11 @@ rtems_status_code _Message_queue_Create(
     return _Status_Get( status );
   }
 
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Message_queue_Information,
     &the_message_queue->Object,
-    (Objects_Name) config->name
+    config->name
   );
-
-  *id = the_message_queue->Object.id;
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( is_global )

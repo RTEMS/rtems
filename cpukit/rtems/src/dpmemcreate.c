@@ -59,13 +59,11 @@ rtems_status_code rtems_port_create(
   the_port->external_base = external_start;
   the_port->length        = length - 1;
 
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Dual_ported_memory_Information,
     &the_port->Object,
-    (Objects_Name) name
+    name
   );
-
-  *id = the_port->Object.id;
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

@@ -55,13 +55,11 @@ rtems_status_code rtems_extension_create(
 
   _User_extensions_Add_set_with_table( &the_extension->Extension, extension_table );
 
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Extension_Information,
     &the_extension->Object,
-    (Objects_Name) name
+    name
   );
-
-  *id = the_extension->Object.id;
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

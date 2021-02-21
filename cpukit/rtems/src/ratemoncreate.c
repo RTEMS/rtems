@@ -60,13 +60,11 @@ rtems_status_code rtems_rate_monotonic_create(
 
   _Rate_monotonic_Reset_statistics( the_period );
 
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Rate_monotonic_Information,
     &the_period->Object,
-    (Objects_Name) name
+    name
   );
-
-  *id = the_period->Object.id;
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

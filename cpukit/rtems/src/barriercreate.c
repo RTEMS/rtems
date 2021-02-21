@@ -63,14 +63,7 @@ rtems_status_code rtems_barrier_create(
 
   _CORE_barrier_Initialize( &the_barrier->Barrier, &the_attributes );
 
-  _Objects_Open(
-    &_Barrier_Information,
-    &the_barrier->Object,
-    (Objects_Name) name
-  );
-
-  *id = the_barrier->Object.id;
-
+  *id = _Objects_Open_u32( &_Barrier_Information, &the_barrier->Object, name );
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

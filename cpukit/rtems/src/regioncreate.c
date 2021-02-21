@@ -75,13 +75,12 @@ rtems_status_code rtems_region_create(
       } else {
         the_region->attribute_set = attribute_set;
 
-        _Objects_Open(
+        *id = _Objects_Open_u32(
           &_Region_Information,
           &the_region->Object,
-          (Objects_Name) name
+          name
         );
 
-        *id = the_region->Object.id;
         return_status = RTEMS_SUCCESSFUL;
       }
     }

@@ -738,50 +738,27 @@ RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
 }
 
 /**
- * @brief Places the_object control pointer and object name
- *      in the Local Pointer and Local Name Tables, respectively.
+ * @brief Assigns the 32-bit unsigned integer name to the object and places the
+ *   object in the local object table.
  *
- * This method uses Objects_Name for the object name.
+ * @param information is the object information.
  *
- * @param[in, out] information Points to an Object Information Table.
- * @param the_object Pointer to an object.
- * @param name The name of the object to make accessible.
+ * @param[in, out] the_object is the object to open.
+ *
+ * @param name is the name of the object to open.
+ *
+ * @return Returns the identifier of the object which is now valid.
  */
-RTEMS_INLINE_ROUTINE void _Objects_Open(
-  Objects_Information *information,
-  Objects_Control     *the_object,
-  Objects_Name         name
-)
-{
-  _Assert( information != NULL );
-  _Assert( the_object != NULL );
-
-  the_object->name = name;
-
-  _Objects_Set_local_object(
-    information,
-    _Objects_Get_index( the_object->id ),
-    the_object
-  );
-}
-
-/**
- * @brief Places the_object control pointer and object name
- *      in the Local Pointer and Local Name Tables, respectively.
- *
- * This method uses uint32_t for the object name.
- *
- * @param[in, out] information Points to an Object Information Table.
- * @param the_object Pointer to an object.
- * @param name The name of the object to make accessible.
- */
-RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
+RTEMS_INLINE_ROUTINE Objects_Id _Objects_Open_u32(
   const Objects_Information *information,
   Objects_Control           *the_object,
   uint32_t                   name
 )
 {
+  _Assert( information != NULL );
   _Assert( !_Objects_Has_string_name( information ) );
+  _Assert( the_object != NULL );
+
   the_object->name.name_u32 = name;
 
   _Objects_Set_local_object(
@@ -789,17 +766,19 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
     _Objects_Get_index( the_object->id ),
     the_object
   );
+
+  return the_object->id;
 }
 
 /**
- * @brief Places the_object control pointer and object name
- *      in the Local Pointer and Local Name Tables, respectively.
+ * @brief Assigns the string name to the object and places the object in the
+ *   local object table.
  *
- * This method uses a String for the object name.
+ * @param information is the object information.
  *
- * @param[in, out] information Points to an Object Information Table.
- * @param the_object Pointer to an object.
- * @param name The name of the object to make accessible.
+ * @param[in, out] the_object is the object to open.
+ *
+ * @param name is the name of the object to open.
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   const Objects_Information *information,
@@ -807,7 +786,10 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   const char                *name
 )
 {
+  _Assert( information != NULL );
   _Assert( _Objects_Has_string_name( information ) );
+  _Assert( the_object != NULL );
+
   the_object->name.name_p = name;
 
   _Objects_Set_local_object(

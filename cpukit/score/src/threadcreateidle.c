@@ -50,7 +50,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
     config.scheduler->maximum_priority
   );
   config.budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
-  config.name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
+  config.name = _Objects_Build_name( 'I', 'D', 'L', 'E' );
   config.is_fp = CPU_IDLE_TASK_IS_FP;
   config.is_preemptible = true;
   config.stack_size = _Thread_Idle_stack_size

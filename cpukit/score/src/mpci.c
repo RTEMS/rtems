@@ -142,7 +142,7 @@ static void _MPCI_Create_server( void )
 
   memset( &config, 0, sizeof( config ) );
   config.scheduler = &_Scheduler_Table[ 0 ];
-  config.name.name_u32 = _Objects_Build_name( 'M', 'P', 'C', 'I' );
+  config.name = _Objects_Build_name( 'M', 'P', 'C', 'I' );
   config.priority = PRIORITY_PSEUDO_ISR;
   config.budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
   config.is_fp = CPU_ALL_TASKS_ARE_FP;

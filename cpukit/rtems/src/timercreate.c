@@ -209,13 +209,11 @@ rtems_status_code rtems_timer_create(
   the_timer->the_class = TIMER_DORMANT;
   _Watchdog_Preinitialize( &the_timer->Ticker, _Per_CPU_Get_snapshot() );
 
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Timer_Information,
     &the_timer->Object,
-    (Objects_Name) name
+    name
   );
-
-  *id = the_timer->Object.id;
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }

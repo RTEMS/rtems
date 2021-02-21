@@ -135,7 +135,7 @@ rtems_status_code _RTEMS_tasks_Create(
     THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE
       : THREAD_CPU_BUDGET_ALGORITHM_NONE,
   thread_config.isr_level =  _Modes_Get_interrupt_level( config->initial_modes );
-  thread_config.name.name_u32 = config->name;
+  thread_config.name = config->name;
   thread_config.is_fp = _Attributes_Is_floating_point( attributes );
   thread_config.is_preemptible = _Modes_Is_preempt( config->initial_modes );
 

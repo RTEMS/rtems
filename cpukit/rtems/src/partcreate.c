@@ -138,13 +138,12 @@ rtems_status_code rtems_partition_create(
     attribute_set
   );
 
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Partition_Information,
     &the_partition->Object,
-    (Objects_Name) name
+    name
   );
 
-  *id = the_partition->Object.id;
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) )
     _Partition_MP_Send_process_packet(

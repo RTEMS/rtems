@@ -245,13 +245,11 @@ rtems_status_code rtems_semaphore_create(
    *  Whether we initialized it as a mutex or counting semaphore, it is
    *  now ready to be "offered" for use as a Classic API Semaphore.
    */
-  _Objects_Open(
+  *id = _Objects_Open_u32(
     &_Semaphore_Information,
     &the_semaphore->Object,
-    (Objects_Name) name
+    name
   );
-
-  *id = the_semaphore->Object.id;
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) )
