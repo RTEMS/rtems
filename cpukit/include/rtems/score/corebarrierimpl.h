@@ -128,19 +128,6 @@ Status_Control _CORE_barrier_Seize(
 );
 
 /**
- * @brief Flushes the barrier.
- *
- * @param[in, out] the_barrier The barrier to flush.
- * @param[out] filter The filter for flushing.
- * @param[out] queue_context The thread queue context.
- */
-uint32_t _CORE_barrier_Do_flush(
-  CORE_barrier_Control      *the_barrier,
-  Thread_queue_Flush_filter  filter,
-  Thread_queue_Context      *queue_context
-);
-
-/**
  * @brief Manually releases the barrier.
  *
  * This routine manually releases the barrier.  All of the threads waiting
@@ -156,8 +143,9 @@ RTEMS_INLINE_ROUTINE uint32_t _CORE_barrier_Surrender(
   Thread_queue_Context *queue_context
 )
 {
-  return _CORE_barrier_Do_flush(
-    the_barrier,
+  return _Thread_queue_Flush_critical(
+    &the_barrier->Wait_queue.Queue,
+    &_CORE_barrier_Thread_queue_operations,
     _Thread_queue_Flush_default_filter,
     queue_context
   );
@@ -174,8 +162,9 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Flush(
   Thread_queue_Context *queue_context
 )
 {
-  _CORE_barrier_Do_flush(
-    the_barrier,
+  _Thread_queue_Flush_critical(
+    &the_barrier->Wait_queue.Queue,
+    &_CORE_barrier_Thread_queue_operations,
     _Thread_queue_Flush_status_object_was_deleted,
     queue_context
   );

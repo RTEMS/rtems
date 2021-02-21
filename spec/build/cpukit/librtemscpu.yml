@@ -1371,7 +1371,6 @@ source:
 - cpukit/score/src/condition.c
 - cpukit/score/src/configstackspacesize.c
 - cpukit/score/src/corebarrier.c
-- cpukit/score/src/corebarrierrelease.c
 - cpukit/score/src/corebarrierwait.c
 - cpukit/score/src/coremsgbroadcast.c
 - cpukit/score/src/coremsg.c

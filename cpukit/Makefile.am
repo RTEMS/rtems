@@ -833,7 +833,6 @@ librtemscpu_a_SOURCES += score/src/apimutexisowner.c
 librtemscpu_a_SOURCES += score/src/apimutexlock.c
 librtemscpu_a_SOURCES += score/src/apimutexunlock.c
 librtemscpu_a_SOURCES += score/src/corebarrier.c
-librtemscpu_a_SOURCES += score/src/corebarrierrelease.c
 librtemscpu_a_SOURCES += score/src/corebarrierwait.c
 librtemscpu_a_SOURCES += score/src/coremsg.c
 librtemscpu_a_SOURCES += score/src/coremsgbroadcast.c
