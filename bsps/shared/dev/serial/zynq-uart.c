@@ -144,14 +144,22 @@ static bool zynq_uart_set_attributes(
 {
   zynq_uart_context *ctx = (zynq_uart_context *) context;
   volatile zynq_uart *regs = ctx->regs;
+  int32_t baud;
   uint32_t brgr = 0;
   uint32_t bauddiv = 0;
   uint32_t mode = 0;
   int rc;
 
-  rc = zynq_cal_baud_rate(115200, &brgr, &bauddiv, regs->mode);
-  if (rc != 0)
-    return rc;
+  /*
+   * Determine the baud rate
+   */
+  baud = rtems_termios_baud_to_number(term->c_ospeed);
+
+  if (baud > 0) {
+    rc = zynq_cal_baud_rate(baud, &brgr, &bauddiv, regs->mode);
+    if (rc != 0)
+      return rc;
+  }
 
   /*
    * Configure the mode register
@@ -202,8 +210,11 @@ static bool zynq_uart_set_attributes(
 
   regs->control &= ~(ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN);
   regs->mode = mode;
-  regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
-  regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
+  /* Ignore baud rate of B0. There are no modem control lines to de-assert */
+  if (baud > 0) {
+    regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
+    regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
+  }
   regs->control |= ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN;
 
   return true;
