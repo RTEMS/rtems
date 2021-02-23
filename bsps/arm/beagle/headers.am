@@ -13,3 +13,5 @@ include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/beagleboneb
 include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/i2c.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/irq.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/spi.h
+include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/qep.h
+include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/pwmss.h

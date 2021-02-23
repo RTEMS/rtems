@@ -77,8 +77,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/spi/spi.c
 # GPIO
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/gpio/bbb-gpio.c
 
+#pwmss shared
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/pwmss/pwmss.c
+
 #pwm
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/pwm/pwm.c
+
+#qep
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/qep/qep.c
 
 #RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/rtc/rtc.c

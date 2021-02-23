@@ -31,17 +31,6 @@ extern "C" {
 #define BBB_CONTROL_CONF_GPMC_AD(n)   (0x800 + (n * 4))
 #define BBB_CONTROL_CONF_LCD_DATA(n)   (0x8a0 + (n * 4))
 
-/**
- * @brief The set of possible PWM subsystem module
- *
- * Enumerated type to define various instance of pwm module.
- */
-typedef enum{
-  BBB_PWMSS0 = 0,
-  BBB_PWMSS1,
-  BBB_PWMSS2,
-  BBB_PWMSS_COUNT
-}BBB_PWMSS;
 
 typedef enum{
   BBB_P8_13_2B = 3,

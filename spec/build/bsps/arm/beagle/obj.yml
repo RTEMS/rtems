@@ -19,7 +19,8 @@ install:
   - bsps/arm/beagle/include/bsp/beagleboneblack.h
   - bsps/arm/beagle/include/bsp/i2c.h
   - bsps/arm/beagle/include/bsp/irq.h
-  - bsps/arm/beagle/include/bsp/spi.h
+  - bsps/arm/beagle/include/bsp/pwmss.h
+  - bsps/arm/beagle/include/bsp/qep.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/beagle/start/linkcmds
@@ -31,6 +32,8 @@ source:
 - bsps/arm/beagle/i2c/bbb-i2c.c
 - bsps/arm/beagle/irq/irq.c
 - bsps/arm/beagle/pwm/pwm.c
+- bsps/arm/beagle/pwmss/pwmss.c
+- bsps/arm/beagle/qep/qep.c
 - bsps/arm/beagle/rtc/rtc.c
 - bsps/arm/beagle/spi/spi.c
 - bsps/arm/beagle/start/bspdebug.c
