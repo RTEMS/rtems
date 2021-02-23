@@ -242,6 +242,17 @@ static void test_io_base64( test_context *ctx )
   rtems_test_assert( n == 0 );
 }
 
+static void test_io_base64url( test_context *ctx )
+{
+  unsigned char buf[] = { 0, 0, 62, 0, 0, 63 };
+  int n;
+
+  clear( ctx );
+  n = _IO_Base64url( put_char, ctx, buf, sizeof( buf ), "\n", 0 );
+  rtems_test_assert( n == 9 );
+  rtems_test_assert( strcmp( ctx->buf, "AAA-\nAAA_" ) == 0 );
+}
+
 static rtems_task Init(
   rtems_task_argument argument
 )
@@ -257,6 +268,7 @@ static rtems_task Init(
   do_getchark();
   test_io_printf(&test_instance);
   test_io_base64(&test_instance);
+  test_io_base64url(&test_instance);
 
   TEST_END();
   rtems_test_exit( 0 );
