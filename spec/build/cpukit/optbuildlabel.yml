@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-string: null
+- define: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+default: DEFAULT
+default-by-variant: []
+description: |
+  Defines the build label returned by rtems_get_build_label().
+enabled-by: true
+format: '{}'
+links: []
+name: RTEMS_BUILD_LABEL
+type: build

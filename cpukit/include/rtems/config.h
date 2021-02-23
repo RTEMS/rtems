@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -92,6 +92,37 @@ extern "C" {
  * Some interfaces of this API are also used to define application
  * configuration option values, for example rtems_resource_unlimited().
  */
+
+/* Generated from spec:/rtems/config/if/get-build-label */
+
+/**
+ * @ingroup RTEMSAPIConfig
+ *
+ * @brief Gets the RTEMS build label.
+ *
+ * The build label is a user-provided string defined by the build
+ * configuration.
+ *
+ * @return Returns the pointer to the RTEMS build label.
+ *
+ * @par Notes
+ * The build label can be used to distinguish test suite results obtained from
+ * different build configurations.  A use case is to record test results with
+ * performance data to track performance regressions.  For this a database of
+ * performance limits is required.  The build label and the target hash
+ * obtained from rtems_get_target_hash() can be used as a key to obtain
+ * performance limits.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+const char *rtems_get_build_label( void );
 
 /* Generated from spec:/rtems/config/if/get-copyright-notice */
 

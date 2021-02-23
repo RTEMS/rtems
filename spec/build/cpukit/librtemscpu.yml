@@ -1338,6 +1338,7 @@ source:
 - cpukit/sapi/src/extensionident.c
 - cpukit/sapi/src/fatal.c
 - cpukit/sapi/src/fatalsrctext.c
+- cpukit/sapi/src/getbuildlabel.c
 - cpukit/sapi/src/getconfigmax.c
 - cpukit/sapi/src/getcopyrightnotice.c
 - cpukit/sapi/src/getversionstring.c

@@ -34,6 +34,8 @@ links:
 - role: build-dependency
   uid: optada
 - role: build-dependency
+  uid: optbuildlabel
+- role: build-dependency
   uid: optdebug
 - role: build-dependency
   uid: optdrvmgr

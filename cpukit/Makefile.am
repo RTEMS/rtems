@@ -1062,6 +1062,7 @@ librtemscpu_a_SOURCES += sapi/src/extensiondelete.c
 librtemscpu_a_SOURCES += sapi/src/extensionident.c
 librtemscpu_a_SOURCES += sapi/src/fatal.c
 librtemscpu_a_SOURCES += sapi/src/fatalsrctext.c
+librtemscpu_a_SOURCES += sapi/src/getbuildlabel.c
 librtemscpu_a_SOURCES += sapi/src/getconfigmax.c
 librtemscpu_a_SOURCES += sapi/src/getcopyrightnotice.c
 librtemscpu_a_SOURCES += sapi/src/getversionstring.c
