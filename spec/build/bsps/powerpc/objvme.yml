@@ -11,8 +11,8 @@ install: []
 links: []
 source:
 - bsps/powerpc/shared/vme/bspVmeDmaList.c
-- bsps/powerpc/shared/vme/vmeconfig.c
 - bsps/powerpc/shared/vme/vmeTsi148.c
-- bsps/powerpc/shared/vme/vme_universe.c
 - bsps/powerpc/shared/vme/vmeUniverse.c
+- bsps/powerpc/shared/vme/vme_universe.c
+- bsps/powerpc/shared/vme/vmeconfig.c
 type: build

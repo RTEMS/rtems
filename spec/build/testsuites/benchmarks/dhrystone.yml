@@ -11,9 +11,9 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/benchmarks/dhrystone/init.c
 - testsuites/benchmarks/dhrystone/dhry_1.c
 - testsuites/benchmarks/dhrystone/dhry_2.c
+- testsuites/benchmarks/dhrystone/init.c
 stlib: []
 target: testsuites/benchmarks/dhrystone.exe
 type: build

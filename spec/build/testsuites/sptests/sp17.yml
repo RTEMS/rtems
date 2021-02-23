@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/sp17/init.c
 - testsuites/sptests/sp17/asr.c
+- testsuites/sptests/sp17/init.c
 - testsuites/sptests/sp17/task1.c
 - testsuites/sptests/sp17/task2.c
 stlib: []

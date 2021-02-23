@@ -26,8 +26,8 @@ source:
 - bsps/m68k/shared/fpsp/rtems_skel.S
 - bsps/m68k/shared/fpsp/sacos.S
 - bsps/m68k/shared/fpsp/sasin.S
-- bsps/m68k/shared/fpsp/satanh.S
 - bsps/m68k/shared/fpsp/satan.S
+- bsps/m68k/shared/fpsp/satanh.S
 - bsps/m68k/shared/fpsp/scale.S
 - bsps/m68k/shared/fpsp/scosh.S
 - bsps/m68k/shared/fpsp/setox.S
@@ -37,10 +37,10 @@ source:
 - bsps/m68k/shared/fpsp/slogn.S
 - bsps/m68k/shared/fpsp/smovecr.S
 - bsps/m68k/shared/fpsp/srem_mod.S
-- bsps/m68k/shared/fpsp/ssinh.S
 - bsps/m68k/shared/fpsp/ssin.S
-- bsps/m68k/shared/fpsp/stanh.S
+- bsps/m68k/shared/fpsp/ssinh.S
 - bsps/m68k/shared/fpsp/stan.S
+- bsps/m68k/shared/fpsp/stanh.S
 - bsps/m68k/shared/fpsp/sto_res.S
 - bsps/m68k/shared/fpsp/stwotox.S
 - bsps/m68k/shared/fpsp/tbldo.S

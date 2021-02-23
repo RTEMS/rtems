@@ -12,6 +12,6 @@ links:
 - role: build-dependency
   uid: objirq
 source:
-- bsps/shared/irq/irq-default.c
 - bsps/shared/irq/irq-default-handler.c
+- bsps/shared/irq/irq-default.c
 type: build

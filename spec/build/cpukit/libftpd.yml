@@ -14,7 +14,7 @@ install:
 install-path: ${BSP_LIBDIR}
 links: []
 source:
-- cpukit/ftpd/ftpd.c
 - cpukit/ftpd/ftpd-init.c
+- cpukit/ftpd/ftpd.c
 target: ftpd
 type: build

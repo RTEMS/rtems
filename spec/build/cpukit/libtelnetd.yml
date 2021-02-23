@@ -18,7 +18,7 @@ source:
 - cpukit/telnetd/check_passwd.c
 - cpukit/telnetd/des.c
 - cpukit/telnetd/pty.c
-- cpukit/telnetd/telnetd.c
 - cpukit/telnetd/telnetd-init.c
+- cpukit/telnetd/telnetd.c
 target: telnetd
 type: build

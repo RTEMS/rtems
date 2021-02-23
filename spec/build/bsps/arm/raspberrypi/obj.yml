@@ -53,8 +53,8 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/gpio/gpio-support.c
 - bsps/shared/dev/serial/console-termios.c
-- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bsp-fdt.c
+- bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
 type: build

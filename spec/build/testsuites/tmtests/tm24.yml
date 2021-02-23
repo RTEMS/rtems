@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/tmtests/tm24/task1.c
 - testsuites/support/src/tmtests_empty_function.c
+- testsuites/tmtests/tm24/task1.c
 stlib: []
 target: testsuites/tmtests/tm24.exe
 type: build

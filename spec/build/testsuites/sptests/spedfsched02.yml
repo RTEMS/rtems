@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/spedfsched02/init.c
 - testsuites/sptests/spedfsched02/getall.c
+- testsuites/sptests/spedfsched02/init.c
 - testsuites/sptests/spedfsched02/task1.c
 stlib: []
 target: testsuites/sptests/spedfsched02.exe

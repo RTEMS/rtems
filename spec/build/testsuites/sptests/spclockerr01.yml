@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/spclock_err01/init.c
 - testsuites/sptests/spclock_err01/delay.c
+- testsuites/sptests/spclock_err01/init.c
 stlib: []
 target: testsuites/sptests/spclock_err01.exe
 type: build

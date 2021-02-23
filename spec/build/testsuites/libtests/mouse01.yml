@@ -12,8 +12,8 @@ ldflags: []
 links: []
 source:
 - testsuites/libtests/mouse01/init.c
-- testsuites/libtests/mouse01/serial_mouse_config.c
 - testsuites/libtests/mouse01/msmouse.c
+- testsuites/libtests/mouse01/serial_mouse_config.c
 - testsuites/libtests/termios04/termios_testdriver_intr.c
 stlib: []
 target: testsuites/libtests/mouse01.exe

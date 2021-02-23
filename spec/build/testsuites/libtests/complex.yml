@@ -11,10 +11,10 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/libtests/complex/init.c
 - testsuites/libtests/complex/docomplex.c
 - testsuites/libtests/complex/docomplexf.c
 - testsuites/libtests/complex/docomplexl.c
+- testsuites/libtests/complex/init.c
 stlib:
 - m
 target: testsuites/libtests/complex.exe

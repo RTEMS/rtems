@@ -18,9 +18,9 @@ install:
   - cpukit/include/drvmgr/pci_bus.h
 links: []
 source:
+- cpukit/libdrvmgr/drvmgr.c
 - cpukit/libdrvmgr/drvmgr_by_id.c
 - cpukit/libdrvmgr/drvmgr_by_name.c
-- cpukit/libdrvmgr/drvmgr.c
 - cpukit/libdrvmgr/drvmgr_dev_by_name.c
 - cpukit/libdrvmgr/drvmgr_drvinf.c
 - cpukit/libdrvmgr/drvmgr_for_each_dev.c

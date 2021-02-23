@@ -20,12 +20,12 @@ source:
 - bsps/shared/dev/flash/am29lv160.c
 - bsps/shared/dev/rtc/mc146818a.c
 - bsps/shared/dev/rtc/mc146818a_ioreg.c
-- bsps/shared/dev/serial/mc68681_baud.c
 - bsps/shared/dev/serial/mc68681.c
+- bsps/shared/dev/serial/mc68681_baud.c
+- bsps/shared/dev/serial/mc68681_reg.c
 - bsps/shared/dev/serial/mc68681_reg2.c
 - bsps/shared/dev/serial/mc68681_reg4.c
 - bsps/shared/dev/serial/mc68681_reg8.c
-- bsps/shared/dev/serial/mc68681_reg.c
 - bsps/shared/dev/serial/z85c30.c
 - bsps/shared/dev/serial/z85c30_reg.c
 type: build

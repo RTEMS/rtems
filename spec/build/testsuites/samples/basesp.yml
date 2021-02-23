@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/samples/base_sp/init.c
 - testsuites/samples/base_sp/apptask.c
+- testsuites/samples/base_sp/init.c
 stlib: []
 target: testsuites/samples/base_sp.exe
 type: build

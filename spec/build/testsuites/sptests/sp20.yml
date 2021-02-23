@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/sp20/init.c
 - testsuites/sptests/sp20/getall.c
+- testsuites/sptests/sp20/init.c
 - testsuites/sptests/sp20/task1.c
 stlib: []
 target: testsuites/sptests/sp20.exe

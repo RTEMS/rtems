@@ -12,8 +12,8 @@ ldflags: []
 links: []
 source:
 - testsuites/sptests/spedfsched03/init.c
-- testsuites/sptests/spedfsched03/tasks_periodic.c
 - testsuites/sptests/spedfsched03/tasks_aperiodic.c
+- testsuites/sptests/spedfsched03/tasks_periodic.c
 stlib: []
 target: testsuites/sptests/spedfsched03.exe
 type: build

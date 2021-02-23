@@ -12,14 +12,14 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/mptests/mp14/init1.c
-- testsuites/mptests/mp14/exit.c
 - testsuites/mptests/mp14/delay.c
 - testsuites/mptests/mp14/evtask1.c
 - testsuites/mptests/mp14/evtmtask.c
+- testsuites/mptests/mp14/exit.c
+- testsuites/mptests/mp14/init1.c
+- testsuites/mptests/mp14/msgtask1.c
 - testsuites/mptests/mp14/pttask1.c
 - testsuites/mptests/mp14/smtask1.c
-- testsuites/mptests/mp14/msgtask1.c
 stlib: []
 target: testsuites/mptests/mp14_node1.exe
 type: build

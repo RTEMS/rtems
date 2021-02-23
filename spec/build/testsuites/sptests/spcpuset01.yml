@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/spcpuset01/test.c
 - testsuites/sptests/spcpuset01/init.c
+- testsuites/sptests/spcpuset01/test.c
 stlib: []
 target: testsuites/sptests/spcpuset01.exe
 type: build

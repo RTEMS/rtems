@@ -24,7 +24,6 @@ source:
 - bsps/arm/shared/clock/clock-a9mpcore.c
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
-- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xilinx-zynq/console/console-config.c
 - bsps/arm/xilinx-zynq/console/console-init.c
@@ -36,6 +35,7 @@ source:
 - bsps/arm/xilinx-zynq/start/bspstartmmu.c
 - bsps/shared/dev/btimer/btimer-stub.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c

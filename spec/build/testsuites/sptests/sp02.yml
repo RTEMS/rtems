@@ -12,10 +12,10 @@ ldflags: []
 links: []
 source:
 - testsuites/sptests/sp02/init.c
+- testsuites/sptests/sp02/preempt.c
 - testsuites/sptests/sp02/task1.c
 - testsuites/sptests/sp02/task2.c
 - testsuites/sptests/sp02/task3.c
-- testsuites/sptests/sp02/preempt.c
 stlib: []
 target: testsuites/sptests/sp02.exe
 type: build

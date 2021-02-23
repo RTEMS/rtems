@@ -43,24 +43,23 @@ links:
 - role: build-dependency
   uid: objdlsparc
 source:
-- cpukit/libdl/dlfcn.c
 - cpukit/libdl/dlfcn-shell.c
+- cpukit/libdl/dlfcn.c
 - cpukit/libdl/fastlz.c
-- cpukit/libdl/rap.c
 - cpukit/libdl/rap-shell.c
-- cpukit/libdl/rtl-allocator.c
+- cpukit/libdl/rap.c
 - cpukit/libdl/rtl-alloc-heap.c
+- cpukit/libdl/rtl-allocator.c
 - cpukit/libdl/rtl-archive.c
 - cpukit/libdl/rtl-bit-alloc.c
-- cpukit/libdl/rtl.c
 - cpukit/libdl/rtl-chain-iterator.c
 - cpukit/libdl/rtl-debugger.c
 - cpukit/libdl/rtl-elf.c
 - cpukit/libdl/rtl-error.c
 - cpukit/libdl/rtl-find-file.c
-- cpukit/libdl/rtl-obj.c
 - cpukit/libdl/rtl-obj-cache.c
 - cpukit/libdl/rtl-obj-comp.c
+- cpukit/libdl/rtl-obj.c
 - cpukit/libdl/rtl-rap.c
 - cpukit/libdl/rtl-shell.c
 - cpukit/libdl/rtl-string.c
@@ -68,4 +67,5 @@ source:
 - cpukit/libdl/rtl-trace.c
 - cpukit/libdl/rtl-unresolved.c
 - cpukit/libdl/rtl-unwind-dw2.c
+- cpukit/libdl/rtl.c
 type: build

@@ -24,13 +24,13 @@ install:
   - cpukit/score/cpu/aarch64/include/rtems/score/cpu_irq.h
 links: []
 source:
-- cpukit/score/cpu/aarch64/cpu.c
-- cpukit/score/cpu/aarch64/cpu_asm.S
 - cpukit/score/cpu/aarch64/aarch64-context-validate.S
 - cpukit/score/cpu/aarch64/aarch64-context-volatile-clobber.S
-- cpukit/score/cpu/aarch64/aarch64-thread-idle.c
-- cpukit/score/cpu/aarch64/aarch64-exception-default.c
 - cpukit/score/cpu/aarch64/aarch64-exception-default.S
-- cpukit/score/cpu/aarch64/aarch64-exception-interrupt.S
+- cpukit/score/cpu/aarch64/aarch64-exception-default.c
 - cpukit/score/cpu/aarch64/aarch64-exception-frame-print.c
+- cpukit/score/cpu/aarch64/aarch64-exception-interrupt.S
+- cpukit/score/cpu/aarch64/aarch64-thread-idle.c
+- cpukit/score/cpu/aarch64/cpu.c
+- cpukit/score/cpu/aarch64/cpu_asm.S
 type: build

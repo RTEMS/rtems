@@ -12,8 +12,8 @@ ldflags: []
 links: []
 source:
 - testsuites/psxtests/psxmmap01/init.c
-- testsuites/psxtests/psxmmap01/test_helper.c
 - testsuites/psxtests/psxmmap01/test_driver.c
+- testsuites/psxtests/psxmmap01/test_helper.c
 stlib: []
 target: testsuites/psxtests/psxmmap01.exe
 type: build

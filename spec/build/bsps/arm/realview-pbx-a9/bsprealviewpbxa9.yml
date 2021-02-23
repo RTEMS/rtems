@@ -67,11 +67,11 @@ source:
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 - bsps/arm/shared/fb/arm-pl111.c
-- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/arm/shared/serial/arm-pl050.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/shared/dev/btimer/btimer-stub.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/serial/console-termios-init.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/dev/serial/getserialmouseps2.c

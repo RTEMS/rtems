@@ -11,10 +11,10 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/spwatchdog/init.c
-- testsuites/sptests/spwatchdog/task1.c
-- testsuites/sptests/spwatchdog/prtime.c
 - testsuites/sptests/spwatchdog/delay.c
+- testsuites/sptests/spwatchdog/init.c
+- testsuites/sptests/spwatchdog/prtime.c
+- testsuites/sptests/spwatchdog/task1.c
 stlib: []
 target: testsuites/sptests/spwatchdog.exe
 type: build

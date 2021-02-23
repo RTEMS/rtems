@@ -30,8 +30,8 @@ install:
 links: []
 source:
 - cpukit/score/cpu/bfin/bfin-exception-frame-print.c
-- cpukit/score/cpu/bfin/cpu_asm.S
 - cpukit/score/cpu/bfin/cpu.c
+- cpukit/score/cpu/bfin/cpu_asm.S
 - cpukit/score/cpu/no_cpu/cpucounterfrequency.c
 - cpukit/score/cpu/no_cpu/cpucounterread.c
 type: build

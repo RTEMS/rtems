@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/spsize/init.c
 - testsuites/sptests/spsize/getint.c
+- testsuites/sptests/spsize/init.c
 - testsuites/sptests/spsize/size.c
 stlib: []
 target: testsuites/sptests/spsize.exe

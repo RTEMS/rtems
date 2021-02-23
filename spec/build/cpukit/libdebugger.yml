@@ -18,8 +18,8 @@ source:
 - cpukit/libdebugger/rtems-debugger-block.c
 - cpukit/libdebugger/rtems-debugger-bsp.c
 - cpukit/libdebugger/rtems-debugger-cmd.c
-- cpukit/libdebugger/rtems-debugger-remote.c
 - cpukit/libdebugger/rtems-debugger-remote-tcp.c
+- cpukit/libdebugger/rtems-debugger-remote.c
 - cpukit/libdebugger/rtems-debugger-server.c
 - cpukit/libdebugger/rtems-debugger-target.c
 - cpukit/libdebugger/rtems-debugger-threads.c

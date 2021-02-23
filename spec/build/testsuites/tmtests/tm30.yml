@@ -11,9 +11,9 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/tmtests/tm30/init.c
 - testsuites/support/src/tmtests_empty_function.c
 - testsuites/support/src/tmtests_support.c
+- testsuites/tmtests/tm30/init.c
 stlib: []
 target: testsuites/tmtests/tm30.exe
 type: build

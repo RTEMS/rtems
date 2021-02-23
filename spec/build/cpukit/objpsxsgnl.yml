@@ -21,8 +21,8 @@ source:
 - cpukit/posix/src/alarm.c
 - cpukit/posix/src/getitimer.c
 - cpukit/posix/src/kill.c
-- cpukit/posix/src/killinfo.c
 - cpukit/posix/src/kill_r.c
+- cpukit/posix/src/killinfo.c
 - cpukit/posix/src/mqueuenotify.c
 - cpukit/posix/src/pause.c
 - cpukit/posix/src/psignal.c

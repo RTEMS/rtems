@@ -12,8 +12,8 @@ ldflags: []
 links: []
 source:
 - testsuites/sptests/splinkersets01/init.c
-- testsuites/sptests/splinkersets01/sets.c
 - testsuites/sptests/splinkersets01/items.c
+- testsuites/sptests/splinkersets01/sets.c
 stlib: []
 target: testsuites/sptests/splinkersets01.exe
 type: build

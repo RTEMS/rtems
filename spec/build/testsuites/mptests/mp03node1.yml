@@ -12,9 +12,9 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/mptests/mp03/delay.c
 - testsuites/mptests/mp03/init1.c
 - testsuites/mptests/mp03/task1.c
-- testsuites/mptests/mp03/delay.c
 stlib: []
 target: testsuites/mptests/mp03_node1.exe
 type: build

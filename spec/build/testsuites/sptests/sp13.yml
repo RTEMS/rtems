@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/sptests/sp13/init.c
 - testsuites/sptests/sp13/fillbuff.c
+- testsuites/sptests/sp13/init.c
 - testsuites/sptests/sp13/putbuff.c
 - testsuites/sptests/sp13/task1.c
 - testsuites/sptests/sp13/task2.c

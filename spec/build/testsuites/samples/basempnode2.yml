@@ -12,8 +12,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/samples/base_mp/init2.c
 - testsuites/samples/base_mp/apptask.c
+- testsuites/samples/base_mp/init2.c
 stlib: []
 target: testsuites/samples/base_mp_node2.exe
 type: build

@@ -10,8 +10,8 @@ includes: []
 install: []
 links: []
 source:
-- bsps/powerpc/shared/cpu_asm.S
 - bsps/powerpc/shared/cpu.c
 - bsps/powerpc/shared/cpuIdent.c
+- bsps/powerpc/shared/cpu_asm.S
 - bsps/powerpc/shared/ppc-print-stack.c
 type: build

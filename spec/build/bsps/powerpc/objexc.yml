@@ -11,6 +11,7 @@ install: []
 links: []
 source:
 - bsps/powerpc/shared/exceptions/ppc-code-copy.c
+- bsps/powerpc/shared/exceptions/ppc_exc.S
 - bsps/powerpc/shared/exceptions/ppc_exc_address.c
 - bsps/powerpc/shared/exceptions/ppc_exc_alignment.c
 - bsps/powerpc/shared/exceptions/ppc_exc_async_normal.S
@@ -22,5 +23,4 @@ source:
 - bsps/powerpc/shared/exceptions/ppc_exc_naked.S
 - bsps/powerpc/shared/exceptions/ppc_exc_print.c
 - bsps/powerpc/shared/exceptions/ppc_exc_prologue.c
-- bsps/powerpc/shared/exceptions/ppc_exc.S
 type: build

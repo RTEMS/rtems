@@ -11,9 +11,9 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/sptests/sp22/delay.c
 - testsuites/sptests/sp22/init.c
 - testsuites/sptests/sp22/prtime.c
-- testsuites/sptests/sp22/delay.c
 - testsuites/sptests/sp22/task1.c
 stlib: []
 target: testsuites/sptests/sp22.exe

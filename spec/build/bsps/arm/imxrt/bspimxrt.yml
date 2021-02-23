@@ -190,8 +190,8 @@ source:
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexio_spi_edma.c
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexio_uart.c
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexio_uart_edma.c
-- bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexram_allocate.c
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexram.c
+- bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexram_allocate.c
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_flexspi.c
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_gpc.c
 - bsps/arm/imxrt/nxp/devices/MIMXRT1052/drivers/fsl_gpio.c

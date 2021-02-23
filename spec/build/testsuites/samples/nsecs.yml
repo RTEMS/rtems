@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/samples/nsecs/init.c
 - testsuites/samples/nsecs/empty.c
+- testsuites/samples/nsecs/init.c
 stlib: []
 target: testsuites/samples/nsecs.exe
 type: build

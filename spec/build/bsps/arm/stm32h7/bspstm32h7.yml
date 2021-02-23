@@ -1,7 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 arch: arm
 bsp: stm32h7
 build-type: bsp
 cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 enabled-by: true
 family: stm32h7
@@ -264,33 +267,33 @@ source:
 - bsps/arm/shared/cpucounter/cpucounter-armv7m.c
 - bsps/arm/shared/irq/irq-armv7m.c
 - bsps/arm/shared/irq/irq-dispatch-armv7m.c
-- bsps/arm/shared/start/bspreset-armv7m.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
-- bsps/arm/stm32h7/console/console.c
-- bsps/arm/stm32h7/console/console-uart4.c
+- bsps/arm/shared/start/bspreset-armv7m.c
 - bsps/arm/stm32h7/console/console-uart4-cfg.c
-- bsps/arm/stm32h7/console/console-uart5.c
+- bsps/arm/stm32h7/console/console-uart4.c
 - bsps/arm/stm32h7/console/console-uart5-cfg.c
-- bsps/arm/stm32h7/console/console-uart7.c
+- bsps/arm/stm32h7/console/console-uart5.c
 - bsps/arm/stm32h7/console/console-uart7-cfg.c
-- bsps/arm/stm32h7/console/console-uart8.c
+- bsps/arm/stm32h7/console/console-uart7.c
 - bsps/arm/stm32h7/console/console-uart8-cfg.c
-- bsps/arm/stm32h7/console/console-uart9.c
+- bsps/arm/stm32h7/console/console-uart8.c
 - bsps/arm/stm32h7/console/console-uart9-cfg.c
-- bsps/arm/stm32h7/console/console-usart10.c
-- bsps/arm/stm32h7/console/console-usart10-cfg.c
-- bsps/arm/stm32h7/console/console-usart1.c
+- bsps/arm/stm32h7/console/console-uart9.c
 - bsps/arm/stm32h7/console/console-usart1-cfg.c
-- bsps/arm/stm32h7/console/console-usart2.c
+- bsps/arm/stm32h7/console/console-usart1.c
+- bsps/arm/stm32h7/console/console-usart10-cfg.c
+- bsps/arm/stm32h7/console/console-usart10.c
 - bsps/arm/stm32h7/console/console-usart2-cfg.c
-- bsps/arm/stm32h7/console/console-usart3.c
+- bsps/arm/stm32h7/console/console-usart2.c
 - bsps/arm/stm32h7/console/console-usart3-cfg.c
-- bsps/arm/stm32h7/console/console-usart6.c
+- bsps/arm/stm32h7/console/console-usart3.c
 - bsps/arm/stm32h7/console/console-usart6-cfg.c
+- bsps/arm/stm32h7/console/console-usart6.c
+- bsps/arm/stm32h7/console/console.c
 - bsps/arm/stm32h7/console/printk-support.c
+- bsps/arm/stm32h7/hal/stm32h7xx_hal.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_adc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_adc_ex.c
-- bsps/arm/stm32h7/hal/stm32h7xx_hal.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_cec.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_comp.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_cortex.c
@@ -303,8 +306,8 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dcmi.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dfsdm.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dfsdm_ex.c
-- bsps/arm/stm32h7/hal/stm32h7xx_hal_dma2d.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dma.c
+- bsps/arm/stm32h7/hal/stm32h7xx_hal_dma2d.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dma_ex.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dsi.c
 - bsps/arm/stm32h7/hal/stm32h7xx_hal_dts.c
@@ -381,8 +384,8 @@ source:
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_crs.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_dac.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_delayblock.c
-- bsps/arm/stm32h7/hal/stm32h7xx_ll_dma2d.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_dma.c
+- bsps/arm/stm32h7/hal/stm32h7xx_ll_dma2d.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_exti.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_fmc.c
 - bsps/arm/stm32h7/hal/stm32h7xx_ll_gpio.c
@@ -413,9 +416,9 @@ source:
 - bsps/arm/stm32h7/start/stm32h7-config-osc.c
 - bsps/arm/stm32h7/start/stm32h7-config-per.c
 - bsps/arm/stm32h7/start/stm32h7-config-pwr.c
-- bsps/arm/stm32h7/start/stm32h7-hal.c
 - bsps/arm/stm32h7/start/stm32h7-hal-eth.c
 - bsps/arm/stm32h7/start/stm32h7-hal-uart.c
+- bsps/arm/stm32h7/start/stm32h7-hal.c
 - bsps/arm/stm32h7/start/system_stm32h7xx.c
 - bsps/shared/dev/btimer/btimer-stub.c
 - bsps/shared/dev/rtc/rtc-support.c
@@ -426,6 +429,3 @@ source:
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
 type: build
-SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

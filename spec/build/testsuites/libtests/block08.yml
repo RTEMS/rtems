@@ -11,9 +11,6 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/libtests/block08/init.c
-- testsuites/libtests/block08/bdbuf_tests.c
-- testsuites/libtests/block08/test_disk.c
 - testsuites/libtests/block08/bdbuf_test1_1.c
 - testsuites/libtests/block08/bdbuf_test1_2.c
 - testsuites/libtests/block08/bdbuf_test1_3.c
@@ -27,6 +24,9 @@ source:
 - testsuites/libtests/block08/bdbuf_test4_1.c
 - testsuites/libtests/block08/bdbuf_test4_2.c
 - testsuites/libtests/block08/bdbuf_test4_3.c
+- testsuites/libtests/block08/bdbuf_tests.c
+- testsuites/libtests/block08/init.c
+- testsuites/libtests/block08/test_disk.c
 stlib: []
 target: testsuites/libtests/block08.exe
 type: build

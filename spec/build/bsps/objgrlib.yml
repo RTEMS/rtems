@@ -84,8 +84,8 @@ source:
 - bsps/shared/grlib/1553/gr1553bm.c
 - bsps/shared/grlib/1553/gr1553rt.c
 - bsps/shared/grlib/amba/ahbstat.c
-- bsps/shared/grlib/amba/ambapp_alloc.c
 - bsps/shared/grlib/amba/ambapp.c
+- bsps/shared/grlib/amba/ambapp_alloc.c
 - bsps/shared/grlib/amba/ambapp_count.c
 - bsps/shared/grlib/amba/ambapp_depth.c
 - bsps/shared/grlib/amba/ambapp_find_by_idx.c
@@ -114,14 +114,14 @@ source:
 - bsps/shared/grlib/l2c/l2c.c
 - bsps/shared/grlib/mem/mctrl.c
 - bsps/shared/grlib/pci/gr_701.c
-- bsps/shared/grlib/pci/grpci2.c
-- bsps/shared/grlib/pci/grpci2dma.c
-- bsps/shared/grlib/pci/grpci.c
 - bsps/shared/grlib/pci/gr_rasta_adcdac.c
 - bsps/shared/grlib/pci/gr_rasta_io.c
 - bsps/shared/grlib/pci/gr_rasta_spw_router.c
 - bsps/shared/grlib/pci/gr_rasta_tmtc.c
 - bsps/shared/grlib/pci/gr_tmtc_1553.c
+- bsps/shared/grlib/pci/grpci.c
+- bsps/shared/grlib/pci/grpci2.c
+- bsps/shared/grlib/pci/grpci2dma.c
 - bsps/shared/grlib/pci/pcif.c
 - bsps/shared/grlib/pwm/grpwm.c
 - bsps/shared/grlib/scrub/memscrub.c

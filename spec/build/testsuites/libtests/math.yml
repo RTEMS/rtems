@@ -12,8 +12,8 @@ includes:
 ldflags: []
 links: []
 source:
-- testsuites/libtests/math/init.c
 - testsuites/libtests/math/domath.c
+- testsuites/libtests/math/init.c
 stlib:
 - m
 target: testsuites/libtests/math.exe

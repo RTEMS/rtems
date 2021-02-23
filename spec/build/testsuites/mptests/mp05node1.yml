@@ -12,9 +12,9 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/mptests/mp05/asr.c
 - testsuites/mptests/mp05/init1.c
 - testsuites/mptests/mp05/task1.c
-- testsuites/mptests/mp05/asr.c
 stlib: []
 target: testsuites/mptests/mp05_node1.exe
 type: build

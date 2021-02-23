@@ -12,8 +12,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/smptests/smpscheduler06/init.c
 - testsuites/smptests/smpscheduler03/test.c
+- testsuites/smptests/smpscheduler06/init.c
 stlib: []
 target: testsuites/smptests/smpscheduler06.exe
 type: build

@@ -13,9 +13,9 @@ ldflags: []
 links: []
 source:
 - testsuites/mptests/mp09/init2.c
-- testsuites/mptests/mp09/task1.c
 - testsuites/mptests/mp09/recvmsg.c
 - testsuites/mptests/mp09/sendmsg.c
+- testsuites/mptests/mp09/task1.c
 stlib: []
 target: testsuites/mptests/mp09_node2.exe
 type: build

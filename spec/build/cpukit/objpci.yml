@@ -27,12 +27,12 @@ source:
 - cpukit/libpci/pci_access.c
 - cpukit/libpci/pci_access_func.c
 - cpukit/libpci/pci_access_io.c
-- cpukit/libpci/pci_access_mem_be.c
 - cpukit/libpci/pci_access_mem.c
+- cpukit/libpci/pci_access_mem_be.c
 - cpukit/libpci/pci_access_mem_le.c
 - cpukit/libpci/pci_bus.c
-- cpukit/libpci/pci_cfg_auto.c
 - cpukit/libpci/pci_cfg.c
+- cpukit/libpci/pci_cfg_auto.c
 - cpukit/libpci/pci_cfg_peripheral.c
 - cpukit/libpci/pci_cfg_print_code.c
 - cpukit/libpci/pci_cfg_read.c

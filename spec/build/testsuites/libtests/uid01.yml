@@ -11,10 +11,10 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/libtests/uid01/init.c
-- testsuites/libtests/uid01/serial_mouse_config.c
-- testsuites/libtests/uid01/msmouse.c
 - testsuites/libtests/termios04/termios_testdriver_intr.c
+- testsuites/libtests/uid01/init.c
+- testsuites/libtests/uid01/msmouse.c
+- testsuites/libtests/uid01/serial_mouse_config.c
 stlib: []
 target: testsuites/libtests/uid01.exe
 type: build

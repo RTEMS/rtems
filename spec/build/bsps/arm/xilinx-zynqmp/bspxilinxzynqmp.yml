@@ -77,11 +77,9 @@ links:
   uid: ../../bspopts
 source:
 - bsps/arm/shared/cache/cache-cp15.c
-- bsps/shared/dev/clock/arm-generic-timer.c
 - bsps/arm/shared/clock/arm-generic-timer-aarch32.c
 - bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 - bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
-- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/xilinx-zynqmp/console/console-config.c
 - bsps/arm/xilinx-zynqmp/start/bspreset.c
@@ -89,7 +87,9 @@ source:
 - bsps/arm/xilinx-zynqmp/start/bspstarthooks.c
 - bsps/arm/xilinx-zynqmp/start/bspstartmmu.c
 - bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/clock/arm-generic-timer.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c

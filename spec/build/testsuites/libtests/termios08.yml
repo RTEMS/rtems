@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/libtests/termios08/init.c
 - testsuites/libtests/termios03/termios_testdriver_polled.c
+- testsuites/libtests/termios08/init.c
 stlib: []
 target: testsuites/libtests/termios08.exe
 type: build

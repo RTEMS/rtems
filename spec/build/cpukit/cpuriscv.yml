@@ -27,11 +27,11 @@ install:
 links: []
 source:
 - cpukit/score/cpu/riscv/cpu.c
-- cpukit/score/cpu/riscv/riscv-exception-handler.S
-- cpukit/score/cpu/riscv/riscv-exception-frame-print.c
-- cpukit/score/cpu/riscv/riscv-context-switch.S
 - cpukit/score/cpu/riscv/riscv-context-initialize.c
+- cpukit/score/cpu/riscv/riscv-context-switch.S
 - cpukit/score/cpu/riscv/riscv-context-validate.S
 - cpukit/score/cpu/riscv/riscv-context-volatile-clobber.S
 - cpukit/score/cpu/riscv/riscv-counter.S
+- cpukit/score/cpu/riscv/riscv-exception-frame-print.c
+- cpukit/score/cpu/riscv/riscv-exception-handler.S
 type: build

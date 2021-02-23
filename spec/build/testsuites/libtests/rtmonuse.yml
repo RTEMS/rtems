@@ -11,8 +11,8 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/libtests/rtmonuse/init.c
 - testsuites/libtests/rtmonuse/getall.c
+- testsuites/libtests/rtmonuse/init.c
 - testsuites/libtests/rtmonuse/task1.c
 stlib: []
 target: testsuites/libtests/rtmonuse.exe

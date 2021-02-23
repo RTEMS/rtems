@@ -12,13 +12,13 @@ ldflags: []
 links: []
 source:
 - testsuites/sptests/sp12/init.c
+- testsuites/sptests/sp12/pridrv.c
+- testsuites/sptests/sp12/pritask.c
 - testsuites/sptests/sp12/task1.c
 - testsuites/sptests/sp12/task2.c
 - testsuites/sptests/sp12/task3.c
 - testsuites/sptests/sp12/task4.c
 - testsuites/sptests/sp12/task5.c
-- testsuites/sptests/sp12/pridrv.c
-- testsuites/sptests/sp12/pritask.c
 stlib: []
 target: testsuites/sptests/sp12.exe
 type: build
