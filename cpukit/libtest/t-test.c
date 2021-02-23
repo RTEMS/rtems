@@ -841,6 +841,8 @@ T_system(T_context *ctx)
 	T_do_log(ctx, T_QUIET, "S:Version:%s\n", rtems_version());
 	T_do_log(ctx, T_QUIET, "S:BSP:%s\n", rtems_board_support_package());
 	T_do_log(ctx, T_QUIET, "S:BuildLabel:%s\n", rtems_get_build_label());
+	T_do_log(ctx, T_QUIET, "S:TargetHash:SHA256:%s\n",
+	    rtems_get_target_hash());
 #if RTEMS_DEBUG
 	T_do_log(ctx, T_QUIET, "S:RTEMS_DEBUG:1\n");
 #else

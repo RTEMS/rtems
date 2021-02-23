@@ -130,6 +130,8 @@ static const char censored_init[] = "A:ttest01\n"
 "S:Compiler:*"
 "S:Version:*"
 "S:BSP:*"
+"S:BuildLabel:*"
+"S:TargetHash:SHA256:*"
 "S:RTEMS_DEBUG:*"
 "S:RTEMS_MULTIPROCESSING:*"
 "S:RTEMS_POSIX_API:*"
@@ -161,7 +163,9 @@ censor_putchar(int c, void *arg)
 		} else if (c == *ctx->censor_c) {
 			(*ctx->putchar)(c, ctx->putchar_arg);
 			++ctx->censor_c;
-		}
+		} else {
+	                test_assert(0);
+                }
 		break;
 	case CENSOR_DISCARD:
 		if (c == '\n') {
@@ -184,7 +188,7 @@ run_initialize(void)
 }
 
 static const char expected_final[] = "Z:ttest01:C:344:N:1339:F:795:D:0.691999\n"
-"Y:ReportHash:SHA256:23dd328162c564ada3c4de97446801018ade051aaec3308bb9a7ef8f98041d67\n";
+"Y:ReportHash:SHA256:2e044b038565203cde1ff74b3e28403a3a96f0802e8d3f82a37170065a17a0a1\n";
 
 static void
 run_finalize(void)

@@ -21,6 +21,7 @@ actions:
     tmcontext01: exclude
     tmfine01: exclude
     top: exclude
+    ttest01: exclude
     utf8proc01: exclude
 build-type: option
 copyrights:
