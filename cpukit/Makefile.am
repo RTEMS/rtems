@@ -851,6 +851,7 @@ librtemscpu_a_SOURCES += score/src/corerwlockobtainread.c
 librtemscpu_a_SOURCES += score/src/corerwlockobtainwrite.c
 librtemscpu_a_SOURCES += score/src/corerwlockrelease.c
 librtemscpu_a_SOURCES += score/src/coresem.c
+librtemscpu_a_SOURCES += score/src/hash.c
 librtemscpu_a_SOURCES += score/src/heap.c
 librtemscpu_a_SOURCES += score/src/heapallocate.c
 librtemscpu_a_SOURCES += score/src/heapextend.c
