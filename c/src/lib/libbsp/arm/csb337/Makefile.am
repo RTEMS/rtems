@@ -34,6 +34,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/memmap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterfrequency.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/pmc.c

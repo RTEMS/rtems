@@ -93,5 +93,6 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/stackalloc.c
 type: build

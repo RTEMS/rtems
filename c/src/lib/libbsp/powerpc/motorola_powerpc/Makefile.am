@@ -43,6 +43,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_activ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/ppc_idle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/bspreset.c
 

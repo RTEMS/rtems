@@ -62,6 +62,7 @@ source:
 - bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bspgetworkarea-default.c
 - bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/stackalloc.c
 type: build

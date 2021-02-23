@@ -21,6 +21,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5225x/start/init5225x.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5225x/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/mcf5225x/clock/clock.c

@@ -28,6 +28,7 @@ source:
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c
 - bsps/shared/start/bspreset-empty.c
+- bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/sparc/leon2/btimer/btimer.c
 - bsps/sparc/leon2/clock/ckinit.c

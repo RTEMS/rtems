@@ -40,6 +40,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwl
 
 # Shared
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-fdt.c

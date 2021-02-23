@@ -52,6 +52,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_setup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_activate.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/bspclean.c
 
 #pclock

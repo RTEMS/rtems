@@ -21,6 +21,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/niagara/start/bspclean.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/niagara/start/m5op_sparc.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c

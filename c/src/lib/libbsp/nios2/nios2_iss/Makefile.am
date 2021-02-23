@@ -24,6 +24,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/start/setvec.c
 

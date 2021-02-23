@@ -28,6 +28,7 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspclean.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/setvec.c

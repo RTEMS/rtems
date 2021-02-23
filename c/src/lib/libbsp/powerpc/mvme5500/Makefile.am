@@ -21,6 +21,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/zerobss.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/bspclean.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/probeMemEnd.c

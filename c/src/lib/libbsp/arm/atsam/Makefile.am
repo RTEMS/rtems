@@ -96,6 +96,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/bspstarthooks.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/getentropy-trng.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/pin-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/pmc-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power-clock.c

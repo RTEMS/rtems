@@ -24,6 +24,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/csb350/clock/clockdrv.c

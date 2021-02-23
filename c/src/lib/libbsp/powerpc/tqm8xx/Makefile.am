@@ -44,6 +44,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/mmutlbtab.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cpuinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c

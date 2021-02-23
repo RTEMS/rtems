@@ -104,4 +104,5 @@ source:
 - bsps/powerpc/shared/start/zerobss.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
+- bsps/shared/start/gettargethash-default.c
 type: build

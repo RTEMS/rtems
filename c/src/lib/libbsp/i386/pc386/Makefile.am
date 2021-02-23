@@ -94,6 +94,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/irq_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/elcr.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/ldsegs.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/irq_asm.S

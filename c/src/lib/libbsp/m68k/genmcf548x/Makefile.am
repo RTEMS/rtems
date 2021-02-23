@@ -29,6 +29,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/genmcf548x/clock/clock.c
 # console

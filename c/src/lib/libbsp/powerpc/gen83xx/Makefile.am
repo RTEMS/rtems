@@ -31,6 +31,7 @@ librtemsbsp_a_SOURCES =
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/tictac.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/cpuinit.c

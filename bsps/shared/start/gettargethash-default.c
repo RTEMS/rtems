@@ -1,0 +1,66 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This source file contains the default implementation of
+ *   rtems_get_target_hash().
+ */
+
+/*
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include <rtems/config.h>
+#include <rtems/counter.h>
+#include <rtems/sysinit.h>
+#include <rtems/score/hash.h>
+
+static Hash_Control bsp_target_hash;
+
+static void bsp_target_hash_initialize( void )
+{
+  Hash_Context context;
+  uint32_t     frequency;
+
+  _Hash_Initialize( &context );
+
+  frequency = rtems_counter_frequency();
+  _Hash_Add_data( &context, &frequency, sizeof( frequency ) );
+
+  _Hash_Finalize( &context, &bsp_target_hash );
+}
+
+const char *rtems_get_target_hash( void )
+{
+  return _Hash_Get_string( &bsp_target_hash );
+}
+
+RTEMS_SYSINIT_ITEM(
+  bsp_target_hash_initialize,
+  RTEMS_SYSINIT_TARGET_HASH,
+  RTEMS_SYSINIT_ORDER_SECOND
+);

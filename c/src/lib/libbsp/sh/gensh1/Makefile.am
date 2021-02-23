@@ -24,6 +24,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/start/bsphwinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh1/clock/ckinit.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh1/clock/delay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh1/start/cpu_asm.c
