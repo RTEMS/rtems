@@ -381,6 +381,39 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  */
 uintptr_t rtems_configuration_get_stack_space_size( void );
 
+/* Generated from spec:/rtems/config/if/get-target-hash */
+
+/**
+ * @ingroup RTEMSAPIConfig
+ *
+ * @brief Gets the RTEMS target hash.
+ *
+ * The target hash is calculated from BSP-specific values which characterize a
+ * target system.
+ *
+ * @return Returns the pointer to the RTEMS target hash.
+ *
+ * @par Notes
+ * @parblock
+ * For example, the device tree, settings of the memory controller, processor
+ * and bus frequencies, a serial number of a chip may be used to calculate the
+ * target hash.
+ *
+ * The target hash can be used to distinguish test suite results obtained from
+ * different target systems.  See also rtems_get_build_label().
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+const char *rtems_get_target_hash( void );
+
 /* Generated from spec:/rtems/config/if/get-ticks-per-timeslice */
 
 /**
