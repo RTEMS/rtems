@@ -726,7 +726,9 @@ class OptionItem(Item):
         print("{} = {}".format(self.data["name"], value))
 
     def _do_append_test_cppflags(self, conf, name, state):
-        conf.env.append_value("TEST_" + name.upper().replace("-", "_") + "_CPPFLAGS", state)
+        conf.env.append_value(
+            "TEST_" + name.upper().replace("-", "_") + "_CPPFLAGS", state
+        )
 
     def _append_test_cppflags(self, conf, cic, value, arg):
         self._do_append_test_cppflags(conf, arg, value)
