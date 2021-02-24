@@ -26,10 +26,6 @@ links:
 - role: build-dependency
   uid: objmpci
 - role: build-dependency
-  uid: objnet
-- role: build-dependency
-  uid: objnetnosmp
-- role: build-dependency
   uid: objsmp
 - role: build-dependency
   uid: optconirq

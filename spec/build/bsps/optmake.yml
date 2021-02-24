@@ -6,7 +6,6 @@ actions:
             return "yes"
         return "no"
     conf.env["RTEMS_HAS_MULTIPROCESSING"] = yesno(conf, "RTEMS_MULTIPROCESSING")
-    conf.env["RTEMS_HAS_NETWORKING"] = yesno(conf, "RTEMS_NETWORKING")
     conf.env["RTEMS_HAS_POSIX_API"] = yesno(conf, "RTEMS_POSIX_API")
 build-type: option
 copyrights:

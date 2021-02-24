@@ -14,8 +14,6 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
-  uid: objnet
-- role: build-dependency
   uid: optcpuclk
 - role: build-dependency
   uid: optdbug

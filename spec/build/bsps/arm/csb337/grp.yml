@@ -14,8 +14,6 @@ links:
 - role: build-dependency
   uid: objlcd
 - role: build-dependency
-  uid: objnet
-- role: build-dependency
   uid: objumon
 - role: build-dependency
   uid: objumoncon

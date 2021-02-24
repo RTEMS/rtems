@@ -42,8 +42,6 @@ links:
 - role: build-dependency
   uid: optmpci
 - role: build-dependency
-  uid: optnet
-- role: build-dependency
   uid: optnewlib
 - role: build-dependency
   uid: optparavirt

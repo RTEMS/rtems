@@ -43,8 +43,6 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
-  uid: objnet
-- role: build-dependency
   uid: optsbrk
 - role: build-dependency
   uid: ../crti
