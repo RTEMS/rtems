@@ -167,7 +167,7 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
     RTEMS_SYSINIT_ITEM(
       _Stack_Allocator_do_initialize,
-      RTEMS_SYSINIT_DIRTY_MEMORY,
+      RTEMS_SYSINIT_STACK_ALLOCATOR,
       RTEMS_SYSINIT_ORDER_MIDDLE
     );
   #endif

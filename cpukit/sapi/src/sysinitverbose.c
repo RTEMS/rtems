@@ -61,6 +61,7 @@ SYSINIT_VERBOSE( ZERO_MEMORY );
 SYSINIT_VERBOSE( ISR_STACK );
 SYSINIT_VERBOSE( PER_CPU_DATA );
 SYSINIT_VERBOSE( SBRK );
+SYSINIT_VERBOSE( STACK_ALLOCATOR );
 SYSINIT_VERBOSE( WORKSPACE );
 SYSINIT_VERBOSE( MALLOC );
 SYSINIT_VERBOSE( BSP_START );
@@ -233,9 +234,17 @@ static void _Sysinit_Verbose_SBRK( void )
   }
 }
 
+static void _Sysinit_Verbose_STACK_ALLOCATOR( void )
+{
+  if ( !SYSINIT_IS_ADJACENT( SBRK, STACK_ALLOCATOR ) ) {
+    _Sysinit_Print_free_memory();
+    printk( "sysinit: STACK_ALLOCATOR: done\n" );
+  }
+}
+
 static void _Sysinit_Verbose_WORKSPACE( void )
 {
-  if ( !SYSINIT_IS_ADJACENT( SBRK, WORKSPACE ) ) {
+  if ( !SYSINIT_IS_ADJACENT( STACK_ALLOCATOR, WORKSPACE ) ) {
     _Sysinit_Print_free_memory();
     printk( "sysinit: WORKSPACE: done\n" );
   }
