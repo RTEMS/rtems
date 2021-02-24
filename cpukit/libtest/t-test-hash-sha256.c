@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (C) 2019 embedded brains GmbH
+ * Copyright (C) 2019, 2021 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,6 +26,9 @@
  */
 
 #include <rtems/test.h>
+#include <rtems/score/io.h>
+
+#include <limits.h>
 
 #if defined(__rtems__)
 #include <sha256.h>
@@ -69,16 +72,12 @@ T_report_hash_sha256_finalize(void)
 {
 	T_report_hash_sha256_context *ctx;
 	unsigned char hash[32];
-	size_t i;
 
 	ctx = &T_report_hash_sha256_instance;
 	SHA256_Final(hash, &ctx->sha256);
 	T_printf("Y:ReportHash:SHA256:");
-
-	for (i = 0; i < 32; ++i) {
-		T_printf("%02x", hash[i]);
-	}
-
+	(void)_IO_Base64url(ctx->putchar, ctx->putchar_arg, hash,
+	    sizeof(hash), NULL, INT_MAX);
 	T_printf("\n");
 }
 
