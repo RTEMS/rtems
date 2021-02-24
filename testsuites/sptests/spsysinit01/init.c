@@ -77,6 +77,8 @@ typedef enum {
   BSP_START_POST,
   CPU_COUNTER_PRE,
   CPU_COUNTER_POST,
+  TARGET_HASH_PRE,
+  TARGET_HASH_POST,
   INITIAL_EXTENSIONS_PRE,
   INITIAL_EXTENSIONS_POST,
   DATA_STRUCTURES_PRE,
@@ -255,6 +257,20 @@ FIRST(RTEMS_SYSINIT_CPU_COUNTER)
 LAST(RTEMS_SYSINIT_CPU_COUNTER)
 {
   next_step(CPU_COUNTER_POST);
+}
+
+FIRST(RTEMS_SYSINIT_TARGET_HASH)
+{
+  /*
+   * Since the work performed here is BSP-specific, there is no way to test pre
+   * and post conditions.
+   */
+  next_step(TARGET_HASH_PRE);
+}
+
+LAST(RTEMS_SYSINIT_TARGET_HASH)
+{
+  next_step(TARGET_HASH_POST);
 }
 
 FIRST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)

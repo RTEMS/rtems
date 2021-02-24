@@ -39,6 +39,7 @@ extern "C" {
 #define RTEMS_SYSINIT_MALLOC                     000280
 #define RTEMS_SYSINIT_BSP_START                  000300
 #define RTEMS_SYSINIT_CPU_COUNTER                000400
+#define RTEMS_SYSINIT_TARGET_HASH                000480
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000500
 #define RTEMS_SYSINIT_MP_EARLY                   000600
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000700
