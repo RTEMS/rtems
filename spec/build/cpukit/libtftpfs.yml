@@ -15,6 +15,6 @@ install:
 install-path: ${BSP_LIBDIR}
 links: []
 source:
-- cpukit/libnetworking/lib/tftpDriver.c
+- cpukit/libfs/src/ftpfs/tftpDriver.c
 target: tftpfs
 type: build
