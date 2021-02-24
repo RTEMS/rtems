@@ -38,6 +38,7 @@ SECTIONS
     BYTE(0x75); BYTE(0x78); /* Partition name */
     . = 0x400;
     *(.text)
+    *(.text*)
     *(.sdata2)
     *(.rodata)
     *(.rodata*)
@@ -98,4 +99,3 @@ SECTIONS
     *(.comment)
   }
 }
-
