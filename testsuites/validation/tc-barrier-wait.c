@@ -263,16 +263,27 @@ static void RtemsBarrierReqWait_Pre_Barrier_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Barrier_NoObj: {
+      /*
+       * The ``id`` parameter shall be invalid.
+       */
       ctx->id = 0xffffffff;
       break;
     }
 
     case RtemsBarrierReqWait_Pre_Barrier_Manual: {
+      /*
+       * The ``id`` parameter shall be associated with a
+       * manual release barrier.
+       */
       ctx->id = ctx->manual_release_id;
       break;
     }
 
     case RtemsBarrierReqWait_Pre_Barrier_Auto: {
+      /*
+       * The ``id`` parameter shall be associated with an
+       * automatic release barrier.
+       */
       ctx->id = ctx->auto_release_id;
       break;
     }
@@ -289,11 +300,19 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Timeout_Ticks: {
+      /*
+       * The ``released`` parameter shall be a clock tick
+       * interval.
+       */
       ctx->timeout = 2;
       break;
     }
 
     case RtemsBarrierReqWait_Pre_Timeout_Forever: {
+      /*
+       * The ``released`` parameter shall be
+       * RTEMS_NO_TIMEOUT.
+       */
       ctx->timeout = RTEMS_NO_TIMEOUT;
       break;
     }
@@ -310,6 +329,10 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Satisfy_Never: {
+      /*
+       * While the calling task waits at the barrier, the barrier shall not be
+       * released or deleted.
+       */
       if ( ctx->timeout == RTEMS_NO_TIMEOUT ) {
         SendEvents( ctx->low_worker_id, EVENT_CHECK_TIMER | EVENT_RELEASE );
       }
@@ -317,16 +340,27 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
     }
 
     case RtemsBarrierReqWait_Pre_Satisfy_Wait: {
+      /*
+       * Calling the directive shall release the barrier.
+       */
       SendEvents( ctx->high_worker_id, EVENT_WAIT );
       break;
     }
 
     case RtemsBarrierReqWait_Pre_Satisfy_Release: {
+      /*
+       * While the calling task waits at the barrier, the barrier shall be
+       * released.
+       */
       SendEvents( ctx->low_worker_id, EVENT_RELEASE );
       break;
     }
 
     case RtemsBarrierReqWait_Pre_Satisfy_Delete: {
+      /*
+       * While the calling task waits at the barrier, the barrier shall be
+       * deleted.
+       */
       SendEvents( ctx->low_worker_id, EVENT_DELETE );
       break;
     }
@@ -343,26 +377,45 @@ static void RtemsBarrierReqWait_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqWait_Post_Status_Ok: {
+      /*
+       * The return status of rtems_barrier_wait() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsBarrierReqWait_Post_Status_InvId: {
+      /*
+       * The return status of rtems_barrier_wait() shall be
+       * RTEMS_INVALID_ID.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
     }
 
     case RtemsBarrierReqWait_Post_Status_Timeout: {
+      /*
+       * The return status of rtems_barrier_wait() shall be
+       * RTEMS_TIMEOUT.
+       */
       T_rsc( ctx->status, RTEMS_TIMEOUT );
       break;
     }
 
     case RtemsBarrierReqWait_Post_Status_ObjDel: {
+      /*
+       * The return status of rtems_barrier_wait() shall be
+       * RTEMS_OBJECT_WAS_DELETED.
+       */
       T_rsc( ctx->status, RTEMS_OBJECT_WAS_DELETED );
       break;
     }
 
     case RtemsBarrierReqWait_Post_Status_NoReturn: {
+      /*
+       * The call to rtems_barrier_wait() shall not return to the calling task.
+       */
       T_rsc_success( ctx->status );
       break;
     }

@@ -183,11 +183,18 @@ static void RtemsBarrierReqDelete_Pre_Id_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqDelete_Pre_Id_Valid: {
+      /*
+       * The ``id`` parameter shall be associated with
+       * the barrier.
+       */
       ctx->id = ctx->barrier_id;
       break;
     }
 
     case RtemsBarrierReqDelete_Pre_Id_Invalid: {
+      /*
+       * The ``id`` parameter shall be invalid.
+       */
       ctx->id = 0;
       break;
     }
@@ -204,12 +211,20 @@ static void RtemsBarrierReqDelete_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqDelete_Post_Status_Ok: {
+      /*
+       * The return status of rtems_barrier_delete() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       ctx->barrier_id = 0;
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsBarrierReqDelete_Post_Status_InvId: {
+      /*
+       * The return status of rtems_barrier_delete() shall be
+       * RTEMS_INVALID_ID.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
     }
@@ -229,6 +244,9 @@ static void RtemsBarrierReqDelete_Post_Id_Check(
 
   switch ( state ) {
     case RtemsBarrierReqDelete_Post_Id_Valid: {
+      /*
+       * The unique object name shall identify the barrier.
+       */
       id = 0;
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc_success( sc );
@@ -237,6 +255,9 @@ static void RtemsBarrierReqDelete_Post_Id_Check(
     }
 
     case RtemsBarrierReqDelete_Post_Id_Invalid: {
+      /*
+       * The unique object name shall not identify the barrier.
+       */
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );
       break;
@@ -254,12 +275,18 @@ static void RtemsBarrierReqDelete_Post_Flush_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqDelete_Post_Flush_Yes: {
+      /*
+       * Tasks waiting at the barrier shall be unblocked.
+       */
       ++ctx->wait_expected;
       T_eq_u32( ctx->wait_done, ctx->wait_expected );
       break;
     }
 
     case RtemsBarrierReqDelete_Post_Flush_No: {
+      /*
+       * Tasks waiting at the barrier shall remain blocked.
+       */
       T_eq_u32( ctx->wait_done, ctx->wait_expected );
       break;
     }

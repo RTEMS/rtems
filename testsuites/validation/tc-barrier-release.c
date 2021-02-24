@@ -213,16 +213,27 @@ static void RtemsBarrierReqRelease_Pre_Barrier_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Barrier_NoObj: {
+      /*
+       * The ``id`` parameter shall be invalid.
+       */
       ctx->id = 0xffffffff;
       break;
     }
 
     case RtemsBarrierReqRelease_Pre_Barrier_Manual: {
+      /*
+       * The ``id`` parameter shall be associated with a
+       * manual release barrier.
+       */
       ctx->id = ctx->manual_release_id;
       break;
     }
 
     case RtemsBarrierReqRelease_Pre_Barrier_Auto: {
+      /*
+       * The ``id`` parameter shall be associated with an
+       * automatic release barrier.
+       */
       ctx->id = ctx->auto_release_id;
       break;
     }
@@ -241,11 +252,18 @@ static void RtemsBarrierReqRelease_Pre_Released_Prepare(
 
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Released_Valid: {
+      /*
+       * The ``released`` parameter shall reference an integer variable.
+       */
       ctx->released = &ctx->released_value;
       break;
     }
 
     case RtemsBarrierReqRelease_Pre_Released_Null: {
+      /*
+       * The ``released`` parameter shall be
+       * NULL.
+       */
       ctx->released = NULL;
       break;
     }
@@ -262,11 +280,17 @@ static void RtemsBarrierReqRelease_Pre_Waiting_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Waiting_Zero: {
+      /*
+       * The number of tasks waiting at the barrier shall be zero.
+       */
       ctx->waiting_tasks = 0;
       break;
     }
 
     case RtemsBarrierReqRelease_Pre_Waiting_Positive: {
+      /*
+       * The number of tasks waiting at the barrier shall be positive.
+       */
       ctx->waiting_tasks = 1;
       SendEvents( ctx->worker_id, EVENT_WAIT );
       break;
@@ -284,16 +308,28 @@ static void RtemsBarrierReqRelease_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqRelease_Post_Status_Ok: {
+      /*
+       * The return status of rtems_barrier_release() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsBarrierReqRelease_Post_Status_InvId: {
+      /*
+       * The return status of rtems_barrier_release() shall be
+       * RTEMS_INVALID_ID.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
     }
 
     case RtemsBarrierReqRelease_Post_Status_InvAddr: {
+      /*
+       * The return status of rtems_barrier_release() shall be
+       * RTEMS_INVALID_ADDRESS.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       break;
     }
@@ -310,11 +346,19 @@ static void RtemsBarrierReqRelease_Post_Released_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqRelease_Post_Released_Valid: {
+      /*
+       * The value of the variable for the number of released tasks shall equal
+       * the number of tasks released by the rtems_barrier_release() call.
+       */
       T_eq_u32( ctx->released_value, ctx->waiting_tasks );
       break;
     }
 
     case RtemsBarrierReqRelease_Post_Released_Unchanged: {
+      /*
+       * The value of variable for the number of released tasks shall be unchanged
+       * by the rtems_barrier_release() call.
+       */
       T_eq_u32( ctx->released_value, RELEASED_INVALID_VALUE );
       break;
     }

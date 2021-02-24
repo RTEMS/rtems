@@ -54,8 +54,6 @@
 
 #include <rtems.h>
 #include <string.h>
-#include <rtems/score/chainimpl.h>
-#include <rtems/score/objectimpl.h>
 
 #include <rtems/test.h>
 
@@ -252,11 +250,17 @@ static void RtemsBarrierReqCreate_Pre_Name_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Name_Valid: {
+      /*
+       * The ``name`` parameter shall be valid.
+       */
       ctx->name = NAME;
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_Name_Invalid: {
+      /*
+       * The ``name`` parameter shall be invalid.
+       */
       ctx->name = 0;
       break;
     }
@@ -273,16 +277,28 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Class_Default: {
+      /*
+       * The ``attribute_set`` parameter shall specify the default
+       * class.
+       */
       /* Nothing to do */
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_Class_Manual: {
+      /*
+       * The ``attribute_set`` parameter shall specify the manual
+       * release class.
+       */
       ctx->attribute_set |= RTEMS_BARRIER_MANUAL_RELEASE;
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_Class_Auto: {
+      /*
+       * The ``attribute_set`` parameter shall specify the
+       * automatic release class.
+       */
       ctx->attribute_set |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
       break;
     }
@@ -299,11 +315,17 @@ static void RtemsBarrierReqCreate_Pre_MaxWait_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_MaxWait_Zero: {
+      /*
+       * The ``maximum_waiters`` parameter shall be zero.
+       */
       ctx->maximum_waiters = 0;
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_MaxWait_Positive: {
+      /*
+       * The ``maximum_waiters`` parameter shall be positive.
+       */
       ctx->maximum_waiters = 1;
       break;
     }
@@ -320,11 +342,19 @@ static void RtemsBarrierReqCreate_Pre_Id_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Id_Valid: {
+      /*
+       * The ``id`` parameter shall reference an object
+       * identifier value.
+       */
       ctx->id = &ctx->id_value;
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_Id_Null: {
+      /*
+       * The ``id`` parameter shall be
+       * NULL.
+       */
       ctx->id = NULL;
       break;
     }
@@ -341,11 +371,17 @@ static void RtemsBarrierReqCreate_Pre_Free_Prepare(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Free_Yes: {
+      /*
+       * The system shall have at least one inactive barrier object available.
+       */
       /* Nothing to do */
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_Free_No: {
+      /*
+       * The system shall have no inactive partition object available.
+       */
       ctx->seized_objects = T_seize_objects( Create, NULL );
       break;
     }
@@ -362,26 +398,46 @@ static void RtemsBarrierReqCreate_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_Status_Ok: {
+      /*
+       * The return status of rtems_barrier_create() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsBarrierReqCreate_Post_Status_InvName: {
+      /*
+       * The return status of rtems_barrier_create() shall be
+       * RTEMS_INVALID_NAME.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_NAME );
       break;
     }
 
     case RtemsBarrierReqCreate_Post_Status_InvAddr: {
+      /*
+       * The return status of rtems_barrier_create() shall be
+       * RTEMS_INVALID_ADDRESS.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       break;
     }
 
     case RtemsBarrierReqCreate_Post_Status_InvNum: {
+      /*
+       * The return status of rtems_barrier_create() shall be
+       * RTEMS_INVALID_NUMBER.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
       break;
     }
 
     case RtemsBarrierReqCreate_Post_Status_TooMany: {
+      /*
+       * The return status of rtems_barrier_create() shall be
+       * RTEMS_TOO_MANY.
+       */
       T_rsc( ctx->status, RTEMS_TOO_MANY );
       break;
     }
@@ -401,7 +457,11 @@ static void RtemsBarrierReqCreate_Post_Name_Check(
 
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_Name_Valid: {
-      id = INVALID_ID;
+      /*
+       * The unique object name shall identify the barrier created by the
+       * rtems_barrier_create() call.
+       */
+      id = 0;
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc_success( sc );
       T_eq_u32( id, ctx->id_value );
@@ -409,6 +469,9 @@ static void RtemsBarrierReqCreate_Post_Name_Check(
     }
 
     case RtemsBarrierReqCreate_Post_Name_Invalid: {
+      /*
+       * The unique object name shall not identify a barrier.
+       */
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );
       break;
@@ -428,11 +491,17 @@ static void RtemsBarrierReqCreate_Post_Class_Check(
 
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_Class_NoObj: {
+      /*
+       * The barrier class is not applicable since there was no barrier created.
+       */
       /* Not applicable */
       break;
     }
 
     case RtemsBarrierReqCreate_Post_Class_Manual: {
+      /*
+       * The class of the barrier shall be manual release.
+       */
       sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
       T_rsc_success( sc );
 
@@ -442,6 +511,9 @@ static void RtemsBarrierReqCreate_Post_Class_Check(
     }
 
     case RtemsBarrierReqCreate_Post_Class_Auto: {
+      /*
+       * The class of the barrier shall be automatic release.
+       */
       sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
       T_rsc_success( sc );
 
@@ -461,12 +533,20 @@ static void RtemsBarrierReqCreate_Post_IdValue_Check(
 {
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_IdValue_Assigned: {
+      /*
+       * The value of the object identifier variable shall be equal to the object
+       * identifier of the barrier created by the rtems_barrier_create() call.
+       */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
     case RtemsBarrierReqCreate_Post_IdValue_Unchanged: {
+      /*
+       * The value of the object identifier variable shall be unchanged by the
+       * rtems_barrier_create() call.
+       */
       T_eq_u32( ctx->id_value, INVALID_ID );
       break;
     }
