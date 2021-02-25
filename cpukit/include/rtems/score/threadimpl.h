@@ -201,13 +201,29 @@ typedef struct {
  * @param the_thread The thread to initialize.
  * @param config The configuration of the thread to initialize.
  *
- * @retval true The thread initialization was successful.
- * @retval false The thread initialization failed.
+ * @retval STATUS_SUCCESSFUL The thread initialization was successful.
+ *
+ * @retval STATUS_UNSATISFIED The thread initialization failed.
  */
-bool _Thread_Initialize(
+Status_Control _Thread_Initialize(
   Thread_Information         *information,
   Thread_Control             *the_thread,
   const Thread_Configuration *config
+);
+
+/**
+ * @brief Frees the thread.
+ *
+ * This routine invokes the thread delete extensions and frees all resources
+ * associated with the thread.  Afterwards the thread object is closed.
+ *
+ * @param[in, out] information is the thread information.
+ *
+ * @param[in, out] the_thread is the thread to free.
+ */
+void _Thread_Free(
+  Thread_Information *information,
+  Thread_Control     *the_thread
 );
 
 /**

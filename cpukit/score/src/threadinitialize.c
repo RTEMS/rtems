@@ -29,14 +29,81 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/config.h>
 
-bool _Thread_Initialize(
+void _Thread_Free(
+  Thread_Information *information,
+  Thread_Control     *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  Scheduler_Node *scheduler_node;
+  size_t          scheduler_index;
+#endif
+
+  _User_extensions_Thread_delete( the_thread );
+  _User_extensions_Destroy_iterators( the_thread );
+  _ISR_lock_Destroy( &the_thread->Keys.Lock );
+
+#if defined(RTEMS_SMP)
+  scheduler_node = the_thread->Scheduler.nodes;
+  scheduler_index = 0;
+
+  while ( scheduler_index < _Scheduler_Count ) {
+    _Scheduler_Node_destroy(
+      &_Scheduler_Table[ scheduler_index ],
+      scheduler_node
+    );
+    scheduler_node = (Scheduler_Node *)
+      ( (uintptr_t) scheduler_node + _Scheduler_Node_size );
+    ++scheduler_index;
+  }
+#else
+  _Scheduler_Node_destroy(
+    _Thread_Scheduler_get_home( the_thread ),
+    _Thread_Scheduler_get_home_node( the_thread )
+  );
+#endif
+
+  _ISR_lock_Destroy( &the_thread->Timer.Lock );
+
+  /*
+   *  The thread might have been FP.  So deal with that.
+   */
+#if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+#if ( CPU_USE_DEFERRED_FP_SWITCH == TRUE )
+  if ( _Thread_Is_allocated_fp( the_thread ) )
+    _Thread_Deallocate_fp();
+#endif
+#endif
+
+  _Freechain_Push(
+    &information->Thread_queue_heads.Free,
+    the_thread->Wait.spare_heads
+  );
+
+  /*
+   *  Free the rest of the memory associated with this task
+   *  and set the associated pointers to NULL for safety.
+   */
+  ( *the_thread->Start.stack_free )( the_thread->Start.Initial_stack.area );
+
+#if defined(RTEMS_SMP)
+  _ISR_lock_Destroy( &the_thread->Scheduler.Lock );
+  _ISR_lock_Destroy( &the_thread->Wait.Lock.Default );
+  _SMP_lock_Stats_destroy( &the_thread->Potpourri_stats );
+#endif
+
+  _Thread_queue_Destroy( &the_thread->Join_queue );
+  _Context_Destroy( the_thread, &the_thread->Registers );
+  _Objects_Free( &information->Objects, &the_thread->Object );
+}
+
+static bool _Thread_Try_initialize(
   Thread_Information         *information,
   Thread_Control             *the_thread,
   const Thread_Configuration *config
 )
 {
   uintptr_t                tls_size;
-  bool                     extension_status;
   size_t                   i;
   char                    *stack_begin;
   char                    *stack_end;
@@ -44,8 +111,8 @@ bool _Thread_Initialize(
 #if defined(RTEMS_SMP)
   Scheduler_Node          *scheduler_node_for_index;
   const Scheduler_Control *scheduler_for_index;
-#endif
   size_t                   scheduler_index;
+#endif
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
   memset(
@@ -60,29 +127,6 @@ bool _Thread_Initialize(
     *(void **) ( (char *) the_thread + add_on->destination_offset ) =
       (char *) the_thread + add_on->source_offset;
   }
-
-  /* Set everything to perform the error case clean up */
-  the_thread->Start.stack_free = config->stack_free;
-
-#if defined(RTEMS_SMP)
-  if (
-    !config->is_preemptible
-      && !_Scheduler_Is_non_preempt_mode_supported( config->scheduler )
-  ) {
-    goto failed;
-  }
-#endif
-
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-  if (
-    config->isr_level != 0
-#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
-      && _SMP_Need_inter_processor_interrupts()
-#endif
-  ) {
-    goto failed;
-  }
-#endif
 
   stack_begin = config->stack_area;
   stack_end = stack_begin + config->stack_size;
@@ -131,6 +175,7 @@ bool _Thread_Initialize(
   the_thread->Start.is_preemptible   = config->is_preemptible;
   the_thread->Start.budget_algorithm = config->budget_algorithm;
   the_thread->Start.budget_callout   = config->budget_callout;
+  the_thread->Start.stack_free       = config->stack_free;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
 
@@ -202,7 +247,6 @@ bool _Thread_Initialize(
     the_thread,
     config->priority
   );
-  scheduler_index = 1;
 #endif
 
   _Priority_Node_initialize( &the_thread->Real_priority, config->priority );
@@ -244,39 +288,58 @@ bool _Thread_Initialize(
   _Objects_Open_u32( &information->Objects, &the_thread->Object, config->name );
 
   /*
+   * We do following checks of simple error conditions after the thread is
+   * fully initialized to simplify the clean up in case of an error.  With a
+   * fully initialized thread we can simply use _Thread_Free() and do not have
+   * to bother with partially initialized threads.
+   */
+
+#if defined(RTEMS_SMP)
+  if (
+    !config->is_preemptible
+      && !_Scheduler_Is_non_preempt_mode_supported( config->scheduler )
+  ) {
+    return false;
+  }
+#endif
+
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+  if (
+    config->isr_level != 0
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+      && _SMP_Need_inter_processor_interrupts()
+#endif
+  ) {
+    return false;
+  }
+#endif
+
+  /*
    *  We assume the Allocator Mutex is locked and dispatching is
    *  enabled when we get here.  We want to be able to run the
    *  user extensions with dispatching enabled.  The Allocator
    *  Mutex provides sufficient protection to let the user extensions
    *  run safely.
    */
-  extension_status = _User_extensions_Thread_create( the_thread );
-  if ( extension_status )
-    return true;
+  return _User_extensions_Thread_create( the_thread );
+}
 
-#if defined(RTEMS_SMP)
-  while ( scheduler_index > 0 ) {
-    scheduler_node_for_index = (Scheduler_Node *)
-      ( (uintptr_t) scheduler_node_for_index - _Scheduler_Node_size );
-    --scheduler_for_index;
-    --scheduler_index;
-    _Scheduler_Node_destroy( scheduler_for_index, scheduler_node_for_index );
+Status_Control _Thread_Initialize(
+  Thread_Information         *information,
+  Thread_Control             *the_thread,
+  const Thread_Configuration *config
+)
+{
+  bool ok;
+
+  ok = _Thread_Try_initialize( information, the_thread, config );
+
+  if ( !ok ) {
+    _Objects_Close( &information->Objects, &the_thread->Object );
+    _Thread_Free( information, the_thread );
+
+    return STATUS_UNSATISFIED;
   }
-#else
-  if ( scheduler_index > 0 ) {
-    _Scheduler_Node_destroy( config->scheduler, scheduler_node );
-  }
-#endif
 
-  _Freechain_Push(
-    &information->Thread_queue_heads.Free,
-    the_thread->Wait.spare_heads
-  );
-
-#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-failed:
-#endif
-
-  ( *the_thread->Start.stack_free )( the_thread->Start.Initial_stack.area );
-  return false;
+  return STATUS_SUCCESSFUL;
 }

@@ -126,7 +126,7 @@ static void _MPCI_Create_server( void )
     }
   };
   Thread_Configuration config;
-  bool                 ok;
+  Status_Control       status;
   ISR_lock_Context     lock_context;
 
 
@@ -152,13 +152,12 @@ static void _MPCI_Create_server( void )
     + CPU_ALL_TASKS_ARE_FP * CONTEXT_FP_SIZE;
   config.stack_area = _MPCI_Receive_server_stack;
 
-  ok = _Thread_Initialize(
+  status = _Thread_Initialize(
     &_Thread_Information,
     _MPCI_Receive_server_tcb,
     &config
   );
-  _Assert( ok );
-  (void) ok;
+  _Assert_Unused_variable_equals( status, STATUS_SUCCESSFUL );
 
   _ISR_lock_ISR_disable( &lock_context );
   _Thread_Start( _MPCI_Receive_server_tcb, &entry, &lock_context );

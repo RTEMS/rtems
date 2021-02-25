@@ -107,13 +107,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
     _Objects_Allocate_unprotected( &_POSIX_Threads_Information.Objects );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free (
-  Thread_Control *the_pthread
-)
-{
-  _Objects_Free( &_POSIX_Threads_Information.Objects, &the_pthread->Object );
-}
-
 /** @} */
 
 #ifdef __cplusplus

@@ -25,6 +25,7 @@
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/support.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
@@ -77,14 +78,6 @@ rtems_status_code rtems_task_construct(
 )
 {
   return _RTEMS_tasks_Create( config, id, _RTEMS_tasks_Prepare_user_stack );
-}
-
-static void _RTEMS_tasks_Free( Thread_Control *the_thread )
-{
-  Thread_Information *information;
-
-  information = _Thread_Get_objects_information( the_thread );
-  _Objects_Free( &information->Objects, &the_thread->Object );
 }
 
 rtems_status_code _RTEMS_tasks_Create(
@@ -190,7 +183,7 @@ rtems_status_code _RTEMS_tasks_Create(
     the_global_object = _Objects_MP_Allocate_global_object();
 
     if ( the_global_object == NULL ) {
-      _RTEMS_tasks_Free( the_thread );
+      _Objects_Free( &_RTEMS_tasks_Information.Objects, &the_thread->Object );
       _Objects_Allocator_unlock();
       return RTEMS_TOO_MANY;
     }
@@ -204,17 +197,16 @@ rtems_status_code _RTEMS_tasks_Create(
    */
 
   if ( status == RTEMS_SUCCESSFUL ) {
-    bool ok;
+    Status_Control score_status;
 
-    ok = _Thread_Initialize(
+    score_status = _Thread_Initialize(
       &_RTEMS_tasks_Information,
       the_thread,
       &thread_config
     );
-
-    if ( !ok ) {
-      status = RTEMS_UNSATISFIED;
-    }
+    status = _Status_Get( score_status );
+  } else {
+    _Objects_Free( &_RTEMS_tasks_Information.Objects, &the_thread->Object );
   }
 
   if ( status != RTEMS_SUCCESSFUL ) {
@@ -222,7 +214,6 @@ rtems_status_code _RTEMS_tasks_Create(
     if ( is_global )
       _Objects_MP_Free_global_object( the_global_object );
 #endif
-    _RTEMS_tasks_Free( the_thread );
     _Objects_Allocator_unlock();
     return status;
   }

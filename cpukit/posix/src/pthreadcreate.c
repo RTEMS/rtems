@@ -26,6 +26,7 @@
 #include <pthread.h>
 #include <errno.h>
 
+#include <rtems/posix/posixapi.h>
 #include <rtems/posix/priorityimpl.h>
 #if defined(RTEMS_POSIX_API)
 #include <rtems/posix/psignalimpl.h>
@@ -72,7 +73,8 @@ int pthread_create(
   int                                 normal_prio;
   bool                                valid;
   Thread_Configuration                config;
-  bool                                status;
+  Status_Control                      status;
+  bool                                ok;
   Thread_Control                     *the_thread;
   Thread_Control                     *executing;
   int                                 schedpolicy = SCHED_RR;
@@ -224,22 +226,23 @@ int pthread_create(
     config.stack_free = _Stack_Free_nothing;
   }
 
-  status = ( config.stack_area != NULL );
+  if ( config.stack_area == NULL ) {
+    _Objects_Free( &_POSIX_Threads_Information.Objects, &the_thread->Object );
+    _Objects_Allocator_unlock();
+    return EAGAIN;
+  }
 
   /*
    *  Initialize the core thread for this task.
    */
-  if ( status ) {
-    status = _Thread_Initialize(
-      &_POSIX_Threads_Information,
-      the_thread,
-      &config
-    );
-  }
-  if ( !status ) {
-    _POSIX_Threads_Free( the_thread );
+  status = _Thread_Initialize(
+    &_POSIX_Threads_Information,
+    the_thread,
+    &config
+  );
+  if ( status != STATUS_SUCCESSFUL ) {
     _Objects_Allocator_unlock();
-    return EAGAIN;
+    return _POSIX_Get_error( status );
   }
 
   if ( the_attr->detachstate == PTHREAD_CREATE_DETACHED ) {
@@ -249,14 +252,14 @@ int pthread_create(
   the_thread->Life.state |= THREAD_LIFE_CHANGE_DEFERRED;
 
   _ISR_lock_ISR_disable( &lock_context );
-   status = _Scheduler_Set_affinity(
+   ok = _Scheduler_Set_affinity(
      the_thread,
      the_attr->affinitysetsize,
      the_attr->affinityset
    );
   _ISR_lock_ISR_enable( &lock_context );
-   if ( !status ) {
-     _POSIX_Threads_Free( the_thread );
+   if ( !ok ) {
+      _Thread_Free( &_POSIX_Threads_Information, the_thread );
      _RTEMS_Unlock_allocator();
      return EINVAL;
    }
@@ -287,7 +290,7 @@ int pthread_create(
    *  POSIX threads are allocated and started in one operation.
    */
   _ISR_lock_ISR_disable( &lock_context );
-  status = _Thread_Start( the_thread, &entry, &lock_context );
+  ok = _Thread_Start( the_thread, &entry, &lock_context );
 
   #if defined(RTEMS_DEBUG)
     /*
@@ -296,8 +299,8 @@ int pthread_create(
      *  NOTE: This can only happen if someone slips in and touches the
      *        thread while we are creating it.
      */
-    if ( !status ) {
-      _POSIX_Threads_Free( the_thread );
+    if ( !ok ) {
+      _Thread_Free( &_POSIX_Threads_Information, the_thread );
       _Objects_Allocator_unlock();
       return EINVAL;
     }
