@@ -24,8 +24,6 @@ links:
 - role: build-dependency
   uid: libnfs
 - role: build-dependency
-  uid: libpppd
-- role: build-dependency
   uid: librtemscpu
 - role: build-dependency
   uid: librtemscxx
