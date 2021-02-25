@@ -74,8 +74,6 @@ install:
   - bsps/include/grlib/tlib.h
 links:
 - role: build-dependency
-  uid: objgrlibnet
-- role: build-dependency
   uid: objgrlibnosmp
 source:
 - bsps/shared/grlib/1553/b1553brm.c
