@@ -345,6 +345,7 @@ include_rtems_score_HEADERS += include/rtems/score/coresemimpl.h
 include_rtems_score_HEADERS += include/rtems/score/cpustdatomic.h
 include_rtems_score_HEADERS += include/rtems/score/freechain.h
 include_rtems_score_HEADERS += include/rtems/score/freechainimpl.h
+include_rtems_score_HEADERS += include/rtems/score/hash.h
 include_rtems_score_HEADERS += include/rtems/score/heap.h
 include_rtems_score_HEADERS += include/rtems/score/heapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/heapinfo.h

@@ -345,6 +345,7 @@ install:
   - cpukit/include/rtems/score/coresemimpl.h
   - cpukit/include/rtems/score/cpustdatomic.h
   - cpukit/include/rtems/score/freechain.h
+  - cpukit/include/rtems/score/hash.h
   - cpukit/include/rtems/score/heap.h
   - cpukit/include/rtems/score/heapimpl.h
   - cpukit/include/rtems/score/heapinfo.h
