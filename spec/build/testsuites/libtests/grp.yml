@@ -125,8 +125,6 @@ links:
 - role: build-dependency
   uid: fstat
 - role: build-dependency
-  uid: ftp01
-- role: build-dependency
   uid: ftrylockfile
 - role: build-dependency
   uid: funlockfile
@@ -187,8 +185,6 @@ links:
 - role: build-dependency
   uid: md501
 - role: build-dependency
-  uid: mghttpd01
-- role: build-dependency
   uid: monitor
 - role: build-dependency
   uid: monitor02
@@ -196,8 +192,6 @@ links:
   uid: mouse01
 - role: build-dependency
   uid: nanosleep
-- role: build-dependency
-  uid: networking01
 - role: build-dependency
   uid: newlib01
 - role: build-dependency
@@ -258,8 +252,6 @@ links:
   uid: stat
 - role: build-dependency
   uid: stringto01
-- role: build-dependency
-  uid: syscall01
 - role: build-dependency
   uid: tar01
 - role: build-dependency

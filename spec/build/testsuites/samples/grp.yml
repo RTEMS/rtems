@@ -29,15 +29,11 @@ links:
 - role: build-dependency
   uid: iostream
 - role: build-dependency
-  uid: loopback
-- role: build-dependency
   uid: minimum
 - role: build-dependency
   uid: nsecs
 - role: build-dependency
   uid: paranoia
-- role: build-dependency
-  uid: pppd
 - role: build-dependency
   uid: ticker
 - role: build-dependency
