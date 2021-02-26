@@ -40,6 +40,7 @@ SECTIONS
     *(.text)
     *(.text*)
     *(.sdata2)
+    *(.sdata2*)
     *(.rodata)
     *(.rodata*)
   }
@@ -72,13 +73,17 @@ SECTIONS
     *(.data)
     *(.data*)
     *(.sdata)
+    *(.sdata*)
     . = ALIGN(4);
     _data_end = .;
   }
   .bss :
   {
     *(.sbss)
+    *(.sbss*)
     *(.bss)
+    *(.bss*)
+    *(COMMON)
     . = ALIGN(4);
     _bss_end = .;
   }
@@ -96,6 +101,7 @@ SECTIONS
 
   /DISCARD/ : 
   {
-    *(.comment)
+    *(.comment*)
+    *(.debug*)
   }
 }
