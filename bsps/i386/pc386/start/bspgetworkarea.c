@@ -36,10 +36,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 /* #define BSP_GET_WORK_AREA_DEBUG */
 #include <bsp.h>
 #include <bsp/bootcard.h>
