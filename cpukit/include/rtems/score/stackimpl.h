@@ -119,28 +119,42 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Ensure_minimum (
 }
 
 /**
- * @brief Extend the stack size to account for additional data structures
- *   allocated in the stack area of a thread.
+ * @brief Extends the stack size to account for additional data structures
+ *   allocated in the thread storage area.
  *
- * @param stack_size The stack size.
- * @param is_fp Indicates if the stack is for a floating-point thread.
+ * @param stack_size is the stack size.
  *
- * @return The extended stack size.
+ * @param is_fp shall be true, if the stack is for a floating-point thread,
+ *   otherwise it shall be false.
+ *
+ * @return Returns the extended stack size.
  */
 RTEMS_INLINE_ROUTINE size_t _Stack_Extend_size(
   size_t stack_size,
   bool   is_fp
 )
 {
+  size_t extra_size;
+
+  extra_size = _TLS_Get_allocation_size();
+
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( is_fp ) {
-    stack_size += CONTEXT_FP_SIZE;
+    /* This addition cannot overflow since the TLS size cannot be that large */
+    extra_size += CONTEXT_FP_SIZE;
   }
 #else
   (void) is_fp;
 #endif
 
-  stack_size += _TLS_Get_allocation_size();
+  stack_size += extra_size;
+
+  if ( stack_size < extra_size ) {
+    /*
+     * In case of an unsigned integer overflow, saturate at the maximum value.
+     */
+    stack_size = SIZE_MAX;
+  }
 
   return stack_size;
 }
