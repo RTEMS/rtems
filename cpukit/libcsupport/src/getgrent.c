@@ -26,6 +26,7 @@
 
 #include <stdlib.h>
 #include <pthread.h>
+#include <rtems/score/assert.h>
 
 typedef struct {
   FILE *fp;

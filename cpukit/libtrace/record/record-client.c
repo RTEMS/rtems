@@ -38,6 +38,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <rtems/score/assert.h>
 
 #define TIME_MASK ( ( UINT32_C( 1 ) << RTEMS_RECORD_TIME_BITS ) - 1 )
 
