@@ -1089,7 +1089,7 @@ static void display_line(struct editor *ed, int pos, int fullline) {
   int selstart, selend, ch;
   char *s;
 
-  get_selection(ed, &selstart, &selend);
+  (void) get_selection(ed, &selstart, &selend);
   while (col < maxcol) {
     if (margin == 0) {
       if (!hilite && pos >= selstart && pos < selend) {
