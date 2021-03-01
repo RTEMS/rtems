@@ -465,6 +465,7 @@ int grspw_device_init(GRSPW_DEV *pDev)
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
 	union drvmgr_key_value *value;
+        rtems_status_code status;
 
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)pDev->dev->businfo;
@@ -555,21 +556,23 @@ int grspw_device_init(GRSPW_DEV *pDev)
 		return RTEMS_NO_MEMORY;
 
 	/* Create semaphores */
-	rtems_semaphore_create(
+	status = rtems_semaphore_create(
 		rtems_build_name('T', 'x', 'S', '0' + pDev->minor), 
 		0, 
 		RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
 		RTEMS_NO_PRIORITY_CEILING, 
 		0, 
 		&(pDev->txsp));
+        _Assert_Unused_variable_equals(status, RTEMS_SUCCESSFUL);
 
-	rtems_semaphore_create(
+	status = rtems_semaphore_create(
 		rtems_build_name('R', 'x', 'S', '0' + pDev->minor), 
 		0, 
 		RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY | \
 		RTEMS_NO_PRIORITY_CEILING, 
 		0, 
 		&(pDev->rxsp));
+        _Assert_Unused_variable_equals(status, RTEMS_SUCCESSFUL);
 
 	grspw_hw_init(pDev);
 
