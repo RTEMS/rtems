@@ -22,6 +22,11 @@
 
 #include <rtems/score/objectimpl.h>
 
+static bool _Objects_Is_local_node_search( uint32_t node )
+{
+  return node == OBJECTS_SEARCH_LOCAL_NODE || _Objects_Is_local_node( node );
+}
+
 Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   uint32_t                   name,
   uint32_t                   node,
@@ -29,36 +34,31 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   const Objects_Information *information
 )
 {
-  bool                       search_local_node;
-  const Objects_Control     *the_object;
-  Objects_Maximum            maximum;
-  Objects_Maximum            index;
 #if defined(RTEMS_MULTIPROCESSING)
-  Objects_Name               name_for_mp;
+  Objects_Name name_for_mp;
 #endif
 
-  /* ASSERT: information->is_string == false */
+  _Assert( !_Objects_Has_string_name( information ) );
 
-  if ( !id )
+  if ( id == NULL ) {
     return OBJECTS_INVALID_ADDRESS;
+  }
 
-  maximum = _Objects_Get_maximum_index( information );
-  search_local_node = false;
+  if (
+    node == OBJECTS_SEARCH_ALL_NODES ||
+    _Objects_Is_local_node_search( node )
+  ) {
+    Objects_Maximum maximum;
+    Objects_Maximum index;
 
-  if ( maximum > 0 &&
-      (node == OBJECTS_SEARCH_ALL_NODES ||
-       node == OBJECTS_SEARCH_LOCAL_NODE ||
-       _Objects_Is_local_node( node )
-      ))
-   search_local_node = true;
+    maximum = _Objects_Get_maximum_index( information );
 
-  if ( search_local_node ) {
     for ( index = 0; index < maximum; ++index ) {
-      the_object = information->local_table[ index ];
-      if ( !the_object )
-        continue;
+      const Objects_Control *the_object;
 
-      if ( name == the_object->name.name_u32 ) {
+      the_object = information->local_table[ index ];
+
+      if ( the_object != NULL && name == the_object->name.name_u32 ) {
         *id = the_object->id;
         _Assert( name != 0 );
         return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
@@ -67,8 +67,9 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( _Objects_Is_local_node( node ) || node == OBJECTS_SEARCH_LOCAL_NODE )
+  if ( _Objects_Is_local_node_search( node ) ) {
     return OBJECTS_INVALID_NAME;
+  }
 
   name_for_mp.name_u32 = name;
   return _Objects_MP_Global_name_search( information, name_for_mp, node, id );
