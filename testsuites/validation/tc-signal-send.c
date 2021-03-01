@@ -371,16 +371,27 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Task_NoObj: {
+      /*
+       * The ``id`` parameter shall be invalid.
+       */
       ctx->id = 0xffffffff;
       break;
     }
 
     case RtemsSignalReqSend_Pre_Task_Self: {
+      /*
+       * The ``id`` parameter shall be associated with
+       * the calling task.
+       */
       ctx->id = RTEMS_SELF;
       break;
     }
 
     case RtemsSignalReqSend_Pre_Task_Other: {
+      /*
+       * The ``id`` parameter shall be associated with a
+       * task other than the calling task.
+       */
       ctx->id = ctx->worker_id;
       break;
     }
@@ -397,11 +408,17 @@ static void RtemsSignalReqSend_Pre_Set_Prepare(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Set_Zero: {
+      /*
+       * The ``signal_set`` parameter shall be zero.
+       */
       ctx->signal_set = 0;
       break;
     }
 
     case RtemsSignalReqSend_Pre_Set_NonZero: {
+      /*
+       * The ``signal_set`` parameter shall be non-zero.
+       */
       ctx->signal_set = 0xdeadbeef;
       break;
     }
@@ -418,11 +435,19 @@ static void RtemsSignalReqSend_Pre_Handler_Prepare(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Handler_Invalid: {
+      /*
+       * When the target task has no valid ASR handler installed, the
+       * rtems_signal_send() directive shall be called.
+       */
       ctx->handler = NULL;
       break;
     }
 
     case RtemsSignalReqSend_Pre_Handler_Valid: {
+      /*
+       * When the target task has a valid ASR handler installed, the
+       * rtems_signal_send() directive shall be called.
+       */
       ctx->handler = SignalHandler;
       break;
     }
@@ -439,11 +464,19 @@ static void RtemsSignalReqSend_Pre_ASR_Prepare(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Pre_ASR_Enabled: {
+      /*
+       * When the target task has ASR processing enabled, the rtems_signal_send()
+       * directive shall be called.
+       */
       ctx->mode = RTEMS_DEFAULT_MODES;
       break;
     }
 
     case RtemsSignalReqSend_Pre_ASR_Disabled: {
+      /*
+       * When the target task has ASR processing disabled, the rtems_signal_send()
+       * directive shall be called.
+       */
       ctx->mode = RTEMS_NO_ASR;
       break;
     }
@@ -460,11 +493,19 @@ static void RtemsSignalReqSend_Pre_Nested_Prepare(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Nested_Yes: {
+      /*
+       * When the target task processes an asynchronous signal set, the
+       * rtems_signal_send() directive shall be called.
+       */
       ctx->nested = 1;
       break;
     }
 
     case RtemsSignalReqSend_Pre_Nested_No: {
+      /*
+       * When the target task does not process an asynchronous signal set, the
+       * rtems_signal_send() directive shall be called.
+       */
       ctx->nested = 0;
       break;
     }
@@ -481,21 +522,37 @@ static void RtemsSignalReqSend_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Post_Status_Ok: {
+      /*
+       * The return status of rtems_signal_send() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsSignalReqSend_Post_Status_InvNum: {
+      /*
+       * The return status of rtems_signal_send() shall be
+       * RTEMS_INVALID_NUMBER.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
       break;
     }
 
     case RtemsSignalReqSend_Post_Status_InvId: {
+      /*
+       * The return status of rtems_signal_send() shall be
+       * RTEMS_INVALID_ID.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
     }
 
     case RtemsSignalReqSend_Post_Status_NotDef: {
+      /*
+       * The return status of rtems_signal_send() shall be
+       * RTEMS_NOT_DEFINED.
+       */
       T_rsc( ctx->status, RTEMS_NOT_DEFINED );
       break;
     }
@@ -516,6 +573,10 @@ static void RtemsSignalReqSend_Post_Handler_Check(
 
   switch ( state ) {
     case RtemsSignalReqSend_Post_Handler_NoCall: {
+      /*
+       * While the ASR processing is disabled, the ASR handler shall not be
+       * called.
+       */
       T_eq_sz( ctx->calls_after_send, ctx->nested );
       T_eq_sz( ctx->calls_after_dispatch, ctx->nested );
       T_eq_sz( ctx->calls_after_enable, ctx->nested );
@@ -523,6 +584,9 @@ static void RtemsSignalReqSend_Post_Handler_Check(
     }
 
     case RtemsSignalReqSend_Post_Handler_DuringSend: {
+      /*
+       * The ASR handler shall be called during the rtems_signal_send() call.
+       */
       ++expected_calls;
       T_eq_sz( ctx->calls_after_send, ctx->nested + 1 );
       T_eq_sz( ctx->calls_after_dispatch, ctx->nested + 1 );
@@ -531,6 +595,10 @@ static void RtemsSignalReqSend_Post_Handler_Check(
     }
 
     case RtemsSignalReqSend_Post_Handler_AfterDispatch: {
+      /*
+       * When the next thread dispatch of the target task of the
+       * rtems_signal_send() call takes place, the ASR handler shall be called.
+       */
       ++expected_calls;
       T_eq_sz( ctx->calls_after_send, ctx->nested );
       T_eq_sz( ctx->calls_after_dispatch, ctx->nested + 1 );
@@ -539,6 +607,10 @@ static void RtemsSignalReqSend_Post_Handler_Check(
     }
 
     case RtemsSignalReqSend_Post_Handler_AfterEnable: {
+      /*
+       * When the target task of the rtems_signal_send() call re-enables ASR
+       * processing, the ASR handler shall be called.
+       */
       ++expected_calls;
       T_eq_sz( ctx->calls_after_send, ctx->nested );
       T_eq_sz( ctx->calls_after_dispatch, ctx->nested );
@@ -568,6 +640,9 @@ static void RtemsSignalReqSend_Post_Recursive_Check(
 {
   switch ( state ) {
     case RtemsSignalReqSend_Post_Recursive_Yes: {
+      /*
+       * The ASR handler shall be called recursively.
+       */
       T_eq_sz( ctx->handler_calls, 2 );
       T_ne_uptr( ctx->stack_pointers[ 0 ], 0 );
       T_ne_uptr( ctx->stack_pointers[ 1 ], 0 );
@@ -576,6 +651,9 @@ static void RtemsSignalReqSend_Post_Recursive_Check(
     }
 
     case RtemsSignalReqSend_Post_Recursive_No: {
+      /*
+       * The ASR handler shall not be called recursively.
+       */
       if ( ctx->handler_calls == 2 ) {
         T_ne_uptr( ctx->stack_pointers[ 0 ], 0 );
         T_ne_uptr( ctx->stack_pointers[ 1 ], 0 );
