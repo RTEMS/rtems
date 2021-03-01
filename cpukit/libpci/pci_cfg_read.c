@@ -73,6 +73,7 @@ static int pci_read_addressable(struct pci_dev *dev, struct pci_res *res)
 		break;
 	case PCI_RES_MEM:
 		range1 = &bus->dev.resources[BRIDGE_RES_MEM];
+		/* Fall through */
 	default:
 	case PCI_RES_MEMIO:
 		range0 = &bus->dev.resources[BRIDGE_RES_MEMIO];
