@@ -228,9 +228,11 @@ task_usage(Thread_Control* thread, void* arg)
           if (CPU_usage_Equal_to(&usage, &data->zero) ||
               CPU_usage_Less_than(&usage, &data->usage[j]))
             continue;
+          /* Fall through */
         case RTEMS_TOP_SORT_REAL_PRI:
           if (thread->Real_priority.priority > data->tasks[j]->Real_priority.priority)
             continue;
+          /* Fall through */
         case RTEMS_TOP_SORT_CURRENT_PRI:
           if (
             _Thread_Get_priority( thread )
@@ -238,6 +240,7 @@ task_usage(Thread_Control* thread, void* arg)
           ) {
             continue;
           }
+          /* Fall through */
         case RTEMS_TOP_SORT_ID:
           if (thread->Object.id < data->tasks[j]->Object.id)
             continue;
