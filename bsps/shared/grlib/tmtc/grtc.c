@@ -1365,6 +1365,7 @@ static int process_dma(struct grtc_priv *pDev)
 		/* Start of frame found, Try to copy header */
 		pDev->frm = NULL;
 		pDev->frame_state = FRM_STATE_HDR;
+		/* Fall through */
 
 		case FRM_STATE_HDR:
 		DBG2("FRAME_STATE_HDR\n");
@@ -1396,6 +1397,7 @@ static int process_dma(struct grtc_priv *pDev)
 			return -1;
 		}
 		pDev->frame_state = FRM_STATE_ALLOC;
+		/* Fall through */
 
 		case FRM_STATE_ALLOC:
 		DBG2("FRAME_STATE_ALLOC\n");
@@ -1449,6 +1451,7 @@ static int process_dma(struct grtc_priv *pDev)
 
 		pDev->frame_state = FRM_STATE_PAYLOAD;
 		pDev->frm = frm;
+		/* Fall through */
 
 		case FRM_STATE_PAYLOAD:
 		DBG2("FRAME_STATE_PAYLOAD\n");
@@ -1476,6 +1479,7 @@ static int process_dma(struct grtc_priv *pDev)
 		}
 		frm->len += ret;
 		pDev->frame_state = FRM_STATE_FILLER;
+		/* Fall through */
 
 		case FRM_STATE_FILLER:
 		DBG2("FRAME_STATE_FILLER\n");
