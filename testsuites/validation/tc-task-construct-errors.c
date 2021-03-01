@@ -337,11 +337,17 @@ static void RtemsTaskReqConstructErrors_Pre_Id_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Id_Valid: {
+      /*
+       * The id parameter shall reference an object identifier value.
+       */
       ctx->id = &ctx->id_value;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Id_Null: {
+      /*
+       * The id parameter shall be NULL.
+       */
       ctx->id = NULL;
       break;
     }
@@ -358,11 +364,17 @@ static void RtemsTaskReqConstructErrors_Pre_Name_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Name_Valid: {
+      /*
+       * The name of the task configuration shall be valid.
+       */
       ctx->config.name = NAME;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Name_Inv: {
+      /*
+       * The name of the task configuration shall be invalid.
+       */
       ctx->config.name = 0;
       break;
     }
@@ -379,11 +391,18 @@ static void RtemsTaskReqConstructErrors_Pre_SysTsk_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_SysTsk_Yes: {
+      /*
+       * The attributes of the task configuration shall specify a system task.
+       */
       ctx->config.attributes |= RTEMS_SYSTEM_TASK;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_SysTsk_No: {
+      /*
+       * The attributes of the task configuration shall specify an application
+       * task.
+       */
       /* Nothing to do */
       break;
     }
@@ -400,16 +419,25 @@ static void RtemsTaskReqConstructErrors_Pre_Prio_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Prio_Valid: {
+      /*
+       * The initial priority of the task configuration shall be valid.
+       */
       ctx->config.initial_priority = 254;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Prio_Zero: {
+      /*
+       * The initial priority of the task configuration shall be zero.
+       */
       ctx->config.initial_priority = 0;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Prio_Inv: {
+      /*
+       * The initial priority of the task configuration shall be invalid.
+       */
       ctx->config.initial_priority = 0xffffffff;
       break;
     }
@@ -426,11 +454,17 @@ static void RtemsTaskReqConstructErrors_Pre_Free_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Free_Yes: {
+      /*
+       * The system shall have at least one inactive task object available.
+       */
       /* Nothing to do */
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Free_No: {
+      /*
+       * The system shall have no inactive task object available.
+       */
       ctx->seized_objects = T_seize_objects( Create, ctx );
       break;
     }
@@ -447,11 +481,19 @@ static void RtemsTaskReqConstructErrors_Pre_TLS_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_TLS_Enough: {
+      /*
+       * The maximum thread-local storage size of the task configuration shall be
+       * greater than or equal to the thread-local storage size.
+       */
       ctx->config.maximum_thread_local_storage_size = MAX_TLS_SIZE;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_TLS_Small: {
+      /*
+       * The maximum thread-local storage size of the task configuration shall be
+       * less than the thread-local storage size.
+       */
       ctx->config.maximum_thread_local_storage_size = 0;
       break;
     }
@@ -468,11 +510,19 @@ static void RtemsTaskReqConstructErrors_Pre_Stack_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Stack_Enough: {
+      /*
+       * The task stack size of the task configuration shall be greater than or
+       * equal to the configured minimum size.
+       */
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Stack_Small: {
+      /*
+       * The task stack size of the task configuration shall be less than the
+       * configured minimum size.
+       */
       ctx->stack_size = 0;
       break;
     }
@@ -489,11 +539,17 @@ static void RtemsTaskReqConstructErrors_Pre_Ext_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Ext_Ok: {
+      /*
+       * None of the task create extensions shall fail.
+       */
       ctx->create_extension_status = true;
       break;
     }
 
     case RtemsTaskReqConstructErrors_Pre_Ext_Err: {
+      /*
+       * At least one of the task create extensions shall fail.
+       */
       ctx->create_extension_status = false;
       break;
     }
@@ -510,36 +566,64 @@ static void RtemsTaskReqConstructErrors_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_Status_Ok: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_Status_InvAddr: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_INVALID_ADDRESS.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_Status_InvName: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_INVALID_NAME.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_NAME );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_Status_InvPrio: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_INVALID_PRIORITY.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_Status_InvSize: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_INVALID_SIZE.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_SIZE );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_Status_TooMany: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_TOO_MANY.
+       */
       T_rsc( ctx->status, RTEMS_TOO_MANY );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_Status_Unsat: {
+      /*
+       * The return status of rtems_task_construct() shall be
+       * RTEMS_UNSATISFIED.
+       */
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
       break;
     }
@@ -559,6 +643,10 @@ static void RtemsTaskReqConstructErrors_Post_Name_Check(
 
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_Name_Valid: {
+      /*
+       * The unique object name shall identify the task constructed by
+       * the rtems_task_construct() call.
+       */
       id = 0;
       sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc_success( sc );
@@ -567,6 +655,9 @@ static void RtemsTaskReqConstructErrors_Post_Name_Check(
     }
 
     case RtemsTaskReqConstructErrors_Post_Name_Invalid: {
+      /*
+       * The unique object name shall not identify a task.
+       */
       sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );
       break;
@@ -584,12 +675,20 @@ static void RtemsTaskReqConstructErrors_Post_IdValue_Check(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_IdValue_Assigned: {
+      /*
+       * The value of the object identifier variable shall be equal to the object
+       * identifier of the task constructed by the rtems_task_construct() call.
+       */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_IdValue_Unchanged: {
+      /*
+       * The value of the object identifier variable shall be unchanged by the
+       * rtems_task_construct() call.
+       */
       T_eq_u32( ctx->id_value, INVALID_ID );
       break;
     }
@@ -606,11 +705,19 @@ static void RtemsTaskReqConstructErrors_Post_CreateExt_Check(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_CreateExt_Yes: {
+      /*
+       * The create user extensions shall be invoked during the
+       * rtems_task_construct() call.
+       */
       T_eq_u32( ctx->create_extension_calls, 1 );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_CreateExt_No: {
+      /*
+       * The create user extensions shall not be invoked during the
+       * rtems_task_construct() call.
+       */
       T_eq_u32( ctx->create_extension_calls, 0 );
       break;
     }
@@ -627,11 +734,19 @@ static void RtemsTaskReqConstructErrors_Post_DelExt_Check(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_DelExt_Yes: {
+      /*
+       * The delete user extensions shall be invoked during the
+       * rtems_task_construct() call.
+       */
       T_eq_u32( ctx->delete_extension_calls, 1 );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_DelExt_No: {
+      /*
+       * The delete user extensions shall not be invoked during the
+       * rtems_task_construct() call.
+       */
       T_eq_u32( ctx->delete_extension_calls, 0 );
       break;
     }
@@ -648,11 +763,19 @@ static void RtemsTaskReqConstructErrors_Post_StoFree_Check(
 {
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_StoFree_Yes: {
+      /*
+       * The storage free handler of the task configuration shall be invoked
+       * during the rtems_task_construct() call.
+       */
       T_eq_u32( ctx->storage_free_calls, 1 );
       break;
     }
 
     case RtemsTaskReqConstructErrors_Post_StoFree_No: {
+      /*
+       * The storage free handler of the task configuration shall not be invoked
+       * during the rtems_task_construct() call.
+       */
       T_eq_u32( ctx->storage_free_calls, 0 );
       break;
     }

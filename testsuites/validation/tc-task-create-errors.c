@@ -301,11 +301,17 @@ static void RtemsTaskReqCreateErrors_Pre_Id_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Id_Valid: {
+      /*
+       * The id parameter shall reference an object identifier value.
+       */
       ctx->id = &ctx->id_value;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Id_Null: {
+      /*
+       * The id parameter shall be NULL.
+       */
       ctx->id = NULL;
       break;
     }
@@ -322,11 +328,17 @@ static void RtemsTaskReqCreateErrors_Pre_Name_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Name_Valid: {
+      /*
+       * The ``name`` parameter shall be valid.
+       */
       ctx->name = NAME;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Name_Inv: {
+      /*
+       * The ``name`` parameter shall be invalid.
+       */
       ctx->name = 0;
       break;
     }
@@ -343,11 +355,19 @@ static void RtemsTaskReqCreateErrors_Pre_SysTsk_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_SysTsk_Yes: {
+      /*
+       * The ``attribute_set`` parameter shall specify a system
+       * task.
+       */
       ctx->attributes = RTEMS_SYSTEM_TASK;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_SysTsk_No: {
+      /*
+       * The ``attribute_set`` parameter shall specify an
+       * application task.
+       */
       ctx->attributes = RTEMS_DEFAULT_ATTRIBUTES;
       break;
     }
@@ -364,16 +384,25 @@ static void RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Prio_Valid: {
+      /*
+       * The ``initial_priority`` parameter shall be valid.
+       */
       ctx->initial_priority = 254;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Prio_Zero: {
+      /*
+       * The ``initial_priority`` parameter shall be zero.
+       */
       ctx->initial_priority = 0;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Prio_Inv: {
+      /*
+       * The ``initial_priority`` parameter shall be invalid.
+       */
       ctx->initial_priority = 0xffffffff;
       break;
     }
@@ -390,11 +419,17 @@ static void RtemsTaskReqCreateErrors_Pre_Free_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Free_Yes: {
+      /*
+       * The system shall have at least one inactive task object available.
+       */
       /* Nothing to do */
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Free_No: {
+      /*
+       * The system shall have no inactive task object available.
+       */
       ctx->seized_objects = T_seize_objects( Create, ctx );
       break;
     }
@@ -411,16 +446,28 @@ static void RtemsTaskReqCreateErrors_Pre_Stack_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Stack_Normal: {
+      /*
+       * The ``initial_priority`` parameter shall be greater than or
+       * equal to the configured minimum size.
+       */
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Stack_Small: {
+      /*
+       * The ``initial_priority`` parameter shall be less than the
+       * configured minimum size.
+       */
       ctx->stack_size = 0;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Stack_Huge: {
+      /*
+       * The ``initial_priority`` parameter shall be greater than the
+       * maximum stack size which can be allocated by the system.
+       */
       ctx->stack_size = SIZE_MAX;
       break;
     }
@@ -437,11 +484,17 @@ static void RtemsTaskReqCreateErrors_Pre_Ext_Prepare(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Ext_Ok: {
+      /*
+       * None of the task create extensions shall fail.
+       */
       ctx->create_extension_status = true;
       break;
     }
 
     case RtemsTaskReqCreateErrors_Pre_Ext_Err: {
+      /*
+       * At least one of the task create extensions shall fail.
+       */
       ctx->create_extension_status = false;
       break;
     }
@@ -458,31 +511,55 @@ static void RtemsTaskReqCreateErrors_Post_Status_Check(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Post_Status_Ok: {
+      /*
+       * The return status of rtems_task_create() shall be
+       * RTEMS_SUCCESSFUL.
+       */
       T_rsc_success( ctx->status );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_Status_InvAddr: {
+      /*
+       * The return status of rtems_task_create() shall be
+       * RTEMS_INVALID_ADDRESS.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_Status_InvName: {
+      /*
+       * The return status of rtems_task_create() shall be
+       * RTEMS_INVALID_NAME.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_NAME );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_Status_InvPrio: {
+      /*
+       * The return status of rtems_task_create() shall be
+       * RTEMS_INVALID_PRIORITY.
+       */
       T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_Status_TooMany: {
+      /*
+       * The return status of rtems_task_create() shall be
+       * RTEMS_TOO_MANY.
+       */
       T_rsc( ctx->status, RTEMS_TOO_MANY );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_Status_Unsat: {
+      /*
+       * The return status of rtems_task_create() shall be
+       * RTEMS_UNSATISFIED.
+       */
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
       break;
     }
@@ -502,6 +579,10 @@ static void RtemsTaskReqCreateErrors_Post_Name_Check(
 
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Post_Name_Valid: {
+      /*
+       * The unique object name shall identify the task created by
+       * the rtems_task_create() call.
+       */
       id = 0;
       sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc_success( sc );
@@ -510,6 +591,9 @@ static void RtemsTaskReqCreateErrors_Post_Name_Check(
     }
 
     case RtemsTaskReqCreateErrors_Post_Name_Invalid: {
+      /*
+       * The unique object name shall not identify a task.
+       */
       sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );
       break;
@@ -527,12 +611,20 @@ static void RtemsTaskReqCreateErrors_Post_IdValue_Check(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Post_IdValue_Assigned: {
+      /*
+       * The value of the object identifier variable shall be equal to the object
+       * identifier of the task created by the rtems_task_create() call.
+       */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_IdValue_Unchanged: {
+      /*
+       * The value of the object identifier variable shall be unchanged by the
+       * rtems_task_create() call.
+       */
       T_eq_u32( ctx->id_value, INVALID_ID );
       break;
     }
@@ -549,11 +641,19 @@ static void RtemsTaskReqCreateErrors_Post_CreateExt_Check(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Post_CreateExt_Yes: {
+      /*
+       * The create user extensions shall be invoked during the
+       * rtems_task_create() call.
+       */
       T_eq_u32( ctx->create_extension_calls, 1 );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_CreateExt_No: {
+      /*
+       * The create user extensions shall not be invoked during the
+       * rtems_task_create() call.
+       */
       T_eq_u32( ctx->create_extension_calls, 0 );
       break;
     }
@@ -570,11 +670,19 @@ static void RtemsTaskReqCreateErrors_Post_DelExt_Check(
 {
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Post_DelExt_Yes: {
+      /*
+       * The delete user extensions shall be invoked during the
+       * rtems_task_create() call.
+       */
       T_eq_u32( ctx->delete_extension_calls, 1 );
       break;
     }
 
     case RtemsTaskReqCreateErrors_Post_DelExt_No: {
+      /*
+       * The delete user extensions shall not be invoked during the
+       * rtems_task_create() call.
+       */
       T_eq_u32( ctx->delete_extension_calls, 0 );
       break;
     }
