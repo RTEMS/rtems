@@ -291,6 +291,7 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	int status;
 	uint32_t bar0, bar0_size;
 	int resources_cnt;
+	int sc;
 
 	/* PCI device does not have the IRQ line register, when PCI autoconf configures it the configuration
 	 * is forgotten. We take the IRQ number from the PCI Host device (AMBA device), this works as long
@@ -314,7 +315,8 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 
 	strcpy(priv->prefix, "/dev/tmtc1553_0");
 	priv->prefix[14] += dev->minor_drv;
-	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	sc = mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	_Assert_Unused_variable_equals(sc, 0);
 	priv->prefix[15] = '/';
 	priv->prefix[16] = '\0';
 
