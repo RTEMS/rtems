@@ -380,6 +380,7 @@ int gr_rasta_adcdac_init1(struct drvmgr_dev *dev)
 	uint32_t bar0, bar1, bar0_size, bar1_size;
 	union drvmgr_key_value *value;
 	int resources_cnt;
+	int sc;
 
 	priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
@@ -395,7 +396,8 @@ int gr_rasta_adcdac_init1(struct drvmgr_dev *dev)
 
 	strcpy(priv->prefix, "/dev/rastaadcdac0");
 	priv->prefix[16] += dev->minor_drv;
-	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	sc = mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	_Assert_Unused_variable_equals(sc, 0);
 	priv->prefix[17] = '/';
 	priv->prefix[18] = '\0';
 
