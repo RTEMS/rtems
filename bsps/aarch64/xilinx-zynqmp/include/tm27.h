@@ -41,6 +41,14 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+/*
+ * On ZynqMP hardware, SGI0-7 are permanently enabled for IPI usage while
+ * SGI8-15 are permanently disabled along with PPI16-24. Override tm27's usage
+ * of SGI12 and SGI13 with SGI6 and SGI7.
+ */
+#define ARM_GIC_TM27_IRQ_LOW ARM_GIC_IRQ_SGI_6
+#define ARM_GIC_TM27_IRQ_HIGH ARM_GIC_IRQ_SGI_7
+
 #include <dev/irq/arm-gic-tm27.h>
 
 #endif /* __tm27_h */
