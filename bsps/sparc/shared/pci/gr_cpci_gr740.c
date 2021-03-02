@@ -455,6 +455,7 @@ int gr_cpci_gr740_init1(struct drvmgr_dev *dev)
 	int status, i;
 	union drvmgr_key_value *value;
 	int resources_cnt;
+	int sc;
 
 	priv = dev->priv;
 	if (!priv)
@@ -471,7 +472,8 @@ int gr_cpci_gr740_init1(struct drvmgr_dev *dev)
 
 	strcpy(priv->prefix, "/dev/gr740_0");
 	priv->prefix[11] += dev->minor_drv;
-	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	sc = mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	_Assert_Unused_variable_equals(sc, 0);
 	priv->prefix[12] = '/';
 	priv->prefix[13] = '\0';
 
