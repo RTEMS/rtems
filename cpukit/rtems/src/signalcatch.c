@@ -58,17 +58,35 @@ rtems_status_code rtems_signal_catch(
   asr->handler = asr_handler;
   asr->mode_set = mode_set;
 
+#if defined(RTEMS_SMP)
   if ( asr_handler == NULL ) {
     Chain_Node *node;
 
-    asr->signals_pending = 0;
+    /*
+     * In SMP configurations, signals may be sent on other processors
+     * (interrupts or threads) in parallel.  This will cause an inter-processor
+     * interrupt which may be blocked by the above interrupt disable.
+     */
+
     node = &api->Signal_action.Node;
+    _Assert( asr->signals_pending == 0 || !_Chain_Is_node_off_chain( node ) );
+    _Assert( asr->signals_pending != 0 || _Chain_Is_node_off_chain( node ) );
 
     if ( !_Chain_Is_node_off_chain( node ) ) {
+      asr->signals_pending = 0;
       _Chain_Extract_unprotected( node );
       _Chain_Set_off_chain( node );
     }
   }
+#else
+  /*
+   * In uniprocessor configurations, as soon as interrupts are disabled above
+   * nobody can send signals to the executing thread.  So, pending signals at
+   * this point cannot appear.
+   */
+  _Assert( asr->signals_pending == 0 );
+  _Assert( _Chain_Is_node_off_chain( &api->Signal_action.Node ) );
+#endif
 
   _Thread_State_release( executing, &lock_context );
   return RTEMS_SUCCESSFUL;
