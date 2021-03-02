@@ -34,6 +34,7 @@ static int rtems_shell_main_chmod(
   int           n;
   mode_t        mode;
   unsigned long tmp;
+  int           sc;
 
   if (argc < 2) {
     fprintf(stderr,"%s: too few arguments\n", argv[0]);
@@ -52,8 +53,10 @@ static int rtems_shell_main_chmod(
   /*
    *  Now change the files modes
    */
-  for (n=2 ; n < argc ; n++)
-    chmod(argv[n++], mode);
+  for (n=2 ; n < argc ; n++) {
+    sc = chmod(argv[n++], mode);
+    _Assert_Unused_variable_unequal(sc, -1);
+  }
 
   return 0;
 }
