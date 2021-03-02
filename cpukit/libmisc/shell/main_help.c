@@ -119,7 +119,8 @@ static int rtems_shell_help(
     rtems_shell_cmd_t *shell_cmd;
 
     if (lines && (line > lines)) {
-      printf("Press any key to continue...");getchar();
+      printf("Press any key to continue...");
+      (void) getchar(); /* we only want to know a character was pressed */
       printf("\n");
       line = 0;
     }
