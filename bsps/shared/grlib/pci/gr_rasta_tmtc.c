@@ -574,6 +574,7 @@ int gr_rasta_tmtc_init1(struct drvmgr_dev *dev)
 	uint32_t bar0, bar1, bar0_size, bar1_size;
 	union drvmgr_key_value *value;
 	int resources_cnt;
+	int sc;
 
 	priv = dev->priv;
 	if (!priv)
@@ -587,7 +588,8 @@ int gr_rasta_tmtc_init1(struct drvmgr_dev *dev)
 
 	strcpy(priv->prefix, "/dev/rastatmtc0");
 	priv->prefix[14] += dev->minor_drv;
-	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	sc = mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	_Assert_Unused_variable_equals(sc, 0);
 	priv->prefix[15] = '/';
 	priv->prefix[16] = '\0';
 
