@@ -478,6 +478,7 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 	int status, i;
 	union drvmgr_key_value *value;
 	int resources_cnt;
+	int sc;
 
 	priv = dev->priv;
 	if (!priv)
@@ -494,7 +495,8 @@ int gr_cpci_leon4_n2x_init1(struct drvmgr_dev *dev)
 
 	strcpy(priv->prefix, "/dev/leon4n2x0");
 	priv->prefix[13] += dev->minor_drv;
-	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	sc = mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	_Assert_Unused_variable_equals(sc, 0);
 	priv->prefix[14] = '/';
 	priv->prefix[15] = '\0';
 
