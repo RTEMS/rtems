@@ -66,7 +66,9 @@ typedef enum {
   STM32H7_MODULE_USB1_OTG,
   STM32H7_MODULE_USB1_OTG_ULPI,
   STM32H7_MODULE_USB2_OTG,
-  STM32H7_MODULE_USB2_OTG_ULPI
+  STM32H7_MODULE_USB2_OTG_ULPI,
+  STM32H7_MODULE_SDMMC1,
+  STM32H7_MODULE_SDMMC2,
 } stm32h7_module_index;
 
 stm32h7_module_index stm32h7_get_module_index(const void *regs);
