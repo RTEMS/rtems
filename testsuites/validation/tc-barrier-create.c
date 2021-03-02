@@ -278,8 +278,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Class_Default: {
       /*
-       * The ``attribute_set`` parameter shall specify the default
-       * class.
+       * The ``attribute_set`` parameter shall specify the default class.
        */
       /* Nothing to do */
       break;
@@ -287,8 +286,8 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Class_Manual: {
       /*
-       * The ``attribute_set`` parameter shall specify the manual
-       * release class.
+       * The ``attribute_set`` parameter shall specify the manual release
+       * class.
        */
       ctx->attribute_set |= RTEMS_BARRIER_MANUAL_RELEASE;
       break;
@@ -296,8 +295,8 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Class_Auto: {
       /*
-       * The ``attribute_set`` parameter shall specify the
-       * automatic release class.
+       * The ``attribute_set`` parameter shall specify the automatic release
+       * class.
        */
       ctx->attribute_set |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
       break;
@@ -343,8 +342,7 @@ static void RtemsBarrierReqCreate_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Id_Valid: {
       /*
-       * The ``id`` parameter shall reference an object
-       * identifier value.
+       * The ``id`` parameter shall reference an object identifier value.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -352,8 +350,7 @@ static void RtemsBarrierReqCreate_Pre_Id_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Id_Null: {
       /*
-       * The ``id`` parameter shall be
-       * NULL.
+       * The ``id`` parameter shall be NULL.
        */
       ctx->id = NULL;
       break;
@@ -399,8 +396,7 @@ static void RtemsBarrierReqCreate_Post_Status_Check(
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_Status_Ok: {
       /*
-       * The return status of rtems_barrier_create() shall be
-       * RTEMS_SUCCESSFUL.
+       * The return status of rtems_barrier_create() shall be RTEMS_SUCCESSFUL.
        */
       T_rsc_success( ctx->status );
       break;
@@ -435,8 +431,7 @@ static void RtemsBarrierReqCreate_Post_Status_Check(
 
     case RtemsBarrierReqCreate_Post_Status_TooMany: {
       /*
-       * The return status of rtems_barrier_create() shall be
-       * RTEMS_TOO_MANY.
+       * The return status of rtems_barrier_create() shall be RTEMS_TOO_MANY.
        */
       T_rsc( ctx->status, RTEMS_TOO_MANY );
       break;
@@ -492,7 +487,8 @@ static void RtemsBarrierReqCreate_Post_Class_Check(
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_Class_NoObj: {
       /*
-       * The barrier class is not applicable since there was no barrier created.
+       * The barrier class is not applicable since there was no barrier
+       * created.
        */
       /* Not applicable */
       break;
@@ -534,8 +530,9 @@ static void RtemsBarrierReqCreate_Post_IdValue_Check(
   switch ( state ) {
     case RtemsBarrierReqCreate_Post_IdValue_Assigned: {
       /*
-       * The value of the object identifier variable shall be equal to the object
-       * identifier of the barrier created by the rtems_barrier_create() call.
+       * The value of the object identifier variable shall be equal to the
+       * object identifier of the barrier created by the rtems_barrier_create()
+       * call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );

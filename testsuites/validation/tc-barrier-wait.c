@@ -272,8 +272,8 @@ static void RtemsBarrierReqWait_Pre_Barrier_Prepare(
 
     case RtemsBarrierReqWait_Pre_Barrier_Manual: {
       /*
-       * The ``id`` parameter shall be associated with a
-       * manual release barrier.
+       * The ``id`` parameter shall be associated with a manual release
+       * barrier.
        */
       ctx->id = ctx->manual_release_id;
       break;
@@ -281,8 +281,8 @@ static void RtemsBarrierReqWait_Pre_Barrier_Prepare(
 
     case RtemsBarrierReqWait_Pre_Barrier_Auto: {
       /*
-       * The ``id`` parameter shall be associated with an
-       * automatic release barrier.
+       * The ``id`` parameter shall be associated with an automatic release
+       * barrier.
        */
       ctx->id = ctx->auto_release_id;
       break;
@@ -301,8 +301,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Timeout_Ticks: {
       /*
-       * The ``released`` parameter shall be a clock tick
-       * interval.
+       * The ``released`` parameter shall be a clock tick interval.
        */
       ctx->timeout = 2;
       break;
@@ -310,8 +309,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
 
     case RtemsBarrierReqWait_Pre_Timeout_Forever: {
       /*
-       * The ``released`` parameter shall be
-       * RTEMS_NO_TIMEOUT.
+       * The ``released`` parameter shall be RTEMS_NO_TIMEOUT.
        */
       ctx->timeout = RTEMS_NO_TIMEOUT;
       break;
@@ -378,8 +376,7 @@ static void RtemsBarrierReqWait_Post_Status_Check(
   switch ( state ) {
     case RtemsBarrierReqWait_Post_Status_Ok: {
       /*
-       * The return status of rtems_barrier_wait() shall be
-       * RTEMS_SUCCESSFUL.
+       * The return status of rtems_barrier_wait() shall be RTEMS_SUCCESSFUL.
        */
       T_rsc_success( ctx->status );
       break;
@@ -387,8 +384,7 @@ static void RtemsBarrierReqWait_Post_Status_Check(
 
     case RtemsBarrierReqWait_Post_Status_InvId: {
       /*
-       * The return status of rtems_barrier_wait() shall be
-       * RTEMS_INVALID_ID.
+       * The return status of rtems_barrier_wait() shall be RTEMS_INVALID_ID.
        */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
@@ -396,8 +392,7 @@ static void RtemsBarrierReqWait_Post_Status_Check(
 
     case RtemsBarrierReqWait_Post_Status_Timeout: {
       /*
-       * The return status of rtems_barrier_wait() shall be
-       * RTEMS_TIMEOUT.
+       * The return status of rtems_barrier_wait() shall be RTEMS_TIMEOUT.
        */
       T_rsc( ctx->status, RTEMS_TIMEOUT );
       break;

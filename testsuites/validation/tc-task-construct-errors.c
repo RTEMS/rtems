@@ -482,8 +482,8 @@ static void RtemsTaskReqConstructErrors_Pre_TLS_Prepare(
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_TLS_Enough: {
       /*
-       * The maximum thread-local storage size of the task configuration shall be
-       * greater than or equal to the thread-local storage size.
+       * The maximum thread-local storage size of the task configuration shall
+       * be greater than or equal to the thread-local storage size.
        */
       ctx->config.maximum_thread_local_storage_size = MAX_TLS_SIZE;
       break;
@@ -491,8 +491,8 @@ static void RtemsTaskReqConstructErrors_Pre_TLS_Prepare(
 
     case RtemsTaskReqConstructErrors_Pre_TLS_Small: {
       /*
-       * The maximum thread-local storage size of the task configuration shall be
-       * less than the thread-local storage size.
+       * The maximum thread-local storage size of the task configuration shall
+       * be less than the thread-local storage size.
        */
       ctx->config.maximum_thread_local_storage_size = 0;
       break;
@@ -567,8 +567,7 @@ static void RtemsTaskReqConstructErrors_Post_Status_Check(
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_Status_Ok: {
       /*
-       * The return status of rtems_task_construct() shall be
-       * RTEMS_SUCCESSFUL.
+       * The return status of rtems_task_construct() shall be RTEMS_SUCCESSFUL.
        */
       T_rsc_success( ctx->status );
       break;
@@ -612,8 +611,7 @@ static void RtemsTaskReqConstructErrors_Post_Status_Check(
 
     case RtemsTaskReqConstructErrors_Post_Status_TooMany: {
       /*
-       * The return status of rtems_task_construct() shall be
-       * RTEMS_TOO_MANY.
+       * The return status of rtems_task_construct() shall be RTEMS_TOO_MANY.
        */
       T_rsc( ctx->status, RTEMS_TOO_MANY );
       break;
@@ -644,8 +642,8 @@ static void RtemsTaskReqConstructErrors_Post_Name_Check(
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_Name_Valid: {
       /*
-       * The unique object name shall identify the task constructed by
-       * the rtems_task_construct() call.
+       * The unique object name shall identify the task constructed by the
+       * rtems_task_construct() call.
        */
       id = 0;
       sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
@@ -676,8 +674,9 @@ static void RtemsTaskReqConstructErrors_Post_IdValue_Check(
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Post_IdValue_Assigned: {
       /*
-       * The value of the object identifier variable shall be equal to the object
-       * identifier of the task constructed by the rtems_task_construct() call.
+       * The value of the object identifier variable shall be equal to the
+       * object identifier of the task constructed by the
+       * rtems_task_construct() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -773,8 +772,8 @@ static void RtemsTaskReqConstructErrors_Post_StoFree_Check(
 
     case RtemsTaskReqConstructErrors_Post_StoFree_No: {
       /*
-       * The storage free handler of the task configuration shall not be invoked
-       * during the rtems_task_construct() call.
+       * The storage free handler of the task configuration shall not be
+       * invoked during the rtems_task_construct() call.
        */
       T_eq_u32( ctx->storage_free_calls, 0 );
       break;

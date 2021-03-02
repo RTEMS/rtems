@@ -222,8 +222,8 @@ static void RtemsBarrierReqRelease_Pre_Barrier_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Barrier_Manual: {
       /*
-       * The ``id`` parameter shall be associated with a
-       * manual release barrier.
+       * The ``id`` parameter shall be associated with a manual release
+       * barrier.
        */
       ctx->id = ctx->manual_release_id;
       break;
@@ -231,8 +231,8 @@ static void RtemsBarrierReqRelease_Pre_Barrier_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Barrier_Auto: {
       /*
-       * The ``id`` parameter shall be associated with an
-       * automatic release barrier.
+       * The ``id`` parameter shall be associated with an automatic release
+       * barrier.
        */
       ctx->id = ctx->auto_release_id;
       break;
@@ -261,8 +261,7 @@ static void RtemsBarrierReqRelease_Pre_Released_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Released_Null: {
       /*
-       * The ``released`` parameter shall be
-       * NULL.
+       * The ``released`` parameter shall be NULL.
        */
       ctx->released = NULL;
       break;
@@ -356,8 +355,8 @@ static void RtemsBarrierReqRelease_Post_Released_Check(
 
     case RtemsBarrierReqRelease_Post_Released_Unchanged: {
       /*
-       * The value of variable for the number of released tasks shall be unchanged
-       * by the rtems_barrier_release() call.
+       * The value of variable for the number of released tasks shall be
+       * unchanged by the rtems_barrier_release() call.
        */
       T_eq_u32( ctx->released_value, RELEASED_INVALID_VALUE );
       break;

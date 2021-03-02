@@ -380,8 +380,7 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
 
     case RtemsSignalReqSend_Pre_Task_Self: {
       /*
-       * The ``id`` parameter shall be associated with
-       * the calling task.
+       * The ``id`` parameter shall be associated with the calling task.
        */
       ctx->id = RTEMS_SELF;
       break;
@@ -389,8 +388,8 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
 
     case RtemsSignalReqSend_Pre_Task_Other: {
       /*
-       * The ``id`` parameter shall be associated with a
-       * task other than the calling task.
+       * The ``id`` parameter shall be associated with a task other than the
+       * calling task.
        */
       ctx->id = ctx->worker_id;
       break;
@@ -465,8 +464,8 @@ static void RtemsSignalReqSend_Pre_ASR_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_ASR_Enabled: {
       /*
-       * When the target task has ASR processing enabled, the rtems_signal_send()
-       * directive shall be called.
+       * When the target task has ASR processing enabled, the
+       * rtems_signal_send() directive shall be called.
        */
       ctx->mode = RTEMS_DEFAULT_MODES;
       break;
@@ -474,8 +473,8 @@ static void RtemsSignalReqSend_Pre_ASR_Prepare(
 
     case RtemsSignalReqSend_Pre_ASR_Disabled: {
       /*
-       * When the target task has ASR processing disabled, the rtems_signal_send()
-       * directive shall be called.
+       * When the target task has ASR processing disabled, the
+       * rtems_signal_send() directive shall be called.
        */
       ctx->mode = RTEMS_NO_ASR;
       break;
@@ -523,8 +522,7 @@ static void RtemsSignalReqSend_Post_Status_Check(
   switch ( state ) {
     case RtemsSignalReqSend_Post_Status_Ok: {
       /*
-       * The return status of rtems_signal_send() shall be
-       * RTEMS_SUCCESSFUL.
+       * The return status of rtems_signal_send() shall be RTEMS_SUCCESSFUL.
        */
       T_rsc_success( ctx->status );
       break;
@@ -541,8 +539,7 @@ static void RtemsSignalReqSend_Post_Status_Check(
 
     case RtemsSignalReqSend_Post_Status_InvId: {
       /*
-       * The return status of rtems_signal_send() shall be
-       * RTEMS_INVALID_ID.
+       * The return status of rtems_signal_send() shall be RTEMS_INVALID_ID.
        */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
@@ -550,8 +547,7 @@ static void RtemsSignalReqSend_Post_Status_Check(
 
     case RtemsSignalReqSend_Post_Status_NotDef: {
       /*
-       * The return status of rtems_signal_send() shall be
-       * RTEMS_NOT_DEFINED.
+       * The return status of rtems_signal_send() shall be RTEMS_NOT_DEFINED.
        */
       T_rsc( ctx->status, RTEMS_NOT_DEFINED );
       break;

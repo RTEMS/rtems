@@ -279,8 +279,7 @@ static void RtemsSignalReqCatch_Pre_Preempt_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Preempt_Yes: {
       /*
-       * The ``mode_set`` parameter shall specify that
-       * preemption is enabled.
+       * The ``mode_set`` parameter shall specify that preemption is enabled.
        */
       #if defined(RTEMS_SMP)
       if ( rtems_configuration_get_maximum_processors() == 1 ) {
@@ -294,8 +293,7 @@ static void RtemsSignalReqCatch_Pre_Preempt_Prepare(
 
     case RtemsSignalReqCatch_Pre_Preempt_No: {
       /*
-       * The ``mode_set`` parameter shall specify that
-       * preemption is disabled.
+       * The ``mode_set`` parameter shall specify that preemption is disabled.
        */
       ctx->mode |= RTEMS_NO_PREEMPT;
       break;
@@ -314,8 +312,7 @@ static void RtemsSignalReqCatch_Pre_Timeslice_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Timeslice_Yes: {
       /*
-       * The ``mode_set`` parameter shall specify that
-       * timeslicing is enabled.
+       * The ``mode_set`` parameter shall specify that timeslicing is enabled.
        */
       ctx->mode |= RTEMS_TIMESLICE;
       break;
@@ -323,8 +320,7 @@ static void RtemsSignalReqCatch_Pre_Timeslice_Prepare(
 
     case RtemsSignalReqCatch_Pre_Timeslice_No: {
       /*
-       * The ``mode_set`` parameter shall specify that
-       * timeslicing is disabled.
+       * The ``mode_set`` parameter shall specify that timeslicing is disabled.
        */
       ctx->normal_mode |= RTEMS_TIMESLICE;
       break;
@@ -343,8 +339,8 @@ static void RtemsSignalReqCatch_Pre_ASR_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_ASR_Yes: {
       /*
-       * The ``mode_set`` parameter shall specify that
-       * ASR processing is enabled.
+       * The ``mode_set`` parameter shall specify that ASR processing is
+       * enabled.
        */
       /* We cannot disable ASR processing at normal task level for this test */
       break;
@@ -352,8 +348,8 @@ static void RtemsSignalReqCatch_Pre_ASR_Prepare(
 
     case RtemsSignalReqCatch_Pre_ASR_No: {
       /*
-       * The ``mode_set`` parameter shall specify that
-       * ASR processing is disabled.
+       * The ``mode_set`` parameter shall specify that ASR processing is
+       * disabled.
        */
       ctx->mode |= RTEMS_NO_ASR;
       break;
@@ -372,8 +368,7 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_IntLvl_Zero: {
       /*
-       * The ``mode_set`` parameter shall specify an interrupt
-       * level of zero.
+       * The ``mode_set`` parameter shall specify an interrupt level of zero.
        */
       #if !defined(RTEMS_SMP) && CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
       ctx->normal_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
@@ -383,8 +378,7 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
 
     case RtemsSignalReqCatch_Pre_IntLvl_Positive: {
       /*
-       * The ``mode_set`` parameter shall specify a positive
-       * interrupt level.
+       * The ``mode_set`` parameter shall specify a positive interrupt level.
        */
       ctx->mode |= RTEMS_INTERRUPT_LEVEL( 1 );
       break;
@@ -403,8 +397,7 @@ static void RtemsSignalReqCatch_Post_Status_Check(
   switch ( state ) {
     case RtemsSignalReqCatch_Post_Status_Ok: {
       /*
-       * The return status of rtems_signal_catch() shall be
-       * RTEMS_SUCCESSFUL.
+       * The return status of rtems_signal_catch() shall be RTEMS_SUCCESSFUL.
        */
       T_rsc_success( ctx->catch_status );
       break;
@@ -414,8 +407,8 @@ static void RtemsSignalReqCatch_Post_Status_Check(
       /*
        * Where the system is configured with SMP support, if the scheduler does
        * not support the no-preempt mode, then the return status of
-       * rtems_signal_catch() shall be RTEMS_NOT_IMPLEMENTED,
-       * otherwise the return status shall be RTEMS_SUCCESSFUL.
+       * rtems_signal_catch() shall be RTEMS_NOT_IMPLEMENTED, otherwise the
+       * return status shall be RTEMS_SUCCESSFUL.
        */
       #if defined(RTEMS_SMP)
       if ( rtems_configuration_get_maximum_processors() > 1 ) {
@@ -434,8 +427,8 @@ static void RtemsSignalReqCatch_Post_Status_Check(
        * Where the system is configured with SMP support and the configured
        * processor maximum is greater than one, or the CPU port enabled robust
        * thread dispatching, the return status of rtems_signal_catch() shall be
-       * RTEMS_NOT_IMPLEMENTED, otherwise the return status
-       * shall be RTEMS_SUCCESSFUL.
+       * RTEMS_NOT_IMPLEMENTED, otherwise the return status shall be
+       * RTEMS_SUCCESSFUL.
        */
       #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
       T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
@@ -464,9 +457,10 @@ static void RtemsSignalReqCatch_Post_Send_Check(
   switch ( state ) {
     case RtemsSignalReqCatch_Post_Send_New: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call was successful, the ASR processing shall be done with the specified
-       * handler, otherwise the ASR information of the caller shall be unchanged.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call was successful, the ASR processing shall be done with the
+       * specified handler, otherwise the ASR information of the caller shall
+       * be unchanged.
        */
       T_rsc_success( ctx->send_status );
 
@@ -484,10 +478,10 @@ static void RtemsSignalReqCatch_Post_Send_Check(
 
     case RtemsSignalReqCatch_Post_Send_NotDef: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call was successful, the ASR processing shall be deactivated and all
-       * pending signals shall be cleared, otherwise the ASR information of the
-       * caller shall be unchanged.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call was successful, the ASR processing shall be deactivated and
+       * all pending signals shall be cleared, otherwise the ASR information of
+       * the caller shall be unchanged.
        */
       if ( ctx->catch_status == RTEMS_SUCCESSFUL ) {
         T_rsc( ctx->send_status, RTEMS_NOT_DEFINED );
@@ -516,9 +510,9 @@ static void RtemsSignalReqCatch_Post_Preempt_Check(
   switch ( state ) {
     case RtemsSignalReqCatch_Post_Preempt_Yes: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with preemption enabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with preemption enabled.
        */
       CheckHandlerMode( ctx, RTEMS_PREEMPT_MASK, RTEMS_PREEMPT );
       break;
@@ -526,9 +520,9 @@ static void RtemsSignalReqCatch_Post_Preempt_Check(
 
     case RtemsSignalReqCatch_Post_Preempt_No: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with preemption disabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with preemption disabled.
        */
       CheckHandlerMode( ctx, RTEMS_PREEMPT_MASK, RTEMS_NO_PREEMPT );
       break;
@@ -547,9 +541,9 @@ static void RtemsSignalReqCatch_Post_Timeslice_Check(
   switch ( state ) {
     case RtemsSignalReqCatch_Post_Timeslice_Yes: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with timeslicing enabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with timeslicing enabled.
        */
       CheckHandlerMode( ctx, RTEMS_TIMESLICE_MASK, RTEMS_TIMESLICE );
       break;
@@ -557,9 +551,9 @@ static void RtemsSignalReqCatch_Post_Timeslice_Check(
 
     case RtemsSignalReqCatch_Post_Timeslice_No: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with timeslicing disabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with timeslicing disabled.
        */
       CheckHandlerMode( ctx, RTEMS_TIMESLICE_MASK, RTEMS_NO_TIMESLICE );
       break;
@@ -578,9 +572,9 @@ static void RtemsSignalReqCatch_Post_ASR_Check(
   switch ( state ) {
     case RtemsSignalReqCatch_Post_ASR_Yes: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with ASR processing enabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with ASR processing enabled.
        */
       CheckHandlerMode( ctx, RTEMS_ASR_MASK, RTEMS_ASR );
       break;
@@ -588,9 +582,9 @@ static void RtemsSignalReqCatch_Post_ASR_Check(
 
     case RtemsSignalReqCatch_Post_ASR_No: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with ASR processing disabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with ASR processing disabled.
        */
       CheckHandlerMode( ctx, RTEMS_ASR_MASK, RTEMS_NO_ASR );
       break;
@@ -609,9 +603,9 @@ static void RtemsSignalReqCatch_Post_IntLvl_Check(
   switch ( state ) {
     case RtemsSignalReqCatch_Post_IntLvl_Zero: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with interrupts enabled.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with interrupts enabled.
        */
       CheckHandlerMode( ctx, RTEMS_INTERRUPT_MASK, RTEMS_INTERRUPT_LEVEL( 0 ) );
       break;
@@ -619,9 +613,10 @@ static void RtemsSignalReqCatch_Post_IntLvl_Check(
 
     case RtemsSignalReqCatch_Post_IntLvl_Positive: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and the
-       * call with a valid handler was successful, the ASR processing shall be
-       * done with interrupts disabled according to the specified interrupt level.
+       * When a signal set is sent to the caller of rtems_signal_catch() and
+       * the call with a valid handler was successful, the ASR processing shall
+       * be done with interrupts disabled according to the specified interrupt
+       * level.
        */
       CheckHandlerMode( ctx, RTEMS_INTERRUPT_MASK, RTEMS_INTERRUPT_LEVEL( 1 ) );
       break;

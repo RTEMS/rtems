@@ -316,8 +316,8 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_MaxPending_Valid: {
       /*
-       * The maximum number of pending messages of the message queue configuration
-       * shall be valid.
+       * The maximum number of pending messages of the message queue
+       * configuration shall be valid.
        */
       ctx->config.maximum_pending_messages = MAX_PENDING_MESSAGES;
       break;
@@ -325,8 +325,8 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxPending_Zero: {
       /*
-       * The maximum number of pending messages of the message queue configuration
-       * shall be zero.
+       * The maximum number of pending messages of the message queue
+       * configuration shall be zero.
        */
       ctx->config.maximum_pending_messages = 0;
       break;
@@ -334,9 +334,9 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxPending_Big: {
       /*
-       * The maximum number of pending messages of the message queue configuration
-       * shall be big enough so that a calculation to get the message buffer
-       * storage area size overflows.
+       * The maximum number of pending messages of the message queue
+       * configuration shall be big enough so that a calculation to get the
+       * message buffer storage area size overflows.
        */
       ctx->config.maximum_pending_messages = UINT32_MAX;
       break;
@@ -373,9 +373,9 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxSize_Big: {
       /*
-       * The maximum message size of the message queue configuration
-       * shall be big enough so that a calculation to get the message buffer
-       * storage area size overflows.
+       * The maximum message size of the message queue configuration shall be
+       * big enough so that a calculation to get the message buffer storage
+       * area size overflows.
        */
       ctx->config.maximum_message_size = SIZE_MAX;
       break;
@@ -454,8 +454,8 @@ static void RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_AreaSize_Valid: {
       /*
-       * The message buffer storage area size of the message queue configuration
-       * shall be valid.
+       * The message buffer storage area size of the message queue
+       * configuration shall be valid.
        */
       ctx->config.storage_size = sizeof( buffers );
       break;
@@ -463,8 +463,8 @@ static void RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_AreaSize_Invalid: {
       /*
-       * The message buffer storage area size of the message queue configuration
-       * shall be invalid.
+       * The message buffer storage area size of the message queue
+       * configuration shall be invalid.
        */
       ctx->config.storage_size = SIZE_MAX;
       break;
@@ -592,8 +592,8 @@ static void RtemsMessageReqConstructErrors_Post_IdValue_Check(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Post_IdValue_Assigned: {
       /*
-       * The value of the object identifier variable shall be equal to the object
-       * identifier of the message queue constructed by the
+       * The value of the object identifier variable shall be equal to the
+       * object identifier of the message queue constructed by the
        * rtems_message_queue_construct() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );

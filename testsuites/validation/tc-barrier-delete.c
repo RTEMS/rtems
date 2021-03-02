@@ -184,8 +184,7 @@ static void RtemsBarrierReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqDelete_Pre_Id_Valid: {
       /*
-       * The ``id`` parameter shall be associated with
-       * the barrier.
+       * The ``id`` parameter shall be associated with the barrier.
        */
       ctx->id = ctx->barrier_id;
       break;
@@ -212,8 +211,7 @@ static void RtemsBarrierReqDelete_Post_Status_Check(
   switch ( state ) {
     case RtemsBarrierReqDelete_Post_Status_Ok: {
       /*
-       * The return status of rtems_barrier_delete() shall be
-       * RTEMS_SUCCESSFUL.
+       * The return status of rtems_barrier_delete() shall be RTEMS_SUCCESSFUL.
        */
       ctx->barrier_id = 0;
       T_rsc_success( ctx->status );
@@ -222,8 +220,7 @@ static void RtemsBarrierReqDelete_Post_Status_Check(
 
     case RtemsBarrierReqDelete_Post_Status_InvId: {
       /*
-       * The return status of rtems_barrier_delete() shall be
-       * RTEMS_INVALID_ID.
+       * The return status of rtems_barrier_delete() shall be RTEMS_INVALID_ID.
        */
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       break;
