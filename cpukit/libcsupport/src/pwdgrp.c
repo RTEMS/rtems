@@ -36,6 +36,7 @@
 #include <stdint.h>
 
 #include <rtems/seterr.h>
+#include <rtems/score/assert.h>
 
 #include "pwdgrp.h"
 
@@ -62,10 +63,13 @@ static void init_file(const char *name, const char *content)
  */
 static void pwdgrp_init(void)
 {
+  int sc;
+
   /*
    * Do the best to create this directory.
    */
-  mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+  sc = mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+  _Assert_Unused_variable_equals(sc, 0);
 
   /*
    *  Initialize /etc/passwd
