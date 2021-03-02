@@ -41,7 +41,6 @@ static void _Signal_Action_handler(
   bool                         normal_is_preemptible;
   uint32_t                     normal_cpu_time_budget;
   Thread_CPU_budget_algorithms normal_budget_algorithm;
-  bool                         normal_asr_is_enabled;
   uint32_t                     normal_isr_level;
   uint32_t                     before_call_isr_level;
   bool                         after_call_is_preemptible;
@@ -68,8 +67,8 @@ static void _Signal_Action_handler(
 
   /* Save normal mode */
 
+  _Assert( asr->is_enabled );
   normal_is_preemptible = executing->is_preemptible;
-  normal_asr_is_enabled = asr->is_enabled;
   normal_cpu_time_budget = executing->cpu_time_budget;
   normal_budget_algorithm = executing->budget_algorithm;
 
@@ -133,13 +132,9 @@ static void _Signal_Action_handler(
    */
 
   after_call_asr_is_enabled = asr->is_enabled;
-  asr->is_enabled = normal_asr_is_enabled;
+  asr->is_enabled = true;
 
-  if (
-    normal_asr_is_enabled &&
-    !after_call_asr_is_enabled &&
-    asr->signals_pending != 0
-  ) {
+  if ( !after_call_asr_is_enabled && asr->signals_pending != 0 ) {
     _Thread_Append_post_switch_action( executing, action );
   }
 }
