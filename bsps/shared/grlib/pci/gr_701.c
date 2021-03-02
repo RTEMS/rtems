@@ -316,6 +316,7 @@ int gr701_init1(struct drvmgr_dev *dev)
 	struct pci_dev_info *devinfo;
 	uint32_t bar0, bar1, bar0_size, bar1_size;
 	int resources_cnt;
+	int sc;
 
 	priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
@@ -330,7 +331,8 @@ int gr701_init1(struct drvmgr_dev *dev)
 	/* Generate Device prefix */
 	strcpy(priv->prefix, "/dev/gr701_0");
 	priv->prefix[11] += dev->minor_drv;
-	mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	sc = mkdir(priv->prefix, S_IRWXU | S_IRWXG | S_IRWXO);
+	_Assert_Unused_variable_equals(sc, 0);
 	priv->prefix[12] = '/';
 	priv->prefix[13] = '\0';
 
