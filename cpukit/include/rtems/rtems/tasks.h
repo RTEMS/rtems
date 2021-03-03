@@ -201,7 +201,7 @@ rtems_status_code rtems_task_create(
  * Use it with RTEMS_ALIGNED() to define the alignment of a statically
  * allocated task storage area.
  */
-#define RTEMS_TASK_STORAGE_ALIGNMENT CPU_HEAP_ALIGNMENT
+#define RTEMS_TASK_STORAGE_ALIGNMENT CPU_STACK_ALIGNMENT
 
 /**
  * @brief Returns the recommended task storage area size for the specified size
