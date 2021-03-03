@@ -49,8 +49,7 @@ extern "C" {
  */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   #define CONTEXT_FP_SIZE \
-    ( ( CPU_CONTEXT_FP_SIZE + CPU_HEAP_ALIGNMENT - 1 ) \
-      & ~( CPU_HEAP_ALIGNMENT - 1 ) )
+    RTEMS_ALIGN_UP( CPU_CONTEXT_FP_SIZE, CPU_STACK_ALIGNMENT )
 #else
   #define CONTEXT_FP_SIZE 0
 #endif

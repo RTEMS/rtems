@@ -48,7 +48,6 @@ uintptr_t _TLS_Get_allocation_size( void )
 {
   uintptr_t size;
   uintptr_t allocation_size;
-  uintptr_t alignment;
 
   size = _TLS_Get_size();
 
@@ -59,25 +58,34 @@ uintptr_t _TLS_Get_allocation_size( void )
   allocation_size = _TLS_Allocation_size;
 
   if ( allocation_size == 0 ) {
-    allocation_size = _TLS_Heap_align_up( size );
-    alignment = _TLS_Heap_align_up( (uintptr_t) _TLS_Alignment );
+    uintptr_t alignment;
+
+    alignment = _TLS_Align_up( (uintptr_t) _TLS_Alignment );
+
+    allocation_size = size;
+    allocation_size += _TLS_Get_thread_control_block_area_size( alignment );
+#ifndef __i386__
+    allocation_size += sizeof( TLS_Dynamic_thread_vector );
+#endif
+
+    /*
+     * The TLS area is allocated in the thread storage area.  Each allocation
+     * shall meet the stack alignment requirement.
+     */
+    allocation_size = _TLS_Align_up( allocation_size );
 
     /*
      * The stack allocator does not support aligned allocations.  Allocate
      * enough to do the alignment manually.
      */
-    if ( alignment > CPU_HEAP_ALIGNMENT ) {
-      allocation_size += alignment;
+    if ( alignment > CPU_STACK_ALIGNMENT ) {
+      _Assert( alignment % CPU_STACK_ALIGNMENT == 0 );
+      allocation_size += alignment - CPU_STACK_ALIGNMENT;
     }
-
-    allocation_size += _TLS_Get_thread_control_block_area_size( alignment );
-
-#ifndef __i386__
-    allocation_size += sizeof(TLS_Dynamic_thread_vector);
-#endif
 
     if ( _Thread_Maximum_TLS_size != 0 ) {
       if ( allocation_size <= _Thread_Maximum_TLS_size ) {
+        _Assert( _Thread_Maximum_TLS_size % CPU_STACK_ALIGNMENT == 0 );
         allocation_size = _Thread_Maximum_TLS_size;
       } else {
         _Internal_error( INTERNAL_ERROR_TOO_LARGE_TLS_SIZE );

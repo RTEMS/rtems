@@ -107,6 +107,7 @@ static bool _Thread_Try_initialize(
   size_t                   i;
   char                    *stack_begin;
   char                    *stack_end;
+  uintptr_t                stack_align;
   Scheduler_Node          *scheduler_node;
 #if defined(RTEMS_SMP)
   Scheduler_Node          *scheduler_node_for_index;
@@ -128,8 +129,12 @@ static bool _Thread_Try_initialize(
       (char *) the_thread + add_on->source_offset;
   }
 
+  /* Set up the properly aligned stack area begin and end */
   stack_begin = config->stack_area;
   stack_end = stack_begin + config->stack_size;
+  stack_align = CPU_STACK_ALIGNMENT;
+  stack_begin = (char *) RTEMS_ALIGN_UP( (uintptr_t) stack_begin, stack_align );
+  stack_end = (char *) RTEMS_ALIGN_DOWN( (uintptr_t) stack_end, stack_align );
 
   /* Allocate floating-point context in stack area */
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )

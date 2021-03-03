@@ -135,6 +135,7 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Extend_size(
 )
 {
   size_t extra_size;
+  size_t alignment_overhead;
 
   extra_size = _TLS_Get_allocation_size();
 
@@ -147,14 +148,31 @@ RTEMS_INLINE_ROUTINE size_t _Stack_Extend_size(
   (void) is_fp;
 #endif
 
-  stack_size += extra_size;
+  /*
+   * In order to make sure that a user-provided stack size is the minimum which
+   * can be allocated for the stack, we have to align it up to the next stack
+   * boundary.
+   */
+  alignment_overhead = CPU_STACK_ALIGNMENT - 1;
 
-  if ( stack_size < extra_size ) {
+#if CPU_STACK_ALIGNMENT > CPU_HEAP_ALIGNMENT
+  /*
+   * If the heap allocator does not meet the stack alignment requirement, then
+   * we have to do the stack alignment manually in _Thread_Initialize() and
+   * need to allocate extra space for this.
+   */
+  alignment_overhead += CPU_STACK_ALIGNMENT - CPU_HEAP_ALIGNMENT;
+#endif
+
+  if ( stack_size > SIZE_MAX - extra_size - alignment_overhead ) {
     /*
      * In case of an unsigned integer overflow, saturate at the maximum value.
      */
-    stack_size = SIZE_MAX;
+    return SIZE_MAX;
   }
+
+  stack_size += extra_size;
+  stack_size = RTEMS_ALIGN_UP( stack_size, CPU_STACK_ALIGNMENT );
 
   return stack_size;
 }

@@ -122,17 +122,17 @@ static inline uintptr_t _TLS_Get_size( void )
 }
 
 /**
- * @brief Returns the value aligned up to the heap alignment.
+ * @brief Returns the value aligned up to the stack alignment.
  *
  * @param val The value to align.
  *
- * @return The value aligned to the heap alignment.
+ * @return The value aligned to the stack alignment.
  */
-static inline uintptr_t _TLS_Heap_align_up( uintptr_t val )
+static inline uintptr_t _TLS_Align_up( uintptr_t val )
 {
-  uintptr_t msk = CPU_HEAP_ALIGNMENT - 1;
+  uintptr_t alignment = CPU_STACK_ALIGNMENT;
 
-  return (val + msk) & ~msk;
+  return RTEMS_ALIGN_UP( val, alignment );
 }
 
 /**
@@ -229,7 +229,7 @@ static inline void *_TLS_TCB_at_area_begin_initialize( void *tls_area )
   void *tls_block = (char *) tls_area
     + _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment );
   TLS_Thread_control_block *tcb = tls_area;
-  uintptr_t aligned_size = _TLS_Heap_align_up( (uintptr_t) _TLS_Size );
+  uintptr_t aligned_size = _TLS_Align_up( (uintptr_t) _TLS_Size );
   TLS_Dynamic_thread_vector *dtv = (TLS_Dynamic_thread_vector *)
     ((char *) tls_block + aligned_size);
 
@@ -253,7 +253,7 @@ static inline void *_TLS_TCB_before_TLS_block_initialize( void *tls_area )
     + _TLS_Get_thread_control_block_area_size( (uintptr_t) _TLS_Alignment );
   TLS_Thread_control_block *tcb = (TLS_Thread_control_block *)
     ((char *) tls_block - sizeof(*tcb));
-  uintptr_t aligned_size = _TLS_Heap_align_up( (uintptr_t) _TLS_Size );
+  uintptr_t aligned_size = _TLS_Align_up( (uintptr_t) _TLS_Size );
   TLS_Dynamic_thread_vector *dtv = (TLS_Dynamic_thread_vector *)
     ((char *) tls_block + aligned_size);
 
@@ -276,7 +276,7 @@ static inline void *_TLS_TCB_after_TLS_block_initialize( void *tls_area )
   uintptr_t size = (uintptr_t) _TLS_Size;
   uintptr_t tls_align = (uintptr_t) _TLS_Alignment;
   uintptr_t tls_mask = tls_align - 1;
-  uintptr_t heap_align = _TLS_Heap_align_up( tls_align );
+  uintptr_t heap_align = _TLS_Align_up( tls_align );
   uintptr_t heap_mask = heap_align - 1;
   TLS_Thread_control_block *tcb = (TLS_Thread_control_block *)
     ((char *) tls_area + ((size + heap_mask) & ~heap_mask));
