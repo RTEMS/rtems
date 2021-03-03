@@ -30,35 +30,33 @@
 #define _RTEMS_PERCPU_DEFINE_OFFSETS
 #include <rtems/score/percpu.h>
 
+#define PER_CPU_IS_POWER_OF_TWO( value ) \
+  ( ( ( ( value ) - 1 ) & ( value ) ) == 0 )
+
 /*
- * In case a CPU port needs another alignment, then add this here and make sure
- * it is a power of two greater than or equal to two.
+ * The minimum alignment of two is due to the Heap Handler which uses the
+ * HEAP_PREV_BLOCK_USED flag to indicate that the previous block is used.
  */
+
 RTEMS_STATIC_ASSERT(
-  CPU_ALIGNMENT == 2
-    || CPU_ALIGNMENT == 4
-    || CPU_ALIGNMENT == 8
-    || CPU_ALIGNMENT == 16
-    || CPU_ALIGNMENT == 32,
+  CPU_ALIGNMENT >= 2 && PER_CPU_IS_POWER_OF_TWO( CPU_ALIGNMENT ),
   CPU_ALIGNMENT
 );
 
-/*
- * In case a CPU port needs another heap alignment, then add this here and make
- * sure it is a power of two greater than or equal to two.
- */
 RTEMS_STATIC_ASSERT(
-  CPU_HEAP_ALIGNMENT == 2
-    || CPU_HEAP_ALIGNMENT == 4
-    || CPU_HEAP_ALIGNMENT == 8
-    || CPU_HEAP_ALIGNMENT == 16
-    || CPU_HEAP_ALIGNMENT == 32,
+  CPU_HEAP_ALIGNMENT >= 2 && PER_CPU_IS_POWER_OF_TWO( CPU_HEAP_ALIGNMENT ),
   CPU_HEAP_ALIGNMENT_0
 );
 
 RTEMS_STATIC_ASSERT(
   CPU_HEAP_ALIGNMENT >= CPU_ALIGNMENT,
   CPU_HEAP_ALIGNMENT_1
+);
+
+RTEMS_STATIC_ASSERT(
+  CPU_STACK_ALIGNMENT >= CPU_HEAP_ALIGNMENT &&
+    PER_CPU_IS_POWER_OF_TWO( CPU_STACK_ALIGNMENT ),
+  CPU_STACK_ALIGNMENT
 );
 
 RTEMS_STATIC_ASSERT(

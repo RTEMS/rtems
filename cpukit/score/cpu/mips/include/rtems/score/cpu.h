@@ -525,15 +525,6 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
-/*
- *  This number corresponds to the byte alignment requirement for the
- *  stack.  This alignment requirement may be stricter than that for the
- *  data types alignment specified by CPU_ALIGNMENT.  If the CPU_ALIGNMENT
- *  is strict enough for the stack, then this should be set to 0.
- *
- *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
- */
-
 #define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
 
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES

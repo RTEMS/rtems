@@ -338,7 +338,7 @@ extern void*                     _VBR;
  *  from the Workspace.
  */
 
-#define CPU_STACK_ALIGNMENT        0
+#define CPU_STACK_ALIGNMENT              CPU_ALIGNMENT
 
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
 

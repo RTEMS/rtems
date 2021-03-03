@@ -255,20 +255,10 @@ typedef struct {
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
 /**
- * This number corresponds to the byte alignment requirement for the
- * stack.  This alignment requirement may be stricter than that for the
- * data types alignment specified by @ref CPU_ALIGNMENT.  If the
- * @ref CPU_ALIGNMENT is strict enough for the stack, then this should be
- * set to 0.
- *
- * @note This must be a power of 2 either 0 or greater than @ref CPU_ALIGNMENT.
- *
- * Port Specific Information:
- *
  * The v850 has enough RAM where alignment to 16 may be desirable depending
  * on the cache properties. But this remains to be demonstrated.
  */
-#define CPU_STACK_ALIGNMENT        4
+#define CPU_STACK_ALIGNMENT        8
 
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
 

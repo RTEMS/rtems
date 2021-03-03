@@ -635,13 +635,6 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
 /*
- *  This number corresponds to the byte alignment requirement for the
- *  stack.  This alignment requirement may be stricter than that for the
- *  data types alignment specified by CPU_ALIGNMENT.  If the CPU_ALIGNMENT
- *  is strict enough for the stack, then this should be set to 0.
- *
- *  NOTE:  This must be a power of 2 either 0 or greater than CPU_ALIGNMENT.
- *
  *  The alignment restrictions for the SPARC are not that strict but this
  *  should unsure that the stack is always sufficiently alignment that the
  *  window overflow, underflow, and flush routines can use double word loads

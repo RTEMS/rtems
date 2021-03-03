@@ -401,16 +401,6 @@ extern Context_Control_fp _CPU_Null_fp_context;
  */
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
-/**
- * This number corresponds to the byte alignment requirement for the
- * stack.  This alignment requirement may be stricter than that for the
- * data types alignment specified by @ref CPU_ALIGNMENT.
- *
- *
- * Port Specific Information:
- *
- * Stack is software-managed
- */
 #define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
 
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
