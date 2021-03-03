@@ -982,7 +982,7 @@ static rtems_device_driver brm_write(rtems_device_major_number major, rtems_devi
 
 	rw_args->bytes_moved = count; 
 
-	if (count >= 0) {
+	if (count > 0) {
 		return RTEMS_SUCCESSFUL;
 	}
 	return RTEMS_UNSATISFIED;
