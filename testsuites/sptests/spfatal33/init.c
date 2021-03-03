@@ -36,20 +36,20 @@
 #define FATAL_ERROR_EXPECTED_SOURCE INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_ERROR  INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
 
-static _Thread_local short tls;
+static _Thread_local int tls[ RTEMS_TASK_STORAGE_ALIGNMENT ];
 
-static void force_error(void)
+static void force_error( void )
 {
-  long var;
+  int var;
 
-  var = tls;
+  var = tls[ 0 ];
   RTEMS_OBFUSCATE_VARIABLE( var );
-  tls = var;
+  tls[ 0 ] = var;
 
   /* Not reached */
   rtems_test_assert( 0 );
 }
 
-#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE 1
+#define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE RTEMS_TASK_STORAGE_ALIGNMENT
 
 #include "../spfatal_support/spfatalimpl.h"

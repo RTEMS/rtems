@@ -887,9 +887,17 @@
  * The default value is 0.
  *
  * @par Value Constraints
- * The value of this configuration option shall be greater than or equal to 0
- * and less than or equal to <a
- * href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
+ * @parblock
+ * The value of this configuration option shall satisfy all of the following
+ * constraints:
+ *
+ * * It shall be greater than or equal to 0.
+ *
+ * * It shall be less than or equal to <a
+ *   href="https://en.cppreference.com/w/c/types/limits">SIZE_MAX</a>.
+ *
+ * * It shall be an integral multiple of #RTEMS_TASK_STORAGE_ALIGNMENT.
+ * @endparblock
  *
  * @par Notes
  * @parblock
