@@ -239,9 +239,7 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 		/* Get regmod structure from argument */
 		regmod = (satcan_regmod*)ioarg->buffer;
 		DBG("SatCAN: ioctl: getting register %d\n\r", regmod->reg);
-		if (regmod->reg < 0)
-			return RTEMS_INVALID_NAME;
-		else if (regmod->reg <= SATCAN_FILTER_STOP)
+		if (regmod->reg <= SATCAN_FILTER_STOP)
 			regmod->val = regs->satcan[regmod->reg];
 		else if (regmod->reg == SATCAN_WCTRL)
 			regmod->val = regs->ctrl;
@@ -260,9 +258,7 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 		regmod = (satcan_regmod*)ioarg->buffer;
 		DBG("SatCAN: ioctl: setting register %d, value %x\n\r", 
 		    regmod->reg, regmod->val);
-		if (regmod->reg < 0)
-			return RTEMS_INVALID_NAME;
-		else if (regmod->reg <= SATCAN_FILTER_STOP)
+		if (regmod->reg <= SATCAN_FILTER_STOP)
 			regs->satcan[regmod->reg] = regmod->val;
 		else if (regmod->reg == SATCAN_WCTRL)
 			regs->ctrl = regmod->val;
@@ -281,9 +277,7 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 		regmod = (satcan_regmod*)ioarg->buffer;
 		DBG("SatCAN: ioctl: or:ing register %d, with value %x\n\r",
 		    regmod->reg, regmod->val);
-		if (regmod->reg < 0)
-			return RTEMS_INVALID_NAME;
-		else if (regmod->reg <= SATCAN_FILTER_STOP)
+		if (regmod->reg <= SATCAN_FILTER_STOP)
 			regs->satcan[regmod->reg] |= regmod->val;
 		else if (regmod->reg == SATCAN_WCTRL)
 			regs->ctrl |= regmod->val;
@@ -302,9 +296,7 @@ static rtems_device_driver satcan_ioctl(rtems_device_major_number major, rtems_d
 		regmod = (satcan_regmod*)ioarg->buffer;
 		DBG("SatCAN: ioctl: masking register %d, with value %x\n\r",
 		    regmod->reg, regmod->val);
-		if (regmod->reg < 0)
-			return RTEMS_INVALID_NAME;
-		else if (regmod->reg <= SATCAN_FILTER_STOP)
+		if (regmod->reg <= SATCAN_FILTER_STOP)
 			regs->satcan[regmod->reg] &= regmod->val;
 		else if (regmod->reg == SATCAN_WCTRL)
 			regs->ctrl &= regmod->val;
