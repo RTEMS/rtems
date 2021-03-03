@@ -358,7 +358,18 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
        * The maximum message size of the message queue configuration shall be
        * valid.
        */
-      ctx->config.maximum_message_size = MAX_MESSAGE_SIZE;
+      if ( ctx->config.maximum_pending_messages == UINT32_MAX ) {
+        /*
+         * At least on 64-bit systems we need a bit of help to ensure that we
+         * meet the Big state of the MaxPending pre-condition.  The following
+         * message size is valid with respect to calculations involving only
+         * the message size.
+         */
+        ctx->config.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
+          1 - sizeof( CORE_message_queue_Buffer );
+      } else {
+        ctx->config.maximum_message_size = MAX_MESSAGE_SIZE;
+      }
       break;
     }
 

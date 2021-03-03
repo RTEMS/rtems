@@ -4,9 +4,6 @@ actions:
     # expected to fail
     minimum: exclude
 
-    # test broken under 64bit due to SIZE_MAX differences
-    validation-0: expected-fail
-
     # don't compile due to toolchain issues
     spconfig01: exclude
     spmisc01: exclude
