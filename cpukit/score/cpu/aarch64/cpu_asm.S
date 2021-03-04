@@ -64,7 +64,7 @@
 DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
 /* Start saving context */
 	GET_SELF_CPU_CONTROL	reg_2
-	ldr	x3, [x2, #PER_CPU_ISR_DISPATCH_DISABLE]
+	ldr	w3, [x2, #PER_CPU_ISR_DISPATCH_DISABLE]
 
 	stp x19, x20, [x0]
 	stp x21, x22, [x0, #0x10]
@@ -109,7 +109,7 @@ DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
 
 	msr	TPIDR_EL0, x3
 
-	str	x4, [x2, #PER_CPU_ISR_DISPATCH_DISABLE]
+	str	w4, [x2, #PER_CPU_ISR_DISPATCH_DISABLE]
 
 	ldp x19, x20, [x1]
 	ldp x21, x22, [x1, #0x10]
