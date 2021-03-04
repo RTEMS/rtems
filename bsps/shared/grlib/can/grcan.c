@@ -1787,7 +1787,7 @@ int grcan_set_sfilter(void *d, const struct grcan_filter *filter)
 	if ( !filter ){
 		/* disable TX/RX SYNC filtering */
 		pDev->sfilter.mask = 0xffffffff;
-		pDev->sfilter.mask = 0;
+		pDev->sfilter.code = 0;
 
 		 /* disable Sync interrupt */
 		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
