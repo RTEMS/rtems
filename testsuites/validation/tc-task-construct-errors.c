@@ -338,7 +338,7 @@ static void RtemsTaskReqConstructErrors_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Id_Valid: {
       /*
-       * The id parameter shall reference an object identifier value.
+       * The ``id`` parameter shall reference an object of type rtems_id.
        */
       ctx->id = &ctx->id_value;
       break;
@@ -346,7 +346,7 @@ static void RtemsTaskReqConstructErrors_Pre_Id_Prepare(
 
     case RtemsTaskReqConstructErrors_Pre_Id_Null: {
       /*
-       * The id parameter shall be NULL.
+       * The ``id`` parameter shall be NULL.
        */
       ctx->id = NULL;
       break;

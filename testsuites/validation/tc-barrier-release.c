@@ -253,7 +253,7 @@ static void RtemsBarrierReqRelease_Pre_Released_Prepare(
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Released_Valid: {
       /*
-       * The ``released`` parameter shall reference an integer variable.
+       * The ``released`` parameter shall reference an object of type uint32_t.
        */
       ctx->released = &ctx->released_value;
       break;
