@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- env-enable: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+default:
+- enabled-by:
+    and:
+    - BUILD_TESTS
+    - not: RTEMS_GCOV_COVERAGE
+  value: true
+- enabled-by: true
+  value: false
+description: |
+  Build the static memory benchmark programs (may be also enabled by
+  BUILD_TESTS).
+enabled-by: true
+links: []
+name: BUILD_MEMBENCH
+type: build

@@ -25,6 +25,8 @@ links:
 - role: build-dependency
   uid: optlib
 - role: build-dependency
+  uid: optmembench
+- role: build-dependency
   uid: optmp
 - role: build-dependency
   uid: optpsx
@@ -52,6 +54,8 @@ links:
   uid: fstests/grp
 - role: build-dependency
   uid: libtests/grp
+- role: build-dependency
+  uid: membench/grp
 - role: build-dependency
   uid: mptests/grp
 - role: build-dependency

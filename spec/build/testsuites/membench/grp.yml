@@ -1,0 +1,119 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+enabled-by: BUILD_MEMBENCH
+cflags: []
+cppflags: []
+cxxflags: []
+includes:
+- ${BSP_INCLUDES}
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: mem-barrier-wait-rel-del
+- role: build-dependency
+  uid: mem-barrier-wait-rel
+- role: build-dependency
+  uid: mem-bsp-clock
+- role: build-dependency
+  uid: mem-clock-get-uptime
+- role: build-dependency
+  uid: mem-clock-set-get-tod
+- role: build-dependency
+  uid: mem-clock-set
+- role: build-dependency
+  uid: mem-event-snd-rcv
+- role: build-dependency
+  uid: mem-fatal-fatal
+- role: build-dependency
+  uid: mem-message-bcst-rcv
+- role: build-dependency
+  uid: mem-message-snd-rcv-del
+- role: build-dependency
+  uid: mem-message-snd-rcv
+- role: build-dependency
+  uid: mem-message-ugt-rcv
+- role: build-dependency
+  uid: mem-part-get-ret-del
+- role: build-dependency
+  uid: mem-part-get-ret
+- role: build-dependency
+  uid: mem-ratemon-period-del
+- role: build-dependency
+  uid: mem-ratemon-period
+- role: build-dependency
+  uid: mem-rtems-basic
+- role: build-dependency
+  uid: mem-rtems-smp-1
+- role: build-dependency
+  uid: mem-rtems-smp-global-2
+- role: build-dependency
+  uid: mem-rtems-smp-global-4
+- role: build-dependency
+  uid: mem-rtems-smp-part-2
+- role: build-dependency
+  uid: mem-rtems-smp-part-4
+- role: build-dependency
+  uid: mem-scheduler-add-cpu
+- role: build-dependency
+  uid: mem-scheduler-rm-cpu
+- role: build-dependency
+  uid: mem-sem-obt-rel-del
+- role: build-dependency
+  uid: mem-sem-obt-rel
+- role: build-dependency
+  uid: mem-signal-catch-snd
+- role: build-dependency
+  uid: mem-task-delete
+- role: build-dependency
+  uid: mem-task-exit
+- role: build-dependency
+  uid: mem-task-get-affinity
+- role: build-dependency
+  uid: mem-task-get-priority
+- role: build-dependency
+  uid: mem-task-get-scheduler
+- role: build-dependency
+  uid: mem-task-mode
+- role: build-dependency
+  uid: mem-task-restart
+- role: build-dependency
+  uid: mem-task-set-affinity
+- role: build-dependency
+  uid: mem-task-set-priority
+- role: build-dependency
+  uid: mem-task-set-scheduler
+- role: build-dependency
+  uid: mem-task-sus-res
+- role: build-dependency
+  uid: mem-task-wake-after
+- role: build-dependency
+  uid: mem-task-wake-when
+- role: build-dependency
+  uid: mem-timer-after
+- role: build-dependency
+  uid: mem-timer-cancel
+- role: build-dependency
+  uid: mem-timer-delete
+- role: build-dependency
+  uid: mem-timer-reset
+- role: build-dependency
+  uid: mem-timer-srv-after
+- role: build-dependency
+  uid: mem-timer-srv-init
+- role: build-dependency
+  uid: mem-timer-srv-when
+- role: build-dependency
+  uid: mem-timer-when
+- role: build-dependency
+  uid: mem-userext-create
+- role: build-dependency
+  uid: mem-userext-delete
+type: build
+use-after:
+- rtemstest
+- rtemscpu
+- rtemsbsp
+use-before: []
