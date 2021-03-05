@@ -90,6 +90,14 @@
  */
 
 /**
+ * @defgroup RTEMSTestSuitesMembench Memory Benchmark Test Suites
+ *
+ * @ingroup RTEMSTestSuites
+ *
+ * @brief This group contains the test suites related to memory benchmarks.
+ */
+
+/**
  * @defgroup RTEMSTestSuitesUnit Unit Test Suites
  *
  * @ingroup RTEMSTestSuites
