@@ -38,7 +38,7 @@ links:
 - role: build-dependency
   uid: ../optgtusevirt
 - role: build-dependency
-  uid: ../optstarthyp
+  uid: ../../optstarthyp
 - role: build-dependency
   uid: optnullsize
 - role: build-dependency
