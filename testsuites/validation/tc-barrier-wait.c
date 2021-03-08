@@ -66,11 +66,11 @@
  */
 
 typedef enum {
-  RtemsBarrierReqWait_Pre_Barrier_NoObj,
-  RtemsBarrierReqWait_Pre_Barrier_Manual,
-  RtemsBarrierReqWait_Pre_Barrier_Auto,
-  RtemsBarrierReqWait_Pre_Barrier_NA
-} RtemsBarrierReqWait_Pre_Barrier;
+  RtemsBarrierReqWait_Pre_Id_NoObj,
+  RtemsBarrierReqWait_Pre_Id_Manual,
+  RtemsBarrierReqWait_Pre_Id_Auto,
+  RtemsBarrierReqWait_Pre_Id_NA
+} RtemsBarrierReqWait_Pre_Id;
 
 typedef enum {
   RtemsBarrierReqWait_Pre_Timeout_Ticks,
@@ -130,7 +130,7 @@ typedef struct {
 static RtemsBarrierReqWait_Context
   RtemsBarrierReqWait_Instance;
 
-static const char * const RtemsBarrierReqWait_PreDesc_Barrier[] = {
+static const char * const RtemsBarrierReqWait_PreDesc_Id[] = {
   "NoObj",
   "Manual",
   "Auto",
@@ -152,7 +152,7 @@ static const char * const RtemsBarrierReqWait_PreDesc_Satisfy[] = {
 };
 
 static const char * const * const RtemsBarrierReqWait_PreDesc[] = {
-  RtemsBarrierReqWait_PreDesc_Barrier,
+  RtemsBarrierReqWait_PreDesc_Id,
   RtemsBarrierReqWait_PreDesc_Timeout,
   RtemsBarrierReqWait_PreDesc_Satisfy,
   NULL
@@ -256,21 +256,21 @@ static void Worker( rtems_task_argument arg )
   }
 }
 
-static void RtemsBarrierReqWait_Pre_Barrier_Prepare(
-  RtemsBarrierReqWait_Context    *ctx,
-  RtemsBarrierReqWait_Pre_Barrier state
+static void RtemsBarrierReqWait_Pre_Id_Prepare(
+  RtemsBarrierReqWait_Context *ctx,
+  RtemsBarrierReqWait_Pre_Id   state
 )
 {
   switch ( state ) {
-    case RtemsBarrierReqWait_Pre_Barrier_NoObj: {
+    case RtemsBarrierReqWait_Pre_Id_NoObj: {
       /*
-       * The ``id`` parameter shall be invalid.
+       * The ``id`` parameter shall not be associated with a barrier.
        */
       ctx->id = 0xffffffff;
       break;
     }
 
-    case RtemsBarrierReqWait_Pre_Barrier_Manual: {
+    case RtemsBarrierReqWait_Pre_Id_Manual: {
       /*
        * The ``id`` parameter shall be associated with a manual release
        * barrier.
@@ -279,7 +279,7 @@ static void RtemsBarrierReqWait_Pre_Barrier_Prepare(
       break;
     }
 
-    case RtemsBarrierReqWait_Pre_Barrier_Auto: {
+    case RtemsBarrierReqWait_Pre_Id_Auto: {
       /*
        * The ``id`` parameter shall be associated with an automatic release
        * barrier.
@@ -288,7 +288,7 @@ static void RtemsBarrierReqWait_Pre_Barrier_Prepare(
       break;
     }
 
-    case RtemsBarrierReqWait_Pre_Barrier_NA:
+    case RtemsBarrierReqWait_Pre_Id_NA:
       break;
   }
 }
@@ -608,7 +608,7 @@ static const uint8_t RtemsBarrierReqWait_TransitionMap[][ 1 ] = {
 
 static const struct {
   uint8_t Skip : 1;
-  uint8_t Pre_Barrier_NA : 1;
+  uint8_t Pre_Id_NA : 1;
   uint8_t Pre_Timeout_NA : 1;
   uint8_t Pre_Satisfy_NA : 1;
 } RtemsBarrierReqWait_TransitionInfo[] = {
@@ -681,13 +681,13 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Barrier_NoObj;
-    ctx->pcs[ 0 ] < RtemsBarrierReqWait_Pre_Barrier_NA;
+    ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NoObj;
+    ctx->pcs[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsBarrierReqWait_TransitionInfo[ index ].Pre_Barrier_NA ) {
-      ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Barrier_NA;
-      index += ( RtemsBarrierReqWait_Pre_Barrier_NA - 1 )
+    if ( RtemsBarrierReqWait_TransitionInfo[ index ].Pre_Id_NA ) {
+      ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NA;
+      index += ( RtemsBarrierReqWait_Pre_Id_NA - 1 )
         * RtemsBarrierReqWait_Pre_Timeout_NA
         * RtemsBarrierReqWait_Pre_Satisfy_NA;
     }
@@ -718,7 +718,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
           continue;
         }
 
-        RtemsBarrierReqWait_Pre_Barrier_Prepare( ctx, ctx->pcs[ 0 ] );
+        RtemsBarrierReqWait_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
         RtemsBarrierReqWait_Pre_Timeout_Prepare( ctx, ctx->pcs[ 1 ] );
         RtemsBarrierReqWait_Pre_Satisfy_Prepare( ctx, ctx->pcs[ 2 ] );
         RtemsBarrierReqWait_Action( ctx );

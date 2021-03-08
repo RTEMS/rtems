@@ -420,7 +420,8 @@ static void RtemsTaskReqConstructErrors_Pre_Prio_Prepare(
   switch ( state ) {
     case RtemsTaskReqConstructErrors_Pre_Prio_Valid: {
       /*
-       * The initial priority of the task configuration shall be valid.
+       * The initial priority of the task configuration shall be valid and
+       * non-zero.
        */
       ctx->config.initial_priority = 254;
       break;

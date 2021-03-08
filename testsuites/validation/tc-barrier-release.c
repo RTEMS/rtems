@@ -67,11 +67,11 @@
  */
 
 typedef enum {
-  RtemsBarrierReqRelease_Pre_Barrier_NoObj,
-  RtemsBarrierReqRelease_Pre_Barrier_Manual,
-  RtemsBarrierReqRelease_Pre_Barrier_Auto,
-  RtemsBarrierReqRelease_Pre_Barrier_NA
-} RtemsBarrierReqRelease_Pre_Barrier;
+  RtemsBarrierReqRelease_Pre_Id_NoObj,
+  RtemsBarrierReqRelease_Pre_Id_Manual,
+  RtemsBarrierReqRelease_Pre_Id_Auto,
+  RtemsBarrierReqRelease_Pre_Id_NA
+} RtemsBarrierReqRelease_Pre_Id;
 
 typedef enum {
   RtemsBarrierReqRelease_Pre_Released_Valid,
@@ -133,7 +133,7 @@ typedef struct {
 static RtemsBarrierReqRelease_Context
   RtemsBarrierReqRelease_Instance;
 
-static const char * const RtemsBarrierReqRelease_PreDesc_Barrier[] = {
+static const char * const RtemsBarrierReqRelease_PreDesc_Id[] = {
   "NoObj",
   "Manual",
   "Auto",
@@ -153,7 +153,7 @@ static const char * const RtemsBarrierReqRelease_PreDesc_Waiting[] = {
 };
 
 static const char * const * const RtemsBarrierReqRelease_PreDesc[] = {
-  RtemsBarrierReqRelease_PreDesc_Barrier,
+  RtemsBarrierReqRelease_PreDesc_Id,
   RtemsBarrierReqRelease_PreDesc_Released,
   RtemsBarrierReqRelease_PreDesc_Waiting,
   NULL
@@ -206,21 +206,21 @@ static void Worker( rtems_task_argument arg )
   }
 }
 
-static void RtemsBarrierReqRelease_Pre_Barrier_Prepare(
-  RtemsBarrierReqRelease_Context    *ctx,
-  RtemsBarrierReqRelease_Pre_Barrier state
+static void RtemsBarrierReqRelease_Pre_Id_Prepare(
+  RtemsBarrierReqRelease_Context *ctx,
+  RtemsBarrierReqRelease_Pre_Id   state
 )
 {
   switch ( state ) {
-    case RtemsBarrierReqRelease_Pre_Barrier_NoObj: {
+    case RtemsBarrierReqRelease_Pre_Id_NoObj: {
       /*
-       * The ``id`` parameter shall be invalid.
+       * The ``id`` parameter shall not be associated with a barrier.
        */
       ctx->id = 0xffffffff;
       break;
     }
 
-    case RtemsBarrierReqRelease_Pre_Barrier_Manual: {
+    case RtemsBarrierReqRelease_Pre_Id_Manual: {
       /*
        * The ``id`` parameter shall be associated with a manual release
        * barrier.
@@ -229,7 +229,7 @@ static void RtemsBarrierReqRelease_Pre_Barrier_Prepare(
       break;
     }
 
-    case RtemsBarrierReqRelease_Pre_Barrier_Auto: {
+    case RtemsBarrierReqRelease_Pre_Id_Auto: {
       /*
        * The ``id`` parameter shall be associated with an automatic release
        * barrier.
@@ -238,7 +238,7 @@ static void RtemsBarrierReqRelease_Pre_Barrier_Prepare(
       break;
     }
 
-    case RtemsBarrierReqRelease_Pre_Barrier_NA:
+    case RtemsBarrierReqRelease_Pre_Id_NA:
       break;
   }
 }
@@ -522,7 +522,7 @@ static const uint8_t RtemsBarrierReqRelease_TransitionMap[][ 2 ] = {
 
 static const struct {
   uint8_t Skip : 1;
-  uint8_t Pre_Barrier_NA : 1;
+  uint8_t Pre_Id_NA : 1;
   uint8_t Pre_Released_NA : 1;
   uint8_t Pre_Waiting_NA : 1;
 } RtemsBarrierReqRelease_TransitionInfo[] = {
@@ -573,13 +573,13 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Barrier_NoObj;
-    ctx->pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Barrier_NA;
+    ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NoObj;
+    ctx->pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsBarrierReqRelease_TransitionInfo[ index ].Pre_Barrier_NA ) {
-      ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Barrier_NA;
-      index += ( RtemsBarrierReqRelease_Pre_Barrier_NA - 1 )
+    if ( RtemsBarrierReqRelease_TransitionInfo[ index ].Pre_Id_NA ) {
+      ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NA;
+      index += ( RtemsBarrierReqRelease_Pre_Id_NA - 1 )
         * RtemsBarrierReqRelease_Pre_Released_NA
         * RtemsBarrierReqRelease_Pre_Waiting_NA;
     }
@@ -610,7 +610,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
           continue;
         }
 
-        RtemsBarrierReqRelease_Pre_Barrier_Prepare( ctx, ctx->pcs[ 0 ] );
+        RtemsBarrierReqRelease_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
         RtemsBarrierReqRelease_Pre_Released_Prepare( ctx, ctx->pcs[ 1 ] );
         RtemsBarrierReqRelease_Pre_Waiting_Prepare( ctx, ctx->pcs[ 2 ] );
         RtemsBarrierReqRelease_Action( ctx );

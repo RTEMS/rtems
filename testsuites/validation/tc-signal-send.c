@@ -372,7 +372,7 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Task_NoObj: {
       /*
-       * The ``id`` parameter shall be invalid.
+       * The ``id`` parameter shall not be associated with a task.
        */
       ctx->id = 0xffffffff;
       break;

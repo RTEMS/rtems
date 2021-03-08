@@ -66,8 +66,8 @@
  */
 
 typedef enum {
-  RtemsBarrierReqDelete_Pre_Id_Valid,
-  RtemsBarrierReqDelete_Pre_Id_Invalid,
+  RtemsBarrierReqDelete_Pre_Id_NoObj,
+  RtemsBarrierReqDelete_Pre_Id_Barrier,
   RtemsBarrierReqDelete_Pre_Id_NA
 } RtemsBarrierReqDelete_Pre_Id;
 
@@ -78,10 +78,10 @@ typedef enum {
 } RtemsBarrierReqDelete_Post_Status;
 
 typedef enum {
-  RtemsBarrierReqDelete_Post_Id_Valid,
-  RtemsBarrierReqDelete_Post_Id_Invalid,
-  RtemsBarrierReqDelete_Post_Id_NA
-} RtemsBarrierReqDelete_Post_Id;
+  RtemsBarrierReqDelete_Post_Name_Valid,
+  RtemsBarrierReqDelete_Post_Name_Invalid,
+  RtemsBarrierReqDelete_Post_Name_NA
+} RtemsBarrierReqDelete_Post_Name;
 
 typedef enum {
   RtemsBarrierReqDelete_Post_Flush_Yes,
@@ -121,8 +121,8 @@ static RtemsBarrierReqDelete_Context
   RtemsBarrierReqDelete_Instance;
 
 static const char * const RtemsBarrierReqDelete_PreDesc_Id[] = {
-  "Valid",
-  "Invalid",
+  "NoObj",
+  "Barrier",
   "NA"
 };
 
@@ -182,19 +182,19 @@ static void RtemsBarrierReqDelete_Pre_Id_Prepare(
 )
 {
   switch ( state ) {
-    case RtemsBarrierReqDelete_Pre_Id_Valid: {
+    case RtemsBarrierReqDelete_Pre_Id_NoObj: {
       /*
-       * The ``id`` parameter shall be associated with the barrier.
+       * The ``id`` parameter shall not be associated with a barrier.
        */
-      ctx->id = ctx->barrier_id;
+      ctx->id = 0;
       break;
     }
 
-    case RtemsBarrierReqDelete_Pre_Id_Invalid: {
+    case RtemsBarrierReqDelete_Pre_Id_Barrier: {
       /*
-       * The ``id`` parameter shall be invalid.
+       * The ``id`` parameter shall be associated with a barrier.
        */
-      ctx->id = 0;
+      ctx->id = ctx->barrier_id;
       break;
     }
 
@@ -231,16 +231,16 @@ static void RtemsBarrierReqDelete_Post_Status_Check(
   }
 }
 
-static void RtemsBarrierReqDelete_Post_Id_Check(
-  RtemsBarrierReqDelete_Context *ctx,
-  RtemsBarrierReqDelete_Post_Id  state
+static void RtemsBarrierReqDelete_Post_Name_Check(
+  RtemsBarrierReqDelete_Context  *ctx,
+  RtemsBarrierReqDelete_Post_Name state
 )
 {
   rtems_status_code sc;
   rtems_id          id;
 
   switch ( state ) {
-    case RtemsBarrierReqDelete_Post_Id_Valid: {
+    case RtemsBarrierReqDelete_Post_Name_Valid: {
       /*
        * The unique object name shall identify the barrier.
        */
@@ -251,7 +251,7 @@ static void RtemsBarrierReqDelete_Post_Id_Check(
       break;
     }
 
-    case RtemsBarrierReqDelete_Post_Id_Invalid: {
+    case RtemsBarrierReqDelete_Post_Name_Invalid: {
       /*
        * The unique object name shall not identify the barrier.
        */
@@ -260,7 +260,7 @@ static void RtemsBarrierReqDelete_Post_Id_Check(
       break;
     }
 
-    case RtemsBarrierReqDelete_Post_Id_NA:
+    case RtemsBarrierReqDelete_Post_Name_NA:
       break;
   }
 }
@@ -378,13 +378,13 @@ static T_fixture RtemsBarrierReqDelete_Fixture = {
 
 static const uint8_t RtemsBarrierReqDelete_TransitionMap[][ 3 ] = {
   {
-    RtemsBarrierReqDelete_Post_Status_Ok,
-    RtemsBarrierReqDelete_Post_Id_Invalid,
-    RtemsBarrierReqDelete_Post_Flush_Yes
-  }, {
     RtemsBarrierReqDelete_Post_Status_InvId,
-    RtemsBarrierReqDelete_Post_Id_Valid,
+    RtemsBarrierReqDelete_Post_Name_Valid,
     RtemsBarrierReqDelete_Post_Flush_No
+  }, {
+    RtemsBarrierReqDelete_Post_Status_Ok,
+    RtemsBarrierReqDelete_Post_Name_Invalid,
+    RtemsBarrierReqDelete_Post_Flush_Yes
   }
 };
 
@@ -422,6 +422,11 @@ static void RtemsBarrierReqDelete_Cleanup( RtemsBarrierReqDelete_Context *ctx )
 
     sc = rtems_barrier_delete( ctx->barrier_id );
     T_rsc_success( sc );
+
+    ++ctx->wait_expected;
+    T_eq_u32( ctx->wait_done, ctx->wait_expected );
+
+    ctx->barrier_id = 0;
   }
 }
 
@@ -438,7 +443,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqDelete_Pre_Id_Valid;
+    ctx->pcs[ 0 ] = RtemsBarrierReqDelete_Pre_Id_NoObj;
     ctx->pcs[ 0 ] < RtemsBarrierReqDelete_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
@@ -459,7 +464,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
       ctx,
       RtemsBarrierReqDelete_TransitionMap[ index ][ 0 ]
     );
-    RtemsBarrierReqDelete_Post_Id_Check(
+    RtemsBarrierReqDelete_Post_Name_Check(
       ctx,
       RtemsBarrierReqDelete_TransitionMap[ index ][ 1 ]
     );

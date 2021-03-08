@@ -383,7 +383,7 @@ static void RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
   switch ( state ) {
     case RtemsTaskReqCreateErrors_Pre_Prio_Valid: {
       /*
-       * The ``initial_priority`` parameter shall be valid.
+       * The ``initial_priority`` parameter shall be valid and non-zero.
        */
       ctx->initial_priority = 254;
       break;
@@ -446,7 +446,8 @@ static void RtemsTaskReqCreateErrors_Pre_Stack_Prepare(
     case RtemsTaskReqCreateErrors_Pre_Stack_Normal: {
       /*
        * The ``initial_priority`` parameter shall be greater than or equal to
-       * the configured minimum size.
+       * the configured minimum size and less than or equal to the maximum
+       * stack size which can be allocated by the system.
        */
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
       break;
