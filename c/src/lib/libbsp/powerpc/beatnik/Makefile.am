@@ -83,13 +83,15 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/motload_fixu
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
 
 #network
+# low-level driver
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_mve/mv643xx_eth.c
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_em/if_em.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_em/if_em_hw.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_em/if_em_rtems.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_gfe/if_gfe.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_gfe/if_gfe_rtems.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_mve/mv643xx_eth.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_mve/mv643xx_eth_bsdnet.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/support/bsp_attach.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/support/early_link_status.c
 endif

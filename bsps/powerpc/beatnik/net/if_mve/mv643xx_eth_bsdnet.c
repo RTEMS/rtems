@@ -95,7 +95,44 @@
 #include <errno.h>
 #include <inttypes.h>
 
-#include <bsp/mv643xx_eth.h>
+
+#ifdef BSDBSD
+#include <sys/param.h>
+#include <sys/proc.h>
+#include <sys/socket.h>
+#include <sys/sockio.h>
+#include <dev/mii/mii.h>
+#include <net/if_var.h>
+#include <net/if_media.h>
+
+/* Not so nice; would be more elegant not to depend on C library but the
+ * RTEMS-specific ioctl for dumping statistics needs stdio anyways.
+ */
+
+/*#define NDEBUG effectively removes all assertions
+ * If defining NDEBUG, MAKE SURE assert() EXPRESSION HAVE NO SIDE_EFFECTS!!
+ * This driver DOES have side-effects, so DONT DEFINE NDEBUG
+ * Performance-critical assertions are removed by undefining MVETH_TESTING.
+ */
+
+#undef NDEBUG
+#include <rtems/rtems_bsdnet.h>
+#include <sys/param.h>
+#include <sys/mbuf.h>
+#include <sys/socket.h>
+#include <sys/sockio.h>
+#include <net/ethernet.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#include <netinet/if_ether.h>
+#endif /* BSDBSD */
+
+#ifdef BSDBSD
+#include <rtems/rtems_mii_ioctl.h>
+
+#include <bsp/early_enet_link_status.h>
+#include <bsp/if_mve_pub.h>
+#endif /* BSDBSD */
 
 /* CONFIGURABLE PARAMETERS */
 
@@ -322,6 +359,128 @@
 #else
 #define STATIC static
 #endif
+
+struct mveth_private;
+
+/* Clear multicast filters                        */
+void
+BSP_mve_mcast_filter_clear(struct mveth_private *mp);
+void
+BSP_mve_mcast_filter_accept_all(struct mveth_private *mp);
+void
+BSP_mve_mcast_filter_accept_add(struct mveth_private *mp, unsigned char *enaddr);
+void
+BSP_mve_mcast_filter_accept_del(struct mveth_private *mp, unsigned char *enaddr);
+/* Stop hardware and clean out the rings */
+void
+BSP_mve_stop_hw(struct mveth_private *mp);
+
+struct mveth_private *
+BSP_mve_setup(
+	int		 unit,
+	rtems_id tid,
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void *cleanup_txbuf_arg,
+	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
+	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
+	void *consume_rxbuf_arg,
+	int		rx_ring_size,
+	int		tx_ring_size,
+	int		irq_mask
+);
+
+struct mveth_private *
+BSP_mve_setup_1(
+	int		 unit,
+	void     (*isr)(void *isr_arg),
+	void     *isr_arg,
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void *cleanup_txbuf_arg,
+	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
+	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
+	void *consume_rxbuf_arg,
+	int		rx_ring_size,
+	int		tx_ring_size,
+	int		irq_mask
+);
+
+/* MAIN RX-TX ROUTINES
+ *
+ * BSP_mve_swipe_tx():  descriptor scavenger; releases mbufs
+ * BSP_mve_send_buf():  xfer mbufs from IF to chip
+ * BSP_mve_swipe_rx():  enqueue received mbufs to interface
+ *                    allocate new ones and yield them to the
+ *                    chip.
+ */
+
+/* clean up the TX ring freeing up buffers */
+int
+BSP_mve_swipe_tx(struct mveth_private *mp);
+int
+BSP_mve_send_buf_raw(
+	struct mveth_private *mp,
+	void                 *head_p,
+	int                   h_len,
+	void                 *data_p,
+    int                   d_len);
+/* send received buffers upwards and replace them
+ * with freshly allocated ones;
+ * ASSUMPTION:	buffer length NEVER changes and is set
+ *				when the ring is initialized.
+ * TS 20060727: not sure if this assumption is still necessary - I believe it isn't.
+ */
+int
+BSP_mve_swipe_rx(struct mveth_private *mp);
+
+rtems_id
+BSP_mve_get_tid(struct mveth_private *mp);
+int
+BSP_mve_detach(struct mveth_private *mp);
+
+/* Fire up the low-level driver
+ *
+ * - make sure hardware is halted
+ * - enable cache snooping
+ * - clear address filters
+ * - clear mib counters
+ * - reset phy
+ * - initialize (or reinitialize) descriptor rings
+ * - check that the firmware has set up a reasonable mac address.
+ * - generate unicast filter entry for our mac address
+ * - write register config values to the chip
+ * - start hardware (serial port and SDMA)
+ */
+
+void
+BSP_mve_init_hw(struct mveth_private *mp, int promisc, unsigned char *enaddr);
+
+/* read ethernet address from hw to buffer */
+void
+BSP_mve_read_eaddr(struct mveth_private *mp, unsigned char *oeaddr);
+
+void
+BSP_mve_enable_irqs(struct mveth_private *mp);
+void
+BSP_mve_disable_irqs(struct mveth_private *mp);
+uint32_t
+BSP_mve_ack_irqs(struct mveth_private *mp);
+void
+BSP_mve_enable_irq_mask(struct mveth_private *mp, uint32_t mask);
+uint32_t
+BSP_mve_disable_irq_mask(struct mveth_private *mp, uint32_t mask);
+uint32_t
+BSP_mve_ack_irq_mask(struct mveth_private *mp, uint32_t mask);
+
+void
+BSP_mve_dump_stats(struct mveth_private *mp, FILE *f);
+
+unsigned
+mveth_mii_read(struct mveth_private *mp, unsigned addr);
+
+unsigned
+mveth_mii_write(struct mveth_private *mp, unsigned addr, unsigned v);
+
+
 
 #define TX_AVAILABLE_RING_SIZE(mp)		((mp)->xbuf_count - (TX_NUM_TAG_SLOTS))
 
@@ -747,10 +906,47 @@ struct mveth_private {
 	}           mc_refcnt;
 };
 
+/* stuff needed for bsdnet support */
+#ifdef BSDBSD
+struct mveth_bsdsupp {
+	int				oif_flags;					/* old / cached if_flags */
+};
+#endif /*BSDBSD*/
+
+struct mveth_softc {
+#ifdef BSDBSD
+	struct arpcom			arpcom;
+	struct mveth_bsdsupp	bsd;
+#endif /*BSDBSD*/
+	struct mveth_private	pvt;
+};
+
 /* GLOBAL VARIABLES */
 #ifdef MVETH_DEBUG_TX_DUMP
 int mveth_tx_dump = 0;
 #endif
+
+/* THE array of driver/bsdnet structs */
+
+/* If detaching/module unloading is enabled, the main driver data
+ * structure must remain in memory; hence it must reside in its own
+ * 'dummy' module...
+ */
+#ifdef  MVETH_DETACH_HACK
+extern
+#else
+STATIC
+#endif
+struct mveth_softc theMvEths[MV643XXETH_NUM_DRIVER_SLOTS]
+#ifndef MVETH_DETACH_HACK
+= {{{{0}},}}
+#endif
+;
+
+#ifdef BSDBSD
+/* daemon task id */
+STATIC rtems_id	mveth_tid = 0;
+#endif /*BSDBSD*/
 
 /* register access protection mutex */
 STATIC rtems_id mveth_mtx = 0;
@@ -801,6 +997,7 @@ static const char *mibfmt[] = {
 /* forward decls + implementation for IRQ API funcs */
 
 static void mveth_isr(rtems_irq_hdl_param unit);
+static void mveth_isr_1(rtems_irq_hdl_param unit);
 static void noop(const rtems_irq_connect_data *unused)  {}
 static int  noop1(const rtems_irq_connect_data *unused) { return 0; }
 
@@ -830,6 +1027,36 @@ static rtems_irq_connect_data irq_data[MAX_NUM_SLOTS] = {
 		noop1
 	},
 };
+
+/* MII Ioctl Interface */
+#ifdef BSDMII
+
+/* mdio / mii interface wrappers for rtems_mii_ioctl API */
+
+static int mveth_mdio_r(int phy, void *uarg, unsigned reg, uint32_t *pval)
+{
+	if ( phy > 1 )
+		return -1;
+
+	*pval = mveth_mii_read(uarg, reg);
+	return 0;
+}
+
+static int mveth_mdio_w(int phy, void *uarg, unsigned reg, uint32_t val)
+{
+	if ( phy > 1 )
+		return -1;
+	mveth_mii_write(uarg, reg, val);
+	return 0;
+}
+
+static struct rtems_mdio_info mveth_mdio = {
+	mdio_r:	  mveth_mdio_r,
+	mdio_w:	  mveth_mdio_w,
+	has_gmii: 1,
+};
+
+#endif /* BSDBSD */
 
 /* LOW LEVEL SUPPORT ROUTINES */
 
@@ -999,7 +1226,19 @@ register uint32_t x,xe,p;
 
 static void mveth_isr(rtems_irq_hdl_param arg)
 {
-struct mveth_private *mp   = (struct mveth_private*) arg;
+unsigned unit = (unsigned)arg;
+	mveth_disable_irqs(&theMvEths[unit].pvt, -1);
+	theMvEths[unit].pvt.stats.irqs++;
+#ifdef BSDBSD
+#warning FIXME
+	rtems_bsdnet_event_send( theMvEths[unit].pvt.tid, 1<<unit );
+#endif
+}
+
+static void mveth_isr_1(rtems_irq_hdl_param arg)
+{
+unsigned              unit = (unsigned)arg;
+struct mveth_private *mp   = &theMvEths[unit].pvt;
 
 	mp->stats.irqs++;
 	mp->isr(mp->isr_arg);
@@ -1069,7 +1308,7 @@ uint32_t	x;
  *       locking of all shared registers must be implemented!
  */
 unsigned
-BSP_mve_mii_read(struct mveth_private *mp, unsigned addr)
+mveth_mii_read(struct mveth_private *mp, unsigned addr)
 {
 unsigned v;
 unsigned wc = 0;
@@ -1095,7 +1334,7 @@ unsigned wc = 0;
 }
 
 unsigned
-BSP_mve_mii_write(struct mveth_private *mp, unsigned addr, unsigned v)
+mveth_mii_write(struct mveth_private *mp, unsigned addr, unsigned v)
 {
 unsigned wc = 0;
 
@@ -1152,6 +1391,58 @@ uint32_t active_q;
 }
 
 /* update serial port settings from current link status */
+#ifdef BSDMII
+static void
+mveth_update_serial_port(struct mveth_private *mp, int media)
+{
+int port = mp->port_num;
+uint32_t old, new;
+
+	new = old = MV_READ(MV643XX_ETH_SERIAL_CONTROL_R(port));
+
+	/* mask speed and duplex settings */
+	new &= ~(  MV643XX_ETH_SET_GMII_SPEED_1000
+			 | MV643XX_ETH_SET_MII_SPEED_100
+			 | MV643XX_ETH_SET_FULL_DUPLEX );
+
+	if ( IFM_FDX & media )
+		new |= MV643XX_ETH_SET_FULL_DUPLEX;
+
+	switch ( IFM_SUBTYPE(media) ) {
+		default: /* treat as 10 */
+			break;
+		case IFM_100_TX:
+			new |= MV643XX_ETH_SET_MII_SPEED_100;
+			break;
+		case IFM_1000_T:
+			new |= MV643XX_ETH_SET_GMII_SPEED_1000;
+			break;
+	}
+
+
+	if ( new != old ) {
+		if ( ! (MV643XX_ETH_SERIAL_PORT_ENBL & new) ) {
+			/* just write */
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), new);
+		} else {
+			uint32_t were_running;
+
+			were_running = mveth_stop_tx(port);
+
+			old &= ~MV643XX_ETH_SERIAL_PORT_ENBL;
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), old);
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), new);
+			/* linux driver writes twice... */
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), new);
+
+			if ( were_running ) {
+				MV_WRITE(MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(mp->port_num), MV643XX_ETH_TX_START(0));
+			}
+		}
+	}
+}
+#endif /*BSDMII*/
+
 
 void
 BSP_mve_mcast_filter_clear(struct mveth_private *mp)
@@ -1366,6 +1657,36 @@ register uint8_t *d = to, *s = fro;
 }
 #endif
 
+#ifdef BSDBSD
+/* Assign values (buffer + user data) to a tx descriptor slot */
+static int
+mveth_assign_desc(MvEthTxDesc d, struct mbuf *m, unsigned long extra)
+{
+int rval = (d->byte_cnt = m->m_len);
+
+#ifdef MVETH_TESTING
+	assert( !d->mb      );
+	assert(  m->m_len   );
+#endif
+
+	/* set CRC on all descriptors; seems to be necessary */
+	d->cmd_sts  = extra | (TDESC_GEN_CRC | TDESC_ZERO_PAD);
+
+#ifdef ENABLE_TX_WORKAROUND_8_BYTE_PROBLEM
+	/* The buffer must be 64bit aligned if the payload is <8 (??) */
+	if ( rval < 8 && ((mtod(m, uintptr_t)) & 7) ) {
+		d->buf_ptr = CPUADDR2ENET( d->workaround );
+		memcpy((void*)d->workaround, mtod(m, void*), rval);
+	} else
+#endif
+	{
+		d->buf_ptr  = CPUADDR2ENET( mtod(m, unsigned long) );
+	}
+	d->l4i_chk  = 0;
+	return rval;
+}
+#endif /*BSDBSD*/
+
 static int
 mveth_assign_desc_raw(MvEthTxDesc d, void *buf, int len, unsigned long extra)
 {
@@ -1479,7 +1800,6 @@ MvEthTxDesc d;
 
 static struct mveth_private *
 mve_setup_internal(
-	struct mveth_private *mp,
 	int		 unit,
 	rtems_id tid,
 	void     (*isr)(void*isr_arg),
@@ -1495,12 +1815,26 @@ mve_setup_internal(
 )
 
 {
+struct mveth_private *mp;
+#ifdef BSDBSD
+struct ifnet         *ifp;
+#endif
 int                  InstallISRSuccessful;
 
 	if ( unit <= 0 || unit > MV643XXETH_NUM_DRIVER_SLOTS ) {
 		printk(DRVNAME": Bad unit number %i; must be 1..%i\n", unit, MV643XXETH_NUM_DRIVER_SLOTS);
 		return 0;
 	}
+#ifdef BSDBSD
+#warning FIXME
+	ifp = &theMvEths[unit-1].arpcom.ac_if;
+	if ( ifp->if_init ) {
+		if ( ifp->if_init ) {
+			printk(DRVNAME": instance %i already attached.\n", unit);
+			return 0;
+		}
+	}
+#endif
 
 	if ( rx_ring_size < 0 && tx_ring_size < 0 )
 		return 0;
@@ -1524,6 +1858,8 @@ int                  InstallISRSuccessful;
 			rtems_panic("unable to proceed\n");
 		}
 	}
+
+	mp = &theMvEths[unit-1].pvt;
 
 	memset(mp, 0, sizeof(*mp));
 
@@ -1565,11 +1901,16 @@ int                  InstallISRSuccessful;
 	BSP_mve_stop_hw(mp);
 
 	if ( irq_mask ) {
-		irq_data[mp->port_num].hdl    = mveth_isr;
-		irq_data[mp->port_num].handle = (rtems_irq_hdl_param)mp;
+		irq_data[mp->port_num].hdl = tid ? mveth_isr : mveth_isr_1;	
 		InstallISRSuccessful = BSP_install_rtems_irq_handler( &irq_data[mp->port_num] );
 		assert( InstallISRSuccessful );
 	}
+
+#ifdef BSDBSD
+#warning fixme
+	/* mark as used */
+	ifp->if_init = (void*)(-1);
+#endif
 
 	if ( rx_ring_size < 0 )
 		irq_mask &= ~ MV643XX_ETH_IRQ_RX_DONE;
@@ -1588,8 +1929,64 @@ int                  InstallISRSuccessful;
 }
 
 struct mveth_private *
+BSP_mve_setup(
+	int		 unit,
+	rtems_id tid,
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void *cleanup_txbuf_arg,
+	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
+	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
+	void *consume_rxbuf_arg,
+	int		rx_ring_size,
+	int		tx_ring_size,
+	int		irq_mask
+)
+{
+struct ifnet         *ifp;
+struct mveth_private *mp,
+
+	if ( unit <= 0 || unit > MV643XXETH_NUM_DRIVER_SLOTS ) {
+		printk(DRVNAME": Bad unit number %i; must be 1..%i\n", unit, MV643XXETH_NUM_DRIVER_SLOTS);
+		return 0;
+	}
+
+	if ( irq_mask && 0 == tid ) {
+		printk(DRVNAME": must supply a TID if irq_msk not zero\n");
+		return 0;	
+	}
+
+	ifp = &theMvEths[unit-1].arpcom.ac_if;
+
+	if ( ifp->if_init ) {
+		if ( ifp->if_init ) {
+			printk(DRVNAME": instance %i already attached.\n", unit);
+			return 0;
+		}
+	}
+
+	mp  = &theMvEths[unit-1].pvt;
+
+	if ( 0 == mve_setup_internal(
+				mp,
+				unit,
+				tid,
+				0, 0,
+				cleanup_txbuf, cleanup_txbuf_arg,
+				alloc_rxbuf,
+				consume_rxbuf, consume_rxbuf_arg,
+				rx_ring_size, tx_ring_size,
+				irq_mask) ) {
+		return 0;
+	}
+
+	/* mark as used */
+	ifp->if_init = (void*)(-1);
+
+	return mp;
+}
+
+struct mveth_private *
 BSP_mve_setup_1(
-	struct mveth_private *mp,
 	int		 unit,
 	void     (*isr)(void *isr_arg),
 	void     *isr_arg,
@@ -1609,7 +2006,6 @@ BSP_mve_setup_1(
 	}
 
 	return mve_setup_internal(
-				mp,
 				unit,
 				0,
 				isr, isr_arg,
@@ -1691,6 +2087,239 @@ register MvEthTxDesc	d;
 
 	return rval;
 }
+
+#ifdef BSDBSD
+
+/* allocate a new cluster and copy an existing chain there;
+ * old chain is released...
+ */
+static struct mbuf *
+repackage_chain(struct mbuf *m_head)
+{
+struct mbuf *m;
+	MGETHDR(m, M_DONTWAIT, MT_DATA);
+
+	if ( !m ) {
+		goto bail;
+	}
+
+	MCLGET(m, M_DONTWAIT);
+
+	if ( !(M_EXT & m->m_flags) ) {
+		m_freem(m);
+		m = 0;
+		goto bail;
+	}
+
+	m_copydata(m_head, 0, MCLBYTES, mtod(m, caddr_t));
+	m->m_pkthdr.len = m->m_len = m_head->m_pkthdr.len;
+
+bail:
+	m_freem(m_head);
+	return m;
+}
+
+/* Enqueue a mbuf chain or a raw data buffer for transmission;
+ * RETURN: #bytes sent or -1 if there are not enough descriptors
+ *
+ * If 'len' is <=0 then 'm_head' is assumed to point to a mbuf chain.
+ * OTOH, a raw data packet may be send (non-BSD driver) by pointing
+ * m_head to the start of the data and passing 'len' > 0.
+ *
+ * Comments: software cache-flushing incurs a penalty if the
+ *           packet cannot be queued since it is flushed anyways.
+ *           The algorithm is slightly more efficient in the normal
+ *			 case, though.
+ */
+int
+BSP_mve_send_buf(struct mveth_private *mp, void *m_head, void *data_p, int len)
+{
+int						rval;
+register MvEthTxDesc	l,d,h;
+register struct mbuf	*m1;
+int						nmbs;
+int						ismbuf = (len <= 0);
+
+/* Only way to get here is when we discover that the mbuf chain
+ * is too long for the tx ring
+ */
+startover:
+
+	rval = 0;
+
+#ifdef MVETH_TESTING 
+	assert(m_head);
+#endif
+
+	/* if no descriptor is available; try to wipe the queue */
+	if ( (mp->avail < 1) && MVETH_CLEAN_ON_SEND(mp)<=0 ) {
+		/* Maybe TX is stalled and needs to be restarted */
+		mveth_start_tx(mp);
+		return -1;
+	}
+
+	h = mp->d_tx_h;
+
+#ifdef MVETH_TESTING 
+	assert( !h->buf_ptr );
+	assert( !h->mb      );
+#endif
+
+	if ( ! (m1 = m_head) )
+		return 0;
+
+	if ( ismbuf ) {
+		/* find first mbuf with actual data */
+		while ( 0 == m1->m_len ) {
+			if ( ! (m1 = m1->m_next) ) {
+				/* end reached and still no data to send ?? */
+				m_freem(m_head);
+				return 0;
+			}
+		}
+	}
+
+	/* Don't use the first descriptor yet because BSP_mve_swipe_tx()
+	 * needs mp->d_tx_h->buf_ptr == NULL as a marker. Hence, we
+	 * start with the second mbuf and fill the first descriptor
+	 * last.
+	 */
+
+	l = h;
+	d = NEXT_TXD(h);
+
+	mp->avail--;
+
+	nmbs = 1;
+	if ( ismbuf ) {
+			register struct mbuf *m;
+			for ( m=m1->m_next; m; m=m->m_next ) {
+					if ( 0 == m->m_len )
+							continue;	/* skip empty mbufs */
+
+					nmbs++;
+
+					if ( mp->avail < 1 && MVETH_CLEAN_ON_SEND(mp)<=0 ) {
+							/* Maybe TX was stalled - try to restart */
+							mveth_start_tx(mp);
+
+							/* not enough descriptors; cleanup...
+							 * the first slot was never used, so we start
+							 * at mp->d_tx_h->next;
+							 */
+							for ( l = NEXT_TXD(h); l!=d; l=NEXT_TXD(l) ) {
+#ifdef MVETH_TESTING
+									assert( l->mb == 0 );
+#endif
+									l->buf_ptr  = 0;
+									l->cmd_sts  = 0;
+									mp->avail++;
+							}
+							mp->avail++;
+							if ( nmbs > TX_AVAILABLE_RING_SIZE(mp) ) {
+									/* this chain will never fit into the ring */
+									if ( nmbs > mp->stats.maxchain )
+											mp->stats.maxchain = nmbs;
+									mp->stats.repack++;
+									if ( ! (m_head = repackage_chain(m_head)) ) {
+											/* no cluster available */
+											mp->stats.odrops++;
+											return 0;
+									}
+									goto startover;
+							}
+							return -1;
+					}
+
+					mp->avail--;
+
+#ifdef MVETH_TESTING
+					assert( d != h      );
+					assert( !d->buf_ptr );
+#endif
+
+					/* fill this slot */
+					rval += mveth_assign_desc(d, m, TDESC_DMA_OWNED);
+
+					FLUSH_BUF(mtod(m, uint32_t), m->m_len);
+
+					l = d;
+					d = NEXT_TXD(d);
+
+					FLUSH_DESC(l);
+			}
+
+		/* fill first slot - don't release to DMA yet */
+		rval += mveth_assign_desc(h, m1, TDESC_FRST);
+
+
+		FLUSH_BUF(mtod(m1, uint32_t), m1->m_len);
+
+	} else {
+		/* fill first slot with raw buffer - don't release to DMA yet */
+		rval += mveth_assign_desc_raw(h, data_p, len, TDESC_FRST);
+
+		FLUSH_BUF( (uint32_t)data_p, len);
+	}
+
+	/* tag last slot; this covers the case where 1st==last */
+	l->cmd_sts      |= TDESC_LAST | TDESC_INT_ENA;
+	/* mbuf goes into last desc */
+	l->u_buf         = m_head;
+
+
+	FLUSH_DESC(l);
+
+	/* Tag end; make sure chip doesn't try to read ahead of here! */
+	l->next->cmd_sts = 0;
+	FLUSH_DESC(l->next);
+
+#ifdef MVETH_DEBUG_TX_DUMP
+	if ( (mveth_tx_dump & (1<<mp->port_num)) ) {
+		int ll,kk;
+		if ( ismbuf ) {
+			struct mbuf *m;
+			for ( kk=0, m=m_head; m; m=m->m_next) {
+				for ( ll=0; ll<m->m_len; ll++ ) {
+					printf("%02X ",*(mtod(m,char*) + ll));
+					if ( ((++kk)&0xf) == 0 )
+						printf("\n");
+				}
+			}
+		} else {
+			for ( ll=0; ll<len; ) {
+				printf("%02X ",*((char*)data_p + ll));
+				if ( ((++ll)&0xf) == 0 )
+					printf("\n");
+			}	
+		}
+		printf("\n");
+	}
+#endif
+
+	membarrier();
+
+	/* turn over the whole chain by flipping ownership of the first desc */
+	h->cmd_sts |= TDESC_DMA_OWNED;
+
+	FLUSH_DESC(h);
+
+	membarrier();
+
+	/* notify the device */
+	MV_WRITE(MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(mp->port_num), MV643XX_ETH_TX_START(0));
+
+	/* Update softc */
+	mp->stats.packet++;
+	if ( nmbs > mp->stats.maxchain )
+		mp->stats.maxchain = nmbs;
+
+	/* remember new head */
+	mp->d_tx_h = d;
+
+	return rval; /* #bytes sent */
+}
+#endif /* BSDBSD */
 
 int
 BSP_mve_send_buf_raw(
@@ -2121,6 +2750,28 @@ unsigned char	buf[6], *eaddr;
 	}
 }
 
+#ifdef BSDMII
+int
+BSP_mve_media_ioctl(struct mveth_private *mp, int cmd, int *parg)
+{
+int rval;
+	/* alias cmd == 0,1 */
+	switch ( cmd ) {
+		case 0: cmd = SIOCGIFMEDIA;
+			break;
+		case 1: cmd = SIOCSIFMEDIA;
+		case SIOCGIFMEDIA:
+		case SIOCSIFMEDIA:
+			break;
+		default: return -1;
+	}
+	REGLOCK();
+	rval = rtems_mii_ioctl(&mveth_mdio, mp, cmd, parg);
+	REGUNLOCK();
+	return rval;
+}
+#endif
+
 void
 BSP_mve_enable_irqs(struct mveth_private *mp)
 {
@@ -2157,6 +2808,137 @@ BSP_mve_ack_irq_mask(struct mveth_private *mp, uint32_t mask)
 {
 	return mveth_ack_irqs(mp, mask);
 }
+
+#ifdef BSDMII
+int
+BSP_mve_ack_link_chg(struct mveth_private *mp, int *pmedia)
+{
+int media = IFM_MAKEWORD(0,0,0,0);
+
+	if ( 0 == BSP_mve_media_ioctl(mp, SIOCGIFMEDIA, &media)) {
+		if ( IFM_LINK_OK & media ) {
+			mveth_update_serial_port(mp, media);
+			/* If TX stalled because there was no buffer then whack it */
+			mveth_start_tx(mp);
+		}
+		if ( pmedia )
+			*pmedia = media;
+		return 0;
+	}
+	return -1;
+}
+#endif
+
+#ifdef BSDBSD
+
+/* BSDNET SUPPORT/GLUE ROUTINES */
+
+static void
+mveth_set_filters(struct ifnet *ifp);
+
+STATIC void
+mveth_stop(struct mveth_softc *sc)
+{
+	BSP_mve_stop_hw(&sc->pvt);
+	sc->arpcom.ac_if.if_timer = 0;
+}
+
+/* allocate a mbuf for RX with a properly aligned data buffer
+ * RETURNS 0 if allocation fails
+ */
+static void *
+alloc_mbuf_rx(int *psz, uintptr_t *paddr)
+{
+struct mbuf		*m;
+unsigned long	l,o;
+
+	MGETHDR(m, M_DONTWAIT, MT_DATA);
+	if ( !m )
+		return 0;
+	MCLGET(m, M_DONTWAIT);
+	if ( ! (m->m_flags & M_EXT) ) {
+		m_freem(m);
+		return 0;
+	}
+
+	o = mtod(m, unsigned long);
+	l = MV643XX_ALIGN(o, RX_BUF_ALIGNMENT) - o;
+
+	/* align start of buffer */
+	m->m_data += l;
+
+	/* reduced length */
+	l = MCLBYTES - l;
+
+	m->m_len   = m->m_pkthdr.len = l;
+	*psz       = m->m_len;
+	*paddr     = mtod(m, uintptr_t); 
+
+	return (void*) m;
+}
+
+static void consume_rx_mbuf(void *buf, void *arg, int len)
+{
+struct ifnet *ifp = arg;
+struct mbuf    *m = buf;
+
+	if ( len <= 0 ) {
+		ifp->if_iqdrops++;
+		if ( len < 0 ) {
+			ifp->if_ierrors++;
+		}
+		if ( m )
+			m_freem(m);
+	} else {
+		struct ether_header *eh;
+
+			eh			= (struct ether_header *)(mtod(m, unsigned long) + ETH_RX_OFFSET);
+			m->m_len	= m->m_pkthdr.len = len - sizeof(struct ether_header) - ETH_RX_OFFSET - ETH_CRC_LEN;
+			m->m_data  += sizeof(struct ether_header) + ETH_RX_OFFSET;
+			m->m_pkthdr.rcvif = ifp;
+
+			ifp->if_ipackets++;
+			ifp->if_ibytes  += m->m_pkthdr.len;
+			
+			if (0) {
+				/* Low-level debugging */
+				int i;
+				for (i=0; i<13; i++) {
+					printf("%02X:",((char*)eh)[i]);
+				}
+				printf("%02X\n",((char*)eh)[i]);
+				for (i=0; i<m->m_len; i++) {
+					if ( !(i&15) )
+						printf("\n");
+					printf("0x%02x ",mtod(m,char*)[i]);
+				}
+				printf("\n");
+			}
+
+			if (0) {
+				/* Low-level debugging/testing without bsd stack */
+				m_freem(m);
+			} else {
+				/* send buffer upwards */
+				ether_input(ifp, eh, m);
+			}
+	}
+}
+
+static void release_tx_mbuf(void *buf, void *arg, int err)
+{
+struct ifnet *ifp = arg;
+struct mbuf  *mb  = buf;
+
+	if ( err ) {
+		ifp->if_oerrors++;
+	} else {
+		ifp->if_opackets++;
+	}
+	ifp->if_obytes += mb->m_pkthdr.len;
+	m_freem(mb);
+}
+#endif /*BSDBSD*/
 
 static void
 dump_update_stats(struct mveth_private *mp, FILE *f)
@@ -2204,3 +2986,534 @@ BSP_mve_dump_stats(struct mveth_private *mp, FILE *f)
 {
 	dump_update_stats(mp, f);
 }
+
+#ifdef BSDBSD
+
+/* BSDNET DRIVER CALLBACKS */
+
+static void
+mveth_init(void *arg)
+{
+struct mveth_softc	*sc  = arg;
+struct ifnet		*ifp = &sc->arpcom.ac_if;
+int                 media;
+
+	BSP_mve_init_hw(&sc->pvt, ifp->if_flags & IFF_PROMISC, sc->arpcom.ac_enaddr);
+
+	media = IFM_MAKEWORD(0, 0, 0, 0);
+	if ( 0 == BSP_mve_media_ioctl(&sc->pvt, SIOCGIFMEDIA, &media) ) {
+	    if ( (IFM_LINK_OK & media) ) {
+			ifp->if_flags &= ~IFF_OACTIVE;
+		} else {
+			ifp->if_flags |= IFF_OACTIVE;
+		}
+	}
+
+	/* if promiscuous then there is no need to change */
+	if ( ! (ifp->if_flags & IFF_PROMISC) )
+		mveth_set_filters(ifp);
+
+	ifp->if_flags |= IFF_RUNNING;
+	sc->arpcom.ac_if.if_timer = 0;
+}
+
+/* bsdnet driver entry to start transmission */
+static void
+mveth_start(struct ifnet *ifp)
+{
+struct mveth_softc	*sc = ifp->if_softc;
+struct mbuf			*m  = 0;
+
+	while ( ifp->if_snd.ifq_head ) {
+		IF_DEQUEUE( &ifp->if_snd, m );
+		if ( BSP_mve_send_buf(&sc->pvt, m, 0, 0) < 0 ) {
+			IF_PREPEND( &ifp->if_snd, m);
+			ifp->if_flags |= IFF_OACTIVE;
+			break;
+		}
+		/* need to do this really only once
+		 * but it's cheaper this way.
+		 */
+		ifp->if_timer = 2*IFNET_SLOWHZ;
+	}
+}
+
+/* bsdnet driver entry; */
+static void
+mveth_watchdog(struct ifnet *ifp)
+{
+struct mveth_softc	*sc = ifp->if_softc;
+
+	ifp->if_oerrors++;
+	printk(DRVNAME"%i: watchdog timeout; resetting\n", ifp->if_unit);
+
+	mveth_init(sc);
+	mveth_start(ifp);
+}
+
+static void
+mveth_set_filters(struct ifnet *ifp)
+{
+struct mveth_softc  *sc = ifp->if_softc;
+uint32_t              v;
+
+	v = MV_READ(MV643XX_ETH_PORT_CONFIG_R(sc->pvt.port_num));
+	if ( ifp->if_flags & IFF_PROMISC )
+		v |= MV643XX_ETH_UNICAST_PROMISC_MODE;
+	else
+		v &= ~MV643XX_ETH_UNICAST_PROMISC_MODE;
+	MV_WRITE(MV643XX_ETH_PORT_CONFIG_R(sc->pvt.port_num), v);
+
+	if ( ifp->if_flags & (IFF_PROMISC | IFF_ALLMULTI) ) {
+		BSP_mve_mcast_filter_accept_all(&sc->pvt);
+	} else {
+		struct ether_multi     *enm;
+		struct ether_multistep step;
+
+		BSP_mve_mcast_filter_clear( &sc->pvt );
+		
+		ETHER_FIRST_MULTI(step, (struct arpcom *)ifp, enm);
+
+		while ( enm ) {
+			if ( memcmp(enm->enm_addrlo, enm->enm_addrhi, ETHER_ADDR_LEN) )
+				assert( !"Should never get here; IFF_ALLMULTI should be set!" );
+
+			BSP_mve_mcast_filter_accept_add(&sc->pvt, enm->enm_addrlo);
+
+			ETHER_NEXT_MULTI(step, enm);
+		}
+	}
+}
+
+/* bsdnet driver ioctl entry */
+static int
+mveth_ioctl(struct ifnet *ifp, ioctl_command_t cmd, caddr_t data)
+{
+struct mveth_softc	*sc   = ifp->if_softc;
+struct ifreq		*ifr  = (struct ifreq *)data;
+int					error = 0;
+int					f;
+
+	switch ( cmd ) {
+  		case SIOCSIFFLAGS:
+			f = ifp->if_flags;
+			if ( f & IFF_UP ) {
+				if ( ! ( f & IFF_RUNNING ) ) {
+					mveth_init(sc);
+				} else {
+					if ( (f & IFF_PROMISC) != (sc->bsd.oif_flags & IFF_PROMISC) ) {
+						/* Note: in all other scenarios the 'promisc' flag
+						 * in the low-level driver [which affects the way
+						 * the multicast filter is setup: accept none vs.
+						 * accept all in promisc mode] is eventually
+						 * set when the IF is brought up...
+						 */
+						sc->pvt.promisc = (f & IFF_PROMISC);
+
+						mveth_set_filters(ifp);
+					}
+					/* FIXME: other flag changes are ignored/unimplemented */
+				}
+			} else {
+				if ( f & IFF_RUNNING ) {
+					mveth_stop(sc);
+					ifp->if_flags  &= ~(IFF_RUNNING | IFF_OACTIVE);
+				}
+			}
+			sc->bsd.oif_flags = ifp->if_flags;
+		break;
+
+  		case SIOCGIFMEDIA:
+  		case SIOCSIFMEDIA:
+			error = BSP_mve_media_ioctl(&sc->pvt, cmd, &ifr->ifr_media);
+		break;
+ 
+		case SIOCADDMULTI:
+		case SIOCDELMULTI:
+			error = (cmd == SIOCADDMULTI)
+		    		? ether_addmulti(ifr, &sc->arpcom)
+				    : ether_delmulti(ifr, &sc->arpcom);
+
+			if (error == ENETRESET) {
+				if (ifp->if_flags & IFF_RUNNING) {
+					mveth_set_filters(ifp);
+				}
+				error = 0;
+			}
+		break;
+
+
+		break;
+
+ 		case SIO_RTEMS_SHOW_STATS:
+			dump_update_stats(&sc->pvt, stdout);
+		break;
+
+		default:
+			error = ether_ioctl(ifp, cmd, data);
+		break;
+	}
+
+	return error;
+}
+
+/* DRIVER TASK */
+
+/* Daemon task does all the 'interrupt' work */
+static void mveth_daemon(void *arg)
+{
+struct mveth_softc	*sc;
+struct ifnet		*ifp;
+rtems_event_set		evs;
+	for (;;) {
+		rtems_bsdnet_event_receive( 7, RTEMS_WAIT | RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT, &evs );
+		evs &= 7;
+		for ( sc = theMvEths; evs; evs>>=1, sc++ ) {
+			if ( (evs & 1) ) {
+				register uint32_t x;
+
+				ifp = &sc->arpcom.ac_if;
+
+				if ( !(ifp->if_flags & IFF_UP) ) {
+					mveth_stop(sc);
+					ifp->if_flags &= ~(IFF_UP|IFF_RUNNING);
+					continue;
+				}
+
+				if ( !(ifp->if_flags & IFF_RUNNING) ) {
+					/* event could have been pending at the time hw was stopped;
+					 * just ignore...
+					 */
+					continue;
+				}
+
+				x = mveth_ack_irqs(&sc->pvt, -1);
+
+				if ( MV643XX_ETH_EXT_IRQ_LINK_CHG & x ) {
+					/* phy status changed */
+					int media;
+
+					if ( 0 == BSP_mve_ack_link_chg(&sc->pvt, &media) ) {
+						if ( IFM_LINK_OK & media ) {
+							ifp->if_flags &= ~IFF_OACTIVE;
+							mveth_start(ifp);
+						} else {
+							/* stop sending */
+							ifp->if_flags |= IFF_OACTIVE;
+						}
+					}
+				}
+				/* free tx chain */
+				if ( (MV643XX_ETH_EXT_IRQ_TX_DONE & x) && BSP_mve_swipe_tx(&sc->pvt) ) {
+					ifp->if_flags &= ~IFF_OACTIVE;
+					if ( TX_AVAILABLE_RING_SIZE(&sc->pvt) == sc->pvt.avail )
+						ifp->if_timer = 0;
+					mveth_start(ifp);
+				}
+				if ( (MV643XX_ETH_IRQ_RX_DONE & x) )
+					BSP_mve_swipe_rx(&sc->pvt);
+
+				mveth_enable_irqs(&sc->pvt, -1);
+			}
+		}
+	}
+}
+
+#ifdef  MVETH_DETACH_HACK
+static int mveth_detach(struct mveth_softc *sc);
+#endif
+
+
+/* PUBLIC RTEMS BSDNET ATTACH FUNCTION */
+int
+rtems_mve_attach(struct rtems_bsdnet_ifconfig *ifcfg, int attaching)
+{
+char				*unitName;
+int					unit,i,cfgUnits;
+struct	mveth_softc *sc;
+struct	ifnet		*ifp;
+
+	unit = rtems_bsdnet_parse_driver_name(ifcfg, &unitName);
+	if ( unit <= 0 || unit > MV643XXETH_NUM_DRIVER_SLOTS ) {
+		printk(DRVNAME": Bad unit number %i; must be 1..%i\n", unit, MV643XXETH_NUM_DRIVER_SLOTS);
+		return 1;
+	}
+
+	sc  = &theMvEths[unit-1];
+	ifp = &sc->arpcom.ac_if;
+	sc->pvt.port_num = unit-1;
+	sc->pvt.phy      = (MV_READ(MV643XX_ETH_PHY_ADDR_R) >> (5*sc->pvt.port_num)) & 0x1f;
+
+	if ( attaching ) {
+		if ( ifp->if_init ) {
+			printk(DRVNAME": instance %i already attached.\n", unit);
+			return -1;
+		}
+
+		for ( i=cfgUnits = 0; i<MV643XXETH_NUM_DRIVER_SLOTS; i++ ) {
+			if ( theMvEths[i].arpcom.ac_if.if_init )
+				cfgUnits++;
+		}
+		cfgUnits++; /* this new one */
+
+		/* lazy init of TID should still be thread-safe because we are protected
+		 * by the global networking semaphore..
+		 */
+		if ( !mveth_tid ) {
+			/* newproc uses the 1st 4 chars of name string to build an rtems name */
+			mveth_tid = rtems_bsdnet_newproc("MVEd", 4096, mveth_daemon, 0);
+		}
+
+		if ( !BSP_mve_setup( unit,
+						     mveth_tid,
+						     release_tx_mbuf, ifp,
+						     alloc_mbuf_rx,
+						     consume_rx_mbuf, ifp,
+						     ifcfg->rbuf_count,
+						     ifcfg->xbuf_count,
+			                 BSP_MVE_IRQ_TX | BSP_MVE_IRQ_RX | BSP_MVE_IRQ_LINK) ) {
+			return -1;
+		}
+
+		if ( nmbclusters < sc->pvt.rbuf_count * cfgUnits + 60 /* arbitrary */ )  {
+			printk(DRVNAME"%i: (mv643xx ethernet) Your application has not enough mbuf clusters\n", unit);
+			printk(     "                         configured for this driver.\n");
+			return -1;
+		}
+
+		if ( ifcfg->hardware_address ) {
+			memcpy(sc->arpcom.ac_enaddr, ifcfg->hardware_address, ETHER_ADDR_LEN);
+		} else {
+			/* read back from hardware assuming that MotLoad already had set it up */
+			BSP_mve_read_eaddr(&sc->pvt, sc->arpcom.ac_enaddr);
+		}
+
+		ifp->if_softc			= sc;
+		ifp->if_unit			= unit;
+		ifp->if_name			= unitName;
+
+		ifp->if_mtu				= ifcfg->mtu ? ifcfg->mtu : ETHERMTU;
+
+		ifp->if_init			= mveth_init;
+		ifp->if_ioctl			= mveth_ioctl;
+		ifp->if_start			= mveth_start;
+		ifp->if_output			= ether_output;
+		/*
+		 * While nonzero, the 'if->if_timer' is decremented
+		 * (by the networking code) at a rate of IFNET_SLOWHZ (1hz) and 'if_watchdog'
+		 * is called when it expires. 
+		 * If either of those fields is 0 the feature is disabled.
+		 */
+		ifp->if_watchdog		= mveth_watchdog;
+		ifp->if_timer			= 0;
+
+		sc->bsd.oif_flags		= /* ... */
+		ifp->if_flags			= IFF_BROADCAST | IFF_MULTICAST | IFF_SIMPLEX;
+
+		/*
+		 * if unset, this set to 10Mbps by ether_ifattach; seems to be unused by bsdnet stack;
+		 * could be updated along with phy speed, though...
+		ifp->if_baudrate		= 10000000;
+		*/
+
+		/* NOTE: ether_output drops packets if ifq_len >= ifq_maxlen
+		 *       but this is the packet count, not the fragment count!
+		ifp->if_snd.ifq_maxlen	= sc->pvt.xbuf_count;
+		*/
+		ifp->if_snd.ifq_maxlen	= ifqmaxlen;
+
+#ifdef  MVETH_DETACH_HACK
+		if ( !ifp->if_addrlist ) /* do only the first time [reattach hack] */
+#endif
+		{
+			if_attach(ifp);
+			ether_ifattach(ifp);
+		}
+
+	} else {
+#ifdef  MVETH_DETACH_HACK
+		if ( !ifp->if_init ) {
+			printk(DRVNAME": instance %i not attached.\n", unit);
+			return -1;
+		}
+		return mveth_detach(sc);
+#else
+		printk(DRVNAME": interface detaching not implemented\n");
+		return -1;
+#endif
+	}
+
+	return 0;
+}
+
+/* EARLY PHY ACCESS */
+static int
+mveth_early_init(int idx)
+{
+	if ( idx < 0 || idx >= MV643XXETH_NUM_DRIVER_SLOTS )
+		return -1;
+
+	/* determine the phy */
+	theMvEths[idx].pvt.phy = (MV_READ(MV643XX_ETH_PHY_ADDR_R) >> (5*idx)) & 0x1f;
+	return 0;
+}
+
+static int
+mveth_early_read_phy(int idx, unsigned reg)
+{
+int rval;
+
+	if ( idx < 0 || idx >= MV643XXETH_NUM_DRIVER_SLOTS )
+		return -1;
+
+	rval = mveth_mii_read(&theMvEths[idx].pvt, reg);
+	return rval < 0 ? rval : rval & 0xffff;
+}
+
+static int
+mveth_early_write_phy(int idx, unsigned reg, unsigned val)
+{
+	if ( idx < 0 || idx >= MV643XXETH_NUM_DRIVER_SLOTS )
+		return -1;
+
+	mveth_mii_write(&theMvEths[idx].pvt, reg, val);
+	return 0;
+}
+
+rtems_bsdnet_early_link_check_ops
+rtems_mve_early_link_check_ops = {
+	init:		mveth_early_init,
+	read_phy:	mveth_early_read_phy,
+	write_phy:	mveth_early_write_phy,
+	name:		DRVNAME,
+	num_slots:	MAX_NUM_SLOTS
+};
+
+/* DEBUGGING */
+
+#endif /*BSDBSD*/
+
+#ifdef MVETH_DEBUG
+/* Display/dump descriptor rings */
+
+int
+mveth_dring(struct mveth_softc *sc)
+{
+int i;
+if (1) {
+MvEthRxDesc pr;
+printf("RX:\n");
+
+	for (i=0, pr=sc->pvt.rx_ring; i<sc->pvt.rbuf_count; i++, pr++) {
+#ifndef ENABLE_HW_SNOOPING
+		/* can't just invalidate the descriptor - if it contains
+		 * data that hasn't been flushed yet, we create an inconsistency...
+		 */
+		rtems_bsdnet_semaphore_obtain();
+		INVAL_DESC(pr);
+#endif
+		printf("cnt: 0x%04x, size: 0x%04x, stat: 0x%08x, next: 0x%08x, buf: 0x%08x\n",
+			pr->byte_cnt, pr->buf_size, pr->cmd_sts, (uint32_t)pr->next_desc_ptr, pr->buf_ptr);
+
+#ifndef ENABLE_HW_SNOOPING
+		rtems_bsdnet_semaphore_release();
+#endif
+	}
+}
+if (1) {
+MvEthTxDesc pt;
+printf("TX:\n");
+	for (i=0, pt=sc->pvt.tx_ring; i<sc->pvt.xbuf_count; i++, pt++) {
+#ifndef ENABLE_HW_SNOOPING
+		rtems_bsdnet_semaphore_obtain();
+		INVAL_DESC(pt);
+#endif
+		printf("cnt: 0x%04x, stat: 0x%08x, next: 0x%08x, buf: 0x%08x, mb: 0x%08x\n",
+			pt->byte_cnt, pt->cmd_sts, (uint32_t)pt->next_desc_ptr, pt->buf_ptr,
+			(uint32_t)pt->mb);
+
+#ifndef ENABLE_HW_SNOOPING
+		rtems_bsdnet_semaphore_release();
+#endif
+	}
+}
+	return 0;
+}
+
+#endif
+
+/* DETACH HACK DETAILS */
+
+#ifdef  MVETH_DETACH_HACK
+int
+_cexpModuleFinalize(void *mh)
+{
+int i;
+	for ( i=0; i<MV643XXETH_NUM_DRIVER_SLOTS; i++ ) {
+		if ( theMvEths[i].arpcom.ac_if.if_init ) {
+			printf("Interface %i still attached; refuse to unload\n", i+1);
+			return -1;
+		}
+	}
+	/* delete task; since there are no attached interfaces, it should block
+	 * for events and hence not hold the semaphore or other resources...
+	 */
+	rtems_task_delete(mveth_tid);
+	return 0;
+}
+
+/* ugly hack to allow unloading/reloading the driver core.
+ * needed because rtems' bsdnet release doesn't implement
+ * if_detach(). Therefore, we bring the interface down but
+ * keep the device record alive...
+ */
+static void
+ether_ifdetach_pvt(struct ifnet *ifp)
+{
+        ifp->if_flags = 0;
+        ifp->if_ioctl = 0;
+        ifp->if_start = 0;
+        ifp->if_watchdog = 0;
+        ifp->if_init  = 0;
+}
+
+static int
+mveth_detach(struct mveth_softc *sc)
+{
+struct ifnet	*ifp = &sc->arpcom.ac_if;
+	if ( ifp->if_init ) {
+		if ( ifp->if_flags & (IFF_UP | IFF_RUNNING) ) {
+			printf(DRVNAME"%i: refuse to detach; interface still up\n",sc->pvt.port_num+1);
+			return -1;
+		}
+		mveth_stop(sc);
+/* not implemented in BSDnet/RTEMS (yet) but declared in header */
+#define ether_ifdetach ether_ifdetach_pvt
+		ether_ifdetach(ifp);
+	}
+	free( (void*)sc->pvt.ring_area, M_DEVBUF );
+	sc->pvt.ring_area = 0;
+	sc->pvt.tx_ring   = 0;
+	sc->pvt.rx_ring   = 0;
+	sc->pvt.d_tx_t    = sc->pvt.d_tx_h   = 0;
+	sc->pvt.d_rx_t    = 0;
+	sc->pvt.avail     = 0;
+	/* may fail if ISR was not installed yet */
+	BSP_remove_rtems_irq_handler( &irq_data[sc->pvt.port_num] );
+	return 0;
+}
+
+#ifdef MVETH_DEBUG
+struct rtems_bsdnet_ifconfig mveth_dbg_config = {
+	name:				DRVNAME"1",
+	attach:				rtems_mve_attach,
+	ip_address:			"192.168.2.10",		/* not used by rtems_bsdnet_attach */
+	ip_netmask:			"255.255.255.0",	/* not used by rtems_bsdnet_attach */
+	hardware_address:	0, /* (void *) */
+	ignore_broadcast:	0,					/* TODO driver should honour this  */
+	mtu:				0,
+	rbuf_count:			0,					/* TODO driver should honour this  */
+	xbuf_count:			0,					/* TODO driver should honour this  */
+};
+#endif
+#endif
