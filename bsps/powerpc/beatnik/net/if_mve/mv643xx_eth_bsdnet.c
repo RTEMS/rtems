@@ -135,6 +135,7 @@
 /* Enable Hardware Snooping; if this is disabled (undefined),
  * cache coherency is maintained by software.
  */
+#undef  ENABLE_HW_SNOOPING
 
 /* Compile-time debugging features */
 
@@ -543,6 +544,8 @@ typedef uint32_t Dma_addr_t;
 /* stuff needed for bsdnet support */
 struct mveth_bsdsupp {
 	int				oif_flags;					/* old / cached if_flags */
+	int             tx_ring_size;
+	int             rx_ring_size;
 };
 
 struct mveth_softc {
@@ -664,6 +667,9 @@ struct mveth_private *mp;
 			rtems_panic("unable to proceed\n");
 		}
 	}
+
+	theMvEths[unit-1].bsd.tx_ring_size = tx_ring_size;
+	theMvEths[unit-1].bsd.rx_ring_size = rx_ring_size;
 
 	/* mark as used */
 	ifp->if_init = (void*)(-1);
@@ -1172,6 +1178,7 @@ static void mveth_daemon(void *arg)
 struct mveth_softc	*sc;
 struct ifnet		*ifp;
 rtems_event_set		evs;
+int                 avail;
 	for (;;) {
 		rtems_bsdnet_event_receive( 7, RTEMS_WAIT | RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT, &evs );
 		evs &= 7;
@@ -1211,13 +1218,10 @@ rtems_event_set		evs;
 					}
 				}
 				/* free tx chain */
-				if ( (MV643XX_ETH_EXT_IRQ_TX_DONE & x) && BSP_mve_swipe_tx(sc->pvt) ) {
+				if ( (MV643XX_ETH_EXT_IRQ_TX_DONE & x) && (avail = BSP_mve_swipe_tx(sc->pvt)) > 0 ) {
 					ifp->if_flags &= ~IFF_OACTIVE;
-#warning FIXME
-#ifdef BSDBSD
-					if ( TX_AVAILABLE_RING_SIZE(sc->pvt) == sc->pvt->avail )
+					if ( sc->bsd.tx_ring_size == avail )
 						ifp->if_timer = 0;
-#endif
 					mveth_start(ifp);
 				}
 				if ( (MV643XX_ETH_IRQ_RX_DONE & x) )

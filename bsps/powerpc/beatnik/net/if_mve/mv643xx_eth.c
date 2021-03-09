@@ -108,10 +108,10 @@
 /* Compile-time debugging features */
 
 /* Enable paranoia assertions and checks; reduce # of descriptors to minimum for stressing   */
-#define MVETH_TESTING
+#undef  MVETH_TESTING
 
 /* Enable debugging messages and some support routines  (dump rings etc.)                    */      
-#define MVETH_DEBUG
+#undef  MVETH_DEBUG
 
 /* Ring sizes */
 
@@ -1726,7 +1726,7 @@ register MvEthTxDesc	d;
 	mp->d_tx_t = d;
 	mp->avail += rval;
 
-	return rval;
+	return mp->avail;
 }
 
 int
