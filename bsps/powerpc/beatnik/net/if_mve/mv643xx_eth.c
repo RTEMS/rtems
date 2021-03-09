@@ -94,6 +94,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <inttypes.h>
+#include <stdlib.h>
 
 #include <bsp/mv643xx_eth.h>
 
@@ -748,17 +749,6 @@ struct mveth_private {
 };
 
 /* GLOBAL VARIABLES */
-#ifdef MVETH_DEBUG_TX_DUMP
-int mveth_tx_dump = 0;
-#endif
-
-/* register access protection mutex */
-STATIC rtems_id mveth_mtx = 0;
-#define REGLOCK()	do { \
-		if ( RTEMS_SUCCESSFUL != rtems_semaphore_obtain(mveth_mtx, RTEMS_WAIT, RTEMS_NO_TIMEOUT) ) \
-			rtems_panic(DRVNAME": unable to lock register protection mutex"); \
-		} while (0)
-#define REGUNLOCK()	rtems_semaphore_release(mveth_mtx)
 
 /* Format strings for statistics messages */
 static const char *mibfmt[] = {
@@ -1059,6 +1049,14 @@ uint32_t	x;
 	MV_WRITE(MV643XX_ETH_MAC_ADDR_LO(mp->port_num), x);
 }
 
+static inline int
+port2phy(int port)
+{
+	port &= 0x1f;
+	/* during early init we may not know the phy and we are given a port number instead! */
+	return  ( (MV_READ(MV643XX_ETH_PHY_ADDR_R) >> (5*port)) & 0x1f );
+}
+
 /* PHY/MII Interface
  *
  * Read/write a PHY register;
@@ -1068,8 +1066,8 @@ uint32_t	x;
  *       If non-bsd drivers are running on a subset of IFs proper
  *       locking of all shared registers must be implemented!
  */
-unsigned
-BSP_mve_mii_read(struct mveth_private *mp, unsigned addr)
+static unsigned
+do_mii_read(int phy, unsigned addr)
 {
 unsigned v;
 unsigned wc = 0;
@@ -1082,7 +1080,7 @@ unsigned wc = 0;
 		wc++;
 	} while ( MV643XX_ETH_SMI_BUSY & v );
 
-	MV_WRITE(MV643XX_ETH_SMI_R, (addr <<21 ) | (mp->phy<<16) | MV643XX_ETH_SMI_OP_RD );
+	MV_WRITE(MV643XX_ETH_SMI_R, (addr <<21 ) | (phy<<16) | MV643XX_ETH_SMI_OP_RD );
 
 	do {
 		v = MV_READ(MV643XX_ETH_SMI_R);
@@ -1095,7 +1093,19 @@ unsigned wc = 0;
 }
 
 unsigned
-BSP_mve_mii_write(struct mveth_private *mp, unsigned addr, unsigned v)
+BSP_mve_mii_read(struct mveth_private *mp, unsigned addr)
+{
+	return do_mii_read(mp->phy, addr);
+}
+
+unsigned
+BSP_mve_mii_read_early(int port, unsigned addr)
+{
+	return do_mii_read(port2phy(port), addr);
+}
+
+static unsigned
+do_mii_write(int phy, unsigned addr, unsigned v)
 {
 unsigned wc = 0;
 
@@ -1110,10 +1120,23 @@ unsigned wc = 0;
 	while ( MV643XX_ETH_SMI_BUSY & MV_READ(MV643XX_ETH_SMI_R) )
 		wc++ /* wait */;
 
-	MV_WRITE(MV643XX_ETH_SMI_R, (addr <<21 ) | (mp->phy<<16) | MV643XX_ETH_SMI_OP_WR | v );
+	MV_WRITE(MV643XX_ETH_SMI_R, (addr <<21 ) | (phy<<16) | MV643XX_ETH_SMI_OP_WR | v );
 
 	return wc;
 }
+
+unsigned
+BSP_mve_mii_write(struct mveth_private *mp, unsigned addr, unsigned v)
+{
+	return do_mii_write( mp->phy, addr, v );
+}
+
+unsigned
+BSP_mve_mii_write_early(int port, unsigned addr, unsigned v)
+{
+	return do_mii_write(port2phy(port), addr, v);
+}
+
 
 /* MID-LAYER SUPPORT ROUTINES */
 
@@ -1149,6 +1172,19 @@ uint32_t active_q;
 	}
 
 	return active_q;
+}
+
+void
+BSP_mve_promisc_set(struct mveth_private *mp, int promisc)
+{
+uint32_t              v;
+
+	v = MV_READ(MV643XX_ETH_PORT_CONFIG_R(mp->port_num));
+	if ( (mp->promisc = promisc) )
+		v |= MV643XX_ETH_UNICAST_PROMISC_MODE;
+	else
+		v &= ~MV643XX_ETH_UNICAST_PROMISC_MODE;
+	MV_WRITE(MV643XX_ETH_PORT_CONFIG_R(mp->port_num), v);
 }
 
 /* update serial port settings from current link status */
@@ -1367,7 +1403,7 @@ register uint8_t *d = to, *s = fro;
 #endif
 
 static int
-mveth_assign_desc_raw(MvEthTxDesc d, void *buf, int len, unsigned long extra)
+mveth_assign_desc_raw(MvEthTxDesc d, void *buf, int len, void *uptr, unsigned long extra)
 {
 int rval = (d->byte_cnt = len);
 
@@ -1389,6 +1425,7 @@ int rval = (d->byte_cnt = len);
 	{
 		d->buf_ptr  = CPUADDR2ENET( (unsigned long)buf );
 	}
+	d->u_buf    = uptr;
 	d->l4i_chk  = 0;
 	return rval;
 }
@@ -1477,9 +1514,8 @@ MvEthTxDesc d;
 
 /* PUBLIC LOW-LEVEL DRIVER ACCESS */
 
-static struct mveth_private *
-mve_setup_internal(
-	struct mveth_private *mp,
+struct mveth_private *
+BSP_mve_create(
 	int		 unit,
 	rtems_id tid,
 	void     (*isr)(void*isr_arg),
@@ -1493,8 +1529,8 @@ mve_setup_internal(
 	int		tx_ring_size,
 	int		irq_mask
 )
-
 {
+struct mveth_private *mp;
 int                  InstallISRSuccessful;
 
 	if ( unit <= 0 || unit > MV643XXETH_NUM_DRIVER_SLOTS ) {
@@ -1510,25 +1546,20 @@ int                  InstallISRSuccessful;
 		return 0;
 	}
 
-	/* lazy init of mutex (non thread-safe! - we assume 1st initialization is single-threaded) */
-	if ( ! mveth_mtx ) {
-		rtems_status_code sc;
-		sc = rtems_semaphore_create(
-				rtems_build_name('m','v','e','X'),
-				1,
-				RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY | RTEMS_DEFAULT_ATTRIBUTES,
-				0,
-				&mveth_mtx);
-		if ( RTEMS_SUCCESSFUL != sc ) {
-			rtems_error(sc,DRVNAME": creating mutex\n");
-			rtems_panic("unable to proceed\n");
-		}
+	if ( tx_ring_size < 1 ) {
+		printk(DRVNAME": tx ring size must not be zero (networking configuration issue?)\n");
+		return 0;
 	}
 
-	memset(mp, 0, sizeof(*mp));
+	if ( rx_ring_size < 1 ) {
+		printk(DRVNAME": rx ring size must not be zero (networking configuration issue?)\n");
+		return 0;
+	}
+
+	mp = calloc( 1, sizeof *mp );
 
 	mp->port_num          = unit-1;
-	mp->phy               = (MV_READ(MV643XX_ETH_PHY_ADDR_R) >> (5*mp->port_num)) & 0x1f;
+	mp->phy               = port2phy(mp->port_num);
 
 	mp->tid               = tid;
 	mp->isr               = isr;
@@ -1540,8 +1571,8 @@ int                  InstallISRSuccessful;
 	mp->consume_rxbuf     = consume_rxbuf;
 	mp->consume_rxbuf_arg = consume_rxbuf_arg;
 
-	mp->rbuf_count = rx_ring_size ? rx_ring_size : MV643XX_RX_RING_SIZE;
-	mp->xbuf_count = tx_ring_size ? tx_ring_size : MV643XX_TX_RING_SIZE;
+	mp->rbuf_count = rx_ring_size;
+	mp->xbuf_count = tx_ring_size;
 
 	if ( mp->xbuf_count > 0 )
 		mp->xbuf_count += TX_NUM_TAG_SLOTS;
@@ -1551,16 +1582,10 @@ int                  InstallISRSuccessful;
 	if ( mp->xbuf_count < 0 )
 		mp->xbuf_count = 0;
 
-#ifdef BSDBSD
 	/* allocate ring area; add 1 entry -- room for alignment */
 	assert( !mp->ring_area );
-	mp->ring_area = malloc(
-							sizeof(*mp->ring_area) *
-								(mp->rbuf_count + mp->xbuf_count + 1),
-							M_DEVBUF,
-							M_WAIT );
+	mp->ring_area = malloc( sizeof(*mp->ring_area) * (mp->rbuf_count + mp->xbuf_count + 1) );
 	assert( mp->ring_area );
-#endif
 
 	BSP_mve_stop_hw(mp);
 
@@ -1587,37 +1612,56 @@ int                  InstallISRSuccessful;
 	return mp;
 }
 
-struct mveth_private *
-BSP_mve_setup_1(
-	struct mveth_private *mp,
-	int		 unit,
-	void     (*isr)(void *isr_arg),
-	void     *isr_arg,
-	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
-	void *cleanup_txbuf_arg,
-	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
-	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
-	void *consume_rxbuf_arg,
-	int		rx_ring_size,
-	int		tx_ring_size,
-	int		irq_mask
-)
+void
+BSP_mve_update_serial_port(struct mveth_private *mp, int media)
 {
-	if ( irq_mask && 0 == isr ) {
-		printk(DRVNAME": must supply an ISR if irq_msk not zero\n");
-		return 0;	
+int port = mp->port_num;
+uint32_t old, new;
+
+	new = old = MV_READ(MV643XX_ETH_SERIAL_CONTROL_R(port));
+
+	/* mask speed and duplex settings */
+	new &= ~(  MV643XX_ETH_SET_GMII_SPEED_1000
+			 | MV643XX_ETH_SET_MII_SPEED_100
+			 | MV643XX_ETH_SET_FULL_DUPLEX );
+
+	if ( (MV643XX_MEDIA_FD & media) )
+		new |= MV643XX_ETH_SET_FULL_DUPLEX;
+
+	switch ( (media & MV643XX_MEDIA_SPEED_MSK) ) {
+		default: /* treat as 10 */
+			break;
+		case MV643XX_MEDIA_100:
+			new |= MV643XX_ETH_SET_MII_SPEED_100;
+			break;
+		case MV643XX_MEDIA_1000:
+			new |= MV643XX_ETH_SET_GMII_SPEED_1000;
+			break;
 	}
 
-	return mve_setup_internal(
-				mp,
-				unit,
-				0,
-				isr, isr_arg,
-				cleanup_txbuf, cleanup_txbuf_arg,
-				alloc_rxbuf,
-				consume_rxbuf, consume_rxbuf_arg,
-				rx_ring_size, tx_ring_size,
-				irq_mask);
+
+	if ( new != old ) {
+		if ( ! (MV643XX_ETH_SERIAL_PORT_ENBL & new) ) {
+			/* just write */
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), new);
+		} else {
+			uint32_t were_running;
+
+			were_running = mveth_stop_tx(port);
+
+			old &= ~MV643XX_ETH_SERIAL_PORT_ENBL;
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), old);
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), new);
+			/* linux driver writes twice... */
+			MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(port), new);
+
+			if ( were_running ) {
+				MV_WRITE(MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(mp->port_num), MV643XX_ETH_TX_START(0));
+			}
+		}
+	}
+	/* If TX stalled because there was no buffer then whack it */
+	mveth_start_tx(mp);
 }
 
 rtems_id
@@ -1629,24 +1673,14 @@ BSP_mve_get_tid(struct mveth_private *mp)
 int
 BSP_mve_detach(struct mveth_private *mp)
 {
-#ifdef BSDBSD
-int unit = mp->port_num;
-#endif
 	BSP_mve_stop_hw(mp);
 	if ( mp->irq_mask || mp->xirq_mask ) {
 		if ( !BSP_remove_rtems_irq_handler( &irq_data[mp->port_num] ) )
 			return -1;
 	}
-#ifdef BSDBSD
-#warning FIXME
-	free( (void*)mp->ring_area, M_DEVBUF );
-#endif
+	free( (void*)mp->ring_area );
 	memset(mp, 0, sizeof(*mp));
 	__asm__ __volatile__("":::"memory");
-	/* mark as unused */
-#ifdef BSDBSD
-	theMvEths[unit].arpcom.ac_if.if_init = 0;
-#endif
 	return 0;
 }
 
@@ -1690,6 +1724,133 @@ register MvEthTxDesc	d;
 	mp->avail += rval;
 
 	return rval;
+}
+
+int
+BSP_mve_send_buf_chain(struct mveth_private *mp, MveEthBufIterNext next, MveEthBufIter *it)
+{
+int						rval;
+register MvEthTxDesc	l,d,h;
+int						nmbs;
+MveEthBufIter           head = *it;
+
+	rval = 0;
+
+	/* if no descriptor is available; try to wipe the queue */
+	if ( (mp->avail < 1) && MVETH_CLEAN_ON_SEND(mp)<=0 ) {
+		/* Maybe TX is stalled and needs to be restarted */
+		mveth_start_tx(mp);
+		return -1;
+	}
+
+	h = mp->d_tx_h;
+
+#ifdef MVETH_TESTING 
+	assert( !h->buf_ptr );
+	assert( !h->mb      );
+#endif
+
+	/* Don't use the first descriptor yet because BSP_mve_swipe_tx()
+	 * needs mp->d_tx_h->buf_ptr == NULL as a marker. Hence, we
+	 * start with the second mbuf and fill the first descriptor
+	 * last.
+	 */
+
+	l = h;
+	d = NEXT_TXD(h);
+
+	mp->avail--;
+
+	nmbs = 1;
+	while ( (it = next(it)) ) {
+		if ( 0 == it->len )
+			continue;	/* skip empty mbufs */
+
+		nmbs++;
+
+		if ( mp->avail < 1 && MVETH_CLEAN_ON_SEND(mp)<=0 ) {
+			/* Maybe TX was stalled - try to restart */
+			mveth_start_tx(mp);
+
+			/* not enough descriptors; cleanup...
+			 * the first slot was never used, so we start
+			 * at mp->d_tx_h->next;
+			 */
+			for ( l = NEXT_TXD(h); l!=d; l=NEXT_TXD(l) ) {
+#ifdef MVETH_TESTING
+				assert( l->mb == 0 );
+#endif
+				l->buf_ptr  = 0;
+				l->cmd_sts  = 0;
+				mp->avail++;
+			}
+			mp->avail++;
+			if ( nmbs > TX_AVAILABLE_RING_SIZE(mp) ) {
+				/* this chain will never fit into the ring */
+				if ( nmbs > mp->stats.maxchain )
+					mp->stats.maxchain = nmbs;
+				mp->stats.repack++;
+				/* caller may reorganize chain */
+				return -2;
+			}
+			return -1;
+		}
+
+		mp->avail--;
+
+#ifdef MVETH_TESTING
+		assert( d != h      );
+		assert( !d->buf_ptr );
+#endif
+
+		/* fill this slot */
+		rval += mveth_assign_desc_raw(d, it->data, it->len, it->uptr, TDESC_DMA_OWNED);
+
+		FLUSH_BUF( (uint32_t)it->data, it->len );
+
+		l = d;
+		d = NEXT_TXD(d);
+
+		FLUSH_DESC(l);
+	}
+
+	/* fill first slot - don't release to DMA yet */
+	rval += mveth_assign_desc_raw(h, head.data, head.len, head.uptr, TDESC_FRST);
+
+
+	FLUSH_BUF((uint32_t)head.data, head.len);
+
+
+	/* tag last slot; this covers the case where 1st==last */
+	l->cmd_sts      |= TDESC_LAST | TDESC_INT_ENA;
+
+	FLUSH_DESC(l);
+
+	/* Tag end; make sure chip doesn't try to read ahead of here! */
+	l->next->cmd_sts = 0;
+	FLUSH_DESC(l->next);
+
+	membarrier();
+
+	/* turn over the whole chain by flipping ownership of the first desc */
+	h->cmd_sts |= TDESC_DMA_OWNED;
+
+	FLUSH_DESC(h);
+
+	membarrier();
+
+	/* notify the device */
+	MV_WRITE(MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(mp->port_num), MV643XX_ETH_TX_START(0));
+
+	/* Update softc */
+	mp->stats.packet++;
+	if ( nmbs > mp->stats.maxchain )
+		mp->stats.maxchain = nmbs;
+
+	/* remember new head */
+	mp->d_tx_h = d;
+
+	return rval; /* #bytes sent */
 }
 
 int
@@ -1754,7 +1915,7 @@ int                     frst_len;
 		assert( d != h      );
 		assert( !d->buf_ptr );
 #endif
-		rval += mveth_assign_desc_raw(d, data_p, d_len, TDESC_DMA_OWNED);
+		rval += mveth_assign_desc_raw(d, data_p, d_len, 0, TDESC_DMA_OWNED);
 		FLUSH_BUF( (uint32_t)data_p, d_len );
 		d->u_buf = data_p;
 
@@ -1765,7 +1926,7 @@ int                     frst_len;
 	}
 
 	/* fill first slot with raw buffer - don't release to DMA yet */
-	rval       += mveth_assign_desc_raw(h, frst_buf, frst_len, TDESC_FRST);
+	rval       += mveth_assign_desc_raw(h, frst_buf, frst_len, 0, TDESC_FRST);
 
 	FLUSH_BUF( (uint32_t)frst_buf, frst_len);
 
@@ -2158,8 +2319,8 @@ BSP_mve_ack_irq_mask(struct mveth_private *mp, uint32_t mask)
 	return mveth_ack_irqs(mp, mask);
 }
 
-static void
-dump_update_stats(struct mveth_private *mp, FILE *f)
+void
+BSP_mve_dump_stats(struct mveth_private *mp, FILE *f)
 {
 int      p = mp->port_num;
 int      idx;
@@ -2197,10 +2358,4 @@ uint32_t v;
 		}
 	}
 	fprintf(f, "\n");
-}
-
-void
-BSP_mve_dump_stats(struct mveth_private *mp, FILE *f)
-{
-	dump_update_stats(mp, f);
 }
