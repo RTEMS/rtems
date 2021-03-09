@@ -1,19 +1,19 @@
 #ifndef RTEMS_BSDNET_IF_MVE_PUBLIC_SYMBOLS_H
 #define RTEMS_BSDNET_IF_MVE_PUBLIC_SYMBOLS_H
 
-/* 
+/*
  * Authorship
  * ----------
  * This software ('beatnik' RTEMS BSP for MVME6100 and MVME5500) was
  *     created by Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The 'beatnik' BSP was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -22,18 +22,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -42,13 +42,14 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
 #include <bsp/early_enet_link_status.h>
 #include <stdint.h>
+#include <bsp/mv643xx_eth.h>
 
 #ifdef __cplusplus
   extern "C" {
@@ -86,8 +87,8 @@ struct mveth_private;
  *		by BSP_mve_send_buf() earlier. The callback is passed 'cleanup_txbuf_arg'
  *		and a flag indicating whether the send had been successful.
  *		The driver no longer accesses 'user_buf' after invoking this callback.
- *		CONTEXT: This callback is executed either by BSP_mve_swipe_tx() or 
- *		BSP_mve_send_buf(), BSP_mve_init_hw(), BSP_mve_stop_hw() (the latter 
+ *		CONTEXT: This callback is executed either by BSP_mve_swipe_tx() or
+ *		BSP_mve_send_buf(), BSP_mve_init_hw(), BSP_mve_stop_hw() (the latter
  *		ones calling BSP_mve_swipe_tx()).
  *	void *cleanup_txbuf_arg:
  *		Closure argument that is passed on to 'cleanup_txbuf()' callback;
@@ -105,7 +106,7 @@ struct mveth_private;
  *				 instead of handing it out to 'consume_rxbuf()'.
  *		CONTEXT: Called when initializing the RX ring (BSP_mve_init_hw()) or when
  *				 swiping it (BSP_mve_swipe_rx()).
- *		
+ *
  *
  *	void (*consume_rxbuf)(void *user_buf, void *consume_rxbuf_arg, int len);
  *		Pointer to user-supplied callback to pass a received buffer back to
@@ -140,7 +141,7 @@ struct mveth_private *
 BSP_mve_setup(
 	int		 unit,
 	rtems_id driver_tid,
-	void (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred), 
+	void (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred),
 	void *cleanup_txbuf_arg,
 	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
 	void (*consume_rxbuf)(void *user_buf, void *consume_rxbuf_arg, int len),
@@ -161,7 +162,7 @@ BSP_mve_setup_1(
 	int		 unit,
 	void     (*isr)(void *isr_arg),
 	void     *isr_arg,
-	void (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred), 
+	void (*cleanup_txbuf)(void *user_buf, void *cleanup_txbuf_arg, int error_on_tx_occurred),
 	void *cleanup_txbuf_arg,
 	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
 	void (*consume_rxbuf)(void *user_buf, void *consume_rxbuf_arg, int len),
@@ -171,81 +172,6 @@ BSP_mve_setup_1(
 	int		irq_mask
 );
 
-
-/*
- * Initialize interface hardware
- *
- * 'mp'			handle obtained by from BSP_mve_setup(). 
- * 'promisc'	whether to set promiscuous flag.
- * 'enaddr'		pointer to six bytes with MAC address. Read
- *				from the device if NULL.
- *
- * Note:        Multicast filters are cleared by this routine.
- *              However, in promiscuous mode the mcast filters
- *              are programmed to accept all multicast frames.
- */
-void
-BSP_mve_init_hw(struct mveth_private *mp, int promisc, unsigned char *enaddr);
-
-/*
- * Clear multicast hash filter. No multicast frames are accepted
- * after executing this routine (unless the hardware was initialized
- * in 'promiscuous' mode).
- */
-void
-BSP_mve_mcast_filter_clear(struct mveth_private *mp);
-
-/*
- * Program multicast filter to accept all multicast frames
- */
-void
-BSP_mve_mcast_filter_accept_all(struct mveth_private *mp);
-
-/*
- * Add a MAC address to the multicast filter.
- * Existing entries are not changed but note that
- * the filter is imperfect, i.e., multiple MAC addresses
- * may alias to a single filter entry. Hence software
- * filtering must still be performed.
- *
- * If a higher-level driver implements IP multicasting
- * then multiple IP addresses may alias to the same MAC
- * address. This driver maintains a 'reference-count'
- * which is incremented every time the same MAC-address
- * is passed to this routine; the address is only removed
- * from the filter if BSP_mve_mcast_filter_accept_del()
- * is called the same number of times (or by BSP_mve_mcast_filter_clear).
- */
-void
-BSP_mve_mcast_filter_accept_add(struct mveth_private *mp, unsigned char *enaddr);
-
-/*
- * Remove a MAC address from the multicast filter.
- * This routine decrements the reference count of the given
- * MAC-address and removes it from the filter once the
- * count reaches zero.
- */
-void
-BSP_mve_mcast_filter_accept_del(struct mveth_private *mp, unsigned char *enaddr);
-
-/*
- * Shutdown hardware and clean out the rings
- */
-void
-BSP_mve_stop_hw(struct mveth_private *mp);
-
-/* calls BSP_mve_stop_hw(), releases all resources and marks the interface
- * as unused.
- * RETURNS 0 on success, nonzero on failure.
- * NOTE:   the handle MUST NOT be used after successful execution of this
- *         routine.
- */
-int
-BSP_mve_detach(struct mveth_private *mp);
-
-int
-BSP_mve_send_buf_raw(struct mveth_private *mp, void *head_p, int h_len,
-    void *data_p, int d_len);
 
 /*
  * Enqueue a mbuf chain or a raw data buffer for transmission;
@@ -268,29 +194,6 @@ BSP_mve_send_buf_raw(struct mveth_private *mp, void *head_p, int h_len,
 int
 BSP_mve_send_buf(struct mveth_private *mp, void *m_head, void *data_p, int len);
 
-/* Descriptor scavenger; cleanup the TX ring, passing all buffers
- * that have been sent to the cleanup_tx() callback.
- * This routine is called from BSP_mve_send_buf(), BSP_mve_init_hw(),
- * BSP_mve_stop_hw().
- *
- * RETURNS: number of buffers processed.
- */
-int
-BSP_mve_swipe_tx(struct mveth_private *mp);
-
-/* Retrieve all received buffers from the RX ring, replacing them
- * by fresh ones (obtained from the alloc_rxbuf() callback). The
- * received buffers are passed to consume_rxbuf().
- *
- * RETURNS: number of buffers processed.
- */
-int
-BSP_mve_swipe_rx(struct mveth_private *mp);
-
-/* read ethernet address from hw to buffer */
-void
-BSP_mve_read_eaddr(struct mveth_private *mp, unsigned char *eaddr);
-
 /* read/write media word.
  *   'cmd': can be SIOCGIFMEDIA, SIOCSIFMEDIA, 0 or 1. The latter
  *          are aliased to the former for convenience.
@@ -302,62 +205,6 @@ BSP_mve_read_eaddr(struct mveth_private *mp, unsigned char *eaddr);
  */
 int
 BSP_mve_media_ioctl(struct mveth_private *mp, int cmd, int *parg);
-
-/* Interrupt related routines */
-
-/* Note: the BSP_mve_enable/disable/ack_irqs() entry points
- *       are deprecated.
- *       The newer API where the user passes a mask allows
- *       for more selective control.
- */
-
-/* Enable all supported interrupts at device */
-void
-BSP_mve_enable_irqs(struct mveth_private *mp);
-
-/* Disable all supported interrupts at device */
-void
-BSP_mve_disable_irqs(struct mveth_private *mp);
-
-/* Acknowledge (and clear) all supported interrupts.
- * RETURNS: interrupts that were raised.
- */
-uint32_t
-BSP_mve_ack_irqs(struct mveth_private *mp);
-
-/* Enable interrupts included in 'mask' (leaving
- * already enabled interrupts on). If the mask
- * includes bits that were not passed to the 'setup'
- * routine then the behavior is undefined.
- */
-void
-BSP_mve_enable_irq_mask(struct mveth_private *mp, uint32_t irq_mask);
-
-/* Disable interrupts included in 'mask' (leaving
- * other ones that are currently enabled on). If the
- * mask includes bits that were not passed to the 'setup'
- * routine then the behavior is undefined.
- *
- * RETURNS: Bitmask of interrupts that were enabled upon entry
- *          into this routine. This can be used to restore the
- *          previous state.
- */
-uint32_t
-BSP_mve_disable_irq_mask(struct mveth_private *mp, uint32_t irq_mask);
-
-/* Acknowledge and clear selected interrupts.
- * 
- * RETURNS: All pending interrupts.
- *
- * NOTE:    Only pending interrupts contained in 'mask'
- *          are cleared. Others are left pending.
- *
- *          This routine can be used to check for pending
- *          interrupts (pass mask ==  0) or to clear all
- *          interrupts (pass mask == -1).
- */
-uint32_t
-BSP_mve_ack_irq_mask(struct mveth_private *mp, uint32_t mask);
 
 /* If the PHY link status changes then some
  * internal settings in the ethernet controller's
@@ -378,21 +225,7 @@ BSP_mve_ack_irq_mask(struct mveth_private *mp, uint32_t mask);
 int
 BSP_mve_ack_link_chg(struct mveth_private *mp, int *pmedia);
 
-/* Retrieve the driver daemon TID that was passed to
- * BSP_mve_setup().
- */
-
-rtems_id
-BSP_mve_get_tid(struct mveth_private *mp);
-
-/* Dump statistics to file (stdout if NULL)
- *
- * NOTE: this routine is not thread safe
- */
-void
-BSP_mve_dump_stats(struct mveth_private *mp, FILE *f);
-
-/* 
+/*
  *
  * Example driver task loop (note: no synchronization of
  * buffer access shown!).
