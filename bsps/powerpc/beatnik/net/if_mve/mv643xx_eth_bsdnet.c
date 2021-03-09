@@ -135,7 +135,6 @@
 /* Enable Hardware Snooping; if this is disabled (undefined),
  * cache coherency is maintained by software.
  */
-#undef  ENABLE_HW_SNOOPING
 
 /* Compile-time debugging features */
 

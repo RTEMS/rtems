@@ -108,16 +108,10 @@
 /* Compile-time debugging features */
 
 /* Enable paranoia assertions and checks; reduce # of descriptors to minimum for stressing   */
-#undef  MVETH_TESTING
+#define MVETH_TESTING
 
 /* Enable debugging messages and some support routines  (dump rings etc.)                    */      
-#undef  MVETH_DEBUG
-
-/* Hack for driver development; rtems bsdnet doesn't implement detaching an interface :-(
- * but this hack allows us to unload/reload the driver module which makes development
- * a lot less painful.
- */
-#undef MVETH_DETACH_HACK
+#define MVETH_DEBUG
 
 /* Ring sizes */
 
@@ -789,6 +783,15 @@ static const char *mibfmt[] = {
 /* Interrupt Handler Connection */
 
 /* forward decls + implementation for IRQ API funcs */
+
+STATIC int
+mveth_init_rx_desc_ring(struct mveth_private *mp);
+
+STATIC int
+mveth_init_tx_desc_ring(struct mveth_private *mp);
+
+int
+BSP_mve_dring_nonsync(struct mveth_private *mp);
 
 static void mveth_isr(rtems_irq_hdl_param unit);
 static void noop(const rtems_irq_connect_data *unused)  {}
@@ -1747,7 +1750,7 @@ MveEthBufIter           head = *it;
 
 #ifdef MVETH_TESTING 
 	assert( !h->buf_ptr );
-	assert( !h->mb      );
+	assert( !h->u_buf   );
 #endif
 
 	/* Don't use the first descriptor yet because BSP_mve_swipe_tx()
@@ -1778,7 +1781,7 @@ MveEthBufIter           head = *it;
 			 */
 			for ( l = NEXT_TXD(h); l!=d; l=NEXT_TXD(l) ) {
 #ifdef MVETH_TESTING
-				assert( l->mb == 0 );
+				assert( l->u_buf == 0 );
 #endif
 				l->buf_ptr  = 0;
 				l->cmd_sts  = 0;
@@ -1870,7 +1873,7 @@ int                     frst_len;
 	rval = 0;
 
 #ifdef MVETH_TESTING 
-	assert(header || data);
+	assert(head_p || data_p);
 #endif
 
 	needed = head_p && data_p ? 2 : 1;
@@ -1887,7 +1890,7 @@ int                     frst_len;
 
 #ifdef MVETH_TESTING 
 	assert( !h->buf_ptr );
-	assert( !h->mb      );
+	assert( !h->u_buf   );
 #endif
 
 	/* find the 'first' user buffer */
@@ -2359,3 +2362,35 @@ uint32_t v;
 	}
 	fprintf(f, "\n");
 }
+
+#ifdef MVETH_DEBUG
+/* Display/dump descriptor rings */
+
+/* These low-level routines need to be synchronized with
+ * any Tx/Rx threads!
+ */
+int
+BSP_mve_dring_nonsync(struct mveth_private *mp)
+{
+int i;
+if (1) {
+MvEthRxDesc pr;
+printf("RX:\n");
+
+	for (i=0, pr=mp->rx_ring; i<mp->rbuf_count; i++, pr++) {
+		printf("cnt: 0x%04x, size: 0x%04x, stat: 0x%08x, next: 0x%08x, buf: 0x%08x\n",
+			pr->byte_cnt, pr->buf_size, pr->cmd_sts, (uint32_t)pr->next_desc_ptr, pr->buf_ptr);
+	}
+}
+if (1) {
+MvEthTxDesc pt;
+printf("TX:\n");
+	for (i=0, pt=mp->tx_ring; i<mp->xbuf_count; i++, pt++) {
+		printf("cnt: 0x%04x, stat: 0x%08x, next: 0x%08x, buf: 0x%08x, mb: 0x%08x\n",
+			pt->byte_cnt, pt->cmd_sts, (uint32_t)pt->next_desc_ptr, pt->buf_ptr,
+			(uint32_t)pt->u_buf);
+	}
+}
+	return 0;
+}
+#endif
