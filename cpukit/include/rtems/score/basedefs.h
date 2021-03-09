@@ -362,7 +362,8 @@ extern "C" {
  *
  * @param ... are the arguments to stringify.
  *
- * @return Returns the stringification of the arguments.
+ * @return Returns the stringification of the arguments.  In case of several
+ *   arguments a single string is returned not several.
  */
 #define RTEMS_STRING( ... ) #__VA_ARGS__
 
@@ -936,7 +937,8 @@ extern "C" {
  *
  * @param ... are the arguments to expand and stringify.
  *
- * @return Returns the stringification of the expansion of the arguments.
+ * @return Returns the stringification of the expansion of the arguments.  In
+ *   case of several arguments a single string is returned not several.
  */
 #define RTEMS_XSTRING( ... ) RTEMS_STRING( __VA_ARGS__ )
 
