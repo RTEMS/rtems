@@ -70,7 +70,7 @@ typedef struct MveEthBufIter {
 	                        reasons)                             */
 } MveEthBufIter;
 
-typedef MveEthBufIter *(*MveEthBufIterNext)(const MveEthBufIter*);
+typedef MveEthBufIter *(*MveEthBufIterNext)(MveEthBufIter*);
 
 int
 BSP_mve_send_buf_chain(struct mveth_private *mp, MveEthBufIterNext next, MveEthBufIter *it);

@@ -1830,6 +1830,7 @@ register MvEthTxDesc	l,d,h;
 int						needed;
 void                    *frst_buf;
 int                     frst_len;
+void                    *uarg;
 
 	rval = 0;
 
@@ -1855,12 +1856,16 @@ int                     frst_len;
 #endif
 
 	/* find the 'first' user buffer */
-	if ( (frst_buf = head_p) ) {
+	if ( (frst_buf = head_p) && (h_len > 0) ) {
 		frst_len = h_len;
 	} else {
 		frst_buf = data_p;
 		frst_len = d_len;
 	}
+
+	uarg = (head_p && ! h_len) ? head_p : frst_buf;
+
+	/* Legacy: if h_len == 0 but head_p is not then use that for the user arg */
 
 	/* Don't use the first descriptor yet because BSP_mve_swipe_tx()
 	 * needs mp->d_tx_h->buf_ptr == NULL as a marker. Hence, we
@@ -1898,7 +1903,7 @@ int                     frst_len;
 	l->cmd_sts |= TDESC_LAST | TDESC_INT_ENA;
 
 	/* first buffer of 'chain' goes into last desc */
-	l->u_buf    = frst_buf;
+	l->u_buf    = uarg;
 
 	FLUSH_DESC(l);
 
