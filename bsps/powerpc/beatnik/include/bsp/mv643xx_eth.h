@@ -301,7 +301,7 @@ BSP_mve_dump_stats(struct mveth_private *mp, FILE *f);
  *              are programmed to accept all multicast frames.
  */
 void
-BSP_mve_init_hw(struct mveth_private *mp, int promisc, unsigned char *enaddr);
+BSP_mve_init_hw(struct mveth_private *mp, int promisc, unsigned char *enaddr, int speed);
 
 /*
  * Update the serial port to a new speed (e.g., result of a PHY IRQ)

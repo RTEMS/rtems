@@ -2063,7 +2063,7 @@ uint32_t mveth_serial_ctrl_config_val = MVETH_SERIAL_CTRL_CONFIG_VAL;
  */
 
 void
-BSP_mve_init_hw(struct mveth_private *mp, int promisc, unsigned char *enaddr)
+BSP_mve_init_hw(struct mveth_private *mp, int promisc, unsigned char *enaddr, int media)
 {
 int					i;
 uint32_t			v;
@@ -2173,15 +2173,9 @@ static int			inited = 0;
 	v |= mveth_serial_ctrl_config_val;
 	MV_WRITE(MV643XX_ETH_SERIAL_CONTROL_R(mp->port_num), v);
 
-#ifdef BSDMII
-#warning FIXME
-	i = IFM_MAKEWORD(0, 0, 0, 0);
-	if ( 0 == BSP_mve_media_ioctl(mp, SIOCGIFMEDIA, &i) ) {
-	    if ( (IFM_LINK_OK & i) ) {
-			mveth_update_serial_port(mp, i);
-		}
+	if ( (MV643XX_MEDIA_LINK & media) ) {
+		BSP_mve_update_serial_port(mp, media);
 	}
-#endif
 
 	/* enable serial port */
 	v  = MV_READ(MV643XX_ETH_SERIAL_CONTROL_R(mp->port_num));

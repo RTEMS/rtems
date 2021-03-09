@@ -563,6 +563,34 @@ int rval;
 	return rval;
 }
 
+/* Translate IFFLAGS to low-level driver representation */
+static int
+xlateMediaFlags(int media)
+{
+int lowLevelFlags = 0;
+
+	if ( IFM_LINK_OK & media ) {
+		lowLevelFlags |= MV643XX_MEDIA_LINK;
+
+		if ( IFM_FDX & media ) {
+			lowLevelFlags |= MV643XX_MEDIA_FD;
+		}
+
+		switch ( IFM_SUBTYPE(media) ) {
+			default: /* treat as 10 */
+				lowLevelFlags |= MV643XX_MEDIA_10;
+				break;
+			case IFM_100_TX:
+				lowLevelFlags |= MV643XX_MEDIA_100;
+				break;
+			case IFM_1000_T:
+				lowLevelFlags |= MV643XX_MEDIA_1000;
+				break;
+		}
+	}
+	return lowLevelFlags;
+}
+
 int
 BSP_mve_ack_link_chg(struct mveth_private *mp, int *pmedia)
 {
@@ -570,23 +598,7 @@ int media = IFM_MAKEWORD(0,0,0,0);
 
 	if ( 0 == BSP_mve_media_ioctl(mp, SIOCGIFMEDIA, &media)) {
 		if ( IFM_LINK_OK & media ) {
-			int serport_cfg = 0;
-
-			if ( IFM_FDX & media ) {
-				serport_cfg |= MV643XX_MEDIA_FD;
-			}
-
-			switch ( IFM_SUBTYPE(media) ) {
-				default: /* treat as 10 */
-					serport_cfg |= MV643XX_MEDIA_10;
-					break;
-				case IFM_100_TX:
-					serport_cfg |= MV643XX_MEDIA_100;
-					break;
-				case IFM_1000_T:
-					serport_cfg |= MV643XX_MEDIA_1000;
-					break;
-			}
+			int serport_cfg = xlateMediaFlags( media );
 
 			BSP_mve_update_serial_port(mp, serport_cfg);
 		}
@@ -713,8 +725,7 @@ mveth_init(void *arg)
 struct mveth_softc	*sc  = arg;
 struct ifnet		*ifp = &sc->arpcom.ac_if;
 int                 media;
-
-	BSP_mve_init_hw(sc->pvt, ifp->if_flags & IFF_PROMISC, sc->arpcom.ac_enaddr);
+int                 lowLevelMediaStatus;
 
 	media = IFM_MAKEWORD(0, 0, 0, 0);
 	if ( 0 == BSP_mve_media_ioctl(sc->pvt, SIOCGIFMEDIA, &media) ) {
@@ -724,6 +735,11 @@ int                 media;
 			ifp->if_flags |= IFF_OACTIVE;
 		}
 	}
+
+	lowLevelMediaStatus = xlateMediaFlags( media );
+
+	BSP_mve_init_hw(sc->pvt, ifp->if_flags & IFF_PROMISC, sc->arpcom.ac_enaddr, lowLevelMediaStatus);
+
 
 	/* if promiscuous then there is no need to change */
 	if ( ! (ifp->if_flags & IFF_PROMISC) )
