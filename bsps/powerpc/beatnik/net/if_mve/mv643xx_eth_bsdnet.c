@@ -132,11 +132,6 @@
 
 /* CONFIGURABLE PARAMETERS */
 
-/* Enable Hardware Snooping; if this is disabled (undefined),
- * cache coherency is maintained by software.
- */
-#undef  ENABLE_HW_SNOOPING
-
 /* Compile-time debugging features */
 
 /* Enable paranoia assertions and checks; reduce # of descriptors to minimum for stressing   */
@@ -189,8 +184,6 @@
 #define MV643XXETH_NUM_DRIVER_SLOTS	2
 #endif
 
-#define TX_NUM_TAG_SLOTS			1 /* leave room for tag; must not be 0 */
-
 #define DRVNAME			"mve"
 #define MAX_NUM_SLOTS   3
 
@@ -204,31 +197,7 @@
 #define STATIC static
 #endif
 
-struct mveth_private *
-BSP_mve_setup(
-	int		 unit,
-	rtems_id tid,
-	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
-	void *cleanup_txbuf_arg,
-	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
-	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
-	void *consume_rxbuf_arg,
-	int		rx_ring_size,
-	int		tx_ring_size,
-	int		irq_mask
-);
-
-#define TX_AVAILABLE_RING_SIZE(mp)		((mp)->xbuf_count - (TX_NUM_TAG_SLOTS))
-
 /* macros for ring alignment; proper alignment is a hardware req; . */
-
-#ifdef ENABLE_HW_SNOOPING
-
-#define RING_ALIGNMENT				16
-/* rx buffers must be 64-bit aligned (chip requirement) */
-#define RX_BUF_ALIGNMENT			8
-
-#else /* ENABLE_HW_SNOOPING */
 
 /* Software cache management */
 
@@ -247,291 +216,16 @@ BSP_mve_setup(
 #define RX_BUF_ALIGNMENT			PPC_CACHE_ALIGNMENT
 #endif
 
-#endif /* ENABLE_HW_SNOOPING */
-
-
 /* HELPER MACROS */
 
 /* Align base to alignment 'a' */
 #define MV643XX_ALIGN(b, a)	((((uint32_t)(b)) + (a)-1) & (~((a)-1)))
-
-#define NOOP()			do {} while(0)
-
-/* Function like macros */
-#define MV_READ(off) \
-		ld_le32((volatile uint32_t *)(BSP_MV64x60_BASE + (off)))
-#define MV_WRITE(off, data)		\
-		st_le32((volatile uint32_t *)(BSP_MV64x60_BASE + (off)), ((unsigned)data))
-
-
-/* ENET window mapped 1:1 to CPU addresses by our BSP/MotLoad
- * -- if this is changed, we should think about caching the 'next' and 'buf' pointers.
- */
-#define CPUADDR2ENET(a) ((Dma_addr_t)(a))
-#define ENET2CPUADDR(a) (a)
-
-#if 1	/* Whether to automatically try to reclaim descriptors when enqueueing new packets */
-#define MVETH_CLEAN_ON_SEND(mp) (BSP_mve_swipe_tx(mp))
-#else
-#define MVETH_CLEAN_ON_SEND(mp) (-1)
-#endif
-
-#define NEXT_TXD(d)	(d)->next
-#define NEXT_RXD(d)	(d)->next
-
-/* REGISTER AND DESCRIPTOR OFFSET AND BIT DEFINITIONS */
-
-/* Descriptor Definitions */
-/* Rx descriptor */
-#define RDESC_ERROR									(1<< 0)	/* Error summary    */
-
-/* Error code (bit 1&2) is only valid if summary bit is set */
-#define RDESC_CRC_ERROR								(    1)
-#define RDESC_OVERRUN_ERROR							(    3)
-#define RDESC_MAX_FRAMELENGTH_ERROR					(    5)
-#define RDESC_RESOURCE_ERROR						(    7)
-
-#define RDESC_LAST									(1<<26)	/* Last Descriptor   */
-#define RDESC_FRST									(1<<27)	/* First Descriptor  */
-#define RDESC_INT_ENA								(1<<29) /* Enable Interrupts */
-#define RDESC_DMA_OWNED								(1<<31)
-
-/* Tx descriptor */
-#define TDESC_ERROR									(1<< 0) /* Error summary     */
-#define TDESC_ZERO_PAD								(1<<19)
-#define TDESC_LAST									(1<<20)	/* Last Descriptor   */
-#define TDESC_FRST									(1<<21)	/* First Descriptor  */
-#define TDESC_GEN_CRC								(1<<22)
-#define TDESC_INT_ENA								(1<<23) /* Enable Interrupts */
-#define TDESC_DMA_OWNED								(1<<31)
-
-
-
-/* Register Definitions */
-#define MV643XX_ETH_PHY_ADDR_R						(0x2000)
-#define MV643XX_ETH_SMI_R							(0x2004)
-#define MV643XX_ETH_SMI_BUSY						(1<<28)
-#define MV643XX_ETH_SMI_VALID						(1<<27)
-#define MV643XX_ETH_SMI_OP_WR						(0<<26)
-#define MV643XX_ETH_SMI_OP_RD						(1<<26)
-
-#define MV643XX_ETH_TRANSMIT_QUEUE_COMMAND_R(port)	(0x2448 + ((port)<<10))
-#define MV643XX_ETH_TX_START(queue)					(0x0001<<(queue))
-#define MV643XX_ETH_TX_STOP(queue)					(0x0100<<(queue))
-#define MV643XX_ETH_TX_START_M(queues)				((queues)&0xff)
-#define MV643XX_ETH_TX_STOP_M(queues)				(((queues)&0xff)<<8)
-#define MV643XX_ETH_TX_STOP_ALL						(0xff00)
-#define MV643XX_ETH_TX_ANY_RUNNING					(0x00ff)
-
-#define MV643XX_ETH_RECEIVE_QUEUE_COMMAND_R(port)	(0x2680 + ((port)<<10))
-#define MV643XX_ETH_RX_START(queue)					(0x0001<<(queue))
-#define MV643XX_ETH_RX_STOP(queue)					(0x0100<<(queue))
-#define MV643XX_ETH_RX_STOP_ALL						(0xff00)
-#define MV643XX_ETH_RX_ANY_RUNNING					(0x00ff)
-
-#define MV643XX_ETH_CURRENT_SERVED_TX_DESC(port)	(0x2684 + ((port)<<10))
 
 /* The chip puts the ethernet header at offset 2 into the buffer so
  * that the payload is aligned
  */
 #define ETH_RX_OFFSET								2
 #define ETH_CRC_LEN									4	/* strip FCS at end of packet */
-
-
-#define MV643XX_ETH_INTERRUPT_CAUSE_R(port)			(0x2460 + ((port)<<10))
-/* not fully understood; RX seems to raise 0x0005 or 0x0c05 if last buffer is filled and 0x0c00
- * if there are no buffers
- */
-#define MV643XX_ETH_ALL_IRQS						(0x0007ffff)
-#define MV643XX_ETH_KNOWN_IRQS						(0x00000c05)
-#define MV643XX_ETH_IRQ_EXT_ENA						(1<<1)
-#define MV643XX_ETH_IRQ_RX_DONE						(1<<2)
-#define MV643XX_ETH_IRQ_RX_NO_DESC					(1<<10)
-
-#define MV643XX_ETH_INTERRUPT_EXTEND_CAUSE_R(port)	(0x2464 + ((port)<<10))
-/* not fully understood; TX seems to raise 0x0001 and link change is 0x00010000
- * if there are no buffers
- */
-#define MV643XX_ETH_ALL_EXT_IRQS					(0x0011ffff)
-#define MV643XX_ETH_KNOWN_EXT_IRQS					(0x00010101)
-#define MV643XX_ETH_EXT_IRQ_TX_DONE					(1<<0)
-#define MV643XX_ETH_EXT_IRQ_LINK_CHG				(1<<16)
-#define MV643XX_ETH_INTERRUPT_ENBL_R(port)			(0x2468 + ((port)<<10))
-#define MV643XX_ETH_INTERRUPT_EXTEND_ENBL_R(port)	(0x246c + ((port)<<10))
-
-/* port configuration */
-#define MV643XX_ETH_PORT_CONFIG_R(port)				(0x2400 + ((port)<<10))
-#define	MV643XX_ETH_UNICAST_PROMISC_MODE			(1<<0)
-#define	MV643XX_ETH_DFLT_RX_Q(q)					((q)<<1)
-#define	MV643XX_ETH_DFLT_RX_ARP_Q(q)				((q)<<4)
-#define MV643XX_ETH_REJ_BCAST_IF_NOT_IP_OR_ARP		(1<<7)
-#define MV643XX_ETH_REJ_BCAST_IF_IP					(1<<8)
-#define MV643XX_ETH_REJ_BCAST_IF_ARP				(1<<9)
-#define MV643XX_ETH_TX_AM_NO_UPDATE_ERR_SUMMARY		(1<<12)
-#define MV643XX_ETH_CAPTURE_TCP_FRAMES_ENBL			(1<<14)
-#define MV643XX_ETH_CAPTURE_UDP_FRAMES_ENBL			(1<<15)
-#define	MV643XX_ETH_DFLT_RX_TCP_Q(q)				((q)<<16)
-#define	MV643XX_ETH_DFLT_RX_UDP_Q(q)				((q)<<19)
-#define	MV643XX_ETH_DFLT_RX_BPDU_Q(q)				((q)<<22)
-
-
-
-#define MV643XX_ETH_PORT_CONFIG_XTEND_R(port)		(0x2404 + ((port)<<10))
-#define MV643XX_ETH_CLASSIFY_ENBL					(1<<0)
-#define MV643XX_ETH_SPAN_BPDU_PACKETS_AS_NORMAL		(0<<1)
-#define MV643XX_ETH_SPAN_BPDU_PACKETS_2_Q7			(1<<1)
-#define MV643XX_ETH_PARTITION_DISBL					(0<<2)
-#define MV643XX_ETH_PARTITION_ENBL					(1<<2)
-
-#define MV643XX_ETH_SDMA_CONFIG_R(port)				(0x241c + ((port)<<10))
-#define MV643XX_ETH_SDMA_RIFB						(1<<0)
-#define MV643XX_ETH_RX_BURST_SZ_1_64BIT				(0<<1)
-#define MV643XX_ETH_RX_BURST_SZ_2_64BIT				(1<<1)
-#define MV643XX_ETH_RX_BURST_SZ_4_64BIT				(2<<1)
-#define MV643XX_ETH_RX_BURST_SZ_8_64BIT				(3<<1)
-#define MV643XX_ETH_RX_BURST_SZ_16_64BIT			(4<<1)
-#define MV643XX_ETH_SMDA_BLM_RX_NO_SWAP				(1<<4)
-#define MV643XX_ETH_SMDA_BLM_TX_NO_SWAP				(1<<5)
-#define MV643XX_ETH_SMDA_DESC_BYTE_SWAP				(1<<6)
-#define MV643XX_ETH_TX_BURST_SZ_1_64BIT				(0<<22)
-#define MV643XX_ETH_TX_BURST_SZ_2_64BIT				(1<<22)
-#define MV643XX_ETH_TX_BURST_SZ_4_64BIT				(2<<22)
-#define MV643XX_ETH_TX_BURST_SZ_8_64BIT				(3<<22)
-#define MV643XX_ETH_TX_BURST_SZ_16_64BIT			(4<<22)
-
-#define	MV643XX_ETH_RX_MIN_FRAME_SIZE_R(port)		(0x247c + ((port)<<10))
-
-
-#define MV643XX_ETH_SERIAL_CONTROL_R(port)			(0x243c + ((port)<<10))
-#define MV643XX_ETH_SERIAL_PORT_ENBL				(1<<0)	/* Enable serial port */
-#define MV643XX_ETH_FORCE_LINK_PASS					(1<<1)
-#define MV643XX_ETH_DISABLE_AUTO_NEG_FOR_DUPLEX		(1<<2)
-#define MV643XX_ETH_DISABLE_AUTO_NEG_FOR_FLOWCTL	(1<<3)
-#define MV643XX_ETH_ADVERTISE_SYMMETRIC_FLOWCTL		(1<<4)
-#define MV643XX_ETH_FORCE_FC_MODE_TX_PAUSE_DIS		(1<<5)
-#define MV643XX_ETH_FORCE_BP_MODE_JAM_TX			(1<<7)
-#define MV643XX_ETH_FORCE_BP_MODE_JAM_TX_ON_RX_ERR	(1<<8)
-#define MV643XX_ETH_BIT9_UNKNOWN					(1<<9)	/* unknown purpose; linux sets this */
-#define MV643XX_ETH_FORCE_LINK_FAIL_DISABLE			(1<<10)
-#define MV643XX_ETH_RETRANSMIT_FOREVER				(1<<11) /* limit to 16 attempts if clear    */
-#define MV643XX_ETH_DISABLE_AUTO_NEG_SPEED_GMII		(1<<13)
-#define MV643XX_ETH_DTE_ADV_1						(1<<14)
-#define MV643XX_ETH_AUTO_NEG_BYPASS_ENBL			(1<<15)
-#define MV643XX_ETH_RESTART_AUTO_NEG				(1<<16)
-#define MV643XX_ETH_SC_MAX_RX_1518					(0<<17)	/* Limit RX packet size */
-#define MV643XX_ETH_SC_MAX_RX_1522					(1<<17)	/* Limit RX packet size */
-#define MV643XX_ETH_SC_MAX_RX_1552					(2<<17)	/* Limit RX packet size */
-#define MV643XX_ETH_SC_MAX_RX_9022					(3<<17)	/* Limit RX packet size */
-#define MV643XX_ETH_SC_MAX_RX_9192					(4<<17)	/* Limit RX packet size */
-#define MV643XX_ETH_SC_MAX_RX_9700					(5<<17)	/* Limit RX packet size */
-#define MV643XX_ETH_SC_MAX_RX_MASK					(7<<17)	/* bitmask */
-#define MV643XX_ETH_SET_EXT_LOOPBACK				(1<<20)
-#define MV643XX_ETH_SET_FULL_DUPLEX					(1<<21)
-#define MV643XX_ETH_ENBL_FLOWCTL_TX_RX_IN_FD		(1<<22)	/* enable flow ctrl on rx and tx in full-duplex */
-#define MV643XX_ETH_SET_GMII_SPEED_1000				(1<<23)	/* 10/100 if clear */
-#define MV643XX_ETH_SET_MII_SPEED_100				(1<<24)	/* 10 if clear     */
-
-#define MV643XX_ETH_PORT_STATUS_R(port)				(0x2444 + ((port)<<10))
-
-#define MV643XX_ETH_PORT_STATUS_MODE_10_BIT			(1<<0)
-#define MV643XX_ETH_PORT_STATUS_LINK_UP				(1<<1)
-#define MV643XX_ETH_PORT_STATUS_FDX					(1<<2)
-#define MV643XX_ETH_PORT_STATUS_FC					(1<<3)
-#define MV643XX_ETH_PORT_STATUS_1000				(1<<4)
-#define MV643XX_ETH_PORT_STATUS_100					(1<<5)
-/* PSR bit 6 unknown */
-#define MV643XX_ETH_PORT_STATUS_TX_IN_PROGRESS		(1<<7)
-#define MV643XX_ETH_PORT_STATUS_ANEG_BYPASSED		(1<<8)
-#define MV643XX_ETH_PORT_STATUS_PARTITION			(1<<9)
-#define MV643XX_ETH_PORT_STATUS_TX_FIFO_EMPTY		(1<<10)
-
-#define MV643XX_ETH_MIB_COUNTERS(port)				(0x3000 + ((port)<<7))
-#define MV643XX_ETH_NUM_MIB_COUNTERS				32
-
-#define MV643XX_ETH_MIB_GOOD_OCTS_RCVD_LO			(0)
-#define MV643XX_ETH_MIB_GOOD_OCTS_RCVD_HI			(1<<2)
-#define MV643XX_ETH_MIB_BAD_OCTS_RCVD				(2<<2)
-#define MV643XX_ETH_MIB_INTERNAL_MAC_TX_ERR			(3<<2)
-#define MV643XX_ETH_MIB_GOOD_FRAMES_RCVD			(4<<2)
-#define MV643XX_ETH_MIB_BAD_FRAMES_RCVD				(5<<2)
-#define MV643XX_ETH_MIB_BCAST_FRAMES_RCVD			(6<<2)
-#define MV643XX_ETH_MIB_MCAST_FRAMES_RCVD			(7<<2)
-#define MV643XX_ETH_MIB_FRAMES_64_OCTS				(8<<2)
-#define MV643XX_ETH_MIB_FRAMES_65_127_OCTS			(9<<2)
-#define MV643XX_ETH_MIB_FRAMES_128_255_OCTS			(10<<2)
-#define MV643XX_ETH_MIB_FRAMES_256_511_OCTS			(11<<2)
-#define MV643XX_ETH_MIB_FRAMES_512_1023_OCTS		(12<<2)
-#define MV643XX_ETH_MIB_FRAMES_1024_MAX_OCTS		(13<<2)
-#define MV643XX_ETH_MIB_GOOD_OCTS_SENT_LO			(14<<2)
-#define MV643XX_ETH_MIB_GOOD_OCTS_SENT_HI			(15<<2)
-#define MV643XX_ETH_MIB_GOOD_FRAMES_SENT			(16<<2)
-#define MV643XX_ETH_MIB_EXCESSIVE_COLL				(17<<2)
-#define MV643XX_ETH_MIB_MCAST_FRAMES_SENT			(18<<2)
-#define MV643XX_ETH_MIB_BCAST_FRAMES_SENT			(19<<2)
-#define MV643XX_ETH_MIB_UNREC_MAC_CTRL_RCVD			(20<<2)
-#define MV643XX_ETH_MIB_FC_SENT						(21<<2)
-#define MV643XX_ETH_MIB_GOOD_FC_RCVD				(22<<2)
-#define MV643XX_ETH_MIB_BAD_FC_RCVD					(23<<2)
-#define MV643XX_ETH_MIB_UNDERSIZE_RCVD				(24<<2)
-#define MV643XX_ETH_MIB_FRAGMENTS_RCVD				(25<<2)
-#define MV643XX_ETH_MIB_OVERSIZE_RCVD				(26<<2)
-#define MV643XX_ETH_MIB_JABBER_RCVD					(27<<2)
-#define MV643XX_ETH_MIB_MAC_RX_ERR					(28<<2)
-#define MV643XX_ETH_MIB_BAD_CRC_EVENT				(29<<2)
-#define MV643XX_ETH_MIB_COLL						(30<<2)
-#define MV643XX_ETH_MIB_LATE_COLL					(31<<2)
-
-#define MV643XX_ETH_DA_FILTER_SPECL_MCAST_TBL(port) (0x3400+((port)<<10))
-#define MV643XX_ETH_DA_FILTER_OTHER_MCAST_TBL(port) (0x3500+((port)<<10))
-#define MV643XX_ETH_DA_FILTER_UNICAST_TBL(port)		(0x3600+((port)<<10))
-#define MV643XX_ETH_NUM_MCAST_ENTRIES				64
-#define MV643XX_ETH_NUM_UNICAST_ENTRIES				4
-
-#define MV643XX_ETH_BAR_0							(0x2200)
-#define MV643XX_ETH_SIZE_R_0						(0x2204)
-#define MV643XX_ETH_BAR_1							(0x2208)
-#define MV643XX_ETH_SIZE_R_1						(0x220c)
-#define MV643XX_ETH_BAR_2							(0x2210)
-#define MV643XX_ETH_SIZE_R_2						(0x2214)
-#define MV643XX_ETH_BAR_3							(0x2218)
-#define MV643XX_ETH_SIZE_R_3						(0x221c)
-#define MV643XX_ETH_BAR_4							(0x2220)
-#define MV643XX_ETH_SIZE_R_4						(0x2224)
-#define MV643XX_ETH_BAR_5							(0x2228)
-#define MV643XX_ETH_SIZE_R_5						(0x222c)
-#define MV643XX_ETH_NUM_BARS						6
-
-/* Bits in the BAR reg to program cache snooping */
-#define MV64360_ENET2MEM_SNOOP_NONE 0x0000
-#define MV64360_ENET2MEM_SNOOP_WT	0x1000
-#define MV64360_ENET2MEM_SNOOP_WB	0x2000
-#define MV64360_ENET2MEM_SNOOP_MSK	0x3000
-
-
-#define MV643XX_ETH_BAR_ENBL_R						(0x2290)
-#define MV643XX_ETH_BAR_DISABLE(bar)				(1<<(bar))
-#define MV643XX_ETH_BAR_DISBL_ALL					0x3f
-
-#define MV643XX_ETH_RX_Q0_CURRENT_DESC_PTR(port)	(0x260c+((port)<<10))
-#define MV643XX_ETH_RX_Q1_CURRENT_DESC_PTR(port)	(0x261c+((port)<<10))
-#define MV643XX_ETH_RX_Q2_CURRENT_DESC_PTR(port)	(0x262c+((port)<<10))
-#define MV643XX_ETH_RX_Q3_CURRENT_DESC_PTR(port)	(0x263c+((port)<<10))
-#define MV643XX_ETH_RX_Q4_CURRENT_DESC_PTR(port)	(0x264c+((port)<<10))
-#define MV643XX_ETH_RX_Q5_CURRENT_DESC_PTR(port)	(0x265c+((port)<<10))
-#define MV643XX_ETH_RX_Q6_CURRENT_DESC_PTR(port)	(0x266c+((port)<<10))
-#define MV643XX_ETH_RX_Q7_CURRENT_DESC_PTR(port)	(0x267c+((port)<<10))
-
-#define MV643XX_ETH_TX_Q0_CURRENT_DESC_PTR(port)	(0x26c0+((port)<<10))
-#define MV643XX_ETH_TX_Q1_CURRENT_DESC_PTR(port)	(0x26c4+((port)<<10))
-#define MV643XX_ETH_TX_Q2_CURRENT_DESC_PTR(port)	(0x26c8+((port)<<10))
-#define MV643XX_ETH_TX_Q3_CURRENT_DESC_PTR(port)	(0x26cc+((port)<<10))
-#define MV643XX_ETH_TX_Q4_CURRENT_DESC_PTR(port)	(0x26d0+((port)<<10))
-#define MV643XX_ETH_TX_Q5_CURRENT_DESC_PTR(port)	(0x26d4+((port)<<10))
-#define MV643XX_ETH_TX_Q6_CURRENT_DESC_PTR(port)	(0x26d8+((port)<<10))
-#define MV643XX_ETH_TX_Q7_CURRENT_DESC_PTR(port)	(0x26dc+((port)<<10))
-
-#define MV643XX_ETH_MAC_ADDR_LO(port)				(0x2414+((port)<<10))
-#define MV643XX_ETH_MAC_ADDR_HI(port)				(0x2418+((port)<<10))
 
 /* TYPE DEFINITIONS */
 
@@ -553,6 +247,12 @@ struct mveth_softc {
 	struct mveth_bsdsupp	bsd;
 	struct mveth_private	*pvt;
 };
+
+typedef struct BsdMveIter {
+	MveEthBufIter it;
+	struct mbuf  *m;
+	struct mbuf  *h;
+} BsdMveIter;
 
 /* GLOBAL VARIABLES */
 #ifdef MVETH_DEBUG_TX_DUMP
@@ -767,12 +467,6 @@ bail:
 	return m;
 }
 
-typedef struct BsdMveIter {
-	MveEthBufIter it;
-	struct mbuf  *m;
-	struct mbuf  *h;
-} BsdMveIter;
-
 static MveEthBufIter *fillIter(struct mbuf *m, BsdMveIter *it)
 {
 	if ( (it->m = (void*)m) ) {
@@ -784,7 +478,7 @@ static MveEthBufIter *fillIter(struct mbuf *m, BsdMveIter *it)
 	return 0;
 }
 
-static MveEthBufIter *nextBuf(const MveEthBufIter *arg)
+static MveEthBufIter *nextBuf(MveEthBufIter *arg)
 {
 BsdMveIter *it = (BsdMveIter*)arg;
 	return fillIter( it->m->m_next, it );
@@ -1399,44 +1093,14 @@ rtems_mve_early_link_check_ops = {
 int
 mveth_dring(struct mveth_softc *sc)
 {
-int i;
-if (1) {
-MvEthRxDesc pr;
-printf("RX:\n");
-
-	for (i=0, pr=sc->pvt->rx_ring; i<sc->pvt->rbuf_count; i++, pr++) {
-#ifndef ENABLE_HW_SNOOPING
 		/* can't just invalidate the descriptor - if it contains
 		 * data that hasn't been flushed yet, we create an inconsistency...
 		 */
 		rtems_bsdnet_semaphore_obtain();
-		INVAL_DESC(pr);
-#endif
-		printf("cnt: 0x%04x, size: 0x%04x, stat: 0x%08x, next: 0x%08x, buf: 0x%08x\n",
-			pr->byte_cnt, pr->buf_size, pr->cmd_sts, (uint32_t)pr->next_desc_ptr, pr->buf_ptr);
 
-#ifndef ENABLE_HW_SNOOPING
-		rtems_bsdnet_semaphore_release();
-#endif
-	}
-}
-if (1) {
-MvEthTxDesc pt;
-printf("TX:\n");
-	for (i=0, pt=sc->pvt->tx_ring; i<sc->pvt->xbuf_count; i++, pt++) {
-#ifndef ENABLE_HW_SNOOPING
-		rtems_bsdnet_semaphore_obtain();
-		INVAL_DESC(pt);
-#endif
-		printf("cnt: 0x%04x, stat: 0x%08x, next: 0x%08x, buf: 0x%08x, mb: 0x%08x\n",
-			pt->byte_cnt, pt->cmd_sts, (uint32_t)pt->next_desc_ptr, pt->buf_ptr,
-			(uint32_t)pt->mb);
+		BSP_mve_dring_nosync(sc->pvt);
 
-#ifndef ENABLE_HW_SNOOPING
 		rtems_bsdnet_semaphore_release();
-#endif
-	}
-}
 	return 0;
 }
 
