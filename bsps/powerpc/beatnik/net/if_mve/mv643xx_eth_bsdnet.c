@@ -877,6 +877,17 @@ int					f;
 
 /* DRIVER TASK */
 
+static void mveth_isr(void *arg)
+{
+struct mveth_softc	*sc = (struct mveth_softc*) arg;
+int                 idx = (sc - &theMvEths[0]);
+	BSP_mve_disable_irqs( sc->pvt );
+#ifdef MVETH_DEBUG
+	printk(DRVNAME": bsdnet isr; posting event %i to 0x%08x\n", idx, BSP_mve_get_tid( sc->pvt ));
+#endif
+	rtems_bsdnet_event_send( BSP_mve_get_tid( sc->pvt ), (1<<idx) );
+}
+
 /* Daemon task does all the 'interrupt' work */
 static void mveth_daemon(void *arg)
 {
@@ -997,8 +1008,9 @@ struct	ifnet		*ifp;
 			ifcfg->xbuf_count = MV643XX_TX_RING_SIZE;
 		}
 
-		if ( !BSP_mve_setup( unit,
+		if ( !mve_setup_bsd( unit,
 						     mveth_tid,
+		                     mveth_isr, (void*)sc,
 						     release_tx_mbuf, ifp,
 						     alloc_mbuf_rx,
 						     consume_rx_mbuf, ifp,
