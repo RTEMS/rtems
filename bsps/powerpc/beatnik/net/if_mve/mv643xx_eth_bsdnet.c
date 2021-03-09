@@ -1271,6 +1271,14 @@ struct	ifnet		*ifp;
 			mveth_tid = rtems_bsdnet_newproc("MVEd", 4096, mveth_daemon, 0);
 		}
 
+		if ( 0 == ifcfg->rbuf_count ) {
+			ifcfg->rbuf_count = MV643XX_RX_RING_SIZE;
+		}
+
+		if ( 0 == ifcfg->xbuf_count ) {
+			ifcfg->xbuf_count = MV643XX_TX_RING_SIZE;
+		}
+
 		if ( !BSP_mve_setup( unit,
 						     mveth_tid,
 						     release_tx_mbuf, ifp,

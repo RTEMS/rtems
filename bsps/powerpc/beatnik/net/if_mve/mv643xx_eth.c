@@ -113,45 +113,6 @@
 /* Enable debugging messages and some support routines  (dump rings etc.)                    */      
 #undef  MVETH_DEBUG
 
-/* Ring sizes */
-
-#ifdef MVETH_TESTING
-
-/* hard and small defaults */
-#undef  MV643XX_RX_RING_SIZE
-#define MV643XX_RX_RING_SIZE	2
-#undef  MV643XX_TX_RING_SIZE
-#define MV643XX_TX_RING_SIZE	4
-
-#else /* MVETH_TESTING */
-
-/* Define default ring sizes, allow override from bsp.h, Makefile,... and from ifcfg->rbuf_count/xbuf_count */
-
-#ifndef MV643XX_RX_RING_SIZE
-#define MV643XX_RX_RING_SIZE	40	/* attached buffers are always 2k clusters, i.e., this
-									 * driver - with a configured ring size of 40 - constantly
-									 * locks 80k of cluster memory - your app config better
-									 * provides enough space!
-									 */
-#endif
-
-#ifndef MV643XX_TX_RING_SIZE
-/* NOTE: tx ring size MUST be > max. # of fragments / mbufs in a chain;
- *       in 'TESTING' mode, special code is compiled in to repackage
- *		 chains that are longer than the ring size. Normally, this is
- *		 disabled for sake of speed.
- *		 I observed chains of >17 entries regularly!
- *
- *       Also, TX_NUM_TAG_SLOTS (1) must be left empty as a marker, hence
- *       the ring size must be > max. #frags + 1.
- */
-#define MV643XX_TX_RING_SIZE	200	/* these are smaller fragments and not occupied when
-									 * the driver is idle.
-									 */
-#endif
-
-#endif /* MVETH_TESTING */
-
 /* How many instances to we support (bsp.h could override) */
 #ifndef MV643XXETH_NUM_DRIVER_SLOTS
 #define MV643XXETH_NUM_DRIVER_SLOTS	2
