@@ -113,11 +113,6 @@
 /* Enable debugging messages and some support routines  (dump rings etc.)                    */      
 #undef  MVETH_DEBUG
 
-/* How many instances to we support (bsp.h could override) */
-#ifndef MV643XXETH_NUM_DRIVER_SLOTS
-#define MV643XXETH_NUM_DRIVER_SLOTS	2
-#endif
-
 #define TX_NUM_TAG_SLOTS			1 /* leave room for tag; must not be 0 */
 
 /* This is REAL; chip reads from 64-bit down-aligned buffer

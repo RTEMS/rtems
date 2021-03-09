@@ -179,11 +179,6 @@
 
 #endif /* MVETH_TESTING */
 
-/* How many instances to we support (bsp.h could override) */
-#ifndef MV643XXETH_NUM_DRIVER_SLOTS
-#define MV643XXETH_NUM_DRIVER_SLOTS	2
-#endif
-
 #define DRVNAME			"mve"
 #define MAX_NUM_SLOTS   3
 
