@@ -884,8 +884,17 @@ struct mveth_softc	*sc;
 struct ifnet		*ifp;
 rtems_event_set		evs;
 int                 avail;
+
+#ifdef MVETH_DEBUG
+	sleep(1);
+	printk(DRVNAME": bsdnet mveth_daemon started\n");
+#endif
+
 	for (;;) {
 		rtems_bsdnet_event_receive( 7, RTEMS_WAIT | RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT, &evs );
+#ifdef MVETH_DEBUG
+		printk(DRVNAME": bsdnet mveth_daemon event received 0x%x\n", evs);
+#endif
 		evs &= 7;
 		for ( sc = theMvEths; evs; evs>>=1, sc++ ) {
 			if ( (evs & 1) ) {
@@ -975,6 +984,10 @@ struct	ifnet		*ifp;
 			/* newproc uses the 1st 4 chars of name string to build an rtems name */
 			mveth_tid = rtems_bsdnet_newproc("MVEd", 4096, mveth_daemon, 0);
 		}
+
+#ifdef MVETH_DEBUG
+		printk(DRVNAME": daemon created; id 0x%08x\n", mveth_tid);
+#endif
 
 		if ( 0 == ifcfg->rbuf_count ) {
 			ifcfg->rbuf_count = MV643XX_RX_RING_SIZE;

@@ -908,6 +908,7 @@ static inline uint32_t
 mveth_ack_irqs(struct mveth_private *mp, uint32_t mask)
 {
 register uint32_t x,xe,p;
+register uint32_t rval;
 
 		p  = mp->port_num;
 		/* Get cause */
@@ -943,13 +944,21 @@ register uint32_t x,xe,p;
 		/* luckily, the extended and 'normal' interrupts we use don't overlap so
 		 * we can just OR them into a single word
 		 */
-		return  (xe & mp->xirq_mask) | (x & mp->irq_mask);
+		rval = (xe & mp->xirq_mask) | (x & mp->irq_mask);
+
+#ifdef MVETH_DEBUG
+		printk(DRVNAME"%i: mveth_ack_irqs 0x%08x\n", rval);
+#endif
+		return rval;
 }
 
 static void mveth_isr(rtems_irq_hdl_param arg)
 {
 struct mveth_private *mp   = (struct mveth_private*) arg;
 
+#ifdef MVETH_DEBUG
+	printk(DRVNAME": mveth_isr\n");
+#endif
 	mp->stats.irqs++;
 	mp->isr(mp->isr_arg);
 }
@@ -1576,6 +1585,10 @@ BSP_mve_update_serial_port(struct mveth_private *mp, int media)
 {
 int port = mp->port_num;
 uint32_t old, new;
+
+#ifdef MVETH_DEBUG
+	printk(DRVNAME"%i: Entering BSP_mve_update_serial_port()\n");
+#endif
 
 	new = old = MV_READ(MV643XX_ETH_SERIAL_CONTROL_R(port));
 
