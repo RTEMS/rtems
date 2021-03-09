@@ -25,7 +25,9 @@ default:
 description: |
   ABI flags
 enabled-by:
-- gcc
+  and:
+  - gcc
+  - not: RTEMS_CLANG_STATIC_ANALYZER
 links: []
 name: ABI_FLAGS
 type: build

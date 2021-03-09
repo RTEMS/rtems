@@ -27,7 +27,9 @@ default:
 description: |
   ABI flags
 enabled-by:
-- clang
+  and:
+  - clang
+  - not: RTEMS_CLANG_STATIC_ANALYZER
 links: []
 name: ABI_FLAGS
 type: build
