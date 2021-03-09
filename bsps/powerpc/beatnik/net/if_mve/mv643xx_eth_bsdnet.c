@@ -245,8 +245,8 @@ struct mveth_softc {
 
 typedef struct BsdMveIter {
 	MveEthBufIter it;
-	struct mbuf  *m;
-	struct mbuf  *h;
+	struct mbuf  *next;
+	struct mbuf  *head;
 } BsdMveIter;
 
 /* GLOBAL VARIABLES */
@@ -462,21 +462,34 @@ bail:
 	return m;
 }
 
-static MveEthBufIter *fillIter(struct mbuf *m, BsdMveIter *it)
+static inline struct mbuf *skipEmpty(struct mbuf *m)
 {
-	if ( (it->m = (void*)m) ) {
+	while ( m && ( 0 == m->m_len ) ) {
+		m = m->m_next;
+	}
+	return m;
+}
+
+static MveEthBufIter *nextBuf(MveEthBufIter *arg)
+{
+BsdMveIter  *it = (BsdMveIter*)arg;
+struct mbuf *m;
+	if ( (m = it->next) ) {
+		it->next    = skipEmpty( m->m_next );
 		it->it.data = mtod(m, void*);
 		it->it.len  = m->m_len;
-		it->it.uptr = m->m_next ? it->h : 0;
+		it->it.uptr = it->next ? 0 : it->head;
 		return (MveEthBufIter*)it;
 	}
 	return 0;
 }
 
-static MveEthBufIter *nextBuf(MveEthBufIter *arg)
+static MveEthBufIter *initIter(BsdMveIter *it, struct mbuf *m)
 {
-BsdMveIter *it = (BsdMveIter*)arg;
-	return fillIter( it->m->m_next, it );
+	it->head = m;
+	it->next = skipEmpty( m );
+	/* Fill with first buf info */
+	return nextBuf( &it->it );
 }
 
 int
@@ -501,12 +514,10 @@ startover:
 		return 0;
 
 	/* find first mbuf with actual data */
-	while ( 0 == m1->m_len ) {
-		if ( ! (m1 = m1->m_next) ) {
-			/* end reached and still no data to send ?? */
-			m_freem(m_head);
-			return 0;
-		}
+	if ( ! initIter( &iter, m_head ) ) {
+		/* end reached and still no data to send ?? */
+		m_freem(m_head);
+		return 0;
 	}
 
 #ifdef MVETH_DEBUG_TX_DUMP
@@ -523,9 +534,6 @@ startover:
 		printf("\n");
 	}
 #endif
-
-	fillIter( m_head, &iter );
-	iter.h = m_head;
 
 	rval = BSP_mve_send_buf_chain( mp, nextBuf, &iter.it );
 
