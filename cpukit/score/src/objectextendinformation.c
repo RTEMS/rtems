@@ -171,6 +171,17 @@ Objects_Maximum _Objects_Extend_information(
 
     if ( old_maximum > extend_count ) {
       /*
+       * Coverity thinks there is a way for this to be NULL (CID #26033).
+       * After much time spent analyzing this, no one has identified the
+       * conditions where this can actually occur. Adding this _Assert ensures
+       * that it is never NULL. If this assert is triggered, condition
+       * generating this case will have been identified and it can be revisted.
+       * This is being done out of an abundance of caution since we could have
+       * easily flagged this as a false positive and ignored it completely.
+       */
+      _Assert(information->object_blocks != NULL);
+
+      /*
        *  Copy each section of the table over. This has to be performed as
        *  separate parts as size of each block has changed.
        */
