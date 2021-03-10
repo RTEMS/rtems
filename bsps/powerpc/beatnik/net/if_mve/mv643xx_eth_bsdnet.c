@@ -168,9 +168,6 @@
  *		 chains that are longer than the ring size. Normally, this is
  *		 disabled for sake of speed.
  *		 I observed chains of >17 entries regularly!
- *
- *       Also, TX_NUM_TAG_SLOTS (1) must be left empty as a marker, hence
- *       the ring size must be > max. #frags + 1.
  */
 #define MV643XX_TX_RING_SIZE	200	/* these are smaller fragments and not occupied when
 									 * the driver is idle.
@@ -207,7 +204,6 @@
 #if	PPC_CACHE_ALIGMENT != 16 && PPC_CACHE_ALIGNMENT != 32
 #error "Cache line size must be 16 or 32"
 #else
-#define RING_ALIGNMENT				PPC_CACHE_ALIGNMENT
 #define RX_BUF_ALIGNMENT			PPC_CACHE_ALIGNMENT
 #endif
 
@@ -951,7 +947,7 @@ int                 avail;
 					}
 				}
 				/* free tx chain */
-				if ( (MV643XX_ETH_EXT_IRQ_TX_DONE & x) && (avail = BSP_mve_swipe_tx(sc->pvt)) > 0 ) {
+				if ( (MV643XX_ETH_EXT_IRQ_TX_DONE & x) && ((avail = BSP_mve_swipe_tx(sc->pvt)) > 0) ) {
 					ifp->if_flags &= ~IFF_OACTIVE;
 					if ( sc->bsd.tx_ring_size == avail )
 						ifp->if_timer = 0;
