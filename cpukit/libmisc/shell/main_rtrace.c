@@ -473,6 +473,7 @@ rtems_trace_buffering_shell_save (int argc, char *argv[])
   {
     close (out);
     printf ("error: no memory\n");
+    return 1;
   }
 
   memset (buf, 0, SAVE_BUF_SIZE);
