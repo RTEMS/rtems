@@ -1063,7 +1063,11 @@ unsigned wc = 0;
 unsigned
 BSP_mve_mii_read(struct mveth_private *mp, unsigned addr)
 {
-	return do_mii_read(mp->phy, addr);
+unsigned rval = do_mii_read(mp->phy, addr);
+#ifdef MVETH_DEBUG
+	printk(DRVNAME": BSP_mve_mii_read(%d): 0x%08x\n", addr, rval);
+#endif
+	return rval;
 }
 
 unsigned
@@ -1096,6 +1100,9 @@ unsigned wc = 0;
 unsigned
 BSP_mve_mii_write(struct mveth_private *mp, unsigned addr, unsigned v)
 {
+#ifdef MVETH_DEBUG
+	printk(DRVNAME": BSP_mve_mii_write(%d): 0x%08x\n", addr, v);
+#endif
 	return do_mii_write( mp->phy, addr, v );
 }
 
@@ -1587,7 +1594,7 @@ int port = mp->port_num;
 uint32_t old, new;
 
 #ifdef MVETH_DEBUG
-	printk(DRVNAME"%i: Entering BSP_mve_update_serial_port()\n");
+	printk(DRVNAME": Entering BSP_mve_update_serial_port()\n");
 #endif
 
 	new = old = MV_READ(MV643XX_ETH_SERIAL_CONTROL_R(port));
