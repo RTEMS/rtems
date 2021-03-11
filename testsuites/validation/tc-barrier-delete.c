@@ -242,7 +242,7 @@ static void RtemsBarrierReqDelete_Post_Name_Check(
   switch ( state ) {
     case RtemsBarrierReqDelete_Post_Name_Valid: {
       /*
-       * The unique object name shall identify the barrier.
+       * The unique object name shall identify a barrier.
        */
       id = 0;
       sc = rtems_barrier_ident( NAME, &id );
@@ -253,7 +253,7 @@ static void RtemsBarrierReqDelete_Post_Name_Check(
 
     case RtemsBarrierReqDelete_Post_Name_Invalid: {
       /*
-       * The unique object name shall not identify the barrier.
+       * The unique object name shall not identify a barrier.
        */
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );

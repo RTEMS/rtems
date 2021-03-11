@@ -426,7 +426,7 @@ static void RtemsTaskReqCreateErrors_Pre_Free_Prepare(
 
     case RtemsTaskReqCreateErrors_Pre_Free_No: {
       /*
-       * The system shall have no inactive task object available.
+       * The system shall not have an inactive task object available.
        */
       ctx->seized_objects = T_seize_objects( Create, ctx );
       break;

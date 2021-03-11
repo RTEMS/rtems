@@ -416,7 +416,7 @@ static void RtemsMessageReqConstructErrors_Pre_Free_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_Free_No: {
       /*
-       * The system shall have no inactive message queue object available.
+       * The system shall not have an inactive message queue object available.
        */
       i = 0;
       ctx->seized_objects = T_seize_objects( Create, &i );

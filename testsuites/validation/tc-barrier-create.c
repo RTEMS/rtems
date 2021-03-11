@@ -377,7 +377,7 @@ static void RtemsBarrierReqCreate_Pre_Free_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Free_No: {
       /*
-       * The system shall have no inactive partition object available.
+       * The system shall not have an inactive barrier object available.
        */
       ctx->seized_objects = T_seize_objects( Create, NULL );
       break;

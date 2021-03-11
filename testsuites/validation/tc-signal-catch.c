@@ -305,9 +305,11 @@ static void RtemsSignalReqCatch_Pre_Pending_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Pending_Yes: {
       /*
-       * Where the system has more than one processor, when
-       * rtems_signal_catch() is called, the calling task shall have pending
-       * signals.
+       * Where the system has more than one processor, while the calling task
+       * has pending signals, the rtems_signal_catch() directive shall be
+       * called. Where the system has exactly one processor, while the calling
+       * task has no pending signals, the rtems_signal_catch() directive shall
+       * be called.
        */
       ctx->pending_signals = ( rtems_scheduler_get_processor_maximum() > 1 ) ? 1 : 0;
       break;
@@ -315,8 +317,8 @@ static void RtemsSignalReqCatch_Pre_Pending_Prepare(
 
     case RtemsSignalReqCatch_Pre_Pending_No: {
       /*
-       * When rtems_signal_catch() is called, the calling task shall have no
-       * pending signals.
+       * While the calling task has no pending signals, the
+       * rtems_signal_catch() directive shall be called.
        */
       ctx->pending_signals = 0;
       break;
