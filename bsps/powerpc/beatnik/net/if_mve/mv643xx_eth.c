@@ -108,7 +108,7 @@
 /* Compile-time debugging features */
 
 /* Enable paranoia assertions and checks; reduce # of descriptors to minimum for stressing   */
-#undef  MVETH_TESTING
+#define MVETH_TESTING
 
 /* Enable debugging messages and some support routines  (dump rings etc.)                    */      
 #undef  MVETH_DEBUG
@@ -409,7 +409,8 @@
  * if there are no buffers
  */
 #define MV643XX_ETH_ALL_EXT_IRQS					(0x0011ffff)
-#define MV643XX_ETH_KNOWN_EXT_IRQS					(0x00010101)
+/* Recent (2013) linux driver mentions both bits 0x00110000 as 'link change' causes */
+#define MV643XX_ETH_KNOWN_EXT_IRQS					(0x00110101)
 #define MV643XX_ETH_EXT_IRQ_TX_DONE					(1<<0)
 #define MV643XX_ETH_EXT_IRQ_LINK_CHG				(1<<16)
 #define MV643XX_ETH_INTERRUPT_ENBL_R(port)			(0x2468 + ((port)<<10))
