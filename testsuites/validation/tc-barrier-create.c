@@ -119,10 +119,10 @@ typedef enum {
 } RtemsBarrierReqCreate_Post_Class;
 
 typedef enum {
-  RtemsBarrierReqCreate_Post_IdValue_Assigned,
-  RtemsBarrierReqCreate_Post_IdValue_Unchanged,
-  RtemsBarrierReqCreate_Post_IdValue_NA
-} RtemsBarrierReqCreate_Post_IdValue;
+  RtemsBarrierReqCreate_Post_IdVar_Set,
+  RtemsBarrierReqCreate_Post_IdVar_Nop,
+  RtemsBarrierReqCreate_Post_IdVar_NA
+} RtemsBarrierReqCreate_Post_IdVar;
 
 /**
  * @brief Test context for spec:/rtems/barrier/req/create test case.
@@ -522,33 +522,34 @@ static void RtemsBarrierReqCreate_Post_Class_Check(
   }
 }
 
-static void RtemsBarrierReqCreate_Post_IdValue_Check(
-  RtemsBarrierReqCreate_Context     *ctx,
-  RtemsBarrierReqCreate_Post_IdValue state
+static void RtemsBarrierReqCreate_Post_IdVar_Check(
+  RtemsBarrierReqCreate_Context   *ctx,
+  RtemsBarrierReqCreate_Post_IdVar state
 )
 {
   switch ( state ) {
-    case RtemsBarrierReqCreate_Post_IdValue_Assigned: {
+    case RtemsBarrierReqCreate_Post_IdVar_Set: {
       /*
-       * The value of the object identifier variable shall be equal to the
-       * object identifier of the barrier created by the rtems_barrier_create()
-       * call.
+       * The value of the object referenced by the ``id`` parameter shall be
+       * set to the object identifier of the created barrier after the return
+       * of the rtems_barrier_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
-    case RtemsBarrierReqCreate_Post_IdValue_Unchanged: {
+    case RtemsBarrierReqCreate_Post_IdVar_Nop: {
       /*
-       * The value of the object identifier variable shall be unchanged by the
+       * Objects referenced by the ``id`` parameter in past calls to
+       * rtems_barrier_create() shall not be accessed by the
        * rtems_barrier_create() call.
        */
       T_eq_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
-    case RtemsBarrierReqCreate_Post_IdValue_NA:
+    case RtemsBarrierReqCreate_Post_IdVar_NA:
       break;
   }
 }
@@ -630,242 +631,242 @@ static const uint8_t RtemsBarrierReqCreate_TransitionMap[][ 4 ] = {
     RtemsBarrierReqCreate_Post_Status_Ok,
     RtemsBarrierReqCreate_Post_Name_Valid,
     RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdValue_Assigned
+    RtemsBarrierReqCreate_Post_IdVar_Set
   }, {
     RtemsBarrierReqCreate_Post_Status_TooMany,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_Ok,
     RtemsBarrierReqCreate_Post_Name_Valid,
     RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdValue_Assigned
+    RtemsBarrierReqCreate_Post_IdVar_Set
   }, {
     RtemsBarrierReqCreate_Post_Status_TooMany,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_Ok,
     RtemsBarrierReqCreate_Post_Name_Valid,
     RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdValue_Assigned
+    RtemsBarrierReqCreate_Post_IdVar_Set
   }, {
     RtemsBarrierReqCreate_Post_Status_TooMany,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_Ok,
     RtemsBarrierReqCreate_Post_Name_Valid,
     RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdValue_Assigned
+    RtemsBarrierReqCreate_Post_IdVar_Set
   }, {
     RtemsBarrierReqCreate_Post_Status_TooMany,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvNum,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvNum,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_Ok,
     RtemsBarrierReqCreate_Post_Name_Valid,
     RtemsBarrierReqCreate_Post_Class_Auto,
-    RtemsBarrierReqCreate_Post_IdValue_Assigned
+    RtemsBarrierReqCreate_Post_IdVar_Set
   }, {
     RtemsBarrierReqCreate_Post_Status_TooMany,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvAddr,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }, {
     RtemsBarrierReqCreate_Post_Status_InvName,
     RtemsBarrierReqCreate_Post_Name_Invalid,
     RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdValue_Unchanged
+    RtemsBarrierReqCreate_Post_IdVar_Nop
   }
 };
 
@@ -1095,7 +1096,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
               ctx,
               RtemsBarrierReqCreate_TransitionMap[ index ][ 2 ]
             );
-            RtemsBarrierReqCreate_Post_IdValue_Check(
+            RtemsBarrierReqCreate_Post_IdVar_Check(
               ctx,
               RtemsBarrierReqCreate_TransitionMap[ index ][ 3 ]
             );

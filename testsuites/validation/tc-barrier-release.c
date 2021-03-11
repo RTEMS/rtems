@@ -93,10 +93,10 @@ typedef enum {
 } RtemsBarrierReqRelease_Post_Status;
 
 typedef enum {
-  RtemsBarrierReqRelease_Post_Released_Valid,
-  RtemsBarrierReqRelease_Post_Released_Unchanged,
-  RtemsBarrierReqRelease_Post_Released_NA
-} RtemsBarrierReqRelease_Post_Released;
+  RtemsBarrierReqRelease_Post_ReleasedVar_Set,
+  RtemsBarrierReqRelease_Post_ReleasedVar_Nop,
+  RtemsBarrierReqRelease_Post_ReleasedVar_NA
+} RtemsBarrierReqRelease_Post_ReleasedVar;
 
 /**
  * @brief Test context for spec:/rtems/barrier/req/release test case.
@@ -338,31 +338,33 @@ static void RtemsBarrierReqRelease_Post_Status_Check(
   }
 }
 
-static void RtemsBarrierReqRelease_Post_Released_Check(
-  RtemsBarrierReqRelease_Context      *ctx,
-  RtemsBarrierReqRelease_Post_Released state
+static void RtemsBarrierReqRelease_Post_ReleasedVar_Check(
+  RtemsBarrierReqRelease_Context         *ctx,
+  RtemsBarrierReqRelease_Post_ReleasedVar state
 )
 {
   switch ( state ) {
-    case RtemsBarrierReqRelease_Post_Released_Valid: {
+    case RtemsBarrierReqRelease_Post_ReleasedVar_Set: {
       /*
-       * The value of the variable for the number of released tasks shall equal
-       * the number of tasks released by the rtems_barrier_release() call.
+       * The value of the object referenced by the ``released`` parameter shall
+       * be set to the number of released tasks after the return of the
+       * rtems_barrier_release() call.
        */
       T_eq_u32( ctx->released_value, ctx->waiting_tasks );
       break;
     }
 
-    case RtemsBarrierReqRelease_Post_Released_Unchanged: {
+    case RtemsBarrierReqRelease_Post_ReleasedVar_Nop: {
       /*
-       * The value of variable for the number of released tasks shall be
-       * unchanged by the rtems_barrier_release() call.
+       * Objects referenced by the ``released`` parameter in past calls to
+       * rtems_barrier_release() shall not be accessed by the
+       * rtems_barrier_release() call.
        */
       T_eq_u32( ctx->released_value, RELEASED_INVALID_VALUE );
       break;
     }
 
-    case RtemsBarrierReqRelease_Post_Released_NA:
+    case RtemsBarrierReqRelease_Post_ReleasedVar_NA:
       break;
   }
 }
@@ -483,40 +485,40 @@ static T_fixture RtemsBarrierReqRelease_Fixture = {
 static const uint8_t RtemsBarrierReqRelease_TransitionMap[][ 2 ] = {
   {
     RtemsBarrierReqRelease_Post_Status_InvId,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_InvId,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_Released_Valid
+    RtemsBarrierReqRelease_Post_ReleasedVar_Set
   }, {
     RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_Released_Valid
+    RtemsBarrierReqRelease_Post_ReleasedVar_Set
   }, {
     RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_Released_Valid
+    RtemsBarrierReqRelease_Post_ReleasedVar_Set
   }, {
     RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_Released_Valid
+    RtemsBarrierReqRelease_Post_ReleasedVar_Set
   }, {
     RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }, {
     RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_Released_Unchanged
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
   }
 };
 
@@ -618,7 +620,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
           ctx,
           RtemsBarrierReqRelease_TransitionMap[ index ][ 0 ]
         );
-        RtemsBarrierReqRelease_Post_Released_Check(
+        RtemsBarrierReqRelease_Post_ReleasedVar_Check(
           ctx,
           RtemsBarrierReqRelease_TransitionMap[ index ][ 1 ]
         );

@@ -129,10 +129,10 @@ typedef enum {
 } RtemsTaskReqCreateErrors_Post_Name;
 
 typedef enum {
-  RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
-  RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-  RtemsTaskReqCreateErrors_Post_IdValue_NA
-} RtemsTaskReqCreateErrors_Post_IdValue;
+  RtemsTaskReqCreateErrors_Post_IdVar_Set,
+  RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+  RtemsTaskReqCreateErrors_Post_IdVar_NA
+} RtemsTaskReqCreateErrors_Post_IdVar;
 
 typedef enum {
   RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
@@ -599,32 +599,34 @@ static void RtemsTaskReqCreateErrors_Post_Name_Check(
   }
 }
 
-static void RtemsTaskReqCreateErrors_Post_IdValue_Check(
-  RtemsTaskReqCreateErrors_Context     *ctx,
-  RtemsTaskReqCreateErrors_Post_IdValue state
+static void RtemsTaskReqCreateErrors_Post_IdVar_Check(
+  RtemsTaskReqCreateErrors_Context   *ctx,
+  RtemsTaskReqCreateErrors_Post_IdVar state
 )
 {
   switch ( state ) {
-    case RtemsTaskReqCreateErrors_Post_IdValue_Assigned: {
+    case RtemsTaskReqCreateErrors_Post_IdVar_Set: {
       /*
-       * The value of the object identifier variable shall be equal to the
-       * object identifier of the task created by the rtems_task_create() call.
+       * The value of the object referenced by the ``id`` parameter shall be
+       * set to the object identifier of the created task after the return of
+       * the rtems_task_create() call.
        */
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
-    case RtemsTaskReqCreateErrors_Post_IdValue_Unchanged: {
+    case RtemsTaskReqCreateErrors_Post_IdVar_Nop: {
       /*
-       * The value of the object identifier variable shall be unchanged by the
-       * rtems_task_create() call.
+       * Objects referenced by the ``id`` parameter in past calls to
+       * rtems_task_create() shall not be accessed by the rtems_task_create()
+       * call.
        */
       T_eq_u32( ctx->id_value, INVALID_ID );
       break;
     }
 
-    case RtemsTaskReqCreateErrors_Post_IdValue_NA:
+    case RtemsTaskReqCreateErrors_Post_IdVar_NA:
       break;
   }
 }
@@ -754,1729 +756,1729 @@ static const uint8_t RtemsTaskReqCreateErrors_TransitionMap[][ 5 ] = {
   {
     RtemsTaskReqCreateErrors_Post_Status_Ok,
     RtemsTaskReqCreateErrors_Post_Name_Valid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
+    RtemsTaskReqCreateErrors_Post_IdVar_Set,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
-    RtemsTaskReqCreateErrors_Post_DelExt_Yes
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_Ok,
-    RtemsTaskReqCreateErrors_Post_Name_Valid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
-    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_Unsat,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
-    RtemsTaskReqCreateErrors_Post_DelExt_Yes
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_Unsat,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_Unsat,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_TooMany,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_TooMany,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_TooMany,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_TooMany,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_TooMany,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_TooMany,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_Ok,
-    RtemsTaskReqCreateErrors_Post_Name_Valid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
-    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_Unsat,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_Yes
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Ok,
     RtemsTaskReqCreateErrors_Post_Name_Valid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
+    RtemsTaskReqCreateErrors_Post_IdVar_Set,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_Yes
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
-    RtemsTaskReqCreateErrors_Post_CreateExt_No,
-    RtemsTaskReqCreateErrors_Post_DelExt_No
-  }, {
-    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
-    RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Ok,
     RtemsTaskReqCreateErrors_Post_Name_Valid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
+    RtemsTaskReqCreateErrors_Post_IdVar_Set,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_Yes
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Ok,
     RtemsTaskReqCreateErrors_Post_Name_Valid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Assigned,
+    RtemsTaskReqCreateErrors_Post_IdVar_Set,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
     RtemsTaskReqCreateErrors_Post_DelExt_Yes
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_Unsat,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_TooMany,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_Ok,
+    RtemsTaskReqCreateErrors_Post_Name_Valid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Set,
+    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_Unsat,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
+    RtemsTaskReqCreateErrors_Post_DelExt_Yes
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_Ok,
+    RtemsTaskReqCreateErrors_Post_Name_Valid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Set,
+    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_Unsat,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_Yes,
+    RtemsTaskReqCreateErrors_Post_DelExt_Yes
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_Unsat,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_Unsat,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_TooMany,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_TooMany,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_TooMany,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_TooMany,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_TooMany,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_TooMany,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvPrio,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
+    RtemsTaskReqCreateErrors_Post_Status_InvPrio,
+    RtemsTaskReqCreateErrors_Post_Name_Invalid,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
+    RtemsTaskReqCreateErrors_Post_CreateExt_No,
+    RtemsTaskReqCreateErrors_Post_DelExt_No
+  }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvAddr,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }, {
     RtemsTaskReqCreateErrors_Post_Status_InvName,
     RtemsTaskReqCreateErrors_Post_Name_Invalid,
-    RtemsTaskReqCreateErrors_Post_IdValue_Unchanged,
+    RtemsTaskReqCreateErrors_Post_IdVar_Nop,
     RtemsTaskReqCreateErrors_Post_CreateExt_No,
     RtemsTaskReqCreateErrors_Post_DelExt_No
   }
@@ -3257,7 +3259,7 @@ T_TEST_CASE_FIXTURE(
                   ctx,
                   RtemsTaskReqCreateErrors_TransitionMap[ index ][ 1 ]
                 );
-                RtemsTaskReqCreateErrors_Post_IdValue_Check(
+                RtemsTaskReqCreateErrors_Post_IdVar_Check(
                   ctx,
                   RtemsTaskReqCreateErrors_TransitionMap[ index ][ 2 ]
                 );
