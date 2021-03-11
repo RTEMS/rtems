@@ -659,7 +659,7 @@ struct mveth_private {
 		unsigned		maxchain;
 		unsigned		repack;
 		unsigned		packet;
-		unsigned		odrops;					/* no counter in core code                   */
+		unsigned		idrops;					/* no counter in core code                   */
 		struct {
 			uint64_t	good_octs_rcvd;         /* 64-bit */
 			uint32_t	bad_octs_rcvd;
@@ -1976,7 +1976,7 @@ uintptr_t 				baddr;
 		if ( err || !(newbuf = mp->alloc_rxbuf(&sz, &baddr)) ) {
 			/* drop packet and recycle buffer */
 			newbuf = d->u_buf;
-			mp->consume_rxbuf(0, mp->consume_rxbuf_arg, err ? -1 : 0);
+			mp->stats.idrops++;
 		} else {
 #ifdef MVETH_TESTING
 			assert( d->byte_cnt > 0 );
@@ -2312,6 +2312,7 @@ uint32_t v;
 	fprintf(f, "  Max. mbuf chain length: %i\n", mp->stats.maxchain);
 	fprintf(f, "  # repacketed:           %i\n", mp->stats.repack);
 	fprintf(f, "  # packets:              %i\n", mp->stats.packet);
+	fprintf(f, "  # buffer alloc failed:  %i\n", mp->stats.idrops);
 	fprintf(f, "MIB Counters:\n");
 	for ( idx = MV643XX_ETH_MIB_GOOD_OCTS_RCVD_LO>>2;
 			idx < MV643XX_ETH_NUM_MIB_COUNTERS;
