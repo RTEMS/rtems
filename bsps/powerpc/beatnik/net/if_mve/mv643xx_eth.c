@@ -18,19 +18,19 @@
  * new implementation and is the original work by the author.
  */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software (mv643xx ethernet driver for RTEMS) was
  *     created by Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The 'mv643xx ethernet driver for RTEMS' was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -39,18 +39,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -59,9 +59,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 /*
  * NOTE: Some register (e.g., the SMI register) are SHARED among the
@@ -110,7 +110,7 @@
 /* Enable paranoia assertions and checks; reduce # of descriptors to minimum for stressing   */
 #define MVETH_TESTING
 
-/* Enable debugging messages and some support routines  (dump rings etc.)                    */      
+/* Enable debugging messages and some support routines  (dump rings etc.)                    */
 #undef  MVETH_DEBUG
 
 #define TX_NUM_TAG_SLOTS			1 /* leave room for tag; must not be 0 */
@@ -199,7 +199,7 @@
  *
  * broadcast packet RX: 0x00000005
  *           last buf:  0x00000c05
- *           overrun:   0x00000c00           
+ *           overrun:   0x00000c00
  * unicast   packet RX: 0x00000005
  * bad CRC received:    0x00000005
  *
@@ -232,11 +232,11 @@
  *        }
  *    --> sometimes, cmd_sts is STILL != 0 here
  *
- * b) Sometimes, the OWNership flag is *not cleared*.  
- * 
+ * b) Sometimes, the OWNership flag is *not cleared*.
+ *
  * c) Weird things happen if the chip finds a descriptor with 'OWN'
  *    still set (i.e., not properly loaded), i.e., corrupted packets
- *    are sent [with OK checksum since the chip calculates it]. 
+ *    are sent [with OK checksum since the chip calculates it].
  *
  * Combine a+b+c and we end up with a real mess.
  *
@@ -398,11 +398,16 @@
 /* not fully understood; RX seems to raise 0x0005 or 0x0c05 if last buffer is filled and 0x0c00
  * if there are no buffers
  */
-#define MV643XX_ETH_ALL_IRQS						(0x0007ffff)
-#define MV643XX_ETH_KNOWN_IRQS						(0x00000c05)
+#define MV643XX_ETH_ALL_IRQS						(0x07ffffff)
+#define MV643XX_ETH_KNOWN_IRQS						(0x00080c07)
 #define MV643XX_ETH_IRQ_EXT_ENA						(1<<1)
+/* defined in public header
 #define MV643XX_ETH_IRQ_RX_DONE						(1<<2)
+ */
 #define MV643XX_ETH_IRQ_RX_NO_DESC					(1<<10)
+#define MV643XX_ETH_TX_Q_N_END(n)                   (1<<((n)+19))
+/* We just use queue 0 */
+#define MV643XX_ETH_TX_Q_END						MV643XX_ETH_TX_Q_N_END(0)
 
 #define MV643XX_ETH_INTERRUPT_EXTEND_CAUSE_R(port)	(0x2464 + ((port)<<10))
 /* not fully understood; TX seems to raise 0x0001 and link change is 0x00010000
@@ -411,8 +416,13 @@
 #define MV643XX_ETH_ALL_EXT_IRQS					(0x0011ffff)
 /* Recent (2013) linux driver mentions both bits 0x00110000 as 'link change' causes */
 #define MV643XX_ETH_KNOWN_EXT_IRQS					(0x00110101)
-#define MV643XX_ETH_EXT_IRQ_TX_DONE					(1<<0)
+/* TX queues 0..7 */
+#define MV643XX_ETH_EXT_IRQ_TXN_DONE(n)				(1<<(n))
+/* We just use queue 0 */
+/* defined in public header
+#define MV643XX_ETH_EXT_IRQ_TX_DONE 				MV643XX_ETH_EXT_IRQ_TXN_DONE(0)
 #define MV643XX_ETH_EXT_IRQ_LINK_CHG				(1<<16)
+ */
 #define MV643XX_ETH_INTERRUPT_ENBL_R(port)			(0x2468 + ((port)<<10))
 #define MV643XX_ETH_INTERRUPT_EXTEND_ENBL_R(port)	(0x246c + ((port)<<10))
 
@@ -640,7 +650,7 @@ struct mveth_private {
 	int				port_num;
 	int				phy;
 	MvEthRxDesc		d_rx_t;						/* tail of the RX ring; next received packet */
-	MvEthTxDesc		d_tx_t, d_tx_h;				
+	MvEthTxDesc		d_tx_t, d_tx_h;
 	uint32_t		rx_desc_dma, tx_desc_dma; 	/* ring address as seen by DMA;	(1:1 on this BSP) */
 	int				avail;
 	void            (*isr)(void*);
@@ -830,7 +840,7 @@ static inline void FLUSH_BUF(register uintptr_t addr, register int len)
 {
 	asm volatile("":::"memory");
 	len = MV643XX_ALIGN(len, RX_BUF_ALIGNMENT);
-	do { 
+	do {
 		asm volatile("dcbf %0, %1"::"b"(addr),"r"(len));
 		len -= RX_BUF_ALIGNMENT;
 	} while ( len >= 0 );
@@ -938,8 +948,10 @@ register uint32_t rval;
 			 || ((xe & MV643XX_ETH_ALL_EXT_IRQS) & ~MV643XX_ETH_KNOWN_EXT_IRQS) ) {
 			fprintf(stderr, "Unknown IRQs detected; leaving all disabled for debugging:\n");
 			fprintf(stderr, "Cause reg was 0x%08x, ext cause 0x%08x\n", x, xe);
+/*
 			mp->irq_mask  = 0;
 			mp->xirq_mask = 0;
+*/
 		}
 #endif
 		/* luckily, the extended and 'normal' interrupts we use don't overlap so
@@ -1029,7 +1041,7 @@ port2phy(int port)
 /* PHY/MII Interface
  *
  * Read/write a PHY register;
- * 
+ *
  * NOTE: The SMI register is shared among the three devices.
  *       Protection is provided by the global networking semaphore.
  *       If non-bsd drivers are running on a subset of IFs proper
@@ -1496,7 +1508,7 @@ BSP_mve_create(
 	rtems_id tid,
 	void     (*isr)(void*isr_arg),
 	void     *isr_arg,
-	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred),
 	void *cleanup_txbuf_arg,
 	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
 	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
@@ -1725,7 +1737,7 @@ MveEthBufIter           head = *it;
 
 	h = mp->d_tx_h;
 
-#ifdef MVETH_TESTING 
+#ifdef MVETH_TESTING
 	assert( !h->buf_ptr );
 	assert( !h->u_buf   );
 #endif
@@ -1850,7 +1862,7 @@ void                    *uarg;
 
 	rval = 0;
 
-#ifdef MVETH_TESTING 
+#ifdef MVETH_TESTING
 	assert(head_p || data_p);
 #endif
 
@@ -1866,7 +1878,7 @@ void                    *uarg;
 
 	h = mp->d_tx_h;
 
-#ifdef MVETH_TESTING 
+#ifdef MVETH_TESTING
 	assert( !h->buf_ptr );
 	assert( !h->u_buf   );
 #endif
@@ -1968,7 +1980,7 @@ uintptr_t 				baddr;
 
 	for ( d = mp->d_rx_t; ! (INVAL_DESC(d), (RDESC_DMA_OWNED & d->cmd_sts)); d=NEXT_RXD(d) ) {
 
-#ifdef MVETH_TESTING 
+#ifdef MVETH_TESTING
 		assert(d->u_buf);
 #endif
 
@@ -2030,7 +2042,7 @@ int			i;
 
 		BSP_mve_swipe_tx(mp);
 
-#ifdef MVETH_TESTING 
+#ifdef MVETH_TESTING
 		assert( mp->d_tx_h == mp->d_tx_t );
 		for ( i=0, d=mp->tx_ring; i<mp->xbuf_count; i++, d++ ) {
 			assert( !d->buf_ptr );
@@ -2173,7 +2185,7 @@ static int			inited = 0;
 		assert( maclo && machi && maclo != 0xffffffff && machi != 0xffffffff );
 		mveth_ucfilter(mp, maclo&0xff, 1/* accept */);
 	}
-	
+
 	/* port, serial and sdma configuration */
 	v = MVETH_PORT_CONFIG_VAL;
 	if ( promisc ) {

@@ -18,19 +18,19 @@
  * new implementation and is the original work by the author.
  */
 
-/* 
+/*
  * Authorship
  * ----------
  * This software (mv643xx ethernet driver for RTEMS) was
  *     created by Till Straumann <strauman@slac.stanford.edu>, 2005-2007,
  * 	   Stanford Linear Accelerator Center, Stanford University.
- * 
+ *
  * Acknowledgement of sponsorship
  * ------------------------------
  * The 'mv643xx ethernet driver for RTEMS' was produced by
  *     the Stanford Linear Accelerator Center, Stanford University,
  * 	   under Contract DE-AC03-76SFO0515 with the Department of Energy.
- * 
+ *
  * Government disclaimer of liability
  * ----------------------------------
  * Neither the United States nor the United States Department of Energy,
@@ -39,18 +39,18 @@
  * completeness, or usefulness of any data, apparatus, product, or process
  * disclosed, or represents that its use would not infringe privately owned
  * rights.
- * 
+ *
  * Stanford disclaimer of liability
  * --------------------------------
  * Stanford University makes no representations or warranties, express or
  * implied, nor assumes any liability for the use of this software.
- * 
+ *
  * Stanford disclaimer of copyright
  * --------------------------------
  * Stanford University, owner of the copyright, hereby disclaims its
  * copyright and all other rights in this software.  Hence, anyone may
- * freely use it for any purpose without restriction.  
- * 
+ * freely use it for any purpose without restriction.
+ *
  * Maintenance of notices
  * ----------------------
  * In the interest of clarity regarding the origin and status of this
@@ -59,9 +59,9 @@
  * or distributed by the recipient and are to be affixed to any copy of
  * software made or distributed by the recipient that contains a copy or
  * derivative of this software.
- * 
+ *
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
- */ 
+ */
 
 /*
  * NOTE: Some register (e.g., the SMI register) are SHARED among the
@@ -137,7 +137,7 @@
 /* Enable paranoia assertions and checks; reduce # of descriptors to minimum for stressing   */
 #undef  MVETH_TESTING
 
-/* Enable debugging messages and some support routines  (dump rings etc.)                    */      
+/* Enable debugging messages and some support routines  (dump rings etc.)                    */
 #undef  MVETH_DEBUG
 
 /* Ring sizes */
@@ -302,7 +302,7 @@ mve_setup_bsd(
 	rtems_id tid,
 	void     (*isr)(void *isr_arg),
 	void     *isr_arg,
-	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred),
 	void *cleanup_txbuf_arg,
 	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
 	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
@@ -372,7 +372,7 @@ struct mveth_private *
 BSP_mve_setup(
 	int		 unit,
 	rtems_id tid,
-	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred),
 	void *cleanup_txbuf_arg,
 	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
 	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
@@ -384,7 +384,7 @@ BSP_mve_setup(
 {
 	if ( irq_mask && 0 == tid ) {
 		printk(DRVNAME": must supply a TID if irq_msk not zero\n");
-		return 0;	
+		return 0;
 	}
 
 	return mve_setup_bsd(
@@ -403,7 +403,7 @@ BSP_mve_setup_1(
 	int		 unit,
 	void     (*isr)(void *isr_arg),
 	void     *isr_arg,
-	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred), 
+	void (*cleanup_txbuf)(void *user_buf, void *closure, int error_on_tx_occurred),
 	void *cleanup_txbuf_arg,
 	void *(*alloc_rxbuf)(int *p_size, uintptr_t *p_data_addr),
 	void (*consume_rxbuf)(void *user_buf, void *closure, int len),
@@ -415,7 +415,7 @@ BSP_mve_setup_1(
 {
 	if ( irq_mask && 0 == isr ) {
 		printk(DRVNAME": must supply an ISR if irq_msk not zero\n");
-		return 0;	
+		return 0;
 	}
 
 	return mve_setup_bsd(
@@ -502,7 +502,7 @@ startover:
 
 	rval = 0;
 
-#ifdef MVETH_TESTING 
+#ifdef MVETH_TESTING
 	assert(m_head);
 #endif
 
@@ -536,7 +536,7 @@ startover:
 	if ( -2 == rval ) {
 		if ( ! (m_head = repackage_chain( m_head )) ) {
 			/* no cluster available */
-			/* No access to this counter, unfortunately			
+			/* No access to this counter, unfortunately
 			mp->stats.odrops++;
 			 */
 			return 0;
@@ -654,7 +654,7 @@ unsigned long	l,o;
 
 	m->m_len   = m->m_pkthdr.len = l;
 	*psz       = m->m_len;
-	*paddr     = mtod(m, uintptr_t); 
+	*paddr     = mtod(m, uintptr_t);
 
 	return (void*) m;
 }
@@ -681,7 +681,7 @@ struct mbuf    *m = buf;
 
 			ifp->if_ipackets++;
 			ifp->if_ibytes  += m->m_pkthdr.len;
-			
+
 			if (0) {
 				/* Low-level debugging */
 				int i;
@@ -801,7 +801,7 @@ struct mveth_softc  *sc = ifp->if_softc;
 		struct ether_multistep step;
 
 		BSP_mve_mcast_filter_clear( sc->pvt );
-		
+
 		ETHER_FIRST_MULTI(step, (struct arpcom *)ifp, enm);
 
 		while ( enm ) {
@@ -849,7 +849,7 @@ int					f;
   		case SIOCSIFMEDIA:
 			error = BSP_mve_media_ioctl(sc->pvt, cmd, &ifr->ifr_media);
 		break;
- 
+
 		case SIOCADDMULTI:
 		case SIOCDELMULTI:
 			error = (cmd == SIOCADDMULTI)
@@ -1050,7 +1050,7 @@ struct	ifnet		*ifp;
 		/*
 		 * While nonzero, the 'if->if_timer' is decremented
 		 * (by the networking code) at a rate of IFNET_SLOWHZ (1hz) and 'if_watchdog'
-		 * is called when it expires. 
+		 * is called when it expires.
 		 * If either of those fields is 0 the feature is disabled.
 		 */
 		ifp->if_watchdog		= mveth_watchdog;
