@@ -734,12 +734,12 @@ static void test_mrsp_flush_error(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void test_mrsp_initially_locked_error(void)
+static void test_mrsp_initially_locked(void)
 {
   rtems_status_code sc;
   rtems_id id;
 
-  puts("test MrsP initially locked error");
+  puts("test MrsP initially locked");
 
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
@@ -749,7 +749,13 @@ static void test_mrsp_initially_locked_error(void)
     1,
     &id
   );
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void test_mrsp_nested_obtain_error(test_context *ctx)
@@ -1750,7 +1756,7 @@ static void Init(rtems_task_argument arg)
   }
 
   test_mrsp_flush_error(ctx);
-  test_mrsp_initially_locked_error();
+  test_mrsp_initially_locked();
   test_mrsp_nested_obtain_error(ctx);
   test_mrsp_deadlock_error(ctx);
   test_mrsp_multiple_obtain(ctx);

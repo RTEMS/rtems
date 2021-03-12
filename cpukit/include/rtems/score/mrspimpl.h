@@ -295,12 +295,13 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   bool                     initially_locked
 )
 {
-  uint32_t scheduler_count = _Scheduler_Count;
-  uint32_t i;
+  Thread_queue_Context queue_context;
+  ISR_Level            level;
+  size_t               scheduler_count;
+  size_t               i;
+  Status_Control       status;
 
-  if ( initially_locked ) {
-    return STATUS_INVALID_NUMBER;
-  }
+  scheduler_count = _Scheduler_Count;
 
   for ( i = 0 ; i < scheduler_count ; ++i ) {
     const Scheduler_Control *scheduler_of_index;
@@ -316,7 +317,22 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   }
 
   _Thread_queue_Object_initialize( &mrsp->Wait_queue );
-  return STATUS_SUCCESSFUL;
+
+  if ( !initially_locked ) {
+    return STATUS_SUCCESSFUL;
+  }
+
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
+  _Thread_queue_Context_set_ISR_level( &queue_context, level );
+  _MRSP_Acquire_critical( mrsp, &queue_context );
+  status = _MRSP_Claim_ownership( mrsp, executing, &queue_context );
+
+  if ( status != STATUS_SUCCESSFUL ) {
+    _Thread_queue_Destroy( &mrsp->Wait_queue );
+  }
+
+  return status;
 }
 
 /**
