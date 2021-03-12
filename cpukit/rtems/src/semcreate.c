@@ -72,12 +72,6 @@ rtems_status_code rtems_semaphore_create(
 
   if ( maybe_global == RTEMS_COUNTING_SEMAPHORE ) {
     variant = SEMAPHORE_VARIANT_COUNTING;
-  } else if ( count > 1 ) {
-    /*
-     * The remaining variants are all binary semphores, thus reject an invalid
-     * count value.
-     */
-    return RTEMS_INVALID_NUMBER;
   } else if ( maybe_global == RTEMS_SIMPLE_BINARY_SEMAPHORE ) {
     variant = SEMAPHORE_VARIANT_SIMPLE_BINARY;
   } else if ( maybe_global == RTEMS_BINARY_SEMAPHORE ) {
@@ -107,6 +101,10 @@ rtems_status_code rtems_semaphore_create(
 #endif
   } else {
     return RTEMS_NOT_DEFINED;
+  }
+
+  if ( count > 1 && variant != SEMAPHORE_VARIANT_COUNTING ) {
+    return RTEMS_INVALID_NUMBER;
   }
 
   the_semaphore = _Semaphore_Allocate();
