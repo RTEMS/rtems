@@ -42,7 +42,9 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/basedefs.h>
 
+/* These must be 8 byte aligned to avoid misaligned accesses */
 #define FRAME_OFFSET_X4  0x00
 #define FRAME_OFFSET_X5  0x08
 #define FRAME_OFFSET_X6  0x10
@@ -54,18 +56,23 @@
 #define FRAME_OFFSET_LR  0x40
 
 #ifdef AARCH64_MULTILIB_VFP
-  #define FRAME_OFFSET_V8  0x48
-  #define FRAME_OFFSET_V9  0x58
-  #define FRAME_OFFSET_V10 0x68
-  #define FRAME_OFFSET_V11 0x78
-  #define FRAME_OFFSET_V12 0x88
-  #define FRAME_OFFSET_V13 0x98
-  #define FRAME_OFFSET_V14 0xA8
-  #define FRAME_OFFSET_V15 0xB8
+  /* These must be 16 byte aligned to avoid misaligned accesses */
+  #define FRAME_OFFSET_V8  0x50
+  #define FRAME_OFFSET_V9  0x60
+  #define FRAME_OFFSET_V10 0x70
+  #define FRAME_OFFSET_V11 0x80
+  #define FRAME_OFFSET_V12 0x90
+  #define FRAME_OFFSET_V13 0xA0
+  #define FRAME_OFFSET_V14 0xB0
+  #define FRAME_OFFSET_V15 0xC0
 
-  #define FRAME_SIZE (FRAME_OFFSET_V15 + 0x10)
+  /*
+   * Force 16 byte alignment of the frame size to avoid stack pointer alignment
+   * exceptions.
+   */
+  #define FRAME_SIZE RTEMS_ALIGN_UP( FRAME_OFFSET_V15, 16 )
 #else
-  #define FRAME_SIZE (FRAME_OFFSET_LR + 0x08)
+  #define FRAME_SIZE RTEMS_ALIGN_UP( FRAME_OFFSET_LR, 16 )
 #endif
 
 	.section	.text
