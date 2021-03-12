@@ -310,11 +310,31 @@ copy(rtems_shell_cp_globals* cp_globals,
 		case FTS_ERR:
 			warnx("%s: %s",
 			    curr->fts_path, strerror(curr->fts_errno));
+		#ifdef __rtems__
+		/*
+		 * Coverity spotted that badcp is set by each loop
+		 * iteration so setting it right before continue
+		 * results in the value being unused. See CID 1255344
+		 *
+		 * The current NetBSD source (v1.62) was checked and
+		 * the same issue appears to apply although the
+		 * variable names have changed since this was imported
+		 * to RTEMS.
+		 *
+		 * This pattern exists in multiple places in this file.
+		 */
+			rval = 1;
+		#else
 			badcp = rval = 1;
+		#endif
 			continue;
 		case FTS_DC:			/* Warn, continue. */
 			warnx("%s: directory causes a cycle", curr->fts_path);
+		#ifdef __rtems__
+			rval = 1;
+		#else
 			badcp = rval = 1;
+		#endif
 			continue;
 		default:
 			;
@@ -366,7 +386,11 @@ copy(rtems_shell_cp_globals* cp_globals,
 			if (target_mid - to.p_path + nlen >= PATH_MAX) {
 				warnx("%s%s: name too long (not copied)",
 				    to.p_path, p);
+			#ifdef __rtems__
+				rval = 1;
+			#else
 				badcp = rval = 1;
+			#endif
 				continue;
 			}
 			(void)strncat(target_mid, p, nlen);
@@ -418,7 +442,11 @@ copy(rtems_shell_cp_globals* cp_globals,
 			    to_stat.st_ino == curr->fts_statp->st_ino) {
 				warnx("%s and %s are identical (not copied).",
 				    to.p_path, curr->fts_path);
+			#ifdef __rtems__
+				rval = 1;
+			#else
 				badcp = rval = 1;
+			#endif
 				if (S_ISDIR(curr->fts_statp->st_mode))
 					(void)fts_set(ftsp, curr, FTS_SKIP);
 				continue;
@@ -428,7 +456,11 @@ copy(rtems_shell_cp_globals* cp_globals,
 				warnx("cannot overwrite directory %s with "
 				    "non-directory %s",
 				    to.p_path, curr->fts_path);
+			#ifdef __rtems__
+				rval = 1;
+			#else
 				badcp = rval = 1;
+			#endif
 				continue;
 			}
 			dne = 0;
