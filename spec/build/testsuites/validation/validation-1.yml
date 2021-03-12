@@ -13,6 +13,8 @@ links: []
 source:
 - testsuites/validation/tc-signal-catch.c
 - testsuites/validation/tc-signal-send.c
+- testsuites/validation/tc-task-construct-errors.c
+- testsuites/validation/tc-task-create-errors.c
 - testsuites/validation/ts-validation-1.c
 stlib: []
 target: testsuites/validation/ts-validation-1.exe

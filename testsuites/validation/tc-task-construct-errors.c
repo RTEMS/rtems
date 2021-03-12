@@ -64,6 +64,7 @@
  *   spec:/rtems/task/req/construct-errors
  *
  * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidation1
  *
  * @{
  */
