@@ -128,14 +128,17 @@ void zynq_uart_initialize(rtems_termios_device_context *base)
 
   regs->control &= ~(ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN);
   regs->control = ZYNQ_UART_CONTROL_RXDIS
-    | ZYNQ_UART_CONTROL_TXDIS
-    | ZYNQ_UART_CONTROL_RXRES
-    | ZYNQ_UART_CONTROL_TXRES;
+    | ZYNQ_UART_CONTROL_TXDIS;
   regs->mode = ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL)
     | ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE)
     | ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8);
   regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
   regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
+  /* A Tx/Rx logic reset must be issued after baud rate manipulation */
+  regs->control = ZYNQ_UART_CONTROL_RXDIS
+    | ZYNQ_UART_CONTROL_TXDIS
+    | ZYNQ_UART_CONTROL_RXRES
+    | ZYNQ_UART_CONTROL_TXRES;
   regs->rx_fifo_trg_lvl = ZYNQ_UART_RX_FIFO_TRG_LVL_RTRIG(0);
   regs->rx_timeout = ZYNQ_UART_RX_TIMEOUT_RTO(0);
   regs->control = ZYNQ_UART_CONTROL_RXEN

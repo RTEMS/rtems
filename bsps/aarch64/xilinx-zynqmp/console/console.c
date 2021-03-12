@@ -112,6 +112,12 @@ static void zynqmp_debug_console_early_init(char c)
     &zynqmp_uart_instances[BSP_CONSOLE_MINOR].base;
 
   zynq_uart_initialize(base);
+  BSP_output_char = zynqmp_debug_console_out;
+  /*
+   * Some ZynqMP UARTs have a hardware bug that causes TX/RX logic restarts to
+   * require a kick after baud rate registers are initialized.
+   */
+  zynqmp_debug_console_out(0);
   zynqmp_debug_console_out(c);
 }
 
