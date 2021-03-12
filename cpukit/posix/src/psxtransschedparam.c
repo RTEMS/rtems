@@ -42,27 +42,28 @@ int _POSIX_Thread_Translate_to_sched_policy(
 }
 
 int _POSIX_Thread_Translate_sched_param(
-  int                                  policy,
-  const struct sched_param            *param,
-  Thread_CPU_budget_algorithms        *budget_algorithm,
-  Thread_CPU_budget_algorithm_callout *budget_callout
+  int                       policy,
+  const struct sched_param *param,
+  Thread_Configuration     *config
 )
 {
-  *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
-  *budget_callout = NULL;
+  config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+  config->budget_callout = NULL;
+  config->cpu_time_budget = 0;
 
   if ( policy == SCHED_OTHER ) {
-    *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+    config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
     return 0;
   }
 
   if ( policy == SCHED_FIFO ) {
-    *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+    config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
     return 0;
   }
 
   if ( policy == SCHED_RR ) {
-    *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
+    config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
+    config->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
     return 0;
   }
 
@@ -80,8 +81,8 @@ int _POSIX_Thread_Translate_sched_param(
 	 _Timespec_To_ticks( &param->sched_ss_init_budget ) )
       return EINVAL;
 
-    *budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-    *budget_callout = _POSIX_Threads_Sporadic_budget_callout;
+    config->budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
+    config->budget_callout = _POSIX_Threads_Sporadic_budget_callout;
     return 0;
   }
 #endif

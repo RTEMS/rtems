@@ -171,8 +171,7 @@ int pthread_create(
   error = _POSIX_Thread_Translate_sched_param(
     schedpolicy,
     &schedparam,
-    &config.budget_algorithm,
-    &config.budget_callout
+    &config
   );
   if ( error != 0 ) {
     return error;

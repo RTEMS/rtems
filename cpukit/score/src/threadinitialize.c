@@ -27,7 +27,6 @@
 #include <rtems/score/tls.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
-#include <rtems/config.h>
 
 void _Thread_Free(
   Thread_Information *information,
@@ -176,6 +175,7 @@ static bool _Thread_Try_initialize(
    */
 
   the_thread->is_fp                  = config->is_fp;
+  the_thread->cpu_time_budget        = config->cpu_time_budget;
   the_thread->Start.isr_level        = config->isr_level;
   the_thread->Start.is_preemptible   = config->is_preemptible;
   the_thread->Start.budget_algorithm = config->budget_algorithm;
@@ -183,22 +183,6 @@ static bool _Thread_Try_initialize(
   the_thread->Start.stack_free       = config->stack_free;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
-
-  switch ( config->budget_algorithm ) {
-    case THREAD_CPU_BUDGET_ALGORITHM_NONE:
-    case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
-      break;
-    #if defined(RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE)
-      case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
-        the_thread->cpu_time_budget =
-          rtems_configuration_get_ticks_per_timeslice();
-        break;
-    #endif
-    #if defined(RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT)
-      case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
-	break;
-    #endif
-  }
 
 #if defined(RTEMS_SMP)
   scheduler_node = NULL;

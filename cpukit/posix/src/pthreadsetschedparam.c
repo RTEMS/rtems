@@ -24,6 +24,7 @@
 #endif
 
 #include <pthread.h>
+#include <string.h>
 #include <errno.h>
 
 #include <rtems/posix/pthreadimpl.h>
@@ -32,12 +33,11 @@
 #include <rtems/score/schedulerimpl.h>
 
 static int _POSIX_Set_sched_param(
-  Thread_Control                       *the_thread,
-  int                                   policy,
-  const struct sched_param             *param,
-  Thread_CPU_budget_algorithms          budget_algorithm,
-  Thread_CPU_budget_algorithm_callout   budget_callout,
-  Thread_queue_Context                 *queue_context
+  Thread_Control             *the_thread,
+  int                         policy,
+  const struct sched_param   *param,
+  const Thread_Configuration *config,
+  Thread_queue_Context       *queue_context
 )
 {
   const Scheduler_Control *scheduler;
@@ -103,8 +103,9 @@ static int _POSIX_Set_sched_param(
   }
 #endif
 
-  the_thread->budget_algorithm = budget_algorithm;
-  the_thread->budget_callout   = budget_callout;
+  the_thread->cpu_time_budget  = config->cpu_time_budget;
+  the_thread->budget_algorithm = config->budget_algorithm;
+  the_thread->budget_callout   = config->budget_callout;
 
 #if defined(RTEMS_POSIX_API)
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
@@ -114,11 +115,6 @@ static int _POSIX_Set_sched_param(
 
   if ( policy == SCHED_SPORADIC ) {
     _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
-  } else {
-#endif
-    the_thread->cpu_time_budget =
-      rtems_configuration_get_ticks_per_timeslice();
-#if defined(RTEMS_POSIX_API)
   }
 #endif
 
@@ -135,23 +131,18 @@ int pthread_setschedparam(
 #endif
 )
 {
-  Thread_CPU_budget_algorithms         budget_algorithm;
-  Thread_CPU_budget_algorithm_callout  budget_callout;
-  Thread_Control                      *the_thread;
-  Per_CPU_Control                     *cpu_self;
-  Thread_queue_Context                 queue_context;
-  int                                  error;
+  Thread_Configuration config;
+  Thread_Control      *the_thread;
+  Per_CPU_Control     *cpu_self;
+  Thread_queue_Context queue_context;
+  int                  error;
 
   if ( param == NULL ) {
     return EINVAL;
   }
 
-  error = _POSIX_Thread_Translate_sched_param(
-    policy,
-    param,
-    &budget_algorithm,
-    &budget_callout
-  );
+  memset( &config, 0, sizeof( config ) );
+  error = _POSIX_Thread_Translate_sched_param( policy, param, &config );
   if ( error != 0 ) {
     return error;
   }
@@ -169,8 +160,7 @@ int pthread_setschedparam(
     the_thread,
     policy,
     param,
-    budget_algorithm,
-    budget_callout,
+    &config,
     &queue_context
   );
   cpu_self = _Thread_queue_Dispatch_disable( &queue_context );

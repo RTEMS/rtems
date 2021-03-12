@@ -164,6 +164,11 @@ typedef struct {
   Thread_CPU_budget_algorithm_callout budget_callout;
 
   /**
+   * @brief The thread's initial CPU time budget.
+   */
+  uint32_t cpu_time_budget;
+
+  /**
    * @brief 32-bit unsigned integer name of the object for the thread.
    */
   uint32_t name;

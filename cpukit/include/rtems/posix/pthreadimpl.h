@@ -77,24 +77,24 @@ int _POSIX_Thread_Translate_to_sched_policy(
 );
 
 /**
- * @brief Translate sched_param into SuperCore terms.
+ * @brief Translates the POSIX scheduling policy and parameters to parts of the
+ *   thread configuration.
  *
- * This method translates the POSIX API sched_param into the corresponding
- * SuperCore settings.
+ * @param policy is the POSIX scheduling policy.
  *
- * @param[in] policy is the POSIX scheduling policy
- * @param[in] param points to the scheduling parameter structure
- * @param[in] budget_algorithm points to the output CPU Budget algorithm
- * @param[in] budget_callout points to the output CPU Callout
+ * @param param is the pointer to the POSIX scheduling parameters.
  *
- * @retval 0 Indicates success.
- * @retval error_code POSIX error code indicating failure.
+ * @param[out] config is the pointer to a thread configuration to set the
+ *   budget algorithm, callout, and CPU time budget.
+ *
+ * @retval 0 The operation was successful.
+ *
+ * @retval EINVAL The POSIX scheduling policy or parameters were invalid.
  */
 int _POSIX_Thread_Translate_sched_param(
-  int                                  policy,
-  const struct sched_param            *param,
-  Thread_CPU_budget_algorithms        *budget_algorithm,
-  Thread_CPU_budget_algorithm_callout *budget_callout
+  int                       policy,
+  const struct sched_param *param,
+  Thread_Configuration     *config
 );
 
 RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
