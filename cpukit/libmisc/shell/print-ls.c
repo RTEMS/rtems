@@ -325,7 +325,16 @@ printacol(rtems_shell_ls_globals* globals, DISPLAY *dp)
 		if (IS_NOPRINT(p))
 			continue;
 		if (col >= numcols) {
+		#ifdef __rtems__
+		/*
+		 * chcnt is not using the value that it has been assigned
+		 * before being used again, resulting in a Coverity issue.
+		 * See CID 1255346
+		 */
+			col = 0;
+		#else
 			chcnt = col = 0;
+		#endif
 			(void)putchar('\n');
 		}
 		chcnt = printaname(globals, p, dp->s_inode,
