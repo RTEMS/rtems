@@ -501,7 +501,8 @@ static void test_many_classic_mrsp_body(
   sc = rtems_semaphore_create(
     rtems_build_name('T', 'E', 'S', 'T'),
     1,
-    RTEMS_BINARY_SEMAPHORE | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     1,
     &id
   );

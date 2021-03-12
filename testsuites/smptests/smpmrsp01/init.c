@@ -257,8 +257,8 @@ static void create_mrsp_sema(
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     1,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     prio,
     id
   );
@@ -744,8 +744,8 @@ static void test_mrsp_initially_locked_error(void)
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     0,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     1,
     &id
   );

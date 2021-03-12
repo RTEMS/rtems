@@ -93,8 +93,8 @@ rtems_status_code rtems_semaphore_create(
   ) {
     variant = SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING;
   } else if (
-    mutex_with_protocol
-      == ( RTEMS_BINARY_SEMAPHORE | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
+    mutex_with_protocol == ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
   ) {
 #if defined(RTEMS_SMP)
     variant = SEMAPHORE_VARIANT_MRSP;

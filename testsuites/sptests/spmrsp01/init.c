@@ -53,8 +53,8 @@ static void test_mrsp_create_errors(void)
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     1,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY
+      | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     UINT32_MAX,
     &id
   );
@@ -63,15 +63,31 @@ static void test_mrsp_create_errors(void)
   create_not_defined(
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
       | RTEMS_COUNTING_SEMAPHORE
+      | RTEMS_PRIORITY
   );
 
   create_not_defined(
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
       | RTEMS_SIMPLE_BINARY_SEMAPHORE
+      | RTEMS_PRIORITY
   );
 
   create_not_defined(
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE
+      | RTEMS_FIFO
+  );
+
+  create_not_defined(
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_INHERIT_PRIORITY
+      | RTEMS_BINARY_SEMAPHORE
+      | RTEMS_PRIORITY
+  );
+
+  create_not_defined(
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_PRIORITY_CEILING
       | RTEMS_BINARY_SEMAPHORE
       | RTEMS_PRIORITY
   );
@@ -79,20 +95,9 @@ static void test_mrsp_create_errors(void)
   create_not_defined(
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
       | RTEMS_INHERIT_PRIORITY
-      | RTEMS_BINARY_SEMAPHORE
-  );
-
-  create_not_defined(
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
       | RTEMS_PRIORITY_CEILING
       | RTEMS_BINARY_SEMAPHORE
-  );
-
-  create_not_defined(
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_INHERIT_PRIORITY
-      | RTEMS_PRIORITY_CEILING
-      | RTEMS_BINARY_SEMAPHORE
+      | RTEMS_PRIORITY
   );
 }
 
@@ -116,8 +121,8 @@ static void test_mrsp_obtain_release(void)
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     1,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     1,
     &id
   );
@@ -202,8 +207,8 @@ static void test_mrsp_set_priority(void)
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     1,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     1,
     &id
   );
@@ -266,8 +271,8 @@ static void test_mrsp_timeout_and_not_owner_of_resource(void)
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     1,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     1,
     &id
   );

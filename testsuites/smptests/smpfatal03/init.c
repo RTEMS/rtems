@@ -41,8 +41,8 @@ static void Init( rtems_task_argument arg )
   sc = rtems_semaphore_create(
     rtems_build_name('M', 'R', 'S', 'P'),
     1,
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+      RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
     1,
     &sem_id
   );
