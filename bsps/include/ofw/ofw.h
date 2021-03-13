@@ -541,6 +541,23 @@ bool rtems_ofw_node_status( phandle_t node );
  */
 phandle_t rtems_ofw_find_device_by_compat( const char *compat );
 
+/**
+ * @brief check a nodes compatible property.
+ *
+ * This routine is local to RTEMS OFW and does not have an corresponding
+ * FreeBSD OFW pair.
+ *
+ * Return true if @a compat equals @a node compatible property
+ *
+ * @param[in] node phandle of node
+ * @param[in] compat Compatible string
+ *
+ * @retval 1 If node contains the @a compat as a element in compatible
+ * property.
+ * @retval 0 Otherwise.
+ */
+bool rtems_ofw_is_node_compatible( phandle_t node, const char *compat );
+
 #ifdef __cplusplus
 }
 #endif

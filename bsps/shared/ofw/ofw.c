@@ -690,3 +690,15 @@ phandle_t rtems_ofw_find_device_by_compat( const char *compat )
   offset = fdt_node_offset_by_compatible(fdtp, -1, compat);
   return rtems_fdt_offset_to_phandle(offset);
 }
+
+bool rtems_ofw_is_node_compatible(
+  phandle_t node,
+  const char *compat
+)
+{
+  int offset;
+
+  offset = rtems_fdt_phandle_to_offset(node);
+
+  return fdt_node_check_compatible(fdtp, offset, compat) == 0;
+}
