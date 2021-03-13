@@ -39,6 +39,7 @@ source:
 - bsps/arm/beagle/start/bspdebug.c
 - bsps/arm/beagle/start/bspreset.c
 - bsps/arm/beagle/start/bspstart.c
+- bsps/arm/beagle/start/bsp-soc-detect.c
 - bsps/arm/beagle/start/bspstarthooks.c
 - bsps/arm/beagle/start/bspstartmmu.c
 - bsps/arm/shared/cache/cache-cp15.c

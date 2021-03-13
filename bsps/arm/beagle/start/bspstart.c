@@ -19,17 +19,28 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/i2c.h>
 #include <rtems/sysinit.h>
+#include "bsp-soc-detect.h"
 
 #include "bspdebug.h"
 
 void bsp_start(void)
 {
-#if IS_DM3730
-  const char* type = "dm3730-based";
-#endif
-#if IS_AM335X
-  const char* type = "am335x-based";
-#endif
+  const char *type;
+
+  bsp_soc_detect();
+
+  switch (ti_chip()) {
+    case CHIP_AM335X:
+      type = "am335x-based";
+      break;
+    case CHIP_OMAP_3:
+      type = "dm3730-based";
+      break;
+    default:
+      type = "Unknown SOC";
+      break;
+  }
+
   bsp_interrupt_initialize();
   printk("\nRTEMS Beagleboard: %s\n", type);
   printk("        ARM Debug: 0x%08x\n", (intptr_t) bbb_arm_debug_registers());
