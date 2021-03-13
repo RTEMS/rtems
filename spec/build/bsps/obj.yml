@@ -60,6 +60,10 @@ install:
   source:
   - bsps/include/rtems/zilog/z8036.h
   - bsps/include/rtems/zilog/z8530.h
+- destination: ${BSP_INCLUDEDIR}/arm/ti
+  source:
+  - bsps/include/arm/ti/ti_pinmux.h
+  - bsps/include/arm/ti/ti_cpuid.h
 links:
 - role: build-dependency
   uid: objmpci
@@ -101,4 +105,6 @@ source:
 - bsps/shared/ofw/ofw.c
 - bsps/shared/rtems-version.c
 - bsps/shared/start/bootcard.c
+- bsps/shared/freebsd/sys/arm/ti/ti_pinmux.c
+- bsps/shared/freebsd/sys/arm/ti/am335x/am335x_scm_padconf.c
 type: build

@@ -20,6 +20,8 @@
 #include <bsp/i2c.h>
 #include <rtems/sysinit.h>
 #include "bsp-soc-detect.h"
+#include <arm/ti/ti_pinmux.h>
+#include <ofw/ofw.h>
 
 #include "bspdebug.h"
 
@@ -55,6 +57,29 @@ uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
   return intr[0];
 }
 
+static void traverse_fdt_nodes( phandle_t node )
+{
+
+  for (node = rtems_ofw_child(node); node != 0; node = rtems_ofw_peer(node)) {
+    traverse_fdt_nodes(node);
+
+    if (!rtems_ofw_node_status(node))
+      continue;
+
+    /*
+     * Put all driver initialization functions here
+     */
+    beagle_pinmux_init(node);
+  }
+}
+
+static void bbb_drivers_initialize(void)
+{
+  phandle_t node = rtems_ofw_peer(0);
+
+  traverse_fdt_nodes(node);
+}
+
 static void bbb_i2c_0_initialize(void)
 {
   int err;
@@ -72,4 +97,10 @@ RTEMS_SYSINIT_ITEM(
   bbb_i2c_0_initialize,
   RTEMS_SYSINIT_LAST,
   RTEMS_SYSINIT_ORDER_LAST_BUT_5
+);
+
+RTEMS_SYSINIT_ITEM(
+	bbb_drivers_initialize,
+	RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+	RTEMS_SYSINIT_ORDER_LAST
 );

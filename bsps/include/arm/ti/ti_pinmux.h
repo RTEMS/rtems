@@ -42,6 +42,9 @@
  */
 #ifndef _TI_PINMUX_H_
 #define _TI_PINMUX_H_
+#ifdef __rtems__
+#include <ofw/ofw.h>
+#endif /* __rtems__ */
 
 struct ti_pinmux_padconf {
 	uint16_t    reg_off;
@@ -63,12 +66,16 @@ struct ti_pinmux_device {
 	const struct ti_pinmux_padconf	*padconf;
 };
 
+#ifndef __rtems__
 struct ti_pinmux_softc {
 	device_t		sc_dev;
 	struct resource *	sc_res[4];
 	bus_space_tag_t		sc_bst;
 	bus_space_handle_t	sc_bsh;
 };
+#else /* __rtems__ */
+void beagle_pinmux_init(phandle_t node);
+#endif /* __rtems__ */
 
 int ti_pinmux_padconf_set(const char *padname, const char *muxmode, 
     unsigned int state);

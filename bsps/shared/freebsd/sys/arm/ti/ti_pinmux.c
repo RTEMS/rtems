@@ -34,9 +34,12 @@
  * Exposes pinmux module to pinctrl-compatible interface
  */
 #include <sys/cdefs.h>
+#ifndef __rtems__
 __FBSDID("$FreeBSD$");
+#endif /* __rtems__ */
 
 #include <sys/param.h>
+#ifndef __rtems__
 #include <sys/systm.h>
 #include <sys/kernel.h>
 #include <sys/module.h>
@@ -55,22 +58,52 @@ __FBSDID("$FreeBSD$");
 #include <dev/fdt/fdt_pinctrl.h>
 
 #include <arm/ti/omap4/omap4_scm_padconf.h>
+#else /* __rtems__ */
+#include <ofw/ofw_compat.h>
+#endif /* __rtems__ */
 #include <arm/ti/am335x/am335x_scm_padconf.h>
 #include <arm/ti/ti_cpuid.h>
+#ifndef __rtems__
 #include "ti_pinmux.h"
+#else /* __rtems__ */
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <libfdt.h>
+#include <rtems/bspIo.h>
+#include <rtems/sysinit.h>
+#include <arm/ti/ti_pinmux.h>
+#endif /* __rtems__ */
 
 struct pincfg {
 	uint32_t reg;
 	uint32_t conf;
 };
 
+#ifndef __rtems__
 static struct resource_spec ti_pinmux_res_spec[] = {
 	{ SYS_RES_MEMORY,	0,	RF_ACTIVE },	/* Control memory window */
 	{ -1, 0 }
 };
+#endif /* __rtems__ */
+
+#ifdef __rtems__
+struct ti_pinmux_softc {
+#ifndef __rtems__
+	device_t		sc_dev;
+	struct resource *	sc_res[4];
+	bus_space_tag_t		sc_bst;
+	bus_space_handle_t	sc_bsh;
+#else /* __rtems__ */
+	int			sc_bst;
+	uintptr_t		sc_bsh;
+#endif /* __rtems__ */
+};
+#endif /* __rtems__ */
 
 static struct ti_pinmux_softc *ti_pinmux_sc;
 
+#ifndef __rtems__
 #define	ti_pinmux_read_2(sc, reg)		\
     bus_space_read_2((sc)->sc_bst, (sc)->sc_bsh, (reg))
 #define	ti_pinmux_write_2(sc, reg, val)		\
@@ -79,6 +112,19 @@ static struct ti_pinmux_softc *ti_pinmux_sc;
     bus_space_read_4((sc)->sc_bst, (sc)->sc_bsh, (reg))
 #define	ti_pinmux_write_4(sc, reg, val)		\
     bus_space_write_4((sc)->sc_bst, (sc)->sc_bsh, (reg), (val))
+#else /* __rtems__ */
+static uint16_t
+ti_pinmux_read_2(struct ti_pinmux_softc *sc, uintptr_t ofs) {
+	uintptr_t bsh = sc->sc_bsh;
+	return *(uint16_t volatile *)(bsh + ofs);
+}
+static void
+ti_pinmux_write_2(struct ti_pinmux_softc *sc, uintptr_t ofs, uint16_t val) {
+	uintptr_t bsh = sc->sc_bsh;
+	uint16_t volatile *bsp = (uint16_t volatile *)(bsh + ofs);
+	*bsp = val;
+}
+#endif /* __rtems__ */
 
 
 /**
@@ -149,16 +195,22 @@ ti_pinmux_padconf_set_internal(struct ti_pinmux_softc *sc,
 
 	/* couldn't find the mux mode */
 	if (mode >= 8) {
+#ifndef __rtems__
 		printf("Invalid mode \"%s\"\n", muxmode);
+#else /* __rtems__ */
+		printk("Invalid mode \"%s\"\n", muxmode);
+#endif /* __rtems__ */
 		return (EINVAL);
 	}
 
 	/* set the mux mode */
 	reg_val |= (uint16_t)(mode & ti_pinmux_dev->padconf_muxmode_mask);
 
+#ifndef __rtems__
 	if (bootverbose)
 		device_printf(sc->sc_dev, "setting internal %x for %s\n",
 		    reg_val, muxmode);
+#endif /* __rtems__ */
 	/* write the register value (16-bit writes) */
 	ti_pinmux_write_2(sc, padconf->reg_off, reg_val);
 
@@ -331,14 +383,20 @@ ti_pinmux_padconf_get_gpiomode(uint32_t gpio, unsigned int *state)
 }
 
 static int
+#ifndef __rtems__
 ti_pinmux_configure_pins(device_t dev, phandle_t cfgxref)
+#else /* __rtems__ */
+ti_pinmux_configure_pins(struct ti_pinmux_softc *sc, phandle_t cfgxref)
+#endif /* __rtems__ */
 {
 	struct pincfg *cfgtuples, *cfg;
 	phandle_t cfgnode;
 	int i, ntuples;
+#ifndef __rtems__
 	static struct ti_pinmux_softc *sc;
 
 	sc = device_get_softc(dev);
+#endif /* __rtems__ */
 	cfgnode = OF_node_from_xref(cfgxref);
 	ntuples = OF_getencprop_alloc_multi(cfgnode, "pinctrl-single,pins",
 	    sizeof(*cfgtuples), (void **)&cfgtuples);
@@ -350,12 +408,14 @@ ti_pinmux_configure_pins(device_t dev, phandle_t cfgxref)
 		return (0); /* Empty property is not an error. */
 
 	for (i = 0, cfg = cfgtuples; i < ntuples; i++, cfg++) {
+#ifndef __rtems__
 		if (bootverbose) {
 			char name[32];
 			OF_getprop(cfgnode, "name", &name, sizeof(name));
 			printf("%16s: muxreg 0x%04x muxval 0x%02x\n",
 			    name, cfg->reg, cfg->conf);
 		}
+#endif /* __rtems__ */
 
 		/* write the register value (16-bit writes) */
 		ti_pinmux_write_2(sc, cfg->reg, cfg->conf);
@@ -370,6 +430,7 @@ ti_pinmux_configure_pins(device_t dev, phandle_t cfgxref)
  * Device part of OMAP SCM driver
  */
 
+#ifndef __rtems__
 static int
 ti_pinmux_probe(device_t dev)
 {
@@ -404,7 +465,27 @@ ti_pinmux_probe(device_t dev)
 	device_set_desc(dev, "TI Pinmux Module");
 	return (BUS_PROBE_DEFAULT);
 }
+#endif /* __rtems__ */
 
+static void
+beagle_pinctrl_configure_children(struct ti_pinmux_softc *sc, phandle_t parent)
+{
+	phandle_t node;
+	int len;
+	uint32_t phandle;
+
+	for (node = OF_child(parent); node != 0; node = OF_peer(node)) {
+		if (rtems_ofw_node_status(node)) {
+			beagle_pinctrl_configure_children(sc, node);
+			len = OF_getencprop(node, "pinctrl-0", &phandle, sizeof(phandle));
+			if (len == sizeof(phandle)) {
+				ti_pinmux_configure_pins(sc, phandle);
+			}
+		}
+	}
+}
+
+#ifndef __rtems__
 /**
  *	ti_pinmux_attach - attaches the pinmux to the simplebus
  *	@dev: new device
@@ -440,7 +521,38 @@ ti_pinmux_attach(device_t dev)
 
 	return (0);
 }
+#endif
 
+void
+beagle_pinmux_init(phandle_t node)
+{
+	static struct ti_pinmux_softc pinmux_softc;
+	rtems_ofw_memory_area reg;
+	int rv;
+
+	if (!rtems_ofw_is_node_compatible(node, "pinctrl-single"))
+		return ;
+
+	switch (ti_chip()) {
+	case CHIP_AM335X:
+		ti_pinmux_dev = &ti_am335x_pinmux_dev;
+		break;
+	default:
+		printk("Unknown CPU in pinmux\n");
+		return ;
+	}
+
+	rv = rtems_ofw_get_reg(node, &reg, sizeof(reg));
+	if (rv == -1) {
+		printk("pinmux_init: rtems_ofw_get_reg failed %d\n", rv);
+		return ;
+	}
+	pinmux_softc.sc_bsh = reg.start;
+
+	beagle_pinctrl_configure_children(&pinmux_softc, OF_peer(0));
+}
+
+#ifndef __rtems__
 static device_method_t ti_pinmux_methods[] = {
 	DEVMETHOD(device_probe,		ti_pinmux_probe),
 	DEVMETHOD(device_attach,	ti_pinmux_attach),
@@ -459,3 +571,4 @@ static driver_t ti_pinmux_driver = {
 static devclass_t ti_pinmux_devclass;
 
 DRIVER_MODULE(ti_pinmux, simplebus, ti_pinmux_driver, ti_pinmux_devclass, 0, 0);
+#endif /* __rtems__ */

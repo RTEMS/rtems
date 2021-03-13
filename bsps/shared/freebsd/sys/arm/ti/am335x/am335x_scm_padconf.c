@@ -27,9 +27,12 @@
  */
 
 #include <sys/cdefs.h>
+#ifndef __rtems__
 __FBSDID("$FreeBSD$");
+#endif /* __rtems__ */
 
 #include <sys/param.h>
+#ifndef __rtems__
 #include <sys/systm.h>
 #include <sys/kernel.h>
 #include <sys/module.h>
@@ -45,6 +48,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/gpio.h>
 
 #include <arm/ti/tivar.h>
+#endif /* __rtems__ */
 #include <arm/ti/ti_pinmux.h>
 
 #include <arm/ti/am335x/am335x_scm_padconf.h>
