@@ -23,6 +23,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/score/assert.h>
 #include <bsp.h>
 #include <rtems/libi2c.h>
 #include <libchip/disp_hcms29xx.h>
@@ -596,7 +597,8 @@ static rtems_task disp_hcms29xx_update_task
 	  (int) strlen(softc_ptr->disp_param.disp_buffer);
       }
       if (rc == RTEMS_SUCCESSFUL) {
-	rc = rtems_semaphore_release(softc_ptr->disp_param.trns_sema_id);
+        rc = rtems_semaphore_release(softc_ptr->disp_param.trns_sema_id);
+        _Assert_Unused_variable_equals(rc, RTEMS_SUCCESSFUL);
       }
       /*
        * set initial offset to negative value
