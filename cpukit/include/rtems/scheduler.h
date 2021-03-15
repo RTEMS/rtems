@@ -257,16 +257,14 @@
   #define RTEMS_SCHEDULER_STRONG_APA( name, prio_count ) \
     static struct { \
       Scheduler_strong_APA_Context Base; \
-      Chain_Control                Ready[ ( prio_count ) ]; \
+      Scheduler_strong_APA_CPU CPU[ CONFIGURE_MAXIMUM_PROCESSORS ]; \
     } SCHEDULER_STRONG_APA_CONTEXT_NAME( name )
 
   #define RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name ) \
     { \
       &SCHEDULER_STRONG_APA_CONTEXT_NAME( name ).Base.Base.Base, \
       SCHEDULER_STRONG_APA_ENTRY_POINTS, \
-      RTEMS_ARRAY_SIZE( \
-        SCHEDULER_STRONG_APA_CONTEXT_NAME( name ).Ready \
-      ) - 1, \
+      SCHEDULER_STRONG_APA_MAXIMUM_PRIORITY, \
       ( obj_name ) \
       SCHEDULER_CONTROL_IS_NON_PREEMPT_MODE_SUPPORTED( false ) \
     }

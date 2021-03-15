@@ -45,6 +45,10 @@
 
 #include <rtems/confdefs/percpu.h>
 
+#ifndef CONFIGURE_MAXIMUM_PROCESSORS
+  #define CONFIGURE_MAXIMUM_PROCESSORS 1
+#endif
+
 #if !defined(CONFIGURE_SCHEDULER_CBS) \
   && !defined(CONFIGURE_SCHEDULER_EDF) \
   && !defined(CONFIGURE_SCHEDULER_EDF_SMP) \
@@ -56,9 +60,9 @@
   && !defined(CONFIGURE_SCHEDULER_STRONG_APA) \
   && !defined(CONFIGURE_SCHEDULER_USER)
   #if defined(RTEMS_SMP) && _CONFIGURE_MAXIMUM_PROCESSORS > 1
-    #define CONFIGURE_SCHEDULER_EDF_SMP
+    #define CONFIGURE_SCHEDULER_STRONG_APA
   #else
-    #define CONFIGURE_SCHEDULER_PRIORITY
+    #define CONFIGURE_SCHEDULER_STRONG_APA
   #endif
 #endif
 
