@@ -36,8 +36,13 @@ rtems_task Task_1(
   rtems_mode        previous_mode;
   rtems_status_code status;
 
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+  puts( "TA1 - rtems_signal_catch - RTEMS_INTERRUPT_LEVEL( 0 )" );
+  status = rtems_signal_catch( Process_asr, RTEMS_INTERRUPT_LEVEL(0) );
+#else
   puts( "TA1 - rtems_signal_catch - RTEMS_INTERRUPT_LEVEL( 3 )" );
   status = rtems_signal_catch( Process_asr, RTEMS_INTERRUPT_LEVEL(3) );
+#endif
   directive_failed( status, "rtems_signal_catch" );
 
   puts( "TA1 - rtems_signal_send - RTEMS_SIGNAL_16 to self" );
