@@ -184,7 +184,7 @@ static void RtemsBarrierReqDelete_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqDelete_Pre_Id_NoObj: {
       /*
-       * The ``id`` parameter shall not be associated with a barrier.
+       * While the ``id`` parameter is not associated with a barrier.
        */
       ctx->id = 0;
       break;
@@ -192,7 +192,7 @@ static void RtemsBarrierReqDelete_Pre_Id_Prepare(
 
     case RtemsBarrierReqDelete_Pre_Id_Barrier: {
       /*
-       * The ``id`` parameter shall be associated with a barrier.
+       * While the ``id`` parameter is associated with a barrier.
        */
       ctx->id = ctx->barrier_id;
       break;
@@ -355,50 +355,6 @@ static void RtemsBarrierReqDelete_Teardown_Wrap( void *arg )
   RtemsBarrierReqDelete_Teardown( ctx );
 }
 
-static size_t RtemsBarrierReqDelete_Scope( void *arg, char *buf, size_t n )
-{
-  RtemsBarrierReqDelete_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsBarrierReqDelete_PreDesc, buf, n, ctx->pcs );
-  }
-
-  return 0;
-}
-
-static T_fixture RtemsBarrierReqDelete_Fixture = {
-  .setup = RtemsBarrierReqDelete_Setup_Wrap,
-  .stop = NULL,
-  .teardown = RtemsBarrierReqDelete_Teardown_Wrap,
-  .scope = RtemsBarrierReqDelete_Scope,
-  .initial_context = &RtemsBarrierReqDelete_Instance
-};
-
-static const uint8_t RtemsBarrierReqDelete_TransitionMap[][ 3 ] = {
-  {
-    RtemsBarrierReqDelete_Post_Status_InvId,
-    RtemsBarrierReqDelete_Post_Name_Valid,
-    RtemsBarrierReqDelete_Post_Flush_No
-  }, {
-    RtemsBarrierReqDelete_Post_Status_Ok,
-    RtemsBarrierReqDelete_Post_Name_Invalid,
-    RtemsBarrierReqDelete_Post_Flush_Yes
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-} RtemsBarrierReqDelete_TransitionInfo[] = {
-  {
-    0, 0
-  }, {
-    0, 0
-  }
-};
-
 static void RtemsBarrierReqDelete_Prepare( RtemsBarrierReqDelete_Context *ctx )
 {
   rtems_status_code   sc;
@@ -430,12 +386,65 @@ static void RtemsBarrierReqDelete_Cleanup( RtemsBarrierReqDelete_Context *ctx )
   }
 }
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Id_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_Name : 2;
+  uint8_t Post_Flush : 2;
+} RtemsBarrierReqDelete_Entry;
+
+static const RtemsBarrierReqDelete_Entry
+RtemsBarrierReqDelete_Entries[] = {
+  { 0, 0, RtemsBarrierReqDelete_Post_Status_InvId,
+    RtemsBarrierReqDelete_Post_Name_Valid, RtemsBarrierReqDelete_Post_Flush_No },
+  { 0, 0, RtemsBarrierReqDelete_Post_Status_Ok,
+    RtemsBarrierReqDelete_Post_Name_Invalid,
+    RtemsBarrierReqDelete_Post_Flush_Yes }
+};
+
+static const uint8_t
+RtemsBarrierReqDelete_Map[] = {
+  0, 1
+};
+
+static size_t RtemsBarrierReqDelete_Scope( void *arg, char *buf, size_t n )
+{
+  RtemsBarrierReqDelete_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope( RtemsBarrierReqDelete_PreDesc, buf, n, ctx->pcs );
+  }
+
+  return 0;
+}
+
+static T_fixture RtemsBarrierReqDelete_Fixture = {
+  .setup = RtemsBarrierReqDelete_Setup_Wrap,
+  .stop = NULL,
+  .teardown = RtemsBarrierReqDelete_Teardown_Wrap,
+  .scope = RtemsBarrierReqDelete_Scope,
+  .initial_context = &RtemsBarrierReqDelete_Instance
+};
+
+static inline RtemsBarrierReqDelete_Entry RtemsBarrierReqDelete_GetEntry(
+  size_t index
+)
+{
+  return RtemsBarrierReqDelete_Entries[
+    RtemsBarrierReqDelete_Map[ index ]
+  ];
+}
+
 /**
  * @fn void T_case_body_RtemsBarrierReqDelete( void )
  */
 T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
 {
   RtemsBarrierReqDelete_Context *ctx;
+  RtemsBarrierReqDelete_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -447,12 +456,14 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqDelete_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsBarrierReqDelete_TransitionInfo[ index ].Pre_Id_NA ) {
+    entry = RtemsBarrierReqDelete_GetEntry( index );
+
+    if ( entry.Pre_Id_NA ) {
       ctx->pcs[ 0 ] = RtemsBarrierReqDelete_Pre_Id_NA;
       index += ( RtemsBarrierReqDelete_Pre_Id_NA - 1 );
     }
 
-    if ( RtemsBarrierReqDelete_TransitionInfo[ index ].Skip ) {
+    if ( entry.Skip ) {
       ++index;
       continue;
     }
@@ -460,18 +471,9 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
     RtemsBarrierReqDelete_Prepare( ctx );
     RtemsBarrierReqDelete_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
     RtemsBarrierReqDelete_Action( ctx );
-    RtemsBarrierReqDelete_Post_Status_Check(
-      ctx,
-      RtemsBarrierReqDelete_TransitionMap[ index ][ 0 ]
-    );
-    RtemsBarrierReqDelete_Post_Name_Check(
-      ctx,
-      RtemsBarrierReqDelete_TransitionMap[ index ][ 1 ]
-    );
-    RtemsBarrierReqDelete_Post_Flush_Check(
-      ctx,
-      RtemsBarrierReqDelete_TransitionMap[ index ][ 2 ]
-    );
+    RtemsBarrierReqDelete_Post_Status_Check( ctx, entry.Post_Status );
+    RtemsBarrierReqDelete_Post_Name_Check( ctx, entry.Post_Name );
+    RtemsBarrierReqDelete_Post_Flush_Check( ctx, entry.Post_Flush );
     RtemsBarrierReqDelete_Cleanup( ctx );
     ++index;
   }

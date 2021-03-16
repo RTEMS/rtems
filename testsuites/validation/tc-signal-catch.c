@@ -105,69 +105,93 @@ typedef enum {
 
 typedef enum {
   RtemsSignalReqCatch_Post_Status_Ok,
-  RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
   RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
+  RtemsSignalReqCatch_Post_Status_NotImplIntLvlSMP,
+  RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
   RtemsSignalReqCatch_Post_Status_NA
 } RtemsSignalReqCatch_Post_Status;
 
 typedef enum {
-  RtemsSignalReqCatch_Post_Send_New,
-  RtemsSignalReqCatch_Post_Send_NotDef,
-  RtemsSignalReqCatch_Post_Send_NA
-} RtemsSignalReqCatch_Post_Send;
-
-typedef enum {
-  RtemsSignalReqCatch_Post_Preempt_Yes,
-  RtemsSignalReqCatch_Post_Preempt_No,
-  RtemsSignalReqCatch_Post_Preempt_NA
-} RtemsSignalReqCatch_Post_Preempt;
-
-typedef enum {
-  RtemsSignalReqCatch_Post_Timeslice_Yes,
-  RtemsSignalReqCatch_Post_Timeslice_No,
-  RtemsSignalReqCatch_Post_Timeslice_NA
-} RtemsSignalReqCatch_Post_Timeslice;
-
-typedef enum {
-  RtemsSignalReqCatch_Post_ASR_Yes,
-  RtemsSignalReqCatch_Post_ASR_No,
-  RtemsSignalReqCatch_Post_ASR_NA
-} RtemsSignalReqCatch_Post_ASR;
-
-typedef enum {
-  RtemsSignalReqCatch_Post_IntLvl_Zero,
-  RtemsSignalReqCatch_Post_IntLvl_Positive,
-  RtemsSignalReqCatch_Post_IntLvl_NA
-} RtemsSignalReqCatch_Post_IntLvl;
+  RtemsSignalReqCatch_Post_ASRInfo_NopIntLvl,
+  RtemsSignalReqCatch_Post_ASRInfo_NopIntLvlSMP,
+  RtemsSignalReqCatch_Post_ASRInfo_NopNoPreempt,
+  RtemsSignalReqCatch_Post_ASRInfo_New,
+  RtemsSignalReqCatch_Post_ASRInfo_Inactive,
+  RtemsSignalReqCatch_Post_ASRInfo_NA
+} RtemsSignalReqCatch_Post_ASRInfo;
 
 /**
  * @brief Test context for spec:/rtems/signal/req/catch test case.
  */
 typedef struct {
+  /**
+   * @brief This member contains the object identifier of the runner task.
+   */
   rtems_id runner_id;
 
+  /**
+   * @brief This member contains the object identifier of the worker task.
+   */
   rtems_id worker_id;
 
+  /**
+   * @brief null If this member is non-zero, then rtems_signal_catch() is
+   *   called with pending signals, otherwise it is called with no pending
+   *   signals.
+   */
   uint32_t pending_signals;
 
+  /**
+   * @brief This member provides a barrier to synchronize the runner and worker
+   *   tasks.
+   */
   SMP_barrier_Control barrier;
 
+  /**
+   * @brief This member is used for barrier operations done by the runner task.
+   */
   SMP_barrier_State runner_barrier_state;
 
+  /**
+   * @brief When the default handler is called, this member is incremented.
+   */
   uint32_t default_handler_calls;
 
+  /**
+   * @brief When the handler is called, this member is incremented.
+   */
   uint32_t handler_calls;
 
+  /**
+   * @brief This member contains the mode observed in the last handler call.
+   */
   rtems_mode handler_mode;
 
+  /**
+   * @brief This member specifies the normal task mode for the action.
+   */
   rtems_mode normal_mode;
 
+  /**
+   * @brief This member specifies the handler for the action.
+   */
   rtems_asr_entry handler;
 
+  /**
+   * @brief This member specifies the task mode for the action.
+   */
   rtems_mode mode;
 
+  /**
+   * @brief This member contains the return status of the rtems_signal_catch()
+   *   call of the action.
+   */
   rtems_status_code catch_status;
 
+  /**
+   * @brief This member contains the return status of the rtems_signal_send()
+   *   call of the action.
+   */
   rtems_status_code send_status;
 
   /**
@@ -269,12 +293,20 @@ static void SignalHandler( rtems_signal_set signal_set )
   }
 }
 
-static void CheckHandlerMode( Context *ctx, rtems_mode mask, rtems_mode mode )
+static void CheckNoASRChange( Context *ctx )
 {
-  if ( ctx->catch_status == RTEMS_SUCCESSFUL && ctx->handler != NULL ) {
-    T_ne_u32( ctx->handler_mode, 0xffffffff );
-    T_eq_u32( ctx->handler_mode & mask, mode );
-  }
+  T_rsc_success( ctx->send_status );
+  T_eq_u32( ctx->default_handler_calls, 1 + ctx->pending_signals );
+  T_eq_u32( ctx->handler_calls, 0 );
+  T_eq_u32( ctx->handler_mode, 0xffffffff );
+}
+
+static void CheckNewASRSettings( Context *ctx )
+{
+  T_rsc_success( ctx->send_status );
+  T_eq_u32( ctx->default_handler_calls, 0 );
+  T_eq_u32( ctx->handler_calls, 1 + ctx->pending_signals );
+  T_eq_u32( ctx->handler_mode, ctx->mode );
 }
 
 static void Worker( rtems_task_argument arg )
@@ -306,19 +338,22 @@ static void RtemsSignalReqCatch_Pre_Pending_Prepare(
     case RtemsSignalReqCatch_Pre_Pending_Yes: {
       /*
        * Where the system has more than one processor, while the calling task
-       * has pending signals, the rtems_signal_catch() directive shall be
-       * called. Where the system has exactly one processor, while the calling
-       * task has no pending signals, the rtems_signal_catch() directive shall
-       * be called.
+       * has pending signals.
+       *
+       * Where the system has exactly one processor, while the calling task has
+       * no pending signals.
        */
-      ctx->pending_signals = ( rtems_scheduler_get_processor_maximum() > 1 ) ? 1 : 0;
+      if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+        ctx->pending_signals = 1;
+      } else {
+        ctx->pending_signals = 0;
+      }
       break;
     }
 
     case RtemsSignalReqCatch_Pre_Pending_No: {
       /*
-       * While the calling task has no pending signals, the
-       * rtems_signal_catch() directive shall be called.
+       * While the calling task has no pending signals.
        */
       ctx->pending_signals = 0;
       break;
@@ -337,7 +372,7 @@ static void RtemsSignalReqCatch_Pre_Handler_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Handler_Invalid: {
       /*
-       * The ``asr_handler`` parameter shall be NULL.
+       * While the ``asr_handler`` parameter is NULL.
        */
       ctx->handler = NULL;
       break;
@@ -345,7 +380,7 @@ static void RtemsSignalReqCatch_Pre_Handler_Prepare(
 
     case RtemsSignalReqCatch_Pre_Handler_Valid: {
       /*
-       * The ``asr_handler`` parameter shall be a valid ASR handler.
+       * While the ``asr_handler`` parameter is a valid ASR handler.
        */
       ctx->handler = SignalHandler;
       break;
@@ -364,21 +399,18 @@ static void RtemsSignalReqCatch_Pre_Preempt_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Preempt_Yes: {
       /*
-       * The ``mode_set`` parameter shall specify that preemption is enabled.
+       * While the ``mode_set`` parameter specifies that preemption is enabled.
        */
-      #if defined(RTEMS_SMP)
       if ( rtems_configuration_get_maximum_processors() == 1 ) {
         ctx->normal_mode |= RTEMS_NO_PREEMPT;
       }
-      #else
-      ctx->normal_mode |= RTEMS_NO_PREEMPT;
-      #endif
       break;
     }
 
     case RtemsSignalReqCatch_Pre_Preempt_No: {
       /*
-       * The ``mode_set`` parameter shall specify that preemption is disabled.
+       * While the ``mode_set`` parameter specifies that preemption is
+       * disabled.
        */
       ctx->mode |= RTEMS_NO_PREEMPT;
       break;
@@ -397,7 +429,8 @@ static void RtemsSignalReqCatch_Pre_Timeslice_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_Timeslice_Yes: {
       /*
-       * The ``mode_set`` parameter shall specify that timeslicing is enabled.
+       * While the ``mode_set`` parameter specifies that timeslicing is
+       * enabled.
        */
       ctx->mode |= RTEMS_TIMESLICE;
       break;
@@ -405,7 +438,8 @@ static void RtemsSignalReqCatch_Pre_Timeslice_Prepare(
 
     case RtemsSignalReqCatch_Pre_Timeslice_No: {
       /*
-       * The ``mode_set`` parameter shall specify that timeslicing is disabled.
+       * While the ``mode_set`` parameter specifies that timeslicing is
+       * disabled.
        */
       ctx->normal_mode |= RTEMS_TIMESLICE;
       break;
@@ -424,16 +458,18 @@ static void RtemsSignalReqCatch_Pre_ASR_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_ASR_Yes: {
       /*
-       * The ``mode_set`` parameter shall specify that ASR processing is
+       * While the ``mode_set`` parameter specifies that ASR processing is
        * enabled.
        */
-      /* We cannot disable ASR processing at normal task level for this test */
+      /*
+       * We cannot disable ASR processing at normal task level for this state.
+       */
       break;
     }
 
     case RtemsSignalReqCatch_Pre_ASR_No: {
       /*
-       * The ``mode_set`` parameter shall specify that ASR processing is
+       * While the ``mode_set`` parameter specifies that ASR processing is
        * disabled.
        */
       ctx->mode |= RTEMS_NO_ASR;
@@ -453,9 +489,9 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
   switch ( state ) {
     case RtemsSignalReqCatch_Pre_IntLvl_Zero: {
       /*
-       * The ``mode_set`` parameter shall specify an interrupt level of zero.
+       * While the ``mode_set`` parameter specifies an interrupt level of zero.
        */
-      #if !defined(RTEMS_SMP) && CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+      #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE && !defined(RTEMS_SMP)
       ctx->normal_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
       #endif
       break;
@@ -463,7 +499,9 @@ static void RtemsSignalReqCatch_Pre_IntLvl_Prepare(
 
     case RtemsSignalReqCatch_Pre_IntLvl_Positive: {
       /*
-       * The ``mode_set`` parameter shall specify a positive interrupt level.
+       * While the ``mode_set`` parameter specifies an interrupt level greater
+       * than or equal to one and less than or equal to
+       * CPU_MODES_INTERRUPT_MASK.
        */
       ctx->mode |= RTEMS_INTERRUPT_LEVEL( 1 );
       break;
@@ -488,44 +526,44 @@ static void RtemsSignalReqCatch_Post_Status_Check(
       break;
     }
 
-    case RtemsSignalReqCatch_Post_Status_NotImplNoPreempt: {
+    case RtemsSignalReqCatch_Post_Status_NotImplIntLvl: {
       /*
-       * Where the system is configured with SMP support, if the scheduler does
-       * not support the no-preempt mode, then the return status of
-       * rtems_signal_catch() shall be RTEMS_NOT_IMPLEMENTED, otherwise the
-       * return status shall be RTEMS_SUCCESSFUL.
+       * The return status of rtems_signal_catch() shall be
+       * RTEMS_NOT_IMPLEMENTED.
        */
-      #if defined(RTEMS_SMP)
-      if ( rtems_configuration_get_maximum_processors() > 1 ) {
-        T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
-      } else {
-        T_rsc_success( ctx->catch_status );
-      }
-      #else
-      T_rsc_success( ctx->catch_status );
-      #endif
+      T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
       break;
     }
 
-    case RtemsSignalReqCatch_Post_Status_NotImplIntLvl: {
+    case RtemsSignalReqCatch_Post_Status_NotImplIntLvlSMP: {
       /*
-       * Where the system is configured with SMP support and the configured
-       * processor maximum is greater than one, or the CPU port enabled robust
-       * thread dispatching, the return status of rtems_signal_catch() shall be
-       * RTEMS_NOT_IMPLEMENTED, otherwise the return status shall be
-       * RTEMS_SUCCESSFUL.
+       * Where the system needs inter-processor interrupts, the return status
+       * of rtems_signal_catch() shall be RTEMS_NOT_IMPLEMENTED.
+       *
+       * Where the system does not need inter-processor interrupts, the return
+       * status of rtems_signal_catch() shall be RTEMS_SUCCESSFUL.
        */
-      #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
-      T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
-      #elif defined(RTEMS_SMP)
       if ( rtems_configuration_get_maximum_processors() > 1 ) {
         T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
       } else {
         T_rsc_success( ctx->catch_status );
       }
-      #else
-      T_rsc_success( ctx->catch_status );
-      #endif
+      break;
+    }
+
+    case RtemsSignalReqCatch_Post_Status_NotImplNoPreempt: {
+      /*
+       * Where the scheduler does not support the no-preempt mode, the return
+       * status of rtems_signal_catch() shall be RTEMS_NOT_IMPLEMENTED.
+       *
+       * Where the scheduler does support the no-preempt mode, the return
+       * status of rtems_signal_catch() shall be RTEMS_SUCCESSFUL.
+       */
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->catch_status );
+      }
       break;
     }
 
@@ -534,180 +572,85 @@ static void RtemsSignalReqCatch_Post_Status_Check(
   }
 }
 
-static void RtemsSignalReqCatch_Post_Send_Check(
-  RtemsSignalReqCatch_Context  *ctx,
-  RtemsSignalReqCatch_Post_Send state
-)
-{
-  switch ( state ) {
-    case RtemsSignalReqCatch_Post_Send_New: {
-      /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call was successful, the ASR processing shall be done with the
-       * specified handler, otherwise the ASR information of the caller shall
-       * be unchanged.
-       */
-      T_rsc_success( ctx->send_status );
-
-      if ( ctx->catch_status == RTEMS_SUCCESSFUL ) {
-        T_eq_u32( ctx->default_handler_calls, 0 );
-        T_eq_u32( ctx->handler_calls, 1 + ctx->pending_signals );
-        T_ne_u32( ctx->handler_mode, 0xffffffff );
-      } else {
-        T_eq_u32( ctx->default_handler_calls, 1 + ctx->pending_signals );
-        T_eq_u32( ctx->handler_calls, 0 );
-        T_eq_u32( ctx->handler_mode, 0xffffffff );
-      }
-      break;
-    }
-
-    case RtemsSignalReqCatch_Post_Send_NotDef: {
-      /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call was successful, the ASR processing shall be deactivated and
-       * all pending signals shall be cleared, otherwise the ASR information of
-       * the caller shall be unchanged.
-       */
-      if ( ctx->catch_status == RTEMS_SUCCESSFUL ) {
-        T_rsc( ctx->send_status, RTEMS_NOT_DEFINED );
-        T_eq_u32( ctx->default_handler_calls, 0 );
-        T_eq_u32( ctx->handler_calls, 0 );
-        T_eq_u32( ctx->handler_mode, 0xffffffff );
-      } else {
-        T_rsc_success( ctx->send_status );
-        T_eq_u32( ctx->default_handler_calls, 1 + ctx->pending_signals );
-        T_eq_u32( ctx->handler_calls, 0 );
-        T_eq_u32( ctx->handler_mode, 0xffffffff );
-      }
-      break;
-    }
-
-    case RtemsSignalReqCatch_Post_Send_NA:
-      break;
-  }
-}
-
-static void RtemsSignalReqCatch_Post_Preempt_Check(
+static void RtemsSignalReqCatch_Post_ASRInfo_Check(
   RtemsSignalReqCatch_Context     *ctx,
-  RtemsSignalReqCatch_Post_Preempt state
+  RtemsSignalReqCatch_Post_ASRInfo state
 )
 {
   switch ( state ) {
-    case RtemsSignalReqCatch_Post_Preempt_Yes: {
+    case RtemsSignalReqCatch_Post_ASRInfo_NopIntLvl: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with preemption enabled.
+       * The ASR information of the caller of rtems_signal_catch() shall not be
+       * changed by the rtems_signal_catch() call.
        */
-      CheckHandlerMode( ctx, RTEMS_PREEMPT_MASK, RTEMS_PREEMPT );
+      CheckNoASRChange( ctx );
       break;
     }
 
-    case RtemsSignalReqCatch_Post_Preempt_No: {
+    case RtemsSignalReqCatch_Post_ASRInfo_NopIntLvlSMP: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with preemption disabled.
+       * Where the system needs inter-processor interrupts, the ASR information
+       * of the caller of rtems_signal_catch() shall not be changed by the
+       * rtems_signal_catch() call.
+       *
+       * Where the system does not need inter-processor interrupts, the ASR
+       * processing for the caller of rtems_signal_catch() shall be done using
+       * the handler specified by ``asr_handler`` in the mode specified by
+       * ``mode_set``.
        */
-      CheckHandlerMode( ctx, RTEMS_PREEMPT_MASK, RTEMS_NO_PREEMPT );
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        CheckNoASRChange( ctx );
+      } else {
+        CheckNewASRSettings( ctx );
+      }
       break;
     }
 
-    case RtemsSignalReqCatch_Post_Preempt_NA:
-      break;
-  }
-}
-
-static void RtemsSignalReqCatch_Post_Timeslice_Check(
-  RtemsSignalReqCatch_Context       *ctx,
-  RtemsSignalReqCatch_Post_Timeslice state
-)
-{
-  switch ( state ) {
-    case RtemsSignalReqCatch_Post_Timeslice_Yes: {
+    case RtemsSignalReqCatch_Post_ASRInfo_NopNoPreempt: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with timeslicing enabled.
+       * Where the scheduler does not support the no-preempt mode, the ASR
+       * information of the caller of rtems_signal_catch() shall not be changed
+       * by the rtems_signal_catch() call.
+       *
+       * Where the scheduler does support the no-preempt mode, the ASR
+       * processing for the caller of rtems_signal_catch() shall be done using
+       * the handler specified by ``asr_handler`` in the mode specified by
+       * ``mode_set``.
        */
-      CheckHandlerMode( ctx, RTEMS_TIMESLICE_MASK, RTEMS_TIMESLICE );
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        CheckNoASRChange( ctx );
+      } else {
+        CheckNewASRSettings( ctx );
+      }
       break;
     }
 
-    case RtemsSignalReqCatch_Post_Timeslice_No: {
+    case RtemsSignalReqCatch_Post_ASRInfo_New: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with timeslicing disabled.
+       * The ASR processing for the caller of rtems_signal_catch() shall be
+       * done using the handler specified by ``asr_handler`` in the mode
+       * specified by ``mode_set``.
        */
-      CheckHandlerMode( ctx, RTEMS_TIMESLICE_MASK, RTEMS_NO_TIMESLICE );
+      CheckNewASRSettings( ctx );
       break;
     }
 
-    case RtemsSignalReqCatch_Post_Timeslice_NA:
-      break;
-  }
-}
-
-static void RtemsSignalReqCatch_Post_ASR_Check(
-  RtemsSignalReqCatch_Context *ctx,
-  RtemsSignalReqCatch_Post_ASR state
-)
-{
-  switch ( state ) {
-    case RtemsSignalReqCatch_Post_ASR_Yes: {
+    case RtemsSignalReqCatch_Post_ASRInfo_Inactive: {
       /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with ASR processing enabled.
+       * The ASR processing for the caller of rtems_signal_catch() shall be
+       * deactivated.
+       *
+       * The pending signals of the caller of rtems_signal_catch() shall be
+       * cleared.
        */
-      CheckHandlerMode( ctx, RTEMS_ASR_MASK, RTEMS_ASR );
+      T_rsc( ctx->send_status, RTEMS_NOT_DEFINED );
+      T_eq_u32( ctx->default_handler_calls, 0 );
+      T_eq_u32( ctx->handler_calls, 0 );
+      T_eq_u32( ctx->handler_mode, 0xffffffff );
       break;
     }
 
-    case RtemsSignalReqCatch_Post_ASR_No: {
-      /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with ASR processing disabled.
-       */
-      CheckHandlerMode( ctx, RTEMS_ASR_MASK, RTEMS_NO_ASR );
-      break;
-    }
-
-    case RtemsSignalReqCatch_Post_ASR_NA:
-      break;
-  }
-}
-
-static void RtemsSignalReqCatch_Post_IntLvl_Check(
-  RtemsSignalReqCatch_Context    *ctx,
-  RtemsSignalReqCatch_Post_IntLvl state
-)
-{
-  switch ( state ) {
-    case RtemsSignalReqCatch_Post_IntLvl_Zero: {
-      /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with interrupts enabled.
-       */
-      CheckHandlerMode( ctx, RTEMS_INTERRUPT_MASK, RTEMS_INTERRUPT_LEVEL( 0 ) );
-      break;
-    }
-
-    case RtemsSignalReqCatch_Post_IntLvl_Positive: {
-      /*
-       * When a signal set is sent to the caller of rtems_signal_catch() and
-       * the call with a valid handler was successful, the ASR processing shall
-       * be done with interrupts disabled according to the specified interrupt
-       * level.
-       */
-      CheckHandlerMode( ctx, RTEMS_INTERRUPT_MASK, RTEMS_INTERRUPT_LEVEL( 1 ) );
-      break;
-    }
-
-    case RtemsSignalReqCatch_Post_IntLvl_NA:
+    case RtemsSignalReqCatch_Post_ASRInfo_NA:
       break;
   }
 }
@@ -779,619 +722,6 @@ static void RtemsSignalReqCatch_Teardown_Wrap( void *arg )
   RtemsSignalReqCatch_Teardown( ctx );
 }
 
-static size_t RtemsSignalReqCatch_Scope( void *arg, char *buf, size_t n )
-{
-  RtemsSignalReqCatch_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsSignalReqCatch_PreDesc, buf, n, ctx->pcs );
-  }
-
-  return 0;
-}
-
-static T_fixture RtemsSignalReqCatch_Fixture = {
-  .setup = RtemsSignalReqCatch_Setup_Wrap,
-  .stop = NULL,
-  .teardown = RtemsSignalReqCatch_Teardown_Wrap,
-  .scope = RtemsSignalReqCatch_Scope,
-  .initial_context = &RtemsSignalReqCatch_Instance
-};
-
-static const uint8_t RtemsSignalReqCatch_TransitionMap[][ 6 ] = {
-  {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_NotDef,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_Ok,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_Yes,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_Yes,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_Yes,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Zero
-  }, {
-    RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
-    RtemsSignalReqCatch_Post_Send_New,
-    RtemsSignalReqCatch_Post_Preempt_No,
-    RtemsSignalReqCatch_Post_Timeslice_No,
-    RtemsSignalReqCatch_Post_ASR_No,
-    RtemsSignalReqCatch_Post_IntLvl_Positive
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Pending_NA : 1;
-  uint8_t Pre_Handler_NA : 1;
-  uint8_t Pre_Preempt_NA : 1;
-  uint8_t Pre_Timeslice_NA : 1;
-  uint8_t Pre_ASR_NA : 1;
-  uint8_t Pre_IntLvl_NA : 1;
-} RtemsSignalReqCatch_TransitionInfo[] = {
-  {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0
-  }
-};
-
 static void RtemsSignalReqCatch_Prepare( RtemsSignalReqCatch_Context *ctx )
 {
   rtems_status_code sc;
@@ -1433,12 +763,87 @@ static void RtemsSignalReqCatch_Action( RtemsSignalReqCatch_Context *ctx )
   T_rsc_success( sc );
 }
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Pending_NA : 1;
+  uint16_t Pre_Handler_NA : 1;
+  uint16_t Pre_Preempt_NA : 1;
+  uint16_t Pre_Timeslice_NA : 1;
+  uint16_t Pre_ASR_NA : 1;
+  uint16_t Pre_IntLvl_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_ASRInfo : 3;
+} RtemsSignalReqCatch_Entry;
+
+static const RtemsSignalReqCatch_Entry
+RtemsSignalReqCatch_Entries[] = {
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_Ok,
+    RtemsSignalReqCatch_Post_ASRInfo_Inactive },
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_NotImplIntLvl,
+    RtemsSignalReqCatch_Post_ASRInfo_NopIntLvl },
+#elif defined(RTEMS_SMP)
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_NotImplIntLvlSMP,
+    RtemsSignalReqCatch_Post_ASRInfo_NopIntLvlSMP },
+#else
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_Ok,
+    RtemsSignalReqCatch_Post_ASRInfo_New },
+#endif
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_Ok,
+    RtemsSignalReqCatch_Post_ASRInfo_New },
+#if defined(RTEMS_SMP)
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_NotImplNoPreempt,
+    RtemsSignalReqCatch_Post_ASRInfo_NopNoPreempt }
+#else
+  { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_Ok,
+    RtemsSignalReqCatch_Post_ASRInfo_New }
+#endif
+};
+
+static const uint8_t
+RtemsSignalReqCatch_Map[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1,
+  3, 1, 3, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1,
+  2, 1, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1
+};
+
+static size_t RtemsSignalReqCatch_Scope( void *arg, char *buf, size_t n )
+{
+  RtemsSignalReqCatch_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope( RtemsSignalReqCatch_PreDesc, buf, n, ctx->pcs );
+  }
+
+  return 0;
+}
+
+static T_fixture RtemsSignalReqCatch_Fixture = {
+  .setup = RtemsSignalReqCatch_Setup_Wrap,
+  .stop = NULL,
+  .teardown = RtemsSignalReqCatch_Teardown_Wrap,
+  .scope = RtemsSignalReqCatch_Scope,
+  .initial_context = &RtemsSignalReqCatch_Instance
+};
+
+static inline RtemsSignalReqCatch_Entry RtemsSignalReqCatch_GetEntry(
+  size_t index
+)
+{
+  return RtemsSignalReqCatch_Entries[
+    RtemsSignalReqCatch_Map[ index ]
+  ];
+}
+
 /**
  * @fn void T_case_body_RtemsSignalReqCatch( void )
  */
 T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
 {
   RtemsSignalReqCatch_Context *ctx;
+  RtemsSignalReqCatch_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -1450,7 +855,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
     ctx->pcs[ 0 ] < RtemsSignalReqCatch_Pre_Pending_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsSignalReqCatch_TransitionInfo[ index ].Pre_Pending_NA ) {
+    entry = RtemsSignalReqCatch_GetEntry( index );
+
+    if ( entry.Pre_Pending_NA ) {
       ctx->pcs[ 0 ] = RtemsSignalReqCatch_Pre_Pending_NA;
       index += ( RtemsSignalReqCatch_Pre_Pending_NA - 1 )
         * RtemsSignalReqCatch_Pre_Handler_NA
@@ -1465,7 +872,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
       ctx->pcs[ 1 ] < RtemsSignalReqCatch_Pre_Handler_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( RtemsSignalReqCatch_TransitionInfo[ index ].Pre_Handler_NA ) {
+      entry = RtemsSignalReqCatch_GetEntry( index );
+
+      if ( entry.Pre_Handler_NA ) {
         ctx->pcs[ 1 ] = RtemsSignalReqCatch_Pre_Handler_NA;
         index += ( RtemsSignalReqCatch_Pre_Handler_NA - 1 )
           * RtemsSignalReqCatch_Pre_Preempt_NA
@@ -1479,7 +888,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
         ctx->pcs[ 2 ] < RtemsSignalReqCatch_Pre_Preempt_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( RtemsSignalReqCatch_TransitionInfo[ index ].Pre_Preempt_NA ) {
+        entry = RtemsSignalReqCatch_GetEntry( index );
+
+        if ( entry.Pre_Preempt_NA ) {
           ctx->pcs[ 2 ] = RtemsSignalReqCatch_Pre_Preempt_NA;
           index += ( RtemsSignalReqCatch_Pre_Preempt_NA - 1 )
             * RtemsSignalReqCatch_Pre_Timeslice_NA
@@ -1492,7 +903,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
           ctx->pcs[ 3 ] < RtemsSignalReqCatch_Pre_Timeslice_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          if ( RtemsSignalReqCatch_TransitionInfo[ index ].Pre_Timeslice_NA ) {
+          entry = RtemsSignalReqCatch_GetEntry( index );
+
+          if ( entry.Pre_Timeslice_NA ) {
             ctx->pcs[ 3 ] = RtemsSignalReqCatch_Pre_Timeslice_NA;
             index += ( RtemsSignalReqCatch_Pre_Timeslice_NA - 1 )
               * RtemsSignalReqCatch_Pre_ASR_NA
@@ -1504,7 +917,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
             ctx->pcs[ 4 ] < RtemsSignalReqCatch_Pre_ASR_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            if ( RtemsSignalReqCatch_TransitionInfo[ index ].Pre_ASR_NA ) {
+            entry = RtemsSignalReqCatch_GetEntry( index );
+
+            if ( entry.Pre_ASR_NA ) {
               ctx->pcs[ 4 ] = RtemsSignalReqCatch_Pre_ASR_NA;
               index += ( RtemsSignalReqCatch_Pre_ASR_NA - 1 )
                 * RtemsSignalReqCatch_Pre_IntLvl_NA;
@@ -1515,12 +930,14 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
               ctx->pcs[ 5 ] < RtemsSignalReqCatch_Pre_IntLvl_NA;
               ++ctx->pcs[ 5 ]
             ) {
-              if ( RtemsSignalReqCatch_TransitionInfo[ index ].Pre_IntLvl_NA ) {
+              entry = RtemsSignalReqCatch_GetEntry( index );
+
+              if ( entry.Pre_IntLvl_NA ) {
                 ctx->pcs[ 5 ] = RtemsSignalReqCatch_Pre_IntLvl_NA;
                 index += ( RtemsSignalReqCatch_Pre_IntLvl_NA - 1 );
               }
 
-              if ( RtemsSignalReqCatch_TransitionInfo[ index ].Skip ) {
+              if ( entry.Skip ) {
                 ++index;
                 continue;
               }
@@ -1533,29 +950,10 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
               RtemsSignalReqCatch_Pre_ASR_Prepare( ctx, ctx->pcs[ 4 ] );
               RtemsSignalReqCatch_Pre_IntLvl_Prepare( ctx, ctx->pcs[ 5 ] );
               RtemsSignalReqCatch_Action( ctx );
-              RtemsSignalReqCatch_Post_Status_Check(
+              RtemsSignalReqCatch_Post_Status_Check( ctx, entry.Post_Status );
+              RtemsSignalReqCatch_Post_ASRInfo_Check(
                 ctx,
-                RtemsSignalReqCatch_TransitionMap[ index ][ 0 ]
-              );
-              RtemsSignalReqCatch_Post_Send_Check(
-                ctx,
-                RtemsSignalReqCatch_TransitionMap[ index ][ 1 ]
-              );
-              RtemsSignalReqCatch_Post_Preempt_Check(
-                ctx,
-                RtemsSignalReqCatch_TransitionMap[ index ][ 2 ]
-              );
-              RtemsSignalReqCatch_Post_Timeslice_Check(
-                ctx,
-                RtemsSignalReqCatch_TransitionMap[ index ][ 3 ]
-              );
-              RtemsSignalReqCatch_Post_ASR_Check(
-                ctx,
-                RtemsSignalReqCatch_TransitionMap[ index ][ 4 ]
-              );
-              RtemsSignalReqCatch_Post_IntLvl_Check(
-                ctx,
-                RtemsSignalReqCatch_TransitionMap[ index ][ 5 ]
+                entry.Post_ASRInfo
               );
               ++index;
             }

@@ -214,7 +214,7 @@ static void RtemsBarrierReqRelease_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Id_NoObj: {
       /*
-       * The ``id`` parameter shall not be associated with a barrier.
+       * While the ``id`` parameter is not associated with a barrier.
        */
       ctx->id = 0xffffffff;
       break;
@@ -222,7 +222,7 @@ static void RtemsBarrierReqRelease_Pre_Id_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Id_Manual: {
       /*
-       * The ``id`` parameter shall be associated with a manual release
+       * While the ``id`` parameter is associated with a manual release
        * barrier.
        */
       ctx->id = ctx->manual_release_id;
@@ -231,7 +231,7 @@ static void RtemsBarrierReqRelease_Pre_Id_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Id_Auto: {
       /*
-       * The ``id`` parameter shall be associated with an automatic release
+       * While the ``id`` parameter is associated with an automatic release
        * barrier.
        */
       ctx->id = ctx->auto_release_id;
@@ -253,7 +253,8 @@ static void RtemsBarrierReqRelease_Pre_Released_Prepare(
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Released_Valid: {
       /*
-       * The ``released`` parameter shall reference an object of type uint32_t.
+       * While the ``released`` parameter references an object of type
+       * uint32_t.
        */
       ctx->released = &ctx->released_value;
       break;
@@ -261,7 +262,7 @@ static void RtemsBarrierReqRelease_Pre_Released_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Released_Null: {
       /*
-       * The ``released`` parameter shall be NULL.
+       * While the ``released`` parameter is NULL.
        */
       ctx->released = NULL;
       break;
@@ -280,7 +281,7 @@ static void RtemsBarrierReqRelease_Pre_Waiting_Prepare(
   switch ( state ) {
     case RtemsBarrierReqRelease_Pre_Waiting_Zero: {
       /*
-       * The number of tasks waiting at the barrier shall be zero.
+       * While the number of tasks waiting at the barrier is zero.
        */
       ctx->waiting_tasks = 0;
       break;
@@ -288,7 +289,7 @@ static void RtemsBarrierReqRelease_Pre_Waiting_Prepare(
 
     case RtemsBarrierReqRelease_Pre_Waiting_Positive: {
       /*
-       * The number of tasks waiting at the barrier shall be positive.
+       * While the number of tasks waiting at the barrier is positive.
        */
       ctx->waiting_tasks = 1;
       SendEvents( ctx->worker_id, EVENT_WAIT );
@@ -461,6 +462,37 @@ static void RtemsBarrierReqRelease_Teardown_Wrap( void *arg )
   RtemsBarrierReqRelease_Teardown( ctx );
 }
 
+static void RtemsBarrierReqRelease_Action(
+  RtemsBarrierReqRelease_Context *ctx
+)
+{
+  ctx->status = rtems_barrier_release( ctx->id, ctx->released );
+}
+
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Id_NA : 1;
+  uint8_t Pre_Released_NA : 1;
+  uint8_t Pre_Waiting_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_ReleasedVar : 2;
+} RtemsBarrierReqRelease_Entry;
+
+static const RtemsBarrierReqRelease_Entry
+RtemsBarrierReqRelease_Entries[] = {
+  { 0, 0, 0, 1, RtemsBarrierReqRelease_Post_Status_InvAddr,
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop },
+  { 0, 0, 0, 0, RtemsBarrierReqRelease_Post_Status_Ok,
+    RtemsBarrierReqRelease_Post_ReleasedVar_Set },
+  { 0, 0, 0, 1, RtemsBarrierReqRelease_Post_Status_InvId,
+    RtemsBarrierReqRelease_Post_ReleasedVar_Nop }
+};
+
+static const uint8_t
+RtemsBarrierReqRelease_Map[] = {
+  2, 2, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0
+};
+
 static size_t RtemsBarrierReqRelease_Scope( void *arg, char *buf, size_t n )
 {
   RtemsBarrierReqRelease_Context *ctx;
@@ -482,84 +514,13 @@ static T_fixture RtemsBarrierReqRelease_Fixture = {
   .initial_context = &RtemsBarrierReqRelease_Instance
 };
 
-static const uint8_t RtemsBarrierReqRelease_TransitionMap[][ 2 ] = {
-  {
-    RtemsBarrierReqRelease_Post_Status_InvId,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvId,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Set
-  }, {
-    RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Set
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Set
-  }, {
-    RtemsBarrierReqRelease_Post_Status_Ok,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Set
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }, {
-    RtemsBarrierReqRelease_Post_Status_InvAddr,
-    RtemsBarrierReqRelease_Post_ReleasedVar_Nop
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Pre_Released_NA : 1;
-  uint8_t Pre_Waiting_NA : 1;
-} RtemsBarrierReqRelease_TransitionInfo[] = {
-  {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 1
-  }, {
-    0, 0, 0, 1
-  }
-};
-
-static void RtemsBarrierReqRelease_Action(
-  RtemsBarrierReqRelease_Context *ctx
+static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_GetEntry(
+  size_t index
 )
 {
-  ctx->status = rtems_barrier_release( ctx->id, ctx->released );
+  return RtemsBarrierReqRelease_Entries[
+    RtemsBarrierReqRelease_Map[ index ]
+  ];
 }
 
 /**
@@ -568,6 +529,7 @@ static void RtemsBarrierReqRelease_Action(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
 {
   RtemsBarrierReqRelease_Context *ctx;
+  RtemsBarrierReqRelease_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -579,7 +541,9 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsBarrierReqRelease_TransitionInfo[ index ].Pre_Id_NA ) {
+    entry = RtemsBarrierReqRelease_GetEntry( index );
+
+    if ( entry.Pre_Id_NA ) {
       ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NA;
       index += ( RtemsBarrierReqRelease_Pre_Id_NA - 1 )
         * RtemsBarrierReqRelease_Pre_Released_NA
@@ -591,7 +555,9 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
       ctx->pcs[ 1 ] < RtemsBarrierReqRelease_Pre_Released_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( RtemsBarrierReqRelease_TransitionInfo[ index ].Pre_Released_NA ) {
+      entry = RtemsBarrierReqRelease_GetEntry( index );
+
+      if ( entry.Pre_Released_NA ) {
         ctx->pcs[ 1 ] = RtemsBarrierReqRelease_Pre_Released_NA;
         index += ( RtemsBarrierReqRelease_Pre_Released_NA - 1 )
           * RtemsBarrierReqRelease_Pre_Waiting_NA;
@@ -602,12 +568,14 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
         ctx->pcs[ 2 ] < RtemsBarrierReqRelease_Pre_Waiting_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( RtemsBarrierReqRelease_TransitionInfo[ index ].Pre_Waiting_NA ) {
+        entry = RtemsBarrierReqRelease_GetEntry( index );
+
+        if ( entry.Pre_Waiting_NA ) {
           ctx->pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_NA;
           index += ( RtemsBarrierReqRelease_Pre_Waiting_NA - 1 );
         }
 
-        if ( RtemsBarrierReqRelease_TransitionInfo[ index ].Skip ) {
+        if ( entry.Skip ) {
           ++index;
           continue;
         }
@@ -616,13 +584,10 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
         RtemsBarrierReqRelease_Pre_Released_Prepare( ctx, ctx->pcs[ 1 ] );
         RtemsBarrierReqRelease_Pre_Waiting_Prepare( ctx, ctx->pcs[ 2 ] );
         RtemsBarrierReqRelease_Action( ctx );
-        RtemsBarrierReqRelease_Post_Status_Check(
-          ctx,
-          RtemsBarrierReqRelease_TransitionMap[ index ][ 0 ]
-        );
+        RtemsBarrierReqRelease_Post_Status_Check( ctx, entry.Post_Status );
         RtemsBarrierReqRelease_Post_ReleasedVar_Check(
           ctx,
-          RtemsBarrierReqRelease_TransitionMap[ index ][ 1 ]
+          entry.Post_ReleasedVar
         );
         ++index;
       }

@@ -72,6 +72,12 @@ typedef enum {
 } RtemsBarrierReqCreate_Pre_Name;
 
 typedef enum {
+  RtemsBarrierReqCreate_Pre_Id_Valid,
+  RtemsBarrierReqCreate_Pre_Id_Null,
+  RtemsBarrierReqCreate_Pre_Id_NA
+} RtemsBarrierReqCreate_Pre_Id;
+
+typedef enum {
   RtemsBarrierReqCreate_Pre_Class_Default,
   RtemsBarrierReqCreate_Pre_Class_Manual,
   RtemsBarrierReqCreate_Pre_Class_Auto,
@@ -83,12 +89,6 @@ typedef enum {
   RtemsBarrierReqCreate_Pre_MaxWait_Positive,
   RtemsBarrierReqCreate_Pre_MaxWait_NA
 } RtemsBarrierReqCreate_Pre_MaxWait;
-
-typedef enum {
-  RtemsBarrierReqCreate_Pre_Id_Valid,
-  RtemsBarrierReqCreate_Pre_Id_Null,
-  RtemsBarrierReqCreate_Pre_Id_NA
-} RtemsBarrierReqCreate_Pre_Id;
 
 typedef enum {
   RtemsBarrierReqCreate_Pre_Free_Yes,
@@ -112,7 +112,6 @@ typedef enum {
 } RtemsBarrierReqCreate_Post_Name;
 
 typedef enum {
-  RtemsBarrierReqCreate_Post_Class_NoObj,
   RtemsBarrierReqCreate_Post_Class_Manual,
   RtemsBarrierReqCreate_Post_Class_Auto,
   RtemsBarrierReqCreate_Post_Class_NA
@@ -169,6 +168,12 @@ static const char * const RtemsBarrierReqCreate_PreDesc_Name[] = {
   "NA"
 };
 
+static const char * const RtemsBarrierReqCreate_PreDesc_Id[] = {
+  "Valid",
+  "Null",
+  "NA"
+};
+
 static const char * const RtemsBarrierReqCreate_PreDesc_Class[] = {
   "Default",
   "Manual",
@@ -182,12 +187,6 @@ static const char * const RtemsBarrierReqCreate_PreDesc_MaxWait[] = {
   "NA"
 };
 
-static const char * const RtemsBarrierReqCreate_PreDesc_Id[] = {
-  "Valid",
-  "Null",
-  "NA"
-};
-
 static const char * const RtemsBarrierReqCreate_PreDesc_Free[] = {
   "Yes",
   "No",
@@ -196,9 +195,9 @@ static const char * const RtemsBarrierReqCreate_PreDesc_Free[] = {
 
 static const char * const * const RtemsBarrierReqCreate_PreDesc[] = {
   RtemsBarrierReqCreate_PreDesc_Name,
+  RtemsBarrierReqCreate_PreDesc_Id,
   RtemsBarrierReqCreate_PreDesc_Class,
   RtemsBarrierReqCreate_PreDesc_MaxWait,
-  RtemsBarrierReqCreate_PreDesc_Id,
   RtemsBarrierReqCreate_PreDesc_Free,
   NULL
 };
@@ -251,7 +250,7 @@ static void RtemsBarrierReqCreate_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Name_Valid: {
       /*
-       * The ``name`` parameter shall be valid.
+       * While the ``name`` parameter is valid.
        */
       ctx->name = NAME;
       break;
@@ -259,13 +258,40 @@ static void RtemsBarrierReqCreate_Pre_Name_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Name_Invalid: {
       /*
-       * The ``name`` parameter shall be invalid.
+       * While the ``name`` parameter is invalid.
        */
       ctx->name = 0;
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_Name_NA:
+      break;
+  }
+}
+
+static void RtemsBarrierReqCreate_Pre_Id_Prepare(
+  RtemsBarrierReqCreate_Context *ctx,
+  RtemsBarrierReqCreate_Pre_Id   state
+)
+{
+  switch ( state ) {
+    case RtemsBarrierReqCreate_Pre_Id_Valid: {
+      /*
+       * While the ``id`` parameter references an object of type rtems_id.
+       */
+      ctx->id = &ctx->id_value;
+      break;
+    }
+
+    case RtemsBarrierReqCreate_Pre_Id_Null: {
+      /*
+       * While the ``id`` parameter is NULL.
+       */
+      ctx->id = NULL;
+      break;
+    }
+
+    case RtemsBarrierReqCreate_Pre_Id_NA:
       break;
   }
 }
@@ -278,7 +304,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Class_Default: {
       /*
-       * The ``attribute_set`` parameter shall specify the default class.
+       * While the ``attribute_set`` parameter specifies the default class.
        */
       /* Nothing to do */
       break;
@@ -286,7 +312,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Class_Manual: {
       /*
-       * The ``attribute_set`` parameter shall specify the manual release
+       * While the ``attribute_set`` parameter specifies the manual release
        * class.
        */
       ctx->attribute_set |= RTEMS_BARRIER_MANUAL_RELEASE;
@@ -295,7 +321,7 @@ static void RtemsBarrierReqCreate_Pre_Class_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Class_Auto: {
       /*
-       * The ``attribute_set`` parameter shall specify the automatic release
+       * While the ``attribute_set`` parameter specifies the automatic release
        * class.
        */
       ctx->attribute_set |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
@@ -315,7 +341,7 @@ static void RtemsBarrierReqCreate_Pre_MaxWait_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_MaxWait_Zero: {
       /*
-       * The ``maximum_waiters`` parameter shall be zero.
+       * While the ``maximum_waiters`` parameter is zero.
        */
       ctx->maximum_waiters = 0;
       break;
@@ -323,40 +349,13 @@ static void RtemsBarrierReqCreate_Pre_MaxWait_Prepare(
 
     case RtemsBarrierReqCreate_Pre_MaxWait_Positive: {
       /*
-       * The ``maximum_waiters`` parameter shall be positive.
+       * While the ``maximum_waiters`` parameter is positive.
        */
       ctx->maximum_waiters = 1;
       break;
     }
 
     case RtemsBarrierReqCreate_Pre_MaxWait_NA:
-      break;
-  }
-}
-
-static void RtemsBarrierReqCreate_Pre_Id_Prepare(
-  RtemsBarrierReqCreate_Context *ctx,
-  RtemsBarrierReqCreate_Pre_Id   state
-)
-{
-  switch ( state ) {
-    case RtemsBarrierReqCreate_Pre_Id_Valid: {
-      /*
-       * The ``id`` parameter shall reference an object of type rtems_id.
-       */
-      ctx->id = &ctx->id_value;
-      break;
-    }
-
-    case RtemsBarrierReqCreate_Pre_Id_Null: {
-      /*
-       * The ``id`` parameter shall be NULL.
-       */
-      ctx->id = NULL;
-      break;
-    }
-
-    case RtemsBarrierReqCreate_Pre_Id_NA:
       break;
   }
 }
@@ -369,7 +368,7 @@ static void RtemsBarrierReqCreate_Pre_Free_Prepare(
   switch ( state ) {
     case RtemsBarrierReqCreate_Pre_Free_Yes: {
       /*
-       * The system shall have at least one inactive barrier object available.
+       * While the system has at least one inactive barrier object available.
        */
       /* Nothing to do */
       break;
@@ -377,7 +376,7 @@ static void RtemsBarrierReqCreate_Pre_Free_Prepare(
 
     case RtemsBarrierReqCreate_Pre_Free_No: {
       /*
-       * The system shall not have an inactive barrier object available.
+       * While the system has no inactive barrier object available.
        */
       ctx->seized_objects = T_seize_objects( Create, NULL );
       break;
@@ -485,18 +484,10 @@ static void RtemsBarrierReqCreate_Post_Class_Check(
   rtems_status_code sc;
 
   switch ( state ) {
-    case RtemsBarrierReqCreate_Post_Class_NoObj: {
-      /*
-       * The barrier class is not applicable since there was no barrier
-       * created.
-       */
-      /* Not applicable */
-      break;
-    }
-
     case RtemsBarrierReqCreate_Post_Class_Manual: {
       /*
-       * The class of the barrier shall be manual release.
+       * The class of the barrier created by the rtems_barrier_create() call
+       * shall be manual release.
        */
       sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
       T_rsc_success( sc );
@@ -508,7 +499,8 @@ static void RtemsBarrierReqCreate_Post_Class_Check(
 
     case RtemsBarrierReqCreate_Post_Class_Auto: {
       /*
-       * The class of the barrier shall be automatic release.
+       * The class of the barrier created by the rtems_barrier_create() call
+       * shall be automatic release.
        */
       sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
       T_rsc_success( sc );
@@ -605,378 +597,6 @@ static void RtemsBarrierReqCreate_Teardown_Wrap( void *arg )
   RtemsBarrierReqCreate_Teardown( ctx );
 }
 
-static size_t RtemsBarrierReqCreate_Scope( void *arg, char *buf, size_t n )
-{
-  RtemsBarrierReqCreate_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsBarrierReqCreate_PreDesc, buf, n, ctx->pcs );
-  }
-
-  return 0;
-}
-
-static T_fixture RtemsBarrierReqCreate_Fixture = {
-  .setup = RtemsBarrierReqCreate_Setup_Wrap,
-  .stop = NULL,
-  .teardown = RtemsBarrierReqCreate_Teardown_Wrap,
-  .scope = RtemsBarrierReqCreate_Scope,
-  .initial_context = &RtemsBarrierReqCreate_Instance
-};
-
-static const uint8_t RtemsBarrierReqCreate_TransitionMap[][ 4 ] = {
-  {
-    RtemsBarrierReqCreate_Post_Status_Ok,
-    RtemsBarrierReqCreate_Post_Name_Valid,
-    RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdVar_Set
-  }, {
-    RtemsBarrierReqCreate_Post_Status_TooMany,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_Ok,
-    RtemsBarrierReqCreate_Post_Name_Valid,
-    RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdVar_Set
-  }, {
-    RtemsBarrierReqCreate_Post_Status_TooMany,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_Ok,
-    RtemsBarrierReqCreate_Post_Name_Valid,
-    RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdVar_Set
-  }, {
-    RtemsBarrierReqCreate_Post_Status_TooMany,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_Ok,
-    RtemsBarrierReqCreate_Post_Name_Valid,
-    RtemsBarrierReqCreate_Post_Class_Manual,
-    RtemsBarrierReqCreate_Post_IdVar_Set
-  }, {
-    RtemsBarrierReqCreate_Post_Status_TooMany,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvNum,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvNum,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_Ok,
-    RtemsBarrierReqCreate_Post_Name_Valid,
-    RtemsBarrierReqCreate_Post_Class_Auto,
-    RtemsBarrierReqCreate_Post_IdVar_Set
-  }, {
-    RtemsBarrierReqCreate_Post_Status_TooMany,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvAddr,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }, {
-    RtemsBarrierReqCreate_Post_Status_InvName,
-    RtemsBarrierReqCreate_Post_Name_Invalid,
-    RtemsBarrierReqCreate_Post_Class_NoObj,
-    RtemsBarrierReqCreate_Post_IdVar_Nop
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Name_NA : 1;
-  uint8_t Pre_Class_NA : 1;
-  uint8_t Pre_MaxWait_NA : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Pre_Free_NA : 1;
-} RtemsBarrierReqCreate_TransitionInfo[] = {
-  {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }
-};
-
 static void RtemsBarrierReqCreate_Action( RtemsBarrierReqCreate_Context *ctx )
 {
   ctx->status = rtems_barrier_create(
@@ -1001,12 +621,85 @@ static void RtemsBarrierReqCreate_Cleanup( RtemsBarrierReqCreate_Context *ctx )
   T_surrender_objects( &ctx->seized_objects, rtems_barrier_delete );
 }
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Name_NA : 1;
+  uint16_t Pre_Id_NA : 1;
+  uint16_t Pre_Class_NA : 1;
+  uint16_t Pre_MaxWait_NA : 1;
+  uint16_t Pre_Free_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Name : 2;
+  uint16_t Post_Class : 2;
+  uint16_t Post_IdVar : 2;
+} RtemsBarrierReqCreate_Entry;
+
+static const RtemsBarrierReqCreate_Entry
+RtemsBarrierReqCreate_Entries[] = {
+  { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_InvName,
+    RtemsBarrierReqCreate_Post_Name_Invalid,
+    RtemsBarrierReqCreate_Post_Class_NA, RtemsBarrierReqCreate_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_InvAddr,
+    RtemsBarrierReqCreate_Post_Name_Invalid,
+    RtemsBarrierReqCreate_Post_Class_NA, RtemsBarrierReqCreate_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_TooMany,
+    RtemsBarrierReqCreate_Post_Name_Invalid,
+    RtemsBarrierReqCreate_Post_Class_NA, RtemsBarrierReqCreate_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_Ok,
+    RtemsBarrierReqCreate_Post_Name_Valid,
+    RtemsBarrierReqCreate_Post_Class_Manual,
+    RtemsBarrierReqCreate_Post_IdVar_Set },
+  { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_InvNum,
+    RtemsBarrierReqCreate_Post_Name_Invalid,
+    RtemsBarrierReqCreate_Post_Class_NA, RtemsBarrierReqCreate_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, RtemsBarrierReqCreate_Post_Status_Ok,
+    RtemsBarrierReqCreate_Post_Name_Valid,
+    RtemsBarrierReqCreate_Post_Class_Auto, RtemsBarrierReqCreate_Post_IdVar_Set }
+};
+
+static const uint8_t
+RtemsBarrierReqCreate_Map[] = {
+  3, 2, 3, 2, 3, 2, 3, 2, 4, 4, 5, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+static size_t RtemsBarrierReqCreate_Scope( void *arg, char *buf, size_t n )
+{
+  RtemsBarrierReqCreate_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope( RtemsBarrierReqCreate_PreDesc, buf, n, ctx->pcs );
+  }
+
+  return 0;
+}
+
+static T_fixture RtemsBarrierReqCreate_Fixture = {
+  .setup = RtemsBarrierReqCreate_Setup_Wrap,
+  .stop = NULL,
+  .teardown = RtemsBarrierReqCreate_Teardown_Wrap,
+  .scope = RtemsBarrierReqCreate_Scope,
+  .initial_context = &RtemsBarrierReqCreate_Instance
+};
+
+static inline RtemsBarrierReqCreate_Entry RtemsBarrierReqCreate_GetEntry(
+  size_t index
+)
+{
+  return RtemsBarrierReqCreate_Entries[
+    RtemsBarrierReqCreate_Map[ index ]
+  ];
+}
+
 /**
  * @fn void T_case_body_RtemsBarrierReqCreate( void )
  */
 T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
 {
   RtemsBarrierReqCreate_Context *ctx;
+  RtemsBarrierReqCreate_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -1018,48 +711,56 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqCreate_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsBarrierReqCreate_TransitionInfo[ index ].Pre_Name_NA ) {
+    entry = RtemsBarrierReqCreate_GetEntry( index );
+
+    if ( entry.Pre_Name_NA ) {
       ctx->pcs[ 0 ] = RtemsBarrierReqCreate_Pre_Name_NA;
       index += ( RtemsBarrierReqCreate_Pre_Name_NA - 1 )
+        * RtemsBarrierReqCreate_Pre_Id_NA
         * RtemsBarrierReqCreate_Pre_Class_NA
         * RtemsBarrierReqCreate_Pre_MaxWait_NA
-        * RtemsBarrierReqCreate_Pre_Id_NA
         * RtemsBarrierReqCreate_Pre_Free_NA;
     }
 
     for (
-      ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Class_Default;
-      ctx->pcs[ 1 ] < RtemsBarrierReqCreate_Pre_Class_NA;
+      ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Id_Valid;
+      ctx->pcs[ 1 ] < RtemsBarrierReqCreate_Pre_Id_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( RtemsBarrierReqCreate_TransitionInfo[ index ].Pre_Class_NA ) {
-        ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Class_NA;
-        index += ( RtemsBarrierReqCreate_Pre_Class_NA - 1 )
+      entry = RtemsBarrierReqCreate_GetEntry( index );
+
+      if ( entry.Pre_Id_NA ) {
+        ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Id_NA;
+        index += ( RtemsBarrierReqCreate_Pre_Id_NA - 1 )
+          * RtemsBarrierReqCreate_Pre_Class_NA
           * RtemsBarrierReqCreate_Pre_MaxWait_NA
-          * RtemsBarrierReqCreate_Pre_Id_NA
           * RtemsBarrierReqCreate_Pre_Free_NA;
       }
 
       for (
-        ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_MaxWait_Zero;
-        ctx->pcs[ 2 ] < RtemsBarrierReqCreate_Pre_MaxWait_NA;
+        ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_Class_Default;
+        ctx->pcs[ 2 ] < RtemsBarrierReqCreate_Pre_Class_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( RtemsBarrierReqCreate_TransitionInfo[ index ].Pre_MaxWait_NA ) {
-          ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_MaxWait_NA;
-          index += ( RtemsBarrierReqCreate_Pre_MaxWait_NA - 1 )
-            * RtemsBarrierReqCreate_Pre_Id_NA
+        entry = RtemsBarrierReqCreate_GetEntry( index );
+
+        if ( entry.Pre_Class_NA ) {
+          ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_Class_NA;
+          index += ( RtemsBarrierReqCreate_Pre_Class_NA - 1 )
+            * RtemsBarrierReqCreate_Pre_MaxWait_NA
             * RtemsBarrierReqCreate_Pre_Free_NA;
         }
 
         for (
-          ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_Id_Valid;
-          ctx->pcs[ 3 ] < RtemsBarrierReqCreate_Pre_Id_NA;
+          ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_MaxWait_Zero;
+          ctx->pcs[ 3 ] < RtemsBarrierReqCreate_Pre_MaxWait_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          if ( RtemsBarrierReqCreate_TransitionInfo[ index ].Pre_Id_NA ) {
-            ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_Id_NA;
-            index += ( RtemsBarrierReqCreate_Pre_Id_NA - 1 )
+          entry = RtemsBarrierReqCreate_GetEntry( index );
+
+          if ( entry.Pre_MaxWait_NA ) {
+            ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_MaxWait_NA;
+            index += ( RtemsBarrierReqCreate_Pre_MaxWait_NA - 1 )
               * RtemsBarrierReqCreate_Pre_Free_NA;
           }
 
@@ -1068,38 +769,28 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
             ctx->pcs[ 4 ] < RtemsBarrierReqCreate_Pre_Free_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            if ( RtemsBarrierReqCreate_TransitionInfo[ index ].Pre_Free_NA ) {
+            entry = RtemsBarrierReqCreate_GetEntry( index );
+
+            if ( entry.Pre_Free_NA ) {
               ctx->pcs[ 4 ] = RtemsBarrierReqCreate_Pre_Free_NA;
               index += ( RtemsBarrierReqCreate_Pre_Free_NA - 1 );
             }
 
-            if ( RtemsBarrierReqCreate_TransitionInfo[ index ].Skip ) {
+            if ( entry.Skip ) {
               ++index;
               continue;
             }
 
             RtemsBarrierReqCreate_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
-            RtemsBarrierReqCreate_Pre_Class_Prepare( ctx, ctx->pcs[ 1 ] );
-            RtemsBarrierReqCreate_Pre_MaxWait_Prepare( ctx, ctx->pcs[ 2 ] );
-            RtemsBarrierReqCreate_Pre_Id_Prepare( ctx, ctx->pcs[ 3 ] );
+            RtemsBarrierReqCreate_Pre_Id_Prepare( ctx, ctx->pcs[ 1 ] );
+            RtemsBarrierReqCreate_Pre_Class_Prepare( ctx, ctx->pcs[ 2 ] );
+            RtemsBarrierReqCreate_Pre_MaxWait_Prepare( ctx, ctx->pcs[ 3 ] );
             RtemsBarrierReqCreate_Pre_Free_Prepare( ctx, ctx->pcs[ 4 ] );
             RtemsBarrierReqCreate_Action( ctx );
-            RtemsBarrierReqCreate_Post_Status_Check(
-              ctx,
-              RtemsBarrierReqCreate_TransitionMap[ index ][ 0 ]
-            );
-            RtemsBarrierReqCreate_Post_Name_Check(
-              ctx,
-              RtemsBarrierReqCreate_TransitionMap[ index ][ 1 ]
-            );
-            RtemsBarrierReqCreate_Post_Class_Check(
-              ctx,
-              RtemsBarrierReqCreate_TransitionMap[ index ][ 2 ]
-            );
-            RtemsBarrierReqCreate_Post_IdVar_Check(
-              ctx,
-              RtemsBarrierReqCreate_TransitionMap[ index ][ 3 ]
-            );
+            RtemsBarrierReqCreate_Post_Status_Check( ctx, entry.Post_Status );
+            RtemsBarrierReqCreate_Post_Name_Check( ctx, entry.Post_Name );
+            RtemsBarrierReqCreate_Post_Class_Check( ctx, entry.Post_Class );
+            RtemsBarrierReqCreate_Post_IdVar_Check( ctx, entry.Post_IdVar );
             RtemsBarrierReqCreate_Cleanup( ctx );
             ++index;
           }

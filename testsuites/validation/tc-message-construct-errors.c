@@ -67,16 +67,16 @@
  */
 
 typedef enum {
-  RtemsMessageReqConstructErrors_Pre_Id_Id,
-  RtemsMessageReqConstructErrors_Pre_Id_Null,
-  RtemsMessageReqConstructErrors_Pre_Id_NA
-} RtemsMessageReqConstructErrors_Pre_Id;
-
-typedef enum {
   RtemsMessageReqConstructErrors_Pre_Name_Valid,
   RtemsMessageReqConstructErrors_Pre_Name_Invalid,
   RtemsMessageReqConstructErrors_Pre_Name_NA
 } RtemsMessageReqConstructErrors_Pre_Name;
+
+typedef enum {
+  RtemsMessageReqConstructErrors_Pre_Id_Id,
+  RtemsMessageReqConstructErrors_Pre_Id_Null,
+  RtemsMessageReqConstructErrors_Pre_Id_NA
+} RtemsMessageReqConstructErrors_Pre_Id;
 
 typedef enum {
   RtemsMessageReqConstructErrors_Pre_MaxPending_Valid,
@@ -162,15 +162,15 @@ typedef struct {
 static RtemsMessageReqConstructErrors_Context
   RtemsMessageReqConstructErrors_Instance;
 
-static const char * const RtemsMessageReqConstructErrors_PreDesc_Id[] = {
-  "Id",
-  "Null",
-  "NA"
-};
-
 static const char * const RtemsMessageReqConstructErrors_PreDesc_Name[] = {
   "Valid",
   "Invalid",
+  "NA"
+};
+
+static const char * const RtemsMessageReqConstructErrors_PreDesc_Id[] = {
+  "Id",
+  "Null",
   "NA"
 };
 
@@ -207,8 +207,8 @@ static const char * const RtemsMessageReqConstructErrors_PreDesc_AreaSize[] = {
 };
 
 static const char * const * const RtemsMessageReqConstructErrors_PreDesc[] = {
-  RtemsMessageReqConstructErrors_PreDesc_Id,
   RtemsMessageReqConstructErrors_PreDesc_Name,
+  RtemsMessageReqConstructErrors_PreDesc_Id,
   RtemsMessageReqConstructErrors_PreDesc_MaxPending,
   RtemsMessageReqConstructErrors_PreDesc_MaxSize,
   RtemsMessageReqConstructErrors_PreDesc_Free,
@@ -254,33 +254,6 @@ static rtems_status_code Create( void *arg, uint32_t *id )
   return rtems_message_queue_construct( &config, id );
 }
 
-static void RtemsMessageReqConstructErrors_Pre_Id_Prepare(
-  RtemsMessageReqConstructErrors_Context *ctx,
-  RtemsMessageReqConstructErrors_Pre_Id   state
-)
-{
-  switch ( state ) {
-    case RtemsMessageReqConstructErrors_Pre_Id_Id: {
-      /*
-       * The ``id`` parameter shall reference an object of type rtems_id.
-       */
-      ctx->id = &ctx->id_value;
-      break;
-    }
-
-    case RtemsMessageReqConstructErrors_Pre_Id_Null: {
-      /*
-       * The ``id`` parameter shall be NULL.
-       */
-      ctx->id = NULL;
-      break;
-    }
-
-    case RtemsMessageReqConstructErrors_Pre_Id_NA:
-      break;
-  }
-}
-
 static void RtemsMessageReqConstructErrors_Pre_Name_Prepare(
   RtemsMessageReqConstructErrors_Context *ctx,
   RtemsMessageReqConstructErrors_Pre_Name state
@@ -289,7 +262,7 @@ static void RtemsMessageReqConstructErrors_Pre_Name_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_Name_Valid: {
       /*
-       * The name of the message queue configuration shall be valid.
+       * While the name of the message queue configuration is valid.
        */
       ctx->config.name = NAME;
       break;
@@ -297,13 +270,40 @@ static void RtemsMessageReqConstructErrors_Pre_Name_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_Name_Invalid: {
       /*
-       * The name of the message queue configuration shall be invalid.
+       * While the name of the message queue configuration is invalid.
        */
       ctx->config.name = 0;
       break;
     }
 
     case RtemsMessageReqConstructErrors_Pre_Name_NA:
+      break;
+  }
+}
+
+static void RtemsMessageReqConstructErrors_Pre_Id_Prepare(
+  RtemsMessageReqConstructErrors_Context *ctx,
+  RtemsMessageReqConstructErrors_Pre_Id   state
+)
+{
+  switch ( state ) {
+    case RtemsMessageReqConstructErrors_Pre_Id_Id: {
+      /*
+       * While the ``id`` parameter references an object of type rtems_id.
+       */
+      ctx->id = &ctx->id_value;
+      break;
+    }
+
+    case RtemsMessageReqConstructErrors_Pre_Id_Null: {
+      /*
+       * While the ``id`` parameter is NULL.
+       */
+      ctx->id = NULL;
+      break;
+    }
+
+    case RtemsMessageReqConstructErrors_Pre_Id_NA:
       break;
   }
 }
@@ -316,8 +316,8 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_MaxPending_Valid: {
       /*
-       * The maximum number of pending messages of the message queue
-       * configuration shall be valid.
+       * While the maximum number of pending messages of the message queue
+       * configuration is valid.
        */
       ctx->config.maximum_pending_messages = MAX_PENDING_MESSAGES;
       break;
@@ -325,8 +325,8 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxPending_Zero: {
       /*
-       * The maximum number of pending messages of the message queue
-       * configuration shall be zero.
+       * While the maximum number of pending messages of the message queue
+       * configuration is zero.
        */
       ctx->config.maximum_pending_messages = 0;
       break;
@@ -334,9 +334,9 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxPending_Big: {
       /*
-       * The maximum number of pending messages of the message queue
-       * configuration shall be big enough so that a calculation to get the
-       * message buffer storage area size overflows.
+       * While the maximum number of pending messages of the message queue
+       * configuration is big enough so that a calculation to get the message
+       * buffer storage area size overflows.
        */
       ctx->config.maximum_pending_messages = UINT32_MAX;
       break;
@@ -355,7 +355,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_MaxSize_Valid: {
       /*
-       * The maximum message size of the message queue configuration shall be
+       * While the maximum message size of the message queue configuration is
        * valid.
        */
       if ( ctx->config.maximum_pending_messages == UINT32_MAX ) {
@@ -375,7 +375,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxSize_Zero: {
       /*
-       * The maximum message size of the message queue configuration shall be
+       * While the maximum message size of the message queue configuration is
        * zero.
        */
       ctx->config.maximum_message_size = 0;
@@ -384,7 +384,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_MaxSize_Big: {
       /*
-       * The maximum message size of the message queue configuration shall be
+       * While the maximum message size of the message queue configuration is
        * big enough so that a calculation to get the message buffer storage
        * area size overflows.
        */
@@ -407,7 +407,7 @@ static void RtemsMessageReqConstructErrors_Pre_Free_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_Free_Yes: {
       /*
-       * The system shall have at least one inactive message queue object
+       * While the system has at least one inactive message queue object
        * available.
        */
       /* Nothing to do */
@@ -416,7 +416,7 @@ static void RtemsMessageReqConstructErrors_Pre_Free_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_Free_No: {
       /*
-       * The system shall not have an inactive message queue object available.
+       * While the system has no inactive message queue object available.
        */
       i = 0;
       ctx->seized_objects = T_seize_objects( Create, &i );
@@ -436,8 +436,8 @@ static void RtemsMessageReqConstructErrors_Pre_Area_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_Area_Valid: {
       /*
-       * The message buffer storage area begin pointer of the message queue
-       * configuration shall be valid.
+       * While the message buffer storage area begin pointer of the message
+       * queue configuration is valid.
        */
       ctx->config.storage_area = buffers;
       break;
@@ -445,8 +445,8 @@ static void RtemsMessageReqConstructErrors_Pre_Area_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_Area_Null: {
       /*
-       * The message buffer storage area begin pointer of the message queue
-       * configuration shall be NULL.
+       * While the message buffer storage area begin pointer of the message
+       * queue configuration is NULL.
        */
       ctx->config.storage_area = NULL;
       break;
@@ -465,8 +465,8 @@ static void RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
   switch ( state ) {
     case RtemsMessageReqConstructErrors_Pre_AreaSize_Valid: {
       /*
-       * The message buffer storage area size of the message queue
-       * configuration shall be valid.
+       * While the message buffer storage area size of the message queue
+       * configuration is valid.
        */
       ctx->config.storage_size = sizeof( buffers );
       break;
@@ -474,8 +474,8 @@ static void RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
 
     case RtemsMessageReqConstructErrors_Pre_AreaSize_Invalid: {
       /*
-       * The message buffer storage area size of the message queue
-       * configuration shall be invalid.
+       * While the message buffer storage area size of the message queue
+       * configuration is invalid.
        */
       ctx->config.storage_size = SIZE_MAX;
       break;
@@ -627,1781 +627,6 @@ static void RtemsMessageReqConstructErrors_Post_IdVar_Check(
   }
 }
 
-static size_t RtemsMessageReqConstructErrors_Scope(
-  void  *arg,
-  char  *buf,
-  size_t n
-)
-{
-  RtemsMessageReqConstructErrors_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope(
-      RtemsMessageReqConstructErrors_PreDesc,
-      buf,
-      n,
-      ctx->pcs
-    );
-  }
-
-  return 0;
-}
-
-static T_fixture RtemsMessageReqConstructErrors_Fixture = {
-  .setup = NULL,
-  .stop = NULL,
-  .teardown = NULL,
-  .scope = RtemsMessageReqConstructErrors_Scope,
-  .initial_context = &RtemsMessageReqConstructErrors_Instance
-};
-
-static const uint8_t RtemsMessageReqConstructErrors_TransitionMap[][ 3 ] = {
-  {
-    RtemsMessageReqConstructErrors_Post_Status_Ok,
-    RtemsMessageReqConstructErrors_Post_Name_Valid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Set
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_Unsat,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_Unsat,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_Unsat,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvNum,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvSize,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_TooMany,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }, {
-    RtemsMessageReqConstructErrors_Post_Status_InvName,
-    RtemsMessageReqConstructErrors_Post_Name_Invalid,
-    RtemsMessageReqConstructErrors_Post_IdVar_Nop
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Pre_Name_NA : 1;
-  uint8_t Pre_MaxPending_NA : 1;
-  uint8_t Pre_MaxSize_NA : 1;
-  uint8_t Pre_Free_NA : 1;
-  uint8_t Pre_Area_NA : 1;
-  uint8_t Pre_AreaSize_NA : 1;
-} RtemsMessageReqConstructErrors_TransitionInfo[] = {
-  {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0, 0, 0
-  }
-};
-
 static void RtemsMessageReqConstructErrors_Prepare(
   RtemsMessageReqConstructErrors_Context *ctx
 )
@@ -2433,6 +658,99 @@ static void RtemsMessageReqConstructErrors_Cleanup(
   T_surrender_objects( &ctx->seized_objects, rtems_message_queue_delete );
 }
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Name_NA : 1;
+  uint16_t Pre_Id_NA : 1;
+  uint16_t Pre_MaxPending_NA : 1;
+  uint16_t Pre_MaxSize_NA : 1;
+  uint16_t Pre_Free_NA : 1;
+  uint16_t Pre_Area_NA : 1;
+  uint16_t Pre_AreaSize_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Name : 2;
+  uint16_t Post_IdVar : 2;
+} RtemsMessageReqConstructErrors_Entry;
+
+static const RtemsMessageReqConstructErrors_Entry
+RtemsMessageReqConstructErrors_Entries[] = {
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvName,
+    RtemsMessageReqConstructErrors_Post_Name_Invalid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvAddr,
+    RtemsMessageReqConstructErrors_Post_Name_Invalid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvNum,
+    RtemsMessageReqConstructErrors_Post_Name_Invalid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvSize,
+    RtemsMessageReqConstructErrors_Post_Name_Invalid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_TooMany,
+    RtemsMessageReqConstructErrors_Post_Name_Invalid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_Unsat,
+    RtemsMessageReqConstructErrors_Post_Name_Invalid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Nop },
+  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_Ok,
+    RtemsMessageReqConstructErrors_Post_Name_Valid,
+    RtemsMessageReqConstructErrors_Post_IdVar_Set }
+};
+
+static const uint8_t
+RtemsMessageReqConstructErrors_Map[] = {
+  6, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 2, 2,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+  4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0
+};
+
+static size_t RtemsMessageReqConstructErrors_Scope(
+  void  *arg,
+  char  *buf,
+  size_t n
+)
+{
+  RtemsMessageReqConstructErrors_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope(
+      RtemsMessageReqConstructErrors_PreDesc,
+      buf,
+      n,
+      ctx->pcs
+    );
+  }
+
+  return 0;
+}
+
+static T_fixture RtemsMessageReqConstructErrors_Fixture = {
+  .setup = NULL,
+  .stop = NULL,
+  .teardown = NULL,
+  .scope = RtemsMessageReqConstructErrors_Scope,
+  .initial_context = &RtemsMessageReqConstructErrors_Instance
+};
+
+static inline RtemsMessageReqConstructErrors_Entry
+RtemsMessageReqConstructErrors_GetEntry( size_t index )
+{
+  return RtemsMessageReqConstructErrors_Entries[
+    RtemsMessageReqConstructErrors_Map[ index ]
+  ];
+}
+
 /**
  * @fn void T_case_body_RtemsMessageReqConstructErrors( void )
  */
@@ -2442,6 +760,7 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsMessageReqConstructErrors_Context *ctx;
+  RtemsMessageReqConstructErrors_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -2449,14 +768,16 @@ T_TEST_CASE_FIXTURE(
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Id_Id;
-    ctx->pcs[ 0 ] < RtemsMessageReqConstructErrors_Pre_Id_NA;
+    ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Name_Valid;
+    ctx->pcs[ 0 ] < RtemsMessageReqConstructErrors_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_Id_NA ) {
-      ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Id_NA;
-      index += ( RtemsMessageReqConstructErrors_Pre_Id_NA - 1 )
-        * RtemsMessageReqConstructErrors_Pre_Name_NA
+    entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+    if ( entry.Pre_Name_NA ) {
+      ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Name_NA;
+      index += ( RtemsMessageReqConstructErrors_Pre_Name_NA - 1 )
+        * RtemsMessageReqConstructErrors_Pre_Id_NA
         * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
         * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
         * RtemsMessageReqConstructErrors_Pre_Free_NA
@@ -2465,13 +786,15 @@ T_TEST_CASE_FIXTURE(
     }
 
     for (
-      ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Name_Valid;
-      ctx->pcs[ 1 ] < RtemsMessageReqConstructErrors_Pre_Name_NA;
+      ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Id_Id;
+      ctx->pcs[ 1 ] < RtemsMessageReqConstructErrors_Pre_Id_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_Name_NA ) {
-        ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Name_NA;
-        index += ( RtemsMessageReqConstructErrors_Pre_Name_NA - 1 )
+      entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+      if ( entry.Pre_Id_NA ) {
+        ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Id_NA;
+        index += ( RtemsMessageReqConstructErrors_Pre_Id_NA - 1 )
           * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
           * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
           * RtemsMessageReqConstructErrors_Pre_Free_NA
@@ -2484,7 +807,9 @@ T_TEST_CASE_FIXTURE(
         ctx->pcs[ 2 ] < RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_MaxPending_NA ) {
+        entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+        if ( entry.Pre_MaxPending_NA ) {
           ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
           index += ( RtemsMessageReqConstructErrors_Pre_MaxPending_NA - 1 )
             * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
@@ -2498,7 +823,9 @@ T_TEST_CASE_FIXTURE(
           ctx->pcs[ 3 ] < RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_MaxSize_NA ) {
+          entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+          if ( entry.Pre_MaxSize_NA ) {
             ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
             index += ( RtemsMessageReqConstructErrors_Pre_MaxSize_NA - 1 )
               * RtemsMessageReqConstructErrors_Pre_Free_NA
@@ -2511,7 +838,9 @@ T_TEST_CASE_FIXTURE(
             ctx->pcs[ 4 ] < RtemsMessageReqConstructErrors_Pre_Free_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_Free_NA ) {
+            entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+            if ( entry.Pre_Free_NA ) {
               ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Free_NA;
               index += ( RtemsMessageReqConstructErrors_Pre_Free_NA - 1 )
                 * RtemsMessageReqConstructErrors_Pre_Area_NA
@@ -2523,7 +852,9 @@ T_TEST_CASE_FIXTURE(
               ctx->pcs[ 5 ] < RtemsMessageReqConstructErrors_Pre_Area_NA;
               ++ctx->pcs[ 5 ]
             ) {
-              if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_Area_NA ) {
+              entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+              if ( entry.Pre_Area_NA ) {
                 ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Area_NA;
                 index += ( RtemsMessageReqConstructErrors_Pre_Area_NA - 1 )
                   * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
@@ -2534,22 +865,24 @@ T_TEST_CASE_FIXTURE(
                 ctx->pcs[ 6 ] < RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
                 ++ctx->pcs[ 6 ]
               ) {
-                if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Pre_AreaSize_NA ) {
+                entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+                if ( entry.Pre_AreaSize_NA ) {
                   ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
                   index += ( RtemsMessageReqConstructErrors_Pre_AreaSize_NA - 1 );
                 }
 
-                if ( RtemsMessageReqConstructErrors_TransitionInfo[ index ].Skip ) {
+                if ( entry.Skip ) {
                   ++index;
                   continue;
                 }
 
                 RtemsMessageReqConstructErrors_Prepare( ctx );
-                RtemsMessageReqConstructErrors_Pre_Id_Prepare(
+                RtemsMessageReqConstructErrors_Pre_Name_Prepare(
                   ctx,
                   ctx->pcs[ 0 ]
                 );
-                RtemsMessageReqConstructErrors_Pre_Name_Prepare(
+                RtemsMessageReqConstructErrors_Pre_Id_Prepare(
                   ctx,
                   ctx->pcs[ 1 ]
                 );
@@ -2576,15 +909,15 @@ T_TEST_CASE_FIXTURE(
                 RtemsMessageReqConstructErrors_Action( ctx );
                 RtemsMessageReqConstructErrors_Post_Status_Check(
                   ctx,
-                  RtemsMessageReqConstructErrors_TransitionMap[ index ][ 0 ]
+                  entry.Post_Status
                 );
                 RtemsMessageReqConstructErrors_Post_Name_Check(
                   ctx,
-                  RtemsMessageReqConstructErrors_TransitionMap[ index ][ 1 ]
+                  entry.Post_Name
                 );
                 RtemsMessageReqConstructErrors_Post_IdVar_Check(
                   ctx,
-                  RtemsMessageReqConstructErrors_TransitionMap[ index ][ 2 ]
+                  entry.Post_IdVar
                 );
                 RtemsMessageReqConstructErrors_Cleanup( ctx );
                 ++index;

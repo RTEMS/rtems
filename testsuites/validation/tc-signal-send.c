@@ -372,7 +372,7 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Task_NoObj: {
       /*
-       * The ``id`` parameter shall not be associated with a task.
+       * While the ``id`` parameter is not associated with a task.
        */
       ctx->id = 0xffffffff;
       break;
@@ -380,7 +380,7 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
 
     case RtemsSignalReqSend_Pre_Task_Self: {
       /*
-       * The ``id`` parameter shall be associated with the calling task.
+       * While the ``id`` parameter is associated with the calling task.
        */
       ctx->id = RTEMS_SELF;
       break;
@@ -388,7 +388,7 @@ static void RtemsSignalReqSend_Pre_Task_Prepare(
 
     case RtemsSignalReqSend_Pre_Task_Other: {
       /*
-       * The ``id`` parameter shall be associated with a task other than the
+       * While the ``id`` parameter is associated with a task other than the
        * calling task.
        */
       ctx->id = ctx->worker_id;
@@ -408,7 +408,7 @@ static void RtemsSignalReqSend_Pre_Set_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Set_Zero: {
       /*
-       * The ``signal_set`` parameter shall be zero.
+       * While the ``signal_set`` parameter is zero.
        */
       ctx->signal_set = 0;
       break;
@@ -416,7 +416,7 @@ static void RtemsSignalReqSend_Pre_Set_Prepare(
 
     case RtemsSignalReqSend_Pre_Set_NonZero: {
       /*
-       * The ``signal_set`` parameter shall be non-zero.
+       * While the ``signal_set`` parameter is non-zero.
        */
       ctx->signal_set = 0xdeadbeef;
       break;
@@ -435,8 +435,7 @@ static void RtemsSignalReqSend_Pre_Handler_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Handler_Invalid: {
       /*
-       * When the target task has no valid ASR handler installed, the
-       * rtems_signal_send() directive shall be called.
+       * While the target task has no valid ASR handler installed.
        */
       ctx->handler = NULL;
       break;
@@ -444,8 +443,7 @@ static void RtemsSignalReqSend_Pre_Handler_Prepare(
 
     case RtemsSignalReqSend_Pre_Handler_Valid: {
       /*
-       * When the target task has a valid ASR handler installed, the
-       * rtems_signal_send() directive shall be called.
+       * While the target task has a valid ASR handler installed.
        */
       ctx->handler = SignalHandler;
       break;
@@ -464,8 +462,7 @@ static void RtemsSignalReqSend_Pre_ASR_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_ASR_Enabled: {
       /*
-       * When the target task has ASR processing enabled, the
-       * rtems_signal_send() directive shall be called.
+       * While the target task has ASR processing enabled.
        */
       ctx->mode = RTEMS_DEFAULT_MODES;
       break;
@@ -473,8 +470,7 @@ static void RtemsSignalReqSend_Pre_ASR_Prepare(
 
     case RtemsSignalReqSend_Pre_ASR_Disabled: {
       /*
-       * When the target task has ASR processing disabled, the
-       * rtems_signal_send() directive shall be called.
+       * While the target task has ASR processing disabled.
        */
       ctx->mode = RTEMS_NO_ASR;
       break;
@@ -493,8 +489,7 @@ static void RtemsSignalReqSend_Pre_Nested_Prepare(
   switch ( state ) {
     case RtemsSignalReqSend_Pre_Nested_Yes: {
       /*
-       * When the target task processes an asynchronous signal set, the
-       * rtems_signal_send() directive shall be called.
+       * While the target task processes an asynchronous signal.
        */
       ctx->nested = 1;
       break;
@@ -502,8 +497,7 @@ static void RtemsSignalReqSend_Pre_Nested_Prepare(
 
     case RtemsSignalReqSend_Pre_Nested_No: {
       /*
-       * When the target task does not process an asynchronous signal set, the
-       * rtems_signal_send() directive shall be called.
+       * While the target task does not process an asynchronous signal.
        */
       ctx->nested = 0;
       break;
@@ -736,330 +730,6 @@ static void RtemsSignalReqSend_Teardown_Wrap( void *arg )
   RtemsSignalReqSend_Teardown( ctx );
 }
 
-static size_t RtemsSignalReqSend_Scope( void *arg, char *buf, size_t n )
-{
-  RtemsSignalReqSend_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsSignalReqSend_PreDesc, buf, n, ctx->pcs );
-  }
-
-  return 0;
-}
-
-static T_fixture RtemsSignalReqSend_Fixture = {
-  .setup = RtemsSignalReqSend_Setup_Wrap,
-  .stop = NULL,
-  .teardown = RtemsSignalReqSend_Teardown_Wrap,
-  .scope = RtemsSignalReqSend_Scope,
-  .initial_context = &RtemsSignalReqSend_Instance
-};
-
-static const uint8_t RtemsSignalReqSend_TransitionMap[][ 3 ] = {
-  {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvId,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_DuringSend,
-    RtemsSignalReqSend_Post_Recursive_Yes
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_DuringSend,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_AfterEnable,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_AfterEnable,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_InvNum,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_NotDef,
-    RtemsSignalReqSend_Post_Handler_NoCall,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_AfterDispatch,
-    RtemsSignalReqSend_Post_Recursive_Yes
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_AfterDispatch,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_AfterEnable,
-    RtemsSignalReqSend_Post_Recursive_No
-  }, {
-    RtemsSignalReqSend_Post_Status_Ok,
-    RtemsSignalReqSend_Post_Handler_AfterEnable,
-    RtemsSignalReqSend_Post_Recursive_No
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Task_NA : 1;
-  uint8_t Pre_Set_NA : 1;
-  uint8_t Pre_Handler_NA : 1;
-  uint8_t Pre_ASR_NA : 1;
-  uint8_t Pre_Nested_NA : 1;
-} RtemsSignalReqSend_TransitionInfo[] = {
-  {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }, {
-    0, 0, 0, 0, 0, 0
-  }
-};
-
 static void RtemsSignalReqSend_Prepare( RtemsSignalReqSend_Context *ctx )
 {
   ctx->handler_calls = 0;
@@ -1113,12 +783,89 @@ static void RtemsSignalReqSend_Action( RtemsSignalReqSend_Context *ctx )
   }
 }
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Task_NA : 1;
+  uint16_t Pre_Set_NA : 1;
+  uint16_t Pre_Handler_NA : 1;
+  uint16_t Pre_ASR_NA : 1;
+  uint16_t Pre_Nested_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Handler : 3;
+  uint16_t Post_Recursive : 2;
+} RtemsSignalReqSend_Entry;
+
+static const RtemsSignalReqSend_Entry
+RtemsSignalReqSend_Entries[] = {
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_InvNum,
+    RtemsSignalReqSend_Post_Handler_NoCall,
+    RtemsSignalReqSend_Post_Recursive_No },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_InvId,
+    RtemsSignalReqSend_Post_Handler_NoCall,
+    RtemsSignalReqSend_Post_Recursive_No },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_NotDef,
+    RtemsSignalReqSend_Post_Handler_NoCall,
+    RtemsSignalReqSend_Post_Recursive_No },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_Ok,
+    RtemsSignalReqSend_Post_Handler_AfterEnable,
+    RtemsSignalReqSend_Post_Recursive_No },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_Ok,
+    RtemsSignalReqSend_Post_Handler_DuringSend,
+    RtemsSignalReqSend_Post_Recursive_Yes },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_Ok,
+    RtemsSignalReqSend_Post_Handler_DuringSend,
+    RtemsSignalReqSend_Post_Recursive_No },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_Ok,
+    RtemsSignalReqSend_Post_Handler_AfterDispatch,
+    RtemsSignalReqSend_Post_Recursive_Yes },
+  { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_Ok,
+    RtemsSignalReqSend_Post_Handler_AfterDispatch,
+    RtemsSignalReqSend_Post_Recursive_No }
+};
+
+static const uint8_t
+RtemsSignalReqSend_Map[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2,
+  2, 2, 4, 5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 6, 7, 3, 3
+};
+
+static size_t RtemsSignalReqSend_Scope( void *arg, char *buf, size_t n )
+{
+  RtemsSignalReqSend_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope( RtemsSignalReqSend_PreDesc, buf, n, ctx->pcs );
+  }
+
+  return 0;
+}
+
+static T_fixture RtemsSignalReqSend_Fixture = {
+  .setup = RtemsSignalReqSend_Setup_Wrap,
+  .stop = NULL,
+  .teardown = RtemsSignalReqSend_Teardown_Wrap,
+  .scope = RtemsSignalReqSend_Scope,
+  .initial_context = &RtemsSignalReqSend_Instance
+};
+
+static inline RtemsSignalReqSend_Entry RtemsSignalReqSend_GetEntry(
+  size_t index
+)
+{
+  return RtemsSignalReqSend_Entries[
+    RtemsSignalReqSend_Map[ index ]
+  ];
+}
+
 /**
  * @fn void T_case_body_RtemsSignalReqSend( void )
  */
 T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
 {
   RtemsSignalReqSend_Context *ctx;
+  RtemsSignalReqSend_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -1130,7 +877,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
     ctx->pcs[ 0 ] < RtemsSignalReqSend_Pre_Task_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsSignalReqSend_TransitionInfo[ index ].Pre_Task_NA ) {
+    entry = RtemsSignalReqSend_GetEntry( index );
+
+    if ( entry.Pre_Task_NA ) {
       ctx->pcs[ 0 ] = RtemsSignalReqSend_Pre_Task_NA;
       index += ( RtemsSignalReqSend_Pre_Task_NA - 1 )
         * RtemsSignalReqSend_Pre_Set_NA
@@ -1144,7 +893,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
       ctx->pcs[ 1 ] < RtemsSignalReqSend_Pre_Set_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( RtemsSignalReqSend_TransitionInfo[ index ].Pre_Set_NA ) {
+      entry = RtemsSignalReqSend_GetEntry( index );
+
+      if ( entry.Pre_Set_NA ) {
         ctx->pcs[ 1 ] = RtemsSignalReqSend_Pre_Set_NA;
         index += ( RtemsSignalReqSend_Pre_Set_NA - 1 )
           * RtemsSignalReqSend_Pre_Handler_NA
@@ -1157,7 +908,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
         ctx->pcs[ 2 ] < RtemsSignalReqSend_Pre_Handler_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( RtemsSignalReqSend_TransitionInfo[ index ].Pre_Handler_NA ) {
+        entry = RtemsSignalReqSend_GetEntry( index );
+
+        if ( entry.Pre_Handler_NA ) {
           ctx->pcs[ 2 ] = RtemsSignalReqSend_Pre_Handler_NA;
           index += ( RtemsSignalReqSend_Pre_Handler_NA - 1 )
             * RtemsSignalReqSend_Pre_ASR_NA
@@ -1169,7 +922,9 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
           ctx->pcs[ 3 ] < RtemsSignalReqSend_Pre_ASR_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          if ( RtemsSignalReqSend_TransitionInfo[ index ].Pre_ASR_NA ) {
+          entry = RtemsSignalReqSend_GetEntry( index );
+
+          if ( entry.Pre_ASR_NA ) {
             ctx->pcs[ 3 ] = RtemsSignalReqSend_Pre_ASR_NA;
             index += ( RtemsSignalReqSend_Pre_ASR_NA - 1 )
               * RtemsSignalReqSend_Pre_Nested_NA;
@@ -1180,12 +935,14 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
             ctx->pcs[ 4 ] < RtemsSignalReqSend_Pre_Nested_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            if ( RtemsSignalReqSend_TransitionInfo[ index ].Pre_Nested_NA ) {
+            entry = RtemsSignalReqSend_GetEntry( index );
+
+            if ( entry.Pre_Nested_NA ) {
               ctx->pcs[ 4 ] = RtemsSignalReqSend_Pre_Nested_NA;
               index += ( RtemsSignalReqSend_Pre_Nested_NA - 1 );
             }
 
-            if ( RtemsSignalReqSend_TransitionInfo[ index ].Skip ) {
+            if ( entry.Skip ) {
               ++index;
               continue;
             }
@@ -1197,17 +954,11 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
             RtemsSignalReqSend_Pre_ASR_Prepare( ctx, ctx->pcs[ 3 ] );
             RtemsSignalReqSend_Pre_Nested_Prepare( ctx, ctx->pcs[ 4 ] );
             RtemsSignalReqSend_Action( ctx );
-            RtemsSignalReqSend_Post_Status_Check(
-              ctx,
-              RtemsSignalReqSend_TransitionMap[ index ][ 0 ]
-            );
-            RtemsSignalReqSend_Post_Handler_Check(
-              ctx,
-              RtemsSignalReqSend_TransitionMap[ index ][ 1 ]
-            );
+            RtemsSignalReqSend_Post_Status_Check( ctx, entry.Post_Status );
+            RtemsSignalReqSend_Post_Handler_Check( ctx, entry.Post_Handler );
             RtemsSignalReqSend_Post_Recursive_Check(
               ctx,
-              RtemsSignalReqSend_TransitionMap[ index ][ 2 ]
+              entry.Post_Recursive
             );
             ++index;
           }

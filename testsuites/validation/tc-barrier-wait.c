@@ -264,7 +264,7 @@ static void RtemsBarrierReqWait_Pre_Id_Prepare(
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Id_NoObj: {
       /*
-       * The ``id`` parameter shall not be associated with a barrier.
+       * While the ``id`` parameter is not associated with a barrier.
        */
       ctx->id = 0xffffffff;
       break;
@@ -272,7 +272,7 @@ static void RtemsBarrierReqWait_Pre_Id_Prepare(
 
     case RtemsBarrierReqWait_Pre_Id_Manual: {
       /*
-       * The ``id`` parameter shall be associated with a manual release
+       * While the ``id`` parameter is associated with a manual release
        * barrier.
        */
       ctx->id = ctx->manual_release_id;
@@ -281,7 +281,7 @@ static void RtemsBarrierReqWait_Pre_Id_Prepare(
 
     case RtemsBarrierReqWait_Pre_Id_Auto: {
       /*
-       * The ``id`` parameter shall be associated with an automatic release
+       * While the ``id`` parameter is associated with an automatic release
        * barrier.
        */
       ctx->id = ctx->auto_release_id;
@@ -301,7 +301,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Timeout_Ticks: {
       /*
-       * The ``released`` parameter shall be a clock tick interval.
+       * While the ``released`` parameter is a clock tick interval.
        */
       ctx->timeout = 2;
       break;
@@ -309,7 +309,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
 
     case RtemsBarrierReqWait_Pre_Timeout_Forever: {
       /*
-       * The ``released`` parameter shall be RTEMS_NO_TIMEOUT.
+       * While the ``released`` parameter is RTEMS_NO_TIMEOUT.
        */
       ctx->timeout = RTEMS_NO_TIMEOUT;
       break;
@@ -328,7 +328,7 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
   switch ( state ) {
     case RtemsBarrierReqWait_Pre_Satisfy_Never: {
       /*
-       * While the calling task waits at the barrier, the barrier shall not be
+       * While the calling task waits at the barrier, while the barrier is not
        * released or deleted.
        */
       if ( ctx->timeout == RTEMS_NO_TIMEOUT ) {
@@ -339,7 +339,7 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
 
     case RtemsBarrierReqWait_Pre_Satisfy_Wait: {
       /*
-       * Calling the directive shall release the barrier.
+       * While calling the directive releases the barrier.
        */
       SendEvents( ctx->high_worker_id, EVENT_WAIT );
       break;
@@ -347,7 +347,7 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
 
     case RtemsBarrierReqWait_Pre_Satisfy_Release: {
       /*
-       * While the calling task waits at the barrier, the barrier shall be
+       * While the calling task waits at the barrier, while the barrier is
        * released.
        */
       SendEvents( ctx->low_worker_id, EVENT_RELEASE );
@@ -356,7 +356,7 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
 
     case RtemsBarrierReqWait_Pre_Satisfy_Delete: {
       /*
-       * While the calling task waits at the barrier, the barrier shall be
+       * While the calling task waits at the barrier, while the barrier is
        * deleted.
        */
       SendEvents( ctx->low_worker_id, EVENT_DELETE );
@@ -533,6 +533,34 @@ static void RtemsBarrierReqWait_Teardown_Wrap( void *arg )
   RtemsBarrierReqWait_Teardown( ctx );
 }
 
+static void RtemsBarrierReqWait_Action( RtemsBarrierReqWait_Context *ctx )
+{
+  ctx->status = rtems_barrier_wait( ctx->id, ctx->timeout );
+}
+
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Id_NA : 1;
+  uint8_t Pre_Timeout_NA : 1;
+  uint8_t Pre_Satisfy_NA : 1;
+  uint8_t Post_Status : 3;
+} RtemsBarrierReqWait_Entry;
+
+static const RtemsBarrierReqWait_Entry
+RtemsBarrierReqWait_Entries[] = {
+  { 0, 0, 1, 1, RtemsBarrierReqWait_Post_Status_InvId },
+  { 0, 0, 0, 0, RtemsBarrierReqWait_Post_Status_Ok },
+  { 0, 0, 0, 0, RtemsBarrierReqWait_Post_Status_ObjDel },
+  { 0, 0, 0, 0, RtemsBarrierReqWait_Post_Status_Timeout },
+  { 1, 0, 0, 0, RtemsBarrierReqWait_Post_Status_NA },
+  { 0, 0, 0, 0, RtemsBarrierReqWait_Post_Status_NoReturn }
+};
+
+static const uint8_t
+RtemsBarrierReqWait_Map[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 1, 2, 5, 4, 1, 2, 3, 1, 1, 2, 5, 1, 1, 2
+};
+
 static size_t RtemsBarrierReqWait_Scope( void *arg, char *buf, size_t n )
 {
   RtemsBarrierReqWait_Context *ctx;
@@ -554,118 +582,13 @@ static T_fixture RtemsBarrierReqWait_Fixture = {
   .initial_context = &RtemsBarrierReqWait_Instance
 };
 
-static const uint8_t RtemsBarrierReqWait_TransitionMap[][ 1 ] = {
-  {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_InvId
-  }, {
-    RtemsBarrierReqWait_Post_Status_Timeout
-  }, {
-    RtemsBarrierReqWait_Post_Status_NA
-  }, {
-    RtemsBarrierReqWait_Post_Status_Ok
-  }, {
-    RtemsBarrierReqWait_Post_Status_ObjDel
-  }, {
-    RtemsBarrierReqWait_Post_Status_NoReturn
-  }, {
-    RtemsBarrierReqWait_Post_Status_NA
-  }, {
-    RtemsBarrierReqWait_Post_Status_Ok
-  }, {
-    RtemsBarrierReqWait_Post_Status_ObjDel
-  }, {
-    RtemsBarrierReqWait_Post_Status_Timeout
-  }, {
-    RtemsBarrierReqWait_Post_Status_Ok
-  }, {
-    RtemsBarrierReqWait_Post_Status_Ok
-  }, {
-    RtemsBarrierReqWait_Post_Status_ObjDel
-  }, {
-    RtemsBarrierReqWait_Post_Status_NoReturn
-  }, {
-    RtemsBarrierReqWait_Post_Status_Ok
-  }, {
-    RtemsBarrierReqWait_Post_Status_Ok
-  }, {
-    RtemsBarrierReqWait_Post_Status_ObjDel
-  }
-};
-
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Pre_Timeout_NA : 1;
-  uint8_t Pre_Satisfy_NA : 1;
-} RtemsBarrierReqWait_TransitionInfo[] = {
-  {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 1, 1
-  }, {
-    0, 0, 0, 0
-  }, {
-    1, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    1, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }
-};
-
-static void RtemsBarrierReqWait_Action( RtemsBarrierReqWait_Context *ctx )
+static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_GetEntry(
+  size_t index
+)
 {
-  ctx->status = rtems_barrier_wait( ctx->id, ctx->timeout );
+  return RtemsBarrierReqWait_Entries[
+    RtemsBarrierReqWait_Map[ index ]
+  ];
 }
 
 /**
@@ -674,6 +597,7 @@ static void RtemsBarrierReqWait_Action( RtemsBarrierReqWait_Context *ctx )
 T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
 {
   RtemsBarrierReqWait_Context *ctx;
+  RtemsBarrierReqWait_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -685,7 +609,9 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( RtemsBarrierReqWait_TransitionInfo[ index ].Pre_Id_NA ) {
+    entry = RtemsBarrierReqWait_GetEntry( index );
+
+    if ( entry.Pre_Id_NA ) {
       ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NA;
       index += ( RtemsBarrierReqWait_Pre_Id_NA - 1 )
         * RtemsBarrierReqWait_Pre_Timeout_NA
@@ -697,7 +623,9 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
       ctx->pcs[ 1 ] < RtemsBarrierReqWait_Pre_Timeout_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( RtemsBarrierReqWait_TransitionInfo[ index ].Pre_Timeout_NA ) {
+      entry = RtemsBarrierReqWait_GetEntry( index );
+
+      if ( entry.Pre_Timeout_NA ) {
         ctx->pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_NA;
         index += ( RtemsBarrierReqWait_Pre_Timeout_NA - 1 )
           * RtemsBarrierReqWait_Pre_Satisfy_NA;
@@ -708,12 +636,14 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
         ctx->pcs[ 2 ] < RtemsBarrierReqWait_Pre_Satisfy_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( RtemsBarrierReqWait_TransitionInfo[ index ].Pre_Satisfy_NA ) {
+        entry = RtemsBarrierReqWait_GetEntry( index );
+
+        if ( entry.Pre_Satisfy_NA ) {
           ctx->pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_NA;
           index += ( RtemsBarrierReqWait_Pre_Satisfy_NA - 1 );
         }
 
-        if ( RtemsBarrierReqWait_TransitionInfo[ index ].Skip ) {
+        if ( entry.Skip ) {
           ++index;
           continue;
         }
@@ -722,10 +652,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
         RtemsBarrierReqWait_Pre_Timeout_Prepare( ctx, ctx->pcs[ 1 ] );
         RtemsBarrierReqWait_Pre_Satisfy_Prepare( ctx, ctx->pcs[ 2 ] );
         RtemsBarrierReqWait_Action( ctx );
-        RtemsBarrierReqWait_Post_Status_Check(
-          ctx,
-          RtemsBarrierReqWait_TransitionMap[ index ][ 0 ]
-        );
+        RtemsBarrierReqWait_Post_Status_Check( ctx, entry.Post_Status );
         ++index;
       }
     }
