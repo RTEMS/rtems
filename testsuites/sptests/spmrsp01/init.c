@@ -72,12 +72,6 @@ static void test_mrsp_create_errors(void)
 
   create_not_defined(
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
-      | RTEMS_BINARY_SEMAPHORE
-      | RTEMS_PRIORITY
-  );
-
-  create_not_defined(
-    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
       | RTEMS_INHERIT_PRIORITY
       | RTEMS_BINARY_SEMAPHORE
   );

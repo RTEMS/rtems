@@ -92,9 +92,14 @@ rtems_status_code rtems_semaphore_create(
   ) {
     variant = SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING;
   } else if (
-    mutex_with_protocol
+    ( mutex_with_protocol & ~RTEMS_PRIORITY )
       == ( RTEMS_BINARY_SEMAPHORE | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
   ) {
+    /*
+     * In RTEMS 5.2 using RTEMS_FIFO and RTEMS_PRIORITY for MrsP semaphores is
+     * allowed.  In RTEMS 6, RTEMS_PRIORITY is required for MrsP semaphores
+     * analogous to priority ceiling semaphores.
+     */
 #if defined(RTEMS_SMP)
     variant = SEMAPHORE_VARIANT_MRSP;
 #else
