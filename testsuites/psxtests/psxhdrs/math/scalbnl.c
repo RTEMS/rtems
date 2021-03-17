@@ -35,8 +35,10 @@
 #endif
 
 #include <math.h>
+#include "has_long_double.h"
 #include <float.h>
 
+#if defined NEWLIB_HAS_LONG_DOUBLE_MATH_FUNCTIONS
 int test( void );
 
 int test( void )
@@ -48,3 +50,4 @@ int test( void )
 
   return (result);
 }
+#endif

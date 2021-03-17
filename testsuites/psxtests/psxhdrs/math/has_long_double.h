@@ -1,12 +1,19 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
- *  @file
- *  @brief atan2l() API Conformance Test
+ * @file
+ *
+ * @brief Defines NEWLIB_HAS_LONG_DOUBLE_MATH_FUNCTIONS
+ *
+ * This file uses logic copied from newlib's math.h on 21 Jan 2021
+ * to determine whether or not the long double math functions tests
+ * should be built. The original math.h file was sourced from
+ * https://codeload.github.com/RTEMS/sourceware-mirror-newlib-cygwin/tar.gz/a0d7982
+ * The original math.h this is based on has no license or copyright notice
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2018 Shashvat Jain
+ * Copyright (C) 2021 OAR Corporation.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,24 +37,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifndef HAS_LONG_DOUBLE_H
+#define HAS_LONG_DOUBLE_H
+
+/* Newlib doesn't fully support long double math functions so far.
+   On platforms where long double equals double the long double functions
+   simply call the double functions.  On Cygwin the long double functions
+   are implemented independently from newlib to be able to use optimized
+   assembler functions despite using the Microsoft x86_64 ABI. */
+#if defined (_LDBL_EQ_DBL) || defined (__CYGWIN__)
+#ifndef __math_68881
+#define NEWLIB_HAS_LONG_DOUBLE_MATH_FUNCTIONS 1
+#endif
 #endif
 
-#include <math.h>
-#include "has_long_double.h"
-
-#if defined NEWLIB_HAS_LONG_DOUBLE_MATH_FUNCTIONS
-int test( void );
-
-int test( void )
-{
-    long double x = 1 ;
-    long double y = 0 ;
-    long double result ;
-
-    result = atan2l( y , x ) ;
-
-    return (result) ;  /* This should return 0 */
-}
 #endif
