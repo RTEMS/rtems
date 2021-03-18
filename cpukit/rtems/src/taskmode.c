@@ -94,31 +94,37 @@ rtems_status_code rtems_task_mode(
   if ( ( mask & ( RTEMS_ASR_MASK | RTEMS_PREEMPT_MASK ) ) != 0 ) {
     bool             need_thread_dispatch;
     ISR_lock_Context lock_context;
-    bool             previous_asr_is_enabled;
-    bool             previous_is_preemptible;
 
     need_thread_dispatch = false;
 
     _Thread_State_acquire( executing, &lock_context );
 
-    previous_asr_is_enabled = asr->is_enabled;
-    asr->is_enabled = !_Modes_Is_asr_disabled( mode_set );
+    if ( ( mask & RTEMS_ASR_MASK ) != 0 ) {
+      bool previous_asr_is_enabled;
 
-    if (
-      !previous_asr_is_enabled &&
-        asr->is_enabled &&
-        asr->signals_pending != 0
-    ) {
-      need_thread_dispatch = true;
-      _Thread_Append_post_switch_action( executing, &api->Signal_action );
+      previous_asr_is_enabled = asr->is_enabled;
+      asr->is_enabled = !_Modes_Is_asr_disabled( mode_set );
+
+      if (
+        !previous_asr_is_enabled &&
+          asr->is_enabled &&
+          asr->signals_pending != 0
+      ) {
+        need_thread_dispatch = true;
+        _Thread_Append_post_switch_action( executing, &api->Signal_action );
+      }
     }
 
-    previous_is_preemptible = executing->is_preemptible;
-    executing->is_preemptible = _Modes_Is_preempt( mode_set );
+    if ( ( mask & RTEMS_PREEMPT_MASK ) != 0 ) {
+      bool previous_is_preemptible;
 
-    if ( executing->is_preemptible && !previous_is_preemptible ) {
-      need_thread_dispatch = true;
-      _Scheduler_Schedule( executing );
+      previous_is_preemptible = executing->is_preemptible;
+      executing->is_preemptible = _Modes_Is_preempt( mode_set );
+
+      if ( executing->is_preemptible && !previous_is_preemptible ) {
+        need_thread_dispatch = true;
+        _Scheduler_Schedule( executing );
+      }
     }
 
     if ( need_thread_dispatch ) {
