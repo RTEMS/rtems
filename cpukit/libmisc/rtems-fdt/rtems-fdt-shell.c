@@ -52,14 +52,14 @@ static long rtems_fdt_test_timeout = 5;
 static rtems_fdt_handle cmd_fdt_handle;
 
 static void
-rtems_fdt_write (uint32_t address, uint32_t value)
+rtems_fdt_write (uintptr_t address, uint32_t value)
 {
   volatile uint32_t* ap = (uint32_t*) address;
   *ap = value;
 }
 
 static uint32_t
-rtems_fdt_read (uint32_t address)
+rtems_fdt_read (uintptr_t address)
 {
   volatile uint32_t* ap = (uint32_t*) address;
   return *ap;
