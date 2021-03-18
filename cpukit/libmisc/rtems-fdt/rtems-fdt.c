@@ -580,7 +580,7 @@ rtems_fdt_load (const char* filename, rtems_fdt_handle* handle)
         close (bf);
         return -RTEMS_FDT_ERR_READ_FAIL;
       }
-      r -= size;
+      size -= r;
       buf += r;
     }
   }
