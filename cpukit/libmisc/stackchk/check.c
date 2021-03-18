@@ -447,12 +447,13 @@ static bool Stack_check_Dump_threads_usage(
 {
   char                 name[ 22 ];
   const rtems_printer *printer;
+  uintptr_t sp = _CPU_Context_Get_SP( &the_thread->Registers );
 
   printer = arg;
   _Thread_Get_name( the_thread, name, sizeof( name ) );
   Stack_check_Dump_stack_usage(
     &the_thread->Start.Initial_stack,
-    (void *) _CPU_Context_Get_SP( &the_thread->Registers ),
+    (void *) sp,
     name,
     the_thread->Object.id,
     printer
