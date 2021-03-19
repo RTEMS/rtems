@@ -92,13 +92,14 @@ static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
   volatile RISCV_CLINT_regs *clint;
   uint64_t value;
+  uint32_t cpu = rtems_scheduler_get_processor();
 
   clint = tc->clint;
 
-  value = clint->mtimecmp[0].val_64;
+  value = clint->mtimecmp[cpu].val_64;
   value += tc->interval;
 
-  riscv_clock_write_mtimecmp(&clint->mtimecmp[0], value);
+  riscv_clock_write_mtimecmp(&clint->mtimecmp[cpu], value);
 }
 
 static void riscv_clock_handler_install(void)
@@ -148,6 +149,47 @@ static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
   return fdt32_to_cpu(*val);
 }
 
+static void riscv_clock_clint_init(
+  volatile RISCV_CLINT_regs *clint,
+  uint64_t cmpval,
+  uint32_t cpu
+)
+{
+  riscv_clock_write_mtimecmp(
+    &clint->mtimecmp[cpu],
+	cmpval
+  );
+
+  /* Enable mtimer interrupts */
+  set_csr(mie, MIP_MTIP);
+}
+
+#if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
+static void riscv_clock_secondary_action(void *arg)
+{
+  volatile RISCV_CLINT_regs *clint = riscv_clint;
+  uint64_t *cmpval = arg;
+  uint32_t cpu = _CPU_SMP_Get_current_processor();
+
+  riscv_clock_clint_init(clint, *cmpval, cpu);
+}
+#endif
+
+static void riscv_clock_secondary_initialization(
+  volatile RISCV_CLINT_regs *clint,
+  uint64_t cmpval,
+  uint32_t interval
+)
+{
+#if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
+  _SMP_Othercast_action(riscv_clock_secondary_action, &cmpval);
+
+  if (cmpval - riscv_clock_read_mtime(&clint->mtime) >= interval) {
+    bsp_fatal(RISCV_FATAL_CLOCK_SMP_INIT);
+  }
+#endif
+}
+
 static void riscv_clock_initialize(void)
 {
   const char *fdt;
@@ -156,6 +198,7 @@ static void riscv_clock_initialize(void)
   uint32_t tb_freq;
   uint64_t us_per_tick;
   uint32_t interval;
+  uint64_t cmpval;
 
   fdt = bsp_fdt_get();
   tb_freq = riscv_clock_get_timebase_frequency(fdt);
@@ -167,13 +210,11 @@ static void riscv_clock_initialize(void)
   tc->clint = clint;
   tc->interval = interval;
 
-  riscv_clock_write_mtimecmp(
-    &clint->mtimecmp[0],
-    riscv_clock_read_mtime(&clint->mtime) + interval
-  );
+  cmpval = riscv_clock_read_mtime(&clint->mtime);
+  cmpval += interval;
 
-  /* Enable mtimer interrupts */
-  set_csr(mie, MIP_MTIP);
+  riscv_clock_clint_init(clint, cmpval, 0);
+  riscv_clock_secondary_initialization(clint, cmpval, interval);
 
   /* Initialize timecounter */
   tc->base.tc_get_timecount = riscv_clock_get_timecount;
@@ -212,7 +253,5 @@ RTEMS_SYSINIT_ITEM(
 
 #define Clock_driver_support_install_isr(isr) \
   riscv_clock_handler_install()
-
-#define CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR
 
 #include "../../../shared/dev/clock/clockimpl.h"
