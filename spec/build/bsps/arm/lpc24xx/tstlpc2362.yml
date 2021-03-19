@@ -19,6 +19,7 @@ actions:
     mdosfsfspatheval: exclude
     mdosfsfsrdwr: exclude
     mdosfsfsscandir01: exclude
+    mdosfsfsstatvfs: exclude
     mdosfsfstime: exclude
     mghttpd01: exclude
     monitor: exclude
