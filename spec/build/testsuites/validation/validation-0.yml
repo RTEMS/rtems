@@ -19,6 +19,7 @@ source:
 - testsuites/validation/tc-object.c
 - testsuites/validation/tc-signal-catch.c
 - testsuites/validation/tc-signal-send.c
+- testsuites/validation/tc-support.c
 - testsuites/validation/tc-task-construct-errors.c
 - testsuites/validation/tc-task-create-errors.c
 - testsuites/validation/ts-validation-0.c
