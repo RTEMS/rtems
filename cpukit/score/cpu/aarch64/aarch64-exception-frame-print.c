@@ -45,10 +45,113 @@
 #include <inttypes.h>
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/io.h>
 #include <rtems/bspIo.h>
+
+typedef struct {
+	char *s;
+	size_t n;
+} String_Context;
+
+static void _CPU_Put_char( int c, void *arg )
+{
+  String_Context *sctx = arg;
+  size_t n = sctx->n;
+
+  if (n > 0) {
+    char *s = sctx->s;
+    *s = (char) c;
+    sctx->s = s + 1;
+    sctx->n = n - 1;
+  }
+}
+
+static void _CPU_Binary_sprintf(
+  char *s,
+  size_t maxlen,
+  uint32_t num_bits,
+  uint32_t value
+)
+{
+  String_Context sctx;
+  uint32_t mask;
+
+  sctx.s = s;
+  sctx.n = maxlen;
+
+  mask = 1 << (num_bits - 1);
+
+  while ( mask != 0 ) {
+    _IO_Printf( _CPU_Put_char, &sctx, "%d", (value & mask ? 1 : 0) );
+    mask >>= 1;
+  }
+
+  s[num_bits] = '\0';
+}
+
+static const char* _CPU_Exception_class_to_string( uint16_t exception_class )
+{
+  /* The 80 character limit is intentionally ignored for these strings. */
+  switch ( exception_class ) {
+    case 0x01:
+      return "Trapped WFI or WFE instruction";
+    case 0x03:
+      return "Trapped MCR or MRC access with (coproc==0b1111)";
+    case 0x04:
+      return "Trapped MCRR or MRRC access with (coproc==0b1111)";
+    case 0x05:
+      return "Trapped MCR or MRC access with (coproc==0b1110)";
+    case 0x06:
+      return "Trapped LDC or STC access";
+    case 0x0c:
+      return "Trapped MRRC access with (coproc==0b1110)";
+    case 0x0e:
+      return "Illegal Execution state";
+    case 0x18:
+      return "Trapped MSR, MRS, or System instruction";
+    case 0x20:
+      return "Instruction Abort from a lower Exception level";
+    case 0x21:
+      return "Instruction Abort taken without a change in Exception level";
+    case 0x22:
+      return "PC alignment fault";
+    case 0x24:
+      return "Data Abort from a lower Exception level";
+    case 0x25:
+      return "Data Abort taken without a change in Exception level";
+    case 0x26:
+      return "SP alignment fault";
+    case 0x30:
+      return "Breakpoint exception from a lower Exception level";
+    case 0x31:
+      return "Breakpoint exception taken without a change in Exception level";
+    case 0x32:
+      return "Software Step exception from a lower Exception level";
+    case 0x33:
+      return "Software Step exception taken without a change in Exception level";
+    case 0x34:
+      return "Watchpoint exception from a lower Exception level";
+    case 0x35:
+      return "Watchpoint exception taken without a change in Exception level";
+    case 0x38:
+      return "BKPT instruction execution in AArch32 state";
+    case 0x3c:
+      return "BRK instruction execution in AArch64 state";
+    default:
+      return "Unknown";
+  }
+}
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
+  uint32_t ec;
+  uint32_t il;
+  uint32_t iss;
+  char     ec_str[7];
+  char     iss_str[26];
+  int      i;
+  const uint128_t *qx;
+
   printk(
     "\n"
     "X0   = 0x%016" PRIx64  " X17  = 0x%016" PRIx64 "\n"
@@ -68,8 +171,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
     "X14  = 0x%016" PRIx64  " SP   = 0x%016" PRIxPTR "\n"
     "X15  = 0x%016" PRIx64  " PC   = 0x%016" PRIxPTR "\n"
     "X16  = 0x%016" PRIx64  " DAIF = 0x%016" PRIx64 "\n"
-    "VEC  = 0x%016" PRIxPTR " CPSR = 0x%016" PRIx64 "\n"
-    "ESR  = 0x%016" PRIx64  " FAR  = 0x%016" PRIx64 "\n",
+    "VEC  = 0x%016" PRIxPTR " CPSR = 0x%016" PRIx64 "\n",
     frame->register_x0, frame->register_x17,
     frame->register_x1, frame->register_x18,
     frame->register_x2, frame->register_x19,
@@ -83,23 +185,36 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
     frame->register_x10, frame->register_x27,
     frame->register_x11, frame->register_x28,
     frame->register_x12, frame->register_fp,
-    frame->register_x13, (intptr_t)frame->register_lr,
-    frame->register_x14, (intptr_t)frame->register_sp,
-    frame->register_x15, (intptr_t)frame->register_pc,
+    frame->register_x13, (intptr_t) frame->register_lr,
+    frame->register_x14, (intptr_t) frame->register_sp,
+    frame->register_x15, (intptr_t) frame->register_pc,
     frame->register_x16, frame->register_daif,
-    (intptr_t) frame->vector, frame->register_cpsr,
-    frame->register_syndrome, frame->register_fault_address
+    (intptr_t) frame->vector, frame->register_cpsr
   );
 
-  const uint128_t *qx = &frame->register_q0;
-  int i;
+  ec = frame->register_syndrome >> 26 & 0x3f;
+  il = frame->register_syndrome >> 25 & 0x1;
+  iss = frame->register_syndrome & 0x1ffffff;
+
+  _CPU_Binary_sprintf( ec_str, sizeof( ec_str ), sizeof( ec_str ) - 1, ec );
+  _CPU_Binary_sprintf( iss_str, sizeof( iss_str ), sizeof( iss_str ) - 1, iss );
+
+  printk(
+    "ESR  = EC: 0b%s" " IL: 0b%d" " ISS: 0b%s" "\n"
+    "       %s\n",
+    ec_str, il, iss_str, _CPU_Exception_class_to_string( ec )
+  );
+
+  printk( "FAR  = 0x%016" PRIx64 "\n", frame->register_fault_address );
+
+  qx = &frame->register_q0;
 
   printk(
     "FPCR = 0x%016" PRIx64 " FPSR = 0x%016" PRIx64 "\n",
     frame->register_fpcr, frame->register_fpsr
   );
 
-  for ( i = 0; i < 32; ++i ) {
+  for ( i = 0 ; i < 32 ; ++i ) {
     uint64_t low = (uint64_t) qx[i];
     uint64_t high = (uint64_t) (qx[i] >> 32);
 
