@@ -55,6 +55,8 @@
 #include <rtems.h>
 #include <string.h>
 
+#include "tc-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -167,19 +169,6 @@ static const char * const * const RtemsBarrierReqRelease_PreDesc[] = {
 
 typedef RtemsBarrierReqRelease_Context Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL
-} Priorities;
-
-static void SendEvents( rtems_id id, rtems_event_set events )
-{
-  rtems_status_code sc;
-
-  sc = rtems_event_send( id, events );
-  T_rsc_success( sc );
-}
-
 static void Worker( rtems_task_argument arg )
 {
   Context *ctx;
@@ -187,19 +176,13 @@ static void Worker( rtems_task_argument arg )
   ctx = (Context *) arg;
 
   while ( true ) {
-    rtems_status_code sc;
-    rtems_event_set   events;
+    rtems_event_set events;
 
-    events = 0;
-    sc = rtems_event_receive(
-      RTEMS_ALL_EVENTS,
-      RTEMS_EVENT_ANY | RTEMS_WAIT,
-      RTEMS_NO_TIMEOUT,
-      &events
-    );
-    T_rsc_success( sc );
+    events = ReceiveAnyEvents();
 
     if ( ( events & EVENT_WAIT ) != 0 ) {
+      rtems_status_code sc;
+
       sc = rtems_barrier_wait( ctx->id, RTEMS_NO_TIMEOUT );
       T_rsc_success( sc );
     }
@@ -372,32 +355,12 @@ static void RtemsBarrierReqRelease_Post_ReleasedVar_Check(
 
 static void RtemsBarrierReqRelease_Setup( RtemsBarrierReqRelease_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
+  rtems_status_code sc;
 
   memset( ctx, 0, sizeof( *ctx ) );
-
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
-
-  sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K' ),
-    PRIO_HIGH,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->worker_id
-  );
-  T_assert_rsc_success( sc );
-
-  sc = rtems_task_start(
-    ctx->worker_id,
-    Worker,
-    (rtems_task_argument) ctx
-  );
-  T_assert_rsc_success( sc );
+  SetSelfPriority( PRIO_NORMAL );
+  ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+  StartTask( ctx->worker_id, Worker, ctx );
 
   sc = rtems_barrier_create(
     NAME,
@@ -429,18 +392,9 @@ static void RtemsBarrierReqRelease_Teardown(
   RtemsBarrierReqRelease_Context *ctx
 )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
+  rtems_status_code sc;
 
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
-
-  if ( ctx->worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->worker_id );
-    T_rsc_success( sc );
-  }
+  DeleteTask( ctx->worker_id );
 
   if ( ctx->manual_release_id != 0 ) {
     sc = rtems_barrier_delete( ctx->manual_release_id );
@@ -451,6 +405,8 @@ static void RtemsBarrierReqRelease_Teardown(
     sc = rtems_barrier_delete( ctx->auto_release_id );
     T_rsc_success( sc );
   }
+
+  RestoreRunnerPriority();
 }
 
 static void RtemsBarrierReqRelease_Teardown_Wrap( void *arg )

@@ -56,6 +56,8 @@
 #include <string.h>
 #include <rtems/score/smpbarrier.h>
 
+#include "tc-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -666,15 +668,7 @@ static void RtemsSignalReqCatch_Setup( RtemsSignalReqCatch_Context *ctx )
     rtems_status_code sc;
     rtems_id          scheduler_id;
 
-    sc = rtems_task_create(
-      rtems_build_name( 'W', 'O', 'R', 'K' ),
-      1,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &ctx->worker_id
-    );
-    T_assert_rsc_success( sc );
+    ctx->worker_id = CreateTask( "WORK", 1 );
 
     sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
     T_assert_rsc_success( sc );
@@ -682,12 +676,7 @@ static void RtemsSignalReqCatch_Setup( RtemsSignalReqCatch_Context *ctx )
     sc = rtems_task_set_scheduler( ctx->worker_id, scheduler_id, 1 );
     T_assert_rsc_success( sc );
 
-    sc = rtems_task_start(
-      ctx->worker_id,
-      Worker,
-      (rtems_task_argument) ctx
-    );
-    T_assert_rsc_success( sc );
+    StartTask( ctx->worker_id, Worker, ctx );
   }
 }
 
@@ -702,15 +691,8 @@ static void RtemsSignalReqCatch_Setup_Wrap( void *arg )
 
 static void RtemsSignalReqCatch_Teardown( RtemsSignalReqCatch_Context *ctx )
 {
-  rtems_status_code sc;
-
-  if ( ctx->worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->worker_id );
-    T_rsc_success( sc );
-  }
-
-  sc = rtems_signal_catch( NULL, RTEMS_DEFAULT_MODES );
-  T_rsc_success( sc );
+  DeleteTask( ctx->worker_id );
+  RestoreRunnerASR();
 }
 
 static void RtemsSignalReqCatch_Teardown_Wrap( void *arg )

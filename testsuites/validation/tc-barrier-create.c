@@ -55,6 +55,8 @@
 #include <rtems.h>
 #include <string.h>
 
+#include "tc-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -207,11 +209,6 @@ static const char * const * const RtemsBarrierReqCreate_PreDesc[] = {
 #define INVALID_ID 0xffffffff
 
 typedef RtemsBarrierReqCreate_Context Context;
-
-typedef enum {
-  PRIO_NORMAL = 1,
-  PRIO_LOW
-} Priorities;
 
 static void Worker( rtems_task_argument arg )
 {
@@ -548,23 +545,10 @@ static void RtemsBarrierReqCreate_Post_IdVar_Check(
 
 static void RtemsBarrierReqCreate_Setup( RtemsBarrierReqCreate_Context *ctx )
 {
-  rtems_status_code sc;
-
   memset( ctx, 0, sizeof( *ctx ) );
   ctx->id_value = INVALID_ID;
-
-  sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K' ),
-    PRIO_LOW,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->worker_id
-  );
-  T_assert_rsc_success( sc );
-
-  sc = rtems_task_start( ctx->worker_id, Worker, (rtems_task_argument) ctx );
-  T_assert_rsc_success( sc );
+  ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+  StartTask( ctx->worker_id, Worker, ctx );
 }
 
 static void RtemsBarrierReqCreate_Setup_Wrap( void *arg )
@@ -580,12 +564,7 @@ static void RtemsBarrierReqCreate_Teardown(
   RtemsBarrierReqCreate_Context *ctx
 )
 {
-  rtems_status_code sc;
-
-  if ( ctx->worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->worker_id );
-    T_rsc_success( sc );
-  }
+  DeleteTask( ctx->worker_id );
 }
 
 static void RtemsBarrierReqCreate_Teardown_Wrap( void *arg )

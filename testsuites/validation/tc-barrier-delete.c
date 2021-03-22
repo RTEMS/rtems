@@ -55,6 +55,8 @@
 #include <rtems.h>
 #include <string.h>
 
+#include "tc-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -135,12 +137,6 @@ static const char * const * const RtemsBarrierReqDelete_PreDesc[] = {
 
 typedef RtemsBarrierReqDelete_Context Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW
-} Priorities;
-
 static void Worker( rtems_task_argument arg )
 {
   Context *ctx;
@@ -169,9 +165,7 @@ static void Worker( rtems_task_argument arg )
 
     ++ctx->wait_done;
 
-    prio = 0;
-    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_LOW, &prio );
-    T_rsc_success( sc );
+    prio = SetSelfPriority( PRIO_LOW );
     T_eq_u32( prio, PRIO_HIGH );
   }
 }
@@ -295,28 +289,10 @@ static void RtemsBarrierReqDelete_Post_Flush_Check(
 
 static void RtemsBarrierReqDelete_Setup( RtemsBarrierReqDelete_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
-
   memset( ctx, 0, sizeof( *ctx ) );
-
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
-
-  sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K' ),
-    PRIO_LOW,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->worker_id
-  );
-  T_assert_rsc_success( sc );
-
-  sc = rtems_task_start( ctx->worker_id, Worker, (rtems_task_argument) ctx );
-  T_assert_rsc_success( sc );
+  SetSelfPriority( PRIO_NORMAL );
+  ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+  StartTask( ctx->worker_id, Worker, ctx );
 }
 
 static void RtemsBarrierReqDelete_Setup_Wrap( void *arg )
@@ -332,18 +308,8 @@ static void RtemsBarrierReqDelete_Teardown(
   RtemsBarrierReqDelete_Context *ctx
 )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
-
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
-
-  if ( ctx->worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->worker_id );
-    T_rsc_success( sc );
-  }
+  DeleteTask( ctx->worker_id );
+  RestoreRunnerPriority();
 }
 
 static void RtemsBarrierReqDelete_Teardown_Wrap( void *arg )
@@ -357,12 +323,9 @@ static void RtemsBarrierReqDelete_Teardown_Wrap( void *arg )
 
 static void RtemsBarrierReqDelete_Prepare( RtemsBarrierReqDelete_Context *ctx )
 {
-  rtems_status_code   sc;
   rtems_task_priority prio;
 
-  prio = 0;
-  sc = rtems_task_set_priority( ctx->worker_id, PRIO_HIGH, &prio );
-  T_rsc_success( sc );
+  prio = SetPriority( ctx->worker_id, PRIO_HIGH );
   T_true( prio == PRIO_LOW || prio == PRIO_HIGH );
 }
 

@@ -55,6 +55,8 @@
 #include <rtems.h>
 #include <string.h>
 
+#include "tc-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -170,20 +172,6 @@ static const char * const * const RtemsBarrierReqWait_PreDesc[] = {
 
 typedef RtemsBarrierReqWait_Context Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW
-} Priorities;
-
-static void SendEvents( rtems_id id, rtems_event_set events )
-{
-  rtems_status_code sc;
-
-  sc = rtems_event_send( id, events );
-  T_rsc_success( sc );
-}
-
 static void Worker( rtems_task_argument arg )
 {
   Context *ctx;
@@ -194,14 +182,7 @@ static void Worker( rtems_task_argument arg )
     rtems_status_code sc;
     rtems_event_set   events;
 
-    events = 0;
-    sc = rtems_event_receive(
-      RTEMS_ALL_EVENTS,
-      RTEMS_EVENT_ANY | RTEMS_WAIT,
-      RTEMS_NO_TIMEOUT,
-      &events
-    );
-    T_rsc_success( sc );
+    events = ReceiveAnyEvents();
 
     if ( ( events & EVENT_CHECK_TIMER ) != 0 ) {
       T_eq_int(
@@ -238,9 +219,7 @@ static void Worker( rtems_task_argument arg )
         id = &ctx->auto_release_id;
       }
 
-      prio = 0;
-      sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-      T_rsc_success( sc );
+      prio = SetSelfPriority( PRIO_HIGH );
       T_eq_u32( prio, PRIO_LOW );
 
       sc = rtems_barrier_delete( ctx->id );
@@ -249,8 +228,7 @@ static void Worker( rtems_task_argument arg )
       sc = rtems_barrier_create( NAME, attribute_set, maximum_waiters, id );
       T_rsc_success( sc );
 
-      sc = rtems_task_set_priority( RTEMS_SELF, prio, &prio );
-      T_rsc_success( sc );
+      prio = SetSelfPriority( prio );
       T_eq_u32( prio, PRIO_HIGH );
     }
   }
@@ -422,50 +400,15 @@ static void RtemsBarrierReqWait_Post_Status_Check(
 
 static void RtemsBarrierReqWait_Setup( RtemsBarrierReqWait_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
+  rtems_status_code sc;
 
   memset( ctx, 0, sizeof( *ctx ) );
   ctx->main_id = rtems_task_self();
-
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
-
-  sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K' ),
-    PRIO_HIGH,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->high_worker_id
-  );
-  T_assert_rsc_success( sc );
-
-  sc = rtems_task_start(
-    ctx->high_worker_id,
-    Worker,
-    (rtems_task_argument) ctx
-  );
-  T_assert_rsc_success( sc );
-
-  sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K' ),
-    PRIO_LOW,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->low_worker_id
-  );
-  T_assert_rsc_success( sc );
-
-  sc = rtems_task_start(
-    ctx->low_worker_id,
-    Worker,
-    (rtems_task_argument) ctx
-  );
-  T_assert_rsc_success( sc );
+  SetSelfPriority( PRIO_NORMAL );
+  ctx->high_worker_id = CreateTask( "WRKH", PRIO_HIGH );
+  StartTask( ctx->high_worker_id, Worker, ctx );
+  ctx->low_worker_id = CreateTask( "WRKL", PRIO_LOW );
+  StartTask( ctx->low_worker_id, Worker, ctx );
 
   sc = rtems_barrier_create(
     NAME,
@@ -495,23 +438,10 @@ static void RtemsBarrierReqWait_Setup_Wrap( void *arg )
 
 static void RtemsBarrierReqWait_Teardown( RtemsBarrierReqWait_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
+  rtems_status_code sc;
 
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
-
-  if ( ctx->high_worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->high_worker_id );
-    T_rsc_success( sc );
-  }
-
-  if ( ctx->low_worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->low_worker_id );
-    T_rsc_success( sc );
-  }
+  DeleteTask( ctx->high_worker_id );
+  DeleteTask( ctx->low_worker_id );
 
   if ( ctx->manual_release_id != 0 ) {
     sc = rtems_barrier_delete( ctx->manual_release_id );
@@ -522,6 +452,8 @@ static void RtemsBarrierReqWait_Teardown( RtemsBarrierReqWait_Context *ctx )
     sc = rtems_barrier_delete( ctx->auto_release_id );
     T_rsc_success( sc );
   }
+
+  RestoreRunnerPriority();
 }
 
 static void RtemsBarrierReqWait_Teardown_Wrap( void *arg )

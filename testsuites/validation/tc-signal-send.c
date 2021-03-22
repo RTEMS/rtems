@@ -54,6 +54,8 @@
 
 #include <rtems.h>
 
+#include "tc-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -217,36 +219,6 @@ static const char * const * const RtemsSignalReqSend_PreDesc[] = {
 
 typedef RtemsSignalReqSend_Context Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL
-} Priorities;
-
-static rtems_event_set Wait( void )
-{
-  rtems_status_code sc;
-  rtems_event_set   events;
-
-  events = 0;
-  sc = rtems_event_receive(
-    RTEMS_ALL_EVENTS,
-    RTEMS_EVENT_ANY | RTEMS_WAIT,
-    RTEMS_NO_TIMEOUT,
-    &events
-  );
-  T_rsc_success( sc );
-
-  return events;
-}
-
-static void SendEvents( rtems_id id, rtems_event_set events )
-{
-  rtems_status_code sc;
-
-  sc = rtems_event_send( id, events );
-  T_rsc_success( sc );
-}
-
 static void WorkerDone( const Context *ctx )
 {
 #if defined(RTEMS_SMP)
@@ -262,7 +234,7 @@ static void SendEventsToWorker( const Context *ctx, rtems_event_set events )
 
 #if defined(RTEMS_SMP)
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
-    events = Wait();
+    events = ReceiveAnyEvents();
     T_eq_u32( events, EVENT_WORKER_DONE );
   }
 #endif
@@ -293,12 +265,12 @@ static void SignalHandler( rtems_signal_set signal_set )
 
       WorkerDone( ctx );
 
-      events = Wait();
+      events = ReceiveAnyEvents();
       T_eq_u32( events, EVENT_SEND_DONE );
 
       WorkerDone( ctx );
 
-      events = Wait();
+      events = ReceiveAnyEvents();
       T_eq_u32( events, EVENT_DO_ENABLE );
     } else {
       sc = rtems_signal_catch( ctx->handler, RTEMS_NO_ASR );
@@ -321,7 +293,7 @@ static void Worker( rtems_task_argument arg )
     rtems_status_code sc;
     rtems_event_set   events;
 
-    events = Wait();
+    events = ReceiveAnyEvents();
     T_eq_u32( events, EVENT_START );
 
     if ( ctx->nested != 0 ) {
@@ -343,12 +315,12 @@ static void Worker( rtems_task_argument arg )
 
       WorkerDone( ctx );
 
-      events = Wait();
+      events = ReceiveAnyEvents();
       T_eq_u32( events, EVENT_SEND_DONE );
 
       WorkerDone( ctx );
 
-      events = Wait();
+      events = ReceiveAnyEvents();
       T_eq_u32( events, EVENT_DO_ENABLE );
 
       sc = rtems_task_mode( mode, RTEMS_ASR_MASK, &mode );
@@ -357,7 +329,7 @@ static void Worker( rtems_task_argument arg )
       WorkerDone( ctx );
     }
 
-    events = Wait();
+    events = ReceiveAnyEvents();
     T_eq_u32( events, EVENT_END );
 
     WorkerDone( ctx );
@@ -659,26 +631,13 @@ static void RtemsSignalReqSend_Post_Recursive_Check(
 
 static void RtemsSignalReqSend_Setup( RtemsSignalReqSend_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
+  rtems_status_code sc;
 
   memset( ctx, 0, sizeof( *ctx ) );
   ctx->runner_id = rtems_task_self();
+  SetSelfPriority( PRIO_NORMAL );
 
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
-
-  sc = rtems_task_create(
-    rtems_build_name( 'W', 'O', 'R', 'K' ),
-    PRIO_HIGH,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->worker_id
-  );
-  T_assert_rsc_success( sc );
+  ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
 
   #if defined(RTEMS_SMP)
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
@@ -692,8 +651,7 @@ static void RtemsSignalReqSend_Setup( RtemsSignalReqSend_Context *ctx )
   }
   #endif
 
-  sc = rtems_task_start( ctx->worker_id, Worker, (rtems_task_argument) ctx );
-  T_assert_rsc_success( sc );
+  StartTask( ctx->worker_id, Worker, ctx );
 }
 
 static void RtemsSignalReqSend_Setup_Wrap( void *arg )
@@ -707,18 +665,8 @@ static void RtemsSignalReqSend_Setup_Wrap( void *arg )
 
 static void RtemsSignalReqSend_Teardown( RtemsSignalReqSend_Context *ctx )
 {
-  rtems_status_code   sc;
-  rtems_task_priority prio;
-
-  prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-  T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
-
-  if ( ctx->worker_id != 0 ) {
-    sc = rtems_task_delete( ctx->worker_id );
-    T_rsc_success( sc );
-  }
+  DeleteTask( ctx->worker_id );
+  RestoreRunnerPriority();
 }
 
 static void RtemsSignalReqSend_Teardown_Wrap( void *arg )
