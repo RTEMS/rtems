@@ -357,12 +357,10 @@ _CORE_ceiling_mutex_Get_scheduler(
  *
  * @param[out] the_mutex The ceiling mutex to set the priority of.
  * @param priority_ceiling The new priority ceiling of the mutex.
- * @param queue_context The thread queue context.
  */
 RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
   CORE_ceiling_mutex_Control *the_mutex,
-  Priority_Control            priority_ceiling,
-  Thread_queue_Context       *queue_context
+  Priority_Control            priority_ceiling
 )
 {
   Thread_Control *owner;
@@ -370,15 +368,19 @@ RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
   owner = _CORE_mutex_Get_owner( &the_mutex->Recursive.Mutex );
 
   if ( owner != NULL ) {
-    _Thread_Wait_acquire( owner, queue_context );
+    Thread_queue_Context queue_context;
+
+    _Thread_queue_Context_initialize( &queue_context );
+    _Thread_queue_Context_clear_priority_updates( &queue_context );
+    _Thread_Wait_acquire_critical( owner, &queue_context );
     _Thread_Priority_change(
       owner,
       &the_mutex->Priority_ceiling,
       priority_ceiling,
       PRIORITY_GROUP_LAST,
-      queue_context
+      &queue_context
     );
-    _Thread_Wait_release( owner, queue_context );
+    _Thread_Wait_release_critical( owner, &queue_context );
   } else {
     the_mutex->Priority_ceiling.priority = priority_ceiling;
   }

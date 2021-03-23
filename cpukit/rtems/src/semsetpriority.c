@@ -85,8 +85,7 @@ static rtems_status_code _Semaphore_Set_priority(
       if ( sc == RTEMS_SUCCESSFUL && new_priority != RTEMS_CURRENT_PRIORITY ) {
         _CORE_ceiling_mutex_Set_priority(
           &the_semaphore->Core_control.Mutex,
-          core_priority,
-          queue_context
+          core_priority
         );
       }
 
