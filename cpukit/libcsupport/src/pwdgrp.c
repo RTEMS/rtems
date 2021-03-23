@@ -67,9 +67,13 @@ static void pwdgrp_init(void)
 
   /*
    * Do the best to create this directory.
+   *
+   * /etc could be created by the network stack initialization or an initial
+   * filesystem image. Deliberately ignore the return value.
    */
   sc = mkdir("/etc", S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-  _Assert_Unused_variable_equals(sc, 0);
+  _Assert((sc == 0) || (sc == -1 && errno == EEXIST));
+  (void) sc;
 
   /*
    *  Initialize /etc/passwd
