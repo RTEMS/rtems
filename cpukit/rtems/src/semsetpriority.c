@@ -29,20 +29,6 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
-static rtems_status_code _Semaphore_Is_scheduler_valid(
-  const CORE_ceiling_mutex_Control *the_mutex,
-  const Scheduler_Control          *scheduler
-)
-{
-#if defined(RTEMS_SMP)
-  if ( scheduler != _CORE_ceiling_mutex_Get_scheduler( the_mutex ) ) {
-    return RTEMS_NOT_DEFINED;
-  }
-#endif
-
-  return RTEMS_SUCCESSFUL;
-}
-
 static rtems_status_code _Semaphore_Set_priority(
   Semaphore_Control       *the_semaphore,
   const Scheduler_Control *scheduler,
@@ -51,7 +37,6 @@ static rtems_status_code _Semaphore_Set_priority(
   Thread_queue_Context    *queue_context
 )
 {
-  rtems_status_code  sc;
   bool               valid;
   Priority_Control   core_priority;
   Priority_Control   old_priority;
@@ -73,16 +58,26 @@ static rtems_status_code _Semaphore_Set_priority(
 
   switch ( variant ) {
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
-      sc = _Semaphore_Is_scheduler_valid(
-        &the_semaphore->Core_control.Mutex,
-        scheduler
-      );
+#if defined(RTEMS_SMP)
+      if (
+        scheduler != _CORE_ceiling_mutex_Get_scheduler(
+          &the_semaphore->Core_control.Mutex
+        )
+      ) {
+        _Thread_queue_Release(
+          &the_semaphore->Core_control.Wait_queue,
+          queue_context
+        );
+
+        return RTEMS_NOT_DEFINED;
+      }
+#endif
 
       old_priority = _CORE_ceiling_mutex_Get_priority(
         &the_semaphore->Core_control.Mutex
       );
 
-      if ( sc == RTEMS_SUCCESSFUL && new_priority != RTEMS_CURRENT_PRIORITY ) {
+      if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
         _CORE_ceiling_mutex_Set_priority(
           &the_semaphore->Core_control.Mutex,
           core_priority
@@ -105,7 +100,6 @@ static rtems_status_code _Semaphore_Set_priority(
         );
       }
 
-      sc = RTEMS_SUCCESSFUL;
       break;
 #endif
     default:
@@ -115,9 +109,12 @@ static rtems_status_code _Semaphore_Set_priority(
           || variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || variant == SEMAPHORE_VARIANT_COUNTING
       );
-      old_priority = 0;
-      sc = RTEMS_NOT_DEFINED;
-      break;
+      _Thread_queue_Release(
+        &the_semaphore->Core_control.Wait_queue,
+        queue_context
+      );
+
+      return RTEMS_NOT_DEFINED;
   }
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
@@ -129,7 +126,7 @@ static rtems_status_code _Semaphore_Set_priority(
   _Thread_Dispatch_enable( cpu_self );
 
   *old_priority_p = _RTEMS_Priority_From_core( scheduler, old_priority );
-  return sc;
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code rtems_semaphore_set_priority(

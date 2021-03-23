@@ -282,7 +282,7 @@ static void test(void)
     prio = 1;
     sc = rtems_semaphore_set_priority(cmtx_id, scheduler_b_id, prio, &prio);
     rtems_test_assert(sc == RTEMS_NOT_DEFINED);
-    rtems_test_assert(prio == 2);
+    rtems_test_assert(prio == 1);
   }
 
   CPU_ZERO(&cpuset);
