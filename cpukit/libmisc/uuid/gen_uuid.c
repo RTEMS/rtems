@@ -155,7 +155,6 @@ static int get_random_fd(void)
 	struct timeval	tv;
 	static int	fd = -2;
 	int		i;
-	int		sc;
 
 	if (fd == -2) {
 		gettimeofday(&tv, 0);
@@ -165,10 +164,8 @@ static int get_random_fd(void)
 			fd = open("/dev/random", O_RDONLY | O_NONBLOCK);
 		if (fd >= 0) {
 			i = fcntl(fd, F_GETFD);
-			if (i >= 0) {
-				sc = fcntl(fd, F_SETFD, i | FD_CLOEXEC);
-				_Assert_Unused_variable_unequal(sc, -1);
-			}
+			if (i >= 0)
+				fcntl(fd, F_SETFD, i | FD_CLOEXEC);
 		}
 #endif
 		srand((getpid() << ((sizeof(pid_t)*CHAR_BIT)>>1)) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
@@ -337,7 +334,6 @@ static int get_clock(uint32_t *clock_high, uint32_t *clock_low,
 	uint64_t			clock_reg;
 	mode_t				save_umask;
 	int				len;
-	int				sc;
 
 	if (state_fd == -2) {
 		save_umask = umask(0);
@@ -430,8 +426,7 @@ try_again:
 		}
 		rewind(state_f);
 		fl.l_type = F_UNLCK;
-		sc = fcntl(state_fd, F_SETLK, &fl);
-		_Assert_Unused_variable_unequal(sc, -1);
+		fcntl(state_fd, F_SETLK, &fl);
 	}
 
 	*clock_high = clock_reg >> 32;
