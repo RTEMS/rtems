@@ -255,8 +255,14 @@ main_cp(rtems_shell_cp_globals* cp_globals, int argc, char *argv[])
 		 */
 		if (r == -1) {
 			if (Rflag && (Lflag || Hflag))
+			#ifdef __rtems__
+				(void)
+			#endif
 				stat(*argv, &tmp_stat);
 			else
+			#ifdef __rtems__
+				(void)
+			#endif
 				lstat(*argv, &tmp_stat);
 
 			if (S_ISDIR(tmp_stat.st_mode) && Rflag)
