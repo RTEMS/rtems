@@ -165,6 +165,9 @@ static int get_random_fd(void)
 		if (fd >= 0) {
 			i = fcntl(fd, F_GETFD);
 			if (i >= 0)
+			#ifdef __rtems__
+				(void)
+			#endif
 				fcntl(fd, F_SETFD, i | FD_CLOEXEC);
 		}
 #endif
@@ -426,6 +429,9 @@ try_again:
 		}
 		rewind(state_f);
 		fl.l_type = F_UNLCK;
+	#ifdef __rtems__
+		(void)
+	#endif
 		fcntl(state_fd, F_SETLK, &fl);
 	}
 
