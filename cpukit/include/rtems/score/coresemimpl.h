@@ -133,23 +133,21 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
   Thread_queue_Context          *queue_context
 )
 {
-  Thread_Control *the_thread;
-  Status_Control  status;
+  Status_Control      status;
+  Thread_queue_Heads *heads;
 
   status = STATUS_SUCCESSFUL;
 
   _CORE_semaphore_Acquire_critical( the_semaphore, queue_context );
 
-  the_thread = _Thread_queue_First_locked(
-    &the_semaphore->Wait_queue,
-    operations
-  );
-  if ( the_thread != NULL ) {
-    _Thread_queue_Extract_critical(
+  heads = the_semaphore->Wait_queue.Queue.heads;
+
+  if ( heads != NULL ) {
+    _Thread_queue_Surrender_no_priority(
       &the_semaphore->Wait_queue.Queue,
-      operations,
-      the_thread,
-      queue_context
+      heads,
+      queue_context,
+      operations
     );
   } else {
     if ( the_semaphore->count < maximum_count )

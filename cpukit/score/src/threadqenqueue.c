@@ -711,6 +711,115 @@ void _Thread_queue_Surrender(
   _Thread_Dispatch_enable( cpu_self );
 }
 
+void _Thread_queue_Surrender_no_priority(
+  Thread_queue_Queue            *queue,
+  Thread_queue_Heads            *heads,
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
+)
+{
+  Thread_Control  *the_thread;
+  bool             unblock;
+  Per_CPU_Control *cpu_self;
+
+  _Assert( heads != NULL );
+  _Assert( queue->owner == NULL );
+
+  the_thread = ( *operations->surrender )( queue, heads, NULL, queue_context );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  _Thread_queue_MP_set_callout( the_thread, queue_context );
+#endif
+
+  unblock = _Thread_queue_Make_ready_again( the_thread );
+
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
+  _Thread_queue_Queue_release(
+    queue,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  if ( unblock ) {
+    _Thread_Remove_timer_and_unblock( the_thread, queue );
+  }
+
+  _Thread_Dispatch_enable( cpu_self );
+}
+
+Status_Control _Thread_queue_Surrender_priority_ceiling(
+  Thread_queue_Queue            *queue,
+  Thread_Control                *executing,
+  Priority_Node                 *priority_ceiling,
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
+)
+{
+  ISR_lock_Context    lock_context;
+  Thread_queue_Heads *heads;
+  Thread_Control     *new_owner;
+  bool                unblock;
+  Per_CPU_Control    *cpu_self;
+
+  _Thread_Resource_count_decrement( executing );
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_acquire_default_critical( executing, &lock_context );
+  _Thread_Priority_remove( executing, priority_ceiling, queue_context );
+  _Thread_Wait_release_default_critical( executing, &lock_context );
+
+  heads = queue->heads;
+  queue->owner = NULL;
+
+  if ( heads == NULL ) {
+    cpu_self = _Thread_Dispatch_disable_critical(
+      &queue_context->Lock_context.Lock_context
+    );
+    _Thread_queue_Queue_release(
+      queue,
+      &queue_context->Lock_context.Lock_context
+    );
+    _Thread_Priority_update( queue_context );
+    _Thread_Dispatch_direct( cpu_self );
+    return STATUS_SUCCESSFUL;
+  }
+
+  new_owner = ( *operations->surrender )(
+    queue,
+    heads,
+    NULL,
+    queue_context
+  );
+
+  queue->owner = new_owner;
+
+  unblock = _Thread_queue_Make_ready_again( new_owner );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Objects_Is_local_id( new_owner->Object.id ) )
+#endif
+  {
+    _Thread_Resource_count_increment( new_owner );
+    _Thread_Wait_acquire_default_critical( new_owner, &lock_context );
+    _Thread_Priority_add( new_owner, priority_ceiling, queue_context );
+    _Thread_Wait_release_default_critical( new_owner, &lock_context );
+  }
+
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
+  _Thread_queue_Queue_release(
+    queue,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  _Thread_Priority_update( queue_context );
+
+  if ( unblock ) {
+    _Thread_Remove_timer_and_unblock( new_owner, queue );
+  }
+
+  _Thread_Dispatch_direct( cpu_self );
+  return STATUS_SUCCESSFUL;
+}
+
 #if defined(RTEMS_SMP)
 void _Thread_queue_Surrender_sticky(
   Thread_queue_Queue            *queue,

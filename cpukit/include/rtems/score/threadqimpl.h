@@ -1080,6 +1080,49 @@ void _Thread_queue_Surrender(
   const Thread_queue_Operations *operations
 );
 
+/**
+ * @brief Surrenders the thread queue previously owned by the thread to the
+ * first enqueued thread.
+ *
+ * The owner of the thread queue must be set to NULL by the caller.
+ *
+ * This function releases the thread queue lock.  In addition it performs a
+ * thread dispatch if necessary.
+ *
+ * @param[in, out] queue The actual thread queue.
+ * @param heads The thread queue heads.  It must not be NULL.
+ * @param queue_context The thread queue context of the lock acquire.
+ * @param operations The thread queue operations.
+ */
+void _Thread_queue_Surrender_no_priority(
+  Thread_queue_Queue            *queue,
+  Thread_queue_Heads            *heads,
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
+);
+
+/**
+ * @brief Surrenders the thread queue previously owned by the thread to the
+ * first enqueued thread.
+ *
+ * The owner of the thread queue must be set to NULL by the caller.
+ *
+ * This function releases the thread queue lock.  In addition it performs a
+ * thread dispatch if necessary.
+ *
+ * @param[in, out] queue The actual thread queue.
+ * @param heads The thread queue heads.  It must not be NULL.
+ * @param queue_context The thread queue context of the lock acquire.
+ * @param operations The thread queue operations.
+ */
+Status_Control _Thread_queue_Surrender_priority_ceiling(
+  Thread_queue_Queue            *queue,
+  Thread_Control                *executing,
+  Priority_Node                 *ceiling_priority,
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
+);
+
 #if defined(RTEMS_SMP)
 /**
  * @brief Surrenders the thread queue previously owned by the thread to the

@@ -529,10 +529,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Surrender(
   Thread_queue_Context       *queue_context
 )
 {
-  unsigned int      nest_level;
-  ISR_lock_Context  lock_context;
-  Per_CPU_Control  *cpu_self;
-  Thread_Control   *new_owner;
+  unsigned int nest_level;
 
   _CORE_mutex_Acquire_critical( &the_mutex->Recursive.Mutex, queue_context );
 
@@ -549,53 +546,13 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Surrender(
     return STATUS_SUCCESSFUL;
   }
 
-  _Thread_Resource_count_decrement( executing );
-
-  _Thread_queue_Context_clear_priority_updates( queue_context );
-  _Thread_Wait_acquire_default_critical( executing, &lock_context );
-  _Thread_Priority_remove(
+  return _Thread_queue_Surrender_priority_ceiling(
+    &the_mutex->Recursive.Mutex.Wait_queue.Queue,
     executing,
     &the_mutex->Priority_ceiling,
-    queue_context
-  );
-  _Thread_Wait_release_default_critical( executing, &lock_context );
-
-  new_owner = _Thread_queue_First_locked(
-    &the_mutex->Recursive.Mutex.Wait_queue,
+    queue_context,
     CORE_MUTEX_TQ_OPERATIONS
   );
-  _CORE_mutex_Set_owner( &the_mutex->Recursive.Mutex, new_owner );
-
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
-
-  if ( new_owner != NULL ) {
-#if defined(RTEMS_MULTIPROCESSING)
-    if ( _Objects_Is_local_id( new_owner->Object.id ) )
-#endif
-    {
-      _Thread_Resource_count_increment( new_owner );
-      _Thread_Priority_add(
-        new_owner,
-        &the_mutex->Priority_ceiling,
-        queue_context
-      );
-    }
-
-    _Thread_queue_Extract_critical(
-      &the_mutex->Recursive.Mutex.Wait_queue.Queue,
-      CORE_MUTEX_TQ_OPERATIONS,
-      new_owner,
-      queue_context
-    );
-  } else {
-    _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
-  }
-
-  _Thread_Priority_update( queue_context );
-  _Thread_Dispatch_enable( cpu_self );
-  return STATUS_SUCCESSFUL;
 }
 
 /** @} */

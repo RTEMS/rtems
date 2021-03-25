@@ -47,18 +47,12 @@ int sem_post( sem_t *_sem )
   }
 
   if ( RTEMS_PREDICT_TRUE( heads != NULL ) ) {
-    const Thread_queue_Operations *operations;
-    Thread_Control *first;
-
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
-    operations = SEMAPHORE_TQ_OPERATIONS;
-    first = ( *operations->first )( heads );
-
-    _Thread_queue_Extract_critical(
+    _Thread_queue_Surrender_no_priority(
       &sem->Queue.Queue,
-      operations,
-      first,
-      &queue_context
+      heads,
+      &queue_context,
+      SEMAPHORE_TQ_OPERATIONS
     );
     return 0;
   }

@@ -35,36 +35,33 @@ int _POSIX_Condition_variables_Signal_support(
 {
   POSIX_Condition_variables_Control *the_cond;
   unsigned long                      flags;
-  const Thread_queue_Operations     *operations;
-  Thread_queue_Heads                *heads;
+  Thread_queue_Context               queue_context;
 
   the_cond = _POSIX_Condition_variables_Get( cond );
   POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags );
-  operations = POSIX_CONDITION_VARIABLES_TQ_OPERATIONS;
+  _Thread_queue_Context_initialize( &queue_context );
 
   do {
-    Thread_queue_Context queue_context;
+    Thread_queue_Heads *heads;
 
-    _Thread_queue_Context_initialize( &queue_context );
     _POSIX_Condition_variables_Acquire( the_cond, &queue_context );
 
     heads = the_cond->Queue.Queue.heads;
 
-    if ( heads != NULL ) {
-      Thread_Control *the_thread;
-
-      the_thread = ( *operations->first )( heads );
-      _Thread_queue_Extract_critical(
-        &the_cond->Queue.Queue,
-        operations,
-        the_thread,
-        &queue_context
-      );
-    } else {
+    if ( heads == NULL ) {
       the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
       _POSIX_Condition_variables_Release( the_cond, &queue_context );
+
+      return 0;
     }
-  } while ( is_broadcast && heads != NULL );
+
+    _Thread_queue_Surrender_no_priority(
+      &the_cond->Queue.Queue,
+      heads,
+      &queue_context,
+      POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
+    );
+  } while ( is_broadcast );
 
   return 0;
 }

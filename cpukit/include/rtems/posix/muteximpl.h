@@ -382,10 +382,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_surrender(
   Thread_queue_Context *queue_context
 )
 {
-  unsigned int        nest_level;
-  ISR_lock_Context    lock_context;
-  Per_CPU_Control    *cpu_self;
-  Thread_queue_Heads *heads;
+  unsigned int nest_level;
 
   if ( !_POSIX_Mutex_Is_owner( the_mutex, executing ) ) {
     _POSIX_Mutex_Release( the_mutex, queue_context );
@@ -400,48 +397,13 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_surrender(
     return STATUS_SUCCESSFUL;
   }
 
-  _Thread_Resource_count_decrement( executing );
-
-  _Thread_queue_Context_clear_priority_updates( queue_context );
-  _Thread_Wait_acquire_default_critical( executing, &lock_context );
-  _Thread_Priority_remove(
+  return _Thread_queue_Surrender_priority_ceiling(
+    &the_mutex->Recursive.Mutex.Queue.Queue,
     executing,
     &the_mutex->Priority_ceiling,
-    queue_context
+    queue_context,
+    POSIX_MUTEX_PRIORITY_CEILING_TQ_OPERATIONS
   );
-  _Thread_Wait_release_default_critical( executing, &lock_context );
-
-  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
-
-  heads = the_mutex->Recursive.Mutex.Queue.Queue.heads;
-
-  if ( heads != NULL ) {
-    const Thread_queue_Operations *operations;
-    Thread_Control                *new_owner;
-
-    operations = POSIX_MUTEX_PRIORITY_CEILING_TQ_OPERATIONS;
-    new_owner = ( *operations->first )( heads );
-    _POSIX_Mutex_Set_owner( the_mutex, new_owner );
-    _Thread_Resource_count_increment( new_owner );
-    _Thread_Priority_add(
-      new_owner,
-      &the_mutex->Priority_ceiling,
-      queue_context
-    );
-    _Thread_queue_Extract_critical(
-      &the_mutex->Recursive.Mutex.Queue.Queue,
-      operations,
-      new_owner,
-      queue_context
-    );
-  } else {
-    _POSIX_Mutex_Set_owner( the_mutex, NULL );
-    _POSIX_Mutex_Release( the_mutex, queue_context );
-  }
-
-  _Thread_Priority_update( queue_context );
-  _Thread_Dispatch_enable( cpu_self );
-  return STATUS_SUCCESSFUL;
 }
 
 #define POSIX_MUTEX_ABSTIME_TRY_LOCK ((uintptr_t) 1)
