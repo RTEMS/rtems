@@ -115,5 +115,9 @@ void *_Workspace_Allocate( size_t size )
 
 void _Workspace_Free( void *block )
 {
-  _Heap_Free( &_Workspace_Area, block );
+  bool ok;
+
+  ok = _Heap_Free( &_Workspace_Area, block );
+  _Assert( ok );
+  (void) ok;
 }
