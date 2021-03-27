@@ -101,7 +101,11 @@ static void test_stack_config(void)
 
   eno = pthread_attr_getstacksize(&attr, &stack_size);
   rtems_test_assert(eno == 0);
-  rtems_test_assert(stack_size == 2 * CPU_STACK_MINIMUM_SIZE);
+  rtems_test_assert(stack_size >= 2 * CPU_STACK_MINIMUM_SIZE);
+  rtems_test_assert(
+    stack_size <= 2 * CPU_STACK_MINIMUM_SIZE + CPU_STACK_ALIGNMENT -
+      CPU_HEAP_ALIGNMENT
+  );
 
   eno = pthread_attr_destroy(&attr);
   rtems_test_assert(eno == 0);

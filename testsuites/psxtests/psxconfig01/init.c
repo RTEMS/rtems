@@ -480,7 +480,11 @@ static rtems_task Init(rtems_task_argument argument)
 
     eno = pthread_attr_getstacksize(&attr, &stack_size);
     rtems_test_assert(eno == 0);
-    rtems_test_assert(stack_size == CPU_STACK_MINIMUM_SIZE);
+    rtems_test_assert(stack_size >= CPU_STACK_MINIMUM_SIZE);
+    rtems_test_assert(
+      stack_size <= CPU_STACK_MINIMUM_SIZE + CPU_STACK_ALIGNMENT -
+        CPU_HEAP_ALIGNMENT
+    );
 
     eno = pthread_attr_destroy(&attr);
     rtems_test_assert(eno == 0);

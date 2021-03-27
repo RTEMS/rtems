@@ -78,7 +78,11 @@ static rtems_task test_task(rtems_task_argument arg)
   sc = pthread_attr_getstack( &attr, &addr, &size );
   rtems_test_assert( sc == 0 );
   rtems_test_assert( addr != NULL );
-  rtems_test_assert( size == RTEMS_MINIMUM_STACK_SIZE );
+  rtems_test_assert( size >= RTEMS_MINIMUM_STACK_SIZE );
+  rtems_test_assert(
+    size <= RTEMS_MINIMUM_STACK_SIZE + CPU_STACK_ALIGNMENT -
+      CPU_HEAP_ALIGNMENT
+  );
 
   value = -1;
   sc = pthread_attr_getscope( &attr, &value );

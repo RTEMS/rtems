@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,12 +55,27 @@
 #include <rtems/score/stack.h>
 #include <rtems/sysinit.h>
 
+#if CPU_STACK_ALIGNMENT > CPU_HEAP_ALIGNMENT
+  #define _CONFIGURE_TASK_STACK_ALLOC_SIZE( _stack_size ) \
+    ( RTEMS_ALIGN_UP( \
+        ( _stack_size ) + CONTEXT_FP_SIZE, \
+        CPU_STACK_ALIGNMENT \
+      ) + CPU_STACK_ALIGNMENT - CPU_HEAP_ALIGNMENT )
+#else
+  #define _CONFIGURE_TASK_STACK_ALLOC_SIZE( _stack_size ) \
+    RTEMS_ALIGN_UP( ( _stack_size ) + CONTEXT_FP_SIZE, CPU_STACK_ALIGNMENT )
+#endif
+
 #ifdef CONFIGURE_TASK_STACK_FROM_ALLOCATOR
   #define _Configure_From_stackspace( _stack_size ) \
-    CONFIGURE_TASK_STACK_FROM_ALLOCATOR( _stack_size + CONTEXT_FP_SIZE )
+    CONFIGURE_TASK_STACK_FROM_ALLOCATOR( \
+      _CONFIGURE_TASK_STACK_ALLOC_SIZE( _stack_size ) \
+    )
 #else
   #define _Configure_From_stackspace( _stack_size ) \
-    _Configure_From_workspace( _stack_size + CONTEXT_FP_SIZE )
+    _Configure_From_workspace( \
+      _CONFIGURE_TASK_STACK_ALLOC_SIZE( _stack_size ) \
+    )
 #endif
 
 #ifndef CONFIGURE_EXTRA_TASK_STACKS

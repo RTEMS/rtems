@@ -132,7 +132,6 @@ static bool _Thread_Try_initialize(
   stack_begin = config->stack_area;
   stack_end = stack_begin + config->stack_size;
   stack_align = CPU_STACK_ALIGNMENT;
-  stack_begin = (char *) RTEMS_ALIGN_UP( (uintptr_t) stack_begin, stack_align );
   stack_end = (char *) RTEMS_ALIGN_DOWN( (uintptr_t) stack_end, stack_align );
 
   /* Allocate floating-point context in stack area */
