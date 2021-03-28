@@ -184,6 +184,7 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(rv == true);
 
   TEST_END();
+  test_bin = NULL;
   rtems_test_exit(0);
 }
 
