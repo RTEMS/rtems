@@ -148,7 +148,7 @@ static int rtems_shell_help(
         line+= rtems_shell_help_cmd(shell_cmd);
       if (lines && (line > lines)) {
         printf("Press any key to continue...");
-        getchar();
+        (void) getchar();
         printf("\n");
         line = 0;
       }
