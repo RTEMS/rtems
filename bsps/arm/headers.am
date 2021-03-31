@@ -39,6 +39,8 @@ include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/lpc-timer.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/start.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/zynq-uart-regs.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/zynq-uart.h
+include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/cadence-spi-regs.h
+include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/cadence-spi.h
 
 include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS =
