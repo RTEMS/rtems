@@ -41,6 +41,8 @@ include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/zynq-uart-regs.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/zynq-uart.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/cadence-spi-regs.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/cadence-spi.h
+include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/xilinx-axi-spi-regs.h
+include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/xilinx-axi-spi.h
 
 include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS =
