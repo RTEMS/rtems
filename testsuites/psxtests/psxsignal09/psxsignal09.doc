@@ -1,0 +1,7 @@
+#  COPYRIGHT (c) 2021.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  SPDX-License-Identifier: BSD-2-Clause
+
+This test ensures that machine exceptions are mapped to POSIX signals when
+required by the application.

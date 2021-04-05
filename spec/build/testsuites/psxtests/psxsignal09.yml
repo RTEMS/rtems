@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by:
+- and:
+  - RTEMS_EXCEPTION_EXTENSIONS
+  - RTEMS_POSIX_API
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/psxtests/psxsignal09/init.c
+stlib: []
+target: testsuites/psxtests/psxsignal09.exe
+type: build
+use-after: []
+use-before: []
