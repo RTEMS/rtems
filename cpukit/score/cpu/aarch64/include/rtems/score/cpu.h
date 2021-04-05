@@ -210,33 +210,33 @@ uint64_t _CPU_ISR_Get_level( void );
 
 #if defined(AARCH64_DISABLE_INLINE_ISR_DISABLE_ENABLE)
 uint64_t AArch64_interrupt_disable( void );
-void AArch64_interrupt_enable( uint64_t level );
-void AArch64_interrupt_flash( uint64_t level );
+void AArch64_interrupt_enable( uint64_t isr_cookie );
+void AArch64_interrupt_flash( uint64_t isr_cookie );
 #else
 static inline uint64_t AArch64_interrupt_disable( void )
 {
-  uint64_t level;
+  uint64_t isr_cookie;
 
   __asm__ volatile (
-    "mrs %[level], DAIF\n"
+    "mrs %[isr_cookie], DAIF\n"
     "msr DAIFSet, #0x2\n"
-    : [level] "=&r" (level)
+    : [isr_cookie] "=&r" (isr_cookie)
   );
 
-  return level;
+  return isr_cookie;
 }
 
-static inline void AArch64_interrupt_enable( uint64_t level )
+static inline void AArch64_interrupt_enable( uint64_t isr_cookie )
 {
   __asm__ volatile (
-    "msr DAIF, %[level]\n"
-    : : [level] "r" (level)
+    "msr DAIF, %[isr_cookie]\n"
+    : : [isr_cookie] "r" (isr_cookie)
   );
 }
 
-static inline void AArch64_interrupt_flash( uint64_t level )
+static inline void AArch64_interrupt_flash( uint64_t isr_cookie )
 {
-  AArch64_interrupt_enable(level);
+  AArch64_interrupt_enable(isr_cookie);
   AArch64_interrupt_disable();
 }
 #endif  /* !AARCH64_DISABLE_INLINE_ISR_DISABLE_ENABLE */
@@ -252,9 +252,9 @@ static inline void AArch64_interrupt_flash( uint64_t level )
 #define _CPU_ISR_Flash( _isr_cookie ) \
   AArch64_interrupt_flash( _isr_cookie )
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint64_t level )
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint64_t isr_cookie )
 {
-  return level == 0;
+  return ( isr_cookie & AARCH64_PSTATE_I ) == 0;
 }
 
 void _CPU_Context_Initialize(
