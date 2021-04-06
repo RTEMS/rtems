@@ -1,0 +1,20 @@
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+default: ( GPIO_PIN_8 | GPIO_PIN_9 )
+default-by-variant:
+- value: ( GPIO_PIN_9 | GPIO_PIN_10 )
+  variants:
+  - arm/nucleo-h743zi
+default-by-variant: []
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_USART3_GPIO_PINS
+description: |
+  GPIO pins used for the USART3 pin configuration.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

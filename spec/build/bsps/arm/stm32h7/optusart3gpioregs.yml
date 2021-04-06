@@ -1,0 +1,20 @@
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+default: GPIOD
+default-by-variant:
+- value: GPIOB
+  variants:
+  - arm/nucleo-h743zi
+default-by-variant: []
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_USART3_GPIO_REGS
+description: |
+  GPIO registers used for the USART3 pin configuration.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

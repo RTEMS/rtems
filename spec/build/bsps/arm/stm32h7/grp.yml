@@ -78,6 +78,10 @@ links:
 - role: build-dependency
   uid: optprintkinstance
 - role: build-dependency
+  uid: optusart3gpiopins
+- role: build-dependency
+  uid: optusart3gpioregs
+- role: build-dependency
   uid: optvariant
 - role: build-dependency
   uid: ../../optconsolebaud

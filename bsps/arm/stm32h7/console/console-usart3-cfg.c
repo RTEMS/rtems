@@ -31,11 +31,13 @@
 
 #include <stm32h7/hal.h>
 
+#include <bspopts.h>
+
 const stm32h7_uart_config stm32h7_usart3_config = {
   .gpio = {
-    .regs = GPIOB,
+    .regs = STM32H7_USART3_GPIO_REGS,
     .config = {
-      .Pin = GPIO_PIN_9 | GPIO_PIN_10,
+      .Pin = STM32H7_USART3_GPIO_PINS,
       .Mode = GPIO_MODE_AF_PP,
       .Pull = GPIO_NOPULL,
       .Speed = GPIO_SPEED_FREQ_LOW,
