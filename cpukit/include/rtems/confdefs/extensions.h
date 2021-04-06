@@ -93,6 +93,10 @@
   #include <rtems/stackchk.h>
 #endif
 
+#ifdef CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
+  #include <rtems/score/exception.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -103,6 +107,9 @@ extern "C" {
   || defined(CONFIGURE_INITIAL_EXTENSIONS) \
   || defined(BSP_INITIAL_EXTENSION)
   const User_extensions_Table _User_extensions_Initial_extensions[] = {
+    #ifdef CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
+      { .fatal = _Exception_Raise_signal },
+    #endif
     #ifdef _CONFIGURE_RECORD_NEED_EXTENSION
       {
         #ifdef CONFIGURE_RECORD_EXTENSIONS_ENABLED

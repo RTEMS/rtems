@@ -343,6 +343,7 @@ install:
   - cpukit/include/rtems/score/coresem.h
   - cpukit/include/rtems/score/coresemimpl.h
   - cpukit/include/rtems/score/cpustdatomic.h
+  - cpukit/include/rtems/score/exception.h
   - cpukit/include/rtems/score/freechain.h
   - cpukit/include/rtems/score/hash.h
   - cpukit/include/rtems/score/heap.h
@@ -497,6 +498,8 @@ links:
   uid: objdl
 - role: build-dependency
   uid: objdrvmgr
+- role: build-dependency
+  uid: objexceptionmapping
 - role: build-dependency
   uid: objgnat
 - role: build-dependency

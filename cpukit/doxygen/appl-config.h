@@ -1773,6 +1773,29 @@
  */
 #define CONFIGURE_ATA_DRIVER_TASK_PRIORITY
 
+/* Generated from spec:/acfg/if/exception-to-signal-mapping */
+
+/**
+ * @brief This configuration option is a boolean feature define.
+ *
+ * In case this configuration option is defined, then the machine exception to
+ * POSIX signal mapping is configured during system initialization.
+ *
+ * @par Default Configuration
+ * If this configuration option is undefined, then the described feature is not
+ * enabled.
+ *
+ * @par Notes
+ * @parblock
+ * This device driver is responsible for setting up a mapping from machine
+ * exceptions to POSIX signals so that applications may consume them and alter
+ * task execution as necessary.
+ *
+ * This is especially useful for applications written in Ada or C++.
+ * @endparblock
+ */
+#define CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
+
 /* Generated from spec:/acfg/if/max-drivers */
 
 /**
