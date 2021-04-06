@@ -21,6 +21,11 @@
 #ifndef __STM32H7xx_HAL_CONF_H
 #define __STM32H7xx_HAL_CONF_H
 
+#ifdef __rtems__
+#include <bspopts.h>
+
+#define HSE_VALUE ((uint32_t)STM32H7_HSE_FREQUENCY)
+#endif /* __rtems__ */
 #ifdef __cplusplus
  extern "C" {
 #endif
