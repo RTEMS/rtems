@@ -27,7 +27,7 @@ static bool _Objects_Is_local_node_search( uint32_t node )
   return node == OBJECTS_SEARCH_LOCAL_NODE || _Objects_Is_local_node( node );
 }
 
-Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
+Status_Control _Objects_Name_to_id_u32(
   uint32_t                   name,
   uint32_t                   node,
   Objects_Id                *id,
@@ -41,7 +41,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   _Assert( !_Objects_Has_string_name( information ) );
 
   if ( id == NULL ) {
-    return OBJECTS_INVALID_ADDRESS;
+    return STATUS_INVALID_ADDRESS;
   }
 
   if (
@@ -61,19 +61,19 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
       if ( the_object != NULL && name == the_object->name.name_u32 ) {
         *id = the_object->id;
         _Assert( name != 0 );
-        return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
+        return STATUS_SUCCESSFUL;
       }
     }
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Objects_Is_local_node_search( node ) ) {
-    return OBJECTS_INVALID_NAME;
+    return STATUS_INVALID_NAME;
   }
 
   name_for_mp.name_u32 = name;
   return _Objects_MP_Global_name_search( information, name_for_mp, node, id );
 #else
-  return OBJECTS_INVALID_NAME;
+  return STATUS_INVALID_NAME;
 #endif
 }

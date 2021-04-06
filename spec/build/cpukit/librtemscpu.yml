@@ -1280,7 +1280,6 @@ source:
 - cpukit/rtems/src/semsetpriority.c
 - cpukit/rtems/src/signalcatch.c
 - cpukit/rtems/src/signalsend.c
-- cpukit/rtems/src/status.c
 - cpukit/rtems/src/statustext.c
 - cpukit/rtems/src/statustoerrno.c
 - cpukit/rtems/src/systemeventreceive.c

@@ -293,19 +293,19 @@ void _Objects_MP_Close (
   }
 }
 
-Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search(
+Status_Control _Objects_MP_Global_name_search(
   const Objects_Information *information,
   Objects_Name               the_name,
   uint32_t                   nodes_to_search,
   Objects_Id                *the_id
 )
 {
-  Objects_Name_or_id_lookup_errors  status;
-  Objects_MP_Control               *the_global_object;
-  ISR_lock_Context                  lock_context;
+  Status_Control      status;
+  Objects_MP_Control *the_global_object;
+  ISR_lock_Context    lock_context;
 
   if ( nodes_to_search > _Objects_Maximum_nodes ) {
-    return OBJECTS_INVALID_NODE;
+    return STATUS_INVALID_NODE;
   }
 
   _Objects_MP_Global_acquire( &lock_context );
@@ -336,9 +336,9 @@ Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search(
   if ( the_global_object != NULL ) {
     *the_id = the_global_object->id;
     _Assert( the_global_object->name.name_u32 != 0 );
-    status = OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
+    status = STATUS_SUCCESSFUL;
   } else {
-    status = OBJECTS_INVALID_NAME;
+    status = STATUS_INVALID_NAME;
   }
 
   _Objects_MP_Global_release( &lock_context );

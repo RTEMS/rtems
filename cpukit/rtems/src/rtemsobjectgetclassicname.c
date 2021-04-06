@@ -29,8 +29,8 @@ rtems_status_code rtems_object_get_classic_name(
   rtems_name   *name
 )
 {
-  Objects_Name_or_id_lookup_errors  status;
-  Objects_Name                      name_u;
+  Status_Control status;
+  Objects_Name   name_u;
 
   if ( !name )
     return RTEMS_INVALID_ADDRESS;
@@ -38,5 +38,5 @@ rtems_status_code rtems_object_get_classic_name(
   status = _Objects_Id_to_name( id, &name_u );
 
   *name = name_u.name_u32;
-  return _Status_Object_name_errors_to_status[ status ];
+  return _Status_Get( status );
 }

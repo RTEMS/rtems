@@ -22,7 +22,7 @@
 
 #include <rtems/score/threadimpl.h>
 
-Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
+Status_Control _Objects_Id_to_name (
   Objects_Id      id,
   Objects_Name   *name
 )
@@ -40,10 +40,10 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
 
   information = _Objects_Get_information_id( tmpId );
   if ( !information )
-    return OBJECTS_INVALID_ID;
+    return STATUS_INVALID_ID;
 
   if ( _Objects_Has_string_name( information ) )
-    return OBJECTS_INVALID_ID;
+    return STATUS_INVALID_ID;
 
   the_object = _Objects_Get(
     tmpId,
@@ -51,9 +51,9 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
     information
   );
   if ( !the_object )
-    return OBJECTS_INVALID_ID;
+    return STATUS_INVALID_ID;
 
   *name = the_object->name;
   _ISR_lock_ISR_enable( &lock_context );
-  return OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL;
+  return STATUS_SUCCESSFUL;
 }

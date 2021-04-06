@@ -48,9 +48,9 @@ rtems_status_code _RTEMS_Name_to_id(
   const Objects_Information *information
 )
 {
-  Objects_Name_or_id_lookup_errors status;
+  Status_Control status;
 
   status = _Objects_Name_to_id_u32( name, node, id, information );
 
-  return _Status_Object_name_errors_to_status[ status ];
+  return _Status_Get( status );
 }

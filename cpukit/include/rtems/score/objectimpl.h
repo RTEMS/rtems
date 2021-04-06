@@ -190,36 +190,6 @@ unsigned int _Objects_API_maximum_class(
 Objects_Control *_Objects_Allocate( Objects_Information *information );
 
 /**
- *  This function implements the common portion of the object
- *  identification directives.  This directive returns the object
- *  id associated with name.  If more than one object of this class
- *  is named name, then the object to which the id belongs is
- *  arbitrary.  Node indicates the extent of the search for the
- *  id of the object named name.  If the object class supports global
- *  objects, then the search can be limited to a particular node
- *  or allowed to encompass all nodes.
- */
-typedef enum {
-  OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL,
-  OBJECTS_INVALID_NAME,
-  OBJECTS_INVALID_ADDRESS,
-  OBJECTS_INVALID_ID,
-  OBJECTS_INVALID_NODE
-} Objects_Name_or_id_lookup_errors;
-
-/**
- *  This macro defines the first entry in the
- *  @ref Objects_Name_or_id_lookup_errors enumerated list.
- */
-#define OBJECTS_NAME_ERRORS_FIRST OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL
-
-/**
- *  This macro defines the last entry in the
- *  @ref Objects_Name_or_id_lookup_errors enumerated list.
- */
-#define OBJECTS_NAME_ERRORS_LAST  OBJECTS_INVALID_NODE
-
-/**
  * @brief Searches an object of the specified class with the specified name on
  *   the specified set of nodes.
  *
@@ -233,12 +203,12 @@ typedef enum {
  *   operation was successful.
  * @param information is the pointer to an object class information block.
  *
- * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The operations was successful.
- * @retval OBJECTS_INVALID_ADDRESS The id parameter was NULL.
- * @retval OBJECTS_INVALID_NAME No object exists with the specified name on the
+ * @retval STATUS_SUCCESSFUL The operations was successful.
+ * @retval STATUS_INVALID_ADDRESS The id parameter was NULL.
+ * @retval STATUS_INVALID_NAME No object exists with the specified name on the
  *   specified node set.
  */
-Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
+Status_Control _Objects_Name_to_id_u32(
   uint32_t                   name,
   uint32_t                   node,
   Objects_Id                *id,
@@ -282,13 +252,13 @@ Objects_Control *_Objects_Get_by_name(
  * @param id is the Id of the object whose name we are locating.
  * @param[out] name will contain the name of the object, if found.
  *
- * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The operation succeeded.  @a name
+ * @retval STATUS_SUCCESSFUL The operation succeeded.  @a name
  *      contains the name of the object.
- * @retval OBJECTS_INVALID_ID The id is invalid, the operation failed.
+ * @retval STATUS_INVALID_ID The id is invalid, the operation failed.
  *
  * @note This function currently does not support string names.
  */
-Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
+Status_Control _Objects_Id_to_name (
   Objects_Id      id,
   Objects_Name   *name
 );

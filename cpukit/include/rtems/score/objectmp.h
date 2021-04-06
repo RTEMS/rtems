@@ -143,12 +143,12 @@ void _Objects_MP_Close (
  * @param nodes_to_search Indicates the set of nodes to search.
  * @param[out] the_id will contain the Id of the object if found.
  *
- * @retval OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL The lookup was successful.
- * @retval OBJECTS_INVALID_NODE The number of nodes is bigger than the
+ * @retval STATUS_SUCCESSFUL The lookup was successful.
+ * @retval STATUS_INVALID_NODE The number of nodes is bigger than the
  *      objects maximum nodes value.
- * @retval OBJECTS_INVALID_NAME There is no global object with this name.
+ * @retval STATUS_INVALID_NAME There is no global object with this name.
  */
-Objects_Name_or_id_lookup_errors _Objects_MP_Global_name_search (
+Status_Control _Objects_MP_Global_name_search (
   const Objects_Information *information,
   Objects_Name               the_name,
   uint32_t                   nodes_to_search,
