@@ -180,7 +180,7 @@ static void test_actions(rtems_disk_device *dd)
 
   for (i = 0; i < ACTION_COUNT; ++i) {
     const test_action *action = &actions [i];
-    rtems_status_code sc;
+    rtems_status_code sc = RTEMS_INVALID_ADDRESS;
     rtems_bdbuf_buffer *bd;
     rtems_blkdev_stats stats;
 
