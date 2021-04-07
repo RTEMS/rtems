@@ -572,7 +572,7 @@ rtems_status_code rtems_semaphore_obtain(
  * @retval ::RTEMS_NOT_OWNER_OF_RESOURCE The calling task was not the owner of
  *   the semaphore.
  *
- * @retval ::RTEMS_INTERNAL_ERROR The semaphore's count already had the maximum
+ * @retval ::RTEMS_UNSATISFIED The semaphore's count already had the maximum
  *   value of UINT32_MAX.
  *
  * @par Notes
