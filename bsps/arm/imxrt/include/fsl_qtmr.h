@@ -207,7 +207,7 @@ rtems_vector_number QTMR_get_IRQ_from_fdt(const void *fdt, int node);
  *
  * @param base     Quad Timer peripheral base address.
  *
- * @return IRQ vector number. BSP_INTERRUPT_VECTOR_INVALID on error.
+ * @return Clock frequency value in hertz.
  */
 uint32_t QTMR_get_src_clk(TMR_Type *base);
 #endif /* __rtems__ */
