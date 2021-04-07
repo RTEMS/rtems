@@ -631,8 +631,6 @@ static void RtemsSignalReqSend_Post_Recursive_Check(
 
 static void RtemsSignalReqSend_Setup( RtemsSignalReqSend_Context *ctx )
 {
-  rtems_status_code sc;
-
   memset( ctx, 0, sizeof( *ctx ) );
   ctx->runner_id = rtems_task_self();
   SetSelfPriority( PRIO_NORMAL );
@@ -641,7 +639,8 @@ static void RtemsSignalReqSend_Setup( RtemsSignalReqSend_Context *ctx )
 
   #if defined(RTEMS_SMP)
   if ( rtems_scheduler_get_processor_maximum() > 1 ) {
-    rtems_id scheduler_id;
+    rtems_status_code sc;
+    rtems_id          scheduler_id;
 
     sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
     T_assert_rsc_success( sc );
