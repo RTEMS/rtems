@@ -149,8 +149,7 @@ static const uint32_t sample_seconds [] = {
   4168736895UL,
   4200272895UL,
   4231808895UL,
-  4263431295UL,
-  4294967295UL
+  4263431295UL
 };
 
 static const rtems_time_of_day nearly_problem_2038 = {
@@ -171,8 +170,8 @@ static const rtems_time_of_day problem_2038 = {
   .second = 8
 };
 
-static const rtems_time_of_day nearly_problem_2106 = {
-  .year = 2106,
+static const rtems_time_of_day tod_to_seconds_base = {
+  .year = 0,
   .month = 2,
   .day = 7,
   .hour = 6,
@@ -180,13 +179,22 @@ static const rtems_time_of_day nearly_problem_2106 = {
   .second = 15
 };
 
+static const rtems_time_of_day nearly_problem_2106 = {
+  .year = 2105,
+  .month = 12,
+  .day = 31,
+  .hour = 23,
+  .minute = 59,
+  .second = 59
+};
+
 static const rtems_time_of_day problem_2106 = {
   .year = 2106,
-  .month = 2,
-  .day = 7,
-  .hour = 6,
-  .minute = 28,
-  .second = 16
+  .month = 1,
+  .day = 1,
+  .hour = 0,
+  .minute = 0,
+  .second = 0
 };
 
 static const rtems_time_of_day problem_2100 = {
@@ -214,7 +222,7 @@ static void test_tod_to_seconds(void)
   size_t n = sizeof(sample_seconds) / sizeof(sample_seconds [0]);
 
   for (i = 0; i < n; ++i) {
-    rtems_time_of_day tod = nearly_problem_2106;
+    rtems_time_of_day tod = tod_to_seconds_base;
     uint32_t seconds = 0;
     rtems_interval seconds_as_interval = 0;
 

@@ -124,6 +124,22 @@ extern "C" {
 #define TOD_BASE_YEAR 1988
 
 /**
+ *  @brief Latest year to which a time of day can be initialized.
+ *
+ *  The following constant defines the latest year to which an
+ *  RTEMS time of day can be set using rtems_clock_set().
+ *
+ *  32 bits can accept as latest point in time 2106-Feb-7 6:28:15
+ *  but to simplify the implementation, is was decided to only
+ *  check that the year is not greater than the year of this constant.
+ *
+ *  The internal realtime clock can run centuries longer but in
+ *  contrast to the POSIX API, the RTEMS Classic API does not
+ *  support this for efficiency reasons.
+ */
+#define TOD_LATEST_YEAR 2105
+
+/**
  * @addtogroup RTEMSScoreTOD
  *
  * This handler encapsulates functionality used to manage time of day.

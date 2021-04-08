@@ -52,6 +52,7 @@ bool _TOD_Validate(
       (the_tod->month  == 0)                      ||
       (the_tod->month  >  TOD_MONTHS_PER_YEAR)    ||
       (the_tod->year   <  TOD_BASE_YEAR)          ||
+      (the_tod->year   >  TOD_LATEST_YEAR)        ||
       (the_tod->day    == 0) )
      return false;
 

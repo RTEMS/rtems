@@ -23,7 +23,7 @@
 #include <rtems/rtems/clockimpl.h>
 #include <rtems/score/todimpl.h>
 
-#define TOD_SECONDS_AT_2100_03_01_00_00 4107538800UL
+#define TOD_SECONDS_AT_2100_03_01_00_00 4107542400UL
 
 /*
  *  The following array contains the number of days in all months
