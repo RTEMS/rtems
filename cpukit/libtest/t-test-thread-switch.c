@@ -96,11 +96,11 @@ T_thread_switch_recorder(Thread_Control *executing, Thread_Control *heir)
 	if (log != NULL) {
 		size_t recorded;
 
-		++log->switches;
-		recorded = log->recorded;
+		++log->header.switches;
+		recorded = log->header.recorded;
 
-		if (recorded < log->capacity) {
-			log->recorded = recorded + 1;
+		if (recorded < log->header.capacity) {
+			log->header.recorded = recorded + 1;
 			log->events[recorded].executing = executing->Object.id;
 			log->events[recorded].heir = heir->Object.id;
 			log->events[recorded].cpu =
@@ -127,8 +127,8 @@ T_thread_switch_record(T_thread_switch_log *log)
 	}
 
 	if (log != NULL) {
-		log->recorded = 0;
-		log->switches = 0;
+		log->header.recorded = 0;
+		log->header.switches = 0;
 	}
 
 	rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
@@ -142,20 +142,20 @@ T_thread_switch_record(T_thread_switch_log *log)
 T_thread_switch_log *
 T_thread_switch_record_2(T_thread_switch_log_2 *log)
 {
-	log->log.capacity = 2;
-	return T_thread_switch_record(&log->log);
+	log->header.capacity = T_ARRAY_SIZE(log->events);
+	return T_thread_switch_record((T_thread_switch_log *)log);
 }
 
 T_thread_switch_log *
 T_thread_switch_record_4(T_thread_switch_log_4 *log)
 {
-	log->log.capacity = 4;
-	return T_thread_switch_record(&log->log);
+	log->header.capacity = T_ARRAY_SIZE(log->events);
+	return T_thread_switch_record((T_thread_switch_log *)log);
 }
 
 T_thread_switch_log *
 T_thread_switch_record_10(T_thread_switch_log_10 *log)
 {
-	log->log.capacity = 10;
-	return T_thread_switch_record(&log->log);
+	log->header.capacity = T_ARRAY_SIZE(log->events);
+	return T_thread_switch_record((T_thread_switch_log *)log);
 }

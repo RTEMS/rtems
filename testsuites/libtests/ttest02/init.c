@@ -222,23 +222,23 @@ T_TEST_CASE(TestThreadSwitch)
 	memset(&log_2, 0xff, sizeof(log_2));
 	log = T_thread_switch_record_2(&log_2);
 	T_null(log);
-	T_eq_sz(log_2.log.recorded, 0);
-	T_eq_sz(log_2.log.capacity, 2);
-	T_eq_u64(log_2.log.switches, 0);
+	T_eq_sz(log_2.header.recorded, 0);
+	T_eq_sz(log_2.header.capacity, 2);
+	T_eq_u64(log_2.header.switches, 0);
 
 	memset(&log_4, 0xff, sizeof(log_4));
 	log = T_thread_switch_record_4(&log_4);
-	T_eq_ptr(log, &log_2.log);
-	T_eq_sz(log_4.log.recorded, 0);
-	T_eq_sz(log_4.log.capacity, 4);
-	T_eq_u64(log_4.log.switches, 0);
+	T_eq_ptr(&log->header, &log_2.header);
+	T_eq_sz(log_4.header.recorded, 0);
+	T_eq_sz(log_4.header.capacity, 4);
+	T_eq_u64(log_4.header.switches, 0);
 
 	memset(&log_10, 0xff, sizeof(log_10));
 	log = T_thread_switch_record_10(&log_10);
-	T_eq_ptr(log, &log_4.log);
-	T_eq_sz(log_10.log.recorded, 0);
-	T_eq_sz(log_10.log.capacity, 10);
-	T_eq_u64(log_10.log.switches, 0);
+	T_eq_ptr(&log->header, &log_4.header);
+	T_eq_sz(log_10.header.recorded, 0);
+	T_eq_sz(log_10.header.capacity, 10);
+	T_eq_u64(log_10.header.switches, 0);
 
 	for (i = 0; i < 6; ++i) {
 		rtems_status_code sc;
@@ -248,10 +248,10 @@ T_TEST_CASE(TestThreadSwitch)
 	}
 
 	log = T_thread_switch_record(NULL);
-	T_eq_ptr(log, &log_10.log);
-	T_eq_sz(log->recorded, 10);
-	T_eq_sz(log->capacity, 10);
-	T_eq_u64(log->switches, 12);
+	T_eq_ptr(&log->header, &log_10.header);
+	T_eq_sz(log->header.recorded, 10);
+	T_eq_sz(log->header.capacity, 10);
+	T_eq_u64(log->header.switches, 12);
 	executing = rtems_task_self();
 	T_eq_u32(log->events[0].executing, executing);
 	T_ne_u32(log->events[0].heir, 0);

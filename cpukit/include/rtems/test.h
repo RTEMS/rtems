@@ -89,10 +89,8 @@ typedef struct T_fixture_node {
 
 #if defined(__GNUC__) || __STDC_VERSION__ >= 199409L
 #define T_ZERO_LENGTH_ARRAY
-#define T_ZERO_LENGTH_ARRAY_EXTENSION(n) (n)
 #else
 #define T_ZERO_LENGTH_ARRAY 1
-#define T_ZERO_LENGTH_ARRAY_EXTENSION(n) ((n) - 1)
 #endif
 
 /** @} */
@@ -2434,22 +2432,26 @@ typedef struct {
 	size_t recorded;
 	size_t capacity;
 	uint64_t switches;
+} T_thread_switch_header;
+
+typedef struct {
+	T_thread_switch_header header;
 	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY];
 } T_thread_switch_log;
 
 typedef struct {
-	T_thread_switch_log log;
-	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY_EXTENSION(2)];
+	T_thread_switch_header header;
+	T_thread_switch_event events[2];
 } T_thread_switch_log_2;
 
 typedef struct {
-	T_thread_switch_log log;
-	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY_EXTENSION(4)];
+	T_thread_switch_header header;
+	T_thread_switch_event events[4];
 } T_thread_switch_log_4;
 
 typedef struct {
-	T_thread_switch_log log;
-	T_thread_switch_event events[T_ZERO_LENGTH_ARRAY_EXTENSION(10)];
+	T_thread_switch_header header;
+	T_thread_switch_event events[10];
 } T_thread_switch_log_10;
 
 T_thread_switch_log *T_thread_switch_record(T_thread_switch_log *);
