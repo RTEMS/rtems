@@ -12,6 +12,7 @@ install:
   source:
   - cpukit/include/rtems/test.h
   - cpukit/include/rtems/test-info.h
+  - cpukit/include/rtems/test-scheduler.h
 install-path: ${BSP_LIBDIR}
 links: []
 source:
@@ -30,6 +31,7 @@ source:
 - cpukit/libtest/t-test-rtems-objs.c
 - cpukit/libtest/t-test-rtems-posix-keys.c
 - cpukit/libtest/t-test-rtems.c
+- cpukit/libtest/t-test-scheduler.c
 - cpukit/libtest/t-test-thread-switch.c
 - cpukit/libtest/t-test-time.c
 - cpukit/libtest/t-test.c
