@@ -24,7 +24,6 @@
 #include <rtems.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/onceimpl.h>
 #include <rtems/score/todimpl.h>
 
 static Timer_server_Control _Timer_server_Default;
@@ -225,11 +224,10 @@ rtems_status_code rtems_timer_initiate_server(
 )
 {
   rtems_status_code status;
-  Thread_Life_state thread_life_state;
 
-  thread_life_state = _Once_Lock();
+  _Objects_Allocator_lock();
   status = _Timer_server_Initiate( priority, stack_size, attribute_set );
-  _Once_Unlock( thread_life_state );
+  _Objects_Allocator_unlock();
 
   return status;
 }
