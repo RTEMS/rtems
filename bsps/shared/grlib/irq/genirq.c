@@ -188,8 +188,8 @@ static int genirq_set_active(
 				return 1;
 			}
 			e = isrentry;
-		} else {
-			enabled += isrentry->enabled;
+		} else if ( isrentry->enabled ) {
+			enabled = 1;
 		}
 		isrentry = isrentry->next;
 	}
