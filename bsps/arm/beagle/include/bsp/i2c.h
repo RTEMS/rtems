@@ -26,6 +26,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <dev/i2c/i2c.h>
+#include <ofw/ofw.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,10 +38,6 @@ extern "C" {
 #define BBB_I2C_0_BUS_PATH "/dev/i2c-0"
 #define BBB_I2C_1_BUS_PATH "/dev/i2c-1"
 #define BBB_I2C_2_BUS_PATH "/dev/i2c-2"
-
-#define BBB_I2C0_IRQ 70
-#define BBB_I2C1_IRQ 71
-#define BBB_I2C2_IRQ 30
 
 typedef enum {
   I2C0,
@@ -87,32 +84,7 @@ typedef struct i2c_regs {
   uint32_t BBB_I2C_SBLOCK;
 } bbb_i2c_regs;
 
-int am335x_i2c_bus_register(
-  const char         *bus_path,
-  uintptr_t           register_base,
-  uint32_t            input_clock, /* FIXME: Unused. Left for compatibility. */
-  rtems_vector_number irq
-);
-
-static inline int bbb_register_i2c_1( void )
-{
-  return am335x_i2c_bus_register(
-    BBB_I2C_1_BUS_PATH,
-    AM335X_I2C1_BASE,
-    I2C_BUS_CLOCK_DEFAULT,
-    BBB_I2C1_IRQ
-  );
-}
-
-static inline int bbb_register_i2c_2( void )
-{
-  return am335x_i2c_bus_register(
-    BBB_I2C_2_BUS_PATH,
-    AM335X_I2C2_BASE,
-    I2C_BUS_CLOCK_DEFAULT,
-    BBB_I2C2_IRQ
-  );
-}
+void beagle_i2c_init( phandle_t node );
 
 #ifdef __cplusplus
 }

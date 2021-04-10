@@ -49,6 +49,8 @@
 #include <libcpu/omap3.h>
 #include <libcpu/am335x.h>
 
+#include <ofw/ofw.h>
+
 #define BSP_FEATURE_IRQ_EXTENSION
 
 /* UART base clock frequency */
@@ -67,6 +69,8 @@
 #define BITS(Start, End) (((1 << (End+1)) - 1) & ~((1 << (Start)) - 1))
 
 #define udelay(u) rtems_task_wake_after(1 + ((u)/rtems_configuration_get_microseconds_per_tick()))
+
+int beagle_get_node_unit(phandle_t node);
 
 /* Write a uint32_t value to a memory address. */
 static inline void

@@ -25,6 +25,7 @@
 #include <bsp/bbb-gpio.h>
 #include <rtems/score/assert.h>
 #include <dev/i2c/i2c.h>
+#include <ofw/ofw.h>
 
 typedef struct bbb_i2c_bus {
   i2c_bus base;
@@ -34,12 +35,6 @@ typedef struct bbb_i2c_bus {
     volatile uint32_t *i2c_clkctrl;
     volatile uint32_t *clkstctrl;
   } clkregs;
-  struct {
-    volatile uint32_t *conf_sda;
-    uint32_t mmode_sda;
-    volatile uint32_t *conf_scl;
-    uint32_t mmode_scl;
-  } pinregs;
   rtems_id task_id;
   rtems_vector_number irq;
   i2c_msg *buffer;
@@ -56,19 +51,22 @@ typedef struct bbb_i2c_bus {
 #else
 #define debug_print(fmt, args...)
 #endif
+/*
+ * Here we assume the number of i2c nodes
+ * will be less than 100.
+ */
+#define PATH_LEN (strlen("/dev/i2c-xx") + 1)
 
 static int am335x_i2c_fill_registers(
   bbb_i2c_bus *bus,
-  uintptr_t register_base
+  uint32_t base
 )
 {
-  /* FIXME: The pin handling should be replaced by a proper pin handling during
-   * initialization. This one is heavily board specific. */
-#if ! IS_AM335X
-  printk ("The I2C driver currently only works on Beagle Bone. Please add your pin configs.");
-  return EINVAL;
-#endif
-  bus->regs = (volatile bbb_i2c_regs *) register_base;
+  bus->regs = (volatile bbb_i2c_regs *)base;
+
+  /*
+   * FIXME: Implement a clock driver to parse and setup clocks
+   */
   switch ((intptr_t) bus->regs) {
   case AM335X_I2C0_BASE:
     bus->clkregs.ctrl_clkctrl = &REG(AM335X_SOC_CM_WKUP_REGS +
@@ -77,10 +75,6 @@ static int am335x_i2c_fill_registers(
                                  AM335X_CM_WKUP_I2C0_CLKCTRL);
     bus->clkregs.clkstctrl = &REG(AM335X_SOC_CM_WKUP_REGS +
                                    AM335X_CM_WKUP_CLKSTCTRL);
-    bus->pinregs.conf_sda = &REG(AM335X_PADCONF_BASE + AM335X_CONF_I2C0_SDA);
-    bus->pinregs.mmode_sda = 0;
-    bus->pinregs.conf_scl = &REG(AM335X_PADCONF_BASE + AM335X_CONF_I2C0_SCL);
-    bus->pinregs.mmode_scl = 0;
     break;
   case AM335X_I2C1_BASE:
     bus->clkregs.ctrl_clkctrl = &REG(AM335X_SOC_CM_WKUP_REGS +
@@ -88,10 +82,6 @@ static int am335x_i2c_fill_registers(
     bus->clkregs.i2c_clkctrl = &REG(AM335X_CM_PER_ADDR +
                                  AM335X_CM_PER_I2C1_CLKCTRL);
     bus->clkregs.clkstctrl = NULL;
-    bus->pinregs.conf_sda = &REG(AM335X_PADCONF_BASE + AM335X_CONF_SPI0_D1);
-    bus->pinregs.mmode_sda = 2;
-    bus->pinregs.conf_scl = &REG(AM335X_PADCONF_BASE + AM335X_CONF_SPI0_CS0);
-    bus->pinregs.mmode_scl = 2;
     break;
   case AM335X_I2C2_BASE:
     bus->clkregs.ctrl_clkctrl = &REG(AM335X_SOC_CM_WKUP_REGS +
@@ -99,24 +89,12 @@ static int am335x_i2c_fill_registers(
     bus->clkregs.i2c_clkctrl = &REG(AM335X_CM_PER_ADDR +
                                  AM335X_CM_PER_I2C2_CLKCTRL);
     bus->clkregs.clkstctrl = NULL;
-    bus->pinregs.conf_sda = &REG(AM335X_PADCONF_BASE + AM335X_CONF_UART1_CTSN);
-    bus->pinregs.mmode_sda = 3;
-    bus->pinregs.conf_scl = &REG(AM335X_PADCONF_BASE + AM335X_CONF_UART1_RTSN);
-    bus->pinregs.mmode_scl = 3;
     break;
   default:
     return EINVAL;
   }
+
   return 0;
-}
-
-static void am335x_i2c_pinmux( bbb_i2c_bus *bus )
-{
-  *bus->pinregs.conf_sda =
-    ( BBB_RXACTIVE | BBB_SLEWCTRL | bus->pinregs.mmode_sda);
-
-  *bus->pinregs.conf_scl =
-    ( BBB_RXACTIVE | BBB_SLEWCTRL | bus->pinregs.mmode_scl);
 }
 
 static void am335x_i2c_module_clk_enable( bbb_i2c_bus *bus )
@@ -453,36 +431,34 @@ static void am335x_i2c_destroy( i2c_bus *base )
   i2c_bus_destroy_and_free( &bus->base );
 }
 
-int am335x_i2c_bus_register(
-  const char         *bus_path,
-  uintptr_t           register_base,
-  uint32_t            input_clock,
-  rtems_vector_number irq
+static int am335x_i2c_bus_register(
+  uint32_t reg_base,
+  rtems_vector_number irq,
+  const char *bus_path
 )
 {
-  bbb_i2c_bus      *bus;
-  rtems_status_code sc;
-  int               err;
-
-  (void) input_clock; /* FIXME: Unused. Left for compatibility. */
+  bbb_i2c_bus        *bus;
+  rtems_status_code   sc;
+  int                 err;
 
   bus = (bbb_i2c_bus *) i2c_bus_alloc_and_init( sizeof( *bus ) );
+  bus->irq = irq;
 
   if ( bus == NULL ) {
     return -1;
   }
 
-  bus->irq = irq;
-
-  err = am335x_i2c_fill_registers(bus, register_base);
+  err = am335x_i2c_fill_registers(bus, reg_base);
   if (err != 0) {
+    printf("i2c: invalid register base\n");
     ( *bus->base.destroy )( &bus->base );
     rtems_set_errno_and_return_minus_one( err );
   }
-  am335x_i2c_module_clk_enable(bus);
-  am335x_i2c_pinmux( bus );
+
+  am335x_i2c_module_clk_enable( bus );
   err = am335x_i2c_reset( bus );
   if (err != 0) {
+    printk("i2c: reset timed out\n");
     ( *bus->base.destroy )( &bus->base );
     rtems_set_errno_and_return_minus_one( err );
   }
@@ -505,4 +481,50 @@ int am335x_i2c_bus_register(
   bus->base.destroy = am335x_i2c_destroy;
 
   return i2c_bus_register( &bus->base, bus_path );
+}
+
+void beagle_i2c_init(phandle_t node)
+{
+  int                   err;
+  int                   unit;
+  char                  bus_path[PATH_LEN];
+  rtems_vector_number   irq;
+  rtems_ofw_memory_area reg;
+
+  if (!rtems_ofw_is_node_compatible(node, "ti,omap4-i2c"))
+    /* We cannot handle this device */
+    return ;
+
+  unit = beagle_get_node_unit(node);
+  if (unit < 0 || unit >= 100) {
+    printk("i2c: cannot register device, node unit number invalid.");
+    printk(" Valid range is 0 <= unit < 100\n");
+    return ;
+  }
+
+  err = rtems_ofw_get_prop(node, "rtems,path", (void *)bus_path, PATH_LEN);
+  if (err < 0) {
+    /* No path was provided in the device tree therefore use the default one */
+    snprintf(bus_path, PATH_LEN, "/dev/i2c-%d", unit);
+  } else if (err >= PATH_LEN) {
+    /* Null terminate the string */
+    bus_path[PATH_LEN - 1] = 0;
+    printk("i2c: bus path too long, trucated %s\n", bus_path);
+  }
+
+  err = rtems_ofw_get_interrupts(node, &irq, sizeof(irq));
+  if (err < 1) {
+    printk("i2c: cannot register device, irq missing in device tree\n");
+    return ;
+  }
+
+  err = rtems_ofw_get_reg(node, &reg, sizeof(reg));
+  if (err <= 0) {
+    printk("i2c: cannot register device, regs field missing\n");
+    return ;
+  }
+
+  err = am335x_i2c_bus_register(reg.start, irq, bus_path);
+  if (err != 0)
+    printk("i2c: Could not register device (%d)\n", err);
 }
