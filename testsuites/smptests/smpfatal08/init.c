@@ -38,6 +38,8 @@ void bsp_start_on_secondary_processor(struct Per_CPU_Control *cpu_self)
 {
   /* Provided to avoid multiple definitions of the CPU SMP support functions */
   (void) cpu_self;
+  /* Block secondary cpus if they are running to avoid clobbering output */
+  (void) _CPU_Thread_Idle_body( 0 );
 }
 
 #if QORIQ_THREAD_COUNT > 1
