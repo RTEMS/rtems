@@ -31,11 +31,102 @@
 	chosen: chosen {};
 
 	aliases {
+		acmp = &acmp;
+		adc1 = &adc1;
+		adc2 = &adc2;
+		adc-etc = &adc_etc;
+		aips1-config = &aips1_config;
+		aips2-config = &aips2_config;
+		aips3-config = &aips3_config;
+		aips4-config = &aips4_config;
+		analog = &analog;
+		aoi1 = &aoi1;
+		aoi2 = &aoi2;
+		bee = &bee;
+		ccm = &ccm;
+		csi = &csi;
+		csu = &csu;
+		dcdc = &dcdc;
+		dcp = &dcp;
+		dma-ch-mux = &dma_ch_mux;
+		edma = &edma;
+		enc1 = &enc1;
+		enc2 = &enc2;
+		enc3 = &enc3;
+		enc4 = &enc4;
+		ewm = &ewm;
+		fec1 = &fec1;
+		flexcan1 = &flexcan1;
+		flexcan2 = &flexcan2;
+		flexio1 = &flexio1;
+		flexio2 = &flexio2;
+		flexpwm1 = &flexpwm1;
+		flexpwm2 = &flexpwm2;
+		flexpwm3 = &flexpwm3;
+		flexpwm4 = &flexpwm4;
+		flexram = &flexram;
+		flexspi = &flexspi;
+		gpc = &gpc;
+		/*
+		 * Linux convention starts GPIO at 0. Therefore the driver
+		 * shared with i.MX6 expects 0 too.
+		 */
 		gpio0 = &gpio1;
 		gpio1 = &gpio2;
 		gpio2 = &gpio3;
 		gpio3 = &gpio4;
 		gpio4 = &gpio5;
+		gpt1 = &gpt1;
+		gpt2 = &gpt2;
+		iomuxc = &iomuxc;
+		iomuxc-gpr = &iomuxc_gpr;
+		iomuxc-snvs = &iomuxc_snvs;
+		iomuxc-snvs-gpr = &iomuxc_snvs_gpr;
+		kpp = &kpp;
+		lcdif = &lcdif;
+		lpi2c1 = &lpi2c1;
+		lpi2c2 = &lpi2c2;
+		lpi2c3 = &lpi2c3;
+		lpi2c4 = &lpi2c4;
+		lpspi1 = &lpspi1;
+		lpspi2 = &lpspi2;
+		lpspi3 = &lpspi3;
+		lpspi4 = &lpspi4;
+		lpuart1 = &lpuart1;
+		lpuart2 = &lpuart2;
+		lpuart3 = &lpuart3;
+		lpuart4 = &lpuart4;
+		lpuart5 = &lpuart5;
+		lpuart6 = &lpuart6;
+		lpuart7 = &lpuart7;
+		lpuart8 = &lpuart8;
+		ocotp = &ocotp;
+		pit = &pit;
+		pxp = &pxp;
+		qtimer1 = &qtimer1;
+		qtimer2 = &qtimer2;
+		qtimer3 = &qtimer3;
+		qtimer4 = &qtimer4;
+		romcp = &romcp;
+		sai1 = &sai1;
+		sai2 = &sai2;
+		sai3 = &sai3;
+		semc = &semc;
+		sjc = &sjc;
+		snvs-hp = &snvs_hp;
+		spdif = &spdif;
+		src = &src;
+		trng = &trng;
+		tsc-dig = &tsc_dig;
+		usb = &usb;
+		usdhc1 = &usdhc1;
+		usdhc2 = &usdhc2;
+		wdog1 = &wdog1;
+		wdog2 = &wdog2;
+		wdog3 = &wdog3;
+		xbar1 = &xbar1;
+		xbar2 = &xbar2;
+		xbar3 = &xbar3;
 	};
 
 	nvic: interrupt-controller@e000e100  {
@@ -65,21 +156,53 @@
 			reg = <0x40000000 0x00100000>;
 			ranges;
 
-			edma: dma-controller@400e8000 {
-				/*
-				 * FIXME: The driver currently doesn't use
-				 * these. So only keep it here so that others
-				 * can reference the channel numbers.
-				 */
-				compatible = "fsl,imxrt-edma";
-				/*
-				 * Use DMA cells just like Linux:
-				 * First cell is the DMAMUX which is allways 0
-				 * in our case. Second one is the request
-				 * source.
-				 */
-				#dma-cells = <2>;
-				reg = <0x400e8000 0x4000>;
+			aips1_config: aips_config@4007c000 {
+				reg = <0x4007c000 0x4000>;
+			};
+
+			dcdc: dcdc@40080000 {
+				reg = <0x40080000 0x4000>;
+				interrupts = <69>;
+			};
+
+			pit: pit@40084000 {
+				reg = <0x40084000 0x4000>;
+				interrupts = <122>;
+			};
+
+			acmp: acmp@40094000 {
+				reg = <0x40094000 0x4000>;
+				interrupts = <123>, <124>, <125>, <126>;
+			};
+
+			iomuxc_snvs_gpr: iomuxc_snvs_gpr@400a4000 {
+				reg = <0x400a4000 0x4000>;
+			};
+
+			iomuxc_snvs: iomuxc_snvs@400a8000 {
+				reg = <0x400a8000 0x4000>;
+			};
+
+			iomuxc_gpr: iomuxc_gpr@400ac000 {
+				reg = <0x400ac000 0x4000>;
+			};
+
+			flexram: flexram@400b0000 {
+				reg = <0x400b0000 0x4000>;
+			};
+
+			ewm: ewm@400b4000 {
+				reg = <0x400b4000 0x4000>;
+				interrupts = <94>;
+			};
+
+			wdog1: wdog@400b8000 {
+				reg = <0x400b8000 0x4000>;
+				interrupts = <92>;
+			};
+
+			wdog3: wdog@400bc000 {
+				reg = <0x400bc000 0x4000>;
 			};
 
 			gpio5: gpio@400c0000 {
@@ -92,6 +215,86 @@
 				interrupt-controller;
 				#interrupt-cells = <2>;
 			};
+
+			adc1: adc@400c4000 {
+				reg = <0x400c4000 0x4000>;
+				interrupts = <67>;
+			};
+
+			adc2: adc@400c8000 {
+				reg = <0x400c8000 0x4000>;
+				interrupts = <68>;
+			};
+
+			trng: trng@400cc000 {
+				reg = <0x400cc000 0x4000>;
+				interrupts = <53>;
+			};
+
+			wdog2: wdog@400d0000 {
+				reg = <0x400d0000 0x4000>;
+				interrupts = <45>;
+			};
+
+			snvs_hp: snvs_hp@400d4000 {
+				reg = <0x400d4000 0x4000>;
+				interrupts = <46>, <47>, <48>;
+			};
+
+			analog: analog@400d8000 {
+				reg = <0x400d8000 0x4000>;
+			};
+
+			csu: csu@400dc000 {
+				reg = <0x400dc000 0x4000>;
+				interrupts = <49>;
+			};
+
+			tsc_dig: tsc_dig@400e0000 {
+				reg = <0x400e0000 0x4000>;
+				interrupts = <40>;
+			};
+
+			sjc: sjc@400e4000 {
+				reg = <0x400e4000 0x4000>;
+			};
+
+			edma: dma-controller@400e8000 {
+				compatible = "fsl,imxrt-edma";
+				/*
+				 * Use DMA cells just like Linux:
+				 * First cell is the DMAMUX which is allways 0
+				 * in our case. Second one is the request
+				 * source.
+				 */
+				#dma-cells = <2>;
+				reg = <0x400e8000 0x4000>;
+				interrupts = <0>, <1>, <2>, <3>,
+				             <4>, <5>, <6>, <7>,
+					     <8>, <9>, <10>, <11>,
+					     <12>, <13>, <14>, <15>,
+					     <16>;
+			};
+
+			dma_ch_mux: dma_ch_mux@400ec000 {
+				reg = <0x400ec000 0x4000>;
+			};
+
+			gpc: gpc@400f4000 {
+				reg = <0x400f4000 0x4000>;
+				interrupts = <97>;
+			};
+
+			src: src@400f8000 {
+				reg = <0x400f8000 0x4000>;
+				interrupts = <98>;
+			};
+
+			ccm: ccm@400fc000 {
+				reg = <0x400fc000 0x4000>;
+				interrupts = <95>, <96>;
+			};
+
 		};
 
 		aips-bus@40100000 {
@@ -101,73 +304,12 @@
 			reg = <0x40100000 0x00100000>;
 			ranges;
 
-			qtimer4: timer@401e8000 {
-				compatible = "nxp,imxrt-qtimer";
-				reg = <0x401e8000 0x4000>;
-				interrupts = <136>;
+			aips2_config: aips_config@4017c000 {
+				reg = <0x4017c000 0x4000>;
 			};
 
-			qtimer3: timer@401e4000 {
-				compatible = "nxp,imxrt-qtimer";
-				reg = <0x401e4000 0x4000>;
-				interrupts = <135>;
-			};
-
-			qtimer2: timer@401e0000 {
-				compatible = "nxp,imxrt-qtimer";
-				reg = <0x401e0000 0x4000>;
-				interrupts = <134>;
-			};
-
-			qtimer1: timer@401dc000 {
-				compatible = "nxp,imxrt-qtimer";
-				reg = <0x401dc000 0x4000>;
-				interrupts = <133>;
-			};
-
-			gpio4: gpio@401c4000 {
-				compatible = "fsl,imxrt-gpio",
-				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
-				reg = <0x401c4000 0x4000>;
-				interrupts = <86>, <87>;
-				gpio-controller;
-				#gpio-cells = <2>;
-				interrupt-controller;
-				#interrupt-cells = <2>;
-			};
-
-			gpio3: gpio@401c0000 {
-				compatible = "fsl,imxrt-gpio",
-				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
-				reg = <0x401c0000 0x4000>;
-				interrupts = <84>, <85>;
-				gpio-controller;
-				#gpio-cells = <2>;
-				interrupt-controller;
-				#interrupt-cells = <2>;
-			};
-
-			gpio2: gpio@401bc000 {
-				compatible = "fsl,imxrt-gpio",
-				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
-				reg = <0x401bc000 0x4000>;
-				interrupts = <82>, <83>;
-				gpio-controller;
-				#gpio-cells = <2>;
-				interrupt-controller;
-				#interrupt-cells = <2>;
-			};
-
-			gpio1: gpio@401b8000 {
-				compatible = "fsl,imxrt-gpio",
-				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
-				reg = <0x401b8000 0x4000>;
-				interrupts = <80>, <81>, <72>, <73>, <74>,
-				    <75>, <76>, <77>, <78>, <79>;
-				gpio-controller;
-				#gpio-cells = <2>;
-				interrupt-controller;
-				#interrupt-cells = <2>;
+			romcp: romcp@40180000 {
+				reg = <0x40180000 0x4000>;
 			};
 
 			lpuart1: uart@40184000 {
@@ -250,9 +392,117 @@
 				dmas = <&edma 0 72>, <&edma 0 73>;
 			};
 
+			flexio1: can@401ac000 {
+				reg = <0x401ac000 0x4000>;
+				interrupts = <90>;
+			};
+
+			flexio2: can@401b0000 {
+				reg = <0x401b0000 0x4000>;
+				interrupts = <91>;
+			};
+
+			gpio1: gpio@401b8000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x401b8000 0x4000>;
+				interrupts = <80>, <81>, <72>, <73>, <74>,
+				    <75>, <76>, <77>, <78>, <79>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio2: gpio@401bc000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x401bc000 0x4000>;
+				interrupts = <82>, <83>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio3: gpio@401c0000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x401c0000 0x4000>;
+				interrupts = <84>, <85>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			gpio4: gpio@401c4000 {
+				compatible = "fsl,imxrt-gpio",
+				    "fsl,imx6ul-gpio", "fsl,imx35-gpio";
+				reg = <0x401c4000 0x4000>;
+				interrupts = <86>, <87>;
+				gpio-controller;
+				#gpio-cells = <2>;
+				interrupt-controller;
+				#interrupt-cells = <2>;
+			};
+
+			flexcan1: can@401d0000 {
+				reg = <0x401d0000 0x4000>;
+				interrupts = <36>;
+			};
+
+			flexcan2: can@401d4000 {
+				reg = <0x401d4000 0x4000>;
+				interrupts = <37>;
+			};
+
+			qtimer1: timer@401dc000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401dc000 0x4000>;
+				interrupts = <133>;
+			};
+
+			qtimer2: timer@401e0000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401e0000 0x4000>;
+				interrupts = <134>;
+			};
+
+			qtimer3: timer@401e4000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401e4000 0x4000>;
+				interrupts = <135>;
+			};
+
+			qtimer4: timer@401e8000 {
+				compatible = "nxp,imxrt-qtimer";
+				reg = <0x401e8000 0x4000>;
+				interrupts = <136>;
+			};
+
+			gpt1: timer@401ec000 {
+				reg = <0x401ec000 0x4000>;
+				interrupts = <100>;
+			};
+
+			gpt2: timer@401f0000 {
+				reg = <0x401f0000 0x4000>;
+				interrupts = <101>;
+			};
+
+			ocotp: ocotp@401f4000 {
+				reg = <0x401f4000 0x4000>;
+			};
+
 			iomuxc: pinctrl@401f8000 {
 				compatible = "nxp,imxrt1050-iomuxc";
 				reg = <0x401f8000 0x4000>;
+			};
+
+			kpp: kpp@401fc000 {
+				reg = <0x401fc000 0x4000>;
+				interrupts = <39>;
 			};
 		};
 
@@ -262,6 +512,40 @@
 			#size-cells = <1>;
 			reg = <0x40200000 0x00100000>;
 			ranges;
+
+			aips3_config: aips_config@4027c000 {
+				reg = <0x4027c000 0x4000>;
+			};
+
+			flexspi: spi@402a8000 {
+				reg = <0x402a8000 0x4000>;
+				interrupts = <108>;
+			};
+
+			pxp: pxp@402b4000 {
+				reg = <0x402b4000 0x4000>;
+				interrupts = <44>;
+			};
+
+			lcdif: lcdif@402b8000 {
+				reg = <0x402b8000 0x4000>;
+				interrupts = <42>;
+			};
+
+			csi: csi@402bc000 {
+				reg = <0x402bc000 0x4000>;
+				interrupts = <43>;
+			};
+
+			usdhc1: sdhci@402c0000 {
+				reg = <0x402c0000 0x4000>;
+				interrupts = <110>;
+			};
+
+			usdhc2: sdhci@402c4000 {
+				reg = <0x402c4000 0x4000>;
+				interrupts = <111>;
+			};
 
 			fec1: ethernet@402d8000 {
 				compatible = "fsl,imxrt-fec", "fsl,imx6ul-fec";
@@ -273,6 +557,21 @@
 				phy-mode = "rmii";
 				status = "disabled";
 			};
+
+			usb: usb@402e0000 {
+				reg = <0x402e0000 0x4000>;
+				interrupts = <65>, <66>, <112>, <113>;
+			};
+
+			semc: semc@402f0000 {
+				reg = <0x402f0000 0x4000>;
+				interrupts = <109>;
+			};
+
+			dcp: dcp@402fc000 {
+				reg = <0x402fc000 0x4000>;
+				interrupts = <50>, <51>, <52>;
+			};
 		};
 
 		aips-bus@40300000 {
@@ -281,6 +580,30 @@
 			#size-cells = <1>;
 			reg = <0x40300000 0x00100000>;
 			ranges;
+
+			aips4_config: aips_config@4037c000 {
+				reg = <0x4037c000 0x4000>;
+			};
+
+			spdif: spdif@40380000 {
+				reg = <0x40380000 0x4000>;
+				interrupts = <60>;
+			};
+
+			sai1: sai@40384000 {
+				reg = <0x40384000 0x4000>;
+				interrupts = <56>;
+			};
+
+			sai2: sai@40388000 {
+				reg = <0x40388000 0x4000>;
+				interrupts = <57>;
+			};
+
+			sai3: sai@4038c000 {
+				reg = <0x4038c000 0x4000>;
+				interrupts = <58>, <59>;
+			};
 
 			lpspi1: spi@40394000 {
 				#address-cells = <1>;
@@ -328,6 +651,77 @@
 				rtems,path = "/dev/spi4";
 				dma-names = "tx", "rx";
 				dmas = <&edma 0 80>, <&edma 0 79>;
+			};
+
+			adc_etc: adc@403b0000 {
+				reg = <0x403b0000 0x4000>;
+				interrupts = <118>, <119>, <120>, <121>;
+			};
+
+			aoi1: aoi@403b4000 {
+				reg = <0x403b4000 0x4000>;
+			};
+
+			aoi2: aoi@403b8000 {
+				reg = <0x403b8000 0x4000>;
+			};
+
+			xbar1: xbar@403bc000 {
+				reg = <0x403bc000 0x4000>;
+				interrupts = <116>, <117>;
+			};
+
+			xbar2: xbar@403c0000 {
+				reg = <0x403c0000 0x4000>;
+			};
+
+			xbar3: xbar@403c4000 {
+				reg = <0x403c4000 0x4000>;
+			};
+
+			enc1: enc@403c8000 {
+				reg = <0x403c8000 0x4000>;
+				interrupts = <129>;
+			};
+
+			enc2: enc@403cc000 {
+				reg = <0x403cc000 0x4000>;
+				interrupts = <130>;
+			};
+
+			enc3: enc@403d0000 {
+				reg = <0x403d0000 0x4000>;
+				interrupts = <131>;
+			};
+
+			enc4: enc@403d4000 {
+				reg = <0x403d4000 0x4000>;
+				interrupts = <132>;
+			};
+
+			flexpwm1: pwm@403dc000 {
+				reg = <0x403dc000 0x4000>;
+				interrupts = <102>, <103>, <104>, <105>, <106>;
+			};
+
+			flexpwm2: pwm@403e0000 {
+				reg = <0x403e0000 0x4000>;
+				interrupts = <137>, <138>, <139>, <140>, <141>;
+			};
+
+			flexpwm3: pwm@403e4000 {
+				reg = <0x403e4000 0x4000>;
+				interrupts = <142>, <143>, <144>, <145>, <146>;
+			};
+
+			flexpwm4: pwm@403e8000 {
+				reg = <0x403e8000 0x4000>;
+				interrupts = <147>, <148>, <149>, <150>, <151>;
+			};
+
+			bee: bee@403ec000 {
+				reg = <0x403ec000 0x4000>;
+				interrupts = <55>;
 			};
 
 			lpi2c1: i2c@403f0000 {
