@@ -56,7 +56,7 @@
 #include <string.h>
 #include <rtems/score/smpbarrier.h>
 
-#include "tc-support.h"
+#include "tx-support.h"
 
 #include <rtems/test.h>
 

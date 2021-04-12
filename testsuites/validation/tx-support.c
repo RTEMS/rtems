@@ -41,7 +41,7 @@
 #include "config.h"
 #endif
 
-#include "tc-support.h"
+#include "tx-support.h"
 
 #include <rtems/test.h>
 

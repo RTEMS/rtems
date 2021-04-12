@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _TC_SUPPORT_H
-#define _TC_SUPPORT_H
+#ifndef _TX_SUPPORT_H
+#define _TX_SUPPORT_H
 
 #include <rtems.h>
 
@@ -100,4 +100,4 @@ void RestoreRunnerPriority( void );
 }
 #endif
 
-#endif /* _TC_SUPPORT_H */
+#endif /* _TX_SUPPORT_H */
