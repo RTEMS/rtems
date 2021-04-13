@@ -58,10 +58,6 @@
 #include <rtems/thread.h>
 #include <rtems/userenv.h>
 
-#ifdef RTEMS_NETWORKING
-#include <rtems/rtems_bsdnet.h>
-#endif
-
 #define TELNETD_EVENT_SUCCESS RTEMS_EVENT_0
 
 #define TELNETD_EVENT_ERROR RTEMS_EVENT_1
@@ -400,12 +396,7 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
   ctx->server_socket = -1;
   LIST_INIT(&ctx->free_sessions);
 
-  /* Check priority */
-#ifdef RTEMS_NETWORKING
-  if (ctx->config.priority == 0) {
-    ctx->config.priority = rtems_bsdnet_config.network_task_priority;
-  }
-#endif
+  /* Set priority */
   if (ctx->config.priority == 0) {
     ctx->config.priority = 100;
   }
