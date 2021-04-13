@@ -259,6 +259,8 @@ links:
 - role: build-dependency
   uid: tar03
 - role: build-dependency
+  uid: telnetd01
+- role: build-dependency
   uid: termios
 - role: build-dependency
   uid: termios01

@@ -1,0 +1,11 @@
+*** BEGIN OF TEST TELNETD 1 ***
+*** TEST VERSION: 5.0.0.dc32b6aa0807fb70f9b26bc0bc6e164ddb49bd3a
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_NETWORKING
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 9670d7541e0621915e521fe76e7bb33de8cee661, Newlib d13c84eb07e35984bf7a974cd786a6cdac29e6b9)
+syslog: telnetd: configuration with invalid command
+syslog: telnetd: cannot create session task
+syslog: telnetd: started successfully on port 23
+syslog: telnetd: cannot bind server socket
+
+*** END OF TEST TELNETD 1 ***
