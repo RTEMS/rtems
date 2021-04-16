@@ -468,7 +468,14 @@ rtems_status_code rtems_semaphore_delete( rtems_id id );
  * @retval ::RTEMS_INVALID_ID There was no semaphore associated with the
  *   identifier specified by ``id``.
  *
+ * @retval ::RTEMS_NOT_DEFINED The semaphore uses a priority ceiling and there
+ *   was no priority ceiling defined for the home scheduler of the calling
+ *   task.
+ *
  * @retval ::RTEMS_UNSATISFIED The semaphore could not be obtained immediately.
+ *
+ * @retval ::RTEMS_INVALID_PRIORITY The semaphore uses a priority ceiling and
+ *   the calling task had a current priority less than the priority ceiling.
  *
  * @retval ::RTEMS_INCORRECT_STATE Acquiring of the local, binary semaphore by
  *   the calling task would have cased a deadlock.
