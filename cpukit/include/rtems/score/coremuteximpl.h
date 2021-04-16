@@ -475,19 +475,19 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
 
   _CORE_mutex_Acquire_critical( &the_mutex->Recursive.Mutex, queue_context );
 
+#if defined(RTEMS_SMP)
+  if (
+    _Thread_Scheduler_get_home( executing )
+      != _CORE_ceiling_mutex_Get_scheduler( the_mutex )
+  ) {
+    _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
+    return STATUS_NOT_DEFINED;
+  }
+#endif
+
   owner = _CORE_mutex_Get_owner( &the_mutex->Recursive.Mutex );
 
   if ( owner == NULL ) {
-#if defined(RTEMS_SMP)
-    if (
-      _Thread_Scheduler_get_home( executing )
-        != _CORE_ceiling_mutex_Get_scheduler( the_mutex )
-    ) {
-      _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
-      return STATUS_NOT_DEFINED;
-    }
-#endif
-
     _Thread_queue_Context_clear_priority_updates( queue_context );
     return _CORE_ceiling_mutex_Set_owner(
       the_mutex,
