@@ -553,6 +553,14 @@ _start:
 #endif
 
 	ldr	sp, =_ISR_Stack_area_end
+
+	/*
+	 * Set the Main Stack Pointer (MSP) to the ISR stack area end just in
+	 * case we run using the Process Stack Pointer (PSP).
+	 */
+	mov	r0, sp
+	msr	msp, r0
+
 	ldr	lr, =bsp_start_hook_0_done + 1
 	b	bsp_start_hook_0
 
