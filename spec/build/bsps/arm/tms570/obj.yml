@@ -29,7 +29,7 @@ install:
   - bsps/arm/tms570/include/bsp/tms570_selftest_parity.h
   - bsps/arm/tms570/include/bsp/tms570lc4357-pins.h
   - bsps/arm/tms570/include/bsp/tms570ls3137zwt-pins.h
-- destination: ${BSP_INCLUDEDIR}/bsp/ti/herc
+- destination: ${BSP_INCLUDEDIR}/bsp/ti_herc
   source:
   - bsps/arm/tms570/include/bsp/ti_herc/reg_adc.h
   - bsps/arm/tms570/include/bsp/ti_herc/reg_ccmsr.h
