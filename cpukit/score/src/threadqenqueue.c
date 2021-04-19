@@ -746,38 +746,6 @@ void _Thread_queue_Surrender_sticky(
 }
 #endif
 
-Thread_Control *_Thread_queue_Do_dequeue(
-  Thread_queue_Control          *the_thread_queue,
-  const Thread_queue_Operations *operations
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Thread_queue_MP_callout        mp_callout
-#endif
-)
-{
-  Thread_queue_Context  queue_context;
-  Thread_Control       *the_thread;
-
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_set_MP_callout( &queue_context, mp_callout );
-  _Thread_queue_Acquire( the_thread_queue, &queue_context );
-
-  the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
-
-  if ( the_thread != NULL ) {
-    _Thread_queue_Extract_critical(
-      &the_thread_queue->Queue,
-      operations,
-      the_thread,
-      &queue_context
-    );
-  } else {
-    _Thread_queue_Release( the_thread_queue, &queue_context );
-  }
-
-  return the_thread;
-}
-
 #if defined(RTEMS_MULTIPROCESSING)
 void _Thread_queue_Unblock_proxy(
   Thread_queue_Queue *queue,

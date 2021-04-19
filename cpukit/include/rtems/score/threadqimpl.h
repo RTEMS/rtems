@@ -794,57 +794,6 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
 #endif
 
 /**
- * @brief Dequeues the first thread waiting on the thread queue and returns it.
- *
- * @param the_thread_queue The thread queue for the operation.
- * @param operations The thread queue operations.
- *
- * @return The first locked thread.
- */
-Thread_Control *_Thread_queue_Do_dequeue(
-  Thread_queue_Control          *the_thread_queue,
-  const Thread_queue_Operations *operations
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Thread_queue_MP_callout        mp_callout
-#endif
-);
-
-/**
- *  @brief Gets a pointer to a thread waiting on the_thread_queue.
- *
- *  This function returns a pointer to a thread waiting on
- *  the_thread_queue.  The selection of this thread is based on
- *  the discipline of the_thread_queue.  If no threads are waiting
- *  on the_thread_queue, then NULL is returned.
- *
- *  - INTERRUPT LATENCY:
- *    + single case
- */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Dequeue( \
-    the_thread_queue, \
-    operations, \
-    mp_callout \
-  ) \
-    _Thread_queue_Do_dequeue( \
-      the_thread_queue, \
-      operations, \
-      mp_callout \
-    )
-#else
-  #define _Thread_queue_Dequeue( \
-    the_thread_queue, \
-    operations, \
-    mp_callout \
-  ) \
-    _Thread_queue_Do_dequeue( \
-      the_thread_queue, \
-      operations \
-    )
-#endif
-
-/**
  * @brief Blocks the thread and places it on the thread queue.
  *
  * This enqueues the thread on the thread queue, blocks the thread, and
