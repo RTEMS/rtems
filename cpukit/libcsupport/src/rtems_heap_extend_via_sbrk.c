@@ -29,7 +29,12 @@
 
 #include "malloc_p.h"
 
-ptrdiff_t RTEMS_Malloc_Sbrk_amount;
+static ptrdiff_t RTEMS_Malloc_Sbrk_amount;
+
+void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount )
+{
+  RTEMS_Malloc_Sbrk_amount = sbrk_amount;
+}
 
 void *rtems_heap_extend_via_sbrk(
   Heap_Control *heap,

@@ -48,12 +48,7 @@ Heap_Control *RTEMS_Malloc_Initialize(
   Heap_Initialization_or_extend_handler  extend
 );
 
-extern ptrdiff_t RTEMS_Malloc_Sbrk_amount;
-
-static inline void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount )
-{
-  RTEMS_Malloc_Sbrk_amount = sbrk_amount;
-}
+void rtems_heap_set_sbrk_amount( ptrdiff_t sbrk_amount );
 
 typedef void *(*rtems_heap_extend_handler)(
   Heap_Control *heap,
