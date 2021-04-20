@@ -25,7 +25,6 @@
 #include <rtems/bspIo.h>
 #include <rtems/malloc.h>
 #include <rtems/score/memory.h>
-#include <rtems/score/wkspace.h>
 
 #include <bspopts.h>
 

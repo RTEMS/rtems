@@ -24,7 +24,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
 
 #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
 

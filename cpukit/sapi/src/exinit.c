@@ -39,7 +39,6 @@
 #include <rtems/score/timecounter.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/score/wkspace.h>
 
 RTEMS_SECTION(".rtemsroset.copyright") const char _Copyright_Notice[] =
   "Copyright (C) 1989, 2021 RTEMS Project and contributors";

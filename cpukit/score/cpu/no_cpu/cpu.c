@@ -18,7 +18,6 @@
 #endif
 
 #include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
 
 void _CPU_Initialize(void)
 {

@@ -25,7 +25,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/wkspace.h>
 
 Status_Control _CORE_message_queue_Submit(
   CORE_message_queue_Control       *the_message_queue,

@@ -21,7 +21,6 @@
 #endif
 
 #include <rtems/score/schedulercbs.h>
-#include <rtems/score/wkspace.h>
 
 int _Scheduler_CBS_Cleanup (void)
 {

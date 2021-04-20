@@ -36,7 +36,6 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
-#include <rtems/score/wkspace.h>
 
 #define THREAD_JOIN_TQ_OPERATIONS &_Thread_queue_Operations_priority
 

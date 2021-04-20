@@ -51,7 +51,6 @@
 #endif
 
 #include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
 
 #if CPU_HARDWARE_FP
 Context_Control_fp _CPU_Null_fp_context;

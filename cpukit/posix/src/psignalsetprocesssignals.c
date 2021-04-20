@@ -24,7 +24,6 @@
 
 #include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/posix/psignalimpl.h>

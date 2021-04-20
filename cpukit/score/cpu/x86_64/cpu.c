@@ -39,7 +39,6 @@
 
 #include <rtems/score/idt.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/score/tls.h>
 
 void _CPU_Exception_frame_print(const CPU_Exception_frame *ctx)

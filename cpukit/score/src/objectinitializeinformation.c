@@ -25,7 +25,6 @@
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/sysstate.h>
-#include <rtems/score/wkspace.h>
 
 void _Objects_Initialize_information(
   Objects_Information *information

@@ -12,7 +12,6 @@
  */
 
 #include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/score/cpu.h>
 
 /* bsp_start_vector_table_begin is the start address of the vector table

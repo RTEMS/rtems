@@ -21,7 +21,6 @@
 #endif
 
 #include <rtems/score/schedulercbs.h>
-#include <rtems/score/wkspace.h>
 
 int _Scheduler_CBS_Destroy_server (
   Scheduler_CBS_Server_id server_id

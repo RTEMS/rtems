@@ -18,7 +18,6 @@
 #endif
 
 #include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
 
 #include <string.h> /* for memset */
 
