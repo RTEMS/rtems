@@ -1190,6 +1190,14 @@ static void test_rtems_calloc(void)
   rtems_test_assert(p == NULL);
   rtems_test_assert(errno == 0);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than=N"
+  errno = 0;
+  p = rtems_calloc(SIZE_MAX, SIZE_MAX);
+  rtems_test_assert(p == NULL);
+  rtems_test_assert(errno == 0);
+#pragma GCC diagnostic pop
+
   i = rtems_calloc(1, sizeof(*i));
   rtems_test_assert(i != NULL);
   rtems_test_assert(*i == 0);
@@ -1313,22 +1321,17 @@ rtems_task Init(
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Walloc-size-larger-than=N"
   p1 = calloc( 1, SIZE_MAX );
+  rtems_test_assert( p1 == NULL );
+
+  p1 = calloc( SIZE_MAX, SIZE_MAX );
+  rtems_test_assert( p1 == NULL );
 #pragma GCC diagnostic pop
-  if (p1) {
-    printf("ERROR on attempt to calloc SIZE_MAX block expected failure.");
-    free( p1 );
-  }
 
   /*
    * Verify error case where malloc of size 0.
    */
   p1 = malloc( 0 );
-  if (p1) {
-    printf("ERROR on attempt to malloc size 0 block expected failure.");
-    free( p1 );
-  }
-
-
+  rtems_test_assert( p1 == NULL );
 
   test_heap_initialize();
   test_heap_block_allocate();

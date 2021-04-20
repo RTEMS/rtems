@@ -20,7 +20,10 @@
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_CALLOC)
 #include <stdlib.h>
+
+#include <errno.h>
 #include <string.h>
+
 #include <rtems/score/basedefs.h>
 
 void *calloc(
@@ -31,7 +34,15 @@ void *calloc(
   void   *cptr;
   size_t  length;
 
-  length = nelem * elsize;
+  if ( nelem == 0 ) {
+    length = 0;
+  } else if ( elsize > SIZE_MAX / nelem ) {
+    errno = ENOMEM;
+    return NULL;
+  } else {
+    length = nelem * elsize;
+  }
+
   cptr = malloc( length );
   RTEMS_OBFUSCATE_VARIABLE( cptr );
   if ( RTEMS_PREDICT_FALSE( cptr == NULL ) ) {
