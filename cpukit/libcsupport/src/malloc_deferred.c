@@ -112,19 +112,4 @@ void *rtems_malloc( size_t size )
 
   return rtems_heap_allocate_aligned_with_boundary( size, 0, 0 );
 }
-
-void *rtems_calloc( size_t nelem, size_t elsize )
-{
-  size_t  length;
-  void   *p;
-
-  length = nelem * elsize;
-  p = rtems_malloc( length );
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  if ( RTEMS_PREDICT_FALSE( p == NULL ) ) {
-    return p;
-  }
-
-  return memset( p, 0, length );
-}
 #endif

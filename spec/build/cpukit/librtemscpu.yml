@@ -708,6 +708,7 @@ source:
 - cpukit/libcsupport/src/realpath.c
 - cpukit/libcsupport/src/resource_snapshot.c
 - cpukit/libcsupport/src/rmdir.c
+- cpukit/libcsupport/src/rtemscalloc.c
 - cpukit/libcsupport/src/rtems_heap_extend.c
 - cpukit/libcsupport/src/rtems_heap_extend_via_sbrk.c
 - cpukit/libcsupport/src/rtems_heap_greedy.c

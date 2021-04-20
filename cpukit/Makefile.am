@@ -213,6 +213,7 @@ librtemscpu_a_SOURCES += libcsupport/src/realpath.c
 librtemscpu_a_SOURCES += libcsupport/src/_rename_r.c
 librtemscpu_a_SOURCES += libcsupport/src/resource_snapshot.c
 librtemscpu_a_SOURCES += libcsupport/src/rmdir.c
+librtemscpu_a_SOURCES += libcsupport/src/rtemscalloc.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_extend.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_extend_via_sbrk.c
 librtemscpu_a_SOURCES += libcsupport/src/rtems_heap_greedy.c
