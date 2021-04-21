@@ -1,16 +1,7 @@
-*** POSIX TEST 13 ***
+*** BEGIN OF TEST PSX 13 ***
+*** TEST VERSION: 6.0.0.75f80242186af2dde0c5bc7272a119e3b78d7ba0
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_POSIX_API
+*** TEST TOOLS: 10.2.1 20210309 (RTEMS 6, RSB 5e449fb5c2cb6812a238f9f9764fd339cbbf05c2, Newlib d10d0d9)
 
-Files initialized successfully.
-Testing device_lseek()... Failed!!!
-Testing dup()............ Failed!!!
-Testing dup2()........... Success.
-Testing fdatasync()...... Success.
-Testing umask().......... Success.
-Testing utime().......... Success.
-Testing utimes().......... Success.
-Testing fsync().......... Success.
-Testing pathconf()....... Success.
-Testing fpathconf()...... Success.
-Testing sync()...... 
-
-*** END OF TEST PSX13 ***
+*** END OF TEST PSX 13 ***

@@ -1,26 +1,49 @@
-/*
- *  Psx13
- *  Chris Bond (working under Jennifer's account)
+/*  SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ *  @file
+ *
+ *  @brief This tests various file system functions.
  *
  *  This test exercises the following routines:
  *
- *     device_lseek - test implemented
- *     dup          - test implemented
- *     dup2         - test implemented
- *     fdatasync    - test implemented
- *     fsync        - test implemented
- *     pathconf     - test implemented
- *     fpathconf    - test implemented
- *     umask        - test implemented
- *     utime        - test implemented
- *     utimes       - test implemented
- *
- *  COPYRIGHT (c) 1989-2009.
+ *     - lseek()
+ *     - dup()
+ *     - dup2()
+ *     - fdatasync()
+ *     - fsync()
+ *     - pathconf()
+ *     - fpathconf()
+ *     - umask()
+ *     - utime()
+ *     - utimes()
+ *     - sync()
+ */
+
+/*
+ *  COPYRIGHT (c) 1989-2009, 2021.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -34,6 +57,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <utime.h>
+#include <tmacros.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -42,685 +66,389 @@
 
 const char rtems_test_name[] = "PSX 13";
 
-int InitFiles(void);
-int DeviceLSeekTest(void);
-int DupTest(void);
-int Dup2Test(void);
-int FDataSyncTest(void);
-int UMaskTest(void);
-int UTimeTest(void);
-int UTimesTest(void);
-int PathConfTest(void);
-int FPathConfTest(void);
-int FSyncTest(void);
-
-/*-------------------------------------------------------------------
- * InitFiles function
- *
- * Initializes the three files to be used in the test.
- *
- * arguments: none
- * assumptions: fopen, fprintf, fwrite, FILE are available
- * actions: creates testfile1, a text file with 'a'..'z' listed 4 times.
- *          creates testfile2, a text file with 'a'..'z' listed 4 times.
- *          creates testfile3, a binary file with 0..9 listed 4 times.
- * returns: TRUE if files opened successfully.
- *          FALSE if fail on file open for write.
- *
- * ------------------------------------------------------------------
+/**
+ * @brief Initializes the three files to be used for the test.
  */
-
-int InitFiles (void)
+static void InitFiles( void )
 {
   int count;
+  int rv;
   FILE *fp1, *fp2, *fp3;
   char letter;
   int number;
-  int retval;
 
-  fp1 = fopen("testfile1.tst", "wt");
-  fp2 = fopen("testfile2.tst", "wt");
-  fp3 = fopen("testfile4.tst", "wb");
+  fp1 = fopen( "testfile1.tst", "wt" );
+  rtems_test_assert( fp1 != NULL );
 
-  if ((fp1 != NULL) && (fp2 != NULL) && (fp3 !=NULL)) {
+  fp2 = fopen( "testfile2.tst", "wt" );
+  rtems_test_assert( fp2 != NULL );
 
-    letter = 'a';
+  fp3 = fopen( "testfile4.tst", "wb" );
+  rtems_test_assert( fp3 != NULL );
 
-    for (count=0 ; count<(26*4); ++count) {
-      fprintf (fp1, "%c", letter);
-      fprintf (fp2, "%c", letter);
+  letter = 'a';
 
-      ++letter;
-      if (letter > 'z')
-	letter = 'a';
-    }
+  for( count = 0 ; count < (26*4); ++count) {
+    fprintf( fp1, "%c", letter );
+    fprintf( fp2, "%c", letter );
 
-    number = 0;
-
-    for (count = 0; count <40; ++count) {
-
-      fwrite (&number, 1, sizeof(int), fp3);
-
-      ++number;
-      if (number > 9)
-	number = 0;
-    }
-
-    fclose(fp1);
-    fclose(fp2);
-    fclose(fp3);
-
-    retval = TRUE;
+    ++letter;
+    if( letter > 'z' )
+      letter = 'a';
   }
 
-  else
-    retval = FALSE;
+  number = 0;
 
-  /* assert (retval == TRUE);*/
+  for( count = 0; count < 40; ++count ) {
+    fwrite( &number, 1, sizeof(int), fp3 );
 
-  return (retval);
-}
-
-/* ---------------------------------------------------------------
- * DeviceLSeekTest function
- *
- * Hits the device_lseek code by lseeking on the console.
- *
- * arguments: none
- * assumptions: lseek available
- * actions: hits lseek with some dummy arguments.
- * returns: value of return from lseek.
- *
- * ---------------------------------------------------------------
- */
-
-int DeviceLSeekTest (void)
-{
-  int error = -1, retval = FALSE;
-
-  int fd = open ("/dev/console", O_RDONLY);
-
-  error = lseek(fd, 5, SEEK_SET);
-
-  if (error == 0)
-    retval = TRUE;
-  else
-    retval = FALSE;
-
-  close( fd );  /* assert (retval == TRUE);*/
-
-  return (retval);
-}
-
-/* ---------------------------------------------------------------
- * DupTest function
- *
- * Hits the dup code.
- *
- * arguments: none
- * assumptions: dup, open, close, fcntl available.
- * actions: Gets a file descriptor(fd1) for test file1.
- *          dups fd1 to fd2.
- *          sets fd1 to append mode
- *          checks fd2 to ensure it's in append mode, also.
- * returns: success if fd2 is indeed a copy of fd1.
- *
- * ---------------------------------------------------------------
- */
-
-int DupTest(void)
-{
-  int fd1, fd2;
-
-  int flags = 0, retval = FALSE;
-
-  fd1 = open ("testfile1.tst", O_RDONLY);
-  fd2 = dup(fd1);
-
-  if (fd2 != -1) {
-
-    fcntl(fd1, F_SETFL, O_APPEND);
-    flags = fcntl(fd2, F_GETFL);
-
-    close (fd1);
-
-    flags = (flags & O_APPEND);
-
-    retval = (flags == O_APPEND);
+    ++number;
+    if( number > 9 )
+      number = 0;
   }
 
-  else
-    retval = FALSE;
+  rv = fclose( fp1 );
+  rtems_test_assert( rv != EOF );
 
-  close( fd1 );
-  close( fd2 );
-  /* assert (retval == TRUE);*/
+  rv = fclose( fp2 );
+  rtems_test_assert( rv != EOF );
 
-  return (retval);
+  rv = fclose( fp3 );
+  rtems_test_assert( rv != EOF );
 }
 
-/* ---------------------------------------------------------------
- * Dup2Test function
- *
- * Hits the dup2 code.
- *
- * arguments: none
- * assumptions: dup, dup2, open, close, fcntl available.
- * actions: Gets a file descriptor(fd1) for test file1.
- *          dups fd1 to fd2.
- *          sets fd1 to append mode
- *          checks fd2 to ensure it's in append mode, also.
- *          sets fd1 to invalid value, fd2 to valid, tries to dup2.
- *          sets fd2 to invalid value, fd1 to valid tries to dup2.
- * returns: success if fd2 is a copy of fd1, and invalid fd1 or fd2 produce errors.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises lseek() by lseeking on the console.
  */
+static void DeviceLSeekTest( void )
+{
+  int rv;
+  int fd;
 
-int Dup2Test(void)
+  fd = open( "/dev/console", O_RDONLY );
+  rtems_test_assert( fd != -1 );
+
+  rv = lseek( fd, 5, SEEK_SET );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ESPIPE );
+
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
+}
+
+/**
+ * @brief Exercises dup().
+ */
+static void DupTest( void )
 {
   int fd1, fd2;
+  int flags;
+  int rv;
 
-  int flags = 0, retval = FALSE;
+  fd1 = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd1 != -1 );
 
-  int error = 0;
+  fd2 = dup( fd1 );
+  rtems_test_assert( fd2 != -1 );
 
-  fd1 = open ("testfile1.tst", O_RDONLY);
-  fd2 = open ("testfile2.tst", O_RDONLY);
-  error = dup2(fd1, fd2);
+  rv = fcntl( fd1, F_SETFL, O_APPEND );
+  rtems_test_assert( rv != -1 );
+
+  flags = fcntl( fd2, F_GETFL ) & O_APPEND;
+  rtems_test_assert( flags == 0 );
+
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
+
+  rv = close( fd2 );
+  rtems_test_assert( rv == 0 );
+}
+
+/**
+ * @brief Exercises dup2().
+ */
+static void Dup2Test( void )
+{
+  int fd1, fd2;
+  int flags;
+  int rv;
+
+  fd1 = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd1 != -1 );
+
+  fd2 = open( "testfile2.tst", O_RDONLY );
+  rtems_test_assert( fd2 != -1 );
 
   /* make sure dup2 works if both fd1 and fd2 are valid file descriptors. */
+  rv = dup2( fd1, fd2 );
+  rtems_test_assert( rv != -1 );
 
-  if (error != -1) {
+  rv = fcntl( fd1, F_SETFL, O_APPEND );
+  rtems_test_assert( rv != -1 );
 
-    fcntl(fd1, F_SETFL, O_APPEND);
-    flags = fcntl(fd1, F_GETFL);
+  flags = fcntl( fd1, F_GETFL ) & O_APPEND;
+  rtems_test_assert( flags == O_APPEND );
 
-    flags = (flags & O_APPEND);
-    retval = (flags == O_APPEND);
-  }
+  /* make sure dup2 fails correctly if one or the other arguments are invalid. */
+  /* this assumes -1 is an invalid value for a file descriptor!!! (POSIX book, p.135) */
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
 
-  else {
-    retval = FALSE;
-    close(fd2);
-  }
+  fd1 = -1;
 
-  if (retval == TRUE) {
+  rv = dup2( fd1, fd2 );
+  rtems_test_assert( rv == -1 );
 
-    /* make sure dup2 fails correctly if one or the other arguments are invalid. */
-    /* this assumes -1 is an invalid value for a file descriptor!!! (POSIX book, p.135) */
+  fd1 = dup( fd2 );
+  fd2 = -1;
 
-    fd1 = -1;
+  rv = dup2( fd1, fd2 );
+  rtems_test_assert( rv == -1 );
 
-    if (dup2 (fd1, fd2) != -1)
-      retval = FALSE;
-    else {
-      fd1 = dup(fd2);
-      fd2 = -1;
-
-      if (dup2(fd1, fd2) != -1)
-	retval = FALSE;
-    }
-  }
-
-  close (fd1);
-  close (fd2);
-  /* assert (retval == TRUE);*/
-
-  return (retval);
+  rv = close( fd1 );
+  rtems_test_assert( rv == 0 );
 }
 
-/* ---------------------------------------------------------------
- * FDataSyncTest function
- *
- * Hits the fdatasync code. Does NOT test the functionality of the
- * underlying fdatasync entry in the IMFS op table.
- *
- * arguments: none
- * assumptions: open, close, fdatasync functions available.
- * actions: attempts to fdatasync a file descriptor flagged as read-only.
- *          attempts to fdatasync an invalid file descriptor (-1).
- *          attempts to fdatasync a perfectly valid fd opened as RDWR
- *
- * returns: TRUE if attempt to fdatasync invalid and read-only filed
- *           descriptor fail, and fdatasync succeeds on valid fd.
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises fdatasync(). Does NOT test the functionality of the
+ *        underlying fdatasync entry in the IMFS op table.
  */
-
-int FDataSyncTest(void)
+static void FDataSyncTest( void )
 {
-  int fd = -1;
-  int error = 0, retval = TRUE;
+  int fd;
+  int rv;
 
   /* Try it with a RD_ONLY file. */
+  fd = open( "testfile1.tst", O_RDONLY );
+  rtems_test_assert( fd != -1 );
 
-  fd = open ("testfile1.tst", O_RDONLY);
+  rv = fdatasync( fd );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
 
-  error = fdatasync(fd);
-  if ((error == -1) && (errno == EINVAL))
-    retval = TRUE;
-  else
-    retval = FALSE;
+  rv = close(fd);
+  rtems_test_assert( rv == 0 );
 
-  close (fd);
+  /* Try it with a bad file descriptor */
+  fd = -1;
 
-  if (retval == TRUE) {
-
-    /* Try it with a bad file descriptor */
-
-    fd = -1;
-
-    error = fdatasync(fd);
-    if ((errno == EBADF) && (error == -1))
-      retval = TRUE;
-    else
-      retval = FALSE;
-  }
+  rv = fdatasync( fd );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
 
   /* Okay - now the success case... */
+  fd = open( "testfile1.tst", O_RDWR );
+  rv = fdatasync( fd );
+  rtems_test_assert( rv == 0 );
 
-  if (retval == TRUE) {
-    fd = open ("testfile1.tst", O_RDWR);
-    error = fdatasync(fd);
-
-    if (error == 0)
-      retval = TRUE;
-    else
-      retval = FALSE;
-
-    close (fd);
-  }
-
-  /* assert (retval == TRUE);*/
-
-  return (retval);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-/* ---------------------------------------------------------------
- * UMaskTest function
- *
- * Hits the umask code.
- *
- * arguments: none
- * assumptions: umask function available.
- * actions: set umask to 0ctal 23.
- *          set umask to Octal 22, retrieve the old value.
- *
- * returns: TRUE if old value is 23,
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises umask().
  */
-
-int UMaskTest (void)
+static void UMaskTest( void )
 {
-  mode_t error = 0;
-  int    retval = FALSE;
+  mode_t rv;
 
-  umask(023);
-  error = umask(022);
+  (void) umask( 023 );
 
-  if (error == 023)
-    retval = TRUE;
-  else
-    retval = FALSE;
-
-  /* assert (retval == TRUE);*/
-
-  return(retval);
+  rv = umask( 022 );
+  rtems_test_assert( rv == 023 );
 }
 
-/* ---------------------------------------------------------------
- * UTimeTest function
- *
- * Hits the utime code. Does NOT test the functionality of the underlying utime
- * entry in the IMFS op table.
- *
- * arguments: none
- * assumptions: utime function available.
- * actions: set utime for an invalid filename.
- *          set utime for a valid filename.
- *
- * returns: TRUE if time on valid file is set correctly and utime failed on
- *          an invalid filename.
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises utime(). Does not test the functionality of the
+ *        underlying utime entry in the IMFS op table.
  */
-
-int UTimeTest (void)
+static void UTimeTest( void )
 {
-  int error = 0, retval = FALSE;
+  int rv;
   struct utimbuf time;
   struct stat fstat;
 
   /* First, an invalid filename. */
-  error = utime("!This is an =invalid p@thname!!! :)", NULL);
-
-  if (error == -1)
-    retval = TRUE;
-  else
-    retval = FALSE;
+  rv = utime( "!This is an =invalid p@thname!!! :)", NULL );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   /* Now, the success test. */
-  if (retval == TRUE) {
+  time.actime  = 12345;
+  time.modtime = 54321;
 
-    time.actime  = 12345;
-    time.modtime = 54321;
+  rv = utime( "testfile1.tst", &time );
+  rtems_test_assert( rv == 0 );
 
-    error = utime("testfile1.tst", &time);
+  /* But, did it set the time? */
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( fstat.st_atime == 12345 );
+  rtems_test_assert( fstat.st_mtime == 54321 );
 
-    if (error == 0) {
-
-      /* But, did it set the time? */
-      stat ("testfile1.tst", &fstat);
-
-      if ((fstat.st_atime == 12345) && (fstat.st_mtime == 54321 ))
-	retval = TRUE;
-      else
-	retval = FALSE;
-    }
-    else
-      retval = FALSE;
-
-    error = utime("testfile1.tst", NULL );
-    retval &= (error == 0) ? TRUE : FALSE;
-  }
-
-  /* assert (retval == TRUE);*/
-
-  return (retval);
+  rv = utime( "testfile1.tst", NULL );
+  rtems_test_assert( rv == 0 );
 }
 
-/* ---------------------------------------------------------------
- * UTimesTest function
- *
- * Hits the utimes code. Does NOT test the functionality of the underlying utime
- * entry in the IMFS op table.
- *
- * arguments: none
- * assumptions: utimes function available.
- * actions: set utimes for an invalid filename.
- *          set utimes for a valid filename.
- *
- * returns: TRUE if time on valid file is set correctly and utimes failed on
- *          an invalid filename.
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises utimes(). Does NOT test the functionality of the
+ *        underlying utime entry in the IMFS op table.
  */
-
-int UTimesTest (void)
+static void UTimesTest( void )
 {
-  int error = 0, retval = FALSE;
+  int rv;
   struct timeval time[2];
   struct stat fstat;
 
   /* First, an invalid filename. */
-  error = utimes("!This is an =invalid p@thname!!! :)", NULL);
-
-  if (error == -1)
-    retval = TRUE;
-  else
-    retval = FALSE;
+  rv = utimes( "!This is an =invalid p@thname!!! : )", NULL);
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOENT );
 
   /* Now, the success test. */
-  if (retval == TRUE) {
+  time[0].tv_sec = 12345;
+  time[1].tv_sec = 54321;
 
-    time[0].tv_sec = 12345;
-    time[1].tv_sec = 54321;
+  rv = utimes( "testfile1.tst", (struct timeval *)&time );
+  rtems_test_assert( rv == 0 );
 
-    error = utimes("testfile1.tst", (struct timeval *)&time);
-
-    if (error == 0) {
-
-      /* But, did it set the time? */
-      stat ("testfile1.tst", &fstat);
-
-      if ((fstat.st_atime == 12345) && (fstat.st_mtime == 54321 ))
-	retval = TRUE;
-      else
-	retval = FALSE;
-    }
-
-    else
-      retval = FALSE;
-  }
-
-  /* assert (retval == TRUE);*/
-
-  return (retval);
+  /* But, did it set the time? */
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( fstat.st_atime == 12345 );
+  rtems_test_assert( fstat.st_mtime == 54321 );
 }
 
-/* ---------------------------------------------------------------
- * PathConfTest function
- *
- * Hits the pathconf code.
- *
- * arguments: none
- * assumptions: pathconf function available.
- * actions: Try to pathconf a bad filename.
- *          Try to pathconf a good filename.
- *
- * returns: TRUE if pathconf fails on bad file, succeeds on good file.
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises pathconf().
  */
-
-int PathConfTest (void)
+static void PathConfTest( void )
 {
-  int error = 0, retval = FALSE;
+  int rv;
 
-  error = pathconf("thisfiledoesnotexist", _PC_LINK_MAX);
+  rv = pathconf( "thisfiledoesnotexist", _PC_LINK_MAX );
+  rtems_test_assert( rv == -1 );
 
-  if (error == -1) {
-    error = pathconf("testfile1.tst", _PC_LINK_MAX);
-
-    if (error != -1)
-      retval = TRUE;
-    else
-      retval = FALSE;
-  }
-
-  else
-    retval = FALSE;
-
-  /* assert (retval == TRUE);*/
-
-  return(retval);
+  rv = pathconf( "testfile1.tst", _PC_LINK_MAX );
+  rtems_test_assert( rv != -1 );
 }
 
-/* ---------------------------------------------------------------
- * FPathConfTest function
- *
- * Hits the fpathconf code.
- *
- * arguments: none
- * assumptions: fpathconf function available.
- * actions: Call fpathconf with all arguments, plus an invalid.
- *
- * returns: TRUE always.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises fpathconf().
  */
-
-int FPathConfTest (void)
+static void FPathConfTest( void )
 {
-  int error = 0, retval = TRUE;
+  int rv;
+  int fd;
 
-  int fd  = -1;
+  fd = -1;
+  rv = fpathconf( fd, _PC_LINK_MAX );
+  rtems_test_assert( rv == -1 );
 
-  error = fpathconf(fd, _PC_LINK_MAX);
+  fd = open( "testfile1.tst", O_RDWR );
+  rtems_test_assert( fd != -1 );
 
-  if (error == -1) {
-    fd = open("testfile1.tst", O_RDWR);
+  rv = fpathconf( fd, _PC_LINK_MAX );
+  rtems_test_assert( rv != -1 );
 
-    error = fpathconf(fd, _PC_LINK_MAX);
-    error = fpathconf(fd, _PC_MAX_CANON);
-    error = fpathconf(fd, _PC_MAX_INPUT);
-    error = fpathconf(fd, _PC_NAME_MAX);
-    error = fpathconf(fd, _PC_PATH_MAX);
-    error = fpathconf(fd, _PC_PIPE_BUF);
-    error = fpathconf(fd, _PC_CHOWN_RESTRICTED);
-    error = fpathconf(fd, _PC_NO_TRUNC);
-    error = fpathconf(fd, _PC_VDISABLE);
-    error = fpathconf(fd, _PC_ASYNC_IO);
-    error = fpathconf(fd, _PC_PRIO_IO);
-    error = fpathconf(fd, _PC_SYNC_IO);
-    error = fpathconf(fd, 255);
+  rv = fpathconf( fd, _PC_MAX_CANON );
+  rtems_test_assert( rv != -1 );
 
-    close(fd);
+  rv = fpathconf( fd, _PC_MAX_INPUT );
+  rtems_test_assert( rv != -1 );
 
-    fd = open("testfile1.tst", O_WRONLY);
+  rv = fpathconf( fd, _PC_NAME_MAX );
+  rtems_test_assert( rv != -1 );
 
-    error = fpathconf(fd, _PC_LINK_MAX);
+  rv = fpathconf( fd, _PC_PATH_MAX );
+  rtems_test_assert( rv != -1 );
 
-    retval = TRUE;
-  }
+  rv = fpathconf( fd, _PC_PIPE_BUF );
+  rtems_test_assert( rv != -1 );
 
-  else
-    retval = FALSE;
+  rv = fpathconf( fd, _PC_CHOWN_RESTRICTED );
+  rtems_test_assert( rv != -1 );
 
-  /* assert (retval == TRUE);*/
+  rv = fpathconf( fd, _PC_NO_TRUNC );
+  rtems_test_assert( rv != -1 );
 
-  return(retval);
+  rv = fpathconf( fd, _PC_VDISABLE );
+  rtems_test_assert( rv != -1 );
+
+  rv = fpathconf( fd, _PC_ASYNC_IO );
+  rtems_test_assert( rv != -1 );
+
+  rv = fpathconf( fd, _PC_PRIO_IO );
+  rtems_test_assert( rv != -1 );
+
+  rv = fpathconf( fd, _PC_SYNC_IO );
+  rtems_test_assert( rv != -1 );
+
+  rv = fpathconf( fd, 255 );
+  rtems_test_assert( rv == -1 );
+
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
+
+  fd = open( "testfile1.tst", O_WRONLY );
+  rtems_test_assert( rv != -1 );
+
+  rv = fpathconf( fd, _PC_LINK_MAX );
+  rtems_test_assert( rv != -1 );
+
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-/* ---------------------------------------------------------------
- * FSyncTest function
- *
- * Hits the fsync code.
- *
- * arguments: none
- * assumptions: open, fsync functions available.
- * actions: open test file,
- *          try to fsync it.
- *
- * returns: TRUE if fsync doesn't return -1,
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises fsync().
  */
-
-int FSyncTest (void)
+static void FSyncTest( void )
 {
-  int error = 0, retval = FALSE;
-  int fd = -1;
+  int rv;
+  int fd;
 
-  fd = open("testfile1.tst", O_RDWR);
+  fd = open( "testfile1.tst", O_RDWR );
+  rtems_test_assert( fd != -1 );
 
-  if (fd != -1) {
+  rv = fsync(fd);
+  rtems_test_assert( rv != -1 );
 
-    error = fsync(fd);
-
-    if (error != -1)
-      retval = TRUE;
-    else
-      retval = FALSE;
-
-    close(fd);
-  }
-
-  else
-    retval = FALSE;
-
-  /* assert (retval == TRUE);*/
-
-  return(retval);
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 }
 
-/* ---------------------------------------------------------------
- * Main function
- *
- *  main entry point to the test
- *
- * ---------------------------------------------------------------
+/**
+ * @brief Exercises sync().
  */
+static void SyncTest( void )
+{
+  sync();
+}
 
-#if defined(__rtems__)
-int test_main(void);
-int test_main(void)
-#else
-int main(
-  int    argc,
-  char **argv
-)
-#endif
+/**
+ * @brief The main entry point to the test.
+ */
+int test_main( void );
+int test_main( void )
 {
   TEST_BEGIN();
 
-  if (InitFiles() == TRUE) {
-    printf ("\nFiles initialized successfully.\n");
+  InitFiles();
 
-    printf ("Testing device_lseek()... ");
-    if (DeviceLSeekTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
+  DeviceLSeekTest();
+  DupTest();
+  Dup2Test();
+  FDataSyncTest();
+  UMaskTest();
+  UTimeTest();
+  UTimesTest();
+  FSyncTest();
+  PathConfTest();
+  FPathConfTest();
+  SyncTest();
 
-    printf ("Testing dup()............ ");
-    if (DupTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
+  TEST_END();
 
-    printf ("Testing dup2()........... ");
-    if (Dup2Test() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-    printf ("Testing fdatasync()...... ");
-    if (FDataSyncTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-    printf ("Testing umask().......... ");
-    if (UMaskTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing utime().......... ");
-    if (UTimeTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing utimes().......... ");
-    if (UTimesTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing fsync().......... ");
-    if (FSyncTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing pathconf()....... ");
-    if (PathConfTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing fpathconf()...... ");
-    if (FPathConfTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-    printf ("Testing sync()...... ");
-    sync();
-    printf ("Done.\n");
-
-    TEST_END();
-  }
-
-  rtems_test_exit(0);
+  rtems_test_exit( 0 );
 }
