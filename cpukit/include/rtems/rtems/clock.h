@@ -128,10 +128,11 @@ extern "C" {
  *
  * * The directive may be called from within any runtime context.
  *
- * * The directive may change the priority of another task which may preempt
- *   the calling task.
+ * * The directive may change the priority of a task.  This may cause the
+ *   calling task to be preempted.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  * @endparblock
  */
 rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );

@@ -127,7 +127,8 @@ extern "C" {
  *
  * * The directive may be called from within task context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  * @endparblock
  */
 void rtems_multiprocessing_announce( void );

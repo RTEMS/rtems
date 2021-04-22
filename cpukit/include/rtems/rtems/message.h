@@ -563,7 +563,8 @@ rtems_status_code rtems_message_queue_delete( rtems_id id );
  *
  * * The directive may be called from within interrupt context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  *
  * * When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
@@ -619,7 +620,8 @@ rtems_status_code rtems_message_queue_send(
  *
  * * The directive may be called from within interrupt context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  *
  * * When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the
@@ -681,7 +683,8 @@ rtems_status_code rtems_message_queue_urgent(
  *
  * * The directive may be called from within interrupt context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  *
  * * When the directive operates on a remote object, the directive sends a
  *   message to the remote node and waits for a reply.  This will preempt the

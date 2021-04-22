@@ -341,7 +341,8 @@ rtems_status_code rtems_barrier_wait( rtems_id id, rtems_interval timeout );
  *
  * * The directive may be called from within task context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  * @endparblock
  */
 rtems_status_code rtems_barrier_release( rtems_id id, uint32_t *released );

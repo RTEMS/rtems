@@ -519,7 +519,8 @@ rtems_status_code rtems_event_system_receive(
  *
  * * The directive may be called from within task context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  * @endparblock
  */
 rtems_status_code rtems_event_system_send(
@@ -634,7 +635,8 @@ static inline rtems_status_code rtems_event_transient_receive(
  *
  * * The directive may be called from within task context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  * @endparblock
  */
 static inline rtems_status_code rtems_event_transient_send( rtems_id id )
@@ -707,7 +709,8 @@ static inline rtems_status_code rtems_event_transient_send( rtems_id id )
  *
  * * The directive may be called from within task context.
  *
- * * The directive may unblock another task which may preempt the calling task.
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
  * @endparblock
  */
 rtems_status_code rtems_event_send( rtems_id id, rtems_event_set event_in );
