@@ -377,8 +377,9 @@ rtems_status_code rtems_timer_ident( rtems_name name, rtems_id *id );
  *
  * This directive cancels the timer specified by ``id``.  This timer will be
  * reinitiated by the next invocation of rtems_timer_reset(),
- * rtems_timer_fire_after(), or rtems_timer_fire_when() with the same timer
- * identifier.
+ * rtems_timer_fire_after(), rtems_timer_fire_when(),
+ * rtems_timer_server_fire_after(), or rtems_timer_server_fire_when() with the
+ * same timer identifier.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
