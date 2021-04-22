@@ -7,7 +7,6 @@ default-by-variant:
 - value: ( GPIO_PIN_9 | GPIO_PIN_10 )
   variants:
   - arm/nucleo-h743zi
-default-by-variant: []
 enabled-by: true
 format: '{}'
 links: []
