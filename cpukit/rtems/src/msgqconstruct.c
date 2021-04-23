@@ -50,6 +50,10 @@ rtems_status_code rtems_message_queue_construct(
   rtems_id                         *id
 )
 {
+  if ( config == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
   return _Message_queue_Create( config, id, _Message_queue_Get_buffers );
 }
 

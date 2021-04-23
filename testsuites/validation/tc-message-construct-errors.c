@@ -67,6 +67,12 @@
  */
 
 typedef enum {
+  RtemsMessageReqConstructErrors_Pre_Config_Valid,
+  RtemsMessageReqConstructErrors_Pre_Config_Null,
+  RtemsMessageReqConstructErrors_Pre_Config_NA
+} RtemsMessageReqConstructErrors_Pre_Config;
+
+typedef enum {
   RtemsMessageReqConstructErrors_Pre_Name_Valid,
   RtemsMessageReqConstructErrors_Pre_Name_Invalid,
   RtemsMessageReqConstructErrors_Pre_Name_NA
@@ -139,7 +145,9 @@ typedef enum {
 typedef struct {
   rtems_status_code status;
 
-  rtems_message_queue_config config;
+  const rtems_message_queue_config *config;
+
+  rtems_message_queue_config config_value;
 
   rtems_id *id;
 
@@ -150,7 +158,7 @@ typedef struct {
   /**
    * @brief This member defines the pre-condition states for the next action.
    */
-  size_t pcs[ 7 ];
+  size_t pcs[ 8 ];
 
   /**
    * @brief This member indicates if the test action loop is currently
@@ -161,6 +169,12 @@ typedef struct {
 
 static RtemsMessageReqConstructErrors_Context
   RtemsMessageReqConstructErrors_Instance;
+
+static const char * const RtemsMessageReqConstructErrors_PreDesc_Config[] = {
+  "Valid",
+  "Null",
+  "NA"
+};
 
 static const char * const RtemsMessageReqConstructErrors_PreDesc_Name[] = {
   "Valid",
@@ -207,6 +221,7 @@ static const char * const RtemsMessageReqConstructErrors_PreDesc_AreaSize[] = {
 };
 
 static const char * const * const RtemsMessageReqConstructErrors_PreDesc[] = {
+  RtemsMessageReqConstructErrors_PreDesc_Config,
   RtemsMessageReqConstructErrors_PreDesc_Name,
   RtemsMessageReqConstructErrors_PreDesc_Id,
   RtemsMessageReqConstructErrors_PreDesc_MaxPending,
@@ -254,6 +269,34 @@ static rtems_status_code Create( void *arg, uint32_t *id )
   return rtems_message_queue_construct( &config, id );
 }
 
+static void RtemsMessageReqConstructErrors_Pre_Config_Prepare(
+  RtemsMessageReqConstructErrors_Context   *ctx,
+  RtemsMessageReqConstructErrors_Pre_Config state
+)
+{
+  switch ( state ) {
+    case RtemsMessageReqConstructErrors_Pre_Config_Valid: {
+      /*
+       * While the ``config`` parameter references an object of type
+       * rtems_message_queue_config.
+       */
+      ctx->config = &ctx->config_value;
+      break;
+    }
+
+    case RtemsMessageReqConstructErrors_Pre_Config_Null: {
+      /*
+       * While the ``config`` parameter is NULL.
+       */
+      ctx->config = NULL;
+      break;
+    }
+
+    case RtemsMessageReqConstructErrors_Pre_Config_NA:
+      break;
+  }
+}
+
 static void RtemsMessageReqConstructErrors_Pre_Name_Prepare(
   RtemsMessageReqConstructErrors_Context *ctx,
   RtemsMessageReqConstructErrors_Pre_Name state
@@ -264,7 +307,7 @@ static void RtemsMessageReqConstructErrors_Pre_Name_Prepare(
       /*
        * While the name of the message queue configuration is valid.
        */
-      ctx->config.name = NAME;
+      ctx->config_value.name = NAME;
       break;
     }
 
@@ -272,7 +315,7 @@ static void RtemsMessageReqConstructErrors_Pre_Name_Prepare(
       /*
        * While the name of the message queue configuration is invalid.
        */
-      ctx->config.name = 0;
+      ctx->config_value.name = 0;
       break;
     }
 
@@ -319,7 +362,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
        * While the maximum number of pending messages of the message queue
        * configuration is valid.
        */
-      ctx->config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+      ctx->config_value.maximum_pending_messages = MAX_PENDING_MESSAGES;
       break;
     }
 
@@ -328,7 +371,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
        * While the maximum number of pending messages of the message queue
        * configuration is zero.
        */
-      ctx->config.maximum_pending_messages = 0;
+      ctx->config_value.maximum_pending_messages = 0;
       break;
     }
 
@@ -338,7 +381,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
        * configuration is big enough so that a calculation to get the message
        * buffer storage area size overflows.
        */
-      ctx->config.maximum_pending_messages = UINT32_MAX;
+      ctx->config_value.maximum_pending_messages = UINT32_MAX;
       break;
     }
 
@@ -358,17 +401,17 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
        * While the maximum message size of the message queue configuration is
        * valid.
        */
-      if ( ctx->config.maximum_pending_messages == UINT32_MAX ) {
+      if ( ctx->config_value.maximum_pending_messages == UINT32_MAX ) {
         /*
          * At least on 64-bit systems we need a bit of help to ensure that we
          * meet the Big state of the MaxPending pre-condition.  The following
          * message size is valid with respect to calculations involving only
          * the message size.
          */
-        ctx->config.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
+        ctx->config_value.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
           1 - sizeof( CORE_message_queue_Buffer );
       } else {
-        ctx->config.maximum_message_size = MAX_MESSAGE_SIZE;
+        ctx->config_value.maximum_message_size = MAX_MESSAGE_SIZE;
       }
       break;
     }
@@ -378,7 +421,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
        * While the maximum message size of the message queue configuration is
        * zero.
        */
-      ctx->config.maximum_message_size = 0;
+      ctx->config_value.maximum_message_size = 0;
       break;
     }
 
@@ -388,7 +431,7 @@ static void RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
        * big enough so that a calculation to get the message buffer storage
        * area size overflows.
        */
-      ctx->config.maximum_message_size = SIZE_MAX;
+      ctx->config_value.maximum_message_size = SIZE_MAX;
       break;
     }
 
@@ -439,7 +482,7 @@ static void RtemsMessageReqConstructErrors_Pre_Area_Prepare(
        * While the message buffer storage area begin pointer of the message
        * queue configuration is valid.
        */
-      ctx->config.storage_area = buffers;
+      ctx->config_value.storage_area = buffers;
       break;
     }
 
@@ -448,7 +491,7 @@ static void RtemsMessageReqConstructErrors_Pre_Area_Prepare(
        * While the message buffer storage area begin pointer of the message
        * queue configuration is NULL.
        */
-      ctx->config.storage_area = NULL;
+      ctx->config_value.storage_area = NULL;
       break;
     }
 
@@ -468,7 +511,7 @@ static void RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
        * While the message buffer storage area size of the message queue
        * configuration is valid.
        */
-      ctx->config.storage_size = sizeof( buffers );
+      ctx->config_value.storage_size = sizeof( buffers );
       break;
     }
 
@@ -477,7 +520,7 @@ static void RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
        * While the message buffer storage area size of the message queue
        * configuration is invalid.
        */
-      ctx->config.storage_size = SIZE_MAX;
+      ctx->config_value.storage_size = SIZE_MAX;
       break;
     }
 
@@ -632,14 +675,14 @@ static void RtemsMessageReqConstructErrors_Prepare(
 )
 {
   ctx->id_value = INVALID_ID;
-  memset( &ctx->config, 0, sizeof( ctx->config ) );
+  memset( &ctx->config_value, 0, sizeof( ctx->config_value ) );
 }
 
 static void RtemsMessageReqConstructErrors_Action(
   RtemsMessageReqConstructErrors_Context *ctx
 )
 {
-  ctx->status = rtems_message_queue_construct( &ctx->config, ctx->id );
+  ctx->status = rtems_message_queue_construct( ctx->config, ctx->id );
 }
 
 static void RtemsMessageReqConstructErrors_Cleanup(
@@ -660,6 +703,7 @@ static void RtemsMessageReqConstructErrors_Cleanup(
 
 typedef struct {
   uint16_t Skip : 1;
+  uint16_t Pre_Config_NA : 1;
   uint16_t Pre_Name_NA : 1;
   uint16_t Pre_Id_NA : 1;
   uint16_t Pre_MaxPending_NA : 1;
@@ -674,25 +718,31 @@ typedef struct {
 
 static const RtemsMessageReqConstructErrors_Entry
 RtemsMessageReqConstructErrors_Entries[] = {
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvName,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    RtemsMessageReqConstructErrors_Post_Status_InvAddr,
     RtemsMessageReqConstructErrors_Post_Name_Invalid,
     RtemsMessageReqConstructErrors_Post_IdVar_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvAddr,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    RtemsMessageReqConstructErrors_Post_Status_InvName,
     RtemsMessageReqConstructErrors_Post_Name_Invalid,
     RtemsMessageReqConstructErrors_Post_IdVar_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvNum,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    RtemsMessageReqConstructErrors_Post_Status_InvNum,
     RtemsMessageReqConstructErrors_Post_Name_Invalid,
     RtemsMessageReqConstructErrors_Post_IdVar_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_InvSize,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    RtemsMessageReqConstructErrors_Post_Status_InvSize,
     RtemsMessageReqConstructErrors_Post_Name_Invalid,
     RtemsMessageReqConstructErrors_Post_IdVar_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_TooMany,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    RtemsMessageReqConstructErrors_Post_Status_TooMany,
     RtemsMessageReqConstructErrors_Post_Name_Invalid,
     RtemsMessageReqConstructErrors_Post_IdVar_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_Unsat,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    RtemsMessageReqConstructErrors_Post_Status_Unsat,
     RtemsMessageReqConstructErrors_Post_Name_Invalid,
     RtemsMessageReqConstructErrors_Post_IdVar_Nop },
-  { 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_Ok,
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0, RtemsMessageReqConstructErrors_Post_Status_Ok,
     RtemsMessageReqConstructErrors_Post_Name_Valid,
     RtemsMessageReqConstructErrors_Post_IdVar_Set }
 };
@@ -701,16 +751,27 @@ static const uint8_t
 RtemsMessageReqConstructErrors_Map[] = {
   6, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 2, 2,
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-  4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1,
+  4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0
 };
 
 static size_t RtemsMessageReqConstructErrors_Scope(
@@ -768,15 +829,16 @@ T_TEST_CASE_FIXTURE(
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Name_Valid;
-    ctx->pcs[ 0 ] < RtemsMessageReqConstructErrors_Pre_Name_NA;
+    ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Config_Valid;
+    ctx->pcs[ 0 ] < RtemsMessageReqConstructErrors_Pre_Config_NA;
     ++ctx->pcs[ 0 ]
   ) {
     entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-    if ( entry.Pre_Name_NA ) {
-      ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Name_NA;
-      index += ( RtemsMessageReqConstructErrors_Pre_Name_NA - 1 )
+    if ( entry.Pre_Config_NA ) {
+      ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Config_NA;
+      index += ( RtemsMessageReqConstructErrors_Pre_Config_NA - 1 )
+        * RtemsMessageReqConstructErrors_Pre_Name_NA
         * RtemsMessageReqConstructErrors_Pre_Id_NA
         * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
         * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
@@ -786,15 +848,16 @@ T_TEST_CASE_FIXTURE(
     }
 
     for (
-      ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Id_Id;
-      ctx->pcs[ 1 ] < RtemsMessageReqConstructErrors_Pre_Id_NA;
+      ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Name_Valid;
+      ctx->pcs[ 1 ] < RtemsMessageReqConstructErrors_Pre_Name_NA;
       ++ctx->pcs[ 1 ]
     ) {
       entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-      if ( entry.Pre_Id_NA ) {
-        ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Id_NA;
-        index += ( RtemsMessageReqConstructErrors_Pre_Id_NA - 1 )
+      if ( entry.Pre_Name_NA ) {
+        ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Name_NA;
+        index += ( RtemsMessageReqConstructErrors_Pre_Name_NA - 1 )
+          * RtemsMessageReqConstructErrors_Pre_Id_NA
           * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
           * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
           * RtemsMessageReqConstructErrors_Pre_Free_NA
@@ -803,15 +866,16 @@ T_TEST_CASE_FIXTURE(
       }
 
       for (
-        ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_Valid;
-        ctx->pcs[ 2 ] < RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
+        ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_Id_Id;
+        ctx->pcs[ 2 ] < RtemsMessageReqConstructErrors_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
         entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-        if ( entry.Pre_MaxPending_NA ) {
-          ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
-          index += ( RtemsMessageReqConstructErrors_Pre_MaxPending_NA - 1 )
+        if ( entry.Pre_Id_NA ) {
+          ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_Id_NA;
+          index += ( RtemsMessageReqConstructErrors_Pre_Id_NA - 1 )
+            * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
             * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
             * RtemsMessageReqConstructErrors_Pre_Free_NA
             * RtemsMessageReqConstructErrors_Pre_Area_NA
@@ -819,108 +883,129 @@ T_TEST_CASE_FIXTURE(
         }
 
         for (
-          ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_Valid;
-          ctx->pcs[ 3 ] < RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
+          ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_Valid;
+          ctx->pcs[ 3 ] < RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
           ++ctx->pcs[ 3 ]
         ) {
           entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-          if ( entry.Pre_MaxSize_NA ) {
-            ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
-            index += ( RtemsMessageReqConstructErrors_Pre_MaxSize_NA - 1 )
+          if ( entry.Pre_MaxPending_NA ) {
+            ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
+            index += ( RtemsMessageReqConstructErrors_Pre_MaxPending_NA - 1 )
+              * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
               * RtemsMessageReqConstructErrors_Pre_Free_NA
               * RtemsMessageReqConstructErrors_Pre_Area_NA
               * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
           }
 
           for (
-            ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Free_Yes;
-            ctx->pcs[ 4 ] < RtemsMessageReqConstructErrors_Pre_Free_NA;
+            ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_Valid;
+            ctx->pcs[ 4 ] < RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
             ++ctx->pcs[ 4 ]
           ) {
             entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-            if ( entry.Pre_Free_NA ) {
-              ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_Free_NA;
-              index += ( RtemsMessageReqConstructErrors_Pre_Free_NA - 1 )
+            if ( entry.Pre_MaxSize_NA ) {
+              ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
+              index += ( RtemsMessageReqConstructErrors_Pre_MaxSize_NA - 1 )
+                * RtemsMessageReqConstructErrors_Pre_Free_NA
                 * RtemsMessageReqConstructErrors_Pre_Area_NA
                 * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
             }
 
             for (
-              ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Area_Valid;
-              ctx->pcs[ 5 ] < RtemsMessageReqConstructErrors_Pre_Area_NA;
+              ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Free_Yes;
+              ctx->pcs[ 5 ] < RtemsMessageReqConstructErrors_Pre_Free_NA;
               ++ctx->pcs[ 5 ]
             ) {
               entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-              if ( entry.Pre_Area_NA ) {
-                ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Area_NA;
-                index += ( RtemsMessageReqConstructErrors_Pre_Area_NA - 1 )
+              if ( entry.Pre_Free_NA ) {
+                ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Free_NA;
+                index += ( RtemsMessageReqConstructErrors_Pre_Free_NA - 1 )
+                  * RtemsMessageReqConstructErrors_Pre_Area_NA
                   * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
               }
 
               for (
-                ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_Valid;
-                ctx->pcs[ 6 ] < RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
+                ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_Area_Valid;
+                ctx->pcs[ 6 ] < RtemsMessageReqConstructErrors_Pre_Area_NA;
                 ++ctx->pcs[ 6 ]
               ) {
                 entry = RtemsMessageReqConstructErrors_GetEntry( index );
 
-                if ( entry.Pre_AreaSize_NA ) {
-                  ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-                  index += ( RtemsMessageReqConstructErrors_Pre_AreaSize_NA - 1 );
+                if ( entry.Pre_Area_NA ) {
+                  ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_Area_NA;
+                  index += ( RtemsMessageReqConstructErrors_Pre_Area_NA - 1 )
+                    * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
                 }
 
-                if ( entry.Skip ) {
+                for (
+                  ctx->pcs[ 7 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_Valid;
+                  ctx->pcs[ 7 ] < RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
+                  ++ctx->pcs[ 7 ]
+                ) {
+                  entry = RtemsMessageReqConstructErrors_GetEntry( index );
+
+                  if ( entry.Pre_AreaSize_NA ) {
+                    ctx->pcs[ 7 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
+                    index += ( RtemsMessageReqConstructErrors_Pre_AreaSize_NA - 1 );
+                  }
+
+                  if ( entry.Skip ) {
+                    ++index;
+                    continue;
+                  }
+
+                  RtemsMessageReqConstructErrors_Prepare( ctx );
+                  RtemsMessageReqConstructErrors_Pre_Config_Prepare(
+                    ctx,
+                    ctx->pcs[ 0 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_Name_Prepare(
+                    ctx,
+                    ctx->pcs[ 1 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_Id_Prepare(
+                    ctx,
+                    ctx->pcs[ 2 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
+                    ctx,
+                    ctx->pcs[ 3 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
+                    ctx,
+                    ctx->pcs[ 4 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_Free_Prepare(
+                    ctx,
+                    ctx->pcs[ 5 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_Area_Prepare(
+                    ctx,
+                    ctx->pcs[ 6 ]
+                  );
+                  RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
+                    ctx,
+                    ctx->pcs[ 7 ]
+                  );
+                  RtemsMessageReqConstructErrors_Action( ctx );
+                  RtemsMessageReqConstructErrors_Post_Status_Check(
+                    ctx,
+                    entry.Post_Status
+                  );
+                  RtemsMessageReqConstructErrors_Post_Name_Check(
+                    ctx,
+                    entry.Post_Name
+                  );
+                  RtemsMessageReqConstructErrors_Post_IdVar_Check(
+                    ctx,
+                    entry.Post_IdVar
+                  );
+                  RtemsMessageReqConstructErrors_Cleanup( ctx );
                   ++index;
-                  continue;
                 }
-
-                RtemsMessageReqConstructErrors_Prepare( ctx );
-                RtemsMessageReqConstructErrors_Pre_Name_Prepare(
-                  ctx,
-                  ctx->pcs[ 0 ]
-                );
-                RtemsMessageReqConstructErrors_Pre_Id_Prepare(
-                  ctx,
-                  ctx->pcs[ 1 ]
-                );
-                RtemsMessageReqConstructErrors_Pre_MaxPending_Prepare(
-                  ctx,
-                  ctx->pcs[ 2 ]
-                );
-                RtemsMessageReqConstructErrors_Pre_MaxSize_Prepare(
-                  ctx,
-                  ctx->pcs[ 3 ]
-                );
-                RtemsMessageReqConstructErrors_Pre_Free_Prepare(
-                  ctx,
-                  ctx->pcs[ 4 ]
-                );
-                RtemsMessageReqConstructErrors_Pre_Area_Prepare(
-                  ctx,
-                  ctx->pcs[ 5 ]
-                );
-                RtemsMessageReqConstructErrors_Pre_AreaSize_Prepare(
-                  ctx,
-                  ctx->pcs[ 6 ]
-                );
-                RtemsMessageReqConstructErrors_Action( ctx );
-                RtemsMessageReqConstructErrors_Post_Status_Check(
-                  ctx,
-                  entry.Post_Status
-                );
-                RtemsMessageReqConstructErrors_Post_Name_Check(
-                  ctx,
-                  entry.Post_Name
-                );
-                RtemsMessageReqConstructErrors_Post_IdVar_Check(
-                  ctx,
-                  entry.Post_IdVar
-                );
-                RtemsMessageReqConstructErrors_Cleanup( ctx );
-                ++index;
               }
             }
           }
