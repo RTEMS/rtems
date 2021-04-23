@@ -103,6 +103,10 @@ rtems_status_code rtems_task_construct(
   rtems_id                *id
 )
 {
+  if ( config == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
   return _RTEMS_tasks_Create( config, id, _RTEMS_tasks_Prepare_user_stack );
 }
 
