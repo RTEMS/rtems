@@ -5,12 +5,6 @@ include $(top_srcdir)/automake/multilib.am
 include $(srcdir)/header-dirs.am
 include $(srcdir)/headers.am
 
-if LIBNETWORKING
-
-include $(srcdir)/libnetworking/headers.am
-
-endif
-
 # This file is in the build tree
 include_rtems_score_HEADERS += ../include/rtems/score/cpuopts.h
 
@@ -291,7 +285,6 @@ librtemscpu_a_SOURCES += libmisc/cpuuse/cpuusagereset.c
 librtemscpu_a_SOURCES += libmisc/cpuuse/cpuusagetop.c
 librtemscpu_a_SOURCES += libmisc/devnull/devnull.c
 librtemscpu_a_SOURCES += libmisc/devnull/devzero.c
-librtemscpu_a_SOURCES += libmisc/dummy/dummy-networking.c
 librtemscpu_a_SOURCES += libmisc/dumpbuf/dumpbuf.c
 librtemscpu_a_SOURCES += libmisc/fb/mw_print.c
 librtemscpu_a_SOURCES += libmisc/fb/mw_uid.c
@@ -1232,170 +1225,6 @@ librtemscpu_a_SOURCES += libgnat/adasupp.c
 
 endif
 
-if LIBNETWORKING
-
-librtemscpu_a_SOURCES += libmisc/monitor/mon-network.c
-librtemscpu_a_SOURCES += libnetworking/kern/kern_mib.c
-librtemscpu_a_SOURCES += libnetworking/kern/kern_subr.c
-librtemscpu_a_SOURCES += libnetworking/kern/kern_sysctl.c
-librtemscpu_a_SOURCES += libnetworking/kern/uipc_domain.c
-librtemscpu_a_SOURCES += libnetworking/kern/uipc_mbuf.c
-librtemscpu_a_SOURCES += libnetworking/kern/uipc_socket2.c
-librtemscpu_a_SOURCES += libnetworking/kern/uipc_socket.c
-librtemscpu_a_SOURCES += libnetworking/libc/base64.c
-librtemscpu_a_SOURCES += libnetworking/libc/gethostbydns.c
-librtemscpu_a_SOURCES += libnetworking/libc/gethostbyht.c
-librtemscpu_a_SOURCES += libnetworking/libc/gethostbynis.c
-librtemscpu_a_SOURCES += libnetworking/libc/gethostnamadr.c
-librtemscpu_a_SOURCES += libnetworking/libc/getifaddrs.c
-librtemscpu_a_SOURCES += libnetworking/libc/getnameinfo.c
-librtemscpu_a_SOURCES += libnetworking/libc/getnetbydns.c
-librtemscpu_a_SOURCES += libnetworking/libc/getnetbyht.c
-librtemscpu_a_SOURCES += libnetworking/libc/getnetbynis.c
-librtemscpu_a_SOURCES += libnetworking/libc/getnetnamadr.c
-librtemscpu_a_SOURCES += libnetworking/libc/getproto.c
-librtemscpu_a_SOURCES += libnetworking/libc/getprotoent.c
-librtemscpu_a_SOURCES += libnetworking/libc/getprotoname.c
-librtemscpu_a_SOURCES += libnetworking/libc/getservbyname.c
-librtemscpu_a_SOURCES += libnetworking/libc/getservbyport.c
-librtemscpu_a_SOURCES += libnetworking/libc/getservent.c
-librtemscpu_a_SOURCES += libnetworking/libc/herror.c
-librtemscpu_a_SOURCES += libnetworking/libc/if_indextoname.c
-librtemscpu_a_SOURCES += libnetworking/libc/if_nameindex.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_addr.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_lnaof.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_makeaddr.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_netof.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_network.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_ntoa.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_ntop.c
-librtemscpu_a_SOURCES += libnetworking/libc/inet_pton.c
-librtemscpu_a_SOURCES += libnetworking/libc/linkaddr.c
-librtemscpu_a_SOURCES += libnetworking/libc/map_v4v6.c
-librtemscpu_a_SOURCES += libnetworking/libc/nsap_addr.c
-librtemscpu_a_SOURCES += libnetworking/libc/ns_name.c
-librtemscpu_a_SOURCES += libnetworking/libc/ns_netint.c
-librtemscpu_a_SOURCES += libnetworking/libc/ns_parse.c
-librtemscpu_a_SOURCES += libnetworking/libc/ns_print.c
-librtemscpu_a_SOURCES += libnetworking/libc/ns_ttl.c
-librtemscpu_a_SOURCES += libnetworking/libc/rcmd.c
-librtemscpu_a_SOURCES += libnetworking/libc/recv.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_comp.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_data.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_debug.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_init.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_mkquery.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_mkupdate.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_query.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_send.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_stubs.c
-librtemscpu_a_SOURCES += libnetworking/libc/res_update.c
-librtemscpu_a_SOURCES += libnetworking/libc/send.c
-librtemscpu_a_SOURCES += libnetworking/lib/getprotoby.c
-librtemscpu_a_SOURCES += libnetworking/lib/rtems_bsdnet_ntp.c
-librtemscpu_a_SOURCES += libnetworking/lib/syslog.c
-librtemscpu_a_SOURCES += libnetworking/net/if.c
-librtemscpu_a_SOURCES += libnetworking/net/if_ethersubr.c
-librtemscpu_a_SOURCES += libnetworking/net/if_loop.c
-librtemscpu_a_SOURCES += libnetworking/net/if_ppp.c
-librtemscpu_a_SOURCES += libnetworking/netinet/if_ether.c
-librtemscpu_a_SOURCES += libnetworking/netinet/igmp.c
-librtemscpu_a_SOURCES += libnetworking/netinet/in.c
-librtemscpu_a_SOURCES += libnetworking/netinet/in_cksum.c
-librtemscpu_a_SOURCES += libnetworking/netinet/in_pcb.c
-librtemscpu_a_SOURCES += libnetworking/netinet/in_proto.c
-librtemscpu_a_SOURCES += libnetworking/netinet/in_rmx.c
-librtemscpu_a_SOURCES += libnetworking/netinet/ip_divert.c
-librtemscpu_a_SOURCES += libnetworking/netinet/ip_fw.c
-librtemscpu_a_SOURCES += libnetworking/netinet/ip_icmp.c
-librtemscpu_a_SOURCES += libnetworking/netinet/ip_input.c
-librtemscpu_a_SOURCES += libnetworking/netinet/ip_mroute.c
-librtemscpu_a_SOURCES += libnetworking/netinet/ip_output.c
-librtemscpu_a_SOURCES += libnetworking/netinet/raw_ip.c
-librtemscpu_a_SOURCES += libnetworking/netinet/tcp_debug.c
-librtemscpu_a_SOURCES += libnetworking/netinet/tcp_input.c
-librtemscpu_a_SOURCES += libnetworking/netinet/tcp_output.c
-librtemscpu_a_SOURCES += libnetworking/netinet/tcp_subr.c
-librtemscpu_a_SOURCES += libnetworking/netinet/tcp_timer.c
-librtemscpu_a_SOURCES += libnetworking/netinet/tcp_usrreq.c
-librtemscpu_a_SOURCES += libnetworking/netinet/udp_usrreq.c
-librtemscpu_a_SOURCES += libnetworking/net/ppp_tty.c
-librtemscpu_a_SOURCES += libnetworking/net/radix.c
-librtemscpu_a_SOURCES += libnetworking/net/raw_cb.c
-librtemscpu_a_SOURCES += libnetworking/net/raw_usrreq.c
-librtemscpu_a_SOURCES += libnetworking/net/route.c
-librtemscpu_a_SOURCES += libnetworking/net/rtsock.c
-librtemscpu_a_SOURCES += libnetworking/net/slcompress.c
-librtemscpu_a_SOURCES += libnetworking/nfs/bootp_subr.c
-librtemscpu_a_SOURCES += libnetworking/rtems/mkrootfs.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_bootp.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_bsdnet_malloc_starvation.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_dhcp.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_dhcp_failsafe.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_glue.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_malloc_mbuf.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_mii_ioctl.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_mii_ioctl_kern.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_select.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showicmpstat.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showifstat.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showipstat.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showmbuf.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showroute.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showtcpstat.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_showudpstat.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_socketpair.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_syscall_api.c
-librtemscpu_a_SOURCES += libnetworking/rtems/rtems_syscall.c
-librtemscpu_a_SOURCES += libnetworking/rtems/sghostname.c
-librtemscpu_a_SOURCES += librpc/src/rpc/auth_none.c
-librtemscpu_a_SOURCES += librpc/src/rpc/auth_unix.c
-librtemscpu_a_SOURCES += librpc/src/rpc/authunix_prot.c
-librtemscpu_a_SOURCES += librpc/src/rpc/bindresvport.c
-librtemscpu_a_SOURCES += librpc/src/rpc/clnt_generic.c
-librtemscpu_a_SOURCES += librpc/src/rpc/clnt_perror.c
-librtemscpu_a_SOURCES += librpc/src/rpc/clnt_raw.c
-librtemscpu_a_SOURCES += librpc/src/rpc/clnt_simple.c
-librtemscpu_a_SOURCES += librpc/src/rpc/clnt_tcp.c
-librtemscpu_a_SOURCES += librpc/src/rpc/clnt_udp.c
-librtemscpu_a_SOURCES += librpc/src/rpc/get_myaddress.c
-librtemscpu_a_SOURCES += librpc/src/rpc/getrpcent.c
-librtemscpu_a_SOURCES += librpc/src/rpc/getrpcport.c
-librtemscpu_a_SOURCES += librpc/src/rpc/netname.c
-librtemscpu_a_SOURCES += librpc/src/rpc/netnamer.c
-librtemscpu_a_SOURCES += librpc/src/rpc/pmap_clnt.c
-librtemscpu_a_SOURCES += librpc/src/rpc/pmap_getmaps.c
-librtemscpu_a_SOURCES += librpc/src/rpc/pmap_getport.c
-librtemscpu_a_SOURCES += librpc/src/rpc/pmap_prot2.c
-librtemscpu_a_SOURCES += librpc/src/rpc/pmap_prot.c
-librtemscpu_a_SOURCES += librpc/src/rpc/pmap_rmt.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rpc_callmsg.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rpc_commondata.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rpcdname.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rpc_dtablesize.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rpc_prot.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rtems_portmapper.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rtems_rpc.c
-librtemscpu_a_SOURCES += librpc/src/rpc/rtime.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_auth.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_auth_unix.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_raw.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_run.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_simple.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_tcp.c
-librtemscpu_a_SOURCES += librpc/src/rpc/svc_udp.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_array.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_float.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_mem.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_rec.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_reference.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_sizeof.c
-librtemscpu_a_SOURCES += librpc/src/xdr/xdr_stdio.c
-
-endif
-
 if LIBPCI
 
 librtemscpu_a_SOURCES += libpci/pci_access.c
@@ -1900,12 +1729,12 @@ libftpd_a_SOURCES += ftpd/ftpd-init.c
 project_lib_LIBRARIES += libftpfs.a
 
 libftpfs_a_SOURCES =
-libftpfs_a_SOURCES += libnetworking/lib/ftpfs.c
+libftpfs_a_SOURCES += libfs/src/ftpfs/ftpfs.c
 
 project_lib_LIBRARIES += libtftpfs.a
 
 libtftpfs_a_SOURCES =
-libtftpfs_a_SOURCES += libnetworking/lib/tftpDriver.c
+libtftpfs_a_SOURCES += libfs/src/ftpfs/tftpDriver.c
 
 project_lib_LIBRARIES += libtelnetd.a
 

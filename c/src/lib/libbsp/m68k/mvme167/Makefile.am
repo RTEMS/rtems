@@ -35,10 +35,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme167/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme167/btimer/btimer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme167/btimer/timerisr.S
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme167/net/network.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c

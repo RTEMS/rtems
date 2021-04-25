@@ -37,10 +37,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/irq/irq_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/irq/irq.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/net/network.c 
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/clock/clock-ppc403.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c

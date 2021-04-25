@@ -55,12 +55,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/vectors_ent
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/GT64260/GT64260TWSI.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/GT64260/MVME5500I2C.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/net/if_100MHz/GT64260eth.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/net/if_1GHz/if_wm.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/net/if_1GHz/pci_map.c
-endif
-
 rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)

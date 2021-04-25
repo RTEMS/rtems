@@ -84,12 +84,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/mpci/intercom-mpci
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/net/network.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/net/if_intercom.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
-endif
-
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/bspsmp.c
 endif

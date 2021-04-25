@@ -78,14 +78,6 @@ if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspsmp.c
 endif
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/net/leon_smc91111.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/net/leon_open_eth.c
-if !HAS_SMP
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/net/leon_greth.c
-endif
-endif
-
 if HAS_MP
 # shmsupp
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/mpci/addrconv.c

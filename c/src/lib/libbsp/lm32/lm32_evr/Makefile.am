@@ -39,10 +39,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/btimer/btimer.c
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/net/tsmac.c
-endif
-
 include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/lm32/lm32_evr/headers.am

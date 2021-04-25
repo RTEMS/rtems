@@ -70,12 +70,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/gtm.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/net/network.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
-endif
-
-
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

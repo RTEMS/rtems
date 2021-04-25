@@ -150,7 +150,6 @@ include_rtems_HEADERS += include/rtems/rtems-rfs-format.h
 include_rtems_HEADERS += include/rtems/rtems-rfs-shell.h
 include_rtems_HEADERS += include/rtems/rtems-rfs.h
 include_rtems_HEADERS += include/rtems/rtemsdialer.h
-include_rtems_HEADERS += include/rtems/rtemspppd.h
 include_rtems_HEADERS += include/rtems/scheduler.h
 include_rtems_HEADERS += include/rtems/serdbg.h
 include_rtems_HEADERS += include/rtems/serdbgcnf.h

@@ -42,11 +42,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/cpuinit
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/net/if_hdlcsubr.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/net/network.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/dev/console-generic.c

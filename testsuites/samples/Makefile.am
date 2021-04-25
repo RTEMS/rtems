@@ -86,16 +86,6 @@ hello_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_hello) \
 	$(support_includes)
 endif
 
-if NETTESTS
-if TEST_loopback
-samples += loopback
-sample_screens += loopback/loopback.scn
-loopback_SOURCES = loopback/init.c
-loopback_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_loopback) \
-	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-endif
-endif
-
 if TEST_minimum
 samples += minimum
 sample_screens += minimum/minimum.scn
@@ -122,19 +112,6 @@ paranoia_SOURCES = paranoia/init.c paranoia/paranoia.c \
 paranoia_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_paranoia) \
 	$(support_includes)
 paranoia_LDADD = -lm $(LDADD)
-endif
-
-if NETTESTS
-if NO_SMP
-if TEST_pppd
-samples += pppd
-pppd_SOURCES = pppd/init.c pppd/pppdapp.c pppd/netconfig.h \
-	pppd/system.h
-pppd_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_pppd) $(support_includes) \
-	-I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-pppd_LDADD = $(RTEMS_ROOT)cpukit/libpppd.a $(LDADD)
-endif
-endif
 endif
 
 if TEST_ticker

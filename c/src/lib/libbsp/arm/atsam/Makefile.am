@@ -126,11 +126,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7m.c
 
-# Network
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/net/if_atsam.c
-endif
-
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/i2c/atsam_i2c_bus.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/i2c/atsam_i2c_init.c

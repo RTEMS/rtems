@@ -55,9 +55,5 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/mcdma/MCD_tasksI
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/mcdma/mcdma_glue.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/cache.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/net/network.c
-endif
-
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am

@@ -37,10 +37,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/iommu/griommu.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/irq/genirq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/l2c/l2c.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/mem/mctrl.c
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/net/greth.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/net/network_interface_add.c
-endif
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/pci/gr_701.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/pci/grpci2.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/grlib/pci/grpci2dma.c

@@ -50,11 +50,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cpuinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/net/network_fec.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/net/network_scc.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cp.c

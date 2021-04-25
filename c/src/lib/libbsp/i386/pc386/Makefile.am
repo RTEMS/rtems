@@ -126,13 +126,6 @@ appstart.$(OBJEXT): appcpustart.$(OBJEXT)
 	$(OBJCOPY) -I binary -O elf32-i386 -B i386 appstart.bin $@
 endif
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/3c509.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/elink.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/ne2000.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/wd8003.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/cpuModel.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/displayCpu.c

@@ -17,6 +17,10 @@ rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
+rtems_crtn.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crtn.S
+	$(CPPASCOMPILE) -DASM -o $@ -c $<
+project_lib_DATA += rtems_crtn.$(OBJEXT)
+
 
 preload.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
@@ -82,18 +86,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/gt_pci_init.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/pci_io_remap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/motload_fixup.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
-
-#network
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_em/if_em.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_em/if_em_hw.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_em/if_em_rtems.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_gfe/if_gfe.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_gfe/if_gfe_rtems.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/if_mve/mv643xx_eth.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/support/bsp_attach.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/net/support/early_link_status.c
-endif
 
 # tod
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c

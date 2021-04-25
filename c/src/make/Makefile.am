@@ -24,7 +24,6 @@ bsp.cfg: bsp.cfg.in Makefile
 	-e "s|[@]HAS_MP[@]|$(HAS_MP)|" \
 	-e "s|[@]HAS_POSIX_API[@]|$(HAS_POSIX_API)|" \
 	-e "s|[@]HAS_CPLUSPLUS[@]|$(HAS_CPLUSPLUS)|" \
-	-e "s|[@]HAS_NETWORKING[@]|$(HAS_NETWORKING)|" \
 	< $(srcdir)/bsp.cfg.in > bsp.cfg
 CLEANFILES += bsp.cfg
 
@@ -48,7 +47,6 @@ target.cfg: target.cfg.in Makefile
 	-e "s|[@]RTEMS_HAS_MULTIPROCESSING[@]|$(HAS_MP)|" \
 	-e "s|[@]RTEMS_HAS_POSIX_API[@]|$(HAS_POSIX_API)|" \
 	-e "s|[@]RTEMS_HAS_CPLUSPLUS[@]|$(HAS_CPLUSPLUS)|" \
-	-e "s|[@]RTEMS_HAS_NETWORKING[@]|$(HAS_NETWORKING)|" \
 	< $(srcdir)/target.cfg.in > target.cfg
 CLEANFILES += target.cfg
 

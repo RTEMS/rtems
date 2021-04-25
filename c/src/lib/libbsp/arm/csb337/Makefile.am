@@ -68,10 +68,6 @@ endif
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/net/network.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

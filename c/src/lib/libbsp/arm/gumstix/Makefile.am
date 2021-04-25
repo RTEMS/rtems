@@ -44,9 +44,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/fb/fb.c
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/net/rtl8019.c
-endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 

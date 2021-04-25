@@ -65,11 +65,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/getcurrentprocessor-zero.c
 endif
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/net/leon_smc91111.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/net/leon_open_eth.c
-endif
-
 
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/grlib-sources.am

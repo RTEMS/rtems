@@ -95,13 +95,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 # Start hooks
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspstarthooks.c
 
-###############################################################################
-#                  Network                                                    #
-###############################################################################
-
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/net/
-endif
 
 ###############################################################################
 #                  Special Rules                                              #

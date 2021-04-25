@@ -45,10 +45,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/irq/bsp_irq_asm.S
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/net/network.c
-endif
-
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/edb7312/headers.am

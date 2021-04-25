@@ -37,20 +37,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/serprobe.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/z85c30.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/z85c30_reg.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bootcard.c
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/cs8900.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/dec21140.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/elnk.c
-if !HAS_SMP
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/greth2.c
-endif
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/i82586.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/if_dc.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/if_fxp.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/open_eth.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/smc91111.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/sonic.c
-endif
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/rtems-version.c
 if HAS_MP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-addlq.c

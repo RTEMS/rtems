@@ -59,10 +59,6 @@ if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/bspsmp.c
 endif
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/net/erc32sonic.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 

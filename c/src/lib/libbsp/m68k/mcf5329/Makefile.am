@@ -36,10 +36,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5329/console/console.c
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5329/btimer/btimer.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5329/net/network.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf532x.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c

@@ -739,18 +739,6 @@ fstat_norun_SOURCES = POSIX/fstat.c
 fstat_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
-if NETTESTS
-if TEST_ftp01
-lib_tests += ftp01
-lib_screens += ftp01/ftp01.scn
-lib_docs += ftp01/ftp01.doc
-ftp01_SOURCES = ftp01/init.c
-ftp01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ftp01) \
-	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-ftp01_LDADD = $(RTEMS_ROOT)cpukit/libftpd.a $(RTEMS_ROOT)cpukit/libftpfs.a $(LDADD)
-endif
-endif
-
 if TEST_ftrylockfile
 lib_tests += ftrylockfile.norun
 ftrylockfile_norun_SOURCES = POSIX/ftrylockfile.c
@@ -963,29 +951,6 @@ md501_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_md501) \
 	$(support_includes)
 endif
 
-if NETTESTS
-if HAS_POSIX
-if TEST_mghttpd01
-lib_tests += mghttpd01
-lib_screens += mghttpd01/mghttpd01.scn
-lib_docs += mghttpd01/mghttpd01.doc
-mghttpd01_SOURCES = mghttpd01/init.c mghttpd01-tar.c \
-	mghttpd01-tar.h mghttpd01/test-http-client.c \
-	mghttpd01/test-http-client.h
-mghttpd01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mghttpd01) \
-	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-mghttpd01_LDADD = $(RTEMS_ROOT)cpukit/libmghttpd.a $(LDADD)
-mghttpd01-tar.c: mghttpd01/mghttpd01.tar
-	$(AM_V_GEN)$(BIN2C) -C $< $@
-mghttpd01-tar.h: mghttpd01/mghttpd01.tar
-	$(AM_V_GEN)$(BIN2C) -H $< $@
-mghttpd01-tar.o: mghttpd01-tar.c mghttpd01-tar.h
-mghttpd01/init.c: mghttpd01-tar.h
-CLEANFILES += mghttpd01.tar mghttpd01-tar.c mghttpd01-tar.h
-endif
-endif
-endif
-
 if TEST_monitor
 lib_tests += monitor
 monitor_SOURCES = monitor/init.c monitor/system.h
@@ -1015,17 +980,6 @@ if TEST_nanosleep
 lib_tests += nanosleep.norun
 nanosleep_norun_SOURCES = POSIX/nanosleep.c
 nanosleep_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
-endif
-
-if NETTESTS
-if TEST_networking01
-lib_tests += networking01
-lib_screens += networking01/networking01.scn
-lib_docs += networking01/networking01.doc
-networking01_SOURCES = networking01/init.c
-networking01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_networking01) \
-	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-endif
 endif
 
 if TEST_newlib01
@@ -1247,17 +1201,6 @@ stringto01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_stringto01) \
 	$(support_includes)
 endif
 
-if NETTESTS
-if TEST_syscall01
-lib_tests += syscall01
-lib_screens += syscall01/syscall01.scn
-lib_docs += syscall01/syscall01.doc
-syscall01_SOURCES = syscall01/init.c
-syscall01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_syscall01) \
-	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-endif
-endif
-
 if TARTESTS
 if TEST_tar01
 lib_tests += tar01
@@ -1324,18 +1267,6 @@ lib_docs += tar03/tar03.doc
 tar03_SOURCES = tar03/init.c
 tar03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar03) \
 	$(support_includes)
-endif
-
-if NETTESTS
-if TEST_telnetd01
-lib_tests += telnetd01
-lib_screens += telnetd01/telnetd01.scn
-lib_docs += telnetd01/telnetd01.doc
-telnetd01_SOURCES = telnetd01/init.c
-telnetd01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_telnetd01) \
-	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-telnetd01_LDADD = $(RTEMS_ROOT)cpukit/libtelnetd.a $(LDADD)
-endif
 endif
 
 if TEST_termios

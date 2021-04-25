@@ -5,10 +5,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = ../../../../../../bsps/powerpc/virtex/start/bsp_specs
 
-if HAS_NETWORKING
-endif
-
-
 noinst_PROGRAMS =
 
 
@@ -50,11 +46,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/irq/irq_init.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
-
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += =
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/net/xiltemac.c
-endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c

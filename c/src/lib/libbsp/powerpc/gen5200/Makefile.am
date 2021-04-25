@@ -101,10 +101,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/cpuinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/uboot_support.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/bestcomm.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/net/network.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c

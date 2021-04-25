@@ -81,10 +81,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/i2c_init.c
 # vpd
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/vpd.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/net/tsec.c
-endif
-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/clock/clock-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c

@@ -31,11 +31,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/console/console.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/interrupt.c
 
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/net/networkconfig.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/net/ethernet.c
-endif
-
 include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/shared/shared-sources.am

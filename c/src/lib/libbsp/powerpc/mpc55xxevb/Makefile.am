@@ -79,12 +79,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/sd-card
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/i2c/i2c_init.c
 
-# Network
-if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/net/smsc9218i.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/net/if_smc.c
-endif
-
 # BSP library
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
