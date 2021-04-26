@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/rtems/tasks.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_task_start(
@@ -40,7 +41,7 @@ rtems_status_code rtems_task_start(
   };
   Thread_Control   *the_thread;
   ISR_lock_Context  lock_context;
-  bool              ok;
+  Status_Control    status;
 
   the_thread = _Thread_Get( id, &lock_context );
 
@@ -54,7 +55,7 @@ rtems_status_code rtems_task_start(
     return RTEMS_INVALID_ID;
   }
 
-  ok = _Thread_Start( the_thread, &entry, &lock_context );
+  status = _Thread_Start( the_thread, &entry, &lock_context );
 
-  return ok ? RTEMS_SUCCESSFUL : RTEMS_INCORRECT_STATE;
+  return _Status_Get( status );
 }

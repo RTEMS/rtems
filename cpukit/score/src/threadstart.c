@@ -24,7 +24,7 @@
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/userextimpl.h>
 
-bool _Thread_Start(
+Status_Control _Thread_Start(
   Thread_Control                 *the_thread,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context
@@ -36,7 +36,7 @@ bool _Thread_Start(
 
   if ( !_States_Is_dormant( the_thread->current_state ) ) {
     _Thread_State_release( the_thread, lock_context );
-    return false;
+    return STATUS_INCORRECT_STATE;
   }
 
   the_thread->Start.Entry = *entry;
@@ -49,5 +49,5 @@ bool _Thread_Start(
   _User_extensions_Thread_start( the_thread );
 
   _Thread_Dispatch_enable( cpu_self );
-  return true;
+  return STATUS_SUCCESSFUL;
 }

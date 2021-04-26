@@ -260,12 +260,11 @@ void _Thread_Free(
  * @param[in, out] is the ISR lock context which shall be used to disable the
  *   local interrupts before the call of this routine.
  *
- * @retval true The thread was in the dormant state and was sucessefully
- *   started.
+ * @retval STATUS_SUCCESSFUL The thread start was successful.
  *
- * @retval false Otherwise.
+ * @retval STATUS_INCORRECT_STATE The thread was already started.
  */
-bool _Thread_Start(
+Status_Control _Thread_Start(
   Thread_Control                 *the_thread,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context
