@@ -33,7 +33,6 @@ rtems_status_code rtems_task_get_affinity(
 {
   Thread_Control   *the_thread;
   ISR_lock_Context  lock_context;
-  Per_CPU_Control  *cpu_self;
   Status_Control    status;
 
   if ( cpuset == NULL ) {
@@ -52,7 +51,6 @@ rtems_status_code rtems_task_get_affinity(
     return RTEMS_INVALID_ID;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
   status = _Scheduler_Get_affinity(
@@ -62,6 +60,5 @@ rtems_status_code rtems_task_get_affinity(
   );
 
   _Thread_State_release( the_thread, &lock_context );
-  _Thread_Dispatch_enable( cpu_self );
   return _Status_Get( status );
 }
