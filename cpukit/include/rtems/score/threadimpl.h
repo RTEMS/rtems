@@ -904,6 +904,13 @@ Thread_Control *_Thread_Get(
 );
 
 /**
+ * @brief Gets the identifier of the calling thread.
+ *
+ * @return Returns the identifier of the calling thread.
+ */
+Objects_Id _Thread_Self_id( void );
+
+/**
  * @brief Gets the cpu of the thread's scheduler.
  *
  * @param thread The thread.

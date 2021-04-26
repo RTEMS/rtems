@@ -1119,7 +1119,6 @@ source:
 - cpukit/posix/src/pthreadinitthreads.c
 - cpukit/posix/src/pthreadjoin.c
 - cpukit/posix/src/pthreadonce.c
-- cpukit/posix/src/pthreadself.c
 - cpukit/posix/src/pthreadsetaffinitynp.c
 - cpukit/posix/src/pthreadsetnamenp.c
 - cpukit/posix/src/pthreadsetschedparam.c
@@ -1299,7 +1298,6 @@ source:
 - cpukit/rtems/src/taskrestart.c
 - cpukit/rtems/src/taskresume.c
 - cpukit/rtems/src/tasks.c
-- cpukit/rtems/src/taskself.c
 - cpukit/rtems/src/tasksetaffinity.c
 - cpukit/rtems/src/tasksetpriority.c
 - cpukit/rtems/src/tasksetscheduler.c
@@ -1548,6 +1546,7 @@ source:
 - cpukit/score/src/threadqtimeout.c
 - cpukit/score/src/threadrestart.c
 - cpukit/score/src/threadscheduler.c
+- cpukit/score/src/threadselfid.c
 - cpukit/score/src/threadsetstate.c
 - cpukit/score/src/threadstackallocate.c
 - cpukit/score/src/threadstackfree.c
