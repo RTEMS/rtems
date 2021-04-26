@@ -1,5 +1,0 @@
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/vme/bspVmeDmaList.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/vme/vmeconfig.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/vme/vmeTsi148.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/vme/vme_universe.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/vme/vmeUniverse.c

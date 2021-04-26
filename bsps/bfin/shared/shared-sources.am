@@ -1,8 +1,0 @@
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/mmu.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/clock.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/rtc.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/spi.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/sport.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/timer.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/twi.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/dev/uart.c

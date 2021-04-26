@@ -1,5 +1,0 @@
-## Explicitly set CPPASCOMPILE
-# to be able to use it for compilation of *.S even if automake
-# doesn't generate this variable. (automake-1.8.2+ only generates
-# this rule if *_SOURCES contain *.S.)
-CPPASCOMPILE = $(CCAS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
