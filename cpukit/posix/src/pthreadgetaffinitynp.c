@@ -28,6 +28,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
+#include <rtems/posix/posixapi.h>
 
 int pthread_getaffinity_np(
   pthread_t  thread,
@@ -38,7 +39,7 @@ int pthread_getaffinity_np(
   Thread_Control   *the_thread;
   ISR_lock_Context  lock_context;
   Per_CPU_Control  *cpu_self;
-  bool              ok;
+  Status_Control    status;
 
   if ( cpuset == NULL ) {
     return EFAULT;
@@ -53,7 +54,7 @@ int pthread_getaffinity_np(
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
-  ok = _Scheduler_Get_affinity(
+  status = _Scheduler_Get_affinity(
     the_thread,
     cpusetsize,
     cpuset
@@ -61,7 +62,7 @@ int pthread_getaffinity_np(
 
   _Thread_State_release( the_thread, &lock_context );
   _Thread_Dispatch_enable( cpu_self );
-  return ok ? 0 : EINVAL;
+  return _POSIX_Get_error( status );
 }
 
 #endif

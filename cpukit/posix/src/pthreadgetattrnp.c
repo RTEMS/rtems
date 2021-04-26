@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/posix/pthreadattrimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/schedulerimpl.h>
@@ -41,7 +42,7 @@ int pthread_getattr_np(
   Thread_CPU_budget_algorithms  budget_algorithm;
   const Scheduler_Control      *scheduler;
   Priority_Control              priority;
-  bool                          ok;
+  Status_Control                status;
 
   if ( attr == NULL ) {
     return EINVAL;
@@ -82,7 +83,7 @@ int pthread_getattr_np(
 
   attr->affinityset = &attr->affinitysetpreallocated;
   attr->affinitysetsize = sizeof( attr->affinitysetpreallocated );
-  ok = _Scheduler_Get_affinity(
+  status = _Scheduler_Get_affinity(
     the_thread,
     attr->affinitysetsize,
     attr->affinityset
@@ -102,5 +103,5 @@ int pthread_getattr_np(
   attr->schedpolicy =
     _POSIX_Thread_Translate_to_sched_policy( budget_algorithm );
 
-  return ok ? 0 : EINVAL;
+  return _POSIX_Get_error( status );
 }

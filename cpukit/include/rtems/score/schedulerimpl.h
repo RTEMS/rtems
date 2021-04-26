@@ -693,10 +693,11 @@ RTEMS_INLINE_ROUTINE const Processor_mask *_Scheduler_Get_processors(
  * @param cpusetsize The size of @a cpuset.
  * @param[out] cpuset The cpuset that serves as destination for the copy operation
  *
- * @retval true The copy operation was lossless.
- * @retval false The copy operation was not lossless
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ *
+ * @retval STATUS_INVALID_NUMBER The processor set was too small.
  */
-bool _Scheduler_Get_affinity(
+Status_Control _Scheduler_Get_affinity(
   Thread_Control *the_thread,
   size_t          cpusetsize,
   cpu_set_t      *cpuset

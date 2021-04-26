@@ -27,7 +27,7 @@
 
 #include <rtems/score/schedulerimpl.h>
 
-bool _Scheduler_Get_affinity(
+Status_Control _Scheduler_Get_affinity(
   Thread_Control *the_thread,
   size_t          cpusetsize,
   cpu_set_t      *cpuset
@@ -49,5 +49,10 @@ bool _Scheduler_Get_affinity(
   status = _Processor_mask_To_cpu_set_t( affinity, cpusetsize, cpuset );
 
   _Scheduler_Release_critical( scheduler, &lock_context );
-  return status == PROCESSOR_MASK_COPY_LOSSLESS;
+
+  if ( status != PROCESSOR_MASK_COPY_LOSSLESS ) {
+    return STATUS_INVALID_NUMBER;
+  }
+
+  return STATUS_SUCCESSFUL;
 }
