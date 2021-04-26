@@ -21,6 +21,7 @@
 #define _RTEMS_SCORE_SCHEDULER_H
 
 #include <rtems/score/thread.h>
+#include <rtems/score/status.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -228,7 +229,7 @@ typedef struct {
 
 #if defined(RTEMS_SMP)
   /** @see _Scheduler_Set_affinity() */
-  bool ( *set_affinity )(
+  Status_Control ( *set_affinity )(
     const Scheduler_Control *,
     Thread_Control *,
     Scheduler_Node *,
@@ -581,10 +582,13 @@ void _Scheduler_default_Start_idle(
    * @param node This parameter is unused.
    * @param affinity The new processor affinity set for the thread.
    *
-   * @retval true The processor set of the scheduler is a subset of the affinity set.
-   * @retval false The processor set of the scheduler is not a subset of the affinity set.
+    * @retval STATUS_SUCCESSFUL The affinity is a subset of the online
+    *   processors.
+    *
+    * @retval STATUS_INVALID_NUMBER The affinity is not a subset of the online
+    *   processors.
    */
-  bool _Scheduler_default_Set_affinity(
+  Status_Control _Scheduler_default_Set_affinity(
     const Scheduler_Control *scheduler,
     Thread_Control          *thread,
     Scheduler_Node          *node,

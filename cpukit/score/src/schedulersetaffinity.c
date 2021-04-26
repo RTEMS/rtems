@@ -27,22 +27,22 @@
 
 #include <rtems/score/schedulerimpl.h>
 
-bool _Scheduler_Set_affinity(
+Status_Control _Scheduler_Set_affinity(
   Thread_Control       *the_thread,
   size_t                cpusetsize,
   const cpu_set_t      *cpuset
 )
 {
   Processor_mask             affinity;
-  Processor_mask_Copy_status status;
+  Processor_mask_Copy_status copy_status;
   const Scheduler_Control   *scheduler;
   Scheduler_Node            *node;
   ISR_lock_Context           lock_context;
-  bool                       ok;
+  Status_Control             status;
 
-  status = _Processor_mask_From_cpu_set_t( &affinity, cpusetsize, cpuset );
-  if ( !_Processor_mask_Is_at_most_partial_loss( status ) ) {
-    return false;
+  copy_status = _Processor_mask_From_cpu_set_t( &affinity, cpusetsize, cpuset );
+  if ( !_Processor_mask_Is_at_most_partial_loss( copy_status ) ) {
+    return STATUS_INVALID_NUMBER;
   }
 
   /*
@@ -57,18 +57,18 @@ bool _Scheduler_Set_affinity(
 
   node = _Thread_Scheduler_get_home_node( the_thread );
 #if defined(RTEMS_SMP)
-  ok = ( *scheduler->Operations.set_affinity )(
+  status = ( *scheduler->Operations.set_affinity )(
     scheduler,
     the_thread,
     node,
     &affinity
   );
 
-  if ( ok ) {
+  if ( status == STATUS_SUCCESSFUL ) {
     _Processor_mask_Assign( &the_thread->Scheduler.Affinity, &affinity );
   }
 #else
-  ok = _Scheduler_default_Set_affinity_body(
+  status = _Scheduler_default_Set_affinity_body(
     scheduler,
     the_thread,
     node,
@@ -77,5 +77,5 @@ bool _Scheduler_Set_affinity(
 #endif
 
   _Scheduler_Release_critical( scheduler, &lock_context );
-  return ok;
+  return status;
 }

@@ -723,7 +723,7 @@ void _Scheduler_EDF_SMP_Unpin(
   node->pinning_ready_queue_index = 0;
 }
 
-bool _Scheduler_EDF_SMP_Set_affinity(
+Status_Control _Scheduler_EDF_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node_base,
@@ -739,7 +739,7 @@ bool _Scheduler_EDF_SMP_Set_affinity(
   _Processor_mask_And( &local_affinity, &context->Processors, affinity );
 
   if ( _Processor_mask_Is_zero( &local_affinity ) ) {
-    return false;
+    return STATUS_INVALID_NUMBER;
   }
 
   if ( _Processor_mask_Is_equal( affinity, &_SMP_Online_processors ) ) {
@@ -766,5 +766,5 @@ bool _Scheduler_EDF_SMP_Set_affinity(
     );
   }
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }

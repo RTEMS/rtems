@@ -251,13 +251,13 @@ int pthread_create(
   the_thread->Life.state |= THREAD_LIFE_CHANGE_DEFERRED;
 
   _ISR_lock_ISR_disable( &lock_context );
-   ok = _Scheduler_Set_affinity(
+   status = _Scheduler_Set_affinity(
      the_thread,
      the_attr->affinitysetsize,
      the_attr->affinityset
    );
   _ISR_lock_ISR_enable( &lock_context );
-   if ( !ok ) {
+   if ( status != STATUS_SUCCESSFUL ) {
       _Thread_Free( &_POSIX_Threads_Information, the_thread );
      _RTEMS_Unlock_allocator();
      return EINVAL;

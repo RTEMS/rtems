@@ -541,7 +541,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
   );
 }
 
-bool _Scheduler_priority_affinity_SMP_Set_affinity(
+Status_Control _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node_base,
@@ -557,7 +557,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   _Processor_mask_And( &my_affinity, &context->Processors, affinity );
 
   if ( _Processor_mask_Count( &my_affinity ) == 0 ) {
-    return false;
+    return STATUS_INVALID_NUMBER;
   }
 
   node = _Scheduler_priority_affinity_SMP_Node_downcast( node_base );
@@ -567,7 +567,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
    * doing anything.
    */
   if ( _Processor_mask_Is_equal( &node->Affinity, affinity ) )
-    return true;
+    return STATUS_SUCCESSFUL;
 
   current_state = thread->current_state;
 
@@ -584,5 +584,5 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     (void) _Scheduler_priority_affinity_SMP_Unblock( scheduler, thread, &node->Base.Base.Base );
   }
 
-  return true;
+  return STATUS_SUCCESSFUL;
 }

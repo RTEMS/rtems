@@ -711,10 +711,12 @@ Status_Control _Scheduler_Get_affinity(
  * @param node This parameter is unused.
  * @param affinity The processor mask to check.
  *
- * @retval true @a affinity is a subset of the online processors.
- * @retval false @a affinity is not a subset of the online processors.
+ * @retval STATUS_SUCCESSFUL The affinity is a subset of the online processors.
+ *
+ * @retval STATUS_INVALID_NUMBER The affinity is not a subset of the online
+ *   processors.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
+RTEMS_INLINE_ROUTINE Status_Control _Scheduler_default_Set_affinity_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
@@ -724,7 +726,12 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   (void) scheduler;
   (void) the_thread;
   (void) node;
-  return _Processor_mask_Is_subset( affinity, _SMP_Get_online_processors() );
+
+  if ( !_Processor_mask_Is_subset( affinity, _SMP_Get_online_processors() ) ) {
+    return STATUS_INVALID_NUMBER;
+  }
+
+  return STATUS_SUCCESSFUL;
 }
 
 /**
@@ -734,10 +741,12 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
  * @param cpusetsize The size of @a cpuset.
  * @param cpuset The cpuset to set the affinity.
  *
- * @retval true The operation succeeded.
- * @retval false The operation did not succeed.
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ *
+ * @retval STATUS_INVALID_NUMBER The processor set was not a valid new
+ *   processor affinity set for the thread.
  */
-bool _Scheduler_Set_affinity(
+Status_Control _Scheduler_Set_affinity(
   Thread_Control  *the_thread,
   size_t           cpusetsize,
   const cpu_set_t *cpuset
@@ -1318,12 +1327,12 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
 
   if (
     _Scheduler_Get_processor_count( new_scheduler ) == 0
-      || !( *new_scheduler->Operations.set_affinity )(
+      || ( *new_scheduler->Operations.set_affinity )(
         new_scheduler,
         the_thread,
         new_scheduler_node,
         &the_thread->Scheduler.Affinity
-      )
+      ) != STATUS_SUCCESSFUL
   ) {
     _Scheduler_Release_critical( new_scheduler, &lock_context );
     _Priority_Plain_insert(

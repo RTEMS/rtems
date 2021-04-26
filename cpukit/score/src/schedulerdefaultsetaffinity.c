@@ -22,7 +22,7 @@
 
 #include <rtems/score/schedulerimpl.h>
 
-bool _Scheduler_default_Set_affinity(
+Status_Control _Scheduler_default_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node,

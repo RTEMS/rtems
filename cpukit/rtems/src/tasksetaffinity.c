@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/rtems/tasks.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
@@ -33,7 +34,7 @@ rtems_status_code rtems_task_set_affinity(
   Thread_Control   *the_thread;
   ISR_lock_Context  lock_context;
   Per_CPU_Control  *cpu_self;
-  bool              ok;
+  Status_Control    status;
 
   if ( cpuset == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -54,7 +55,7 @@ rtems_status_code rtems_task_set_affinity(
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
-  ok = _Scheduler_Set_affinity(
+  status = _Scheduler_Set_affinity(
     the_thread,
     cpusetsize,
     cpuset
@@ -62,5 +63,5 @@ rtems_status_code rtems_task_set_affinity(
 
   _Thread_State_release( the_thread, &lock_context );
   _Thread_Dispatch_enable( cpu_self );
-  return ok ? RTEMS_SUCCESSFUL : RTEMS_INVALID_NUMBER;
+  return _Status_Get( status );
 }

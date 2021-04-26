@@ -330,10 +330,13 @@ void _Scheduler_EDF_SMP_Start_idle(
  * @param node This parameter is unused.
  * @param affinity The new processor affinity set for the thread.
  *
- * @retval true The processor set of the scheduler is a subset of the affinity set.
- * @retval false The processor set of the scheduler is not a subset of the affinity set.
+ * @retval STATUS_SUCCESSFUL The processor set of the scheduler is a subset of
+ *   the affinity set.
+ *
+ * @retval STATUS_INVALID_NUMBER The processor set of the scheduler is not a
+ *   subset of the affinity set.
  */
-bool _Scheduler_EDF_SMP_Set_affinity(
+Status_Control _Scheduler_EDF_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node,

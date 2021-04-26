@@ -213,10 +213,10 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
  * @param[in, out] node The scheduler node.
  * @param affinity The new affinity set.
  *
- * @retval true if successful
- * @retval false if unsuccessful
+ * @retval STATUS_SUCCESSFUL if successful
+ * @retval STATUS_INVALID_NUMBER if unsuccessful
  */
-bool _Scheduler_priority_affinity_SMP_Set_affinity(
+Status_Control _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node,
