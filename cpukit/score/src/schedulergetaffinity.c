@@ -51,7 +51,7 @@ Status_Control _Scheduler_Get_affinity(
   _Scheduler_Release_critical( scheduler, &lock_context );
 
   if ( status != PROCESSOR_MASK_COPY_LOSSLESS ) {
-    return STATUS_INVALID_NUMBER;
+    return STATUS_INVALID_SIZE;
   }
 
   return STATUS_SUCCESSFUL;

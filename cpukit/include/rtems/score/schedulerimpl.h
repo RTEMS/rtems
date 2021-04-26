@@ -695,7 +695,7 @@ RTEMS_INLINE_ROUTINE const Processor_mask *_Scheduler_Get_processors(
  *
  * @retval STATUS_SUCCESSFUL The operation succeeded.
  *
- * @retval STATUS_INVALID_NUMBER The processor set was too small.
+ * @retval STATUS_INVALID_SIZE The processor set was too small.
  */
 Status_Control _Scheduler_Get_affinity(
   Thread_Control *the_thread,

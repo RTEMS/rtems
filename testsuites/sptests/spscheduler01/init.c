@@ -49,6 +49,7 @@ static void assert_eno(rtems_status_code sc, int eno)
       rtems_test_assert(eno == ESRCH);
       break;
     case RTEMS_INVALID_NUMBER:
+    case RTEMS_INVALID_SIZE:
       rtems_test_assert(eno == EINVAL);
       break;
     default:
@@ -139,7 +140,7 @@ static void test_task_get_set_affinity(void)
   rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
 
   sc = task_get_affinity(RTEMS_SELF, 0, &cpuset);
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert(sc == RTEMS_INVALID_SIZE);
 
   sc = task_set_affinity(RTEMS_SELF, 0, &cpuset);
   rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
