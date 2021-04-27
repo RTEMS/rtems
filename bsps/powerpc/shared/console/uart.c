@@ -536,6 +536,10 @@ BSP_uart_termios_set(int uart, void *p)
 
   uart_data[uart].ioMode           = ttyp->device.outputUsesInterrupts;
 
+  /* Convert from the baud number to the "speed_t" termios setting. */
+  ttyp->termios.c_ispeed = ttyp->termios.c_ospeed =
+    rtems_termios_number_to_baud(uart_data[uart].baud);
+
   return;
 }
 
