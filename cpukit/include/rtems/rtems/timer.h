@@ -545,7 +545,7 @@ rtems_status_code rtems_timer_fire_after(
  */
 rtems_status_code rtems_timer_fire_when(
   rtems_id                          id,
-  rtems_time_of_day                *wall_time,
+  const rtems_time_of_day          *wall_time,
   rtems_timer_service_routine_entry routine,
   void                             *user_data
 );
@@ -719,7 +719,7 @@ rtems_status_code rtems_timer_server_fire_after(
  */
 rtems_status_code rtems_timer_server_fire_when(
   rtems_id                          id,
-  rtems_time_of_day                *wall_time,
+  const rtems_time_of_day          *wall_time,
   rtems_timer_service_routine_entry routine,
   void                             *user_data
 );
