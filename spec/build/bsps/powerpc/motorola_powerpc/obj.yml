@@ -20,7 +20,9 @@ install:
   source:
   - bsps/powerpc/motorola_powerpc/start/linkcmds
   - bsps/powerpc/shared/start/linkcmds.share
-links: []
+links:
+- role: build-dependency
+  uid: ../../optconsolebaud
 source:
 - bsps/powerpc/motorola_powerpc/console/polled_io.c
 - bsps/powerpc/motorola_powerpc/start/bspreset.c

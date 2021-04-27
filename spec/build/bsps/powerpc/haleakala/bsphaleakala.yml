@@ -37,6 +37,8 @@ links:
 - role: build-dependency
   uid: abi
 - role: build-dependency
+  uid: ../../optconsolebaud
+- role: build-dependency
   uid: optsprg
 - role: build-dependency
   uid: optvecbase

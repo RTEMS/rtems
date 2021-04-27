@@ -34,6 +34,10 @@ Note that the policy can still be defined by the application
 CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK this feature is removed
 and a little memory is saved.])
 
+RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[9600])
+RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],
+[default console baud])
+
 AC_DEFINE(__ppc_generic, 1, [PowerPC model option])
 
 # Explicitly list all Makefiles here

@@ -160,7 +160,7 @@ BSP_uart_init(int uart, int baud, int hwFlow)
 
   if ( (int)BSPBaseBaud <= 0 ) {
   	/* Use current divisor assuming BSPBaseBaud gives us the current speed */
-	BSPBaseBaud  = BSPBaseBaud ? -BSPBaseBaud : 9600;
+	BSPBaseBaud  = BSPBaseBaud ? -BSPBaseBaud : BSP_CONSOLE_BAUD;
 	BSPBaseBaud *= ((uread(uart, DLM) << 8) | uread(uart, DLL));
   }
 

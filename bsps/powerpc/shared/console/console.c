@@ -153,8 +153,8 @@ static int console_first_open(int major, int minor, void *arg)
   /* must not open a minor device we have no ISR for */
   assert( minor>=0 && minor < sizeof(ttyS)/sizeof(ttyS[0]) && ttyS[minor].isr );
 
-  /* 9600-8-N-1 */
-  BSP_uart_init(minor, 9600, 0);
+  /* BSP_CONSOLE_BAUD-8-N-1 */
+  BSP_uart_init(minor, BSP_CONSOLE_BAUD, 0);
   status = BSP_uart_install_isr(minor, ttyS[minor].isr);
   if (!status) {
     printk("Error installing serial console interrupt handler for '%s'!\n",

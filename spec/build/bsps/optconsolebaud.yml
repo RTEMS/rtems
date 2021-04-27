@@ -11,6 +11,11 @@ default-by-variant:
   variants:
   - m68k/m5484FireEngine
   - powerpc/hsc_cm01
+  - powerpc/beatnik
+  - powerpc/haleakala
+  - powerpc/motorola_powerpc
+  - powerpc/mvme3100
+  - powerpc/mvme5500
 - value: 19200
   variants:
   - m68k/COBRA5475
