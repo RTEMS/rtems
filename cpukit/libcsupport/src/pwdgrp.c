@@ -63,8 +63,6 @@ static void init_file(const char *name, const char *content)
  */
 static void pwdgrp_init(void)
 {
-  int sc;
-
   /*
    * Do the best to create this directory.
    *
