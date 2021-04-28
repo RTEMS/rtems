@@ -1372,15 +1372,6 @@ librtemscpu_a_SOURCES += libmisc/shell/main_pci.c
 
 endif
 
-if LIBNETWORKING
-
-librtemscpu_a_SOURCES += libmisc/shell/main_ifconfig.c
-librtemscpu_a_SOURCES += libmisc/shell/main_route.c
-librtemscpu_a_SOURCES += libmisc/shell/main_netstats.c
-librtemscpu_a_SOURCES += libmisc/shell/main_ping.c
-
-endif
-
 endif
 
 if LIBUTF8PROC
@@ -1812,40 +1803,6 @@ libz_a_SOURCES += zlib/inftrees.c
 libz_a_SOURCES += zlib/trees.c
 libz_a_SOURCES += zlib/uncompr.c
 libz_a_SOURCES += zlib/zutil.c
-
-if LIBNETWORKING
-
-project_lib_LIBRARIES += libnfs.a
-
-libnfs_a_SOURCES =
-libnfs_a_SOURCES += libfs/src/nfsclient/proto/mount_prot_xdr.c
-libnfs_a_SOURCES += libfs/src/nfsclient/proto/nfs_prot_xdr.c
-libnfs_a_SOURCES += libfs/src/nfsclient/src/nfs.c
-libnfs_a_SOURCES += libfs/src/nfsclient/src/rpcio.c
-libnfs_a_SOURCES += libfs/src/nfsclient/src/sock_mbuf.c
-libnfs_a_SOURCES += libfs/src/nfsclient/src/xdr_mbuf.c
-
-project_lib_LIBRARIES += libpppd.a
-
-libpppd_a_SOURCES =
-libpppd_a_SOURCES += pppd/auth.c
-libpppd_a_SOURCES += pppd/ccp.c
-libpppd_a_SOURCES += pppd/chap.c
-libpppd_a_SOURCES += pppd/chap_ms.c
-libpppd_a_SOURCES += pppd/chat.c
-libpppd_a_SOURCES += pppd/demand.c
-libpppd_a_SOURCES += pppd/fsm.c
-libpppd_a_SOURCES += pppd/ipcp.c
-libpppd_a_SOURCES += pppd/lcp.c
-libpppd_a_SOURCES += pppd/magic.c
-libpppd_a_SOURCES += pppd/options.c
-libpppd_a_SOURCES += pppd/rtemsmain.c
-libpppd_a_SOURCES += pppd/rtemspppd.c
-libpppd_a_SOURCES += pppd/sys-rtems.c
-libpppd_a_SOURCES += pppd/upap.c
-libpppd_a_SOURCES += pppd/utils.c
-
-endif
 
 if HACK_TO_AVOID_LONG_ARG_LIST
 

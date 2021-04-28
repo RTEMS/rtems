@@ -293,7 +293,6 @@ AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
 AM_CONDITIONAL(HAS_SMP,[test "$RTEMS_HAS_SMP" = "yes"])
 
 AM_CONDITIONAL(HAS_PTHREADS,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
-AM_CONDITIONAL(LIBNETWORKING,test x"$rtems_cv_HAS_NETWORKING" = x"yes")
 
 AM_CONDITIONAL([LIBSHELL],[test x"$HAVE_ASSIGNABLE_STDIO" = x"yes"])
 AM_CONDITIONAL([LIBSERDBG],[test x"$rtems_cv_cc_attribute_weak" = x"yes"])
