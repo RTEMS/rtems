@@ -1,4 +1,4 @@
-/*  SPDX-License-Identifier: BSD-2-Clause */
+/* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
  *  @file
@@ -8,8 +8,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009, 2021.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

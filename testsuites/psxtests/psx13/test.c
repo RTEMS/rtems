@@ -1,4 +1,4 @@
-/*  SPDX-License-Identifier: BSD-2-Clause */
+/* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
  *  @file
@@ -17,12 +17,13 @@
  *     - umask()
  *     - utime()
  *     - utimes()
+ *     - utimensat()
+ *     - futimens()
  *     - sync()
  */
 
 /*
- *  COPYRIGHT (c) 1989-2009, 2021.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -52,6 +53,8 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/score/timespec.h>
+#include <rtems/score/todimpl.h>
 #include <sys/time.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -210,8 +213,7 @@ static void Dup2Test( void )
 }
 
 /**
- * @brief Exercises fdatasync(). Does NOT test the functionality of the
- *        underlying fdatasync entry in the IMFS op table.
+ * @brief Exercises fdatasync().
  */
 static void FDataSyncTest( void )
 {
@@ -259,60 +261,517 @@ static void UMaskTest( void )
 }
 
 /**
- * @brief Exercises utime(). Does not test the functionality of the
- *        underlying utime entry in the IMFS op table.
+ * @brief Exercises utime().
  */
 static void UTimeTest( void )
 {
   int rv;
   struct utimbuf time;
+  struct timespec current_time;
   struct stat fstat;
 
-  /* First, an invalid filename. */
+  /* ENOENT test case */
+
+  /* Case: Pass an invalid filename. */
   rv = utime( "!This is an =invalid p@thname!!! :)", NULL );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == ENOENT );
 
-  /* Now, the success test. */
+  /* EACCES test case */
+
+  /* Case: Change user ID to someone besides root */
+  rv = seteuid( 1 );
+  rtems_test_assert( rv == 0 );
+
+  rv = utime( "testfile1.tst", NULL );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EACCES );
+
+  rv = seteuid( 0 );
+  rtems_test_assert( rv == 0 );
+
+  /* EINVAL test cases */
+
+  /* Case: Invalid access time */
+  time.actime  = -1;
+  time.modtime = 54321;
+
+  rv = utime( "testfile1.tst", &time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Invalid modified time */
+  time.actime  = 12345;
+  time.modtime = -1;
+
+  rv = utime( "testfile1.tst", &time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Successful test cases */
+
+  /* Case: Test without times argument */
+  clock_gettime( CLOCK_REALTIME, &current_time );
+
+  rv = utime( "testfile1.tst", NULL );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
+
+  /* Case: time is filled with valid values */
   time.actime  = 12345;
   time.modtime = 54321;
 
   rv = utime( "testfile1.tst", &time );
   rtems_test_assert( rv == 0 );
 
-  /* But, did it set the time? */
+  /* Check that it actually changed the time */
   rv = stat( "testfile1.tst", &fstat );
   rtems_test_assert( rv == 0 );
   rtems_test_assert( fstat.st_atime == 12345 );
   rtems_test_assert( fstat.st_mtime == 54321 );
-
-  rv = utime( "testfile1.tst", NULL );
-  rtems_test_assert( rv == 0 );
 }
 
 /**
- * @brief Exercises utimes(). Does NOT test the functionality of the
- *        underlying utime entry in the IMFS op table.
+ * @brief Exercises utimes().
  */
 static void UTimesTest( void )
 {
   int rv;
   struct timeval time[2];
+  struct timespec current_time;
   struct stat fstat;
 
-  /* First, an invalid filename. */
+  /* ENOENT test case */
+
+  /* Case: First, an invalid filename. */
   rv = utimes( "!This is an =invalid p@thname!!! : )", NULL);
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == ENOENT );
 
-  /* Now, the success test. */
-  time[0].tv_sec = 12345;
-  time[1].tv_sec = 54321;
+  /* EACCES test case */
 
-  rv = utimes( "testfile1.tst", (struct timeval *)&time );
+  /* Change the user ID of the process to someone besides root */
+  rv = seteuid( 1 );
   rtems_test_assert( rv == 0 );
 
-  /* But, did it set the time? */
+  rv = utimes( "testfile1.tst", NULL );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EACCES );
+
+  rv = seteuid( 0 );
+  rtems_test_assert( rv == 0 );
+
+  /* EINVAL test cases */
+
+  /* Case: Negative access time tv_sec value */
+  time[0].tv_sec = -1;
+  time[0].tv_usec = 12345;
+  time[1].tv_sec = 54321;
+  time[1].tv_usec = 54321;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative modified time second value */
+  time[0].tv_sec = 12345;
+  time[1].tv_sec = -1;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative access time microsecond value */
+  time[1].tv_sec = 54321;
+  time[0].tv_usec = -1;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative modified time microsecond value */
+  time[0].tv_usec = 12345;
+  time[1].tv_usec = -1;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Access time microsecond value too large */
+  time[0].tv_usec = 1000000;
+  time[1].tv_usec = 54321;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Modified time microsecond value too large */
+  time[1].tv_usec = 1000000;
+  time[0].tv_usec = 12345;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Successful test cases */
+
+  /* Case: Test without times argument */
+  clock_gettime( CLOCK_REALTIME, &current_time );
+
+  rv = utimes( "testfile1.tst", NULL );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
+
+  /* Case: time is filled with valid values */
+  time[0].tv_sec = 12345;
+  time[0].tv_usec = 12345;
+  time[1].tv_sec = 54321;
+  time[1].tv_usec = 54321;
+
+  rv = utimes( "testfile1.tst", time );
+  rtems_test_assert( rv == 0 );
+
+  /* Check that it actually changed the time */
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( fstat.st_atime == 12345 );
+  rtems_test_assert( fstat.st_mtime == 54321 );
+}
+
+/**
+ * @brief Exercises utimensat().
+ */
+static void UTimensatTest( void )
+{
+  int rv;
+  struct timespec time[2];
+  struct timespec current_time;
+  struct stat fstat;
+
+  /* ENOSYS test cases */
+
+  /* Case: Pass an unsupported file descriptor */
+  rv = utimensat(
+    0,
+    "!This is an =invalid p@thname!!! : )",
+    NULL,
+    0
+  );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOSYS );
+
+  /* Case: Pass unsupported flag */
+  rv = utimensat(
+    AT_FDCWD,
+    "!This is an =invalid p@thname!!! : )",
+    NULL,
+    1
+  );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOSYS );
+
+  /* ENOENT test case */
+
+  /* Use an invalid filename. */
+  rv = utimensat(
+    AT_FDCWD,
+    "!This is an =invalid p@thname!!! : )",
+    NULL,
+    0
+  );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == ENOENT );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+
+  /* EACCES test Cases */
+
+  /* Case: When times is NULL and the user has insufficient privileges */
+
+  /* Change the user ID of the process to someone besides root */
+  rv = seteuid( 1 );
+  rtems_test_assert( rv == 0 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", NULL, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EACCES );
+
+  rv = seteuid( 0 );
+  rtems_test_assert( rv == 0 );
+
+  /* Case: File is read-only and time's tv_nsec members are UTIME_NOW */
+
+  /* Change file to be read-only */
+  rv = chmod( "testfile1.tst", 06444 );
+  rtems_test_assert( rv == 0 );
+
+  _Timespec_Set( &time[0], 0, UTIME_NOW );
+  _Timespec_Set( &time[1], 0, UTIME_NOW );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EACCES );
+
+  rv = chmod( "testfile1.tst", fstat.st_mode );
+  rtems_test_assert( rv == 0 );
+
+  /* EINVAL test cases */
+
+  /* Case: Negative access time second value */
+  _Timespec_Set( &time[0], -12345, 12345 );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative modified time second value */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], -54321, 54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative access time nanosecond value */
+  _Timespec_Set( &time[0], 12345, -12345 );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative modified time nanosecond value */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, -54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Access time nanosecond value too large */
+  _Timespec_Set( &time[0], 12345, TOD_NANOSECONDS_PER_SECOND );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Modified time nanosecond value too large */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, TOD_NANOSECONDS_PER_SECOND );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Successful test cases */
+
+  /* Case: Test without times argument */
+  clock_gettime( CLOCK_REALTIME, &current_time );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", NULL, 0 );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
+
+  /* Case: Running with access time nanosecond field equal to UTIME_NOW */
+  _Timespec_Set( &time[0], 12345, UTIME_NOW );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
+  rtems_test_assert( fstat.st_mtime == 54321 );
+
+  /* Case: Running with modified time nanosecond field equal to UTIME_NOW */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, UTIME_NOW );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( fstat.st_atime == 12345 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
+
+  /* Case: Normal run */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = utimensat( AT_FDCWD, "testfile1.tst", time, 0 );
+  rtems_test_assert( rv == 0 );
+
+  /* Check that it actually changed the time */
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( fstat.st_atime == 12345 );
+  rtems_test_assert( fstat.st_mtime == 54321 );
+}
+
+/**
+ * @brief Exercises futimens().
+ */
+static void FutimensTest( void )
+{
+  int rv;
+  int fd;
+  struct timespec time[2];
+  struct timespec current_time;
+  struct stat fstat;
+
+  /* EBADF test case */
+
+  /* Case: Pass an invalid file descriptor */
+  rv = futimens( -1, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EBADF );
+
+  fd = open( "testfile1.tst", O_RDWR );
+  rtems_test_assert( fd != -1 );
+
+  /* EACCES test cases */
+
+  /* Case: When times is NULL and the user has insufficient privileges */
+
+  /* Change the user ID of the process to someone besides root */
+  rv = seteuid( 1 );
+  rtems_test_assert( rv == 0 );
+
+  rv = futimens( fd, NULL );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EACCES );
+
+  rv = seteuid( 0 );
+  rtems_test_assert( rv == 0 );
+
+  /* Case: File is read-only and time's tv_nsec members are UTIME_NOW */
+
+  /* Change file to be read-only */
+  rv = chmod( "testfile1.tst", 06444 );
+  rtems_test_assert( rv == 0 );
+
+  _Timespec_Set( &time[0], 0, UTIME_NOW );
+  _Timespec_Set( &time[1], 0, UTIME_NOW );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EACCES );
+
+  rv = chmod( "testfile1.tst", fstat.st_mode );
+  rtems_test_assert( rv == 0 );
+
+  /* EINVAL test cases */
+
+  /* Case: Negative access time second value */
+  _Timespec_Set( &time[0], -12345, 12345 );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative modified time second value */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], -54321, 54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative access time nanosecond value */
+  _Timespec_Set( &time[0], 12345, -12345 );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Negative modified time nanosecond value */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, -54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Access time nanosecond value too large */
+  _Timespec_Set( &time[0], 12345, TOD_NANOSECONDS_PER_SECOND );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Case: Modified time nanosecond value too large */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, TOD_NANOSECONDS_PER_SECOND );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  /* Successful test cases */
+
+  /* Case: Test without times argument */
+  clock_gettime( CLOCK_REALTIME, &current_time );
+
+  rv = futimens( fd, NULL );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
+
+/* Case: Running with access time nanosecond field equal to UTIME_NOW */
+  _Timespec_Set( &time[0], 12345, UTIME_NOW );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_atim.tv_sec );
+  rtems_test_assert( fstat.st_mtime == 54321 );
+
+  /* Case: Running with modified time nanosecond field equal to UTIME_NOW */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, UTIME_NOW );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == 0 );
+
+  rv = stat( "testfile1.tst", &fstat );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( fstat.st_atime == 12345 );
+  rtems_test_assert( current_time.tv_sec <= fstat.st_mtim.tv_sec );
+
+  /* Case: Normal run */
+  _Timespec_Set( &time[0], 12345, 12345 );
+  _Timespec_Set( &time[1], 54321, 54321 );
+
+  rv = futimens( fd, time );
+  rtems_test_assert( rv == 0 );
+
+  /* Check that it actually changed the time */
   rv = stat( "testfile1.tst", &fstat );
   rtems_test_assert( rv == 0 );
   rtems_test_assert( fstat.st_atime == 12345 );
@@ -443,6 +902,8 @@ int test_main( void )
   UMaskTest();
   UTimeTest();
   UTimesTest();
+  UTimensatTest();
+  FutimensTest();
   FSyncTest();
   PathConfTest();
   FPathConfTest();
