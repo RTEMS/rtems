@@ -1,58 +1,66 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  *  @file
  *
- *  @brief Set File Access and Modification Times
  *  @ingroup libcsupport
+ *
+ *  @brief Set file access and modification times in seconds.
  */
 
 /*
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-/* FIXME: This include is a workaround for a broken <utime.h> in Newlib */
-#include <sys/types.h>
-
-#include <utime.h>
-
+#include <sys/stat.h>
 #include <rtems/libio_.h>
 
+#include <fcntl.h>
+#include <utime.h>
+
 /**
- *  POSIX 1003.1b 5.5.6 - Set File Access and Modification Times
+ *  https://pubs.opengroup.org/onlinepubs/009604599/functions/utime.html
+ *
+ *  Set file access and modification times
  */
-int utime( const char *path, const struct utimbuf *times )
+int utime(
+  const char *path,
+  const struct utimbuf *times
+)
 {
-  int rv = 0;
-  rtems_filesystem_eval_path_context_t ctx;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK;
-  const rtems_filesystem_location_info_t *currentloc =
-    rtems_filesystem_eval_path_start( &ctx, path, eval_flags );
-  struct utimbuf now_times;
+  struct timespec new_times[2];
 
   if ( times == NULL ) {
-    time_t now = time( NULL );
-
-    now_times.actime = now;
-    now_times.modtime = now;
-
-    times = &now_times;
+    return utimensat(AT_FDCWD, path, NULL, 0);
   }
 
-  rv = (*currentloc->mt_entry->ops->utime_h)(
-    currentloc,
-    times->actime,
-    times->modtime
-  );
+  _Timespec_Set(&new_times[0], times->actime, 0);
+  _Timespec_Set(&new_times[1], times->modtime, 0);
 
-  rtems_filesystem_eval_path_cleanup( &ctx );
-
-  return rv;
+  return utimensat(AT_FDCWD, path, new_times, 0);
 }
