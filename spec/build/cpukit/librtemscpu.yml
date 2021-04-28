@@ -761,6 +761,8 @@ source:
 - cpukit/libcsupport/src/unmount.c
 - cpukit/libcsupport/src/utime.c
 - cpukit/libcsupport/src/utimes.c
+- cpukit/libcsupport/src/futimens.c
+- cpukit/libcsupport/src/utimensat.c
 - cpukit/libcsupport/src/utsname.c
 - cpukit/libcsupport/src/vprintk.c
 - cpukit/libcsupport/src/write.c
@@ -1559,6 +1561,7 @@ source:
 - cpukit/score/src/threadyield.c
 - cpukit/score/src/timespecaddto.c
 - cpukit/score/src/timespecdivide.c
+- cpukit/score/src/timespecisnonnegative.c
 - cpukit/score/src/timespecdividebyinteger.c
 - cpukit/score/src/timespecfromticks.c
 - cpukit/score/src/timespecgetasnanoseconds.c

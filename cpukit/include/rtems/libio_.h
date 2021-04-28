@@ -1,21 +1,39 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
  * @brief LibIO Internal Interface
- * 
+ *
  * This file is the libio internal interface.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2011.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
- *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH.
+ * Modifications to support reference counting in the file system are
+ * Copyright (c) 2012 embedded brains GmbH.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO__H
@@ -30,6 +48,7 @@
 #include <rtems/libio.h>
 #include <rtems/seterr.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/timespec.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -356,6 +375,65 @@ static inline void rtems_filesystem_instance_unlock(
 
   (*mt_entry->ops->unlock_h)( mt_entry );
 }
+
+/**
+ * @brief Checks the tv_nsec member of a timespec struct
+ *
+ * This function is used with utimensat() and futimens() only. This ensures
+ * that the value in the tv_nsec member is equal to either UTIME_NOW,
+ * UTIME_OMIT, or a value greater-than or equal to zero and less than a
+ * billion.
+ *
+ * @param[in] time The timespec struct to be validated
+ *
+ * @retval true The tv_nsec member is a valid value.
+ * @retval false The tv_nsec member is not a valid value.
+ */
+bool rtems_filesystem_utime_tv_nsec_valid( struct timespec time );
+
+/**
+ * @brief Checks for errors and if the process has write permissions to the file.
+ *
+ * This function is only used with utimensat() and futimens().It checks for
+ * EACCES and EPERM errors depending on what values are in @a times and if the
+ * process has write permissions to the file.
+ *
+ * @param[in] currentloc The current location to a file
+ * @param[in] times The timespecs used to check for errors. The timespec at
+ *                  index 0 is the access time, and the timespec at index 1 is
+ *                  the modification time.
+ *
+ * @retval 0 An error was not found.
+ * @retval -1 An error was found.
+ */
+int rtems_filesystem_utime_check_permissions(
+  const rtems_filesystem_location_info_t *currentloc,
+  const struct timespec times[2]
+);
+
+/**
+ * @brief Checks @a times and fills @a new_times with the time to be written
+ *
+ * This function is only used with utimensat() and futimens(). @a times contains
+ * the constant values passed into utimensat/futimens. @a new_times contains the
+ * values that will be written to the file. These values depend on @a times. If
+ * @a times is NULL, or either of its elements' tv_nsec members are UTIME_NOW,
+ * the current elapsed time in nanoseconds will be saved in the corresponding
+ * location in @a new_times.
+ *
+ * For each of the arguments, the timespec at index 0 is the access time, and
+ * the timespec at index 1 is the modification time.
+ *
+ * @param[in] times The timespecs to be checked
+ * @param[out] new_times The timespecs containing the time to be written
+ *
+ * @retval 0 @a times is valid.
+ * @retval -1 @a times is not valid.
+ */
+int rtems_filesystem_utime_update(
+  const struct timespec times[2],
+  struct timespec new_times[2]
+);
 
 /*
  *  File Descriptor Routine Prototypes
