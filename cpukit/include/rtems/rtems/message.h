@@ -755,9 +755,9 @@ rtems_status_code rtems_message_queue_broadcast(
  *
  * If the calling task chooses to return immediately and the queue is empty,
  * then the directive returns immediately with the ::RTEMS_UNSATISFIED status
- * cod.  If the calling task chooses to wait at the message queue and the queue
- * is empty, then the calling task is placed on the message wait queue and
- * blocked.  If the queue was created with the #RTEMS_PRIORITY option
+ * code.  If the calling task chooses to wait at the message queue and the
+ * queue is empty, then the calling task is placed on the message wait queue
+ * and blocked.  If the queue was created with the #RTEMS_PRIORITY option
  * specified, then the calling task is inserted into the wait queue according
  * to its priority.  But, if the queue was created with the #RTEMS_FIFO option
  * specified, then the calling task is placed at the rear of the wait queue.
