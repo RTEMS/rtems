@@ -4243,7 +4243,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#constant-bandwidth-server-scheduling-cbs>Constant
  * Bandwidth Server Scheduling (CBS)</a> algorithm is made available to the
  * application.
@@ -4270,7 +4270,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#earliest-deadline-first-scheduler>Earliest
  * Deadline First Scheduler</a> algorithm is made available to the application.
  *
@@ -4296,7 +4296,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#earliest-deadline-first-smp-scheduler>Earliest
  * Deadline First SMP Scheduler</a> algorithm is made available to the
  * application.
@@ -4390,7 +4390,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#deterministic-priority-scheduler>Deterministic
  * Priority Scheduler</a> algorithm is made available to the application.
  *
@@ -4422,7 +4422,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#arbitrary-processor-affinity-priority-smp-scheduler>Arbitrary
  * Processor Affinity Priority SMP Scheduler</a> algorithm is made available to
  * the application.
@@ -4455,7 +4455,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#deterministic-priority-smp-scheduler>Deterministic
  * Priority SMP Scheduler</a> algorithm is made available to the application.
  *
@@ -4487,7 +4487,7 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#simple-priority-scheduler>Simple
  * Priority Scheduler</a> algorithm is made available to the application.
  *
@@ -4513,10 +4513,9 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then <a
+ * In case this configuration option is defined, then the <a
  * href=https://docs.rtems.org/branches/master/c-user/scheduling_concepts.html#simple-priority-smp-scheduler>Simple
  * Priority SMP Scheduler</a> algorithm is made available to the application.
- * application.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
@@ -4543,8 +4542,8 @@
 /**
  * @brief This configuration option is a boolean feature define.
  *
- * In case this configuration option is defined, then Strong APA algorithm is
- * made available to the application.
+ * In case this configuration option is defined, then the Strong APA algorithm
+ * is made available to the application.
  *
  * @par Default Configuration
  * If this configuration option is undefined, then the described feature is not
