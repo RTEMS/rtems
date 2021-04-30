@@ -54,10 +54,6 @@ long sysconf(
       return (long) rtems_scheduler_get_processor_maximum();
     case _SC_POSIX_26_VERSION:
       return (long) _POSIX_26_VERSION;
-#if defined(__sparc__)
-    case 515: /* Solaris _SC_STACK_PROT */
-      return 0;
-#endif
     default:
       rtems_set_errno_and_return_minus_one( EINVAL );
   }

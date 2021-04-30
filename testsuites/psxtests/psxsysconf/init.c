@@ -83,14 +83,6 @@ void *POSIX_Init(
       == (long) rtems_scheduler_get_processor_maximum()
   );
 
-#if defined(__sparc__)
-  /* Solaris _SC_STACK_PROT - 515 */
-  sc = sysconf( _SC_PAGESIZE );
-  printf( "sysconf - (SPARC only) _SC_STACK_PROT=%ld\n", sc );
-  if ( sc == -1 )
-   rtems_test_exit(0);
-#endif
-
   TEST_END();
   rtems_test_exit( 0 );
 
