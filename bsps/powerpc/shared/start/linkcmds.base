@@ -343,6 +343,13 @@ SECTIONS {
 	} > REGION_RTEMSSTACK AT > REGION_RTEMSSTACK
 	bsp_section_rtemsstack_size = bsp_section_rtemsstack_end - bsp_section_rtemsstack_begin;
 
+	.noinit (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_noinit_begin = .;
+		*(.noinit*)
+		bsp_section_noinit_end = .;
+	} > REGION_WORK AT > REGION_WORK
+	bsp_section_noinit_size = bsp_section_noinit_end - bsp_section_noinit_begin;
+
 	.work : ALIGN_WITH_INPUT {
 		/*
 		 * The work section will occupy the remaining REGION_WORK region and

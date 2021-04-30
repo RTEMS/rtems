@@ -155,6 +155,10 @@ SECTIONS {
                 _clear_end = .;
         } >myram
 
+        .noinit (NOLOAD) : {
+                *(.noinit*)
+        } >mvram
+
         .rtemsstack (NOLOAD) : {
                 *(SORT(.rtemsstack.*))
                 WorkAreaBase = .;

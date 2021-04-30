@@ -190,6 +190,10 @@ SECTIONS
                 _clear_end = .;
         } > dram
 
+        .noinit (NOLOAD) : {
+                *(.noinit*)
+        } > dram
+
         .rtemsstack (NOLOAD) : {
                 *(SORT(.rtemsstack.*))
                 WorkAreaBase = .;

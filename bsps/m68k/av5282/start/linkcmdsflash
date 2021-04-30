@@ -183,6 +183,10 @@ SECTIONS
                 _clear_end = .;
         }
 
+        .noinit (NOLOAD) : {
+                *(.noinit*)
+        }
+
         .rtemsstack (NOLOAD) : {
                 *(SORT(.rtemsstack.*))
                 WorkAreaBase = .;

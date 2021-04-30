@@ -289,6 +289,10 @@ SECTIONS
 
     clear_end = .;
 
+    .noinit (NOLOAD) : {
+        *(.noinit*)
+    } >ram
+
     .rtemsstack (NOLOAD) : {
         *(SORT(.rtemsstack.*))
     } >ram

@@ -192,6 +192,9 @@ SECTIONS
 	*(.bss)
 	*(COMMON)
   }
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  }
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   }

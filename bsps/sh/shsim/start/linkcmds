@@ -203,6 +203,10 @@ SECTIONS
   _end = . ;
   PROVIDE (end = .);
 
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } > ram
+
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   } > ram

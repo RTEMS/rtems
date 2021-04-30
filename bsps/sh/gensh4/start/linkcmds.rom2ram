@@ -192,6 +192,10 @@ SECTIONS
       *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
     } >ram
 
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } > ram
+
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   } > ram

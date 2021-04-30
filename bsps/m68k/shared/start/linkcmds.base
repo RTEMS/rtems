@@ -249,6 +249,13 @@ SECTIONS {
 	} > REGION_DATA AT > REGION_DATA
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
 
+	.noinit (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_noinit_begin = .;
+		*(.noinit*)
+		bsp_section_noinit_end = .;
+	} > REGION_DATA AT > REGION_DATA
+	bsp_section_noinit_size = bsp_section_noinit_end - bsp_section_noinit_begin;
+
 	.rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
 		*(SORT(.rtemsstack.*))
 	} > REGION_DATA AT > REGION_DATA

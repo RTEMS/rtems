@@ -179,6 +179,10 @@ SECTIONS
     __end = .;
   } > ram
 
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } > ram
+
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
     PROVIDE (WorkAreaBase = .);

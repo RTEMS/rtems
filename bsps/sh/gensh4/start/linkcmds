@@ -145,6 +145,10 @@ SECTIONS
    __bss_end = .;
   } > ram
 
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } > ram
+
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   } > ram

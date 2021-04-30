@@ -136,6 +136,10 @@ SECTIONS
          __end = .;
     } > sdram
 
+    .noinit (NOLOAD) : {
+        *(.noinit*)
+    } > sdram
+
     .rtemsstack (NOLOAD) : {
         *(SORT(.rtemsstack.*))
         _WorkAreaBase = .;

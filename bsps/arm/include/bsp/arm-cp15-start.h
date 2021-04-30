@@ -78,6 +78,10 @@ typedef struct {
     .end = (uint32_t) bsp_section_rtemsstack_end, \
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
   }, { \
+    .begin = (uint32_t) bsp_section_noinit_begin, \
+    .end = (uint32_t) bsp_section_noinit_end, \
+    .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
+  }, { \
     .begin = (uint32_t) bsp_section_work_begin, \
     .end = (uint32_t) bsp_section_work_end, \
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
@@ -99,7 +103,7 @@ typedef struct {
     .flags = ARMV7_MMU_DATA_READ_WRITE_CACHED \
   }
 
-#define ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX 9
+#define ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX 10
 
 BSP_START_DATA_SECTION extern const arm_cp15_start_section_config
   arm_cp15_start_mmu_config_table[];

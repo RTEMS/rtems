@@ -252,6 +252,10 @@ SECTIONS
   .               = ALIGN(0x10);        /* Align to a cache-line boundary */
   PROVIDE(__bsp_ram_start = .);
 
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } >RAM
+
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   } >RAM

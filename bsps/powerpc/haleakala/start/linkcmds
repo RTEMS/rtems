@@ -250,6 +250,10 @@ SECTIONS
     bss.size = bss.end - bss.start;
     sbss.size = sbss.end - sbss.start;
 
+    .noinit (NOLOAD) : {
+        *(.noinit*)
+    } >RAM
+
     .rtemsstack (NOLOAD) : {
         *(SORT(.rtemsstack.*))
     } >RAM

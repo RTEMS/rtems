@@ -194,6 +194,9 @@ SECTIONS
     PROVIDE (end = .);
     _clear_end = .;
   } > ram
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } > ram
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
     WorkAreaBase = .;

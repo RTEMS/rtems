@@ -233,6 +233,10 @@ SECTIONS
 
   PROVIDE(_end = bss.end);
 
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  }
+
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   }

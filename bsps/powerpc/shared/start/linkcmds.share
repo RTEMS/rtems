@@ -253,6 +253,9 @@ SECTIONS
   . = ALIGN(16);
    PROVIDE (__bss_end = .);
   } > CODE
+  .noinit (NOLOAD) : {
+    *(.noinit*)
+  } > CODE
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   } >CODE

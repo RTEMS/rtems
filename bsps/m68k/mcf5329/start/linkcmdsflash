@@ -175,6 +175,10 @@ SECTIONS
         . = ALIGN (16);
         PROVIDE (_end = .);
         _clear_end = .;
+    } > dram
+
+    .noinit (NOLOAD) : {
+        *(.noinit*)
         WorkAreaBase = .;
     } > dram
 

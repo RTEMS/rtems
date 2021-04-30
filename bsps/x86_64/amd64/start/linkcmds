@@ -10,6 +10,7 @@
  * Changes:
  *   - Added HeapSize, RamBase, RamSize, WorkBase
  *   - rtemssroset section
+ *   - noinit section
  *   - rtemsstack section
  */
 
@@ -231,6 +232,10 @@ SECTIONS
   }
   . = ALIGN(64 / 8);
   _end = .; PROVIDE (end = .);
+  .noinit (NOLOAD) :
+  {
+    *(.noinit*)
+  }
   .rtemsstack (NOLOAD) :
   {
     *(SORT(.rtemsstack.*))

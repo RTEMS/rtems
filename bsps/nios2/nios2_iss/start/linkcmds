@@ -267,6 +267,10 @@ SECTIONS
         __bss_end = ABSOLUTE(.);
     } > onchip_memory_0
 
+    .noinit (NOLOAD) : {
+        *(.noinit*)
+    } > onchip_memory_0
+
     .rtemsstack (NOLOAD) : {
         _stack_low = ABSOLUTE(.);
         *(SORT(.rtemsstack.*))
