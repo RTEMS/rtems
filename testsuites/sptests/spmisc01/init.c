@@ -49,6 +49,8 @@ RTEMS_CONST static int const_func(void)
 
 RTEMS_SECTION(".rtemsroset.test") static int section_variable = 28;
 
+RTEMS_NOINIT static int noinit_variable;
+
 RTEMS_USED static int used_func(void)
 {
   return 35;
@@ -205,6 +207,7 @@ static int concat(void)
 static void Init(rtems_task_argument arg)
 {
   void *p;
+  int   v;
 
   TEST_BEGIN();
   rtems_test_assert(inline_func() == 7);
@@ -213,6 +216,8 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(pure_func() == 21);
   rtems_test_assert(const_func() == 23);
   rtems_test_assert(section_variable == 28);
+  v = noinit_variable;
+  RTEMS_OBFUSCATE_VARIABLE(v);
   rtems_test_assert(unused_arg_and_variable_func(49) == 42);
   rtems_test_assert(sizeof(packed_struct) == 5);
   rtems_test_assert(alias_func() == 14);
