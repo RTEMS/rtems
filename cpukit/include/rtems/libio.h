@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -11,15 +13,31 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
- *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH.
+ * Modifications to support reference counting in the file system are
+ * Copyright (C) 2012 embedded brains GmbH.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO_H
@@ -375,18 +393,16 @@ typedef int (*rtems_filesystem_rmnod_t)(
  * @brief Set node access and modification times.
  *
  * @param[in] loc The location of the node.
- * @param[in] actime Access time for the node.
- * @param[in] modtime Modification for the node.
+ * @param[in] times Access and modification times for the node
  *
  * @retval 0 Successful operation.
  * @retval -1 An error occurred.  The errno is set to indicate the error.
  *
- * @see rtems_filesystem_default_utime().
+ * @see rtems_filesystem_default_utimens().
  */
-typedef int (*rtems_filesystem_utime_t)(
+typedef int (*rtems_filesystem_utimens_t)(
   const rtems_filesystem_location_info_t *loc,
-  time_t actime,
-  time_t modtime
+  struct timespec times[2]
 );
 
 /**
@@ -484,7 +500,7 @@ struct _rtems_filesystem_operations_table {
   rtems_filesystem_mount_t mount_h;
   rtems_filesystem_unmount_t unmount_h;
   rtems_filesystem_fsunmount_me_t fsunmount_me_h;
-  rtems_filesystem_utime_t utime_h;
+  rtems_filesystem_utimens_t utimens_h;
   rtems_filesystem_symlink_t symlink_h;
   rtems_filesystem_readlink_t readlink_h;
   rtems_filesystem_rename_t rename_h;
@@ -644,12 +660,11 @@ void rtems_filesystem_default_fsunmount(
 /**
  * @retval -1 Always.  The errno is set to ENOTSUP.
  *
- * @see rtems_filesystem_utime_t.
+ * @see rtems_filesystem_utimens_t.
  */
-int rtems_filesystem_default_utime(
+int rtems_filesystem_default_utimens(
   const rtems_filesystem_location_info_t *loc,
-  time_t actime,
-  time_t modtime
+  struct timespec times[2]
 );
 
 /**

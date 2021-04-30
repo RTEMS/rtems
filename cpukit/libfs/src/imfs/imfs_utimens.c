@@ -1,16 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /**
- *  @file
+ * @file
  *
- *  @ingroup libcsupport
+ * @ingroup IMFS
  *
- *  @brief Set file access and modification times based on file descriptor in
- *  nanoseconds.
+ * @brief Set IMFS File Access and Modification Times
  */
 
 /*
- * COPYRIGHT (C) 2021 On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (C) 1989, 2021 On-Line Applications Research Corporation (OAR).
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,50 +37,22 @@
 #include "config.h"
 #endif
 
-#include <sys/stat.h>
-#include <rtems/libio_.h>
+#include <rtems/imfs.h>
 
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
+#include <sys/time.h>
 
-/**
- *  https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/functions/futimens.html
- *
- *  Set file access and modification times
- */
-int futimens(
-  int                    fd,
-  const struct timespec  times[2]
+int IMFS_utimens(
+  const rtems_filesystem_location_info_t *loc,
+  struct timespec times[2]
 )
 {
-  int rv;
-  rtems_libio_t *iop;
-  struct timespec new_times[2];
-  const rtems_filesystem_location_info_t *currentloc = NULL;
+  IMFS_jnode_t *the_jnode;
 
-  LIBIO_GET_IOP_WITH_ACCESS( fd, iop, LIBIO_FLAGS_READ, EBADF );
+  the_jnode = (IMFS_jnode_t *) loc->node_access;
 
-  currentloc = &iop->pathinfo;
+  the_jnode->stat_atime = times[0].tv_sec;
+  the_jnode->stat_mtime = times[1].tv_sec;
+  the_jnode->stat_ctime = time( NULL );
 
-  rv = rtems_filesystem_utime_update( times, new_times );
-  if ( rv != 0 ) {
-    rtems_libio_iop_drop( iop );
-    return rv;
-  }
-
-  rv = rtems_filesystem_utime_check_permissions( currentloc, times );
-  if ( rv != 0 ) {
-    rtems_libio_iop_drop( iop );
-    return rv;
-  }
-
-  rv = (*currentloc->mt_entry->ops->utimens_h)(
-    currentloc,
-    new_times
-  );
-
-  rtems_libio_iop_drop( iop );
-
-  return rv;
+  return 0;
 }

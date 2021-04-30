@@ -296,16 +296,14 @@ rtems_rfs_rtems_chown (const rtems_filesystem_location_info_t *pathloc,
  * This routine is the implementation of the utime() system call for the
  * RFS.
  *
- * @param pathloc
- * @param atime
- * @param mtime
+ * @param pathloc The path to the file to be modified
+ * @param times The times to update the file to
  * return int
  */
 
 static int
-rtems_rfs_rtems_utime(const rtems_filesystem_location_info_t* pathloc,
-                      time_t                                  atime,
-                      time_t                                  mtime)
+rtems_rfs_rtems_utimens(const rtems_filesystem_location_info_t* pathloc,
+                        struct timespec                         times[2])
 {
   rtems_rfs_file_system* fs = rtems_rfs_rtems_pathloc_dev (pathloc);
   rtems_rfs_ino          ino = rtems_rfs_rtems_get_pathloc_ino (pathloc);
@@ -318,8 +316,8 @@ rtems_rfs_rtems_utime(const rtems_filesystem_location_info_t* pathloc,
     return rtems_rfs_rtems_error ("utime: read inode", rc);
   }
 
-  rtems_rfs_inode_set_atime (&inode, atime);
-  rtems_rfs_inode_set_mtime (&inode, mtime);
+  rtems_rfs_inode_set_atime (&inode, times[0].tv_sec);
+  rtems_rfs_inode_set_mtime (&inode, times[1].tv_sec);
 
   rc = rtems_rfs_inode_close (fs, &inode);
   if (rc)
@@ -735,7 +733,7 @@ const rtems_filesystem_operations_table rtems_rfs_ops =
   .mount_h        = rtems_filesystem_default_mount,
   .unmount_h      = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_rfs_rtems_shutdown,
-  .utime_h        = rtems_rfs_rtems_utime,
+  .utimens_h      = rtems_rfs_rtems_utimens,
   .symlink_h      = rtems_rfs_rtems_symlink,
   .readlink_h     = rtems_rfs_rtems_readlink,
   .rename_h       = rtems_rfs_rtems_rename,

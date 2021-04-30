@@ -214,7 +214,7 @@ int utimensat(
     return rv;
   }
 
-  rv = (*currentloc->mt_entry->ops->utime_h)(
+  rv = (*currentloc->mt_entry->ops->utimens_h)(
     currentloc,
     new_times
   );

@@ -231,9 +231,9 @@ static const rtems_filesystem_operations_table IMFS_root_ops = {
   #endif
   rtems_filesystem_default_fsunmount,
   #ifdef CONFIGURE_IMFS_DISABLE_UTIME
-    rtems_filesystem_default_utime,
+    rtems_filesystem_default_utimens,
   #else
-    IMFS_utime,
+    IMFS_utimens,
   #endif
   #ifdef CONFIGURE_IMFS_DISABLE_SYMLINK
     rtems_filesystem_default_symlink,

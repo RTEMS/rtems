@@ -1118,10 +1118,9 @@ static int rtems_jffs2_statvfs(
 	return 0;
 }
 
-static int rtems_jffs2_utime(
+static int rtems_jffs2_utimens(
 	const rtems_filesystem_location_info_t *loc,
-	time_t actime,
-	time_t modtime
+	struct timespec times[2]
 )
 {
 	struct _inode *inode = rtems_jffs2_get_inode_by_location(loc);
@@ -1129,8 +1128,8 @@ static int rtems_jffs2_utime(
 	int eno;
 
 	iattr.ia_valid = ATTR_ATIME | ATTR_MTIME | ATTR_CTIME;
-	iattr.ia_atime = actime;
-	iattr.ia_mtime = modtime;
+	iattr.ia_atime = times[0].tv_sec;
+	iattr.ia_mtime = times[1].tv_sec;
 	iattr.ia_ctime = get_seconds();
 
 	eno = -jffs2_do_setattr(inode, &iattr);
@@ -1186,7 +1185,7 @@ static const rtems_filesystem_operations_table rtems_jffs2_ops = {
 	.mount_h = rtems_filesystem_default_mount,
 	.unmount_h = rtems_filesystem_default_unmount,
 	.fsunmount_me_h = rtems_jffs2_fsunmount,
-	.utime_h = rtems_jffs2_utime,
+	.utimens_h = rtems_jffs2_utimens,
 	.symlink_h = rtems_jffs2_symlink,
 	.readlink_h = rtems_jffs2_readlink,
 	.rename_h = rtems_jffs2_rename,

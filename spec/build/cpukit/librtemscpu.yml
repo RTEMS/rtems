@@ -804,7 +804,7 @@ source:
 - cpukit/libfs/src/defaults/default_statvfs.c
 - cpukit/libfs/src/defaults/default_symlink.c
 - cpukit/libfs/src/defaults/default_unmount.c
-- cpukit/libfs/src/defaults/default_utime.c
+- cpukit/libfs/src/defaults/default_utimens.c
 - cpukit/libfs/src/defaults/default_write.c
 - cpukit/libfs/src/defaults/default_writev.c
 - cpukit/libfs/src/dosfs/fat.c
@@ -861,7 +861,7 @@ source:
 - cpukit/libfs/src/imfs/imfs_stat_file.c
 - cpukit/libfs/src/imfs/imfs_symlink.c
 - cpukit/libfs/src/imfs/imfs_unmount.c
-- cpukit/libfs/src/imfs/imfs_utime.c
+- cpukit/libfs/src/imfs/imfs_utimens.c
 - cpukit/libfs/src/imfs/ioman.c
 - cpukit/libfs/src/pipe/fifo.c
 - cpukit/libfs/src/pipe/pipe.c
