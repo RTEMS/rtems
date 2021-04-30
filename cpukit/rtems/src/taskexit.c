@@ -42,6 +42,6 @@ void rtems_task_exit( void )
     NULL
   );
 
-  _Thread_Dispatch_direct( cpu_self );
+  _Thread_Dispatch_direct_no_return( cpu_self );
   RTEMS_UNREACHABLE();
 }

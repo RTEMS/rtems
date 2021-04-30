@@ -126,6 +126,17 @@ void _Thread_Dispatch( void );
 void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self );
 
 /**
+ * @brief Directly do a thread dispatch and do not return.
+ *
+ * @param cpu_self is the current processor.
+ *
+ * @see _Thread_Dispatch_direct().
+ */
+RTEMS_NO_RETURN void _Thread_Dispatch_direct_no_return(
+  Per_CPU_Control *cpu_self
+);
+
+/**
  * @brief Performs a thread dispatch on the current processor.
  *
  * On entry the thread dispatch disable level must be equal to one and

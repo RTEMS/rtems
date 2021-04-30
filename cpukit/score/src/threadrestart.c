@@ -288,7 +288,7 @@ void _Thread_Life_action_handler(
   if ( _Thread_Is_life_terminating( previous_life_state ) ) {
     cpu_self = _Thread_Wait_for_join( executing, cpu_self );
     _Thread_Make_zombie( executing );
-    _Thread_Dispatch_direct( cpu_self );
+    _Thread_Dispatch_direct_no_return( cpu_self );
     RTEMS_UNREACHABLE();
   }
 
@@ -610,7 +610,7 @@ void _Thread_Restart_self(
   _Thread_Wait_release_default( executing, lock_context );
 
   _Thread_Priority_update( &queue_context );
-  _Thread_Dispatch_direct( cpu_self );
+  _Thread_Dispatch_direct_no_return( cpu_self );
   RTEMS_UNREACHABLE();
 }
 

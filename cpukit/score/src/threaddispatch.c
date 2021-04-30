@@ -358,6 +358,9 @@ void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self )
   _Thread_Do_dispatch( cpu_self, level );
 }
 
+RTEMS_ALIAS( _Thread_Dispatch_direct ) void
+_Thread_Dispatch_direct_no_return( Per_CPU_Control * );
+
 void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
 {
   uint32_t disable_level = cpu_self->thread_dispatch_disable_level;

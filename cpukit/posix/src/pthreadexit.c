@@ -35,6 +35,6 @@ void pthread_exit( void *value_ptr )
 
   _Thread_Exit( executing, THREAD_LIFE_TERMINATING, value_ptr );
 
-  _Thread_Dispatch_direct( cpu_self );
+  _Thread_Dispatch_direct_no_return( cpu_self );
   RTEMS_UNREACHABLE();
 }
