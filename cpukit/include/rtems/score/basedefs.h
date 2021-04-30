@@ -353,6 +353,22 @@ extern "C" {
  */
 #define RTEMS_EXPAND( _token ) _token
 
+/* Generated from spec:/rtems/basedefs/if/section */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Instructs the compiler to place the variable or function in the
+ *   section.
+ *
+ * @param _section is the section name as a string.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_SECTION( _section ) __attribute__(( __section__( _section ) ))
+#else
+  #define RTEMS_SECTION( _section )
+#endif
+
 /* Generated from spec:/rtems/basedefs/if/string */
 
 /**
@@ -613,6 +629,16 @@ extern "C" {
  */
 #define RTEMS_COMPILER_NO_RETURN_ATTRIBUTE RTEMS_NO_RETURN
 
+/* Generated from spec:/rtems/basedefs/if/noinit */
+
+/**
+ * @ingroup RTEMSAPIBaseDefs
+ *
+ * @brief Instructs the compiler to place the variable in a section which is
+ *   not initialized.
+ */
+#define RTEMS_NOINIT RTEMS_SECTION( ".noinit" )
+
 /* Generated from spec:/rtems/basedefs/if/obfuscate-variable */
 
 /**
@@ -750,22 +776,6 @@ extern "C" {
   #define RTEMS_RETURN_ADDRESS() __builtin_return_address( 0 )
 #else
   #define RTEMS_RETURN_ADDRESS() NULL
-#endif
-
-/* Generated from spec:/rtems/basedefs/if/section */
-
-/**
- * @ingroup RTEMSAPIBaseDefs
- *
- * @brief Instructs the compiler to place the variable or function in the
- *   section.
- *
- * @param _section is the section name as a string.
- */
-#if defined(__GNUC__)
-  #define RTEMS_SECTION( _section ) __attribute__(( __section__( _section ) ))
-#else
-  #define RTEMS_SECTION( _section )
 #endif
 
 /* Generated from spec:/rtems/basedefs/if/static-analysis */
