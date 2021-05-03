@@ -53,13 +53,13 @@ void *realloc( void *ptr, size_t size )
   uintptr_t           old_size;
   uintptr_t           avail_size;
 
+  if ( ptr == NULL ) {
+    return malloc( size );
+  }
+
   if ( size == 0 ) {
     free( ptr );
     return NULL;
-  }
-
-  if ( ptr == NULL ) {
-    return malloc( size );
   }
 
   heap = RTEMS_Malloc_Heap;
