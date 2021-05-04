@@ -59,6 +59,22 @@ static Once_Control _Once_Information = {
   .State = RTEMS_CONDITION_VARIABLE_INITIALIZER( "_Once" )
 };
 
+static Thread_Life_state _Once_Lock( void )
+{
+  Thread_Life_state thread_life_state;
+
+  thread_life_state = _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
+  rtems_mutex_lock( &_Once_Information.Mutex );
+
+  return thread_life_state;
+}
+
+static void _Once_Unlock( Thread_Life_state thread_life_state )
+{
+  rtems_mutex_unlock( &_Once_Information.Mutex );
+  _Thread_Set_life_protection( thread_life_state );
+}
+
 int _Once( unsigned char *once_state, void ( *init_routine )( void ) )
 {
   _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
@@ -89,20 +105,4 @@ int _Once( unsigned char *once_state, void ( *init_routine )( void ) )
   }
 
   return 0;
-}
-
-Thread_Life_state _Once_Lock( void )
-{
-  Thread_Life_state thread_life_state;
-
-  thread_life_state = _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
-  rtems_mutex_lock( &_Once_Information.Mutex );
-
-  return thread_life_state;
-}
-
-void _Once_Unlock( Thread_Life_state thread_life_state )
-{
-  rtems_mutex_unlock( &_Once_Information.Mutex );
-  _Thread_Set_life_protection( thread_life_state );
 }

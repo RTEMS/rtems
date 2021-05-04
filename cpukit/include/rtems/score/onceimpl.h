@@ -57,22 +57,6 @@ extern "C" {
  */
 int _Once( unsigned char *once_state, void ( *init_routine )( void ) );
 
-/**
- * @brief Locks the Once_Information_Mutex and returns the thread life state.
- *
- * @return The thread life state (THREAD_LIFE_PROTECTED).
- */
-Thread_Life_state _Once_Lock( void );
-
-/**
- * @brief Unlocks the Once_Information_Mutex and sets the thread life
- *      protection to thread_life_state.
- *
- * @param thread_life_state The thread life state to set the thread life
- *      protection to.
- */
-void _Once_Unlock( Thread_Life_state thread_life_state );
-
 /** @} */
 
 #ifdef __cplusplus
