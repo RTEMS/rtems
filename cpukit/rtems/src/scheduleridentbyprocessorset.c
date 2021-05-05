@@ -44,6 +44,10 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
     return RTEMS_INVALID_ADDRESS;
   }
 
+  if ( cpuset == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
   status = _Processor_mask_From_cpu_set_t( &set, cpusetsize, cpuset );
   if ( status == PROCESSOR_MASK_COPY_INVALID_SIZE ) {
     return RTEMS_INVALID_SIZE;
