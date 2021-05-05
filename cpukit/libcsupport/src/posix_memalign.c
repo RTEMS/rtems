@@ -24,18 +24,33 @@
 #include <errno.h>
 
 int posix_memalign(
-  void   **pointer,
+  void   **memptr,
   size_t   alignment,
   size_t   size
 )
 {
-  if (((alignment - 1) & alignment) != 0 || (alignment < sizeof(void *)))
-    return EINVAL;
+  RTEMS_OBFUSCATE_VARIABLE( memptr );
 
-  /*
-   *  rtems_memalign does all of the error checking work EXCEPT
-   *  for adding restrictionso on the alignment.
-   */
-  return rtems_memalign( pointer, alignment, size );
+  if ( memptr == NULL ) {
+    return EINVAL;
+  }
+
+  *memptr = NULL;
+
+  if ( alignment < sizeof( void * ) ) {
+    return EINVAL;
+  }
+
+  if ( ( ( alignment - 1 ) & alignment ) != 0 ) {
+    return EINVAL;
+  }
+
+  *memptr = rtems_heap_allocate_aligned_with_boundary( size, alignment, 0 );
+
+  if ( *memptr == NULL ) {
+    return ENOMEM;
+  }
+
+  return 0;
 }
 #endif
