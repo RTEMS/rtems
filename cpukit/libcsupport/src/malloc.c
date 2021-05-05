@@ -30,6 +30,10 @@ void *malloc(
 {
   void        *return_this;
 
+  if ( size == 0 ) {
+    return NULL;
+  }
+
   return_this = rtems_heap_allocate_aligned_with_boundary( size, 0, 0 );
   if ( !return_this ) {
     errno = ENOMEM;

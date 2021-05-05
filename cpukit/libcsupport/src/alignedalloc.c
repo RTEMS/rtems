@@ -35,6 +35,10 @@
 
 void *aligned_alloc( size_t alignment, size_t size )
 {
+  if ( size == 0 ) {
+    return NULL;
+  }
+
   return rtems_heap_allocate_aligned_with_boundary( size, alignment, 0 );
 }
 

@@ -106,6 +106,10 @@ void *rtems_heap_allocate_aligned_with_boundary(
 
 void *rtems_malloc( size_t size )
 {
+  if ( size == 0 ) {
+    return NULL;
+  }
+
   return rtems_heap_allocate_aligned_with_boundary( size, 0, 0 );
 }
 #endif

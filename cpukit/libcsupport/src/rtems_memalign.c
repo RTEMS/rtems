@@ -40,6 +40,10 @@ int rtems_memalign(
 
   *pointer = NULL;
 
+  if ( size == 0 ) {
+    return 0;
+  }
+
   /*
    *  Perform the aligned allocation requested
    */

@@ -37,6 +37,10 @@ int posix_memalign(
 
   *memptr = NULL;
 
+  if ( size == 0 ) {
+    return 0;
+  }
+
   if ( alignment < sizeof( void * ) ) {
     return EINVAL;
   }

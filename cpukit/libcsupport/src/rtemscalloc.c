@@ -47,13 +47,14 @@ void *rtems_calloc( size_t nelem, size_t elsize )
   void   *p;
 
   if ( nelem == 0 ) {
-    length = 0;
-  } else if ( elsize > SIZE_MAX / nelem ) {
     return NULL;
-  } else {
-    length = nelem * elsize;
   }
 
+  if ( elsize > SIZE_MAX / nelem ) {
+    return NULL;
+  }
+
+  length = nelem * elsize;
   p = rtems_malloc( length );
   RTEMS_OBFUSCATE_VARIABLE( p );
   if ( RTEMS_PREDICT_FALSE( p == NULL ) ) {

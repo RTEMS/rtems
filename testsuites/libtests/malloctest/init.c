@@ -1153,10 +1153,7 @@ static void test_rtems_malloc(void)
   void *p;
 
   p = rtems_malloc(0);
-  rtems_test_assert(p != NULL);
-
-  RTEMS_OBFUSCATE_VARIABLE(p);
-  free(p);
+  rtems_test_assert(p == NULL);
 
   errno = 0;
   p = rtems_malloc(SIZE_MAX / 2);
@@ -1176,22 +1173,13 @@ static void test_rtems_calloc(void)
   int *i;
 
   p = rtems_calloc(0, 0);
-  rtems_test_assert(p != NULL);
-
-  RTEMS_OBFUSCATE_VARIABLE(p);
-  free(p);
+  rtems_test_assert(p == NULL);
 
   p = rtems_calloc(0, 1);
-  rtems_test_assert(p != NULL);
-
-  RTEMS_OBFUSCATE_VARIABLE(p);
-  free(p);
+  rtems_test_assert(p == NULL);
 
   p = rtems_calloc(1, 0);
-  rtems_test_assert(p != NULL);
-
-  RTEMS_OBFUSCATE_VARIABLE(p);
-  free(p);
+  rtems_test_assert(p == NULL);
 
   errno = 0;
   p = rtems_calloc(1, SIZE_MAX / 2);
@@ -1323,73 +1311,56 @@ static void test_alloc_zero_size(void)
   int eno;
 
   size = 0;
+  errno = -1;
 
   RTEMS_OBFUSCATE_VARIABLE( size );
   p = malloc( size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
-  p = calloc( 1, size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  p = calloc( size, 1 );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
   p = rtems_malloc( size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
   p = rtems_calloc( 1, size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
-  p = NULL;
+  p = (void *)(uintptr_t) 1;
   eno = posix_memalign( &p, 32, size );
   rtems_test_assert( eno == 0 );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
-  p = NULL;
+  p = (void *)(uintptr_t) 1;
   eno = rtems_memalign( &p, 32, size );
   rtems_test_assert( eno == 0 );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
   p = aligned_alloc( 32, size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
   p = realloc( NULL, size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 
   RTEMS_OBFUSCATE_VARIABLE( size );
   p = reallocarray( NULL, 1, size );
-  rtems_test_assert( p != NULL );
-
-  RTEMS_OBFUSCATE_VARIABLE( p );
-  free( p );
+  rtems_test_assert( p == NULL );
+  rtems_test_assert( errno == -1 );
 }
 
 rtems_task Init(

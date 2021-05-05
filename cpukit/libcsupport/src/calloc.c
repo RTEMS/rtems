@@ -35,14 +35,15 @@ void *calloc(
   size_t  length;
 
   if ( nelem == 0 ) {
-    length = 0;
-  } else if ( elsize > SIZE_MAX / nelem ) {
-    errno = ENOMEM;
     return NULL;
-  } else {
-    length = nelem * elsize;
   }
 
+  if ( elsize > SIZE_MAX / nelem ) {
+    errno = ENOMEM;
+    return NULL;
+  }
+
+  length = nelem * elsize;
   cptr = malloc( length );
   RTEMS_OBFUSCATE_VARIABLE( cptr );
   if ( RTEMS_PREDICT_FALSE( cptr == NULL ) ) {
