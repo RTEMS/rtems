@@ -602,7 +602,7 @@ static void test_scheduler_get_processors(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
   sc = rtems_scheduler_get_processor_set(scheduler_id, 0, &cpuset);
-  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+  rtems_test_assert(sc == RTEMS_INVALID_SIZE);
 
   sc = rtems_scheduler_get_processor_set(scheduler_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

@@ -50,7 +50,7 @@ rtems_status_code rtems_scheduler_get_processor_set(
   processor_set = _Scheduler_Get_processors( scheduler );
   status = _Processor_mask_To_cpu_set_t( processor_set, cpusetsize, cpuset );
   if ( status != PROCESSOR_MASK_COPY_LOSSLESS ) {
-    return RTEMS_INVALID_NUMBER;
+    return RTEMS_INVALID_SIZE;
   }
 
   return RTEMS_SUCCESSFUL;
