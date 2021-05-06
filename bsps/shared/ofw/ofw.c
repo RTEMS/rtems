@@ -42,6 +42,7 @@
 #include <assert.h>
 #include <rtems/sysinit.h>
 #include <ofw/ofw_test.h>
+#include <rtems/score/assert.h>
 
 static void *fdtp = NULL;
 
@@ -186,6 +187,7 @@ ssize_t rtems_ofw_get_prop(
   const void *prop;
   int offset;
   int len;
+  int copy_len;
   uint32_t cpuid;
 
   offset = rtems_fdt_phandle_to_offset(node);
@@ -226,7 +228,9 @@ ssize_t rtems_ofw_get_prop(
     return -1;
   }
 
-  bcopy(prop, buf, MIN(len, bufsize));
+  copy_len = MIN(len, bufsize);
+  _Assert(copy_len <= bufsize);
+  memmove(buf, prop, copy_len);
 
   return len;
 }
@@ -637,6 +641,12 @@ int rtems_ofw_get_reg(
         range.child_bus = fdt32_to_cpu(ptr[j].child_bus);
         range.size = fdt32_to_cpu(ptr[j].size);
 
+        /**
+         * (buf + size - (sizeof(buf[0]) - 1) is the last valid
+         * address for buf[i]. If buf[i] points to any address larger
+         * than this, it will be an out of bound access
+         */
+        _Assert(&buf[i] < (buf + size - (sizeof(buf[0]) - 1)));
         if (buf[i].start >= range.child_bus &&
             buf[i].start < range.child_bus + range.size) {
           offset = range.parent_bus - range.child_bus;
