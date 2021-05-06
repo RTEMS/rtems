@@ -812,7 +812,6 @@ static inline RtemsSignalReqSend_Entry RtemsSignalReqSend_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
 {
   RtemsSignalReqSend_Context *ctx;
-  RtemsSignalReqSend_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -824,75 +823,30 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
     ctx->pcs[ 0 ] < RtemsSignalReqSend_Pre_Task_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsSignalReqSend_GetEntry( index );
-
-    if ( entry.Pre_Task_NA ) {
-      ctx->pcs[ 0 ] = RtemsSignalReqSend_Pre_Task_NA;
-      index += ( RtemsSignalReqSend_Pre_Task_NA - 1 )
-        * RtemsSignalReqSend_Pre_Set_NA
-        * RtemsSignalReqSend_Pre_Handler_NA
-        * RtemsSignalReqSend_Pre_ASR_NA
-        * RtemsSignalReqSend_Pre_Nested_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsSignalReqSend_Pre_Set_Zero;
       ctx->pcs[ 1 ] < RtemsSignalReqSend_Pre_Set_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsSignalReqSend_GetEntry( index );
-
-      if ( entry.Pre_Set_NA ) {
-        ctx->pcs[ 1 ] = RtemsSignalReqSend_Pre_Set_NA;
-        index += ( RtemsSignalReqSend_Pre_Set_NA - 1 )
-          * RtemsSignalReqSend_Pre_Handler_NA
-          * RtemsSignalReqSend_Pre_ASR_NA
-          * RtemsSignalReqSend_Pre_Nested_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsSignalReqSend_Pre_Handler_Invalid;
         ctx->pcs[ 2 ] < RtemsSignalReqSend_Pre_Handler_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = RtemsSignalReqSend_GetEntry( index );
-
-        if ( entry.Pre_Handler_NA ) {
-          ctx->pcs[ 2 ] = RtemsSignalReqSend_Pre_Handler_NA;
-          index += ( RtemsSignalReqSend_Pre_Handler_NA - 1 )
-            * RtemsSignalReqSend_Pre_ASR_NA
-            * RtemsSignalReqSend_Pre_Nested_NA;
-        }
-
         for (
           ctx->pcs[ 3 ] = RtemsSignalReqSend_Pre_ASR_Enabled;
           ctx->pcs[ 3 ] < RtemsSignalReqSend_Pre_ASR_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          entry = RtemsSignalReqSend_GetEntry( index );
-
-          if ( entry.Pre_ASR_NA ) {
-            ctx->pcs[ 3 ] = RtemsSignalReqSend_Pre_ASR_NA;
-            index += ( RtemsSignalReqSend_Pre_ASR_NA - 1 )
-              * RtemsSignalReqSend_Pre_Nested_NA;
-          }
-
           for (
             ctx->pcs[ 4 ] = RtemsSignalReqSend_Pre_Nested_Yes;
             ctx->pcs[ 4 ] < RtemsSignalReqSend_Pre_Nested_NA;
             ++ctx->pcs[ 4 ]
           ) {
+            RtemsSignalReqSend_Entry entry;
+
             entry = RtemsSignalReqSend_GetEntry( index );
-
-            if ( entry.Pre_Nested_NA ) {
-              ctx->pcs[ 4 ] = RtemsSignalReqSend_Pre_Nested_NA;
-              index += ( RtemsSignalReqSend_Pre_Nested_NA - 1 );
-            }
-
-            if ( entry.Skip ) {
-              ++index;
-              continue;
-            }
+            ++index;
 
             RtemsSignalReqSend_Prepare( ctx );
             RtemsSignalReqSend_Pre_Task_Prepare( ctx, ctx->pcs[ 0 ] );
@@ -907,7 +861,6 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
               ctx,
               entry.Post_Recursive
             );
-            ++index;
           }
         }
       }

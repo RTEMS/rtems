@@ -825,7 +825,6 @@ static inline RtemsSignalReqCatch_Entry RtemsSignalReqCatch_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
 {
   RtemsSignalReqCatch_Context *ctx;
-  RtemsSignalReqCatch_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -837,92 +836,35 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
     ctx->pcs[ 0 ] < RtemsSignalReqCatch_Pre_Pending_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsSignalReqCatch_GetEntry( index );
-
-    if ( entry.Pre_Pending_NA ) {
-      ctx->pcs[ 0 ] = RtemsSignalReqCatch_Pre_Pending_NA;
-      index += ( RtemsSignalReqCatch_Pre_Pending_NA - 1 )
-        * RtemsSignalReqCatch_Pre_Handler_NA
-        * RtemsSignalReqCatch_Pre_Preempt_NA
-        * RtemsSignalReqCatch_Pre_Timeslice_NA
-        * RtemsSignalReqCatch_Pre_ASR_NA
-        * RtemsSignalReqCatch_Pre_IntLvl_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsSignalReqCatch_Pre_Handler_Invalid;
       ctx->pcs[ 1 ] < RtemsSignalReqCatch_Pre_Handler_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsSignalReqCatch_GetEntry( index );
-
-      if ( entry.Pre_Handler_NA ) {
-        ctx->pcs[ 1 ] = RtemsSignalReqCatch_Pre_Handler_NA;
-        index += ( RtemsSignalReqCatch_Pre_Handler_NA - 1 )
-          * RtemsSignalReqCatch_Pre_Preempt_NA
-          * RtemsSignalReqCatch_Pre_Timeslice_NA
-          * RtemsSignalReqCatch_Pre_ASR_NA
-          * RtemsSignalReqCatch_Pre_IntLvl_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsSignalReqCatch_Pre_Preempt_Yes;
         ctx->pcs[ 2 ] < RtemsSignalReqCatch_Pre_Preempt_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = RtemsSignalReqCatch_GetEntry( index );
-
-        if ( entry.Pre_Preempt_NA ) {
-          ctx->pcs[ 2 ] = RtemsSignalReqCatch_Pre_Preempt_NA;
-          index += ( RtemsSignalReqCatch_Pre_Preempt_NA - 1 )
-            * RtemsSignalReqCatch_Pre_Timeslice_NA
-            * RtemsSignalReqCatch_Pre_ASR_NA
-            * RtemsSignalReqCatch_Pre_IntLvl_NA;
-        }
-
         for (
           ctx->pcs[ 3 ] = RtemsSignalReqCatch_Pre_Timeslice_Yes;
           ctx->pcs[ 3 ] < RtemsSignalReqCatch_Pre_Timeslice_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          entry = RtemsSignalReqCatch_GetEntry( index );
-
-          if ( entry.Pre_Timeslice_NA ) {
-            ctx->pcs[ 3 ] = RtemsSignalReqCatch_Pre_Timeslice_NA;
-            index += ( RtemsSignalReqCatch_Pre_Timeslice_NA - 1 )
-              * RtemsSignalReqCatch_Pre_ASR_NA
-              * RtemsSignalReqCatch_Pre_IntLvl_NA;
-          }
-
           for (
             ctx->pcs[ 4 ] = RtemsSignalReqCatch_Pre_ASR_Yes;
             ctx->pcs[ 4 ] < RtemsSignalReqCatch_Pre_ASR_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            entry = RtemsSignalReqCatch_GetEntry( index );
-
-            if ( entry.Pre_ASR_NA ) {
-              ctx->pcs[ 4 ] = RtemsSignalReqCatch_Pre_ASR_NA;
-              index += ( RtemsSignalReqCatch_Pre_ASR_NA - 1 )
-                * RtemsSignalReqCatch_Pre_IntLvl_NA;
-            }
-
             for (
               ctx->pcs[ 5 ] = RtemsSignalReqCatch_Pre_IntLvl_Zero;
               ctx->pcs[ 5 ] < RtemsSignalReqCatch_Pre_IntLvl_NA;
               ++ctx->pcs[ 5 ]
             ) {
+              RtemsSignalReqCatch_Entry entry;
+
               entry = RtemsSignalReqCatch_GetEntry( index );
-
-              if ( entry.Pre_IntLvl_NA ) {
-                ctx->pcs[ 5 ] = RtemsSignalReqCatch_Pre_IntLvl_NA;
-                index += ( RtemsSignalReqCatch_Pre_IntLvl_NA - 1 );
-              }
-
-              if ( entry.Skip ) {
-                ++index;
-                continue;
-              }
+              ++index;
 
               RtemsSignalReqCatch_Prepare( ctx );
               RtemsSignalReqCatch_Pre_Pending_Prepare( ctx, ctx->pcs[ 0 ] );
@@ -937,7 +879,6 @@ T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
                 ctx,
                 entry.Post_ASRInfo
               );
-              ++index;
             }
           }
         }

@@ -1074,7 +1074,6 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsTaskReqConstructErrors_Context *ctx;
-  RtemsTaskReqConstructErrors_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -1086,149 +1085,50 @@ T_TEST_CASE_FIXTURE(
     ctx->pcs[ 0 ] < RtemsTaskReqConstructErrors_Pre_Config_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-    if ( entry.Pre_Config_NA ) {
-      ctx->pcs[ 0 ] = RtemsTaskReqConstructErrors_Pre_Config_NA;
-      index += ( RtemsTaskReqConstructErrors_Pre_Config_NA - 1 )
-        * RtemsTaskReqConstructErrors_Pre_Name_NA
-        * RtemsTaskReqConstructErrors_Pre_Id_NA
-        * RtemsTaskReqConstructErrors_Pre_SysTsk_NA
-        * RtemsTaskReqConstructErrors_Pre_Prio_NA
-        * RtemsTaskReqConstructErrors_Pre_Free_NA
-        * RtemsTaskReqConstructErrors_Pre_TLS_NA
-        * RtemsTaskReqConstructErrors_Pre_Stack_NA
-        * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsTaskReqConstructErrors_Pre_Name_Valid;
       ctx->pcs[ 1 ] < RtemsTaskReqConstructErrors_Pre_Name_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-      if ( entry.Pre_Name_NA ) {
-        ctx->pcs[ 1 ] = RtemsTaskReqConstructErrors_Pre_Name_NA;
-        index += ( RtemsTaskReqConstructErrors_Pre_Name_NA - 1 )
-          * RtemsTaskReqConstructErrors_Pre_Id_NA
-          * RtemsTaskReqConstructErrors_Pre_SysTsk_NA
-          * RtemsTaskReqConstructErrors_Pre_Prio_NA
-          * RtemsTaskReqConstructErrors_Pre_Free_NA
-          * RtemsTaskReqConstructErrors_Pre_TLS_NA
-          * RtemsTaskReqConstructErrors_Pre_Stack_NA
-          * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsTaskReqConstructErrors_Pre_Id_Valid;
         ctx->pcs[ 2 ] < RtemsTaskReqConstructErrors_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-        if ( entry.Pre_Id_NA ) {
-          ctx->pcs[ 2 ] = RtemsTaskReqConstructErrors_Pre_Id_NA;
-          index += ( RtemsTaskReqConstructErrors_Pre_Id_NA - 1 )
-            * RtemsTaskReqConstructErrors_Pre_SysTsk_NA
-            * RtemsTaskReqConstructErrors_Pre_Prio_NA
-            * RtemsTaskReqConstructErrors_Pre_Free_NA
-            * RtemsTaskReqConstructErrors_Pre_TLS_NA
-            * RtemsTaskReqConstructErrors_Pre_Stack_NA
-            * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-        }
-
         for (
           ctx->pcs[ 3 ] = RtemsTaskReqConstructErrors_Pre_SysTsk_Yes;
           ctx->pcs[ 3 ] < RtemsTaskReqConstructErrors_Pre_SysTsk_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-          if ( entry.Pre_SysTsk_NA ) {
-            ctx->pcs[ 3 ] = RtemsTaskReqConstructErrors_Pre_SysTsk_NA;
-            index += ( RtemsTaskReqConstructErrors_Pre_SysTsk_NA - 1 )
-              * RtemsTaskReqConstructErrors_Pre_Prio_NA
-              * RtemsTaskReqConstructErrors_Pre_Free_NA
-              * RtemsTaskReqConstructErrors_Pre_TLS_NA
-              * RtemsTaskReqConstructErrors_Pre_Stack_NA
-              * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-          }
-
           for (
             ctx->pcs[ 4 ] = RtemsTaskReqConstructErrors_Pre_Prio_Valid;
             ctx->pcs[ 4 ] < RtemsTaskReqConstructErrors_Pre_Prio_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-            if ( entry.Pre_Prio_NA ) {
-              ctx->pcs[ 4 ] = RtemsTaskReqConstructErrors_Pre_Prio_NA;
-              index += ( RtemsTaskReqConstructErrors_Pre_Prio_NA - 1 )
-                * RtemsTaskReqConstructErrors_Pre_Free_NA
-                * RtemsTaskReqConstructErrors_Pre_TLS_NA
-                * RtemsTaskReqConstructErrors_Pre_Stack_NA
-                * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-            }
-
             for (
               ctx->pcs[ 5 ] = RtemsTaskReqConstructErrors_Pre_Free_Yes;
               ctx->pcs[ 5 ] < RtemsTaskReqConstructErrors_Pre_Free_NA;
               ++ctx->pcs[ 5 ]
             ) {
-              entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-              if ( entry.Pre_Free_NA ) {
-                ctx->pcs[ 5 ] = RtemsTaskReqConstructErrors_Pre_Free_NA;
-                index += ( RtemsTaskReqConstructErrors_Pre_Free_NA - 1 )
-                  * RtemsTaskReqConstructErrors_Pre_TLS_NA
-                  * RtemsTaskReqConstructErrors_Pre_Stack_NA
-                  * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-              }
-
               for (
                 ctx->pcs[ 6 ] = RtemsTaskReqConstructErrors_Pre_TLS_Enough;
                 ctx->pcs[ 6 ] < RtemsTaskReqConstructErrors_Pre_TLS_NA;
                 ++ctx->pcs[ 6 ]
               ) {
-                entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-                if ( entry.Pre_TLS_NA ) {
-                  ctx->pcs[ 6 ] = RtemsTaskReqConstructErrors_Pre_TLS_NA;
-                  index += ( RtemsTaskReqConstructErrors_Pre_TLS_NA - 1 )
-                    * RtemsTaskReqConstructErrors_Pre_Stack_NA
-                    * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-                }
-
                 for (
                   ctx->pcs[ 7 ] = RtemsTaskReqConstructErrors_Pre_Stack_Enough;
                   ctx->pcs[ 7 ] < RtemsTaskReqConstructErrors_Pre_Stack_NA;
                   ++ctx->pcs[ 7 ]
                 ) {
-                  entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-                  if ( entry.Pre_Stack_NA ) {
-                    ctx->pcs[ 7 ] = RtemsTaskReqConstructErrors_Pre_Stack_NA;
-                    index += ( RtemsTaskReqConstructErrors_Pre_Stack_NA - 1 )
-                      * RtemsTaskReqConstructErrors_Pre_Ext_NA;
-                  }
-
                   for (
                     ctx->pcs[ 8 ] = RtemsTaskReqConstructErrors_Pre_Ext_Ok;
                     ctx->pcs[ 8 ] < RtemsTaskReqConstructErrors_Pre_Ext_NA;
                     ++ctx->pcs[ 8 ]
                   ) {
+                    RtemsTaskReqConstructErrors_Entry entry;
+
                     entry = RtemsTaskReqConstructErrors_GetEntry( index );
-
-                    if ( entry.Pre_Ext_NA ) {
-                      ctx->pcs[ 8 ] = RtemsTaskReqConstructErrors_Pre_Ext_NA;
-                      index += ( RtemsTaskReqConstructErrors_Pre_Ext_NA - 1 );
-                    }
-
-                    if ( entry.Skip ) {
-                      ++index;
-                      continue;
-                    }
+                    ++index;
 
                     RtemsTaskReqConstructErrors_Prepare( ctx );
                     RtemsTaskReqConstructErrors_Pre_Config_Prepare(
@@ -1293,7 +1193,6 @@ T_TEST_CASE_FIXTURE(
                       entry.Post_StoFree
                     );
                     RtemsTaskReqConstructErrors_Cleanup( ctx );
-                    ++index;
                   }
                 }
               }

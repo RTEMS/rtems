@@ -529,7 +529,6 @@ static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
 {
   RtemsBarrierReqWait_Context *ctx;
-  RtemsBarrierReqWait_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -541,43 +540,34 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsBarrierReqWait_GetEntry( index );
-
-    if ( entry.Pre_Id_NA ) {
-      ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NA;
-      index += ( RtemsBarrierReqWait_Pre_Id_NA - 1 )
-        * RtemsBarrierReqWait_Pre_Timeout_NA
-        * RtemsBarrierReqWait_Pre_Satisfy_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_Ticks;
       ctx->pcs[ 1 ] < RtemsBarrierReqWait_Pre_Timeout_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsBarrierReqWait_GetEntry( index );
-
-      if ( entry.Pre_Timeout_NA ) {
-        ctx->pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_NA;
-        index += ( RtemsBarrierReqWait_Pre_Timeout_NA - 1 )
-          * RtemsBarrierReqWait_Pre_Satisfy_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_Never;
         ctx->pcs[ 2 ] < RtemsBarrierReqWait_Pre_Satisfy_NA;
         ++ctx->pcs[ 2 ]
       ) {
+        RtemsBarrierReqWait_Entry entry;
+        size_t pcs[ 3 ];
+
         entry = RtemsBarrierReqWait_GetEntry( index );
+        ++index;
+
+        if ( entry.Skip ) {
+          continue;
+        }
+
+        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
+
+        if ( entry.Pre_Timeout_NA ) {
+          ctx->pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_NA;
+        }
 
         if ( entry.Pre_Satisfy_NA ) {
           ctx->pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_NA;
-          index += ( RtemsBarrierReqWait_Pre_Satisfy_NA - 1 );
-        }
-
-        if ( entry.Skip ) {
-          ++index;
-          continue;
         }
 
         RtemsBarrierReqWait_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
@@ -585,7 +575,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
         RtemsBarrierReqWait_Pre_Satisfy_Prepare( ctx, ctx->pcs[ 2 ] );
         RtemsBarrierReqWait_Action( ctx );
         RtemsBarrierReqWait_Post_Status_Check( ctx, entry.Post_Status );
-        ++index;
+        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
       }
     }
   }

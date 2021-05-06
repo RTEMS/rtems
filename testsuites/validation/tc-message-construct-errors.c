@@ -821,7 +821,6 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsMessageReqConstructErrors_Context *ctx;
-  RtemsMessageReqConstructErrors_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -833,129 +832,45 @@ T_TEST_CASE_FIXTURE(
     ctx->pcs[ 0 ] < RtemsMessageReqConstructErrors_Pre_Config_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-    if ( entry.Pre_Config_NA ) {
-      ctx->pcs[ 0 ] = RtemsMessageReqConstructErrors_Pre_Config_NA;
-      index += ( RtemsMessageReqConstructErrors_Pre_Config_NA - 1 )
-        * RtemsMessageReqConstructErrors_Pre_Name_NA
-        * RtemsMessageReqConstructErrors_Pre_Id_NA
-        * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
-        * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-        * RtemsMessageReqConstructErrors_Pre_Free_NA
-        * RtemsMessageReqConstructErrors_Pre_Area_NA
-        * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Name_Valid;
       ctx->pcs[ 1 ] < RtemsMessageReqConstructErrors_Pre_Name_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-      if ( entry.Pre_Name_NA ) {
-        ctx->pcs[ 1 ] = RtemsMessageReqConstructErrors_Pre_Name_NA;
-        index += ( RtemsMessageReqConstructErrors_Pre_Name_NA - 1 )
-          * RtemsMessageReqConstructErrors_Pre_Id_NA
-          * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
-          * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-          * RtemsMessageReqConstructErrors_Pre_Free_NA
-          * RtemsMessageReqConstructErrors_Pre_Area_NA
-          * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_Id_Id;
         ctx->pcs[ 2 ] < RtemsMessageReqConstructErrors_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-        if ( entry.Pre_Id_NA ) {
-          ctx->pcs[ 2 ] = RtemsMessageReqConstructErrors_Pre_Id_NA;
-          index += ( RtemsMessageReqConstructErrors_Pre_Id_NA - 1 )
-            * RtemsMessageReqConstructErrors_Pre_MaxPending_NA
-            * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-            * RtemsMessageReqConstructErrors_Pre_Free_NA
-            * RtemsMessageReqConstructErrors_Pre_Area_NA
-            * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-        }
-
         for (
           ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_Valid;
           ctx->pcs[ 3 ] < RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-          if ( entry.Pre_MaxPending_NA ) {
-            ctx->pcs[ 3 ] = RtemsMessageReqConstructErrors_Pre_MaxPending_NA;
-            index += ( RtemsMessageReqConstructErrors_Pre_MaxPending_NA - 1 )
-              * RtemsMessageReqConstructErrors_Pre_MaxSize_NA
-              * RtemsMessageReqConstructErrors_Pre_Free_NA
-              * RtemsMessageReqConstructErrors_Pre_Area_NA
-              * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-          }
-
           for (
             ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_Valid;
             ctx->pcs[ 4 ] < RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-            if ( entry.Pre_MaxSize_NA ) {
-              ctx->pcs[ 4 ] = RtemsMessageReqConstructErrors_Pre_MaxSize_NA;
-              index += ( RtemsMessageReqConstructErrors_Pre_MaxSize_NA - 1 )
-                * RtemsMessageReqConstructErrors_Pre_Free_NA
-                * RtemsMessageReqConstructErrors_Pre_Area_NA
-                * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-            }
-
             for (
               ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Free_Yes;
               ctx->pcs[ 5 ] < RtemsMessageReqConstructErrors_Pre_Free_NA;
               ++ctx->pcs[ 5 ]
             ) {
-              entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-              if ( entry.Pre_Free_NA ) {
-                ctx->pcs[ 5 ] = RtemsMessageReqConstructErrors_Pre_Free_NA;
-                index += ( RtemsMessageReqConstructErrors_Pre_Free_NA - 1 )
-                  * RtemsMessageReqConstructErrors_Pre_Area_NA
-                  * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-              }
-
               for (
                 ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_Area_Valid;
                 ctx->pcs[ 6 ] < RtemsMessageReqConstructErrors_Pre_Area_NA;
                 ++ctx->pcs[ 6 ]
               ) {
-                entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-                if ( entry.Pre_Area_NA ) {
-                  ctx->pcs[ 6 ] = RtemsMessageReqConstructErrors_Pre_Area_NA;
-                  index += ( RtemsMessageReqConstructErrors_Pre_Area_NA - 1 )
-                    * RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-                }
-
                 for (
                   ctx->pcs[ 7 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_Valid;
                   ctx->pcs[ 7 ] < RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
                   ++ctx->pcs[ 7 ]
                 ) {
+                  RtemsMessageReqConstructErrors_Entry entry;
+
                   entry = RtemsMessageReqConstructErrors_GetEntry( index );
-
-                  if ( entry.Pre_AreaSize_NA ) {
-                    ctx->pcs[ 7 ] = RtemsMessageReqConstructErrors_Pre_AreaSize_NA;
-                    index += ( RtemsMessageReqConstructErrors_Pre_AreaSize_NA - 1 );
-                  }
-
-                  if ( entry.Skip ) {
-                    ++index;
-                    continue;
-                  }
+                  ++index;
 
                   RtemsMessageReqConstructErrors_Prepare( ctx );
                   RtemsMessageReqConstructErrors_Pre_Config_Prepare(
@@ -1004,7 +919,6 @@ T_TEST_CASE_FIXTURE(
                     entry.Post_IdVar
                   );
                   RtemsMessageReqConstructErrors_Cleanup( ctx );
-                  ++index;
                 }
               }
             }

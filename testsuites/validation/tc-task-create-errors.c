@@ -885,7 +885,6 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsTaskReqCreateErrors_Context *ctx;
-  RtemsTaskReqCreateErrors_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -897,110 +896,40 @@ T_TEST_CASE_FIXTURE(
     ctx->pcs[ 0 ] < RtemsTaskReqCreateErrors_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-    if ( entry.Pre_Name_NA ) {
-      ctx->pcs[ 0 ] = RtemsTaskReqCreateErrors_Pre_Name_NA;
-      index += ( RtemsTaskReqCreateErrors_Pre_Name_NA - 1 )
-        * RtemsTaskReqCreateErrors_Pre_Id_NA
-        * RtemsTaskReqCreateErrors_Pre_SysTsk_NA
-        * RtemsTaskReqCreateErrors_Pre_Prio_NA
-        * RtemsTaskReqCreateErrors_Pre_Free_NA
-        * RtemsTaskReqCreateErrors_Pre_Stack_NA
-        * RtemsTaskReqCreateErrors_Pre_Ext_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsTaskReqCreateErrors_Pre_Id_Valid;
       ctx->pcs[ 1 ] < RtemsTaskReqCreateErrors_Pre_Id_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-      if ( entry.Pre_Id_NA ) {
-        ctx->pcs[ 1 ] = RtemsTaskReqCreateErrors_Pre_Id_NA;
-        index += ( RtemsTaskReqCreateErrors_Pre_Id_NA - 1 )
-          * RtemsTaskReqCreateErrors_Pre_SysTsk_NA
-          * RtemsTaskReqCreateErrors_Pre_Prio_NA
-          * RtemsTaskReqCreateErrors_Pre_Free_NA
-          * RtemsTaskReqCreateErrors_Pre_Stack_NA
-          * RtemsTaskReqCreateErrors_Pre_Ext_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsTaskReqCreateErrors_Pre_SysTsk_Yes;
         ctx->pcs[ 2 ] < RtemsTaskReqCreateErrors_Pre_SysTsk_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-        if ( entry.Pre_SysTsk_NA ) {
-          ctx->pcs[ 2 ] = RtemsTaskReqCreateErrors_Pre_SysTsk_NA;
-          index += ( RtemsTaskReqCreateErrors_Pre_SysTsk_NA - 1 )
-            * RtemsTaskReqCreateErrors_Pre_Prio_NA
-            * RtemsTaskReqCreateErrors_Pre_Free_NA
-            * RtemsTaskReqCreateErrors_Pre_Stack_NA
-            * RtemsTaskReqCreateErrors_Pre_Ext_NA;
-        }
-
         for (
           ctx->pcs[ 3 ] = RtemsTaskReqCreateErrors_Pre_Prio_Valid;
           ctx->pcs[ 3 ] < RtemsTaskReqCreateErrors_Pre_Prio_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-          if ( entry.Pre_Prio_NA ) {
-            ctx->pcs[ 3 ] = RtemsTaskReqCreateErrors_Pre_Prio_NA;
-            index += ( RtemsTaskReqCreateErrors_Pre_Prio_NA - 1 )
-              * RtemsTaskReqCreateErrors_Pre_Free_NA
-              * RtemsTaskReqCreateErrors_Pre_Stack_NA
-              * RtemsTaskReqCreateErrors_Pre_Ext_NA;
-          }
-
           for (
             ctx->pcs[ 4 ] = RtemsTaskReqCreateErrors_Pre_Free_Yes;
             ctx->pcs[ 4 ] < RtemsTaskReqCreateErrors_Pre_Free_NA;
             ++ctx->pcs[ 4 ]
           ) {
-            entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-            if ( entry.Pre_Free_NA ) {
-              ctx->pcs[ 4 ] = RtemsTaskReqCreateErrors_Pre_Free_NA;
-              index += ( RtemsTaskReqCreateErrors_Pre_Free_NA - 1 )
-                * RtemsTaskReqCreateErrors_Pre_Stack_NA
-                * RtemsTaskReqCreateErrors_Pre_Ext_NA;
-            }
-
             for (
               ctx->pcs[ 5 ] = RtemsTaskReqCreateErrors_Pre_Stack_Normal;
               ctx->pcs[ 5 ] < RtemsTaskReqCreateErrors_Pre_Stack_NA;
               ++ctx->pcs[ 5 ]
             ) {
-              entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-              if ( entry.Pre_Stack_NA ) {
-                ctx->pcs[ 5 ] = RtemsTaskReqCreateErrors_Pre_Stack_NA;
-                index += ( RtemsTaskReqCreateErrors_Pre_Stack_NA - 1 )
-                  * RtemsTaskReqCreateErrors_Pre_Ext_NA;
-              }
-
               for (
                 ctx->pcs[ 6 ] = RtemsTaskReqCreateErrors_Pre_Ext_Ok;
                 ctx->pcs[ 6 ] < RtemsTaskReqCreateErrors_Pre_Ext_NA;
                 ++ctx->pcs[ 6 ]
               ) {
+                RtemsTaskReqCreateErrors_Entry entry;
+
                 entry = RtemsTaskReqCreateErrors_GetEntry( index );
-
-                if ( entry.Pre_Ext_NA ) {
-                  ctx->pcs[ 6 ] = RtemsTaskReqCreateErrors_Pre_Ext_NA;
-                  index += ( RtemsTaskReqCreateErrors_Pre_Ext_NA - 1 );
-                }
-
-                if ( entry.Skip ) {
-                  ++index;
-                  continue;
-                }
+                ++index;
 
                 RtemsTaskReqCreateErrors_Prepare( ctx );
                 RtemsTaskReqCreateErrors_Pre_Name_Prepare(
@@ -1047,7 +976,6 @@ T_TEST_CASE_FIXTURE(
                   entry.Post_DelExt
                 );
                 RtemsTaskReqCreateErrors_Cleanup( ctx );
-                ++index;
               }
             }
           }

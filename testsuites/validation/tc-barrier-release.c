@@ -485,7 +485,6 @@ static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
 {
   RtemsBarrierReqRelease_Context *ctx;
-  RtemsBarrierReqRelease_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -497,43 +496,26 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsBarrierReqRelease_GetEntry( index );
-
-    if ( entry.Pre_Id_NA ) {
-      ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NA;
-      index += ( RtemsBarrierReqRelease_Pre_Id_NA - 1 )
-        * RtemsBarrierReqRelease_Pre_Released_NA
-        * RtemsBarrierReqRelease_Pre_Waiting_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsBarrierReqRelease_Pre_Released_Valid;
       ctx->pcs[ 1 ] < RtemsBarrierReqRelease_Pre_Released_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsBarrierReqRelease_GetEntry( index );
-
-      if ( entry.Pre_Released_NA ) {
-        ctx->pcs[ 1 ] = RtemsBarrierReqRelease_Pre_Released_NA;
-        index += ( RtemsBarrierReqRelease_Pre_Released_NA - 1 )
-          * RtemsBarrierReqRelease_Pre_Waiting_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_Zero;
         ctx->pcs[ 2 ] < RtemsBarrierReqRelease_Pre_Waiting_NA;
         ++ctx->pcs[ 2 ]
       ) {
+        RtemsBarrierReqRelease_Entry entry;
+        size_t pcs[ 3 ];
+
         entry = RtemsBarrierReqRelease_GetEntry( index );
+        ++index;
+
+        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
 
         if ( entry.Pre_Waiting_NA ) {
           ctx->pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_NA;
-          index += ( RtemsBarrierReqRelease_Pre_Waiting_NA - 1 );
-        }
-
-        if ( entry.Skip ) {
-          ++index;
-          continue;
         }
 
         RtemsBarrierReqRelease_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
@@ -545,7 +527,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
           ctx,
           entry.Post_ReleasedVar
         );
-        ++index;
+        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
       }
     }
   }

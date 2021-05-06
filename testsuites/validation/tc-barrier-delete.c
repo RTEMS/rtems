@@ -407,7 +407,6 @@ static inline RtemsBarrierReqDelete_Entry RtemsBarrierReqDelete_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
 {
   RtemsBarrierReqDelete_Context *ctx;
-  RtemsBarrierReqDelete_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -419,17 +418,10 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqDelete_Pre_Id_NA;
     ++ctx->pcs[ 0 ]
   ) {
+    RtemsBarrierReqDelete_Entry entry;
+
     entry = RtemsBarrierReqDelete_GetEntry( index );
-
-    if ( entry.Pre_Id_NA ) {
-      ctx->pcs[ 0 ] = RtemsBarrierReqDelete_Pre_Id_NA;
-      index += ( RtemsBarrierReqDelete_Pre_Id_NA - 1 );
-    }
-
-    if ( entry.Skip ) {
-      ++index;
-      continue;
-    }
+    ++index;
 
     RtemsBarrierReqDelete_Prepare( ctx );
     RtemsBarrierReqDelete_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
@@ -438,7 +430,6 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
     RtemsBarrierReqDelete_Post_Name_Check( ctx, entry.Post_Name );
     RtemsBarrierReqDelete_Post_Flush_Check( ctx, entry.Post_Flush );
     RtemsBarrierReqDelete_Cleanup( ctx );
-    ++index;
   }
 }
 

@@ -678,7 +678,6 @@ static inline RtemsBarrierReqCreate_Entry RtemsBarrierReqCreate_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
 {
   RtemsBarrierReqCreate_Context *ctx;
-  RtemsBarrierReqCreate_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -690,75 +689,30 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
     ctx->pcs[ 0 ] < RtemsBarrierReqCreate_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = RtemsBarrierReqCreate_GetEntry( index );
-
-    if ( entry.Pre_Name_NA ) {
-      ctx->pcs[ 0 ] = RtemsBarrierReqCreate_Pre_Name_NA;
-      index += ( RtemsBarrierReqCreate_Pre_Name_NA - 1 )
-        * RtemsBarrierReqCreate_Pre_Id_NA
-        * RtemsBarrierReqCreate_Pre_Class_NA
-        * RtemsBarrierReqCreate_Pre_MaxWait_NA
-        * RtemsBarrierReqCreate_Pre_Free_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Id_Valid;
       ctx->pcs[ 1 ] < RtemsBarrierReqCreate_Pre_Id_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = RtemsBarrierReqCreate_GetEntry( index );
-
-      if ( entry.Pre_Id_NA ) {
-        ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Id_NA;
-        index += ( RtemsBarrierReqCreate_Pre_Id_NA - 1 )
-          * RtemsBarrierReqCreate_Pre_Class_NA
-          * RtemsBarrierReqCreate_Pre_MaxWait_NA
-          * RtemsBarrierReqCreate_Pre_Free_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_Class_Default;
         ctx->pcs[ 2 ] < RtemsBarrierReqCreate_Pre_Class_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = RtemsBarrierReqCreate_GetEntry( index );
-
-        if ( entry.Pre_Class_NA ) {
-          ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_Class_NA;
-          index += ( RtemsBarrierReqCreate_Pre_Class_NA - 1 )
-            * RtemsBarrierReqCreate_Pre_MaxWait_NA
-            * RtemsBarrierReqCreate_Pre_Free_NA;
-        }
-
         for (
           ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_MaxWait_Zero;
           ctx->pcs[ 3 ] < RtemsBarrierReqCreate_Pre_MaxWait_NA;
           ++ctx->pcs[ 3 ]
         ) {
-          entry = RtemsBarrierReqCreate_GetEntry( index );
-
-          if ( entry.Pre_MaxWait_NA ) {
-            ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_MaxWait_NA;
-            index += ( RtemsBarrierReqCreate_Pre_MaxWait_NA - 1 )
-              * RtemsBarrierReqCreate_Pre_Free_NA;
-          }
-
           for (
             ctx->pcs[ 4 ] = RtemsBarrierReqCreate_Pre_Free_Yes;
             ctx->pcs[ 4 ] < RtemsBarrierReqCreate_Pre_Free_NA;
             ++ctx->pcs[ 4 ]
           ) {
+            RtemsBarrierReqCreate_Entry entry;
+
             entry = RtemsBarrierReqCreate_GetEntry( index );
-
-            if ( entry.Pre_Free_NA ) {
-              ctx->pcs[ 4 ] = RtemsBarrierReqCreate_Pre_Free_NA;
-              index += ( RtemsBarrierReqCreate_Pre_Free_NA - 1 );
-            }
-
-            if ( entry.Skip ) {
-              ++index;
-              continue;
-            }
+            ++index;
 
             RtemsBarrierReqCreate_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
             RtemsBarrierReqCreate_Pre_Id_Prepare( ctx, ctx->pcs[ 1 ] );
@@ -771,7 +725,6 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
             RtemsBarrierReqCreate_Post_Class_Check( ctx, entry.Post_Class );
             RtemsBarrierReqCreate_Post_IdVar_Check( ctx, entry.Post_IdVar );
             RtemsBarrierReqCreate_Cleanup( ctx );
-            ++index;
           }
         }
       }
