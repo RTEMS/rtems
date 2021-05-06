@@ -37,16 +37,16 @@ int posix_memalign(
 
   *memptr = NULL;
 
-  if ( size == 0 ) {
-    return 0;
-  }
-
   if ( alignment < sizeof( void * ) ) {
     return EINVAL;
   }
 
   if ( ( ( alignment - 1 ) & alignment ) != 0 ) {
     return EINVAL;
+  }
+
+  if ( size == 0 ) {
+    return 0;
   }
 
   *memptr = rtems_heap_allocate_aligned_with_boundary( size, alignment, 0 );
