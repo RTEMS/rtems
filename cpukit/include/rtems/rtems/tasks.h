@@ -542,6 +542,8 @@ rtems_status_code rtems_scheduler_ident_by_processor(
  *
  * @retval ::RTEMS_INVALID_ADDRESS The ``id`` parameter was NULL.
  *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``cpuset`` parameter was NULL.
+ *
  * @retval ::RTEMS_INVALID_SIZE The processor set size was invalid.
  *
  * @retval ::RTEMS_INVALID_NAME The processor set contained no online
