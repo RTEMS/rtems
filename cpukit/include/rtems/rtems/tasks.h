@@ -780,7 +780,7 @@ uint32_t rtems_scheduler_get_processor_maximum( void );
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
  *   identifier specified by ``scheduler_id``.
  *
- * @retval ::RTEMS_INVALID_NUMBER The provided processor set was too small for
+ * @retval ::RTEMS_INVALID_SIZE The provided processor set was too small for
  *   the set of processors owned by the scheduler.
  *
  * @par Constraints
