@@ -41,7 +41,12 @@ static void *_Message_queue_Get_buffers(
     return NULL;
   }
 
-  the_message_queue->free_message_buffers = config->storage_free;
+  if ( config->storage_free != NULL ) {
+    the_message_queue->free_message_buffers = config->storage_free;
+  } else {
+    the_message_queue->free_message_buffers = _Objects_Free_nothing;
+  }
+
   return config->storage_area;
 }
 

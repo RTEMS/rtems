@@ -51,11 +51,9 @@ void _CORE_message_queue_Close(
     queue_context
   );
 
-  if ( the_message_queue->free_message_buffers != NULL ) {
-    ( *the_message_queue->free_message_buffers )(
-      the_message_queue->message_buffers
-    );
-  }
+  ( *the_message_queue->free_message_buffers )(
+    the_message_queue->message_buffers
+  );
 
   _Thread_queue_Destroy( &the_message_queue->Wait_queue );
 }
