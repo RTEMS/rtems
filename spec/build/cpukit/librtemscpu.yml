@@ -1433,6 +1433,7 @@ source:
 - cpukit/score/src/objectclose.c
 - cpukit/score/src/objectextendinformation.c
 - cpukit/score/src/objectfree.c
+- cpukit/score/src/objectfreenothing.c
 - cpukit/score/src/objectfreestatic.c
 - cpukit/score/src/objectgetinfo.c
 - cpukit/score/src/objectgetinfoid.c
@@ -1518,7 +1519,6 @@ source:
 - cpukit/score/src/smpbarrierwait.c
 - cpukit/score/src/stackallocator.c
 - cpukit/score/src/stackallocatorfree.c
-- cpukit/score/src/stackallocatorfreenothing.c
 - cpukit/score/src/stackallocatorinit.c
 - cpukit/score/src/thread.c
 - cpukit/score/src/threadallocateunlimited.c

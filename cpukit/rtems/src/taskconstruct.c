@@ -92,7 +92,7 @@ static rtems_status_code _RTEMS_tasks_Prepare_user_stack(
   if ( config->storage_free != NULL ) {
     thread_config->stack_free = config->storage_free;
   } else {
-    thread_config->stack_free = _Stack_Free_nothing;
+    thread_config->stack_free = _Objects_Free_nothing;
   }
 
   return RTEMS_SUCCESSFUL;

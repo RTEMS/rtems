@@ -3,10 +3,10 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreStack
+ * @ingroup RTEMSScoreObject
  *
  * @brief This source file contains the implementation of
- *   _Stack_Free_nothing().
+ *   _Objects_Free_nothing().
  */
 
 /*
@@ -38,9 +38,9 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/stackimpl.h>
+#include <rtems/score/objectimpl.h>
 
-void _Stack_Free_nothing( void *stack_area )
+void _Objects_Free_nothing( void *ptr )
 {
-  (void) stack_area;
+  (void) ptr;
 }

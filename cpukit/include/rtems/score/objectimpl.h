@@ -954,6 +954,13 @@ RTEMS_INLINE_ROUTINE Objects_Control *_Objects_Allocate_with_extend(
   return the_object;
 }
 
+/**
+ * @brief This function does nothing.
+ *
+ * @param ptr is not used.
+ */
+void _Objects_Free_nothing( void *ptr );
+
 /** @} */
 
 #ifdef __cplusplus

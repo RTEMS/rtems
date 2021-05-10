@@ -221,7 +221,7 @@ int pthread_create(
     config.stack_free = _Stack_Free;
     config.stack_area = _Stack_Allocate( config.stack_size );
   } else {
-    config.stack_free = _Stack_Free_nothing;
+    config.stack_free = _Objects_Free_nothing;
   }
 
   if ( config.stack_area == NULL ) {

@@ -144,7 +144,7 @@ typedef struct {
   /**
    * @brief This member contains the handler to free the stack.
    *
-   * It shall not be NULL.  Use _Stack_Free_nothing() if nothing is to free.
+   * It shall not be NULL.  Use _Objects_Free_nothing() if nothing is to free.
    */
   void ( *stack_free )( void * );
 
