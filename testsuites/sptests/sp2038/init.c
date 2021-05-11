@@ -277,14 +277,14 @@ static void test_problem_year(void)
 
 static void test_leap_year(void)
 {
-    bool test_status;
+    rtems_status_code test_status;
     const rtems_time_of_day *problem = &problem_2100;
     const rtems_time_of_day *problem2 = &problem_2100_2;
     // 2100 is not a leap year, so it should have 28 days
     test_status = _TOD_Validate(problem);
-    rtems_test_assert(test_status == true);
+    rtems_test_assert(test_status == RTEMS_SUCCESSFUL);
     test_status = _TOD_Validate(problem2);
-    rtems_test_assert(test_status == false);
+    rtems_test_assert(test_status == RTEMS_INVALID_CLOCK);
 }
 
 static bool test_year_is_leap_year(uint32_t year)

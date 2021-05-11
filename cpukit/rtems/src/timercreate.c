@@ -132,7 +132,8 @@ rtems_status_code _Timer_Fire_when(
   Watchdog_Service_routine_entry     adaptor
 )
 {
-  rtems_interval seconds;
+  rtems_status_code status;
+  rtems_interval    seconds;
 
   if ( !_TOD_Is_set() )
     return RTEMS_NOT_DEFINED;
@@ -140,8 +141,11 @@ rtems_status_code _Timer_Fire_when(
   if ( !routine )
     return RTEMS_INVALID_ADDRESS;
 
-  if ( !_TOD_Validate( wall_time ) )
-    return RTEMS_INVALID_CLOCK;
+  status = _TOD_Validate( wall_time );
+
+  if ( status != RTEMS_SUCCESSFUL ) {
+    return status;
+  }
 
   seconds = _TOD_To_seconds( wall_time );
   if ( seconds <= _TOD_Seconds_since_epoch() )

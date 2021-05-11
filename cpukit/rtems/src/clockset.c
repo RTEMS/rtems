@@ -29,26 +29,25 @@ rtems_status_code rtems_clock_set(
   const rtems_time_of_day *tod
 )
 {
-  Status_Control status;
+  rtems_status_code status;
+  Status_Control    score_status;
+  struct timespec   tod_as_timespec;
+  ISR_lock_Context  lock_context;
 
-  if ( !tod )
-    return RTEMS_INVALID_ADDRESS;
+  status = _TOD_Validate( tod );
 
-  if ( _TOD_Validate( tod ) ) {
-    struct timespec  tod_as_timespec;
-    ISR_lock_Context lock_context;
-
-    tod_as_timespec.tv_sec = _TOD_To_seconds( tod );
-    tod_as_timespec.tv_nsec = tod->ticks
-      * rtems_configuration_get_nanoseconds_per_tick();
-
-    _TOD_Lock();
-    _TOD_Acquire( &lock_context );
-    status = _TOD_Set( &tod_as_timespec, &lock_context );
-    _TOD_Unlock();
-
-    return _Status_Get( status );
+  if ( status != RTEMS_SUCCESSFUL ) {
+    return status;
   }
 
-  return RTEMS_INVALID_CLOCK;
+  tod_as_timespec.tv_sec = _TOD_To_seconds( tod );
+  tod_as_timespec.tv_nsec = tod->ticks
+    * rtems_configuration_get_nanoseconds_per_tick();
+
+  _TOD_Lock();
+  _TOD_Acquire( &lock_context );
+  score_status = _TOD_Set( &tod_as_timespec, &lock_context );
+  _TOD_Unlock();
+
+  return _Status_Get( score_status );
 }

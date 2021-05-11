@@ -30,9 +30,10 @@ rtems_status_code rtems_task_wake_when(
   rtems_time_of_day *time_buffer
 )
 {
-  uint32_t         seconds;
-  Thread_Control  *executing;
-  Per_CPU_Control *cpu_self;
+  uint32_t          seconds;
+  Thread_Control   *executing;
+  Per_CPU_Control  *cpu_self;
+  rtems_status_code status;
 
   if ( !_TOD_Is_set() )
     return RTEMS_NOT_DEFINED;
@@ -41,9 +42,11 @@ rtems_status_code rtems_task_wake_when(
     return RTEMS_INVALID_ADDRESS;
 
   time_buffer->ticks = 0;
+  status = _TOD_Validate( time_buffer );
 
-  if ( !_TOD_Validate( time_buffer ) )
-    return RTEMS_INVALID_CLOCK;
+  if ( status != RTEMS_SUCCESSFUL ) {
+    return status;
+  }
 
   seconds = _TOD_To_seconds( time_buffer );
 
