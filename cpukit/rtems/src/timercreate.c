@@ -141,7 +141,7 @@ rtems_status_code _Timer_Fire_when(
   if ( !routine )
     return RTEMS_INVALID_ADDRESS;
 
-  status = _TOD_Validate( wall_time );
+  status = _TOD_Validate( wall_time, TOD_ENABLE_TICKS_VALIDATION );
 
   if ( status != RTEMS_SUCCESSFUL ) {
     return status;

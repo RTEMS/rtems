@@ -2071,7 +2071,7 @@ rtems_status_code rtems_task_wake_after( rtems_interval ticks );
  *   occur.
  * @endparblock
  */
-rtems_status_code rtems_task_wake_when( rtems_time_of_day *time_buffer );
+rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer );
 
 /* Generated from spec:/rtems/task/if/get-scheduler */
 

@@ -281,9 +281,9 @@ static void test_leap_year(void)
     const rtems_time_of_day *problem = &problem_2100;
     const rtems_time_of_day *problem2 = &problem_2100_2;
     // 2100 is not a leap year, so it should have 28 days
-    test_status = _TOD_Validate(problem);
+    test_status = _TOD_Validate(problem, TOD_ENABLE_TICKS_VALIDATION);
     rtems_test_assert(test_status == RTEMS_SUCCESSFUL);
-    test_status = _TOD_Validate(problem2);
+    test_status = _TOD_Validate(problem2, TOD_ENABLE_TICKS_VALIDATION);
     rtems_test_assert(test_status == RTEMS_INVALID_CLOCK);
 }
 

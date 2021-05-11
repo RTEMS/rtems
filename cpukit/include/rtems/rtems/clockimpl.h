@@ -35,19 +35,34 @@ extern "C" {
  */
 
 /**
- * @brief TOD Validate
+ * @brief Using this constant for the ticks mask disables the validation of the
+ *   ticks member in _TOD_Validate().
+ */
+#define TOD_DISABLE_TICKS_VALIDATION 0
+
+/**
+ * @brief Using this constant for the ticks mask enables the validation of the
+ *   ticks member in _TOD_Validate().
+ */
+#define TOD_ENABLE_TICKS_VALIDATION UINT32_MAX
+
+/**
+ * @brief Validates the time of day.
  *
- * This support function tests whether @a the_tod references
- * a valid time of day.
+ * @param the_tod is the reference to the time of day structure to validate or
+ *   NULL.
  *
- * @param the_tod A reference to the time of day structure to validate.
+ * @param ticks_mask is the mask for the ticks member of the time of day.  Use
+ *   #TOD_ENABLE_TICKS_VALIDATION to validate the ticks member.  Use
+ *   #TOD_DISABLE_TICKS_VALIDATION to skip the validation of the ticks member.
  *
  * @retval RTEMS_SUCCESSFUL @a the_tod references a valid time of day.
  * @retval RTEMS_INVALID_CLOCK @a the_tod references an invalid time of day.
  * @retval RTEMS_INVALID_ADDRESS @a the_tod reference is @c NULL.
  */
 rtems_status_code _TOD_Validate(
-  const rtems_time_of_day *the_tod
+  const rtems_time_of_day *the_tod,
+  uint32_t                 ticks_mask
 );
 
 /**

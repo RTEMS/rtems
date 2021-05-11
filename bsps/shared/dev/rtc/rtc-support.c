@@ -255,7 +255,7 @@ int setRealTime(
   if (!RTC_Is_present())
     return -1;
 
-  if (_TOD_Validate(tod) != RTEMS_SUCCESSFUL)
+  if (_TOD_Validate(tod, TOD_ENABLE_TICKS_VALIDATION) != RTEMS_SUCCESSFUL)
     return -1;
 
   RTC_Table[RTC_Minor].pDeviceFns->deviceSetTime(RTC_Minor, tod);

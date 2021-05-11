@@ -34,7 +34,7 @@ rtems_status_code rtems_clock_set(
   struct timespec   tod_as_timespec;
   ISR_lock_Context  lock_context;
 
-  status = _TOD_Validate( tod );
+  status = _TOD_Validate( tod, TOD_ENABLE_TICKS_VALIDATION );
 
   if ( status != RTEMS_SUCCESSFUL ) {
     return status;
