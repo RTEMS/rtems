@@ -46,8 +46,8 @@ rtems_status_code _TOD_Validate(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  ticks_per_second = TOD_MICROSECONDS_PER_SECOND /
-	    rtems_configuration_get_microseconds_per_tick();
+  ticks_per_second = rtems_clock_get_ticks_per_second();
+
   if ((the_tod->ticks  >= ticks_per_second)       ||
       (the_tod->second >= TOD_SECONDS_PER_MINUTE) ||
       (the_tod->minute >= TOD_MINUTES_PER_HOUR)   ||
