@@ -1,0 +1,16 @@
+actions:
+- get-integer: null
+- env-assign: null
+build-type: option
+default: 0
+default-by-variant: []
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: IMXRT_MEMORY_OCRAM_NOCACHE_SIZE
+description: |
+  Size of the nocache area at the end of the OCRAM in bytes.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

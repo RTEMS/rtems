@@ -9,7 +9,8 @@ format: '{}'
 links: []
 name: IMXRT_DEFAULT_LINKCMDS
 description: |
-  The default linker command file.  Must be linkcmds.sdram or linkcmds.flexspi.
+  The default linker command file.  Must be linkcmds.sdram, linkcmds.ocram or
+  linkcmds.flexspi.
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

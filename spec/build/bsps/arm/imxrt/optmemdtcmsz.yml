@@ -1,0 +1,17 @@
+actions:
+- get-integer: null
+- env-assign: null
+build-type: option
+default: 0x20000
+default-by-variant: []
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: IMXRT_MEMORY_DTCM_SIZE
+description: |
+  Size of the DTCM in bytes. Note that these sizes depend on fuses or software
+  settings done by a bootloader (together with ITCM and OCRAM).
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

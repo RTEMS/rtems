@@ -48,6 +48,10 @@ extern char imxrt_memory_ocram_begin[];
 extern char imxrt_memory_ocram_end[];
 extern char imxrt_memory_ocram_size[];
 
+extern char imxrt_memory_ocram_nocache_begin[];
+extern char imxrt_memory_ocram_nocache_end[];
+extern char imxrt_memory_ocram_nocache_size[];
+
 extern char imxrt_memory_peripheral_begin[];
 extern char imxrt_memory_peripheral_end[];
 extern char imxrt_memory_peripheral_size[];

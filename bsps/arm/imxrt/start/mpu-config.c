@@ -56,6 +56,12 @@ BSP_START_DATA_SECTION const ARMV7M_MPU_Region_config
         | ARMV7M_MPU_RASR_TEX(0x2)
         | ARMV7M_MPU_RASR_ENABLE,
     }, {
+      .begin = imxrt_memory_ocram_nocache_begin,
+      .end = imxrt_memory_ocram_nocache_end,
+      .rasr = ARMV7M_MPU_RASR_AP(0x3)
+        | ARMV7M_MPU_RASR_TEX(0x2)
+        | ARMV7M_MPU_RASR_ENABLE,
+    }, {
       .begin = imxrt_memory_peripheral_begin,
       .end = imxrt_memory_peripheral_end,
       .rasr = ARMV7M_MPU_RASR_XN

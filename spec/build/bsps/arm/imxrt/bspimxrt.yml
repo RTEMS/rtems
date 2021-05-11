@@ -109,6 +109,7 @@ install:
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/imxrt/start/linkcmds.flexspi
+  - bsps/arm/imxrt/start/linkcmds.ocram
   - bsps/arm/imxrt/start/linkcmds.sdram
 links:
 - role: build-dependency
@@ -124,13 +125,21 @@ links:
 - role: build-dependency
   uid: optlinkcmds
 - role: build-dependency
+  uid: optmemdtcmsz
+- role: build-dependency
   uid: optmemflashcfgsz
 - role: build-dependency
   uid: optmemflashivtsz
 - role: build-dependency
   uid: optmemflexspisz
 - role: build-dependency
+  uid: optmemitcmsz
+- role: build-dependency
   uid: optmemnullsz
+- role: build-dependency
+  uid: optmemocramsz
+- role: build-dependency
+  uid: optmemocramnocachesz
 - role: build-dependency
   uid: optmemsdrambase
 - role: build-dependency
