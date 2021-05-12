@@ -2652,7 +2652,7 @@ void _Thread_Do_unpin(
 RTEMS_INLINE_ROUTINE void _Thread_Pin( Thread_Control *executing )
 {
 #if defined(RTEMS_SMP)
-  _Assert( executing == _Thread_Executing );
+  _Assert( executing == _Thread_Get_executing() );
 
   executing->Scheduler.pin_level += THREAD_PIN_STEP;
 #else
@@ -2674,7 +2674,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Unpin(
 #if defined(RTEMS_SMP)
   unsigned int pin_level;
 
-  _Assert( executing == _Thread_Executing );
+  _Assert( executing == _Per_CPU_Get_executing( cpu_self ) );
 
   pin_level = executing->Scheduler.pin_level;
   _Assert( pin_level > 0 );
