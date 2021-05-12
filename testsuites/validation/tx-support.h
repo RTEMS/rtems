@@ -60,6 +60,11 @@ typedef enum {
   PRIO_ULTRA_LOW
 } Priority;
 
+/**
+ * @brief This constants represents an invalid RTEMS object identifier.
+ */
+#define INVALID_ID 0xfffffffd
+
 #define CreateTask( name, priority ) \
   DoCreateTask( \
     rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ), \

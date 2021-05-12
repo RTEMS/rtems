@@ -55,6 +55,8 @@
 #include <rtems.h>
 #include <string.h>
 
+#include "tx-support.h"
+
 #include <rtems/test.h>
 
 /**
@@ -233,8 +235,6 @@ static const char * const * const RtemsMessageReqConstructErrors_PreDesc[] = {
 };
 
 #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
-
-#define INVALID_ID 0xffffffff
 
 #define MAX_MESSAGE_QUEUES 4
 

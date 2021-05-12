@@ -206,8 +206,6 @@ static const char * const * const RtemsBarrierReqCreate_PreDesc[] = {
 
 #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-#define INVALID_ID 0xffffffff
-
 typedef RtemsBarrierReqCreate_Context Context;
 
 static void Worker( rtems_task_argument arg )
