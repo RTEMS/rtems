@@ -2142,12 +2142,29 @@ rtems_status_code rtems_task_get_scheduler(
  * @retval ::RTEMS_INVALID_ID There was no scheduler associated with the
  *   identifier specified by ``scheduler_id``.
  *
- * @retval ::RTEMS_INVALID_PRIORITY There task priority specified in
- *   ``priority`` was invalid with respect to the scheduler specified by
- *   ``scheduler_id``.
+ * @retval ::RTEMS_INVALID_PRIORITY The task priority specified by ``priority``
+ *   was invalid with respect to the scheduler specified by ``scheduler_id``.
  *
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
  *   specified by ``task_id``.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` was
+ *   enqueued on a wait queue.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` had a
+ *   current priority which consisted of more than the real priority.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` had a
+ *   helping scheduler.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The task specified by ``task_id`` was
+ *   pinned.
+ *
+ * @retval ::RTEMS_UNSATISFIED The scheduler specified by ``scheduler_id``
+ *   owned no processor.
+ *
+ * @retval ::RTEMS_UNSATISFIED The scheduler specified by ``scheduler_id`` did
+ *   not support the affinity set of the task specified by ``task_id``.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
