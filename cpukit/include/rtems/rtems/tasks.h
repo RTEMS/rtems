@@ -1845,8 +1845,8 @@ rtems_status_code rtems_task_set_priority(
  *
  * @par Notes
  * The current priority reflects temporary priority adjustments due to locking
- * protocols, the rate-monotonic period objects on some schedulers, and other
- * mechanisms.
+ * protocols, the rate-monotonic period objects on some schedulers such as EDF,
+ * and the POSIX sporadic server.
  *
  * @par Constraints
  * @parblock
