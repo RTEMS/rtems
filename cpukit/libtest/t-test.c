@@ -47,7 +47,7 @@
 #include "t-test-printf.h"
 #endif /* __rtems__ */
 
-#define T_LINE_SIZE 128
+#define T_LINE_SIZE 256
 
 typedef struct {
 	pthread_spinlock_t lock;
