@@ -30,7 +30,7 @@
  * Compile this file with the following commands:
  *     export BSP_DIR="${RTEMS_SRC_DIR}/bsps/arm/imxrt/"
  *     arm-rtems6-cpp -P -x assembler-with-cpp -I "${BSP_DIR}/include/" -include "${BSP_DIR}/dts/imxrt1050-evkb.dts" /dev/null | \
- *         dtc -@ -O dtb -o "${BSP_DIR}/dts/imxrt1050-evkb.dtb" -b 0 -p 1024
+ *         dtc -O dtb -o "${BSP_DIR}/dts/imxrt1050-evkb.dtb" -b 0 -p 64
  *     rtems-bin2c -C -N imxrt_dtb "${BSP_DIR}/dts/imxrt1050-evkb.dtb" "${BSP_DIR}/dts/imxrt1050-evkb.c"
  */
 
