@@ -48,4 +48,7 @@ BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
 
   /* Reduce frequency for I2C */
   CLOCK_SetDiv(kCLOCK_Lpi2cDiv, 5);
+
+  /* Enable EDMA clock. We initialize the EDMA so we need the clock. */
+  CLOCK_EnableClock(kCLOCK_Dma);
 }
