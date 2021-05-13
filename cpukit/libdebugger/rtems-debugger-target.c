@@ -168,7 +168,7 @@ rtems_debugger_target_reg_table_size(void)
 }
 
 int
-rtems_debugger_target_swbreak_control(bool insert, DB_UINT addr, DB_UINT kind)
+rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
 {
   rtems_debugger_target*         target = rtems_debugger->target;
   rtems_debugger_target_swbreak* swbreaks;

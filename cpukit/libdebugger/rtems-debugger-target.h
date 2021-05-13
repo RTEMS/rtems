@@ -200,7 +200,7 @@ extern void rtems_debugger_target_exception_print(CPU_Exception_frame* frame);
  * Software breakpoints. These are also referred to as memory breakpoints.
  */
 extern int rtems_debugger_target_swbreak_control(bool    insert,
-                                                 DB_UINT addr,
+                                                 uintptr_t addr,
                                                  DB_UINT kind);
 
 /**

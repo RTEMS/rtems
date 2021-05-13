@@ -154,6 +154,26 @@ hex_encode(int val)
   return "0123456789abcdef"[val & 0xf];
 }
 
+static inline uintptr_t
+hex_decode_addr(const uint8_t* data)
+{
+  uintptr_t ui = 0;
+  size_t  i;
+  if (data[0] == '-') {
+    if (data[1] == '1')
+      ui = (uintptr_t) -1;
+  }
+  else {
+    for (i = 0; i < (sizeof(ui) * 2); ++i) {
+      int v = hex_decode(data[i]);
+      if (v < 0)
+        break;
+      ui = (ui << 4) | v;
+    }
+  }
+  return ui;
+}
+
 static inline DB_UINT
 hex_decode_uint(const uint8_t* data)
 {
@@ -1438,10 +1458,10 @@ remote_read_memory(uint8_t* buffer, int size)
   if (comma == NULL)
     remote_packet_out_str(r_E01);
   else {
-    DB_UINT addr;
+    uintptr_t addr;
     DB_UINT length;
     int     r;
-    addr = hex_decode_uint(&buffer[1]);
+    addr = hex_decode_addr(&buffer[1]);
     length = hex_decode_uint((const uint8_t*) comma + 1);
     remote_packet_out_reset();
     r = rtems_debugger_target_start_memory_access();
@@ -1468,10 +1488,10 @@ remote_write_memory(uint8_t* buffer, int size)
   comma = strchr((const char*) buffer, ',');
   colon = strchr((const char*) buffer, ':');
   if (comma != NULL && colon != NULL) {
-    DB_UINT addr;
+    uintptr_t addr;
     DB_UINT length;
     int     r;
-    addr = hex_decode_uint(&buffer[1]);
+    addr = hex_decode_addr(&buffer[1]);
     length = hex_decode_uint((const uint8_t*) comma + 1);
     r = rtems_debugger_target_start_memory_access();
     if (r == 0) {
@@ -1519,9 +1539,9 @@ remote_breakpoints(bool insert, uint8_t* buffer, int size)
     comma2 = strchr(comma1 + 1, ',');
     if (comma2 != NULL) {
       uint32_t capabilities;
-      DB_UINT  addr;
+      uintptr_t  addr;
       DB_UINT  kind;
-      addr = hex_decode_uint((const uint8_t*) comma1 + 1);
+      addr = hex_decode_addr((const uint8_t*) comma1 + 1);
       kind = hex_decode_uint((const uint8_t*)comma2 + 1);
       capabilities = rtems_debugger_target_capabilities();
       switch (buffer[1]) {
