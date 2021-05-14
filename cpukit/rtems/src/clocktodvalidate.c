@@ -37,17 +37,19 @@ const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
 
 rtems_status_code _TOD_Validate(
   const rtems_time_of_day *the_tod,
-  uint32_t                 ticks_mask
+  TOD_Ticks_validation     ticks_validation
 )
 {
-  uint32_t   days_in_month;
-  uint32_t   ticks_per_second;
+  uint32_t days_in_month;
+  uint32_t ticks_per_second;
+  uint32_t ticks_mask;
 
   if ( the_tod == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
   ticks_per_second = rtems_clock_get_ticks_per_second();
+  ticks_mask = (uint32_t) ticks_validation;
 
   if ( ( ( the_tod->ticks & ticks_mask ) >= ticks_per_second ) ||
       (the_tod->second >= TOD_SECONDS_PER_MINUTE) ||
