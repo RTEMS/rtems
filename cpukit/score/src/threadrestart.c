@@ -524,7 +524,7 @@ void _Thread_Exit(
   _Thread_State_release( executing, &lock_context );
 }
 
-bool _Thread_Restart_other(
+Status_Control _Thread_Restart_other(
   Thread_Control                 *the_thread,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context
@@ -537,7 +537,7 @@ bool _Thread_Restart_other(
 
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     _Thread_State_release( the_thread, lock_context );
-    return false;
+    return STATUS_INCORRECT_STATE;
   }
 
   the_thread->Start.Entry = *entry;
@@ -564,7 +564,7 @@ bool _Thread_Restart_other(
   }
 
   _Thread_Dispatch_enable( cpu_self );
-  return true;
+  return STATUS_SUCCESSFUL;
 }
 
 void _Thread_Restart_self(

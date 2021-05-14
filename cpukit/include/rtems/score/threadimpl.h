@@ -286,14 +286,17 @@ RTEMS_NO_RETURN void _Thread_Restart_self(
 /**
  * @brief Restarts the thread.
  *
- * @param[in, out] the_thread The thread to restart.
- * @param entry The start entry information for @a the_thread.
- * @param lock_context The lock context.
+ * @param[in, out] the_thread is the thread to restart.
  *
- * @retval true The operation was successful.
- * @retval false The operation failed.
+ * @param entry is the new start entry information for the thread to restart.
+ *
+ * @param[in, out] lock_context is the lock context with interrupts disabled.
+ *
+ * @retval STATUS_SUCCESSFUL The operation was successful.
+ *
+ * @retval STATUS_INCORRECT_STATE The thread was dormant.
  */
-bool _Thread_Restart_other(
+Status_Control _Thread_Restart_other(
   Thread_Control                 *the_thread,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context
