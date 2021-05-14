@@ -147,18 +147,6 @@ void _ISR_Handler_initialization ( void );
  */
 void _ISR_Handler( void );
 
-/**
- * @brief Checks if an ISR in progress.
- *
- * This function returns true if the processor is currently servicing
- * and interrupt and false otherwise.   A return value of true indicates
- * that the caller is an interrupt service routine, NOT a thread.
- *
- * @retval true Returns true when called from an ISR.
- * @retval false Returns false when not called from an ISR.
- */
-bool _ISR_Is_in_progress( void );
-
 #ifdef __cplusplus
 }
 #endif

@@ -144,6 +144,17 @@ typedef uint32_t   ISR_Level;
     RTEMS_COMPILER_MEMORY_BARRIER();  \
   } while (0)
 
+/**
+ * @brief Checks if an ISR in progress.
+ *
+ * This function returns true, if the processor is currently servicing
+ * and interrupt, and false otherwise.   A return value of true indicates
+ * that the caller is an interrupt service routine, **not** a thread.
+ *
+ * @return true Returns true, if called from within an ISR, otherwise false.
+ */
+bool _ISR_Is_in_progress( void );
+
 /** @} */
 
 #ifdef __cplusplus

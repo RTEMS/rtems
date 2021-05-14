@@ -538,7 +538,7 @@ Status_Control _Thread_Restart(
 
   if (
     the_thread == _Per_CPU_Get_executing( cpu_self ) &&
-    !_ISR_Is_in_progress()
+    !_Per_CPU_Is_ISR_in_progress( cpu_self )
   ) {
     ignored_life_states = THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED;
   } else {

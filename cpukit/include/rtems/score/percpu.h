@@ -683,6 +683,16 @@ static inline struct _Thread_Control *_Per_CPU_Get_executing(
   return cpu->executing;
 }
 
+static inline bool _Per_CPU_Is_ISR_in_progress( const Per_CPU_Control *cpu )
+{
+#if CPU_PROVIDES_ISR_IS_IN_PROGRESS == TRUE
+  (void) cpu;
+  return _ISR_Is_in_progress();
+#else
+  return cpu->isr_nest_level != 0;
+#endif
+}
+
 static inline bool _Per_CPU_Is_processor_online(
   const Per_CPU_Control *cpu
 )
