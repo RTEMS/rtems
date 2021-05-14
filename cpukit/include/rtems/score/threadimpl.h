@@ -297,18 +297,20 @@ Status_Control _Thread_Restart(
 void _Thread_Yield( Thread_Control *executing );
 
 /**
- * @brief Changes the currently executing thread to a new state with the sets.
+ * @brief Changes the life of currently executing thread.
  *
- * @param clear States to clear.
- * @param set States to set.
- * @param ignore States to ignore.
+ * @param life_states_to_clear are the thread life states to clear.
  *
- * @return The previous state the thread was in.
+ * @param life_states_to_set are the thread life states to set.
+ *
+ * @param ignored_life_states are the ignored thread life states.
+ *
+ * @return Returns the thread life state before the changes.
  */
 Thread_Life_state _Thread_Change_life(
-  Thread_Life_state clear,
-  Thread_Life_state set,
-  Thread_Life_state ignore
+  Thread_Life_state life_states_to_clear,
+  Thread_Life_state life_states_to_set,
+  Thread_Life_state ignored_life_states
 );
 
 /**
@@ -338,12 +340,12 @@ void _Thread_Kill_zombies( void );
  * @brief Exits the currently executing thread.
  *
  * @param[in, out] executing The currently executing thread.
- * @param set The states to set.
+ * @param life_states_to_set The states to set.
  * @param[out] exit_value Contains the exit value of the thread.
  */
 void _Thread_Exit(
   Thread_Control    *executing,
-  Thread_Life_state  set,
+  Thread_Life_state  life_states_to_set,
   void              *exit_value
 );
 

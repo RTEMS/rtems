@@ -197,9 +197,9 @@ void _Thread_Kill_zombies( void )
 
 static Thread_Life_state _Thread_Change_life_locked(
   Thread_Control    *the_thread,
-  Thread_Life_state  clear,
-  Thread_Life_state  set,
-  Thread_Life_state  ignore
+  Thread_Life_state  life_states_to_clear,
+  Thread_Life_state  life_states_to_set,
+  Thread_Life_state  ignored_life_states
 )
 {
   Thread_Life_state previous;
@@ -207,11 +207,11 @@ static Thread_Life_state _Thread_Change_life_locked(
 
   previous = the_thread->Life.state;
   state = previous;
-  state &= ~clear;
-  state |= set;
+  state &= ~life_states_to_clear;
+  state |= life_states_to_set;
   the_thread->Life.state = state;
 
-  state &= ~ignore;
+  state &= ~ignored_life_states;
 
   if (
     _Thread_Is_life_change_allowed( state )
@@ -491,7 +491,7 @@ void _Thread_Close(
 
 void _Thread_Exit(
   Thread_Control    *executing,
-  Thread_Life_state  set,
+  Thread_Life_state  life_states_to_set,
   void              *exit_value
 )
 {
@@ -510,7 +510,7 @@ void _Thread_Exit(
   _Thread_Change_life_locked(
     executing,
     0,
-    set,
+    life_states_to_set,
     THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED
   );
   _Thread_State_release( executing, &lock_context );
@@ -583,9 +583,9 @@ Status_Control _Thread_Restart(
 }
 
 Thread_Life_state _Thread_Change_life(
-  Thread_Life_state clear,
-  Thread_Life_state set,
-  Thread_Life_state ignore
+  Thread_Life_state life_states_to_clear,
+  Thread_Life_state life_states_to_set,
+  Thread_Life_state ignored_life_states
 )
 {
   ISR_lock_Context   lock_context;
@@ -595,7 +595,12 @@ Thread_Life_state _Thread_Change_life(
 
   executing = _Thread_State_acquire_for_executing( &lock_context );
 
-  previous = _Thread_Change_life_locked( executing, clear, set, ignore );
+  previous = _Thread_Change_life_locked(
+    executing,
+    life_states_to_clear,
+    life_states_to_set,
+    ignored_life_states
+  );
 
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
   _Thread_State_release( executing, &lock_context );
