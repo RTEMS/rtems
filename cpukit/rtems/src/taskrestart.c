@@ -48,13 +48,7 @@ rtems_status_code rtems_task_restart(
 
   entry = the_thread->Start.Entry;
   entry.Kinds.Numeric.argument = argument;
-
-  if ( the_thread == _Thread_Executing ) {
-    _Thread_Restart_self( the_thread, &entry, &lock_context );
-    RTEMS_UNREACHABLE();
-  }
-
-  status = _Thread_Restart_other( the_thread, &entry, &lock_context );
+  status = _Thread_Restart( the_thread, &entry, &lock_context );
 
   return _Status_Get( status );
 }

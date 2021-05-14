@@ -271,19 +271,6 @@ Status_Control _Thread_Start(
 );
 
 /**
- * @brief Restarts the currently executing thread.
- *
- * @param[in, out] executing The currently executing thread.
- * @param entry The start entry information for @a executing.
- * @param lock_context The lock context.
- */
-RTEMS_NO_RETURN void _Thread_Restart_self(
-  Thread_Control                 *executing,
-  const Thread_Entry_information *entry,
-  ISR_lock_Context               *lock_context
-);
-
-/**
  * @brief Restarts the thread.
  *
  * @param[in, out] the_thread is the thread to restart.
@@ -296,7 +283,7 @@ RTEMS_NO_RETURN void _Thread_Restart_self(
  *
  * @retval STATUS_INCORRECT_STATE The thread was dormant.
  */
-Status_Control _Thread_Restart_other(
+Status_Control _Thread_Restart(
   Thread_Control                 *the_thread,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context

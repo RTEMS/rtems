@@ -5,8 +5,7 @@
  *
  * @brief This source file contains the implementation of _Thread_Cancel(),
  *   _Thread_Change_life(), _Thread_Close(), _Thread_Exit(), _Thread_Join(),
- *   _Thread_Kill_zombies(), _Thread_Restart_other(), _Thread_Restart_self(),
- *   and _Thread_Set_life_protection().
+ *   _Thread_Kill_zombies(), _Thread_Restart(), and _Thread_Set_life_protection().
  */
 
 /*
@@ -517,7 +516,7 @@ void _Thread_Exit(
   _Thread_State_release( executing, &lock_context );
 }
 
-Status_Control _Thread_Restart_other(
+Status_Control _Thread_Restart(
   Thread_Control                 *the_thread,
   const Thread_Entry_information *entry,
   ISR_lock_Context               *lock_context
@@ -525,6 +524,7 @@ Status_Control _Thread_Restart_other(
 {
   Thread_Life_state    previous;
   Per_CPU_Control     *cpu_self;
+  Thread_Life_state    ignored_life_states;
   Thread_queue_Context queue_context;
 
   _Thread_State_acquire_critical( the_thread, lock_context );
@@ -534,15 +534,24 @@ Status_Control _Thread_Restart_other(
     return STATUS_INCORRECT_STATE;
   }
 
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
+
+  if (
+    the_thread == _Per_CPU_Get_executing( cpu_self ) &&
+    !_ISR_Is_in_progress()
+  ) {
+    ignored_life_states = THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED;
+  } else {
+    ignored_life_states = 0;
+  }
+
   the_thread->Start.Entry = *entry;
   previous = _Thread_Change_life_locked(
     the_thread,
     0,
     THREAD_LIFE_RESTARTING,
-    0
+    ignored_life_states
   );
-
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
 
   if ( _Thread_Is_life_change_allowed( previous ) ) {
     _Thread_Add_life_change_request( the_thread );
@@ -571,53 +580,6 @@ Status_Control _Thread_Restart_other(
   _Thread_Priority_update( &queue_context );
   _Thread_Dispatch_enable( cpu_self );
   return STATUS_SUCCESSFUL;
-}
-
-void _Thread_Restart_self(
-  Thread_Control                 *executing,
-  const Thread_Entry_information *entry,
-  ISR_lock_Context               *lock_context
-)
-{
-  Per_CPU_Control      *cpu_self;
-  Thread_queue_Context  queue_context;
-
-  _Assert(
-    _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
-  );
-  _Assert(
-    executing->current_state == STATES_READY
-      || executing->current_state == STATES_SUSPENDED
-  );
-
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
-  _Thread_State_acquire_critical( executing, lock_context );
-
-  executing->Start.Entry = *entry;
-  _Thread_Change_life_locked(
-    executing,
-    0,
-    THREAD_LIFE_RESTARTING,
-    THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED
-  );
-
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Thread_State_release( executing, lock_context );
-
-  _Thread_Wait_acquire_default( executing, lock_context );
-  _Thread_Priority_change(
-    executing,
-    &executing->Real_priority,
-    executing->Start.initial_priority,
-    false,
-    &queue_context
-  );
-  _Thread_Wait_release_default( executing, lock_context );
-
-  _Thread_Priority_update( &queue_context );
-  _Thread_Dispatch_direct_no_return( cpu_self );
-  RTEMS_UNREACHABLE();
 }
 
 Thread_Life_state _Thread_Change_life(
