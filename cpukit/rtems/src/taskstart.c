@@ -41,6 +41,10 @@ rtems_status_code rtems_task_start(
   ISR_lock_Context  lock_context;
   bool              ok;
 
+  if ( entry_point == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
   the_thread = _Thread_Get( id, &lock_context );
 
   if ( the_thread == NULL ) {

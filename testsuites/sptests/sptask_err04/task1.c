@@ -165,6 +165,15 @@ rtems_task Task_1(
   );
   puts( "TA1 - rtems_task_start - RTEMS_INVALID_ID" );
 
+  /* NULL entry point */
+  status = rtems_task_start( RTEMS_SELF, NULL, 0 );
+  fatal_directive_status(
+    status,
+    RTEMS_INVALID_ADDRESS,
+    "rtems_task_start with NULL entry point"
+  );
+  puts( "TA1 - rtems_task_start - RTEMS_INVALID_ADDRESS" );
+
   /* already started */
   status = rtems_task_start( RTEMS_SELF, Task_1, 0 );
   fatal_directive_status(
