@@ -29,6 +29,7 @@ rtems_status_code rtems_task_delete(
 {
   Thread_Control       *the_thread;
   Thread_Close_context  context;
+  Per_CPU_Control      *cpu_self;
   Thread_Control       *executing;
 
   _Thread_queue_Context_initialize( &context.Base );
@@ -44,12 +45,20 @@ rtems_status_code rtems_task_delete(
     return RTEMS_INVALID_ID;
   }
 
-  executing = _Thread_Executing;
+  cpu_self = _Per_CPU_Get();
+
+  if ( _Per_CPU_Is_ISR_in_progress( cpu_self ) ) {
+    _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
+    return RTEMS_CALLED_FROM_ISR;
+  }
+
+  executing = _Per_CPU_Get_executing( cpu_self );
 
   if ( the_thread == executing ) {
-    Per_CPU_Control *cpu_self;
-
-    cpu_self = _Thread_queue_Dispatch_disable( &context.Base );
+    _Thread_Dispatch_disable_with_CPU(
+      cpu_self,
+      &context.Base.Lock_context.Lock_context
+    );
     _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
 
     /*
@@ -61,7 +70,8 @@ rtems_status_code rtems_task_delete(
       THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
       NULL
     );
-    _Thread_Dispatch_enable( cpu_self );
+    _Thread_Dispatch_direct_no_return( cpu_self );
+    RTEMS_UNREACHABLE();
   } else {
     _Thread_Close( the_thread, executing, &context );
   }
