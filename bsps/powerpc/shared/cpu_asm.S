@@ -258,7 +258,9 @@ PROC (_CPU_Context_restore_fp):
 
 	ALIGN (PPC_CACHE_ALIGNMENT, PPC_CACHE_ALIGN_POWER)
 	PUBLIC_PROC (_CPU_Context_switch)
+	PUBLIC_PROC (_CPU_Context_switch_no_return)
 PROC (_CPU_Context_switch):
+PROC (_CPU_Context_switch_no_return):
 
 #ifdef BSP_USE_SYNC_IN_CONTEXT_SWITCH
 	sync

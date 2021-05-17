@@ -37,9 +37,11 @@
 	.align	2
 
 PUBLIC(_CPU_Context_switch)
+PUBLIC(_CPU_Context_switch_no_return)
 PUBLIC(_CPU_Context_restore)
 
 SYM(_CPU_Context_switch):
+SYM(_CPU_Context_switch_no_return):
 	GET_SELF_CPU_CONTROL	a2
 	lw	a3, PER_CPU_ISR_DISPATCH_DISABLE(a2)
 

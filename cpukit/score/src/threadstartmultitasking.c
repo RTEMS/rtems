@@ -59,7 +59,7 @@ void _Thread_Start_multitasking( void )
      * executing to the currently selected heir thread.
      */
     _CPU_Context_Set_is_executing( &trash, true );
-    _CPU_Context_switch( &trash, &heir->Registers );
+    _CPU_Context_switch_no_return( &trash, &heir->Registers );
     RTEMS_UNREACHABLE();
   }
 #else

@@ -57,7 +57,9 @@
 
         .align 4
         PUBLIC(_CPU_Context_switch)
+        PUBLIC(_CPU_Context_switch_no_return)
 SYM(_CPU_Context_switch):
+SYM(_CPU_Context_switch_no_return):
         st      %g5, [%o0 + G5_OFFSET]       ! save the global registers
 
         /*

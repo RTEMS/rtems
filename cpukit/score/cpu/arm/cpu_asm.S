@@ -54,6 +54,9 @@
  */
 
 DEFINE_FUNCTION_ARM(_CPU_Context_switch)
+	.globl	_CPU_Context_switch_no_return
+	.set	_CPU_Context_switch_no_return, _CPU_Context_switch
+
 /* Start saving context */
 	GET_SELF_CPU_CONTROL	r2
 	ldr	r3, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]

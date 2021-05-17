@@ -971,6 +971,11 @@ void _CPU_Context_switch(
   Context_Control  *heir
 );
 
+RTEMS_NO_RETURN void _CPU_Context_switch_no_return(
+  Context_Control *executing,
+  Context_Control *heir
+);
+
 /**
  * @brief SPARC specific context restore.
  *
