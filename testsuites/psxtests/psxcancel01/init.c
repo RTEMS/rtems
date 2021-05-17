@@ -18,38 +18,41 @@ const char rtems_test_name[] = "PSXCANCEL 1";
 
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
-rtems_timer_service_routine Cancel_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
-);
-rtems_timer_service_routine SetState_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
-);
-rtems_timer_service_routine SetType_duringISR_TSR(
-  rtems_id  ignored_id,
-  void     *ignored_address
-);
-void doit(
-  rtems_timer_service_routine (*TSR)(rtems_id, void *),
-  const char                   *method
-);
 
-volatile int TSR_occurred;
-volatile int TSR_status;
+static volatile int TSR_occurred;
 
-rtems_id  timer_id;
+static volatile int TSR_status;
 
-rtems_timer_service_routine Cancel_duringISR_TSR(
+static rtems_id  timer_id;
+
+static pthread_t thread;
+
+static void *suspend_self( void *arg )
+{
+  int               eno;
+  rtems_status_code status;
+
+  (void) arg;
+
+  eno = pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
+  rtems_test_assert( eno == 0 );
+
+  status = rtems_task_suspend( RTEMS_SELF);
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
+
+  return NULL;
+}
+
+static rtems_timer_service_routine Cancel_duringISR_TSR(
   rtems_id  ignored_id,
   void     *ignored_address
 )
 {
-  TSR_status = pthread_cancel( pthread_self() );
+  TSR_status = pthread_cancel( thread );
   TSR_occurred = 1;
 }
 
-rtems_timer_service_routine SetState_duringISR_TSR(
+static rtems_timer_service_routine SetState_duringISR_TSR(
   rtems_id  ignored_id,
   void     *ignored_address
 )
@@ -60,7 +63,7 @@ rtems_timer_service_routine SetState_duringISR_TSR(
   TSR_occurred = 1;
 }
 
-rtems_timer_service_routine SetType_duringISR_TSR(
+static rtems_timer_service_routine SetType_duringISR_TSR(
   rtems_id  ignored_id,
   void     *ignored_address
 )
@@ -71,9 +74,10 @@ rtems_timer_service_routine SetType_duringISR_TSR(
   TSR_occurred = 1;
 }
 
-void doit(
+static void doit(
   rtems_timer_service_routine (*TSR)(rtems_id, void *),
-  const char                   *method
+  const char                   *method,
+  int                           expected_status
 )
 {
   rtems_interval    start;
@@ -97,11 +101,11 @@ void doit(
     printf( "%s did not occur\n", method );
     rtems_test_exit(0);
   }
-  if ( TSR_status != EPROTO ) {
+  if ( TSR_status != expected_status ) {
     printf( "%s returned %s\n", method, strerror(TSR_status) );
     rtems_test_exit(0);
   }
-  printf( "%s - from ISR returns EPROTO - OK\n", method );
+  printf( "%s - from ISR returns expected status - OK\n", method );
 
 }
 
@@ -110,6 +114,8 @@ void *POSIX_Init(
 )
 {
   rtems_status_code status;
+  int               eno;
+  void             *value;
 
   TEST_BEGIN();
 
@@ -119,9 +125,17 @@ void *POSIX_Init(
   );
   rtems_test_assert( !status );
 
-  doit( Cancel_duringISR_TSR, "pthread_cancel" );
-  doit( SetState_duringISR_TSR, "pthread_setcancelstate" );
-  doit( SetType_duringISR_TSR, "pthread_setcanceltype" );
+  eno = pthread_create( &thread, NULL, suspend_self, NULL );
+  rtems_test_assert( eno == 0 );
+
+  doit( Cancel_duringISR_TSR, "pthread_cancel", 0 );
+  doit( SetState_duringISR_TSR, "pthread_setcancelstate", EPROTO );
+  doit( SetType_duringISR_TSR, "pthread_setcanceltype", EPROTO );
+
+  value = NULL;
+  eno = pthread_join( thread, &value );
+  rtems_test_assert( eno == 0 );
+  rtems_test_assert( value == PTHREAD_CANCELED );
 
   TEST_END();
   rtems_test_exit(0);
@@ -137,7 +151,7 @@ void *POSIX_Init(
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_POSIX_THREADS        1
+#define CONFIGURE_MAXIMUM_POSIX_THREADS        2
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_INIT
