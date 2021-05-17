@@ -97,6 +97,7 @@ int clock_nanosleep(
   }
 
   if ( rmtp != NULL && ( flags & TIMER_ABSTIME ) == 0 ) {
+#if defined( RTEMS_POSIX_API )
     if ( eno == EINTR ) {
       struct timespec actual_end;
 
@@ -110,6 +111,10 @@ int clock_nanosleep(
     } else {
       _Timespec_Set_to_zero( rmtp );
     }
+#else
+    _Assert( eno != EINTR );
+    _Timespec_Set_to_zero( rmtp );
+#endif
   }
 
   return eno;
