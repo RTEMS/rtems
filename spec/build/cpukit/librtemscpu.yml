@@ -990,6 +990,7 @@ source:
 - cpukit/posix/src/clockgetcpuclockid.c
 - cpukit/posix/src/clockgetres.c
 - cpukit/posix/src/clockgettime.c
+- cpukit/posix/src/clocknanosleep.c
 - cpukit/posix/src/clocksettime.c
 - cpukit/posix/src/condattrdestroy.c
 - cpukit/posix/src/condattrgetclock.c

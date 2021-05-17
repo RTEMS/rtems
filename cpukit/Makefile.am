@@ -490,6 +490,7 @@ librtemscpu_a_SOURCES += posix/src/cleanuppush.c
 librtemscpu_a_SOURCES += posix/src/clockgetcpuclockid.c
 librtemscpu_a_SOURCES += posix/src/clockgetres.c
 librtemscpu_a_SOURCES += posix/src/clockgettime.c
+librtemscpu_a_SOURCES += posix/src/clocknanosleep.c
 librtemscpu_a_SOURCES += posix/src/clocksettime.c
 librtemscpu_a_SOURCES += posix/src/condattrdestroy.c
 librtemscpu_a_SOURCES += posix/src/condattrgetclock.c
