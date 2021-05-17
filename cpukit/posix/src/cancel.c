@@ -52,17 +52,17 @@ int pthread_cancel( pthread_t thread )
     return ESRCH;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-  _ISR_lock_ISR_enable( &lock_context );
-
+  cpu_self = _Per_CPU_Get();
   executing = _Per_CPU_Get_executing( cpu_self );
 
   if ( the_thread == executing ) {
-    _Thread_Exit( executing, THREAD_LIFE_TERMINATING, PTHREAD_CANCELED );
+    _ISR_lock_ISR_enable( &lock_context );
+    _Thread_Exit( PTHREAD_CANCELED, THREAD_LIFE_TERMINATING );
   } else {
+    _Thread_Dispatch_disable_with_CPU( cpu_self, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
     _Thread_Cancel( the_thread, executing, PTHREAD_CANCELED );
+    _Thread_Dispatch_enable( cpu_self );
   }
-
-  _Thread_Dispatch_enable( cpu_self );
   return 0;
 }

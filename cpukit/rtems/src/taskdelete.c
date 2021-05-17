@@ -55,23 +55,13 @@ rtems_status_code rtems_task_delete(
   executing = _Per_CPU_Get_executing( cpu_self );
 
   if ( the_thread == executing ) {
-    _Thread_Dispatch_disable_with_CPU(
-      cpu_self,
-      &context.Base.Lock_context.Lock_context
-    );
     _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
 
     /*
      * The Classic tasks are neither detached nor joinable.  In case of
      * self deletion, they are detached, otherwise joinable by default.
      */
-    _Thread_Exit(
-      executing,
-      THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
-      NULL
-    );
-    _Thread_Dispatch_direct_no_return( cpu_self );
-    RTEMS_UNREACHABLE();
+    _Thread_Exit( NULL, THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED );
   } else {
     _Thread_Close( the_thread, executing, &context );
   }

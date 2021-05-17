@@ -489,13 +489,18 @@ void _Thread_Close(
   );
 }
 
-void _Thread_Exit(
-  Thread_Control    *executing,
-  Thread_Life_state  life_states_to_set,
-  void              *exit_value
+RTEMS_NO_RETURN void _Thread_Exit(
+  void              *exit_value,
+  Thread_Life_state  life_states_to_set
 )
 {
+  Per_CPU_Control *cpu_self;
+  Thread_Control  *executing;
   ISR_lock_Context lock_context;
+
+  _ISR_lock_ISR_disable( &lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  executing = _Per_CPU_Get_executing( cpu_self );
 
   _Assert(
     _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
@@ -505,7 +510,7 @@ void _Thread_Exit(
       || executing->current_state == STATES_SUSPENDED
   );
 
-  _Thread_State_acquire( executing, &lock_context );
+  _Thread_State_acquire_critical( executing, &lock_context );
   _Thread_Set_exit_value( executing, exit_value );
   _Thread_Change_life_locked(
     executing,
@@ -514,6 +519,9 @@ void _Thread_Exit(
     THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED
   );
   _Thread_State_release( executing, &lock_context );
+
+  _Thread_Dispatch_direct_no_return( cpu_self );
+  RTEMS_UNREACHABLE();
 }
 
 Status_Control _Thread_Restart(

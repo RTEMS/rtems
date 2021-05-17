@@ -339,14 +339,13 @@ void _Thread_Kill_zombies( void );
 /**
  * @brief Exits the currently executing thread.
  *
- * @param[in, out] executing The currently executing thread.
- * @param life_states_to_set The states to set.
- * @param[out] exit_value Contains the exit value of the thread.
+ * @param exit_value is the exit value of the thread.
+ *
+ * @param life_states_to_set are the thread life states to set.
  */
-void _Thread_Exit(
-  Thread_Control    *executing,
-  Thread_Life_state  life_states_to_set,
-  void              *exit_value
+RTEMS_NO_RETURN void _Thread_Exit(
+  void              *exit_value,
+  Thread_Life_state  life_states_to_set
 );
 
 /**

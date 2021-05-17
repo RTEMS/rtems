@@ -30,18 +30,5 @@
 
 void rtems_task_exit( void )
 {
-  Thread_Control  *executing;
-  Per_CPU_Control *cpu_self;
-
-  cpu_self = _Thread_Dispatch_disable();
-  executing = _Per_CPU_Get_executing( cpu_self );
-
-  _Thread_Exit(
-    executing,
-    THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
-    NULL
-  );
-
-  _Thread_Dispatch_direct_no_return( cpu_self );
-  RTEMS_UNREACHABLE();
+  _Thread_Exit( NULL, THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED );
 }
