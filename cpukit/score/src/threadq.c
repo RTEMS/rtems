@@ -25,11 +25,7 @@
 #include "config.h"
 #endif
 
-#include <string.h>
-
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/rbtreeimpl.h>
-#include <rtems/score/threadimpl.h>
 
 RTEMS_STATIC_ASSERT(
 #if defined(RTEMS_SMP)
@@ -166,35 +162,3 @@ void _Thread_queue_MP_callout_do_nothing(
   /* Do nothing */
 }
 #endif
-
-size_t _Thread_queue_Queue_get_name_and_id(
-  const Thread_queue_Queue *queue,
-  char                     *buffer,
-  size_t                    buffer_size,
-  Objects_Id               *id
-)
-{
-  const char *name;
-
-  name = queue->name;
-
-  if ( name == _Thread_queue_Object_name ) {
-    const Thread_queue_Object *queue_object;
-
-    queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( queue );
-    *id = queue_object->Object.id;
-    return _Objects_Name_to_string(
-      queue_object->Object.name,
-      false,
-      buffer,
-      buffer_size
-    );
-  } else {
-    if ( name == NULL ) {
-      name = _Thread_queue_Object_name;
-    }
-
-    *id = 0;
-    return strlcpy( buffer, name, buffer_size );
-  }
-}

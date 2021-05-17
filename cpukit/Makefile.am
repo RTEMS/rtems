@@ -985,6 +985,7 @@ librtemscpu_a_SOURCES += score/src/threadqenqueue.c
 librtemscpu_a_SOURCES += score/src/threadqextractwithproxy.c
 librtemscpu_a_SOURCES += score/src/threadqfirst.c
 librtemscpu_a_SOURCES += score/src/threadqflush.c
+librtemscpu_a_SOURCES += score/src/threadqgetnameandid.c
 librtemscpu_a_SOURCES += score/src/threadqops.c
 librtemscpu_a_SOURCES += score/src/threadqtimeout.c
 librtemscpu_a_SOURCES += score/src/timespecaddto.c

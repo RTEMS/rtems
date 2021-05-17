@@ -1543,6 +1543,7 @@ source:
 - cpukit/score/src/threadqextractwithproxy.c
 - cpukit/score/src/threadqfirst.c
 - cpukit/score/src/threadqflush.c
+- cpukit/score/src/threadqgetnameandid.c
 - cpukit/score/src/threadqops.c
 - cpukit/score/src/threadqtimeout.c
 - cpukit/score/src/threadrestart.c
