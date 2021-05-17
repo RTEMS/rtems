@@ -353,7 +353,7 @@ static int altera_cyclone_v_ds1339_get_time(int minor, rtems_time_of_day* tod)
     temp_tod.month  = ds1339_get_month(&time);
     temp_tod.year   = ds1339_get_year(&time);
 
-    sc = _TOD_Validate(&temp_tod, TOD_ENABLE_TICKS_VALIDATION)
+    sc = _TOD_Validate(&temp_tod, TOD_ENABLE_TICKS_VALIDATION);
     if (sc == RTEMS_SUCCESSFUL)
       memcpy(tod, &temp_tod, sizeof(temp_tod));
   }
@@ -736,7 +736,7 @@ static int  altera_cyclone_v_m41st87_get_time(int minor, rtems_time_of_day* tod)
   temp_tod.month  = m41st87_get_month(&time);
   temp_tod.year   = m41st87_get_year(&time);
 
-  sc = _TOD_Validate(&temp_tod);
+  sc = _TOD_Validate(&temp_tod, TOD_ENABLE_TICKS_VALIDATION);
   if (sc == RTEMS_SUCCESSFUL)
     memcpy(tod, &temp_tod, sizeof(temp_tod));
 
