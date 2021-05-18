@@ -267,41 +267,53 @@ _Thread_queue_Context_set_enqueue_timeout_ticks(
 }
 
 /**
- * @brief Sets the enqueue callout to add an absolute monotonic timeout in
- * timespec format.
+ * @brief Sets the enqueue callout to add a timeout in timespec format using
+ *   CLOCK_MONOTONIC.
  *
- * @param[out] queue_context The thread queue context.
- * @param abstime The absolute monotonic timeout.
+ * @param[out] queue_context is the thread queue context.
+ *
+ * @param timeout is the absolute or relative timeout.
+ *
+ * @param absolute is true, if the timeout shall be absolute, otherwise it
+ *   shall be relative to the current time of the clock.
  *
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
   Thread_queue_Context  *queue_context,
-  const struct timespec *abstime
+  const struct timespec *timeout,
+  bool                   absolute
 )
 {
-  queue_context->Timeout.arg = abstime;
+  queue_context->Timeout.arg = timeout;
+  queue_context->timeout_absolute = absolute;
   queue_context->enqueue_callout =
     _Thread_queue_Add_timeout_monotonic_timespec;
 }
 
 /**
- * @brief Sets the enqueue callout to add an absolute realtime timeout in
- * timespec format.
+ * @brief Sets the enqueue callout to add a timeout in timespec format using
+ *   CLOCK_REALTIME.
  *
- * @param[out] queue_context The thread queue context.
- * @param abstime The absolute realtime timeout.
+ * @param[out] queue_context is the thread queue context.
+ *
+ * @param timeout is the absolute or relative timeout.
+ *
+ * @param absolute is true, if the timeout shall be absolute, otherwise it
+ *   shall be relative to the current time of the clock.
  *
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
   Thread_queue_Context  *queue_context,
-  const struct timespec *abstime
+  const struct timespec *timeout,
+  bool                   absolute
 )
 {
-  queue_context->Timeout.arg = abstime;
+  queue_context->Timeout.arg = timeout;
+  queue_context->timeout_absolute = absolute;
   queue_context->enqueue_callout = _Thread_queue_Add_timeout_realtime_timespec;
 }
 

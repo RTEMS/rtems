@@ -60,7 +60,8 @@ int sem_timedwait(
     );
     _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
       &queue_context,
-      abstime
+      abstime,
+      true
     );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
     _Thread_queue_Enqueue(

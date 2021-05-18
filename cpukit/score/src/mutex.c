@@ -206,7 +206,8 @@ int _Mutex_Acquire_timed(
   } else {
     _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
       &queue_context,
-      abstime
+      abstime,
+      true
     );
     _Mutex_Acquire_slow( mutex, owner, executing, level, &queue_context );
 
@@ -327,7 +328,8 @@ int _Mutex_recursive_Acquire_timed(
   } else {
     _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
       &queue_context,
-      abstime
+      abstime,
+      true
     );
     _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, level, &queue_context );
 

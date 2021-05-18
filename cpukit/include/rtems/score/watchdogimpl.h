@@ -535,6 +535,22 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
 }
 
 /**
+ * @brief Converts the ticks to timespec.
+ *
+ * @param ticks are the ticks to convert.
+ *
+ * @param[out] ts is the timespec to return the converted ticks.
+ */
+RTEMS_INLINE_ROUTINE void _Watchdog_Ticks_to_timespec(
+  uint64_t         ticks,
+  struct timespec *ts
+)
+{
+  ts->tv_sec = ticks >> WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
+  ts->tv_nsec = ticks & ( ( 1U << WATCHDOG_BITS_FOR_1E9_NANOSECONDS ) - 1 );
+}
+
+/**
  * @brief Converts the sbintime in ticks.
  *
  * @param sbt The sbintime to convert to ticks.

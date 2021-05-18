@@ -214,7 +214,8 @@ struct Thread_queue_Context {
    * callout must be used to install the thread watchdog for timeout handling.
    *
    * @see _Thread_queue_Enqueue_do_nothing_extra().
-   *   _Thread_queue_Add_timeout_ticks(), and
+   *   _Thread_queue_Add_timeout_ticks(),
+   *   _Thread_queue_Add_timeout_monotonic_timespec(), and
    *   _Thread_queue_Add_timeout_realtime_timespec().
    */
   Thread_queue_Enqueue_callout enqueue_callout;
@@ -235,6 +236,12 @@ struct Thread_queue_Context {
      */
     const void *arg;
   } Timeout;
+
+  /**
+   * @brief If this member is true, the timeout shall be absolute, otherwise it
+   *   shall be relative to the current time of the clock.
+   */
+  bool timeout_absolute;
 
 #if defined(RTEMS_SMP)
   /**

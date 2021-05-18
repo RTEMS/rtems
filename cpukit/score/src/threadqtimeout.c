@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (c) 2016, 2017 embedded brains GmbH
+ * Copyright (c) 2016, 2021 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -55,8 +55,14 @@ static void _Thread_queue_Add_timeout_timespec(
 )
 {
   const struct timespec *abstime;
+  struct timespec        base;
 
-  abstime = queue_context->Timeout.arg;
+  if ( queue_context->timeout_absolute ) {
+    abstime = queue_context->Timeout.arg;
+  } else {
+    base = *now;
+    abstime = _Watchdog_Future_timespec( &base, queue_context->Timeout.arg );
+  }
 
   if ( _Watchdog_Is_valid_timespec( abstime ) ) {
     uint64_t expire;

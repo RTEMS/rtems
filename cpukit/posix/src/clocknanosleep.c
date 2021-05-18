@@ -43,11 +43,10 @@ int clock_nanosleep(
   struct timespec        *rmtp
 )
 {
-  Thread_queue_Context   queue_context;
-  struct timespec        now;
-  const struct timespec *end;
-  Thread_Control        *executing;
-  int                    eno;
+  Thread_queue_Context queue_context;
+  bool                 absolute;
+  Thread_Control      *executing;
+  int                  eno;
 
   if ( clock_id != CLOCK_REALTIME && clock_id != CLOCK_MONOTONIC ) {
     return ENOTSUP;
@@ -60,26 +59,23 @@ int clock_nanosleep(
   );
 
   if ( ( flags & TIMER_ABSTIME ) != 0 ) {
-    end = rqtp;
+    absolute = true;
+    rmtp = NULL;
   } else {
-    if ( clock_id == CLOCK_REALTIME ) {
-      _Timecounter_Nanotime( &now );
-    } else {
-      _Timecounter_Nanouptime( &now );
-    }
-
-    end = _Watchdog_Future_timespec( &now, rqtp );
+    absolute = false;
   }
 
   if ( clock_id == CLOCK_REALTIME ) {
     _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
       &queue_context,
-      end
+      rqtp,
+      absolute
     );
   } else {
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,
-      end
+      rqtp,
+      absolute
     );
   }
 
@@ -97,10 +93,11 @@ int clock_nanosleep(
     eno = 0;
   }
 
-  if ( rmtp != NULL && ( flags & TIMER_ABSTIME ) == 0 ) {
+  if ( rmtp != NULL ) {
 #if defined( RTEMS_POSIX_API )
     if ( eno == EINTR ) {
       struct timespec actual_end;
+      struct timespec planned_end;
 
       if ( clock_id == CLOCK_REALTIME ) {
         _Timecounter_Nanotime( &actual_end );
@@ -108,8 +105,13 @@ int clock_nanosleep(
         _Timecounter_Nanouptime( &actual_end );
       }
 
-      if ( _Timespec_Less_than( &actual_end, end ) ) {
-        _Timespec_Subtract( &actual_end, end, rmtp );
+      _Watchdog_Ticks_to_timespec(
+        executing->Timer.Watchdog.expire,
+        &planned_end
+      );
+
+      if ( _Timespec_Less_than( &actual_end, &planned_end ) ) {
+        _Timespec_Subtract( &actual_end, &planned_end, rmtp );
       } else {
         _Timespec_Set_to_zero( rmtp );
       }

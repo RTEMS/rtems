@@ -76,7 +76,6 @@ int sigtimedwait(
   siginfo_t             signal_information;
   siginfo_t            *the_info;
   int                   signo;
-  struct timespec       uptime;
   Thread_queue_Context  queue_context;
   int                   error;
 
@@ -93,13 +92,10 @@ int sigtimedwait(
    */
 
   if ( timeout != NULL ) {
-    const struct timespec *end;
-
-    _Timecounter_Nanouptime( &uptime );
-    end = _Watchdog_Future_timespec( &uptime, timeout );
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,
-      end
+      timeout,
+      false
     );
   } else {
     _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );

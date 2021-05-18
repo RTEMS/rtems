@@ -37,7 +37,8 @@ int pthread_rwlock_timedrdlock(
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
     &queue_context,
-    abstime
+    abstime,
+    true
   );
   status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
