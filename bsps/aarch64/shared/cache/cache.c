@@ -37,6 +37,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/utility.h>
+#include <rtems/score/aarch64-system-registers.h>
 
 #define AARCH64_CACHE_L1_CPU_DATA_ALIGNMENT ((size_t)64)
 #define AARCH64_CACHE_L1_DATA_LINE_MASK \
@@ -175,69 +176,30 @@ static inline void _CPU_cache_unfreeze_instruction(void)
   /* TODO */
 }
 
-static inline uint64_t
-AArch64_get_ccsidr(void)
+static inline uint64_t AArch64_get_ccsidr_for_level(uint64_t val)
 {
-  uint64_t val;
-
-  __asm__ volatile (
-    "mrs %[val], CCSIDR_EL1\n"
-    : [val] "=&r" (val)
-  );
-
-  return val;
+  _AArch64_Write_csselr_el1(val);
+  return _AArch64_Read_ccsidr_el1();
 }
-
-#define CCSIDR_NUMSETS(val) BSP_FLD64(val, 13, 27)
-#define CCSIDR_NUMSETS_GET(reg) BSP_FLD64GET(reg, 13, 27)
-#define CCSIDR_NUMSETS_SET(reg, val) BSP_FLD64SET(reg, val, 13, 27)
-#define CCSIDR_ASSOCIATIVITY(val) BSP_FLD64(val, 3, 12)
-#define CCSIDR_ASSOCIATIVITY_GET(reg) BSP_FLD64GET(reg, 3, 12)
-#define CCSIDR_ASSOCIATIVITY_SET(reg, val) BSP_FLD64SET(reg, val, 3, 12)
-/* line size == 1 << (GET(reg)+4): 0 -> (1 << 4) == 16 */
-#define CCSIDR_LINE_SIZE(val) BSP_FLD64(val, 0, 2)
-#define CCSIDR_LINE_SIZE_GET(reg) BSP_FLD64GET(reg, 0, 2)
-#define CCSIDR_LINE_SIZE_SET(reg, val) BSP_FLD64SET(reg, val, 0, 2)
 
 static inline uint64_t
 AArch64_ccsidr_get_line_power(uint64_t ccsidr)
 {
-  return CCSIDR_LINE_SIZE_GET(ccsidr) + 4;
+  return AARCH64_CCSIDR_EL1_LINESIZE_GET(ccsidr) + 4;
 }
 
 static inline uint64_t
 AArch64_ccsidr_get_associativity(uint64_t ccsidr)
 {
-  return CCSIDR_ASSOCIATIVITY_GET(ccsidr) + 1;
+  return AARCH64_CCSIDR_EL1_ASSOCIATIVITY_GET_0(ccsidr) + 1;
 }
 
 static inline uint64_t
 AArch64_ccsidr_get_num_sets(uint64_t ccsidr)
 {
-  return CCSIDR_NUMSETS_GET(ccsidr) + 1;
+  return AARCH64_CCSIDR_EL1_NUMSETS_GET_0(ccsidr) + 1;
 }
 
-static inline void
-AArch64_set_csselr(uint64_t val)
-{
-  __asm__ volatile (
-    "msr CSSELR_EL1, %[val]\n"
-    :
-    : [val] "r" (val)
-  );
-}
-#define CSSELR_TND BSP_BIT64(4)
-/* This field is level-1: L1 cache is 0, L2 cache is 1, etc */
-#define CSSELR_LEVEL(val) BSP_FLD64(val, 1, 3)
-#define CSSELR_LEVEL_GET(reg) BSP_FLD64GET(reg, 1, 3)
-#define CSSELR_LEVEL_SET(reg, val) BSP_FLD64SET(reg, val, 1, 3)
-#define CSSELR_IND BSP_BIT64(0)
-
-static inline uint64_t AArch64_get_ccsidr_for_level(uint64_t val)
-{
-  AArch64_set_csselr(val);
-  return AArch64_get_ccsidr();
-}
 
 static inline void AArch64_data_cache_clean_level(uint64_t level)
 {
@@ -247,7 +209,7 @@ static inline void AArch64_data_cache_clean_level(uint64_t level)
   uint64_t way;
   uint64_t way_shift;
 
-  ccsidr = AArch64_get_ccsidr_for_level(CSSELR_LEVEL(level));
+  ccsidr = AArch64_get_ccsidr_for_level(AARCH64_CSSELR_EL1_LEVEL(level));
 
   line_power = AArch64_ccsidr_get_line_power(ccsidr);
   associativity = AArch64_ccsidr_get_associativity(ccsidr);
@@ -272,63 +234,25 @@ static inline void AArch64_data_cache_clean_level(uint64_t level)
   }
 }
 
-static inline uint64_t
-AArch64_get_clidr(void)
-{
-  uint64_t val;
-
-  __asm__ volatile (
-    "mrs %[val], CLIDR_EL1\n"
-    : [val] "=&r" (val)
-  );
-
-  return val;
-}
-
-#define CLIDR_LOC(val) BSP_FLD64(val, 24, 26)
-#define CLIDR_LOC_GET(reg) BSP_FLD64GET(reg, 24, 26)
-#define CLIDR_LOC_SET(reg, val) BSP_FLD64SET(reg, val, 24, 26)
-#define CLIDR_CTYPE7(val) BSP_FLD64(val, 18, 20)
-#define CLIDR_CTYPE7_GET(reg) BSP_FLD64GET(reg, 18, 20)
-#define CLIDR_CTYPE7_SET(reg, val) BSP_FLD64SET(reg, val, 18, 20)
-#define CLIDR_CTYPE6(val) BSP_FLD64(val, 15, 17)
-#define CLIDR_CTYPE6_GET(reg) BSP_FLD64GET(reg, 15, 17)
-#define CLIDR_CTYPE6_SET(reg, val) BSP_FLD64SET(reg, val, 15, 17)
-#define CLIDR_CTYPE5(val) BSP_FLD64(val, 12, 14)
-#define CLIDR_CTYPE5_GET(reg) BSP_FLD64GET(reg, 12, 14)
-#define CLIDR_CTYPE5_SET(reg, val) BSP_FLD64SET(reg, val, 12, 14)
-#define CLIDR_CTYPE4(val) BSP_FLD64(val, 9, 11)
-#define CLIDR_CTYPE4_GET(reg) BSP_FLD64GET(reg, 9, 11)
-#define CLIDR_CTYPE4_SET(reg, val) BSP_FLD64SET(reg, val, 9, 11)
-#define CLIDR_CTYPE3(val) BSP_FLD64(val, 6, 8)
-#define CLIDR_CTYPE3_GET(reg) BSP_FLD64GET(reg, 6, 8)
-#define CLIDR_CTYPE3_SET(reg, val) BSP_FLD64SET(reg, val, 6, 8)
-#define CLIDR_CTYPE2(val) BSP_FLD64(val, 3, 5)
-#define CLIDR_CTYPE2_GET(reg) BSP_FLD64GET(reg, 3, 5)
-#define CLIDR_CTYPE2_SET(reg, val) BSP_FLD64SET(reg, val, 3, 5)
-#define CLIDR_CTYPE1(val) BSP_FLD64(val, 0, 2)
-#define CLIDR_CTYPE1_GET(reg) BSP_FLD64GET(reg, 0, 2)
-#define CLIDR_CTYPE1_SET(reg, val) BSP_FLD64SET(reg, val, 0, 2)
-
 static inline
 uint64_t AArch64_clidr_get_cache_type(uint64_t clidr, uint64_t level)
 {
   switch (level)
   {
   case 1:
-    return CLIDR_CTYPE1_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE1_GET(clidr);
   case 2:
-    return CLIDR_CTYPE2_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE2_GET(clidr);
   case 3:
-    return CLIDR_CTYPE3_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE3_GET(clidr);
   case 4:
-    return CLIDR_CTYPE4_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE4_GET(clidr);
   case 5:
-    return CLIDR_CTYPE5_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE5_GET(clidr);
   case 6:
-    return CLIDR_CTYPE6_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE6_GET(clidr);
   case 7:
-    return CLIDR_CTYPE7_GET(clidr);
+    return AARCH64_CLIDR_EL1_CTYPE7_GET(clidr);
   default:
     return 0;
   }
@@ -336,12 +260,12 @@ uint64_t AArch64_clidr_get_cache_type(uint64_t clidr, uint64_t level)
 
 static inline uint64_t AArch64_clidr_get_level_of_coherency(uint64_t clidr)
 {
-  return CLIDR_LOC_GET(clidr);
+  return AARCH64_CLIDR_EL1_LOC_GET(clidr);
 }
 
 static inline void AArch64_data_cache_clean_all_levels(void)
 {
-  uint64_t clidr = AArch64_get_clidr();
+  uint64_t clidr = _AArch64_Read_clidr_el1();
   uint64_t loc = AArch64_clidr_get_level_of_coherency(clidr);
   uint64_t level = 0;
 
@@ -370,7 +294,7 @@ static inline void AArch64_cache_invalidate_level(uint64_t level)
   uint64_t way;
   uint64_t way_shift;
 
-  ccsidr = AArch64_get_ccsidr_for_level(CSSELR_LEVEL(level));
+  ccsidr = AArch64_get_ccsidr_for_level(AARCH64_CSSELR_EL1_LEVEL(level));
 
   line_power = AArch64_ccsidr_get_line_power(ccsidr);
   associativity = AArch64_ccsidr_get_associativity(ccsidr);
@@ -397,7 +321,7 @@ static inline void AArch64_cache_invalidate_level(uint64_t level)
 
 static inline void AArch64_data_cache_invalidate_all_levels(void)
 {
-  uint64_t clidr = AArch64_get_clidr();
+  uint64_t clidr = _AArch64_Read_clidr_el1();
   uint64_t loc = AArch64_clidr_get_level_of_coherency(clidr);
   uint64_t level = 0;
 
@@ -416,86 +340,15 @@ static inline void _CPU_cache_invalidate_entire_data(void)
   AArch64_data_cache_invalidate_all_levels();
 }
 
-static inline uint64_t
-AArch64_get_sctlr(void)
-{
-  uint64_t val;
-
-  __asm__ volatile (
-    "mrs %[val], SCTLR_EL1\n"
-    : [val] "=&r" (val)
-  );
-
-  return val;
-}
-
-static inline void
-AArch64_set_sctlr(uint64_t val)
-{
-  __asm__ volatile (
-    "msr SCTLR_EL1, %[val]\n"
-    :
-    : [val] "r" (val)
-  );
-}
-
-#define SCTLR_TWEDEL(val) BSP_FLD64(val, 46, 49)
-#define SCTLR_TWEDEL_GET(reg) BSP_FLD64GET(reg, 46, 49)
-#define SCTLR_TWEDEL_SET(reg, val) BSP_FLD64SET(reg, val, 46, 49)
-#define SCTLR_TWEDEN BSP_BIT64(45)
-#define SCTLR_DSSBS BSP_BIT64(44)
-#define SCTLR_ATA BSP_BIT64(43)
-#define SCTLR_ATA0 BSP_BIT64(42)
-#define SCTLR_TCF(val) BSP_FLD64(val, 40, 41)
-#define SCTLR_TCF_GET(reg) BSP_FLD64GET(reg, 40, 41)
-#define SCTLR_TCF_SET(reg, val) BSP_FLD64SET(reg, val, 40, 41)
-#define SCTLR_TCF0(val) BSP_FLD64(val, 38, 39)
-#define SCTLR_TCF0_GET(reg) BSP_FLD64GET(reg, 38, 39)
-#define SCTLR_TCF0_SET(reg, val) BSP_FLD64SET(reg, val, 38, 39)
-#define SCTLR_ITFSB BSP_BIT64(37)
-#define SCTLR_BT1 BSP_BIT64(36)
-#define SCTLR_BT0 BSP_BIT64(35)
-#define SCTLR_ENIA BSP_BIT64(31)
-#define SCTLR_ENIB BSP_BIT64(30)
-#define SCTLR_LSMAOE BSP_BIT64(29)
-#define SCTLR_NTLSMD BSP_BIT64(28)
-#define SCTLR_ENDA BSP_BIT64(27)
-#define SCTLR_UCI BSP_BIT64(26)
-#define SCTLR_EE BSP_BIT64(25)
-#define SCTLR_E0E BSP_BIT64(24)
-#define SCTLR_SPAN BSP_BIT64(23)
-#define SCTLR_EIS BSP_BIT64(22)
-#define SCTLR_IESB BSP_BIT64(21)
-#define SCTLR_TSCXT BSP_BIT64(20)
-#define SCTLR_WXN BSP_BIT64(19)
-#define SCTLR_NTWE BSP_BIT64(18)
-#define SCTLR_NTWI BSP_BIT64(16)
-#define SCTLR_UCT BSP_BIT64(15)
-#define SCTLR_DZE BSP_BIT64(14)
-#define SCTLR_ENDB BSP_BIT64(13)
-#define SCTLR_I BSP_BIT64(12)
-#define SCTLR_EOS BSP_BIT64(11)
-#define SCTLR_ENRCTX BSP_BIT64(10)
-#define SCTLR_UMA BSP_BIT64(9)
-#define SCTLR_SED BSP_BIT64(8)
-#define SCTLR_ITD BSP_BIT64(7)
-#define SCTLR_NAA BSP_BIT64(6)
-#define SCTLR_CP15BEN BSP_BIT64(5)
-#define SCTLR_SA0 BSP_BIT64(4)
-#define SCTLR_SA BSP_BIT64(3)
-#define SCTLR_C BSP_BIT64(2)
-#define SCTLR_A BSP_BIT64(1)
-#define SCTLR_M BSP_BIT64(0)
-
 static inline void _CPU_cache_enable_data(void)
 {
   rtems_interrupt_level level;
   uint64_t sctlr;
 
   rtems_interrupt_local_disable(level);
-  sctlr = AArch64_get_sctlr();
-  sctlr |= SCTLR_C;
-  AArch64_set_sctlr(sctlr);
+  sctlr = _AArch64_Read_sctlr_el1();
+  sctlr |= AARCH64_SCTLR_EL1_C;
+  _AArch64_Write_sctlr_el1(sctlr);
   rtems_interrupt_local_enable(level);
 }
 
@@ -507,9 +360,9 @@ static inline void _CPU_cache_disable_data(void)
   rtems_interrupt_local_disable(level);
   AArch64_data_cache_clean_all_levels();
   AArch64_data_cache_invalidate_all_levels();
-  sctlr = AArch64_get_sctlr();
-  sctlr &= ~SCTLR_C;
-  AArch64_set_sctlr(sctlr);
+  sctlr = _AArch64_Read_sctlr_el1();
+  sctlr &= ~AARCH64_SCTLR_EL1_C;
+  _AArch64_Write_sctlr_el1(sctlr);
   rtems_interrupt_local_enable(level);
 }
 
@@ -556,9 +409,9 @@ static inline void _CPU_cache_enable_instruction(void)
   uint64_t sctlr;
 
   rtems_interrupt_local_disable(level);
-  sctlr = AArch64_get_sctlr();
-  sctlr |= SCTLR_I;
-  AArch64_set_sctlr(sctlr);
+  sctlr = _AArch64_Read_sctlr_el1();
+  sctlr |= AARCH64_SCTLR_EL1_I;
+  _AArch64_Write_sctlr_el1(sctlr);
   rtems_interrupt_local_enable(level);
 }
 
@@ -568,9 +421,9 @@ static inline void _CPU_cache_disable_instruction(void)
   uint64_t sctlr;
 
   rtems_interrupt_local_disable(level);
-  sctlr = AArch64_get_sctlr();
-  sctlr &= ~SCTLR_I;
-  AArch64_set_sctlr(sctlr);
+  sctlr = _AArch64_Read_sctlr_el1();
+  sctlr &= ~AARCH64_SCTLR_EL1_I;
+  _AArch64_Write_sctlr_el1(sctlr);
   rtems_interrupt_local_enable(level);
 }
 
@@ -583,7 +436,7 @@ static inline size_t AArch64_get_cache_size(
   uint64_t loc;
   uint64_t ccsidr;
 
-  clidr = AArch64_get_clidr();
+  clidr = _AArch64_Read_clidr_el1();
   loc = AArch64_clidr_get_level_of_coherency(clidr);
 
   if (level >= loc) {
@@ -595,7 +448,7 @@ static inline size_t AArch64_get_cache_size(
   }
 
   ccsidr = AArch64_get_ccsidr_for_level(
-    CSSELR_LEVEL(level) | (instruction ? CSSELR_IND : 0)
+    AARCH64_CSSELR_EL1_LEVEL(level) | (instruction ? AARCH64_CSSELR_EL1_IND : 0)
   );
 
   return (1U << (AArch64_ccsidr_get_line_power(ccsidr)+4))
