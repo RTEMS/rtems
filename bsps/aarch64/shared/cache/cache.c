@@ -39,11 +39,9 @@
 #include <bsp/utility.h>
 #include <rtems/score/aarch64-system-registers.h>
 
-#define AARCH64_CACHE_L1_CPU_DATA_ALIGNMENT ((size_t)64)
-#define AARCH64_CACHE_L1_DATA_LINE_MASK \
-  ( AARCH64_CACHE_L1_CPU_DATA_ALIGNMENT - 1 )
-#define AARCH64_CACHE_PREPARE_MVA(mva) \
-  ((const void *) (((size_t) (mva)) & AARCH64_CACHE_L1_DATA_LINE_MASK))
+#define AARCH64_CACHE_L1_CPU_DATA_ALIGNMENT ( (size_t) 64 )
+#define AARCH64_CACHE_PREPARE_MVA(mva) (const void *) \
+  RTEMS_ALIGN_DOWN ( (size_t) mva, AARCH64_CACHE_L1_CPU_DATA_ALIGNMENT )
 
 static inline
 void AArch64_data_cache_clean_and_invalidate_line(const void *d_addr)
@@ -75,7 +73,7 @@ _CPU_cache_flush_data_range(
 {
   _AARCH64_Data_synchronization_barrier();
   if ( n_bytes != 0 ) {
-    size_t adx = (size_t) d_addr & ~AARCH64_CACHE_L1_DATA_LINE_MASK;
+    size_t adx = (size_t) AARCH64_CACHE_PREPARE_MVA ( d_addr );
     const size_t ADDR_LAST = (size_t) d_addr + n_bytes - 1;
 
     for (; adx <= ADDR_LAST; adx += AARCH64_CACHE_L1_CPU_DATA_ALIGNMENT ) {
@@ -116,8 +114,7 @@ _CPU_cache_invalidate_data_range(
 )
 {
   if ( n_bytes != 0 ) {
-    size_t adx = (size_t) d_addr
-                         & ~AARCH64_CACHE_L1_DATA_LINE_MASK;
+    size_t adx = (size_t) AARCH64_CACHE_PREPARE_MVA ( d_addr );
     const size_t end = (size_t)d_addr + n_bytes -1;
 
     /* Back starting address up to start of a line and invalidate until end */
