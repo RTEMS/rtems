@@ -44,7 +44,7 @@ int clock_nanosleep(
 )
 {
   Thread_queue_Context   queue_context;
-  struct timespec        uptime;
+  struct timespec        now;
   const struct timespec *end;
   Thread_Control        *executing;
   int                    eno;
@@ -61,21 +61,22 @@ int clock_nanosleep(
 
   if ( ( flags & TIMER_ABSTIME ) != 0 ) {
     end = rqtp;
-
-    if ( clock_id == CLOCK_REALTIME ) {
-      _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
-        &queue_context,
-        end
-      );
-    } else {
-      _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
-        &queue_context,
-        end
-      );
-    }
   } else {
-    _Timecounter_Nanouptime( &uptime );
-    end = _Watchdog_Future_timespec( &uptime, rqtp );
+    if ( clock_id == CLOCK_REALTIME ) {
+      _Timecounter_Nanotime( &now );
+    } else {
+      _Timecounter_Nanouptime( &now );
+    }
+
+    end = _Watchdog_Future_timespec( &now, rqtp );
+  }
+
+  if ( clock_id == CLOCK_REALTIME ) {
+    _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
+      &queue_context,
+      end
+    );
+  } else {
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,
       end
@@ -101,7 +102,11 @@ int clock_nanosleep(
     if ( eno == EINTR ) {
       struct timespec actual_end;
 
-      _Timecounter_Nanouptime( &actual_end );
+      if ( clock_id == CLOCK_REALTIME ) {
+        _Timecounter_Nanotime( &actual_end );
+      } else {
+        _Timecounter_Nanouptime( &actual_end );
+      }
 
       if ( _Timespec_Less_than( &actual_end, end ) ) {
         _Timespec_Subtract( &actual_end, end, rmtp );
