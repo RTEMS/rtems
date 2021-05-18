@@ -5,12 +5,11 @@
  *
  * @ingroup RTEMSBSPsAArch64XilinxZynqMP
  *
- * @brief This source file contains the implementation of this BSP's startup
- *   hooks.
+ * @brief This source file contains the default MMU tables and setup.
  */
 
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
  * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,16 +36,42 @@
 
 #include <bsp.h>
 #include <bsp/start.h>
+#include <bsp/aarch64-mmu.h>
 
-BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
-{
-  /* Do nothing */
-}
+BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
+zynqmp_mmu_config_table[] = {
+  AARCH64_MMU_DEFAULT_SECTIONS,
+#if defined( RTEMS_SMP )
+  {
+    .begin = 0xffff0000U,
+    .end = 0xffffffffU,
+    .flags = AARCH64_MMU_DEVICE
+  },
+#endif
+  {
+    .begin = 0xf9000000U,
+    .end = 0xf9100000U,
+    .flags = AARCH64_MMU_DEVICE
+  }, {
+    .begin = 0xfd000000U,
+    .end = 0xffc00000U,
+    .flags = AARCH64_MMU_DEVICE
+  }
+};
 
-BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
+/*
+ * Make weak and let the user override.
+ */
+BSP_START_TEXT_SECTION void
+zynqmp_setup_mmu_and_cache( void ) __attribute__ ((weak));
+
+BSP_START_TEXT_SECTION void
+zynqmp_setup_mmu_and_cache( void )
 {
-  AArch64_start_set_vector_base();
-  bsp_start_copy_sections();
-  zynqmp_setup_mmu_and_cache();
-  bsp_start_clear_bss();
+  aarch64_mmu_setup();
+
+  aarch64_mmu_setup_translation_table_and_enable(
+    &zynqmp_mmu_config_table[ 0 ],
+    RTEMS_ARRAY_SIZE( zynqmp_mmu_config_table )
+  );
 }

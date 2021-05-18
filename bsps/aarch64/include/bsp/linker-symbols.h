@@ -104,6 +104,10 @@ LINKER_SYMBOL(bsp_section_bss_begin)
 LINKER_SYMBOL(bsp_section_bss_end)
 LINKER_SYMBOL(bsp_section_bss_size)
 
+LINKER_SYMBOL(bsp_section_rtemsstack_begin)
+LINKER_SYMBOL(bsp_section_rtemsstack_end)
+LINKER_SYMBOL(bsp_section_rtemsstack_size)
+
 LINKER_SYMBOL(bsp_section_work_begin)
 LINKER_SYMBOL(bsp_section_work_end)
 LINKER_SYMBOL(bsp_section_work_size)
@@ -133,6 +137,9 @@ LINKER_SYMBOL(bsp_vector_table_size)
 LINKER_SYMBOL(bsp_start_vector_table_begin)
 LINKER_SYMBOL(bsp_start_vector_table_end)
 LINKER_SYMBOL(bsp_start_vector_table_size)
+
+LINKER_SYMBOL(bsp_translation_table_base)
+LINKER_SYMBOL(bsp_translation_table_end)
 
 #define BSP_FAST_TEXT_SECTION \
   RTEMS_SECTION(".bsp_fast_text")

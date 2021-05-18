@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-integer: null
+- assert-ge: 0x1
+- assert-le: 0x800
+- env-assign: null
+- format-and-define: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research (OAR)
+default: 0x40
+default-by-variant: []
+description: |
+  Defines the number of MMU translation table pages to provide.
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: AARCH64_MMU_TRANSLATION_TABLE_PAGES
+type: build

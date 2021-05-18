@@ -15,6 +15,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/aarch64/xilinx-zynqmp/include/bsp/irq.h
+  - bsps/aarch64/include/bsp/aarch64-mmu.h
 links: []
 source:
 - bsps/aarch64/shared/cache/cache.c
@@ -22,6 +23,7 @@ source:
 - bsps/aarch64/xilinx-zynqmp/console/console.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstart.c
 - bsps/aarch64/xilinx-zynqmp/start/bspstarthooks.c
+- bsps/aarch64/xilinx-zynqmp/start/bspstartmmu.c
 - bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/clock/arm-generic-timer.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c

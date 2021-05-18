@@ -61,6 +61,13 @@ extern "C" {
 
 #define BSP_RESET_SMC
 
+/**
+ * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
+ *
+ * Provide in the application to override the defaults in the BSP.
+ */
+BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void);
+
 void zynqmp_debug_console_flush(void);
 
 #ifdef __cplusplus

@@ -72,10 +72,6 @@
  * * The exception returns to the previous execution state
  */
 
-/*
- * TODO(kmoore) The current implementation here assumes that SP is not
- * misaligned.
- */
 	.macro	JUMP_HANDLER_SHORT
 /* Mask to use in BIC, lower 7 bits */
 	mov x0, #0x7f
@@ -186,13 +182,50 @@ curr_el_sp0_serror_get_pc:		/* The current PC is now in LR */
  * the current SP.
  */
 curr_el_spx_sync:
-	msr SCTLR_EL1, XZR
-	stp x0,	lr,	[sp, #-0x10]!	/* Push x0,lr on to the stack */
-	bl curr_el_spx_sync_get_pc	/* Get current execution address */
-curr_el_spx_sync_get_pc:		/* The current PC is now in LR */
-/* Use short jump handler since this has an extra instruction to clear SCTLR */
-	JUMP_HANDLER_SHORT
-	JUMP_TARGET_SPx
+	msr spsel, #0							/* switch to exception stack */
+	sub sp, sp, #AARCH64_EXCEPTION_FRAME_SIZE			/* reserve space for CEF */
+	str lr, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_LR_OFFSET]	/* shove lr into CEF */
+	bl .push_exception_context_start				/* bl to CEF store routine */
+/* Save original sp in x0 for .push_exception_context_finish */
+	msr spsel, #1
+	mov x0, sp
+	msr spsel, #0
+/* Push the remainder of the context */
+	bl .push_exception_context_finish
+/* get jump target and branch/link */
+	bl curr_el_spx_sync_get_pc		/* Get current execution address */
+curr_el_spx_sync_get_pc:			/* The current PC is now in LR */
+	mov x0, #0x7f				/* Mask to use in BIC, lower 7 bits */
+	bic x0,	lr,	x0			/* Mask LR to base of current vector */
+	ldr x1,	[x0,	#0x78]			/* Load target from last word in vector */
+	and lr, lr, #0x780			/* Mask off bits for vector number */
+	lsr lr, lr, #7				/* Shift the vector bits down */
+/* Store the vector */
+	str lr, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_VECTOR_OFFSET]
+	mov x0, sp
+	blr x1
+/* bl to CEF restore routine (doesn't restore lr) */
+	bl .pop_exception_context
+	ldr lr, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_LR_OFFSET]	/* get lr from CEF */
+/* drop space reserved for CEF and clear exclusive */
+	add sp, sp, #AARCH64_EXCEPTION_FRAME_SIZE
+	msr spsel, #1				/* switch to thread stack */
+	eret					/* exception return */
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+/* Takes up the space of 2 instructions */
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	.word _AArch64_Exception_default
+	.word 0x0
+#else
+	.dword _AArch64_Exception_default
+#endif
 .balign 0x80
 /*
  * The exception handler for IRQ exceptions from the current EL using the
@@ -446,7 +479,7 @@ twiddle:
 /*
  * Apply the exception frame to the current register status, SP points to the EF
  */
-.pop_exception_context_and_ret:
+.pop_exception_context:
 /* Pop daif and spsr */
 	ldp x2, x3, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_DAIF_OFFSET]
 /* Restore daif and spsr */
@@ -462,8 +495,6 @@ twiddle:
 /* Restore fpcr and fpsr */
 	msr FPSR, x2
 	msr FPCR, x3
-/* Restore LR */
-	ldr lr, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_LR_OFFSET]
 /* Pop VFP registers */
 	ldp q0,  q1,  [sp, #(AARCH64_EXCEPTION_FRAME_REGISTER_Q0_OFFSET + 0x000)]
 	ldp q2,  q3,  [sp, #(AARCH64_EXCEPTION_FRAME_REGISTER_Q0_OFFSET + 0x020)]
@@ -496,12 +527,15 @@ twiddle:
 	ldp x24, x25, [sp, #0xc0]
 	ldp x26, x27, [sp, #0xd0]
 	ldp x28, x29, [sp, #0xe0]
-/* Pop sp (ignored since sp should be shortly restored anyway) and ELR */
+/* Pop sp and ELR */
 	ldp x0, x1, [sp, #AARCH64_EXCEPTION_FRAME_REGISTER_SP_OFFSET]
+/* Restore thread SP */
+	msr spsel, #1
+	mov sp, x0
+	msr spsel, #0
 /* Restore exception LR */
 	msr ELR_EL1, x1
 	ldp x0,  x1,  [sp, #0x00]
-	add sp, sp, #AARCH64_EXCEPTION_FRAME_SIZE
 
 /* We must clear reservations to ensure consistency with atomic operations */
 	clrex
