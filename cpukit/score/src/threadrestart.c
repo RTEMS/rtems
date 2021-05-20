@@ -12,7 +12,7 @@
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014, 2016 embedded brains GmbH.
+ *  Copyright (c) 2014, 2021 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -403,6 +403,25 @@ static void _Thread_Set_exit_value(
   the_thread->Life.exit_value = exit_value;
 }
 
+static void _Thread_Try_life_change_request(
+  Thread_Control    *the_thread,
+  Thread_Life_state  previous,
+  ISR_lock_Context  *lock_context
+)
+{
+  if ( _Thread_Is_life_change_allowed( previous ) ) {
+    _Thread_Add_life_change_request( the_thread );
+    _Thread_State_release( the_thread, lock_context );
+
+    _Thread_queue_Extract_with_proxy( the_thread );
+    _Thread_Timer_remove( the_thread );
+    _Thread_Remove_life_change_request( the_thread );
+  } else {
+    _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
+    _Thread_State_release( the_thread, lock_context );
+  }
+}
+
 void _Thread_Cancel(
   Thread_Control *the_thread,
   Thread_Control *executing,
@@ -433,21 +452,9 @@ void _Thread_Cancel(
   } else {
     Priority_Control priority;
 
-    _Thread_Add_life_change_request( the_thread );
-
-    if ( _Thread_Is_life_change_allowed( previous ) ) {
-      _Thread_State_release( the_thread, &lock_context );
-
-      _Thread_queue_Extract_with_proxy( the_thread );
-      _Thread_Timer_remove( the_thread );
-    } else {
-      _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
-      _Thread_State_release( the_thread, &lock_context );
-    }
-
+    _Thread_Try_life_change_request( the_thread, previous, &lock_context );
     priority = _Thread_Get_priority( executing );
     _Thread_Raise_real_priority( the_thread, priority );
-    _Thread_Remove_life_change_request( the_thread );
   }
 
   _Thread_Dispatch_enable( cpu_self );
@@ -560,18 +567,7 @@ Status_Control _Thread_Restart(
     THREAD_LIFE_RESTARTING,
     ignored_life_states
   );
-
-  if ( _Thread_Is_life_change_allowed( previous ) ) {
-    _Thread_Add_life_change_request( the_thread );
-    _Thread_State_release( the_thread, lock_context );
-
-    _Thread_queue_Extract_with_proxy( the_thread );
-    _Thread_Timer_remove( the_thread );
-    _Thread_Remove_life_change_request( the_thread );
-  } else {
-    _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
-    _Thread_State_release( the_thread, lock_context );
-  }
+  _Thread_Try_life_change_request( the_thread, previous, lock_context );
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_clear_priority_updates( &queue_context );
