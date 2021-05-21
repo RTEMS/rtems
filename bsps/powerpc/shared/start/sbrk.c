@@ -150,9 +150,19 @@ void *sbrk(ptrdiff_t incr)
     remaining_size-=incr;
     rval = (void *) remaining_start;
     remaining_start += incr;
-  } else {
-    errno = ENOMEM;
   }
+
+  /*
+   * sbrk() is a Legacy POSIX method which means it is no longer part of the
+   * POSIX standard. Historically, it was required to set errno to ENOMEM if
+   * the extension failed. This implementation does not do that for two
+   * reasons. First, this method is only called from the RTEMS malloc()
+   * implementation and does not expect errno to be set when -1 is returned.
+   * Second, setting errno implicitly pulls in some of the newlib reentrancy
+   * support. Not setting errno avoids this method forcing that support
+   * into every application for every BSP that uses this method.
+   */
+
   #ifdef DEBUG
     printk("************* SBRK 0x%08x (ret 0x%08x) **********\n", incr, rval);
   #endif
