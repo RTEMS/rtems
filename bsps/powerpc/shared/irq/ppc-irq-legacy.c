@@ -1,18 +1,19 @@
+/**
+ * @file PIC-independent implementation of the functions described in irq.h
+ */
+
 /*
+ * Copyright (C) 1998, 1999 valette@crf.canon.fr
  *
- *  This file contains the PIC-independent implementation of the functions described in irq.h
- *
- *  Copyright (C) 1998, 1999 valette@crf.canon.fr
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <stdlib.h>
 
 #include <rtems.h>
-#include <stdlib.h>
+#include <rtems/malloc.h>
 #include <rtems/bspIo.h> /* for printk */
 #include <libcpu/spr.h>
 #include <bsp/irq_supp.h>
@@ -85,8 +86,8 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
       return 0;
     }
 
-	/* pre-allocate memory outside of critical section */
-    vchain = (rtems_irq_connect_data*)malloc(sizeof(rtems_irq_connect_data));
+    /* pre-allocate memory outside of critical section */
+    vchain = (rtems_irq_connect_data*) rtems_malloc(sizeof(rtems_irq_connect_data));
 
     rtems_interrupt_disable(level);
 
