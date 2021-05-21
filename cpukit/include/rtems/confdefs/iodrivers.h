@@ -189,6 +189,27 @@ RTEMS_SYSINIT_ITEM(
   || CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
   || CONFIGURE_MAXIMUM_DRIVERS */
 
+
+/*
+ * If any flavor of console driver is configured, then configure the post
+ * driver hook which opens /dev/console as stdin, stdout, and stderr.
+ *
+ * NOTE: This also results in an atexit() handler being registered to close
+ *       /dev/console.
+ */
+#if defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) || \
+    defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER) || \
+    defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER)
+
+  #include <rtems/libio.h>
+
+  RTEMS_SYSINIT_ITEM(
+    rtems_libio_post_driver,
+    RTEMS_SYSINIT_STD_FILE_DESCRIPTORS,
+    RTEMS_SYSINIT_ORDER_MIDDLE
+  );
+#endif
+
 #endif /* CONFIGURE_INIT */
 
 #endif /* _RTEMS_CONFDEFS_IODRIVERS_H */
