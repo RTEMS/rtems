@@ -539,6 +539,7 @@ Status_Control _Thread_Restart(
 {
   Thread_Life_state    previous;
   Per_CPU_Control     *cpu_self;
+  bool                 is_self_restart;
   Thread_Life_state    ignored_life_states;
   Thread_queue_Context queue_context;
 
@@ -550,11 +551,10 @@ Status_Control _Thread_Restart(
   }
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
+  is_self_restart = ( the_thread == _Per_CPU_Get_executing( cpu_self ) &&
+    !_Per_CPU_Is_ISR_in_progress( cpu_self ) );
 
-  if (
-    the_thread == _Per_CPU_Get_executing( cpu_self ) &&
-    !_Per_CPU_Is_ISR_in_progress( cpu_self )
-  ) {
+  if ( is_self_restart ) {
     ignored_life_states = THREAD_LIFE_PROTECTED | THREAD_LIFE_CHANGE_DEFERRED;
   } else {
     ignored_life_states = 0;
@@ -582,7 +582,13 @@ Status_Control _Thread_Restart(
   _Thread_Wait_release( the_thread, &queue_context );
 
   _Thread_Priority_update( &queue_context );
-  _Thread_Dispatch_enable( cpu_self );
+
+  if ( is_self_restart ) {
+    _Thread_Dispatch_direct_no_return( cpu_self );
+  } else {
+    _Thread_Dispatch_enable( cpu_self );
+  }
+
   return STATUS_SUCCESSFUL;
 }
 
