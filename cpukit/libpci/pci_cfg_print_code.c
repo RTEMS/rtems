@@ -65,8 +65,8 @@ static void pci_cfg_print_device(struct pci_dev *dev, char *prefix)
 	char name[32];
 	char buf[8];
 	printf("%s.resources = {\n", prefix);
-	strcpy(buf, prefix);
-	strcat(buf, "\t");
+	strlcpy(buf, prefix, sizeof(buf));
+	strlcat(buf, "\t", sizeof(buf));
 	pci_cfg_print_resources(dev->resources, buf);
 	printf("%s},\n", prefix);
 	if (dev->next == NULL) {
