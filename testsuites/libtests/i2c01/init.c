@@ -336,6 +336,124 @@ static void test_simple_read_write(test_bus *bus, int fd)
   rtems_test_assert(memcmp(&buf[0], &abc[0], sizeof(buf)) == 0);
 }
 
+typedef struct {
+  rtems_id caller;
+  int fd;
+} bus_obtainer_ctx;
+
+static void bus_obtainer_task(rtems_task_argument arg)
+{
+  rtems_event_set e = 0;
+  bus_obtainer_ctx *c = (bus_obtainer_ctx *) arg;
+  int rv;
+  rtems_status_code sc;
+
+  rv = ioctl(c->fd, I2C_BUS_OBTAIN);
+  rtems_test_assert(rv == 0);
+
+  sc = rtems_event_send(c->caller, RTEMS_EVENT_1);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_receive(
+    RTEMS_EVENT_1,
+    RTEMS_EVENT_ANY | RTEMS_WAIT,
+    100,
+    &e
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rv = ioctl(c->fd, I2C_BUS_RELEASE);
+  rtems_test_assert(rv == 0);
+
+  sc = rtems_event_send(c->caller, RTEMS_EVENT_1);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void test_nonblock_read_write(test_bus *bus, int fd)
+{
+  int flags;
+  int rv;
+  char buf[3];
+  ssize_t n;
+  i2c_msg msgs[] = {{
+    .addr = 1,
+    .flags = I2C_M_STOP,
+    .len = sizeof(buf),
+    .buf = (uint8_t *) buf,
+  }};
+  struct i2c_rdwr_ioctl_data payload = {
+    .msgs = msgs,
+    .nmsgs = sizeof(msgs)/sizeof(msgs[0]),
+  };
+  rtems_id id;
+  rtems_event_set e = 0;
+  bus_obtainer_ctx ctx = {
+    .caller = rtems_task_self(),
+    .fd = fd,
+  };
+  rtems_status_code sc;
+
+  flags = fcntl(fd, F_GETFL, 0);
+  rtems_test_assert(flags > 0);
+
+  rv = fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+  rtems_test_assert(rv != -1);
+
+  sc = rtems_task_create(
+    rtems_build_name('O', 'B', 'T', 'A'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(
+    id,
+    bus_obtainer_task,
+    (rtems_task_argument) &ctx
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_event_receive(
+    RTEMS_EVENT_1,
+    RTEMS_EVENT_ANY | RTEMS_WAIT,
+    100,
+    &e
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  errno = 0;
+  n = read(fd, &buf[0], sizeof(buf));
+  rtems_test_assert(n == -1);
+  rtems_test_assert(errno == EAGAIN);
+
+  errno = 0;
+  n = write(fd, &buf[0], sizeof(buf));
+  rtems_test_assert(n == -1);
+  rtems_test_assert(errno == EAGAIN);
+
+  errno = 0;
+  rv = ioctl(fd, I2C_RDWR, &payload);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EAGAIN);
+
+  sc = rtems_event_send(id, RTEMS_EVENT_1);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_event_receive(
+    RTEMS_EVENT_1,
+    RTEMS_EVENT_ANY | RTEMS_WAIT,
+    100,
+    &e
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rv = fcntl(fd, F_SETFL, flags);
+  rtems_test_assert(rv != -1);
+}
+
 static void test_gpio_nxp_pca9535(void)
 {
   int rv;
@@ -627,6 +745,7 @@ static void test(void)
   rtems_test_assert(bus->base.timeout == 0);
 
   test_simple_read_write(bus, fd);
+  test_nonblock_read_write(bus, fd);
   test_eeprom(bus);
   test_gpio_nxp_pca9535();
   test_switch_nxp_pca9548a();
@@ -657,7 +776,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 7
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 

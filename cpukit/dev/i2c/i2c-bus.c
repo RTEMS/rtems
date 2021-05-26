@@ -31,6 +31,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+int i2c_bus_try_obtain(i2c_bus *bus)
+{
+  return rtems_recursive_mutex_try_lock(&bus->mutex);
+}
+
 void i2c_bus_obtain(i2c_bus *bus)
 {
   rtems_recursive_mutex_lock(&bus->mutex);
@@ -41,7 +46,12 @@ void i2c_bus_release(i2c_bus *bus)
   rtems_recursive_mutex_unlock(&bus->mutex);
 }
 
-int i2c_bus_transfer(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count)
+int i2c_bus_do_transfer(
+  i2c_bus *bus,
+  i2c_msg *msgs,
+  uint32_t msg_count,
+  uint32_t flags
+)
 {
   int err;
   uint32_t i;
@@ -63,11 +73,22 @@ int i2c_bus_transfer(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count)
     }
   }
 
-  i2c_bus_obtain(bus);
+  if ((flags & I2C_BUS_NOBLOCK) != 0) {
+    if (i2c_bus_try_obtain(bus) != 0) {
+      return -EAGAIN;
+    }
+  } else {
+    i2c_bus_obtain(bus);
+  }
   err = (*bus->transfer)(bus, msgs, msg_count);
   i2c_bus_release(bus);
 
   return err;
+}
+
+int i2c_bus_transfer(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count)
+{
+  return i2c_bus_do_transfer(bus, msgs, msg_count, 0);
 }
 
 static ssize_t i2c_bus_read(
@@ -84,12 +105,17 @@ static ssize_t i2c_bus_read(
     .buf = buffer
   };
   int err;
+  unsigned flags = 0;
 
   if (bus->ten_bit_address) {
     msg.flags |= I2C_M_TEN;
   }
 
-  err = i2c_bus_transfer(bus, &msg, 1);
+  if (rtems_libio_iop_is_no_delay(iop)) {
+    flags |= I2C_BUS_NOBLOCK;
+  }
+
+  err = i2c_bus_do_transfer(bus, &msg, 1, flags);
   if (err == 0) {
     return msg.len;
   } else {
@@ -111,12 +137,17 @@ static ssize_t i2c_bus_write(
     .buf = RTEMS_DECONST(void *, buffer)
   };
   int err;
+  unsigned flags = 0;
 
   if (bus->ten_bit_address) {
     msg.flags |= I2C_M_TEN;
   }
 
-  err = i2c_bus_transfer(bus, &msg, 1);
+  if (rtems_libio_iop_is_no_delay(iop)) {
+    flags |= I2C_BUS_NOBLOCK;
+  }
+
+  err = i2c_bus_do_transfer(bus, &msg, 1, flags);
   if (err == 0) {
     return msg.len;
   } else {
@@ -133,12 +164,16 @@ static int i2c_bus_ioctl(
   i2c_bus *bus = IMFS_generic_get_context_by_iop(iop);
   i2c_rdwr_ioctl_data *rdwr;
   int err;
+  unsigned flags = 0;
 
   switch (command) {
     case I2C_RDWR:
       rdwr = arg;
       if (rdwr->nmsgs > 0) {
-        err = i2c_bus_transfer(bus, rdwr->msgs, rdwr->nmsgs);
+        if (rtems_libio_iop_is_no_delay(iop)) {
+          flags |= I2C_BUS_NOBLOCK;
+        }
+        err = i2c_bus_do_transfer(bus, rdwr->msgs, rdwr->nmsgs, flags);
       } else {
         err = 0;
       }

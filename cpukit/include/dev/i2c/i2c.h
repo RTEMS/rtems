@@ -243,6 +243,16 @@ int i2c_bus_register(
 );
 
 /**
+ * @brief Try to obtain the bus.
+ *
+ * @param[in] bus The bus control.
+ *
+ * @retval 0 Successful operation.
+ * @retval EBUSY if mutex is already locked.
+ */
+int i2c_bus_try_obtain(i2c_bus *bus);
+
+/**
  * @brief Obtains the bus.
  *
  * @param[in] bus The bus control.
@@ -259,7 +269,8 @@ void i2c_bus_release(i2c_bus *bus);
 /**
  * @brief Transfers I2C messages.
  *
- * The bus is obtained before the transfer and released afterwards.
+ * The bus is obtained before the transfer and released afterwards. This is the
+ * same like calling @ref i2c_bus_do_transfer with flags set to 0.
  *
  * @param[in] bus The bus control.
  * @param[in] msgs The messages to transfer.
@@ -270,6 +281,37 @@ void i2c_bus_release(i2c_bus *bus);
  * @retval negative Negative error number in case of an error.
  */
 int i2c_bus_transfer(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count);
+
+/**
+ * @brief Transfers I2C messages with optional flags.
+ *
+ * The bus is obtained before the transfer and released afterwards. If the flag
+ * I2C_BUS_NOBLOCK is set and the bus is already obtained, nothing will be
+ * transfered and the function returns with an -EAGAIN.
+ *
+ * @param[in] bus The bus control.
+ * @param[in] msgs The messages to transfer.
+ * @param[in] msg_count The count of messages to transfer.  It must be
+ * positive.
+ * @param[in] flags Options for the whole transfer.
+ *
+ * @retval 0 Successful operation.
+ * @retval -EAGAIN if @ref I2C_BUS_NOBLOCK is set and the bus is already
+ * obtained.
+ * @retval negative Negative error number in case of an error.
+ */
+int i2c_bus_do_transfer(
+  i2c_bus *bus,
+  i2c_msg *msgs,
+  uint32_t msg_count,
+  uint32_t flags
+);
+
+/**
+ * @brief I2C bus transfer flag to indicate that the task should not block if
+ * the bus is busy on a new transfer.
+ */
+#define I2C_BUS_NOBLOCK (1u << 0)
 
 /** @} */
 
