@@ -25,10 +25,74 @@
 
 const char rtems_test_name[] = "SPTHREAD 1";
 
+#define WAKEUP_EVENT RTEMS_EVENT_0
+
+typedef struct {
+  rtems_mutex *mtx;
+  rtems_recursive_mutex *rmtx;
+  rtems_id calling_task;
+} mutex_context;
+
+static void mutex_task(rtems_task_argument arg)
+{
+  mutex_context *m;
+  int rv;
+
+  m = (mutex_context *) arg;
+
+  rtems_test_assert(m->mtx != NULL || m->rmtx != NULL);
+
+  if (m->mtx) {
+    rv = rtems_mutex_try_lock(m->mtx);
+    rtems_test_assert(rv == EBUSY);
+  }
+
+  if (m->rmtx) {
+    rv = rtems_recursive_mutex_try_lock(m->rmtx);
+    rtems_test_assert(rv == EBUSY);
+  }
+
+  rtems_event_send(m->calling_task, WAKEUP_EVENT);
+}
+
+static void test_try_lock_from_different_task(
+  rtems_mutex *m,
+  rtems_recursive_mutex *r
+)
+{
+  mutex_context ctx;
+  rtems_status_code sc;
+  rtems_event_set e;
+  rtems_id id;
+
+  ctx.mtx = m;
+  ctx.rmtx = r;
+  ctx.calling_task = rtems_task_self();
+
+  sc = rtems_task_create(
+    rtems_build_name('M', 'T', 'X', ' '),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(id, mutex_task, (rtems_task_argument) &ctx);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_event_receive(WAKEUP_EVENT, RTEMS_EVENT_ANY | RTEMS_WAIT, 10, &e);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_task_delete(id);
+}
+
 static void test_mutex(void)
 {
   rtems_mutex a = RTEMS_MUTEX_INITIALIZER("a");
   const char *name;
+  int rv;
 
   name = rtems_mutex_get_name(&a);
   rtems_test_assert(strcmp(name, "a") == 0);
@@ -47,6 +111,13 @@ static void test_mutex(void)
 
   rtems_mutex_lock(&a);
 
+  test_try_lock_from_different_task(&a, NULL);
+
+  rtems_mutex_unlock(&a);
+
+  rv = rtems_mutex_try_lock(&a);
+  rtems_test_assert(rv == 0);
+
   rtems_mutex_unlock(&a);
 
   rtems_mutex_destroy(&a);
@@ -56,6 +127,7 @@ static void test_recursive_mutex(void)
 {
   rtems_recursive_mutex a = RTEMS_RECURSIVE_MUTEX_INITIALIZER("a");
   const char *name;
+  int rv;
 
   name = rtems_recursive_mutex_get_name(&a);
   rtems_test_assert(strcmp(name, "a") == 0);
@@ -75,6 +147,13 @@ static void test_recursive_mutex(void)
   rtems_recursive_mutex_lock(&a);
 
   rtems_recursive_mutex_lock(&a);
+
+  rv = rtems_recursive_mutex_try_lock(&a);
+  rtems_test_assert(rv == 0);
+
+  test_try_lock_from_different_task(NULL, &a);
+
+  rtems_recursive_mutex_unlock(&a);
 
   rtems_recursive_mutex_unlock(&a);
 

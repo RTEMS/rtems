@@ -54,6 +54,11 @@ static __inline void rtems_mutex_lock( rtems_mutex *mutex )
   _Mutex_Acquire( mutex );
 }
 
+static __inline int rtems_mutex_try_lock( rtems_mutex *mutex )
+{
+  return _Mutex_Try_acquire( mutex );
+}
+
 static __inline void rtems_mutex_unlock( rtems_mutex *mutex )
 {
   _Mutex_Release( mutex );
@@ -95,6 +100,13 @@ static __inline void rtems_recursive_mutex_lock(
 )
 {
   _Mutex_recursive_Acquire( mutex );
+}
+
+static __inline int rtems_recursive_mutex_try_lock(
+  rtems_recursive_mutex *mutex
+)
+{
+  return _Mutex_recursive_Try_acquire( mutex );
 }
 
 static __inline void rtems_recursive_mutex_unlock(
