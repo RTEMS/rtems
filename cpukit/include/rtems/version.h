@@ -32,6 +32,27 @@ extern "C" {
  * @brief The Version API provides functions to return the version or parts of
  * the version of RTEMS you are using.
  *
+ * A branch in the version control system will always fall back to a
+ * NOT-RELEASED version number with a minor number of 0. Only the release
+ * archives have a VERSION file with a final release number. That means for
+ * example that the 5 development branch will still show a version 5.0.0 even
+ * after the 5.1 release.
+ *
+ * The reason for that are the following:
+ *
+ * 1. All pre-release tests are performed with a specific git hash. A committed
+ * VERSION file would need to be changed and committed afterwards for releasing
+ * with the required release version causing the released version to have a
+ * different git hash and the test results couldn't be linked to the released
+ * version.
+ *
+ * 2. Users deploying RTEMS would need to commit a local change to a committed
+ * VERSION file and that would clash with the project changes. Deployment can
+ * use the project repos directly.
+ *
+ * 3. The VERSION file management and generation is the responsibility of the
+ * release manager and the release process.
+ *
  * @{
  */
 
