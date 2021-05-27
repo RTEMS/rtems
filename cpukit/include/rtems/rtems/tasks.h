@@ -1501,6 +1501,9 @@ rtems_status_code rtems_task_restart(
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
  *   specified by ``id``.
  *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
  * @par Notes
