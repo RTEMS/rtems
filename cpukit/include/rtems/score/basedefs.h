@@ -842,6 +842,8 @@ extern "C" {
 /* Generated from spec:/rtems/basedefs/if/unreachable */
 
 /**
+ * @ingroup RTEMSAPIBaseDefs
+ *
  * @brief Tells the compiler that this program point is unreachable.
  */
 #if defined(__GNUC__)
