@@ -360,7 +360,17 @@ rtems_monitor_line_editor (
             {
               int bs;
               pos--;
-              strcpy (buffer + pos, buffer + pos + 1);
+
+              /*
+               * Memory operation used here instead of string
+               * method due the src and dest of buffer overlapping.
+               */
+              memmove(
+                buffer + pos,
+                buffer + pos + 1,
+                RTEMS_COMMAND_BUFFER_SIZE - pos - 1
+              );
+              buffer[RTEMS_COMMAND_BUFFER_SIZE - 1] = '\0';
               fprintf(stdout,"\b%s \b", buffer + pos);
               for (bs = 0; bs < ((int) strlen (buffer) - pos); bs++)
                 putchar ('\b');
