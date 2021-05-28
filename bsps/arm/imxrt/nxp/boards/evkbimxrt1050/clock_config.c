@@ -33,6 +33,7 @@ board: IMXRT1050-EVKB
 #ifndef __rtems__
 #include "clock_config.h"
 #else /* __rtems__ */
+#include <bspopts.h>
 #include "fsl_clock_config.h"
 #endif /* __rtems__ */
 #include "fsl_iomuxc.h"
@@ -146,10 +147,17 @@ sources:
 /*******************************************************************************
  * Variables for BOARD_BootClockRUN configuration
  ******************************************************************************/
+#ifndef __rtems__
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN = {
     .loopDivider = 100, /* PLL loop divider, Fout = Fin * 50 */
     .src         = 0,   /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
 };
+#else /* __rtems__ */
+/*
+ * Moved to bsps/arm/imxrt/start/clock-arm-pll-config.c so an application can
+ * overwrite it.
+ */
+#endif /* __rtems__ */
 const clock_sys_pll_config_t sysPllConfig_BOARD_BootClockRUN = {
     .loopDivider = 1, /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
     .numerator   = 0, /* 30 bit numerator of fractional loop divider */

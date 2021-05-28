@@ -238,6 +238,7 @@ source:
 - bsps/arm/imxrt/spi/imxrt-lpspi.c
 - bsps/arm/imxrt/start/bspstart.c
 - bsps/arm/imxrt/start/bspstarthooks.c
+- bsps/arm/imxrt/start/clock-arm-pll-config.c
 - bsps/arm/imxrt/start/flash-boot-data.c
 - bsps/arm/imxrt/start/flash-config.c
 - bsps/arm/imxrt/start/flash-dcd.c
