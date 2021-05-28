@@ -2,15 +2,16 @@ actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 0x20000
+default: 0x1ff00
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'
 links: []
 name: IMXRT_MEMORY_ITCM_SIZE
 description: |
-  Size of the ITCM in bytes. Note that these sizes depend on fuses or software
-  settings done by a bootloader (together with DTCM and OCRAM).
+  Size of the ITCM in bytes.  Note that these sizes depend on fuses or software
+  settings done by a bootloader (together with DTCM and OCRAM).  The ITCM size
+  has to take the IMXRT_MEMORY_NULL_SIZE into account!
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

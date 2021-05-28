@@ -1,15 +1,18 @@
 actions:
 - get-integer: null
 - env-assign: null
+- define-unquoted: IMXRT_MEMORY_FLASH_ORIGIN
 build-type: option
-default: 1048576
+default: 0x60000000
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: IMXRT_MEMORY_SDRAM_NOCACHE_SIZE
+name: IMXRT_MEMORY_FLASH_ORIGIN
 description: |
-  Size of the nocache area at the end of the SDRAM in bytes.
+  Origin of the external flash memory.  That can be for example a flash
+  connected to FlexSPI or to SEMC.  The default value is for a HyperFlash
+  connected to FlexSPI.
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

@@ -1,0 +1,20 @@
+actions:
+- get-integer: null
+- env-assign: null
+- define-unquoted: IMXRT_MEMORY_FLASH_SIZE
+build-type: option
+default: 0x4000000
+default-by-variant: []
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: IMXRT_MEMORY_FLASH_SIZE
+description: |
+  Size of the external flash area in bytes.  Has to be big enough to hold the
+  i.MXRT initial vector table (IVT) and configuration information.  The sizes of
+  these are defined with IMXRT_MEMORY_FLASH_IVT_SIZE and
+  IMXRT_MEMORY_FLASH_CFG_SIZE.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

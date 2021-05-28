@@ -2,17 +2,16 @@ build-type: config-file
 content: |
   MEMORY {
     NULL           : ORIGIN = 0x00000000, LENGTH = ${IMXRT_MEMORY_NULL_SIZE:#010x}
-    ITCM           : ORIGIN = ${IMXRT_MEMORY_NULL_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_ITCM_SIZE:#010x} - ${IMXRT_MEMORY_NULL_SIZE:#010x}
+    ITCM           : ORIGIN = ${IMXRT_MEMORY_NULL_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_ITCM_SIZE:#010x}
     DTCM           : ORIGIN = 0x20000000, LENGTH = ${IMXRT_MEMORY_DTCM_SIZE:#010x}
     OCRAM          : ORIGIN = 0x20200000, LENGTH = ${IMXRT_MEMORY_OCRAM_SIZE:#010x} - ${IMXRT_MEMORY_OCRAM_NOCACHE_SIZE:#010x}
     OCRAM_NOCACHE  : ORIGIN = 0x20200000 + ${IMXRT_MEMORY_OCRAM_SIZE:#010x} - ${IMXRT_MEMORY_OCRAM_NOCACHE_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_OCRAM_NOCACHE_SIZE:#010x}
     PERIPHERAL     : ORIGIN = 0x40000000, LENGTH = 0x20000000
-    FLEXSPI_CONFIG : ORIGIN = 0x60000000, LENGTH = ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x}
-    FLEXSPI_IVT    : ORIGIN = 0x60000000 + ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}
-    FLEXSPI        : ORIGIN = 0x60000000 + ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x} + ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_FLEXSPI_FLASH_SIZE:#010x} - ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x} - ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}
-    FLEXSPI_FIFO   : ORIGIN = 0x7F800000, LENGTH = 8M
-    SDRAM          : ORIGIN = ${IMXRT_MEMORY_SDRAM_BASE:#010x}, LENGTH = ${IMXRT_MEMORY_SDRAM_SIZE:#010x} - ${IMXRT_MEMORY_SDRAM_NOCACHE_SIZE:#010x}
-    SDRAM_NOCACHE  : ORIGIN = ${IMXRT_MEMORY_SDRAM_BASE:#010x} + ${IMXRT_MEMORY_SDRAM_SIZE:#010x} - ${IMXRT_MEMORY_SDRAM_NOCACHE_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_SDRAM_NOCACHE_SIZE:#010x}
+    FLASH_CONFIG   : ORIGIN = ${IMXRT_MEMORY_FLASH_ORIGIN:#010x}, LENGTH = ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x}
+    FLASH_IVT      : ORIGIN = ${IMXRT_MEMORY_FLASH_ORIGIN:#010x} + ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}
+    FLASH          : ORIGIN = ${IMXRT_MEMORY_FLASH_ORIGIN:#010x} + ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x} + ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_FLASH_SIZE:#010x} - ${IMXRT_MEMORY_FLASH_CFG_SIZE:#010x} - ${IMXRT_MEMORY_FLASH_IVT_SIZE:#010x}
+    EXTRAM         : ORIGIN = ${IMXRT_MEMORY_EXTRAM_ORIGIN:#010x}, LENGTH = ${IMXRT_MEMORY_EXTRAM_SIZE:#010x} - ${IMXRT_MEMORY_EXTRAM_NOCACHE_SIZE:#010x}
+    EXTRAM_NOCACHE : ORIGIN = ${IMXRT_MEMORY_EXTRAM_ORIGIN:#010x} + ${IMXRT_MEMORY_EXTRAM_SIZE:#010x} - ${IMXRT_MEMORY_EXTRAM_NOCACHE_SIZE:#010x}, LENGTH = ${IMXRT_MEMORY_EXTRAM_NOCACHE_SIZE:#010x}
   }
 
   imxrt_memory_null_begin = ORIGIN (NULL);
@@ -39,29 +38,25 @@ content: |
   imxrt_memory_peripheral_end = ORIGIN (PERIPHERAL) + LENGTH (PERIPHERAL);
   imxrt_memory_peripheral_size = LENGTH (PERIPHERAL);
 
-  imxrt_memory_flexspi_config_begin = ORIGIN (FLEXSPI_CONFIG);
-  imxrt_memory_flexspi_config_end = ORIGIN (FLEXSPI_CONFIG) + LENGTH (FLEXSPI_CONFIG);
-  imxrt_memory_flexspi_config_size = LENGTH (FLEXSPI_CONFIG);
+  imxrt_memory_flash_config_begin = ORIGIN (FLASH_CONFIG);
+  imxrt_memory_flash_config_end = ORIGIN (FLASH_CONFIG) + LENGTH (FLASH_CONFIG);
+  imxrt_memory_flash_config_size = LENGTH (FLASH_CONFIG);
 
-  imxrt_memory_flexspi_ivt_begin = ORIGIN (FLEXSPI_IVT);
-  imxrt_memory_flexspi_ivt_end = ORIGIN (FLEXSPI_IVT) + LENGTH (FLEXSPI_IVT);
-  imxrt_memory_flexspi_ivt_size = LENGTH (FLEXSPI_IVT);
+  imxrt_memory_flash_ivt_begin = ORIGIN (FLASH_IVT);
+  imxrt_memory_flash_ivt_end = ORIGIN (FLASH_IVT) + LENGTH (FLASH_IVT);
+  imxrt_memory_flash_ivt_size = LENGTH (FLASH_IVT);
 
-  imxrt_memory_flexspi_begin = ORIGIN (FLEXSPI);
-  imxrt_memory_flexspi_end = ORIGIN (FLEXSPI) + LENGTH (FLEXSPI);
-  imxrt_memory_flexspi_size = LENGTH (FLEXSPI);
+  imxrt_memory_flash_begin = ORIGIN (FLASH);
+  imxrt_memory_flash_end = ORIGIN (FLASH) + LENGTH (FLASH);
+  imxrt_memory_flash_size = LENGTH (FLASH);
 
-  imxrt_memory_flexspi_fifo_begin = ORIGIN (FLEXSPI_FIFO);
-  imxrt_memory_flexspi_fifo_end = ORIGIN (FLEXSPI_FIFO) + LENGTH (FLEXSPI_FIFO);
-  imxrt_memory_flexspi_fifo_size = LENGTH (FLEXSPI_FIFO);
+  imxrt_memory_extram_begin = ORIGIN (EXTRAM);
+  imxrt_memory_extram_end = ORIGIN (EXTRAM) + LENGTH (EXTRAM);
+  imxrt_memory_extram_size = LENGTH (EXTRAM);
 
-  imxrt_memory_sdram_begin = ORIGIN (SDRAM);
-  imxrt_memory_sdram_end = ORIGIN (SDRAM) + LENGTH (SDRAM);
-  imxrt_memory_sdram_size = LENGTH (SDRAM);
-
-  imxrt_memory_sdram_nocache_begin = ORIGIN (SDRAM_NOCACHE);
-  imxrt_memory_sdram_nocache_end = ORIGIN (SDRAM_NOCACHE) + LENGTH (SDRAM_NOCACHE);
-  imxrt_memory_sdram_nocache_size = LENGTH (SDRAM_NOCACHE);
+  imxrt_memory_extram_nocache_begin = ORIGIN (EXTRAM_NOCACHE);
+  imxrt_memory_extram_nocache_end = ORIGIN (EXTRAM_NOCACHE) + LENGTH (EXTRAM_NOCACHE);
+  imxrt_memory_extram_nocache_size = LENGTH (EXTRAM_NOCACHE);
 enabled-by: true
 install-path: ${BSP_LIBDIR}
 links: []

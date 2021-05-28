@@ -30,8 +30,8 @@
 #include <bspopts.h>
 
 const BOOT_DATA_T imxrt_boot_data = {
-  .start = (uint32_t) imxrt_memory_flexspi_config_begin,
-  .size = IMXRT_MEMORY_FLEXSPI_FLASH_SIZE,
+  .start = (uint32_t) imxrt_memory_flash_config_begin,
+  .size = IMXRT_MEMORY_FLASH_SIZE,
   .plugin = PLUGIN_FLAG,
   .placeholder = 0xFFFFFFFF,
 };

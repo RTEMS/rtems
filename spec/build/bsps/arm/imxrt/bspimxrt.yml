@@ -127,25 +127,27 @@ links:
 - role: build-dependency
   uid: optmemdtcmsz
 - role: build-dependency
+  uid: optmemextramnocachesz
+- role: build-dependency
+  uid: optmemextramorigin
+- role: build-dependency
+  uid: optmemextramsz
+- role: build-dependency
   uid: optmemflashcfgsz
 - role: build-dependency
   uid: optmemflashivtsz
 - role: build-dependency
-  uid: optmemflexspisz
+  uid: optmemflashorigin
+- role: build-dependency
+  uid: optmemflashsz
 - role: build-dependency
   uid: optmemitcmsz
 - role: build-dependency
   uid: optmemnullsz
 - role: build-dependency
-  uid: optmemocramsz
-- role: build-dependency
   uid: optmemocramnocachesz
 - role: build-dependency
-  uid: optmemsdrambase
-- role: build-dependency
-  uid: optmemsdramsz
-- role: build-dependency
-  uid: optmemsdramnocachesz
+  uid: optmemocramsz
 - role: build-dependency
   uid: ../start
 - role: build-dependency
@@ -240,8 +242,8 @@ source:
 - bsps/arm/imxrt/start/bspstarthooks.c
 - bsps/arm/imxrt/start/clock-arm-pll-config.c
 - bsps/arm/imxrt/start/flash-boot-data.c
-- bsps/arm/imxrt/start/flash-config.c
 - bsps/arm/imxrt/start/flash-dcd.c
+- bsps/arm/imxrt/start/flash-flexspi-config.c
 - bsps/arm/imxrt/start/flash-ivt.c
 - bsps/arm/imxrt/start/imxrt-ffec-init.c
 - bsps/arm/imxrt/start/mpu-config.c

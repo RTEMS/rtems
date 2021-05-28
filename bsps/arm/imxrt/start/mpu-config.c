@@ -32,8 +32,8 @@
 BSP_START_DATA_SECTION const ARMV7M_MPU_Region_config
   imxrt_config_mpu_region [] = {
     {
-      .begin = imxrt_memory_sdram_begin,
-      .end = imxrt_memory_sdram_end,
+      .begin = imxrt_memory_extram_begin,
+      .end = imxrt_memory_extram_end,
       .rasr = ARMV7M_MPU_RASR_AP(0x3)
         | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
         | ARMV7M_MPU_RASR_ENABLE,
@@ -44,14 +44,14 @@ BSP_START_DATA_SECTION const ARMV7M_MPU_Region_config
         | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
         | ARMV7M_MPU_RASR_ENABLE,
     }, {
-      .begin = imxrt_memory_flexspi_config_begin,
-      .end = imxrt_memory_flexspi_end,
+      .begin = imxrt_memory_flash_config_begin,
+      .end = imxrt_memory_flash_end,
       .rasr = ARMV7M_MPU_RASR_AP(0x3)
         | ARMV7M_MPU_RASR_TEX(0x1) | ARMV7M_MPU_RASR_C | ARMV7M_MPU_RASR_B
         | ARMV7M_MPU_RASR_ENABLE,
     }, {
-      .begin = imxrt_memory_sdram_nocache_begin,
-      .end = imxrt_memory_sdram_nocache_end,
+      .begin = imxrt_memory_extram_nocache_begin,
+      .end = imxrt_memory_extram_nocache_end,
       .rasr = ARMV7M_MPU_RASR_AP(0x3)
         | ARMV7M_MPU_RASR_TEX(0x2)
         | ARMV7M_MPU_RASR_ENABLE,

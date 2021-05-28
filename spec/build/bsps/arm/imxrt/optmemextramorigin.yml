@@ -1,16 +1,16 @@
 actions:
 - get-integer: null
 - env-assign: null
-- define-unquoted: IMXRT_MEMORY_FLEXSPI_FLASH_SIZE
 build-type: option
-default: 67108864
+default: 0x80000000
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'
 links: []
-name: IMXRT_MEMORY_FLEXSPI_FLASH_SIZE
+name: IMXRT_MEMORY_EXTRAM_ORIGIN
 description: |
-  Size of the FlexSPI Flash area in bytes.
+  Base address of the external RAM.  An external ram can be for example be a
+  SDRAM connected to SEMC or a HyperRAM connected to FlexSPI.
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

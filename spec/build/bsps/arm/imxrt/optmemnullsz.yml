@@ -2,7 +2,7 @@ actions:
 - get-integer: null
 - env-assign: null
 build-type: option
-default: 0x400
+default: 0x100
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'
@@ -10,7 +10,8 @@ links: []
 name: IMXRT_MEMORY_NULL_SIZE
 description: |
   Size of the NULL pointer protection area in bytes.  This memory area reduces
-  the size of the ITCM available to the application.
+  the size of the ITCM available to the application.  If you adapt this, you
+  have to adapt IMXRT_MEMORY_ITCM_SIZE too.
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

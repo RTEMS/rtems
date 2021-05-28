@@ -9,7 +9,8 @@ format: '{:#010x}'
 links: []
 name: IMXRT_MEMORY_OCRAM_NOCACHE_SIZE
 description: |
-  Size of the nocache area at the end of the OCRAM in bytes.
+  Size of the nocache area at the end of the OCRAM in bytes.  Must not be bigger
+  than IMXRT_MEMORY_OCRAM_SIZE.
 type: build
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:

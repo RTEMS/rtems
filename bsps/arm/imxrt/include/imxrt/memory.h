@@ -56,29 +56,25 @@ extern char imxrt_memory_peripheral_begin[];
 extern char imxrt_memory_peripheral_end[];
 extern char imxrt_memory_peripheral_size[];
 
-extern char imxrt_memory_flexspi_config_begin[];
-extern char imxrt_memory_flexspi_config_end[];
-extern char imxrt_memory_flexspi_config_size[];
+extern char imxrt_memory_flash_config_begin[];
+extern char imxrt_memory_flash_config_end[];
+extern char imxrt_memory_flash_config_size[];
 
-extern char imxrt_memory_flexspi_ivt_begin[];
-extern char imxrt_memory_flexspi_ivt_end[];
-extern char imxrt_memory_flexspi_ivt_size[];
+extern char imxrt_memory_flash_ivt_begin[];
+extern char imxrt_memory_flash_ivt_end[];
+extern char imxrt_memory_flash_ivt_size[];
 
-extern char imxrt_memory_flexspi_begin[];
-extern char imxrt_memory_flexspi_end[];
-extern char imxrt_memory_flexspi_size[];
+extern char imxrt_memory_flash_begin[];
+extern char imxrt_memory_flash_end[];
+extern char imxrt_memory_flash_size[];
 
-extern char imxrt_memory_flexspi_fifo_begin[];
-extern char imxrt_memory_flexspi_fifo_end[];
-extern char imxrt_memory_flexspi_fifo_size[];
+extern char imxrt_memory_extram_begin[];
+extern char imxrt_memory_extram_end[];
+extern char imxrt_memory_extram_size[];
 
-extern char imxrt_memory_sdram_begin[];
-extern char imxrt_memory_sdram_end[];
-extern char imxrt_memory_sdram_size[];
-
-extern char imxrt_memory_sdram_nocache_begin[];
-extern char imxrt_memory_sdram_nocache_end[];
-extern char imxrt_memory_sdram_nocache_size[];
+extern char imxrt_memory_extram_nocache_begin[];
+extern char imxrt_memory_extram_nocache_end[];
+extern char imxrt_memory_extram_nocache_size[];
 
 #ifdef __cplusplus
 }

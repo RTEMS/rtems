@@ -43,7 +43,7 @@ const flexspi_nor_config_t imxrt_flexspi_config = {
     .deviceType = kFlexSpiDeviceType_SerialRAM,
     .sflashPadType = kSerialFlash_8Pads,
     .serialClkFreq = kFlexSpiSerialClk_133MHz,
-    .sflashA1Size = IMXRT_MEMORY_FLEXSPI_FLASH_SIZE,
+    .sflashA1Size = IMXRT_MEMORY_FLASH_SIZE,
     .dataValidTime = {16u, 16u},
     .lookupTable = {
       FLEXSPI_LUT_SEQ(CMD_DDR, FLEXSPI_8PAD, 0xA0, RADDR_DDR, FLEXSPI_8PAD, 0x18),
