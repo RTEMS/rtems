@@ -656,7 +656,7 @@ static inline void _ARMV7M_MPU_Set_region(
   RTEMS_OBFUSCATE_VARIABLE(end);
   size = (uintptr_t) end - (uintptr_t) begin;
 
-  if ( size > 0 ) {
+  if ( (uintptr_t) end > (uintptr_t) begin ) {
     rbar = (uintptr_t) begin | region | ARMV7M_MPU_RBAR_VALID;
     rasr |= _ARMV7M_MPU_Get_region_size(size);
   } else {
