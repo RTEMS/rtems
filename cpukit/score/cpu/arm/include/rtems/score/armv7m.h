@@ -660,7 +660,7 @@ static inline void _ARMV7M_MPU_Set_region(
     rbar = (uintptr_t) begin | region | ARMV7M_MPU_RBAR_VALID;
     rasr |= _ARMV7M_MPU_Get_region_size(size);
   } else {
-    rbar = region;
+    rbar = ARMV7M_MPU_RBAR_VALID | region;
     rasr = 0;
   }
 
