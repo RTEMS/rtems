@@ -122,7 +122,7 @@ static int
 tcp_remote_connect(rtems_debugger_remote* remote)
 {
   int                        ld;
-  struct sockaddr_in         addr;
+  struct sockaddr_in         addr = {0};
   socklen_t                  opt;
   socklen_t                  len;
   bool                       running;
