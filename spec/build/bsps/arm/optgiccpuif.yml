@@ -6,10 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 0x2c000000
-default-by-variant:
-- value: 0xac000000
-  variants:
-  - arm/fvp_cortex_r52
+default-by-variant: []
 description: |
   Defines the base address of the GIC CPU Interface.
 enabled-by: true

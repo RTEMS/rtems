@@ -24,8 +24,6 @@ links:
 - role: build-dependency
   uid: ../optgicspicount
 - role: build-dependency
-  uid: ../optgiccpuif
-- role: build-dependency
   uid: ../optgicdist
 - role: build-dependency
   uid: ../optgicredist
