@@ -79,7 +79,7 @@ void bsp_start_hook_0( void )
     arm_gic_irq_initialize_secondary_cpu();
 
     /* Change the VBAR from the start to the normal vector table */
-    _AArch32_Write_vbar( bsp_vector_table_begin );
+    _AArch32_Write_vbar( (uint32_t) bsp_vector_table_begin );
 
     bsp_interrupt_vector_enable( ARM_GIC_IRQ_SGI_0 );
     _SMP_Start_multitasking_on_secondary_processor(
