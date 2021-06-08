@@ -178,16 +178,10 @@ SYM(trap_table):
    MEC timer control register mirror is so we can stop the timers
    from an external debugger. It is needed because the control
    register is write-only. Trap 0x7C cannot occure in ERC32...
-
-   We also use this location to store the last location of the
-   usable RAM in order not to overwrite the remote debugger with
-   the RTEMS work-space area.
-
 */
 
-	.global SYM(_ERC32_MEC_Timer_Control_Mirror), SYM(rdb_start), SYM(CLOCK_SPEED)
+	.global SYM(_ERC32_MEC_Timer_Control_Mirror), SYM(CLOCK_SPEED)
 
-SYM(rdb_start):
 SYM(_ERC32_MEC_Timer_Control_Mirror):
 
   BAD_TRAP; BAD_TRAP;                           ! 7C - 7D undefined
@@ -320,9 +314,6 @@ SYM(hard_reset):
 	st	%l7, [%l0]
 #endif
 
-	set	SYM(rdb_start), %g5	! End of RAM
-	st	%o0, [%g5]
-
         /* clear the bss */
 
         sethi %hi(__bss_start), %g2     ! g2 = start of bss
@@ -337,6 +328,9 @@ SYM(hard_reset):
         cmp    %g2,%g3
         bleu,a .Lzerobss
         nop
+
+        call    SYM(_SPARC_Memory_initialize)
+         nop ! o0 = end of usable RAM provided by the boot loader
 
         call    SYM(boot_card)          ! does not return
          mov    %g0, %o0                ! command line
