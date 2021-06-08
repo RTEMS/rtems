@@ -331,47 +331,19 @@ SYM(hard_reset):
         mov     %sp, %fp                ! Set frame pointer
         nop
 
-        /*
-         *  Copy the initialized data to RAM
-         *
-         *  FROM:   _data_load_start
-         *  TO:     _data_start
-         *  LENGTH: (__bss_start - _data_start) bytes
-         */
-
-        sethi %hi(_data_load_start),%g1 ! g1 = start of initialized data in ROM
-        or    %g1,%lo(_data_load_start),%g1
-
-        sethi %hi(_data_start),%g3      ! g3 = start of initialized data in RAM
-        or    %g3,%lo(_data_start),%g3
-
-        sethi %hi(__bss_start), %g2     ! g2 = end of initialized data in RAM
-        or    %g2,%lo(__bss_start),%g2
-
-	cmp   %g1, %g3
-	be    1f
-	nop
-
-copy_data:
-        ldd   [%g1], %g4
-        std   %g4 , [%g3]               ! copy this double word
-        add   %g3, 8, %g3               ! bump the destination pointer
-        add   %g1, 8, %g1               ! bump the source pointer
-        cmp   %g3, %g2                  ! Is the pointer past the end of dest?
-        bl    copy_data
-        nop
-
         /* clear the bss */
-1:
+
+        sethi %hi(__bss_start), %g2     ! g2 = start of bss
+        or    %g2,%lo(__bss_start),%g2
 
         sethi %hi(_end),%g3
         or    %g3,%lo(_end),%g3         ! g3 = end of bss
         mov   %g0,%g1                   ! so std has two zeros
-zerobss:
+.Lzerobss:
         std    %g0,[%g2]
         add    %g2,8,%g2
         cmp    %g2,%g3
-        bleu,a zerobss
+        bleu,a .Lzerobss
         nop
 
         mov     %g0, %o0                ! command line
