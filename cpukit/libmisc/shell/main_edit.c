@@ -684,7 +684,7 @@ static void moveto(struct editor *ed, int pos, int center) {
 // Text selection
 //
 
-static int get_selection(struct editor *ed, int *start, int *end) {
+static int get_selection(struct editor *ed, size_t *start, size_t *end) {
   if (ed->anchor == -1) {
     *start = *end = -1;
     return 0;
@@ -705,7 +705,7 @@ static int get_selection(struct editor *ed, int *start, int *end) {
 }
 
 static int get_selected_text(struct editor *ed, char *buffer, int size) {
-  int selstart, selend, len;
+  size_t selstart, selend, len;
 
   if (!get_selection(ed, &selstart, &selend)) return 0;
   len = selend - selstart;
@@ -726,7 +726,7 @@ static void update_selection(struct editor *ed, int select) {
 }
 
 static int erase_selection(struct editor *ed) {
-  int selstart, selend;
+  size_t selstart, selend;
 
   if (!get_selection(ed, &selstart, &selend)) return 0;
   moveto(ed, selstart, 0);
@@ -1086,7 +1086,7 @@ static void display_line(struct editor *ed, int pos, int fullline) {
   int maxcol = ed->env->cols + margin;
   unsigned char *bufptr = ed->env->linebuf;
   unsigned char *p = text_ptr(ed, pos);
-  int selstart, selend, ch;
+  size_t selstart, selend, ch;
   char *s;
 
   (void) get_selection(ed, &selstart, &selend);
@@ -1545,9 +1545,9 @@ static void del(struct editor *ed) {
 }
 
 static void indent(struct editor *ed, unsigned char *indentation) {
-  int start, end, i, lines, toplines, newline, ch;
+  size_t start, end, i, lines, toplines, newline, ch;
   unsigned char *buffer, *p;
-  int buflen;
+  size_t buflen;
   int width = strlen((const char*) indentation);
   int pos = ed->linepos + ed->col;
 
@@ -1602,7 +1602,7 @@ static void indent(struct editor *ed, unsigned char *indentation) {
 }
 
 static void unindent(struct editor *ed, unsigned char *indentation) {
-  int start, end, i, newline, ch, shrinkage, topofs;
+  size_t start, end, i, newline, ch, shrinkage, topofs;
   unsigned char *buffer, *p;
   int width = strlen((const char*) indentation);
   int pos = ed->linepos + ed->col;
@@ -1686,7 +1686,7 @@ static void redo(struct editor *ed) {
 //
 
 static void copy_selection(struct editor *ed) {
-  int selstart, selend;
+  size_t selstart, selend;
 
   if (!get_selection(ed, &selstart, &selend)) return;
   ed->env->clipsize = selend - selstart;
