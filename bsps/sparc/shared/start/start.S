@@ -288,47 +288,40 @@ SYM(hard_reset):
         nop
         nop
 
-	sethi	%hi(_Per_CPU_Information), %g6 ! get per-CPU control
-	add	%g6, %lo(_Per_CPU_Information), %g6
+        mov     %sp, %o0 ! save end of usable RAM provided by the boot loader
+        set     SYM(_Per_CPU_Information), %g6 ! set per-CPU control
+        set     SYM(_ISR_Stack_size), %l0 ! get ISR stack size
 
 #if defined(START_LEON3_ENABLE_SMP)
-	rd	%asr17, %o0		! get CPU identifier
-	srl	%o0, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, %o0
+        rd      %asr17, %l7 ! get CPU identifier
+        srl     %l7, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, %l7
+        add     %l7, 1, %l1 ! get ISR stack offset for this CPU
+        smul    %l1, %l0, %l0
+        sll     %l7, PER_CPU_CONTROL_SIZE_LOG2, %l2 ! per-CPU for this CPU
+        add     %g6, %l2, %g6
+#endif
+        set     SYM(_ISR_Stack_area_begin), %sp ! set stack pointer
+        add     %sp, %l0, %sp
+        andn    %sp, CPU_STACK_ALIGNMENT - 1, %sp
+        sub     %sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
+        mov     %sp, %fp ! set frame pointer
 
-	sll	%o0, PER_CPU_CONTROL_SIZE_LOG2, %l0
-	add	%g6, %l0, %g6
-
+#if defined(START_LEON3_ENABLE_SMP)
 	/* If LEON3_Boot_Cpu < 0 then assign us as boot CPU and continue. */
-	set	SYM(LEON3_Boot_Cpu), %o1
-	ld	[%o1], %o2
-	tst	%o2
+        set     SYM(LEON3_Boot_Cpu), %l0
+        ld      [%l0], %l1
+        tst     %l1
 	bneg	.Lbootcpu
 	 nop
-
-	ld	[%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp ! set stack pointer
-	andn	%sp, CPU_STACK_ALIGNMENT - 1, %sp
-	sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
-	mov	%sp, %fp		! set frame pointer
 
 	call	SYM(bsp_start_on_secondary_processor) ! does not return
 	 mov	%g6, %o0
 .Lbootcpu:
-	st	%o0, [%o1]
+	st	%l7, [%l0]
 #endif
 
 	set	SYM(rdb_start), %g5	! End of RAM
-	st	%sp, [%g5]
-	set	SYM(_ISR_Stack_size), %g5
-#if defined(START_LEON3_ENABLE_SMP)
-	add	%o0, 1, %o0
-	smul	%o0, %g5, %g5
-#endif
-	set	SYM(_ISR_Stack_area_begin), %sp
-	add	%sp, %g5, %sp
-	andn	%sp, CPU_STACK_ALIGNMENT - 1, %sp
-	sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
-        mov     %sp, %fp                ! Set frame pointer
-        nop
+	st	%o0, [%g5]
 
         /* clear the bss */
 
