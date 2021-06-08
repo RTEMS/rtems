@@ -775,13 +775,6 @@ RTEMS_INLINE_ROUTINE void _Per_CPU_Release_all(
 
 #if defined( RTEMS_SMP )
 
-/**
- *  @brief Allocate and Initialize Per CPU Structures
- *
- *  This method allocates and initialize the per CPU structure.
- */
-void _Per_CPU_Initialize(void);
-
 void _Per_CPU_State_change(
   Per_CPU_Control *cpu,
   Per_CPU_State new_state
