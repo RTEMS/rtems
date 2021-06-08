@@ -30,6 +30,14 @@ links:
 - role: build-dependency
   uid: optclkuart
 - role: build-dependency
+  uid: optcgem0
+- role: build-dependency
+  uid: optcgem1
+- role: build-dependency
+  uid: optcgem2
+- role: build-dependency
+  uid: optcgem3
+- role: build-dependency
   uid: ../../optconminor
 - role: build-dependency
   uid: ../../obj
