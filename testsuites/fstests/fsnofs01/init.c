@@ -187,7 +187,6 @@ static void test_path_ops(void)
   char buf [32];
   ssize_t n = 0;
   const char *path = "/";
-  const struct utimbuf times;
 
   errno = 0;
   rv = open(path, O_RDONLY);
@@ -294,10 +293,14 @@ static void test_path_ops(void)
   rtems_test_assert(rv == -1);
   rtems_test_assert(errno == ENXIO);
 
+  /*
+   * Pass in NULL so the new access and modification time are interpreted
+   * as being the current time. Otherwise, the value has to be validated.
+   */
   errno = 0;
-  rv = utime(path, &times);
+  rv = utime(path, NULL);
   rtems_test_assert(rv == -1);
-  rtems_test_assert(errno == ENXIO);
+  rtems_test_assert(errno == ENOENT);
 }
 
 static void test_user_env(void)
