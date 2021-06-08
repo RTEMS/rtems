@@ -85,7 +85,7 @@
 
   .section    ".text"
   PUBLIC(start)
-  .global start, __bsp_mem_init
+  .global start
 
 SYM(start):
 #if SYM(start) != start
