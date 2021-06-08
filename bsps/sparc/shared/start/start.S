@@ -306,13 +306,12 @@ SYM(hard_reset):
 	 nop
 
 	ld	[%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp ! set stack pointer
-	sub	%sp, 4, %sp		! stack starts at end of area - 4
-	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
+	andn	%sp, CPU_STACK_ALIGNMENT - 1, %sp
+	sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 	mov	%sp, %fp		! set frame pointer
 
-	mov	%g6, %o0
 	call	SYM(bsp_start_on_secondary_processor) ! does not return
-	 sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
+	 mov	%g6, %o0
 .Lbootcpu:
 	st	%o0, [%o1]
 #endif
@@ -326,8 +325,8 @@ SYM(hard_reset):
 #endif
 	set	SYM(_ISR_Stack_area_begin), %sp
 	add	%sp, %g5, %sp
-	sub	%sp, 4, %sp		! stack starts at end of area - 4
-	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
+	andn	%sp, CPU_STACK_ALIGNMENT - 1, %sp
+	sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
         mov     %sp, %fp                ! Set frame pointer
         nop
 
@@ -346,8 +345,7 @@ SYM(hard_reset):
         bleu,a .Lzerobss
         nop
 
-        mov     %g0, %o0                ! command line
         call    SYM(boot_card)          ! does not return
-         sub     %sp, 0x60, %sp         ! room for boot_card to save args
+         mov    %g0, %o0                ! command line
 
 /* end of file */
