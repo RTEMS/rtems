@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSDeviceGRLIBAPBUART
+ * @ingroup RTEMSDeviceGRLIBIRQAMP
  *
- * @brief This header file defines the APBUART interface.
+ * @brief This header file defines the IRQ(A)MP interface.
  */
 
 /*
@@ -50,61 +50,52 @@
  * https://docs.rtems.org
  */
 
-/* Generated from spec:/dev/grlib/if/apbuart-header-2 */
+/* Generated from spec:/dev/grlib/if/irqamp-header-2 */
 
-#ifndef _GRLIB_APBUART_H
-#define _GRLIB_APBUART_H
+#ifndef _GRLIB_IRQAMP_H
+#define _GRLIB_IRQAMP_H
 
-#include <grlib/apbuart-regs.h>
+#include <stddef.h>
+#include <grlib/io.h>
+#include <grlib/irqamp-regs.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/apbuart-inbyte-nonblocking */
+/* Generated from spec:/dev/grlib/if/irqamp-get-timestamp */
 
 /**
- * @ingroup RTEMSDeviceGRLIBAPBUART
+ * @ingroup RTEMSDeviceGRLIBIRQAMP
  *
- * @brief Clears all errors and tries to get one character from the receiver
- *   FIFO.
+ * @brief Gets the interrupt timestamping register bock.
  *
- * @param regs is the pointer to the APBUART register block.
+ * @param irqamp_regs is the IRQ(A)MP register block.
  *
- * @retval -1 The receiver FIFO was empty.
+ * @retval NULL The IRQ(A)MP does not support the interrupt timestamping
+ *   feature.
  *
- * @return Returns the first character of the receiver FIFO if it was
- *   non-empty.
+ * @return Returns the interrupt timestamping register block.
  */
-int apbuart_inbyte_nonblocking( apbuart *regs );
+static inline irqamp_timestamp *irqamp_get_timestamp_registers(
+  irqamp *irqamp_regs
+)
+{
+  irqamp_timestamp *timestamp_regs;
+  uint32_t itstmpc;
 
-/* Generated from spec:/dev/grlib/if/apbuart-outbyte-polled */
+  timestamp_regs = &irqamp_regs->itstmp[ 0 ];
+  itstmpc = grlib_load_32( &timestamp_regs->itstmpc );
 
-/**
- * @ingroup RTEMSDeviceGRLIBAPBUART
- *
- * @brief Waits until an empty transmitter FIFO was observed and then stores
- *   the character to the data register.
- *
- * @param regs is the pointer to the APBUART register block.
- *
- * @param ch is the character to output.
- */
-void apbuart_outbyte_polled( apbuart *regs, char ch );
+  if ( IRQAMP_ITSTMPC_TSTAMP_GET( itstmpc ) == 0 ) {
+    return NULL;
+  }
 
-/* Generated from spec:/dev/grlib/if/apbuart-outbyte-wait */
-
-/**
- * @ingroup RTEMSDeviceGRLIBAPBUART
- *
- * @brief Ensures that at least once an empty transmitter FIFO was observed.
- *
- * @param regs is the pointer to the APBUART register block.
- */
-void apbuart_outbyte_wait( const apbuart *regs );
+  return timestamp_regs;
+}
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _GRLIB_APBUART_H */
+#endif /* _GRLIB_IRQAMP_H */

@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSDeviceGRLIBAPBUART
+ * @ingroup RTEMSDeviceGRGPREG
  *
- * @brief This header file defines the APBUART interface.
+ * @brief This header file defines the GRGPREG register block interface.
  */
 
 /*
@@ -50,61 +50,86 @@
  * https://docs.rtems.org
  */
 
-/* Generated from spec:/dev/grlib/if/apbuart-header-2 */
+/* Generated from spec:/dev/grlib/if/grgpreg-header */
 
-#ifndef _GRLIB_APBUART_H
-#define _GRLIB_APBUART_H
+#ifndef _GRLIB_GRGPREG_REGS_H
+#define _GRLIB_GRGPREG_REGS_H
 
-#include <grlib/apbuart-regs.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Generated from spec:/dev/grlib/if/apbuart-inbyte-nonblocking */
+/* Generated from spec:/dev/grlib/if/grgpreg */
 
 /**
- * @ingroup RTEMSDeviceGRLIBAPBUART
+ * @defgroup RTEMSDeviceGRGPREG GRGPREG
  *
- * @brief Clears all errors and tries to get one character from the receiver
- *   FIFO.
+ * @ingroup RTEMSDeviceGRLIB
  *
- * @param regs is the pointer to the APBUART register block.
+ * @brief This group contains the GRGPREG interfaces.
  *
- * @retval -1 The receiver FIFO was empty.
- *
- * @return Returns the first character of the receiver FIFO if it was
- *   non-empty.
+ * @{
  */
-int apbuart_inbyte_nonblocking( apbuart *regs );
-
-/* Generated from spec:/dev/grlib/if/apbuart-outbyte-polled */
 
 /**
- * @ingroup RTEMSDeviceGRLIBAPBUART
+ * @defgroup RTEMSDeviceGRGPREGBOOTSTRAP Bootstrap register (BOOTSTRAP)
  *
- * @brief Waits until an empty transmitter FIFO was observed and then stores
- *   the character to the data register.
+ * @brief This group contains register bit definitions.
  *
- * @param regs is the pointer to the APBUART register block.
- *
- * @param ch is the character to output.
+ * @{
  */
-void apbuart_outbyte_polled( apbuart *regs, char ch );
 
-/* Generated from spec:/dev/grlib/if/apbuart-outbyte-wait */
+#define GRGPREG_BOOTSTRAP_B10 0x2000000U
+
+#define GRGPREG_BOOTSTRAP_B9 0x1000000U
+
+#define GRGPREG_BOOTSTRAP_B8 0x800000U
+
+#define GRGPREG_BOOTSTRAP_B7 0x400000U
+
+#define GRGPREG_BOOTSTRAP_B6 0x200000U
+
+#define GRGPREG_BOOTSTRAP_B5 0x100000U
+
+#define GRGPREG_BOOTSTRAP_B4 0x80000U
+
+#define GRGPREG_BOOTSTRAP_B3 0x40000U
+
+#define GRGPREG_BOOTSTRAP_B2 0x20000U
+
+#define GRGPREG_BOOTSTRAP_B1 0x10000U
+
+#define GRGPREG_BOOTSTRAP_GPIO_SHIFT 0
+#define GRGPREG_BOOTSTRAP_GPIO_MASK 0xffffU
+#define GRGPREG_BOOTSTRAP_GPIO_GET( _reg ) \
+  ( ( ( _reg ) & GRGPREG_BOOTSTRAP_GPIO_MASK ) >> \
+    GRGPREG_BOOTSTRAP_GPIO_SHIFT )
+#define GRGPREG_BOOTSTRAP_GPIO_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRGPREG_BOOTSTRAP_GPIO_MASK ) | \
+    ( ( ( _val ) << GRGPREG_BOOTSTRAP_GPIO_SHIFT ) & \
+      GRGPREG_BOOTSTRAP_GPIO_MASK ) )
+#define GRGPREG_BOOTSTRAP_GPIO( _val ) \
+  ( ( ( _val ) << GRGPREG_BOOTSTRAP_GPIO_SHIFT ) & \
+    GRGPREG_BOOTSTRAP_GPIO_MASK )
+
+/** @} */
 
 /**
- * @ingroup RTEMSDeviceGRLIBAPBUART
- *
- * @brief Ensures that at least once an empty transmitter FIFO was observed.
- *
- * @param regs is the pointer to the APBUART register block.
+ * @brief This structure defines the GRGPREG register block memory map.
  */
-void apbuart_outbyte_wait( const apbuart *regs );
+typedef struct grgpreg {
+  /**
+   * @brief See @ref RTEMSDeviceGRGPREGBOOTSTRAP.
+   */
+  uint32_t bootstrap;
+} grgpreg;
+
+/** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _GRLIB_APBUART_H */
+#endif /* _GRLIB_GRGPREG_REGS_H */

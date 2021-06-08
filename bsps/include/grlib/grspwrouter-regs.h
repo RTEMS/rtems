@@ -1,0 +1,890 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSDeviceGRSPWROUTER
+ *
+ * @brief This header file defines the GRSPWROUTER register block interface.
+ */
+
+/*
+ * Copyright (C) 2021 embedded brains GmbH & Co. KG
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://www.rtems.org/bugs.html
+ *
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
+ *
+ * https://docs.rtems.org
+ */
+
+/* Generated from spec:/dev/grlib/if/grspwrouter-header */
+
+#ifndef _GRLIB_GRSPWROUTER_REGS_H
+#define _GRLIB_GRSPWROUTER_REGS_H
+
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Generated from spec:/dev/grlib/if/grspwrouter */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTER GRSPWROUTER
+ *
+ * @ingroup RTEMSDeviceGRLIB
+ *
+ * @brief This group contains the GRSPWROUTER interfaces.
+ *
+ * @{
+ */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBACTRL AMBA port Control (AMBACTRL)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBACTRL_RA 0x80000000U
+
+#define GRSPWROUTER_AMBACTRL_RX 0x40000000U
+
+#define GRSPWROUTER_AMBACTRL_RC 0x20000000U
+
+#define GRSPWROUTER_AMBACTRL_NCH_SHIFT 27
+#define GRSPWROUTER_AMBACTRL_NCH_MASK 0x18000000U
+#define GRSPWROUTER_AMBACTRL_NCH_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBACTRL_NCH_MASK ) >> \
+    GRSPWROUTER_AMBACTRL_NCH_SHIFT )
+#define GRSPWROUTER_AMBACTRL_NCH_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBACTRL_NCH_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBACTRL_NCH_SHIFT ) & \
+      GRSPWROUTER_AMBACTRL_NCH_MASK ) )
+#define GRSPWROUTER_AMBACTRL_NCH( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBACTRL_NCH_SHIFT ) & \
+    GRSPWROUTER_AMBACTRL_NCH_MASK )
+
+#define GRSPWROUTER_AMBACTRL_DI 0x1000000U
+
+#define GRSPWROUTER_AMBACTRL_ME 0x800000U
+
+#define GRSPWROUTER_AMBACTRL_RD 0x20000U
+
+#define GRSPWROUTER_AMBACTRL_RE 0x10000U
+
+#define GRSPWROUTER_AMBACTRL_TQ 0x100U
+
+#define GRSPWROUTER_AMBACTRL_RS 0x40U
+
+#define GRSPWROUTER_AMBACTRL_PM 0x20U
+
+#define GRSPWROUTER_AMBACTRL_TI 0x10U
+
+#define GRSPWROUTER_AMBACTRL_IE 0x8U
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBASTS AMBA port Status (AMBASTS)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBASTS_NIRQ_SHIFT 28
+#define GRSPWROUTER_AMBASTS_NIRQ_MASK 0x70000000U
+#define GRSPWROUTER_AMBASTS_NIRQ_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBASTS_NIRQ_MASK ) >> \
+    GRSPWROUTER_AMBASTS_NIRQ_SHIFT )
+#define GRSPWROUTER_AMBASTS_NIRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBASTS_NIRQ_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBASTS_NIRQ_SHIFT ) & \
+      GRSPWROUTER_AMBASTS_NIRQ_MASK ) )
+#define GRSPWROUTER_AMBASTS_NIRQ( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBASTS_NIRQ_SHIFT ) & \
+    GRSPWROUTER_AMBASTS_NIRQ_MASK )
+
+#define GRSPWROUTER_AMBASTS_NRXD_SHIFT 26
+#define GRSPWROUTER_AMBASTS_NRXD_MASK 0xc000000U
+#define GRSPWROUTER_AMBASTS_NRXD_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBASTS_NRXD_MASK ) >> \
+    GRSPWROUTER_AMBASTS_NRXD_SHIFT )
+#define GRSPWROUTER_AMBASTS_NRXD_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBASTS_NRXD_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBASTS_NRXD_SHIFT ) & \
+      GRSPWROUTER_AMBASTS_NRXD_MASK ) )
+#define GRSPWROUTER_AMBASTS_NRXD( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBASTS_NRXD_SHIFT ) & \
+    GRSPWROUTER_AMBASTS_NRXD_MASK )
+
+#define GRSPWROUTER_AMBASTS_NTXD_SHIFT 24
+#define GRSPWROUTER_AMBASTS_NTXD_MASK 0x3000000U
+#define GRSPWROUTER_AMBASTS_NTXD_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBASTS_NTXD_MASK ) >> \
+    GRSPWROUTER_AMBASTS_NTXD_SHIFT )
+#define GRSPWROUTER_AMBASTS_NTXD_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBASTS_NTXD_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBASTS_NTXD_SHIFT ) & \
+      GRSPWROUTER_AMBASTS_NTXD_MASK ) )
+#define GRSPWROUTER_AMBASTS_NTXD( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBASTS_NTXD_SHIFT ) & \
+    GRSPWROUTER_AMBASTS_NTXD_MASK )
+
+#define GRSPWROUTER_AMBASTS_ME 0x1000U
+
+#define GRSPWROUTER_AMBASTS_EE 0x100U
+
+#define GRSPWROUTER_AMBASTS_IA 0x80U
+
+#define GRSPWROUTER_AMBASTS_TO 0x1U
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADEFADDR \
+ *   AMBA port Default address (AMBADEFADDR)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADEFADDR_DEFMASK_SHIFT 8
+#define GRSPWROUTER_AMBADEFADDR_DEFMASK_MASK 0xff00U
+#define GRSPWROUTER_AMBADEFADDR_DEFMASK_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADEFADDR_DEFMASK_MASK ) >> \
+    GRSPWROUTER_AMBADEFADDR_DEFMASK_SHIFT )
+#define GRSPWROUTER_AMBADEFADDR_DEFMASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADEFADDR_DEFMASK_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADEFADDR_DEFMASK_SHIFT ) & \
+      GRSPWROUTER_AMBADEFADDR_DEFMASK_MASK ) )
+#define GRSPWROUTER_AMBADEFADDR_DEFMASK( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADEFADDR_DEFMASK_SHIFT ) & \
+    GRSPWROUTER_AMBADEFADDR_DEFMASK_MASK )
+
+#define GRSPWROUTER_AMBADEFADDR_DEFADDR_SHIFT 0
+#define GRSPWROUTER_AMBADEFADDR_DEFADDR_MASK 0xffU
+#define GRSPWROUTER_AMBADEFADDR_DEFADDR_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADEFADDR_DEFADDR_MASK ) >> \
+    GRSPWROUTER_AMBADEFADDR_DEFADDR_SHIFT )
+#define GRSPWROUTER_AMBADEFADDR_DEFADDR_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADEFADDR_DEFADDR_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADEFADDR_DEFADDR_SHIFT ) & \
+      GRSPWROUTER_AMBADEFADDR_DEFADDR_MASK ) )
+#define GRSPWROUTER_AMBADEFADDR_DEFADDR( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADEFADDR_DEFADDR_SHIFT ) & \
+    GRSPWROUTER_AMBADEFADDR_DEFADDR_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADKEY \
+ *   AMBA port Destination key (AMBADKEY)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADKEY_DESTKEY_SHIFT 0
+#define GRSPWROUTER_AMBADKEY_DESTKEY_MASK 0xffU
+#define GRSPWROUTER_AMBADKEY_DESTKEY_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADKEY_DESTKEY_MASK ) >> \
+    GRSPWROUTER_AMBADKEY_DESTKEY_SHIFT )
+#define GRSPWROUTER_AMBADKEY_DESTKEY_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADKEY_DESTKEY_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADKEY_DESTKEY_SHIFT ) & \
+      GRSPWROUTER_AMBADKEY_DESTKEY_MASK ) )
+#define GRSPWROUTER_AMBADKEY_DESTKEY( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADKEY_DESTKEY_SHIFT ) & \
+    GRSPWROUTER_AMBADKEY_DESTKEY_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBATC AMBA port Time-code (AMBATC)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBATC_TCMSK_SHIFT 24
+#define GRSPWROUTER_AMBATC_TCMSK_MASK 0xff000000U
+#define GRSPWROUTER_AMBATC_TCMSK_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBATC_TCMSK_MASK ) >> \
+    GRSPWROUTER_AMBATC_TCMSK_SHIFT )
+#define GRSPWROUTER_AMBATC_TCMSK_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBATC_TCMSK_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBATC_TCMSK_SHIFT ) & \
+      GRSPWROUTER_AMBATC_TCMSK_MASK ) )
+#define GRSPWROUTER_AMBATC_TCMSK( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBATC_TCMSK_SHIFT ) & \
+    GRSPWROUTER_AMBATC_TCMSK_MASK )
+
+#define GRSPWROUTER_AMBATC_TCVAL_SHIFT 16
+#define GRSPWROUTER_AMBATC_TCVAL_MASK 0xff0000U
+#define GRSPWROUTER_AMBATC_TCVAL_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBATC_TCVAL_MASK ) >> \
+    GRSPWROUTER_AMBATC_TCVAL_SHIFT )
+#define GRSPWROUTER_AMBATC_TCVAL_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBATC_TCVAL_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBATC_TCVAL_SHIFT ) & \
+      GRSPWROUTER_AMBATC_TCVAL_MASK ) )
+#define GRSPWROUTER_AMBATC_TCVAL( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBATC_TCVAL_SHIFT ) & \
+    GRSPWROUTER_AMBATC_TCVAL_MASK )
+
+#define GRSPWROUTER_AMBATC_TCTRL_SHIFT 6
+#define GRSPWROUTER_AMBATC_TCTRL_MASK 0xc0U
+#define GRSPWROUTER_AMBATC_TCTRL_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBATC_TCTRL_MASK ) >> \
+    GRSPWROUTER_AMBATC_TCTRL_SHIFT )
+#define GRSPWROUTER_AMBATC_TCTRL_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBATC_TCTRL_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBATC_TCTRL_SHIFT ) & \
+      GRSPWROUTER_AMBATC_TCTRL_MASK ) )
+#define GRSPWROUTER_AMBATC_TCTRL( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBATC_TCTRL_SHIFT ) & \
+    GRSPWROUTER_AMBATC_TCTRL_MASK )
+
+#define GRSPWROUTER_AMBATC_TIMECNT_SHIFT 0
+#define GRSPWROUTER_AMBATC_TIMECNT_MASK 0x3fU
+#define GRSPWROUTER_AMBATC_TIMECNT_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBATC_TIMECNT_MASK ) >> \
+    GRSPWROUTER_AMBATC_TIMECNT_SHIFT )
+#define GRSPWROUTER_AMBATC_TIMECNT_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBATC_TIMECNT_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBATC_TIMECNT_SHIFT ) & \
+      GRSPWROUTER_AMBATC_TIMECNT_MASK ) )
+#define GRSPWROUTER_AMBATC_TIMECNT( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBATC_TIMECNT_SHIFT ) & \
+    GRSPWROUTER_AMBATC_TIMECNT_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADMACTRL \
+ *   AMBA port DMA control/status (AMBADMACTRL)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADMACTRL_INTNUM_SHIFT 26
+#define GRSPWROUTER_AMBADMACTRL_INTNUM_MASK 0xfc000000U
+#define GRSPWROUTER_AMBADMACTRL_INTNUM_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMACTRL_INTNUM_MASK ) >> \
+    GRSPWROUTER_AMBADMACTRL_INTNUM_SHIFT )
+#define GRSPWROUTER_AMBADMACTRL_INTNUM_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMACTRL_INTNUM_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMACTRL_INTNUM_SHIFT ) & \
+      GRSPWROUTER_AMBADMACTRL_INTNUM_MASK ) )
+#define GRSPWROUTER_AMBADMACTRL_INTNUM( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMACTRL_INTNUM_SHIFT ) & \
+    GRSPWROUTER_AMBADMACTRL_INTNUM_MASK )
+
+#define GRSPWROUTER_AMBADMACTRL_EP 0x800000U
+
+#define GRSPWROUTER_AMBADMACTRL_TR 0x400000U
+
+#define GRSPWROUTER_AMBADMACTRL_IE 0x200000U
+
+#define GRSPWROUTER_AMBADMACTRL_IT 0x100000U
+
+#define GRSPWROUTER_AMBADMACTRL_RP 0x80000U
+
+#define GRSPWROUTER_AMBADMACTRL_TP 0x40000U
+
+#define GRSPWROUTER_AMBADMACTRL_SP 0x8000U
+
+#define GRSPWROUTER_AMBADMACTRL_SA 0x4000U
+
+#define GRSPWROUTER_AMBADMACTRL_EN 0x2000U
+
+#define GRSPWROUTER_AMBADMACTRL_NS 0x1000U
+
+#define GRSPWROUTER_AMBADMACTRL_RD 0x800U
+
+#define GRSPWROUTER_AMBADMACTRL_RX 0x400U
+
+#define GRSPWROUTER_AMBADMACTRL_AT 0x200U
+
+#define GRSPWROUTER_AMBADMACTRL_RA 0x100U
+
+#define GRSPWROUTER_AMBADMACTRL_TA 0x80U
+
+#define GRSPWROUTER_AMBADMACTRL_PR 0x40U
+
+#define GRSPWROUTER_AMBADMACTRL_PS 0x20U
+
+#define GRSPWROUTER_AMBADMACTRL_AI 0x10U
+
+#define GRSPWROUTER_AMBADMACTRL_RI 0x8U
+
+#define GRSPWROUTER_AMBADMACTRL_TI 0x4U
+
+#define GRSPWROUTER_AMBADMACTRL_RE 0x2U
+
+#define GRSPWROUTER_AMBADMACTRL_TE 0x1U
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADMAMAXLEN \
+ *   AMBA port DMA RX maximum length (AMBADMAMAXLEN)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_SHIFT 2
+#define GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_MASK 0x1fffffcU
+#define GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_MASK ) >> \
+    GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_SHIFT )
+#define GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_SHIFT ) & \
+      GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_MASK ) )
+#define GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_SHIFT ) & \
+    GRSPWROUTER_AMBADMAMAXLEN_RXMAXLEN_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADMATXDESC \
+ *   AMBA port DMA transmit descriptor table address (AMBADMATXDESC)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_SHIFT 10
+#define GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_MASK 0xfffffc00U
+#define GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_MASK ) >> \
+    GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_SHIFT )
+#define GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_SHIFT ) & \
+      GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_MASK ) )
+#define GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_SHIFT ) & \
+    GRSPWROUTER_AMBADMATXDESC_DESCBASEADDR_MASK )
+
+#define GRSPWROUTER_AMBADMATXDESC_DESCSEL_SHIFT 4
+#define GRSPWROUTER_AMBADMATXDESC_DESCSEL_MASK 0x3f0U
+#define GRSPWROUTER_AMBADMATXDESC_DESCSEL_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMATXDESC_DESCSEL_MASK ) >> \
+    GRSPWROUTER_AMBADMATXDESC_DESCSEL_SHIFT )
+#define GRSPWROUTER_AMBADMATXDESC_DESCSEL_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMATXDESC_DESCSEL_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMATXDESC_DESCSEL_SHIFT ) & \
+      GRSPWROUTER_AMBADMATXDESC_DESCSEL_MASK ) )
+#define GRSPWROUTER_AMBADMATXDESC_DESCSEL( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMATXDESC_DESCSEL_SHIFT ) & \
+    GRSPWROUTER_AMBADMATXDESC_DESCSEL_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADMARXDESC \
+ *   AMBA port DMA receive descriptor table address (AMBADMARXDESC)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_SHIFT 10
+#define GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_MASK 0xfffffc00U
+#define GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_MASK ) >> \
+    GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_SHIFT )
+#define GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_SHIFT ) & \
+      GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_MASK ) )
+#define GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_SHIFT ) & \
+    GRSPWROUTER_AMBADMARXDESC_DESCBASEADDR_MASK )
+
+#define GRSPWROUTER_AMBADMARXDESC_DESCSEL_SHIFT 3
+#define GRSPWROUTER_AMBADMARXDESC_DESCSEL_MASK 0x3f8U
+#define GRSPWROUTER_AMBADMARXDESC_DESCSEL_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMARXDESC_DESCSEL_MASK ) >> \
+    GRSPWROUTER_AMBADMARXDESC_DESCSEL_SHIFT )
+#define GRSPWROUTER_AMBADMARXDESC_DESCSEL_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMARXDESC_DESCSEL_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMARXDESC_DESCSEL_SHIFT ) & \
+      GRSPWROUTER_AMBADMARXDESC_DESCSEL_MASK ) )
+#define GRSPWROUTER_AMBADMARXDESC_DESCSEL( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMARXDESC_DESCSEL_SHIFT ) & \
+    GRSPWROUTER_AMBADMARXDESC_DESCSEL_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBADMAADDR \
+ *   AMBA port DMA address (AMBADMAADDR)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBADMAADDR_MASK_SHIFT 8
+#define GRSPWROUTER_AMBADMAADDR_MASK_MASK 0xff00U
+#define GRSPWROUTER_AMBADMAADDR_MASK_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMAADDR_MASK_MASK ) >> \
+    GRSPWROUTER_AMBADMAADDR_MASK_SHIFT )
+#define GRSPWROUTER_AMBADMAADDR_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMAADDR_MASK_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMAADDR_MASK_SHIFT ) & \
+      GRSPWROUTER_AMBADMAADDR_MASK_MASK ) )
+#define GRSPWROUTER_AMBADMAADDR_MASK( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMAADDR_MASK_SHIFT ) & \
+    GRSPWROUTER_AMBADMAADDR_MASK_MASK )
+
+#define GRSPWROUTER_AMBADMAADDR_ADDR_SHIFT 0
+#define GRSPWROUTER_AMBADMAADDR_ADDR_MASK 0xffU
+#define GRSPWROUTER_AMBADMAADDR_ADDR_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBADMAADDR_ADDR_MASK ) >> \
+    GRSPWROUTER_AMBADMAADDR_ADDR_SHIFT )
+#define GRSPWROUTER_AMBADMAADDR_ADDR_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBADMAADDR_ADDR_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBADMAADDR_ADDR_SHIFT ) & \
+      GRSPWROUTER_AMBADMAADDR_ADDR_MASK ) )
+#define GRSPWROUTER_AMBADMAADDR_ADDR( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBADMAADDR_ADDR_SHIFT ) & \
+    GRSPWROUTER_AMBADMAADDR_ADDR_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAINTCTRL \
+ *   AMBA port Distributed interrupt control (AMBAINTCTRL)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAINTCTRL_INTNUM_SHIFT 26
+#define GRSPWROUTER_AMBAINTCTRL_INTNUM_MASK 0xfc000000U
+#define GRSPWROUTER_AMBAINTCTRL_INTNUM_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTCTRL_INTNUM_MASK ) >> \
+    GRSPWROUTER_AMBAINTCTRL_INTNUM_SHIFT )
+#define GRSPWROUTER_AMBAINTCTRL_INTNUM_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTCTRL_INTNUM_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTCTRL_INTNUM_SHIFT ) & \
+      GRSPWROUTER_AMBAINTCTRL_INTNUM_MASK ) )
+#define GRSPWROUTER_AMBAINTCTRL_INTNUM( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTCTRL_INTNUM_SHIFT ) & \
+    GRSPWROUTER_AMBAINTCTRL_INTNUM_MASK )
+
+#define GRSPWROUTER_AMBAINTCTRL_EE 0x1000000U
+
+#define GRSPWROUTER_AMBAINTCTRL_IA 0x800000U
+
+#define GRSPWROUTER_AMBAINTCTRL_TQ 0x100000U
+
+#define GRSPWROUTER_AMBAINTCTRL_AQ 0x80000U
+
+#define GRSPWROUTER_AMBAINTCTRL_IQ 0x40000U
+
+#define GRSPWROUTER_AMBAINTCTRL_AA 0x8000U
+
+#define GRSPWROUTER_AMBAINTCTRL_AT 0x4000U
+
+#define GRSPWROUTER_AMBAINTCTRL_IT 0x2000U
+
+#define GRSPWROUTER_AMBAINTCTRL_ID 0x80U
+
+#define GRSPWROUTER_AMBAINTCTRL_II 0x40U
+
+#define GRSPWROUTER_AMBAINTCTRL_TXINT_SHIFT 0
+#define GRSPWROUTER_AMBAINTCTRL_TXINT_MASK 0x3fU
+#define GRSPWROUTER_AMBAINTCTRL_TXINT_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTCTRL_TXINT_MASK ) >> \
+    GRSPWROUTER_AMBAINTCTRL_TXINT_SHIFT )
+#define GRSPWROUTER_AMBAINTCTRL_TXINT_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTCTRL_TXINT_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTCTRL_TXINT_SHIFT ) & \
+      GRSPWROUTER_AMBAINTCTRL_TXINT_MASK ) )
+#define GRSPWROUTER_AMBAINTCTRL_TXINT( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTCTRL_TXINT_SHIFT ) & \
+    GRSPWROUTER_AMBAINTCTRL_TXINT_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAINTRX \
+ *   AMBA port Interrupt receive (AMBAINTRX)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAINTRX_RXIRQ_SHIFT 0
+#define GRSPWROUTER_AMBAINTRX_RXIRQ_MASK 0xffffffffU
+#define GRSPWROUTER_AMBAINTRX_RXIRQ_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTRX_RXIRQ_MASK ) >> \
+    GRSPWROUTER_AMBAINTRX_RXIRQ_SHIFT )
+#define GRSPWROUTER_AMBAINTRX_RXIRQ_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTRX_RXIRQ_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTRX_RXIRQ_SHIFT ) & \
+      GRSPWROUTER_AMBAINTRX_RXIRQ_MASK ) )
+#define GRSPWROUTER_AMBAINTRX_RXIRQ( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTRX_RXIRQ_SHIFT ) & \
+    GRSPWROUTER_AMBAINTRX_RXIRQ_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAACKRX \
+ *   AMBA port Interrupt acknowledgement / extended interrupt receive (AMBAACKRX)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAACKRX_RXACK_SHIFT 0
+#define GRSPWROUTER_AMBAACKRX_RXACK_MASK 0xffffffffU
+#define GRSPWROUTER_AMBAACKRX_RXACK_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAACKRX_RXACK_MASK ) >> \
+    GRSPWROUTER_AMBAACKRX_RXACK_SHIFT )
+#define GRSPWROUTER_AMBAACKRX_RXACK_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAACKRX_RXACK_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAACKRX_RXACK_SHIFT ) & \
+      GRSPWROUTER_AMBAACKRX_RXACK_MASK ) )
+#define GRSPWROUTER_AMBAACKRX_RXACK( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAACKRX_RXACK_SHIFT ) & \
+    GRSPWROUTER_AMBAACKRX_RXACK_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAINTTO0 \
+ *   AMBA port Interrupt timeout, interrupt 0-31 (AMBAINTTO0)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAINTTO0_INTTO_SHIFT 0
+#define GRSPWROUTER_AMBAINTTO0_INTTO_MASK 0xffffffffU
+#define GRSPWROUTER_AMBAINTTO0_INTTO_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTTO0_INTTO_MASK ) >> \
+    GRSPWROUTER_AMBAINTTO0_INTTO_SHIFT )
+#define GRSPWROUTER_AMBAINTTO0_INTTO_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTTO0_INTTO_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTTO0_INTTO_SHIFT ) & \
+      GRSPWROUTER_AMBAINTTO0_INTTO_MASK ) )
+#define GRSPWROUTER_AMBAINTTO0_INTTO( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTTO0_INTTO_SHIFT ) & \
+    GRSPWROUTER_AMBAINTTO0_INTTO_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAINTTO1 \
+ *   AMBA port Interrupt timeout, interrupt 32-63 (AMBAINTTO1)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAINTTO1_INTTO_SHIFT 0
+#define GRSPWROUTER_AMBAINTTO1_INTTO_MASK 0xffffffffU
+#define GRSPWROUTER_AMBAINTTO1_INTTO_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTTO1_INTTO_MASK ) >> \
+    GRSPWROUTER_AMBAINTTO1_INTTO_SHIFT )
+#define GRSPWROUTER_AMBAINTTO1_INTTO_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTTO1_INTTO_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTTO1_INTTO_SHIFT ) & \
+      GRSPWROUTER_AMBAINTTO1_INTTO_MASK ) )
+#define GRSPWROUTER_AMBAINTTO1_INTTO( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTTO1_INTTO_SHIFT ) & \
+    GRSPWROUTER_AMBAINTTO1_INTTO_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAINTMSK0 \
+ *   AMBA port Interrupt mask, interrupt 0-31 (AMBAINTMSK0)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAINTMSK0_MASK_SHIFT 0
+#define GRSPWROUTER_AMBAINTMSK0_MASK_MASK 0xffffffffU
+#define GRSPWROUTER_AMBAINTMSK0_MASK_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTMSK0_MASK_MASK ) >> \
+    GRSPWROUTER_AMBAINTMSK0_MASK_SHIFT )
+#define GRSPWROUTER_AMBAINTMSK0_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTMSK0_MASK_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTMSK0_MASK_SHIFT ) & \
+      GRSPWROUTER_AMBAINTMSK0_MASK_MASK ) )
+#define GRSPWROUTER_AMBAINTMSK0_MASK( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTMSK0_MASK_SHIFT ) & \
+    GRSPWROUTER_AMBAINTMSK0_MASK_MASK )
+
+/** @} */
+
+/**
+ * @defgroup RTEMSDeviceGRSPWROUTERAMBAINTMSK1 \
+ *   AMBA port Interrupt mask, interrupt 32-63 (AMBAINTMSK1)
+ *
+ * @brief This group contains register bit definitions.
+ *
+ * @{
+ */
+
+#define GRSPWROUTER_AMBAINTMSK1_MASK_SHIFT 0
+#define GRSPWROUTER_AMBAINTMSK1_MASK_MASK 0xffffffffU
+#define GRSPWROUTER_AMBAINTMSK1_MASK_GET( _reg ) \
+  ( ( ( _reg ) & GRSPWROUTER_AMBAINTMSK1_MASK_MASK ) >> \
+    GRSPWROUTER_AMBAINTMSK1_MASK_SHIFT )
+#define GRSPWROUTER_AMBAINTMSK1_MASK_SET( _reg, _val ) \
+  ( ( ( _reg ) & ~GRSPWROUTER_AMBAINTMSK1_MASK_MASK ) | \
+    ( ( ( _val ) << GRSPWROUTER_AMBAINTMSK1_MASK_SHIFT ) & \
+      GRSPWROUTER_AMBAINTMSK1_MASK_MASK ) )
+#define GRSPWROUTER_AMBAINTMSK1_MASK( _val ) \
+  ( ( ( _val ) << GRSPWROUTER_AMBAINTMSK1_MASK_SHIFT ) & \
+    GRSPWROUTER_AMBAINTMSK1_MASK_MASK )
+
+/** @} */
+
+/**
+ * @brief This structure defines the GRSPWROUTER register block memory map.
+ */
+typedef struct grspwrouter {
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBACTRL.
+   */
+  uint32_t ambactrl;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBASTS.
+   */
+  uint32_t ambasts;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADEFADDR.
+   */
+  uint32_t ambadefaddr;
+
+  uint32_t reserved_c_10;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADKEY.
+   */
+  uint32_t ambadkey;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBATC.
+   */
+  uint32_t ambatc;
+
+  uint32_t reserved_18_20[ 2 ];
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMACTRL.
+   */
+  uint32_t ambadmactrl_0;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAMAXLEN.
+   */
+  uint32_t ambadmamaxlen_0;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMATXDESC.
+   */
+  uint32_t ambadmatxdesc_0;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMARXDESC.
+   */
+  uint32_t ambadmarxdesc_0;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAADDR.
+   */
+  uint32_t ambadmaaddr_0;
+
+  uint32_t reserved_34_40[ 3 ];
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMACTRL.
+   */
+  uint32_t ambadmactrl_1;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAMAXLEN.
+   */
+  uint32_t ambadmamaxlen_1;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMATXDESC.
+   */
+  uint32_t ambadmatxdesc_1;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMARXDESC.
+   */
+  uint32_t ambadmarxdesc_1;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAADDR.
+   */
+  uint32_t ambadmaaddr_1;
+
+  uint32_t reserved_54_60[ 3 ];
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMACTRL.
+   */
+  uint32_t ambadmactrl_2;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAMAXLEN.
+   */
+  uint32_t ambadmamaxlen_2;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMATXDESC.
+   */
+  uint32_t ambadmatxdesc_2;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMARXDESC.
+   */
+  uint32_t ambadmarxdesc_2;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAADDR.
+   */
+  uint32_t ambadmaaddr_2;
+
+  uint32_t reserved_74_80[ 3 ];
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMACTRL.
+   */
+  uint32_t ambadmactrl_3;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAMAXLEN.
+   */
+  uint32_t ambadmamaxlen_3;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMATXDESC.
+   */
+  uint32_t ambadmatxdesc_3;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMARXDESC.
+   */
+  uint32_t ambadmarxdesc_3;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBADMAADDR.
+   */
+  uint32_t ambadmaaddr_3;
+
+  uint32_t reserved_94_a0[ 3 ];
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAINTCTRL.
+   */
+  uint32_t ambaintctrl;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAINTRX.
+   */
+  uint32_t ambaintrx;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAACKRX.
+   */
+  uint32_t ambaackrx;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAINTTO0.
+   */
+  uint32_t ambaintto0;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAINTTO1.
+   */
+  uint32_t ambaintto1;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAINTMSK0.
+   */
+  uint32_t ambaintmsk0;
+
+  /**
+   * @brief See @ref RTEMSDeviceGRSPWROUTERAMBAINTMSK1.
+   */
+  uint32_t ambaintmsk1;
+} grspwrouter;
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _GRLIB_GRSPWROUTER_REGS_H */
