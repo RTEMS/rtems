@@ -38,7 +38,6 @@
 #include "config.h"
 #endif
 
-#include <sys/stat.h>
 #include <rtems/libio_.h>
 
 #include <fcntl.h>
