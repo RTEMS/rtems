@@ -36,6 +36,8 @@
 
 #include <tmacros.h>
 
+PER_CPU_DATA_NEED_INITIALIZATION();
+
 static PER_CPU_DATA_ITEM(int, i) = 123;
 
 const char rtems_test_name[] = "SMPFATAL 9";

@@ -840,6 +840,7 @@ librtemscpu_a_SOURCES += score/src/coremsgwkspace.c
 librtemscpu_a_SOURCES += score/src/coremutexseize.c
 librtemscpu_a_SOURCES += score/src/percpu.c
 librtemscpu_a_SOURCES += score/src/percpuasm.c
+librtemscpu_a_SOURCES += score/src/percpudata.c
 librtemscpu_a_SOURCES += score/src/corerwlock.c
 librtemscpu_a_SOURCES += score/src/corerwlockobtainread.c
 librtemscpu_a_SOURCES += score/src/corerwlockobtainwrite.c

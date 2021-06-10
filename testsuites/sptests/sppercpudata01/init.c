@@ -25,6 +25,8 @@
 
 const char rtems_test_name[] = "SPPERCPUDATA 1";
 
+PER_CPU_DATA_NEED_INITIALIZATION();
+
 static RTEMS_ALIGNED(CPU_HEAP_ALIGNMENT)
   PER_CPU_DATA_ITEM(unsigned char, c) = 1;
 

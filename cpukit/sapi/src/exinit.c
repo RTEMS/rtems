@@ -32,7 +32,6 @@
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/percpudata.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/smpimpl.h>
@@ -57,18 +56,6 @@ _Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
   &_RTEMS_Objects[ 0 ],
   &_POSIX_Objects[ 0 ]
 };
-
-RTEMS_LINKER_RWSET(
-  _Per_CPU_Data,
-#if defined(RTEMS_SMP)
-  /*
-   * In SMP configurations, prevent false cache line sharing of per-processor
-   * data with a proper alignment.
-   */
-  RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
-#endif
-  char
-);
 
 static void rtems_initialize_data_structures(void)
 {

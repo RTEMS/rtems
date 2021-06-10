@@ -1454,6 +1454,7 @@ source:
 - cpukit/score/src/once.c
 - cpukit/score/src/percpu.c
 - cpukit/score/src/percpuasm.c
+- cpukit/score/src/percpudata.c
 - cpukit/score/src/pheapallocate.c
 - cpukit/score/src/pheapextend.c
 - cpukit/score/src/pheapfree.c

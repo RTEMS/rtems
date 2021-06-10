@@ -51,6 +51,20 @@ extern "C" {
 RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
 
 /**
+ * @brief Translation units which define per-CPU items shall call this macro
+ *   exactly once at file scope.
+ */
+#ifdef RTEMS_SMP
+#define PER_CPU_DATA_NEED_INITIALIZATION() \
+  static const char * const _Per_CPU_Data_reference \
+  RTEMS_SECTION( ".rtemsroset.reference" ) RTEMS_USED = \
+  RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data )
+#else
+#define PER_CPU_DATA_NEED_INITIALIZATION() \
+  RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char )
+#endif
+
+/**
  * @brief Declares a per-CPU item of the specified type.
  *
  * Items declared with this macro have external linkage.

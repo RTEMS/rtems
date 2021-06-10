@@ -27,14 +27,9 @@
 
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/memory.h>
-#include <rtems/score/percpudata.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/config.h>
-#include <rtems/sysinit.h>
-
-#include <string.h>
 
 #if CPU_USE_DEFERRED_FP_SWITCH == TRUE
   #error "deferred FP switch not implemented for SMP"
@@ -264,40 +259,3 @@ void _SMP_Send_message_multicast(
     }
   }
 }
-
-static void _Per_CPU_Data_initialize( void )
-{
-  uintptr_t size;
-
-  size = RTEMS_LINKER_SET_SIZE( _Per_CPU_Data );
-
-  if ( size > 0 ) {
-    const Memory_Information *mem;
-    Per_CPU_Control          *cpu;
-    uint32_t                  cpu_index;
-    uint32_t                  cpu_max;
-
-    mem = _Memory_Get();
-    cpu = _Per_CPU_Get_by_index( 0 );
-    cpu->data = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data );
-
-    cpu_max = rtems_configuration_get_maximum_processors();
-
-    for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
-      cpu = _Per_CPU_Get_by_index( cpu_index );
-      cpu->data = _Memory_Allocate( mem, size, CPU_CACHE_LINE_BYTES );
-
-      if( cpu->data == NULL ) {
-        _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA );
-      }
-
-      memcpy( cpu->data, RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ), size);
-    }
-  }
-}
-
-RTEMS_SYSINIT_ITEM(
-  _Per_CPU_Data_initialize,
-  RTEMS_SYSINIT_PER_CPU_DATA,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
