@@ -45,17 +45,6 @@
 #include <grlib/ambapp.h>
 #include <grlib/grlib.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* The AMBA Plug&Play info of the bus that the LEON3 sits on */
-extern struct ambapp_bus ambapp_plb;
-
-#ifdef __cplusplus
-}
-#endif
-
 /** @} */
 
 #endif /* __AMBA_H__ */

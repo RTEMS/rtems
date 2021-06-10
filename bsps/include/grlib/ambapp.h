@@ -188,6 +188,11 @@ struct ambapp_context {
   void *(*alloc)(size_t);
 };
 
+/**
+ * @brief Gets the fully scanned AMBA Plug & Play Processor Local Bus (PLB).
+ */
+extern struct ambapp_bus *ambapp_plb(void);
+
 /* Scan a AMBA Plug & Play bus and create all device structures describing the 
  * the devices. The devices will form a tree, where every node describes one
  * interface. The resulting tree is placed in the location pointed to by root.

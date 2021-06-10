@@ -42,7 +42,7 @@ void irqmp_initialize(void)
   struct ambapp_dev *adev;
 
   /* Find GRLIB Interrupt controller */
-  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+  adev = (void *)ambapp_for_each(ambapp_plb(), (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_IRQMP,
                                  ambapp_find_by_idx, NULL);
   if (adev != NULL) {
@@ -89,7 +89,7 @@ void gptimer_initialize(void)
   struct ambapp_dev *adev;
 
   /* find GP Timer */
-  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+  adev = (void *)ambapp_for_each(ambapp_plb(), (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
                                  ambapp_find_by_idx, &grlib_timer_core_index);
   if (adev) {
@@ -98,7 +98,7 @@ void gptimer_initialize(void)
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(
-      &ambapp_plb,
+      ambapp_plb(),
       GRLIB_Timer_Adev,
       (GRLIB_Timer_Regs->scaler_reload + 1)
         * GRLIB_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER

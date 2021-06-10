@@ -69,9 +69,6 @@
 extern "C" {
 #endif
 
-/* The AMBA Plug&Play info of the bus that the cpu sits on */
-extern struct ambapp_bus ambapp_plb;
-
 extern uint32_t GRLIB_Cpu_Index;
 extern const unsigned char GRLIB_mp_irq;
 
@@ -89,7 +86,7 @@ static inline uint32_t grlib_up_counter_frequency(void)
    * For simplicity, assume that the interrupt controller uses the processor
    * clock.  This is at least true on the GR740.
    */
-  return ambapp_freq_get(&ambapp_plb, GRLIB_IrqCtrl_Adev);
+  return ambapp_freq_get(ambapp_plb(), GRLIB_IrqCtrl_Adev);
 }
 
 extern rtems_interrupt_lock GRLIB_IrqCtrl_Lock;

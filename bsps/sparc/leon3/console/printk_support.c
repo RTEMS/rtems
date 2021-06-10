@@ -85,7 +85,7 @@ static void bsp_debug_uart_init(void)
 
   /* Find APBUART core for System Debug Console */
   i = leon3_debug_uart_index;
-  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+  adev = (void *)ambapp_for_each(ambapp_plb(), (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_APBUART,
                                  ambapp_find_by_idx, (void *)&i);
   if (adev != NULL) {

@@ -585,7 +585,7 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
 	strcpy(fs_name, SATCAN_DEVNAME);
 
 	/* Find core and initialize register pointer */
-	if (!ambapp_find_ahbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_SATCAN, &d)) {
+	if (!ambapp_find_ahbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_SATCAN, &d)) {
 		printk("SatCAN: Failed to find SatCAN core\n\r");
 		return -1;
 	}

@@ -132,7 +132,7 @@ static rtems_device_driver canmux_initialize(rtems_device_major_number major, rt
 	strcpy(fs_name, CANMUX_DEVNAME);
 	
 	/* Find core and initialize register pointer */
-	if (!ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_CANMUX, &d)) {
+	if (!ambapp_find_apbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_CANMUX, &d)) {
 		printk("CAN_MUX: Failed to find CAN_MUX core\n\r");
 		return -1;
 	}

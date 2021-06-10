@@ -157,8 +157,6 @@ RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
 
 #endif
 
-extern struct ambapp_bus ambapp_plb;
-
 #ifdef __cplusplus
 }
 #endif

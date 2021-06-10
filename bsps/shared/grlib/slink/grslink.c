@@ -181,7 +181,7 @@ static int SLINK_getaddr(int *base, int *irq)
 {	
 	struct ambapp_apb_info c;
 
-	if (ambapp_find_apbslv(&ambapp_plb,VENDOR_GAISLER,GAISLER_SLINK,&c) == 1) {
+	if (ambapp_find_apbslv(ambapp_plb(),VENDOR_GAISLER,GAISLER_SLINK,&c) == 1) {
 		*base = c.start;
 		*irq = c.common.irq;
 		return 0;
@@ -215,7 +215,7 @@ static int SLINK_getsysfreq(void)
 	struct ambapp_apb_info t;
 	struct gptimer_regs *tregs;
 		
-	if (ambapp_find_apbslv(&ambapp_plb,VENDOR_GAISLER,GAISLER_GPTIMER,&t)==1) {
+	if (ambapp_find_apbslv(ambapp_plb(),VENDOR_GAISLER,GAISLER_GPTIMER,&t)==1) {
 		tregs = (struct gptimer_regs *)t.start;
 		DBG("SLINK_getsysfreq returning %d\n", 
 		    (tregs->scaler_reload+1)*1000*1000);

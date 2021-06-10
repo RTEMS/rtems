@@ -31,7 +31,7 @@ static inline volatile struct l2c_regs *get_l2c_regs(void)
   struct ambapp_dev *adev;
 
   adev = (void *) ambapp_for_each(
-    &ambapp_plb,
+    ambapp_plb(),
     OPTIONS_ALL | OPTIONS_AHB_SLVS,
     VENDOR_GAISLER,
     GAISLER_L2CACHE,

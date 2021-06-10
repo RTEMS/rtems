@@ -53,14 +53,26 @@ void bsp_start(void)
 #endif
 }
 
-void amba_initialize(void);
-struct ambapp_bus ambapp_plb;
+static struct ambapp_bus ambapp_plb_instance;
 
-void amba_initialize(void)
+struct ambapp_bus *ambapp_plb( void )
 {
-  ambapp_scan(&ambapp_plb, GRLIB_IO_AREA, NULL, NULL);
-  gptimer_initialize();
-  irqmp_initialize();
+  struct ambapp_bus *plb;
+
+  plb = &ambapp_plb_instance;
+
+  if ( plb->root == NULL ) {
+    ambapp_scan( plb, GRLIB_IO_AREA, NULL, NULL );
+    gptimer_initialize();
+    irqmp_initialize();
+  }
+
+  return plb;
+}
+
+static void amba_initialize( void )
+{
+  (void) ambapp_plb();
 }
 
 RTEMS_SYSINIT_ITEM(

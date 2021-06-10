@@ -52,7 +52,7 @@ static void leon3_counter_initialize(void)
     /* Enable interrupt timestamping for an arbitrary interrupt line */
     irqmp_ts->control = 0x1;
 
-    leon3_counter_frequency = ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev);
+    leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
   } else if (gpt != NULL) {
     /* Fall back to the first GPTIMER if available */
     counter->read_isr_disabled = _SPARC_Counter_read_down;
@@ -65,7 +65,7 @@ static void leon3_counter_initialize(void)
                                                     GPTIMER_TIMER_CTRL_RS |
                                                     GPTIMER_TIMER_CTRL_LD;
 
-    leon3_counter_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev) /
+    leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
       (gpt->scaler_reload + 1);
   }
 }

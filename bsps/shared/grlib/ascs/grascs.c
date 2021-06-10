@@ -72,7 +72,7 @@ static int ASCS_get_addr(int *base, int *irq) {
 
   struct ambapp_apb_info core;
   
-  if(ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_ASCS, &core) == 1) {
+  if(ambapp_find_apbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_ASCS, &core) == 1) {
     *base = core.start;
     *irq = core.common.irq;
     DBG("ASCS_get_addr: Registerd ASCS core at 0x%x with irq %i\n",core.start, core.irq);
@@ -108,7 +108,7 @@ static int ASCS_get_sysfreq(void) {
   struct gptimer_regs *tregs;
   int tmp;
 
-  if(ambapp_find_apbslv(&ambapp_plb, VENDOR_GAISLER, GAISLER_GPTIMER, &gpt) == 1) {
+  if(ambapp_find_apbslv(ambapp_plb(), VENDOR_GAISLER, GAISLER_GPTIMER, &gpt) == 1) {
     tregs = (struct gptimer_regs *) gpt.start;
     tmp = (tregs->scaler_reload + 1)*1000;
     DBG("ASCS_get_sysfreq: Detected system frequency %i kHz\n",tmp);

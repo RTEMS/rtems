@@ -15,7 +15,10 @@
 #include <bsp/fatal.h>
 #include <leon.h>
 #include <grlib/ambapp.h>
+#include <rtems/score/memory.h>
 #include <rtems/sysinit.h>
+
+#include <string.h>
 
 unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
 int leon3_timer_core_index __attribute__((weak)) = 0;
@@ -25,7 +28,35 @@ int leon3_timer_core_index __attribute__((weak)) = 0;
  * After software has scanned AMBA PnP it builds a tree to make
  * it easier for drivers to work with the bus architecture.
  */
-struct ambapp_bus ambapp_plb;
+static struct ambapp_bus ambapp_plb_instance;
+
+static void *ambapp_plb_alloc( size_t size )
+{
+  return _Memory_Allocate( _Memory_Get(), size, CPU_HEAP_ALIGNMENT );
+}
+
+struct ambapp_bus *ambapp_plb( void )
+{
+  struct ambapp_bus *plb;
+
+  plb = &ambapp_plb_instance;
+
+  if ( plb->root == NULL ) {
+    struct ambapp_context ctx;
+
+    ctx.copy_from_device = (ambapp_memcpy_t) memcpy;
+    ctx.alloc = ambapp_plb_alloc;
+
+    /* Scan AMBA Plug&Play read-only information. The routine builds a PnP
+     * tree into ambapp_plb in RAM, after this we never access the PnP
+     * information in hardware directly any more.
+     * Since on Processor Local Bus (PLB) memory mapping is 1:1
+     */
+    ambapp_scan( plb, LEON3_IO_AREA, &ctx, NULL );
+  }
+
+  return plb;
+}
 
 /* If RTEMS_DRVMGR_STARTUP is defined extra code is added that
  * registers the GRLIB AMBA PnP bus driver as root driver.
@@ -48,10 +79,20 @@ struct drvmgr_bus_res grlib_drv_resources __attribute__((weak)) =
 };
 
 /* GRLIB AMBA bus configuration (the LEON3 root bus configuration) */
-struct grlib_config grlib_bus_config =
+struct grlib_config grlib_bus_config;
+
+static void ambapp_grlib_root_initialize( void )
 {
-  &ambapp_plb,              /* AMBAPP bus setup */
-  &grlib_drv_resources,     /* Driver configuration */
+  /* Register Root bus, Use GRLIB AMBA PnP bus as root bus for LEON3 */
+  grlib_bus_config.abus = ambapp_plb();
+  grlib_bus_config.resources = &grlib_drv_resources;
+  ambapp_grlib_root_register(&grlib_bus_config);
+}
+
+RTEMS_SYSINIT_ITEM(
+  ambapp_grlib_root_initialize,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_SECOND
 };
 #endif
 
@@ -78,16 +119,12 @@ static void amba_initialize(void)
 {
   int icsel;
   struct ambapp_dev *adev;
+  struct ambapp_bus *plb;
 
-  /* Scan AMBA Plug&Play read-only information. The routine builds a PnP
-   * tree into ambapp_plb in RAM, after this we never access the PnP
-   * information in hardware directly any more.
-   * Since on Processor Local Bus (PLB) memory mapping is 1:1
-   */
-  ambapp_scan(&ambapp_plb, LEON3_IO_AREA, NULL, NULL);
+  plb = ambapp_plb();
 
   /* Find LEON3 Interrupt controller */
-  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+  adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_IRQMP,
                                  ambapp_find_by_idx, NULL);
   if (adev == NULL) {
@@ -118,7 +155,7 @@ static void amba_initialize(void)
   leon3_ext_irq_init();
 
   /* find GP Timer */
-  adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
+  adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
                                  ambapp_find_by_idx, &leon3_timer_core_index);
   if (adev) {
@@ -127,7 +164,7 @@ static void amba_initialize(void)
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(
-      &ambapp_plb,
+      plb,
       LEON3_Timer_Adev,
       (LEON3_Timer_Regs->scaler_reload + 1)
         * LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
@@ -140,15 +177,10 @@ static void amba_initialize(void)
     if (leon3_timer_prescaler)
       LEON3_Timer_Regs->scaler_reload = leon3_timer_prescaler;
   }
-
-#ifdef RTEMS_DRVMGR_STARTUP
-  /* Register Root bus, Use GRLIB AMBA PnP bus as root bus for LEON3 */
-  ambapp_grlib_root_register(&grlib_bus_config);
-#endif
 }
 
 RTEMS_SYSINIT_ITEM(
   amba_initialize,
-  RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_SECOND
+  RTEMS_SYSINIT_BSP_EARLY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
 );

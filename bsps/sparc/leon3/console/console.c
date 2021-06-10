@@ -66,7 +66,7 @@ static int find_matching_apbuart(struct ambapp_dev *dev, int index, void *arg)
   /* Get APBUART core frequency, it is assumed that it is the same
    * as Bus frequency where the UART is situated
    */
-  apbuarts[uarts].freq_hz = ambapp_freq_get(&ambapp_plb, dev);
+  apbuarts[uarts].freq_hz = ambapp_freq_get(ambapp_plb(), dev);
   uarts++;
 
   if (uarts >= BSP_NUMBER_OF_TERMIOS_PORTS)
@@ -81,7 +81,7 @@ static void leon3_console_scan_uarts(void)
   memset(apbuarts, 0, sizeof(apbuarts));
 
   /* Find APBUART cores */
-  ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS), VENDOR_GAISLER,
+  ambapp_for_each(ambapp_plb(), (OPTIONS_ALL|OPTIONS_APB_SLVS), VENDOR_GAISLER,
                   GAISLER_APBUART, find_matching_apbuart, NULL);
 }
 
