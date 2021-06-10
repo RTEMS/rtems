@@ -62,11 +62,9 @@ extern "C" {
 #define APBUART_STATUS_TF 0x200
 #define APBUART_STATUS_RF 0x400
 
-void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int wait_sent
-);
+void apbuart_outbyte_wait(const struct apbuart_regs *regs);
+
+void apbuart_outbyte_polled(struct apbuart_regs *regs, unsigned char ch);
 
 int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 

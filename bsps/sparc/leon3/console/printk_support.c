@@ -34,7 +34,8 @@ static void bsp_debug_uart_discard(char c)
 
 static void bsp_debug_uart_output_char(char c)
 {
-  apbuart_outbyte_polled(leon3_debug_uart, c, 1);
+  apbuart_outbyte_polled(leon3_debug_uart, c);
+  apbuart_outbyte_wait(leon3_debug_uart);
 }
 
 static int bsp_debug_uart_poll_char(void)

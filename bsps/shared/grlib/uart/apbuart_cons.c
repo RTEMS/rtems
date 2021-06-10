@@ -641,7 +641,7 @@ static void write_polled(
 	int nwrite = 0;
 
 	while (nwrite < len) {
-		apbuart_outbyte_polled(uart->regs, *buf++, 0);
+		apbuart_outbyte_polled(uart->regs, *buf++);
 		nwrite++;
 	}
 }

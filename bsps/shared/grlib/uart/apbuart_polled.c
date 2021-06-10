@@ -9,27 +9,27 @@
 
 #include <grlib/apbuart.h>
 
-void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int wait_sent
-)
+#include <rtems/score/cpuimpl.h>
+
+void apbuart_outbyte_wait(const struct apbuart_regs *regs)
 {
   while ( (regs->status & APBUART_STATUS_TE) == 0 ) {
     /* Lower bus utilization while waiting for UART */
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
+    _CPU_Instruction_no_operation();
   }
+}
 
+void apbuart_outbyte_polled(struct apbuart_regs *regs, char ch)
+{
+  apbuart_outbyte_wait(regs);
   regs->data = (unsigned int) ch;
-
-  /* Wait until the character has been sent? */
-  if (wait_sent) {
-    while ((regs->status & APBUART_STATUS_TE) == 0)
-      ;
-  }
 }
 
 int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)

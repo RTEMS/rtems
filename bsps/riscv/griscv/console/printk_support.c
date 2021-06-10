@@ -100,7 +100,8 @@ static void bsp_out_char(char c)
     */
   }
 
-  apbuart_outbyte_polled(grlib_debug_uart, c, 1);
+  apbuart_outbyte_polled(grlib_debug_uart, c);
+  apbuart_outbyte_wait(grlib_debug_uart);
 }
 
 /*
