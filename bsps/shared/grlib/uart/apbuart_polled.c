@@ -12,11 +12,9 @@
 void apbuart_outbyte_polled(
   struct apbuart_regs *regs,
   unsigned char ch,
-  int do_cr_on_newline,
   int wait_sent
 )
 {
-send:
   while ( (regs->status & APBUART_STATUS_TE) == 0 ) {
     /* Lower bus utilization while waiting for UART */
     __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
@@ -25,11 +23,6 @@ send:
     __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
   }
 
-  if ((ch == '\n') && do_cr_on_newline) {
-    regs->data = (unsigned int) '\r';
-    do_cr_on_newline = 0;
-    goto send;
-  }
   regs->data = (unsigned int) ch;
 
   /* Wait until the character has been sent? */

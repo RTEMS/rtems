@@ -65,7 +65,6 @@ extern "C" {
 void apbuart_outbyte_polled(
   struct apbuart_regs *regs,
   unsigned char ch,
-  int do_cr_on_newline,
   int wait_sent
 );
 
