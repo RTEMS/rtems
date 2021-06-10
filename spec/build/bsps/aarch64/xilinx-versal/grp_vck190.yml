@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: group
+copyrights:
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+enabled-by: true
+includes: []
+install: []
+ldflags: []
+links:
+- role: build-dependency
+  uid: grp
+- role: build-dependency
+  uid: ../../optstarthyp
+- role: build-dependency
+  uid: tstvck190
+type: build
+use-after: []
+use-before: []
