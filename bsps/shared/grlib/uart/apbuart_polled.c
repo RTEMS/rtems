@@ -35,11 +35,11 @@ void apbuart_outbyte_polled(struct apbuart_regs *regs, char ch)
 int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)
 {
   /* Clear errors */
-  if (regs->status & APBUART_STATUS_ERR)
-    regs->status = ~APBUART_STATUS_ERR;
+  regs->status = ~APBUART_STATUS_ERR;
 
-  if ((regs->status & APBUART_STATUS_DR) == 0)
+  if ((regs->status & APBUART_STATUS_DR) == 0) {
     return -1;
-  else
-    return (int) regs->data;
+  }
+
+  return (uint8_t) regs->data;
 }
