@@ -25,23 +25,7 @@
 int leon3_debug_uart_index __attribute__((weak)) = 0;
 struct apbuart_regs *leon3_debug_uart = NULL;
 
-/*
- * Before UART driver is available, use the idle stack to buffer early uses of
- * printk().
- */
-static size_t bsp_debug_uart_pre_init_buf_index;
-
-static void bsp_debug_uart_pre_init_out(char c)
-{
-  size_t i;
-
-  i = bsp_debug_uart_pre_init_buf_index;
-
-  if (i < _Thread_Idle_stack_size) {
-    bsp_debug_uart_pre_init_buf_index = i + 1;
-    _Thread_Idle_stacks[i] = c;
-  }
-}
+static void bsp_debug_uart_init(void);
 
 static void bsp_debug_uart_discard(char c)
 {
@@ -58,6 +42,12 @@ static int bsp_debug_uart_poll_char(void)
   return apbuart_inbyte_nonblocking(leon3_debug_uart);
 }
 
+static void bsp_debug_uart_pre_init_out(char c)
+{
+  bsp_debug_uart_init();
+  (*BSP_output_char)(c);
+}
+
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
  */
@@ -65,7 +55,12 @@ static void bsp_debug_uart_init(void)
 {
   int i;
   struct ambapp_dev *adev;
-  struct ambapp_apb_info *apb;
+
+  if ( BSP_output_char != bsp_debug_uart_pre_init_out ) {
+    return;
+  }
+
+  BSP_output_char = bsp_debug_uart_discard;
 
   /* Update leon3_debug_uart_index to index used as debug console. Let user
    * select Debug console by setting leon3_debug_uart_index. If the BSP is to
@@ -89,8 +84,7 @@ static void bsp_debug_uart_init(void)
                                  VENDOR_GAISLER, GAISLER_APBUART,
                                  ambapp_find_by_idx, (void *)&i);
   if (adev != NULL) {
-    size_t i;
-    size_t n;
+    struct ambapp_apb_info *apb;
 
     /*
      * Found a matching debug console, initialize debug UART if present for
@@ -103,14 +97,6 @@ static void bsp_debug_uart_init(void)
 
     BSP_poll_char = bsp_debug_uart_poll_char;
     BSP_output_char = bsp_debug_uart_output_char;
-
-    n = bsp_debug_uart_pre_init_buf_index;
-
-    for (i = 0; i < n; ++i) {
-      rtems_putc(_Thread_Idle_stacks[i]);
-    }
-  } else {
-    BSP_output_char = bsp_debug_uart_discard;
   }
 }
 
