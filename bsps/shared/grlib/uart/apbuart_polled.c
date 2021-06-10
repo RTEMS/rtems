@@ -29,7 +29,7 @@ void apbuart_outbyte_wait(const struct apbuart_regs *regs)
 void apbuart_outbyte_polled(struct apbuart_regs *regs, char ch)
 {
   apbuart_outbyte_wait(regs);
-  regs->data = (unsigned int) ch;
+  regs->data = (uint8_t) ch;
 }
 
 int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)

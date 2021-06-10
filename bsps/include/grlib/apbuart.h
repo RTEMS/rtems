@@ -64,7 +64,7 @@ extern "C" {
 
 void apbuart_outbyte_wait(const struct apbuart_regs *regs);
 
-void apbuart_outbyte_polled(struct apbuart_regs *regs, unsigned char ch);
+void apbuart_outbyte_polled(struct apbuart_regs *regs, char ch);
 
 int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 
