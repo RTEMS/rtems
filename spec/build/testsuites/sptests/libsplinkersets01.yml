@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: library
+cflags: []
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install: []
+install-path: null
+links: []
+source:
+- testsuites/sptests/splinkersets01/content.c
+- testsuites/sptests/splinkersets01/item-a.c
+- testsuites/sptests/splinkersets01/item-ca.c
+- testsuites/sptests/splinkersets01/sets.c
+target: splinkersets01
+type: build

@@ -1943,7 +1943,9 @@ endif
 if TEST_splinkersets01
 sp_libs += libsplinkersets01.a
 libsplinkersets01_a_SOURCES = splinkersets01/sets.c \
-	splinkersets01/items.c
+	splinkersets01/content.c \
+	splinkersets01/item-a.c \
+	splinkersets01/item-ca.c
 endif
 
 noinst_PROGRAMS = $(sp_tests)

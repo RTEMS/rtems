@@ -13,6 +13,8 @@ ldflags:
 - -Wl,--wrap=puts
 links:
 - role: build-dependency
+  uid: libsplinkersets01
+- role: build-dependency
   uid: sp01
 - role: build-dependency
   uid: sp02
