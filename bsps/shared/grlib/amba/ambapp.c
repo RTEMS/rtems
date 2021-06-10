@@ -23,7 +23,8 @@
 #define AMBA_APB_SLAVES 16
 
 /* Allocate one AMBA device */
-static struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
+static struct ambapp_dev *
+ambapp_alloc_dev_struct(const struct ambapp_context *ctx, int dev_type)
 {
   struct ambapp_dev *dev;
   size_t size = sizeof(*dev);
@@ -32,9 +33,11 @@ static struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
     size += sizeof(struct ambapp_apb_info);
   else
     size += sizeof(struct ambapp_ahb_info); /* AHB */
-  dev = grlib_calloc(1, size);
-  if (dev != NULL)
+  dev = (*ctx->alloc)(size);
+  if (dev != NULL) {
+    dev = memset(dev, 0, size);
     dev->dev_type = dev_type;
+  }
   return dev;
 }
 
@@ -145,7 +148,7 @@ static int ambapp_add_ahbbus(
 static int ambapp_scan2(
   struct ambapp_bus *abus,
   unsigned int ioarea,
-  ambapp_memcpy_t memfunc,
+  const struct ambapp_context *ctx,
   struct ambapp_dev *parent,
   struct ambapp_dev **root
   )
@@ -176,12 +179,12 @@ static int ambapp_scan2(
   /* AHB MASTERS */
   ahb = (struct ambapp_pnp_ahb *) (ioarea | AMBA_CONF_AREA);
   for (i = 0; i < maxloops; i++, ahb++) {
-    memfunc(&ahb_buf, ahb, sizeof(struct ambapp_pnp_ahb), abus);
+    (*ctx->copy_from_device)(&ahb_buf, ahb, sizeof(struct ambapp_pnp_ahb), abus);
     if (ahb_buf.id == 0)
       continue;
 
     /* An AHB device present here */
-    dev = ambapp_alloc_dev_struct(DEV_AHB_MST);
+    dev = ambapp_alloc_dev_struct(ctx, DEV_AHB_MST);
     if (!dev)
       return -1;
 
@@ -200,12 +203,12 @@ static int ambapp_scan2(
   ahb = (struct ambapp_pnp_ahb *)
     (ioarea | AMBA_CONF_AREA | AMBA_AHB_SLAVE_CONF_AREA);
   for (i = 0; i < maxloops; i++, ahb++) {
-    memfunc(&ahb_buf, ahb, sizeof(struct ambapp_pnp_ahb), abus);
+    (*ctx->copy_from_device)(&ahb_buf, ahb, sizeof(struct ambapp_pnp_ahb), abus);
     if (ahb_buf.id == 0)
       continue;
 
     /* An AHB device present here */
-    dev = ambapp_alloc_dev_struct(DEV_AHB_SLV);
+    dev = ambapp_alloc_dev_struct(ctx, DEV_AHB_SLV);
     if (!dev)
       return -1;
 
@@ -235,7 +238,7 @@ static int ambapp_scan2(
         bridge_adr = ambapp_addr_from(abus->mmaps,
               ahb_info->custom[1]);
         /* Scan next bus if not already scanned */
-        if (ambapp_scan2(abus, bridge_adr, memfunc, dev,
+        if (ambapp_scan2(abus, bridge_adr, ctx, dev,
             &dev->children))
           return -1;
       }
@@ -251,11 +254,11 @@ static int ambapp_scan2(
       apb = (struct ambapp_pnp_apb *)
         (apbbase | AMBA_CONF_AREA);
       for (j=0; j<AMBA_APB_SLAVES; j++, apb++) {
-        memfunc(&apb_buf, apb, sizeof(*apb), abus);
+        (*ctx->copy_from_device)(&apb_buf, apb, sizeof(*apb), abus);
         if (apb_buf.id == 0)
           continue;
 
-        apbdev = ambapp_alloc_dev_struct(DEV_APB_SLV);
+        apbdev = ambapp_alloc_dev_struct(ctx, DEV_APB_SLV);
         if (!apbdev)
           return -1;
 
@@ -279,22 +282,28 @@ static int ambapp_scan2(
   return 0;
 }
 
+static const struct ambapp_context default_ctx = {
+  .copy_from_device = (ambapp_memcpy_t)memcpy,
+  .alloc = rtems_malloc
+};
+
 /* Build AMBA Plug & Play device graph */
 int ambapp_scan(
   struct ambapp_bus *abus,
   unsigned int ioarea,
-  ambapp_memcpy_t memfunc,
+  const struct ambapp_context *ctx,
   struct ambapp_mmap *mmaps
   )
 {
+
   memset(abus, 0, sizeof(*abus));
   abus->mmaps = mmaps;
 
-  /* Default to memcpy() */
-  if (!memfunc)
-    memfunc = (ambapp_memcpy_t)memcpy;
+  if (ctx == NULL) {
+    ctx = &default_ctx;
+  }
 
-  return ambapp_scan2(abus, ioarea, memfunc, NULL, &abus->root);
+  return ambapp_scan2(abus, ioarea, ctx, NULL, &abus->root);
 }
 
 /* Match search options againt device */

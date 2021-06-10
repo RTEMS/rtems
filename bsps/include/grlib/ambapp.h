@@ -15,6 +15,15 @@
 #ifndef __AMBAPP_H__
 #define __AMBAPP_H__
 
+#include <stddef.h>
+
+/* Include VENDOR and DEVICE definitions */
+#include "ambapp_ids.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @defgroup amba AMBA
  *
@@ -24,13 +33,6 @@
  *
  * @{
  */
-
-/* Include VENDOR and DEVICE definitions */
-#include "ambapp_ids.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* Max supported AHB buses */
 #define AHB_BUS_MAX 6
@@ -181,6 +183,11 @@ typedef void *(*ambapp_memcpy_t)(
 	struct ambapp_bus *abus	/* Optional AMBA Bus pointer */
 	);
 
+struct ambapp_context {
+  ambapp_memcpy_t copy_from_device;
+  void *(*alloc)(size_t);
+};
+
 /* Scan a AMBA Plug & Play bus and create all device structures describing the 
  * the devices. The devices will form a tree, where every node describes one
  * interface. The resulting tree is placed in the location pointed to by root.
@@ -188,16 +195,16 @@ typedef void *(*ambapp_memcpy_t)(
  * Since it the tree is located in RAM it is easier to work with AMBA buses
  * that is located over PCI and SpaceWire etc.
  *
+ * \param abus     Resulting device node tree root is stored here.
  * \param ioarea   The IO-AREA where Plug & Play information can be found.
- * \param parent   Used internally when recursing down a bridge. Set to NULL.
+ * \param ctx      The scan context.  May be NULL.
  * \param mmaps    Is used to perform address translation if needed.
- * \param root     Resulting device node tree root is stored here.
  *
  */
 extern int ambapp_scan(
 	struct ambapp_bus *abus,
 	unsigned int ioarea,
-	ambapp_memcpy_t memfunc,
+	const struct ambapp_context *ctx,
 	struct ambapp_mmap *mmaps
 	);
 
