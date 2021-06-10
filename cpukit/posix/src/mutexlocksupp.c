@@ -69,7 +69,7 @@ int _POSIX_Mutex_Lock_support(
 
   executing = _POSIX_Mutex_Acquire( the_mutex, &queue_context );
   _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout);
-  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
+  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime, true );
 
   switch ( _POSIX_Mutex_Get_protocol( flags ) ) {
     case POSIX_MUTEX_PRIORITY_CEILING:

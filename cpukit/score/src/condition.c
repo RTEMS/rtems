@@ -188,7 +188,7 @@ int _Condition_Wait_timed(
     &context.Base,
     _Condition_Enqueue_with_timeout
   );
-  _Thread_queue_Context_set_timeout_argument( &context.Base, abstime );
+  _Thread_queue_Context_set_timeout_argument( &context.Base, abstime, true );
   executing = _Condition_Do_wait( _condition, _mutex, &context );
   eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   _Mutex_Acquire( _mutex );
@@ -243,7 +243,7 @@ int _Condition_Wait_recursive_timed(
     &context.Base,
     _Condition_Enqueue_with_timeout
   );
-  _Thread_queue_Context_set_timeout_argument( &context.Base, abstime );
+  _Thread_queue_Context_set_timeout_argument( &context.Base, abstime, true );
   nest_level = _Condition_Unnest_mutex( _mutex );
   executing = _Condition_Do_wait( _condition, &_mutex->_Mutex, &context );
   eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );

@@ -109,7 +109,7 @@ int _POSIX_Condition_variables_Wait_support(
   _Thread_queue_Context_initialize( &queue_context );
 
   if ( abstime != NULL ) {
-    _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
+    _Thread_queue_Context_set_timeout_argument( &queue_context, abstime, true );
 
     if ( _POSIX_Condition_variables_Get_clock( flags ) == CLOCK_MONOTONIC ) {
       _Thread_queue_Context_set_enqueue_callout(

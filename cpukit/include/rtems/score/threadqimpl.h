@@ -201,18 +201,24 @@ _Thread_queue_Context_set_timeout_ticks(
 /**
  * @brief Sets the timeout argument in the thread queue context.
  *
- * @param[out] queue_context The thread queue context.
- * @param arg The timeout argument.
+ * @param[out] queue_context is the thread queue context.
+ *
+ * @param arg is the timeout argument.
+ *
+ * @param absolute is true, if the timeout shall be absolute, otherwise it
+ *   shall be relative to the current time of the clock.
  *
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_timeout_argument(
   Thread_queue_Context *queue_context,
-  const void           *arg
+  const void           *arg,
+  bool                  absolute
 )
 {
   queue_context->Timeout.arg = arg;
+  queue_context->timeout_absolute = absolute;
 }
 
 /**

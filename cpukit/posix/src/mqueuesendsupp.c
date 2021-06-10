@@ -70,7 +70,7 @@ int _POSIX_Message_queue_Send_support(
   }
 
   _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout );
-  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
+  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime, true );
 
   _CORE_message_queue_Acquire_critical(
     &the_mq->Message_queue,

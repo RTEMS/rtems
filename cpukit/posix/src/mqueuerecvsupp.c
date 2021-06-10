@@ -69,7 +69,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   }
 
   _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout );
-  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
+  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime, true );
 
   /*
    *  Now if something goes wrong, we return a "length" of -1
