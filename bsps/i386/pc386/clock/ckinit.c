@@ -104,48 +104,60 @@ static uint32_t pc386_get_timecount_i8254(struct timecounter *tc)
 
 /*
  * Calibrate CPU cycles per tick. Interrupts should be disabled.
+ * Will also set the PIT, so call this before registering the 
+ * periodic timer for rtems tick generation
  */
 static void calibrate_tsc(void)
 {
   uint64_t              begin_time;
-  uint8_t               then_lsb, then_msb, now_lsb, now_msb;
-  uint32_t              i;
+  uint8_t               lsb, msb;
+  uint32_t              max_timer_value;
+  uint32_t              last_tick, cur_tick;
+  int32_t               diff, remaining;
 
-  /*
-   * We just reset the timer, so we know we're at the beginning of a tick.
-   */
-
-  /*
-   * Count cycles. Watching the timer introduces a several microsecond
-   * uncertaintity, so let it cook for a while and divide by the number of
-   * ticks actually executed.
-   */
+  /* Set the timer to free running mode */
+  outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_INTTC);
+  /* Reset the 16 timer reload value, first LSB, then MSB */
+  outport_byte(TIMER_CNTR0, 0);
+  outport_byte(TIMER_CNTR0, 0);
+  /* We use the full 16 bit */
+  max_timer_value = 0xffff;
+  /* Calibrate for 1s, i.e. TIMER_TICK PIT ticks */
+  remaining = TIMER_TICK;
 
   begin_time = rdtsc();
-
-  for (i = rtems_clock_get_ticks_per_second() * pc386_isrs_per_tick;
-       i != 0; --i ) {
-    /* We know we've just completed a tick when timer goes from low to high */
-    then_lsb = then_msb = 0xff;
-    do {
-      READ_8254(now_lsb, now_msb);
-      if ((then_msb < now_msb) ||
-          ((then_msb == now_msb) && (then_lsb < now_lsb)))
-        break;
-      then_lsb = now_lsb;
-      then_msb = now_msb;
-    } while (1);
+  READ_8254(lsb, msb);
+  last_tick = (msb << 8) | lsb;
+  while(remaining > 0) {
+    READ_8254(lsb, msb);
+    cur_tick = (msb << 8) | lsb;
+    /* PIT counts down, so subtract cur from last */
+    diff = last_tick - cur_tick;
+    last_tick = cur_tick;
+    if (diff < 0) {
+        diff += max_timer_value;
+    }
+    remaining -= diff;
   }
 
   pc586_tsc_frequency = rdtsc() - begin_time;
 
 #if 0
-  printk( "CPU clock at %u MHz\n", (uint32_t)(pc586_tsc_frequency / 1000000));
+  printk( "CPU clock at %u Hz\n", (uint32_t)(pc586_tsc_frequency ));
 #endif
 }
 
 static void clockOn(void)
 {
+
+  /*
+   * First calibrate the TSC. Do this every time we
+   * turn the clock on in case the CPU clock speed has changed.
+   */
+  if ( x86_has_tsc() ) {
+    calibrate_tsc();
+  }
+
   rtems_interrupt_lock_context lock_context;
   pc386_isrs_per_tick        = 1;
   pc386_microseconds_per_isr = rtems_configuration_get_microseconds_per_tick();
@@ -171,13 +183,6 @@ static void clockOn(void)
   rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 
   bsp_interrupt_vector_enable( BSP_PERIODIC_TIMER );
-
-  /*
-   * Now calibrate cycles per tick. Do this every time we
-   * turn the clock on in case the CPU clock speed has changed.
-   */
-  if ( x86_has_tsc() )
-    calibrate_tsc();
 }
 
 bool Clock_isr_enabled = false;
