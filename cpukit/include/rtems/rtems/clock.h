@@ -144,10 +144,10 @@ rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );
  *
  * @brief Gets the time of day associated with the current CLOCK_REALTIME.
  *
- * @param time_of_day is the pointer to a RTEMS time of day variable.  When the
+ * @param time_of_day is the pointer to an rtems_time_of_day object.  When the
  *   directive call is successful, the time of day associated with the
  *   CLOCK_REALTIME at some point during the directive call will be stored in
- *   this variable.
+ *   this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -177,10 +177,10 @@ rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
  * @brief Gets the seconds and microseconds elapsed since the Unix epoch and
  *   the current CLOCK_REALTIME.
  *
- * @param[out] time_of_day is the pointer to a timeval structure variable.
- *   When the directive call is successful, the seconds and microseconds
- *   elapsed since the Unix epoch and the CLOCK_REALTIME at some point during
- *   the directive call will be stored in this variable.
+ * @param[out] time_of_day is the pointer to a struct timeval object.  When the
+ *   directive call is successful, the seconds and microseconds elapsed since
+ *   the Unix epoch and the CLOCK_REALTIME at some point during the directive
+ *   call will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -210,10 +210,10 @@ rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
  * @brief Gets the seconds elapsed since the RTEMS epoch and the current
  *   CLOCK_REALTIME.
  *
- * @param[out] seconds_since_rtems_epoch is the pointer to an interval
- *   variable.  When the directive call is successful, the seconds elapsed
- *   since the RTEMS epoch and the CLOCK_REALTIME at some point during the
- *   directive call will be stored in this variable.
+ * @param[out] seconds_since_rtems_epoch is the pointer to an ::rtems_interval
+ *   object.  When the directive call is successful, the seconds elapsed since
+ *   the RTEMS epoch and the CLOCK_REALTIME at some point during the directive
+ *   call will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -306,10 +306,10 @@ rtems_interval rtems_clock_get_ticks_since_boot( void );
  * @brief Gets the seconds and nanoseconds elapsed since some time point during
  *   the system initialization using CLOCK_MONOTONIC.
  *
- * @param[out] uptime is the pointer to a timeval structure variable.  When the
+ * @param[out] uptime is the pointer to a struct timeval object.  When the
  *   directive call is successful, the seconds and nanoseconds elapsed since
  *   some time point during the system initialization and some point during the
- *   directive call using CLOCK_MONOTONIC will be stored in this variable.
+ *   directive call using CLOCK_MONOTONIC will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -336,10 +336,10 @@ rtems_status_code rtems_clock_get_uptime( struct timespec *uptime );
  * @brief Gets the seconds and microseconds elapsed since some time point
  *   during the system initialization using CLOCK_MONOTONIC.
  *
- * @param[out] uptime is the pointer to a timeval structure variable.  The
- *   seconds and microseconds elapsed since some time point during the system
+ * @param[out] uptime is the pointer to a struct timeval object.  The seconds
+ *   and microseconds elapsed since some time point during the system
  *   initialization and some point during the directive call using
- *   CLOCK_MONOTONIC will be stored in this variable.  The pointer shall be
+ *   CLOCK_MONOTONIC will be stored in this object.  The pointer shall be
  *   valid, otherwise the behaviour is undefined.
  *
  * @par Constraints

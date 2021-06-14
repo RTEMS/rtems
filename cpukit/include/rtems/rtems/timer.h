@@ -191,9 +191,9 @@ typedef struct {
  *
  * @param id is the timer identifier.
  *
- * @param[out] the_info is the pointer to a timer information variable.  When
- *   the directive call is successful, the information about the timer will be
- *   stored in this variable.
+ * @param[out] the_info is the pointer to an rtems_timer_information object.
+ *   When the directive call is successful, the information about the timer
+ *   will be stored in this object.
  *
  * This directive returns information about the timer.
  *
@@ -267,9 +267,9 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )( rtem
  *
  * @param name is the object name of the timer.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created timer will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created timer will be stored in
+ *   this object.
  *
  * This directive creates a timer which resides on the local node.  The timer
  * has the user-defined object name specified in ``name``.  The assigned object
@@ -326,9 +326,9 @@ rtems_status_code rtems_timer_create( rtems_name name, rtems_id *id );
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a timer identifier associated with the timer name
  * specified in ``name``.

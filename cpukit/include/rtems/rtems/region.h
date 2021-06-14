@@ -87,9 +87,9 @@ extern "C" {
  *
  * @param segment is the begin address of the segment.
  *
- * @param[out] size is the pointer to a uintptr_t variable.  When the directive
+ * @param[out] size is the pointer to a uintptr_t object.  When the directive
  *   call is successful, the size of the segment in bytes will be stored in
- *   this variable.
+ *   this object.
  *
  * This directive obtains the size in bytes of the segment specified by
  * ``segment`` of the region specified by ``id`` in ``size``.
@@ -148,9 +148,9 @@ rtems_status_code rtems_region_get_segment_size(
  *
  * @param attribute_set is the attribute set of the region.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created region will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created region will be stored in
+ *   this object.
  *
  * This directive creates a region which resides on the local node.  The region
  * has the user-defined object name specified in ``name``.  The assigned object
@@ -242,9 +242,9 @@ rtems_status_code rtems_region_create(
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a region identifier associated with the region name
  * specified in ``name``.
@@ -400,9 +400,9 @@ rtems_status_code rtems_region_extend(
  * @param timeout is the timeout in clock ticks if the #RTEMS_WAIT option is
  *   set.  Use #RTEMS_NO_TIMEOUT to wait potentially forever.
  *
- * @param segment is the pointer to a void pointer variable.  When the
+ * @param[out] segment is the pointer to a ``void`` pointer object.  When the
  *   directive call is successful, the begin address of the allocated segment
- *   will be stored in this variable.
+ *   will be stored in this object.
  *
  * This directive gets a segment from the region specified by ``id``.
  *
@@ -558,9 +558,9 @@ rtems_status_code rtems_region_return_segment( rtems_id id, void *segment );
  *
  * @param size is the requested new size of the segment.
  *
- * @param[out] old_size is the pointer to an uintptr_t variable.  When the
+ * @param[out] old_size is the pointer to an uintptr_t object.  When the
  *   directive call is successful, the old size of the segment will be stored
- *   in this variable.
+ *   in this object.
  *
  * This directive is used to increase or decrease the size of the ``segment``
  * of the region specified by ``id``.  When increasing the size of a segment,
@@ -613,9 +613,9 @@ rtems_status_code rtems_region_resize_segment(
  *
  * @param id is the region identifier.
  *
- * @param[out] the_info is the pointer to a Heap_Information_block variable.
+ * @param[out] the_info is the pointer to a Heap_Information_block object.
  *   When the directive call is successful, the information of the region will
- *   be stored in this variable.
+ *   be stored in this object.
  *
  * This directive is used to obtain information about the used and free memory
  * in the region specified by ``id``. This is a snapshot at the time of the
@@ -668,9 +668,9 @@ rtems_status_code rtems_region_get_information(
  *
  * @param id is the region identifier.
  *
- * @param[out] the_info is the pointer to a Heap_Information_block variable.
+ * @param[out] the_info is the pointer to a Heap_Information_block object.
  *   When the directive call is successful, the free information of the region
- *   will be stored in this variable.
+ *   will be stored in this object.
  *
  * This directive is used to obtain information about the free memory in the
  * region specified by ``id``. This is a snapshot at the time of the call. The

@@ -89,9 +89,9 @@ extern "C" {
  *
  * @param length is the length in bytes of the memory area.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created port will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created port will be stored in
+ *   this object.
  *
  * This directive creates a port which resides on the local node.  The port has
  * the user-defined object name specified in ``name``.  The assigned object
@@ -160,9 +160,9 @@ rtems_status_code rtems_port_create(
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a port identifier associated with the port name
  * specified in ``name``.
@@ -251,9 +251,9 @@ rtems_status_code rtems_port_delete( rtems_id id );
  *
  * @param external is the external address to convert.
  *
- * @param[out] internal is the pointer to a pointer variable.  When the
+ * @param[out] internal is the pointer to a ``void`` pointer object.  When the
  *   directive call is successful, the external address associated with the
- *   internal address will be stored in this variable.
+ *   internal address will be stored in this object.
  *
  * This directive converts a dual-ported memory address from external to
  * internal representation for the specified port.  If the given external
@@ -297,9 +297,9 @@ rtems_status_code rtems_port_external_to_internal(
  *
  * @param internal is the internal address to convert.
  *
- * @param[out] external is the pointer to a pointer variable.  When the
+ * @param[out] external is the pointer to a ``void`` pointer object.  When the
  *   directive call is successful, the external address associated with the
- *   internal address will be stored in this variable.
+ *   internal address will be stored in this object.
  *
  * This directive converts a dual-ported memory address from internal to
  * external representation so that it can be passed to owner of the DPMA

@@ -155,10 +155,10 @@ typedef ISR_Vector_number rtems_vector_number;
  *
  * @param vector is the interrupt vector number.
  *
- * @param[out] old_isr_handler is the pointer to an ::rtems_isr_entry variable.
+ * @param[out] old_isr_handler is the pointer to an ::rtems_isr_entry object.
  *   When the directive call is successful, the previous interrupt service
  *   routine established for this interrupt vector will be stored in this
- *   variable.
+ *   object.
  *
  * This directive establishes an interrupt service routine (ISR) for the
  * interrupt specified by the ``vector`` number.  The ``new_isr_handler``

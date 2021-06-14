@@ -95,9 +95,9 @@ extern "C" {
  *   semaphore with the priority ceiling or MrsP locking protocol as defined by
  *   the attribute set.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created semaphore will
- *   be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created semaphore will be stored
+ *   in this object.
  *
  * This directive creates a semaphore which resides on the local node.  The
  * semaphore has the user-defined object name specified in ``name`` and the
@@ -272,9 +272,9 @@ rtems_status_code rtems_semaphore_create(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a semaphore identifier associated with the semaphore
  * name specified in ``name``.
@@ -737,9 +737,9 @@ rtems_status_code rtems_semaphore_flush( rtems_id id );
  * @param new_priority is the new priority corresponding to the specified
  *   scheduler.
  *
- * @param[out] old_priority is the pointer to a task priority variable.  When
- *   the directive call is successful, the old priority of the semaphore
- *   corresponding to the specified scheduler will be stored in this variable.
+ * @param[out] old_priority is the pointer to an ::rtems_task_priority object.
+ *   When the directive call is successful, the old priority of the semaphore
+ *   corresponding to the specified scheduler will be stored in this object.
  *
  * This directive sets the priority of the semaphore specified by
  * ``semaphore_id``.  The priority corresponds to the scheduler specified by

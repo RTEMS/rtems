@@ -88,9 +88,9 @@ extern "C" {
  * @param maximum_waiters is the maximum count of waiters on an automatic
  *   release barrier.
  *
- * @param id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created barrier will
- *   be stored in this variable.
+ * @param id is the pointer to an ::rtems_id object.  When the directive call
+ *   is successful, the identifier of the created barrier will be stored in
+ *   this object.
  *
  * This directive creates a barrier which resides on the local node.  The
  * barrier has the user-defined object name specified in ``name`` and the
@@ -178,9 +178,9 @@ rtems_status_code rtems_barrier_create(
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a barrier identifier associated with the barrier name
  * specified in ``name``.
@@ -318,9 +318,9 @@ rtems_status_code rtems_barrier_wait( rtems_id id, rtems_interval timeout );
  *
  * @param id is the barrier identifier.
  *
- * @param[out] released is the pointer to an integer variable.  When the
+ * @param[out] released is the pointer to an uint32_t object.  When the
  *   directive call is successful, the number of released tasks will be stored
- *   in this variable.
+ *   in this object.
  *
  * This directive releases the barrier specified by ``id``.  All tasks waiting
  * at the barrier will be unblocked.  The number of released tasks will be

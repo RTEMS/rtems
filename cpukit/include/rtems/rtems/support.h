@@ -228,9 +228,9 @@ static inline void rtems_name_to_characters(
  *
  * @param bytes is the number of bytes to allocated.
  *
- * @param[out] pointer is the pointer to a pointer variable.  When the
+ * @param[out] pointer is the pointer to a ``void`` pointer object.  When the
  *   directive call is successful, the begin address of the allocated memory
- *   area will be stored in this variable.
+ *   area will be stored in this object.
  *
  * @return Returns true, if the allocation was successful, otherwise false.
  *
@@ -286,9 +286,9 @@ bool rtems_workspace_free( void *pointer );
  *
  * @brief Gets information about the RTEMS Workspace.
  *
- * @param the_info is the pointer to a heap information variable.  When the
- *   directive call is successful, the heap information will be stored in this
- *   variable.
+ * @param[out] the_info is the pointer to a Heap_Information_block object.
+ *   When the directive call is successful, the heap information will be stored
+ *   in this object.
  *
  * @return Returns true, if getting the information was successful, otherwise
  *   false.

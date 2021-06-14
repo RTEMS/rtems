@@ -151,9 +151,9 @@ typedef struct {
  *
  * @param attribute_set is the attribute set of the message queue.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created message queue
- *   will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created message queue will be
+ *   stored in this object.
  *
  * This directive creates a message queue which resides on the local node.  The
  * message queue has the user-defined object name specified in ``name``.
@@ -288,9 +288,9 @@ rtems_status_code rtems_message_queue_create(
  *
  * @param config is the message queue configuration.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the constructed message
- *   queue will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the constructed message queue will
+ *   be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -388,9 +388,9 @@ rtems_status_code rtems_message_queue_construct(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a message queue identifier associated with the
  * message queue name specified in ``name``.
@@ -647,9 +647,9 @@ rtems_status_code rtems_message_queue_urgent(
  *
  * @param size is the size in bytes of the message buffer to broadcast.
  *
- * @param[out] count is the pointer to an uint32_t variable.  When the
- *   directive call is successful, the number of unblocked tasks will be stored
- *   in this variable.
+ * @param[out] count is the pointer to an uint32_t object.  When the directive
+ *   call is successful, the number of unblocked tasks will be stored in this
+ *   object.
  *
  * This directive causes all tasks that are waiting at the queue specified by
  * ``id`` to be unblocked and sent the message contained in ``buffer``.  Before
@@ -713,9 +713,9 @@ rtems_status_code rtems_message_queue_broadcast(
  *   rtems_message_queue_construct().  The ``size`` parameter cannot be used to
  *   specify the size of the buffer.
  *
- * @param size is the pointer to a size_t variable.  When the directive call is
- *   successful, the size in bytes of the received messages will be stored in
- *   this variable.  This parameter cannot be used to specify the size of the
+ * @param[out] size is the pointer to a size_t object.  When the directive call
+ *   is successful, the size in bytes of the received messages will be stored
+ *   in this object.  This parameter cannot be used to specify the size of the
  *   buffer.
  *
  * @param option_set is the option set.
@@ -819,9 +819,9 @@ rtems_status_code rtems_message_queue_receive(
  *
  * @param id is the queue identifier.
  *
- * @param[out] count is the pointer to an uint32_t variable.  When the
- *   directive call is successful, the number of pending messages will be
- *   stored in this variable.
+ * @param[out] count is the pointer to an uint32_t object.  When the directive
+ *   call is successful, the number of pending messages will be stored in this
+ *   object.
  *
  * This directive returns the number of messages pending on the queue specified
  * by ``id`` in ``count``.  If no messages are present on the queue, count is
@@ -861,9 +861,9 @@ rtems_status_code rtems_message_queue_get_number_pending(
  *
  * @param id is the queue identifier.
  *
- * @param[out] count is the pointer to an uint32_t variable.  When the
- *   directive call is successful, the number of unblocked tasks will be stored
- *   in this variable.
+ * @param[out] count is the pointer to an uint32_t object.  When the directive
+ *   call is successful, the number of unblocked tasks will be stored in this
+ *   object.
  *
  * This directive removes all pending messages from the queue specified by
  * ``id``.  The number of messages removed is returned in ``count``.  If no

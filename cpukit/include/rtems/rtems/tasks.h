@@ -449,9 +449,9 @@ rtems_task_priority _RTEMS_Maximum_priority( void );
  *
  * @param name is the scheduler name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the scheduler will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the scheduler will be stored in this
+ *   object.
  *
  * This directive obtains a scheduler identifier associated with the scheduler
  * name specified in ``name``.
@@ -491,9 +491,9 @@ rtems_status_code rtems_scheduler_ident( rtems_name name, rtems_id *id );
  *
  * @param cpu_index is the processor index to identify the scheduler.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the scheduler will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the scheduler will be stored in this
+ *   object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -525,15 +525,15 @@ rtems_status_code rtems_scheduler_ident_by_processor(
  *
  * @brief Identifies a scheduler by the processor set.
  *
- * @param cpusetsize is the size of the referenced processor set variable in
- *   bytes.  This value shall be positive.
+ * @param cpusetsize is the size of the processor set referenced by ``cpuset``
+ *   in bytes.  The size shall be positive.
  *
- * @param cpuset is the pointer to a processor set variable.  The referenced
- *   processor set will be used to identify the scheduler.
+ * @param cpuset is the pointer to a cpu_set_t.  The referenced processor set
+ *   will be used to identify the scheduler.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the scheduler will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the scheduler will be stored in this
+ *   object.
  *
  * The scheduler is selected according to the highest numbered online processor
  * in the specified processor set.
@@ -577,9 +577,9 @@ rtems_status_code rtems_scheduler_ident_by_processor_set(
  *
  * @param scheduler_id is the scheduler identifier.
  *
- * @param[out] priority is the pointer to a task priority variable.  The
- *   maximum priority of the scheduler will be stored in this variable, if the
- *   operation is successful.
+ * @param[out] priority is the pointer to an ::rtems_task_priority object.
+ *   When the directive the maximum priority of the scheduler will be stored in
+ *   this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -614,10 +614,10 @@ rtems_status_code rtems_scheduler_get_maximum_priority(
  *
  * @param priority is the Classic API task priority to map.
  *
- * @param[out] posix_priority is the pointer to a POSIX thread priority
- *   variable.  When the directive call is successful, the POSIX thread
- *   priority value corresponding to the specified Classic API task priority
- *   value will be stored in this variable.
+ * @param[out] posix_priority is the pointer to an ``int`` object.  When the
+ *   directive call is successful, the POSIX thread priority value
+ *   corresponding to the specified Classic API task priority value will be
+ *   stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -655,10 +655,10 @@ rtems_status_code rtems_scheduler_map_priority_to_posix(
  *
  * @param posix_priority is the POSIX thread priority to map.
  *
- * @param[out] priority is the pointer to a Classic API task priority variable.
+ * @param[out] priority is the pointer to an ::rtems_task_priority object.
  *   When the directive call is successful, the Classic API task priority value
  *   corresponding to the specified POSIX thread priority value will be stored
- *   in this variable.
+ *   in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -764,14 +764,13 @@ uint32_t rtems_scheduler_get_processor_maximum( void );
  *
  * @param scheduler_id is the scheduler identifier.
  *
- * @param cpusetsize is the size of the referenced processor set variable in
- *   bytes.
+ * @param cpusetsize is the size of the processor set referenced by ``cpuset``
+ *   in bytes.
  *
- * @param[out] cpuset is the pointer to a processor set variable.  When the
- *   directive call is successful, the processor set of the scheduler will be
- *   stored in this variable.  A set bit in the processor set means that the
- *   corresponding processor is owned by the scheduler, otherwise the bit is
- *   cleared.
+ * @param[out] cpuset is the pointer to a cpu_set_t object.  When the directive
+ *   call is successful, the processor set of the scheduler will be stored in
+ *   this object.  A set bit in the processor set means that the corresponding
+ *   processor is owned by the scheduler, otherwise the bit is cleared.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -909,9 +908,9 @@ rtems_status_code rtems_scheduler_remove_processor(
  *
  * @param attribute_set is the attribute set of the task.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created task will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created task will be stored in
+ *   this object.
  *
  * This directive creates a task which resides on the local node.  The task has
  * the user-defined object name specified in ``name``.  The assigned object
@@ -1145,9 +1144,9 @@ rtems_status_code rtems_task_create(
  *
  * @param config is the task configuration.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the constructed task will
- *   be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the constructed task will be stored
+ *   in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -1259,9 +1258,9 @@ rtems_status_code rtems_task_construct(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a task identifier associated with the task name
  * specified in ``name``.
@@ -1748,10 +1747,9 @@ rtems_status_code rtems_task_is_suspended( rtems_id id );
  * @param new_priority is the new real priority or #RTEMS_CURRENT_PRIORITY to
  *   get the current priority.
  *
- * @param[out] old_priority is the pointer to an ::rtems_task_priority
- *   variable.  When the directive call is successful, the current or previous
- *   priority of the task with respect to its home scheduler will be stored in
- *   this variable.
+ * @param[out] old_priority is the pointer to an ::rtems_task_priority object.
+ *   When the directive call is successful, the current or previous priority of
+ *   the task with respect to its home scheduler will be stored in this object.
  *
  * This directive manipulates the priority of the task specified by ``id``.
  * When ``new_priority`` is not equal to #RTEMS_CURRENT_PRIORITY, the specified
@@ -1823,9 +1821,9 @@ rtems_status_code rtems_task_set_priority(
  *
  * @param scheduler_id is the scheduler identifier.
  *
- * @param[out] priority is the pointer to an ::rtems_task_priority variable.
+ * @param[out] priority is the pointer to an ::rtems_task_priority object.
  *   When the directive call is successful, the current priority of the task
- *   with respect to the specified scheduler will be stored in this variable.
+ *   with respect to the specified scheduler will be stored in this object.
  *
  * This directive returns the current priority in ``priority`` of the task
  * specified by ``task_id`` with respect to the scheduler specified by
@@ -1886,9 +1884,9 @@ rtems_status_code rtems_task_get_priority(
  *   applied to the calling task.  When the value is #RTEMS_CURRENT_MODE, the
  *   mode of the calling task is not changed.
  *
- * @param previous_mode_set is the pointer to a mode variable.  When the
+ * @param previous_mode_set is the pointer to an ::rtems_mode object.  When the
  *   directive call is successful, the mode of the task before any mode changes
- *   done by the directive call will be stored in this variable.
+ *   done by the directive call will be stored in this object.
  *
  * This directive queries and optionally manipulates the execution mode of the
  * calling task.  A task's execution mode enables and disables preemption,
@@ -2086,9 +2084,9 @@ rtems_status_code rtems_task_wake_when( const rtems_time_of_day *time_buffer );
  * @param task_id is the task identifier.  The constant #RTEMS_SELF may be used
  *   to specify the calling task.
  *
- * @param[out] scheduler_id is the pointer to an ::rtems_id variable.  When the
+ * @param[out] scheduler_id is the pointer to an ::rtems_id object.  When the
  *   directive call is successful, the identifier of the home scheduler of the
- *   task will be stored in this variable.
+ *   task will be stored in this object.
  *
  * This directive returns the identifier of the home scheduler of the task
  * specified by ``task_id`` in ``scheduler_id``.
@@ -2202,12 +2200,12 @@ rtems_status_code rtems_task_set_scheduler(
  * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
- * @param cpusetsize is the size of the referenced processor set variable in
- *   bytes.
+ * @param cpusetsize is the size of the processor set referenced by ``cpuset``
+ *   in bytes.
  *
- * @param[out] cpuset is the pointer to a processor set variable.  When the
- *   directive call is successful, the processor affinity set of the task will
- *   be stored in this variable.  A set bit in the processor set means that the
+ * @param[out] cpuset is the pointer to a cpu_set_t object.  When the directive
+ *   call is successful, the processor affinity set of the task will be stored
+ *   in this object.  A set bit in the processor set means that the
  *   corresponding processor is in the processor affinity set of the task,
  *   otherwise the bit is cleared.
  *
@@ -2221,8 +2219,8 @@ rtems_status_code rtems_task_set_scheduler(
  * @retval ::RTEMS_INVALID_ID There was no task associated with the identifier
  *   specified by ``id``.
  *
- * @retval ::RTEMS_INVALID_SIZE The provided processor set was too small for
- *   the processor affinity set of the task.
+ * @retval ::RTEMS_INVALID_SIZE The size specified by ``cpusetsize`` of the
+ *   processor set was too small for the processor affinity set of the task.
  *
  * @retval ::RTEMS_ILLEGAL_ON_REMOTE_OBJECT The task resided on a remote node.
  *
@@ -2256,10 +2254,10 @@ rtems_status_code rtems_task_get_affinity(
  * @param id is the task identifier.  The constant #RTEMS_SELF may be used to
  *   specify the calling task.
  *
- * @param cpusetsize is the size of the referenced processor set variable in
- *   bytes.
+ * @param cpusetsize is the size of the processor set referenced by ``cpuset``
+ *   in bytes.
  *
- * @param cpuset is the pointer to a processor set variable.  The processor set
+ * @param[out] cpuset is the pointer to a cpu_set_t object.  The processor set
  *   defines the new processor affinity set of the task.  A set bit in the
  *   processor set means that the corresponding processor shall be in the
  *   processor affinity set of the task, otherwise the bit shall be cleared.

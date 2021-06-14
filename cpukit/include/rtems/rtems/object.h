@@ -304,9 +304,9 @@ rtems_name rtems_build_name( char c1, char c2, char c3, char c4 );
  *
  * @param id is the object identifier to get the name.
  *
- * @param[out] name is the pointer to an object name variable.  When the
+ * @param[out] name is the pointer to an ::rtems_name object.  When the
  *   directive call is successful, the object name associated with the object
- *   identifier will be stored in this variable.
+ *   identifier will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
@@ -730,9 +730,9 @@ const char *rtems_object_get_api_class_name( int the_api, int the_class );
  * @param the_class is the object class of the object API to get the class
  *   information.
  *
- * @param info is the pointer to an object class information variable.  When
- *   the directive call is successful, the object class information of the
- *   class of the API will be stored in this variable.
+ * @param[out] info is the pointer to an rtems_object_api_class_information
+ *   object.  When the directive call is successful, the object class
+ *   information of the class of the API will be stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *

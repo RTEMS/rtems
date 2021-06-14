@@ -228,9 +228,9 @@ struct rtems_printer;
  *
  * @param name is the object name of the period.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created period will be
- *   stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created period will be stored in
+ *   this object.
  *
  * This directive creates a period which resides on the local node.  The period
  * has the user-defined object name specified in ``name`` The assigned object
@@ -285,9 +285,9 @@ rtems_status_code rtems_rate_monotonic_create( rtems_name name, rtems_id *id );
  *
  * @param name is the object name to look up.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a period identifier associated with the period name
  * specified in ``name``.
@@ -467,9 +467,9 @@ rtems_status_code rtems_rate_monotonic_period(
  *
  * @param id is the rate monotonic period identifier.
  *
- * @param[out] status is the pointer to a rtems_rate_monotonic_period_status
- *   variable.  When the directive call is successful, the detailed period
- *   status will be stored in this variable.
+ * @param[out] status is the pointer to an rtems_rate_monotonic_period_status
+ *   object.  When the directive call is successful, the detailed period status
+ *   will be stored in this object.
  *
  * This directive returns the detailed status of the rate monotonic period
  * specified by ``id``.  The detailed status of the period will be returned in
@@ -528,9 +528,9 @@ rtems_status_code rtems_rate_monotonic_get_status(
  *
  * @param id is the rate monotonic period identifier.
  *
- * @param[out] status is the pointer to a
- *   rtems_rate_monotonic_period_statistics variable.  When the directive call
- *   is successful, the period statistics will be stored in this variable.
+ * @param[out] status is the pointer to an
+ *   rtems_rate_monotonic_period_statistics object.  When the directive call is
+ *   successful, the period statistics will be stored in this object.
  *
  * This directive returns the statistics of the rate monotonic period specified
  * by ``id``.  The statistics of the period will be returned in the members of

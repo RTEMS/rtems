@@ -112,9 +112,9 @@ extern "C" {
  *
  * @param attribute_set is the attribute set of the partition.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the identifier of the created partition will
- *   be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the identifier of the created partition will be stored
+ *   in this object.
  *
  * This directive creates a partition of fixed size buffers from a physically
  * contiguous memory space which starts at ``starting_address`` and is
@@ -252,9 +252,9 @@ rtems_status_code rtems_partition_create(
  *
  * @param node is the node or node set to search for a matching object.
  *
- * @param[out] id is the pointer to an object identifier variable.  When the
- *   directive call is successful, the object identifier of an object with the
- *   specified name will be stored in this variable.
+ * @param[out] id is the pointer to an ::rtems_id object.  When the directive
+ *   call is successful, the object identifier of an object with the specified
+ *   name will be stored in this object.
  *
  * This directive obtains a partition identifier associated with the partition
  * name specified in ``name``.
@@ -388,9 +388,9 @@ rtems_status_code rtems_partition_delete( rtems_id id );
  *
  * @param id is the partition identifier.
  *
- * @param[out] buffer is the pointer to a buffer pointer variable.  When the
+ * @param[out] buffer is the pointer to a ``void`` pointer object.  When the
  *   directive call is successful, the pointer to the allocated buffer will be
- *   stored in this variable.
+ *   stored in this object.
  *
  * This directive allows a buffer to be obtained from the partition specified
  * by ``id``.  The address of the allocated buffer is returned through the

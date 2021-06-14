@@ -194,9 +194,10 @@ typedef struct {
  *
  * @param driver_table is the device driver address table.
  *
- * @param[out] registered_major is the pointer to a device major number
- *   variable.  When the directive call is successful, the device major number
- *   of the registered device will be stored in this variable.
+ * @param[out] registered_major is the pointer to an
+ *   ::rtems_device_major_number object.  When the directive call is
+ *   successful, the device major number of the registered device will be
+ *   stored in this object.
  *
  * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
