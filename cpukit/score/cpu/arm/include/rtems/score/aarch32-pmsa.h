@@ -108,7 +108,7 @@ extern "C" {
 #define AARCH32_PMSA_MEM_INNER_WA 0x01U
 
 #define AARCH32_PMSA_MEM_ATTR( _ma0, _ma1, _ma2, _ma3 ) \
-  ( ( _ma0 ) | ( ( _ma1 ) << 8 ) | ( ( _ma1 ) << 16 ) | ( ( _ma1 ) << 24 ) )
+  ( ( _ma0 ) | ( ( _ma1 ) << 8 ) | ( ( _ma2 ) << 16 ) | ( ( _ma3 ) << 24 ) )
 
 #define AARCH32_PMSA_MEM_ATTR_DEFAULT_CACHED \
   ( AARCH32_PMSA_MEM_OUTER_WBNT | \
