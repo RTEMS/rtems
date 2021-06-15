@@ -733,7 +733,13 @@ void _Thread_queue_Surrender_sticky(
     queue_context
   );
   queue->owner = new_owner;
-  _Thread_queue_Make_ready_again( new_owner );
+
+  /*
+   * There is no need to check the unblock status, since in the corresponding
+   * _Thread_queue_Enqueue_sticky() the thread is not blocked by the scheduler.
+   * Instead, the thread busy waits for a change of its thread wait flags.
+   */
+  (void) _Thread_queue_Make_ready_again( new_owner );
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
