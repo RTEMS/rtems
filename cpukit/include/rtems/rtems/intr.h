@@ -54,6 +54,7 @@
 #ifndef _RTEMS_RTEMS_INTR_H
 #define _RTEMS_RTEMS_INTR_H
 
+#include <stdint.h>
 #include <rtems/rtems/status.h>
 #include <rtems/score/basedefs.h>
 #include <rtems/score/cpu.h>
@@ -99,7 +100,7 @@ typedef ISR_Handler rtems_isr;
  * @ingroup RTEMSAPIClassicIntr
  *
  * @brief Interrupt service routines installed by rtems_interrupt_catch() shall
- *   have this function pointer type.
+ *   have this type.
  */
 #if CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE
   typedef ISR_Handler_entry rtems_isr_entry;
@@ -502,42 +503,6 @@ rtems_status_code rtems_interrupt_catch(
  */
 #define rtems_interrupt_is_in_progress() _ISR_Is_in_progress()
 
-/* Generated from spec:/rtems/intr/if/cause */
-
-/**
- * @ingroup RTEMSAPIClassicIntr
- *
- * @brief Causes the interrupt.
- *
- * @param _vector is the vector number of the interrupt to cause.
- *
- * @par Constraints
- * @parblock
- * The following constraints apply to this directive:
- *
- * * The directive is not implemented.
- * @endparblock
- */
-#define rtems_interrupt_cause( _vector ) do { } while ( 0 )
-
-/* Generated from spec:/rtems/intr/if/clear */
-
-/**
- * @ingroup RTEMSAPIClassicIntr
- *
- * @brief Clears the interrupt.
- *
- * @param _vector is the vector number of the interrupt to clear.
- *
- * @par Constraints
- * @parblock
- * The following constraints apply to this directive:
- *
- * * The directive is not implemented.
- * @endparblock
- */
-#define rtems_interrupt_clear( _vector ) do { } while ( 0 )
-
 /* Generated from spec:/rtems/intr/if/lock-initialize */
 
 /**
@@ -908,6 +873,129 @@ rtems_status_code rtems_interrupt_catch(
  */
 #define RTEMS_INTERRUPT_LOCK_REFERENCE( _designator, _target ) \
   ISR_LOCK_REFERENCE( _designator, _target )
+
+/* Generated from spec:/rtems/intr/if/raise */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Raises the interrupt vector.
+ *
+ * @param vector is the number of the interrupt vector to raise.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
+ *   not been satisfied.
+ *
+ * @par Notes
+ * The rtems_interrupt_get_attributes() directive may be used to check if an
+ * interrupt vector can be raised.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_raise( rtems_vector_number vector );
+
+/* Generated from spec:/rtems/intr/if/raise-on */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Raises the interrupt vector on the processor.
+ *
+ * @param vector is the number of the interrupt vector to raise.
+ *
+ * @param cpu_index is the index of the target processor of the interrupt
+ *   vector to raise.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_NOT_CONFIGURED The processor specified by ``cpu_index`` was
+ *   not configured to be used by the application.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The processor specified by ``cpu_index`` was
+ *   configured to be used by the application, however, it was not online.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
+ *   not been satisfied.
+ *
+ * @par Notes
+ * The rtems_interrupt_get_attributes() directive may be used to check if an
+ * interrupt vector can be raised on a processor.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_raise_on(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+);
+
+/* Generated from spec:/rtems/intr/if/clear */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Clears the interrupt vector.
+ *
+ * @param vector is the number of the interrupt vector to clear.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to raise the interrupt vector has
+ *   not been satisfied.
+ *
+ * @par Notes
+ * The rtems_interrupt_get_attributes() directive may be used to check if an
+ * interrupt vector can be cleared.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_clear( rtems_vector_number vector );
 
 #ifdef __cplusplus
 }
