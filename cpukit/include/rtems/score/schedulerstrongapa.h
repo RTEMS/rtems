@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
@@ -8,29 +10,43 @@
  */
 
 /*
- * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
+ * Copyright (C) 2020 Richi Dubey
+ * Copyright (C) 2013, 2018 embedded brains GmbH (http://www.embedded-brains.de)
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef _RTEMS_SCORE_SCHEDULERSTRONGAPA_H
 #define _RTEMS_SCORE_SCHEDULERSTRONGAPA_H
 
 #include <rtems/score/scheduler.h>
-#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/schedulersmp.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/* Forward Declaration of Per_CPU_Control */
+struct Per_CPU_Control;
 
 /**
  * @defgroup RTEMSScoreSchedulerStrongAPA Strong APA Scheduler
@@ -39,30 +55,21 @@ extern "C" {
  *
  * @brief This group contains the Strong APA Scheduler implementation.
  *
- * This is an implementation of the global fixed priority scheduler (G-FP).  It
- * uses one ready chain per priority to ensure constant time insert operations.
- * The scheduled chain uses linear insert operations and has at most processor
- * count entries.  Since the processor and priority count are constants all
- * scheduler operations complete in a bounded execution time.
+ * This is an implementation of the Strong APA scheduler defined by
+ * Cerqueira et al. in Linux's Processor Affinity API, Refined:
+ * Shifting Real-Time Tasks Towards Higher Schedulability.
  *
- * The the_thread preempt mode will be ignored.
- *
+ * The scheduled and ready nodes are accessed via the
+ * Scheduler_strong_APA_Context::Ready which helps in backtracking when a
+ * node which is executing on a CPU gets blocked. New node is allocated to
+ * the cpu by checking all the executing nodes in the affinity set of the
+ * node and the subsequent nodes executing on the processors in its
+ * affinity set.
  * @{
  */
 
 /**
- * @brief Scheduler context specialization for Strong APA
- * schedulers.
- */
-typedef struct {
-  Scheduler_SMP_Context    Base;
-  Priority_bit_map_Control Bit_map;
-  Chain_Control            Ready[ RTEMS_ZERO_LENGTH_ARRAY ];
-} Scheduler_strong_APA_Context;
-
-/**
- * @brief Scheduler node specialization for Strong APA
- * schedulers.
+ * @brief Scheduler node specialization for Strong APA schedulers.
  */
 typedef struct {
   /**
@@ -71,10 +78,72 @@ typedef struct {
   Scheduler_SMP_Node Base;
 
   /**
-   * @brief The associated ready queue of this node.
+   * @brief Chain node for Scheduler_strong_APA_Context::Ready.
    */
-  Scheduler_priority_Ready_queue Ready_queue;
+  Chain_Node Ready_node;
+
+  /**
+   * @brief CPU that this node would preempt in the backtracking part of
+   * _Scheduler_strong_APA_Get_highest_ready and
+   * _Scheduler_strong_APA_Do_Enqueue.
+   */
+  struct Per_CPU_Control *cpu_to_preempt;
+
+  /**
+   * @brief The associated affinity set of this node.
+   */
+  Processor_mask Affinity;
 } Scheduler_strong_APA_Node;
+
+
+/**
+ * @brief CPU related variables and a CPU_Control to implement BFS.
+ */
+typedef struct {
+  /**
+   * @brief CPU in a queue.
+   */
+  struct Per_CPU_Control *cpu;
+
+  /**
+   * @brief The node that would preempt this CPU.
+   */
+  Scheduler_Node *preempting_node;
+
+  /**
+   * @brief Whether or not this cpu has been added to the queue
+   * (visited in BFS).
+   */
+  bool visited;
+
+  /**
+   * @brief The node currently executing on this cpu.
+   */
+  Scheduler_Node *executing;
+} Scheduler_strong_APA_CPU;
+
+/**
+ * @brief Scheduler context and node definition for Strong APA scheduler.
+ */
+typedef struct {
+  /**
+   * @brief @see Scheduler_SMP_Context.
+   */
+  Scheduler_SMP_Context Base;
+
+  /**
+   * @brief Chain of all the ready and scheduled nodes present in
+   * the Strong APA scheduler.
+   */
+  Chain_Control Ready;
+
+  /**
+   * @brief Stores cpu-specific variables.
+   */
+  Scheduler_strong_APA_CPU CPU[ RTEMS_ZERO_LENGTH_ARRAY ];
+} Scheduler_strong_APA_Context;
+
+#define SCHEDULER_STRONG_APA_MAXIMUM_PRIORITY 255
 
 /**
  * @brief Entry points for the Strong APA Scheduler.
@@ -101,8 +170,8 @@ typedef struct {
     _Scheduler_default_Release_job, \
     _Scheduler_default_Cancel_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_SMP_Start_idle \
-    SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
+    _Scheduler_strong_APA_Start_idle, \
+    _Scheduler_strong_APA_Set_affinity \
   }
 
 /**
@@ -169,7 +238,7 @@ void _Scheduler_strong_APA_Update_priority(
 /**
  * @brief Asks for help.
  *
- * @param  scheduler The scheduler control instance.
+ * @param scheduler The scheduler control instance.
  * @param the_thread The thread that asks for help.
  * @param node The node of @a the_thread.
  *
@@ -245,6 +314,33 @@ void _Scheduler_strong_APA_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
+);
+
+/**
+ * @brief Starts an idle thread.
+ *
+ * @param scheduler The scheduler instance.
+ * @param[in, out] the_thread An idle thread.
+ * @param cpu The cpu for the operation.
+ */
+void _Scheduler_strong_APA_Start_idle(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *idle,
+  struct Per_CPU_Control  *cpu
+);
+
+/**
+ * @brief Sets the affinity .
+ *
+ * @param scheduler The scheduler control instance.
+ * @param the_thread The thread to yield.
+ * @param[in, out] node The node of @a the_thread.
+ */
+Status_Control _Scheduler_strong_APA_Set_affinity(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node_base,
+  const Processor_mask    *affinity
 );
 
 /** @} */
