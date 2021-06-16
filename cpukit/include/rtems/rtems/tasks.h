@@ -2257,7 +2257,7 @@ rtems_status_code rtems_task_get_affinity(
  * @param cpusetsize is the size of the processor set referenced by ``cpuset``
  *   in bytes.
  *
- * @param[out] cpuset is the pointer to a cpu_set_t object.  The processor set
+ * @param cpuset is the pointer to a cpu_set_t object.  The processor set
  *   defines the new processor affinity set of the task.  A set bit in the
  *   processor set means that the corresponding processor shall be in the
  *   processor affinity set of the task, otherwise the bit shall be cleared.
