@@ -142,34 +142,6 @@ static inline bool bsp_interrupt_allocate_handler_index(
   #endif
 }
 
-static bsp_interrupt_handler_entry *bsp_interrupt_allocate_handler_entry(void)
-{
-  bsp_interrupt_handler_entry *e;
-
-  #ifdef BSP_INTERRUPT_NO_HEAP_USAGE
-    rtems_vector_number index = 0;
-
-    if (bsp_interrupt_allocate_handler_index(0, &index)) {
-      e = &bsp_interrupt_handler_table [index];
-    } else {
-      e = NULL;
-    }
-  #else
-    e = rtems_malloc(sizeof(*e));
-  #endif
-
-  return e;
-}
-
-static void bsp_interrupt_free_handler_entry(bsp_interrupt_handler_entry *e)
-{
-  #ifdef BSP_INTERRUPT_NO_HEAP_USAGE
-    bsp_interrupt_clear_handler_entry(e, 0);
-  #else
-    free(e);
-  #endif
-}
-
 void bsp_interrupt_initialize(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -318,7 +290,7 @@ static rtems_status_code bsp_interrupt_handler_install(
       }
 
       /* Allocate a new entry */
-      current = bsp_interrupt_allocate_handler_entry();
+      current = rtems_malloc(sizeof(*current));
       if (current == NULL) {
         /* Not enough memory */
         bsp_interrupt_unlock();
@@ -433,7 +405,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
       match->next = current->next;
       bsp_interrupt_enable(level);
 
-      bsp_interrupt_free_handler_entry(current);
+      free(current);
     } else if (match == head) {
       /*
        * The match is the list head and has no successor.
@@ -465,7 +437,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
       bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
       bsp_interrupt_enable(level);
 
-      bsp_interrupt_free_handler_entry(match);
+      free(match);
     }
   } else {
     /* No matching entry found */

@@ -483,7 +483,6 @@ rtems_status_code mpc55xx_intc_clear_software_irq(rtems_vector_number vector);
 
 #ifdef BSP_INTERRUPT_HANDLER_TABLE_SIZE
   #define BSP_INTERRUPT_USE_INDEX_TABLE
-  #define BSP_INTERRUPT_NO_HEAP_USAGE
 #endif
 
 /** @} */

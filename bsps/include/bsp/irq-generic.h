@@ -66,10 +66,6 @@ extern "C" {
   #error "if you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well"
 #endif
 
-#if defined(BSP_INTERRUPT_NO_HEAP_USAGE) && !defined(BSP_INTERRUPT_USE_INDEX_TABLE)
-  #error "if you define BSP_INTERRUPT_NO_HEAP_USAGE, you have to define BSP_INTERRUPT_USE_INDEX_TABLE etc. as well"
-#endif
-
 #define BSP_INTERRUPT_VECTOR_NUMBER \
   (BSP_INTERRUPT_VECTOR_MAX - BSP_INTERRUPT_VECTOR_MIN + 1)
 
@@ -149,10 +145,6 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * @ref BSP_INTERRUPT_USE_INDEX_TABLE.  With an enabled index table the handler
  * table will be accessed via a small index table.  You can define the size of
  * the handler table with @ref BSP_INTERRUPT_HANDLER_TABLE_SIZE.
- *
- * Normally new list entries are allocated from the heap.  You may define
- * @ref BSP_INTERRUPT_NO_HEAP_USAGE, if you do not want to use the heap.  For
- * this option you have to define @ref BSP_INTERRUPT_USE_INDEX_TABLE as well.
  *
  * You have to provide some special routines in your BSP (follow the links for
  * the details):
