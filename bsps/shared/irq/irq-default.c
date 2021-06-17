@@ -1,13 +1,17 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup RTEMSBSPsShared
+ * @ingroup bsp_interrupt
+ *
+ * @brief This source file contains the default implementation of
+ *   bsp_interrupt_vector_enable(), bsp_interrupt_vector_disable(), and
+ *   bsp_interrupt_facility_initialize().
  */
 
 /*
- * SPDX-License-Identifier: BSD-2-Clause
- *
- * Copyright (C) 2019 embedded brains GmbH
+ * Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
