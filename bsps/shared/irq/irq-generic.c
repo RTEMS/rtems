@@ -46,7 +46,7 @@
     [BSP_INTERRUPT_VECTOR_COUNT];
 #endif
 
-bsp_interrupt_handler_entry bsp_interrupt_handler_table
+rtems_interrupt_entry bsp_interrupt_handler_table
   [BSP_INTERRUPT_HANDLER_TABLE_SIZE];
 
 /* The last entry indicates if everything is initialized */
@@ -87,7 +87,7 @@ static inline void bsp_interrupt_set_initialized(void)
 }
 
 static inline void bsp_interrupt_clear_handler_entry(
-  bsp_interrupt_handler_entry *e,
+  rtems_interrupt_entry *e,
   rtems_vector_number vector
 )
 {
@@ -108,7 +108,7 @@ static inline bool bsp_interrupt_allocate_handler_index(
 
     /* The first entry will remain empty */
     for (i = 1; i < BSP_INTERRUPT_HANDLER_TABLE_SIZE; ++i) {
-      const bsp_interrupt_handler_entry *e = &bsp_interrupt_handler_table [i];
+      const rtems_interrupt_entry *e = &bsp_interrupt_handler_table [i];
       if (bsp_interrupt_is_empty_handler_entry(e)) {
         *index = i;
         return true;
@@ -164,7 +164,7 @@ static rtems_status_code bsp_interrupt_handler_install(
 {
   rtems_interrupt_level level;
   rtems_vector_number index = 0;
-  bsp_interrupt_handler_entry *head = NULL;
+  rtems_interrupt_entry *head = NULL;
   bool enable_vector = false;
   bool replace = RTEMS_INTERRUPT_IS_REPLACE(options);
 
@@ -218,9 +218,9 @@ static rtems_status_code bsp_interrupt_handler_install(
     /* This is the first handler so enable the vector later */
     enable_vector = true;
   } else {
-    bsp_interrupt_handler_entry *current = head;
-    bsp_interrupt_handler_entry *tail = NULL;
-    bsp_interrupt_handler_entry *match = NULL;
+    rtems_interrupt_entry *current = head;
+    rtems_interrupt_entry *tail = NULL;
+    rtems_interrupt_entry *match = NULL;
 
     /* Ensure that a unique handler remains unique */
     if (
@@ -327,10 +327,10 @@ static rtems_status_code bsp_interrupt_handler_remove(
 {
   rtems_interrupt_level level;
   rtems_vector_number index = 0;
-  bsp_interrupt_handler_entry *head = NULL;
-  bsp_interrupt_handler_entry *current = NULL;
-  bsp_interrupt_handler_entry *previous = NULL;
-  bsp_interrupt_handler_entry *match = NULL;
+  rtems_interrupt_entry *head = NULL;
+  rtems_interrupt_entry *current = NULL;
+  rtems_interrupt_entry *previous = NULL;
+  rtems_interrupt_entry *match = NULL;
 
   /* Check parameters and system state */
   if (!bsp_interrupt_is_initialized()) {
@@ -454,7 +454,7 @@ rtems_status_code rtems_interrupt_handler_remove(
 bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)
 {
   rtems_vector_number index = 0;
-  bsp_interrupt_handler_entry *head = NULL;
+  rtems_interrupt_entry *head = NULL;
   bool empty;
 
   /* For use in interrupts so no lock. */

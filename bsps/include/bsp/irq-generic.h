@@ -83,16 +83,7 @@ extern "C" {
 
 #define bsp_interrupt_assert(e) _Assert(e)
 
-struct bsp_interrupt_handler_entry {
-  rtems_interrupt_handler handler;
-  void *arg;
-  const char *info;
-  struct bsp_interrupt_handler_entry *next;
-};
-
-typedef struct bsp_interrupt_handler_entry bsp_interrupt_handler_entry;
-
-extern bsp_interrupt_handler_entry bsp_interrupt_handler_table [];
+extern rtems_interrupt_entry bsp_interrupt_handler_table [];
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
   #if BSP_INTERRUPT_HANDLER_TABLE_SIZE < 0x100
@@ -386,7 +377,7 @@ static inline void bsp_interrupt_handler_dispatch_unchecked(
   rtems_vector_number vector
 )
 {
-  const bsp_interrupt_handler_entry *e;
+  const rtems_interrupt_entry *e;
 
   e = &bsp_interrupt_handler_table[ bsp_interrupt_handler_index( vector ) ];
 
@@ -494,7 +485,7 @@ void bsp_interrupt_handler_empty( void *arg );
  * @brief Checks if a handler entry is empty.
  */
 static inline bool bsp_interrupt_is_empty_handler_entry(
-  const bsp_interrupt_handler_entry *entry
+  const rtems_interrupt_entry *entry
 )
 {
   return entry->handler == bsp_interrupt_handler_empty;

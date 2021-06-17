@@ -52,7 +52,7 @@ static rtems_status_code bsp_interrupt_handler_iterate(
   void *arg
 )
 {
-  bsp_interrupt_handler_entry *current = NULL;
+  rtems_interrupt_entry *current = NULL;
   rtems_option options = 0;
   rtems_vector_number index = 0;
 
