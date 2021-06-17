@@ -166,6 +166,243 @@ typedef void ( *rtems_interrupt_per_handler_routine )(
 #define RTEMS_INTERRUPT_IS_REPLACE( _options ) \
   ( ( _options ) & RTEMS_INTERRUPT_REPLACE )
 
+/* Generated from spec:/rtems/intr/if/entry */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief This structure represents an interrupt entry.
+ *
+ * @par Notes
+ * This structure shall be treated as an opaque data type from the API point of
+ * view.  Members shall not be accessed directly.  An entry may be initialized
+ * by RTEMS_INTERRUPT_ENTRY_INITIALIZER() or
+ * rtems_interrupt_entry_initialize().  It may be installed for an interrupt
+ * vector with rtems_interrupt_entry_install() and removed from an interrupt
+ * vector by rtems_interrupt_entry_remove().
+ */
+typedef struct rtems_interrupt_entry {
+  /**
+   * @brief This member is the interrupt handler routine.
+   */
+  rtems_interrupt_handler handler;
+
+  /**
+   * @brief This member is the interrupt handler argument.
+   */
+  void *arg;
+
+  /**
+   * @brief This member is the reference to the next entry or NULL.
+   */
+  struct rtems_interrupt_entry *next;
+
+  /**
+   * @brief This member is the descriptive information of the entry.
+   */
+  const char *info;
+} rtems_interrupt_entry;
+
+/* Generated from spec:/rtems/intr/if/entry-initializer */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Statically initializes an interrupt entry object.
+ *
+ * @param _routine is the interrupt handler routine for the entry.
+ *
+ * @param _arg is the interrupt handler argument for the entry.
+ *
+ * @param _info is the descriptive information for the entry.
+ *
+ * @par Notes
+ * Alternatively, rtems_interrupt_entry_initialize() may be used to dynamically
+ * initialize an interrupt entry.
+ */
+#define RTEMS_INTERRUPT_ENTRY_INITIALIZER( _routine, _arg, _info ) \
+  { _routine,  _arg, NULL, _info }
+
+/* Generated from spec:/rtems/intr/if/entry-initialize */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Initializes the interrupt entry.
+ *
+ * @param[out] entry is the interrupt entry to initialize.
+ *
+ * @param routine is the interrupt handler routine for the entry.
+ *
+ * @param arg is the interrupt handler argument for the entry.
+ *
+ * @param info is the descriptive information for the entry.
+ *
+ * @par Notes
+ * Alternatively, RTEMS_INTERRUPT_ENTRY_INITIALIZER() may be used to statically
+ * initialize an interrupt entry.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+static inline void rtems_interrupt_entry_initialize(
+  rtems_interrupt_entry  *entry,
+  rtems_interrupt_handler routine,
+  void                   *arg,
+  const char             *info
+)
+{
+  entry->handler = routine;
+  entry->arg = arg;
+  entry->next = NULL;
+  entry->info = info;
+}
+
+/* Generated from spec:/rtems/intr/if/entry-install */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Installs the interrupt entry at the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param options is the interrupt entry install option set.
+ *
+ * @param entry is the interrupt entry to install.
+ *
+ * One of the following mutually exclusive options
+ *
+ * * #RTEMS_INTERRUPT_UNIQUE, and
+ *
+ * * #RTEMS_INTERRUPT_SHARED
+ *
+ * shall be set in the ``options`` parameter.
+ *
+ * The handler routine of the entry specified by ``entry`` will be called with
+ * the handler argument of the entry when dispatched.  The order in which
+ * shared interrupt handlers are dispatched for one vector is defined by the
+ * installation order.  The first installed handler is dispatched first.
+ *
+ * If the option #RTEMS_INTERRUPT_UNIQUE is set, then it will be ensured that
+ * the handler will be the only one for the interrupt vector.
+ *
+ * If the option #RTEMS_INTERRUPT_SHARED is set, then multiple handlers may be
+ * installed for the interrupt vector.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``entry`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The handler routine of the entry was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER An option specified by ``options`` was not
+ *   applicable.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_UNIQUE option was set
+ *   in ``entry`` and the interrupt vector was already occupied by a handler.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_SHARED option was set
+ *   in ``entry`` and the interrupt vector was already occupied by a unique
+ *   handler.
+ *
+ * @retval ::RTEMS_TOO_MANY The handler routine of the entry specified by
+ *   ``entry`` was already installed for the interrupt vector specified by
+ *   ``vector`` with an argument equal to the handler argument of the entry.
+ *
+ * @par Notes
+ * When the directive call was successful, the ownership of the interrupt entry
+ * has been transferred from the caller to the interrupt service.  An installed
+ * interrupt entry may be removed from the interrupt service by calling
+ * rtems_interrupt_entry_remove().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The interrupt entry shall have been initialized by
+ *   rtems_interrupt_entry_initialize() or RTEMS_INTERRUPT_ENTRY_INITIALIZER().
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_entry_install(
+  rtems_vector_number    vector,
+  rtems_option           options,
+  rtems_interrupt_entry *entry
+);
+
+/* Generated from spec:/rtems/intr/if/entry-remove */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Removes the interrupt entry from the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param entry is the interrupt entry to remove.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``entry`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
+ * @retval ::RTEMS_UNSATISFIED The entry specified by ``entry`` was not
+ *   installed at the interrupt vector specified by ``vector``.
+ *
+ * @par Notes
+ * When the directive call was successful, the ownership of the interrupt entry
+ * has been transferred from the interrupt service to the caller.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The interrupt entry shall have been installed by
+ *   rtems_interrupt_entry_install().
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_entry_remove(
+  rtems_vector_number    vector,
+  rtems_interrupt_entry *entry
+);
+
 /* Generated from spec:/rtems/intr/if/handler-install */
 
 /**
