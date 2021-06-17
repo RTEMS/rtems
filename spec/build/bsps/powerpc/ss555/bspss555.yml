@@ -70,6 +70,7 @@ source:
 - bsps/shared/irq/irq-affinity.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/irq/irq-default.c
+- bsps/shared/irq/irq-enable-disable.c
 - bsps/shared/irq/irq-generic.c
 - bsps/shared/irq/irq-handler-iterate.c
 - bsps/shared/irq/irq-info.c

@@ -315,6 +315,94 @@ rtems_status_code rtems_interrupt_handler_remove(
   void                   *arg
 );
 
+/* Generated from spec:/rtems/intr/if/vector-enable */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Enables the interrupt vector.
+ *
+ * @param vector is the number of the interrupt vector to enable.
+ *
+ * The directive enables the interrupt vector specified by ``vector``. This
+ * allows that interrupt service requests are issued to the target processors
+ * of the interrupt vector.  Interrupt service requests for an interrupt vector
+ * may be raised by rtems_interrupt_raise(), rtems_interrupt_raise_on(),
+ * external signals, or messages.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to enable the interrupt vector has
+ *   not been satisfied.
+ *
+ * @par Notes
+ * The rtems_interrupt_get_attributes() directive may be used to check if an
+ * interrupt vector can be enabled.  Interrupt vectors may be disabled by
+ * rtems_interrupt_vector_disable().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
+
+/* Generated from spec:/rtems/intr/if/vector-disable */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Disables the interrupt vector.
+ *
+ * @param vector is the number of the interrupt vector to disable.
+ *
+ * The directive disables the interrupt vector specified by ``vector``.  This
+ * prevents that an interrupt service request is issued to the target
+ * processors of the interrupt vector.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to disable the interrupt vector has
+ *   not been satisfied.
+ *
+ * @par Notes
+ * The rtems_interrupt_get_attributes() directive may be used to check if an
+ * interrupt vector can be disabled.  Interrupt vectors may be enabled by
+ * rtems_interrupt_vector_enable().  There may be targets on which some
+ * interrupt vectors cannot be disabled, for example a hardware watchdog
+ * interrupt or software generated interrupts.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
+
 /* Generated from spec:/rtems/intr/if/get-affinity */
 
 /**
