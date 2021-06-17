@@ -1,294 +1,566 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
- * @ingroup rtems_interrupt_extension
+ * @ingroup RTEMSAPIClassicIntr
  *
- * @brief Header file for the Interrupt Manager Extension.
+ * @brief This header file defines the Interrupt Manager Extension API.
  */
 
 /*
- * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
+ * Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
- * Copyright (C) 2008, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef RTEMS_IRQ_EXTENSION_H
-#define RTEMS_IRQ_EXTENSION_H
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
+ *
+ * https://www.rtems.org/bugs.html
+ *
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
+ *
+ * https://docs.rtems.org
+ */
 
-#include <rtems.h>
-#include <rtems/chain.h>
+/* Generated from spec:/rtems/intr/if/header-2 */
+
+#ifndef _RTEMS_IRQ_EXTENSION_H
+#define _RTEMS_IRQ_EXTENSION_H
+
+#include <stddef.h>
+#include <stdint.h>
+#include <sys/cpuset.h>
+#include <rtems/rtems/attr.h>
+#include <rtems/rtems/intr.h>
+#include <rtems/rtems/modes.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
+#include <rtems/score/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif
+
+/* Generated from spec:/rtems/intr/if/handler */
 
 /**
- * @defgroup rtems_interrupt_extension Interrupt Manager Extension
- *
  * @ingroup RTEMSAPIClassicIntr
  *
- * In addition to the Classic API interrupt handler with a handle are
- * supported.  You can also install multiple shared handler for one interrupt
- * vector.
+ * @brief Interrupt handler routines shall have this type.
  */
-/**@{**/
+typedef void ( *rtems_interrupt_handler )( void * );
+
+/* Generated from spec:/rtems/intr/if/per-handler-routine */
 
 /**
- * @brief Makes the interrupt handler unique.  Prevents other handler from
- * using the same interrupt vector.
- */
-#define RTEMS_INTERRUPT_UNIQUE ((rtems_option) 0x00000001)
-
-/**
- * @brief Allows that this interrupt handler may share a common interrupt
- * vector with other handler.
- */
-#define RTEMS_INTERRUPT_SHARED ((rtems_option) 0x00000000)
-
-/**
- * @brief Forces that this interrupt handler replaces the first handler with
- * the same argument.
- */
-#define RTEMS_INTERRUPT_REPLACE ((rtems_option) 0x00000002)
-
-/**
- * @brief Returns true if the interrupt handler unique option is set.
- */
-#define RTEMS_INTERRUPT_IS_UNIQUE( options) \
-  ((options) & RTEMS_INTERRUPT_UNIQUE)
-
-/**
- * @brief Returns true if the interrupt handler shared option is set.
- */
-#define RTEMS_INTERRUPT_IS_SHARED( options) \
-  (!RTEMS_INTERRUPT_IS_UNIQUE( options))
-
-/**
- * @brief Returns true if the interrupt handler replace option is set.
- */
-#define RTEMS_INTERRUPT_IS_REPLACE( options) \
-  ((options) & RTEMS_INTERRUPT_REPLACE)
-
-/**
- * @brief Interrupt handler routine type.
- */
-typedef void (*rtems_interrupt_handler)(void *);
-
-/**
- * @brief Installs the interrupt handler routine @a handler for the interrupt
- * vector with number @a vector.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * You can set one of the mutually exclusive options
+ * @brief Visitor routines invoked by rtems_interrupt_handler_iterate() shall
+ *   have this type.
+ */
+typedef void ( *rtems_interrupt_per_handler_routine )(
+  void *,
+  const char *,
+  rtems_option,
+  rtems_interrupt_handler,
+  void *
+);
+
+/* Generated from spec:/rtems/intr/if/shared */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
  *
- * - @ref RTEMS_INTERRUPT_UNIQUE
- * - @ref RTEMS_INTERRUPT_SHARED
- * - @ref RTEMS_INTERRUPT_REPLACE
+ * @brief This interrupt handler install option allows that the interrupt
+ *   handler may share the interrupt vector with other handler.
+ */
+#define RTEMS_INTERRUPT_SHARED ( (rtems_option) 0x00000000 )
+
+/* Generated from spec:/rtems/intr/if/unique */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
  *
- * with the @a options parameter for the interrupt handler.
+ * @brief This interrupt handler install option ensures that the interrupt
+ *   handler is unique.
  *
- * The handler routine shall be called with argument @a arg when dispatched.
- * The order in which the shared interrupt handlers are dispatched for one
- * vector is BSP dependent.
+ * This option prevents other handler from using the same interrupt vector.
+ */
+#define RTEMS_INTERRUPT_UNIQUE ( (rtems_option) 0x00000001 )
+
+/* Generated from spec:/rtems/intr/if/replace */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
  *
- * If the option @ref RTEMS_INTERRUPT_UNIQUE is set then it shall be ensured
- * that this handler will be the only one for this vector.
+ * @brief This interrupt handler install option requests that the interrupt
+ *   handler replaces the first handler with the same argument.
+ */
+#define RTEMS_INTERRUPT_REPLACE ( (rtems_option) 0x00000002 )
+
+/* Generated from spec:/rtems/intr/if/is-shared */
+
+/**
+ * @brief Checks if the interrupt handler shared option is set.
  *
- * If the option @ref RTEMS_INTERRUPT_REPLACE is set then it shall be ensured
- * that this handler will replace the first handler with the same argument for
- * this vector if it exists, otherwise an error status shall be returned.  A
- * second handler with the same argument for this vector shall remain
- * unchanged.  The new handler will inherit the unique or shared option from
+ * @param _options is the interrupt handler option set to check.
+ *
+ * @return Returns true, if the interrupt handler shared option
+ *   #RTEMS_INTERRUPT_SHARED is set, otherwise false.
+ */
+#define RTEMS_INTERRUPT_IS_SHARED( _options ) \
+  ( ( _options ) & RTEMS_INTERRUPT_SHARED )
+
+/* Generated from spec:/rtems/intr/if/is-unique */
+
+/**
+ * @brief Checks if the interrupt handler unique option is set.
+ *
+ * @param _options is the interrupt handler option set to check.
+ *
+ * @return Returns true, if the interrupt handler unique option
+ *   #RTEMS_INTERRUPT_UNIQUE is set, otherwise false.
+ */
+#define RTEMS_INTERRUPT_IS_UNIQUE( _options ) \
+  ( ( _options ) & RTEMS_INTERRUPT_UNIQUE )
+
+/* Generated from spec:/rtems/intr/if/is-replace */
+
+/**
+ * @brief Checks if the interrupt handler replace option is set.
+ *
+ * @param _options is the interrupt handler option set to check.
+ *
+ * @return Returns true, if the interrupt handler replace option
+ *   #RTEMS_INTERRUPT_REPLACE is set, otherwise false.
+ */
+#define RTEMS_INTERRUPT_IS_REPLACE( _options ) \
+  ( ( _options ) & RTEMS_INTERRUPT_REPLACE )
+
+/* Generated from spec:/rtems/intr/if/handler-install */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Installs the interrupt handler routine and argument at the interrupt
+ *   vector.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param info is the descriptive information of the interrupt handler to
+ *   install.
+ *
+ * @param options is the interrupt handler install option set.
+ *
+ * @param routine is the interrupt handler routine to install.
+ *
+ * @param arg is the interrupt handler argument to install.
+ *
+ * One of the following mutually exclusive options
+ *
+ * * #RTEMS_INTERRUPT_UNIQUE,
+ *
+ * * #RTEMS_INTERRUPT_SHARED, and
+ *
+ * * #RTEMS_INTERRUPT_REPLACE
+ *
+ * shall be set in the ``options`` parameter.
+ *
+ * The handler routine will be called with the argument specified by ``arg``
+ * when dispatched.  The order in which shared interrupt handlers are
+ * dispatched for one vector is defined by the installation order.  The first
+ * installed handler is dispatched first.
+ *
+ * If the option #RTEMS_INTERRUPT_UNIQUE is set, then it will be ensured that
+ * the handler will be the only one for the interrupt vector.
+ *
+ * If the option #RTEMS_INTERRUPT_SHARED is set, then multiple handler may be
+ * installed for the interrupt vector.
+ *
+ * If the option #RTEMS_INTERRUPT_REPLACE is set, then the handler specified by
+ * ``routine`` will replace the first handler with the same argument for the
+ * interrupt vector if it exists, otherwise an error status will be returned.
+ * A second handler with the same argument for the interrupt vector will remain
+ * unchanged.  The new handler will inherit the unique or shared options from
  * the replaced handler.
  *
- * You can provide an informative description @a info.  This may be used for
- * system debugging and status tools.  The string has to be persistent during
- * the handler life time.
+ * An informative description may be provided in ``info``.  It may be used for
+ * system debugging and diagnostic tools.  The referenced string has to be
+ * persistent as long as the handler is installed.
  *
- * This function may block.
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_CALLED_FROM_ISR If this function is called from interrupt
- * context this shall be returned.
- * @retval RTEMS_INVALID_ADDRESS If the handler address is NULL this shall be
- * returned.
- * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
- * returned.
- * @retval RTEMS_INVALID_NUMBER If an option is not applicable this shall be
- * returned.
- * @retval RTEMS_RESOURCE_IN_USE If the vector is already occupied with a
- * unique handler this shall be returned.  If a unique handler should be
- * installed and there is already a handler installed this shall be returned.
- * @retval RTEMS_TOO_MANY If a handler with this argument is already installed
- * for the vector this shall be returned.
- * @retval RTEMS_UNSATISFIED If no handler exists to replace with the specified
- * argument and vector this shall be returned.
- * @retval RTEMS_IO_ERROR Reserved for board support package specific error
- * conditions.
+ * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
+ * @retval ::RTEMS_NO_MEMORY There was not enough memory available to allocate
+ *   data structures to install the handler.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_UNIQUE option was set
+ *   in ``options`` and the interrupt vector was already occupied by a handler.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_SHARED option was set
+ *   in ``options`` and the interrupt vector was already occupied by a unique
+ *   handler.
+ *
+ * @retval ::RTEMS_TOO_MANY The handler specified by ``routine`` was already
+ *   installed for the interrupt vector specified by ``vector`` with an
+ *   argument equal to the argument specified by ``arg``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The #RTEMS_INTERRUPT_REPLACE option was set in
+ *   ``options`` and no handler to replace was installed.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_handler_install(
-  rtems_vector_number vector,
-  const char *info,
-  rtems_option options,
-  rtems_interrupt_handler handler,
-  void *arg
+  rtems_vector_number     vector,
+  const char             *info,
+  rtems_option            options,
+  rtems_interrupt_handler routine,
+  void                   *arg
 );
 
+/* Generated from spec:/rtems/intr/if/handler-remove */
+
 /**
- * @brief Removes the interrupt handler routine @a handler with argument @a arg
- * for the interrupt vector with number @a vector.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * This function may block.
+ * @brief Removes the interrupt handler routine and argument from the interrupt
+ *   vector.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_CALLED_FROM_ISR If this function is called from interrupt
- * context this shall be returned.
- * @retval RTEMS_INVALID_ADDRESS If the handler address is NULL this shall be
- * returned.
- * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
- * returned.
- * @retval RTEMS_UNSATISFIED If the handler with its argument is not installed
- * for the vector this shall be returned.
- * @retval RTEMS_IO_ERROR Reserved for board support package specific error
- * conditions.
+ * @param vector is the interrupt vector number.
+ *
+ * @param routine is the interrupt handler routine to remove.
+ *
+ * @param arg is the interrupt handler argument to remove.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
+ * @retval ::RTEMS_UNSATISFIED There was no handler routine and argument pair
+ *   installed specified by ``routine`` and ``arg``.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_handler_remove(
-  rtems_vector_number vector,
-  rtems_interrupt_handler handler,
-  void *arg
+  rtems_vector_number     vector,
+  rtems_interrupt_handler routine,
+  void                   *arg
 );
 
-/**
- * @brief Interrupt handler iteration routine type.
- *
- * @see rtems_interrupt_handler_iterate()
- */
-typedef void (*rtems_interrupt_per_handler_routine)(
-  void *, const char *, rtems_option, rtems_interrupt_handler, void *
-);
+/* Generated from spec:/rtems/intr/if/get-affinity */
 
 /**
- * @brief Iterates over all installed interrupt handler of the interrupt vector
- * with number @a vector.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * For each installed handler of the vector the function @a routine will be
- * called with the supplied argument @a arg and the handler information,
- * options, routine and argument.
+ * @brief Gets the processor affinity set of the interrupt vector.
  *
- * This function is intended for system information and diagnostics.
+ * @param vector is the interrupt vector number.
  *
- * This function may block.  Never install or remove an interrupt handler
- * within the iteration routine.  This may result in a deadlock.
+ * @param affinity_size is the size of the processor set referenced by
+ *   ``affinity`` in bytes.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_CALLED_FROM_ISR If this function is called from interrupt
- * context this shall be returned.
- * @retval RTEMS_INVALID_ID If the vector number is out of range this shall be
- * returned.
- * @retval RTEMS_IO_ERROR Reserved for board support package specific error
- * conditions.
- */
-rtems_status_code rtems_interrupt_handler_iterate(
-  rtems_vector_number vector,
-  rtems_interrupt_per_handler_routine routine,
-  void *arg
-);
-
-/**
- * @brief Sets the processor affinity set of an interrupt vector.
+ * @param[out] affinity is the pointer to a cpu_set_t object.  When the
+ *   directive call is successful, the processor affinity set of the interrupt
+ *   vector will be stored in this object.  A set bit in the processor set
+ *   means that the corresponding processor is in the processor affinity set of
+ *   the interrupt vector, otherwise the bit is cleared.
  *
- * @param[in] vector The interrupt vector number.
- * @param[in] affinity_size The storage size of the affinity set.
- * @param[in] affinity_set The new processor affinity set for the interrupt
- *   vector.  This pointer must not be @c NULL.
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID The vector number is invalid.
- * @retval RTEMS_INVALID_SIZE Invalid affinity set size.
- * @retval RTEMS_INVALID_NUMBER Invalid processor affinity set.
- */
-rtems_status_code rtems_interrupt_set_affinity(
-  rtems_vector_number  vector,
-  size_t               affinity_size,
-  const cpu_set_t     *affinity
-);
-
-/**
- * @brief Gets the processor affinity set of an interrupt vector.
+ * @retval ::RTEMS_INVALID_ADDRESS The ``affinity`` parameter was NULL.
  *
- * @param[in] vector The interrupt vector number.
- * @param[in] affinity_size The storage size of the affinity set.
- * @param[out] affinity_set The current processor affinity set for the
- *   interrupt vector.  This pointer must not be @c NULL.
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID The vector number is invalid.
- * @retval RTEMS_INVALID_SIZE Invalid affinity set size.
+ * @retval ::RTEMS_INVALID_SIZE The size specified by ``affinity_size`` of the
+ *   processor set was too small for the processor affinity set of the
+ *   interrupt vector.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_get_affinity(
-  rtems_vector_number  vector,
-  size_t               affinity_size,
-  cpu_set_t           *affinity
+  rtems_vector_number vector,
+  size_t              affinity_size,
+  cpu_set_t          *affinity
 );
 
-/**
- * @brief An interrupt server action.
- *
- * This structure must be treated as an opaque data type.  Members must not be
- * accessed directly.
- *
- * @see rtems_interrupt_server_action_prepend().
- */
-typedef struct rtems_interrupt_server_action {
-  struct rtems_interrupt_server_action *next;
-  rtems_interrupt_handler               handler;
-  void                                 *arg;
-} rtems_interrupt_server_action;
+/* Generated from spec:/rtems/intr/if/set-affinity */
 
 /**
- * @brief The interrupt server index of the default interrupt server.
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Sets the processor affinity set of the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param affinity_size is the size of the processor set referenced by
+ *   ``affinity`` in bytes.
+ *
+ * @param affinity is the pointer to a cpu_set_t object.  The processor set
+ *   defines the new processor affinity set of the interrupt vector.  A set bit
+ *   in the processor set means that the corresponding processor shall be in
+ *   the processor affinity set of the interrupt vector, otherwise the bit
+ *   shall be cleared.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``affinity`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER The referenced processor set was not a valid
+ *   new processor affinity set for the interrupt vector.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to set the processor affinity of the
+ *   interrupt vector has not been satisfied.
+ *
+ * @par Notes
+ * The rtems_interrupt_get_attributes() directive may be used to check if the
+ * processor affinity of an interrupt vector can be set.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_set_affinity(
+  rtems_vector_number vector,
+  size_t              affinity_size,
+  const cpu_set_t    *affinity
+);
+
+/* Generated from spec:/rtems/intr/if/handler-iterate */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Iterates over all interrupt handler installed at the interrupt
+ *   vector.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param routine is the visitor routine.
+ *
+ * @param arg is the visitor argument.
+ *
+ * For each installed handler at the interrupt vector the visitor function
+ * specified by ``routine`` will be called with the argument specified by
+ * ``arg`` and the handler information, options, routine and argument.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The service was not initialized.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
+ * @par Notes
+ * @parblock
+ * The directive is intended for system information and diagnostics.
+ *
+ * Never install or remove an interrupt handler within the visitor function.
+ * This may result in a deadlock.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_handler_iterate(
+  rtems_vector_number                 vector,
+  rtems_interrupt_per_handler_routine routine,
+  void                               *arg
+);
+
+/* Generated from spec:/rtems/intr/if/server-default */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief The constant represents the index of the default interrupt server.
  */
 #define RTEMS_INTERRUPT_SERVER_DEFAULT 0
 
+/* Generated from spec:/rtems/intr/if/server-control */
+
 /**
- * @brief An interrupt server control.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * This structure must be treated as an opaque data type.  Members must not be
- * accessed directly.
+ * @brief This structure represents an interrupt server.
  *
- * @see rtems_interrupt_server_create()
+ * @par Notes
+ * This structure shall be treated as an opaque data type from the API point of
+ * view.  Members shall not be accessed directly.  The structure is initialized
+ * by rtems_interrupt_server_create() and maintained by the interrupt server
+ * support.
  */
 typedef struct rtems_interrupt_server_control {
-  RTEMS_INTERRUPT_LOCK_MEMBER( lock )
-  rtems_chain_control          entries;
-  rtems_id                     server;
-  unsigned long                errors;
-  uint32_t                     index;
-  rtems_chain_node             node;
+  #if defined(RTEMS_SMP)
+    /**
+     * @brief This member is the ISR lock protecting the server control state.
+     */
+    rtems_interrupt_lock lock;
+  #endif
+
+  /**
+   * @brief This member is the chain of pending interrupt entries.
+   */
+  Chain_Control entries;
+
+  /**
+   * @brief This member is the identifier of the server task.
+   */
+  rtems_id server;
+
+  /**
+   * @brief This member is the error count.
+   */
+  unsigned long errors;
+
+  /**
+   * @brief This member is the server index.
+   */
+  uint32_t index;
+
+  /**
+   * @brief This member is the node for the interrupt server registry.
+   */
+  Chain_Node node;
+
+  /**
+   * @brief This member is the optional handler to destroy the interrupt server
+   *   control.
+   */
   void ( *destroy )( struct rtems_interrupt_server_control * );
 } rtems_interrupt_server_control;
 
+/* Generated from spec:/rtems/intr/if/server-config */
+
 /**
- * @brief An interrupt server configuration.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * @see rtems_interrupt_server_create()
+ * @brief This structure defines an interrupt server configuration.
+ *
+ * @par Notes
+ * See also rtems_interrupt_server_create().
  */
 typedef struct {
   /**
-   * @brief The task name of the interrupt server.
+   * @brief This member is the task name of the interrupt server.
    */
   rtems_name name;
 
   /**
-   * @brief The initial task priority of the interrupt server.
+   * @brief This member is the initial task priority of the interrupt server.
    */
   rtems_task_priority priority;
 
   /**
-   * @brief The task storage area of the interrupt server.
+   * @brief This member is the task storage area of the interrupt server.
    *
    * It shall be NULL for interrupt servers created by
    * rtems_interrupt_server_create().
@@ -296,127 +568,142 @@ typedef struct {
   void *storage_area;
 
   /**
-   * @brief The task storage size of the interrupt server.
+   * @brief This member is the task storage size of the interrupt server.
    *
-   * For interrupt servers created by rtems_interrupt_server_create() this is
-   * the task stack size.
+   * For interrupt servers created by rtems_interrupt_server_create() this is the
+   * task stack size.
    */
   size_t storage_size;
 
   /**
-   * @brief The initial task modes of the interrupt server.
+   * @brief This member is the initial mode set of the interrupt server.
    */
   rtems_mode modes;
 
   /**
-   * @brief The task attributes of the interrupt server.
+   * @brief This member is the attribute set of the interrupt server.
    */
   rtems_attribute attributes;
 
   /**
-   * @brief An optional handler to destroy the interrupt server control handed
-   *   over to rtems_interrupt_server_create().
+   * @brief This member is an optional handler to destroy the interrupt server
+   *   control handed over to rtems_interrupt_server_create().
    *
-   * This handler is called in the context of the interrupt server to be
+   * The destroy handler is optional and may be NULL.  If the destroy handler is
+   * present, it is called from within the context of the interrupt server to be
    * deleted, see also rtems_interrupt_server_delete().
    */
   void ( *destroy )( rtems_interrupt_server_control * );
 } rtems_interrupt_server_config;
 
-/**
- * @brief An interrupt server entry.
- *
- * This structure must be treated as an opaque data type.  Members must not be
- * accessed directly.
- *
- * @see rtems_interrupt_server_entry_initialize(),
- *   rtems_interrupt_server_action_prepend(),
- *   rtems_interrupt_server_entry_submit(), and
- *   rtems_interrupt_server_entry_destroy().
- */
-typedef struct {
-  rtems_chain_node               node;
-  void                          *server;
-  rtems_vector_number            vector;
-  rtems_interrupt_server_action *actions;
-} rtems_interrupt_server_entry;
+/* Generated from spec:/rtems/intr/if/server-initialize */
 
 /**
- * @brief An interrupt server request.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * This structure must be treated as an opaque data type.  Members must not be
- * accessed directly.
- *
- * @see rtems_interrupt_server_request_initialize(),
- *   rtems_interrupt_server_request_set_vector(),
- *   rtems_interrupt_server_request_submit(), and
- *   rtems_interrupt_server_request_destroy().
- */
-typedef struct {
-  rtems_interrupt_server_entry  entry;
-  rtems_interrupt_server_action action;
-} rtems_interrupt_server_request;
-
-/**
  * @brief Initializes the interrupt server tasks.
  *
- * This function tries to create an interrupt server task for each processor in
- * the system.  The tasks will have the priority @a priority, the stack size @a
- * stack_size, the modes @a modes and the attributes @a attributes.  The count
- * of server tasks will be returned in @a server_count.  Interrupt handlers can
- * be installed on an interrupt server with
+ * @param priority is the initial task priority of the created interrupt
+ *   servers.
+ *
+ * @param stack_size is the task stack size of the created interrupt servers.
+ *
+ * @param modes is the initial mode set of the created interrupt servers.
+ *
+ * @param attributes is the attribute set of the created interrupt servers.
+ *
+ * @param[out] server_count is the pointer to an uint32_t object or NULL. When
+ *   the pointer is not equal to NULL, the count of successfully created
+ *   interrupt servers is stored in this object regardless of the return
+ *   status.
+ *
+ * The directive tries to create an interrupt server task for each online
+ * processor in the system.  The tasks will have the initial priority specified
+ * by ``priority``, the stack size specified by ``stack_size``, the initial
+ * mode set specified by ``modes``, and the attribute set specified by
+ * ``attributes``.  The count of successfully created server tasks will be
+ * returned in ``server_count`` if the pointer is not equal to NULL.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The interrupt servers were already
+ *   initialized.
+ *
+ * @return The directive uses rtems_task_create().  If this directive fails,
+ *   then its error status will be returned.
+ *
+ * @par Notes
+ * @parblock
+ * Interrupt handlers may be installed on an interrupt server with
  * rtems_interrupt_server_handler_install() and removed with
  * rtems_interrupt_server_handler_remove() using a server index.  In case of an
  * interrupt, the request will be forwarded to the interrupt server.  The
  * handlers are executed within the interrupt server context.  If one handler
  * blocks on something this may delay the processing of other handlers.
  *
- * The server count pointer @a server_count may be @a NULL.
+ * Interrupt servers may be deleted by rtems_interrupt_server_delete().
+ * @endparblock
  *
- * The task name of interrupt servers created by this function is
- * rtems_build_name( 'I', 'R', 'Q', 'S' ).
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
  *
- * This function may block.
+ * * The directive may be called from within device driver initialization
+ *   context.
  *
- * @retval RTEMS_SUCCESSFUL The operation was successful.
+ * * The directive may be called from within task context.
  *
- * @retval RTEMS_INCORRECT_STATE The interrupt servers were already initialized.
- *
- * @return The function uses rtems_task_create().  If this operation is not
- *   successful, then its status code is returned.
- *
- * @see rtems_interrupt_server_create() and rtems_interrupt_server_delete().
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_initialize(
   rtems_task_priority priority,
-  size_t stack_size,
-  rtems_mode modes,
-  rtems_attribute attributes,
-  uint32_t *server_count
+  size_t              stack_size,
+  rtems_mode          modes,
+  rtems_attribute     attributes,
+  uint32_t           *server_count
 );
 
+/* Generated from spec:/rtems/intr/if/server-create */
+
 /**
+ * @ingroup RTEMSAPIClassicIntr
+ *
  * @brief Creates an interrupt server.
  *
- * This function may block.
- *
- * @param[out] control is the interrupt server control.  The ownership of this
- *   structure is transferred from the caller of this function to the interrupt
+ * @param[out] control is the pointer to an rtems_interrupt_server_control
+ *   object.  When the directive call was successful, the ownership of the
+ *   object was transferred from the caller of the directive to the interrupt
  *   server management.
  *
  * @param config is the interrupt server configuration.
  *
- * @param[out] server_index is the pointer to a server index variable.  The
- *   index of the built interrupt server will be stored in the referenced
- *   variable if the operation was successful.
+ * @param[out] server_index is the pointer to an uint32_t object.  When the
+ *   directive call was successful, the index of the created interrupt server
+ *   will be stored in this object.
  *
- * @retval RTEMS_SUCCESSFUL The operation was successful.
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
  *
- * @return The function uses rtems_task_create().  If this operation is not
- *   successful, then its status code is returned.
+ * @return The directive uses rtems_task_create().  If this directive fails,
+ *   then its error status will be returned.
  *
- * @see rtems_interrupt_server_initialize() and
- *   rtems_interrupt_server_delete().
+ * @par Notes
+ * See also rtems_interrupt_server_initialize() and
+ * rtems_interrupt_server_delete().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_create(
   rtems_interrupt_server_control      *control,
@@ -424,189 +711,197 @@ rtems_status_code rtems_interrupt_server_create(
   uint32_t                            *server_index
 );
 
-/**
- * @brief Destroys the interrupt server.
- *
- * This function may block.
- *
- * The interrupt server deletes itself, so after the return of the function the
- * interrupt server may be still in the termination process depending on the
- * task priorities of the system.
- *
- * @param server_index is the index of the interrupt server to destroy.  Use
- *   ::RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- *
- * @retval RTEMS_SUCCESSFUL The operation was successful.
- * @retval RTEMS_INVALID_ID The interrupt server index was invalid.
- *
- * @see rtems_interrupt_server_create()
- */
-rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
+/* Generated from spec:/rtems/intr/if/server-handler-install */
 
 /**
- * @brief Installs the interrupt handler routine @a handler for the interrupt
- * vector with number @a vector on the server @a server.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * The handler routine will be executed on the corresponding interrupt server
- * task.  A server index @a server_index of @c RTEMS_INTERRUPT_SERVER_DEFAULT
- * may be used to install the handler on the default server.
+ * @brief Installs the interrupt handler routine and argument at the interrupt
+ *   vector on the interrupt server.
  *
- * This function may block.
+ * @param server_index is the interrupt server index.  The constant
+ *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
+ *   interrupt server.
  *
- * @see rtems_interrupt_handler_install().
+ * @param vector is the interrupt vector number.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
- * @retval * For other errors see rtems_interrupt_handler_install().
+ * @param info is the descriptive information of the interrupt handler to
+ *   install.
+ *
+ * @param options is the interrupt handler install option set.
+ *
+ * @param routine is the interrupt handler routine to install.
+ *
+ * @param arg is the interrupt handler argument to install.
+ *
+ * The handler routine specified by ``routine`` will be executed within the
+ * context of the interrupt server task specified by ``server_index``.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The directive was called from within
+ *   interrupt context.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_INVALID_NUMBER An option specified by ``info`` was not
+ *   applicable.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_UNIQUE option was set
+ *   in ``info`` and the interrupt vector was already occupied by a handler.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The #RTEMS_INTERRUPT_SHARED option was set
+ *   in ``info`` and the interrupt vector was already occupied by a unique
+ *   handler.
+ *
+ * @retval ::RTEMS_TOO_MANY The handler specified by ``routine`` was already
+ *   installed for the interrupt vector specified by ``vector`` with an
+ *   argument equal to the argument specified by ``arg``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The #RTEMS_INTERRUPT_REPLACE option was set in
+ *   ``info`` and no handler to replace was installed.
+ *
+ * @par Notes
+ * See also rtems_interrupt_handler_install().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_handler_install(
-  uint32_t server_index,
-  rtems_vector_number vector,
-  const char *info,
-  rtems_option options,
-  rtems_interrupt_handler handler,
-  void *arg
+  uint32_t                server_index,
+  rtems_vector_number     vector,
+  const char             *info,
+  rtems_option            options,
+  rtems_interrupt_handler routine,
+  void                   *arg
 );
 
+/* Generated from spec:/rtems/intr/if/server-handler-remove */
+
 /**
- * @brief Removes the interrupt handler routine @a handler with argument @a arg
- * for the interrupt vector with number @a vector from the server @a server.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * A server index @a server_index of @c RTEMS_INTERRUPT_SERVER_DEFAULT may be
- * used to remove the handler from the default server.
+ * @brief Removes the interrupt handler routine and argument from the interrupt
+ *   vector and the interrupt server.
  *
- * This function may block.
+ * @param server_index is the interrupt server index.  The constant
+ *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
+ *   interrupt server.
  *
- * @see rtems_interrupt_handler_remove().
+ * @param vector is the interrupt vector number.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
- * @retval * For other errors see rtems_interrupt_handler_remove().
+ * @param routine is the interrupt handler routine to remove.
+ *
+ * @param arg is the interrupt handler argument to remove.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_UNSATISFIED There was no handler routine and argument pair
+ *   installed specified by ``routine`` and ``arg``.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_handler_remove(
-  uint32_t server_index,
-  rtems_vector_number vector,
-  rtems_interrupt_handler handler,
-  void *arg
+  uint32_t                server_index,
+  rtems_vector_number     vector,
+  rtems_interrupt_handler routine,
+  void                   *arg
 );
 
-/**
- * @brief Iterates over all interrupt handler of the interrupt vector with
- * number @a vector which are installed on the interrupt server specified by
- * @a server.
- *
- * A server index @a server_index of @c RTEMS_INTERRUPT_SERVER_DEFAULT may be
- * used to specify the default server.
- *
- * @see rtems_interrupt_handler_iterate()
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
- * @retval * For other errors see rtems_interrupt_handler_iterate().
- */
-rtems_status_code rtems_interrupt_server_handler_iterate(
-  uint32_t server_index,
-  rtems_vector_number vector,
-  rtems_interrupt_per_handler_routine routine,
-  void *arg
-);
+/* Generated from spec:/rtems/intr/if/server-set-affinity */
 
 /**
- * @brief Moves the interrupt handlers installed on the specified source
- * interrupt server to the destination interrupt server.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * This function must be called from thread context.  It may block.  Calling
- * this function within the context of an interrupt server is undefined
- * behaviour.
+ * @brief Sets the processor affinity of the interrupt server.
  *
- * @param[in] source_server_index The source interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- * @param[in] vector The interrupt vector number.
- * @param[in] destination_server_index The destination interrupt server index.
- *   Use @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID The destination interrupt server index is invalid.
- * @retval RTEMS_INVALID_ID The vector number is invalid.
- * @retval RTEMS_INVALID_ID The destination interrupt server index is invalid.
- */
-rtems_status_code rtems_interrupt_server_move(
-  uint32_t            source_server_index,
-  rtems_vector_number vector,
-  uint32_t            destination_server_index
-);
-
-/**
- * @brief Suspends the specified interrupt server.
- *
- * A suspend request is sent to the specified interrupt server.  This function
- * waits for an acknowledgment from the specified interrupt server.
- *
- * This function must be called from thread context.  It may block.  Calling
- * this function within the context of an interrupt server is undefined
- * behaviour.
- *
- * @param[in] server_index The interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- *
- * @see rtems_interrupt_server_resume().
- *
- * @retval RTEMS_SUCCESSFUL Successful operation
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
- */
-rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
-
-/**
- * @brief Resumes the specified interrupt server.
- *
- * This function must be called from thread context.  It may block.  Calling
- * this function within the context of an interrupt server is undefined
- * behaviour.
- *
- * @param[in] server_index The interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- *
- * @see rtems_interrupt_server_suspend().
- *
- * @retval RTEMS_SUCCESSFUL Successful operation
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
- */
-rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
-
-/**
- * @brief Sets the processor affinity of the specified interrupt server.
- *
- * The scheduler is set determined by the highest numbered processor in the
- * specified affinity set.
- *
- * This operation is only reliable in case the specified interrupt was
- * suspended via rtems_interrupt_server_suspend().
- *
- * @param[in] server_index The interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- * @param[in] affinity_size The storage size of the affinity set.
- * @param[in] affinity The desired processor affinity set for the specified
+ * @param server_index is the interrupt server index.  The constant
+ *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
  *   interrupt server.
- * @param[in] priority The task priority with respect to the corresponding
- *   scheduler instance.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
- * @retval RTEMS_INVALID_SIZE Invalid affinity set size.
- * @retval RTEMS_INVALID_NAME The affinity set contains no online processor.
- * @retval RTEMS_INCORRECT_STATE The highest numbered online processor in the
- *   specified affinity set is not owned by a scheduler.
- * @retval RTEMS_INVALID_PRIORITY Invalid priority.
- * @retval RTEMS_RESOURCE_IN_USE The interrupt server owns resources which deny
- *   a scheduler change.
- * @retval RTEMS_INVALID_NUMBER Invalid processor affinity set.
+ * @param affinity_size is the size of the processor set referenced by
+ *   ``affinity`` in bytes.
+ *
+ * @param affinity is the pointer to a cpu_set_t object.  The processor set
+ *   defines the new processor affinity set of the interrupt server.  A set bit
+ *   in the processor set means that the corresponding processor shall be in
+ *   the processor affinity set of the task, otherwise the bit shall be
+ *   cleared.
+ *
+ * @param priority is the new real priority for the interrupt server.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @return The directive uses rtems_scheduler_ident_by_processor_set(),
+ *   rtems_task_set_scheduler(), and rtems_task_set_affinity().  If one of
+ *   these directive fails, then its error status will be returned.
+ *
+ * @par Notes
+ * @parblock
+ * The scheduler is set determined by the highest numbered processor in the
+ * affinity set specified by ``affinity``.
+ *
+ * This operation is only reliable in case the interrupt server was suspended
+ * via rtems_interrupt_server_suspend().
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may change the processor affinity of a task.  This may cause
+ *   the calling task to be preempted.
+ *
+ * * The directive may change the priority of a task.  This may cause the
+ *   calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_set_affinity(
   uint32_t            server_index,
@@ -615,127 +910,633 @@ rtems_status_code rtems_interrupt_server_set_affinity(
   rtems_task_priority priority
 );
 
+/* Generated from spec:/rtems/intr/if/server-delete */
+
 /**
- * @brief Initializes the specified interrupt server entry.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * @param[in] server_index The interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- * @param[in] entry The interrupt server entry to initialize.
+ * @brief Deletes the interrupt server.
  *
- * @see rtems_interrupt_server_action_prepend().
+ * @param server_index is the index of the interrupt server to delete.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   server index specified by ``server_index``.
+ *
+ * @par Notes
+ * @parblock
+ * The interrupt server deletes itself, so after the return of the directive
+ * the interrupt server may be still in the termination process depending on
+ * the task priorities of the system.
+ *
+ * See also rtems_interrupt_server_create().
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_server_delete( uint32_t server_index );
+
+/* Generated from spec:/rtems/intr/if/server-suspend */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Suspends the interrupt server.
+ *
+ * @param server_index is the index of the interrupt server to suspend.  The
+ *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
+ *   default interrupt server.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @par Notes
+ * Interrupt server may be resumed by rtems_interrupt_server_resume().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
+
+/* Generated from spec:/rtems/intr/if/server-resume */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Resumes the interrupt server.
+ *
+ * @param server_index is the index of the interrupt server to resume.  The
+ *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
+ *   default interrupt server.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @par Notes
+ * Interrupt server may be suspended by rtems_interrupt_server_suspend().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
+
+/* Generated from spec:/rtems/intr/if/server-move */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Moves the interrupt handlers installed at the interrupt vector and
+ *   the source interrupt server to the destination interrupt server.
+ *
+ * @param source_server_index is the index of the source interrupt server.  The
+ *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
+ *   default interrupt server.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param destination_server_index is the index of the destination interrupt
+ *   server.  The constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to
+ *   specify the default interrupt server.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``source_server_index``.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``destination_server_index``.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_server_move(
+  uint32_t            source_server_index,
+  rtems_vector_number vector,
+  uint32_t            destination_server_index
+);
+
+/* Generated from spec:/rtems/intr/if/server-handler-iterate */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Iterates over all interrupt handler installed at the interrupt vector
+ *   and interrupt server.
+ *
+ * @param server_index is the index of the interrupt server.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param routine is the visitor routine.
+ *
+ * @param arg is the visitor argument.
+ *
+ * For each installed handler at the interrupt vector and interrupt server the
+ * visitor function specified by ``vector`` will be called with the argument
+ * specified by ``routine`` and the handler information, options, routine and
+ * argument.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @par Notes
+ * @parblock
+ * The directive is intended for system information and diagnostics.
+ *
+ * Never install or remove an interrupt handler within the visitor function.
+ * This may result in a deadlock.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_server_handler_iterate(
+  uint32_t                            server_index,
+  rtems_vector_number                 vector,
+  rtems_interrupt_per_handler_routine routine,
+  void                               *arg
+);
+
+/* Generated from spec:/rtems/intr/if/server-action */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief This structure represents an interrupt server action.
+ *
+ * @par Notes
+ * This structure shall be treated as an opaque data type from the API point of
+ * view.  Members shall not be accessed directly.
+ */
+typedef struct rtems_interrupt_server_action {
+  /**
+   * @brief This member is the reference to the next action or NULL.
+   */
+  struct rtems_interrupt_server_action *next;
+
+  /**
+   * @brief This member is the interrupt handler.
+   */
+  rtems_interrupt_handler handler;
+
+  /**
+   * @brief This member is the interrupt handler argument.
+   */
+  void *arg;
+} rtems_interrupt_server_action;
+
+/* Generated from spec:/rtems/intr/if/server-entry */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief This structure represents an interrupt server entry.
+ *
+ * @par Notes
+ * This structure shall be treated as an opaque data type from the API point of
+ * view.  Members shall not be accessed directly.  An entry is initialized by
+ * rtems_interrupt_server_entry_initialize() and destroyed by
+ * rtems_interrupt_server_entry_destroy().  Interrupt server actions can be
+ * prepended to the entry by rtems_interrupt_server_action_prepend().  The
+ * entry is submitted to be serviced by rtems_interrupt_server_entry_submit().
+ */
+typedef struct {
+  /**
+   * @brief This member is the node for the interrupt entry processing.
+   */
+  Chain_Node node;
+
+  /**
+   * @brief This member references the interrupt server used to process the
+   *   entry.
+   */
+  rtems_interrupt_server_control *server;
+
+  /**
+   * @brief This member is the interrupt vector number.
+   */
+  rtems_vector_number vector;
+
+  /**
+   * @brief This member is the interrupt server actions list head.
+   */
+  rtems_interrupt_server_action *actions;
+} rtems_interrupt_server_entry;
+
+/* Generated from spec:/rtems/intr/if/server-entry-initialize */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Initializes the interrupt server entry.
+ *
+ * @param server_index is the interrupt server index.  The constant
+ *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
+ *   interrupt server.
+ *
+ * @param entry is the interrupt server entry to initialize.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @par Notes
+ * After initialization, the list of actions of the interrupt server entry is
+ * empty.  Actions may be prepended by rtems_interrupt_server_action_prepend().
+ * Interrupt server entries may be moved to another interrupt vector with
+ * rtems_interrupt_server_entry_move().  Server entries may be submitted to get
+ * serviced by the interrupt server with rtems_interrupt_server_entry_submit().
+ * Server entries may be destroyed by rtems_interrupt_server_entry_destroy().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_entry_initialize(
   uint32_t                      server_index,
   rtems_interrupt_server_entry *entry
 );
 
+/* Generated from spec:/rtems/intr/if/server-action-prepend */
+
 /**
- * @brief Prepends the specified interrupt server action to the list of actions
- * of the specified interrupt server entry.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * No error checking is performed.
+ * @brief Prepends the interrupt server action to the list of actions of the
+ *   interrupt server entry.
  *
- * @param[in] entry The interrupt server entry to prepend the interrupt server
- *   action.  It must have been initialized via
+ * @param[in,out] entry is the interrupt server entry to prepend the interrupt
+ *   server action.  It shall have been initialized via
  *   rtems_interrupt_server_entry_initialize().
- * @param[in] action The interrupt server action to prepend the list of actions
- *   of the entry.
- * @param[in] handler The interrupt handler for the action.
- * @param[in] arg The interrupt handler argument for the action.
+ *
+ * @param[out] action is the interrupt server action to initialize and prepend
+ *   to the list of actions of the entry.
+ *
+ * @param routine is the interrupt handler routine to set in the action.
+ *
+ * @param arg is the interrupt handler argument to set in the action.
+ *
+ * @par Notes
+ * No error checking is performed by the directive.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The interrupt server entry shall have been initialized by
+ *   rtems_interrupt_server_entry_initialize() and further optional calls to
+ *   rtems_interrupt_server_action_prepend().
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_action_prepend() with the same interrupt server
+ *   entry. Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_entry_move() with the same interrupt server entry.
+ *   Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_entry_submit() with the same interrupt server
+ *   entry. Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called while the interrupt server entry is
+ *   pending on or serviced by its current interrupt server.  Calling the
+ *   directive under these conditions is undefined behaviour.
+ * @endparblock
  */
 void rtems_interrupt_server_action_prepend(
   rtems_interrupt_server_entry  *entry,
   rtems_interrupt_server_action *action,
-  rtems_interrupt_handler        handler,
+  rtems_interrupt_handler        routine,
   void                          *arg
 );
 
-/**
- * @brief Submits the specified interrupt server entry so that its interrupt
- * server actions can be invoked by the specified interrupt server.
- *
- * This function may be used to do a two-step interrupt processing.  The first
- * step is done in interrupt context which calls this function.  The second
- * step is then done in the context of the interrupt server.
- *
- * This function may be called from thread or interrupt context.  It does not
- * block.  No error checking is performed.
- *
- * @param[in] entry The interrupt server entry must be initialized before the
- *   first call to this function via rtems_interrupt_server_entry_initialize()
- *   and rtems_interrupt_server_action_prepend().  The entry and its actions
- *   must not be modified between calls to this function.  Use
- *   rtems_interrupt_server_entry_destroy() to destroy an entry in use.
- */
-void rtems_interrupt_server_entry_submit(
-  rtems_interrupt_server_entry *entry
-);
+/* Generated from spec:/rtems/intr/if/server-entry-destroy */
 
 /**
- * @brief Moves the interrupt server entry to the specified destination
- * interrupt server.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * Calling this function concurrently with rtems_interrupt_server_entry_submit()
- * with the same entry or while the entry is enqueued on the previous interrupt
- * server is undefined behaviour.
+ * @brief Destroys the interrupt server entry.
  *
- * @param[in,out] entry The interrupt server entry.  It must have be initialized
- *   before the call to this function.
- * @param destination_server_index The destination interrupt server index.
- *   Use @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ * @param[in,out] entry is the interrupt server entry to destroy.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID The destination interrupt server index is invalid.
- */
-rtems_status_code rtems_interrupt_server_entry_move(
-  rtems_interrupt_server_entry *entry,
-  uint32_t                      destination_server_index
-);
-
-/**
- * @brief Destroys the specified interrupt server entry.
+ * @par Notes
+ * No error checking is performed by the directive.
  *
- * This function must be called from thread context.  It may block.  Calling
- * this function within the context of an interrupt server is undefined
- * behaviour.  No error checking is performed.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
  *
- * @param[in] entry The interrupt server entry to destroy.  It must have been
- *   initialized via rtems_interrupt_server_entry_initialize().
+ * * The directive may be called from within task context.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ *
+ * * The interrupt server entry shall have been initialized by
+ *   rtems_interrupt_server_entry_initialize() and further optional calls to
+ *   rtems_interrupt_server_action_prepend().
+ * @endparblock
  */
 void rtems_interrupt_server_entry_destroy(
   rtems_interrupt_server_entry *entry
 );
 
+/* Generated from spec:/rtems/intr/if/server-entry-submit */
+
 /**
- * @brief Initializes the specified interrupt server request.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * @param[in] server_index The interrupt server index.  Use
- *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
- * @param[in] request The interrupt server request to initialize.
- * @param[in] handler The interrupt handler for the request action.
- * @param[in] arg The interrupt handler argument for the request action.
+ * @brief Submits the interrupt server entry to be serviced by the interrupt
+ *   server.
  *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
- * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
+ * @param entry is the interrupt server entry to submit.
  *
- * @see rtems_interrupt_server_request_set_vector().
+ * The directive appends the entry to the pending entries of the interrupt
+ * server.  The interrupt server is notified that a new entry is pending.  Once
+ * the interrupt server is scheduled it services the actions of all pending
+ * entries.
+ *
+ * @par Notes
+ * @parblock
+ * This directive may be used to do a two-step interrupt processing.  The first
+ * step is done from within interrupt context by a call to this directive.  The
+ * second step is then done from within the context of the interrupt server.
+ *
+ * No error checking is performed by the directive.
+ *
+ * A submitted entry may be destroyed by
+ * rtems_interrupt_server_entry_destroy().
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
+ *
+ * * The interrupt server entry shall have been initialized by
+ *   rtems_interrupt_server_entry_initialize() and further optional calls to
+ *   rtems_interrupt_server_action_prepend().
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_action_prepend() with the same interrupt server
+ *   entry. Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_entry_move() with the same interrupt server entry.
+ *   Calling the directive under this condition is undefined behaviour.
+ * @endparblock
+ */
+void rtems_interrupt_server_entry_submit(
+  rtems_interrupt_server_entry *entry
+);
+
+/* Generated from spec:/rtems/intr/if/server-entry-move */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Moves the interrupt server entry to the interrupt server.
+ *
+ * @param entry is the interrupt server entry to move.
+ *
+ * @param server_index is the index of the destination interrupt server.  The
+ *   constant #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the
+ *   default interrupt server.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The interrupt server entry shall have been initialized by
+ *   rtems_interrupt_server_entry_initialize() and further optional calls to
+ *   rtems_interrupt_server_action_prepend().
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_action_prepend() with the same interrupt server
+ *   entry. Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_entry_move() with the same interrupt server entry.
+ *   Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_entry_submit() with the same interrupt server
+ *   entry. Calling the directive under this condition is undefined behaviour.
+ *
+ * * The directive shall not be called while the interrupt server entry is
+ *   pending on or serviced by its current interrupt server.  Calling the
+ *   directive under these conditions is undefined behaviour.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_server_entry_move(
+  rtems_interrupt_server_entry *entry,
+  uint32_t                      server_index
+);
+
+/* Generated from spec:/rtems/intr/if/server-request */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief This structure represents an interrupt server request.
+ *
+ * @par Notes
+ * This structure shall be treated as an opaque data type from the API point of
+ * view.  Members shall not be accessed directly.  A request is initialized by
+ * rtems_interrupt_server_request_initialize() and destroyed by
+ * rtems_interrupt_server_request_destroy().  The interrupt vector of the
+ * request can be set by rtems_interrupt_server_request_set_vector().  The
+ * request is submitted to be serviced by
+ * rtems_interrupt_server_request_submit().
+ */
+typedef struct {
+  /**
+   * @brief This member is the interrupt server entry.
+   */
+  rtems_interrupt_server_entry entry;
+
+  /**
+   * @brief This member is the interrupt server action.
+   */
+  rtems_interrupt_server_action action;
+} rtems_interrupt_server_request;
+
+/* Generated from spec:/rtems/intr/if/server-request-initialize */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Initializes the interrupt server request.
+ *
+ * @param server_index is the interrupt server index.  The constant
+ *   #RTEMS_INTERRUPT_SERVER_DEFAULT may be used to specify the default
+ *   interrupt server.
+ *
+ * @param[out] request is the interrupt server request to initialize.
+ *
+ * @param routine is the interrupt handler routine for the request action.
+ *
+ * @param arg is the interrupt handler argument for the request action.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt server associated with the
+ *   index specified by ``server_index``.
+ *
+ * @par Notes
+ * An interrupt server requests consists of an interrupt server entry and
+ * exactly one interrupt server action.  The interrupt vector of the request
+ * may be changed with rtems_interrupt_server_request_set_vector().  Interrupt
+ * server requests may be submitted to get serviced by the interrupt server
+ * with rtems_interrupt_server_request_submit().  Requests may be destroyed by
+ * rtems_interrupt_server_request_destroy().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
 rtems_status_code rtems_interrupt_server_request_initialize(
   uint32_t                        server_index,
   rtems_interrupt_server_request *request,
-  rtems_interrupt_handler         handler,
+  rtems_interrupt_handler         routine,
   void                           *arg
 );
 
+/* Generated from spec:/rtems/intr/if/server-request-set-vector */
+
 /**
- * @brief Sets the interrupt vector in the specified interrupt server request.
+ * @ingroup RTEMSAPIClassicIntr
  *
+ * @brief Sets the interrupt vector in the interrupt server request.
+ *
+ * @param[in,out] request is the interrupt server request to change.
+ *
+ * @param vector is the interrupt vector number to be used by the request.
+ *
+ * @par Notes
+ * @parblock
  * By default, the interrupt vector of an interrupt server request is set to a
  * special value which is outside the range of vectors supported by the
  * interrupt controller hardware.
@@ -743,13 +1544,40 @@ rtems_status_code rtems_interrupt_server_request_initialize(
  * Calls to rtems_interrupt_server_request_submit() will disable the interrupt
  * vector of the request.  After processing of the request by the interrupt
  * server the interrupt vector will be enabled again.
+ * @endparblock
  *
- * @param[in] request The initialized interrupt server request.
- * @param[in] vector The interrupt vector number.
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
  *
- * @see rtems_interrupt_server_request_initialize().
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The interrupt server request shall have been initialized by
+ *   rtems_interrupt_server_request_initialize().
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_request_set_vector() with the same interrupt server
+ *   request.  Calling the directive under this condition is undefined
+ *   behaviour.
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_request_submit() with the same interrupt server
+ *   request. Calling the directive under this condition is undefined
+ *   behaviour.
+ *
+ * * The directive shall not be called while the interrupt server entry is
+ *   pending on or serviced by its current interrupt server.  Calling the
+ *   directive under these conditions is undefined behaviour.
+ * @endparblock
  */
-RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_set_vector(
+static inline void rtems_interrupt_server_request_set_vector(
   rtems_interrupt_server_request *request,
   rtems_vector_number             vector
 )
@@ -757,51 +1585,101 @@ RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_set_vector(
   request->entry.vector = vector;
 }
 
-/**
- * @brief Submits the specified interrupt server request so that its interrupt
- * server action can be invoked by the specified interrupt server.
- *
- * This function may be used to do a two-step interrupt processing.  The first
- * step is done in interrupt context which calls this function.  The second
- * step is then done in the context of the interrupt server.
- *
- * This function may be called from thread or interrupt context.  It does not
- * block.  No error checking is performed.
- *
- * @param[in] request The interrupt server request must be initialized before the
- *   first call to this function via
- *   rtems_interrupt_server_request_initialize().  The request must not be
- *   modified between calls to this function.  Use
- *   rtems_interrupt_server_request_destroy() to destroy a request in use.
- */
-RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_submit(
-  rtems_interrupt_server_request *request
-)
-{
-  rtems_interrupt_server_entry_submit( &request->entry );
-}
+/* Generated from spec:/rtems/intr/if/server-request-destroy */
 
 /**
- * @brief Destroys the specified interrupt server request.
+ * @ingroup RTEMSAPIClassicIntr
  *
- * This function must be called from thread context.  It may block.  Calling
- * this function within the context of an interrupt server is undefined
- * behaviour.  No error checking is performed.
+ * @brief Destroys the interrupt server request.
  *
- * @param[in] request The interrupt server request to destroy.  It must have
- *   been initialized via rtems_interrupt_server_request_initialize().
+ * @param[in,out] request is the interrupt server request to destroy.
+ *
+ * @par Notes
+ * No error checking is performed by the directive.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive shall not be called from within the context of an interrupt
+ *   server.  Calling the directive from within the context of an interrupt
+ *   server is undefined behaviour.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ *
+ * * The interrupt server request shall have been initialized by
+ *   rtems_interrupt_server_request_initialize().
+ * @endparblock
  */
-RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_destroy(
+static inline void rtems_interrupt_server_request_destroy(
   rtems_interrupt_server_request *request
 )
 {
   rtems_interrupt_server_entry_destroy( &request->entry );
 }
 
-/** @} */
+/* Generated from spec:/rtems/intr/if/server-request-submit */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Submits the interrupt server request to be serviced by the interrupt
+ *   server.
+ *
+ * @param[in,out] request is the interrupt server request to submit.
+ *
+ * The directive appends the interrupt server entry of the request to the
+ * pending entries of the interrupt server.  The interrupt server is notified
+ * that a new entry is pending.  Once the interrupt server is scheduled it
+ * services the actions of all pending entries.
+ *
+ * @par Notes
+ * @parblock
+ * This directive may be used to do a two-step interrupt processing.  The first
+ * step is done from within interrupt context by a call to this directive.  The
+ * second step is then done from within the context of the interrupt server.
+ *
+ * No error checking is performed by the directive.
+ *
+ * A submitted request may be destroyed by
+ * rtems_interrupt_server_request_destroy().
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may unblock a task.  This may cause the calling task to be
+ *   preempted.
+ *
+ * * The interrupt server request shall have been initialized by
+ *   rtems_interrupt_server_request_initialize().
+ *
+ * * The directive shall not be called concurrently with
+ *   rtems_interrupt_server_request_set_vector() with the same interrupt server
+ *   request.  Calling the directive under this condition is undefined
+ *   behaviour.
+ * @endparblock
+ */
+static inline void rtems_interrupt_server_request_submit(
+  rtems_interrupt_server_request *request
+)
+{
+  rtems_interrupt_server_entry_submit( &request->entry );
+}
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 
-#endif /* RTEMS_IRQ_EXTENSION_H */
+#endif /* _RTEMS_IRQ_EXTENSION_H */
