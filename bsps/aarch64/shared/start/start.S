@@ -98,7 +98,32 @@ _start:
 #endif
 	msr SCTLR_EL1, x0
 
-#ifdef BSP_START_IN_HYP_SUPPORT
+#ifdef BSP_START_IN_MON_SUPPORT
+	/* Drop from EL3 to EL2 */
+
+  /* Initialize HCR_EL2 and SCTLR_EL2 */
+  msr HCR_EL2, XZR
+  msr SCTLR_EL2, XZR
+  /* Set EL2 Execution state via SCR_EL3 */
+  mrs x0, SCR_EL3
+  /* Set EL2 to AArch64 */
+  orr x0, x0, #(1<<10)
+  /* Set EL1 to NS */
+  orr x0, x0, #1
+  msr SCR_EL3, x0
+
+  /* set EL2h mode for eret */
+  mov x0, #0b01001
+  msr SPSR_EL3, x0
+
+  /* Set EL2 entry point */
+  adr x0, _el2_start
+  msr ELR_EL3, x0
+  eret
+#endif
+
+#if defined(BSP_START_IN_HYP_SUPPORT) || defined(BSP_START_IN_MON_SUPPORT)
+_el2_start:
 	/* Drop from EL2 to EL1 */
 
 	/* Configure HCR_EL2 */
