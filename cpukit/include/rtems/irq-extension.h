@@ -419,6 +419,213 @@ rtems_status_code rtems_interrupt_set_affinity(
   const cpu_set_t    *affinity
 );
 
+/* Generated from spec:/rtems/intr/if/signal-variant */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief This enumeration provides interrupt trigger signal variants.
+ */
+typedef enum {
+  /**
+   * @brief This interrupt signal variant indicates that the interrupt trigger
+   *   signal is unspecified.
+   */
+  RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL,
+
+  /**
+   * @brief This interrupt signal variant indicates that the interrupt cannot be
+   *   triggered by a signal.
+   */
+  RTEMS_INTERRUPT_NO_SIGNAL,
+
+  /**
+   * @brief This interrupt signal variant indicates that the interrupt is
+   *   triggered by a low level signal.
+   */
+  RTEMS_INTERRUPT_SIGNAL_LEVEL_LOW,
+
+  /**
+   * @brief This interrupt signal variant indicates that the interrupt is
+   *   triggered by a high level signal.
+   */
+  RTEMS_INTERRUPT_SIGNAL_LEVEL_HIGH,
+
+  /**
+   * @brief This interrupt signal variant indicates that the interrupt is
+   *   triggered by a falling edge signal.
+   */
+  RTEMS_INTERRUPT_SIGNAL_EDGE_FALLING,
+
+  /**
+   * @brief This interrupt signal variant indicates that the interrupt is
+   *   triggered by a raising edge signal.
+   */
+  RTEMS_INTERRUPT_SIGNAL_EDGE_RAISING
+} rtems_interrupt_signal_variant;
+
+/* Generated from spec:/rtems/intr/if/attributes */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief This structure provides the attributes of an interrupt vector.
+ *
+ * The rtems_interrupt_get_attributes() directive may be used to obtain the
+ * attributes of an interrupt vector.
+ */
+typedef struct {
+  /**
+   * @brief This member is true, if the interrupt vector is maskable by
+   *   rtems_interrupt_local_disable(), otherwise it is false.
+   *
+   * Interrupt vectors which are not maskable by rtems_interrupt_local_disable()
+   * should be used with care since they cannot use most operating system
+   * services.
+   */
+  bool is_maskable;
+
+  /**
+   * @brief This member is true, if the interrupt vector can be enabled by
+   *   rtems_interrupt_vector_enable(), otherwise it is false.
+   *
+   * When an interrupt vector can be enabled, this means that the enabled state
+   * can always be changed from disabled to enabled.  For an interrupt vector
+   * which can be enabled it follows that it may be enabled.
+   */
+  bool can_enable;
+
+  /**
+   * @brief This member is true, if the interrupt vector may be enabled by
+   *   rtems_interrupt_vector_enable(), otherwise it is false.
+   *
+   * When an interrupt vector may be enabled, this means that the enabled state
+   * may be changed from disabled to enabled.  The requested enabled state change
+   * should be checked by rtems_interrupt_vector_is_enabled().  Some interrupt
+   * vectors may be optionally available and cannot be enabled on a particular
+   * target.
+   */
+  bool maybe_enable;
+
+  /**
+   * @brief This member is true, if the interrupt vector can be disabled by
+   *   rtems_interrupt_vector_disable(), otherwise it is false.
+   *
+   * When an interrupt vector can be disabled, this means that the enabled state
+   * can be changed from enabled to disabled.  For an interrupt vector which can
+   * be disabled it follows that it may be disabled.
+   */
+  bool can_disable;
+
+  /**
+   * @brief This member is true, if the interrupt vector may be disabled by
+   *   rtems_interrupt_vector_disable(), otherwise it is false.
+   *
+   * When an interrupt vector may be disabled, this means that the enabled state
+   * may be changed from enabled to disabled.  The requested enabled state change
+   * should be checked by rtems_interrupt_vector_is_enabled().  Some interrupt
+   * vectors may be always enabled and cannot be disabled on a particular target.
+   */
+  bool maybe_disable;
+
+  /**
+   * @brief This member is true, if the interrupt vector can be raised by
+   *   rtems_interrupt_raise(), otherwise it is false.
+   */
+  bool can_raise;
+
+  /**
+   * @brief This member is true, if the interrupt vector can be raised on a
+   *   processor by rtems_interrupt_raise_on(), otherwise it is false.
+   */
+  bool can_raise_on;
+
+  /**
+   * @brief This member is true, if the interrupt vector can be cleared by
+   *   rtems_interrupt_clear(), otherwise it is false.
+   */
+  bool can_clear;
+
+  /**
+   * @brief This member is true, if the pending status of the interrupt
+   *   associated with the interrupt vector is cleared by an interrupt
+   *   acknowledge from the processor, otherwise it is false.
+   */
+  bool cleared_by_acknowledge;
+
+  /**
+   * @brief This member is true, if the affinity set of the interrupt vector can
+   *   be obtained by rtems_interrupt_get_affinity(), otherwise it is false.
+   */
+  bool can_get_affinity;
+
+  /**
+   * @brief This member is true, if the affinity set of the interrupt vector can
+   *   be set by rtems_interrupt_set_affinity(), otherwise it is false.
+   */
+  bool can_set_affinity;
+
+  /**
+   * @brief This member is true, if the interrupt associated with the interrupt
+   *   vector can be triggered by a message.
+   *
+   * Interrupts may be also triggered by signals, rtems_interrupt_raise(), or
+   * rtems_interrupt_raise_on().  Examples for message triggered interrupts are
+   * the PCIe MSI/MSI-X and the ARM GICv3 Locality-specific Peripheral Interrupts
+   * (LPI).
+   */
+  bool can_be_triggered_by_message;
+
+  /**
+   * @brief This member describes the trigger signal of the interrupt associated
+   *   with the interrupt vector.
+   *
+   * Interrupts are normally triggered by signals which indicate an interrupt
+   * request from a peripheral.  Interrupts may be also triggered by messages,
+   * rtems_interrupt_raise(), or rtems_interrupt_raise_on().
+   */
+  rtems_interrupt_signal_variant trigger_signal;
+} rtems_interrupt_attributes;
+
+/* Generated from spec:/rtems/intr/if/get-attributes */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Gets the attributes of the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param[out] attributes is the pointer to an rtems_interrupt_attributes
+ *   object.  When the directive call is successful, the attributes of the
+ *   interrupt vector will be stored in this object.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``attributes`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+);
+
 /* Generated from spec:/rtems/intr/if/handler-iterate */
 
 /**
