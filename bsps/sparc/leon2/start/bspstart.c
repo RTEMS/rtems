@@ -111,7 +111,7 @@ static void leon2_pre_driver_hook( void )
   /* Initialize shared interrupt handling, must be done after IRQ
    * controller has been found and initialized.
    */
-  BSP_shared_interrupt_init();
+  bsp_interrupt_initialize();
 
 #ifdef RTEMS_DRVMGR_STARTUP
   leon2_root_register(&leon2_bus_config, &leon2_amba_res);

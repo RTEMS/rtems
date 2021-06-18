@@ -12,22 +12,15 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 #include <rtems/sysinit.h>
 
 /*
- * Called just before drivers are initialized.  Is used to initialize shared
- * interrupt handling.
+ * Initialize shared interrupt handling, must be done after IRQ controller has
+ * been found and initialized.
  */
-static void erc32_pre_driver_hook( void )
-{
-  /* Initialize shared interrupt handling, must be done after IRQ
-   * controller has been found and initialized.
-   */
-  BSP_shared_interrupt_init();
-}
-
 RTEMS_SYSINIT_ITEM(
-  erc32_pre_driver_hook,
+  bsp_interrupt_initialize,
   RTEMS_SYSINIT_BSP_PRE_DRIVERS,
   RTEMS_SYSINIT_ORDER_MIDDLE
 );

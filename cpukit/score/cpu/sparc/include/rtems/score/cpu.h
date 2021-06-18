@@ -743,9 +743,13 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 #ifndef ASM
 
-/*
- *  ISR handler macros
+/**
+ * @brief Dispatches the installed interrupt handlers.
+ *
+ * @param irq is the interrupt vector number of the external interrupt ranging
+ *   from 0 to 15.  This is not a trap number.
  */
+void _SPARC_Interrupt_dispatch( uint32_t irq );
 
 /**
  * Disable all interrupts for a critical section.  The previous

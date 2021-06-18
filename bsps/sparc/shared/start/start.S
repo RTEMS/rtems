@@ -33,6 +33,13 @@
   TRAP(_vector, _SPARC_Bad_trap)
 
 /*
+ * External interrupt trap
+ */
+#define ISR_TRAP(_vector) \
+  TRAP_SYM(_vector):; \
+  TRAP(_vector - 0x10, _SPARC_Interrupt_trap)
+
+/*
  * System call optimized trap table entry
  */
 #define FPDIS_TRAP(_handler)  \
@@ -128,27 +135,27 @@ TRAP_SYM(0x06):
   BAD_TRAP(0x0d)                                ! 0D undefined
   BAD_TRAP(0x0e)                                ! 0E undefined
   BAD_TRAP(0x0f)                                ! 0F undefined
-  BAD_TRAP(0x10)                                ! 10 undefined
 
   /*
    *  External interrupt traps
    */
 
-  BAD_TRAP(0x11)                                ! 11 external interrupt 1
-  BAD_TRAP(0x12)                                ! 12 external interrupt 2
-  BAD_TRAP(0x13)                                ! 13 external interrupt 3
-  BAD_TRAP(0x14)                                ! 14 external interrupt 4
-  BAD_TRAP(0x15)                                ! 15 external interrupt 5
-  BAD_TRAP(0x16)                                ! 16 external interrupt 6
-  BAD_TRAP(0x17)                                ! 17 external interrupt 7
-  BAD_TRAP(0x18)                                ! 18 external interrupt 8
-  BAD_TRAP(0x19)                                ! 19 external interrupt 9
-  BAD_TRAP(0x1a)                                ! 1A external interrupt 10
-  BAD_TRAP(0x1b)                                ! 1B external interrupt 11
-  BAD_TRAP(0x1c)                                ! 1C external interrupt 12
-  BAD_TRAP(0x1d)                                ! 1D external interrupt 13
-  BAD_TRAP(0x1e)                                ! 1E external interrupt 14
-  BAD_TRAP(0x1f)                                ! 1F external interrupt 15
+  ISR_TRAP(0x10)                                ! 10 undefined
+  ISR_TRAP(0x11)                                ! 11 external interrupt 1
+  ISR_TRAP(0x12)                                ! 12 external interrupt 2
+  ISR_TRAP(0x13)                                ! 13 external interrupt 3
+  ISR_TRAP(0x14)                                ! 14 external interrupt 4
+  ISR_TRAP(0x15)                                ! 15 external interrupt 5
+  ISR_TRAP(0x16)                                ! 16 external interrupt 6
+  ISR_TRAP(0x17)                                ! 17 external interrupt 7
+  ISR_TRAP(0x18)                                ! 18 external interrupt 8
+  ISR_TRAP(0x19)                                ! 19 external interrupt 9
+  ISR_TRAP(0x1a)                                ! 1A external interrupt 10
+  ISR_TRAP(0x1b)                                ! 1B external interrupt 11
+  ISR_TRAP(0x1c)                                ! 1C external interrupt 12
+  ISR_TRAP(0x1d)                                ! 1D external interrupt 13
+  ISR_TRAP(0x1e)                                ! 1E external interrupt 14
+  ISR_TRAP(0x1f)                                ! 1F external interrupt 15
 
   BAD_TRAP(0x20)                                ! 20 undefined
   BAD_TRAP(0x21)                                ! 21 undefined

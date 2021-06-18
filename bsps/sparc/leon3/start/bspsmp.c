@@ -18,6 +18,7 @@
 #include <bsp/fatal.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
+#include <rtems/sysinit.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/smpimpl.h>
 #include <stdlib.h>
@@ -55,12 +56,9 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
 
-uint32_t _CPU_SMP_Initialize( void )
+static void leon3_install_inter_processor_interrupt( void )
 {
   rtems_status_code sc;
-
-  if ( !leon3_data_cache_snooping_enabled() )
-    bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR );
 
   sc = rtems_interrupt_handler_install(
     LEON3_mp_irq,
@@ -70,6 +68,16 @@ uint32_t _CPU_SMP_Initialize( void )
     NULL
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
+}
+
+uint32_t _CPU_SMP_Initialize( void )
+{
+  if ( !leon3_data_cache_snooping_enabled() )
+    bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR );
+
+#if !defined(RTEMS_DRVMGR_STARTUP)
+  leon3_install_inter_processor_interrupt();
+#endif
 
   return leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
 }
@@ -102,3 +110,11 @@ void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
   /* send interrupt to destination CPU */
   LEON3_IrqCtrl_Regs->force[target_processor_index] = 1 << LEON3_mp_irq;
 }
+
+#if defined(RTEMS_DRVMGR_STARTUP)
+RTEMS_SYSINIT_ITEM(
+  leon3_install_inter_processor_interrupt,
+  RTEMS_SYSINIT_DRVMGR_LEVEL_1,
+  RTEMS_SYSINIT_ORDER_LAST_BUT_4
+);
+#endif

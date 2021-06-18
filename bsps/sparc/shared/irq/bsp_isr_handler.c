@@ -8,28 +8,19 @@
 *
 */
 
-#include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq-generic.h>
 
-static inline void bsp_dispatch_irq(int irq)
+/*
+ * This function is called directly from _SPARC_Interrupt_trap() for
+ * traps 0x10 to 0x1F which correspond to IRQ 0 to 15 respectively.
+ */
+void _SPARC_Interrupt_dispatch( uint32_t irq )
 {
-  bsp_interrupt_handler_entry *e =
-    &bsp_interrupt_handler_table[bsp_interrupt_handler_index(irq)];
+  bsp_interrupt_assert( irq < BSP_INTERRUPT_VECTOR_COUNT );
 
-  while (e != NULL) {
-    (*e->handler)(e->arg);
-    e = e->next;
-  }
-}
+  /* Let BSP fixup and/or handle incoming IRQ */
+  irq = bsp_irq_fixup( irq );
 
-/* Called directly from IRQ trap handler TRAP[0x10..0x1F] = IRQ[0..15] */
-void bsp_isr_handler(rtems_vector_number vector)
-{
-  int irq = vector - 0x10;
-
-  /* Let BSP fixup and/or handle incomming IRQ */
-  irq = bsp_irq_fixup(irq);
-
-  bsp_dispatch_irq(irq);
+  bsp_interrupt_handler_dispatch_unchecked( irq );
 }

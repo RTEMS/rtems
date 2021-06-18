@@ -20,6 +20,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <leon.h>
 #include <bsp/bootcard.h>
 #include <rtems/sysinit.h>
@@ -66,6 +67,10 @@ static inline int set_snooping(void)
 void bsp_start( void )
 {
   CPU_SPARC_HAS_SNOOPING = set_snooping();
+
+#ifndef RTEMS_DRVMGR_STARTUP
+  bsp_interrupt_initialize();
+#endif
 }
 
 static void leon3_cpu_index_init(void)
@@ -84,38 +89,13 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_FIRST
 );
 
-static void leon3_interrupt_common_init( void )
-{
-  /* Initialize shared interrupt handling, must be done after IRQ
-   * controller has been found and initialized.
-   */
-  BSP_shared_interrupt_init();
-}
-
-/*
- * Called just before drivers are initialized.  Is used to initialize shared
- * interrupt handling.
- */
-static void leon3_pre_driver_hook( void )
-{
-#ifndef RTEMS_DRVMGR_STARTUP
-  leon3_interrupt_common_init();
-#endif
-}
-
-RTEMS_SYSINIT_ITEM(
-  leon3_pre_driver_hook,
-  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-
-#ifdef RTEMS_DRVMGR_STARTUP
 /*
  * Initialize shared interrupt handling, must be done after IRQ controller has
  * been found and initialized.
  */
+#ifdef RTEMS_DRVMGR_STARTUP
 RTEMS_SYSINIT_ITEM(
-  leon3_interrupt_common_init,
+  bsp_interrupt_initialize,
   RTEMS_SYSINIT_DRVMGR_LEVEL_1,
   RTEMS_SYSINIT_ORDER_LAST_BUT_5
 );

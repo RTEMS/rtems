@@ -1623,6 +1623,7 @@ librtemscpu_a_SOURCES += score/cpu/sparc/sparc-context-validate.S
 librtemscpu_a_SOURCES += score/cpu/sparc/sparc-context-volatile-clobber.S
 librtemscpu_a_SOURCES += score/cpu/sparc/sparc-counter-asm.S
 librtemscpu_a_SOURCES += score/cpu/sparc/sparc-exception-frame-print.c
+librtemscpu_a_SOURCES += score/cpu/sparc/sparc-isr-handler.S
 librtemscpu_a_SOURCES += score/cpu/sparc/sparc-isr-install.c
 librtemscpu_a_SOURCES += score/cpu/sparc/syscall.S
 librtemscpu_a_SOURCES += score/cpu/sparc/window.S

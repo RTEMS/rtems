@@ -1,5 +1,4 @@
-/*  cpu_asm.s
- *
+/*
  *  This file contains the basic algorithms for all assembly code used
  *  in an specific CPU port of RTEMS.  These algorithms must be implemented
  *  in assembly language.
@@ -26,276 +25,7 @@
 #include <libcpu/grlib-tn-0018.h>
 
 /*
- *  void _CPU_Context_switch(
- *    Context_Control  *run,
- *    Context_Control  *heir
- *  )
- *
- *  This routine performs a normal non-FP context switch.
- */
-
-        .align 4
-        PUBLIC(_CPU_Context_switch)
-        PUBLIC(_CPU_Context_switch_no_return)
-SYM(_CPU_Context_switch):
-SYM(_CPU_Context_switch_no_return):
-        st      %g5, [%o0 + G5_OFFSET]       ! save the global registers
-
-        /*
-         * No need to save the thread pointer %g7 since it is a thread
-         * invariant.  It is initialized once in _CPU_Context_Initialize().
-         */
-
-        std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
-        SPARC_LEON3FT_B2BST_NOP
-        std     %l2, [%o0 + L2_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %l4, [%o0 + L4_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %l6, [%o0 + L6_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-
-        std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
-        SPARC_LEON3FT_B2BST_NOP
-        std     %i2, [%o0 + I2_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %i4, [%o0 + I4_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %i6, [%o0 + I6_FP_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-
-        std     %o6, [%o0 + O6_SP_OFFSET]    ! save the output registers
-
-        ! load the ISR stack nesting prevention flag
-        ld      [%g6 + PER_CPU_ISR_DISPATCH_DISABLE], %o4
-        ! save it a bit later so we do not waste a couple of cycles
-
-        rd      %psr, %o2
-        st      %o2, [%o0 + PSR_OFFSET]      ! save status register
-
-        ! Now actually save ISR stack nesting prevention flag
-        st       %o4, [%o0 + ISR_DISPATCH_DISABLE_STACK_OFFSET]
-
-        /*
-         *  This is entered from _CPU_Context_restore with:
-         *    o1 = context to restore
-         *    o2 = psr
-         */
-
-        PUBLIC(_CPU_Context_restore_heir)
-SYM(_CPU_Context_restore_heir):
-        /*
-         *  Flush all windows with valid contents except the current one.
-         *  In examining the set register windows, one may logically divide
-         *  the windows into sets (some of which may be empty) based on their
-         *  current status:
-         *
-         *    + current (i.e. in use),
-         *    + used (i.e. a restore would not trap)
-         *    + invalid (i.e. 1 in corresponding bit in WIM)
-         *    + unused
-         *
-         *  Either the used or unused set of windows may be empty.
-         *
-         *  NOTE: We assume only one bit is set in the WIM at a time.
-         *
-         *  Given a CWP of 5 and a WIM of 0x1, the registers are divided
-         *  into sets as follows:
-         *
-         *    + 0   - invalid
-         *    + 1-4 - unused
-         *    + 5   - current
-         *    + 6-7 - used
-         *
-         *  In this case, we only would save the used windows -- 6 and 7.
-         *
-         *   Traps are disabled for the same logical period as in a
-         *     flush all windows trap handler.
-         *
-         *    Register Usage while saving the windows:
-         *      g1 = current PSR
-         *      g2 = current wim
-         *      g3 = CWP
-         *      g4 = wim scratch
-         *      g5 = scratch
-         */
-
-        and     %o2, SPARC_PSR_CWP_MASK, %g3  ! g3 = CWP
-        andn    %o2, SPARC_PSR_ET_MASK, %g1   ! g1 = psr with traps disabled
-        mov     %g1, %psr                     ! **** DISABLE TRAPS ****
-        mov     %wim, %g2                     ! g2 = wim
-        mov     1, %g4
-        sll     %g4, %g3, %g4                 ! g4 = WIM mask for CW invalid
-
-save_frame_loop:
-        sll     %g4, 1, %g5                   ! rotate the "wim" left 1
-        srl     %g4, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g4
-        or      %g4, %g5, %g4                 ! g4 = wim if we do one restore
-
-        /*
-         *  If a restore would not underflow, then continue.
-         */
-
-        andcc   %g4, %g2, %g0                 ! Any windows to flush?
-        bnz     done_flushing                 ! No, then continue
-        nop
-
-        restore                               ! back one window
-
-        /*
-         *  Now save the window just as if we overflowed to it.
-         */
-
-        std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-
-        std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-        std     %i6, [%sp + CPU_STACK_FRAME_I6_FP_OFFSET]
-        SPARC_LEON3FT_B2BST_NOP
-
-        ba      save_frame_loop
-        nop
-
-done_flushing:
-
-        ! Wait three instructions after the write to PSR before using
-        ! non-global registers or instructions affecting the CWP
-        mov     %g1, %psr                     ! restore cwp
-        add     %g3, 1, %g2                   ! calculate desired WIM
-        and     %g2, SPARC_NUMBER_OF_REGISTER_WINDOWS - 1, %g2
-        mov     1, %g4
-        sll     %g4, %g2, %g4                 ! g4 = new WIM
-        mov     %g4, %wim
-
-#if defined(RTEMS_SMP)
-        /*
-         * The executing thread no longer executes on this processor.  Switch
-         * the stack to the temporary interrupt stack of this processor.  Mark
-         * the context of the executing thread as not executing.
-         */
-        add     %g6, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE, %sp
-        st      %g0, [%o0 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
-
-        ! Try to update the is executing indicator of the heir context
-        mov     1, %g1
-
-.Ltry_update_is_executing:
-
-        swap    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
-        cmp     %g1, 0
-        bne     .Lcheck_is_executing
-
-        ! The next load is in a delay slot, which is all right
-#endif
-
-#if defined(SPARC_USE_LAZY_FP_SWITCH)
-        ld      [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET], %g2
-#endif
-        ld      [%o1 + PSR_OFFSET], %g1       ! g1 = heir psr with traps enabled
-#if defined(SPARC_USE_LAZY_FP_SWITCH)
-        sethi   %hi(SPARC_PSR_EF_MASK), %g5
-        cmp     %g2, %g0
-        bne,a   .Lclear_psr_ef_done
-         andn   %g1, %g5, %g1                 ! g1 = heir psr w/o PSR[EF]
-.Lclear_psr_ef_done:
-#endif
-        andn    %g1, SPARC_PSR_CWP_MASK, %g1  ! g1 = heir psr w/o cwp
-        or      %g1, %g3, %g1                 ! g1 = heir psr with cwp
-        mov     %g1, %psr                     ! restore status register and
-                                              ! **** ENABLE TRAPS ****
-
-        ld      [%o1 + G5_OFFSET], %g5        ! restore the global registers
-        ld      [%o1 + G7_OFFSET], %g7
-
-        ! Load thread specific ISR dispatch prevention flag
-        ld      [%o1 + ISR_DISPATCH_DISABLE_STACK_OFFSET], %o2
-        ! Store it to memory later to use the cycles
-
-        ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
-        ldd     [%o1 + L2_OFFSET], %l2
-        ldd     [%o1 + L4_OFFSET], %l4
-        ldd     [%o1 + L6_OFFSET], %l6
-
-        ! Now restore thread specific ISR dispatch prevention flag
-        st      %o2, [%g6 + PER_CPU_ISR_DISPATCH_DISABLE]
-
-        ldd     [%o1 + I0_OFFSET], %i0        ! restore the input registers
-        ldd     [%o1 + I2_OFFSET], %i2
-        ldd     [%o1 + I4_OFFSET], %i4
-        ldd     [%o1 + I6_FP_OFFSET], %i6
-
-        ldd     [%o1 + O6_SP_OFFSET], %o6     ! restore the output registers
-
-        jmp     %o7 + 8                       ! return
-        nop                                   ! delay slot
-
-#if defined(RTEMS_SMP)
-.Lcheck_is_executing:
-
-        ! Check the is executing indicator of the heir context
-        ld      [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
-        cmp     %g1, 0
-        beq     .Ltry_update_is_executing
-         mov    1, %g1
-
-        ! We may have a new heir
-
-        ! Read the executing and heir
-        ld      [%g6 + PER_CPU_OFFSET_EXECUTING], %g2
-        ld      [%g6 + PER_CPU_OFFSET_HEIR], %g4
-
-        ! Update the executing only if necessary to avoid cache line
-        ! monopolization.
-        cmp     %g2, %g4
-        beq     .Ltry_update_is_executing
-         mov    1, %g1
-
-        ! Calculate the heir context pointer
-        sub     %o1, %g2, %g2
-        add     %g2, %g4, %o1
-
-        ! Update the executing
-        st      %g4, [%g6 + PER_CPU_OFFSET_EXECUTING]
-
-        ba      .Ltry_update_is_executing
-         mov    1, %g1
-#endif
-
-/*
- *  void _CPU_Context_restore(
- *    Context_Control *new_context
- *  )
- *
- *  This routine is generally used only to perform restart self.
- *
- *  NOTE: It is unnecessary to reload some registers.
- */
-        .align 4
-        PUBLIC(_CPU_Context_restore)
-SYM(_CPU_Context_restore):
-        save    %sp, -SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
-        rd      %psr, %o2
-#if defined(RTEMS_SMP)
-        ! On SPARC the restore path needs also a valid executing context on SMP
-        ! to update the is executing indicator.
-        mov     %i0, %o0
-#endif
-        ba      SYM(_CPU_Context_restore_heir)
-        mov     %i0, %o1                      ! in the delay slot
-
-/*
- *  void _SPARC_Interrupt_trap()
+ *  void _ISR_Handler()
  *
  *  This routine provides the RTEMS interrupt management.
  *
@@ -305,14 +35,28 @@ SYM(_CPU_Context_restore):
  *    l0 = PSR
  *    l1 = PC
  *    l2 = nPC
- *    l3 = interrupt vector number (this is not the trap type)
+ *    l3 = trap type
  *
- *  NOTE: This trap handler is intended to service external interrupts.
+ *  NOTE: By an executive defined convention, trap type is between 0 and 255 if
+ *        it is an asynchonous trap and 256 and 511 if it is synchronous.
  */
 
         .align 4
-        PUBLIC(_SPARC_Interrupt_trap)
-SYM(_SPARC_Interrupt_trap):
+        PUBLIC(_ISR_Handler)
+SYM(_ISR_Handler):
+        /*
+         *  Fix the return address for synchronous traps.
+         */
+
+        andcc   %l3, SPARC_SYNCHRONOUS_TRAP_BIT_MASK, %g0
+                                      ! Is this a synchronous trap?
+        be,a    win_ovflow            ! No, then skip the adjustment
+        nop                           ! DELAY
+        mov     %l1, %l6              ! save trapped pc for debug info
+        mov     %l2, %l1              ! do not return to the instruction
+        add     %l2, 4, %l2           ! indicated
+
+win_ovflow:
         /*
          *  Save the globals this block uses.
          *
@@ -399,7 +143,7 @@ dont_do_the_window:
          *  includes a regular minimum stack frame which will be used if
          *  needed by register window overflow and underflow handlers.
          *
-         *  REGISTERS SAME AS AT _SPARC_Interrupt_trap()
+         *  REGISTERS SAME AS AT _ISR_Handler
          */
 
         sub     %fp, CPU_INTERRUPT_FRAME_SIZE, %sp
@@ -425,6 +169,9 @@ dont_do_the_window:
 
         rd      %y, %g1
         st      %g1, [%sp + ISF_Y_OFFSET]      ! save y
+        st      %l6, [%sp + ISF_TPC_OFFSET]    ! save real trapped pc
+
+        mov     %sp, %o1                       ! 2nd arg to ISR Handler
 
         /*
          *  Increment ISR nest level and Thread dispatch disable level.
@@ -503,16 +250,26 @@ dont_switch_stacks:
         sub      %sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 
         /*
-         *  Set the PIL in the %psr to mask off interrupts with lower priority.
+         *  Check if we have an external interrupt (trap 0x11 - 0x1f). If so,
+         *  set the PIL in the %psr to mask off interrupts with lower priority.
          *  The original %psr in %l0 is not modified since it will be restored
          *  when the interrupt handler returns.
          */
 
         mov      %l0, %g5
-        sll      %l3, 8, %g4
+        and      %l3, 0x0ff, %g4
+        subcc    %g4, 0x11, %g0
+        bl       dont_fix_pil
+        subcc    %g4, 0x1f, %g0
+        bg       dont_fix_pil
+        sll      %g4, 8, %g4
         and      %g4, SPARC_PSR_PIL_MASK, %g4
         andn     %l0, SPARC_PSR_PIL_MASK, %g5
+        ba       pil_fixed
         or       %g4, %g5, %g5
+dont_fix_pil:
+        or       %g5, SPARC_PSR_PIL_MASK, %g5
+pil_fixed:
 
 #if SPARC_HAS_FPU == 1
         /*
@@ -525,10 +282,23 @@ dont_switch_stacks:
         wr       %g5, SPARC_PSR_ET_MASK, %psr ! **** ENABLE TRAPS ****
 
         /*
-         *  Call _SPARC_Interrupt_dispatch( %l3 )
+         *  Vector to user's handler.
+         *
+         *  NOTE: TBR may no longer have vector number in it since
+         *        we just enabled traps.  It is definitely in l3.
          */
+
+        sethi    %hi(SYM(_ISR_Vector_table)), %g4
+        or       %g4, %lo(SYM(_ISR_Vector_table)), %g4
+        and      %l3, 0xFF, %g5         ! remove synchronous trap indicator
+        sll      %g5, 2, %g5            ! g5 = offset into table
+        ld       [%g4 + %g5], %g4       ! g4 = _ISR_Vector_table[ vector ]
+
+
+                                        ! o1 = 2nd arg = address of the ISF
+                                        !   WAS LOADED WHEN ISF WAS SAVED!!!
         mov      %l3, %o0               ! o0 = 1st arg = vector number
-        call     SYM(_SPARC_Interrupt_dispatch)
+        call     %g4
 #if defined(RTEMS_PROFILING)
          mov     %o5, %l3               ! save interrupt entry instant
 #else
@@ -740,8 +510,8 @@ isr_dispatch:
          *  The CWP in place at this point may be different from
          *  that which was in effect at the beginning of the ISR if we
          *  have been context switched between the beginning of this invocation
-         *  of _SPARC_Interrupt_trap() and this point.  Thus the CWP and WIM
-         *  should not be changed back to their values at ISR entry time.  Any
+         *  of _ISR_Handler and this point.  Thus the CWP and WIM should
+         *  not be changed back to their values at ISR entry time.  Any
          *  changes to the PSR must preserve the CWP.
          */
 
