@@ -72,8 +72,6 @@
 #define AT91RM9200_INT_IRQ6      31
 #define AT91RM9200_MAX_INT       32
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 #define BSP_INTERRUPT_VECTOR_MAX (AT91RM9200_MAX_INT - 1)
 
 #endif /* __IRQ_H__ */

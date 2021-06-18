@@ -19,7 +19,6 @@
 #define LIBBSP_LEON2_IRQ_CONFIG_H
 
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
-#define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX BSP_INTERRUPT_VECTOR_MAX_STD
 
 /* No extra check is needed */

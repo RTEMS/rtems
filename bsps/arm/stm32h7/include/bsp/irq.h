@@ -36,8 +36,6 @@
 
 #endif /* ASM */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 #define BSP_INTERRUPT_VECTOR_MAX 239
 
 #endif /* LIBBSP_ARM_STM32H7_IRQ_H */

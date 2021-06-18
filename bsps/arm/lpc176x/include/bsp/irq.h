@@ -35,8 +35,6 @@
  * @{
  */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0U
-
 #define LPC176X_IRQ_WDT 0U
 #define LPC176X_IRQ_TIMER_0 1U
 #define LPC176X_IRQ_TIMER_1 2U

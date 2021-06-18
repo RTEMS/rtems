@@ -31,8 +31,6 @@
  * @{
  */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 /*
  *  Interrupt Vector Numbers
  *

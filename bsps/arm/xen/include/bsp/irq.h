@@ -40,7 +40,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 1023
 
 /* Xen guest interrupts */

@@ -24,7 +24,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 0
 
 RTEMS_INLINE_ROUTINE void bsp_interrupt_set_affinity(

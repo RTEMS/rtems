@@ -35,8 +35,6 @@
  * @{
  */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 #ifdef ARM_MULTILIB_ARCH_V4
   #define LPC24XX_IRQ_WDT 0
   #define LPC24XX_IRQ_SOFTWARE 1

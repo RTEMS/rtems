@@ -133,7 +133,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   }
 
   /* Mask all interrupts */
-  for(i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; i++)
+  for(i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; i++)
     bsp_interrupt_vector_disable(i);
 
   /* Install generic interrupt handler */

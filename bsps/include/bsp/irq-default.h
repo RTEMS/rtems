@@ -45,11 +45,6 @@ extern "C" {
  */
 
 /**
- * @brief Default minimum interrupt vector.
- */
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
-/**
  * @brief Default maximum interrupt vector.
  */
 #define BSP_INTERRUPT_VECTOR_MAX 0

@@ -36,7 +36,6 @@
  *
  */
 /* MIPS_INTERRUPT_BASE should be 32 (0x20) */
-#define BSP_INTERRUPT_VECTOR_MIN      0
 #define AU1X00_IRQ_SW0                (MIPS_INTERRUPT_BASE + 0)
 #define AU1X00_IRQ_SW1                (MIPS_INTERRUPT_BASE + 1)
 #define AU1X00_IRQ_IC0_REQ0           (MIPS_INTERRUPT_BASE + 2)

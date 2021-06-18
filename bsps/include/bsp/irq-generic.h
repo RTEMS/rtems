@@ -58,20 +58,15 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#if !defined(BSP_INTERRUPT_VECTOR_MIN) || !defined(BSP_INTERRUPT_VECTOR_MAX) || (BSP_INTERRUPT_VECTOR_MAX + 1) < BSP_INTERRUPT_VECTOR_MIN
-  #error "invalid BSP_INTERRUPT_VECTOR_MIN or BSP_INTERRUPT_VECTOR_MAX"
-#endif
-
-#if BSP_INTERRUPT_VECTOR_MIN != 0
-  #error "BSP_INTERRUPT_VECTOR_MIN shall be zero"
+#if !defined(BSP_INTERRUPT_VECTOR_MAX)
+  #error "BSP_INTERRUPT_VECTOR_MAX shall be defined"
 #endif
 
 #if defined(BSP_INTERRUPT_USE_INDEX_TABLE) && !defined(BSP_INTERRUPT_HANDLER_TABLE_SIZE)
   #error "if you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well"
 #endif
 
-#define BSP_INTERRUPT_VECTOR_NUMBER \
-  (BSP_INTERRUPT_VECTOR_MAX - BSP_INTERRUPT_VECTOR_MIN + 1)
+#define BSP_INTERRUPT_VECTOR_NUMBER (BSP_INTERRUPT_VECTOR_MAX + 1)
 
 #ifndef BSP_INTERRUPT_HANDLER_TABLE_SIZE
   #define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_NUMBER
@@ -117,9 +112,9 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
 )
 {
   #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-    return bsp_interrupt_handler_index_table [vector - BSP_INTERRUPT_VECTOR_MIN];
+    return bsp_interrupt_handler_index_table [vector];
   #else
-    return vector - BSP_INTERRUPT_VECTOR_MIN;
+    return vector;
   #endif
 }
 
@@ -131,7 +126,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * @brief Generic BSP Interrupt Support
  *
  * The BSP interrupt support manages a sequence of interrupt vector numbers
- * ranging from @ref BSP_INTERRUPT_VECTOR_MIN to @ref BSP_INTERRUPT_VECTOR_MAX
+ * ranging from zero to @ref BSP_INTERRUPT_VECTOR_MAX
  * including the end points.  It provides methods to
  * @ref bsp_interrupt_handler_install() "install",
  * @ref bsp_interrupt_handler_remove() "remove" and
@@ -143,7 +138,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  *
  * You have to configure the BSP interrupt support in the <bsp/irq.h> file
  * for each BSP.  For a minimum configuration you have to provide
- * @ref BSP_INTERRUPT_VECTOR_MIN and @ref BSP_INTERRUPT_VECTOR_MAX.
+ * @ref BSP_INTERRUPT_VECTOR_MAX.
  *
  * For boards with small memory requirements you can define
  * @ref BSP_INTERRUPT_USE_INDEX_TABLE.  With an enabled index table the handler
@@ -178,8 +173,7 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
    */
   static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
   {
-    return (rtems_vector_number) BSP_INTERRUPT_VECTOR_MIN <= vector
-      && vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX;
+    return vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX;
   }
 #endif
 

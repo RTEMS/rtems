@@ -20,8 +20,6 @@
 
 #include <pxa255.h>
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 #define BSP_INTERRUPT_VECTOR_MAX (PRIMARY_IRQS - 1)
 
 #endif /* __asm__ */

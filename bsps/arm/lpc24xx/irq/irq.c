@@ -91,7 +91,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   /* Use IRQ category */
   VICIntSelect = 0;
 
-  for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+  for (i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
     /* Use the vector address register to store the vector number */
     addr [i] = i;
 

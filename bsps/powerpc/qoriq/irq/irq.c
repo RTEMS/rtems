@@ -128,7 +128,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 {
 	unsigned int i;
 
-	for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+	for (i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
 		uint32_t config;
 		unsigned int priority;
 		uint32_t destination;
@@ -354,7 +354,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
 		pic_reset();
 
-		for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+		for (i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
 			volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(i);
 
 			src_cfg->vpr = VPR_MSK | VPR_P
@@ -375,7 +375,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
 	qoriq.pic.ctpr = 0;
 
-	for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+	for (i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
 		qoriq.pic.iack;
 		qoriq.pic.eoi = 0;
 		qoriq.pic.whoami;

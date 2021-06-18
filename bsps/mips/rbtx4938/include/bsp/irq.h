@@ -35,7 +35,6 @@
  *  Interrupt Vector Numbers
  *
  */
-#define BSP_INTERRUPT_VECTOR_MIN   0
 #define TX4938_IRQ_ECC         MIPS_INTERRUPT_BASE+0
 #define TX4938_IRQ_WTE         MIPS_INTERRUPT_BASE+1
 #define TX4938_IRQ_INT0        MIPS_INTERRUPT_BASE+2

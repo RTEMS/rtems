@@ -24,7 +24,6 @@
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MAX_EXT 31 /* Extended IRQ controller */
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX BSP_INTERRUPT_VECTOR_MAX_EXT
 
 /* The check is different depending on IRQ controller, runtime detected */

@@ -38,7 +38,6 @@
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
 
-#define BSP_INTERRUPT_VECTOR_MIN  0x0
 #define BSP_IRQ_VECTOR_NUMBER     34
 #define BSP_INTERRUPT_VECTOR_MAX  BSP_IRQ_VECTOR_NUMBER
 

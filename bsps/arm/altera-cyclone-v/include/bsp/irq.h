@@ -47,7 +47,6 @@ extern "C" {
  */
 
 /* Use interrupt IDs as defined in alt_interrupt_common.h */
-#define BSP_INTERRUPT_VECTOR_MIN ALT_INT_INTERRUPT_SGI0
 #define BSP_INTERRUPT_VECTOR_MAX ALT_INT_INTERRUPT_RAM_ECC_UNCORRECTED_IRQ
 
 /** @} */

@@ -53,8 +53,6 @@
 #define LPC22xx_INTERRUPT_CAN4RX 27	/* CAN2 Rx interrupt */
 #define BSP_MAX_INT              28
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 #define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
 
 #define UNDEFINED_INSTRUCTION_VECTOR_ADDR   (*(u_long *)0x00000004L)

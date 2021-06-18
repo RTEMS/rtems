@@ -79,7 +79,6 @@ extern "C" {
 #define BSP_RT_TIMER3		10
 #define BSP_SMP_IPI   		16 /* not part of the ATPIC */
 
-#define BSP_INTERRUPT_VECTOR_MIN BSP_IRQ_VECTOR_LOWEST_OFFSET
 #define BSP_INTERRUPT_VECTOR_MAX BSP_IRQ_VECTOR_MAX_OFFSET
 
 /** @brief

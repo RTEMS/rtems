@@ -87,7 +87,7 @@ void bsp_interrupt_report_with_plugin(
     "--------+----------------------------------+---------+------------+------------\n"
   );
 
-  for (v = BSP_INTERRUPT_VECTOR_MIN; v <= BSP_INTERRUPT_VECTOR_MAX; ++v) {
+  for (v = 0; v <= BSP_INTERRUPT_VECTOR_MAX; ++v) {
     e.vector = v;
     rtems_interrupt_handler_iterate(
       v,

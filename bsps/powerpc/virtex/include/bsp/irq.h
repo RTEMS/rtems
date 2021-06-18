@@ -61,7 +61,6 @@
           (BSP_IS_PROCESSOR_IRQ(irqnum)	\
            || BSP_IS_OPBINTC_IRQ(irqnum))
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX BSP_PROCESSOR_IRQ_MAX_OFFSET
 
 #ifndef ASM

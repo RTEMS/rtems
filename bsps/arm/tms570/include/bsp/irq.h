@@ -32,7 +32,6 @@
 #include <rtems/irq-extension.h>
 #endif
 
-#define BSP_INTERRUPT_VECTOR_MIN 0U
 #define TMS570_IRQ_ESM_HIGH 0
 #define TMS570_IRQ_RESERVED 1
 #define TMS570_IRQ_TIMER_0 2

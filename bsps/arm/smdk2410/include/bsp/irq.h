@@ -90,8 +90,6 @@
 #error "Undefined Samsung CPU model"
 #endif
 
-#define BSP_INTERRUPT_VECTOR_MIN 0
-
 #define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
 
 #endif /* _IRQ_H_ */
