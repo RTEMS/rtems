@@ -23,10 +23,13 @@
   #define START_LEON3_ENABLE_SMP
 #endif
 
+#define TRAP_SYM(_vector) SYM(trap_##_vector)
+
 /*
  *  Unexpected trap will halt the processor by forcing it to error state
  */
-#define BAD_TRAP \
+#define BAD_TRAP(_vector) \
+  TRAP_SYM(_vector):; \
   ta 0; \
   nop; \
   nop; \
@@ -81,7 +84,7 @@
  *  Software trap. Treat as BAD_TRAP for the time being...
  */
 
-#define SOFT_TRAP BAD_TRAP
+#define SOFT_TRAP(_vector) BAD_TRAP(_vector)
 
   .section    ".text"
   PUBLIC(start)
@@ -105,73 +108,143 @@ start:
 SYM(trap_table):
 
   RTRAP( 0, SYM(hard_reset) );                  ! 00 reset trap
-  BAD_TRAP;                                     ! 01 instruction access
+  BAD_TRAP(0x01)                                ! 01 instruction access
                                                 !    exception
-  BAD_TRAP;                                     ! 02 illegal instruction
-  BAD_TRAP;                                     ! 03 privileged instruction
+  BAD_TRAP(0x02)                                ! 02 illegal instruction
+  BAD_TRAP(0x03)                                ! 03 privileged instruction
 #if defined(SPARC_USE_LAZY_FP_SWITCH)
+TRAP_SYM(0x04):
   FPDIS_TRAP(SYM(syscall_lazy_fp_switch));      ! 04 fp disabled
 #else
-  BAD_TRAP;                                     ! 04 fp disabled
+  BAD_TRAP(0x04)                                ! 04 fp disabled
 #endif
+TRAP_SYM(0x05):
   WOTRAP(5, SYM(window_overflow_trap_handler)); ! 05 window overflow
+TRAP_SYM(0x06):
   WUTRAP(6, SYM(window_underflow_trap_handler));! 06 window underflow
-  BAD_TRAP;                                     ! 07 memory address not aligned
-  BAD_TRAP;                                     ! 08 fp exception
-  BAD_TRAP;                                     ! 09 data access exception
-  BAD_TRAP;                                     ! 0A tag overflow
-  BAD_TRAP;                                     ! 0B undefined
-  BAD_TRAP;                                     ! 0C undefined
-  BAD_TRAP;                                     ! 0D undefined
-  BAD_TRAP;                                     ! 0E undefined
-  BAD_TRAP;                                     ! 0F undefined
-  BAD_TRAP;                                     ! 10 undefined
+  BAD_TRAP(0x07)                                ! 07 memory address not aligned
+  BAD_TRAP(0x08)                                ! 08 fp exception
+  BAD_TRAP(0x09)                                ! 09 data access exception
+  BAD_TRAP(0x0a)                                ! 0A tag overflow
+  BAD_TRAP(0x0b)                                ! 0B undefined
+  BAD_TRAP(0x0c)                                ! 0C undefined
+  BAD_TRAP(0x0d)                                ! 0D undefined
+  BAD_TRAP(0x0e)                                ! 0E undefined
+  BAD_TRAP(0x0f)                                ! 0F undefined
+  BAD_TRAP(0x10)                                ! 10 undefined
 
   /*
-   *  ERC32 defined traps
+   *  External interrupt traps
    */
 
-  BAD_TRAP;                                     ! 11 masked errors
-  BAD_TRAP;                                     ! 12 external 1
-  BAD_TRAP;                                     ! 13 external 2
-  BAD_TRAP;                                     ! 14 UART A RX/TX
-  BAD_TRAP;                                     ! 15 UART B RX/TX
-  BAD_TRAP;                                     ! 16 correctable memory error
-  BAD_TRAP;                                     ! 17 UART error
-  BAD_TRAP;                                     ! 18 DMA access error
-  BAD_TRAP;                                     ! 19 DMA timeout
-  BAD_TRAP;                                     ! 1A external 3
-  BAD_TRAP;                                     ! 1B external 4
-  BAD_TRAP;                                     ! 1C general purpose timer
-  BAD_TRAP;                                     ! 1D real time clock
-  BAD_TRAP;                                     ! 1E external 5
-  BAD_TRAP;                                     ! 1F watchdog timeout
+  BAD_TRAP(0x11)                                ! 11 external interrupt 1
+  BAD_TRAP(0x12)                                ! 12 external interrupt 2
+  BAD_TRAP(0x13)                                ! 13 external interrupt 3
+  BAD_TRAP(0x14)                                ! 14 external interrupt 4
+  BAD_TRAP(0x15)                                ! 15 external interrupt 5
+  BAD_TRAP(0x16)                                ! 16 external interrupt 6
+  BAD_TRAP(0x17)                                ! 17 external interrupt 7
+  BAD_TRAP(0x18)                                ! 18 external interrupt 8
+  BAD_TRAP(0x19)                                ! 19 external interrupt 9
+  BAD_TRAP(0x1a)                                ! 1A external interrupt 10
+  BAD_TRAP(0x1b)                                ! 1B external interrupt 11
+  BAD_TRAP(0x1c)                                ! 1C external interrupt 12
+  BAD_TRAP(0x1d)                                ! 1D external interrupt 13
+  BAD_TRAP(0x1e)                                ! 1E external interrupt 14
+  BAD_TRAP(0x1f)                                ! 1F external interrupt 15
 
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 20 - 23 undefined
-  BAD_TRAP;                                     ! 24 cp_disabled
-            BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 25 - 27 undefined
-  BAD_TRAP;                                     ! 28 cp_exception
-            BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 29 - 2B undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 2C - 2F undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 30 - 33 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 34 - 37 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 38 - 3B undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 3C - 3F undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 40 - 43 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 44 - 47 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 48 - 4B undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 4C - 4F undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 50 - 53 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 54 - 57 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 58 - 5B undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 5C - 5F undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 60 - 63 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 64 - 67 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 68 - 6B undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 6C - 6F undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 70 - 73 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 74 - 77 undefined
-  BAD_TRAP; BAD_TRAP; BAD_TRAP; BAD_TRAP;       ! 78 - 7B undefined
+  BAD_TRAP(0x20)                                ! 20 undefined
+  BAD_TRAP(0x21)                                ! 21 undefined
+  BAD_TRAP(0x22)                                ! 22 undefined
+  BAD_TRAP(0x23)                                ! 23 undefined
+  BAD_TRAP(0x24)                                ! 24 cp_disabled
+  BAD_TRAP(0x25)                                ! 25 undefined
+  BAD_TRAP(0x26)                                ! 26 undefined
+  BAD_TRAP(0x27)                                ! 27 undefined
+  BAD_TRAP(0x28)                                ! 28 cp_exception
+  BAD_TRAP(0x29)                                ! 29 undefined
+  BAD_TRAP(0x2a)                                ! 2A undefined
+  BAD_TRAP(0x2b)                                ! 2B undefined
+  BAD_TRAP(0x2c)                                ! 2C undefined
+  BAD_TRAP(0x2d)                                ! 2D undefined
+  BAD_TRAP(0x2e)                                ! 2E undefined
+  BAD_TRAP(0x2f)                                ! 2F undefined
+  BAD_TRAP(0x30)                                ! 30 undefined
+  BAD_TRAP(0x31)                                ! 31 undefined
+  BAD_TRAP(0x32)                                ! 32 undefined
+  BAD_TRAP(0x33)                                ! 33 undefined
+  BAD_TRAP(0x34)                                ! 34 undefined
+  BAD_TRAP(0x35)                                ! 35 undefined
+  BAD_TRAP(0x36)                                ! 36 undefined
+  BAD_TRAP(0x37)                                ! 37 undefined
+  BAD_TRAP(0x38)                                ! 38 undefined
+  BAD_TRAP(0x39)                                ! 39 undefined
+  BAD_TRAP(0x3a)                                ! 3A undefined
+  BAD_TRAP(0x3b)                                ! 3B undefined
+  BAD_TRAP(0x3c)                                ! 3C undefined
+  BAD_TRAP(0x3d)                                ! 3D undefined
+  BAD_TRAP(0x3e)                                ! 3E undefined
+  BAD_TRAP(0x3f)                                ! 3F undefined
+  BAD_TRAP(0x40)                                ! 40 undefined
+  BAD_TRAP(0x41)                                ! 41 undefined
+  BAD_TRAP(0x42)                                ! 42 undefined
+  BAD_TRAP(0x43)                                ! 43 undefined
+  BAD_TRAP(0x44)                                ! 44 undefined
+  BAD_TRAP(0x45)                                ! 45 undefined
+  BAD_TRAP(0x46)                                ! 46 undefined
+  BAD_TRAP(0x47)                                ! 47 undefined
+  BAD_TRAP(0x48)                                ! 48 undefined
+  BAD_TRAP(0x49)                                ! 49 undefined
+  BAD_TRAP(0x4a)                                ! 4A undefined
+  BAD_TRAP(0x4b)                                ! 4B undefined
+  BAD_TRAP(0x4c)                                ! 4C undefined
+  BAD_TRAP(0x4d)                                ! 4D undefined
+  BAD_TRAP(0x4e)                                ! 4E undefined
+  BAD_TRAP(0x4f)                                ! 4F undefined
+  BAD_TRAP(0x50)                                ! 50 undefined
+  BAD_TRAP(0x51)                                ! 51 undefined
+  BAD_TRAP(0x52)                                ! 52 undefined
+  BAD_TRAP(0x53)                                ! 53 undefined
+  BAD_TRAP(0x54)                                ! 54 undefined
+  BAD_TRAP(0x55)                                ! 55 undefined
+  BAD_TRAP(0x56)                                ! 56 undefined
+  BAD_TRAP(0x57)                                ! 57 undefined
+  BAD_TRAP(0x58)                                ! 58 undefined
+  BAD_TRAP(0x59)                                ! 59 undefined
+  BAD_TRAP(0x5a)                                ! 5A undefined
+  BAD_TRAP(0x5b)                                ! 5B undefined
+  BAD_TRAP(0x5c)                                ! 5C undefined
+  BAD_TRAP(0x5d)                                ! 5D undefined
+  BAD_TRAP(0x5e)                                ! 5E undefined
+  BAD_TRAP(0x5f)                                ! 5F undefined
+  BAD_TRAP(0x60)                                ! 60 undefined
+  BAD_TRAP(0x61)                                ! 61 undefined
+  BAD_TRAP(0x62)                                ! 62 undefined
+  BAD_TRAP(0x63)                                ! 63 undefined
+  BAD_TRAP(0x64)                                ! 64 undefined
+  BAD_TRAP(0x65)                                ! 65 undefined
+  BAD_TRAP(0x66)                                ! 66 undefined
+  BAD_TRAP(0x67)                                ! 67 undefined
+  BAD_TRAP(0x68)                                ! 68 undefined
+  BAD_TRAP(0x69)                                ! 69 undefined
+  BAD_TRAP(0x6a)                                ! 6A undefined
+  BAD_TRAP(0x6b)                                ! 6B undefined
+  BAD_TRAP(0x6c)                                ! 6C undefined
+  BAD_TRAP(0x6d)                                ! 6D undefined
+  BAD_TRAP(0x6e)                                ! 6E undefined
+  BAD_TRAP(0x6f)                                ! 6F undefined
+  BAD_TRAP(0x70)                                ! 70 undefined
+  BAD_TRAP(0x71)                                ! 71 undefined
+  BAD_TRAP(0x72)                                ! 72 undefined
+  BAD_TRAP(0x73)                                ! 73 undefined
+  BAD_TRAP(0x74)                                ! 74 undefined
+  BAD_TRAP(0x75)                                ! 75 undefined
+  BAD_TRAP(0x76)                                ! 76 undefined
+  BAD_TRAP(0x77)                                ! 77 undefined
+  BAD_TRAP(0x78)                                ! 78 undefined
+  BAD_TRAP(0x79)                                ! 79 undefined
+  BAD_TRAP(0x7a)                                ! 7A undefined
+  BAD_TRAP(0x7b)                                ! 7B undefined
 
 /*
    This is a sad patch to make sure that we know where the
@@ -184,13 +257,15 @@ SYM(trap_table):
 
 SYM(_ERC32_MEC_Timer_Control_Mirror):
 
-  BAD_TRAP; BAD_TRAP;                           ! 7C - 7D undefined
+  BAD_TRAP(0x7C)                                ! 7C undefined
+  BAD_TRAP(0x7D)                                ! 7D undefined
 
 SYM(CLOCK_SPEED):
+TRAP_SYM(0x7e):
 
   .word	0x0a, 0, 0, 0				! 7E (10 MHz default)
 
-  BAD_TRAP; 					! 7F undefined
+  BAD_TRAP(0x7F)                                ! 7F undefined
 
   /*
    *  Software traps
@@ -201,12 +276,17 @@ SYM(CLOCK_SPEED):
    *        installed before.
    */
 
+TRAP_SYM(0x80):
   TRAP( 0x80, SYM(syscall) );                   ! 80 halt syscall SW trap
-  SOFT_TRAP; SOFT_TRAP;                         ! 81 - 82
+  SOFT_TRAP(0x81)                               ! 81
+  SOFT_TRAP(0x82)                               ! 82
+TRAP_SYM(0x83):
   TRAP( 0x83, SYM(window_flush_trap_handler) ); ! 83 flush windows SW trap
-
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 84 - 87
-  SOFT_TRAP;                                    ! 88
+  SOFT_TRAP(0x84)                               ! 84
+  SOFT_TRAP(0x85)                               ! 85
+  SOFT_TRAP(0x86)                               ! 86
+  SOFT_TRAP(0x87)                               ! 87
+  SOFT_TRAP(0x88)                               ! 88
 
   /*
    *  SW Trap 9-15 Reserved for Operating System
@@ -214,44 +294,133 @@ SYM(CLOCK_SPEED):
    *  SPARC_SWTRAP_IRQDIS
    *  SPARC_SWTRAP_IRQEN
    */
+TRAP_SYM(0x89):
   IRQDIS_TRAP(SYM(syscall_irqdis));             ! 89 IRQ Disable syscall trap
+TRAP_SYM(0x8a):
   IRQEN_TRAP(SYM(syscall_irqen));               ! 8A IRQ Enable syscall trap
 #if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
+TRAP_SYM(0x8b):
   IRQDIS_TRAP(SYM(syscall_irqdis_fp));          ! 8B IRQ disable
                                                 ! and set PSR[EF] syscall trap
 #else
-  SOFT_TRAP;                                    ! 8B
+  SOFT_TRAP(0x8b)                               ! 8B
 #endif
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 8C - 8F
-
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 90 - 93
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 94 - 97
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 98 - 9B
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 9C - 9F
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! A0 - A3
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! A4 - A7
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! A8 - AB
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! AC - AF
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! B0 - B3
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! B4 - B7
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! B8 - BB
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! BC - BF
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! C0 - C3
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! C4 - C7
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! C8 - CB
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! CC - CF
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! D0 - D3
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! D4 - D7
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! D8 - DB
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! DC - DF
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! E0 - E3
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! E4 - E7
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! E8 - EB
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! EC - EF
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! F0 - F3
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! F4 - F7
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! F8 - FB
-  SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! FC - FF
+  SOFT_TRAP(0x8c)                               ! 8C
+  SOFT_TRAP(0x8d)                               ! 8D
+  SOFT_TRAP(0x8e)                               ! 8E
+  SOFT_TRAP(0x8f)                               ! 8F
+  SOFT_TRAP(0x90)                               ! 90
+  SOFT_TRAP(0x91)                               ! 91
+  SOFT_TRAP(0x92)                               ! 92
+  SOFT_TRAP(0x93)                               ! 93
+  SOFT_TRAP(0x94)                               ! 94
+  SOFT_TRAP(0x95)                               ! 95
+  SOFT_TRAP(0x96)                               ! 96
+  SOFT_TRAP(0x97)                               ! 97
+  SOFT_TRAP(0x98)                               ! 98
+  SOFT_TRAP(0x99)                               ! 99
+  SOFT_TRAP(0x9a)                               ! 9A
+  SOFT_TRAP(0x9b)                               ! 9B
+  SOFT_TRAP(0x9c)                               ! 9C
+  SOFT_TRAP(0x9d)                               ! 9D
+  SOFT_TRAP(0x9e)                               ! 9E
+  SOFT_TRAP(0x9f)                               ! 9F
+  SOFT_TRAP(0xa0)                               ! a0
+  SOFT_TRAP(0xa1)                               ! a1
+  SOFT_TRAP(0xa2)                               ! a2
+  SOFT_TRAP(0xa3)                               ! a3
+  SOFT_TRAP(0xa4)                               ! a4
+  SOFT_TRAP(0xa5)                               ! a5
+  SOFT_TRAP(0xa6)                               ! a6
+  SOFT_TRAP(0xa7)                               ! a7
+  SOFT_TRAP(0xa8)                               ! a8
+  SOFT_TRAP(0xa9)                               ! a9
+  SOFT_TRAP(0xaa)                               ! aA
+  SOFT_TRAP(0xab)                               ! aB
+  SOFT_TRAP(0xac)                               ! aC
+  SOFT_TRAP(0xad)                               ! aD
+  SOFT_TRAP(0xae)                               ! aE
+  SOFT_TRAP(0xaf)                               ! aF
+  SOFT_TRAP(0xb0)                               ! b0
+  SOFT_TRAP(0xb1)                               ! b1
+  SOFT_TRAP(0xb2)                               ! b2
+  SOFT_TRAP(0xb3)                               ! b3
+  SOFT_TRAP(0xb4)                               ! b4
+  SOFT_TRAP(0xb5)                               ! b5
+  SOFT_TRAP(0xb6)                               ! b6
+  SOFT_TRAP(0xb7)                               ! b7
+  SOFT_TRAP(0xb8)                               ! b8
+  SOFT_TRAP(0xb9)                               ! b9
+  SOFT_TRAP(0xba)                               ! bA
+  SOFT_TRAP(0xbb)                               ! bB
+  SOFT_TRAP(0xbc)                               ! bC
+  SOFT_TRAP(0xbd)                               ! bD
+  SOFT_TRAP(0xbe)                               ! bE
+  SOFT_TRAP(0xbf)                               ! bF
+  SOFT_TRAP(0xc0)                               ! c0
+  SOFT_TRAP(0xc1)                               ! c1
+  SOFT_TRAP(0xc2)                               ! c2
+  SOFT_TRAP(0xc3)                               ! c3
+  SOFT_TRAP(0xc4)                               ! c4
+  SOFT_TRAP(0xc5)                               ! c5
+  SOFT_TRAP(0xc6)                               ! c6
+  SOFT_TRAP(0xc7)                               ! c7
+  SOFT_TRAP(0xc8)                               ! c8
+  SOFT_TRAP(0xc9)                               ! c9
+  SOFT_TRAP(0xca)                               ! cA
+  SOFT_TRAP(0xcb)                               ! cB
+  SOFT_TRAP(0xcc)                               ! cC
+  SOFT_TRAP(0xcd)                               ! cD
+  SOFT_TRAP(0xce)                               ! cE
+  SOFT_TRAP(0xcf)                               ! cF
+  SOFT_TRAP(0xd0)                               ! d0
+  SOFT_TRAP(0xd1)                               ! d1
+  SOFT_TRAP(0xd2)                               ! d2
+  SOFT_TRAP(0xd3)                               ! d3
+  SOFT_TRAP(0xd4)                               ! d4
+  SOFT_TRAP(0xd5)                               ! d5
+  SOFT_TRAP(0xd6)                               ! d6
+  SOFT_TRAP(0xd7)                               ! d7
+  SOFT_TRAP(0xd8)                               ! d8
+  SOFT_TRAP(0xd9)                               ! d9
+  SOFT_TRAP(0xda)                               ! dA
+  SOFT_TRAP(0xdb)                               ! dB
+  SOFT_TRAP(0xdc)                               ! dC
+  SOFT_TRAP(0xdd)                               ! dD
+  SOFT_TRAP(0xde)                               ! dE
+  SOFT_TRAP(0xdf)                               ! dF
+  SOFT_TRAP(0xe0)                               ! e0
+  SOFT_TRAP(0xe1)                               ! e1
+  SOFT_TRAP(0xe2)                               ! e2
+  SOFT_TRAP(0xe3)                               ! e3
+  SOFT_TRAP(0xe4)                               ! e4
+  SOFT_TRAP(0xe5)                               ! e5
+  SOFT_TRAP(0xe6)                               ! e6
+  SOFT_TRAP(0xe7)                               ! e7
+  SOFT_TRAP(0xe8)                               ! e8
+  SOFT_TRAP(0xe9)                               ! e9
+  SOFT_TRAP(0xea)                               ! eA
+  SOFT_TRAP(0xeb)                               ! eB
+  SOFT_TRAP(0xec)                               ! eC
+  SOFT_TRAP(0xed)                               ! eD
+  SOFT_TRAP(0xee)                               ! eE
+  SOFT_TRAP(0xef)                               ! eF
+  SOFT_TRAP(0xf0)                               ! f0
+  SOFT_TRAP(0xf1)                               ! f1
+  SOFT_TRAP(0xf2)                               ! f2
+  SOFT_TRAP(0xf3)                               ! f3
+  SOFT_TRAP(0xf4)                               ! f4
+  SOFT_TRAP(0xf5)                               ! f5
+  SOFT_TRAP(0xf6)                               ! f6
+  SOFT_TRAP(0xf7)                               ! f7
+  SOFT_TRAP(0xf8)                               ! f8
+  SOFT_TRAP(0xf9)                               ! f9
+  SOFT_TRAP(0xfa)                               ! fA
+  SOFT_TRAP(0xfb)                               ! fB
+  SOFT_TRAP(0xfc)                               ! fC
+  SOFT_TRAP(0xfd)                               ! fD
+  SOFT_TRAP(0xfe)                               ! fE
+  SOFT_TRAP(0xff)                               ! fF
 
 /*
  *  This is the hard reset code.
