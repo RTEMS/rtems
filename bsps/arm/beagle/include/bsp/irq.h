@@ -16,6 +16,7 @@
 #include <rtems/irq-extension.h>
 
 #define BSP_INTERRUPT_VECTOR_MAX 127
+#define BSP_INTERRUPT_VECTOR_COUNT 128
 
 #endif /* ASM */
 

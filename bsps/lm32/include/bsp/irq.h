@@ -36,6 +36,7 @@
  * @brief Maximum vector number.
  */
 #define BSP_INTERRUPT_VECTOR_MAX 31
+#define BSP_INTERRUPT_VECTOR_COUNT 32
 
 /** @} */
 

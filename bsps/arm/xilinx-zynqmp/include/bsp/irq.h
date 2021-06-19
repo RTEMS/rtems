@@ -68,6 +68,7 @@ extern "C" {
 #define ZYNQMP_IRQ_UART_1 54
 
 #define BSP_INTERRUPT_VECTOR_MAX 187
+#define BSP_INTERRUPT_VECTOR_COUNT 188
 
 /** @} */
 

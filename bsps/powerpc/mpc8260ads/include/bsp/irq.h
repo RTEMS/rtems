@@ -142,6 +142,7 @@ extern volatile unsigned int ppc_cached_irq_mask;
 #define BSP_PERIODIC_TIMER		(BSP_DECREMENTER)
 
 #define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
+#define BSP_INTERRUPT_VECTOR_COUNT (BSP_MAX_OFFSET + 1)
 
 #define CPM_INTERRUPT
 

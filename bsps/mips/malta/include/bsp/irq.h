@@ -80,6 +80,7 @@
 #
 
 #define BSP_INTERRUPT_VECTOR_MAX   MALTA_PCI_ADP_LAST
+#define BSP_INTERRUPT_VECTOR_COUNT   (MALTA_PCI_ADP_LAST + 1)
 
 /*
  * Redefine interrupts with more descriptive names.

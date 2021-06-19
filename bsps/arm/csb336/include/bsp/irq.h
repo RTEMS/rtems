@@ -89,5 +89,6 @@
 #define BSP_MAX_INT              64
 
 #define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
+#define BSP_INTERRUPT_VECTOR_COUNT BSP_MAX_INT
 
 #endif /* __IRQ_H__ */

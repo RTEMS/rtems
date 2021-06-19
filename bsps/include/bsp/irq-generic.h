@@ -62,6 +62,14 @@ extern "C" {
   #error "BSP_INTERRUPT_VECTOR_MAX shall be defined"
 #endif
 
+#if !defined(BSP_INTERRUPT_VECTOR_COUNT)
+  #error "BSP_INTERRUPT_VECTOR_COUNT shall be defined"
+#endif
+
+#if BSP_INTERRUPT_VECTOR_MAX + 1 != BSP_INTERRUPT_VECTOR_COUNT
+  #error "BSP_INTERRUPT_VECTOR_COUNT is not equal to BSP_INTERRUPT_VECTOR_MAX + 1"
+#endif
+
 #if defined(BSP_INTERRUPT_USE_INDEX_TABLE) && !defined(BSP_INTERRUPT_HANDLER_TABLE_SIZE)
   #error "if you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well"
 #endif

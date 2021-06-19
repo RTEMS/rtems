@@ -91,6 +91,7 @@
 #endif
 
 #define BSP_INTERRUPT_VECTOR_MAX (BSP_MAX_INT - 1)
+#define BSP_INTERRUPT_VECTOR_COUNT BSP_MAX_INT
 
 #endif /* _IRQ_H_ */
 /* end of include file */

@@ -48,6 +48,7 @@ extern "C" {
  * @brief Default maximum interrupt vector.
  */
 #define BSP_INTERRUPT_VECTOR_MAX 0
+#define BSP_INTERRUPT_VECTOR_COUNT 1
 
 /** @} */
 

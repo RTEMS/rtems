@@ -80,6 +80,7 @@ extern "C" {
 #define BSP_SMP_IPI   		16 /* not part of the ATPIC */
 
 #define BSP_INTERRUPT_VECTOR_MAX BSP_IRQ_VECTOR_MAX_OFFSET
+#define BSP_INTERRUPT_VECTOR_COUNT BSP_IRQ_VECTOR_NUMBER
 
 /** @brief
  * Type definition for RTEMS managed interrupts
