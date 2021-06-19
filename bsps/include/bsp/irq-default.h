@@ -45,9 +45,12 @@ extern "C" {
  */
 
 /**
- * @brief Default maximum interrupt vector.
+ * @brief This constant defines the default interrupt vector count.
+ *
+ * By default, no interrupt vectors are supported and all related directives
+ * return RTEMS_INVALID_ID.
  */
-#define BSP_INTERRUPT_VECTOR_COUNT 1
+#define BSP_INTERRUPT_VECTOR_COUNT 0
 
 /** @} */
 
