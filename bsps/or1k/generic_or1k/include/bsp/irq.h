@@ -23,8 +23,7 @@
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
 
-#define BSP_INTERRUPT_VECTOR_MIN  0x100
-#define BSP_INTERRUPT_VECTOR_MAX  0x1F00
+#include <bsp/irq-default.h>
 
 /* Interrupt Identification Register */
 #define OR1K_BSP_UART_REG_INT_ID_MSI    (0x00)

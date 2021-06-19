@@ -59,10 +59,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/btimer/btimer.
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/or1k/generic_or1k/clock/clockdrv.c
 
-# IRQ
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/irq/irq.c
-
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/shared/cache/cache.c
 
@@ -71,6 +67,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/shared/cache/cache.c
 ###############################################################################
 
 
-include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
+include $(srcdir)/../../../../../../bsps/shared/irq-default-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/or1k/generic_or1k/headers.am
