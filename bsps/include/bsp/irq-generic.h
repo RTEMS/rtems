@@ -74,10 +74,8 @@ extern "C" {
   #error "if you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well"
 #endif
 
-#define BSP_INTERRUPT_VECTOR_NUMBER (BSP_INTERRUPT_VECTOR_MAX + 1)
-
 #ifndef BSP_INTERRUPT_HANDLER_TABLE_SIZE
-  #define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_NUMBER
+  #define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_COUNT
 #endif
 
 /* Internal macros for SMP support, do not use externally */

@@ -44,7 +44,7 @@
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
   bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table
-    [BSP_INTERRUPT_VECTOR_NUMBER];
+    [BSP_INTERRUPT_VECTOR_COUNT];
 #endif
 
 bsp_interrupt_handler_entry bsp_interrupt_handler_table
