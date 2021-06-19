@@ -316,7 +316,7 @@ static void Init(rtems_task_argument arg)
   test(cpu_count);
 
   /* Try to find the clock interrupt handler */
-  for ( vec = 0; vec < BSP_INTERRUPT_VECTOR_MAX; vec++ ) {
+  for ( vec = 0; vec <= BSP_INTERRUPT_VECTOR_MAX; vec++ ) {
     rtems_interrupt_handler_iterate(vec, locate_clock_interrupt_handler, &cih);
     if ( cih.found )
       break;
