@@ -162,7 +162,6 @@ extern "C" {
     BSP_IPIC_IRQ_LAST     = BSP_IPIC_IRQ_MAX_OFFSET,
   } rtems_irq_symbolic_name;
 
-#define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
 #define BSP_INTERRUPT_VECTOR_COUNT (BSP_MAX_OFFSET + 1)
 
 rtems_status_code mpc83xx_ipic_set_mask( rtems_vector_number vector, rtems_vector_number mask_vector, bool mask);

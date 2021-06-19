@@ -114,7 +114,6 @@ extern "C" {
 #define ZYNQ_IRQ_FPGA_15 91
 #define ZYNQ_IRQ_PARITY 92
 
-#define BSP_INTERRUPT_VECTOR_MAX 92
 #define BSP_INTERRUPT_VECTOR_COUNT 93
 
 /** @} */

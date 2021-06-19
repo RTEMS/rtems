@@ -146,7 +146,6 @@ extern "C" {
 #define BSP_PERIODIC_TIMER	BSP_SIU_INT_IRQ_6
 #define BSP_FAST_ETHERNET_CTRL	BSP_SIU_INT_IRQ_3
 
-#define BSP_INTERRUPT_VECTOR_MAX BSP_MAX_OFFSET
 #define BSP_INTERRUPT_VECTOR_COUNT (BSP_MAX_OFFSET + 1)
 
 extern int BSP_irq_enabled_at_cpm(const rtems_irq_number irqLine);

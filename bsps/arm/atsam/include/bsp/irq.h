@@ -23,7 +23,6 @@
   #include <rtems/irq-extension.h>
 #endif
 
-#define BSP_INTERRUPT_VECTOR_MAX 64
 #define BSP_INTERRUPT_VECTOR_COUNT 65
 
 #endif /* LIBBSP_ARM_ATSAM_ESV_70_IRQ_H */

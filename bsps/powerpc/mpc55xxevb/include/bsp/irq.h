@@ -477,7 +477,6 @@ rtems_status_code mpc55xx_intc_clear_software_irq(rtems_vector_number vector);
  * @{
  */
 
-#define BSP_INTERRUPT_VECTOR_MAX MPC55XX_IRQ_MAX
 #define BSP_INTERRUPT_VECTOR_COUNT (MPC55XX_IRQ_MAX + 1)
 
 #ifdef BSP_INTERRUPT_HANDLER_TABLE_SIZE

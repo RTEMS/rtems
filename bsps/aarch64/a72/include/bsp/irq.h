@@ -48,7 +48,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_MAX 1023
 #define BSP_INTERRUPT_VECTOR_COUNT 1024
 
 /* Interrupts vectors */

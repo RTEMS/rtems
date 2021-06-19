@@ -43,7 +43,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_INTERRUPT_VECTOR_MAX 159
 #define BSP_INTERRUPT_VECTOR_COUNT 160
 #define BSP_INTERRUPT_VECTOR_INVALID (UINT32_MAX)
 
