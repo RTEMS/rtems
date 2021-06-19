@@ -31,7 +31,7 @@
 
 static inline bool lpc24xx_irq_is_valid(rtems_vector_number vector)
 {
-  return vector <= BSP_INTERRUPT_VECTOR_MAX;
+  return vector < BSP_INTERRUPT_VECTOR_COUNT;
 }
 
 void lpc24xx_irq_set_priority(rtems_vector_number vector, unsigned priority)
@@ -91,7 +91,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   /* Use IRQ category */
   VICIntSelect = 0;
 
-  for (i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+  for (i = 0; i < BSP_INTERRUPT_VECTOR_COUNT; ++i) {
     /* Use the vector address register to store the vector number */
     addr [i] = i;
 

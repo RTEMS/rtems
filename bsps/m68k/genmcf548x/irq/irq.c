@@ -26,7 +26,7 @@ typedef struct {
   const char *info;
 } interrupt_control;
 
-static interrupt_control interrupt_controls[BSP_INTERRUPT_VECTOR_MAX + 1];
+static interrupt_control interrupt_controls[BSP_INTERRUPT_VECTOR_COUNT];
 
 static uint32_t vector_to_reg(rtems_vector_number vector)
 {

@@ -67,7 +67,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
   _ARMV7M_SCB->icsr = ARMV7M_SCB_ICSR_PENDSVCLR | ARMV7M_SCB_ICSR_PENDSTCLR;
 
-  for (i = 0; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
+  for (i = 0; i < BSP_INTERRUPT_VECTOR_COUNT; ++i) {
     _ARMV7M_NVIC_Clear_enable(i);
     _ARMV7M_NVIC_Clear_pending(i);
     _ARMV7M_NVIC_Set_priority(i, BSP_ARMV7M_IRQ_PRIORITY_DEFAULT);

@@ -28,7 +28,7 @@
 #include <bsp/irq.h>
 #include <rtems/score/armv4.h>
 
-unsigned int priorityTable[BSP_INTERRUPT_VECTOR_MAX+1];
+unsigned int priorityTable[BSP_INTERRUPT_VECTOR_COUNT];
 
 /**
  * @brief Set priority of the interrupt vector.

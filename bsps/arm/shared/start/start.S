@@ -529,7 +529,7 @@ bsp_start_vector_table_begin:
 	.word	_ARMV7M_Exception_default /* Reserved */
 	.word	_ARMV7M_Pendable_service_call /* PendSV */
 	.word	_ARMV7M_Clock_handler /* SysTick */
-	.rept	BSP_INTERRUPT_VECTOR_MAX + 1
+	.rept	BSP_INTERRUPT_VECTOR_COUNT
 	.word	_ARMV7M_NVIC_Interrupt_dispatch /* IRQ */
 	.endr
 

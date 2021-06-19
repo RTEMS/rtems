@@ -64,7 +64,7 @@ static const char *const cause_strings[32] = {
 
 static inline bool bsp_irq_is_valid(rtems_vector_number vector)
 {
-  return vector <= BSP_INTERRUPT_VECTOR_MAX;
+  return vector < BSP_INTERRUPT_VECTOR_COUNT;
 }
 
 void bsp_interrupt_vector_enable(rtems_vector_number vector)

@@ -142,7 +142,7 @@ extern "C" {
 #define BSP_INTERRUPT_VECTOR_MAX LPC32XX_IRQ_SYSCLK
 #define BSP_INTERRUPT_VECTOR_COUNT (LPC32XX_IRQ_SYSCLK + 1)
 
-#define LPC32XX_IRQ_COUNT (BSP_INTERRUPT_VECTOR_MAX + 1)
+#define LPC32XX_IRQ_COUNT BSP_INTERRUPT_VECTOR_COUNT
 
 void lpc32xx_irq_set_priority(rtems_vector_number vector, unsigned priority);
 

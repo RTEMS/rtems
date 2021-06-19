@@ -42,7 +42,7 @@
 
 #include <bsp/irq-generic.h>
 
-#define BSP_INTERRUPT_SERVER_MANAGEMENT_VECTOR (BSP_INTERRUPT_VECTOR_MAX + 1)
+#define BSP_INTERRUPT_SERVER_MANAGEMENT_VECTOR BSP_INTERRUPT_VECTOR_COUNT
 
 static rtems_interrupt_server_control bsp_interrupt_server_default;
 

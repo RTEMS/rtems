@@ -38,7 +38,7 @@
  */
 static inline bool lpc176x_irq_is_valid( const rtems_vector_number vector )
 {
-  return vector <= BSP_INTERRUPT_VECTOR_MAX;
+  return vector < BSP_INTERRUPT_VECTOR_COUNT;
 }
 
 void lpc176x_irq_set_priority(
