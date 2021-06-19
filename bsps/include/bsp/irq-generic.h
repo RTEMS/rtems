@@ -62,6 +62,10 @@ extern "C" {
   #error "invalid BSP_INTERRUPT_VECTOR_MIN or BSP_INTERRUPT_VECTOR_MAX"
 #endif
 
+#if BSP_INTERRUPT_VECTOR_MIN != 0
+  #error "BSP_INTERRUPT_VECTOR_MIN shall be zero"
+#endif
+
 #if defined(BSP_INTERRUPT_USE_INDEX_TABLE) && !defined(BSP_INTERRUPT_HANDLER_TABLE_SIZE)
   #error "if you define BSP_INTERRUPT_USE_INDEX_TABLE, you have to define BSP_INTERRUPT_HANDLER_TABLE_SIZE etc. as well"
 #endif
