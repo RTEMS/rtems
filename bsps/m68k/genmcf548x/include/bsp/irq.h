@@ -89,8 +89,16 @@
 #define MCF548X_IRQ_GPT1 61
 #define MCF548X_IRQ_GPT0 62
 
-#define BSP_INTERRUPT_VECTOR_MIN 1
+#define BSP_INTERRUPT_VECTOR_MIN 0
 
 #define BSP_INTERRUPT_VECTOR_MAX 63
+
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+
+static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
+{
+  return 1 <= vector
+    && vector <= (rtems_vector_number) BSP_INTERRUPT_VECTOR_MAX;
+}
 
 #endif /* LIBBSP_M68K_MCF548X_IRQ_H */
