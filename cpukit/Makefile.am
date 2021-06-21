@@ -998,6 +998,7 @@ librtemscpu_a_SOURCES += score/src/timespeclessthan.c
 librtemscpu_a_SOURCES += score/src/timespecsubtract.c
 librtemscpu_a_SOURCES += score/src/timespectoticks.c
 librtemscpu_a_SOURCES += score/src/timespecdivide.c
+librtemscpu_a_SOURCES += score/src/timespecisnonnegative.c
 librtemscpu_a_SOURCES += score/src/timespecdividebyinteger.c
 librtemscpu_a_SOURCES += score/src/timespecgetasnanoseconds.c
 librtemscpu_a_SOURCES += score/src/coretod.c
