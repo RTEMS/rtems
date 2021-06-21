@@ -147,6 +147,57 @@ RTEMS_STATIC_ASSERT(
   CPU_Interrupt_frame_alignment
 );
 
+#define SPARC_ASSERT_REGISTER_WINDOW_OFFSET( member, off ) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof( SPARC_Register_window, member ) == \
+      RTEMS_XCONCAT( SPARC_REGISTER_WINDOW_OFFSET_, off ), \
+    SPARC_Register_window ## member \
+  )
+
+SPARC_ASSERT_REGISTER_WINDOW_OFFSET( local[ 0 ], LOCAL( 0 ) );
+SPARC_ASSERT_REGISTER_WINDOW_OFFSET( local[ 1 ], LOCAL( 1 ) );
+SPARC_ASSERT_REGISTER_WINDOW_OFFSET( input[ 0 ], INPUT( 0 ) );
+SPARC_ASSERT_REGISTER_WINDOW_OFFSET( input[ 1 ], INPUT( 1 ) );
+
+RTEMS_STATIC_ASSERT(
+  sizeof( SPARC_Register_window ) == SPARC_REGISTER_WINDOW_SIZE,
+  SPARC_REGISTER_WINDOW_SIZE
+);
+
+#define SPARC_ASSERT_EXCEPTION_OFFSET( member, off ) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof( CPU_Exception_frame, member ) == \
+      RTEMS_XCONCAT( SPARC_EXCEPTION_OFFSET_, off ), \
+    CPU_Exception_frame_offset_ ## member \
+  )
+
+SPARC_ASSERT_EXCEPTION_OFFSET( psr, PSR );
+SPARC_ASSERT_EXCEPTION_OFFSET( pc, PC );
+SPARC_ASSERT_EXCEPTION_OFFSET( npc, NPC );
+SPARC_ASSERT_EXCEPTION_OFFSET( trap, TRAP );
+SPARC_ASSERT_EXCEPTION_OFFSET( wim, WIM );
+SPARC_ASSERT_EXCEPTION_OFFSET( y, Y );
+SPARC_ASSERT_EXCEPTION_OFFSET( global[ 0 ], GLOBAL( 0 ) );
+SPARC_ASSERT_EXCEPTION_OFFSET( global[ 1 ], GLOBAL( 1 ) );
+SPARC_ASSERT_EXCEPTION_OFFSET( output[ 0 ], OUTPUT( 0 ) );
+SPARC_ASSERT_EXCEPTION_OFFSET( output[ 1 ], OUTPUT( 1 ) );
+
+#if SPARC_HAS_FPU == 1
+SPARC_ASSERT_EXCEPTION_OFFSET( fsr, FSR );
+SPARC_ASSERT_EXCEPTION_OFFSET( fp[ 0 ], FP( 0 ) );
+SPARC_ASSERT_EXCEPTION_OFFSET( fp[ 1 ], FP( 1 ) );
+#endif
+
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Exception_frame ) == SPARC_EXCEPTION_FRAME_SIZE,
+  SPARC_EXCEPTION_FRAME_SIZE
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Exception_frame ) % CPU_ALIGNMENT == 0,
+  CPU_Exception_frame_alignment
+);
+
 /*
  *  _CPU_Initialize
  *

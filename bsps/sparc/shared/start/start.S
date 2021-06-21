@@ -26,14 +26,11 @@
 #define TRAP_SYM(_vector) SYM(trap_##_vector)
 
 /*
- *  Unexpected trap will halt the processor by forcing it to error state
+ *  Unexpected trap will lead to an RTEMS fatal error.
  */
 #define BAD_TRAP(_vector) \
   TRAP_SYM(_vector):; \
-  ta 0; \
-  nop; \
-  nop; \
-  nop;
+  TRAP(_vector, _SPARC_Bad_trap)
 
 /*
  * System call optimized trap table entry

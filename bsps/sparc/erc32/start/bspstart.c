@@ -20,8 +20,6 @@
  */
 static void erc32_pre_driver_hook( void )
 {
-  bsp_spurious_initialize();
-
   /* Initialize shared interrupt handling, must be done after IRQ
    * controller has been found and initialized.
    */

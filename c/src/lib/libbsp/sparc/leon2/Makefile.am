@@ -30,7 +30,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/setvec.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/spurious.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/bspidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/bspdelay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exit.c

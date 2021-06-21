@@ -90,8 +90,6 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 
 void BSP_fatal_exit(uint32_t error);
 
-void bsp_spurious_initialize( void );
-
 /* Interrupt Service Routine (ISR) pointer */
 typedef void (*bsp_shared_isr)(void *arg);
 

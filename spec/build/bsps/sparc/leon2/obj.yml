@@ -41,7 +41,6 @@ source:
 - bsps/sparc/leon2/start/bspstart.c
 - bsps/sparc/leon2/start/cache.c
 - bsps/sparc/leon2/start/setvec.c
-- bsps/sparc/leon2/start/spurious.c
 - bsps/sparc/shared/drvmgr/ambapp_bus_leon2.c
 - bsps/sparc/shared/drvmgr/leon2_amba_bus.c
 - bsps/sparc/shared/gnatcommon.c

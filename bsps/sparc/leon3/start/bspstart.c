@@ -98,8 +98,6 @@ static void leon3_interrupt_common_init( void )
  */
 static void leon3_pre_driver_hook( void )
 {
-  bsp_spurious_initialize();
-
 #ifndef RTEMS_DRVMGR_STARTUP
   leon3_interrupt_common_init();
 #endif

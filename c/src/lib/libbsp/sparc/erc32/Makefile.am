@@ -28,7 +28,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/setvec.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/spurious.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/erc32mec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/boardinit.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/bspidle.c

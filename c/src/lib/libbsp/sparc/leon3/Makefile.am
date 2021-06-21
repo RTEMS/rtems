@@ -32,7 +32,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/gettargethash-defau
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/setvec.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/spurious.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspidle.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspdelay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c

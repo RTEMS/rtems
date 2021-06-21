@@ -108,8 +108,6 @@ struct drvmgr_bus_res leon2_amba_res __attribute__((weak)) =
  */
 static void leon2_pre_driver_hook( void )
 {
-  bsp_spurious_initialize();
-
   /* Initialize shared interrupt handling, must be done after IRQ
    * controller has been found and initialized.
    */

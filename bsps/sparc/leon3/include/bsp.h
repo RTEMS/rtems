@@ -129,8 +129,6 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 
 void BSP_fatal_exit(uint32_t error);
 
-void bsp_spurious_initialize( void );
-
 /*
  *  Delay for the specified number of microseconds.
  */
