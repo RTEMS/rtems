@@ -1417,6 +1417,7 @@ source:
 - cpukit/score/src/iovprintf.c
 - cpukit/score/src/isr.c
 - cpukit/score/src/isrisinprogress.c
+- cpukit/score/src/isrvectortable.c
 - cpukit/score/src/iterateoverthreads.c
 - cpukit/score/src/kern_tc.c
 - cpukit/score/src/libatomic.c
