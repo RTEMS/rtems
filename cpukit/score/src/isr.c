@@ -44,10 +44,6 @@ void _ISR_Handler_initialization( void )
 
   _ISR_Nest_level = 0;
 
-#if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
-  _CPU_Initialize_vectors();
-#endif
-
   stack_size = rtems_configuration_get_interrupt_stack_size();
   cpu_max = rtems_configuration_get_maximum_processors();
   stack_low = _ISR_Stack_area_begin;

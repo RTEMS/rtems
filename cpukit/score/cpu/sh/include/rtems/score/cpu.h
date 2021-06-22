@@ -367,14 +367,6 @@ void CPU_delay( uint32_t   microseconds );
  */
 
 /*
- *  Support routine to initialize the RTEMS vector table after it is allocated.
- *
- *  SH Specific Information: NONE
- */
-
-#define _CPU_Initialize_vectors()
-
-/*
  *  Disable all interrupts for an RTEMS critical section.  The previous
  *  level is returned in _level.
  */

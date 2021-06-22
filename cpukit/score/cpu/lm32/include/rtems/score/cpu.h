@@ -415,15 +415,6 @@ extern Context_Control_fp _CPU_Null_fp_context;
 /**@{**/
 
 /**
- * Support routine to initialize the RTEMS vector table after it is allocated.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define _CPU_Initialize_vectors()
-
-/**
  * Disable all interrupts for an RTEMS critical section.  The previous
  * level is returned in @a _isr_cookie.
  *

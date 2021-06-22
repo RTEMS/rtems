@@ -147,8 +147,6 @@ typedef struct {
 
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
-#define _CPU_Initialize_vectors()
-
 static inline uint32_t riscv_interrupt_disable( void )
 {
   unsigned long mstatus;

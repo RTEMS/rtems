@@ -155,8 +155,6 @@ typedef struct {
 
 #ifndef ASM
 
-#define _CPU_Initialize_vectors()
-
 #define _CPU_ISR_Enable(_level)                             \
 {                                                           \
   amd64_enable_interrupts();                                \

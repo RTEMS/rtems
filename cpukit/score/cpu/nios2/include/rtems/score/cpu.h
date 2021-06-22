@@ -172,8 +172,6 @@ typedef struct {
   uint32_t ipending;
 } CPU_Exception_frame;
 
-#define _CPU_Initialize_vectors()
-
 /**
  * @brief Macro to disable interrupts.
  *

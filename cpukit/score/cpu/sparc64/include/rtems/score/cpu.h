@@ -652,12 +652,6 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  */
 
 /*
- *  Support routine to initialize the RTEMS vector table after it is allocated.
- */
-
-#define _CPU_Initialize_vectors()
-
-/*
  *  Disable all interrupts for a critical section.  The previous
  *  level is returned in _level.
  */
