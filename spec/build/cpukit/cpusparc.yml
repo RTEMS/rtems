@@ -37,6 +37,7 @@ source:
 - cpukit/score/cpu/sparc/sparc-context-validate.S
 - cpukit/score/cpu/sparc/sparc-context-volatile-clobber.S
 - cpukit/score/cpu/sparc/sparc-counter-asm.S
+- cpukit/score/cpu/sparc/sparc-isr-install.c
 - cpukit/score/cpu/sparc/syscall.S
 - cpukit/score/cpu/sparc/window.S
 type: build
