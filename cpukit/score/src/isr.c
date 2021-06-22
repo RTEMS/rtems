@@ -22,9 +22,7 @@
 
 #include <rtems/score/isr.h>
 #include <rtems/score/address.h>
-#include <rtems/score/interr.h>
 #include <rtems/score/percpu.h>
-#include <rtems/score/stackimpl.h>
 #include <rtems/config.h>
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
@@ -41,8 +39,6 @@ void _ISR_Handler_initialization( void )
   uint32_t  cpu_index;
   size_t    stack_size;
   char     *stack_low;
-
-  _ISR_Nest_level = 0;
 
   stack_size = rtems_configuration_get_interrupt_stack_size();
   cpu_max = rtems_configuration_get_maximum_processors();
