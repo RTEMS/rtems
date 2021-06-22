@@ -91,7 +91,7 @@ static void _AArch32_PMSA_Configure(
   _ARM_Data_synchronization_barrier();
   sctlr = _AArch32_Read_sctlr();
   sctlr |= AARCH32_SCTLR_M | AARCH32_SCTLR_I | AARCH32_SCTLR_C;
-  sctlr &= ~AARCH32_SCTLR_BR;
+  sctlr &= ~( AARCH32_SCTLR_A | AARCH32_SCTLR_BR );
   _AArch32_Write_sctlr( sctlr );
   _ARM_Instruction_synchronization_barrier();
 }
