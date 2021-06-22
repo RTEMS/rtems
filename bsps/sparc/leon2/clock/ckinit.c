@@ -93,14 +93,14 @@ uint32_t _CPU_Counter_frequency(void)
   return LEON2_TIMER_1_FREQUENCY;
 }
 
-/*
- *  The Real Time Clock Counter Timer uses this trap type.
- */
-
-#define CLOCK_VECTOR LEON_TRAP_TYPE( LEON_INTERRUPT_TIMER1 )
-
 #define Clock_driver_support_install_isr( _new ) \
-  set_vector( _new, CLOCK_VECTOR, 1 )
+  (void) rtems_interrupt_handler_install( \
+    LEON_INTERRUPT_TIMER1, \
+    "Clock", \
+    RTEMS_INTERRUPT_SHARED, \
+    _new, \
+    NULL \
+  )
 
 #define Clock_driver_support_at_tick() leon2_clock_at_tick()
 

@@ -18,6 +18,7 @@
 #include <bsp/fatal.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/smpimpl.h>
 #include <stdlib.h>
 
@@ -28,10 +29,9 @@ uint32_t _CPU_SMP_Get_current_processor( void )
 }
 #endif
 
-static rtems_isr bsp_inter_processor_interrupt(
-  rtems_vector_number vector
-)
+static void bsp_inter_processor_interrupt( void *arg )
 {
+  (void) arg;
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
@@ -57,11 +57,19 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 
 uint32_t _CPU_SMP_Initialize( void )
 {
+  rtems_status_code sc;
+
   if ( !leon3_data_cache_snooping_enabled() )
     bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR );
 
-  LEON_Unmask_interrupt(LEON3_mp_irq);
-  set_vector(bsp_inter_processor_interrupt, LEON_TRAP_TYPE(LEON3_mp_irq), 1);
+  sc = rtems_interrupt_handler_install(
+    LEON3_mp_irq,
+    "IPI",
+    RTEMS_INTERRUPT_SHARED,
+    bsp_inter_processor_interrupt,
+    NULL
+  );
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 
   return leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
 }

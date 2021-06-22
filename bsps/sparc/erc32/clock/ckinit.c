@@ -23,7 +23,7 @@
  */
 
 #include <bsp.h>
-#include <bspopts.h>
+#include <rtems/irq-extension.h>
 #include <rtems/sysinit.h>
 #include <rtems/timecounter.h>
 #include <rtems/score/sparcimpl.h>
@@ -105,7 +105,13 @@ RTEMS_SYSINIT_ITEM(
 #define CLOCK_VECTOR ERC32_TRAP_TYPE( ERC32_INTERRUPT_REAL_TIME_CLOCK )
 
 #define Clock_driver_support_install_isr( _new ) \
-  set_vector( _new, CLOCK_VECTOR, 1 )
+  (void) rtems_interrupt_handler_install( \
+    ERC32_INTERRUPT_REAL_TIME_CLOCK, \
+    "Clock", \
+    RTEMS_INTERRUPT_SHARED, \
+    _new, \
+    NULL \
+  )
 
 #define Clock_driver_support_set_interrupt_affinity( _online_processors ) \
   do { \

@@ -57,14 +57,28 @@
 #else   /* use a regular asynchronous trap */
 
 #define TEST_INTERRUPT_SOURCE LEON_INTERRUPT_EXTERNAL_1
-#define TEST_VECTOR LEON_TRAP_TYPE( TEST_INTERRUPT_SOURCE )
 #define TEST_INTERRUPT_SOURCE2 LEON_INTERRUPT_EXTERNAL_1+1
-#define TEST_VECTOR2 LEON_TRAP_TYPE( TEST_INTERRUPT_SOURCE2 )
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-#define Install_tm27_vector( handler ) \
-  set_vector( (handler), TEST_VECTOR, 1 ); \
-  set_vector( (handler), TEST_VECTOR2, 1 );
+static inline void Install_tm27_vector(
+  void ( *handler )( rtems_vector_number )
+)
+{
+  (void) rtems_interrupt_handler_install(
+    TEST_INTERRUPT_SOURCE,
+    "tm27 low",
+    RTEMS_INTERRUPT_SHARED,
+    (rtems_interrupt_handler) handler,
+    NULL
+  );
+  (void) rtems_interrupt_handler_install(
+    TEST_INTERRUPT_SOURCE2,
+    "tm27 high",
+    RTEMS_INTERRUPT_SHARED,
+    (rtems_interrupt_handler) handler,
+    NULL
+  );
+}
 
 #define Cause_tm27_intr() \
   do { \

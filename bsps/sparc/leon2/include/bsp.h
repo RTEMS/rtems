@@ -52,6 +52,8 @@ extern "C" {
 /* SPARC CPU variant: LEON2 */
 #define LEON2 1
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 /*
  *  BSP provides its own Idle thread body
  */

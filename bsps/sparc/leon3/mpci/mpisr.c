@@ -45,6 +45,11 @@ void Shm_setvec( void )
    * Interrupt driven mode is not currently supported.
    * This is thought to be the interrupt to use.
    */
-  LEON_Unmask_interrupt(LEON3_mp_irq);
-  set_vector((rtems_isr_entry) Shm_isr, LEON_TRAP_TYPE(LEON3_mp_irq), 1);
+  (void) rtems_interrupt_handler_install(
+    LEON3_mp_irq,
+    "MPCI",
+    RTEMS_INTERRUPT_SHARED,
+    (rtems_interrupt_handler) Shm_isr,
+    NULL
+  );
 }

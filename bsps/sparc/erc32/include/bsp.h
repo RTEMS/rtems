@@ -46,6 +46,8 @@
 extern "C" {
 #endif
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 /*
  *  BSP provides its own Idle thread body
  */
