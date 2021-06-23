@@ -93,7 +93,7 @@ RTEMS_SYSINIT_ITEM(
   ambapp_grlib_root_initialize,
   RTEMS_SYSINIT_BSP_START,
   RTEMS_SYSINIT_ORDER_SECOND
-};
+);
 #endif
 
 rtems_interrupt_lock LEON3_IrqCtrl_Lock =
