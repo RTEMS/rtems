@@ -44,7 +44,6 @@ install:
   - bsps/include/grlib/grascs.h
   - bsps/include/grlib/grcan.h
   - bsps/include/grlib/grctm.h
-  - bsps/include/grlib/greth.h
   - bsps/include/grlib/grgpio.h
   - bsps/include/grlib/griommu.h
   - bsps/include/grlib/grlib.h
@@ -64,7 +63,6 @@ install:
   - bsps/include/grlib/l4stat.h
   - bsps/include/grlib/mctrl.h
   - bsps/include/grlib/memscrub.h
-  - bsps/include/grlib/network_interface_add.h
   - bsps/include/grlib/occan.h
   - bsps/include/grlib/pcif.h
   - bsps/include/grlib/satcan.h

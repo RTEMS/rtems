@@ -25,9 +25,6 @@ install:
   - bsps/powerpc/beatnik/include/bsp/gtintrreg.h
   - bsps/powerpc/beatnik/include/bsp/gtpcireg.h
   - bsps/powerpc/beatnik/include/bsp/gtreg.h
-  - bsps/powerpc/beatnik/include/bsp/if_em_pub.h
-  - bsps/powerpc/beatnik/include/bsp/if_gfe_pub.h
-  - bsps/powerpc/beatnik/include/bsp/if_mve_pub.h
   - bsps/powerpc/beatnik/include/bsp/irq.h
 - destination: ${BSP_LIBDIR}
   source:

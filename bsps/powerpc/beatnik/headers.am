@@ -16,7 +16,4 @@ include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/gti2cr
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/gtintrreg.h
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/gtpcireg.h
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/gtreg.h
-include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/if_em_pub.h
-include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/if_gfe_pub.h
-include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/if_mve_pub.h
 include_bsp_HEADERS += ../../../../../../bsps/powerpc/beatnik/include/bsp/irq.h
