@@ -51,6 +51,7 @@ extern "C" {
 
 /* Interrupts vectors */
 #define BSP_TIMER_VIRT_PPI 27
+#define BSP_TIMER_PHYS_S_PPI 29
 #define BSP_TIMER_PHYS_NS_PPI 30
 #define VERSAL_IRQ_UART_0 50
 #define VERSAL_IRQ_UART_1 51

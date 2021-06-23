@@ -43,6 +43,8 @@ uint64_t arm_gt_clock_get_compare_value(void)
   __asm__ volatile (
 #ifdef AARCH64_GENERIC_TIMER_USE_VIRTUAL
     "mrs %[val], cntv_cval_el0"
+#elif defined(AARCH64_GENERIC_TIMER_USE_PHYSICAL_SECURE)
+    "mrs %[val], cntps_cval_el1"
 #else
     "mrs %[val], cntp_cval_el0"
 #endif
@@ -56,6 +58,8 @@ void arm_gt_clock_set_compare_value(uint64_t cval)
   __asm__ volatile (
 #ifdef AARCH64_GENERIC_TIMER_USE_VIRTUAL
     "msr cntv_cval_el0, %[cval]"
+#elif defined(AARCH64_GENERIC_TIMER_USE_PHYSICAL_SECURE)
+    "msr cntps_cval_el1, %[cval]"
 #else
     "msr cntp_cval_el0, %[cval]"
 #endif
@@ -83,6 +87,8 @@ void arm_gt_clock_set_control(uint32_t ctl)
   __asm__ volatile (
 #ifdef AARCH64_GENERIC_TIMER_USE_VIRTUAL
     "msr cntv_ctl_el0, %[ctl]"
+#elif defined(AARCH64_GENERIC_TIMER_USE_PHYSICAL_SECURE)
+    "msr cntps_ctl_el1, %[ctl]"
 #else
     "msr cntp_ctl_el0, %[ctl]"
 #endif
@@ -102,6 +108,8 @@ void arm_generic_timer_get_config( uint32_t *frequency, uint32_t *irq )
 
 #ifdef ARM_GENERIC_TIMER_USE_VIRTUAL
   *irq = BSP_TIMER_VIRT_PPI;
+#elif defined(AARCH64_GENERIC_TIMER_USE_PHYSICAL_SECURE)
+  *irq = BSP_TIMER_PHYS_S_PPI;
 #else
   *irq = BSP_TIMER_PHYS_NS_PPI;
 #endif

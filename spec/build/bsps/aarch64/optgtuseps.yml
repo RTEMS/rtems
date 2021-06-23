@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+default: false
+default-by-variant: []
+description: |
+  If set to true, and AARCH64_GENERIC_TIMER_USE_VIRTUAL is false, then
+  the clock driver uses the Physical Secure Timer of the AARCH64
+  Generic Timer, otherwise it uses the Physical Non-Secure Timer (EL1).
+enabled-by: true
+links: []
+name: AARCH64_GENERIC_TIMER_USE_PHYSICAL_SECURE
+type: build
