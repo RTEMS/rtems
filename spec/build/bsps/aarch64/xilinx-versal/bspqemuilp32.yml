@@ -12,9 +12,7 @@ includes: []
 install: []
 links:
 - role: build-dependency
-  uid: grp
-- role: build-dependency
-  uid: tstqemu
+  uid: grp_qemu
 - role: build-dependency
   uid: linkcmds_ilp32
 source: []

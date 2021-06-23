@@ -98,7 +98,7 @@ _start:
 #endif
 	msr SCTLR_EL1, x0
 
-#ifdef BSP_START_IN_MON_SUPPORT
+#ifdef BSP_START_IN_EL3_MONITOR_MODE_SUPPORT
 	/* Drop from EL3 to EL2 */
 
   /* Initialize HCR_EL2 and SCTLR_EL2 */
@@ -108,21 +108,35 @@ _start:
   mrs x0, SCR_EL3
   /* Set EL2 to AArch64 */
   orr x0, x0, #(1<<10)
+#ifdef AARCH64_IS_NONSECURE
   /* Set EL1 to NS */
   orr x0, x0, #1
+#endif
   msr SCR_EL3, x0
 
   /* set EL2h mode for eret */
+#ifdef AARCH64_IS_NONSECURE
   mov x0, #0b01001
+#else
+  mov x0, #0b00101
+#endif
+
   msr SPSR_EL3, x0
 
   /* Set EL2 entry point */
+#ifdef AARCH64_IS_NONSECURE
   adr x0, _el2_start
+#else
+  adr x0, _el1_start
+#endif
   msr ELR_EL3, x0
   eret
 #endif
 
-#if defined(BSP_START_IN_HYP_SUPPORT) || defined(BSP_START_IN_MON_SUPPORT)
+#if defined(BSP_START_IN_HYP_SUPPORT) || \
+    ( defined(BSP_START_IN_EL3_MONITOR_MODE_SUPPORT) && \
+      defined(AARCH64_IS_NONSECURE) \
+    )
 _el2_start:
 	/* Drop from EL2 to EL1 */
 

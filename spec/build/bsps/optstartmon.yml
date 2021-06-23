@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+default: true
+default-by-variant: []
+description: |
+  If set to true, then a system start in monitor mode (EL3) is
+  supported, otherwise it is unsupported.
+enabled-by: true
+links: []
+name: BSP_START_IN_EL3_MONITOR_MODE_SUPPORT
+type: build

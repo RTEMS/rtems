@@ -175,6 +175,15 @@ void bsp_interrupt_vector_enable(rtems_vector_number vector)
   } else {
     volatile gic_sgi_ppi *sgi_ppi =
       gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+    /* Set interrupt group to 1 in the current security mode */
+#if defined(AARCH64_IS_NONSECURE)
+    sgi_ppi->icspigrpr[0] |= 1 << (vector % 32);
+    sgi_ppi->icspigrpmodr[0] &= ~(1 << (vector % 32));
+#else
+    sgi_ppi->icspigrpr[0] &= ~(1 << (vector % 32));
+    sgi_ppi->icspigrpmodr[0] |= 1 << (vector % 32);
+#endif
+    /* Set enable */
     sgi_ppi->icspiser[0] = 1 << (vector % 32);
   }
 }
@@ -217,10 +226,15 @@ static void gicv3_init_cpu_interface(void)
   waker &= ~waker_mask;
   redist->icrwaker = waker;
 
-  /* Set interrupt group to 1NS for SGI/PPI interrupts routed through the redistributor */
   volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
+  /* Set interrupt group to 1 in the current security mode */
+#if defined(AARCH64_IS_NONSECURE)
   sgi_ppi->icspigrpr[0] = 0xffffffff;
   sgi_ppi->icspigrpmodr[0] = 0;
+#else
+  sgi_ppi->icspigrpr[0] = 0x0;
+  sgi_ppi->icspigrpmodr[0] = 0xffffffff;
+#endif
   for (int id = 0; id < 32; id++) {
     sgi_ppi->icspiprior[id] = PRIORITY_DEFAULT;
   }
@@ -247,9 +261,14 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     /* Disable all interrupts */
     dist->icdicer[id / 32] = 0xffffffff;
 
-    /* Set interrupt group to 1NS for all interrupts */
+    /* Set interrupt group to 1 in the current security mode */
+#if defined(AARCH64_IS_NONSECURE)
     dist->icdigr[id / 32] = 0xffffffff;
     dist->icdigmr[id / 32] = 0;
+#else
+    dist->icdigr[id / 32] = 0;
+    dist->icdigmr[id / 32] = 0xffffffff;
+#endif
   }
 
   for (id = 0; id < id_count; ++id) {

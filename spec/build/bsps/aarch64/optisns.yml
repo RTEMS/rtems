@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+copyrights:
+- Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
+default: true
+default-by-variant:
+- value: false
+  variants:
+  - aarch64/xilinx_versal_lp64_qemu
+  - aarch64/xilinx_versal_ilp32_qemu
+description: |
+  If set to true, then the processor starts and stays in the non-secure mode,
+  otherwise it will be in the secure mode.
+enabled-by: true
+links: []
+name: AARCH64_IS_NONSECURE
+type: build
