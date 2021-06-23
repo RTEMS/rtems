@@ -205,10 +205,8 @@ typedef struct {
   /* GICR_IPRIORITYR */
   uint8_t icspiprior[32];
   uint32_t reserved_420_bfc[504];
-  /* GICR_ICFGR0 */
-  uint32_t icspicfgr0;
-  /* GICR_ICFGR1 */
-  uint32_t icspicfgr1;
+  /* GICR_ICFGR0 and GICR_ICFGR1 */
+  uint32_t icspicfgr[2];
   uint32_t reserved_c08_cfc[62];
   /* GICR_IGRPMODR0 */
   uint32_t icspigrpmodr[64];
