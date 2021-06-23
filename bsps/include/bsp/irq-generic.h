@@ -251,34 +251,55 @@ void bsp_interrupt_vector_enable(rtems_vector_number vector);
 void bsp_interrupt_vector_disable(rtems_vector_number vector);
 
 /**
- * @brief Sequencially calls all interrupt handlers for the vector number @a
- * vector.
+ * @brief Sequentially calls all interrupt handlers installed at the vector.
  *
- * If the vector number is out of range or the handler list is empty
- * bsp_interrupt_handler_default() will be called with argument @a vector.
+ * This function does not validate the vector number.  If the vector number is
+ * out of range, then the behaviour is undefined.
  *
  * You can call this function within every context which can be disabled via
- * rtems_interrupt_disable().
+ * rtems_interrupt_local_disable().
+ *
+ * @param vector is the vector number.
  */
-static inline void bsp_interrupt_handler_dispatch(rtems_vector_number vector)
+static inline void bsp_interrupt_handler_dispatch_unchecked(
+  rtems_vector_number vector
+)
 {
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    const bsp_interrupt_handler_entry *e =
-      &bsp_interrupt_handler_table [bsp_interrupt_handler_index(vector)];
+  const bsp_interrupt_handler_entry *e;
 
-    do {
-      rtems_interrupt_handler handler;
-      void *arg;
+  e = &bsp_interrupt_handler_table[ bsp_interrupt_handler_index( vector ) ];
 
-      arg = e->arg;
-      bsp_interrupt_fence(ATOMIC_ORDER_ACQUIRE);
-      handler = e->handler;
-      (*handler)(arg);
+  do {
+    rtems_interrupt_handler handler;
+    void *arg;
 
-      e = e->next;
-    } while (e != NULL);
+    arg = e->arg;
+    bsp_interrupt_fence( ATOMIC_ORDER_ACQUIRE );
+    handler = e->handler;
+    ( *handler )( arg );
+
+    e = e->next;
+  } while ( e != NULL );
+}
+
+/**
+ * @brief Sequentially calls all interrupt handlers installed at the vector.
+ *
+ * If the vector number is out of range or the handler list is empty
+ * bsp_interrupt_handler_default() will be called with the vector number as
+ * argument.
+ *
+ * You can call this function within every context which can be disabled via
+ * rtems_interrupt_local_disable().
+ *
+ * @param vector is the vector number.
+ */
+static inline void bsp_interrupt_handler_dispatch( rtems_vector_number vector )
+{
+  if ( bsp_interrupt_is_valid_vector( vector ) ) {
+    bsp_interrupt_handler_dispatch_unchecked( vector );
   } else {
-    bsp_interrupt_handler_default(vector);
+    bsp_interrupt_handler_default( vector );
   }
 }
 
