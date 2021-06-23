@@ -144,6 +144,12 @@ void zynq_uart_initialize(rtems_termios_device_context *base)
   regs->control = ZYNQ_UART_CONTROL_RXEN
     | ZYNQ_UART_CONTROL_TXEN
     | ZYNQ_UART_CONTROL_RSTTO;
+
+  /*
+   * Some ZynqMP UARTs have a hardware bug that causes TX/RX logic restarts to
+   * require a kick after baud rate registers are initialized.
+   */
+  zynq_uart_write_polled(base, 0);
 }
 
 int zynq_uart_read_polled(rtems_termios_device_context *base)

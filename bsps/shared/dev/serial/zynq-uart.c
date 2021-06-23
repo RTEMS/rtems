@@ -214,8 +214,16 @@ static bool zynq_uart_set_attributes(
   if (baud > 0) {
     regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
     regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
+    regs->control |= ZYNQ_UART_CONTROL_RXRES
+      | ZYNQ_UART_CONTROL_TXRES;
   }
   regs->control |= ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN;
+
+  /*
+   * Some ZynqMP UARTs have a hardware bug that causes TX/RX logic restarts to
+   * require a kick after baud rate registers are initialized.
+   */
+  zynq_uart_write_polled(context, 0);
 
   return true;
 }
