@@ -112,6 +112,7 @@
 /* AArch64 GICv3 registers are not named in GCC */
 #define ICC_IGRPEN0 "S3_0_C12_C12_6, %0"
 #define ICC_IGRPEN1 "S3_0_C12_C12_7, %0"
+#define ICC_IGRPEN1_EL3 "S3_6_C12_C12_7, %0"
 #define ICC_PMR     "S3_0_C4_C6_0, %0"
 #define ICC_EOIR1   "S3_0_C12_C12_1, %0"
 #define ICC_SRE     "S3_0_C12_C12_5, %0"
