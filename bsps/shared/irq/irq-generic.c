@@ -122,6 +122,32 @@ static inline bool bsp_interrupt_allocate_handler_index(
   #endif
 }
 
+rtems_status_code bsp_interrupt_check_and_lock(
+  rtems_vector_number     vector,
+  rtems_interrupt_handler handler
+)
+{
+  if ( !bsp_interrupt_is_initialized() ) {
+    return RTEMS_INCORRECT_STATE;
+  }
+
+  if ( handler == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  if ( rtems_interrupt_is_in_progress() ) {
+    return RTEMS_CALLED_FROM_ISR;
+  }
+
+  bsp_interrupt_lock();
+
+  return RTEMS_SUCCESSFUL;
+}
+
 void bsp_interrupt_initialize(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -162,25 +188,18 @@ static rtems_status_code bsp_interrupt_handler_install(
   void *arg
 )
 {
+  rtems_status_code sc;
   rtems_interrupt_level level;
   rtems_vector_number index = 0;
   rtems_interrupt_entry *head = NULL;
   bool enable_vector = false;
   bool replace = RTEMS_INTERRUPT_IS_REPLACE(options);
 
-  /* Check parameters and system state */
-  if (!bsp_interrupt_is_initialized()) {
-    return RTEMS_INTERNAL_ERROR;
-  } else if (!bsp_interrupt_is_valid_vector(vector)) {
-    return RTEMS_INVALID_ID;
-  } else if (handler == NULL) {
-    return RTEMS_INVALID_ADDRESS;
-  } else if (rtems_interrupt_is_in_progress()) {
-    return RTEMS_CALLED_FROM_ISR;
-  }
+  sc = bsp_interrupt_check_and_lock( vector, handler );
 
-  /* Lock */
-  bsp_interrupt_lock();
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    return sc;
+  }
 
   /* Get handler table index */
   index = bsp_interrupt_handler_index(vector);
@@ -325,6 +344,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
   void *arg
 )
 {
+  rtems_status_code sc;
   rtems_interrupt_level level;
   rtems_vector_number index = 0;
   rtems_interrupt_entry *head = NULL;
@@ -332,19 +352,11 @@ static rtems_status_code bsp_interrupt_handler_remove(
   rtems_interrupt_entry *previous = NULL;
   rtems_interrupt_entry *match = NULL;
 
-  /* Check parameters and system state */
-  if (!bsp_interrupt_is_initialized()) {
-    return RTEMS_INTERNAL_ERROR;
-  } else if (!bsp_interrupt_is_valid_vector(vector)) {
-    return RTEMS_INVALID_ID;
-  } else if (handler == NULL) {
-    return RTEMS_INVALID_ADDRESS;
-  } else if (rtems_interrupt_is_in_progress()) {
-    return RTEMS_CALLED_FROM_ISR;
-  }
+  sc = bsp_interrupt_check_and_lock( vector, handler );
 
-  /* Lock */
-  bsp_interrupt_lock();
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    return sc;
+  }
 
   /* Get handler table index */
   index = bsp_interrupt_handler_index(vector);

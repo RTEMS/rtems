@@ -36,39 +36,26 @@
 
 #include <bsp/irq-generic.h>
 
-/**
- * @brief Iterates over all installed interrupt handler of a vector.
- *
- * @ingroup bsp_interrupt
- *
- * @return In addition to the standard status codes this function returns
- * RTEMS_INTERNAL_ERROR if the BSP interrupt support is not initialized.
- *
- * @see rtems_interrupt_handler_iterate().
- */
-static rtems_status_code bsp_interrupt_handler_iterate(
-  rtems_vector_number vector,
+rtems_status_code rtems_interrupt_handler_iterate(
+  rtems_vector_number                 vector,
   rtems_interrupt_per_handler_routine routine,
-  void *arg
+  void                               *arg
 )
 {
-  rtems_interrupt_entry *current = NULL;
-  rtems_option options = 0;
-  rtems_vector_number index = 0;
+  rtems_status_code      sc;
+  rtems_vector_number    index;
+  rtems_option           options;
+  rtems_interrupt_entry *current;
 
-  /* Check parameters and system state */
-  if (!bsp_interrupt_is_initialized()) {
-    return RTEMS_INTERNAL_ERROR;
-  } else if (!bsp_interrupt_is_valid_vector(vector)) {
-    return RTEMS_INVALID_ID;
-  } else if (rtems_interrupt_is_in_progress()) {
-    return RTEMS_CALLED_FROM_ISR;
+  sc = bsp_interrupt_check_and_lock(
+    vector,
+    (rtems_interrupt_handler) routine
+  );
+
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    return sc;
   }
 
-  /* Lock */
-  bsp_interrupt_lock();
-
-  /* Interate */
   index = bsp_interrupt_handler_index(vector);
   current = &bsp_interrupt_handler_table [index];
   if (!bsp_interrupt_is_empty_handler_entry(current)) {
@@ -80,17 +67,7 @@ static rtems_status_code bsp_interrupt_handler_iterate(
     } while (current != NULL);
   }
 
-  /* Unlock */
   bsp_interrupt_unlock();
 
   return RTEMS_SUCCESSFUL;
-}
-
-rtems_status_code rtems_interrupt_handler_iterate(
-  rtems_vector_number vector,
-  rtems_interrupt_per_handler_routine routine,
-  void *arg
-)
-{
-  return bsp_interrupt_handler_iterate(vector, routine, arg);
 }

@@ -428,11 +428,45 @@ bool bsp_interrupt_handler_is_empty(rtems_vector_number vector);
 
 /** @} */
 
-/* For internal use only */
+/**
+ * @brief Acquires the interrupt support lock.
+ *
+ * The interrupt support lock is a mutex.  The mutex is only acquired if the
+ * system is the ::SYSTEM_STATE_UP state.
+ */
 void bsp_interrupt_lock(void);
 
-/* For internal use only */
+/**
+ * @brief Releases the interrupt support lock.
+ *
+ * The mutex is only released if the system is the ::SYSTEM_STATE_UP state.
+ */
 void bsp_interrupt_unlock(void);
+
+/**
+ * @brief Checks the vector and routine.  When the checks were successful, the
+ *   interrupt support lock will be obtained.
+ *
+ * @param vector is the interrupt vector number to check.
+ *
+ * @param routine is the routine to check.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INCORRECT_STATE The interrupt support was not initialized.
+ *
+ * @retval ::RTEMS_CALLED_FROM_ISR The function was called from within
+ *   interrupt context.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``routine`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ */
+rtems_status_code bsp_interrupt_check_and_lock(
+  rtems_vector_number     vector,
+  rtems_interrupt_handler handler
+);
 
 /**
  * @brief This table contains a bit map which indicates if an entry is unique
