@@ -13,8 +13,8 @@
  */
 
 #include <bsp.h>
-#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <grlib/cons.h>
 #include <rtems/console.h>
 
@@ -64,6 +64,10 @@ static void console_dev_init(struct console_priv *con)
 	);
 	if (status != RTEMS_SUCCESSFUL) {
 		rtems_fatal_error_occurred(status);
+	}
+
+	if ((con->flags & FLAG_SYSCON) != 0) {
+		(void) link(fsname, CONSOLE_DEVICE_NAME);
 	}
 }
 
