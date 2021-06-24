@@ -10,8 +10,6 @@ links:
 - role: build-dependency
   uid: grp
 - role: build-dependency
-  uid: ../../optstartmon
-- role: build-dependency
   uid: tstqemu
 type: build
 use-after: []

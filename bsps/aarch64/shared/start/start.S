@@ -98,7 +98,13 @@ _start:
 #endif
 	msr SCTLR_EL1, x0
 
-#ifdef BSP_START_IN_EL3_MONITOR_MODE_SUPPORT
+  mrs x0, CurrentEL
+  cmp x0, #(1<<2)
+  b.eq _el1_start
+  cmp x0, #(2<<2)
+  b.eq _el2_start
+
+_el3_start:
 	/* Drop from EL3 to EL2 */
 
   /* Initialize HCR_EL2 and SCTLR_EL2 */
@@ -131,12 +137,7 @@ _start:
 #endif
   msr ELR_EL3, x0
   eret
-#endif
 
-#if defined(BSP_START_IN_HYP_SUPPORT) || \
-    ( defined(BSP_START_IN_EL3_MONITOR_MODE_SUPPORT) && \
-      defined(AARCH64_IS_NONSECURE) \
-    )
 _el2_start:
 	/* Drop from EL2 to EL1 */
 
@@ -159,8 +160,8 @@ _el2_start:
 	adr x0, _el1_start
 	msr ELR_EL2, x0
 	eret
+
 _el1_start:
-#endif
 
 #ifdef RTEMS_SMP
 	/* Read MPIDR and get current processor index */
