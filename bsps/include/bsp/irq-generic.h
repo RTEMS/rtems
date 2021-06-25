@@ -415,17 +415,6 @@ static inline void bsp_interrupt_handler_dispatch( rtems_vector_number vector )
   }
 }
 
-/**
- * @brief Is interrupt handler empty.
- *
- * This routine returns true if the handler is empty and has not been
- * initialised else false is returned. The interrupt lock is not used
- * so this call can be used from within interrupts.
- *
- * @return If empty true shall be returned else false is returned.
- */
-bool bsp_interrupt_handler_is_empty(rtems_vector_number vector);
-
 /** @} */
 
 /**
