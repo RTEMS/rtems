@@ -38,6 +38,7 @@ source:
 - bsps/m68k/shared/m68kidle.c
 - bsps/m68k/shared/memProbe.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/irq/irq-affinity.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/irq/irq-info.c
 - bsps/shared/irq/irq-legacy.c

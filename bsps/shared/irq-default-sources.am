@@ -1,3 +1,4 @@
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-affinity.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-generic.c

@@ -46,6 +46,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/raw_exceptio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors.S
 
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-affinity.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-generic.c

@@ -39,7 +39,6 @@
 
 #include <stdlib.h>
 
-#include <rtems/score/processormask.h>
 #include <rtems/malloc.h>
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
@@ -547,55 +546,4 @@ bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)
   empty = bsp_interrupt_is_empty_handler_entry(head);
 
   return empty;
-}
-
-rtems_status_code rtems_interrupt_set_affinity(
-  rtems_vector_number  vector,
-  size_t               affinity_size,
-  const cpu_set_t     *affinity
-)
-{
-  Processor_mask             set;
-  Processor_mask_Copy_status status;
-
-  if (!bsp_interrupt_is_valid_vector(vector)) {
-    return RTEMS_INVALID_ID;
-  }
-
-  status = _Processor_mask_From_cpu_set_t(&set, affinity_size, affinity);
-  if (status != PROCESSOR_MASK_COPY_LOSSLESS) {
-    return RTEMS_INVALID_SIZE;
-  }
-
-#if defined(RTEMS_SMP)
-  bsp_interrupt_set_affinity(vector, &set);
-#endif
-  return RTEMS_SUCCESSFUL;
-}
-
-rtems_status_code rtems_interrupt_get_affinity(
-  rtems_vector_number  vector,
-  size_t               affinity_size,
-  cpu_set_t           *affinity
-)
-{
-  Processor_mask             set;
-  Processor_mask_Copy_status status;
-
-  if (!bsp_interrupt_is_valid_vector(vector)) {
-    return RTEMS_INVALID_ID;
-  }
-
-#if defined(RTEMS_SMP)
-  bsp_interrupt_get_affinity(vector, &set);
-#else
-  _Processor_mask_From_index(&set, 0);
-#endif
-
-  status = _Processor_mask_To_cpu_set_t(&set, affinity_size, affinity);
-  if (status != PROCESSOR_MASK_COPY_LOSSLESS) {
-    return RTEMS_INVALID_SIZE;
-  }
-
-  return RTEMS_SUCCESSFUL;
 }

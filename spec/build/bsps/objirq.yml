@@ -10,6 +10,7 @@ includes: []
 install: []
 links: []
 source:
+- bsps/shared/irq/irq-affinity.c
 - bsps/shared/irq/irq-generic.c
 - bsps/shared/irq/irq-info.c
 - bsps/shared/irq/irq-legacy.c
