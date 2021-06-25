@@ -322,6 +322,63 @@ void bsp_interrupt_lock(void);
 /* For internal use only */
 void bsp_interrupt_unlock(void);
 
+/**
+ * @brief This table contains a bit map which indicates if an entry is unique
+ *   or shared.
+ *
+ * If the bit associated with a vector is set, then the entry is unique,
+ * otherwise it may be shared.  If the bit with index
+ * #BSP_INTERRUPT_HANDLER_TABLE_SIZE is set, then the interrupt support is
+ * initialized, otherwise it is not initialized.
+ */
+extern uint8_t bsp_interrupt_handler_unique_table[];
+
+/**
+ * @brief Checks if the handler entry associated with the hander index is
+ *   unique.
+ *
+ * @param index is the handler index to check.
+ *
+ * @return Returns true, if handler entry associated with the hander index is
+ *   unique, otherwise false.
+ */
+static inline bool bsp_interrupt_is_handler_unique( rtems_vector_number index )
+{
+  rtems_vector_number table_index;
+  uint8_t             bit;
+
+  table_index = index / 8;
+  bit = (uint8_t) ( 1U << ( index % 8 ) );
+
+  return ( bsp_interrupt_handler_unique_table[ table_index ] & bit ) != 0;
+}
+
+/**
+ * @brief Checks if the interrupt support is initialized.
+ *
+ * @return Returns true, if the interrupt support is initialized, otherwise
+ *   false.
+ */
+static inline bool bsp_interrupt_is_initialized( void )
+{
+  return bsp_interrupt_is_handler_unique( BSP_INTERRUPT_HANDLER_TABLE_SIZE );
+}
+
+/**
+ * @brief This handler routine is used for empty entries.
+ */
+void bsp_interrupt_handler_empty( void *arg );
+
+/**
+ * @brief Checks if a handler entry is empty.
+ */
+static inline bool bsp_interrupt_is_empty_handler_entry(
+  const bsp_interrupt_handler_entry *entry
+)
+{
+  return entry->handler == bsp_interrupt_handler_empty;
+}
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

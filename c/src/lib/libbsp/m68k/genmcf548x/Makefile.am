@@ -40,6 +40,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/btimer/btimer.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-affinity.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-handler-iterate.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-info.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-legacy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-lock.c

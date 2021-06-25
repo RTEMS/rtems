@@ -50,6 +50,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-affinity.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-generic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-handler-iterate.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-info.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-lock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-server.c

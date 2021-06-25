@@ -40,6 +40,7 @@ source:
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/irq/irq-affinity.c
 - bsps/shared/irq/irq-default-handler.c
+- bsps/shared/irq/irq-handler-iterate.c
 - bsps/shared/irq/irq-info.c
 - bsps/shared/irq/irq-legacy.c
 - bsps/shared/irq/irq-lock.c
