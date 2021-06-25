@@ -6,11 +6,11 @@
  * @ingroup bsp_interrupt
  *
  * @brief This source file contains the implementation of
- *   rtems_interrupt_handler_iterate().
+ *   rtems_interrupt_handler_remove().
  */
 
 /*
- * Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,37 +36,45 @@
 
 #include <bsp/irq-generic.h>
 
-rtems_status_code rtems_interrupt_handler_iterate(
-  rtems_vector_number                 vector,
-  rtems_interrupt_per_handler_routine routine,
-  void                               *arg
+#include <stdlib.h>
+
+static rtems_status_code bsp_interrupt_handler_do_remove(
+  rtems_vector_number     vector,
+  rtems_interrupt_handler routine,
+  void                   *arg
 )
 {
-  rtems_status_code      sc;
-  rtems_vector_number    index;
-  rtems_option           options;
-  rtems_interrupt_entry *entry;
+  rtems_interrupt_entry    *entry;
+  rtems_interrupt_entry   **previous_next;
 
-  sc = bsp_interrupt_check_and_lock(
-    vector,
-    (rtems_interrupt_handler) routine
-  );
+  entry = bsp_interrupt_entry_find( vector, routine, arg, &previous_next );
+
+  if ( entry == NULL ) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  bsp_interrupt_entry_remove( vector, entry, previous_next );
+  free( entry );
+
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code rtems_interrupt_handler_remove(
+  rtems_vector_number     vector,
+  rtems_interrupt_handler routine,
+  void                   *arg
+)
+{
+  rtems_status_code sc;
+
+  sc = bsp_interrupt_check_and_lock( vector, routine );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
-  index = bsp_interrupt_handler_index( vector );
-  options = bsp_interrupt_is_handler_unique( index ) ?
-    RTEMS_INTERRUPT_UNIQUE : RTEMS_INTERRUPT_SHARED;
-  entry = bsp_interrupt_handler_table[ index ];
-
-  while ( entry != NULL ) {
-    ( *routine )( arg, entry->info, options, entry->handler, entry->arg );
-    entry = entry->next;
-  }
-
+  sc = bsp_interrupt_handler_do_remove( vector, routine, arg );
   bsp_interrupt_unlock();
 
-  return RTEMS_SUCCESSFUL;
+  return sc;
 }

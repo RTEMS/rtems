@@ -38,16 +38,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/console/console.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/btimer/btimer.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-affinity.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-raise-clear.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-enable-disable.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-handler-iterate.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-info.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-lock.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-server.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-shell.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/irq/intc-icr-init-values.c
 
@@ -59,5 +50,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/mcdma/MCD_tasksI
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/mcdma/mcdma_glue.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/cache.c
 
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am

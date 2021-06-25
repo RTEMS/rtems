@@ -353,13 +353,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
 static bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)
 {
-  rtems_vector_number index;
-  rtems_interrupt_entry *head;
-
-  index = bsp_interrupt_handler_index(vector);
-  head = &bsp_interrupt_handler_table[index];
-
-  return bsp_interrupt_is_empty_handler_entry(head);
+  return bsp_interrupt_entry_load_first(vector) == NULL;
 }
 
 /*

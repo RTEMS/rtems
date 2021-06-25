@@ -99,4 +99,12 @@ static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
     && vector < (rtems_vector_number) BSP_INTERRUPT_VECTOR_COUNT;
 }
 
+void mcf548x_interrupt_vector_install(rtems_vector_number vector);
+
+void mcf548x_interrupt_vector_remove(rtems_vector_number vector);
+
+#define bsp_interrupt_vector_install(v) mcf548x_interrupt_vector_install(v)
+
+#define bsp_interrupt_vector_remove(v) mcf548x_interrupt_vector_remove(v)
+
 #endif /* LIBBSP_M68K_MCF548X_IRQ_H */

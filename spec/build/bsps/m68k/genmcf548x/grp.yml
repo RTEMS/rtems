@@ -28,6 +28,8 @@ links:
 - role: build-dependency
   uid: ../../obj
 - role: build-dependency
+  uid: ../../objirq
+- role: build-dependency
   uid: ../../optconsolebaud
 - role: build-dependency
   uid: ../../bspopts

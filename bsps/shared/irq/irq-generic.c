@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2008, 2018 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -46,92 +46,75 @@
     [BSP_INTERRUPT_VECTOR_COUNT];
 #endif
 
-rtems_interrupt_entry bsp_interrupt_handler_table
-  [BSP_INTERRUPT_HANDLER_TABLE_SIZE];
+rtems_interrupt_entry *
+bsp_interrupt_handler_table[ BSP_INTERRUPT_HANDLER_TABLE_SIZE ];
 
 /* The last entry indicates if everything is initialized */
 uint8_t bsp_interrupt_handler_unique_table
   [ ( BSP_INTERRUPT_HANDLER_TABLE_SIZE + 7 + 1 ) / 8 ];
-
-void bsp_interrupt_handler_empty( void *arg )
-{
-  rtems_vector_number vector = (rtems_vector_number) (uintptr_t) arg;
-
-  bsp_interrupt_handler_default( vector );
-}
-
-#ifdef RTEMS_SMP
-  static void bsp_interrupt_handler_do_nothing(void *arg)
-  {
-    (void) arg;
-  }
-#endif
-
-static inline void bsp_interrupt_set_handler_unique(
-  rtems_vector_number index,
-  bool unique
-)
-{
-  rtems_vector_number i = index / 8;
-  rtems_vector_number s = index % 8;
-  if (unique) {
-    bsp_interrupt_handler_unique_table [i] |= (uint8_t) (0x1U << s);
-  } else {
-    bsp_interrupt_handler_unique_table [i] &= (uint8_t) ~(0x1U << s);
-  }
-}
 
 static inline void bsp_interrupt_set_initialized(void)
 {
   bsp_interrupt_set_handler_unique(BSP_INTERRUPT_HANDLER_TABLE_SIZE, true);
 }
 
-static inline void bsp_interrupt_clear_handler_entry(
-  rtems_interrupt_entry *e,
+#if defined(BSP_INTERRUPT_USE_INDEX_TABLE)
+static inline rtems_vector_number bsp_interrupt_allocate_handler_index(
   rtems_vector_number vector
 )
 {
-  e->handler = bsp_interrupt_handler_empty;
-  bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-  e->arg = (void *) (uintptr_t) vector;
-  e->info = NULL;
-  e->next = NULL;
-}
+  rtems_vector_number i;
 
-static inline bool bsp_interrupt_allocate_handler_index(
-  rtems_vector_number vector,
-  rtems_vector_number *index
-)
-{
-  #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-    rtems_vector_number i = 0;
-
-    /* The first entry will remain empty */
-    for (i = 1; i < BSP_INTERRUPT_HANDLER_TABLE_SIZE; ++i) {
-      const rtems_interrupt_entry *e = &bsp_interrupt_handler_table [i];
-      if (bsp_interrupt_is_empty_handler_entry(e)) {
-        *index = i;
-        return true;
-      }
+  /* The first entry will remain empty */
+  for ( i = 1; i < BSP_INTERRUPT_HANDLER_TABLE_SIZE; ++i ) {
+    if (  bsp_interrupt_handler_table[ i ] == NULL ) {
+      break;
     }
+  }
 
-    return false;
-  #else
-    *index = bsp_interrupt_handler_index(vector);
-    return true;
-  #endif
+  return i;
 }
+#endif
+
+#if defined(RTEMS_SMP)
+RTEMS_STATIC_ASSERT(
+  sizeof( Atomic_Uintptr ) == sizeof( rtems_interrupt_entry * ),
+  rtems_interrupt_entry_pointer_size
+);
+
+void bsp_interrupt_spurious( rtems_vector_number vector )
+{
+  Atomic_Uintptr        *ptr;
+  rtems_interrupt_entry *first;
+
+  /*
+   * In order to get the last written pointer value to the first entry, we have
+   * to carry out an atomic read-modify-write operation.
+   */
+  ptr = (Atomic_Uintptr *) &bsp_interrupt_handler_table[
+    bsp_interrupt_handler_index( vector )
+  ];
+  first = (rtems_interrupt_entry *)
+    _Atomic_Fetch_add_uintptr( ptr, 0, ATOMIC_ORDER_ACQUIRE );
+
+  if ( first == NULL ) {
+    bsp_interrupt_handler_default( vector );
+  } else {
+    bsp_interrupt_dispatch_entries( first );
+  }
+}
+#endif
 
 rtems_status_code bsp_interrupt_check_and_lock(
   rtems_vector_number     vector,
-  rtems_interrupt_handler handler
+  rtems_interrupt_handler routine
 )
 {
   if ( !bsp_interrupt_is_initialized() ) {
     return RTEMS_INCORRECT_STATE;
   }
 
-  if ( handler == NULL ) {
+  if ( routine == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
@@ -148,317 +131,160 @@ rtems_status_code bsp_interrupt_check_and_lock(
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_initialize(void)
+rtems_interrupt_entry *bsp_interrupt_entry_find(
+  rtems_vector_number      vector,
+  rtems_interrupt_handler  routine,
+  void                    *arg,
+  rtems_interrupt_entry ***previous_next
+)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  size_t i = 0;
+  rtems_vector_number    index;
+  rtems_interrupt_entry *entry;
 
-  /* Initialize handler table */
-  for (i = 0; i < BSP_INTERRUPT_HANDLER_TABLE_SIZE; ++i) {
-    bsp_interrupt_handler_table [i].handler = bsp_interrupt_handler_empty;
-    bsp_interrupt_handler_table [i].arg = (void *) i;
+  bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) );
+  index = bsp_interrupt_handler_index( vector );
+  *previous_next = &bsp_interrupt_handler_table[ index ];
+  entry = bsp_interrupt_handler_table[ index ];
+
+  while ( entry != NULL ) {
+    if ( entry->handler == routine && entry->arg == arg ) {
+      return entry;
+    }
+
+    *previous_next = &entry->next;
+    entry = entry->next;
   }
 
+  return NULL;
+}
+
+void bsp_interrupt_initialize( void )
+{
+  rtems_status_code sc;
+
   sc = bsp_interrupt_facility_initialize();
-  if (sc != RTEMS_SUCCESSFUL) {
-    bsp_fatal(BSP_FATAL_INTERRUPT_INITIALIZATION);
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    bsp_fatal( BSP_FATAL_INTERRUPT_INITIALIZATION );
   }
 
   bsp_interrupt_set_initialized();
 }
 
-/**
- * @brief Installs an interrupt handler.
- *
- * @ingroup bsp_interrupt
- *
- * @return In addition to the standard status codes this function returns:
- * - If the BSP interrupt support is not initialized RTEMS_INTERNAL_ERROR will
- * be returned.
- * - If not enough memory for a new handler is available RTEMS_NO_MEMORY will
- * be returned
- *
- * @see rtems_interrupt_handler_install()
- */
-static rtems_status_code bsp_interrupt_handler_install(
-  rtems_vector_number vector,
-  const char *info,
-  rtems_option options,
-  rtems_interrupt_handler handler,
-  void *arg
+static rtems_status_code bsp_interrupt_entry_install_first(
+  rtems_vector_number       vector,
+  rtems_option              options,
+  rtems_interrupt_entry    *entry
 )
 {
-  rtems_status_code sc;
-  rtems_interrupt_level level;
-  rtems_vector_number index = 0;
-  rtems_interrupt_entry *head = NULL;
-  bool enable_vector = false;
-  bool replace = RTEMS_INTERRUPT_IS_REPLACE(options);
+  rtems_vector_number index;
 
-  sc = bsp_interrupt_check_and_lock( vector, handler );
+#ifdef BSP_INTERRUPT_USE_INDEX_TABLE
+  index = bsp_interrupt_allocate_handler_index( vector );
 
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    return sc;
+  if ( index == BSP_INTERRUPT_HANDLER_TABLE_SIZE ) {
+    /* Handler table is full */
+    return RTEMS_NO_MEMORY;
+  }
+#else
+  index = vector;
+#endif
+
+#ifdef BSP_INTERRUPT_USE_INDEX_TABLE
+  bsp_interrupt_handler_index_table[ vector ] = index;
+#endif
+  bsp_interrupt_entry_store_release(
+    &bsp_interrupt_handler_table[ index ],
+    entry
+  );
+
+  bsp_interrupt_set_handler_unique(
+    index,
+    RTEMS_INTERRUPT_IS_UNIQUE( options )
+  );
+#if defined(bsp_interrupt_vector_install)
+  bsp_interrupt_vector_install( vector );
+#else
+  bsp_interrupt_vector_enable( vector );
+#endif
+
+  return RTEMS_SUCCESSFUL;
+}
+
+static rtems_status_code bsp_interrupt_entry_install(
+  rtems_vector_number    vector,
+  rtems_option           options,
+  rtems_interrupt_entry *entry
+)
+{
+  rtems_vector_number     index;
+  rtems_interrupt_entry  *first;
+  rtems_interrupt_entry  *other;
+  rtems_interrupt_entry **previous_next;
+
+  if ( RTEMS_INTERRUPT_IS_REPLACE( options ) ) {
+    return RTEMS_INVALID_NUMBER;
   }
 
-  /* Get handler table index */
-  index = bsp_interrupt_handler_index(vector);
+  index = bsp_interrupt_handler_index( vector );
+  first = bsp_interrupt_handler_table[ index ];
 
-  /* Get head entry of the handler list for current vector */
-  head = &bsp_interrupt_handler_table [index];
+  if ( first == NULL ) {
+    return bsp_interrupt_entry_install_first( vector, options, entry );
+  }
 
-  if (bsp_interrupt_is_empty_handler_entry(head)) {
-    if (replace) {
-      /* No handler to replace exists */
-      bsp_interrupt_unlock();
-      return RTEMS_UNSATISFIED;
-    }
+  if ( RTEMS_INTERRUPT_IS_UNIQUE( options ) ) {
+    /* Cannot install a unique entry if there is already an entry installed */
+    return RTEMS_RESOURCE_IN_USE;
+  }
 
+  if ( bsp_interrupt_is_handler_unique( index ) ) {
     /*
-     * No real handler installed yet.  So allocate a new index in
-     * the handler table and fill the entry with life.
-     */
-    if (bsp_interrupt_allocate_handler_index(vector, &index)) {
-      bsp_interrupt_disable(level);
-      bsp_interrupt_handler_table [index].arg = arg;
-      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-      bsp_interrupt_handler_table [index].handler = handler;
-      #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-        bsp_interrupt_handler_index_table [vector] = index;
-      #endif
-      bsp_interrupt_enable(level);
-      bsp_interrupt_handler_table [index].info = info;
-    } else {
-      /* Handler table is full */
-      bsp_interrupt_unlock();
-      return RTEMS_NO_MEMORY;
-    }
-
-    /* This is the first handler so enable the vector later */
-    enable_vector = true;
-  } else {
-    rtems_interrupt_entry *current = head;
-    rtems_interrupt_entry *tail = NULL;
-    rtems_interrupt_entry *match = NULL;
-
-    /* Ensure that a unique handler remains unique */
-    if (
-      !replace
-        && (RTEMS_INTERRUPT_IS_UNIQUE(options)
-          || bsp_interrupt_is_handler_unique(index))
-    ) {
-      /*
-       * Tried to install a unique handler on a not empty
-       * list or there is already a unique handler installed.
-       */
-      bsp_interrupt_unlock();
-      return RTEMS_RESOURCE_IN_USE;
-    }
-
-    /*
-     * Search for the list tail and check if the handler is already
+     * Cannot install another entry if there is already an unique entry
      * installed.
      */
-    do {
-      if (
-        match == NULL
-          && (current->handler == handler || replace)
-          && current->arg == arg
-      ) {
-        match = current;
-      }
-      tail = current;
-      current = current->next;
-    } while (current != NULL);
-
-    if (replace) {
-      /* Ensure that a handler to replace exists */
-      if (match == NULL) {
-        bsp_interrupt_unlock();
-        return RTEMS_UNSATISFIED;
-      }
-
-      /* Use existing entry */
-      current = match;
-    } else {
-      /* Ensure the handler is not already installed */
-      if (match != NULL) {
-        /* The handler is already installed */
-        bsp_interrupt_unlock();
-        return RTEMS_TOO_MANY;
-      }
-
-      /* Allocate a new entry */
-      current = rtems_malloc(sizeof(*current));
-      if (current == NULL) {
-        /* Not enough memory */
-        bsp_interrupt_unlock();
-        return RTEMS_NO_MEMORY;
-      }
-    }
-
-    /* Update existing entry or set new entry */
-    current->handler = handler;
-    current->info = info;
-
-    if (!replace) {
-      /* Set new entry */
-      current->arg = arg;
-      current->next = NULL;
-
-      /* Link to list tail */
-      bsp_interrupt_disable(level);
-      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-      tail->next = current;
-      bsp_interrupt_enable(level);
-    }
+    return RTEMS_RESOURCE_IN_USE;
   }
 
-  /* Make the handler unique if necessary */
-  bsp_interrupt_set_handler_unique(index, RTEMS_INTERRUPT_IS_UNIQUE(options));
+  other = bsp_interrupt_entry_find(
+    vector,
+    entry->handler,
+    entry->arg,
+    &previous_next
+  );
 
-  /* Enable the vector if necessary */
-  if (enable_vector) {
-    bsp_interrupt_vector_enable(vector);
+  if ( other != NULL ) {
+    /*
+     * Cannot install an entry which has the same routine and argument as an
+     * already installed entry.
+     */
+    return RTEMS_TOO_MANY;
   }
 
-  /* Unlock */
-  bsp_interrupt_unlock();
+  bsp_interrupt_entry_store_release( previous_next, entry );
 
   return RTEMS_SUCCESSFUL;
 }
 
-/**
- * @brief Removes an interrupt handler.
- *
- * @ingroup bsp_interrupt
- *
- * @return In addition to the standard status codes this function returns
- * RTEMS_INTERNAL_ERROR if the BSP interrupt support is not initialized.
- *
- * @see rtems_interrupt_handler_remove().
- */
-static rtems_status_code bsp_interrupt_handler_remove(
-  rtems_vector_number vector,
-  rtems_interrupt_handler handler,
-  void *arg
+rtems_status_code rtems_interrupt_entry_install(
+  rtems_vector_number    vector,
+  rtems_option           options,
+  rtems_interrupt_entry *entry
 )
 {
   rtems_status_code sc;
-  rtems_interrupt_level level;
-  rtems_vector_number index = 0;
-  rtems_interrupt_entry *head = NULL;
-  rtems_interrupt_entry *current = NULL;
-  rtems_interrupt_entry *previous = NULL;
-  rtems_interrupt_entry *match = NULL;
 
-  sc = bsp_interrupt_check_and_lock( vector, handler );
+  if ( entry == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  sc = bsp_interrupt_check_and_lock( vector, entry->handler );
 
   if ( sc != RTEMS_SUCCESSFUL ) {
     return sc;
   }
 
-  /* Get handler table index */
-  index = bsp_interrupt_handler_index(vector);
-
-  /* Get head entry of the handler list for current vector */
-  head = &bsp_interrupt_handler_table [index];
-
-  /* Search for a matching entry */
-  current = head;
-  do {
-    if (current->handler == handler && current->arg == arg) {
-      match = current;
-      break;
-    }
-    previous = current;
-    current = current->next;
-  } while (current != NULL);
-
-  /* Remove the matching entry */
-  if (match != NULL) {
-    if (match->next != NULL) {
-      /*
-       * The match has a successor.  A successor is always
-       * allocated.  So replace the match with its successor
-       * and free the successor entry.
-       */
-      current = match->next;
-
-      bsp_interrupt_disable(level);
-      #ifdef RTEMS_SMP
-        match->handler = bsp_interrupt_handler_do_nothing;
-        bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-      #endif
-      match->arg = current->arg;
-      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-      match->handler = current->handler;
-      match->info = current->info;
-      match->next = current->next;
-      bsp_interrupt_enable(level);
-
-      free(current);
-    } else if (match == head) {
-      /*
-       * The match is the list head and has no successor.
-       * The list head is stored in a static table so clear
-       * this entry.  Since now the list is empty disable the
-       * vector.
-       */
-
-      /* Disable the vector */
-      bsp_interrupt_vector_disable(vector);
-
-      /* Clear entry */
-      bsp_interrupt_disable(level);
-      bsp_interrupt_clear_handler_entry(head, vector);
-      #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
-        bsp_interrupt_handler_index_table [vector] = 0;
-      #endif
-      bsp_interrupt_enable(level);
-
-      /* Allow shared handlers */
-      bsp_interrupt_set_handler_unique(index, false);
-    } else {
-      /*
-       * The match is the list tail and has a predecessor.
-       * So terminate the predecessor and free the match.
-       */
-      bsp_interrupt_disable(level);
-      previous->next = NULL;
-      bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-      bsp_interrupt_enable(level);
-
-      free(match);
-    }
-  } else {
-    /* No matching entry found */
-    bsp_interrupt_unlock();
-    return RTEMS_UNSATISFIED;
-  }
-
-  /* Unlock */
+  sc = bsp_interrupt_entry_install( vector, options, entry );
   bsp_interrupt_unlock();
 
-  return RTEMS_SUCCESSFUL;
-}
-
-rtems_status_code rtems_interrupt_handler_install(
-  rtems_vector_number vector,
-  const char *info,
-  rtems_option options,
-  rtems_interrupt_handler handler,
-  void *arg
-)
-{
-  return bsp_interrupt_handler_install(vector, info, options, handler, arg);
-}
-
-rtems_status_code rtems_interrupt_handler_remove(
-  rtems_vector_number vector,
-  rtems_interrupt_handler handler,
-  void *arg
-)
-{
-  return bsp_interrupt_handler_remove(vector, handler, arg);
+  return sc;
 }

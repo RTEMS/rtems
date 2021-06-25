@@ -12,7 +12,7 @@
 /*
  * Copyright (C) 2016 Chris Johns <chrisj@rtems.org>
  *
- * Copyright (C) 2008, 2017 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -70,20 +70,13 @@ extern "C" {
   #define BSP_INTERRUPT_HANDLER_TABLE_SIZE BSP_INTERRUPT_VECTOR_COUNT
 #endif
 
-/* Internal macros for SMP support, do not use externally */
-#ifdef RTEMS_SMP
-  #define bsp_interrupt_disable(level) do { (void) level; } while (0)
-  #define bsp_interrupt_enable(level) do { } while (0)
-  #define bsp_interrupt_fence(order) _Atomic_Fence(order)
-#else
-  #define bsp_interrupt_disable(level) rtems_interrupt_disable(level)
-  #define bsp_interrupt_enable(level) rtems_interrupt_enable(level)
-  #define bsp_interrupt_fence(order) do { } while (0)
-#endif
-
 #define bsp_interrupt_assert(e) _Assert(e)
 
-extern rtems_interrupt_entry bsp_interrupt_handler_table [];
+/**
+ * @brief Each member of this table references the first installed entry at the
+ *   corresponding interrupt vector or is NULL.
+ */
+extern rtems_interrupt_entry *bsp_interrupt_handler_table[];
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
   #if BSP_INTERRUPT_HANDLER_TABLE_SIZE < 0x100
@@ -140,6 +133,12 @@ static inline rtems_vector_number bsp_interrupt_handler_index(
  * - bsp_interrupt_vector_enable()
  * - bsp_interrupt_vector_disable()
  * - bsp_interrupt_handler_default()
+ *
+ * Optionally, the BSP may define the following macros to customize the vector
+ * installation after installing the first entry and the vector removal before
+ * removing the last entry:
+ * - bsp_interrupt_vector_install()
+ * - bsp_interrupt_vector_remove()
  *
  * The following now deprecated functions are provided for backward
  * compatibility:
@@ -362,14 +361,114 @@ rtems_status_code bsp_interrupt_raise_on(
  */
 rtems_status_code bsp_interrupt_clear( rtems_vector_number vector );
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Handles a spurious interrupt.
+ *
+ * @param vector is the vector number.
+ */
+void bsp_interrupt_spurious( rtems_vector_number vector );
+#endif
+
+/**
+ * @brief Loads the interrupt entry with atomic acquire semantic.
+ *
+ * @param ptr is the pointer to an ::rtems_interrupt_entry pointer.
+ *
+ * @return Returns the pointer value.
+ */
+static inline rtems_interrupt_entry *bsp_interrupt_entry_load_acquire(
+  rtems_interrupt_entry * const *ptr
+)
+{
+#if defined(RTEMS_SMP)
+  return (rtems_interrupt_entry *) _Atomic_Load_uintptr(
+    (const Atomic_Uintptr *) ptr,
+    ATOMIC_ORDER_ACQUIRE
+  );
+#else
+  return *ptr;
+#endif
+}
+
+/**
+ * @brief Stores the interrupt entry with atomic release semantic.
+ *
+ * @param[out] ptr is the pointer to an ::rtems_interrupt_entry pointer.
+ *
+ * @param value is the pointer value.
+ */
+static inline void bsp_interrupt_entry_store_release(
+  rtems_interrupt_entry **ptr,
+  rtems_interrupt_entry  *value
+)
+{
+#if defined(RTEMS_SMP)
+  _Atomic_Store_uintptr(
+    (Atomic_Uintptr *) ptr,
+    (Atomic_Uintptr) value,
+    ATOMIC_ORDER_RELEASE
+  );
+#else
+  rtems_interrupt_level level;
+
+  rtems_interrupt_local_disable( level );
+  *ptr = value;
+  rtems_interrupt_local_enable( level );
+#endif
+}
+
+/**
+ * @brief Loads the first interrupt entry installed at the interrupt vector.
+ *
+ * @param vector is the vector number.
+ *
+ * @return Returns the first entry or NULL.
+ */
+static inline rtems_interrupt_entry *bsp_interrupt_entry_load_first(
+  rtems_vector_number vector
+)
+{
+  rtems_vector_number index;
+
+  index = bsp_interrupt_handler_index( vector );
+
+  return bsp_interrupt_entry_load_acquire(
+    &bsp_interrupt_handler_table[ index ]
+  );
+}
+
+/**
+ * @brief Sequentially calls all interrupt handlers of the entry its
+ *   successors.
+ *
+ * In uniprocessor configurations, you can call this function within every
+ * context which can be disabled via rtems_interrupt_local_disable().
+ *
+ * In SMP configurations, you can call this function in every context.
+ *
+ * @param entry is the first entry.
+ */
+static inline void bsp_interrupt_dispatch_entries(
+  const rtems_interrupt_entry *entry
+)
+{
+  do {
+    ( *entry->handler )( entry->arg );
+    entry = bsp_interrupt_entry_load_acquire( &entry->next );
+  } while ( RTEMS_PREDICT_FALSE( entry != NULL ) );
+}
+
 /**
  * @brief Sequentially calls all interrupt handlers installed at the vector.
  *
  * This function does not validate the vector number.  If the vector number is
  * out of range, then the behaviour is undefined.
  *
- * You can call this function within every context which can be disabled via
- * rtems_interrupt_local_disable().
+ * In uniprocessor configurations, you can call this function within every
+ * context which can be disabled via rtems_interrupt_local_disable().
+ *
+ * In SMP configurations, you can call this function in every context.
  *
  * @param vector is the vector number.
  */
@@ -377,21 +476,19 @@ static inline void bsp_interrupt_handler_dispatch_unchecked(
   rtems_vector_number vector
 )
 {
-  const rtems_interrupt_entry *e;
+  const rtems_interrupt_entry *entry;
 
-  e = &bsp_interrupt_handler_table[ bsp_interrupt_handler_index( vector ) ];
+  entry = bsp_interrupt_entry_load_first( vector );
 
-  do {
-    rtems_interrupt_handler handler;
-    void *arg;
-
-    arg = e->arg;
-    bsp_interrupt_fence( ATOMIC_ORDER_ACQUIRE );
-    handler = e->handler;
-    ( *handler )( arg );
-
-    e = e->next;
-  } while ( e != NULL );
+  if ( RTEMS_PREDICT_TRUE( entry != NULL ) ) {
+    bsp_interrupt_dispatch_entries( entry );
+  } else {
+#if defined(RTEMS_SMP)
+    bsp_interrupt_spurious( vector );
+#else
+    bsp_interrupt_handler_default( vector );
+#endif
+  }
 }
 
 /**
@@ -401,8 +498,10 @@ static inline void bsp_interrupt_handler_dispatch_unchecked(
  * bsp_interrupt_handler_default() will be called with the vector number as
  * argument.
  *
- * You can call this function within every context which can be disabled via
- * rtems_interrupt_local_disable().
+ * In uniprocessor configurations, you can call this function within every
+ * context which can be disabled via rtems_interrupt_local_disable().
+ *
+ * In SMP configurations, you can call this function in every context.
  *
  * @param vector is the vector number.
  */
@@ -457,6 +556,21 @@ rtems_status_code bsp_interrupt_check_and_lock(
   rtems_interrupt_handler handler
 );
 
+/* For internal use only */
+rtems_interrupt_entry *bsp_interrupt_entry_find(
+  rtems_vector_number      vector,
+  rtems_interrupt_handler  routine,
+  void                    *arg,
+  rtems_interrupt_entry ***previous_next
+);
+
+/* For internal use only */
+void bsp_interrupt_entry_remove(
+  rtems_vector_number     vector,
+  rtems_interrupt_entry  *entry,
+  rtems_interrupt_entry **previous_next
+);
+
 /**
  * @brief This table contains a bit map which indicates if an entry is unique
  *   or shared.
@@ -489,6 +603,31 @@ static inline bool bsp_interrupt_is_handler_unique( rtems_vector_number index )
 }
 
 /**
+ * @brief Sets the unique status of the handler entry.
+ *
+ * @param index is the handler index.
+ *
+ * @param unique is the unique status to set.
+ */
+static inline void bsp_interrupt_set_handler_unique(
+  rtems_vector_number index,
+  bool                unique
+)
+{
+  rtems_vector_number table_index;
+  uint8_t             bit;
+
+  table_index = index / 8;
+  bit = (uint8_t) ( 1U << ( index % 8 ) );
+
+  if (unique) {
+    bsp_interrupt_handler_unique_table[ table_index ] |= bit;
+  } else {
+    bsp_interrupt_handler_unique_table[ table_index ] &= ~bit;
+  }
+}
+
+/**
  * @brief Checks if the interrupt support is initialized.
  *
  * @return Returns true, if the interrupt support is initialized, otherwise
@@ -497,21 +636,6 @@ static inline bool bsp_interrupt_is_handler_unique( rtems_vector_number index )
 static inline bool bsp_interrupt_is_initialized( void )
 {
   return bsp_interrupt_is_handler_unique( BSP_INTERRUPT_HANDLER_TABLE_SIZE );
-}
-
-/**
- * @brief This handler routine is used for empty entries.
- */
-void bsp_interrupt_handler_empty( void *arg );
-
-/**
- * @brief Checks if a handler entry is empty.
- */
-static inline bool bsp_interrupt_is_empty_handler_entry(
-  const rtems_interrupt_entry *entry
-)
-{
-  return entry->handler == bsp_interrupt_handler_empty;
 }
 
 #ifdef __cplusplus
