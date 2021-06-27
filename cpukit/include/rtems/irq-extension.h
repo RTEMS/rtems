@@ -315,6 +315,56 @@ rtems_status_code rtems_interrupt_handler_remove(
   void                   *arg
 );
 
+/* Generated from spec:/rtems/intr/if/vector-is-enabled */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Checks if the interrupt vector is enabled.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param[out] enabled is the pointer to a ``bool`` object.  When the directive
+ *   call is successful, the enabled status of the interrupt associated with
+ *   the interrupt vector specified by ``vector`` will be stored in this
+ *   object.  When the interrupt was enabled for the processor executing the
+ *   directive call at some time point during the call, the object value will
+ *   be set to true, otherwise to false.
+ *
+ * The directive checks if the interrupt associated with the interrupt vector
+ * specified by ``vector`` was enabled for the processor executing the
+ * directive call at some time point during the call.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``enabled`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @par Notes
+ * Interrupt vectors may be enabled by rtems_interrupt_vector_enable() and
+ * disabled by rtems_interrupt_vector_disable().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_vector_is_enabled(
+  rtems_vector_number vector,
+  bool               *enabled
+);
+
 /* Generated from spec:/rtems/intr/if/vector-enable */
 
 /**
