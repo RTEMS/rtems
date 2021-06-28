@@ -77,6 +77,29 @@ void bsp_interrupt_get_affinity(
 	_Processor_mask_From_uint32_t(affinity, destination, 0);
 }
 
+rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
+#if defined(RTEMS_SMP)
+rtems_status_code bsp_interrupt_raise_on(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+#endif
+
+rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
 rtems_status_code bsp_interrupt_vector_is_enabled(
   rtems_vector_number vector,
   bool               *enabled
@@ -299,6 +322,29 @@ static void pic_vector_enable(rtems_vector_number vector, uint32_t msk)
 	rtems_interrupt_lock_acquire(&lock, &lock_context);
 	src_cfg->vpr = (src_cfg->vpr & ~VPR_MSK) | msk;
 	rtems_interrupt_lock_release(&lock, &lock_context);
+}
+
+rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
+#if defined(RTEMS_SMP)
+rtems_status_code bsp_interrupt_raise_on(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+#endif
+
+rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_vector_is_enabled(

@@ -96,6 +96,18 @@ void bsp_interrupt_dispatch(void)
  * @retval RTEMS_INVALID_ID vector is invalid.
  * @retval RTEMS_SUCCESSFUL interrupt source enabled.
  */
+rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
+rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
 rtems_status_code bsp_interrupt_vector_is_enabled(
   rtems_vector_number vector,
   bool               *enabled

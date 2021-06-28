@@ -11,6 +11,7 @@ install: []
 links: []
 source:
 - bsps/shared/irq/irq-affinity.c
+- bsps/shared/irq/irq-raise-clear.c
 - bsps/shared/irq/irq-enable-disable.c
 - bsps/shared/irq/irq-generic.c
 - bsps/shared/irq/irq-handler-iterate.c

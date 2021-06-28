@@ -270,6 +270,18 @@ static inline bool bsp_interrupt_vector_is_valid(rtems_vector_number vector)
   return BSP_i8259a_irq_valid((const rtems_irq_number) vector);
 }
 
+rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
+rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  return RTEMS_UNSATISFIED;
+}
+
 rtems_status_code bsp_interrupt_vector_is_enabled(
   rtems_vector_number vector,
   bool               *enabled

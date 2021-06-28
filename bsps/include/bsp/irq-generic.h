@@ -274,6 +274,53 @@ void bsp_interrupt_vector_enable(rtems_vector_number vector);
 void bsp_interrupt_vector_disable(rtems_vector_number vector);
 
 /**
+ * @brief Causes the interrupt vector.
+ *
+ * @param vector is the number of the interrupt vector to cause.  It shall be
+ *   valid.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to cause the interrupt vector has
+ *   not been satisfied.
+ */
+rtems_status_code bsp_interrupt_raise( rtems_vector_number vector );
+
+#if defined(RTEMS_SMP)
+/**
+ * @brief Causes the interrupt vector on the processor.
+ *
+ * @param vector is the number of the interrupt vector to cause.  It shall be
+ *   valid.
+ *
+ * @param cpu_index is the index of the target processor of the interrupt
+ *   vector to cause.  It shall be valid.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to cause the interrupt vector has
+ *   not been satisfied.
+ */
+rtems_status_code bsp_interrupt_raise_on(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+);
+#endif
+
+/**
+ * @brief Clears the interrupt vector.
+ *
+ * @param vector is the number of the interrupt vector to clear.  It shall be
+ *   valid.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to cause the interrupt vector has
+ *   not been satisfied.
+ */
+rtems_status_code bsp_interrupt_clear( rtems_vector_number vector );
+
+/**
  * @brief Sequentially calls all interrupt handlers installed at the vector.
  *
  * This function does not validate the vector number.  If the vector number is

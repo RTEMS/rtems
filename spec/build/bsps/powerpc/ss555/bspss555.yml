@@ -68,6 +68,7 @@ source:
 - bsps/powerpc/ss555/start/vectors_init.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/irq/irq-affinity.c
+- bsps/shared/irq/irq-raise-clear.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/irq/irq-default.c
 - bsps/shared/irq/irq-enable-disable.c

@@ -5,13 +5,13 @@
  *
  * @ingroup bsp_interrupt
  *
- * @brief This source file contains the default implementation of
- *   bsp_interrupt_vector_enable(), bsp_interrupt_vector_disable(), and
- *   bsp_interrupt_facility_initialize().
+ * @brief This source file contains the implementation of
+ *   rtems_interrupt_raise(), rtems_interrupt_raise_on() and
+ *   rtems_interrupt_clear().
  */
 
 /*
- * Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,42 +37,48 @@
 
 #include <bsp/irq-generic.h>
 
-rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
+#include <rtems/score/processormask.h>
+#include <rtems/score/smpimpl.h>
+#include <rtems/config.h>
+
+rtems_status_code rtems_interrupt_raise( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  return bsp_interrupt_raise( vector );
 }
 
-rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
-{
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
-}
-
-rtems_status_code bsp_interrupt_vector_is_enabled(
+rtems_status_code rtems_interrupt_raise_on(
   rtems_vector_number vector,
-  bool               *enabled
+  uint32_t            cpu_index
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  if ( cpu_index >= rtems_configuration_get_maximum_processors() ) {
+    return RTEMS_NOT_CONFIGURED;
+  }
+
+#if defined(RTEMS_SMP)
+  if ( !_Processor_mask_Is_set( _SMP_Get_online_processors(), cpu_index ) ) {
+    return RTEMS_INCORRECT_STATE;
+  }
+
+  return bsp_interrupt_raise_on( vector, cpu_index );
+#else
+  return bsp_interrupt_raise( vector );
+#endif
 }
 
-void bsp_interrupt_vector_enable(rtems_vector_number vector)
+rtems_status_code rtems_interrupt_clear( rtems_vector_number vector )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  (void)vector;
-}
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
+  }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
-{
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  (void)vector;
-}
-
-rtems_status_code bsp_interrupt_facility_initialize(void)
-{
-  return RTEMS_NOT_IMPLEMENTED;
+  return bsp_interrupt_clear( vector );
 }
