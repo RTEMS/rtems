@@ -77,6 +77,14 @@ void bsp_interrupt_get_affinity(
 	_Processor_mask_From_uint32_t(affinity, destination, 0);
 }
 
+rtems_status_code bsp_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
@@ -322,6 +330,14 @@ static void pic_vector_enable(rtems_vector_number vector, uint32_t msk)
 	rtems_interrupt_lock_acquire(&lock, &lock_context);
 	src_cfg->vpr = (src_cfg->vpr & ~VPR_MSK) | msk;
 	rtems_interrupt_lock_release(&lock, &lock_context);
+}
+
+rtems_status_code bsp_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+)
+{
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)

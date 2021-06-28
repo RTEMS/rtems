@@ -6,8 +6,8 @@
  * @ingroup bsp_interrupt
  *
  * @brief This source file contains the implementation of
- *   rtems_interrupt_vector_is_enabled(), rtems_interrupt_vector_enable() and
- *   rtems_interrupt_vector_disable().
+ *   rtems_interrupt_get_attributes(), rtems_interrupt_vector_is_enabled(),
+ *   rtems_interrupt_vector_enable() and rtems_interrupt_vector_disable().
  */
 
 /*
@@ -36,6 +36,35 @@
  */
 
 #include <bsp/irq-generic.h>
+
+#include <string.h>
+
+rtems_status_code rtems_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+)
+{
+  rtems_status_code sc;
+
+  if ( attributes == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  memset( attributes, 0, sizeof( *attributes ) );
+
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  sc = bsp_interrupt_get_attributes( vector, attributes );
+#if !defined(RTEMS_SMP)
+  attributes->can_raise_on = attributes->can_raise;
+  attributes->can_get_affinity = true;
+  attributes->can_set_affinity = true;
+#endif
+
+  return sc;
+}
 
 rtems_status_code rtems_interrupt_vector_is_enabled(
   rtems_vector_number vector,

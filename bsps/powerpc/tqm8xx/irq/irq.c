@@ -63,6 +63,14 @@ static rtems_status_code bsp_irq_enable_at_CPM(rtems_vector_number irqnum)
   return RTEMS_SUCCESSFUL;
 }
 
+rtems_status_code bsp_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));

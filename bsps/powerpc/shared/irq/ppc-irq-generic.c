@@ -95,6 +95,14 @@ int BSP_rtems_irq_generic_set(rtems_irq_global_settings* config)
   return 1;
 }
 
+rtems_status_code bsp_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+)
+{
+  return RTEMS_SUCCESSFUL;
+}
+
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));

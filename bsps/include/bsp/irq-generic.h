@@ -218,6 +218,23 @@ void bsp_interrupt_initialize(void);
 rtems_status_code bsp_interrupt_facility_initialize(void);
 
 /**
+ * @brief Gets the attributes of the interrupt vector.
+ *
+ * @param vector is the interrupt vector number.  It shall be valid.
+ *
+ * @param[out] attributes is the pointer to an rtems_interrupt_attributes
+ *   object.  When the function call is successful, the attributes of the
+ *   interrupt vector will be stored in this object.  The pointer shall not be
+ *   NULL.  The object shall be cleared to zero by the caller.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ */
+rtems_status_code bsp_interrupt_get_attributes(
+  rtems_vector_number         vector,
+  rtems_interrupt_attributes *attributes
+);
+
+/**
  * @brief Checks if the interrupt is enabled.
  *
  * The function checks if the interrupt associated with the interrupt vector
