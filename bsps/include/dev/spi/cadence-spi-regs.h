@@ -78,6 +78,7 @@ typedef struct {
 	uint32_t slave_idle_count;
 	uint32_t txthreshold;
 	uint32_t rxthreshold;
+	uint32_t unused[51];
 	uint32_t moduleid;
 } cadence_spi;
 
