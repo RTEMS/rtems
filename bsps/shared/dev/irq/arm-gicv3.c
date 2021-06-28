@@ -169,6 +169,32 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  attributes->is_maskable = true;
+  attributes->maybe_enable = true;
+  attributes->maybe_disable = true;
+  attributes->can_raise = true;
+
+  if ( vector <= ARM_GIC_IRQ_SGI_LAST ) {
+    /*
+     * It is implementation-defined whether implemented SGIs are permanently
+     * enabled, or can be enabled and disabled by writes to GICD_ISENABLER0 and
+     * GICD_ICENABLER0.
+     */
+    attributes->can_raise_on = true;
+    attributes->cleared_by_acknowledge = true;
+    attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
+  } else {
+    attributes->can_disable = true;
+    attributes->can_clear = true;
+    attributes->trigger_signal = RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL;
+
+    if ( vector > ARM_GIC_IRQ_PPI_LAST ) {
+      /* SPI */
+      attributes->can_get_affinity = true;
+      attributes->can_set_affinity = true;
+    }
+  }
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -179,14 +205,39 @@ rtems_status_code bsp_interrupt_is_pending(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+
+  if (vector <= ARM_GIC_IRQ_PPI_LAST) {
+    volatile gic_sgi_ppi *sgi_ppi =
+      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+
+    *pending = (sgi_ppi->icspispendr[0] & (1U << vector)) != 0;
+  } else {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    *pending = gic_id_is_pending(dist, vector);
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector <= ARM_GIC_IRQ_SGI_LAST) {
+    arm_gic_trigger_sgi(vector, 1U << _SMP_Get_current_processor());
+  } else if (vector <= ARM_GIC_IRQ_PPI_LAST) {
+    volatile gic_sgi_ppi *sgi_ppi =
+      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+
+    sgi_ppi->icspispendr[0] = 1U << vector;
+  } else {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    gic_id_set_pending(dist, vector);
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 #if defined(RTEMS_SMP)
@@ -195,15 +246,35 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  if (vector >= 16) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  arm_gic_trigger_sgi(vector, 1U << cpu_index);
+  return RTEMS_SUCCESSFUL;
 }
 #endif
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector <= ARM_GIC_IRQ_SGI_LAST) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    volatile gic_sgi_ppi *sgi_ppi =
+      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+
+    sgi_ppi->icspicpendr[0] = 1U << vector;
+  } else {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    gic_id_clear_pending(dist, vector);
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_is_enabled(
@@ -213,8 +284,19 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    volatile gic_sgi_ppi *sgi_ppi =
+      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+
+    *enabled = (sgi_ppi->icspiser[0] & (1U << vector)) != 0;
+  } else {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    *enabled = gic_id_is_enabled(dist, vector);
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
@@ -222,22 +304,24 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  if (vector >= 32) {
+  if (vector > ARM_GIC_IRQ_PPI_LAST) {
     volatile gic_dist *dist = ARM_GIC_DIST;
+
     gic_id_enable(dist, vector);
   } else {
     volatile gic_sgi_ppi *sgi_ppi =
       gicv3_get_sgi_ppi(_SMP_Get_current_processor());
+
     /* Set interrupt group to 1 in the current security mode */
 #if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
-    sgi_ppi->icspigrpr[0] |= 1 << (vector % 32);
-    sgi_ppi->icspigrpmodr[0] &= ~(1 << (vector % 32));
+    sgi_ppi->icspigrpr[0] |= 1U << vector;
+    sgi_ppi->icspigrpmodr[0] &= ~(1U << vector);
 #else
-    sgi_ppi->icspigrpr[0] &= ~(1 << (vector % 32));
-    sgi_ppi->icspigrpmodr[0] |= 1 << (vector % 32);
+    sgi_ppi->icspigrpr[0] &= ~(1U << vector);
+    sgi_ppi->icspigrpmodr[0] |= 1U << vector;
 #endif
     /* Set enable */
-    sgi_ppi->icspiser[0] = 1 << (vector % 32);
+    sgi_ppi->icspiser[0] = 1U << vector;
   }
 
   return RTEMS_SUCCESSFUL;
@@ -247,13 +331,15 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  if (vector >= 32) {
+  if (vector > ARM_GIC_IRQ_PPI_LAST) {
     volatile gic_dist *dist = ARM_GIC_DIST;
+
     gic_id_disable(dist, vector);
   } else {
     volatile gic_sgi_ppi *sgi_ppi =
       gicv3_get_sgi_ppi(_SMP_Get_current_processor());
-    sgi_ppi->icspicer[0] = 1 << (vector % 32);
+
+    sgi_ppi->icspicer[0] = 1U << vector;
   }
 
   return RTEMS_SUCCESSFUL;
@@ -407,6 +493,10 @@ rtems_status_code bsp_interrupt_set_affinity(
   volatile gic_dist *dist = ARM_GIC_DIST;
   uint8_t targets = (uint8_t) _Processor_mask_To_uint32_t(affinity, 0);
 
+  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    return RTEMS_UNSATISFIED;
+  }
+
   gic_id_set_targets(dist, vector, targets);
   return RTEMS_SUCCESSFUL;
 }
@@ -417,8 +507,13 @@ rtems_status_code bsp_interrupt_get_affinity(
 )
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
-  uint8_t targets = gic_id_get_targets(dist, vector);
+  uint8_t targets;
 
+  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  targets = gic_id_get_targets(dist, vector);
   _Processor_mask_From_uint32_t(affinity, targets, 0);
   return RTEMS_SUCCESSFUL;
 }

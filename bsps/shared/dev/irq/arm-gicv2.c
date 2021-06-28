@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2021 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -69,6 +69,32 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  attributes->is_maskable = true;
+  attributes->maybe_enable = true;
+  attributes->maybe_disable = true;
+  attributes->can_raise = true;
+
+  if ( vector <= ARM_GIC_IRQ_SGI_LAST ) {
+    /*
+     * It is implementation-defined whether implemented SGIs are permanently
+     * enabled, or can be enabled and disabled by writes to GICD_ISENABLER0 and
+     * GICD_ICENABLER0.
+     */
+    attributes->can_raise_on = true;
+    attributes->cleared_by_acknowledge = true;
+    attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
+  } else {
+    attributes->can_disable = true;
+    attributes->can_clear = true;
+    attributes->trigger_signal = RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL;
+
+    if ( vector > ARM_GIC_IRQ_PPI_LAST ) {
+      /* SPI */
+      attributes->can_get_affinity = true;
+      attributes->can_set_affinity = true;
+    }
+  }
+
   return RTEMS_SUCCESSFUL;
 }
 
@@ -77,16 +103,25 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+  volatile gic_dist *dist = ARM_GIC_DIST;
+
+  *pending = gic_id_is_pending(dist, vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector <= ARM_GIC_IRQ_SGI_LAST) {
+    arm_gic_trigger_sgi(vector, 1U << _SMP_Get_current_processor());
+  } else {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    gic_id_set_pending(dist, vector);
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 #if defined(RTEMS_SMP)
@@ -95,15 +130,27 @@ rtems_status_code bsp_interrupt_raise_on(
   uint32_t            cpu_index
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  if (vector >= 16) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  arm_gic_trigger_sgi(vector, 1U << cpu_index);
+  return RTEMS_SUCCESSFUL;
 }
 #endif
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  volatile gic_dist *dist = ARM_GIC_DIST;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+
+  if (vector <= ARM_GIC_IRQ_SGI_LAST) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  gic_id_clear_pending(dist, vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_is_enabled(
@@ -111,10 +158,13 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   bool               *enabled
 )
 {
+  volatile gic_dist *dist = ARM_GIC_DIST;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+
+  *enabled = gic_id_is_enabled(dist, vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
@@ -207,8 +257,8 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
   dist->icdigr[0] = 0xffffffff;
 #endif
 
-  /* Initialize Peripheral Private Interrupts (PPIs) */
-  for (id = 0; id < 32; ++id) {
+  /* Initialize priority of SGIs and PPIs */
+  for (id = 0; id <= ARM_GIC_IRQ_PPI_LAST; ++id) {
     gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
   }
 
@@ -300,6 +350,10 @@ rtems_status_code bsp_interrupt_set_affinity(
   volatile gic_dist *dist = ARM_GIC_DIST;
   uint8_t targets = (uint8_t) _Processor_mask_To_uint32_t(affinity, 0);
 
+  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    return RTEMS_UNSATISFIED;
+  }
+
   gic_id_set_targets(dist, vector, targets);
   return RTEMS_SUCCESSFUL;
 }
@@ -310,8 +364,13 @@ rtems_status_code bsp_interrupt_get_affinity(
 )
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
-  uint8_t targets = gic_id_get_targets(dist, vector);
+  uint8_t targets;
 
+  if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  targets = gic_id_get_targets(dist, vector);
   _Processor_mask_From_uint32_t(affinity, targets, 0);
   return RTEMS_SUCCESSFUL;
 }

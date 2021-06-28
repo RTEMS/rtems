@@ -46,6 +46,9 @@ extern "C" {
 #define ARM_GIC_IRQ_SGI_13 13
 #define ARM_GIC_IRQ_SGI_14 14
 #define ARM_GIC_IRQ_SGI_15 15
+#define ARM_GIC_IRQ_SGI_LAST 15
+
+#define ARM_GIC_IRQ_PPI_LAST 31
 
 #define ARM_GIC_DIST ((volatile gic_dist *) BSP_ARM_GIC_DIST_BASE)
 
