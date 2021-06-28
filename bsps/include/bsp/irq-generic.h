@@ -218,6 +218,29 @@ void bsp_interrupt_initialize(void);
 rtems_status_code bsp_interrupt_facility_initialize(void);
 
 /**
+ * @brief Checks if the interrupt is enabled.
+ *
+ * The function checks if the interrupt associated with the interrupt vector
+ * specified by ``vector`` was enabled for the processor executing the function
+ * call at some time point during the call.
+ *
+ * @param vector is the interrupt vector number.  It shall be valid.
+ *
+ * @param[out] enabled is the pointer to a ``bool`` object.  It shall not be
+ *   ``NULL``.  When the function call is successful, the enabled status of
+ *   the interrupt associated with the interrupt vector specified by ``vector``
+ *   will be stored in this object.  When the interrupt was enabled for the
+ *   processor executing the function call at some time point during the call,
+ *   the object will be set to true, otherwise to false.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ */
+rtems_status_code bsp_interrupt_vector_is_enabled(
+  rtems_vector_number vector,
+  bool               *enabled
+);
+
+/**
  * @brief Enables the interrupt vector with number @a vector.
  *
  * This function shall enable the vector at the corresponding facility (in most

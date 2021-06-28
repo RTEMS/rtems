@@ -35,6 +35,17 @@ static int qemuppc_exception_handler(
   return 0;
 }
 
+rtems_status_code bsp_interrupt_vector_is_enabled(
+  rtems_vector_number vector,
+  bool               *enabled
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(enabled != NULL);
+  *enabled = false;
+  return RTEMS_UNSATISFIED;
+}
+
 /*
  * functions to enable/disable a source at the ipic
  */

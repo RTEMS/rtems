@@ -95,6 +95,17 @@ static uint32_t omap_get_mir_reg(rtems_vector_number vector, uint32_t *const mas
   return mir_reg;
 }
 
+rtems_status_code bsp_interrupt_vector_is_enabled(
+  rtems_vector_number vector,
+  bool               *enabled
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(enabled != NULL);
+  *enabled = false;
+  return RTEMS_UNSATISFIED;
+}
+
 void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   uint32_t mask, cur;

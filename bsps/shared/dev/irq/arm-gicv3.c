@@ -164,6 +164,17 @@ void bsp_interrupt_dispatch(void)
   }
 }
 
+rtems_status_code bsp_interrupt_vector_is_enabled(
+  rtems_vector_number vector,
+  bool               *enabled
+)
+{
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(enabled != NULL);
+  *enabled = false;
+  return RTEMS_UNSATISFIED;
+}
+
 void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
 
