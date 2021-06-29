@@ -11,6 +11,7 @@ install: []
 install-path: null
 links: []
 source:
+- testsuites/validation/tx-call-within-isr.c
 - testsuites/validation/tx-support.c
 target: validation
 type: build

@@ -38,6 +38,7 @@
 #define _TX_SUPPORT_H
 
 #include <rtems.h>
+#include <rtems/score/atomic.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -98,6 +99,19 @@ void RestoreRunnerASR( void );
 void RestoreRunnerMode( void );
 
 void RestoreRunnerPriority( void );
+
+typedef struct {
+  Chain_Node node;
+  void ( *handler )( void * );
+  void *arg;
+  Atomic_Uint done;
+} CallWithinISRRequest;
+
+void CallWithinISR( void ( *handler )( void * ), void *arg );
+
+void CallWithinISRSubmit( CallWithinISRRequest *request );
+
+void CallWithinISRWait( const CallWithinISRRequest *request );
 
 /** @} */
 

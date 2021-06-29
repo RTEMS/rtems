@@ -1,0 +1,134 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestSuites
+ *
+ * @brief This source file contains the implementation of CallWithinISR(),
+ *   CallWithinISRSubmit(), and CallWithinISRWait().
+ */
+
+/*
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "tx-support.h"
+
+#include <rtems/sysinit.h>
+#include <rtems/score/chainimpl.h>
+
+#include <bsp.h>
+
+/* Some target architectures need this variable for <tm27.h> */
+uint32_t Interrupt_nest;
+
+#define _RTEMS_TMTEST27
+
+#include <tm27.h>
+
+typedef struct {
+  Chain_Control pending;
+  RTEMS_INTERRUPT_LOCK_MEMBER( lock )
+} CallWithinISRContext;
+
+static CallWithinISRContext CallWithinISRInstance = {
+#if defined( RTEMS_SMP )
+  .lock = RTEMS_INTERRUPT_LOCK_INITIALIZER( "CallWithinISR" ),
+#endif
+  .pending = CHAIN_INITIALIZER_EMPTY( CallWithinISRInstance.pending )
+};
+
+static void CallWithinISRHandler( rtems_vector_number vector )
+{
+  CallWithinISRContext *ctx;
+
+  (void) vector;
+  ctx = &CallWithinISRInstance;
+
+  while ( true ) {
+    rtems_interrupt_lock_context lock_context;
+    CallWithinISRRequest        *request;
+
+    rtems_interrupt_lock_acquire( &ctx->lock, &lock_context );
+    request = (CallWithinISRRequest *)
+      _Chain_Get_unprotected( &ctx->pending );
+    rtems_interrupt_lock_release( &ctx->lock, &lock_context );
+
+    if ( request == NULL ) {
+      break;
+    }
+
+    ( *request->handler )( request->arg );
+    _Atomic_Store_uint( &request->done, 1, ATOMIC_ORDER_RELEASE );
+  }
+}
+
+void CallWithinISR( void ( *handler )( void * ), void *arg )
+{
+  CallWithinISRRequest request;
+
+  request.handler = handler;
+  request.arg = arg;
+  CallWithinISRSubmit( &request );
+  CallWithinISRWait( &request );
+}
+
+void CallWithinISRSubmit( CallWithinISRRequest *request )
+{
+  CallWithinISRContext        *ctx;
+  rtems_interrupt_lock_context lock_context;
+
+  ctx = &CallWithinISRInstance;
+
+  rtems_interrupt_lock_acquire( &ctx->lock, &lock_context );
+  _Atomic_Store_uint( &request->done, 0, ATOMIC_ORDER_RELAXED );
+  _Chain_Initialize_node( &request->node );
+  _Chain_Append_unprotected( &ctx->pending, &request->node );
+  rtems_interrupt_lock_release( &ctx->lock, &lock_context );
+
+  Cause_tm27_intr();
+}
+
+void CallWithinISRWait( const CallWithinISRRequest *request )
+{
+  while ( _Atomic_Load_uint( &request->done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {
+    /* Wait */
+  }
+}
+
+static void CallWithinISRInitialize( void )
+{
+  Install_tm27_vector( CallWithinISRHandler );
+}
+
+RTEMS_SYSINIT_ITEM(
+  CallWithinISRInitialize,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
