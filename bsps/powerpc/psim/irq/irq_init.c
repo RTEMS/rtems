@@ -151,10 +151,11 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable( rtems_vector_number irqnum)
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
 {
   /* FIXME: do something */
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(irqnum));
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)

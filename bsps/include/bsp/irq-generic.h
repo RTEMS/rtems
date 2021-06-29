@@ -278,7 +278,7 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector );
 
 /**
- * @brief Disables the interrupt vector with number @a vector.
+ * @brief Disables the interrupt vector.
  *
  * This function shall disable the vector at the corresponding facility (in
  * most cases the interrupt controller).  It will be called then the last
@@ -286,13 +286,17 @@ rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector );
  * example.
  *
  * @note The implementation should use
- * bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector)) to valdiate the
- * vector number.
+ * bsp_interrupt_assert( bsp_interrupt_is_valid_vector( vector ) ) to validate
+ * the vector number in ::RTEMS_DEBUG configurations.
  *
- * @note You must not install or remove an interrupt handler in this function.
- * This may result in a deadlock.
+ * @param vector is the interrupt vector number.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to disable the interrupt vector has
+ *   not been satisfied.
  */
-void bsp_interrupt_vector_disable(rtems_vector_number vector);
+rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number vector );
 
 /**
  * @brief Checks if the interrupt is pending.

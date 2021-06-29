@@ -116,7 +116,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   volatile uint32_t *imr = vector_to_imr(vector);
   uint32_t bit = vector_to_bit(vector);
@@ -127,6 +127,8 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
   rtems_interrupt_disable(level);
   *imr |= bit;
   rtems_interrupt_enable(level);
+
+  return RTEMS_SUCCESSFUL;
 }
 
 static void_func get_exception_handler(rtems_vector_number vector)

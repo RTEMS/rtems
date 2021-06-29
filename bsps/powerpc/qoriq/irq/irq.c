@@ -137,10 +137,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 	return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 	ev_int_set_mask(vector, 1);
+	return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_dispatch(uintptr_t exception_number)
@@ -403,9 +404,10 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 	return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
 	pic_vector_enable(vector, VPR_MSK);
+	return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_dispatch(uintptr_t exception_number)

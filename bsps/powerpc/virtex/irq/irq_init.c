@@ -185,13 +185,15 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   if (BSP_IS_OPBINTC_IRQ(vector)) {
     BSP_irq_disable_at_opbintc(vector);
   }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 static int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned int excNum)

@@ -150,7 +150,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   uint32_t mask, cur;
   uint32_t mir_reg = omap_get_mir_reg(vector, &mask);
@@ -160,6 +160,7 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
   cur = mmio_read(omap_intr.base + mir_reg);
   mmio_write(omap_intr.base + mir_reg, cur | mask);
   flush_data_cache();
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)

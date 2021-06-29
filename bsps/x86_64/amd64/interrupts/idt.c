@@ -141,9 +141,10 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   /* XXX */
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(

@@ -243,7 +243,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
@@ -255,6 +255,8 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
       gicv3_get_sgi_ppi(_SMP_Get_current_processor());
     sgi_ppi->icspicer[0] = 1 << (vector % 32);
   }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 static inline uint32_t get_id_count(volatile gic_dist *dist)

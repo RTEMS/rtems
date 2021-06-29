@@ -97,7 +97,5 @@ rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector )
     return RTEMS_INVALID_ID;
   }
 
-  bsp_interrupt_vector_disable( vector );
-
-  return RTEMS_SUCCESSFUL;
+  return bsp_interrupt_vector_disable( vector );
 }

@@ -316,7 +316,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   rtems_interrupt_level level;
 
@@ -326,6 +326,8 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
   lpc32xx_irq_clear_bit_in_field(vector, &lpc32xx_irq_enable);
   lpc32xx_irq_clear_bit_in_register(vector, LPC32XX_IRQ_OFFSET_ER);
   rtems_interrupt_enable(level);
+
+  return RTEMS_SUCCESSFUL;
 }
 
 void lpc32xx_set_exception_handler(

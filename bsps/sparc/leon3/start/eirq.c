@@ -167,7 +167,7 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
 #if defined(RTEMS_SMP)
   rtems_interrupt_lock_context lock_context;
@@ -192,6 +192,7 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   BSP_Cpu_Mask_interrupt(vector, _LEON3_Get_current_processor());
 #endif
+  return RTEMS_SUCCESSFUL;
 }
 
 #if defined(RTEMS_SMP)

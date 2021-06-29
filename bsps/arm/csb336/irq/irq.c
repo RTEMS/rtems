@@ -78,12 +78,14 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_vector_disable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   if (vector < MC9328MXL_NUM_INTS)
     MC9328MXL_AITC_INTDISNUM = vector;
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)
