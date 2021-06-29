@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2020 Richi Dubey ( richidubey@gmail.com )
  * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
@@ -16,7 +17,7 @@
 #include "config.h"
 #endif
 
-#include "tmacros.h"
+#include <tmacros.h>
 
 #include <rtems.h>
 
@@ -24,15 +25,22 @@ const char rtems_test_name[] = "SMPSTRONGAPA 1";
 
 #define CPU_COUNT 4
 
-#define TASK_COUNT (3 * CPU_COUNT)
+#define TASK_COUNT 5
 
 #define P(i) (UINT32_C(2) + i)
 
 #define ALL ((UINT32_C(1) << CPU_COUNT) - 1)
 
-#define IDLE UINT8_C(255)
+#define A(cpu0, cpu1, cpu2, cpu3) ( (cpu3 << 3) | (cpu2 << 2) | (cpu1 << 1)| cpu0 )
 
-#define NAME rtems_build_name('S', 'A', 'P', 'A')
+typedef enum {
+  T0,
+  T1,
+  T2,
+  T3,
+  T4,
+  IDLE
+} task_index;
 
 typedef struct {
   enum {
@@ -43,7 +51,7 @@ typedef struct {
     KIND_UNBLOCK
   } kind;
 
-  size_t index;
+  task_index index;
 
   struct {
     rtems_task_priority priority;
@@ -102,17 +110,34 @@ typedef struct {
 
 static const test_action test_actions[] = {
   RESET,
-  UNBLOCK(      0,           0, IDLE, IDLE, IDLE),
-  UNBLOCK(      1,           0,    1, IDLE, IDLE),
-  UNBLOCK(      2,           0,    1,    2, IDLE),
-  UNBLOCK(      3,           0,    1,    2,    3),
-  UNBLOCK(      5,           0,    1,    2,    3),
-  SET_PRIORITY( 3,  P(4),    0,    1,    2,    3),
-  SET_PRIORITY( 5,  P(3),    0,    1,    2,    5),
-  BLOCK(        5,           0,    1,    2,    3),
-  SET_AFFINITY( 5,   ALL,    0,    1,    2,    3),
-  RESET,
-  UNBLOCK(      0,           0, IDLE, IDLE, IDLE),
+  UNBLOCK(      T0,			T0,  IDLE, IDLE, IDLE),
+  UNBLOCK(      T1,			T0,    T1, IDLE, IDLE),
+  UNBLOCK(      T2,			T0,    T1,   T2, IDLE),
+  UNBLOCK(      T3,			T0,    T1,   T2,   T3),
+  UNBLOCK(      T4,			T0,    T1,   T2,   T3),
+  SET_PRIORITY( T0,  P(0),		T0,    T1,   T2,   T3),
+  SET_PRIORITY( T1,  P(1),		T0,    T1,   T2,   T3),
+  SET_PRIORITY( T2,  P(2),		T0,    T1,   T2,   T3),
+  SET_PRIORITY( T4,  P(4),		T0,    T1,   T2,   T3),
+  /*
+   * Introduce Task 3 intially with lowest priority to imitate late arrival
+   */
+  SET_PRIORITY( T3,  P(8),		T0,    T1,   T2,   T4),
+  SET_AFFINITY( T0,   ALL,		T0,    T1,   T2,   T4),
+  SET_AFFINITY( T1,   A(0, 1, 0, 0),	T0,    T1,   T2,   T4),
+  SET_AFFINITY( T2,   A(0, 0, 1, 0),	T0,    T1,   T2,   T4),
+  SET_AFFINITY( T4,   A(0, 0, 0, 1),	T0,    T1,   T2,   T4),
+  /*
+   *Set affinity of Task 4 only to CPU1, so that we can check shifting
+   */
+  SET_AFFINITY( T3,   A(1, 0, 0, 0),	T0,    T1,   T2,   T4),
+  /*
+   * Show that higher priority task gets dislodged from its processor
+   * by a lower priority task !
+   * and goes to the cpu that is executing the task with lowest priority
+   * (among all cpus).
+   */
+  SET_PRIORITY( T3,   P(3),	        T3,    T1,   T2,   T0),
   RESET
 };
 
@@ -182,7 +207,7 @@ static void check_cpu_allocations(test_context *ctx, const test_action *action)
   size_t i;
 
   for (i = 0; i < CPU_COUNT; ++i) {
-    size_t e;
+    task_index e;
     const Per_CPU_Control *c;
     const Thread_Control *h;
 
@@ -279,7 +304,7 @@ static void test(void)
 
   for (i = 0; i < TASK_COUNT; ++i) {
     sc = rtems_task_create(
-      NAME,
+      rtems_build_name(' ', ' ', 'T', '0' + i),
       P(i),
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
@@ -292,7 +317,10 @@ static void test(void)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
-  sc = rtems_timer_create(NAME, &ctx->timer_id);
+  sc = rtems_timer_create(
+    rtems_build_name('A', 'C', 'T', 'N'),
+    &ctx->timer_id
+  );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_timer_fire_after(ctx->timer_id, 1, timer, ctx);
