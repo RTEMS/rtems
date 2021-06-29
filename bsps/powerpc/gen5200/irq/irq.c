@@ -401,7 +401,7 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   return RTEMS_UNSATISFIED;
 }
 
-void bsp_interrupt_vector_enable( rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector)
 {
   int base_index = get_siu_irq_base_index( vector);
 
@@ -429,6 +429,8 @@ void bsp_interrupt_vector_enable( rtems_vector_number vector)
 
     rtems_interrupt_enable( level);
   }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 /*

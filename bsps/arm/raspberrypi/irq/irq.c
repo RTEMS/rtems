@@ -196,11 +196,12 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   return RTEMS_UNSATISFIED;
 }
 
-void bsp_interrupt_vector_enable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   BCM2835_REG(bsp_vector_to_reg(vector)->enable_reg_addr) =
               bsp_vector_to_mask(vector);
+  return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_vector_disable(rtems_vector_number vector)

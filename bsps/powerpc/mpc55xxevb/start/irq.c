@@ -194,10 +194,11 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   return RTEMS_UNSATISFIED;
 }
 
-void bsp_interrupt_vector_enable( rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector)
 {
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 	mpc55xx_intc_set_priority( vector, MPC55XX_INTC_DEFAULT_PRIORITY);
+	return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_vector_disable( rtems_vector_number vector)

@@ -188,7 +188,8 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   return RTEMS_UNSATISFIED;
 }
 
-void bsp_interrupt_vector_enable(rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   /* XXX */
+  return RTEMS_SUCCESSFUL;
 }

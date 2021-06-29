@@ -418,7 +418,7 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
   return RTEMS_UNSATISFIED;
 }
 
-void bsp_interrupt_vector_enable( rtems_vector_number vector)
+rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number vector)
 {
   rtems_vector_number vecnum = vector - BSP_IPIC_IRQ_LOWEST_OFFSET;
   const BSP_isrc_rsc_t *rsc_ptr;
@@ -436,6 +436,8 @@ void bsp_interrupt_vector_enable( rtems_vector_number vector)
       rtems_interrupt_enable(level);
     }
   }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_vector_disable( rtems_vector_number vector)
