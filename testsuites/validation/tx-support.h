@@ -113,6 +113,8 @@ void CallWithinISRSubmit( CallWithinISRRequest *request );
 
 void CallWithinISRWait( const CallWithinISRRequest *request );
 
+bool HasInterruptVectorEntriesInstalled( rtems_vector_number vector );
+
 /** @} */
 
 #ifdef __cplusplus
