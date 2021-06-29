@@ -16,6 +16,7 @@ source:
 - testsuites/validation/tc-barrier-release.c
 - testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-intr-get-attributes.c
+- testsuites/validation/tc-intr-vector-is-enabled.c
 - testsuites/validation/tc-message-construct-errors.c
 - testsuites/validation/tc-object.c
 - testsuites/validation/tc-signal-catch.c
