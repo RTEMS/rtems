@@ -15,6 +15,7 @@ source:
 - testsuites/validation/tc-barrier-delete.c
 - testsuites/validation/tc-barrier-release.c
 - testsuites/validation/tc-barrier-wait.c
+- testsuites/validation/tc-intr-entry-install.c
 - testsuites/validation/tc-intr-get-attributes.c
 - testsuites/validation/tc-intr-vector-disable.c
 - testsuites/validation/tc-intr-vector-enable.c
