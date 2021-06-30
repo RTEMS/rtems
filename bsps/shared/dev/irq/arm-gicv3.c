@@ -176,7 +176,7 @@ void bsp_interrupt_vector_enable(rtems_vector_number vector)
     volatile gic_sgi_ppi *sgi_ppi =
       gicv3_get_sgi_ppi(_SMP_Get_current_processor());
     /* Set interrupt group to 1 in the current security mode */
-#if defined(AARCH64_IS_NONSECURE)
+#if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
     sgi_ppi->icspigrpr[0] |= 1 << (vector % 32);
     sgi_ppi->icspigrpmodr[0] &= ~(1 << (vector % 32));
 #else
@@ -228,7 +228,7 @@ static void gicv3_init_cpu_interface(void)
 
   volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
   /* Set interrupt group to 1 in the current security mode */
-#if defined(AARCH64_IS_NONSECURE)
+#if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
   sgi_ppi->icspigrpr[0] = 0xffffffff;
   sgi_ppi->icspigrpmodr[0] = 0;
 #else
@@ -262,7 +262,7 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     dist->icdicer[id / 32] = 0xffffffff;
 
     /* Set interrupt group to 1 in the current security mode */
-#if defined(AARCH64_IS_NONSECURE)
+#if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
     dist->icdigr[id / 32] = 0xffffffff;
     dist->icdigmr[id / 32] = 0;
 #else
