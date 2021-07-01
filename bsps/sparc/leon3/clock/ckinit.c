@@ -133,16 +133,22 @@ static void leon3_tc_do_tick(void)
 #define Clock_driver_support_install_isr(isr) \
   bsp_clock_handler_install(isr)
 
+static rtems_interrupt_entry leon3_clock_interrupt_entry;
+
 static void bsp_clock_handler_install(rtems_interrupt_handler isr)
 {
   rtems_status_code sc;
 
-  sc = rtems_interrupt_handler_install(
-    clkirq,
-    "Clock",
-    RTEMS_INTERRUPT_UNIQUE,
+  rtems_interrupt_entry_initialize(
+    &leon3_clock_interrupt_entry,
     isr,
-    NULL
+    NULL,
+    "Clock"
+  );
+  sc = rtems_interrupt_entry_install(
+    clkirq,
+    RTEMS_INTERRUPT_UNIQUE,
+    &leon3_clock_interrupt_entry
   );
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_fatal(RTEMS_FATAL_SOURCE_BSP, LEON3_FATAL_CLOCK_INITIALIZATION);
