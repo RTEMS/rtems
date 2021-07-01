@@ -105,7 +105,7 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 
 void _CPU_SMP_Prepare_start_multitasking( void )
 {
-  rtems_cache_invalidate_entire_instruction();
+  /* Do nothing */
 }
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
