@@ -34,11 +34,15 @@
  */
 static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 {
-  if (LEON3_IrqCtrl_EIrq != 0) {
-    return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
-  } else {
-    return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
+  if (vector == 0) {
+    return false;
   }
+
+  if (LEON3_IrqCtrl_EIrq > 0) {
+    return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
+  }
+
+  return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
 }
 
 void bsp_interrupt_set_affinity(
