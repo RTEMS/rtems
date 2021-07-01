@@ -163,7 +163,7 @@ static __inline void rtems_condition_variable_signal(
   rtems_condition_variable *condition_variable
 )
 {
-  _Condition_Broadcast( condition_variable );
+  _Condition_Signal( condition_variable );
 }
 
 static __inline void rtems_condition_variable_broadcast(
