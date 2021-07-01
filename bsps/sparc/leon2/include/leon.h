@@ -295,7 +295,11 @@ static __inline__ int bsp_irq_fixup(int irq)
 
 #define LEON_Force_interrupt( _source ) \
   do { \
-    LEON_REG.Interrupt_Force = (1 << (_source)); \
+    uint32_t _level; \
+    \
+    _level = sparc_disable_interrupts(); \
+      LEON_REG.Interrupt_Force |= (1 << (_source)); \
+    sparc_enable_interrupts( _level ); \
   } while (0)
 
 #define LEON_Is_interrupt_pending( _source ) \
@@ -348,7 +352,17 @@ static __inline__ int bsp_irq_fixup(int irq)
 /* Make all SPARC BSPs have common macros for interrupt handling */
 #define BSP_Clear_interrupt(_source) LEON_Clear_interrupt(_source)
 #define BSP_Force_interrupt(_source) LEON_Force_interrupt(_source)
+#define BSP_Clear_forced_interrupt( _source ) \
+  do { \
+    uint32_t _level; \
+    \
+    _level = sparc_disable_interrupts(); \
+      LEON_REG.Interrupt_Force &= ~(1 << (_source)); \
+    sparc_enable_interrupts( _level ); \
+  } while (0)
 #define BSP_Is_interrupt_pending(_source) LEON_Is_interrupt_pending(_source)
+#define BSP_Is_interrupt_forced(_source) \
+  (LEON_REG.Interrupt_Force & (1 << (_source)))
 #define BSP_Is_interrupt_masked(_source) LEON_Is_interrupt_masked(_source)
 #define BSP_Unmask_interrupt(_source) LEON_Unmask_interrupt(_source)
 #define BSP_Mask_interrupt(_source) LEON_Mask_interrupt(_source)

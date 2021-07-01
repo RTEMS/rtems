@@ -66,6 +66,20 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
+  bool is_standard_interrupt;
+
+  is_standard_interrupt = (vector <= BSP_INTERRUPT_VECTOR_MAX_STD);
+  attributes->is_maskable = (vector != 15);
+  attributes->can_enable = true;
+  attributes->maybe_enable = true;
+  attributes->can_disable = true;
+  attributes->maybe_disable = true;
+  attributes->can_raise = true;
+  attributes->can_raise_on = is_standard_interrupt;
+  attributes->can_clear = true;
+  attributes->cleared_by_acknowledge = true;
+  attributes->can_get_affinity = is_standard_interrupt;
+  attributes->can_set_affinity = is_standard_interrupt;
   return RTEMS_SUCCESSFUL;
 }
 
@@ -74,16 +88,56 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
+#if defined(RTEMS_SMP)
+  rtems_interrupt_level level;
+  uint32_t bit;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+  bit = 1U << vector;
+
+  rtems_interrupt_local_disable(level);
+  *pending = (LEON3_IrqCtrl_Regs->ipend & bit) != 0 ||
+    (LEON3_IrqCtrl_Regs->force[rtems_scheduler_get_processor()] & bit) != 0;
+  rtems_interrupt_local_enable(level);
+  return RTEMS_SUCCESSFUL;
+#else
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  *pending = !BSP_Is_interrupt_pending(vector);
+  return RTEMS_SUCCESSFUL;
+#endif
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
+  uint32_t bit;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  bit = 1U << vector;
+
+  if ( vector <= BSP_INTERRUPT_VECTOR_MAX_STD ) {
+    uint32_t cpu_count;
+    uint32_t cpu_index;
+
+    cpu_count = rtems_scheduler_get_processor_maximum();
+
+    for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+      LEON3_IrqCtrl_Regs->force[cpu_index] = bit;
+    }
+  } else {
+    rtems_interrupt_lock_context lock_context;
+
+    /*
+     * This is a very dangerous operation and should only be used for test
+     * software.  We may accidentally clear the pending state set by
+     * peripherals with this read-modify-write operation.
+     */
+    LEON3_IRQCTRL_ACQUIRE(&lock_context);
+    LEON3_IrqCtrl_Regs->ipend |= bit;
+    LEON3_IRQCTRL_RELEASE(&lock_context);
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 #if defined(RTEMS_SMP)
@@ -93,14 +147,31 @@ rtems_status_code bsp_interrupt_raise_on(
 )
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  bsp_interrupt_assert(cpu_index < rtems_scheduler_get_processor_maximum());
+
+  if ( vector > BSP_INTERRUPT_VECTOR_MAX_STD ) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  LEON3_IrqCtrl_Regs->force[cpu_index] = 1U << vector;
+  return RTEMS_SUCCESSFUL;
 }
 #endif
 
 rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 {
+  uint32_t bit;
+
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+  bit = 1U << vector;
+
+  LEON3_IrqCtrl_Regs->iclear = bit;
+
+  if (vector <= BSP_INTERRUPT_VECTOR_MAX_STD) {
+    LEON3_IrqCtrl_Regs->force[rtems_scheduler_get_processor()] = bit << 16;
+  }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_is_enabled(
@@ -109,9 +180,9 @@ rtems_status_code bsp_interrupt_vector_is_enabled(
 )
 {
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+  *enabled =
+    !BSP_Cpu_Is_interrupt_masked(vector, _LEON3_Get_current_processor());
+  return RTEMS_SUCCESSFUL;
 }
 
 #if defined(RTEMS_SMP)
@@ -123,8 +194,13 @@ static void leon3_interrupt_vector_enable(rtems_vector_number vector)
   uint32_t bit;
   uint32_t unmasked;
 
+  if (vector <= BSP_INTERRUPT_VECTOR_MAX_STD) {
+    affinity = leon3_interrupt_affinities[vector];
+  } else {
+    affinity = leon3_interrupt_affinities[LEON3_IrqCtrl_EIrq];
+  }
+
   cpu_count = rtems_scheduler_get_processor_maximum();
-  affinity = leon3_interrupt_affinities[vector];
   bit = 1U << vector;
   unmasked = 0;
 
@@ -206,6 +282,10 @@ rtems_status_code bsp_interrupt_set_affinity(
   uint32_t cpu_index;
   uint32_t bit;
 
+  if (vector >= RTEMS_ARRAY_SIZE(leon3_interrupt_affinities)) {
+    return RTEMS_UNSATISFIED;
+  }
+
   cpu_count = rtems_scheduler_get_processor_maximum();
   bit = 1U << vector;
 
@@ -232,6 +312,10 @@ rtems_status_code bsp_interrupt_get_affinity(
   Processor_mask *affinity
 )
 {
+  if (vector >= RTEMS_ARRAY_SIZE(leon3_interrupt_affinities)) {
+    return RTEMS_UNSATISFIED;
+  }
+
   *affinity = leon3_interrupt_affinities[vector];
   return RTEMS_SUCCESSFUL;
 }

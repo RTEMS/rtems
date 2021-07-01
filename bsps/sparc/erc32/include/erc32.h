@@ -352,7 +352,7 @@ static __inline__ int bsp_irq_fixup(int irq)
     \
     _level = sparc_disable_interrupts(); \
     ERC32_MEC.Test_Control = ERC32_MEC.Test_Control | 0x80000; \
-    ERC32_MEC.Interrupt_Force = (1 << (_source)); \
+    ERC32_MEC.Interrupt_Force |= (1 << (_source)); \
     sparc_enable_interrupts( _level ); \
   } while (0)
 
@@ -406,7 +406,17 @@ static __inline__ int bsp_irq_fixup(int irq)
 /* Make all SPARC BSPs have common macros for interrupt handling on local CPU */
 #define BSP_Clear_interrupt(_source) ERC32_Clear_interrupt(_source)
 #define BSP_Force_interrupt(_source) ERC32_Force_interrupt(_source)
+#define BSP_Clear_forced_interrupt( _source ) \
+  do { \
+    uint32_t _level; \
+    \
+    _level = sparc_disable_interrupts(); \
+      ERC32_MEC.Interrupt_Force &= ~(1 << (_source)); \
+    sparc_enable_interrupts( _level ); \
+  } while (0)
 #define BSP_Is_interrupt_pending(_source) ERC32_Is_interrupt_pending(_source)
+#define BSP_Is_interrupt_forced(_source) \
+  (ERC32_MEC.Interrupt_Force & (1 << (_source)))
 #define BSP_Is_interrupt_masked(_source) ERC32_Is_interrupt_masked(_source)
 #define BSP_Unmask_interrupt(_source) ERC32_Unmask_interrupt(_source)
 #define BSP_Mask_interrupt(_source) ERC32_Mask_interrupt(_source)

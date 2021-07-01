@@ -23,8 +23,7 @@
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_COUNT (BSP_INTERRUPT_VECTOR_MAX_STD + 1)
 
-/* No extra check is needed */
-#undef BSP_INTERRUPT_CUSTOM_VALID_VECTOR
+#define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
 
 RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number   vector,
