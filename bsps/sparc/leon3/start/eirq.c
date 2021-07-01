@@ -12,6 +12,7 @@
 
 #include <leon.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 
 /* GRLIB extended IRQ controller IRQ number */
 int LEON3_IrqCtrl_EIrq = -1;
@@ -23,6 +24,19 @@ void leon3_ext_irq_init(void)
     /* Extended IRQ controller available */
     LEON3_IrqCtrl_EIrq = (LEON3_IrqCtrl_Regs->mpstat >> 16) & 0xf;
   }
+}
+
+bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
+{
+  if (vector == 0) {
+    return false;
+  }
+
+  if (LEON3_IrqCtrl_EIrq > 0) {
+    return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
+  }
+
+  return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
 }
 
 void bsp_interrupt_set_affinity(
