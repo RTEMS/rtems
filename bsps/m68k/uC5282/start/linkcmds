@@ -91,13 +91,13 @@ SECTIONS
          * crtn.o are in.
          */
         PROVIDE (_init = .);
-        *crti.o(.init)
-        *(.init)
-        *crtn.o(.init)
+        KEEP (*crti.o(.init))
+        KEEP (*(.init))
+        KEEP (*crtn.o(.init))
         PROVIDE (_fini = .);
-        *crti.o(.fini)
-        *(.fini)
-        *crtn.o(.fini)
+        KEEP (*crti.o(.fini))
+        KEEP (*(.fini))
+        KEEP (*crtn.o(.fini))
 
         /*
          * Special FreeBSD sysctl sections.
@@ -122,18 +122,22 @@ SECTIONS
          * crtend.o.  The same comments apply to it.
          */
         . = ALIGN (16);
-        *crtbegin.o(.ctors)
-        *(.ctors)
-        *crtend.o(.ctors)
-        *crtbegin.o(.dtors)
-        *(.dtors)
-        *crtend.o(.dtors)
+        KEEP (*crtbegin.o(.ctors))
+        KEEP (*crtbegin?.o(.ctors))
+        KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+        KEEP (*(SORT(.ctors.*)))
+        KEEP (*(.ctors))
+        KEEP (*crtbegin.o(.dtors))
+        KEEP (*crtbegin?.o(.dtors))
+        KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+        KEEP (*(SORT(.dtors.*)))
+        KEEP (*(.dtors))
 
         /*
          * Exception frame info
          */
         . = ALIGN (16);
-        *(.eh_frame)
+        KEEP (*(.eh_frame))
 
         /*
          * Read-only data
@@ -141,7 +145,7 @@ SECTIONS
         . = ALIGN (16);
         _rodata_start = . ;
         *(.rodata*)
-	KEEP (*(SORT(.rtemsroset.*)))
+        KEEP (*(SORT(.rtemsroset.*)))
         *(.gnu.linkonce.r*)
 
         . = ALIGN (16);
@@ -179,7 +183,7 @@ SECTIONS
         KEEP (*(SORT(.rtemsrwset.*)))
         *(.gnu.linkonce.d*)
         *(.gcc_except_table*)
-        *(.jcr)
+        KEEP (*(.jcr))
         . = ALIGN (16);
         PROVIDE (_edata = .);
         PROVIDE (_copy_end = .);
