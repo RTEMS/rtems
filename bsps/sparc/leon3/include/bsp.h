@@ -214,17 +214,6 @@ extern void BSP_shared_interrupt_mask(int irq);
 extern const unsigned char LEON3_mp_irq;
 #endif
 
-#ifdef RTEMS_SMP
-/* Weak table used to implement static interrupt CPU affinity in a SMP
- * configuration. The array index is the interrupt to be looked up, and
- * the array[INTERRUPT] content is the CPU number relative to boot CPU
- * index that will be servicing the interrupts from the IRQ source. The
- * default is to let the first CPU (the boot cpu) to handle all
- * interrupts (all zeros).
- */
-extern const unsigned char LEON3_irq_to_cpu[32];
-#endif
-
 /* Common driver build-time configurations. On small systems undefine
  * [DRIVER]_INFO_AVAIL to avoid info routines get dragged in. It is good
  * for debugging and printing information about the system, but makes the

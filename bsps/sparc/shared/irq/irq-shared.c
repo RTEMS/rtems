@@ -8,54 +8,42 @@
 *
 */
 
-#include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq-generic.h>
 
-#if defined(RTEMS_SMP) && defined(LEON3)
-/* Interrupt to CPU map. Default to CPU0 since in BSS. */
-const unsigned char LEON3_irq_to_cpu[32] __attribute__((weak));
+static inline int bsp_irq_cpu(int irq)
+{
+#if defined(RTEMS_SMP)
+  Processor_mask affinity;
 
-/* On SMP use map table above relative to SMP Boot CPU (normally CPU0) */
-static inline int bsp_irq_cpu(int irq)
-{
-  /* protect from bad user configuration, default to boot cpu */
-  if (rtems_configuration_get_maximum_processors() <= LEON3_irq_to_cpu[irq])
-    return LEON3_Cpu_Index;
-  else
-    return LEON3_Cpu_Index + LEON3_irq_to_cpu[irq];
-}
-#else
-/* when not SMP the local CPU is returned */
-static inline int bsp_irq_cpu(int irq)
-{
-#ifdef LEON3
+  bsp_interrupt_get_affinity((rtems_vector_number) irq, &affinity);
+  return (int) _Processor_mask_Find_last_set(&affinity);
+#elif defined(LEON3)
   return _LEON3_Get_current_processor();
 #else
   return 0;
 #endif
 }
-#endif
 
-/* Callback from bsp_interrupt_initialize() */
+#if !defined(LEON3)
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
+  /* Nothing to do */
   return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  int irq = (int)vector;
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  BSP_Cpu_Unmask_interrupt(irq, bsp_irq_cpu(irq));
+  BSP_Cpu_Unmask_interrupt(vector, 0);
 }
 
 void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  int irq = (int)vector;
   bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  BSP_Cpu_Mask_interrupt(irq, bsp_irq_cpu(irq));
+  BSP_Cpu_Mask_interrupt(vector, 0);
 }
+#endif
 
 void BSP_shared_interrupt_mask(int irq)
 {

@@ -16,6 +16,7 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/fatal.h>
+#include <bsp/irq.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
@@ -38,8 +39,6 @@ static void bsp_inter_processor_interrupt( void *arg )
 
 void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 {
-  uint32_t cpu_index_self;
-
   /*
    * If data cache snooping is not enabled we terminate using BSP_fatal_exit()
    * instead of bsp_fatal().  This is done since the latter function tries to
@@ -49,19 +48,20 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   if ( !leon3_data_cache_snooping_enabled() )
     BSP_fatal_exit( LEON3_FATAL_INVALID_CACHE_CONFIG_SECONDARY_PROCESSOR );
 
-  /* Unmask IPI interrupts at Interrupt controller for this CPU */
-  cpu_index_self = _Per_CPU_Get_index(cpu_self);
-  LEON3_IrqCtrl_Regs->mask[cpu_index_self] |= 1U << LEON3_mp_irq;
-
   _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
 
 static void leon3_install_inter_processor_interrupt( void )
 {
   rtems_status_code sc;
+  rtems_vector_number irq;
+
+  irq = LEON3_mp_irq;
+
+  bsp_interrupt_set_affinity( irq, _SMP_Get_online_processors() );
 
   sc = rtems_interrupt_handler_install(
-    LEON3_mp_irq,
+    irq,
     "IPI",
     RTEMS_INTERRUPT_SHARED,
     bsp_inter_processor_interrupt,
@@ -74,10 +74,6 @@ uint32_t _CPU_SMP_Initialize( void )
 {
   if ( !leon3_data_cache_snooping_enabled() )
     bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR );
-
-#if !defined(RTEMS_DRVMGR_STARTUP)
-  leon3_install_inter_processor_interrupt();
-#endif
 
   return leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
 }
@@ -97,7 +93,9 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 {
   (void) cpu_count;
 
-  /* Nothing to do */
+#if !defined(RTEMS_DRVMGR_STARTUP)
+  leon3_install_inter_processor_interrupt();
+#endif
 }
 
 void _CPU_SMP_Prepare_start_multitasking( void )
