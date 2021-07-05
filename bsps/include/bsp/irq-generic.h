@@ -291,6 +291,32 @@ void bsp_interrupt_vector_enable(rtems_vector_number vector);
 void bsp_interrupt_vector_disable(rtems_vector_number vector);
 
 /**
+ * @brief Checks if the interrupt is pending.
+ *
+ * The function checks if the interrupt associated with the interrupt vector
+ * specified by ``vector`` was pending for the processor executing the function
+ * call at some time point during the call.
+ *
+ * @param vector is the interrupt vector number.  It shall be valid.
+ *
+ * @param[out] pending is the pointer to a ``bool`` object.  It shall not be
+ *   ``NULL``.  When the function call is successful, the pending status of
+ *   the interrupt associated with the interrupt vector specified by ``vector``
+ *   will be stored in this object.  When the interrupt was pending for the
+ *   processor executing the function call at some time point during the call,
+ *   the object will be set to true, otherwise to false.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to get the pending status has not
+ *   been satisfied.
+ */
+rtems_status_code bsp_interrupt_is_pending(
+  rtems_vector_number vector,
+  bool               *pending
+);
+
+/**
  * @brief Causes the interrupt vector.
  *
  * @param vector is the number of the interrupt vector to cause.  It shall be

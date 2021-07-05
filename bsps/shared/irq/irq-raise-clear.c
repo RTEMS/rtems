@@ -6,7 +6,6 @@
  * @ingroup bsp_interrupt
  *
  * @brief This source file contains the implementation of
- *   rtems_interrupt_raise(), rtems_interrupt_raise_on() and
  *   rtems_interrupt_clear().
  */
 
@@ -40,6 +39,22 @@
 #include <rtems/score/processormask.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/config.h>
+
+rtems_status_code rtems_interrupt_is_pending(
+  rtems_vector_number vector,
+  bool               *pending
+)
+{
+  if ( pending == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
+    return RTEMS_INVALID_ID;
+  }
+
+  return bsp_interrupt_is_pending( vector, pending );
+}
 
 rtems_status_code rtems_interrupt_raise( rtems_vector_number vector )
 {
