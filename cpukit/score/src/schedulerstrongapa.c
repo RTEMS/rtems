@@ -187,7 +187,7 @@ static inline Scheduler_Node * _Scheduler_strong_APA_Find_highest_ready(
   uint32_t                      rear
 )
 {
-  Scheduler_Node              *highest_ready;
+  Scheduler_Node              *highest_ready = NULL;
   Scheduler_strong_APA_CPU    *CPU;
   const Chain_Node            *tail;
   Chain_Node                  *next;
@@ -258,6 +258,12 @@ static inline Scheduler_Node * _Scheduler_strong_APA_Find_highest_ready(
     next = _Chain_Next( next );
     }
   }
+
+  /*
+   * By definition, the system would always have a ready node,
+   * hence highest_ready would not be NULL.
+   */
+  _Assert( highest_ready != NULL );
 
   return highest_ready;
 }
@@ -494,7 +500,7 @@ static inline Scheduler_Node* _Scheduler_strong_APA_Get_lowest_reachable(
   Per_CPU_Control             **cpu_to_preempt
 )
 {
-  Scheduler_Node              *lowest_reachable;
+  Scheduler_Node              *lowest_reachable = NULL;
   Priority_Control             max_priority_num;
   uint32_t	               cpu_max;
   uint32_t	               cpu_index;
@@ -546,6 +552,11 @@ static inline Scheduler_Node* _Scheduler_strong_APA_Get_lowest_reachable(
       }
     }
   }
+  /*
+   * Since it is not allowed for a task to have an empty affinity set,
+   * there would always be a lowest_reachable task, hence it would not be NULL
+   */
+  _Assert( lowest_reachable != NULL );
 
   return lowest_reachable;
 }
@@ -673,7 +684,7 @@ static inline bool _Scheduler_strong_APA_Enqueue(
   Scheduler_strong_APA_CPU     *CPU;
   uint32_t	                cpu_max;
   uint32_t              	cpu_index;
-  Per_CPU_Control              *cpu_to_preempt;
+  Per_CPU_Control              *cpu_to_preempt = NULL;
   Scheduler_Node               *lowest_reachable;
   Scheduler_strong_APA_Node    *strong_node;
 
@@ -711,7 +722,12 @@ static inline bool _Scheduler_strong_APA_Enqueue(
                        rear,
                        &cpu_to_preempt
                      );
-
+  /*
+   * Since it is not allowed for a task to have an empty affinity set,
+   * there would always be a lowest_reachable task, hence cpu_to_preempt
+   * would not be NULL.
+   */
+  _Assert( cpu_to_preempt != NULL );
   return _Scheduler_strong_APA_Do_enqueue(
            context,
            lowest_reachable,
