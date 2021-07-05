@@ -70,7 +70,7 @@
 
 const char rtems_test_name[] = "Validation0";
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 4
+#define CONFIGURE_MAXIMUM_PROCESSORS 5
 
 #include "ts-default.h"
 
