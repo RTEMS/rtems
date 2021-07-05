@@ -453,6 +453,60 @@ rtems_status_code rtems_interrupt_vector_enable( rtems_vector_number vector );
  */
 rtems_status_code rtems_interrupt_vector_disable( rtems_vector_number vector );
 
+/* Generated from spec:/rtems/intr/if/is-pending */
+
+/**
+ * @ingroup RTEMSAPIClassicIntr
+ *
+ * @brief Checks if the interrupt is pending.
+ *
+ * @param vector is the interrupt vector number.
+ *
+ * @param[out] pending is the pointer to a ``bool`` object.  When the directive
+ *   call is successful, the pending status of the interrupt associated with
+ *   the interrupt vector specified by ``vector`` will be stored in this
+ *   object.  When the interrupt was pending for the processor executing the
+ *   directive call at some time point during the call, the object value will
+ *   be set to true, otherwise to false.
+ *
+ * The directive checks if the interrupt associated with the interrupt vector
+ * specified by ``vector`` was pending for the processor executing the
+ * directive call at some time point during the call.
+ *
+ * @retval ::RTEMS_SUCCESSFUL The requested operation was successful.
+ *
+ * @retval ::RTEMS_INVALID_ADDRESS The ``pending`` parameter was NULL.
+ *
+ * @retval ::RTEMS_INVALID_ID There was no interrupt vector associated with the
+ *   number specified by ``vector``.
+ *
+ * @retval ::RTEMS_UNSATISFIED The request to get the pending status has not
+ *   been satisfied.
+ *
+ * @par Notes
+ * Interrupts may be made pending by calling the rtems_interrupt_raise() or
+ * rtems_interrupt_raise_on() directives or due to external signals or
+ * messages.  The pending state may be cleared by rtems_interrupt_clear().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within interrupt context.
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+rtems_status_code rtems_interrupt_is_pending(
+  rtems_vector_number vector,
+  bool               *pending
+);
+
 /* Generated from spec:/rtems/intr/if/get-affinity */
 
 /**
