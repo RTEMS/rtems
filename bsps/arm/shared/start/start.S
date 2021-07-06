@@ -482,16 +482,22 @@ bsp_start_hook_0_done:
 
 .Lvector_table_copy_done:
 
-#if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8
 	/*
 	 * This code path is only executed by the primary processor.  Set the
 	 * VBAR to the normal vector table.  For secondary processors, this is
 	 * done by bsp_start_hook_0().
 	 */
+#if (__ARM_ARCH >= 7 && __ARM_ARCH_PROFILE == 'A') || __ARM_ARCH >= 8
 	ldr	r0, =bsp_vector_table_begin
 	dsb
 	mcr	p15, 0, r0, c12, c0, 0
 	isb
+#elif defined(__ARM_ARCH_6KZ__)
+	mov	r1, #0
+	ldr	r0, =bsp_vector_table_begin
+	mcr	p15, 0, r1, c7, c10, 4      /* DataSync */
+	mcr	p15, 0, r0, c12, c0, 0      /* Load VBAR */
+	mcr	p15, 0, r1, c7, c5, 4       /* Flush Prefetch */
 #endif
 
 	SWITCH_FROM_ARM_TO_THUMB	r3
