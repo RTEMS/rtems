@@ -47,13 +47,17 @@ rtems_status_code rtems_interrupt_set_affinity(
   Processor_mask             set;
   Processor_mask_Copy_status status;
 
+  if ( affinity == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
+
   if (!bsp_interrupt_is_valid_vector(vector)) {
     return RTEMS_INVALID_ID;
   }
 
   status = _Processor_mask_From_cpu_set_t(&set, affinity_size, affinity);
-  if (status != PROCESSOR_MASK_COPY_LOSSLESS) {
-    return RTEMS_INVALID_SIZE;
+  if ( !_Processor_mask_Is_at_most_partial_loss( status ) ) {
+    return RTEMS_INVALID_NUMBER;
   }
 
 #if defined(RTEMS_SMP)
@@ -70,6 +74,10 @@ rtems_status_code rtems_interrupt_get_affinity(
 {
   Processor_mask             set;
   Processor_mask_Copy_status status;
+
+  if ( affinity == NULL ) {
+    return RTEMS_INVALID_ADDRESS;
+  }
 
   if (!bsp_interrupt_is_valid_vector(vector)) {
     return RTEMS_INVALID_ID;
