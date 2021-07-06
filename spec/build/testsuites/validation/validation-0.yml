@@ -18,6 +18,7 @@ source:
 - testsuites/validation/tc-intr-clear.c
 - testsuites/validation/tc-intr-entry-install.c
 - testsuites/validation/tc-intr-entry-remove.c
+- testsuites/validation/tc-intr-get-affinity.c
 - testsuites/validation/tc-intr-get-attributes.c
 - testsuites/validation/tc-intr-is-pending.c
 - testsuites/validation/tc-intr-raise.c
