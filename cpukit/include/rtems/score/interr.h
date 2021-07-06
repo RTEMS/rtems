@@ -144,6 +144,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_HEAP = 13,
 
   /**
+   * @brief Fatal source for spurious interrupts.
+   *
+   * The fatal code is the interrupt vector number of the spurious interrupt.
+   */
+  RTEMS_FATAL_SOURCE_SPURIOUS_INTERRUPT = 14,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for

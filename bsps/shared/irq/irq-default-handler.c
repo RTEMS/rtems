@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2008, 2012 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,13 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <inttypes.h>
-
-#include <rtems/bspIo.h>
-
 #include <bsp/irq-generic.h>
 
-void bsp_interrupt_handler_default(rtems_vector_number vector)
+#include <rtems/score/interr.h>
+
+void bsp_interrupt_handler_default( rtems_vector_number vector )
 {
-  printk("spurious interrupt: %" PRIu32 "\n", vector);
+  _Terminate( RTEMS_FATAL_SOURCE_SPURIOUS_INTERRUPT, vector );
 }

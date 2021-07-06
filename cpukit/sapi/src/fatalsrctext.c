@@ -41,7 +41,8 @@ static const char *const fatal_source_text[] = {
   "RTEMS_FATAL_SOURCE_SMP",
   "RTEMS_FATAL_SOURCE_PANIC",
   "RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE",
-  "RTEMS_FATAL_SOURCE_HEAP"
+  "RTEMS_FATAL_SOURCE_HEAP",
+  "RTEMS_FATAL_SOURCE_SPURIOUS_INTERRUPT"
 };
 
 const char *rtems_fatal_source_text( rtems_fatal_source source )
