@@ -367,7 +367,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 )
@@ -382,7 +382,7 @@ void bsp_interrupt_set_affinity(
 
     if (_Processor_mask_Is_equal(&mask, _SMP_Get_online_processors())) {
       riscv_plic_irq_to_cpu[interrupt_index - 1] = NULL;
-      return;
+      return RTEMS_SUCCESSFUL;
     }
 
     if (_Processor_mask_Count(&mask) == 1) {
@@ -392,11 +392,13 @@ void bsp_interrupt_set_affinity(
       cpu_index = _Processor_mask_Find_last_set(&mask) - 1;
       cpu = _Per_CPU_Get_by_index(cpu_index);
       riscv_plic_irq_to_cpu[interrupt_index - 1] = cpu->cpu_per_cpu.plic_m_ie;
-      return;
+      return RTEMS_SUCCESSFUL;
     }
 
     bsp_fatal(RISCV_FATAL_INVALID_INTERRUPT_AFFINITY);
   }
+
+  return RTEMS_UNSATISFIED;
 }
 
 rtems_status_code bsp_interrupt_get_affinity(

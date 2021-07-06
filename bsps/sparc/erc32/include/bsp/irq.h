@@ -26,13 +26,14 @@
 /* No extra check is needed */
 #undef BSP_INTERRUPT_CUSTOM_VALID_VECTOR
 
-RTEMS_INLINE_ROUTINE void bsp_interrupt_set_affinity(
+RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number   vector,
   const Processor_mask *affinity
 )
 {
   (void) vector;
   (void) affinity;
+  return RTEMS_SUCCESSFUL;
 }
 
 RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_get_affinity(

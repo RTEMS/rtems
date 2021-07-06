@@ -175,7 +175,7 @@ rtems_status_code bsp_interrupt_get_affinity(
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 )
@@ -196,4 +196,6 @@ void bsp_interrupt_set_affinity(
   } else {
     GRLIB_Disable_interrupt_broadcast(vector);
   }
+
+  return RTEMS_SUCCESSFUL;
 }

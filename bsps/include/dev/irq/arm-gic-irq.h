@@ -69,7 +69,7 @@ rtems_status_code arm_gic_irq_get_group(
   gic_group *group
 );
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 );

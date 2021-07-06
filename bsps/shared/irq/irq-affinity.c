@@ -61,9 +61,10 @@ rtems_status_code rtems_interrupt_set_affinity(
   }
 
 #if defined(RTEMS_SMP)
-  bsp_interrupt_set_affinity(vector, &set);
-#endif
+  return bsp_interrupt_set_affinity(vector, &set);
+#else
   return RTEMS_SUCCESSFUL;
+#endif
 }
 
 rtems_status_code rtems_interrupt_get_affinity(

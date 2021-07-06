@@ -29,7 +29,7 @@
 /* The check is different depending on IRQ controller, runtime detected */
 #define BSP_INTERRUPT_CUSTOM_VALID_VECTOR
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 );

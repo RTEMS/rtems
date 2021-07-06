@@ -399,7 +399,7 @@ rtems_status_code arm_gic_irq_get_priority(
   return sc;
 }
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 )
@@ -408,6 +408,7 @@ void bsp_interrupt_set_affinity(
   uint8_t targets = (uint8_t) _Processor_mask_To_uint32_t(affinity, 0);
 
   gic_id_set_targets(dist, vector, targets);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_affinity(

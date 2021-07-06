@@ -45,7 +45,7 @@ RTEMS_INTERRUPT_LOCK_DEFINE(static, lock, "QorIQ IRQ")
 
 #ifdef QORIQ_IS_HYPERVISOR_GUEST
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
 	rtems_vector_number vector,
 	const Processor_mask *affinity
 )
@@ -62,6 +62,7 @@ void bsp_interrupt_set_affinity(
 	ev_int_get_config(vector, &config, &priority, &destination);
 	ev_int_set_config(vector, config, priority, new_destination);
 	rtems_interrupt_lock_release(&lock, &lock_context);
+	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_affinity(
@@ -314,7 +315,7 @@ rtems_status_code qoriq_pic_set_priority(
 	return sc;
 }
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
 	rtems_vector_number vector,
 	const Processor_mask *affinity
 )
@@ -322,6 +323,7 @@ void bsp_interrupt_set_affinity(
 	volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 
 	src_cfg->dr = _Processor_mask_To_uint32_t(affinity, 0);
+	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_affinity(

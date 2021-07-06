@@ -196,7 +196,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 }
 
 #if defined(RTEMS_SMP)
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 )
@@ -224,6 +224,7 @@ void bsp_interrupt_set_affinity(
   }
 
   LEON3_IRQCTRL_RELEASE(&lock_context);
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_affinity(

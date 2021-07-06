@@ -380,7 +380,7 @@ rtems_status_code qoriq_pic_set_priority(
   int *old_priority
 );
 
-void bsp_interrupt_set_affinity(
+rtems_status_code bsp_interrupt_set_affinity(
   rtems_vector_number vector,
   const Processor_mask *affinity
 );
