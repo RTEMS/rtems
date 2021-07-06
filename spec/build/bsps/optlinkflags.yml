@@ -3,16 +3,14 @@ actions:
 - get-string: null
 - split: null
 - env-append: null
-- env-append: PKGCONFIG_LDFLAGS
 build-type: option
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default:
-- -Wl,--gc-sections
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+default: []
 default-by-variant: []
 description: |
-  Flags passed to the linker at the end of the link command.
+  Flags passed to the linker.
 enabled-by: true
 links: []
-name: LDFLAGS
+name: LINKFLAGS
 type: build
