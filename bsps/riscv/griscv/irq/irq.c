@@ -156,7 +156,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-void bsp_interrupt_get_affinity(
+rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number vector,
   Processor_mask *affinity
 )
@@ -171,6 +171,8 @@ void bsp_interrupt_get_affinity(
       _Processor_mask_Set(affinity, cpu_index);
     }
   }
+
+  return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_set_affinity(

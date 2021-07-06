@@ -16,7 +16,7 @@ static inline int bsp_irq_cpu(int irq)
 #if defined(RTEMS_SMP)
   Processor_mask affinity;
 
-  bsp_interrupt_get_affinity((rtems_vector_number) irq, &affinity);
+  (void) bsp_interrupt_get_affinity((rtems_vector_number) irq, &affinity);
   return (int) _Processor_mask_Find_last_set(&affinity);
 #elif defined(LEON3)
   return _LEON3_Get_current_processor();

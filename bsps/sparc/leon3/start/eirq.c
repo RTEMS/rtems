@@ -226,11 +226,12 @@ void bsp_interrupt_set_affinity(
   LEON3_IRQCTRL_RELEASE(&lock_context);
 }
 
-void bsp_interrupt_get_affinity(
+rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number vector,
   Processor_mask *affinity
 )
 {
   *affinity = leon3_interrupt_affinities[vector];
+  return RTEMS_SUCCESSFUL;
 }
 #endif

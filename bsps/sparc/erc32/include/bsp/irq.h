@@ -35,13 +35,14 @@ RTEMS_INLINE_ROUTINE void bsp_interrupt_set_affinity(
   (void) affinity;
 }
 
-RTEMS_INLINE_ROUTINE void bsp_interrupt_get_affinity(
+RTEMS_INLINE_ROUTINE rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number  vector,
   Processor_mask      *affinity
 )
 {
   (void) vector;
   _Processor_mask_From_index( affinity, 0 );
+  return RTEMS_SUCCESSFUL;
 }
 
 #endif /* LIBBSP_ERC32_IRQ_CONFIG_H */

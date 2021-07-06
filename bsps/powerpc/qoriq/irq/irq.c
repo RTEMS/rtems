@@ -64,7 +64,7 @@ void bsp_interrupt_set_affinity(
 	rtems_interrupt_lock_release(&lock, &lock_context);
 }
 
-void bsp_interrupt_get_affinity(
+rtems_status_code bsp_interrupt_get_affinity(
 	rtems_vector_number vector,
 	Processor_mask *affinity
 )
@@ -75,6 +75,7 @@ void bsp_interrupt_get_affinity(
 
 	ev_int_get_config(vector, &config, &priority, &destination);
 	_Processor_mask_From_uint32_t(affinity, destination, 0);
+	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
@@ -323,7 +324,7 @@ void bsp_interrupt_set_affinity(
 	src_cfg->dr = _Processor_mask_To_uint32_t(affinity, 0);
 }
 
-void bsp_interrupt_get_affinity(
+rtems_status_code bsp_interrupt_get_affinity(
 	rtems_vector_number vector,
 	Processor_mask *affinity
 )
@@ -331,6 +332,7 @@ void bsp_interrupt_get_affinity(
 	volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 
 	_Processor_mask_From_uint32_t(affinity, src_cfg->dr, 0);
+	return RTEMS_SUCCESSFUL;
 }
 
 static void pic_vector_enable(rtems_vector_number vector, uint32_t msk)

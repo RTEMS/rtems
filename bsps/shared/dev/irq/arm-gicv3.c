@@ -410,7 +410,7 @@ void bsp_interrupt_set_affinity(
   gic_id_set_targets(dist, vector, targets);
 }
 
-void bsp_interrupt_get_affinity(
+rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number vector,
   Processor_mask *affinity
 )
@@ -419,6 +419,7 @@ void bsp_interrupt_get_affinity(
   uint8_t targets = gic_id_get_targets(dist, vector);
 
   _Processor_mask_From_uint32_t(affinity, targets, 0);
+  return RTEMS_SUCCESSFUL;
 }
 
 void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)

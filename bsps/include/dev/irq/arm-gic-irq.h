@@ -74,7 +74,7 @@ void bsp_interrupt_set_affinity(
   const Processor_mask *affinity
 );
 
-void bsp_interrupt_get_affinity(
+rtems_status_code bsp_interrupt_get_affinity(
   rtems_vector_number vector,
   Processor_mask *affinity
 );
