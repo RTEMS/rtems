@@ -43,6 +43,32 @@
 #include <rtems/irq-extension.h>
 #include <rtems/test.h>
 
+#include <bsp/irq-generic.h>
+
+rtems_vector_number GetValidInterruptVectorNumber(
+  const rtems_interrupt_attributes *required
+)
+{
+  rtems_vector_number vector;
+
+  for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
+    rtems_status_code          sc;
+    rtems_interrupt_attributes attr;
+
+    sc = rtems_interrupt_get_attributes( vector, &attr );
+
+    if (
+      sc == RTEMS_SUCCESSFUL &&
+        ( required == NULL ||
+          !required->can_get_affinity || attr.can_get_affinity )
+      ) {
+      break;
+    }
+  }
+
+  return vector;
+}
+
 static void HasInstalled(
   void                   *arg,
   const char             *info,

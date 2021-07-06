@@ -38,6 +38,7 @@
 #define _TX_SUPPORT_H
 
 #include <rtems.h>
+#include <rtems/irq-extension.h>
 #include <rtems/score/atomic.h>
 
 #ifdef __cplusplus
@@ -112,6 +113,10 @@ void CallWithinISR( void ( *handler )( void * ), void *arg );
 void CallWithinISRSubmit( CallWithinISRRequest *request );
 
 void CallWithinISRWait( const CallWithinISRRequest *request );
+
+rtems_vector_number GetValidInterruptVectorNumber(
+  const rtems_interrupt_attributes *required
+);
 
 bool HasInterruptVectorEntriesInstalled( rtems_vector_number vector );
 
