@@ -111,10 +111,13 @@ static Memory_Area _Memory_Areas[1];
 
 static void bsp_memory_initialize(void)
 {
+  const arm_cp15_start_section_config *section;
+
+  section = &imx_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX];
   _Memory_Initialize(
     &_Memory_Areas[0],
-    imx_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].begin,
-    imx_mmu_config_table[ARMV7_CP15_START_WORKSPACE_ENTRY_INDEX].end
+    (void *) section->begin,
+    (void *) section->end
   );
 }
 
