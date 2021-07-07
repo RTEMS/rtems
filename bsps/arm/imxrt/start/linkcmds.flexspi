@@ -21,7 +21,7 @@ REGION_ALIAS ("REGION_NOCACHE_LOAD", FLASH);
 bsp_vector_table_in_start_section = 1;
 
 SECTIONS {
-  . = imxrt_memory_flexspi_begin;
+  . = imxrt_memory_flash_begin;
   .flash_config : ALIGN_WITH_INPUT {
     KEEP(*(.boot_hdr.conf))
   } > FLASH_CONFIG AT > FLASH_CONFIG
