@@ -404,6 +404,12 @@ _start:
 	mcr	p15, 0, r1, c1, c0, 0
 	isb
 
+#ifdef RTEMS_SMP
+	/* Skip the data cache initialization if we are a secondary processor */
+	cmp	r7, #0
+	bne	.Ldata_caches_initialized
+#endif
+
 	/* Check previous SCTLR[C] and initialize data caches */
 	tst	r0, #0x4
 	bne	.Lclean_invalidate_data_caches
