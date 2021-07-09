@@ -153,6 +153,18 @@ static void imx_find_gic(const void *fdt)
     node = fdt_path_offset(fdt, "/soc/interrupt-controller");
   }
   imx_gic_dist_base = (uintptr_t) imx_get_reg_of_node(fdt, node);
+
+#if defined(RTEMS_SMP)
+  /*
+   * Secondary processors start with a disabled data cache and use the GIC to
+   * deterine if they can continue the initialization, see
+   * arm_gic_irq_initialize_secondary_cpu().
+   */
+  rtems_cache_flush_multiple_data_lines(
+    &imx_gic_dist_base,
+    sizeof(imx_gic_dist_base)
+  );
+#endif
 }
 
 void bsp_start(void)
