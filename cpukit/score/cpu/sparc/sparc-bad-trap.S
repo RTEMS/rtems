@@ -208,20 +208,6 @@ SYM(_SPARC_Bad_trap):
         std     %f30, [%l7 + SPARC_EXCEPTION_OFFSET_FP(15)]
 #endif
 
-#if !defined(SPARC_USE_LAZY_FP_SWITCH)
-        /*
-         * Call
-         * _Internal_error( INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT )
-         * if necessary.
-         */
-        cmp     %l3, 4
-        bne     .Lno_fp_disable_trap
-         nop
-        call    SYM(_Internal_error)
-         set    38, %o0
-.Lno_fp_disable_trap:
-#endif
-
         /*
          * Call _Terminate( RTEMS_FATAL_SOURCE_EXCEPTION, %l0 ).
          */
