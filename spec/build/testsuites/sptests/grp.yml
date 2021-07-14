@@ -189,8 +189,6 @@ links:
 - role: build-dependency
   uid: spcontext01
 - role: build-dependency
-  uid: spcoverage
-- role: build-dependency
   uid: spcpucounter01
 - role: build-dependency
   uid: spcpuset01
