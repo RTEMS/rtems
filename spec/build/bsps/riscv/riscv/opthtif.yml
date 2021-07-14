@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   enables the HTIF support if defined to a non-zero value, otherwise it is disabled (disabled by default)

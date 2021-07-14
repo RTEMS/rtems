@@ -8,6 +8,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 134217708
+default-by-family: []
 default-by-variant: []
 description: |
   reset region origin

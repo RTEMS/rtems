@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
 default: true
+default-by-family: []
 default-by-variant:
 - value: false
   variants:

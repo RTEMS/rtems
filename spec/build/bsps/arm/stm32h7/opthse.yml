@@ -5,6 +5,7 @@ actions:
 - format-and-define: null
 build-type: option
 default: 25000000
+default-by-family: []
 default-by-variant:
 - value: 8000000
   variants:

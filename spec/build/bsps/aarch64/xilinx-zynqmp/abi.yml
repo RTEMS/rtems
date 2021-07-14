@@ -8,6 +8,7 @@ copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default:
 - -mcpu=cortex-a53
+default-by-family: []
 default-by-variant:
 - value:
   - -mcpu=cortex-a53

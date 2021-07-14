@@ -9,6 +9,7 @@ copyrights:
 default:
 - -mcpu=arm7tdmi-s
 - -mthumb
+default-by-family: []
 default-by-variant:
 - value:
   - -mthumb

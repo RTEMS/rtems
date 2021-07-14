@@ -7,6 +7,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 0
+default-by-family: []
 default-by-variant: []
 description: |
   size of tightly coupled memories (TCM) in bytes

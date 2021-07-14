@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   If set to true, and AARCH64_GENERIC_TIMER_USE_VIRTUAL is false, then

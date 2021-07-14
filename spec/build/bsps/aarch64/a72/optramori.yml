@@ -8,6 +8,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: 1073741824
+default-by-family: []
 default-by-variant: []
 description: |
   base address of memory area available to the BSP

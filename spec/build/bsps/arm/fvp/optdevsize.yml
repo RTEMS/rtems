@@ -8,6 +8,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 354418688
+default-by-family: []
 default-by-variant: []
 description: |
   Defines the size in bytes of the device area.

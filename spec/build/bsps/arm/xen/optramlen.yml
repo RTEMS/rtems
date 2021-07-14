@@ -8,6 +8,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 8388608
+default-by-family: []
 default-by-variant: []
 description: |
   length of memory area available to the BSP

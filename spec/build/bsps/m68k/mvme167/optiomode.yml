@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   0 for polled I/O, 1 for interrupt-driven.

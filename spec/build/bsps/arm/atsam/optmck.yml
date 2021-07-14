@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 123000000
+default-by-family: []
 default-by-variant: []
 description: |
   Frequency of the MCK in Hz. Set to 0 to force application defined speed.  See start/pmc-config.c for available clock configurations.

@@ -8,6 +8,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default:
 - -mcpu=603e
+default-by-family: []
 default-by-variant:
 - value:
   - -mcpu=7400

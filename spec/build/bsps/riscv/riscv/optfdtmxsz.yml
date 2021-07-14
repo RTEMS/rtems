@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 65536
+default-by-family: []
 default-by-variant: []
 description: |
   maximum size of the FDT blob in bytes

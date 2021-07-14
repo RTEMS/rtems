@@ -9,6 +9,7 @@ copyrights:
 default:
 - -Dppc405
 - -mcpu=405
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 65535
+default-by-family: []
 default-by-variant: []
 description: |
   Define to the desired timeout (in steps of 1/20 msec) to enable the watchdog.  Default is to disable the watchdog entirely.

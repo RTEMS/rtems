@@ -4,6 +4,7 @@ actions:
 - define-unquoted: IMXRT_MEMORY_FLASH_ORIGIN
 build-type: option
 default: 0x60000000
+default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'

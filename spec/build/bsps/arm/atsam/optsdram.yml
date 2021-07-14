@@ -19,6 +19,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: is42s16100e-7bli
+default-by-family: []
 default-by-variant: []
 description: |
   SDRAM variant

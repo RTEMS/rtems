@@ -8,6 +8,7 @@ default:
 - -mcpu=cortex-m7
 - -mfpu=fpv5-d16
 - -mfloat-abi=hard
+default-by-family: []
 default-by-variant: []
 enabled-by: true
 links: []

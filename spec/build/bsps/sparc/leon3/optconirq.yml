@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 0
+default-by-family: []
 default-by-variant: []
 description: |
   The leon3 console driver can operate in either polled or interrupt mode.  Under the simulator (especially when FAST_UART is defined), polled seems to operate better.

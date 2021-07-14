@@ -10,6 +10,7 @@ default:
 - -DSUN4U
 - -DUS3
 - -mcpu=ultrasparc3
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

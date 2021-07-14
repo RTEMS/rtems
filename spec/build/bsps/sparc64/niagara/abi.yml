@@ -9,6 +9,7 @@ copyrights:
 default:
 - -DSUN4V
 - -mcpu=niagara
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

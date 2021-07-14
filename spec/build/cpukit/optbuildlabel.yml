@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 default: DEFAULT
+default-by-family: []
 default-by-variant: []
 description: |
   Defines the build label returned by rtems_get_build_label().

@@ -10,6 +10,7 @@ default:
 - -Dppc440
 - -mcpu=440
 - -msoft-float
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

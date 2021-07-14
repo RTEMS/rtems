@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: (MPC55XX_CHIP_TYPE / 10)
+default-by-family: []
 default-by-variant: []
 description: |
   specifies the chip family in use (e.g. 555 for MPC5554)

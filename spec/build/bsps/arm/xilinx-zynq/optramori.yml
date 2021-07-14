@@ -9,6 +9,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 1048576
+default-by-family: []
 default-by-variant:
 - value: 4194304
   variants:

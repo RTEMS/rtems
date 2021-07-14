@@ -12,6 +12,7 @@ default:
 - -mbig-endian
 - -mfpu=vfpv3-d16
 - -mfloat-abi=hard
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

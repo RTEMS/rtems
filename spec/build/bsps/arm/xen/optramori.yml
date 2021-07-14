@@ -8,6 +8,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 1073741824
+default-by-family: []
 default-by-variant: []
 description: |
   base address of memory area available to the BSP

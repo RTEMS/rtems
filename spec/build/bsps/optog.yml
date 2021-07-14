@@ -13,6 +13,7 @@ default:
 - -g
 - -fdata-sections
 - -ffunction-sections
+default-by-family: []
 default-by-variant: []
 description: |
   Optimization flags passed to the C and C++ compiler

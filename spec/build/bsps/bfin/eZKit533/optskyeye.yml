@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   (BSP--Skyeye) If defined, disable features which are not supported on Skyeye.

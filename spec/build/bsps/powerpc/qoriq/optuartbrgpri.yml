@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 250
+default-by-family: []
 default-by-variant: []
 description: |
   UART to Intercom bridge task priority

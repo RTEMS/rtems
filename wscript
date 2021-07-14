@@ -592,9 +592,6 @@ class BSPItem(Item):
         arch_bsps = bsps.setdefault(data["arch"].strip(), {})
         arch_bsps[data["bsp"].strip()] = self
 
-    def prepare_configure(self, conf, cic):
-        conf.env.BSP_FAMILY = self.data["family"]
-
     def prepare_build(self, bld, bic):
         return BuildItemContext(
             bic.includes + bld.env.BSP_INCLUDES.split(), [], [], []
@@ -695,8 +692,12 @@ class OptionItem(Item):
                 return True
         return False
 
-    def default_value(self, variant):
+    def default_value(self, variant, family):
         value = self.data["default"]
+        for default in self.data["default-by-family"]:
+            if OptionItem._is_variant(default["families"], family):
+                value = default["value"]
+                break
         for default in self.data["default-by-variant"]:
             if OptionItem._is_variant(default["variants"], variant):
                 value = default["value"]
@@ -709,8 +710,8 @@ class OptionItem(Item):
             return value
         return self.data["format"].format(value)
 
-    def do_defaults(self, variant):
-        value = self.default_value(variant)
+    def do_defaults(self, variant, family):
+        value = self.default_value(variant, family)
         if value is None:
             return
         description = self.data["description"]
@@ -917,7 +918,7 @@ class OptionItem(Item):
             value = cic.cp.getboolean(conf.variant, name)
             cic.add_option(name)
         except configparser.NoOptionError:
-            value = self.default_value(conf.env.ARCH_BSP)
+            value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
         except ValueError as ve:
             conf.fatal(
                 "Invalid value for configuration option {}: {}".format(name, ve)
@@ -933,7 +934,7 @@ class OptionItem(Item):
             value = cic.cp.get(conf.variant, name)
             cic.add_option(name)
         except configparser.NoOptionError:
-            value = self.default_value(conf.env.ARCH_BSP)
+            value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
             if value is None:
                 return value
         try:
@@ -952,7 +953,7 @@ class OptionItem(Item):
             cic.add_option(name)
             value = no_unicode(value)
         except configparser.NoOptionError:
-            value = self.default_value(conf.env.ARCH_BSP)
+            value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
         return value
 
     def _script(self, conf, cic, value, arg):
@@ -1365,12 +1366,23 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.setenv(variant)
     arch, bsp_name = variant.split("/")
     bsp_base = bsp_map.get(bsp_name, bsp_name)
+
+    try:
+        bsp_item = bsps[arch][bsp_base]
+    except KeyError:
+        conf.fatal("No such base BSP: '{}'".format(variant))
+
+    family = bsp_item.data['family']
+
     arch_bsp = arch + "/" + bsp_base
+    arch_family = arch + "/" + family
 
     conf.env["ARCH"] = arch
     conf.env["ARCH_BSP"] = arch_bsp
+    conf.env["ARCH_FAMILY"] = arch_family
     conf.env["BSP_BASE"] = bsp_base
     conf.env["BSP_NAME"] = bsp_name
+    conf.env["BSP_FAMILY"] = family
     conf.env["DEST_OS"] = "rtems"
 
     # For the enabled-by evaluation we have to use the base BSP defined by the
@@ -1385,10 +1397,6 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
 
     items[conf.env.TOPGROUP].configure(conf, cic)
 
-    try:
-        bsp_item = bsps[arch][bsp_base]
-    except KeyError:
-        conf.fatal("No such base BSP: '{}'".format(variant))
     bsp_item.configure(conf, cic)
 
     options = set([o[0].upper() for o in cp.items(variant)])

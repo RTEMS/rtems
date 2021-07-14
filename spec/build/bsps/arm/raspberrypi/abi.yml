@@ -12,6 +12,7 @@ default:
 - -mfpu=neon
 - -mfloat-abi=hard
 - -mtune=cortex-a7
+default-by-family: []
 default-by-variant:
 - value:
   - -mcpu=arm1176jzf-s

@@ -9,6 +9,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 On-Line Applications Research (OAR)
 default: 0x40
+default-by-family: []
 default-by-variant: []
 description: |
   Defines the number of MMU translation table pages to provide.

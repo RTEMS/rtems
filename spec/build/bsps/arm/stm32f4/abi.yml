@@ -9,6 +9,7 @@ copyrights:
 default:
 - -mthumb
 - -mcpu=cortex-m4
+default-by-family: []
 default-by-variant:
 - value:
   - -mthumb

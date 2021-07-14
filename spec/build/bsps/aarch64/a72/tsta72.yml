@@ -34,6 +34,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: null
+default-by-family: []
 default-by-variant: []
 description: ''
 enabled-by: true

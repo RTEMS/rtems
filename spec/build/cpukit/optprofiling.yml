@@ -7,6 +7,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   Enable the SMP lock profiling support

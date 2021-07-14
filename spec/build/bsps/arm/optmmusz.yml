@@ -9,6 +9,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 16384
+default-by-family: []
 default-by-variant: []
 description: |
   Defines the size of the MMU translation table in bytes.  The translation

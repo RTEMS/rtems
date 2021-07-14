@@ -8,6 +8,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 On-Line Applications Research (OAR)
 default: 0x100000
+default-by-family: []
 default-by-variant: []
 description: |
   length of nocache RAM region

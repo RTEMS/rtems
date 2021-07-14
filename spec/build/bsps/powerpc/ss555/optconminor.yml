@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: SCI2_MINOR
+default-by-family: []
 default-by-variant: []
 description: |
   Must be defined to be one of SCI1_MINOR or SCI2_MINOR.  Determines which device will be registered as /dev/console.

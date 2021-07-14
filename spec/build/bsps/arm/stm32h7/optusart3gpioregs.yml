@@ -3,6 +3,7 @@ actions:
 - define-unquoted: null
 build-type: option
 default: GPIOD
+default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{}'

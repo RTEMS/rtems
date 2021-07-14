@@ -11,6 +11,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: 1048576
+default-by-family: []
 default-by-variant: []
 description: |
   Set the value of RELOCADDR to the address where you want your image to load.

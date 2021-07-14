@@ -12,6 +12,7 @@ default:
 - -Wimplicit-function-declaration
 - -Wstrict-prototypes
 - -Wnested-externs
+default-by-family: []
 default-by-variant: []
 description: |
   Warning flags passed to the C compiler

@@ -8,6 +8,7 @@ copyrights:
 - Copyright (C) 2020 Hesham Almatary <Hesham.Almatary@cl.cam.ac.uk>
 default:
 - -mcpu=leon3
+default-by-family: []
 default-by-variant:
 - value:
   - -mcpu=leon3

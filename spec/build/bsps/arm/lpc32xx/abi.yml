@@ -9,6 +9,7 @@ copyrights:
 default:
 - -mcpu=arm926ej-s
 - -mthumb
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

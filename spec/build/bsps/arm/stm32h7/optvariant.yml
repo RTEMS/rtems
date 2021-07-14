@@ -13,6 +13,7 @@ actions:
     conf.define_cond(value, True)
 build-type: option
 default: STM32H743xx
+default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{}'

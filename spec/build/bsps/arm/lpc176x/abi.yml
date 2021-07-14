@@ -9,6 +9,7 @@ copyrights:
 default:
 - -mthumb
 - -mcpu=cortex-m3
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

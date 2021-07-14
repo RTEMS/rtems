@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   If defined, this indicates the BSP is being built to run on the lm32 simulator in GDB.  This enables fast idle support which speeds up the clock ticks while the idle task is running so time spent in the idle task is minimized.  This significantly reduces the wall time required to execute the RTEMS test suites.  It also enables a special exit and alternate printk support.

@@ -8,6 +8,7 @@ copyrights:
 - Copyright (C) 2021 Gedare Bloom 
 default:
 - -mcpu=cortex-a72
+default-by-family: []
 default-by-variant:
 - value:
   - -mcpu=cortex-a72

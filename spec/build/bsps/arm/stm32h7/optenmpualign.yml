@@ -4,6 +4,7 @@ actions:
 - define-condition: null
 build-type: option
 default: true
+default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{}'

@@ -9,6 +9,7 @@ copyrights:
 default:
 - -mcfv4e
 - -Wa,-memac
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

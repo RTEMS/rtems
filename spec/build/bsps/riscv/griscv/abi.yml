@@ -9,6 +9,7 @@ copyrights:
 default:
 - -march=rv32imafdc
 - -mabi=ilp32d
+default-by-family: []
 default-by-variant:
 - value:
   - -march=rv32imac

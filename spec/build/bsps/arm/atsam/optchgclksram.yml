@@ -6,6 +6,7 @@ build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default: false
+default-by-family: []
 default-by-variant: []
 description: |
   Move the functions that set up the clock into the SRAM.  This allows to change the clock frequency even if the application is started from SDRAM.  Requires a TCM_SIZE > 0.

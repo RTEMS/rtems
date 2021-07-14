@@ -10,6 +10,7 @@ default:
 - -mips3
 - -G0
 - -EL
+default-by-family: []
 default-by-variant: []
 description: |
   ABI flags
