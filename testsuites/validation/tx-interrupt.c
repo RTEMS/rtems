@@ -69,6 +69,53 @@ rtems_vector_number GetValidInterruptVectorNumber(
   return vector;
 }
 
+rtems_vector_number GetTestableInterruptVector( void )
+{
+  rtems_vector_number vector;
+
+  for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
+    rtems_status_code          sc;
+    rtems_interrupt_attributes attr;
+
+    sc = rtems_interrupt_get_attributes( vector, &attr );
+
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      continue;
+    }
+
+    if ( !attr.is_maskable ) {
+      continue;
+    }
+
+    if ( HasInterruptVectorEntriesInstalled( vector ) ) {
+      continue;
+    }
+
+    if ( attr.can_enable && attr.can_disable ) {
+      break;
+    }
+
+    if (
+      attr.maybe_enable && attr.maybe_disable &&
+      !attr.can_be_triggered_by_message &&
+      attr.trigger_signal == RTEMS_INTERRUPT_NO_SIGNAL
+    ) {
+      rtems_status_code sc;
+      bool              enabled;
+
+      (void) rtems_interrupt_vector_enable( vector );
+      sc = rtems_interrupt_vector_is_enabled( vector, &enabled );
+
+      if ( sc == RTEMS_SUCCESSFUL && enabled ) {
+        (void) rtems_interrupt_vector_disable( vector );
+        break;
+      }
+    }
+  }
+
+  return vector;
+}
+
 static void HasInstalled(
   void                   *arg,
   const char             *info,

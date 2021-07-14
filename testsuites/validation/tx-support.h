@@ -118,6 +118,8 @@ rtems_vector_number GetValidInterruptVectorNumber(
   const rtems_interrupt_attributes *required
 );
 
+rtems_vector_number GetTestableInterruptVector( void );
+
 bool HasInterruptVectorEntriesInstalled( rtems_vector_number vector );
 
 /** @} */
