@@ -12,10 +12,6 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-acfg-appl-needs-clock-driver.c
-- testsuites/validation/tc-barrier-create.c
-- testsuites/validation/tc-barrier-delete.c
-- testsuites/validation/tc-barrier-release.c
-- testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-intr-clear.c
 - testsuites/validation/tc-intr-entry-install.c
 - testsuites/validation/tc-intr-entry-remove.c

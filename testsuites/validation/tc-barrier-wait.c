@@ -62,7 +62,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsBarrierReqWait spec:/rtems/barrier/req/wait
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
  *
  * @{
  */
@@ -127,6 +127,12 @@ typedef struct {
 
   struct {
     /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 3 ];
+
+    /**
      * @brief This member defines the pre-condition states for the next action.
      */
     size_t pcs[ 3 ];
@@ -187,13 +193,15 @@ static const char * const * const RtemsBarrierReqWait_PreDesc[] = {
 
 #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-#define EVENT_CHECK_TIMER RTEMS_EVENT_0
+#define EVENT_TIMER_INACTIVE RTEMS_EVENT_0
 
 #define EVENT_WAIT RTEMS_EVENT_1
 
 #define EVENT_RELEASE RTEMS_EVENT_2
 
 #define EVENT_DELETE RTEMS_EVENT_3
+
+#define EVENT_TIMER_EXPIRE RTEMS_EVENT_4
 
 typedef RtemsBarrierReqWait_Context Context;
 
@@ -209,7 +217,7 @@ static void Worker( rtems_task_argument arg )
 
     events = ReceiveAnyEvents();
 
-    if ( ( events & EVENT_CHECK_TIMER ) != 0 ) {
+    if ( ( events & EVENT_TIMER_INACTIVE ) != 0 ) {
       T_eq_int(
         T_get_thread_timer_state( ctx->main_id ),
         T_THREAD_TIMER_INACTIVE
@@ -255,6 +263,14 @@ static void Worker( rtems_task_argument arg )
 
       prio = SetSelfPriority( prio );
       T_eq_u32( prio, PRIO_HIGH );
+    }
+
+    if ( ( events & EVENT_TIMER_EXPIRE ) != 0 ) {
+      T_eq_int(
+        T_get_thread_timer_state( ctx->main_id ),
+        T_THREAD_TIMER_SCHEDULED
+      );
+      FinalClockTick();
     }
   }
 }
@@ -306,7 +322,7 @@ static void RtemsBarrierReqWait_Pre_Timeout_Prepare(
       /*
        * While the ``released`` parameter is a clock tick interval.
        */
-      ctx->timeout = 2;
+      ctx->timeout = UINT32_MAX;
       break;
     }
 
@@ -335,7 +351,9 @@ static void RtemsBarrierReqWait_Pre_Satisfy_Prepare(
        * released or deleted.
        */
       if ( ctx->timeout == RTEMS_NO_TIMEOUT ) {
-        SendEvents( ctx->low_worker_id, EVENT_CHECK_TIMER | EVENT_RELEASE );
+        SendEvents( ctx->low_worker_id, EVENT_TIMER_INACTIVE | EVENT_RELEASE );
+      } else {
+        SendEvents( ctx->low_worker_id, EVENT_TIMER_EXPIRE );
       }
       break;
     }
@@ -544,17 +562,30 @@ static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_PopEntry(
   ];
 }
 
+static void RtemsBarrierReqWait_SetPreConditionStates(
+  RtemsBarrierReqWait_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+
+  if ( ctx->Map.entry.Pre_Timeout_NA ) {
+    ctx->Map.pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_NA;
+  } else {
+    ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+  }
+
+  if ( ctx->Map.entry.Pre_Satisfy_NA ) {
+    ctx->Map.pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_NA;
+  } else {
+    ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+  }
+}
+
 static void RtemsBarrierReqWait_TestVariant( RtemsBarrierReqWait_Context *ctx )
 {
   RtemsBarrierReqWait_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  RtemsBarrierReqWait_Pre_Timeout_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_Timeout_NA ? RtemsBarrierReqWait_Pre_Timeout_NA : ctx->Map.pcs[ 1 ]
-  );
-  RtemsBarrierReqWait_Pre_Satisfy_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_Satisfy_NA ? RtemsBarrierReqWait_Pre_Satisfy_NA : ctx->Map.pcs[ 2 ]
-  );
+  RtemsBarrierReqWait_Pre_Timeout_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsBarrierReqWait_Pre_Satisfy_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsBarrierReqWait_Action( ctx );
   RtemsBarrierReqWait_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
 }
@@ -571,19 +602,19 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NoObj;
-    ctx->Map.pcs[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsBarrierReqWait_Pre_Id_NoObj;
+    ctx->Map.pci[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_Ticks;
-      ctx->Map.pcs[ 1 ] < RtemsBarrierReqWait_Pre_Timeout_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_Ticks;
+      ctx->Map.pci[ 1 ] < RtemsBarrierReqWait_Pre_Timeout_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_Never;
-        ctx->Map.pcs[ 2 ] < RtemsBarrierReqWait_Pre_Satisfy_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_Never;
+        ctx->Map.pci[ 2 ] < RtemsBarrierReqWait_Pre_Satisfy_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         ctx->Map.entry = RtemsBarrierReqWait_PopEntry( ctx );
 
@@ -591,6 +622,7 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
           continue;
         }
 
+        RtemsBarrierReqWait_SetPreConditionStates( ctx );
         RtemsBarrierReqWait_TestVariant( ctx );
       }
     }

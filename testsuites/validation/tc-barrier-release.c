@@ -63,7 +63,7 @@
  * @defgroup RTEMSTestCaseRtemsBarrierReqRelease \
  *   spec:/rtems/barrier/req/release
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
  *
  * @{
  */
@@ -130,6 +130,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 3 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -500,16 +506,27 @@ static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_PopEntry(
   ];
 }
 
+static void RtemsBarrierReqRelease_SetPreConditionStates(
+  RtemsBarrierReqRelease_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+
+  if ( ctx->Map.entry.Pre_Waiting_NA ) {
+    ctx->Map.pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_NA;
+  } else {
+    ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+  }
+}
+
 static void RtemsBarrierReqRelease_TestVariant(
   RtemsBarrierReqRelease_Context *ctx
 )
 {
   RtemsBarrierReqRelease_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsBarrierReqRelease_Pre_Released_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsBarrierReqRelease_Pre_Waiting_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_Waiting_NA ? RtemsBarrierReqRelease_Pre_Waiting_NA : ctx->Map.pcs[ 2 ]
-  );
+  RtemsBarrierReqRelease_Pre_Waiting_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsBarrierReqRelease_Action( ctx );
   RtemsBarrierReqRelease_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsBarrierReqRelease_Post_ReleasedVar_Check(
@@ -530,21 +547,22 @@ T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NoObj;
-    ctx->Map.pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NoObj;
+    ctx->Map.pci[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsBarrierReqRelease_Pre_Released_Valid;
-      ctx->Map.pcs[ 1 ] < RtemsBarrierReqRelease_Pre_Released_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsBarrierReqRelease_Pre_Released_Valid;
+      ctx->Map.pci[ 1 ] < RtemsBarrierReqRelease_Pre_Released_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_Zero;
-        ctx->Map.pcs[ 2 ] < RtemsBarrierReqRelease_Pre_Waiting_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_Zero;
+        ctx->Map.pci[ 2 ] < RtemsBarrierReqRelease_Pre_Waiting_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         ctx->Map.entry = RtemsBarrierReqRelease_PopEntry( ctx );
+        RtemsBarrierReqRelease_SetPreConditionStates( ctx );
         RtemsBarrierReqRelease_TestVariant( ctx );
       }
     }

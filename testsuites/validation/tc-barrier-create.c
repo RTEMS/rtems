@@ -62,7 +62,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsBarrierReqCreate spec:/rtems/barrier/req/create
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
  *
  * @{
  */

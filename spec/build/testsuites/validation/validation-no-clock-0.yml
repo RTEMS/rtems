@@ -13,6 +13,11 @@ links: []
 source:
 - testsuites/validation/tc-acfg.c
 - testsuites/validation/tc-attr.c
+- testsuites/validation/tc-barrier-create.c
+- testsuites/validation/tc-barrier-delete.c
+- testsuites/validation/tc-barrier-ident.c
+- testsuites/validation/tc-barrier-release.c
+- testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c

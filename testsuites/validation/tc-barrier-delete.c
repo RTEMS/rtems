@@ -62,7 +62,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsBarrierReqDelete spec:/rtems/barrier/req/delete
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
  *
  * @{
  */
