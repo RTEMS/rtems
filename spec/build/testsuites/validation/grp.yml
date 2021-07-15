@@ -10,6 +10,7 @@ enabled-by:
 - BUILD_VALIDATIONTESTS
 includes:
 - ${BSP_INCLUDES}
+- testsuites/validation
 install: []
 ldflags: []
 links:
@@ -79,6 +80,8 @@ links:
   uid: validation-tls-0
 - role: build-dependency
   uid: validation-tls-1
+- role: build-dependency
+  uid: bsps/validation-bsp-0
 type: build
 use-after:
 - validation

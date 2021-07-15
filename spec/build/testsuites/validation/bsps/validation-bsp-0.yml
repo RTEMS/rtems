@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: bsps/sparc/leon3
+features: c cprogram
+includes: []
+ldflags:
+- -Wl,--wrap=_IO_Relax
+links:
+- role: build-dependency
+  uid: objgrlib
+source:
+- testsuites/validation/bsps/ts-validation-bsp-0.c
+stlib: []
+target: testsuites/validation/bsps/ts-validation-bsp-0.exe
+type: build
+use-after:
+- validation
+use-before: []
