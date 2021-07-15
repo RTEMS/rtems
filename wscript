@@ -1372,7 +1372,7 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     except KeyError:
         conf.fatal("No such base BSP: '{}'".format(variant))
 
-    family = bsp_item.data['family']
+    family = bsp_item.data["family"]
 
     arch_bsp = arch + "/" + bsp_base
     arch_family = arch + "/" + family
