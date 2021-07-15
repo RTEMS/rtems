@@ -659,7 +659,7 @@ class TestProgramItem(Item):
             start_files=True,
             stlib=self.data["stlib"],
             target=self.get(bld, "target"),
-            use=self.data["use-before"] + bic.use + self.data["use-after"],
+            use=bic.objects + self.data["use-before"] + bic.use + self.data["use-after"],
         )
 
 
