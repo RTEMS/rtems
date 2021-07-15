@@ -235,8 +235,8 @@ typedef struct {
 /**
  * @ingroup RTEMSAPIClassicTasks
  *
- * @brief This constant is passed to {set-priority:/name} when the caller wants
- *   to obtain the current priority.
+ * @brief This constant is passed to rtems_task_set_priority() when the caller
+ *   wants to obtain the current priority.
  */
 #define RTEMS_CURRENT_PRIORITY 0
 
