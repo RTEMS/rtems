@@ -694,12 +694,12 @@ class OptionItem(Item):
 
     def default_value(self, variant, family):
         value = self.data["default"]
-        for default in self.data["default-by-family"]:
-            if OptionItem._is_variant(default["families"], family):
-                value = default["value"]
-                break
         for default in self.data["default-by-variant"]:
             if OptionItem._is_variant(default["variants"], variant):
+                value = default["value"]
+                break
+        for default in self.data["default-by-family"]:
+            if OptionItem._is_variant(default["families"], family):
                 value = default["value"]
                 break
         if value is None:
