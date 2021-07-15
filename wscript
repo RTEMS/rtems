@@ -203,11 +203,11 @@ class Item(object):
     def get_enabled_by(self):
         return self.data["enabled-by"]
 
-    def defaults(self, enable, variant):
+    def defaults(self, enable, variant, family):
         if _is_enabled(enable, self.get_enabled_by()):
             for p in self.links():
-                p.defaults(enable, variant)
-            self.do_defaults(variant)
+                p.defaults(enable, variant, family)
+            self.do_defaults(variant, family)
 
     def configure(self, conf, cic):
         if _is_enabled(conf.env.ENABLE, self.get_enabled_by()):
@@ -223,7 +223,7 @@ class Item(object):
                 p.build(bld, bic)
             self.do_build(bld, bic)
 
-    def do_defaults(self, variant):
+    def do_defaults(self, variant, family):
         return
 
     def prepare_configure(self, conf, cic):
@@ -1566,8 +1566,10 @@ COMPILER = {}""".format(
                     )
                 )
                 enable = [compiler, arch, variant]
-                items[top_group].defaults(enable, variant)
-                bsps[arch][bsp].defaults(enable, variant)
+                bsp_item = bsps[arch][bsp]
+                family = arch + "/" + bsp_item.data["family"]
+                items[top_group].defaults(enable, variant, family)
+                bsp_item.defaults(enable, variant, family)
     if first:
         no_matches_error(ctx, white_list)
 
