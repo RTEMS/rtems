@@ -115,9 +115,10 @@ RTEMS_SYSINIT_ITEM(
 );
 #endif
 
-/* Pointers to Interrupt Controller configuration registers */
+#if !defined(LEON3_IRQAMP_BASE)
 irqamp *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
+#endif
 
 #if !defined(LEON3_GPTIMER_BASE)
 gptimer *LEON3_Timer_Regs;
@@ -140,7 +141,12 @@ static void amba_initialize(void)
   struct ambapp_bus *plb;
 
   plb = ambapp_plb();
+#if defined(LEON3_IRQAMP_BASE) && defined(LEON3_GPTIMER_BASE)
+  (void) plb;
+  (void) adev;
+#endif
 
+#if !defined(LEON3_IRQAMP_BASE)
   /* Find LEON3 Interrupt controller */
   adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_IRQMP,
@@ -167,6 +173,7 @@ static void amba_initialize(void)
     icsel = (icsel >> ((7 - (LEON3_Cpu_Index & 0x7)) * 4)) & 0xf;
     LEON3_IrqCtrl_Regs += icsel;
   }
+#endif
 
 #if !defined(LEON3_GPTIMER_BASE)
   /* find GP Timer */

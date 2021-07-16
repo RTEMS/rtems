@@ -41,6 +41,8 @@
 #include <grlib/irqamp-regs.h>
 #include <grlib/io.h>
 
+#include <bspopts.h>
+
 struct ambapp_dev;
 
 #ifdef __cplusplus
@@ -84,7 +86,11 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 /**
  * @brief This pointer provides the IRQ(A)MP register block address.
  */
+#if defined(LEON3_IRQAMP_BASE)
+#define LEON3_IrqCtrl_Regs ((irqamp *) LEON3_IRQAMP_BASE)
+#else
 extern irqamp *LEON3_IrqCtrl_Regs;
+#endif
 
 /**
  * @brief This pointer provides the IRQ(A)MP device information block.
