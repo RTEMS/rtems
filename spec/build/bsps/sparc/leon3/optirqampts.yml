@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+default:
+- enabled-by:
+  - sparc/gr712rc
+  - sparc/gr740
+  - sparc/ut699
+  - sparc/ut700
+  value: false
+- enabled-by: true
+  value: true
+enabled-by: true
+links: []
+name: LEON3_IRQAMP_PROBE_TIMESTAMP
+description: |
+  If this option is set to true, then the interrupt timestamping feature of the
+  IRQ(A)MP is probed.  If it is available, then it may be used for the CPU
+  counter and interrupt profiling.
+type: build
