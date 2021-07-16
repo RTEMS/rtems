@@ -61,13 +61,13 @@ links:
 - role: build-dependency
   uid: optconirq
 - role: build-dependency
-  uid: optfdtcpyro
+  uid: ../../optfdtcpyro
 - role: build-dependency
-  uid: optfdtmxsz
+  uid: ../../optfdtmxsz
 - role: build-dependency
-  uid: optfdtro
+  uid: ../../optfdtro
 - role: build-dependency
-  uid: optfdtuboot
+  uid: ../../optfdtuboot
 - role: build-dependency
   uid: optresetvec
 - role: build-dependency

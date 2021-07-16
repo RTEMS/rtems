@@ -68,9 +68,9 @@ links:
 - role: build-dependency
   uid: optexcfixdhdlr
 - role: build-dependency
-  uid: optfdtmxsz
+  uid: ../../optfdtmxsz
 - role: build-dependency
-  uid: optfdtro
+  uid: ../../optfdtro
 - role: build-dependency
   uid: opthid0
 - role: build-dependency

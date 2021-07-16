@@ -73,15 +73,15 @@ links:
 - role: build-dependency
   uid: optconuart1
 - role: build-dependency
-  uid: optfdtcpyro
+  uid: ../../optfdtcpyro
 - role: build-dependency
   uid: optfdten
 - role: build-dependency
-  uid: optfdtmxsz
+  uid: ../../optfdtmxsz
 - role: build-dependency
-  uid: optfdtro
+  uid: ../../optfdtro
 - role: build-dependency
-  uid: optfdtuboot
+  uid: ../../optfdtuboot
 - role: build-dependency
   uid: opti2cspeed
 - role: build-dependency

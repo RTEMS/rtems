@@ -41,6 +41,14 @@ links:
   uid: linkcmds
 - role: build-dependency
   uid: ../../bspopts
+- role: build-dependency
+  uid: ../../optfdtcpyro
+- role: build-dependency
+  uid: ../../optfdtmxsz
+- role: build-dependency
+  uid: ../../optfdtro
+- role: build-dependency
+  uid: ../../optfdtuboot
 type: build
 use-after: []
 use-before: []
