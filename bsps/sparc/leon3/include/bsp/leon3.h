@@ -263,6 +263,7 @@ static inline void leon3_up_counter_enable( void )
   );
 }
 
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
 /**
  * @brief Checks if the LEON up-counter is available.
  *
@@ -274,6 +275,7 @@ static inline bool leon3_up_counter_is_available( void )
 {
   return leon3_up_counter_low() != leon3_up_counter_low();
 }
+#endif
 
 /**
  * @brief Gets the LEON up-counter frequency in Hz.

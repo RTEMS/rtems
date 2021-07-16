@@ -230,6 +230,7 @@ static void leon3_clock_use_irqamp_timestamp(
 }
 #endif
 
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
 static void leon3_clock_use_gptimer(
   struct timecounter *tc,
   gptimer_timer *timer
@@ -262,6 +263,7 @@ static void leon3_clock_use_gptimer(
 
   rtems_timecounter_install(tc);
 }
+#endif
 
 static void leon3_clock_initialize(void)
 {
@@ -288,6 +290,9 @@ static void leon3_clock_initialize(void)
 
   leon3_up_counter_enable();
 
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+  leon3_clock_use_up_counter(tc);
+#else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
     leon3_clock_use_up_counter(tc);
@@ -305,6 +310,7 @@ static void leon3_clock_initialize(void)
 #endif
 
   leon3_clock_use_gptimer(tc, timer);
+#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 }
 
 #define Clock_driver_support_initialize_hardware() \

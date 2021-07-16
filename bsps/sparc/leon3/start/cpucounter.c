@@ -68,6 +68,7 @@ static void leon3_counter_use_irqamp_timestamp(
 }
 #endif
 
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
 static void leon3_counter_use_gptimer(SPARC_Counter *counter, gptimer *gpt)
 {
   gptimer_timer *timer;
@@ -88,19 +89,25 @@ static void leon3_counter_use_gptimer(SPARC_Counter *counter, gptimer *gpt)
     (grlib_load_32(&gpt->sreload) + 1);
 #endif
 }
+#endif
 
 static void leon3_counter_initialize(void)
 {
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
   irqamp_timestamp *irqmp_ts;
 #endif
+#if !defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   gptimer *gpt;
+#endif
   SPARC_Counter *counter;
 
   counter = &_SPARC_Counter_mutable;
 
   leon3_up_counter_enable();
 
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+  leon3_counter_use_up_counter(counter);
+#else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
     leon3_counter_use_up_counter(counter);
@@ -123,6 +130,7 @@ static void leon3_counter_initialize(void)
     /* Fall back to the first GPTIMER if available */
     leon3_counter_use_gptimer(counter, gpt);
   }
+#endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 }
 
 RTEMS_SYSINIT_ITEM(
