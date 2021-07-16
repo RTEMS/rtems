@@ -115,9 +115,6 @@ RTEMS_SYSINIT_ITEM(
 );
 #endif
 
-rtems_interrupt_lock LEON3_IrqCtrl_Lock =
-  RTEMS_INTERRUPT_LOCK_INITIALIZER("LEON3 IrqCtrl");
-
 /* Pointers to Interrupt Controller configuration registers */
 volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
@@ -166,12 +163,6 @@ static void amba_initialize(void)
     icsel = (icsel >> ((7 - (LEON3_Cpu_Index & 0x7)) * 4)) & 0xf;
     LEON3_IrqCtrl_Regs += icsel;
   }
-  LEON3_IrqCtrl_Regs->mask[LEON3_Cpu_Index] = 0;
-  LEON3_IrqCtrl_Regs->force[LEON3_Cpu_Index] = 0;
-  LEON3_IrqCtrl_Regs->iclear = 0xffffffff;
-
-  /* Init Extended IRQ controller if available */
-  leon3_ext_irq_init();
 
   /* find GP Timer */
   adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),

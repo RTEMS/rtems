@@ -38,12 +38,19 @@
 /* GRLIB extended IRQ controller IRQ number */
 int LEON3_IrqCtrl_EIrq = -1;
 
+rtems_interrupt_lock LEON3_IrqCtrl_Lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER("LEON3 IrqCtrl");
+
 /* Initialize Extended Interrupt controller */
-void leon3_ext_irq_init(void)
+void leon3_ext_irq_init(volatile struct irqmp_regs *regs)
 {
-  if ( (LEON3_IrqCtrl_Regs->mpstat >> 16) & 0xf ) {
+  regs->mask[LEON3_Cpu_Index] = 0;
+  regs->force[LEON3_Cpu_Index] = 0;
+  regs->iclear = 0xffffffff;
+
+  if ( (regs->mpstat >> 16) & 0xf ) {
     /* Extended IRQ controller available */
-    LEON3_IrqCtrl_EIrq = (LEON3_IrqCtrl_Regs->mpstat >> 16) & 0xf;
+    LEON3_IrqCtrl_EIrq = (regs->mpstat >> 16) & 0xf;
   }
 }
 
@@ -76,6 +83,8 @@ void bsp_interrupt_facility_initialize(void)
     leon3_interrupt_affinities[i] = affinity;
   }
 #endif
+
+  leon3_ext_irq_init(LEON3_IrqCtrl_Regs);
 }
 
 rtems_status_code bsp_interrupt_get_attributes(

@@ -44,6 +44,7 @@
 
 #include <rtems.h>
 #include <amba.h>
+#include <bsp/irqimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -146,10 +147,6 @@ extern "C" {
 #define LEON3_REG_CACHE_CTRL_FI      0x00200000 /* Flush instruction cache */
 #define LEON3_REG_CACHE_CTRL_DS      0x00800000 /* Data cache snooping */
 
-/* LEON3 Interrupt Controller */
-extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
-extern struct ambapp_dev *LEON3_IrqCtrl_Adev;
-
 /* LEON3 GP Timer */
 extern volatile struct gptimer_regs *LEON3_Timer_Regs;
 extern struct ambapp_dev *LEON3_Timer_Adev;
@@ -192,8 +189,6 @@ static __inline__ int bsp_irq_fixup(int irq)
  *        The operations which read the register, modify the value and then
  *        store the result back are vulnerable.
  */
-
-extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 
 #define LEON3_IRQCTRL_ACQUIRE( _lock_context ) \
   rtems_interrupt_lock_acquire( &LEON3_IrqCtrl_Lock, _lock_context )
@@ -409,9 +404,6 @@ extern int leon3_timer_core_index;
  *  ...
  */
 extern unsigned int leon3_timer_prescaler;
-
-/* GRLIB extended IRQ controller register */
-void leon3_ext_irq_init(void);
 
 RTEMS_NO_RETURN void leon3_power_down_loop(void);
 
