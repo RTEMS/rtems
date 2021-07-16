@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+default:
+- enabled-by: sparc/gr712rc
+  value: 0x80000300
+- enabled-by: sparc/gr740
+  value: 0xff908000
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: LEON3_GPTIMER_BASE
+description: |
+  This option defines the base address of the GPTIMER register block used by
+  the clock driver.
+type: build

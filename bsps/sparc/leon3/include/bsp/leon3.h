@@ -189,7 +189,11 @@ static inline uint32_t leon3_get_data_cache_config_register( void )
 /**
  * @brief This pointer provides the GPTIMER register block address.
  */
+#if defined(LEON3_GPTIMER_BASE)
+#define LEON3_Timer_Regs ((gptimer *) LEON3_GPTIMER_BASE)
+#else
 extern gptimer *LEON3_Timer_Regs;
+#endif
 
 /**
  * @brief This pointer provides the GPTIMER device information block.

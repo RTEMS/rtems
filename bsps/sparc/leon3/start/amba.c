@@ -119,8 +119,10 @@ RTEMS_SYSINIT_ITEM(
 irqamp *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
 
+#if !defined(LEON3_GPTIMER_BASE)
 gptimer *LEON3_Timer_Regs;
 struct ambapp_dev *LEON3_Timer_Adev;
+#endif
 
 /*
  *  amba_initialize
@@ -166,6 +168,7 @@ static void amba_initialize(void)
     LEON3_IrqCtrl_Regs += icsel;
   }
 
+#if !defined(LEON3_GPTIMER_BASE)
   /* find GP Timer */
   adev = (void *)ambapp_for_each(plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
@@ -189,6 +192,7 @@ static void amba_initialize(void)
     if (leon3_timer_prescaler)
       grlib_store_32(&LEON3_Timer_Regs->sreload, leon3_timer_prescaler);
   }
+#endif
 }
 
 RTEMS_SYSINIT_ITEM(
