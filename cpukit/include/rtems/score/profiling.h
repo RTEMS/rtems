@@ -163,7 +163,7 @@ static inline void _Profiling_Update_max_interrupt_delay(
  * disable level is decremented.
  *
  * @param cpu The cpu control.
- * @param interrupt_entry_instant The instant that the interrupt occured.
+ * @param interrupt_entry_instant The instant that the interrupt occurred.
  * @param interrupt_exit_instant The instant in which the interrupt was exited.
  */
 void _Profiling_Outer_most_interrupt_entry_and_exit(

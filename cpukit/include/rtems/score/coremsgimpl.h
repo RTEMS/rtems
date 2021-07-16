@@ -261,7 +261,7 @@ Status_Control _CORE_message_queue_Broadcast(
  * @retval STATUS_MESSAGE_INVALID_SIZE The message size was too big.
  * @retval STATUS_TOO_MANY No message buffers were available.
  * @retval STATUS_MESSAGE_QUEUE_WAIT_IN_ISR The caller is in an ISR, do not block!
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 Status_Control _CORE_message_queue_Submit(
   CORE_message_queue_Control       *the_message_queue,
@@ -298,7 +298,7 @@ Status_Control _CORE_message_queue_Submit(
  *
  * @retval STATUS_SUCCESSFUL The message was successfully seized from the message queue.
  * @retval STATUS_UNSATISFIED Wait was set to false and there is currently no pending message.
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  *
  * @note Returns message priority via return area in TCB.
  *
@@ -351,7 +351,7 @@ void _CORE_message_queue_Insert_message(
  * @retval STATUS_MESSAGE_INVALID_SIZE The message size was too big.
  * @retval STATUS_TOO_MANY No message buffers were available.
  * @retval STATUS_MESSAGE_QUEUE_WAIT_IN_ISR The caller is in an ISR, do not block!
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
   CORE_message_queue_Control       *the_message_queue,
@@ -387,7 +387,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
  * @retval STATUS_MESSAGE_INVALID_SIZE The message size was too big.
  * @retval STATUS_TOO_MANY No message buffers were available.
  * @retval STATUS_MESSAGE_QUEUE_WAIT_IN_ISR The caller is in an ISR, do not block!
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Urgent(
   CORE_message_queue_Control       *the_message_queue,

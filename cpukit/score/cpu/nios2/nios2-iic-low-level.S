@@ -137,7 +137,7 @@ stuck_in_exception:
 
     /*
      * Restore the saved registers, so that all general purpose registers
-     * have been restored to their state at the time the interrupt occured.
+     * have been restored to their state at the time the interrupt occurred.
      */
 
     ldw r1,   0(sp)
@@ -277,7 +277,7 @@ _ISR_Handler:
 
     /*
      * Restore the saved registers, so that all general purpose registers
-     * have been restored to their state at the time the interrupt occured.
+     * have been restored to their state at the time the interrupt occurred.
      */
 
     ldw r1,   0(sp)

@@ -25,7 +25,7 @@ int drvmgr_children_unregister(struct drvmgr_bus *bus)
 	while (bus->children != NULL) {
 		err = drvmgr_dev_unregister(bus->children);
 		if (err != DRVMGR_OK) {
-			/* An error occured */
+			/* An error occurred */
 			bus->children->error = err;
 			return err;
 		}

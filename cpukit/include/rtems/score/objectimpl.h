@@ -326,7 +326,7 @@ Objects_Control *_Objects_Get_no_protection(
  * @param[in, out] next_id_p The Id of the next object we will look at.
  *
  * @retval pointer Pointer to the located object.
- * @retval NULL An error occured.
+ * @retval NULL An error occurred.
  */
 Objects_Control *_Objects_Get_next(
   Objects_Id                 id,
@@ -346,7 +346,7 @@ Objects_Control *_Objects_Get_next(
  *
  * @retval pointer Pointer to the Object Information Table
  *         for the class of objects which corresponds to this object ID.
- * @retval NULL An error occured.
+ * @retval NULL An error occurred.
  */
 Objects_Information *_Objects_Get_information(
   Objects_APIs   the_api,
@@ -363,7 +363,7 @@ Objects_Information *_Objects_Get_information(
  *
  * @retval pointer Pointer to the Object Information Table
  *         for the class of objects which corresponds to this object ID.
- * @retval NULL An error occured.
+ * @retval NULL An error occurred.
  */
 Objects_Information *_Objects_Get_information_id(
   Objects_Id  id
@@ -396,7 +396,7 @@ RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
  * @param[out] name A string which will be filled in.
  *
  * @retval @a name The operation was succeeded and the string was correctly filled in.
- * @retval NULL An error occured.
+ * @retval NULL An error occurred.
  */
 char *_Objects_Get_name_as_string(
   Objects_Id   id,

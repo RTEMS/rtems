@@ -750,7 +750,7 @@ _ISR_Handler_Exception:
 	** Note, if the exception vector returns, rely on it to have
 	** adjusted EPC so we will return to some correct address.  If
 	** this is not done, we might get stuck in an infinite loop because
-	** we'll return to the instruction where the exception occured and
+	** we'll return to the instruction where the exception occurred and
 	** it could throw again.
 	**
 	** It is expected the only code using the exception processing is
@@ -776,7 +776,7 @@ _ISR_Handler_Exception:
 	beqz	t4,excnodelay
 	NOP
 
-	* it did, now see if the branch occured or not *
+	* it did, now see if the branch occurred or not *
 	li	t3,CAUSE_BT
 	AND	t4,t1,t3
 	beqz	t4,excnobranch

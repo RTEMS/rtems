@@ -37,7 +37,7 @@
  *     count    - count of clusters to allocate (chain length)
  *
  * RETURNS:
- *     RC_OK on success, or error code if error occured (errno set
+ *     RC_OK on success, or error code if error occurred (errno set
  *     appropriately)
  *
  *
@@ -170,7 +170,7 @@ cleanup:
  *     chain    - number of the first cluster in  the chain
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately)
  */
 int
 fat_free_fat_clusters_chain(
@@ -225,7 +225,7 @@ fat_free_fat_clusters_chain(
  *                the chain)
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *     and errno set appropriately
  */
 int
@@ -308,7 +308,7 @@ fat_get_fat_cluster(
  *     in_val   - value to set
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *     and errno set appropriately
  */
 int

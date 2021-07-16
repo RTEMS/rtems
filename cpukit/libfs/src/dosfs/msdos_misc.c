@@ -334,7 +334,7 @@ msdos_long_to_short(rtems_dosfs_convert_control     *converter,
  *
  * RETURNS:
  *     RC_OK and updated 'parent_loc' on success, or -1 if error
- *     occured (errno set apropriately)
+ *     occurred (errno set apropriately)
  *
  */
 int
@@ -476,7 +476,7 @@ msdos_find_name(
  *
  * RETURNS:
  *     RC_OK, filled aux_struct_ptr and name_dir_entry on success, or -1 if
- *     error occured (errno set apropriately)
+ *     error occurred (errno set apropriately)
  *
  */
 int
@@ -570,7 +570,7 @@ msdos_get_name_node(
  *     dir_entry      - placeholder for found node
  *
  * RETURNS:
- *     RC_OK, filled 'paux' and 'dir_entry' on success, or -1 if error occured
+ *     RC_OK, filled 'paux' and 'dir_entry' on success, or -1 if error occurred
  *     (errno set apropriately)
  *
  */
@@ -702,7 +702,7 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately).
+ *     RC_OK on success, or -1 if error occurred (errno set apropriately).
  *
  */
 int
@@ -772,7 +772,7 @@ fat_file_write_time_and_date(
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *
  */
 int
@@ -820,7 +820,7 @@ fat_file_write_first_cluster_num(
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately).
+ *     RC_OK on success, or -1 if error occurred (errno set apropriately).
  *
  */
 int
@@ -868,7 +868,7 @@ fat_file_write_file_size(
  *     fchar    - character to set up
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set apropriately)
  *
  */
 int
@@ -939,7 +939,7 @@ msdos_set_first_char4file_name(
  *     ret_val  - placeholder for result
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *
  */
 int
@@ -2001,7 +2001,7 @@ msdos_find_name_in_fat_file (
  *     dir_entry - placeholder for found node
  *
  * RETURNS:
- *     RC_OK on success, or error code if error occured
+ *     RC_OK on success, or error code if error occurred
  *
  */
 int msdos_find_node_by_cluster_num_in_fat_file(

@@ -41,7 +41,7 @@
  *     count  - the number of bytes to read
  *
  * RETURNS:
- *     the number of bytes read on success, or -1 if error occured (errno set
+ *     the number of bytes read on success, or -1 if error occurred (errno set
  *     appropriately)
  */
 ssize_t
@@ -72,7 +72,7 @@ msdos_file_read(rtems_libio_t *iop, void *buffer, size_t count)
  *     count  - count of bytes to write
  *
  * RETURNS:
- *     the number of bytes written on success, or -1 if error occured
+ *     the number of bytes written on success, or -1 if error occurred
  *     and errno set appropriately
  */
 ssize_t
@@ -117,7 +117,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
  *     buf - stat buffer provided by user
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately)
  */
 int
 msdos_file_stat(
@@ -155,7 +155,7 @@ msdos_file_stat(
  *     length - new length
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately).
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately).
  */
 int
 msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
@@ -204,7 +204,7 @@ msdos_file_ftruncate(rtems_libio_t *iop, off_t length)
  *     iop - file control block
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately)
  */
 int
 msdos_file_sync(rtems_libio_t *iop)

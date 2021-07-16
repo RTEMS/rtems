@@ -82,7 +82,7 @@ fat_file_lseek(
  *
  * RETURNS:
  *     RC_OK and pointer to opened descriptor on success, or -1 if error
- *     occured (errno set appropriately)
+ *     occurred (errno set appropriately)
  */
 int
 fat_file_open(
@@ -208,7 +208,7 @@ fat_file_update(fat_fs_info_t *fs_info, fat_file_fd_t *fat_fd)
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
- *     RC_OK, or -1 if error occured (errno set appropriately)
+ *     RC_OK, or -1 if error occurred (errno set appropriately)
  */
 int
 fat_file_close(
@@ -280,7 +280,7 @@ fat_file_close(
  *     buf      - buffer provided by user
  *
  * RETURNS:
- *     the number of bytes read on success, or -1 if error occured (errno
+ *     the number of bytes read on success, or -1 if error occurred (errno
  *     set appropriately)
  */
 ssize_t
@@ -414,7 +414,7 @@ static bool
  *
  * RETURNS:
  *     number of bytes actually written to the file on success, or -1 if
- *     error occured (errno set appropriately)
+ *     error occurred (errno set appropriately)
  */
 static ssize_t
 fat_file_write_fat32_or_non_root_dir(
@@ -490,7 +490,7 @@ fat_file_write_fat32_or_non_root_dir(
  *
  * RETURNS:
  *     number of bytes actually written to the file on success, or -1 if
- *     error occured (errno set appropriately)
+ *     error occurred (errno set appropriately)
  */
 ssize_t
 fat_file_write(
@@ -578,7 +578,7 @@ fat_file_write(
  *     a_length   - placeholder for result - actual new length of file
  *
  * RETURNS:
- *     RC_OK and new length of file on success, or -1 if error occured (errno
+ *     RC_OK and new length of file on success, or -1 if error occurred (errno
  *     set appropriately)
  */
 int
@@ -648,7 +648,7 @@ fat_file_extend(
     rc = fat_scan_fat_for_free_clusters(fs_info, &chain, cls2add,
                                         &cls_added, &last_cl, zero_fill);
 
-    /* this means that low level I/O error occured */
+    /* this means that low level I/O error occurred */
     if (rc != RC_OK)
         return rc;
 
@@ -730,7 +730,7 @@ fat_file_extend(
  *     new_length - new length
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately)
  */
 int
 fat_file_truncate(
@@ -795,7 +795,7 @@ fat_file_truncate(
  *     ...
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured and errno set appropriately
+ *     RC_OK on success, or -1 if error occurred and errno set appropriately
  */
 int
 fat_file_ioctl(
@@ -894,7 +894,7 @@ fat_file_mark_removed(
  *     fat_fd   - fat-file descriptor
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately)
  */
 int
 fat_file_size(

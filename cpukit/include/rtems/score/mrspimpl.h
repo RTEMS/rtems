@@ -345,8 +345,8 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
  * @retval STATUS_SUCCESSFUL The operation succeeded.
  * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the
  *      currently executing thread exceeds the ceiling priority.
- * @retval STATUS_DEADLOCK A deadlock occured.
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_DEADLOCK A deadlock occurred.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   MRSP_Control         *mrsp,

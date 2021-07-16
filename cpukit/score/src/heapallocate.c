@@ -207,7 +207,7 @@ void *_Heap_Allocate_aligned_with_boundary(
   bool search_again = false;
 
   if ( block_size_floor < alloc_size ) {
-    /* Integer overflow occured */
+    /* Integer overflow occurred */
     return NULL;
   }
 

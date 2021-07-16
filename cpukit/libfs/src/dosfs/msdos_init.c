@@ -91,7 +91,7 @@ void msdos_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry)
  *     temp_mt_entry - mount table entry
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set apropriately).
+ *     RC_OK on success, or -1 if error occurred (errno set apropriately).
  *
  */
 int rtems_dosfs_initialize(

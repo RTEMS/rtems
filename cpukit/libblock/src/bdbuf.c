@@ -331,7 +331,7 @@ rtems_bdbuf_avl_search (rtems_bdbuf_buffer** root,
  * @param root pointer to the root node of the AVL-Tree
  * @param node Pointer to the node to add.
  * @retval 0 The node added successfully
- * @retval -1 An error occured
+ * @retval -1 An error occurred
  */
 static int
 rtems_bdbuf_avl_insert(rtems_bdbuf_buffer** root,

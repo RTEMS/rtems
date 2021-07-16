@@ -44,7 +44,7 @@
  *     directory_handlers - directory operations table
  *
  * RETURNS:
- *     RC_OK and filled temp_mt_entry on success, or -1 if error occured
+ *     RC_OK and filled temp_mt_entry on success, or -1 if error occurred
  *     (errno set apropriately)
  *
  */

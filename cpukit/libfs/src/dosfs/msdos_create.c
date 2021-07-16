@@ -55,7 +55,7 @@
  *                  (see msdos_file.c, msdos_link for documentation)
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately).
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately).
  *
  */
 int

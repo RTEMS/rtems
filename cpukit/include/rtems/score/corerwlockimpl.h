@@ -169,7 +169,7 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
  * @retval STATUS_SUCCESSFUL The RWlock was successfully seized.
  * @retval STATUS_UNAVAILABLE The RWlock is currently locked for writing
  *          and the calling thread is not willing to wait.
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 
 Status_Control _CORE_RWLock_Seize_for_reading(

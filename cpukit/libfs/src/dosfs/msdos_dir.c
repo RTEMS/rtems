@@ -58,7 +58,7 @@
  *     count  - count of bytes to read
  *
  * RETURNS:
- *     the number of bytes read on success, or -1 if error occured (errno
+ *     the number of bytes read on success, or -1 if error occurred (errno
  *     set apropriately).
  */
 ssize_t
@@ -381,7 +381,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
  *     buf - stat buffer provided by user
  *
  * RETURNS:
- *     RC_OK and filled stat buffer on success, or -1 if error occured (errno
+ *     RC_OK and filled stat buffer on success, or -1 if error occurred (errno
  *     set apropriately).
  */
 int

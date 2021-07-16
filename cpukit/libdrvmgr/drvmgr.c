@@ -266,7 +266,7 @@ static int do_dev_init(
 		/* Note: This init function may register new devices */
 		dev->error = init(dev);
 		if (dev->error != DRVMGR_OK) {
-			/* An error of some kind has occured in the
+			/* An error of some kind has occurred in the
 			 * driver/device, the failed device is put into the
 			 * inactive list, this way Init2,3 and/or 4 will not
 			 * be called for this device.

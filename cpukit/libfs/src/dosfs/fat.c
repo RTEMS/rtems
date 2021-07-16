@@ -164,7 +164,7 @@ fat_buf_release(fat_fs_info_t *fs_info)
  *     buff     - buffer provided by user
  *
  * RETURNS:
- *     bytes read on success, or -1 if error occured
+ *     bytes read on success, or -1 if error occurred
  *     and errno set appropriately
  */
 ssize_t
@@ -259,7 +259,7 @@ fat_block_write(
  *     buff     - buffer provided by user
  *
  * RETURNS:
- *     bytes written on success, or -1 if error occured
+ *     bytes written on success, or -1 if error occurred
  *     and errno set appropriately
  */
 ssize_t
@@ -388,7 +388,7 @@ fat_cluster_set(
  *     fs_info  - FS info
  *
  * RETURNS:
- *     0 on success, or -1 if error occured and errno set appropriately
+ *     0 on success, or -1 if error occurred and errno set appropriately
  */
 int
 _fat_block_release(fat_fs_info_t *fs_info)
@@ -410,7 +410,7 @@ _fat_block_release(fat_fs_info_t *fs_info)
  *     buff               - buffer provided by user
  *
  * RETURNS:
- *     bytes written on success, or -1 if error occured
+ *     bytes written on success, or -1 if error occurred
  *     and errno set appropriately
  */
 ssize_t
@@ -472,7 +472,7 @@ static bool is_cluster_aligned(const fat_vol_t *vol, uint32_t sec_num)
  *     fs_info  - FS info
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *     and errno set appropriately
  */
 int
@@ -785,7 +785,7 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
  *     fs_info    - FS info
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured (errno set appropriately)
+ *     RC_OK on success, or -1 if error occurred (errno set appropriately)
  */
 static int
 fat_fat32_update_fsinfo_sector(fat_fs_info_t *fs_info)
@@ -854,7 +854,7 @@ fat_sync(fat_fs_info_t *fs_info)
  *     fs_info  - FS info
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *     and errno set appropriately
  */
 int
@@ -905,7 +905,7 @@ fat_shutdown_drive(fat_fs_info_t *fs_info)
  *     start_cluster_num - num of first cluster in the chain
  *
  * RETURNS:
- *     RC_OK on success, or -1 if error occured
+ *     RC_OK on success, or -1 if error occurred
  *     and errno set appropriately
  */
 int

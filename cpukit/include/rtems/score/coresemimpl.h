@@ -195,7 +195,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  * @retval STATUS_SUCCESSFUL The semaphore was successfully seized.
  * @retval STATUS_UNSATISFIED The semaphore is currently not free and the
  *      calling thread not willing to wait.
- * @retval STATUS_TIMEOUT A timeout occured.
+ * @retval STATUS_TIMEOUT A timeout occurred.
  */
 RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
   CORE_semaphore_Control        *the_semaphore,
