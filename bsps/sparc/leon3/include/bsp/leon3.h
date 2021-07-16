@@ -39,6 +39,7 @@
 #include <grlib/apbuart-regs.h>
 #include <grlib/gptimer-regs.h>
 
+#include <bspopts.h>
 #include <bsp/irqimpl.h>
 
 #include <grlib/ambapp.h>
@@ -266,7 +267,11 @@ static inline uint32_t leon3_up_counter_frequency( void )
 /**
  * @brief This pointer provides the debug APBUART register block address.
  */
+#if defined(LEON3_APBUART_BASE)
+#define leon3_debug_uart ((struct apbuart *) LEON3_APBUART_BASE)
+#else
 extern apbuart *leon3_debug_uart;
+#endif
 
 /** @} */
 

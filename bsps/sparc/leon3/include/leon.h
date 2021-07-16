@@ -329,6 +329,7 @@ static inline unsigned int leon_r32_no_cache(uintptr_t addr)
  */
 extern int syscon_uart_index;
 
+#if !defined(LEON3_APBUART_BASE)
 /* Let user override which on-chip APBUART will be debug UART
  * 0 = Default APBUART. On MP system CPU0=APBUART0, CPU1=APBUART1...
  * 1 = APBUART[0]
@@ -337,6 +338,7 @@ extern int syscon_uart_index;
  * ...
  */
 extern int leon3_debug_uart_index;
+#endif
 
 /* Let user override which on-chip TIMER core will be used for system clock
  * timer. This controls which timer core will be accociated with
