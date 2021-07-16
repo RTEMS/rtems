@@ -1,0 +1,20 @@
+actions:
+- get-string: null
+- define-unquoted: null
+build-type: option
+default: null
+default-by-family: []
+default-by-variant:
+- value: GPIO_PIN_13
+  variants:
+  - arm/nucleo-h743zi
+enabled-by: true
+format: '{}'
+links: []
+name: STM32H7_ETH_GPIOB_PINS
+description: |
+  GPIO B pins used for the ETH pin configuration.
+type: build
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

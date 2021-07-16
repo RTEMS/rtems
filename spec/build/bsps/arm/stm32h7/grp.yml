@@ -84,6 +84,10 @@ links:
 - role: build-dependency
   uid: optvariant
 - role: build-dependency
+  uid: optethgpiogregs
+- role: build-dependency
+  uid: optethgpiobregs
+- role: build-dependency
   uid: ../../optconsolebaud
 - role: build-dependency
   uid: ../../optconsoleirq

@@ -31,10 +31,12 @@
 
 #include <stm32h7/hal.h>
 
+#include <bspopts.h>
+
 static const stm32h7_gpio_config gpiog = {
   .regs = GPIOG,
   .config = {
-    .Pin = GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_13,
+    .Pin = STM32H7_ETH_GPIOG_PINS,
     .Mode = GPIO_MODE_AF_PP,
     .Pull = GPIO_NOPULL,
     .Speed = GPIO_SPEED_FREQ_LOW,
@@ -64,6 +66,21 @@ static const stm32h7_gpio_config gpioa = {
   }
 };
 
+#ifdef STM32H7_ETH_GPIOB_PINS
+
+static const stm32h7_gpio_config gpiob = {
+  .regs = GPIOB,
+  .config = {
+    .Pin = STM32H7_ETH_GPIOB_PINS,
+    .Mode = GPIO_MODE_AF_PP,
+    .Pull = GPIO_NOPULL,
+    .Speed = GPIO_SPEED_FREQ_LOW,
+    .Alternate = GPIO_AF11_ETH
+  }
+};
+
+#endif
+
 void
 HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
 {
@@ -73,4 +90,7 @@ HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
   stm32h7_gpio_init(&gpiog);
   stm32h7_gpio_init(&gpioc);
   stm32h7_gpio_init(&gpioa);
+#ifdef STM32H7_ETH_GPIOB_PINS
+  stm32h7_gpio_init(&gpiob);
+#endif
 }
