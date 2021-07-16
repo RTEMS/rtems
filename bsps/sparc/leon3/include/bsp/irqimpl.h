@@ -38,7 +38,8 @@
 #define LIBBSP_SPARC_LEON3_BSP_IRQIMPL_H
 
 #include <rtems.h>
-#include <grlib/grlib.h>
+#include <grlib/irqamp-regs.h>
+#include <grlib/io.h>
 
 struct ambapp_dev;
 
@@ -53,14 +54,37 @@ extern "C" {
  */
 
 /**
+ * @brief This object provides the index of the boot processor.
+ *
+ * This object should be read-only after initialization.
+ */
+extern uint32_t LEON3_Cpu_Index;
+
+/**
  * @brief This lock serializes the interrupt controller access.
  */
 extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 
 /**
+ * @brief Acquires the interrupt controller lock.
+ *
+ * @param[out] _lock_context is the lock context.
+ */
+#define LEON3_IRQCTRL_ACQUIRE( _lock_context ) \
+  rtems_interrupt_lock_acquire( &LEON3_IrqCtrl_Lock, _lock_context )
+
+/**
+ * @brief Releases the interrupt controller lock.
+ *
+ * @param[in, out] _lock_context is the lock context.
+ */
+#define LEON3_IRQCTRL_RELEASE( _lock_context ) \
+  rtems_interrupt_lock_release( &LEON3_IrqCtrl_Lock, _lock_context )
+
+/**
  * @brief This pointer provides the IRQ(A)MP register block address.
  */
-extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
+extern irqamp *LEON3_IrqCtrl_Regs;
 
 /**
  * @brief This pointer provides the IRQ(A)MP device information block.
@@ -80,7 +104,7 @@ extern uint32_t LEON3_IrqCtrl_EIrq;
  *
  * @param[in, out] regs is the IRQ(A)MP register block address.
  */
-void leon3_ext_irq_init( volatile struct irqmp_regs *regs );
+void leon3_ext_irq_init( irqamp *regs );
 
 /**
  * @brief Acknowledges and maps extended interrupts if this feature is
@@ -91,12 +115,15 @@ void leon3_ext_irq_init( volatile struct irqmp_regs *regs );
 static inline uint32_t bsp_irq_fixup( uint32_t irq )
 {
   uint32_t eirq;
+  uint32_t cpu_self;
 
   if ( irq != LEON3_IrqCtrl_EIrq ) {
     return irq;
   }
 
-  eirq = LEON3_IrqCtrl_Regs->intid[ _LEON3_Get_current_processor() ] & 0x1f;
+  cpu_self = _LEON3_Get_current_processor();
+  eirq = grlib_load_32( &LEON3_IrqCtrl_Regs->pextack[ cpu_self ] );
+  eirq = IRQAMP_PEXTACK_EID_4_0_GET( eirq );
 
   if ( eirq < 16 ) {
     return irq;

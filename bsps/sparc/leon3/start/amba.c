@@ -116,7 +116,7 @@ RTEMS_SYSINIT_ITEM(
 #endif
 
 /* Pointers to Interrupt Controller configuration registers */
-volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
+irqamp *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
 volatile struct gptimer_regs *LEON3_Timer_Regs;
 struct ambapp_dev *LEON3_Timer_Adev;
@@ -133,7 +133,6 @@ struct ambapp_dev *LEON3_Timer_Adev;
 
 static void amba_initialize(void)
 {
-  int icsel;
   struct ambapp_dev *adev;
   struct ambapp_bus *plb;
 
@@ -151,15 +150,17 @@ static void amba_initialize(void)
     bsp_fatal(LEON3_FATAL_NO_IRQMP_CONTROLLER);
   }
 
-  LEON3_IrqCtrl_Regs = (volatile struct irqmp_regs *)DEV_TO_APB(adev)->start;
+  LEON3_IrqCtrl_Regs = (irqamp *)DEV_TO_APB(adev)->start;
   LEON3_IrqCtrl_Adev = adev;
-  if ((LEON3_IrqCtrl_Regs->ampctrl >> 28) > 0) {
+  if ((grlib_load_32(&LEON3_IrqCtrl_Regs->asmpctrl) >> 28) > 0) {
+    uint32_t icsel;
+
     /* IRQ Controller has support for multiple IRQ Controllers, each
      * CPU can be routed to different Controllers, we find out which
      * controller by looking at the IRQCTRL Select Register for this CPU.
      * Each Controller is located at a 4KByte offset.
      */
-    icsel = LEON3_IrqCtrl_Regs->icsel[LEON3_Cpu_Index/8];
+    icsel = grlib_load_32(&LEON3_IrqCtrl_Regs->icselr[LEON3_Cpu_Index/8]);
     icsel = (icsel >> ((7 - (LEON3_Cpu_Index & 0x7)) * 4)) & 0xf;
     LEON3_IrqCtrl_Regs += icsel;
   }

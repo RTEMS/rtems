@@ -45,6 +45,7 @@
 #include <leon.h>
 #include <rtems/rtems/intr.h>
 #include <grlib/ambapp.h>
+#include <grlib/irqamp.h>
 #include <rtems/score/profiling.h>
 #include <rtems/score/sparcimpl.h>
 #include <rtems/timecounter.h>
@@ -69,12 +70,14 @@ static struct timecounter leon3_tc;
 
 static void leon3_tc_tick_irqmp_timestamp(void)
 {
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &LEON3_IrqCtrl_Regs->timestamp[0];
-  unsigned int first = irqmp_ts->assertion;
-  unsigned int second = irqmp_ts->counter;
+  irqamp_timestamp *irqmp_ts =
+    irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
+  uint32_t first = grlib_load_32(&irqmp_ts->itstmpas);
+  uint32_t second = grlib_load_32(&irqmp_ts->itcnt);
+  uint32_t control = grlib_load_32(&irqmp_ts->itstmpc);
 
-  irqmp_ts->control |= IRQMP_TIMESTAMP_S1_S2;
+  control |= IRQMP_TIMESTAMP_S1_S2;
+  grlib_store_32(&irqmp_ts->itstmpc, control);
 
   _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
 
@@ -100,11 +103,13 @@ static void leon3_tc_tick_irqmp_timestamp_init(void)
   bool done = true;
 #endif
 
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &LEON3_IrqCtrl_Regs->timestamp[0];
-  unsigned int ks = 1U << 5;
+  irqamp_timestamp *irqmp_ts =
+    irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
+  uint32_t ks = 1U << 5;
+  uint32_t control = grlib_load_32(&irqmp_ts->itstmpc);
 
-  irqmp_ts->control = ks | IRQMP_TIMESTAMP_S1_S2 | (unsigned int) clkirq;
+  control = ks | IRQMP_TIMESTAMP_S1_S2 | (unsigned int) clkirq;
+  grlib_store_32(&irqmp_ts->itstmpc, control);
 
   if (done) {
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp;
@@ -116,14 +121,14 @@ static void leon3_tc_tick_irqmp_timestamp_init(void)
 
 static void leon3_tc_tick_default(void)
 {
-#ifndef RTEMS_SMP
+#if !defined(RTEMS_SMP)
   SPARC_Counter *counter;
   rtems_interrupt_level level;
 
   counter = &_SPARC_Counter_mutable;
   rtems_interrupt_local_disable(level);
 
-  LEON3_IrqCtrl_Regs->iclear = counter->pending_mask;
+  grlib_store_32(&LEON3_IrqCtrl_Regs->iclear, counter->pending_mask);
   counter->accumulated += counter->interval;
 
   rtems_interrupt_local_enable(level);
@@ -179,11 +184,11 @@ static void bsp_clock_handler_install(rtems_interrupt_handler isr)
 
 static void leon3_clock_initialize(void)
 {
-  volatile struct irqmp_timestamp_regs *irqmp_ts;
+  irqamp_timestamp *irqmp_ts;
   volatile struct gptimer_regs *gpt;
   struct timecounter *tc;
 
-  irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
+  irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
   gpt = LEON3_Timer_Regs;
   tc = &leon3_tc;
 
@@ -201,13 +206,13 @@ static void leon3_clock_initialize(void)
     tc->tc_frequency = leon3_up_counter_frequency();
 
 #ifdef RTEMS_PROFILING
-    if (!irqmp_has_timestamp(irqmp_ts)) {
+    if (irqmp_ts == NULL) {
       bsp_fatal(LEON3_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT);
     }
 #endif
 
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
-  } else if (irqmp_has_timestamp(irqmp_ts)) {
+  } else if (irqmp_ts != NULL) {
     /* Use the interrupt controller timestamp counter if available */
     tc->tc_get_timecount = _SPARC_Get_timecount_up;
     tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev);
@@ -218,7 +223,7 @@ static void leon3_clock_initialize(void)
      * At least one TSISEL field must be non-zero to enable the timestamp
      * counter.  Use an arbitrary interrupt source.
      */
-    irqmp_ts->control = 0x1;
+    grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
   } else {
 #ifdef RTEMS_SMP
     /*
@@ -237,7 +242,7 @@ static void leon3_clock_initialize(void)
     counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
     counter->read = _SPARC_Counter_read_clock;
     counter->counter_register = &gpt->timer[LEON3_CLOCK_INDEX].value;
-    counter->pending_register = &LEON3_IrqCtrl_Regs->ipend;
+    counter->pending_register = grlib_load_32(&LEON3_IrqCtrl_Regs->ipend);
     counter->pending_mask = UINT32_C(1) << clkirq;
     counter->accumulated = rtems_configuration_get_microseconds_per_tick();
     counter->interval = rtems_configuration_get_microseconds_per_tick();

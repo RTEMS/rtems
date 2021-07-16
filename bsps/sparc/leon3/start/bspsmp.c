@@ -17,6 +17,7 @@
 #include <bsp/bootcard.h>
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
+#include <bsp/leon3.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
@@ -75,6 +76,11 @@ static void leon3_install_inter_processor_interrupt( void )
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
 
+static uint32_t leon3_get_cpu_count( const irqamp *regs )
+{
+  return IRQAMP_MPSTAT_NCPU_GET( grlib_load_32( &regs->mpstat ) ) + 1;
+}
+
 uint32_t _CPU_SMP_Initialize( void )
 {
   if ( !leon3_data_cache_snooping_enabled() )
@@ -89,7 +95,10 @@ bool _CPU_SMP_Start_processor( uint32_t cpu_index )
     printk( "Waking CPU %d\n", cpu_index );
   #endif
 
-  LEON3_IrqCtrl_Regs->mpstat = 1U << cpu_index;
+  grlib_store_32(
+    &LEON3_IrqCtrl_Regs->mpstat,
+    IRQAMP_MPSTAT_STATUS(1U << cpu_index)
+  );
 
   return true;
 }
@@ -111,7 +120,10 @@ void _CPU_SMP_Prepare_start_multitasking( void )
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
 {
   /* send interrupt to destination CPU */
-  LEON3_IrqCtrl_Regs->force[target_processor_index] = 1 << LEON3_mp_irq;
+  grlib_store_32(
+    &LEON3_IrqCtrl_Regs->piforce[target_processor_index],
+    1U << LEON3_mp_irq
+  );
 }
 
 #if defined(RTEMS_DRVMGR_STARTUP)

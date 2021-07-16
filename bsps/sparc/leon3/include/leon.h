@@ -44,6 +44,7 @@
 
 #include <rtems.h>
 #include <amba.h>
+#include <grlib/io.h>
 #include <bsp/irqimpl.h>
 
 #ifdef __cplusplus
@@ -151,9 +152,6 @@ extern "C" {
 extern volatile struct gptimer_regs *LEON3_Timer_Regs;
 extern struct ambapp_dev *LEON3_Timer_Adev;
 
-/* LEON3 CPU Index of boot CPU */
-extern uint32_t LEON3_Cpu_Index;
-
 /* Macros used for manipulating bits in LEON3 GP Timer Control Register */
 
 #define LEON3_IRQMPSTATUS_CPUNR     28
@@ -172,28 +170,21 @@ extern uint32_t LEON3_Cpu_Index;
  *        store the result back are vulnerable.
  */
 
-#define LEON3_IRQCTRL_ACQUIRE( _lock_context ) \
-  rtems_interrupt_lock_acquire( &LEON3_IrqCtrl_Lock, _lock_context )
-
-#define LEON3_IRQCTRL_RELEASE( _lock_context ) \
-  rtems_interrupt_lock_release( &LEON3_IrqCtrl_Lock, _lock_context )
-
 #define LEON_Clear_interrupt( _source ) \
-  do { \
-    LEON3_IrqCtrl_Regs->iclear = (1U << (_source)); \
-  } while (0)
+  grlib_store_32(&LEON3_IrqCtrl_Regs->iclear, 1U << (_source))
 
 #define LEON_Force_interrupt( _source ) \
-  do { \
-    LEON3_IrqCtrl_Regs->iforce = (1U << (_source)); \
-  } while (0)
+  grlib_store_32(&LEON3_IrqCtrl_Regs->iforce0, 1U << (_source))
 
 #define LEON_Enable_interrupt_broadcast( _source ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1U << ( _source ); \
+    uint32_t _brdcst; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-    LEON3_IrqCtrl_Regs->bcast |= _mask; \
+    _brdcst = grlib_load_32(&LEON3_IrqCtrl_Regs->brdcst); \
+    _brdcst |= _mask; \
+    grlib_store_32(&LEON3_IrqCtrl_Regs->brdcst, _brdcst); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -201,30 +192,39 @@ extern uint32_t LEON3_Cpu_Index;
   do { \
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1U << ( _source ); \
+    uint32_t _brdcst; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-    LEON3_IrqCtrl_Regs->bcast &= ~_mask; \
+    _brdcst = grlib_load_32(&LEON3_IrqCtrl_Regs->brdcst); \
+    _brdcst &= ~_mask; \
+    grlib_store_32(&LEON3_IrqCtrl_Regs->brdcst, _brdcst); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 #define LEON_Is_interrupt_pending( _source ) \
-  (LEON3_IrqCtrl_Regs->ipend & (1U << (_source)))
+  (grlib_load_32(&LEON3_IrqCtrl_Regs->ipend) & (1U << (_source)))
 
 #define LEON_Cpu_Is_interrupt_masked( _source, _cpu ) \
-     (!(LEON3_IrqCtrl_Regs->mask[_cpu] & (1U << (_source))))
+     (!(grlib_load_32(&LEON3_IrqCtrl_Regs->pimask[_cpu]) & (1U << (_source))))
 
 #define LEON_Cpu_Mask_interrupt( _source, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
+    uint32_t _pimask; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-     LEON3_IrqCtrl_Regs->mask[_cpu]  &= ~(1U << (_source)); \
+    _pimask = grlib_load_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ]); \
+    _pimask &= ~(1U << (_source)); \
+    grlib_store_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ], _pimask); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 #define LEON_Cpu_Unmask_interrupt( _source, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
+    uint32_t _pimask; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-    LEON3_IrqCtrl_Regs->mask[_cpu]  |= (1U << (_source)); \
+    _pimask = grlib_load_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ]); \
+    _pimask |= 1U << (_source); \
+    grlib_store_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ], _pimask); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -233,8 +233,8 @@ extern uint32_t LEON3_Cpu_Index;
     rtems_interrupt_lock_context _lock_context; \
     uint32_t _mask = 1U << (_source); \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-     (_previous) = LEON3_IrqCtrl_Regs->mask[_cpu]; \
-     LEON3_IrqCtrl_Regs->mask[_cpu] = _previous & ~_mask; \
+    (_previous) = grlib_load_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ]); \
+    grlib_store_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ], (_previous) & ~_mask); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
     (_previous) &= _mask; \
   } while (0)
@@ -242,10 +242,12 @@ extern uint32_t LEON3_Cpu_Index;
 #define LEON_Cpu_Restore_interrupt( _source, _previous, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
-    uint32_t _mask = 1U << (_source); \
+    uint32_t _pimask; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-      LEON3_IrqCtrl_Regs->mask[_cpu] = \
-        (LEON3_IrqCtrl_Regs->mask[_cpu] & ~_mask) | (_previous); \
+    _pimask = grlib_load_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ]); \
+    _pimask &= ~(1U << (_source)); \
+    _pimask |= _previous; \
+    grlib_store_32(&LEON3_IrqCtrl_Regs->pimask[_cpu ], _pimask); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -388,15 +390,6 @@ extern int leon3_timer_core_index;
 extern unsigned int leon3_timer_prescaler;
 
 RTEMS_NO_RETURN void leon3_power_down_loop(void);
-
-static inline uint32_t leon3_get_cpu_count(
-  volatile struct irqmp_regs *irqmp
-)
-{
-  uint32_t mpstat = irqmp->mpstat;
-
-  return ((mpstat >> LEON3_IRQMPSTATUS_CPUNR) & 0xf)  + 1;
-}
 
 static inline void leon3_set_system_register(uint32_t addr, uint32_t val)
 {

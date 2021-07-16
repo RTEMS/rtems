@@ -55,9 +55,9 @@ void bsp_fatal_extension(
       (code == SMP_FATAL_SHUTDOWN_RESPONSE)) {
     leon3_power_down_loop(); /* CPU didn't start shutdown sequence .. */
   } else {
-    volatile struct irqmp_regs *irqmp = LEON3_IrqCtrl_Regs;
+    irqamp *regs = LEON3_IrqCtrl_Regs;
 
-    if (irqmp != NULL) {
+    if (regs != NULL) {
       /*
        * Value was chosen to get something in the magnitude of 1ms on a 200MHz
        * processor.
@@ -76,7 +76,10 @@ void bsp_fatal_extension(
 
       /* Wait some time for secondary processors to halt */
       i = 0;
-      while ((irqmp->mpstat & halt_mask) != halt_mask && i < max_wait) {
+      while (
+        (grlib_load_32(&regs->mpstat) & halt_mask) != halt_mask &&
+        i < max_wait
+      ) {
         ++i;
       }
     }

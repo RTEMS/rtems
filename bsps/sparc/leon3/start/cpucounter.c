@@ -26,6 +26,7 @@
  */
 
 #include <leon.h>
+#include <grlib/irqamp.h>
 
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
@@ -40,11 +41,11 @@ uint32_t _CPU_Counter_frequency(void)
 
 static void leon3_counter_initialize(void)
 {
-  volatile struct irqmp_timestamp_regs *irqmp_ts;
+  irqamp_timestamp *irqmp_ts;
   volatile struct gptimer_regs *gpt;
   SPARC_Counter *counter;
 
-  irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
+  irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
   gpt = LEON3_Timer_Regs;
   counter = &_SPARC_Counter_mutable;
 
@@ -56,14 +57,14 @@ static void leon3_counter_initialize(void)
     counter->read = _SPARC_Counter_read_asr23;
 
     leon3_counter_frequency = leon3_up_counter_frequency();
-  } else if (irqmp_has_timestamp(irqmp_ts)) {
+  } else if (irqmp_ts != NULL) {
     /* Use the interrupt controller timestamp counter if available */
     counter->read_isr_disabled = _SPARC_Counter_read_up;
     counter->read = _SPARC_Counter_read_up;
-    counter->counter_register = &LEON3_IrqCtrl_Regs->timestamp[0].counter;
+    counter->counter_register = &irqmp_ts->itcnt;
 
     /* Enable interrupt timestamping for an arbitrary interrupt line */
-    irqmp_ts->control = 0x1;
+    grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
 
     leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
   } else if (gpt != NULL) {
