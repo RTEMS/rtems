@@ -6,8 +6,12 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <amba.h>
+#include <grlib/l2cache-regs.h>
+#include <grlib/io.h>
+
 #include <bsp/leon3.h>
+
+#include <grlib/ambapp.h>
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
@@ -19,12 +23,11 @@
 
 #define CPU_DATA_CACHE_ALIGNMENT 64
 
-static inline volatile struct l2c_regs *get_l2c_regs(void)
+static inline l2cache *get_l2c_regs(void)
 {
-  volatile struct l2c_regs *l2c = NULL;
   struct ambapp_dev *adev;
 
-  adev = (void *) ambapp_for_each(
+  adev = (struct ambapp_dev *) ambapp_for_each(
     ambapp_plb(),
     OPTIONS_ALL | OPTIONS_AHB_SLVS,
     VENDOR_GAISLER,
@@ -32,27 +35,32 @@ static inline volatile struct l2c_regs *get_l2c_regs(void)
     ambapp_find_by_idx,
     NULL
   );
-  if (adev != NULL) {
-    l2c = (volatile struct l2c_regs *) DEV_TO_AHB(adev)->start[1];
+
+  if (adev == NULL) {
+    return NULL;
   }
 
-  return l2c;
+  return (l2cache *) DEV_TO_AHB(adev)->start[1];
 }
 
 static inline size_t get_l2_size(void)
 {
-  size_t size = 0;
-  volatile struct l2c_regs *l2c = get_l2c_regs();
+  l2cache *regs;
+  unsigned status;
+  unsigned ways;
+  unsigned set_size;
 
-  if (l2c != NULL) {
-    unsigned status = l2c->status;
-    unsigned ways = (status & 0x3) + 1;
-    unsigned set_size = ((status & 0x7ff) >> 2) * 1024;
+  regs = get_l2c_regs();
 
-    size = ways * set_size;
+  if (regs == NULL) {
+    return 0;
   }
 
-  return size;
+  status = grlib_load_32(&regs->l2cs);
+  ways = L2CACHE_L2CS_WAY_GET(status) + 1;
+  set_size = L2CACHE_L2CS_WAY_SIZE_GET(status) * 1024;
+
+  return ways * set_size;
 }
 
 static inline size_t get_l1_size(uint32_t l1_cfg)
