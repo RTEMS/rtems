@@ -23,6 +23,8 @@
 #include <bsp/bootcard.h>
 #include <rtems/score/smpimpl.h>
 
+#include <leon.h>
+
 void bsp_fatal_extension(
   rtems_fatal_source source,
   bool always_set_to_false,

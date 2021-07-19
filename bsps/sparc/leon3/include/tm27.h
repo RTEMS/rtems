@@ -20,6 +20,9 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+#include <bsp.h>
+#include <leon.h>
+
 /*
  *  Define the interrupt mechanism for Time Test 27
  *

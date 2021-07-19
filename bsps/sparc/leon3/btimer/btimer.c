@@ -18,7 +18,7 @@
  */
 
 
-#include <bsp.h>
+#include <leon.h>
 #include <rtems/btimer.h>
 
 #if defined(RTEMS_MULTIPROCESSING)

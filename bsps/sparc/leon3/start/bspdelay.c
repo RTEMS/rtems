@@ -14,6 +14,7 @@
  */
 
 #include <bsp.h>
+#include <leon.h>
 
 void rtems_bsp_delay(int usecs)
 {

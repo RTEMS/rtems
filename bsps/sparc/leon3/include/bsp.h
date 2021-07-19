@@ -32,7 +32,6 @@
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-#include <leon.h>
 #include <rtems/irq-extension.h>
 
 #ifdef __cplusplus

@@ -33,7 +33,7 @@
  *  European Space Agency.
  */
 
-#include <bsp.h>
+#include <leon.h>
 
 rtems_isr_entry set_vector(                   /* returns old vector */
   rtems_isr_entry     handler,                /* isr routine        */
