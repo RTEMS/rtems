@@ -142,10 +142,6 @@ extern "C" {
 #define LEON_REG_UART_CTRL_FA     0x80000000 /* FIFO Available */
 #define LEON_REG_UART_CTRL_FA_BIT 31
 
-/* LEON3 GP Timer */
-extern volatile struct gptimer_regs *LEON3_Timer_Regs;
-extern struct ambapp_dev *LEON3_Timer_Adev;
-
 /* Macros used for manipulating bits in LEON3 GP Timer Control Register */
 
 #define LEON3_IRQMPSTATUS_CPUNR     28
@@ -315,26 +311,6 @@ extern struct ambapp_dev *LEON3_Timer_Adev;
 
 #define LEON_REG_TIMER_COUNTER_DEFINED_MASK       0x00000003
 #define LEON_REG_TIMER_COUNTER_CURRENT_MODE_MASK  0x00000003
-
-#if defined(RTEMS_MULTIPROCESSING)
-  #define LEON3_CLOCK_INDEX \
-   (rtems_configuration_get_user_multiprocessing_table() ? LEON3_Cpu_Index : 0)
-#else
-  #define LEON3_CLOCK_INDEX 0
-#endif
-
-#if defined(RTEMS_SMP)
-#define LEON3_COUNTER_GPTIMER_INDEX (LEON3_CLOCK_INDEX + 1)
-#else
-#define LEON3_COUNTER_GPTIMER_INDEX LEON3_CLOCK_INDEX
-#endif
-
-/*
- * We assume that a boot loader (usually GRMON) initialized the GPTIMER 0 to
- * run with 1MHz.  This is used to determine all clock frequencies of the PnP
- * devices.  See also ambapp_freq_init() and ambapp_freq_get().
- */
-#define LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER 1000000
 
 /* Load 32-bit word by forcing a cache-miss */
 static inline unsigned int leon_r32_no_cache(uintptr_t addr)

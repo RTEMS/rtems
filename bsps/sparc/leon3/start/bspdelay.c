@@ -14,15 +14,17 @@
  */
 
 #include <bsp.h>
-#include <leon.h>
+#include <bsp/leon3.h>
 
 void rtems_bsp_delay(int usecs)
 {
   uint32_t then;
+  gptimer_timer *regs;
 
-  then  =LEON3_Timer_Regs->timer[0].value;
+  regs = &LEON3_Timer_Regs->timer[0];
+  then  =grlib_load_32(&regs->tcntval);
   then += usecs;
 
-  while (LEON3_Timer_Regs->timer[0].value >= then)
+  while (grlib_load_32(&regs->tcntval) >= then)
     ;
 }

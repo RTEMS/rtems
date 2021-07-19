@@ -50,18 +50,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <rtems.h>
-#include <bsp.h>
-#include <stdlib.h>
-#include <string.h>
 #include <drvmgr/drvmgr.h>
 #include <grlib/ambapp_bus.h>
-#include <grlib/grlib.h>
 #include <grlib/gptimer.h>
+#include <grlib/gptimer-regs.h>
+#include <grlib/io.h>
 #include <grlib/tlib.h>
 
 #if defined(LEON3)
-#include <leon.h>
+#include <bsp/leon3.h>
 #endif
 
 #ifdef GPTIMER_INFO_AVAIL
@@ -75,49 +72,21 @@
 
 #include <grlib/grlib_impl.h>
 
-/* GPTIMER Core Configuration Register (READ-ONLY) */
-#define GPTIMER_CFG_TIMERS_BIT	0
-#define GPTIMER_CFG_IRQ_BIT	3
-#define GPTIMER_CFG_SI_BIT	8
-#define GPTIMER_CFG_DF_BIT	9
-
-#define GPTIMER_CFG_TIMERS	(0x7<<GPTIMER_CFG_TIMERS_BIT)
-#define GPTIMER_CFG_IRQ		(0x1f<<GPTIMER_CFG_IRQ_BIT)
-#define GPTIMER_CFG_SI		(1<<GPTIMER_CFG_SI_BIT)
-#define GPTIMER_CFG_DF		(1<<GPTIMER_CFG_DF_BIT)
-
-/* GPTIMER Timer Control Register */
-#define GPTIMER_CTRL_EN_BIT	0
-#define GPTIMER_CTRL_RS_BIT	1
-#define GPTIMER_CTRL_LD_BIT	2
-#define GPTIMER_CTRL_IE_BIT	3
-#define GPTIMER_CTRL_IP_BIT	4
-#define GPTIMER_CTRL_CH_BIT	5
-#define GPTIMER_CTRL_DH_BIT	6
-
-#define GPTIMER_CTRL_EN	(1<<GPTIMER_CTRL_EN_BIT)
-#define GPTIMER_CTRL_RS	(1<<GPTIMER_CTRL_RS_BIT)
-#define GPTIMER_CTRL_LD	(1<<GPTIMER_CTRL_LD_BIT)
-#define GPTIMER_CTRL_IE	(1<<GPTIMER_CTRL_IE_BIT)
-#define GPTIMER_CTRL_IP	(1<<GPTIMER_CTRL_IP_BIT)
-#define GPTIMER_CTRL_CH	(1<<GPTIMER_CTRL_CH_BIT)
-#define GPTIMER_CTRL_DH	(1<<GPTIMER_CTRL_DH_BIT)
-
 #define DBG(x...)
 
 /* GPTIMER timer private */
-struct gptimer_timer {
+struct gptimer_timer_priv {
 	struct tlib_dev tdev;	/* Must be first in struct */
-	struct gptimer_timer_regs *tregs;
+	gptimer_timer *tregs;
 	char index; /* Timer Index in this driver */
 	char tindex; /* Timer Index In Hardware */
-	unsigned char irq_ack_mask;
+	uint32_t irq_ack_mask;
 };
 
 /* GPTIMER Core private */
 struct gptimer_priv {
 	struct drvmgr_dev *dev;
-	struct gptimer_regs *regs;
+	gptimer *regs;
 	unsigned int base_clk;
 	unsigned int base_freq;
 	unsigned int widthmask;
@@ -126,7 +95,7 @@ struct gptimer_priv {
 
 	/* Structure per Timer unit, the core supports up to 8 timers */
 	int timer_cnt;
-	struct gptimer_timer timers[0];
+	struct gptimer_timer_priv timers[0];
 };
 
 void gptimer_isr(void *data);
@@ -200,14 +169,14 @@ void gptimer_register_drv (void)
 int gptimer_init1(struct drvmgr_dev *dev)
 {
 	struct gptimer_priv *priv;
-	struct gptimer_regs *regs;
+	gptimer *regs;
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
 	int timer_hw_cnt, timer_cnt, timer_start;
 	int i, size;
-	struct gptimer_timer *timer;
+	struct gptimer_timer_priv *timer;
 	union drvmgr_key_value *value;
-	unsigned char irq_ack_mask;
+	uint32_t irq_ack_mask;
 
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)dev->businfo;
@@ -215,12 +184,12 @@ int gptimer_init1(struct drvmgr_dev *dev)
 		return -1;
 	}
 	pnpinfo = &ambadev->info;
-	regs = (struct gptimer_regs *)pnpinfo->apb_slv->start;
+	regs = (gptimer *)pnpinfo->apb_slv->start;
 
 	DBG("GPTIMER[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
 	/* Get number of Timers */
-	timer_hw_cnt = regs->cfg & GPTIMER_CFG_TIMERS;
+	timer_hw_cnt = GPTIMER_CONFIG_TIMERS_GET(grlib_load_32(&regs->config));
 
 	/* Let user spelect a range of timers to be used. In AMP systems
 	 * it is sometimes neccessary to leave timers for other CPU instances.
@@ -251,7 +220,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 * are present.
 	 */
 	size = sizeof(struct gptimer_priv) +
-		timer_cnt*sizeof(struct gptimer_timer);
+		timer_cnt*sizeof(struct gptimer_timer_priv);
 	priv = dev->priv = grlib_calloc(1, size);
 	if ( !priv )
 		return DRVMGR_NOMEM;
@@ -277,24 +246,24 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 */
 	value = drvmgr_dev_key_get(priv->dev, "prescaler", DRVMGR_KT_INT);
 	if ( value )
-		regs->scaler_reload = value->i;
+		grlib_store_32(&regs->sreload, value->i);
 
 	/* Get Frequency that the timers are operating in (after prescaler) */
-	priv->base_freq = priv->base_clk / (priv->regs->scaler_reload + 1);
+	priv->base_freq = priv->base_clk / (grlib_load_32(&regs->sreload) + 1);
 
 	/* Stop Timer and probe Pending bit. In newer hardware the
 	 * timer has pending bit is cleared by writing a one to it,
 	 * whereas older versions it is cleared with a zero.
 	 */
-	priv->regs->timer[timer_start].ctrl = GPTIMER_CTRL_IP;
-	if ((priv->regs->timer[timer_start].ctrl & GPTIMER_CTRL_IP) != 0)
-		irq_ack_mask = ~GPTIMER_CTRL_IP;
+	grlib_store_32(&regs->timer[timer_start].tctrl, GPTIMER_TCTRL_IP);
+	if ((grlib_load_32(&regs->timer[timer_start].tctrl) & GPTIMER_TCTRL_IP) != 0)
+		irq_ack_mask = ~GPTIMER_TCTRL_IP;
 	else
-		irq_ack_mask = ~0;
+		irq_ack_mask = ~0U;
 
 	/* Probe timer register width mask */
-	priv->regs->timer[timer_start].value = 0xffffffff;
-	priv->widthmask = priv->regs->timer[timer_start].value;
+	grlib_store_32(&regs->timer[timer_start].tcntval, 0xffffffff);
+	priv->widthmask = grlib_load_32(&regs->timer[timer_start].tcntval);
 
 	priv->timer_cnt = timer_cnt;
 	for (i=0; i<timer_cnt; i++) {
@@ -314,7 +283,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 *  B. Each Timer have an individual IRQ. The number is:
 	 *        BASE_IRQ + timer_index
 	 */
-	priv->separate_interrupt = (regs->cfg & GPTIMER_CFG_SI) != 0;
+	priv->separate_interrupt = (grlib_load_32(&regs->config) & GPTIMER_CONFIG_SI) != 0;
 
 	return DRVMGR_OK;
 }
@@ -326,7 +295,7 @@ static int gptimer_info(
 	void *p, int argc, char *argv[])
 {
 	struct gptimer_priv *priv = dev->priv;
-	struct gptimer_timer *timer;
+	struct gptimer_timer_priv *timer;
 	char buf[64];
 	int i;
 
@@ -337,7 +306,7 @@ static int gptimer_info(
 	print_line(p, buf);
 	sprintf(buf, "REGS:        0x%08x", (unsigned int)priv->regs);
 	print_line(p, buf);
-	sprintf(buf, "BASE SCALER: %d", priv->regs->scaler_reload);
+	sprintf(buf, "BASE SCALER: %d", grlib_load_32(&priv->regs->sreload));
 	print_line(p, buf);
 	sprintf(buf, "BASE FREQ:   %dkHz", priv->base_freq / 1000);
 	print_line(p, buf);
@@ -350,9 +319,9 @@ static int gptimer_info(
 		print_line(p, buf);
 		sprintf(buf, " TLIB Index: %d", timer->index);
 		print_line(p, buf);
-		sprintf(buf, " RELOAD REG: %d", timer->tregs->reload);
+		sprintf(buf, " RELOAD REG: %d", grlib_load_32(&timer->tregs->trldval));
 		print_line(p, buf);
-		sprintf(buf, " CTRL REG:   %d", timer->tregs->ctrl);
+		sprintf(buf, " CTRL REG:   %d", grlib_load_32(&timer->tregs->tctrl));
 		print_line(p, buf);
 	}
 
@@ -360,24 +329,28 @@ static int gptimer_info(
 }
 #endif
 
-static inline struct gptimer_priv *priv_from_timer(struct gptimer_timer *t)
+static inline struct gptimer_priv *priv_from_timer(struct gptimer_timer_priv *t)
 {
 	return (struct gptimer_priv *)
 		((unsigned int)t -
 		sizeof(struct gptimer_priv) -
-		t->index * sizeof(struct gptimer_timer));
+		t->index * sizeof(struct gptimer_timer_priv));
 }
 
 static int gptimer_tlib_int_pend(struct tlib_dev *hand, int ack)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
-	unsigned int ctrl = timer->tregs->ctrl;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
+	uint32_t tctrl;
 
-	if ((ctrl & (GPTIMER_CTRL_IP | GPTIMER_CTRL_IE)) ==
-		(GPTIMER_CTRL_IP | GPTIMER_CTRL_IE)) {
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+
+	if ((tctrl & (GPTIMER_TCTRL_IP | GPTIMER_TCTRL_IE)) ==
+		(GPTIMER_TCTRL_IP | GPTIMER_TCTRL_IE)) {
 		/* clear Pending IRQ ? */
-		if (ack)
-			timer->tregs->ctrl = ctrl & timer->irq_ack_mask;
+		if (ack) {
+			tctrl &= timer->irq_ack_mask;
+			grlib_store_32(&timer->tregs->tctrl, tctrl);
+		}
 		return 1; /* timer generated IRQ */
 	} else
 		return 0; /* was not timer causing IRQ */
@@ -406,12 +379,15 @@ void gptimer_isr(void *data)
 
 static void gptimer_tlib_reset(struct tlib_dev *hand)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
+	uint32_t tctrl;
 
-	timer->tregs->ctrl = (timer->tregs->ctrl & timer->irq_ack_mask) &
-			     GPTIMER_CTRL_IP;
-	timer->tregs->reload = 0xffffffff;
-	timer->tregs->ctrl = GPTIMER_CTRL_LD;
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+	tctrl &= timer->irq_ack_mask;
+	tctrl &= GPTIMER_TCTRL_IP;
+	grlib_store_32(&timer->tregs->tctrl, tctrl);
+	grlib_store_32(&timer->tregs->trldval, 0xffffffff);
+	grlib_store_32(&timer->tregs->tctrl, GPTIMER_TCTRL_LD);
 }
 
 static void gptimer_tlib_get_freq(
@@ -419,24 +395,24 @@ static void gptimer_tlib_get_freq(
 	unsigned int *basefreq,
 	unsigned int *tickrate)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
 
 	/* Calculate base frequency from Timer Clock and Prescaler */
 	if ( basefreq )
 		*basefreq = priv->base_freq;
 	if ( tickrate )
-		*tickrate = timer->tregs->reload + 1;
+		*tickrate = grlib_load_32(&timer->tregs->trldval) + 1;
 }
 
 static int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 
-	timer->tregs->reload = tickrate - 1;
+	grlib_store_32(&timer->tregs->trldval, tickrate - 1);
 
 	/*Check that value was allowed (Timer may not be as wide as expected)*/
-	if ( timer->tregs->reload != (tickrate - 1) )
+	if (grlib_load_32(&timer->tregs->trldval) != (tickrate - 1))
 		return -1;
 	else
 		return 0;
@@ -444,8 +420,9 @@ static int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
 
 static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data, int flags)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
+	uint32_t tctrl;
 
 	if ( priv->separate_interrupt ) {
 		drvmgr_interrupt_register(priv->dev, timer->tindex,
@@ -476,16 +453,21 @@ static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *d
 	}
 #endif
 
-	timer->tregs->ctrl |= GPTIMER_CTRL_IE;
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+	tctrl |= GPTIMER_TCTRL_IE;
+	grlib_store_32(&timer->tregs->tctrl, tctrl);
 }
 
 static void gptimer_tlib_irq_unreg(struct tlib_dev *hand, tlib_isr_t func, void *data)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
+	uint32_t tctrl;
 
 	/* Turn off IRQ at source, unregister IRQ handler */
-	timer->tregs->ctrl &= ~GPTIMER_CTRL_IE;
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+	tctrl &= ~GPTIMER_TCTRL_IE;
+	grlib_store_32(&timer->tregs->tctrl, tctrl);
 
 	if ( priv->separate_interrupt ) {
 		drvmgr_interrupt_unregister(priv->dev, timer->tindex,
@@ -502,46 +484,54 @@ static void gptimer_tlib_irq_unreg(struct tlib_dev *hand, tlib_isr_t func, void 
 
 static void gptimer_tlib_start(struct tlib_dev *hand, int once)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
-	unsigned int ctrl;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
+	uint32_t tctrl;
 
 	/* Load the selected frequency before starting Frequency */
-	ctrl = GPTIMER_CTRL_LD | GPTIMER_CTRL_EN;
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+	tctrl &= timer->irq_ack_mask;
+	tctrl &= ~GPTIMER_TCTRL_RS;
+	tctrl |= GPTIMER_TCTRL_LD | GPTIMER_TCTRL_EN;
 	if ( once == 0 )
-		ctrl |= GPTIMER_CTRL_RS; /* Restart Timer */
-	timer->tregs->ctrl = ctrl | (timer->tregs->ctrl & timer->irq_ack_mask &
-			     ~GPTIMER_CTRL_RS);
+		tctrl |= GPTIMER_TCTRL_RS; /* Restart Timer */
+	grlib_store_32(&timer->tregs->tctrl, tctrl);
 }
 
 static void gptimer_tlib_stop(struct tlib_dev *hand)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
+	uint32_t tctrl;
 
 	/* Load the selected Frequency */
-	timer->tregs->ctrl &= ~(GPTIMER_CTRL_EN|GPTIMER_CTRL_IP);
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+	tctrl &= ~(GPTIMER_TCTRL_EN|GPTIMER_TCTRL_IP);
+	grlib_store_32(&timer->tregs->tctrl, tctrl);
 }
 
 static void gptimer_tlib_restart(struct tlib_dev *hand)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
+	uint32_t tctrl;
 
-	timer->tregs->ctrl |= GPTIMER_CTRL_LD | GPTIMER_CTRL_EN;
+	tctrl = grlib_load_32(&timer->tregs->tctrl);
+	tctrl |= GPTIMER_TCTRL_LD | GPTIMER_TCTRL_EN;
+	grlib_store_32(&timer->tregs->tctrl, tctrl);
 }
 
 static void gptimer_tlib_get_counter(
 	struct tlib_dev *hand,
 	unsigned int *counter)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 
-	*counter = timer->tregs->value;
+	*counter = grlib_load_32(&timer->tregs->tcntval);
 }
 
 static void gptimer_tlib_get_widthmask(
 	struct tlib_dev *hand,
 	unsigned int *widthmask)
 {
-	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_timer_priv *timer = (struct gptimer_timer_priv *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
 
 	*widthmask = priv->widthmask;

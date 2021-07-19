@@ -42,7 +42,7 @@
 #include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
-#include <leon.h>
+#include <bsp/leon3.h>
 #include <rtems/rtems/intr.h>
 #include <grlib/ambapp.h>
 #include <grlib/irqamp.h>
@@ -148,7 +148,7 @@ static void leon3_tc_do_tick(void)
   do { \
     /* Assume timer found during BSP initialization */ \
     if (LEON3_Timer_Regs) { \
-      clkirq = (LEON3_Timer_Regs->cfg & 0xf8) >> 3; \
+      clkirq = (grlib_load_32(&LEON3_Timer_Regs->config) & 0xf8) >> 3; \
       \
       Adjust_clkirq_for_node(); \
     } \
@@ -185,19 +185,22 @@ static void bsp_clock_handler_install(rtems_interrupt_handler isr)
 static void leon3_clock_initialize(void)
 {
   irqamp_timestamp *irqmp_ts;
-  volatile struct gptimer_regs *gpt;
+  gptimer_timer *timer;
   struct timecounter *tc;
 
+  timer = &LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX];
+
+  grlib_store_32(
+    &timer->trldval,
+    rtems_configuration_get_microseconds_per_tick() - 1
+  );
+  grlib_store_32(
+    &timer->tctrl,
+    GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS | GPTIMER_TCTRL_LD | GPTIMER_TCTRL_IE
+  );
+
   irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
-  gpt = LEON3_Timer_Regs;
   tc = &leon3_tc;
-
-  gpt->timer[LEON3_CLOCK_INDEX].reload =
-    rtems_configuration_get_microseconds_per_tick() - 1;
-  gpt->timer[LEON3_CLOCK_INDEX].ctrl =
-    GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_RS |
-      GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_IE;
-
   leon3_up_counter_enable();
 
   if (leon3_up_counter_is_available()) {
@@ -231,8 +234,10 @@ static void leon3_clock_initialize(void)
      * controller.  At least on SMP configurations we must use a second timer
      * in free running mode for the timecounter.
      */
-    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].ctrl =
-      GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_IE;
+    grlib_store_32(
+      &LEON3_Timer_Regs->timer[LEON3_COUNTER_GPTIMER_INDEX].tctrl,
+      GPTIMER_TCTRL_EN | GPTIMER_TCTRL_IE
+    );
 
     tc->tc_get_timecount = _SPARC_Get_timecount_down;
 #else
@@ -241,7 +246,7 @@ static void leon3_clock_initialize(void)
     counter = &_SPARC_Counter_mutable;
     counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
     counter->read = _SPARC_Counter_read_clock;
-    counter->counter_register = &gpt->timer[LEON3_CLOCK_INDEX].value;
+    counter->counter_register = &timer->tcntval;
     counter->pending_register = grlib_load_32(&LEON3_IrqCtrl_Regs->ipend);
     counter->pending_mask = UINT32_C(1) << clkirq;
     counter->accumulated = rtems_configuration_get_microseconds_per_tick();

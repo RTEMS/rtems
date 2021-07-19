@@ -118,7 +118,8 @@ RTEMS_SYSINIT_ITEM(
 /* Pointers to Interrupt Controller configuration registers */
 irqamp *LEON3_IrqCtrl_Regs;
 struct ambapp_dev *LEON3_IrqCtrl_Adev;
-volatile struct gptimer_regs *LEON3_Timer_Regs;
+
+gptimer *LEON3_Timer_Regs;
 struct ambapp_dev *LEON3_Timer_Adev;
 
 /*
@@ -170,14 +171,14 @@ static void amba_initialize(void)
                                  VENDOR_GAISLER, GAISLER_GPTIMER,
                                  ambapp_find_by_idx, &leon3_timer_core_index);
   if (adev) {
-    LEON3_Timer_Regs = (volatile struct gptimer_regs *)DEV_TO_APB(adev)->start;
+    LEON3_Timer_Regs = (gptimer *)DEV_TO_APB(adev)->start;
     LEON3_Timer_Adev = adev;
 
     /* Register AMBA Bus Frequency */
     ambapp_freq_init(
       plb,
       LEON3_Timer_Adev,
-      (LEON3_Timer_Regs->scaler_reload + 1)
+      (grlib_load_32(&LEON3_Timer_Regs->sreload) + 1)
         * LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER
     );
     /* Set user prescaler configuration. Use this to increase accuracy of timer
@@ -186,7 +187,7 @@ static void amba_initialize(void)
      * GRTIMER/GPTIMER hardware. See HW manual.
      */
     if (leon3_timer_prescaler)
-      LEON3_Timer_Regs->scaler_reload = leon3_timer_prescaler;
+      grlib_store_32(&LEON3_Timer_Regs->sreload, leon3_timer_prescaler);
   }
 }
 

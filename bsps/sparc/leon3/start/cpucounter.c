@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <leon.h>
+#include <bsp/leon3.h>
 #include <grlib/irqamp.h>
 
 #include <rtems/counter.h>
@@ -42,7 +42,7 @@ uint32_t _CPU_Counter_frequency(void)
 static void leon3_counter_initialize(void)
 {
   irqamp_timestamp *irqmp_ts;
-  volatile struct gptimer_regs *gpt;
+  gptimer *gpt;
   SPARC_Counter *counter;
 
   irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
@@ -68,19 +68,23 @@ static void leon3_counter_initialize(void)
 
     leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
   } else if (gpt != NULL) {
+    gptimer_timer *timer;
+    uint32_t       tctrl;
+
     /* Fall back to the first GPTIMER if available */
+    timer = &gpt->timer[LEON3_COUNTER_GPTIMER_INDEX];
     counter->read_isr_disabled = _SPARC_Counter_read_down;
     counter->read = _SPARC_Counter_read_down;
-    counter->counter_register = &gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].value;
+    counter->counter_register = &timer->tcntval;
 
     /* Enable timer just in case no clock driver is configured */
-    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].reload = 0xffffffff;
-    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].ctrl |= GPTIMER_TIMER_CTRL_EN |
-                                                    GPTIMER_TIMER_CTRL_RS |
-                                                    GPTIMER_TIMER_CTRL_LD;
+    grlib_store_32(&timer->trldval, 0xffffffff);
+    tctrl = grlib_load_32(&timer->tctrl);
+    tctrl |= GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS | GPTIMER_TCTRL_LD;
+    grlib_store_32(&timer->tctrl, tctrl);
 
     leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
-      (gpt->scaler_reload + 1);
+      (grlib_load_32(&gpt->sreload) + 1);
   }
 }
 

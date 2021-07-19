@@ -30,14 +30,12 @@
  */
 
 #include <bsp.h>
+#include <bsp/leon3.h>
 #include <bsp/watchdog.h>
-#include <grlib/grlib.h>
-
-extern volatile struct gptimer_regs *LEON3_Timer_Regs;
 
 struct gptimer_watchdog_priv {
-  struct gptimer_regs *regs;
-  struct gptimer_timer_regs *timer;
+  gptimer *regs;
+  gptimer_timer *timer;
   int timerno;
 };
 
@@ -60,10 +58,10 @@ int bsp_watchdog_init(void)
    * functionality is available or not, we assume that it is if we
    * reached this function.
    */
-  bsp_watchdogs[0].regs = (struct gptimer_regs *)LEON3_Timer_Regs;
+  bsp_watchdogs[0].regs = LEON3_Timer_Regs;
 
   /* Find Timer that has watchdog functionality */
-  timercnt = bsp_watchdogs[0].regs->cfg & 0x7;
+  timercnt = grlib_load_32(&bsp_watchdogs[0].regs->config) & 0x7;
   if (timercnt < 2) /* First timer system clock timer */
     return 0;
 
@@ -76,6 +74,9 @@ int bsp_watchdog_init(void)
 
 void bsp_watchdog_reload(int watchdog, unsigned int reload_value)
 {
+  gptimer_timer *timer;
+  uint32_t tctrl;
+
   if (bsp_watchdog_count == 0)
     bsp_watchdog_init();
 
@@ -83,10 +84,12 @@ void bsp_watchdog_reload(int watchdog, unsigned int reload_value)
     return;
 
   /* Kick watchdog, and clear interrupt pending bit */
-  bsp_watchdogs[watchdog].timer->reload = reload_value;
-  bsp_watchdogs[watchdog].timer->ctrl =
-    (GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_EN) |
-    (bsp_watchdogs[watchdog].timer->ctrl & ~(1<<4));
+  timer = bsp_watchdogs[watchdog].timer;
+  grlib_store_32(&timer->trldval, reload_value);
+  tctrl = grlib_load_32(&timer->tctrl);
+  tctrl |= GPTIMER_TCTRL_LD | GPTIMER_TCTRL_EN;
+  tctrl &= ~GPTIMER_TCTRL_IP;
+  grlib_store_32(&timer->tctrl, tctrl);
 }
 
 void bsp_watchdog_stop(int watchdog)
@@ -98,7 +101,7 @@ void bsp_watchdog_stop(int watchdog)
     return;
 
   /* Stop watchdog timer */
-  bsp_watchdogs[watchdog].timer->ctrl = 0;
+  grlib_store_32(&bsp_watchdogs[watchdog].timer->tctrl, 0);
 }
 
 /* Use watchdog timer to reset system */

@@ -33,23 +33,21 @@ bool benchmark_timer_find_average_overhead;
 
 bool benchmark_timer_is_initialized = false;
 
-extern volatile struct gptimer_regs *LEON3_Timer_Regs;
-
 void benchmark_timer_initialize(void)
 {
   /*
    *  Timer runs long and accurate enough not to require an interrupt.
    */
   if (LEON3_Timer_Regs) {
+    gptimer_timer *timer = &LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX];
     if ( benchmark_timer_is_initialized == false ) {
       /* approximately 1 us per countdown */
-      LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].reload = 0xffffff;
-      LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value = 0xffffff;
+      grlib_store_32( &timer->trldval, 0xffffff );
+      grlib_store_32( &timer->tcntval, 0xffffff );
     } else {
       benchmark_timer_is_initialized = true;
     }
-    LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].ctrl =
-      GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_LD;
+    grlib_store_32( &timer->tctrl, GPTIMER_TCTRL_EN | GPTIMER_TCTRL_LD );
   }
 }
 
@@ -62,7 +60,8 @@ benchmark_timer_t benchmark_timer_read(void)
   uint32_t total;
 
   if (LEON3_Timer_Regs) {
-    total = LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].value;
+    total =
+      grlib_load_32( &LEON3_Timer_Regs->timer[LEON3_TIMER_INDEX].tcntval );
 
     total = 0xffffff - total;
 
