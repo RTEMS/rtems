@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+actions:
+- get-integer: null
+- format-and-define: null
+build-type: option
+default:
+- enabled-by: sparc/gr712rc
+  value: 0x00000000
+- enabled-by: sparc/gr740
+  value: 0xf0000000
+enabled-by: true
+format: '{:#010x}'
+links: []
+name: LEON3_L2CACHE_BASE
+description: |
+  This option defines the base address of the L2CACHE register block.
+type: build

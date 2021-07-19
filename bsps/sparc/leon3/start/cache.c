@@ -11,7 +11,13 @@
 
 #include <bsp/leon3.h>
 
+#if !defined(LEON3_L2CACHE_BASE)
 #include <grlib/ambapp.h>
+#endif
+
+#if !defined(LEON3_L2CACHE_BASE) || LEON3_L2CACHE_BASE != 0
+#define LEON3_MAYBE_HAS_L2CACHE
+#endif
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
@@ -23,6 +29,7 @@
 
 #define CPU_DATA_CACHE_ALIGNMENT 64
 
+#if !defined(LEON3_L2CACHE_BASE)
 static inline l2cache *get_l2c_regs(void)
 {
   struct ambapp_dev *adev;
@@ -42,26 +49,7 @@ static inline l2cache *get_l2c_regs(void)
 
   return (l2cache *) DEV_TO_AHB(adev)->start[1];
 }
-
-static inline size_t get_l2_size(void)
-{
-  l2cache *regs;
-  unsigned status;
-  unsigned ways;
-  unsigned set_size;
-
-  regs = get_l2c_regs();
-
-  if (regs == NULL) {
-    return 0;
-  }
-
-  status = grlib_load_32(&regs->l2cs);
-  ways = L2CACHE_L2CS_WAY_GET(status) + 1;
-  set_size = L2CACHE_L2CS_WAY_SIZE_GET(status) * 1024;
-
-  return ways * set_size;
-}
+#endif
 
 static inline size_t get_l1_size(uint32_t l1_cfg)
 {
@@ -71,10 +59,36 @@ static inline size_t get_l1_size(uint32_t l1_cfg)
   return ways * wsize;
 }
 
+#if defined(LEON3_MAYBE_HAS_L2CACHE)
+static inline size_t get_l2_size(void)
+{
+  l2cache *regs;
+  unsigned status;
+  unsigned ways;
+  unsigned set_size;
+
+#if defined(LEON3_L2CACHE_BASE)
+  regs = (l2cache *) LEON3_L2CACHE_BASE;
+#else
+  regs = get_l2c_regs();
+
+  if (regs == NULL) {
+    return 0;
+  }
+#endif
+
+  status = grlib_load_32(&regs->l2cs);
+  ways = L2CACHE_L2CS_WAY_GET(status) + 1;
+  set_size = L2CACHE_L2CS_WAY_SIZE_GET(status) * 1024;
+
+  return ways * set_size;
+}
+
 static inline size_t get_max_size(size_t a, size_t b)
 {
   return a < b ? b : a;
 }
+#endif
 
 static inline size_t get_cache_size(uint32_t level, uint32_t l1_cfg)
 {
@@ -82,14 +96,20 @@ static inline size_t get_cache_size(uint32_t level, uint32_t l1_cfg)
 
   switch (level) {
     case 0:
+#if defined(LEON3_MAYBE_HAS_L2CACHE)
       size = get_max_size(get_l1_size(l1_cfg), get_l2_size());
+#else
+      size = get_l1_size(l1_cfg);
+#endif
       break;
     case 1:
       size = get_l1_size(l1_cfg);
       break;
+#if defined(LEON3_MAYBE_HAS_L2CACHE)
     case 2:
       size = get_l2_size();
       break;
+#endif
     default:
       size = 0;
       break;

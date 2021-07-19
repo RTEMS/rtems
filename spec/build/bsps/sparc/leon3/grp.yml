@@ -45,6 +45,8 @@ links:
 - role: build-dependency
   uid: optconirq
 - role: build-dependency
+  uid: optl2cachebase
+- role: build-dependency
   uid: optleon3smp
 - role: build-dependency
   uid: optplbfreq
