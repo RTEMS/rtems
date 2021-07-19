@@ -44,11 +44,14 @@
 #include <bsp/irq.h>
 #include <bsp/leon3.h>
 #include <rtems/rtems/intr.h>
-#include <grlib/ambapp.h>
 #include <grlib/irqamp.h>
 #include <rtems/score/profiling.h>
 #include <rtems/score/sparcimpl.h>
 #include <rtems/timecounter.h>
+
+#if !defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+#include <grlib/ambapp.h>
+#endif
 
 /* The LEON3 BSP Timer driver can rely on the Driver Manager if the
  * DrvMgr is initialized during startup. Otherwise the classic driver
@@ -218,7 +221,11 @@ static void leon3_clock_initialize(void)
   } else if (irqmp_ts != NULL) {
     /* Use the interrupt controller timestamp counter if available */
     tc->tc_get_timecount = _SPARC_Get_timecount_up;
+#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+    tc->tc_frequency = leon3_processor_local_bus_frequency();
+#else
     tc->tc_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev);
+#endif
 
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
 

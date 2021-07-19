@@ -39,6 +39,8 @@ links:
 - role: build-dependency
   uid: optleon3smp
 - role: build-dependency
+  uid: optplbfreq
+- role: build-dependency
   uid: optpwrdwnhlt
 - role: build-dependency
   uid: ../start

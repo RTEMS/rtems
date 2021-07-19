@@ -66,7 +66,11 @@ static void leon3_counter_initialize(void)
     /* Enable interrupt timestamping for an arbitrary interrupt line */
     grlib_store_32(&irqmp_ts->itstmpc, IRQAMP_ITSTMPC_TSISEL(1));
 
+#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+    leon3_counter_frequency = leon3_processor_local_bus_frequency();
+#else
     leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
+#endif
   } else if (gpt != NULL) {
     gptimer_timer *timer;
     uint32_t       tctrl;
@@ -83,8 +87,12 @@ static void leon3_counter_initialize(void)
     tctrl |= GPTIMER_TCTRL_EN | GPTIMER_TCTRL_RS | GPTIMER_TCTRL_LD;
     grlib_store_32(&timer->tctrl, tctrl);
 
+#if defined(LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER)
+    leon3_counter_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
+#else
     leon3_counter_frequency = ambapp_freq_get(ambapp_plb(), LEON3_Timer_Adev) /
       (grlib_load_32(&gpt->sreload) + 1);
+#endif
   }
 }
 

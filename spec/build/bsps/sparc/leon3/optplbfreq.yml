@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+default:
+- enabled-by:
+  - sparc/gr712rc
+  - sparc/gr740
+  value: true
+- enabled-by: true
+  value: false
+enabled-by: true
+links: []
+name: LEON3_PLB_FREQUENCY_DEFINED_BY_GPTIMER
+description: |
+  If this option is set to true, then the processor local bus (PLB) frequency
+  is directly defined by the first GPTIMER frequency neglecting the actual bus
+  topology.  It is assumed that the boot loader configured the first GPTIMER to
+  have a frequency of LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER.
+type: build
