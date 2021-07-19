@@ -16,6 +16,7 @@ install:
   source:
   - bsps/sparc/leon2/include/bsp/at697_pci.h
   - bsps/sparc/leon2/include/bsp/irq.h
+  - bsps/sparc/leon2/include/bsp/irqimpl.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/sparc/leon2/start/linkcmds.at697f

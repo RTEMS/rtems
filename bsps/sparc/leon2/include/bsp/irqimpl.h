@@ -1,8 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARCLEON2
+ *
+ * @brief This header file provides interfaces used by the interrupt support
+ *   implementation.
+ */
+
 /*
- *  COPYRIGHT (c) 2015
- *  Cobham Gaisler
+ * Copyright (C) 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -24,23 +32,32 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef LIBBSP_SPARC_LEON3_BSP_IRQIMPL_H
+#define LIBBSP_SPARC_LEON3_BSP_IRQIMPL_H
+
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @addtogroup RTEMSBSPsSPARCLEON2
  *
+ * @{
  */
 
-#include <bsp.h>
-#include <bsp/irq-generic.h>
-#include <bsp/irqimpl.h>
-
-/*
- * This function is called directly from _SPARC_Interrupt_trap() for
- * traps 0x10 to 0x1F which correspond to IRQ 0 to 15 respectively.
- */
-void _SPARC_Interrupt_dispatch( uint32_t irq )
+static inline uint32_t bsp_irq_fixup( uint32_t irq )
 {
-  bsp_interrupt_assert( irq < BSP_INTERRUPT_VECTOR_COUNT );
-
-  /* Let BSP fixup and/or handle incoming IRQ */
-  irq = bsp_irq_fixup( irq );
-
-  bsp_interrupt_handler_dispatch_unchecked( irq );
+  return irq;
 }
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* LIBBSP_SPARC_LEON3_BSP_IRQIMPL_H */

@@ -17,6 +17,7 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/sparc/erc32/include/bsp/irq.h
+  - bsps/sparc/erc32/include/bsp/irqimpl.h
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/sparc/erc32/start/linkcmds

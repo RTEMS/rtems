@@ -292,11 +292,6 @@ typedef struct {
 
 extern LEON_Register_Map LEON_REG;
 
-static __inline__ int bsp_irq_fixup(int irq)
-{
-       return irq;
-}
-
 /*
  *  Macros to manipulate the Interrupt Clear, Interrupt Force, Interrupt Mask,
  *  and the Interrupt Pending Registers.

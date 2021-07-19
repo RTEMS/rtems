@@ -326,11 +326,6 @@ typedef struct {
 
 extern ERC32_Register_Map ERC32_MEC;
 
-static __inline__ int bsp_irq_fixup(int irq)
-{
-       return irq;
-}
-
 /*
  *  Macros to manipulate the Interrupt Clear, Interrupt Force, Interrupt Mask,
  *  and the Interrupt Pending Registers.

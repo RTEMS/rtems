@@ -40,9 +40,9 @@
  */
 
 #include <bsp.h>
-#include <bsp/irq.h>
-#include <bspopts.h>
 #include <bsp/fatal.h>
+#include <bsp/irq.h>
+#include <leon.h>
 #include <rtems/rtems/intr.h>
 #include <grlib/ambapp.h>
 #include <rtems/score/profiling.h>

@@ -68,11 +68,42 @@ extern volatile struct irqmp_regs *LEON3_IrqCtrl_Regs;
 extern struct ambapp_dev *LEON3_IrqCtrl_Adev;
 
 /**
+ * @brief This object provides the interrupt number used to multiplex extended
+ *   interrupts or is zero if no extended interrupts are available.
+ *
+ * This object should be read-only after initialization.
+ */
+extern uint32_t LEON3_IrqCtrl_EIrq;
+
+/**
  * @brief Initializes the interrupt controller for the boot processor.
  *
  * @param[in, out] regs is the IRQ(A)MP register block address.
  */
 void leon3_ext_irq_init( volatile struct irqmp_regs *regs );
+
+/**
+ * @brief Acknowledges and maps extended interrupts if this feature is
+ * available and the interrupt for extended interrupts is present.
+ *
+ * @param irq is the standard interrupt number.
+ */
+static inline uint32_t bsp_irq_fixup( uint32_t irq )
+{
+  uint32_t eirq;
+
+  if ( irq != LEON3_IrqCtrl_EIrq ) {
+    return irq;
+  }
+
+  eirq = LEON3_IrqCtrl_Regs->intid[ _LEON3_Get_current_processor() ] & 0x1f;
+
+  if ( eirq < 16 ) {
+    return irq;
+  }
+
+  return eirq;
+}
 
 /** @} */
 

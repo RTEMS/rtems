@@ -154,24 +154,6 @@ extern struct ambapp_dev *LEON3_Timer_Adev;
 /* LEON3 CPU Index of boot CPU */
 extern uint32_t LEON3_Cpu_Index;
 
-/* The external IRQ number, -1 if not external interrupts */
-extern int LEON3_IrqCtrl_EIrq;
-
-static __inline__ int bsp_irq_fixup(int irq)
-{
-  int eirq, cpu;
-
-  if (LEON3_IrqCtrl_EIrq != 0 && irq == LEON3_IrqCtrl_EIrq) {
-    /* Get interrupt number from IRQ controller */
-    cpu = _LEON3_Get_current_processor();
-    eirq = LEON3_IrqCtrl_Regs->intid[cpu] & 0x1f;
-    if (eirq & 0x10)
-      irq = eirq;
-  }
-
-  return irq;
-}
-
 /* Macros used for manipulating bits in LEON3 GP Timer Control Register */
 
 #define LEON3_IRQMPSTATUS_CPUNR     28
