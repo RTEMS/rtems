@@ -45,7 +45,7 @@
 #include <rtems.h>
 #include <amba.h>
 #include <grlib/io.h>
-#include <bsp/irqimpl.h>
+#include <bsp/leon3.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -141,12 +141,6 @@ extern "C" {
 #define LEON_REG_UART_CTRL_SI     0x00004000 /* TX shift register empty IRQ enable */
 #define LEON_REG_UART_CTRL_FA     0x80000000 /* FIFO Available */
 #define LEON_REG_UART_CTRL_FA_BIT 31
-
-/*
- *  The following defines the bits in the LEON Cache Control Register.
- */
-#define LEON3_REG_CACHE_CTRL_FI      0x00200000 /* Flush instruction cache */
-#define LEON3_REG_CACHE_CTRL_DS      0x00800000 /* Data cache snooping */
 
 /* LEON3 GP Timer */
 extern volatile struct gptimer_regs *LEON3_Timer_Regs;
@@ -390,98 +384,6 @@ extern int leon3_timer_core_index;
 extern unsigned int leon3_timer_prescaler;
 
 RTEMS_NO_RETURN void leon3_power_down_loop(void);
-
-static inline void leon3_set_system_register(uint32_t addr, uint32_t val)
-{
-  __asm__ volatile(
-    "sta %1, [%0] 2"
-    :
-    : "r" (addr), "r" (val)
-  );
-}
-
-static inline uint32_t leon3_get_system_register(uint32_t addr)
-{
-  uint32_t val;
-
-  __asm__ volatile(
-    "lda [%1] 2, %0"
-    : "=r" (val)
-    : "r" (addr)
-  );
-
-  return val;
-}
-
-static inline void leon3_set_cache_control_register(uint32_t val)
-{
-  leon3_set_system_register(0x0, val);
-}
-
-static inline uint32_t leon3_get_cache_control_register(void)
-{
-  return leon3_get_system_register(0x0);
-}
-
-static inline bool leon3_data_cache_snooping_enabled(void)
-{
-  return leon3_get_cache_control_register() & LEON3_REG_CACHE_CTRL_DS;
-}
-
-static inline uint32_t leon3_get_inst_cache_config_register(void)
-{
-  return leon3_get_system_register(0x8);
-}
-
-static inline uint32_t leon3_get_data_cache_config_register(void)
-{
-  return leon3_get_system_register(0xc);
-}
-
-static inline uint32_t leon3_up_counter_low(void)
-{
-  uint32_t asr23;
-
-  __asm__ volatile (
-    "mov %%asr23, %0"
-    : "=&r" (asr23)
-  );
-
-  return asr23;
-}
-
-static inline uint32_t leon3_up_counter_high(void)
-{
-  uint32_t asr22;
-
-  __asm__ volatile (
-    "mov %%asr22, %0"
-    : "=&r" (asr22)
-  );
-
-  return asr22;
-}
-
-static inline void leon3_up_counter_enable(void)
-{
-  __asm__ volatile (
-    "mov %g0, %asr22"
-  );
-}
-
-static inline bool leon3_up_counter_is_available(void)
-{
-  return leon3_up_counter_low() != leon3_up_counter_low();
-}
-
-static inline uint32_t leon3_up_counter_frequency(void)
-{
-  /*
-   * For simplicity, assume that the interrupt controller uses the processor
-   * clock.  This is at least true on the GR740.
-   */
-  return ambapp_freq_get(ambapp_plb(), LEON3_IrqCtrl_Adev);
-}
 
 #endif /* !ASM */
 

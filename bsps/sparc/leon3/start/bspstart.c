@@ -40,7 +40,7 @@
 
 #include <bsp.h>
 #include <bsp/irq-generic.h>
-#include <leon.h>
+#include <bsp/leon3.h>
 #include <bsp/bootcard.h>
 #include <rtems/sysinit.h>
 

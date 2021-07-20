@@ -18,7 +18,6 @@
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include <bsp/leon3.h>
-#include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/assert.h>
