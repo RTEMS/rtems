@@ -361,8 +361,6 @@ extern int leon3_timer_core_index;
  */
 extern unsigned int leon3_timer_prescaler;
 
-RTEMS_NO_RETURN void leon3_power_down_loop(void);
-
 #endif /* !ASM */
 
 #ifdef __cplusplus

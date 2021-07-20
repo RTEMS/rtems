@@ -31,7 +31,7 @@
  */
 
 #include <bsp.h>
-#include <leon.h>
+#include <bsp/leon3.h>
 #include <rtems/score/cpuimpl.h>
 
 void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )

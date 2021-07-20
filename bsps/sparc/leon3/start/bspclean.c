@@ -34,9 +34,8 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/leon3.h>
 #include <rtems/score/smpimpl.h>
-
-#include <leon.h>
 
 void bsp_fatal_extension(
   rtems_fatal_source source,
