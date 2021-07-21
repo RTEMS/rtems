@@ -1390,7 +1390,7 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.env["ENABLE"] = [
         get_compiler(conf, cp, variant),
         arch,
-        arch_family,
+        "bsps/" + arch_family,
         arch_bsp,
     ]
 
