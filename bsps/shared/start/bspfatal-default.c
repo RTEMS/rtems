@@ -22,21 +22,42 @@ void bsp_fatal_extension(
 {
   #if BSP_VERBOSE_FATAL_EXTENSION
     Thread_Control *executing;
+    const char* TYPE = "*** FATAL ***";
+    const char* type = "fatal";
+
+    if ( source == RTEMS_FATAL_SOURCE_EXIT ) {
+      if ( code == 0 ) {
+        TYPE = "[ RTEMS shutdown ]";
+      } else {
+        TYPE = "*** EXIT STATUS NOT ZERO ***";
+      }
+      type = "exit";
+    }
 
     printk(
       "\n"
-      "*** FATAL ***\n"
-      "fatal source: %i (%s)\n"
-      #ifdef RTEMS_SMP
-        "CPU: %" PRIu32 "\n"
-      #endif
+      "%s\n"
       ,
-      source,
-      rtems_fatal_source_text( source )
-      #ifdef RTEMS_SMP
-        , rtems_scheduler_get_processor()
-      #endif
+      TYPE
     );
+
+    if ( source != RTEMS_FATAL_SOURCE_EXIT || code != 0 ) {
+      printk(
+        "%s source: %i (%s)\n"
+        ,
+        type,
+        source,
+        rtems_fatal_source_text( source )
+      );
+    }
+
+    #ifdef RTEMS_SMP
+      printk(
+        "CPU: %" PRIu32 "\n"
+        ,
+        rtems_scheduler_get_processor()
+      );
+    #endif
   #endif
 
   #if (BSP_PRINT_EXCEPTION_CONTEXT) || BSP_VERBOSE_FATAL_EXTENSION
@@ -48,13 +69,49 @@ void bsp_fatal_extension(
   #if BSP_VERBOSE_FATAL_EXTENSION
     else if ( source == INTERNAL_ERROR_CORE ) {
       printk(
-        "fatal code: %ju (%s)\n",
+        "%s code: %ju (%s)\n",
+        type,
         (uintmax_t) code,
         rtems_internal_error_text( code )
       );
-    } else {
+    } else if ( source == RTEMS_FATAL_SOURCE_HEAP ) {
+      Heap_Error_context *error_context = (Heap_Error_context*) code;
+      const char* reasons[] = {
+        "HEAP_ERROR_BROKEN_PROTECTOR",
+        "HEAP_ERROR_FREE_PATTERN",
+        "HEAP_ERROR_DOUBLE_FREE",
+        "HEAP_ERROR_BAD_USED_BLOCK",
+        "HEAP_ERROR_BAD_FREE_BLOCK"
+      };
+      const char* reason = "invalid reason";
+      if ( error_context->reason <= (int) HEAP_ERROR_BAD_FREE_BLOCK ) {
+        reason = reasons[(int) error_context->reason];
+      }
       printk(
-        "fatal code: %ju (0x%08jx)\n",
+        "heap error: heap=%p block=%p reason=%s(%d)",
+        error_context->heap,
+        error_context->block,
+        reason,
+        error_context->reason
+      );
+      if ( error_context->reason == HEAP_ERROR_BROKEN_PROTECTOR ) {
+        uintptr_t *pb0 = &error_context->block->Protection_begin.protector [0];
+        uintptr_t *pb1 = &error_context->block->Protection_begin.protector [1];
+        uintptr_t *pe0 = &error_context->block->Protection_end.protector [0];
+        uintptr_t *pe1 = &error_context->block->Protection_end.protector [1];
+        printk(
+          "=[%p,%p,%p,%p]",
+          *pb0 != HEAP_BEGIN_PROTECTOR_0 ? pb0 : NULL,
+          *pb1 != HEAP_BEGIN_PROTECTOR_1 ? pb1 : NULL,
+          *pe0 != HEAP_END_PROTECTOR_0 ? pe0 : NULL,
+          *pe1 != HEAP_END_PROTECTOR_1 ? pe1 : NULL
+        );
+        printk( "\n" );
+      }
+    } else if ( source != RTEMS_FATAL_SOURCE_EXIT || code != 0 ) {
+      printk(
+        "%s code: %ju (0x%08jx)\n",
+        type,
         (uintmax_t) code,
         (uintmax_t) code
       );
