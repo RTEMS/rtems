@@ -68,7 +68,7 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/if/api */
+/* Generated from spec:/if/group */
 
 /**
  * @defgroup RTEMSAPI API
