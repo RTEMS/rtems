@@ -10,7 +10,6 @@ default:
 - -march=r3900
 - -Wa,-xgot
 - -G0
-default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

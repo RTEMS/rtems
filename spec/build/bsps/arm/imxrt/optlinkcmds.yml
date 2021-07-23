@@ -3,7 +3,6 @@ actions:
 - env-assign: null
 build-type: option
 default: linkcmds.flexspi
-default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{}'

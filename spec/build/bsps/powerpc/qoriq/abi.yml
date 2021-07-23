@@ -12,7 +12,6 @@ default:
 - -meabi
 - -msdata=sysv
 - -mstrict-align
-default-by-family: []
 default-by-variant:
 - value:
   - -mcpu=e6500

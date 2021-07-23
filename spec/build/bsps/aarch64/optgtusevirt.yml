@@ -6,7 +6,6 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
 default: false
-default-by-family: []
 default-by-variant: []
 description: |
   If set to true, then the clock driver uses the Virtual Timer of the AARCH64

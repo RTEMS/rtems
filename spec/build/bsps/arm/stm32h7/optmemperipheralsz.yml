@@ -3,7 +3,6 @@ actions:
 - env-assign: null
 build-type: option
 default: 0x20000000
-default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'

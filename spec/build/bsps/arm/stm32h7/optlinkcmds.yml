@@ -3,7 +3,6 @@ actions:
 - env-assign: null
 build-type: option
 default: linkcmds.sdram
-default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{}'

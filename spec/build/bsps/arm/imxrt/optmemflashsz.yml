@@ -4,7 +4,6 @@ actions:
 - define-unquoted: IMXRT_MEMORY_FLASH_SIZE
 build-type: option
 default: 0x4000000
-default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{:#010x}'

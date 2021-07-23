@@ -698,10 +698,12 @@ class OptionItem(Item):
             if OptionItem._is_variant(default["variants"], variant):
                 value = default["value"]
                 break
-        for default in self.data["default-by-family"]:
-            if OptionItem._is_variant(default["families"], family):
-                value = default["value"]
-                break
+        else:
+            family = "bsps/" + family
+            for default in self.data["default-by-variant"]:
+                if OptionItem._is_variant(default["variants"], family):
+                    value = default["value"]
+                    break
         if value is None:
             return value
         if isinstance(value, list):

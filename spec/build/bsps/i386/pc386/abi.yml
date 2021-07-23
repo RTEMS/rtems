@@ -10,7 +10,6 @@ default:
 - -mtune=pentium4
 - -march=pentium4
 - -msse3
-default-by-family: []
 default-by-variant:
 - value:
   - -mtune=pentiumpro

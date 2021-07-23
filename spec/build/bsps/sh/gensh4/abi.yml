@@ -9,7 +9,6 @@ copyrights:
 default:
 - -m4
 - -ml
-default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

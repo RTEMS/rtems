@@ -12,7 +12,6 @@ default:
 - -mfpu=neon
 - -mfloat-abi=hard
 - -mtune=cortex-a9
-default-by-family: []
 default-by-variant: []
 description: |
   ABI flags

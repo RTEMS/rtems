@@ -8,7 +8,6 @@ build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
 default: 0x10000000
-default-by-family: []
 default-by-variant: []
 description: |
   length of memory area available to the BSP

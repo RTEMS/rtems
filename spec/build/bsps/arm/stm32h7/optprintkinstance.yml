@@ -3,7 +3,6 @@ actions:
 - define-unquoted: null
 build-type: option
 default: stm32h7_usart1_instance
-default-by-family: []
 default-by-variant: []
 enabled-by: true
 format: '{}'

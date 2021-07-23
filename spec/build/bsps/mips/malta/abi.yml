@@ -10,7 +10,6 @@ default:
 - -march=24kf1_1
 - -Wa,-xgot
 - -G0
-default-by-family: []
 default-by-variant: []
 description: |
   ABI flags
