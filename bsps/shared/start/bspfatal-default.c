@@ -11,6 +11,7 @@
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <rtems/version.h>
+#include <rtems/score/heap.h>
 #include <rtems/score/threadimpl.h>
 #include <inttypes.h>
 
@@ -74,6 +75,7 @@ void bsp_fatal_extension(
         (uintmax_t) code,
         rtems_internal_error_text( code )
       );
+    #if defined(HEAP_PROTECTION)
     } else if ( source == RTEMS_FATAL_SOURCE_HEAP ) {
       Heap_Error_context *error_context = (Heap_Error_context*) code;
       const char* reasons[] = {
@@ -108,6 +110,7 @@ void bsp_fatal_extension(
         );
         printk( "\n" );
       }
+    #endif
     } else if ( source != RTEMS_FATAL_SOURCE_EXIT || code != 0 ) {
       printk(
         "%s code: %ju (0x%08jx)\n",
