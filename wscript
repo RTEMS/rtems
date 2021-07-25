@@ -327,11 +327,11 @@ class Item(object):
                 cmd.extend(self.env.LINKFLAGS)
                 cmd.extend([i.abspath() for i in self.inputs])
                 cmd.append("-o" + self.outputs[0].abspath())
-                cmd.extend(self.ldflags)
                 cmd.append("-L.")
                 cmd.extend(["-l" + l for l in self.stlib])
                 cmd.extend(["-l" + l for l in self.use])
                 cmd.extend(self.env.LDFLAGS)
+                cmd.extend(self.ldflags)
                 return self.exec_command(cmd)
 
             def scan(self):
