@@ -22,5 +22,4 @@ target: testsuites/libtests/rcxx01.exe
 type: build
 use-after: []
 use-before:
-- rtemsdefaultconfig
 - rtemscxx
