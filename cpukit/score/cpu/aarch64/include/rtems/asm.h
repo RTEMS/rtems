@@ -81,7 +81,12 @@
   .align 8 ; .globl name ; name: ; .globl name ## _aarch64 ; name ## _aarch64:
 
 .macro GET_SELF_CPU_CONTROL REG
+#ifdef RTEMS_SMP
+	/* Use Thread ID Register (TPIDR_EL1) */
+	mrs	\REG, TPIDR_EL1
+#else
 	ldr	\REG, =_Per_CPU_Information
+#endif
 .endm
 
 /** @} */

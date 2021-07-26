@@ -47,7 +47,11 @@
 .globl	_AArch64_Exception_interrupt_nest
 
 #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
-  #define SELF_CPU_CONTROL_GET_REG w19
+  #ifdef RTEMS_SMP
+    #define SELF_CPU_CONTROL_GET_REG x19
+  #else
+    #define SELF_CPU_CONTROL_GET_REG w19
+  #endif
 #else
   #define SELF_CPU_CONTROL_GET_REG x19
 #endif

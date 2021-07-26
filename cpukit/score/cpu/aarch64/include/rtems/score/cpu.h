@@ -134,9 +134,9 @@
 
 #ifdef RTEMS_SMP
   #if defined(AARCH64_MULTILIB_VFP)
-    #define AARCH64_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x70
+    #define AARCH64_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0xb8
   #else
-    #define AARCH64_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x30
+    #define AARCH64_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 0x78
   #endif
 #endif
 
@@ -191,12 +191,12 @@ typedef struct {
 
 static inline void _AARCH64_Data_memory_barrier( void )
 {
-  __asm__ volatile ( "dmb LD" : : : "memory" );
+  __asm__ volatile ( "dmb SY" : : : "memory" );
 }
 
 static inline void _AARCH64_Data_synchronization_barrier( void )
 {
-  __asm__ volatile ( "dsb LD" : : : "memory" );
+  __asm__ volatile ( "dsb SY" : : : "memory" );
 }
 
 static inline void _AARCH64_Instruction_synchronization_barrier( void )
@@ -312,6 +312,11 @@ void _CPU_ISR_install_vector(
  * @brief CPU switch context.
  */
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
+
+RTEMS_NO_RETURN void _CPU_Context_switch_no_return(
+  Context_Control *executing,
+  Context_Control *heir
+);
 
 RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
 

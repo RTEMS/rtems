@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsAArch64XilinxZynqMP
+ * @ingroup RTEMSBSPsAArch64Shared
  *
- * @brief This source file contains the default MMU tables and setup.
+ * @brief SMP startup and interop code.
  */
 
 /*
@@ -34,56 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
-#include <bsp/start.h>
-#include <bsp/aarch64-mmu.h>
+#include <rtems/score/smpimpl.h>
 
-BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
-zynqmp_mmu_config_table[] = {
-  AARCH64_MMU_DEFAULT_SECTIONS,
-  {
-    .begin = 0xf9000000U,
-    .end = 0xf9100000U,
-    .flags = AARCH64_MMU_DEVICE
-  }, {
-    .begin = 0xfd000000U,
-    .end = 0xffc00000U,
-    .flags = AARCH64_MMU_DEVICE
-  }
-};
+#include <bsp/irq.h>
 
-/*
- * Make weak and let the user override.
- */
-BSP_START_TEXT_SECTION void
-zynqmp_setup_mmu_and_cache( void ) __attribute__ ((weak));
-
-BSP_START_TEXT_SECTION void
-zynqmp_setup_mmu_and_cache( void )
+static void bsp_inter_processor_interrupt( void *arg )
 {
-  aarch64_mmu_setup();
-
-  aarch64_mmu_setup_translation_table(
-    &zynqmp_mmu_config_table[ 0 ],
-    RTEMS_ARRAY_SIZE( zynqmp_mmu_config_table )
-  );
-
-  aarch64_mmu_enable();
+  _SMP_Inter_processor_interrupt_handler( _Per_CPU_Get() );
 }
 
-/*
- * Make weak and let the user override.
- */
-BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
-__attribute__ ( ( weak ) );
-
-BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
+uint32_t _CPU_SMP_Initialize( void )
 {
-  /* Perform basic MMU setup */
-  aarch64_mmu_setup();
+  return arm_gic_irq_processor_count();
+}
 
-  /* Use the existing root page table already configured by CPU0 */
-  _AArch64_Write_ttbr0_el1( (uintptr_t) bsp_translation_table_base );
+void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
+{
+  if ( cpu_count > 0 ) {
+    rtems_status_code sc;
 
-  aarch64_mmu_enable();
+    sc = rtems_interrupt_handler_install(
+      ARM_GIC_IRQ_SGI_0,
+      "IPI",
+      RTEMS_INTERRUPT_UNIQUE,
+      bsp_inter_processor_interrupt,
+      NULL
+    );
+    _Assert( sc == RTEMS_SUCCESSFUL );
+    (void) sc;
+
+#if defined( BSP_DATA_CACHE_ENABLED ) || \
+    defined( BSP_INSTRUCTION_CACHE_ENABLED )
+    /* Enable unified L2 cache */
+    rtems_cache_enable_data();
+#endif
+  }
+}
+
+void _CPU_SMP_Prepare_start_multitasking( void )
+{
+  /* Do nothing */
+}
+
+void _CPU_SMP_Send_interrupt( uint32_t target_processor_index )
+{
+  arm_gic_irq_generate_software_irq(
+    ARM_GIC_IRQ_SGI_0,
+    1U << target_processor_index
+  );
 }

@@ -385,17 +385,14 @@ BSP_START_TEXT_SECTION static inline void aarch64_mmu_setup_translation_table(
 }
 
 BSP_START_TEXT_SECTION static inline void
-aarch64_mmu_setup_translation_table_and_enable(
-  const aarch64_mmu_config_entry *config_table,
-  size_t config_count
-)
+aarch64_mmu_enable( void )
 {
   uint64_t sctlr;
 
-  aarch64_mmu_setup_translation_table(
-    config_table,
-    config_count
-  );
+  /* CPUECTLR_EL1.SMPEN is already set on ZynqMP and is not writable */
+
+  /* Invalidate cache */
+  rtems_cache_invalidate_entire_data();
 
   /* Enable MMU and cache */
   sctlr = _AArch64_Read_sctlr_el1();

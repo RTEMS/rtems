@@ -55,13 +55,22 @@
  *
  */
 
+DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
+	.globl	_CPU_Context_switch_no_return
+	.set	_CPU_Context_switch_no_return, _CPU_Context_switch
 #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
-#define reg_2 w2
+/* Sanitize inputs for ILP32 ABI */
+	mov w0, w0
+	mov w1, w1
+  #ifdef RTEMS_SMP
+    #define reg_2 x2
+  #else
+    #define reg_2 w2
+  #endif
 #else
 #define reg_2 x2
 #endif
 
-DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
 /* Start saving context */
 	GET_SELF_CPU_CONTROL	reg_2
 	ldr	w3, [x2, #PER_CPU_ISR_DISPATCH_DISABLE]
@@ -86,7 +95,30 @@ DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
 	str	x3, [x0, #AARCH64_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
 
 #ifdef RTEMS_SMP
-#error SMP not yet supported
+	/*
+	 * The executing thread no longer executes on this processor.  Switch
+	 * the stack to the temporary interrupt stack of this processor.  Mark
+	 * the context of the executing thread as not executing.
+	 */
+	dmb	SY
+	add	sp, x2, #(PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE)
+	mov	x3, #0
+	strb	w3, [x0, #AARCH64_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
+
+.L_check_is_executing:
+
+	/* Check the is executing indicator of the heir context */
+	add	x3, x1, #AARCH64_CONTEXT_CONTROL_IS_EXECUTING_OFFSET
+	ldaxrb	w4, [x3]
+	cmp	x4, #0
+	bne	.L_get_potential_new_heir
+
+	/* Try to update the is executing indicator of the heir context */
+	mov	x4, #1
+	stlxrb	w5, w4, [x3]
+	cmp	x5, #0
+	bne	.L_get_potential_new_heir
+	dmb	SY
 #endif
 
 /* Start restoring context */
@@ -129,6 +161,46 @@ DEFINE_FUNCTION_AARCH64(_CPU_Context_switch)
  *
  */
 DEFINE_FUNCTION_AARCH64(_CPU_Context_restore)
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+/* Sanitize input for ILP32 ABI */
+	mov w0, w0
+#endif
+
         mov     x1, x0
 	GET_SELF_CPU_CONTROL	reg_2
         b       .L_restore
+
+#ifdef RTEMS_SMP
+.L_get_potential_new_heir:
+
+	/* We may have a new heir */
+
+	/* Read the executing and heir */
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	ldr	w4, [x2, #PER_CPU_OFFSET_EXECUTING]
+	ldr	w5, [x2, #PER_CPU_OFFSET_HEIR]
+#else
+	ldr	x4, [x2, #PER_CPU_OFFSET_EXECUTING]
+	ldr	x5, [x2, #PER_CPU_OFFSET_HEIR]
+#endif
+
+	/*
+	 * Update the executing only if necessary to avoid cache line
+	 * monopolization.
+	 */
+	cmp	x4, x5
+	beq	.L_check_is_executing
+
+	/* Calculate the heir context pointer */
+	sub	x4, x1, x4
+	add	x1, x5, x4
+
+	/* Update the executing */
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	str	w5, [x2, #PER_CPU_OFFSET_EXECUTING]
+#else
+	str	x5, [x2, #PER_CPU_OFFSET_EXECUTING]
+#endif
+
+	b	.L_check_is_executing
+#endif

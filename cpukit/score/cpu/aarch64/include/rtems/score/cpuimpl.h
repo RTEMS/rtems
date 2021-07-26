@@ -50,7 +50,7 @@
  */
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
-#define CPU_INTERRUPT_FRAME_SIZE 240
+#define CPU_INTERRUPT_FRAME_SIZE 0x2E0
 
 #ifndef ASM
 
@@ -59,6 +59,71 @@ extern "C" {
 #endif
 
 RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error );
+
+typedef struct {
+  uint64_t x0;
+  uint64_t register_lr_original;
+  uint64_t register_lr;
+  uint64_t x1;
+  uint64_t x2;
+  uint64_t x3;
+  uint64_t x4;
+  uint64_t x5;
+  uint64_t x6;
+  uint64_t x7;
+  uint64_t x8;
+  uint64_t x9;
+  uint64_t x10;
+  uint64_t x11;
+  uint64_t x12;
+  uint64_t x13;
+  uint64_t x14;
+  uint64_t x15;
+  uint64_t x16;
+  uint64_t x17;
+  uint64_t x18;
+  uint64_t x19;
+  uint64_t x20;
+  uint64_t x21;
+#ifdef AARCH64_MULTILIB_VFP
+  uint128_t q0;
+  uint128_t q1;
+  uint128_t q2;
+  uint128_t q3;
+  uint128_t q4;
+  uint128_t q5;
+  uint128_t q6;
+  uint128_t q7;
+  uint128_t q8;
+  uint128_t q9;
+  uint128_t q10;
+  uint128_t q11;
+  uint128_t q12;
+  uint128_t q13;
+  uint128_t q14;
+  uint128_t q15;
+  uint128_t q16;
+  uint128_t q17;
+  uint128_t q18;
+  uint128_t q19;
+  uint128_t q20;
+  uint128_t q21;
+  uint128_t q22;
+  uint128_t q23;
+  uint128_t q24;
+  uint128_t q25;
+  uint128_t q26;
+  uint128_t q27;
+  uint128_t q28;
+  uint128_t q29;
+  uint128_t q30;
+  uint128_t q31;
+#endif /* AARCH64_MULTILIB_VFP */
+  uint64_t register_elr;
+  uint64_t register_spsr;
+  uint64_t register_fpsr;
+  uint64_t register_fpcr;
+} CPU_Interrupt_frame;
 
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 

@@ -60,6 +60,7 @@ extern "C" {
 #define BSP_ARM_GIC_DIST_BASE 0xf9010000
 
 #define BSP_RESET_SMC
+#define BSP_CPU_ON_USES_SMC
 
 /**
  * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
@@ -67,6 +68,14 @@ extern "C" {
  * Provide in the application to override the defaults in the BSP.
  */
 BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void);
+
+/**
+ * @brief Zynq UltraScale+ MPSoC specific set up of the MMU for non-primary
+ * cores.
+ *
+ * Provide in the application to override the defaults in the BSP.
+ */
+BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void );
 
 void zynqmp_debug_console_flush(void);
 

@@ -70,8 +70,10 @@ versal_setup_mmu_and_cache( void )
 {
   aarch64_mmu_setup();
 
-  aarch64_mmu_setup_translation_table_and_enable(
+  aarch64_mmu_setup_translation_table(
     &versal_mmu_config_table[ 0 ],
     RTEMS_ARRAY_SIZE( versal_mmu_config_table )
   );
+
+  aarch64_mmu_enable();
 }

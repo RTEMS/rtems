@@ -166,21 +166,21 @@ _el1_start:
 #ifdef RTEMS_SMP
   /* Read MPIDR and get current processor index */
   mrs x7, mpidr_el1
-  and x7, #0xff
+  and x7, x7, #0xff
 #endif
 
 #ifdef RTEMS_SMP
   /*
    * Get current per-CPU control and store it in PL1 only Thread ID
-   * Register (TPIDRPRW).
+   * Register (TPIDR_EL1).
    */
 #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
   ldr w1, =_Per_CPU_Information
 #else
   ldr x1, =_Per_CPU_Information
 #endif
-  add x1, x1, x7, asl #PER_CPU_CONTROL_SIZE_LOG2
-  mcr p15, 0, x1, c13, c0, 4
+  add x1, x1, x7, lsl #PER_CPU_CONTROL_SIZE_LOG2
+  msr TPIDR_EL1, x1
 
 #endif
 
@@ -201,8 +201,8 @@ _el1_start:
 #endif
   add x3, x1, x2
 
-  /* Save original DAIF value */
-  mrs  x4, DAIF
+  /* Disable interrupts */
+  msr DAIFSet, #0x2
 
 #ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
   mov x8, XZR
