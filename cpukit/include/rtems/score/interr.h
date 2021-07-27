@@ -215,21 +215,6 @@ typedef enum {
 typedef CPU_Uint32ptr Internal_errors_t;
 
 /**
- *  This type holds the fatal error information.
- */
-typedef struct {
-  /** This is the source of the error. */
-  Internal_errors_Source  the_source;
-  /** This is the error code. */
-  Internal_errors_t       the_error;
-} Internal_errors_Information;
-
-/**
- *  When a fatal error occurs, the error information is stored here.
- */
-extern Internal_errors_Information _Internal_errors_What_happened;
-
-/**
  * @brief Initiates system termination.
  *
  * This routine is invoked when the application or the executive itself
@@ -253,8 +238,7 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  * may install an initial extension that performs a system reset.  In this case
  * the non-initial extensions will be not called.
  *
- * Once all fatal handler executed the error information will be stored to
- * _Internal_errors_What_happened and the system state is set to
+ * Once all fatal handler executed the system state is set to
  * SYSTEM_STATE_TERMINATED.
  *
  * The final step is to call the CPU specific _CPU_Fatal_halt().

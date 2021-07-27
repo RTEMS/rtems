@@ -4,8 +4,7 @@
  * @ingroup RTEMSScoreIntErr
  *
  * @brief This source file contains the definition of ::_System_state_Current
- *   and ::_Internal_errors_What_happened and implementation of _Terminate() and
- *   _Internal_error().
+ *   and the implementation of _Terminate() and _Internal_error().
  */
 
 /*
@@ -28,22 +27,14 @@
 
 System_state_Codes _System_state_Current;
 
-Internal_errors_Information _Internal_errors_What_happened;
-
 void _Terminate(
   Internal_errors_Source the_source,
   Internal_errors_t      the_error
 )
 {
   _User_extensions_Fatal( the_source, the_error );
-
-  _Internal_errors_What_happened.the_source = the_source;
-  _Internal_errors_What_happened.the_error  = the_error;
-
   _System_state_Set( SYSTEM_STATE_TERMINATED );
-
   _SMP_Request_shutdown();
-
   _CPU_Fatal_halt( the_source, the_error );
 
   /* will not return from this routine */
