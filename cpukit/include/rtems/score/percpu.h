@@ -102,15 +102,18 @@ struct Scheduler_Context;
  * The processor state controls the life cycle of processors at the lowest
  * level.  No multi-threading or other high-level concepts matter here.
  *
- * State changes must be initiated via _Per_CPU_State_change().  This function
- * may not return in case someone requested a shutdown.  The
- * _SMP_Send_message() function will be used to notify other processors about
- * state changes if the other processor is in the up state.
+ * The state of a processor is indicated by the Per_CPU_Control::state membe.
+ * The current state of a processor can be get by _Per_CPU_Get_state().  Only
+ * the processor associated with the control may change its state using
+ * _Per_CPU_Set_state().
  *
  * Due to the sequential nature of the basic system initialization one
  * processor has a special role.  It is the processor executing the boot_card()
  * function.  This processor is called the boot processor.  All other
- * processors are called secondary.
+ * processors are called secondary.  The boot processor uses
+ * _SMP_Request_start_multitasking() to indicate that processors should start
+ * multiprocessing.  Secondary processors will wait for this request in
+ * _SMP_Start_multitasking_on_secondary_processor().
  *
  * @dot
  * digraph states {
@@ -150,21 +153,11 @@ typedef enum {
    * the first time.  The boot processor will wait for all secondary processors
    * to change into this state.  In case a secondary processor does not reach
    * this state the system will not start.  The secondary processors wait now
-   * for a change into the PER_CPU_STATE_REQUEST_START_MULTITASKING state set
-   * by the boot processor once all secondary processors reached the
-   * PER_CPU_STATE_READY_TO_START_MULTITASKING state.
+   * for a change into the PER_CPU_STATE_UP state set requested by the boot
+   * processor through ::_SMP_Ready_to_start_multitasking once all secondary
+   * processors reached the PER_CPU_STATE_READY_TO_START_MULTITASKING state.
    */
   PER_CPU_STATE_READY_TO_START_MULTITASKING,
-
-  /**
-   * @brief Multitasking start of processor is requested.
-   *
-   * The boot processor completed system initialization and is about to perform
-   * a context switch to its heir thread.  Secondary processors should now
-   * issue a context switch to the heir thread.  This normally enables
-   * interrupts on the processor for the first time.
-   */
-  PER_CPU_STATE_REQUEST_START_MULTITASKING,
 
   /**
    * @brief Normal multitasking state.
@@ -547,11 +540,12 @@ typedef struct Per_CPU_Control {
     char *data;
 
     /**
-     * @brief Indicates the current state of the CPU.
+     * @brief Indicates the current state of the processor.
      *
-     * This member is protected by the _Per_CPU_State_lock lock.
+     * Only the processor associated with this control is allowed to change
+     * this member.
      *
-     * @see _Per_CPU_State_change().
+     * @see _Per_CPU_Get_state() and _Per_CPU_Set_state().
      */
     Atomic_Uint state;
 
@@ -801,17 +795,13 @@ static inline void _Per_CPU_Set_state(
   Per_CPU_State    state
 )
 {
+  _Assert( cpu_self == _Per_CPU_Get() );
   _Atomic_Store_uint(
     &cpu_self->state,
     (unsigned int) state,
     ATOMIC_ORDER_RELEASE
   );
 }
-
-void _Per_CPU_State_change(
-  Per_CPU_Control *cpu,
-  Per_CPU_State new_state
-);
 
 /**
  * @brief Waits for a processor to change into a non-initial state.

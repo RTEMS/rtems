@@ -22,6 +22,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/smpimpl.h>
 
 void _Thread_Start_multitasking( void )
 {
@@ -29,7 +30,8 @@ void _Thread_Start_multitasking( void )
   Thread_Control  *heir;
 
 #if defined(RTEMS_SMP)
-  _Per_CPU_State_change( cpu_self, PER_CPU_STATE_UP );
+  _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_UP );
+  _SMP_Try_to_process_message( cpu_self, SMP_MESSAGE_FORCE_PROCESSING );
 
   /*
    * Threads begin execution in the _Thread_Handler() function.   This

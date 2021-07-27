@@ -47,6 +47,7 @@ static void fatal_extension(
 {
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
   uint32_t self = rtems_scheduler_get_processor();
+  uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
 
   assert(!always_set_to_false);
 
@@ -57,25 +58,29 @@ static void fatal_extension(
     assert(code == 0xdeadbeef);
 
     _SMP_Request_shutdown();
+    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
 
-    for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
+    for (cpu = 0; cpu < cpu_count; ++cpu) {
       const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
       Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
 
       assert(state == PER_CPU_STATE_SHUTDOWN);
     }
 
+    for (cpu = cpu_count; cpu < MAX_CPUS; ++cpu) {
+      const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+      Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
+
+      assert(state == PER_CPU_STATE_INITIAL);
+    }
+
     TEST_END();
   } else if ( source == RTEMS_FATAL_SOURCE_SMP ) {
     assert(self != main_cpu);
-    assert(code == SMP_FATAL_SHUTDOWN);
+    assert(code == SMP_FATAL_SHUTDOWN_RESPONSE);
+    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
+    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
   }
-
-  _SMP_barrier_Wait(
-    &barrier,
-    &barrier_state,
-    rtems_scheduler_get_processor_maximum()
-  );
 }
 
 static rtems_status_code test_driver_init(

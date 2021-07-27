@@ -92,27 +92,6 @@ void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
   _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
 }
 
-static void _Per_CPU_Try_perform_jobs( Per_CPU_Control *cpu_self )
-{
-  unsigned long message;
-
-  message = _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED );
-
-  if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
-    bool success;
-
-    success = _Atomic_Compare_exchange_ulong(
-      &cpu_self->message, &message,
-      message & ~SMP_MESSAGE_PERFORM_JOBS, ATOMIC_ORDER_RELAXED,
-      ATOMIC_ORDER_RELAXED
-    );
-
-    if ( success ) {
-      _Per_CPU_Perform_jobs( cpu_self );
-    }
-  }
-}
-
 void _Per_CPU_Wait_for_job(
   const Per_CPU_Control *cpu,
   const Per_CPU_Job     *job
@@ -122,17 +101,22 @@ void _Per_CPU_Wait_for_job(
     _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
       != PER_CPU_JOB_DONE
   ) {
+    Per_CPU_Control *cpu_self;
+
     switch ( _Per_CPU_Get_state( cpu ) ) {
       case PER_CPU_STATE_INITIAL:
       case PER_CPU_STATE_READY_TO_START_MULTITASKING:
-      case PER_CPU_STATE_REQUEST_START_MULTITASKING:
       case PER_CPU_STATE_UP:
         /*
-         * Calling this function with the current processor is intentional.
-         * We have to perform our own jobs here in case inter-processor
-         * interrupts are not working.
+         * Calling this function with the current processor is intentional.  We
+         * have to perform our own jobs here in case inter-processor interrupts
+         * are not working.
          */
-        _Per_CPU_Try_perform_jobs( _Per_CPU_Get() );
+        cpu_self = _Per_CPU_Get();
+        _SMP_Try_to_process_message(
+          cpu_self,
+          _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED )
+        );
         break;
       default:
         _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );

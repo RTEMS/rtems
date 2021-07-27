@@ -4,7 +4,8 @@ test set name: smpfatal01
 
 directives:
 
-  - _Per_CPU_State_change()
+  - _SMP_Request_shutdown()
+  - _SMP_Request_start_multitasking()
 
 concepts:
 

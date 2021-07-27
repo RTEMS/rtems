@@ -32,6 +32,8 @@ const char rtems_test_name[] = "SMPFATAL 1";
 
 static uint32_t main_cpu;
 
+static uint32_t other_cpu;
+
 static SMP_barrier_Control barrier = SMP_BARRIER_CONTROL_INITIALIZER;
 
 static void Init(rtems_task_argument arg)
@@ -45,34 +47,58 @@ static void fatal_extension(
   rtems_fatal_code code
 )
 {
-  SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
+  assert(!always_set_to_false);
 
   if (source == RTEMS_FATAL_SOURCE_SMP) {
+    SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
+    uint32_t cpu_count = rtems_scheduler_get_processor_maximum();
     uint32_t self = rtems_scheduler_get_processor();
 
-    assert(!always_set_to_false);
-    assert(code == SMP_FATAL_SHUTDOWN);
+    if (self == other_cpu) {
+      assert(code == SMP_FATAL_SHUTDOWN);
+    } else {
+      assert(code == SMP_FATAL_SHUTDOWN_RESPONSE);
+    }
+
+    _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
 
     if (self == main_cpu) {
       uint32_t cpu;
 
-      for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
+      for (cpu = 0; cpu < cpu_count; ++cpu) {
         const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
         Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
 
         assert(state == PER_CPU_STATE_SHUTDOWN);
       }
 
+      for (cpu = cpu_count; cpu < MAX_CPUS; ++cpu) {
+        const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+        Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
+
+        assert(state == PER_CPU_STATE_INITIAL);
+      }
+
       TEST_END();
+    } else {
+      _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
     }
   }
-
-  _SMP_barrier_Wait(
-    &barrier,
-    &barrier_state,
-    rtems_scheduler_get_processor_maximum()
-  );
 }
+
+static void shutdown_handler(void *arg)
+{
+  _SMP_Request_shutdown();
+  _SMP_Fatal(SMP_FATAL_SHUTDOWN);
+}
+
+static const Per_CPU_Job_context shutdown_context = {
+  .handler = shutdown_handler
+};
+
+static Per_CPU_Job shutdown_job = {
+  .context = &shutdown_context
+};
 
 static rtems_status_code test_driver_init(
   rtems_device_major_number major,
@@ -89,6 +115,7 @@ static rtems_status_code test_driver_init(
   assert(rtems_configuration_get_maximum_processors() == MAX_CPUS);
 
   main_cpu = self;
+  other_cpu = (self + 1) % cpu_count;
 
   for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
     const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
@@ -107,10 +134,14 @@ static rtems_status_code test_driver_init(
   }
 
   if (cpu_count > 1) {
-    uint32_t other = (self + 1) % cpu_count;
-    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( other );
+    Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( other_cpu );
 
-    _Per_CPU_Set_state(per_cpu, PER_CPU_STATE_SHUTDOWN);
+    _Per_CPU_Add_job(per_cpu, &shutdown_job);
+    _Atomic_Fetch_or_ulong(
+      &per_cpu->message,
+      SMP_MESSAGE_PERFORM_JOBS,
+      ATOMIC_ORDER_RELEASE
+    );
   } else {
     TEST_END();
     exit(0);

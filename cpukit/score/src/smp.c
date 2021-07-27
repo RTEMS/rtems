@@ -5,11 +5,12 @@
  *
  * @brief This source file contains the definition of ::_SMP_Online_processors
  *   and ::_SMP_Processor_maximum and the implementation of
- *   _SMP_Handler_initialize(), _SMP_Request_shutdown(),
- *   _SMP_Request_start_multitasking(), _SMP_Send_message(),
- *   _SMP_Send_message_broadcast(), _SMP_Send_message_multicast(),
- *   _SMP_Should_start_processor(), and
- *   _SMP_Start_multitasking_on_secondary_processor().
+ *   _SMP_Handler_initialize(),  _SMP_Process_message(),
+ *   _SMP_Request_shutdown(), _SMP_Request_start_multitasking(),
+ *   _SMP_Send_message(), _SMP_Send_message_broadcast(),
+ *   _SMP_Send_message_multicast(), _SMP_Should_start_processor(),
+ *   _SMP_Start_multitasking_on_secondary_processor(), and
+ *   _SMP_Try_to_process_message().
  */
 
 /*
@@ -34,6 +35,15 @@
 #if CPU_USE_DEFERRED_FP_SWITCH == TRUE
   #error "deferred FP switch not implemented for SMP"
 #endif
+
+/**
+ * @brief Indicates if the system is ready to start multitasking.
+ *
+ * Only the boot processor is allowed to change this object.  If the object has
+ * a non-zero value and no fatal error occurred, then secondary processors
+ * should call _Thread_Start_multitasking() to start multiprocessing.
+ */
+static Atomic_Uint _SMP_Ready_to_start_multitasking;
 
 Processor_mask _SMP_Online_processors;
 
@@ -159,20 +169,38 @@ void _SMP_Request_start_multitasking( void )
   uint32_t         cpu_max;
   uint32_t         cpu_index;
 
-  cpu_self = _Per_CPU_Get();
-  _Per_CPU_State_change( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
-
   cpu_max = _SMP_Get_processor_maximum();
+  cpu_self = _Per_CPU_Get();
 
+  /*
+   * Wait until all other online processors reached the
+   * PER_CPU_STATE_READY_TO_START_MULTITASKING state.  The waiting is done
+   * without a timeout.  If secondary processors cannot reach this state, then
+   * it is expected that they indicate this failure with an
+   * ::SMP_MESSAGE_SHUTDOWN message or reset the system.
+   */
   for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control *cpu;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    if ( _Per_CPU_Is_processor_online( cpu ) ) {
-      _Per_CPU_State_change( cpu, PER_CPU_STATE_REQUEST_START_MULTITASKING );
+    if ( cpu != cpu_self && _Per_CPU_Is_processor_online( cpu ) ) {
+      while (
+        _Per_CPU_Get_state( cpu ) != PER_CPU_STATE_READY_TO_START_MULTITASKING
+      ) {
+        _SMP_Try_to_process_message(
+          cpu_self,
+          _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED )
+        );
+      }
     }
   }
+
+  _Atomic_Store_uint(
+    &_SMP_Ready_to_start_multitasking,
+    1U,
+    ATOMIC_ORDER_RELEASE
+  );
 }
 
 bool _SMP_Should_start_processor( uint32_t cpu_index )
@@ -181,6 +209,22 @@ bool _SMP_Should_start_processor( uint32_t cpu_index )
 
   assignment = _Scheduler_Get_initial_assignment( cpu_index );
   return _Scheduler_Should_start_processor( assignment );
+}
+
+static void _SMP_Wait_for_start_multitasking( Per_CPU_Control *cpu_self )
+{
+  unsigned int ready;
+
+  do {
+    _SMP_Try_to_process_message(
+      cpu_self,
+      _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED )
+    );
+    ready = _Atomic_Load_uint(
+      &_SMP_Ready_to_start_multitasking,
+      ATOMIC_ORDER_ACQUIRE
+    );
+  } while ( ready == 0U );
 }
 
 void _SMP_Start_multitasking_on_secondary_processor(
@@ -199,28 +243,96 @@ void _SMP_Start_multitasking_on_secondary_processor(
     _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR );
   }
 
-  _Per_CPU_State_change( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
-
+  _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
+  _SMP_Wait_for_start_multitasking( cpu_self );
   _Thread_Start_multitasking();
 }
 
 void _SMP_Request_shutdown( void )
 {
   ISR_Level level;
+  uint32_t  cpu_max;
+  uint32_t  cpu_index_self;
+  uint32_t  cpu_index;
 
   _ISR_Local_disable( level );
   (void) level;
 
-  _Per_CPU_State_change( _Per_CPU_Get(), PER_CPU_STATE_SHUTDOWN );
+  cpu_max = _SMP_Processor_configured_maximum;
+  cpu_index_self = _SMP_Get_current_processor();
+
+  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
+    Per_CPU_Control *cpu;
+
+    cpu = _Per_CPU_Get_by_index( cpu_index );
+
+    if ( cpu_index == cpu_index_self ) {
+      _Per_CPU_Set_state( cpu, PER_CPU_STATE_SHUTDOWN );
+    } else {
+      _Atomic_Fetch_or_ulong(
+        &cpu->message,
+        SMP_MESSAGE_SHUTDOWN,
+        ATOMIC_ORDER_RELEASE
+      );
+
+      if ( _Per_CPU_Get_state( cpu ) == PER_CPU_STATE_UP ) {
+        _CPU_SMP_Send_interrupt( cpu_index );
+      }
+    }
+  }
+}
+
+long unsigned _SMP_Process_message(
+  Per_CPU_Control *cpu_self,
+  long unsigned    message
+)
+{
+  if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
+    /* Check the state to prevent recursive shutdowns */
+    if ( _Per_CPU_Get_state( cpu_self ) != PER_CPU_STATE_SHUTDOWN ) {
+      _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_SHUTDOWN );
+      _SMP_Fatal( SMP_FATAL_SHUTDOWN_RESPONSE );
+    }
+  }
+
+  if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
+    _Per_CPU_Perform_jobs( cpu_self );
+  }
+}
+
+void _SMP_Try_to_process_message(
+  Per_CPU_Control *cpu_self,
+  unsigned long    message
+)
+{
+  if ( message != 0 ) {
+    /*
+     * Fetch the current message.  Only a read-modify-write operation
+     * guarantees that we get an up to date message.  This is especially
+     * important if the function was called using SMP_MESSAGE_FORCE_PROCESSING.
+     */
+    message = _Atomic_Exchange_ulong(
+      &cpu_self->message,
+      0,
+      ATOMIC_ORDER_ACQUIRE
+    );
+
+    _SMP_Process_message( cpu_self, message );
+  }
 }
 
 void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
 {
   Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-  _Atomic_Fetch_or_ulong( &cpu->message, message, ATOMIC_ORDER_RELEASE );
+  (void) _Atomic_Fetch_or_ulong(
+    &cpu->message, message,
+    ATOMIC_ORDER_RELEASE
+  );
 
-  _CPU_SMP_Send_interrupt( cpu_index );
+  if ( _Per_CPU_Get_state( cpu ) == PER_CPU_STATE_UP ) {
+    _CPU_SMP_Send_interrupt( cpu_index );
+  }
 }
 
 void _SMP_Send_message_broadcast( unsigned long message )

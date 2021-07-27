@@ -51,6 +51,16 @@ extern "C" {
 #define SMP_MESSAGE_PERFORM_JOBS 0x2UL
 
 /**
+ * @brief SMP message to force the message processing in
+ *   _SMP_Try_to_process_message().
+ *
+ * This message bit is never sent to a processor.  It is only used to force the
+ * message processing in _SMP_Try_to_process_message().  Any non-zero value
+ * would do it.
+ */
+#define SMP_MESSAGE_FORCE_PROCESSING 0x4UL
+
+/**
  * @brief SMP fatal codes.
  */
 typedef enum {
@@ -130,11 +140,47 @@ RTEMS_NO_RETURN void _SMP_Start_multitasking_on_secondary_processor(
 );
 
 /**
- * @brief Interrupts handler for inter-processor interrupts.
+ * @brief Processes the SMP message.
  *
- * @param[in, out] cpu_self The cpu control for the operation.
+ * @param[in, out] cpu_self is the processor control of the processor executing
+ *   this function.
  *
- * @return The received message.
+ * @return Returns the processed message.
+ */
+long unsigned _SMP_Process_message(
+  Per_CPU_Control *cpu_self,
+  long unsigned    message
+);
+
+/**
+ * @brief Tries to process the current SMP message.
+ *
+ * This function may be used in busy wait loops.
+ *
+ * @param cpu_self is the processor control of the processor executing this
+ *   function.
+ *
+ * @param message is used to check if the SMP message processing should be
+ *   carried out.  If it is not equal to zero, then _SMP_Process_message() is
+ *   called with a newly fetched message.  This parameter is not used to process
+ *   the message.  It is only used to check if the processing is necessary.
+ *   Use #SMP_MESSAGE_FORCE_PROCESSING to force the message processing.
+ */
+void _SMP_Try_to_process_message(
+  Per_CPU_Control *cpu_self,
+  unsigned long    message
+);
+
+/**
+ * @brief Processes an inter-processor interrupt.
+ *
+ * Use this function for the inter-processor interrupt handler.  Never call
+ * this function in a tight loop.
+ *
+ * @param[in, out] cpu_self is the processor control of the processor executing
+ *   this function.
+ *
+ * @return Returns the processed message.
  */
 static inline long unsigned _SMP_Inter_processor_interrupt_handler(
   Per_CPU_Control *cpu_self
@@ -155,14 +201,7 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
   );
 
   if ( RTEMS_PREDICT_FALSE( message != 0 ) ) {
-    if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
-      _SMP_Fatal( SMP_FATAL_SHUTDOWN_RESPONSE );
-      /* does not continue past here */
-    }
-
-    if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
-      _Per_CPU_Perform_jobs( cpu_self );
-    }
+    return _SMP_Process_message( cpu_self, message );
   }
 
   return message;

@@ -4,7 +4,8 @@ test set name: smpfatal02
 
 directives:
 
-  - _Per_CPU_State_change()
+  - _Terminate()
+  - _SMP_Start_multitasking_on_secondary_processor()
 
 concepts:
 
