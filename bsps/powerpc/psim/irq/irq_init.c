@@ -158,12 +158,11 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
+  rtems_status_code sc;
+
   /* Install exception handler */
-  if (ppc_exc_set_handler( ASM_EXT_VECTOR, psim_exception_handler)) {
-    return RTEMS_IO_ERROR;
-  }
-  
-  return RTEMS_SUCCESSFUL;
+  sc = ppc_exc_set_handler( ASM_EXT_VECTOR, psim_exception_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
 }

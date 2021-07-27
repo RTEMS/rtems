@@ -548,20 +548,17 @@ static int BSP_irq_handle_at_ipic( unsigned excNum)
  * Fill the array mpc83xx_ipic_prio2mask to allow masking of lower prio sources
  * to implement nested interrupts.
  */
-static rtems_status_code mpc83xx_ipic_calc_prio2mask(void)
+static void mpc83xx_ipic_calc_prio2mask(void)
 {
-  rtems_status_code rc = RTEMS_SUCCESSFUL;
-
   /*
    * FIXME: fill the array
    */
-  return rc;
 }
 
 /*
  * Activate the interrupt controller
  */
-static rtems_status_code mpc83xx_ipic_initialize(void)
+static void mpc83xx_ipic_initialize(void)
 {
   /*
    * mask off all interrupts
@@ -613,7 +610,7 @@ static rtems_status_code mpc83xx_ipic_initialize(void)
   /*
    * calculate priority masks
    */
-  return mpc83xx_ipic_calc_prio2mask();
+  mpc83xx_ipic_calc_prio2mask();
 }
 
 static int mpc83xx_exception_handler(
@@ -624,19 +621,18 @@ static int mpc83xx_exception_handler(
   return BSP_irq_handle_at_ipic( exception_number);
 }
 
-rtems_status_code bsp_interrupt_facility_initialize()
+void bsp_interrupt_facility_initialize()
 {
+  rtems_status_code sc;
+
   /* Install exception handler */
-  if (ppc_exc_set_handler( ASM_EXT_VECTOR, mpc83xx_exception_handler)) {
-    return RTEMS_IO_ERROR;
-  }
-  if (ppc_exc_set_handler( ASM_E300_SYSMGMT_VECTOR, mpc83xx_exception_handler)) {
-    return RTEMS_IO_ERROR;
-  }
-  if (ppc_exc_set_handler( ASM_E300_CRIT_VECTOR, mpc83xx_exception_handler)) {
-    return RTEMS_IO_ERROR;
-  }
+  sc = ppc_exc_set_handler( ASM_EXT_VECTOR, mpc83xx_exception_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
+  sc = ppc_exc_set_handler( ASM_E300_SYSMGMT_VECTOR, mpc83xx_exception_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
+  sc = ppc_exc_set_handler( ASM_E300_CRIT_VECTOR, mpc83xx_exception_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
 
   /* Initialize the interrupt controller */
-  return mpc83xx_ipic_initialize();
+  mpc83xx_ipic_initialize();
 }

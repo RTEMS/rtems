@@ -125,7 +125,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
     return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   uint32_t int_stat = 0;
 
@@ -221,6 +221,4 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   int_stat = *EP7312_INTSR3;
 
   _CPU_ISR_install_vector(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt, NULL);
-
-  return RTEMS_SUCCESSFUL;
 }

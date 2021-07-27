@@ -181,7 +181,7 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 	}
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
 	unsigned int i;
 
@@ -458,7 +458,7 @@ static void pic_global_timer_init(void)
 	}
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
 	rtems_vector_number i = 0;
 	uint32_t processor_id = ppc_processor_id();
@@ -494,8 +494,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 		qoriq.pic.eoi = 0;
 		qoriq.pic.whoami;
 	}
-
-	return RTEMS_SUCCESSFUL;
 }
 
 #endif /* QORIQ_IS_HYPERVISOR_GUEST */

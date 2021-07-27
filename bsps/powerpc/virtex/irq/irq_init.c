@@ -203,11 +203,12 @@ static int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned int excNu
   return 0;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
+  rtems_status_code sc;
+
   opb_intc_init();
 
-  ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
-
-  return RTEMS_SUCCESSFUL;
+  sc = ppc_exc_set_handler(ASM_EXT_VECTOR, C_dispatch_irq_handler);
+  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
 }

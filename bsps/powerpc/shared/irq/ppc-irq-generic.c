@@ -151,11 +151,10 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   /*
    * Initialize RTEMS IRQ system
    */
   BSP_rtems_irq_mng_init(0);
-  return RTEMS_SUCCESSFUL;
 }

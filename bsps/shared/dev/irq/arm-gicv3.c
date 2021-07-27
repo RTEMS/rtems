@@ -388,7 +388,7 @@ static void gicv3_init_cpu_interface(void)
   WRITE_SR(ICC_CTLR, 0x0);
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
   uint32_t id_count = get_id_count(dist);
@@ -423,7 +423,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   }
 
   gicv3_init_cpu_interface();
-  return RTEMS_SUCCESSFUL;
 }
 
 #ifdef RTEMS_SMP

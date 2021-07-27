@@ -160,13 +160,7 @@ rtems_interrupt_entry *bsp_interrupt_entry_find(
 
 void bsp_interrupt_initialize( void )
 {
-  rtems_status_code sc;
-
-  sc = bsp_interrupt_facility_initialize();
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    bsp_fatal( BSP_FATAL_INTERRUPT_INITIALIZATION );
-  }
-
+  bsp_interrupt_facility_initialize();
   bsp_interrupt_set_initialized();
 }
 

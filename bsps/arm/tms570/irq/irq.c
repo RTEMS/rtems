@@ -174,7 +174,7 @@ rtems_status_code bsp_interrupt_vector_disable(
  *
  * @retval RTEMS_SUCCESSFUL All is set
  */
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   void (**vim_vec)(void) = (void (**)(void)) 0xFFF82000;
   unsigned int value = 0x00010203;
@@ -241,6 +241,4 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     sctlr |= 1 << 24;
   #endif
   asm volatile ("mcr p15, 0, %0, c1, c0, 0\n": : "r" (sctlr));
-
-  return RTEMS_SUCCESSFUL;
 }

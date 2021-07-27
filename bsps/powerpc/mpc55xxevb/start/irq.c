@@ -131,7 +131,7 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 	INTC.EOIR.R = 1;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
 	rtems_vector_number vector;
 
@@ -148,8 +148,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
 	/* Set current priority to 0 */
 	INTC.CPR.B.PRI = 0;
-
-	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(

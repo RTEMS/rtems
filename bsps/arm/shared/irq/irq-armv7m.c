@@ -94,7 +94,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   ARMV7M_Exception_handler *vector_table;
   int                       i;
@@ -118,8 +118,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   }
 
   _ARMV7M_SCB->vtor = vector_table;
-
-  return RTEMS_SUCCESSFUL;
 }
 
 #endif /* ARM_MULTILIB_ARCH_V7M */

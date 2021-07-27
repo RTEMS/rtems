@@ -12,9 +12,9 @@
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
-  return RTEMS_SUCCESSFUL;
+  /* Nothing to do */
 }
 
 rtems_status_code bsp_interrupt_get_attributes(

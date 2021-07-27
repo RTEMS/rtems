@@ -347,7 +347,7 @@ void lpc32xx_set_exception_handler(
   }
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   size_t i = 0;
 
@@ -385,6 +385,4 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   lpc32xx.sic_2.atr = 0x0;
 
   lpc32xx_set_exception_handler(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt);
-
-  return RTEMS_SUCCESSFUL;
 }

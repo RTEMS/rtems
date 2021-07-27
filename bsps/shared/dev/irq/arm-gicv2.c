@@ -208,7 +208,7 @@ static void enable_fiq(void)
 #endif
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
   volatile gic_dist *dist = ARM_GIC_DIST;
@@ -239,7 +239,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   dist->icddcr = GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE;
 
   enable_fiq();
-  return RTEMS_SUCCESSFUL;
 }
 
 #ifdef RTEMS_SMP

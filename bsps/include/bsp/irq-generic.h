@@ -202,10 +202,8 @@ void bsp_interrupt_initialize(void);
  * The vectors will be enabled with your bsp_interrupt_vector_enable() function
  * and disabled via your bsp_interrupt_vector_disable() function.  These
  * functions have to work afterwards.
- *
- * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_facility_initialize(void);
+void bsp_interrupt_facility_initialize(void);
 
 /**
  * @brief Gets the attributes of the interrupt vector.

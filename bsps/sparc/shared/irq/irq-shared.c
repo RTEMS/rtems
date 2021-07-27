@@ -35,10 +35,9 @@ bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
   return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   /* Nothing to do */
-  return RTEMS_SUCCESSFUL;
 }
 
 static bool is_maskable(rtems_vector_number vector)

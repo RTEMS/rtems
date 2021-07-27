@@ -326,7 +326,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   int i;
 
@@ -347,8 +347,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
   for (i = 0; i < BSP_IRQ_LINES_NUMBER; i++)
     irq_trigger[i] = elcr_read_trigger(i);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 static bool bsp_interrupt_handler_is_empty(rtems_vector_number vector)

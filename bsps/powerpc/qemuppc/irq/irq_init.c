@@ -94,12 +94,11 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
-  /* Install exception handler */
-  if (ppc_exc_set_handler( ASM_EXT_VECTOR, qemuppc_exception_handler)) {
-    return RTEMS_IO_ERROR;
-  }
+  rtems_status_code sc;
 
-  return RTEMS_SUCCESSFUL;
+  /* Install exception handler */
+  sc = ppc_exc_set_handler( ASM_EXT_VECTOR, qemuppc_exception_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
 }

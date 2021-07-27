@@ -226,8 +226,10 @@ static int BSP_irq_handle_at_siu( unsigned excNum)
 /*
  * Activate the CPIC
  */
-static rtems_status_code mpc8xx_cpic_initialize( void)
+static void mpc8xx_cpic_initialize( void)
 {
+  rtems_status_code sc;
+
   /*
    * mask off all interrupts
    */
@@ -240,20 +242,19 @@ static rtems_status_code mpc8xx_cpic_initialize( void)
   /*
    * enable CPIC interrupt in SIU interrupt controller
    */
-  return bsp_irq_enable_at_SIU(BSP_CPM_INTERRUPT);
+  sc = bsp_irq_enable_at_SIU(BSP_CPM_INTERRUPT);
+  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
 }
 
 /*
  * Activate the SIU interrupt controller
  */
-static rtems_status_code mpc8xx_siu_int_initialize( void)
+static void mpc8xx_siu_int_initialize( void)
 {
   /*
    * mask off all interrupts
    */
   m8xx.simask = 0;
-
-  return RTEMS_SUCCESSFUL;
 }
 
 static int mpc8xx_exception_handler(BSP_Exception_frame *frame,
@@ -262,16 +263,17 @@ static int mpc8xx_exception_handler(BSP_Exception_frame *frame,
   return BSP_irq_handle_at_siu(exception_number);
 }
 
-rtems_status_code bsp_interrupt_facility_initialize()
+void bsp_interrupt_facility_initialize()
 {
+  rtems_status_code sc;
+
   /* Install exception handler */
-  if (ppc_exc_set_handler(ASM_EXT_VECTOR, mpc8xx_exception_handler)) {
-    return RTEMS_IO_ERROR;
-  }
+  sc = ppc_exc_set_handler(ASM_EXT_VECTOR, mpc8xx_exception_handler);
+  _Assert_Unused_variable_equals(sc, RTEMS_SUCCESSFUL);
+
   /* Initialize the SIU interrupt controller */
-  if (mpc8xx_siu_int_initialize()) {
-    return RTEMS_IO_ERROR;
-  }
+  mpc8xx_siu_int_initialize();
+
   /* Initialize the CPIC interrupt controller */
-  return mpc8xx_cpic_initialize();
+  mpc8xx_cpic_initialize();
 }

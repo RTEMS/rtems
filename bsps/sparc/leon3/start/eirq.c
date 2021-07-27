@@ -45,7 +45,7 @@ bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
 Processor_mask leon3_interrupt_affinities[BSP_INTERRUPT_VECTOR_MAX_STD + 1];
 #endif
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
 #if defined(RTEMS_SMP)
   Processor_mask affinity;
@@ -57,8 +57,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     leon3_interrupt_affinities[i] = affinity;
   }
 #endif
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(

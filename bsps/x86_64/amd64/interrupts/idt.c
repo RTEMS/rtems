@@ -129,7 +129,7 @@ void amd64_dispatch_isr(rtems_vector_number vector)
   bsp_interrupt_handler_dispatch(vector);
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   uintptr_t old;
   for (uint32_t i = 0; i < BSP_IRQ_VECTOR_NUMBER; i++) {
@@ -137,8 +137,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   }
 
   lidt(&idtr);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)

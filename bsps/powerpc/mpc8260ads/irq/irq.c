@@ -398,21 +398,19 @@ rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize()
+void bsp_interrupt_facility_initialize()
 {
+  rtems_status_code sc;
+
   /* Install exception handler */
-  if (ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler)) {
-    return RTEMS_IO_ERROR;
-  }
-  if (ppc_exc_set_handler( ASM_DEC_VECTOR, C_dispatch_irq_handler)) {
-    return RTEMS_IO_ERROR;
-  }
+  sc = ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
+  sc = ppc_exc_set_handler( ASM_DEC_VECTOR, C_dispatch_irq_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
 
   /* Fill in priority masks */
   compute_SIU_IvectMask_from_prio();
 
   /* Initialize the interrupt controller */
   BSP_CPM_irq_init();
-
-  return RTEMS_SUCCESSFUL;
 }

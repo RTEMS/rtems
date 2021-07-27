@@ -93,7 +93,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_UNSATISFIED;
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
-  return RTEMS_NOT_IMPLEMENTED;
+  /* Nothing to do */
 }

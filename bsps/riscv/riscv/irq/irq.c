@@ -215,15 +215,13 @@ static void riscv_plic_init(const void *fdt)
   set_csr(mie, MIP_MEIP);
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
   const void *fdt;
 
   fdt = bsp_fdt_get();
   riscv_clint_init(fdt);
   riscv_plic_init(fdt);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(

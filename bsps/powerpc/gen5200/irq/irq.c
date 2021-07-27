@@ -745,19 +745,17 @@ static void BSP_SIU_irq_init( void)
   setup_irqMaskTable();
 }
 
-rtems_status_code bsp_interrupt_facility_initialize( void)
+void bsp_interrupt_facility_initialize( void)
 {
+  rtems_status_code sc;
+
   BSP_SIU_irq_init();
 
   /* Install exception handler */
-  if (ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler)) {
-    return RTEMS_IO_ERROR;
-  }
-  if (ppc_exc_set_handler( ASM_E300_SYSMGMT_VECTOR, C_dispatch_irq_handler)) {
-    return RTEMS_IO_ERROR;
-  }
-
-  return RTEMS_SUCCESSFUL;
+  sc = ppc_exc_set_handler( ASM_EXT_VECTOR, C_dispatch_irq_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
+  sc = ppc_exc_set_handler( ASM_E300_SYSMGMT_VECTOR, C_dispatch_irq_handler);
+  _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL);
 }
 
 void bsp_interrupt_handler_default( rtems_vector_number vector)

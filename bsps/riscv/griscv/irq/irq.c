@@ -75,7 +75,7 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
   }
 }
 
-rtems_status_code bsp_interrupt_facility_initialize(void)
+void bsp_interrupt_facility_initialize(void)
 {
 
   /*
@@ -83,8 +83,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
    * bsp_start_on_secondary_processor().
    */
   set_csr(mie, MIP_MEIP);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
