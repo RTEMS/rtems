@@ -1004,16 +1004,6 @@ RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
   #endif
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
-
-  static inline void _CPU_SMP_Processor_event_broadcast( void )
-  {
-    __asm__ volatile ( "" : : : "memory" );
-  }
-
-  static inline void _CPU_SMP_Processor_event_receive( void )
-  {
-    __asm__ volatile ( "" : : : "memory" );
-  }
 #endif
 
 #if defined(SPARC_USE_LAZY_FP_SWITCH)

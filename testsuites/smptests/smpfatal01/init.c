@@ -58,7 +58,7 @@ static void fatal_extension(
 
       for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
         const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-        Per_CPU_State state = per_cpu->state;
+        Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
 
         assert(state == PER_CPU_STATE_SHUTDOWN);
       }
@@ -92,7 +92,7 @@ static rtems_status_code test_driver_init(
 
   for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
     const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-    Per_CPU_State state = per_cpu->state;
+    Per_CPU_State state = _Per_CPU_Get_state(per_cpu);
 
     if (cpu == self) {
       assert(state == PER_CPU_STATE_INITIAL);
@@ -110,7 +110,7 @@ static rtems_status_code test_driver_init(
     uint32_t other = (self + 1) % cpu_count;
     Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( other );
 
-    per_cpu->state = PER_CPU_STATE_SHUTDOWN;
+    _Per_CPU_Set_state(per_cpu, PER_CPU_STATE_SHUTDOWN);
   } else {
     TEST_END();
     exit(0);

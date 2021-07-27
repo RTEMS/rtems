@@ -390,7 +390,7 @@ static void set_wrong_cpu_state(void *arg)
 
   cpu_self = arg;
   T_step_eq_ptr(0, cpu_self, _Per_CPU_Get());
-  cpu_self->state = 123;
+  _Per_CPU_Set_state(cpu_self, 123);
 
   while (true) {
     /* Do nothing */

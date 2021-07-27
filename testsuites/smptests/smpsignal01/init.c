@@ -33,7 +33,7 @@ typedef enum {
 } test_state;
 
 typedef struct {
-  test_state state;
+  volatile test_state state;
   rtems_id consumer;
   rtems_id producer;
   uint32_t consumer_processor;
@@ -45,13 +45,12 @@ typedef struct {
 static void change_state(test_context *ctx, test_state new_state)
 {
   ctx->state = new_state;
-  _CPU_SMP_Processor_event_broadcast();
 }
 
 static void wait_for_state(const test_context *ctx, test_state desired_state)
 {
   while ( ctx->state != desired_state ) {
-    _CPU_SMP_Processor_event_receive();
+    /* Wait */
   }
 }
 

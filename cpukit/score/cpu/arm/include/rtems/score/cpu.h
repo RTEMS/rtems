@@ -510,18 +510,6 @@ RTEMS_NO_RETURN void _CPU_Context_restore( Context_Control *new_context );
   {
     __asm__ volatile ( "wfe" : : : "memory" );
   }
-
-  static inline void _CPU_SMP_Processor_event_broadcast( void )
-  {
-    _ARM_Data_synchronization_barrier();
-    _ARM_Send_event();
-  }
-
-  static inline void _CPU_SMP_Processor_event_receive( void )
-  {
-    _ARM_Wait_for_event();
-    _ARM_Data_memory_barrier();
-  }
 #endif
 
 

@@ -973,16 +973,6 @@ void _CPU_Context_restore_fp(
   }
 
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
-
-  static inline void _CPU_SMP_Processor_event_broadcast( void )
-  {
-    __asm__ volatile ( "" : : : "memory" );
-  }
-
-  static inline void _CPU_SMP_Processor_event_receive( void )
-  {
-    __asm__ volatile ( "" : : : "memory" );
-  }
 #endif
 
 typedef struct {

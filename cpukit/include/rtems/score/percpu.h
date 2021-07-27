@@ -553,7 +553,7 @@ typedef struct Per_CPU_Control {
      *
      * @see _Per_CPU_State_change().
      */
-    Per_CPU_State state;
+    Atomic_Uint state;
 
     /**
      * @brief FIFO list of jobs to be performed by this processor.
@@ -774,6 +774,39 @@ RTEMS_INLINE_ROUTINE void _Per_CPU_Release_all(
 }
 
 #if defined( RTEMS_SMP )
+
+/**
+ * @brief Gets the current processor state.
+ *
+ * @param cpu is the processor control.
+ *
+ * @return Returns the current state of the processor.
+ */
+static inline Per_CPU_State _Per_CPU_Get_state( const Per_CPU_Control *cpu )
+{
+  return (Per_CPU_State)
+    _Atomic_Load_uint( &cpu->state, ATOMIC_ORDER_ACQUIRE );
+}
+
+/**
+ * @brief Sets the processor state of the current processor.
+ *
+ * @param cpu_self is the processor control of the processor executing this
+ *   function.
+ *
+ * @param state is the new processor state.
+ */
+static inline void _Per_CPU_Set_state(
+  Per_CPU_Control *cpu_self,
+  Per_CPU_State    state
+)
+{
+  _Atomic_Store_uint(
+    &cpu_self->state,
+    (unsigned int) state,
+    ATOMIC_ORDER_RELEASE
+  );
+}
 
 void _Per_CPU_State_change(
   Per_CPU_Control *cpu,

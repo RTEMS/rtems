@@ -122,12 +122,10 @@ void _Per_CPU_Wait_for_job(
     _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
       != PER_CPU_JOB_DONE
   ) {
-    switch ( cpu->state ) {
+    switch ( _Per_CPU_Get_state( cpu ) ) {
       case PER_CPU_STATE_INITIAL:
       case PER_CPU_STATE_READY_TO_START_MULTITASKING:
       case PER_CPU_STATE_REQUEST_START_MULTITASKING:
-        _CPU_SMP_Processor_event_broadcast();
-        /* Fall through */
       case PER_CPU_STATE_UP:
         /*
          * Calling this function with the current processor is intentional.

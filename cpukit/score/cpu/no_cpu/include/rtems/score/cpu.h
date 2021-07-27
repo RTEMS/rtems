@@ -1348,35 +1348,6 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
   void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
   /**
-   * @brief Broadcasts a processor event.
-   *
-   * Some architectures provide a low-level synchronization primitive for
-   * processors in a multi-processor environment.  Processors waiting for this
-   * event may go into a low-power state and stop generating system bus
-   * transactions.  This function must ensure that preceding store operations
-   * can be observed by other processors.
-   *
-   * @see _CPU_SMP_Processor_event_receive().
-   */
-  static inline void _CPU_SMP_Processor_event_broadcast( void )
-  {
-    __asm__ volatile ( "" : : : "memory" );
-  }
-
-  /**
-   * @brief Receives a processor event.
-   *
-   * This function will wait for the processor event and may wait forever if no
-   * such event arrives.
-   *
-   * @see _CPU_SMP_Processor_event_broadcast().
-   */
-  static inline void _CPU_SMP_Processor_event_receive( void )
-  {
-    __asm__ volatile ( "" : : : "memory" );
-  }
-
-  /**
    * @brief Gets the is executing indicator of the thread context.
    *
    * @param[in] context The context.

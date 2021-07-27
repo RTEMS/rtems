@@ -55,7 +55,9 @@ static void _Per_CPU_State_busy_wait(
   Per_CPU_State new_state
 )
 {
-  Per_CPU_State state = cpu->state;
+  Per_CPU_State state;
+
+  state = _Per_CPU_Get_state( cpu );
 
   switch ( new_state ) {
     case PER_CPU_STATE_REQUEST_START_MULTITASKING:
@@ -64,8 +66,7 @@ static void _Per_CPU_State_busy_wait(
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
         _Per_CPU_Perform_jobs( cpu );
-        _CPU_SMP_Processor_event_receive();
-        state = cpu->state;
+        state = _Per_CPU_Get_state( cpu );
       }
       break;
     case PER_CPU_STATE_UP:
@@ -74,8 +75,7 @@ static void _Per_CPU_State_busy_wait(
           && state != PER_CPU_STATE_SHUTDOWN
       ) {
         _Per_CPU_Perform_jobs( cpu );
-        _CPU_SMP_Processor_event_receive();
-        state = cpu->state;
+        state = _Per_CPU_Get_state( cpu );
       }
       break;
     default:
@@ -143,8 +143,8 @@ void _Per_CPU_State_change(
 
   _Per_CPU_State_acquire( &lock_context );
 
-  next_state = _Per_CPU_State_get_next( cpu->state, new_state );
-  cpu->state = next_state;
+  next_state = _Per_CPU_State_get_next( _Per_CPU_Get_state( cpu ), new_state );
+  _Per_CPU_Set_state( cpu, next_state );
 
   if ( next_state == PER_CPU_STATE_SHUTDOWN ) {
     uint32_t cpu_max = rtems_configuration_get_maximum_processors();
@@ -154,7 +154,7 @@ void _Per_CPU_State_change(
       Per_CPU_Control *cpu_other = _Per_CPU_Get_by_index( cpu_index );
 
       if ( cpu_other != cpu ) {
-        switch ( cpu_other->state ) {
+        switch ( _Per_CPU_Get_state( cpu_other ) ) {
           case PER_CPU_STATE_UP:
             _SMP_Send_message( cpu_index, SMP_MESSAGE_SHUTDOWN );
             break;
@@ -163,12 +163,10 @@ void _Per_CPU_State_change(
             break;
         }
 
-        cpu_other->state = PER_CPU_STATE_SHUTDOWN;
+        _Per_CPU_Set_state( cpu_other, PER_CPU_STATE_SHUTDOWN );
       }
     }
   }
-
-  _CPU_SMP_Processor_event_broadcast();
 
   _Per_CPU_State_release( &lock_context );
 

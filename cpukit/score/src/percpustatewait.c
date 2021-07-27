@@ -33,8 +33,11 @@ bool _Per_CPU_State_wait_for_non_initial_state(
   uint32_t timeout_in_ns
 )
 {
-  const Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-  Per_CPU_State state = cpu->state;
+  const Per_CPU_Control *cpu;
+  Per_CPU_State          state;
+
+  cpu = _Per_CPU_Get_by_index( cpu_index );
+  state = _Per_CPU_Get_state( cpu );
 
   if ( timeout_in_ns > 0 ) {
     rtems_counter_ticks ticks =
@@ -45,19 +48,16 @@ bool _Per_CPU_State_wait_for_non_initial_state(
     while ( ticks > delta && state == PER_CPU_STATE_INITIAL ) {
       rtems_counter_ticks b;
 
-      _CPU_SMP_Processor_event_receive();
-      state = cpu->state;
+      state = _Per_CPU_Get_state( cpu );
 
       ticks -= delta;
-
       b = rtems_counter_read();
       delta = rtems_counter_difference( b, a );
       a = b;
     }
   } else {
     while ( state == PER_CPU_STATE_INITIAL ) {
-      _CPU_SMP_Processor_event_receive();
-      state = cpu->state;
+      state = _Per_CPU_Get_state( cpu );
     }
   }
 
