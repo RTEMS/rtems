@@ -3,12 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSScorePerCPU
  * @ingroup RTEMSScoreSMP
  *
- * @brief This source file contains the implementation of _Per_CPU_Add_job(),
- *   _Per_CPU_Perform_jobs(), _Per_CPU_Wait_for_job(), _SMP_Broadcast_action(),
- *   _SMP_Multicast_action(), _SMP_Othercast_action(), and _SMP_Synchronize().
+ * @brief This source file contains the implementation of
+ *   _SMP_Broadcast_action(), _SMP_Multicast_action(), _SMP_Othercast_action(),
+ *   and _SMP_Synchronize().
  */
 
 /*
@@ -42,88 +41,6 @@
 
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/assert.h>
-
-#define _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, lock_context ) \
-  _ISR_lock_ISR_disable_and_acquire( &( cpu )->Jobs.Lock, lock_context )
-
-#define _Per_CPU_Jobs_release_and_ISR_enable( cpu, lock_context ) \
-  _ISR_lock_Release_and_ISR_enable( &( cpu )->Jobs.Lock, lock_context )
-
-void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu )
-{
-  ISR_lock_Context  lock_context;
-  Per_CPU_Job      *job;
-
-  _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
-  job = cpu->Jobs.head;
-  cpu->Jobs.head = NULL;
-  _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
-
-  while ( job != NULL ) {
-    const Per_CPU_Job_context *context;
-    Per_CPU_Job               *next;
-
-    context = job->context;
-    next = job->next;
-    ( *context->handler )( context->arg );
-    _Atomic_Store_ulong( &job->done, PER_CPU_JOB_DONE, ATOMIC_ORDER_RELEASE );
-
-    job = next;
-  }
-}
-
-void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
-{
-  ISR_lock_Context lock_context;
-
-  _Atomic_Store_ulong( &job->done, 0, ATOMIC_ORDER_RELAXED );
-  _Assert( job->next == NULL );
-
-  _Per_CPU_Jobs_ISR_disable_and_acquire( cpu, &lock_context );
-
-  if ( cpu->Jobs.head == NULL ) {
-    cpu->Jobs.head = job;
-  } else {
-    *cpu->Jobs.tail = job;
-  }
-
-  cpu->Jobs.tail = &job->next;
-
-  _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
-}
-
-void _Per_CPU_Wait_for_job(
-  const Per_CPU_Control *cpu,
-  const Per_CPU_Job     *job
-)
-{
-  while (
-    _Atomic_Load_ulong( &job->done, ATOMIC_ORDER_ACQUIRE )
-      != PER_CPU_JOB_DONE
-  ) {
-    Per_CPU_Control *cpu_self;
-
-    switch ( _Per_CPU_Get_state( cpu ) ) {
-      case PER_CPU_STATE_INITIAL:
-      case PER_CPU_STATE_READY_TO_START_MULTITASKING:
-      case PER_CPU_STATE_UP:
-        /*
-         * Calling this function with the current processor is intentional.  We
-         * have to perform our own jobs here in case inter-processor interrupts
-         * are not working.
-         */
-        cpu_self = _Per_CPU_Get();
-        _SMP_Try_to_process_message(
-          cpu_self,
-          _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED )
-        );
-        break;
-      default:
-        _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
-        break;
-    }
-  }
-}
 
 typedef struct {
   Per_CPU_Job_context Context;

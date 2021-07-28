@@ -1150,6 +1150,7 @@ endif
 
 if HAS_SMP
 
+librtemscpu_a_SOURCES += score/src/percpujobs.c
 librtemscpu_a_SOURCES += score/src/percpustatewait.c
 librtemscpu_a_SOURCES += score/src/profilingsmplock.c
 librtemscpu_a_SOURCES += score/src/schedulerdefaultpinunpin.c

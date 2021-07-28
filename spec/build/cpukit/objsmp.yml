@@ -5,12 +5,12 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
-enabled-by:
-- RTEMS_SMP
+enabled-by: RTEMS_SMP
 includes: []
 install: []
 links: []
 source:
+- cpukit/score/src/percpujobs.c
 - cpukit/score/src/percpustatewait.c
 - cpukit/score/src/profilingsmplock.c
 - cpukit/score/src/schedulerdefaultaskforhelp.c
