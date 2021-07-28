@@ -1156,7 +1156,7 @@ T_run_by_name(const char *name)
 
 static T_case_context default_case;
 
-void
+void *
 T_case_begin(const char *name, const T_fixture *fixture)
 {
 	T_case_context *tc;
@@ -1165,6 +1165,7 @@ T_case_begin(const char *name, const T_fixture *fixture)
 	tc->name = name;
 	tc->fixture = fixture;
 	T_do_case_begin(&T_instance, tc);
+	return T_instance.case_fixture.context;
 }
 
 void

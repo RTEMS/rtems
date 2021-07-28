@@ -2306,7 +2306,7 @@ void T_run_all(void);
 
 void T_run_by_name(const char *);
 
-void T_case_begin(const char *, const T_fixture *);
+void *T_case_begin(const char *, const T_fixture *);
 
 void T_case_end(void);
 
