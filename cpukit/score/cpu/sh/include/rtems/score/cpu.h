@@ -490,32 +490,6 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-/* Fatal Error manager macros */
-
-/*
- * FIXME: Trap32 ???
- *
- *  This routine copies _error into a known place -- typically a stack
- *  location or a register, optionally disables interrupts, and
- *  invokes a Trap32 Instruction which returns to the breakpoint
- *  routine of cmon.
- */
-
-#ifdef BSP_FATAL_HALT
-  /* we manage the fatal error in the board support package */
-  void bsp_fatal_halt( uint32_t   _error);
-#define _CPU_Fatal_halt( _source, _error ) bsp_fatal_halt( _error)
-#else
-#define _CPU_Fatal_halt( _source, _error)\
-{ \
-  __asm__ volatile("mov.l %0,r0"::"m" (_error)); \
-  __asm__ volatile("mov #1, r4"); \
-  __asm__ volatile("trapa #34"); \
-}
-#endif
-
-/* end of Fatal Error manager macros */
-
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE

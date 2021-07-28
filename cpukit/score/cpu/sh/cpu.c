@@ -30,9 +30,9 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/sh_io.h>
-#include <rtems/score/cpu.h>
 #include <rtems/score/sh.h>
 
 /* referenced in start.S */
@@ -74,6 +74,13 @@ void _CPU_Initialize(void)
 
   /* enable interrupts */
   _CPU_ISR_Set_level( level ) ;
+}
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  __asm__ volatile("mov.l %0,r0"::"m" (error));
+  __asm__ volatile("mov #1, r4");
+  __asm__ volatile("trapa #34");
 }
 
 /*

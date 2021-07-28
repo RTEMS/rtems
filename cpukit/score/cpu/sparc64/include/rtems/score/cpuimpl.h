@@ -35,6 +35,8 @@
 extern "C" {
 #endif
 
+RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error );
+
 RTEMS_INLINE_ROUTINE void _CPU_Context_volatile_clobber( uintptr_t pattern )
 {
   /* TODO */

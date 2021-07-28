@@ -7,9 +7,9 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
+#include <rtems/score/cpuimpl.h>
 
-void _CPU_Fatal_halt(uint32_t source, uint32_t error)
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
 {
   __asm__ volatile (
          "cli\n\t"
@@ -18,7 +18,5 @@ void _CPU_Fatal_halt(uint32_t source, uint32_t error)
          : "=r" ((error))
          : "0" ((error))
   );
-  #ifdef __GNUC__
-    __builtin_unreachable();
-  #endif
+  RTEMS_UNREACHABLE();
 }

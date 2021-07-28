@@ -50,6 +50,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
 
 #if CPU_HARDWARE_FP
@@ -91,6 +92,18 @@ void _CPU_Initialize(void)
   						   control register to prevent underflow and
   						   inexact exceptions */
 #endif
+}
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  ISR_Level level;
+
+  _CPU_ISR_Disable( level );
+  (void) level;
+
+  while ( true ) {
+    /* Do nothing */
+  }
 }
 
 uint32_t   _CPU_ISR_Get_level( void )

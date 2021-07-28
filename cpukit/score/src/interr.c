@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/score/interr.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
@@ -36,9 +37,6 @@ void _Terminate(
   _System_state_Set( SYSTEM_STATE_TERMINATED );
   _SMP_Request_shutdown();
   _CPU_Fatal_halt( the_source, the_error );
-
-  /* will not return from this routine */
-  while (true);
 }
 
 void _Internal_error( Internal_errors_Core_list core_error )

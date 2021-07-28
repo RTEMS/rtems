@@ -769,25 +769,6 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-/* Fatal Error manager macros */
-
-/*
- *  This routine copies _error into a known place -- typically a stack
- *  location or a register, optionally disables interrupts, and
- *  halts/stops the CPU.
- */
-
-#define _CPU_Fatal_halt( _source, _error ) \
-  do { \
-    uint32_t   level; \
-    \
-    level = sparc_disable_interrupts(); \
-    __asm__ volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) ); \
-    while (1); /* loop forever */ \
-  } while (0)
-
-/* end of Fatal Error manager macros */
-
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
 
 /* Bitfield handler macros */

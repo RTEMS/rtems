@@ -28,10 +28,11 @@
 
 #include <bsp/riscv.h>
 #include <bsp/fdt.h>
+#include <rtems/score/cpuimpl.h>
 
 #include <libfdt.h>
 
-void _CPU_Fatal_halt(uint32_t source, uint32_t error)
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
 {
   const char *fdt;
   int node;

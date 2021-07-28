@@ -27,8 +27,9 @@
  */
 
 #include <bsp.h>
+#include <rtems/score/cpuimpl.h>
 
-void _CPU_Fatal_halt(uint32_t source, uint32_t error)
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
 {
     /* ecall is currently used to halt the griscv cpu */
     asm ("ecall");

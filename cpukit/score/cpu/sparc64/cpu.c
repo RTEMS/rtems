@@ -16,6 +16,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/tls.h>
 #include <rtems/rtems/cache.h>
@@ -61,6 +62,15 @@ void _CPU_Initialize(void)
    *  interrupt stack frame on its stack.
    */
   _CPU_ISR_Dispatch_disable = 0;
+}
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  uint32_t   level;
+
+  level = sparc_disable_interrupts();
+  __asm__ volatile ( "mov  %0, %%g1 " : "=r" (level) : "0" (level) );
+  while (1); /* loop forever */
 }
 
 void _CPU_Context_Initialize(

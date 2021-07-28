@@ -211,8 +211,6 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) )
 
-RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, uint32_t error );
-
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE

@@ -17,6 +17,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
 
 #include <string.h> /* for memset */
@@ -28,6 +29,13 @@
  */
 void _CPU_Initialize(void)
 {
+}
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  __asm__ __volatile__ ( "di" );
+  __asm__ __volatile__ ( "mov %0, r10; " : "=r" ((error)) );
+  __asm__ __volatile__ ( "halt" );
 }
 
 /*

@@ -37,6 +37,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/idt.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/tls.h>
@@ -47,4 +48,16 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *ctx)
 
 void _CPU_Initialize(void)
 {
+}
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  ISR_Level level;
+
+  _CPU_ISR_Disable( level );
+  (void) level;
+
+  while ( true ) {
+    /* Do nothing */
+  }
 }

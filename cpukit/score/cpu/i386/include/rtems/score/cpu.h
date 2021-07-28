@@ -479,18 +479,7 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-/*
- *  Fatal Error manager macros
- *
- *  These macros perform the following functions:
- *    + disable interrupts and halt the CPU
- */
-
-RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, uint32_t error );
-
 #endif /* ASM */
-
-/* end of Fatal Error manager macros */
 
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
 

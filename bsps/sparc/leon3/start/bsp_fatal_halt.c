@@ -13,24 +13,19 @@
 
 #include <bsp.h>
 #include <leon.h>
+#include <rtems/score/cpuimpl.h>
 
-#ifdef BSP_POWER_DOWN_AT_FATAL_HALT
-
-/* Power down LEON CPU on fatal error exit */
-void _CPU_Fatal_halt(uint32_t source, uint32_t error)
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
 {
+#ifdef BSP_POWER_DOWN_AT_FATAL_HALT
+  /* Power down LEON CPU on fatal error exit */
   sparc_disable_interrupts();
   leon3_power_down_loop();
-}
-
 #else
-
-/* return to debugger, simulator, hypervisor or similar by exiting
- * with an error code. g1=1, g2=FATAL_SOURCE, G3=error-code.
- */
-void _CPU_Fatal_halt(uint32_t source, uint32_t error)
-{
+  /*
+   * Return to debugger, simulator, hypervisor or similar by exiting
+   * with an error code. g1=1, g2=FATAL_SOURCE, G3=error-code.
+   */
   sparc_syscall_exit(source, error);
-}
-
 #endif
+}

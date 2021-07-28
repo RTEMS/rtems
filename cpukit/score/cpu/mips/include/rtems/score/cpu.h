@@ -710,23 +710,6 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-/* Fatal Error manager macros */
-
-/*
- *  This routine copies _error into a known place -- typically a stack
- *  location or a register, optionally disables interrupts, and
- *  halts/stops the CPU.
- */
-
-#define _CPU_Fatal_halt( _source, _error ) \
-  do { \
-    unsigned int _level; \
-    _CPU_ISR_Disable(_level); \
-    (void)_level; \
-    loop: goto loop; \
-  } while (0)
-
-
 extern void mips_break( int error );
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE

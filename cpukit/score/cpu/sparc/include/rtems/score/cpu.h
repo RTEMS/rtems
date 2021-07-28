@@ -883,17 +883,6 @@ void _CPU_Context_Initialize(
   do { } while ( 0 )
 /* end of Context handler macros */
 
-/* Fatal Error manager macros */
-
-/**
- * This routine copies _error into a known place -- typically a stack
- * location or a register, optionally disables interrupts, and
- * halts/stops the CPU.
- */
-RTEMS_NO_RETURN void _CPU_Fatal_halt( uint32_t source, uint32_t error );
-
-/* end of Fatal Error manager macros */
-
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
 
 /* Bitfield handler macros */

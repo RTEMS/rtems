@@ -26,8 +26,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/assert.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tls.h>
 
@@ -171,3 +170,20 @@ void _CPU_Initialize( void )
 }
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  ISR_Level level;
+
+  _CPU_ISR_Disable( level );
+  (void) level;
+
+  __asm__ volatile ("mov r0, %0\n"
+                : "=r" (error)
+                : "0" (error)
+                : "r0" );
+
+  while ( true ) {
+    /* Do nothing */
+  }
+}

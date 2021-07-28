@@ -824,23 +824,6 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of Context handler macros */
 
-/* Fatal Error manager macros */
-
-/**
- * This routine copies _error into a known place -- typically a stack
- * location or a register, optionally disables interrupts, and
- * halts/stops the CPU.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define _CPU_Fatal_halt( _source, _error ) \
-  { \
-  }
-
-/* end of Fatal Error manager macros */
-
 /* Bitfield handler macros */
 
 /**

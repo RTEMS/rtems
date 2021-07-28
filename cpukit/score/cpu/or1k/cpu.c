@@ -11,8 +11,8 @@
  *
  */
 
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/cpu.h>
 
 /* bsp_start_vector_table_begin is the start address of the vector table
  * containing addresses to ISR Handlers. It's defined at the BSP linkcmds
@@ -27,6 +27,22 @@ void _CPU_Initialize(void)
 {
   /* Do nothing */
 }
+
+void _CPU_Fatal_halt( uint32_t source, CPU_Uint32ptr error )
+{
+  ISR_Level level;
+
+  _CPU_ISR_Disable( level );
+  (void) level;
+
+  _OR1KSIM_CPU_Halt();
+
+  while ( true ) {
+    /* Do nothing */
+  }
+}
+
+/* end of Fatal Error manager macros */
 
 /**
  * @brief Sets the hardware interrupt level by the level value.

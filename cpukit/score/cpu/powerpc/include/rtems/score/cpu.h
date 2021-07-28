@@ -613,20 +613,6 @@ void ppc_set_interrupt_level( uint32_t level );
 
 #endif /* ASM */
 
-#define _CPU_Fatal_halt( _source, _error ) \
-  do { \
-    ppc_interrupt_disable(); \
-    __asm__ volatile ( \
-      "mr 3, %0\n" \
-      "mr 4, %1\n" \
-      "1:\n" \
-      "b 1b\n" \
-      : \
-      : "r" (_source), "r" (_error) \
-      : "memory" \
-    ); \
-  } while ( 0 )
-
 /*
  *  Should be large enough to run all RTEMS tests.  This ensures
  *  that a "reasonable" small application should not have any problems.

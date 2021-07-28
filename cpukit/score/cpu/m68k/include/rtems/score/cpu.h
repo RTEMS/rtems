@@ -401,35 +401,6 @@ void _CPU_Context_Initialize(
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
-/*
- *  Fatal Error manager macros
- *
- *  These macros perform the following functions:
- *    + disable interrupts and halt the CPU
- */
-
-#if ( defined(__mcoldfire__) )
-#define _CPU_Fatal_halt( _source, _error ) \
-  { __asm__ volatile( "move.w %%sr,%%d0\n\t" \
-		  "or.l %2,%%d0\n\t" \
-		  "move.w %%d0,%%sr\n\t" \
-		  "move.l %1,%%d0\n\t" \
-		  "move.l #0xDEADBEEF,%%d1\n\t" \
-                  "halt" \
-		  : "=g" (_error) \
-		  : "0" (_error), "d"(0x0700) \
-		  : "d0", "d1" ); \
-  }
-#else
-#define _CPU_Fatal_halt( _source, _error ) \
-  { __asm__ volatile( "movl  %0,%%d0; " \
-                  "orw   #0x0700,%%sr; " \
-                  "stop  #0x2700" : "=d" ((_error)) : "0" ((_error)) ); \
-  }
-#endif
-
-/* end of Fatal Error manager macros */
-
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
 
 /*

@@ -461,26 +461,6 @@ void _CPU_Context_Initialize(
 
 /* end of Context handler macros */
 
-/* Fatal Error manager macros */
-
-/**
- * This routine copies _error into a known place -- typically a stack
- * location or a register, optionally disables interrupts, and
- * halts/stops the CPU.
- *
- * Port Specific Information:
- *
- * Move the error code into r10, disable interrupts and halt.
- */
-#define _CPU_Fatal_halt( _source, _error ) \
-  do { \
-    __asm__ __volatile__ ( "di" ); \
-    __asm__ __volatile__ ( "mov %0, r10; " : "=r" ((_error)) ); \
-    __asm__ __volatile__ ( "halt" ); \
-  } while (0)
-
-/* end of Fatal Error manager macros */
-
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
 #define CPU_USE_LIBC_INIT_FINI_ARRAY FALSE
