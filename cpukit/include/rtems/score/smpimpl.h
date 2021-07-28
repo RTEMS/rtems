@@ -227,28 +227,6 @@ bool _SMP_Should_start_processor( uint32_t cpu_index );
  */
 void _SMP_Send_message( uint32_t cpu_index, unsigned long message );
 
-/**
- * @brief Sends an SMP message to all other online processors.
- *
- * @param message The message to send.
- */
-void _SMP_Send_message_broadcast(
-  unsigned long message
-);
-
-/**
- * @brief Sends an SMP message to a set of processors.
- *
- * The sending processor may be part of the set.
- *
- * @param targets The set of processors to send the message.
- * @param message The message to send.
- */
-void _SMP_Send_message_multicast(
-  const Processor_mask *targets,
-  unsigned long         message
-);
-
 typedef void ( *SMP_Action_handler )( void *arg );
 
 /**

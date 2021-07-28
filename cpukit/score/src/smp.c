@@ -7,8 +7,7 @@
  *   and ::_SMP_Processor_maximum and the implementation of
  *   _SMP_Handler_initialize(),  _SMP_Process_message(),
  *   _SMP_Request_shutdown(), _SMP_Request_start_multitasking(),
- *   _SMP_Send_message(), _SMP_Send_message_broadcast(),
- *   _SMP_Send_message_multicast(), _SMP_Should_start_processor(),
+ *   _SMP_Send_message(), _SMP_Should_start_processor(),
  *   _SMP_Start_multitasking_on_secondary_processor(), and
  *   _SMP_Try_to_process_message().
  */
@@ -332,42 +331,5 @@ void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
 
   if ( _Per_CPU_Get_state( cpu ) == PER_CPU_STATE_UP ) {
     _CPU_SMP_Send_interrupt( cpu_index );
-  }
-}
-
-void _SMP_Send_message_broadcast( unsigned long message )
-{
-  uint32_t cpu_max;
-  uint32_t cpu_index_self;
-  uint32_t cpu_index;
-
-  _Assert( _Debug_Is_thread_dispatching_allowed() );
-  cpu_max = _SMP_Get_processor_maximum();
-  cpu_index_self = _SMP_Get_current_processor();
-
-  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
-    if (
-      cpu_index != cpu_index_self
-        && _Processor_mask_Is_set( &_SMP_Online_processors, cpu_index )
-    ) {
-      _SMP_Send_message( cpu_index, message );
-    }
-  }
-}
-
-void _SMP_Send_message_multicast(
-  const Processor_mask *targets,
-  unsigned long         message
-)
-{
-  uint32_t cpu_max;
-  uint32_t cpu_index;
-
-  cpu_max = _SMP_Get_processor_maximum();
-
-  for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
-    if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
-      _SMP_Send_message( cpu_index, message );
-    }
   }
 }
