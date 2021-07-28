@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Get Character from Stdin
- *  @ingroup libcsupport
+ * @ingroup BSPIO
+ *
+ * @brief This source file contains the implementation of getchark().
  */
 
 /*
@@ -18,13 +19,17 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
 #include <rtems/bspIo.h>
 
-int getchark(void)
+int getchark( void )
 {
-  if ( BSP_poll_char )
-    return (*BSP_poll_char)();
+  BSP_polling_getchar_function_type poll_char;
 
-  return -1;
+  poll_char = BSP_poll_char;
+
+  if ( poll_char == NULL ) {
+    return -1;
+  }
+
+  return ( *poll_char )();
 }
