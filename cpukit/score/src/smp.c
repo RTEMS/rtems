@@ -297,6 +297,8 @@ long unsigned _SMP_Process_message(
   if ( ( message & SMP_MESSAGE_PERFORM_JOBS ) != 0 ) {
     _Per_CPU_Perform_jobs( cpu_self );
   }
+
+  return message;
 }
 
 void _SMP_Try_to_process_message(
