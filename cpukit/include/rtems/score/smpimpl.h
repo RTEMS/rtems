@@ -218,14 +218,15 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
 bool _SMP_Should_start_processor( uint32_t cpu_index );
 
 /**
- * @brief Sends an SMP message to a processor.
+ * @brief Sends the SMP message to the processor.
  *
  * The target processor may be the sending processor.
  *
- * @param cpu_index The target processor of the message.
- * @param message The message to send.
+ * @param[in, out] cpu is the processor control of the target processor.
+ *
+ * @param message is the message to send.
  */
-void _SMP_Send_message( uint32_t cpu_index, unsigned long message );
+void _SMP_Send_message( Per_CPU_Control *cpu, unsigned long message );
 
 typedef void ( *SMP_Action_handler )( void *arg );
 

@@ -322,16 +322,14 @@ void _SMP_Try_to_process_message(
   }
 }
 
-void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
+void _SMP_Send_message( Per_CPU_Control *cpu, unsigned long message )
 {
-  Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-
   (void) _Atomic_Fetch_or_ulong(
     &cpu->message, message,
     ATOMIC_ORDER_RELEASE
   );
 
   if ( _Per_CPU_Get_state( cpu ) == PER_CPU_STATE_UP ) {
-    _CPU_SMP_Send_interrupt( cpu_index );
+    _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( cpu ) );
   }
 }

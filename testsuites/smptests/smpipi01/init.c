@@ -127,7 +127,10 @@ static void test_send_message_while_processing_a_message(
       barrier(ctx, bs);
 
       rtems_test_assert(ctx->counters[cpu_index].value == 1);
-      _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
+      _SMP_Send_message(
+        _Per_CPU_Get_by_index(cpu_index),
+        SMP_MESSAGE_PERFORM_JOBS
+      );
 
       /* (B) */
       barrier(ctx, bs);
@@ -199,8 +202,11 @@ static void test_send_message_flood(
   }
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
+    Per_CPU_Control *cpu;
     Per_CPU_Control *cpu_self;
     uint32_t i;
+
+    cpu = _Per_CPU_Get_by_index(cpu_index);
 
     cpu_self = _Thread_Dispatch_disable();
     _SMP_Synchronize();
@@ -213,7 +219,7 @@ static void test_send_message_flood(
     }
 
     for (i = 0; i < 100000; ++i) {
-      _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
+      _SMP_Send_message(cpu, SMP_MESSAGE_PERFORM_JOBS);
     }
 
     for (i = 0; i < cpu_count; ++i) {

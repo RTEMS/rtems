@@ -466,7 +466,7 @@ T_TEST_CASE(JobOrder)
   }
 
   T_step(0);
-  _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
+  _SMP_Send_message(cpu_self, SMP_MESSAGE_PERFORM_JOBS);
   _Thread_Dispatch_enable(cpu_self);
 }
 
@@ -505,9 +505,9 @@ T_TEST_CASE(AddJobInJob)
 
   _Per_CPU_Add_job(cpu_self, &add_job_in_job_jobs[0]);
   T_step(0);
-  _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
+  _SMP_Send_message(cpu_self, SMP_MESSAGE_PERFORM_JOBS);
   T_step(2);
-  _SMP_Send_message(_Per_CPU_Get_index(cpu_self), SMP_MESSAGE_PERFORM_JOBS);
+  _SMP_Send_message(cpu_self, SMP_MESSAGE_PERFORM_JOBS);
   _Thread_Dispatch_enable(cpu_self);
 }
 

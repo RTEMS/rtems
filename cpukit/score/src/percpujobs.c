@@ -96,7 +96,7 @@ void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
 void _Per_CPU_Submit_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
 {
   _Per_CPU_Add_job( cpu, job );
-  _SMP_Send_message( _Per_CPU_Get_index( cpu ), SMP_MESSAGE_PERFORM_JOBS );
+  _SMP_Send_message( cpu, SMP_MESSAGE_PERFORM_JOBS );
 }
 
 void _Per_CPU_Wait_for_job(
