@@ -75,6 +75,8 @@ void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
 {
   ISR_lock_Context lock_context;
 
+  _Assert( job->context != NULL && job->context->handler != NULL );
+
   _Atomic_Store_ulong( &job->done, 0, ATOMIC_ORDER_RELAXED );
   _Assert( job->next == NULL );
 
