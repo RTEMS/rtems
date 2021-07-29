@@ -6,8 +6,7 @@
  * @ingroup RTEMSScoreSMP
  *
  * @brief This source file contains the implementation of
- *   _SMP_Broadcast_action(), _SMP_Multicast_action(), _SMP_Othercast_action(),
- *   and _SMP_Synchronize().
+ *   _SMP_Multicast_action().
  */
 
 /*
@@ -107,34 +106,4 @@ void _SMP_Multicast_action(
 
   _SMP_Issue_action_jobs( targets, &jobs, cpu_max );
   _SMP_Wait_for_action_jobs( targets, &jobs, cpu_max );
-}
-
-void _SMP_Broadcast_action(
-  SMP_Action_handler  handler,
-  void               *arg
-)
-{
-  _SMP_Multicast_action( _SMP_Get_online_processors(), handler, arg );
-}
-
-void _SMP_Othercast_action(
-  SMP_Action_handler  handler,
-  void               *arg
-)
-{
-  Processor_mask targets;
-
-  _Processor_mask_Assign( &targets, _SMP_Get_online_processors() );
-  _Processor_mask_Clear( &targets, _SMP_Get_current_processor() );
-  _SMP_Multicast_action( &targets, handler, arg );
-}
-
-static void _SMP_Do_nothing_action( void *arg )
-{
-  /* Do nothing */
-}
-
-void _SMP_Synchronize( void )
-{
-  _SMP_Othercast_action( _SMP_Do_nothing_action, NULL );
 }
