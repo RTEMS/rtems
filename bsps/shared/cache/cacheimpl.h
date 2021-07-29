@@ -299,7 +299,8 @@ static void smp_cache_broadcast( SMP_Action_handler handler, void *arg )
     cpu_self = _Per_CPU_Get();
   }
 
-  _SMP_Broadcast_action( handler, arg );
+  ( *handler )( arg );
+  _SMP_Othercast_action( handler, arg );
 
   if ( isr_level == 0 ) {
     _Thread_Dispatch_enable( cpu_self );
