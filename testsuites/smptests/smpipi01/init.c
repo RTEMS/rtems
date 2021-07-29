@@ -121,8 +121,7 @@ static void test_send_message_while_processing_a_message(
       Per_CPU_Control *cpu_self;
 
       ctx->jobs[0][0].context = &barrier_0_job_context;
-      _Per_CPU_Add_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0][0]);
-      _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
+      _Per_CPU_Submit_job(_Per_CPU_Get_by_index(cpu_index), &ctx->jobs[0][0]);
 
       /* (A) */
       barrier(ctx, bs);
@@ -196,8 +195,7 @@ static void test_send_message_flood(
 
     ctx->jobs[cpu_index][0].context = &counter_0_job_context;
     ctx->jobs[cpu_index][1].context = &counter_1_job_context;
-    _Per_CPU_Add_job(cpu, &ctx->jobs[cpu_index][0]);
-    _SMP_Send_message(cpu_index, SMP_MESSAGE_PERFORM_JOBS);
+    _Per_CPU_Submit_job(cpu, &ctx->jobs[cpu_index][0]);
   }
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {

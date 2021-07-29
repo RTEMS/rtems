@@ -54,7 +54,6 @@ void _SMP_Unicast_action(
   context.arg = arg;
   job.context = &context;
   cpu = _Per_CPU_Get_by_index( cpu_index );
-  _Per_CPU_Add_job( cpu, &job );
-  _SMP_Send_message( cpu_index, SMP_MESSAGE_PERFORM_JOBS );
+  _Per_CPU_Submit_job( cpu, &job );
   _Per_CPU_Wait_for_job( cpu, &job );
 }

@@ -305,9 +305,7 @@ T_interrupt_thread_switch(Thread_Control *executing, Thread_Control *heir)
 			 * context of the inter-processor interrupt.
 			 */
 			cpu_self = _Per_CPU_Get();
-			_Per_CPU_Add_job(cpu_self, &ctx->job);
-			_SMP_Send_message(_Per_CPU_Get_index(cpu_self),
-			    SMP_MESSAGE_PERFORM_JOBS);
+			_Per_CPU_Submit_job(cpu_self, &ctx->job);
 #else
 			(*ctx->blocked)(ctx->arg);
 #endif

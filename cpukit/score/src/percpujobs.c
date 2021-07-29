@@ -6,7 +6,8 @@
  * @ingroup RTEMSScorePerCPU
  *
  * @brief This source file contains the implementation of _Per_CPU_Add_job(),
- *   _Per_CPU_Perform_jobs(), and _Per_CPU_Wait_for_job().
+ *   _Per_CPU_Perform_jobs(), _Per_CPU_Submit_job(), and
+ *   _Per_CPU_Wait_for_job().
  */
 
 /*
@@ -88,6 +89,12 @@ void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
   cpu->Jobs.tail = &job->next;
 
   _Per_CPU_Jobs_release_and_ISR_enable( cpu, &lock_context );
+}
+
+void _Per_CPU_Submit_job( Per_CPU_Control *cpu, Per_CPU_Job *job )
+{
+  _Per_CPU_Add_job( cpu, job );
+  _SMP_Send_message( _Per_CPU_Get_index( cpu ), SMP_MESSAGE_PERFORM_JOBS );
 }
 
 void _Per_CPU_Wait_for_job(

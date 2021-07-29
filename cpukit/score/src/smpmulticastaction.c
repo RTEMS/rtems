@@ -63,8 +63,7 @@ static void _SMP_Issue_action_jobs(
       job->context = &jobs->Context;
       cpu = _Per_CPU_Get_by_index( cpu_index );
 
-      _Per_CPU_Add_job( cpu, job );
-      _SMP_Send_message( cpu_index, SMP_MESSAGE_PERFORM_JOBS );
+      _Per_CPU_Submit_job( cpu, job );
     }
   }
 }

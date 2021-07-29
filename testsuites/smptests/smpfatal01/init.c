@@ -136,12 +136,7 @@ static rtems_status_code test_driver_init(
   if (cpu_count > 1) {
     Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( other_cpu );
 
-    _Per_CPU_Add_job(per_cpu, &shutdown_job);
-    _Atomic_Fetch_or_ulong(
-      &per_cpu->message,
-      SMP_MESSAGE_PERFORM_JOBS,
-      ATOMIC_ORDER_RELEASE
-    );
+    _Per_CPU_Submit_job(per_cpu, &shutdown_job);
   } else {
     TEST_END();
     exit(0);

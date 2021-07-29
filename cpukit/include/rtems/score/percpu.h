@@ -841,17 +841,29 @@ bool _Per_CPU_State_wait_for_non_initial_state(
 void _Per_CPU_Perform_jobs( Per_CPU_Control *cpu );
 
 /**
- * @brief Adds the job to the tail of the processing list of the specified
- * processor.
+ * @brief Adds the job to the tail of the processing list of the processor.
  *
- * This function does not send the SMP_MESSAGE_PERFORM_JOBS message the
- * specified processor.
+ * This function does not send the ::SMP_MESSAGE_PERFORM_JOBS message to the
+ * processor, see also _Per_CPU_Submit_job().
  *
  * @param[in, out] cpu The processor to add the job.
  * @param[in, out] job The job.  The Per_CPU_Job::context member must be
  *   initialized by the caller.
  */
 void _Per_CPU_Add_job( Per_CPU_Control *cpu, Per_CPU_Job *job );
+
+/**
+ * @brief Adds the job to the tail of the processing list of the processor and
+ *   notifies the processor to process the job.
+ *
+ * This function sends the ::SMP_MESSAGE_PERFORM_JOBS message to the processor
+ * if it is in the ::PER_CPU_STATE_UP state, see also _Per_CPU_Add_job().
+ *
+ * @param[in, out] cpu The processor to add the job.
+ * @param[in, out] job The job.  The Per_CPU_Job::context member must be
+ *   initialized by the caller.
+ */
+void _Per_CPU_Submit_job( Per_CPU_Control *cpu, Per_CPU_Job *job );
 
 /**
  * @brief Waits for the job carried out by the specified processor.
