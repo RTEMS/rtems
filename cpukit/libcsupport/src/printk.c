@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Kernel Printf Function
- *  @ingroup libcsupport
+ * @ingroup RTEMSAPIKernelCharIO
+ *
+ * @brief This source file contains the implementation of printk().
  */
 
 /*

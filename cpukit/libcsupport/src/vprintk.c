@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Print Formatted Output
- *  @ingroup libcsupport
+ * @ingroup RTEMSAPIKernelCharIO
+ *
+ * @brief This source file contains the implementation of vprintk().
  */
 
 /*

@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Write Character to Stream
- *  @ingroup libcsupport
+ * @ingroup RTEMSAPIKernelCharIO
+ *
+ * @brief This source file contains the implementation of putk().
  */
 
 /*

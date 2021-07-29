@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup BSPIO
+ * @ingroup RTEMSAPIKernelCharIO
  *
  * @brief This source file contains the implementation of getchark().
  */

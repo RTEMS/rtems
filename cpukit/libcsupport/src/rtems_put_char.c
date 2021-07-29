@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSAPIKernelCharIO
+ *
+ * @brief This source file contains the implementation of rtems_put_char().
+ */
+
 /*
  * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
  *
