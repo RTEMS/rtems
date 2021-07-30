@@ -73,7 +73,7 @@ static void leon3_install_inter_processor_interrupt( void )
 uint32_t _CPU_SMP_Initialize( void )
 {
   if ( !leon3_data_cache_snooping_enabled() )
-    bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR );
+    bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_BOOT_PROCESSOR );
 
   return leon3_get_cpu_count(LEON3_IrqCtrl_Regs);
 }
