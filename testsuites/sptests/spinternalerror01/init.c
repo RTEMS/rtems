@@ -85,8 +85,6 @@ static void stack_free(void *ptr)
 
 #define CONFIGURE_SCHEDULER_TABLE_ENTRIES { }
 
-#define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER 0
-
 #define CONFIGURE_TASK_STACK_ALLOCATOR stack_allocate
 
 #define CONFIGURE_TASK_STACK_DEALLOCATOR stack_free
