@@ -39,14 +39,9 @@ static void bsp_inter_processor_interrupt( void *arg )
 
 void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 {
-  /*
-   * If data cache snooping is not enabled we terminate using BSP_fatal_exit()
-   * instead of bsp_fatal().  This is done since the latter function tries to
-   * acquire a ticket lock, an operation which requires data cache snooping to
-   * be enabled.
-   */
-  if ( !leon3_data_cache_snooping_enabled() )
-    BSP_fatal_exit( LEON3_FATAL_INVALID_CACHE_CONFIG_SECONDARY_PROCESSOR );
+  if ( !leon3_data_cache_snooping_enabled() ) {
+    bsp_fatal( LEON3_FATAL_INVALID_CACHE_CONFIG_SECONDARY_PROCESSOR );
+  }
 
   _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
@@ -73,11 +68,6 @@ static void leon3_install_inter_processor_interrupt( void )
     &leon3_inter_processor_interrupt_entry
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
-}
-
-static uint32_t leon3_get_cpu_count( const irqamp *regs )
-{
-  return IRQAMP_MPSTAT_NCPU_GET( grlib_load_32( &regs->mpstat ) ) + 1;
 }
 
 uint32_t _CPU_SMP_Initialize( void )

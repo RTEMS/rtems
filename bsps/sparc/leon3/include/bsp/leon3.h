@@ -162,6 +162,18 @@ static inline uint32_t leon3_get_data_cache_config_register( void )
 }
 
 /**
+ * @brief Gets the processor count.
+ *
+ * @param[in] regs is the IRQ(A)MP register block address.
+ *
+ * @return Returns the processor count.
+ */
+static inline uint32_t leon3_get_cpu_count( const irqamp *regs )
+{
+  return IRQAMP_MPSTAT_NCPU_GET( grlib_load_32( &regs->mpstat ) ) + 1;
+}
+
+/**
  * @brief This constant defines the index of the GPTIMER timer used by the
  *   clock driver.
  */
