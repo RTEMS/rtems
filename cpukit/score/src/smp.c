@@ -287,6 +287,11 @@ long unsigned _SMP_Process_message(
 )
 {
   if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
+    ISR_Level level;
+
+    _CPU_ISR_Disable( level );
+    (void) level;
+
     /* Check the state to prevent recursive shutdowns */
     if ( _Per_CPU_Get_state( cpu_self ) != PER_CPU_STATE_SHUTDOWN ) {
       _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_SHUTDOWN );
