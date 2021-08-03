@@ -35,8 +35,10 @@
 #include <bsp/irq-generic.h>
 #include <bsp/irqimpl.h>
 
+#if !defined(LEON3_IRQAMP_EXTENDED_INTERRUPT)
 /* GRLIB extended IRQ controller IRQ number */
 uint32_t LEON3_IrqCtrl_EIrq;
+#endif
 
 rtems_interrupt_lock LEON3_IrqCtrl_Lock =
   RTEMS_INTERRUPT_LOCK_INITIALIZER("LEON3 IrqCtrl");
@@ -47,7 +49,9 @@ void leon3_ext_irq_init(irqamp *regs)
   grlib_store_32(&regs->pimask[LEON3_Cpu_Index], 0);
   grlib_store_32(&regs->piforce[LEON3_Cpu_Index], 0);
   grlib_store_32(&regs->iclear, 0xffffffff);
+#if !defined(LEON3_IRQAMP_EXTENDED_INTERRUPT)
   LEON3_IrqCtrl_EIrq = IRQAMP_MPSTAT_EIRQ_GET(grlib_load_32(&regs->mpstat));
+#endif
 }
 
 bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
@@ -56,11 +60,15 @@ bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
     return false;
   }
 
+#if defined(LEON3_IRQAMP_EXTENDED_INTERRUPT)
+  return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
+#else
   if (LEON3_IrqCtrl_EIrq > 0) {
     return vector <= BSP_INTERRUPT_VECTOR_MAX_EXT;
   }
 
   return vector <= BSP_INTERRUPT_VECTOR_MAX_STD;
+#endif
 }
 
 #if defined(RTEMS_SMP)

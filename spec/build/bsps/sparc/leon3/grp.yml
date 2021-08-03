@@ -43,6 +43,8 @@ links:
 - role: build-dependency
   uid: optirqampbase
 - role: build-dependency
+  uid: optirqampextirq
+- role: build-dependency
   uid: optirqampts
 - role: build-dependency
   uid: optconirq

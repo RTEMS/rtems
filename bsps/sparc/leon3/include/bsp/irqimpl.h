@@ -103,7 +103,11 @@ extern struct ambapp_dev *LEON3_IrqCtrl_Adev;
  *
  * This object should be read-only after initialization.
  */
+#if defined(LEON3_IRQAMP_EXTENDED_INTERRUPT)
+#define LEON3_IrqCtrl_EIrq LEON3_IRQAMP_EXTENDED_INTERRUPT
+#else
 extern uint32_t LEON3_IrqCtrl_EIrq;
+#endif
 
 /**
  * @brief Initializes the interrupt controller for the boot processor.
