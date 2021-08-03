@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+actions:
+- get-boolean: null
+- define-condition: null
+build-type: option
+default:
+- enabled-by:
+  - sparc/gr712rc
+  - sparc/gr740
+  value: false
+- enabled-by: true
+  value: true
+enabled-by: true
+links: []
+name: LEON3_PROBE_ASR_22_23_UP_COUNTER
+description: |
+  If this option is set to true, then it will be probed if the %asr22 and
+  %asr23 up-counter is available.
+type: build

@@ -39,6 +39,8 @@ uint32_t _CPU_Counter_frequency(void)
   return leon3_counter_frequency;
 }
 
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
+   defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
 static void leon3_counter_use_up_counter(SPARC_Counter *counter)
 {
   counter->read_isr_disabled = _SPARC_Counter_read_asr23;
@@ -46,6 +48,7 @@ static void leon3_counter_use_up_counter(SPARC_Counter *counter)
 
   leon3_counter_frequency = leon3_up_counter_frequency();
 }
+#endif
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
 static void leon3_counter_use_irqamp_timestamp(
@@ -108,11 +111,13 @@ static void leon3_counter_initialize(void)
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   leon3_counter_use_up_counter(counter);
 #else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
+#if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
     leon3_counter_use_up_counter(counter);
     return;
   }
+#endif
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
   irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);

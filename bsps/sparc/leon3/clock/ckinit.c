@@ -187,6 +187,8 @@ static void bsp_clock_handler_install(rtems_interrupt_handler isr)
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
   bsp_interrupt_set_affinity(clkirq, online_processors)
 
+#if defined(LEON3_HAS_ASR_22_23_UP_COUNTER) || \
+   defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
 static void leon3_clock_use_up_counter(struct timecounter *tc)
 {
   tc->tc_get_timecount = _SPARC_Get_timecount_asr23;
@@ -202,6 +204,7 @@ static void leon3_clock_use_up_counter(struct timecounter *tc)
 
   rtems_timecounter_install(tc);
 }
+#endif
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
 static void leon3_clock_use_irqamp_timestamp(
@@ -293,11 +296,13 @@ static void leon3_clock_initialize(void)
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
   leon3_clock_use_up_counter(tc);
 #else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
+#if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
     leon3_clock_use_up_counter(tc);
     return;
   }
+#endif
 
 #if defined(LEON3_IRQAMP_PROBE_TIMESTAMP)
   irqmp_ts = irqamp_get_timestamp_registers(LEON3_IrqCtrl_Regs);
