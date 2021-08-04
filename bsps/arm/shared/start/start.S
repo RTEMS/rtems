@@ -197,9 +197,21 @@ _start:
 	/* Read MPIDR and get current processor index */
 	mrc	p15, 0, r7, c0, c0, 5
 	and	r7, #0xff
-#endif
 
-#ifdef RTEMS_SMP
+	/*
+	 * Check that this is a configured processor.  If not, then there is
+	 * not much what can be done since we do not have a stack available for
+	 * this processor.  Just loop forever in this case.
+	 */
+	ldr	r1, =_SMP_Processor_configured_maximum
+	ldr	r1, [r1]
+	cmp	r1, r7
+	bgt	.Lconfigured_processor
+.Linvalid_processor_wait_for_ever:
+	wfe
+	b	.Linvalid_processor_wait_for_ever
+.Lconfigured_processor:
+
         /*
          * Get current per-CPU control and store it in PL1 only Thread ID
          * Register (TPIDRPRW).

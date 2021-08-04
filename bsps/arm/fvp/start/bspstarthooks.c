@@ -66,10 +66,7 @@ void bsp_start_hook_0( void )
      * Prevent the fatal errors SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR
      * and SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR this way.
      */
-    if (
-      cpu_index_self >= rtems_configuration_get_maximum_processors()
-        || !_SMP_Should_start_processor( cpu_index_self )
-    ) {
+    if ( !_SMP_Should_start_processor( cpu_index_self ) ) {
       while ( true ) {
         _ARM_Wait_for_event();
       }
