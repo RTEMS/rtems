@@ -13,4 +13,9 @@ timer_settime - bad itimer value - negative nanosecond - EINVAL
 timer_settime - bad clock value - EINVAL
 timer_delete - OK
 timer_delete - bad id - EINVAL
+timer_create (monotonic) - bad timer id pointer - EINVAL
+timer_create (monotonic) - OK
+timer_create (monotonic) - too many - EAGAIN
+timer_settime (monotonic) - bad itimer value - previous time - EINVAL
+timer_settime (monotonic) - bad id - EINVAL
 *** END OF POSIX Timers Test 02 ***

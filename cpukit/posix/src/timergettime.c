@@ -28,6 +28,7 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/seterr.h>
+#include <rtems/timespec.h>
 
 /*
  *          - When a timer is initialized, the value of the time in
@@ -42,32 +43,43 @@ int timer_gettime(
 )
 {
   POSIX_Timer_Control *ptimer;
-  ISR_lock_Context     lock_context;
-  uint64_t             now;
-  uint32_t             remaining;
+  ISR_lock_Context lock_context;
+  Per_CPU_Control *cpu;
+  struct timespec now;
+  struct timespec expire;
+  struct timespec result;
 
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   ptimer = _POSIX_Timer_Get( timerid, &lock_context );
-  if ( ptimer != NULL ) {
-    Per_CPU_Control *cpu;
-
-    cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
-    now = cpu->Watchdog.ticks;
-
-    if ( now < ptimer->Timer.expire ) {
-      remaining = (uint32_t) ( ptimer->Timer.expire - now );
-    } else {
-      remaining = 0;
-    }
-
-    _Timespec_From_ticks( remaining, &value->it_value );
-    value->it_interval = ptimer->timer_data.it_interval;
-
-    _POSIX_Timer_Release( cpu, &lock_context );
-    return 0;
+  if ( ptimer == NULL ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  rtems_set_errno_and_return_minus_one( EINVAL );
+  cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
+  rtems_timespec_from_ticks( ptimer->Timer.expire, &expire );
+
+  if ( ptimer->clock_type == CLOCK_MONOTONIC ) {
+  _Timecounter_Nanouptime(&now);
+  } else  if (ptimer->clock_type == CLOCK_REALTIME) {
+    _TOD_Get(&now);
+  } else {
+    _POSIX_Timer_Release( cpu, &lock_context );
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+
+ if ( rtems_timespec_less_than( &now, &expire ) ) {
+      rtems_timespec_subtract( &now, &expire, &result );
+  } else {
+    result.tv_nsec = 0;
+    result.tv_sec  = 0;
+  }
+
+  value->it_value = result;
+  value->it_interval = ptimer->timer_data.it_interval;
+
+  _POSIX_Timer_Release( cpu, &lock_context );
+  return 0;
 }

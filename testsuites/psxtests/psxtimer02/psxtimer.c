@@ -127,6 +127,32 @@ void *POSIX_Init (
   status = timer_delete( timer );
   fatal_posix_service_status_errno( status, EINVAL, "bad id" );
 
+  puts( "timer_create (monotonic) - bad timer id pointer - EINVAL" );
+  status = timer_create( CLOCK_MONOTONIC, &event, NULL );
+  fatal_posix_service_status_errno( status, EINVAL, "bad timer id" );
+
+  puts( "timer_create (monotonic) - OK" );
+  status = timer_create( CLOCK_MONOTONIC, NULL, &timer );
+  posix_service_failed( status, "timer_create OK" );
+
+  puts( "timer_create (monotonic) - too many - EAGAIN" );
+  status = timer_create( CLOCK_MONOTONIC, NULL, &timer1 );
+  fatal_posix_service_status_errno( status, EAGAIN, "too many" );
+
+  clock_gettime( CLOCK_MONOTONIC, &now );
+  itimer.it_value = now;
+  itimer.it_value.tv_sec = itimer.it_value.tv_sec - 1;
+  puts( "timer_settime (monotonic) - bad itimer value - previous time - EINVAL" );
+  status = timer_settime( timer, TIMER_ABSTIME, &itimer, NULL );
+  fatal_posix_service_status_errno( status, EINVAL, "bad itimer value #3" );
+
+  clock_gettime( CLOCK_MONOTONIC, &now );
+  itimer.it_value = now;
+  itimer.it_value.tv_sec = itimer.it_value.tv_sec + 1;
+  puts( "timer_settime (monotonic) - bad id - EINVAL" );
+  status = timer_settime( timer1, TIMER_ABSTIME, &itimer, NULL );
+  fatal_posix_service_status_errno( status, EINVAL, "bad id" );
+
   TEST_END();
   rtems_test_exit (0);
 }

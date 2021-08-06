@@ -48,6 +48,7 @@ typedef struct {
   uint32_t          ticks;      /* Number of ticks of the initialization */
   uint32_t          overrun;    /* Number of expirations of the timer    */
   struct timespec   time;       /* Time at which the timer was started   */
+  clockid_t         clock_type; /* The type of timer */
 } POSIX_Timer_Control;
 
 /**

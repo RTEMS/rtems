@@ -40,7 +40,7 @@ int timer_create(
 {
   POSIX_Timer_Control *ptimer;
 
-  if ( clock_id != CLOCK_REALTIME )
+  if (  clock_id != CLOCK_REALTIME && clock_id != CLOCK_MONOTONIC )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( !timerid )
@@ -91,6 +91,7 @@ int timer_create(
   ptimer->timer_data.it_value.tv_nsec    = 0;
   ptimer->timer_data.it_interval.tv_sec  = 0;
   ptimer->timer_data.it_interval.tv_nsec = 0;
+  ptimer->clock_type = clock_id;
 
   _Watchdog_Preinitialize( &ptimer->Timer, _Per_CPU_Get_snapshot() );
   _Watchdog_Initialize( &ptimer->Timer, _POSIX_Timer_TSR );
