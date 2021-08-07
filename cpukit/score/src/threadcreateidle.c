@@ -38,13 +38,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
 
   memset( &config, 0, sizeof( config ) );
   config.scheduler = _Scheduler_Get_by_CPU( cpu );
-
-#if defined(RTEMS_SMP)
-  if ( config.scheduler == NULL ) {
-    return;
-  }
-#endif
-
+  _Assert( config.scheduler != NULL );
   config.priority = _Scheduler_Map_priority(
     config.scheduler,
     config.scheduler->maximum_priority
