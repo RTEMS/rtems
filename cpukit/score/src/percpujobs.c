@@ -127,7 +127,6 @@ void _Per_CPU_Wait_for_job(
         break;
       default:
         _SMP_Fatal( SMP_FATAL_WRONG_CPU_STATE_TO_PERFORM_JOBS );
-        break;
     }
   }
 }
