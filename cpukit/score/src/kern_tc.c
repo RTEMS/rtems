@@ -26,7 +26,6 @@
  * ----------------------------------------------------------------------------
  *
  * Copyright (c) 2011, 2015, 2016 The FreeBSD Foundation
- * All rights reserved.
  *
  * Portions of this software were developed by Julien Ridoux at the University
  * of Melbourne under sponsorship from the FreeBSD Foundation.
