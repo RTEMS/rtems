@@ -47,5 +47,4 @@ source:
 - bsps/sparc/shared/irq/bsp_isr_handler.c
 - bsps/sparc/shared/irq/irq-shared.c
 - bsps/sparc/shared/start/bsp_fatal_exit.c
-- bsps/sparc/shared/start/bsp_fatal_halt.c
 type: build

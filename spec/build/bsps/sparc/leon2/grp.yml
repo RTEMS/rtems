@@ -31,8 +31,6 @@ links:
 - role: build-dependency
   uid: optconirq
 - role: build-dependency
-  uid: optpwrdwnhlt
-- role: build-dependency
   uid: ../start
 - role: build-dependency
   uid: ../../bspopts
