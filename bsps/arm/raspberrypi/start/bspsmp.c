@@ -42,6 +42,7 @@ bool _CPU_SMP_Start_processor( uint32_t cpu_index )
   if (cpu_index != cpu_index_self) {
 
     BCM2835_REG(BCM2836_MAILBOX_3_WRITE_SET_BASE + 0x10 * cpu_index) = (uint32_t)_start;
+    _ARM_Send_event();
 
     /*
      * Wait for secondary processor to complete its basic initialization so
