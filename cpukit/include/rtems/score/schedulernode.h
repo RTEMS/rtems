@@ -28,7 +28,7 @@
 #include <rtems/score/basedefs.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/smplockseq.h>
+#include <rtems/score/isrlock.h>
 
 /**
  * @addtogroup RTEMSScoreScheduler
@@ -197,14 +197,20 @@ struct Scheduler_Node {
      * least-significant bit which indicates if the thread should be appended
      * (bit set) or prepended (bit cleared) to its priority group, see
      * SCHEDULER_PRIORITY_APPEND().
+     *
+     * @see _Scheduler_Node_get_priority() and _Scheduler_Node_set_priority().
      */
+#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER == 8
+    Atomic_Ulong value;
+#else
     Priority_Control value;
+#endif
 
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER != 8
     /**
-     * @brief Sequence lock to synchronize priority value updates.
+     * @brief The lock protects the priority value.
      */
-    SMP_sequence_lock_Control Lock;
+    ISR_lock_Control Lock;
 #endif
   } Priority;
 };

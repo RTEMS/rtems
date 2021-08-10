@@ -77,12 +77,15 @@ extern "C" {
   ( ( ( priority ) & ( (Priority_Control) PRIORITY_GROUP_LAST ) ) != 0 )
 
 /**
- * @brief Initializes a node.
+ * @brief Initializes the node.
  *
- * @param scheduler The scheduler for the initialization of @a node.
- * @param[out] node The node to initialize.
- * @param the_thread The thread for the initialization of @a node.
- * @param priority The priority value for @a node.
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[out] node is the node to initialize.
+ *
+ * @param[in, out] the_thread is the thread of the node.
+ *
+ * @param priority is the initial priority of the node.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   const struct _Scheduler_Control *scheduler,
@@ -100,10 +103,33 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   node->Wait.Priority.scheduler = scheduler;
   node->user = the_thread;
   node->idle = NULL;
-  _SMP_sequence_lock_Initialize( &node->Priority.Lock );
+#if CPU_SIZEOF_POINTER != 8
+  _ISR_lock_Initialize( &node->Priority.Lock, "Scheduler Node Priority" );
+#endif
 #else
   (void) scheduler;
   (void) the_thread;
+#endif
+}
+
+/**
+ * @brief Destroys the node.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] node is the node to destroy.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_destroy(
+  const struct _Scheduler_Control *scheduler,
+  Scheduler_Node                  *node
+)
+{
+  (void) scheduler;
+
+#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER != 8
+  _ISR_lock_Destroy( &node->Priority.Lock );
+#else
+  (void) node;
 #endif
 }
 
@@ -148,17 +174,18 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
 {
   Priority_Control priority;
 
-#if defined(RTEMS_SMP)
-  unsigned int     seq;
+#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER == 8
+  priority = _Atomic_Fetch_add_ulong(
+    &node->Priority.value,
+    0,
+    ATOMIC_ORDER_RELAXED
+  );
+#else
+  ISR_lock_Context lock_context;
 
-  do {
-    seq = _SMP_sequence_lock_Read_begin( &node->Priority.Lock );
-#endif
-
-    priority = node->Priority.value;
-
-#if defined(RTEMS_SMP)
-  } while ( _SMP_sequence_lock_Read_retry( &node->Priority.Lock, seq ) );
+  _ISR_lock_Acquire( &node->Priority.Lock, &lock_context );
+  priority = node->Priority.value;
+  _ISR_lock_Release( &node->Priority.Lock, &lock_context );
 #endif
 
   return priority;
@@ -180,16 +207,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
   Priority_Group_order group_order
 )
 {
-#if defined(RTEMS_SMP)
-  unsigned int seq;
+#if defined(RTEMS_SMP) && CPU_SIZEOF_POINTER == 8
+  _Atomic_Store_ulong(
+    &node->Priority.value,
+    new_priority | (Priority_Control) group_order,
+    ATOMIC_ORDER_RELAXED
+  );
+#else
+  ISR_lock_Context lock_context;
 
-  seq = _SMP_sequence_lock_Write_begin( &node->Priority.Lock );
-#endif
-
+  _ISR_lock_Acquire( &node->Priority.Lock, &lock_context );
   node->Priority.value = new_priority | ( (Priority_Control) group_order );
-
-#if defined(RTEMS_SMP)
-  _SMP_sequence_lock_Write_end( &node->Priority.Lock, seq );
+  _ISR_lock_Release( &node->Priority.Lock, &lock_context );
 #endif
 }
 

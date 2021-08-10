@@ -21,12 +21,12 @@
 #endif
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/schedulernodeimpl.h>
 
 void _Scheduler_default_Node_destroy(
   const Scheduler_Control *scheduler,
   Scheduler_Node          *node
 )
 {
-  (void) scheduler;
-  (void) node;
+  _Scheduler_Node_do_destroy( scheduler, node );
 }
