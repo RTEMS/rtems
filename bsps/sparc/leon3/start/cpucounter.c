@@ -131,10 +131,14 @@ static void leon3_counter_initialize(void)
 
   gpt = LEON3_Timer_Regs;
 
+#if defined(LEON3_GPTIMER_BASE)
+  leon3_counter_use_gptimer(counter, gpt);
+#else
   if (gpt != NULL) {
     /* Fall back to the first GPTIMER if available */
     leon3_counter_use_gptimer(counter, gpt);
   }
+#endif
 #endif /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 }
 
