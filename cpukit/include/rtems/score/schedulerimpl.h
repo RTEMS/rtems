@@ -1388,7 +1388,11 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
       &new_scheduler_node->Thread.Scheduler_node.Chain
     );
 
-    _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
+    _Scheduler_Node_set_priority(
+      new_scheduler_node,
+      priority,
+      PRIORITY_GROUP_LAST
+    );
 
     if ( _States_Is_ready( current_state ) ) {
       _Scheduler_Unblock( the_thread );
@@ -1398,7 +1402,11 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   }
 #endif
 
-  _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
+  _Scheduler_Node_set_priority(
+    new_scheduler_node,
+    priority,
+    PRIORITY_GROUP_LAST
+  );
   _Scheduler_Update_priority( the_thread );
   return STATUS_SUCCESSFUL;
 }

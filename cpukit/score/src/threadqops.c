@@ -700,7 +700,7 @@ static void _Thread_queue_Priority_inherit_do_priority_actions_remove(
 
 static void _Thread_queue_Priority_inherit_do_priority_actions_change(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Actions     *priority_actions,
   void                 *arg
 )
@@ -787,7 +787,7 @@ static void _Thread_queue_Priority_inherit_priority_actions(
         _Priority_Changed(
           &priority_queue->Queue,
           &scheduler_node->Wait.Priority.Node,
-          false,
+          PRIORITY_GROUP_LAST,
           priority_actions,
           _Thread_queue_Priority_inherit_do_priority_actions_change,
           scheduler_node_of_owner
@@ -884,7 +884,7 @@ static void _Thread_queue_Priority_inherit_do_initialize(
 
 static void _Thread_queue_Priority_inherit_do_enqueue_change(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Actions     *priority_actions,
   void                 *arg
 )
@@ -1079,7 +1079,7 @@ static void _Thread_queue_Priority_inherit_do_extract_remove(
 
 static void _Thread_queue_Priority_inherit_do_extract_change(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Actions     *priority_actions,
   void                 *arg
 )
@@ -1231,7 +1231,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_add(
   _Scheduler_Node_set_priority(
     scheduler_node,
     _Priority_Get_priority( priority_aggregation ),
-    false
+    PRIORITY_GROUP_LAST
   );
 }
 
@@ -1254,7 +1254,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_remove(
 
 static void _Thread_queue_Priority_inherit_do_surrender_change(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Actions     *priority_actions,
   void                 *arg
 )
@@ -1270,14 +1270,14 @@ static void _Thread_queue_Priority_inherit_do_surrender_change(
   _Scheduler_Node_set_priority(
     SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation ),
     _Priority_Get_priority( priority_aggregation ),
-    prepend_it
+    priority_group_order
   );
 }
 
 #if defined(RTEMS_SMP)
 static void _Thread_queue_Priority_inherit_do_surrender_change_2(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Actions     *priority_actions,
   void                 *arg
 )
@@ -1285,7 +1285,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_change_2(
   _Scheduler_Node_set_priority(
     SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation ),
     _Priority_Get_priority( priority_aggregation ),
-    prepend_it
+    priority_group_order
   );
 }
 #endif

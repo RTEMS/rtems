@@ -47,12 +47,6 @@ extern "C" {
   RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Priority )
 
 /**
- * @brief Priority append indicator for the priority control used for the
- * scheduler node priority.
- */
-#define SCHEDULER_PRIORITY_APPEND_FLAG 1
-
-/**
  * @brief Maps a priority value to support the append indicator.
  */
 #define SCHEDULER_PRIORITY_MAP( priority ) ( ( priority ) << 1 )
@@ -66,13 +60,13 @@ extern "C" {
  * @brief Clears the priority append indicator bit.
  */
 #define SCHEDULER_PRIORITY_PURIFY( priority )  \
-  ( ( priority ) & ~( (Priority_Control) SCHEDULER_PRIORITY_APPEND_FLAG ) )
+  ( ( priority ) & ~( (Priority_Control) PRIORITY_GROUP_LAST ) )
 
 /**
  * @brief Returns the priority control with the append indicator bit set.
  */
 #define SCHEDULER_PRIORITY_APPEND( priority )  \
-  ( ( priority ) | SCHEDULER_PRIORITY_APPEND_FLAG )
+  ( ( priority ) | ( (Priority_Control) PRIORITY_GROUP_LAST ) )
 
 /**
  * @brief Returns true, if the item should be appended to its priority group,
@@ -80,7 +74,7 @@ extern "C" {
  * group.
  */
 #define SCHEDULER_PRIORITY_IS_APPEND( priority ) \
-  ( ( ( priority ) & SCHEDULER_PRIORITY_APPEND_FLAG ) != 0 )
+  ( ( ( priority ) & ( (Priority_Control) PRIORITY_GROUP_LAST ) ) != 0 )
 
 /**
  * @brief Initializes a node.
@@ -173,14 +167,17 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
 /**
  * @brief Sets the priority of the node.
  *
- * @param[in, out] node The node to set the priority of.
- * @param new_priority The new priority for @a node.
- * @param prepend_it Indicates whether the new priority should be prepended.
+ * @param[in, out] node is the scheduler node.
+ *
+ * @param new_priority is the priority to set.
+ *
+ * @param group_order is the priority group order, see #PRIORITY_GROUP_FIRST
+ *   and #PRIORITY_GROUP_LAST.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
-  Scheduler_Node   *node,
-  Priority_Control  new_priority,
-  bool              prepend_it
+  Scheduler_Node      *node,
+  Priority_Control     new_priority,
+  Priority_Group_order group_order
 )
 {
 #if defined(RTEMS_SMP)
@@ -189,8 +186,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
   seq = _SMP_sequence_lock_Write_begin( &node->Priority.Lock );
 #endif
 
-  new_priority |= ( prepend_it ? 0 : SCHEDULER_PRIORITY_APPEND_FLAG );
-  node->Priority.value = new_priority;
+  node->Priority.value = new_priority | ( (Priority_Control) group_order );
 
 #if defined(RTEMS_SMP)
   _SMP_sequence_lock_Write_end( &node->Priority.Lock, seq );

@@ -691,9 +691,10 @@ void _Thread_Priority_remove(
  *
  * @param the_thread The thread.
  * @param[out] priority_node The thread priority node to change.
- * @param prepend_it In case this is true, then the thread is prepended to
- *   its priority group in its home scheduler instance, otherwise it is
- *   appended.
+ * @param priority_group_order The priority group order determines if the
+ *   thread is inserted as the first or last node into the ready or scheduled
+ *   queues of its home scheduler, see #PRIORITY_GROUP_FIRST and
+ *   #PRIORITY_GROUP_LAST.
  * @param queue_context The thread queue context to return an updated set of
  *   threads for _Thread_Priority_update().  The thread queue context must be
  *   initialized via _Thread_queue_Context_clear_priority_updates() before a
@@ -704,7 +705,7 @@ void _Thread_Priority_remove(
 void _Thread_Priority_changed(
   Thread_Control       *the_thread,
   Priority_Node        *priority_node,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Thread_queue_Context *queue_context
 );
 
@@ -718,9 +719,10 @@ void _Thread_Priority_changed(
  * @param[out] priority_node The thread priority node to change.
  * @param new_priority The new thread priority value of the thread priority
  *   node to change.
- * @param prepend_it In case this is true, then the thread is prepended to
- *   its priority group in its home scheduler instance, otherwise it is
- *   appended.
+ * @param priority_group_order The priority group order determines if the
+ *   thread is inserted as the first or last node into the ready or scheduled
+ *   queues of its home scheduler, see #PRIORITY_GROUP_FIRST and
+ *   #PRIORITY_GROUP_LAST.
  * @param queue_context The thread queue context to return an updated set of
  *   threads for _Thread_Priority_update().  The thread queue context must be
  *   initialized via _Thread_queue_Context_clear_priority_updates() before a
@@ -732,7 +734,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Priority_change(
   Thread_Control       *the_thread,
   Priority_Node        *priority_node,
   Priority_Control      new_priority,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Thread_queue_Context *queue_context
 )
 {
@@ -740,7 +742,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Priority_change(
   _Thread_Priority_changed(
     the_thread,
     priority_node,
-    prepend_it,
+    priority_group_order,
     queue_context
   );
 }

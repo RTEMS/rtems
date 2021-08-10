@@ -33,7 +33,7 @@ static Scheduler_SMP_Node *get_scheduler_node(Thread_Control *thread)
 static void apply_priority(
   Thread_Control *thread,
   Priority_Control new_priority,
-  bool prepend_it,
+  Priority_Group_order priority_group_order,
   Thread_queue_Context *queue_context
 )
 {
@@ -49,7 +49,7 @@ static void apply_priority(
     thread,
     &thread->Real_priority,
     new_priority,
-    prepend_it,
+    priority_group_order,
     queue_context
   );
   _Thread_Wait_release(thread, queue_context);
@@ -58,12 +58,12 @@ static void apply_priority(
 static void change_priority(
   Thread_Control *thread,
   Priority_Control new_priority,
-  bool prepend_it
+  Priority_Group_order priority_group_order
 )
 {
   Thread_queue_Context queue_context;
 
-  apply_priority(thread, new_priority, prepend_it, &queue_context);
+  apply_priority(thread, new_priority, priority_group_order, &queue_context);
   _Thread_Priority_update(&queue_context);
 }
 
@@ -110,7 +110,7 @@ static void test_case_change_priority(
   Scheduler_SMP_Node *executing_node,
   Scheduler_SMP_Node_state start_state,
   Priority_Control prio,
-  bool prepend_it,
+  Priority_Group_order priority_group_order,
   Scheduler_SMP_Node_state new_state
 )
 {
@@ -120,10 +120,10 @@ static void test_case_change_priority(
 
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      change_priority(executing, 1, true);
+      change_priority(executing, 1, PRIORITY_GROUP_FIRST);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      change_priority(executing, 4, true);
+      change_priority(executing, 4, PRIORITY_GROUP_FIRST);
       break;
     default:
       rtems_test_assert(0);
@@ -131,10 +131,10 @@ static void test_case_change_priority(
   }
   rtems_test_assert(executing_node->state == start_state);
 
-  change_priority(executing, prio, prepend_it);
+  change_priority(executing, prio, priority_group_order);
   rtems_test_assert(executing_node->state == new_state);
 
-  change_priority(executing, 1, true);
+  change_priority(executing, 1, PRIORITY_GROUP_FIRST);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Dispatch_enable( cpu_self );
@@ -147,7 +147,10 @@ static const Scheduler_SMP_Node_state states[2] = {
 
 static const Priority_Control priorities[2] = { 2, 5 };
 
-static const bool prepend_it[2] = { true, false };
+static const Priority_Group_order priority_group_order[2] = {
+  PRIORITY_GROUP_FIRST,
+  PRIORITY_GROUP_LAST
+};
 
 static void test_change_priority(void)
 {
@@ -165,13 +168,13 @@ static void test_change_priority(void)
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
-      for (k = 0; k < RTEMS_ARRAY_SIZE(prepend_it); ++k) {
+      for (k = 0; k < RTEMS_ARRAY_SIZE(priority_group_order); ++k) {
         test_case_change_priority(
           executing,
           executing_node,
           states[i],
           priorities[j],
-          prepend_it[k],
+          priority_group_order[k],
           states[j]
         );
       }
@@ -186,7 +189,7 @@ static void update_priority_op(
   Thread_Control *thread,
   Scheduler_SMP_Node *scheduler_node,
   Priority_Control new_priority,
-  bool prepend_it
+  Priority_Group_order priority_group_order
 )
 {
   const Scheduler_Control *scheduler;
@@ -194,7 +197,7 @@ static void update_priority_op(
   ISR_lock_Context scheduler_lock_context;
   Thread_queue_Context queue_context;
 
-  apply_priority(thread, new_priority, prepend_it, &queue_context);
+  apply_priority(thread, new_priority, priority_group_order, &queue_context);
 
   _Thread_State_acquire( thread, &state_lock_context );
   scheduler = _Thread_Scheduler_get_home( thread );
@@ -216,7 +219,7 @@ static void test_case_update_priority_op(
   Thread_Control *other,
   Scheduler_SMP_Node_state start_state,
   Priority_Control prio,
-  bool prepend_it,
+  Priority_Group_order priority_group_order,
   Scheduler_SMP_Node_state new_state
 )
 {
@@ -226,10 +229,10 @@ static void test_case_update_priority_op(
 
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      change_priority(executing, 1, true);
+      change_priority(executing, 1, PRIORITY_GROUP_FIRST);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      change_priority(executing, 4, true);
+      change_priority(executing, 4, PRIORITY_GROUP_FIRST);
       break;
     default:
       rtems_test_assert(0);
@@ -237,7 +240,7 @@ static void test_case_update_priority_op(
   }
   rtems_test_assert(executing_node->state == start_state);
 
-  update_priority_op(executing, executing_node, prio, prepend_it);
+  update_priority_op(executing, executing_node, prio, priority_group_order);
   rtems_test_assert(executing_node->state == new_state);
 
   if (start_state != new_state) {
@@ -254,7 +257,7 @@ static void test_case_update_priority_op(
     }
   }
 
-  change_priority(executing, 1, true);
+  change_priority(executing, 1, PRIORITY_GROUP_FIRST);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Dispatch_enable( cpu_self );
@@ -279,14 +282,14 @@ static void test_update_priority_op(void)
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
-      for (k = 0; k < RTEMS_ARRAY_SIZE(prepend_it); ++k) {
+      for (k = 0; k < RTEMS_ARRAY_SIZE(priority_group_order); ++k) {
         test_case_update_priority_op(
           executing,
           executing_node,
           other,
           states[i],
           priorities[j],
-          prepend_it[k],
+          priority_group_order[k],
           states[j]
         );
       }
@@ -332,19 +335,19 @@ static void test_case_yield_op(
 
   cpu_self = _Thread_Dispatch_disable();
 
-  change_priority(executing, 4, false);
-  change_priority(other, 4, false);
+  change_priority(executing, 4, PRIORITY_GROUP_LAST);
+  change_priority(other, 4, PRIORITY_GROUP_LAST);
 
   switch (start_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
       switch (new_state) {
         case SCHEDULER_SMP_NODE_SCHEDULED:
-          change_priority(executing, 2, false);
-          change_priority(other, 3, false);
+          change_priority(executing, 2, PRIORITY_GROUP_LAST);
+          change_priority(other, 3, PRIORITY_GROUP_LAST);
           break;
         case SCHEDULER_SMP_NODE_READY:
-          change_priority(executing, 2, false);
-          change_priority(other, 2, false);
+          change_priority(executing, 2, PRIORITY_GROUP_LAST);
+          change_priority(other, 2, PRIORITY_GROUP_LAST);
           break;
         default:
           rtems_test_assert(0);
@@ -357,8 +360,8 @@ static void test_case_yield_op(
           rtems_test_assert(0);
           break;
         case SCHEDULER_SMP_NODE_READY:
-          change_priority(executing, 3, false);
-          change_priority(other, 2, false);
+          change_priority(executing, 3, PRIORITY_GROUP_LAST);
+          change_priority(other, 2, PRIORITY_GROUP_LAST);
           break;
         default:
           rtems_test_assert(0);
@@ -383,7 +386,7 @@ static void test_case_yield_op(
       break;
   }
 
-  change_priority(executing, 1, true);
+  change_priority(executing, 1, PRIORITY_GROUP_FIRST);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Dispatch_enable( cpu_self );
@@ -481,11 +484,11 @@ static void test_case_unblock_op(
 
   switch (new_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      change_priority(executing, 2, false);
+      change_priority(executing, 2, PRIORITY_GROUP_LAST);
       rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      change_priority(executing, 4, false);
+      change_priority(executing, 4, PRIORITY_GROUP_LAST);
       rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_READY);
       break;
     default:
@@ -508,7 +511,7 @@ static void test_case_unblock_op(
       break;
   }
 
-  change_priority(executing, 1, true);
+  change_priority(executing, 1, PRIORITY_GROUP_FIRST);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Dispatch_enable( cpu_self );

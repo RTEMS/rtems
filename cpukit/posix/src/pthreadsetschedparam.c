@@ -96,7 +96,7 @@ static int _POSIX_Set_sched_param(
     _Thread_Priority_changed(
       the_thread,
       &the_thread->Real_priority,
-      false,
+      PRIORITY_GROUP_LAST,
       queue_context
     );
 #if defined(RTEMS_POSIX_API)

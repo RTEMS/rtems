@@ -50,7 +50,7 @@ static rtems_status_code _RTEMS_tasks_Set_priority(
     the_thread,
     &the_thread->Real_priority,
     core_new_priority,
-    false,
+    PRIORITY_GROUP_LAST,
     queue_context
   );
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );

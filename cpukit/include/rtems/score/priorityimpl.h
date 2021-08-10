@@ -37,6 +37,29 @@ extern "C" {
  * @{
  */
 
+ /**
+  * @brief The priority group order determines if a priority node is inserted
+  *   as the first or last node into its priority group.
+  *
+  * The values of the enumerators matter.  The least significant bit of a
+  * ::Priority_Control value is not used for the actual priority of a node.
+  * During insertion the least significant bit is used to determine the
+  * ordering within a priority group based on the enumerator values.
+  */
+typedef enum {
+  /**
+   * @brief Priority group first option requests that the priority node is
+   *   inserted as the first node into its priority group.
+   */
+  PRIORITY_GROUP_FIRST = 0,
+
+  /**
+   * @brief Priority group last option requests that the priority node is
+   *   inserted as the last node into its priority group.
+   */
+  PRIORITY_GROUP_LAST = 1
+} Priority_Group_order;
+
 /**
  * @brief Initializes the priority actions empty.
  *
@@ -465,7 +488,7 @@ typedef void ( *Priority_Add_handler )(
 
 typedef void ( *Priority_Change_handler )(
   Priority_Aggregation *aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  group_order,
   Priority_Actions     *actions,
   void                 *arg
 );
@@ -482,19 +505,19 @@ typedef void ( *Priority_Remove_handler )(
  * This method does nothing.
  *
  * @param aggregation Is ignored by the method.
- * @param prepend_it Is ignored by the method.
+ * @param group_order Is ignored by the method.
  * @param actions Is ignored by the method.
  * @param arg Is ignored by the method.
  */
 RTEMS_INLINE_ROUTINE void _Priority_Change_nothing(
   Priority_Aggregation *aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  group_order,
   Priority_Actions     *actions,
   void                 *arg
 )
 {
   (void) aggregation;
-  (void) prepend_it;
+  (void) group_order;
   (void) actions;
   (void) arg;
 }
@@ -547,7 +570,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Non_empty_insert(
 
   if ( is_new_minimum ) {
     aggregation->Node.priority = node->priority;
-    ( *change )( aggregation, false, actions, arg );
+    ( *change )( aggregation, PRIORITY_GROUP_LAST, actions, arg );
   }
 }
 
@@ -619,7 +642,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract(
 
     if ( node->priority < min->priority ) {
       aggregation->Node.priority = min->priority;
-      ( *change )( aggregation, true, actions, arg );
+      ( *change )( aggregation, PRIORITY_GROUP_FIRST, actions, arg );
     }
   }
 }
@@ -654,7 +677,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract_non_empty(
 
   if ( node->priority < min->priority ) {
     aggregation->Node.priority = min->priority;
-    ( *change )( aggregation, true, actions, arg );
+    ( *change )( aggregation, PRIORITY_GROUP_FIRST, actions, arg );
   }
 }
 
@@ -666,8 +689,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract_non_empty(
  *
  * @param[in, out] aggregation The aggregation to change the node in.
  * @param node The node that has a new priority and will be reinserted in the aggregation.
- * @param prepend_it Indicates whether @a change should prepend if the minimal priority is
- *      incorrectly set after the change.
+ * @param group_order The priority group order which may be used by @ change.
  * @param actions The actions for the case that the minimal priority is incorrectly set
  *      after the change.
  * @param change Is called if the minimal priority is incorrectly set after the change.
@@ -676,7 +698,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Extract_non_empty(
 RTEMS_INLINE_ROUTINE void _Priority_Changed(
   Priority_Aggregation    *aggregation,
   Priority_Node           *node,
-  bool                     prepend_it,
+  Priority_Group_order     group_order,
   Priority_Actions        *actions,
   Priority_Change_handler  change,
   void                    *arg
@@ -695,7 +717,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Changed(
 
   if ( min->priority != aggregation->Node.priority ) {
     aggregation->Node.priority = min->priority;
-    ( *change )( aggregation, prepend_it, actions, arg );
+    ( *change )( aggregation, group_order, actions, arg );
   }
 }
 

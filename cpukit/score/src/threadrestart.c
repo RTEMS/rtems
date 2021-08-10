@@ -70,7 +70,7 @@ static void _Thread_Raise_real_priority(
       the_thread,
       &the_thread->Real_priority,
       priority,
-      false,
+      PRIORITY_GROUP_LAST,
       &queue_context
     );
   }
@@ -576,7 +576,7 @@ Status_Control _Thread_Restart(
     the_thread,
     &the_thread->Real_priority,
     the_thread->Start.initial_priority,
-    false,
+    PRIORITY_GROUP_LAST,
     &queue_context
   );
   _Thread_Wait_release( the_thread, &queue_context );

@@ -31,13 +31,13 @@
 
 static void _Thread_Set_scheduler_node_priority(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it
+  Priority_Group_order  priority_group_order
 )
 {
   _Scheduler_Node_set_priority(
     SCHEDULER_NODE_OF_WAIT_PRIORITY_NODE( priority_aggregation ),
     _Priority_Get_priority( priority_aggregation ),
-    prepend_it
+    priority_group_order
   );
 }
 
@@ -55,7 +55,10 @@ static void _Thread_Priority_action_add(
   the_thread = arg;
 
   _Thread_Scheduler_add_wait_node( the_thread, scheduler_node );
-  _Thread_Set_scheduler_node_priority( priority_aggregation, false );
+  _Thread_Set_scheduler_node_priority(
+    priority_aggregation,
+    PRIORITY_GROUP_LAST
+  );
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_ADD );
   _Priority_Actions_add( priority_actions, priority_aggregation );
 }
@@ -73,7 +76,10 @@ static void _Thread_Priority_action_remove(
   the_thread = arg;
 
   _Thread_Scheduler_remove_wait_node( the_thread, scheduler_node );
-  _Thread_Set_scheduler_node_priority( priority_aggregation, true );
+  _Thread_Set_scheduler_node_priority(
+    priority_aggregation,
+    PRIORITY_GROUP_FIRST
+  );
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_REMOVE );
   _Priority_Actions_add( priority_actions, priority_aggregation );
 }
@@ -81,12 +87,15 @@ static void _Thread_Priority_action_remove(
 
 static void _Thread_Priority_action_change(
   Priority_Aggregation *priority_aggregation,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Actions     *priority_actions,
   void                 *arg
 )
 {
-  _Thread_Set_scheduler_node_priority( priority_aggregation, prepend_it );
+  _Thread_Set_scheduler_node_priority(
+    priority_aggregation,
+    priority_group_order
+  );
 #if defined(RTEMS_SMP) || defined(RTEMS_DEBUG)
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_CHANGE );
 #endif
@@ -97,7 +106,7 @@ static void _Thread_Priority_do_perform_actions(
   Thread_Control                *the_thread,
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
-  bool                           prepend_it,
+  Priority_Group_order           priority_group_order,
   Thread_queue_Context          *queue_context
 )
 {
@@ -162,7 +171,7 @@ static void _Thread_Priority_do_perform_actions(
         _Priority_Changed(
           priority_aggregation,
           priority_action_node,
-          prepend_it,
+          priority_group_order,
           &queue_context->Priority.Actions,
           _Thread_Priority_action_change,
           NULL
@@ -214,7 +223,7 @@ void _Thread_Priority_perform_actions(
       the_thread,
       queue,
       the_thread->Wait.operations,
-      false,
+      PRIORITY_GROUP_LAST,
       queue_context
     );
 
@@ -244,7 +253,7 @@ static void _Thread_Priority_apply(
   Thread_Control       *the_thread,
   Priority_Node        *priority_action_node,
   Thread_queue_Context *queue_context,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Priority_Action_type  priority_action_type
 )
 {
@@ -263,7 +272,7 @@ static void _Thread_Priority_apply(
     the_thread,
     queue,
     the_thread->Wait.operations,
-    prepend_it,
+    priority_group_order,
     queue_context
   );
 
@@ -288,7 +297,7 @@ void _Thread_Priority_add(
     the_thread,
     priority_node,
     queue_context,
-    false,
+    PRIORITY_GROUP_LAST,
     PRIORITY_ACTION_ADD
   );
 }
@@ -303,7 +312,7 @@ void _Thread_Priority_remove(
     the_thread,
     priority_node,
     queue_context,
-    true,
+    PRIORITY_GROUP_FIRST,
     PRIORITY_ACTION_REMOVE
   );
 }
@@ -311,7 +320,7 @@ void _Thread_Priority_remove(
 void _Thread_Priority_changed(
   Thread_Control       *the_thread,
   Priority_Node        *priority_node,
-  bool                  prepend_it,
+  Priority_Group_order  priority_group_order,
   Thread_queue_Context *queue_context
 )
 {
@@ -319,7 +328,7 @@ void _Thread_Priority_changed(
     the_thread,
     priority_node,
     queue_context,
-    prepend_it,
+    priority_group_order,
     PRIORITY_ACTION_CHANGE
   );
 }

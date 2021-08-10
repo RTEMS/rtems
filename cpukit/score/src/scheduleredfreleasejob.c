@@ -66,7 +66,7 @@ void _Scheduler_EDF_Release_job(
     _Thread_Priority_changed(
       the_thread,
       priority_node,
-      false,
+      PRIORITY_GROUP_LAST,
       queue_context
     );
   } else {

@@ -375,7 +375,7 @@ RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
       owner,
       &the_mutex->Priority_ceiling,
       priority_ceiling,
-      false,
+      PRIORITY_GROUP_LAST,
       queue_context
     );
     _Thread_Wait_release( owner, queue_context );

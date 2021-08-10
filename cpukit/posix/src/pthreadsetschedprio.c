@@ -49,7 +49,7 @@ int pthread_setschedprio( pthread_t thread, int prio )
     the_thread,
     &the_thread->Real_priority,
     new_priority,
-    true,
+    PRIORITY_GROUP_FIRST,
     &queue_context
   );
 
