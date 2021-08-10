@@ -23,6 +23,7 @@
 #include <rtems/rtems/partimpl.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/support.h>
+#include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/sysinit.h>
@@ -40,8 +41,11 @@ static void _Partition_Initialize(
   rtems_attribute    attribute_set
 )
 {
-  the_partition->starting_address      = starting_address;
-  the_partition->length                = length;
+  const void *limit_address;
+
+  limit_address = _Addresses_Add_offset( starting_address, length - 1 );
+  the_partition->base_address          = starting_address;
+  the_partition->limit_address         = limit_address;
   the_partition->buffer_size           = buffer_size;
   the_partition->attribute_set         = attribute_set;
   the_partition->number_of_used_blocks = 0;

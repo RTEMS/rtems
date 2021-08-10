@@ -48,15 +48,20 @@ typedef struct {
   ISR_LOCK_MEMBER( Lock )
 
   /**
-   * @brief This member contains the physical starting address of the buffer
-   *   area.
+   * @brief This member contains the base address of the buffer area.
+   *
+   * The base address is the address of the first byte contained in the buffer
+   * area.
    */
-  void *starting_address;
+  const void *base_address;
 
   /**
-   * @brief This member contains the size of the buffer area in bytes.
+   * @brief This member contains the limit address of the buffer area.
+   *
+   * The limit address is the address of the last byte contained in the buffer
+   * area.
    */
-  uintptr_t length;
+  const void *limit_address;
 
   /**
    * @brief This member contains the size of each buffer in bytes.

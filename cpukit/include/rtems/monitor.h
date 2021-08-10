@@ -192,7 +192,7 @@ typedef struct {
     rtems_name          name;
   /* end of common portion */
   rtems_attribute     attribute;
-  void *              start_addr;
+  const void *        start_addr;
   uint32_t            length;
   uint32_t            buf_size;
   uint32_t            used_blocks;

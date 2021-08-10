@@ -33,7 +33,7 @@ static bool _Partition_Is_address_on_buffer_boundary(
 
   offset = _Addresses_Subtract(
     the_buffer,
-    the_partition->starting_address
+    the_partition->base_address
   );
 
   return ( offset % the_partition->buffer_size ) == 0;
@@ -44,14 +44,17 @@ static bool _Partition_Is_address_a_buffer_begin(
    const void              *the_buffer
 )
 {
-  void *starting;
-  void *ending;
+  const void *base;
+  const void *limit;
 
-  starting = the_partition->starting_address;
-  ending   = _Addresses_Add_offset( starting, the_partition->length );
+  base = the_partition->base_address;
+  limit = the_partition->limit_address;
 
-  return _Addresses_Is_in_range( the_buffer, starting, ending )
-    && _Partition_Is_address_on_buffer_boundary( the_partition, the_buffer );
+  if ( !_Addresses_Is_in_range( the_buffer, base, limit ) ) {
+    return false;
+  }
+
+  return _Partition_Is_address_on_buffer_boundary( the_partition, the_buffer );
 }
 
 static void _Partition_Free_buffer(

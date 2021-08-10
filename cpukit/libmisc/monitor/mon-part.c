@@ -22,8 +22,9 @@ rtems_monitor_part_canonical(
     const Partition_Control *rtems_part = (const Partition_Control *) part_void;
 
     canonical_part->attribute = rtems_part->attribute_set;
-    canonical_part->start_addr = rtems_part->starting_address;
-    canonical_part->length = rtems_part->length;
+    canonical_part->start_addr = rtems_part->base_address;
+    canonical_part->length = (uint32_t) ( (uintptr_t)
+        rtems_part->limit_address + 1 - (uintptr_t) rtems_part->base_address );
     canonical_part->buf_size = rtems_part->buffer_size;
     canonical_part->used_blocks = rtems_part->number_of_used_blocks;
 }
