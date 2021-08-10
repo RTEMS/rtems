@@ -524,6 +524,27 @@ typedef struct {
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
+RTEMS_NO_RETURN void _CPU_Exception_resume( CPU_Exception_frame *frame );
+
+RTEMS_NO_RETURN void
+_CPU_Exception_dispatch_and_resume( CPU_Exception_frame *frame );
+
+void _CPU_Exception_disable_thread_dispatch( void );
+
+int _CPU_Exception_frame_get_signal( CPU_Exception_frame *frame );
+
+void _CPU_Exception_frame_set_resume( CPU_Exception_frame *frame,
+                                      void *address );
+
+void _CPU_Exception_frame_make_resume_next_instruction(
+  CPU_Exception_frame *frame
+);
+
+void _AArch64_Exception_frame_copy(
+  CPU_Exception_frame *new_ef,
+  CPU_Exception_frame *old_ef
+);
+
 void _AArch64_Exception_default( CPU_Exception_frame *frame );
 
 /** Type that can store a 32-bit integer or a pointer. */
