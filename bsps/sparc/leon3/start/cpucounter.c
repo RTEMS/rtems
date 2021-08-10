@@ -106,12 +106,13 @@ static void leon3_counter_initialize(void)
 
   counter = &_SPARC_Counter_mutable;
 
-  leon3_up_counter_enable();
-
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+  leon3_up_counter_enable();
   leon3_counter_use_up_counter(counter);
 #else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 #if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
+  leon3_up_counter_enable();
+
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
     leon3_counter_use_up_counter(counter);

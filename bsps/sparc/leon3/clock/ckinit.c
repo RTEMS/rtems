@@ -291,12 +291,13 @@ static void leon3_clock_initialize(void)
   tc->tc_counter_mask = 0xffffffff;
   tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
 
-  leon3_up_counter_enable();
-
 #if defined(LEON3_HAS_ASR_22_23_UP_COUNTER)
+  leon3_up_counter_enable();
   leon3_clock_use_up_counter(tc);
 #else /* LEON3_HAS_ASR_22_23_UP_COUNTER */
 #if defined(LEON3_PROBE_ASR_22_23_UP_COUNTER)
+  leon3_up_counter_enable();
+
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
     leon3_clock_use_up_counter(tc);
