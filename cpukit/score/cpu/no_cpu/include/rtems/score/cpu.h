@@ -1142,6 +1142,69 @@ typedef struct {
  */
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
+#ifdef RTEMS_EXCEPTION_EXTENSIONS
+  /**
+   * @brief Resumes normal execution using the provided exception frame.
+   *
+   * This routine helps to avoid dead code in the exception handler epilogue and
+   * does not return. This routine may assume that the provided pointer is valid
+   * for resetting the exception stack.
+   *
+   * @param frame The CPU_Exception_frame describing the machine exception.
+   */
+  RTEMS_NO_RETURN void _CPU_Exception_resume( CPU_Exception_frame *frame );
+
+  /**
+   * @brief Performs thread dispatch and resumes normal execution.
+   *
+   * This routine helps to avoid dead code in the exception handler epilogue and
+   * does not return. This routine may assume that the provided pointer is valid
+   * for resetting the exception stack. This function is expected to decrement
+   * the ISR nest level and thread dispatch disable level in the Per_CPU_Control
+   * structure.
+   *
+   * @param frame The CPU_Exception_frame describing the machine
+   * exception.
+   */
+  RTEMS_NO_RETURN void _CPU_Exception_dispatch_and_resume(
+    CPU_Exception_frame *frame
+  );
+
+  /**
+   * @brief Disables thread dispatch.
+   *
+   * This must be called before calling _CPU_Exception_dispatch_and_resume
+   * since that function is expected to reduce the levels incremented below.
+   */
+  void _CPU_Exception_disable_thread_dispatch( void );
+
+  /**
+   * @brief Retrieves the generic exception class of the machine exception.
+   *
+   * @param frame The CPU_Exception_frame describing the machine
+   * exception.
+   * @return The signal associated with the CPU_Exception_frame.
+   */
+  int _CPU_Exception_frame_get_signal( CPU_Exception_frame *frame );
+
+  /**
+   * @brief Sets the execution address of the exception frame.
+   *
+   * @param frame The CPU_Exception_frame describing the machine exception.
+   * @param address The address at which execution should resume.
+   */
+  void _CPU_Exception_frame_set_resume( CPU_Exception_frame *frame, void *address );
+
+  /**
+   * @brief Sets the execution address of the exception frame to the next
+   * instruction.
+   *
+   * @param frame The CPU_Exception_frame describing the machine
+   * exception.
+   */
+  void _CPU_Exception_frame_make_resume_next_instruction( CPU_Exception_frame *frame );
+#endif
+
 /**
  * @defgroup RTEMSScoreCPUExampleCPUEndian CPUEndian
  * 

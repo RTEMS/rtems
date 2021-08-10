@@ -40,6 +40,8 @@ links:
 - role: build-dependency
   uid: optdrvmgr
 - role: build-dependency
+  uid: optexceptionextensions
+- role: build-dependency
   uid: optmpci
 - role: build-dependency
   uid: optnewlib
