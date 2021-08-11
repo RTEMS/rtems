@@ -204,9 +204,9 @@ static inline void _AARCH64_Instruction_synchronization_barrier( void )
   __asm__ volatile ( "isb" : : : "memory" );
 }
 
-void _CPU_ISR_Set_level( uint64_t level );
+void _CPU_ISR_Set_level( uint32_t level );
 
-uint64_t _CPU_ISR_Get_level( void );
+uint32_t _CPU_ISR_Get_level( void );
 
 #if defined(AARCH64_DISABLE_INLINE_ISR_DISABLE_ENABLE)
 uint64_t AArch64_interrupt_disable( void );

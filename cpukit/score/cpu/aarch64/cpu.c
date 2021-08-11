@@ -146,7 +146,7 @@ void _CPU_Context_Initialize(
   }
 }
 
-void _CPU_ISR_Set_level( uint64_t level )
+void _CPU_ISR_Set_level( uint32_t level )
 {
   /* Set the mask bit if interrupts are disabled */
   level = level ? AARCH64_PSTATE_I : 0;
@@ -156,7 +156,7 @@ void _CPU_ISR_Set_level( uint64_t level )
   );
 }
 
-uint64_t _CPU_ISR_Get_level( void )
+uint32_t _CPU_ISR_Get_level( void )
 {
   uint64_t level;
 
