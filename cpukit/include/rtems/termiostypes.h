@@ -367,6 +367,10 @@ typedef struct rtems_termios_tty {
    */
   rtems_id                rxTaskId;
   rtems_id                txTaskId;
+  /*
+   * Information for the tx task how many characters have been dequeued.
+   */
+  int                     txTaskCharsDequeued;
 
   /*
    * line discipline related stuff
@@ -482,7 +486,7 @@ struct rtems_termios_linesw {
   int (*l_read )(struct rtems_termios_tty *tp,rtems_libio_rw_args_t *args);
   int (*l_write)(struct rtems_termios_tty *tp,rtems_libio_rw_args_t *args);
   int (*l_rint )(int c,struct rtems_termios_tty *tp);
-  int (*l_start)(struct rtems_termios_tty *tp);
+  int (*l_start)(struct rtems_termios_tty *tp,int len);
   int (*l_ioctl)(struct rtems_termios_tty *tp,rtems_libio_ioctl_args_t *args);
   int (*l_modem)(struct rtems_termios_tty *tp,int flags);
 };
