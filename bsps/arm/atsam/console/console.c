@@ -145,8 +145,9 @@ static void atsam_uart_interrupt(void *arg)
     }
   }
 
-  if (ctx->transmitting && (sr & UART_SR_TXEMPTY) != 0) {
+  while (ctx->transmitting && (sr & UART_SR_TXRDY) != 0) {
     rtems_termios_dequeue_characters(tty, 1);
+    sr = regs->UART_SR;
   }
 }
 #endif
@@ -408,16 +409,16 @@ static void atsam_uart_write(
   if (len > 0) {
     ctx->transmitting = true;
     regs->UART_THR = buf[0];
-    regs->UART_IER = UART_IDR_TXEMPTY;
+    regs->UART_IER = UART_IDR_TXRDY;
   } else {
     ctx->transmitting = false;
-    regs->UART_IDR = UART_IDR_TXEMPTY;
+    regs->UART_IDR = UART_IDR_TXRDY;
   }
 #else
   size_t i;
 
   for (i = 0; i < len; ++i) {
-    while ((regs->UART_SR & UART_SR_TXEMPTY) == 0) {
+    while ((regs->UART_SR & UART_SR_TXRDY) == 0) {
       /* Wait */
     }
 
