@@ -1969,6 +1969,7 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
     /*
      * send wake up to transmitter task
      */
+    tty->txTaskCharsDequeued = len;
     sc = rtems_event_send(tty->txTaskId, TERMIOS_TX_START_EVENT);
     if (sc != RTEMS_SUCCESSFUL)
       rtems_fatal_error_occurred (sc);
@@ -1980,7 +1981,7 @@ rtems_termios_dequeue_characters (void *ttyp, int len)
      * call PPP line discipline start function
      */
     if (rtems_termios_linesw[tty->t_line].l_start != NULL) {
-      rtems_termios_linesw[tty->t_line].l_start(tty);
+      rtems_termios_linesw[tty->t_line].l_start(tty, len);
     }
     return 0; /* nothing to output in IRQ... */
   }
@@ -2015,7 +2016,7 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
      * call any line discipline start function
      */
     if (rtems_termios_linesw[tty->t_line].l_start != NULL) {
-      rtems_termios_linesw[tty->t_line].l_start(tty);
+      rtems_termios_linesw[tty->t_line].l_start(tty, tty->txTaskCharsDequeued);
 
       if (tty->t_line == PPPDISC) {
         /*
