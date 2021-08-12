@@ -86,7 +86,6 @@ rtems_status_code bsp_interrupt_is_pending(
   bool               *pending
 )
 {
-#if defined(RTEMS_SMP)
   rtems_interrupt_level level;
   uint32_t bit;
 
@@ -99,11 +98,6 @@ rtems_status_code bsp_interrupt_is_pending(
     (LEON3_IrqCtrl_Regs->force[rtems_scheduler_get_processor()] & bit) != 0;
   rtems_interrupt_local_enable(level);
   return RTEMS_SUCCESSFUL;
-#else
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  *pending = !BSP_Is_interrupt_pending(vector);
-  return RTEMS_SUCCESSFUL;
-#endif
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
