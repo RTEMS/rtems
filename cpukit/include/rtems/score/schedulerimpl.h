@@ -611,12 +611,30 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Tick( const Per_CPU_Control *cpu )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get_by_CPU( cpu );
-  Thread_Control *executing = cpu->executing;
+  const Scheduler_Control *scheduler;
+  Thread_Control          *executing;
 
-  if ( scheduler != NULL && executing != NULL ) {
-    ( *scheduler->Operations.tick )( scheduler, executing );
+  scheduler = _Scheduler_Get_by_CPU( cpu );
+
+#if defined(RTEMS_SMP)
+  if ( scheduler == NULL ) {
+    /*
+     * In SMP configurations, processors may be removed/added at runtime
+     * from/to a scheduler.  There may be still clock interrupts on currently
+     * unassigned processors.
+     */
+    return;
   }
+#endif
+
+  /*
+   * Each online processor has at least an idle thread as the executing thread
+   * even in case it has currently no scheduler assigned.  Clock interrupts on
+   * processors which are not online would be a severe bug of the Clock Driver.
+   */
+  executing = _Per_CPU_Get_executing( cpu );
+  _Assert( executing != NULL );
+  ( *scheduler->Operations.tick )( scheduler, executing );
 }
 
 /**
