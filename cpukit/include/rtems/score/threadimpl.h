@@ -48,6 +48,33 @@ extern "C" {
  */
 
 /**
+ * @brief The thread zombie registry is used to register threads in the
+ *   #STATES_ZOMBIE state.
+ */
+typedef struct {
+#if defined(RTEMS_SMP)
+  /**
+   * @brief This lock protects the zombie chain.
+   */
+  ISR_lock_Control Lock;
+#endif
+
+  /**
+   * @brief This chain contains the registered zombie threads.
+   */
+  Chain_Control Chain;
+} Thread_Zombie_registry;
+
+/**
+ * @brief This object is a registry for threads in the #STATES_ZOMBIE state.
+ *
+ * The registry contains zombie threads waiting to get killed by
+ * _Thread_Kill_zombies().  Use _Thread_Add_to_zombie_registry() to add zombie
+ * threads to the registry.
+ */
+extern Thread_Zombie_registry _Thread_Zombies;
+
+/**
  *  Self for the GNU Ada Run-Time
  */
 extern void *rtems_ada_self;

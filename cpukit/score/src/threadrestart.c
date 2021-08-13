@@ -44,14 +44,11 @@ static void _Thread_Life_action_handler(
   ISR_lock_Context *lock_context
 );
 
-typedef struct {
-  Chain_Control Chain;
-  ISR_lock_Control Lock;
-} Thread_Zombie_control;
-
-static Thread_Zombie_control _Thread_Zombies = {
-  .Chain = CHAIN_INITIALIZER_EMPTY( _Thread_Zombies.Chain ),
-  .Lock = ISR_LOCK_INITIALIZER( "thread zombies" )
+Thread_Zombie_registry _Thread_Zombies = {
+#if defined(RTEMS_SMP)
+  .Lock = ISR_LOCK_INITIALIZER( "Thread Zombies" ),
+#endif
+  .Chain = CHAIN_INITIALIZER_EMPTY( _Thread_Zombies.Chain )
 };
 
 static void _Thread_Raise_real_priority(
@@ -115,10 +112,10 @@ static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
   );
 }
 
-static void _Thread_Add_to_zombie_chain( Thread_Control *the_thread )
+static void _Thread_Add_to_zombie_registry( Thread_Control *the_thread )
 {
-  ISR_lock_Context       lock_context;
-  Thread_Zombie_control *zombies;
+  ISR_lock_Context        lock_context;
+  Thread_Zombie_registry *zombies;
 
   zombies = &_Thread_Zombies;
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
@@ -148,7 +145,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
    * threads, so that they are able to clean up the thread immediately.  This
    * matters for SMP configurations.
    */
-  _Thread_Add_to_zombie_chain( the_thread );
+  _Thread_Add_to_zombie_registry( the_thread );
 
   _Thread_Wake_up_joining_threads( the_thread );
 }
@@ -169,16 +166,16 @@ static void _Thread_Wait_for_execution_stop( const Thread_Control *the_thread )
 #endif
 }
 
-static Thread_Control *_Thread_Get_zombie( Thread_Zombie_control *zombies )
+static Thread_Control *_Thread_Get_zombie( Thread_Zombie_registry *zombies )
 {
   return (Thread_Control *) _Chain_Get_unprotected( &zombies->Chain );
 }
 
 void _Thread_Kill_zombies( void )
 {
-  ISR_lock_Context       lock_context;
-  Thread_Zombie_control *zombies;
-  Thread_Control        *the_thread;
+  ISR_lock_Context        lock_context;
+  Thread_Zombie_registry *zombies;
+  Thread_Control         *the_thread;
 
   zombies = &_Thread_Zombies;
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
