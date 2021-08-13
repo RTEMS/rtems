@@ -153,7 +153,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
   _Thread_Wake_up_joining_threads( the_thread );
 }
 
-static void _Thread_Wait_for_execution_stop( Thread_Control *the_thread )
+static void _Thread_Wait_for_execution_stop( const Thread_Control *the_thread )
 {
 #if defined(RTEMS_SMP)
   /*
@@ -169,16 +169,21 @@ static void _Thread_Wait_for_execution_stop( Thread_Control *the_thread )
 #endif
 }
 
+static Thread_Control *_Thread_Get_zombie( Thread_Zombie_control *zombies )
+{
+  return (Thread_Control *) _Chain_Get_unprotected( &zombies->Chain );
+}
+
 void _Thread_Kill_zombies( void )
 {
-  ISR_lock_Context lock_context;
-  Thread_Zombie_control *zombies = &_Thread_Zombies;
-  Thread_Control *the_thread;
+  ISR_lock_Context       lock_context;
+  Thread_Zombie_control *zombies;
+  Thread_Control        *the_thread;
 
+  zombies = &_Thread_Zombies;
   _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
 
-  the_thread = (Thread_Control *) _Chain_Get_unprotected( &zombies->Chain );
-  while ( the_thread != NULL ) {
+  while ( ( the_thread = _Thread_Get_zombie( zombies ) ) != NULL ) {
     Thread_Information *information;
 
     _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
@@ -188,8 +193,6 @@ void _Thread_Kill_zombies( void )
     _Thread_Free( information, the_thread );
 
     _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
-
-    the_thread = (Thread_Control *) _Chain_Get_unprotected( &zombies->Chain );
   }
 
   _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
