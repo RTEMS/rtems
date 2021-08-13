@@ -75,11 +75,6 @@ typedef struct {
 extern Thread_Zombie_registry _Thread_Zombies;
 
 /**
- *  Self for the GNU Ada Run-Time
- */
-extern void *rtems_ada_self;
-
-/**
  * @brief Object identifier of the global constructor thread.
  *
  * This variable is set by _RTEMS_tasks_Initialize_user_tasks_body() or
