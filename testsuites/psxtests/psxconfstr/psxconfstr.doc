@@ -1,0 +1,16 @@
+﻿#  COPYRIGHT (c) 2020
+#  On-Line Applications Research Corporation (OAR).
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxconfstr
+
+Directives:
+  confstr()
+
+Concepts:
+
++ This test exercises the confstr method

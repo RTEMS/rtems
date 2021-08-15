@@ -1009,6 +1009,7 @@ source:
 - cpukit/posix/src/condtimedwait.c
 - cpukit/posix/src/condwait.c
 - cpukit/posix/src/condwaitsupp.c
+- cpukit/posix/src/confstr.c
 - cpukit/posix/src/fork.c
 - cpukit/posix/src/key.c
 - cpukit/posix/src/keycreate.c

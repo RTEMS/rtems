@@ -509,6 +509,7 @@ librtemscpu_a_SOURCES += posix/src/condsignalsupp.c
 librtemscpu_a_SOURCES += posix/src/condtimedwait.c
 librtemscpu_a_SOURCES += posix/src/condwait.c
 librtemscpu_a_SOURCES += posix/src/condwaitsupp.c
+librtemscpu_a_SOURCES += posix/src/confstr.c
 librtemscpu_a_SOURCES += posix/src/_execve.c
 librtemscpu_a_SOURCES += posix/src/fork.c
 librtemscpu_a_SOURCES += posix/src/key.c

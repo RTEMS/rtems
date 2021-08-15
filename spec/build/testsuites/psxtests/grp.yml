@@ -90,6 +90,8 @@ links:
 - role: build-dependency
   uid: psxconfig01
 - role: build-dependency
+  uid: psxconfstr
+- role: build-dependency
   uid: psxdevctl01
 - role: build-dependency
   uid: psxeintrjoin

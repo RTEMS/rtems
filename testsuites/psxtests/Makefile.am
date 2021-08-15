@@ -358,6 +358,15 @@ psxconfig01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxconfig01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
+
+psx_tests += psxconfstr
+psx_screens += psxconfstr/psxconfstr.scn
+psx_docs += psxconfstr/psxconfstr.doc
+psxconfstr_SOURCES = psxconfstr/init.c
+psxconfstr_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxconfstr) \
+	$(support_includes)
+
+
 if TEST_psxdevctl01
 psx_tests += psxdevctl01
 psx_screens += psxdevctl01/psxdevctl01.scn
