@@ -93,6 +93,14 @@ typedef enum {
   RtemsIntrReqGetAttributes_Post_Attributes_NA
 } RtemsIntrReqGetAttributes_Post_Attributes;
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Vector_NA : 1;
+  uint8_t Pre_Attributes_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_Attributes : 2;
+} RtemsIntrReqGetAttributes_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/get-attributes test case.
  */
@@ -119,16 +127,33 @@ typedef struct {
    */
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 2 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 2 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqGetAttributes_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqGetAttributes_Context;
 
 static RtemsIntrReqGetAttributes_Context
@@ -342,14 +367,6 @@ static void RtemsIntrReqGetAttributes_Action(
   }
 }
 
-typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Vector_NA : 1;
-  uint8_t Pre_Attributes_NA : 1;
-  uint8_t Post_Status : 2;
-  uint8_t Post_Attributes : 2;
-} RtemsIntrReqGetAttributes_Entry;
-
 static const RtemsIntrReqGetAttributes_Entry
 RtemsIntrReqGetAttributes_Entries[] = {
   { 0, 0, 0, RtemsIntrReqGetAttributes_Post_Status_InvAddr,
@@ -371,8 +388,13 @@ static size_t RtemsIntrReqGetAttributes_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqGetAttributes_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope(
+      RtemsIntrReqGetAttributes_PreDesc,
+      buf,
+      n,
+      ctx->Map.pcs
+    );
   }
 
   return 0;
@@ -387,11 +409,32 @@ static T_fixture RtemsIntrReqGetAttributes_Fixture = {
 };
 
 static inline RtemsIntrReqGetAttributes_Entry
-RtemsIntrReqGetAttributes_GetEntry( size_t index )
+RtemsIntrReqGetAttributes_PopEntry( RtemsIntrReqGetAttributes_Context *ctx )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqGetAttributes_Entries[
     RtemsIntrReqGetAttributes_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqGetAttributes_TestVariant(
+  RtemsIntrReqGetAttributes_Context *ctx
+)
+{
+  RtemsIntrReqGetAttributes_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqGetAttributes_Pre_Attributes_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqGetAttributes_Action( ctx );
+  RtemsIntrReqGetAttributes_Post_Status_Check(
+    ctx,
+    ctx->Map.entry.Post_Status
+  );
+  RtemsIntrReqGetAttributes_Post_Attributes_Check(
+    ctx,
+    ctx->Map.entry.Post_Attributes
+  );
 }
 
 /**
@@ -403,36 +446,24 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsIntrReqGetAttributes_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqGetAttributes_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqGetAttributes_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqGetAttributes_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqGetAttributes_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqGetAttributes_Pre_Attributes_Obj;
-      ctx->pcs[ 1 ] < RtemsIntrReqGetAttributes_Pre_Attributes_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqGetAttributes_Pre_Attributes_Obj;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqGetAttributes_Pre_Attributes_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
-      RtemsIntrReqGetAttributes_Entry entry;
-
-      entry = RtemsIntrReqGetAttributes_GetEntry( index );
-      ++index;
-
+      ctx->Map.entry = RtemsIntrReqGetAttributes_PopEntry( ctx );
       RtemsIntrReqGetAttributes_Prepare( ctx );
-      RtemsIntrReqGetAttributes_Pre_Vector_Prepare( ctx, ctx->pcs[ 0 ] );
-      RtemsIntrReqGetAttributes_Pre_Attributes_Prepare( ctx, ctx->pcs[ 1 ] );
-      RtemsIntrReqGetAttributes_Action( ctx );
-      RtemsIntrReqGetAttributes_Post_Status_Check( ctx, entry.Post_Status );
-      RtemsIntrReqGetAttributes_Post_Attributes_Check(
-        ctx,
-        entry.Post_Attributes
-      );
+      RtemsIntrReqGetAttributes_TestVariant( ctx );
     }
   }
 }

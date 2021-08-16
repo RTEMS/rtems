@@ -148,6 +148,22 @@ typedef enum {
   RtemsIntrReqEntryRemove_Post_Installed_NA
 } RtemsIntrReqEntryRemove_Post_Installed;
 
+typedef struct {
+  uint32_t Skip : 1;
+  uint32_t Pre_Vector_NA : 1;
+  uint32_t Pre_Entry_NA : 1;
+  uint32_t Pre_Routine_NA : 1;
+  uint32_t Pre_EntryObj_NA : 1;
+  uint32_t Pre_Init_NA : 1;
+  uint32_t Pre_ISR_NA : 1;
+  uint32_t Pre_CanDisable_NA : 1;
+  uint32_t Pre_First_NA : 1;
+  uint32_t Pre_Last_NA : 1;
+  uint32_t Post_Status : 3;
+  uint32_t Post_Disabled : 3;
+  uint32_t Post_Installed : 2;
+} RtemsIntrReqEntryRemove_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/entry-remove test case.
  */
@@ -272,16 +288,33 @@ typedef struct {
    */
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 9 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 9 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqEntryRemove_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqEntryRemove_Context;
 
 static RtemsIntrReqEntryRemove_Context
@@ -1058,7 +1091,7 @@ static void RtemsIntrReqEntryRemove_Setup_Wrap( void *arg )
   RtemsIntrReqEntryRemove_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsIntrReqEntryRemove_Setup( ctx );
 }
 
@@ -1134,22 +1167,6 @@ static void RtemsIntrReqEntryRemove_Cleanup(
     T_rsc_success( sc );
   }
 }
-
-typedef struct {
-  uint32_t Skip : 1;
-  uint32_t Pre_Vector_NA : 1;
-  uint32_t Pre_Entry_NA : 1;
-  uint32_t Pre_Routine_NA : 1;
-  uint32_t Pre_EntryObj_NA : 1;
-  uint32_t Pre_Init_NA : 1;
-  uint32_t Pre_ISR_NA : 1;
-  uint32_t Pre_CanDisable_NA : 1;
-  uint32_t Pre_First_NA : 1;
-  uint32_t Pre_Last_NA : 1;
-  uint32_t Post_Status : 3;
-  uint32_t Post_Disabled : 3;
-  uint32_t Post_Installed : 2;
-} RtemsIntrReqEntryRemove_Entry;
 
 static const RtemsIntrReqEntryRemove_Entry
 RtemsIntrReqEntryRemove_Entries[] = {
@@ -1254,8 +1271,13 @@ static size_t RtemsIntrReqEntryRemove_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqEntryRemove_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope(
+      RtemsIntrReqEntryRemove_PreDesc,
+      buf,
+      n,
+      ctx->Map.pcs
+    );
   }
 
   return 0;
@@ -1269,13 +1291,57 @@ static T_fixture RtemsIntrReqEntryRemove_Fixture = {
   .initial_context = &RtemsIntrReqEntryRemove_Instance
 };
 
-static inline RtemsIntrReqEntryRemove_Entry RtemsIntrReqEntryRemove_GetEntry(
-  size_t index
+static inline RtemsIntrReqEntryRemove_Entry RtemsIntrReqEntryRemove_PopEntry(
+  RtemsIntrReqEntryRemove_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqEntryRemove_Entries[
     RtemsIntrReqEntryRemove_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqEntryRemove_TestVariant(
+  RtemsIntrReqEntryRemove_Context *ctx
+)
+{
+  RtemsIntrReqEntryRemove_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqEntryRemove_Pre_Entry_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqEntryRemove_Pre_Routine_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_Routine_NA ? RtemsIntrReqEntryRemove_Pre_Routine_NA : ctx->Map.pcs[ 2 ]
+  );
+  RtemsIntrReqEntryRemove_Pre_EntryObj_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_EntryObj_NA ? RtemsIntrReqEntryRemove_Pre_EntryObj_NA : ctx->Map.pcs[ 3 ]
+  );
+  RtemsIntrReqEntryRemove_Pre_Init_Prepare( ctx, ctx->Map.pcs[ 4 ] );
+  RtemsIntrReqEntryRemove_Pre_ISR_Prepare( ctx, ctx->Map.pcs[ 5 ] );
+  RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_CanDisable_NA ? RtemsIntrReqEntryRemove_Pre_CanDisable_NA : ctx->Map.pcs[ 6 ]
+  );
+  RtemsIntrReqEntryRemove_Pre_First_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_First_NA ? RtemsIntrReqEntryRemove_Pre_First_NA : ctx->Map.pcs[ 7 ]
+  );
+  RtemsIntrReqEntryRemove_Pre_Last_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_Last_NA ? RtemsIntrReqEntryRemove_Pre_Last_NA : ctx->Map.pcs[ 8 ]
+  );
+  RtemsIntrReqEntryRemove_Action( ctx );
+  RtemsIntrReqEntryRemove_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsIntrReqEntryRemove_Post_Disabled_Check(
+    ctx,
+    ctx->Map.entry.Post_Disabled
+  );
+  RtemsIntrReqEntryRemove_Post_Installed_Check(
+    ctx,
+    ctx->Map.entry.Post_Installed
+  );
 }
 
 /**
@@ -1287,137 +1353,60 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsIntrReqEntryRemove_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqEntryRemove_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqEntryRemove_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqEntryRemove_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqEntryRemove_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqEntryRemove_Pre_Entry_Obj;
-      ctx->pcs[ 1 ] < RtemsIntrReqEntryRemove_Pre_Entry_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqEntryRemove_Pre_Entry_Obj;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqEntryRemove_Pre_Entry_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsIntrReqEntryRemove_Pre_Routine_Valid;
-        ctx->pcs[ 2 ] < RtemsIntrReqEntryRemove_Pre_Routine_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsIntrReqEntryRemove_Pre_Routine_Valid;
+        ctx->Map.pcs[ 2 ] < RtemsIntrReqEntryRemove_Pre_Routine_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsIntrReqEntryRemove_Pre_EntryObj_Installed;
-          ctx->pcs[ 3 ] < RtemsIntrReqEntryRemove_Pre_EntryObj_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsIntrReqEntryRemove_Pre_EntryObj_Installed;
+          ctx->Map.pcs[ 3 ] < RtemsIntrReqEntryRemove_Pre_EntryObj_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->pcs[ 4 ] = RtemsIntrReqEntryRemove_Pre_Init_Yes;
-            ctx->pcs[ 4 ] < RtemsIntrReqEntryRemove_Pre_Init_NA;
-            ++ctx->pcs[ 4 ]
+            ctx->Map.pcs[ 4 ] = RtemsIntrReqEntryRemove_Pre_Init_Yes;
+            ctx->Map.pcs[ 4 ] < RtemsIntrReqEntryRemove_Pre_Init_NA;
+            ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->pcs[ 5 ] = RtemsIntrReqEntryRemove_Pre_ISR_Yes;
-              ctx->pcs[ 5 ] < RtemsIntrReqEntryRemove_Pre_ISR_NA;
-              ++ctx->pcs[ 5 ]
+              ctx->Map.pcs[ 5 ] = RtemsIntrReqEntryRemove_Pre_ISR_Yes;
+              ctx->Map.pcs[ 5 ] < RtemsIntrReqEntryRemove_Pre_ISR_NA;
+              ++ctx->Map.pcs[ 5 ]
             ) {
               for (
-                ctx->pcs[ 6 ] = RtemsIntrReqEntryRemove_Pre_CanDisable_Yes;
-                ctx->pcs[ 6 ] < RtemsIntrReqEntryRemove_Pre_CanDisable_NA;
-                ++ctx->pcs[ 6 ]
+                ctx->Map.pcs[ 6 ] = RtemsIntrReqEntryRemove_Pre_CanDisable_Yes;
+                ctx->Map.pcs[ 6 ] < RtemsIntrReqEntryRemove_Pre_CanDisable_NA;
+                ++ctx->Map.pcs[ 6 ]
               ) {
                 for (
-                  ctx->pcs[ 7 ] = RtemsIntrReqEntryRemove_Pre_First_Yes;
-                  ctx->pcs[ 7 ] < RtemsIntrReqEntryRemove_Pre_First_NA;
-                  ++ctx->pcs[ 7 ]
+                  ctx->Map.pcs[ 7 ] = RtemsIntrReqEntryRemove_Pre_First_Yes;
+                  ctx->Map.pcs[ 7 ] < RtemsIntrReqEntryRemove_Pre_First_NA;
+                  ++ctx->Map.pcs[ 7 ]
                 ) {
                   for (
-                    ctx->pcs[ 8 ] = RtemsIntrReqEntryRemove_Pre_Last_Yes;
-                    ctx->pcs[ 8 ] < RtemsIntrReqEntryRemove_Pre_Last_NA;
-                    ++ctx->pcs[ 8 ]
+                    ctx->Map.pcs[ 8 ] = RtemsIntrReqEntryRemove_Pre_Last_Yes;
+                    ctx->Map.pcs[ 8 ] < RtemsIntrReqEntryRemove_Pre_Last_NA;
+                    ++ctx->Map.pcs[ 8 ]
                   ) {
-                    RtemsIntrReqEntryRemove_Entry entry;
-                    size_t pcs[ 9 ];
-
-                    entry = RtemsIntrReqEntryRemove_GetEntry( index );
-                    ++index;
-
-                    memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-                    if ( entry.Pre_Routine_NA ) {
-                      ctx->pcs[ 2 ] = RtemsIntrReqEntryRemove_Pre_Routine_NA;
-                    }
-
-                    if ( entry.Pre_EntryObj_NA ) {
-                      ctx->pcs[ 3 ] = RtemsIntrReqEntryRemove_Pre_EntryObj_NA;
-                    }
-
-                    if ( entry.Pre_CanDisable_NA ) {
-                      ctx->pcs[ 6 ] = RtemsIntrReqEntryRemove_Pre_CanDisable_NA;
-                    }
-
-                    if ( entry.Pre_First_NA ) {
-                      ctx->pcs[ 7 ] = RtemsIntrReqEntryRemove_Pre_First_NA;
-                    }
-
-                    if ( entry.Pre_Last_NA ) {
-                      ctx->pcs[ 8 ] = RtemsIntrReqEntryRemove_Pre_Last_NA;
-                    }
-
+                    ctx->Map.entry = RtemsIntrReqEntryRemove_PopEntry( ctx );
                     RtemsIntrReqEntryRemove_Prepare( ctx );
-                    RtemsIntrReqEntryRemove_Pre_Vector_Prepare(
-                      ctx,
-                      ctx->pcs[ 0 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_Entry_Prepare(
-                      ctx,
-                      ctx->pcs[ 1 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_Routine_Prepare(
-                      ctx,
-                      ctx->pcs[ 2 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_EntryObj_Prepare(
-                      ctx,
-                      ctx->pcs[ 3 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_Init_Prepare(
-                      ctx,
-                      ctx->pcs[ 4 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_ISR_Prepare(
-                      ctx,
-                      ctx->pcs[ 5 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_CanDisable_Prepare(
-                      ctx,
-                      ctx->pcs[ 6 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_First_Prepare(
-                      ctx,
-                      ctx->pcs[ 7 ]
-                    );
-                    RtemsIntrReqEntryRemove_Pre_Last_Prepare(
-                      ctx,
-                      ctx->pcs[ 8 ]
-                    );
-                    RtemsIntrReqEntryRemove_Action( ctx );
-                    RtemsIntrReqEntryRemove_Post_Status_Check(
-                      ctx,
-                      entry.Post_Status
-                    );
-                    RtemsIntrReqEntryRemove_Post_Disabled_Check(
-                      ctx,
-                      entry.Post_Disabled
-                    );
-                    RtemsIntrReqEntryRemove_Post_Installed_Check(
-                      ctx,
-                      entry.Post_Installed
-                    );
+                    RtemsIntrReqEntryRemove_TestVariant( ctx );
                     RtemsIntrReqEntryRemove_Cleanup( ctx );
-                    memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
                   }
                 }
               }

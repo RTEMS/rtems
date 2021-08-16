@@ -108,6 +108,16 @@ typedef enum {
   RtemsIntrReqSetAffinity_Post_SetAffinity_NA
 } RtemsIntrReqSetAffinity_Post_SetAffinity;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Vector_NA : 1;
+  uint16_t Pre_CPUSetKind_NA : 1;
+  uint16_t Pre_CPUSet_NA : 1;
+  uint16_t Pre_CanSetAffinity_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_SetAffinity : 2;
+} RtemsIntrReqSetAffinity_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/set-affinity test case.
  */
@@ -150,16 +160,33 @@ typedef struct {
    */
   cpu_set_t *cpuset;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 4 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 4 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqSetAffinity_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqSetAffinity_Context;
 
 static RtemsIntrReqSetAffinity_Context
@@ -467,7 +494,7 @@ static void RtemsIntrReqSetAffinity_Setup_Wrap( void *arg )
   RtemsIntrReqSetAffinity_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsIntrReqSetAffinity_Setup( ctx );
 }
 
@@ -538,16 +565,6 @@ static void RtemsIntrReqSetAffinity_Action(
   }
 }
 
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Vector_NA : 1;
-  uint16_t Pre_CPUSetKind_NA : 1;
-  uint16_t Pre_CPUSet_NA : 1;
-  uint16_t Pre_CanSetAffinity_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_SetAffinity : 2;
-} RtemsIntrReqSetAffinity_Entry;
-
 static const RtemsIntrReqSetAffinity_Entry
 RtemsIntrReqSetAffinity_Entries[] = {
   { 0, 0, 0, 0, 0, RtemsIntrReqSetAffinity_Post_Status_InvAddr,
@@ -575,8 +592,13 @@ static size_t RtemsIntrReqSetAffinity_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqSetAffinity_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope(
+      RtemsIntrReqSetAffinity_PreDesc,
+      buf,
+      n,
+      ctx->Map.pcs
+    );
   }
 
   return 0;
@@ -590,13 +612,36 @@ static T_fixture RtemsIntrReqSetAffinity_Fixture = {
   .initial_context = &RtemsIntrReqSetAffinity_Instance
 };
 
-static inline RtemsIntrReqSetAffinity_Entry RtemsIntrReqSetAffinity_GetEntry(
-  size_t index
+static inline RtemsIntrReqSetAffinity_Entry RtemsIntrReqSetAffinity_PopEntry(
+  RtemsIntrReqSetAffinity_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqSetAffinity_Entries[
     RtemsIntrReqSetAffinity_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqSetAffinity_TestVariant(
+  RtemsIntrReqSetAffinity_Context *ctx
+)
+{
+  RtemsIntrReqSetAffinity_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqSetAffinity_Pre_CPUSetKind_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqSetAffinity_Pre_CPUSet_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_CanSetAffinity_NA ? RtemsIntrReqSetAffinity_Pre_CanSetAffinity_NA : ctx->Map.pcs[ 3 ]
+  );
+  RtemsIntrReqSetAffinity_Action( ctx );
+  RtemsIntrReqSetAffinity_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsIntrReqSetAffinity_Post_SetAffinity_Check(
+    ctx,
+    ctx->Map.entry.Post_SetAffinity
+  );
 }
 
 /**
@@ -608,59 +653,34 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsIntrReqSetAffinity_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqSetAffinity_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqSetAffinity_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqSetAffinity_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqSetAffinity_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqSetAffinity_Pre_CPUSetKind_Valid;
-      ctx->pcs[ 1 ] < RtemsIntrReqSetAffinity_Pre_CPUSetKind_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqSetAffinity_Pre_CPUSetKind_Valid;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqSetAffinity_Pre_CPUSetKind_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsIntrReqSetAffinity_Pre_CPUSet_Valid;
-        ctx->pcs[ 2 ] < RtemsIntrReqSetAffinity_Pre_CPUSet_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsIntrReqSetAffinity_Pre_CPUSet_Valid;
+        ctx->Map.pcs[ 2 ] < RtemsIntrReqSetAffinity_Pre_CPUSet_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Yes;
-          ctx->pcs[ 3 ] < RtemsIntrReqSetAffinity_Pre_CanSetAffinity_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Yes;
+          ctx->Map.pcs[ 3 ] < RtemsIntrReqSetAffinity_Pre_CanSetAffinity_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
-          RtemsIntrReqSetAffinity_Entry entry;
-          size_t pcs[ 4 ];
-
-          entry = RtemsIntrReqSetAffinity_GetEntry( index );
-          ++index;
-
-          memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-          if ( entry.Pre_CanSetAffinity_NA ) {
-            ctx->pcs[ 3 ] = RtemsIntrReqSetAffinity_Pre_CanSetAffinity_NA;
-          }
-
+          ctx->Map.entry = RtemsIntrReqSetAffinity_PopEntry( ctx );
           RtemsIntrReqSetAffinity_Prepare( ctx );
-          RtemsIntrReqSetAffinity_Pre_Vector_Prepare( ctx, ctx->pcs[ 0 ] );
-          RtemsIntrReqSetAffinity_Pre_CPUSetKind_Prepare( ctx, ctx->pcs[ 1 ] );
-          RtemsIntrReqSetAffinity_Pre_CPUSet_Prepare( ctx, ctx->pcs[ 2 ] );
-          RtemsIntrReqSetAffinity_Pre_CanSetAffinity_Prepare(
-            ctx,
-            ctx->pcs[ 3 ]
-          );
-          RtemsIntrReqSetAffinity_Action( ctx );
-          RtemsIntrReqSetAffinity_Post_Status_Check( ctx, entry.Post_Status );
-          RtemsIntrReqSetAffinity_Post_SetAffinity_Check(
-            ctx,
-            entry.Post_SetAffinity
-          );
-          memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
+          RtemsIntrReqSetAffinity_TestVariant( ctx );
         }
       }
     }

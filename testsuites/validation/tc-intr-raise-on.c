@@ -102,6 +102,15 @@ typedef enum {
   RtemsIntrReqRaiseOn_Post_Pending_NA
 } RtemsIntrReqRaiseOn_Post_Pending;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Vector_NA : 1;
+  uint16_t Pre_CPU_NA : 1;
+  uint16_t Pre_CanRaiseOn_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Pending : 2;
+} RtemsIntrReqRaiseOn_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/raise-on test case.
  */
@@ -143,16 +152,33 @@ typedef struct {
    */
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 3 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 3 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqRaiseOn_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqRaiseOn_Context;
 
 static RtemsIntrReqRaiseOn_Context
@@ -542,7 +568,7 @@ static void RtemsIntrReqRaiseOn_Setup_Wrap( void *arg )
   RtemsIntrReqRaiseOn_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsIntrReqRaiseOn_Setup( ctx );
 }
 
@@ -581,15 +607,6 @@ static void RtemsIntrReqRaiseOn_Action( RtemsIntrReqRaiseOn_Context *ctx )
   }
 }
 
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Vector_NA : 1;
-  uint16_t Pre_CPU_NA : 1;
-  uint16_t Pre_CanRaiseOn_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_Pending : 2;
-} RtemsIntrReqRaiseOn_Entry;
-
 static const RtemsIntrReqRaiseOn_Entry
 RtemsIntrReqRaiseOn_Entries[] = {
   { 0, 0, 0, 1, RtemsIntrReqRaiseOn_Post_Status_InvId,
@@ -627,8 +644,8 @@ static size_t RtemsIntrReqRaiseOn_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqRaiseOn_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsIntrReqRaiseOn_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -642,13 +659,30 @@ static T_fixture RtemsIntrReqRaiseOn_Fixture = {
   .initial_context = &RtemsIntrReqRaiseOn_Instance
 };
 
-static inline RtemsIntrReqRaiseOn_Entry RtemsIntrReqRaiseOn_GetEntry(
-  size_t index
+static inline RtemsIntrReqRaiseOn_Entry RtemsIntrReqRaiseOn_PopEntry(
+  RtemsIntrReqRaiseOn_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqRaiseOn_Entries[
     RtemsIntrReqRaiseOn_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqRaiseOn_TestVariant( RtemsIntrReqRaiseOn_Context *ctx )
+{
+  RtemsIntrReqRaiseOn_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqRaiseOn_Pre_CPU_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_CanRaiseOn_NA ? RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA : ctx->Map.pcs[ 2 ]
+  );
+  RtemsIntrReqRaiseOn_Action( ctx );
+  RtemsIntrReqRaiseOn_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsIntrReqRaiseOn_Post_Pending_Check( ctx, ctx->Map.entry.Post_Pending );
 }
 
 /**
@@ -657,50 +691,33 @@ static inline RtemsIntrReqRaiseOn_Entry RtemsIntrReqRaiseOn_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsIntrReqRaiseOn, &RtemsIntrReqRaiseOn_Fixture )
 {
   RtemsIntrReqRaiseOn_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqRaiseOn_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqRaiseOn_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqRaiseOn_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqRaiseOn_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqRaiseOn_Pre_CPU_Online;
-      ctx->pcs[ 1 ] < RtemsIntrReqRaiseOn_Pre_CPU_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqRaiseOn_Pre_CPU_Online;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqRaiseOn_Pre_CPU_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Yes;
-        ctx->pcs[ 2 ] < RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Yes;
+        ctx->Map.pcs[ 2 ] < RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
-        RtemsIntrReqRaiseOn_Entry entry;
-        size_t pcs[ 3 ];
+        ctx->Map.entry = RtemsIntrReqRaiseOn_PopEntry( ctx );
 
-        entry = RtemsIntrReqRaiseOn_GetEntry( index );
-        ++index;
-
-        if ( entry.Skip ) {
+        if ( ctx->Map.entry.Skip ) {
           continue;
         }
 
-        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-        if ( entry.Pre_CanRaiseOn_NA ) {
-          ctx->pcs[ 2 ] = RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA;
-        }
-
-        RtemsIntrReqRaiseOn_Pre_Vector_Prepare( ctx, ctx->pcs[ 0 ] );
-        RtemsIntrReqRaiseOn_Pre_CPU_Prepare( ctx, ctx->pcs[ 1 ] );
-        RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Prepare( ctx, ctx->pcs[ 2 ] );
-        RtemsIntrReqRaiseOn_Action( ctx );
-        RtemsIntrReqRaiseOn_Post_Status_Check( ctx, entry.Post_Status );
-        RtemsIntrReqRaiseOn_Post_Pending_Check( ctx, entry.Post_Pending );
-        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
+        RtemsIntrReqRaiseOn_TestVariant( ctx );
       }
     }
   }

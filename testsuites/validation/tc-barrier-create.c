@@ -125,6 +125,19 @@ typedef enum {
   RtemsBarrierReqCreate_Post_IdVar_NA
 } RtemsBarrierReqCreate_Post_IdVar;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Name_NA : 1;
+  uint16_t Pre_Id_NA : 1;
+  uint16_t Pre_Class_NA : 1;
+  uint16_t Pre_MaxWait_NA : 1;
+  uint16_t Pre_Free_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Name : 2;
+  uint16_t Post_Class : 2;
+  uint16_t Post_IdVar : 2;
+} RtemsBarrierReqCreate_Entry;
+
 /**
  * @brief Test context for spec:/rtems/barrier/req/create test case.
  */
@@ -149,16 +162,33 @@ typedef struct {
 
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 5 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 5 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsBarrierReqCreate_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsBarrierReqCreate_Context;
 
 static RtemsBarrierReqCreate_Context
@@ -554,7 +584,7 @@ static void RtemsBarrierReqCreate_Setup_Wrap( void *arg )
   RtemsBarrierReqCreate_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqCreate_Setup( ctx );
 }
 
@@ -570,7 +600,7 @@ static void RtemsBarrierReqCreate_Teardown_Wrap( void *arg )
   RtemsBarrierReqCreate_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqCreate_Teardown( ctx );
 }
 
@@ -597,19 +627,6 @@ static void RtemsBarrierReqCreate_Cleanup( RtemsBarrierReqCreate_Context *ctx )
 
   T_surrender_objects( &ctx->seized_objects, rtems_barrier_delete );
 }
-
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Name_NA : 1;
-  uint16_t Pre_Id_NA : 1;
-  uint16_t Pre_Class_NA : 1;
-  uint16_t Pre_MaxWait_NA : 1;
-  uint16_t Pre_Free_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_Name : 2;
-  uint16_t Post_Class : 2;
-  uint16_t Post_IdVar : 2;
-} RtemsBarrierReqCreate_Entry;
 
 static const RtemsBarrierReqCreate_Entry
 RtemsBarrierReqCreate_Entries[] = {
@@ -646,8 +663,8 @@ static size_t RtemsBarrierReqCreate_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsBarrierReqCreate_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsBarrierReqCreate_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -661,13 +678,33 @@ static T_fixture RtemsBarrierReqCreate_Fixture = {
   .initial_context = &RtemsBarrierReqCreate_Instance
 };
 
-static inline RtemsBarrierReqCreate_Entry RtemsBarrierReqCreate_GetEntry(
-  size_t index
+static inline RtemsBarrierReqCreate_Entry RtemsBarrierReqCreate_PopEntry(
+  RtemsBarrierReqCreate_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsBarrierReqCreate_Entries[
     RtemsBarrierReqCreate_Map[ index ]
   ];
+}
+
+static void RtemsBarrierReqCreate_TestVariant(
+  RtemsBarrierReqCreate_Context *ctx
+)
+{
+  RtemsBarrierReqCreate_Pre_Name_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsBarrierReqCreate_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsBarrierReqCreate_Pre_Class_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsBarrierReqCreate_Pre_MaxWait_Prepare( ctx, ctx->Map.pcs[ 3 ] );
+  RtemsBarrierReqCreate_Pre_Free_Prepare( ctx, ctx->Map.pcs[ 4 ] );
+  RtemsBarrierReqCreate_Action( ctx );
+  RtemsBarrierReqCreate_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsBarrierReqCreate_Post_Name_Check( ctx, ctx->Map.entry.Post_Name );
+  RtemsBarrierReqCreate_Post_Class_Check( ctx, ctx->Map.entry.Post_Class );
+  RtemsBarrierReqCreate_Post_IdVar_Check( ctx, ctx->Map.entry.Post_IdVar );
 }
 
 /**
@@ -676,52 +713,38 @@ static inline RtemsBarrierReqCreate_Entry RtemsBarrierReqCreate_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqCreate, &RtemsBarrierReqCreate_Fixture )
 {
   RtemsBarrierReqCreate_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqCreate_Pre_Name_Valid;
-    ctx->pcs[ 0 ] < RtemsBarrierReqCreate_Pre_Name_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsBarrierReqCreate_Pre_Name_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsBarrierReqCreate_Pre_Name_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Id_Valid;
-      ctx->pcs[ 1 ] < RtemsBarrierReqCreate_Pre_Id_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsBarrierReqCreate_Pre_Id_Valid;
+      ctx->Map.pcs[ 1 ] < RtemsBarrierReqCreate_Pre_Id_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsBarrierReqCreate_Pre_Class_Default;
-        ctx->pcs[ 2 ] < RtemsBarrierReqCreate_Pre_Class_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsBarrierReqCreate_Pre_Class_Default;
+        ctx->Map.pcs[ 2 ] < RtemsBarrierReqCreate_Pre_Class_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsBarrierReqCreate_Pre_MaxWait_Zero;
-          ctx->pcs[ 3 ] < RtemsBarrierReqCreate_Pre_MaxWait_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsBarrierReqCreate_Pre_MaxWait_Zero;
+          ctx->Map.pcs[ 3 ] < RtemsBarrierReqCreate_Pre_MaxWait_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->pcs[ 4 ] = RtemsBarrierReqCreate_Pre_Free_Yes;
-            ctx->pcs[ 4 ] < RtemsBarrierReqCreate_Pre_Free_NA;
-            ++ctx->pcs[ 4 ]
+            ctx->Map.pcs[ 4 ] = RtemsBarrierReqCreate_Pre_Free_Yes;
+            ctx->Map.pcs[ 4 ] < RtemsBarrierReqCreate_Pre_Free_NA;
+            ++ctx->Map.pcs[ 4 ]
           ) {
-            RtemsBarrierReqCreate_Entry entry;
-
-            entry = RtemsBarrierReqCreate_GetEntry( index );
-            ++index;
-
-            RtemsBarrierReqCreate_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
-            RtemsBarrierReqCreate_Pre_Id_Prepare( ctx, ctx->pcs[ 1 ] );
-            RtemsBarrierReqCreate_Pre_Class_Prepare( ctx, ctx->pcs[ 2 ] );
-            RtemsBarrierReqCreate_Pre_MaxWait_Prepare( ctx, ctx->pcs[ 3 ] );
-            RtemsBarrierReqCreate_Pre_Free_Prepare( ctx, ctx->pcs[ 4 ] );
-            RtemsBarrierReqCreate_Action( ctx );
-            RtemsBarrierReqCreate_Post_Status_Check( ctx, entry.Post_Status );
-            RtemsBarrierReqCreate_Post_Name_Check( ctx, entry.Post_Name );
-            RtemsBarrierReqCreate_Post_Class_Check( ctx, entry.Post_Class );
-            RtemsBarrierReqCreate_Post_IdVar_Check( ctx, entry.Post_IdVar );
+            ctx->Map.entry = RtemsBarrierReqCreate_PopEntry( ctx );
+            RtemsBarrierReqCreate_TestVariant( ctx );
             RtemsBarrierReqCreate_Cleanup( ctx );
           }
         }

@@ -102,6 +102,15 @@ typedef enum {
   RtemsIntrReqVectorEnable_Post_IsEnabled_NA
 } RtemsIntrReqVectorEnable_Post_IsEnabled;
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Vector_NA : 1;
+  uint8_t Pre_IsEnabled_NA : 1;
+  uint8_t Pre_CanEnable_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_IsEnabled : 2;
+} RtemsIntrReqVectorEnable_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/vector-enable test case.
  */
@@ -128,16 +137,33 @@ typedef struct {
    */
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 3 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 3 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqVectorEnable_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqVectorEnable_Context;
 
 static RtemsIntrReqVectorEnable_Context
@@ -518,15 +544,6 @@ static void RtemsIntrReqVectorEnable_Action(
   }
 }
 
-typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Vector_NA : 1;
-  uint8_t Pre_IsEnabled_NA : 1;
-  uint8_t Pre_CanEnable_NA : 1;
-  uint8_t Post_Status : 2;
-  uint8_t Post_IsEnabled : 2;
-} RtemsIntrReqVectorEnable_Entry;
-
 static const RtemsIntrReqVectorEnable_Entry
 RtemsIntrReqVectorEnable_Entries[] = {
   { 0, 0, 1, 1, RtemsIntrReqVectorEnable_Post_Status_InvId,
@@ -550,8 +567,13 @@ static size_t RtemsIntrReqVectorEnable_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqVectorEnable_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope(
+      RtemsIntrReqVectorEnable_PreDesc,
+      buf,
+      n,
+      ctx->Map.pcs
+    );
   }
 
   return 0;
@@ -565,13 +587,41 @@ static T_fixture RtemsIntrReqVectorEnable_Fixture = {
   .initial_context = &RtemsIntrReqVectorEnable_Instance
 };
 
-static inline RtemsIntrReqVectorEnable_Entry RtemsIntrReqVectorEnable_GetEntry(
-  size_t index
+static inline RtemsIntrReqVectorEnable_Entry RtemsIntrReqVectorEnable_PopEntry(
+  RtemsIntrReqVectorEnable_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqVectorEnable_Entries[
     RtemsIntrReqVectorEnable_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqVectorEnable_TestVariant(
+  RtemsIntrReqVectorEnable_Context *ctx
+)
+{
+  RtemsIntrReqVectorEnable_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqVectorEnable_Pre_IsEnabled_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_IsEnabled_NA ? RtemsIntrReqVectorEnable_Pre_IsEnabled_NA : ctx->Map.pcs[ 1 ]
+  );
+  RtemsIntrReqVectorEnable_Pre_CanEnable_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_CanEnable_NA ? RtemsIntrReqVectorEnable_Pre_CanEnable_NA : ctx->Map.pcs[ 2 ]
+  );
+  RtemsIntrReqVectorEnable_Action( ctx );
+  RtemsIntrReqVectorEnable_Post_Status_Check(
+    ctx,
+    ctx->Map.entry.Post_Status
+  );
+  RtemsIntrReqVectorEnable_Post_IsEnabled_Check(
+    ctx,
+    ctx->Map.entry.Post_IsEnabled
+  );
 }
 
 /**
@@ -583,53 +633,28 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsIntrReqVectorEnable_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqVectorEnable_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqVectorEnable_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqVectorEnable_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqVectorEnable_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqVectorEnable_Pre_IsEnabled_Yes;
-      ctx->pcs[ 1 ] < RtemsIntrReqVectorEnable_Pre_IsEnabled_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqVectorEnable_Pre_IsEnabled_Yes;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqVectorEnable_Pre_IsEnabled_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsIntrReqVectorEnable_Pre_CanEnable_Yes;
-        ctx->pcs[ 2 ] < RtemsIntrReqVectorEnable_Pre_CanEnable_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsIntrReqVectorEnable_Pre_CanEnable_Yes;
+        ctx->Map.pcs[ 2 ] < RtemsIntrReqVectorEnable_Pre_CanEnable_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
-        RtemsIntrReqVectorEnable_Entry entry;
-        size_t pcs[ 3 ];
-
-        entry = RtemsIntrReqVectorEnable_GetEntry( index );
-        ++index;
-
-        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-        if ( entry.Pre_IsEnabled_NA ) {
-          ctx->pcs[ 1 ] = RtemsIntrReqVectorEnable_Pre_IsEnabled_NA;
-        }
-
-        if ( entry.Pre_CanEnable_NA ) {
-          ctx->pcs[ 2 ] = RtemsIntrReqVectorEnable_Pre_CanEnable_NA;
-        }
-
-        RtemsIntrReqVectorEnable_Pre_Vector_Prepare( ctx, ctx->pcs[ 0 ] );
-        RtemsIntrReqVectorEnable_Pre_IsEnabled_Prepare( ctx, ctx->pcs[ 1 ] );
-        RtemsIntrReqVectorEnable_Pre_CanEnable_Prepare( ctx, ctx->pcs[ 2 ] );
-        RtemsIntrReqVectorEnable_Action( ctx );
-        RtemsIntrReqVectorEnable_Post_Status_Check( ctx, entry.Post_Status );
-        RtemsIntrReqVectorEnable_Post_IsEnabled_Check(
-          ctx,
-          entry.Post_IsEnabled
-        );
-        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
+        ctx->Map.entry = RtemsIntrReqVectorEnable_PopEntry( ctx );
+        RtemsIntrReqVectorEnable_TestVariant( ctx );
       }
     }
   }

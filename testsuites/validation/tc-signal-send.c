@@ -120,6 +120,18 @@ typedef enum {
   RtemsSignalReqSend_Post_Recursive_NA
 } RtemsSignalReqSend_Post_Recursive;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Task_NA : 1;
+  uint16_t Pre_Set_NA : 1;
+  uint16_t Pre_Handler_NA : 1;
+  uint16_t Pre_ASR_NA : 1;
+  uint16_t Pre_Nested_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Handler : 3;
+  uint16_t Post_Recursive : 2;
+} RtemsSignalReqSend_Entry;
+
 /**
  * @brief Test context for spec:/rtems/signal/req/send test case.
  */
@@ -152,16 +164,33 @@ typedef struct {
 
   rtems_signal_set signal_set;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 5 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 5 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsSignalReqSend_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsSignalReqSend_Context;
 
 static RtemsSignalReqSend_Context
@@ -658,7 +687,7 @@ static void RtemsSignalReqSend_Setup_Wrap( void *arg )
   RtemsSignalReqSend_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsSignalReqSend_Setup( ctx );
 }
 
@@ -673,7 +702,7 @@ static void RtemsSignalReqSend_Teardown_Wrap( void *arg )
   RtemsSignalReqSend_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsSignalReqSend_Teardown( ctx );
 }
 
@@ -730,18 +759,6 @@ static void RtemsSignalReqSend_Action( RtemsSignalReqSend_Context *ctx )
   }
 }
 
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Task_NA : 1;
-  uint16_t Pre_Set_NA : 1;
-  uint16_t Pre_Handler_NA : 1;
-  uint16_t Pre_ASR_NA : 1;
-  uint16_t Pre_Nested_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_Handler : 3;
-  uint16_t Post_Recursive : 2;
-} RtemsSignalReqSend_Entry;
-
 static const RtemsSignalReqSend_Entry
 RtemsSignalReqSend_Entries[] = {
   { 0, 0, 0, 0, 0, 0, RtemsSignalReqSend_Post_Status_InvNum,
@@ -782,8 +799,8 @@ static size_t RtemsSignalReqSend_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsSignalReqSend_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsSignalReqSend_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -797,13 +814,33 @@ static T_fixture RtemsSignalReqSend_Fixture = {
   .initial_context = &RtemsSignalReqSend_Instance
 };
 
-static inline RtemsSignalReqSend_Entry RtemsSignalReqSend_GetEntry(
-  size_t index
+static inline RtemsSignalReqSend_Entry RtemsSignalReqSend_PopEntry(
+  RtemsSignalReqSend_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsSignalReqSend_Entries[
     RtemsSignalReqSend_Map[ index ]
   ];
+}
+
+static void RtemsSignalReqSend_TestVariant( RtemsSignalReqSend_Context *ctx )
+{
+  RtemsSignalReqSend_Pre_Task_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsSignalReqSend_Pre_Set_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsSignalReqSend_Pre_Handler_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsSignalReqSend_Pre_ASR_Prepare( ctx, ctx->Map.pcs[ 3 ] );
+  RtemsSignalReqSend_Pre_Nested_Prepare( ctx, ctx->Map.pcs[ 4 ] );
+  RtemsSignalReqSend_Action( ctx );
+  RtemsSignalReqSend_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsSignalReqSend_Post_Handler_Check( ctx, ctx->Map.entry.Post_Handler );
+  RtemsSignalReqSend_Post_Recursive_Check(
+    ctx,
+    ctx->Map.entry.Post_Recursive
+  );
 }
 
 /**
@@ -812,55 +849,39 @@ static inline RtemsSignalReqSend_Entry RtemsSignalReqSend_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsSignalReqSend, &RtemsSignalReqSend_Fixture )
 {
   RtemsSignalReqSend_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsSignalReqSend_Pre_Task_NoObj;
-    ctx->pcs[ 0 ] < RtemsSignalReqSend_Pre_Task_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsSignalReqSend_Pre_Task_NoObj;
+    ctx->Map.pcs[ 0 ] < RtemsSignalReqSend_Pre_Task_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsSignalReqSend_Pre_Set_Zero;
-      ctx->pcs[ 1 ] < RtemsSignalReqSend_Pre_Set_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsSignalReqSend_Pre_Set_Zero;
+      ctx->Map.pcs[ 1 ] < RtemsSignalReqSend_Pre_Set_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsSignalReqSend_Pre_Handler_Invalid;
-        ctx->pcs[ 2 ] < RtemsSignalReqSend_Pre_Handler_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsSignalReqSend_Pre_Handler_Invalid;
+        ctx->Map.pcs[ 2 ] < RtemsSignalReqSend_Pre_Handler_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsSignalReqSend_Pre_ASR_Enabled;
-          ctx->pcs[ 3 ] < RtemsSignalReqSend_Pre_ASR_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsSignalReqSend_Pre_ASR_Enabled;
+          ctx->Map.pcs[ 3 ] < RtemsSignalReqSend_Pre_ASR_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->pcs[ 4 ] = RtemsSignalReqSend_Pre_Nested_Yes;
-            ctx->pcs[ 4 ] < RtemsSignalReqSend_Pre_Nested_NA;
-            ++ctx->pcs[ 4 ]
+            ctx->Map.pcs[ 4 ] = RtemsSignalReqSend_Pre_Nested_Yes;
+            ctx->Map.pcs[ 4 ] < RtemsSignalReqSend_Pre_Nested_NA;
+            ++ctx->Map.pcs[ 4 ]
           ) {
-            RtemsSignalReqSend_Entry entry;
-
-            entry = RtemsSignalReqSend_GetEntry( index );
-            ++index;
-
+            ctx->Map.entry = RtemsSignalReqSend_PopEntry( ctx );
             RtemsSignalReqSend_Prepare( ctx );
-            RtemsSignalReqSend_Pre_Task_Prepare( ctx, ctx->pcs[ 0 ] );
-            RtemsSignalReqSend_Pre_Set_Prepare( ctx, ctx->pcs[ 1 ] );
-            RtemsSignalReqSend_Pre_Handler_Prepare( ctx, ctx->pcs[ 2 ] );
-            RtemsSignalReqSend_Pre_ASR_Prepare( ctx, ctx->pcs[ 3 ] );
-            RtemsSignalReqSend_Pre_Nested_Prepare( ctx, ctx->pcs[ 4 ] );
-            RtemsSignalReqSend_Action( ctx );
-            RtemsSignalReqSend_Post_Status_Check( ctx, entry.Post_Status );
-            RtemsSignalReqSend_Post_Handler_Check( ctx, entry.Post_Handler );
-            RtemsSignalReqSend_Post_Recursive_Check(
-              ctx,
-              entry.Post_Recursive
-            );
+            RtemsSignalReqSend_TestVariant( ctx );
           }
         }
       }

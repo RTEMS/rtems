@@ -97,6 +97,14 @@ typedef enum {
   RtemsBarrierReqWait_Post_Status_NA
 } RtemsBarrierReqWait_Post_Status;
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Id_NA : 1;
+  uint8_t Pre_Timeout_NA : 1;
+  uint8_t Pre_Satisfy_NA : 1;
+  uint8_t Post_Status : 3;
+} RtemsBarrierReqWait_Entry;
+
 /**
  * @brief Test context for spec:/rtems/barrier/req/wait test case.
  */
@@ -117,16 +125,33 @@ typedef struct {
 
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 3 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 3 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsBarrierReqWait_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsBarrierReqWait_Context;
 
 static RtemsBarrierReqWait_Context
@@ -432,7 +457,7 @@ static void RtemsBarrierReqWait_Setup_Wrap( void *arg )
   RtemsBarrierReqWait_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqWait_Setup( ctx );
 }
 
@@ -461,7 +486,7 @@ static void RtemsBarrierReqWait_Teardown_Wrap( void *arg )
   RtemsBarrierReqWait_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqWait_Teardown( ctx );
 }
 
@@ -469,14 +494,6 @@ static void RtemsBarrierReqWait_Action( RtemsBarrierReqWait_Context *ctx )
 {
   ctx->status = rtems_barrier_wait( ctx->id, ctx->timeout );
 }
-
-typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Pre_Timeout_NA : 1;
-  uint8_t Pre_Satisfy_NA : 1;
-  uint8_t Post_Status : 3;
-} RtemsBarrierReqWait_Entry;
 
 static const RtemsBarrierReqWait_Entry
 RtemsBarrierReqWait_Entries[] = {
@@ -499,8 +516,8 @@ static size_t RtemsBarrierReqWait_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsBarrierReqWait_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsBarrierReqWait_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -514,13 +531,32 @@ static T_fixture RtemsBarrierReqWait_Fixture = {
   .initial_context = &RtemsBarrierReqWait_Instance
 };
 
-static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_GetEntry(
-  size_t index
+static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_PopEntry(
+  RtemsBarrierReqWait_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsBarrierReqWait_Entries[
     RtemsBarrierReqWait_Map[ index ]
   ];
+}
+
+static void RtemsBarrierReqWait_TestVariant( RtemsBarrierReqWait_Context *ctx )
+{
+  RtemsBarrierReqWait_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsBarrierReqWait_Pre_Timeout_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_Timeout_NA ? RtemsBarrierReqWait_Pre_Timeout_NA : ctx->Map.pcs[ 1 ]
+  );
+  RtemsBarrierReqWait_Pre_Satisfy_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_Satisfy_NA ? RtemsBarrierReqWait_Pre_Satisfy_NA : ctx->Map.pcs[ 2 ]
+  );
+  RtemsBarrierReqWait_Action( ctx );
+  RtemsBarrierReqWait_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
 }
 
 /**
@@ -529,53 +565,33 @@ static inline RtemsBarrierReqWait_Entry RtemsBarrierReqWait_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqWait, &RtemsBarrierReqWait_Fixture )
 {
   RtemsBarrierReqWait_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NoObj;
-    ctx->pcs[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsBarrierReqWait_Pre_Id_NoObj;
+    ctx->Map.pcs[ 0 ] < RtemsBarrierReqWait_Pre_Id_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_Ticks;
-      ctx->pcs[ 1 ] < RtemsBarrierReqWait_Pre_Timeout_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_Ticks;
+      ctx->Map.pcs[ 1 ] < RtemsBarrierReqWait_Pre_Timeout_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_Never;
-        ctx->pcs[ 2 ] < RtemsBarrierReqWait_Pre_Satisfy_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_Never;
+        ctx->Map.pcs[ 2 ] < RtemsBarrierReqWait_Pre_Satisfy_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
-        RtemsBarrierReqWait_Entry entry;
-        size_t pcs[ 3 ];
+        ctx->Map.entry = RtemsBarrierReqWait_PopEntry( ctx );
 
-        entry = RtemsBarrierReqWait_GetEntry( index );
-        ++index;
-
-        if ( entry.Skip ) {
+        if ( ctx->Map.entry.Skip ) {
           continue;
         }
 
-        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-        if ( entry.Pre_Timeout_NA ) {
-          ctx->pcs[ 1 ] = RtemsBarrierReqWait_Pre_Timeout_NA;
-        }
-
-        if ( entry.Pre_Satisfy_NA ) {
-          ctx->pcs[ 2 ] = RtemsBarrierReqWait_Pre_Satisfy_NA;
-        }
-
-        RtemsBarrierReqWait_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
-        RtemsBarrierReqWait_Pre_Timeout_Prepare( ctx, ctx->pcs[ 1 ] );
-        RtemsBarrierReqWait_Pre_Satisfy_Prepare( ctx, ctx->pcs[ 2 ] );
-        RtemsBarrierReqWait_Action( ctx );
-        RtemsBarrierReqWait_Post_Status_Check( ctx, entry.Post_Status );
-        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
+        RtemsBarrierReqWait_TestVariant( ctx );
       }
     }
   }

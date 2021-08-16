@@ -93,6 +93,14 @@ typedef enum {
   RtemsIntrReqClear_Post_Cleared_NA
 } RtemsIntrReqClear_Post_Cleared;
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Vector_NA : 1;
+  uint8_t Pre_CanClear_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_Cleared : 2;
+} RtemsIntrReqClear_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/clear test case.
  */
@@ -124,16 +132,33 @@ typedef struct {
    */
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 2 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 2 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqClear_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqClear_Context;
 
 static RtemsIntrReqClear_Context
@@ -486,14 +511,6 @@ static void RtemsIntrReqClear_Action( RtemsIntrReqClear_Context *ctx )
   }
 }
 
-typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Vector_NA : 1;
-  uint8_t Pre_CanClear_NA : 1;
-  uint8_t Post_Status : 2;
-  uint8_t Post_Cleared : 2;
-} RtemsIntrReqClear_Entry;
-
 static const RtemsIntrReqClear_Entry
 RtemsIntrReqClear_Entries[] = {
   { 0, 0, 1, RtemsIntrReqClear_Post_Status_InvId,
@@ -515,8 +532,8 @@ static size_t RtemsIntrReqClear_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqClear_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsIntrReqClear_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -530,13 +547,29 @@ static T_fixture RtemsIntrReqClear_Fixture = {
   .initial_context = &RtemsIntrReqClear_Instance
 };
 
-static inline RtemsIntrReqClear_Entry RtemsIntrReqClear_GetEntry(
-  size_t index
+static inline RtemsIntrReqClear_Entry RtemsIntrReqClear_PopEntry(
+  RtemsIntrReqClear_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqClear_Entries[
     RtemsIntrReqClear_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqClear_TestVariant( RtemsIntrReqClear_Context *ctx )
+{
+  RtemsIntrReqClear_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqClear_Pre_CanClear_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_CanClear_NA ? RtemsIntrReqClear_Pre_CanClear_NA : ctx->Map.pcs[ 1 ]
+  );
+  RtemsIntrReqClear_Action( ctx );
+  RtemsIntrReqClear_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsIntrReqClear_Post_Cleared_Check( ctx, ctx->Map.entry.Post_Cleared );
 }
 
 /**
@@ -545,40 +578,23 @@ static inline RtemsIntrReqClear_Entry RtemsIntrReqClear_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsIntrReqClear, &RtemsIntrReqClear_Fixture )
 {
   RtemsIntrReqClear_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqClear_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqClear_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqClear_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqClear_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqClear_Pre_CanClear_Yes;
-      ctx->pcs[ 1 ] < RtemsIntrReqClear_Pre_CanClear_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqClear_Pre_CanClear_Yes;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqClear_Pre_CanClear_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
-      RtemsIntrReqClear_Entry entry;
-      size_t pcs[ 2 ];
-
-      entry = RtemsIntrReqClear_GetEntry( index );
-      ++index;
-
-      memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-      if ( entry.Pre_CanClear_NA ) {
-        ctx->pcs[ 1 ] = RtemsIntrReqClear_Pre_CanClear_NA;
-      }
-
-      RtemsIntrReqClear_Pre_Vector_Prepare( ctx, ctx->pcs[ 0 ] );
-      RtemsIntrReqClear_Pre_CanClear_Prepare( ctx, ctx->pcs[ 1 ] );
-      RtemsIntrReqClear_Action( ctx );
-      RtemsIntrReqClear_Post_Status_Check( ctx, entry.Post_Status );
-      RtemsIntrReqClear_Post_Cleared_Check( ctx, entry.Post_Cleared );
-      memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
+      ctx->Map.entry = RtemsIntrReqClear_PopEntry( ctx );
+      RtemsIntrReqClear_TestVariant( ctx );
     }
   }
 }

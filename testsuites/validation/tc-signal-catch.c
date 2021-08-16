@@ -122,6 +122,18 @@ typedef enum {
   RtemsSignalReqCatch_Post_ASRInfo_NA
 } RtemsSignalReqCatch_Post_ASRInfo;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Pending_NA : 1;
+  uint16_t Pre_Handler_NA : 1;
+  uint16_t Pre_Preempt_NA : 1;
+  uint16_t Pre_Timeslice_NA : 1;
+  uint16_t Pre_ASR_NA : 1;
+  uint16_t Pre_IntLvl_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_ASRInfo : 3;
+} RtemsSignalReqCatch_Entry;
+
 /**
  * @brief Test context for spec:/rtems/signal/req/catch test case.
  */
@@ -196,16 +208,33 @@ typedef struct {
    */
   rtems_status_code send_status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 6 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 6 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsSignalReqCatch_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsSignalReqCatch_Context;
 
 static RtemsSignalReqCatch_Context
@@ -685,7 +714,7 @@ static void RtemsSignalReqCatch_Setup_Wrap( void *arg )
   RtemsSignalReqCatch_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsSignalReqCatch_Setup( ctx );
 }
 
@@ -700,7 +729,7 @@ static void RtemsSignalReqCatch_Teardown_Wrap( void *arg )
   RtemsSignalReqCatch_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsSignalReqCatch_Teardown( ctx );
 }
 
@@ -745,18 +774,6 @@ static void RtemsSignalReqCatch_Action( RtemsSignalReqCatch_Context *ctx )
   T_rsc_success( sc );
 }
 
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Pending_NA : 1;
-  uint16_t Pre_Handler_NA : 1;
-  uint16_t Pre_Preempt_NA : 1;
-  uint16_t Pre_Timeslice_NA : 1;
-  uint16_t Pre_ASR_NA : 1;
-  uint16_t Pre_IntLvl_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_ASRInfo : 3;
-} RtemsSignalReqCatch_Entry;
-
 static const RtemsSignalReqCatch_Entry
 RtemsSignalReqCatch_Entries[] = {
   { 0, 0, 0, 0, 0, 0, 0, RtemsSignalReqCatch_Post_Status_Ok,
@@ -795,8 +812,8 @@ static size_t RtemsSignalReqCatch_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsSignalReqCatch_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsSignalReqCatch_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -810,13 +827,30 @@ static T_fixture RtemsSignalReqCatch_Fixture = {
   .initial_context = &RtemsSignalReqCatch_Instance
 };
 
-static inline RtemsSignalReqCatch_Entry RtemsSignalReqCatch_GetEntry(
-  size_t index
+static inline RtemsSignalReqCatch_Entry RtemsSignalReqCatch_PopEntry(
+  RtemsSignalReqCatch_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsSignalReqCatch_Entries[
     RtemsSignalReqCatch_Map[ index ]
   ];
+}
+
+static void RtemsSignalReqCatch_TestVariant( RtemsSignalReqCatch_Context *ctx )
+{
+  RtemsSignalReqCatch_Pre_Pending_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsSignalReqCatch_Pre_Handler_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsSignalReqCatch_Pre_Preempt_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsSignalReqCatch_Pre_Timeslice_Prepare( ctx, ctx->Map.pcs[ 3 ] );
+  RtemsSignalReqCatch_Pre_ASR_Prepare( ctx, ctx->Map.pcs[ 4 ] );
+  RtemsSignalReqCatch_Pre_IntLvl_Prepare( ctx, ctx->Map.pcs[ 5 ] );
+  RtemsSignalReqCatch_Action( ctx );
+  RtemsSignalReqCatch_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsSignalReqCatch_Post_ASRInfo_Check( ctx, ctx->Map.entry.Post_ASRInfo );
 }
 
 /**
@@ -825,60 +859,44 @@ static inline RtemsSignalReqCatch_Entry RtemsSignalReqCatch_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsSignalReqCatch, &RtemsSignalReqCatch_Fixture )
 {
   RtemsSignalReqCatch_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsSignalReqCatch_Pre_Pending_Yes;
-    ctx->pcs[ 0 ] < RtemsSignalReqCatch_Pre_Pending_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsSignalReqCatch_Pre_Pending_Yes;
+    ctx->Map.pcs[ 0 ] < RtemsSignalReqCatch_Pre_Pending_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsSignalReqCatch_Pre_Handler_Invalid;
-      ctx->pcs[ 1 ] < RtemsSignalReqCatch_Pre_Handler_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsSignalReqCatch_Pre_Handler_Invalid;
+      ctx->Map.pcs[ 1 ] < RtemsSignalReqCatch_Pre_Handler_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsSignalReqCatch_Pre_Preempt_Yes;
-        ctx->pcs[ 2 ] < RtemsSignalReqCatch_Pre_Preempt_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsSignalReqCatch_Pre_Preempt_Yes;
+        ctx->Map.pcs[ 2 ] < RtemsSignalReqCatch_Pre_Preempt_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsSignalReqCatch_Pre_Timeslice_Yes;
-          ctx->pcs[ 3 ] < RtemsSignalReqCatch_Pre_Timeslice_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsSignalReqCatch_Pre_Timeslice_Yes;
+          ctx->Map.pcs[ 3 ] < RtemsSignalReqCatch_Pre_Timeslice_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->pcs[ 4 ] = RtemsSignalReqCatch_Pre_ASR_Yes;
-            ctx->pcs[ 4 ] < RtemsSignalReqCatch_Pre_ASR_NA;
-            ++ctx->pcs[ 4 ]
+            ctx->Map.pcs[ 4 ] = RtemsSignalReqCatch_Pre_ASR_Yes;
+            ctx->Map.pcs[ 4 ] < RtemsSignalReqCatch_Pre_ASR_NA;
+            ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->pcs[ 5 ] = RtemsSignalReqCatch_Pre_IntLvl_Zero;
-              ctx->pcs[ 5 ] < RtemsSignalReqCatch_Pre_IntLvl_NA;
-              ++ctx->pcs[ 5 ]
+              ctx->Map.pcs[ 5 ] = RtemsSignalReqCatch_Pre_IntLvl_Zero;
+              ctx->Map.pcs[ 5 ] < RtemsSignalReqCatch_Pre_IntLvl_NA;
+              ++ctx->Map.pcs[ 5 ]
             ) {
-              RtemsSignalReqCatch_Entry entry;
-
-              entry = RtemsSignalReqCatch_GetEntry( index );
-              ++index;
-
+              ctx->Map.entry = RtemsSignalReqCatch_PopEntry( ctx );
               RtemsSignalReqCatch_Prepare( ctx );
-              RtemsSignalReqCatch_Pre_Pending_Prepare( ctx, ctx->pcs[ 0 ] );
-              RtemsSignalReqCatch_Pre_Handler_Prepare( ctx, ctx->pcs[ 1 ] );
-              RtemsSignalReqCatch_Pre_Preempt_Prepare( ctx, ctx->pcs[ 2 ] );
-              RtemsSignalReqCatch_Pre_Timeslice_Prepare( ctx, ctx->pcs[ 3 ] );
-              RtemsSignalReqCatch_Pre_ASR_Prepare( ctx, ctx->pcs[ 4 ] );
-              RtemsSignalReqCatch_Pre_IntLvl_Prepare( ctx, ctx->pcs[ 5 ] );
-              RtemsSignalReqCatch_Action( ctx );
-              RtemsSignalReqCatch_Post_Status_Check( ctx, entry.Post_Status );
-              RtemsSignalReqCatch_Post_ASRInfo_Check(
-                ctx,
-                entry.Post_ASRInfo
-              );
+              RtemsSignalReqCatch_TestVariant( ctx );
             }
           }
         }

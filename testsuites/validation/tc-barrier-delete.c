@@ -91,6 +91,14 @@ typedef enum {
   RtemsBarrierReqDelete_Post_Flush_NA
 } RtemsBarrierReqDelete_Post_Flush;
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Id_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_Name : 2;
+  uint8_t Post_Flush : 2;
+} RtemsBarrierReqDelete_Entry;
+
 /**
  * @brief Test context for spec:/rtems/barrier/req/delete test case.
  */
@@ -107,16 +115,33 @@ typedef struct {
 
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 1 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 1 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsBarrierReqDelete_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsBarrierReqDelete_Context;
 
 static RtemsBarrierReqDelete_Context
@@ -300,7 +325,7 @@ static void RtemsBarrierReqDelete_Setup_Wrap( void *arg )
   RtemsBarrierReqDelete_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqDelete_Setup( ctx );
 }
 
@@ -317,7 +342,7 @@ static void RtemsBarrierReqDelete_Teardown_Wrap( void *arg )
   RtemsBarrierReqDelete_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqDelete_Teardown( ctx );
 }
 
@@ -349,14 +374,6 @@ static void RtemsBarrierReqDelete_Cleanup( RtemsBarrierReqDelete_Context *ctx )
   }
 }
 
-typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Post_Status : 2;
-  uint8_t Post_Name : 2;
-  uint8_t Post_Flush : 2;
-} RtemsBarrierReqDelete_Entry;
-
 static const RtemsBarrierReqDelete_Entry
 RtemsBarrierReqDelete_Entries[] = {
   { 0, 0, RtemsBarrierReqDelete_Post_Status_InvId,
@@ -377,8 +394,8 @@ static size_t RtemsBarrierReqDelete_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsBarrierReqDelete_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsBarrierReqDelete_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -392,13 +409,28 @@ static T_fixture RtemsBarrierReqDelete_Fixture = {
   .initial_context = &RtemsBarrierReqDelete_Instance
 };
 
-static inline RtemsBarrierReqDelete_Entry RtemsBarrierReqDelete_GetEntry(
-  size_t index
+static inline RtemsBarrierReqDelete_Entry RtemsBarrierReqDelete_PopEntry(
+  RtemsBarrierReqDelete_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsBarrierReqDelete_Entries[
     RtemsBarrierReqDelete_Map[ index ]
   ];
+}
+
+static void RtemsBarrierReqDelete_TestVariant(
+  RtemsBarrierReqDelete_Context *ctx
+)
+{
+  RtemsBarrierReqDelete_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsBarrierReqDelete_Action( ctx );
+  RtemsBarrierReqDelete_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsBarrierReqDelete_Post_Name_Check( ctx, ctx->Map.entry.Post_Name );
+  RtemsBarrierReqDelete_Post_Flush_Check( ctx, ctx->Map.entry.Post_Flush );
 }
 
 /**
@@ -407,28 +439,19 @@ static inline RtemsBarrierReqDelete_Entry RtemsBarrierReqDelete_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqDelete, &RtemsBarrierReqDelete_Fixture )
 {
   RtemsBarrierReqDelete_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqDelete_Pre_Id_NoObj;
-    ctx->pcs[ 0 ] < RtemsBarrierReqDelete_Pre_Id_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsBarrierReqDelete_Pre_Id_NoObj;
+    ctx->Map.pcs[ 0 ] < RtemsBarrierReqDelete_Pre_Id_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
-    RtemsBarrierReqDelete_Entry entry;
-
-    entry = RtemsBarrierReqDelete_GetEntry( index );
-    ++index;
-
+    ctx->Map.entry = RtemsBarrierReqDelete_PopEntry( ctx );
     RtemsBarrierReqDelete_Prepare( ctx );
-    RtemsBarrierReqDelete_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
-    RtemsBarrierReqDelete_Action( ctx );
-    RtemsBarrierReqDelete_Post_Status_Check( ctx, entry.Post_Status );
-    RtemsBarrierReqDelete_Post_Name_Check( ctx, entry.Post_Name );
-    RtemsBarrierReqDelete_Post_Flush_Check( ctx, entry.Post_Flush );
+    RtemsBarrierReqDelete_TestVariant( ctx );
     RtemsBarrierReqDelete_Cleanup( ctx );
   }
 }

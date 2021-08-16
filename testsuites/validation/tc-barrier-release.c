@@ -100,6 +100,15 @@ typedef enum {
   RtemsBarrierReqRelease_Post_ReleasedVar_NA
 } RtemsBarrierReqRelease_Post_ReleasedVar;
 
+typedef struct {
+  uint8_t Skip : 1;
+  uint8_t Pre_Id_NA : 1;
+  uint8_t Pre_Released_NA : 1;
+  uint8_t Pre_Waiting_NA : 1;
+  uint8_t Post_Status : 2;
+  uint8_t Post_ReleasedVar : 2;
+} RtemsBarrierReqRelease_Entry;
+
 /**
  * @brief Test context for spec:/rtems/barrier/req/release test case.
  */
@@ -120,16 +129,33 @@ typedef struct {
 
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 3 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 3 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsBarrierReqRelease_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsBarrierReqRelease_Context;
 
 static RtemsBarrierReqRelease_Context
@@ -384,7 +410,7 @@ static void RtemsBarrierReqRelease_Setup_Wrap( void *arg )
   RtemsBarrierReqRelease_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqRelease_Setup( ctx );
 }
 
@@ -414,7 +440,7 @@ static void RtemsBarrierReqRelease_Teardown_Wrap( void *arg )
   RtemsBarrierReqRelease_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsBarrierReqRelease_Teardown( ctx );
 }
 
@@ -424,15 +450,6 @@ static void RtemsBarrierReqRelease_Action(
 {
   ctx->status = rtems_barrier_release( ctx->id, ctx->released );
 }
-
-typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Id_NA : 1;
-  uint8_t Pre_Released_NA : 1;
-  uint8_t Pre_Waiting_NA : 1;
-  uint8_t Post_Status : 2;
-  uint8_t Post_ReleasedVar : 2;
-} RtemsBarrierReqRelease_Entry;
 
 static const RtemsBarrierReqRelease_Entry
 RtemsBarrierReqRelease_Entries[] = {
@@ -455,8 +472,8 @@ static size_t RtemsBarrierReqRelease_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsBarrierReqRelease_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( RtemsBarrierReqRelease_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -470,13 +487,35 @@ static T_fixture RtemsBarrierReqRelease_Fixture = {
   .initial_context = &RtemsBarrierReqRelease_Instance
 };
 
-static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_GetEntry(
-  size_t index
+static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_PopEntry(
+  RtemsBarrierReqRelease_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsBarrierReqRelease_Entries[
     RtemsBarrierReqRelease_Map[ index ]
   ];
+}
+
+static void RtemsBarrierReqRelease_TestVariant(
+  RtemsBarrierReqRelease_Context *ctx
+)
+{
+  RtemsBarrierReqRelease_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsBarrierReqRelease_Pre_Released_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsBarrierReqRelease_Pre_Waiting_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_Waiting_NA ? RtemsBarrierReqRelease_Pre_Waiting_NA : ctx->Map.pcs[ 2 ]
+  );
+  RtemsBarrierReqRelease_Action( ctx );
+  RtemsBarrierReqRelease_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  RtemsBarrierReqRelease_Post_ReleasedVar_Check(
+    ctx,
+    ctx->Map.entry.Post_ReleasedVar
+  );
 }
 
 /**
@@ -485,49 +524,28 @@ static inline RtemsBarrierReqRelease_Entry RtemsBarrierReqRelease_GetEntry(
 T_TEST_CASE_FIXTURE( RtemsBarrierReqRelease, &RtemsBarrierReqRelease_Fixture )
 {
   RtemsBarrierReqRelease_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NoObj;
-    ctx->pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsBarrierReqRelease_Pre_Id_NoObj;
+    ctx->Map.pcs[ 0 ] < RtemsBarrierReqRelease_Pre_Id_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsBarrierReqRelease_Pre_Released_Valid;
-      ctx->pcs[ 1 ] < RtemsBarrierReqRelease_Pre_Released_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsBarrierReqRelease_Pre_Released_Valid;
+      ctx->Map.pcs[ 1 ] < RtemsBarrierReqRelease_Pre_Released_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_Zero;
-        ctx->pcs[ 2 ] < RtemsBarrierReqRelease_Pre_Waiting_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_Zero;
+        ctx->Map.pcs[ 2 ] < RtemsBarrierReqRelease_Pre_Waiting_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
-        RtemsBarrierReqRelease_Entry entry;
-        size_t pcs[ 3 ];
-
-        entry = RtemsBarrierReqRelease_GetEntry( index );
-        ++index;
-
-        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-        if ( entry.Pre_Waiting_NA ) {
-          ctx->pcs[ 2 ] = RtemsBarrierReqRelease_Pre_Waiting_NA;
-        }
-
-        RtemsBarrierReqRelease_Pre_Id_Prepare( ctx, ctx->pcs[ 0 ] );
-        RtemsBarrierReqRelease_Pre_Released_Prepare( ctx, ctx->pcs[ 1 ] );
-        RtemsBarrierReqRelease_Pre_Waiting_Prepare( ctx, ctx->pcs[ 2 ] );
-        RtemsBarrierReqRelease_Action( ctx );
-        RtemsBarrierReqRelease_Post_Status_Check( ctx, entry.Post_Status );
-        RtemsBarrierReqRelease_Post_ReleasedVar_Check(
-          ctx,
-          entry.Post_ReleasedVar
-        );
-        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
+        ctx->Map.entry = RtemsBarrierReqRelease_PopEntry( ctx );
+        RtemsBarrierReqRelease_TestVariant( ctx );
       }
     }
   }

@@ -147,6 +147,22 @@ typedef enum {
   RtemsTaskReqCreateErrors_Post_DelExt_NA
 } RtemsTaskReqCreateErrors_Post_DelExt;
 
+typedef struct {
+  uint32_t Skip : 1;
+  uint32_t Pre_Name_NA : 1;
+  uint32_t Pre_Id_NA : 1;
+  uint32_t Pre_SysTsk_NA : 1;
+  uint32_t Pre_Prio_NA : 1;
+  uint32_t Pre_Free_NA : 1;
+  uint32_t Pre_Stack_NA : 1;
+  uint32_t Pre_Ext_NA : 1;
+  uint32_t Post_Status : 3;
+  uint32_t Post_Name : 2;
+  uint32_t Post_IdVar : 2;
+  uint32_t Post_CreateExt : 2;
+  uint32_t Post_DelExt : 2;
+} RtemsTaskReqCreateErrors_Entry;
+
 /**
  * @brief Test context for spec:/rtems/task/req/create-errors test case.
  */
@@ -175,16 +191,33 @@ typedef struct {
 
   void *seized_objects;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 7 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 7 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsTaskReqCreateErrors_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsTaskReqCreateErrors_Context;
 
 static RtemsTaskReqCreateErrors_Context
@@ -709,7 +742,7 @@ static void RtemsTaskReqCreateErrors_Setup_Wrap( void *arg )
   RtemsTaskReqCreateErrors_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsTaskReqCreateErrors_Setup( ctx );
 }
 
@@ -728,7 +761,7 @@ static void RtemsTaskReqCreateErrors_Teardown_Wrap( void *arg )
   RtemsTaskReqCreateErrors_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsTaskReqCreateErrors_Teardown( ctx );
 }
 
@@ -774,22 +807,6 @@ static void RtemsTaskReqCreateErrors_Cleanup(
 
   T_surrender_objects( &ctx->seized_objects, rtems_task_delete );
 }
-
-typedef struct {
-  uint32_t Skip : 1;
-  uint32_t Pre_Name_NA : 1;
-  uint32_t Pre_Id_NA : 1;
-  uint32_t Pre_SysTsk_NA : 1;
-  uint32_t Pre_Prio_NA : 1;
-  uint32_t Pre_Free_NA : 1;
-  uint32_t Pre_Stack_NA : 1;
-  uint32_t Pre_Ext_NA : 1;
-  uint32_t Post_Status : 3;
-  uint32_t Post_Name : 2;
-  uint32_t Post_IdVar : 2;
-  uint32_t Post_CreateExt : 2;
-  uint32_t Post_DelExt : 2;
-} RtemsTaskReqCreateErrors_Entry;
 
 static const RtemsTaskReqCreateErrors_Entry
 RtemsTaskReqCreateErrors_Entries[] = {
@@ -852,8 +869,13 @@ static size_t RtemsTaskReqCreateErrors_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsTaskReqCreateErrors_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope(
+      RtemsTaskReqCreateErrors_PreDesc,
+      buf,
+      n,
+      ctx->Map.pcs
+    );
   }
 
   return 0;
@@ -867,13 +889,45 @@ static T_fixture RtemsTaskReqCreateErrors_Fixture = {
   .initial_context = &RtemsTaskReqCreateErrors_Instance
 };
 
-static inline RtemsTaskReqCreateErrors_Entry RtemsTaskReqCreateErrors_GetEntry(
-  size_t index
+static inline RtemsTaskReqCreateErrors_Entry RtemsTaskReqCreateErrors_PopEntry(
+  RtemsTaskReqCreateErrors_Context *ctx
 )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsTaskReqCreateErrors_Entries[
     RtemsTaskReqCreateErrors_Map[ index ]
   ];
+}
+
+static void RtemsTaskReqCreateErrors_TestVariant(
+  RtemsTaskReqCreateErrors_Context *ctx
+)
+{
+  RtemsTaskReqCreateErrors_Pre_Name_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsTaskReqCreateErrors_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsTaskReqCreateErrors_Pre_SysTsk_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsTaskReqCreateErrors_Pre_Prio_Prepare( ctx, ctx->Map.pcs[ 3 ] );
+  RtemsTaskReqCreateErrors_Pre_Free_Prepare( ctx, ctx->Map.pcs[ 4 ] );
+  RtemsTaskReqCreateErrors_Pre_Stack_Prepare( ctx, ctx->Map.pcs[ 5 ] );
+  RtemsTaskReqCreateErrors_Pre_Ext_Prepare( ctx, ctx->Map.pcs[ 6 ] );
+  RtemsTaskReqCreateErrors_Action( ctx );
+  RtemsTaskReqCreateErrors_Post_Status_Check(
+    ctx,
+    ctx->Map.entry.Post_Status
+  );
+  RtemsTaskReqCreateErrors_Post_Name_Check( ctx, ctx->Map.entry.Post_Name );
+  RtemsTaskReqCreateErrors_Post_IdVar_Check( ctx, ctx->Map.entry.Post_IdVar );
+  RtemsTaskReqCreateErrors_Post_CreateExt_Check(
+    ctx,
+    ctx->Map.entry.Post_CreateExt
+  );
+  RtemsTaskReqCreateErrors_Post_DelExt_Check(
+    ctx,
+    ctx->Map.entry.Post_DelExt
+  );
 }
 
 /**
@@ -885,96 +939,49 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsTaskReqCreateErrors_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsTaskReqCreateErrors_Pre_Name_Valid;
-    ctx->pcs[ 0 ] < RtemsTaskReqCreateErrors_Pre_Name_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsTaskReqCreateErrors_Pre_Name_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsTaskReqCreateErrors_Pre_Name_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsTaskReqCreateErrors_Pre_Id_Valid;
-      ctx->pcs[ 1 ] < RtemsTaskReqCreateErrors_Pre_Id_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsTaskReqCreateErrors_Pre_Id_Valid;
+      ctx->Map.pcs[ 1 ] < RtemsTaskReqCreateErrors_Pre_Id_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsTaskReqCreateErrors_Pre_SysTsk_Yes;
-        ctx->pcs[ 2 ] < RtemsTaskReqCreateErrors_Pre_SysTsk_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsTaskReqCreateErrors_Pre_SysTsk_Yes;
+        ctx->Map.pcs[ 2 ] < RtemsTaskReqCreateErrors_Pre_SysTsk_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsTaskReqCreateErrors_Pre_Prio_Valid;
-          ctx->pcs[ 3 ] < RtemsTaskReqCreateErrors_Pre_Prio_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsTaskReqCreateErrors_Pre_Prio_Valid;
+          ctx->Map.pcs[ 3 ] < RtemsTaskReqCreateErrors_Pre_Prio_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
           for (
-            ctx->pcs[ 4 ] = RtemsTaskReqCreateErrors_Pre_Free_Yes;
-            ctx->pcs[ 4 ] < RtemsTaskReqCreateErrors_Pre_Free_NA;
-            ++ctx->pcs[ 4 ]
+            ctx->Map.pcs[ 4 ] = RtemsTaskReqCreateErrors_Pre_Free_Yes;
+            ctx->Map.pcs[ 4 ] < RtemsTaskReqCreateErrors_Pre_Free_NA;
+            ++ctx->Map.pcs[ 4 ]
           ) {
             for (
-              ctx->pcs[ 5 ] = RtemsTaskReqCreateErrors_Pre_Stack_Normal;
-              ctx->pcs[ 5 ] < RtemsTaskReqCreateErrors_Pre_Stack_NA;
-              ++ctx->pcs[ 5 ]
+              ctx->Map.pcs[ 5 ] = RtemsTaskReqCreateErrors_Pre_Stack_Normal;
+              ctx->Map.pcs[ 5 ] < RtemsTaskReqCreateErrors_Pre_Stack_NA;
+              ++ctx->Map.pcs[ 5 ]
             ) {
               for (
-                ctx->pcs[ 6 ] = RtemsTaskReqCreateErrors_Pre_Ext_Ok;
-                ctx->pcs[ 6 ] < RtemsTaskReqCreateErrors_Pre_Ext_NA;
-                ++ctx->pcs[ 6 ]
+                ctx->Map.pcs[ 6 ] = RtemsTaskReqCreateErrors_Pre_Ext_Ok;
+                ctx->Map.pcs[ 6 ] < RtemsTaskReqCreateErrors_Pre_Ext_NA;
+                ++ctx->Map.pcs[ 6 ]
               ) {
-                RtemsTaskReqCreateErrors_Entry entry;
-
-                entry = RtemsTaskReqCreateErrors_GetEntry( index );
-                ++index;
-
+                ctx->Map.entry = RtemsTaskReqCreateErrors_PopEntry( ctx );
                 RtemsTaskReqCreateErrors_Prepare( ctx );
-                RtemsTaskReqCreateErrors_Pre_Name_Prepare(
-                  ctx,
-                  ctx->pcs[ 0 ]
-                );
-                RtemsTaskReqCreateErrors_Pre_Id_Prepare( ctx, ctx->pcs[ 1 ] );
-                RtemsTaskReqCreateErrors_Pre_SysTsk_Prepare(
-                  ctx,
-                  ctx->pcs[ 2 ]
-                );
-                RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
-                  ctx,
-                  ctx->pcs[ 3 ]
-                );
-                RtemsTaskReqCreateErrors_Pre_Free_Prepare(
-                  ctx,
-                  ctx->pcs[ 4 ]
-                );
-                RtemsTaskReqCreateErrors_Pre_Stack_Prepare(
-                  ctx,
-                  ctx->pcs[ 5 ]
-                );
-                RtemsTaskReqCreateErrors_Pre_Ext_Prepare( ctx, ctx->pcs[ 6 ] );
-                RtemsTaskReqCreateErrors_Action( ctx );
-                RtemsTaskReqCreateErrors_Post_Status_Check(
-                  ctx,
-                  entry.Post_Status
-                );
-                RtemsTaskReqCreateErrors_Post_Name_Check(
-                  ctx,
-                  entry.Post_Name
-                );
-                RtemsTaskReqCreateErrors_Post_IdVar_Check(
-                  ctx,
-                  entry.Post_IdVar
-                );
-                RtemsTaskReqCreateErrors_Post_CreateExt_Check(
-                  ctx,
-                  entry.Post_CreateExt
-                );
-                RtemsTaskReqCreateErrors_Post_DelExt_Check(
-                  ctx,
-                  entry.Post_DelExt
-                );
+                RtemsTaskReqCreateErrors_TestVariant( ctx );
                 RtemsTaskReqCreateErrors_Cleanup( ctx );
               }
             }

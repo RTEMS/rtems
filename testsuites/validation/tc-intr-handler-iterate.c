@@ -107,6 +107,16 @@ typedef enum {
   RtemsIntrReqHandlerIterate_Post_Visit_NA
 } RtemsIntrReqHandlerIterate_Post_Visit;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Vector_NA : 1;
+  uint16_t Pre_Routine_NA : 1;
+  uint16_t Pre_Init_NA : 1;
+  uint16_t Pre_ISR_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Visit : 2;
+} RtemsIntrReqHandlerIterate_Entry;
+
 /**
  * @brief Test context for spec:/rtems/intr/req/handler-iterate test case.
  */
@@ -160,16 +170,33 @@ typedef struct {
    */
   rtems_status_code status;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 4 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 4 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    RtemsIntrReqHandlerIterate_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
+  } Map;
 } RtemsIntrReqHandlerIterate_Context;
 
 static RtemsIntrReqHandlerIterate_Context
@@ -498,7 +525,7 @@ static void RtemsIntrReqHandlerIterate_Setup_Wrap( void *arg )
   RtemsIntrReqHandlerIterate_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   RtemsIntrReqHandlerIterate_Setup( ctx );
 }
 
@@ -512,16 +539,6 @@ static void RtemsIntrReqHandlerIterate_Action(
     Action( ctx );
   }
 }
-
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Vector_NA : 1;
-  uint16_t Pre_Routine_NA : 1;
-  uint16_t Pre_Init_NA : 1;
-  uint16_t Pre_ISR_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_Visit : 2;
-} RtemsIntrReqHandlerIterate_Entry;
 
 static const RtemsIntrReqHandlerIterate_Entry
 RtemsIntrReqHandlerIterate_Entries[] = {
@@ -554,8 +571,13 @@ static size_t RtemsIntrReqHandlerIterate_Scope(
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( RtemsIntrReqHandlerIterate_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope(
+      RtemsIntrReqHandlerIterate_PreDesc,
+      buf,
+      n,
+      ctx->Map.pcs
+    );
   }
 
   return 0;
@@ -570,11 +592,34 @@ static T_fixture RtemsIntrReqHandlerIterate_Fixture = {
 };
 
 static inline RtemsIntrReqHandlerIterate_Entry
-RtemsIntrReqHandlerIterate_GetEntry( size_t index )
+RtemsIntrReqHandlerIterate_PopEntry( RtemsIntrReqHandlerIterate_Context *ctx )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return RtemsIntrReqHandlerIterate_Entries[
     RtemsIntrReqHandlerIterate_Map[ index ]
   ];
+}
+
+static void RtemsIntrReqHandlerIterate_TestVariant(
+  RtemsIntrReqHandlerIterate_Context *ctx
+)
+{
+  RtemsIntrReqHandlerIterate_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  RtemsIntrReqHandlerIterate_Pre_Routine_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  RtemsIntrReqHandlerIterate_Pre_Init_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  RtemsIntrReqHandlerIterate_Pre_ISR_Prepare( ctx, ctx->Map.pcs[ 3 ] );
+  RtemsIntrReqHandlerIterate_Action( ctx );
+  RtemsIntrReqHandlerIterate_Post_Status_Check(
+    ctx,
+    ctx->Map.entry.Post_Status
+  );
+  RtemsIntrReqHandlerIterate_Post_Visit_Check(
+    ctx,
+    ctx->Map.entry.Post_Visit
+  );
 }
 
 /**
@@ -586,47 +631,33 @@ T_TEST_CASE_FIXTURE(
 )
 {
   RtemsIntrReqHandlerIterate_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = RtemsIntrReqHandlerIterate_Pre_Vector_Valid;
-    ctx->pcs[ 0 ] < RtemsIntrReqHandlerIterate_Pre_Vector_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = RtemsIntrReqHandlerIterate_Pre_Vector_Valid;
+    ctx->Map.pcs[ 0 ] < RtemsIntrReqHandlerIterate_Pre_Vector_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = RtemsIntrReqHandlerIterate_Pre_Routine_Valid;
-      ctx->pcs[ 1 ] < RtemsIntrReqHandlerIterate_Pre_Routine_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = RtemsIntrReqHandlerIterate_Pre_Routine_Valid;
+      ctx->Map.pcs[ 1 ] < RtemsIntrReqHandlerIterate_Pre_Routine_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = RtemsIntrReqHandlerIterate_Pre_Init_Yes;
-        ctx->pcs[ 2 ] < RtemsIntrReqHandlerIterate_Pre_Init_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = RtemsIntrReqHandlerIterate_Pre_Init_Yes;
+        ctx->Map.pcs[ 2 ] < RtemsIntrReqHandlerIterate_Pre_Init_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
         for (
-          ctx->pcs[ 3 ] = RtemsIntrReqHandlerIterate_Pre_ISR_Yes;
-          ctx->pcs[ 3 ] < RtemsIntrReqHandlerIterate_Pre_ISR_NA;
-          ++ctx->pcs[ 3 ]
+          ctx->Map.pcs[ 3 ] = RtemsIntrReqHandlerIterate_Pre_ISR_Yes;
+          ctx->Map.pcs[ 3 ] < RtemsIntrReqHandlerIterate_Pre_ISR_NA;
+          ++ctx->Map.pcs[ 3 ]
         ) {
-          RtemsIntrReqHandlerIterate_Entry entry;
-
-          entry = RtemsIntrReqHandlerIterate_GetEntry( index );
-          ++index;
-
-          RtemsIntrReqHandlerIterate_Pre_Vector_Prepare( ctx, ctx->pcs[ 0 ] );
-          RtemsIntrReqHandlerIterate_Pre_Routine_Prepare( ctx, ctx->pcs[ 1 ] );
-          RtemsIntrReqHandlerIterate_Pre_Init_Prepare( ctx, ctx->pcs[ 2 ] );
-          RtemsIntrReqHandlerIterate_Pre_ISR_Prepare( ctx, ctx->pcs[ 3 ] );
-          RtemsIntrReqHandlerIterate_Action( ctx );
-          RtemsIntrReqHandlerIterate_Post_Status_Check(
-            ctx,
-            entry.Post_Status
-          );
-          RtemsIntrReqHandlerIterate_Post_Visit_Check( ctx, entry.Post_Visit );
+          ctx->Map.entry = RtemsIntrReqHandlerIterate_PopEntry( ctx );
+          RtemsIntrReqHandlerIterate_TestVariant( ctx );
         }
       }
     }
