@@ -37,24 +37,24 @@ static void zynq_uart_interrupt(void *arg)
   rtems_termios_tty *tty = arg;
   zynq_uart_context *ctx = rtems_termios_get_device_context(tty);
   volatile zynq_uart *regs = ctx->regs;
-  uint32_t channel_sts;
 
-  if ((regs->irq_sts & (ZYNQ_UART_TIMEOUT | ZYNQ_UART_RTRIG)) != 0) {
-    regs->irq_sts = ZYNQ_UART_TIMEOUT | ZYNQ_UART_RTRIG;
-
-    do {
-      char c = (char) ZYNQ_UART_TX_RX_FIFO_FIFO_GET(regs->tx_rx_fifo);
-
-      rtems_termios_enqueue_raw_characters(tty, &c, 1);
-
-      channel_sts = regs->channel_sts;
-    } while ((channel_sts & ZYNQ_UART_CHANNEL_STS_REMPTY) == 0);
-  } else {
-    channel_sts = regs->channel_sts;
+  if ((regs->irq_sts & ZYNQ_UART_RTRIG) != 0) {
+    char buf[32];
+    int c = 0;
+    regs->irq_sts = ZYNQ_UART_RTRIG;
+    while (c < sizeof(buf) &&
+           (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_REMPTY) == 0) {
+       buf[c++] = (char) ZYNQ_UART_TX_RX_FIFO_FIFO_GET(regs->tx_rx_fifo);
+    }
+    rtems_termios_enqueue_raw_characters(tty, buf, c);
   }
 
-  if (ctx->transmitting && (channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) != 0) {
-    rtems_termios_dequeue_characters(tty, 1);
+  if (ctx->transmitting) {
+    int sent = ctx->tx_queued;
+    regs->irq_dis = ZYNQ_UART_TEMPTY;
+    ctx->transmitting = false;
+    ctx->tx_queued = 0;
+    rtems_termios_dequeue_characters(tty, sent);
   }
 }
 #endif
@@ -76,11 +76,10 @@ static bool zynq_uart_first_open(
   zynq_uart_initialize(base);
 
 #ifdef ZYNQ_CONSOLE_USE_INTERRUPTS
-  regs->rx_timeout = 32;
-  regs->rx_fifo_trg_lvl = ZYNQ_UART_FIFO_DEPTH / 2;
+  regs->rx_fifo_trg_lvl = 1;
   regs->irq_dis = 0xffffffff;
   regs->irq_sts = 0xffffffff;
-  regs->irq_en = ZYNQ_UART_RTRIG | ZYNQ_UART_TIMEOUT;
+  regs->irq_en = ZYNQ_UART_RTRIG;
   sc = rtems_interrupt_handler_install(
     ctx->irq,
     "UART",
@@ -119,18 +118,23 @@ static void zynq_uart_write_support(
   zynq_uart_context *ctx = (zynq_uart_context *) base;
   volatile zynq_uart *regs = ctx->regs;
 
+  regs->irq_dis = ZYNQ_UART_TEMPTY;
+
   if (len > 0) {
-    ctx->transmitting = true;
+    const char *p = &buf[0];
     regs->irq_sts = ZYNQ_UART_TEMPTY;
+    while (((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TNFUL) == 0) &&
+           len > 0) {
+      regs->tx_rx_fifo = ZYNQ_UART_TX_RX_FIFO_FIFO(*p);
+      ++p;
+      ++ctx->tx_queued;
+      --len;
+    }
+    ctx->transmitting = true;
     regs->irq_en = ZYNQ_UART_TEMPTY;
-    regs->tx_rx_fifo = ZYNQ_UART_TX_RX_FIFO_FIFO(buf[0]);
-  } else {
-    ctx->transmitting = false;
-    regs->irq_dis = ZYNQ_UART_TEMPTY;
   }
 #else
   ssize_t i;
-
   for (i = 0; i < len; ++i) {
     zynq_uart_write_polled(base, buf[i]);
   }
@@ -164,6 +168,7 @@ static bool zynq_uart_set_attributes(
   /*
    * Configure the mode register
    */
+  mode = regs->mode & ZYNQ_UART_MODE_CLKS;
   mode |= ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL);
 
   /*
@@ -208,22 +213,25 @@ static bool zynq_uart_set_attributes(
     mode |= ZYNQ_UART_MODE_NBSTOP(ZYNQ_UART_MODE_NBSTOP_STOP_1);
   }
 
-  regs->control &= ~(ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN);
-  regs->mode = mode;
+  /*
+   * Wait for any data in the TXFIFO to be sent then wait while the
+   * transmiter is active.
+   */
+  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0 ||
+         (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TACTIVE) != 0) {
+    /* Wait */
+  }
+
+  regs->control = ZYNQ_UART_CONTROL_RXDIS | ZYNQ_UART_CONTROL_TXDIS;
   /* Ignore baud rate of B0. There are no modem control lines to de-assert */
   if (baud > 0) {
     regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
     regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
-    regs->control |= ZYNQ_UART_CONTROL_RXRES
-      | ZYNQ_UART_CONTROL_TXRES;
   }
-  regs->control |= ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN;
-
-  /*
-   * Some ZynqMP UARTs have a hardware bug that causes TX/RX logic restarts to
-   * require a kick after baud rate registers are initialized.
-   */
-  zynq_uart_write_polled(context, 0);
+  regs->control = ZYNQ_UART_CONTROL_RXRES | ZYNQ_UART_CONTROL_TXRES;
+  regs->mode = mode;
+  regs->irq_sts = 0xffffffff;
+  regs->control = ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN;
 
   return true;
 }

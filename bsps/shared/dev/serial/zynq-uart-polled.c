@@ -121,35 +121,35 @@ void zynq_uart_initialize(rtems_termios_device_context *base)
   volatile zynq_uart *regs = ctx->regs;
   uint32_t brgr = 0x3e;
   uint32_t bauddiv = 0x6;
+  uint32_t mode_clks = regs->mode & ZYNQ_UART_MODE_CLKS;
 
-  zynq_uart_reset_tx_flush(ctx);
+  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0 ||
+         (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TACTIVE) != 0) {
+    /* Wait */
+  }
 
-  zynq_cal_baud_rate(ZYNQ_UART_DEFAULT_BAUD, &brgr, &bauddiv, regs->mode);
+  zynq_cal_baud_rate(ZYNQ_UART_DEFAULT_BAUD, &brgr, &bauddiv, mode_clks);
 
-  regs->control &= ~(ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN);
-  regs->control = ZYNQ_UART_CONTROL_RXDIS
-    | ZYNQ_UART_CONTROL_TXDIS;
-  regs->mode = ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL)
-    | ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE)
-    | ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8);
+  regs->control = 0;
+  regs->control = ZYNQ_UART_CONTROL_RXDIS | ZYNQ_UART_CONTROL_TXDIS;
   regs->baud_rate_gen = ZYNQ_UART_BAUD_RATE_GEN_CD(brgr);
   regs->baud_rate_div = ZYNQ_UART_BAUD_RATE_DIV_BDIV(bauddiv);
   /* A Tx/Rx logic reset must be issued after baud rate manipulation */
-  regs->control = ZYNQ_UART_CONTROL_RXDIS
-    | ZYNQ_UART_CONTROL_TXDIS
-    | ZYNQ_UART_CONTROL_RXRES
-    | ZYNQ_UART_CONTROL_TXRES;
+  regs->control = ZYNQ_UART_CONTROL_RXDIS | ZYNQ_UART_CONTROL_TXDIS;
+  regs->control = ZYNQ_UART_CONTROL_RXRES | ZYNQ_UART_CONTROL_TXRES;
   regs->rx_fifo_trg_lvl = ZYNQ_UART_RX_FIFO_TRG_LVL_RTRIG(0);
   regs->rx_timeout = ZYNQ_UART_RX_TIMEOUT_RTO(0);
-  regs->control = ZYNQ_UART_CONTROL_RXEN
-    | ZYNQ_UART_CONTROL_TXEN
-    | ZYNQ_UART_CONTROL_RSTTO;
+  regs->control = ZYNQ_UART_CONTROL_RXEN | ZYNQ_UART_CONTROL_TXEN;
+  regs->mode = ZYNQ_UART_MODE_CHMODE(ZYNQ_UART_MODE_CHMODE_NORMAL)
+    | ZYNQ_UART_MODE_PAR(ZYNQ_UART_MODE_PAR_NONE)
+    | ZYNQ_UART_MODE_CHRL(ZYNQ_UART_MODE_CHRL_8)
+    | mode_clks;
 
-  /*
-   * Some ZynqMP UARTs have a hardware bug that causes TX/RX logic restarts to
-   * require a kick after baud rate registers are initialized.
-   */
-  zynq_uart_write_polled(base, 0);
+  while (zynq_uart_read_polled(base) >= 0) {
+    /* Drop */
+  }
+
+  zynq_uart_reset_tx_flush(ctx);
 }
 
 int zynq_uart_read_polled(rtems_termios_device_context *base)
@@ -172,7 +172,7 @@ void zynq_uart_write_polled(
   zynq_uart_context *ctx = (zynq_uart_context *) base;
   volatile zynq_uart *regs = ctx->regs;
 
-  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TFUL) != 0) {
+  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TNFUL) != 0) {
     /* Wait */
   }
 
@@ -187,7 +187,8 @@ void zynq_uart_reset_tx_flush(zynq_uart_context *ctx)
   while (c-- > 0)
     zynq_uart_write_polled(&ctx->base, '\r');
 
-  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0) {
+  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0 ||
+         (regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TACTIVE) != 0) {
     /* Wait */
   }
 }
