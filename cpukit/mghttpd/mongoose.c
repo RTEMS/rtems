@@ -81,6 +81,12 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#if __rtems__
+#include <time.h>
+#include <sys/param.h>
+#include <rtems/libio_.h>
+#endif
+
 #if defined(_WIN32) && !defined(__SYMBIAN32__) // Windows specific
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400 // To make it link in VS2005
@@ -1516,13 +1522,32 @@ static int set_non_blocking_mode(SOCKET sock) {
 #ifndef HAVE_POLL
 static int poll(struct pollfd *pfd, int n, int milliseconds) {
   struct timeval tv;
+#if __rtems__
+  #define set (*set_prealloc)
+  static fd_set *set_prealloc;
+  static size_t set_size;
+#else
   fd_set set;
+#endif
   int i, result;
   SOCKET maxfd = 0;
 
   tv.tv_sec = milliseconds / 1000;
   tv.tv_usec = (milliseconds % 1000) * 1000;
+#if __rtems__
+  if (set_prealloc == NULL) {
+    set_size =
+      sizeof(fd_set) * (howmany(rtems_libio_number_iops, sizeof(fd_set) * 8));
+    set_prealloc = malloc(set_size);
+    if (set_prealloc == NULL) {
+      errno = ENOMEM;
+      return -1;
+    }
+  }
+  memset(set_prealloc, 0, set_size);
+#else
   FD_ZERO(&set);
+#endif
 
   for (i = 0; i < n; i++) {
     FD_SET((SOCKET) pfd[i].fd, &set);
@@ -5368,6 +5393,12 @@ static void *master_thread(void *thread_func_param) {
         }
       }
     }
+#if __rtems__
+    else {
+      struct timespec t = { .tv_sec = 0, .tv_nsec = 500000000L };
+      nanosleep(&t, &t);
+    }
+#endif /* __rtems__ */
   }
   free(pfd);
   DEBUG_TRACE(("stopping workers"));
