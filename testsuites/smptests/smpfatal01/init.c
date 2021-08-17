@@ -62,7 +62,7 @@ static void fatal_extension(
 
     _SMP_barrier_Wait(&barrier, &barrier_state, cpu_count);
 
-    if (self == main_cpu) {
+    if (self == other_cpu) {
       uint32_t cpu;
 
       for (cpu = 0; cpu < cpu_count; ++cpu) {
