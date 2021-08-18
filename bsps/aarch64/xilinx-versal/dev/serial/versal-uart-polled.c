@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2021 Gedare Bloom <gedare@rtems.org> 
+ * Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -68,7 +68,7 @@ int32_t versal_cal_baud_rate(
     return -1;
   }
 
-  /* 
+  /*
    * The UART clock cannot be larger than 16*65535*baudrate.
    * Could maybe use an estimate (inputclk / 2**16) to save a division.
    * This invariant gets checked below, by ensuring ibdiv < 2**16.
@@ -78,7 +78,7 @@ int32_t versal_cal_baud_rate(
    * The UART clock cannot be more than 5/3 times faster than the LPD_LSBUS_CLK
    *  - TODO?
    */
-  
+
   /*
    * The baud rate divisor is a 16-bit integer and 6-bit fractional part.
    * It is equal to the UART clock / (16 * baudrate).
@@ -138,7 +138,8 @@ int versal_uart_initialize(rtems_termios_device_context *base)
   }
 
   /* Line control: 8-bit word length, no parity, no FIFO, 1 stop bit */
-  regs->uartlcr_h = VERSAL_UARTLCR_H_WLEN( VERSAL_UARTLCR_H_WLEN_8 );
+  regs->uartlcr_h = VERSAL_UARTLCR_H_WLEN( VERSAL_UARTLCR_H_WLEN_8 )
+    | VERSAL_UARTLCR_H_FEN;
 
   /* Control: receive, transmit, uart enable, no CTS, no RTS, no loopback */
   regs->uartcr = VERSAL_UARTCR_RXE
@@ -204,6 +205,9 @@ void versal_uart_reset_tx_flush(rtems_termios_device_context *base)
   while ((regs->uartfr & VERSAL_UARTFR_TXFE) == 0) {
     /* Wait for empty */
   }
+  while ((regs->uartfr & VERSAL_UARTFR_BUSY) != 0) {
+    /* Wait for empty */
+  }
 }
 
 static void versal_uart_write_support(
@@ -225,4 +229,3 @@ const rtems_termios_device_handler versal_uart_handler = {
   .poll_read = versal_uart_read_polled,
   .mode = TERMIOS_POLLED
 };
-
