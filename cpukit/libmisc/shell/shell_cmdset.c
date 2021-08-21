@@ -112,6 +112,11 @@ rtems_shell_cmd_t *rtems_shell_add_cmd_struct(
   rtems_shell_cmd_t **next_ptr = &rtems_shell_first_cmd;
   rtems_shell_cmd_t *existing;
 
+  if (shell_cmd == NULL)
+    return NULL;
+  if (shell_cmd->name == NULL)
+    return NULL;
+
   /*
    * Iterate through all commands and check if a command with this name is
    * already present.
