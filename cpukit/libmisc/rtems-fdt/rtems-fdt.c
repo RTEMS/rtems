@@ -637,6 +637,8 @@ rtems_fdt_register (const void* dtb, rtems_fdt_handle* handle)
 
   blob->blob = dtb;
   blob->name = NULL;
+  rtems_chain_initialize_node(&blob->node);
+
   fdt = rtems_fdt_lock ();
 
   rtems_chain_append_unprotected (&fdt->blobs, &blob->node);
