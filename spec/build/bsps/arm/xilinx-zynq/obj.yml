@@ -14,8 +14,8 @@ install:
   - bsps/arm/xilinx-zynq/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/arm/xilinx-zynq/include/bsp/cadence-i2c-regs.h
-  - bsps/arm/xilinx-zynq/include/bsp/cadence-i2c.h
+  - bsps/include/dev/i2c/cadence-i2c-regs.h
+  - bsps/include/dev/i2c/cadence-i2c.h
   - bsps/arm/xilinx-zynq/include/bsp/i2c.h
   - bsps/arm/xilinx-zynq/include/bsp/irq.h
 links: []
@@ -28,7 +28,7 @@ source:
 - bsps/arm/xilinx-zynq/console/console-config.c
 - bsps/arm/xilinx-zynq/console/console-init.c
 - bsps/arm/xilinx-zynq/console/debug-console.c
-- bsps/arm/xilinx-zynq/i2c/cadence-i2c.c
+- bsps/shared/dev/i2c/cadence-i2c.c
 - bsps/arm/xilinx-zynq/start/bspreset.c
 - bsps/arm/xilinx-zynq/start/bspstart.c
 - bsps/arm/xilinx-zynq/start/bspstarthooks.c

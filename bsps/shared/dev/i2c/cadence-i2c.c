@@ -25,8 +25,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp/cadence-i2c.h>
-#include <bsp/cadence-i2c-regs.h>
+#include <dev/i2c/cadence-i2c.h>
+#include <dev/i2c/cadence-i2c-regs.h>
 
 #include <rtems/irq-extension.h>
 #include <rtems/score/assert.h>
