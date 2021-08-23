@@ -39,6 +39,16 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 
+__attribute__ ((weak)) uint32_t zynqmp_clock_i2c0(void)
+{
+  return ZYNQMP_CLOCK_I2C0;
+}
+
+__attribute__ ((weak)) uint32_t zynqmp_clock_i2c1(void)
+{
+  return ZYNQMP_CLOCK_I2C1;
+}
+
 void bsp_start( void )
 {
   bsp_interrupt_initialize();

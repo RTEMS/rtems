@@ -11,6 +11,8 @@ links:
   uid: grp
 - role: build-dependency
   uid: tstzu3eg
+- role : build-dependency
+  uid: objcadencei2c
 type: build
 use-after: []
 use-before: []

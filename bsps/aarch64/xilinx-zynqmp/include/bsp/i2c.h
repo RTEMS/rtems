@@ -1,16 +1,8 @@
-/* SPDX-License-Identifier: BSD-2-Clause */
-
-/**
- * @file
- *
- * @ingroup RTEMSBSPsAArch64XilinxZynqMP
- *
- * @brief This header file provides the core BSP definitions
- */
-
 /*
- * Copyright (C) 2020 On-Line Applications Research Corporation (OAR)
- * Written by Kinsey Moore <kinsey.moore@oarcorp.com>
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (C) 2021 On-Line Applications Research (OAR)
+ * Copyright (C) 2014 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,52 +26,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_H
-#define LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_H
+#ifndef LIBBSP_ARM_XILINX_ZYNQ_I2C_H
+#define LIBBSP_ARM_XILINX_ZYNQ_I2C_H
 
-/**
- * @addtogroup RTEMSBSPsAArch64
- *
- * @{
- */
-
-#include <bspopts.h>
-
-#ifndef ASM
-
-#include <bsp/default-initial-extension.h>
-#include <bsp/start.h>
-
-#include <rtems.h>
+#include <dev/i2c/cadence-i2c.h>
+#include <bsp/irq.h>
+#include <bsp.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define BSP_ARM_GIC_CPUIF_BASE 0xf9020000
-#define BSP_ARM_GIC_DIST_BASE 0xf9010000
+static inline int zynqmp_register_i2c_0(void)
+{
+  return i2c_bus_register_cadence(
+    "/dev/i2c-0",
+    0x00FF020000,
+    zynqmp_clock_i2c0(),
+    ZYNQMP_IRQ_I2C_0
+  );
+}
 
-#define BSP_RESET_SMC
-
-/**
- * @brief Zynq UltraScale+ MPSoC specific set up of the MMU.
- *
- * Provide in the application to override the defaults in the BSP.
- */
-BSP_START_TEXT_SECTION void zynqmp_setup_mmu_and_cache(void);
-
-void zynqmp_debug_console_flush(void);
-
-uint32_t zynqmp_clock_i2c0(void);
-
-uint32_t zynqmp_clock_i2c1(void);
+static inline int zynqmp_register_i2c_1(void)
+{
+  return i2c_bus_register_cadence(
+    "/dev/i2c-1",
+    0x00FF030000,
+    zynqmp_clock_i2c1(),
+    ZYNQMP_IRQ_I2C_1
+  );
+}
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* ASM */
-
-/** @} */
-
-#endif /* LIBBSP_AARCH64_XILINX_ZYNQMP_BSP_H */
+#endif /* LIBBSP_ARM_XILINX_ZYNQ_I2C_H */

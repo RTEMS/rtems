@@ -53,6 +53,8 @@ extern "C" {
 /* Interrupts vectors */
 #define BSP_TIMER_VIRT_PPI 27
 #define BSP_TIMER_PHYS_NS_PPI 30
+#define ZYNQMP_IRQ_I2C_0 49
+#define ZYNQMP_IRQ_I2C_1 50
 #define ZYNQMP_IRQ_UART_0 54
 #define ZYNQMP_IRQ_UART_1 53
 #define ZYNQMP_IRQ_ETHERNET_0 89
