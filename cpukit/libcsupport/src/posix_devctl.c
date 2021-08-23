@@ -35,6 +35,7 @@
 #include <rtems/seterr.h>
 
 #include  <unistd.h>
+#include  <fcntl.h>
 
 int posix_devctl(
   int              fd,
@@ -44,6 +45,15 @@ int posix_devctl(
   int *__restrict  dev_info_ptr
 )
 {
+  int rv = 0;
+
+  /*
+   * posix_devctl() is supposed to return an errno. errno needs to be
+   * preserved in spite of calling methods (e.g., close, fcntl, and ioctl)
+   * that set it.
+   */
+  int errno_copy = errno;
+
   /*
    * The POSIX 1003.26 standard allows for library implementations
    * that implement posix_devctl() using ioctl(). In this case,
@@ -72,15 +82,69 @@ int posix_devctl(
   }
 
   /*
-   * The FACE Technical Standard Edition 3.0 and newer requires the SOCKCLOSE
-   * ioctl command. This is because the Security Profile does not include
-   * close() and applications need a way to close sockets. Closing sockets is
-   * a minimum requirement so using close() in the implementation meets that
-   * requirement but also lets the application close other file types.
+   *
    */
-  if (dcmd == SOCKCLOSE ) {
-    return close(fd);
+  switch (dcmd) {
+
+    /*
+     * The FACE Technical Standard Edition 3.0 and newer requires the SOCKCLOSE
+     * ioctl command. This is because the Security Profile does not include
+     * close() and applications need a way to close sockets. Closing sockets is
+     * a minimum requirement so using close() in the implementation meets that
+     * requirement but also lets the application close other file types.
+     */
+    case SOCKCLOSE:
+      if (close(fd) != 0) {
+        rv    = errno;
+        errno = errno_copy;
+
+        return rv;
+      }
+      break;
+
+    /*
+     * The FACE Technical Standard Edition 3.0 and newer requires the
+     * posix_devctl command to support the FIONBIO subcommand.
+     */
+    case FIONBIO: {
+      int tmp_flag;
+      int flag;
+
+      if (nbyte != sizeof(int)) {
+        return EINVAL;
+      }
+
+      tmp_flag = fcntl(fd, F_GETFL, 0);
+      if (tmp_flag == -1) {
+        rv = errno;
+        errno = errno_copy;
+
+        return rv;
+      }
+
+      flag = *(int *)dev_data_ptr;
+
+      if (flag != 0) {
+        tmp_flag |= O_NONBLOCK;
+      } else {
+        tmp_flag &= ~O_NONBLOCK;
+      }
+
+      (void) fcntl(fd, F_SETFL, tmp_flag);
+      break;
+    }
+
+    default:
+      if (ioctl(fd, dcmd, dev_data_ptr) != 0) {
+        rv = errno;
+        errno = errno_copy;
+
+        return rv;
+      }
+      break;
   }
 
-  return ioctl(fd, dcmd, dev_data_ptr);
+  errno = errno_copy;
+
+  return rv;
 }
