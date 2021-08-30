@@ -366,8 +366,8 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_clear_priority_updates(
  *
  * @return The priority update count of @a queue_context.
  */
-RTEMS_INLINE_ROUTINE size_t _Thread_queue_Context_save_priority_updates(
-  Thread_queue_Context *queue_context
+RTEMS_INLINE_ROUTINE size_t _Thread_queue_Context_get_priority_updates(
+  const Thread_queue_Context *queue_context
 )
 {
   return queue_context->Priority.update_count;

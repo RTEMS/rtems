@@ -212,7 +212,7 @@ void _Thread_Priority_perform_actions(
    */
 
   the_thread = start_of_path;
-  update_count = _Thread_queue_Context_save_priority_updates( queue_context );
+  update_count = _Thread_queue_Context_get_priority_updates( queue_context );
 
   while ( true ) {
     Thread_queue_Queue *queue;
