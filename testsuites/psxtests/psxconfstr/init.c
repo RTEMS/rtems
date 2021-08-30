@@ -44,39 +44,38 @@
 
 const char rtems_test_name[] = "PSXCONFSTR";
 
-/* init test function begins */
 T_TEST_CASE(confstr)
 {
 
   int r;
-  char * buf = "";
   const char UPE[] = "unsupported programming environment";
+  char buf[sizeof(UPE)];
   size_t len1;
-  len1 = strlen(UPE) + 1;
-  r = confstr(_CS_PATH, buf, sizeof(buf));
-  T_quiet_psx_success(r);
+
+  len1 = sizeof(UPE);
 
   r = confstr(_CS_POSIX_V6_ILP32_OFFBIG_CFLAGS, buf, sizeof(buf));
-  T_quiet_eq_int(r, len1);
+  T_eq_sz(r, len1);
 
   r = confstr(_CS_POSIX_V6_LP64_OFF64_LDFLAGS, buf, sizeof(buf));
-  T_quiet_eq_int(r, len1);
+  T_eq_sz(r, len1);
 
   r = confstr(_CS_POSIX_V7_ILP32_OFF32_CFLAGS, buf, sizeof(buf));
-  T_quiet_eq_int(r, len1);
+  T_eq_sz(r, len1);
 
   r = confstr(_CS_POSIX_V7_ILP32_OFFBIG_CFLAGS, buf, sizeof(buf));
-  T_quiet_eq_int(r, len1);
+  T_eq_sz(r, len1);
 
   r = confstr(_CS_POSIX_V7_LP64_OFF64_LIBS, buf, sizeof(buf));
-  T_quiet_eq_int(r, len1);
+  T_eq_sz(r, len1);
 
   r = confstr(_CS_POSIX_V6_LP64_OFF64_CFLAGS, buf, sizeof(buf));
-  T_quiet_eq_int(r, len1);
+  T_eq_sz(r, len1);
 
+  errno = 0;
   r = confstr(_CS_PATH, buf, sizeof(buf));
-  T_quiet_psx_success(r);
-
+  T_eq_sz(r, 0);
+  T_eq_int(errno, EINVAL);
 }
 
 static rtems_task Init(rtems_task_argument ignored)
