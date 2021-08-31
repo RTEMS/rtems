@@ -1,11 +1,12 @@
 /**
  * @file
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreFutex
  *
  * @brief This source file contains the implementation of
  *   _Futex_Wait() and _Futex_Wake().
  */
+
 /*
  * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
@@ -18,6 +19,18 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
+ */
+
+/**
+ * @defgroup RTEMSScoreFutex Futex Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This group contains the Futex Handler implementation.
+ *
+ * The behaviour of the futex operations is defined by Linux, see also:
+ *
+ * https://man7.org/linux/man-pages/man2/futex.2.html
  */
 
 #ifdef HAVE_CONFIG_H
@@ -84,6 +97,22 @@ static void _Futex_Queue_release(
   _ISR_Local_enable( level );
 }
 
+/**
+ * @brief Performs the ``FUTEX_WAIT`` operation.
+ *
+ * @param[in, out] _futex is the futex object.
+ *
+ * @param[in] uaddr is the address to the futex state.
+ *
+ * @param val is the expected futex state value.
+ *
+ * @retval 0 Returns zero if the futex state is equal to the expected value.
+ *   In this case the calling thread is enqueued on the thread queue of the
+ *   futex object.
+ *
+ * @retval EAGAIN Returns EAGAIN if the futex state is not equal to the
+ *   expected value.
+ */
 int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
 {
   Futex_Control        *futex;
@@ -113,7 +142,7 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
     eno = 0;
   } else {
     _Futex_Queue_release( futex, level, &queue_context );
-    eno = EWOULDBLOCK;
+    eno = EAGAIN;
   }
 
   return eno;
@@ -143,6 +172,15 @@ static Thread_Control *_Futex_Flush_filter(
   return the_thread;
 }
 
+/**
+ * @brief Performs the ``FUTEX_WAKE`` operation.
+ *
+ * @param[in, out] _futex is the futex object.
+ *
+ * @param count is the maximum count of threads to wake up.
+ *
+ * @return Returns the count of woken up threads.
+ */
 int _Futex_Wake( struct _Futex_Control *_futex, int count )
 {
   Futex_Control *futex;
