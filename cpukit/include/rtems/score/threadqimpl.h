@@ -1139,34 +1139,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_empty(
  * @brief Returns the first thread on the thread queue if it exists, otherwise
  * @c NULL.
  *
- * The caller must be the owner of the thread queue lock.  The thread queue
- * lock is not released.
- *
- * @param the_thread_queue The thread queue.
- * @param operations The thread queue operations.
- *
-* @retval first The first thread on the thread queue according to the enqueue
- * order.
- * @retval NULL No thread is present on the thread queue.
- */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_queue_First_locked(
-  Thread_queue_Control          *the_thread_queue,
-  const Thread_queue_Operations *operations
-)
-{
-  Thread_queue_Heads *heads = the_thread_queue->Queue.heads;
-
-  if ( heads != NULL ) {
-    return ( *operations->first )( heads );
-  } else {
-    return NULL;
-  }
-}
-
-/**
- * @brief Returns the first thread on the thread queue if it exists, otherwise
- * @c NULL.
- *
  * @param the_thread_queue The thread queue.
  *
  * @retval first The first thread on the thread queue according to the enqueue
