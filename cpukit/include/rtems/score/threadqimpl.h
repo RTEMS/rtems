@@ -938,40 +938,18 @@ Status_Control _Thread_queue_Enqueue_sticky(
  * @param[in, out] the_thread The thread to extract.
  * @param[in, out] queue_context The thread queue context.
  *
- * @return Returns the unblock indicator for _Thread_queue_Unblock_critical().
- * True indicates, that this thread must be unblocked by the scheduler later in
- * _Thread_queue_Unblock_critical(), and false otherwise.  In case false is
- * returned, then the thread queue enqueue procedure was interrupted.  Thus it
- * will unblock itself and the thread wait information is no longer accessible,
- * since this thread may already block on another resource in an SMP
- * configuration.
+ * @return Returns the unblock indicator.  True indicates, that this thread
+ * must be unblocked by the scheduler using _Thread_Remove_timer_and_unblock(),
+ * and false otherwise.  In case false is returned, then the thread queue
+ * enqueue procedure was interrupted.  Thus it will unblock itself and the
+ * thread wait information is no longer accessible, since this thread may
+ * already block on another resource in an SMP configuration.
  */
 bool _Thread_queue_Extract_locked(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
   Thread_queue_Context          *queue_context
-);
-
-/**
- * @brief Unblocks the thread which was on the thread queue before.
- *
- * The caller must be the owner of the thread queue lock.  This function will
- * release the thread queue lock.  Thread dispatching is disabled before the
- * thread queue lock is released and an unblock is necessary.  Thread
- * dispatching is enabled once the sequence to unblock the thread is complete.
- *
- * @param unblock The unblock indicator returned by
- * _Thread_queue_Extract_locked().
- * @param queue The actual thread queue.
- * @param[in, out] the_thread The thread to extract.
- * @param[in, out] lock_context The lock context of the lock acquire.
- */
-void _Thread_queue_Unblock_critical(
-  bool                unblock,
-  Thread_queue_Queue *queue,
-  Thread_Control     *the_thread,
-  ISR_lock_Context   *lock_context
 );
 
 /**

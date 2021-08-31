@@ -11,7 +11,7 @@
  *   _Thread_queue_Path_acquire_critical(),
  *   _Thread_queue_Path_release_critical(),
  *   _Thread_queue_Resume(),_Thread_queue_Surrender(),
- *   _Thread_queue_Surrender_sticky(), and _Thread_queue_Unblock_critical().
+ *   _Thread_queue_Surrender_sticky().
  */
 
 /*
@@ -584,27 +584,6 @@ bool _Thread_queue_Extract_locked(
   return _Thread_queue_Make_ready_again( the_thread );
 }
 
-void _Thread_queue_Unblock_critical(
-  bool                unblock,
-  Thread_queue_Queue *queue,
-  Thread_Control     *the_thread,
-  ISR_lock_Context   *lock_context
-)
-{
-  if ( unblock ) {
-    Per_CPU_Control *cpu_self;
-
-    cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-    _Thread_queue_Queue_release( queue, lock_context );
-
-    _Thread_Remove_timer_and_unblock( the_thread, queue );
-
-    _Thread_Dispatch_enable( cpu_self );
-  } else {
-    _Thread_queue_Queue_release( queue, lock_context );
-  }
-}
-
 void _Thread_queue_Resume(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
@@ -645,25 +624,20 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
   queue = the_thread->Wait.queue;
 
   if ( queue != NULL ) {
-    bool unblock;
-
     _Thread_Wait_remove_request( the_thread, &queue_context.Lock_context );
     _Thread_queue_Context_set_MP_callout(
       &queue_context,
       _Thread_queue_MP_callout_do_nothing
     );
-    unblock = _Thread_queue_Extract_locked(
+#if defined(RTEMS_MULTIPROCESSING)
+    _Thread_queue_MP_set_callout( the_thread, &queue_context );
+#endif
+    ( *the_thread->Wait.operations->extract )(
       queue,
-      the_thread->Wait.operations,
       the_thread,
       &queue_context
     );
-    _Thread_queue_Unblock_critical(
-      unblock,
-      queue,
-      the_thread,
-      &queue_context.Lock_context.Lock_context
-    );
+    _Thread_queue_Resume( queue, the_thread, &queue_context );
   } else {
     _Thread_Wait_release( the_thread, &queue_context );
   }
