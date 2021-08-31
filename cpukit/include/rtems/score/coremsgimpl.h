@@ -616,7 +616,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
   Thread_queue_Context            *queue_context
 )
 {
-  Thread_Control *the_thread;
+  Thread_queue_Heads *heads;
+  Thread_Control     *the_thread;
 
   /*
    *  If there are pending messages, then there can't be threads
@@ -634,13 +635,17 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
    *  There must be no pending messages if there is a thread waiting to
    *  receive a message.
    */
-  the_thread = _Thread_queue_First_locked(
-    &the_message_queue->Wait_queue,
-    the_message_queue->operations
-  );
-  if ( the_thread == NULL ) {
+  heads = the_message_queue->Wait_queue.Queue.heads;
+  if ( heads == NULL ) {
     return NULL;
   }
+
+  the_thread = ( *the_message_queue->operations->surrender )(
+    &the_message_queue->Wait_queue.Queue,
+    heads,
+    NULL,
+    queue_context
+  );
 
    *(size_t *) the_thread->Wait.return_argument = size;
    the_thread->Wait.count = (uint32_t) submit_type;
@@ -651,9 +656,8 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Dequeue_receiver(
     size
   );
 
-  _Thread_queue_Extract_critical(
+  _Thread_queue_Resume(
     &the_message_queue->Wait_queue.Queue,
-    the_message_queue->operations,
     the_thread,
     queue_context
   );

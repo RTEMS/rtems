@@ -975,56 +975,23 @@ void _Thread_queue_Unblock_critical(
 );
 
 /**
- * @brief Extracts the thread from the thread queue and unblocks it.
+ * @brief Resumes the extracted or surrendered thread.
  *
- * The caller must be the owner of the thread queue lock.  This function will
- * release the thread queue lock and restore the default thread lock.  Thread
- * dispatching is disabled before the thread queue lock is released and an
- * unblock is necessary.  Thread dispatching is enabled once the sequence to
- * unblock the thread is complete.  This makes it possible to use the thread
- * queue lock to protect the state of objects embedding the thread queue and
- * directly enter _Thread_queue_Extract_critical() to finalize an operation in
- * case a waiting thread exists.
+ * This function makes the thread ready again.  If necessary, the thread is
+ * unblocked and its thread timer removed.
  *
- * @code
- * #include <rtems/score/threadqimpl.h>
+ * The thread shall have been extracted from the thread queue or surrendered by
+ * the thread queue right before the call to this function.  The caller shall
+ * be the owner of the thread queue lock.
  *
- * typedef struct {
- *   Thread_queue_Control  Queue;
- *   Thread_Control       *owner;
- * } Mutex;
- *
- * void _Mutex_Release( Mutex *mutex )
- * {
- *   Thread_queue_Context  queue_context;
- *   Thread_Control       *first;
- *
- *   _Thread_queue_Context_initialize( &queue_context, NULL );
- *   _Thread_queue_Acquire( &mutex->Queue, queue_context );
- *
- *   first = _Thread_queue_First_locked( &mutex->Queue );
- *   mutex->owner = first;
- *
- *   if ( first != NULL ) {
- *     _Thread_queue_Extract_critical(
- *       &mutex->Queue.Queue,
- *       mutex->Queue.operations,
- *       first,
- *       &queue_context
- *   );
- * }
- * @endcode
- *
- * @param queue The actual thread queue.
- * @param operations The thread queue operations.
- * @param[in, out] the_thread The thread to extract.
- * @param[in, out] queue_context The thread queue context of the lock acquire.
+ * @param queue is the actual thread queue.
+ * @param[in, out] the_thread is the thread to make ready and unblock.
+ * @param[in, out] queue_context is the thread queue context.
  */
-void _Thread_queue_Extract_critical(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread,
-  Thread_queue_Context          *queue_context
+void _Thread_queue_Resume(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
 );
 
 /**

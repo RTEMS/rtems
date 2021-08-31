@@ -56,7 +56,8 @@ Status_Control _CORE_message_queue_Seize(
       return STATUS_SUCCESSFUL;
     #else
     {
-      Thread_Control   *the_thread;
+      Thread_queue_Heads *heads;
+      Thread_Control     *the_thread;
 
       /*
        *  There could be a thread waiting to send a message.  If there
@@ -65,11 +66,8 @@ Status_Control _CORE_message_queue_Seize(
        *  NOTE: If we note that the queue was not full before this receive,
        *  then we can avoid this dequeue.
        */
-      the_thread = _Thread_queue_First_locked(
-        &the_message_queue->Wait_queue,
-        the_message_queue->operations
-      );
-      if ( the_thread == NULL ) {
+      heads = the_message_queue->Wait_queue.Queue.heads;
+      if ( heads == NULL ) {
         _CORE_message_queue_Free_message_buffer(
           the_message_queue,
           the_message
@@ -77,6 +75,13 @@ Status_Control _CORE_message_queue_Seize(
         _CORE_message_queue_Release( the_message_queue, queue_context );
         return STATUS_SUCCESSFUL;
       }
+
+      the_thread = ( *the_message_queue->operations->surrender )(
+        &the_message_queue->Wait_queue.Queue,
+        heads,
+        NULL,
+        queue_context
+      );
 
       /*
        *  There was a thread waiting to send a message.  This code
@@ -90,9 +95,8 @@ Status_Control _CORE_message_queue_Seize(
         (size_t) the_thread->Wait.option,
         (CORE_message_queue_Submit_types) the_thread->Wait.count
       );
-      _Thread_queue_Extract_critical(
+      _Thread_queue_Resume(
         &the_message_queue->Wait_queue.Queue,
-        the_message_queue->operations,
         the_thread,
         queue_context
       );

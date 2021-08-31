@@ -7,9 +7,10 @@
  *   _Thread_queue_Deadlock_fatal(), _Thread_queue_Deadlock_status(),
  *   _Thread_queue_Do_dequeue(), _Thread_queue_Enqueue(),
  *   _Thread_queue_Enqueue_do_nothing_extra(), _Thread_queue_Enqueue_sticky(),
- *   _Thread_queue_Extract(), _Thread_queue_Extract_critical(),
- *   _Thread_queue_Extract_locked(), _Thread_queue_Path_acquire_critical(),
- *   _Thread_queue_Path_release_critical(), _Thread_queue_Surrender(),
+ *   _Thread_queue_Extract(), _Thread_queue_Extract_locked(),
+ *   _Thread_queue_Path_acquire_critical(),
+ *   _Thread_queue_Path_release_critical(),
+ *   _Thread_queue_Resume(),_Thread_queue_Surrender(),
  *   _Thread_queue_Surrender_sticky(), and _Thread_queue_Unblock_critical().
  */
 
@@ -604,28 +605,32 @@ void _Thread_queue_Unblock_critical(
   }
 }
 
-void _Thread_queue_Extract_critical(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread,
-  Thread_queue_Context          *queue_context
+void _Thread_queue_Resume(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
 )
 {
   bool unblock;
 
-  unblock = _Thread_queue_Extract_locked(
-    queue,
-    operations,
-    the_thread,
-    queue_context
-  );
+  unblock = _Thread_queue_Make_ready_again( the_thread );
 
-  _Thread_queue_Unblock_critical(
-    unblock,
-    queue,
-    the_thread,
-    &queue_context->Lock_context.Lock_context
-  );
+  if ( unblock ) {
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Thread_queue_Dispatch_disable( queue_context );
+    _Thread_queue_Queue_release(
+      queue, &queue_context->Lock_context.Lock_context
+    );
+
+    _Thread_Remove_timer_and_unblock( the_thread, queue );
+
+    _Thread_Dispatch_enable( cpu_self );
+  } else {
+    _Thread_queue_Queue_release(
+      queue, &queue_context->Lock_context.Lock_context
+    );
+  }
 }
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
