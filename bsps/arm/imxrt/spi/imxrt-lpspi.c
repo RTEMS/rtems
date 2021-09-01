@@ -43,16 +43,19 @@ struct imxrt_lpspi_bus {
   uint32_t src_clock_hz;
   clock_ip_name_t clock_ip;
 
-  uint32_t msg_todo;
-  const spi_ioc_transfer *msg;
   rtems_binary_semaphore sem;
-  uint32_t tcr;
+  bool cs_change_on_last_msg;
 
+  uint32_t rx_msg_todo;
+  const spi_ioc_transfer *rx_msg;
   size_t remaining_rx_size;
   uint8_t *rx_buf;
 
+  uint32_t tx_msg_todo;
+  const spi_ioc_transfer *tx_msg;
   size_t remaining_tx_size;
   const uint8_t *tx_buf;
+
   uint32_t fifo_size;
 };
 
@@ -146,11 +149,7 @@ static void imxrt_lpspi_config(
   }
 
   tcr |= LPSPI_TCR_PCS(msg->cs);
-
-  if (!msg->cs_change) {
-    tcr |= LPSPI_TCR_CONT_MASK;
-  }
-
+  tcr |= LPSPI_TCR_CONT_MASK;
   tcr |= LPSPI_TCR_FRAMESZ(word_size-1);
 
   if (ccr_orig != ccr) {
@@ -159,9 +158,13 @@ static void imxrt_lpspi_config(
     regs->CR |= LPSPI_CR_MEN_MASK;
   }
 
-  /* No CONTC on first write. Otherwise upper 8 bits are not written. */
-  regs->TCR = tcr;
-  regs->TCR = tcr | LPSPI_TCR_CONTC_MASK | LPSPI_TCR_CONT_MASK;
+  if (bus->cs_change_on_last_msg) {
+    /* No CONTC on first write. Otherwise upper 8 bits are not written. */
+    regs->TCR = tcr;
+  }
+  regs->TCR = tcr | LPSPI_TCR_CONTC_MASK;
+
+  bus->cs_change_on_last_msg = msg->cs_change;
 }
 
 static inline bool imxrt_lpspi_rx_fifo_not_empty(
@@ -184,48 +187,72 @@ static inline bool imxrt_lpspi_tx_fifo_not_full(
       bus->fifo_size - 2;
 }
 
+static void imxrt_lpspi_next_tx_msg(
+  struct imxrt_lpspi_bus *bus,
+  volatile LPSPI_Type *regs
+)
+{
+  if (bus->tx_msg_todo > 0) {
+    const spi_ioc_transfer *msg;
+
+    msg = bus->tx_msg;
+
+    imxrt_lpspi_config(bus, regs, msg);
+    bus->remaining_tx_size = msg->len;
+    bus->tx_buf = msg->tx_buf;
+  }
+}
+
 static void imxrt_lpspi_fill_tx_fifo(
   struct imxrt_lpspi_bus *bus,
   volatile LPSPI_Type *regs
 )
 {
   while(imxrt_lpspi_tx_fifo_not_full(bus, regs)
-      && bus->remaining_tx_size > 0) {
-    if (bus->remaining_tx_size == 1) {
-      regs->TCR &= ~(LPSPI_TCR_CONT_MASK);
-    }
+      && (bus->tx_msg_todo > 0 || bus->remaining_tx_size > 0)) {
+    if (bus->remaining_tx_size > 0) {
+      if (bus->remaining_tx_size == 1 && bus->tx_msg->cs_change) {
+        /*
+         * Necessary for getting the last data out of the Rx FIFO. See "i.MX
+         * RT1050 Processor Reference Manual Rev. 4" Chapter 47.3.2.2 "Receive
+         * FIFO and Data Match":
+         *
+         * "During a continuous transfer, if the transmit FIFO is empty, then
+         * the receive data is only written to the receive FIFO after the
+         * transmit FIFO is written or after the Transmit Command Register (TCR)
+         * is written to end the frame."
+         */
+        regs->TCR &= ~(LPSPI_TCR_CONT_MASK);
+      }
 
-    if (bus->tx_buf != NULL) {
-      regs->TDR = bus->tx_buf[0];
-      ++bus->tx_buf;
-    } else {
-      regs->TDR = 0;
+      if (bus->tx_buf != NULL) {
+        regs->TDR = bus->tx_buf[0];
+        ++bus->tx_buf;
+      } else {
+        regs->TDR = 0;
+      }
+      --bus->remaining_tx_size;
     }
-    --bus->remaining_tx_size;
+    if (bus->remaining_tx_size == 0) {
+      --bus->tx_msg_todo;
+      ++bus->tx_msg;
+      imxrt_lpspi_next_tx_msg(bus, regs);
+    }
   }
 }
 
-static void imxrt_lpspi_next_msg(
+static void imxrt_lpspi_next_rx_msg(
   struct imxrt_lpspi_bus *bus,
   volatile LPSPI_Type *regs
 )
 {
-  if (bus->msg_todo > 0) {
+  if (bus->rx_msg_todo > 0) {
     const spi_ioc_transfer *msg;
 
-    msg = bus->msg;
+    msg = bus->rx_msg;
 
-    imxrt_lpspi_config(bus, regs, msg);
-    bus->remaining_tx_size = msg->len;
     bus->remaining_rx_size = msg->len;
     bus->rx_buf = msg->rx_buf;
-    bus->tx_buf = msg->tx_buf;
-
-    imxrt_lpspi_fill_tx_fifo(bus, regs);
-    regs->IER = LPSPI_IER_TDIE_MASK;
-  } else {
-    regs->IER = 0;
-    rtems_binary_semaphore_post(&bus->sem);
   }
 }
 
@@ -234,15 +261,22 @@ static void imxrt_lpspi_pull_data_from_rx_fifo(
   volatile LPSPI_Type *regs
 )
 {
-  while (imxrt_lpspi_rx_fifo_not_empty(regs) && bus->remaining_rx_size > 0) {
-    uint32_t data;
-
-    data = regs->RDR;
-    if (bus->rx_buf != NULL) {
-      *bus->rx_buf = data;
-      ++bus->rx_buf;
+  uint32_t data;
+  while (imxrt_lpspi_rx_fifo_not_empty(regs)
+      && (bus->rx_msg_todo > 0 || bus->remaining_rx_size > 0)) {
+    if (bus->remaining_rx_size > 0) {
+      data = regs->RDR;
+      if (bus->rx_buf != NULL) {
+        *bus->rx_buf = data;
+        ++bus->rx_buf;
+      }
+      --bus->remaining_rx_size;
     }
-    --bus->remaining_rx_size;
+    if (bus->remaining_rx_size == 0) {
+      --bus->rx_msg_todo;
+      ++bus->rx_msg;
+      imxrt_lpspi_next_rx_msg(bus, regs);
+    }
   }
 }
 
@@ -257,39 +291,22 @@ static void imxrt_lpspi_interrupt(void *arg)
   imxrt_lpspi_pull_data_from_rx_fifo(bus, regs);
   imxrt_lpspi_fill_tx_fifo(bus, regs);
 
-  if (bus->remaining_tx_size == 0) {
-    if (bus->remaining_rx_size > 0) {
-      regs->IER = LPSPI_IER_RDIE_MASK;
-    } else {
-      --bus->msg_todo;
-      ++bus->msg;
-      imxrt_lpspi_next_msg(bus, regs);
-    }
+  if (bus->tx_msg_todo > 0 || bus->remaining_tx_size > 0) {
+    regs->IER = LPSPI_IER_TDIE_MASK;
+  } else if (bus->rx_msg_todo > 0 || bus->remaining_rx_size > 0) {
+    regs->IER = LPSPI_IER_RDIE_MASK;
+  } else {
+    regs->IER = 0;
+    rtems_binary_semaphore_post(&bus->sem);
   }
 }
 
 static inline int imxrt_lpspi_settings_ok(
   struct imxrt_lpspi_bus *bus,
-  const spi_ioc_transfer *msg
+  const spi_ioc_transfer *msg,
+  const spi_ioc_transfer *prev_msg
 )
 {
-  if (msg->cs_change == 0) {
-    /*
-     * This one most likely would need a bigger workaround if it is necessary.
-     * See "i.MX RT1050 Processor Reference Manual Rev. 4" Chapter 47.3.2.2
-     * "Receive FIFO and Data Match":
-     *
-     * "During a continuous transfer, if the transmit FIFO is empty, then the
-     * receive data is only written to the receive FIFO after the transmit FIFO
-     * is written or after the Transmit Command Register (TCR) is written to end
-     * the frame."
-     *
-     * It might is possible to extend the driver so that it can work with an
-     * empty read buffer.
-     */
-    return -EINVAL;
-  }
-
   /* most of this is currently just not implemented */
   if (msg->cs > 3 ||
       msg->speed_hz > bus->base.max_speed_hz ||
@@ -297,6 +314,18 @@ static inline int imxrt_lpspi_settings_ok(
       (msg->mode & ~(SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST)) != 0 ||
       msg->bits_per_word != word_size) {
     return -EINVAL;
+  }
+
+  if (prev_msg != NULL && !prev_msg->cs_change) {
+    /*
+     * A lot of settings have to be the same in this case because the upper 8
+     * bit of TCR can't be changed if it is a continuous transfer.
+     */
+    if (prev_msg->cs != msg->cs ||
+        prev_msg->speed_hz != msg->speed_hz ||
+        prev_msg->mode != msg->mode) {
+      return -EINVAL;
+    }
   }
 
   return 0;
@@ -308,15 +337,27 @@ static int imxrt_lpspi_check_messages(
   uint32_t size
 )
 {
+  const spi_ioc_transfer *prev_msg = NULL;
+
   while(size > 0) {
     int rv;
-    rv = imxrt_lpspi_settings_ok(bus, msg);
+    rv = imxrt_lpspi_settings_ok(bus, msg, prev_msg);
     if (rv != 0) {
       return rv;
     }
 
+    prev_msg = msg;
     ++msg;
     --size;
+  }
+
+  /*
+   * Check whether cs_change is set on last message. Can't work without it
+   * because the last received data is only put into the FIFO if it is the end
+   * of a transfer or if another TX byte is put into the FIFO.
+   */
+  if (!prev_msg->cs_change) {
+    return -EINVAL;
   }
 
   return 0;
@@ -336,10 +377,20 @@ static int imxrt_lpspi_transfer(
   rv = imxrt_lpspi_check_messages(bus, msgs, n);
 
   if (rv == 0) {
-    bus->msg_todo = n;
-    bus->msg = &msgs[0];
+    bus->tx_msg_todo = n;
+    bus->tx_msg = &msgs[0];
+    bus->rx_msg_todo = n;
+    bus->rx_msg = &msgs[0];
+    bus->cs_change_on_last_msg = true;
 
-    imxrt_lpspi_next_msg(bus, bus->regs);
+    imxrt_lpspi_next_rx_msg(bus, bus->regs);
+    imxrt_lpspi_next_tx_msg(bus, bus->regs);
+    /*
+     * Enable the transmit FIFO empty interrupt which will cause an interrupt
+     * instantly because there is no data in the transmit FIFO. The interrupt
+     * will then fill the FIFO. So nothing else to do here.
+     */
+    bus->regs->IER = LPSPI_IER_TDIE_MASK;
     rtems_binary_semaphore_wait(&bus->sem);
   }
 
@@ -416,7 +467,7 @@ static int imxrt_lpspi_setup(spi_bus *base)
 
   bus = (struct imxrt_lpspi_bus *) base;
 
-  rv = imxrt_lpspi_settings_ok(bus, &msg);
+  rv = imxrt_lpspi_settings_ok(bus, &msg, NULL);
 
   /*
    * Nothing to do besides checking.
