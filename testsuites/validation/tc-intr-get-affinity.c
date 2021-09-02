@@ -139,7 +139,7 @@ typedef struct {
    * @brief This member provides the object referenced by the ``affinity``
    *   parameter.
    */
-  cpu_set_t cpuset_obj;
+  cpu_set_t cpuset_obj[ 2 ];;
 
   /**
    * @brief This member contains the return value of the
@@ -236,12 +236,12 @@ static void CheckGetAffinity(
 )
 {
   rtems_status_code sc;
-  cpu_set_t         set;
+  cpu_set_t         set[ 2 ];
 
   if ( attr->can_get_affinity ) {
-    CPU_ZERO( &ctx->cpuset_obj );
+    CPU_ZERO_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
   } else {
-    CPU_FILL( &ctx->cpuset_obj );
+    CPU_FILL_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
   }
 
   sc = rtems_interrupt_get_affinity(
@@ -250,14 +250,14 @@ static void CheckGetAffinity(
     ctx->cpuset
   );
 
-  CPU_ZERO( &set );
+  CPU_ZERO_S( sizeof( set ), set );
 
   if ( attr->can_get_affinity ) {
     T_rsc_success( sc );
-    T_ne_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
+    T_false( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
   } else {
     T_rsc( sc, RTEMS_UNSATISFIED );
-    T_eq_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
+    T_true( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
   }
 }
 
@@ -298,7 +298,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_Valid: {
       /*
        * While the ``affinity_size`` parameter is an integral multiple of the
-       * size of long, while the ``affinity_size`` parameter specifies a
+       * size of ``long``, while the ``affinity_size`` parameter specifies a
        * processor set which is large enough to contain the processor affinity
        * set of the interrupt specified by ``vector``.
        */
@@ -309,7 +309,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_TooSmall: {
       /*
        * While the ``affinity_size`` parameter is an integral multiple of the
-       * size of long, while the ``affinity_size`` parameter specifies a
+       * size of ``long``, while the ``affinity_size`` parameter specifies a
        * processor set which is not large enough to contain the processor
        * affinity set of the interrupt specified by ``vector``.
        */
@@ -320,7 +320,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSetSize_Prepare(
     case RtemsIntrReqGetAffinity_Pre_CPUSetSize_Askew: {
       /*
        * While the ``affinity_size`` parameter is not an integral multiple of
-       * the size of long.
+       * the size of ``long``.
        */
       ctx->cpusetsize = SIZE_MAX;
       break;
@@ -342,7 +342,7 @@ static void RtemsIntrReqGetAffinity_Pre_CPUSet_Prepare(
        * While the ``affinity`` parameter references an object of type
        * cpu_set_t.
        */
-      ctx->cpuset = &ctx->cpuset_obj;
+      ctx->cpuset = ctx->cpuset_obj;
       break;
     }
 
@@ -529,7 +529,7 @@ static void RtemsIntrReqGetAffinity_Action(
 {
   if (
     ctx->valid_vector && ctx->cpusetsize == sizeof( ctx->cpuset_obj ) &&
-    ctx->cpuset == &ctx->cpuset_obj
+    ctx->cpuset == ctx->cpuset_obj
   ) {
     for (
       ctx->vector = 0;
@@ -551,7 +551,7 @@ static void RtemsIntrReqGetAffinity_Action(
       CheckGetAffinity( ctx, &attr );
     }
   } else {
-    cpu_set_t set;
+    cpu_set_t set[ 2 ];
 
     if ( ctx->valid_vector ) {
       ctx->vector = ctx->some_vector;
@@ -559,7 +559,7 @@ static void RtemsIntrReqGetAffinity_Action(
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
     }
 
-    CPU_FILL( &ctx->cpuset_obj );
+    CPU_FILL_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
 
     ctx->status = rtems_interrupt_get_affinity(
       ctx->vector,
@@ -567,13 +567,16 @@ static void RtemsIntrReqGetAffinity_Action(
       ctx->cpuset
     );
 
-    if ( ctx->cpuset == NULL || ctx->cpusetsize != sizeof( ctx->cpuset ) ) {
-      CPU_FILL( &set );
+    if (
+      ctx->cpuset == NULL ||
+      ctx->cpusetsize != sizeof( ctx->cpuset_obj )
+    ) {
+      CPU_FILL_S( sizeof( set ), set );
     } else {
-      CPU_ZERO( &set );
+      CPU_ZERO_S( sizeof( set ), set );
     }
 
-    T_eq_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
+    T_true( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
   }
 }
 
