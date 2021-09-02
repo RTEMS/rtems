@@ -1464,8 +1464,8 @@ const Thread_queue_Operations _Thread_queue_Operations_default = {
   .priority_actions = _Thread_queue_Do_nothing_priority_actions,
   .extract = _Thread_queue_Do_nothing_extract
   /*
-   * The default operations are only used in _Thread_Change_priority() and
-   * _Thread_Timeout() and don't have a thread queue associated with them, so
+   * The default operations are only used in _Thread_Priority_apply() and
+   * _Thread_Continue() and do not have a thread queue associated with them, so
    * the enqueue and first operations are superfluous.
    */
 };

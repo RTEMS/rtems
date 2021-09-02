@@ -406,6 +406,7 @@ typedef struct _Thread_queue_Heads {
 } Thread_queue_Heads;
 
 struct Thread_queue_Queue {
+#if defined(RTEMS_SMP)
   /**
    * @brief Lock to protect this thread queue.
    *
@@ -418,7 +419,6 @@ struct Thread_queue_Queue {
    * @see _Thread_queue_Acquire(), _Thread_queue_Acquire_critical() and
    * _Thread_queue_Release().
    */
-#if defined(RTEMS_SMP)
   SMP_ticket_lock_Control Lock;
 #endif
 
@@ -517,37 +517,68 @@ typedef Thread_Control *( *Thread_queue_First_operation )(
 );
 
 /**
- * @brief Thread queue operations.
+ * @brief The thread queue operations are used to manage the threads of a
+ *   thread queue.
+ *
+ * The standard thread queue operation variants are:
+ *
+ * * ::_Thread_queue_Operations_default
+ *
+ * * ::_Thread_queue_Operations_FIFO
+ *
+ * * ::_Thread_queue_Operations_priority
+ *
+ * * ::_Thread_queue_Operations_priority_inherit
  *
  * @see _Thread_wait_Set_operations().
  */
 struct Thread_queue_Operations {
   /**
-   * @brief Thread queue priority actions operation.
+   * @brief This operation performs the thread queue priority actions.
+   *
+   * Priority actions are produced and processed during enqueue, extract, and
+   * surrender operations.
    */
   Thread_queue_Priority_actions_operation priority_actions;
 
   /**
-   * @brief Thread queue enqueue operation.
+   * @brief This operation is used to enqueue the thread on the thread queue.
    *
-   * Called by object routines to enqueue the thread.
+   * The enqueue order is defined by the operations variant.
    */
   Thread_queue_Enqueue_operation enqueue;
 
   /**
-   * @brief Thread queue extract operation.
+   * @brief This operation is used to extract the thread from the thread queue.
    *
-   * Called by object routines to extract a thread from a thread queue.
+   * The extract operation is intended for timeouts, thread restarts, and
+   * thread cancellation.  In SMP configurations, the extract operation does
+   * not ensure FIFO fairness across schedulers for priority queues.  The
+   * surrender operation should be used to dequeue a thread from the thread
+   * queue under normal conditions (no timeout, no thread restart, and no
+   * thread cancellation).
    */
   Thread_queue_Extract_operation extract;
 
   /**
-   * @brief Thread queue surrender operation.
+   * @brief This operation is used to dequeue the thread from the thread queue
+   *   and optionally surrender the thread queue from a previous owner to the
+   *   thread.
+   *
+   * In addition to the optional surrender, there is a subtle difference
+   * between the extract and dequeue of a thread from a thread queue.  In SMP
+   * configurations, FIFO fairness across schedulers for priority queues is
+   * only ensured by the dequeue done by the surrender operation and not by the
+   * extract operation.
    */
   Thread_queue_Surrender_operation surrender;
 
   /**
-   * @brief Thread queue first operation.
+   * @brief This operation returns the first thread on the thread queue.
+   *
+   * This operation may be called only when the thread queue contains at least
+   * one thread.  Use ::Thread_queue_Queue::heads to determine if a thread
+   * queue is empty.
    */
   Thread_queue_First_operation first;
 };

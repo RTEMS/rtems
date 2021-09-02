@@ -1396,12 +1396,33 @@ typedef struct {
     Wait_queue.Queue \
   )
 
+/**
+ * @brief The default thread queue operations are used when a thread is not
+ *   enqueued on a thread queue.
+ *
+ * The default operations may be used by _Thread_Priority_apply() and
+ * _Thread_Continue() if the thread is not enqueued on a thread queue.  The
+ * default operations do nothing.
+ */
 extern const Thread_queue_Operations _Thread_queue_Operations_default;
 
+/**
+ * @brief The FIFO thread queue operations are used when a thread is enqueued
+ *   on a thread queue and provide FIFO ordering of enqueued threads.
+ */
 extern const Thread_queue_Operations _Thread_queue_Operations_FIFO;
 
+/**
+ * @brief The FIFO thread queue operations are used when a thread is enqueued
+ *   on a thread queue and provide priority ordering of enqueued threads.
+ */
 extern const Thread_queue_Operations _Thread_queue_Operations_priority;
 
+/**
+ * @brief The FIFO thread queue operations are used when a thread is enqueued
+ *   on a thread queue and provide priority ordering of enqueued threads with
+ *   support for priority inheritance.
+ */
 extern const Thread_queue_Operations _Thread_queue_Operations_priority_inherit;
 
 /**
