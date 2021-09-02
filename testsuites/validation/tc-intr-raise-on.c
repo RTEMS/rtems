@@ -63,7 +63,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsIntrReqRaiseOn spec:/rtems/intr/req/raise-on
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -153,6 +153,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 3 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -332,21 +338,21 @@ static void CheckRaiseOn(
     T_rsc_success( sc );
 
     if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
-      T_false( IsPending( ctx ) );
+      Disable( ctx );
+      RaiseOn( ctx );
 
-      if ( attr->can_disable ) {
-        Disable( ctx );
-        RaiseOn( ctx );
-        T_true( IsPending( ctx ) );
+      /*
+       * Some interrupt controllers will signal a pending interrupt if it is
+       * disabled (for example ARM GIC), others will not signal a pending
+       * interrupt if it is disabled (for example Freescale/NXP MPIC).
+       */
+      (void) IsPending( ctx );
 
-        sc = rtems_interrupt_vector_enable( ctx->vector );
-        T_rsc_success( sc );
+      sc = rtems_interrupt_vector_enable( ctx->vector );
+      T_rsc_success( sc );
 
-        while ( ctx->interrupt_count < 1 ) {
-          /* Wait */
-        }
-      } else {
-        ++ctx->interrupt_count;
+      while ( ctx->interrupt_count < 1 ) {
+        /* Wait */
       }
 
       T_false( IsPending( ctx ) );
@@ -672,14 +678,25 @@ static inline RtemsIntrReqRaiseOn_Entry RtemsIntrReqRaiseOn_PopEntry(
   ];
 }
 
+static void RtemsIntrReqRaiseOn_SetPreConditionStates(
+  RtemsIntrReqRaiseOn_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+
+  if ( ctx->Map.entry.Pre_CanRaiseOn_NA ) {
+    ctx->Map.pcs[ 2 ] = RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA;
+  } else {
+    ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+  }
+}
+
 static void RtemsIntrReqRaiseOn_TestVariant( RtemsIntrReqRaiseOn_Context *ctx )
 {
   RtemsIntrReqRaiseOn_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqRaiseOn_Pre_CPU_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_CanRaiseOn_NA ? RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA : ctx->Map.pcs[ 2 ]
-  );
+  RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsIntrReqRaiseOn_Action( ctx );
   RtemsIntrReqRaiseOn_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqRaiseOn_Post_Pending_Check( ctx, ctx->Map.entry.Post_Pending );
@@ -697,19 +714,19 @@ T_TEST_CASE_FIXTURE( RtemsIntrReqRaiseOn, &RtemsIntrReqRaiseOn_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsIntrReqRaiseOn_Pre_Vector_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsIntrReqRaiseOn_Pre_Vector_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsIntrReqRaiseOn_Pre_Vector_Valid;
+    ctx->Map.pci[ 0 ] < RtemsIntrReqRaiseOn_Pre_Vector_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsIntrReqRaiseOn_Pre_CPU_Online;
-      ctx->Map.pcs[ 1 ] < RtemsIntrReqRaiseOn_Pre_CPU_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsIntrReqRaiseOn_Pre_CPU_Online;
+      ctx->Map.pci[ 1 ] < RtemsIntrReqRaiseOn_Pre_CPU_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Yes;
-        ctx->Map.pcs[ 2 ] < RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = RtemsIntrReqRaiseOn_Pre_CanRaiseOn_Yes;
+        ctx->Map.pci[ 2 ] < RtemsIntrReqRaiseOn_Pre_CanRaiseOn_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         ctx->Map.entry = RtemsIntrReqRaiseOn_PopEntry( ctx );
 
@@ -717,6 +734,7 @@ T_TEST_CASE_FIXTURE( RtemsIntrReqRaiseOn, &RtemsIntrReqRaiseOn_Fixture )
           continue;
         }
 
+        RtemsIntrReqRaiseOn_SetPreConditionStates( ctx );
         RtemsIntrReqRaiseOn_TestVariant( ctx );
       }
     }

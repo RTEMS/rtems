@@ -63,7 +63,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsIntrReqClear spec:/rtems/intr/req/clear
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -133,6 +133,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 2 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -560,13 +566,23 @@ static inline RtemsIntrReqClear_Entry RtemsIntrReqClear_PopEntry(
   ];
 }
 
+static void RtemsIntrReqClear_SetPreConditionStates(
+  RtemsIntrReqClear_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+
+  if ( ctx->Map.entry.Pre_CanClear_NA ) {
+    ctx->Map.pcs[ 1 ] = RtemsIntrReqClear_Pre_CanClear_NA;
+  } else {
+    ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+  }
+}
+
 static void RtemsIntrReqClear_TestVariant( RtemsIntrReqClear_Context *ctx )
 {
   RtemsIntrReqClear_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  RtemsIntrReqClear_Pre_CanClear_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_CanClear_NA ? RtemsIntrReqClear_Pre_CanClear_NA : ctx->Map.pcs[ 1 ]
-  );
+  RtemsIntrReqClear_Pre_CanClear_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsIntrReqClear_Action( ctx );
   RtemsIntrReqClear_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqClear_Post_Cleared_Check( ctx, ctx->Map.entry.Post_Cleared );
@@ -584,16 +600,17 @@ T_TEST_CASE_FIXTURE( RtemsIntrReqClear, &RtemsIntrReqClear_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsIntrReqClear_Pre_Vector_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsIntrReqClear_Pre_Vector_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsIntrReqClear_Pre_Vector_Valid;
+    ctx->Map.pci[ 0 ] < RtemsIntrReqClear_Pre_Vector_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsIntrReqClear_Pre_CanClear_Yes;
-      ctx->Map.pcs[ 1 ] < RtemsIntrReqClear_Pre_CanClear_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsIntrReqClear_Pre_CanClear_Yes;
+      ctx->Map.pci[ 1 ] < RtemsIntrReqClear_Pre_CanClear_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       ctx->Map.entry = RtemsIntrReqClear_PopEntry( ctx );
+      RtemsIntrReqClear_SetPreConditionStates( ctx );
       RtemsIntrReqClear_TestVariant( ctx );
     }
   }

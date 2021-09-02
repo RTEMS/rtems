@@ -62,7 +62,7 @@
  * @defgroup RTEMSTestCaseRtemsIntrReqGetAttributes \
  *   spec:/rtems/intr/req/get-attributes
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */

@@ -27,6 +27,7 @@ source:
 - testsuites/validation/tc-clock-set.c
 - testsuites/validation/tc-cpuuse.c
 - testsuites/validation/tc-events.c
+- testsuites/validation/tc-intr.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c

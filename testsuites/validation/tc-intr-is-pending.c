@@ -63,7 +63,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsIntrReqIsPending spec:/rtems/intr/req/is-pending
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -151,6 +151,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 3 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -284,14 +290,21 @@ static void CheckIsPending(
   if ( has_installed_entries ) {
     /*
      * We cannot test this vector thoroughly, since it is used by a device
-     * driver.
+     * driver.  It may be pending or not.  For example in SMP configurations,
+     * it may be pending while being serviced right now on another processor.
      */
-    T_false( IsPending( ctx ) );
+    (void) IsPending( ctx );
   } else if ( !attr->is_maskable ) {
     /* We can only safely test maskable interrupts */
     T_false( IsPending( ctx ) );
+  } else if ( IsPending( ctx ) ) {
+    /*
+     * If there is already an interrupt pending, then it is probably raised
+     * by a peripheral which we cannot control.
+     */
   } else if (
-    attr->can_disable && ( attr->can_clear || attr->cleared_by_acknowledge )
+    attr->can_raise && attr->can_disable &&
+    ( attr->can_clear || attr->cleared_by_acknowledge )
   ) {
     rtems_interrupt_entry entry;
     rtems_interrupt_level level;
@@ -307,19 +320,21 @@ static void CheckIsPending(
     T_rsc_success( sc );
 
     if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
-      if ( attr->can_disable ) {
-        Disable( ctx );
-        Raise( ctx );
-        T_true( IsPending( ctx ) );
+      Disable( ctx );
+      Raise( ctx );
 
-        sc = rtems_interrupt_vector_enable( ctx->vector );
-        T_rsc_success( sc );
+      /*
+       * Some interrupt controllers will signal a pending interrupt if it is
+       * disabled (for example ARM GIC), others will not signal a pending
+       * interrupt if it is disabled (for example Freescale/NXP MPIC).
+       */
+      (void) IsPending( ctx );
 
-        while ( ctx->interrupt_count < 1 ) {
-          /* Wait */
-        }
-      } else {
-        ++ctx->interrupt_count;
+      sc = rtems_interrupt_vector_enable( ctx->vector );
+      T_rsc_success( sc );
+
+      while ( ctx->interrupt_count < 1 ) {
+        /* Wait */
       }
 
       rtems_interrupt_local_disable( level );
@@ -593,16 +608,27 @@ static inline RtemsIntrReqIsPending_Entry RtemsIntrReqIsPending_PopEntry(
   ];
 }
 
+static void RtemsIntrReqIsPending_SetPreConditionStates(
+  RtemsIntrReqIsPending_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+
+  if ( ctx->Map.entry.Pre_IsPending_NA ) {
+    ctx->Map.pcs[ 2 ] = RtemsIntrReqIsPending_Pre_IsPending_NA;
+  } else {
+    ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+  }
+}
+
 static void RtemsIntrReqIsPending_TestVariant(
   RtemsIntrReqIsPending_Context *ctx
 )
 {
   RtemsIntrReqIsPending_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqIsPending_Pre_Pending_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsIntrReqIsPending_Pre_IsPending_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_IsPending_NA ? RtemsIntrReqIsPending_Pre_IsPending_NA : ctx->Map.pcs[ 2 ]
-  );
+  RtemsIntrReqIsPending_Pre_IsPending_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsIntrReqIsPending_Action( ctx );
   RtemsIntrReqIsPending_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqIsPending_Post_IsPending_Check(
@@ -623,21 +649,22 @@ T_TEST_CASE_FIXTURE( RtemsIntrReqIsPending, &RtemsIntrReqIsPending_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsIntrReqIsPending_Pre_Vector_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsIntrReqIsPending_Pre_Vector_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsIntrReqIsPending_Pre_Vector_Valid;
+    ctx->Map.pci[ 0 ] < RtemsIntrReqIsPending_Pre_Vector_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsIntrReqIsPending_Pre_Pending_Obj;
-      ctx->Map.pcs[ 1 ] < RtemsIntrReqIsPending_Pre_Pending_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsIntrReqIsPending_Pre_Pending_Obj;
+      ctx->Map.pci[ 1 ] < RtemsIntrReqIsPending_Pre_Pending_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsIntrReqIsPending_Pre_IsPending_Yes;
-        ctx->Map.pcs[ 2 ] < RtemsIntrReqIsPending_Pre_IsPending_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = RtemsIntrReqIsPending_Pre_IsPending_Yes;
+        ctx->Map.pci[ 2 ] < RtemsIntrReqIsPending_Pre_IsPending_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         ctx->Map.entry = RtemsIntrReqIsPending_PopEntry( ctx );
+        RtemsIntrReqIsPending_SetPreConditionStates( ctx );
         RtemsIntrReqIsPending_TestVariant( ctx );
       }
     }

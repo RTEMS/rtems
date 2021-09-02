@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/validation/tc-intr-clear.c
+- testsuites/validation/tc-intr-entry-install.c
+- testsuites/validation/tc-intr-entry-remove.c
+- testsuites/validation/tc-intr-get-affinity.c
+- testsuites/validation/tc-intr-get-attributes.c
+- testsuites/validation/tc-intr-handler-iterate.c
+- testsuites/validation/tc-intr-is-pending.c
+- testsuites/validation/tc-intr-raise.c
+- testsuites/validation/tc-intr-raise-on.c
+- testsuites/validation/tc-intr-set-affinity.c
+- testsuites/validation/tc-intr-vector-disable.c
+- testsuites/validation/tc-intr-vector-enable.c
+- testsuites/validation/tc-intr-vector-is-enabled.c
+- testsuites/validation/ts-validation-intr.c
+stlib: []
+target: testsuites/validation/ts-validation-intr.exe
+type: build
+use-after: []
+use-before: []

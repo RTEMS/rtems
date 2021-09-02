@@ -63,7 +63,7 @@
  * @defgroup RTEMSTestCaseRtemsIntrReqEntryInstall \
  *   spec:/rtems/intr/req/entry-install
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -174,9 +174,14 @@ typedef struct {
   bool initialized_during_setup;
 
   /**
-   * @brief If this member is true, then an interrupt occurred.
+   * @brief This member provides a counter for handler invocations.
    */
-  bool interrupt_occurred;
+  uint32_t handler_counter;
+
+  /**
+   * @brief This member provides a counter snapshot for each entry.
+   */
+  uint32_t counter_by_entry[ 3 ];;
 
   /**
    * @brief This member provides the vector number of a testable interrupt
@@ -271,6 +276,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 8 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -409,29 +420,66 @@ static void Install(
   ctx->other_installed = true;
 }
 
-static void OtherRoutine( void *arg )
+static void Routine( Context *ctx, uint32_t counter )
 {
-  Context          *ctx;
   rtems_status_code sc;
 
-  (void) arg;
-  ctx = T_fixture_context();
-  sc = rtems_interrupt_vector_disable( ctx->test_vector );
-  T_rsc_success( sc );
+  ctx->handler_counter = counter;
 
-  ctx->interrupt_occurred = true;
+  if (
+    ctx->attributes.can_clear &&
+    !ctx->attributes.cleared_by_acknowledge
+  ) {
+    sc = rtems_interrupt_clear( ctx->test_vector );
+    T_rsc_success( sc );
+  }
+
+  if ( counter > 3 ) {
+    sc = rtems_interrupt_vector_disable( ctx->test_vector );
+    T_rsc_success( sc );
+  }
 }
 
 static void EntryRoutine( void *arg )
 {
-  T_eq_ptr( arg, &entry_arg );
-  OtherRoutine( NULL );
+  Context *ctx;
+  uint32_t counter;
+
+  ctx = T_fixture_context();
+  counter = ctx->handler_counter + 1;
+
+  if ( arg == &other_arg ) {
+    ctx->counter_by_entry[ 1 ] = counter;
+  } else {
+    ctx->counter_by_entry[ 0 ] = counter;
+    T_eq_ptr( arg, &entry_arg );
+  }
+
+  Routine( ctx, counter );
+}
+
+static void OtherRoutine( void *arg )
+{
+  Context *ctx;
+  uint32_t counter;
+
+  (void) arg;
+  ctx = T_fixture_context();
+  counter = ctx->handler_counter + 1;
+  ctx->counter_by_entry[ 1 ] = counter;
+  Routine( ctx, counter );
 }
 
 static void ThirdRoutine( void *arg )
 {
+  Context *ctx;
+  uint32_t counter;
+
+  ctx = T_fixture_context();
+  counter = ctx->handler_counter + 1;
+  ctx->counter_by_entry[ 2 ] = counter;
   T_eq_ptr( arg, &third_arg );
-  OtherRoutine( NULL );
+  Routine( ctx, counter );
 }
 
 static void InstallThird( Context *ctx )
@@ -489,6 +537,11 @@ static void Action( void *arg )
     &ctx->enabled_after
   );
   T_rsc_success( sc );
+
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    sc = rtems_interrupt_raise( ctx->test_vector );
+    T_rsc_success( sc );
+  }
 }
 
 static void VisitInstalled(
@@ -940,7 +993,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
        * The enabled status of the interrupt vector specified by ``vector``
        * shall not be modified by the rtems_interrupt_entry_install() call.
        */
-      if ( !ctx->interrupt_occurred ) {
+      if ( ctx->handler_counter == 0 ) {
         T_eq( ctx->enabled_before, ctx->enabled_after );
       }
       break;
@@ -950,9 +1003,7 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
       /*
        * The interrupt vector specified by ``vector`` shall be enabled.
        */
-      if ( ctx->attributes.can_enable ) {
-        T_true( ctx->enabled_after || ctx->interrupt_occurred );
-      }
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
       break;
     }
 
@@ -960,10 +1011,13 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
       /*
        * The interrupt vector specified by ``vector`` may be enabled.
        */
-      /* The comment of pre-condition ``CanEnable`` for the ``Yes`` state. */
-      if ( ctx->attributes.can_enable ) {
-        T_true( ctx->enabled_after || ctx->interrupt_occurred );
-      }
+      /*
+       * Interrupt vectors which cannot be enabled are not selected as a
+       * testable interrupt vector by GetTestableInterruptVector(), so this
+       * path is not validated by this test.  See also comment for
+       * ``CanEnable`` pre-condition state ``Yes``.
+       */
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
       break;
     }
 
@@ -973,8 +1027,11 @@ static void RtemsIntrReqEntryInstall_Post_Enable_Check(
        */
       /*
        * Interrupt vectors which cannot be enabled are not selected as a
-       * testable interrupt vector by GetTestableInterruptVector().
+       * testable interrupt vector by GetTestableInterruptVector(), so this
+       * path is not validated by this test.  See also comment for
+       * ``CanEnable`` pre-condition state ``Yes``.
        */
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
       break;
     }
 
@@ -997,6 +1054,24 @@ static void RtemsIntrReqEntryInstall_Post_Installed_Check(
     ctx
   );
   T_rsc_success( sc );
+
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    uint32_t counter;
+
+    counter = 1;
+
+    if ( ctx->other_installed ) {
+      T_eq_u32( ctx->counter_by_entry[ 1 ], counter );
+      ++counter;
+    }
+
+    if ( ctx->third_installed ) {
+      T_eq_u32( ctx->counter_by_entry[ 2 ], counter );
+      ++counter;
+    }
+
+    T_eq_u32( ctx->counter_by_entry[ 0 ], counter );
+  }
 
   switch ( state ) {
     case RtemsIntrReqEntryInstall_Post_Installed_No: {
@@ -1038,10 +1113,13 @@ static void RtemsIntrReqEntryInstall_Setup(
   RtemsIntrReqEntryInstall_Context *ctx
 )
 {
+  rtems_interrupt_attributes required = {
+    .can_raise = true
+  };
   rtems_status_code sc;
 
   ctx->initialized_during_setup = bsp_interrupt_is_initialized();
-  ctx->test_vector = GetTestableInterruptVector( NULL );
+  ctx->test_vector = GetTestableInterruptVector( &required );
   sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
   T_rsc_success( sc );
 }
@@ -1059,7 +1137,13 @@ static void RtemsIntrReqEntryInstall_Prepare(
   RtemsIntrReqEntryInstall_Context *ctx
 )
 {
-  ctx->interrupt_occurred = false;
+  size_t i;
+
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->counter_by_entry ); ++i ) {
+    ctx->counter_by_entry[ i ] = 0;
+  }
+
+  ctx->handler_counter = 0;
   ctx->other_installed = false;
   ctx->third_installed = false;
 }
@@ -1254,6 +1338,36 @@ static inline RtemsIntrReqEntryInstall_Entry RtemsIntrReqEntryInstall_PopEntry(
   ];
 }
 
+static void RtemsIntrReqEntryInstall_SetPreConditionStates(
+  RtemsIntrReqEntryInstall_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+  ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+
+  if ( ctx->Map.entry.Pre_Routine_NA ) {
+    ctx->Map.pcs[ 3 ] = RtemsIntrReqEntryInstall_Pre_Routine_NA;
+  } else {
+    ctx->Map.pcs[ 3 ] = ctx->Map.pci[ 3 ];
+  }
+
+  ctx->Map.pcs[ 4 ] = ctx->Map.pci[ 4 ];
+  ctx->Map.pcs[ 5 ] = ctx->Map.pci[ 5 ];
+
+  if ( ctx->Map.entry.Pre_CanEnable_NA ) {
+    ctx->Map.pcs[ 6 ] = RtemsIntrReqEntryInstall_Pre_CanEnable_NA;
+  } else {
+    ctx->Map.pcs[ 6 ] = ctx->Map.pci[ 6 ];
+  }
+
+  if ( ctx->Map.entry.Pre_Installed_NA ) {
+    ctx->Map.pcs[ 7 ] = RtemsIntrReqEntryInstall_Pre_Installed_NA;
+  } else {
+    ctx->Map.pcs[ 7 ] = ctx->Map.pci[ 7 ];
+  }
+}
+
 static void RtemsIntrReqEntryInstall_TestVariant(
   RtemsIntrReqEntryInstall_Context *ctx
 )
@@ -1261,20 +1375,11 @@ static void RtemsIntrReqEntryInstall_TestVariant(
   RtemsIntrReqEntryInstall_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqEntryInstall_Pre_Options_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsIntrReqEntryInstall_Pre_Entry_Prepare( ctx, ctx->Map.pcs[ 2 ] );
-  RtemsIntrReqEntryInstall_Pre_Routine_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_Routine_NA ? RtemsIntrReqEntryInstall_Pre_Routine_NA : ctx->Map.pcs[ 3 ]
-  );
+  RtemsIntrReqEntryInstall_Pre_Routine_Prepare( ctx, ctx->Map.pcs[ 3 ] );
   RtemsIntrReqEntryInstall_Pre_Init_Prepare( ctx, ctx->Map.pcs[ 4 ] );
   RtemsIntrReqEntryInstall_Pre_ISR_Prepare( ctx, ctx->Map.pcs[ 5 ] );
-  RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_CanEnable_NA ? RtemsIntrReqEntryInstall_Pre_CanEnable_NA : ctx->Map.pcs[ 6 ]
-  );
-  RtemsIntrReqEntryInstall_Pre_Installed_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_Installed_NA ? RtemsIntrReqEntryInstall_Pre_Installed_NA : ctx->Map.pcs[ 7 ]
-  );
+  RtemsIntrReqEntryInstall_Pre_CanEnable_Prepare( ctx, ctx->Map.pcs[ 6 ] );
+  RtemsIntrReqEntryInstall_Pre_Installed_Prepare( ctx, ctx->Map.pcs[ 7 ] );
   RtemsIntrReqEntryInstall_Action( ctx );
   RtemsIntrReqEntryInstall_Post_Status_Check(
     ctx,
@@ -1305,46 +1410,47 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsIntrReqEntryInstall_Pre_Vector_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsIntrReqEntryInstall_Pre_Vector_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsIntrReqEntryInstall_Pre_Vector_Valid;
+    ctx->Map.pci[ 0 ] < RtemsIntrReqEntryInstall_Pre_Vector_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsIntrReqEntryInstall_Pre_Options_Unique;
-      ctx->Map.pcs[ 1 ] < RtemsIntrReqEntryInstall_Pre_Options_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsIntrReqEntryInstall_Pre_Options_Unique;
+      ctx->Map.pci[ 1 ] < RtemsIntrReqEntryInstall_Pre_Options_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsIntrReqEntryInstall_Pre_Entry_Obj;
-        ctx->Map.pcs[ 2 ] < RtemsIntrReqEntryInstall_Pre_Entry_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = RtemsIntrReqEntryInstall_Pre_Entry_Obj;
+        ctx->Map.pci[ 2 ] < RtemsIntrReqEntryInstall_Pre_Entry_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         for (
-          ctx->Map.pcs[ 3 ] = RtemsIntrReqEntryInstall_Pre_Routine_Valid;
-          ctx->Map.pcs[ 3 ] < RtemsIntrReqEntryInstall_Pre_Routine_NA;
-          ++ctx->Map.pcs[ 3 ]
+          ctx->Map.pci[ 3 ] = RtemsIntrReqEntryInstall_Pre_Routine_Valid;
+          ctx->Map.pci[ 3 ] < RtemsIntrReqEntryInstall_Pre_Routine_NA;
+          ++ctx->Map.pci[ 3 ]
         ) {
           for (
-            ctx->Map.pcs[ 4 ] = RtemsIntrReqEntryInstall_Pre_Init_Yes;
-            ctx->Map.pcs[ 4 ] < RtemsIntrReqEntryInstall_Pre_Init_NA;
-            ++ctx->Map.pcs[ 4 ]
+            ctx->Map.pci[ 4 ] = RtemsIntrReqEntryInstall_Pre_Init_Yes;
+            ctx->Map.pci[ 4 ] < RtemsIntrReqEntryInstall_Pre_Init_NA;
+            ++ctx->Map.pci[ 4 ]
           ) {
             for (
-              ctx->Map.pcs[ 5 ] = RtemsIntrReqEntryInstall_Pre_ISR_Yes;
-              ctx->Map.pcs[ 5 ] < RtemsIntrReqEntryInstall_Pre_ISR_NA;
-              ++ctx->Map.pcs[ 5 ]
+              ctx->Map.pci[ 5 ] = RtemsIntrReqEntryInstall_Pre_ISR_Yes;
+              ctx->Map.pci[ 5 ] < RtemsIntrReqEntryInstall_Pre_ISR_NA;
+              ++ctx->Map.pci[ 5 ]
             ) {
               for (
-                ctx->Map.pcs[ 6 ] = RtemsIntrReqEntryInstall_Pre_CanEnable_Yes;
-                ctx->Map.pcs[ 6 ] < RtemsIntrReqEntryInstall_Pre_CanEnable_NA;
-                ++ctx->Map.pcs[ 6 ]
+                ctx->Map.pci[ 6 ] = RtemsIntrReqEntryInstall_Pre_CanEnable_Yes;
+                ctx->Map.pci[ 6 ] < RtemsIntrReqEntryInstall_Pre_CanEnable_NA;
+                ++ctx->Map.pci[ 6 ]
               ) {
                 for (
-                  ctx->Map.pcs[ 7 ] = RtemsIntrReqEntryInstall_Pre_Installed_None;
-                  ctx->Map.pcs[ 7 ] < RtemsIntrReqEntryInstall_Pre_Installed_NA;
-                  ++ctx->Map.pcs[ 7 ]
+                  ctx->Map.pci[ 7 ] = RtemsIntrReqEntryInstall_Pre_Installed_None;
+                  ctx->Map.pci[ 7 ] < RtemsIntrReqEntryInstall_Pre_Installed_NA;
+                  ++ctx->Map.pci[ 7 ]
                 ) {
                   ctx->Map.entry = RtemsIntrReqEntryInstall_PopEntry( ctx );
+                  RtemsIntrReqEntryInstall_SetPreConditionStates( ctx );
                   RtemsIntrReqEntryInstall_Prepare( ctx );
                   RtemsIntrReqEntryInstall_TestVariant( ctx );
                   RtemsIntrReqEntryInstall_Cleanup( ctx );

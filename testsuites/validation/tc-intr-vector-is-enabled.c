@@ -64,7 +64,7 @@
  * @defgroup RTEMSTestCaseRtemsIntrReqVectorIsEnabled \
  *   spec:/rtems/intr/req/vector-is-enabled
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -153,6 +153,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 3 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -584,16 +590,27 @@ RtemsIntrReqVectorIsEnabled_PopEntry(
   ];
 }
 
+static void RtemsIntrReqVectorIsEnabled_SetPreConditionStates(
+  RtemsIntrReqVectorIsEnabled_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+
+  if ( ctx->Map.entry.Pre_IsEnabled_NA ) {
+    ctx->Map.pcs[ 2 ] = RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_NA;
+  } else {
+    ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+  }
+}
+
 static void RtemsIntrReqVectorIsEnabled_TestVariant(
   RtemsIntrReqVectorIsEnabled_Context *ctx
 )
 {
   RtemsIntrReqVectorIsEnabled_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
   RtemsIntrReqVectorIsEnabled_Pre_Enabled_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-  RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_IsEnabled_NA ? RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_NA : ctx->Map.pcs[ 2 ]
-  );
+  RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   RtemsIntrReqVectorIsEnabled_Action( ctx );
   RtemsIntrReqVectorIsEnabled_Post_Status_Check(
     ctx,
@@ -620,21 +637,22 @@ T_TEST_CASE_FIXTURE(
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsIntrReqVectorIsEnabled_Pre_Vector_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsIntrReqVectorIsEnabled_Pre_Vector_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsIntrReqVectorIsEnabled_Pre_Vector_Valid;
+    ctx->Map.pci[ 0 ] < RtemsIntrReqVectorIsEnabled_Pre_Vector_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsIntrReqVectorIsEnabled_Pre_Enabled_Obj;
-      ctx->Map.pcs[ 1 ] < RtemsIntrReqVectorIsEnabled_Pre_Enabled_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsIntrReqVectorIsEnabled_Pre_Enabled_Obj;
+      ctx->Map.pci[ 1 ] < RtemsIntrReqVectorIsEnabled_Pre_Enabled_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_Yes;
-        ctx->Map.pcs[ 2 ] < RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_Yes;
+        ctx->Map.pci[ 2 ] < RtemsIntrReqVectorIsEnabled_Pre_IsEnabled_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         ctx->Map.entry = RtemsIntrReqVectorIsEnabled_PopEntry( ctx );
+        RtemsIntrReqVectorIsEnabled_SetPreConditionStates( ctx );
         RtemsIntrReqVectorIsEnabled_TestVariant( ctx );
       }
     }

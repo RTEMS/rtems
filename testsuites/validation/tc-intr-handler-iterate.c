@@ -63,7 +63,7 @@
  * @defgroup RTEMSTestCaseRtemsIntrReqHandlerIterate \
  *   spec:/rtems/intr/req/handler-iterate
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */

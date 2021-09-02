@@ -63,7 +63,7 @@
 /**
  * @defgroup RTEMSTestCaseRtemsIntrReqRaise spec:/rtems/intr/req/raise
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationIntr
  *
  * @{
  */
@@ -133,6 +133,12 @@ typedef struct {
   rtems_status_code status;
 
   struct {
+    /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 2 ];
+
     /**
      * @brief This member defines the pre-condition states for the next action.
      */
@@ -304,21 +310,21 @@ static void CheckRaise(
     T_rsc_success( sc );
 
     if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
-      T_false( IsPending( ctx ) );
+      Disable( ctx );
+      Raise( ctx );
 
-      if ( attr->can_disable ) {
-        Disable( ctx );
-        Raise( ctx );
-        T_true( IsPending( ctx ) );
+      /*
+       * Some interrupt controllers will signal a pending interrupt if it is
+       * disabled (for example ARM GIC), others will not signal a pending
+       * interrupt if it is disabled (for example Freescale/NXP MPIC).
+       */
+      (void) IsPending( ctx );
 
-        sc = rtems_interrupt_vector_enable( ctx->vector );
-        T_rsc_success( sc );
+      sc = rtems_interrupt_vector_enable( ctx->vector );
+      T_rsc_success( sc );
 
-        while ( ctx->interrupt_count < 1 ) {
-          /* Wait */
-        }
-      } else {
-        ++ctx->interrupt_count;
+      while ( ctx->interrupt_count < 1 ) {
+        /* Wait */
       }
 
       T_false( IsPending( ctx ) );
@@ -550,13 +556,23 @@ static inline RtemsIntrReqRaise_Entry RtemsIntrReqRaise_PopEntry(
   ];
 }
 
+static void RtemsIntrReqRaise_SetPreConditionStates(
+  RtemsIntrReqRaise_Context *ctx
+)
+{
+  ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+
+  if ( ctx->Map.entry.Pre_CanRaise_NA ) {
+    ctx->Map.pcs[ 1 ] = RtemsIntrReqRaise_Pre_CanRaise_NA;
+  } else {
+    ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+  }
+}
+
 static void RtemsIntrReqRaise_TestVariant( RtemsIntrReqRaise_Context *ctx )
 {
   RtemsIntrReqRaise_Pre_Vector_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-  RtemsIntrReqRaise_Pre_CanRaise_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_CanRaise_NA ? RtemsIntrReqRaise_Pre_CanRaise_NA : ctx->Map.pcs[ 1 ]
-  );
+  RtemsIntrReqRaise_Pre_CanRaise_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   RtemsIntrReqRaise_Action( ctx );
   RtemsIntrReqRaise_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
   RtemsIntrReqRaise_Post_Pending_Check( ctx, ctx->Map.entry.Post_Pending );
@@ -574,16 +590,17 @@ T_TEST_CASE_FIXTURE( RtemsIntrReqRaise, &RtemsIntrReqRaise_Fixture )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = RtemsIntrReqRaise_Pre_Vector_Valid;
-    ctx->Map.pcs[ 0 ] < RtemsIntrReqRaise_Pre_Vector_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = RtemsIntrReqRaise_Pre_Vector_Valid;
+    ctx->Map.pci[ 0 ] < RtemsIntrReqRaise_Pre_Vector_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = RtemsIntrReqRaise_Pre_CanRaise_Yes;
-      ctx->Map.pcs[ 1 ] < RtemsIntrReqRaise_Pre_CanRaise_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = RtemsIntrReqRaise_Pre_CanRaise_Yes;
+      ctx->Map.pci[ 1 ] < RtemsIntrReqRaise_Pre_CanRaise_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       ctx->Map.entry = RtemsIntrReqRaise_PopEntry( ctx );
+      RtemsIntrReqRaise_SetPreConditionStates( ctx );
       RtemsIntrReqRaise_TestVariant( ctx );
     }
   }
