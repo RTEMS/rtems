@@ -4,7 +4,6 @@
  * @ingroup RTEMSScoreRBTree
  *
  * @brief This source file contains the implementation of
- *   _RBTree_Minimum(), _RBTree_Maximum(), _RBTree_Successor(), and
  *   _RBTree_Predecessor().
  */
 
@@ -40,9 +39,9 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/basedefs.h>
 
-RB_GENERATE_NEXT( RBTree_Control, RBTree_Node, Node, static )
+RB_GENERATE_PREV( RBTree_Control, RBTree_Node, Node, static inline )
 
-RBTree_Node *_RBTree_Successor( const RBTree_Node *node )
+RBTree_Node *_RBTree_Predecessor( const RBTree_Node *node )
 {
-  return RB_NEXT( RBTree_Control, NULL, RTEMS_DECONST( RBTree_Node *, node ) );
+  return RB_PREV( RBTree_Control, NULL, RTEMS_DECONST( RBTree_Node *, node ) );
 }

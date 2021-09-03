@@ -1472,8 +1472,11 @@ source:
 - cpukit/score/src/rbtreeextract.c
 - cpukit/score/src/rbtreeinsert.c
 - cpukit/score/src/rbtreeiterate.c
+- cpukit/score/src/rbtreemax.c
+- cpukit/score/src/rbtreemin.c
 - cpukit/score/src/rbtreenext.c
 - cpukit/score/src/rbtreepostorder.c
+- cpukit/score/src/rbtreeprev.c
 - cpukit/score/src/rbtreereplace.c
 - cpukit/score/src/sched.c
 - cpukit/score/src/scheduler.c
