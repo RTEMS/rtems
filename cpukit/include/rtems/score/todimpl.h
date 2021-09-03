@@ -116,6 +116,15 @@ extern "C" {
   (4 * TOD_SECONDS_PER_DAY))
 
 /**
+ * @brief Seconds from 1970-01-01T00:00:00Z to 2400-01-01T00:00:00Z.
+ *
+ * This is the latest time of day which should be set by _TOD_Set().  The year
+ * 2400 was chosen to guarantee a defined CLOCK_REALTIME within the range of a
+ * system uptime of about 114 years.
+ */
+#define TOD_SECONDS_1970_THROUGH_2400 13569465600
+
+/**
  *  @brief Earliest year to which an time of day can be initialized.
  *
  *  The following constant define the earliest year to which an

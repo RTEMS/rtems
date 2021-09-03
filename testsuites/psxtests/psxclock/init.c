@@ -131,6 +131,20 @@ static rtems_task Init(
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EINVAL );
 
+  puts( "Init: clock_settime - 2400-01-01T00:00:00.999999999Z SUCCESSFUL" );
+  tv.tv_sec = 13569465600;
+  tv.tv_nsec = 999999999;
+  sc = clock_settime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( sc == 0 );
+
+  puts( "Init: clock_settime - 2400-01-01T00:00:01Z EINVAL" );
+  tv.tv_sec = 13569465601;
+  tv.tv_nsec = 0;
+  errno = 0;
+  sc = clock_settime( CLOCK_REALTIME, &tv );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EINVAL );
+
   puts( "Init: clock_settime - far future EINVAL" );
   tv.tv_sec = 17179869184;
   tv.tv_nsec = 0;

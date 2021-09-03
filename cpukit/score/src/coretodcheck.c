@@ -51,7 +51,7 @@ Status_Control _TOD_Is_valid_new_time_of_day( const struct timespec *tod )
     return STATUS_INVALID_NUMBER;
   }
 
-  if ( _Watchdog_Is_far_future_timespec( tod ) ) {
+  if ( tod->tv_sec > TOD_SECONDS_1970_THROUGH_2400 ) {
     return STATUS_INVALID_NUMBER;
   }
 
