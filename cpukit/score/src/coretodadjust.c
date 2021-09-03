@@ -42,7 +42,12 @@ Status_Control _TOD_Adjust(
   _TOD_Acquire( &lock_context );
   _TOD_Get( &tod );
   _Timespec_Add_to( &tod, delta );
-  status = _TOD_Set( &tod, &lock_context );
+  status = _TOD_Is_valid_new_time_of_day( &tod );
+
+  if ( status == STATUS_SUCCESSFUL ) {
+    status = _TOD_Set( &tod, &lock_context );
+  }
+
   _TOD_Unlock();
 
   return status;

@@ -41,6 +41,11 @@ int clock_settime(
   if ( clock_id == CLOCK_REALTIME ) {
     ISR_lock_Context lock_context;
 
+    status = _TOD_Is_valid_new_time_of_day( tp );
+    if ( status != STATUS_SUCCESSFUL ) {
+      rtems_set_errno_and_return_minus_one( STATUS_GET_POSIX( status ) );
+    }
+
     _TOD_Lock();
     _TOD_Acquire( &lock_context );
       status = _TOD_Set( tp, &lock_context );

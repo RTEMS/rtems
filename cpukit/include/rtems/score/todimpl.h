@@ -207,12 +207,24 @@ static inline void _TOD_Release( ISR_lock_Context *lock_context )
 }
 
 /**
+ * @brief Checks the time point is a valid new time of day for _TOD_Set().
+ *
+ * @param tod the time of day to check.
+ *
+ * @retval STATUS_SUCCESSFUL The time of day is valid.
+ *
+ * @retval STATUS_INVALID_NUMBER The time of day is invalid.
+ */
+Status_Control _TOD_Is_valid_new_time_of_day( const struct timespec *tod );
+
+/**
  * @brief Sets the time of day.
  *
  * The caller must be the owner of the TOD lock.
  *
  * @param tod The new time of day in timespec format representing
- *   the time since UNIX Epoch.
+ *   the time since UNIX Epoch.  The new time of day shall be valid according
+ *   to _TOD_Is_valid_new_time_of_day().
  * @param lock_context The ISR lock context used for the corresponding
  *   _TOD_Acquire().  The caller must be the owner of the TOD lock.  This
  *   function will release the TOD lock.

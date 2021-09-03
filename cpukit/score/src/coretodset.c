@@ -23,25 +23,6 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/watchdogimpl.h>
 
-static Status_Control _TOD_Check_time_of_day_and_run_hooks(
-  const struct timespec *tod
-)
-{
-  if ( !_Watchdog_Is_valid_timespec( tod ) ) {
-    return STATUS_INVALID_NUMBER;
-  }
-
-  if ( tod->tv_sec < TOD_SECONDS_1970_THROUGH_1988 ) {
-    return STATUS_INVALID_NUMBER;
-  }
-
-  if ( _Watchdog_Is_far_future_timespec( tod ) ) {
-    return STATUS_INVALID_NUMBER;
-  }
-
-  return _TOD_Hook_Run( TOD_ACTION_SET_CLOCK, tod );
-}
-
 Status_Control _TOD_Set(
   const struct timespec *tod,
   ISR_lock_Context      *lock_context
@@ -54,8 +35,9 @@ Status_Control _TOD_Set(
   Status_Control  status;
 
   _Assert( _TOD_Is_owner() );
+  _Assert( _TOD_Is_valid_new_time_of_day( tod ) == STATUS_SUCCESSFUL );
 
-  status = _TOD_Check_time_of_day_and_run_hooks( tod );
+  status = _TOD_Hook_Run( TOD_ACTION_SET_CLOCK, tod );
   if ( status != STATUS_SUCCESSFUL ) {
     _TOD_Release( lock_context );
     return status;
