@@ -1005,7 +1005,6 @@ librtemscpu_a_SOURCES += score/src/timespecdividebyinteger.c
 librtemscpu_a_SOURCES += score/src/timespecgetasnanoseconds.c
 librtemscpu_a_SOURCES += score/src/coretod.c
 librtemscpu_a_SOURCES += score/src/coretodset.c
-librtemscpu_a_SOURCES += score/src/coretodtickspersec.c
 librtemscpu_a_SOURCES += score/src/coretodadjust.c
 librtemscpu_a_SOURCES += score/src/watchdoginsert.c
 librtemscpu_a_SOURCES += score/src/coretodhookdata.c

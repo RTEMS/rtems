@@ -24,6 +24,7 @@
 #include <rtems/score/timestamp.h>
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogticks.h>
 
 #include <sys/time.h>
 #include <time.h>
@@ -296,26 +297,9 @@ static inline uint32_t _TOD_Seconds_since_epoch( void )
 }
 
 /**
- * @brief Gets number of ticks in a second.
- *
- * This method returns the number of ticks in a second.
- *
- * @note If the clock tick value does not multiply evenly into a second
- *       then this number of ticks will be slightly shorter than a second.
- *
- * @return The number of ticks in a second.
- */
-uint32_t TOD_TICKS_PER_SECOND_method(void);
-
-/**
  *  @brief Gets number of ticks in a second.
- *
- *  This method exists to hide the fact that TOD_TICKS_PER_SECOND can not
- *  be implemented as a macro in a .h file due to visibility issues.
- *  The Configuration Table is not available to SuperCore .h files but
- *  is available to their .c files.
  */
-#define TOD_TICKS_PER_SECOND TOD_TICKS_PER_SECOND_method()
+#define TOD_TICKS_PER_SECOND _Watchdog_Ticks_per_second
 
 /**
  * @brief This routine returns a timeval based upon the internal timespec

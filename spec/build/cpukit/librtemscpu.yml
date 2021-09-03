@@ -1395,7 +1395,6 @@ source:
 - cpukit/score/src/coretodhookrun.c
 - cpukit/score/src/coretodhookunregister.c
 - cpukit/score/src/coretodset.c
-- cpukit/score/src/coretodtickspersec.c
 - cpukit/score/src/debugisthreaddispatchingallowed.c
 - cpukit/score/src/freechain.c
 - cpukit/score/src/futex.c
