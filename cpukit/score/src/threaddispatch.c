@@ -5,7 +5,7 @@
  *
  * @brief This source file contains the definition of ::_Thread_Allocated_fp
  *   and ::_User_extensions_Switches_list and the implementation of
- *   _Thread_Dispatch(), _Thread_Dispatch_direct(), _Thread_Dispatch_enable(),
+ *   _Thread_Dispatch_direct(), _Thread_Dispatch_enable(),
  *   and _Thread_Do_dispatch().
  */
 
@@ -325,25 +325,6 @@ post_switch:
   _ISR_Local_enable( level );
 
   _Thread_Run_post_switch_actions( executing );
-}
-
-void _Thread_Dispatch( void )
-{
-  ISR_Level        level;
-  Per_CPU_Control *cpu_self;
-
-  _ISR_Local_disable( level );
-
-  cpu_self = _Per_CPU_Get();
-
-  if ( cpu_self->dispatch_necessary ) {
-    _Profiling_Thread_dispatch_disable( cpu_self, 0 );
-    _Assert( cpu_self->thread_dispatch_disable_level == 0 );
-    cpu_self->thread_dispatch_disable_level = 1;
-    _Thread_Do_dispatch( cpu_self, level );
-  } else {
-    _ISR_Local_enable( level );
-  }
 }
 
 void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self )

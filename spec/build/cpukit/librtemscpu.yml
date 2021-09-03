@@ -1543,6 +1543,7 @@ source:
 - cpukit/score/src/threaditerate.c
 - cpukit/score/src/threadloadenv.c
 - cpukit/score/src/threadname.c
+- cpukit/score/src/threadplaindispatch.c
 - cpukit/score/src/threadq.c
 - cpukit/score/src/threadqenqueue.c
 - cpukit/score/src/threadqextractwithproxy.c
