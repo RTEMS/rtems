@@ -51,15 +51,31 @@ rtems_status_code _TOD_Validate(
   ticks_per_second = rtems_clock_get_ticks_per_second();
   ticks_mask = (uint32_t) ticks_validation;
 
-  if ( ( ( the_tod->ticks & ticks_mask ) >= ticks_per_second ) ||
-      (the_tod->second >= TOD_SECONDS_PER_MINUTE) ||
-      (the_tod->minute >= TOD_MINUTES_PER_HOUR)   ||
-      (the_tod->hour   >= TOD_HOURS_PER_DAY)      ||
-      (the_tod->month  == 0)                      ||
-      (the_tod->month  >  TOD_MONTHS_PER_YEAR)    ||
-      (the_tod->year   <  TOD_BASE_YEAR)          ||
-      (the_tod->year   >  TOD_LATEST_YEAR)        ||
-      (the_tod->day    == 0) ) {
+  if ( ( the_tod->ticks & ticks_mask ) >= ticks_per_second ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->second >= TOD_SECONDS_PER_MINUTE ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->minute >= TOD_MINUTES_PER_HOUR ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->hour >= TOD_HOURS_PER_DAY ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->month == 0 || the_tod->month > TOD_MONTHS_PER_YEAR ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->year < TOD_BASE_YEAR || the_tod->year > TOD_LATEST_YEAR ) {
+    return RTEMS_INVALID_CLOCK;
+  }
+
+  if ( the_tod->day == 0 ) {
     return RTEMS_INVALID_CLOCK;
   }
 
