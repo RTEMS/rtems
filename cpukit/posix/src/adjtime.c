@@ -44,6 +44,7 @@ int adjtime(
 )
 {
   struct timespec delta_as_timespec;
+  Status_Control  status;
 
   /*
    * Simple validations
@@ -83,7 +84,10 @@ int adjtime(
   /*
    * Now apply the adjustment
    */
-  _TOD_Adjust( &delta_as_timespec );
+  status = _TOD_Adjust( &delta_as_timespec );
+  if ( status != STATUS_SUCCESSFUL ) {
+    rtems_set_errno_and_return_minus_one( STATUS_GET_POSIX( status ) );
+  }
 
   return 0;
 }

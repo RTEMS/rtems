@@ -337,8 +337,11 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
  * specified amount.
  *
  * @param delta is the amount to adjust.
+ *
+ * @retval STATUS_SUCCESSFUL Successful operation.
+ * @retval other Some error occurred.
  */
-void _TOD_Adjust(
+Status_Control _TOD_Adjust(
   const struct timespec *delta
 );
 

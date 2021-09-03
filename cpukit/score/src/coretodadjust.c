@@ -22,12 +22,13 @@
 
 #include <rtems/score/todimpl.h>
 
-void _TOD_Adjust(
+Status_Control _TOD_Adjust(
   const struct timespec *delta
 )
 {
   ISR_lock_Context lock_context;
   struct timespec  tod;
+  Status_Control   status;
 
   /*
    * Currently, RTEMS does the adjustment in one movement.
@@ -41,6 +42,8 @@ void _TOD_Adjust(
   _TOD_Acquire( &lock_context );
   _TOD_Get( &tod );
   _Timespec_Add_to( &tod, delta );
-  _TOD_Set( &tod, &lock_context );
+  status = _TOD_Set( &tod, &lock_context );
   _TOD_Unlock();
+
+  return status;
 }
