@@ -101,10 +101,13 @@ extern "C" {
  * range-checked, and an error is returned if any one is out of its valid
  * range.
  *
- * RTEMS can represent time points of this clock in nanoseconds ranging from
- * 1988-01-01T00:00:00.000000000Z to 2514-05-31T01:53:03.999999999Z.  The
- * future uptime of the system shall be in this range, otherwise the system
- * behaviour is undefined.
+ * RTEMS can represent time points of the CLOCK_REALTIME clock in nanoseconds
+ * ranging from 1988-01-01T00:00:00.000000000Z to
+ * 2514-05-31T01:53:03.999999999Z.  The future uptime of the system shall be in
+ * this range, otherwise the system behaviour is undefined.  Due to
+ * implementation constraints, the time of day set by the directive shall be
+ * before 2100-01-01:00:00.000000000Z.  The latest valid time of day accepted
+ * by the POSIX clock_settime() is 2400-01-01T00:00:00.999999999Z.
  *
  * The specified time is based on the configured clock tick rate, see the
  * #CONFIGURE_MICROSECONDS_PER_TICK application configuration option.
@@ -133,6 +136,12 @@ extern "C" {
  *
  * * The directive may unblock a task.  This may cause the calling task to be
  *   preempted.
+ *
+ * * The time of day set by the directive shall be
+ *   1988-01-01T00:00:00.000000000Z or later.
+ *
+ * * The time of day set by the directive shall be before
+ *   2100-01-01T00:00:00.000000000Z.
  * @endparblock
  */
 rtems_status_code rtems_clock_set( const rtems_time_of_day *time_of_day );
