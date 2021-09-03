@@ -142,12 +142,16 @@ extern "C" {
  *  32 bits can accept as latest point in time 2106-Feb-7 6:28:15
  *  but to simplify the implementation, is was decided to only
  *  check that the year is not greater than the year of this constant.
+ *  The year 2099 was chosen because all years evenly divisible by 4 from 1988
+ *  to 2099 are leap years.  In this time frame, years evenly divisible by 100
+ *  are no leap years unless they are evenly divisible by 400.  Thus the year
+ *  2000 is a leap year.
  *
- *  The internal realtime clock can run centuries longer but in
+ *  The internal CLOCK_REALTIME can run centuries longer but in
  *  contrast to the POSIX API, the RTEMS Classic API does not
  *  support this for efficiency reasons.
  */
-#define TOD_LATEST_YEAR 2105
+#define TOD_LATEST_YEAR 2099
 
 /**
  * @addtogroup RTEMSScoreTOD
@@ -174,6 +178,14 @@ typedef struct {
  * @brief TOD Management information
  */
 extern TOD_Control _TOD;
+
+/**
+ * @brief This array contains the number of days in all months up to the month
+ *   indicated by the index of the second dimension.
+ *
+ * The first dimension should be 0 for leap years, and 1 otherwise.
+ */
+extern const uint16_t _TOD_Days_to_date[ 2 ][ 13 ];
 
 /**
  * @brief Locks the time of day mutex.
@@ -213,6 +225,21 @@ static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
 static inline void _TOD_Release( ISR_lock_Context *lock_context )
 {
   _Timecounter_Release( lock_context );
+}
+
+/**
+ * @brief Maps the year to the leap year index.
+ *
+ * @param year is the year to map.
+ *
+ * @retval 0 The year is a leap year.
+ *
+ * @retval 1 The year is not a leap year.
+ */
+static inline size_t _TOD_Get_leap_year_index( uint32_t year )
+{
+  _Assert( year % 4 != 0 || year % 100 != 0 || year % 400 == 0 );
+  return ( ( year % 4 ) + 3 ) / 4;
 }
 
 /**

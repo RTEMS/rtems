@@ -26,13 +26,13 @@
 
 /*
  *  The following array contains the number of days in all months.
- *  The first dimension should be 1 for leap years, and 0 otherwise.
+ *  The first dimension should be 0 for leap years, and 1 otherwise.
  *  The second dimension should range from 1 to 12 for January to
- *  February, respectively.
+ *  December, respectively.
  */
-const uint32_t   _TOD_Days_per_month[ 2 ][ 13 ] = {
-  { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-  { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+static const uint32_t _TOD_Days_per_month[ 2 ][ 13 ] = {
+  { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+  { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 };
 
 rtems_status_code _TOD_Validate(
@@ -40,6 +40,7 @@ rtems_status_code _TOD_Validate(
   TOD_Ticks_validation     ticks_validation
 )
 {
+  size_t  leap_year_index;
   uint32_t days_in_month;
   uint32_t ticks_per_second;
   uint32_t ticks_mask;
@@ -79,11 +80,8 @@ rtems_status_code _TOD_Validate(
     return RTEMS_INVALID_CLOCK;
   }
 
-  if (((the_tod->year % 4) == 0 && (the_tod->year % 100 != 0)) ||
-     (the_tod->year % 400 == 0))
-    days_in_month = _TOD_Days_per_month[ 1 ][ the_tod->month ];
-  else
-    days_in_month = _TOD_Days_per_month[ 0 ][ the_tod->month ];
+  leap_year_index = _TOD_Get_leap_year_index( the_tod->year );
+  days_in_month = _TOD_Days_per_month[ leap_year_index ][ the_tod->month ];
 
   if ( the_tod->day > days_in_month ) {
     return RTEMS_INVALID_CLOCK;

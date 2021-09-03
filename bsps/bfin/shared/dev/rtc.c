@@ -22,11 +22,6 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/rtems/clockimpl.h>
 
-/* The following are inside RTEMS -- we are violating visibility!!!
- * Perhaps an API could be defined to get days since 1 Jan.
- */
-extern const uint16_t   _TOD_Days_to_date[2][13];
-
 /*
  *  Prototypes and routines used below
  */
@@ -75,7 +70,7 @@ int setRealTime(
   tod_temp = *tod;
 
   days = (tod_temp.year - TOD_BASE_YEAR) * 365 + \
-          _TOD_Days_to_date[0][tod_temp.month] + tod_temp.day - 1;
+          _TOD_Days_to_date[1][tod_temp.month] + tod_temp.day - 1;
   if (tod_temp.month < 3)
     days +=  Leap_years_until_now (tod_temp.year - 1);
   else
@@ -115,7 +110,7 @@ void getRealTime(
 
   /* finding month and day */
   Leap_year = (((!(tod_temp.year%4)) && (tod_temp.year%100)) ||
-              (!(tod_temp.year%400)))?1:0;
+              (!(tod_temp.year%400)))?0:1;
   for (n=1; n<=12; n++) {
     if (days <= _TOD_Days_to_date[Leap_year][n+1]) {
       tod_temp.month = n;

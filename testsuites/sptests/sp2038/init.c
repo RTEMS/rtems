@@ -143,13 +143,7 @@ static const uint32_t sample_seconds [] = {
   3979434495UL,
   4011056895UL,
   4042592895UL,
-  4074128895UL,
-  4105664895UL,
-  4137200895UL,
-  4168736895UL,
-  4200272895UL,
-  4231808895UL,
-  4263431295UL
+  4074128895UL
 };
 
 static const rtems_time_of_day nearly_problem_2038 = {
@@ -177,24 +171,6 @@ static const rtems_time_of_day tod_to_seconds_base = {
   .hour = 6,
   .minute = 28,
   .second = 15
-};
-
-static const rtems_time_of_day nearly_problem_2106 = {
-  .year = 2105,
-  .month = 12,
-  .day = 31,
-  .hour = 23,
-  .minute = 59,
-  .second = 59
-};
-
-static const rtems_time_of_day problem_2106 = {
-  .year = 2106,
-  .month = 1,
-  .day = 1,
-  .hour = 0,
-  .minute = 0,
-  .second = 0
 };
 
 static const rtems_time_of_day problem_2100 = {
@@ -242,24 +218,15 @@ static void test_tod_to_seconds(void)
 static void test_problem_year(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  time_t zero = 0;
-  time_t one = 1;
-  time_t maybe_negative = zero - one;
   bool time_t_is_32_bit = sizeof(time_t) == 4;
-  bool time_t_is_signed = maybe_negative < zero;
 
   if (time_t_is_32_bit) {
     const rtems_time_of_day *nearly_problem = NULL;
     const rtems_time_of_day *problem = NULL;
     rtems_time_of_day now;
 
-    if (time_t_is_signed) {
-      nearly_problem = &nearly_problem_2038;
-      problem = &problem_2038;
-    } else {
-      nearly_problem = &nearly_problem_2106;
-      problem = &problem_2106;
-    }
+    nearly_problem = &nearly_problem_2038;
+    problem = &problem_2038;
 
     sc = rtems_clock_set(nearly_problem);
     ASSERT_SC(sc);
@@ -282,7 +249,7 @@ static void test_leap_year(void)
     const rtems_time_of_day *problem2 = &problem_2100_2;
     // 2100 is not a leap year, so it should have 28 days
     test_status = _TOD_Validate(problem, TOD_ENABLE_TICKS_VALIDATION);
-    rtems_test_assert(test_status == RTEMS_SUCCESSFUL);
+    rtems_test_assert(test_status == RTEMS_INVALID_CLOCK);
     test_status = _TOD_Validate(problem2, TOD_ENABLE_TICKS_VALIDATION);
     rtems_test_assert(test_status == RTEMS_INVALID_CLOCK);
 }
@@ -309,7 +276,7 @@ static void test_every_day(void)
     rtems_status_code sc = RTEMS_SUCCESSFUL;
     rtems_time_of_day now;
 
-    for (every_day.year = 1988; every_day.year <= 2100; ++every_day.year) {
+    for (every_day.year = 1988; every_day.year <= 2099; ++every_day.year) {
         int leap_year = test_year_is_leap_year(every_day.year) ? 1 : 0;
         for (every_day.month = 1; every_day.month <= 12; ++every_day.month) {
             int days = days_per_month[leap_year][every_day.month - 1];

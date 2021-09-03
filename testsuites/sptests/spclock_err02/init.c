@@ -89,7 +89,7 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_get_tod" );
   print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
-  build_time( &time, 12, 31, 2100, 23, 59, 59, 0 );
+  build_time( &time, 12, 31, 2099, 23, 59, 59, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
@@ -98,10 +98,10 @@ rtems_task Init(
   directive_failed( status, "rtems_clock_set" );
   print_time( "TA1 - rtems_clock_get_tod - ", &time, " - RTEMS_SUCCESSFUL\n" );
 
-  build_time( &time, 12, 31, 2099, 23, 59, 59, 0 );
+  build_time( &time, 1, 1, 2100, 0, 0, 0, 0 );
   status = rtems_clock_set( &time );
-  directive_failed( status, "rtems_clock_set" );
-  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_SUCCESSFUL\n" );
+  fatal_directive_status( status, RTEMS_INVALID_CLOCK, "rtems_clock_set" );
+  print_time( "TA1 - rtems_clock_set - ", &time, " - RTEMS_INVALID_CLOCK\n" );
   status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
   status = rtems_clock_get_tod( &time );
   directive_failed( status, "rtems_clock_set" );

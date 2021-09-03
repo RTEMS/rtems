@@ -32,8 +32,6 @@
 #define RTEMS_DAYS_PER_YEAR   (365UL)
 #define RTEMS_YEAR_BASE       (1970UL)
 
-extern const uint16_t _TOD_Days_to_date[2][13];
-
 static bool _Leap_year(
   uint32_t year
 )
@@ -64,9 +62,9 @@ static uint32_t _Year_day_as_month(
   uint32_t        month = 0;
 
   if ( _Leap_year( year ) )
-    days_to_date = _TOD_Days_to_date[1];
-  else
     days_to_date = _TOD_Days_to_date[0];
+  else
+    days_to_date = _TOD_Days_to_date[1];
 
   days_to_date += 2;
 
