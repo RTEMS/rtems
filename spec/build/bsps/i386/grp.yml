@@ -15,7 +15,6 @@ install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
   - bsps/i386/include/bsp/apic.h
-  - bsps/i386/include/bsp/irq.h
   - bsps/i386/include/bsp/irq_asm.h
   - bsps/i386/include/bsp/realmode_int.h
   - bsps/i386/include/bsp/smp-imps.h

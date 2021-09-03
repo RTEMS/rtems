@@ -19,6 +19,7 @@ install:
   - bsps/i386/pc386/include/bsp/exar17d15x.h
   - bsps/i386/pc386/include/bsp/fb_default_mode.h
   - bsps/i386/pc386/include/bsp/fb_vesa.h
+  - bsps/i386/pc386/include/bsp/irq.h
   - bsps/i386/pc386/include/bsp/rtd316.h
   - bsps/i386/pc386/include/bsp/tblsizes.h
   - bsps/i386/pc386/include/bsp/vbe3.h
