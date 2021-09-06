@@ -29,7 +29,7 @@ QUICKREF
 #include <string.h>
 #include "local.h"
 
-#define LBLOCKSIZE (sizeof(long))
+#define LBLOCKSIZE (__SIZEOF_LONG__)
 #define UNALIGNED(X)   ((long)X & (LBLOCKSIZE - 1))
 #define TOO_SMALL(LEN) ((LEN) < LBLOCKSIZE)
 
@@ -42,7 +42,9 @@ memset (void *m,
   char *s = (char *) m;
 
 #if !defined(PREFER_SIZE_OVER_SPEED) && !defined(__OPTIMIZE_SIZE__)
+#if LBLOCKSIZE > 4
   unsigned int i;
+#endif
   unsigned long buffer;
   unsigned long *aligned_addr;
   unsigned int d = c & 0xff;	/* To avoid sign extension, copy C to an
@@ -65,8 +67,10 @@ memset (void *m,
          we can set large blocks quickly.  */
       buffer = (d << 8) | d;
       buffer |= (buffer << 16);
+#if LBLOCKSIZE > 4
       for (i = 32; i < LBLOCKSIZE * 8; i <<= 1)
         buffer = (buffer << i) | buffer;
+#endif
 
       /* Unroll the loop.  */
       while (n >= LBLOCKSIZE*4)
