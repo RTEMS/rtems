@@ -19,6 +19,8 @@ source:
 - testsuites/validation/tc-ratemon-timeout.c
 - testsuites/validation/tc-sem-delete.c
 - testsuites/validation/tc-sem-uni.c
+- testsuites/validation/tc-signal-catch.c
+- testsuites/validation/tc-signal-send.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/ts-validation-one-cpu-0.c
 stlib: []

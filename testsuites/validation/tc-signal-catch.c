@@ -63,8 +63,8 @@
 /**
  * @defgroup RTEMSTestCaseRtemsSignalReqCatch spec:/rtems/signal/req/catch
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
  *
  * @{
  */

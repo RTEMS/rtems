@@ -61,8 +61,8 @@
 /**
  * @defgroup RTEMSTestCaseRtemsSignalReqSend spec:/rtems/signal/req/send
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
  *
  * @{
  */
@@ -723,8 +723,10 @@ static void RtemsSignalReqSend_Action( RtemsSignalReqSend_Context *ctx )
   if ( ctx->id == ctx->worker_id ) {
     SendEventsToWorker( ctx, EVENT_START );
 
+    StartDelayThreadDispatch( 1 );
     ctx->status = rtems_signal_send( ctx->id, ctx->signal_set );
     ctx->calls_after_send = ctx->handler_calls;
+    StopDelayThreadDispatch( 1 );
 
     SendEventsToWorker( ctx, EVENT_SEND_DONE );
     ctx->calls_after_dispatch = ctx->handler_calls;

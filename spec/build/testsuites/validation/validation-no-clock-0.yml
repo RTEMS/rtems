@@ -70,6 +70,9 @@ source:
 - testsuites/validation/tc-sem-release.c
 - testsuites/validation/tc-sem-set-priority.c
 - testsuites/validation/tc-sem-timeout.c
+- testsuites/validation/tc-signal-catch.c
+- testsuites/validation/tc-signals.c
+- testsuites/validation/tc-signal-send.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c
@@ -79,6 +82,7 @@ source:
 - testsuites/validation/tr-sem-seize-try.c
 - testsuites/validation/tr-sem-seize-wait.c
 - testsuites/validation/tr-sem-surrender.c
+- testsuites/validation/tr-signal-constant.c
 - testsuites/validation/tr-tq-enqueue-ceiling.c
 - testsuites/validation/tr-tq-enqueue-deadlock.c
 - testsuites/validation/tr-tq-enqueue-fifo.c
