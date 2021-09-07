@@ -12,9 +12,9 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-task-construct.c
-- testsuites/validation/ts-validation-1.c
+- testsuites/validation/ts-validation-one-cpu-1.c
 stlib: []
-target: testsuites/validation/ts-validation-1.exe
+target: testsuites/validation/ts-validation-one-cpu-1.exe
 type: build
 use-after: []
 use-before: []

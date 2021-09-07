@@ -57,14 +57,16 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/threadimpl.h>
 
+#include "tx-support.h"
+
 #include <rtems/test.h>
 
 /**
  * @defgroup RTEMSTestCaseRtemsTaskReqCreateErrors \
  *   spec:/rtems/task/req/create-errors
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationOneCpu0
  *
  * @{
  */
@@ -280,8 +282,6 @@ static const char * const * const RtemsTaskReqCreateErrors_PreDesc[] = {
 
 #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-#define INVALID_ID 0xffffffff
-
 typedef RtemsTaskReqCreateErrors_Context Context;
 
 static rtems_status_code Create( void *arg, uint32_t *id )
@@ -419,7 +419,7 @@ static void RtemsTaskReqCreateErrors_Pre_Prio_Prepare(
       /*
        * While the ``initial_priority`` parameter is valid and non-zero.
        */
-      ctx->initial_priority = 254;
+      ctx->initial_priority = RTEMS_MAXIMUM_PRIORITY - 1;
       break;
     }
 
