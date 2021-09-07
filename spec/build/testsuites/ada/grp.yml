@@ -13,6 +13,7 @@ install: []
 ldflags:
 - -Wl,--wrap=printf
 - -Wl,--wrap=puts
+- -Wl,--wrap=putchar
 links:
 - role: build-dependency
   uid: optgnat
