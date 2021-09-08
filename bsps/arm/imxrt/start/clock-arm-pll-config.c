@@ -26,8 +26,15 @@
  */
 
 #include "fsl_clock_config.h"
+#include <bspopts.h>
 
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN = {
+#if (IMXRT_SPEEDGRADE == '6')
     .loopDivider = 100,
+#elif (IMXRT_SPEEDGRADE == '5')
+    .loopDivider = 88,
+#else
+    #error unknown speed grade of i.MXRT processor
+#endif
     .src = 0,
 };
