@@ -105,7 +105,6 @@ links:
   uid: linkcmdssdram
 - role: build-dependency
   uid: ../../bspopts
-source: []
 type: build
 use-after: []
 use-before: []

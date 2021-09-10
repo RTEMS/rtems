@@ -172,7 +172,6 @@ install:
 - destination: ${BSP_LIBDIR}
   source:
   - bsps/arm/stm32h7/start/bsp_specs
-ldflags: []
 links: []
 source:
 - bsps/arm/shared/cache/cache-v7m.c
