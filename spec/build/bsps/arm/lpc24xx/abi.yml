@@ -19,10 +19,10 @@ default-by-variant:
   - arm/lpc17xx_plx800_ram
   - arm/lpc17xx_plx800_rom_int
 - value:
-  - -mthumb
   - -mcpu=cortex-m4
-  - -mfpu=fpv4-sp-d16
+  - -mthumb
   - -mfloat-abi=hard
+  - -mfpu=auto
   variants:
   - arm/lpc40xx_ea_ram
   - arm/lpc40xx_ea_rom_int
