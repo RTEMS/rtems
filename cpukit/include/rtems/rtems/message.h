@@ -861,8 +861,8 @@ rtems_status_code rtems_message_queue_get_number_pending(
  * @param id is the queue identifier.
  *
  * @param[out] count is the pointer to an uint32_t object.  When the directive
- *   call is successful, the number of unblocked tasks will be stored in this
- *   object.
+ *   call is successful, the number of pending messages removed from the queue
+ *   will be stored in this object.
  *
  * This directive removes all pending messages from the queue specified by
  * ``id``.  The number of messages removed is returned in ``count``.  If no
