@@ -773,9 +773,6 @@ rtems_status_code rtems_message_queue_broadcast(
  *
  * @retval ::RTEMS_UNSATISFIED The queue was empty.
  *
- * @retval ::RTEMS_UNSATISFIED The queue was flushed while the calling task was
- *   waiting to receive a message.
- *
  * @retval ::RTEMS_TIMEOUT The timeout happened while the calling task was
  *   waiting to receive a message
  *
@@ -876,17 +873,22 @@ rtems_status_code rtems_message_queue_get_number_pending(
  *
  * @retval ::RTEMS_INVALID_ADDRESS The ``count`` parameter was NULL.
  *
+ * @par Notes
+ * The directive does not flush tasks waiting to receive a message from the
+ * wait queue of the message queue.
+ *
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
  *
- * * The directive may be called from within task context.
- *
  * * The directive may be called from within interrupt context.
  *
- * * When the directive operates on a remote object, the directive sends a
- *   message to the remote node and waits for a reply.  This will preempt the
- *   calling task.
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive will not cause the calling task to be preempted.
  * @endparblock
  */
 rtems_status_code rtems_message_queue_flush( rtems_id id, uint32_t *count );
