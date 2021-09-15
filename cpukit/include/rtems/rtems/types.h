@@ -71,16 +71,6 @@
 extern "C" {
 #endif
 
-/* Generated from spec:/rtems/req/group */
-
-/**
- * @defgroup RTEMSImplClassic Classic API
- *
- * @ingroup RTEMSImpl
- *
- * @brief This group contains the Classic API implementation.
- */
-
 /* Generated from spec:/rtems/type/if/group */
 
 /**

@@ -26,6 +26,14 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup RTEMSImplClassic Classic API
+ *
+ * @ingroup RTEMSImpl
+ *
+ * @brief This group contains the Classic API implementation.
+ */
+
+/**
  * @defgroup RTEMSImplClassicStatus Directive Status
  *
  * @ingroup RTEMSImplClassic
