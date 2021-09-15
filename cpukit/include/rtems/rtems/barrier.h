@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicBarrier
+ *
  * @brief This header file defines the Barrier Manager API.
  */
 

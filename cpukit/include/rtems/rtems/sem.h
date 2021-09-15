@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicSemaphore
+ *
  * @brief This header file defines the Semaphore Manager API.
  */
 

@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicTask
+ *
  * @brief This header file defines the main parts of the Tasks Manager API.
  */
 

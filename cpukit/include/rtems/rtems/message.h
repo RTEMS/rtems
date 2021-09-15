@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicMessage
+ *
  * @brief This header file defines the Message Manager API.
  */
 

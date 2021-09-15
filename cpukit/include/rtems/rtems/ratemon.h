@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicRateMonotonic
+ *
  * @brief This header file defines the Rate-Monotonic Manager API.
  */
 

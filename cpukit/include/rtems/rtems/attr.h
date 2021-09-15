@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicAttr
+ *
  * @brief This header file provides Classic API directive attributes.
  */
 

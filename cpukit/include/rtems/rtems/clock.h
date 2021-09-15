@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicClock
+ *
  * @brief This header file defines the Clock Manager API.
  */
 
