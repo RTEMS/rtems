@@ -39,6 +39,9 @@
 #endif
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/interr.h>
+#include <rtems/score/smpimpl.h>
+#include <rtems/sysinit.h>
 
 void _Scheduler_default_Pin_or_unpin_do_nothing(
   const Scheduler_Control *scheduler,
@@ -52,3 +55,19 @@ void _Scheduler_default_Pin_or_unpin_do_nothing(
   (void) node;
   (void) cpu;
 }
+
+static void _Scheduler_Ensure_exactly_one_processor( void )
+{
+  if ( _SMP_Get_processor_maximum() != 1 ) {
+    _Terminate(
+      RTEMS_FATAL_SOURCE_SMP,
+      SMP_FATAL_SCHEDULER_REQUIRES_EXACTLY_ONE_PROCESSOR
+    );
+  }
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Scheduler_Ensure_exactly_one_processor,
+  RTEMS_SYSINIT_SCHEDULER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

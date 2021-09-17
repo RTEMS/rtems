@@ -43,6 +43,7 @@ extern "C" {
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000500
 #define RTEMS_SYSINIT_MP_EARLY                   000600
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000700
+#define RTEMS_SYSINIT_SCHEDULER                  000780
 #define RTEMS_SYSINIT_MP                         000800
 #define RTEMS_SYSINIT_USER_EXTENSIONS            000900
 #define RTEMS_SYSINIT_CLASSIC_TASKS              000a00
