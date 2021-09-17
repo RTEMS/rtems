@@ -458,8 +458,19 @@ Priority_Control _Scheduler_default_Unmap_priority(
     Scheduler_Node          *node,
     struct Per_CPU_Control  *cpu
   );
+#endif
 
-  #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
+/**
+ * @brief This define provides a set of default implementations for
+ *   SMP-specific scheduler operations.
+ *
+ * The default implementations are intended for uniprocessor schedulers.  SMP
+ * schedulers shall implement the operations properly.
+ *
+ * If SMP support is disabled, the define evaluates to nothing.
+ */
+#if defined(RTEMS_SMP)
+  #define SCHEDULER_DEFAULT_SMP_OPERATIONS \
     _Scheduler_default_Ask_for_help, \
     _Scheduler_default_Reconsider_help_request, \
     _Scheduler_default_Withdraw_node, \
@@ -468,7 +479,7 @@ Priority_Control _Scheduler_default_Unmap_priority(
     NULL, \
     NULL,
 #else
-  #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP
+  #define SCHEDULER_DEFAULT_SMP_OPERATIONS
 #endif
 
 /**

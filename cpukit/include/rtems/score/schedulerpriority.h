@@ -52,7 +52,7 @@ extern "C" {
     _Scheduler_priority_Update_priority,  /* update priority entry point */ \
     _Scheduler_default_Map_priority,      /* map priority entry point */ \
     _Scheduler_default_Unmap_priority,    /* unmap priority entry point */ \
-    SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
+    SCHEDULER_DEFAULT_SMP_OPERATIONS \
     _Scheduler_priority_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy,      /* node destroy entry point */ \
     _Scheduler_default_Release_job,       /* new period of task */ \

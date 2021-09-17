@@ -61,7 +61,7 @@ extern "C" {
     _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
     _Scheduler_EDF_Map_priority,     /* map priority entry point */ \
     _Scheduler_EDF_Unmap_priority,   /* unmap priority entry point */ \
-    SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
+    SCHEDULER_DEFAULT_SMP_OPERATIONS \
     _Scheduler_EDF_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
