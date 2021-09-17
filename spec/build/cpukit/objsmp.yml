@@ -13,7 +13,6 @@ source:
 - cpukit/score/src/percpujobs.c
 - cpukit/score/src/percpustatewait.c
 - cpukit/score/src/profilingsmplock.c
-- cpukit/score/src/schedulerdefaultaskforhelp.c
 - cpukit/score/src/schedulerdefaultpinunpin.c
 - cpukit/score/src/schedulerdefaultpinunpindonothing.c
 - cpukit/score/src/schedulerdefaultsetaffinity.c

@@ -403,49 +403,6 @@ Priority_Control _Scheduler_default_Unmap_priority(
   /**
    * @brief Does nothing.
    *
-   * @param scheduler This parameter is unused.
-   * @param the_thread This parameter is unused.
-   * @param node This parameter is unused.
-   *
-   * @return Always returns false.
-   */
-  bool _Scheduler_default_Ask_for_help(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    Scheduler_Node          *node
-  );
-
-  /**
-   * @brief Does nothing.
-   *
-   * @param scheduler This parameter is unused.
-   * @param the_thread This parameter is unused.
-   * @param node This parameter is unused.
-   */
-  void _Scheduler_default_Reconsider_help_request(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    Scheduler_Node          *node
-  );
-
-  /**
-   * @brief Does nothing.
-   *
-   * @param scheduler This parameter is unused.
-   * @param the_thread This parameter is unused..
-   * @param node This parameter is unused.
-   * @param next_state This parameter is unused.
-   */
-  void _Scheduler_default_Withdraw_node(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *the_thread,
-    Scheduler_Node          *node,
-    Thread_Scheduler_state   next_state
-  );
-
-  /**
-   * @brief Does nothing.
-   *
    * This default implementation for the thread pin or unpin operations should
    * be used by uniprocessor schedulers if SMP support is enabled.
    *
@@ -489,12 +446,22 @@ Priority_Control _Scheduler_default_Unmap_priority(
  * schedulers shall implement the operations properly.
  *
  * If SMP support is disabled, the define evaluates to nothing.
+ *
+ * If SMP support is enabled and the system has exactly one processor, then it
+ * may use an uniprocessor scheduler.  The ask for help, reconsider help
+ * request, and withdraw node operations are NULL, since they are only used if
+ * a thread has at least one helping scheduler node.  At least two schedulers
+ * are required to get a helping node and each scheduler involved must own at
+ * least one processor.  This is not possible on a system with exactly one
+ * processor.  The processor add operation is NULL, since there is no other
+ * processor to add.  The processor remove operation is NULL, since the one and
+ * only processor cannot be removed.
  */
 #if defined(RTEMS_SMP)
   #define SCHEDULER_DEFAULT_SMP_OPERATIONS \
-    _Scheduler_default_Ask_for_help, \
-    _Scheduler_default_Reconsider_help_request, \
-    _Scheduler_default_Withdraw_node, \
+    NULL, \
+    NULL, \
+    NULL, \
     _Scheduler_default_Pin_or_unpin_do_nothing, \
     _Scheduler_default_Pin_or_unpin_do_nothing, \
     NULL, \
