@@ -35,6 +35,7 @@
 #include <time.h>
 
 #ifdef __rtems__
+#include <rtems.h>
 #include <rtems/counter.h>
 #include <rtems/score/timecounter.h>
 #endif
@@ -231,8 +232,52 @@ T_now_dummy(void)
 	    memory_order_relaxed);
 }
 
+#ifndef __rtems__
 T_time
 T_now_tick(void)
 {
 	return T_ticks_to_time(T_tick());
 }
+#else /* __rtems__ */
+#if defined(RTEMS_SMP)
+static rtems_interrupt_lock T_time_lock =
+  RTEMS_INTERRUPT_LOCK_INITIALIZER("Test Time Lock");
+#endif
+
+static T_ticks T_tick_last;
+
+static T_time T_tick_time;
+
+static bool T_tick_initialized;
+
+T_time
+T_now_tick(void)
+{
+	rtems_interrupt_lock_context lock_context;
+	T_ticks ticks;
+	T_time now;
+
+	ticks = T_tick();
+
+	rtems_interrupt_lock_acquire(&T_time_lock, &lock_context);
+
+	if (T_tick_initialized) {
+		T_ticks last;
+
+		last = T_tick_last;
+		T_tick_last = ticks;
+
+		now = T_tick_time;
+		now += T_ticks_to_time(ticks - last);
+		T_tick_time = now;
+	} else {
+		T_tick_initialized = true;
+		T_tick_last = ticks;
+		now = 0;
+	}
+
+	rtems_interrupt_lock_release(&T_time_lock, &lock_context);
+
+	return now;
+}
+#endif /* __rtems__ */
