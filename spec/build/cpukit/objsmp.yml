@@ -15,6 +15,7 @@ source:
 - cpukit/score/src/profilingsmplock.c
 - cpukit/score/src/schedulerdefaultaskforhelp.c
 - cpukit/score/src/schedulerdefaultpinunpin.c
+- cpukit/score/src/schedulerdefaultpinunpindonothing.c
 - cpukit/score/src/schedulerdefaultsetaffinity.c
 - cpukit/score/src/scheduleredfsmp.c
 - cpukit/score/src/schedulerpriorityaffinitysmp.c

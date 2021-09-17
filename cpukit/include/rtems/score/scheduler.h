@@ -444,15 +444,36 @@ Priority_Control _Scheduler_default_Unmap_priority(
   );
 
   /**
-   * @brief Does nothing in a single processor system, otherwise a fatal error
-   * is issued.
+   * @brief Does nothing.
+   *
+   * This default implementation for the thread pin or unpin operations should
+   * be used by uniprocessor schedulers if SMP support is enabled.
    *
    * @param scheduler This parameter is unused.
    * @param the_thread This parameter is unused.
    * @param node This parameter is unused.
    * @param cpu This parameter is unused.
    */
-  void _Scheduler_default_Pin_or_unpin(
+  void _Scheduler_default_Pin_or_unpin_do_nothing(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node,
+    struct Per_CPU_Control  *cpu
+  );
+
+  /**
+   * @brief Does nothing in a single processor system, otherwise a fatal error
+   * is issued.
+   *
+   * This default implementation for the thread pin or unpin operations should
+   * be used by SMP schedulers which do not support thread pinning.
+   *
+   * @param scheduler This parameter is unused.
+   * @param the_thread This parameter is unused.
+   * @param node This parameter is unused.
+   * @param cpu This parameter is unused.
+   */
+  void _Scheduler_default_Pin_or_unpin_not_supported(
     const Scheduler_Control *scheduler,
     Thread_Control          *the_thread,
     Scheduler_Node          *node,
@@ -474,8 +495,8 @@ Priority_Control _Scheduler_default_Unmap_priority(
     _Scheduler_default_Ask_for_help, \
     _Scheduler_default_Reconsider_help_request, \
     _Scheduler_default_Withdraw_node, \
-    _Scheduler_default_Pin_or_unpin, \
-    _Scheduler_default_Pin_or_unpin, \
+    _Scheduler_default_Pin_or_unpin_do_nothing, \
+    _Scheduler_default_Pin_or_unpin_do_nothing, \
     NULL, \
     NULL,
 #else

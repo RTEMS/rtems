@@ -75,8 +75,8 @@ typedef struct {
     _Scheduler_simple_SMP_Ask_for_help, \
     _Scheduler_simple_SMP_Reconsider_help_request, \
     _Scheduler_simple_SMP_Withdraw_node, \
-    _Scheduler_default_Pin_or_unpin, \
-    _Scheduler_default_Pin_or_unpin, \
+    _Scheduler_default_Pin_or_unpin_not_supported, \
+    _Scheduler_default_Pin_or_unpin_not_supported, \
     _Scheduler_simple_SMP_Add_processor, \
     _Scheduler_simple_SMP_Remove_processor, \
     _Scheduler_simple_SMP_Node_initialize, \

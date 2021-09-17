@@ -6,7 +6,7 @@
  * @ingroup RTEMSScoreScheduler
  *
  * @brief This source file contains the implementation of
- *   _Scheduler_default_Pin_or_unpin_not_supported().
+ *   _Scheduler_default_Pin_or_unpin_do_nothing().
  */
 
 /*
@@ -39,10 +39,8 @@
 #endif
 
 #include <rtems/score/scheduler.h>
-#include <rtems/score/interr.h>
-#include <rtems/score/smpimpl.h>
 
-void _Scheduler_default_Pin_or_unpin_not_supported(
+void _Scheduler_default_Pin_or_unpin_do_nothing(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
@@ -53,11 +51,4 @@ void _Scheduler_default_Pin_or_unpin_not_supported(
   (void) the_thread;
   (void) node;
   (void) cpu;
-
-  if ( _SMP_Get_processor_maximum() > 1 ) {
-    _Terminate(
-      RTEMS_FATAL_SOURCE_SMP,
-      SMP_FATAL_SCHEDULER_PIN_OR_UNPIN_NOT_SUPPORTED
-    );
-  }
 }
