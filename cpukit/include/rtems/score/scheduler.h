@@ -605,11 +605,23 @@ void _Scheduler_default_Start_idle(
     Scheduler_Node          *node,
     const Processor_mask    *affinity
   );
+#endif
 
-  #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
+/**
+ * @brief This define provides the default implementation for the
+ *   SMP-specific set affinity operation.
+ *
+ * The default implementation _Scheduler_default_Set_affinity() is intended for
+ * uniprocessor schedulers and SMP schedulers which only support an affinity to
+ * all online processors.
+ *
+ * If SMP support is disabled, the define evaluates to nothing.
+ */
+#if defined(RTEMS_SMP)
+  #define SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
     , _Scheduler_default_Set_affinity
 #else
-  #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY
+  #define SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION
 #endif
 
 /**

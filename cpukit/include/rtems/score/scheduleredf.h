@@ -68,7 +68,7 @@ extern "C" {
     _Scheduler_EDF_Cancel_job,       /* cancel period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
     _Scheduler_default_Start_idle    /* start idle entry point */ \
-    SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
+    SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
   }
 
 typedef struct {
