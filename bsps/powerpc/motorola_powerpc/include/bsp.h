@@ -31,11 +31,11 @@
 #include <rtems.h>
 #include <libcpu/io.h>
 #include <bsp/vectors.h>
-  
+
 #ifdef qemu
 #include <rtems/bspcmdline.h>
 #endif
-  
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -118,7 +118,33 @@ extern "C" {
 /*
  * The BSP has PCI devices. Enable support in LibBSD.
  */
-#define BSP_HAS_PCI
+#define BSP_HAS_PC_PCI
+
+/*
+ * Remap the PCI address space for LibBSD
+ */
+#define RTEMS_BSP_PCI_IO_REGION_BASE  0
+#define RTEMS_BSP_PCI_MEM_REGION_BASE PCI_DRAM_OFFSET
+
+/*
+ * Remap the PCI address space for LibBSD
+ */
+#define RTEMS_BSP_ADDR_PTR(_type) uint ## _type ## _t __volatile*
+#define RTEMS_BSP_ADDR_CPTR(_type) const RTEMS_BSP_ADDR_PTR(_type)
+#define RTEMS_BSP_ADDRESS_READ(_addr, _type) \
+       *((RTEMS_BSP_ADDR_CPTR(_type)) (((RTEMS_BSP_ADDR_CPTR(8)) _addr) + PCI_DRAM_OFFSET))
+#define RTEMS_BSP_ADDRESS_WRITE(_addr, _val, _type) \
+       *((RTEMS_BSP_ADDR_PTR(_type)) (((RTEMS_BSP_ADDR_PTR(8)) _addr) + PCI_DRAM_OFFSET)) = (_val)
+
+#define RTEMS_BSP_READ_1(_addr) RTEMS_BSP_ADDRESS_READ(_addr, 8)
+#define RTEMS_BSP_READ_2(_addr) RTEMS_BSP_ADDRESS_READ(_addr, 16)
+#define RTEMS_BSP_READ_4(_addr) RTEMS_BSP_ADDRESS_READ(_addr, 32)
+#define RTEMS_BSP_READ_8(_addr) RTEMS_BSP_ADDRESS_READ(_addr, 64)
+
+#define RTEMS_BSP_WRITE_1(_addr, _val) RTEMS_BSP_ADDRESS_WRITE(_addr, _val, 8)
+#define RTEMS_BSP_WRITE_2(_addr, _val) RTEMS_BSP_ADDRESS_WRITE(_addr, _val, 16)
+#define RTEMS_BSP_WRITE_4(_addr, _val) RTEMS_BSP_ADDRESS_WRITE(_addr, _val, 32)
+#define RTEMS_BSP_WRITE_8(_addr, _val) RTEMS_BSP_ADDRESS_WRITE(_addr, _val, 64)
 
 /*
  *  Base address definitions for several devices
