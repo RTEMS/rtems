@@ -72,6 +72,7 @@ source:
 - bsps/shared/dev/btimer/btimer-stub.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2.c
+- bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/dev/serial/console-termios-init.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/dev/serial/getserialmouseps2.c

@@ -64,40 +64,6 @@ void bsp_interrupt_dispatch(void)
   }
 }
 
-rtems_status_code bsp_interrupt_get_attributes(
-  rtems_vector_number         vector,
-  rtems_interrupt_attributes *attributes
-)
-{
-  attributes->is_maskable = true;
-  attributes->maybe_enable = true;
-  attributes->maybe_disable = true;
-  attributes->can_raise = true;
-
-  if ( vector <= ARM_GIC_IRQ_SGI_LAST ) {
-    /*
-     * It is implementation-defined whether implemented SGIs are permanently
-     * enabled, or can be enabled and disabled by writes to GICD_ISENABLER0 and
-     * GICD_ICENABLER0.
-     */
-    attributes->can_raise_on = true;
-    attributes->cleared_by_acknowledge = true;
-    attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
-  } else {
-    attributes->can_disable = true;
-    attributes->can_clear = true;
-    attributes->trigger_signal = RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL;
-
-    if ( vector > ARM_GIC_IRQ_PPI_LAST ) {
-      /* SPI */
-      attributes->can_get_affinity = true;
-      attributes->can_set_affinity = true;
-    }
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
 rtems_status_code bsp_interrupt_is_pending(
   rtems_vector_number vector,
   bool               *pending
@@ -348,8 +314,21 @@ rtems_status_code bsp_interrupt_set_affinity(
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
   uint8_t targets = (uint8_t) _Processor_mask_To_uint32_t(affinity, 0);
+  rtems_interrupt_attributes attr;
+  rtems_status_code sc;
+
+  memset( &attr, 0, sizeof( attr ) );
+  sc = bsp_interrupt_get_attributes( vector, &attr );
+
+  if ( sc ) {
+    return sc;
+  }
 
   if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
+    return RTEMS_UNSATISFIED;
+  }
+
+  if ( attr.can_set_affinity == 0 ) {
     return RTEMS_UNSATISFIED;
   }
 
@@ -364,12 +343,26 @@ rtems_status_code bsp_interrupt_get_affinity(
 {
   volatile gic_dist *dist = ARM_GIC_DIST;
   uint8_t targets;
+  rtems_interrupt_attributes attr;
+  rtems_status_code sc;
+
+  memset( &attr, 0, sizeof( attr ) );
+  sc = bsp_interrupt_get_attributes( vector, &attr );
+
+  if ( sc ) {
+    return sc;
+  }
 
   if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
     return RTEMS_UNSATISFIED;
   }
 
   targets = gic_id_get_targets(dist, vector);
+
+  if ( attr.can_get_affinity == 0 ) {
+    return RTEMS_UNSATISFIED;
+  }
+
   _Processor_mask_From_uint32_t(affinity, targets, 0);
   return RTEMS_SUCCESSFUL;
 }

@@ -100,6 +100,7 @@ source:
 - bsps/shared/dev/clock/arm-generic-timer.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2.c
+- bsps/shared/dev/irq/arm-gicv2-get-attributes.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bsp-fdt.c
