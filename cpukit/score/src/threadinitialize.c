@@ -101,17 +101,17 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
   const Thread_Configuration *config
 )
 {
-  Scheduler_Node          *scheduler_node;
+  Scheduler_Node          *home_scheduler_node;
 #if defined(RTEMS_SMP)
-  Scheduler_Node          *scheduler_node_for_index;
-  const Scheduler_Control *scheduler_for_index;
+  Scheduler_Node          *scheduler_node;
+  const Scheduler_Control *scheduler;
   size_t                   scheduler_index;
 #endif
 
 #if defined(RTEMS_SMP)
-  scheduler_node = NULL;
-  scheduler_node_for_index = the_thread->Scheduler.nodes;
-  scheduler_for_index = &_Scheduler_Table[ 0 ];
+  home_scheduler_node = NULL;
+  scheduler_node = the_thread->Scheduler.nodes;
+  scheduler = &_Scheduler_Table[ 0 ];
   scheduler_index = 0;
 
   /*
@@ -121,27 +121,27 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
    * configured.
    */
   while ( scheduler_index < _Scheduler_Count ) {
-    Priority_Control priority_for_index;
+    Priority_Control priority;
 
-    if ( scheduler_for_index == config->scheduler ) {
-      priority_for_index = config->priority;
-      scheduler_node = scheduler_node_for_index;
+    if ( scheduler == config->scheduler ) {
+      priority = config->priority;
+      home_scheduler_node = scheduler_node;
     } else {
       /*
        * Use the idle thread priority for the non-home scheduler instances by
        * default.
        */
-      priority_for_index = _Scheduler_Map_priority(
-        scheduler_for_index,
-        scheduler_for_index->maximum_priority
+      priority = _Scheduler_Map_priority(
+        scheduler,
+        scheduler->maximum_priority
       );
     }
 
     _Scheduler_Node_initialize(
-      scheduler_for_index,
-      scheduler_node_for_index,
+      scheduler,
+      scheduler_node,
       the_thread,
-      priority_for_index
+      priority
     );
 
     /*
@@ -149,9 +149,9 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
      * configuration, the _Scheduler_Node_size constant is used to get the next
      * scheduler node.  Using sizeof( Scheduler_Node ) would be wrong.
      */
-    scheduler_node_for_index = (Scheduler_Node *)
-      ( (uintptr_t) scheduler_node_for_index + _Scheduler_Node_size );
-    ++scheduler_for_index;
+    scheduler_node = (Scheduler_Node *)
+      ( (uintptr_t) scheduler_node + _Scheduler_Node_size );
+    ++scheduler;
     ++scheduler_index;
   }
 
@@ -159,23 +159,23 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
    * The thread is initialized to use exactly one scheduler node which is
    * provided by its home scheduler.
    */
-  _Assert( scheduler_node != NULL );
+  _Assert( home_scheduler_node != NULL );
   _Chain_Initialize_one(
     &the_thread->Scheduler.Wait_nodes,
-    &scheduler_node->Thread.Wait_node
+    &home_scheduler_node->Thread.Wait_node
   );
   _Chain_Initialize_one(
     &the_thread->Scheduler.Scheduler_nodes,
-    &scheduler_node->Thread.Scheduler_node.Chain
+    &home_scheduler_node->Thread.Scheduler_node.Chain
   );
 #else
   /*
    * In uniprocessor configurations, the thread has exactly one scheduler node.
    */
-  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
+  home_scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   _Scheduler_Node_initialize(
     config->scheduler,
-    scheduler_node,
+    home_scheduler_node,
     the_thread,
     config->priority
   );
@@ -189,7 +189,7 @@ static void _Thread_Initialize_scheduler_and_wait_nodes(
    */
   _Priority_Node_initialize( &the_thread->Real_priority, config->priority );
   _Priority_Initialize_one(
-    &scheduler_node->Wait.Priority,
+    &home_scheduler_node->Wait.Priority,
     &the_thread->Real_priority
   );
 
