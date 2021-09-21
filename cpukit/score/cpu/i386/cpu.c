@@ -215,16 +215,16 @@ void _CPU_Exception_frame_print (const CPU_Exception_frame *ctx)
 {
   unsigned int faultAddr = 0;
   printk("----------------------------------------------------------\n");
-  printk("Exception %" PRIu32 " caught at PC %" PRIx32 " by thread %" PRId32 "\n",
+  printk("Exception %" PRIu32 " caught at PC %" PRIx32 " by thread %" PRIx32 "\n",
 	 ctx->idtIndex,
 	 ctx->eip,
 	 _Thread_Executing->Object.id);
   printk("----------------------------------------------------------\n");
   printk("Processor execution context at time of the fault was  :\n");
   printk("----------------------------------------------------------\n");
-  printk(" EAX = %" PRIx32 "	EBX = %" PRIx32 "	ECX = %" PRIx32 "	EDX = %" PRIx32 "\n",
+  printk(" EAX =  0x%08" PRIx32 "	EBX =  0x%08" PRIx32 "	ECX =  0x%08" PRIx32 "	EDX =  0x%08" PRIx32 "\n",
 	 ctx->eax, ctx->ebx, ctx->ecx, ctx->edx);
-  printk(" ESI = %" PRIx32 "	EDI = %" PRIx32 "	EBP = %" PRIx32 "	ESP = %" PRIx32 "\n",
+  printk(" ESI = 0x%08" PRIx32 "	EDI =  0x%08" PRIx32 "	EBP =  0x%08" PRIx32 "	ESP =  0x%08" PRIx32 "\n",
 	 ctx->esi, ctx->edi, ctx->ebp, ctx->esp0);
   printk("----------------------------------------------------------\n");
   printk("Error code pushed by processor itself (if not 0) = %" PRIx32 "\n",
@@ -250,7 +250,7 @@ void _CPU_Exception_frame_print (const CPU_Exception_frame *ctx)
 	printk("Call Stack Trace of EIP:\n");
 	if ( fp ) {
 		for ( i=1; fp->up; fp=fp->up, i++ ) {
-			printk("0x%08" PRIx32 " ",fp->pc);
+			printk("0x%08" PRIxPTR " ",fp->pc);
 			if ( ! (i&3) )
 				printk("\n");
 		}
