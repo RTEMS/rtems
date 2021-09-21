@@ -96,6 +96,113 @@ void _Thread_Free(
   _Objects_Free( &information->Objects, &the_thread->Object );
 }
 
+static void _Thread_Initialize_scheduler_and_wait_nodes(
+  Thread_Control             *the_thread,
+  const Thread_Configuration *config
+)
+{
+  Scheduler_Node          *scheduler_node;
+#if defined(RTEMS_SMP)
+  Scheduler_Node          *scheduler_node_for_index;
+  const Scheduler_Control *scheduler_for_index;
+  size_t                   scheduler_index;
+#endif
+
+#if defined(RTEMS_SMP)
+  scheduler_node = NULL;
+  scheduler_node_for_index = the_thread->Scheduler.nodes;
+  scheduler_for_index = &_Scheduler_Table[ 0 ];
+  scheduler_index = 0;
+
+  /*
+   * In SMP configurations, the thread has exactly one scheduler node for each
+   * configured scheduler.  Initialize the scheduler nodes of each scheduler.
+   * The application configuration ensures that we have at least one scheduler
+   * configured.
+   */
+  while ( scheduler_index < _Scheduler_Count ) {
+    Priority_Control priority_for_index;
+
+    if ( scheduler_for_index == config->scheduler ) {
+      priority_for_index = config->priority;
+      scheduler_node = scheduler_node_for_index;
+    } else {
+      /*
+       * Use the idle thread priority for the non-home scheduler instances by
+       * default.
+       */
+      priority_for_index = _Scheduler_Map_priority(
+        scheduler_for_index,
+        scheduler_for_index->maximum_priority
+      );
+    }
+
+    _Scheduler_Node_initialize(
+      scheduler_for_index,
+      scheduler_node_for_index,
+      the_thread,
+      priority_for_index
+    );
+
+    /*
+     * Since the size of a scheduler node depends on the application
+     * configuration, the _Scheduler_Node_size constant is used to get the next
+     * scheduler node.  Using sizeof( Scheduler_Node ) would be wrong.
+     */
+    scheduler_node_for_index = (Scheduler_Node *)
+      ( (uintptr_t) scheduler_node_for_index + _Scheduler_Node_size );
+    ++scheduler_for_index;
+    ++scheduler_index;
+  }
+
+  /*
+   * The thread is initialized to use exactly one scheduler node which is
+   * provided by its home scheduler.
+   */
+  _Assert( scheduler_node != NULL );
+  _Chain_Initialize_one(
+    &the_thread->Scheduler.Wait_nodes,
+    &scheduler_node->Thread.Wait_node
+  );
+  _Chain_Initialize_one(
+    &the_thread->Scheduler.Scheduler_nodes,
+    &scheduler_node->Thread.Scheduler_node.Chain
+  );
+#else
+  /*
+   * In uniprocessor configurations, the thread has exactly one scheduler node.
+   */
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
+  _Scheduler_Node_initialize(
+    config->scheduler,
+    scheduler_node,
+    the_thread,
+    config->priority
+  );
+#endif
+
+  /*
+   * The current priority of the thread is initialized to exactly the real
+   * priority of the thread.  During the lifetime of the thread, it may gain
+   * more priority nodes, for example through locking protocols such as
+   * priority inheritance or priority ceiling.
+   */
+  _Priority_Node_initialize( &the_thread->Real_priority, config->priority );
+  _Priority_Initialize_one(
+    &scheduler_node->Wait.Priority,
+    &the_thread->Real_priority
+  );
+
+#if defined(RTEMS_SMP)
+  RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
+  the_thread->Scheduler.home_scheduler = config->scheduler;
+  _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
+  _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
+  _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
+  _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );
+#endif
+}
+
 static bool _Thread_Try_initialize(
   Thread_Information         *information,
   Thread_Control             *the_thread,
@@ -107,12 +214,6 @@ static bool _Thread_Try_initialize(
   char                    *stack_begin;
   char                    *stack_end;
   uintptr_t                stack_align;
-  Scheduler_Node          *scheduler_node;
-#if defined(RTEMS_SMP)
-  Scheduler_Node          *scheduler_node_for_index;
-  const Scheduler_Control *scheduler_for_index;
-  size_t                   scheduler_index;
-#endif
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
   memset(
@@ -182,78 +283,13 @@ static bool _Thread_Try_initialize(
   the_thread->Start.stack_free       = config->stack_free;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
+  _Thread_Initialize_scheduler_and_wait_nodes( the_thread, config );
 
 #if defined(RTEMS_SMP)
-  scheduler_node = NULL;
-  scheduler_node_for_index = the_thread->Scheduler.nodes;
-  scheduler_for_index = &_Scheduler_Table[ 0 ];
-  scheduler_index = 0;
-
-  while ( scheduler_index < _Scheduler_Count ) {
-    Priority_Control priority_for_index;
-
-    if ( scheduler_for_index == config->scheduler ) {
-      priority_for_index = config->priority;
-      scheduler_node = scheduler_node_for_index;
-    } else {
-      /*
-       * Use the idle thread priority for the non-home scheduler instances by
-       * default.
-       */
-      priority_for_index = _Scheduler_Map_priority(
-        scheduler_for_index,
-        scheduler_for_index->maximum_priority
-      );
-    }
-
-    _Scheduler_Node_initialize(
-      scheduler_for_index,
-      scheduler_node_for_index,
-      the_thread,
-      priority_for_index
-    );
-    scheduler_node_for_index = (Scheduler_Node *)
-      ( (uintptr_t) scheduler_node_for_index + _Scheduler_Node_size );
-    ++scheduler_for_index;
-    ++scheduler_index;
-  }
-
-  _Assert( scheduler_node != NULL );
-  _Chain_Initialize_one(
-    &the_thread->Scheduler.Wait_nodes,
-    &scheduler_node->Thread.Wait_node
-  );
-  _Chain_Initialize_one(
-    &the_thread->Scheduler.Scheduler_nodes,
-    &scheduler_node->Thread.Scheduler_node.Chain
-  );
-#else
-  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
-  _Scheduler_Node_initialize(
-    config->scheduler,
-    scheduler_node,
-    the_thread,
-    config->priority
-  );
-#endif
-
-  _Priority_Node_initialize( &the_thread->Real_priority, config->priority );
-  _Priority_Initialize_one(
-    &scheduler_node->Wait.Priority,
-    &the_thread->Real_priority
-  );
-
-#if defined(RTEMS_SMP)
-  RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
-  the_thread->Scheduler.home_scheduler = config->scheduler;
-  _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
   _Processor_mask_Assign(
     &the_thread->Scheduler.Affinity,
     _SMP_Get_online_processors()
    );
-  _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
-  _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
-  _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
   _SMP_lock_Stats_initialize( &the_thread->Join_queue.Lock_stats, "Thread State" );
 #endif
