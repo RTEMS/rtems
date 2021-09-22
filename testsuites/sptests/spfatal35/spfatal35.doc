@@ -1,0 +1,7 @@
+This file describes the concepts tested by this test set.
+
+test set name: spfatal35
+
+concepts:
+
+  - Ensure that a RTEMS_FATAL_SOURCE_EXCEPTION can be recovered from.
