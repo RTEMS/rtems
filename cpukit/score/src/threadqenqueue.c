@@ -544,6 +544,16 @@ static bool _Thread_queue_MP_set_callout(
 }
 #endif
 
+static void _Thread_queue_Force_ready_again( Thread_Control *the_thread )
+{
+  /*
+   * We must set the wait flags under protection of the current thread lock,
+   * otherwise a _Thread_Timeout() running on another processor may interfere.
+   */
+  _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_READY_AGAIN );
+  _Thread_Wait_restore_default( the_thread );
+}
+
 static bool _Thread_queue_Make_ready_again( Thread_Control *the_thread )
 {
   bool success;
@@ -568,6 +578,45 @@ static bool _Thread_queue_Make_ready_again( Thread_Control *the_thread )
 
   _Thread_Wait_restore_default( the_thread );
   return unblock;
+}
+
+/*
+ * This function is used instead of _Thread_queue_Make_ready_again() in
+ * _Thread_queue_Surrender() and _Thread_queue_Surrender_priority_ceiling()
+ * since only the previous owner thread is allowed to surrender the thread
+ * queue.
+ *
+ * In uniprocessor configurations, there is only one executing thread (in this
+ * case the previous owner), so the new owner thread must be fully blocked.
+ *
+ * In SMP configurations, the new owner may execute on another processor in
+ * parallel, so we have to use _Thread_queue_Make_ready_again().
+ */
+static bool _Thread_queue_Make_new_owner_ready_again( Thread_Control *new_owner )
+{
+#if defined(RTEMS_SMP)
+  return _Thread_queue_Make_ready_again( new_owner );
+#else
+  _Assert( _Thread_Wait_flags_get( new_owner ) == THREAD_QUEUE_BLOCKED );
+  _Thread_queue_Force_ready_again( new_owner );
+  return false;
+#endif
+}
+
+static void _Thread_queue_Unblock_new_owner_and_remove_timer(
+  Thread_queue_Queue *queue,
+  Thread_Control     *new_owner,
+  bool                unblock
+)
+{
+#if defined(RTEMS_SMP)
+  if ( unblock ) {
+    _Thread_Remove_timer_and_unblock( new_owner, queue );
+  }
+#else
+  (void) unblock;
+  _Thread_Remove_timer_and_unblock( new_owner, queue );
+#endif
 }
 
 bool _Thread_queue_Extract_locked(
@@ -673,7 +722,7 @@ void _Thread_queue_Surrender(
     _Thread_Resource_count_increment( new_owner );
   }
 
-  unblock = _Thread_queue_Make_ready_again( new_owner );
+  unblock = _Thread_queue_Make_new_owner_ready_again( new_owner );
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
@@ -682,10 +731,11 @@ void _Thread_queue_Surrender(
   );
 
   _Thread_Priority_update( queue_context );
-
-  if ( unblock ) {
-    _Thread_Remove_timer_and_unblock( new_owner, queue );
-  }
+  _Thread_queue_Unblock_new_owner_and_remove_timer(
+    queue,
+    new_owner,
+    unblock
+  );
 
   _Thread_Dispatch_enable( cpu_self );
 }
@@ -771,7 +821,7 @@ Status_Control _Thread_queue_Surrender_priority_ceiling(
 
   queue->owner = new_owner;
 
-  unblock = _Thread_queue_Make_ready_again( new_owner );
+  unblock = _Thread_queue_Make_new_owner_ready_again( new_owner );
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Objects_Is_local_id( new_owner->Object.id ) )
@@ -790,10 +840,11 @@ Status_Control _Thread_queue_Surrender_priority_ceiling(
   );
 
   _Thread_Priority_update( queue_context );
-
-  if ( unblock ) {
-    _Thread_Remove_timer_and_unblock( new_owner, queue );
-  }
+  _Thread_queue_Unblock_new_owner_and_remove_timer(
+    queue,
+    new_owner,
+    unblock
+  );
 
   _Thread_Dispatch_direct( cpu_self );
   return STATUS_SUCCESSFUL;
@@ -823,11 +874,15 @@ void _Thread_queue_Surrender_sticky(
   queue->owner = new_owner;
 
   /*
-   * There is no need to check the unblock status, since in the corresponding
+   * There is no need to unblock the thread, since in the corresponding
    * _Thread_queue_Enqueue_sticky() the thread is not blocked by the scheduler.
    * Instead, the thread busy waits for a change of its thread wait flags.
+   * Timeouts cannot interfere since we hold the thread queue lock.
    */
-  (void) _Thread_queue_Make_ready_again( new_owner );
+  _Assert(
+    _Thread_Wait_flags_get( new_owner ) == THREAD_QUEUE_INTEND_TO_BLOCK
+  );
+  _Thread_queue_Force_ready_again( new_owner );
 
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
