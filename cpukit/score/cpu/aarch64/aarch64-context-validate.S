@@ -44,35 +44,47 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/basedefs.h>
 
-/* These must be 8 byte aligned to avoid misaligned accesses */
-#define FRAME_OFFSET_X4  0x00
-#define FRAME_OFFSET_X5  0x08
-#define FRAME_OFFSET_X6  0x10
-#define FRAME_OFFSET_X7  0x18
-#define FRAME_OFFSET_X8  0x20
-#define FRAME_OFFSET_X9  0x28
-#define FRAME_OFFSET_X10 0x30
-#define FRAME_OFFSET_X11 0x38
-#define FRAME_OFFSET_LR  0x40
+/*
+ * This register size applies to X (integer) registers as well as the D (lower
+ * half floating point) registers. It does not apply to V (full size floating
+ * point) registers or W (lower half integer) registers.
+ */
+#define AARCH64_REGISTER_SIZE 8
+
+/* According to the AAPCS64, X19-X28 are callee-saved registers */
+#define FRAME_OFFSET_X19  0x00
+#define FRAME_OFFSET_X20  0x08
+#define FRAME_OFFSET_X21  0x10
+#define FRAME_OFFSET_X22  0x18
+#define FRAME_OFFSET_X23  0x20
+#define FRAME_OFFSET_X24  0x28
+#define FRAME_OFFSET_X25  0x30
+#define FRAME_OFFSET_X26  0x38
+#define FRAME_OFFSET_X27  0x40
+#define FRAME_OFFSET_X28  0x48
+#define FRAME_OFFSET_LR   0x50
 
 #ifdef AARCH64_MULTILIB_VFP
-  /* These must be 16 byte aligned to avoid misaligned accesses */
-  #define FRAME_OFFSET_V8  0x50
-  #define FRAME_OFFSET_V9  0x60
-  #define FRAME_OFFSET_V10 0x70
-  #define FRAME_OFFSET_V11 0x80
-  #define FRAME_OFFSET_V12 0x90
-  #define FRAME_OFFSET_V13 0xA0
-  #define FRAME_OFFSET_V14 0xB0
-  #define FRAME_OFFSET_V15 0xC0
+  /*
+   * According to the AAPCS64, V8-V15 are callee-saved registers, but only the
+   * bottom 8 bytes are required to be saved which correspond to D8-D15.
+   */
+  #define FRAME_OFFSET_D8  0x58
+  #define FRAME_OFFSET_D9  0x60
+  #define FRAME_OFFSET_D10 0x68
+  #define FRAME_OFFSET_D11 0x70
+  #define FRAME_OFFSET_D12 0x78
+  #define FRAME_OFFSET_D13 0x80
+  #define FRAME_OFFSET_D14 0x88
+  #define FRAME_OFFSET_D15 0x90
 
   /*
    * Force 16 byte alignment of the frame size to avoid stack pointer alignment
    * exceptions.
    */
-  #define FRAME_SIZE RTEMS_ALIGN_UP( FRAME_OFFSET_V15, 16 )
+  #define FRAME_SIZE RTEMS_ALIGN_UP( FRAME_OFFSET_D15 + AARCH64_REGISTER_SIZE, 16 )
 #else
-  #define FRAME_SIZE RTEMS_ALIGN_UP( FRAME_OFFSET_LR, 16 )
+  #define FRAME_SIZE RTEMS_ALIGN_UP( FRAME_OFFSET_LR + AARCH64_REGISTER_SIZE, 16 )
 #endif
 
 	.section	.text
@@ -83,25 +95,27 @@ FUNCTION_ENTRY(_CPU_Context_validate)
 
 	sub	sp, sp, #FRAME_SIZE
 
-	str	x4, [sp, #FRAME_OFFSET_X4]
-	str	x5, [sp, #FRAME_OFFSET_X5]
-	str	x6, [sp, #FRAME_OFFSET_X6]
-	str	x7, [sp, #FRAME_OFFSET_X7]
-	str	x8, [sp, #FRAME_OFFSET_X8]
-	str	x9, [sp, #FRAME_OFFSET_X9]
-	str	x10, [sp, #FRAME_OFFSET_X10]
-	str	x11, [sp, #FRAME_OFFSET_X11]
+	str	x19, [sp, #FRAME_OFFSET_X19]
+	str	x20, [sp, #FRAME_OFFSET_X20]
+	str	x21, [sp, #FRAME_OFFSET_X21]
+	str	x22, [sp, #FRAME_OFFSET_X22]
+	str	x23, [sp, #FRAME_OFFSET_X23]
+	str	x24, [sp, #FRAME_OFFSET_X24]
+	str	x25, [sp, #FRAME_OFFSET_X25]
+	str	x26, [sp, #FRAME_OFFSET_X26]
+	str	x27, [sp, #FRAME_OFFSET_X27]
+	str	x28, [sp, #FRAME_OFFSET_X28]
 	str	lr, [sp, #FRAME_OFFSET_LR]
 
 #ifdef AARCH64_MULTILIB_VFP
-	str	d8, [sp, #FRAME_OFFSET_V8]
-	str	d9, [sp, #FRAME_OFFSET_V9]
-	str	d10, [sp, #FRAME_OFFSET_V10]
-	str	d11, [sp, #FRAME_OFFSET_V11]
-	str	d12, [sp, #FRAME_OFFSET_V12]
-	str	d13, [sp, #FRAME_OFFSET_V13]
-	str	d14, [sp, #FRAME_OFFSET_V14]
-	str	d15, [sp, #FRAME_OFFSET_V15]
+	str	d8, [sp, #FRAME_OFFSET_D8]
+	str	d9, [sp, #FRAME_OFFSET_D9]
+	str	d10, [sp, #FRAME_OFFSET_D10]
+	str	d11, [sp, #FRAME_OFFSET_D11]
+	str	d12, [sp, #FRAME_OFFSET_D12]
+	str	d13, [sp, #FRAME_OFFSET_D13]
+	str	d14, [sp, #FRAME_OFFSET_D14]
+	str	d15, [sp, #FRAME_OFFSET_D15]
 #endif
 
 	/* Fill */
@@ -119,7 +133,7 @@ FUNCTION_ENTRY(_CPU_Context_validate)
 
 
 #ifdef AARCH64_MULTILIB_VFP
-	/* X3 contains the FPSCR */
+	/* X3 contains the FPSR */
 	mrs	x3, FPSR
 	ldr	x4, =0xf000001f
 	bic	x3, x3, x4
@@ -139,6 +153,23 @@ FUNCTION_ENTRY(_CPU_Context_validate)
 	fill_register	x10
 	fill_register	x11
 	fill_register	x12
+	fill_register	x13
+	fill_register	x14
+	fill_register	x15
+	fill_register	x16
+	fill_register	x17
+	fill_register	x18
+	fill_register	x19
+	fill_register	x20
+	fill_register	x21
+	fill_register	x22
+	fill_register	x23
+	fill_register	x24
+	fill_register	x25
+	fill_register	x26
+	fill_register	x27
+	fill_register	x28
+	fill_register	x29
 	fill_register	lr
 
 #ifdef AARCH64_MULTILIB_VFP
@@ -191,7 +222,6 @@ check:
 	bne	restore
 .endm
 
-	/* A compare involving the stack pointer is deprecated */
 	mov	x1, sp
 	cmp	x2, x1
 	bne	restore
@@ -211,6 +241,23 @@ check:
 	check_register	x10
 	check_register	x11
 	check_register	x12
+	check_register	x13
+	check_register	x14
+	check_register	x15
+	check_register	x16
+	check_register	x17
+	check_register	x18
+	check_register	x19
+	check_register	x20
+	check_register	x21
+	check_register	x22
+	check_register	x23
+	check_register	x24
+	check_register	x25
+	check_register	x26
+	check_register	x27
+	check_register	x28
+	check_register	x29
 	check_register	lr
 
 #ifdef AARCH64_MULTILIB_VFP
@@ -222,25 +269,27 @@ check:
 	/* Restore */
 restore:
 
-	ldr	x4, [sp, #FRAME_OFFSET_X4]
-	ldr	x5, [sp, #FRAME_OFFSET_X5]
-	ldr	x6, [sp, #FRAME_OFFSET_X6]
-	ldr	x7, [sp, #FRAME_OFFSET_X7]
-	ldr	x8, [sp, #FRAME_OFFSET_X8]
-	ldr	x9, [sp, #FRAME_OFFSET_X9]
-	ldr	x10, [sp, #FRAME_OFFSET_X10]
-	ldr	x11, [sp, #FRAME_OFFSET_X11]
+	ldr	x19, [sp, #FRAME_OFFSET_X19]
+	ldr	x20, [sp, #FRAME_OFFSET_X20]
+	ldr	x21, [sp, #FRAME_OFFSET_X21]
+	ldr	x22, [sp, #FRAME_OFFSET_X22]
+	ldr	x23, [sp, #FRAME_OFFSET_X23]
+	ldr	x24, [sp, #FRAME_OFFSET_X24]
+	ldr	x25, [sp, #FRAME_OFFSET_X25]
+	ldr	x26, [sp, #FRAME_OFFSET_X26]
+	ldr	x27, [sp, #FRAME_OFFSET_X27]
+	ldr	x28, [sp, #FRAME_OFFSET_X28]
 	ldr	lr, [sp, #FRAME_OFFSET_LR]
 
 #ifdef AARCH64_MULTILIB_VFP
-	ldr	d8, [sp, #FRAME_OFFSET_V8]
-	ldr	d9, [sp, #FRAME_OFFSET_V9]
-	ldr	d10, [sp, #FRAME_OFFSET_V10]
-	ldr	d11, [sp, #FRAME_OFFSET_V11]
-	ldr	d12, [sp, #FRAME_OFFSET_V12]
-	ldr	d13, [sp, #FRAME_OFFSET_V13]
-	ldr	d14, [sp, #FRAME_OFFSET_V14]
-	ldr	d15, [sp, #FRAME_OFFSET_V15]
+	ldr	d8, [sp, #FRAME_OFFSET_D8]
+	ldr	d9, [sp, #FRAME_OFFSET_D9]
+	ldr	d10, [sp, #FRAME_OFFSET_D10]
+	ldr	d11, [sp, #FRAME_OFFSET_D11]
+	ldr	d12, [sp, #FRAME_OFFSET_D12]
+	ldr	d13, [sp, #FRAME_OFFSET_D13]
+	ldr	d14, [sp, #FRAME_OFFSET_D14]
+	ldr	d15, [sp, #FRAME_OFFSET_D15]
 #endif
 
 	add	sp, sp, #FRAME_SIZE

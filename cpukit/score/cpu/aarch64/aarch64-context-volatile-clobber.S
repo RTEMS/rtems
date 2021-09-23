@@ -90,10 +90,29 @@ FUNCTION_ENTRY(_CPU_Context_volatile_clobber)
 	clobber_vfp_register	d31
 #endif /* AARCH64_MULTILIB_VFP */
 
+/*
+ * According to the AAPCS64, X0-X18 and X29 are caller-saved registers. X0 is
+ * already being clobbered.
+ */
 	clobber_register	x1
 	clobber_register	x2
 	clobber_register	x3
+	clobber_register	x4
+	clobber_register	x5
+	clobber_register	x6
+	clobber_register	x7
+	clobber_register	x8
+	clobber_register	x9
+	clobber_register	x10
+	clobber_register	x11
 	clobber_register	x12
+	clobber_register	x13
+	clobber_register	x14
+	clobber_register	x15
+	clobber_register	x16
+	clobber_register	x17
+	clobber_register	x18
+	clobber_register	x29
 
 	ret
 
