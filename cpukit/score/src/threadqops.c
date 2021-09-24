@@ -1186,7 +1186,7 @@ static void _Thread_queue_Priority_inherit_extract(
    * resolves the deadlock.  Thread T1 and T2 can the complete their
    * operations.
    */
-  _Thread_queue_Path_acquire_critical( queue, the_thread, queue_context );
+  (void) _Thread_queue_Path_acquire( queue, the_thread, queue_context );
 #endif
 
   _Thread_queue_Queue_extract(
@@ -1199,7 +1199,7 @@ static void _Thread_queue_Priority_inherit_extract(
   );
 
 #if defined(RTEMS_SMP)
-  _Thread_queue_Path_release_critical( queue_context );
+  _Thread_queue_Path_release( queue_context );
 #endif
 }
 

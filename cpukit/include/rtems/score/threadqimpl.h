@@ -1339,28 +1339,56 @@ void _Thread_queue_Unblock_proxy(
 #endif
 
 /**
- * @brief Acquires the thread queue path in a critical section.
- *
- * @param queue The thread queue queue.
- * @param the_thread The thread for the operation.
- * @param queue_context The thread queue context.
- *
- * @retval true The operation was successful.
- * @retval false The operation failed.
+ * @brief This is a status code to indicate if a deadlock was detected or not.
  */
+typedef enum {
+  /**
+   * @brief The operation did not detect a deadlock.
+   */
+  THREAD_QUEUE_NO_DEADLOCK,
+
+  /**
+   * @brief The operation detected a deadlock.
+   */
+  THREAD_QUEUE_DEADLOCK_DETECTED
+} Thread_queue_Deadlock_status;
+
 #if defined(RTEMS_SMP)
-bool _Thread_queue_Path_acquire_critical(
+/**
+ * @brief Acquires the thread queue path.
+ *
+ * The caller must own the thread queue lock.
+ *
+ * An acquired thread queue path must be released by calling
+ * _Thread_queue_Path_release() with the same thread queue context.
+ *
+ * @param queue is the thread queue queue.
+ *
+ * @param the_thread is the thread for the operation.
+ *
+ * @param queue_context is the thread queue context.
+ *
+ * @retval THREAD_QUEUE_NO_DEADLOCK No deadlock was detected.
+ *
+ * @retval THREAD_QUEUE_DEADLOCK_DETECTED A deadlock was detected while
+ *   acquiring the thread queue path.  The thread queue path must still be
+ *   released by _Thread_queue_Path_release() in this case.
+ */
+Thread_queue_Deadlock_status _Thread_queue_Path_acquire(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
 );
 
 /**
- * @brief Releases the thread queue path in a critical section.
+ * @brief Releases the thread queue path.
  *
- * @param queue_context The thread queue context.
+ * The caller must have acquired the thread queue path with a corresponding
+ * _Thread_queue_Path_acquire().
+ *
+ * @param queue_context is the thread queue context.
  */
-void _Thread_queue_Path_release_critical(
+void _Thread_queue_Path_release(
   Thread_queue_Context *queue_context
 );
 #endif

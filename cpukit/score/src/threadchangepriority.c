@@ -278,11 +278,11 @@ static void _Thread_Priority_apply(
 
   if ( !_Priority_Actions_is_empty( &queue_context->Priority.Actions ) ) {
 #if defined(RTEMS_SMP)
-    _Thread_queue_Path_acquire_critical( queue, the_thread, queue_context );
+    (void) _Thread_queue_Path_acquire( queue, the_thread, queue_context );
 #endif
     _Thread_Priority_perform_actions( queue->owner, queue_context );
 #if defined(RTEMS_SMP)
-    _Thread_queue_Path_release_critical( queue_context );
+    _Thread_queue_Path_release( queue_context );
 #endif
   }
 }
