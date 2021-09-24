@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScore
+ * @ingroup RTEMSScoreSysLockMutex
  *
  * @brief This source file contains the implementation of
  *   _Mutex_Acquire(), _Mutex_Acquire_timed(), _Mutex_Acquire_timed_ticks(),
@@ -35,6 +35,20 @@
 #include <rtems/score/muteximpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
+
+/**
+ * @defgroup RTEMSScoreSysLockMutex System Lock Mutex Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This group contains the System Lock Mutex Handler implementation.
+ *
+ * The interfaces are defined by Newlib in <sys/lock.h>.  The system lock
+ * mutexes are used for Newlib internal locking, the C++ standard library
+ * provided by GCC, the OpenMP support provided by GCC, the self-contained
+ * objects API provided by RTEMS, and the SuperCore internal mutexes such as
+ * the objects allocator lock (see ::API_Mutex_Control).
+ */
 
 #define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
 
