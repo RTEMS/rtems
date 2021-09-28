@@ -351,6 +351,9 @@ static void imx_ecspi_interrupt(void *arg)
   } else if (bus->in_transfer > 0) {
     regs->intreg = IMX_ECSPI_RR;
   } else {
+    if (bus->msg->cs_change) {
+      imx_ecspi_set_chipsel(bus, IMX_ECSPI_CS_NONE);
+    }
     --bus->msg_todo;
     ++bus->msg;
     imx_ecspi_next_msg(bus, regs);
@@ -375,9 +378,6 @@ static int imx_ecspi_check_messages(
     }
     if ((msg->mode & SPI_NO_CS) == 0 &&
         (msg->cs > IMX_ECSPI_MAX_CHIPSELECTS || !bus->cspins[msg->cs].valid)) {
-      return -EINVAL;
-    }
-    if (msg->cs_change != 0) {
       return -EINVAL;
     }
 
@@ -408,7 +408,9 @@ static int imx_ecspi_transfer(
 
     imx_ecspi_next_msg(bus, bus->regs);
     rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-    imx_ecspi_set_chipsel(bus, IMX_ECSPI_CS_NONE);
+    if (msgs[n-1].cs_change) {
+      imx_ecspi_set_chipsel(bus, IMX_ECSPI_CS_NONE);
+    }
   }
   return rv;
 }
