@@ -24,16 +24,16 @@
 #include <rtems/score/todimpl.h>
 
 rtems_status_code rtems_clock_get_tod_timeval(
-  struct timeval  *time
+  struct timeval  *time_of_day
 )
 {
-  if ( !time )
+  if ( !time_of_day )
     return RTEMS_INVALID_ADDRESS;
 
   if ( !_TOD_Is_set() )
     return RTEMS_NOT_DEFINED;
 
-  _TOD_Get_timeval( time );
+  _TOD_Get_timeval( time_of_day );
 
   return RTEMS_SUCCESSFUL;
 }

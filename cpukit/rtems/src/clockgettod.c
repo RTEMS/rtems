@@ -81,7 +81,7 @@ static uint32_t _Year_day_as_month(
 }
 
 rtems_status_code rtems_clock_get_tod(
-  rtems_time_of_day  *time_buffer
+  rtems_time_of_day  *time_of_day
 )
 {
   struct timeval now;
@@ -91,7 +91,7 @@ rtems_status_code rtems_clock_get_tod(
   uint32_t       year_days;
   uint32_t       leap_years;
 
-  if ( !time_buffer )
+  if ( !time_of_day )
     return RTEMS_INVALID_ADDRESS;
 
   if ( !_TOD_Is_set() )
@@ -126,14 +126,14 @@ rtems_status_code rtems_clock_get_tod(
     }
   }
 
-  time_buffer->year   = year;
-  time_buffer->month  = _Year_day_as_month( year, &year_days ) + 1;
-  time_buffer->day    = year_days + 1;
-  time_buffer->hour   = day_secs / RTEMS_SECS_PER_HOUR;
-  time_buffer->minute = day_secs % RTEMS_SECS_PER_HOUR;
-  time_buffer->second = time_buffer->minute % RTEMS_SECS_PER_MINUTE;
-  time_buffer->minute = time_buffer->minute / RTEMS_SECS_PER_MINUTE;
-  time_buffer->ticks  = now.tv_usec /
+  time_of_day->year   = year;
+  time_of_day->month  = _Year_day_as_month( year, &year_days ) + 1;
+  time_of_day->day    = year_days + 1;
+  time_of_day->hour   = day_secs / RTEMS_SECS_PER_HOUR;
+  time_of_day->minute = day_secs % RTEMS_SECS_PER_HOUR;
+  time_of_day->second = time_of_day->minute % RTEMS_SECS_PER_MINUTE;
+  time_of_day->minute = time_of_day->minute / RTEMS_SECS_PER_MINUTE;
+  time_of_day->ticks  = now.tv_usec /
     rtems_configuration_get_microseconds_per_tick( );
 
   return RTEMS_SUCCESSFUL;
