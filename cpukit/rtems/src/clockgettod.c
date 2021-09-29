@@ -100,9 +100,14 @@ rtems_status_code rtems_clock_get_tod(
   /* Obtain the current time */
   _TOD_Get_timeval( &now );
 
-  /* How many days and how many seconds in the day ? */
-  days = now.tv_sec / RTEMS_SECS_PER_DAY;
-  day_secs = now.tv_sec % RTEMS_SECS_PER_DAY;
+  /*
+   * How many days and how many seconds in the day?
+   *
+   * A 32-bit integer can represent enough days for several 1000 years.  When
+   * the current time is valid, the integer conversions below are well defined.
+   */
+  days = (uint32_t) ( now.tv_sec / RTEMS_SECS_PER_DAY );
+  day_secs = (uint32_t) ( now.tv_sec % RTEMS_SECS_PER_DAY );
 
   /* How many non-leap year years ? */
   year = ( days / RTEMS_DAYS_PER_YEAR ) + RTEMS_YEAR_BASE;
