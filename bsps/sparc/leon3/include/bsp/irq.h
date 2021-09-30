@@ -2,7 +2,7 @@
 
 /**
  * @file
- * @ingroup sparc_leon3
+ * @ingroup RTEMSBSPsSPARCLEON3
  * @brief LEON3 generic shared IRQ setup
  *
  * Based on libbsp/shared/include/irq.h.
