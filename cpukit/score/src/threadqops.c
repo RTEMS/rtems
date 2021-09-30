@@ -59,17 +59,6 @@ void _Thread_queue_Do_nothing_priority_actions(
   _Priority_Actions_initialize_empty( priority_actions );
 }
 
-static void _Thread_queue_Do_nothing_extract(
-  Thread_queue_Queue   *queue,
-  Thread_Control       *the_thread,
-  Thread_queue_Context *queue_context
-)
-{
-  (void) queue;
-  (void) the_thread;
-  (void) queue_context;
-}
-
 static void _Thread_queue_Queue_enqueue(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
@@ -1461,12 +1450,11 @@ static Thread_Control *_Thread_queue_Priority_inherit_surrender(
 }
 
 const Thread_queue_Operations _Thread_queue_Operations_default = {
-  .priority_actions = _Thread_queue_Do_nothing_priority_actions,
-  .extract = _Thread_queue_Do_nothing_extract
+  .priority_actions = _Thread_queue_Do_nothing_priority_actions
   /*
    * The default operations are only used in _Thread_Priority_apply() and
    * _Thread_Continue() and do not have a thread queue associated with them, so
-   * the enqueue and first operations are superfluous.
+   * the enqueue, extract, surrender, and first operations are superfluous.
    */
 };
 
