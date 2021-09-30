@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplClassicASR
+ * @ingroup RTEMSImplClassicSignal
  *
  * @brief This header file provides data structures used by the implementation
  *   and the @ref RTEMSImplApplConfig to ultimately define
@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSImplClassicASR
+ * @addtogroup RTEMSImplClassicSignal
  *
  * @{
  */
