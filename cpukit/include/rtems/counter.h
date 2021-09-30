@@ -1,9 +1,10 @@
 /**
  * @file
  *
- * @ingroup ClassicCounter
+ * @ingroup RTEMSAPICounter
  * 
- * @brief Free-Running Counter and Busy Wait Delay API
+ * @brief This header file defines the Free-Running Counter and Busy Wait Delay
+ *   API.
  */
 
 /*
