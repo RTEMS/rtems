@@ -28,14 +28,15 @@
 #include <pthread.h>
 
 /**
- * @defgroup POSIXAPI RTEMS POSIX API
+ * @defgroup POSIXAPI POSIX API
  *
  * @ingroup RTEMSImpl
  *
- * RTEMS POSIX API definitions and modules.
+ * @brief This group contains definitions and modules which are used to
+ *   implement the POSIX APIs supported by RTEMS.
  *
+ * @{
  */
-/**@{**/
 
 extern const int _POSIX_Get_by_name_error_table[ 3 ];
 
