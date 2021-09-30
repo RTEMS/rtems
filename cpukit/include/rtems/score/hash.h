@@ -49,6 +49,8 @@ extern "C" {
 /**
  * @defgroup RTEMSScoreHash Hash Handler
  *
+ * @ingroup RTEMSScore
+ *
  * @brief This group contains the Hash Handler implementation.
  *
  * @{
