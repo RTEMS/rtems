@@ -1,3 +1,30 @@
+/*
+ *  Copyright (c) 2015, Hesham Almatary
+ *  COPYRIGHT (c) 1989-2008.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *   notice, this list of conditions and the following disclaimer in the
+ *   documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 /**
  * @file rtems/score/cpu.h
  */
@@ -17,17 +44,6 @@
  *  + At the end of each comment section, there is a heading which
  *    says "Port Specific Information:".  When porting to RTEMS,
  *    add CPU family specific information in this section
- */
-
-/*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.com/license/LICENSE.
- *
- *  $Id: cpu.h,v 1.35 2010/10/21 22:14:20 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -464,19 +480,7 @@ extern "C" {
  *  to another.
  */
 typedef struct {
-    /** This field is a hint that a port will have a number of integer
-     *  registers that need to be saved at a context switch.
-     */
-    uint32_t   some_integer_register;
-    /** This field is a hint that a port will have a number of system
-     *  registers that need to be saved at a context switch.
-     */
-    uint32_t   some_system_register;
-
-    /** This field is a hint that a port will have a register that
-     *  is the stack pointer.
-     */
-    uint32_t   stack_pointer;
+    uint32_t r[32];
 } Context_Control;
 
 /**
@@ -489,7 +493,7 @@ typedef struct {
  *  @return This method returns the stack pointer.
  */
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->stack_pointer
+  (_context)->r[0]
 
 /**
  *  @ingroup CPUContext Management
@@ -799,43 +803,32 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
-/* Context handler macros */
-
 /**
- *  @ingroup CPUContext
- *  Initialize the context to a state suitable for starting a
- *  task after a context restore operation.  Generally, this
- *  involves:
+ * @brief Initializes the CPU context.
  *
- *     - setting a starting address
- *     - preparing the stack
- *     - preparing the stack and frame pointers
- *     - setting the proper interrupt level in the context
- *     - initializing the floating point context
+ * The following steps are performed:
+ *  - setting a starting address
+ *  - preparing the stack
+ *  - preparing the stack and frame pointers
+ *  - setting the proper interrupt level in the context
  *
- *  This routine generally does not set any unnecessary register
- *  in the context.  The state of the "general data" registers is
- *  undefined at task start time.
- *
- *  @param[in] _the_context is the context structure to be initialized
- *  @param[in] _stack_base is the lowest physical address of this task's stack
- *  @param[in] _size is the size of this task's stack
- *  @param[in] _isr is the interrupt disable level
- *  @param[in] _entry_point is the thread's entry point.  This is
- *         always @a _Thread_Handler
- *  @param[in] _is_fp is TRUE if the thread is to be a floating
- *        point thread.  This is typically only used on CPUs where the
- *        FPU may be easily disabled by software such as on the SPARC
- *        where the PSR contains an enable FPU bit.
- *
- *  Port Specific Information:
- *
- *  XXX document implementation including references if appropriate
+ * @param[in] context points to the context area
+ * @param[in] stack_area_begin is the low address of the allocated stack area
+ * @param[in] stack_area_size is the size of the stack area in bytes
+ * @param[in] new_level is the interrupt level for the task
+ * @param[in] entry_point is the task's entry point
+ * @param[in] is_fp is set to @c true if the task is a floating point task
+ * @param[in] tls_area is the thread-local storage (TLS) area
  */
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                 _isr, _entry_point, _is_fp ) \
-  { \
-  }
+void _CPU_Context_Initialize(
+  Context_Control *context,
+  void *stack_area_begin,
+  size_t stack_area_size,
+  uint32_t new_level,
+  void (*entry_point)( void ),
+  bool is_fp,
+  void *tls_area
+);
 
 /**
  *  This routine is responsible for somehow restarting the currently
@@ -916,9 +909,9 @@ uint32_t   _CPU_ISR_Get_level( void );
  *
  *  XXX document implementation including references if appropriate
  */
-#define _CPU_Fatal_halt( _error ) \
-  { \
-  }
+#define _CPU_Fatal_halt(_source, _error ) \
+        printk("Fatal Error %d.%d Halted\n",_source, _error); \
+        for(;;)
 
 /* end of Fatal Error manager macros */
 
@@ -1058,6 +1051,21 @@ uint32_t   _CPU_ISR_Get_level( void );
   (_priority)
 
 #endif
+
+#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC FALSE
+#define CPU_TIMESTAMP_USE_INT64 TRUE
+#define CPU_TIMESTAMP_USE_INT64_INLINE FALSE
+
+typedef struct {
+/* There is no CPU specific per-CPU state */
+} CPU_Per_CPU_control;
+
+#define CPU_SIZEOF_POINTER 4
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
+typedef struct {
+  uint32_t r[32];
+} CPU_Exception_frame;
 
 /* end of Priority handler macros */
 
@@ -1255,6 +1263,15 @@ static inline uint32_t CPU_swap_u32(
  */
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
+
+typedef uint32_t CPU_Counter_ticks;
+
+CPU_Counter_ticks _CPU_Counter_read( void );
+
+CPU_Counter_ticks _CPU_Counter_difference(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+);
 
 #ifdef __cplusplus
 }

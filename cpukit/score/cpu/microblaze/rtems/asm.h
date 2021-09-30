@@ -19,6 +19,7 @@
  *  notice.  This file is freely distributable as long as the source
  *  of the file is noted.  This file is:
  *
+ *  Copyright (c) 2015, Hesham Almatary
  *  COPYRIGHT (c) 1994-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -36,7 +37,6 @@
 #define ASM
 #endif
 #include <rtems/score/cpuopts.h>
-#include <rtems/score/no_cpu.h>
 
 #ifndef __USER_LABEL_PREFIX__
 /**
