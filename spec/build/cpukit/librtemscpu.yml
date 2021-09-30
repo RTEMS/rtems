@@ -286,7 +286,6 @@ install:
   - cpukit/include/rtems/rtems/eventimpl.h
   - cpukit/include/rtems/rtems/eventmp.h
   - cpukit/include/rtems/rtems/intr.h
-  - cpukit/include/rtems/rtems/mainpage.h
   - cpukit/include/rtems/rtems/message.h
   - cpukit/include/rtems/rtems/messagedata.h
   - cpukit/include/rtems/rtems/messageimpl.h
