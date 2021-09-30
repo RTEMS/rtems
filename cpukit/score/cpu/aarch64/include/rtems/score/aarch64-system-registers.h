@@ -6719,21 +6719,291 @@ static inline uint64_t _AArch64_Read_dbgauthstatus_el1( void )
 #define AARCH64_DBGBCR_N_EL1_BT_GET( _reg ) \
   ( ( ( _reg ) >> 20 ) & 0xfU )
 
-static inline uint64_t _AArch64_Read_dbgbcr_n_el1( void )
+static inline uint64_t _AArch64_Read_dbgbcr0_el1( void )
 {
   uint64_t value;
 
   __asm__ volatile (
-    "mrs %0, DBGBCR_N_EL1" : "=&r" ( value ) : : "memory"
+    "mrs %0, DBGBCR0_EL1" : "=&r" ( value ) : : "memory"
   );
 
   return value;
 }
 
-static inline void _AArch64_Write_dbgbcr_n_el1( uint64_t value )
+static inline void _AArch64_Write_dbgbcr0_el1( uint64_t value )
 {
   __asm__ volatile (
-    "msr DBGBCR_N_EL1, %0" : : "r" ( value ) : "memory"
+    "msr DBGBCR0_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr1_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR1_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr1_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR1_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr2_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR2_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr2_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR2_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr3_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR3_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr3_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR3_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr4_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR4_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr4_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR4_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr5_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR5_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr5_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR5_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr6_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR6_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr6_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR6_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr7_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR7_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr7_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR7_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr8_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR8_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr8_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR8_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr9_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR9_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr9_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR9_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr10_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR10_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr10_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR10_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr11_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR11_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr11_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR11_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr12_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR12_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr12_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR12_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr13_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR13_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr13_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR13_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr14_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR14_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr14_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR14_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbcr15_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBCR15_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbcr15_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBCR15_EL1, %0" : : "r" ( value ) : "memory"
   );
 }
 
@@ -6781,21 +7051,291 @@ static inline void _AArch64_Write_dbgbcr_n_el1( uint64_t value )
 #define AARCH64_DBGBVR_N_EL1_RESS_14_4_GET( _reg ) \
   ( ( ( _reg ) >> 53 ) & 0x7ffULL )
 
-static inline uint64_t _AArch64_Read_dbgbvr_n_el1( void )
+static inline uint64_t _AArch64_Read_dbgbvr0_el1( void )
 {
   uint64_t value;
 
   __asm__ volatile (
-    "mrs %0, DBGBVR_N_EL1" : "=&r" ( value ) : : "memory"
+    "mrs %0, DBGBVR0_EL1" : "=&r" ( value ) : : "memory"
   );
 
   return value;
 }
 
-static inline void _AArch64_Write_dbgbvr_n_el1( uint64_t value )
+static inline void _AArch64_Write_dbgbvr0_el1( uint64_t value )
 {
   __asm__ volatile (
-    "msr DBGBVR_N_EL1, %0" : : "r" ( value ) : "memory"
+    "msr DBGBVR0_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr1_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR1_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr1_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR1_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr2_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR2_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr2_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR2_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr3_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR3_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr3_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR3_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr4_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR4_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr4_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR4_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr5_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR5_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr5_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR5_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr6_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR6_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr6_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR6_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr7_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR7_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr7_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR7_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr8_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR8_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr8_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR8_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr9_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR9_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr9_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR9_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr10_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR10_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr10_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR10_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr11_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR11_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr11_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR11_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr12_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR12_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr12_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR12_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr13_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR13_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr13_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR13_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr14_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR14_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr14_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR14_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgbvr15_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGBVR15_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgbvr15_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGBVR15_EL1, %0" : : "r" ( value ) : "memory"
   );
 }
 
@@ -7027,21 +7567,291 @@ static inline void _AArch64_Write_dbgvcr32_el2( uint64_t value )
 #define AARCH64_DBGWCR_N_EL1_MASK_GET( _reg ) \
   ( ( ( _reg ) >> 24 ) & 0x1fU )
 
-static inline uint64_t _AArch64_Read_dbgwcr_n_el1( void )
+static inline uint64_t _AArch64_Read_dbgwcr0_el1( void )
 {
   uint64_t value;
 
   __asm__ volatile (
-    "mrs %0, DBGWCR_N_EL1" : "=&r" ( value ) : : "memory"
+    "mrs %0, DBGWCR0_EL1" : "=&r" ( value ) : : "memory"
   );
 
   return value;
 }
 
-static inline void _AArch64_Write_dbgwcr_n_el1( uint64_t value )
+static inline void _AArch64_Write_dbgwcr0_el1( uint64_t value )
 {
   __asm__ volatile (
-    "msr DBGWCR_N_EL1, %0" : : "r" ( value ) : "memory"
+    "msr DBGWCR0_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr1_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR1_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr1_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR1_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr2_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR2_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr2_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR2_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr3_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR3_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr3_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR3_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr4_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR4_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr4_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR4_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr5_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR5_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr5_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR5_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr6_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR6_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr6_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR6_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr7_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR7_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr7_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR7_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr8_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR8_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr8_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR8_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr9_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR9_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr9_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR9_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr10_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR10_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr10_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR10_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr11_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR11_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr11_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR11_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr12_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR12_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr12_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR12_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr13_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR13_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr13_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR13_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr14_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR14_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr14_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR14_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwcr15_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWCR15_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwcr15_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWCR15_EL1, %0" : : "r" ( value ) : "memory"
   );
 }
 
@@ -7065,21 +7875,291 @@ static inline void _AArch64_Write_dbgwcr_n_el1( uint64_t value )
 #define AARCH64_DBGWVR_N_EL1_RESS_14_4_GET( _reg ) \
   ( ( ( _reg ) >> 53 ) & 0x7ffULL )
 
-static inline uint64_t _AArch64_Read_dbgwvr_n_el1( void )
+static inline uint64_t _AArch64_Read_dbgwvr0_el1( void )
 {
   uint64_t value;
 
   __asm__ volatile (
-    "mrs %0, DBGWVR_N_EL1" : "=&r" ( value ) : : "memory"
+    "mrs %0, DBGWVR0_EL1" : "=&r" ( value ) : : "memory"
   );
 
   return value;
 }
 
-static inline void _AArch64_Write_dbgwvr_n_el1( uint64_t value )
+static inline void _AArch64_Write_dbgwvr0_el1( uint64_t value )
 {
   __asm__ volatile (
-    "msr DBGWVR_N_EL1, %0" : : "r" ( value ) : "memory"
+    "msr DBGWVR0_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr1_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR1_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr1_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR1_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr2_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR2_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr2_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR2_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr3_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR3_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr3_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR3_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr4_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR4_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr4_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR4_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr5_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR5_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr5_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR5_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr6_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR6_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr6_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR6_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr7_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR7_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr7_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR7_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr8_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR8_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr8_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR8_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr9_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR9_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr9_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR9_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr10_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR10_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr10_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR10_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr11_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR11_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr11_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR11_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr12_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR12_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr12_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR12_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr13_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR13_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr13_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR13_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr14_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR14_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr14_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR14_EL1, %0" : : "r" ( value ) : "memory"
+  );
+}
+
+static inline uint64_t _AArch64_Read_dbgwvr15_el1( void )
+{
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, DBGWVR15_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  return value;
+}
+
+static inline void _AArch64_Write_dbgwvr15_el1( uint64_t value )
+{
+  __asm__ volatile (
+    "msr DBGWVR15_EL1, %0" : : "r" ( value ) : "memory"
   );
 }
 
