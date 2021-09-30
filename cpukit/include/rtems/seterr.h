@@ -1,10 +1,10 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Data which Ease the Burden of Consistently Setting Errno
+ * @ingroup RTEMSAPISetErrno
  *
- *  This file contains macros and definitions which ease the burden
- *  of consistently setting errno and returning -1.
+ * @brief This header file defines macros to set ``errno`` and return minus
+ *   one.
  */
 
 /*
@@ -22,7 +22,7 @@
 #include <errno.h>
 
 /**
- * @defgroup RTEMSAPISetErrno Set Errno
+ * @defgroup RTEMSAPISetErrno Set Error Number Support
  *
  * @ingroup RTEMSAPI
  *
