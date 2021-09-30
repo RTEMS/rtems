@@ -47,7 +47,15 @@ extern "C" {
 struct Heap_Control;
 
 /**
- * @addtogroup RTEMSScoreWorkspace
+ * @defgroup RTEMSScoreWorkspace Workspace Handler
+ *
+ * @ingroup RTEMSScore
+ *
+ * @brief This group contains the Workspace Handler implementation.
+ *
+ * This handler encapsulates functionality related to the management of the
+ * RTEMS Workspace.  It provides mechanisms which can be used to define,
+ * initialize and manipulate the RTEMS Workspace.
  *
  * @{
  */
