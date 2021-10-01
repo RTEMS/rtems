@@ -129,6 +129,9 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_stack_free_hook() \
   (_Stack_Allocator_free)
 
+#define rtems_configuration_get_stack_allocate_for_idle_hook() \
+  (_Stack_Allocator_allocate_for_idle)
+
  /**
   * This macro assists in accessing the field which indicates whether
   * RTEMS is responsible for zeroing the Executive Workspace.

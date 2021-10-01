@@ -132,12 +132,14 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
 
 #if defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   && defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
+  /* Custom allocator may or may not use the work space. */
   #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
     const bool _Stack_Allocator_avoids_workspace = true;
   #else
     const bool _Stack_Allocator_avoids_workspace = false;
   #endif
 
+  /* Custom allocator may or may not need initialization. */
   #ifdef CONFIGURE_TASK_STACK_ALLOCATOR_INIT
     const Stack_Allocator_initialize _Stack_Allocator_initialize =
       CONFIGURE_TASK_STACK_ALLOCATOR_INIT;
@@ -145,14 +147,28 @@ const uintptr_t _Stack_Space_size = _CONFIGURE_STACK_SPACE_SIZE;
     const Stack_Allocator_initialize _Stack_Allocator_initialize = NULL;
   #endif
 
+  /* Custom allocator must include allocate and free */
   const Stack_Allocator_allocate _Stack_Allocator_allocate =
     CONFIGURE_TASK_STACK_ALLOCATOR;
 
   const Stack_Allocator_free _Stack_Allocator_free =
     CONFIGURE_TASK_STACK_DEALLOCATOR;
+
+/*
+ * Must provide both a custom stack allocator and deallocator
+ */
 #elif defined(CONFIGURE_TASK_STACK_ALLOCATOR) \
   || defined(CONFIGURE_TASK_STACK_DEALLOCATOR)
   #error "CONFIGURE_TASK_STACK_ALLOCATOR and CONFIGURE_TASK_STACK_DEALLOCATOR must be both defined or both undefined"
+#endif
+
+/*
+ * Custom IDLE thread stacks allocator. If this is provided, it is assumed
+ * that the allocator is providing its own memory for these stacks.
+ */
+#ifdef CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
+  const Stack_Allocator_allocate_for_idle _Stack_Allocator_allocate_for_idle =
+    CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE;
 #endif
 
 #ifdef CONFIGURE_DIRTY_MEMORY

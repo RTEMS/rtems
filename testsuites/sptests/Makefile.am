@@ -1783,6 +1783,24 @@ spstkalloc02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spstkalloc02) \
 	$(support_includes)
 endif
 
+if TEST_spstkalloc03
+sp_tests += spstkalloc03
+sp_screens += spstkalloc03/spstkalloc03.scn
+sp_docs += spstkalloc03/spstkalloc03.doc
+spstkalloc03_SOURCES = spstkalloc03/init.c
+spstkalloc03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spstkalloc03) \
+	$(support_includes)
+endif
+
+if TEST_spstkalloc04
+sp_tests += spstkalloc04
+sp_screens += spstkalloc04/spstkalloc04.scn
+sp_docs += spstkalloc04/spstkalloc04.doc
+spstkalloc04_SOURCES = spstkalloc04/init.c
+spstkalloc04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spstkalloc04) \
+	$(support_includes)
+endif
+
 if TEST_spsysinit01
 sp_tests += spsysinit01
 sp_screens += spsysinit01/spsysinit01.scn

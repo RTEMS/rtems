@@ -1,0 +1,59 @@
+/*
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (C) 2021 OAR Corporation
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <rtems/score/stack.h>
+#include <rtems/score/thread.h>
+
+/**
+ * @brief Default stack allocator allocate for idle handler.
+ *
+ * The allocate for idle handler is optional even when the user thread stack
+ * allocator and deallocator are configured.
+ *
+ * The default allocator for IDLE thread stacks gets the memory from a
+ * statically allocated area provided via confdefs.h.
+ *
+ * @param cpu Index of the CPU for the IDLE thread using this stack
+ * @param stack_size The size of the stack area to allocate in bytes.
+ *
+ * @retval NULL Not enough memory (never returned).
+ * @retval other Pointer to begin of stack area.
+ */
+static void *_Stack_Allocator_allocate_for_idle_default(
+  uint32_t  cpu,
+  size_t    stack_size
+)
+{
+  return &_Thread_Idle_stacks[ cpu * stack_size ];
+}
+
+const Stack_Allocator_allocate_for_idle _Stack_Allocator_allocate_for_idle =
+        _Stack_Allocator_allocate_for_idle_default;

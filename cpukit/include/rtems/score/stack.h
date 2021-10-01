@@ -82,6 +82,23 @@ typedef void *( *Stack_Allocator_allocate )( size_t stack_size );
 typedef void ( *Stack_Allocator_free )( void *addr );
 
 /**
+ * @brief Stack allocator allocate for idle handler.
+ *
+ * The allocate for idle handler is optional even when the user thread stack
+ * allocator and deallocator are configured.
+ *
+ * @param cpu Index of the CPU for the IDLE thread using this stack
+ * @param stack_size The size of the stack area to allocate in bytes.
+ *
+ * @retval NULL Not enough memory.
+ * @retval other Pointer to begin of stack area.
+ */
+typedef void *( *Stack_Allocator_allocate_for_idle )(
+  uint32_t  cpu,
+  size_t    stack_size
+);
+
+/**
  * @brief The minimum stack size.
  *
  * Application provided via <rtems/confdefs.h>.
@@ -124,6 +141,13 @@ extern const Stack_Allocator_allocate _Stack_Allocator_allocate;
 extern const Stack_Allocator_free _Stack_Allocator_free;
 
 /** @} */
+/**
+ * @brief The stack allocator allocate stack for idle thread handler.
+ *
+ * Application provided via <rtems/confdefs.h>.
+ */
+extern const Stack_Allocator_allocate_for_idle
+  _Stack_Allocator_allocate_for_idle;
 
 #ifdef __cplusplus
 }
