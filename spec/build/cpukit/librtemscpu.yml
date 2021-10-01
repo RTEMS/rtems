@@ -472,6 +472,8 @@ links:
 - role: build-dependency
   uid: cpumips
 - role: build-dependency
+  uid: cpumicroblaze
+- role: build-dependency
   uid: cpumoxie
 - role: build-dependency
   uid: cpunios2

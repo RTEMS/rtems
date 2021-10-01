@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+cppflags: []
+cxxflags: []
+enabled-by: true
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}
+  source:
+  - bsps/microblaze/microblaze_fpga/include/bsp.h
+  - bsps/microblaze/microblaze_fpga/include/tm27.h
+- destination: ${BSP_INCLUDEDIR}/bsp
+  source:
+  - bsps/microblaze/microblaze_fpga/include/bsp/irq.h
+  - bsps/microblaze/include/common/xil_types.h
+  - bsps/microblaze/include/dev/serial/uartlite.h
+  - bsps/microblaze/include/dev/serial/uartlite_l.h
+links: []
+source:
+- bsps/microblaze/microblaze_fpga/clock/clock.c
+- bsps/microblaze/microblaze_fpga/console/console-io.c
+- bsps/microblaze/microblaze_fpga/console/debug-io.c
+- bsps/microblaze/microblaze_fpga/irq/irq.c
+- bsps/microblaze/microblaze_fpga/start/_exception_handler.S
+- bsps/microblaze/microblaze_fpga/start/_hw_exception_handler.S
+- bsps/microblaze/microblaze_fpga/start/_interrupt_handler.S
+- bsps/microblaze/microblaze_fpga/start/bspreset.c
+- bsps/microblaze/microblaze_fpga/start/bspstart.c
+- bsps/microblaze/microblaze_fpga/start/crtinit.S
+- bsps/microblaze/shared/dev/serial/uartlite.c
+- bsps/microblaze/shared/dev/serial/uartlite_l.c
+- bsps/shared/cache/nocache.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
+- bsps/shared/dev/cpucounter/cpucounterfrequency.c
+- bsps/shared/dev/cpucounter/cpucounterread.c
+- bsps/shared/dev/getentropy/getentropy-cpucounter.c
+- bsps/shared/dev/serial/console-termios-init.c
+- bsps/shared/dev/serial/console-termios.c
+- bsps/shared/irq/irq-default-handler.c
+- bsps/shared/start/bspfatal-default.c
+- bsps/shared/start/bspgetworkarea-default.c
+- bsps/shared/start/gettargethash-default.c
+- bsps/shared/start/sbrk.c
+type: build

@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+cppflags: []
+cxxflags: []
+enabled-by:
+- microblaze
+includes: []
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/score/cpu/microblaze/include/rtems/asm.h
+- destination: ${BSP_INCLUDEDIR}/rtems/score
+  source:
+  - cpukit/score/cpu/microblaze/include/rtems/score/cpu.h
+  - cpukit/score/cpu/microblaze/include/rtems/score/cpuatomic.h
+  - cpukit/score/cpu/microblaze/include/rtems/score/cpuimpl.h
+  - cpukit/score/cpu/microblaze/include/rtems/score/microblaze.h
+links: []
+source:
+- cpukit/score/cpu/microblaze/__tls_get_addr.c
+- cpukit/score/cpu/microblaze/microblaze-context-switch.S
+- cpukit/score/cpu/microblaze/microblaze-context-validate.S
+- cpukit/score/cpu/microblaze/microblaze-context-volatile-clobber.S
+- cpukit/score/cpu/microblaze/cpu.c
+- cpukit/score/cpu/microblaze/cpu_asm.S
+type: build

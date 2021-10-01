@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+asflags: []
+build-type: start-file
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+cppflags: []
+enabled-by: true
+includes: []
+install-path: ${BSP_LIBDIR}
+links: []
+source:
+- bsps/microblaze/shared/start/start.S
+target: start.o
+type: build

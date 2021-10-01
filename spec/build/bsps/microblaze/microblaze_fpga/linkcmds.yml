@@ -1,0 +1,242 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: config-file
+content: |
+  /* SPDX-License-Identifier: BSD-2-Clause */
+
+  /*
+   * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+   *
+   * Redistribution and use in source and binary forms, with or without
+   * modification, are permitted provided that the following conditions
+   * are met:
+   * 1. Redistributions of source code must retain the above copyright
+   *    notice, this list of conditions and the following disclaimer.
+   * 2. Redistributions in binary form must reproduce the above copyright
+   *    notice, this list of conditions and the following disclaimer in the
+   *    documentation and/or other materials provided with the distribution.
+   *
+   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   * POSSIBILITY OF SUCH DAMAGE.
+   */
+
+  ENTRY (_start)
+  STARTUP (start.o)
+  _TEXT_START_ADDR = DEFINED(_TEXT_START_ADDR) ? _TEXT_START_ADDR : 0x80000000;
+
+  MEMORY
+    {
+        BRAM     (AIW) : ORIGIN = 0x00000000, LENGTH = 0x10000
+        RAM   : ORIGIN = _TEXT_START_ADDR, LENGTH = 0x1000000
+    }
+
+  REGION_ALIAS ("REGION_START", BRAM);
+  REGION_ALIAS ("REGION_VECTOR", BRAM);
+  REGION_ALIAS ("REGION_TEXT", RAM);
+  REGION_ALIAS ("REGION_TEXT_LOAD", RAM);
+  REGION_ALIAS ("REGION_RODATA", RAM);
+  REGION_ALIAS ("REGION_RODATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_DATA", RAM);
+  REGION_ALIAS ("REGION_DATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_FAST_DATA", RAM);
+  REGION_ALIAS ("REGION_FAST_DATA_LOAD", RAM);
+  REGION_ALIAS ("REGION_BSS", RAM);
+  REGION_ALIAS ("REGION_WORK", RAM);
+  REGION_ALIAS ("REGION_STACK", RAM);
+
+  SECTIONS
+  {
+    .vectors.reset 0x0 : { KEEP (*(.vectors.reset)) } = 0
+    .vectors.sw_exception 0x8 : { KEEP (*(.vectors.sw_exception)) } = 0
+    .vectors.interrupt 0x10 : { KEEP (*(.vectors.interrupt)) } = 0
+    .vectors.debug_sw_break 0x18 : { KEEP (*(.vectors.debug_sw_break)) } = 0
+    .vectors.hw_exception 0x20 : { KEEP (*(.vectors.hw_exception)) } = 0
+    . = _TEXT_START_ADDR;
+    .text : ALIGN_WITH_INPUT {
+      bsp_section_text_begin = .;
+      *(.text.unlikely .text.*_unlikely)
+      *(.text .stub .text.* .gnu.linkonce.t.*)
+      /* .gnu.warning sections are handled specially by elf32.em.  */
+      *(.gnu.warning)
+      *(.glue_7t) *(.glue_7) *(.vfp11_veneer) *(.v4_bx)
+    } > REGION_TEXT AT > REGION_TEXT_LOAD
+    .init : ALIGN_WITH_INPUT {
+      KEEP (*(.init))
+    } > REGION_TEXT AT > REGION_TEXT_LOAD
+    .fini : ALIGN_WITH_INPUT {
+      KEEP (*(.fini))
+
+      /*
+      * If requested, align the size of the combined start and text
+      * section to the next power of two to meet MPU region
+      * alignment requirements.
+      */
+      . = DEFINED (bsp_align_text_and_rodata_end_to_power_of_2) ?
+          bsp_section_start_begin
+          + ALIGN (. - bsp_section_start_begin,
+          1 << LOG2CEIL (. - bsp_section_start_begin)) : .;
+
+      bsp_section_text_end = .;
+    } > REGION_TEXT AT > REGION_TEXT_LOAD
+    bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
+    bsp_section_text_load_begin = LOADADDR (.text);
+    bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
+
+    . = ALIGN(4);
+
+    /* Added to handle pic code */
+    .got : {
+      *(.got)
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .got1 : {
+      *(.got1)
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .got2 : {
+      *(.got2)
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+
+    _frodata = . ;
+    .rodata : {
+      *(.rodata)
+      *(.rodata.*)
+      *(.gnu.linkonce.r.*)
+      CONSTRUCTORS; /* Is this needed? */
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    _erodata = .;
+    .eh_frame : {
+      *(.eh_frame)
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .jcr : {
+      *(.jcr)
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .gcc_except_table : {
+      *(.gcc_except_table)
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .tdata : ALIGN_WITH_INPUT {
+      _TLS_Data_begin = .;
+      *(.tdata .tdata.* .gnu.linkonce.td.*)
+      _TLS_Data_end = .;
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .tbss : ALIGN_WITH_INPUT {
+      _TLS_BSS_begin = .;
+      *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+      _TLS_BSS_end = .;
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+    _TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
+    _TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
+    _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+    _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+    _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
+
+    .ctors : {
+      _dummy_symbol__ = .;
+      __CTOR_LIST__ = .;
+      ___CTORS_LIST___ = .;
+      KEEP (*crtbegin.o(.ctors))
+      KEEP (*(EXCLUDE_FILE(*crtend.o) .ctors))
+      KEEP (*(SORT(.ctors.*)))
+      KEEP (*(.ctors*))
+      __CTOR_END__ = .;
+      ___CTORS_END___ = .;
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .dtors : {
+      __DTOR_LIST__ = .;
+      ___DTORS_LIST___ = .;
+      KEEP (*crtbegin.o(.dtors))
+      KEEP (*(EXCLUDE_FILE(*crtend.o) .dtors))
+      KEEP (*(SORT(.dtors.*)))
+      KEEP (*(.dtors))
+      PROVIDE(__DTOR_END__ = .);
+      PROVIDE(___DTORS_END___ = .);
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+    .rtemsroset : {
+      /* Special FreeBSD linker set sections */
+      __start_set_sysctl_set = .;
+      *(set_sysctl_*);
+      __stop_set_sysctl_set = .;
+      *(set_domain_*);
+      *(set_pseudo_*);
+
+      KEEP (*(SORT(.rtemsroset.*)))
+      bsp_section_rodata_end = .;
+    } > REGION_RODATA AT > REGION_RODATA_LOAD
+
+    .data : ALIGN_WITH_INPUT {
+      bsp_section_data_begin = .;
+      *(.data .data.* .gnu.linkonce.d.*)
+      SORT(CONSTRUCTORS)
+    } > REGION_DATA AT > REGION_DATA_LOAD
+    .data1 : ALIGN_WITH_INPUT {
+      *(.data1)
+    } > REGION_DATA AT > REGION_DATA_LOAD
+    .rtemsrwset : ALIGN_WITH_INPUT {
+      KEEP (*(SORT(.rtemsrwset.*)))
+      bsp_section_data_end = .;
+    } > REGION_DATA AT > REGION_DATA_LOAD
+    bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
+    bsp_section_data_load_begin = LOADADDR (.data);
+    bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
+
+    .bss : ALIGN_WITH_INPUT {
+      bsp_section_bss_begin = .;
+      *(.dynbss)
+      *(.bss .bss.* .gnu.linkonce.b.*)
+      *(COMMON)
+      bsp_section_bss_end = .;
+    } > REGION_BSS AT > REGION_BSS
+    bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
+
+    . = ALIGN(8);
+
+    .rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
+      bsp_section_rtemsstack_begin = .;
+      *(SORT_BY_ALIGNMENT (SORT_BY_NAME (.rtemsstack*)))
+      bsp_section_rtemsstack_end = .;
+    } > REGION_WORK AT > REGION_WORK
+    bsp_section_rtemsstack_size = bsp_section_rtemsstack_end - bsp_section_rtemsstack_begin;
+
+    .work : ALIGN_WITH_INPUT {
+      /*
+      * The work section will occupy the remaining REGION_WORK region and
+      * contains the RTEMS work space and heap.
+      */
+      bsp_section_work_begin = .;
+      . += ORIGIN (REGION_WORK) + LENGTH (REGION_WORK) - ABSOLUTE (.);
+      bsp_section_work_end = .;
+    } > REGION_WORK AT > REGION_WORK
+    bsp_section_work_size = bsp_section_work_end - bsp_section_work_begin;
+
+    .stack : ALIGN_WITH_INPUT {
+      /*
+      * The stack section will occupy the remaining REGION_STACK region and may
+      * contain the task stacks.  Depending on the region distribution this
+      * section may be of zero size.
+      */
+      bsp_section_stack_begin = .;
+      . += ORIGIN (REGION_STACK) + LENGTH (REGION_STACK) - ABSOLUTE (.);
+      bsp_section_stack_end = .;
+    } > REGION_STACK AT > REGION_STACK
+    bsp_section_stack_size = bsp_section_stack_end - bsp_section_stack_begin;
+
+    RamBase = ORIGIN (REGION_WORK);
+    RamSize = LENGTH (REGION_WORK);
+    RamEnd = RamBase + RamSize;
+    WorkAreaBase = bsp_section_work_begin;
+    HeapSize = 0;
+  }
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+install-path: ${BSP_LIBDIR}
+links: []
+target: linkcmds
+type: build
