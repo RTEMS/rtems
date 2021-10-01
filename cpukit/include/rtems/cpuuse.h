@@ -1,87 +1,228 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /**
  * @file
  *
  * @ingroup libmisc_cpuuse
  *
- * @brief CPU Usage Report
- *
- * This include file contains information necessary to utilize
- * and install the cpu usage reporting mechanism.
+ * @brief This header file provides the CPU usage reporting API.
  */
 
 /*
- * COPYRIGHT (c) 1989-2011.
- * On-Line Applications Research Corporation (OAR).
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __RTEMS_CPUUSE_h
-#define __RTEMS_CPUUSE_h
-
-#include <rtems.h>
-#include <rtems/print.h>
-
-/**
- *  @defgroup libmisc_cpuuse CPU Usage
+/*
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
- *  @ingroup RTEMSAPIClassic
+ * https://www.rtems.org/bugs.html
+ *
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
+ *
+ * https://docs.rtems.org
  */
-/**@{*/
+
+/* Generated from spec:/rtems/cpuuse/if/header */
+
+#ifndef _RTEMS_CPUUSE_H
+#define _RTEMS_CPUUSE_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * rtems_cpu_usage_report_with_handler
- */
-
-void rtems_cpu_usage_report_with_plugin( const rtems_printer *printer );
+/* Generated from spec:/rtems/cpuuse/if/group */
 
 /**
- *  @brief Report CPU usage.
+ * @defgroup libmisc_cpuuse CPU Usage Reporting
  *
- *  CPU Usage Reporter
+ * @ingroup RTEMSAPI
+ *
+ * @brief The CPU usage reporting directives can be used to report and reset
+ *   the CPU usage of threads.
  */
 
+/* Generated from spec:/rtems/cpuuse/if/printer */
+
+/* Forward declaration */
+struct rtems_printer;
+
+/* Generated from spec:/rtems/cpuuse/if/cpu-info-report */
+
+/**
+ * @ingroup libmisc_cpuuse
+ *
+ * @brief Reports the CPU information using the printer plugin.
+ *
+ * @param printer is the printer plugin to output the report.
+ *
+ * @return Returns the number of characters printed.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ * @endparblock
+ */
+int rtems_cpu_info_report( const struct rtems_printer *printer );
+
+/* Generated from spec:/rtems/cpuuse/if/report */
+
+/**
+ * @ingroup libmisc_cpuuse
+ *
+ * @brief Reports the CPU usage of each thread using the printk() printer.
+ *
+ * @par Notes
+ * See also rtems_cpu_usage_report_with_plugin().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
+ */
 void rtems_cpu_usage_report( void );
 
-/**
- *   @brief CPU usage Top plugin
- *
- *   Report CPU Usage in top format to
- *   to a print plugin.
- */
-void rtems_cpu_usage_top_with_plugin( const rtems_printer *printer );
+/* Generated from spec:/rtems/cpuuse/if/report-with-plugin */
 
 /**
- *  @brief CPU usage top.
+ * @ingroup libmisc_cpuuse
  *
- *  CPU Usage top
+ * @brief Reports the CPU usage of each thread using the printer plugin.
+ *
+ * @param printer is the printer plugin to output the report.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
+void rtems_cpu_usage_report_with_plugin( const struct rtems_printer *printer );
 
-void rtems_cpu_usage_top( void );
+/* Generated from spec:/rtems/cpuuse/if/reset */
 
 /**
- *  @brief Reset CPU usage.
+ * @ingroup libmisc_cpuuse
  *
- *  CPU Usage Reporter
+ * @brief Resets the CPU usage of each thread.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within device driver initialization
+ *   context.
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ * @endparblock
  */
-
 void rtems_cpu_usage_reset( void );
 
+/* Generated from spec:/rtems/cpuuse/if/top */
+
 /**
- * @brief Reports per-processor information.
+ * @ingroup libmisc_cpuuse
  *
- * @return The number of characters printed.
+ * @brief Starts an interactive CPU usage reporting using the printk() printer.
+ *
+ * @par Notes
+ * See also rtems_cpu_usage_top_with_plugin().
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ * @endparblock
  */
-int rtems_cpu_info_report( const rtems_printer *printer );
+void rtems_cpu_usage_top( void );
+
+/* Generated from spec:/rtems/cpuuse/if/top-with-plugin */
+
+/**
+ * @ingroup libmisc_cpuuse
+ *
+ * @brief Starts an interactive CPU usage reporting using the printer plugin.
+ *
+ * @param printer is the printer plugin to output the report.
+ *
+ * @par Notes
+ * The directive starts a task to do the reporting.  The getchar() function is
+ * used to get commands from the user.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within task context.
+ *
+ * * The directive may obtain and release the object allocator mutex.  This may
+ *   cause the calling task to be preempted.
+ *
+ * * The directive sends a request to another task and waits for a response.
+ *   This may cause the calling task to be blocked and unblocked.
+ * @endparblock
+ */
+void rtems_cpu_usage_top_with_plugin( const struct rtems_printer *printer );
 
 #ifdef __cplusplus
 }
 #endif
-/**@}*/
-#endif
-/* end of include file */
+
+#endif /* _RTEMS_CPUUSE_H */
