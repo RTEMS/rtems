@@ -110,7 +110,7 @@ typedef struct {
 #define SCHEDULER_EDF_SMP_ENTRY_POINTS \
   { \
     _Scheduler_EDF_SMP_Initialize, \
-    _Scheduler_default_Schedule, \
+    NULL, \
     _Scheduler_EDF_SMP_Yield, \
     _Scheduler_EDF_SMP_Block, \
     _Scheduler_EDF_SMP_Unblock, \
