@@ -12,6 +12,7 @@ ldflags: []
 links: []
 source:
 - testsuites/unit/tc-misaligned-builtin-memcpy.c
+- testsuites/unit/tc-score-rbtree.c
 - testsuites/unit/ts-unit-no-clock-0.c
 stlib: []
 target: testsuites/unit/ts-unit-no-clock-0.exe
