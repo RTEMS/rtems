@@ -217,7 +217,7 @@ static rtems_status_code _Rate_monotonic_Activate(
   ISR_lock_Context       *lock_context
 )
 {
-  the_period->postponed_jobs = 0;
+  _Assert( the_period->postponed_jobs == 0 );
   the_period->state = RATE_MONOTONIC_ACTIVE;
   the_period->next_length = length;
   _Rate_monotonic_Restart( the_period, executing, lock_context );
