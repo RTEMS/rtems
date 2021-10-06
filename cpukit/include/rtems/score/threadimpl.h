@@ -2195,8 +2195,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
 
   queue = the_thread->Wait.queue;
 
-#if defined(RTEMS_SMP)
   if ( queue != NULL ) {
+#if defined(RTEMS_SMP)
     _Assert( queue_context->Lock_context.Wait.queue == queue );
 #endif
 
@@ -2210,8 +2210,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
 #if defined(RTEMS_SMP)
     _Assert( queue_context->Lock_context.Wait.queue == NULL );
     queue_context->Lock_context.Wait.queue = queue;
-  }
 #endif
+  }
 }
 
 /**
