@@ -368,6 +368,18 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  */
 #define rtems_configuration_get_stack_free_hook() _Stack_Allocator_free
 
+/**
+ * @ingroup RTEMSAPIConfig
+ *
+ * @brief Gets the IDLE thread stack allocator hook configured for this
+ *   application.
+ *
+ * @return Returns the IDLE thread stack allocator hook configured for this
+ *   application.
+ */
+#define rtems_configuration_get_stack_allocate_for_idle_hook() \
+  (_Stack_Allocator_allocate_for_idle)
+
 /* Generated from spec:/rtems/config/if/get-stack-space-size */
 
 /**

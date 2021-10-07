@@ -49,9 +49,15 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   config.is_preemptible = true;
   config.stack_size = _Thread_Idle_stack_size
     + CPU_IDLE_TASK_IS_FP * CONTEXT_FP_SIZE;
-  config.stack_area = &_Thread_Idle_stacks[
-    _Per_CPU_Get_index( cpu ) * config.stack_size
-  ];
+
+  /*
+   * The IDLE thread stacks may be statically allocated or there may be a
+   * custom allocator provided just as with user threads.
+   */
+  config.stack_area = (*_Stack_Allocator_allocate_for_idle)(
+    _Per_CPU_Get_index( cpu ),
+    config.stack_size
+  );
 
   /*
    *  The entire workspace is zeroed during its initialization.  Thus, all

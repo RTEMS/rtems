@@ -396,6 +396,10 @@ links:
 - role: build-dependency
   uid: spstkalloc02
 - role: build-dependency
+  uid: spstkalloc03
+- role: build-dependency
+  uid: spstkalloc04
+- role: build-dependency
   uid: spsysinit01
 - role: build-dependency
   uid: spsyslock01
