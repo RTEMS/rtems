@@ -351,33 +351,50 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_scheduled(
 }
 
 /**
- * @brief Sets the first node of the header.
+ * @brief Sets the first watchdog of the watchdog collection to the next
+ * watchdog of the current first watchdog.
  *
- * Sets the first node of the header to either the leftmost child node of the
- *  watchdog control node, or if not present sets it to the right child node of
- * the watchdog control node. if both are not present, the new first node is
- * the parent node of the current first node.
+ * This function may be used during watchdog removals, see _Watchdog_Remove()
+ * and _Watchdog_Tickle().
  *
- * @param[in, out] header The watchdog header.
- * @param the_watchdog The watchdog control node for the operation.
+ * @param[in, out] header is the watchdog collection header.
+ *
+ * @param first is the current first watchdog which should be removed
+ *   afterwards.
  */
 RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
-  Watchdog_Header  *header,
-  Watchdog_Control *the_watchdog
+  Watchdog_Header        *header,
+  const Watchdog_Control *first
 )
 {
-  RBTree_Node *node = _RBTree_Right( &the_watchdog->Node.RBTree );
+  RBTree_Node *right;
 
-  if ( node != NULL ) {
-    RBTree_Node *left;
+  /*
+   * This function uses the following properties of red-black trees:
+   *
+   * 1. Every leaf (NULL) is black.
+   *
+   * 2. If a node is red, then both its children are black.
+   *
+   * 3. Every simple path from a node to a descendant leaf contains the same
+   *    number of black nodes.
+   *
+   * The first node has no left child.  So every path from the first node has
+   * exactly one black node (including leafs).  The first node cannot have a
+   * non-leaf black right child.  It may have a red right child.  In this case
+   * both children must be leafs.
+   */
+  _Assert( header->first == &first->Node.RBTree );
+  _Assert( _RBTree_Left( &first->Node.RBTree ) == NULL );
+  right = _RBTree_Right( &first->Node.RBTree );
 
-    while ( ( left = _RBTree_Left( node ) ) != NULL ) {
-      node = left;
-    }
-
-    header->first = node;
+  if ( right != NULL ) {
+    _Assert( RB_COLOR( right, Node ) == RB_RED );
+    _Assert( _RBTree_Left( right ) == NULL );
+    _Assert( _RBTree_Right( right ) == NULL );
+    header->first = right;
   } else {
-    header->first = _RBTree_Parent( &the_watchdog->Node.RBTree );
+    header->first = _RBTree_Parent( &first->Node.RBTree );
   }
 }
 
