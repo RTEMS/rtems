@@ -218,7 +218,7 @@ static struct timehands th0 = {
 	.th_counter = &dummy_timecounter,
 	.th_scale = (uint64_t)-1 / 1000000,
 	.th_offset = { .sec = 1 },
-	.th_generation = 1,
+	.th_generation = UINT_MAX,
 #ifdef __rtems__
 	.th_bintime = { .sec = TOD_SECONDS_1970_THROUGH_1988 },
 	.th_microtime = { TOD_SECONDS_1970_THROUGH_1988, 0 },
