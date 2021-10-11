@@ -61,6 +61,7 @@
 #include <rtems/score/smp.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/rtems/clock.h>
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -699,6 +700,16 @@ getmicrotime(struct timeval *tvp)
 }
 #endif /* FFCLOCK */
 
+#ifdef __rtems__
+void
+rtems_clock_get_boot_time(struct timespec *boottime)
+{
+	struct bintime boottimebin;
+
+	getboottimebin(&boottimebin);
+	bintime2timespec(&boottimebin, boottime);
+}
+#endif /* __rtems__ */
 void
 getboottime(struct timeval *boottime)
 {
@@ -2646,4 +2657,49 @@ DB_SHOW_COMMAND(timecounter, db_show_timecounter)
 	    (intmax_t)th->th_boottime.sec, (uintmax_t)th->th_boottime.frac);
 }
 #endif
+#else /* __rtems__ */
+RTEMS_ALIAS(_Timecounter_Nanotime)
+void rtems_clock_get_realtime(struct timespec *);
+
+RTEMS_ALIAS(_Timecounter_Bintime)
+void rtems_clock_get_realtime_bintime(struct bintime *);
+
+RTEMS_ALIAS(_Timecounter_Microtime)
+void rtems_clock_get_realtime_timeval(struct timeval *);
+
+RTEMS_ALIAS(_Timecounter_Getnanotime)
+void rtems_clock_get_realtime_coarse(struct timespec *);
+
+RTEMS_ALIAS(_Timecounter_Getbintime)
+void rtems_clock_get_realtime_coarse_bintime(struct bintime *);
+
+RTEMS_ALIAS(_Timecounter_Getmicrotime)
+void rtems_clock_get_realtime_coarse_timeval(struct timeval *);
+
+RTEMS_ALIAS(_Timecounter_Nanouptime)
+void rtems_clock_get_monotonic(struct timespec *);
+
+RTEMS_ALIAS(_Timecounter_Binuptime)
+void rtems_clock_get_monotonic_bintime(struct bintime *);
+
+RTEMS_ALIAS(_Timecounter_Sbinuptime)
+sbintime_t rtems_clock_get_monotonic_sbintime(void);
+
+RTEMS_ALIAS(_Timecounter_Microuptime)
+void rtems_clock_get_monotonic_timeval(struct timeval *);
+
+RTEMS_ALIAS(_Timecounter_Getnanouptime)
+void rtems_clock_get_monotonic_coarse(struct timespec *);
+
+RTEMS_ALIAS(_Timecounter_Getbinuptime)
+void rtems_clock_get_monotonic_coarse_bintime(struct bintime *);
+
+RTEMS_ALIAS(_Timecounter_Getmicrouptime)
+void rtems_clock_get_monotonic_coarse_timeval(struct timeval *);
+
+RTEMS_ALIAS(_Timecounter_Getboottimebin)
+void rtems_clock_get_boot_time_bintime(struct bintime *);
+
+RTEMS_ALIAS(_Timecounter_Getboottime)
+void rtems_clock_get_boot_time_timeval(struct timeval *);
 #endif /* __rtems__ */

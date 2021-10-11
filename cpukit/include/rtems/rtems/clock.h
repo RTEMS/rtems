@@ -81,6 +81,11 @@ extern "C" {
  *   related capabilities.
  */
 
+/* Generated from spec:/rtems/clock/if/bintime */
+
+/* Forward declaration */
+struct bintime;
+
 /* Generated from spec:/rtems/clock/if/set */
 
 /**
@@ -212,6 +217,593 @@ rtems_status_code rtems_clock_get_tod( rtems_time_of_day *time_of_day );
  * @endparblock
  */
 rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
+
+/* Generated from spec:/rtems/clock/if/get-realtime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch measured using
+ *   CLOCK_REALTIME in seconds and nanoseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a struct timespec object.  The
+ *   time elapsed since the Unix epoch measured using the CLOCK_REALTIME at
+ *   some time point during the directive call will be stored in this object.
+ *   Calling the directive with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.  Alternatively, the
+ * rtems_clock_get_realtime_coarse() directive may be used to get the time with
+ * less precision and less runtime overhead.
+ *
+ * See rtems_clock_get_realtime_bintime() and
+ * rtems_clock_get_realtime_timeval() to get the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_realtime( struct timespec *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-realtime-bintime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch measured using
+ *   CLOCK_REALTIME in binary time format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since the Unix epoch measured using the CLOCK_REALTIME at some
+ *   time point during the directive call will be stored in this object.
+ *   Calling the directive with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.  Alternatively, the
+ * rtems_clock_get_realtime_coarse_bintime() directive may be used to get the
+ * time with less precision and less runtime overhead.
+ *
+ * See rtems_clock_get_realtime() and rtems_clock_get_realtime_timeval() to get
+ * the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_realtime_bintime( struct bintime *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-realtime-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch measured using
+ *   CLOCK_REALTIME in seconds and microseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a struct timeval object.  The
+ *   time elapsed since the Unix epoch measured using the CLOCK_REALTIME at
+ *   some time point during the directive call will be stored in this object.
+ *   Calling the directive with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.  Alternatively, the
+ * rtems_clock_get_realtime_coarse_timeval() directive may be used to get the
+ * time with less precision and less runtime overhead.
+ *
+ * See rtems_clock_get_realtime() and rtems_clock_get_realtime_bintime() to get
+ * the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-realtime-coarse */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch measured using
+ *   CLOCK_REALTIME in coarse precision in seconds and nanoseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a struct timespec object.  The
+ *   time elapsed since the Unix epoch measured using the CLOCK_REALTIME at
+ *   some time point close to the directive call will be stored in this object.
+ *   Calling the directive with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive does not access a device to get the time.  It uses a recent
+ * snapshot provided by the Clock Driver.  Alternatively, the
+ * rtems_clock_get_realtime() directive may be used to get the time with higher
+ * precision and higher runtime overhead.
+ *
+ * See rtems_clock_get_realtime_coarse_bintime() and
+ * rtems_clock_get_realtime_coarse_timeval() to get the time in alternative
+ * formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-realtime-coarse-bintime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch measured using
+ *   CLOCK_REALTIME in coarse precision in binary time format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since the Unix epoch measured using the CLOCK_REALTIME at some
+ *   time point close to the directive call will be stored in this object.
+ *   Calling the directive with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive does not access a device to get the time.  It uses a recent
+ * snapshot provided by the Clock Driver.  Alternatively, the
+ * rtems_clock_get_realtime_bintime() directive may be used to get the time
+ * with higher precision and higher runtime overhead.
+ *
+ * See rtems_clock_get_realtime_coarse() and
+ * rtems_clock_get_realtime_coarse_timeval() to get the time in alternative
+ * formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-realtime-coarse-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch measured using
+ *   CLOCK_REALTIME in coarse precision in seconds and microseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a struct timeval object.  The
+ *   time elapsed since the Unix epoch measured using the CLOCK_REALTIME at
+ *   some time point close to the directive call will be stored in this object.
+ *   Calling the directive with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive does not access a device to get the time.  It uses a recent
+ * snapshot provided by the Clock Driver.  Alternatively, the
+ * rtems_clock_get_realtime_timeval() directive may be used to get the time
+ * with higher precision and higher runtime overhead.
+ *
+ * See rtems_clock_get_realtime_coarse() and
+ * rtems_clock_get_realtime_coarse_timeval() to get the time in alternative
+ * formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in seconds and nanoseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since some fixed time point in the past measured using the
+ *   CLOCK_MONOTONIC at some time point during the directive call will be
+ *   stored in this object.  Calling the directive with a pointer equal to NULL
+ *   is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.  Alternatively, the
+ * rtems_clock_get_monotonic_coarse() directive may be used to get the time
+ * with less precision and less runtime overhead.
+ *
+ * See rtems_clock_get_monotonic_bintime(),
+ * rtems_clock_get_monotonic_sbintime(), and
+ * rtems_clock_get_monotonic_timeval() to get the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_monotonic( struct timespec *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic-bintime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in binary time format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since some fixed time point in the past measured using the
+ *   CLOCK_MONOTONIC at some time point during the directive call will be
+ *   stored in this object.  Calling the directive with a pointer equal to NULL
+ *   is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.  Alternatively, the
+ * rtems_clock_get_monotonic_coarse_bintime() directive may be used to get the
+ * time with less precision and less runtime overhead.
+ *
+ * See rtems_clock_get_monotonic(), rtems_clock_get_monotonic_sbintime(), and
+ * rtems_clock_get_monotonic_timeval() to get the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_monotonic_bintime( struct bintime *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic-sbintime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in signed binary time format.
+ *
+ * @return Returns the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC at some time point during the directive
+ *   call.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.
+ *
+ * See rtems_clock_get_monotonic(), rtems_clock_get_monotonic_bintime(), and
+ * rtems_clock_get_monotonic_timeval() to get the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+int64_t rtems_clock_get_monotonic_sbintime( void );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in seconds and microseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since some fixed time point in the past measured using the
+ *   CLOCK_MONOTONIC at some time point during the directive call will be
+ *   stored in this object.  Calling the directive with a pointer equal to NULL
+ *   is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive accesses a device provided by the Clock Driver to get the time
+ * in the highest precision available to the system.  Alternatively, the
+ * rtems_clock_get_monotonic_coarse_timeval() directive may be used to get the
+ * time with less precision and less runtime overhead.
+ *
+ * See rtems_clock_get_monotonic(), rtems_clock_get_monotonic_bintime(), and
+ * rtems_clock_get_monotonic_sbintime() to get the time in alternative formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic-coarse */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in coarse precision in seconds and
+ *   nanoseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since some fixed time point in the past measured using the
+ *   CLOCK_MONOTONIC at some time point close to the directive call will be
+ *   stored in this object.  Calling the directive with a pointer equal to NULL
+ *   is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive does not access a device to get the time.  It uses a recent
+ * snapshot provided by the Clock Driver.  Alternatively, the
+ * rtems_clock_get_monotonic() directive may be used to get the time with
+ * higher precision and higher runtime overhead.
+ *
+ * See rtems_clock_get_monotonic_coarse_bintime() and
+ * rtems_clock_get_monotonic_coarse_timeval() to get the time in alternative
+ * formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic-coarse-bintime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in coarse precision in binary time
+ *   format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since some fixed time point in the past measured using the
+ *   CLOCK_MONOTONIC at some time point close to the directive call will be
+ *   stored in this object.  Calling the directive with a pointer equal to NULL
+ *   is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive does not access a device to get the time.  It uses a recent
+ * snapshot provided by the Clock Driver.  Alternatively, the
+ * rtems_clock_get_monotonic_bintime() directive may be used to get the time
+ * with higher precision and higher runtime overhead.
+ *
+ * See rtems_clock_get_monotonic_coarse() and
+ * rtems_clock_get_monotonic_coarse_timeval() to get the time in alternative
+ * formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-monotonic-coarse-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since some fixed time point in the past
+ *   measured using the CLOCK_MONOTONIC in coarse precision in seconds and
+ *   microseconds format.
+ *
+ * @param[out] time_snapshot is the pointer to a bintime object.  The time
+ *   elapsed since some fixed time point in the past measured using the
+ *   CLOCK_MONOTONIC at some time point close to the directive call will be
+ *   stored in this object.  Calling the directive with a pointer equal to NULL
+ *   is undefined behaviour.
+ *
+ * @par Notes
+ * @parblock
+ * The directive does not access a device to get the time.  It uses a recent
+ * snapshot provided by the Clock Driver.  Alternatively, the
+ * rtems_clock_get_monotonic_timeval() directive may be used to get the time
+ * with higher precision and higher runtime overhead.
+ *
+ * See rtems_clock_get_monotonic_coarse() and
+ * rtems_clock_get_monotonic_coarse_bintime() to get the time in alternative
+ * formats.
+ * @endparblock
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_monotonic_coarse_timeval( struct timeval *time_snapshot );
+
+/* Generated from spec:/rtems/clock/if/get-boot-time */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch at some time point during
+ *   system initialization in seconds and nanoseconds format.
+ *
+ * @param[out] boot_time is the pointer to a struct timespec object.  The time
+ *   elapsed since the Unix epoch at some time point during system
+ *   initialization call will be stored in this object.  Calling the directive
+ *   with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * See rtems_clock_get_boot_time_bintime() and
+ * rtems_clock_get_boot_time_timeval() to get the boot time in alternative
+ * formats.  Setting the CLOCK_REALTIME will also set the boot time.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_boot_time( struct timespec *boot_time );
+
+/* Generated from spec:/rtems/clock/if/get-boot-time-bintime */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch at some time point during
+ *   system initialization in binary time format.
+ *
+ * @param[out] boot_time is the pointer to a bintime object.  The time elapsed
+ *   since the Unix epoch at some time point during system initialization call
+ *   will be stored in this object.  Calling the directive with a pointer equal
+ *   to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * See rtems_clock_get_boot_time() and rtems_clock_get_boot_time_timeval() to
+ * get the boot time in alternative formats.  Setting the CLOCK_REALTIME will
+ * also set the boot time.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_boot_time_bintime( struct bintime *boot_time );
+
+/* Generated from spec:/rtems/clock/if/get-boot-time-timeval */
+
+/**
+ * @ingroup RTEMSAPIClassicClock
+ *
+ * @brief Gets the time elapsed since the Unix epoch at some time point during
+ *   system initialization in seconds and microseconds format.
+ *
+ * @param[out] boot_time is the pointer to a struct timeval object.  The time
+ *   elapsed since the Unix epoch at some time point during system
+ *   initialization call will be stored in this object.  Calling the directive
+ *   with a pointer equal to NULL is undefined behaviour.
+ *
+ * @par Notes
+ * See rtems_clock_get_boot_time() and rtems_clock_get_boot_time_bintime() to
+ * get the boot time in alternative formats.  Setting the CLOCK_REALTIME will
+ * also set the boot time.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * The directive may be called from within any runtime context.
+ *
+ * * The directive will not cause the calling task to be preempted.
+ *
+ * * The directive requires a Clock Driver.
+ * @endparblock
+ */
+void rtems_clock_get_boot_time_timeval( struct timeval *boot_time );
 
 /* Generated from spec:/rtems/clock/if/get-seconds-since-epoch */
 
