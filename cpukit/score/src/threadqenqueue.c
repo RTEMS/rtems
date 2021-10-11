@@ -818,7 +818,7 @@ Status_Control _Thread_queue_Surrender_priority_ceiling(
       &queue_context->Lock_context.Lock_context
     );
     _Thread_Priority_update( queue_context );
-    _Thread_Dispatch_direct( cpu_self );
+    _Thread_Dispatch_enable( cpu_self );
     return STATUS_SUCCESSFUL;
   }
 
@@ -856,7 +856,7 @@ Status_Control _Thread_queue_Surrender_priority_ceiling(
     unblock
   );
 
-  _Thread_Dispatch_direct( cpu_self );
+  _Thread_Dispatch_enable( cpu_self );
   return STATUS_SUCCESSFUL;
 }
 

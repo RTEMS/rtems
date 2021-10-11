@@ -406,6 +406,48 @@ static void test_mutex_auto_initialization( void )
   }
 }
 
+static void test_mutex_prio_protect_with_cv( void )
+{
+  pthread_mutex_t mutex;
+  pthread_mutexattr_t attr;
+  pthread_cond_t cond;
+  int eno;
+  struct timespec timeout;
+
+  eno = pthread_mutexattr_init( &attr );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutex_init( &mutex, &attr );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutexattr_destroy( &attr );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_init( &cond, NULL );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutex_lock( &mutex );
+  rtems_test_assert( eno == 0 );
+
+  timeout.tv_sec = 0;
+  timeout.tv_nsec = 0;
+
+  eno = pthread_cond_timedwait( &cond, &mutex, &timeout );
+  rtems_test_assert( eno == ETIMEDOUT );
+
+  eno = pthread_mutex_unlock( &mutex );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutex_destroy( &mutex );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_destroy( &cond );
+  rtems_test_assert( eno == 0 );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -431,6 +473,7 @@ void *POSIX_Init(
   test_mutex_not_initialized();
   test_mutex_invalid_copy();
   test_mutex_auto_initialization();
+  test_mutex_prio_protect_with_cv();
   test_get_priority();
   test_set_priority();
   test_errors_pthread_setschedprio();
