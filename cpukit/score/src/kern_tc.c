@@ -175,7 +175,7 @@ struct timehands {
 	struct timecounter	*th_counter;
 	int64_t			th_adjustment;
 	uint64_t		th_scale;
-	u_int			th_large_delta;
+	uint32_t		th_large_delta;
 	uint32_t	 	th_offset_count;
 	struct bintime		th_offset;
 	struct bintime		th_bintime;
@@ -235,6 +235,7 @@ static struct timehands th0 = {
 	.th_counter = &dummy_timecounter,
 	.th_scale = (uint64_t)-1 / 1000000,
 	.th_offset = { .sec = 1 },
+	.th_large_delta = 1000000,
 	.th_generation = UINT_MAX,
 #ifdef __rtems__
 	.th_bintime = { .sec = TOD_SECONDS_1970_THROUGH_1988 },
@@ -390,7 +391,12 @@ bintime_off(struct bintime *bt, u_int off)
 	struct timehands *th;
 	struct bintime *btp;
 	uint64_t scale, x;
+#ifndef __rtems__
 	u_int delta, gen, large_delta;
+#else /* __rtems__ */
+	uint32_t delta, large_delta;
+	u_int gen;
+#endif /* __rtems__ */
 
 	do {
 		th = timehands;
@@ -553,16 +559,29 @@ sbintime_t
 _Timecounter_Sbinuptime(void)
 {
 	struct timehands *th;
-	uint32_t gen;
 	sbintime_t sbt;
+	uint64_t scale;
+	uint32_t delta;
+	uint32_t large_delta;
+	u_int gen;
 
 	do {
 		th = timehands;
 		gen = atomic_load_acq_int(&th->th_generation);
 		sbt = bttosbt(th->th_offset);
-		sbt += (th->th_scale * tc_delta(th)) >> 32;
+		scale = th->th_scale;
+		delta = tc_delta(th);
+		large_delta = th->th_large_delta;
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
+
+	if (__predict_false(delta >= large_delta)) {
+		/* Avoid overflow for scale * delta. */
+		sbt += (scale >> 32) * delta;
+		sbt += ((scale & 0xffffffff) * delta) >> 32;
+	} else {
+		sbt += (scale * delta) >> 32;
+	}
 
 	return (sbt);
 }

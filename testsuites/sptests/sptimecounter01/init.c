@@ -204,11 +204,11 @@ void boot_card(const char *cmdline)
   assert(bt.sec == 1);
   assert(bt.frac == 18446744073708);
 
-  /* Ensure that the fraction overflows and the second remains constant */
+  /* Check that a large delta yields a correct time */
   ctx->counter = (0xf0000000 | 1) + TEST_FREQ;
   rtems_bsd_binuptime(&bt);
   assert(ctx->counter == (0xf0000000 | 2) + TEST_FREQ);
-  assert(bt.sec == 1);
+  assert(bt.sec == 2);
   assert(bt.frac == 18446742522092);
 
   test_install(ctx);
