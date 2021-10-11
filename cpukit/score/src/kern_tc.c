@@ -407,7 +407,11 @@ bintime_off(struct bintime *bt, u_int off)
 		delta = tc_delta(th);
 		large_delta = th->th_large_delta;
 		atomic_thread_fence_acq();
+#if defined(RTEMS_SMP)
 	} while (gen == 0 || gen != th->th_generation);
+#else
+	} while (gen != th->th_generation);
+#endif
 
 	if (__predict_false(delta >= large_delta)) {
 		/* Avoid overflow for scale * delta. */
@@ -438,7 +442,11 @@ getthmember(void *out, size_t out_size, u_int off)
 		gen = atomic_load_acq_int(&th->th_generation);
 		memcpy(out, (char *)th + off, out_size);
 		atomic_thread_fence_acq();
+#if defined(RTEMS_SMP)
 	} while (gen == 0 || gen != th->th_generation);
+#else
+	} while (gen != th->th_generation);
+#endif
 }
 #define	GETTHMEMBER(dst, member)					\
 do {									\
@@ -573,7 +581,11 @@ _Timecounter_Sbinuptime(void)
 		delta = tc_delta(th);
 		large_delta = th->th_large_delta;
 		atomic_thread_fence_acq();
+#if defined(RTEMS_SMP)
 	} while (gen == 0 || gen != th->th_generation);
+#else
+	} while (gen != th->th_generation);
+#endif
 
 	if (__predict_false(delta >= large_delta)) {
 		/* Avoid overflow for scale * delta. */
@@ -1604,7 +1616,10 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	struct bintime bt;
 	struct timecounter *tc;
 	struct timehands *th, *tho;
-	uint32_t delta, ncount, ogen;
+	uint32_t delta, ncount;
+#if defined(RTEMS_SMP)
+	u_int ogen;
+#endif
 	int i;
 	time_t t;
 
@@ -1620,14 +1635,12 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	tho = timehands;
 #if defined(RTEMS_SMP)
 	th = tho->th_next;
-#else
-	th = tho;
-#endif
 	ogen = th->th_generation;
 	th->th_generation = 0;
 	atomic_thread_fence_rel();
-#if defined(RTEMS_SMP)
 	memcpy(th, tho, offsetof(struct timehands, th_generation));
+#else
+	th = tho;
 #endif
 	if (new_boottimebin != NULL)
 		th->th_boottime = *new_boottimebin;
@@ -1727,6 +1740,7 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 #endif
 	}
 
+#if defined(RTEMS_SMP)
 	/*
 	 * Now that the struct timehands is again consistent, set the new
 	 * generation number, making sure to not make it zero.
@@ -1734,6 +1748,9 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	if (++ogen == 0)
 		ogen = 1;
 	atomic_store_rel_int(&th->th_generation, ogen);
+#else
+	atomic_store_rel_int(&th->th_generation, th->th_generation + 1);
+#endif
 
 	/* Go live with the new struct timehands. */
 #ifdef FFCLOCK
@@ -2226,27 +2243,38 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
 {
 	struct bintime bt;
 	struct timehands *th;
-	uint32_t ogen;
+#if defined(RTEMS_SMP)
+	u_int ogen;
+#endif
 
 	th = timehands;
+#if defined(RTEMS_SMP)
 	ogen = th->th_generation;
+	th->th_generation = 0;
+	atomic_thread_fence_rel();
+#endif
+
 	th->th_offset_count = offset;
 	bintime_addx(&th->th_offset, th->th_scale * delta);
-
 	bt = th->th_offset;
 	bintime_add(&bt, &th->th_boottime);
+
 	/* Update the UTC timestamps used by the get*() functions. */
 	th->th_bintime = bt;
 	bintime2timeval(&bt, &th->th_microtime);
 	bintime2timespec(&bt, &th->th_nanotime);
 
+#if defined(RTEMS_SMP)
 	/*
 	 * Now that the struct timehands is again consistent, set the new
 	 * generation number, making sure to not make it zero.
 	 */
 	if (++ogen == 0)
 		ogen = 1;
-	th->th_generation = ogen;
+	atomic_store_rel_int(&th->th_generation, ogen);
+#else
+	atomic_store_rel_int(&th->th_generation, th->th_generation + 1);
+#endif
 
 	/* Go live with the new struct timehands. */
 	time_second = th->th_microtime.tv_sec;
