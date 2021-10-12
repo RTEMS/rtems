@@ -52,7 +52,7 @@ static bool cpu_usage_visitor( Thread_Control *the_thread, void *arg )
   ctx = arg;
   _Thread_Get_name( the_thread, name, sizeof( name ) );
 
-  _Thread_Get_CPU_time_used( the_thread, &used );
+  used = _Thread_Get_CPU_time_used_after_last_reset( the_thread );
   _TOD_Get_uptime( &uptime );
   _Timestamp_Subtract( &ctx->uptime_at_last_reset, &uptime, &ctx->total );
   _Timestamp_Divide( &used, &ctx->total, &ival, &fval );

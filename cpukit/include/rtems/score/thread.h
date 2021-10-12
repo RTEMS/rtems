@@ -853,10 +853,19 @@ struct _Thread_Control {
   Thread_CPU_budget_algorithms          budget_algorithm;
   /** This field is the method invoked with the budgeted time is consumed. */
   Thread_CPU_budget_algorithm_callout   budget_callout;
-  /** This field is the amount of CPU time consumed by this thread
-   *  since it was created.
+
+  /**
+   * @brief This member contains the amount of CPU time consumed by this thread
+   *   since it was created.
    */
-  Timestamp_Control                     cpu_time_used;
+  Timestamp_Control cpu_time_used;
+
+  /**
+   * @brief This member contains the amount of CPU time consumed by this thread
+   *   at the time of the last reset of the CPU usage by
+   *   rtems_cpu_usage_reset().
+   */
+  Timestamp_Control cpu_time_used_at_last_reset;
 
   /** This field contains information about the starting state of
    *  this thread.

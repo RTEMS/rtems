@@ -28,10 +28,10 @@ void rtems_test_busy_cpu_usage( time_t seconds, long nanoseconds )
   Timestamp_Control  now;
 
   executing = _Thread_Get_executing();
-  _Thread_Get_CPU_time_used( executing, &start );
+  start = _Thread_Get_CPU_time_used( executing );
   _Timestamp_Set( &busy, seconds, nanoseconds );
 
   do {
-    _Thread_Get_CPU_time_used( executing, &now );
+    now = _Thread_Get_CPU_time_used( executing );
   } while ( now - start < busy );
 }

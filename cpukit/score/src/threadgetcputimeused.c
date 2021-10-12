@@ -4,7 +4,7 @@
  * @ingroup RTEMSScoreThread
  *
  * @brief This source file contains the implementation of
- *   _Thread_Get_CPU_time_used().
+ *   _Thread_Get_CPU_time_used() and _Thread_Get_CPU_time_used_locked().
  */
 
 /*
@@ -37,25 +37,39 @@ static bool _Thread_Is_scheduled( const Thread_Control *the_thread )
 #endif
 }
 
-void _Thread_Get_CPU_time_used(
-  Thread_Control    *the_thread,
-  Timestamp_Control *cpu_time_used
+Timestamp_Control _Thread_Get_CPU_time_used_locked(
+  Thread_Control *the_thread
 )
 {
-  const Scheduler_Control *scheduler;
-  ISR_lock_Context         state_lock_context;
-  ISR_lock_Context         scheduler_lock_context;
-
-  _Thread_State_acquire( the_thread, &state_lock_context );
-  scheduler = _Thread_Scheduler_get_home( the_thread );
-  _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
+  _Assert( _Thread_State_is_owner( the_thread ) );
+  _Assert(
+    _ISR_lock_Is_owner(
+      &_Scheduler_Get_context( _Thread_Scheduler_get_home( the_thread ) )->Lock
+    )
+  );
 
   if ( _Thread_Is_scheduled( the_thread ) ) {
     _Thread_Update_CPU_time_used( the_thread, _Thread_Get_CPU( the_thread ) );
   }
 
-  *cpu_time_used = the_thread->cpu_time_used;
+  return the_thread->cpu_time_used;
+}
+
+Timestamp_Control _Thread_Get_CPU_time_used( Thread_Control *the_thread )
+{
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         state_lock_context;
+  ISR_lock_Context         scheduler_lock_context;
+  Timestamp_Control        cpu_time_used;
+
+  _Thread_State_acquire( the_thread, &state_lock_context );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
+
+  cpu_time_used = _Thread_Get_CPU_time_used_locked( the_thread );
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( the_thread, &state_lock_context );
+
+  return cpu_time_used;
 }

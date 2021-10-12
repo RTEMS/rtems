@@ -65,7 +65,8 @@ clock_t _times(
    *  of ticks since boot and the number of ticks executed by this
    *  this thread.
    */
-  _Thread_Get_CPU_time_used( _Thread_Get_executing(), &cpu_time_used );
+  cpu_time_used =
+    _Thread_Get_CPU_time_used_after_last_reset( _Thread_Get_executing() );
   ptms->tms_utime = ((clock_t) cpu_time_used) / tick_interval;
 
   return ptms->tms_stime;

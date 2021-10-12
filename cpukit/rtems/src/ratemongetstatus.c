@@ -31,7 +31,6 @@ rtems_status_code rtems_rate_monotonic_get_status(
 {
   Rate_monotonic_Control *the_period;
   ISR_lock_Context        lock_context;
-  rtems_status_code       status;
 
   if ( period_status == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -54,35 +53,28 @@ rtems_status_code rtems_rate_monotonic_get_status(
      */
     _Timespec_Set_to_zero( &period_status->since_last_period );
     _Timespec_Set_to_zero( &period_status->executed_since_last_period );
-    status = RTEMS_SUCCESSFUL;
   } else {
     Timestamp_Control wall_since_last_period;
     Timestamp_Control cpu_since_last_period;
-    bool              valid_status;
 
     /*
      *  Grab the current status.
      */
-    valid_status = _Rate_monotonic_Get_status(
+    _Rate_monotonic_Get_status(
       the_period,
       &wall_since_last_period,
       &cpu_since_last_period
     );
-    if ( valid_status ) {
-      _Timestamp_To_timespec(
-        &wall_since_last_period,
-        &period_status->since_last_period
-      );
-      _Timestamp_To_timespec(
-        &cpu_since_last_period,
-        &period_status->executed_since_last_period
-      );
-      status = RTEMS_SUCCESSFUL;
-    } else {
-      status = RTEMS_NOT_DEFINED;
-    }
+    _Timestamp_To_timespec(
+      &wall_since_last_period,
+      &period_status->since_last_period
+    );
+    _Timestamp_To_timespec(
+      &cpu_since_last_period,
+      &period_status->executed_since_last_period
+    );
   }
 
   _Rate_monotonic_Release( the_period, &lock_context );
-  return status;
+  return RTEMS_SUCCESSFUL;
 }

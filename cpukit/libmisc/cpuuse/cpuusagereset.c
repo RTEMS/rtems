@@ -40,7 +40,8 @@ static bool CPU_usage_Per_thread_handler(
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
+  the_thread->cpu_time_used_at_last_reset =
+    _Thread_Get_CPU_time_used_locked( the_thread );
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( the_thread, &state_lock_context );

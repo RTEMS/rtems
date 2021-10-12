@@ -1543,6 +1543,7 @@ source:
 - cpukit/score/src/threadentryadaptorpointer.c
 - cpukit/score/src/threadget.c
 - cpukit/score/src/threadgetcputimeused.c
+- cpukit/score/src/threadgetcputimeusedafterreset.c
 - cpukit/score/src/threadhandler.c
 - cpukit/score/src/threadidledefault.c
 - cpukit/score/src/threadinitialize.c

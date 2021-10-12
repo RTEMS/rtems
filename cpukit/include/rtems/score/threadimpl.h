@@ -1242,15 +1242,41 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
 #endif
 
 /**
- * @brief Gets the used cpu time of the thread and stores it in the given
- *      Timestamp_Control.
+ * @brief Gets the used processor time of the thread throughout its entire
+ *   lifetime.
  *
- * @param the_thread The thread to get the used cpu time of.
- * @param[out] cpu_time_used Stores the used cpu time of @a the_thread.
+ * @param[in, out] the_thread is the thread.
+ *
+ * @return Returns the used processor time of the thread throughout its entire
+ *   lifetime.
  */
-void _Thread_Get_CPU_time_used(
-  Thread_Control    *the_thread,
-  Timestamp_Control *cpu_time_used
+Timestamp_Control _Thread_Get_CPU_time_used( Thread_Control *the_thread );
+
+/**
+ * @brief Gets the used processor time of the thread throughout its entire
+ *   lifetime if the caller already acquired the thread state and home
+ *   scheduler locks.
+ *
+ * @param[in, out] the_thread is the thread.
+ *
+ * @return Returns the used processor time of the thread throughout its entire
+ *   lifetime.
+ */
+Timestamp_Control _Thread_Get_CPU_time_used_locked(
+  Thread_Control *the_thread
+);
+
+/**
+ * @brief Gets the used processor time of the thread after the last CPU usage
+ *   reset.
+ *
+ * @param[in, out] the_thread is the thread.
+ *
+ * @return Returns the used processor time of the thread after the last CPU usage
+ *   reset.
+ */
+Timestamp_Control _Thread_Get_CPU_time_used_after_last_reset(
+  Thread_Control *the_thread
 );
 
 /**

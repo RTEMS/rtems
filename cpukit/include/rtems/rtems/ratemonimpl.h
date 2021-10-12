@@ -92,7 +92,7 @@ RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get(
 void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
 
 /**
- * @brief _Rate_monotonic_Get_status(
+ * @brief Gets the rate monotonic CPU usage status.
  *
  * This routine is invoked to compute the elapsed wall time and cpu
  * time for a period.
@@ -102,11 +102,8 @@ void _Rate_monotonic_Timeout( Watchdog_Control *watchdog );
  *             since the period was initiated.
  * @param[out] cpu_since_last_period is set to the cpu time used by the
  *             owning thread since the period was initiated.
- *
- * @retval This routine returns true if the status can be determined
- *         and false otherwise.
  */
-bool _Rate_monotonic_Get_status(
+void _Rate_monotonic_Get_status(
   const Rate_monotonic_Control *the_period,
   Timestamp_Control            *wall_since_last_period,
   Timestamp_Control            *cpu_since_last_period

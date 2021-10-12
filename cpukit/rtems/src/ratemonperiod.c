@@ -26,7 +26,7 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/todimpl.h>
 
-bool _Rate_monotonic_Get_status(
+void _Rate_monotonic_Get_status(
   const Rate_monotonic_Control *the_period,
   Timestamp_Control            *wall_since_last_period,
   Timestamp_Control            *cpu_since_last_period
@@ -47,14 +47,7 @@ bool _Rate_monotonic_Get_status(
   /*
    *  Determine cpu usage since period initiated.
    */
-  _Thread_Get_CPU_time_used( owning_thread, &used );
-
-  /*
-   *  The cpu usage info was reset while executing.  Can't
-   *  determine a status.
-   */
-  if ( _Timestamp_Less_than( &used, &the_period->cpu_usage_period_initiated ) )
-    return false;
+  used = _Thread_Get_CPU_time_used( owning_thread );
 
    /* used = current cpu usage - cpu usage at start of period */
   _Timestamp_Subtract(
@@ -62,8 +55,6 @@ bool _Rate_monotonic_Get_status(
     &used,
     cpu_since_last_period
   );
-
-  return true;
 }
 
 static void _Rate_monotonic_Release_postponed_job(
@@ -130,7 +121,7 @@ void _Rate_monotonic_Restart(
    *  Set the starting point and the CPU time used for the statistics.
    */
   _TOD_Get_uptime( &the_period->time_period_initiated );
-  _Thread_Get_CPU_time_used( owner, &the_period->cpu_usage_period_initiated );
+  the_period->cpu_usage_period_initiated = _Thread_Get_CPU_time_used( owner );
 
   _Rate_monotonic_Release_job(
     the_period,
@@ -147,7 +138,6 @@ static void _Rate_monotonic_Update_statistics(
   Timestamp_Control          executed;
   Timestamp_Control          since_last_period;
   Rate_monotonic_Statistics *stats;
-  bool                       valid_status;
 
   /*
    *  Assume we are only called in states where it is appropriate
@@ -167,10 +157,7 @@ static void _Rate_monotonic_Update_statistics(
   /*
    *  Grab status for time statistics.
    */
-  valid_status =
-    _Rate_monotonic_Get_status( the_period, &since_last_period, &executed );
-  if (!valid_status)
-    return;
+  _Rate_monotonic_Get_status( the_period, &since_last_period, &executed );
 
   /*
    *  Update CPU time

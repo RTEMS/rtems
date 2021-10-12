@@ -178,7 +178,7 @@ task_usage(Thread_Control* thread, void* arg)
 
   data->stack_size += thread->Start.Initial_stack.size;
 
-  _Thread_Get_CPU_time_used(thread, &usage);
+  usage = _Thread_Get_CPU_time_used_after_last_reset(thread);
 
   for (j = 0; j < data->last_task_count; j++)
   {
