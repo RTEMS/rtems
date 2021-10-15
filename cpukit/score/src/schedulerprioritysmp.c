@@ -12,7 +12,9 @@
  *   _Scheduler_priority_SMP_Remove_processor(),
  *   _Scheduler_priority_SMP_Unblock(),
  *   _Scheduler_priority_SMP_Update_priority(),
- *   _Scheduler_priority_SMP_Withdraw_node(), and
+ *   _Scheduler_priority_SMP_Withdraw_node(),
+ *   _Scheduler_priority_SMP_Make_sticky(),
+ *   _Scheduler_priority_SMP_Clean_sticky(), and
  *   _Scheduler_priority_SMP_Yield().
  */
 
@@ -257,6 +259,39 @@ void _Scheduler_priority_SMP_Withdraw_node(
     the_thread,
     node,
     next_state,
+    _Scheduler_SMP_Extract_from_scheduled,
+    _Scheduler_priority_SMP_Extract_from_ready,
+    _Scheduler_priority_SMP_Get_highest_ready,
+    _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor_lazy
+  );
+}
+
+void _Scheduler_priority_SMP_Make_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  _Scheduler_SMP_Make_sticky(
+    scheduler,
+    the_thread,
+    node,
+    _Scheduler_priority_SMP_Do_update,
+    _Scheduler_priority_SMP_Enqueue
+  );
+}
+
+void _Scheduler_priority_SMP_Clean_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  _Scheduler_SMP_Clean_sticky(
+    scheduler,
+    the_thread,
+    node,
     _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Get_highest_ready,

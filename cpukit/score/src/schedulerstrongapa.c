@@ -31,7 +31,9 @@
  *   _Scheduler_strong_APA_Set_affinity(),
  *   _Scheduler_strong_APA_Set_scheduled(), _Scheduler_strong_APA_Start_idle(),
  *   _Scheduler_strong_APA_Unblock(), _Scheduler_strong_APA_Update_priority(),
- *   _Scheduler_strong_APA_Withdraw_node(), and _Scheduler_strong_APA_Yield().
+ *   _Scheduler_strong_APA_Withdraw_node(),
+ *   _Scheduler_strong_APA_Make_sticky(), _Scheduler_strong_APA_Clean_sticky(),
+ *   and _Scheduler_strong_APA_Yield().
  */
 
 /*
@@ -928,6 +930,39 @@ void _Scheduler_strong_APA_Withdraw_node(
     node,
     next_state,
     _Scheduler_strong_APA_Extract_from_scheduled,
+    _Scheduler_strong_APA_Extract_from_ready,
+    _Scheduler_strong_APA_Get_highest_ready,
+    _Scheduler_strong_APA_Move_from_ready_to_scheduled,
+    _Scheduler_strong_APA_Allocate_processor
+  );
+}
+
+void _Scheduler_strong_APA_Make_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  _Scheduler_SMP_Make_sticky(
+    scheduler,
+    the_thread,
+    node,
+    _Scheduler_strong_APA_Do_update,
+    _Scheduler_strong_APA_Enqueue
+  );
+}
+
+void _Scheduler_strong_APA_Clean_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  _Scheduler_SMP_Clean_sticky(
+    scheduler,
+    the_thread,
+    node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,

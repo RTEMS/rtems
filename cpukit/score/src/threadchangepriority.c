@@ -372,18 +372,140 @@ void _Thread_Priority_update( Thread_queue_Context *queue_context )
 }
 
 #if defined(RTEMS_SMP)
-void _Thread_Priority_and_sticky_update(
+static void _Thread_Priority_update_helping(
   Thread_Control *the_thread,
-  int             sticky_level_change
+  Chain_Node     *first_node
 )
+{
+  const Chain_Node *tail;
+  Chain_Node       *node;
+
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+  node = _Chain_Next( first_node );
+
+  while ( node != tail ) {
+    Scheduler_Node          *scheduler_node;
+    const Scheduler_Control *scheduler;
+    ISR_lock_Context         lock_context;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    ( *scheduler->Operations.update_priority )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    node = _Chain_Next( node );
+  }
+}
+
+void _Thread_Priority_update_and_make_sticky( Thread_Control *the_thread )
+{
+  ISR_lock_Context         lock_context;
+  ISR_lock_Context         lock_context_2;
+  Chain_Node              *node;
+  Scheduler_Node          *scheduler_node;
+  const Scheduler_Control *scheduler;
+  int                      new_sticky_level;
+  int                      make_sticky_level;
+
+  _Thread_State_acquire( the_thread, &lock_context );
+  _Thread_Scheduler_process_requests( the_thread );
+
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context_2 );
+
+  new_sticky_level = scheduler_node->sticky_level + 1;
+  scheduler_node->sticky_level = new_sticky_level;
+  _Assert( new_sticky_level >= 1 );
+
+  /*
+   * The sticky level is incremented by the scheduler block operation, so for a
+   * ready thread, the change to sticky happens at a level of two.
+   */
+  make_sticky_level = 1 + (int) _Thread_Is_ready( the_thread );
+
+  if ( new_sticky_level == make_sticky_level ) {
+    ( *scheduler->Operations.make_sticky )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+  }
+
+  ( *scheduler->Operations.update_priority )(
+    scheduler,
+    the_thread,
+    scheduler_node
+  );
+
+  _Scheduler_Release_critical( scheduler, &lock_context_2 );
+  _Thread_Priority_update_helping( the_thread, node );
+  _Thread_State_release( the_thread, &lock_context );
+}
+
+void _Thread_Priority_update_and_clean_sticky( Thread_Control *the_thread )
+{
+  ISR_lock_Context         lock_context;
+  ISR_lock_Context         lock_context_2;
+  Chain_Node              *node;
+  Scheduler_Node          *scheduler_node;
+  const Scheduler_Control *scheduler;
+  int                      new_sticky_level;
+  int                      clean_sticky_level;
+
+  _Thread_State_acquire( the_thread, &lock_context );
+  _Thread_Scheduler_process_requests( the_thread );
+
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context_2 );
+
+  new_sticky_level = scheduler_node->sticky_level - 1;
+  scheduler_node->sticky_level = new_sticky_level;
+  _Assert( new_sticky_level >= 0 );
+
+  /*
+   * The sticky level is incremented by the scheduler block operation, so for a
+   * ready thread, the change to sticky happens at a level of one.
+   */
+  clean_sticky_level = (int) _Thread_Is_ready( the_thread );
+
+  if ( new_sticky_level == clean_sticky_level ) {
+    ( *scheduler->Operations.clean_sticky )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+  }
+
+  ( *scheduler->Operations.update_priority )(
+    scheduler,
+    the_thread,
+    scheduler_node
+  );
+
+  _Scheduler_Release_critical( scheduler, &lock_context_2 );
+  _Thread_Priority_update_helping( the_thread, node );
+  _Thread_State_release( the_thread, &lock_context );
+}
+
+void _Thread_Priority_update_ignore_sticky( Thread_Control *the_thread )
 {
   ISR_lock_Context lock_context;
 
   _Thread_State_acquire( the_thread, &lock_context );
-  _Scheduler_Priority_and_sticky_update(
-    the_thread,
-    sticky_level_change
-  );
+  _Thread_Scheduler_process_requests( the_thread );
+  _Scheduler_Update_priority( the_thread );
   _Thread_State_release( the_thread, &lock_context );
 }
 #endif

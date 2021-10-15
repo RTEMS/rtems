@@ -518,7 +518,7 @@ Status_Control _Thread_queue_Enqueue_sticky(
   );
 
   _Thread_Priority_update( queue_context );
-  _Thread_Priority_and_sticky_update( the_thread, 1 );
+  _Thread_Priority_update_and_make_sticky( the_thread );
   _Thread_Dispatch_enable( cpu_self );
 
   while (
@@ -899,8 +899,8 @@ void _Thread_queue_Surrender_sticky(
     queue,
     &queue_context->Lock_context.Lock_context
   );
-  _Thread_Priority_and_sticky_update( previous_owner, -1 );
-  _Thread_Priority_and_sticky_update( new_owner, 0 );
+  _Thread_Priority_update_and_clean_sticky( previous_owner );
+  _Thread_Priority_update_ignore_sticky( new_owner );
   _Thread_Dispatch_enable( cpu_self );
 }
 #endif

@@ -129,6 +129,8 @@ typedef struct {
     _Scheduler_EDF_SMP_Ask_for_help, \
     _Scheduler_EDF_SMP_Reconsider_help_request, \
     _Scheduler_EDF_SMP_Withdraw_node, \
+    _Scheduler_EDF_SMP_Make_sticky, \
+    _Scheduler_EDF_SMP_Clean_sticky, \
     _Scheduler_EDF_SMP_Pin, \
     _Scheduler_EDF_SMP_Unpin, \
     _Scheduler_EDF_SMP_Add_processor, \
@@ -246,6 +248,36 @@ void _Scheduler_EDF_SMP_Withdraw_node(
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
   Thread_Scheduler_state   next_state
+);
+
+/**
+ * @brief Makes the node sticky.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the scheduler node to make sticky.
+ */
+void _Scheduler_EDF_SMP_Make_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
+
+/**
+ * @brief Cleans the sticky property from the node.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the scheduler node to clean the sticky property.
+ */
+void _Scheduler_EDF_SMP_Clean_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /**

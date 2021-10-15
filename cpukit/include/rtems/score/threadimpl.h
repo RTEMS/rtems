@@ -790,17 +790,29 @@ void _Thread_Priority_replace(
  */
 void _Thread_Priority_update( Thread_queue_Context *queue_context );
 
-/**
- * @brief Updates the priority of the thread and changes it sticky level.
- *
- * @param the_thread The thread.
- * @param sticky_level_change The new value for the sticky level.
- */
 #if defined(RTEMS_SMP)
-void _Thread_Priority_and_sticky_update(
-  Thread_Control *the_thread,
-  int             sticky_level_change
-);
+/**
+ * @brief Updates the priority of the thread and makes its home scheduler node
+ *   sticky.
+ *
+ * @param the_thread is the thread to work on.
+ */
+void _Thread_Priority_update_and_make_sticky( Thread_Control *the_thread );
+
+/**
+ * @brief Updates the priority of the thread and cleans the sticky property of
+ *   its home scheduler node.
+ *
+ * @param the_thread is the thread to work on.
+ */
+void _Thread_Priority_update_and_clean_sticky( Thread_Control *the_thread );
+
+/**
+ * @brief Updates the priority of the thread.
+ *
+ * @param the_thread is the thread to update the priority.
+ */
+void _Thread_Priority_update_ignore_sticky( Thread_Control *the_thread );
 #endif
 
 /**

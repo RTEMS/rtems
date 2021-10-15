@@ -1688,6 +1688,90 @@ static inline void _Scheduler_SMP_Withdraw_node(
 }
 
 /**
+ * @brief Makes the node sticky.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the scheduler node to make sticky.
+ */
+static inline void _Scheduler_SMP_Make_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  Scheduler_SMP_Update     update,
+  Scheduler_SMP_Enqueue    enqueue
+)
+{
+  Scheduler_SMP_Node_state node_state;
+
+  node_state = _Scheduler_SMP_Node_state( node );
+
+  if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
+    Scheduler_Context *context;
+    Priority_Control   insert_priority;
+    Priority_Control   priority;
+
+    context = _Scheduler_Get_context( scheduler );
+    priority = _Scheduler_Node_get_priority( node );
+    priority = SCHEDULER_PRIORITY_PURIFY( priority );
+
+    if ( priority != _Scheduler_SMP_Node_priority( node ) ) {
+      ( *update )( context, node, priority );
+    }
+
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
+    insert_priority = SCHEDULER_PRIORITY_APPEND( priority );
+    (void) ( *enqueue )( context, node, insert_priority );
+  }
+}
+
+/**
+ * @brief Cleans the sticky property from the node.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the scheduler node to clean the sticky property.
+ */
+static inline void _Scheduler_SMP_Clean_sticky(
+  const Scheduler_Control          *scheduler,
+  Thread_Control                   *the_thread,
+  Scheduler_Node                   *node,
+  Scheduler_SMP_Extract             extract_from_scheduled,
+  Scheduler_SMP_Extract             extract_from_ready,
+  Scheduler_SMP_Get_highest_ready   get_highest_ready,
+  Scheduler_SMP_Move                move_from_ready_to_scheduled,
+  Scheduler_SMP_Allocate_processor  allocate_processor
+)
+{
+  Scheduler_SMP_Node_state node_state;
+
+  node_state = _Scheduler_SMP_Node_state( node );
+
+  if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED && node->idle != NULL ) {
+    Scheduler_Context *context;
+
+    context = _Scheduler_Get_context( scheduler );
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
+
+    ( *extract_from_scheduled )( context, node );
+
+    _Scheduler_SMP_Schedule_highest_ready(
+      context,
+      node,
+      _Thread_Get_CPU( node->idle ),
+      extract_from_ready,
+      get_highest_ready,
+      move_from_ready_to_scheduled,
+      allocate_processor
+    );
+  }
+}
+
+/**
  * @brief Starts the idle thread on the given processor.
  *
  * @param context The scheduler context instance.

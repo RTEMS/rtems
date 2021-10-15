@@ -135,6 +135,61 @@ typedef struct {
   );
 
   /**
+   * @brief Makes the node sticky.
+   *
+   * This operation is used by _Thread_Priority_update_and_make_sticky().  It
+   * is only called for the scheduler node of the home scheduler.
+   *
+   * Uniprocessor schedulers schould provide
+   * _Scheduler_default_Sticky_do_nothing() for this operation.
+   *
+   * SMP schedulers should provide this operation using
+   * _Scheduler_SMP_Make_sticky().
+   *
+   * The make and clean sticky operations are an optimization to simplify the
+   * control flow in the update priority operation.  The update priority
+   * operation is used for all scheduler nodes and not just the scheduler node
+   * of home schedulers.  The update priority operation is a commonly used
+   * operations together with block and unblock.  The make and clean sticky
+   * operations are used only in specific scenarios.
+   *
+   * @param scheduler is the scheduler of the node.
+   *
+   * @param[in, out] the_thread is the thread owning the node.
+   *
+   * @param[in, out] node is the scheduler node to make sticky.
+   */
+  void ( *make_sticky )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
+   * @brief Cleans the sticky property from the node.
+   *
+   * This operation is used by _Thread_Priority_update_and_clean_sticky().  It
+   * is only called for the scheduler node of the home scheduler.
+   *
+   * Uniprocessor schedulers schould provide
+   * _Scheduler_default_Sticky_do_nothing() for this operation.
+   *
+   * SMP schedulers should provide this operation using
+   * _Scheduler_SMP_Clean_sticky().
+   *
+   * @param scheduler is the scheduler of the node.
+   *
+   * @param[in, out] the_thread is the thread owning the node.
+   *
+   * @param[in, out] node is the scheduler node to clean the sticky property.
+   */
+  void ( *clean_sticky )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
    * @brief Pin thread operation.
    *
    * @param[in] scheduler The scheduler instance of the specified processor.
@@ -400,6 +455,24 @@ Priority_Control _Scheduler_default_Unmap_priority(
   /**
    * @brief Does nothing.
    *
+   * This default implementation for the make and clean sticky operations
+   * should be used by uniprocessor schedulers if SMP support is enabled.
+   *
+   * @param scheduler is an unused parameter.
+   *
+   * @param the_thread is an unused parameter.
+   *
+   * @param node is an unused parameter.
+   */
+  void _Scheduler_default_Sticky_do_nothing(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
+   * @brief Does nothing.
+   *
    * This default implementation for the thread pin or unpin operations should
    * be used by uniprocessor schedulers if SMP support is enabled.
    *
@@ -459,6 +532,8 @@ Priority_Control _Scheduler_default_Unmap_priority(
     NULL, \
     NULL, \
     NULL, \
+    _Scheduler_default_Sticky_do_nothing, \
+    _Scheduler_default_Sticky_do_nothing, \
     _Scheduler_default_Pin_or_unpin_do_nothing, \
     _Scheduler_default_Pin_or_unpin_do_nothing, \
     NULL, \

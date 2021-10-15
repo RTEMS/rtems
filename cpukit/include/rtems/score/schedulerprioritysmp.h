@@ -93,6 +93,8 @@ typedef struct {
     _Scheduler_priority_SMP_Ask_for_help, \
     _Scheduler_priority_SMP_Reconsider_help_request, \
     _Scheduler_priority_SMP_Withdraw_node, \
+    _Scheduler_priority_SMP_Make_sticky, \
+    _Scheduler_priority_SMP_Clean_sticky, \
     _Scheduler_default_Pin_or_unpin_not_supported, \
     _Scheduler_default_Pin_or_unpin_not_supported, \
     _Scheduler_priority_SMP_Add_processor, \
@@ -212,6 +214,36 @@ void _Scheduler_priority_SMP_Withdraw_node(
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
   Thread_Scheduler_state   next_state
+);
+
+/**
+ * @brief Makes the node sticky.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the scheduler node to make sticky.
+ */
+void _Scheduler_priority_SMP_Make_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
+
+/**
+ * @brief Cleans the sticky property from the node.
+ *
+ * @param scheduler is the scheduler of the node.
+ *
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the scheduler node to clean the sticky property.
+ */
+void _Scheduler_priority_SMP_Clean_sticky(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /**
