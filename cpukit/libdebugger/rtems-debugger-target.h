@@ -164,22 +164,22 @@ extern int rtems_debugger_target_write_regs(rtems_debugger_thread* thread);
 /**
  * Return the thread's program counter (PC).
  */
-extern DB_UINT rtems_debugger_target_reg_pc(rtems_debugger_thread* thread);
+extern uintptr_t rtems_debugger_target_reg_pc(rtems_debugger_thread* thread);
 
 /**
  * Return the frame's program counter (PC).
  */
-extern DB_UINT rtems_debugger_target_frame_pc(CPU_Exception_frame* frame);
+extern uintptr_t rtems_debugger_target_frame_pc(CPU_Exception_frame* frame);
 
 /**
  * Return the thread's stack pointer (SP).
  */
-extern DB_UINT rtems_debugger_target_reg_sp(rtems_debugger_thread* thread);
+extern uintptr_t rtems_debugger_target_reg_sp(rtems_debugger_thread* thread);
 
 /**
  * Return the thread's TCB stack pointer (SP).
  */
-extern DB_UINT rtems_debugger_target_tcb_sp(rtems_debugger_thread* thread);
+extern uintptr_t rtems_debugger_target_tcb_sp(rtems_debugger_thread* thread);
 
 /**
  * The thread is stepping. Setup the thread to step an instruction.
@@ -228,7 +228,7 @@ extern int rtems_debugger_target_hwbreak_remove(void);
  */
 extern int rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint type,
                                                  bool                             insert,
-                                                 DB_UINT                          addr,
+                                                 uintptr_t                        addr,
                                                  DB_UINT                          kind);
 
 /**

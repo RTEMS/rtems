@@ -315,7 +315,7 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
     Thread_Control*                      thread = _Thread_Get_executing();
     const rtems_id                       tid = thread->Object.id;
     rtems_id*                            excludes;
-    DB_UINT                              pc;
+    uintptr_t                            pc;
     const rtems_debugger_thread_stepper* stepper;
     rtems_debugger_exception             target_exception;
     size_t                               i;

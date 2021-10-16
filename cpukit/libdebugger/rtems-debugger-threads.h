@@ -102,8 +102,8 @@ typedef struct rtems_debugger_thread
 typedef struct rtems_debugger_thread_stepper
 {
   rtems_debugger_thread* thread;
-  DB_UINT                start;
-  DB_UINT                end;
+  uintptr_t              start;
+  uintptr_t              end;
 } rtems_debugger_thread_stepper;
 
 /**
@@ -165,15 +165,15 @@ extern int rtems_debugger_thread_step(rtems_debugger_thread* thread);
  * Thread is stepping so record the details.
  */
 extern int rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
-                                          DB_UINT                start,
-                                          DB_UINT                end);
+                                          uintptr_t              start,
+                                          uintptr_t              end);
 
 /**
  * Thread's PC in the stepping range? Returns the stepper is in range else
  * NULL.
  */
 extern const rtems_debugger_thread_stepper*
-rtems_debugger_thread_is_stepping(rtems_id id, DB_UINT pc);
+rtems_debugger_thread_is_stepping(rtems_id id, uintptr_t pc);
 
 /**
  * Return the thread's current priority/

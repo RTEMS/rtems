@@ -376,7 +376,7 @@ rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
   return 0;
 }
 
-DB_UINT
+uintptr_t
 rtems_debugger_target_reg_pc(rtems_debugger_thread* thread)
 {
   int r;
@@ -387,13 +387,13 @@ rtems_debugger_target_reg_pc(rtems_debugger_thread* thread)
   return 0;
 }
 
-DB_UINT
+uintptr_t
 rtems_debugger_target_frame_pc(CPU_Exception_frame* frame)
 {
-  return (DB_UINT) frame->eip;
+  return (uintptr_t) frame->eip;
 }
 
-DB_UINT
+uintptr_t
 rtems_debugger_target_reg_sp(rtems_debugger_thread* thread)
 {
   int r;
@@ -404,7 +404,7 @@ rtems_debugger_target_reg_sp(rtems_debugger_thread* thread)
   return 0;
 }
 
-DB_UINT
+uintptr_t
 rtems_debugger_target_tcb_sp(rtems_debugger_thread* thread)
 {
   return (DB_UINT) thread->tcb->Registers.esp;
@@ -503,7 +503,7 @@ rtems_debugger_target_hwbreak_remove(void)
 int
 rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
                                       bool                             insert,
-                                      DB_UINT                          addr,
+                                      uintptr_t                        addr,
                                       DB_UINT                          kind)
 {
   /*

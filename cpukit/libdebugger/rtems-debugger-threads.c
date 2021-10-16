@@ -469,8 +469,8 @@ rtems_debugger_thread_step(rtems_debugger_thread* thread)
 
 int
 rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
-                               DB_UINT                start,
-                               DB_UINT                end)
+                               uintptr_t              start,
+                               uintptr_t              end)
 {
   /* add lock */
   rtems_debugger_threads*        threads = rtems_debugger->threads;
@@ -496,7 +496,7 @@ rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
 }
 
 const rtems_debugger_thread_stepper*
-rtems_debugger_thread_is_stepping(rtems_id id, DB_UINT pc)
+rtems_debugger_thread_is_stepping(rtems_id id, uintptr_t pc)
 {
   /* add lock */
   rtems_debugger_threads*        threads = rtems_debugger->threads;
