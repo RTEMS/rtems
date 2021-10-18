@@ -16,6 +16,8 @@ int
 main (void)
 {
   void *foo = calloc (42, 43);
+  int rc = (foo != NULL);
+  free(foo);
 
-  return (foo != NULL);
+  return rc;
 }
