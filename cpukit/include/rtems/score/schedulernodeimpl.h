@@ -264,6 +264,27 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
 {
   return node->idle;
 }
+
+/**
+ * @brief Sets the scheduler node's user to the idle thread.
+ *
+ * @param[in, out] node is the node to receive an idle thread.
+ *
+ * @param idle is the idle thread to use.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_idle_user(
+  Scheduler_Node *node,
+  Thread_Control *idle
+)
+{
+  _Assert( _Scheduler_Node_get_idle( node ) == NULL );
+  _Assert(
+    _Scheduler_Node_get_owner( node ) == _Scheduler_Node_get_user( node )
+  );
+
+  _Scheduler_Node_set_user( node, idle );
+  node->idle = idle;
+}
 #endif
 
 #ifdef __cplusplus

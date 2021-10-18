@@ -900,26 +900,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
 }
 
 /**
- * @brief Sets the scheduler node's idle thread.
- *
- * @param[in, out] node The node to receive an idle thread.
- * @param idle The idle thread control for the operation.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
-  Scheduler_Node *node,
-  Thread_Control *idle
-)
-{
-  _Assert( _Scheduler_Node_get_idle( node ) == NULL );
-  _Assert(
-    _Scheduler_Node_get_owner( node ) == _Scheduler_Node_get_user( node )
-  );
-
-  _Scheduler_Node_set_user( node, idle );
-  node->idle = idle;
-}
-
-/**
  * @brief Uses an idle thread for this scheduler node.
  *
  * A thread whose home scheduler node has a sticky level greater than zero may
@@ -941,7 +921,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
 {
   Thread_Control *idle = ( *get_idle_thread )( context );
 
-  _Scheduler_Set_idle_thread( node, idle );
+  _Scheduler_Node_set_idle_user( node, idle );
   _Thread_Set_CPU( idle, cpu );
   return idle;
 }
@@ -1079,7 +1059,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
     uses_idle,
     _Scheduler_Node_get_owner( uses_idle )
   );
-  _Scheduler_Set_idle_thread( needs_idle, idle );
+  _Scheduler_Node_set_idle_user( needs_idle, idle );
 }
 
 /**
