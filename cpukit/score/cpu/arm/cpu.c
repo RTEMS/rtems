@@ -152,6 +152,7 @@ void _CPU_Context_Initialize(
   }
 }
 
+#if !defined(RTEMS_PARAVIRT)
 void _CPU_ISR_Set_level( uint32_t level )
 {
   uint32_t arm_switch_reg;
@@ -184,6 +185,7 @@ uint32_t _CPU_ISR_Get_level( void )
 
   return ( level & ARM_PSR_I ) != 0;
 }
+#endif /* RTEMS_PARAVIRT */
 
 void _CPU_Initialize( void )
 {
