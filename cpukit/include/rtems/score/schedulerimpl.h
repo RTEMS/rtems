@@ -915,14 +915,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
   Scheduler_Context         *context,
   Scheduler_Node            *node,
-  Per_CPU_Control           *cpu,
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
   Thread_Control *idle = ( *get_idle_thread )( context );
 
   _Scheduler_Node_set_idle_user( node, idle );
-  _Thread_Set_CPU( idle, cpu );
   return idle;
 }
 
@@ -999,12 +997,12 @@ _Scheduler_Try_to_schedule_node(
   } else if ( idle != NULL ) {
     action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
   } else {
-    _Scheduler_Use_idle_thread(
-      context,
-      node,
-      _Thread_Get_CPU( owner ),
-      get_idle_thread
-    );
+    Thread_Control *idle;
+    Thread_Control *user;
+
+    idle = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+    user = _Scheduler_Node_get_user( node );
+    _Thread_Set_CPU( idle, _Thread_Get_CPU( user ) );
   }
 
   _Thread_Scheduler_release_critical( owner, &lock_context );
@@ -1104,12 +1102,8 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
     if ( is_scheduled && _Scheduler_Node_get_idle( node ) == NULL ) {
       Thread_Control *idle;
 
-      idle = _Scheduler_Use_idle_thread(
-        context,
-        node,
-        thread_cpu,
-        get_idle_thread
-      );
+      idle = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+      _Thread_Set_CPU( idle, thread_cpu );
       _Thread_Dispatch_update_heir( _Per_CPU_Get(), thread_cpu, idle );
     }
 
