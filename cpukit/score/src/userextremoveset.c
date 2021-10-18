@@ -42,8 +42,6 @@ void _User_extensions_Remove_set (
    */
 
   if ( the_extension->Callouts.thread_switch != NULL ) {
-    ISR_lock_Context lock_context;
-
     _Per_CPU_Acquire_all( &lock_context );
     _Chain_Extract_unprotected( &the_extension->Switch.Node );
     _Per_CPU_Release_all( &lock_context );
