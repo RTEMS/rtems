@@ -822,8 +822,8 @@ static inline void _Scheduler_SMP_Enqueue_to_scheduled(
       allocate_processor
     );
 
-    ( *insert_scheduled )( context, node, priority );
     ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
+    ( *insert_scheduled )( context, node, priority );
 
     _Scheduler_Release_idle_thread(
       context,
@@ -837,8 +837,8 @@ static inline void _Scheduler_SMP_Enqueue_to_scheduled(
     );
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_SCHEDULED );
 
-    ( *insert_scheduled )( context, node, priority );
     ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
+    ( *insert_scheduled )( context, node, priority );
 
     _Scheduler_Exchange_idle_thread( node, lowest_scheduled );
   } else {
@@ -997,8 +997,8 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
         allocate_processor
       );
 
-      ( *insert_ready )( context, node, insert_priority );
       ( *move_from_ready_to_scheduled )( context, highest_ready );
+      ( *insert_ready )( context, node, insert_priority );
 
       idle = _Scheduler_Release_idle_thread(
         context,
@@ -1013,8 +1013,8 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
         SCHEDULER_SMP_NODE_SCHEDULED
       );
 
-      ( *insert_ready )( context, node, insert_priority );
       ( *move_from_ready_to_scheduled )( context, highest_ready );
+      ( *insert_ready )( context, node, insert_priority );
 
       _Scheduler_Exchange_idle_thread( highest_ready, node );
       return false;
@@ -1522,8 +1522,8 @@ static inline bool _Scheduler_SMP_Ask_for_help(
           allocate_processor
         );
 
-        ( *insert_scheduled )( context, node, insert_priority );
         ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
+        ( *insert_scheduled )( context, node, insert_priority );
 
         _Scheduler_Release_idle_thread(
           context,
