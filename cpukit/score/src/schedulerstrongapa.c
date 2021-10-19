@@ -809,6 +809,7 @@ void _Scheduler_strong_APA_Yield(
     context,
     thread,
     node,
+    _Scheduler_strong_APA_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Enqueue,
     _Scheduler_strong_APA_Enqueue_scheduled
@@ -872,6 +873,7 @@ void _Scheduler_strong_APA_Update_priority(
     context,
     thread,
     node,
+    _Scheduler_strong_APA_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Do_update,
     _Scheduler_strong_APA_Enqueue,
@@ -925,6 +927,7 @@ void _Scheduler_strong_APA_Withdraw_node(
     the_thread,
     node,
     next_state,
+    _Scheduler_strong_APA_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
@@ -988,6 +991,7 @@ Thread_Control *_Scheduler_strong_APA_Remove_processor(
   return _Scheduler_SMP_Remove_processor(
     context,
     cpu,
+    _Scheduler_strong_APA_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Enqueue
   );
@@ -1045,6 +1049,7 @@ Status_Control _Scheduler_strong_APA_Set_affinity(
    node_base,
    &local_affinity,
    _Scheduler_strong_APA_Do_set_affinity,
+   _Scheduler_strong_APA_Extract_from_scheduled,
    _Scheduler_strong_APA_Extract_from_ready,
    _Scheduler_strong_APA_Get_highest_ready,
    _Scheduler_strong_APA_Move_from_ready_to_scheduled,

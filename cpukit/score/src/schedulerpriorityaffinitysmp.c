@@ -449,6 +449,7 @@ void _Scheduler_priority_affinity_SMP_Update_priority(
     context,
     thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Do_update,
     _Scheduler_priority_affinity_SMP_Enqueue,
@@ -503,6 +504,7 @@ void _Scheduler_priority_affinity_SMP_Withdraw_node(
     the_thread,
     node,
     next_state,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
@@ -536,6 +538,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
   return _Scheduler_SMP_Remove_processor(
     context,
     cpu,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Enqueue
   );

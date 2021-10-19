@@ -1328,6 +1328,8 @@ static inline void _Scheduler_SMP_Unblock(
  * @param context The scheduler instance context.
  * @param thread The thread for the operation.
  * @param[in, out] node The node to update the priority of.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
  * @param extract_from_ready Function to extract a node from the ready
  *      queue of the scheduler context.
  * @param update Function to update the priority of a node in the scheduler
@@ -1340,6 +1342,7 @@ static inline void _Scheduler_SMP_Update_priority(
   Scheduler_Context              *context,
   Thread_Control                 *thread,
   Scheduler_Node                 *node,
+  Scheduler_SMP_Extract           extract_from_scheduled,
   Scheduler_SMP_Extract           extract_from_ready,
   Scheduler_SMP_Update            update,
   Scheduler_SMP_Enqueue           enqueue,
@@ -1365,7 +1368,7 @@ static inline void _Scheduler_SMP_Update_priority(
   node_state = _Scheduler_SMP_Node_state( node );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( context, node );
+    ( *extract_from_scheduled )( context, node );
     ( *update )( context, node, priority );
     ( *enqueue_scheduled )( context, node, insert_priority );
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
@@ -1387,6 +1390,8 @@ static inline void _Scheduler_SMP_Update_priority(
  * @param context The scheduler instance context.
  * @param thread The thread for the operation.
  * @param node The node of the thread that yields.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
  * @param extract_from_ready Function to extract a node from the ready
  *      queue of the scheduler context.
  * @param enqueue Function to enqueue a node with a given priority.
@@ -1396,6 +1401,7 @@ static inline void _Scheduler_SMP_Yield(
   Scheduler_Context              *context,
   Thread_Control                 *thread,
   Scheduler_Node                 *node,
+  Scheduler_SMP_Extract           extract_from_scheduled,
   Scheduler_SMP_Extract           extract_from_ready,
   Scheduler_SMP_Enqueue           enqueue,
   Scheduler_SMP_Enqueue_scheduled enqueue_scheduled
@@ -1410,7 +1416,7 @@ static inline void _Scheduler_SMP_Yield(
   insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( context, node );
+    ( *extract_from_scheduled )( context, node );
     ( *enqueue_scheduled )( context, node, insert_priority );
     needs_help = false;
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
@@ -1606,6 +1612,8 @@ static inline void _Scheduler_SMP_Reconsider_help_request(
  * @param[in, out] thread The thread to change to @a next_state.
  * @param[in, out] node The node to withdraw.
  * @param next_state The new state for @a thread.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
  * @param extract_from_ready Function to extract a node from the ready queue
  *      of the scheduler context.
  * @param get_highest_ready Function to get the highest ready node.
@@ -1619,6 +1627,7 @@ static inline void _Scheduler_SMP_Withdraw_node(
   Thread_Control                   *thread,
   Scheduler_Node                   *node,
   Thread_Scheduler_state            next_state,
+  Scheduler_SMP_Extract             extract_from_scheduled,
   Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
@@ -1640,7 +1649,7 @@ static inline void _Scheduler_SMP_Withdraw_node(
     _Scheduler_Thread_change_state( thread, next_state );
     _Thread_Scheduler_release_critical( thread, &lock_context );
 
-    _Scheduler_SMP_Extract_from_scheduled( context, node );
+    ( *extract_from_scheduled )( context, node );
     _Scheduler_SMP_Schedule_highest_ready(
       context,
       node,
@@ -1732,6 +1741,8 @@ static inline void _Scheduler_SMP_Add_processor(
  *
  * @param context The scheduler context instance.
  * @param cpu The processor to remove from.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
  * @param extract_from_ready Function to extract a node from the ready queue
  *      of the scheduler context.
  * @param enqueue Function to enqueue a node with a given priority.
@@ -1741,6 +1752,7 @@ static inline void _Scheduler_SMP_Add_processor(
 static inline Thread_Control *_Scheduler_SMP_Remove_processor(
   Scheduler_Context     *context,
   Per_CPU_Control       *cpu,
+  Scheduler_SMP_Extract  extract_from_scheduled,
   Scheduler_SMP_Extract  extract_from_ready,
   Scheduler_SMP_Enqueue  enqueue
 )
@@ -1762,7 +1774,7 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
     chain_node = _Chain_Next( chain_node );
   } while ( _Thread_Get_CPU( victim_user ) != cpu );
 
-  _Scheduler_SMP_Extract_from_scheduled( context, victim_node );
+  ( *extract_from_scheduled )( context, victim_node );
   victim_owner = _Scheduler_Node_get_owner( victim_node );
 
   if ( !victim_owner->is_idle ) {
@@ -1810,6 +1822,8 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
  * @param[in, out] node The node to set the affinity of.
  * @param arg The affinity for @a node.
  * @param set_affinity Function to set the affinity of a node.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
  * @param extract_from_ready Function to extract a node from the ready queue
  *      of the scheduler context.
  * @param get_highest_ready Function to get the highest ready node.
@@ -1825,6 +1839,7 @@ static inline void _Scheduler_SMP_Set_affinity(
   Scheduler_Node                  *node,
   void                            *arg,
   Scheduler_SMP_Set_affinity       set_affinity,
+  Scheduler_SMP_Extract            extract_from_scheduled,
   Scheduler_SMP_Extract            extract_from_ready,
   Scheduler_SMP_Get_highest_ready  get_highest_ready,
   Scheduler_SMP_Move               move_from_ready_to_scheduled,
@@ -1840,7 +1855,7 @@ static inline void _Scheduler_SMP_Set_affinity(
   insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( context, node );
+    ( *extract_from_scheduled )( context, node );
     _Scheduler_SMP_Preempt_and_schedule_highest_ready(
       context,
       node,

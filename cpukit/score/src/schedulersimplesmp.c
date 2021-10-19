@@ -277,6 +277,7 @@ void _Scheduler_simple_SMP_Update_priority(
     context,
     thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Do_update,
     _Scheduler_simple_SMP_Enqueue,
@@ -326,6 +327,7 @@ void _Scheduler_simple_SMP_Withdraw_node(
     the_thread,
     node,
     next_state,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
@@ -359,6 +361,7 @@ Thread_Control *_Scheduler_simple_SMP_Remove_processor(
   return _Scheduler_SMP_Remove_processor(
     context,
     cpu,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Enqueue
   );
@@ -376,6 +379,7 @@ void _Scheduler_simple_SMP_Yield(
     context,
     thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Enqueue,
     _Scheduler_simple_SMP_Enqueue_scheduled

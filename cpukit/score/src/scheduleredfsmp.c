@@ -529,6 +529,7 @@ void _Scheduler_EDF_SMP_Update_priority(
     context,
     thread,
     node,
+    _Scheduler_EDF_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Do_update,
     _Scheduler_EDF_SMP_Enqueue,
@@ -578,6 +579,7 @@ void _Scheduler_EDF_SMP_Withdraw_node(
     the_thread,
     node,
     next_state,
+    _Scheduler_EDF_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
@@ -625,6 +627,7 @@ Thread_Control *_Scheduler_EDF_SMP_Remove_processor(
   return _Scheduler_SMP_Remove_processor(
     context,
     cpu,
+    _Scheduler_EDF_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Enqueue
   );
@@ -642,6 +645,7 @@ void _Scheduler_EDF_SMP_Yield(
     context,
     thread,
     node,
+    _Scheduler_EDF_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Enqueue,
     _Scheduler_EDF_SMP_Enqueue_scheduled
@@ -758,6 +762,7 @@ Status_Control _Scheduler_EDF_SMP_Set_affinity(
       node_base,
       &rqi,
       _Scheduler_EDF_SMP_Do_set_affinity,
+      _Scheduler_EDF_SMP_Extract_from_scheduled,
       _Scheduler_EDF_SMP_Extract_from_ready,
       _Scheduler_EDF_SMP_Get_highest_ready,
       _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
