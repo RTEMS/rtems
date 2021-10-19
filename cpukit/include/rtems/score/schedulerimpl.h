@@ -969,7 +969,7 @@ RTEMS_INLINE_ROUTINE Scheduler_Try_to_schedule_action
 _Scheduler_Try_to_schedule_node(
   Scheduler_Context         *context,
   Scheduler_Node            *node,
-  const Thread_Control      *idle,
+  Scheduler_Node            *victim,
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
@@ -994,7 +994,7 @@ _Scheduler_Try_to_schedule_node(
     action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
   } else if ( node->sticky_level == 0 ) {
     action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
-  } else if ( idle != NULL ) {
+  } else if ( _Scheduler_Node_get_idle( victim ) != NULL ) {
     action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
   } else {
     Thread_Control *idle;

@@ -810,7 +810,7 @@ static inline void _Scheduler_SMP_Enqueue_to_scheduled(
   action = _Scheduler_Try_to_schedule_node(
     context,
     node,
-    _Scheduler_Node_get_idle( lowest_scheduled ),
+    lowest_scheduled,
     _Scheduler_SMP_Get_idle_thread
   );
 
@@ -987,7 +987,7 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
     action = _Scheduler_Try_to_schedule_node(
       context,
       highest_ready,
-      _Scheduler_Node_get_idle( node ),
+      node,
       _Scheduler_SMP_Get_idle_thread
     );
 
@@ -1086,7 +1086,7 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
     action = _Scheduler_Try_to_schedule_node(
       context,
       highest_ready,
-      NULL,
+      victim,
       _Scheduler_SMP_Get_idle_thread
     );
 
@@ -1145,7 +1145,7 @@ static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
     action = _Scheduler_Try_to_schedule_node(
       context,
       highest_ready,
-      NULL,
+      victim,
       _Scheduler_SMP_Get_idle_thread
     );
 
