@@ -4,10 +4,6 @@ actions:
     # expected to produce a fatal-error when run
     minimum: exclude
 
-    # don't compile due to toolchain issues, see RTEMS issue #4218
-    spconfig01: exclude
-    spmisc01: exclude
-
 build-type: option
 copyrights:
 - Copyright (C) 2021 Gedare Bloom <gedare@rtems.org>

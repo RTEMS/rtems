@@ -4,10 +4,6 @@ actions:
     # expected to fail
     minimum: exclude
 
-    # don't compile due to toolchain issues
-    spconfig01: exclude
-    spmisc01: exclude
-
     # tests that are passing intermittently
     spcpucounter01: indeterminate
     rtmonuse: indeterminate
