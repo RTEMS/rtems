@@ -10,6 +10,7 @@
  */
 
 /*
+ * Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
  * Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -302,6 +303,23 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
 #define rtems_configuration_get_number_of_initial_extensions() \
   ((uint32_t) _User_extensions_Initial_count)
 
+/* Generated from spec:/rtems/config/if/get-stack-allocate-for-idle-hook */
+
+/**
+ * @ingroup RTEMSAPIConfig
+ *
+ * @brief Gets the thread stack allocator allocate hook used to allocate the
+ *   stack of each IDLE task configured for this application.
+ *
+ * @return Returns the thread stack allocator allocate hook used to allocate
+ *   the stack of each IDLE task configured for this application.
+ *
+ * @par Notes
+ * See #CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE.
+ */
+#define rtems_configuration_get_stack_allocate_for_idle_hook() \
+  _Stack_Allocator_allocate_for_idle
+
 /* Generated from spec:/rtems/config/if/get-stack-allocate-hook */
 
 /**
@@ -367,18 +385,6 @@ uint32_t rtems_configuration_get_maximum_extensions( void );
  * See #CONFIGURE_TASK_STACK_DEALLOCATOR.
  */
 #define rtems_configuration_get_stack_free_hook() _Stack_Allocator_free
-
-/**
- * @ingroup RTEMSAPIConfig
- *
- * @brief Gets the IDLE thread stack allocator hook configured for this
- *   application.
- *
- * @return Returns the IDLE thread stack allocator hook configured for this
- *   application.
- */
-#define rtems_configuration_get_stack_allocate_for_idle_hook() \
-  (_Stack_Allocator_allocate_for_idle)
 
 /* Generated from spec:/rtems/config/if/get-stack-space-size */
 

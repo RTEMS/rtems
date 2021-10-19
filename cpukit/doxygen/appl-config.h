@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2019, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 2010 Gedare Bloom
- * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+ * Copyright (C) 1988, 2021 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -4670,6 +4670,32 @@
  * configured, see #CONFIGURE_TASK_STACK_ALLOCATOR.
  */
 #define CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
+
+/* Generated from spec:/acfg/if/task-stack-allocator-for-idle */
+
+/**
+ * @brief This configuration option is an initializer define.
+ *
+ * The value of this configuration option is the address for the stack
+ * allocator allocate handler used to allocate the task stack of each IDLE
+ * task.
+ *
+ * @par Default Value
+ * The default value is ``_Stack_Allocator_allocate_for_idle_default``, which
+ * indicates that IDLE task stacks will be allocated from an area statically
+ * allocated by ``<rtems/confdefs.h>``.
+ *
+ * @par Value Constraints
+ * The value of this configuration option shall be defined to a valid function
+ * pointer of the type ``void *( *allocate )( uint32_t, size_t )``.
+ *
+ * @par Notes
+ * This configuration option is independent of the other thread stack allocator
+ * configuration options.  It is assumed that any memory allocated for the
+ * stack of an IDLE task will not be from the RTEMS Workspace or the memory
+ * statically allocated by default.
+ */
+#define CONFIGURE_TASK_STACK_ALLOCATOR_FOR_IDLE
 
 /* Generated from spec:/acfg/if/task-stack-allocator-init */
 
