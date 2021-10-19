@@ -1042,22 +1042,24 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
  * @brief Exchanges an idle thread from the scheduler node that uses it
  *      right now to another scheduler node.
  *
- * @param needs_idle The scheduler node that needs an idle thread.
- * @param uses_idle The scheduler node that used the idle thread.
- * @param idle The idle thread that is exchanged.
+ * @param needs_idle is the scheduler node that needs an idle thread.
+ *
+ * @param uses_idle is the scheduler node that used the idle thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
   Scheduler_Node *needs_idle,
-  Scheduler_Node *uses_idle,
-  Thread_Control *idle
+  Scheduler_Node *uses_idle
 )
 {
-  uses_idle->idle = NULL;
+  _Scheduler_Node_set_idle_user(
+    needs_idle,
+    _Scheduler_Node_get_idle( uses_idle )
+  );
   _Scheduler_Node_set_user(
     uses_idle,
     _Scheduler_Node_get_owner( uses_idle )
   );
-  _Scheduler_Node_set_idle_user( needs_idle, idle );
+  uses_idle->idle = NULL;
 }
 
 /**

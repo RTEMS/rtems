@@ -840,11 +840,7 @@ static inline void _Scheduler_SMP_Enqueue_to_scheduled(
     ( *insert_scheduled )( context, node, priority );
     ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
 
-    _Scheduler_Exchange_idle_thread(
-      node,
-      lowest_scheduled,
-      _Scheduler_Node_get_idle( lowest_scheduled )
-    );
+    _Scheduler_Exchange_idle_thread( node, lowest_scheduled );
   } else {
     _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
@@ -1020,11 +1016,7 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
       ( *insert_ready )( context, node, insert_priority );
       ( *move_from_ready_to_scheduled )( context, highest_ready );
 
-      _Scheduler_Exchange_idle_thread(
-        highest_ready,
-        node,
-        _Scheduler_Node_get_idle( node )
-      );
+      _Scheduler_Exchange_idle_thread( highest_ready, node );
       return false;
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
