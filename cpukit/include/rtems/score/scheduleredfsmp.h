@@ -79,9 +79,18 @@ typedef struct {
   RBTree_Control Queue;
 
   /**
-   * @brief The scheduled thread of the corresponding processor.
+   * @brief If this member is not NULL, then it references the scheduled thread
+   *   affine only to the corresponding processor, otherwise the processor is
+   *   allocated to a thread which may execute on any of the processors owned
+   *   by the scheduler.
    */
-  Scheduler_EDF_SMP_Node *scheduled;
+  Scheduler_EDF_SMP_Node *affine_scheduled;
+
+  /**
+   * @brief This member references the thread allocated to the corresponding
+   *   processor.
+   */
+  Scheduler_EDF_SMP_Node *allocated;
 } Scheduler_EDF_SMP_Ready_queue;
 
 typedef struct {

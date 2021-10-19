@@ -196,21 +196,21 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_highest_ready(
   return &highest_ready->Base.Base;
 }
 
-static inline void _Scheduler_EDF_SMP_Set_scheduled(
+static inline void _Scheduler_EDF_SMP_Set_allocated(
   Scheduler_EDF_SMP_Context *self,
-  Scheduler_EDF_SMP_Node    *scheduled,
+  Scheduler_EDF_SMP_Node    *allocated,
   const Per_CPU_Control     *cpu
 )
 {
-  self->Ready[ _Per_CPU_Get_index( cpu ) + 1 ].scheduled = scheduled;
+  self->Ready[ _Per_CPU_Get_index( cpu ) + 1 ].allocated = allocated;
 }
 
-static inline Scheduler_EDF_SMP_Node *_Scheduler_EDF_SMP_Get_scheduled(
+static inline Scheduler_EDF_SMP_Node *_Scheduler_EDF_SMP_Get_allocated(
   const Scheduler_EDF_SMP_Context *self,
   uint8_t                          rqi
 )
 {
-  return self->Ready[ rqi ].scheduled;
+  return self->Ready[ rqi ].allocated;
 }
 
 static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
@@ -226,18 +226,60 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
 
   if ( rqi != 0 ) {
     Scheduler_EDF_SMP_Context *self;
-    Scheduler_EDF_SMP_Node    *node;
+    Scheduler_EDF_SMP_Node    *affine_scheduled;
 
     self = _Scheduler_EDF_SMP_Get_self( context );
-    node = _Scheduler_EDF_SMP_Get_scheduled( self, rqi );
+    affine_scheduled = self->Ready[ rqi ].affine_scheduled;
 
-    if ( node->ready_queue_index > 0 ) {
-      _Assert( node->ready_queue_index == rqi );
-      return &node->Base.Base;
+    if ( affine_scheduled != NULL ) {
+      _Assert( affine_scheduled->ready_queue_index == rqi );
+      return &affine_scheduled->Base.Base;
     }
   }
 
   return _Scheduler_SMP_Get_lowest_scheduled( context, filter_base );
+}
+
+static inline void _Scheduler_EDF_SMP_Insert_scheduled(
+  Scheduler_Context *context,
+  Scheduler_Node    *node_base,
+  Priority_Control   priority_to_insert
+)
+{
+  Scheduler_EDF_SMP_Context     *self;
+  Scheduler_EDF_SMP_Node        *node;
+  uint8_t                        rqi;
+  Scheduler_EDF_SMP_Ready_queue *ready_queue;
+
+  self = _Scheduler_EDF_SMP_Get_self( context );
+  node = _Scheduler_EDF_SMP_Node_downcast( node_base );
+  rqi = node->ready_queue_index;
+  ready_queue = &self->Ready[ rqi ];
+
+  _Scheduler_SMP_Insert_scheduled( context, node_base, priority_to_insert );
+
+  if ( rqi != 0 ) {
+    ready_queue->affine_scheduled = node;
+
+    if ( !_RBTree_Is_empty( &ready_queue->Queue ) ) {
+      _Chain_Extract_unprotected( &ready_queue->Node );
+    }
+  }
+}
+
+static inline void _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary(
+  Scheduler_EDF_SMP_Context     *self,
+  uint8_t                        rqi,
+  Scheduler_EDF_SMP_Ready_queue *ready_queue
+)
+{
+  if (
+    rqi != 0 &&
+    _RBTree_Is_empty( &ready_queue->Queue ) &&
+    ready_queue->affine_scheduled == NULL
+  ) {
+    _Chain_Append_unprotected( &self->Affine_queues, &ready_queue->Node );
+  }
 }
 
 static inline void _Scheduler_EDF_SMP_Insert_ready(
@@ -265,6 +307,7 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
   node->generation = generation;
   self->generations[ generation_index ] = generation + increment;
 
+  _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary( self, rqi, ready_queue );
   _RBTree_Initialize_node( &node->Base.Base.Node.RBTree );
   _RBTree_Insert_inline(
     &ready_queue->Queue,
@@ -272,16 +315,6 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
     &insert_priority,
     _Scheduler_EDF_SMP_Priority_less_equal
   );
-
-  if ( rqi != 0 && _Chain_Is_node_off_chain( &ready_queue->Node ) ) {
-    Scheduler_EDF_SMP_Node *scheduled;
-
-    scheduled = _Scheduler_EDF_SMP_Get_scheduled( self, rqi );
-
-    if ( scheduled->ready_queue_index == 0 ) {
-      _Chain_Append_unprotected( &self->Affine_queues, &ready_queue->Node );
-    }
-  }
 }
 
 static inline void _Scheduler_EDF_SMP_Extract_from_scheduled(
@@ -305,6 +338,8 @@ static inline void _Scheduler_EDF_SMP_Extract_from_scheduled(
   if ( rqi != 0 && !_RBTree_Is_empty( &ready_queue->Queue ) ) {
     _Chain_Append_unprotected( &self->Affine_queues, &ready_queue->Node );
   }
+
+  ready_queue->affine_scheduled = NULL;
 }
 
 static inline void _Scheduler_EDF_SMP_Extract_from_ready(
@@ -328,10 +363,9 @@ static inline void _Scheduler_EDF_SMP_Extract_from_ready(
   if (
     rqi != 0
       && _RBTree_Is_empty( &ready_queue->Queue )
-      && !_Chain_Is_node_off_chain( &ready_queue->Node )
+      && ready_queue->affine_scheduled == NULL
   ) {
     _Chain_Extract_unprotected( &ready_queue->Node );
-    _Chain_Set_off_chain( &ready_queue->Node );
   }
 }
 
@@ -342,7 +376,7 @@ static inline void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
 {
   Priority_Control insert_priority;
 
-  _Scheduler_SMP_Extract_from_scheduled( context, scheduled_to_ready );
+  _Scheduler_EDF_SMP_Extract_from_scheduled( context, scheduled_to_ready );
   insert_priority = _Scheduler_SMP_Node_priority( scheduled_to_ready );
   _Scheduler_EDF_SMP_Insert_ready(
     context,
@@ -361,7 +395,7 @@ static inline void _Scheduler_EDF_SMP_Move_from_ready_to_scheduled(
   _Scheduler_EDF_SMP_Extract_from_ready( context, ready_to_scheduled );
   insert_priority = _Scheduler_SMP_Node_priority( ready_to_scheduled );
   insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
-  _Scheduler_SMP_Insert_scheduled(
+  _Scheduler_EDF_SMP_Insert_scheduled(
     context,
     ready_to_scheduled,
     insert_priority
@@ -385,24 +419,16 @@ static inline void _Scheduler_EDF_SMP_Allocate_processor(
   rqi = scheduled->ready_queue_index;
 
   if ( rqi != 0 ) {
-    Scheduler_EDF_SMP_Ready_queue *ready_queue;
-    Per_CPU_Control               *desired_cpu;
-
-    ready_queue = &self->Ready[ rqi ];
-
-    if ( !_Chain_Is_node_off_chain( &ready_queue->Node ) ) {
-      _Chain_Extract_unprotected( &ready_queue->Node );
-      _Chain_Set_off_chain( &ready_queue->Node );
-    }
+    Per_CPU_Control *desired_cpu;
 
     desired_cpu = _Per_CPU_Get_by_index( rqi - 1 );
 
     if ( victim_cpu != desired_cpu ) {
       Scheduler_EDF_SMP_Node *node;
 
-      node = _Scheduler_EDF_SMP_Get_scheduled( self, rqi );
+      node = _Scheduler_EDF_SMP_Get_allocated( self, rqi );
       _Assert( node->ready_queue_index == 0 );
-      _Scheduler_EDF_SMP_Set_scheduled( self, node, victim_cpu );
+      _Scheduler_EDF_SMP_Set_allocated( self, node, victim_cpu );
       _Scheduler_SMP_Allocate_processor_exact(
         context,
         &node->Base.Base,
@@ -413,7 +439,7 @@ static inline void _Scheduler_EDF_SMP_Allocate_processor(
     }
   }
 
-  _Scheduler_EDF_SMP_Set_scheduled( self, scheduled, victim_cpu );
+  _Scheduler_EDF_SMP_Set_allocated( self, scheduled, victim_cpu );
   _Scheduler_SMP_Allocate_processor_exact(
     context,
     &scheduled->Base.Base,
@@ -454,7 +480,7 @@ static inline bool _Scheduler_EDF_SMP_Enqueue(
     insert_priority,
     _Scheduler_SMP_Priority_less_equal,
     _Scheduler_EDF_SMP_Insert_ready,
-    _Scheduler_SMP_Insert_scheduled,
+    _Scheduler_EDF_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_scheduled_to_ready,
     _Scheduler_EDF_SMP_Get_lowest_scheduled,
     _Scheduler_EDF_SMP_Allocate_processor
@@ -475,7 +501,7 @@ static inline void _Scheduler_EDF_SMP_Enqueue_scheduled(
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Insert_ready,
-    _Scheduler_SMP_Insert_scheduled,
+    _Scheduler_EDF_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
     _Scheduler_EDF_SMP_Allocate_processor
   );
@@ -510,7 +536,7 @@ static inline bool _Scheduler_EDF_SMP_Do_ask_for_help(
     node,
     _Scheduler_SMP_Priority_less_equal,
     _Scheduler_EDF_SMP_Insert_ready,
-    _Scheduler_SMP_Insert_scheduled,
+    _Scheduler_EDF_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_scheduled_to_ready,
     _Scheduler_EDF_SMP_Get_lowest_scheduled,
     _Scheduler_EDF_SMP_Allocate_processor
@@ -598,7 +624,7 @@ static inline void _Scheduler_EDF_SMP_Register_idle(
 
   self = _Scheduler_EDF_SMP_Get_self( context );
   idle = _Scheduler_EDF_SMP_Node_downcast( idle_base );
-  _Scheduler_EDF_SMP_Set_scheduled( self, idle, cpu );
+  _Scheduler_EDF_SMP_Set_allocated( self, idle, cpu );
 }
 
 void _Scheduler_EDF_SMP_Add_processor(
