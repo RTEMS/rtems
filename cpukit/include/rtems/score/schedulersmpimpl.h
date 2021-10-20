@@ -590,7 +590,7 @@ static inline void _Scheduler_SMP_Release_idle_thread(
  *
  * @param[in, out] idle The thread to extract the node of.
  */
-static inline void _Scheduler_SMP_Exctract_idle_thread(
+static inline void _Scheduler_SMP_Extract_idle_thread(
   Thread_Control *idle
 )
 {
@@ -1768,7 +1768,7 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
     _Assert( victim_owner == victim_user );
     _Assert( _Scheduler_Node_get_idle( victim_node ) == NULL );
     idle = victim_owner;
-    _Scheduler_SMP_Exctract_idle_thread( idle );
+    _Scheduler_SMP_Extract_idle_thread( idle );
   }
 
   return idle;
