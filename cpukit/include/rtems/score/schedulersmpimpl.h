@@ -847,6 +847,12 @@ static inline void _Scheduler_SMP_Enqueue_to_scheduled(
     ( *insert_scheduled )( context, node, priority );
 
     _Scheduler_Exchange_idle_thread( node, lowest_scheduled );
+    ( *allocate_processor )(
+      context,
+      node,
+      lowest_scheduled,
+      _Thread_Get_CPU( _Scheduler_Node_get_user( node ) )
+    );
   } else {
     _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
@@ -1021,6 +1027,12 @@ static inline void _Scheduler_SMP_Enqueue_scheduled(
       ( *insert_ready )( context, node, insert_priority );
 
       _Scheduler_Exchange_idle_thread( highest_ready, node );
+      ( *allocate_processor )(
+        context,
+        highest_ready,
+        node,
+        _Thread_Get_CPU( _Scheduler_Node_get_user( highest_ready ) )
+      );
       return;
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
@@ -1111,6 +1123,12 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
       ( *move_from_ready_to_scheduled )( context, highest_ready );
 
       _Scheduler_Exchange_idle_thread( highest_ready, victim );
+      ( *allocate_processor )(
+        context,
+        highest_ready,
+        victim,
+        _Thread_Get_CPU( _Scheduler_Node_get_user( highest_ready ) )
+      );
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
@@ -1184,6 +1202,7 @@ static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
       ( *move_from_ready_to_scheduled )( context, highest_ready );
 
       _Scheduler_Exchange_idle_thread( highest_ready, victim );
+      ( *allocate_processor )( context, highest_ready, victim, _Thread_Get_CPU( _Scheduler_Node_get_user( highest_ready ) ) );
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
