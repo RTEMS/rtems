@@ -798,26 +798,26 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
 
 #if defined(RTEMS_SMP)
 /**
- * @brief Gets an idle thread from the scheduler instance.
+ * @brief Gets a scheduler node which is owned by an unused idle thread.
  *
- * @param context The scheduler instance context.
+ * @param arg is the handler argument.
  *
- * @return idle An idle thread for use.  This function must always return an
- * idle thread.  If none is available, then this is a fatal error.
+ * @return Returns a scheduler node owned by an idle thread for use.  This
+ *   handler must always return a node.  If none is available, then this is a
+ *   fatal error.
  */
-typedef Thread_Control *( *Scheduler_Get_idle_thread )(
-  Scheduler_Context *context
-);
+typedef Scheduler_Node *( *Scheduler_Get_idle_node )( void *arg );
 
 /**
- * @brief Releases an idle thread to the scheduler instance for reuse.
+ * @brief Releases the scheduler node which is owned by an idle thread.
  *
- * @param context The scheduler instance context.
- * @param idle The idle thread to release.
+ * @param node is the node to release.
+ *
+ * @param arg is the handler argument.
  */
-typedef void ( *Scheduler_Release_idle_thread )(
-  Scheduler_Context *context,
-  Thread_Control    *idle
+typedef void ( *Scheduler_Release_idle_node )(
+  Scheduler_Node *node,
+  void           *arg
 );
 
 /**
@@ -841,189 +841,114 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
 }
 
 /**
- * @brief Uses an idle thread for this scheduler node.
+ * @brief Uses an idle thread for the scheduler node.
  *
- * A thread whose home scheduler node has a sticky level greater than zero may
- * use an idle thread in the home scheduler instance in the case it executes
- * currently in another scheduler instance or in the case it is in a blocking
- * state.
+ * @param[in, out] node is the node which wants to use an idle thread.
  *
- * @param context The scheduler instance context.
- * @param[in, out] node The node which wants to use the idle thread.
- * @param cpu The processor for the idle thread.
- * @param get_idle_thread Function to get an idle thread.
+ * @param get_idle_node is the get idle node handler.
+ *
+ * @param arg is the handler argument.
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
-  Scheduler_Context         *context,
-  Scheduler_Node            *node,
-  Scheduler_Get_idle_thread  get_idle_thread
+  Scheduler_Node          *node,
+  Scheduler_Get_idle_node  get_idle_node,
+  void                    *arg
 )
 {
-  Thread_Control *idle = ( *get_idle_thread )( context );
+  Scheduler_Node *idle_node;
+  Thread_Control *idle;
 
+  idle_node = ( *get_idle_node )( arg );
+  idle = _Scheduler_Node_get_owner( idle_node );
+  _Assert( idle->is_idle );
   _Scheduler_Node_set_idle_user( node, idle );
+
   return idle;
 }
 
 /**
- * @brief This enumeration defines what a scheduler should do with a node which
- * could be scheduled.
+ * @brief Releases the idle thread used by the scheduler node.
+ *
+ * @param[in, out] node is the node which wants to release the idle thread.
+ *
+ * @param idle is the idle thread to release.
+ *
+ * @param release_idle_node is the release idle node handler.
+ *
+ * @param arg is the handler argument.
  */
-typedef enum {
-  SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE,
-  SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE,
-  SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK
-} Scheduler_Try_to_schedule_action;
-
-/**
- * @brief Tries to schedule the scheduler node.
- *
- * When a scheduler needs to schedule a node, it shall use this function to
- * determine what it shall do with the node.  The node replaces a victim node if
- * it can be scheduled.
- *
- * This function uses the state of the node and the scheduler state of the owner
- * thread to determine what shall be done.  Each scheduler maintains its nodes
- * independent of other schedulers.  This function ensures that a thread is
- * scheduled by at most one scheduler.  If a node requires an executing thread
- * due to some locking protocol and the owner thread is already scheduled by
- * another scheduler, then an idle thread shall be attached to the node.
- *
- * @param[in, out] context is the scheduler context.
- * @param[in, out] node is the node which could be scheduled.
- * @param idle is an idle thread used by the victim node or NULL.
- * @param get_idle_thread points to a function to get an idle thread.
- *
- * @retval SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE The node shall be scheduled.
- *
- * @retval SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE The node shall be
- *   scheduled and the provided idle thread shall be attached to the node.  This
- *   action is returned, if the node cannot use the owner thread and shall use
- *   an idle thread instead.  In this case, the idle thread is provided by the
- *   victim node.
- *
- * @retval SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK The node shall be blocked.  This
- *   action is returned, if the owner thread is already scheduled by another
- *   scheduler.
- */
-RTEMS_INLINE_ROUTINE Scheduler_Try_to_schedule_action
-_Scheduler_Try_to_schedule_node(
-  Scheduler_Context         *context,
-  Scheduler_Node            *node,
-  Scheduler_Node            *victim,
-  Scheduler_Get_idle_thread  get_idle_thread
+RTEMS_INLINE_ROUTINE void _Scheduler_Release_idle_thread(
+  Scheduler_Node             *node,
+  const Thread_Control       *idle,
+  Scheduler_Release_idle_node release_idle_node,
+  void                       *arg
 )
 {
-  ISR_lock_Context                  lock_context;
-  Scheduler_Try_to_schedule_action  action;
-  Thread_Control                   *owner;
+  Thread_Control *owner;
+  Scheduler_Node *idle_node;
 
-  action = SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE;
   owner = _Scheduler_Node_get_owner( node );
-  _Assert( _Scheduler_Node_get_user( node ) == owner );
-  _Assert( _Scheduler_Node_get_idle( node ) == NULL );
-
-  _Thread_Scheduler_acquire_critical( owner, &lock_context );
-
-  if ( owner->Scheduler.state == THREAD_SCHEDULER_READY ) {
-    _Thread_Scheduler_cancel_need_for_help( owner, _Thread_Get_CPU( owner ) );
-    _Scheduler_Thread_change_state( owner, THREAD_SCHEDULER_SCHEDULED );
-  } else if (
-    owner->Scheduler.state == THREAD_SCHEDULER_SCHEDULED
-      && node->sticky_level <= 1
-  ) {
-    action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
-  } else if ( node->sticky_level == 0 ) {
-    action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
-  } else if ( _Scheduler_Node_get_idle( victim ) != NULL ) {
-    action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
-  } else {
-    Thread_Control *idle;
-    Thread_Control *user;
-
-    idle = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
-    user = _Scheduler_Node_get_user( node );
-    _Thread_Set_CPU( idle, _Thread_Get_CPU( user ) );
-  }
-
-  _Thread_Scheduler_release_critical( owner, &lock_context );
-  return action;
+  _Assert( _Scheduler_Node_get_user( node ) == idle );
+  _Scheduler_Node_set_user( node, owner );
+  node->idle = NULL;
+  idle_node = _Thread_Scheduler_get_home_node( idle );
+  ( *release_idle_node )( idle_node, arg );
 }
 
 /**
- * @brief Releases an idle thread using this scheduler node.
+ * @brief Releases the idle thread used by the scheduler node if the node uses
+ *   an idle thread.
  *
- * @param context The scheduler instance context.
- * @param[in, out] node The node which may have an idle thread as user.
- * @param release_idle_thread Function to release an idle thread.
+ * @param[in, out] node is the node which wants to release the idle thread.
  *
- * @retval idle The idle thread which used this node.
- * @retval NULL This node had no idle thread as an user.
+ * @param release_idle_node is the release idle node handler.
+ *
+ * @param arg is the handler argument.
+ *
+ * @retval NULL The scheduler node did not use an idle thread.
+ *
+ * @return Returns the idle thread used by the scheduler node.
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
-  Scheduler_Context             *context,
-  Scheduler_Node                *node,
-  Scheduler_Release_idle_thread  release_idle_thread
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread_if_necessary(
+  Scheduler_Node             *node,
+  Scheduler_Release_idle_node release_idle_node,
+  void                        *arg
 )
 {
-  Thread_Control *idle = _Scheduler_Node_get_idle( node );
+  Thread_Control *idle;
+
+  idle = _Scheduler_Node_get_idle( node );
 
   if ( idle != NULL ) {
-    Thread_Control *owner = _Scheduler_Node_get_owner( node );
-
-    node->idle = NULL;
-    _Scheduler_Node_set_user( node, owner );
-    ( *release_idle_thread )( context, idle );
+    _Scheduler_Release_idle_thread( node, idle, release_idle_node, arg );
   }
 
   return idle;
-}
-
-/**
- * @brief Exchanges an idle thread from the scheduler node that uses it
- *      right now to another scheduler node.
- *
- * @param needs_idle is the scheduler node that needs an idle thread.
- *
- * @param uses_idle is the scheduler node that used the idle thread.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
-  Scheduler_Node *needs_idle,
-  Scheduler_Node *uses_idle
-)
-{
-  _Scheduler_Node_set_idle_user(
-    needs_idle,
-    _Scheduler_Node_get_idle( uses_idle )
-  );
-  _Scheduler_Node_set_user(
-    uses_idle,
-    _Scheduler_Node_get_owner( uses_idle )
-  );
-  uses_idle->idle = NULL;
 }
 
 /**
  * @brief Blocks this scheduler node.
  *
- * @param context The scheduler instance context.
  * @param[in, out] thread The thread which wants to get blocked referencing this
  *   node.  This is not necessarily the user of this node in case the node
  *   participates in the scheduler helping protocol.
- * @param[in, out] node The node which wants to get blocked.
- * @param is_scheduled This node is scheduled.
- * @param get_idle_thread Function to get an idle thread.
+ *
+ * @param[in, out] node is the node which wants to get blocked.
+ *
+ * @param get_idle_node is the get idle node handler.
+ *
+ * @param arg is the get idle node handler argument.
  *
  * @retval thread_cpu The processor of the thread.  Indicates to continue with
  *   the blocking operation.
  * @retval NULL Otherwise.
  */
 RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
-  Scheduler_Context         *context,
-  Thread_Control            *thread,
-  Scheduler_Node            *node,
-  bool                       is_scheduled,
-  Scheduler_Get_idle_thread  get_idle_thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node,
+  bool                     is_scheduled,
+  Scheduler_Get_idle_node  get_idle_node,
+  void                    *arg
 )
 {
   int               sticky_level;
@@ -1045,7 +970,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
     if ( is_scheduled && _Scheduler_Node_get_idle( node ) == NULL ) {
       Thread_Control *idle;
 
-      idle = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+      idle = _Scheduler_Use_idle_thread( node, get_idle_node, arg );
       _Thread_Set_CPU( idle, thread_cpu );
       _Thread_Dispatch_update_heir( _Per_CPU_Get(), thread_cpu, idle );
     }
@@ -1058,31 +983,28 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
 }
 
 /**
- * @brief Discard the idle thread from the scheduler node.
+ * @brief Discards the idle thread used by the scheduler node.
  *
- * @param context The scheduler context.
- * @param[in, out] the_thread The thread for the operation.
- * @param[in, out] node The scheduler node to discard the idle thread from.
- * @param release_idle_thread Method to release the idle thread from the context.
+ * @param[in, out] the_thread is the thread owning the node.
+ *
+ * @param[in, out] node is the node which wants to release the idle thread.
+ *
+ * @param release_idle_node is the release idle node handler.
+ *
+ * @param arg is the handler argument.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
-  Scheduler_Context             *context,
-  Thread_Control                *the_thread,
-  Scheduler_Node                *node,
-  Scheduler_Release_idle_thread  release_idle_thread
+  Thread_Control             *the_thread,
+  Scheduler_Node             *node,
+  Scheduler_Release_idle_node release_idle_node,
+  void                       *arg
 )
 {
   Thread_Control  *idle;
-  Thread_Control  *owner;
   Per_CPU_Control *cpu;
 
   idle = _Scheduler_Node_get_idle( node );
-  owner = _Scheduler_Node_get_owner( node );
-
-  node->idle = NULL;
-  _Assert( _Scheduler_Node_get_user( node ) == idle );
-  _Scheduler_Node_set_user( node, owner );
-  ( *release_idle_thread )( context, idle );
+  _Scheduler_Release_idle_thread( node, idle, release_idle_node, arg );
 
   cpu = _Thread_Get_CPU( idle );
   _Thread_Set_CPU( the_thread, cpu );
@@ -1102,11 +1024,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
  * @retval false Do not continue with the unblocking operation.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
-  Scheduler_Context             *context,
-  Thread_Control                *the_thread,
-  Scheduler_Node                *node,
-  bool                           is_scheduled,
-  Scheduler_Release_idle_thread  release_idle_thread
+  Thread_Control              *the_thread,
+  Scheduler_Node              *node,
+  bool                         is_scheduled,
+  Scheduler_Release_idle_node  release_idle_node,
+  void                        *arg
 )
 {
   bool unblock;
@@ -1115,13 +1037,13 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
   _Assert( node->sticky_level > 0 );
 
   if ( is_scheduled ) {
+    _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_SCHEDULED );
     _Scheduler_Discard_idle_thread(
-      context,
       the_thread,
       node,
-      release_idle_thread
+      release_idle_node,
+      arg
     );
-    _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_SCHEDULED );
     unblock = false;
   } else {
     _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_READY );

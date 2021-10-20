@@ -57,6 +57,7 @@ extern "C" {
  */
 typedef struct {
   Scheduler_SMP_Context    Base;
+  Chain_Control           *idle_ready_queue;
   Priority_bit_map_Control Bit_map;
   Chain_Control            Ready[ RTEMS_ZERO_LENGTH_ARRAY ];
 } Scheduler_priority_SMP_Context;

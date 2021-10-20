@@ -409,10 +409,36 @@ static inline void _Scheduler_EDF_SMP_Move_from_ready_to_scheduled(
   );
 }
 
+static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_idle( void *arg )
+{
+  Scheduler_EDF_SMP_Context *self;
+  Scheduler_Node            *lowest_ready;
+
+  self = _Scheduler_EDF_SMP_Get_self( arg );
+  lowest_ready = (Scheduler_Node *) _RBTree_Maximum( &self->Ready[ 0 ].Queue );
+  _Assert( lowest_ready != NULL );
+  _RBTree_Extract( &self->Ready[ 0 ].Queue, &lowest_ready->Node.RBTree );
+  _Chain_Initialize_node( &lowest_ready->Node.Chain );
+
+  return lowest_ready;
+}
+
+static inline void _Scheduler_EDF_SMP_Release_idle(
+  Scheduler_Node *node,
+  void           *arg
+)
+{
+  Scheduler_EDF_SMP_Context *self;
+
+  self = _Scheduler_EDF_SMP_Get_self( arg );
+  _RBTree_Initialize_node( &node->Node.RBTree );
+  _RBTree_Append( &self->Ready[ 0 ].Queue, &node->Node.RBTree );
+}
+
 static inline void _Scheduler_EDF_SMP_Allocate_processor(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled_base,
-  Scheduler_Node    *victim_base,
+  Thread_Control    *victim_thread,
   Per_CPU_Control   *victim_cpu
 )
 {
@@ -420,7 +446,7 @@ static inline void _Scheduler_EDF_SMP_Allocate_processor(
   Scheduler_EDF_SMP_Node        *scheduled;
   uint8_t                        rqi;
 
-  (void) victim_base;
+  (void) victim_thread;
   self = _Scheduler_EDF_SMP_Get_self( context );
   scheduled = _Scheduler_EDF_SMP_Node_downcast( scheduled_base );
   rqi = scheduled->ready_queue_index;
@@ -471,7 +497,9 @@ void _Scheduler_EDF_SMP_Block(
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_EDF_SMP_Allocate_processor
+    _Scheduler_EDF_SMP_Allocate_processor,
+    _Scheduler_EDF_SMP_Get_idle,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -489,8 +517,11 @@ static inline bool _Scheduler_EDF_SMP_Enqueue(
     _Scheduler_EDF_SMP_Insert_ready,
     _Scheduler_EDF_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
     _Scheduler_EDF_SMP_Get_lowest_scheduled,
-    _Scheduler_EDF_SMP_Allocate_processor
+    _Scheduler_EDF_SMP_Allocate_processor,
+    _Scheduler_EDF_SMP_Get_idle,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -510,7 +541,9 @@ static inline void _Scheduler_EDF_SMP_Enqueue_scheduled(
     _Scheduler_EDF_SMP_Insert_ready,
     _Scheduler_EDF_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_EDF_SMP_Allocate_processor
+    _Scheduler_EDF_SMP_Allocate_processor,
+    _Scheduler_EDF_SMP_Get_idle,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -527,7 +560,8 @@ void _Scheduler_EDF_SMP_Unblock(
     thread,
     node,
     _Scheduler_EDF_SMP_Do_update,
-    _Scheduler_EDF_SMP_Enqueue
+    _Scheduler_EDF_SMP_Enqueue,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -546,7 +580,8 @@ static inline bool _Scheduler_EDF_SMP_Do_ask_for_help(
     _Scheduler_EDF_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_scheduled_to_ready,
     _Scheduler_EDF_SMP_Get_lowest_scheduled,
-    _Scheduler_EDF_SMP_Allocate_processor
+    _Scheduler_EDF_SMP_Allocate_processor,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -616,7 +651,9 @@ void _Scheduler_EDF_SMP_Withdraw_node(
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_EDF_SMP_Allocate_processor
+    _Scheduler_EDF_SMP_Allocate_processor,
+    _Scheduler_EDF_SMP_Get_idle,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -649,7 +686,9 @@ void _Scheduler_EDF_SMP_Clean_sticky(
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_EDF_SMP_Allocate_processor
+    _Scheduler_EDF_SMP_Allocate_processor,
+    _Scheduler_EDF_SMP_Get_idle,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -695,7 +734,9 @@ Thread_Control *_Scheduler_EDF_SMP_Remove_processor(
     cpu,
     _Scheduler_EDF_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
-    _Scheduler_EDF_SMP_Enqueue
+    _Scheduler_EDF_SMP_Enqueue,
+    _Scheduler_EDF_SMP_Get_idle,
+    _Scheduler_EDF_SMP_Release_idle
   );
 }
 
@@ -833,7 +874,9 @@ Status_Control _Scheduler_EDF_SMP_Set_affinity(
       _Scheduler_EDF_SMP_Get_highest_ready,
       _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
       _Scheduler_EDF_SMP_Enqueue,
-      _Scheduler_EDF_SMP_Allocate_processor
+      _Scheduler_EDF_SMP_Allocate_processor,
+      _Scheduler_EDF_SMP_Get_idle,
+      _Scheduler_EDF_SMP_Release_idle
     );
   }
 

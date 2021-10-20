@@ -55,15 +55,6 @@ typedef struct {
    * @brief The chain of scheduled nodes.
    */
   Chain_Control Scheduled;
-
-  /**
-   * @brief Chain of the available idle threads.
-   *
-   * Idle threads are used for the scheduler helping protocol.  It is crucial
-   * that the idle threads preserve their relative order.  This is the case for
-   * this priority based scheduler.
-   */
-  Chain_Control Idle_threads;
 } Scheduler_SMP_Context;
 
 /**

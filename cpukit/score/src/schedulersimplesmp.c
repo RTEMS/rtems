@@ -172,6 +172,30 @@ static void _Scheduler_simple_SMP_Extract_from_ready(
   _Chain_Extract_unprotected( &node_to_extract->Node.Chain );
 }
 
+static inline Scheduler_Node *_Scheduler_simple_SMP_Get_idle( void *arg )
+{
+  Scheduler_simple_SMP_Context *self =
+    _Scheduler_simple_SMP_Get_self( arg );
+  Scheduler_Node *lowest_ready = (Scheduler_Node *) _Chain_Last( &self->Ready );
+
+  _Assert( &lowest_ready->Node.Chain != _Chain_Head( &self->Ready ) );
+  _Chain_Extract_unprotected( &lowest_ready->Node.Chain );
+
+  return lowest_ready;
+}
+
+static inline void _Scheduler_simple_SMP_Release_idle(
+  Scheduler_Node *node,
+  void           *arg
+)
+{
+  Scheduler_simple_SMP_Context *self;
+
+  self = _Scheduler_simple_SMP_Get_self( arg );
+
+  _Chain_Append_unprotected( &self->Ready, &node->Node.Chain );
+}
+
 void _Scheduler_simple_SMP_Block(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
@@ -188,7 +212,9 @@ void _Scheduler_simple_SMP_Block(
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -206,8 +232,11 @@ static bool _Scheduler_simple_SMP_Enqueue(
     _Scheduler_simple_SMP_Insert_ready,
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_simple_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
     _Scheduler_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -227,7 +256,9 @@ static void _Scheduler_simple_SMP_Enqueue_scheduled(
     _Scheduler_simple_SMP_Insert_ready,
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -244,7 +275,8 @@ void _Scheduler_simple_SMP_Unblock(
     thread,
     node,
     _Scheduler_simple_SMP_Do_update,
-    _Scheduler_simple_SMP_Enqueue
+    _Scheduler_simple_SMP_Enqueue,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -263,7 +295,8 @@ static bool _Scheduler_simple_SMP_Do_ask_for_help(
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_simple_SMP_Move_from_scheduled_to_ready,
     _Scheduler_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -333,7 +366,9 @@ void _Scheduler_simple_SMP_Withdraw_node(
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -366,7 +401,9 @@ void _Scheduler_simple_SMP_Clean_sticky(
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_simple_SMP_Get_idle,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 
@@ -398,7 +435,9 @@ Thread_Control *_Scheduler_simple_SMP_Remove_processor(
     cpu,
     _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_simple_SMP_Extract_from_ready,
-    _Scheduler_simple_SMP_Enqueue
+    _Scheduler_simple_SMP_Enqueue,
+    _Scheduler_simple_SMP_Get_idle,
+    _Scheduler_simple_SMP_Release_idle
   );
 }
 

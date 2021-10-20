@@ -190,7 +190,9 @@ void _Scheduler_priority_affinity_SMP_Block(
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 
   /*
@@ -262,8 +264,11 @@ static bool _Scheduler_priority_affinity_SMP_Enqueue_fifo(
     _Scheduler_priority_SMP_Insert_ready,
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
     _Scheduler_priority_affinity_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 
@@ -342,7 +347,10 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
       lowest_scheduled,
       _Scheduler_SMP_Insert_scheduled,
       _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
-      _Scheduler_SMP_Allocate_processor_exact
+      _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
+      _Scheduler_SMP_Allocate_processor_exact,
+      _Scheduler_priority_SMP_Get_idle,
+      _Scheduler_priority_SMP_Release_idle
     );
   }
 }
@@ -363,7 +371,8 @@ void _Scheduler_priority_affinity_SMP_Unblock(
     thread,
     node,
     _Scheduler_priority_SMP_Do_update,
-    _Scheduler_priority_affinity_SMP_Enqueue_fifo
+    _Scheduler_priority_affinity_SMP_Enqueue_fifo,
+    _Scheduler_priority_SMP_Release_idle
   );
 
   /*
@@ -390,8 +399,11 @@ static bool _Scheduler_priority_affinity_SMP_Enqueue(
     _Scheduler_priority_SMP_Insert_ready,
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
     _Scheduler_priority_affinity_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 
@@ -416,7 +428,9 @@ static void _Scheduler_priority_affinity_SMP_Enqueue_scheduled(
     _Scheduler_priority_SMP_Insert_ready,
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 
@@ -435,7 +449,8 @@ static bool _Scheduler_priority_affinity_SMP_Do_ask_for_help(
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
     _Scheduler_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 
@@ -510,7 +525,9 @@ void _Scheduler_priority_affinity_SMP_Withdraw_node(
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_lazy,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 
@@ -543,7 +560,9 @@ void _Scheduler_priority_affinity_SMP_Clean_sticky(
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_exact
+    _Scheduler_SMP_Allocate_processor_exact,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 
@@ -575,7 +594,9 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
     cpu,
     _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
-    _Scheduler_priority_affinity_SMP_Enqueue
+    _Scheduler_priority_affinity_SMP_Enqueue,
+    _Scheduler_priority_SMP_Get_idle,
+    _Scheduler_priority_SMP_Release_idle
   );
 }
 

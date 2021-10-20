@@ -157,14 +157,14 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_scheduled(
 static inline void _Scheduler_strong_APA_Allocate_processor(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled_base,
-  Scheduler_Node    *victim_base,
+  Thread_Control    *victim_thread,
   Per_CPU_Control   *victim_cpu
 )
 {
   Scheduler_strong_APA_Node    *scheduled;
   Scheduler_strong_APA_Context *self;
 
-  (void) victim_base;
+  (void) victim_thread;
 
   scheduled = _Scheduler_strong_APA_Node_downcast( scheduled_base );
   self = _Scheduler_strong_APA_Get_self( context );
@@ -268,6 +268,63 @@ static inline Scheduler_Node * _Scheduler_strong_APA_Find_highest_ready(
   _Assert( highest_ready != NULL );
 
   return highest_ready;
+}
+
+static inline Scheduler_Node *_Scheduler_strong_APA_Get_idle( void *arg )
+{
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *lowest_ready = NULL;
+  Priority_Control              max_priority_num;
+  const Chain_Node             *tail;
+  Chain_Node                   *next;
+
+  self = _Scheduler_strong_APA_Get_self( arg );
+  tail = _Chain_Immutable_tail( &self->Ready );
+  next = _Chain_First( &self->Ready );
+  max_priority_num = 0;
+
+  while ( next != tail ) {
+    Scheduler_strong_APA_Node *node;
+    Scheduler_SMP_Node_state   curr_state;
+
+    node = (Scheduler_strong_APA_Node*) STRONG_SCHEDULER_NODE_OF_CHAIN( next );
+    curr_state = _Scheduler_SMP_Node_state( &node->Base.Base );
+
+    if ( curr_state == SCHEDULER_SMP_NODE_READY ) {
+      Priority_Control curr_priority;
+
+      curr_priority = _Scheduler_Node_get_priority( &node->Base.Base );
+
+      if ( curr_priority > max_priority_num ) {
+        max_priority_num = curr_priority;
+        lowest_ready = node;
+      }
+    }
+
+    next = _Chain_Next( next );
+  }
+
+  _Assert( lowest_ready != NULL );
+  _Chain_Extract_unprotected( &lowest_ready->Ready_node );
+  _Chain_Set_off_chain( &lowest_ready->Ready_node );
+
+  return &lowest_ready->Base.Base;
+}
+
+static inline void _Scheduler_strong_APA_Release_idle(
+  Scheduler_Node *node_base,
+  void           *arg
+)
+{
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *node;
+
+  self = _Scheduler_strong_APA_Get_self( arg );
+  node = _Scheduler_strong_APA_Node_downcast( node_base );
+
+  if ( _Chain_Is_node_off_chain( &node->Ready_node ) ) {
+    _Chain_Append_unprotected( &self->Ready, &node->Ready_node );
+  }
 }
 
 static inline void  _Scheduler_strong_APA_Move_from_ready_to_scheduled(
@@ -386,16 +443,24 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_highest_ready(
      * So there is need for task shifting.
      */
     while ( node->cpu_to_preempt != filter_cpu ) {
+      Thread_Control *next_node_idle;
+
       curr_node = &node->Base.Base;
       next_node = _Scheduler_strong_APA_Get_scheduled(
                     self,
                     node->cpu_to_preempt
                   );
+      next_node_idle = _Scheduler_Release_idle_thread_if_necessary(
+        next_node,
+        _Scheduler_strong_APA_Release_idle,
+        context
+      );
 
       (void) _Scheduler_SMP_Preempt(
                context,
                curr_node,
                next_node,
+               next_node_idle,
                _Scheduler_strong_APA_Allocate_processor
              );
 
@@ -587,6 +652,8 @@ static inline bool _Scheduler_strong_APA_Do_enqueue(
   self = _Scheduler_strong_APA_Get_self( context );
   CPU = self->CPU;
 
+  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
+
   node_priority = _Scheduler_Node_get_priority( node );
   node_priority = SCHEDULER_PRIORITY_PURIFY( node_priority );
 
@@ -633,7 +700,10 @@ static inline bool _Scheduler_strong_APA_Do_enqueue(
       next_node,
       _Scheduler_SMP_Insert_scheduled,
       _Scheduler_strong_APA_Move_from_scheduled_to_ready,
-      _Scheduler_strong_APA_Allocate_processor
+      _Scheduler_strong_APA_Move_from_ready_to_scheduled,
+      _Scheduler_strong_APA_Allocate_processor,
+      _Scheduler_strong_APA_Get_idle,
+      _Scheduler_strong_APA_Release_idle
     );
 
     curr_node = next_node;
@@ -641,13 +711,21 @@ static inline bool _Scheduler_strong_APA_Do_enqueue(
     curr_strong_node = _Scheduler_strong_APA_Node_downcast( curr_node );
 
     while ( curr_node != lowest_reachable ) {
+      Thread_Control *next_node_idle;
+
       curr_CPU = curr_strong_node->cpu_to_preempt;
       next_node = _Scheduler_strong_APA_Get_scheduled( self, curr_CPU );
+      next_node_idle = _Scheduler_Release_idle_thread_if_necessary(
+        next_node,
+        _Scheduler_strong_APA_Release_idle,
+        context
+      );
       /* curr_node preempts the next_node; */
       _Scheduler_SMP_Preempt(
         context,
         curr_node,
         next_node,
+        next_node_idle,
         _Scheduler_strong_APA_Allocate_processor
       );
 
@@ -755,7 +833,9 @@ static inline void _Scheduler_strong_APA_Enqueue_scheduled(
     _Scheduler_strong_APA_Insert_ready,
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
-    _Scheduler_strong_APA_Allocate_processor
+    _Scheduler_strong_APA_Allocate_processor,
+    _Scheduler_strong_APA_Get_idle,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -774,7 +854,8 @@ static inline bool _Scheduler_strong_APA_Do_ask_for_help(
     _Scheduler_SMP_Insert_scheduled,
     _Scheduler_strong_APA_Move_from_scheduled_to_ready,
     _Scheduler_strong_APA_Get_lowest_scheduled,
-    _Scheduler_strong_APA_Allocate_processor
+    _Scheduler_strong_APA_Allocate_processor,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -842,7 +923,9 @@ void _Scheduler_strong_APA_Block(
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
-    _Scheduler_strong_APA_Allocate_processor
+    _Scheduler_strong_APA_Allocate_processor,
+    _Scheduler_strong_APA_Get_idle,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -859,7 +942,8 @@ void _Scheduler_strong_APA_Unblock(
     thread,
     node,
     _Scheduler_strong_APA_Do_update,
-    _Scheduler_strong_APA_Enqueue
+    _Scheduler_strong_APA_Enqueue,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -933,7 +1017,9 @@ void _Scheduler_strong_APA_Withdraw_node(
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
-    _Scheduler_strong_APA_Allocate_processor
+    _Scheduler_strong_APA_Allocate_processor,
+    _Scheduler_strong_APA_Get_idle,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -966,7 +1052,9 @@ void _Scheduler_strong_APA_Clean_sticky(
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
-    _Scheduler_strong_APA_Allocate_processor
+    _Scheduler_strong_APA_Allocate_processor,
+    _Scheduler_strong_APA_Get_idle,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -1028,7 +1116,9 @@ Thread_Control *_Scheduler_strong_APA_Remove_processor(
     cpu,
     _Scheduler_strong_APA_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
-    _Scheduler_strong_APA_Enqueue
+    _Scheduler_strong_APA_Enqueue,
+    _Scheduler_strong_APA_Get_idle,
+    _Scheduler_strong_APA_Release_idle
   );
 }
 
@@ -1089,7 +1179,9 @@ Status_Control _Scheduler_strong_APA_Set_affinity(
    _Scheduler_strong_APA_Get_highest_ready,
    _Scheduler_strong_APA_Move_from_ready_to_scheduled,
    _Scheduler_strong_APA_Enqueue,
-   _Scheduler_strong_APA_Allocate_processor
+   _Scheduler_strong_APA_Allocate_processor,
+   _Scheduler_strong_APA_Get_idle,
+   _Scheduler_strong_APA_Release_idle
  );
 
   return STATUS_SUCCESSFUL;

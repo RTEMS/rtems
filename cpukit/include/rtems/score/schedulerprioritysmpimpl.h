@@ -156,6 +156,41 @@ static inline void _Scheduler_priority_SMP_Extract_from_ready(
   );
 }
 
+static inline Scheduler_Node *_Scheduler_priority_SMP_Get_idle( void *arg )
+{
+  Scheduler_priority_SMP_Context *self;
+  Scheduler_priority_SMP_Node    *lowest_ready;
+
+  self = _Scheduler_priority_SMP_Get_self( arg );
+  lowest_ready = (Scheduler_priority_SMP_Node *)
+    _Chain_Last( self->idle_ready_queue );
+  _Scheduler_priority_Ready_queue_extract(
+    &lowest_ready->Base.Base.Node.Chain,
+    &lowest_ready->Ready_queue,
+    &self->Bit_map
+  );
+
+  return &lowest_ready->Base.Base;
+}
+
+static inline void _Scheduler_priority_SMP_Release_idle(
+  Scheduler_Node *node_base,
+  void           *arg
+)
+{
+  Scheduler_priority_SMP_Context *self;
+  Scheduler_priority_SMP_Node    *node;
+
+  self = _Scheduler_priority_SMP_Get_self( arg );
+  node = _Scheduler_priority_SMP_Node_downcast( node_base );
+
+  _Scheduler_priority_Ready_queue_enqueue(
+    &node->Base.Base.Node.Chain,
+    &node->Ready_queue,
+    &self->Bit_map
+  );
+}
+
 static inline void _Scheduler_priority_SMP_Do_update(
   Scheduler_Context *context,
   Scheduler_Node    *node_to_update,
