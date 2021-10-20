@@ -1098,6 +1098,15 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
         victim,
         _Scheduler_SMP_Release_idle_thread
       );
+    } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
+      _Scheduler_SMP_Node_change_state(
+        highest_ready,
+        SCHEDULER_SMP_NODE_SCHEDULED
+      );
+
+      ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      _Scheduler_Exchange_idle_thread( highest_ready, victim );
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
@@ -1162,6 +1171,15 @@ static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
         victim,
         _Scheduler_SMP_Release_idle_thread
       );
+    } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
+      _Scheduler_SMP_Node_change_state(
+        highest_ready,
+        SCHEDULER_SMP_NODE_SCHEDULED
+      );
+
+      ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      _Scheduler_Exchange_idle_thread( highest_ready, victim );
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
