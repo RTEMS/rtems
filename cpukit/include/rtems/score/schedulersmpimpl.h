@@ -1092,6 +1092,12 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
       );
 
       ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      _Scheduler_Release_idle_thread(
+        context,
+        victim,
+        _Scheduler_SMP_Release_idle_thread
+      );
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
@@ -1150,6 +1156,12 @@ static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
       );
 
       ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      _Scheduler_Release_idle_thread(
+        context,
+        victim,
+        _Scheduler_SMP_Release_idle_thread
+      );
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
