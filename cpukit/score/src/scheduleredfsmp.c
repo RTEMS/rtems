@@ -461,13 +461,13 @@ static inline bool _Scheduler_EDF_SMP_Enqueue(
   );
 }
 
-static inline bool _Scheduler_EDF_SMP_Enqueue_scheduled(
+static inline void _Scheduler_EDF_SMP_Enqueue_scheduled(
   Scheduler_Context *context,
   Scheduler_Node    *node,
   Priority_Control   insert_priority
 )
 {
-  return _Scheduler_SMP_Enqueue_scheduled(
+  _Scheduler_SMP_Enqueue_scheduled(
     context,
     node,
     insert_priority,

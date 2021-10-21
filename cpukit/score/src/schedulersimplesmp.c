@@ -209,13 +209,13 @@ static bool _Scheduler_simple_SMP_Enqueue(
   );
 }
 
-static bool _Scheduler_simple_SMP_Enqueue_scheduled(
+static void _Scheduler_simple_SMP_Enqueue_scheduled(
   Scheduler_Context *context,
   Scheduler_Node    *node,
   Priority_Control   insert_priority
 )
 {
-  return _Scheduler_SMP_Enqueue_scheduled(
+  _Scheduler_SMP_Enqueue_scheduled(
     context,
     node,
     insert_priority,

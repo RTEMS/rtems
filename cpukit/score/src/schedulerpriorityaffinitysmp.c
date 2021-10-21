@@ -398,13 +398,13 @@ static bool _Scheduler_priority_affinity_SMP_Enqueue(
  * invoke _Scheduler_SMP_Enqueue_scheduled() with
  * this scheduler's get_highest_ready() helper.
  */
-static bool _Scheduler_priority_affinity_SMP_Enqueue_scheduled(
+static void _Scheduler_priority_affinity_SMP_Enqueue_scheduled(
   Scheduler_Context *context,
   Scheduler_Node    *node,
   Priority_Control   insert_priority
 )
 {
-  return _Scheduler_SMP_Enqueue_scheduled(
+  _Scheduler_SMP_Enqueue_scheduled(
     context,
     node,
     insert_priority,

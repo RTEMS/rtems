@@ -330,6 +330,12 @@ typedef bool ( *Scheduler_SMP_Enqueue )(
   Priority_Control   priority
 );
 
+typedef void ( *Scheduler_SMP_Enqueue_scheduled )(
+  Scheduler_Context *context,
+  Scheduler_Node    *node_to_enqueue,
+  Priority_Control   priority
+);
+
 typedef void ( *Scheduler_SMP_Allocate_processor )(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled,
@@ -924,7 +930,7 @@ static inline bool _Scheduler_SMP_Enqueue(
  * @param allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
  */
-static inline bool _Scheduler_SMP_Enqueue_scheduled(
+static inline void _Scheduler_SMP_Enqueue_scheduled(
   Scheduler_Context                *context,
   Scheduler_Node                   *const node,
   Priority_Control                  insert_priority,
@@ -977,7 +983,7 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
         _Thread_Scheduler_release_critical( owner, &lock_context );
       }
 
-      return false;
+      return;
     }
 
     action = _Scheduler_Try_to_schedule_node(
@@ -988,8 +994,6 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
     );
 
     if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
-      Thread_Control *idle;
-
       _Scheduler_SMP_Preempt(
         context,
         highest_ready,
@@ -1000,12 +1004,12 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
       ( *move_from_ready_to_scheduled )( context, highest_ready );
       ( *insert_ready )( context, node, insert_priority );
 
-      idle = _Scheduler_Release_idle_thread(
+      _Scheduler_Release_idle_thread(
         context,
         node,
         _Scheduler_SMP_Release_idle_thread
       );
-      return ( idle == NULL );
+      return;
     } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
       _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
       _Scheduler_SMP_Node_change_state(
@@ -1017,7 +1021,7 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
       ( *insert_ready )( context, node, insert_priority );
 
       _Scheduler_Exchange_idle_thread( highest_ready, node );
-      return false;
+      return;
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
@@ -1333,14 +1337,14 @@ static inline void _Scheduler_SMP_Unblock(
  * @param ask_for_help Function to perform a help request.
  */
 static inline void _Scheduler_SMP_Update_priority(
-  Scheduler_Context          *context,
-  Thread_Control             *thread,
-  Scheduler_Node             *node,
-  Scheduler_SMP_Extract       extract_from_ready,
-  Scheduler_SMP_Update        update,
-  Scheduler_SMP_Enqueue       enqueue,
-  Scheduler_SMP_Enqueue       enqueue_scheduled,
-  Scheduler_SMP_Ask_for_help  ask_for_help
+  Scheduler_Context              *context,
+  Thread_Control                 *thread,
+  Scheduler_Node                 *node,
+  Scheduler_SMP_Extract           extract_from_ready,
+  Scheduler_SMP_Update            update,
+  Scheduler_SMP_Enqueue           enqueue,
+  Scheduler_SMP_Enqueue_scheduled enqueue_scheduled,
+  Scheduler_SMP_Ask_for_help      ask_for_help
 )
 {
   Priority_Control         priority;
@@ -1389,12 +1393,12 @@ static inline void _Scheduler_SMP_Update_priority(
  * @param enqueue_scheduled Function to enqueue a scheduled node.
  */
 static inline void _Scheduler_SMP_Yield(
-  Scheduler_Context     *context,
-  Thread_Control        *thread,
-  Scheduler_Node        *node,
-  Scheduler_SMP_Extract  extract_from_ready,
-  Scheduler_SMP_Enqueue  enqueue,
-  Scheduler_SMP_Enqueue  enqueue_scheduled
+  Scheduler_Context              *context,
+  Thread_Control                 *thread,
+  Scheduler_Node                 *node,
+  Scheduler_SMP_Extract           extract_from_ready,
+  Scheduler_SMP_Enqueue           enqueue,
+  Scheduler_SMP_Enqueue_scheduled enqueue_scheduled
 )
 {
   bool                     needs_help;
@@ -1695,11 +1699,11 @@ static inline void _Scheduler_SMP_Do_start_idle(
  * @param register_idle Function to register the idle thread for a cpu.
  */
 static inline void _Scheduler_SMP_Add_processor(
-  Scheduler_Context           *context,
-  Thread_Control              *idle,
-  Scheduler_SMP_Has_ready      has_ready,
-  Scheduler_SMP_Enqueue        enqueue_scheduled,
-  Scheduler_SMP_Register_idle  register_idle
+  Scheduler_Context              *context,
+  Thread_Control                 *idle,
+  Scheduler_SMP_Has_ready         has_ready,
+  Scheduler_SMP_Enqueue_scheduled enqueue_scheduled,
+  Scheduler_SMP_Register_idle     register_idle
 )
 {
   Scheduler_SMP_Context *self;
