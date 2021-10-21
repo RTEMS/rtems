@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by: BUILD_LIBDEBUGGER
 includes: []
 install: []
 install-path: ${BSP_LIBDIR}

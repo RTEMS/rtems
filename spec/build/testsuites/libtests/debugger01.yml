@@ -5,9 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
-enabled-by:
-- arm
-- i386
+enabled-by: BUILD_LIBDEBUGGER
 features: c cprogram
 includes: []
 ldflags: []
