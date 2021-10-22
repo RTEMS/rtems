@@ -31,6 +31,32 @@ extern "C" {
  */
 
 /**
+ * @brief Appends the node to the red-black tree.
+ *
+ * The appended node is the new maximum node of the tree.  The caller shall
+ * ensure that the appended node is indeed the maximum node with respect to the
+ * tree order.
+ *
+ * @param[in, out] the_rbtree is the red-black tree control.
+ *
+ * @param the_node[out] is the node to append.
+ */
+void _RBTree_Append( RBTree_Control *the_rbtree, RBTree_Node *the_node );
+
+/**
+ * @brief Prepends the node to the red-black tree.
+ *
+ * The prepended node is the new minimum node of the tree.  The caller shall
+ * ensure that the prepended node is indeed the minimum node with respect to the
+ * tree order.
+ *
+ * @param[in, out] the_rbtree is the red-black tree control.
+ *
+ * @param the_node[out] is the node to prepend.
+ */
+void _RBTree_Prepend( RBTree_Control *the_rbtree, RBTree_Node *the_node );
+
+/**
  * @brief Red-black tree visitor.
  *
  * @param[in] node The node.
