@@ -201,8 +201,8 @@ _el1_start:
 #endif
   add x3, x1, x2
 
-  /* Disable interrupts */
-  msr DAIFSet, #0x2
+  /* Disable interrupts and debug */
+  msr DAIFSet, #0xa
 
 #ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
   mov x8, XZR
