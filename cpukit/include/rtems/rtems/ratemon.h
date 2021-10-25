@@ -445,6 +445,10 @@ rtems_status_code rtems_rate_monotonic_delete( rtems_id id );
  *
  * @retval ::RTEMS_TIMEOUT The rate monotonic period has expired.
  *
+ * @par Notes
+ * Resetting the processor usage time of tasks has no impact on the period
+ * status and statistics.
+ *
  * @par Constraints
  * @parblock
  * The following constraints apply to this directive:
@@ -501,9 +505,6 @@ rtems_status_code rtems_rate_monotonic_period(
  *   with the identifier specified by ``id``.
  *
  * @retval ::RTEMS_INVALID_ADDRESS The ``status`` parameter was NULL.
- *
- * @retval ::RTEMS_NOT_DEFINED There was no status available due to a reset of
- *   the processor time usage of the owner task of the period.
  *
  * @par Constraints
  * @parblock
