@@ -149,11 +149,17 @@ void _CPU_Context_Initialize(
 void _CPU_ISR_Set_level( uint32_t level )
 {
   /* Set the mask bit if interrupts are disabled */
-  level = level ? AARCH64_PSTATE_I : 0;
-  __asm__ volatile (
-    "msr DAIF, %[level]\n"
-    : : [level] "r" (level)
-  );
+  if ( level ) {
+    __asm__ volatile (
+      "msr DAIFSet, #0x2\n"
+      : : [level] "r" (level)
+    );
+  } else {
+    __asm__ volatile (
+      "msr DAIFClr, #0x2\n"
+      : : [level] "r" (level)
+    );
+  }
 }
 
 uint32_t _CPU_ISR_Get_level( void )

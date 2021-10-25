@@ -49,7 +49,7 @@ extern "C" {
 static inline void arm_interrupt_handler_dispatch(rtems_vector_number vector)
 {
   uint32_t interrupt_level = _CPU_ISR_Get_level();
-  AArch64_interrupt_enable(1);
+  _CPU_ISR_Set_level(1);
   bsp_interrupt_handler_dispatch(vector);
   _CPU_ISR_Set_level(interrupt_level);
 }
