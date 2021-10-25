@@ -11,6 +11,8 @@ install: []
 install-path: ${BSP_LIBDIR}
 links:
 - role: build-dependency
+  uid: objdbgaarch64
+- role: build-dependency
   uid: objdbgarm
 - role: build-dependency
   uid: objdbgi386

@@ -371,6 +371,17 @@ aarch64_mmu_enable( void )
   _AArch64_Write_sctlr_el1( sctlr );
 }
 
+BSP_START_TEXT_SECTION static inline void
+aarch64_mmu_disable( void )
+{
+  uint64_t sctlr;
+
+  /* Enable MMU and cache */
+  sctlr = _AArch64_Read_sctlr_el1();
+  sctlr &= ~(AARCH64_SCTLR_EL1_M);
+  _AArch64_Write_sctlr_el1( sctlr );
+}
+
 BSP_START_TEXT_SECTION static inline void aarch64_mmu_setup( void )
 {
   /* Set TCR */
