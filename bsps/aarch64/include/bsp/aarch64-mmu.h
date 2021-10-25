@@ -246,6 +246,15 @@ BSP_START_TEXT_SECTION static inline rtems_status_code aarch64_mmu_map_block(
       } else {
         /* block starts on a boundary, but is short */
         chunk_size = size;
+
+	/* it isn't possible to go beyond page table level 2 */
+	if ( page_flag ) {
+          /* no sub-table, apply block properties */
+          page_table[index] = addr | flags | page_flag;
+          size -= chunk_size;
+          addr += chunk_size;
+          continue;
+	}
       }
     } else {
       uintptr_t block_top = RTEMS_ALIGN_UP( addr, granularity );
