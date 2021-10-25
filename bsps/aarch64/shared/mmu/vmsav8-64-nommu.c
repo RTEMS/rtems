@@ -3,9 +3,9 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsAArch64XilinxZynqMP
+ * @ingroup RTEMSBSPsAArch64Shared
  *
- * @brief This source file contains the default MMU tables and setup.
+ * @brief AArch64 MMU dummy implementation.
  */
 
 /*
@@ -34,57 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
-#include <bsp/start.h>
-#include <bsp/aarch64-mmu.h>
 #include <libcpu/mmu-vmsav8-64.h>
 
-BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
-zynqmp_mmu_config_table[] = {
-  AARCH64_MMU_DEFAULT_SECTIONS,
-  {
-    .begin = 0xf9000000U,
-    .end = 0xf9100000U,
-    .flags = AARCH64_MMU_DEVICE
-  }, {
-    .begin = 0xfd000000U,
-    .end = 0xffc00000U,
-    .flags = AARCH64_MMU_DEVICE
-  }
-};
-
 /*
- * Make weak and let the user override.
+ * This must have a non-header implementation because it is used by libdebugger.
  */
-BSP_START_TEXT_SECTION void
-zynqmp_setup_mmu_and_cache( void ) __attribute__ ((weak));
-
-BSP_START_TEXT_SECTION void
-zynqmp_setup_mmu_and_cache( void )
+rtems_status_code aarch64_mmu_map(
+  uintptr_t addr,
+  uint64_t size,
+  uint64_t flags
+)
 {
-  aarch64_mmu_setup();
-
-  aarch64_mmu_setup_translation_table(
-    &zynqmp_mmu_config_table[ 0 ],
-    RTEMS_ARRAY_SIZE( zynqmp_mmu_config_table )
-  );
-
-  aarch64_mmu_enable();
-}
-
-/*
- * Make weak and let the user override.
- */
-BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
-__attribute__ ( ( weak ) );
-
-BSP_START_TEXT_SECTION void zynqmp_setup_secondary_cpu_mmu_and_cache( void )
-{
-  /* Perform basic MMU setup */
-  aarch64_mmu_setup();
-
-  /* Use the existing root page table already configured by CPU0 */
-  _AArch64_Write_ttbr0_el1( (uintptr_t) bsp_translation_table_base );
-
-  aarch64_mmu_enable();
+  return RTEMS_SUCCESSFUL;
 }

@@ -36,6 +36,7 @@
 #include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/aarch64-mmu.h>
+#include <libcpu/mmu-vmsav8-64.h>
 
 BSP_START_DATA_SECTION static const aarch64_mmu_config_entry
 versal_mmu_config_table[] = {

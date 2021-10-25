@@ -42,49 +42,11 @@
 #include <rtems/score/aarch64-system-registers.h>
 #include <bspopts.h>
 #include <bsp/utility.h>
+#include <libcpu/mmu-vmsav8-64.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-/* VMSAv8 Long-descriptor fields */
-#define MMU_DESC_AF                        BSP_BIT64( 10 )
-#define MMU_DESC_SH_INNER                  ( BSP_BIT64( 9 ) | BSP_BIT64( 8 ) )
-#define MMU_DESC_WRITE_DISABLE             BSP_BIT64( 7 )
-/* PAGE and TABLE flags are the same bit, but only apply on certain levels */
-#define MMU_DESC_TYPE_TABLE                BSP_BIT64( 1 )
-#define MMU_DESC_TYPE_PAGE                 BSP_BIT64( 1 )
-#define MMU_DESC_VALID                     BSP_BIT64( 0 )
-#define MMU_DESC_MAIR_ATTR( val )          BSP_FLD64( val, 2, 3 )
-#define MMU_DESC_MAIR_ATTR_GET( reg )      BSP_FLD64GET( reg, 2, 3 )
-#define MMU_DESC_MAIR_ATTR_SET( reg, val ) BSP_FLD64SET( reg, val, 2, 3 )
-#define MMU_DESC_PAGE_TABLE_MASK           0xFFFFFFFFF000LL
-
-/* Page table configuration */
-#define MMU_PAGE_BITS           12
-#define MMU_PAGE_SIZE           ( 1 << MMU_PAGE_BITS )
-#define MMU_BITS_PER_LEVEL      9
-#define MMU_TOP_LEVEL_PAGE_BITS ( 2 * MMU_BITS_PER_LEVEL + MMU_PAGE_BITS )
-
-#define AARCH64_MMU_FLAGS_BASE \
-  ( MMU_DESC_VALID | MMU_DESC_SH_INNER | MMU_DESC_AF )
-
-#define AARCH64_MMU_DATA_RO_CACHED \
-  ( AARCH64_MMU_FLAGS_BASE | MMU_DESC_MAIR_ATTR( 3 ) | MMU_DESC_WRITE_DISABLE )
-#define AARCH64_MMU_CODE_CACHED AARCH64_MMU_DATA_RO_CACHED
-#define AARCH64_MMU_CODE_RW_CACHED AARCH64_MMU_DATA_RW_CACHED
-
-#define AARCH64_MMU_DATA_RO \
-  ( AARCH64_MMU_FLAGS_BASE | MMU_DESC_MAIR_ATTR( 1 ) | MMU_DESC_WRITE_DISABLE )
-#define AARCH64_MMU_CODE AARCH64_MMU_DATA_RO
-#define AARCH64_MMU_CODE_RW AARCH64_MMU_DATA_RW
-
-/* RW implied by not ORing in RO */
-#define AARCH64_MMU_DATA_RW_CACHED \
-  ( AARCH64_MMU_FLAGS_BASE | MMU_DESC_MAIR_ATTR( 3 ) )
-#define AARCH64_MMU_DATA_RW \
-  ( AARCH64_MMU_FLAGS_BASE | MMU_DESC_MAIR_ATTR( 1 ) )
-#define AARCH64_MMU_DEVICE ( AARCH64_MMU_FLAGS_BASE | MMU_DESC_MAIR_ATTR( 0 ) )
 
 typedef struct {
   uintptr_t begin;
