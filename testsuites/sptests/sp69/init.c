@@ -60,31 +60,6 @@ rtems_task Init(
   rtems_test_assert( period_status.executed_since_last_period.tv_sec == 0 );
   rtems_test_assert( period_status.executed_since_last_period.tv_nsec == 0 );
 
-  /*
-   * Check get_status error cases.
-   */
-  puts( "rtems_rate_monotonic_get_status - check RTEMS_NOT_DEFINED" );
-
-  /* Do some work to get a non-zero cpu usage */
-  rtems_test_spin_for_ticks( 10 );
-
-  status = rtems_rate_monotonic_period( period_id, 100 );
-  directive_failed( status, "rate_monotonic_period" );
-
-  /* Do some more work */
-  rtems_test_spin_for_ticks( 10 );
-
-  /* Reset the cpu usage statistics. */
-  rtems_cpu_usage_reset();
-
-  /* Status should be undefined. */
-  status = rtems_rate_monotonic_get_status( period_id, &period_status );
-  fatal_directive_status(
-    status,
-    RTEMS_NOT_DEFINED,
-    "rtems_rate_monotonic_get_status after cpu usage reset"
-  );
-
   /* Clean up. */
   status = rtems_rate_monotonic_cancel( period_id );
   directive_failed( status, "rate_monotonic_cancel" );
