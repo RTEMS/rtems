@@ -826,7 +826,8 @@ RTEMS_INLINE_ROUTINE bool _Chain_Get_with_empty_check_unprotected(
  * @retval false Otherwise.
  */
 typedef bool ( *Chain_Node_order )(
-  const void       *left,
+  const void       *key,
+  const Chain_Node *left,
   const Chain_Node *right
 );
 
@@ -848,18 +849,20 @@ typedef bool ( *Chain_Node_order )(
 RTEMS_INLINE_ROUTINE void _Chain_Insert_ordered_unprotected(
   Chain_Control    *the_chain,
   Chain_Node       *to_insert,
-  const void       *left,
+  const void       *key,
   Chain_Node_order  order
 )
 {
   const Chain_Node *tail = _Chain_Immutable_tail( the_chain );
+  Chain_Node *previous = _Chain_Head( the_chain );
   Chain_Node *next = _Chain_First( the_chain );
 
-  while ( next != tail && !( *order )( left, next ) ) {
+  while ( next != tail && !( *order )( key, to_insert, next ) ) {
+    previous = next;
     next = _Chain_Next( next );
   }
 
-  _Chain_Insert_unprotected( _Chain_Previous( next ), to_insert );
+  _Chain_Insert_unprotected( previous, to_insert );
 }
 
 /**

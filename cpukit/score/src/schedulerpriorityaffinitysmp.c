@@ -52,12 +52,13 @@
  */
 
 static bool _Scheduler_priority_affinity_SMP_Priority_less_equal(
-  const void       *to_insert,
+  const void       *key,
+  const Chain_Node *to_insert,
   const Chain_Node *next
 )
 {
   return next != NULL
-    && _Scheduler_SMP_Priority_less_equal( to_insert, next );
+    && _Scheduler_SMP_Priority_less_equal( key, to_insert, next );
 }
 
 static Scheduler_priority_affinity_SMP_Node *
@@ -326,6 +327,7 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
     if (
       _Scheduler_SMP_Priority_less_equal(
         &lowest_scheduled_priority,
+        &lowest_scheduled->Node.Chain,
         &highest_ready->Node.Chain
       )
     ) {

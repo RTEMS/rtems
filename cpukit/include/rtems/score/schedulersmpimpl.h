@@ -374,21 +374,26 @@ static inline void _Scheduler_SMP_Do_nothing_register_idle(
 /**
  * @brief Checks if @a to_insert is less or equal than the priority of the chain node.
  *
- * @param to_insert The priority to compare.
- * @param next The chain node to compare the priority of.
+ * @param key is the priority to compare.
+ *
+ * @param to_insert is the chain node to insert.
+ *
+ * @param next is the chain node to compare the priority of.
  *
  * @retval true @a to_insert is less or equal than the priority of @a next.
  * @retval false @a to_insert is greater than the priority of @a next.
  */
 static inline bool _Scheduler_SMP_Priority_less_equal(
-  const void       *to_insert,
+  const void       *key,
+  const Chain_Node *to_insert,
   const Chain_Node *next
 )
 {
   const Priority_Control   *priority_to_insert;
   const Scheduler_SMP_Node *node_next;
 
-  priority_to_insert = (const Priority_Control *) to_insert;
+  (void) to_insert;
+  priority_to_insert = (const Priority_Control *) key;
   node_next = (const Scheduler_SMP_Node *) next;
 
   return *priority_to_insert <= node_next->priority;
@@ -931,7 +936,13 @@ static inline bool _Scheduler_SMP_Enqueue(
 
   lowest_scheduled = ( *get_lowest_scheduled )( context, node );
 
-  if ( ( *order )( &insert_priority, &lowest_scheduled->Node.Chain ) ) {
+  if (
+    ( *order )(
+      &insert_priority,
+      &node->Node.Chain,
+      &lowest_scheduled->Node.Chain
+    )
+  ) {
     _Scheduler_SMP_Enqueue_to_scheduled(
       context,
       node,
@@ -1007,8 +1018,11 @@ static inline void _Scheduler_SMP_Enqueue_scheduled(
      * it now on the scheduled or ready set.
      */
     if (
-      node->sticky_level > 0
-        && ( *order )( &insert_priority, &highest_ready->Node.Chain )
+      node->sticky_level > 0 && ( *order )(
+        &insert_priority,
+        &node->Node.Chain,
+        &highest_ready->Node.Chain
+      )
     ) {
       if ( node_idle != NULL ) {
         Thread_Control   *owner;
@@ -1532,7 +1546,13 @@ static inline bool _Scheduler_SMP_Ask_for_help(
 
       insert_priority = _Scheduler_SMP_Node_priority( node );
 
-      if ( ( *order )( &insert_priority, &lowest_scheduled->Node.Chain ) ) {
+      if (
+        ( *order )(
+          &insert_priority,
+          &node->Node.Chain,
+          &lowest_scheduled->Node.Chain
+        )
+      ) {
         Thread_Control *lowest_scheduled_idle;
 
         _Thread_Scheduler_cancel_need_for_help(

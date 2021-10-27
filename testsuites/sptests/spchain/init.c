@@ -426,8 +426,14 @@ static void test_chain_node_count(void)
   }
 }
 
-static bool test_order( const void *left, const Chain_Node *right )
+static bool test_order(
+  const void       *key,
+  const Chain_Node *left,
+  const Chain_Node *right
+)
 {
+  rtems_test_assert( key == left );
+
   return (uintptr_t) left < (uintptr_t) right;
 }
 

@@ -48,21 +48,26 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
 /**
  * @brief Checks if the priority is less or equal than the priority of the node.
  *
- * @param to_insert The priority to check whether it is less or equal than @a next.
- * @param next The Chain node to compare the priority of.
+ * @param key is the priority to compare.
+ *
+ * @param to_insert is the chain node to insert.
+ *
+ * @param next is the chain node to compare the priority of.
  *
  * @retval true @a to_insert is smaller or equal than the priority of @a next.
  * @retval false @a to_insert is greater than the priority of @a next.
  */
 RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Priority_less_equal(
-  const void       *to_insert,
+  const void       *key,
+  const Chain_Node *to_insert,
   const Chain_Node *next
 )
 {
   const unsigned int   *priority_to_insert;
   const Thread_Control *thread_next;
 
-  priority_to_insert = (const unsigned int *) to_insert;
+  (void) to_insert;
+  priority_to_insert = (const unsigned int *) key;
   thread_next = (const Thread_Control *) next;
 
   return *priority_to_insert <= _Thread_Get_priority( thread_next );

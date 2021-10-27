@@ -24,14 +24,16 @@
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
 static bool _CORE_message_queue_Order(
-  const void       *left,
+  const void       *key,
+  const Chain_Node *left,
   const Chain_Node *right
 )
 {
    const int                       *left_priority;
    const CORE_message_queue_Buffer *right_message;
 
-   left_priority = (const int *) left;
+   (void) left;
+   left_priority = (const int *) key;
    right_message = (const CORE_message_queue_Buffer *) right;
 
    return *left_priority <
