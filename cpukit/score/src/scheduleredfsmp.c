@@ -374,15 +374,21 @@ static inline void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
   Scheduler_Node    *scheduled_to_ready
 )
 {
-  Priority_Control insert_priority;
+  Scheduler_EDF_SMP_Context     *self;
+  Scheduler_EDF_SMP_Node        *node;
+  uint8_t                        rqi;
+  Scheduler_EDF_SMP_Ready_queue *ready_queue;
 
   _Scheduler_EDF_SMP_Extract_from_scheduled( context, scheduled_to_ready );
-  insert_priority = _Scheduler_SMP_Node_priority( scheduled_to_ready );
-  _Scheduler_EDF_SMP_Insert_ready(
-    context,
-    scheduled_to_ready,
-    insert_priority
-  );
+
+  self = _Scheduler_EDF_SMP_Get_self( context );
+  node = _Scheduler_EDF_SMP_Node_downcast( scheduled_to_ready );
+  rqi = node->ready_queue_index;
+  ready_queue = &self->Ready[ rqi ];
+
+  _Scheduler_EDF_SMP_Activate_ready_queue_if_necessary( self, rqi, ready_queue );
+  _RBTree_Initialize_node( &node->Base.Base.Node.RBTree );
+  _RBTree_Prepend( &ready_queue->Queue, &node->Base.Base.Node.RBTree );
 }
 
 static inline void _Scheduler_EDF_SMP_Move_from_ready_to_scheduled(
