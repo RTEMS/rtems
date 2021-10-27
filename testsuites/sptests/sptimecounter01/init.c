@@ -23,6 +23,7 @@
 #include <bsp/bootcard.h>
 
 #include <rtems/score/timecounterimpl.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/timecounter.h>
 #include <rtems/bsd.h>
@@ -41,6 +42,8 @@ typedef struct {
 } test_context;
 
 static test_context test_instance;
+
+static Thread_Control executing;
 
 static uint32_t test_get_timecount(struct timecounter *tc)
 {
@@ -106,11 +109,16 @@ void boot_card(const char *cmdline)
   struct bintime bt;
   struct timeval tv;
   struct timespec ts;
+  Per_CPU_Control *cpu_self;
 
   ctx = &test_instance;
   tc = &ctx->tc;
 
   TEST_BEGIN();
+
+  cpu_self = _Per_CPU_Get();
+  cpu_self->executing = &executing;
+  cpu_self->heir = &executing;
 
   assert(time(NULL) == TOD_SECONDS_1970_THROUGH_1988);
 

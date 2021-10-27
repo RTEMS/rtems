@@ -62,11 +62,13 @@ void _Watchdog_Do_tickle(
 
 void _Watchdog_Tick( Per_CPU_Control *cpu )
 {
-  ISR_lock_Context  lock_context;
-  Watchdog_Header  *header;
-  Watchdog_Control *first;
-  uint64_t          ticks;
-  struct timespec   now;
+  ISR_lock_Context                    lock_context;
+  Watchdog_Header                    *header;
+  Watchdog_Control                   *first;
+  uint64_t                            ticks;
+  struct timespec                     now;
+  Thread_Control                     *executing;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
 
   if ( _Per_CPU_Is_boot_processor( cpu ) ) {
     ++_Watchdog_Ticks_since_boot;
@@ -122,5 +124,16 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
 
   _ISR_lock_Release_and_ISR_enable( &cpu->Watchdog.Lock, &lock_context );
 
-  _Scheduler_Tick( cpu );
+  /*
+   * Each online processor has at least an idle thread as the executing thread
+   * even in case it has currently no scheduler assigned.  Clock interrupts on
+   * processors which are not online would be a severe bug of the Clock Driver.
+   */
+  executing = _Per_CPU_Get_executing( cpu );
+  _Assert( executing != NULL );
+  cpu_budget_operations = executing->CPU_budget.operations;
+
+  if ( cpu_budget_operations != NULL ) {
+    ( *cpu_budget_operations->at_tick )( executing );
+  }
 }

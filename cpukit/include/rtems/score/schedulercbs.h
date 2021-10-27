@@ -67,7 +67,6 @@ extern "C" {
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
     _Scheduler_CBS_Cancel_job,       /* cancel period of task */ \
-    _Scheduler_default_Tick,         /* tick entry point */ \
     _Scheduler_default_Start_idle    /* start idle entry point */ \
     SCHEDULER_DEFAULT_SET_AFFINITY_OPERATION \
   }
@@ -394,15 +393,9 @@ int _Scheduler_CBS_Set_parameters (
 );
 
 /**
- * @brief Invoked when a limited time quantum is exceeded.
- *
- * This routine is invoked when a limited time quantum is exceeded.
- *
- * @param the_thread The thread that exceeded a limited time quantum.
+ * @brief These are the CBS CPU budget operations.
  */
-void _Scheduler_CBS_Budget_callout(
-  Thread_Control *the_thread
-);
+extern const Thread_CPU_budget_operations _Scheduler_CBS_Budget;
 
 /**
  * @brief Initializes a CBS specific scheduler node of @a the_thread.

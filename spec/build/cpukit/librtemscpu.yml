@@ -413,6 +413,7 @@ install:
   - cpukit/include/rtems/score/status.h
   - cpukit/include/rtems/score/sysstate.h
   - cpukit/include/rtems/score/thread.h
+  - cpukit/include/rtems/score/threadcpubudget.h
   - cpukit/include/rtems/score/threaddispatch.h
   - cpukit/include/rtems/score/threadidledata.h
   - cpukit/include/rtems/score/threadimpl.h
@@ -1506,7 +1507,6 @@ source:
 - cpukit/score/src/schedulerdefaultreleasejob.c
 - cpukit/score/src/schedulerdefaultschedule.c
 - cpukit/score/src/schedulerdefaultstartidle.c
-- cpukit/score/src/schedulerdefaulttick.c
 - cpukit/score/src/scheduleredf.c
 - cpukit/score/src/scheduleredfblock.c
 - cpukit/score/src/scheduleredfchangepriority.c
@@ -1544,6 +1544,7 @@ source:
 - cpukit/score/src/threadentryadaptoridle.c
 - cpukit/score/src/threadentryadaptornumeric.c
 - cpukit/score/src/threadentryadaptorpointer.c
+- cpukit/score/src/threadexhausttimeslice.c
 - cpukit/score/src/threadget.c
 - cpukit/score/src/threadgetcputimeused.c
 - cpukit/score/src/threadgetcputimeusedafterreset.c
@@ -1562,6 +1563,7 @@ source:
 - cpukit/score/src/threadqgetnameandid.c
 - cpukit/score/src/threadqops.c
 - cpukit/score/src/threadqtimeout.c
+- cpukit/score/src/threadresettimeslice.c
 - cpukit/score/src/threadrestart.c
 - cpukit/score/src/threadscheduler.c
 - cpukit/score/src/threadselfid.c

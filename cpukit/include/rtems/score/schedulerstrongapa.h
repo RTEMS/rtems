@@ -169,7 +169,6 @@ typedef struct {
     _Scheduler_default_Node_destroy, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Cancel_job, \
-    _Scheduler_default_Tick, \
     _Scheduler_strong_APA_Start_idle, \
     _Scheduler_strong_APA_Set_affinity \
   }

@@ -35,16 +35,15 @@ static void _Signal_Action_handler(
   ISR_lock_Context *lock_context
 )
 {
-  RTEMS_API_Control           *api;
-  ASR_Information             *asr;
-  rtems_signal_set             signal_set;
-  bool                         normal_is_preemptible;
-  uint32_t                     normal_cpu_time_budget;
-  Thread_CPU_budget_algorithms normal_budget_algorithm;
-  uint32_t                     normal_isr_level;
-  uint32_t                     before_call_isr_level;
-  bool                         after_call_is_preemptible;
-  bool                         after_call_asr_is_enabled;
+  RTEMS_API_Control        *api;
+  ASR_Information          *asr;
+  rtems_signal_set          signal_set;
+  bool                      normal_is_preemptible;
+  Thread_CPU_budget_control normal_cpu_budget;
+  uint32_t                  normal_isr_level;
+  uint32_t                  before_call_isr_level;
+  bool                      after_call_is_preemptible;
+  bool                      after_call_asr_is_enabled;
 
   (void) action;
 
@@ -69,8 +68,7 @@ static void _Signal_Action_handler(
 
   _Assert( asr->is_enabled );
   normal_is_preemptible = executing->is_preemptible;
-  normal_cpu_time_budget = executing->cpu_time_budget;
-  normal_budget_algorithm = executing->budget_algorithm;
+  normal_cpu_budget = executing->CPU_budget;
 
   /* Set mode for ASR processing */
 
@@ -102,8 +100,7 @@ static void _Signal_Action_handler(
 
   _Thread_State_acquire( executing, lock_context );
 
-  executing->cpu_time_budget = normal_cpu_time_budget ;
-  executing->budget_algorithm = normal_budget_algorithm ;
+  executing->CPU_budget = normal_cpu_budget;
   after_call_is_preemptible = executing->is_preemptible;
   executing->is_preemptible = normal_is_preemptible;
 

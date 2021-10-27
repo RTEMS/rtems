@@ -275,7 +275,8 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
   executing = cpu_self->executing;
 
   do {
-    Thread_Control *heir;
+    Thread_Control                     *heir;
+    const Thread_CPU_budget_operations *cpu_budget_operations;
 
     level = _Thread_Preemption_intervention( executing, cpu_self, level );
     heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
@@ -292,8 +293,12 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
      *  Since heir and executing are not the same, we need to do a real
      *  context switch.
      */
-    if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
-      heir->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
+
+    cpu_budget_operations = heir->CPU_budget.operations;
+
+    if ( cpu_budget_operations != NULL ) {
+      ( *cpu_budget_operations->at_context_switch )( heir );
+    }
 
     _ISR_Local_enable( level );
 

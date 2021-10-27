@@ -217,10 +217,6 @@ static Thread_Life_state _Thread_Change_life_locked(
     _Thread_Is_life_change_allowed( state )
       && _Thread_Is_life_changing( state )
   ) {
-    the_thread->is_preemptible   = the_thread->Start.is_preemptible;
-    the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
-    the_thread->budget_callout   = the_thread->Start.budget_callout;
-
     _Thread_Add_post_switch_action(
       the_thread,
       &the_thread->Life.Action,

@@ -37,12 +37,12 @@ int pthread_getattr_np(
   pthread_attr_t *attr
 )
 {
-  Thread_Control               *the_thread;
-  ISR_lock_Context              lock_context;
-  Thread_CPU_budget_algorithms  budget_algorithm;
-  const Scheduler_Control      *scheduler;
-  Priority_Control              priority;
-  Status_Control                status;
+  Thread_Control                     *the_thread;
+  ISR_lock_Context                    lock_context;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
+  const Scheduler_Control            *scheduler;
+  Priority_Control                    priority;
+  Status_Control                      status;
 
   if ( attr == NULL ) {
     return EINVAL;
@@ -89,7 +89,7 @@ int pthread_getattr_np(
     attr->affinityset
   );
 
-  budget_algorithm = the_thread->budget_algorithm;
+  cpu_budget_operations = the_thread->CPU_budget.operations;
 
   _Thread_State_release( the_thread, &lock_context );
 
@@ -101,7 +101,7 @@ int pthread_getattr_np(
     priority
   );
   attr->schedpolicy =
-    _POSIX_Thread_Translate_to_sched_policy( budget_algorithm );
+    _POSIX_Thread_Translate_to_sched_policy( cpu_budget_operations );
 
   return _POSIX_Get_error( status );
 }

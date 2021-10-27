@@ -176,19 +176,9 @@ typedef struct {
   Priority_Control priority;
 
   /**
-   * @brief The thread's budget algorithm.
+   * @brief The thread's initial CPU budget operations.
    */
-  Thread_CPU_budget_algorithms budget_algorithm;
-
-  /**
-   * @brief The thread's initial budget callout.
-   */
-  Thread_CPU_budget_algorithm_callout budget_callout;
-
-  /**
-   * @brief The thread's initial CPU time budget.
-   */
-  uint32_t cpu_time_budget;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
 
   /**
    * @brief 32-bit unsigned integer name of the object for the thread.

@@ -21,10 +21,17 @@
 #endif
 
 #include <rtems/score/schedulercbsimpl.h>
+#include <rtems/score/statesimpl.h>
+#include <rtems/score/threadcpubudget.h>
 
-void _Scheduler_CBS_Budget_callout(
-  Thread_Control *the_thread
-)
+/**
+ * @brief Invoked when a limited time quantum is exceeded.
+ *
+ * This routine is invoked when a limited time quantum is exceeded.
+ *
+ * @param the_thread The thread that exceeded a limited time quantum.
+ */
+static void _Scheduler_CBS_Budget_callout( Thread_Control *the_thread )
 {
   Scheduler_CBS_Node      *node;
   Scheduler_CBS_Server_id  server_id;
@@ -51,6 +58,34 @@ void _Scheduler_CBS_Budget_callout(
     node->cbs_server->cbs_budget_overrun( server_id );
   }
 }
+
+static void _Scheduler_CBS_Budget_at_tick( Thread_Control *the_thread )
+{
+  uint32_t budget_available;
+
+  if ( !the_thread->is_preemptible ) {
+    return;
+  }
+
+  if ( !_States_Is_ready( the_thread->current_state ) ) {
+    return;
+  }
+
+  budget_available = the_thread->CPU_budget.available;
+
+  if ( budget_available == 1 ) {
+    the_thread->CPU_budget.available = 0;
+    _Scheduler_CBS_Budget_callout ( the_thread );
+  } else {
+    the_thread->CPU_budget.available = budget_available - 1;
+  }
+}
+
+const Thread_CPU_budget_operations _Scheduler_CBS_Budget = {
+  .at_tick = _Scheduler_CBS_Budget_at_tick,
+  .at_context_switch = _Thread_CPU_budget_do_nothing,
+  .initialize = _Thread_CPU_budget_do_nothing
+};
 
 int _Scheduler_CBS_Initialize(void)
 {

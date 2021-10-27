@@ -26,6 +26,8 @@ void _Thread_Load_environment(
   Thread_Control *the_thread
 )
 {
+  const Thread_CPU_budget_operations *cpu_budget_operations;
+
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   if ( the_thread->Start.fp_context ) {
     the_thread->fp_context = the_thread->Start.fp_context;
@@ -34,8 +36,13 @@ void _Thread_Load_environment(
 #endif
 
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
-  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
-  the_thread->budget_callout   = the_thread->Start.budget_callout;
+
+  cpu_budget_operations = the_thread->Start.cpu_budget_operations;
+  the_thread->CPU_budget.operations = cpu_budget_operations;
+
+  if ( cpu_budget_operations != NULL ) {
+    ( *cpu_budget_operations->initialize )( the_thread );
+  }
 
   _Context_Initialize(
     &the_thread->Registers,

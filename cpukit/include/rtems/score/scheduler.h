@@ -217,9 +217,6 @@ typedef struct {
     Thread_queue_Context *
   );
 
-  /** @see _Scheduler_Tick() */
-  void ( *tick )( const Scheduler_Control *, Thread_Control * );
-
   /** @see _Scheduler_Start_idle() */
   void ( *start_idle )(
     const Scheduler_Control *,
@@ -541,20 +538,6 @@ void _Scheduler_default_Cancel_job(
   Thread_Control          *the_thread,
   Priority_Node           *priority_node,
   Thread_queue_Context    *queue_context
-);
-
-/**
- * @brief Performs tick operations depending on the CPU budget algorithm for
- * each executing thread.
- *
- * This routine is invoked as part of processing each clock tick.
- *
- * @param scheduler The scheduler.
- * @param[in, out] executing An executing thread.
- */
-void _Scheduler_default_Tick(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *executing
 );
 
 /**

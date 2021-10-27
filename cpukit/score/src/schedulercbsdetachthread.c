@@ -28,10 +28,11 @@ int _Scheduler_CBS_Detach_thread (
   rtems_id                task_id
 )
 {
-  Scheduler_CBS_Server *server;
-  ISR_lock_Context      lock_context;
-  Thread_Control       *the_thread;
-  Scheduler_CBS_Node   *node;
+  Scheduler_CBS_Server               *server;
+  ISR_lock_Context                    lock_context;
+  Thread_Control                     *the_thread;
+  Scheduler_CBS_Node                 *node;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
 
   if ( server_id >= _Scheduler_CBS_Maximum_servers ) {
     return SCHEDULER_CBS_ERROR_INVALID_PARAMETER;
@@ -58,9 +59,14 @@ int _Scheduler_CBS_Detach_thread (
 
   server->task_id = -1;
 
-  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
-  the_thread->budget_callout   = the_thread->Start.budget_callout;
-  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+  the_thread->is_preemptible = the_thread->Start.is_preemptible;
+
+  cpu_budget_operations = the_thread->Start.cpu_budget_operations;
+  the_thread->CPU_budget.operations = cpu_budget_operations;
+
+  if ( cpu_budget_operations != NULL ) {
+    ( *cpu_budget_operations->initialize )( the_thread );
+  }
 
   _ISR_lock_ISR_enable( &lock_context );
   return SCHEDULER_CBS_OK;

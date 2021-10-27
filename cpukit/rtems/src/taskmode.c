@@ -73,7 +73,7 @@ rtems_status_code rtems_task_mode(
 
   old_mode  = (executing->is_preemptible) ? RTEMS_PREEMPT : RTEMS_NO_PREEMPT;
 
-  if ( executing->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_NONE )
+  if ( executing->CPU_budget.operations == NULL )
     old_mode |= RTEMS_NO_TIMESLICE;
   else
     old_mode |= RTEMS_TIMESLICE;

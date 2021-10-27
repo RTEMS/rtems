@@ -154,13 +154,16 @@ rtems_status_code _RTEMS_tasks_Create(
   attributes = _Attributes_Clear( attributes, ATTRIBUTES_NOT_SUPPORTED );
 
   memset( &thread_config, 0, sizeof( thread_config ) );
-  thread_config.budget_algorithm = _Modes_Is_timeslice( config->initial_modes ) ?
-    THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE
-      : THREAD_CPU_BUDGET_ALGORITHM_NONE,
   thread_config.isr_level =  _Modes_Get_interrupt_level( config->initial_modes );
   thread_config.name = config->name;
   thread_config.is_fp = _Attributes_Is_floating_point( attributes );
   thread_config.is_preemptible = _Modes_Is_preempt( config->initial_modes );
+
+  if ( _Modes_Is_timeslice( config->initial_modes ) ) {
+    thread_config.cpu_budget_operations = &_Thread_CPU_budget_reset_timeslice;
+  } else {
+    thread_config.cpu_budget_operations = NULL;
+  }
 
   /*
    *  Validate the RTEMS API priority and convert it to the core priority range.

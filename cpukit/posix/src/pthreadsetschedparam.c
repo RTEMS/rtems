@@ -40,14 +40,15 @@ static int _POSIX_Set_sched_param(
   Thread_queue_Context       *queue_context
 )
 {
-  const Scheduler_Control *scheduler;
-  int                      normal_prio;
-  bool                     valid;
-  Priority_Control         core_normal_prio;
+  const Scheduler_Control            *scheduler;
+  int                                 normal_prio;
+  bool                                valid;
+  Priority_Control                    core_normal_prio;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
 #if defined(RTEMS_POSIX_API)
-  POSIX_API_Control       *api;
-  int                      low_prio;
-  Priority_Control         core_low_prio;
+  POSIX_API_Control                  *api;
+  int                                 low_prio;
+  Priority_Control                    core_low_prio;
 #endif
 
   normal_prio = param->sched_priority;
@@ -103,9 +104,12 @@ static int _POSIX_Set_sched_param(
   }
 #endif
 
-  the_thread->cpu_time_budget  = config->cpu_time_budget;
-  the_thread->budget_algorithm = config->budget_algorithm;
-  the_thread->budget_callout   = config->budget_callout;
+  cpu_budget_operations = config->cpu_budget_operations;
+  the_thread->CPU_budget.operations = cpu_budget_operations;
+
+  if ( cpu_budget_operations != NULL ) {
+    ( *cpu_budget_operations->initialize )( the_thread );
+  }
 
 #if defined(RTEMS_POSIX_API)
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );

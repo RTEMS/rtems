@@ -47,7 +47,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   POSIX_API_Control *api
 )
 {
-  the_thread->cpu_time_budget =
+  the_thread->CPU_budget.available =
     _Timespec_To_ticks( &api->Sporadic.sched_ss_init_budget );
 
   _Watchdog_Per_CPU_insert_ticks(
@@ -61,19 +61,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
 void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog );
 
 /**
- * @brief POSIX threads sporadic budget callout.
- *
- * This routine handles the sporadic scheduling algorithm.
- *
- * @param[in] the_thread is a pointer to the thread whose budget
- * has been exceeded.
+ * @brief The POSIX threads sporadic budget operations.
  */
-void _POSIX_Threads_Sporadic_budget_callout(
-  Thread_Control *the_thread
-);
+extern const Thread_CPU_budget_operations _POSIX_Threads_Sporadic_budget;
 
 int _POSIX_Thread_Translate_to_sched_policy(
-  Thread_CPU_budget_algorithms budget_algorithm
+  const Thread_CPU_budget_operations *operations
 );
 
 /**

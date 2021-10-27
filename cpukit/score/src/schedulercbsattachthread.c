@@ -64,9 +64,8 @@ int _Scheduler_CBS_Attach_thread (
 
   server->task_id = task_id;
 
-  the_thread->budget_callout   = _Scheduler_CBS_Budget_callout;
-  the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-  the_thread->is_preemptible   = true;
+  the_thread->is_preemptible = true;
+  the_thread->CPU_budget.operations = &_Scheduler_CBS_Budget;
 
   _ISR_lock_ISR_enable( &lock_context );
   return SCHEDULER_CBS_OK;

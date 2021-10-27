@@ -274,13 +274,11 @@ static bool _Thread_Try_initialize(
    *  General initialization
    */
 
-  the_thread->is_fp                  = config->is_fp;
-  the_thread->cpu_time_budget        = config->cpu_time_budget;
-  the_thread->Start.isr_level        = config->isr_level;
-  the_thread->Start.is_preemptible   = config->is_preemptible;
-  the_thread->Start.budget_algorithm = config->budget_algorithm;
-  the_thread->Start.budget_callout   = config->budget_callout;
-  the_thread->Start.stack_free       = config->stack_free;
+  the_thread->is_fp                       = config->is_fp;
+  the_thread->Start.isr_level             = config->isr_level;
+  the_thread->Start.is_preemptible        = config->is_preemptible;
+  the_thread->Start.cpu_budget_operations = config->cpu_budget_operations;
+  the_thread->Start.stack_free            = config->stack_free;
 
   _Thread_Timer_initialize( &the_thread->Timer, cpu );
   _Thread_Initialize_scheduler_and_wait_nodes( the_thread, config );

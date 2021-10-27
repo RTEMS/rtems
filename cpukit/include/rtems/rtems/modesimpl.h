@@ -22,6 +22,7 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/threadcpubudget.h>
 #include <rtems/config.h>
 
 #ifdef __cplusplus
@@ -148,10 +149,11 @@ RTEMS_INLINE_ROUTINE void _Modes_Apply_timeslice_to_thread(
 )
 {
   if ( _Modes_Is_timeslice( mode_set ) ) {
-    the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
-    the_thread->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
+    the_thread->CPU_budget.operations = &_Thread_CPU_budget_reset_timeslice;
+    the_thread->CPU_budget.available =
+      rtems_configuration_get_ticks_per_timeslice();
   } else {
-    the_thread->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+    the_thread->CPU_budget.operations = NULL;
   }
 }
 

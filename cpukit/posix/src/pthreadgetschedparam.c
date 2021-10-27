@@ -37,11 +37,11 @@ int pthread_getschedparam(
   struct sched_param *param
 )
 {
-  Thread_Control               *the_thread;
-  Thread_queue_Context          queue_context;
-  Thread_CPU_budget_algorithms  budget_algorithm;
-  const Scheduler_Control      *scheduler;
-  Priority_Control              priority;
+  Thread_Control                     *the_thread;
+  Thread_queue_Context                queue_context;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
+  const Scheduler_Control            *scheduler;
+  Priority_Control                    priority;
 
   if ( policy == NULL || param == NULL ) {
     return EINVAL;
@@ -59,11 +59,11 @@ int pthread_getschedparam(
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _POSIX_Threads_Get_sched_param_sporadic( the_thread, scheduler, param );
   priority = the_thread->Real_priority.priority;
-  budget_algorithm = the_thread->budget_algorithm;
+  cpu_budget_operations = the_thread->CPU_budget.operations;
 
   _Thread_Wait_release( the_thread, &queue_context );
 
   param->sched_priority = _POSIX_Priority_From_core( scheduler, priority );
-  *policy = _POSIX_Thread_Translate_to_sched_policy( budget_algorithm );
+  *policy = _POSIX_Thread_Translate_to_sched_policy( cpu_budget_operations );
   return 0;
 }

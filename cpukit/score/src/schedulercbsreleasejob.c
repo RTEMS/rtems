@@ -38,7 +38,7 @@ void _Scheduler_CBS_Release_job(
 
   /* Budget replenishment for the next job. */
   if ( serv_info != NULL ) {
-    the_thread->cpu_time_budget = serv_info->parameters.budget;
+    the_thread->CPU_budget.available = serv_info->parameters.budget;
   }
 
   node->deadline_node = priority_node;

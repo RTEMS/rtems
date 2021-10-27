@@ -600,44 +600,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
 }
 
 /**
- * @brief Scheduler method invoked at each clock tick.
- *
- * This method is invoked at each clock tick to allow the scheduler
- * implementation to perform any activities required.  For the
- * scheduler which support standard RTEMS features, this includes
- * time-slicing management.
- *
- * @param cpu The cpu control for the operation.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Tick( const Per_CPU_Control *cpu )
-{
-  const Scheduler_Control *scheduler;
-  Thread_Control          *executing;
-
-  scheduler = _Scheduler_Get_by_CPU( cpu );
-
-#if defined(RTEMS_SMP)
-  if ( scheduler == NULL ) {
-    /*
-     * In SMP configurations, processors may be removed/added at runtime
-     * from/to a scheduler.  There may be still clock interrupts on currently
-     * unassigned processors.
-     */
-    return;
-  }
-#endif
-
-  /*
-   * Each online processor has at least an idle thread as the executing thread
-   * even in case it has currently no scheduler assigned.  Clock interrupts on
-   * processors which are not online would be a severe bug of the Clock Driver.
-   */
-  executing = _Per_CPU_Get_executing( cpu );
-  _Assert( executing != NULL );
-  ( *scheduler->Operations.tick )( scheduler, executing );
-}
-
-/**
  * @brief Starts the idle thread for a particular processor.
  *
  * @param scheduler The scheduler instance.

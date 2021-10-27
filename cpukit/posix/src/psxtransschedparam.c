@@ -23,22 +23,27 @@
 #include <errno.h>
 
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/threadcpubudget.h>
 
 int _POSIX_Thread_Translate_to_sched_policy(
-  Thread_CPU_budget_algorithms budget_algorithm
+  const Thread_CPU_budget_operations *operations
 )
 {
-  switch ( budget_algorithm ) {
-    case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
-      return SCHED_OTHER;
-    case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
-      return SCHED_RR;
-    case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
-      return SCHED_SPORADIC;
-    default:
-      _Assert( budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_NONE );
-      return SCHED_FIFO;
+  if ( operations == NULL ) {
+    return SCHED_FIFO;
   }
+
+  if ( operations == &_Thread_CPU_budget_exhaust_timeslice ) {
+    return SCHED_RR;
+  }
+
+#if defined(RTEMS_POSIX_API)
+  if ( operations == &_POSIX_Threads_Sporadic_budget ) {
+    return SCHED_SPORADIC;
+  }
+#endif
+
+  return SCHED_OTHER;
 }
 
 int _POSIX_Thread_Translate_sched_param(
@@ -47,23 +52,19 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_Configuration     *config
 )
 {
-  config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
-  config->budget_callout = NULL;
-  config->cpu_time_budget = 0;
+  config->cpu_budget_operations = NULL;
 
-  if ( policy == SCHED_OTHER ) {
-    config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE;
+  if ( policy == SCHED_FIFO ) {
     return 0;
   }
 
-  if ( policy == SCHED_FIFO ) {
-    config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
+  if ( policy == SCHED_OTHER ) {
+    config->cpu_budget_operations = &_Thread_CPU_budget_reset_timeslice;
     return 0;
   }
 
   if ( policy == SCHED_RR ) {
-    config->budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
-    config->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
+    config->cpu_budget_operations = &_Thread_CPU_budget_exhaust_timeslice;
     return 0;
   }
 
@@ -81,8 +82,7 @@ int _POSIX_Thread_Translate_sched_param(
 	 _Timespec_To_ticks( &param->sched_ss_init_budget ) )
       return EINVAL;
 
-    config->budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;
-    config->budget_callout = _POSIX_Threads_Sporadic_budget_callout;
+    config->cpu_budget_operations = &_POSIX_Threads_Sporadic_budget;
     return 0;
   }
 #endif

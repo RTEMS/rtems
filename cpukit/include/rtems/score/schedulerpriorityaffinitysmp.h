@@ -73,7 +73,6 @@ extern "C" {
     _Scheduler_default_Node_destroy, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Cancel_job, \
-    _Scheduler_default_Tick, \
     _Scheduler_SMP_Start_idle, \
     _Scheduler_priority_affinity_SMP_Set_affinity \
   }

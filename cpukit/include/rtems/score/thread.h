@@ -76,14 +76,6 @@ extern "C" {
  *@{
  */
 
-#define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
-
-/*
- * With the addition of the Constant Block Scheduler (CBS),
- * this feature is needed even when POSIX is disabled.
- */
-#define RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT
-
 #if defined(RTEMS_DEBUG)
 #define RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT
 #endif
@@ -148,27 +140,47 @@ typedef struct {
 } Thread_Entry_information;
 
 /**
- *  The following lists the algorithms used to manage the thread cpu budget.
- *
- *  Reset Timeslice:   At each context switch, reset the time quantum.
- *  Exhaust Timeslice: Only reset the quantum once it is consumed.
- *  Callout:           Execute routine when budget is consumed.
+ * @brief This structure contains operations which manage the CPU budget of a
+ *   thread.
  */
-typedef enum {
-  THREAD_CPU_BUDGET_ALGORITHM_NONE,
-  THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE,
-  #if defined(RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE)
-    THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE,
-  #endif
-  #if defined(RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT)
-    THREAD_CPU_BUDGET_ALGORITHM_CALLOUT
-  #endif
-}  Thread_CPU_budget_algorithms;
+typedef struct {
+  /**
+   * @brief This operation is called at each clock tick for the executing
+   *   thread.
+   */
+  void ( *at_tick )( Thread_Control * );
 
-/**  This defines thes the entry point for the thread specific timeslice
- *   budget management algorithm.
+  /**
+   * @brief This operation is called right before a context switch to the
+   *   thread is performed.
+   */
+  void ( *at_context_switch )( Thread_Control * );
+
+  /**
+   * @brief This operation is called to initialize the CPU budget of the
+   *   thread.
+   */
+  void ( *initialize )( Thread_Control * );
+} Thread_CPU_budget_operations;
+
+/**
+ * @brief This structure is used to control the CPU budget of a thread.
  */
-typedef void (*Thread_CPU_budget_algorithm_callout )( Thread_Control * );
+typedef struct {
+  /**
+   * @brief If this member is not NULL, then it references the CPU budget
+   *   operations used to manage the CPU budget of the thread, otherwise it is
+   *   NULL.
+   */
+  const Thread_CPU_budget_operations *operations;
+
+  /**
+   * @brief This member contains the count of the time quantum that this thread
+   *   is allowed to consume until an action takes place defined by the CPU
+   *   budget operations.
+   */
+  uint32_t available;
+} Thread_CPU_budget_control;
 
 /**
  *  The following structure contains the information which defines
@@ -182,12 +194,13 @@ typedef struct {
     * it started.
     */
   bool                                 is_preemptible;
-  /** This field indicates the CPU budget algorith. */
-  Thread_CPU_budget_algorithms         budget_algorithm;
-  /** This field is the routine to invoke when the CPU allotment is
-   *  consumed.
+
+  /**
+   * @brief This member may provide the CPU budget operations activated when a
+   *   thread is initialized before it is started or restarted.
    */
-  Thread_CPU_budget_algorithm_callout  budget_callout;
+  const Thread_CPU_budget_operations *cpu_budget_operations;
+
   /** This field is the initial ISR disable level of this thread. */
   uint32_t                             isr_level;
   /** This field is the initial priority. */
@@ -772,9 +785,7 @@ struct _Thread_Control {
    * the following fields
    *
    * - RTEMS_API_Control::Signal,
-   * - Thread_Control::budget_algorithm,
-   * - Thread_Control::budget_callout,
-   * - Thread_Control::cpu_time_budget,
+   * - Thread_Control::CPU_budget,
    * - Thread_Control::current_state,
    * - Thread_Control::Post_switch_actions,
    * - Thread_Control::Scheduler::control, and
@@ -841,18 +852,11 @@ struct _Thread_Control {
    */
   bool was_created_with_inherited_scheduler;
 
-  /** This field is the length of the time quantum that this thread is
-   *  allowed to consume.  The algorithm used to manage limits on CPU usage
-   *  is specified by budget_algorithm.
+  /**
+   * @brief This member contains the CPU budget control used to manage the CPU
+   *   budget of the thread.
    */
-  uint32_t                              cpu_time_budget;
-  /** This field is the algorithm used to manage this thread's time
-   *  quantum.  The algorithm may be specified as none which case,
-   *  no limit is in place.
-   */
-  Thread_CPU_budget_algorithms          budget_algorithm;
-  /** This field is the method invoked with the budgeted time is consumed. */
-  Thread_CPU_budget_algorithm_callout   budget_callout;
+  Thread_CPU_budget_control CPU_budget;
 
   /**
    * @brief This member contains the amount of CPU time consumed by this thread

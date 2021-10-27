@@ -34,9 +34,11 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/pthreadattrimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/threadcpubudget.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/stackimpl.h>
+#include <rtems/score/statesimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/sysinit.h>
@@ -348,7 +350,9 @@ void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
   _Thread_Priority_update( &queue_context );
 }
 
-void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
+static void _POSIX_Threads_Sporadic_budget_callout(
+  Thread_Control *the_thread
+)
 {
   POSIX_API_Control    *api;
   Thread_queue_Context  queue_context;
@@ -363,7 +367,7 @@ void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
    *  This will prevent the thread from consuming its entire "budget"
    *  while at low priority.
    */
-  the_thread->cpu_time_budget = UINT32_MAX;
+  the_thread->CPU_budget.available = UINT32_MAX;
 
   if ( !_Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
     _Thread_Priority_add(
@@ -381,6 +385,34 @@ void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
   _Thread_Wait_release( the_thread, &queue_context );
   _Thread_Priority_update( &queue_context );
 }
+
+static void _POSIX_Threads_Sporadic_budget_at_tick( Thread_Control *the_thread )
+{
+  uint32_t budget_available;
+
+  if ( !the_thread->is_preemptible ) {
+    return;
+  }
+
+  if ( !_States_Is_ready( the_thread->current_state ) ) {
+    return;
+  }
+
+  budget_available = the_thread->CPU_budget.available;
+
+  if ( budget_available == 1 ) {
+    the_thread->CPU_budget.available = 0;
+    _POSIX_Threads_Sporadic_budget_callout ( the_thread );
+  } else {
+    the_thread->CPU_budget.available = budget_available - 1;
+  }
+}
+
+const Thread_CPU_budget_operations _POSIX_Threads_Sporadic_budget = {
+  .at_tick = _POSIX_Threads_Sporadic_budget_at_tick,
+  .at_context_switch = _Thread_CPU_budget_do_nothing,
+  .initialize = _Thread_CPU_budget_do_nothing
+};
 
 static bool _POSIX_Threads_Create_extension(
   Thread_Control *executing,
