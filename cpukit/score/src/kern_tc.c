@@ -1505,6 +1505,40 @@ _Timecounter_Set_clock(const struct bintime *_bt,
 }
 
 /*
+ * Recalculate the scaling factor.  We want the number of 1/2^64
+ * fractions of a second per period of the hardware counter, taking
+ * into account the th_adjustment factor which the NTP PLL/adjtime(2)
+ * processing provides us with.
+ *
+ * The th_adjustment is nanoseconds per second with 32 bit binary
+ * fraction and we want 64 bit binary fraction of second:
+ *
+ *	 x = a * 2^32 / 10^9 = a * 4.294967296
+ *
+ * The range of th_adjustment is +/- 5000PPM so inside a 64bit int
+ * we can only multiply by about 850 without overflowing, that
+ * leaves no suitably precise fractions for multiply before divide.
+ *
+ * Divide before multiply with a fraction of 2199/512 results in a
+ * systematic undercompensation of 10PPM of th_adjustment.  On a
+ * 5000PPM adjustment this is a 0.05PPM error.  This is acceptable.
+ *
+ * We happily sacrifice the lowest of the 64 bits of our result
+ * to the goddess of code clarity.
+ */
+static void
+recalculate_scaling_factor_and_large_delta(struct timehands *th)
+{
+	uint64_t scale;
+
+	scale = (uint64_t)1 << 63;
+	scale += (th->th_adjustment / 1024) * 2199;
+	scale /= th->th_counter->tc_frequency;
+	th->th_scale = scale * 2;
+	th->th_large_delta = MIN(((uint64_t)1 << 63) / scale, UINT_MAX);
+}
+
+/*
  * Initialize the next struct timehands in the ring and make
  * it the active timehands.  Along the way we might switch to a different
  * timecounter and/or do seconds processing in NTP.  Slightly magic.
@@ -1526,7 +1560,6 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 {
 	struct bintime bt;
 	struct timehands *th, *tho;
-	uint64_t scale;
 	uint32_t delta, ncount, ogen;
 	int i;
 	time_t t;
@@ -1596,7 +1629,7 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 #endif /* __rtems__ */
 
 	/*
-	 * Deal with NTP second processing.  The for loop normally
+	 * Deal with NTP second processing.  The loop normally
 	 * iterates at most once, but in extreme situations it might
 	 * keep NTP sane if timeouts are not run for several seconds.
 	 * At boot, the time step can be large when the TOD hardware
@@ -1607,14 +1640,21 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	bt = th->th_offset;
 	bintime_add(&bt, &th->th_boottime);
 	i = bt.sec - tho->th_microtime.tv_sec;
-	if (i > LARGE_STEP)
-		i = 2;
-	for (; i > 0; i--) {
-		t = bt.sec;
-		ntp_update_second(&th->th_adjustment, &bt.sec);
-		if (bt.sec != t)
-			th->th_boottime.sec += bt.sec - t;
+	if (i > 0) {
+		if (i > LARGE_STEP)
+			i = 2;
+
+		do {
+			t = bt.sec;
+			ntp_update_second(&th->th_adjustment, &bt.sec);
+			if (bt.sec != t)
+				th->th_boottime.sec += bt.sec - t;
+			--i;
+		} while (i > 0);
+
+		recalculate_scaling_factor_and_large_delta(th);
 	}
+
 	/* Update the UTC timestamps used by the get*() functions. */
 	th->th_bintime = bt;
 	bintime2timeval(&bt, &th->th_microtime);
@@ -1636,39 +1676,11 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 		tc_min_ticktock_freq = max(1, timecounter->tc_frequency /
 		    (((uint64_t)timecounter->tc_counter_mask + 1) / 3));
 #endif /* __rtems__ */
+		recalculate_scaling_factor_and_large_delta(th);
 #ifdef FFCLOCK
 		ffclock_change_tc(th);
 #endif
 	}
-
-	/*-
-	 * Recalculate the scaling factor.  We want the number of 1/2^64
-	 * fractions of a second per period of the hardware counter, taking
-	 * into account the th_adjustment factor which the NTP PLL/adjtime(2)
-	 * processing provides us with.
-	 *
-	 * The th_adjustment is nanoseconds per second with 32 bit binary
-	 * fraction and we want 64 bit binary fraction of second:
-	 *
-	 *	 x = a * 2^32 / 10^9 = a * 4.294967296
-	 *
-	 * The range of th_adjustment is +/- 5000PPM so inside a 64bit int
-	 * we can only multiply by about 850 without overflowing, that
-	 * leaves no suitably precise fractions for multiply before divide.
-	 *
-	 * Divide before multiply with a fraction of 2199/512 results in a
-	 * systematic undercompensation of 10PPM of th_adjustment.  On a
-	 * 5000PPM adjustment this is a 0.05PPM error.  This is acceptable.
- 	 *
-	 * We happily sacrifice the lowest of the 64 bits of our result
-	 * to the goddess of code clarity.
-	 *
-	 */
-	scale = (uint64_t)1 << 63;
-	scale += (th->th_adjustment / 1024) * 2199;
-	scale /= th->th_counter->tc_frequency;
-	th->th_scale = scale * 2;
-	th->th_large_delta = MIN(((uint64_t)1 << 63) / scale, UINT_MAX);
 
 	/*
 	 * Now that the struct timehands is again consistent, set the new
