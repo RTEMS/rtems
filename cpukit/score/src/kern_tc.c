@@ -80,8 +80,6 @@ ISR_LOCK_DEFINE(, _Timecounter_Lock, "Timecounter")
 #define hz rtems_clock_get_ticks_per_second()
 #define printf(...)
 #define log(...)
-/* FIXME: https://devel.rtems.org/ticket/2348 */
-#define ntp_update_second(a, b) do { (void) a; (void) b; } while (0)
 
 static inline void
 atomic_thread_fence_acq(void)
@@ -117,6 +115,17 @@ atomic_load_ptr(void *ptr)
 
 	return ((void *)_Atomic_Load_uintptr(ptr, ATOMIC_ORDER_RELAXED));
 }
+
+static Timecounter_NTP_update_second _Timecounter_NTP_update_second;
+
+void
+_Timecounter_Set_NTP_update_second(Timecounter_NTP_update_second handler)
+{
+
+	_Timecounter_NTP_update_second = handler;
+}
+
+#define	ntp_update_second(a, b) (*ntp_update_second_handler)(a, b)
 #endif /* __rtems__ */
 
 /*
@@ -1605,6 +1614,9 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 #endif
 	int i;
 	time_t t;
+#ifdef __rtems__
+	Timecounter_NTP_update_second ntp_update_second_handler;
+#endif
 
 	/*
 	 * Make the next timehands a copy of the current one, but do
@@ -1680,6 +1692,10 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	 */
 	bt = th->th_offset;
 	bintime_add(&bt, &th->th_boottime);
+#ifdef __rtems__
+	ntp_update_second_handler = _Timecounter_NTP_update_second;
+	if (ntp_update_second_handler != NULL) {
+#endif /* __rtems__ */
 	i = bt.sec - tho->th_microtime.tv_sec;
 	if (i > 0) {
 		if (i > LARGE_STEP)
@@ -1695,6 +1711,9 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 
 		recalculate_scaling_factor_and_large_delta(th);
 	}
+#ifdef __rtems__
+	}
+#endif /* __rtems__ */
 
 	/* Update the UTC timestamps used by the get*() functions. */
 	th->th_bintime = bt;
