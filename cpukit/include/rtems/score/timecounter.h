@@ -8,7 +8,7 @@
  */
 
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2021 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -247,6 +247,28 @@ extern volatile int32_t _Timecounter_Time_uptime;
  * @brief The current timecounter.
  */
 extern struct timecounter *_Timecounter;
+
+/**
+ * @brief Handler doing the NTP update second processing shall have this type.
+ *
+ * @param[in, out] adjustment is the NTP time adjustment.
+ *
+ * @param[in, out] newsec is the number of seconds since Unix epoch.
+ */
+typedef	void ( *Timecounter_NTP_update_second )(
+  int64_t *adjustment,
+  time_t  *newsec
+);
+
+/**
+ * @brief Sets the NTP update second handler.
+ *
+ * @param handler is the new NTP update second handler used to carry out the
+ *   NTP update second processing.
+ */
+void _Timecounter_Set_NTP_update_second(
+  Timecounter_NTP_update_second handler
+);
 
 /** @} */
 
