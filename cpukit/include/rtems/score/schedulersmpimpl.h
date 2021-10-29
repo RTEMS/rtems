@@ -1435,7 +1435,6 @@ static inline void _Scheduler_SMP_Yield(
   Scheduler_SMP_Enqueue_scheduled enqueue_scheduled
 )
 {
-  bool                     needs_help;
   Scheduler_SMP_Node_state node_state;
   Priority_Control         insert_priority;
 
@@ -1446,17 +1445,9 @@ static inline void _Scheduler_SMP_Yield(
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     ( *extract_from_scheduled )( context, node );
     ( *enqueue_scheduled )( context, node, insert_priority );
-    needs_help = false;
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
     ( *extract_from_ready )( context, node );
-
-    needs_help = ( *enqueue )( context, node, insert_priority );
-  } else {
-    needs_help = true;
-  }
-
-  if ( needs_help ) {
-    _Scheduler_Ask_for_help( thread );
+    (void) ( *enqueue )( context, node, insert_priority );
   }
 }
 
