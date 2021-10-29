@@ -761,7 +761,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
 
   /* TODO: flash critical section? */
 
-  if ( _Thread_Is_executing( the_thread ) || _Thread_Is_heir( the_thread ) ) {
+  if ( _Thread_Is_heir( the_thread ) ) {
     ( *schedule )( scheduler, the_thread, true );
   }
 }
