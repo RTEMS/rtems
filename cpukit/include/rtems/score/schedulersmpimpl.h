@@ -1326,43 +1326,49 @@ static inline void _Scheduler_SMP_Unblock(
 )
 {
   Scheduler_SMP_Node_state  node_state;
-  bool                      unblock;
+  Priority_Control          priority;
+  bool                      needs_help;
+
+  ++node->sticky_level;
+  _Assert( node->sticky_level > 0 );
 
   node_state = _Scheduler_SMP_Node_state( node );
-  unblock = _Scheduler_Unblock_node(
-    thread,
-    node,
-    node_state == SCHEDULER_SMP_NODE_SCHEDULED,
-    release_idle_node,
-    context
-  );
 
-  if ( unblock ) {
-    Priority_Control priority;
-    bool             needs_help;
+  if ( RTEMS_PREDICT_FALSE( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) ) {
+    _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_SCHEDULED );
+    _Scheduler_Discard_idle_thread(
+      thread,
+      node,
+      release_idle_node,
+      context
+    );
 
-    priority = _Scheduler_Node_get_priority( node );
-    priority = SCHEDULER_PRIORITY_PURIFY( priority );
+    return;
+  }
 
-    if ( priority != _Scheduler_SMP_Node_priority( node ) ) {
-      ( *update )( context, node, priority );
-    }
+  _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_READY );
 
-    if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
-      Priority_Control insert_priority;
+  priority = _Scheduler_Node_get_priority( node );
+  priority = SCHEDULER_PRIORITY_PURIFY( priority );
 
-      insert_priority = SCHEDULER_PRIORITY_APPEND( priority );
-      needs_help = ( *enqueue )( context, node, insert_priority );
-    } else {
-      _Assert( node_state == SCHEDULER_SMP_NODE_READY );
-      _Assert( node->sticky_level > 0 );
-      _Assert( node->idle == NULL );
-      needs_help = true;
-    }
+  if ( priority != _Scheduler_SMP_Node_priority( node ) ) {
+    ( *update )( context, node, priority );
+  }
 
-    if ( needs_help ) {
-      _Scheduler_Ask_for_help( thread );
-    }
+  if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
+    Priority_Control insert_priority;
+
+    insert_priority = SCHEDULER_PRIORITY_APPEND( priority );
+    needs_help = ( *enqueue )( context, node, insert_priority );
+  } else {
+    _Assert( node_state == SCHEDULER_SMP_NODE_READY );
+    _Assert( node->sticky_level > 0 );
+    _Assert( node->idle == NULL );
+    needs_help = true;
+  }
+
+  if ( needs_help ) {
+    _Scheduler_Ask_for_help( thread );
   }
 }
 

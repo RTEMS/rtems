@@ -954,48 +954,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
   _Thread_Set_CPU( the_thread, cpu );
   _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, the_thread );
 }
-
-/**
- * @brief Unblocks this scheduler node.
- *
- * @param context The scheduler instance context.
- * @param[in, out] the_thread The thread which wants to get unblocked.
- * @param[in, out] node The node which wants to get unblocked.
- * @param is_scheduled This node is scheduled.
- * @param release_idle_thread Function to release an idle thread.
- *
- * @retval true Continue with the unblocking operation.
- * @retval false Do not continue with the unblocking operation.
- */
-RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
-  Thread_Control              *the_thread,
-  Scheduler_Node              *node,
-  bool                         is_scheduled,
-  Scheduler_Release_idle_node  release_idle_node,
-  void                        *arg
-)
-{
-  bool unblock;
-
-  ++node->sticky_level;
-  _Assert( node->sticky_level > 0 );
-
-  if ( is_scheduled ) {
-    _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_SCHEDULED );
-    _Scheduler_Discard_idle_thread(
-      the_thread,
-      node,
-      release_idle_node,
-      arg
-    );
-    unblock = false;
-  } else {
-    _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_READY );
-    unblock = true;
-  }
-
-  return unblock;
-}
 #endif
 
 /**
