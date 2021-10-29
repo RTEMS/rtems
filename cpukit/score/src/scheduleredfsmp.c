@@ -478,46 +478,42 @@ static inline void _Scheduler_EDF_SMP_Release_idle(
 static inline void _Scheduler_EDF_SMP_Allocate_processor(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled_base,
-  Thread_Control    *victim_thread,
-  Per_CPU_Control   *victim_cpu
+  Per_CPU_Control   *cpu
 )
 {
   Scheduler_EDF_SMP_Context     *self;
   Scheduler_EDF_SMP_Node        *scheduled;
   uint8_t                        rqi;
 
-  (void) victim_thread;
   self = _Scheduler_EDF_SMP_Get_self( context );
   scheduled = _Scheduler_EDF_SMP_Node_downcast( scheduled_base );
   rqi = scheduled->ready_queue_index;
 
   if ( rqi != 0 ) {
-    Per_CPU_Control *desired_cpu;
+    Per_CPU_Control *affine_cpu;
 
-    desired_cpu = _Per_CPU_Get_by_index( rqi - 1 );
+    affine_cpu = _Per_CPU_Get_by_index( rqi - 1 );
 
-    if ( victim_cpu != desired_cpu ) {
+    if ( cpu != affine_cpu ) {
       Scheduler_EDF_SMP_Node *node;
 
       node = _Scheduler_EDF_SMP_Get_allocated( self, rqi );
       _Assert( node->ready_queue_index == 0 );
-      _Scheduler_EDF_SMP_Set_allocated( self, node, victim_cpu );
+      _Scheduler_EDF_SMP_Set_allocated( self, node, cpu );
       _Scheduler_SMP_Allocate_processor_exact(
         context,
         &node->Base.Base,
-        NULL,
-        victim_cpu
+        cpu
       );
-      victim_cpu = desired_cpu;
+      cpu = affine_cpu;
     }
   }
 
-  _Scheduler_EDF_SMP_Set_allocated( self, scheduled, victim_cpu );
+  _Scheduler_EDF_SMP_Set_allocated( self, scheduled, cpu );
   _Scheduler_SMP_Allocate_processor_exact(
     context,
     &scheduled->Base.Base,
-    NULL,
-    victim_cpu
+    cpu
   );
 }
 

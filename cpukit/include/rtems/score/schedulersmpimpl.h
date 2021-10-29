@@ -343,8 +343,7 @@ typedef void ( *Scheduler_SMP_Enqueue_scheduled )(
 typedef void ( *Scheduler_SMP_Allocate_processor )(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled,
-  Thread_Control    *victim_thread,
-  Per_CPU_Control   *victim_cpu
+  Per_CPU_Control   *cpu
 );
 
 typedef void ( *Scheduler_SMP_Register_idle )(
@@ -640,100 +639,101 @@ static inline Scheduler_SMP_Action _Scheduler_SMP_Try_to_schedule(
 }
 
 /**
- * @brief Allocates the cpu for the scheduled thread.
+ * @brief Allocates a processor to the user of the scheduled node.
  *
  * Attempts to prevent migrations but does not take into account affinity.
  *
- * @param context The scheduler context instance.
- * @param scheduled The scheduled node that should be executed next.
- * @param victim If the heir is this node's thread, no processor is allocated.
- * @param[in, out] victim_cpu The cpu to allocate.
+ * @param[in, out] context is the scheduler context.
+ *
+ * @param[in, out] scheduled is the scheduled node that gets the processor allocated.
+ *
+ * @param[in, out] cpu is the processor to allocate.
  */
 static inline void _Scheduler_SMP_Allocate_processor_lazy(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled,
-  Thread_Control    *victim_thread,
-  Per_CPU_Control   *victim_cpu
+  Per_CPU_Control   *cpu
 )
 {
   Thread_Control *scheduled_thread = _Scheduler_Node_get_user( scheduled );
   Per_CPU_Control *scheduled_cpu = _Thread_Get_CPU( scheduled_thread );
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
-  Thread_Control *heir;
 
   _Assert( _ISR_Get_level() != 0 );
 
-  if ( _Thread_Is_executing_on_a_processor( scheduled_thread ) ) {
-    if ( _Scheduler_SMP_Is_processor_owned_by_us( context, scheduled_cpu ) ) {
-      heir = scheduled_cpu->heir;
-      _Thread_Dispatch_update_heir(
-        cpu_self,
-        scheduled_cpu,
-        scheduled_thread
-      );
-    } else {
-      /* We have to force a migration to our processor set */
-      heir = scheduled_thread;
-    }
-  } else {
-    heir = scheduled_thread;
+  if ( cpu == scheduled_cpu ) {
+    _Thread_Set_CPU( scheduled_thread, cpu );
+    _Thread_Dispatch_update_heir( cpu_self, cpu, scheduled_thread );
+
+    return;
   }
 
-  if ( heir != victim_thread ) {
-    _Thread_Set_CPU( heir, victim_cpu );
-    _Thread_Dispatch_update_heir( cpu_self, victim_cpu, heir );
+  if (
+    _Thread_Is_executing_on_a_processor( scheduled_thread ) &&
+    _Scheduler_SMP_Is_processor_owned_by_us( context, scheduled_cpu )
+  ) {
+    Thread_Control *heir = scheduled_cpu->heir;
+    _Thread_Dispatch_update_heir( cpu_self, scheduled_cpu, scheduled_thread );
+    _Thread_Set_CPU( heir, cpu );
+    _Thread_Dispatch_update_heir( cpu_self, cpu, heir );
+
+    return;
   }
+
+  _Thread_Set_CPU( scheduled_thread, cpu );
+  _Thread_Dispatch_update_heir( cpu_self, cpu, scheduled_thread );
 }
 
 /**
- * @brief Allocates the cpu for the scheduled thread.
+ * @brief Allocates exactly the processor to the user of the scheduled node.
  *
  * This method is slightly different from
  * _Scheduler_SMP_Allocate_processor_lazy() in that it does what it is asked to
  * do.  _Scheduler_SMP_Allocate_processor_lazy() attempts to prevent migrations
  * but does not take into account affinity.
  *
- * @param context This parameter is unused.
- * @param scheduled The scheduled node whose thread should be executed next.
- * @param victim This parameter is unused.
- * @param[in, out] victim_cpu The cpu to allocate.
+ * @param[in, out] context is the scheduler context.
+ *
+ * @param[in, out] scheduled is the scheduled node that gets the processor allocated.
+ *
+ * @param[in, out] cpu is the processor to allocate.
  */
 static inline void _Scheduler_SMP_Allocate_processor_exact(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled,
-  Thread_Control    *victim_thread,
-  Per_CPU_Control   *victim_cpu
+  Per_CPU_Control   *cpu
 )
 {
   Thread_Control *scheduled_thread = _Scheduler_Node_get_user( scheduled );
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
 
   (void) context;
-  (void) victim_thread;
 
-  _Thread_Set_CPU( scheduled_thread, victim_cpu );
-  _Thread_Dispatch_update_heir( cpu_self, victim_cpu, scheduled_thread );
+  _Thread_Set_CPU( scheduled_thread, cpu );
+  _Thread_Dispatch_update_heir( cpu_self, cpu, scheduled_thread );
 }
 
 /**
- * @brief Allocates the cpu for the scheduled thread using the given allocation function.
+ * @brief Allocates the processor to the user of the scheduled node using the
+ *   given allocation handler.
  *
- * @param context The scheduler context instance.
- * @param scheduled The scheduled node that should be executed next.
- * @param victim If the heir is this node's thread, no processor is allocated.
- * @param[in, out] victim_cpu The cpu to allocate.
- * @param allocate_processor The function to use for the allocation of @a victim_cpu.
+ * @param[in, out] context is the scheduler context.
+ *
+ * @param[in, out] scheduled is the scheduled node that gets the processor allocated.
+ *
+ * @param[in, out] cpu is the processor to allocate.
+ *
+ * @param allocate_processor is the handler which should allocate the processor.
  */
 static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_Context                *context,
   Scheduler_Node                   *scheduled,
-  Thread_Control                   *victim_thread,
-  Per_CPU_Control                  *victim_cpu,
+  Per_CPU_Control                  *cpu,
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
   _Scheduler_SMP_Node_change_state( scheduled, SCHEDULER_SMP_NODE_SCHEDULED );
-  ( *allocate_processor )( context, scheduled, victim_thread, victim_cpu );
+  ( *allocate_processor )( context, scheduled, cpu );
 }
 
 /**
@@ -760,9 +760,8 @@ static inline void _Scheduler_SMP_Preempt(
 )
 {
   Thread_Control   *victim_owner;
-  Thread_Control   *victim_user;
   ISR_lock_Context  lock_context;
-  Per_CPU_Control  *victim_cpu;
+  Per_CPU_Control  *cpu;
 
   _Scheduler_SMP_Node_change_state( victim, SCHEDULER_SMP_NODE_READY );
 
@@ -770,8 +769,7 @@ static inline void _Scheduler_SMP_Preempt(
   _Thread_Scheduler_acquire_critical( victim_owner, &lock_context );
 
   if ( RTEMS_PREDICT_TRUE( victim_idle == NULL ) ) {
-    victim_user = victim_owner;
-    victim_cpu = _Thread_Get_CPU( victim_owner );
+    cpu = _Thread_Get_CPU( victim_owner );
 
     if ( victim_owner->Scheduler.state == THREAD_SCHEDULER_SCHEDULED ) {
       _Scheduler_Thread_change_state( victim_owner, THREAD_SCHEDULER_READY );
@@ -779,17 +777,16 @@ static inline void _Scheduler_SMP_Preempt(
       if ( victim_owner->Scheduler.helping_nodes > 0 ) {
         ISR_lock_Context lock_context_2;
 
-        _Per_CPU_Acquire( victim_cpu, &lock_context_2 );
+        _Per_CPU_Acquire( cpu, &lock_context_2 );
         _Chain_Append_unprotected(
-          &victim_cpu->Threads_in_need_for_help,
+          &cpu->Threads_in_need_for_help,
           &victim_owner->Scheduler.Help_node
         );
-        _Per_CPU_Release( victim_cpu, &lock_context_2 );
+        _Per_CPU_Release( cpu, &lock_context_2 );
       }
     }
   } else {
-    victim_user = victim_idle;
-    victim_cpu = _Thread_Get_CPU( victim_idle );
+    cpu = _Thread_Get_CPU( victim_idle );
   }
 
   _Thread_Scheduler_release_critical( victim_owner, &lock_context );
@@ -797,8 +794,7 @@ static inline void _Scheduler_SMP_Preempt(
   _Scheduler_SMP_Allocate_processor(
     context,
     scheduled,
-    victim_user,
-    victim_cpu,
+    cpu,
     allocate_processor
   );
 }
@@ -1123,10 +1119,8 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
   Scheduler_Release_idle_node       release_idle_node
 )
 {
-  Thread_Control      *victim_thread;
   Scheduler_SMP_Action action;
 
-  victim_thread = _Scheduler_Node_get_user( victim );
   (void) _Scheduler_Release_idle_thread_if_necessary(
     victim,
     release_idle_node,
@@ -1146,7 +1140,6 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
       _Scheduler_SMP_Allocate_processor(
         context,
         highest_ready,
-        victim_thread,
         victim_cpu,
         allocate_processor
       );

@@ -157,25 +157,21 @@ static inline Scheduler_Node *_Scheduler_strong_APA_Get_scheduled(
 static inline void _Scheduler_strong_APA_Allocate_processor(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled_base,
-  Thread_Control    *victim_thread,
-  Per_CPU_Control   *victim_cpu
+  Per_CPU_Control   *cpu
 )
 {
   Scheduler_strong_APA_Node    *scheduled;
   Scheduler_strong_APA_Context *self;
 
-  (void) victim_thread;
-
   scheduled = _Scheduler_strong_APA_Node_downcast( scheduled_base );
   self = _Scheduler_strong_APA_Get_self( context );
 
-  _Scheduler_strong_APA_Set_scheduled( self, scheduled_base, victim_cpu );
+  _Scheduler_strong_APA_Set_scheduled( self, scheduled_base, cpu );
 
   _Scheduler_SMP_Allocate_processor_exact(
     context,
     &( scheduled->Base.Base ),
-    NULL,
-    victim_cpu
+    cpu
   );
 }
 
