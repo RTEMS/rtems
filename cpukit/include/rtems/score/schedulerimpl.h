@@ -927,62 +927,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread_if_necessary
 }
 
 /**
- * @brief Blocks this scheduler node.
- *
- * @param[in, out] thread The thread which wants to get blocked referencing this
- *   node.  This is not necessarily the user of this node in case the node
- *   participates in the scheduler helping protocol.
- *
- * @param[in, out] node is the node which wants to get blocked.
- *
- * @param get_idle_node is the get idle node handler.
- *
- * @param arg is the get idle node handler argument.
- *
- * @retval thread_cpu The processor of the thread.  Indicates to continue with
- *   the blocking operation.
- * @retval NULL Otherwise.
- */
-RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
-  Thread_Control          *thread,
-  Scheduler_Node          *node,
-  bool                     is_scheduled,
-  Scheduler_Get_idle_node  get_idle_node,
-  void                    *arg
-)
-{
-  int               sticky_level;
-  ISR_lock_Context  lock_context;
-  Per_CPU_Control  *thread_cpu;
-
-  sticky_level = node->sticky_level;
-  --sticky_level;
-  node->sticky_level = sticky_level;
-  _Assert( sticky_level >= 0 );
-
-  _Thread_Scheduler_acquire_critical( thread, &lock_context );
-  thread_cpu = _Thread_Get_CPU( thread );
-  _Thread_Scheduler_cancel_need_for_help( thread, thread_cpu );
-  _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
-  _Thread_Scheduler_release_critical( thread, &lock_context );
-
-  if ( sticky_level > 0 ) {
-    if ( is_scheduled && _Scheduler_Node_get_idle( node ) == NULL ) {
-      Thread_Control *idle;
-
-      idle = _Scheduler_Use_idle_thread( node, get_idle_node, arg );
-      _Thread_Set_CPU( idle, thread_cpu );
-      _Thread_Dispatch_update_heir( _Per_CPU_Get(), thread_cpu, idle );
-    }
-
-    return NULL;
-  }
-
-  _Assert( thread == _Scheduler_Node_get_user( node ) );
-  return thread_cpu;
-}
-
-/**
  * @brief Discards the idle thread used by the scheduler node.
  *
  * @param[in, out] the_thread is the thread owning the node.
