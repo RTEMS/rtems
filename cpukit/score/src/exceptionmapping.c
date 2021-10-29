@@ -76,7 +76,7 @@ void _Exception_Raise_signal(
 #ifdef RTEMS_SMP
   system_up = ( _Per_CPU_Get_state( cpu_self ) == PER_CPU_STATE_UP );
 #else
-  system_up = ( _System_state_Get == SYSTEM_STATE_UP );
+  system_up = ( _System_state_Get() == SYSTEM_STATE_UP );
 #endif
 
   if ( !system_up ) {
