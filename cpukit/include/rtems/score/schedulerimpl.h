@@ -174,30 +174,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Is_non_preempt_mode_supported(
 }
 #endif
 
-#if defined(RTEMS_SMP)
-void _Scheduler_Request_ask_for_help( Thread_Control *the_thread );
-
-/**
- * @brief Registers an ask for help request if necessary.
- *
- * The actual ask for help operation is carried out during
- * _Thread_Do_dispatch() on a processor related to the thread.  This yields a
- * better separation of scheduler instances.  A thread of one scheduler
- * instance should not be forced to carry out too much work for threads on
- * other scheduler instances.
- *
- * @param the_thread The thread in need for help.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help( Thread_Control *the_thread )
-{
-  _Assert( _Thread_State_is_owner( the_thread ) );
-
-  if ( the_thread->Scheduler.helping_nodes > 0 ) {
-    _Scheduler_Request_ask_for_help( the_thread );
-  }
-}
-#endif
-
 /**
  * The preferred method to add a new scheduler is to define the jump table
  * entries and add a case to the _Scheduler_Initialize routine.

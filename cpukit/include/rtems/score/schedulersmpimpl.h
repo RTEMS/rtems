@@ -563,6 +563,73 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
 }
 
 /**
+ * @brief Removes the thread's ask for help request from the processor.
+ *
+ * The caller must be the owner of the thread's scheduler lock.
+ *
+ * @param[in, out] thread is the thread of the ask for help request.
+ *
+ * @param[in, out] cpu is the processor from which the ask for help request
+ *   should be removed.
+ */
+void _Scheduler_SMP_Remove_ask_for_help_from_processor(
+  Thread_Control  *thread,
+  Per_CPU_Control *cpu
+);
+
+/**
+ * @brief Cancels the thread's ask for help request.
+ *
+ * The caller must be the owner of the thread's scheduler lock.
+ *
+ * @param[in, out] thread is the thread of the ask help request.
+ */
+static inline void _Scheduler_SMP_Cancel_ask_for_help( Thread_Control *thread )
+{
+  Per_CPU_Control *cpu;
+
+  _Assert( _ISR_lock_Is_owner( &thread->Scheduler.Lock ) );
+  cpu = thread->Scheduler.ask_for_help_cpu;
+
+  if ( RTEMS_PREDICT_FALSE( cpu != NULL ) ) {
+    _Scheduler_SMP_Remove_ask_for_help_from_processor( thread, cpu );
+  }
+}
+
+/**
+ * @brief Requests to ask for help for the thread.
+ *
+ * The actual ask for help operations are carried out during
+ * _Thread_Do_dispatch() on the current processor.
+ *
+ * An alternative approach would be to carry out the requests on a processor
+ * related to the thread.  This could reduce the overhead for the preempting
+ * thread a bit, however, there are at least two problems with this approach.
+ * Firstly, we have to figure out what is a processor related to the thread.
+ * Secondly, we may need an inter-processor interrupt.
+ *
+ * @param[in, out] thread is the thread in need for help.
+ */
+static inline void _Scheduler_SMP_Request_ask_for_help( Thread_Control *thread )
+{
+  ISR_lock_Context lock_context;
+  Per_CPU_Control *cpu_self;
+
+  cpu_self = _Per_CPU_Get();
+
+  _Assert( thread->Scheduler.ask_for_help_cpu == NULL );
+  thread->Scheduler.ask_for_help_cpu = cpu_self;
+  cpu_self->dispatch_necessary = true;
+
+  _Per_CPU_Acquire( cpu_self, &lock_context );
+  _Chain_Append_unprotected(
+    &cpu_self->Threads_in_need_for_help,
+    &thread->Scheduler.Help_node
+  );
+  _Per_CPU_Release( cpu_self, &lock_context );
+}
+
+/**
  * @brief This enumeration defines what a scheduler should do with a node which
  * could be scheduled.
  */
@@ -616,7 +683,7 @@ static inline Scheduler_SMP_Action _Scheduler_SMP_Try_to_schedule(
   owner_sticky_level = node->sticky_level;
 
   if ( RTEMS_PREDICT_TRUE( owner_state == THREAD_SCHEDULER_READY ) ) {
-    _Thread_Scheduler_cancel_need_for_help( owner, _Thread_Get_CPU( owner ) );
+    _Scheduler_SMP_Cancel_ask_for_help( owner );
     _Scheduler_Thread_change_state( owner, THREAD_SCHEDULER_SCHEDULED );
     _Thread_Scheduler_release_critical( owner, &lock_context );
     return SCHEDULER_SMP_DO_SCHEDULE;
@@ -769,22 +836,15 @@ static inline void _Scheduler_SMP_Preempt(
   _Thread_Scheduler_acquire_critical( victim_owner, &lock_context );
 
   if ( RTEMS_PREDICT_TRUE( victim_idle == NULL ) ) {
-    cpu = _Thread_Get_CPU( victim_owner );
-
     if ( victim_owner->Scheduler.state == THREAD_SCHEDULER_SCHEDULED ) {
       _Scheduler_Thread_change_state( victim_owner, THREAD_SCHEDULER_READY );
 
       if ( victim_owner->Scheduler.helping_nodes > 0 ) {
-        ISR_lock_Context lock_context_2;
-
-        _Per_CPU_Acquire( cpu, &lock_context_2 );
-        _Chain_Append_unprotected(
-          &cpu->Threads_in_need_for_help,
-          &victim_owner->Scheduler.Help_node
-        );
-        _Per_CPU_Release( cpu, &lock_context_2 );
+        _Scheduler_SMP_Request_ask_for_help( victim_owner );
       }
     }
+
+    cpu = _Thread_Get_CPU( victim_owner );
   } else {
     cpu = _Thread_Get_CPU( victim_idle );
   }
@@ -1030,10 +1090,7 @@ static inline void _Scheduler_SMP_Enqueue_scheduled(
         if ( owner->Scheduler.state == THREAD_SCHEDULER_READY ) {
           Per_CPU_Control *cpu;
 
-          _Thread_Scheduler_cancel_need_for_help(
-            owner,
-            _Thread_Get_CPU( owner )
-          );
+          _Scheduler_SMP_Cancel_ask_for_help( owner );
           _Scheduler_Thread_change_state( owner, THREAD_SCHEDULER_SCHEDULED );
           cpu = _Thread_Get_CPU( node_idle );
           _Thread_Set_CPU( owner, cpu );
@@ -1252,8 +1309,8 @@ static inline void _Scheduler_SMP_Block(
   _Assert( sticky_level >= 0 );
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
+  _Scheduler_SMP_Cancel_ask_for_help( thread );
   cpu = _Thread_Get_CPU( thread );
-  _Thread_Scheduler_cancel_need_for_help( thread, cpu );
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
   _Thread_Scheduler_release_critical( thread, &lock_context );
 
@@ -1316,7 +1373,8 @@ static inline void _Scheduler_SMP_Unblock(
 {
   Scheduler_SMP_Node_state  node_state;
   Priority_Control          priority;
-  bool                      needs_help;
+
+  _Assert( _Chain_Is_node_off_chain( &thread->Scheduler.Help_node ) );
 
   ++node->sticky_level;
   _Assert( node->sticky_level > 0 );
@@ -1346,18 +1404,19 @@ static inline void _Scheduler_SMP_Unblock(
 
   if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
     Priority_Control insert_priority;
+    bool             needs_help;
 
     insert_priority = SCHEDULER_PRIORITY_APPEND( priority );
     needs_help = ( *enqueue )( context, node, insert_priority );
+
+    if ( needs_help && thread->Scheduler.helping_nodes > 0 ) {
+      _Scheduler_SMP_Request_ask_for_help( thread );
+    }
   } else {
     _Assert( node_state == SCHEDULER_SMP_NODE_READY );
     _Assert( node->sticky_level > 0 );
     _Assert( node->idle == NULL );
-    needs_help = true;
-  }
-
-  if ( needs_help ) {
-    _Scheduler_Ask_for_help( thread );
+    _Scheduler_SMP_Request_ask_for_help( thread );
   }
 }
 
@@ -1562,10 +1621,7 @@ static inline bool _Scheduler_SMP_Ask_for_help(
       ) {
         Thread_Control *lowest_scheduled_idle;
 
-        _Thread_Scheduler_cancel_need_for_help(
-          thread,
-          _Thread_Get_CPU( thread )
-        );
+        _Scheduler_SMP_Cancel_ask_for_help( thread );
         _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_SCHEDULED );
         _Thread_Scheduler_release_critical( thread, &lock_context );
 
@@ -1595,10 +1651,7 @@ static inline bool _Scheduler_SMP_Ask_for_help(
         success = false;
       }
     } else if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-      _Thread_Scheduler_cancel_need_for_help(
-        thread,
-        _Thread_Get_CPU( thread )
-      );
+      _Scheduler_SMP_Cancel_ask_for_help( thread );
       _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_SCHEDULED );
       _Thread_Scheduler_release_critical( thread, &lock_context );
       _Scheduler_Discard_idle_thread(

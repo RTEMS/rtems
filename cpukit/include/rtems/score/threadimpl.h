@@ -1494,32 +1494,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 }
 #endif
 
-#if defined(RTEMS_SMP)
-/**
- * @brief Cancels the thread's need for help.
- *
- * @param the_thread The thread to cancel the help request of.
- * @param cpu The cpu to get the lock context of in order to
- *      cancel the help request.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Scheduler_cancel_need_for_help(
-  Thread_Control  *the_thread,
-  Per_CPU_Control *cpu
-)
-{
-  ISR_lock_Context lock_context;
-
-  _Per_CPU_Acquire( cpu, &lock_context );
-
-  if ( !_Chain_Is_node_off_chain( &the_thread->Scheduler.Help_node ) ) {
-    _Chain_Extract_unprotected( &the_thread->Scheduler.Help_node );
-    _Chain_Set_off_chain( &the_thread->Scheduler.Help_node );
-  }
-
-  _Per_CPU_Release( cpu, &lock_context );
-}
-#endif
-
 /**
  * @brief Gets the home scheduler of the thread.
  *

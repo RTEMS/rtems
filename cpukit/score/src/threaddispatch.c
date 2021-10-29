@@ -172,8 +172,8 @@ static ISR_Level _Thread_Preemption_intervention(
     Thread_Control *the_thread;
 
     node = _Chain_Get_first_unprotected( &cpu_self->Threads_in_need_for_help );
-    _Chain_Set_off_chain( node );
     the_thread = THREAD_OF_SCHEDULER_HELP_NODE( node );
+    the_thread->Scheduler.ask_for_help_cpu = NULL;
 
     _Per_CPU_Release( cpu_self, &lock_context );
 

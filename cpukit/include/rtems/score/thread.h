@@ -306,10 +306,24 @@ typedef struct {
   Chain_Control Scheduler_nodes;
 
   /**
-   * @brief Node for the Per_CPU_Control::Threads_in_need_for_help chain.
+   * @brief If an ask for help request for the thread is pending, then this
+   *   member references the processor on which the ask for help request is
+   *   registered, otherwise it is NULL.
    *
-   * This chain is protected by the Per_CPU_Control::Lock lock of the assigned
-   * processor.
+   * Depending on the state of the thread and usage context, this member is
+   * protected by the Per_CPU_Control::Lock lock of the referenced processor,
+   * the scheduler lock of the thread (Thread_Scheduler_control::Lock), or the
+   * thread state lock.
+   */
+  struct Per_CPU_Control *ask_for_help_cpu;
+
+  /**
+   * @brief This member is the node for the
+   *   Per_CPU_Control::Threads_in_need_for_help chain.
+   *
+   * This chain is protected by the Per_CPU_Control::Lock lock of the processor
+   * on which the ask for help request is registered
+   * (Thread_Scheduler_control::ask_for_help_cpu).
    */
   Chain_Node Help_node;
 
