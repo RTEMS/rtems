@@ -1098,7 +1098,9 @@ static inline void _Scheduler_SMP_Extract_from_scheduled(
  *
  * @param context The scheduler context instance.
  * @param victim The node of the thread that is repressed by the newly scheduled thread.
- * @param victim_cpu The cpu to allocate.
+ * @param cpu is the processor to allocate.
+ * @param extract_from_scheduled Function to extract a node from the set of
+ *      scheduled nodes.
  * @param extract_from_ready Function to extract a node from the set of
  *      ready nodes.
  * @param get_highest_ready Function to get the highest ready node.
@@ -1110,22 +1112,19 @@ static inline void _Scheduler_SMP_Extract_from_scheduled(
 static inline void _Scheduler_SMP_Schedule_highest_ready(
   Scheduler_Context                *context,
   Scheduler_Node                   *victim,
-  Per_CPU_Control                  *victim_cpu,
+  Per_CPU_Control                  *cpu,
+  Scheduler_SMP_Extract             extract_from_scheduled,
   Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
   Scheduler_SMP_Allocate_processor  allocate_processor,
-  Scheduler_Get_idle_node           get_idle_node,
-  Scheduler_Release_idle_node       release_idle_node
+  Scheduler_Get_idle_node           get_idle_node
 )
 {
   Scheduler_SMP_Action action;
 
-  (void) _Scheduler_Release_idle_thread_if_necessary(
-    victim,
-    release_idle_node,
-    context
-  );
+  _Scheduler_SMP_Node_change_state( victim, SCHEDULER_SMP_NODE_BLOCKED );
+  ( *extract_from_scheduled )( context, victim );
 
   while ( true ) {
     Scheduler_Node *highest_ready = ( *get_highest_ready )( context, victim );
@@ -1140,7 +1139,7 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
       _Scheduler_SMP_Allocate_processor(
         context,
         highest_ready,
-        victim_cpu,
+        cpu,
         allocate_processor
       );
 
@@ -1239,14 +1238,13 @@ static inline void _Scheduler_SMP_Block(
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
   Scheduler_SMP_Allocate_processor  allocate_processor,
-  Scheduler_Get_idle_node           get_idle_node,
-  Scheduler_Release_idle_node       release_idle_node
+  Scheduler_Get_idle_node           get_idle_node
 )
 {
   int                       sticky_level;
   ISR_lock_Context          lock_context;
   Scheduler_SMP_Node_state  node_state;
-  Per_CPU_Control          *thread_cpu;
+  Per_CPU_Control          *cpu;
 
   sticky_level = node->sticky_level;
   --sticky_level;
@@ -1254,8 +1252,8 @@ static inline void _Scheduler_SMP_Block(
   _Assert( sticky_level >= 0 );
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
-  thread_cpu = _Thread_Get_CPU( thread );
-  _Thread_Scheduler_cancel_need_for_help( thread, thread_cpu );
+  cpu = _Thread_Get_CPU( thread );
+  _Thread_Scheduler_cancel_need_for_help( thread, cpu );
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
   _Thread_Scheduler_release_critical( thread, &lock_context );
 
@@ -1269,8 +1267,8 @@ static inline void _Scheduler_SMP_Block(
       Thread_Control *idle;
 
       idle = _Scheduler_Use_idle_thread( node, get_idle_node, context );
-      _Thread_Set_CPU( idle, thread_cpu );
-      _Thread_Dispatch_update_heir( _Per_CPU_Get(), thread_cpu, idle );
+      _Thread_Set_CPU( idle, cpu );
+      _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, idle );
     }
 
     return;
@@ -1279,22 +1277,20 @@ static inline void _Scheduler_SMP_Block(
   _Assert( _Scheduler_Node_get_user( node ) == thread );
   _Assert( _Scheduler_Node_get_idle( node ) == NULL );
 
-  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
-
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    ( *extract_from_scheduled )( context, node );
     _Scheduler_SMP_Schedule_highest_ready(
       context,
       node,
-      thread_cpu,
+      cpu,
+      extract_from_scheduled,
       extract_from_ready,
       get_highest_ready,
       move_from_ready_to_scheduled,
       allocate_processor,
-      get_idle_node,
-      release_idle_node
+      get_idle_node
     );
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
     ( *extract_from_ready )( context, node );
   }
 }
@@ -1683,8 +1679,7 @@ static inline void _Scheduler_SMP_Withdraw_node(
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
   Scheduler_SMP_Allocate_processor  allocate_processor,
-  Scheduler_Get_idle_node           get_idle_node,
-  Scheduler_Release_idle_node       release_idle_node
+  Scheduler_Get_idle_node           get_idle_node
 )
 {
   ISR_lock_Context         lock_context;
@@ -1693,30 +1688,32 @@ static inline void _Scheduler_SMP_Withdraw_node(
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
 
   node_state = _Scheduler_SMP_Node_state( node );
-  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    Per_CPU_Control *thread_cpu;
+    Per_CPU_Control *cpu;
 
     _Assert( thread == _Scheduler_Node_get_user( node ) );
-    thread_cpu = _Thread_Get_CPU( thread );
+    cpu = _Thread_Get_CPU( thread );
     _Scheduler_Thread_change_state( thread, next_state );
     _Thread_Scheduler_release_critical( thread, &lock_context );
 
-    ( *extract_from_scheduled )( context, node );
+    _Assert( _Scheduler_Node_get_user( node ) == thread );
+    _Assert( _Scheduler_Node_get_idle( node ) == NULL );
+
     _Scheduler_SMP_Schedule_highest_ready(
       context,
       node,
-      thread_cpu,
+      cpu,
+      extract_from_scheduled,
       extract_from_ready,
       get_highest_ready,
       move_from_ready_to_scheduled,
       allocate_processor,
-      get_idle_node,
-      release_idle_node
+      get_idle_node
     );
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
     _Thread_Scheduler_release_critical( thread, &lock_context );
+    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
     ( *extract_from_ready )( context, node );
   } else {
     _Assert( node_state == SCHEDULER_SMP_NODE_BLOCKED );
@@ -1789,25 +1786,29 @@ static inline void _Scheduler_SMP_Clean_sticky(
 
   node_state = _Scheduler_SMP_Node_state( node );
 
-  if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED && node->idle != NULL ) {
-    Scheduler_Context *context;
+  if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
+    Thread_Control *idle;
 
-    context = _Scheduler_Get_context( scheduler );
+    idle = _Scheduler_Node_get_idle( node );
 
-    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
-    ( *extract_from_scheduled )( context, node );
+    if ( idle != NULL ) {
+      Scheduler_Context *context;
 
-    _Scheduler_SMP_Schedule_highest_ready(
-      context,
-      node,
-      _Thread_Get_CPU( node->idle ),
-      extract_from_ready,
-      get_highest_ready,
-      move_from_ready_to_scheduled,
-      allocate_processor,
-      get_idle_node,
-      release_idle_node
-    );
+      context = _Scheduler_Get_context( scheduler );
+
+      _Scheduler_Release_idle_thread( node, idle, release_idle_node, context );
+      _Scheduler_SMP_Schedule_highest_ready(
+        context,
+        node,
+        _Thread_Get_CPU( idle ),
+        extract_from_scheduled,
+        extract_from_ready,
+        get_highest_ready,
+        move_from_ready_to_scheduled,
+        allocate_processor,
+        get_idle_node
+      );
+    }
   }
 }
 

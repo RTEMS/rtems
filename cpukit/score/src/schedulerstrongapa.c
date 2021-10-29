@@ -920,8 +920,7 @@ void _Scheduler_strong_APA_Block(
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
     _Scheduler_strong_APA_Allocate_processor,
-    _Scheduler_strong_APA_Get_idle,
-    _Scheduler_strong_APA_Release_idle
+    _Scheduler_strong_APA_Get_idle
   );
 }
 
@@ -1014,8 +1013,7 @@ void _Scheduler_strong_APA_Withdraw_node(
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
     _Scheduler_strong_APA_Allocate_processor,
-    _Scheduler_strong_APA_Get_idle,
-    _Scheduler_strong_APA_Release_idle
+    _Scheduler_strong_APA_Get_idle
   );
 }
 

@@ -213,8 +213,7 @@ void _Scheduler_simple_SMP_Block(
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
     _Scheduler_SMP_Allocate_processor_lazy,
-    _Scheduler_simple_SMP_Get_idle,
-    _Scheduler_simple_SMP_Release_idle
+    _Scheduler_simple_SMP_Get_idle
   );
 }
 
@@ -367,8 +366,7 @@ void _Scheduler_simple_SMP_Withdraw_node(
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,
     _Scheduler_SMP_Allocate_processor_lazy,
-    _Scheduler_simple_SMP_Get_idle,
-    _Scheduler_simple_SMP_Release_idle
+    _Scheduler_simple_SMP_Get_idle
   );
 }
 

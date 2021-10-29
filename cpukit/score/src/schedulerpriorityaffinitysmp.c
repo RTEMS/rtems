@@ -192,8 +192,7 @@ void _Scheduler_priority_affinity_SMP_Block(
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
     _Scheduler_SMP_Allocate_processor_exact,
-    _Scheduler_priority_SMP_Get_idle,
-    _Scheduler_priority_SMP_Release_idle
+    _Scheduler_priority_SMP_Get_idle
   );
 
   /*
@@ -528,8 +527,7 @@ void _Scheduler_priority_affinity_SMP_Withdraw_node(
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
     _Scheduler_SMP_Allocate_processor_lazy,
-    _Scheduler_priority_SMP_Get_idle,
-    _Scheduler_priority_SMP_Release_idle
+    _Scheduler_priority_SMP_Get_idle
   );
 }
 
