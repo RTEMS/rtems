@@ -33,6 +33,12 @@
 
 #include <tmacros.h>
 
+/*
+ * Message buffer information
+ */
+#define MAX_MESSAGES 2
+#define MESSAGE_SIZE (sizeof(long) * 4)
+
 /* functions */
 
 rtems_task Init(
@@ -51,6 +57,9 @@ rtems_task Init(
 #define CONFIGURE_MAXIMUM_PERIODS             1
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS     0
 #define CONFIGURE_TICKS_PER_TIMESLICE       100
+
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(MAX_MESSAGES, MESSAGE_SIZE)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

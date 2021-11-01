@@ -32,8 +32,6 @@
 
 #define CONFIGURE_INIT
 #include "system.h"
-#define MESSAGE_SIZE (sizeof(long) * 4)
-
 const char rtems_test_name[] = "SP MESSAGE QUEUE ERROR 1";
 
 rtems_task Init(
@@ -44,6 +42,8 @@ rtems_task Init(
   uint32_t          count;
   size_t            size;
   rtems_status_code status;
+
+  rtems_test_assert( MAX_MESSAGES == 2 );
   
   TEST_BEGIN();
   Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
@@ -60,7 +60,7 @@ rtems_task Init(
   /* null ID parameter */
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    3,
+    MAX_MESSAGES,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     NULL
@@ -90,7 +90,7 @@ rtems_task Init(
   /* max size == 0 */
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    3,
+    MAX_MESSAGES,
     0,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -105,7 +105,7 @@ rtems_task Init(
   /* bad name parameter */
   status = rtems_message_queue_create(
     0,
-    3,
+    MAX_MESSAGES,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id
@@ -149,7 +149,7 @@ rtems_task Init(
 
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    2,
+    MAX_MESSAGES,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
@@ -159,7 +159,7 @@ rtems_task Init(
 
   status = rtems_message_queue_create(
     Queue_name[ 2 ],
-    1,
+    MAX_MESSAGES,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Junk_id

@@ -33,8 +33,6 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
-#define MESSAGE_SIZE (sizeof(long) * 4)
-
 const char rtems_test_name[] = "SP MESSAGE QUEUE ERROR 2";
 
 rtems_task Init(
@@ -43,6 +41,8 @@ rtems_task Init(
 {
   long              buffer[ 4 ];
   rtems_status_code status;
+
+  rtems_test_assert( MAX_MESSAGES == 2 );
   
   TEST_BEGIN();
   Queue_name[ 1 ]      =  rtems_build_name( 'M', 'Q', '1', ' ' );
@@ -61,7 +61,7 @@ rtems_task Init(
   
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    2,
+    MAX_MESSAGES,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
@@ -75,7 +75,7 @@ rtems_task Init(
 
   status = rtems_message_queue_create(
     Queue_name[ 1 ],
-    2,
+    MAX_MESSAGES,
     MESSAGE_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES,
     &Queue_id[ 1 ]
