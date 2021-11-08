@@ -867,9 +867,12 @@ rtems_status_code rtems_scheduler_add_processor(
  *
  * @retval ::RTEMS_INVALID_NUMBER The processor was not owned by the scheduler.
  *
- * @retval ::RTEMS_RESOURCE_IN_USE The set of processors owned by the scheduler
- *   would have been empty after the processor removal and there was at least
- *   one non-idle task that used this scheduler as its home scheduler.
+ * @retval ::RTEMS_RESOURCE_IN_USE The processor was required by at least one
+ *   non-idle task that used the scheduler as its home scheduler.
+ *
+ * @retval ::RTEMS_RESOURCE_IN_USE The processor was the last processor owned
+ *   by the scheduler and there was at least one task that used the scheduler
+ *   as a helping scheduler.
  *
  * @par Notes
  * Removing a processor from a scheduler is a complex operation that involves

@@ -1978,8 +1978,9 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
   victim_owner = _Scheduler_Node_get_owner( victim_node );
 
   if ( !victim_owner->is_idle ) {
-    Thread_Control *victim_idle;
-    Scheduler_Node *idle_node;
+    Thread_Control  *victim_idle;
+    Scheduler_Node  *idle_node;
+    Priority_Control insert_priority;
 
     victim_idle = _Scheduler_Release_idle_thread_if_necessary(
       victim_node,
@@ -1996,13 +1997,10 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
       _Scheduler_SMP_Allocate_processor_exact
     );
 
-    if ( !_Chain_Is_empty( &self->Scheduled ) ) {
-      Priority_Control insert_priority;
-
-      insert_priority = _Scheduler_SMP_Node_priority( victim_node );
-      insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
-      ( *enqueue )( &self->Base, victim_node, insert_priority );
-    }
+    _Assert( !_Chain_Is_empty( &self->Scheduled ) );
+    insert_priority = _Scheduler_SMP_Node_priority( victim_node );
+    insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
+    ( *enqueue )( &self->Base, victim_node, insert_priority );
   } else {
     _Assert( victim_owner == victim_user );
     _Assert( _Scheduler_Node_get_idle( victim_node ) == NULL );

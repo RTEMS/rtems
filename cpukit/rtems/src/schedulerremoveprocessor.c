@@ -35,7 +35,7 @@ typedef struct {
   rtems_status_code        status;
 } Scheduler_Processor_removal_context;
 
-static bool _Scheduler_Check_processor_removal(
+static bool _Scheduler_Check_processor_not_required(
   Thread_Control *the_thread,
   void           *arg
 )
@@ -66,6 +66,45 @@ static bool _Scheduler_Check_processor_removal(
 
   _Thread_State_release_critical( the_thread, &state_context );
   _Thread_Wait_release( the_thread, &queue_context );
+  return iter_context->status != RTEMS_SUCCESSFUL;
+}
+
+static bool _Scheduler_Check_no_helping(
+  Thread_Control *the_thread,
+  void           *arg
+)
+{
+  Scheduler_Processor_removal_context *iter_context;
+  ISR_lock_Context                     lock_context;
+  const Chain_Node                    *node;
+  const Chain_Node                    *tail;
+
+  if ( the_thread->is_idle ) {
+    return false;
+  }
+
+  iter_context = arg;
+
+  _Thread_State_acquire( the_thread, &lock_context );
+  node = _Chain_Immutable_first( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+
+  do {
+    const Scheduler_Node    *scheduler_node;
+    const Scheduler_Control *scheduler;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    if ( scheduler == iter_context->scheduler ) {
+      iter_context->status = RTEMS_RESOURCE_IN_USE;
+      break;
+    }
+
+    node = _Chain_Immutable_next( node );
+  } while ( node != tail );
+
+  _Thread_State_release( the_thread, &lock_context );
   return iter_context->status != RTEMS_SUCCESSFUL;
 }
 #endif
@@ -116,7 +155,14 @@ rtems_status_code rtems_scheduler_remove_processor(
   _Scheduler_Release_critical( scheduler, &lock_context );
   _ISR_lock_ISR_enable( &lock_context );
 
-  _Thread_Iterate( _Scheduler_Check_processor_removal, &iter_context );
+  _Thread_Iterate( _Scheduler_Check_processor_not_required, &iter_context );
+
+  if (
+    _Processor_mask_Is_zero( &scheduler_context->Processors ) &&
+    iter_context.status == RTEMS_SUCCESSFUL
+  ) {
+    _Thread_Iterate( _Scheduler_Check_no_helping, &iter_context );
+  }
 
   _ISR_lock_ISR_disable( &lock_context );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
