@@ -872,16 +872,19 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   Scheduler_Node    *filter
 )
 {
-  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
-  Chain_Control *scheduled = &self->Scheduled;
-  Scheduler_Node *lowest_scheduled =
-    (Scheduler_Node *) _Chain_Last( scheduled );
+  Scheduler_SMP_Context *self;
+  Scheduler_Node        *lowest_scheduled;
 
   (void) filter;
 
-  _Assert( &lowest_scheduled->Node.Chain != _Chain_Tail( scheduled ) );
+  self = _Scheduler_SMP_Get_self( context );
+
+  _Assert( !_Chain_Is_empty( &self->Scheduled ) );
+  lowest_scheduled = (Scheduler_Node *) _Chain_Last( &self->Scheduled );
+
   _Assert(
-    _Chain_Next( &lowest_scheduled->Node.Chain ) == _Chain_Tail( scheduled )
+    _Chain_Next( &lowest_scheduled->Node.Chain ) ==
+      _Chain_Tail( &self->Scheduled )
   );
 
   return lowest_scheduled;
