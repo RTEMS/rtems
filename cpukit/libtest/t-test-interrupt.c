@@ -456,8 +456,15 @@ T_interrupt_test(const T_interrupt_test_config *config, void *arg)
 			lower_bound[sample] = lower - delta;
 
 			sample = (sample + 1) % T_INTERRUPT_SAMPLE_COUNT;
-		} else if (state == T_INTERRUPT_TEST_LATE) {
+		} else if (state == T_INTERRUPT_TEST_LATE ||
+		    state == T_INTERRUPT_TEST_ACTION) {
 			uint_fast32_t upper;
+
+			/*
+			 * If the state is T_INTERRUPT_TEST_ACTION, then there
+			 * was probably no interrupt during the action, so the
+			 * interrupt would be late.
+			 */
 
 			lower_sum -= lower_bound[sample];
 			lower_sum += busy;
