@@ -2698,16 +2698,19 @@ extern "C" {
  *   continue its execution.
  *
  * @param[in, out] the_thread is the thread.
+ *
+ * @param status is the thread wait status.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Timer_remove_and_continue(
-  Thread_Control *the_thread
+  Thread_Control *the_thread,
+  Status_Control  status
 )
 {
   _Thread_Timer_remove( the_thread );
 #if defined(RTEMS_MULTIPROCESSING)
   _Thread_MP_Extract_proxy( the_thread );
 #endif
-  _Thread_queue_Extract( the_thread );
+  _Thread_Continue( the_thread, status );
 }
 
 #ifdef __cplusplus

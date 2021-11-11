@@ -175,15 +175,6 @@ static bool _POSIX_signals_Unblock_thread_done(
   return status;
 }
 
-static void _POSIX_signals_Interrupt_thread( Thread_Control *the_thread )
-{
-#if defined(RTEMS_MULTIPROCESSING)
-  _Thread_MP_Extract_proxy( the_thread );
-#endif
-  the_thread->Wait.return_code = STATUS_INTERRUPTED;
-  _Thread_queue_Extract( the_thread );
-}
-
 bool _POSIX_signals_Unblock_thread(
   Thread_Control  *the_thread,
   int              signo,
@@ -215,7 +206,7 @@ bool _POSIX_signals_Unblock_thread(
         *the_info = *info;
       }
 
-      _POSIX_signals_Interrupt_thread( the_thread );
+      _Thread_Timer_remove_and_continue( the_thread, STATUS_INTERRUPTED );
       return _POSIX_signals_Unblock_thread_done( the_thread, api, true );
     }
 
@@ -245,7 +236,7 @@ bool _POSIX_signals_Unblock_thread(
      */
 
     if ( _States_Is_interruptible_by_signal( the_thread->current_state ) ) {
-      _POSIX_signals_Interrupt_thread( the_thread );
+      _Thread_Timer_remove_and_continue( the_thread, STATUS_INTERRUPTED );
     }
   }
   return _POSIX_signals_Unblock_thread_done( the_thread, api, false );

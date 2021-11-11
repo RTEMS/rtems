@@ -137,7 +137,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
   _Objects_Close( &information->Objects, &the_thread->Object );
 
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
-  _Thread_Timer_remove_and_continue( the_thread );
+  _Thread_Timer_remove_and_continue( the_thread, STATUS_INTERNAL_ERROR );
 
   /*
    * Add the thread to the thread zombie chain before we wake up joining
@@ -357,7 +357,7 @@ static void _Thread_Remove_life_change_request( Thread_Control *the_thread )
      * Do not remove states used for thread queues to avoid race conditions on
      * SMP configurations.  We could interrupt an extract operation on another
      * processor disregarding the thread wait flags.  Rely on
-     * _Thread_queue_Extract() for removal of these states.
+     * _Thread_Continue() for removal of these states.
      */
     _Thread_Clear_state_locked(
       the_thread,
@@ -408,7 +408,7 @@ static void _Thread_Try_life_change_request(
     _Thread_Add_life_change_request( the_thread );
     _Thread_State_release( the_thread, lock_context );
 
-    _Thread_Timer_remove_and_continue( the_thread );
+    _Thread_Timer_remove_and_continue( the_thread, STATUS_INTERNAL_ERROR );
     _Thread_Remove_life_change_request( the_thread );
   } else {
     _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
