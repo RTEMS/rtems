@@ -137,8 +137,8 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
   _Objects_Close( &information->Objects, &the_thread->Object );
 
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
-  _Thread_queue_Extract_with_proxy( the_thread );
   _Thread_Timer_remove( the_thread );
+  _Thread_queue_Extract_with_proxy( the_thread );
 
   /*
    * Add the thread to the thread zombie chain before we wake up joining
@@ -409,8 +409,8 @@ static void _Thread_Try_life_change_request(
     _Thread_Add_life_change_request( the_thread );
     _Thread_State_release( the_thread, lock_context );
 
-    _Thread_queue_Extract_with_proxy( the_thread );
     _Thread_Timer_remove( the_thread );
+    _Thread_queue_Extract_with_proxy( the_thread );
     _Thread_Remove_life_change_request( the_thread );
   } else {
     _Thread_Clear_state_locked( the_thread, STATES_SUSPENDED );
