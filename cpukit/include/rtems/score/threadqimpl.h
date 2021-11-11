@@ -1296,16 +1296,21 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(
 #endif
 }
 
+#if defined(RTEMS_MULTIPROCESSING)
 /**
  * @brief Does nothing.
  *
  * @param the_proxy This parameter is unused.
  * @param mp_id This parameter is unused.
  */
-#if defined(RTEMS_MULTIPROCESSING)
 void _Thread_queue_MP_callout_do_nothing(
   Thread_Control *the_proxy,
   Objects_Id      mp_id
+);
+
+bool _Thread_queue_MP_set_callout(
+  Thread_Control             *the_thread,
+  const Thread_queue_Context *queue_context
 );
 
 /**

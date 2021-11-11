@@ -7,8 +7,8 @@
  *   _Thread_queue_Deadlock_fatal(), _Thread_queue_Deadlock_status(),
  *   _Thread_queue_Do_dequeue(), _Thread_queue_Enqueue(),
  *   _Thread_queue_Enqueue_do_nothing_extra(), _Thread_queue_Enqueue_sticky(),
- *   _Thread_queue_Extract(), _Thread_queue_Extract_locked(),
- *   _Thread_queue_Path_acquire(), _Thread_queue_Path_release(),
+ *   _Thread_queue_Extract_locked(), _Thread_queue_Path_acquire(),
+ *   _Thread_queue_Path_release(),
  *   _Thread_queue_Resume(),_Thread_queue_Surrender(),
  *   _Thread_queue_Surrender_no_priority(), _Thread_queue_Surrender_sticky().
  */
@@ -531,7 +531,7 @@ Status_Control _Thread_queue_Enqueue_sticky(
 #endif
 
 #if defined(RTEMS_MULTIPROCESSING)
-static bool _Thread_queue_MP_set_callout(
+bool _Thread_queue_MP_set_callout(
   Thread_Control             *the_thread,
   const Thread_queue_Context *queue_context
 )
@@ -665,37 +665,6 @@ void _Thread_queue_Resume(
     _Thread_queue_Queue_release(
       queue, &queue_context->Lock_context.Lock_context
     );
-  }
-}
-
-void _Thread_queue_Extract( Thread_Control *the_thread )
-{
-  Thread_queue_Context  queue_context;
-  Thread_queue_Queue   *queue;
-
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
-  _Thread_Wait_acquire( the_thread, &queue_context );
-
-  queue = the_thread->Wait.queue;
-
-  if ( queue != NULL ) {
-    _Thread_Wait_remove_request( the_thread, &queue_context.Lock_context );
-    _Thread_queue_Context_set_MP_callout(
-      &queue_context,
-      _Thread_queue_MP_callout_do_nothing
-    );
-#if defined(RTEMS_MULTIPROCESSING)
-    _Thread_queue_MP_set_callout( the_thread, &queue_context );
-#endif
-    ( *the_thread->Wait.operations->extract )(
-      queue,
-      the_thread,
-      &queue_context
-    );
-    _Thread_queue_Resume( queue, the_thread, &queue_context );
-  } else {
-    _Thread_Wait_release( the_thread, &queue_context );
   }
 }
 
