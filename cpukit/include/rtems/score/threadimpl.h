@@ -2690,5 +2690,32 @@ RTEMS_INLINE_ROUTINE void _Thread_Unpin(
 #include <rtems/score/threadmp.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @ingroup RTEMSScoreThread
+ *
+ * @brief Removes the watchdog timer from the thread and lets the thread
+ *   continue its execution.
+ *
+ * @param[in, out] the_thread is the thread.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Timer_remove_and_continue(
+  Thread_Control *the_thread
+)
+{
+  _Thread_Timer_remove( the_thread );
+#if defined(RTEMS_MULTIPROCESSING)
+  _Thread_MP_Extract_proxy( the_thread );
+#endif
+  _Thread_queue_Extract( the_thread );
+}
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
 /* end of include file */

@@ -286,7 +286,7 @@ struct Objects_Information {
 
 #if defined(RTEMS_MULTIPROCESSING)
   /**
-   * @brief This method is used by _Thread_queue_Extract_with_proxy().
+   * @brief This method is used by _Thread_MP_Extract_proxy().
    *
    * This member is statically initialized and read-only.
    */

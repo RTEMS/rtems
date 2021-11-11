@@ -23,4 +23,5 @@ source:
 - cpukit/score/src/mpcidefault.c
 - cpukit/score/src/objectmp.c
 - cpukit/score/src/threadmp.c
+- cpukit/score/src/threadqextractwithproxy.c
 type: build

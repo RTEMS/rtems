@@ -1561,7 +1561,6 @@ source:
 - cpukit/score/src/threadplaindispatch.c
 - cpukit/score/src/threadq.c
 - cpukit/score/src/threadqenqueue.c
-- cpukit/score/src/threadqextractwithproxy.c
 - cpukit/score/src/threadqfirst.c
 - cpukit/score/src/threadqflush.c
 - cpukit/score/src/threadqgetnameandid.c

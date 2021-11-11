@@ -98,6 +98,19 @@ Thread_Control *_Thread_MP_Find_proxy (
   ((_the_thread) == _MPCI_Receive_server_tcb)
 
 /**
+ * @brief Extracts the proxy of the thread if necessary.
+ *
+ * This routine ensures that if there is a proxy for this thread on another
+ * node, it is also dealt with. A proxy is a data that is on the thread queue
+ * on the remote node and acts as a proxy for the local thread. If the local
+ * thread was waiting on a remote operation, then the remote side of the
+ * operation must be cleaned up.
+ *
+ * @param[in, out] the_thread is the thread to determine the proxy.
+ */
+void _Thread_MP_Extract_proxy( Thread_Control *the_thread );
+
+/**
  * @brief Trees a proxy control block to the inactive chain of free proxy
  *      control blocks.
  */

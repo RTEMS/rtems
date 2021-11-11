@@ -984,24 +984,6 @@ void _Thread_queue_Resume(
 void _Thread_queue_Extract( Thread_Control *the_thread );
 
 /**
- * @brief Extracts the_thread from the_thread_queue.
- *
- * This routine extracts the_thread from the_thread_queue
- * and ensures that if there is a proxy for this task on
- * another node, it is also dealt with. A proxy is a data
- * data that is on the thread queue on the remote node and
- * acts as a proxy for the local thread. If the local thread
- * was waiting on a remote operation, then the remote side
- * of the operation must be cleaned up.
- *
- * @param[in, out] the_thread The pointer to a thread control block that
- *     is to be removed
- */
-void _Thread_queue_Extract_with_proxy(
-  Thread_Control       *the_thread
-);
-
-/**
  * @brief Surrenders the thread queue previously owned by the thread to the
  * first enqueued thread.
  *
