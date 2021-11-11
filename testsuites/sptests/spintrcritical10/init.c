@@ -92,8 +92,7 @@ static T_interrupt_test_state any_satisfy_before_timeout_interrupt(void *arg)
 
     if (state == T_INTERRUPT_TEST_DONE) {
       rtems_test_assert(
-        _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
+        _Thread_Wait_flags_get(thread) == THREAD_WAIT_STATE_READY
       );
     }
 
@@ -184,8 +183,7 @@ static T_interrupt_test_state all_satisfy_before_timeout_interrupt(void *arg)
 
     if (state == T_INTERRUPT_TEST_DONE) {
       rtems_test_assert(
-        _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
+        _Thread_Wait_flags_get(thread) == THREAD_WAIT_STATE_READY
       );
     }
 
@@ -261,8 +259,7 @@ static T_interrupt_test_state timeout_before_satisfied_interrupt(void *arg)
 
     if (state == T_INTERRUPT_TEST_DONE) {
       rtems_test_assert(
-        _Thread_Wait_flags_get(thread)
-          == (THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN)
+        _Thread_Wait_flags_get(thread) == THREAD_WAIT_STATE_READY
       );
     }
 

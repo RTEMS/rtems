@@ -41,9 +41,6 @@
 #define THREAD_QUEUE_BLOCKED \
   (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_BLOCKED)
 
-#define THREAD_QUEUE_READY_AGAIN \
-  (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN)
-
 #if defined(RTEMS_SMP)
 /*
  * A global registry of active thread queue links is used to provide deadlock
@@ -560,7 +557,7 @@ static void _Thread_queue_Force_ready_again( Thread_Control *the_thread )
    * We must set the wait flags under protection of the current thread lock,
    * otherwise a _Thread_Timeout() running on another processor may interfere.
    */
-  _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_READY_AGAIN );
+  _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
   _Thread_Wait_restore_default( the_thread );
 }
 
@@ -576,13 +573,13 @@ static bool _Thread_queue_Make_ready_again( Thread_Control *the_thread )
   success = _Thread_Wait_flags_try_change_release(
     the_thread,
     THREAD_QUEUE_INTEND_TO_BLOCK,
-    THREAD_QUEUE_READY_AGAIN
+    THREAD_WAIT_STATE_READY
   );
   if ( success ) {
     unblock = false;
   } else {
     _Assert( _Thread_Wait_flags_get( the_thread ) == THREAD_QUEUE_BLOCKED );
-    _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_READY_AGAIN );
+    _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
     unblock = true;
   }
 

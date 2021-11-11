@@ -2217,14 +2217,18 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
 }
 
 /**
- * @brief The initial thread wait flags value set by _Thread_Initialize().
- */
-#define THREAD_WAIT_FLAGS_INITIAL 0x0U
-
-/**
  * @brief Mask to get the thread wait state flags.
  */
 #define THREAD_WAIT_STATE_MASK 0xffU
+
+/**
+ * @brief Indicates that the thread does not wait on something.
+ *
+ * In this wait state, the wait class is zero.  This wait state is set
+ * initially by _Thread_Initialize() and after each wait operation once the
+ * thread is ready again.
+ */
+#define THREAD_WAIT_STATE_READY 0x0U
 
 /**
  * @brief Indicates that the thread begins with the blocking operation.
@@ -2239,13 +2243,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
  * @brief Indicates that the thread completed the blocking operation.
  */
 #define THREAD_WAIT_STATE_BLOCKED 0x2U
-
-/**
- * @brief Indicates that a condition to end the thread wait occurred.
- *
- * This could be a timeout, a signal, an event or a resource availability.
- */
-#define THREAD_WAIT_STATE_READY_AGAIN 0x4U
 
 /**
  * @brief Mask to get the thread wait class flags.

@@ -78,7 +78,7 @@ static T_interrupt_test_state interrupt( void *arg )
     T_quiet_eq_int( previous_period_state, RATE_MONOTONIC_ACTIVE );
     T_quiet_eq_int( getState( ctx ), RATE_MONOTONIC_ACTIVE );
     state = T_INTERRUPT_TEST_DONE;
-  } else if ( flags == THREAD_WAIT_FLAGS_INITIAL ) {
+  } else if ( flags == THREAD_WAIT_STATE_READY ) {
     T_quiet_true(
       previous_period_state == RATE_MONOTONIC_ACTIVE
         || previous_period_state == RATE_MONOTONIC_EXPIRED
@@ -100,8 +100,6 @@ static void prepare( void *arg )
 {
   test_context      *ctx;
   rtems_status_code  sc;
-  ISR_Level          level;
-  bool               success;
 
   ctx = arg;
 
@@ -119,15 +117,6 @@ static void prepare( void *arg )
      */
     sc = rtems_rate_monotonic_period( ctx->period, 1 );
   } while ( sc != RTEMS_SUCCESSFUL );
-
-  _ISR_Local_disable( level );
-  success = _Thread_Wait_flags_try_change_release(
-    ctx->thread,
-    RATE_MONOTONIC_READY_AGAIN,
-    THREAD_WAIT_FLAGS_INITIAL
-  );
-  _ISR_Local_enable( level );
-  T_quiet_true( success );
 }
 
 static void action( void *arg )

@@ -299,7 +299,7 @@ static bool _Thread_Try_initialize(
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;
   the_thread->Start.initial_priority  = config->priority;
 
-  RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
+  RTEMS_STATIC_ASSERT( THREAD_WAIT_STATE_READY == 0, Wait_flags );
 
   /* POSIX Keys */
   _RBTree_Initialize_empty( &the_thread->Keys.Key_value_pairs );

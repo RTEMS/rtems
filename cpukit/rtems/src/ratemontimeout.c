@@ -74,13 +74,13 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
     success = _Thread_Wait_flags_try_change_release(
       owner,
       RATE_MONOTONIC_INTEND_TO_BLOCK,
-      RATE_MONOTONIC_READY_AGAIN
+      THREAD_WAIT_STATE_READY
     );
     if ( success ) {
       unblock = false;
     } else {
       _Assert( _Thread_Wait_flags_get( owner ) == RATE_MONOTONIC_BLOCKED );
-      _Thread_Wait_flags_set( owner, RATE_MONOTONIC_READY_AGAIN );
+      _Thread_Wait_flags_set( owner, THREAD_WAIT_STATE_READY );
       unblock = true;
     }
 

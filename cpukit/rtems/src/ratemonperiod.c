@@ -247,7 +247,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
   );
   if ( !success ) {
     _Assert(
-      _Thread_Wait_flags_get( executing ) == RATE_MONOTONIC_READY_AGAIN
+      _Thread_Wait_flags_get( executing ) == THREAD_WAIT_STATE_READY
     );
     _Thread_Unblock( executing );
   }

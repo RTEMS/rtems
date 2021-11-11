@@ -42,12 +42,10 @@ static bool _Event_Is_blocking_on_event(
 )
 {
   Thread_Wait_flags wait_flags;
-  Thread_Wait_flags wait_mask;
 
   wait_flags = _Thread_Wait_flags_get( the_thread );
-  wait_mask = THREAD_WAIT_CLASS_MASK | THREAD_WAIT_STATE_READY_AGAIN;
 
-  return ( wait_flags & wait_mask ) == wait_class;
+  return ( wait_flags & THREAD_WAIT_CLASS_MASK ) == wait_class;
 }
 
 static bool _Event_Is_satisfied(
@@ -88,16 +86,14 @@ rtems_status_code _Event_Surrender(
     _Event_Is_blocking_on_event( the_thread, wait_class )
       && _Event_Is_satisfied( the_thread, pending_events, &seized_events )
   ) {
-    Thread_Wait_flags ready_again;
-    bool              success;
+    bool success;
 
     _Event_Satisfy( the_thread, event, pending_events, seized_events );
 
-    ready_again = wait_class | THREAD_WAIT_STATE_READY_AGAIN;
     success = _Thread_Wait_flags_try_change_release(
       the_thread,
       wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK,
-      ready_again
+      THREAD_WAIT_STATE_READY
     );
 
     if ( success ) {
@@ -107,7 +103,7 @@ rtems_status_code _Event_Surrender(
         _Thread_Wait_flags_get( the_thread )
           == ( wait_class | THREAD_WAIT_STATE_BLOCKED )
       );
-      _Thread_Wait_flags_set( the_thread, ready_again );
+      _Thread_Wait_flags_set( the_thread, THREAD_WAIT_STATE_READY );
       unblock = true;
     }
   } else {

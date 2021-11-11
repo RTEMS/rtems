@@ -32,7 +32,7 @@ static bool is_interrupt_timeout( test_context *ctx )
 {
   Thread_Wait_flags flags = _Thread_Wait_flags_get( ctx->thread );
 
-  return flags == ( THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN );
+  return flags == THREAD_WAIT_STATE_READY;
 }
 
 static T_interrupt_test_state interrupt( void *arg )

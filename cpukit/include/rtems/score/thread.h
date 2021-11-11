@@ -404,7 +404,7 @@ typedef union {
  * The mutually exclusive wait state flags are
  * - @ref THREAD_WAIT_STATE_INTEND_TO_BLOCK,
  * - @ref THREAD_WAIT_STATE_BLOCKED, and
- * - @ref THREAD_WAIT_STATE_READY_AGAIN.
+ * - @ref THREAD_WAIT_STATE_READY.
  */
 typedef unsigned int Thread_Wait_flags;
 

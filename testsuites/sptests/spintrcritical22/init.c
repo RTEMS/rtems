@@ -56,7 +56,7 @@ static T_interrupt_test_state release_semaphore(void *arg)
 
     rtems_test_assert(
       _Thread_Wait_flags_get(ctx->main_task_control)
-        == (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN)
+        == THREAD_WAIT_STATE_READY
     );
     sem = &ctx->semaphore_control->Core_control.Semaphore;
     rtems_test_assert(sem->count == 0);
