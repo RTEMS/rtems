@@ -52,13 +52,13 @@ Status_Control _TOD_Set(
   for ( cpu_index = 0 ; cpu_index < cpu_max ; ++cpu_index ) {
     Per_CPU_Control  *cpu;
     Watchdog_Header  *header;
-    ISR_lock_Context  lock_context;
+    ISR_lock_Context  lock_context_2;
     Watchdog_Control *first;
 
     cpu = _Per_CPU_Get_by_index( cpu_index );
     header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
 
-    _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context );
+    _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context_2 );
 
     first = _Watchdog_Header_first( header );
 
@@ -68,11 +68,11 @@ Status_Control _TOD_Set(
         first,
         tod_as_ticks,
         &cpu->Watchdog.Lock,
-        &lock_context
+        &lock_context_2
       );
     }
 
-    _ISR_lock_Release_and_ISR_enable( &cpu->Watchdog.Lock, &lock_context );
+    _ISR_lock_Release_and_ISR_enable( &cpu->Watchdog.Lock, &lock_context_2 );
   }
 
   _TOD.is_set = true;
