@@ -724,8 +724,6 @@ void _Thread_queue_Surrender_no_priority(
 )
 {
   Thread_Control  *the_thread;
-  bool             unblock;
-  Per_CPU_Control *cpu_self;
 
   _Assert( heads != NULL );
   _Assert( queue->owner == NULL );
@@ -736,19 +734,7 @@ void _Thread_queue_Surrender_no_priority(
   _Thread_queue_MP_set_callout( the_thread, queue_context );
 #endif
 
-  unblock = _Thread_queue_Make_ready_again( the_thread );
-
-  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
-  _Thread_queue_Queue_release(
-    queue,
-    &queue_context->Lock_context.Lock_context
-  );
-
-  if ( unblock ) {
-    _Thread_Remove_timer_and_unblock( the_thread, queue );
-  }
-
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_queue_Resume( queue, the_thread, queue_context );
 }
 
 Status_Control _Thread_queue_Surrender_priority_ceiling(
