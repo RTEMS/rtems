@@ -41,19 +41,8 @@
 #error "Do not include this file directly, use <rtems/confdefs.h> instead"
 #endif
 
-#ifdef CONFIGURE_INIT
-
-#ifdef CONFIGURE_DISABLE_BSP_SETTINGS
-  #undef BSP_IDLE_TASK_BODY
-  #undef BSP_IDLE_TASK_STACK_SIZE
-  #undef BSP_INITIAL_EXTENSION
-  #undef BSP_INTERRUPT_STACK_SIZE
-  #undef CONFIGURE_BSP_PREREQUISITE_DRIVERS
-  #undef CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-#else
-  #include <bsp.h>
+#if defined(CONFIGURE_INIT) && !defined(CONFIGURE_DISABLE_BSP_SETTINGS)
+#include <bsp.h>
 #endif
-
-#endif /* CONFIGURE_INIT */
 
 #endif /* _RTEMS_CONFDEFS_BSP_H */

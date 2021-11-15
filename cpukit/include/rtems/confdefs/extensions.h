@@ -146,7 +146,8 @@ extern "C" {
     #ifdef CONFIGURE_INITIAL_EXTENSIONS
       CONFIGURE_INITIAL_EXTENSIONS,
     #endif
-    #ifdef BSP_INITIAL_EXTENSION
+    #if !defined(CONFIGURE_DISABLE_BSP_SETTINGS) && \
+      defined(BSP_INITIAL_EXTENSION)
       BSP_INITIAL_EXTENSION
     #endif
   };
