@@ -885,20 +885,41 @@ Status_Control _Scheduler_EDF_SMP_Set_affinity(
 {
   Scheduler_Context      *context;
   Scheduler_EDF_SMP_Node *node;
-  Processor_mask          local_affinity;
   uint8_t                 rqi;
 
   context = _Scheduler_Get_context( scheduler );
-  _Processor_mask_And( &local_affinity, &context->Processors, affinity );
 
-  if ( _Processor_mask_Is_zero( &local_affinity ) ) {
-    return STATUS_INVALID_NUMBER;
-  }
+  /*
+   * We support a thread to processor affinity to all online processors and an
+   * affinity to exactly one processor.  This restriction is necessary to avoid
+   * issues if processors are added or removed to or from the scheduler.
+   */
 
   if ( _Processor_mask_Is_equal( affinity, &_SMP_Online_processors ) ) {
     rqi = 0;
   } else {
-    rqi = _Processor_mask_Find_last_set( &local_affinity );
+    Processor_mask local_affinity;
+    Processor_mask one_to_one;
+    uint32_t       last;
+
+    _Processor_mask_And( &local_affinity, &context->Processors, affinity );
+
+    if ( _Processor_mask_Is_zero( &local_affinity ) ) {
+      return STATUS_INVALID_NUMBER;
+    }
+
+    last = _Processor_mask_Find_last_set( affinity );
+    _Processor_mask_From_index( &one_to_one, last - 1 );
+
+    /*
+     * Use the global affinity set and not the affinity set local to the
+     * scheduler to check for a one-to-one affinity.
+     */
+    if ( !_Processor_mask_Is_equal( &one_to_one, affinity ) ) {
+      return STATUS_INVALID_NUMBER;
+    }
+
+    rqi = last;
   }
 
   node = _Scheduler_EDF_SMP_Node_downcast( node_base );
