@@ -958,6 +958,15 @@ class OptionItem(Item):
             value = self.default_value(conf.env.ARCH_BSP, conf.env.ARCH_FAMILY)
         return value
 
+    def _get_string_command_line(self, conf, cic, value, arg):
+        name = self.data["name"]
+        try:
+            value = conf.rtems_options[name]
+            del conf.rtems_options[name]
+        except KeyError:
+            value = arg[0]
+        return value
+
     def _script(self, conf, cic, value, arg):
         exec(arg)
         return value
@@ -1040,6 +1049,7 @@ class OptionItem(Item):
             "get-env": self._get_env,
             "get-integer": self._get_integer,
             "get-string": self._get_string,
+            "get-string-command-line": self._get_string_command_line,
             "script": self._script,
             "set-test-state": self._set_test_state,
             "set-value": self._set_value,
@@ -1250,6 +1260,14 @@ def options(ctx):
         metavar="UID",
         help="the UID of the top-level group [default: '/grp']; it may be used in the bsp_defaults and configure commands",
     )
+    rg.add_option(
+        "--rtems-option",
+        metavar="KEY=VALUE",
+        action="append",
+        dest="rtems_options",
+        default=[],
+        help="sets the option identified by KEY to the VALUE in the build specification; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
+    )
 
 
 def check_environment(conf):
@@ -1445,8 +1463,21 @@ def get_top_group(ctx):
     return top_group
 
 
+def prepare_rtems_options(conf):
+    conf.rtems_options = {}
+    for x in conf.options.rtems_options:
+        try:
+            k, v = x.split("=", 1)
+            conf.rtems_options[k] = v
+        except:
+            conf.fatal(
+                "The RTEMS option '{}' is not in KEY=VALUE format".format(x)
+            )
+
+
 def configure(conf):
     check_forbidden_options(conf, ["compiler"])
+    prepare_rtems_options(conf)
     check_environment(conf)
     conf.env["SPECS"] = load_items_from_options(conf)
     top_group = get_top_group(conf)
@@ -1460,6 +1491,8 @@ def configure(conf):
         configure_variant(conf, cp, bsp_map, path_list, top_group, variant)
     conf.setenv("")
     conf.env["VARIANTS"] = variant_list
+    for key in conf.rtems_options:
+        conf.msg("Unknown command line RTEMS option", key, color="RED")
 
 
 def append_variant_builds(bld):
@@ -1490,7 +1523,8 @@ def long_command_line_workaround(bld):
 def build(bld):
     if not bld.variant:
         check_forbidden_options(
-            bld, ["compiler", "config", "specs", "tools", "top_group"]
+            bld,
+            ["compiler", "config", "options", "specs", "tools", "top_group"],
         )
         load_items(bld, bld.env.SPECS)
         append_variant_builds(bld)
@@ -1583,7 +1617,9 @@ COMPILER = {}""".format(
 
 def bsp_list(ctx):
     """lists base BSP variants"""
-    check_forbidden_options(ctx, ["compiler", "config", "tools", "top_group"])
+    check_forbidden_options(
+        ctx, ["compiler", "config", "options", "tools", "top_group"]
+    )
     add_log_filter(ctx.cmd)
     load_items_from_options(ctx)
     white_list = get_white_list(ctx)
