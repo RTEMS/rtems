@@ -1261,6 +1261,11 @@ def options(ctx):
         help="the UID of the top-level group [default: '/grp']; it may be used in the bsp_defaults and configure commands",
     )
     rg.add_option(
+        "--rtems-version",
+        metavar="VALUE",
+        help="sets the RTEMS major version number; it is intended for RTEMS maintainers and may be used in the bsp_defaults and configure commands",
+    )
+    rg.add_option(
         "--rtems-option",
         metavar="KEY=VALUE",
         action="append",
@@ -1473,6 +1478,14 @@ def prepare_rtems_options(conf):
             conf.fatal(
                 "The RTEMS option '{}' is not in KEY=VALUE format".format(x)
             )
+    version = conf.options.rtems_version
+    if version is not None:
+        key = "__RTEMS_MAJOR__"
+        if conf.rtems_options.get(key, version) != version:
+            conf.fatal(
+                "Conflicting RTEMS major versions specified at the command line"
+            )
+        conf.rtems_options[key] = version
 
 
 def configure(conf):
@@ -1524,7 +1537,15 @@ def build(bld):
     if not bld.variant:
         check_forbidden_options(
             bld,
-            ["compiler", "config", "options", "specs", "tools", "top_group"],
+            [
+                "compiler",
+                "config",
+                "options",
+                "specs",
+                "tools",
+                "top_group",
+                "version",
+            ],
         )
         load_items(bld, bld.env.SPECS)
         append_variant_builds(bld)
@@ -1618,7 +1639,7 @@ COMPILER = {}""".format(
 def bsp_list(ctx):
     """lists base BSP variants"""
     check_forbidden_options(
-        ctx, ["compiler", "config", "options", "tools", "top_group"]
+        ctx, ["compiler", "config", "options", "tools", "top_group", "version"]
     )
     add_log_filter(ctx.cmd)
     load_items_from_options(ctx)
