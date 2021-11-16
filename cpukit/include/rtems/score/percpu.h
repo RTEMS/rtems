@@ -38,17 +38,30 @@
 extern "C" {
 #endif
 
-#if defined(RTEMS_SMP)
-  #if defined(RTEMS_PROFILING)
-    #define PER_CPU_CONTROL_SIZE_APPROX \
-      ( 512 + CPU_PER_CPU_CONTROL_SIZE + CPU_INTERRUPT_FRAME_SIZE )
-  #elif defined(RTEMS_DEBUG) || CPU_SIZEOF_POINTER > 4
-    #define PER_CPU_CONTROL_SIZE_APPROX \
-      ( 256 + CPU_PER_CPU_CONTROL_SIZE + CPU_INTERRUPT_FRAME_SIZE )
+#if defined( RTEMS_SMP )
+  #if defined( RTEMS_PROFILING )
+    #define PER_CPU_CONTROL_SIZE_PROFILING 332
   #else
-    #define PER_CPU_CONTROL_SIZE_APPROX \
-      ( 180 + CPU_PER_CPU_CONTROL_SIZE + CPU_INTERRUPT_FRAME_SIZE )
+    #define PER_CPU_CONTROL_SIZE_PROFILING 0
   #endif
+
+  #if defined( RTEMS_DEBUG )
+    #define PER_CPU_CONTROL_SIZE_DEBUG 76
+  #else
+    #define PER_CPU_CONTROL_SIZE_DEBUG 0
+  #endif
+
+  #if CPU_SIZEOF_POINTER > 4
+    #define PER_CPU_CONTROL_SIZE_BIG_POINTER 76
+  #else
+    #define PER_CPU_CONTROL_SIZE_BIG_POINTER 0
+  #endif
+
+  #define PER_CPU_CONTROL_SIZE_BASE 180
+  #define PER_CPU_CONTROL_SIZE_APPROX \
+    ( PER_CPU_CONTROL_SIZE_BASE + CPU_PER_CPU_CONTROL_SIZE + \
+    CPU_INTERRUPT_FRAME_SIZE + PER_CPU_CONTROL_SIZE_PROFILING + \
+    PER_CPU_CONTROL_SIZE_DEBUG + PER_CPU_CONTROL_SIZE_BIG_POINTER )
 
   /*
    * This ensures that on SMP configurations the individual per-CPU controls
