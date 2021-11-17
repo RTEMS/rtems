@@ -12,7 +12,7 @@
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
- *  Copyright (c) 2006 OAR Corporation
+ *  Copyright (c) 2006 On-Line Applications Research Corporation (OAR)
  *
  *  Copyright (c) 2002 Advent Networks, Inc.
  *        Jay Monkman <jmonkman@adventnetworks.com>
