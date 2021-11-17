@@ -3,6 +3,8 @@
 /**
  * @file
  *
+ * @ingroup RTEMSImplClassicSignal
+ *
  * @brief This header file defines the parts of the Signal Manager API.
  */
 
