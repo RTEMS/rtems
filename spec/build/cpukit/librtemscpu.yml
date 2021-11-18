@@ -1270,6 +1270,8 @@ source:
 - cpukit/rtems/src/rtemstimer.c
 - cpukit/rtems/src/scheduleraddprocessor.c
 - cpukit/rtems/src/schedulergetmaxprio.c
+- cpukit/rtems/src/schedulergetprocessor.c
+- cpukit/rtems/src/schedulergetprocessormax.c
 - cpukit/rtems/src/schedulergetprocessorset.c
 - cpukit/rtems/src/schedulerident.c
 - cpukit/rtems/src/scheduleridentbyprocessor.c
