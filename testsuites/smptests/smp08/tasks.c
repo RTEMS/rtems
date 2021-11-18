@@ -28,7 +28,7 @@ rtems_task Test_task(
   p = rtems_object_get_name( RTEMS_SELF, 5, name );
   rtems_test_assert( p != NULL );
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   rtems_test_assert( status == RTEMS_SUCCESSFUL );
   task_index = task_number( tid );
   for ( ; ; ) {

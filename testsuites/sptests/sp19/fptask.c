@@ -27,7 +27,7 @@ rtems_task FP_task(
   INTEGER_DECLARE;
   FP_DECLARE;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident of self" );
 
   task_index = task_number( tid );

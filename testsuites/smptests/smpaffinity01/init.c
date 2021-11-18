@@ -213,7 +213,7 @@ static void Init(rtems_task_argument arg)
   TEST_BEGIN();
 
   /* Initialize thread id */
-  sc = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &Init_id );
+  sc = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &Init_id );
   directive_failed( sc, "Identify Init Task" );
 
   Validate_setaffinity_errors();

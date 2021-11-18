@@ -34,7 +34,7 @@ rtems_task Application_task(
   rtems_status_code status;
   unsigned int      a = (unsigned int) argument;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "ident" );
 
   printf(

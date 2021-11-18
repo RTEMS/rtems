@@ -49,7 +49,7 @@ static rtems_task Init(
 
   TEST_BEGIN();
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &id );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &id );
   directive_failed( status, "task ident" );
 
   /* to make sure it is equal to TA2 */

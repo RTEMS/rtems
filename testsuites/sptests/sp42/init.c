@@ -74,7 +74,7 @@ static rtems_task Locker_task(
   rtems_status_code   status;
   rtems_task_argument my_obtain_counter;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
   rtems_test_assert( task_index == task_number( tid ) - 1 );

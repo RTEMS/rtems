@@ -40,6 +40,7 @@
 #endif
 
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/object.h>
 #include <rtems/rtems/objectimpl.h>
 #include <rtems/score/percpu.h>
 
@@ -53,7 +54,7 @@ rtems_status_code rtems_task_ident(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if ( name == OBJECTS_ID_OF_SELF ) {
+  if ( name == RTEMS_WHO_AM_I ) {
     *id = _Thread_Get_executing()->Object.id;
     return RTEMS_SUCCESSFUL;
   }

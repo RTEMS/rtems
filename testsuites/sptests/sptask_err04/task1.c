@@ -50,7 +50,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_task_delete - RTEMS_INVALID_ID" );
 
   /* NULL param */
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, NULL );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, NULL );
   fatal_directive_status(
     status,
     RTEMS_INVALID_ADDRESS,
@@ -59,7 +59,7 @@ rtems_task Task_1(
   puts( "TA1 - rtems_task_ident - RTEMS_INVALID_ADDRESS" );
 
   /* OK */
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &self_id );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &self_id );
   directive_failed( status, "rtems_task_ident of self" );
   if ( self_id != Task_id[ 1 ] ) {
     puts( "ERROR - rtems_task_ident - incorrect ID returned!" );

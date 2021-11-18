@@ -33,7 +33,7 @@ rtems_task Test_task(
   rtems_task_priority previous_priority;
   rtems_task_priority previous_priority_1;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
   puts( "Getting TID of remote task" );

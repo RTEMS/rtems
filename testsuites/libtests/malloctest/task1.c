@@ -34,7 +34,7 @@ rtems_task Task_1_through_5(
   unsigned char *mem_ptr;
   int mem_amt;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
   while (TRUE)

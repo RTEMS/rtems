@@ -31,7 +31,7 @@ rtems_task Task_1_through_3(
   rtems_status_code status;
   rtems_interval    ticks;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
   ticks = RTEMS_MILLISECONDS_TO_TICKS( task_number( tid ) * 5 * 1000 );

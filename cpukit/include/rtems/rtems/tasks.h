@@ -1267,7 +1267,8 @@ rtems_status_code rtems_task_construct(
  * This directive obtains a task identifier associated with the task name
  * specified in ``name``.
  *
- * A task may obtain its own identifier by specifying #RTEMS_SELF for the name.
+ * A task may obtain its own identifier by specifying #RTEMS_WHO_AM_I for the
+ * name.
  *
  * The node to search is specified in ``node``.  It shall be
  *

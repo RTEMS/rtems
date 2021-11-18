@@ -24,7 +24,7 @@ rtems_task Task_1(
   uint32_t          task_index;
   INTEGER_DECLARE;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
   task_index = task_number( tid );

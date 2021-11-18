@@ -35,7 +35,7 @@ rtems_task Test_task(
   rtems_id          tid;
   rtems_time_of_day time;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "rtems_task_ident" );
 
   status = rtems_clock_get_tod( &time );

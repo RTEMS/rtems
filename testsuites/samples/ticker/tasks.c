@@ -30,7 +30,7 @@ rtems_task Test_task(
   uint32_t          task_index;
   rtems_status_code status;
 
-  status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  status = rtems_task_ident( RTEMS_WHO_AM_I, RTEMS_SEARCH_ALL_NODES, &tid );
   directive_failed( status, "task ident" ); 
 
   task_index = task_number( tid );
