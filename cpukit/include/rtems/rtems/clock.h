@@ -234,9 +234,9 @@ rtems_status_code rtems_clock_get_tod_timeval( struct timeval *time_of_day );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.  Alternatively, the
- * rtems_clock_get_realtime_coarse() directive may be used to get the time with
- * less precision and less runtime overhead.
+ * in the highest resolution available to the system.  Alternatively, the
+ * rtems_clock_get_realtime_coarse() directive may be used to get the time in a
+ * lower resolution and with less runtime overhead.
  *
  * See rtems_clock_get_realtime_bintime() and
  * rtems_clock_get_realtime_timeval() to get the time in alternative formats.
@@ -271,9 +271,9 @@ void rtems_clock_get_realtime( struct timespec *time_snapshot );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.  Alternatively, the
+ * in the highest resolution available to the system.  Alternatively, the
  * rtems_clock_get_realtime_coarse_bintime() directive may be used to get the
- * time with less precision and less runtime overhead.
+ * time in a lower resolution and with less runtime overhead.
  *
  * See rtems_clock_get_realtime() and rtems_clock_get_realtime_timeval() to get
  * the time in alternative formats.
@@ -308,9 +308,9 @@ void rtems_clock_get_realtime_bintime( struct bintime *time_snapshot );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.  Alternatively, the
+ * in the highest resolution available to the system.  Alternatively, the
  * rtems_clock_get_realtime_coarse_timeval() directive may be used to get the
- * time with less precision and less runtime overhead.
+ * time in a lower resolution and with less runtime overhead.
  *
  * See rtems_clock_get_realtime() and rtems_clock_get_realtime_bintime() to get
  * the time in alternative formats.
@@ -335,7 +335,7 @@ void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
  * @ingroup RTEMSAPIClassicClock
  *
  * @brief Gets the time elapsed since the Unix epoch measured using
- *   CLOCK_REALTIME in coarse precision in seconds and nanoseconds format.
+ *   CLOCK_REALTIME in coarse resolution in seconds and nanoseconds format.
  *
  * @param[out] time_snapshot is the pointer to a struct timespec object.  The
  *   time elapsed since the Unix epoch measured using the CLOCK_REALTIME at
@@ -346,8 +346,8 @@ void rtems_clock_get_realtime_timeval( struct timeval *time_snapshot );
  * @parblock
  * The directive does not access a device to get the time.  It uses a recent
  * snapshot provided by the Clock Driver.  Alternatively, the
- * rtems_clock_get_realtime() directive may be used to get the time with higher
- * precision and higher runtime overhead.
+ * rtems_clock_get_realtime() directive may be used to get the time in a higher
+ * resolution and with a higher runtime overhead.
  *
  * See rtems_clock_get_realtime_coarse_bintime() and
  * rtems_clock_get_realtime_coarse_timeval() to get the time in alternative
@@ -373,7 +373,7 @@ void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
  * @ingroup RTEMSAPIClassicClock
  *
  * @brief Gets the time elapsed since the Unix epoch measured using
- *   CLOCK_REALTIME in coarse precision in binary time format.
+ *   CLOCK_REALTIME in coarse resolution in binary time format.
  *
  * @param[out] time_snapshot is the pointer to a bintime object.  The time
  *   elapsed since the Unix epoch measured using the CLOCK_REALTIME at some
@@ -384,8 +384,8 @@ void rtems_clock_get_realtime_coarse( struct timespec *time_snapshot );
  * @parblock
  * The directive does not access a device to get the time.  It uses a recent
  * snapshot provided by the Clock Driver.  Alternatively, the
- * rtems_clock_get_realtime_bintime() directive may be used to get the time
- * with higher precision and higher runtime overhead.
+ * rtems_clock_get_realtime_bintime() directive may be used to get the time in
+ * a higher resolution and with a higher runtime overhead.
  *
  * See rtems_clock_get_realtime_coarse() and
  * rtems_clock_get_realtime_coarse_timeval() to get the time in alternative
@@ -411,7 +411,7 @@ void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
  * @ingroup RTEMSAPIClassicClock
  *
  * @brief Gets the time elapsed since the Unix epoch measured using
- *   CLOCK_REALTIME in coarse precision in seconds and microseconds format.
+ *   CLOCK_REALTIME in coarse resolution in seconds and microseconds format.
  *
  * @param[out] time_snapshot is the pointer to a struct timeval object.  The
  *   time elapsed since the Unix epoch measured using the CLOCK_REALTIME at
@@ -422,8 +422,8 @@ void rtems_clock_get_realtime_coarse_bintime( struct bintime *time_snapshot );
  * @parblock
  * The directive does not access a device to get the time.  It uses a recent
  * snapshot provided by the Clock Driver.  Alternatively, the
- * rtems_clock_get_realtime_timeval() directive may be used to get the time
- * with higher precision and higher runtime overhead.
+ * rtems_clock_get_realtime_timeval() directive may be used to get the time in
+ * a higher resolution and with a higher runtime overhead.
  *
  * See rtems_clock_get_realtime_coarse() and
  * rtems_clock_get_realtime_coarse_timeval() to get the time in alternative
@@ -460,9 +460,9 @@ void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.  Alternatively, the
+ * in the highest resolution available to the system.  Alternatively, the
  * rtems_clock_get_monotonic_coarse() directive may be used to get the time
- * with less precision and less runtime overhead.
+ * with in a lower resolution and with less runtime overhead.
  *
  * See rtems_clock_get_monotonic_bintime(),
  * rtems_clock_get_monotonic_sbintime(), and
@@ -499,9 +499,9 @@ void rtems_clock_get_monotonic( struct timespec *time_snapshot );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.  Alternatively, the
+ * in the highest resolution available to the system.  Alternatively, the
  * rtems_clock_get_monotonic_coarse_bintime() directive may be used to get the
- * time with less precision and less runtime overhead.
+ * time in a lower resolution and with less runtime overhead.
  *
  * See rtems_clock_get_monotonic(), rtems_clock_get_monotonic_sbintime(), and
  * rtems_clock_get_monotonic_timeval() to get the time in alternative formats.
@@ -535,7 +535,7 @@ void rtems_clock_get_monotonic_bintime( struct bintime *time_snapshot );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.
+ * in the highest resolution available to the system.
  *
  * See rtems_clock_get_monotonic(), rtems_clock_get_monotonic_bintime(), and
  * rtems_clock_get_monotonic_timeval() to get the time in alternative formats.
@@ -571,9 +571,9 @@ int64_t rtems_clock_get_monotonic_sbintime( void );
  * @par Notes
  * @parblock
  * The directive accesses a device provided by the Clock Driver to get the time
- * in the highest precision available to the system.  Alternatively, the
+ * in the highest resolution available to the system.  Alternatively, the
  * rtems_clock_get_monotonic_coarse_timeval() directive may be used to get the
- * time with less precision and less runtime overhead.
+ * time in a lower resolution and with less runtime overhead.
  *
  * See rtems_clock_get_monotonic(), rtems_clock_get_monotonic_bintime(), and
  * rtems_clock_get_monotonic_sbintime() to get the time in alternative formats.
@@ -598,7 +598,7 @@ void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
  * @ingroup RTEMSAPIClassicClock
  *
  * @brief Gets the time elapsed since some fixed time point in the past
- *   measured using the CLOCK_MONOTONIC in coarse precision in seconds and
+ *   measured using the CLOCK_MONOTONIC in coarse resolution in seconds and
  *   nanoseconds format.
  *
  * @param[out] time_snapshot is the pointer to a bintime object.  The time
@@ -611,8 +611,8 @@ void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
  * @parblock
  * The directive does not access a device to get the time.  It uses a recent
  * snapshot provided by the Clock Driver.  Alternatively, the
- * rtems_clock_get_monotonic() directive may be used to get the time with
- * higher precision and higher runtime overhead.
+ * rtems_clock_get_monotonic() directive may be used to get the time in a
+ * higher resolution and with a higher runtime overhead.
  *
  * See rtems_clock_get_monotonic_coarse_bintime() and
  * rtems_clock_get_monotonic_coarse_timeval() to get the time in alternative
@@ -638,7 +638,7 @@ void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
  * @ingroup RTEMSAPIClassicClock
  *
  * @brief Gets the time elapsed since some fixed time point in the past
- *   measured using the CLOCK_MONOTONIC in coarse precision in binary time
+ *   measured using the CLOCK_MONOTONIC in coarse resolution in binary time
  *   format.
  *
  * @param[out] time_snapshot is the pointer to a bintime object.  The time
@@ -651,8 +651,8 @@ void rtems_clock_get_monotonic_coarse( struct timespec *time_snapshot );
  * @parblock
  * The directive does not access a device to get the time.  It uses a recent
  * snapshot provided by the Clock Driver.  Alternatively, the
- * rtems_clock_get_monotonic_bintime() directive may be used to get the time
- * with higher precision and higher runtime overhead.
+ * rtems_clock_get_monotonic_bintime() directive may be used to get the time in
+ * a higher resolution and with a higher runtime overhead.
  *
  * See rtems_clock_get_monotonic_coarse() and
  * rtems_clock_get_monotonic_coarse_timeval() to get the time in alternative
@@ -678,7 +678,7 @@ void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
  * @ingroup RTEMSAPIClassicClock
  *
  * @brief Gets the time elapsed since some fixed time point in the past
- *   measured using the CLOCK_MONOTONIC in coarse precision in seconds and
+ *   measured using the CLOCK_MONOTONIC in coarse resolution in seconds and
  *   microseconds format.
  *
  * @param[out] time_snapshot is the pointer to a bintime object.  The time
@@ -691,8 +691,8 @@ void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
  * @parblock
  * The directive does not access a device to get the time.  It uses a recent
  * snapshot provided by the Clock Driver.  Alternatively, the
- * rtems_clock_get_monotonic_timeval() directive may be used to get the time
- * with higher precision and higher runtime overhead.
+ * rtems_clock_get_monotonic_timeval() directive may be used to get the time in
+ * a higher resolution and with a higher runtime overhead.
  *
  * See rtems_clock_get_monotonic_coarse() and
  * rtems_clock_get_monotonic_coarse_bintime() to get the time in alternative
