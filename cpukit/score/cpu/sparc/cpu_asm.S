@@ -190,6 +190,18 @@ done_flushing:
         ! Try to update the is executing indicator of the heir context
         mov     1, %g1
 
+#if defined(__FIX_LEON3FT_B2BST)
+        /*
+         * This is a workaround for GRLIB-TN-0011 (Technical Note on LEON3/FT
+         * AHB Lock Release During Atomic Operation).  Affected components are
+         * the GR712RC, UT699, UT699E, UT700, and LEON3FT-RTAX.  Strictly, the
+         * workaround is only necessary if the MMU is enabled.  Using the
+         * __FIX_LEON3FT_B2BST is not 100% appropriate, but the best thing we
+         * can use to enable the workaround.  An alignment padding is filled
+         * with nops.
+         */
+.align 16
+#endif
 .Ltry_update_is_executing:
 
         swap    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
