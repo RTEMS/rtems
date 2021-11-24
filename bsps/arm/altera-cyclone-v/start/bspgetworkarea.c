@@ -160,7 +160,7 @@ static size_t remove_reserved_memory(
 
       area = find_area(areas, area_count, hole_begin);
       area_end = (uintptr_t) _Memory_Get_end(area);
-      _Memory_Set_end(area, (void *) hole_end);
+      _Memory_Set_end(area, (void *) hole_begin);
 
       if (hole_end <= area_end) {
         if (area_count >= AREA_COUNT_MAX) {
