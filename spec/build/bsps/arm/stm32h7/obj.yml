@@ -169,9 +169,6 @@ install:
   - bsps/arm/stm32h7/include/stm32h7/hal.h
   - bsps/arm/stm32h7/include/stm32h7/memory.h
   - bsps/arm/stm32h7/include/stm32h7/mpu-config.h
-- destination: ${BSP_LIBDIR}
-  source:
-  - bsps/arm/stm32h7/start/bsp_specs
 links: []
 source:
 - bsps/arm/shared/cache/cache-v7m.c
