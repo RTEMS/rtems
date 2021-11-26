@@ -241,14 +241,14 @@ T_measure_runtime_create(const T_measure_runtime_config *config)
 
 	ctx->sample_count = config->sample_count;
 	ctx->samples = add_offset(ctx, sizeof(*ctx));
+	ctx->samples = align_up(ctx->samples, cache_line_size);
 	ctx->cache_line_size = cache_line_size;
 	ctx->chunk_size = chunk_size;
 	ctx->chunk = add_offset(ctx->samples, sample_size);
+	ctx->chunk = align_up(ctx->chunk, cache_line_size);
 	ctx->runner = rtems_task_self();
 	ctx->load_count = load_count;
 	ctx->load_contexts = add_offset(ctx->chunk, chunk_size);
-	ctx->samples = align_up(ctx->samples, cache_line_size);
-	ctx->chunk = align_up(ctx->chunk, cache_line_size);
 
 	for (i = 0; i < load_count; ++i) {
 		rtems_id id;
