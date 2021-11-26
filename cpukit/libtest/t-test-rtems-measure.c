@@ -378,13 +378,12 @@ report_sorted_samples(const T_measure_runtime_context *ctx)
 
 	sample_count = ctx->sample_count;
 	samples = ctx->samples;
-	last = 0;
-	--last;
-	count = 0;
+	last = samples[0];
+	v = samples[0];
+	count = 1;
 
-	for (i = 0; i < sample_count; ++i) {
+	for (i = 1; i < sample_count; ++i) {
 		v = samples[i];
-		++count;
 
 		if (v != last) {
 			uint32_t sa;
@@ -393,24 +392,28 @@ report_sorted_samples(const T_measure_runtime_context *ctx)
 			uint32_t nsb;
 			T_time t;
 
-			T_time_to_seconds_and_nanoseconds(T_ticks_to_time(last),
-			    &sa, &nsa);
-			t = T_ticks_to_time(v);
-			T_time_to_seconds_and_nanoseconds(t, &sb, &nsb);
+			t = T_ticks_to_time(last);
+			T_time_to_seconds_and_nanoseconds(t, &sa, &nsa);
+			T_time_to_seconds_and_nanoseconds(T_ticks_to_time(v),
+			    &sb, &nsb);
 
 			if (sa != sb || nsa != nsb) {
 				T_printf("M:S:%zu:%s\n", count,
 				    T_time_to_string_ns(t, ts));
-				count = 0;
+				count = 1;
+			} else {
+				++count;
 			}
 
 			last = v;
+		} else {
+			++count;
 		}
 	}
 
 	if (count > 0) {
 		T_printf("M:S:%zu:%s\n", count,
-		    T_ticks_to_string_ns(last, ts));
+		    T_ticks_to_string_ns(v, ts));
 	}
 }
 
