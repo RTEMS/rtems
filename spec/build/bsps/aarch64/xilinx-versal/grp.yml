@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: group
 copyrights:
-- Copyright (C) 2021 Gedare Bloom 
+- Copyright (C) 2021 Gedare Bloom
 enabled-by: true
 includes: []
 install: []
