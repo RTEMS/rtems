@@ -37,8 +37,7 @@
 #ifndef _RTEMS_SCORE_AARCH32_PMSA_H
 #define _RTEMS_SCORE_AARCH32_PMSA_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include <rtems/score/basedefs.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -165,12 +164,33 @@ extern "C" {
     AARCH32_PMSA_ATTR_SH( AARCH32_PMSA_ATTR_SH_NO ) | \
     AARCH32_PMSA_ATTR_IDX( 1U ) )
 
+#define AARCH32_PMSA_DATA_READ_WRITE_SHARED \
+  ( AARCH32_PMSA_ATTR_EN | \
+    AARCH32_PMSA_ATTR_XN | \
+    AARCH32_PMSA_ATTR_AP( AARCH32_PMSA_ATTR_AP_EL1_RW_EL0_NO ) | \
+    AARCH32_PMSA_ATTR_SH( AARCH32_PMSA_ATTR_SH_OUTER ) | \
+    AARCH32_PMSA_ATTR_IDX( 1U ) )
+
 #define AARCH32_PMSA_DEVICE \
   ( AARCH32_PMSA_ATTR_EN | \
     AARCH32_PMSA_ATTR_XN | \
     AARCH32_PMSA_ATTR_AP( AARCH32_PMSA_ATTR_AP_EL1_RW_EL0_NO ) | \
     AARCH32_PMSA_ATTR_SH( AARCH32_PMSA_ATTR_SH_NO ) | \
     AARCH32_PMSA_ATTR_IDX( 2U ) )
+
+/*
+ * The Cortex-R52 processor is not coherent and the inner shareability domain
+ * consists of an individual Cortex-R52 core.  Thus for an SMP configuration,
+ * the read-write data must be configured as Non-cachable and Shareable.  The
+ * outer shareability domain is external to the Cortex-R52 processor.
+ */
+#if defined(RTEMS_SMP)
+#define AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
+  AARCH32_PMSA_DATA_READ_WRITE_SHARED
+#else
+#define AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
+  AARCH32_PMSA_DATA_READ_WRITE_CACHED
+#endif
 
 /**
  * @brief The default section definitions shall be used by the BSP to define
@@ -187,7 +207,7 @@ extern "C" {
   }, { \
     .begin = (uint32_t) bsp_section_fast_data_begin, \
     .end = (uint32_t) bsp_section_fast_data_end, \
-    .attributes = AARCH32_PMSA_DATA_READ_WRITE_CACHED \
+    .attributes = AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
   }, { \
     .begin = (uint32_t) bsp_section_start_begin, \
     .end = (uint32_t) bsp_section_start_end, \
@@ -207,23 +227,23 @@ extern "C" {
   }, { \
     .begin = (uint32_t) bsp_section_data_begin, \
     .end = (uint32_t) bsp_section_data_end, \
-    .attributes = AARCH32_PMSA_DATA_READ_WRITE_CACHED \
+    .attributes = AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
   }, { \
     .begin = (uint32_t) bsp_section_bss_begin, \
     .end = (uint32_t) bsp_section_bss_end, \
-    .attributes = AARCH32_PMSA_DATA_READ_WRITE_CACHED \
+    .attributes = AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
   }, { \
     .begin = (uint32_t) bsp_section_rtemsstack_begin, \
     .end = (uint32_t) bsp_section_rtemsstack_end, \
-    .attributes = AARCH32_PMSA_DATA_READ_WRITE_CACHED \
+    .attributes = AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
   }, { \
     .begin = (uint32_t) bsp_section_work_begin, \
     .end = (uint32_t) bsp_section_work_end, \
-    .attributes = AARCH32_PMSA_DATA_READ_WRITE_CACHED \
+    .attributes = AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
   }, { \
     .begin = (uint32_t) bsp_section_stack_begin, \
     .end = (uint32_t) bsp_section_stack_end, \
-    .attributes = AARCH32_PMSA_DATA_READ_WRITE_CACHED \
+    .attributes = AARCH32_PMSA_DATA_READ_WRITE_DEFAULT \
   }, { \
     .begin = (uint32_t) bsp_section_nocache_begin, \
     .end = (uint32_t) bsp_section_nocache_end, \
