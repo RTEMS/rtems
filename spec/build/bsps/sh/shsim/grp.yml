@@ -16,6 +16,8 @@ links:
 - role: build-dependency
   uid: obj
 - role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
   uid: optcpuclk
 - role: build-dependency
   uid: optlowinit

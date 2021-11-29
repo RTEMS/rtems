@@ -54,6 +54,8 @@ links:
 - role: build-dependency
   uid: ../objexc
 - role: build-dependency
+  uid: ../objmem
+- role: build-dependency
   uid: ../objvme
 - role: build-dependency
   uid: ../start
@@ -92,7 +94,6 @@ source:
 - bsps/powerpc/shared/mmu/pte121.c
 - bsps/powerpc/shared/pci/pci.c
 - bsps/powerpc/shared/pci/pcifinddevice.c
-- bsps/powerpc/shared/start/bspgetworkarea.c
 - bsps/powerpc/shared/start/pgtbl_activate.c
 - bsps/powerpc/shared/start/pgtbl_setup.c
 - bsps/powerpc/shared/start/probeMemEnd.c

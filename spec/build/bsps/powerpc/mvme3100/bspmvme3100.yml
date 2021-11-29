@@ -50,6 +50,8 @@ links:
 - role: build-dependency
   uid: ../objexc
 - role: build-dependency
+  uid: ../objmem
+- role: build-dependency
   uid: ../objvme
 - role: build-dependency
   uid: ../motld
@@ -79,7 +81,6 @@ source:
 - bsps/powerpc/shared/pci/generic_clear_hberrs.c
 - bsps/powerpc/shared/pci/pci.c
 - bsps/powerpc/shared/pci/pcifinddevice.c
-- bsps/powerpc/shared/start/bspgetworkarea.c
 - bsps/powerpc/shared/start/sbrk.c
 - bsps/powerpc/shared/start/vpd.c
 - bsps/powerpc/shared/start/zerobss.c

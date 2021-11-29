@@ -40,6 +40,8 @@ links:
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
   uid: ../../opto2
 - role: build-dependency
   uid: ../../bspopts
@@ -64,7 +66,6 @@ source:
 - bsps/shared/dev/serial/legacy-console.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/bspgetworkarea-default.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 type: build

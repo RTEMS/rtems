@@ -27,7 +27,6 @@ source:
 - bsps/shared/cache/nocache.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/start/bspfatal-default.c
-- bsps/shared/start/bspgetworkarea-default.c
 - bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/shared/start/setvec.c

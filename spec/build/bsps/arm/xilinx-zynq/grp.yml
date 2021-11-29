@@ -62,6 +62,8 @@ links:
 - role: build-dependency
   uid: ../../objdevspixil
 - role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
   uid: linkcmds
 - role: build-dependency
   uid: ../../bspopts

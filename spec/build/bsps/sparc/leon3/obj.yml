@@ -59,5 +59,4 @@ source:
 - bsps/sparc/shared/pci/pci_memreg_sparc_be.c
 - bsps/sparc/shared/pci/pci_memreg_sparc_le.c
 - bsps/sparc/shared/start/bsp_fatal_exit.c
-- bsps/sparc/shared/start/bspgetworkarea.c
 type: build

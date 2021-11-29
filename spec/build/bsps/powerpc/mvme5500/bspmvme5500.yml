@@ -58,6 +58,8 @@ links:
 - role: build-dependency
   uid: ../objexc
 - role: build-dependency
+  uid: ../objmem
+- role: build-dependency
   uid: ../objvme
 - role: build-dependency
   uid: ../../bspopts
@@ -87,7 +89,6 @@ source:
 - bsps/powerpc/shared/mmu/bat.c
 - bsps/powerpc/shared/mmu/mmuAsm.S
 - bsps/powerpc/shared/mmu/pte121.c
-- bsps/powerpc/shared/start/bspgetworkarea.c
 - bsps/powerpc/shared/start/pgtbl_setup.c
 - bsps/powerpc/shared/start/probeMemEnd.c
 - bsps/powerpc/shared/start/sbrk.c

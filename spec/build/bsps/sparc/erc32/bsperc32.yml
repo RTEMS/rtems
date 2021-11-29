@@ -28,6 +28,8 @@ links:
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
+  uid: ../objmem
+- role: build-dependency
   uid: ../../opto2
 - role: build-dependency
   uid: abi
@@ -70,5 +72,4 @@ source:
 - bsps/sparc/shared/irq/irq-shared.c
 - bsps/sparc/shared/start/bsp_fatal_exit.c
 - bsps/sparc/shared/start/bsp_fatal_halt.c
-- bsps/sparc/shared/start/bspgetworkarea.c
 type: build

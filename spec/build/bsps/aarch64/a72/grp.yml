@@ -32,6 +32,8 @@ links:
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
+  uid: ../../objmem
+- role: build-dependency
   uid: ../../optcachedata
 - role: build-dependency
   uid: ../../optcacheinst

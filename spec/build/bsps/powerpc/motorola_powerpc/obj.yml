@@ -50,7 +50,6 @@ source:
 - bsps/powerpc/shared/pci/pci.c
 - bsps/powerpc/shared/pci/pcifinddevice.c
 - bsps/powerpc/shared/rtc/todcfg.c
-- bsps/powerpc/shared/start/bspgetworkarea.c
 - bsps/powerpc/shared/start/pgtbl_activate.c
 - bsps/powerpc/shared/start/pgtbl_setup.c
 - bsps/powerpc/shared/start/ppc_idle.c

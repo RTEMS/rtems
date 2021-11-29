@@ -16,6 +16,8 @@ links:
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
+  uid: ../objmem
+- role: build-dependency
   uid: ../grp
 - role: build-dependency
   uid: abi
