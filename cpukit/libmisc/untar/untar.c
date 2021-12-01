@@ -126,30 +126,25 @@ Make_Path(const rtems_printer *printer, char *path)
 
     *p = '\0';
     if (p[1] == '\0') {
-      /* Speculatively unlink the last component so that it can be re-created */
-      unlink(path);
       return 0;
     }
 
     if (mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO) != 0) {
-      if (errno == EEXIST || errno == EISDIR) {
+      if (errno == EEXIST) {
+        /* If it exists already: Check whether it is a directory */
         struct stat sb;
-
-        if (stat(path, &sb) != 0) {
+        if (lstat(path, &sb) != 0) {
+          Print_Error(printer, "lstat", path);
+          return -1;
+        } else if (!S_ISDIR(sb.st_mode)) {
+          rtems_printf(printer,
+                       "untar: mkdir: %s: exists but is not a directory\n",
+                       path);
           return -1;
         }
-
-        if (!S_ISDIR(sb.st_mode)) {
-          if (unlink(path) != 0) {
-            Print_Error(printer, "unlink", path);
-            return -1;
-          }
-
-          if (mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO) != 0) {
-            Print_Error(printer, "mkdir (unlink)", path);
-            return -1;
-          }
-        }
+      } else {
+        Print_Error(printer, "mkdir", path);
+        return -1;
       }
     }
 
@@ -206,6 +201,12 @@ Untar_ProcessHeader(
 
   if (Make_Path(ctx->printer, ctx->file_path) != 0) {
     retval = UNTAR_FAIL;
+  } else {
+    /*
+     * Speculatively unlink. This should unlink everything but non-empty
+     * directories or write protected stuff.
+     */
+    unlink(ctx->file_path);
   }
 
   if (ctx->linkflag == SYMTYPE) {
@@ -225,8 +226,22 @@ Untar_ProcessHeader(
     rtems_printf(ctx->printer, "untar: dir: %s\n", ctx->file_path);
     r = mkdir(ctx->file_path, ctx->mode);
     if (r != 0) {
-      Print_Error(ctx->printer, "mkdir", ctx->file_path);
-      retval = UNTAR_FAIL;
+      if (errno == EEXIST) {
+        /* If it exists already: Check whether it is a directory */
+        struct stat sb;
+        if (lstat(ctx->file_path, &sb) != 0) {
+          Print_Error(ctx->printer, "lstat", ctx->file_path);
+          retval = UNTAR_FAIL;
+        } else if (!S_ISDIR(sb.st_mode)) {
+          rtems_printf(ctx->printer,
+                       "untar: mkdir: %s: exists but is not a directory\n",
+                       ctx->file_path);
+          retval = UNTAR_FAIL;
+        }
+      } else {
+        Print_Error(ctx->printer, "mkdir", ctx->file_path);
+        retval = UNTAR_FAIL;
+      }
     }
   }
 
@@ -426,7 +441,9 @@ Untar_FromFile_Print(
        */
 
       if ((out_fd = creat(ctx.file_path, ctx.mode)) == -1) {
-        (void) lseek(fd, SEEK_CUR, 512UL * ctx.nblocks);
+        /* Couldn't create that file. Abort. */
+        retval = UNTAR_FAIL;
+        break;
       } else {
         for (i = 0; i < ctx.nblocks; i++) {
           n = read(fd, bufr, 512);

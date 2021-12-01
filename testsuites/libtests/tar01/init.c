@@ -7,6 +7,33 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+/*
+ * Note on the used tar file: Generate the file on a system that supports
+ * symlinks with the following commands (tested on Linux - you might have to
+ * adapt on other systems):
+ *
+ * export WORK=some_work_directory
+ * rm -r ${WORK}
+ * mkdir -p ${WORK}/home/abc/def
+ * mkdir -p ${WORK}/home/dir
+ * cd ${WORK}
+ * echo "#! joel" > home/abc/def/test_script
+ * echo "ls -las /dev" >> home/abc/def/test_script
+ * chmod 755 home/abc/def/test_script
+ * echo "This is a test of loading an RTEMS filesystem from an" > home/test_file
+ * echo "initial tar image." >> home/test_file
+ * echo "Hello world" >> home/dir/file
+ * ln -s home/test_file symlink
+ * tar cf tar01.tar --format=ustar \
+ *     symlink \
+ *     home/test_file \
+ *     home/abc/def/test_script \
+ *     home/dir
+ *
+ * Note that "home/dir" is in the archive as separate directory. "home/abc" is
+ * only in the archive as a parent of the file "test_script".
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -95,6 +122,84 @@ void test_untar_from_memory(void)
 
 }
 
+static void assert_file_content(
+    const char *name,
+    const char *expected_content,
+    ssize_t expected_size
+)
+{
+  char buf[16];
+  int fd;
+  int rd;
+
+  fd = open(name, O_RDONLY);
+  rtems_test_assert( fd >= 0 );
+  do {
+    rd = read(fd, buf, sizeof(buf));
+    rtems_test_assert( rd >= 0 );
+    if (rd > 0) {
+      rtems_test_assert( expected_size - rd >= 0 );
+      rtems_test_assert( memcmp(buf, expected_content, rd) == 0 );
+      expected_content += rd;
+      expected_size -= rd;
+    }
+  } while(rd > 0);
+  rtems_test_assert( expected_size == 0 );
+  close(fd);
+}
+
+static void assert_content_like_expected(void)
+{
+  const char *directories[] = {
+    "home",
+    "home/abc",
+    "home/abc/def",
+    "home/dir",
+  };
+  const char *symlinks[] = {
+    "symlink",
+  };
+  const struct {
+    const char *name;
+    const char *content;
+  } files[] = {
+    {
+      .name = "home/abc/def/test_script",
+      .content = "#! joel\nls -las /dev\n",
+    }, {
+      .name = "home/test_file",
+      .content = "This is a test of loading an RTEMS filesystem from an\n"
+                 "initial tar image.\n",
+    }, {
+      .name = "home/dir/file",
+      .content = "Hello world\n",
+    }
+  };
+  size_t i;
+  struct stat st;
+
+  for(i = 0; i < RTEMS_ARRAY_SIZE(directories); ++i) {
+    lstat(directories[i], &st);
+    rtems_test_assert( S_ISDIR(st.st_mode) );
+  }
+
+  for(i = 0; i < RTEMS_ARRAY_SIZE(symlinks); ++i) {
+    lstat(symlinks[i], &st);
+    rtems_test_assert( S_ISLNK(st.st_mode) );
+  }
+
+  for(i = 0; i < RTEMS_ARRAY_SIZE(files); ++i) {
+    lstat(files[i].name, &st);
+    rtems_test_assert( S_ISREG(st.st_mode) );
+
+    assert_file_content(
+        files[i].name,
+        files[i].content,
+        strlen(files[i].content)
+        );
+  }
+}
+
 void test_untar_from_file(void)
 {
   int                fd;
@@ -119,13 +224,105 @@ void test_untar_from_file(void)
   rv = chdir( "/dest" );
   rtems_test_assert( rv == 0 );
 
-  /* Untar it */
+  /* Case 1: Untar it into empty directory */
   rv = Untar_FromFile( "/test.tar" );
   printf("Untaring from file - ");
   if (rv != UNTAR_SUCCESSFUL) {
     printf ("error: untar failed: %i\n", rv);
     exit(1);
   }
+  assert_content_like_expected();
+  printf ("successful\n");
+
+  /* Case 2: Most files exist */
+  rv = unlink("/dest/home/test_file");
+  rtems_test_assert( rv == 0 );
+
+  rv = Untar_FromFile( "/test.tar" );
+  printf("Untar from file into existing structure with one missing file - ");
+  if (rv != UNTAR_SUCCESSFUL) {
+    printf ("error: untar failed: %i\n", rv);
+    exit(1);
+  }
+  assert_content_like_expected();
+  printf ("successful\n");
+
+  /* Case 3: An empty directory exists where a file should be */
+  rv = unlink("/dest/home/test_file");
+  rtems_test_assert( rv == 0 );
+  rv = mkdir("/dest/home/test_file", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  rtems_test_assert( rv == 0 );
+
+  rv = Untar_FromFile( "/test.tar" );
+  printf("Untar from file; overwrite empty directory with file - ");
+  if (rv != UNTAR_SUCCESSFUL) {
+    printf ("error: untar failed: %i\n", rv);
+    exit(1);
+  }
+  assert_content_like_expected();
+  printf ("successful\n");
+
+  /* Case 4: A file exists where a parent directory should be created */
+  rv = unlink("/dest/home/abc/def/test_script");
+  rtems_test_assert( rv == 0 );
+  rv = unlink("/dest/home/abc/def");
+  rtems_test_assert( rv == 0 );
+  rv = unlink("/dest/home/abc");
+  rtems_test_assert( rv == 0 );
+  fd = creat("/dest/home/abc", S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+  rtems_test_assert( fd >= 0 );
+  close(fd);
+
+  rv = Untar_FromFile( "/test.tar" );
+  printf("Untar from file; file exists where parent dir should be created - ");
+  if (rv != UNTAR_FAIL) {
+    printf ("error: untar didn't fail like expected: %i\n", rv);
+    exit(1);
+  }
+  printf ("expected fail\n");
+  /* cleanup so that the next one works */
+  rv = unlink("/dest/home/abc");
+  rtems_test_assert( rv == 0 );
+
+  /* Case 5: A non-empty directory exists where a file should be created */
+  rv = unlink("/dest/home/test_file");
+  rtems_test_assert( rv == 0 );
+  rv = mkdir("/dest/home/test_file", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  rtems_test_assert( rv == 0 );
+  fd = creat("/dest/home/test_file/file",
+      S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+  rtems_test_assert( fd >= 0 );
+  close(fd);
+
+  rv = Untar_FromFile( "/test.tar" );
+  printf("Untar from file; non-empty dir where file should be created - ");
+  if (rv != UNTAR_FAIL) {
+    printf ("error: untar didn't fail like expected: %i\n", rv);
+    exit(1);
+  }
+  printf ("expected fail\n");
+  /* cleanup so that the next one works */
+  rv = unlink("/dest/home/test_file/file");
+  rtems_test_assert( rv == 0 );
+  rv = unlink("/dest/home/test_file");
+  rtems_test_assert( rv == 0 );
+
+  /* Case 6: A file exists where a directory is explicitly in the archive */
+  rv = unlink("/dest/home/dir/file");
+  rtems_test_assert( rv == 0 );
+  rv = unlink("/dest/home/dir");
+  rtems_test_assert( rv == 0 );
+  fd = creat("/dest/home/dir", S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+  rtems_test_assert( fd >= 0 );
+  close(fd);
+
+  rv = Untar_FromFile( "/test.tar" );
+  printf("Untar from file; overwrite file with explicit directory - ");
+  if (rv != UNTAR_SUCCESSFUL) {
+    printf ("error: untar failed: %i\n", rv);
+    exit(1);
+  }
+  assert_content_like_expected();
   printf ("successful\n");
 
   /******************/

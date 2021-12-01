@@ -1,9 +1,24 @@
-*** TAR01 TEST ***
-Untaring from memory - successful
+*** BEGIN OF TEST TAR 1 ***
+*** TEST VERSION: 6.0.0.e1efb4eb8a9d6dd5f6f37dafc9feb0a9e6a888f1
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_POSIX_API
+*** TEST TOOLS: 10.3.1 20210409 (RTEMS 6, RSB ad54d1dd3cf8249d9d39deb1dd28b2f294df062d-modified, Newlib eb03ac1)
+Untaring from memory - untar: memory at 0x11ece8 (10240)
+untar: symlink: home/test_file -> symlink
+untar: file: home/test_file (s:73,m:0644)
+untar: file: home/abc/def/test_script (s:21,m:0755)
+untar: dir: home/dir
+untar: file: home/dir/file (s:12,m:0644)
+successful
 ========= /home/test_file =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
+========= /home/abc/def/test_script =========
+(0)#! joel
+ls -las /dev
+
+ /home/abc/def/test_script: mode: 0755 want: 0755
 ========= /symlink =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
@@ -11,35 +26,58 @@ initial tar image.
 
 Copy tar image to test.tar
 Untaring from file - successful
+Untar from file into existing structure with one missing file - successful
+Untar from file; overwrite empty directory with file - successful
+Untar from file; file exists where parent dir should be created - expected fail
+Untar from file; non-empty dir where file should be created - expected fail
+Untar from file; overwrite file with explicit directory - successful
 ========= /dest/home/test_file =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
+========= /dest/home/abc/def/test_script =========
+(0)#! joel
+ls -las /dev
+
+ /dest/home/abc/def/test_script: mode: 0755 want: 0755
 ========= /dest/symlink =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
 
-Untaring chunks from memory - untar: dir: home
-untar: file: home/test_file (73)
+Untaring chunks from memory - untar: symlink: home/test_file -> symlink
+untar: file: home/test_file (s:73,m:0644)
+untar: file: home/abc/def/test_script (s:21,m:0755)
+untar: dir: home/dir
+untar: file: home/dir/file (s:12,m:0644)
 successful
 ========= /dest2/home/test_file =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
+========= /dest2/home/abc/def/test_script =========
+(0)#! joel
+ls -las /dev
+
+ /dest2/home/abc/def/test_script: mode: 0755 want: 0755
 ========= /dest2/symlink =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
 
-Untaring chunks from tgz- untar: dir: home
-untar: file: home/test_file (73)
-successful
+Untaring chunks from tgz - successful
 ========= /dest3/home/test_file =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
+========= /dest3/home/abc/def/test_script =========
+(0)#! joel
+ls -las /dev
+
+ /dest3/home/abc/def/test_script: mode: 0755 want: 0755
 ========= /dest3/symlink =========
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
-*** END OF TAR01 TEST ***
+
+
+*** END OF TEST TAR 1 ***
