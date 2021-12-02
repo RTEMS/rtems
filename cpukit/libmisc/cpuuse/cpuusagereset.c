@@ -20,6 +20,7 @@
 #endif
 
 #include <rtems/cpuuse.h>
+#include <rtems/rtems/scheduler.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/schedulerimpl.h>

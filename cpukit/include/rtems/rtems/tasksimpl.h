@@ -111,6 +111,14 @@ RTEMS_INLINE_ROUTINE rtems_task_priority _RTEMS_Priority_From_core(
 
 /**@}*/
 
+/**
+ * @defgroup RTEMSImplClassicScheduler Scheduler Manager
+ *
+ * @ingroup RTEMSImplClassic
+ *
+ * @brief This group contains the Scheduler Manager implementation.
+ */
+
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/rtems/taskmp.h>
 #endif

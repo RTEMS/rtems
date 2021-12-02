@@ -303,6 +303,7 @@ install:
   - cpukit/include/rtems/rtems/region.h
   - cpukit/include/rtems/rtems/regiondata.h
   - cpukit/include/rtems/rtems/regionimpl.h
+  - cpukit/include/rtems/rtems/scheduler.h
   - cpukit/include/rtems/rtems/sem.h
   - cpukit/include/rtems/rtems/semdata.h
   - cpukit/include/rtems/rtems/semimpl.h

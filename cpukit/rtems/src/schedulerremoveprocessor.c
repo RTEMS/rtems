@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplClassic
+ * @ingroup RTEMSImplClassicScheduler
  *
  * @brief This source file contains the implementation of
  *   rtems_scheduler_remove_processor().
@@ -25,7 +25,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/scheduler.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/config.h>
 

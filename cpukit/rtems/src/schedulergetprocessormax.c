@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplClassic
+ * @ingroup RTEMSImplClassicScheduler
  *
  * @brief This source file contains the implementation of
  *   rtems_scheduler_get_processor_maximum() which may be used by binding for
@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/scheduler.h>
 
 static uint32_t _RTEMS_Scheduler_get_processor_maximum( void )
 {

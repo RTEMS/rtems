@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSImplClassic
+ * @ingroup RTEMSImplClassicScheduler
  *
  * @brief This source file contains the implementation of
  *   rtems_scheduler_map_priority_to_posix().
@@ -38,7 +38,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/scheduler.h>
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_scheduler_map_priority_to_posix(
