@@ -296,7 +296,7 @@ static inline uintptr_t _CPU_atomic_Load_uintptr( const CPU_atomic_Uintptr *obj,
 static inline void _CPU_atomic_Store_uint( CPU_atomic_Uint *obj, unsigned int desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
-  obj->store( desired );
+  obj->store( desired, order );
 #elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
   atomic_store_explicit( obj, desired, order );
 #else
@@ -316,7 +316,7 @@ static inline void _CPU_atomic_Store_uint( CPU_atomic_Uint *obj, unsigned int de
 static inline void _CPU_atomic_Store_ulong( CPU_atomic_Ulong *obj, unsigned long desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
-  obj->store( desired );
+  obj->store( desired, order );
 #elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
   atomic_store_explicit( obj, desired, order );
 #else
@@ -336,7 +336,7 @@ static inline void _CPU_atomic_Store_ulong( CPU_atomic_Ulong *obj, unsigned long
 static inline void _CPU_atomic_Store_uintptr( CPU_atomic_Uintptr *obj, uintptr_t desired, CPU_atomic_Order order )
 {
 #if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
-  obj->store( desired );
+  obj->store( desired, order );
 #elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
   atomic_store_explicit( obj, desired, order );
 #else
