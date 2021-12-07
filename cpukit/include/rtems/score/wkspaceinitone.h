@@ -59,26 +59,29 @@ extern "C" {
  */
 RTEMS_INLINE_ROUTINE void _Workspace_Initialize_for_one_area( void )
 {
-  uintptr_t page_size;
-  uintptr_t wkspace_size;
-  uintptr_t wkspace_size_with_overhead;
-  uintptr_t available_size;
+  uintptr_t                 page_size;
+  uintptr_t                 wkspace_size;
+  uintptr_t                 wkspace_size_with_overhead;
+  const Memory_Information *mem;
+  Memory_Area              *area;
+  uintptr_t                 free_size;
+  uintptr_t                 available_size;
 
   page_size = CPU_HEAP_ALIGNMENT;
   wkspace_size = rtems_configuration_get_work_space_size();
   wkspace_size_with_overhead = wkspace_size + _Heap_Area_overhead( page_size );
 
-  if ( wkspace_size < wkspace_size_with_overhead ) {
-    const Memory_Information *mem;
-    Memory_Area              *area;
-    uintptr_t                 free_size;
-    uintptr_t                 size;
+  mem = _Memory_Get();
+  _Assert( _Memory_Get_count( mem ) == 1 );
 
-    mem = _Memory_Get();
-    _Assert( _Memory_Get_count( mem ) == 1 );
+  area = _Memory_Get_area( mem, 0 );
+  free_size = _Memory_Get_free_size( area );
 
-    area = _Memory_Get_area( mem, 0 );
-    free_size = _Memory_Get_free_size( area );
+  if (
+    wkspace_size < wkspace_size_with_overhead &&
+    free_size >= wkspace_size_with_overhead
+  ) {
+    uintptr_t size;
 
     if ( rtems_configuration_get_unified_work_area() ) {
       size = free_size;
@@ -95,7 +98,10 @@ RTEMS_INLINE_ROUTINE void _Workspace_Initialize_for_one_area( void )
 
     _Memory_Consume( area, size );
   } else {
-    /* An unsigned integer overflow happened */
+    /*
+     * An unsigned integer overflow happened, or the available free memory is
+     * not enough.
+     */
     available_size = 0;
   }
 
