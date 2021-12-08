@@ -1,0 +1,56 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+cppflags: []
+cxxflags: []
+enabled-by: RTEMS_SMP
+extra-files:
+- testsuites/validation/tr-chains-api-model.h
+- testsuites/validation/tr-event-mgr-model.h
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/validation/tc-event-mgr-model.c
+- testsuites/validation/tr-chains-api-model-0.c
+- testsuites/validation/tr-chains-api-model-1.c
+- testsuites/validation/tr-chains-api-model-10.c
+- testsuites/validation/tr-chains-api-model-11.c
+- testsuites/validation/tr-chains-api-model-12.c
+- testsuites/validation/tr-chains-api-model-13.c
+- testsuites/validation/tr-chains-api-model-14.c
+- testsuites/validation/tr-chains-api-model-15.c
+- testsuites/validation/tr-chains-api-model-16.c
+- testsuites/validation/tr-chains-api-model-17.c
+- testsuites/validation/tr-chains-api-model-18.c
+- testsuites/validation/tr-chains-api-model-19.c
+- testsuites/validation/tr-chains-api-model-2.c
+- testsuites/validation/tr-chains-api-model-20.c
+- testsuites/validation/tr-chains-api-model-3.c
+- testsuites/validation/tr-chains-api-model-4.c
+- testsuites/validation/tr-chains-api-model-5.c
+- testsuites/validation/tr-chains-api-model-6.c
+- testsuites/validation/tr-chains-api-model-7.c
+- testsuites/validation/tr-chains-api-model-8.c
+- testsuites/validation/tr-chains-api-model-9.c
+- testsuites/validation/tr-chains-api-model.c
+- testsuites/validation/tr-event-mgr-model-0.c
+- testsuites/validation/tr-event-mgr-model-1.c
+- testsuites/validation/tr-event-mgr-model-2.c
+- testsuites/validation/tr-event-mgr-model-3.c
+- testsuites/validation/tr-event-mgr-model-4.c
+- testsuites/validation/tr-event-mgr-model-5.c
+- testsuites/validation/tr-event-mgr-model-6.c
+- testsuites/validation/tr-event-mgr-model-7.c
+- testsuites/validation/tr-event-mgr-model-8.c
+- testsuites/validation/tr-event-mgr-model.c
+- testsuites/validation/ts-model-0.c
+stlib: []
+target: testsuites/validation/ts-model-0.exe
+type: build
+use-after:
+- validation
+use-before: []
