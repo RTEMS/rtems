@@ -15,6 +15,8 @@ source:
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c
 - testsuites/validation/tr-mtx-surrender.c
+- testsuites/validation/tr-object-ident.c
+- testsuites/validation/tr-object-ident-local.c
 - testsuites/validation/tr-sem-seize-try.c
 - testsuites/validation/tr-sem-seize-wait.c
 - testsuites/validation/tr-sem-surrender.c
