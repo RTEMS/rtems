@@ -84,6 +84,8 @@ source:
 - testsuites/validation/tc-status-is-equal.c
 - testsuites/validation/tc-status-is-successful.c
 - testsuites/validation/tc-status-text.c
+- testsuites/validation/tc-support.c
+- testsuites/validation/tc-support-is-name-valid.c
 - testsuites/validation/tc-sys-lock.c
 - testsuites/validation/tc-task.c
 - testsuites/validation/tc-task-create-errors.c
