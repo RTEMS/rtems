@@ -40,6 +40,7 @@ source:
 - testsuites/validation/tc-message-receive.c
 - testsuites/validation/tc-message-urgent-send.c
 - testsuites/validation/tc-modes.c
+- testsuites/validation/tc-object.c
 - testsuites/validation/tc-options.c
 - testsuites/validation/tc-part.c
 - testsuites/validation/tc-part-create.c
@@ -104,6 +105,7 @@ source:
 - testsuites/validation/tc-timer-reset.c
 - testsuites/validation/tc-timer-server-fire-after.c
 - testsuites/validation/tc-timer-server-fire-when.c
+- testsuites/validation/tc-type.c
 - testsuites/validation/tc-userext-create.c
 - testsuites/validation/tc-userext-delete.c
 - testsuites/validation/tc-userext-ident.c

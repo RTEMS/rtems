@@ -59,22 +59,39 @@
 /**
  * @defgroup RTEMSTestCaseRtemsObjectValObject spec:/rtems/object/val/object
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNoClock0
  *
- * @brief Tests the rtems_build_name() macro.
+ * @brief Tests some @ref RTEMSAPIClassicObject directives.
  *
  * This test case performs the following actions:
  *
- * - Validate the results of rtems_build_name() for a sample set of parameters.
+ * - Validate the results of rtems_build_name() (function) and
+ *   rtems_build_name() (macro) for a sample set of parameters.
  *
  *   - Check that the accumulated name has the expected value.
+ *
+ * - Validate the result of rtems_object_get_local_node().
+ *
+ *   - Check that the returned value is one.
  *
  * @{
  */
 
+static rtems_name BuildNameMacro( char c1, char c2, char c3, char c4 )
+{
+  return rtems_build_name( c1, c2, c3, c4 );
+}
+
+#undef rtems_build_name
+
+static rtems_name BuildName( char c1, char c2, char c3, char c4 )
+{
+  return rtems_build_name( c1, c2, c3, c4 );
+}
+
 /**
- * @brief Validate the results of rtems_build_name() for a sample set of
- *   parameters.
+ * @brief Validate the results of rtems_build_name() (function) and
+ *   rtems_build_name() (macro) for a sample set of parameters.
  */
 static void RtemsObjectValObject_Action_0( void )
 {
@@ -123,13 +140,22 @@ static void RtemsObjectValObject_Action_0( void )
           T_quiet_eq_u32( actual_name, expected_name )
           accumulated_name += actual_name;
 
-          actual_name = rtems_build_name(
+          actual_name = BuildName(
             chars[ i ],
             chars[ j ],
             chars[ k ],
             chars[ r ]
           );
           T_quiet_eq_u32( actual_name, expected_name );
+
+          actual_name = BuildNameMacro(
+            chars[ i ],
+            chars[ j ],
+            chars[ k ],
+            chars[ r ]
+          );
+          T_quiet_eq_u32( actual_name, expected_name );
+
           accumulated_name += actual_name;
         }
       }
@@ -143,13 +169,29 @@ static void RtemsObjectValObject_Action_0( void )
 }
 
 /**
+ * @brief Validate the result of rtems_object_get_local_node().
+ */
+static void RtemsObjectValObject_Action_1( void )
+{
+  uint32_t node;
+
+  node = rtems_object_get_local_node();
+
+  /*
+   * Check that the returned value is one.
+   */
+  T_step_eq_u32( 1, node, 1 );
+}
+
+/**
  * @fn void T_case_body_RtemsObjectValObject( void )
  */
 T_TEST_CASE( RtemsObjectValObject )
 {
-  T_plan( 1 );
+  T_plan( 2 );
 
   RtemsObjectValObject_Action_0();
+  RtemsObjectValObject_Action_1();
 }
 
 /** @} */
