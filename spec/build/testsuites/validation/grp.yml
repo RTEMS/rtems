@@ -39,6 +39,8 @@ links:
 - role: build-dependency
   uid: validation-acfg-1
 - role: build-dependency
+  uid: validation-cache
+- role: build-dependency
   uid: validation-no-clock-0
 - role: build-dependency
   uid: validation-non-smp
