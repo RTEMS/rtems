@@ -1041,7 +1041,7 @@ static void RtemsIntrReqEntryInstall_Setup(
   rtems_status_code sc;
 
   ctx->initialized_during_setup = bsp_interrupt_is_initialized();
-  ctx->test_vector = GetTestableInterruptVector();
+  ctx->test_vector = GetTestableInterruptVector( NULL );
   sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
   T_rsc_success( sc );
 }

@@ -13,6 +13,13 @@ links: []
 source:
 - testsuites/validation/tx-call-within-isr.c
 - testsuites/validation/tx-interrupt.c
+- testsuites/validation/tx-io-relax.c
+- testsuites/validation/tx-memory-alloc.c
+- testsuites/validation/tx-preemption-intervention.c
 - testsuites/validation/tx-support.c
+- testsuites/validation/tx-thread-queue.c
+- testsuites/validation/tx-timecounter.c
+- testsuites/validation/tx-timer-server.c
+- testsuites/validation/tx-wrap-thread-queue.c
 target: validation
 type: build

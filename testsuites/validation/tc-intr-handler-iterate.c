@@ -505,7 +505,7 @@ static void RtemsIntrReqHandlerIterate_Setup(
   rtems_status_code sc;
 
   ctx->initialized_during_setup = bsp_interrupt_is_initialized();
-  ctx->test_vector = GetTestableInterruptVector();
+  ctx->test_vector = GetTestableInterruptVector( NULL );
   rtems_interrupt_entry_initialize(
     &ctx->entry,
     EntryRoutine,

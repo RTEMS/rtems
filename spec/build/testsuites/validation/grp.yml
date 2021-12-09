@@ -20,5 +20,6 @@ links:
   uid: validation-1
 type: build
 use-after:
+- validation
 - rtemstest
 use-before: []

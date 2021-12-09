@@ -45,6 +45,30 @@
 
 #include <bsp/irq-generic.h>
 
+static bool HasRequiredAttributes(
+  const rtems_interrupt_attributes *required,
+  const rtems_interrupt_attributes *actual
+)
+{
+  if ( required == NULL ) {
+    return true;
+  }
+
+  if ( required->can_get_affinity && !actual->can_get_affinity ) {
+    return false;
+  }
+
+  if ( required->can_raise && !actual->can_raise ) {
+    return false;
+  }
+
+  if ( required->can_raise_on && !actual->can_raise_on ) {
+    return false;
+  }
+
+  return true;
+}
+
 rtems_vector_number GetValidInterruptVectorNumber(
   const rtems_interrupt_attributes *required
 )
@@ -57,11 +81,7 @@ rtems_vector_number GetValidInterruptVectorNumber(
 
     sc = rtems_interrupt_get_attributes( vector, &attr );
 
-    if (
-      sc == RTEMS_SUCCESSFUL &&
-        ( required == NULL ||
-          !required->can_get_affinity || attr.can_get_affinity )
-      ) {
+    if ( sc == RTEMS_SUCCESSFUL && HasRequiredAttributes( required, &attr ) ) {
       break;
     }
   }
@@ -69,7 +89,9 @@ rtems_vector_number GetValidInterruptVectorNumber(
   return vector;
 }
 
-rtems_vector_number GetTestableInterruptVector( void )
+rtems_vector_number GetTestableInterruptVector(
+  const rtems_interrupt_attributes *required
+)
 {
   rtems_vector_number vector;
 
@@ -84,6 +106,10 @@ rtems_vector_number GetTestableInterruptVector( void )
     }
 
     if ( !attr.is_maskable ) {
+      continue;
+    }
+
+    if ( !HasRequiredAttributes( required, &attr ) ) {
       continue;
     }
 
