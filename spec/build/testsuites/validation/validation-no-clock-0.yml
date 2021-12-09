@@ -18,6 +18,8 @@ source:
 - testsuites/validation/tc-barrier-ident.c
 - testsuites/validation/tc-barrier-release.c
 - testsuites/validation/tc-barrier-wait.c
+- testsuites/validation/tc-basedefs.c
+- testsuites/validation/tc-basedefs-pendant.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c
