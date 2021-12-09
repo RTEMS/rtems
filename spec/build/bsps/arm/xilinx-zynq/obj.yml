@@ -14,10 +14,12 @@ install:
   - bsps/arm/xilinx-zynq/include/tm27.h
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
-  - bsps/include/dev/i2c/cadence-i2c-regs.h
-  - bsps/include/dev/i2c/cadence-i2c.h
   - bsps/arm/xilinx-zynq/include/bsp/i2c.h
   - bsps/arm/xilinx-zynq/include/bsp/irq.h
+- destination: ${BSP_INCLUDEDIR}/dev/i2c
+  source:
+  - bsps/include/dev/i2c/cadence-i2c-regs.h
+  - bsps/include/dev/i2c/cadence-i2c.h
 links: []
 source:
 - bsps/arm/shared/cache/cache-l2c-310.c

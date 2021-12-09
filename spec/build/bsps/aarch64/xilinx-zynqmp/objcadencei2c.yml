@@ -10,9 +10,11 @@ includes: []
 install:
 - destination: ${BSP_INCLUDEDIR}/bsp
   source:
+  - bsps/aarch64/xilinx-zynqmp/include/bsp/i2c.h
+- destination: ${BSP_INCLUDEDIR}/dev/i2c
+  source:
   - bsps/include/dev/i2c/cadence-i2c-regs.h
   - bsps/include/dev/i2c/cadence-i2c.h
-  - bsps/aarch64/xilinx-zynqmp/include/bsp/i2c.h
 links: []
 source:
 - bsps/shared/dev/i2c/cadence-i2c.c
