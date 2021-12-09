@@ -43,6 +43,8 @@ links:
 - role: build-dependency
   uid: validation-intr
 - role: build-dependency
+  uid: validation-io-kernel
+- role: build-dependency
   uid: validation-no-clock-0
 - role: build-dependency
   uid: validation-non-smp

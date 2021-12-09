@@ -28,6 +28,9 @@ source:
 - testsuites/validation/tc-cpuuse.c
 - testsuites/validation/tc-events.c
 - testsuites/validation/tc-intr.c
+- testsuites/validation/tc-io-getchark.c
+- testsuites/validation/tc-io-putc.c
+- testsuites/validation/tc-io-put-char.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c
