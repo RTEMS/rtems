@@ -67,6 +67,7 @@ source:
 - testsuites/validation/tc-scheduler-ident-by-processor-set.c
 - testsuites/validation/tc-scheduler-ident.c
 - testsuites/validation/tc-scheduler-remove-processor.c
+- testsuites/validation/tc-sched-yield.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tc-sem-create.c
 - testsuites/validation/tc-sem-flush.c
