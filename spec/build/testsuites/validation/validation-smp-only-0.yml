@@ -11,6 +11,7 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/validation/tc-score-tq-smp.c
 - testsuites/validation/ts-validation-smp-only-0.c
 stlib: []
 target: testsuites/validation/ts-validation-smp-only-0.exe
