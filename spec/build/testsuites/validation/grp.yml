@@ -60,6 +60,12 @@ links:
   uid: validation-smp-only-1
 - role: build-dependency
   uid: validation-smp-only-2
+- role: build-dependency
+  uid: validation-timecounter-0
+- role: build-dependency
+  uid: validation-timecounter-1
+- role: build-dependency
+  uid: validation-timecounter-smp-0
 type: build
 use-after:
 - validation
