@@ -35,6 +35,10 @@ links:
 - role: build-dependency
   uid: validation-1
 - role: build-dependency
+  uid: validation-acfg-0
+- role: build-dependency
+  uid: validation-acfg-1
+- role: build-dependency
   uid: validation-no-clock-0
 - role: build-dependency
   uid: validation-non-smp

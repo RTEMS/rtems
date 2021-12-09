@@ -8,9 +8,11 @@ cxxflags: []
 enabled-by: true
 features: c cprogram
 includes: []
-ldflags: []
+ldflags:
+- -Wl,--wrap=_Scheduler_priority_Yield
 links: []
 source:
+- testsuites/validation/tc-acfg-one-cpu.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/ts-validation-one-cpu-0.c
 stlib: []

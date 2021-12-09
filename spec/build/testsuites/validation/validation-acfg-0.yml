@@ -5,18 +5,17 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
-enabled-by: RTEMS_SMP
+enabled-by: true
 features: c cprogram
 includes: []
-ldflags:
-- -Wl,--wrap=_Scheduler_EDF_SMP_Yield
+ldflags: []
 links: []
 source:
-- testsuites/validation/tc-acfg-scheduler-edf-smp.c
-- testsuites/validation/tc-score-tq-smp.c
-- testsuites/validation/ts-validation-smp-only-0.c
+- testsuites/validation/tc-acfg-appl-does-not-need-clock-driver.c
+- testsuites/validation/tc-acfg-default.c
+- testsuites/validation/ts-validation-acfg-0.c
 stlib: []
-target: testsuites/validation/ts-validation-smp-only-0.exe
+target: testsuites/validation/ts-validation-acfg-0.exe
 type: build
 use-after: []
 use-before: []
