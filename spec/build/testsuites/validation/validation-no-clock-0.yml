@@ -47,6 +47,13 @@ source:
 - testsuites/validation/tc-part-get.c
 - testsuites/validation/tc-part-ident.c
 - testsuites/validation/tc-part-return.c
+- testsuites/validation/tc-ratemon-cancel.c
+- testsuites/validation/tc-ratemon-create.c
+- testsuites/validation/tc-ratemon-delete.c
+- testsuites/validation/tc-ratemon-get-status.c
+- testsuites/validation/tc-ratemon-ident.c
+- testsuites/validation/tc-ratemon-period.c
+- testsuites/validation/tc-ratemon-timeout.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c

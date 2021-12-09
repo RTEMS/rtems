@@ -13,6 +13,10 @@ ldflags:
 links: []
 source:
 - testsuites/validation/tc-acfg-one-cpu.c
+- testsuites/validation/tc-ratemon-cancel.c
+- testsuites/validation/tc-ratemon-get-status.c
+- testsuites/validation/tc-ratemon-period.c
+- testsuites/validation/tc-ratemon-timeout.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/ts-validation-one-cpu-0.c
 stlib: []
