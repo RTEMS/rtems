@@ -63,6 +63,13 @@ source:
 - testsuites/validation/tc-scheduler-ident.c
 - testsuites/validation/tc-scheduler-remove-processor.c
 - testsuites/validation/tc-score-fatal.c
+- testsuites/validation/tc-sem-create.c
+- testsuites/validation/tc-sem-flush.c
+- testsuites/validation/tc-sem-ident.c
+- testsuites/validation/tc-sem-obtain.c
+- testsuites/validation/tc-sem-release.c
+- testsuites/validation/tc-sem-set-priority.c
+- testsuites/validation/tc-sem-timeout.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c
