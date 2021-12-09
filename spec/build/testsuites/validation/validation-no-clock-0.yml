@@ -74,6 +74,10 @@ source:
 - testsuites/validation/tc-signal-catch.c
 - testsuites/validation/tc-signals.c
 - testsuites/validation/tc-signal-send.c
+- testsuites/validation/tc-status.c
+- testsuites/validation/tc-status-is-equal.c
+- testsuites/validation/tc-status-is-successful.c
+- testsuites/validation/tc-status-text.c
 - testsuites/validation/tc-task.c
 - testsuites/validation/tc-task-create-errors.c
 - testsuites/validation/tc-task-delete.c
