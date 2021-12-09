@@ -20,6 +20,11 @@ source:
 - testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-basedefs.c
 - testsuites/validation/tc-basedefs-pendant.c
+- testsuites/validation/tc-clock.c
+- testsuites/validation/tc-clock-get-tod.c
+- testsuites/validation/tc-clock-get-uptime.c
+- testsuites/validation/tc-clock-nanosleep.c
+- testsuites/validation/tc-clock-set.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-mtx-seize-try.c
 - testsuites/validation/tr-mtx-seize-wait.c
