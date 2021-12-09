@@ -55,6 +55,8 @@ links:
 - role: build-dependency
   uid: validation-one-cpu-1
 - role: build-dependency
+  uid: validation-smp-one-cpu-0
+- role: build-dependency
   uid: validation-smp-only-0
 - role: build-dependency
   uid: validation-smp-only-1

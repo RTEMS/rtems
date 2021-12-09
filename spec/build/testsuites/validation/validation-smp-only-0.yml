@@ -20,6 +20,8 @@ source:
 - testsuites/validation/tc-sched-smp.c
 - testsuites/validation/tc-sched-smp-edf.c
 - testsuites/validation/tc-sched-smp-edf-set-affinity.c
+- testsuites/validation/tc-score-smp-per-cpu-jobs.c
+- testsuites/validation/tc-score-smp-thread.c
 - testsuites/validation/tc-score-tq-smp.c
 - testsuites/validation/tc-sem-smp.c
 - testsuites/validation/tc-sem-mrsp-obtain.c
