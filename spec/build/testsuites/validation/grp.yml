@@ -68,6 +68,10 @@ links:
   uid: validation-timecounter-1
 - role: build-dependency
   uid: validation-timecounter-smp-0
+- role: build-dependency
+  uid: validation-tls-0
+- role: build-dependency
+  uid: validation-tls-1
 type: build
 use-after:
 - validation
