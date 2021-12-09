@@ -39,6 +39,7 @@ source:
 - testsuites/validation/tc-message-macros.c
 - testsuites/validation/tc-message-receive.c
 - testsuites/validation/tc-message-urgent-send.c
+- testsuites/validation/tc-modes.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c
