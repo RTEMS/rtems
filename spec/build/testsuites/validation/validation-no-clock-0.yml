@@ -54,6 +54,14 @@ source:
 - testsuites/validation/tc-ratemon-ident.c
 - testsuites/validation/tc-ratemon-period.c
 - testsuites/validation/tc-ratemon-timeout.c
+- testsuites/validation/tc-scheduler-add-processor.c
+- testsuites/validation/tc-scheduler.c
+- testsuites/validation/tc-scheduler-get-maximum-priority.c
+- testsuites/validation/tc-scheduler-get-processor-set.c
+- testsuites/validation/tc-scheduler-ident-by-processor.c
+- testsuites/validation/tc-scheduler-ident-by-processor-set.c
+- testsuites/validation/tc-scheduler-ident.c
+- testsuites/validation/tc-scheduler-remove-processor.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c

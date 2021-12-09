@@ -13,6 +13,7 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-intr-non-smp.c
+- testsuites/validation/tc-scheduler-non-smp.c
 - testsuites/validation/ts-validation-non-smp.c
 stlib: []
 target: testsuites/validation/ts-validation-non-smp.exe
