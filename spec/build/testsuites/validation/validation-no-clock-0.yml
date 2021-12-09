@@ -20,6 +20,7 @@ source:
 - testsuites/validation/tc-barrier-wait.c
 - testsuites/validation/tc-basedefs.c
 - testsuites/validation/tc-basedefs-pendant.c
+- testsuites/validation/tc-c.c
 - testsuites/validation/tc-clock.c
 - testsuites/validation/tc-clock-get-tod.c
 - testsuites/validation/tc-clock-get-uptime.c
@@ -27,6 +28,7 @@ source:
 - testsuites/validation/tc-clock-set.c
 - testsuites/validation/tc-cpuuse.c
 - testsuites/validation/tc-events.c
+- testsuites/validation/tc-flsl.c
 - testsuites/validation/tc-futex-wait.c
 - testsuites/validation/tc-futex-wake.c
 - testsuites/validation/tc-intr.c
