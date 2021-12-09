@@ -12,6 +12,9 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-score-fatal.c
+- testsuites/validation/tr-mtx-seize-try.c
+- testsuites/validation/tr-mtx-seize-wait.c
+- testsuites/validation/tr-mtx-surrender.c
 - testsuites/validation/tr-sem-seize-try.c
 - testsuites/validation/tr-sem-seize-wait.c
 - testsuites/validation/tr-sem-surrender.c
