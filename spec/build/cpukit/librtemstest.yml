@@ -7,7 +7,11 @@ cppflags: []
 cxxflags: []
 enabled-by: true
 includes: []
-install: []
+install:
+- destination: ${BSP_INCLUDEDIR}/rtems
+  source:
+  - cpukit/include/rtems/test.h
+  - cpukit/include/rtems/test-info.h
 install-path: ${BSP_LIBDIR}
 links: []
 source:

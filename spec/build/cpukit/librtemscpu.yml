@@ -174,8 +174,6 @@ install:
   - cpukit/include/rtems/termios_printk.h
   - cpukit/include/rtems/termios_printk_cnf.h
   - cpukit/include/rtems/termiostypes.h
-  - cpukit/include/rtems/test.h
-  - cpukit/include/rtems/test-info.h
   - cpukit/include/rtems/thread.h
   - cpukit/include/rtems/timecounter.h
   - cpukit/include/rtems/timespec.h
