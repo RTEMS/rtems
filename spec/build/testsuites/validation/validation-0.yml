@@ -12,6 +12,7 @@ ldflags: []
 links: []
 source:
 - testsuites/validation/tc-acfg-appl-needs-clock-driver.c
+- testsuites/validation/tc-event-send-receive.c
 - testsuites/validation/tc-intr-clear.c
 - testsuites/validation/tc-intr-entry-install.c
 - testsuites/validation/tc-intr-entry-remove.c
@@ -31,6 +32,7 @@ source:
 - testsuites/validation/tc-signal-send.c
 - testsuites/validation/tc-task-construct-errors.c
 - testsuites/validation/tc-task-create-errors.c
+- testsuites/validation/tr-event-send-receive.c
 - testsuites/validation/ts-validation-0.c
 stlib: []
 target: testsuites/validation/ts-validation-0.exe
