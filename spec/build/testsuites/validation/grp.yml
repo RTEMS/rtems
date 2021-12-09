@@ -31,6 +31,8 @@ links:
 - role: build-dependency
   uid: terminate
 - role: build-dependency
+  uid: userext
+- role: build-dependency
   uid: validation-0
 - role: build-dependency
   uid: validation-1
