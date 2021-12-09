@@ -3,11 +3,12 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
+ * @brief This header file provides a validation test suite runner for
+ *    validation test cases specific to the application configuration.
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,47 +32,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * This file is part of the RTEMS quality process and was automatically
- * generated.  If you find something that needs to be fixed or
- * worded better please post a report or patch to an RTEMS mailing list
- * or raise a bug report:
- *
- * https://www.rtems.org/bugs.html
- *
- * For information on updating and regenerating please refer to the How-To
- * section in the Software Requirements Engineering chapter of the
- * RTEMS Software Engineering manual.  The manual is provided as a part of
- * a release.  For development sources please refer to the online
- * documentation at:
- *
- * https://docs.rtems.org
- */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
+#include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/test.h>
+#include <rtems/test-info.h>
+#include <rtems/testopts.h>
 
-/**
- * @defgroup RTEMSTestSuiteTestsuitesValidation1 spec:/testsuites/validation-1
- *
- * @ingroup RTEMSTestSuites
- *
- * @brief This general purpose validation test suite provides enough resources
- *   to run basic tests for all specified managers and functions.
- *
- * In SMP configurations, up to three scheduler instances using the SMP EDF
- * scheduler are provided using up to four processors.
- *
- * @{
- */
+static char buffer[ 512 ];
 
-const char rtems_test_name[] = "Validation1";
+static const T_action actions[] = {
+  T_report_hash_sha256
+};
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 5
+static const T_config test_config = {
+  .name = rtems_test_name,
+  .buf = buffer,
+  .buf_size = sizeof( buffer ),
+  .putchar = rtems_put_char,
+  .verbosity = RTEMS_TEST_VERBOSITY,
+  .now = T_now_tick,
+  .allocate = T_memory_allocate,
+  .deallocate = T_memory_deallocate,
+  .action_count = T_ARRAY_SIZE( actions ),
+  .actions = actions
+};
 
-#include "ts-default.h"
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-/** @} */
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+#define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+#define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+RTEMS_NO_RETURN static void RunTestSuite( void )
+{
+  int exit_code;
+
+  rtems_test_begin( rtems_test_name, TEST_STATE );
+  T_register();
+  exit_code = T_main( &test_config );
+
+  if ( exit_code == 0 ) {
+    rtems_test_end( rtems_test_name );
+  }
+
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, (uint32_t) exit_code );
+}

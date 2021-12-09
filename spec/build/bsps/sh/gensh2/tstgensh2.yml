@@ -2,12 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 actions:
 - set-test-state:
     fileio: exclude
-    fsdosfsname01: exclude
     iostream: exclude
-    linpack: exclude
     rcxx01: exclude
-    record02: exclude
     utf8proc01: exclude
+    validation-no-clock-0: exclude
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
@@ -18,4 +16,6 @@ enabled-by: true
 links:
 - role: build-dependency
   uid: ../../tstnoiconv
+- role: build-dependency
+  uid: ../../tstsmallmem
 type: build

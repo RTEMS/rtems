@@ -60,6 +60,8 @@ links:
 - role: build-dependency
   uid: start
 - role: build-dependency
+  uid: tst-xfail-val
+- role: build-dependency
   uid: ../../obj
 - role: build-dependency
   uid: ../../objirq

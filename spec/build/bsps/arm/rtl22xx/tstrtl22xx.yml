@@ -9,6 +9,7 @@ actions:
     rcxx01: exclude
     record02: exclude
     utf8proc01: exclude
+    validation-no-clock-0: exclude
 build-type: option
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

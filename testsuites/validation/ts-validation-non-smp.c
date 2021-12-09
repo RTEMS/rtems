@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesPerformance0
+ * @ingroup RTEMSTestSuiteTestsuitesValidationNonSmp
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -52,26 +52,23 @@
 #include "config.h"
 #endif
 
-#include <rtems/test-info.h>
-
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesPerformance0 \
- *   spec:/testsuites/performance-0
+ * @defgroup RTEMSTestSuiteTestsuitesValidationNonSmp \
+ *   spec:/testsuites/validation-non-smp
  *
  * @ingroup RTEMSTestSuites
  *
- * @brief This general purpose performance test suite provides enough resources
- *   to run basic performance tests for all specified managers and functions.
- *
- * In SMP configurations, up to three scheduler instances using the SMP EDF
- * scheduler are provided using up to four processors.
+ * @brief This test suite for non-SMP test cases provides enough resources to
+ *   run basic tests for all specified managers and functions.
  *
  * @{
  */
 
-const char rtems_test_name[] = "Performance0";
+const char rtems_test_name[] = "ValidationNonSMP";
+
+#define CONFIGURE_MAXIMUM_PROCESSORS 1
 
 #include "ts-default.h"
 

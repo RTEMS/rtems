@@ -30,6 +30,8 @@ links:
 - role: build-dependency
   uid: ../../opto2
 - role: build-dependency
+  uid: ../../tst-xfail-intr
+- role: build-dependency
   uid: ../crti
 - role: build-dependency
   uid: ../crtn

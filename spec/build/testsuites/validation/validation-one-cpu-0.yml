@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: test-program
 cflags: []
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
 enabled-by: true
@@ -11,10 +11,9 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/validation/tc-part-performance.c
-- testsuites/validation/ts-performance-0.c
+- testsuites/validation/ts-validation-one-cpu-0.c
 stlib: []
-target: testsuites/validation/ts-performance-0.exe
+target: testsuites/validation/ts-validation-one-cpu-0.exe
 type: build
 use-after: []
 use-before: []

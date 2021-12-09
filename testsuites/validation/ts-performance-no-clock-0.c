@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
+ * @ingroup RTEMSTestSuiteTestsuitesPerformanceNoClock0
  */
 
 /*
@@ -52,15 +52,18 @@
 #include "config.h"
 #endif
 
+#include <rtems/test-info.h>
+
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidation1 spec:/testsuites/validation-1
+ * @defgroup RTEMSTestSuiteTestsuitesPerformanceNoClock0 \
+ *   spec:/testsuites/performance-no-clock-0
  *
  * @ingroup RTEMSTestSuites
  *
- * @brief This general purpose validation test suite provides enough resources
- *   to run basic tests for all specified managers and functions.
+ * @brief This general purpose performance test suite provides enough resources
+ *   to run basic performance tests for all specified managers and functions.
  *
  * In SMP configurations, up to three scheduler instances using the SMP EDF
  * scheduler are provided using up to four processors.
@@ -68,9 +71,11 @@
  * @{
  */
 
-const char rtems_test_name[] = "Validation1";
+const char rtems_test_name[] = "PerformanceNoClock0";
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 5
+#define CONFIGURE_MAXIMUM_PROCESSORS 4
+
+#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
 #include "ts-default.h"
 

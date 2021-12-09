@@ -13,11 +13,21 @@ links:
 - role: build-dependency
   uid: libvalidation
 - role: build-dependency
-  uid: performance-0
+  uid: performance-no-clock-0
 - role: build-dependency
   uid: validation-0
 - role: build-dependency
   uid: validation-1
+- role: build-dependency
+  uid: validation-no-clock-0
+- role: build-dependency
+  uid: validation-non-smp
+- role: build-dependency
+  uid: validation-one-cpu-0
+- role: build-dependency
+  uid: validation-smp-only-0
+- role: build-dependency
+  uid: validation-smp-only-1
 type: build
 use-after:
 - validation

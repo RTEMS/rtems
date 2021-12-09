@@ -3,11 +3,11 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTestsuitesValidation1
+ * @ingroup RTEMSTestSuiteTestsuitesValidationSmpOnly1
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -52,25 +52,42 @@
 #include "config.h"
 #endif
 
+#include "ts-config.h"
+
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTestsuitesValidation1 spec:/testsuites/validation-1
+ * @defgroup RTEMSTestSuiteTestsuitesValidationSmpOnly1 \
+ *   spec:/testsuites/validation-smp-only-1
  *
  * @ingroup RTEMSTestSuites
  *
- * @brief This general purpose validation test suite provides enough resources
- *   to run basic tests for all specified managers and functions.
- *
- * In SMP configurations, up to three scheduler instances using the SMP EDF
- * scheduler are provided using up to four processors.
+ * @brief This SMP-only test suite validates the clustered scheduler
+ *   configuration through an application configuration with a processor
+ *   maximum of two, however, only the first processor has a scheduler
+ *   assigned.
  *
  * @{
  */
 
-const char rtems_test_name[] = "Validation1";
+const char rtems_test_name[] = "ValidationSMPOnly1";
 
-#define CONFIGURE_MAXIMUM_PROCESSORS 5
+#define CONFIGURE_MAXIMUM_PROCESSORS 2
+
+#include <rtems/score/scheduleredfsmp.h>
+
+#define CONFIGURE_SCHEDULER_EDF_SMP
+
+#include <rtems/scheduler.h>
+
+RTEMS_SCHEDULER_EDF_SMP( a );
+
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+  RTEMS_SCHEDULER_TABLE_EDF_SMP( a, TEST_SCHEDULER_A_NAME )
+
+#define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+  RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+  RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER
 
 #include "ts-default.h"
 
