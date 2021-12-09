@@ -31,6 +31,14 @@ source:
 - testsuites/validation/tc-io-getchark.c
 - testsuites/validation/tc-io-putc.c
 - testsuites/validation/tc-io-put-char.c
+- testsuites/validation/tc-message-broadcast.c
+- testsuites/validation/tc-message-construct.c
+- testsuites/validation/tc-message-delete.c
+- testsuites/validation/tc-message-flush-pending.c
+- testsuites/validation/tc-message-ident.c
+- testsuites/validation/tc-message-macros.c
+- testsuites/validation/tc-message-receive.c
+- testsuites/validation/tc-message-urgent-send.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c
