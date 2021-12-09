@@ -15,6 +15,7 @@ source:
 - testsuites/validation/tx-default-task-config.c
 - testsuites/validation/tx-interrupt.c
 - testsuites/validation/tx-io-relax.c
+- testsuites/validation/tx-memory.c
 - testsuites/validation/tx-memory-alloc.c
 - testsuites/validation/tx-preemption-intervention.c
 - testsuites/validation/tx-support.c
