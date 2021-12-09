@@ -27,6 +27,8 @@ source:
 - testsuites/validation/tc-clock-set.c
 - testsuites/validation/tc-cpuuse.c
 - testsuites/validation/tc-events.c
+- testsuites/validation/tc-futex-wait.c
+- testsuites/validation/tc-futex-wake.c
 - testsuites/validation/tc-intr.c
 - testsuites/validation/tc-io-getchark.c
 - testsuites/validation/tc-io-putc.c
