@@ -41,6 +41,12 @@ source:
 - testsuites/validation/tc-message-urgent-send.c
 - testsuites/validation/tc-modes.c
 - testsuites/validation/tc-options.c
+- testsuites/validation/tc-part.c
+- testsuites/validation/tc-part-create.c
+- testsuites/validation/tc-part-delete.c
+- testsuites/validation/tc-part-get.c
+- testsuites/validation/tc-part-ident.c
+- testsuites/validation/tc-part-return.c
 - testsuites/validation/tc-score-fatal.c
 - testsuites/validation/tr-event-constant.c
 - testsuites/validation/tr-mtx-seize-try.c

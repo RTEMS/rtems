@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsPartValPerformance
+ * @ingroup RTEMSTestCaseRtemsPartValPerf
  */
 
 /*
@@ -58,19 +58,18 @@
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtemsPartValPerformance \
- *   spec:/rtems/part/val/performance
+ * @defgroup RTEMSTestCaseRtemsPartValPerf spec:/rtems/part/val/perf
  *
- * @ingroup RTEMSTestSuiteTestsuitesPerformance0
+ * @ingroup RTEMSTestSuiteTestsuitesPerformanceNoClock0
  *
- * @brief This test case provides a context to run Partition Manager
+ * @brief This test case provides a context to run @ref RTEMSAPIClassicPart
  *   performance tests.
  *
  * @{
  */
 
 /**
- * @brief Test context for spec:/rtems/part/val/performance test case.
+ * @brief Test context for spec:/rtems/part/val/perf test case.
  */
 typedef struct {
   /**
@@ -79,8 +78,7 @@ typedef struct {
   rtems_id part_one;
 
   /**
-   * @brief This member provides a partition with exactly
-   *   ${.:/params/buffer-count} free buffers.
+   * @brief This member provides a partition with exactly 100 free buffers.
    */
   rtems_id part_many;
 
@@ -108,20 +106,29 @@ typedef struct {
    * @brief This member provides the measure runtime request.
    */
   T_measure_runtime_request request;
-} RtemsPartValPerformance_Context;
 
-static RtemsPartValPerformance_Context
-  RtemsPartValPerformance_Instance;
+  /**
+   * @brief This member provides an optional measurement begin time point.
+   */
+  T_ticks begin;
 
-static void RtemsPartValPerformance_Setup_Context(
-  RtemsPartValPerformance_Context *ctx
-)
+  /**
+   * @brief This member provides an optional measurement end time point.
+   */
+  T_ticks end;
+} RtemsPartValPerf_Context;
+
+static RtemsPartValPerf_Context
+  RtemsPartValPerf_Instance;
+
+static void RtemsPartValPerf_Setup_Context( RtemsPartValPerf_Context *ctx )
 {
   T_measure_runtime_config config;
 
   memset( &config, 0, sizeof( config ) );
-  config.sample_count = 1000;
+  config.sample_count = 100;
   ctx->request.arg = ctx;
+  ctx->request.flags = T_MEASURE_RUNTIME_REPORT_SAMPLES;
   ctx->context = T_measure_runtime_create( &config );
   T_assert_not_null( ctx->context );
 }
@@ -129,9 +136,7 @@ static void RtemsPartValPerformance_Setup_Context(
 /**
  * @brief Creates the test partition.
  */
-static void RtemsPartValPerformance_Setup(
-  RtemsPartValPerformance_Context *ctx
-)
+static void RtemsPartValPerf_Setup( RtemsPartValPerf_Context *ctx )
 {
   rtems_status_code sc;
   size_t            size;
@@ -164,21 +169,19 @@ static void RtemsPartValPerformance_Setup(
   T_assert_rsc_success( sc );
 }
 
-static void RtemsPartValPerformance_Setup_Wrap( void *arg )
+static void RtemsPartValPerf_Setup_Wrap( void *arg )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
-  RtemsPartValPerformance_Setup_Context( ctx );
-  RtemsPartValPerformance_Setup( ctx );
+  RtemsPartValPerf_Setup_Context( ctx );
+  RtemsPartValPerf_Setup( ctx );
 }
 
 /**
  * @brief Deletes the test partition.
  */
-static void RtemsPartValPerformance_Teardown(
-  RtemsPartValPerformance_Context *ctx
-)
+static void RtemsPartValPerf_Teardown( RtemsPartValPerf_Context *ctx )
 {
   rtems_status_code sc;
 
@@ -193,35 +196,33 @@ static void RtemsPartValPerformance_Teardown(
   }
 }
 
-static void RtemsPartValPerformance_Teardown_Wrap( void *arg )
+static void RtemsPartValPerf_Teardown_Wrap( void *arg )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
-  RtemsPartValPerformance_Teardown( ctx );
+  RtemsPartValPerf_Teardown( ctx );
 }
 
-static T_fixture RtemsPartValPerformance_Fixture = {
-  .setup = RtemsPartValPerformance_Setup_Wrap,
+static T_fixture RtemsPartValPerf_Fixture = {
+  .setup = RtemsPartValPerf_Setup_Wrap,
   .stop = NULL,
-  .teardown = RtemsPartValPerformance_Teardown_Wrap,
+  .teardown = RtemsPartValPerf_Teardown_Wrap,
   .scope = NULL,
-  .initial_context = &RtemsPartValPerformance_Instance
+  .initial_context = &RtemsPartValPerf_Instance
 };
 
 /**
  * @brief Get a buffer.
  */
-static void RtemsPartReqPerfGetBuffer_Body(
-  RtemsPartValPerformance_Context *ctx
-)
+static void RtemsPartReqPerfGetBuffer_Body( RtemsPartValPerf_Context *ctx )
 {
   ctx->status = rtems_partition_get_buffer( ctx->part_many, &ctx->buffer );
 }
 
 static void RtemsPartReqPerfGetBuffer_Body_Wrap( void *arg )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   RtemsPartReqPerfGetBuffer_Body( ctx );
@@ -231,11 +232,11 @@ static void RtemsPartReqPerfGetBuffer_Body_Wrap( void *arg )
  * @brief Return the buffer.
  */
 static bool RtemsPartReqPerfGetBuffer_Teardown(
-  RtemsPartValPerformance_Context *ctx,
-  T_ticks                         *delta,
-  uint32_t                         tic,
-  uint32_t                         toc,
-  unsigned int                     retry
+  RtemsPartValPerf_Context *ctx,
+  T_ticks                  *delta,
+  uint32_t                  tic,
+  uint32_t                  toc,
+  unsigned int              retry
 )
 {
   rtems_status_code sc;
@@ -256,7 +257,7 @@ static bool RtemsPartReqPerfGetBuffer_Teardown_Wrap(
   unsigned int retry
 )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   return RtemsPartReqPerfGetBuffer_Teardown( ctx, delta, tic, toc, retry );
@@ -266,7 +267,7 @@ static bool RtemsPartReqPerfGetBuffer_Teardown_Wrap(
  * @brief Get the buffer.
  */
 static void RtemsPartReqPerfGetNoBuffer_Prepare(
-  RtemsPartValPerformance_Context *ctx
+  RtemsPartValPerf_Context *ctx
 )
 {
   rtems_status_code sc;
@@ -278,16 +279,14 @@ static void RtemsPartReqPerfGetNoBuffer_Prepare(
 /**
  * @brief Try to get a buffer.
  */
-static void RtemsPartReqPerfGetNoBuffer_Body(
-  RtemsPartValPerformance_Context *ctx
-)
+static void RtemsPartReqPerfGetNoBuffer_Body( RtemsPartValPerf_Context *ctx )
 {
   ctx->status = rtems_partition_get_buffer( ctx->part_one, &ctx->buffer );
 }
 
 static void RtemsPartReqPerfGetNoBuffer_Body_Wrap( void *arg )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   RtemsPartReqPerfGetNoBuffer_Body( ctx );
@@ -297,11 +296,11 @@ static void RtemsPartReqPerfGetNoBuffer_Body_Wrap( void *arg )
  * @brief Check the status code.
  */
 static bool RtemsPartReqPerfGetNoBuffer_Teardown(
-  RtemsPartValPerformance_Context *ctx,
-  T_ticks                         *delta,
-  uint32_t                         tic,
-  uint32_t                         toc,
-  unsigned int                     retry
+  RtemsPartValPerf_Context *ctx,
+  T_ticks                  *delta,
+  uint32_t                  tic,
+  uint32_t                  toc,
+  unsigned int              retry
 )
 {
   T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
@@ -317,7 +316,7 @@ static bool RtemsPartReqPerfGetNoBuffer_Teardown_Wrap(
   unsigned int retry
 )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   return RtemsPartReqPerfGetNoBuffer_Teardown( ctx, delta, tic, toc, retry );
@@ -327,7 +326,7 @@ static bool RtemsPartReqPerfGetNoBuffer_Teardown_Wrap(
  * @brief Return the buffer.
  */
 static void RtemsPartReqPerfGetNoBuffer_Cleanup(
-  RtemsPartValPerformance_Context *ctx
+  RtemsPartValPerf_Context *ctx
 )
 {
   rtems_status_code sc;
@@ -339,9 +338,7 @@ static void RtemsPartReqPerfGetNoBuffer_Cleanup(
 /**
  * @brief Get the buffer.
  */
-static void RtemsPartReqPerfReturnBuffer_Setup(
-  RtemsPartValPerformance_Context *ctx
-)
+static void RtemsPartReqPerfReturnBuffer_Setup( RtemsPartValPerf_Context *ctx )
 {
   rtems_status_code sc;
 
@@ -351,7 +348,7 @@ static void RtemsPartReqPerfReturnBuffer_Setup(
 
 static void RtemsPartReqPerfReturnBuffer_Setup_Wrap( void *arg )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   RtemsPartReqPerfReturnBuffer_Setup( ctx );
@@ -360,16 +357,14 @@ static void RtemsPartReqPerfReturnBuffer_Setup_Wrap( void *arg )
 /**
  * @brief Return the buffer.
  */
-static void RtemsPartReqPerfReturnBuffer_Body(
-  RtemsPartValPerformance_Context *ctx
-)
+static void RtemsPartReqPerfReturnBuffer_Body( RtemsPartValPerf_Context *ctx )
 {
   ctx->status = rtems_partition_return_buffer( ctx->part_many, ctx->buffer );
 }
 
 static void RtemsPartReqPerfReturnBuffer_Body_Wrap( void *arg )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   RtemsPartReqPerfReturnBuffer_Body( ctx );
@@ -379,11 +374,11 @@ static void RtemsPartReqPerfReturnBuffer_Body_Wrap( void *arg )
  * @brief Check the status code.
  */
 static bool RtemsPartReqPerfReturnBuffer_Teardown(
-  RtemsPartValPerformance_Context *ctx,
-  T_ticks                         *delta,
-  uint32_t                         tic,
-  uint32_t                         toc,
-  unsigned int                     retry
+  RtemsPartValPerf_Context *ctx,
+  T_ticks                  *delta,
+  uint32_t                  tic,
+  uint32_t                  toc,
+  unsigned int              retry
 )
 {
   T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
@@ -399,21 +394,18 @@ static bool RtemsPartReqPerfReturnBuffer_Teardown_Wrap(
   unsigned int retry
 )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = arg;
   return RtemsPartReqPerfReturnBuffer_Teardown( ctx, delta, tic, toc, retry );
 }
 
 /**
- * @fn void T_case_body_RtemsPartValPerformance( void )
+ * @fn void T_case_body_RtemsPartValPerf( void )
  */
-T_TEST_CASE_FIXTURE(
-  RtemsPartValPerformance,
-  &RtemsPartValPerformance_Fixture
-)
+T_TEST_CASE_FIXTURE( RtemsPartValPerf, &RtemsPartValPerf_Fixture )
 {
-  RtemsPartValPerformance_Context *ctx;
+  RtemsPartValPerf_Context *ctx;
 
   ctx = T_fixture_context();
 

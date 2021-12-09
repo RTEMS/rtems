@@ -14,6 +14,7 @@ source:
 - testsuites/validation/tc-barrier-performance.c
 - testsuites/validation/tc-event-performance.c
 - testsuites/validation/tc-message-performance.c
+- testsuites/validation/tc-part-performance.c
 - testsuites/validation/ts-performance-no-clock-0.c
 stlib: []
 target: testsuites/validation/ts-performance-no-clock-0.exe
