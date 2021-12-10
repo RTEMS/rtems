@@ -11,6 +11,7 @@ includes: []
 ldflags: []
 links: []
 source:
+- testsuites/validation/tc-score-fatal.c
 - testsuites/validation/ts-validation-one-cpu-0.c
 stlib: []
 target: testsuites/validation/ts-validation-one-cpu-0.exe

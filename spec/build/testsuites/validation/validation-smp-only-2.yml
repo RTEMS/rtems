@@ -5,16 +5,17 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by: RTEMS_SMP
 features: c cprogram
 includes: []
-ldflags: []
+ldflags:
+- -Wl,-wrap=_CPU_SMP_Start_processor
 links: []
 source:
-- testsuites/validation/tc-score-fatal.c
-- testsuites/validation/ts-validation-no-clock-0.c
+- testsuites/validation/tc-start-of-optional-processor-failed.c
+- testsuites/validation/ts-validation-smp-only-2.c
 stlib: []
-target: testsuites/validation/ts-validation-no-clock-0.exe
+target: testsuites/validation/ts-validation-smp-only-2.exe
 type: build
 use-after: []
 use-before: []

@@ -13,7 +13,23 @@ links:
 - role: build-dependency
   uid: libvalidation
 - role: build-dependency
+  uid: fatal-boot-processor-not-assigned-to-scheduler
+- role: build-dependency
+  uid: fatal-init-task-construct-failed
+- role: build-dependency
+  uid: fatal-mandatory-processor-not-present
+- role: build-dependency
+  uid: fatal-scheduler-requires-exactly-one-processor
+- role: build-dependency
+  uid: fatal-smp
+- role: build-dependency
+  uid: fatal-start-of-mandatory-processor-failed
+- role: build-dependency
+  uid: fatal-too-large-tls-size
+- role: build-dependency
   uid: performance-no-clock-0
+- role: build-dependency
+  uid: terminate
 - role: build-dependency
   uid: validation-0
 - role: build-dependency
@@ -28,6 +44,8 @@ links:
   uid: validation-smp-only-0
 - role: build-dependency
   uid: validation-smp-only-1
+- role: build-dependency
+  uid: validation-smp-only-2
 type: build
 use-after:
 - validation

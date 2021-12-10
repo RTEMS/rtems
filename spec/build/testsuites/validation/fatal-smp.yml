@@ -5,16 +5,16 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by: RTEMS_SMP
 features: c cprogram
 includes: []
 ldflags: []
 links: []
 source:
-- testsuites/validation/tc-score-fatal.c
-- testsuites/validation/ts-validation-no-clock-0.c
+- testsuites/validation/tr-fatal-smp.c
+- testsuites/validation/ts-fatal-smp.c
 stlib: []
-target: testsuites/validation/ts-validation-no-clock-0.exe
+target: testsuites/validation/ts-fatal-smp.exe
 type: build
 use-after: []
 use-before: []

@@ -8,13 +8,14 @@ cxxflags: []
 enabled-by: true
 features: c cprogram
 includes: []
-ldflags: []
+ldflags:
+- -Wl,--wrap=_CPU_Fatal_halt
 links: []
 source:
-- testsuites/validation/tc-score-fatal.c
-- testsuites/validation/ts-validation-no-clock-0.c
+- testsuites/validation/tc-terminate.c
+- testsuites/validation/ts-terminate.c
 stlib: []
-target: testsuites/validation/ts-validation-no-clock-0.exe
+target: testsuites/validation/ts-terminate.exe
 type: build
 use-after: []
 use-before: []

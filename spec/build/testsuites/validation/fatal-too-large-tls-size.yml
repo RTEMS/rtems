@@ -11,10 +11,10 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/validation/tc-score-fatal.c
-- testsuites/validation/ts-validation-no-clock-0.c
+- testsuites/validation/tr-fatal-too-large-tls-size.c
+- testsuites/validation/ts-fatal-too-large-tls-size.c
 stlib: []
-target: testsuites/validation/ts-validation-no-clock-0.exe
+target: testsuites/validation/ts-fatal-too-large-tls-size.exe
 type: build
 use-after: []
 use-before: []

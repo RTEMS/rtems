@@ -11,10 +11,10 @@ includes: []
 ldflags: []
 links: []
 source:
-- testsuites/validation/tc-score-fatal.c
-- testsuites/validation/ts-validation-no-clock-0.c
+- testsuites/validation/tr-fatal-init-task-construct-failed.c
+- testsuites/validation/ts-fatal-init-task-construct-failed.c
 stlib: []
-target: testsuites/validation/ts-validation-no-clock-0.exe
+target: testsuites/validation/ts-fatal-init-task-construct-failed.exe
 type: build
 use-after: []
 use-before: []
