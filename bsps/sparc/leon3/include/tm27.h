@@ -21,7 +21,11 @@
 #define __tm27_h
 
 #include <bsp.h>
-#include <leon.h>
+#include <bsp/irq.h>
+
+#if defined(RTEMS_SMP)
+#include <rtems/score/smpimpl.h>
+#endif
 
 /*
  *  Define the interrupt mechanism for Time Test 27
@@ -59,40 +63,73 @@
 
 #else   /* use a regular asynchronous trap */
 
-#define TEST_INTERRUPT_SOURCE LEON_INTERRUPT_EXTERNAL_1
-#define TEST_INTERRUPT_SOURCE2 LEON_INTERRUPT_EXTERNAL_1+1
+extern uint32_t Interrupt_nest;
+
+#define TEST_INTERRUPT_SOURCE 5
+#define TEST_INTERRUPT_SOURCE2 6
 #define MUST_WAIT_FOR_INTERRUPT 1
 
 static inline void Install_tm27_vector(
   void ( *handler )( rtems_vector_number )
 )
 {
-  (void) rtems_interrupt_handler_install(
+  static rtems_interrupt_entry entry_low;
+  static rtems_interrupt_entry entry_high;
+
+#if defined(RTEMS_SMP)
+  bsp_interrupt_set_affinity(
     TEST_INTERRUPT_SOURCE,
-    "tm27 low",
-    RTEMS_INTERRUPT_SHARED,
-    (rtems_interrupt_handler) handler,
-    NULL
+    _SMP_Get_online_processors()
   );
-  (void) rtems_interrupt_handler_install(
+  bsp_interrupt_set_affinity(
     TEST_INTERRUPT_SOURCE2,
-    "tm27 high",
-    RTEMS_INTERRUPT_SHARED,
+    _SMP_Get_online_processors()
+  );
+#endif
+
+  rtems_interrupt_entry_initialize(
+    &entry_low,
     (rtems_interrupt_handler) handler,
-    NULL
+    NULL,
+    "tm27 low"
+  );
+  (void) rtems_interrupt_entry_install(
+    TEST_INTERRUPT_SOURCE,
+    RTEMS_INTERRUPT_SHARED,
+    &entry_low
+  );
+  rtems_interrupt_entry_initialize(
+    &entry_high,
+    (rtems_interrupt_handler) handler,
+    NULL,
+    "tm27 high"
+  );
+  (void) rtems_interrupt_entry_install(
+    TEST_INTERRUPT_SOURCE2,
+    RTEMS_INTERRUPT_SHARED,
+    &entry_high
   );
 }
 
-#define Cause_tm27_intr() \
-  do { \
-    LEON_Force_interrupt( TEST_INTERRUPT_SOURCE+(Interrupt_nest>>1)); \
-    nop(); \
-    nop(); \
-    nop(); \
-  } while (0)
+static inline void Cause_tm27_intr( void )
+{
+  rtems_vector_number vector;
 
-#define Clear_tm27_intr() \
-  LEON_Clear_interrupt( TEST_INTERRUPT_SOURCE )
+  vector = TEST_INTERRUPT_SOURCE + ( Interrupt_nest >> 1 );
+#if defined(RTEMS_SMP)
+  (void) rtems_interrupt_raise_on( vector, rtems_scheduler_get_processor() );
+#else
+  (void) rtems_interrupt_raise( vector );
+#endif
+  nop();
+  nop();
+  nop();
+}
+
+static inline void Clear_tm27_intr( void )
+{
+  (void) rtems_interrupt_clear( TEST_INTERRUPT_SOURCE );
+}
 
 #define Lower_tm27_intr() /* empty */
 
