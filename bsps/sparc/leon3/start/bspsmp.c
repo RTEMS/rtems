@@ -51,6 +51,13 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
 
+static rtems_interrupt_entry leon3_inter_processor_interrupt_entry =
+  RTEMS_INTERRUPT_ENTRY_INITIALIZER(
+    bsp_inter_processor_interrupt,
+    NULL,
+    "IPI"
+  );
+
 static void leon3_install_inter_processor_interrupt( void )
 {
   rtems_status_code sc;
@@ -60,12 +67,10 @@ static void leon3_install_inter_processor_interrupt( void )
 
   bsp_interrupt_set_affinity( irq, _SMP_Get_online_processors() );
 
-  sc = rtems_interrupt_handler_install(
+  sc = rtems_interrupt_entry_install(
     irq,
-    "IPI",
     RTEMS_INTERRUPT_SHARED,
-    bsp_inter_processor_interrupt,
-    NULL
+    &leon3_inter_processor_interrupt_entry
   );
   _Assert_Unused_variable_equals( sc, RTEMS_SUCCESSFUL );
 }
