@@ -9,8 +9,6 @@ actions:
     iostream: exclude
     linpack: exclude
     record02: exclude
-    sptls01: exclude
-    sptls02: exclude
     utf8proc01: exclude
 build-type: option
 copyrights:

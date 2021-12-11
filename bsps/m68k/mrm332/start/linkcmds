@@ -139,11 +139,6 @@ SECTIONS
     *(.rodata*)
     KEEP (*(SORT(.rtemsroset.*)))
     *(.gnu.linkonce.r*)
-
-    . = ALIGN (16);
-    PROVIDE (_etext = .);
-    _endtext = .;
-    __data_start_rom = .;
   } > rom
   .tdata : {
     _TLS_Data_begin = .;
@@ -154,6 +149,11 @@ SECTIONS
     _TLS_BSS_begin = .;
     *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
     _TLS_BSS_end = .;
+
+    . = ALIGN (16);
+    PROVIDE (_etext = .);
+    _endtext = .;
+    __data_start_rom = .;
   } > rom
   _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
   _TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
@@ -161,17 +161,13 @@ SECTIONS
   _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
   _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
   _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
-  .gcc_exc :
-  AT ( ADDR(.tdata) + SIZEOF( .tdata ) )
-  {
-    *(.gcc_exc)
-  } > ram
   .data : AT(__data_start_rom) 
   {
 	PROVIDE (_copy_start = .);
     *(.data*)
         KEEP (*(SORT(.rtemsrwset.*)))
 	*(.gnu.linkonce.d*)
+        *(.gcc_exc)
 	*(.gcc_except_table*)
 	*(.jcr)
     . = ALIGN (16);
