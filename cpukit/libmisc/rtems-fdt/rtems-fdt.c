@@ -611,6 +611,7 @@ rtems_fdt_load (const char* filename, rtems_fdt_handle* handle)
     return fe;
   }
 
+  close (bf);
   return 0;
 }
 
