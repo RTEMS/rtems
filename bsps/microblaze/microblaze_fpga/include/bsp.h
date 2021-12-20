@@ -46,6 +46,10 @@ extern "C" {
 
 #include <rtems.h>
 
+#define BSP_FDT_IS_SUPPORTED
+extern const unsigned char system_dtb[];
+extern const size_t system_dtb_size;
+
 #ifdef __cplusplus
 }
 #endif
