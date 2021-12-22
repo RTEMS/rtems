@@ -451,8 +451,8 @@ void rtems_clock_get_realtime_coarse_timeval( struct timeval *time_snapshot );
  * @brief Gets the time elapsed since some fixed time point in the past
  *   measured using the CLOCK_MONOTONIC in seconds and nanoseconds format.
  *
- * @param[out] time_snapshot is the pointer to a bintime object.  The time
- *   elapsed since some fixed time point in the past measured using the
+ * @param[out] time_snapshot is the pointer to a struct timespec object.  The
+ *   time elapsed since some fixed time point in the past measured using the
  *   CLOCK_MONOTONIC at some time point during the directive call will be
  *   stored in this object.  Calling the directive with a pointer equal to NULL
  *   is undefined behaviour.
@@ -562,8 +562,8 @@ int64_t rtems_clock_get_monotonic_sbintime( void );
  * @brief Gets the time elapsed since some fixed time point in the past
  *   measured using the CLOCK_MONOTONIC in seconds and microseconds format.
  *
- * @param[out] time_snapshot is the pointer to a bintime object.  The time
- *   elapsed since some fixed time point in the past measured using the
+ * @param[out] time_snapshot is the pointer to a struct timeval object.  The
+ *   time elapsed since some fixed time point in the past measured using the
  *   CLOCK_MONOTONIC at some time point during the directive call will be
  *   stored in this object.  Calling the directive with a pointer equal to NULL
  *   is undefined behaviour.
@@ -601,8 +601,8 @@ void rtems_clock_get_monotonic_timeval( struct timeval *time_snapshot );
  *   measured using the CLOCK_MONOTONIC in coarse resolution in seconds and
  *   nanoseconds format.
  *
- * @param[out] time_snapshot is the pointer to a bintime object.  The time
- *   elapsed since some fixed time point in the past measured using the
+ * @param[out] time_snapshot is the pointer to a struct timespec object.  The
+ *   time elapsed since some fixed time point in the past measured using the
  *   CLOCK_MONOTONIC at some time point close to the directive call will be
  *   stored in this object.  Calling the directive with a pointer equal to NULL
  *   is undefined behaviour.
@@ -681,8 +681,8 @@ void rtems_clock_get_monotonic_coarse_bintime( struct bintime *time_snapshot );
  *   measured using the CLOCK_MONOTONIC in coarse resolution in seconds and
  *   microseconds format.
  *
- * @param[out] time_snapshot is the pointer to a bintime object.  The time
- *   elapsed since some fixed time point in the past measured using the
+ * @param[out] time_snapshot is the pointer to a struct timeval object.  The
+ *   time elapsed since some fixed time point in the past measured using the
  *   CLOCK_MONOTONIC at some time point close to the directive call will be
  *   stored in this object.  Calling the directive with a pointer equal to NULL
  *   is undefined behaviour.
