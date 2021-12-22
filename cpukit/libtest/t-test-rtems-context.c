@@ -63,6 +63,7 @@ T_do_check_task_context(void)
 	rtems_task_priority prio;
 	rtems_status_code sc;
 	uint32_t v;
+	rtems_event_set events;
 #ifdef RTEMS_SMP
 	rtems_id id;
 #endif
@@ -95,6 +96,14 @@ T_do_check_task_context(void)
 	T_check(&T_special, prio == T_runner_priority,
 	    "Wrong runner priority, expected %" PRIu32 ", actual %"
 	    PRIu32, T_runner_priority, prio);
+
+	sc = rtems_event_receive(RTEMS_ALL_EVENTS,
+	    RTEMS_NO_WAIT | RTEMS_EVENT_ANY, 0, &events);
+	T_quiet_rsc( sc, RTEMS_UNSATISFIED );
+
+	sc = rtems_event_system_receive(RTEMS_ALL_EVENTS,
+	    RTEMS_NO_WAIT | RTEMS_EVENT_ANY, 0, &events);
+	T_quiet_rsc( sc, RTEMS_UNSATISFIED );
 }
 
 void
