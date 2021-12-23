@@ -8,6 +8,9 @@
  */
 
 #include <bsp.h>
+#include <bsp/fdt.h>
+
+#include BSP_MICROBLAZE_FPGA_DTB_HEADER_PATH
 
 const void *bsp_fdt_get(void)
 {

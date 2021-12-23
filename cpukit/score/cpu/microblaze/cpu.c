@@ -116,6 +116,5 @@ void _CPU_ISR_install_vector(
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   while ( true ) {
-    __asm__ volatile ( "sleep" );
   }
 }

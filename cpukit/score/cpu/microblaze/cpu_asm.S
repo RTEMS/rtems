@@ -116,9 +116,7 @@ after_stack_switch:
 	beqi r3, quick_exit
 
 	/* Return to interrupted thread and make it do a dispatch */
-	addik r14, r0, thread_dispatch
-	rtid r14, 0
-	nop
+	bri thread_dispatch
 
 quick_exit:
 	/* Simple return from nested interrupt */

@@ -222,7 +222,7 @@
 			phandle = <0x6>;
 			dmas = <&dma 0
 				&dma 1>;
-			dma-names = "rx", "tx";
+			dma-names = "tx", "rx";
 			memory-region = <&dma_reserved>;
 			mdio {
 				#address-cells = <0x1>;
@@ -230,7 +230,7 @@
 
 				phy@1 {
 					device_type = "ethernet-phy";
-					reg = <0x1>;
+					reg = <0x7>;
 					phandle = <0x5>;
 				};
 			};

@@ -141,7 +141,7 @@ void bsp_interrupt_dispatch( uint32_t source )
 
   if ( source == 0xFF ) {
     /* Read interrupt controller to get the source */
-    vector_number = intc->isr;
+    vector_number = intc->isr & intc->ier;
 
     /* Handle and the first interrupt that is set */
     uint8_t interrupt_status = 0;

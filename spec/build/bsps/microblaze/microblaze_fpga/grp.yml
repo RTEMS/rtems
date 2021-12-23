@@ -18,6 +18,20 @@ links:
 - role: build-dependency
   uid: optconsoleinterrupts
 - role: build-dependency
+  uid: optdcachebaseaddress
+- role: build-dependency
+  uid: optdcachelinelen
+- role: build-dependency
+  uid: optdcachesize
+- role: build-dependency
+  uid: optdtbheaderpath
+- role: build-dependency
+  uid: opticachebaseaddress
+- role: build-dependency
+  uid: opticachelinelen
+- role: build-dependency
+  uid: opticachesize
+- role: build-dependency
   uid: optintcbaseaddress
 - role: build-dependency
   uid: opttimerbaseaddress

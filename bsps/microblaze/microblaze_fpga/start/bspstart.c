@@ -39,5 +39,11 @@
 
 void bsp_start( void )
 {
+  microblaze_invalidate_icache();
+  microblaze_enable_icache();
+
+  microblaze_invalidate_dcache();
+  microblaze_enable_dcache();
+
   bsp_interrupt_initialize();
 }

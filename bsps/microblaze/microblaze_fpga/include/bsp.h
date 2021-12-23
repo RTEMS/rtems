@@ -50,6 +50,11 @@ extern "C" {
 extern const unsigned char system_dtb[];
 extern const size_t system_dtb_size;
 
+void microblaze_enable_icache(void);
+void microblaze_enable_dcache(void);
+void microblaze_invalidate_icache(void);
+void microblaze_invalidate_dcache(void);
+
 #ifdef __cplusplus
 }
 #endif
