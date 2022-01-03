@@ -125,6 +125,29 @@ typedef struct {
   uint64_t register_fpcr;
 } CPU_Interrupt_frame;
 
+#ifdef RTEMS_SMP
+
+static inline
+struct Per_CPU_Control *_AARCH64_Get_current_per_CPU_control( void )
+{
+  struct Per_CPU_Control *cpu_self;
+  uint64_t value;
+
+  __asm__ volatile (
+    "mrs %0, TPIDR_EL1" : "=&r" ( value ) : : "memory"
+  );
+
+  /* Use EL1 Thread ID Register (TPIDR_EL1) */
+  cpu_self = (struct Per_CPU_Control *)(uintptr_t)value;
+
+  return cpu_self;
+}
+
+#define _CPU_Get_current_per_CPU_control() \
+  _AARCH64_Get_current_per_CPU_control()
+
+#endif /* RTEMS_SMP */
+
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
 void _CPU_Context_validate( uintptr_t pattern );
