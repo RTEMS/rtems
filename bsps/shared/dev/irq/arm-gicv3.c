@@ -355,6 +355,34 @@ static inline uint32_t get_id_count(volatile gic_dist *dist)
   return id_count;
 }
 
+static void gicv3_init_dist(void)
+{
+  volatile gic_dist *dist = ARM_GIC_DIST;
+  uint32_t id_count = get_id_count(dist);
+  uint32_t id;
+
+  dist->icddcr = GIC_DIST_ICDDCR_ARE_NS | GIC_DIST_ICDDCR_ARE_S
+               | GIC_DIST_ICDDCR_ENABLE_GRP1S | GIC_DIST_ICDDCR_ENABLE_GRP1NS
+               | GIC_DIST_ICDDCR_ENABLE_GRP0;
+
+  for (id = 0; id < id_count; id += 32) {
+    /* Disable all interrupts */
+    dist->icdicer[id / 32] = 0xffffffff;
+
+    /* Set G1NS */
+    dist->icdigr[id / 32] = 0xffffffff;
+    dist->icdigmr[id / 32] = 0;
+  }
+
+  for (id = 0; id < id_count; ++id) {
+    gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
+  }
+
+  for (id = 32; id < id_count; ++id) {
+    gic_id_set_targets(dist, id, 0x01);
+  }
+}
+
 static void gicv3_init_cpu_interface(void)
 {
   uint32_t cpu_index = _SMP_Get_current_processor();
@@ -390,38 +418,8 @@ static void gicv3_init_cpu_interface(void)
 
 void bsp_interrupt_facility_initialize(void)
 {
-  volatile gic_dist *dist = ARM_GIC_DIST;
-  uint32_t id_count = get_id_count(dist);
-  uint32_t id;
-
   arm_interrupt_facility_set_exception_handler();
-
-  dist->icddcr = GIC_DIST_ICDDCR_ARE_NS | GIC_DIST_ICDDCR_ARE_S
-               | GIC_DIST_ICDDCR_ENABLE_GRP1S | GIC_DIST_ICDDCR_ENABLE_GRP1NS
-               | GIC_DIST_ICDDCR_ENABLE_GRP0;
-
-  for (id = 0; id < id_count; id += 32) {
-    /* Disable all interrupts */
-    dist->icdicer[id / 32] = 0xffffffff;
-
-    /* Set interrupt group to 1 in the current security mode */
-#if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
-    dist->icdigr[id / 32] = 0xffffffff;
-    dist->icdigmr[id / 32] = 0;
-#else
-    dist->icdigr[id / 32] = 0;
-    dist->icdigmr[id / 32] = 0xffffffff;
-#endif
-  }
-
-  for (id = 0; id < id_count; ++id) {
-    gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
-  }
-
-  for (id = 32; id < id_count; ++id) {
-    gic_id_set_targets(dist, id, 0x01);
-  }
-
+  gicv3_init_dist();
   gicv3_init_cpu_interface();
 }
 
