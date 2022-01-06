@@ -55,6 +55,11 @@ _start:
   mov x5, x1    /* machine type number or ~0 for DT boot */
   mov x6, x2    /* physical address of ATAGs or DTB */
 #else /* BSP_START_NEEDS_REGISTER_INITIALIZATION */
+  /*
+   * This block is dead code. No aarch64 targets require this. It might be
+   * needed for hardware simulations or in future processor variants with
+   * lock-step cores.
+   */
   mov x0, XZR
   mov x1, XZR
   mov x2, XZR
@@ -87,8 +92,42 @@ _start:
   mov x29, XZR
   mov x30, XZR
 #ifdef AARCH64_MULTILIB_VFP
-#endif
-#endif
+  mov CPTR_EL3, XZR
+  mov CPTR_EL2, XZR
+  mov d0, XZR
+  mov d1, XZR
+  mov d2, XZR
+  mov d3, XZR
+  mov d4, XZR
+  mov d5, XZR
+  mov d6, XZR
+  mov d7, XZR
+  mov d8, XZR
+  mov d9, XZR
+  mov d10, XZR
+  mov d11, XZR
+  mov d12, XZR
+  mov d13, XZR
+  mov d14, XZR
+  mov d15, XZR
+  mov d16, XZR
+  mov d17, XZR
+  mov d18, XZR
+  mov d19, XZR
+  mov d20, XZR
+  mov d21, XZR
+  mov d22, XZR
+  mov d23, XZR
+  mov d24, XZR
+  mov d25, XZR
+  mov d26, XZR
+  mov d27, XZR
+  mov d28, XZR
+  mov d29, XZR
+  mov d30, XZR
+  mov d31, XZR
+#endif /* AARCH64_MULTILIB_VFP */
+#endif /* BSP_START_NEEDS_REGISTER_INITIALIZATION */
 
   /* Initialize SCTLR_EL1 */
   mov x0, XZR
@@ -251,44 +290,6 @@ _el1_start:
 #endif
 
   /* FPU does not need to be enabled on AArch64 */
-
-#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
-  mov x0, #0
-  mov CPTR_EL3, XZR
-  mov CPTR_EL2, XZR
-  mov d0, XZR
-  mov d1, XZR
-  mov d2, XZR
-  mov d3, XZR
-  mov d4, XZR
-  mov d5, XZR
-  mov d6, XZR
-  mov d7, XZR
-  mov d8, XZR
-  mov d9, XZR
-  mov d10, XZR
-  mov d11, XZR
-  mov d12, XZR
-  mov d13, XZR
-  mov d14, XZR
-  mov d15, XZR
-  mov d16, XZR
-  mov d17, XZR
-  mov d18, XZR
-  mov d19, XZR
-  mov d20, XZR
-  mov d21, XZR
-  mov d22, XZR
-  mov d23, XZR
-  mov d24, XZR
-  mov d25, XZR
-  mov d26, XZR
-  mov d27, XZR
-  mov d28, XZR
-  mov d29, XZR
-  mov d30, XZR
-  mov d31, XZR
-#endif /* BSP_START_NEEDS_REGISTER_INITIALIZATION */
 
 #endif /* AARCH64_MULTILIB_VFP */
 

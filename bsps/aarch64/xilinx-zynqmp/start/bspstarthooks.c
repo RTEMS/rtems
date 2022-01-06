@@ -47,6 +47,11 @@
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
 {
+  /* do nothing */
+}
+
+BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
+{
 #ifdef RTEMS_SMP
   uint32_t cpu_index_self;
 
@@ -72,13 +77,10 @@ BSP_START_TEXT_SECTION void bsp_start_hook_0( void )
     _SMP_Start_multitasking_on_secondary_processor(
       _Per_CPU_Get_by_index( cpu_index_self )
     );
+    /* Unreached */
   }
+#endif /* RTEMS_SMP */
 
-#endif
-}
-
-BSP_START_TEXT_SECTION void bsp_start_hook_1( void )
-{
   AArch64_start_set_vector_base();
   bsp_start_copy_sections();
   zynqmp_setup_mmu_and_cache();
