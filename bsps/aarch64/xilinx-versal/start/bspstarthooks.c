@@ -35,11 +35,12 @@
  */
 
 #include <bsp.h>
+#include <bsp/irq-generic.h>
 #include <bsp/start.h>
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
-  /* Do nothing */
+  bsp_interrupt_facility_initialize();
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)

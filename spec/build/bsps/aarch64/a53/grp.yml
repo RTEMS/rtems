@@ -12,8 +12,6 @@ links:
 - role: build-dependency
   uid: ../start
 - role: build-dependency
-  uid: ../optisns
-- role: build-dependency
   uid: abi
 - role: build-dependency
   uid: obj

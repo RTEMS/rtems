@@ -144,6 +144,33 @@ _start:
   b.eq _el2_start
 
 _el3_start:
+  /*
+   * Before leaving the Secure World, we need to initialize the GIC. We
+   * do that here in an early stack context in EL3. This will NOT work
+   * on secondary core boot! We assume only the primary boot core will
+   * start in EL3 if any. Usually on real hardware, we should be running
+   * on top of trusted firmware and will not boot in EL3. Qemu fakes it
+   * for us and will start the primary core in EL3 and secondary cores
+   * will be brought up in EL1NS as expected.
+   */
+  #ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+    ldr w1, =_ISR_Stack_size
+    ldr w2, =_ISR_Stack_area_begin
+  #else
+    ldr x1, =_ISR_Stack_size
+    ldr x2, =_ISR_Stack_area_begin
+  #endif
+  add x3, x1, x2
+  /* using SP0 for the early init stack context at EL3 */
+  msr spsel, #0
+  mov sp, x3
+
+  /*
+   * Invoke the start hook 0.
+   * We don't set up exception handling, so this hook better behave.
+   */
+  bl bsp_start_hook_0
+
   /* Drop from EL3 to EL2 */
 
   /* Initialize HCR_EL2 and SCTLR_EL2 */
@@ -153,27 +180,16 @@ _el3_start:
   mrs x0, SCR_EL3
   /* Set EL2 to AArch64 */
   orr x0, x0, #(1<<10)
-#ifdef AARCH64_IS_NONSECURE
   /* Set EL1 to NS */
   orr x0, x0, #1
-#endif
   msr SCR_EL3, x0
 
   /* set EL2h mode for eret */
-#ifdef AARCH64_IS_NONSECURE
   mov x0, #0b01001
-#else
-  mov x0, #0b00101
-#endif
-
   msr SPSR_EL3, x0
 
   /* Set EL2 entry point */
-#ifdef AARCH64_IS_NONSECURE
   adr x0, _el2_start
-#else
-  adr x0, _el1_start
-#endif
   msr ELR_EL3, x0
   eret
 
@@ -292,14 +308,6 @@ _el1_start:
   /* FPU does not need to be enabled on AArch64 */
 
 #endif /* AARCH64_MULTILIB_VFP */
-
-  /*
-   * Invoke the start hook 0.
-   *
-   */
-
-  mov x1, x5    /* machine type number or ~0 for DT boot */
-  bl bsp_start_hook_0
 
   /* Branch to start hook 1 */
   bl bsp_start_hook_1

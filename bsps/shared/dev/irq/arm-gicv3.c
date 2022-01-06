@@ -312,14 +312,10 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
     volatile gic_sgi_ppi *sgi_ppi =
       gicv3_get_sgi_ppi(_SMP_Get_current_processor());
 
-    /* Set interrupt group to 1 in the current security mode */
-#if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
+    /* Set G1NS */
     sgi_ppi->icspigrpr[0] |= 1U << vector;
     sgi_ppi->icspigrpmodr[0] &= ~(1U << vector);
-#else
-    sgi_ppi->icspigrpr[0] &= ~(1U << vector);
-    sgi_ppi->icspigrpmodr[0] |= 1U << vector;
-#endif
+
     /* Set enable */
     sgi_ppi->icspiser[0] = 1U << vector;
   }
@@ -398,14 +394,9 @@ static void gicv3_init_cpu_interface(void)
   redist->icrwaker = waker;
 
   volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
-  /* Set interrupt group to 1 in the current security mode */
-#if defined(ARM_MULTILIB_ARCH_V4) || defined(AARCH64_IS_NONSECURE)
+  /* Set G1NS */
   sgi_ppi->icspigrpr[0] = 0xffffffff;
   sgi_ppi->icspigrpmodr[0] = 0;
-#else
-  sgi_ppi->icspigrpr[0] = 0x0;
-  sgi_ppi->icspigrpmodr[0] = 0xffffffff;
-#endif
   for (int id = 0; id < 32; id++) {
     sgi_ppi->icspiprior[id] = PRIORITY_DEFAULT;
   }
