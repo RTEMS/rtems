@@ -280,6 +280,11 @@ static volatile qoriq_pic_src_cfg *get_src_cfg(rtems_vector_number vector)
 	}
 }
 
+static bool is_ipi(rtems_vector_number vector)
+{
+	return (vector - QORIQ_IRQ_IPI_BASE) < 4;
+}
+
 rtems_status_code qoriq_pic_set_priority(
 	rtems_vector_number vector,
 	int new_priority,
@@ -320,8 +325,13 @@ rtems_status_code bsp_interrupt_set_affinity(
 	const Processor_mask *affinity
 )
 {
-	volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
+	volatile qoriq_pic_src_cfg *src_cfg;
 
+	if (is_ipi(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
+	src_cfg = get_src_cfg(vector);
 	src_cfg->dr = _Processor_mask_To_uint32_t(affinity, 0);
 	return RTEMS_SUCCESSFUL;
 }
@@ -331,57 +341,96 @@ rtems_status_code bsp_interrupt_get_affinity(
 	Processor_mask *affinity
 )
 {
-	volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
+	volatile qoriq_pic_src_cfg *src_cfg;
 
+	if (is_ipi(vector)) {
+		return RTEMS_UNSATISFIED;
+	}
+
+	src_cfg = get_src_cfg(vector);
 	_Processor_mask_From_uint32_t(affinity, src_cfg->dr, 0);
 	return RTEMS_SUCCESSFUL;
 }
 
 static void pic_vector_enable(rtems_vector_number vector, uint32_t msk)
 {
-	volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
+	volatile qoriq_pic_src_cfg *src_cfg;
 	rtems_interrupt_lock_context lock_context;
 
 	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
+	src_cfg = get_src_cfg(vector);
 	rtems_interrupt_lock_acquire(&lock, &lock_context);
 	src_cfg->vpr = (src_cfg->vpr & ~VPR_MSK) | msk;
 	rtems_interrupt_lock_release(&lock, &lock_context);
 }
 
 rtems_status_code bsp_interrupt_get_attributes(
-  rtems_vector_number         vector,
-  rtems_interrupt_attributes *attributes
+	rtems_vector_number vector,
+	rtems_interrupt_attributes *attributes
 )
 {
-  return RTEMS_SUCCESSFUL;
+	bool vector_is_ipi = is_ipi(vector);
+	attributes->is_maskable = true;
+	attributes->can_enable = true;
+	attributes->maybe_enable = true;
+	attributes->can_disable = true;
+	attributes->maybe_disable = true;
+	attributes->cleared_by_acknowledge = true;
+	attributes->can_get_affinity = !vector_is_ipi;
+	attributes->can_set_affinity = !vector_is_ipi;
+	attributes->can_raise = vector_is_ipi;
+	attributes->can_raise_on = vector_is_ipi;
+	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_is_pending(
-  rtems_vector_number vector,
-  bool               *pending
+	rtems_vector_number vector,
+	bool *pending
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(pending != NULL);
-  *pending = false;
-  return RTEMS_UNSATISFIED;
+	volatile qoriq_pic_src_cfg *src_cfg;
+
+	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+	bsp_interrupt_assert(pending != NULL);
+
+	src_cfg = get_src_cfg(vector);
+	*pending = (src_cfg->vpr & VPR_A) != 0;
+	return RTEMS_SUCCESSFUL;
+}
+
+static void raise_on(rtems_vector_number vector, uint32_t cpu_index)
+{
+	rtems_vector_number ipi_index = vector - QORIQ_IRQ_IPI_BASE;
+	qoriq.pic.ipidr[ipi_index].reg = 1U << cpu_index;
 }
 
 rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+	if (is_ipi(vector)) {
+		raise_on(vector, rtems_scheduler_get_processor());
+		return RTEMS_SUCCESSFUL;
+	}
+
+	return RTEMS_UNSATISFIED;
 }
 
 #if defined(RTEMS_SMP)
 rtems_status_code bsp_interrupt_raise_on(
-  rtems_vector_number vector,
-  uint32_t            cpu_index
+	rtems_vector_number vector,
+	uint32_t cpu_index
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  return RTEMS_UNSATISFIED;
+	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+	if (is_ipi(vector)) {
+		raise_on(vector, cpu_index);
+		return RTEMS_SUCCESSFUL;
+	}
+
+	return RTEMS_UNSATISFIED;
 }
 #endif
 
@@ -392,14 +441,18 @@ rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
 }
 
 rtems_status_code bsp_interrupt_vector_is_enabled(
-  rtems_vector_number vector,
-  bool               *enabled
+	rtems_vector_number vector,
+	bool *enabled
 )
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
-  bsp_interrupt_assert(enabled != NULL);
-  *enabled = false;
-  return RTEMS_UNSATISFIED;
+	volatile qoriq_pic_src_cfg *src_cfg;
+
+	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+	bsp_interrupt_assert(enabled != NULL);
+
+	src_cfg = get_src_cfg(vector);
+	*enabled = (src_cfg->vpr & VPR_MSK) == 0;
+	return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
