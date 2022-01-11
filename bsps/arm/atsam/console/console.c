@@ -25,272 +25,78 @@
 
 typedef struct {
   rtems_termios_device_context base;
-  Usart *regs;
-  rtems_vector_number irq;
-  uint32_t id;
-  bool console;
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  bool transmitting;
-#endif
-} atsam_usart_context;
-
-static atsam_usart_context atsam_usart_instances[] = {
-  {
-    .regs = USART0,
-    .irq = USART0_IRQn,
-    .id = ID_USART0
-  }
-#ifdef USART1
-  , {
-    .regs = USART1,
-    .irq = USART1_IRQn,
-    .id = ID_USART1
-  }
-#endif
-#ifdef USART2
-  , {
-    .regs = USART2,
-    .irq = USART2_IRQn,
-    .id = ID_USART2
-  }
-#endif
-};
-
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-static void atsam_usart_interrupt(void *arg)
-{
-  rtems_termios_tty *tty = arg;
-  atsam_usart_context *ctx = rtems_termios_get_device_context(tty);
-  Usart *regs = ctx->regs;
-  uint32_t csr = regs->US_CSR;
-
-  while ((csr & US_CSR_RXRDY) != 0) {
-    char c = (char) regs->US_RHR;
-
-    rtems_termios_enqueue_raw_characters(tty, &c, 1);
-
-    csr = regs->US_CSR;
-  }
-
-  if (ctx->transmitting && (csr & US_CSR_TXEMPTY) != 0) {
-    rtems_termios_dequeue_characters(tty, 1);
-  }
-}
-#endif
-
-static bool atsam_usart_set_attributes(
-  rtems_termios_device_context *base,
-  const struct termios *term
-)
-{
-  atsam_usart_context *ctx = (atsam_usart_context *) base;
-  Usart *regs = ctx->regs;
-  rtems_termios_baud_t baud;
-  uint32_t mr;
-
-  baud = rtems_termios_baud_to_number(term->c_ospeed);
-  regs->US_BRGR = (BOARD_MCK / baud) / 16;
-
-  if ((term->c_cflag & CREAD) != 0) {
-    regs->US_CR = US_CR_RXEN | US_CR_TXEN;
-  } else {
-    regs->US_CR = US_CR_TXEN;
-  }
-
-  mr = US_MR_USART_MODE_NORMAL | US_MR_USCLKS_MCK;
-
-  switch (term->c_cflag & CSIZE) {
-    case CS5:
-      mr |= US_MR_CHRL_5_BIT;
-      break;
-    case CS6:
-      mr |= US_MR_CHRL_6_BIT;
-      break;
-    case CS7:
-      mr |= US_MR_CHRL_7_BIT;
-      break;
-    default:
-      mr |= US_MR_CHRL_8_BIT;
-      break;
-  }
-
-  if ((term->c_cflag & PARENB) != 0) {
-    if ((term->c_cflag & PARODD) != 0) {
-      mr |= US_MR_PAR_ODD;
-    } else {
-      mr |= US_MR_PAR_EVEN;
-    }
-  } else {
-    mr |= US_MR_PAR_NO;
-  }
-
-  if ((term->c_cflag & CSTOPB) != 0) {
-    mr |= US_MR_NBSTOP_2_BIT;
-  } else {
-    mr |= US_MR_NBSTOP_1_BIT;
-  }
-
-  regs->US_MR = mr;
-
-  return true;
-}
-
-static bool atsam_usart_first_open(
-  rtems_termios_tty *tty,
-  rtems_termios_device_context *base,
-  struct termios *term,
-  rtems_libio_open_close_args_t *args
-)
-{
-  atsam_usart_context *ctx = (atsam_usart_context *) base;
-  Usart *regs = ctx->regs;
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  rtems_status_code sc;
-#endif
-
-  regs->US_CR = US_CR_RSTRX | US_CR_RSTTX | US_CR_RSTSTA;
-  regs->US_IDR = 0xffffffff;
-
-  PMC_EnablePeripheral(ctx->id);
-
-  rtems_termios_set_initial_baud(tty, ATSAM_CONSOLE_BAUD);
-  atsam_usart_set_attributes(base, term);
-
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  regs->US_IER = US_IDR_RXRDY;
-  sc = rtems_interrupt_handler_install(
-    ctx->irq,
-    "USART",
-    RTEMS_INTERRUPT_SHARED,
-    atsam_usart_interrupt,
-    tty
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    return false;
-  }
-#endif
-
-  return true;
-}
-
-static void atsam_usart_last_close(
-  rtems_termios_tty *tty,
-  rtems_termios_device_context *base,
-  rtems_libio_open_close_args_t *args
-)
-{
-  atsam_usart_context *ctx = (atsam_usart_context *) base;
-
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  rtems_interrupt_handler_remove(ctx->irq, atsam_usart_interrupt, tty);
-#endif
-
-  if (!ctx->console) {
-    PMC_DisablePeripheral(ctx->id);
-  }
-}
-
-static void atsam_usart_write(
-  rtems_termios_device_context *base,
-  const char *buf,
-  size_t len
-)
-{
-  atsam_usart_context *ctx = (atsam_usart_context *) base;
-  Usart *regs = ctx->regs;
-
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  if (len > 0) {
-    ctx->transmitting = true;
-    regs->US_THR = buf[0];
-    regs->US_IER = US_IDR_TXEMPTY;
-  } else {
-    ctx->transmitting = false;
-    regs->US_IDR = US_IDR_TXEMPTY;
-  }
-#else
-  size_t i;
-
-  for (i = 0; i < len; ++i) {
-    while ((regs->US_CSR & US_CSR_TXEMPTY) == 0) {
-      /* Wait */
-    }
-
-    regs->US_THR = buf[i];
-  }
-#endif
-}
-
-#ifndef ATSAM_CONSOLE_USE_INTERRUPTS
-static int atsam_usart_read(rtems_termios_device_context *base)
-{
-  atsam_usart_context *ctx = (atsam_usart_context *) base;
-  Usart *regs = ctx->regs;
-
-  if ((regs->US_CSR & US_CSR_RXRDY) != 0) {
-    return (char) regs->US_RHR;
-  } else {
-    return -1;
-  }
-}
-#endif
-
-static const rtems_termios_device_handler atsam_usart_handler = {
-  .first_open = atsam_usart_first_open,
-  .last_close = atsam_usart_last_close,
-  .write = atsam_usart_write,
-  .set_attributes = atsam_usart_set_attributes,
-#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  .mode = TERMIOS_IRQ_DRIVEN
-#else
-  .poll_read = atsam_usart_read,
-  .mode = TERMIOS_POLLED
-#endif
-};
-
-typedef struct {
-  rtems_termios_device_context base;
   Uart *regs;
   rtems_vector_number irq;
   uint32_t id;
   bool console;
+  bool is_usart;
 #ifdef ATSAM_CONSOLE_USE_INTERRUPTS
   bool transmitting;
 #endif
 } atsam_uart_context;
 
+static atsam_uart_context atsam_usart_instances[] = {
+  {
+    .regs = (Uart *)USART0,
+    .irq = USART0_IRQn,
+    .id = ID_USART0,
+    .is_usart = true,
+  }
+#ifdef USART1
+  , {
+    .regs = (Uart *)USART1,
+    .irq = USART1_IRQn,
+    .id = ID_USART1,
+    .is_usart = true,
+  }
+#endif
+#ifdef USART2
+  , {
+    .regs = (Uart *)USART2,
+    .irq = USART2_IRQn,
+    .id = ID_USART2,
+    .is_usart = true,
+  }
+#endif
+};
+
 static atsam_uart_context atsam_uart_instances[] = {
   {
     .regs = UART0,
     .irq = UART0_IRQn,
-    .id = ID_UART0
+    .id = ID_UART0,
+    .is_usart = false,
   }
 #ifdef UART1
   , {
     .regs = UART1,
     .irq = UART1_IRQn,
-    .id = ID_UART1
+    .id = ID_UART1,
+    .is_usart = false,
   }
 #endif
 #ifdef UART2
   , {
     .regs = UART2,
     .irq = UART2_IRQn,
-    .id = ID_UART2
+    .id = ID_UART2,
+    .is_usart = false,
   }
 #endif
 #ifdef UART3
   , {
     .regs = UART3,
     .irq = UART3_IRQn,
-    .id = ID_UART3
+    .id = ID_UART3,
+    .is_usart = false,
   }
 #endif
 #ifdef UART4
   , {
     .regs = UART4,
     .irq = UART4_IRQn,
-    .id = ID_UART4
+    .id = ID_UART4,
+    .is_usart = false,
   }
 #endif
 };
@@ -336,10 +142,31 @@ static bool atsam_uart_set_attributes(
     regs->UART_CR = UART_CR_TXEN;
   }
 
-  mr = UART_MR_FILTER_DISABLED | UART_MR_BRSRCCK_PERIPH_CLK;
+  if (ctx->is_usart) {
+    mr = US_MR_USART_MODE_NORMAL | US_MR_USCLKS_MCK;
+  } else {
+    mr = UART_MR_FILTER_DISABLED | UART_MR_BRSRCCK_PERIPH_CLK;
+  }
 
-  if ((term->c_cflag & CSIZE) != CS8) {
-    return false;
+  if (ctx->is_usart) {
+    switch (term->c_cflag & CSIZE) {
+      case CS5:
+        mr |= US_MR_CHRL_5_BIT;
+        break;
+      case CS6:
+        mr |= US_MR_CHRL_6_BIT;
+        break;
+      case CS7:
+        mr |= US_MR_CHRL_7_BIT;
+        break;
+      default:
+        mr |= US_MR_CHRL_8_BIT;
+        break;
+    }
+  } else {
+    if ((term->c_cflag & CSIZE) != CS8) {
+      return false;
+    }
   }
 
   if ((term->c_cflag & PARENB) != 0) {
@@ -352,8 +179,16 @@ static bool atsam_uart_set_attributes(
     mr |= UART_MR_PAR_NO;
   }
 
-  if ((term->c_cflag & CSTOPB) != 0) {
-    return false;
+  if (ctx->is_usart) {
+    if ((term->c_cflag & CSTOPB) != 0) {
+      mr |= US_MR_NBSTOP_2_BIT;
+    } else {
+      mr |= US_MR_NBSTOP_1_BIT;
+    }
+  } else {
+    if ((term->c_cflag & CSTOPB) != 0) {
+      return false;
+    }
   }
 
   regs->UART_MR = mr;
@@ -386,7 +221,7 @@ static bool atsam_uart_first_open(
   regs->UART_IER = UART_IDR_RXRDY;
   sc = rtems_interrupt_handler_install(
     ctx->irq,
-    "UART",
+    ctx->is_usart ? "USART" : "UART",
     RTEMS_INTERRUPT_SHARED,
     atsam_uart_interrupt,
     tty
@@ -490,7 +325,7 @@ rtems_status_code console_initialize(
     usart[sizeof(usart) - 2] = (char) ('0' + i);
     rtems_termios_device_install(
       &usart[0],
-      &atsam_usart_handler,
+      &atsam_uart_handler,
       NULL,
       &atsam_usart_instances[i].base
     );
