@@ -37,6 +37,7 @@
 #include <bsp/fdt.h>
 #include <ofw/ofw.h>
 #include <ofw/ofw_test.h>
+#include <rtems/score/isr.h>
 
 #include "some.h"
 
@@ -50,7 +51,20 @@ const void *__real_bsp_fdt_get(void);
 
 const void *__wrap_bsp_fdt_get(void)
 {
-  if (test_bin != NULL) {
+  uintptr_t sp;
+
+  sp = (uintptr_t) __builtin_frame_address(0);
+  RTEMS_OBFUSCATE_VARIABLE(sp);
+
+  /*
+   * Use the stack pointer to check if we have to return the real device tree
+   * since bsp_fdt_get() may get called before the BSS is cleared to zero.
+   */
+  if (
+    (sp < (uintptr_t) _ISR_Stack_area_begin ||
+    sp >= (uintptr_t) _ISR_Stack_area_end) &&
+    test_bin != NULL
+  ) {
     return test_bin;
   }
 
