@@ -28,12 +28,12 @@
 #endif
 
 #ifdef BSP_FDT_BLOB_READ_ONLY
-static const uint32_t
-bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)] CPU_STRUCTURE_ALIGNMENT =
+static RTEMS_ALIGNED(8) const uint32_t
+bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)] =
   { 0xdeadbeef };
 #else
-static uint32_t
-bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)] CPU_STRUCTURE_ALIGNMENT;
+static RTEMS_ALIGNED(8) uint32_t
+bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)];
 #endif
 
 void bsp_fdt_copy(const void *src)
