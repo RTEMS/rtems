@@ -33,6 +33,7 @@
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
+#include <sys/ioccom.h>
 
 #include <rtems.h>
 
@@ -108,6 +109,18 @@ void atsam_rtc_get_time(rtems_time_of_day *tod);
 
 
 void bsp_restart( const void *const addr );
+
+/*
+ * This ioctl enables the receive DMA for an UART. The DMA can be usefull if you
+ * loose characters in high interrupt load situations.
+ *
+ * Disabling the DMA again is only possible by closing all file descriptors of
+ * that UART.
+ *
+ * Note that every UART needs one DMA channel and the system has only a limited
+ * amount of DMAs. So only use it if you need it.
+ */
+#define ATSAM_UART_ENABLE_RX_DMA _IO('d', 0)
 
 #ifdef __cplusplus
 }
