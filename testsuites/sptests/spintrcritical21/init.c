@@ -31,6 +31,18 @@ typedef struct {
   rtems_id        other_task;
 } test_context;
 
+static void clear_pending_events( void )
+{
+  rtems_event_set out;
+
+  (void) rtems_event_receive(
+    RTEMS_ALL_EVENTS,
+    RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+    0,
+    &out
+  );
+}
+
 static bool is_blocked( Thread_Wait_flags flags )
 {
   return flags == ( THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_BLOCKED );
@@ -123,6 +135,8 @@ T_TEST_CASE(EventFromISR)
 
   status = rtems_task_delete( ctx.other_task );
   T_rsc_success( status );
+
+  clear_pending_events();
 }
 
 static T_interrupt_test_state event_with_timeout_from_isr_interrupt(
@@ -183,6 +197,8 @@ T_TEST_CASE( EventWithTimeoutFromISR )
 
   state = T_interrupt_test( &event_with_timeout_from_isr_config, &ctx );
   T_eq_int( state, T_INTERRUPT_TEST_DONE );
+
+  clear_pending_events();
 }
 
 static rtems_task Init( rtems_task_argument argument )
