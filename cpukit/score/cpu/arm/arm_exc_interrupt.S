@@ -37,6 +37,8 @@
 #define STACK_POINTER_ADJUST r7
 #define NON_VOLATILE_SCRATCH r9
 
+#ifndef ARM_MULTILIB_HAS_STORE_RETURN_STATE
+
 #define EXCHANGE_LR r4
 #define EXCHANGE_SPSR r5
 #define EXCHANGE_CPSR r6
@@ -48,10 +50,28 @@
 #define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, NON_VOLATILE_SCRATCH, r12}
 #define CONTEXT_SIZE 32
 
+#endif /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
+
 .arm
 .globl _ARMV4_Exception_interrupt
 _ARMV4_Exception_interrupt:
 
+#ifdef ARM_MULTILIB_HAS_STORE_RETURN_STATE
+	/* Prepare return from interrupt */
+	sub	lr, lr, #4
+
+	/* Save LR_irq and SPSR_irq to the SVC stack */
+	srsfd	sp!, #ARM_PSR_M_SVC
+
+	/* Switch to SVC mode */
+	cps	#ARM_PSR_M_SVC
+
+	/*
+	 * Save the volatile registers, two non-volatile registers used for
+	 * interrupt processing, and the link register.
+	 */
+	push	{r0-r3, STACK_POINTER_ADJUST, NON_VOLATILE_SCRATCH, r12, lr}
+#else /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
 	/* Save exchange registers to exchange area */
 	stmdb	sp, EXCHANGE_LIST
 
@@ -74,6 +94,7 @@ _ARMV4_Exception_interrupt:
 	 */
 	push	CONTEXT_LIST
 	push	{STACK_POINTER_ADJUST, lr}
+#endif /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
 
 	/*
 	 * On a public interface, the stack pointer must be aligned on an
@@ -97,11 +118,13 @@ _ARMV4_Exception_interrupt:
 	push	{r2, r3}
 #endif /* ARM_MULTILIB_VFP */
 
+#ifndef ARM_MULTILIB_HAS_STORE_RETURN_STATE
 	/* Remember INT stack pointer */
 	mov	r1, EXCHANGE_INT_SP
 
 	/* Restore exchange registers from exchange area */
 	ldmia	r1, EXCHANGE_LIST
+#endif /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
 
 	/* Get interrupt nest level */
 	ldr	r2, [r0, #PER_CPU_ISR_NEST_LEVEL]
@@ -109,7 +132,11 @@ _ARMV4_Exception_interrupt:
 	/* Switch stack if necessary and save original stack pointer */
 	mov	NON_VOLATILE_SCRATCH, sp
 	cmp	r2, #0
+#ifdef ARM_MULTILIB_HAS_STORE_RETURN_STATE
+	ldreq	sp, [r0, #PER_CPU_INTERRUPT_STACK_HIGH]
+#else
 	moveq	sp, r1
+#endif
 
 	/* Increment interrupt nest and thread dispatch disable level */
 	ldr	r3, [r0, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
@@ -215,6 +242,13 @@ _ARMV4_Exception_interrupt:
 	/* Undo stack pointer adjustment */
 	add	sp, sp, STACK_POINTER_ADJUST
 
+#ifdef ARM_MULTILIB_HAS_STORE_RETURN_STATE
+	/*
+	 * Restore the volatile registers, two non-volatile registers used for
+	 * interrupt processing, and the link register.
+	 */
+	pop	{r0-r3, STACK_POINTER_ADJUST, NON_VOLATILE_SCRATCH, r12, lr}
+#else /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
 	/* Restore STACK_POINTER_ADJUST register and link register */
 	pop	{STACK_POINTER_ADJUST, lr}
 
@@ -245,6 +279,7 @@ _ARMV4_Exception_interrupt:
 
 	/* Restore EXCHANGE_LR and EXCHANGE_SPSR registers from exchange area */
 	pop	{EXCHANGE_LR, EXCHANGE_SPSR}
+#endif /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
 
 #ifdef ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 	/*
@@ -274,7 +309,11 @@ _ARMV4_Exception_interrupt:
 #endif
 
 	/* Return from interrupt */
+#ifdef ARM_MULTILIB_HAS_STORE_RETURN_STATE
+	rfefd	sp!
+#else
 	subs	pc, lr, #4
+#endif
 
 #ifdef RTEMS_PROFILING
 .Lskip_profiling:

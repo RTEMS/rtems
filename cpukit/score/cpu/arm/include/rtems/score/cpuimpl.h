@@ -79,6 +79,18 @@ typedef struct {
   double d6;
   double d7;
 #endif /* ARM_MULTILIB_VFP */
+#ifdef ARM_MULTILIB_HAS_STORE_RETURN_STATE
+  uint32_t r0;
+  uint32_t r1;
+  uint32_t r2;
+  uint32_t r3;
+  uint32_t r7;
+  uint32_t r9;
+  uint32_t r12;
+  uint32_t lr;
+  uint32_t return_pc;
+  uint32_t return_cpsr;
+#else /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
   uint32_t r9;
   uint32_t lr;
   uint32_t r0;
@@ -89,6 +101,7 @@ typedef struct {
   uint32_t return_cpsr;
   uint32_t r7;
   uint32_t r12;
+#endif /* ARM_MULTILIB_HAS_STORE_RETURN_STATE */
 } CPU_Interrupt_frame;
 
 #ifdef RTEMS_SMP
