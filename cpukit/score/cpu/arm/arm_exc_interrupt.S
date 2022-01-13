@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2022 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -34,6 +34,9 @@
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
+#define STACK_POINTER_ADJUST r7
+#define NON_VOLATILE_SCRATCH r9
+
 #define EXCHANGE_LR r4
 #define EXCHANGE_SPSR r5
 #define EXCHANGE_CPSR r6
@@ -42,9 +45,7 @@
 #define EXCHANGE_LIST {EXCHANGE_LR, EXCHANGE_SPSR, EXCHANGE_CPSR, EXCHANGE_INT_SP}
 #define EXCHANGE_SIZE 16
 
-#define NON_VOLATILE_SCRATCH r9
-
-#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, r7, r12}
+#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, NON_VOLATILE_SCRATCH, r12}
 #define CONTEXT_SIZE 32
 
 .arm
@@ -67,12 +68,21 @@ _ARMV4_Exception_interrupt:
 	/*
 	 * Save context.  We save the link register separately because it has
 	 * to be restored in SVC mode.  The other registers can be restored in
-	 * INT mode.  Ensure that stack remains 8 byte aligned.  Use register
-	 * necessary for the stack alignment for the stack pointer of the
-	 * interrupted context.
+	 * INT mode.  Ensure that the size of the saved registers is an
+	 * integral multiple of 8 bytes.  Provide a non-volatile scratch
+	 * register which may be used accross function calls.
 	 */
 	push	CONTEXT_LIST
-	push	{NON_VOLATILE_SCRATCH, lr}
+	push	{STACK_POINTER_ADJUST, lr}
+
+	/*
+	 * On a public interface, the stack pointer must be aligned on an
+	 * 8-byte boundary.  However, it may temporarily be only aligned on a
+	 * 4-byte boundary.  Make sure the stack pointer is aligned on an
+	 * 8-byte boundary.
+	 */
+	and	STACK_POINTER_ADJUST, sp, #0x4
+	sub	sp, sp, STACK_POINTER_ADJUST
 
 	/* Get per-CPU control of current processor */
 	GET_SELF_CPU_CONTROL	r0
@@ -202,8 +212,11 @@ _ARMV4_Exception_interrupt:
 	vmsr	FPSCR, r2
 #endif /* ARM_MULTILIB_VFP */
 
-	/* Restore NON_VOLATILE_SCRATCH register and link register */
-	pop	{NON_VOLATILE_SCRATCH, lr}
+	/* Undo stack pointer adjustment */
+	add	sp, sp, STACK_POINTER_ADJUST
+
+	/* Restore STACK_POINTER_ADJUST register and link register */
+	pop	{STACK_POINTER_ADJUST, lr}
 
 	/*
 	 * XXX: Remember and restore stack pointer.  The data on the stack is
