@@ -16,12 +16,20 @@
 #include <bsp/irq.h>
 #include <bsp/fatal.h>
 #include <rtems/console.h>
+#include <rtems/seterr.h>
 
 #include <rtems/termiostypes.h>
 
 #include <chip.h>
 
 #include <unistd.h>
+
+#define UART_RX_DMA_BUF_SIZE 32l
+
+typedef struct {
+  char buf[UART_RX_DMA_BUF_SIZE];
+  LinkedListDescriporView3 desc;
+} atsam_uart_rx_dma;
 
 typedef struct {
   rtems_termios_device_context base;
@@ -32,6 +40,11 @@ typedef struct {
   bool is_usart;
 #ifdef ATSAM_CONSOLE_USE_INTERRUPTS
   bool transmitting;
+  bool rx_dma_enabled;
+  uint32_t rx_dma_channel;
+  atsam_uart_rx_dma *rx_dma;
+  char *volatile*rx_dma_da;
+  char *rx_next_read_pos;
 #endif
 } atsam_uart_context;
 
@@ -109,12 +122,27 @@ static void atsam_uart_interrupt(void *arg)
   Uart *regs = ctx->regs;
   uint32_t sr = regs->UART_SR;
 
-  while ((sr & UART_SR_RXRDY) != 0) {
-    char c = (char) regs->UART_RHR;
+  if (!ctx->rx_dma_enabled) {
+    while ((sr & UART_SR_RXRDY) != 0) {
+      char c = (char) regs->UART_RHR;
 
-    rtems_termios_enqueue_raw_characters(tty, &c, 1);
+      rtems_termios_enqueue_raw_characters(tty, &c, 1);
 
-    sr = regs->UART_SR;
+      sr = regs->UART_SR;
+    }
+  } else {
+    while (*ctx->rx_dma_da != ctx->rx_next_read_pos) {
+      char c;
+
+      c = *ctx->rx_next_read_pos;
+
+      ++ctx->rx_next_read_pos;
+      if (ctx->rx_next_read_pos >= &ctx->rx_dma->buf[UART_RX_DMA_BUF_SIZE]) {
+        ctx->rx_next_read_pos = &ctx->rx_dma->buf[0];
+      }
+
+      rtems_termios_enqueue_raw_characters(tty, &c, 1);
+    }
   }
 
   if (ctx->transmitting && (sr & UART_SR_TXEMPTY) != 0) {
@@ -196,6 +224,118 @@ static bool atsam_uart_set_attributes(
   return true;
 }
 
+static void atsam_uart_disable_rx_dma(atsam_uart_context *ctx)
+{
+  if (ctx->rx_dma) {
+    rtems_cache_coherent_free(ctx->rx_dma);
+    ctx->rx_dma = NULL;
+  }
+
+  if (ctx->rx_dma_channel != XDMAD_ALLOC_FAILED) {
+    XDMAD_FreeChannel(&XDMAD_Instance, ctx->rx_dma_channel);
+  }
+
+  ctx->rx_dma_enabled = false;
+}
+
+static rtems_status_code atsam_uart_enable_rx_dma(atsam_uart_context *ctx)
+{
+  eXdmadRC rc;
+  int channel_id;
+
+  if (ctx->rx_dma_enabled) {
+    return RTEMS_SUCCESSFUL;
+  }
+
+  /*
+   * Make sure everything is in a clean default state so that the cleanup works
+   * in an error case.
+   */
+  ctx->rx_dma = NULL;
+  ctx->rx_dma_channel = XDMAD_ALLOC_FAILED;
+
+  ctx->rx_dma = rtems_cache_coherent_allocate(sizeof(*ctx->rx_dma), 0, 0);
+  if (ctx->rx_dma == NULL) {
+    atsam_uart_disable_rx_dma(ctx);
+    return RTEMS_NO_MEMORY;
+  }
+
+  ctx->rx_next_read_pos = &ctx->rx_dma->buf[0];
+
+  ctx->rx_dma_channel = XDMAD_AllocateChannel(
+    &XDMAD_Instance,
+    XDMAD_TRANSFER_MEMORY,
+    ctx->id
+  );
+
+  if (ctx->rx_dma_channel == XDMAD_ALLOC_FAILED) {
+    atsam_uart_disable_rx_dma(ctx);
+    return RTEMS_IO_ERROR;
+  }
+
+  rc = XDMAD_PrepareChannel(&XDMAD_Instance, ctx->rx_dma_channel);
+  if (rc != XDMAD_OK) {
+    atsam_uart_disable_rx_dma(ctx);
+    return RTEMS_IO_ERROR;
+  }
+
+  channel_id = ctx->rx_dma_channel & 0xff;
+  ctx->rx_dma_da =
+    (char *volatile*) &XDMAD_Instance.pXdmacs->XDMAC_CHID[channel_id].XDMAC_CDA;
+
+  ctx->rx_dma->desc.mbr_nda = (uint32_t)&ctx->rx_dma->desc;
+  ctx->rx_dma->desc.mbr_ubc =
+    1 |
+    XDMA_UBC_NVIEW_NDV3 |
+    XDMA_UBC_NDE_FETCH_EN |
+    XDMA_UBC_NDEN_UPDATED |
+    XDMA_UBC_NSEN_UPDATED;
+  ctx->rx_dma->desc.mbr_sa = (uint32_t) &ctx->regs->UART_RHR;
+  ctx->rx_dma->desc.mbr_da = (uint32_t) &ctx->rx_dma->buf[0];
+  ctx->rx_dma->desc.mbr_cfg =
+    XDMAC_CC_TYPE_PER_TRAN |
+    XDMAC_CC_MBSIZE_SINGLE |
+    XDMAC_CC_DSYNC_PER2MEM |
+    XDMAC_CC_SWREQ_HWR_CONNECTED |
+    XDMAC_CC_MEMSET_NORMAL_MODE |
+    XDMAC_CC_CSIZE_CHK_1 |
+    XDMAC_CC_DWIDTH_BYTE |
+    XDMAC_CC_SIF_AHB_IF1 |
+    XDMAC_CC_DIF_AHB_IF1 |
+    XDMAC_CC_SAM_FIXED_AM |
+    XDMAC_CC_DAM_UBS_AM |
+    XDMAC_CC_PERID(XDMAIF_Get_ChannelNumber(ctx->id, XDMAD_TRANSFER_RX));
+  ctx->rx_dma->desc.mbr_bc = UART_RX_DMA_BUF_SIZE - 1;
+  ctx->rx_dma->desc.mbr_ds = 0;
+  ctx->rx_dma->desc.mbr_sus = 0;
+  ctx->rx_dma->desc.mbr_dus = 0;
+
+  rc = XDMAD_ConfigureTransfer(
+    &XDMAD_Instance,
+    ctx->rx_dma_channel,
+    NULL,
+    XDMAC_CNDC_NDE_DSCR_FETCH_EN |
+    XDMAC_CNDC_NDVIEW_NDV3 |
+    XDMAC_CNDC_NDDUP_DST_PARAMS_UPDATED |
+    XDMAC_CNDC_NDSUP_SRC_PARAMS_UPDATED,
+    (uint32_t)&ctx->rx_dma->desc,
+    0);
+  if (rc != XDMAD_OK) {
+    atsam_uart_disable_rx_dma(ctx);
+    return RTEMS_IO_ERROR;
+  }
+
+  rc = XDMAD_StartTransfer(&XDMAD_Instance, ctx->rx_dma_channel);
+  if (rc != XDMAD_OK) {
+    atsam_uart_disable_rx_dma(ctx);
+    return RTEMS_IO_ERROR;
+  }
+
+  ctx->rx_dma_enabled = true;
+
+  return RTEMS_SUCCESSFUL;
+}
+
 static bool atsam_uart_first_open(
   rtems_termios_tty *tty,
   rtems_termios_device_context *base,
@@ -245,6 +385,10 @@ static void atsam_uart_last_close(
 #ifdef ATSAM_CONSOLE_USE_INTERRUPTS
   rtems_interrupt_handler_remove(ctx->irq, atsam_uart_interrupt, tty);
 #endif
+
+  if (ctx->rx_dma_enabled) {
+    atsam_uart_disable_rx_dma(ctx);
+  }
 
   if (!ctx->console) {
     PMC_DisablePeripheral(ctx->id);
@@ -296,13 +440,41 @@ static int atsam_uart_read(rtems_termios_device_context *base)
 }
 #endif
 
+#ifdef ATSAM_CONSOLE_USE_INTERRUPTS
+static int atsam_uart_ioctl(
+  rtems_termios_device_context *base,
+  ioctl_command_t               request,
+  void                         *buffer
+)
+{
+  atsam_uart_context *ctx = (atsam_uart_context *) base;
+  rtems_status_code sc;
+
+  switch (request) {
+    case ATSAM_UART_ENABLE_RX_DMA:
+      sc = atsam_uart_enable_rx_dma(ctx);
+      if (sc != RTEMS_SUCCESSFUL) {
+        rtems_set_errno_and_return_minus_one(EIO);
+      } else {
+        ctx->rx_dma_enabled = true;
+      }
+      break;
+    default:
+      rtems_set_errno_and_return_minus_one(EINVAL);
+  }
+
+  return 0;
+}
+#endif
+
 static const rtems_termios_device_handler atsam_uart_handler = {
   .first_open = atsam_uart_first_open,
   .last_close = atsam_uart_last_close,
   .write = atsam_uart_write,
   .set_attributes = atsam_uart_set_attributes,
 #ifdef ATSAM_CONSOLE_USE_INTERRUPTS
-  .mode = TERMIOS_IRQ_DRIVEN
+  .mode = TERMIOS_IRQ_DRIVEN,
+  .ioctl = atsam_uart_ioctl,
 #else
   .poll_read = atsam_uart_read,
   .mode = TERMIOS_POLLED
