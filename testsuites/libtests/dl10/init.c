@@ -27,9 +27,6 @@
 
 const char rtems_test_name[] = "libdl (RTL) 10";
 
-/* forward declarations to avoid warnings */
-static rtems_task Init(rtems_task_argument argument);
-
 #include "dl10-tar.h"
 
 #define TARFILE_START dl10_tar
@@ -46,9 +43,18 @@ static int test(void)
   return 0;
 }
 
+static void notification(int fd, int seconds_remaining, void *arg)
+{
+  printf(
+    "Press any key to enter shell (%is remaining)\n",
+    seconds_remaining
+  );
+}
+
 static void Init(rtems_task_argument arg)
 {
   int e;
+  rtems_status_code sc;
 
   TEST_BEGIN();
 
@@ -76,13 +82,20 @@ static void Init(rtems_task_argument arg)
     exit (1);
   }
 
-  rtems_shell_init ("SHLL",
-                    RTEMS_MINIMUM_STACK_SIZE * 4,
-                    100,
-                    "/dev/foobar",
-                    false,
-                    true,
-                    NULL);
+
+  sc = rtems_shell_wait_for_input (STDIN_FILENO,
+                                   20,
+                                   notification,
+                                   NULL);
+  if (sc == RTEMS_SUCCESSFUL) {
+    rtems_shell_init ("SHLL",
+                      RTEMS_MINIMUM_STACK_SIZE * 4,
+                      100,
+                      "/dev/foobar",
+                      false,
+                      true,
+                      NULL);
+  }
 
   TEST_END();
 
