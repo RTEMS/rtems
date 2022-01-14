@@ -42,10 +42,9 @@
 #define EXCHANGE_LIST {EXCHANGE_LR, EXCHANGE_SPSR, EXCHANGE_CPSR, EXCHANGE_INT_SP}
 #define EXCHANGE_SIZE 16
 
-#define SELF_CPU_CONTROL r7
 #define NON_VOLATILE_SCRATCH r9
 
-#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, SELF_CPU_CONTROL, r12}
+#define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, r7, r12}
 #define CONTEXT_SIZE 32
 
 .arm
@@ -75,18 +74,18 @@ _ARMV4_Exception_interrupt:
 	push	CONTEXT_LIST
 	push	{NON_VOLATILE_SCRATCH, lr}
 
+	/* Get per-CPU control of current processor */
+	GET_SELF_CPU_CONTROL	r0
+
 #ifdef ARM_MULTILIB_VFP
 	/* Save VFP context */
-	vmrs	r0, FPSCR
+	vmrs	r2, FPSCR
 	vpush	{d0-d7}
 #ifdef ARM_MULTILIB_VFP_D32
 	vpush	{d16-d31}
 #endif
-	push	{r0, r1}
+	push	{r2, r3}
 #endif /* ARM_MULTILIB_VFP */
-
-	/* Get per-CPU control of current processor */
-	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL
 
 	/* Remember INT stack pointer */
 	mov	r1, EXCHANGE_INT_SP
@@ -95,46 +94,46 @@ _ARMV4_Exception_interrupt:
 	ldmia	r1, EXCHANGE_LIST
 
 	/* Get interrupt nest level */
-	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+	ldr	r2, [r0, #PER_CPU_ISR_NEST_LEVEL]
 
 	/* Switch stack if necessary and save original stack pointer */
 	mov	NON_VOLATILE_SCRATCH, sp
 	cmp	r2, #0
 	moveq	sp, r1
 
-	/* Switch to Thumb-2 instructions if necessary */
-	SWITCH_FROM_ARM_TO_THUMB_2	r1
-
 	/* Increment interrupt nest and thread dispatch disable level */
-	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-	add	r2, #1
-	add	r3, #1
-	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
-	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	ldr	r3, [r0, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	add	r2, r2, #1
+	add	r3, r3, #1
+	str	r2, [r0, #PER_CPU_ISR_NEST_LEVEL]
+	str	r3, [r0, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
 	/* Call BSP dependent interrupt dispatcher */
 #ifdef RTEMS_PROFILING
 	cmp	r2, #1
 	bne	.Lskip_profiling
 	BLX_TO_THUMB_1	_CPU_Counter_read
-	mov	SELF_CPU_CONTROL, r0
+	push	{r0, r1}
+	GET_SELF_CPU_CONTROL	r0
 	BLX_TO_THUMB_1	bsp_interrupt_dispatch
 	BLX_TO_THUMB_1	_CPU_Counter_read
+	pop	{r1, r3}
 	mov	r2, r0
-	mov	r1, SELF_CPU_CONTROL
 	GET_SELF_CPU_CONTROL	r0
-	mov	SELF_CPU_CONTROL, r0
 	BLX_TO_THUMB_1	_Profiling_Outer_most_interrupt_entry_and_exit
 .Lprofiling_done:
 #else
 	BLX_TO_THUMB_1	bsp_interrupt_dispatch
 #endif
 
+	/* Get per-CPU control of current processor */
+	GET_SELF_CPU_CONTROL	r0
+
 	/* Load some per-CPU variables */
-	ldr	r0, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-	ldrb	r1, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
-	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_DISPATCH_DISABLE]
-	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+	ldr	r12, [r0, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	ldrb	r1, [r0, #PER_CPU_DISPATCH_NEEDED]
+	ldr	r2, [r0, #PER_CPU_ISR_DISPATCH_DISABLE]
+	ldr	r3, [r0, #PER_CPU_ISR_NEST_LEVEL]
 
 	/* Restore stack pointer */
 	mov	sp, NON_VOLATILE_SCRATCH
@@ -143,15 +142,15 @@ _ARMV4_Exception_interrupt:
 	mrs	NON_VOLATILE_SCRATCH, CPSR
 
 	/* Decrement levels and determine thread dispatch state */
-	eor	r1, r0
-	sub	r0, #1
-	orr	r1, r0
-	orr	r1, r2
-	sub	r3, #1
+	eor	r1, r1, r12
+	sub	r12, r12, #1
+	orr	r1, r1, r12
+	orr	r1, r1, r2
+	sub	r3, r3, #1
 
 	/* Store thread dispatch disable and ISR nest levels */
-	str	r0, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-	str	r3, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+	str	r12, [r0, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	str	r3, [r0, #PER_CPU_ISR_NEST_LEVEL]
 
 	/*
 	 * Check thread dispatch necessary, ISR dispatch disable and thread
@@ -166,46 +165,42 @@ _ARMV4_Exception_interrupt:
 .Ldo_thread_dispatch:
 
 	/* Set ISR dispatch disable and thread dispatch disable level to one */
-	mov	r0, #1
-	str	r0, [SELF_CPU_CONTROL, #PER_CPU_ISR_DISPATCH_DISABLE]
-	str	r0, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	mov	r12, #1
+	str	r12, [r0, #PER_CPU_ISR_DISPATCH_DISABLE]
+	str	r12, [r0, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
 	/* Call _Thread_Do_dispatch(), this function will enable interrupts */
-	mov	r0, SELF_CPU_CONTROL
-	mov	r1, NON_VOLATILE_SCRATCH
-	mov	r2, #0x80
-	bic	r1, r2
+	bic	r1, NON_VOLATILE_SCRATCH, #0x80
 	BLX_TO_THUMB_1	_Thread_Do_dispatch
 
 	/* Disable interrupts */
 	msr	CPSR, NON_VOLATILE_SCRATCH
 
-#ifdef RTEMS_SMP
-	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL
-#endif
+	/*
+	 * Get per-CPU control of current processor.  In SMP configurations, we
+	 * may run on another processor after the _Thread_Do_dispatch() call.
+	 */
+	GET_SELF_CPU_CONTROL	r0
 
 	/* Check if we have to do the thread dispatch again */
-	ldrb	r0, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
-	cmp	r0, #0
+	ldrb	r12, [r0, #PER_CPU_DISPATCH_NEEDED]
+	cmp	r12, #0
 	bne	.Ldo_thread_dispatch
 
 	/* We are done with thread dispatching */
-	mov	r0, #0
-	str	r0, [SELF_CPU_CONTROL, #PER_CPU_ISR_DISPATCH_DISABLE]
+	mov	r12, #0
+	str	r12, [r0, #PER_CPU_ISR_DISPATCH_DISABLE]
 
 .Lthread_dispatch_done:
 
-	/* Switch to ARM instructions if necessary */
-	SWITCH_FROM_THUMB_2_TO_ARM
-
 #ifdef ARM_MULTILIB_VFP
 	/* Restore VFP context */
-	pop	{r0, r1}
+	pop	{r2, r3}
 #ifdef ARM_MULTILIB_VFP_D32
 	vpop	{d16-d31}
 #endif
 	vpop	{d0-d7}
-	vmsr	FPSCR, r0
+	vmsr	FPSCR, r2
 #endif /* ARM_MULTILIB_VFP */
 
 	/* Restore NON_VOLATILE_SCRATCH register and link register */
@@ -216,7 +211,7 @@ _ARMV4_Exception_interrupt:
 	 * still in use.  So the stack is now in an inconsistent state.  The
 	 * FIQ handler implementation must not use this area.
 	 */
-	mov	r0, sp
+	mov	r12, sp
 	add	sp, #CONTEXT_SIZE
 
 	/* Get INT mode program status register */
@@ -230,7 +225,7 @@ _ARMV4_Exception_interrupt:
 	push	{EXCHANGE_LR, EXCHANGE_SPSR}
 
 	/* Restore context */
-	ldmia	r0, CONTEXT_LIST
+	ldmia	r12, CONTEXT_LIST
 
 	/* Set return address and program status */
 	mov	lr, EXCHANGE_LR
@@ -270,11 +265,6 @@ _ARMV4_Exception_interrupt:
 	subs	pc, lr, #4
 
 #ifdef RTEMS_PROFILING
-#ifdef __thumb2__
-.thumb
-#else
-.arm
-#endif
 .Lskip_profiling:
 	BLX_TO_THUMB_1	bsp_interrupt_dispatch
 	b	.Lprofiling_done
