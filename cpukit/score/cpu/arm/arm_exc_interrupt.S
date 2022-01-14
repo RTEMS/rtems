@@ -72,17 +72,17 @@ _ARMV4_Exception_interrupt:
 	 * necessary for the stack alignment for the stack pointer of the
 	 * interrupted context.
 	 */
-	stmdb	sp!, CONTEXT_LIST
-	stmdb	sp!, {NON_VOLATILE_SCRATCH, lr}
+	push	CONTEXT_LIST
+	push	{NON_VOLATILE_SCRATCH, lr}
 
 #ifdef ARM_MULTILIB_VFP
 	/* Save VFP context */
 	vmrs	r0, FPSCR
-	vstmdb	sp!, {d0-d7}
+	vpush	{d0-d7}
 #ifdef ARM_MULTILIB_VFP_D32
-	vstmdb	sp!, {d16-d31}
+	vpush	{d16-d31}
 #endif
-	stmdb	sp!, {r0, r1}
+	push	{r0, r1}
 #endif /* ARM_MULTILIB_VFP */
 
 	/* Get per-CPU control of current processor */
@@ -200,16 +200,16 @@ _ARMV4_Exception_interrupt:
 
 #ifdef ARM_MULTILIB_VFP
 	/* Restore VFP context */
-	ldmia	sp!, {r0, r1}
+	pop	{r0, r1}
 #ifdef ARM_MULTILIB_VFP_D32
-	vldmia	sp!, {d16-d31}
+	vpop	{d16-d31}
 #endif
-	vldmia	sp!, {d0-d7}
+	vpop	{d0-d7}
 	vmsr	FPSCR, r0
 #endif /* ARM_MULTILIB_VFP */
 
 	/* Restore NON_VOLATILE_SCRATCH register and link register */
-	ldmia	sp!, {NON_VOLATILE_SCRATCH, lr}
+	pop	{NON_VOLATILE_SCRATCH, lr}
 
 	/*
 	 * XXX: Remember and restore stack pointer.  The data on the stack is
@@ -227,7 +227,7 @@ _ARMV4_Exception_interrupt:
 	msr	CPSR_c, r1
 
 	/* Save EXCHANGE_LR and EXCHANGE_SPSR registers to exchange area */
-	stmdb	sp!, {EXCHANGE_LR, EXCHANGE_SPSR}
+	push	{EXCHANGE_LR, EXCHANGE_SPSR}
 
 	/* Restore context */
 	ldmia	r0, CONTEXT_LIST
@@ -237,7 +237,7 @@ _ARMV4_Exception_interrupt:
 	msr	SPSR_fsxc, EXCHANGE_SPSR
 
 	/* Restore EXCHANGE_LR and EXCHANGE_SPSR registers from exchange area */
-	ldmia	sp!, {EXCHANGE_LR, EXCHANGE_SPSR}
+	pop	{EXCHANGE_LR, EXCHANGE_SPSR}
 
 #ifdef ARM_MULTILIB_HAS_LOAD_STORE_EXCLUSIVE
 	/*
