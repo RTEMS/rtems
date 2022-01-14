@@ -80,6 +80,8 @@ links:
   uid: ../../opto2
 - role: build-dependency
   uid: ../../bspopts
+- role: build-dependency
+  uid: ../../tst-xfail-dl06
 source:
 - bsps/arm/imx/console/console-config.c
 - bsps/arm/imx/i2c/imx-i2c.c
