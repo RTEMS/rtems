@@ -330,7 +330,7 @@ source:
 - bsps/arm/stm32h7/start/stm32h7-hal-uart.c
 - bsps/arm/stm32h7/start/stm32h7-hal.c
 - bsps/arm/stm32h7/start/system_stm32h7xx.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/rtc/rtc-support.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c

@@ -71,7 +71,7 @@ source:
 - bsps/arm/shared/fb/arm-pl111.c
 - bsps/arm/shared/serial/arm-pl050.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c

@@ -62,7 +62,7 @@ source:
 - bsps/powerpc/t32mppc/irq/irq.c
 - bsps/powerpc/t32mppc/start/bspreset.c
 - bsps/powerpc/t32mppc/start/bspstart.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c

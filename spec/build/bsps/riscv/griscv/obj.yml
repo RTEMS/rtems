@@ -26,7 +26,7 @@ source:
 - bsps/riscv/griscv/start/bsp_fatal_halt.c
 - bsps/riscv/griscv/start/bspstart.c
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c

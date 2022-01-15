@@ -43,7 +43,7 @@ source:
 - bsps/moxie/moxiesim/console/console-io.c
 - bsps/moxie/moxiesim/console/syscalls.S
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/clock/clock-simidle.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c

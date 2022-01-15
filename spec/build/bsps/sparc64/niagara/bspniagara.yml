@@ -40,7 +40,7 @@ links:
   uid: ../../bspopts
 source:
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/legacy-console-control.c
 - bsps/shared/dev/serial/legacy-console-select.c

@@ -258,7 +258,7 @@ source:
 - bsps/arm/shared/pins/imx_iomux.c
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/shared/start/bspreset-armv7m.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c

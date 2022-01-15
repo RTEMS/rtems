@@ -35,7 +35,7 @@ source:
 - bsps/arm/xilinx-zynq/start/bspstart.c
 - bsps/arm/xilinx-zynq/start/bspstarthooks.c
 - bsps/arm/xilinx-zynq/start/bspstartmmu.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/irq/arm-gicv2.c
 - bsps/shared/dev/irq/arm-gicv2-get-attributes.c

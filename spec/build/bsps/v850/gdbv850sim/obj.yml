@@ -22,7 +22,7 @@ install:
 links: []
 source:
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/clock/clock-simidle.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/serial/console-polled.c

@@ -57,7 +57,7 @@ source:
 - bsps/mips/shared/irq/vectorexceptions.c
 - bsps/mips/shared/start/idttlb.S
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
 - bsps/shared/dev/pci/pci_find_device.c
 - bsps/shared/dev/serial/legacy-console-control.c

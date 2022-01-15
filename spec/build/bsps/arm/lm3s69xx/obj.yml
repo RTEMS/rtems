@@ -40,7 +40,7 @@ source:
 - bsps/arm/shared/start/bsp-start-memcpy.S
 - bsps/arm/shared/start/bspreset-armv7m.c
 - bsps/shared/cache/nocache.c
-- bsps/shared/dev/btimer/btimer-stub.c
+- bsps/shared/dev/btimer/btimer-cpucounter.c
 - bsps/shared/dev/cpucounter/cpucounterfrequency.c
 - bsps/shared/dev/cpucounter/cpucounterread.c
 - bsps/shared/dev/getentropy/getentropy-cpucounter.c
