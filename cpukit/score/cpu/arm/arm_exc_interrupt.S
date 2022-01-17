@@ -138,9 +138,6 @@ _ARMV4_Exception_interrupt:
 	/* Restore stack pointer */
 	mov	sp, NON_VOLATILE_SCRATCH
 
-	/* Save CPSR in non-volatile register */
-	mrs	NON_VOLATILE_SCRATCH, CPSR
-
 	/* Decrement levels and determine thread dispatch state */
 	eor	r1, r1, r12
 	sub	r12, r12, #1
@@ -159,8 +156,10 @@ _ARMV4_Exception_interrupt:
 	cmp	r1, #0
 	bne	.Lthread_dispatch_done
 
-	/* Thread dispatch */
+	/* Save CPSR in non-volatile register */
 	mrs	NON_VOLATILE_SCRATCH, CPSR
+
+	/* Thread dispatch */
 
 .Ldo_thread_dispatch:
 
