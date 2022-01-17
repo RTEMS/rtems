@@ -48,12 +48,6 @@
 #define AARCH32_PSMA_REGION_MAX \
   ( ( AARCH32_MPUIR_REGION_MASK >> AARCH32_MPUIR_REGION_SHIFT ) + 1 )
 
-typedef struct {
-  uint32_t base;
-  uint32_t limit;
-  uint32_t attributes;
-} AArch32_PMSA_Region;
-
 static void _AArch32_PMSA_Configure(
   const AArch32_PMSA_Region *regions,
   size_t                     region_used,
@@ -96,24 +90,17 @@ static void _AArch32_PMSA_Configure(
   _ARM_Instruction_synchronization_barrier();
 }
 
-void _AArch32_PMSA_Initialize(
-  uint32_t                    memory_attributes_0,
-  uint32_t                    memory_attributes_1,
+size_t _AArch32_PMSA_Map_sections_to_regions(
   const AArch32_PMSA_Section *sections,
-  size_t                      section_count
+  size_t                      section_count,
+  AArch32_PMSA_Region        *regions,
+  size_t                      region_max
 )
 {
-  AArch32_PMSA_Region regions[ AARCH32_PSMA_REGION_MAX ];
   size_t ri;
   size_t si;
   size_t region_used;
-  size_t region_max;
 
-  _AArch32_Write_mair0( memory_attributes_0 );
-  _AArch32_Write_mair1( memory_attributes_1 );
-
-  region_max = ( _AArch32_Read_mpuir() & AARCH32_MPUIR_REGION_MASK ) >>
-    AARCH32_MPUIR_REGION_SHIFT;
   region_used = 0;
 
   for ( si = 0; si < section_count; ++si ) {
@@ -159,7 +146,7 @@ void _AArch32_PMSA_Initialize(
         size_t i;
 
         if ( region_used >= region_max ) {
-          return;
+          return 0;
         }
 
         for ( i = ri; i < region_used; ++i ) {
@@ -177,7 +164,7 @@ void _AArch32_PMSA_Initialize(
 
     if ( ri == region_used ) {
       if ( region_used >= region_max ) {
-        return;
+        return 0;
       }
 
       /* New last region */
@@ -188,7 +175,36 @@ void _AArch32_PMSA_Initialize(
     }
   }
 
-  _AArch32_PMSA_Configure( regions, region_used, region_max );
+  return region_used;
+}
+
+void _AArch32_PMSA_Initialize(
+  uint32_t                    memory_attributes_0,
+  uint32_t                    memory_attributes_1,
+  const AArch32_PMSA_Section *sections,
+  size_t                      section_count
+)
+{
+  AArch32_PMSA_Region regions[ AARCH32_PSMA_REGION_MAX ];
+  size_t region_max;
+  size_t region_used;
+
+  _AArch32_Write_mair0( memory_attributes_0 );
+  _AArch32_Write_mair1( memory_attributes_1 );
+
+  region_max = ( _AArch32_Read_mpuir() & AARCH32_MPUIR_REGION_MASK ) >>
+    AARCH32_MPUIR_REGION_SHIFT;
+
+  region_used = _AArch32_PMSA_Map_sections_to_regions(
+    sections,
+    section_count,
+    regions,
+    region_max
+  );
+
+  if ( region_used > 0 ) {
+    _AArch32_PMSA_Configure( regions, region_used, region_max );
+  }
 }
 
 #endif

@@ -278,12 +278,41 @@ typedef struct {
 } AArch32_PMSA_Section;
 
 /**
+ * @brief The region definition is used to configure the Memory Protection
+ *   Unit (MPU).
+ *
+ * A region cannot be empty.
+ */
+typedef struct {
+  /**
+   * @brief This member defines the base address of the region.
+   *
+   * The limit address is this the address of the first byte of the region.
+   */
+  uint32_t base;
+
+  /**
+   * @brief This member defines the limit address of the region.
+   *
+   * The limit address is this the address of the last byte of the region.
+   */
+  uint32_t limit;
+
+  /**
+   * @brief This member defines the attributes of the region.
+   */
+  uint32_t attributes;
+} AArch32_PMSA_Region;
+
+/**
  * @brief Initializes the Memory Protection Unit (MPU).
  *
  * The section definitions are used to define the regions of the MPU.  Sections
  * are merged if possible to reduce the count of used regions.  If too many
  * regions are used, then the MPU is not enabled.  Overlapping section
  * definitions result in undefined system behaviour.
+ *
+ * The function shall be called while the MPU is disabled.
  *
  * @param memory_attributes_0 are the memory attributes for MAIR0.
  *
@@ -298,6 +327,31 @@ void _AArch32_PMSA_Initialize(
   uint32_t                    memory_attributes_1,
   const AArch32_PMSA_Section *sections,
   size_t                      section_count
+);
+
+/**
+ * @brief Maps the section definitions to region definitions.
+ *
+ * The section definitions are used to define the regions of the MPU.  Sections
+ * are merged if possible to reduce the count of used regions.  If too many
+ * regions are used, then zero is returned.  Overlapping section definitions
+ * result in undefined system behaviour.
+ *
+ * @param sections is the array with section definitions to map to regions.
+ *
+ * @param section_count is the count of section definitions.
+ *
+ * @param regions is the array with usable region definitions.
+ *
+ * @param region_max is the count of usable region definitions.
+ *
+ * @return Returns the count of actually used regions.
+ */
+size_t _AArch32_PMSA_Map_sections_to_regions(
+  const AArch32_PMSA_Section *sections,
+  size_t                      section_count,
+  AArch32_PMSA_Region        *regions,
+  size_t                      region_max
 );
 
 /**
