@@ -105,19 +105,21 @@ size_t _AArch32_PMSA_Map_sections_to_regions(
 
   for ( si = 0; si < section_count; ++si ) {
     uint32_t base;
-    uint32_t limit;
+    uint32_t end;
     uint32_t attr;
+    uint32_t limit;
 
     base = sections[ si ].begin;
-    limit = sections[ si ].end;
+    end = sections[ si ].end;
     attr = sections[ si ].attributes;
 
-    if ( base == limit ) {
+    if ( base == end ) {
       continue;
     }
 
     base = RTEMS_ALIGN_DOWN( base, AARCH32_PMSA_MIN_REGION_ALIGN );
-    limit = RTEMS_ALIGN_DOWN( limit - 1, AARCH32_PMSA_MIN_REGION_ALIGN );
+    end = RTEMS_ALIGN_UP( end, AARCH32_PMSA_MIN_REGION_ALIGN );
+    limit = end - AARCH32_PMSA_MIN_REGION_ALIGN;
 
     for ( ri = 0; ri < region_used; ++ri ) {
       uint32_t region_base;
@@ -128,29 +130,38 @@ size_t _AArch32_PMSA_Map_sections_to_regions(
       region_limit = regions[ ri ].limit;
       region_attr = regions[ ri ].attributes;
 
-      if (
-        limit + AARCH32_PMSA_MIN_REGION_ALIGN == region_base &&
-          attr == region_attr
-      ) {
-        /* Merge section with existing region */
-        regions[ ri ].base = base;
-        break;
-      } else if (
-        base == region_limit + AARCH32_PMSA_MIN_REGION_ALIGN &&
-          attr == region_attr
-      ) {
-        /* Merge section with existing region */
-        regions[ ri ].limit = limit;
-        break;
-      } else if ( limit < region_base ) {
+      if ( attr == region_attr ) {
+        uint32_t region_end;
+
+        if ( end == region_base ) {
+          /* Extend the region region */
+          regions[ ri ].base = base;
+          break;
+        }
+
+        region_end = region_limit + AARCH32_PMSA_MIN_REGION_ALIGN;
+
+        if ( base == region_end ) {
+          /* Extend the region region */
+          regions[ ri ].limit = limit;
+          break;
+        }
+
+        if ( base >= region_base && end <= region_end ) {
+          /* The section is contained in the region */
+          break;
+        }
+      }
+
+      if ( end <= region_base ) {
         size_t i;
 
         if ( region_used >= region_max ) {
           return 0;
         }
 
-        for ( i = ri; i < region_used; ++i ) {
-          regions[ i + 1 ] = regions[ i ];
+        for ( i = region_used; i > ri; --i ) {
+          regions[ i ] = regions[ i - 1 ];
         }
 
         /* New first region */
@@ -168,10 +179,10 @@ size_t _AArch32_PMSA_Map_sections_to_regions(
       }
 
       /* New last region */
+      ++region_used;
       regions[ ri ].base = base;
       regions[ ri ].limit = limit;
       regions[ ri ].attributes = attr;
-      ++region_used;
     }
   }
 
