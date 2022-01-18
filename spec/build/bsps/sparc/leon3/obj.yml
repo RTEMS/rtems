@@ -32,7 +32,6 @@ source:
 - bsps/shared/dev/serial/console-termios.c
 - bsps/shared/irq/irq-default-handler.c
 - bsps/shared/start/bspreset-empty.c
-- bsps/shared/start/gettargethash-default.c
 - bsps/shared/start/sbrk.c
 - bsps/sparc/leon3/btimer/btimer.c
 - bsps/sparc/leon3/btimer/watchdog.c
@@ -49,6 +48,7 @@ source:
 - bsps/sparc/leon3/start/cpucounter.c
 - bsps/sparc/leon3/start/drvmgr_def_drivers.c
 - bsps/sparc/leon3/start/eirq.c
+- bsps/sparc/leon3/start/gettargethash.c
 - bsps/sparc/leon3/start/setvec.c
 - bsps/sparc/shared/gnatcommon.c
 - bsps/sparc/shared/irq/bsp_isr_handler.c
