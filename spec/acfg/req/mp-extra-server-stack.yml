@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: false
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/mp-extra-server-stack
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The application configuration option shall define the number of bytes the
+  applications wishes to add to the MPCI task stack on top of
+  ${../if/min-task-stack-size:/name}.
+type: requirement

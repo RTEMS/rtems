@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: scheduled task
+text: |
+  A task is scheduled if it is allowed to execute and has a processor
+  assigned.  Such a task executes currently on a processor or is about to
+  start execution.  A task about to start execution it is an heir task on
+  exactly one processor in the system.
+type: glossary

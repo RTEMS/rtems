@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While no deadlock was detected in a sticky thread queue enqueue, while the
+  thread dispatch disable level is not equal to one, if the sticky thread queue
+  enqueue is performed, then the system shall terminate with the
+  ${/score/interr/if/internal-error-core:/name} fatal source and the
+  ${/score/interr/if/thread-queue-enqueue-sticky-from-bad-state:/name} fatal
+  code.
+type: requirement

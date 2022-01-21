@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Reports the CPU information using the printer plugin.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${printer:/name} *${.:/params[0]/name}
+    return: int
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_cpu_info_report
+notes: null
+params:
+- description: |
+    is the printer plugin to output the report.
+  dir: null
+  name: printer
+return:
+  return: |
+    Returns the number of characters printed.
+  return-values: []
+type: interface

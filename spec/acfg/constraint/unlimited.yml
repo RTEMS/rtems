@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The value of the application configuration option may be defined through
+  ${/rtems/config/if/resource-unlimited:/name} the enable unlimited objects for
+  the object class, if the value passed to
+  ${/rtems/config/if/resource-unlimited:/name} satisfies all other constraints
+  of the configuration option.
+type: constraint

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/send
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/send:/name} directive shall send events to the application event
+  set of a task as specified by ${send-receive}.
+type: requirement

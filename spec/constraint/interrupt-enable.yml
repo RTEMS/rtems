@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  While at least one maskable interrupt is pending, when the directive enables
+  maskable interrupts, the pending interrupts are immediately serviced.  The
+  interrupt service routines may unblock higher priority tasks which may
+  preempt the calling task.
+type: constraint

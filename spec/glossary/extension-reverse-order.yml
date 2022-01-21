@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: extension reverse order
+text: |
+  The ${userextensions:/term} may be invoked in extension reverse order.  In
+  reverse order, all user extensions of the ${dynamic-extension-sets:/term} are
+  invoked before all user extensions of the ${initial-extension-sets:/term}.
+  In the dynamic extension sets the order is defined by the registration order.
+  The last registered user extension is invoked first.  In the initial
+  extension sets the order is defined by the table index.  The user extension
+  with the highest table index is invoked first.  See also
+  ${extension-forward-order:/term}.
+type: glossary

@@ -1,0 +1,64 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by the application configuration of the test
+    suite.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the expected fatal source is present.
+    code: |
+      T_step_eq_int( ${step}, ctx->source, RTEMS_FATAL_SOURCE_SMP );
+    links:
+    - role: validation
+      uid: ../req/fatal-boot-processor-not-assigned-to-scheduler
+  - brief: |
+      Check that the expected fatal code is present.
+    code: |
+      T_step_eq_ulong(
+        ${step},
+        ctx->code,
+        SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-boot-processor-not-assigned-to-scheduler
+  links: []
+test-brief: |
+  Tests a fatal error.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is fatal source.
+    dir: null
+    name: source
+    specifier: ${/rtems/userext/if/fatal-source:/name} ${.:name}
+  - description: |
+      is fatal code.
+    dir: null
+    name: code
+    specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
+  target: testsuites/validation/tr-fatal-boot-processor-not-assigned-to-scheduler.h
+test-includes:
+- rtems/score/smpimpl.h
+test-local-includes:
+- tr-fatal-boot-processor-not-assigned-to-scheduler.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-fatal-boot-processor-not-assigned-to-scheduler.c
+test-teardown: null
+type: test-case

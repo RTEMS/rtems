@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets a descriptive name of the object class of the object API.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - int ${.:/params[0]/name}
+    - int ${.:/params[1]/name}
+    return: const char *
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_object_get_api_class_name
+notes: |
+  The string returned is from constant space.  Do not modify or free it.
+params:
+- description: |
+    is the object API of the object class.
+  dir: null
+  name: the_api
+- description: |
+    is the object class of the object API to get the name.
+  dir: null
+  name: the_class
+return:
+  return: |
+    Returns a descriptive name of the class of the API, if the class of the API
+    and the API were valid.
+  return-values:
+  - description: |
+      The API was invalid.
+    value: '"BAD API"'
+  - description: |
+      The class of the API was invalid.
+    value: '"BAD CLASS"'
+type: interface

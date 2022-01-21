@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate the use of the ``-mfix-gr712rc`` compiler option.
+  action-code: |
+    const char *s;
+  checks:
+  - brief: |
+      Check that the compiler built-in define ``__FIX_LEON3FT_B2BST`` is
+      defined.
+    code: |
+      #if !defined(__FIX_LEON3FT_B2BST)
+      #error "__FIX_LEON3FT_B2BST is not defined"
+      #endif
+    links:
+    - role: validation
+      uid: ../req/errata-gr712rc-compiler-fix
+  - brief: |
+      Check that the compiler built-in define ``__FIX_LEON3FT_TN0018`` is
+      defined.
+    code: |
+      #if !defined(__FIX_LEON3FT_TN0018)
+      #error "__FIX_LEON3FT_TN0018 is not defined"
+      #endif
+    links:
+    - role: validation
+      uid: ../req/errata-gr712rc-compiler-fix
+  - brief: |
+      Check that the ``SPARC_LEON3FT_B2BST_NOP`` define expands to a ``nop``
+      instruction.
+    code: |
+      s = RTEMS_XSTRING( SPARC_LEON3FT_B2BST_NOP );
+      T_true( IsEqualIgnoreWhiteSpace( s, "nop" ) );
+    links:
+    - role: validation
+      uid: ../req/errata-b2bst-nop
+  links: []
+test-brief: |
+  This test case collection provides validation test cases for the
+  ``sparc/gr712rc`` ${/glossary/bsp:/term}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- bsp.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-bsp-sparc-leon3-gr712rc.c
+test-teardown: null
+type: test-case

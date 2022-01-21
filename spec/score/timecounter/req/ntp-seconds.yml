@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ntp
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the timehand is updated, when the ${/glossary/ntp:/term} handler is
+  called, the value returned by the ``newsec`` parameter shall define the
+  seconds value of the ${/glossary/clock-realtime:/term} time point of the
+  timehand.
+type: requirement

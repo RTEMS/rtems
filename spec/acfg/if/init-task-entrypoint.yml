@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  The default value is ``Init``.
+description: |
+  The value of this configuration option initializes the entry point of the
+  Classic API initialization task.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-classicinit
+- role: constraint
+  uid: ../constraint/init-task-entry-point
+name: CONFIGURE_INIT_TASK_ENTRY_POINT
+notes: |
+  The application shall provide the function referenced by this configuration
+  option.
+type: interface

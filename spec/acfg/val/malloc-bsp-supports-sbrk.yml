@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/malloc-bsp-supports-sbrk
+method: by-inspection
+references:
+- identifier: cpukit/include/rtems/confdefs/malloc.h
+  hash: tz06hfc6SfN7RsMWx7iMUDXnHav1AZUFS-2JdD0CfUY=
+  type: file
+text: |
+  Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
+  the ${../req/malloc-bsp-supports-sbrk} requirement is implemented as
+  specified.
+type: validation

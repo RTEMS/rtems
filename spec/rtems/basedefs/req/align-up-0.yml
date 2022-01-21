@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/align-up
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the argument ${../if/align-up:/params[1]/name} is a
+  positive power of two integer,
+  and argument ${../if/align-up:/params[0]/name} is a positive or 0
+  integer,
+  the macro ${../if/align-up:/name} shall result in a side-effect free formula
+  calculating an integer which is the *smallest* whole-number *multiple* of
+  ${../if/align-up:/params[1]/name} which is greater or equal
+  ${../if/align-up:/params[0]/name}.
+type: requirement

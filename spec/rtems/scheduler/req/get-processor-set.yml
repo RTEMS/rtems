@@ -1,0 +1,240 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-processor-set
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/get-processor-set:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-processor-set:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/get-processor-set:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvSize
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_SIZE );
+    text: |
+      The return status of ${../if/get-processor-set:/name} shall be
+      ${../../status/if/invalid-size:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetVar
+  states:
+  - name: Set
+    test-code: |
+      CPU_ZERO( &set );
+      CPU_SET( 0, &set );
+      T_eq_int( CPU_CMP( &ctx->cpuset_value, &set ), 0 );
+    text: |
+      The value of the object referenced by the
+      ${../if/get-processor-set:/params[2]/name} parameter shall be set to the
+      processor set owned by the scheduler specified by the
+      ${../if/get-processor-set:/params[0]/name} parameter at some point during
+      the call after the return of the ${../if/get-processor-set:/name} call.
+  - name: Nop
+    test-code: |
+      CPU_FILL( &set );
+      T_eq_int( CPU_CMP( &ctx->cpuset_value, &set ), 0 );
+    text: |
+      Objects referenced by the ${../if/get-processor-set:/params[2]/name}
+      parameter in past calls to ${../if/get-processor-set:/name} shall
+      not be accessed by the ${../if/get-processor-set:/name} call.
+  test-epilogue: null
+  test-prologue: |
+    cpu_set_t set;
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/get-processor-set:/params[0]/name} parameter is not
+      associated with a scheduler.
+  - name: Scheduler
+    test-code: |
+      ctx->id = ctx->scheduler_id;
+    text: |
+      While the ${../if/get-processor-set:/params[0]/name} parameter is
+      associated with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetSize
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_value );
+    text: |
+      While the ${../if/get-processor-set:/params[1]/name} parameter is an
+      integral multiple of the size of long, while the
+      ${../if/get-processor-set:/params[1]/name} parameter specifies a
+      processor set which is large enough to contain the processor set of the
+      scheduler.
+  - name: TooSmall
+    test-code: |
+      ctx->cpusetsize = 0;
+    text: |
+      While the ${../if/get-processor-set:/params[1]/name} parameter is an
+      integral multiple of the size of long, while the
+      ${../if/get-processor-set:/params[1]/name} parameter specifies a
+      processor set which is not large enough to contain the processor set of
+      the scheduler.
+  - name: Askew
+    test-code: |
+      ctx->cpusetsize = SIZE_MAX;
+    text: |
+      While the ${../if/get-processor-set:/params[1]/name} parameter is not an
+      integral multiple of the size of long.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSet
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpuset = &ctx->cpuset_value;
+    text: |
+      While the ${../if/get-processor-set:/params[2]/name} parameter
+      references an object of type ${/c/if/cpu_set_t:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->cpuset = NULL;
+    text: |
+      While the ${../if/get-processor-set:/params[2]/name} parameter is
+      equal to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_scheduler_get_processor_set(
+    ctx->id,
+    ctx->cpusetsize,
+    ctx->cpuset
+  );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the identifier of a scheduler.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member provides the object referenced by the
+    ${../if/get-processor-set:/params[1]/name} parameter.
+  description: null
+  member: |
+    cpu_set_t cpuset_value
+- brief: |
+    This member contains the return value of the
+    ${../if/get-processor-set:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/get-processor-set:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/get-processor-set:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    size_t cpusetsize
+- brief: |
+    This member specifies if the ${../if/get-processor-set:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    cpu_set_t *cpuset
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  CPU_FILL( &ctx->cpuset_value );
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_A_NAME,
+      &ctx->scheduler_id
+    );
+    T_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-scheduler-get-processor-set.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    CPUSetVar: Set
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUSetSize:
+    - Valid
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    CPUSetVar: Nop
+  pre-conditions:
+    Id: all
+    CPUSetSize: all
+    CPUSet:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    CPUSetVar: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    CPUSetSize: all
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+    CPUSetVar: Nop
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUSetSize:
+    - TooSmall
+    - Askew
+    CPUSet:
+    - Valid
+type: requirement

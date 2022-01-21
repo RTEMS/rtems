@@ -1,0 +1,505 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Dequeue
+  states:
+  - name: Priority
+    test-code: |
+      /* Validation is done by spec:/score/tq/req/enqueue-priority */
+    text: |
+      The first thread in priority order shall be dequeued from the thread
+      queue.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'No'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The dequeued thread shall not be unblocked by the thread queue surrender
+      operation.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+- name: PreviousOwnerPriority
+  states:
+  - name: Drop
+    test-code: |
+      T_eq_u32( ctx->priority_after, PRIO_NORMAL );
+    text: |
+      Each ${/glossary/priority-eligible:/term} of the previous owner which had
+      the highest priority inherited through the thread queue shall be updated.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->priority_after, ctx->priority_before );
+    text: |
+      No ${/glossary/priority-eligible:/term} of the previous owner shall be
+      updated.
+  test-epilogue: null
+  test-prologue: null
+- name: RemoveHelper
+  states:
+  - name: 'Yes'
+    test-code: |
+      sc = rtems_task_get_priority(
+        ctx->previous_owner,
+        SCHEDULER_B_ID,
+        &priority
+      );
+      T_rsc( sc, RTEMS_NOT_DEFINED );
+    text: |
+      Each ${/glossary/scheduler-helping:/term} of the previous owner which was
+      only available due to a priority inherited through the thread queue shall
+      be removed from the previous owner.
+  - name: 'No'
+    test-code: |
+      sc = rtems_task_get_priority(
+        ctx->previous_owner,
+        SCHEDULER_B_ID,
+        &priority
+      );
+      #if defined(RTEMS_SMP)
+      T_rsc_success( sc );
+
+      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+        T_eq_u32( priority, PRIO_LOW );
+      } else {
+        T_eq_u32( priority, PRIO_HIGH );
+      }
+      #else
+      T_rsc( sc, RTEMS_INVALID_ID );
+      #endif
+    text: |
+      No ${/glossary/scheduler-helping:/term} shall be removed from the
+      previous owner.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code   sc;
+    rtems_task_priority priority;
+- name: AddHelper
+  states:
+  - name: 'Yes'
+    test-code: |
+      sc = rtems_task_get_priority(
+        ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ],
+        SCHEDULER_A_ID,
+        &priority
+      );
+      T_rsc_success( sc );
+
+      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+        T_eq_u32( priority, PRIO_VERY_HIGH );
+      } else {
+        T_eq_u32( priority, PRIO_LOW );
+      }
+    text: |
+      Each ${/glossary/scheduler-helping:/term} of the new owner which is only
+      available due to a priority inherited through the thread queue shall be
+      added to the new owner.
+  - name: 'No'
+    test-code: |
+      sc = rtems_task_get_priority(
+        ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ],
+        SCHEDULER_A_ID,
+        &priority
+      );
+      #if defined(RTEMS_SMP)
+      T_rsc( sc, RTEMS_NOT_DEFINED );
+      #else
+      T_rsc_success( sc );
+      T_eq_u32( priority, PRIO_HIGH );
+      #endif
+    text: |
+      No ${/glossary/scheduler-helping:/term} shall added to the new owner.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code   sc;
+    rtems_task_priority priority;
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_true( IsTaskSuspended( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] ) );
+    text: |
+      The new owner shall be suspended.
+  - name: 'No'
+    test-code: |
+      T_false( IsTaskSuspended( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] ) );
+    text: |
+      The new owner shall be not suspended.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: InheritedPriority
+  states:
+  - name: Vital
+    test-code: |
+      ctx->inherited_priorities_are_dispensible = false;
+    text: |
+      While at least one priority inherited through the thread queue for the
+      previous owner is the highest priority of the previous owner.
+  - name: Dispensable
+    test-code: |
+      ctx->inherited_priorities_are_dispensible = true;
+    text: |
+      While all priorities inherited through the thread queue for the previous
+      owner are not the highest priority of the previous owner.
+  test-epilogue: null
+  test-prologue: null
+- name: PreviousHelping
+  states:
+  - name: Vital
+    test-code: |
+      ctx->helping_schedules_are_dispensible = false;
+    text: |
+      While at least one ${/glossary/scheduler-helping:/term} of the previous
+      owner is only available due to a priority inherited through the thread
+      queue.
+  - name: Dispensable
+    test-code: |
+      ctx->helping_schedules_are_dispensible = true;
+    text: |
+      While all ${/glossary/scheduler-helping:/term} of the previous owner are
+      not only available due to a priority inherited through the thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->use_helping_scheduler = false;
+    text: |
+      While the previous owner executes in its
+      ${/glossary/scheduler-home:/term}.
+  - name: Helping
+    test-code: |
+      ctx->use_helping_scheduler = true;
+    text: |
+      While the previous owner executes in a
+      ${/glossary/scheduler-helping:/term} which is available due to a priority
+      inherited through the thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: NewHelping
+  states:
+  - name: Vital
+    test-code: |
+      ctx->gains_new_helping_scheduler = true;
+    text: |
+      While at least one ${/glossary/scheduler-helping:/term} of the new owner
+      is only available due to a priority inherited through the thread queue.
+  - name: Dispensable
+    test-code: |
+      ctx->gains_new_helping_scheduler = false;
+    text: |
+      While all ${/glossary/scheduler-helping:/term} of the new owner are not
+      only available due to a priority inherited through the thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspended = true;
+    text: |
+      Whiel the new owner is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspended = false;
+    text: |
+      Whiel the new owner is not suspended.
+  test-epilogue: null
+  test-prologue: null
+- name: WaitState
+  states:
+  - name: IntendToBlock
+    test-code: |
+      ctx->intend_to_block = true;
+    text: |
+      While the new owner is in the intend to block wait
+      state.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->previous_owner = ctx->tq_ctx->worker_id[ TQ_HELPER_A ];
+
+  SetSelfPriority( PRIO_LOW );
+
+  if (
+    ctx->inherited_priorities_are_dispensible ||
+    ctx->helping_schedules_are_dispensible
+  ) {
+    TQSend( ctx->tq_ctx, TQ_HELPER_A, TQ_EVENT_MUTEX_A_OBTAIN );
+
+    if ( ctx->inherited_priorities_are_dispensible ) {
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
+    }
+
+    if ( ctx->helping_schedules_are_dispensible ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        TQ_BLOCKER_C,
+        TQ_EVENT_MUTEX_A_OBTAIN
+      );
+    }
+  }
+
+  /*
+   * Take only the priorities into account which are inherited from the
+   * priority inheritance mutex.  This avoids having to deal with the ceiling
+   * priority.
+   */
+  ctx->priority_before = TQGetPriority( ctx->tq_ctx, TQ_HELPER_A );
+
+  SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
+  ctx->tq_ctx->busy_wait[ TQ_HELPER_A ] = true;
+  TQSendAndSynchronizeRunner(
+    ctx->tq_ctx,
+    TQ_HELPER_A,
+    TQ_EVENT_ENQUEUE | TQ_EVENT_BUSY_WAIT
+  );
+  SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
+
+  TQSendAndWaitForIntendToBlock(
+    ctx->tq_ctx,
+    TQ_BLOCKER_A,
+    TQ_EVENT_ENQUEUE
+  );
+
+  SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
+
+  if ( ctx->gains_new_helping_scheduler ) {
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_D,
+      TQ_EVENT_ENQUEUE
+    );
+    YieldTask( ctx->tq_ctx->worker_id[ TQ_HELPER_A ] );
+    TQWaitForEventsReceived( ctx->tq_ctx, TQ_BLOCKER_D );
+    TQWaitForIntendToBlock( ctx->tq_ctx, TQ_BLOCKER_D );
+    YieldTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_D ] );
+  }
+
+  if ( ctx->use_helping_scheduler ) {
+    SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
+    WaitForHeir( 1, ctx->tq_ctx->worker_id[ TQ_HELPER_A ] );
+  }
+
+  if ( ctx->suspended ) {
+    SuspendTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+  }
+
+  ctx->tq_ctx->busy_wait[ TQ_HELPER_A ] = false;
+  TQSendAndWaitForExecutionStop(
+    ctx->tq_ctx,
+    TQ_HELPER_A,
+    TQ_EVENT_SCHEDULER_RECORD_START |
+      TQ_EVENT_SURRENDER
+  );
+  TQSchedulerRecordStop( ctx->tq_ctx );
+  T_eq_ptr(
+    TQGetOwner( ctx->tq_ctx ),
+    ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ]
+  );
+  ctx->priority_after = TQGetPriority( ctx->tq_ctx, TQ_HELPER_A );
+test-brief: null
+test-cleanup: |
+  SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
+
+  if ( ctx->suspended ) {
+    ResumeTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+  }
+
+  TQSendAndSynchronizeRunner(
+    ctx->tq_ctx,
+    TQ_BLOCKER_A,
+    TQ_EVENT_SURRENDER
+  );
+
+  if ( ctx->gains_new_helping_scheduler ) {
+    TQSendAndSynchronizeRunner(
+      ctx->tq_ctx,
+      TQ_BLOCKER_D,
+      TQ_EVENT_SURRENDER
+    );
+  }
+
+  if (
+    ctx->inherited_priorities_are_dispensible ||
+    ctx->helping_schedules_are_dispensible
+  ) {
+    TQSendAndSynchronizeRunner(
+      ctx->tq_ctx,
+      TQ_HELPER_A,
+      TQ_EVENT_MUTEX_A_RELEASE
+    );
+
+    if ( ctx->inherited_priorities_are_dispensible ) {
+      TQSendAndSynchronizeRunner(
+        ctx->tq_ctx,
+        TQ_BLOCKER_B,
+        TQ_EVENT_MUTEX_A_RELEASE
+      );
+    }
+
+    if ( ctx->helping_schedules_are_dispensible ) {
+      TQSendAndSynchronizeRunner(
+        ctx->tq_ctx,
+        TQ_BLOCKER_C,
+        TQ_EVENT_MUTEX_A_RELEASE
+      );
+    }
+  }
+
+  T_eq_u32( rtems_scheduler_get_processor(), 0 );
+test-context:
+- brief: |
+    If this member is true, then all priorities of the previous owner inherited
+    from the thread queue thread shall be dispensable.
+  description: null
+  member: |
+    bool inherited_priorities_are_dispensible
+- brief: |
+    If this member is true, then all helping schedulers of the previous owner
+    thread gained through the thread queue shall be dispensable.
+  description: null
+  member: |
+    bool helping_schedules_are_dispensible
+- brief: |
+    If this member is true, then the previous owner thread shall use helping
+    scheduler.
+  description: null
+  member: |
+    bool use_helping_scheduler
+- brief: |
+    If this member is true, then the new owner thread shall gain a vital
+    helping scheduler.
+  description: null
+  member: |
+    bool gains_new_helping_scheduler
+- brief: |
+    If this member is true, then the new owner thread shall be suspended.
+  description: null
+  member: |
+    bool suspended
+- brief: |
+    If this member is true, then the new owner thread shall be in the intend to
+    block wait state.
+  description: null
+  member: |
+    bool intend_to_block
+- brief: |
+    This member contains the current priority of the previous owner thread
+    before the thread queue surrender operation.
+  description: null
+  member: |
+    rtems_task_priority priority_before
+- brief: |
+    This member contains the current priority of the previous owner thread
+    after the thread queue surrender operation.
+  description: null
+  member: |
+    rtems_task_priority priority_after
+- brief: |
+    This member contains the identifier of the previous owner thread.
+  description: null
+  member: |
+    rtems_id previous_owner
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-surrender-mrsp.h
+test-includes:
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tr-tq-surrender-mrsp.h
+test-prepare: |
+  ctx->inherited_priorities_are_dispensible = true;
+  ctx->helping_schedules_are_dispensible = true;
+  ctx->use_helping_scheduler = false;
+  ctx->gains_new_helping_scheduler = false;
+  ctx->intend_to_block = false;
+test-setup:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_VERY_HIGH );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_B_ID, PRIO_LOW );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_D, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_A, PRIO_NORMAL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
+  }
+test-target: testsuites/validation/tr-tq-surrender-mrsp.c
+test-teardown:
+  brief: null
+  code: |
+    SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
+  description: null
+text: |
+  When the thread queue is surrendered.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Dequeue: Priority
+    Unblock: 'No'
+    RemoveHelper:
+    - if:
+        pre-conditions:
+          PreviousHelping: Dispensable
+      then: 'No'
+    - else: 'Yes'
+    AddHelper:
+    - if:
+        pre-conditions:
+          NewHelping: Dispensable
+      then: 'No'
+    - else: 'Yes'
+    PreviousOwnerPriority:
+    - if:
+        pre-conditions:
+          InheritedPriority: Vital
+      then: Drop
+    - else: Nop
+    Suspended:
+    - specified-by: Suspended
+  pre-conditions:
+    InheritedPriority: all
+    PreviousHelping: all
+    Scheduler: all
+    NewHelping: all
+    Suspended: all
+    WaitState: all
+type: requirement

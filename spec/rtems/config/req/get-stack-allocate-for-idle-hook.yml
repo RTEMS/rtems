@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-stack-allocate-for-idle-hook
+functional-type: function
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/task-stack-allocator-for-idle:/name} application configuration
+  option.
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-stack-allocate-for-idle-hook:/name} directive shall return
+  the stack allocator allocate handler used to allocate the task stack of each
+  ${/glossary/idletask:/term}.
+type: requirement

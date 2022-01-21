@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 0
+description: |
+  The value of this configuration option defines the maximum number of POSIX
+  API Named Semaphores that can be concurrently active.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-posix
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-obj
+- role: constraint
+  uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/wkspace
+- role: constraint
+  uid: ../constraint/unlimited
+name: CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+notes: |
+  This object class can be configured in unlimited allocation mode, see
+  ${/doc/if/config-unlimited-objects:/name}.
+
+  Named semaphores are created with ${/c/if/sem_open:/name}.  Semaphores
+  initialized with ${/c/if/sem_init:/name} are not affected by this
+  configuration option since the storage space for these semaphores is
+  user-provided.
+type: interface

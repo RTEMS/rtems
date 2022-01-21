@@ -1,0 +1,517 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRCAN
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: grcan-header
+definition:
+- default:
+    count: 1
+    name: CanCONF
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: CanSTAT
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: CanCTRL
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: CanMASK
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: CanCODE
+  offset: 0x1c
+  variants: []
+- default:
+    count: 1
+    name: CanTxCTRL
+  offset: 0x200
+  variants: []
+- default:
+    count: 1
+    name: CanTxADDR
+  offset: 0x204
+  variants: []
+- default:
+    count: 1
+    name: CanTxSIZE
+  offset: 0x208
+  variants: []
+- default:
+    count: 1
+    name: CanTxWR
+  offset: 0x20c
+  variants: []
+- default:
+    count: 1
+    name: CanTxRD
+  offset: 0x210
+  variants: []
+- default:
+    count: 1
+    name: CanTxRD
+  offset: 0x214
+  variants: []
+- default:
+    count: 1
+    name: CanRxCTRL
+  offset: 0x300
+  variants: []
+- default:
+    count: 1
+    name: CanRxADDR
+  offset: 0x304
+  variants: []
+- default:
+    count: 1
+    name: CanRxSIZE
+  offset: 0x308
+  variants: []
+- default:
+    count: 1
+    name: CanRxWR
+  offset: 0x30c
+  variants: []
+- default:
+    count: 1
+    name: CanRxRD
+  offset: 0x310
+  variants: []
+- default:
+    count: 1
+    name: CanRxIRQ
+  offset: 0x314
+  variants: []
+- default:
+    count: 1
+    name: CanRxMASK
+  offset: 0x318
+  variants: []
+- default:
+    count: 1
+    name: CanRxCODE
+  offset: 0x31c
+  variants: []
+register-prefix: null
+register-block-group: GRCAN
+register-block-size: 800
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SCALER'
+      start: 24
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PS1'
+      start: 20
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PS2'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RSJ'
+      start: 12
+      width: 3
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BPR'
+      start: 8
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SAM'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SILNT'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SELECT'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ENABLE1'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ENABLE0'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ABORT'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Configuration Register
+  description: null
+  name: CanCONF
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TXCHANNELS'
+      start: 28
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RXCHANNELS'
+      start: 24
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TXERRCNT'
+      start: 16
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RXERRCNT'
+      start: 8
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ACTIVE'
+      start: 4
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AHBERR'
+      start: 3
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'OR'
+      start: 2
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'OFF'
+      start: 1
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PASS'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Status Register
+  description: null
+  name: CanSTAT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RESET'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ENABLE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Control Register
+  description: null
+  name: CanCTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MASK'
+      start: 0
+      width: 29
+    variants: []
+  brief: |
+    SYNC Mask Filter Register
+  description: null
+  name: CanMASK
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SYNC'
+      start: 0
+      width: 29
+    variants: []
+  brief: |
+    SYNC Code Filter Register
+  description: null
+  name: CanCODE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SINGLE'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ONGOING'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ENABLE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Transmit Channel Control Register
+  description: null
+  name: CanTxCTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 10
+      width: 22
+    variants: []
+  brief: |
+    Transmit Channel Address Register
+  description: null
+  name: CanTxADDR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SIZE'
+      start: 6
+      width: 15
+    variants: []
+  brief: |
+    Transmit Channel Size Register
+  description: null
+  name: CanTxSIZE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WRITE'
+      start: 4
+      width: 16
+    variants: []
+  brief: |
+    Transmit Channel Write Register
+  description: null
+  name: CanTxWR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'READ'
+      start: 4
+      width: 16
+    variants: []
+  brief: |
+    Transmit Channel Read Register
+  description: null
+  name: CanTxRD
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQ'
+      start: 4
+      width: 16
+    variants: []
+  brief: |
+    Transmit Channel Read Register
+  description: null
+  name: CanTxRD
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ONGOING'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ENABLE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Receive Channel Control Register
+  description: null
+  name: CanRxCTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 10
+      width: 22
+    variants: []
+  brief: |
+    Receive Channel Address Register
+  description: null
+  name: CanRxADDR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SIZE'
+      start: 6
+      width: 15
+    variants: []
+  brief: |
+    Receive Channel Size Register
+  description: null
+  name: CanRxSIZE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WRITE'
+      start: 4
+      width: 16
+    variants: []
+  brief: |
+    Receive Channel Write Register
+  description: null
+  name: CanRxWR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'READ'
+      start: 4
+      width: 16
+    variants: []
+  brief: |
+    Receive Channel Read Register
+  description: null
+  name: CanRxRD
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQ'
+      start: 4
+      width: 16
+    variants: []
+  brief: |
+    Receive Channel Interrupt Register
+  description: null
+  name: CanRxIRQ
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AM'
+      start: 0
+      width: 29
+    variants: []
+  brief: |
+    Receive Channel Mask Register
+  description: null
+  name: CanRxMASK
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AC'
+      start: 0
+      width: 29
+    variants: []
+  brief: |
+    Receive Channel Code Register
+  description: null
+  name: CanRxCODE
+  width: 32
+name: grcan
+notes: null
+type: interface

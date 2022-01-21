@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${/glossary/userextensions:/term} are iterated to invoke the thread
+  create extensions, when an extension set is removed, the removed extension
+  set shall not be a next extension set for any iteration in progress after the
+  removal.
+type: requirement

@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This option constant indicates that the task does not want to wait on the
+  resource.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: '0x00000001'
+  variants: []
+description: |
+  If the resource is not available, then the directives shall return
+  immediately with a status to indicate that the request is unsatisfied.
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_NO_WAIT
+notes: null
+type: interface

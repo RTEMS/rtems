@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This type represents Classic API object names.
+copyrights:
+- Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/c/if/uint32_t:/name} rtems_name
+  variants: []
+description: |
+  It is an unsigned 32-bit integer which can be treated as a numeric value or
+  initialized using ${../../object/if/build-name:/name} to encode four ASCII
+  characters.  A value of zero may have a special meaning in some directives.
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_name
+notes: null
+params: []
+return: null
+type: interface

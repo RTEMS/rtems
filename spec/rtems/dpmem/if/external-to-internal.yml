@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Converts the external address to the internal address.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    - void **${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive converts a dual-ported memory address from external to
+  internal representation for the specified port.  If the given external
+  address is invalid for the specified port, then the internal address is set
+  to the given external address.
+enabled-by: true
+index-entries:
+- convert external to internal address
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_port_external_to_internal
+notes: null
+params:
+- description: |
+    is the port identifier.
+  dir: null
+  name: id
+- description: |
+    is the external address to convert.
+  dir: null
+  name: external
+- description: |
+    is the pointer to a ``void`` pointer object.  When the directive call is
+    successful, the external address associated with the internal address will
+    be stored in this object.
+  dir: out
+  name: internal
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+type: interface

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: priority inheritance
+text: |
+  An algorithm that calls for the lower priority task holding a resource to
+  have its priority increased to that of the highest priority task blocked
+  waiting for that resource.  This avoids the problem of priority
+  inversion.
+type: glossary

@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: chain
+text: |
+  A data structure which allows for efficient dynamic addition and removal
+  of elements.  It differs from an array in that it is not limited to a
+  predefined size.
+type: glossary

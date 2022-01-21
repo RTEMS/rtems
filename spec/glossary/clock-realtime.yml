@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: CLOCK_REALTIME
+text: |
+  The CLOCK_REALTIME is a clock provided by RTEMS which measures the real time
+  (also known as wall-clock time).  It is defined by ${posix:/term}.  In
+  particular, every day is treated as if it contains exactly 86400 seconds and
+  leap seconds are ignored.  This clock can be set by the application which may
+  result in time jumps.  It may be affected by incremental adjustments for
+  example carried out by the ${ntp:/term} or the use of a ${pps:/term} signal.
+  RTEMS can represent time points of this clock in nanoseconds ranging from
+  1988-01-01T00:00:00.000000000Z to 2514-05-31T01:53:03.999999999Z.  See also
+  ${clock-monotonic:/term}, ${clock-tick:/term}, and ${clock-driver:/term}.
+type: glossary

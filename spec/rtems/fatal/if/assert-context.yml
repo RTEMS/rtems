@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure provides the context in which an assertion failed.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member provides the file name of the source code file containing the
+      failed assertion statement.
+    definition: const char *${.:name}
+    description: null
+    kind: member
+    name: file
+  variants: []
+- default:
+    brief: |
+      This member provides the line number in the source code file containing
+      the failed assertion statement.
+    definition: int ${.:name}
+    description: null
+    kind: member
+    name: line
+  variants: []
+- default:
+    brief: |
+      This member provides the function name containing the failed assertion
+      statement.
+    definition: const char *${.:name}
+    description: null
+    kind: member
+    name: function
+  variants: []
+- default:
+    brief: |
+      This member provides the expression of the failed assertion statement.
+    definition: const char *${.:name}
+    description: null
+    kind: member
+    name: failed_expression
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_assert_context
+notes: null
+type: interface

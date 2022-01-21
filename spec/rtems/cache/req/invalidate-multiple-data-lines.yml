@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/invalidate-multiple-data-lines
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the ${/glossary/target:/term} has a data cache, where data cache lines
+  can be invalidated, where the data cache is not coherent with all bus
+  masters, when the ${../if/invalidate-multiple-data-lines:/name} directive is
+  called, the data cache lines covering the memory area specified by
+  ${../if/invalidate-multiple-data-lines:/params[0]/name} and
+  ${../if/invalidate-multiple-data-lines:/params[1]/name} shall be invalidated.
+type: requirement

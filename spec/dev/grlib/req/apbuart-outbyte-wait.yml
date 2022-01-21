@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/apbuart-outbyte-wait
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/apbuart-outbyte-wait:/name} directive shall wait until the
+  transmitter FIFO is empty indicated by the status register of the register
+  block specified by ${../if/apbuart-outbyte-wait:/params[0]/name}.
+type: requirement

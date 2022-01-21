@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 Richi Dubey (richidubey@gmail.com)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: Strong APA
+text: |
+  Strong APA is a specialization of ${apa:/term}.  Schedulers which implement
+  strong APA recursively searches for a processor in the ${thread:/term}'s
+  affinity set, whenever a thread becomes ready for execution, followed by the
+  processors in the affinity set of threads that are assigned the processor
+  present in the ready thread's affinity set. This is done to find a thread to
+  processor mapping that does not violate the priority ordering and to provide
+  a thread to processor mapping with a higher total priority of the threads
+  allocated a processor.  Similar analysis is done when a thread blocks.  See
+  also :cite:`Cerqueira:2014:LPA`.
+type: glossary

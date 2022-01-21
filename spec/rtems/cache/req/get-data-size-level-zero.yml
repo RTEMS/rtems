@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-data-size
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the ${/glossary/target:/term} has a data cache, while the
+  ${../if/get-data-size:/params[0]/name} parameter is equal to zero, the
+  ${../if/get-data-size:/name} directive shall return the size of the entire
+  data cache.
+type: requirement

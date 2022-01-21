@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This constant defines the minimum alignment of a partition buffer in
+  bytes.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/cpu/if/sizeof-pointer:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_PARTITION_ALIGNMENT
+notes: |
+  Use it with ${../../basedefs/if/aligned:/name} to define the alignment of
+  partition buffer types or statically allocated partition buffer areas.
+type: interface

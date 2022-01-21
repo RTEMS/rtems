@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../../req/group
+- role: requirement-refinement
+  uid: ../../req/mem-smp-1
+non-functional-type: quality
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The system shall provide a benchmark program to show the static memory usage
+  of a basic application configuration with a call to
+  ${../if/add-processor:/name}.
+type: requirement

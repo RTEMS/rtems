@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The Cache Manager provides functions to perform maintenance operations for
+  data and instruction caches.
+copyrights:
+- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2000, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  The actual actions of the Cache Manager operations depend on the hardware and
+  the implementation provided by the CPU architecture port or a board support
+  package.  Cache implementations tend to be highly hardware dependent.
+enabled-by: true
+identifier: RTEMSAPIClassicCache
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: flush-multiple-data-lines
+- role: placement-order
+  uid: invalidate-multiple-data-lines
+- role: placement-order
+  uid: invalidate-multiple-instruction-lines
+- role: placement-order
+  uid: instruction-sync-after-code-change
+- role: placement-order
+  uid: get-maximal-line-size
+- role: placement-order
+  uid: get-data-line-size
+- role: placement-order
+  uid: get-instruction-line-size
+- role: placement-order
+  uid: get-data-size
+- role: placement-order
+  uid: get-instruction-size
+- role: placement-order
+  uid: flush-entire-data
+- role: placement-order
+  uid: invalidate-entire-data
+- role: placement-order
+  uid: invalidate-entire-instruction
+- role: placement-order
+  uid: enable-data
+- role: placement-order
+  uid: disable-data
+- role: placement-order
+  uid: enable-instruction
+- role: placement-order
+  uid: disable-instruction
+- role: placement-order
+  uid: aligned-malloc
+name: Cache Manager
+text: |
+  The Classic API shall provide an interface to the Cache Manager.
+type: interface

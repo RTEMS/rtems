@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The application configuration information group provides an API to get the
+  configuration of an application.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  Some interfaces of this API are also used to define application configuration
+  option values, for example ${resource-unlimited:/name}.
+enabled-by: true
+identifier: RTEMSAPIConfig
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /if/group
+name: Application Configuration Information
+text: |
+  The RTEMS API shall provide an interface to get the configuration of an
+  application.
+type: interface

@@ -1,0 +1,202 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBFTMCTRL
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: ftmctrl-header
+definition:
+- default:
+    count: 1
+    name: MCFG1
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: MCFG3
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: MCFG5
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: MCFG7
+  offset: 0x18
+  variants: []
+register-prefix: null
+register-block-group: FTMCTRL
+register-block-size: 28
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PBRDY'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ABRDY'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IOBUSW'
+      start: 29
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IBRDY'
+      start: 27
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BEXCN'
+      start: 26
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IO_WAITSTATES'
+      start: 24
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IOEN'
+      start: 20
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ROMBANKSZ'
+      start: 19
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PWEN'
+      start: 14
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PROM_WIDTH'
+      start: 12
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PROM_WRITE_WS'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PROM_READ_WS'
+      start: 8
+      width: 2
+    variants: []
+  brief: |
+    Memory configuration register 1
+  description: null
+  name: MCFG1
+  width: 32
+- bits:
+  - default:
+    - access: []
+      brief: null
+      description: null
+      name: 'ME'
+      start: 27
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WB'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RB'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PE'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TCB'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    Memory configuration register 3
+  description: null
+  name: MCFG3
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IOHWS'
+      start: 23
+      width: 7
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ROMHWS'
+      start: 7
+      width: 7
+    variants: []
+  brief: |
+    Memory configuration register 5
+  description: null
+  name: MCFG5
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BRDYNCNT'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BRDYNRLD'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Memory configuration register 7
+  description: null
+  name: MCFG7
+  width: 32
+name: ftmctrl
+notes: null
+type: interface

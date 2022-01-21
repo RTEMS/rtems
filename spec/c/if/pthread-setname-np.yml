@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-function
+links:
+- role: interface-placement
+  uid: pthread
+name: pthread_setname_np
+references:
+- identifier: http://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
+  type: url
+type: interface

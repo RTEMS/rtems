@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/all-events
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/all-events:/name} constant shall be a constant expression
+  which evaluates to a value of the bitwise or of ${../if/event-00:/name},
+  ${../if/event-01:/name}, ${../if/event-02:/name}, ${../if/event-03:/name},
+  ${../if/event-04:/name}, ${../if/event-05:/name}, ${../if/event-06:/name},
+  ${../if/event-07:/name}, ${../if/event-08:/name}, ${../if/event-09:/name},
+  ${../if/event-10:/name}, ${../if/event-11:/name}, ${../if/event-12:/name},
+  ${../if/event-13:/name}, ${../if/event-14:/name}, ${../if/event-15:/name},
+  ${../if/event-16:/name}, ${../if/event-17:/name}, ${../if/event-18:/name},
+  ${../if/event-19:/name}, ${../if/event-20:/name}, ${../if/event-21:/name},
+  ${../if/event-22:/name}, ${../if/event-23:/name}, ${../if/event-24:/name},
+  ${../if/event-25:/name}, ${../if/event-26:/name}, ${../if/event-27:/name},
+  ${../if/event-28:/name}, ${../if/event-29:/name}, ${../if/event-30:/name},
+  and ${../if/event-31:/name}.
+type: requirement

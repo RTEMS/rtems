@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the system is initialized, if multitasking is started on a processor
+  those index is greater than or equal to the processor maximum defined by the
+  application configuration, then the system shall terminate with the
+  ${/score/interr/if/source-smp:/name} fatal source and the
+  ${../if/fatal-multitasking-start-on-invalid-processor:/name} fatal code.
+type: requirement

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-group
+links:
+- role: interface-placement
+  uid: domain
+name: Configuration Step 3 - Scheduler Table
+references:
+- identifier: ConfigurationSchedulerTable
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html#configuration-step-3-scheduler-table
+  type: url
+type: interface

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/concat
+non-functional-type: interface
+rationale: |
+  The rules for nested use of the ## operator are arcane. The result of such
+  nested macro calls is undefined.
+references: []
+requirement-type: non-functional
+text: |
+  When neither argument is a call of the macro ${../if/concat:/name} itself,
+  the macro shall result in both argument values
+  concatenated textually unaltered in the order they are provided.
+type: requirement

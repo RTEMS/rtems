@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/inline-routine
+non-functional-type: interface
+rationale: |
+  ``inline`` and ``__inline__`` have the same effect at least for the
+  GNU C compiler. ``__inline__`` works even if the GNU C compiler
+  is invoked with the ``-ansi``, or ``-std`` flags.
+
+  The compiler may still emit code for a function defined or declared
+  with ``static inline`` or ``static __inline__``. Therefore,
+  if you want to put an inline function definition into a header
+  file, consider ``extern inline`` instead (see the compiler
+  documentation).
+references: []
+requirement-type: non-functional
+text: |
+  The ${../if/inline-routine:/name} macro shall evaluate
+  to the keywords ``static inline`` or ``static __inline__``
+  which ever variant is available to the used compiler.
+type: requirement

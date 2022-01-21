@@ -1,0 +1,441 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/ident-by-processor-set
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/ident-by-processor-set:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/ident-by-processor-set:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvSize
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_SIZE );
+    text: |
+      The return status of ${../if/ident-by-processor-set:/name} shall be
+      ${../../status/if/invalid-size:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+    text: |
+      The return status of ${../if/ident-by-processor-set:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/ident-by-processor-set:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: IdVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_u32( ctx->id_value, 0x0f010001 );
+    text: |
+      The value of the object referenced by the
+      ${../if/ident-by-processor-set:/params[2]/name} parameter shall be set to
+      the identifier of the scheduler which owned the highest numbered online
+      processor specified by the
+      ${../if/ident-by-processor-set:/params[0]/name}
+      ${../if/ident-by-processor-set:/params[1]/name} parameters at some point
+      during the call after the return of the
+      ${../if/ident-by-processor-set:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      Objects referenced by the ${../if/ident-by-processor-set:/params[2]/name}
+      parameter in past calls to ${../if/ident-by-processor-set:/name} shall
+      not be accessed by the ${../if/ident-by-processor-set:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: CPUOwnedByScheduler
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->cpu_has_scheduler = true;
+    text: |
+      While the highest numbered online processor specified by the processor
+      set is owned by a scheduler.
+  - name: 'No'
+    test-code: |
+      ctx->cpu_has_scheduler = false;
+    text: |
+      While the highest numbered online processor specified by the processor
+      set is not owned by a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetObj
+  states:
+  - name: Invalid
+    test-code: |
+      CPU_ZERO( &ctx->cpuset_value );
+    text: |
+      While the processor set contains no online processor.
+  - name: Valid
+    test-code: |
+      CPU_ZERO( &ctx->cpuset_value );
+
+      if ( ctx->cpu_has_scheduler ) {
+        CPU_SET( 0, &ctx->cpuset_value );
+      } else {
+        CPU_SET( 1, &ctx->cpuset_value );
+      }
+    text: |
+      While the processor set contains at least one online processor.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetSize
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_value );
+    text: |
+      While the ${../if/ident-by-processor-set:/params[0]/name} parameter is
+      an integral multiple of the size of long.
+  - name: Invalid
+    test-code: |
+      ctx->cpusetsize = 1;
+    text: |
+      While the ${../if/ident-by-processor-set:/params[0]/name} parameter is
+      not an integral multiple of the size of long.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSet
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpuset = &ctx->cpuset_value;
+    text: |
+      While the ${../if/ident-by-processor-set:/params[1]/name} parameter
+      references an object of type ${/c/if/cpu_set_t:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->cpuset = NULL;
+    text: |
+      While the ${../if/ident-by-processor-set:/params[1]/name} parameter is
+      equal to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_value = INVALID_ID;
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/ident-by-processor-set:/params[2]/name} parameter
+      references an object of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/ident-by-processor-set:/params[2]/name} parameter is
+      equal to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  OnlyOneCPU: |
+    Where the system is build with SMP support disabled, the system has exactly
+    one processor available and this processor is always owned by a scheduler.
+test-action: |
+  #if defined(RTEMS_SMP)
+  rtems_status_code sc;
+
+  if ( !ctx->cpu_has_scheduler ) {
+    sc = rtems_scheduler_remove_processor( ctx->second_scheduler_id, 1 );
+    T_rsc_success( sc );
+  }
+  #endif
+
+  ctx->status = rtems_scheduler_ident_by_processor_set(
+    ctx->cpusetsize,
+    ctx->cpuset,
+    ctx->id
+  );
+
+  #if defined(RTEMS_SMP)
+  if ( !ctx->cpu_has_scheduler ) {
+    sc = rtems_scheduler_add_processor( ctx->second_scheduler_id, 1 );
+    T_rsc_success( sc );
+  }
+  #endif
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the identifier of a second scheduler.
+  description: null
+  member: |
+    rtems_id second_scheduler_id
+- brief: |
+    This member provides the object referenced by the
+    ${../if/ident-by-processor-set:/params[1]/name} parameter.
+  description: null
+  member: |
+    cpu_set_t cpuset_value
+- brief: |
+    This member provides the object referenced by the
+    ${../if/ident-by-processor-set:/params[2]/name} parameter.
+  description: null
+  member: |
+    rtems_id id_value
+- brief: |
+    If this member is true, then the processor specified by the
+    ${../if/ident-by-processor-set:/params[0]/name} parameter shall be owned by a
+    scheduler.
+  description: null
+  member: |
+    bool cpu_has_scheduler
+- brief: |
+    This member contains the return value of the
+    ${../if/ident-by-processor-set:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the
+    ${../if/ident-by-processor-set:/params[0]/name} parameter value.
+  description: null
+  member: |
+    size_t cpusetsize
+- brief: |
+    This member specifies if the
+    ${../if/ident-by-processor-set:/params[1]/name} parameter value.
+  description: null
+  member: |
+    const cpu_set_t *cpuset
+- brief: |
+    This member specifies if the
+    ${../if/ident-by-processor-set:/params[2]/name} parameter value.
+  description: null
+  member: |
+    rtems_id *id
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  ctx->id_value = INVALID_ID;
+test-setup:
+  brief: null
+  code: |
+    #if defined(RTEMS_SMP)
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_B_NAME,
+      &ctx->second_scheduler_id
+    );
+    T_rsc_success( sc );
+    #else
+    ctx->second_scheduler_id = INVALID_ID;
+    #endif
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-scheduler-ident-by-processor-set.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    IdVar: Set
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'Yes'
+    CPUSetObj:
+    - Valid
+    CPUSetSize:
+    - Valid
+    CPUSet:
+    - Valid
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'Yes'
+    CPUSetObj:
+    - Valid
+    CPUSetSize: all
+    CPUSet: all
+    Id:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler: N/A
+    CPUSetObj:
+    - Invalid
+    CPUSetSize: all
+    CPUSet: all
+    Id:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'Yes'
+    CPUSetObj:
+    - Valid
+    CPUSetSize: all
+    CPUSet:
+    - 'Null'
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler: N/A
+    CPUSetObj:
+    - Invalid
+    CPUSetSize: all
+    CPUSet:
+    - 'Null'
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'Yes'
+    CPUSetObj:
+    - Valid
+    CPUSetSize:
+    - Invalid
+    CPUSet:
+    - Valid
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler: N/A
+    CPUSetObj:
+    - Invalid
+    CPUSetSize:
+    - Invalid
+    CPUSet:
+    - Valid
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler: N/A
+    CPUSetObj:
+    - Invalid
+    CPUSetSize:
+    - Valid
+    CPUSet:
+    - Valid
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'No'
+    CPUSetObj:
+    - Valid
+    CPUSetSize: all
+    CPUSet: all
+    Id: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'No'
+    CPUSetObj:
+    - Valid
+    CPUSetSize: all
+    CPUSet: all
+    Id:
+    - 'Null'
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'No'
+    CPUSetObj:
+    - Valid
+    CPUSetSize: all
+    CPUSet:
+    - 'Null'
+    Id:
+    - Valid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: InvSize
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'No'
+    CPUSetObj:
+    - Valid
+    CPUSetSize:
+    - Invalid
+    CPUSet:
+    - Valid
+    Id:
+    - Valid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: IncStat
+    IdVar: Nop
+  pre-conditions:
+    CPUOwnedByScheduler:
+    - 'No'
+    CPUSetObj:
+    - Valid
+    CPUSetSize:
+    - Valid
+    CPUSet:
+    - Valid
+    Id:
+    - Valid
+type: requirement

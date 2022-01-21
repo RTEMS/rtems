@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: none
+text: |
+  A timer in ${../glossary/state:/term} or ${../glossary/context:/term} none or
+  associated with ${../glossary/clock:/term} none has not been
+  ${../glossary/scheduled:/term} since it was created with
+  ${../if/create:/name}. The timer is "new" and yet unused.
+type: glossary

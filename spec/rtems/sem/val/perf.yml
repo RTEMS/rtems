@@ -1,0 +1,121 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/perf-runtime
+params:
+  sample-count: 100
+test-brief: |
+  This test case provides a context to run ${../if/group:/name} performance
+  tests.
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a mutex identifier.
+  description: null
+  member: |
+    rtems_id mutex_id
+- brief: |
+    This member provides a worker identifier.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member provides a status code.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: |
+    Create a mutex and a worker task.
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->mutex_id = CreateMutex();
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  typedef enum {
+    EVENT_END = RTEMS_EVENT_0,
+    EVENT_OBTAIN = RTEMS_EVENT_1,
+    EVENT_OBTAIN_END = RTEMS_EVENT_2,
+    EVENT_RELEASE = RTEMS_EVENT_3,
+    EVENT_RELEASE_END = RTEMS_EVENT_4
+  } Event;
+
+  static void Send( const Context *ctx, rtems_event_set events )
+  {
+    SendEvents( ctx->worker_id, events );
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_event_set   events;
+      rtems_status_code sc;
+      T_ticks           ticks;
+
+      sc = rtems_event_receive(
+        RTEMS_ALL_EVENTS,
+        RTEMS_EVENT_ANY | RTEMS_WAIT,
+        RTEMS_NO_TIMEOUT,
+        &events
+      );
+      ticks = T_tick();
+      T_quiet_rsc_success( sc );
+
+      if ( ( events & EVENT_END ) != 0 ) {
+        ctx->end = ticks;
+      }
+
+      if ( ( events & EVENT_OBTAIN ) != 0 ) {
+        sc = rtems_semaphore_obtain(
+          ctx->mutex_id,
+          RTEMS_WAIT,
+          RTEMS_NO_TIMEOUT
+        );
+        ticks = T_tick();
+        T_quiet_rsc_success( sc );
+
+        if ( ( events & EVENT_OBTAIN_END ) != 0 ) {
+          ctx->end = ticks;
+        }
+      }
+
+      if ( ( events & EVENT_RELEASE ) != 0 ) {
+        sc = rtems_semaphore_release( ctx->mutex_id );
+        ticks = T_tick();
+        T_quiet_rsc_success( sc );
+
+        if ( ( events & EVENT_RELEASE_END ) != 0 ) {
+          ctx->end = ticks;
+        }
+      }
+    }
+  }
+test-target: testsuites/validation/tc-sem-performance.c
+test-teardown:
+  brief: |
+    Delete the worker task and the mutex.
+  code: |
+    DeleteTask( ctx->worker_id );
+    DeleteMutex( ctx->mutex_id );
+    RestoreRunnerPriority();
+  description: null
+type: runtime-measurement-test

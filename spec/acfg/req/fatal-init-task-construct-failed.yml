@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: init-task-construct-storage-size
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the application was configured to construct the RTEMS initialization
+  task using ${../if/init-task-construct-storage-size:/name}, while the system
+  is initialized, if the task construction fails, then the system shall
+  terminate with the ${/score/interr/if/internal-error-core:/name} fatal source
+  and the ${/score/interr/if/init-task-construct-failed:/name} fatal code.
+type: requirement

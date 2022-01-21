@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 0
+description: |
+  The value of this configuration option defines the maximum number of POSIX
+  API Threads that can be concurrently active.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-posix
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-obj
+- role: constraint
+  uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/stack-space
+name: CONFIGURE_MAXIMUM_POSIX_THREADS
+notes: |
+  This object class can be configured in unlimited allocation mode, see
+  ${/doc/if/config-unlimited-objects:/name}.
+
+  This calculations for the required memory in the RTEMS Workspace for threads
+  assume that each thread has a minimum stack size and has floating point
+  support enabled.  The configuration option ${extra-task-stacks:/name} is used
+  to specify thread stack requirements **above** the minimum size required.
+
+  The maximum number of Classic API Tasks is specified by
+  ${max-tasks:/name}.
+
+  All POSIX threads have floating point enabled.
+type: interface

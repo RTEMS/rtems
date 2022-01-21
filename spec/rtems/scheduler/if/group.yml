@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The scheduling concepts relate to the allocation of processing time for tasks.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  The concept of scheduling in real-time systems dictates the ability to
+  provide an immediate response to specific external events, particularly the
+  necessity of scheduling tasks to run within a specified time limit after the
+  occurrence of an event. For example, software embedded in life-support
+  systems used to monitor hospital patients must take instant action if a
+  change in the patient’s status is detected.
+
+  The component of RTEMS responsible for providing this capability is
+  appropriately called the scheduler. The scheduler’s sole purpose is to
+  allocate the all important resource of processor time to the various tasks
+  competing for attention.
+enabled-by: true
+identifier: RTEMSAPIClassicScheduler
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: ident
+- role: placement-order
+  uid: ident-by-processor
+- role: placement-order
+  uid: ident-by-processor-set
+- role: placement-order
+  uid: get-maximum-priority
+- role: placement-order
+  uid: map-priority-to-posix
+- role: placement-order
+  uid: map-priority-from-posix
+- role: placement-order
+  uid: get-processor
+- role: placement-order
+  uid: get-processor-macro
+- role: placement-order
+  uid: get-processor-maximum
+- role: placement-order
+  uid: get-processor-maximum-macro
+- role: placement-order
+  uid: get-processor-set
+- role: placement-order
+  uid: add-processor
+- role: placement-order
+  uid: remove-processor
+name: Scheduler Manager
+text: |
+  The Classic API shall provide an interface to the Scheduler Manager.
+type: interface

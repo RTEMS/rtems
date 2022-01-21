@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Checks if the status codes are equal.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: |
+      return ${.:/params[0]/name} == ${.:/params[1]/name};
+    params:
+    - ${code:/name} ${.:/params[0]/name}
+    - ${code:/name} ${.:/params[1]/name}
+    return: ${/c/if/bool:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_are_statuses_equal
+notes: null
+params:
+- description: is the left hand side status code.
+  dir: null
+  name: left_status_code
+- description: is the right hand side status code.
+  dir: null
+  name: right_status_code
+return:
+  return: |
+    Returns true, if the left hand side status code is equal to the right hand
+    side status code, otherwise false.
+  return-values: []
+type: interface

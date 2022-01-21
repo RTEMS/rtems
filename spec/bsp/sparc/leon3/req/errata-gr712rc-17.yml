@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: sparc/gr712rc
+links:
+- role: requirement-refinement
+  uid: /req/errata
+- role: requirement-refinement
+  uid: ../if/group
+non-functional-type: design
+rationale: null
+references:
+- identifier: https://www.gaisler.com/doc/gr712rc-usermanual.pdf
+  type: url
+- identifier: https://www.gaisler.com/doc/antn/GRLIB-TN-0013.pdf
+  type: url
+requirement-type: non-functional
+text: |
+  The software product shall take the errata 17 (Technical Note on GRFPU
+  Floating-point controller: Missing FDIV/FSQRT Result) into account.
+type: requirement

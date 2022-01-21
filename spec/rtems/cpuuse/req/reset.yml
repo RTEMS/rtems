@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/reset
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When ${../if/reset:/name} is called, the CPU usage shall be set to zero for
+  each thread.
+type: requirement

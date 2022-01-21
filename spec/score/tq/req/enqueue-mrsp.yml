@@ -1,0 +1,404 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Position
+  states:
+  - name: InitialFirst
+    test-code: |
+      T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+      T_eq_u32( 1, TQGetCounter( ctx->tq_ctx ) );
+    text: |
+      A priority queue associated with the scheduler which contains exactly the
+      enqueueing thread shall be created as the first priority queue of the
+      thread queue.
+  - name: InitialLast
+    test-code: |
+      if ( CanDoFullValidation() ) {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_C ) );
+        T_eq_u32( 2, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 2, TQGetCounter( ctx->tq_ctx ) );
+      } else {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 1, TQGetCounter( ctx->tq_ctx ) );
+      }
+    text: |
+      A priority queue associated with the scheduler which contains exactly the
+      enqueueing thread shall be created as the last priority queue of the
+      thread queue.
+  - name: Second
+    test-code: |
+      if ( CanDoFullValidation() ) {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_B ) );
+        T_eq_u32( 2, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 2, TQGetCounter( ctx->tq_ctx ) );
+      } else {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 1, TQGetCounter( ctx->tq_ctx ) );
+      }
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+  - name: SecondFirst
+    test-code: |
+      if ( CanDoFullValidation() ) {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_B ) );
+        T_eq_u32( 2, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_C ) );
+        T_eq_u32( 3, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 3, TQGetCounter( ctx->tq_ctx ) );
+      } else {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 1, TQGetCounter( ctx->tq_ctx ) );
+      }
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+
+      The position of the priority queue in the thread queue shall not change.
+  - name: SecondLast
+    test-code: |
+      if ( CanDoFullValidation() ) {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_C ) );
+        T_eq_u32( 2, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_B ) );
+        T_eq_u32( 3, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 3, TQGetCounter( ctx->tq_ctx ) );
+      } else {
+        T_eq_u32( 1, TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ) );
+        T_eq_u32( 1, TQGetCounter( ctx->tq_ctx ) );
+      }
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+
+      The position of the priority queue in the thread queue shall not change.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+
+    /* The enqueue is sticky, so no enqueued thread is blocked by the scheduler */
+    T_null( TQGetNextUnblock( ctx->tq_ctx, &i )->thread );
+pre-conditions:
+- name: EligibleScheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->helping = false;
+    text: |
+      While the enqueueing thread has no helping scheduler.
+  - name: Helping
+    test-code: |
+      ctx->helping = true;
+    text: |
+      While the enqueueing thread has at least one helping scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueEligible
+  states:
+  - name: None
+    test-code: |
+      ctx->priority = PRIO_PSEUDO_ISR;
+    text: |
+      While all priority queues of the thread queue associated with eligible
+      schedulers of the enqueueing thread are empty.
+  - name: Equal
+    test-code: |
+      ctx->priority = PRIO_VERY_HIGH;
+    text: |
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is equal to the priority
+      of the enqueueing thread with respect to the eligible scheduler.
+  - name: Low
+    test-code: |
+      ctx->priority = PRIO_HIGH;
+    text: |
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is lower than the
+      priority of the enqueueing thread with respect to the eligible scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueIneligible
+  states:
+  - name: None
+    test-code: |
+      ctx->other_before = false;
+      ctx->other_after = false;
+    text: |
+      While no priority queue of the thread queue exists which is not
+      associated with an eligible scheduler of the enqueueing thread.
+  - name: Only
+    test-code: |
+      ctx->other_before = true;
+      ctx->other_after = false;
+    text: |
+    text: |
+      While exactly one priority queue of the thread queue exists which is not
+      associated with an eligible scheduler of the enqueueing thread.
+  - name: Before
+    test-code: |
+      ctx->other_before = true;
+      ctx->other_after = false;
+    text: |
+    text: |
+      While a priority queue of the thread queue exists which is not
+      associated with an eligible scheduler of the enqueueing thread, while
+      this priority queue is positioned before all priority queues which are
+      associated with eligible schedulers of the enqueueing thread.
+  - name: After
+    test-code: |
+      ctx->other_before = false;
+      ctx->other_after = true;
+    text: |
+      While a priority queue of the thread queue exists which is not associated
+      with an eligible scheduler of the enqueueing thread, while this priority
+      queue is positioned after all priority queues which are associated with
+      eligible schedulers of the enqueueing thread.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  Invalid: |
+    These variants are invalid due to two independent reasons.  Firstly, a
+    priority queue must be present to have another priority queue positioned
+    before or after the priority queue.  Secondly, if only one priority queue
+    shall be present, then on other priority queue can exist.
+test-action: |
+  Status_Control status;
+
+  TQResetCounter( ctx->tq_ctx );
+  TQClearDone( ctx->tq_ctx, TQ_BLOCKER_A );
+  TQClearDone( ctx->tq_ctx, TQ_BLOCKER_B );
+  TQClearDone( ctx->tq_ctx, TQ_BLOCKER_C );
+
+  status = TQEnqueue( ctx->tq_ctx, TQ_WAIT_FOREVER );
+  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
+
+  if ( ctx->helping ) {
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_RUNNER_SYNC
+    );
+    TQSynchronizeRunner();
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_D,
+      TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_MUTEX_A_RELEASE |
+        TQ_EVENT_RUNNER_SYNC_2
+    );
+  }
+
+  if ( CanDoFullValidation() ) {
+    if ( ctx->other_before ) {
+      TQSendAndWaitForIntendToBlock(
+        ctx->tq_ctx,
+        TQ_BLOCKER_C,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+      );
+    }
+
+    if ( ctx->priority != PRIO_PSEUDO_ISR ) {
+      TQSendAndWaitForIntendToBlock(
+        ctx->tq_ctx,
+        TQ_BLOCKER_B,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+      );
+    }
+
+    if ( ctx->other_after ) {
+      TQSendAndWaitForIntendToBlock(
+        ctx->tq_ctx,
+        TQ_BLOCKER_C,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+      );
+    }
+  }
+
+  TQSendAndWaitForIntendToBlock(
+    ctx->tq_ctx,
+    TQ_BLOCKER_A,
+    TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+  );
+
+  TQSchedulerRecordStart( ctx->tq_ctx );
+  status = TQSurrender( ctx->tq_ctx );
+  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
+  TQWaitForDone( ctx->tq_ctx, TQ_BLOCKER_A );
+
+  if ( CanDoFullValidation() ) {
+    if ( ctx->priority != PRIO_PSEUDO_ISR ) {
+      TQWaitForDone( ctx->tq_ctx, TQ_BLOCKER_B );
+    }
+
+    if ( ctx->other_before || ctx->other_after ) {
+      TQWaitForDone( ctx->tq_ctx, TQ_BLOCKER_C );
+    }
+  }
+
+  TQSchedulerRecordStop( ctx->tq_ctx );
+
+  if ( ctx->helping ) {
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      TQ_EVENT_MUTEX_A_RELEASE | TQ_EVENT_RUNNER_SYNC
+    );
+    TQSynchronizeRunner2();
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This this member is true, then the enqueueing thread shall have at least
+    one helping scheduler which is an ineligible scheduler for the already
+    enqueued threads.
+  description: null
+  member: |
+    bool helping
+- brief: |
+    This member specifies the priority of an already enqueued thread with an
+    eligible scheduler equal to an eligible scheduler of the enqueueing thread.
+  description: null
+  member: |
+    rtems_task_priority priority;
+- brief: |
+    If this member is true, then a thread those eligible schedulers are
+    ineligible scheduler to the enqueueing task should be enqueued before a
+    thread with an eligible scheduler equal to an eligible scheduler of the
+    enqueueing thread.
+  description: null
+  member: |
+    size_t other_before;
+- brief: |
+    If this member is true, then a thread those eligible schedulers are
+    ineligible scheduler to the enqueueing task should be enqueued after a
+    thread with an eligible scheduler equal to an eligible scheduler of the
+    enqueueing thread.
+  description: null
+  member: |
+    size_t other_after;
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-enqueue-mrsp.h
+test-includes: []
+test-local-includes:
+- tr-tq-enqueue-mrsp.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    if ( CanDoFullValidation() ) {
+      RemoveProcessor( SCHEDULER_C_ID, 2 );
+      AddProcessor( SCHEDULER_B_ID, 2 );
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_C_ID, PRIO_LOW );
+    }
+
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_LOW );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_B_ID, PRIO_LOW );
+    TQSetScheduler(
+      ctx->tq_ctx,
+      TQ_BLOCKER_D,
+      SCHEDULER_A_ID,
+      PRIO_ULTRA_HIGH
+    );
+  description: null
+test-stop: null
+test-support: |
+  /*
+   * The MrsP locking protocol uses a sticky thread queue enqueue.  This means
+   * that threads waiting for the mutex ownership perform a busy wait and thus
+   * occupy the processor.  For a full validation we need at least four
+   * processors.
+   */
+  static bool CanDoFullValidation( void )
+  {
+    return rtems_scheduler_get_processor_maximum() >= 4;
+  }
+test-target: testsuites/validation/tr-tq-enqueue-mrsp.c
+test-teardown:
+  brief: null
+  code: |
+    if ( CanDoFullValidation() ) {
+      RemoveProcessor( SCHEDULER_B_ID, 2 );
+      AddProcessor( SCHEDULER_C_ID, 2 );
+    }
+
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the calling thread is enqueued on the thread queue.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Position: InitialFirst
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - None
+    QueueIneligible:
+    - None
+- enabled-by: true
+  post-conditions:
+    Position: InitialLast
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - None
+    QueueIneligible:
+    - Only
+- enabled-by: true
+  post-conditions:
+    Position: Second
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - Equal
+    - Low
+    QueueIneligible:
+    - None
+- enabled-by: true
+  post-conditions:
+    Position: SecondLast
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - Equal
+    - Low
+    QueueIneligible:
+    - Before
+- enabled-by: true
+  post-conditions:
+    Position: SecondFirst
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - Equal
+    - Low
+    QueueIneligible:
+    - After
+- enabled-by: true
+  post-conditions: Invalid
+  pre-conditions: default
+type: requirement

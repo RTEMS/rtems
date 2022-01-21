@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/const
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/const:/name} macro is attached to a
+  function declaration or definition,
+  and the return value of that function is not affected by changes
+  to the observable state of the program and that function has
+  no observable effects on such state other than to return a value,
+  the ${../if/const:/name} macro shall permit the compiler to replace
+  subsequent calls to the function with the same argument values by the
+  result of the first call.
+type: requirement

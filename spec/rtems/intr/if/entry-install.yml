@@ -1,0 +1,109 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Installs the interrupt entry at the interrupt vector.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${vector-number:/name} ${.:/params[0]/name}
+    - ${../../option/if/option:/name} ${.:/params[1]/name}
+    - ${entry:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  One of the following mutually exclusive options
+
+  * ${unique:/name}, and
+
+  * ${shared:/name}
+
+  shall be set in the ${.:/params[1]/name} parameter.
+
+  The handler routine of the entry specified by ${.:/params[2]/name} will be
+  called with the handler argument of the entry when dispatched.  The order in
+  which shared interrupt handlers are dispatched for one vector is defined by
+  the installation order.  The first installed handler is dispatched first.
+
+  If the option ${unique:/name} is set, then it will be ensured that the
+  handler will be the only one for the interrupt vector.
+
+  If the option ${shared:/name} is set, then multiple handlers may be installed
+  for the interrupt vector.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../constraint/entry-initialized
+name: rtems_interrupt_entry_install
+notes: |
+  When the directive call was successful, the ownership of the interrupt entry
+  has been transferred from the caller to the interrupt service.  An installed
+  interrupt entry may be removed from the interrupt service by calling
+  ${entry-remove:/name}.
+params:
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the interrupt entry install option set.
+  dir: null
+  name: options
+- description: |
+    is the interrupt entry to install.
+  dir: null
+  name: entry
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The service was not initialized.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The handler routine of the entry was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The directive was called from within interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
+  - description: |
+      An option specified by ${.:/params[1]/name} was not applicable.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The ${unique:/name} option was set in ${.:/params[2]/name} and the
+      interrupt vector was already occupied by a handler.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The ${shared:/name} option was set in ${.:/params[2]/name} and the
+      interrupt vector was already occupied by a unique handler.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The handler routine of the entry specified by ${.:/params[2]/name} was
+      already installed for the interrupt vector specified by
+      ${.:/params[0]/name} with an argument equal to the handler argument of
+      the entry.
+    value: ${../../status/if/too-many:/name}
+type: interface

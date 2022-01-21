@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: get
+- role: requirement-refinement
+  uid: get-coarse
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The directives to get time values shall use a sequence lock to synchronize
+  the reader with exactly one writer.
+type: requirement

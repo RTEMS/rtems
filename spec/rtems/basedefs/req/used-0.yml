@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/used
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/used:/name} is macro attached to
+  a function or ``static`` variable definition,
+  the macro shall cause the compiler to emit the
+  function implementation or variable storage even if
+  there is no reference from C code to the function or variable.
+type: requirement

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread is scheduled by a ${/glossary/scheduler-helping:/term}, while
+  the thread is blocked, when the thread is preempted by the helping scheduler,
+  the thread shall be blocked by the helping scheduler.
+type: requirement

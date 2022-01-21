@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/pure
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/pure:/name} macro is attached to a
+  function declaration or definition,
+  and the function has no observable effects on the state of the program other
+  than to return a value,
+  the ${../if/pure:/name} macro shall permit the compiler to replace
+  subsequent calls to the function with the same argument values by the result
+  of the first call
+  provided the state of the program observable by that function
+  does not change in between two calls.
+type: requirement

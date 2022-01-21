@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate the ${../if/id-none:/name} constant.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Assert that ${../if/id-none:/name} cannot be associated with an object
+      because it has an object index outside the range of valid object indices.
+    code: |
+      RTEMS_STATIC_ASSERT(
+        ( ( RTEMS_ID_NONE >> OBJECTS_INDEX_START_BIT ) &
+          OBJECTS_INDEX_VALID_BITS ) < OBJECTS_INDEX_MINIMUM,
+        ID_NONE
+      );
+    links:
+    - role: validation
+      uid: ../req/id-none
+  links: []
+test-brief: |
+  Tests some ${../if/group:/name} interfaces.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/objectimpl.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-type.c
+test-teardown: null
+type: test-case

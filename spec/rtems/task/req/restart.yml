@@ -1,0 +1,1629 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/restart
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/restart:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/restart:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/restart:/name} shall be
+      ${../../status/if/incorrect-state:/name}.
+  - name: NoReturn
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_IMPLEMENTED );
+    text: |
+      The ${../if/restart:/name} call shall not return.
+  test-epilogue: null
+  test-prologue: null
+- name: FatalError
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->calls.fatal, 1 );
+    text: |
+      The fatal error with a fatal source of
+      ${/score/interr/if/internal-error-core:/name} and a fatal code of
+      ${/score/interr/if/bad-thread-dispatch-disable-level:/name} shall occur
+      through the ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls.fatal, 0 );
+    text: |
+      No fatal error shall occur through the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Argument
+  states:
+  - name: Set
+    test-code: |
+      if ( ctx->restart_counter != 0 ) {
+        #if CPU_SIZEOF_POINTER > 4
+        T_eq_u64( ctx->actual_argument, RESTART_ARGUMENT );
+        #else
+        T_eq_u32( ctx->actual_argument, RESTART_ARGUMENT );
+        #endif
+
+        T_eq_u32( ctx->restart_counter, 1 );
+      } else {
+        #if CPU_SIZEOF_POINTER > 4
+        T_eq_u64(
+          ctx->worker_tcb->Start.Entry.Kinds.Numeric.argument,
+          RESTART_ARGUMENT
+        );
+        T_eq_u64( ctx->actual_argument, UNSET_ARGUMENT );
+        #else
+        T_eq_u32(
+          ctx->worker_tcb->Start.Entry.Kinds.Numeric.argument,
+          RESTART_ARGUMENT
+        );
+        T_eq_u32( ctx->actual_argument, UNSET_ARGUMENT );
+        #endif
+      }
+    text: |
+      The entry point argument of the task specified by the
+      ${../if/restart:/params[0]/name} parameter shall be set to the value
+      specified by the ${../if/restart:/params[1]/name} parameter before the task
+      is unblocked by the ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->actual_argument, UNSET_ARGUMENT );
+      T_eq_u32( ctx->restart_counter, 0 );
+    text: |
+      No entry point argument of a task shall be modified by the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Dormant
+    test-code: |
+      T_eq_u32( ctx->worker_state, STATES_DORMANT )
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The state of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be dormant after the ${../if/restart:/name} call.
+  - name: DormantSuspended
+    test-code: |
+      T_eq_u32( ctx->worker_state, STATES_DORMANT | STATES_SUSPENDED )
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The state of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be dormant and suspended after the ${../if/restart:/name}
+      call.
+  - name: Blocked
+    test-code: |
+      T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
+      T_eq_u32( ctx->worker_state & STATES_BLOCKED, ctx->worker_state )
+
+      if ( ctx->suspended && !ctx->blocked ) {
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
+      }
+
+      if ( !ctx->real_priority_is_initial ) {
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
+      }
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The state of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be blocked after the ${../if/restart:/name} call.
+  - name: Ready
+    test-code: |
+      T_eq_u32( ctx->worker_state, STATES_READY )
+
+      if ( ctx->protected ) {
+        if ( ctx->suspended ) {
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+        }
+      } else {
+        if ( ctx->suspended || ctx->blocked ) {
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+        } else {
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+        }
+      }
+
+      if ( !ctx->real_priority_is_initial ) {
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
+      }
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The state of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be ready after the ${../if/restart:/name} call.
+  - name: Zombie
+    test-code: |
+      T_eq_u32( ctx->worker_state, STATES_ZOMBIE )
+
+      if ( ctx->protected ) {
+        if ( ctx->suspended ) {
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+        }
+      } else {
+        if ( ctx->suspended ) {
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+        } else {
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+
+          event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+          T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
+        }
+      }
+
+      if ( !ctx->real_priority_is_initial ) {
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
+      }
+
+      /* Set zombie state */
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+      T_eq_ptr( event->thread, ctx->worker_tcb );
+
+      /* Wake up deleter */
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+      T_eq_ptr( event->thread, ctx->deleter_tcb );
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The state of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be the zombie state after the ${../if/restart:/name}
+      call.
+  - name: Nop
+    test-code: |
+      T_ne_u32( ctx->worker_state & STATES_LIFE_IS_CHANGING, 0 )
+
+      if ( !ctx->real_priority_is_initial ) {
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
+      }
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The state of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall not be modified by the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: |
+    const T_scheduler_event *event;
+    size_t                   index;
+
+    index = 0;
+- name: Enqueued
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_not_null( ctx->worker_tcb->Wait.queue );
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter
+      shall be enqueued on a ${/glossary/waitqueue:/term}
+      after the ${../if/restart:/name} call.
+  - name: 'No'
+    test-code: |
+      T_null( ctx->worker_tcb->Wait.queue );
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter
+      shall not be enqueued on a ${/glossary/waitqueue:/term} after the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Active
+    test-code: |
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &info);
+      T_eq_int( info.state, TASK_TIMER_TICKS );
+    text: |
+      The timer of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be active after the ${../if/restart:/name} call.
+  - name: Inactive
+    test-code: |
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &info);
+      T_eq_int( info.state, TASK_TIMER_INACTIVE );
+    text: |
+      The timer of the task specified by the ${../if/restart:/params[0]/name}
+      parameter shall be inactive after the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: |
+    TaskTimerInfo info;
+- name: Restarting
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_ne_int( ctx->worker_life_state & THREAD_LIFE_RESTARTING, 0 );
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter
+      shall be restarting after the ${../if/restart:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_int( ctx->worker_life_state & THREAD_LIFE_RESTARTING, 0 );
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter
+      shall not be restarting after the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Terminating
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_ne_int( ctx->worker_life_state & THREAD_LIFE_TERMINATING, 0 );
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter
+      shall be terminating after the ${../if/restart:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_int( ctx->worker_life_state & THREAD_LIFE_TERMINATING, 0 );
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter
+      shall not be terminating after the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Protected
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_ne_int( ctx->worker_life_state & THREAD_LIFE_PROTECTED, 0 );
+    text: |
+      The thread life of the task specified by the
+      ${../if/restart:/params[0]/name} parameter be protected after the
+      ${../if/restart:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_int( ctx->worker_life_state & THREAD_LIFE_PROTECTED, 0 );
+    text: |
+      The thread life of the task specified by the
+      ${../if/restart:/params[0]/name} parameter shall not be protected after
+      the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: RestartExtensions
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_restart, 1 );
+    text: |
+      The thread restart user extensions shall be invoked by the
+      ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_restart, 0 );
+    text: |
+      The thread restart user extensions shall not be invoked by the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: TerminateExtensions
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_terminate, 1 );
+    text: |
+      The thread terminate user extensions shall be invoked by the
+      ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_terminate, 0 );
+    text: |
+      The thread terminate user extensions shall not be invoked by the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/restart:/params[0]/name} parameter is not associated with
+      a task.
+  - name: Executing
+    test-code: |
+      ctx->id = RTEMS_SELF;
+    text: |
+      While the ${../if/restart:/params[0]/name} parameter is associated with
+      the calling task.
+  - name: Other
+    test-code: |
+      ctx->id = ctx->worker_id;
+    text: |
+      While the ${../if/restart:/params[0]/name} parameter is associated with a
+      task other than the calling task.
+  test-epilogue: null
+  test-prologue: null
+- name: Dormant
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->dormant = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is dormant.
+  - name: 'No'
+    test-code: |
+      ctx->dormant = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is not dormant.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspended = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspended = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is not suspended.
+  test-epilogue: null
+  test-prologue: null
+- name: Restarting
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->restarting = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is restarting.
+  - name: 'No'
+    test-code: |
+      ctx->restarting = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is not restarting.
+  test-epilogue: null
+  test-prologue: null
+- name: Terminating
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->terminating = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is terminating.
+  - name: 'No'
+    test-code: |
+      ctx->terminating = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is not terminating.
+  test-epilogue: null
+  test-prologue: null
+- name: Protected
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->protected = true;
+    text: |
+      While thread life of the task specified by the
+      ${../if/restart:/params[0]/name} parameter is protected.
+  - name: 'No'
+    test-code: |
+      ctx->protected = false;
+    text: |
+      While thread life of the task specified by the
+      ${../if/restart:/params[0]/name} parameter is not protected.
+  test-epilogue: null
+  test-prologue: null
+- name: Context
+  states:
+  - name: Task
+    test-code: |
+      ctx->interrupt = false;
+      ctx->nested_request = false;
+    text: |
+      While the ${../if/restart:/name} directive is called from within task
+      context.
+  - name: Interrupt
+    test-code: |
+      ctx->interrupt = true;
+      ctx->nested_request = false;
+    text: |
+      While the ${../if/restart:/name} directive is called from within
+      interrupt context.
+  - name: NestedRequest
+    test-code: |
+      ctx->interrupt = false;
+      ctx->nested_request = true;
+    text: |
+      While the ${../if/restart:/name} directive is called during another
+      ${../if/restart:/name} call with the same task as a nested request.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Ready
+    test-code: |
+      ctx->blocked = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name}
+      parameter is a ${/glossary/readytask:/term} or
+      ${/glossary/scheduledtask:/term}.
+  - name: Blocked
+    test-code: |
+      ctx->blocked = true;
+      ctx->enqueued = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name}
+      parameter is blocked.
+  - name: Enqueued
+    test-code: |
+      ctx->blocked = true;
+      ctx->enqueued = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name}
+      parameter is enqueued on a ${/glossary/waitqueue:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Inactive
+    test-code: |
+      ctx->timer_active = false;
+    text: |
+      While timer of the task specified by the ${../if/restart:/params[0]/name}
+      parameter is inactive.
+  - name: Active
+    test-code: |
+      ctx->timer_active = true;
+    text: |
+      While timer of the task specified by the ${../if/restart:/params[0]/name}
+      parameter is active.
+  test-epilogue: null
+  test-prologue: null
+- name: RealPriority
+  states:
+  - name: Initial
+    test-code: |
+      ctx->real_priority_is_initial = true;
+    text: |
+      While ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/restart:/params[0]/name} parameter is equal to the initial
+      priority.
+  - name: Changed
+    test-code: |
+      ctx->real_priority_is_initial = false;
+    text: |
+      While ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/restart:/params[0]/name} parameter is not equal to the initial
+      priority.
+  test-epilogue: null
+  test-prologue: null
+- name: ThreadDispatch
+  states:
+  - name: Disabled
+    test-code: |
+      ctx->dispatch_disabled = true;
+    text: |
+      While thread dispatching is disabled for the calling task.
+  - name: Enabled
+    test-code: |
+      ctx->dispatch_disabled = false;
+    text: |
+      While thread dispatching is enabled for the calling task.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  ExecutingIsNotDormant: |
+    An executing thread was started and thus is never dormant.
+  ExecutingIsNotBlocked: |
+    An executing thread is not blocked.
+  NotBlockedHasInactiveTimer: |
+    The timer of a not blocked thread is inactive.
+  ThreadDispatchDisabled: |
+    While ISRs or nested requests are processed, the thread dispatching is
+    disabled.
+  NestedRequestNotDormant: |
+    A nested request can only happen if the thread is not dormant.
+  NestedRequestNotProtected: |
+    A nested request can only happen if the thread life protection of the task
+    is disabled.
+  NestedRequestNeedsLifeChanging: |
+    A nested request can only happen if the thread life is changing.
+  NestedRequestNoNestedExit: |
+    A nested request cannot happen during a thread exit.
+  NestedRequestNeedsTask: |
+    A nested request needs a task to restart.
+test-action: |
+  rtems_status_code sc;
+
+  if ( ctx->id != INVALID_ID ) {
+    if ( ctx->dormant ) {
+      PrepareRealPriority( ctx );
+    } else {
+      StartTask( ctx->worker_id, Worker, NULL );
+
+      /* Let the worker catch signals and set the thread life protection state */
+      Yield();
+
+      sc = rtems_signal_send( ctx->worker_id, RTEMS_SIGNAL_0 );
+      T_rsc_success( sc );
+
+      if (
+        ctx->restarting &&
+        ( !ctx->nested_request || ( ctx->nested_request && ctx->terminating ) )
+      ) {
+        sc = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
+        T_rsc_success( sc );
+      }
+
+      if ( ctx->terminating && !ctx->nested_request ) {
+        sc = rtems_task_restart( ctx->deleter_id, (rtems_task_argument) ctx );
+        T_rsc_success( sc );
+      } else {
+        PrepareRealPriority( ctx );
+        Yield();
+      }
+    }
+  }
+
+  if ( ctx->id == RTEMS_SELF ) {
+    CaptureWorkerState( ctx );
+  } else {
+    if ( ctx->nested_request ) {
+      if ( ctx->terminating ) {
+        sc = rtems_task_restart( ctx->deleter_id, (rtems_task_argument) ctx );
+        T_rsc_success( sc );
+      } else {
+        WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
+
+        sc = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
+        T_rsc_success( sc );
+      }
+    } else {
+      SetSelfPriority( PRIO_VERY_HIGH );
+
+      if ( ctx->interrupt ) {
+        CallWithinISR( Restart, ctx );
+      } else {
+        Restart( ctx );
+      }
+    }
+  }
+test-brief: null
+test-cleanup: |
+  SetSelfPriority( PRIO_VERY_LOW );
+
+  if ( ctx->protected && ctx->blocked ) {
+    if ( ctx->enqueued ) {
+      ReleaseMutex( ctx->mutex_id );
+      ObtainMutex( ctx->mutex_id );
+    } else {
+      SendEvents( ctx->worker_id, RTEMS_EVENT_0 );
+    }
+  }
+
+  if ( ctx->id == INVALID_ID || ctx->dormant || !ctx->terminating ) {
+    DeleteTask( ctx->worker_id );
+  }
+
+  SetSelfPriority( PRIO_NORMAL );
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_10 scheduler_log
+- brief: |
+    This member provides a jump context to resume a thread dispatch.
+  description: null
+  member: |
+    jmp_buf thread_dispatch_context;
+- brief: |
+    This member provides the context to wrap thread queue operations.
+  description: null
+  member: |
+    WrapThreadQueueContext wrap_tq_ctx
+- brief: |
+    This member contains the identifier of the runner scheduler.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member contains the identifier of the runner task.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member contains the identifier of the mutex.
+  description: null
+  member: |
+    rtems_id mutex_id
+- brief: |
+    This member provides an event set used to set up the blocking conditions of
+    the task to restart.
+  description: null
+  member: |
+    rtems_event_set events
+- brief: |
+    This member contains the identifier of the worker task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member references the TCB of the worker task.
+  description: null
+  member: |
+    rtems_tcb *worker_tcb
+- brief: |
+    This member contains the worker state at the end of the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    States_Control worker_state
+- brief: |
+    This member contains the worker thread life state at the end of the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    Thread_Life_state worker_life_state
+- brief: |
+    This member contains the identifier of the deleter task.
+  description: null
+  member: |
+    rtems_id deleter_id
+- brief: |
+    This member references the TCB of the deleter task.
+  description: null
+  member: |
+    rtems_tcb *deleter_tcb
+- brief: |
+    This member contains the identifier of the test user extensions.
+  description: null
+  member: |
+    rtems_id extension_id
+- brief: |
+    This member contains extension calls.
+  description: null
+  member: |
+    ExtensionCalls calls;
+- brief: |
+    This member contains extension calls after the ${../if/restart:/name} call.
+  description: null
+  member: |
+    ExtensionCalls calls_after_restart;
+- brief: |
+    This member contains the actual argument passed to the entry point.
+  description: null
+  member: |
+    rtems_task_argument actual_argument
+- brief: |
+    This member contains the restart counter.
+  description: null
+  member: |
+    uint32_t restart_counter
+- brief: |
+    If this member is true, then the worker shall be dormant before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool dormant
+- brief: |
+    If this member is true, then the worker shall be suspended before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool suspended
+- brief: |
+    If this member is true, then the thread life of the worker shall be
+    protected before the ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool protected
+- brief: |
+    If this member is true, then the worker shall be restarting before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool restarting
+- brief: |
+    If this member is true, then the worker shall be terminating before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool terminating
+- brief: |
+    If this member is true, then the ${../if/restart:/name} shall be called
+    from within interrupt context.
+  description: null
+  member: |
+    bool interrupt
+- brief: |
+    If this member is true, then the ${../if/restart:/name} shall be called
+    during another ${../if/restart:/name} call with the same task as a nested
+    request.
+  description: null
+  member: |
+    bool nested_request
+- brief: |
+    If this member is true, then the worker shall be blocked before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool blocked
+- brief: |
+    If this member is true, then the worker shall be enqueued on a
+    ${/glossary/waitqueue:/term} before the ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool enqueued
+- brief: |
+    If this member is true, then the timer of the worker shall be active before
+    the ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool timer_active
+- brief: |
+    If this member is true, then the real priority of the worker shall be equal
+    to its initial priority before the ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool real_priority_is_initial
+- brief: |
+    If this member is true, then thread dispatching is disabled by the worker
+    task before the ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool dispatch_disabled
+- brief: |
+    If this member is true, then it is expected to delete the worker.
+  description: null
+  member: |
+    bool delete_worker_expected
+- brief: |
+    This member contains the return value of the ${../if/restart:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/restart:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/statesimpl.h
+- rtems/score/threaddispatch.h
+- rtems/score/threadimpl.h
+- limits.h
+- setjmp.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->status = RTEMS_NOT_IMPLEMENTED;
+  ctx->actual_argument = UNSET_ARGUMENT;
+  ctx->restart_counter = 0;
+
+  ctx->delete_worker_expected = false;
+  ctx->worker_id = CreateTask( "WORK", PRIO_NORMAL );
+  ctx->delete_worker_expected = true;
+
+  ctx->worker_tcb = GetThread( ctx->worker_id );
+  ctx->worker_state = UINT32_MAX;
+  ctx->worker_life_state = INT_MAX;
+
+  SetPriority( ctx->deleter_id, PRIO_HIGH );
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->runner_id = rtems_task_self();
+    ctx->scheduler_id = GetSelfScheduler();
+    ctx->mutex_id = CreateMutexNoProtocol();
+    ObtainMutex( ctx->mutex_id );
+    WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, Restart, ctx );
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'T', 'E', 'S', 'T' ),
+      &extensions,
+      &ctx->extension_id
+    );
+    T_rsc_success( sc );
+
+    SetFatalHandler( Fatal, ctx );
+    SetSelfPriority( PRIO_NORMAL );
+
+    ctx->deleter_id = CreateTask( "DELE", PRIO_HIGH );
+    ctx->deleter_tcb = GetThread( ctx->deleter_id );
+    StartTask( ctx->deleter_id, Deleter, NULL );
+  description: null
+test-stop: null
+test-support: |
+  #if CPU_SIZEOF_POINTER > 4
+  #define RESTART_ARGUMENT 0xfedcba0987654321U
+  #else
+  #define RESTART_ARGUMENT 0x87654321U
+  #endif
+
+  #define UNSET_ARGUMENT 1
+
+  typedef ${.:/test-context-type} Context;
+
+  static void PrepareRealPriority( Context *ctx )
+  {
+    if ( !ctx->real_priority_is_initial ) {
+      SetScheduler( ctx->worker_id, ctx->scheduler_id, PRIO_LOW );
+      SetPriority( ctx->worker_id, PRIO_NORMAL );
+    }
+  }
+
+  static void CaptureWorkerState( Context *ctx )
+  {
+    T_scheduler_log *log;
+
+    log = T_scheduler_record( NULL );
+
+    if ( log != NULL ) {
+      T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+
+      ctx->worker_state = ctx->worker_tcb->current_state;
+      ctx->worker_life_state = ctx->worker_tcb->Life.state;
+      CopyExtensionCalls( &ctx->calls, &ctx->calls_after_restart );
+    }
+  }
+
+  static void VerifyTaskPreparation( const Context *ctx )
+  {
+    if ( ctx->id != INVALID_ID ) {
+      States_Control state;
+      Thread_Life_state life_state;
+
+      state = STATES_READY;
+      life_state = ctx->worker_tcb->Life.state;
+
+      if ( ctx->suspended ) {
+        state |= STATES_SUSPENDED;
+      }
+
+      if ( ctx->dormant ) {
+        T_eq_int( life_state, 0 );
+        state |= STATES_DORMANT;
+      } else {
+        T_eq( ctx->protected, ( life_state & THREAD_LIFE_PROTECTED ) != 0 );
+        T_eq( ctx->restarting, ( life_state & THREAD_LIFE_RESTARTING ) != 0 );
+        T_eq( ctx->terminating, ( life_state & THREAD_LIFE_TERMINATING ) != 0 );
+
+        if ( ctx->blocked ) {
+          if ( ctx->enqueued ) {
+            state |= STATES_WAITING_FOR_MUTEX;
+          } else {
+            state |= STATES_WAITING_FOR_EVENT;
+          }
+        }
+
+        if ( ctx->nested_request ) {
+          state |= STATES_LIFE_IS_CHANGING;
+        }
+      }
+
+      T_eq_u32( ctx->worker_tcb->current_state, state );
+    }
+  }
+
+  static void Restart( void *arg )
+  {
+    Context         *ctx;
+    T_scheduler_log *log;
+
+    ctx = arg;
+
+    if ( ctx->suspended && ctx->id != INVALID_ID ) {
+      if ( ctx->id != RTEMS_SELF || ctx->interrupt ) {
+        SuspendTask( ctx->worker_id );
+      } else {
+        Per_CPU_Control *cpu_self;
+
+        /*
+         * Where the system was built with SMP support enabled, a suspended
+         * executing thread during the ${../if/restart:/name} call can happen
+         * if the thread was suspended by another processor and the
+         * inter-processor interrupt did not yet arrive.  Where the system was
+         * built with SMP support disabled, this state cannot happen with the
+         * current implementation.  However, we still specify and validate this
+         * behaviour unconditionally since there exist alternative
+         * implementations which would lead to such a state if the executing
+         * thread is suspended by an ISR.
+         */
+        cpu_self = _Thread_Dispatch_disable();
+        SuspendSelf();
+        cpu_self->dispatch_necessary = false;
+        _Thread_Dispatch_enable( cpu_self );
+      }
+    }
+
+    if ( ctx->dispatch_disabled ) {
+      _Thread_Dispatch_disable();
+    }
+
+    VerifyTaskPreparation( ctx );
+    ClearExtensionCalls( &ctx->calls );
+
+    log = T_scheduler_record_10( &ctx->scheduler_log );
+    T_null( log );
+
+    ctx->status = rtems_task_restart( ctx->id, RESTART_ARGUMENT );
+
+    CaptureWorkerState( ctx );
+
+    if ( ctx->dispatch_disabled ) {
+      _Thread_Dispatch_enable( _Per_CPU_Get() );
+    }
+  }
+
+  static void Block( Context *ctx )
+  {
+    rtems_interval ticks;
+
+    if ( ctx->timer_active ) {
+      ticks = UINT32_MAX;
+    } else {
+      ticks = RTEMS_NO_TIMEOUT;
+    }
+
+    if ( ctx->enqueued ) {
+      ObtainMutexTimed( ctx->mutex_id, ticks );
+    } else {
+      /*
+       * Do not use a stack variable for the event set, since we may jump out
+       * of the directive call.
+       */
+      (void) rtems_event_receive(
+        RTEMS_ALL_EVENTS,
+        RTEMS_EVENT_ANY | RTEMS_WAIT,
+        ticks,
+        &ctx->events
+      );
+    }
+  }
+
+  static void BlockDone( const Context *ctx )
+  {
+    if ( ctx->enqueued ) {
+      ReleaseMutex( ctx->mutex_id );
+    }
+  }
+
+  static void Fatal(
+    rtems_fatal_source source,
+    rtems_fatal_code   code,
+    void              *arg
+  )
+  {
+    Context         *ctx;
+    Per_CPU_Control *cpu_self;
+
+    T_eq_int( source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
+
+    ctx = arg;
+    ++ctx->calls.fatal;
+    T_assert_eq_int( ctx->calls.fatal, 1 );
+
+    CaptureWorkerState( ctx );
+
+    cpu_self = _Per_CPU_Get();
+    _Thread_Dispatch_unnest( cpu_self );
+    _Thread_Dispatch_direct_no_return( cpu_self );
+  }
+
+  static void ResumeThreadDispatch(
+    rtems_fatal_source source,
+    rtems_fatal_code   code,
+    void              *arg
+  )
+  {
+    Context *ctx;
+
+    T_eq_int( source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
+
+    ctx = arg;
+    SetFatalHandler( Fatal, ctx );
+    longjmp( ctx->thread_dispatch_context, 1 );
+  }
+
+  static void TriggerNestedRequestViaSelfRestart(
+    Context         *ctx,
+    Per_CPU_Control *cpu_self
+  )
+  {
+    WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
+    SetFatalHandler( ResumeThreadDispatch, ctx );
+
+    if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+      (void) rtems_task_restart(
+        RTEMS_SELF,
+        (rtems_task_argument) ctx
+      );
+    } else {
+      _Thread_Dispatch_unnest( cpu_self );
+    }
+  }
+
+  static void Signal( rtems_signal_set signals )
+  {
+    Context *ctx;
+
+    (void) signals;
+    ctx = T_fixture_context();
+
+    if ( ctx->id == RTEMS_SELF ) {
+      Per_CPU_Control *cpu_self;
+
+      SetPriority( ctx->runner_id, PRIO_VERY_LOW );
+      SetPriority( ctx->deleter_id, PRIO_VERY_LOW );
+
+      if ( ctx->interrupt || ctx->nested_request ) {
+        if ( ctx->blocked ) {
+          SetFatalHandler( ResumeThreadDispatch, ctx );
+          cpu_self = _Thread_Dispatch_disable();
+
+          if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+            Block( ctx );
+          } else {
+            _Thread_Dispatch_unnest( cpu_self );
+          }
+
+          if ( ctx->interrupt ) {
+            CallWithinISR( Restart, ctx );
+          } else {
+            TriggerNestedRequestViaSelfRestart( ctx, cpu_self );
+          }
+
+          _Thread_Dispatch_direct( cpu_self );
+          BlockDone( ctx );
+        } else {
+          if ( ctx->interrupt ) {
+            CallWithinISR( Restart, ctx );
+          } else {
+            cpu_self = _Thread_Dispatch_disable();
+            TriggerNestedRequestViaSelfRestart( ctx, cpu_self );
+            _Thread_Dispatch_direct( cpu_self );
+          }
+        }
+      } else {
+        Restart( ctx );
+      }
+    } else {
+      if ( ctx->blocked ) {
+        Block( ctx );
+        BlockDone( ctx );
+      } else if ( ctx->nested_request ) {
+        Yield();
+      } else {
+        SetPriority( ctx->runner_id, PRIO_VERY_HIGH );
+      }
+    }
+
+    if ( ctx->protected ) {
+      _Thread_Set_life_protection( 0 );
+    }
+  }
+
+  static void Deleter( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    if ( ctx != NULL ) {
+      if ( ctx->real_priority_is_initial ) {
+        /*
+         * We have to prevent a potential priority boost in the task delete
+         * below.
+         */
+        if ( ctx->nested_request ) {
+          /* Lower the priority to PRIO_NORMAL without an * implicit yield */
+          SetSelfPriorityNoYield( PRIO_NORMAL );
+        } else {
+          SetScheduler( ctx->worker_id, ctx->scheduler_id, PRIO_HIGH );
+        }
+      }
+
+      if ( ctx->nested_request ) {
+        WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
+        DeleteTask( ctx->worker_id );
+      } else {
+        DeleteTask( ctx->worker_id );
+      }
+    }
+
+    SuspendSelf();
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    ctx = T_fixture_context();
+
+    if ( arg == 0 ) {
+      sc = rtems_signal_catch( Signal, RTEMS_NO_ASR );
+      T_rsc_success( sc );
+
+      if ( ctx->protected ) {
+        _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
+      }
+
+      Yield();
+    } else {
+      ctx->actual_argument = arg;
+      ++ctx->restart_counter;
+
+      CaptureWorkerState( ctx );
+      SuspendSelf();
+    }
+  }
+
+  static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->calls.thread_delete;
+
+    T_eq_u32( executing->Object.id, ctx->runner_id );
+
+    if ( ctx->delete_worker_expected ) {
+      T_eq_u32( deleted->Object.id, ctx->worker_id );
+    }
+  }
+
+  static void ThreadRestart( rtems_tcb *executing, rtems_tcb *restarted )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->calls.thread_restart;
+  }
+
+  static void ThreadTerminate( rtems_tcb *executing )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->calls.thread_terminate;
+
+    T_eq_u32( executing->Object.id, ctx->worker_id );
+  }
+
+  static const rtems_extensions_table extensions = {
+    .thread_delete = ThreadDelete,
+    .thread_restart = ThreadRestart,
+    .thread_terminate = ThreadTerminate
+  };
+test-target: testsuites/validation/tc-task-restart.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_extension_delete( ctx->extension_id );
+    T_rsc_success( sc );
+
+    SetFatalHandler( NULL, NULL );
+    DeleteTask( ctx->deleter_id );
+    ReleaseMutex( ctx->mutex_id );
+    DeleteMutex( ctx->mutex_id );
+    RestoreRunnerASR();
+    RestoreRunnerPriority();
+    WrapThreadQueueDestroy( &ctx->wrap_tq_ctx );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+      then: NoReturn
+    - else: Ok
+    FatalError:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+          ThreadDispatch: Disabled
+      then: 'Yes'
+    - else: Nop
+    Argument: Set
+    State:
+    - if:
+        pre-conditions:
+          Context: NestedRequest
+      then: Nop
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+          Terminating: 'Yes'
+          ThreadDispatch: Enabled
+      then: Zombie
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+      then: Ready
+    - if:
+        pre-conditions:
+          Protected: 'No'
+      then: Ready
+    - if:
+        pre-conditions:
+          State:
+          - Blocked
+          - Enqueued
+      then: Blocked
+    - else: Ready
+    Enqueued:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+      then: 'No'
+    - if:
+        pre-conditions:
+          State: Enqueued
+          Protected: 'Yes'
+      then: 'Yes'
+    - else: 'No'
+    Timer:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+      then: Inactive
+    - if:
+        pre-conditions:
+          Timer: Active
+          Protected: 'Yes'
+      then: Active
+    - else: Inactive
+    Restarting:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+          Terminating: 'No'
+          ThreadDispatch: Enabled
+      then: 'No'
+    - else: 'Yes'
+    Terminating:
+    - specified-by: Terminating
+    Protected:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+          Terminating: 'Yes'
+          ThreadDispatch: Enabled
+      then: 'Yes'
+    - if:
+        pre-conditions:
+          Id: Executing
+          Context: Task
+          ThreadDispatch: Enabled
+      then: 'No'
+    - specified-by: Protected
+    RestartExtensions:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Terminating: 'No'
+          Context: Task
+          ThreadDispatch: Enabled
+      then: 'Yes'
+    - else: Nop
+    TerminateExtensions:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Terminating: 'Yes'
+          Context: Task
+          ThreadDispatch: Enabled
+      then: 'Yes'
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Executing
+    - Other
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    FatalError: Nop
+    Argument: N/A
+    State: N/A
+    Enqueued: N/A
+    Timer: N/A
+    Restarting: N/A
+    Terminating: N/A
+    Protected: N/A
+    RestartExtensions: Nop
+    TerminateExtensions: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Dormant: N/A
+    Suspended: N/A
+    Restarting: N/A
+    Terminating: N/A
+    Protected: N/A
+    Context: all
+    State: N/A
+    Timer: N/A
+    RealPriority: N/A
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    FatalError: Nop
+    Argument: Nop
+    State:
+    - if:
+        pre-conditions:
+          Suspended: 'Yes'
+      then: DormantSuspended
+    - else: Dormant
+    Enqueued: 'No'
+    Timer: Inactive
+    Restarting: 'No'
+    Terminating: 'No'
+    Protected: 'No'
+    RestartExtensions: Nop
+    TerminateExtensions: Nop
+  pre-conditions:
+    Id:
+    - Other
+    Dormant:
+    - 'Yes'
+    Suspended: all
+    Restarting: N/A
+    Terminating: all
+    Protected: N/A
+    Context: all
+    State: N/A
+    Timer: N/A
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: ExecutingIsNotDormant
+  pre-conditions:
+    Id:
+    - Executing
+    Dormant:
+    - 'Yes'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: ExecutingIsNotBlocked
+  pre-conditions:
+    Id:
+    - Executing
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context:
+    - Task
+    State:
+    - Blocked
+    - Enqueued
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: NotBlockedHasInactiveTimer
+  pre-conditions:
+    Id:
+    - Executing
+    - Other
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State:
+    - Ready
+    Timer:
+    - Active
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: ThreadDispatchDisabled
+  pre-conditions:
+    Id: all
+    Dormant: all
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context:
+    - Interrupt
+    - NestedRequest
+    State: all
+    Enqueued: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch:
+    - Enabled
+- enabled-by: true
+  post-conditions: NestedRequestNotDormant
+  pre-conditions:
+    Id: all
+    Dormant:
+    - 'Yes'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context:
+    - NestedRequest
+    State: all
+    Enqueued: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: NestedRequestNotProtected
+  pre-conditions:
+    Id: all
+    Dormant: all
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected:
+    - 'Yes'
+    Context:
+    - NestedRequest
+    State: all
+    Enqueued: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: NestedRequestNeedsLifeChanging
+  pre-conditions:
+    Id: all
+    Dormant: all
+    Suspended: all
+    Restarting:
+    - 'No'
+    Terminating:
+    - 'No'
+    Protected: all
+    Context:
+    - NestedRequest
+    State: all
+    Enqueued: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: NestedRequestNoNestedExit
+  pre-conditions:
+    Id:
+    - Executing
+    Dormant: all
+    Suspended: all
+    Restarting: all
+    Terminating:
+    - 'Yes'
+    Protected: all
+    Context:
+    - NestedRequest
+    State: all
+    Enqueued: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: NestedRequestNeedsTask
+  pre-conditions:
+    Id:
+    - Invalid
+    Dormant: all
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context:
+    - NestedRequest
+    State: all
+    Enqueued: all
+    Timer: all
+    RealPriority: all
+    ThreadDispatch: all
+type: requirement

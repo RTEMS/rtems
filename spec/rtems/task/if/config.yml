@@ -1,0 +1,119 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the configuration of a task constructed by
+  ${construct:/name}.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member defines the name of the task.
+    definition: ${../../type/if/name:/name} ${.:name}
+    description: null
+    kind: member
+    name: name
+  variants: []
+- default:
+    brief: |
+      This member defines the initial priority of the task.
+    definition: ${../../type/if/priority:/name} ${.:name}
+    description: null
+    kind: member
+    name: initial_priority
+  variants: []
+- default:
+    brief: |
+      This member shall point to the task storage area begin.
+    definition: void *${.:name}
+    description: |
+      The task storage area will contain the task stack, the thread-local
+      storage, and the floating-point context on architectures with a separate
+      floating-point context.
+
+      The task storage area begin address and size should be aligned by
+      ${storage-alignment:/name}.  To avoid memory waste, use
+      ${../../basedefs/if/aligned:/name} and ${storage-alignment:/name} to enforce
+      the recommended alignment of a statically allocated task storage area.
+    kind: member
+    name: storage_area
+  variants: []
+- default:
+    brief: |
+      This member defines size of the task storage area in bytes.
+    definition: ${/c/if/size_t:/name} ${.:name}
+    description: |
+      Use the ${storage-size:/name} macro to determine the recommended task
+      storage area size.
+    kind: member
+    name: storage_size
+  variants: []
+- default:
+    brief: |
+      This member defines the maximum thread-local storage size supported by the
+      task storage area.
+    definition: ${/c/if/size_t:/name} ${.:name}
+    description: |
+      Use ${../../basedefs/if/align-up:/name} and ${storage-alignment:/name} to
+      adjust the size to meet the minimum alignment requirement of a
+      thread-local storage area used to construct a task.
+
+      If the value is less than the actual thread-local storage size, then the
+      task construction by ${construct:/name} fails.
+
+      If the is less than the task storage area size, then the task
+      construction by ${construct:/name} fails.
+
+      The actual thread-local storage size is determined when the application
+      executable is linked.  The ``rtems-exeinfo`` command line tool included
+      in the RTEMS Tools can be used to obtain the thread-local storage size
+      and alignment of an application executable.
+
+      The application may configure the maximum thread-local storage size for
+      all threads explicitly through the
+      ${/acfg/if/max-thread-local-storage-size:/name} configuration option.
+    kind: member
+    name: maximum_thread_local_storage_size
+  variants: []
+- default:
+    brief: |
+      This member defines the optional handler to free the task storage area.
+    definition: void ( *${.:name} )( void * )
+    description: |
+      It is called on exactly two mutually exclusive occasions.  Firstly, when
+      the task construction aborts due to a failed task create extension, or
+      secondly, when the task is deleted.  It is called from task context under
+      protection of the object allocator lock.  It is allowed to call
+      ${/c/if/free:/name} in this handler.  If handler is ${/c/if/null:/name},
+      then no action will be performed.
+    kind: member
+    name: storage_free
+  variants: []
+- default:
+    brief: |
+      This member defines the initial modes of the task.
+    definition: ${../../mode/if/mode:/name} ${.:name}
+    description: null
+    kind: member
+    name: initial_modes
+  variants: []
+- default:
+    brief: |
+      This member defines the attributes of the task.
+    definition: ${../../attr/if/attribute:/name} ${.:name}
+    description: null
+    kind: member
+    name: attributes
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_task_config
+notes: null
+type: interface

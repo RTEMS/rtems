@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ntp
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Let ``T`` be the seconds value of the ${/glossary/clock-realtime:/term} time
+  point of the timehand which is currently updated, let ``S`` be the seconds
+  value of the ${/glossary/clock-realtime:/term} time point of the previous
+  timehand, let ``D`` be ``T`` minus ``S``, while the ${/glossary/ntp:/term}
+  handler is not ${/c/if/null:/name}, while ``D`` is greater than 200, while
+  the timehand is updated, the ${/glossary/ntp:/term} handler shall be called
+  exactly two times.
+type: requirement

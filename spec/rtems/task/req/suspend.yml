@@ -1,0 +1,158 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/suspend
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/suspend:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/suspend:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: AlrdySus
+    test-code: |
+      T_rsc( ctx->status, RTEMS_ALREADY_SUSPENDED );
+    text: |
+      The return status of ${../if/suspend:/name} shall be
+      ${../../status/if/already-suspended:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/suspend:/params[0]/name} parameter is not
+      associated with a task.
+  - name: Task
+    test-code: |
+      ctx->id = ctx->worker_id;
+    text: |
+      While the ${../if/suspend:/params[0]/name} parameter is
+      associated with a task.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspend = true;
+    text: |
+      While the task specified by the ${../if/suspend:/params[0]/name}
+      parameter is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspend = false;
+    text: |
+      While the task specified by the ${../if/suspend:/params[0]/name}
+      parameter is not suspended.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->suspend ) {
+    SuspendTask( ctx->worker_id );
+  }
+
+  ctx->status = rtems_task_suspend( ctx->id );
+
+  if ( ctx->suspend ) {
+    ResumeTask( ctx->worker_id );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the identifier of a task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    If this member is true, then the worker is suspended before the
+    ${../if/suspend:/name} call.
+  description: null
+  member: |
+    bool suspend
+- brief: |
+    This member contains the return value of the ${../if/suspend:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/suspend:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  static void Worker( rtems_task_argument arg )
+  {
+    while ( true ) {
+      /* Do nothing */
+    }
+  }
+test-target: testsuites/validation/tc-task-suspend.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Task
+    Suspended:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: AlrdySus
+  pre-conditions:
+    Id:
+    - Task
+    Suspended:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+  pre-conditions:
+    Id:
+    - Invalid
+    Suspended: N/A
+type: requirement

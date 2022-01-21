@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: This header file defines interfaces to boot the system.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: header-file
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group-fatal
+path: bsp/default-fatal-extension.h
+prefix: bsps/include
+type: interface

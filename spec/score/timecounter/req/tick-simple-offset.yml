@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: tick-simple
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the simple timecounter tick service is called, the timecounter offset of
+  the current timehand shall be set to the offset specified by the ``offset``
+  parameter.
+type: requirement

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: 140
+description: |
+  The value of this configuration option defines the ATA task priority.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/valid-task-priority
+name: CONFIGURE_ATA_DRIVER_TASK_PRIORITY
+notes: |
+  This configuration option is only evaluated if the configuration option
+  ${appl-needs-ata-driver:/name} is defined.
+type: interface

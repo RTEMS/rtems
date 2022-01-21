@@ -1,0 +1,183 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: function-implementation
+  uid: /score/tq/req/enqueue-fifo
+- role: function-implementation
+  uid: /score/tq/req/enqueue-priority
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      status = TQEnqueue( &ctx->tq_ctx->base, ctx->tq_ctx->base.wait );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: Enqueued
+    test-code: |
+      switch ( ctx->tq_ctx->base.discipline ) {
+        case TQ_FIFO:
+          ${../../tq/req/enqueue-fifo:/test-run}( &ctx->tq_ctx->base );
+          break;
+        case TQ_PRIORITY:
+          ${../../tq/req/enqueue-priority:/test-run}( &ctx->tq_ctx->base );
+          break;
+        default:
+          T_unreachable();
+          break;
+      }
+    text: |
+      Where the thread queue uses the FIFO discipline, the calling thread shall
+      be enqueued in FIFO order.
+
+      Where the thread queue uses the priority discipline, the calling thread
+      shall be enqueued in priority order.
+  test-epilogue: null
+  test-prologue: |
+    Status_Control status;
+- name: Count
+  states:
+  - name: Nop
+    test-code: |
+      /* Checked by GetProperties() */
+    text: |
+      The count of the semaphore shall not be modified.
+  - name: MinusOne
+    test-code: |
+      T_eq_u32( TQSemGetCount( ctx->tq_ctx ), 0 );
+    text: |
+      The count of the semaphore shall be decremented by one.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Optional
+    test-code: |
+      /* Checked by GetProperties() */
+    text: |
+      Where the directive was called with a timeout in clock ticks, the thread
+      timer of the calling task shall fire after the specified clock ticks.
+
+      Where the directive was called without a timeout, the thread timer of the
+      calling task shall be inactive.
+  - name: 'No'
+    test-code: |
+      T_eq_int(
+        T_get_thread_timer_state( RTEMS_SELF ),
+        T_THREAD_TIMER_INACTIVE
+      );
+    text: |
+      The thread timer of the calling task shall be inactive.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Count
+  states:
+  - name: Zero
+    test-code: |
+      /* Done by TQEnqueuePrepareDefault() */
+    text: |
+      While the count of the semaphore is zero.
+  - name: Positive
+    test-code: |
+      TQSemSetCount( ctx->tq_ctx, 1 );
+    text: |
+      While the count of the semaphore is greater than zero.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  /* Action performed by Status post-condition */
+test-brief: null
+test-cleanup: null
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the semaphore thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQSemContext *${.:name}
+  target: testsuites/validation/tr-sem-seize-wait.h
+test-includes:
+- rtems/score/statesimpl.h
+test-local-includes:
+- tr-sem-seize-wait.h
+- tr-tq-enqueue-fifo.h
+- tr-tq-enqueue-priority.h
+test-prepare: |
+  ctx->tq_ctx->base.enqueue_prepare = TQEnqueuePrepareDefault;
+  ctx->tq_ctx->base.enqueue_done = TQEnqueueDoneDefault;
+  ctx->tq_ctx->base.get_properties = GetProperties;
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static Status_Control Status( const Context *ctx, Status_Control status )
+  {
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
+  }
+
+  static void GetProperties( TQContext *base, TQWorkerKind enqueued_worker )
+  {
+    TQSemContext        *ctx;
+    T_thread_timer_state timer_state;
+
+    ctx = (TQSemContext *) base;
+    T_eq_u32(
+      ctx->base.worker_tcb[ enqueued_worker ]->current_state,
+      STATES_WAITING_FOR_SEMAPHORE
+    );
+
+    timer_state = T_get_thread_timer_state(
+      ctx->base.worker_id[ enqueued_worker ]
+    );
+
+    if ( base->wait == TQ_WAIT_TIMED ) {
+      T_eq_int( timer_state, T_THREAD_TIMER_SCHEDULED );
+    } else {
+      T_eq_int( timer_state, T_THREAD_TIMER_INACTIVE );
+    }
+
+    T_eq_u32( TQSemGetCount( ctx ), 0 );
+  }
+test-target: testsuites/validation/tr-sem-seize-wait.c
+test-teardown: null
+text: |
+  When the calling task tries to seize the semaphore.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Count: MinusOne
+    Timer: 'No'
+  pre-conditions:
+    Count:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Enqueued
+    Count: Nop
+    Timer: Optional
+  pre-conditions:
+    Count:
+    - Zero
+type: requirement

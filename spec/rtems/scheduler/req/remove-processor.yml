@@ -1,0 +1,1003 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/remove-processor
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: InUse
+    test-code: |
+      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/resource-in-use:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Removed
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( ctx->home && ctx->helping ) {
+        /*
+         * For these test scenarios we use scheduler A in which the runner
+         * remains scheduled.  So, an ask for help request is issued, when the
+         * processor allocated to a task which uses the scheduler as a helping
+         * scheduler is removed.
+         */
+        T_eq_u32( ctx->id, SCHEDULER_A_ID );
+        T_eq_sz( ctx->scheduler_log.header.recorded, 3 );
+        T_eq_int(
+          ctx->scheduler_log.events[ 0 ].operation,
+          T_SCHEDULER_REMOVE_PROCESSOR
+        );
+        T_eq_int(
+          ctx->scheduler_log.events[ 1 ].operation,
+          T_SCHEDULER_ASK_FOR_HELP
+        );
+        T_eq_int(
+          ctx->scheduler_log.events[ 2 ].operation,
+          T_SCHEDULER_ASK_FOR_HELP
+        );
+      } else {
+        T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+        T_eq_int(
+          ctx->scheduler_log.events[ 0 ].operation,
+          T_SCHEDULER_REMOVE_PROCESSOR
+        );
+      }
+    text: |
+      The processor specified by the ${../if/remove-processor:/params[1]/name}
+      parameter shall be removed from the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} by the
+      ${../if/remove-processor:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      No processor shall be removed from a scheduler by the
+      ${../if/remove-processor:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/remove-processor:/params[0]/name} parameter is not
+      associated with a scheduler.
+  - name: Scheduler
+    test-code: |
+      ctx->id = SCHEDULER_A_ID;
+    text: |
+      While the ${../if/remove-processor:/params[0]/name} parameter is
+      associated with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUIndex
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpu_index = 0;
+    text: |
+      While the ${../if/remove-processor:/params[1]/name} parameter is less than
+      the configured processor maximum.
+  - name: Invalid
+    test-code: |
+      ctx->cpu_index = rtems_configuration_get_maximum_processors();
+    text: |
+      While the ${../if/remove-processor:/params[1]/name} parameter is greater
+      than or equal to the configured processor maximum.
+  test-epilogue: null
+  test-prologue: null
+- name: Owned
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->owned = true;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is owned by the
+      scheduler specified by the ${../if/remove-processor:/params[0]/name}
+      parameter.
+  - name: 'No'
+    test-code: |
+      ctx->owned = false;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is not owned by the
+      scheduler specified by the ${../if/remove-processor:/params[0]/name}
+      parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Last
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->last = true;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is the last processor
+      owned by the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter.
+  - name: 'No'
+    test-code: |
+      ctx->last = false;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is not the last
+      processor owned by the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Home
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->home = true;
+    text: |
+      While at least one non-idle task exists which uses the scheduler
+      specified by the ${../if/remove-processor:/params[0]/name} parameter as
+      its ${/glossary/scheduler-home:/term}.
+  - name: 'No'
+    test-code: |
+      ctx->home = false;
+    text: |
+      While no non-idle task exists which uses the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter as its
+      ${/glossary/scheduler-home:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: RequiredByAffinity
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->required_by_affinity = true;
+    text: |
+      While at least one non-idle task which uses the scheduler specified by
+      the ${../if/remove-processor:/params[0]/name} parameter as its
+      ${/glossary/scheduler-home:/term} exists those processor affinity set
+      requires the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter.
+  - name: 'No'
+    test-code: |
+      ctx->required_by_affinity = false;
+    text: |
+      While no non-idle task which uses the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter as its
+      ${/glossary/scheduler-home:/term} exists those processor affinity set
+      requires the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: UsedBy
+  states:
+  - name: Idle
+    test-code: |
+      ctx->idle = true;
+      ctx->task = false;
+      ctx->helping = false;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is used by an idle
+      task.
+  - name: Task
+    test-code: |
+      ctx->idle = false;
+      ctx->task = true;
+      ctx->helping = false;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is used by a task
+      task which uses the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter as its
+      ${/glossary/scheduler-home:/term}.
+  - name: TaskIdle
+    test-code: |
+      ctx->idle = true;
+      ctx->task = true;
+      ctx->helping = false;
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is used by an idle
+      task on behalf of a task task which uses the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter as its
+      ${/glossary/scheduler-home:/term}.
+  - name: Helping
+    test-code: |
+      if ( !ctx->last && rtems_scheduler_get_processor_maximum() < 3 ) {
+        ${.:skip}
+      } else {
+        ctx->idle = false;
+        ctx->task = false;
+        ctx->helping = true;
+      }
+    text: |
+      While the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter is used by a task
+      task which uses the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} parameter as a
+      ${/glossary/scheduler-helping:/term}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  OnlyOneCPU: |
+    Where the system is build with SMP support disabled, the system has exactly
+    one processor and there is no processor available to remove from a
+    scheduler.  In addition, the scheduler helping protocol is not available.
+  NoHomeNoTaskUser: |
+    The processor can only be used by a task if a task uses the scheduler as
+    its home scheduler.
+  LastIsRequired: |
+    The last processor is required by a task which uses the scheduler as its
+    home scheduler.
+test-action: |
+  if (
+    ctx->id == INVALID_ID ||
+    ctx->cpu_index == rtems_configuration_get_maximum_processors() ||
+    ( ctx->owned && ctx->last && ctx->home && ctx->required_by_affinity &&
+      ( ctx->task || ctx->idle ) )
+  ) {
+    DoRemoveProcessor( ctx );
+  } else {
+  #if defined(RTEMS_SMP)
+    if ( ctx->owned && !ctx->home && ctx->helping ) {
+      RemoveWithHelpingOnly( ctx );
+    } else {
+      if ( ctx->owned ) {
+        rtems_id worker_a;
+        rtems_id worker_b;
+
+        worker_a = ctx->worker_id[ WORKER_A ];
+        worker_b = ctx->worker_id[ WORKER_B ];
+
+        ctx->cpu_index = 1;
+
+        if ( ctx->last ) {
+          ctx->id = SCHEDULER_B_ID;
+        } else {
+          RemoveProcessor( SCHEDULER_B_ID, 1 );
+          AddProcessor( SCHEDULER_A_ID, 1 );
+        }
+
+        if ( ctx->home ) {
+          SetScheduler( worker_a, ctx->id, PRIO_LOW );
+
+          if ( ctx->required_by_affinity ) {
+            SetAffinityOne( worker_a, 1 );
+          } else {
+            SetAffinityAll( worker_a );
+          }
+        }
+
+        if ( ctx->idle ) {
+          if ( ctx->task ) {
+            SendAndSync( ctx, WORKER_A, EVENT_STICKY_OBTAIN );
+            SuspendTask( worker_a );
+          }
+        } else if ( ctx->task ) {
+          MakeBusy( ctx, WORKER_A );
+        } else if ( ctx->helping ) {
+          T_true( ctx->home );
+
+          if ( ctx->last ) {
+            SendEvents( worker_b, EVENT_OBTAIN );
+            SetPriority( worker_b, PRIO_LOW );
+          } else {
+            SetScheduler( worker_b, SCHEDULER_C_ID, PRIO_LOW );
+            SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+            MakeBusyAndSync( ctx, WORKER_C );
+          }
+
+          SendAndSync( ctx, WORKER_A, EVENT_OBTAIN );
+          MakeBusy( ctx, WORKER_B );
+          WaitForBusy( ctx, WORKER_B );
+        }
+
+        DoRemoveProcessor( ctx );
+
+        if ( ctx->idle ) {
+          if ( ctx->task ) {
+            ResumeTask( worker_a );
+            SendAndSync( ctx, WORKER_A, EVENT_STICKY_RELEASE );
+          }
+        } else if ( ctx->task ) {
+          StopBusyAndWait( ctx, WORKER_A );
+        } else if ( ctx->helping ) {
+          StopBusy( ctx, WORKER_B );
+
+          if ( ctx->last ) {
+            SetPriority( worker_b, PRIO_HIGH );
+            SendEvents( worker_b, EVENT_RELEASE );
+          } else {
+            StopBusyAndWait( ctx, WORKER_C );
+            SendAndSync( ctx, WORKER_B, EVENT_RELEASE );
+            SetScheduler( worker_b, SCHEDULER_A_ID, PRIO_HIGH );
+          }
+
+          WaitForExecutionStop( worker_b );
+          SendAndSync( ctx, WORKER_A, EVENT_RELEASE );
+        }
+
+        SetAffinityAll( worker_a );
+        SetScheduler( worker_a, SCHEDULER_A_ID, PRIO_HIGH );
+
+        if ( !ctx->last ) {
+          RemoveProcessor( SCHEDULER_A_ID, 1 );
+          AddProcessor( SCHEDULER_B_ID, 1 );
+        }
+      } else {
+        ctx->id = SCHEDULER_B_ID;
+        DoRemoveProcessor( ctx );
+      }
+    }
+  #else
+    T_unreachable();
+  #endif
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the runner identifier.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member contains the worker identifiers.
+  description: null
+  member: |
+    rtems_id worker_id[ WORKER_COUNT ]
+- brief: |
+    This member contains the mutex identifier.
+  description: null
+  member: |
+    rtems_id mutex_id
+- brief: |
+    This member contains the sticky mutex identifier.
+  description: null
+  member: |
+    rtems_id sticky_id
+- brief: |
+    This member contains the worker busy status.
+  description: null
+  member: |
+    volatile bool busy[ WORKER_COUNT ];
+- brief: |
+    This member contains the worker busy status.
+  description: null
+  member: |
+    volatile uint32_t busy_counter[ WORKER_COUNT ];
+- brief: |
+    This member contains the barrier to synchronize the runner and the workers.
+  description: null
+  member: |
+    SMP_barrier_Control barrier
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+- brief: |
+    This member provides the context to wrap thread queue operations.
+  description: null
+  member: |
+    WrapThreadQueueContext wrap_tq_ctx
+- brief: |
+    If this member is true, then the processor to remove shall be owned by the
+    scheduler.
+  description: null
+  member: |
+    bool owned
+- brief: |
+    If this member is true, then the processor to remove shall be the last
+    processor of the scheduler.
+  description: null
+  member: |
+    bool last
+- brief: |
+    If this member is true, then at least one non-idle task shall use the
+    scheduler as its home scheduler.
+  description: null
+  member: |
+    bool home
+- brief: |
+    If this member is true, then at least one non-idle task shall required the
+    processor to remove due to its affinity set.
+  description: null
+  member: |
+    bool required_by_affinity
+- brief: |
+    If this member is true, then the processor to remove shall be used by an
+    idle task.
+  description: null
+  member: |
+    bool idle
+- brief: |
+    If this member is true, then the processor to remove shall be used by a
+    task or on behalf of a task which uses the scheduler as its home scheduler.
+  description: null
+  member: |
+    bool task
+- brief: |
+    If this member is true, then the processor to remove shall be used by a
+    task which uses the scheduler as a helping scheduler.
+  description: null
+  member: |
+    bool helping
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_4 scheduler_log;
+- brief: |
+    This member contains the return value of the
+    ${../if/remove-processor:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies the ${../if/remove-processor:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies the ${../if/remove-processor:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    uint32_t cpu_index
+test-context-support: |
+  typedef enum {
+    WORKER_A,
+    WORKER_B,
+    WORKER_C,
+    WORKER_COUNT
+  } WorkerIndex;
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/percpu.h
+- rtems/score/smpbarrier.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  ctx->status = RTEMS_NOT_IMPLEMENTED;
+test-setup:
+  brief: null
+  code: |
+    #if defined(RTEMS_SMP)
+    rtems_status_code   sc;
+    rtems_task_priority priority;
+
+    ctx->runner_id = rtems_task_self();
+    ctx->mutex_id = CreateMutex();
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'S', 'T', 'K', 'Y' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &ctx->sticky_id
+    );
+    T_rsc_success( sc );
+
+    sc = rtems_semaphore_set_priority(
+      ctx->sticky_id,
+      SCHEDULER_B_ID,
+      PRIO_NORMAL,
+      &priority
+    );
+    T_rsc_success( sc );
+
+    if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+      sc = rtems_semaphore_set_priority(
+        ctx->sticky_id,
+        SCHEDULER_C_ID,
+        PRIO_LOW,
+        &priority
+      );
+      T_rsc_success( sc );
+
+      ctx->worker_id[ WORKER_C ] = CreateTask( "WRKC", PRIO_NORMAL );
+      SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_C_ID, PRIO_NORMAL );
+      StartTask( ctx->worker_id[ WORKER_C ], WorkerC, ctx );
+
+      if ( rtems_scheduler_get_processor_maximum() >= 4 ) {
+        RemoveProcessor( SCHEDULER_C_ID, 3 );
+      }
+    }
+
+    SetSelfPriority( PRIO_NORMAL );
+    SetSelfAffinityOne( 0 );
+
+    ctx->worker_id[ WORKER_A ] = CreateTask( "WRKA", PRIO_HIGH );
+    StartTask( ctx->worker_id[ WORKER_A ], WorkerA, ctx );
+
+    ctx->worker_id[ WORKER_B ] = CreateTask( "WRKB", PRIO_HIGH );
+    StartTask( ctx->worker_id[ WORKER_B ], WorkerB, ctx );
+
+    WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, RequestISR, ctx );
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void DoRemoveProcessor( Context *ctx )
+  {
+    T_scheduler_log *log;
+
+    log = T_scheduler_record_4( &ctx->scheduler_log );
+    T_null( log );
+
+    ctx->status = rtems_scheduler_remove_processor( ctx->id, ctx->cpu_index );
+
+    log = T_scheduler_record( NULL );
+    T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+
+    if ( ctx->status == RTEMS_SUCCESSFUL ) {
+      AddProcessor( ctx->id, ctx->cpu_index );
+    }
+  }
+
+  #if defined(RTEMS_SMP)
+  typedef enum {
+    EVENT_SYNC_RUNNER = RTEMS_EVENT_0,
+    EVENT_OBTAIN = RTEMS_EVENT_1,
+    EVENT_RELEASE = RTEMS_EVENT_2,
+    EVENT_STICKY_OBTAIN = RTEMS_EVENT_3,
+    EVENT_STICKY_RELEASE = RTEMS_EVENT_4,
+    EVENT_RESTART = RTEMS_EVENT_5,
+    EVENT_BUSY = RTEMS_EVENT_6,
+    EVENT_SYNC_RUNNER_LATE = RTEMS_EVENT_7
+  } Event;
+
+  static void Barriers( void *arg )
+  {
+    Context          *ctx;
+    SMP_barrier_State barrier_state;
+
+    ctx = arg;
+    _SMP_barrier_State_initialize( &barrier_state );
+
+    /* A */
+    _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+
+    /* B */
+    _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+  }
+
+  static void RequestISR( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    ctx->request.handler = Barriers;
+    ctx->request.arg = ctx;
+    CallWithinISRSubmit( &ctx->request );
+  }
+
+  static void SendAndSync( Context *ctx, WorkerIndex worker, Event event )
+  {
+    SendEvents( ctx->worker_id[ worker ], EVENT_SYNC_RUNNER | event );
+    ReceiveAllEvents( EVENT_SYNC_RUNNER );
+    WaitForExecutionStop( ctx->worker_id[ worker ] );
+  }
+
+  static void MakeBusy( Context *ctx, WorkerIndex worker )
+  {
+    ctx->busy_counter[ worker ] = 0;
+    ctx->busy[ worker ] = true;
+    SendEvents( ctx->worker_id[ worker ], EVENT_BUSY );
+  }
+
+  static void MakeBusyAndSync( Context *ctx, WorkerIndex worker )
+  {
+    ctx->busy_counter[ worker ] = 0;
+    ctx->busy[ worker ] = true;
+    SendEvents( ctx->worker_id[ worker ], EVENT_SYNC_RUNNER | EVENT_BUSY );
+    ReceiveAllEvents( EVENT_SYNC_RUNNER );
+  }
+
+  static void StopBusy( Context *ctx, WorkerIndex worker )
+  {
+    ctx->busy[ worker ] = false;
+  }
+
+  static void StopBusyAndWait( Context *ctx, WorkerIndex worker )
+  {
+    StopBusy( ctx, worker );
+    WaitForExecutionStop( ctx->worker_id[ worker ] );
+  }
+
+  static void WaitForBusy( Context *ctx, WorkerIndex worker )
+  {
+    while ( ctx->busy_counter[ worker ] == 0 ) {
+      /* Wait */
+    }
+  }
+
+  static void RemoveWithHelpingOnly( Context *ctx )
+  {
+    SMP_barrier_State barrier_state;
+
+    /*
+     * Use the mutex and the worker to construct the removal of the last
+     * processor of a scheduler while a thread is scheduled.
+     */
+
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &barrier_state );
+
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
+
+    /* Let worker B help worker A */
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
+    SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+
+    /*
+     * Restart the worker B to withdraw the help offer and wait on barriers.
+     * Move worker B to scheduler A.  Remove the processor while worker A is
+     * scheduled.
+     */
+
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RESTART );
+
+    /* A */
+    _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
+
+    ctx->id = SCHEDULER_B_ID;
+    ctx->cpu_index = 1;
+    DoRemoveProcessor( ctx );
+
+    /* B */
+    _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+
+    /* Clean up all used resources */
+    SetSelfPriority( PRIO_NORMAL );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
+    T_busy(100000);
+  }
+
+  static void Worker( rtems_task_argument arg, WorkerIndex worker )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_event_set events;
+
+      events = ReceiveAnyEvents();
+
+      if ( ( events & EVENT_SYNC_RUNNER ) != 0 ) {
+        SendEvents( ctx->runner_id, EVENT_SYNC_RUNNER );
+      }
+
+      if ( ( events & EVENT_OBTAIN ) != 0 ) {
+        ObtainMutex( ctx->mutex_id );
+      }
+
+      if ( ( events & EVENT_RELEASE ) != 0 ) {
+        ReleaseMutex( ctx->mutex_id );
+      }
+
+      if ( ( events & EVENT_STICKY_OBTAIN ) != 0 ) {
+        ObtainMutex( ctx->sticky_id );
+      }
+
+      if ( ( events & EVENT_STICKY_RELEASE ) != 0 ) {
+        ReleaseMutex( ctx->sticky_id );
+      }
+
+      if ( ( events & EVENT_RESTART ) != 0 ) {
+        rtems_status_code sc;
+
+        T_eq_u32( rtems_scheduler_get_processor(), 0 );
+        SetPriority( ctx->runner_id, PRIO_VERY_HIGH );
+        T_eq_u32( rtems_scheduler_get_processor(), 1 );
+
+        if ( !ctx->last ) {
+          SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_LOW );
+          RemoveProcessor( SCHEDULER_C_ID, 2 );
+          AddProcessor( SCHEDULER_B_ID, 2 );
+        }
+
+        WrapThreadQueueExtract(
+          &ctx->wrap_tq_ctx,
+          GetThread( ctx->worker_id[ WORKER_B ] )
+        );
+
+        sc = rtems_task_restart(
+          ctx->worker_id[ WORKER_B ],
+          (rtems_task_argument) ctx
+          );
+        T_rsc_success( sc );
+
+        T_eq_u32( rtems_scheduler_get_processor(), 0 );
+
+        if ( !ctx->last ) {
+          RemoveProcessor( SCHEDULER_B_ID, 2 );
+          AddProcessor( SCHEDULER_C_ID, 2 );
+          SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_C_ID, PRIO_NORMAL );
+        }
+      }
+
+      if ( ( events & EVENT_BUSY ) != 0 ) {
+        while ( ctx->busy[ worker ] ) {
+          ++ctx->busy_counter[ worker ];
+        }
+      }
+
+      if ( ( events & EVENT_SYNC_RUNNER_LATE ) != 0 ) {
+        SendEvents( ctx->runner_id, EVENT_SYNC_RUNNER );
+      }
+    }
+  }
+
+  static void WorkerA( rtems_task_argument arg )
+  {
+    Worker( arg, WORKER_A );
+  }
+
+  static void WorkerB( rtems_task_argument arg )
+  {
+    Worker( arg, WORKER_B );
+  }
+
+  static void WorkerC( rtems_task_argument arg )
+  {
+    Worker( arg, WORKER_C );
+  }
+  #endif
+test-target: testsuites/validation/tc-scheduler-remove-processor.c
+test-teardown:
+  brief: null
+  code: |
+    #if defined(RTEMS_SMP)
+    DeleteTask( ctx->worker_id[ WORKER_A ] );
+    DeleteTask( ctx->worker_id[ WORKER_B ] );
+    DeleteTask( ctx->worker_id[ WORKER_C ] );
+    DeleteMutex( ctx->mutex_id );
+    DeleteMutex( ctx->sticky_id );
+    WrapThreadQueueDestroy( &ctx->wrap_tq_ctx );
+
+    if ( rtems_scheduler_get_processor_maximum() >= 4 ) {
+      AddProcessor( SCHEDULER_C_ID, 3 );
+    }
+
+    RestoreRunnerPriority();
+    SetSelfAffinityAll();
+    #endif
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Removed: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    CPUIndex: all
+    Owned: N/A
+    Last: N/A
+    Home: N/A
+    RequiredByAffinity: N/A
+    UsedBy: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Removed: Nop
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Invalid
+    Owned: N/A
+    Last: N/A
+    Home: N/A
+    RequiredByAffinity: N/A
+    UsedBy: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Removed: Nop
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    Owned:
+    - 'No'
+    Last: N/A
+    Home: N/A
+    RequiredByAffinity: N/A
+    UsedBy: N/A
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Last: 'Yes'
+          UsedBy: Helping
+      then: InUse
+    - else: Ok
+    Removed:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'Yes'
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    Owned:
+    - 'Yes'
+    Last: all
+    Home:
+    - 'No'
+    RequiredByAffinity: N/A
+    UsedBy: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          RequiredByAffinity: 'Yes'
+      then: InUse
+    - if:
+        pre-conditions:
+          Last: 'Yes'
+          UsedBy: Helping
+      then: InUse
+    - else: Ok
+    Removed:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'Yes'
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    Owned:
+    - 'Yes'
+    Last: all
+    Home:
+    - 'Yes'
+    RequiredByAffinity: all
+    UsedBy: all
+- enabled-by: true
+  post-conditions: NoHomeNoTaskUser
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    Owned:
+    - 'Yes'
+    Last: all
+    Home:
+    - 'No'
+    RequiredByAffinity: N/A
+    UsedBy:
+    - Task
+    - TaskIdle
+- enabled-by: true
+  post-conditions: LastIsRequired
+  pre-conditions:
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    Owned:
+    - 'Yes'
+    Last:
+    - 'Yes'
+    Home:
+    - 'Yes'
+    RequiredByAffinity:
+    - 'No'
+    UsedBy: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    Id: all
+    CPUIndex: all
+    Owned:
+    - 'No'
+    Last: all
+    Home: all
+    RequiredByAffinity: all
+    UsedBy: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    Id: all
+    CPUIndex: all
+    Owned: all
+    Last:
+    - 'No'
+    Home: all
+    RequiredByAffinity: all
+    UsedBy: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    Id: all
+    CPUIndex: all
+    Owned: all
+    Last: all
+    Home:
+    - 'No'
+    RequiredByAffinity: all
+    UsedBy: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    Id: all
+    CPUIndex: all
+    Owned: all
+    Last: all
+    Home:
+    - 'Yes'
+    RequiredByAffinity:
+    - 'No'
+    UsedBy: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    Id: all
+    CPUIndex: all
+    Owned: all
+    Last: all
+    Home: all
+    RequiredByAffinity: all
+    UsedBy:
+    - TaskIdle
+    - Helping
+type: requirement

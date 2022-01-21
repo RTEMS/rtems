@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: clock
+text: |
+  The timer clock denotes the clock used to determine when the timer will
+  ${../glossary/fire:/term}. An interval timer uses the
+  ${/glossary/clock-tick:/term} based clock while a time-of-day timer uses the
+  ${/glossary/clock-realtime:/term}. A timer can be associated with one of
+  these clocks:
+
+  * ${../glossary/none:/term}
+  * ${../glossary/ticksbasedclock:/term}
+  * ${../glossary/realtimeclock:/term}
+type: glossary

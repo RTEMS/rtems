@@ -1,0 +1,67 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  This is computed by default, and is set to the number of statically
+  configured device drivers configured using the following configuration
+  options:
+
+  * ${appl-extra-drivers:/name}
+
+  * ${appl-needs-ata-driver:/name}
+
+  * ${appl-needs-clock-driver:/name}
+
+  * ${appl-needs-console-driver:/name}
+
+  * ${appl-needs-framebuffer-driver:/name}
+
+  * ${appl-needs-ide-driver:/name}
+
+  * ${appl-needs-libblock:/name}
+
+  * ${appl-needs-null-driver:/name}
+
+  * ${appl-needs-rtc-driver:/name}
+
+  * ${appl-needs-simple-console-driver:/name}
+
+  * ${appl-needs-simple-task-console-driver:/name}
+
+  * ${appl-needs-stub-driver:/name}
+
+  * ${appl-needs-timer-driver:/name}
+
+  * ${appl-needs-watchdog-driver:/name}
+
+  * ${appl-needs-zero-driver:/name}
+
+  * ${appl-prerequisite-drivers:/name}
+
+  If the ${disable-bsp-settings:/name} configuration option is not defined and
+  the ${/glossary/bsp:/term:/name} provides
+  ${/bsp/if/acfg-prerequisite-drivers:/name}, then the BSP-provided
+  prerequisite device drivers are also taken into account.
+description: |
+  The value of this configuration option defines the number of device drivers.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/max-size
+- role: constraint
+  uid: ../constraint/max-drivers
+- role: constraint
+  uid: ../constraint/memory-size
+name: CONFIGURE_MAXIMUM_DRIVERS
+notes: |
+  If the application will dynamically install device drivers, then the
+  configuration option value shall be larger than the number of statically
+  configured device drivers.
+type: interface

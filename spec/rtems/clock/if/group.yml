@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The Clock Manager provides support for time of day and other time related
+  capabilities.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: null
+enabled-by: true
+identifier: RTEMSAPIClassicClock
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: set
+- role: placement-order
+  uid: get-tod
+- role: placement-order
+  uid: get-tod-timeval
+- role: placement-order
+  uid: get-realtime
+- role: placement-order
+  uid: get-realtime-bintime
+- role: placement-order
+  uid: get-realtime-timeval
+- role: placement-order
+  uid: get-realtime-coarse
+- role: placement-order
+  uid: get-realtime-coarse-bintime
+- role: placement-order
+  uid: get-realtime-coarse-timeval
+- role: placement-order
+  uid: get-monotonic
+- role: placement-order
+  uid: get-monotonic-bintime
+- role: placement-order
+  uid: get-monotonic-sbintime
+- role: placement-order
+  uid: get-monotonic-timeval
+- role: placement-order
+  uid: get-monotonic-coarse
+- role: placement-order
+  uid: get-monotonic-coarse-bintime
+- role: placement-order
+  uid: get-monotonic-coarse-timeval
+- role: placement-order
+  uid: get-boot-time
+- role: placement-order
+  uid: get-boot-time-bintime
+- role: placement-order
+  uid: get-boot-time-timeval
+- role: placement-order
+  uid: get-seconds-since-epoch
+- role: placement-order
+  uid: get-ticks-per-second
+- role: placement-order
+  uid: get-ticks-per-second-macro
+- role: placement-order
+  uid: get-ticks-since-boot
+- role: placement-order
+  uid: get-ticks-since-boot-macro
+- role: placement-order
+  uid: get-uptime
+- role: placement-order
+  uid: get-uptime-timeval
+- role: placement-order
+  uid: get-uptime-seconds
+- role: placement-order
+  uid: get-uptime-nanoseconds
+- role: placement-order
+  uid: tick-later
+- role: placement-order
+  uid: tick-later-usec
+- role: placement-order
+  uid: tick-before
+- role: placement-order
+  uid: tick
+name: Clock Manager
+text: |
+  The Classic API shall provide an interface to the Clock Manager.
+type: interface

@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: ticks based clock
+text: |
+  The timer uses the ${/glossary/tick:/term} based ${../glossary/clock:/term} to determine the point in time to ${../glossary/fire:/term}.  A timer is associated with ${/glossary/tick:/term} based ${../glossary/clock:/term} when the timer is ${../glossary/scheduled:/term} using the directives ${../if/fire-after:/name} or ${../if/server-fire-after:/name}. A timer is not longer associated with the ${/glossary/tick:/term} based ${../glossary/clock:/term} when the timer is ${../glossary/scheduled:/term} using the directives ${../if/fire-when:/name} or ${../if/server-fire-when:/name} or when the timer is deleted.  Canceling or resetting a timer does not change the association with a particular ${../glossary/clock:/term}.
+type: glossary

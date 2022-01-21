@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Identifies a scheduler by the processor index.
+copyrights:
+- Copyright (C) 2017, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    - ${../../type/if/id:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_scheduler_ident_by_processor
+notes: null
+params:
+- description: |
+    is the processor index to identify the scheduler.
+  dir: null
+  name: cpu_index
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the scheduler will be stored in this
+    object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The processor index was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The processor index was valid, however, the corresponding processor was
+      not owned by a scheduler.
+    value: ${../../status/if/incorrect-state:/name}
+type: interface

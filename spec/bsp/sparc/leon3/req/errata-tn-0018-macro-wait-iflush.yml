@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: requirement-refinement
+  uid: errata-tn-0018-macros
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ``TN0018_WAIT_IFLUSH`` macro shall flush the instruction cache.
+type: requirement

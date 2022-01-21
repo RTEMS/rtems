@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Checks if the interrupt handler shared option is set.
+copyrights:
+- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    ( ( ${.:/params[0]/name} ) & ${shared:/name} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup-hidden
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+name: RTEMS_INTERRUPT_IS_SHARED
+notes: null
+params:
+- description: |
+    is the interrupt handler option set to check.
+  dir: null
+  name: _options
+return:
+  return: |
+    Returns true, if the interrupt handler shared option ${shared:/name} is
+    set, otherwise false.
+  return-values: []
+type: interface

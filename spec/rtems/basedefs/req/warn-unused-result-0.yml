@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/warn-unused-result
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/warn-unused-result:/name} macro is used as last part
+  of a function declaration or attached to a function definition,
+  and that function has a return type other than ``void``,
+  and the returned value is not used,
+  the macro shall cause the compiler to show a compiler warning.
+type: requirement

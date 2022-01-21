@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This integer type represents system termination codes.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/interr/if/code:/name} ${.:/name}
+  variants: []
+description: |
+  This integer type is large enough to store a 32-bit integer or a pointer.
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_fatal_code
+notes: |
+  The interpretation of a system termination code depends on the system
+  termination source, see ${fatal-source:/name}.
+params: []
+return: null
+type: interface

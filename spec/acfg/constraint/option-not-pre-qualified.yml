@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_QUAL
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The application configuration option is not included in the pre-qualified
+  feature set of RTEMS.  Applications which are restricted to only use
+  interfaces of the pre-qualified feature set of RTEMS shall not use the
+  application configuration option.
+type: constraint

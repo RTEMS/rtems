@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Maps the RTEMS status code to a POSIX error number.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${code:/name} ${.:/params[0]/name}
+    return: int
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+name: rtems_status_code_to_errno
+notes: null
+params:
+- description: is the status code to map.
+  dir: null
+  name: status_code
+return:
+  return: null
+  return-values:
+  - description: |
+      The status code was ${successful:/name}.
+    value: '0'
+  - description: |
+      The status code was ${invalid-number:/name}.
+    value: EBADF
+  - description: |
+      The status code was ${resource-in-use:/name}.
+    value: EBUSY
+  - description: |
+      The status code was ${interrupted:/name}.
+    value: EINTR
+  - description: |
+      The status code was ${invalid-clock:/name},
+      ${invalid-name:/name}, or ${invalid-node:/name}.
+    value: EINVAL
+  - description: |
+      The status code was ${already-suspended:/name},
+      ${called-from-isr:/name},
+      ${illegal-on-remote-object:/name},
+      ${illegal-on-self:/name}, ${incorrect-state:/name},
+      ${internal-error:/name}, ${invalid-address:/name},
+      ${invalid-id:/name}, ${invalid-priority:/name},
+      ${invalid-size:/name}, ${io-error:/name},
+      ${mp-not-configured:/name}, ${not-defined:/name},
+      ${object-was-deleted:/name}, ${proxy-blocking:/name},
+      ${task-exitted:/name}, or ${too-many:/name}.
+    value: EIO
+  - description: |
+      The status code was ${unsatisfied:/name}.
+    value: ENODEV
+  - description: |
+      The status code was ${no-memory:/name}.
+    value: ENOMEM
+  - description: |
+      The status code was ${not-configured:/name} or
+      ${not-implemented:/name}.
+    value: ENOSYS
+  - description: |
+      The status code was ${not-owner-of-resource:/name}.
+    value: EPERM
+  - description: |
+      The status code was ${timeout:/name}.
+    value: ETIMEDOUT
+type: interface

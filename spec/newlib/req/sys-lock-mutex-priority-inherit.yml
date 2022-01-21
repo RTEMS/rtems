@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: sys-lock-mutex-acquire
+- role: requirement-refinement
+  uid: sys-lock-mutex-acquire-timed
+- role: requirement-refinement
+  uid: sys-lock-mutex-release
+- role: requirement-refinement
+  uid: sys-lock-mutex-recursive-acquire
+- role: requirement-refinement
+  uid: sys-lock-mutex-recursive-acquire-timed
+- role: requirement-refinement
+  uid: sys-lock-mutex-recursive-release
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The mutex operations shall use the ${/glossary/priorityinheritance:/term}
+  locking protocol.
+type: requirement

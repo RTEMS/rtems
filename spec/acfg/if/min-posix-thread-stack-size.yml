@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  The default value is two times the value of
+  ${min-task-stack-size:/name}.
+description: |
+  The value of this configuration option defines the minimum stack size in
+  bytes for every POSIX thread in the system.
+enabled-by: true
+index-entries:
+- minimum POSIX thread stack size
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-posix
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/stack-space
+- role: constraint
+  uid: ../constraint/min-bsp-app
+name: CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
+notes: null
+type: interface

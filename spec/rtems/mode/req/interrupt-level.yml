@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/interrupt-level
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/interrupt-level} macro is used, it shall expand to a
+  constant expression which computes the bitwise and of the value specified by
+  the ${../if/interrupt-level:/params[0]/name} parameter and
+  ${../if/interrupt-mask:/name}.
+type: requirement

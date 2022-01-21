@@ -1,0 +1,206 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-attributes
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/get-attributes:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-attributes:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/get-attributes:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Attributes
+  states:
+  - name: Nop
+    test-code: |
+      memset( &attr, 0xa5, sizeof( attr ) );
+      T_eq_mem( &ctx->attributes_obj, &attr, sizeof( attr ) );
+    text: |
+      Objects referenced by the ${../if/get-attributes:/params[1]/name}
+      parameter in past calls to ${../if/get-attributes:/name} shall not be
+      accessed by the ${../if/get-attributes:/name} call.
+  - name: Zero
+    test-code: |
+      memset( &attr, 0, sizeof( attr ) );
+      T_eq_mem( &ctx->attributes_obj, &attr, sizeof( attr ) );
+    text: |
+      The object referenced by the ${../if/get-attributes:/params[1]/name}
+      parameter shall cleared to zero.
+  - name: Set
+    test-code: |
+      memset( &attr, 0xa5, sizeof( attr ) );
+      T_ne_mem( &ctx->attributes_obj, &attr, sizeof( attr ) );
+    text: |
+      The members of the object referenced by the
+      ${../if/get-attributes:/params[1]/name} parameter shall be set to the
+      attributes of the interrupt vector specified by
+      ${../if/get-attributes:/params[0]/name}.
+  test-epilogue: null
+  test-prologue: |
+    rtems_interrupt_attributes attr;
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->valid_vector = true;
+    text: |
+      While the ${../if/get-attributes:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->valid_vector = false;
+    text: |
+      While the ${../if/get-attributes:/params[0]/name} parameter is
+      not associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: Attributes
+  states:
+  - name: Obj
+    test-code: |
+      ctx->attributes = &ctx->attributes_obj;
+    text: |
+      While the ${../if/get-attributes:/params[1]/name} parameter references an
+      object of type ${../if/attributes:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->attributes = NULL;
+    text: |
+      While the ${../if/get-attributes:/params[1]/name} parameter is equal
+      to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_vector_number vector;
+
+  if ( ctx->valid_vector && ctx->attributes != NULL ) {
+    ctx->status = RTEMS_INTERNAL_ERROR;
+
+    for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
+      rtems_status_code sc;
+
+      memset( &ctx->attributes_obj, 0xff, sizeof( ctx->attributes_obj ) );
+      sc = rtems_interrupt_get_attributes( vector, ctx->attributes );
+
+      if ( sc == RTEMS_INVALID_ID ) {
+        continue;
+      }
+
+      T_rsc_success( sc );
+      ctx->status = sc;
+
+      if ( ctx->attributes_obj.can_enable ) {
+        T_true( ctx->attributes_obj.maybe_enable );
+      }
+
+      if ( ctx->attributes_obj.can_disable ) {
+        T_true( ctx->attributes_obj.maybe_disable );
+        T_true(
+          ctx->attributes_obj.can_enable || ctx->attributes_obj.maybe_enable
+        );
+      }
+    }
+  } else {
+    if ( ctx->valid_vector ) {
+      vector = 0;
+    } else {
+      vector = BSP_INTERRUPT_VECTOR_COUNT;
+    }
+
+    ctx->status = rtems_interrupt_get_attributes( vector, ctx->attributes );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the ${../if/attributes:/name} object.
+  description: null
+  member: |
+    rtems_interrupt_attributes attributes_obj
+- brief: |
+    If this member is true, then the ${../if/get-attributes:/params[0]/name}
+    parameter shall be valid.
+  description: null
+  member: |
+    bool valid_vector
+- brief: |
+    This member specifies if the ${../if/get-attributes:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_interrupt_attributes *attributes;
+- brief: |
+    This member contains the return value of the ${../if/get-attributes:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+- string.h
+test-local-includes: []
+test-prepare: |
+  memset( &ctx->attributes_obj, 0xa5, sizeof( ctx->attributes_obj ) );
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-intr-get-attributes.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Attributes: Set
+  pre-conditions:
+    Vector:
+    - Valid
+    Attributes:
+    - Obj
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Attributes: Nop
+  pre-conditions:
+    Vector: all
+    Attributes:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Attributes: Zero
+  pre-conditions:
+    Vector:
+    - Invalid
+    Attributes:
+    - Obj
+type: requirement

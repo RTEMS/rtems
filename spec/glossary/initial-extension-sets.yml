@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: initial extension sets
+text: |
+  The initial extension sets are a table of ${userextensions:/term}.  The table
+  is defined by the application configuration for example through the
+  ${/acfg/if/initial-extensions:/name} application configuration option.  The
+  initial extension sets cannot be altered during runtime through directive
+  calls.  See also ${dynamic-extension-sets:/term}.
+type: glossary

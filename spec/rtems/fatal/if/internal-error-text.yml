@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns a descriptive text for the internal error code.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../userext/if/fatal-code:/name} ${.:/params[0]/name}
+    return: const char *
+  variants: []
+description: null
+enabled-by: true
+index-entries:
+- fatal error
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+name: rtems_internal_error_text
+notes: null
+params:
+- description: |
+    is the internal error code.
+  dir: null
+  name: internal_error_code
+return:
+  return: |
+    Returns a descriptive text for the internal error code.  The text for the
+    internal error code is the enumerator constant name.
+  return-values:
+  - description: |
+      The ${.:/params[0]/name} parameter value was not an internal error code.
+    value: '"?"'
+type: interface

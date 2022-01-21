@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: dynamic extension sets
+text: |
+  The dynamic extension sets are a list of ${userextensions:/term}.  The list
+  is defined by the system services used by the application and directive calls
+  such as ${/rtems/userext/if/create:/name}.  See also
+  ${initial-extension-sets:/term}.
+type: glossary

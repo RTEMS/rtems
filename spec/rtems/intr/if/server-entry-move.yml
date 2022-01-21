@@ -1,0 +1,65 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Moves the interrupt server entry to the interrupt server.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${server-entry:/name} *${.:/params[0]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../constraint/server-entry-initialized
+- role: constraint
+  uid: ../constraint/server-entry-not-while-action-prepend
+- role: constraint
+  uid: ../constraint/server-entry-not-while-move
+- role: constraint
+  uid: ../constraint/server-entry-not-while-submit
+- role: constraint
+  uid: ../constraint/server-entry-not-while-pending
+name: rtems_interrupt_server_entry_move
+notes: null
+params:
+- description: |
+    is the interrupt server entry to move.
+  dir: null
+  name: entry
+- description: |
+    is the index of the destination interrupt server.  The constant
+    ${server-default:/name} may be used to specify the default interrupt
+    server.
+  dir: null
+  name: server_index
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no interrupt server associated with the index specified by
+      ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

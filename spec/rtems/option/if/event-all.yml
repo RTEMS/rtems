@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This option constant indicates that the task wishes to wait until all events
+  of interest are available in ${../../event/if/receive:/name} and
+  ${../../event/if/system-receive:/name}.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: '0x00000000'
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_EVENT_ALL
+notes: null
+type: interface

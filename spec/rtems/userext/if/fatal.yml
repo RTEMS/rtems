@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Fatal extensions are invoked when the system should terminate.
+copyrights:
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/userext/if/fatal:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_fatal_extension
+notes: |
+  The fatal extensions are invoked in
+  ${/glossary/extension-forward-order:/term}.
+
+  The fatal extension should be extremely careful with respect to the RTEMS
+  directives it calls.  Depending on the system termination source, the system
+  may be in an undefined and corrupt state.
+  
+  It is recommended to register fatal extensions through
+  ${/glossary/initial-extension-sets:/term}, see
+  ${/acfg/if/initial-extensions:/name}.
+params:
+- description: |
+    is the system termination source.  The source indicates the component which
+    caused the system termination request, see ${fatal-source:/name}.  The
+    system termination code may provide additional information related to the
+    system termination request.
+  dir: null
+  name: source
+- description: |
+    is a value equal to ${/c/if/false:/name}.
+  dir: null
+  name: always_set_to_false
+- description: |
+    is the system termination code.  This value must be interpreted with
+    respect to the source.
+  dir: null
+  name: code
+return: null
+type: interface

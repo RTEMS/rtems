@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the number of clock ticks for the microseconds value.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: |
+    ( ( ${.:/params[0]/name} ) / ${../../config/if/get-microseconds-per-tick:/name}() )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: RTEMS_MICROSECONDS_TO_TICKS
+notes: |
+  The number of clock ticks per second is defined by the
+  ${/acfg/if/microseconds-per-tick:/name} application configuration option.
+params:
+- description: |
+    is the microseconds value to convert to clock ticks.
+  dir: null
+  name: _us
+return:
+  return: |
+    Returns the number of clock ticks for the specified microseconds value.
+  return-values: []
+type: interface

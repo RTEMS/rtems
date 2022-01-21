@@ -1,0 +1,111 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/perf-runtime
+params:
+  sample-count: 100
+test-brief: |
+  This test case provides a context to run ${../if/group:/name} performance
+  tests.
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a worker identifier.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member provides a second worker identifier.
+  description: null
+  member: |
+    rtems_id worker_2_id
+- brief: |
+    This member provides a status code.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-includes:
+- rtems.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: |
+    Set the runner priority.
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  enum {
+    EVENT_RESTART = RTEMS_EVENT_0,
+    EVENT_SET_END = RTEMS_EVENT_1,
+    EVENT_BUSY = RTEMS_EVENT_2
+  } Event;
+
+  RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char task_storage[
+    RTEMS_TASK_STORAGE_SIZE(
+      TEST_MAXIMUM_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_ATTRIBUTES
+    )
+  ];
+
+  static const rtems_task_config config = {
+    .name = OBJECT_NAME,
+    .initial_priority = PRIO_NORMAL,
+    .storage_area = task_storage,
+    .storage_size = sizeof( task_storage ),
+    .maximum_thread_local_storage_size = 0,
+    .initial_modes = RTEMS_DEFAULT_MODES,
+    .attributes = RTEMS_DEFAULT_ATTRIBUTES
+  };
+
+  static void Send( const Context *ctx, rtems_event_set events )
+  {
+    SendEvents( ctx->worker_id, events );
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    ctx->end = T_tick();
+
+    while ( true ) {
+      rtems_event_set events;
+      T_ticks         ticks;
+
+      events = ReceiveAnyEvents();
+      ticks = T_tick();
+
+      if ( ( events & EVENT_RESTART ) != 0 ) {
+        ctx->begin = T_tick();
+        (void) rtems_task_restart( RTEMS_SELF, (rtems_task_argument) ctx );
+      }
+
+      if ( ( events & EVENT_SET_END ) != 0 ) {
+        ctx->end = ticks;
+      }
+
+      if ( ( events & EVENT_BUSY ) != 0 ) {
+        (void) _CPU_Thread_Idle_body( 0 );
+      }
+    }
+  }
+test-target: testsuites/validation/tc-task-performance.c
+test-teardown:
+  brief: |
+    Restore the runner priority.
+  code: |
+    RestoreRunnerPriority();
+  description: null
+type: runtime-measurement-test

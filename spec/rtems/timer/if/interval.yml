@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This timer class indicates that the timer is currently in use as an interval
+  timer which will fire in the context of the clock tick
+  ${/glossary/isr:/term}.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${class-bit-not-dormant:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enumerator
+links: []
+name: TIMER_INTERVAL
+notes: null
+type: interface

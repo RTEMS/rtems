@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the index of the current processor.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: ${/c/if/uint32_t:/name}
+  variants: []
+description: |
+  Where the system was built with SMP support disabled, this directive
+  evaluates to a compile time constant of zero.
+
+  Where the system was built with SMP support enabled, this directive returns
+  the index of the current processor.  The set of processor indices is the
+  range of integers starting with zero up to ${get-processor-maximum:/name}
+  minus one.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_scheduler_get_processor
+notes: |
+  Outside of sections with disabled thread dispatching the current processor
+  index may change after every instruction since the thread may migrate from
+  one processor to another.  Sections with disabled interrupts are sections
+  with thread dispatching disabled.
+params: []
+return:
+  return: |
+    Returns the index of the current processor.
+  return-values: []
+type: interface

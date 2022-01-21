@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This header file provides parts of the application configuration information
+  API.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: header-file
+links:
+- enabled-by: RTEMS_MULTIPROCESSING
+  role: interface-include
+  uid: /score/mpci/if/header
+- enabled-by: RTEMS_MULTIPROCESSING
+  role: interface-include
+  uid: ../../type/if/header
+- enabled-by: true
+  role: interface-include
+  uid: header-2
+- role: interface-placement
+  uid: /if/domain
+- role: interface-ingroup
+  uid: group
+path: rtems/config.h
+prefix: cpukit/include
+type: interface

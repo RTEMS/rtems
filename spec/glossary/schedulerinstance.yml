@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: scheduler instance
+text: |
+  A scheduler instance is a scheduling algorithm with a corresponding
+  context to store its internal state.  Each processor in the system is
+  owned by at most one scheduler instance.  The processor to scheduler
+  instance assignment is determined at application configuration time.  See
+  :ref:`Configuring a System`.
+type: glossary

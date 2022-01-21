@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the Simple Task Console
+  Driver is initialized during system initialization.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
+notes: |
+  This device driver is responsible for providing the :file:`/dev/console`
+  device file.  This device is used to initialize the standard input, output,
+  and error file descriptors.
+
+  This device driver reads via ${/rtems/io/if/getchark:/name}.
+
+  This device driver writes into a write buffer.  The count of characters
+  written into the write buffer is returned.  It might be less than the
+  requested count, in case the write buffer is full.  The write is
+  non-blocking and may be called from interrupt context.  A dedicated task
+  reads from the write buffer and outputs the characters via
+  ${/rtems/io/if/putc:/name}.  This task runs with the least important priority.
+  The write buffer size is 2047 characters and it is not configurable.
+
+  Use ``fsync( STDOUT_FILENO )`` or ``fdatasync( STDOUT_FILENO )`` to drain the
+  write buffer.
+
+  The Termios framework is not used.  There is no support to change device
+  settings, e.g.  baud, stop bits, parity, etc.
+
+  The
+
+  * ${appl-needs-console-driver:/name},
+
+  * ${appl-needs-simple-console-driver:/name}, and
+
+  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER``
+
+  configuration options are mutually exclusive.
+type: interface

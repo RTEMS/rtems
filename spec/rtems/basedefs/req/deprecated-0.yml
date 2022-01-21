@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/deprecated
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/deprecated:/name} macro is used as last part of a
+  function declaration or type declaration or variable declaration or
+  variable definition,
+  the macro shall cause the compiler to issue a warning message when it
+  encounters a use of the function, type or variable.
+type: requirement

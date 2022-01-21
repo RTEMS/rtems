@@ -1,0 +1,400 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRGPIO
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: grgpio-header
+definition:
+- default:
+    count: 1
+    name: DATA
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: OUTPUT
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: DIRECTION
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: IMASK
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: IPOL
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: IEDGE
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: BYPASS
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: CAP
+  offset: 0x1c
+  variants: []
+- default:
+    count: 8
+    name: IRQMAPR
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: IAVAIL
+  offset: 0x40
+  variants: []
+- default:
+    count: 1
+    name: IFLAG
+  offset: 0x44
+  variants: []
+- default:
+    count: 1
+    name: IPEN
+  offset: 0x48
+  variants: []
+- default:
+    count: 1
+    name: PULSE
+  offset: 0x4c
+  variants: []
+- default:
+    count: 1
+    name: LOR:LOR_OUTPUT
+  offset: 0x54
+  variants: []
+- default:
+    count: 1
+    name: LOR:LOR_DIRECTION
+  offset: 0x58
+  variants: []
+- default:
+    count: 1
+    name: LOR:LOR_IMASK
+  offset: 0x5c
+  variants: []
+- default:
+    count: 1
+    name: LAND:LAND_OUTPUT
+  offset: 0x64
+  variants: []
+- default:
+    count: 1
+    name: LAND:LAND_DIRECTION
+  offset: 0x68
+  variants: []
+- default:
+    count: 1
+    name: LAND:LAND_IMASK
+  offset: 0x6c
+  variants: []
+- default:
+    count: 1
+    name: LXOR:LXOR_OUTPUT
+  offset: 0x74
+  variants: []
+- default:
+    count: 1
+    name: LXOR:LXOR_DIRECTION
+  offset: 0x78
+  variants: []
+- default:
+    count: 1
+    name: LXOR:LXOR_IMASK
+  offset: 0x7c
+  variants: []
+register-prefix: null
+register-block-group: GRGPIO
+register-block-size: 128
+registers:
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    I/O port data register
+  description: null
+  name: DATA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    I/O port output register
+  description: null
+  name: OUTPUT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DIR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    I/O port direction register
+  description: null
+  name: DIRECTION
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MASK'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt mask register
+  description: null
+  name: IMASK
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'POL'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt polarity register
+  description: null
+  name: IPOL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDGE'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt edge register
+  description: null
+  name: IEDGE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BYPASS'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Bypass register
+  description: null
+  name: BYPASS
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PU'
+      start: 18
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IER'
+      start: 17
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IFL'
+      start: 16
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IRQGEN'
+      start: 8
+      width: 5
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NLINES'
+      start: 0
+      width: 5
+    variants: []
+  brief: |
+    Capability register
+  description: null
+  name: CAP
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_I'
+      start: 24
+      width: 7
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_I_1'
+      start: 16
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_I_2'
+      start: 8
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_I_3'
+      start: 4
+      width: 1
+    variants: []
+  brief: |
+    Interrupt map register n, where n = 0 .. 3
+  description: null
+  name: IRQMAPR
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IMASK'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt available register
+  description: null
+  name: IAVAIL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'IFLAG'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt flag register
+  description: null
+  name: IFLAG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IPEN'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt enable register
+  description: null
+  name: IPEN
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PULSE'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Pulse register
+  description: null
+  name: PULSE
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Logical-OR registers
+  description: null
+  name: LOR
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Logical-AND registers
+  description: null
+  name: LAND
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Logical-XOR registers
+  description: null
+  name: LXOR
+  width: 32
+name: grgpio
+notes: null
+type: interface

@@ -1,0 +1,102 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/perf-runtime
+params:
+  buffer-count: 100
+  sample-count: 100
+test-brief: |
+  This test case provides a context to run ${../if/group:/name} performance
+  tests.
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a partition with exactly one free buffer.
+  description: null
+  member: |
+    rtems_id part_one
+- brief: |
+    This member provides a partition with exactly ${.:/params/buffer-count}
+    free buffers.
+  description: null
+  member: |
+    rtems_id part_many
+- brief: |
+    This member provides a status code.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member provides a buffer pointer.
+  description: null
+  member: |
+    void *buffer
+- brief: |
+    This member provides a second buffer pointer.
+  description: null
+  member: |
+    void *buffer_2
+test-context-support: null
+test-description: null
+test-includes:
+- rtems.h
+- rtems/chain.h
+test-local-includes: []
+test-prepare: null
+test-setup:
+  brief: |
+    Creates the test partition.
+  code: |
+    rtems_status_code sc;
+    size_t            size;
+    void             *area;
+    uintptr_t         length;
+
+    size = sizeof( rtems_chain_node );
+
+    area = T_malloc( size );
+    sc = rtems_partition_create(
+      rtems_build_name( ' ', 'O', 'N', 'E' ),
+      area,
+      size,
+      size,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->part_one
+    );
+    T_assert_rsc_success( sc );
+
+    length = ${.:/params/buffer-count} * size;
+    area = T_malloc( length );
+    sc = rtems_partition_create(
+      rtems_build_name( 'M', 'A', 'N', 'Y' ),
+      area,
+      length,
+      size,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->part_many
+    );
+    T_assert_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-part-performance.c
+test-teardown:
+  brief: |
+    Deletes the test partition.
+  code: |
+    rtems_status_code sc;
+
+    if ( ctx->part_one != 0 ) {
+      sc = rtems_partition_delete( ctx->part_one );
+      T_rsc_success( sc );
+    }
+
+    if ( ctx->part_many != 0 ) {
+      sc = rtems_partition_delete( ctx->part_many );
+      T_rsc_success( sc );
+    }
+  description: null
+type: runtime-measurement-test

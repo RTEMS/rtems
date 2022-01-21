@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/local-disable
+- role: interface-function
+  uid: ../if/lock-acquire
+- role: interface-function
+  uid: ../if/lock-isr-disable
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the directive is called, maskable interrupts shall be disabled on a
+  processor which executed at least one instruction of the directive.
+type: requirement

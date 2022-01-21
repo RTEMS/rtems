@@ -1,0 +1,287 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+limits:
+  sparc/gr712rc/smp/qual-only/5zrudgccHYC6azWEU3SRYUnkVXCeq9MufBd5zmfMeEg=:
+    DirtyCache:
+      max-upper-bound: 8.6e-05
+      median-lower-bound: 2.15e-05
+      median-upper-bound: 8.6e-05
+      min-lower-bound: 2.1e-05
+    FullCache:
+      max-upper-bound: 8.4e-05
+      median-lower-bound: 2.05e-05
+      median-upper-bound: 8.2e-05
+      min-lower-bound: 2.05e-05
+    HotCache:
+      max-upper-bound: 8.4e-05
+      median-lower-bound: 2.05e-05
+      median-upper-bound: 8.2e-05
+      min-lower-bound: 2.05e-05
+    Load/1:
+      max-upper-bound: 9.4e-05
+      median-lower-bound: 2.35e-05
+      median-upper-bound: 9.4e-05
+      min-lower-bound: 2.35e-05
+    Load/2:
+      max-upper-bound: 9.4e-05
+      median-lower-bound: 2.35e-05
+      median-upper-bound: 9.4e-05
+      min-lower-bound: 2.35e-05
+  sparc/gr712rc/smp/qual-only/NDvyW8PTjD_thgV3P8TV_7MXVFP9EFvrevMzUX574lY=:
+    DirtyCache:
+      max-upper-bound: 0.000212
+      median-lower-bound: 5.25e-05
+      median-upper-bound: 0.00021
+      min-lower-bound: 5.2e-05
+    FullCache:
+      max-upper-bound: 0.00017
+      median-lower-bound: 1.85e-05
+      median-upper-bound: 7.4e-05
+      min-lower-bound: 1.8e-05
+    HotCache:
+      max-upper-bound: 6.6e-05
+      median-lower-bound: 1.65e-05
+      median-upper-bound: 6.6e-05
+      min-lower-bound: 1.6e-05
+    Load/1:
+      max-upper-bound: 0.000208
+      median-lower-bound: 5.05e-05
+      median-upper-bound: 0.000202
+      min-lower-bound: 5.05e-05
+    Load/2:
+      max-upper-bound: 0.000248
+      median-lower-bound: 5.9e-05
+      median-upper-bound: 0.000236
+      min-lower-bound: 5.9e-05
+  sparc/gr712rc/uni/qual-only/5zrudgccHYC6azWEU3SRYUnkVXCeq9MufBd5zmfMeEg=:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  sparc/gr712rc/uni/qual-only/NDvyW8PTjD_thgV3P8TV_7MXVFP9EFvrevMzUX574lY=:
+    DirtyCache:
+      max-upper-bound: 0.000118
+      median-lower-bound: 2.9e-05
+      median-upper-bound: 0.000116
+      min-lower-bound: 2.9e-05
+    FullCache:
+      max-upper-bound: 0.00011
+      median-lower-bound: 1.15e-05
+      median-upper-bound: 4.6e-05
+      min-lower-bound: 1.15e-05
+    HotCache:
+      max-upper-bound: 4.4e-05
+      median-lower-bound: 1.05e-05
+      median-upper-bound: 4.2e-05
+      min-lower-bound: 1.05e-05
+    Load/1:
+      max-upper-bound: 0.000126
+      median-lower-bound: 3.1e-05
+      median-upper-bound: 0.000124
+      min-lower-bound: 3.05e-05
+  sparc/gr740/smp/qual-only/_xQeTNJwSla2bVbhWPVcI0emLk2bE_GVQfvzt9CN84k=:
+    DirtyCache:
+      max-upper-bound: 8.1e-05
+      median-lower-bound: 2.011e-05
+      median-upper-bound: 8.044e-05
+      min-lower-bound: 2.001e-05
+    FullCache:
+      max-upper-bound: 7.836e-05
+      median-lower-bound: 1.957e-05
+      median-upper-bound: 7.828e-05
+      min-lower-bound: 1.957e-05
+    HotCache:
+      max-upper-bound: 7.88e-05
+      median-lower-bound: 1.97e-05
+      median-upper-bound: 7.88e-05
+      min-lower-bound: 1.97e-05
+    Load/1:
+      max-upper-bound: 8.896e-05
+      median-lower-bound: 2.224e-05
+      median-upper-bound: 8.896e-05
+      min-lower-bound: 2.196e-05
+    Load/2:
+      max-upper-bound: 8.896e-05
+      median-lower-bound: 2.224e-05
+      median-upper-bound: 8.896e-05
+      min-lower-bound: 2.196e-05
+    Load/3:
+      max-upper-bound: 8.896e-05
+      median-lower-bound: 2.224e-05
+      median-upper-bound: 8.896e-05
+      min-lower-bound: 2.196e-05
+    Load/4:
+      max-upper-bound: 8.896e-05
+      median-lower-bound: 2.224e-05
+      median-upper-bound: 8.896e-05
+      min-lower-bound: 2.196e-05
+  sparc/gr740/smp/qual-only/c1ZkBOsUIJ-siPI7pK7knk0z6uni1pxOFlZ2eLDflYc=:
+    DirtyCache:
+      max-upper-bound: 8.1512e-05
+      median-lower-bound: 1.9456e-05
+      median-upper-bound: 7.7824e-05
+      min-lower-bound: 1.863e-05
+    FullCache:
+      max-upper-bound: 7.4152e-05
+      median-lower-bound: 9.198e-06
+      median-upper-bound: 3.6792e-05
+      min-lower-bound: 9.158e-06
+    HotCache:
+      max-upper-bound: 1.6408e-05
+      median-lower-bound: 3.988e-06
+      median-upper-bound: 1.5952e-05
+      min-lower-bound: 3.988e-06
+    Load/1:
+      max-upper-bound: 0.00011332
+      median-lower-bound: 1.7558e-05
+      median-upper-bound: 7.0232e-05
+      min-lower-bound: 1.7358e-05
+    Load/2:
+      max-upper-bound: 0.000499472
+      median-lower-bound: 0.000120076
+      median-upper-bound: 0.000480304
+      min-lower-bound: 0.00011984
+    Load/3:
+      max-upper-bound: 0.000795552
+      median-lower-bound: 0.00019066
+      median-upper-bound: 0.00076264
+      min-lower-bound: 0.000189612
+    Load/4:
+      max-upper-bound: 0.00097216
+      median-lower-bound: 0.00022585
+      median-upper-bound: 0.0009034
+      min-lower-bound: 0.000225152
+  sparc/gr740/uni/qual-only/_xQeTNJwSla2bVbhWPVcI0emLk2bE_GVQfvzt9CN84k=:
+    DirtyCache:
+      max-upper-bound: 5.324e-05
+      median-lower-bound: 1.319e-05
+      median-upper-bound: 5.276e-05
+      min-lower-bound: 1.311e-05
+    FullCache:
+      max-upper-bound: 5.056e-05
+      median-lower-bound: 1.26e-05
+      median-upper-bound: 5.04e-05
+      min-lower-bound: 1.26e-05
+    HotCache:
+      max-upper-bound: 5.012e-05
+      median-lower-bound: 1.253e-05
+      median-upper-bound: 5.012e-05
+      min-lower-bound: 1.253e-05
+    Load/1:
+      max-upper-bound: 6.052e-05
+      median-lower-bound: 1.509e-05
+      median-upper-bound: 6.036e-05
+      min-lower-bound: 1.509e-05
+  sparc/gr740/uni/qual-only/c1ZkBOsUIJ-siPI7pK7knk0z6uni1pxOFlZ2eLDflYc=:
+    DirtyCache:
+      max-upper-bound: 5.4416e-05
+      median-lower-bound: 1.2088e-05
+      median-upper-bound: 4.8352e-05
+      min-lower-bound: 1.1988e-05
+    FullCache:
+      max-upper-bound: 2.9648e-05
+      median-lower-bound: 5.328e-06
+      median-upper-bound: 2.1312e-05
+      min-lower-bound: 5.298e-06
+    HotCache:
+      max-upper-bound: 8.408e-06
+      median-lower-bound: 2.102e-06
+      median-upper-bound: 8.408e-06
+      min-lower-bound: 2.102e-06
+    Load/1:
+      max-upper-bound: 5.7376e-05
+      median-lower-bound: 1.303e-05
+      median-upper-bound: 5.212e-05
+      min-lower-bound: 1.2932e-05
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Release the barrier.
+  code: |
+    uint32_t count;
+
+    ctx->begin = T_tick();
+    ctx->status = rtems_barrier_release( ctx->barrier_id, &count );
+  description: null
+test-cleanup:
+  brief: |
+    Delete the barrier and the worker.
+  code: |
+    rtems_status_code sc;
+
+    DeleteTask( ctx->worker_id );
+
+    sc = rtems_barrier_delete( ctx->barrier_id );
+    T_rsc_success( sc );
+
+    RestoreRunnerPriority();
+  description: null
+test-prepare:
+  brief: |
+    Create a manual release barrier.  Create and start a worker task.
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_barrier_create(
+      OBJECT_NAME,
+      RTEMS_BARRIER_MANUAL_RELEASE,
+      0,
+      &ctx->barrier_id
+    );
+    T_rsc_success( sc );
+
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, BarrierWaitWorker, ctx );
+  description: null
+test-setup: null
+test-teardown:
+  brief: |
+    Set the measured runtime.  Discard samples interrupted by a clock tick.
+  code: |
+    T_quiet_rsc_success( ctx->status );
+
+    *delta = ctx->end - ctx->begin;
+
+    return tic == toc;
+  description: null
+text: |
+  Let U and V be two tasks with the same home scheduler.  Let :math:`B`
+  be a time point measured by U right before a call to
+  ${../if/release:/name} which preempts the caller.  Let :math:`E` be a time
+  point measured by V right after a call to ${../if/wait:/name} returns
+  successfully due to the ${../if/release:/name} call associated with
+  :math:`B`.
+
+  While the execution environment is ${.:/environment}, while the barrier is a
+  manual release barrier, while the measurement sample is :math:`E - B`, when
+  exactly ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement

@@ -1,0 +1,200 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/calloc
+post-conditions:
+- name: Status
+  states:
+  - name: 'Null'
+    test-code: |
+      T_null( ctx->ptr );
+    text: |
+      The return value of ${../if/calloc:/name} shall be equal to
+      ${/c/if/null:/name}.
+  - name: AreaBegin
+    test-code: |
+      T_not_null( ctx->ptr );
+    text: |
+      The return value of ${../if/calloc:/name} shall be equal to the begin
+      address of the allocated memory area.
+  test-epilogue: null
+  test-prologue: null
+- name: Alignment
+  states:
+  - name: Valid
+    test-code: |
+      T_eq_uptr( (uintptr_t) ctx->ptr % CPU_HEAP_ALIGNMENT, 0 );
+    text: |
+      The begin address of the allocated memory area shall be an integral
+      multiple of the heap alignment of the ${/glossary/target-arch:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Size
+  states:
+  - name: Valid
+    test-code: |
+      /* Assume that the next allocation is done from adjacent memory */
+      ptr = ctx->ptr;
+      ctx->ptr = rtems_calloc( ctx->nelem, ctx->elsize );
+      T_not_null( ptr );
+      a = (uintptr_t) ptr;
+      b = (uintptr_t) ctx->ptr;
+      size = a < b ? b - a : a - b;
+      T_ge_uptr( size, ctx->nelem * ctx->elsize );
+    text: |
+      The size of the allocated memory area shall greater than or equal to the
+      product of the ``nelem`` and ``elsize`` parameters.
+  test-epilogue: null
+  test-prologue: |
+    void     *ptr;
+    uintptr_t a;
+    uintptr_t b;
+    uintptr_t size;
+- name: Content
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_u64( *(uint64_t *) ctx->ptr, 0 );
+    text: |
+      The content of the allocated memory area shall be cleared to zero.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: ElementCount
+  states:
+  - name: Huge
+    test-code: |
+      ctx->nelem = SIZE_MAX;
+    text: |
+      While the ``nelem`` parameter is not equal to zero, while the ``nelem``
+      parameter is too large to allocate a memory area with the specified size.
+  - name: Zero
+    test-code: |
+      ctx->nelem = 0;
+    text: |
+      While the ``nelem`` parameter is equal to zero.
+  - name: Valid
+    test-code: |
+      ctx->nelem = 1;
+    text: |
+      While the ``nelem`` parameter is not equal to zero, while the ``nelem``
+      parameter is small enough to allocate a memory area with the specified
+      size.
+  test-epilogue: null
+  test-prologue: null
+- name: ElementSize
+  states:
+  - name: Huge
+    test-code: |
+      ctx->elsize = SIZE_MAX;
+    text: |
+      While the ``elsize`` parameter is not equal to zero, while the ``elsize``
+      parameter is too large to allocate a memory area with the specified size.
+  - name: Zero
+    test-code: |
+      ctx->elsize = 0;
+    text: |
+      While the ``elsize`` parameter is equal to zero.
+  - name: Valid
+    test-code: |
+      ctx->elsize = sizeof( uint64_t );
+    text: |
+      While the ``elsize`` parameter is not equal to zero, while the ``elsize``
+      parameter is small enough to allocate a memory area with the specified
+      size.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->ptr = rtems_calloc( ctx->nelem, ctx->elsize );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a memory support context.
+  description: null
+  member: |
+    MemoryContext mem_ctx;
+- brief: |
+    This member contains the return value of the ${../if/calloc:/name} call.
+  description: null
+  member: |
+    void *ptr
+- brief: |
+    This member specifies if the ``nelem`` parameter value.
+  description: null
+  member: |
+    size_t nelem
+- brief: |
+    This member specifies if the ``elsize`` parameter value.
+  description: null
+  member: |
+    size_t elsize
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/malloc.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    MemorySave( &ctx->mem_ctx );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-mem-rtems-calloc.c
+test-teardown:
+  brief: null
+  code: |
+    MemoryRestore( &ctx->mem_ctx );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: AreaBegin
+    Alignment: Valid
+    Size: Valid
+    Content: Zero
+  pre-conditions:
+    ElementCount:
+    - Valid
+    ElementSize:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: 'Null'
+    Alignment: Valid
+    Size: N/A
+    Content: N/A
+  pre-conditions:
+    ElementCount:
+    - Huge
+    - Zero
+    ElementSize:
+    - Huge
+    - Zero
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: 'Null'
+    Alignment: Valid
+    Size: N/A
+    Content: N/A
+  pre-conditions:
+    ElementCount:
+    - Valid
+    ElementSize:
+    - Huge
+    - Zero
+type: requirement

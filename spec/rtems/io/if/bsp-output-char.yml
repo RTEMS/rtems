@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This function pointer references the kernel character output implementation.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${bsp-output-char-function-type:/name} ${.:/name}
+  variants: []
+description: |
+  This function pointer shall never be ${/c/if/null:/name}.  It shall be
+  provided by the ${/glossary/bsp:/term} and statically initialized.  The
+  referenced function shall output exactly the character specified by the
+  parameter.  In particular, it shall not perform character translations, for
+  example ``NL`` to ``CR`` followed by ``NR``.  The function shall not block.
+enabled-by: true
+index-entries: []
+interface-type: variable
+links:
+- role: interface-placement
+  uid: header-3
+- role: interface-ingroup
+  uid: group-3
+name: BSP_output_char
+notes: null
+type: interface

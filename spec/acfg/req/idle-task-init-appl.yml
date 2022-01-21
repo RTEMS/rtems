@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/idle-task-init-appl
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The application configuration option shall indicate that the user has
+  configured **no** user initialization tasks or threads and that the
+  user-provided ${/glossary/idletask:/term} will perform application
+  initialization and then transform itself into an ${/glossary/idletask:/term}.
+type: requirement

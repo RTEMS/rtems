@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/fine-grained-locking
+- role: requirement-refinement
+  uid: ../if/group
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The state of each thread queue object shall be protected by an
+  object-specific lock.
+type: requirement

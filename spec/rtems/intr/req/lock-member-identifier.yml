@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/lock-member
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/lock-member:/name} is used, it shall expand to structure or
+  union member declaration with an identifier specified by the
+  ${../if/lock-define:/params[0]/name} parameter.
+type: requirement

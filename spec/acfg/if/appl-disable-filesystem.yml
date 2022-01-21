@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default: |
+  If this configuration option is undefined, then a base filesystem and the
+  configured filesystems are initialized during system initialization.
+description: |
+  In case this configuration option is defined, then **no base filesystem** is
+  initialized during system initialization and **no filesystems** are
+  configured.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-pre-qualified-mandatory
+name: CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+notes: |
+  Filesystems shall be initialized to support file descriptor based device
+  drivers and basic input/output functions such as ${/c/if/printf:/name}.
+  Filesystems can be disabled to reduce the memory footprint of an application.
+type: interface

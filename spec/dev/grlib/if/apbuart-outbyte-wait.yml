@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Ensures that at least once an empty transmitter FIFO was observed.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${apbuart:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: apbuart-header-2
+- role: interface-ingroup
+  uid: apbuart
+name: apbuart_outbyte_wait
+notes: null
+params:
+- description: |
+    is the pointer to the APBUART register block.
+  dir: null
+  name: regs
+return: null
+type: interface

@@ -1,0 +1,355 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/vector-is-enabled
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/vector-is-enabled:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/vector-is-enabled:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/vector-is-enabled:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: IsEnabled
+  states:
+  - name: Nop
+    test-code: |
+      T_eq( ctx->is_enabled, !ctx->enabled_obj );
+    text: |
+      Objects referenced by the ${../if/vector-is-enabled:/params[1]/name}
+      parameter in past calls to ${../if/vector-is-enabled:/name} shall not be
+      accessed by the ${../if/vector-is-enabled:/name} call.
+  - name: 'Yes'
+    test-code: |
+      /* Validation is done by WhileIsEnabled() for each interrupt vector */
+    text: |
+      The value of the object referenced by the
+      ${../if/vector-is-enabled:/params[1]/name} parameter shall be set to
+      ${/c/if/true:/name}.
+  - name: 'No'
+    test-code: |
+      /* Validation is done by WhileIsDisabled() for each interrupt vector */
+    text: |
+      The value of the object referenced by the
+      ${../if/vector-is-enabled:/params[1]/name} parameter shall be set to
+      ${/c/if/false:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->valid_vector = true;
+    text: |
+      While the ${../if/vector-is-enabled:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->valid_vector = false;
+    text: |
+      While the ${../if/vector-is-enabled:/params[0]/name} parameter is
+      not associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: Enabled
+  states:
+  - name: Obj
+    test-code: |
+      ctx->enabled = &ctx->enabled_obj;
+    text: |
+      While the ${../if/vector-is-enabled:/params[1]/name} parameter references an
+      object of type ``bool``.
+  - name: 'Null'
+    test-code: |
+      ctx->enabled = NULL;
+    text: |
+      While the ${../if/vector-is-enabled:/params[1]/name} parameter is equal
+      to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: IsEnabled
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->is_enabled = true;
+      ctx->enabled_obj = false;
+    text: |
+      While the interrupt associated with the interrupt vector specified by
+      ${../if/vector-is-enabled:/params[0]/name} was enabled for the processor
+      executing the ${../if/vector-is-enabled:/name} call at some time point
+      during the call.
+  - name: 'No'
+    test-code: |
+      ctx->is_enabled = false;
+      ctx->enabled_obj = true;
+    text: |
+      While the interrupt associated with the interrupt vector specified by
+      ${../if/vector-is-enabled:/params[0]/name} was disabled for the processor
+      executing the ${../if/vector-is-enabled:/name} call at some time point
+      during the call.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->valid_vector && ctx->enabled != NULL ) {
+    for (
+      ctx->vector = 0;
+      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
+      ++ctx->vector
+    ) {
+      rtems_status_code          sc;
+      rtems_interrupt_attributes attr;
+      bool                       has_installed_entries;
+
+      memset( &attr, 0, sizeof( attr ) );
+      sc = rtems_interrupt_get_attributes( ctx->vector, &attr );
+
+      if ( sc == RTEMS_INVALID_ID ) {
+        continue;
+      }
+
+      T_rsc_success( sc );
+
+      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+
+      if ( ctx->is_enabled ) {
+        WhileIsEnabled( ctx, &attr, has_installed_entries );
+      } else {
+        WhileIsDisabled( ctx, &attr, has_installed_entries );
+      }
+    }
+  } else {
+    if ( ctx->valid_vector ) {
+      ctx->vector = 0;
+    } else {
+      ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
+    }
+
+    ctx->status = rtems_interrupt_vector_is_enabled(
+      ctx->vector,
+      ctx->enabled
+    );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then an interrupt occurred.
+  description: null
+  member: |
+    bool interrupt_occurred
+- brief: |
+    This member contains the current vector number.
+  description: null
+  member: |
+    rtems_vector_number vector
+- brief: |
+    If this member is true, then the interrupt vector shall be enabled before
+    the ${../if/vector-is-enabled:/name} call.
+  description: null
+  member: |
+    bool is_enabled
+- brief: |
+    This member provides the ``bool`` object.
+  description: null
+  member: |
+    bool enabled_obj
+- brief: |
+    If this member is true, then the ${../if/vector-is-enabled:/params[0]/name}
+    parameter shall be valid.
+  description: null
+  member: |
+    bool valid_vector
+- brief: |
+    This member specifies if the ${../if/vector-is-enabled:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    bool *enabled;
+- brief: |
+    This member contains the return value of the ${../if/vector-is-enabled:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void CheckIsEnabled( Context *ctx, bool expected )
+  {
+    ctx->enabled_obj = !expected;
+    ctx->status = rtems_interrupt_vector_is_enabled(
+      ctx->vector,
+      ctx->enabled
+    );
+    T_rsc_success( ctx->status );
+    T_eq( ctx->enabled_obj, expected );
+  }
+
+  static void Enable( const Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_vector_enable( ctx->vector );
+   T_rsc_success( sc );
+  }
+
+  static void Disable( const Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_vector_disable( ctx->vector );
+    T_rsc_success( sc );
+  }
+
+  static void EntryRoutine( void *arg )
+  {
+    Context *ctx;
+
+    (void) arg;
+    ctx = T_fixture_context();
+
+    CheckIsEnabled( ctx, true );
+    Disable( ctx );
+    ctx->interrupt_occurred = true;
+  }
+
+  static void WhileIsEnabled(
+    Context                          *ctx,
+    const rtems_interrupt_attributes *attr,
+    bool                              has_installed_entries
+  )
+  {
+    rtems_status_code sc;
+
+    if ( has_installed_entries ) {
+      CheckIsEnabled( ctx, true );
+    } else if ( attr->can_enable && attr->can_disable && attr->is_maskable ) {
+      rtems_interrupt_entry entry;
+
+      ctx->interrupt_occurred = false;
+      rtems_interrupt_entry_initialize( &entry, EntryRoutine, ctx, "Info" );
+      sc = rtems_interrupt_entry_install(
+        ctx->vector,
+        RTEMS_INTERRUPT_UNIQUE,
+        &entry
+      );
+      T_rsc_success( sc );
+
+      ctx->enabled_obj = false;
+      sc = rtems_interrupt_vector_is_enabled( ctx->vector, ctx->enabled );
+      T_rsc_success( sc );
+      T_true( ctx->enabled_obj || ctx->interrupt_occurred );
+
+      sc = rtems_interrupt_entry_remove( ctx->vector, &entry );
+      T_rsc_success( sc );
+
+      CheckIsEnabled( ctx, false );
+    } else {
+      sc = rtems_interrupt_vector_is_enabled( ctx->vector, ctx->enabled );
+      T_rsc_success( sc );
+    }
+  }
+
+  static void WhileIsDisabled(
+    Context                          *ctx,
+    const rtems_interrupt_attributes *attr,
+    bool                              has_installed_entries
+  )
+  {
+    if ( has_installed_entries ) {
+      if ( attr->can_enable && attr->can_disable ) {
+        Disable( ctx );
+        CheckIsEnabled( ctx, false );
+        Enable( ctx );
+      }
+    } else if ( attr->can_disable ) {
+      CheckIsEnabled( ctx, false );
+    } else {
+      rtems_status_code sc;
+
+      sc = rtems_interrupt_vector_is_enabled( ctx->vector, ctx->enabled );
+      T_rsc_success( sc );
+    }
+  }
+test-target: testsuites/validation/tc-intr-vector-is-enabled.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    IsEnabled:
+    - specified-by: IsEnabled
+  pre-conditions:
+    Vector:
+    - Valid
+    Enabled:
+    - Obj
+    IsEnabled: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IsEnabled: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    Enabled:
+    - 'Null'
+    IsEnabled: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IsEnabled: Nop
+  pre-conditions:
+    Vector:
+    - Invalid
+    Enabled:
+    - 'Null'
+    IsEnabled: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    IsEnabled: Nop
+  pre-conditions:
+    Vector:
+    - Invalid
+    Enabled:
+    - Obj
+    IsEnabled: N/A
+type: requirement

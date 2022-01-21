@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite contains BSP-specific test cases.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #include "ts-default.h"
+test-description: null
+test-includes: []
+test-local-includes: []
+test-suite-name: BspSparcLeon3Gr712rc
+test-target: testsuites/validation/ts-bsp-sparc-leon3-gr712rc.c
+type: test-suite

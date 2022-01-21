@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: false
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/malloc-dirty
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The application configuration option shall enable that each memory area
+  returned by C Program Heap allocator functions such as ${/c/if/malloc:/name}
+  is dirtied with a ``0xCF`` byte pattern before it is handed over to the
+  application.
+type: requirement

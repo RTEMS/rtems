@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - not:
+    - aarch64
+    - arm
+    - riscv
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the system does not need inter-processor interrupts, when a thread
+  dispatch is done with maskable interrupts disabled, the thread dispatch shall
+  be carried out.
+type: requirement

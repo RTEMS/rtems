@@ -1,0 +1,422 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Create three worker threads and a mutex.  Use the mutex and the worker to
+    move to a helping scheduler.
+  action-code: |
+    Per_CPU_Control*cpu_self;
+    Thread_Control *executing;
+
+    executing = _Thread_Get_executing();
+    ctx->counter = 0;
+
+    ctx->mutex_id = CreateMutex();
+
+    ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
+    SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
+    StartTask( ctx->worker_a_id, WorkerTask, ctx );
+
+    ctx->worker_b_id = CreateTask( "WRKB", PRIO_HIGH );
+    StartTask( ctx->worker_b_id, WorkerTask, ctx );
+
+    ctx->worker_c_id = CreateTask( "WRKC", PRIO_LOW );
+    StartTask( ctx->worker_c_id, WorkerTask, ctx );
+
+    ObtainMutex( ctx->mutex_id );
+    SendEvents( ctx->worker_a_id, EVENT_OBTAIN | EVENT_RELEASE );
+
+    ctx->busy = true;
+    SendEvents( ctx->worker_b_id, EVENT_BUSY );
+  checks:
+  - brief: |
+      Pin the runner thread while it executes on a processor owned by a
+      helping scheduler.
+    code: |
+      T_eq_u32( rtems_scheduler_get_processor(), 1 );
+      _Thread_Pin( executing );
+    links:
+    - role: validation
+      uid: ../req/pinning-helping
+  - brief: |
+      Pin and unpin the runner thread.  This is a nested operation.
+    code: |
+      T_eq_u32( rtems_scheduler_get_processor(), 1 );
+      _Thread_Pin( executing );
+      _Thread_Unpin( executing, _Per_CPU_Get_snapshot() );
+    links:
+    - role: validation
+      uid: ../req/pinning-nested
+  - brief: |
+      Preempt the pinned runner thread.  Worker B and C execute at the same
+      time on processor 0 and 1 respectively for some point in time.  This
+      shows that the pinning of the runner thread is maintained.
+    code: |
+      ctx->busy = false;
+      SetScheduler( ctx->worker_b_id, SCHEDULER_B_ID, PRIO_HIGH );
+      SendEvents( ctx->worker_b_id, EVENT_LET_WORKER_C_COUNT );
+
+      T_eq_u32( rtems_scheduler_get_processor(), 1 );
+      T_eq_u32( ctx->counter, 1 );
+    links:
+    - role: validation
+      uid: ../req/pinning-preemptible
+  - brief: |
+      Unpin the runner thread.  The runner moves back to its home scheduler.
+    code: |
+      cpu_self = _Thread_Dispatch_disable();
+      _Thread_Unpin( executing, cpu_self );
+      _Thread_Dispatch_direct( cpu_self );
+
+      T_eq_u32( rtems_scheduler_get_processor(), 0 );
+    links:
+    - role: validation
+      uid: ../req/pinning-nested
+  - brief: |
+      Release the mutex.
+    code: |
+      ReleaseMutex( ctx->mutex_id);
+      T_eq_u32( rtems_scheduler_get_processor(), 0 );
+    links: []
+  - brief: |
+      Pin the runner thread.  Unpin the runner thread while it is suspended.
+    code: |
+      _Thread_Pin( executing );
+
+      /* We have to preempt the runner to end up in _Thread_Do_unpin() */
+      SetPriority( ctx->worker_c_id, PRIO_HIGH );
+      SendEvents( ctx->worker_c_id, EVENT_COUNT );
+      T_eq_u32( ctx->counter, 2 );
+
+      cpu_self = _Thread_Dispatch_disable();
+      CallWithinISR( Suspend, executing );
+      _Thread_Unpin( executing, cpu_self );
+      CallWithinISR( Resume, executing );
+      _Thread_Dispatch_direct( cpu_self );
+    links:
+    - role: validation
+      uid: ../req/pinning-unpin-suspended
+  - brief: |
+      Make sure the worker released the mutex.
+    code: |
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_LOW );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
+    links: []
+  - brief: |
+      Clean up all used resources.
+    code: |
+      DeleteTask( ctx->worker_a_id );
+      DeleteTask( ctx->worker_b_id );
+      DeleteTask( ctx->worker_c_id );
+      DeleteMutex( ctx->mutex_id );
+    links: []
+  links: []
+- action-brief: |
+    Create three worker threads and a mutex.  Use the mutex and the worker to
+    check that a suspended thread does not reconsider help requests.
+  action-code: |
+    T_scheduler_log_10       scheduler_log;
+    size_t                   index;
+    const T_scheduler_event *event;
+
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &ctx->barrier_state );
+
+    ctx->counter = 0;
+    ctx->mutex_id = CreateMutex();
+
+    ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
+    SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
+    StartTask( ctx->worker_a_id, WorkerTask, ctx );
+
+    ctx->worker_b_id = CreateTask( "WRKB", PRIO_HIGH );
+    StartTask( ctx->worker_b_id, WorkerTask, ctx );
+
+    ctx->worker_c_id = CreateTask( "WRKC", PRIO_NORMAL );
+    SetScheduler( ctx->worker_c_id, SCHEDULER_B_ID, PRIO_HIGH );
+    StartTask( ctx->worker_c_id, WorkerTask, ctx );
+  checks:
+  - brief: |
+      Let worker B help worker A through the mutex.  Preempt worker A.  Delay
+      the thread switch to worker A.
+    code: |
+      ctx->busy = true;
+      SendEvents(
+        ctx->worker_a_id,
+        EVENT_OBTAIN | EVENT_COUNT_EARLY | EVENT_BUSY | EVENT_COUNT
+      );
+      WaitForCounter( ctx, 1 );
+
+      SendEvents( ctx->worker_b_id, EVENT_OBTAIN );
+      SetPriority( ctx->worker_b_id, PRIO_LOW );
+      SendEvents( ctx->worker_c_id, EVENT_SET_TASK_SWITCH_EXTENSION );
+
+      /* B0 */
+      _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, 2 );
+    links: []
+  - brief: |
+      Suspend worker A and let it wait on its thread state lock.  Check that
+      worker A did not reconsider help requests.
+    code: |
+      T_scheduler_record_10( &scheduler_log );
+      T_scheduler_set_event_handler( SchedulerBlock, ctx );
+      SuspendTask( ctx->worker_a_id );
+      WaitForExecutionStop( ctx->worker_a_id );
+      T_scheduler_record( NULL );
+      T_eq_sz( scheduler_log.header.recorded, 2 );
+      index = 0;
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_WITHDRAW_NODE );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_ptr( event, &T_scheduler_event_null );
+      SetTaskSwitchExtension( NULL );
+    links:
+    - role: validation
+      uid: ../req/suspended-helping
+  - brief: |
+      Resume worker A.  Check that worker A did reconsider help requests after
+      the thread dispatch.
+    code: |
+      T_scheduler_record_10( &scheduler_log );
+      ResumeTask( ctx->worker_a_id );
+      ctx->busy = false;
+      WaitForCounter( ctx, 2 );
+      WaitForExecutionStop( ctx->worker_a_id );
+      T_scheduler_record( NULL );
+      T_eq_sz( scheduler_log.header.recorded, 5 );
+      index = 0;
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_RECONSIDER_HELP_REQUEST );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_RECONSIDER_HELP_REQUEST );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_WITHDRAW_NODE );
+      event = T_scheduler_next_any( &scheduler_log.header, &index );
+      T_eq_ptr( event, &T_scheduler_event_null );
+    links: []
+  - brief: |
+      Clean up all used resources.
+    code: |
+      SendEvents( ctx->worker_a_id, EVENT_RELEASE | EVENT_COUNT );
+      WaitForCounter( ctx, 3 );
+
+      SetPriority( ctx->worker_b_id, PRIO_HIGH );
+      SendEvents( ctx->worker_b_id, EVENT_RELEASE );
+
+      DeleteTask( ctx->worker_a_id );
+      DeleteTask( ctx->worker_b_id );
+      DeleteTask( ctx->worker_c_id );
+      DeleteMutex( ctx->mutex_id );
+    links: []
+  links: []
+test-brief: |
+  Tests SMP-specific thread behaviour.
+test-context:
+- brief: |
+    This member contains the worker A identifier.
+  description: null
+  member: |
+    rtems_id worker_a_id
+- brief: |
+    This member contains the worker B identifier.
+  description: null
+  member: |
+    rtems_id worker_b_id
+- brief: |
+    This member contains the worker C identifier.
+  description: null
+  member: |
+    rtems_id worker_c_id
+- brief: |
+    This member contains the mutex identifier.
+  description: null
+  member: |
+    rtems_id mutex_id
+- brief: |
+    If this member is true, then the worker shall busy wait.
+  description: null
+  member: |
+    volatile bool busy
+- brief: |
+    This member contains a counter for EVENT_COUNT.
+  description: null
+  member: |
+    volatile uint32_t counter
+- brief: |
+    This member contains the barrier to synchronize the runner and the workers.
+  description: null
+  member: |
+    SMP_barrier_Control barrier
+- brief: |
+    This member contains the barrier state for the runner processor.
+  description: null
+  member: |
+    SMP_barrier_State barrier_state
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/smpbarrier.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  typedef enum {
+    EVENT_OBTAIN = RTEMS_EVENT_0,
+    EVENT_RELEASE = RTEMS_EVENT_1,
+    EVENT_COUNT_EARLY = RTEMS_EVENT_2,
+    EVENT_BUSY = RTEMS_EVENT_3,
+    EVENT_COUNT = RTEMS_EVENT_4,
+    EVENT_LET_WORKER_C_COUNT = RTEMS_EVENT_5,
+    EVENT_SET_TASK_SWITCH_EXTENSION = RTEMS_EVENT_6
+  } Event;
+
+  static void TaskSwitchExtension( rtems_tcb *executing, rtems_tcb *heir )
+  {
+    Context        *ctx;
+    Thread_Control *thread;
+
+    (void) executing;
+    (void) heir;
+
+    ctx = T_fixture_context();
+    thread = GetThread( ctx->worker_a_id );
+
+    if ( thread == heir ) {
+      SMP_barrier_State state;
+
+      _SMP_barrier_State_initialize( &state );
+
+      /* B0 */
+      _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+      /* B1 */
+      _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+    }
+  }
+
+  static void WorkerTask( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_event_set events;
+
+      events = ReceiveAnyEvents();
+
+      if ( ( events & EVENT_OBTAIN ) != 0 ) {
+        ObtainMutex( ctx->mutex_id );
+      }
+
+      if ( ( events & EVENT_RELEASE ) != 0 ) {
+        ReleaseMutex( ctx->mutex_id );
+      }
+
+      if ( ( events & EVENT_COUNT_EARLY ) != 0 ) {
+        ++ctx->counter;
+      }
+
+      if ( ( events & EVENT_BUSY ) != 0 ) {
+        while ( ctx->busy ) {
+          /* Do nothing */
+        }
+      }
+
+      if ( ( events & EVENT_COUNT ) != 0 ) {
+        ++ctx->counter;
+      }
+
+      if ( ( events & EVENT_LET_WORKER_C_COUNT ) != 0 ) {
+        uint32_t counter;
+
+        counter = ctx->counter;
+        SendEvents( ctx->worker_c_id, EVENT_COUNT );
+
+        while ( ctx->counter == counter ) {
+          /* Wait */
+        }
+      }
+
+      if ( ( events & EVENT_SET_TASK_SWITCH_EXTENSION ) != 0 ) {
+        SetTaskSwitchExtension( TaskSwitchExtension );
+      }
+    }
+  }
+
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      Thread_Control *thread;
+
+      T_scheduler_set_event_handler( NULL, NULL );
+
+      /* B1 */
+      _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, 2 );
+
+      thread = GetThread( ctx->worker_a_id );
+      TicketLockWaitForOthers( &thread->Join_queue.Queue.Lock, 1 );
+    }
+  }
+
+  static void Suspend( void *arg )
+  {
+    Thread_Control *thread;
+
+    thread = arg;
+    SuspendTask( thread->Object.id );
+  }
+
+  static void Resume( void *arg )
+  {
+    Thread_Control *thread;
+
+    thread = arg;
+    ResumeTask( thread->Object.id );
+  }
+
+  static void WaitForCounter( const Context *ctx, uint32_t expected )
+  {
+    while ( ctx->counter != expected ) {
+      /* Wait */
+    }
+  }
+test-target: testsuites/validation/tc-score-smp-thread.c
+test-teardown:
+  brief: null
+  code: |
+    RestoreRunnerPriority();
+  description: null
+type: test-case

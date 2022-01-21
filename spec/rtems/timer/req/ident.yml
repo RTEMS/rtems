@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/ident
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/ident:/name} directive shall identify an Classic API
+  timer class object by its name as specified by ${../../req/ident-local}.
+type: requirement

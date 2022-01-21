@@ -1,0 +1,1013 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/server-fire-after
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/server-fire-after:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/server-fire-after:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/server-fire-after:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/server-fire-after:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/server-fire-after:/name} shall be
+      ${../../status/if/incorrect-state:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Context
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( class, TIMER_DORMANT );
+    text: |
+      The timer shall have never been ${../glossary/scheduled:/term}.
+      See also ${../glossary/none:/term}.
+  - name: Interrupt
+    test-code: |
+      T_eq_int( class & TIMER_CLASS_BIT_ON_TASK, 0 );
+    text: |
+      The timer shall be in ${../glossary/interruptcontext:/term}.
+  - name: Server
+    test-code: |
+      T_eq_int( class & TIMER_CLASS_BIT_ON_TASK, TIMER_CLASS_BIT_ON_TASK );
+    text: |
+      The timer shall be in ${../glossary/servercontext:/term}.
+  - name: Nop
+    test-code: |
+      T_eq_int( class, ctx->pre_class );
+    text: |
+      Objects referenced by the parameters in the past call to
+      ${../if/server-fire-after:/name} shall not be accessed by the
+      ${../if/server-fire-after:/name} call.
+      See also ${../glossary/nop:/term}.
+  test-epilogue: null
+  test-prologue: |
+      Timer_Classes class;
+      class = GetTimerClass( ctx->timer_id );
+- name: Clock
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( class, TIMER_DORMANT );
+    text: |
+      The timer shall have never been ${../glossary/scheduled:/term}.
+  - name: Ticks
+    test-code: |
+      T_eq_int( class & TIMER_CLASS_BIT_TIME_OF_DAY, 0 );
+    text: |
+      The timer shall use the ${../glossary/ticksbasedclock:/term}.
+  - name: Realtime
+    test-code: |
+      T_eq_int(
+        class & TIMER_CLASS_BIT_TIME_OF_DAY,
+        TIMER_CLASS_BIT_TIME_OF_DAY
+      );
+    text: |
+      The timer shall use the ${../glossary/realtimeclock:/term}.
+  - name: Nop
+    test-code: |
+      T_eq_int( class, ctx->pre_class );
+    text: |
+      Objects referenced by the parameters in the past call to
+      ${../if/server-fire-after:/name} shall not be accessed by the
+      ${../if/server-fire-after:/name} call.
+  test-epilogue: null
+  test-prologue: |
+      Timer_Classes class;
+      class = GetTimerClass( ctx->timer_id );
+- name: State
+  states:
+  - name: Scheduled
+    test-code: |
+      ctx->ticks_till_fire = TriggerTimer( ctx );
+      T_eq_int( ctx->invocations, 1 );
+    text: |
+      The timer shall be in ${../glossary/scheduled:/term}
+      ${../glossary/state:/term}.
+  - name: Nop
+    test-code: |
+      T_eq_int( ctx->post_state, ctx->pre_state );
+    text: |
+      Objects referenced by the parameters in the past call to
+      ${../if/server-fire-after:/name} shall not be accessed by the
+      ${../if/server-fire-after:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Interval
+  states:
+  - name: Param
+    test-code: |
+      T_eq_int( ctx->ticks_till_fire, ctx->ticks_param );
+    text: |
+      The ${../glossary/timerserviceroutine:/term} shall be invoked the
+      number of ticks (see ${/glossary/tick:/term}), which are provided by
+      the ${../if/server-fire-after:/params[1]/name} parameter
+      in the past call to ${../if/server-fire-after:/name}, after a point in time
+      during the execution of the ${../if/server-fire-after:/name} call.
+  - name: Nop
+    test-code: |
+      /*
+       * Whether the timer is scheduled has already been tested by the
+       * "Nop" "State" post-condition above.
+       */
+      T_eq_u32(
+        ctx->post_scheduling_data.interval,
+        ctx->pre_scheduling_data.interval
+      );
+    text: |
+      If and when the ${../glossary/timerserviceroutine:/term} will be invoked
+      shall not be changed by the past call to ${../if/server-fire-after:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Routine
+  states:
+  - name: Param
+    test-code: |
+      T_eq_int( ctx->invocations, 1 );
+    text: |
+      The function reference used to invoke the
+      ${../glossary/timerserviceroutine:/term} when the timer will
+      ${../glossary/fire:/term} shall be the one provided by
+      the ${../if/server-fire-after:/params[2]/name} parameter
+      in the past call to ${../if/server-fire-after:/name}.
+  - name: Nop
+    test-code: |
+      T_eq_ptr(
+        ctx->post_scheduling_data.routine,
+        ctx->pre_scheduling_data.routine
+      );
+    text: |
+      The function reference used for any invocation of the
+      ${../glossary/timerserviceroutine:/term} shall not be changed
+      by the past call to ${../if/server-fire-after:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: UserData
+  states:
+  - name: Param
+    test-code: |
+      T_eq_ptr( ctx->routine_user_data, ctx );
+    text: |
+      The user data argument for invoking the
+      ${../glossary/timerserviceroutine:/term} when the timer will
+      ${../glossary/fire:/term} shall be the one provided by
+      the ${../if/server-fire-after:/params[3]/name} parameter
+      in the past call to ${../if/server-fire-after:/name}.
+  - name: Nop
+    test-code: |
+      T_eq_ptr(
+        ctx->post_scheduling_data.user_data,
+        ctx->pre_scheduling_data.user_data
+      );
+    text: |
+      The user data argument used for any invocation of the
+      ${../glossary/timerserviceroutine:/term} shall not be changed
+      by the past call to ${../if/server-fire-after:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Server
+  states:
+  - name: Init
+    test-code: |
+      rtems_status_code status;
+      status = rtems_timer_initiate_server(
+        RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
+        RTEMS_MINIMUM_STACK_SIZE,
+        RTEMS_DEFAULT_ATTRIBUTES
+      );
+      T_rsc_success( status );
+    text: |
+      While the Timer Server task has been successfully initialized
+      by a call to ${../if/initiate-server:/name}.
+  - name: NotInit
+    test-code: |
+      DeleteTimerServer();
+    text: |
+      While the Timer Server task has not been initialized and does not exist.
+  test-epilogue: null
+  test-prologue: null
+- name: Ticks
+  states:
+  - name: Valid
+    test-code: |
+      ctx->ticks_param = SCHEDULE_LATER;
+    text: |
+      While the ${../if/server-fire-after:/params[1]/name} parameter is a positive
+      (greater 0) number.
+  - name: Is0
+    test-code: |
+      ctx->ticks_param = 0;
+    text: |
+      While the ${../if/server-fire-after:/params[1]/name} parameter is 0.
+  test-epilogue: null
+  test-prologue: null
+- name: Routine
+  states:
+  - name: Valid
+    test-code: |
+      ctx->routine_param = TimerServiceRoutine;
+    text: |
+      While the ${../if/server-fire-after:/params[2]/name} parameter references an
+      object of type ${../if/service-routine-entry:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->routine_param = NULL;
+    text: |
+      While the ${../if/server-fire-after:/params[2]/name} parameter is
+      ${/c/if/null:/name}..
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_param = ctx->timer_id;
+    text: |
+      While the ${../if/server-fire-after:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->id_param = RTEMS_ID_NONE;
+    text: |
+      While the ${../if/server-fire-after:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Context
+  states:
+  - name: None
+    test-code: |
+      ctx->pre_cond_contex = PRE_NONE;
+    text: |
+      While the ${../glossary/timerserviceroutine:/term} has never been
+      ${../glossary/scheduled:/term} since creation of the timer.
+      See also ${../glossary/none:/term}.
+  - name: Interrupt
+    test-code: |
+      ctx->pre_cond_contex = PRE_INTERRUPT;
+    text: |
+      While the timer is in ${../glossary/interruptcontext:/term}.
+  - name: Server
+    test-code: |
+      ctx->pre_cond_contex = PRE_SERVER;
+    text: |
+      While the timer is in ${../glossary/servercontext:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Clock
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( ctx->pre_cond_contex, PRE_NONE );
+    text: |
+      While the timer has never been ${../glossary/scheduled:/term}
+      since creation of the timer.
+  - name: Ticks
+    test-code: |
+      rtems_status_code status;
+
+      if ( ctx->pre_cond_contex == PRE_INTERRUPT ) {
+        status = rtems_timer_fire_after(
+          ctx->timer_id,
+          SCHEDULE_SOON,
+          TimerServiceRoutine,
+          ctx
+        );
+      } else {
+        status = rtems_timer_server_fire_after(
+          ctx->timer_id,
+          SCHEDULE_SOON,
+          TimerServiceRoutine,
+          ctx
+        );
+      }
+      T_rsc_success( status );
+    text: |
+      While the ${../glossary/clock:/term} used to determine when the timer
+      will ${../glossary/fire:/term} is the
+      ${../glossary/ticksbasedclock:/term}.
+  - name: Realtime
+    test-code: |
+      rtems_status_code status;
+
+      if ( ctx->pre_cond_contex == PRE_INTERRUPT ) {
+        status = rtems_timer_fire_when(
+          ctx->timer_id,
+          &tod_schedule,
+          TimerServiceRoutine,
+          ctx
+        );
+      } else {
+        status = rtems_timer_server_fire_when(
+          ctx->timer_id,
+          &tod_schedule,
+          TimerServiceRoutine,
+          ctx
+        );
+      }
+      T_rsc_success( status );
+    text: |
+      While the ${../glossary/clock:/term} used to determine when the timer
+      will ${../glossary/fire:/term} is the ${../glossary/realtimeclock:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      TriggerTimer( ctx );
+      T_eq_int(
+        ctx->invocations,
+        ( ctx->pre_cond_contex == PRE_NONE ) ? 0 : 1
+      );
+      ctx->invocations = 0;
+      ctx->pre_state = TIMER_INACTIVE;
+    text: |
+      While the timer is in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
+  - name: Scheduled
+    test-code: |
+      /* The timer was already scheduled in the "Clock" pre-conditions. */
+      ctx->pre_state = TIMER_SCHEDULED;
+    text: |
+      While the timer is in ${../glossary/scheduled:/term}
+      ${../glossary/state:/term}.
+  - name: Pending
+    test-code: |
+      rtems_status_code status;
+      if ( ctx->pre_cond_contex == PRE_SERVER ) {
+        /*
+         * This call to rtems_timer_fire_after() serves to reach branch coverage
+         * in an if-statement which only serves performance optimization.
+         *
+         * cpukit/rtems/src/timerserver.c:70 else-branch was not reached:
+         * if ( wakeup ) {
+         *   (void) rtems_event_system_send( ts->server_id, RTEMS_EVENT_SYSTEM_SERVER );
+         * }
+         */
+        status = rtems_timer_server_fire_after(
+          ctx->timer_cover_id,
+          SCHEDULE_VERY_SOON,
+          TimerServiceRoutineCover,
+          ctx
+        );
+        T_rsc_success( status );
+      }
+
+      T_rsc_success( rtems_task_suspend( GetTimerServerTaskId() ) );
+      TriggerTimer( ctx );
+      T_eq_int( ctx->invocations, 0 );
+      ctx->pre_state = TIMER_PENDING;
+    text: |
+      While the timer is in ${../glossary/pending:/term}
+      ${../glossary/state:/term}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NotExist: |
+    The pre-condition combination of ${../glossary/context:/term},
+    ${../glossary/clock:/term} and ${../glossary/state:/term} cannot be
+    produced and does therefore not exist.
+  NoServer: |
+    If the server task is not initialized, the timer cannot be in
+    ${../glossary/servercontext:/term}.
+test-action: |
+  GetTimerSchedulingData( ctx->timer_id, &ctx->pre_scheduling_data );
+  ctx->pre_class = GetTimerClass( ctx->timer_id );
+  ctx->status = rtems_timer_server_fire_after(
+    ctx->id_param,
+    ctx->ticks_param,
+    ctx->routine_param,
+    ctx
+  );
+  ctx->post_state = GetTimerState( ctx->timer_id );
+  GetTimerSchedulingData( ctx->timer_id, &ctx->post_scheduling_data );
+  /* Ignoring return status: the timer server task may be suspended or not. */
+  rtems_task_resume( GetTimerServerTaskId() );
+test-brief: null
+test-cleanup: |
+  T_rsc_success( rtems_timer_delete( ctx->timer_cover_id ) );
+  T_rsc_success( rtems_timer_delete( ctx->timer_id ) );
+  DeleteTimerServer();
+test-context:
+- brief: |
+    This member contains a valid id of a timer.
+  description: null
+  member: |
+    rtems_id timer_id
+- brief: |
+    This member contains a valid id of a second timer.
+  description: |
+    This timer is used reach branch coverage in an if-statement which only
+    serves performance optimization.
+  member: |
+    rtems_id timer_cover_id
+- brief: |
+    This member specifies the ${../if/server-fire-after:/params[0]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_id id_param
+- brief: |
+    This member specifies the ${../if/server-fire-after:/params[1]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_interval ticks_param
+- brief: |
+    This member specifies the ${../if/server-fire-after:/params[2]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_timer_service_routine_entry routine_param
+- brief: |
+    This member contains the returned ${/glossary/statuscode:/term}
+    of the action.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member contains a counter for invocations of
+    the ${../glossary/timerserviceroutine:/term}.
+  description: null
+  member: |
+    int invocations
+- brief: |
+    Function TriggerTimer() is used to figure out how many
+    ticks (see ${/glossary/tick:/term}) are needed till the
+    ${../glossary/timerserviceroutine:/term} gets executed.
+    This member contains the number of ticks needed to
+    ${../glossary/fire:/term} the ${../glossary/timerserviceroutine:/term}.
+  description: null
+  member: |
+    Scheduling_Ticks ticks_till_fire
+- brief: |
+    This member contains the user data given to the
+    ${../glossary/timerserviceroutine:/term} when called.
+  description: null
+  member: |
+    void *routine_user_data
+- brief: |
+    This member specifies which pre-condition ${../glossary/context:/term}
+    (${../glossary/none:/term}, ${../glossary/interruptcontext:/term},
+    ${../glossary/servercontext:/term}) must be created before the
+    ${../if/server-fire-after:/name} action gets executed.
+  description: null
+  member: |
+    PreConditionContext pre_cond_contex
+- brief: |
+    This member stores internal ${../glossary/clock:/term} and
+    ${../glossary/context:/term} settings of the timer before
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_Classes pre_class
+- brief: |
+    This member stores the ${../glossary/state:/term} of the timer before
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_States pre_state
+- brief: |
+    This member stores the ${../glossary/state:/term} of the timer after
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_States post_state
+- brief: |
+    This member stores the scheduling data of the timer before
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_Scheduling_Data pre_scheduling_data
+- brief: |
+    This member stores the scheduling data of the timer after
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_Scheduling_Data post_scheduling_data
+test-context-support: |
+  typedef enum {
+    PRE_NONE      = 0,
+    PRE_INTERRUPT = 1,
+    PRE_SERVER    = 2
+  } PreConditionContext;
+
+  typedef enum {
+    SCHEDULE_NONE       = 0,
+    SCHEDULE_VERY_SOON  = 1,
+    SCHEDULE_SOON       = 2,
+    SCHEDULE_LATER      = 3,
+    SCHEDULE_MAX        = 5
+  } Scheduling_Ticks;
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_status_code status;
+  status = rtems_timer_create(
+    rtems_build_name( 'T', 'I', 'M', 'E' ),
+    &ctx->timer_id
+  );
+  T_rsc_success( status );
+
+  status = rtems_timer_create(
+    rtems_build_name( 'C', 'O', 'V', 'R' ),
+    &ctx->timer_cover_id
+  );
+  T_rsc_success( status );
+
+  ctx->invocations               = 0;
+  ctx->ticks_till_fire           = SCHEDULE_NONE;
+  ctx->routine_user_data         = NULL;
+  T_rsc_success( rtems_clock_set( &tod_now ) );
+test-setup: null
+test-stop: null
+test-support: |
+  static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
+  static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 1, 0, 0, 0 };
+  static const rtems_time_of_day tod_fire     = { 2000, 1, 2, 0, 0, 0, 0 };
+
+  static Scheduling_Ticks TriggerTimer( const RtemsTimerReqServerFireAfter_Context *ctx )
+  {
+    int ticks_fired = SCHEDULE_NONE;
+    int invocations_old = ctx->invocations;
+
+    /* Fire the timer service routine for ticks and realtime clock */
+    int i;
+    for ( i = 1; i <= SCHEDULE_MAX; ++i ) {
+      ClockTick();
+      if ( ctx->invocations > invocations_old ) {
+        ticks_fired = i;
+        break;
+      }
+    }
+
+    T_rsc_success( rtems_clock_set( &tod_fire ) );
+
+    return ticks_fired;
+  }
+
+  static void TimerServiceRoutine(
+    rtems_id timer_id,
+    void *user_data
+  )
+  {
+    RtemsTimerReqServerFireAfter_Context *ctx = user_data;
+    ++( ctx->invocations );
+    ctx->routine_user_data = user_data;
+  }
+
+  /*
+   * This service routine is used reach branch coverage in an if-statement
+   * which only serves performance optimization.
+   */
+  static void TimerServiceRoutineCover(
+    rtems_id timer_cover_id,
+    void *user_data
+  )
+  {
+    (void) timer_cover_id;
+    (void) user_data;
+  }
+test-target: testsuites/validation/tc-timer-server-fire-after.c
+test-teardown:
+  brief: Make sure the ${../glossary/realtimeclock:/term} is not set
+    after this test.
+  code: |
+    UnsetClock();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Context: Server
+    Clock: Ticks
+    State: Scheduled
+    Interval: Param
+    Routine: Param
+    UserData: Param
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - Valid
+    Id:
+    - Valid
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Context: Server
+    Clock: Ticks
+    State: Scheduled
+    Interval: Param
+    Routine: Param
+    UserData: Param
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - Valid
+    Id:
+    - Valid
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Context: Server
+    Clock: Ticks
+    State: Scheduled
+    Interval: Param
+    Routine: Param
+    UserData: Param
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - Valid
+    Id:
+    - Valid
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Server: all
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Scheduled
+    - Pending
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Server: all
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - None
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Server: all
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - Interrupt
+    - Server
+    Clock:
+    - None
+    State: all
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Server: all
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Pending
+- enabled-by: true
+  post-conditions: NoServer
+  pre-conditions:
+    Server:
+    - NotInit
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - Valid
+    Id:
+    - Invalid
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - Valid
+    Id:
+    - Invalid
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - Valid
+    Id:
+    - Invalid
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - 'Null'
+    Id: all
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - 'Null'
+    Id: all
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Valid
+    Routine:
+    - 'Null'
+    Id: all
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Is0
+    Routine: all
+    Id: all
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Is0
+    Routine: all
+    Id: all
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - Init
+    Ticks:
+    - Is0
+    Routine: all
+    Id: all
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - NotInit
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Context: Nop
+    Clock: Nop
+    State: Nop
+    Interval: Nop
+    Routine: Nop
+    UserData: Nop
+  pre-conditions:
+    Server:
+    - NotInit
+    Ticks: all
+    Routine: all
+    Id: all
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+type: requirement

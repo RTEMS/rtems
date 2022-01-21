@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/apbuart-outbyte-polled
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/apbuart-outbyte-polled:/name} directive shall wait until the
+  transmitter FIFO is empty and then write the characters specified by
+  ${../if/apbuart-outbyte-polled:/params[1]/name} as an unsigned 8-bit value to
+  the data register of the register block specified by
+  ${../if/apbuart-outbyte-polled:/params[0]/name}.
+type: requirement

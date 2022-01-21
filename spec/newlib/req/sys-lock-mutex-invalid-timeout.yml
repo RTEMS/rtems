@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: sys-lock-mutex-acquire-timed
+- role: requirement-refinement
+  uid: sys-lock-mutex-recursive-acquire-timed
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the mutex is not available, while the timeout parameter does not
+  specify a valid absolute ${/glossary/clock-realtime:/term} time point, if an
+  attempt to acquire the mutex is made, then the directive shall immediately
+  return with a status code of ${/c/if/einval:/name}.
+type: requirement

@@ -1,0 +1,861 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRPCI2
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: grpci2-header
+definition:
+- default:
+    count: 1
+    name: CTRL
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: STATCAP
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: BCIM
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: AHB2PCI
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: DMACTRL
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: DMABASE
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: DMACHAN
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: PCI2AHB
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: PCI2AHB
+  offset: 0x34
+  variants: []
+- default:
+    count: 1
+    name: AHBM2PCI
+  offset: 0x40
+  variants: []
+- default:
+    count: 1
+    name: AHBM2PCI
+  offset: 0x7c
+  variants: []
+- default:
+    count: 1
+    name: TCTRC
+  offset: 0x80
+  variants: []
+- default:
+    count: 1
+    name: TMODE
+  offset: 0x84
+  variants: []
+- default:
+    count: 1
+    name: TADP
+  offset: 0x88
+  variants: []
+- default:
+    count: 1
+    name: TADM
+  offset: 0x8c
+  variants: []
+- default:
+    count: 1
+    name: TCP
+  offset: 0x90
+  variants: []
+- default:
+    count: 1
+    name: TCM
+  offset: 0x94
+  variants: []
+- default:
+    count: 1
+    name: TADS
+  offset: 0x98
+  variants: []
+- default:
+    count: 1
+    name: TCS
+  offset: 0x9c
+  variants: []
+register-prefix: null
+register-block-group: GRPCI2
+register-block-size: 160
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RE'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MR'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TR'
+      start: 29
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SI'
+      start: 27
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PE'
+      start: 26
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ER'
+      start: 25
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EI'
+      start: 24
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BUS_NUMBER'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DFA'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IB'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CB'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DIF'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DEVICE_INT_MASK'
+      start: 4
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'HOST_INT_MASK'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    Control register
+  description: null
+  name: CTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'HOST'
+      start: 31
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MST'
+      start: 30
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TAR'
+      start: 29
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DMA'
+      start: 28
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DI'
+      start: 27
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'HI'
+      start: 26
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IRQ_MODE'
+      start: 24
+      width: 2
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TRACE'
+      start: 23
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'CFGDO'
+      start: 20
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'CFGER'
+      start: 19
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'CORE_INT_STATUS'
+      start: 12
+      width: 7
+    - access: [r]
+      brief: null
+      description: null
+      name: 'HOST_INT_STATUS'
+      start: 8
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'FDEPTH'
+      start: 2
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'FNUM'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    Status and Capability register
+  description: null
+  name: STATCAP
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AHB_MASTER_UNMASK'
+      start: 16
+      width: 16
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BURST_LENGTH'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    PCI master prefetch burst limit
+  description: null
+  name: BCIM
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AHB_TO_PCI_IO'
+      start: 16
+      width: 16
+    variants: []
+  brief: |
+    AHB to PCI mapping for PCI IO
+  description: null
+  name: AHB2PCI
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SAFE'
+      start: 31
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'CHIRQ'
+      start: 12
+      width: 8
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'MA'
+      start: 11
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'TA'
+      start: 10
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'PE'
+      start: 9
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'AE'
+      start: 8
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'DE'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NUMCH'
+      start: 4
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ACTIVE'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DIS'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    DMA control and status register
+  description: null
+  name: DMACTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BASE'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    DMA descriptor base address register
+  description: null
+  name: DMABASE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CHAN'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    DMA channel active register
+  description: null
+  name: DMACHAN
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    PCI BAR to AHB address mapping register
+  description: null
+  name: PCI2AHB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    AHB master to PCI memory address mapping register
+  description: null
+  name: AHBM2PCI
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TRIG_INDEX'
+      start: 16
+      width: 16
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AR'
+      start: 15
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 14
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DEPTH'
+      start: 4
+      width: 8
+    - access: [w]
+      brief: null
+      description: null
+      name: 'SO'
+      start: 1
+      width: 1
+    - access: [w]
+      brief: null
+      description: null
+      name: 'SA'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    PCI trace Control and Status register
+  description: null
+  name: TCTRC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRACING_MODE'
+      start: 24
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRIG_COUNT'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DELAYED_STOP'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    PCI trace counter and mode register
+  description: null
+  name: TMODE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PATTERN'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    PCI trace AD pattern register
+  description: null
+  name: TADP
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MASK'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    PCI trace AD mask register
+  description: null
+  name: TADM
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CBE_3_0'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FRAME'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRDY'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRDY'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'STOP'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DEVSEL'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PAR'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PERR'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SERR'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IDSEL'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'REQ'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'GNT'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LOCK'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RST'
+      start: 3
+      width: 1
+    variants: []
+  brief: |
+    PCI trace Ctrl signal pattern register
+  description: null
+  name: TCP
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CBE_3_0'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FRAME'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRDY'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRDY'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'STOP'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DEVSEL'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PAR'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PERR'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SERR'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IDSEL'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'REQ'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'GNT'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LOCK'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RST'
+      start: 3
+      width: 1
+    variants: []
+  brief: |
+    PCI trace Ctrl signal mask register
+  description: null
+  name: TCM
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SIGNAL'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    PCI trace PCI AD state register
+  description: null
+  name: TADS
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'CBE_3_0'
+      start: 16
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'FRAME'
+      start: 15
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IRDY'
+      start: 14
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TRDY'
+      start: 13
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'STOP'
+      start: 12
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DEVSEL'
+      start: 11
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PAR'
+      start: 10
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PERR'
+      start: 9
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SERR'
+      start: 8
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IDSEL'
+      start: 7
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'REQ'
+      start: 6
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'GNT'
+      start: 5
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'LOCK'
+      start: 4
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RST'
+      start: 3
+      width: 1
+    variants: []
+  brief: |
+    PCI trace PCI Ctrl signal state register
+  description: null
+  name: TCS
+  width: 32
+name: grpci2
+notes: null
+type: interface

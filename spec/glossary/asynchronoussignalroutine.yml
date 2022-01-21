@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: Asynchronous Signal Routine
+text: |
+  Similar to a hardware interrupt except that it is associated with a task
+  and is run in the context of a task.  The directives provided by the
+  signal manager are used to service signals.
+type: glossary

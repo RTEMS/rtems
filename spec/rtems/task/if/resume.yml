@@ -1,0 +1,60 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Resumes the task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive removes the task specified by ${.:/params[0]/name} from the
+  suspended state.  If the task is in the ready state after the suspension is
+  removed, then it will be scheduled to run.  If the task is still in a blocked
+  state after the suspension is removed, then it will remain in that blocked
+  state.
+enabled-by: true
+index-entries:
+- resuming a task
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_task_resume
+notes: null
+params:
+- description: |
+    is the task identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The task was not suspended.
+    value: ${../../status/if/incorrect-state:/name}
+type: interface

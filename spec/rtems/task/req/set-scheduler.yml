@@ -1,0 +1,983 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/set-scheduler
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/set-scheduler:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/set-scheduler:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/set-scheduler:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvPrio
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
+    text: |
+      The return status of ${../if/set-scheduler:/name} shall be
+      ${../../status/if/invalid-priority:/name}.
+  - name: InUse
+    test-code: |
+      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE );
+    text: |
+      The return status of ${../if/set-scheduler:/name} shall be
+      ${../../status/if/resource-in-use:/name}.
+  - name: Unsat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
+    text: |
+      The return status of ${../if/set-scheduler:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Set
+    test-code: |
+      T_eq_u32( ctx->new_scheduler, ctx->scheduler_to_set_id );
+    text: |
+      The ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter shall be set to the
+      scheduler specified by the ${../if/set-scheduler:/params[1]/name}
+      parameter at some point during the ${../if/set-scheduler:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->new_scheduler, ctx->scheduler_a_id );
+    text: |
+      No ${/glossary/scheduler-home:/term} of a task shall be modified by the
+      ${../if/set-scheduler:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Set
+    test-code: |
+      if ( ctx->scheduler_to_set_id == ctx->scheduler_a_id ) {
+        T_eq_u32( ctx->new_priority[ 0 ], PRIO_VERY_LOW );
+        T_eq_u32( ctx->new_priority[ 1 ], PRIO_INVALID );
+      } else {
+        T_eq_u32( ctx->new_priority[ 0 ], PRIO_INVALID );
+        T_eq_u32( ctx->new_priority[ 1 ], PRIO_VERY_LOW );
+      }
+    text: |
+      The ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter shall be set to the
+      priority specified by the ${../if/set-scheduler:/params[2]/name}
+      parameter at some point during the ${../if/set-scheduler:/name} call.
+  - name: Nop
+    test-code: |
+      if ( ctx->blocked ) {
+        T_eq_u32( ctx->new_priority[ 0 ], PRIO_HIGH );
+      } else {
+        T_eq_u32( ctx->new_priority[ 0 ], PRIO_LOW );
+      }
+
+      T_eq_u32( ctx->new_priority[ 1 ], PRIO_INVALID );
+    text: |
+      No task priority shall be modified by the ${../if/set-scheduler:/name}
+      call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: TaskId
+  states:
+  - name: Task
+    test-code: |
+      ctx->task_id = ctx->worker_id[ 0 ];
+    text: |
+      While the ${../if/set-scheduler:/params[0]/name} parameter is
+      associated with a task.
+  - name: Invalid
+    test-code: |
+      ctx->task_id = INVALID_ID;
+    text: |
+      While the ${../if/set-scheduler:/params[0]/name} parameter is not
+      associated with a task.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->scheduler_to_set_id = ctx->scheduler_a_id;
+    text: |
+      While the scheduler specified by the
+      ${../if/set-scheduler:/params[1]/name} parameter is the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter.
+  - name: Other
+    test-code: |
+      ctx->scheduler_to_set_id = ctx->scheduler_b_id;
+    text: |
+      While the scheduler specified by the
+      ${../if/set-scheduler:/params[1]/name} parameter is not the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: SchedulerHasCPU
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Already set by Scheduler pre-condition */
+    text: |
+      While the scheduler specified by the
+      ${../if/set-scheduler:/params[1]/name} parameter owns at least one
+      processor.
+  - name: 'No'
+    test-code: |
+      ctx->scheduler_to_set_id = ctx->scheduler_d_id;
+    text: |
+      While the scheduler specified by the
+      ${../if/set-scheduler:/params[1]/name} parameter owns no processor.
+  test-epilogue: null
+  test-prologue: null
+- name: SchedulerId
+  states:
+  - name: Scheduler
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_to_set_id;
+    text: |
+      While the ${../if/set-scheduler:/params[1]/name} parameter is
+      associated with a scheduler.
+  - name: Invalid
+    test-code: |
+      ctx->scheduler_id = INVALID_ID;
+    text: |
+      While the ${../if/set-scheduler:/params[1]/name} parameter is not
+      associated with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Valid
+    test-code: |
+      ctx->priority = PRIO_VERY_LOW;
+    text: |
+      While the ${/glossary/priority-task:/term} specified by the
+      ${../if/set-scheduler:/params[2]/name} parameter is valid with respect to
+      the scheduler specified by the ${../if/set-scheduler:/params[1]/name}
+      parameter.
+  - name: Invalid
+    test-code: |
+      ctx->priority = PRIO_INVALID;
+    text: |
+      While the ${/glossary/priority-task:/term} specified by the
+      ${../if/set-scheduler:/params[2]/name} parameter is invalid with respect
+      to the scheduler specified by the ${../if/set-scheduler:/params[1]/name}
+      parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: HomePriority
+  states:
+  - name: Real
+    test-code: |
+      ctx->additional_home_priority = false;
+    text: |
+      While the ${/glossary/priority-current:/term} of the task specified by
+      the ${../if/set-scheduler:/params[0]/name} parameter consists only of the
+      ${/glossary/priority-real:/term}.
+  - name: More
+    test-code: |
+      ctx->additional_home_priority = true;
+    text: |
+      While the ${/glossary/priority-current:/term} of the task specified by
+      the ${../if/set-scheduler:/params[0]/name} parameter consists of more
+      than the ${/glossary/priority-real:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: EligiblePriorities
+  states:
+  - name: OnlyOne
+    test-code: |
+      ctx->second_eligible_scheduler = false;
+    text: |
+      While the set of ${/glossary/priority-eligible:/plural} of the task
+      specified by the ${../if/set-scheduler:/params[0]/name} parameter
+      consists of exactly the ${/glossary/priority-current:/term}.
+  - name: More
+    test-code: |
+      ctx->second_eligible_scheduler = true;
+    text: |
+      While the set of ${/glossary/priority-eligible:/plural} of the task
+      specified by the ${../if/set-scheduler:/params[0]/name} parameter
+      consists of more than the ${/glossary/priority-current:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Pinned
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->pinned = true;
+    text: |
+      While the task specified by the ${../if/set-scheduler:/params[0]/name}
+      parameter is pinned.
+  - name: 'No'
+    test-code: |
+      ctx->pinned = false;
+    text: |
+      While the task specified by the ${../if/set-scheduler:/params[0]/name}
+      parameter is not pinned.
+  test-epilogue: null
+  test-prologue: null
+- name: TaskState
+  states:
+  - name: Ready
+    test-code: |
+      ctx->blocked = false;
+      ctx->enqueued = false;
+    text: |
+      While the task specified by the ${../if/set-scheduler:/params[0]/name}
+      parameter is ready.
+  - name: Blocked
+    test-code: |
+      ctx->blocked = true;
+      ctx->enqueued = false;
+    text: |
+      While the task specified by the ${../if/set-scheduler:/params[0]/name}
+      parameter is blocked, while the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter is not enqueued on a
+      ${/glossary/waitqueue:/term}.
+  - name: Enqueued
+    test-code: |
+      ctx->blocked = true;
+      ctx->enqueued = true;
+    text: |
+      While the task specified by the ${../if/set-scheduler:/params[0]/name}
+      parameter is blocked, while the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter is enqueued on a
+      ${/glossary/waitqueue:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: AffinitySupported
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->affinity_supported = true;
+    text: |
+      While the affinity set of the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter is supported by the
+      scheduler specified by the ${../if/set-scheduler:/params[1]/name}
+      parameter.
+  - name: 'No'
+    test-code: |
+      ctx->affinity_supported = false;
+    text: |
+      While the affinity set of the task specified by the
+      ${../if/set-scheduler:/params[0]/name} parameter is not supported by the
+      scheduler specified by the ${../if/set-scheduler:/params[1]/name}
+      parameter.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  OnlyOneCPU: |
+    Where the system was built with SMP support disabled, exactly one scheduler
+    is present in an application using exactly one processor.
+  HomeScheduler: |
+    The ${/glossary/scheduler-home:/term} of a task owns always at least one
+    processor and the affinity set of the task is always supported its home
+    scheduler.
+test-action: |
+  rtems_status_code sc;
+
+  if ( ctx->additional_home_priority || ctx->second_eligible_scheduler ) {
+    SendEvents( ctx->worker_id[ 0 ], EVENT_OBTAIN_MUTEX_A );
+
+    if ( ctx->additional_home_priority ) {
+      SendEvents( ctx->worker_id[ 1 ], EVENT_OBTAIN_MUTEX_A );
+    }
+
+    if ( ctx->second_eligible_scheduler ) {
+      SendEvents(
+        ctx->worker_id[ 2 ],
+        EVENT_RUNNER_SYNC_0 | EVENT_OBTAIN_MUTEX_A
+      );
+      ReceiveAllEvents( EVENT_RUNNER_SYNC_0 );
+      WaitForExecutionStop( ctx->worker_id[ 2 ] );
+    }
+  }
+
+  if ( ctx->blocked && ctx->enqueued ) {
+    ObtainMutex( ctx->mutex_id[ 1 ] );
+    SendEvents( ctx->worker_id[ 0 ], EVENT_OBTAIN_MUTEX_B );
+  }
+
+  if ( !ctx->affinity_supported ) {
+    SetAffinityOne( ctx->worker_id[ 0 ], 0 );
+  }
+
+  if ( ctx->pinned ) {
+    SendEvents( ctx->worker_id[ 0 ], EVENT_PIN );
+  }
+
+  if ( !ctx->blocked ) {
+    SendEvents( ctx->worker_id[ 0 ], EVENT_SET_LOW_PRIO );
+  }
+
+  ctx->status = rtems_task_set_scheduler(
+    ctx->task_id,
+    ctx->scheduler_id,
+    ctx->priority
+  );
+
+  ctx->new_scheduler = GetScheduler( ctx->worker_id[ 0 ] );
+
+  if ( ctx->pinned ) {
+    SendEvents( ctx->worker_id[ 0 ], EVENT_UNPIN );
+  }
+
+  if ( !ctx->affinity_supported ) {
+    SetAffinityAll( ctx->worker_id[ 0 ] );
+  }
+
+  if ( ctx->blocked && ctx->enqueued ) {
+    ReleaseMutex( ctx->mutex_id[ 1 ] );
+    SendEvents( ctx->worker_id[ 0 ], EVENT_RELEASE_MUTEX_B );
+  }
+
+  if ( ctx->additional_home_priority || ctx->second_eligible_scheduler ) {
+    SendEvents( ctx->worker_id[ 0 ], EVENT_RELEASE_MUTEX_A );
+
+    if ( ctx->additional_home_priority ) {
+      SendEvents( ctx->worker_id[ 1 ], EVENT_RELEASE_MUTEX_A );
+    }
+
+    if ( ctx->second_eligible_scheduler ) {
+      SendEvents(
+        ctx->worker_id[ 2 ],
+        EVENT_RELEASE_MUTEX_A | EVENT_RUNNER_SYNC_1
+      );
+      ReceiveAllEvents( EVENT_RUNNER_SYNC_1 );
+    }
+  }
+
+  sc = rtems_task_get_priority(
+    ctx->worker_id[ 0 ],
+    ctx->scheduler_a_id,
+    &ctx->new_priority[ 0 ]
+  );
+
+  if ( sc == RTEMS_NOT_DEFINED ) {
+    ctx->new_priority[ 0 ] = PRIO_INVALID;
+  } else {
+    T_rsc_success( sc );
+  }
+
+  #if defined(RTEMS_SMP)
+  sc = rtems_task_get_priority(
+    ctx->worker_id[ 0 ],
+    ctx->scheduler_b_id,
+    &ctx->new_priority[ 1 ]
+  );
+
+  if ( sc == RTEMS_NOT_DEFINED ) {
+    ctx->new_priority[ 1 ] = PRIO_INVALID;
+  } else {
+    T_rsc_success( sc );
+  }
+  #else
+  ctx->new_priority[ 1 ] = PRIO_INVALID;
+  #endif
+
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    SetScheduler( ctx->worker_id[ 0 ], ctx->scheduler_a_id, PRIO_HIGH );
+  } else if ( !ctx->blocked ) {
+    SetPriority( ctx->worker_id[ 0 ], PRIO_HIGH );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the runner task identifier.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member contains the scheduler A identifier.
+  description: null
+  member: |
+    rtems_id scheduler_a_id
+- brief: |
+    This member contains the scheduler B identifier.
+  description: null
+  member: |
+    rtems_id scheduler_b_id
+- brief: |
+    This member contains the scheduler D identifier.
+  description: null
+  member: |
+    rtems_id scheduler_d_id
+- brief: |
+    This member contains the worker task identifiers.
+  description: null
+  member: |
+    rtems_id worker_id[ 3 ]
+- brief: |
+    This member contains the mutex identifiers.
+  description: null
+  member: |
+    rtems_id mutex_id[ 2 ]
+- brief: |
+    If this member is true, then the task shall have an additional
+    priority for the home scheduler.
+  description: null
+  member: |
+    bool additional_home_priority
+- brief: |
+    If this member is true, then the task shall have a second eligible
+    scheduler.
+  description: null
+  member: |
+    bool second_eligible_scheduler
+- brief: |
+    If this member is true, then the task shall be pinned to a processor.
+  description: null
+  member: |
+    bool pinned
+- brief: |
+    If this member is true, then the task shall be blocked.
+  description: null
+  member: |
+    bool blocked
+- brief: |
+    If this member is true, then the task shall be enqueued on a thread queue.
+  description: null
+  member: |
+    bool enqueued
+- brief: |
+    This member specifies the scheduler identifier to set.
+  description: null
+  member: |
+    rtems_id scheduler_to_set_id
+- brief: |
+    If this member is true, then the affinity of the task shall be supported by
+    the scheduler.
+  description: null
+  member: |
+    bool affinity_supported
+- brief: |
+    This member contains the return value of the ${../if/set-scheduler:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/set-scheduler:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id task_id
+- brief: |
+    This member specifies if the ${../if/set-scheduler:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member specifies if the ${../if/set-scheduler:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_task_priority priority
+- brief: |
+    This member contains the identifier of the new scheduler.
+  description: null
+  member: |
+    rtems_id new_scheduler;
+- brief: |
+    This member contains the new priorities of the task.
+  description: null
+  member: |
+    rtems_task_priority new_priority[ 2 ]
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+    size_t            i;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->runner_id = rtems_task_self();
+    SetSelfPriority( PRIO_NORMAL );
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_A_NAME,
+      &ctx->scheduler_a_id
+    );
+    T_rsc_success( sc );
+
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->mutex_id ); ++i ) {
+      ctx->mutex_id[ i ] = CreateMutex();
+    }
+
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_id ); ++i ) {
+      ctx->worker_id[ i ] = CreateTask( "WORK", PRIO_HIGH - i );
+      StartTask( ctx->worker_id[ i ], Worker, ctx );
+    }
+
+    #if defined(RTEMS_SMP)
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
+    T_rsc_success( sc );
+
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_D_NAME, &ctx->scheduler_d_id );
+    T_rsc_success( sc );
+
+    SetScheduler( ctx->worker_id[ 2 ], ctx->scheduler_b_id, PRIO_NORMAL );
+    #else
+    ctx->scheduler_b_id = INVALID_ID;
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  #define EVENT_OBTAIN_MUTEX_A RTEMS_EVENT_0
+
+  #define EVENT_RELEASE_MUTEX_A RTEMS_EVENT_1
+
+  #define EVENT_OBTAIN_MUTEX_B RTEMS_EVENT_2
+
+  #define EVENT_RELEASE_MUTEX_B RTEMS_EVENT_3
+
+  #define EVENT_PIN RTEMS_EVENT_4
+
+  #define EVENT_UNPIN RTEMS_EVENT_5
+
+  #define EVENT_SET_LOW_PRIO RTEMS_EVENT_6
+
+  #define EVENT_RUNNER_SYNC_0 RTEMS_EVENT_7
+
+  #define EVENT_RUNNER_SYNC_1 RTEMS_EVENT_8
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context        *ctx;
+    Thread_Control *executing;
+
+    ctx = (Context *) arg;
+    executing = _Thread_Get_executing();
+
+    while ( true ) {
+      rtems_event_set events;
+
+      events = ReceiveAnyEvents();
+
+      if ( ( events & EVENT_RUNNER_SYNC_0 ) != 0 ) {
+        SendEvents( ctx->runner_id, EVENT_RUNNER_SYNC_0 );
+      }
+
+      if ( ( events & EVENT_OBTAIN_MUTEX_A ) != 0 ) {
+        ObtainMutex( ctx->mutex_id[ 0 ] );
+      }
+
+      if ( ( events & EVENT_RELEASE_MUTEX_A ) != 0 ) {
+        ReleaseMutex( ctx->mutex_id[ 0 ] );
+      }
+
+      if ( ( events & EVENT_OBTAIN_MUTEX_B ) != 0 ) {
+        ObtainMutex( ctx->mutex_id[ 1 ] );
+      }
+
+      if ( ( events & EVENT_RELEASE_MUTEX_B ) != 0 ) {
+        ReleaseMutex( ctx->mutex_id[ 1 ] );
+      }
+
+      if ( ( events & EVENT_PIN ) != 0 ) {
+        _Thread_Pin( executing );
+      }
+
+      if ( ( events & EVENT_UNPIN ) != 0 ) {
+        _Thread_Unpin( executing, _Per_CPU_Get_snapshot() );
+      }
+
+      if ( ( events & EVENT_SET_LOW_PRIO ) != 0 ) {
+        SetSelfPriority( PRIO_LOW );
+      }
+
+      if ( ( events & EVENT_RUNNER_SYNC_1 ) != 0 ) {
+        SendEvents( ctx->runner_id, EVENT_RUNNER_SYNC_1 );
+      }
+    }
+  }
+test-target: testsuites/validation/tc-task-set-scheduler.c
+test-teardown:
+  brief: null
+  code: |
+    size_t i;
+
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_id ); ++i ) {
+      DeleteTask( ctx->worker_id[ i ] );
+    }
+
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->mutex_id ); ++i ) {
+      DeleteMutex( ctx->mutex_id[ i ] );
+    }
+
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Scheduler: Set
+    Priority: Set
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority:
+    - Real
+    EligiblePriorities:
+    - OnlyOne
+    Pinned:
+    - 'No'
+    TaskState:
+    - Ready
+    - Blocked
+    Scheduler: all
+    SchedulerHasCPU:
+    - 'Yes'
+    AffinitySupported:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Invalid
+    Priority: N/A
+    HomePriority: all
+    EligiblePriorities: all
+    Pinned: all
+    TaskState: all
+    Scheduler: N/A
+    SchedulerHasCPU: N/A
+    AffinitySupported: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Invalid
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority: N/A
+    EligiblePriorities: N/A
+    Pinned: N/A
+    TaskState: N/A
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Invalid
+    SchedulerId:
+    - Invalid
+    Priority: N/A
+    HomePriority: N/A
+    EligiblePriorities: N/A
+    Pinned: N/A
+    TaskState: N/A
+    Scheduler: N/A
+    SchedulerHasCPU: N/A
+    AffinitySupported: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvPrio
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Invalid
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Invalid
+    HomePriority: N/A
+    EligiblePriorities: N/A
+    Pinned: N/A
+    TaskState: N/A
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: InvPrio
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Invalid
+    HomePriority: all
+    EligiblePriorities: all
+    TaskState: all
+    Pinned: all
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority: all
+    EligiblePriorities: all
+    TaskState:
+    - Enqueued
+    Pinned: all
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority:
+    - More
+    EligiblePriorities: all
+    TaskState:
+    - Ready
+    - Blocked
+    Pinned: all
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority:
+    - Real
+    EligiblePriorities:
+    - More
+    TaskState:
+    - Ready
+    - Blocked
+    Pinned: all
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority:
+    - Real
+    EligiblePriorities:
+    - OnlyOne
+    Pinned:
+    - 'Yes'
+    TaskState:
+    - Ready
+    - Blocked
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority:
+    - Real
+    EligiblePriorities:
+    - OnlyOne
+    TaskState:
+    - Ready
+    - Blocked
+    Pinned:
+    - 'No'
+    Scheduler: all
+    SchedulerHasCPU:
+    - 'No'
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    Scheduler: Nop
+    Priority: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Priority:
+    - Valid
+    HomePriority:
+    - Real
+    EligiblePriorities:
+    - OnlyOne
+    TaskState:
+    - Ready
+    - Blocked
+    Pinned:
+    - 'No'
+    Scheduler: all
+    SchedulerHasCPU:
+    - 'Yes'
+    AffinitySupported:
+    - 'No'
+- enabled-by: true
+  post-conditions: HomeScheduler
+  pre-conditions:
+    TaskId: all
+    SchedulerId: all
+    Priority: all
+    HomePriority: all
+    EligiblePriorities: all
+    Pinned: all
+    TaskState: all
+    Scheduler:
+    - Home
+    SchedulerHasCPU:
+    - 'No'
+    AffinitySupported: all
+- enabled-by: true
+  post-conditions: HomeScheduler
+  pre-conditions:
+    TaskId: all
+    SchedulerId: all
+    Priority: all
+    HomePriority: all
+    EligiblePriorities: all
+    Pinned: all
+    TaskState: all
+    Scheduler:
+    - Home
+    SchedulerHasCPU: all
+    AffinitySupported:
+    - 'No'
+- enabled-by: 
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    TaskId: all
+    SchedulerId: all
+    Priority: all
+    HomePriority: all
+    EligiblePriorities:
+    - More
+    Pinned: all
+    TaskState: all
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: 
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    TaskId: all
+    SchedulerId: all
+    Priority: all
+    HomePriority: all
+    EligiblePriorities: all
+    Pinned: all
+    TaskState: all
+    Scheduler:
+    - Other
+    SchedulerHasCPU: all
+    AffinitySupported: all
+- enabled-by: 
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    TaskId: all
+    SchedulerId: all
+    Priority: all
+    HomePriority: all
+    EligiblePriorities: all
+    Pinned:
+    - 'Yes'
+    TaskState: all
+    Scheduler: all
+    SchedulerHasCPU: all
+    AffinitySupported: all
+type: requirement

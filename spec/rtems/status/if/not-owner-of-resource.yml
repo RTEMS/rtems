@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This status code indicates that the caller was not the owner of the resource.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: '23'
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enumerator
+links: []
+name: RTEMS_NOT_OWNER_OF_RESOURCE
+notes: null
+type: interface

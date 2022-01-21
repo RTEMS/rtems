@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Prepends the interrupt server action to the list of actions of the interrupt
+  server entry.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${server-entry:/name} *${.:/params[0]/name}
+    - ${server-action:/name} *${.:/params[1]/name}
+    - ${handler:/name} ${.:/params[2]/name}
+    - void *${.:/params[3]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: ../constraint/server-entry-initialized
+- role: constraint
+  uid: ../constraint/server-entry-not-while-action-prepend
+- role: constraint
+  uid: ../constraint/server-entry-not-while-move
+- role: constraint
+  uid: ../constraint/server-entry-not-while-submit
+- role: constraint
+  uid: ../constraint/server-entry-not-while-pending
+name: rtems_interrupt_server_action_prepend
+notes: |
+  No error checking is performed by the directive.
+params:
+- description: |
+    is the interrupt server entry to prepend the interrupt server action.  It
+    shall have been initialized via ${server-entry-initialize:/name}.
+  dir: inout
+  name: entry
+- description: |
+    is the interrupt server action to initialize and prepend to the list of
+    actions of the entry.
+  dir: out
+  name: action
+- description: |
+    is the interrupt handler routine to set in the action.
+  dir: null
+  name: routine
+- description: |
+    is the interrupt handler argument to set in the action.
+  dir: null
+  name: arg
+return: null
+type: interface

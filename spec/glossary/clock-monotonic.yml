@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: CLOCK_MONOTONIC
+text: |
+  The CLOCK_MONOTONIC is a clock provided by RTEMS which measures the time
+  since an unspecified starting point.  In contrast to ${clock-realtime:/term},
+  this clock cannot be set.  It may be affected by incremental adjustments for
+  example carried out by the ${ntp:/term} or the use of a ${pps:/term} signal.
+  See also ${clock-realtime:/term}, ${clock-tick:/term}, and
+  ${clock-driver:/term}.
+type: glossary

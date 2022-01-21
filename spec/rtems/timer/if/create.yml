@@ -1,0 +1,75 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Creates a timer.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - ${../../type/if/id:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive creates a timer which resides on the local node.  The timer
+  has the user-defined object name specified in ${.:/params[0]/name}.  The
+  assigned object identifier is returned in ${.:/params[1]/name}.  This
+  identifier is used to access the timer with other timer related directives.
+enabled-by: true
+index-entries:
+- create a timer
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
+name: rtems_timer_create
+notes: |
+  The processor used to maintain the timer is the processor of the calling task
+  at some point during the timer creation.
+
+  For control and maintenance of the timer, RTEMS allocates a
+  ${/glossary/tmcb:/term} from the local TMCB free pool and initializes it.
+params:
+- description: |
+    is the object name of the timer.
+  dir: null
+  name: name
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the created timer will be stored in
+    this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no inactive object available to create a timer.  The number of
+      timers available to the application is configured through the
+      ${/acfg/if/max-timers:/name} application configuration option.
+    value: ${../../status/if/too-many:/name}
+type: interface

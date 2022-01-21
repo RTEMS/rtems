@@ -1,0 +1,1021 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: group
+- role: interface-function
+  uid: ../../type/if/no-timeout
+post-conditions:
+- name: SendStatus
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->send_status );
+    text: |
+      The send event status shall be RTEMS_SUCCESSFUL.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->send_status, RTEMS_INVALID_ID );
+    text: |
+      The send event status shall be RTEMS_INVALID_ID.
+  test-epilogue: null
+  test-prologue: null
+- name: ReceiveStatus
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
+      T_eq_u32( GetPendingEvents( ctx ), 0 );
+    text: |
+      The receiver task shall not have pending events.
+  - name: Pending
+    test-code: |
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
+    text: |
+      The receiver task shall have all events sent pending.
+  - name: Timeout
+    test-code: |
+      T_rsc( ctx->receive_status, RTEMS_TIMEOUT );
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
+    text: |
+      The receive event status shall be ${../../status/if/timeout:/name}.  The
+      receiver task shall have all events sent after the timeout pending.
+  - name: Satisfied
+    test-code: |
+      T_rsc( ctx->receive_status, RTEMS_SUCCESSFUL );
+
+      if ( ctx->receive_type != RECEIVE_NORMAL ) {
+        T_eq_int( ctx->receive_condition_state, RECEIVE_COND_SATSIFIED );
+      }
+
+      T_eq_u32( ctx->received_events, ctx->events_to_send & INPUT_EVENTS );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send & ~INPUT_EVENTS );
+    text: |
+      The receive event status shall be ${../../status/if/successful:/name}.
+      The receiver task shall receive all events sent which are an element of
+      the input events.  The receiver task shall have all events sent which are
+      not an element of the input events pending.
+  - name: Unsatisfied
+    test-code: |
+      T_rsc( ctx->receive_status, RTEMS_UNSATISFIED );
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
+    text: |
+      The receive event status shall be ${../../status/if/unsatisfied:/name}.
+      The receiver task shall have all events sent pending.
+  - name: Blocked
+    test-code: |
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNSATISFIED );
+      T_eq_u32( ctx->unsatisfied_pending, ctx->events_to_send );
+    text: |
+      The receiver task shall remain blocked waiting for events after the
+      directive call.  The receiver task shall have all events sent pending.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->receive_status, RTEMS_INVALID_ADDRESS );
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
+    text: |
+      The receive event status shall be
+      ${../../status/if/invalid-address:/name}.  The receiver task shall have
+      all events sent pending.
+  test-epilogue: null
+  test-prologue: null
+- name: SenderPreemption
+  states:
+  - name: 'No'
+    test-code: |
+      /*
+       * There may be a thread switch to the runner thread if the sender thread
+       * was on another scheduler instance.
+       */
+
+      T_le_sz( log->header.recorded, 1 );
+
+      for ( i = 0; i < log->header.recorded; ++i ) {
+        T_ne_u32( log->events[ i ].executing, ctx->worker_id );
+        T_eq_u32( log->events[ i ].heir, ctx->runner_id );
+      }
+    text: |
+      When the sender task calls the directive to send the events, the sender
+      task shall not be preempted as a result of the call.
+  - name: 'Yes'
+    test-code: |
+      T_eq_sz( log->header.recorded, 2 );
+      T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
+      T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
+    text: |
+      When the sender task calls the directive to send the events, the sender
+      task shall be preempted as a result of the call.
+  test-epilogue: null
+  test-prologue: |
+    const T_thread_switch_log_4 *log;
+    size_t                       i;
+
+    log = &ctx->thread_switch_log;
+pre-conditions:
+- name: Id
+  states:
+  - name: InvId
+    test-code: |
+      ctx->receiver_id = 0xffffffff;
+      ctx->sender_type = SENDER_SELF;
+    text: |
+      While the id parameter of the send directive is not associated with a
+      task.
+  - name: Task
+    test-code: |
+      ctx->receiver_id = ctx->runner_id;
+    text: |
+      While the id parameter of the send directive is is associated with a
+      task.
+  test-epilogue: null
+  test-prologue: null
+- name: Send
+  states:
+  - name: Zero
+    test-code: |
+      ctx->events_to_send = 0;
+    text: |
+      While the event set sent is the empty.
+  - name: Unrelated
+    test-code: |
+      ctx->events_to_send = RTEMS_EVENT_7;
+    text: |
+      While the event set sent is unrelated to the event receive condition.
+  - name: Any
+    test-code: |
+      ctx->events_to_send = RTEMS_EVENT_5;
+    text: |
+      While the event set sent is contain at least one but not all events of
+      the event receive condition.
+  - name: All
+    test-code: |
+      ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_23;
+    text: |
+      While the event set sent is contain all events of the event receive
+      condition.
+  - name: MixedAny
+    test-code: |
+      ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_7;
+    text: |
+      While the event set sent is contain at least one but not all events of
+      the event receive condition and at least one unrelated event.
+  - name: MixedAll
+    test-code: |
+      ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_7 | RTEMS_EVENT_23;
+    text: |
+      While the event set sent is contain all events of the event receive
+      condition and at least one unrelated event.
+  test-epilogue: null
+  test-prologue: null
+- name: ReceiverState
+  states:
+  - name: InvAddr
+    test-code: |
+      ctx->sender_type = SENDER_SELF;
+      ctx->receive_type = RECEIVE_NORMAL;
+      ctx->received_events_parameter = NULL;
+    text: |
+      While the receiver task calls the receive directive with the event set to
+      receive parameter set to ${/c/if/null:/name}.
+  - name: NotWaiting
+    test-code: |
+      ctx->sender_type = SENDER_SELF;
+      ctx->receive_type = RECEIVE_SKIP;
+    text: |
+      While the receiver task is not waiting for events.
+  - name: Poll
+    test-code: |
+      ctx->sender_type = SENDER_SELF;
+      ctx->receive_type = RECEIVE_NORMAL;
+      ctx->receive_option_set |= RTEMS_NO_WAIT;
+    text: |
+      While the receiver task polls for events.
+  - name: Timeout
+    test-code: |
+      ctx->sender_type = SENDER_SELF_2;
+      ctx->receive_type = RECEIVE_NORMAL;
+      ctx->receive_timeout = 1;
+    text: |
+      While the receiver task waited for events with a timeout which
+      occurred.
+  - name: Lower
+    test-code: |
+      ctx->sender_type = SENDER_WORKER;
+      ctx->sender_prio = PRIO_HIGH;
+      ctx->receive_type = RECEIVE_NORMAL;
+    text: |
+      While the receiver task is blocked waiting for events and the receiver
+      task shall have a lower priority than the sender task.
+  - name: Equal
+    test-code: |
+      ctx->sender_type = SENDER_WORKER;
+      ctx->sender_prio = PRIO_NORMAL;
+      ctx->receive_type = RECEIVE_NORMAL;
+    text: |
+      While the receiver task is blocked waiting for events and the receiver
+      task shall have a priority equal to the sender task.
+  - name: Higher
+    test-code: |
+      ctx->sender_type = SENDER_WORKER;
+      ctx->sender_prio = PRIO_LOW;
+      ctx->receive_type = RECEIVE_NORMAL;
+    text: |
+      While the receiver task is blocked waiting for events and the receiver
+      task shall have a higher priority than the sender task.
+  - name: Other
+    test-code: |
+      ctx->sender_type = SENDER_WORKER;
+      ctx->sender_prio = PRIO_OTHER;
+      ctx->receive_type = RECEIVE_NORMAL;
+    text: |
+      While the receiver task is blocked waiting for events and the receiver
+      task shall be on another scheduler instance than the sender task.
+  - name: Intend
+    test-code: |
+      ctx->sender_type = SENDER_INTERRUPT;
+      ctx->receive_type = RECEIVE_INTERRUPT;
+    text: |
+      While the receiver task intends to block for waiting for events.
+  test-epilogue: null
+  test-prologue: null
+- name: Satisfy
+  states:
+  - name: All
+    test-code: |
+      ctx->receive_option_set |= RTEMS_EVENT_ALL;
+    text: |
+      While the receiver task is interested in all input events.
+  - name: Any
+    test-code: |
+      ctx->receive_option_set |= RTEMS_EVENT_ANY;
+    text: |
+      While the receiver task is interested in any input event.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoOtherScheduler: |
+    In non-SMP configurations, there exists exactly one scheduler instance.
+test-action: |
+  if ( ctx->sender_type == SENDER_SELF ) {
+    SendAction( ctx );
+  } else if ( ctx->sender_type == SENDER_WORKER ) {
+    Wakeup( ctx->worker_wakeup );
+  }
+
+  if ( ctx->receive_type == RECEIVE_NORMAL ) {
+    ctx->receive_status = ( *ctx->receive )(
+      INPUT_EVENTS,
+      ctx->receive_option_set,
+      ctx->receive_timeout,
+      ctx->received_events_parameter
+    );
+  } else if ( ctx->receive_type == RECEIVE_INTERRUPT ) {
+    T_interrupt_test_state state;
+
+    state = T_interrupt_test( &InterruptConfig, ctx );
+    T_eq_int( state, T_INTERRUPT_TEST_DONE );
+  }
+
+  if ( ctx->sender_type == SENDER_SELF_2 ) {
+    SendAction( ctx );
+  } else if ( ctx->sender_type == SENDER_WORKER ) {
+    rtems_task_priority prio;
+
+    Wait( ctx->runner_wakeup );
+    prio = SetPriority( ctx->worker_id, PRIO_LOW );
+    T_eq_u32( prio, PRIO_HIGH );
+  }
+test-brief: null
+test-cleanup: |
+  rtems_status_code sc;
+  rtems_event_set   events;
+
+  events = 0;
+  sc = ( *ctx->receive )(
+    RTEMS_ALL_EVENTS,
+    RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+    0,
+    &events
+  );
+  if ( sc == RTEMS_SUCCESSFUL ) {
+    T_quiet_ne_u32( events, 0 );
+  } else {
+    T_quiet_rsc( sc, RTEMS_UNSATISFIED );
+    T_quiet_eq_u32( events, 0 );
+  }
+test-context:
+- brief: |
+    This member defines the sender type to perform the event send action.
+  description: null
+  member: SenderTypes sender_type
+- brief: |
+    This member defines the sender task priority.
+  description: null
+  member: rtems_task_priority sender_prio
+- brief: |
+    This member defines the receiver ID used for the event send action.
+  description: null
+  member: rtems_id receiver_id
+- brief: |
+    This member defines the events to send for the event send action.
+  description: null
+  member: rtems_event_set events_to_send
+- brief: |
+    This member contains the status of the event send action.
+  description: null
+  member: rtems_status_code send_status
+- brief: |
+    This member contains the scheduler ID of the runner task.
+  description: null
+  member: ReceiveTypes receive_type
+- brief: |
+    This member defines the option set used for the event receive action.
+  description: null
+  member: rtems_option receive_option_set
+- brief: |
+    This member defines the timeout used for the event receive action.
+  description: null
+  member: rtems_interval receive_timeout
+- brief: |
+    This member contains the events received by the event receive action.
+  description: null
+  member: rtems_event_set received_events
+- brief: |
+    This member references the event set received by the event receive action
+    or is NULL.
+  description: null
+  member: rtems_event_set *received_events_parameter
+- brief: |
+    This member contains the status of the event receive action.
+  description: null
+  member: rtems_status_code receive_status
+- brief: |
+    This member contains the event condition state of the receiver task after
+    the event send action.
+  description: null
+  member: ReceiveConditionStates receive_condition_state
+- brief: |
+    This member contains the pending events after an event send action which
+    did not satisify the event condition of the receiver.
+  description: null
+  member: rtems_event_set unsatisfied_pending
+- brief: |
+    This member contains the TCB of the runner task.
+  description: null
+  member: Thread_Control *runner_thread
+- brief: |
+    This member contains the ID of the runner task.
+  description: null
+  member: rtems_id runner_id
+- brief: |
+    This member contains the task ID of the worker task.
+  description: null
+  member: rtems_id worker_id
+- brief: |
+    This member contains the ID of the semaphore used to wake up the worker
+    task.
+  description: null
+  member: rtems_id worker_wakeup
+- brief: |
+    This member contains the ID of the semaphore used to wake up the runner
+    task.
+  description: null
+  member: rtems_id runner_wakeup
+- brief: |
+    This member contains the scheduler ID of scheduler used by the runner task.
+  description: null
+  member: rtems_id runner_sched
+- brief: |
+    This member contains the scheduler ID of another scheduler which is not
+    used by the runner task.
+  description: null
+  member: rtems_id other_sched
+- brief: |
+    This member contains the thread switch log.
+  description: null
+  member: T_thread_switch_log_4 thread_switch_log
+test-context-support: |
+  #define PRIO_OTHER UINT32_MAX
+
+  typedef enum {
+    SENDER_NONE,
+    SENDER_SELF,
+    SENDER_SELF_2,
+    SENDER_WORKER,
+    SENDER_INTERRUPT
+  } SenderTypes;
+
+  typedef enum {
+    RECEIVE_SKIP,
+    RECEIVE_NORMAL,
+    RECEIVE_INTERRUPT
+  } ReceiveTypes;
+
+  typedef enum {
+    RECEIVE_COND_UNKNOWN,
+    RECEIVE_COND_SATSIFIED,
+    RECEIVE_COND_UNSATISFIED
+  } ReceiveConditionStates;
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes:
+  - rtems.h
+  - rtems/score/thread.h
+  local-includes: []
+  run-params:
+  - description: |
+      is the event send handler.
+    dir: null
+    name: send
+    specifier: rtems_status_code ( *${.:name} )( rtems_id, rtems_event_set )
+  - description: |
+      is the event receive handler.
+    dir: null
+    name: receive
+    specifier: |
+      rtems_status_code ( *${.:name} )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * )
+  - description: |
+      is the get pending events handler.
+    dir: null
+    name: get_pending_events
+    specifier: rtems_event_set ( *${.:name} )( Thread_Control * )
+  - description: |
+      is the thread wait class.
+    dir: null
+    name: wait_class
+    specifier: unsigned int ${.:name}
+  - description: |
+      is the thread waiting for event state.
+    dir: null
+    name: waiting_for_event
+    specifier: int ${.:name}
+  target: testsuites/validation/tr-event-send-receive.h
+test-includes:
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tr-event-send-receive.h
+test-prepare: |
+  ctx->events_to_send = 0;
+  ctx->send_status = RTEMS_INCORRECT_STATE;
+  ctx->received_events = 0xffffffff;
+  ctx->received_events_parameter = &ctx->received_events;
+  ctx->receive_option_set = 0;
+  ctx->receive_timeout = RTEMS_NO_TIMEOUT;
+  ctx->sender_type = SENDER_NONE;
+  ctx->sender_prio = PRIO_NORMAL;
+  ctx->receive_type = RECEIVE_SKIP;
+  ctx->receive_condition_state = RECEIVE_COND_UNKNOWN;
+  ctx->unsatisfied_pending = 0xffffffff;
+  memset( &ctx->thread_switch_log, 0, sizeof( ctx->thread_switch_log ) );
+  T_eq_u32( GetPendingEvents( ctx ), 0 );
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->runner_thread = _Thread_Get_executing();
+    ctx->runner_id = ctx->runner_thread->Object.id;
+    ctx->worker_wakeup = CreateWakeupSema();
+    ctx->runner_wakeup = CreateWakeupSema();
+
+    sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_sched );
+    T_rsc_success( sc );
+
+    #if defined(RTEMS_SMP)
+    sc = rtems_scheduler_ident_by_processor( 1, &ctx->other_sched );
+    T_rsc_success( sc );
+    T_ne_u32( ctx->runner_sched, ctx->other_sched );
+    #endif
+
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
+
+  typedef ${.:/test-context-type} Context;
+
+  static rtems_id CreateWakeupSema( void )
+  {
+    rtems_status_code sc;
+    rtems_id          id;
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'W', 'K', 'U', 'P' ),
+      0,
+      RTEMS_SIMPLE_BINARY_SEMAPHORE,
+      0,
+      &id
+    );
+    T_assert_rsc_success( sc );
+
+    return id;
+  }
+
+  static void DeleteWakeupSema( rtems_id id )
+  {
+    if ( id != 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_semaphore_delete( id );
+      T_rsc_success( sc );
+    }
+  }
+
+  static void Wait( rtems_id id )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+    T_quiet_rsc_success( sc );
+  }
+
+  static void Wakeup( rtems_id id )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_semaphore_release( id );
+    T_quiet_rsc_success( sc );
+  }
+
+  static bool BlockedForEvent( Context *ctx, Thread_Wait_flags flags )
+  {
+    return flags == ( ctx->wait_class | THREAD_WAIT_STATE_BLOCKED );
+  }
+
+  static bool IntendsToBlockForEvent( Context *ctx, Thread_Wait_flags flags )
+  {
+    return flags == ( ctx->wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
+  }
+
+  static bool IsReady( Context *ctx, Thread_Wait_flags flags )
+  {
+    return flags == THREAD_WAIT_STATE_READY;
+  }
+
+  static bool IsSatisfiedFlags( Context *ctx )
+  {
+    return IsReady(
+      ctx,
+      _Thread_Wait_flags_get( ctx->runner_thread )
+    );
+  }
+
+  static bool IsSatisfiedState( Context *ctx )
+  {
+    return ctx->runner_thread->current_state != ctx->waiting_for_event;
+  }
+
+  static void SendAction( Context *ctx )
+  {
+    T_thread_switch_log *log;
+
+    log = T_thread_switch_record_4( &ctx->thread_switch_log );
+    T_quiet_null( log );
+    ctx->send_status = ( *ctx->send )( ctx->receiver_id, ctx->events_to_send );
+    log = T_thread_switch_record( NULL );
+    T_quiet_eq_ptr( &log->header, &ctx->thread_switch_log.header );
+  }
+
+  static void Send(
+    Context *ctx,
+    bool  ( *is_satsified )( Context * )
+  )
+  {
+    SendAction( ctx );
+
+    if ( ( *is_satsified )( ctx ) ) {
+      ctx->receive_condition_state = RECEIVE_COND_SATSIFIED;
+    } else {
+      rtems_status_code sc;
+      rtems_event_set pending;
+      rtems_event_set missing;
+
+      ctx->receive_condition_state = RECEIVE_COND_UNSATISFIED;
+      pending = ( *ctx->get_pending_events )( ctx->runner_thread );
+      ctx->unsatisfied_pending = pending;
+
+      missing = INPUT_EVENTS & ~ctx->events_to_send;
+      T_ne_u32( missing, 0 );
+      sc = ( *ctx->send )( ctx->runner_id, missing );
+      T_rsc_success( sc );
+
+      pending = ( *ctx->get_pending_events )( ctx->runner_thread );
+      T_eq_u32( pending, ctx->events_to_send & ~INPUT_EVENTS );
+    }
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code    sc;
+      rtems_task_priority  prio;
+      T_thread_switch_log *log;
+
+      Wait( ctx->worker_wakeup );
+
+      switch ( ctx->sender_prio ) {
+        case PRIO_NORMAL:
+        case PRIO_HIGH:
+          prio = SetSelfPriority( ctx->sender_prio );
+          T_eq_u32( prio, PRIO_LOW );
+          break;
+        case PRIO_OTHER:
+          log = T_thread_switch_record_4( &ctx->thread_switch_log );
+          T_null( log );
+          sc = rtems_task_set_scheduler(
+            RTEMS_SELF,
+            ctx->other_sched,
+            PRIO_LOW
+          );
+          T_rsc_success( sc );
+
+          /*
+           * Make sure the context switch to the IDLE thread on the previous
+           * CPU is recorded, otherwise the preemption check may sporadically
+           * fail on some targets.
+           */
+          while (ctx->thread_switch_log.header.recorded < 2) {
+            RTEMS_COMPILER_MEMORY_BARRIER();
+          }
+
+          log = T_thread_switch_record( NULL );
+          T_eq_ptr( &log->header, &ctx->thread_switch_log.header );
+          break;
+        case PRIO_LOW:
+          break;
+      }
+
+      Send( ctx, IsSatisfiedState );
+
+      sc = rtems_task_set_scheduler(
+        RTEMS_SELF,
+        ctx->runner_sched,
+        PRIO_HIGH
+      );
+      T_rsc_success( sc );
+
+      Wakeup( ctx->runner_wakeup );
+    }
+  }
+
+  static rtems_event_set GetPendingEvents( Context *ctx )
+  {
+    rtems_event_set pending;
+    rtems_status_code sc;
+
+    sc = ( *ctx->receive )(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &pending
+    );
+    T_quiet_rsc_success( sc );
+
+    return pending;
+  }
+
+  static void RtemsEventReqSendReceive_Cleanup( Context *ctx );
+
+  static void InterruptPrepare( void *arg )
+  {
+    RtemsEventReqSendReceive_Cleanup( arg );
+  }
+
+  static void InterruptAction( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    ctx->receive_status = ( *ctx->receive )(
+      INPUT_EVENTS,
+      ctx->receive_option_set,
+      ctx->receive_timeout,
+      &ctx->received_events
+    );
+    T_quiet_rsc_success( ctx->receive_status );
+  }
+
+  static void InterruptContinue( Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = ( *ctx->send )( ctx->receiver_id, INPUT_EVENTS );
+    T_quiet_rsc_success( sc );
+  }
+
+  static T_interrupt_test_state Interrupt( void *arg )
+  {
+    Context                *ctx;
+    Thread_Wait_flags       flags;
+    T_interrupt_test_state  next_state;
+    T_interrupt_test_state  previous_state;
+
+    ctx = arg;
+    flags = _Thread_Wait_flags_get( ctx->runner_thread );
+
+    if ( IntendsToBlockForEvent( ctx, flags ) ) {
+      next_state = T_INTERRUPT_TEST_DONE;
+    } else if ( BlockedForEvent( ctx, flags ) ) {
+      next_state = T_INTERRUPT_TEST_LATE;
+    } else {
+      next_state = T_INTERRUPT_TEST_EARLY;
+    }
+
+    previous_state = T_interrupt_test_change_state(
+      T_INTERRUPT_TEST_ACTION,
+      next_state
+    );
+
+    if ( previous_state == T_INTERRUPT_TEST_ACTION ) {
+      if ( next_state == T_INTERRUPT_TEST_DONE ) {
+        Send( ctx, IsSatisfiedFlags );
+      } else {
+        InterruptContinue( ctx );
+      }
+    }
+
+    return next_state;
+  }
+
+  static const T_interrupt_test_config InterruptConfig = {
+    .prepare = InterruptPrepare,
+    .action = InterruptAction,
+    .interrupt = Interrupt,
+    .max_iteration_count = 10000
+  };
+test-target: testsuites/validation/tr-event-send-receive.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    DeleteWakeupSema( ctx->worker_wakeup );
+    DeleteWakeupSema( ctx->runner_wakeup );
+    RestoreRunnerPriority();
+  description: null
+text: |
+  When the event send and receive directive variants are called in the
+  specified system condition.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: None
+    SendStatus: InvId
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - InvId
+    ReceiverState: N/A
+    Satisfy: N/A
+    Send: N/A
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Pending
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - InvAddr
+    Satisfy: N/A
+    Send: all
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Pending
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - NotWaiting
+    Satisfy: N/A
+    Send: all
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Timeout
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Timeout
+    Satisfy: all
+    Send: all
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Unsatisfied
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Poll
+    Satisfy: all
+    Send:
+    - Zero
+    - Unrelated
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Blocked
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Lower
+    - Equal
+    - Higher
+    - Intend
+    Satisfy: all
+    Send:
+    - Unrelated
+    - Zero
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Satisfied
+    SendStatus: Ok
+    SenderPreemption: 'Yes'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Higher
+    Satisfy: all
+    Send:
+    - All
+    - MixedAll
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Satisfied
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Poll
+    - Lower
+    - Equal
+    - Intend
+    Satisfy: all
+    Send:
+    - All
+    - MixedAll
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Satisfied
+    SendStatus: Ok
+    SenderPreemption: 'Yes'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Higher
+    Satisfy:
+    - Any
+    Send:
+    - Any
+    - MixedAny
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Satisfied
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Poll
+    - Lower
+    - Equal
+    - Intend
+    Satisfy:
+    - Any
+    Send:
+    - Any
+    - MixedAny
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Unsatisfied
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Poll
+    Satisfy:
+    - All
+    Send:
+    - Any
+    - MixedAny
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Blocked
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Lower
+    - Equal
+    - Higher
+    - Intend
+    Satisfy:
+    - All
+    Send:
+    - Any
+    - MixedAny
+- enabled-by: true
+  post-conditions: NoOtherScheduler
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Other
+    Satisfy: all
+    Send: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    ReceiveStatus: Blocked
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Other
+    Satisfy: all
+    Send:
+    - Unrelated
+    - Zero
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    ReceiveStatus: Satisfied
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Other
+    Satisfy: all
+    Send:
+    - All
+    - MixedAll
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    ReceiveStatus: Satisfied
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Other
+    Satisfy:
+    - Any
+    Send:
+    - Any
+    - MixedAny
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    ReceiveStatus: Blocked
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - Other
+    Satisfy:
+    - All
+    Send:
+    - Any
+    - MixedAny
+type: requirement

@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This group contains the GRLIB interfaces.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIB
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: gptimer-header
+- role: interface-ingroup
+  uid: /req/dev
+name: GRLIB
+text: |
+  The device driver software component shall provide an interface to the GRLIB
+  register blocks.
+type: interface

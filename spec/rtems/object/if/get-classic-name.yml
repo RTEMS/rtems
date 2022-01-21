@@ -1,0 +1,62 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the object name associated with the object identifier.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../type/if/name:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_object_get_classic_name
+notes: null
+params:
+- description: |
+    is the object identifier to get the name.
+  dir: null
+  name: id
+- description: |
+    is the pointer to an ${../../type/if/name:/name} object.  When the
+    directive call is successful, the object name associated with the object
+    identifier will be stored in this object.
+  dir: out
+  name: name
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no object information available for the object identifier.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The object name associated with the object identifier was a string.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      There was no object associated with the object identifier.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

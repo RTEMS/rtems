@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: 0
+description: |
+  The value of this configuration option defines the number of bytes the
+  applications wishes to add to the MPCI task stack on top of
+  ${min-task-stack-size:/name}.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-mpci
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-uint32
+- role: constraint
+  uid: ../constraint/mpci-receive-server-stack
+name: CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
+notes: |
+  This configuration option is only evaluated if
+  ${mp-appl:/name} is defined.
+type: interface

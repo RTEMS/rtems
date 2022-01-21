@@ -1,0 +1,77 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Deletes the message queue.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive deletes the message queue specified by ${.:/params[0]/name}.
+  As a result of this directive, all tasks blocked waiting to receive a message
+  from this queue will be readied and returned a status code which indicates
+  that the message queue was deleted.
+enabled-by: true
+index-entries:
+- delete a message queue
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/mp-send
+- role: constraint
+  uid: ../../constraint/delete-by-any-task
+- role: constraint
+  uid: /constraint/obj-unlimited-free
+name: rtems_message_queue_delete
+notes: |
+  When the message queue is deleted, any messages in the queue are returned to
+  the free message buffer pool.  Any information stored in those messages is
+  lost.  The message buffers allocated for the message queue are reclaimed.
+
+  The ${/glossary/qcb:/term} for the deleted message queue is reclaimed by
+  RTEMS.
+
+  When a global message queue is deleted, the message queue identifier must be
+  transmitted to every node in the system for deletion from the local copy of
+  the global object table.
+
+  The message queue must reside on the local node, even if the message queue
+  was created with the ${../../attr/if/global:/name} attribute.
+
+  Proxies, used to represent remote tasks, are reclaimed when the message queue
+  is deleted.
+params:
+- description: |
+    is the message queue identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no message queue associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The message queue resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+type: interface

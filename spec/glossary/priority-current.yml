@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: current priority
+text: |
+  The current priority of a ${task:/term} is the ${priority-task:/term} with
+  respect to the ${scheduler-home:/term} of the task.  It is an aggregation of
+  the ${priority-real:/term} and temporary priority adjustments due to locking
+  protocols, the rate-monotonic period objects on some schedulers such as EDF,
+  and the ${posix:/term} sporadic server.  The current priority is an
+  ${priority-eligible:/term}.
+type: glossary

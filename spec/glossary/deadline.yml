@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: deadline
+text: |
+  A fixed time limit by which a task must have completed a set of actions.
+  Beyond this point, the results are of reduced value and may even be
+  considered useless or harmful.
+type: glossary

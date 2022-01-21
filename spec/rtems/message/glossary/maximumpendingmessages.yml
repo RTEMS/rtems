@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: maximum pending messages
+text: |
+  The maximum of pending messages is different for each
+  ${/glossary/messagequeue:/term} but equal for all directives called
+  on the same ${/glossary/messagequeue:/term}.  It is defined by
+  the value of member ${../if/config:/definition[1]/default/name} of type
+  ${../if/config:/name} used to construct the ${/glossary/messagequeue:/term}.
+type: glossary

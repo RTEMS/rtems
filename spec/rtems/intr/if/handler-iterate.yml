@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Iterates over all interrupt handler installed at the interrupt vector.
+copyrights:
+- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${vector-number:/name} ${.:/params[0]/name}
+    - ${per-handler-routine:/name} ${.:/params[1]/name}
+    - void *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  For each installed handler at the interrupt vector the visitor function
+  specified by ${.:/params[1]/name} will be called with the argument specified
+  by ${.:/params[2]/name} and the handler information, options, routine and
+  argument.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_interrupt_handler_iterate
+notes: |
+  The directive is intended for system information and diagnostics.
+ 
+  Never install or remove an interrupt handler within the visitor function.
+  This may result in a deadlock.
+params:
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the visitor routine.
+  dir: null
+  name: routine
+- description: 
+    is the visitor argument.
+  dir: null
+  name: arg
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The service was not initialized.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The directive was called from within interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
+type: interface

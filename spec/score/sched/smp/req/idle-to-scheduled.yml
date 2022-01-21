@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While an idle thread is scheduled on behalf of a thread by the
+  ${/glossary/scheduler-home:/term}, while the thread is not scheduled by
+  another scheduler, when the thread is rescheduled by the home scheduler, the
+  thread shall be scheduled.
+type: requirement

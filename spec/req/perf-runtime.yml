@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+non-functional-type: performance
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The runtime of interface functions shall be measured.
+type: requirement

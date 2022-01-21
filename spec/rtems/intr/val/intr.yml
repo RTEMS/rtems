@@ -1,0 +1,227 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate ${../if/local-disable:/name} and ${../if/local-enable:/name}.
+  action-code: |
+    rtems_interrupt_level level;
+    rtems_interrupt_level level_2;
+  checks:
+  - brief: |
+      Check that maskable interrupts are enabled before the call to
+      ${../if/local-disable:/name} and disabled afterwards.
+    code: |
+      T_true( AreInterruptsEnabled() );
+      rtems_interrupt_local_disable( level );
+      T_false( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../if/local-disable
+    - role: validation
+      uid: ../req/disable-interrupts
+    - role: validation
+      uid: ../req/local-disable-assign
+  - brief: |
+      Check that maskable interrupts are disabled before the call to
+      ${../if/local-disable:/name} and disabled afterwards.
+    code: |
+      T_false( AreInterruptsEnabled() );
+      rtems_interrupt_local_disable( level_2 );
+      T_false( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../if/local-disable
+    - role: validation
+      uid: ../req/disable-interrupts
+    - role: validation
+      uid: ../req/local-disable-assign
+  - brief: |
+      Check that the maskable interrupt status is restored by the call to
+      ${../if/local-enable:/name} according to the
+      ${../if/local-enable:/params[0]/name} parameter.  In this case maskable
+      interrupts are still disabled afterwards.
+    code: |
+      T_false( AreInterruptsEnabled() );
+      rtems_interrupt_local_enable( level_2 );
+      T_false( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../if/local-enable
+    - role: validation
+      uid: ../req/local-disable-assign
+    - role: validation
+      uid: ../req/local-enable
+  - brief: |
+      Check that the maskable interrupt status is restored by the call to
+      ${../if/local-enable:/name} according to the
+      ${../if/local-enable:/params[0]/name} parameter.  In this case maskable
+      interrupts are enabled afterwards.
+    code: |
+      T_false( AreInterruptsEnabled() );
+      rtems_interrupt_local_enable( level );
+      T_true( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../if/local-enable
+    - role: validation
+      uid: ../req/local-disable-assign
+    - role: validation
+      uid: ../req/local-enable
+  links: []
+- action-brief: |
+    Validate the interrupt lock directives.
+  action-code: |
+    RTEMS_INTERRUPT_LOCK_DEFINE( , lock, "name" );
+    rtems_interrupt_lock_context lock_context;
+  checks:
+  - brief: |
+      Check that maskable interrupts are disabled before the call to
+      ${../if/lock-isr-disable:/name} and disabled afterwards.
+    code: |
+      T_true( AreInterruptsEnabled() );
+      rtems_interrupt_lock_interrupt_disable( &lock_context );
+      T_false( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../if/lock-isr-disable
+    - role: validation
+      uid: ../req/disable-interrupts
+    - role: validation
+      uid: ../req/lock-store-interrupt-status
+  - brief: |
+      Check that the maskable interrupt status is not changed by the
+      ${../if/lock-acquire-isr:/name} call.
+    code: |
+      T_false( AreInterruptsEnabled() );
+      rtems_interrupt_lock_acquire_isr( &lock, &lock_context );
+      T_false( AreInterruptsEnabled() );
+    links: []
+  - brief: |
+      Check that the maskable interrupt status is restored by the call to
+      ${../if/lock-release:/name} according to the
+      ${../if/lock-release:/params[1]/name} parameter.
+    code: |
+      T_false( AreInterruptsEnabled() );
+      rtems_interrupt_lock_release( &lock, &lock_context );
+      T_true( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../req/lock-restore-interrupts
+  - brief: |
+      Check that maskable interrupts are disabled before the call to
+      ${../if/lock-acquire:/name} and disabled afterwards.
+    code: |
+      T_true( AreInterruptsEnabled() );
+      rtems_interrupt_lock_acquire( &lock, &lock_context );
+      T_false( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../if/lock-acquire
+    - role: validation
+      uid: ../req/disable-interrupts
+    - role: validation
+      uid: ../req/lock-store-interrupt-status
+  - brief: |
+      Check that the maskable interrupt status is restored by the call to
+      ${../if/lock-release:/name} according to the
+      ${../if/lock-release:/params[1]/name} parameter.
+    code: |
+      T_false( AreInterruptsEnabled() );
+      rtems_interrupt_lock_release( &lock, &lock_context );
+      T_true( AreInterruptsEnabled() );
+    links:
+    - role: validation
+      uid: ../req/lock-restore-interrupts
+  - brief: |
+      Check that the maskable interrupt status is not changed by the
+      ${../if/lock-destroy:/name} call.
+    code: |
+      T_true( AreInterruptsEnabled() );
+      rtems_interrupt_lock_destroy( &lock );
+      T_true( AreInterruptsEnabled() );
+    links: []
+  links: []
+- action-brief: |
+    Validate the interrupt entry initialization.
+  action-code: |
+    int entry_arg;
+    int entry_arg_2;
+    const char entry_info[] = "1";
+    const char entry_info_2[] = "1";
+    rtems_interrupt_entry entry = RTEMS_INTERRUPT_ENTRY_INITIALIZER(
+      EntryRoutine,
+      &entry_arg,
+      entry_info
+    );
+  checks:
+  - brief: |
+      Check that the entry is properly initialized by
+      ${../if/entry-initializer:/name}.
+    code: |
+      T_eq_ptr( entry.handler, EntryRoutine );
+      T_eq_ptr( entry.arg, &entry_arg );
+      T_eq_ptr( entry.next, NULL );
+      T_eq_ptr( entry.info, entry_info );
+    links:
+    - role: validation
+      uid: ../req/entry-initializer-handler
+    - role: validation
+      uid: ../req/entry-initializer-arg
+    - role: validation
+      uid: ../req/entry-initializer-next
+    - role: validation
+      uid: ../req/entry-initializer-info
+  - brief: |
+      Call ${../if/entry-initialize:/name}.  Check that the entry is properly
+      initialized by ${../if/entry-initialize:/name}.
+    code: |
+      entry.next = &entry;
+      rtems_interrupt_entry_initialize(
+        &entry,
+        EntryRoutine2,
+        &entry_arg_2,
+        entry_info_2
+      );
+      T_eq_ptr( entry.handler, EntryRoutine2 );
+      T_eq_ptr( entry.arg, &entry_arg_2 );
+      T_eq_ptr( entry.next, NULL );
+      T_eq_ptr( entry.info, entry_info_2 );
+    links:
+    - role: validation
+      uid: ../req/entry-initialize-handler
+    - role: validation
+      uid: ../req/entry-initialize-arg
+    - role: validation
+      uid: ../req/entry-initialize-next
+    - role: validation
+      uid: ../req/entry-initialize-info
+  links: []
+test-brief: |
+  Tests some ${../if/group:/name} directives.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/irq-extension.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static void EntryRoutine( void *arg )
+  {
+    (void) arg;
+  }
+
+  static void EntryRoutine2( void *arg )
+  {
+    (void) arg;
+  }
+test-target: testsuites/validation/tc-intr.c
+test-teardown: null
+type: test-case

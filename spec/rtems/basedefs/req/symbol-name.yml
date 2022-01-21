@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/symbol-name
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/symbol-name:/name} macro shall expand to the
+  ${/glossary/elf:/term} symbol name associated with the C language identifier
+  specified by the ${../if/symbol-name:/params[0]/name} parameter.
+type: requirement

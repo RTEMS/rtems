@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: elapsed
+text: |
+  Elapsed denotes the real ${../glossary/time:/term} passed since the last
+  successful invocation of ${../if/period:/name} (excluding the case where
+  ${../if/period-status-define:/name} is used for parameter
+  ${../if/period:/params[1]/name}).  The elapsed time is measured using
+  ${/glossary/clock-monotonic:/term}.
+type: glossary

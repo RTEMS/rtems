@@ -1,0 +1,507 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/catch
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->catch_status );
+    text: |
+      The return status of ${../if/catch:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: NotImplIntLvl
+    test-code: |
+      T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+    text: |
+      The return status of ${../if/catch:/name} shall be
+      ${../../status/if/not-implemented:/name}.
+  - name: NotImplIntLvlSMP
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->catch_status );
+      }
+    text: |
+      Where the system needs inter-processor interrupts, the return status of
+      ${../if/catch:/name} shall be ${../../status/if/not-implemented:/name}.
+
+      Where the system does not need inter-processor interrupts, the return
+      status of ${../if/catch:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: NotImplNoPreempt
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->catch_status );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, the return
+      status of ${../if/catch:/name} shall be
+      ${../../status/if/not-implemented:/name}.
+
+      Where the scheduler does support the no-preempt mode, the return status
+      of ${../if/catch:/name} shall be ${../../status/if/successful:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: ASRInfo
+  states:
+  - name: NopIntLvl
+    test-code: |
+      CheckNoASRChange( ctx );
+    text: |
+      The ASR information of the caller of ${../if/catch:/name} shall not be
+      changed by the ${../if/catch:/name} call.
+  - name: NopIntLvlSMP
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        CheckNoASRChange( ctx );
+      } else {
+        CheckNewASRSettings( ctx );
+      }
+    text: |
+      Where the system needs inter-processor interrupts, the ASR information of
+      the caller of ${../if/catch:/name} shall not be changed by the
+      ${../if/catch:/name} call.
+
+      Where the system does not need inter-processor interrupts, the ASR
+      processing for the caller of ${../if/catch:/name} shall be done using the
+      handler specified by ${../if/catch:/params[0]/name} in the mode specified
+      by ${../if/catch:/params[1]/name}.
+  - name: NopNoPreempt
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        CheckNoASRChange( ctx );
+      } else {
+        CheckNewASRSettings( ctx );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, the ASR
+      information of the caller of ${../if/catch:/name} shall not be changed by
+      the ${../if/catch:/name} call.
+
+      Where the scheduler does support the no-preempt mode, the ASR processing
+      for the caller of ${../if/catch:/name} shall be done using the handler
+      specified by ${../if/catch:/params[0]/name} in the mode specified by
+      ${../if/catch:/params[1]/name}.
+  - name: New
+    test-code: |
+      CheckNewASRSettings( ctx );
+    text: |
+      The ASR processing for the caller of ${../if/catch:/name} shall be done
+      using the handler specified by ${../if/catch:/params[0]/name} in the mode
+      specified by ${../if/catch:/params[1]/name}.
+  - name: Inactive
+    test-code: |
+      T_rsc( ctx->send_status, RTEMS_NOT_DEFINED );
+      T_eq_u32( ctx->default_handler_calls, 0 );
+      T_eq_u32( ctx->handler_calls, 0 );
+      T_eq_u32( ctx->handler_mode, 0xffffffff );
+    text: |
+      The ASR processing for the caller of ${../if/catch:/name} shall be
+      deactivated.
+
+      The pending signals of the caller of ${../if/catch:/name} shall be cleared.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Pending
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+        ctx->pending_signals = 1;
+      } else {
+        ctx->pending_signals = 0;
+      }
+    text: |
+      Where the system has more than one processor, while the calling task has
+      pending signals.
+
+      Where the system has exactly one processor, while the calling task has no
+      pending signals.
+  - name: 'No'
+    test-code: |
+      ctx->pending_signals = 0;
+    text: |
+      While the calling task has no pending signals.
+  test-epilogue: null
+  test-prologue: null
+- name: Handler
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->handler = NULL;
+    text: |
+      While the ${../if/catch:/params[0]/name} parameter is ${/c/if/null:/name}.
+  - name: Valid
+    test-code: |
+      ctx->handler = SignalHandler;
+    text: |
+      While the ${../if/catch:/params[0]/name} parameter is a valid ASR handler.
+  test-epilogue: null
+  test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() == 1 ) {
+        ctx->normal_mode |= RTEMS_NO_PREEMPT;
+      }
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies that
+      preemption is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode |= RTEMS_NO_PREEMPT;
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies that
+      preemption is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeslice
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode |= RTEMS_TIMESLICE;
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies that
+      timeslicing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->normal_mode |= RTEMS_TIMESLICE;
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies that
+      timeslicing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * We cannot disable ASR processing at normal task level for this state.
+       */
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies that
+      ASR processing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode |= RTEMS_NO_ASR;
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies that
+      ASR processing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvl
+  states:
+  - name: Zero
+    test-code: |
+      #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE && !defined(RTEMS_SMP)
+      ctx->normal_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
+      #endif
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies an interrupt
+      level of zero.
+  - name: Positive
+    test-code: |
+      ctx->mode |= RTEMS_INTERRUPT_LEVEL( 1 );
+    text: |
+      While the ${../if/catch:/params[1]/name} parameter specifies an interrupt
+      level greater than or equal to one and less than or equal to
+      ${/score/cpu/if/modes-interrupt-mask:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_status_code sc;
+  rtems_mode        mode;
+
+  if ( ctx->pending_signals != 0 ) {
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    _SMP_barrier_Wait( &ctx->barrier, &ctx->runner_barrier_state, 2 );
+    _SMP_barrier_Wait( &ctx->barrier, &ctx->runner_barrier_state, 2 );
+    ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
+    rtems_interrupt_local_enable(level);
+  } else {
+    ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
+  }
+
+  sc = rtems_task_mode( ctx->normal_mode, RTEMS_ALL_MODE_MASKS, &mode );
+  T_rsc_success( sc );
+
+  ctx->send_status = rtems_signal_send( RTEMS_SELF, 0xdeadbeef );
+
+  sc = rtems_task_mode( mode, RTEMS_ALL_MODE_MASKS, &mode );
+  T_rsc_success( sc );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the object identifier of the runner task.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member contains the object identifier of the worker task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+    If this member is non-zero, then rtems_signal_catch() is called with
+    pending signals, otherwise it is called with no pending signals.
+  description: null
+  member: |
+    uint32_t pending_signals
+- brief: 
+    This member provides a barrier to synchronize the runner and worker tasks.
+  description: null
+  member: |
+    SMP_barrier_Control barrier
+- brief: |
+    This member is used for barrier operations done by the runner task.
+  description: null
+  member: |
+    SMP_barrier_State runner_barrier_state
+- brief: |
+    When the default handler is called, this member is incremented.
+  description: null
+  member: |
+    uint32_t default_handler_calls
+- brief: |
+    When the handler is called, this member is incremented.
+  description: null
+  member: |
+    uint32_t handler_calls
+- brief: |
+    This member contains the mode observed in the last handler call.
+  description: null
+  member: |
+    rtems_mode handler_mode
+- brief: |
+    This member specifies the normal task mode for the action.
+  description: null
+  member: |
+    rtems_mode normal_mode
+- brief: |
+    This member specifies the handler for the action.
+  description: null
+  member: |
+    rtems_asr_entry handler
+- brief: |
+    This member specifies the task mode for the action.
+  description: null
+  member: |
+    rtems_mode mode
+- brief: |
+    This member contains the return status of the rtems_signal_catch() call of
+    the action.
+  description: null
+  member: |
+    rtems_status_code catch_status
+- brief: |
+    This member contains the return status of the rtems_signal_send() call of
+    the action.
+  description: null
+  member: |
+    rtems_status_code send_status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+- rtems/score/smpbarrier.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_status_code sc;
+
+  ctx->default_handler_calls = 0;
+  ctx->handler_calls = 0;
+  ctx->handler_mode = 0xffffffff;
+  ctx->normal_mode = RTEMS_DEFAULT_MODES;
+  ctx->handler = NULL;
+  ctx->mode = RTEMS_DEFAULT_MODES;
+
+  sc = rtems_signal_catch( DefaultHandler, RTEMS_NO_ASR );
+  T_rsc_success( sc );
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->runner_id = rtems_task_self();
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &ctx->runner_barrier_state );
+
+    if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+      rtems_status_code sc;
+      rtems_id          scheduler_id;
+
+      ctx->worker_id = CreateTask( "WORK", 1 );
+
+      sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
+      T_assert_rsc_success( sc );
+
+      sc = rtems_task_set_scheduler( ctx->worker_id, scheduler_id, 1 );
+      T_assert_rsc_success( sc );
+
+      StartTask( ctx->worker_id, Worker, ctx );
+    }
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void DefaultHandler( rtems_signal_set signal_set )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->default_handler_calls;
+
+    if ( ctx->pending_signals != 0 && ctx->default_handler_calls == 1 ) {
+      T_eq_u32( signal_set, 0x600df00d );
+    } else {
+      T_eq_u32( signal_set, 0xdeadbeef );
+    }
+  }
+
+  static void SignalHandler( rtems_signal_set signal_set )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    ctx = T_fixture_context();
+    ++ctx->handler_calls;
+
+    sc = rtems_task_mode(
+      RTEMS_DEFAULT_MODES,
+      RTEMS_CURRENT_MODE,
+      &ctx->handler_mode
+    );
+    T_rsc_success( sc );
+
+    if ( ctx->pending_signals != 0 && ctx->handler_calls == 1 ) {
+      T_eq_u32( signal_set, 0x600df00d );
+    } else {
+      T_eq_u32( signal_set, 0xdeadbeef );
+    }
+  }
+
+  static void CheckNoASRChange( Context *ctx )
+  {
+    T_rsc_success( ctx->send_status );
+    T_eq_u32( ctx->default_handler_calls, 1 + ctx->pending_signals );
+    T_eq_u32( ctx->handler_calls, 0 );
+    T_eq_u32( ctx->handler_mode, 0xffffffff );
+  }
+
+  static void CheckNewASRSettings( Context *ctx )
+  {
+    T_rsc_success( ctx->send_status );
+    T_eq_u32( ctx->default_handler_calls, 0 );
+    T_eq_u32( ctx->handler_calls, 1 + ctx->pending_signals );
+    T_eq_u32( ctx->handler_mode, ctx->mode );
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    SMP_barrier_State barrier_state;
+
+    ctx = (Context *) arg;
+    _SMP_barrier_State_initialize( &barrier_state );
+
+    while ( true ) {
+      rtems_status_code sc;
+
+      _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+
+      sc = rtems_signal_send( ctx->runner_id, 0x600df00d );
+      T_rsc_success( sc );
+
+      _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+    }
+  }
+test-target: testsuites/validation/tc-signal-catch.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerASR();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    ASRInfo:
+    - if:
+        pre-conditions:
+          Handler: Valid
+      then: New
+    - else: Inactive
+  pre-conditions:
+    Pending: all
+    Handler: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+- enabled-by: CPU_ENABLE_ROBUST_THREAD_DISPATCH
+  post-conditions:
+    Status: NotImplIntLvl
+    ASRInfo: NopIntLvl
+  pre-conditions:
+    Pending: all
+    Handler:
+    - Valid
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl:
+    - Positive
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          IntLvl: Positive
+      then: NotImplIntLvlSMP
+    - if:
+        pre-conditions:
+          Preempt: 'No'
+      then: NotImplNoPreempt
+    - else: Ok
+    ASRInfo:
+    - if:
+        pre-conditions:
+          IntLvl: Positive
+      then: NopIntLvlSMP
+    - if:
+        pre-conditions:
+          Preempt: 'No'
+      then: NopNoPreempt
+    - else: New
+  pre-conditions:
+    Pending: all
+    Handler:
+    - Valid
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+type: requirement

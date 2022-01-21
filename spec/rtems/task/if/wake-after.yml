@@ -1,0 +1,56 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Wakes up after an interval in ${/glossary/clock-tick:/plural} or yields the
+  processor.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/interval:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive blocks the calling task for the specified ${.:/params[0]/name}
+  of clock ticks if the value is not equal to ${yield-processor:/name}.  When
+  the requested interval has elapsed, the task is made ready.  The clock tick
+  directives automatically updates the delay period.  The calling task may give
+  up the processor and remain in the ready state by specifying a value of
+  ${yield-processor:/name} in ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- delay a task for an interval
+- wake up after an interval
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-driver
+- role: constraint
+  uid: /constraint/fatal-bad-thread-dispatch-disable-level
+name: rtems_task_wake_after
+notes: |
+  Setting the system date and time with the ${../../clock/if/set:/name}
+  directive and similar directives which set ${/glossary/clock-realtime:/term}
+  have no effect on a ${wake-after:/name} blocked task.
+params:
+- description: |
+    is the interval in ${/glossary/clock-tick:/plural} to delay the task or
+    ${yield-processor:/name} to yield the processor.
+  dir: null
+  name: ticks
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+type: interface

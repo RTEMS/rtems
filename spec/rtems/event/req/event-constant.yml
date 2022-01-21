@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/event-00
+- role: interface-function
+  uid: ../if/event-01
+- role: interface-function
+  uid: ../if/event-02
+- role: interface-function
+  uid: ../if/event-03
+- role: interface-function
+  uid: ../if/event-04
+- role: interface-function
+  uid: ../if/event-05
+- role: interface-function
+  uid: ../if/event-06
+- role: interface-function
+  uid: ../if/event-07
+- role: interface-function
+  uid: ../if/event-08
+- role: interface-function
+  uid: ../if/event-09
+- role: interface-function
+  uid: ../if/event-10
+- role: interface-function
+  uid: ../if/event-11
+- role: interface-function
+  uid: ../if/event-12
+- role: interface-function
+  uid: ../if/event-13
+- role: interface-function
+  uid: ../if/event-14
+- role: interface-function
+  uid: ../if/event-15
+- role: interface-function
+  uid: ../if/event-16
+- role: interface-function
+  uid: ../if/event-17
+- role: interface-function
+  uid: ../if/event-18
+- role: interface-function
+  uid: ../if/event-19
+- role: interface-function
+  uid: ../if/event-20
+- role: interface-function
+  uid: ../if/event-21
+- role: interface-function
+  uid: ../if/event-22
+- role: interface-function
+  uid: ../if/event-23
+- role: interface-function
+  uid: ../if/event-24
+- role: interface-function
+  uid: ../if/event-25
+- role: interface-function
+  uid: ../if/event-26
+- role: interface-function
+  uid: ../if/event-27
+- role: interface-function
+  uid: ../if/event-28
+- role: interface-function
+  uid: ../if/event-29
+- role: interface-function
+  uid: ../if/event-30
+- role: interface-function
+  uid: ../if/event-31
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Let :math:`J\in\{0, 1, ..., 31\}`.  The :math:`J`-th event number constant
+  shall be a constant expression which evaluates to the integer representation
+  of event number :math:`J`.
+type: requirement

@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: sparc/gr740
+links:
+- role: requirement-refinement
+  uid: /req/errata
+- role: requirement-refinement
+  uid: ../if/group
+non-functional-type: design
+rationale: null
+references:
+- identifier: https://www.gaisler.com/doc/gr740/GR740-UM-DS-2-5.pdf
+  type: url
+requirement-type: non-functional
+text: |
+  The software product shall take the errata 20-1 (Stores to ASI 0x1C
+  (MMU/cache bypass) can update data cache contents) into account.
+type: requirement

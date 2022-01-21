@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validates the characters returned by the ${../if/name-to-characters:/name}
+    directive.
+  action-code: |
+    char c1;
+    char c2;
+    char c3;
+    char c4;
+
+    rtems_name_to_characters( 0x01020304, &c1, &c2, &c3, &c4 );
+  checks:
+  - brief: |
+      Check that the first character is equal to 0x01.
+    code: |
+      T_step_eq_char( ${step}, c1, 0x01 );
+    links:
+    - role: validation
+      uid: ../req/name-to-characters-1
+  - brief: |
+      Check that the second character is equal to 0x02.
+    code: |
+      T_step_eq_char( ${step}, c2, 0x02 );
+    links:
+    - role: validation
+      uid: ../req/name-to-characters-2
+  - brief: |
+      Check that the third character is equal to 0x03.
+    code: |
+      T_step_eq_char( ${step}, c3, 0x03 );
+    links:
+    - role: validation
+      uid: ../req/name-to-characters-3
+  - brief: |
+      Check that the fourth character is equal to 0x04.
+    code: |
+      T_step_eq_char( ${step}, c4, 0x04 );
+    links:
+    - role: validation
+      uid: ../req/name-to-characters-4
+  links: []
+test-brief: |
+  Tests some ${../if/group:/name} directives.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-support.c
+test-teardown: null
+type: test-case

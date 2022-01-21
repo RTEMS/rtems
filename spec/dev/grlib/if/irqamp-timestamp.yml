@@ -1,0 +1,124 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBIRQAMPTimestamp
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: irqamp
+- role: interface-placement
+  uid: irqamp-header
+definition:
+- default:
+    count: 1
+    name: ITCNT
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: ITSTMPC
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: ITSTMPAS
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: ITSTMPAC
+  offset: 0xc
+  variants: []
+register-prefix: IRQAMP
+register-block-group: IRQ(A)MP Timestamp
+register-block-size: 16
+registers:
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TCNT'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt timestamp counter n register
+  description: null
+  name: ITCNT
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TSTAMP'
+      start: 27
+      width: 5
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'S1'
+      start: 26
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'S2'
+      start: 25
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'KS'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TSISEL'
+      start: 0
+      width: 5
+    variants: []
+  brief: |
+    Interrupt timestamp n control register
+  description: null
+  name: ITSTMPC
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TASSERTION'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt Assertion Timestamp n register
+  description: null
+  name: ITSTMPAS
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TACKNOWLEDGE'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Interrupt Acknowledge Timestamp n register
+  description: null
+  name: ITSTMPAC
+  width: 32
+name: irqamp_timestamp
+notes: null
+type: interface

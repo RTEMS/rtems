@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Task delete extensions are invoked when a task is deleted.
+copyrights:
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/userext/if/thread-delete:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/thread-dispatching-disabled-init
+- role: constraint
+  uid: /constraint/thread-dispatching-enabled-multitasking
+- role: constraint
+  uid: ../constraint/object-allocator-system
+- role: constraint
+  uid: ../constraint/object-allocator-task-create
+- role: constraint
+  uid: ../constraint/object-allocator-task-construct
+- role: constraint
+  uid: ../constraint/object-allocator-pthread-create
+name: rtems_task_delete_extension
+notes: |
+  The task delete extensions are invoked in
+  ${/glossary/extension-reverse-order:/term}.
+
+  The task delete extensions are invoked by task create directives before an
+  attempt to allocate a ${/glossary/tcb:/term} is made.
+
+  If a task create extension failed, then a task delete extension may be
+  invoked without a previous invocation of the corresponding task create
+  extension of the extension set.
+params:
+- description: |
+    is the ${/glossary/tcb:/term} of the executing thread.  If the idle thread
+    is created and one of the initial task create extension fails, then the
+    executing thread is equal to ${/c/if/null:/name}.
+  dir: null
+  name: executing
+- description: |
+    is the ${/glossary/tcb:/term} of the deleted thread.  The executing and
+    deleted arguments are never equal.
+  dir: null
+  name: created
+return: null
+type: interface

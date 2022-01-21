@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/unused
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/unused:/name} macro is appended to a label in this form:
+  ``<label>: ${../if/unused:/name};``,
+  the ${../if/unused:/name} macro shall prevent the compiler from emitting
+  a warning if this label is not used.
+type: requirement

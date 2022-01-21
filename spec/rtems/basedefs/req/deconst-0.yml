@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/deconst
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When ${../if/deconst:/params[0]/name} is a non-const pointer type,
+  and ${../if/deconst:/params[1]/name} is a pointer to a value of const type,
+  and the types of ${../if/deconst:/params[0]/name} and
+  ${../if/deconst:/params[1]/name} are compatible in the sense of C,
+  the macro ${../if/deconst:/name} shall result in an expression
+  which returns a pointer of type ${../if/deconst:/params[0]/name} pointing
+  to the same address as ${../if/deconst:/params[1]/name}.
+type: requirement

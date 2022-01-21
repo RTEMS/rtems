@@ -1,0 +1,80 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: bsps/sparc/leon3
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by the DisableCacheSnooping() system
+    initialization handler.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the expected fatal source is present.
+    code: |
+      T_step_eq_int( ${step}, ctx->source, RTEMS_FATAL_SOURCE_BSP );
+    links:
+    - role: validation
+      uid: ../req/fatal-cache-snooping-disabled-boot
+  - brief: |
+      Check that the expected fatal code is present.
+    code: |
+      T_step_eq_ulong(
+        ${step},
+        ctx->code,
+        LEON3_FATAL_INVALID_CACHE_CONFIG_BOOT_PROCESSOR
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-cache-snooping-disabled-boot
+  links: []
+test-brief: |
+  Tests a fatal error.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is fatal source.
+    dir: null
+    name: source
+    specifier: ${/rtems/userext/if/fatal-source:/name} ${.:name}
+  - description: |
+      is fatal code.
+    dir: null
+    name: code
+    specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
+  target: testsuites/validation/tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-boot.h
+test-includes:
+- rtems/sysinit.h
+- bsp/fatal.h
+- bsp/leon3.h
+test-local-includes:
+- tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-boot.h
+test-setup: null
+test-stop: null
+test-support: |
+  static void DisableCacheSnooping( void )
+  {
+    uint32_t control;
+
+    control = leon3_get_cache_control_register();
+    control &= ~LEON3_REG_CACHE_CTRL_DS;
+    leon3_set_cache_control_register( control );
+  }
+
+  RTEMS_SYSINIT_ITEM(
+    DisableCacheSnooping,
+    RTEMS_SYSINIT_BSP_EARLY,
+    RTEMS_SYSINIT_ORDER_FIRST
+  );
+test-target: testsuites/validation/tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-boot.c
+test-teardown: null
+type: test-case

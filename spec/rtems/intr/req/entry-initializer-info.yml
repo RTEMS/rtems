@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/entry-initializer
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/entry-initializer:/name} is used to statically initialize an
+  object of type ${../if/entry:/name}, the ``info`` member of the object
+  shall be initialized to the value of the
+  ${../if/entry-initializer:/params[2]/name}.
+type: requirement

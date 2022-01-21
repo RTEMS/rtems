@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-ticks-per-second
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The ${../if/get-ticks-per-second:/name} function shall
+  return the number of clock ticks per second which is defined indirectly
+  by the CONFIGURE_MICROSECONDS_PER_TICK configuration option..
+type: requirement

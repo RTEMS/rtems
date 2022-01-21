@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Allocates memory from the C Program Heap which begins at a cache line
+  boundary.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/size_t:/name} ${.:/params[0]/name}
+    return: void *
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_cache_aligned_malloc
+notes: null
+params:
+- description: |
+    is the size in bytes of the memory area to allocate.
+  dir: null
+  name: size
+return:
+  return: |
+    Returns the begin address of the allocated memory.  The begin address is on
+    a cache line boundary.
+  return-values:
+  - description: |
+      There is not enough memory available to satisfy the allocation request.
+    value: ${/c/if/null:/name}
+type: interface

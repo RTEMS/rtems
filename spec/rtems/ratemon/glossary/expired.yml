@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: expired
+text: |
+  A period is in expired ${../glossary/state:/term} if an
+  ${../glossary/interval:/term} is set and a
+  ${../glossary/deadline:/term} has passed while the current
+  ${../glossary/job:/term} is still executing.
+
+  A period enters expired ${../glossary/state:/term} when the execution of the
+  current ${../glossary/job:/term} passes over the next
+  ${../glossary/deadline:/term} -- no matter whether this is the ideal end
+  ${../glossary/deadline:/term} of the current or any other
+  ${../glossary/interval:/term}.  A period
+  leaves expired ${../glossary/state:/term} whenever the ${../if/period:/name}
+  directive (not using ${../if/period-status-define:/name} as value for
+  parameter ${../if/period:/params[1]/name}) is called.
+type: glossary

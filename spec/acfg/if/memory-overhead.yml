@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 0
+description: |
+  The value of this configuration option defines the number of kilobytes the
+  application wishes to add to the RTEMS Workspace size calculated by
+  ``<rtems/confdefs.h>``.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/wkspace
+name: CONFIGURE_MEMORY_OVERHEAD
+notes: |
+  This configuration option should only be used when it is suspected that a bug
+  in ``<rtems/confdefs.h>`` has resulted in an underestimation.  Typically the
+  memory allocation will be too low when an application does not account for
+  all message queue buffers or task stacks, see
+  ${message-buffer-memory:/name}.
+type: interface

@@ -1,0 +1,66 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure provides the detailed status of a period.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member contains the identifier of the owner task of the period.
+    definition: ${../../type/if/id:/name} ${.:name}
+    description: null
+    kind: member
+    name: owner
+  variants: []
+- default:
+    brief: |
+      This member contains the state of the period.
+    definition: ${period-states:/name} ${.:name}
+    description: null
+    kind: member
+    name: state
+  variants: []
+- default:
+    brief: |
+      This member contains the time elapsed since the last successful invocation
+      ${period:/name} using ${/glossary/clock-monotonic:/term}.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: |
+      If the period is expired or has not been initiated, then this value has
+      no meaning.
+    kind: member
+    name: since_last_period
+  variants: []
+- default:
+    brief: |
+      This member contains the processor time consumed by the owner task since
+      the last successful invocation ${period:/name}.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: |
+      If the period is expired or has not been initiated, then this value has
+      no meaning.
+    kind: member
+    name: executed_since_last_period
+  variants: []
+- default:
+    brief: |
+      This member contains the count of jobs which are not released yet.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: postponed_jobs_count
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_rate_monotonic_period_status
+notes: null
+type: interface

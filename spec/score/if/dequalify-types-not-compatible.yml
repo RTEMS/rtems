@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  A not implemented function to trigger compile time errors with an error
+  message.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014 Paval Pisa
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: void *
+  variants:
+  - definition:
+      attributes: null
+      body: null
+      params: []
+      return: __attribute__((__error__("RTEMS_DEQUALIFY() types differ not only by
+        volatile and const"))) void *
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by:
+  not: ASM
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: /rtems/basedefs/if/header
+name: RTEMS_DEQUALIFY_types_not_compatible
+notes: null
+params: []
+return: null
+type: interface

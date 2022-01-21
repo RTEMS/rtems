@@ -1,0 +1,64 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by configuring an invalid task priority used
+    to construct the initialization task.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the expected fatal source is present.
+    code: |
+      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+    links:
+    - role: validation
+      uid: ../req/fatal-init-task-construct-failed
+  - brief: |
+      Check that the expected fatal code is present.
+    code: |
+      T_step_eq_ulong(
+        ${step},
+        ctx->code,
+        INTERNAL_ERROR_RTEMS_INIT_TASK_CONSTRUCT_FAILED
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-init-task-construct-failed
+  links: []
+test-brief: |
+  Tests a fatal error.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is fatal source.
+    dir: null
+    name: source
+    specifier: ${/rtems/userext/if/fatal-source:/name} ${.:name}
+  - description: |
+      is fatal code.
+    dir: null
+    name: code
+    specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
+  target: testsuites/validation/tr-fatal-init-task-construct-failed.h
+test-includes:
+- rtems.h
+test-local-includes:
+- tr-fatal-init-task-construct-failed.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-fatal-init-task-construct-failed.c
+test-teardown: null
+type: test-case

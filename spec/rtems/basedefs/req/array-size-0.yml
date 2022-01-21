@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/array-size
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the argument ${../if/alloc-size:/params[0]/name} evaluates to an
+  value of a C one-dimensional array type,
+  and the evaluation of that argument has no side effects,
+  the macro ${../if/array-size:/name} shall result in the number of elements
+  with which that array has been defined.
+type: requirement

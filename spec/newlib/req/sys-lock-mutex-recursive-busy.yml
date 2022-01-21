@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: sys-lock-mutex-try-acquire
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When an attempt to recursively acquire the mutex is made, the directive shall
+  immediately return with a status code of ${/c/if/ebusy:/name}.
+type: requirement

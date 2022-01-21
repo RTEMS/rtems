@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This enumeration defines the states in which a period may be.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enum
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: interface-enumerator
+  uid: inactive
+- role: interface-enumerator
+  uid: active
+- role: interface-enumerator
+  uid: expired
+name: rtems_rate_monotonic_period_states
+notes: null
+type: interface

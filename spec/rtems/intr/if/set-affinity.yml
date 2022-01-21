@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the processor affinity set of the interrupt vector.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${vector-number:/name} ${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    - const ${/c/if/cpu_set_t:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_interrupt_set_affinity
+notes: |
+  The ${get-attributes:/name} directive may be used to check if the processor
+  affinity of an interrupt vector can be set.
+params:
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the size of the processor set referenced by ${.:/params[2]/name} in
+    bytes.
+  dir: null
+  name: affinity_size
+- description: |
+    is the pointer to a ${/c/if/cpu_set_t:/name} object.  The processor set
+    defines the new processor affinity set of the interrupt vector.  A set bit
+    in the processor set means that the corresponding processor shall be in the
+    processor affinity set of the interrupt vector, otherwise the bit shall be
+    cleared.
+  dir: null
+  name: affinity
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The referenced processor set was not a valid new processor affinity set
+      for the interrupt vector.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The request to set the processor affinity of the interrupt vector has not
+      been satisfied.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

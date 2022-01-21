@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  It is defined if a static analysis run is performed.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: null
+  variants:
+  - definition: ''
+    enabled-by:
+    - defined(${/compiler/if/coverity:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_STATIC_ANALYSIS
+notes: null
+type: interface

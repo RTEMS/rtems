@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: Timer Service Routine
+text: |
+  The timer service routine is a user defined function executed when or after the timer fires (see ${../glossary/fire:/term}).  The user must provide a reference to the timer service routine when scheduling a timer. See also ${../glossary/scheduled:/term}.
+type: glossary

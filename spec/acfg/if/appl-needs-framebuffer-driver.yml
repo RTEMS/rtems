@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the Frame Buffer Driver is
+  initialized during system initialization.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+notes: |
+  Most BSPs do not include support for a Frame Buffer Driver. This is
+  because many boards do not include the required hardware.
+
+  If this option is defined and the BSP does not have this device driver, then
+  the user will get a link time error for an undefined symbol.
+type: interface

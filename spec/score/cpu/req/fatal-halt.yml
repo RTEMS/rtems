@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+- role: interface-function
+  uid: ../if/fatal-halt
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/fatal-halt:/name} function shall halt or reset the
+  ${/glossary/target:/term}.
+type: requirement

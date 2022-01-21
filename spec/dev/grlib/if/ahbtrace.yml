@@ -1,0 +1,214 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBAHBTRACE
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: ahbtrace-header
+definition:
+- default:
+    count: 1
+    name: CTRL
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: INDEX
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: TIMETAG
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: MSFILT
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: TBBA
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: TBBM
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: TBBA
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: TBBM
+  offset: 0x1c
+  variants: []
+register-prefix: null
+register-block-group: AHBTRACE
+register-block-size: 32
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DCNT'
+      start: 16
+      width: 7
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PF'
+      start: 8
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BW'
+      start: 6
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RF'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AF'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FR'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FW'
+      start: 2
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DM'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Trace buffer control register
+  description: null
+  name: CTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INDEX'
+      start: 4
+      width: 7
+    variants: []
+  brief: |
+    Trace buffer index register
+  description: null
+  name: INDEX
+  width: 32
+- bits:
+  - default:
+    - access: []
+      brief: null
+      description: null
+      name: 'TIMETAG'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Trace buffer time tag register
+  description: null
+  name: TIMETAG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SMASK_15_0'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MMASK_15_0'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Trace buffer master/slave filter register
+  description: null
+  name: MSFILT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BADDR_31_2'
+      start: 2
+      width: 30
+    variants: []
+  brief: |
+    Trace buffer break address registers
+  description: null
+  name: TBBA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BMASK_31_2'
+      start: 2
+      width: 30
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LD'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ST'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Trace buffer break mask registers
+  description: null
+  name: TBBM
+  width: 32
+name: ahbtrace
+notes: null
+type: interface

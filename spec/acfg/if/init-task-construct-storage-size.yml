@@ -1,0 +1,50 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: |
+  This configuration option has no default value.  If it is not specified, then
+  the Classic API initialization task will be created with the stack size
+  defined by the ${init-task-stack-size:/name} configuration option.
+description: |
+  The value of this configuration option defines the task storage size of the
+  Classic API initialization task.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-classicinit
+- role: constraint
+  uid: ../constraint/min-task-stack-size
+- role: constraint
+  uid: ../constraint/use-task-storage-size
+name: CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE
+notes: |
+  If this configuration option is specified, then
+
+  * a task storage area of the specified size is statically allocated by
+    ``<rtems/confdefs.h>`` for the Classic API initialization task,
+
+  * the Classic API initialization task is constructed by
+    ${/rtems/task/if/construct:/name} instead of using
+    ${/rtems/task/if/create:/name},
+
+  * the maximum thread-local storage size defined by
+    ${max-thread-local-storage-size:/name} is used for the Classic API
+    initialization task,
+
+  * the Classic API initialization task should be accounted for in
+    ${min-tasks-with-user-provided-storage:/name}, and
+
+  * the task storage area used for the Classic API initialization task is not
+    reclaimed by the system if the task is deleted.
+
+  The
+
+  * ${init-task-stack-size:/name} and
+
+  * ``CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE``
+
+  configuration options are mutually exclusive.
+type: interface

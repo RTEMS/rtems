@@ -1,0 +1,120 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/getchark
+post-conditions:
+- name: Result
+  states:
+  - name: PollChar
+    test-code: |
+      T_eq_int( ctx->result, 123 );
+    text: |
+      The return value of ${../if/getchark:/name} shall be the return value of
+      the function referenced by ${../if/bsp-poll-char:/name}.
+  - name: MinusOne
+    test-code: |
+      T_eq_int( ctx->result, -1 );
+      T_eq_u32( ctx->input_count, 0 );
+    text: |
+      The return value of ${../if/getchark:/name} shall be minus one.
+  test-epilogue: null
+  test-prologue: null
+- name: Calls
+  states:
+  - name: Once
+    test-code: |
+      T_eq_u32( ctx->input_count, 1 );
+    text: |
+      The function referenced by ${../if/bsp-poll-char:/name} shall be called
+      exactly once to get the return value for ${../if/getchark:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: PollChar
+  states:
+  - name: Valid
+    test-code: |
+      ctx->poll_char = PollChar;
+    text: |
+      While ${../if/bsp-poll-char:/name} references a function.
+  - name: 'Null'
+    test-code: |
+      ctx->poll_char = NULL;
+    text: |
+      While ${../if/bsp-poll-char:/name} is equal to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  BSP_polling_getchar_function_type poll_char;
+
+  ctx->input_count = 0;
+  poll_char = BSP_poll_char;
+  BSP_poll_char = ctx->poll_char;
+  ctx->result = getchark();
+  BSP_poll_char = poll_char;
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the character input count.
+  description: null
+  member: |
+    size_t input_count
+- brief: |
+    This member specifies the value for ${../if/bsp-poll-char:/name}.
+  description: null
+  member: |
+    BSP_polling_getchar_function_type poll_char
+- brief: |
+    This member contains the return value of the ${../if/getchark:/name} call.
+  description: null
+  member: |
+    int result
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/bspIo.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static int PollChar( void )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->input_count;
+
+    return 123;
+  }
+test-target: testsuites/validation/tc-io-getchark.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result: PollChar
+    Calls: Once
+  pre-conditions:
+    PollChar:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Result: MinusOne
+    Calls: N/A
+  pre-conditions:
+    PollChar:
+    - 'Null'
+type: requirement

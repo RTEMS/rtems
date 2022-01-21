@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: software component
+text: |
+  This term is defined by ECSS-E-ST-40C 3.2.28 as a "part of a software
+  system".  For this project a *software component* shall be any of the
+  following items and nothing else:
+
+  * ${softwareunit:/term}
+
+  * explicitly defined ${elf:/term} symbol in a
+    ${sourcecode:/term} file
+
+  * ${assemblerlanguage:/term} data in a source code file
+
+  * ${clanguage:/term} object with static storage duration
+
+  * C language object with thread-local storage duration
+
+  * ${thread:/term}
+
+  * ${interruptservice:/term}
+
+  * collection of *software components* (this is a software architecture
+    element)
+
+  Please note that explicitly defined ELF symbols and assembler language
+  data are considered a software component only if they are defined in a
+  ${sourcecode:/term} file.  For example, this rules out symbols
+  and data generated as side-effects by the toolchain (compiler, assembler,
+  linker) such as jump tables, linker trampolines, exception frame information,
+  etc.
+type: glossary

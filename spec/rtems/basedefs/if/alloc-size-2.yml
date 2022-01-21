@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Tells the compiler in a declaration that the memory allocation item count and
+  item size parameter of this function is similar to calloc().
+copyrights:
+- Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ''
+  variants:
+  - definition: |
+      __attribute__(( __alloc_size__( ${.:/params[0]/name}, ${.:/params[1]/name} ) ))
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_ALLOC_SIZE_2
+notes: null
+params:
+- description: |
+    is the allocation item count parameter index (starting with one).
+  dir: null
+  name: _count_index
+- description: |
+    is the allocation item size parameter index (starting with one).
+  dir: null
+  name: _size_index
+return: null
+type: interface

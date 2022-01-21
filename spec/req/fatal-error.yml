@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: terminate
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  If the system detects a fatal error, then it shall terminate the system.
+type: requirement

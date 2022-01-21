@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: home scheduler
+text: |
+  The home scheduler of a ${task:/term} is a ${scheduler:/term} which is an
+  ${scheduler-eligible:/term} and which is assigned to the task during its
+  initialization or explicitly via a directive call such as
+  ${/rtems/task/if/set-scheduler:/name}.
+type: glossary

@@ -1,0 +1,405 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRETHGBIT
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: grethgbit-header
+definition:
+- default:
+    count: 1
+    name: CR
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: SR
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: MACMSB
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: MACLSB
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: MDIO
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: TDTBA
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: RDTBA
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: EDCLMACMSB
+  offset: 0x28
+  variants: []
+- default:
+    count: 1
+    name: EDCLMACLSB
+  offset: 0x2c
+  variants: []
+register-prefix: null
+register-block-group: GRETH_GBIT
+register-block-size: 48
+registers:
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EA'
+      start: 31
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BS'
+      start: 28
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'GA'
+      start: 27
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MA'
+      start: 26
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MC'
+      start: 25
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ED'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RD'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DD'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ME'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PI'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BM'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'GB'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SP'
+      start: 7
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'RS'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PM'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FD'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RI'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TI'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    control register
+  description: null
+  name: CR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'PS'
+      start: 8
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'IA'
+      start: 7
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'TS'
+      start: 6
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'TA'
+      start: 5
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 4
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'TI'
+      start: 3
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'RI'
+      start: 2
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'TE'
+      start: 1
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'RE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    status register.
+  description: null
+  name: SR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MSB'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    MAC address MSB.
+  description: null
+  name: MACMSB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LSB'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    MAC address LSB.
+  description: null
+  name: MACLSB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PHYADDR'
+      start: 11
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'REGADDR'
+      start: 6
+      width: 5
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BU'
+      start: 3
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'LF'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RD'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WR'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    MDIO control/status register.
+  description: null
+  name: MDIO
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BASEADDR'
+      start: 10
+      width: 22
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DESCPNT'
+      start: 3
+      width: 7
+    variants: []
+  brief: |
+    transmitter descriptor table base address register.
+  description: null
+  name: TDTBA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BASEADDR'
+      start: 10
+      width: 22
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DESCPNT'
+      start: 3
+      width: 7
+    variants: []
+  brief: |
+    receiver descriptor table base address register.
+  description: null
+  name: RDTBA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MSB'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    EDCL MAC address MSB.
+  description: null
+  name: EDCLMACMSB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LSB'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    EDCL MAC address LSB.
+  description: null
+  name: EDCLMACLSB
+  width: 32
+name: grethgbit
+notes: null
+type: interface

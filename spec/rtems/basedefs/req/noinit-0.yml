@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/noinit
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/section:/name} macro is attached to a
+  global variable definition,
+  and the file format used supports arbitrary sections,
+  the macro shall cause the compiler to store the
+  variable in a section where its value is not initialized
+  during initial start up.
+type: requirement

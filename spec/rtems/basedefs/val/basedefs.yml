@@ -1,0 +1,1586 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Use the ${../if/alias:/name} macro.
+  action-code: |
+    int alias_result;
+
+    alias_result = ori_func( 3 ) + alias_func( 5 );
+  checks:
+  - brief: |
+      Check that ori_func() and alias_func() are the same function.
+    code: |
+      T_step_eq_int( ${step}, alias_result, 16 );
+    links:
+    - role: validation
+      uid: ../req/alias-0
+  links: []
+- action-brief: |
+    Use the ${../if/align-down:/name} macro in various examples.
+  action-code: |
+    int align_down0_result;
+    int align_down1_result;
+    int align_down2_result;
+    int align_down3_result;
+    int align_down4_result;
+    int align_down5_result;
+    int align_down6_result;
+    int align_down7_result;
+    int align_down8_result;
+    int align_down9_result;
+
+    align_down0_result = RTEMS_ALIGN_DOWN( 0, 1 );
+    align_down1_result = RTEMS_ALIGN_DOWN( 0, 4 );
+    align_down2_result = RTEMS_ALIGN_DOWN( 1, 2 );
+    align_down3_result = RTEMS_ALIGN_DOWN( 2, 2 );
+    align_down4_result = RTEMS_ALIGN_DOWN( 3, 2 );
+    align_down5_result = RTEMS_ALIGN_DOWN( 4, 2 );
+    align_down6_result = RTEMS_ALIGN_DOWN( 5, 2 );
+    align_down7_result = RTEMS_ALIGN_DOWN( 255, 16 );
+    align_down8_result = RTEMS_ALIGN_DOWN( 256, 16 );
+    align_down9_result = RTEMS_ALIGN_DOWN( 257, 16 );
+  checks:
+  - brief: |
+      Check that ${../if/align-down:/name} calculates the expected result
+      and is side-effect free.
+    code: |
+      T_step_eq_int( ${step}, align_down0_result, 0 );
+      T_step_eq_int( ${step}, align_down1_result, 0 );
+      T_step_eq_int( ${step}, align_down2_result, 0 );
+      T_step_eq_int( ${step}, align_down3_result, 2 );
+      T_step_eq_int( ${step}, align_down4_result, 2 );
+      T_step_eq_int( ${step}, align_down5_result, 4 );
+      T_step_eq_int( ${step}, align_down6_result, 4 );
+      T_step_eq_int( ${step}, align_down7_result, 240 );
+      T_step_eq_int( ${step}, align_down8_result, 256 );
+      T_step_eq_int( ${step}, align_down9_result, 256 );
+    links:
+    - role: validation
+      uid: ../req/align-down-0
+  links: []
+- action-brief: |
+    Use the ${../if/align-up:/name} macro in various examples.
+  action-code: |
+    int align_up0_result;
+    int align_up1_result;
+    int align_up2_result;
+    int align_up3_result;
+    int align_up4_result;
+    int align_up5_result;
+    int align_up6_result;
+    int align_up7_result;
+    int align_up8_result;
+    int align_up9_result;
+
+    align_up0_result = RTEMS_ALIGN_UP( 0, 1 );
+    align_up1_result = RTEMS_ALIGN_UP( 0, 4 );
+    align_up2_result = RTEMS_ALIGN_UP( 1, 2 );
+    align_up3_result = RTEMS_ALIGN_UP( 2, 2 );
+    align_up4_result = RTEMS_ALIGN_UP( 3, 2 );
+    align_up5_result = RTEMS_ALIGN_UP( 4, 2 );
+    align_up6_result = RTEMS_ALIGN_UP( 5, 2 );
+    align_up7_result = RTEMS_ALIGN_UP( 255, 16 );
+    align_up8_result = RTEMS_ALIGN_UP( 256, 16 );
+    align_up9_result = RTEMS_ALIGN_UP( 257, 16 );
+  checks:
+  - brief: |
+      Check that ${../if/align-up:/name} calculates the expected result
+      and is side-effect free.
+    code: |
+      T_step_eq_int( ${step}, align_up0_result, 0 );
+      T_step_eq_int( ${step}, align_up1_result, 0 );
+      T_step_eq_int( ${step}, align_up2_result, 2 );
+      T_step_eq_int( ${step}, align_up3_result, 2 );
+      T_step_eq_int( ${step}, align_up4_result, 4 );
+      T_step_eq_int( ${step}, align_up5_result, 4 );
+      T_step_eq_int( ${step}, align_up6_result, 6 );
+      T_step_eq_int( ${step}, align_up7_result, 256 );
+      T_step_eq_int( ${step}, align_up8_result, 256 );
+      T_step_eq_int( ${step}, align_up9_result, 272 );
+    links:
+    - role: validation
+      uid: ../req/align-up-0
+  links: []
+- action-brief: |
+    Use the ${../if/aligned:/name} macro.
+  action-code: |
+    char unaligned_var = 'c';
+    char aligned_var RTEMS_ALIGNED( 8 ) = 'd';
+
+    (void) unaligned_var;
+  checks:
+  - brief: |
+      Check that ${../if/aligned:/name} correctly aligns a variable on the stack
+      and a structure member.
+    code: |
+      T_step_eq_int( ${step}, ( ( uintptr_t ) &aligned_var ) % 8, 0 );
+      T_step_eq_int( ${step},
+        offsetof( aligned_member_struct, aligned_member ) % 8, 0 );
+    links:
+    - role: validation
+      uid: ../req/aligned-0
+  links: []
+- action-brief: |
+    Use the ${../if/alignof:/name} macro.
+  action-code: |
+    size_t alignof_char = RTEMS_ALIGNOF( char );
+    size_t alignof_long = RTEMS_ALIGNOF( long );
+    size_t alignof_long_array = RTEMS_ALIGNOF( long[3] );
+    size_t alignof_not_eval_array = RTEMS_ALIGNOF( long[7 / 0] );
+  checks:
+  - brief: |
+      Check that the ${../if/alignof:/name} macro results in the alignment
+      of the type.
+    code: |
+      T_step_eq_sz( ${step}, alignof_char, 1 );
+      T_step_eq_sz( ${step}, alignof_long, alignof_long_array );
+    links:
+    - role: validation
+      uid: ../req/alignof-0
+  - brief: |
+      If the ${../if/alignof:/name} macro would evaluate its argument,
+      it could not figure out how much menory to reserve for it.
+    code: |
+      T_step_eq_sz( ${step}, alignof_long, alignof_not_eval_array );
+    links:
+    - role: validation
+      uid: ../req/alignof-1
+  - brief: |
+      If the ${../if/alignof:/name} macro would evaluate the size expression,
+      the division by zero would cause an error.
+    code: |
+      T_step_eq_sz( ${step}, alignof_long, alignof_not_eval_array );
+    links:
+    - role: validation
+      uid: ../req/alignof-2
+  - brief: |
+      Ensure the constant value of the ${../if/alignof:/name} macro is
+      of type size_t.
+    code: |
+      T_step_true( ${step},
+        __builtin_types_compatible_p( __typeof__( RTEMS_ALIGNOF( char ) ),
+        size_t ) );
+    links:
+    - role: validation
+      uid: ../req/alignof-3
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/alloc-align:/name} macro.
+  action-code: |
+    void *free_ptr;
+    void *alloc_align_ptr;
+    alloc_align_ptr = basedefs_alloc_align_func( 1024, &free_ptr, 64 );
+    basedefs_free( free_ptr );
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/alloc-align:/name} macro has
+      the desired effect. Yet, the check confirms that such a macro exists and
+      that it can be used on such a memory function and that the
+      argument counting starts at 1.
+    code: |
+      T_step_not_null( ${step}, alloc_align_ptr );
+      T_step_eq_int( ${step}, ( ( uintptr_t ) alloc_align_ptr ) % 64, 0 );
+      T_step_ge_uptr( ${step}, ( ( uintptr_t ) alloc_align_ptr ),
+        ( ( uintptr_t ) free_ptr ) );
+      T_step_lt_uptr( ${step}, ( ( uintptr_t ) alloc_align_ptr ),
+        ( ( uintptr_t ) free_ptr ) + 64 );
+    links:
+    - role: validation
+      uid: ../req/alloc-align-0
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/alloc-size:/name} macro.
+  action-code: |
+    void *alloc_size_ptr;
+    alloc_size_ptr = basedefs_alloc_size_func( 1024 );
+    basedefs_free( alloc_size_ptr );
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/alloc-size:/name} macro has
+      the desired effect. Yet, the check confirms that such a macro exists and
+      that it can be used on such a memory function and that the
+      argument counting starts at 1.
+    code: |
+      T_step_not_null( ${step}, alloc_size_ptr );
+    links:
+    - role: validation
+      uid: ../req/alloc-size-0
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/alloc-size-2:/name} macro.
+  action-code: |
+    void *alloc_size_2_ptr;
+    alloc_size_2_ptr = basedefs_alloc_size_2_func( 8, 128 );
+    basedefs_free( alloc_size_2_ptr );
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/alloc-size-2:/name} macro has
+      the desired effect. Yet, the check confirms that such a macro exists and
+      that it can be used on such a memory function and that the
+      argument counting starts at 1.
+    code: |
+      T_step_not_null( ${step}, alloc_size_2_ptr );
+    links:
+    - role: validation
+      uid: ../req/alloc-size-2-0
+  links: []
+- action-brief: |
+    Use the ${../if/array-size:/name} macro.
+  action-code: |
+    int array[] = { 10, 20, 30, 40, 50 };
+    unsigned char array2[12];
+    int array_size = RTEMS_ARRAY_SIZE(array);
+    int array2_size = RTEMS_ARRAY_SIZE(array2);
+  checks:
+  - brief: |
+      Check that the calculated size of the arrays fit their definition.
+    code: |
+      T_step_eq_sz( ${step}, array_size, 5 );
+      T_step_eq_sz( ${step}, array2_size, 12 );
+    links:
+    - role: validation
+      uid: ../req/array-size-0
+  links: []
+- action-brief: |
+    Use the ${../if/compiler-deprecated-attribute:/name} macro.
+  action-code: |
+    int compiler_deprecated_attribute RTEMS_COMPILER_DEPRECATED_ATTRIBUTE = 42;
+  checks:
+  - brief: |
+      It cannot automatically be checked that the
+      ${../if/compiler-deprecated-attribute:/name} macro has the desired
+      effect. The gcc compiler should issue a warning about the use of a
+      deprecated variable on the above line
+      where the ``compiler_deprecated_attribute`` is used.
+    code: |
+      /*
+       * Derivation from Coding Style:
+       * The following code suppresses a compiler warning (instead of fixing
+       * it).
+       * Rational: The variable compiler_deprecated_attribute is not really
+       * deprecated but its purpose is to test the RTEMS_DEPRECATED macro.
+       * The RTEMS_DEPRECATED macro must result in a compiler warning here.
+       */
+      _Pragma( "GCC diagnostic push" )
+      _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
+      T_step_eq_int( ${step}, compiler_deprecated_attribute, 42 );
+      _Pragma( "GCC diagnostic pop" )
+    links:
+    - role: validation
+      uid: ../req/compiler-deprecated-attribute-0
+  links: []
+- action-brief: |
+    Use the ${../if/compiler-memory-barrier:/name} macro.
+  action-code: |
+    RTEMS_COMPILER_MEMORY_BARRIER();
+  checks:
+  - brief: |
+      It cannot be checked that the
+      ${../if/compiler-memory-barrier:/name} macro has the desired
+      effect. It is only checked that such a macro exists.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/compiler-memory-barrier-0
+  links: []
+- action-brief: |
+    Use of the ${../if/compiler-no-return-attribute:/name} macro at the
+    beginning of this file.
+  action-code: |
+    (void) compiler_no_return_attribute_func;
+  checks:
+  - brief: |
+      It cannot be checked that the
+      ${../if/compiler-no-return-attribute:/name} macro has the desired
+      effect. It is only checked that such a macro exists.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/compiler-no-return-attribute-0
+  links: []
+- action-brief: |
+    Use the ${../if/compiler-packed-attribute:/name} macro.
+  action-code: |
+    typedef struct {
+      uint8_t c;
+      RTEMS_COMPILER_PACKED_ATTRIBUTE uint32_t i;
+    } compiler_packed_attribute_struct;
+    int compiler_packed_attribute_offset =
+      offsetof( compiler_packed_attribute_struct, i );
+  checks:
+  - brief: |
+      Check that ${../if/compiler-packed-attribute:/name} correctly aligns
+      a structure member.
+    code: |
+      T_step_eq_int( ${step}, compiler_packed_attribute_offset, 1 );
+    links:
+    - role: validation
+      uid: ../req/compiler-packed-attribute-0
+  links: []
+- action-brief: |
+    Use the ${../if/compiler-pure-attribute:/name} macro at the beginning
+    of this file.
+  action-code: |
+    int compiler_pure_attribute_result;
+    int compiler_pure_attribute_result_2;
+    compiler_pure_attribute_result = compiler_pure_attribute_func();
+    compiler_pure_attribute_result_2 =
+      compiler_pure_attribute_func();
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/compiler-pure-attribute:/name}
+      macro has the desired effect. It is checked that such a macro exists.
+    code: |
+      T_step_eq_int( ${step}, compiler_pure_attribute_result, 21 );
+      T_step_eq_int( ${step}, compiler_pure_attribute_result_2, 21 );
+    links:
+    - role: validation
+      uid: ../req/compiler-pure-attribute-0
+  links: []
+- action-brief: |
+    Use the ${../if/compiler-unused-attribute:/name} macro.
+  action-code: |
+    int compiler_unused_attribute_var RTEMS_COMPILER_UNUSED_ATTRIBUTE;
+  checks:
+  - brief: |
+      It cannot automatically be checked that the
+      ${../if/compiler-unused-attribute:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and one can manually check that no compiler warnings are produced
+      for the compiler_unused_attribute_var.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/compiler-unused-attribute-0
+  links: []
+- action-brief: |
+    Invoke the  ${../if/concat:/name} macro on examples.
+  action-code: |
+    int concat0_result;
+    int concat1_result;
+    concat0_result = RTEMS_CONCAT( con, cat )();
+    concat1_result = RTEMS_CONCAT( abc, cat )();
+  checks:
+  - brief: |
+      Check that the two arguments of ${../if/concat:/name} are concatenated to a
+      new token.
+    code: |
+      T_step_eq_int( ${step}, concat0_result, 91 );
+    links:
+    - role: validation
+      uid: ../req/concat-0
+    - role: validation
+      uid: ../req/concat-1
+  - brief: |
+      Check that the result of the ${../if/concat:/name} expansion is subject to
+      a further pre-processor substitution.
+    code: |
+      T_step_eq_int( ${step}, concat1_result, 91 );
+    links:
+    - role: validation
+      uid: ../req/concat-2
+  links: []
+- action-brief: |
+    Use the ${../if/const:/name} macro at the beginning of this file.
+  action-code: |
+    int const_result;
+    int const_result_2;
+    const_result = const_func( 7 );
+    const_result_2 = const_func( 7 );
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/const:/name}
+      macro has the desired effect. It is checked that such a macro exists.
+    code: |
+      T_step_eq_int( ${step}, const_result, 28 );
+      T_step_eq_int( ${step}, const_result_2, 28 );
+    links:
+    - role: validation
+      uid: ../req/const-0
+  links: []
+- action-brief: |
+    Use the ${../if/container-of:/name} macro.
+  action-code: |
+    typedef struct {
+      int a;
+      int b;
+    } container_of_struct;
+
+    container_of_struct container_of_struct_var;
+    int *container_of_struct_b_adr = &container_of_struct_var.b;
+    container_of_struct *container_of_struct_adr;
+    container_of_struct_adr =
+      RTEMS_CONTAINER_OF( container_of_struct_b_adr, container_of_struct, b );
+  checks:
+  - brief: |
+      Check that the ${../if/container-of:/name}
+      macro evaluates to a pointer to container_of_struct_var.
+    code: |
+      T_step_eq_ptr( ${step},
+        container_of_struct_adr, &container_of_struct_var );
+    links:
+    - role: validation
+      uid: ../req/container-of-0
+  links: []
+- action-brief: |
+    Use the ${../if/declare-global-symbol:/name} macro in the
+    file tc-basedefs-pendant.h.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      Check that the ${../if/declare-global-symbol:/name}
+      macro declares a global symbol which can be accessed by function
+      basedefs_get_global_symbol() which is defined in a file
+      different from the file in which the gobal symbol is defined.
+    code: |
+      T_step_eq_int( ${step}, basedefs_get_global_symbol(), 0xabc );
+    links:
+    - role: validation
+      uid: ../req/declare-global-symbol-0
+  links: []
+- action-brief: |
+    Use the ${../if/deconst:/name} macro.
+  action-code: |
+    const int deconst_array[] = { 52, 55 };
+    int *deconst_pointer;
+    deconst_pointer = RTEMS_DECONST( int *, deconst_array );
+  checks:
+  - brief: |
+      Check that the ${../if/deconst:/name} macro returns a pointer
+      which allows to write into an otherwise const value.
+    code: |
+      T_step_eq_int( ${step}, deconst_pointer[0], 52 );
+      T_step_eq_int( ${step}, deconst_pointer[1], 55 );
+      deconst_pointer[1] = 13;
+      T_step_eq_int( ${step}, deconst_pointer[1], 13 );
+    links:
+    - role: validation
+      uid: ../req/deconst-0
+  links: []
+- action-brief: |
+    Use the ${../if/define-global-symbol:/name} macro at the
+    beginning of this file.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      Check that the ${../if/define-global-symbol:/name}
+      macro defines a global symbol with the correct value.
+    code: |
+      T_step_eq_int( ${step}, (uintptr_t) global_symbol, 0xabc );
+    links:
+    - role: validation
+      uid: ../req/define-global-symbol-0
+    - role: validation
+      uid: ../req/define-global-symbol-1
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/deprecated:/name} macro.
+  action-code: |
+    int deprecated_result;
+    /*
+     * Derivation from Coding Style:
+     * The following code suppresses a compiler warning (instead of fixing it).
+     * Rational: The function deprecated_func() is not really deprecated
+     * but its purpose is to test the RTEMS_DEPRECATED macro.
+     * The RTEMS_DEPRECATED macro must result in a compiler warning here.
+     */
+    _Pragma( "GCC diagnostic push" )
+    _Pragma( "GCC diagnostic ignored \"-Wdeprecated-declarations\"" )
+    deprecated_result = deprecated_func( 5 );
+    _Pragma( "GCC diagnostic pop" )
+  checks:
+  - brief: |
+      It cannot automatically be checked that the
+      ${../if/deprecated:/name} macro has the desired
+      effect. The gcc compiler should issue a warning about the use of a
+      deprecated function on the above line
+      where the ``deprecated_func`` is used.
+    code: |
+      T_step_eq_int( ${step}, deprecated_result, 15 );
+    links:
+    - role: validation
+      uid: ../req/deprecated-0
+  links: []
+- action-brief: |
+    Use the ${../if/dequalify-depthx:/name} macro.
+  action-code: |
+    const volatile int dequalify_depthx_array[] = { 52, 55 };
+    const char dequalify_depthx_var = 'a';
+    const char *dequalify_depthx_one_pointer = &dequalify_depthx_var;
+    const char **dequalify_depthx_two_pointer =
+      &dequalify_depthx_one_pointer;
+    int *dequalify_depthx_pointer;
+    volatile char **dequalify_depthx_twice_pointer;
+    dequalify_depthx_pointer =
+      RTEMS_DEQUALIFY_DEPTHX( *, int *, dequalify_depthx_array );
+    dequalify_depthx_twice_pointer = RTEMS_DEQUALIFY_DEPTHX(
+      **, volatile char **, dequalify_depthx_two_pointer );
+  checks:
+  - brief: |
+      Check that the ${../if/dequalify-depthx:/name} macro returns a pointer
+      which allows to write into an otherwise const (volatile) value.
+    code: |
+      T_step_eq_int( ${step}, dequalify_depthx_pointer[0], 52 );
+      T_step_eq_int( ${step}, dequalify_depthx_pointer[1], 55 );
+      dequalify_depthx_pointer[0] = 13;
+      T_step_eq_int( ${step}, dequalify_depthx_pointer[0], 13 );
+      T_step_eq_char( ${step}, **dequalify_depthx_twice_pointer, 'a' );
+      **dequalify_depthx_twice_pointer = 'Z';
+      T_step_eq_char( ${step}, **dequalify_depthx_twice_pointer, 'Z' );
+    links:
+    - role: validation
+      uid: ../req/dequalify-depthx-0
+  links: []
+- action-brief: |
+    Use the ${../if/dequalify:/name} macro.
+  action-code: |
+    const volatile int dequalify_array[] = { 52, 55 };
+    int *dequalify_pointer;
+    dequalify_pointer = RTEMS_DECONST( int *, dequalify_array );
+  checks:
+  - brief: |
+      Check that the ${../if/dequalify:/name} macro returns a pointer
+      which allows to write into an otherwise const volatile value.
+    code: |
+      T_step_eq_int( ${step}, dequalify_pointer[0], 52 );
+      T_step_eq_int( ${step}, dequalify_pointer[1], 55 );
+      dequalify_pointer[0] = 13;
+      T_step_eq_int( ${step}, dequalify_pointer[0], 13 );
+    links:
+    - role: validation
+      uid: ../req/dequalify-0
+  links: []
+- action-brief: |
+    Use the ${../if/devolatile:/name} macro.
+  action-code: |
+    volatile int devolatile_array[] = { 52, 55 };
+    int *devolatile_pointer;
+    devolatile_pointer = RTEMS_DEVOLATILE( int *, devolatile_array );
+  checks:
+  - brief: |
+      Check that the ${../if/devolatile:/name} macro returns a pointer
+      which allows to write into an otherwise volatile value.
+    code: |
+      T_step_eq_int( ${step}, devolatile_pointer[0], 52 );
+      T_step_eq_int( ${step}, devolatile_pointer[1], 55 );
+      devolatile_pointer[1] = 13;
+      T_step_eq_int( ${step}, devolatile_pointer[1], 13 );
+    links:
+    - role: validation
+      uid: ../req/devolatile-0
+  links: []
+- action-brief: |
+    Invoke the  ${../if/expand:/name} macro on an example.
+  action-code: |
+    int expand_result;
+    expand_result = RTEMS_EXPAND( EXPAND )();
+  checks:
+  - brief: |
+      Check that the argument of ${../if/expand:/name} is expanded and
+      returned.
+    code: |
+      T_step_eq_int( ${step}, expand_result, 82 );
+    links:
+    - role: validation
+      uid: ../req/expand-0
+  links: []
+- action-brief: |
+    Invoke the  ${../if/false:/name} macro on an example.
+  action-code: |
+    char *false_result;
+    false_result = _TO_STR( FALSE );
+  checks:
+  - brief: |
+      Check that of ${../if/false:/name} is substituted by 0.
+    code: |
+      T_step_eq_str( ${step}, false_result, "0" );
+    links:
+    - role: validation
+      uid: ../req/false-0
+  links: []
+- action-brief: |
+    Invoke the  ${../if/have-member-same-type:/name} macro on examples.
+  action-code: |
+    typedef union {
+      short s;
+      int **i;
+      char *c;
+      int a[5];
+    } same_type_union;
+    typedef struct {
+      const short u;
+      short v;
+      int *w;
+      char *x;
+      volatile int y[5];
+      int z;
+    } same_type_struct;
+    int same_type_result_0 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, s, same_type_struct, v );
+    int same_type_result_1 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, s, same_type_struct, z );
+    int same_type_result_2 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, i, same_type_struct, w );
+    int same_type_result_3 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, c, same_type_struct, x );
+    int same_type_result_4 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, a, same_type_struct, y );
+    int same_type_result_5 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, s, same_type_union, s );
+    int same_type_result_6 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, i, same_type_union, i );
+    int same_type_result_7 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, s, same_type_struct, y );
+    int same_type_result_8 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, a, same_type_struct, w );
+    int same_type_result_9 = RTEMS_HAVE_MEMBER_SAME_TYPE(
+      same_type_union, s, same_type_struct, u );
+  checks:
+  - brief: |
+      Check that of ${../if/have-member-same-type:/name} returns 0 and 1
+      depending on whether these types are compatible.
+    code: |
+      T_step_eq_int( ${step}, same_type_result_0, 1 );
+      T_step_eq_int( ${step}, same_type_result_1, 0 );
+      T_step_eq_int( ${step}, same_type_result_2, 0 );
+      T_step_eq_int( ${step}, same_type_result_3, 1 );
+      T_step_eq_int( ${step}, same_type_result_4, 1 );
+      T_step_eq_int( ${step}, same_type_result_5, 1 );
+      T_step_eq_int( ${step}, same_type_result_6, 1 );
+      T_step_eq_int( ${step}, same_type_result_7, 0 );
+      T_step_eq_int( ${step}, same_type_result_8, 0 );
+      T_step_eq_int( ${step}, same_type_result_9, 1 );
+    links:
+    - role: validation
+      uid: ../req/have-member-same-type-0
+  links: []
+- action-brief: |
+    Use the ${../if/inline-routine:/name} in the definition of function
+    inline_routine_func() at the beginning of this file. Obtain the text
+    the macro ${../if/inline-routine:/name} produces.
+  action-code: |
+    const int inline_routine_step = ${step};
+    int inline_routine_result;
+    char *inline_routine_text;
+    inline_routine_result = inline_routine_func( 3 );
+    inline_routine_text = _TO_STR( RTEMS_INLINE_ROUTINE );
+  checks:
+  - brief: |
+      Check that the ${../if/inline-routine:/name} exists
+      and that it produces the desired text.
+    code: |
+      if( 0 == strcmp( "static inline", inline_routine_text ) ) {
+        T_step_eq_str( inline_routine_step,
+          inline_routine_text, "static inline" );
+      } else {
+        T_step_eq_str( inline_routine_step,
+          inline_routine_text, "static __inline__" );
+      }
+      T_step_eq_int( ${step}, inline_routine_result, 8 );
+    links:
+    - role: validation
+      uid: ../req/inline-routine-0
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/malloclike:/name} macro.
+  action-code: |
+    void *malloclike_ptr;
+    /*
+     * If this code is not compiled using GNU C, I still have to run a check
+     * to avoid trouble with the {step} counter of the checks.
+     */
+    const char *malloclike_text = "__attribute__((__malloc__))";
+    malloclike_ptr = basedefs_malloclike_func( 102 );
+    basedefs_free( malloclike_ptr );
+    #if defined( __GNUC__ )
+    malloclike_text = remove_white_space( _TO_STR( RTEMS_MALLOCLIKE ) );
+    #endif
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/malloclike:/name} macro has
+      the desired effect. Yet, the check confirms that such a macro exists and
+      that it can be used on such a memory function and that it produces
+      the correct code.
+    code: |
+      T_step_not_null( ${step}, malloclike_ptr );
+      T_step_eq_str( ${step}, malloclike_text, "__attribute__((__malloc__))" );
+    links:
+    - role: validation
+      uid: ../req/malloclike-0
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/no-inline:/name} macro.
+  action-code: |
+    int no_inline_result;
+    /*
+     * If this code is not compiled using GNU C, I still have to run a check
+     * to avoid trouble with the {step} counter of the checks.
+     */
+    const char *no_inline_text = "__attribute__((__noinline__))";
+    no_inline_result = no_inline_func();
+    #if defined( __GNUC__ )
+    no_inline_text = remove_white_space( _TO_STR( RTEMS_NO_INLINE ) );
+    #endif
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/no-inline:/name} macro has
+      the desired effect. Yet, the check confirms that such a macro exists and
+      that it can be used on such a function and that it produces
+      the correct code.
+    code: |
+      T_step_eq_int( ${step}, no_inline_result, 75 );
+      T_step_eq_str( ${step}, no_inline_text, "__attribute__((__noinline__))" );
+    links:
+    - role: validation
+      uid: ../req/no-inline-0
+  links: []
+- action-brief: |
+    Use of the ${../if/no-return:/name} macro at the beginning of this file.
+  action-code: |
+    (void) no_return_func;
+  checks:
+  - brief: |
+      It cannot be checked that the
+      ${../if/no-return:/name} macro has the desired
+      effect. It is only checked that such a macro exists.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/no-return-0
+  links: []
+- action-brief: |
+    Use the ${../if/noinit:/name} macro on ``noinit_variable`` at the
+    beginning of this file.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/noinit:/name}
+      macro has the desired effect. Yet, the check confirms that such a
+      macro exists and can be used.
+    code: |
+      T_step_not_null( ${step}, &noinit_variable );
+    links:
+    - role: validation
+      uid: ../req/noinit-0
+  links: []
+- action-brief: |
+    Use the ${../if/obfuscate-variable:/name} macro.
+  action-code: |
+    short obfuscate_variable = 66;
+    RTEMS_OBFUSCATE_VARIABLE( obfuscate_variable );
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/obfuscate-variable:/name}
+      macro has the desired effect. Yet, the check confirms that such a
+      macro exists and can be used.
+    code: |
+      T_step_eq_int( ${step}, obfuscate_variable, 66 );
+    links:
+    - role: validation
+      uid: ../req/obfuscate-variable-0
+  links: []
+- action-brief: |
+    Use the ${../if/packed:/name} macro.
+  action-code: |
+    int packed_offset;
+    int packed_full_i_offset;
+    int packed_full_j_offset;
+    int packed_enum_size;
+    typedef struct {
+      uint8_t c;
+      RTEMS_PACKED uint32_t i;
+    } packed_struct;
+    typedef struct RTEMS_PACKED {
+      uint8_t c;
+      uint32_t i;
+      uint32_t j;
+    } packed_full_struct;
+    typedef enum RTEMS_PACKED {
+      red = 1,
+      green,
+      yellow,
+      blue = 255
+    } packed_enum;
+    packed_offset = offsetof( packed_struct, i );
+    packed_full_i_offset = offsetof( packed_full_struct, i );
+    packed_full_j_offset = offsetof( packed_full_struct, j );
+    packed_enum_size = sizeof( packed_enum );
+  checks:
+  - brief: |
+      Check that ${../if/packed:/name} correctly aligns a structure member.
+    code: |
+      T_step_eq_int( ${step}, packed_offset, 1 );
+    links:
+    - role: validation
+      uid: ../req/packed-0
+  - brief: |
+      Check that ${../if/packed:/name} correctly aligns all structure members.
+    code: |
+      T_step_eq_int( ${step}, packed_full_i_offset, 1 );
+      T_step_eq_int( ${step}, packed_full_j_offset, 5 );
+    links:
+    - role: validation
+      uid: ../req/packed-1
+  - brief: |
+      Check that ${../if/packed:/name} correctly enforces a minimal enum type.
+    code: |
+      T_step_eq_int( ${step}, packed_enum_size, 1 );
+    links:
+    - role: validation
+      uid: ../req/packed-2
+  links: []
+- action-brief: |
+    Use the ${../if/predict-false:/name} macro.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/predict-false:/name}
+      macro has the desired effect. Yet, the check confirms that such a
+      macro exists and can be used.
+    code: |
+      T_step_eq_int( ${step}, RTEMS_PREDICT_FALSE( PREDICT_FALSE 1 ), 0 );
+    links:
+    - role: validation
+      uid: ../req/predict-false-0
+  links: []
+- action-brief: |
+    Use the ${../if/predict-true:/name} macro.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/predict-true:/name}
+      macro has the desired effect. Yet, the check confirms that such a
+      macro exists and can be used.
+    code: |
+      T_step_eq_int( ${step}, RTEMS_PREDICT_TRUE( 6 - 5 ), 1 );
+    links:
+    - role: validation
+      uid: ../req/predict-true-0
+  links: []
+- action-brief: |
+    Use a function declared with the ${../if/printflike:/name} macro.
+  action-code: |
+    int printflike_result;
+    printflike_result = printflike_func(
+      "RTEMS_PRINTFLIKE",
+      "%d %lx %s\n",
+      123,
+      0xABCDEFL,
+      "test output"
+    );
+  checks:
+  - brief: |
+      It cannot automatically be checked that the ${../if/printflike:/name}
+      macro has the desired effect. Yet, the check confirms that such a macro
+      exists and that it can be used on such a printf-like function and that
+      the argument numbers are correct.
+    code: |
+      T_step_eq_int( ${step}, printflike_result, 23 );
+    links:
+    - role: validation
+      uid: ../req/printflike-0
+    - role: validation
+      uid: ../req/printflike-1
+  links: []
+- action-brief: |
+    Use the ${../if/pure:/name} macro at the beginning of this file.
+  action-code: |
+    int pure_result;
+    int pure_result_2;
+    pure_result = pure_func();
+    pure_result_2 = pure_func();
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/pure:/name}
+      macro has the desired effect. It is checked that such a macro exists.
+    code: |
+      T_step_eq_int( ${step}, pure_result, 21 );
+      T_step_eq_int( ${step}, pure_result_2, 21 );
+    links:
+    - role: validation
+      uid: ../req/pure-0
+  links: []
+- action-brief: |
+    Get the code the ${../if/return-address:/name} macro produces as string.
+  action-code: |
+    /*
+     * If this code is not compiled using GNU C, I still have to run a check
+     * to avoid trouble with the {step} counter of the checks.
+     */
+    const char *return_address_text = "__builtin_return_address(0)";
+    #if defined( __GNUC__ )
+    return_address_text =
+      remove_white_space( _TO_STR( RTEMS_RETURN_ADDRESS() ) );
+    #endif
+  checks:
+  - brief: |
+      The check confirms that a ${../if/return-address:/name} macro exists
+      and that it produces the correct code.
+    code: |
+      T_step_eq_str( ${step},
+        return_address_text, "__builtin_return_address(0)" );
+    links:
+    - role: validation
+      uid: ../req/return-address-0
+  links: []
+- action-brief: |
+    Use the ${../if/section:/name} macro on ``section_variable`` and
+    ``section_func`` at the beginning of this file.
+  action-code: |
+    short section_result;
+    section_result = section_func( 1234567 );
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/section:/name}
+      macro has the desired effect. Yet, the check confirms that such a
+      macro exists and can be used.
+    code: |
+      T_step_eq_int( ${step}, section_var, 28 );
+      T_step_eq_int( ${step}, section_result, 67 );
+    links:
+    - role: validation
+      uid: ../req/section-0
+  links: []
+- action-brief: |
+    Use the ${../if/static-analysis:/name} macro.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be automatically check that
+      the ${../if/static-analysis:/name} macro has the desired effect.
+    code: |
+      #if defined(__COVERITY__)
+      #  if defined(RTEMS_STATIC_ANALYSIS)
+        T_quiet_true( true, "test passes, no output" );
+      #  else
+        T_quiet_true( false, "RTEMS_STATIC_ANALYSIS not defined" );
+      #  endif
+      #endif
+    links:
+    - role: validation
+      uid: ../req/static-analysis-0
+  links: []
+- action-brief: |
+    Use the ${../if/static-analysis:/name} macro.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be automatically check that
+      the ${../if/static-analysis:/name} macro has the desired effect.
+    code: |
+      #if !defined(__COVERITY__)
+      #  if !defined(RTEMS_STATIC_ANALYSIS)
+        T_quiet_true( true, "test passes, no output" );
+      #  else
+        T_quiet_true( false, "RTEMS_STATIC_ANALYSIS defined" );
+      #  endif
+      #endif
+    links:
+    - role: validation
+      uid: ../req/static-analysis-1
+  links: []
+- action-brief: |
+    Use the ${../if/static-assert:/name} macro.
+  action-code: |
+    RTEMS_STATIC_ASSERT( STATIC_ASSERT_COND 1, RTEMS_STATIC_ASSERT_test );
+  checks:
+  - brief: |
+      It cannot be automatically check that
+      the ${../if/static-assert:/name} macro has the desired effect.
+      Yet, it can be checked that the macro exists and accepts the
+      specified arguments.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/static-assert-0
+  links: []
+- action-brief: |
+    Use the ${../if/string:/name} macro.
+  action-code: |
+    const char *string_var;
+    const char *string_empty_var;
+    const char *string_multi_args_var;
+    /* strange spacing and tabs belong to the test */
+    string_var = RTEMS_STRING( \\ STRING_PREFIX 		cat""\n   );
+    string_empty_var = RTEMS_STRING();
+    string_multi_args_var = RTEMS_STRING( STRING_PREFIX, "abc", DEF );
+  checks:
+  - brief: |
+      Check that the ${../if/string:/name} macro
+      converts its arguments into a single string without applying
+      pre-processor substitutions on its arguments.
+    code: |
+      T_step_eq_str( ${step}, string_var, "\\ STRING_PREFIX cat\"\"\n" );
+      T_step_eq_str( ${step}, string_empty_var, "" );
+      T_step_eq_str( ${step}, string_multi_args_var,
+        "STRING_PREFIX, \"abc\", DEF" );
+    links:
+    - role: validation
+      uid: ../req/string-0
+  links: []
+- action-brief: |
+    Use the ${../if/symbol-name:/name} macro with an example object.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the ${../if/symbol-name:/name} macro expands to the expected
+      symbol name.
+    code: |
+      T_step_eq_ptr( ${step}, &global_object, &address_of_global_object );
+    links:
+    - role: validation
+      uid: ../req/symbol-name
+    - role: validation
+      uid: ../req/symbol-name-expand
+  links: []
+- action-brief: |
+    Invoke the  ${../if/true:/name} macro on an example.
+  action-code: |
+    char *true_result;
+    true_result = _TO_STR( TRUE );
+  checks:
+  - brief: |
+      Check that of ${../if/true:/name} is substituted by 0.
+    code: |
+      T_step_eq_str( ${step}, true_result, "1" );
+    links:
+    - role: validation
+      uid: ../req/true-0
+  links: []
+- action-brief: |
+    Use of the  ${../if/typeof-refx:/name} macro on several examples.
+    This use is already the test as the statements will not compile
+    without error if the macro did not evaluate to the correct type.
+  action-code: |
+    int type_refx_val = 7;
+    char type_refx_chr = 'c';
+    char *type_refx_chr_p = &type_refx_chr;
+    char **type_refx_chr_pp = &type_refx_chr_p;
+    const short type_refx_const_val = 333;
+    RTEMS_TYPEOF_REFX( *, int *) type_refx_x_int = 8;
+    RTEMS_TYPEOF_REFX( **, int **) type_refx_xx_int = 9;
+    RTEMS_TYPEOF_REFX( ***, int ***) type_refx_xxx_int = 10;
+    RTEMS_TYPEOF_REFX( **, int ***) type_refx_xxx_int_p = &type_refx_val;
+    RTEMS_TYPEOF_REFX( **, &type_refx_chr_p) type_refx_ax_char = 'd';
+    RTEMS_TYPEOF_REFX( *, type_refx_chr_p) type_refx_x_char = 'e';
+    RTEMS_TYPEOF_REFX( , *type_refx_chr_p) type_refx_char = 'f';
+    RTEMS_TYPEOF_REFX( *, type_refx_chr_pp[0]) type_refx_xx_char = 'g';
+    RTEMS_TYPEOF_REFX( *, const short **)
+      type_refx_xx_const_short_p = &type_refx_const_val;
+  checks:
+  - brief: |
+      The checks here are proforma. The macro is tested by the fact that
+      the action will not compile if the macro returns a wrong result.
+    code: |
+      T_step_eq_int( ${step}, type_refx_val, 7 );
+      T_step_eq_int( ${step}, type_refx_x_int, 8 );
+      T_step_eq_int( ${step}, type_refx_xx_int, 9 );
+      T_step_eq_int( ${step}, type_refx_xxx_int, 10 );
+      T_step_eq_int( ${step}, *type_refx_xxx_int_p, 7 );
+      T_step_eq_char( ${step}, type_refx_chr, 'c' );
+      T_step_eq_char( ${step}, type_refx_ax_char, 'd' );
+      T_step_eq_char( ${step}, type_refx_x_char, 'e' );
+      T_step_eq_char( ${step}, type_refx_char, 'f' );
+      T_step_eq_char( ${step}, type_refx_xx_char, 'g' );
+      T_step_eq_short( ${step}, *type_refx_xx_const_short_p, 333 );
+    links:
+    - role: validation
+      uid: ../req/typeof-refx-0
+  links: []
+- action-brief: |
+    Use the ${../if/unused:/name} macro. See also unused_func() at the
+    beginning of this file.
+  action-code: |
+    int unused_var RTEMS_UNUSED;
+    typedef struct RTEMS_UNUSED {
+      char c;
+      int i;
+    } unused_struct_t;
+    unused_struct_t unused_struct = { '@', 13 };
+  checks:
+  - brief: |
+      It cannot automatically be checked that the ${../if/unused:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and one can manually check that no compiler warnings are produced
+      for the unused_func().
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/unused-0
+  - brief: |
+      It cannot automatically be checked that the ${../if/unused:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and one can manually check that no compiler warnings are produced
+      for the unused_lable.
+    code: |
+      unused_lable:
+        RTEMS_UNUSED;
+    links:
+    - role: validation
+      uid: ../req/unused-1
+  - brief: |
+      It cannot automatically be checked that the ${../if/unused:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and one can manually check that no compiler warnings are produced
+      for the unused_struct.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/unused-2
+  - brief: |
+      It cannot automatically be checked that the ${../if/unused:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and one can manually check that no compiler warnings are produced
+      for the unused items unused_var and the unused argument and variable
+      in unused_func().
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/unused-3
+  links: []
+- action-brief: |
+    Use of the ${../if/unreachable:/name} macro in function definition of
+    unreachable_func() at the beginning of this file.
+  action-code: |
+    int unreachable_result;
+    unreachable_result = unreachable_func(2101);
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/unreachable:/name}
+      macro has the desired effect. It is checked that such a macro exists
+      and the compiler warning about the missing return statement is suppressed.
+    code: |
+      T_step_eq_int( ${step}, unreachable_result, 2101 );
+    links:
+    - role: validation
+      uid: ../req/unreachable-0
+  links: []
+- action-brief: |
+    Use of the ${../if/used:/name} macro in function definition of
+    used_func() at the beginning of this file and with used_var above.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/used:/name} macro has the
+      desired effect. It is checked that such a macro exists.
+    code: ''
+    links:
+    - role: validation
+      uid: ../req/used-0
+  links: []
+- action-brief: |
+    Use of the ${../if/warn-unused-result:/name} macro in function definition of
+    warn_unused_func() at the beginning of this file.
+  action-code: |
+    int warn_unused_result;
+    warn_unused_result = warn_unused_func( 33 );
+    /*
+     * Derivation from Coding Style:
+     * The following code suppresses a compiler warning (instead of fixing
+     * it).
+     * Rational: Ignoring the function warn_unused_func() result is not really
+     * a bug but its purpose is to test the RTEMS_WARN_UNUSED_RESULT macro.
+     * The RTEMS_WARN_UNUSED_RESULT macro must result in a compiler warning
+     * here.
+     */
+    _Pragma( "GCC diagnostic push" )
+    _Pragma( "GCC diagnostic ignored \"-Wunused-result\"" )
+    warn_unused_func( 66 );
+    _Pragma( "GCC diagnostic pop" )
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/warn-unused-result:/name} macro
+      has the desired effect. The GNU C compiler should issue a warning
+      about the disregarded result returned by the call
+      to the ``warn_unused_func()`` function.
+    code: |
+      T_step_eq_int( ${step}, warn_unused_result, 11 );
+    links:
+    - role: validation
+      uid: ../req/warn-unused-result-0
+  links: []
+- action-brief: |
+    Use of ``basedefs_weak_alias_0/1_func()`` which are defined with the
+    ${../if/weak-alias:/name} macro at the beginning of this file.
+  action-code: |
+    int weak_alias_0_result;
+    int weak_alias_1_result;
+    weak_alias_0_result = ori_func( 3 ) + basedefs_weak_alias_0_func( 5 );
+    weak_alias_1_result = ori_func( 3 ) + basedefs_weak_alias_1_func( 5 );
+  checks:
+  - brief: |
+      There exists no strong alias for basedefs_weak_alias_0_func().
+      Check that ori_func() and basedefs_weak_alias_0_func() are the
+      same function.
+    code: |
+      T_step_eq_int( ${step}, weak_alias_0_result, 16 );
+    links:
+    - role: validation
+      uid: ../req/weak-alias-0
+  - brief: |
+      File ``tc_basedefs_pndant.c`` defines a strong function for
+      basedefs_weak_alias_1_func().
+      Check that ori_func() and basedefs_weak_alias_1_func() are not
+      the same function.
+    code: |
+      T_step_eq_int( ${step}, weak_alias_1_result, 56 );
+    links:
+    - role: validation
+      uid: ../req/weak-alias-1
+  links: []
+- action-brief: |
+    Use of ``basedefs_weak_0/1_var`` and ``basedefs_weak_0/1_func()``
+    which are defined with the ${../if/weak:/name} macro at the
+    beginning of this file.
+  action-code: |
+    int weak_0_result;
+    int weak_1_result;
+    weak_0_result = basedefs_weak_0_func();
+    weak_1_result = basedefs_weak_1_func();
+  checks:
+  - brief: |
+      For ``basedefs_weak_0_var`` and ``basedefs_weak_0_func()`` there
+      exists no other symbols with the same name.
+      Hence, the checks test that the weak symbols are used.
+    code: |
+      T_step_eq_int( ${step}, basedefs_weak_0_var, 60 );
+      T_step_eq_int( ${step}, weak_0_result, 63 );
+    links:
+    - role: validation
+      uid: ../req/weak-0
+  - brief: |
+      ``basedefs_weak_1_var`` and ``basedefs_weak_1_func()``
+      are overwritten by strong symbols defined in file
+      ``tc_basedefs_pendant.c``. Hence, the checks test that the strong
+      variants are used.
+    code: |
+      T_step_eq_int( ${step}, basedefs_weak_1_var, 62 );
+      T_step_eq_int( ${step}, weak_1_result, 65 );
+    links:
+    - role: validation
+      uid: ../req/weak-1
+  links: []
+- action-brief: |
+    Invoke the ${../if/xconcat:/name} macro on examples.
+  action-code: |
+    int xconcat0_result;
+    int xconcat1_result;
+    int xconcat2_result;
+    int xconcat3_result;
+    xconcat0_result = RTEMS_XCONCAT( con, cat )();
+    xconcat1_result = RTEMS_XCONCAT( CON, CAT )();
+    xconcat2_result =
+      RTEMS_XCONCAT( RTEMS_XCONCAT( CO, N ), RTEMS_XCONCAT( ca, t ) )();
+    xconcat3_result = RTEMS_CONCAT( def, cat )();
+  checks:
+  - brief: |
+      Check that the two arguments of ${../if/xconcat:/name} are
+      concatenated without inserting new characters.
+    code: |
+      T_step_eq_int( ${step}, xconcat0_result, 91 );
+    links:
+    - role: validation
+      uid: ../req/xconcat-0
+    - role: validation
+      uid: ../req/xconcat-1
+  - brief: |
+      Check that the two arguments of ${../if/xconcat:/name} are
+      substituted before they are concatenated.
+    code: |
+      T_step_eq_int( ${step}, xconcat1_result, 91 );
+    links:
+    - role: validation
+      uid: ../req/xconcat-2
+  - brief: |
+      Check that the two arguments of ${../if/xconcat:/name} are can
+      be the macro itself.
+    code: |
+      T_step_eq_int( ${step}, xconcat2_result, 91 );
+    links:
+    - role: validation
+      uid: ../req/xconcat-3
+  - brief: |
+      Check that the result of the ${../if/xconcat:/name} expansion
+      is subject to a further pre-processor substitution.
+    code: |
+      T_step_eq_int( ${step}, xconcat3_result, 91 );
+    links:
+    - role: validation
+      uid: ../req/xconcat-2
+  links: []
+- action-brief: |
+    Use the ${../if/xstring:/name} macro.
+  action-code: |
+    const char *xstring_var;
+    const char *xstring_empty_var;
+    const char *string_multi_args_var;
+    /* strange spacing and tabs belong to the test */
+    xstring_var = RTEMS_XSTRING( \\ STRING_PREFIX 		cat""\n   );
+    xstring_empty_var = RTEMS_XSTRING();
+    string_multi_args_var = RTEMS_XSTRING( STRING_PREFIX, abc, "abc", DEF );
+  checks:
+  - brief: |
+      Check that the ${../if/xstring:/name} macro applies
+      pre-processor substitutions on its arguments and
+      converts its arguments into a single string.
+    code: |
+      T_step_eq_str( ${step}, xstring_var, "\\ str cat\"\"\n" );
+      T_step_eq_str( ${step}, xstring_empty_var, "" );
+      T_step_eq_str( ${step}, string_multi_args_var,
+        "str, ABC, \"abc\", DEF" );
+    links:
+    - role: validation
+      uid: ../req/xstring-0
+  links: []
+- action-brief: |
+    Use of the ${../if/zero-length-array:/name} macro in a declaration of
+    a structure.
+  action-code: |
+    typedef struct {
+      char chr;
+      int array[RTEMS_ZERO_LENGTH_ARRAY];
+    } zero_length_struct_0;
+    typedef struct {
+      char chr;
+      int array[1];
+    } zero_length_struct_1;
+  checks:
+  - brief: |
+      Checked that the ${../if/zero-length-array:/name} macro
+      produces a structure similar to a structure with one element.
+    code: |
+      T_step_eq_sz( ${step}, sizeof( zero_length_struct_0 ),
+        sizeof( zero_length_struct_1 ) - sizeof( int ) );
+      T_step_eq_sz( ${step}, offsetof( zero_length_struct_0, chr ),
+        offsetof( zero_length_struct_1, chr ) );
+      T_step_eq_sz( ${step}, offsetof( zero_length_struct_0, array ),
+        offsetof( zero_length_struct_1, array ) );
+    links:
+    - role: validation
+      uid: ../req/zero-length-array-0
+  links: []
+test-brief: |
+  Tests the basedefs macros of the Classic API.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tc-basedefs-pendant.h
+test-setup: null
+test-stop: null
+test-support: |
+  #define WHITE_SPACE_STRING_MAX_LENGTH 80
+  #define abccat concat
+  #define abc ABC
+  #define CON con
+  #define CAT cat
+  #define defcat concat
+  #define GLOBAL_SYMBOL_VALULE( _hex ) 0x ## _hex
+  #define EXPAND expand
+  #define PREDICT_FALSE 1 -
+  #define SECTION_NAME ".rtemsroset.test"
+  #define STATIC_ASSERT_COND 0 +
+  #define STRING_PREFIX str
+  #define SYMBOL_NAME global_object
+  #define _TO_STR2( _text ) #_text
+  #define _TO_STR( _text ) _TO_STR2( _text )
+
+  int global_object;
+
+  extern int address_of_global_object;
+
+  __asm__(
+    "\n\t.set " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( address_of_global_object ) )
+    ", " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( SYMBOL_NAME ) ) "\n"
+  );
+
+  /*
+   * For some reasons - which I fail to fully understand - _TO_STR()
+   * seems to remove spaces around `()` at times and at other times
+   * not. For example, I get
+   *
+   *   *  "__attribute__(( __malloc__ ))" or
+   *   *  "__attribute__((__malloc__))".
+   *
+   * To avoid trouble, the function below returns a version of a
+   * string without any spaces. Albeit, the implementation is rather
+   * brute and raw. It returns a pointer to a static buffer of fixed
+   * size. That will do for tests but not serve as generic function.
+   */
+  static const char *remove_white_space( const char *str )
+  {
+    char c;
+    int i = 0;
+    static char buffer[WHITE_SPACE_STRING_MAX_LENGTH] = {};
+
+    /* Sanity check */
+    if( strlen( str ) >= sizeof( buffer ) ) {
+      T_assert_true( false,
+        "Buffer too small; increase WHITE_SPACE_STRING_MAX_LENGTH" );
+    }
+
+    /* Copy string but skip white spaces */
+    do {
+      c = *( str++ );
+      if ( ' ' != c && '\t' !=c ) {
+        buffer[i++] = c;
+      }
+    } while ( '\0' != c );
+
+    return buffer;
+  }
+
+  static int alias_func( int i ) RTEMS_ALIAS( ori_func );
+
+  typedef struct {
+    uint8_t c;
+    uint8_t aligned_member RTEMS_ALIGNED( 8 );
+  } aligned_member_struct;
+
+  static int concat( void )
+  {
+    return 91;
+  }
+
+  RTEMS_CONST static int const_func( int arg )
+  {
+    return 4 * arg;
+  }
+
+  RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
+    static void compiler_no_return_attribute_func( int i );
+  static void compiler_no_return_attribute_func( int i )
+  {
+    while ( true ) {
+      /* Loop forever */
+    }
+  }
+
+  RTEMS_COMPILER_PURE_ATTRIBUTE static int compiler_pure_attribute_func( void )
+  {
+    return 21;
+  }
+
+  RTEMS_DEFINE_GLOBAL_SYMBOL(
+    GLOBAL_SYMBOL, GLOBAL_SYMBOL_VALULE( abc ) );
+
+  static int deprecated_func( int i ) RTEMS_DEPRECATED;
+  static int deprecated_func( int i )
+  {
+    return 3 * i;
+  }
+
+  static int expand( void )
+  {
+    return 82;
+  }
+
+  RTEMS_INLINE_ROUTINE int inline_routine_func( int arg )
+  {
+    return 1 << arg;
+  }
+
+  RTEMS_NO_INLINE static int no_inline_func( void )
+  {
+    asm ("");
+    return 75;
+  }
+
+  RTEMS_NO_RETURN static void no_return_func( int i )
+  {
+    while ( true ) {
+      /* Loop forever */
+    }
+  }
+
+  RTEMS_NOINIT static uint32_t noinit_variable;
+
+  static int ori_func( int x )
+  {
+     return 2 * x;
+  }
+
+  RTEMS_PRINTFLIKE(2, 3) static int printflike_func(
+    const char *prefix,
+    const char *fmt,
+    ...
+  )
+  {
+    int result;
+    va_list va_list;
+
+    T_printf( "%s: ", prefix );
+    va_start( va_list, fmt );
+    result = T_vprintf( fmt, va_list );
+    va_end( va_list );
+
+    return result;
+  }
+
+  RTEMS_PURE static int pure_func( void )
+  {
+    return 21;
+  }
+
+  RTEMS_SECTION( ".rtemsrwset.test" ) static int section_var = 28;
+  RTEMS_SECTION( SECTION_NAME ) static int section_func( int arg )
+  {
+    return arg % 100;
+  }
+
+  static int unreachable_func( int arg )
+  {
+    if ( 1 == arg % 100 ) {
+      return arg;
+    } else {
+      T_assert_true( false,
+        "Oops! Function caled with bad argument." );
+      RTEMS_UNREACHABLE();
+    }
+  }
+
+  RTEMS_USED static int used_var = 4711;
+  RTEMS_USED static int used_func( void )
+  {
+    return 35;
+  }
+
+  static int warn_unused_func( int arg ) RTEMS_WARN_UNUSED_RESULT;
+  static int warn_unused_func( int arg )
+  {
+    return arg / 3;
+  }
+
+  int basedefs_weak_alias_0_func( int i ) RTEMS_WEAK_ALIAS( ori_func );
+  int basedefs_weak_alias_1_func( int i ) RTEMS_WEAK_ALIAS( ori_func );
+
+  RTEMS_WEAK const volatile int basedefs_weak_0_var = 60;
+  RTEMS_WEAK const volatile int basedefs_weak_1_var = 61;
+  RTEMS_WEAK int basedefs_weak_0_func( void )
+  {
+    return 63;
+  }
+
+  RTEMS_WEAK int basedefs_weak_1_func( void )
+  {
+    return 64;
+  }
+test-target: testsuites/validation/tc-basedefs.c
+test-teardown: null
+type: test-case

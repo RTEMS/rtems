@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This general purpose unit test suite provides enough resources to run
+  basic tests for all specified managers and functions.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 5
+
+  #include "../validation/ts-default.h"
+test-description: |
+  In SMP configurations, up to three scheduler instances using the SMP EDF
+  scheduler are provided using up to four processors.
+test-includes: []
+test-local-includes: []
+test-suite-name: Unit0
+test-target: testsuites/unit/ts-unit-0.c
+type: test-suite

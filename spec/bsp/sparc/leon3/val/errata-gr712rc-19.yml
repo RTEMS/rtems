@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-19
+method: by-inspection
+references:
+- identifier: bsps/sparc/leon3/include/bsp/leon3.h
+  hash: IYTJZM16nwK8qVHx9RLtXeHB1s5Ab-yEixVEWzgVp9Q=
+  type: file
+- identifier: cpukit/score/cpu/sparc/include/libcpu/grlib-tn-0018.h
+  hash: 2H6O61TZYKcwDpr_dKrDOe8xkMNjXz45Oh6bwL5b2vM=
+  type: file
+text: |
+  The ${/glossary/sourcecode:/term} of the software product was reviewed for
+  uses of the ``sta`` instruction with the ASI set to 0x1c.  No use of this
+  instruction was found.
+type: validation

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc
+links:
+- role: validation
+  uid: ../req/fatal-halt-sparc
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/include/rtems/asm.h
+  hash: biIdJwey_Juwf8LH4_ftg7zV2PuUqXH3lIirQxTyW5E=
+  type: file
+- identifier: cpukit/score/cpu/sparc/syscall.S
+  hash: QDjhpRe0UrN3OhoVJEGSnJU0028ZHBGjXYFXrZsRwO4=
+  type: file
+text: |
+  Inspection of the referenced ${/glossary/sourcecode:/term} files showed that
+  the ${../if/fatal-halt:/name} directive is implemented as specified.  In
+  addition, the instruction sequence of the directive was executed in assembler
+  single step mode under control of a debugger on the SPARC/RISCV instruction
+  simulator version 2.29 to validate that its function is as specified.
+type: validation

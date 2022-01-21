@@ -1,0 +1,270 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: function-implementation
+  uid: /score/tq/req/surrender
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: MaxCountExceeded
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_MAXIMUM_COUNT_EXCEEDED ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/maximum-count-exceeded:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Surrender
+  states:
+  - name: FIFO
+    test-code: |
+      ${../../tq/req/surrender:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the semaphore shall be surrendered in FIFO order.
+  - name: Priority
+    test-code: |
+      ${../../tq/req/surrender:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the semaphore shall be surrendered in priority order.
+  test-epilogue: null
+  test-prologue: null
+- name: Count
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_u32( ctx->count_after, 0 );
+    text: |
+      The count of the semaphore shall be zero.
+  - name: One
+    test-code: |
+      T_eq_u32( ctx->count_after, 1 );
+    text: |
+      The count of the semaphore shall be one.
+  - name: PlusOne
+    test-code: |
+      T_eq_u32( ctx->count_after, ctx->count_before + 1 );
+    text: |
+      The count of the semaphore shall be incremented by one.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->count_after, ctx->count_before );
+    text: |
+      The count of the semaphore shall not be modified.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Variant
+  states:
+  - name: Binary
+    test-code: |
+      if ( ctx->tq_ctx->variant != TQ_SEM_BINARY ) {
+        ${.:skip}
+      }
+    text: |
+      Where the semaphore is a binary semaphore.
+  - name: Counting
+    test-code: |
+      if ( ctx->tq_ctx->variant != TQ_SEM_COUNTING ) {
+        ${.:skip}
+      }
+    text: |
+      Where the semaphore is a counting semaphore.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      if ( ctx->tq_ctx->base.discipline != TQ_FIFO ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue of the semaphore uses the FIFO discipline.
+  - name: Priority
+    test-code: |
+      if ( ctx->tq_ctx->base.discipline != TQ_PRIORITY ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue of the semaphore uses the priority discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Count
+  states:
+  - name: LessMax
+    test-code: |
+      ctx->blocked = false;
+
+      if ( ctx->tq_ctx->variant == TQ_SEM_BINARY ) {
+        ctx->count_before = 0;
+      } else {
+        ctx->count_before = UINT32_MAX - 1;
+      }
+    text: |
+      While the count of the semaphore is less than the maximum count.
+  - name: Max
+    test-code: |
+      ctx->blocked = false;
+
+      if ( ctx->tq_ctx->variant == TQ_SEM_BINARY ) {
+        ctx->count_before = 1;
+      } else {
+        ctx->count_before = UINT32_MAX;
+      }
+    text: |
+      While the count of the semaphore is equal to the maximum count.
+  - name: Blocked
+    test-code: |
+      ctx->blocked = true;
+      ctx->count_before = 0;
+    text: |
+      While the semaphore has threads blocked on the semaphore.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  TQSemSetCount( ctx->tq_ctx, ctx->count_before );
+
+  if ( ctx->blocked ) {
+    TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+  }
+
+  ctx->status = TQSurrender( &ctx->tq_ctx->base );
+  ctx->count_after = TQSemGetCount( ctx->tq_ctx );
+  TQSemSetCount( ctx->tq_ctx, 1 );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member specifies the semaphore count before the directive call.
+  description: null
+  member: |
+    uint32_t count_before
+- brief: |
+    This member contains the return status of the directive call.
+  description: null
+  member: |
+    Status_Control status
+- brief: |
+    This member contains the semaphore count after the directive call.
+  description: null
+  member: |
+    uint32_t count_after
+- brief: |
+    If this member is true, then there shall be threads blocked on the
+    semaphore.
+  description: null
+  member: |
+    bool blocked
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQSemContext *${.:name}
+  target: testsuites/validation/tr-sem-surrender.h
+test-includes: []
+test-local-includes:
+- tr-sem-surrender.h
+- tr-tq-surrender.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    ctx->tq_ctx->base.wait = TQ_WAIT_FOREVER;
+    TQReset( &ctx->tq_ctx->base );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static Status_Control Status( const Context *ctx, Status_Control status )
+  {
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
+  }
+test-target: testsuites/validation/tr-sem-surrender.c
+test-teardown: null
+text: |
+  When the calling surrenders the semaphore.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Surrender: N/A
+    Count: One
+  pre-conditions:
+    Variant:
+    - Binary
+    Discipline: all
+    Count:
+    - LessMax
+    - Max
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Surrender:
+    - specified-by: Discipline
+    Count: Zero
+  pre-conditions:
+    Variant:
+    - Binary
+    Discipline: all
+    Count:
+    - Blocked
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Surrender: N/A
+    Count: PlusOne
+  pre-conditions:
+    Variant:
+    - Counting
+    Discipline: all
+    Count:
+    - LessMax
+- enabled-by: true
+  post-conditions:
+    Status: MaxCountExceeded
+    Surrender: N/A
+    Count: Nop
+  pre-conditions:
+    Variant:
+    - Counting
+    Discipline: all
+    Count:
+    - Max
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Surrender:
+    - specified-by: Discipline
+    Count: Zero
+  pre-conditions:
+    Variant:
+    - Counting
+    Discipline: all
+    Count:
+    - Blocked
+type: requirement

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where ${../if/init:/name} is defined, where ${../if/header:/path} is included
+  in a translation unit after the definition of ${../if/init:/name}, when the
+  translation unit is preprocessed and compiled, the application configuration
+  shall be initialized.
+type: requirement

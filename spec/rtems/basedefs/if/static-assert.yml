@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Asserts at compile time that the condition is satisfied.
+copyrights:
+- Copyright (C) 2011, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    struct rtems_static_assert_ ## ${.:/params[1]/name}
+      { int rtems_static_assert_ ## ${.:/params[1]/name} : ( ${.:/params[0]/name} ) ? 1 : -1; }
+  variants:
+  - definition: |
+      static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
+    enabled-by:
+    - ${/compiler/if/cplusplus:/name} >= 201103L
+  - definition: |
+      _Static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
+    enabled-by:
+    - ${/compiler/if/stdc-version:/name} >= 201112L
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_STATIC_ASSERT
+notes: null
+params:
+- description: |
+    is the condition this static assertion shall satisfy.
+  dir: null
+  name: _cond
+- description: |
+    is the error message in case the static assertion fails.
+  dir: null
+  name: _msg
+return: null
+type: interface

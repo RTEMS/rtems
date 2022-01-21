@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  MPCI send packet routines shall have this type.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/mpci/if/send-entry:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: RTEMS_MULTIPROCESSING
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_mpci_send_packet_entry
+notes: null
+params: []
+return: null
+type: interface

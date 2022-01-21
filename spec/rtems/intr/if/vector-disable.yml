@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Disables the interrupt vector.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${vector-number:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  The directive disables the interrupt vector specified by
+  ${.:/params[0]/name}.  This prevents that an interrupt service request is
+  issued to the target processors of the interrupt vector.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_interrupt_vector_disable
+notes: |
+  The ${get-attributes:/name} directive may be used to check if an interrupt
+  vector can be disabled.  Interrupt vectors may be enabled by
+  ${vector-enable:/name}.  There may be targets on which some interrupt vectors
+  cannot be disabled, for example a hardware watchdog interrupt or software
+  generated interrupts.
+params:
+- description: |
+    is the number of the interrupt vector to disable.
+  dir: null
+  name: vector
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The request to disable the interrupt vector has not been satisfied.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

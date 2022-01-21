@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This function pointer may reference the kernel character input implementation.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${bsp-polling-getchar-function-type:/name} ${.:/name}
+  variants: []
+description: |
+  This function pointer may be ${/c/if/null:/name}.  It may reference a
+  function provided by the ${/glossary/bsp:/term}.  Referenced functions shall
+  dequeue the least recently received character from the device and return it
+  as an unsigned character.  If no character is enqueued on the device, then
+  the function shall immediately return the value minus one.
+enabled-by: true
+index-entries: []
+interface-type: variable
+links:
+- role: interface-placement
+  uid: header-3
+- role: interface-ingroup
+  uid: group-3
+name: BSP_poll_char
+notes: null
+type: interface

@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  RTEMS provides a collection of services to assist in the management and usage
+  of the objects created and utilized via other managers.  These services
+  assist in the manipulation of RTEMS objects independent of the API used to
+  create them.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: null
+enabled-by: true
+identifier: RTEMSAPIClassicObject
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: build-id
+- role: placement-order
+  uid: build-id-macro
+- role: placement-order
+  uid: build-name
+- role: placement-order
+  uid: build-name-macro
+- role: placement-order
+  uid: get-classic-name
+- role: placement-order
+  uid: get-name
+- role: placement-order
+  uid: set-name
+- role: placement-order
+  uid: id-get-api
+- role: placement-order
+  uid: id-get-api-macro
+- role: placement-order
+  uid: id-get-class
+- role: placement-order
+  uid: id-get-class-macro
+- role: placement-order
+  uid: id-get-node
+- role: placement-order
+  uid: id-get-node-macro
+- role: placement-order
+  uid: id-get-index
+- role: placement-order
+  uid: id-get-index-macro
+- role: placement-order
+  uid: id-api-minimum
+- role: placement-order
+  uid: id-api-minimum-macro
+- role: placement-order
+  uid: id-api-maximum
+- role: placement-order
+  uid: id-api-maximum-macro
+- role: placement-order
+  uid: api-minimum-class
+- role: placement-order
+  uid: api-maximum-class
+- role: placement-order
+  uid: get-api-name
+- role: placement-order
+  uid: get-api-class-name
+- role: placement-order
+  uid: get-class-information
+- role: placement-order
+  uid: get-local-node
+name: Object Services
+text: |
+  The Classic API shall provide an interface to the Object Services.
+type: interface

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  This interface domain contains interfaces provided during the use of an
+  interface.  For example, defines provided by the user for an included header
+  file.
+enabled-by: true
+index-entries: []
+interface-type: domain
+links:
+- role: requirement-refinement
+  uid: /req/domains
+name: Use of Interface
+type: interface

@@ -1,0 +1,120 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create a couple of timers.
+  action-code: |
+    rtems_status_code sc;
+    size_t            i;
+
+    T_assert_eq_sz( TEST_MAXIMUM_TIMERS, 10 );
+
+    _Atomic_Init_uint( &ctx->counter, 0 );
+
+    for ( i = 0; i < TEST_MAXIMUM_TIMERS ; ++i ) {
+      sc = rtems_timer_create(
+        rtems_build_name( 'T', 'E', 'S', 'T' ),
+        &ctx->timer_ids[ i ]
+      );
+      T_rsc_success( sc );
+    }
+  checks:
+  - brief: |
+      Schedule some timers at the same time point.
+    code: |
+      Fire( ctx, 3, 2 );
+      Fire( ctx, 0, 1 );
+      Fire( ctx, 7, 3 );
+      Fire( ctx, 4, 2 );
+      Fire( ctx, 5, 2 );
+      Fire( ctx, 8, 3 );
+      Fire( ctx, 9, 3 );
+      Fire( ctx, 1, 1 );
+      Fire( ctx, 2, 1 );
+      Fire( ctx, 6, 2 );
+    links: []
+  - brief: |
+      Fire the timers and check that they fired in the expected order.
+    code: |
+      FinalClockTick();
+
+      for ( i = 0; i < TEST_MAXIMUM_TIMERS ; ++i ) {
+        T_eq_sz( ctx->counter_snapshots[ i ], i + 1 );
+      }
+    links:
+    - role: validation
+      uid: ../req/fire-order
+  - brief: |
+      Clean up all used resources.
+    code: |
+      for ( i = 0; i < TEST_MAXIMUM_TIMERS ; ++i ) {
+        sc = rtems_timer_delete( ctx->timer_ids[ i ] );
+        T_rsc_success( sc );
+      }
+    links: []
+  links: []
+test-brief: |
+  Tests general timer behaviour.
+test-context:
+- brief: |
+    This member contains the timer identifiers.
+  description: null
+  member: |
+    rtems_id timer_ids[ TEST_MAXIMUM_TIMERS ]
+- brief: |
+    This member contains the counter.
+  description: null
+  member: |
+    Atomic_Uint counter
+- brief: |
+    This member contains the timer counter snapshots.
+  description: null
+  member: |
+    unsigned int counter_snapshots[ TEST_MAXIMUM_TIMERS ]
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/atomic.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void Timer( rtems_id timer, void *arg )
+  {
+    Context      *ctx;
+    unsigned int *counter;
+
+    ctx = T_fixture_context();
+    counter = arg;
+    *counter = _Atomic_Fetch_add_uint(
+      &ctx->counter,
+      1,
+      ATOMIC_ORDER_RELAXED
+    ) + 1;
+  }
+
+  static void Fire( Context *ctx, size_t i, rtems_interval ticks )
+  {
+    rtems_status_code sc;
+
+    ctx->counter_snapshots[ i ] = 0;
+    sc = rtems_timer_fire_after(
+      ctx->timer_ids[ i ],
+      ticks,
+      Timer,
+      &ctx->counter_snapshots[ i ]
+    );
+    T_rsc_success( sc );
+  }
+test-target: testsuites/validation/tc-timer.c
+test-teardown: null
+type: test-case

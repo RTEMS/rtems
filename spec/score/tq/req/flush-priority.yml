@@ -1,0 +1,205 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+- role: validation
+  uid: flush-filter
+- role: validation
+  uid: flush-remove-timer
+- role: validation
+  uid: flush-unblock
+post-conditions:
+- name: Operation
+  states:
+  - name: Nop
+    test-code: |
+      /* Event receive */
+      T_eq_ptr( GetUnblock( ctx, &i )->thread, GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), &T_scheduler_event_null );
+    text: |
+      No operation shall be performed.
+  - name: TryExtract
+    test-code: |
+      event = GetUnblock( ctx, &i );
+      T_eq_ptr( event->executing, NULL );
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_D ) );
+
+      event = GetUnblock( ctx, &i );
+      T_eq_ptr( event->executing, NULL );
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_C ) );
+
+      event = GetUnblock( ctx, &i );
+      T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_B ) );
+
+      T_eq_ptr( GetUnblock( ctx, &i ), &T_scheduler_event_null );
+    text: |
+      The enqueued threads of the thread queue may be extracted in
+      ${/glossary/priority:/term} order for each priority queue associated with
+      a scheduler.  The priority queues of the thread queue shall be accessed
+      in ${/glossary/fifo:/term} order.
+  test-epilogue: |
+  test-prologue: |
+    size_t                   i;
+    const T_scheduler_event *event;
+
+    i = 0;
+pre-conditions:
+- name: Queue
+  states:
+  - name: Empty
+    test-code: |
+      ctx->tq_ctx->how_many = 0;
+    text: |
+      While the thread queue is empty.
+  - name: NonEmpty
+    test-code: |
+      ctx->tq_ctx->how_many = 3;
+    text: |
+      While the thread queue has at least one enqueued thread.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_PREPARE );
+
+  if ( ctx->tq_ctx->how_many > 0 ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
+    T_scheduler_set_event_handler( SchedulerEvent, ctx );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_B,
+      TQ_EVENT_ENQUEUE
+    );
+  } else {
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH );
+  }
+
+  TQSchedulerRecordStop( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  - description: |
+      is true, if the object using the thread queue supports multiple priority
+      queues, otherwise it is false.
+    dir: null
+    name: supports_multiple_priority_queues
+    specifier: bool ${.:name}
+  target: testsuites/validation/tr-tq-flush-priority.h
+test-includes: []
+test-local-includes:
+- tx-support.h
+- tr-tq-flush-priority.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_ULTRA_HIGH );
+
+    if (
+      ctx->supports_multiple_priority_queues &&
+      rtems_configuration_get_maximum_processors() > 1
+    ) {
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_B_ID, PRIO_HIGH );
+    } else {
+      TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_HIGH );
+    }
+
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_C, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_D, PRIO_ULTRA_HIGH );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const T_scheduler_event *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index );
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+
+  static void Flush( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    TQFlush( ctx->tq_ctx );
+  }
+
+  static void SchedulerEvent(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      ctx->request.handler = Flush;
+      ctx->request.arg = ctx;
+      CallWithinISRSubmit( &ctx->request );
+      T_scheduler_set_event_handler( NULL, NULL );
+    }
+  }
+test-target: testsuites/validation/tr-tq-flush-priority.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the ${/glossary/priority:/term} thread queue is flushed.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Operation: Nop
+  pre-conditions:
+    Queue:
+    - Empty
+- enabled-by: true
+  post-conditions:
+    Operation: TryExtract
+  pre-conditions:
+    Queue:
+    - NonEmpty
+type: requirement

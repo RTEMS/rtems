@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-05
+method: by-review-of-design
+references: []
+text: |
+  The errata of the ${/glossary/gr712rc:/term} is not applicable to the
+  software product since it does not provide a high-level SPI driver.
+type: validation

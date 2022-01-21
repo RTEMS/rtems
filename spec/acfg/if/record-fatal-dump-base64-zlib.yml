@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  In case
+
+  * this configuration option is defined
+
+  * and ${record-per-processor-items:/name} is properly defined,
+
+  then the event records are compressed by zlib and dumped in Base64 encoding
+  in a fatal error extension (see ${/doc/if/terminate:/name}).
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-eventrecord
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB
+notes: |
+  The zlib compression needs about 512KiB of RAM.  This extension can be used
+  to produce crash dumps.
+type: interface

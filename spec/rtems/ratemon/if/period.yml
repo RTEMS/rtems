@@ -1,0 +1,83 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Concludes the current period and start the next period, or gets the period
+  status.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2017 Kuan-Hsun Chen
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../type/if/interval:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive initiates the rate monotonic period specified by
+  ${.:/params[0]/name}  with a length of period ticks specified by
+  ${.:/params[1]/name}.  If the period is running, then the calling task will
+  block for the remainder of the period before reinitiating the period with the
+  specified period length.  If the period was not running (either expired or
+  never initiated), the period is immediately initiated and the directive
+  returns immediately.  If the period has expired, the postponed job will be
+  released immediately and the following calls of this directive will release
+  postponed jobs until there is no more deadline miss.
+
+  If invoked with a period length of ${period-status-define:/name} ticks, the
+  current state of the period will be returned.  The directive status indicates
+  the current state of the period.  This does not alter the state or period
+  length of the period.
+enabled-by: true
+index-entries:
+- conclude current period
+- start current period
+- period initiation
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-creator-only
+name: rtems_rate_monotonic_period
+notes: |
+  Resetting the processor usage time of tasks has no impact on the period
+  status and statistics.
+params:
+- description: |
+    is the rate monotonic period identifier.
+  dir: null
+  name: id
+- description: |
+    is the period length in ${/glossary/clock-tick:/plural} or
+    ${period-status-define:/name} to get the period status.
+  dir: null
+  name: length
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no rate monotonic period associated with the identifier
+      specified by ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The rate monotonic period was not created by the calling task.
+    value: ${../../status/if/not-owner-of-resource:/name}
+  - description: |
+      The rate monotonic period has never been initiated (only possible when
+      the ${.:/params[1]/name} parameter was equal to
+      ${period-status-define:/name}).
+    value: ${../../status/if/not-defined:/name}
+  - description: |
+      The rate monotonic period has expired.
+    value: ${../../status/if/timeout:/name}
+type: interface

@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/self-define
+- role: interface-function
+  uid: ../if/delete
+- role: interface-function
+  uid: ../if/get-affinity
+- role: interface-function
+  uid: ../if/get-priority
+- role: interface-function
+  uid: ../if/get-scheduler
+- role: interface-function
+  uid: ../if/is-suspended
+- role: interface-function
+  uid: ../if/restart
+- role: interface-function
+  uid: ../if/resume
+- role: interface-function
+  uid: ../if/set-affinity
+- role: interface-function
+  uid: ../if/set-priority
+- role: interface-function
+  uid: ../if/set-scheduler
+- role: interface-function
+  uid: ../if/suspend
+- role: interface-function
+  uid: ../../event/if/send
+- role: interface-function
+  uid: ../../event/if/system-send
+- role: interface-function
+  uid: ../../signal/if/send
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${../if/self-define:/name} constant is used as a task identifier
+  parameter in a directive call, it shall be associated with the calling task.
+type: requirement

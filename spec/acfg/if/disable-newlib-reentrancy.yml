@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  In case this configuration option is defined, then the Newlib reentrancy
+  support per thread is disabled and a global reentrancy structure is used.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/option-pre-qualified-mandatory
+name: CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+notes: |
+  You can enable this option to reduce the size of the :term:`TCB`.  Use this
+  option with care, since it can lead to race conditions and undefined system
+  behaviour.  For example, ${/c/if/errno:/name} is no longer a thread-local
+  variable if this option is enabled.
+type: interface

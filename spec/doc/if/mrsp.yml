@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-group
+links:
+- role: interface-placement
+  uid: domain
+name: Multiprocessor Resource Sharing Protocol (MrsP)
+references:
+- identifier: MrsP
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/key_concepts.html#multiprocessor-resource-sharing-protocol-mrsp
+  type: url
+type: interface

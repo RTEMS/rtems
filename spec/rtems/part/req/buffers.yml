@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: requirement-refinement
+  uid: ../if/group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The count of buffers available for use from a partition shall be exactly the
+  buffer area length divided by the buffer size (integer division) specified at
+  partition creation.
+type: requirement

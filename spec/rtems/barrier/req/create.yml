@@ -1,0 +1,423 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/create
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/too-many:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_barrier_ident( NAME, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->id_value );
+    text: |
+      The unique object name shall identify the barrier created by the
+      ${../if/create:/name} call.
+  - name: Invalid
+    test-code: |
+      sc = rtems_barrier_ident( NAME, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a barrier.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: Class
+  states:
+  - name: Manual
+    test-code: |
+      sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
+      T_rsc_success( sc );
+
+      ++ctx->release_expected;
+      T_eq_u32( ctx->release_done, ctx->release_expected );
+    text: |
+      The class of the barrier created by the ${../if/create:/name} call shall
+      be manual release.
+  - name: Auto
+    test-code: |
+      sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
+      T_rsc_success( sc );
+
+      T_eq_u32( ctx->release_done, ctx->release_expected );
+    text: |
+      The class of the barrier created by the ${../if/create:/name} call shall
+      be automatic release.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+- name: IdVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object referenced by the ${../if/create:/params[3]/name}
+      parameter shall be set to the object identifier of the created barrier
+      after the return of the ${../if/create:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      Objects referenced by the ${../if/create:/params[3]/name} parameter in
+      past calls to ${../if/create:/name} shall not be accessed by the
+      ${../if/create:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->name = NAME;
+    text: |
+      While the ${../if/create:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->name = 0;
+    text: |
+      While the ${../if/create:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/create:/params[3]/name} parameter references an object
+      of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/create:/params[3]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Class
+  states:
+  - name: Default
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the ${../if/create:/params[1]/name} parameter specifies the default
+      class.
+  - name: Manual
+    test-code: |
+      ctx->attribute_set |= RTEMS_BARRIER_MANUAL_RELEASE;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter specifies the manual
+      release class.
+  - name: Auto
+    test-code: |
+      ctx->attribute_set |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter specifies the
+      automatic release class.
+  test-epilogue: null
+  test-prologue: null
+- name: MaxWait
+  states:
+  - name: Zero
+    test-code: |
+      ctx->maximum_waiters = 0;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter is zero.
+  - name: Positive
+    test-code: |
+      ctx->maximum_waiters = 1;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter is positive.
+  test-epilogue: null
+  test-prologue: null
+- name: Free
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the system has at least one inactive barrier object available.
+  - name: 'No'
+    test-code: |
+      ctx->seized_objects = T_seize_objects( Create, NULL );
+    text: |
+      While the system has no inactive barrier object available.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_barrier_create(
+    ctx->name,
+    ctx->attribute_set,
+    ctx->maximum_waiters,
+    ctx->id
+  );
+test-brief: null
+test-cleanup: |
+  if ( ctx->id_value != INVALID_ID ) {
+    rtems_status_code sc;
+
+    sc = rtems_barrier_delete( ctx->id_value );
+    T_rsc_success( sc );
+
+    ctx->id_value = INVALID_ID;
+  }
+
+  T_surrender_objects( &ctx->seized_objects, rtems_barrier_delete );
+test-context:
+- brief: null
+  description: null
+  member: |
+    void *seized_objects
+- brief: null
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_id id_value
+- brief: null
+  description: null
+  member: |
+    uint32_t release_done
+- brief: null
+  description: null
+  member: |
+    uint32_t release_expected
+- brief: null
+  description: null
+  member: |
+    rtems_name name
+- brief: null
+  description: null
+  member: |
+    rtems_attribute attribute_set
+- brief: null
+  description: null
+  member: |
+    uint32_t maximum_waiters
+- brief: null
+  description: null
+  member: |
+    rtems_id *id
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->id_value = INVALID_ID;
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  typedef ${.:/test-context-type} Context;
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code sc;
+      uint32_t          released;
+
+      ++ctx->release_done;
+
+      released = 0;
+      sc = rtems_barrier_release( ctx->id_value, &released );
+      T_rsc_success( sc );
+      T_eq_u32( released, 1 );
+    }
+  }
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    return rtems_barrier_create(
+      rtems_build_name( 'S', 'I', 'Z', 'E' ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      0,
+      id
+    );
+  }
+test-target: testsuites/validation/tc-barrier-create.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+    Name: Invalid
+    Class: N/A
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Invalid
+    Id: all
+    Class: all
+    MaxWait: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Name: Invalid
+    Class: N/A
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - 'Null'
+    Class: all
+    MaxWait: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Valid
+    Class: Manual
+    IdVar: Set
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Default
+    - Manual
+    MaxWait: all
+    Free:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Name: Invalid
+    Class: N/A
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Auto
+    MaxWait:
+    - Zero
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Valid
+    Class: Auto
+    IdVar: Set
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Auto
+    MaxWait:
+    - Positive
+    Free:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+    Name: Invalid
+    Class: N/A
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Default
+    - Manual
+    MaxWait: all
+    Free:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+    Name: Invalid
+    Class: N/A
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Auto
+    MaxWait:
+    - Positive
+    Free:
+    - 'No'
+type: requirement

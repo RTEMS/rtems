@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Maps the interrupt level to the associated processor-dependent task mode
+  interrupt level.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ( ( ${.:/params[0]/name} ) & ${interrupt-mask:/name} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_INTERRUPT_LEVEL
+notes: |
+  The Classic API supports 256 interrupt levels using the least significant
+  eight bits of the mode set.  On any particular processor variant, fewer than
+  256 levels may be supported.  At least level 0 (all interrupts enabled) and
+  level 1 (interrupts disabled, on most architectures) are supported.
+params:
+- description: is the interrupt level to map.
+  dir: null
+  name: _interrupt_level
+return:
+  return: |
+    Returns the processor-dependent task mode interrupt level associated with
+    the interrupt level.
+  return-values: []
+type: interface

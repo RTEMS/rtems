@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the processor affinity of the task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    - const ${/c/if/cpu_set_t:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive sets the processor affinity of the task specified by
+  ${.:/params[0]/name}.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/affinity-may-preempt
+name: rtems_task_set_affinity
+notes: null
+params:
+- description: |
+    is the task identifier.  The constant ${self-define:/name} may be used to
+    specify the calling task.
+  dir: null
+  name: id
+- description: |
+    is the size of the processor set referenced by ${.:/params[2]/name} in
+    bytes.
+  dir: null
+  name: cpusetsize
+- description: |
+    is the pointer to a ${/c/if/cpu_set_t:/name} object.  The processor set
+    defines the new processor affinity set of the task.  A set bit in the
+    processor set means that the corresponding processor shall be in the
+    processor affinity set of the task, otherwise the bit shall be cleared.
+  dir: null
+  name: cpuset
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The referenced processor set was not a valid new processor affinity set
+      for the task.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The task resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+type: interface

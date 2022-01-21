@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: 0
+description: |
+  The value of this configuration option defines the minimum count of Classic
+  API Tasks which are constructed by ${/rtems/task/if/construct:/name}.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-classic
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-tasks
+name: CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE
+notes: |
+  By default, the calculation for the required memory in the RTEMS Workspace
+  for tasks assumes that all Classic API Tasks are created by
+  ${/rtems/task/if/create:/name}.  This configuration option can be used to
+  reduce the required memory for the system-provided task storage areas since
+  tasks constructed by ${/rtems/task/if/construct:/name} use a user-provided
+  task storage area.
+type: interface

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/lock-acquire
+- role: interface-function
+  uid: ../if/lock-acquire-isr
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the directive is called, the lock contained in the object referenced by
+  the ${../if/lock-initialize:/params[0]/name} parameter shall be acquired.
+type: requirement

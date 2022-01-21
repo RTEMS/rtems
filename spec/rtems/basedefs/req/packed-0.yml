@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/packed
+non-functional-type: interface
+rationale: |
+  Note: The 4.1, 4.2 and 4.3 series of GCC ignore the packed attribute
+  on bit-fields of type char.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/packed:/name} macro is used as last part of a
+  structure member declaration,
+  and the ``aligned`` attribute or ${../if/aligned:/name} macro
+  is not used on this structure member,
+  the ${../if/packed:/name} macro shall cause the structure member
+  to be aligned at one bit for a bit-field member and one byte otherwise.
+type: requirement

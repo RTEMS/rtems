@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: false
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/mp-max-proxies
+- role: requirement-refinement
+  uid: group
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The application configuration option shall define the maximum number of
+  concurrently active thread/task proxies on this node in a multiprocessor
+  system.
+type: requirement

@@ -1,0 +1,443 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/add-processor
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/add-processor:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/add-processor:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: NotConf
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_CONFIGURED );
+    text: |
+      The return status of ${../if/add-processor:/name} shall be
+      ${../../status/if/not-configured:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/add-processor:/name} shall be
+      ${../../status/if/incorrect-state:/name}.
+  - name: InUse
+    test-code: |
+      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE );
+    text: |
+      The return status of ${../if/add-processor:/name} shall be
+      ${../../status/if/resource-in-use:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Added
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 2 );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].operation,
+        T_SCHEDULER_MAP_PRIORITY
+      );
+      T_eq_int(
+        ctx->scheduler_log.events[ 1 ].operation,
+        T_SCHEDULER_ADD_PROCESSOR
+      );
+
+      priority = GetSelfPriority();
+
+      if ( ctx->scheduler_id == ctx->scheduler_c_id ) {
+        SetSelfScheduler( ctx->scheduler_c_id, priority );
+      }
+
+      SetSelfAffinityOne( CPU_TO_ADD );
+      T_eq_u32( rtems_scheduler_get_processor(), CPU_TO_ADD );
+      SetSelfAffinityAll();
+
+      if ( ctx->scheduler_id == ctx->scheduler_c_id ) {
+        SetSelfScheduler( ctx->scheduler_a_id, priority );
+      }
+    text: |
+      The processor specified by the ${../if/add-processor:/params[1]/name}
+      parameter shall be added to the scheduler specified by the
+      ${../if/add-processor:/params[0]/name} by the
+      ${../if/add-processor:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+
+      CPU_ZERO( &set );
+      CPU_SET( CPU_TO_ADD, &set );
+      sc = rtems_task_set_affinity( RTEMS_SELF, sizeof( set ), &set );
+      T_rsc( sc, RTEMS_INVALID_NUMBER );
+    text: |
+      No processor shall be added to a scheduler by the
+      ${../if/add-processor:/name} call.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code   sc;
+    cpu_set_t           set;
+    rtems_task_priority priority;
+pre-conditions:
+- name: HasReady
+  states:
+  - name: Ready
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_a_id;
+    text: |
+      While the scheduler has at least one ready thread.
+  - name: Empty
+    test-code: |
+      #if defined(RTEMS_SMP)
+      ctx->scheduler_id = ctx->scheduler_c_id;
+      #else
+      ctx->scheduler_id = ctx->scheduler_a_id;
+      #endif
+    text: |
+      While the scheduler has no ready threads.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/add-processor:/params[0]/name} parameter is not
+      associated with a scheduler.
+  - name: Scheduler
+    test-code: |
+      ctx->id = ctx->scheduler_id;
+    text: |
+      While the ${../if/add-processor:/params[0]/name} parameter is
+      associated with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUIndex
+  states:
+  - name: Valid
+    test-code: |
+      #if defined(RTEMS_SMP)
+      ctx->cpu_index = CPU_TO_ADD;
+      #else
+      ctx->cpu_index = 0;
+      #endif
+    text: |
+      While the ${../if/add-processor:/params[1]/name} parameter is less than
+      the configured processor maximum.
+  - name: Invalid
+    test-code: |
+      ctx->cpu_index = rtems_configuration_get_maximum_processors();
+    text: |
+      While the ${../if/add-processor:/params[1]/name} parameter is greater
+      than or equal to the configured processor maximum.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUState
+  states:
+  - name: Idle
+    test-code: |
+      sc = rtems_scheduler_remove_processor(
+        ctx->scheduler_b_id,
+        CPU_TO_ADD
+      );
+      T_rsc_success( sc );
+      ctx->add_cpu_to_scheduler_b = true;
+    text: |
+      While the processor associated with the
+      ${../if/add-processor:/params[1]/name} parameter is configured to be used
+      by a scheduler, while the processor associated with the
+      ${../if/add-processor:/params[1]/name} parameter is online, while the
+      processor associated with the ${../if/add-processor:/params[1]/name}
+      parameter is not owned by a scheduler.
+  - name: InUse
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the processor associated with the
+      ${../if/add-processor:/params[1]/name} parameter is owned by a scheduler.
+  - name: NotOnline
+    test-code: |
+      sc = rtems_scheduler_remove_processor(
+        ctx->scheduler_b_id,
+        CPU_TO_ADD
+      );
+      T_rsc_success( sc );
+      ctx->add_cpu_to_scheduler_b = true;
+      #if defined(RTEMS_SMP)
+      ctx->cpu->online = false;
+      #endif
+    text: |
+      While the processor associated with the
+      ${../if/add-processor:/params[1]/name} parameter is not online.
+  - name: NotUsable
+    test-code: |
+      ctx->cpu_index = rtems_configuration_get_maximum_processors() - 1;
+    text: |
+      While the processor associated with the
+      ${../if/add-processor:/params[1]/name} parameter is not configured to be
+      used by a scheduler.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  OnlyOneCPU: |
+    Where the system is build with SMP support disabled, the system has exactly
+    one processor and there is no other processor available to add to a
+    scheduler.
+test-action: |
+  T_scheduler_log *log;
+
+  log = T_scheduler_record_2( &ctx->scheduler_log );
+  T_null( log );
+
+  ctx->status = rtems_scheduler_add_processor( ctx->id, ctx->cpu_index );
+
+  log = T_scheduler_record( NULL );
+  T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+test-brief: null
+test-cleanup: |
+  #if defined(RTEMS_SMP)
+  rtems_status_code sc;
+
+  ctx->cpu->online = ctx->online;
+
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    sc = rtems_scheduler_remove_processor( ctx->scheduler_id, CPU_TO_ADD );
+    T_rsc_success( sc );
+  }
+
+  if ( ctx->add_cpu_to_scheduler_b ) {
+    sc = rtems_scheduler_add_processor( ctx->scheduler_b_id, CPU_TO_ADD );
+    T_rsc_success( sc );
+  }
+  #endif
+test-context:
+- brief: |
+    This member specifies the scheduler used to add the processor.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member contains the identifier of scheduler A.
+  description: null
+  member: |
+    rtems_id scheduler_a_id
+- brief: |
+    This member contains the identifier of scheduler B.
+  description: null
+  member: |
+    rtems_id scheduler_b_id
+- brief: |
+    This member contains the identifier of scheduler C.
+  description: null
+  member: |
+    rtems_id scheduler_c_id
+- brief: |
+    This member references the processor control of the processor to add.
+  description: null
+  member: |
+    Per_CPU_Control *cpu
+- brief: |
+    This member contains the online status of the processor to add before the
+    ${../if/add-processor:/name} call is prepared.
+  description: null
+  member: |
+    bool online;
+- brief: |
+    If this member is true, then the processor should be added to the scheduler
+    B during cleanup.
+  description: null
+  member: |
+    bool add_cpu_to_scheduler_b;
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_2 scheduler_log;
+- brief: |
+    This member contains the return value of the
+    ${../if/add-processor:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/add-processor:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/add-processor:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    uint32_t cpu_index
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/percpu.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  #if defined(RTEMS_SMP)
+  ctx->add_cpu_to_scheduler_b = false;
+  ctx->online = _Per_CPU_Is_processor_online( ctx->cpu );
+  #endif
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_A_NAME,
+      &ctx->scheduler_a_id
+    );
+    T_rsc_success( sc );
+
+    #if defined(RTEMS_SMP)
+    ctx->cpu = _Per_CPU_Get_by_index( CPU_TO_ADD );
+
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
+    T_rsc_success( sc );
+
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_C_NAME, &ctx->scheduler_c_id );
+    T_rsc_success( sc );
+    #else
+    ctx->scheduler_b_id = INVALID_ID;
+    ctx->scheduler_c_id = INVALID_ID;
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  #define CPU_TO_ADD 1
+test-target: testsuites/validation/tc-scheduler-add-processor.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Invalid
+    CPUIndex:
+    - Valid
+    CPUState:
+    - InUse
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Invalid
+    CPUIndex:
+    - Invalid
+    CPUState: N/A
+- enabled-by: true
+  post-conditions:
+    Status: NotConf
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Invalid
+    CPUState: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    CPUState:
+    - InUse
+- enabled-by: true
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    HasReady: all
+    Id: all
+    CPUIndex:
+    - Valid
+    CPUState:
+    - Idle
+    - NotOnline
+    - NotUsable
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: Ok
+    Added: 'Yes'
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    CPUState:
+    - Idle
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: InvId
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Invalid
+    CPUIndex:
+    - Valid
+    CPUState:
+    - Idle
+    - NotOnline
+    - NotUsable
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: NotConf
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    CPUState:
+    - NotUsable
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: IncStat
+    Added: Nop
+  pre-conditions:
+    HasReady: all
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+    CPUState:
+    - NotOnline
+type: requirement

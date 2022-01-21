@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Builds the object identifier with the lowest index from the API, class, and
+  MPCI node components.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: |
+    ${/score/object/if/id-initial:/name}( ${.:/params[0]/name}, ${.:/params[1]/name}, ${.:/params[2]/name} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: RTEMS_OBJECT_ID_INITIAL
+notes: null
+params:
+- description: |
+    is the API of the object identifier to build.
+  dir: null
+  name: _api
+- description: |
+    is the class of the object identifier to build.
+  dir: null
+  name: _class
+- description: |
+    is the MPCI node of the object identifier to build.
+  dir: null
+  name: _node
+return:
+  return: |
+    Returns the object identifier with the lowest index built from the API,
+    class, and MPCI node components.
+  return-values: []
+type: interface

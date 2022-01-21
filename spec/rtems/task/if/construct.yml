@@ -1,0 +1,122 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Constructs a task from the specified task configuration.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${config:/name} *${.:/params[0]/name}
+    - ${../../type/if/id:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/mp-send
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
+- role: constraint
+  uid: ../../constraint/mp-max-global-objects
+name: rtems_task_construct
+notes: |
+  In contrast to tasks created by ${create:/name}, the tasks constructed by
+  this directive use a user-provided task storage area.  The task storage area
+  contains the task stack, the thread-local storage, and the floating-point
+  context on architectures with a separate floating-point context.
+
+  This directive is intended for applications which do not want to use the
+  RTEMS Workspace and instead statically allocate all operating system
+  resources.  It is not recommended to use ${create:/name} and ${.:/name}
+  together in an application.  It is also not recommended to use ${.:/name} for
+  drivers or general purpose libraries.  The reason for these recommendations
+  is that the task configuration needs settings which can be only given with a
+  through knowledge of the application resources.
+
+  An application based solely on static allocation can avoid any runtime memory
+  allocators.  This can simplify the application architecture as well as any
+  analysis that may be required.
+
+  The stack space estimate done by <rtems/confdefs.h> assumes that all tasks
+  are created by ${create:/name}.  The estimate can be adjusted to take
+  user-provided task storage areas into account through the
+  ${/acfg/if/min-tasks-with-user-provided-storage:/name} application
+  configuration option.
+
+  The ${/acfg/if/max-tasks:/name} should include tasks constructed by
+  ${.:/name}.
+params:
+- description: is the task configuration.
+  dir: null
+  name: config
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the constructed task will be stored
+    in this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The task name was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The initial task priority was invalid.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      The thread-local storage size is greater than the maximum thread-local
+      storage size specified in the task configuration.  The thread-local
+      storage size is determined by the thread-local variables used by the
+      application and ${/acfg/if/max-thread-local-storage-size:/name}.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The task storage area was too small to provide a task stack of the
+      configured minimum size, see ${/acfg/if/min-task-stack-size:/name}.
+      The task storage area contains the task stack, the thread-local storage,
+      and the floating-point context on architectures with a separate
+      floating-point context.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      There was no inactive task object available to construct a task.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      In multiprocessing configurations, there was no inactive global object
+      available to construct a global task.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      One of the task create extensions failed during the task construction.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      In SMP configurations, the non-preemption mode was not supported.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      In SMP configurations, the interrupt level mode was not supported.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

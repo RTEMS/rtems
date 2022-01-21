@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the Console Driver is
+  initialized during system initialization.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+notes: |
+  The Console Driver is responsible for providing the :file:`/dev/console`
+  device file.  This device is used to initialize the standard input, output,
+  and error file descriptors.
+
+  BSPs should be constructed in a manner that allows ${/rtems/io/if/printk:/name} to work
+  properly without the need for the Console Driver to be configured.
+
+  The
+
+  * ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER``,
+
+  * ${appl-needs-simple-console-driver:/name}, and
+
+  * ${appl-needs-simple-task-console-driver:/name}
+
+  configuration options are mutually exclusive.
+type: interface

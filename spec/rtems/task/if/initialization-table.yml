@@ -1,0 +1,77 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the properties of the Classic API user initialization
+  task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member defines the task name.
+    definition: ${../../type/if/name:/name} ${.:name}
+    description: null
+    kind: member
+    name: name
+  variants: []
+- default:
+    brief: |
+      This member defines the task stack size in bytes.
+    definition: ${/c/if/size_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: stack_size
+  variants: []
+- default:
+    brief: |
+      This member defines the initial task priority.
+    definition: ${../../type/if/priority:/name} ${.:name}
+    description: null
+    kind: member
+    name: initial_priority
+  variants: []
+- default:
+    brief: |
+      This member defines the attribute set of the task.
+    definition: ${../../attr/if/attribute:/name} ${.:name}
+    description: null
+    kind: member
+    name: attribute_set
+  variants: []
+- default:
+    brief: |
+      This member defines the entry point of the task.
+    definition: ${entry:/name} ${.:name}
+    description: null
+    kind: member
+    name: entry_point
+  variants: []
+- default:
+    brief: |
+      This member defines the initial modes of the task.
+    definition: ${../../mode/if/mode:/name} ${.:name}
+    description: null
+    kind: member
+    name: mode_set
+  variants: []
+- default:
+    brief: |
+      This member defines the entry point argument of the task.
+    definition: ${argument:/name} ${.:name}
+    description: null
+    kind: member
+    name: argument
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_initialization_tasks_table
+notes: null
+type: interface

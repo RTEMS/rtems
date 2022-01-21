@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/unfreeze-instruction
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the ${/glossary/target:/term} has an instruction cache, where the
+  instruction cache can be frozen, when the ${../if/unfreeze-instruction:/name}
+  directive is called, the instruction cache shall be not frozen.
+type: requirement

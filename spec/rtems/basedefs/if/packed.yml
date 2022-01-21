@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Instructs the compiler in a type definition to place members of a structure
+  or union so that the memory required is minimized.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ''
+  variants:
+  - definition: |
+      __attribute__(( __packed__ ))
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_PACKED
+notes: null
+type: interface

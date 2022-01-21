@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: RTEMS epoch
+text: |
+  The RTEMS epoch is a point in time.  It is 1988-01-01T00:00:00Z in
+  `ISO 8601 <https://en.wikipedia.org/wiki/ISO_8601>`_ time format.
+type: glossary

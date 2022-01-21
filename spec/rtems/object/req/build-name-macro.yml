@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/build-name-macro
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The result of ${../if/build-name-macro:/name} shall be equal to
+  (${../if/build-name-macro:/params[0]/name} modulo 256) * 16777216 +
+  (${../if/build-name-macro:/params[1]/name} modulo 256) * 65536 +
+  (${../if/build-name-macro:/params[2]/name} modulo 256) * 256 +
+  (${../if/build-name-macro:/params[3]/name} modulo 256).
+type: requirement

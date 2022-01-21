@@ -1,0 +1,236 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/create
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/too-many:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_rate_monotonic_ident( NAME, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->id_value );
+    text: |
+      The unique object name shall identify the period created by the
+      ${../if/create:/name} call.
+  - name: Invalid
+    test-code: |
+      sc = rtems_rate_monotonic_ident( NAME, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a period.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: IdVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object referenced by the ${../if/create:/params[1]/name}
+      parameter shall be set to the object identifier of the created period
+      after the return of the ${../if/create:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      Objects referenced by the ${../if/create:/params[1]/name} parameter in
+      past calls to ${../if/create:/name} shall not be accessed by the
+      ${../if/create:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->name = NAME;
+    text: |
+      While the ${../if/create:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->name = 0;
+    text: |
+      While the ${../if/create:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter references an object of type
+      ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter is ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Free
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the system has at least one inactive period object available.
+  - name: 'No'
+    test-code: |
+      ctx->seized_objects = T_seize_objects( Create, NULL );
+    text: |
+      While the system has no inactive period object available.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_rate_monotonic_create( ctx->name, ctx->id );
+test-brief: null
+test-cleanup: |
+  if ( ctx->id_value != INVALID_ID ) {
+    rtems_status_code sc;
+
+    sc = rtems_rate_monotonic_delete( ctx->id_value );
+    T_rsc_success( sc );
+
+    ctx->id_value = INVALID_ID;
+  }
+
+  T_surrender_objects( &ctx->seized_objects, rtems_rate_monotonic_delete );
+test-context:
+- brief: null
+  description: null
+  member: |
+    void *seized_objects
+- brief: null
+  description: null
+  member: |
+    rtems_id id_value
+- brief: null
+  description: null
+  member: |
+    rtems_name name
+- brief: null
+  description: null
+  member: |
+    rtems_id *id
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->id_value = INVALID_ID;
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    return rtems_rate_monotonic_create(
+      rtems_build_name( 'S', 'I', 'Z', 'E' ),
+      id
+    );
+  }
+test-target: testsuites/validation/tc-ratemon-create.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+    Name: Invalid
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Invalid
+    Id: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Name: Invalid
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - 'Null'
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+    Name: Invalid
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Free:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Valid
+    IdVar: Set
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Free:
+    - 'Yes'
+type: requirement

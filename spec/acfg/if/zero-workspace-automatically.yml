@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the memory areas used for
+  the RTEMS Workspace and the C Program Heap are zeroed with a ``0x00`` byte
+  pattern during system initialization.
+enabled-by: true
+index-entries:
+- clear C Program Heap
+- clear RTEMS Workspace
+- zero C Program Heap
+- zero RTEMS Workspace
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
+notes: |
+  Zeroing memory can add significantly to the system initialization time. It is
+  not necessary for RTEMS but is often assumed by support libraries.  In case
+  ${dirty-memory:/name} is also defined, then the memory is first
+  dirtied and then zeroed.
+type: interface

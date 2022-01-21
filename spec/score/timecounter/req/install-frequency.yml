@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: install
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the timecounter to install has a quality level equal to the quality
+  level of the currently installed timecounter, while the timecounter to
+  install has a higher frequancy greater than the frequency of the currently
+  installed timecounter, the timecounter to install shall be installed.
+type: requirement

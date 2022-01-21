@@ -1,0 +1,95 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: bsps/sparc/leon3
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by the OccupyClockInterrupt() system
+    initialization handler.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the expected fatal source is present.
+    code: |
+      T_step_eq_int( ${step}, ctx->source, RTEMS_FATAL_SOURCE_BSP );
+    links:
+    - role: validation
+      uid: ../req/fatal-clock-initialization
+  - brief: |
+      Check that the expected fatal code is present.
+    code: |
+      T_step_eq_ulong(
+        ${step},
+        ctx->code,
+        LEON3_FATAL_CLOCK_INITIALIZATION
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-clock-initialization
+  links: []
+test-brief: |
+  Tests a fatal error.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is fatal source.
+    dir: null
+    name: source
+    specifier: ${/rtems/userext/if/fatal-source:/name} ${.:name}
+  - description: |
+      is fatal code.
+    dir: null
+    name: code
+    specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
+  target: testsuites/validation/tr-fatal-bsp-sparc-leon3-clock-initialization.h
+test-includes:
+- rtems/irq-extension.h
+- rtems/sysinit.h
+- bsp/fatal.h
+- bsp/leon3.h
+test-local-includes:
+- tr-fatal-bsp-sparc-leon3-clock-initialization.h
+test-setup: null
+test-stop: null
+test-support: |
+  static void ClockInterrupt( void *arg )
+  {
+    (void) arg;
+  }
+
+  static rtems_interrupt_entry interrupt_entry = RTEMS_INTERRUPT_ENTRY_INITIALIZER(
+    ClockInterrupt,
+    NULL,
+    "Clock"
+  );
+
+  static void OccupyClockInterrupt( void )
+  {
+    rtems_vector_number vector;
+
+    vector = GPTIMER_CONFIG_IRQ_GET( grlib_load_32( &LEON3_Timer_Regs->config ) );
+    (void) rtems_interrupt_entry_install(
+      vector,
+      RTEMS_INTERRUPT_UNIQUE,
+      &interrupt_entry
+    );
+  }
+
+  RTEMS_SYSINIT_ITEM(
+    OccupyClockInterrupt,
+    RTEMS_SYSINIT_DEVICE_DRIVERS,
+    RTEMS_SYSINIT_ORDER_FIRST
+  );
+test-target: testsuites/validation/tr-fatal-bsp-sparc-leon3-clock-initialization.c
+test-teardown: null
+type: test-case

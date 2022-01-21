@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite provides enough resources to run tests for the
+  directives of the ${/rtems/cache/if/group:/name}.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+
+  #include "ts-default.h"
+test-description: |
+  In SMP configurations, up to three scheduler instances using the SMP EDF
+  scheduler are provided using up to four processors.
+test-includes: []
+test-local-includes: []
+test-suite-name: ValidationCache
+test-target: testsuites/validation/ts-validation-cache.c
+type: test-suite

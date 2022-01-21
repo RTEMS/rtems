@@ -1,0 +1,446 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate the event constant.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      Check that the event constant is equal to the event number bit in the
+      event set.
+    code: |
+      T_step_eq_u32(
+        ${step},
+        ctx->event,
+        ( (rtems_event_set) 1 ) << ctx->number
+      );
+    links:
+    - role: validation
+      uid: ../req/event-constant
+    - role: validation
+      uid: ../req/event-number
+  - brief: |
+      Check that the event number bit of the event constant is not set in
+      RTEMS_PENDING_EVENTS.
+    code: |
+      T_step_eq_u32( ${step}, ctx->event & RTEMS_PENDING_EVENTS, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that there were no pending events.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_system_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that there were no pending events.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Receive all pending events of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was unsatisfied.
+    code: |
+      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+    links: []
+  - brief: |
+      Check that there were no events received.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Receive all pending events of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_system_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was unsatisfied.
+    code: |
+      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+    links: []
+  - brief: |
+      Check that there were no events received.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Send the event to the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+
+    sc = rtems_event_send( RTEMS_SELF, ctx->event );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that the pending event is equal to the event sent by a previous
+      action.
+    code: |
+      T_step_eq_u32( ${step}, out, ctx->event );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_system_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that there were no pending events.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Receive any event of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = 0;
+    sc = rtems_event_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that the received event is equal to the event sent by a previous
+      action.
+    code: |
+      T_step_eq_u32( ${step}, out, ctx->event );
+    links: []
+  links: []
+- action-brief: |
+    Receive any event of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_system_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was unsatisfied.
+    code: |
+      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+    links: []
+  - brief: |
+      Check that the no events were received.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Send the event to the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+
+    sc = rtems_event_system_send( RTEMS_SELF, ctx->event );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that there were no pending events.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_system_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that the pending event is equal to the event sent by a previous
+      action.
+    code: |
+      T_step_eq_u32( ${step}, out, ctx->event );
+    links: []
+  links: []
+- action-brief: |
+    Receive any event of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was unsatisfied.
+    code: |
+      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+    links: []
+  - brief: |
+      Check that the no events were received.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Receive any event of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = 0;
+    sc = rtems_event_system_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that the received event is equal to the event sent by a previous
+      action.
+    code: |
+      T_step_eq_u32( ${step}, out, ctx->event );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the Classic event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that there were no pending events.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+- action-brief: |
+    Get all pending events of the system event set of the executing task.
+  action-code: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
+    out = RTEMS_ALL_EVENTS;
+    sc = rtems_event_system_receive(
+      RTEMS_PENDING_EVENTS,
+      RTEMS_DEFAULT_OPTIONS,
+      0,
+      &out
+    );
+  checks:
+  - brief: |
+      Check that the directive call was successful.
+    code: |
+      T_step_rsc_success( ${step}, sc );
+    links: []
+  - brief: |
+      Check that there were no pending events.
+    code: |
+      T_step_eq_u32( ${step}, out, 0 );
+    links: []
+  links: []
+test-brief: |
+  Tests an event constant and number of the Event Manager using the Classic and
+  system event sets of the executing task.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is the event constant.
+    dir: null
+    name: event
+    specifier: rtems_event_set ${.:name}
+  - description: |
+      is the event number.
+    dir: null
+    name: number
+    specifier: int ${.:name}
+  target: testsuites/validation/tr-event-constant.h
+test-includes:
+- rtems.h
+test-local-includes:
+- tr-event-constant.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-event-constant.c
+test-teardown: null
+type: test-case

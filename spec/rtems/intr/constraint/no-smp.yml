@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  Where the system was built with SMP support enabled, the directive is not
+  available.  Its use will result in compiler warnings and linker errors.  The
+  ${../if/local-disable:/name} and ${../if/local-enable:/name} directives are
+  available in all build configurations.
+type: constraint

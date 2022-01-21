@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/iterate
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While an iteration over all tasks was started by calling
+  ${../if/iterate:/name}, while no task exists which was not visited, the
+  iteration shall stop and then the object allocator lock shall be released.
+type: requirement

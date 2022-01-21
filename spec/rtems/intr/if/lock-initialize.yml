@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Initializes the ISR lock.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: |
+    ${/score/isr/if/lock-initialize:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_lock_initialize
+notes: |
+  ISR locks may also be statically defined by ${lock-define:/name} or
+  statically initialized by ${lock-initializer:/name}.
+params:
+- description: |
+    is the ISR lock to initialize.
+  dir: out
+  name: _lock
+- description: |
+    is the ISR lock name.  It shall be a string.  The name is only used where
+    the system was built with profiling support enabled.
+  dir: null
+  name: _name
+return: null
+type: interface

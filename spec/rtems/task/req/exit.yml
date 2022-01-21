@@ -1,0 +1,535 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/exit
+post-conditions:
+- name: FatalError
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->fatal_extension_calls, 1 );
+    text: |
+      The fatal error with a fatal source of
+      ${/score/interr/if/internal-error-core:/name} and a fatal code of
+      ${/score/interr/if/bad-thread-dispatch-disable-level:/name} shall occur
+      by the ${../if/exit:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->fatal_extension_calls, 0 );
+    text: |
+      No fatal error shall occur by the ${../if/exit:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: DeleteExtensions
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->delete_extension_calls, 0 );
+    text: |
+      The thread delete user extensions shall not be invoked by the
+      ${../if/exit:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: RestartExtensions
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->restart_extension_calls, 0 );
+    text: |
+      The thread restart user extensions shall not be invoked by the
+      ${../if/exit:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: TerminateExtensions
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( ctx->protected ) {
+        T_eq_u32( ctx->terminate_extension_calls, 2 );
+      } else {
+        T_eq_u32( ctx->terminate_extension_calls, 1 );
+      }
+    text: |
+      The thread terminate user extensions shall be invoked by the
+      ${../if/exit:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->terminate_extension_calls, 0 );
+    text: |
+      The thread terminate user extensions shall not be invoked by the
+      ${../if/exit:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Block
+  states:
+  - name: 'Yes'
+    test-code: |
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+      T_eq_u32( event->thread->Object.id, ctx->worker_id );
+
+      if ( ctx->terminating ) {
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
+        T_eq_u32( event->thread->Object.id, ctx->deleter_id );
+
+        event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+        T_eq_int( event->operation, T_SCHEDULER_BLOCK );
+        T_eq_u32( event->thread->Object.id, ctx->deleter_id );
+      }
+
+      event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
+      T_eq_int( event->operation, T_SCHEDULER_NOP );
+    text: |
+      The calling task shall be blocked exactly once by the ${../if/exit:/name}
+      call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      No task shall be blocked by the ${../if/exit:/name} call.
+  test-epilogue: null
+  test-prologue: |
+    const T_scheduler_event *event;
+    size_t                   index;
+
+    index = 0;
+- name: ID
+  states:
+  - name: Valid
+    test-code: |
+      T_rsc_success( sc );
+    text: |
+      The object identifier of the calling task shall be valid.
+  - name: Invalid
+    test-code: |
+      T_rsc( sc, RTEMS_INVALID_ID );
+    text: |
+      The object identifier of the calling task shall be invalid.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+
+    sc = rtems_task_get_scheduler( ctx->worker_id, &id );
+- name: Delete
+  states:
+  - name: NextAllocate
+    test-code: |
+      T_eq_u32( ctx->delete_extension_calls, 1 );
+    text: |
+      The calling task shall be deleted by the next directive which allocates a
+      task.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->delete_extension_calls, 0 );
+    text: |
+      The calling task shall not be deleted by the next directive which
+      allocates a task.
+  test-epilogue: |
+    DeleteTask( id );
+  test-prologue: |
+    rtems_id id;
+
+    id = CreateTask( "TEMP", PRIO_LOW );
+pre-conditions:
+- name: Restarting
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->restarting = true;
+    text: |
+      While the calling task is restarting.
+  - name: 'No'
+    test-code: |
+      ctx->restarting = false;
+    text: |
+      While the calling task is not restarting.
+  test-epilogue: null
+  test-prologue: null
+- name: Terminating
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->terminating = true;
+    text: |
+      While the calling task is terminating.
+  - name: 'No'
+    test-code: |
+      ctx->terminating = false;
+    text: |
+      While the calling task is not terminating.
+  test-epilogue: null
+  test-prologue: null
+- name: Protected
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->protected = true;
+    text: |
+      While the thread life of the calling task is protected.
+  - name: 'No'
+    test-code: |
+      ctx->protected = false;
+    text: |
+      While the thread life of the calling task is not protected.
+  test-epilogue: null
+  test-prologue: null
+- name: ThreadDispatch
+  states:
+  - name: Enabled
+    test-code: |
+      ctx->dispatch_disabled = false;
+    text: |
+      While thread dispatching is enabled for the calling task.
+  - name: Disabled
+    test-code: |
+      ctx->dispatch_disabled = true;
+    text: |
+      While thread dispatching is disabled for the calling task.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_status_code sc;
+
+  ctx->delete_worker_expected = false;
+  ctx->worker_id = CreateTask( "WORK", PRIO_NORMAL );
+  ctx->delete_worker_expected = true;
+
+  StartTask( ctx->worker_id, Worker, ctx );
+
+  /* Let the worker catch signals and set the thread life protection state */
+  Yield();
+
+  sc = rtems_signal_send( ctx->worker_id, RTEMS_SIGNAL_0 );
+  T_rsc_success( sc );
+
+  if ( ctx->restarting ) {
+    sc = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
+    T_rsc_success( sc );
+  }
+
+  if ( ctx->terminating ) {
+    sc = rtems_task_restart( ctx->deleter_id, (rtems_task_argument) ctx );
+    T_rsc_success( sc );
+  } else {
+    Yield();
+  }
+
+  if ( !ctx->dispatch_disabled ) {
+    T_scheduler_log *log;
+
+    log = T_scheduler_record( NULL );
+    T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+  }
+test-brief: null
+test-cleanup: |
+  if ( ctx->dispatch_disabled ) {
+    DeleteTask( ctx->worker_id );
+  }
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_4 scheduler_log
+- brief: |
+    This member contains the identifier of the runner task.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member contains the identifier of the worker task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member contains the identifier of the deleter task.
+  description: null
+  member: |
+    rtems_id deleter_id
+- brief: |
+    This member contains the identifier of the test user extensions.
+  description: null
+  member: |
+    rtems_id extension_id
+- brief: |
+    This member contains the count of fatal extension calls.
+  description: null
+  member: |
+    uint32_t fatal_extension_calls
+- brief: |
+    This member contains the count of thread delete extension calls.
+  description: null
+  member: |
+    uint32_t delete_extension_calls
+- brief: |
+    This member contains the count of thread restart extension calls.
+  description: null
+  member: |
+    uint32_t restart_extension_calls
+- brief: |
+    This member contains the count of thread terminate extension calls.
+  description: null
+  member: |
+    uint32_t terminate_extension_calls
+- brief: |
+    If this member is true, then the thread life of the worker is protected
+    before the ${../if/exit:/name} call.
+  description: null
+  member: |
+    bool protected
+- brief: |
+    If this member is true, then the worker locked the allocator.
+  description: null
+  member: |
+    bool allocator_locked
+- brief: |
+    If this member is true, then the worker is restarting before the
+    ${../if/exit:/name} call.
+  description: null
+  member: |
+    bool restarting
+- brief: |
+    If this member is true, then the worker is terminating before the
+    ${../if/exit:/name} call.
+  description: null
+  member: |
+    bool terminating
+- brief: |
+    If this member is true, then thread dispatching is disabled by the worker
+    task before the ${../if/exit:/name} call.
+  description: null
+  member: |
+    bool dispatch_disabled
+- brief: |
+    If this member is true, then it is expected to delete the worker.
+  description: null
+  member: |
+    bool delete_worker_expected
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/apimutex.h
+- rtems/score/threaddispatch.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->runner_id = rtems_task_self();
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'T', 'E', 'S', 'T' ),
+      &extensions,
+      &ctx->extension_id
+    );
+    T_rsc_success( sc );
+
+    SetFatalHandler( Fatal, ctx );
+    SetSelfPriority( PRIO_NORMAL );
+
+    ctx->deleter_id = CreateTask( "DELE", PRIO_HIGH );
+    StartTask( ctx->deleter_id, Deleter, NULL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void Signal( rtems_signal_set signals )
+  {
+    Context          *ctx;
+    T_scheduler_log  *log;
+    Thread_Life_state life_state;
+
+    (void) signals;
+    ctx = T_fixture_context();
+
+    if ( ctx->dispatch_disabled ) {
+      _Thread_Dispatch_disable();
+    }
+
+    /* Check that the thread life state was prepared correctly */
+    life_state = GetExecuting()->Life.state;
+    T_eq( ctx->protected, ( life_state & THREAD_LIFE_PROTECTED ) != 0 );
+    T_eq( ctx->restarting, ( life_state & THREAD_LIFE_RESTARTING ) != 0 );
+    T_eq( ctx->terminating, ( life_state & THREAD_LIFE_TERMINATING ) != 0 );
+
+    log = T_scheduler_record_4( &ctx->scheduler_log );
+    T_null( log );
+
+    ctx->delete_extension_calls = 0;
+    ctx->fatal_extension_calls = 0;
+    ctx->restart_extension_calls = 0;
+    ctx->terminate_extension_calls = 0;
+
+    rtems_task_exit();
+  }
+
+  static void Deleter( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    if ( ctx != NULL ) {
+      DeleteTask( ctx->worker_id );
+    }
+
+    SuspendSelf();
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    ctx = (Context *) arg;
+
+    sc = rtems_signal_catch( Signal, RTEMS_NO_ASR );
+    T_rsc_success( sc );
+
+    if ( ctx->protected ) {
+      _RTEMS_Lock_allocator();
+      ctx->allocator_locked = true;
+    }
+
+    Yield();
+  }
+
+  static void UnlockAllocator( Context *ctx )
+  {
+    if ( ctx->allocator_locked ) {
+      ctx->allocator_locked = false;
+      _RTEMS_Unlock_allocator();
+    }
+  }
+
+  static void Fatal(
+    rtems_fatal_source source,
+    rtems_fatal_code   code,
+    void              *arg
+  )
+  {
+    Context         *ctx;
+    T_scheduler_log *log;
+    Per_CPU_Control *cpu_self;
+
+    ctx = arg;
+    ++ctx->fatal_extension_calls;
+
+    T_eq_int( source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
+    T_assert_eq_int( ctx->fatal_extension_calls, 1 );
+
+    log = T_scheduler_record( NULL );
+    T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+
+    UnlockAllocator( ctx );
+    SuspendSelf();
+
+    cpu_self = _Per_CPU_Get();
+    _Thread_Dispatch_unnest( cpu_self );
+    _Thread_Dispatch_direct_no_return( cpu_self );
+  }
+
+  static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->delete_extension_calls;
+
+    T_eq_u32( executing->Object.id, ctx->runner_id );
+
+    if ( ctx->delete_worker_expected ) {
+      T_eq_u32( deleted->Object.id, ctx->worker_id );
+    }
+  }
+
+  static void ThreadRestart( rtems_tcb *executing, rtems_tcb *restarted )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->restart_extension_calls;
+  }
+
+  static void ThreadTerminate( rtems_tcb *executing )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->terminate_extension_calls;
+
+    T_eq_u32( executing->Object.id, ctx->worker_id );
+
+    UnlockAllocator( ctx );
+  }
+
+  static const rtems_extensions_table extensions = {
+    .thread_delete = ThreadDelete,
+    .thread_restart = ThreadRestart,
+    .thread_terminate = ThreadTerminate
+  };
+test-target: testsuites/validation/tc-task-exit.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_extension_delete( ctx->extension_id );
+    T_rsc_success( sc );
+
+    SetFatalHandler( NULL, NULL );
+    DeleteTask( ctx->deleter_id );
+    RestoreRunnerASR();
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    FatalError: Nop
+    DeleteExtensions: Nop
+    RestartExtensions: Nop
+    TerminateExtensions: 'Yes'
+    Block: 'Yes'
+    ID: Invalid
+    Delete: NextAllocate
+  pre-conditions:
+    Restarting: all
+    Terminating: all
+    Protected: all
+    ThreadDispatch:
+    - Enabled
+- enabled-by: true
+  post-conditions:
+    FatalError: 'Yes'
+    DeleteExtensions: Nop
+    RestartExtensions: Nop
+    TerminateExtensions: Nop
+    Block: Nop
+    ID: Valid
+    Delete: Nop
+  pre-conditions:
+    Restarting: all
+    Terminating: all
+    Protected: all
+    ThreadDispatch:
+    - Disabled
+type: requirement

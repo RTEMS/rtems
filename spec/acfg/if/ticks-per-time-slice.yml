@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 50
+description: |
+  The value of this configuration option defines the length of the timeslice
+  quantum in ticks for each task.
+enabled-by: true
+index-entries:
+- ticks per timeslice
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-uint32
+name: CONFIGURE_TICKS_PER_TIMESLICE
+notes: |
+  This configuration option has no impact if the Clock Driver is not
+  configured, see ${appl-does-not-need-clock-driver:/name}.
+type: interface

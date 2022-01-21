@@ -1,0 +1,450 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/delete
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      ctx->semaphore_id = 0;
+      T_rsc_success( ctx->delete_status );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->delete_status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InUse
+    test-code: |
+      T_rsc( ctx->delete_status, RTEMS_RESOURCE_IN_USE );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/resource-in-use:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_semaphore_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->semaphore_id );
+    text: |
+      The unique object name shall identify a semaphore.
+  - name: Invalid
+    test-code: |
+      sc = rtems_semaphore_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a semaphore.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: Flush
+  states:
+  - name: FIFO
+    test-code: |
+      T_eq_u32( ctx->worker_counter[ 0 ], 1 );
+      T_eq_u32( ctx->worker_counter[ 1 ], 2 );
+    text: |
+      Tasks waiting at the semaphore shall be unblocked in FIFO order.
+  - name: Priority
+    test-code: |
+      T_eq_u32( ctx->worker_counter[ 0 ], 2 );
+      T_eq_u32( ctx->worker_counter[ 1 ], 1 );
+    text: |
+      Tasks waiting at the semaphore shall be unblocked in priority order.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->worker_counter[ 0 ], 0 );
+      T_eq_u32( ctx->worker_counter[ 1 ], 0 );
+    text: |
+      Tasks waiting at the semaphore shall remain blocked.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->valid_id = false;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is not associated
+      with a semaphore.
+  - name: Counting
+    test-code: |
+      ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
+      ctx->obtain_status = RTEMS_OBJECT_WAS_DELETED;
+    text: |
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a counting semaphore.
+  - name: Simple
+    test-code: |
+      ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
+      ctx->obtain_status = RTEMS_OBJECT_WAS_DELETED;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a simple binary semaphore.
+  - name: Binary
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a binary semaphore.
+  - name: PrioCeiling
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a priority ceiling semaphore.
+  - name: PrioInherit
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a priority inheritance semaphore.
+  - name: MrsP
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a MrsP semaphore.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      ctx->attribute_set |= RTEMS_FIFO;
+    text: |
+      While the semaphore uses the FIFO task wait queue discipline.
+  - name: Priority
+    test-code: |
+      ctx->attribute_set |= RTEMS_PRIORITY;
+    text: |
+      While the semaphore uses the priority task wait queue discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: GtZeroOrNoOwner
+    test-code: |
+      ctx->blocked = false;
+      ctx->count = 1;
+    text: |
+      While the semaphore has a count greater than zero or no owner.
+  - name: Zero
+    test-code: |
+      ctx->blocked = false;
+      ctx->count = 0;
+    text: |
+      While the semaphore has a count of zero or an owner.
+  - name: Blocked
+    test-code: |
+      ctx->blocked = true;
+      ctx->count = 0;
+    text: |
+      While the semaphore has tasks blocked on the semaphore.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NeedsPriorityDiscipline: |
+    Binary semaphores with a locking protocol are required to use the priority
+    task wait queue discipline.
+test-action: |
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_create(
+    NAME,
+    ctx->count,
+    ctx->attribute_set,
+    PRIO_ULTRA_HIGH,
+    &ctx->semaphore_id
+  );
+  T_rsc_success( sc );
+
+  if ( ctx->blocked ) {
+    WakeUp( ctx, 0 );
+    WakeUp( ctx, 1 );
+  }
+
+  if ( ctx->valid_id ) {
+    ctx->id = ctx->semaphore_id;
+  } else {
+    ctx->id = 0;
+  }
+
+  ctx->delete_status = rtems_semaphore_delete( ctx->id );
+test-brief: null
+test-cleanup: |
+  if ( ctx->semaphore_id != 0 ) {
+    rtems_status_code sc;
+
+    if ( ctx->count == 0 ) {
+      sc = rtems_semaphore_release( ctx->semaphore_id );
+      T_rsc_success( sc );
+    }
+
+    sc = rtems_semaphore_delete( ctx->semaphore_id );
+    T_rsc_success( sc );
+
+    ctx->semaphore_id = 0;
+  }
+test-context:
+- brief: |
+    This member contains the worker task identifiers.
+  description: null
+  member: |
+    rtems_id worker_id[ 2 ]
+- brief: |
+    This member contains the worker activity counter.
+  description: null
+  member: |
+    uint32_t counter
+- brief: |
+    This member contains the worker activity counter of a specific worker.
+  description: null
+  member: |
+    uint32_t worker_counter[ 2 ]
+- brief: |
+    This member specifies the expected ${../if/obtain:/name} status.
+  description: null
+  member: |
+    rtems_status_code obtain_status
+- brief: |
+    This member specifies if the initial count of the semaphore.
+  description: null
+  member: |
+    uint32_t count
+- brief: |
+    This member specifies if the attribute set of the semaphore.
+  description: null
+  member: |
+    rtems_attribute attribute_set
+- brief: |
+    This member contains the semaphore identifier.
+  description: null
+  member: |
+    rtems_id semaphore_id
+- brief: |
+    If this member is true, then the ${../if/create:/params[0]/name} parameter
+    shall be valid, otherwise it should be ${/c/if/null:/name}.
+  description: null
+  member: |
+    bool valid_id
+- brief: |
+    If this member is true, then tasks shall be blocked on the semaphore,
+    otherwise no tasks shall be blocked on the semaphore.
+  description: null
+  member: |
+    bool blocked
+- brief: |
+    This member specifies the ${../if/create:/params[0]/name} parameter for the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies the expected ${../if/delete:/name} status.
+  description: null
+  member: |
+    rtems_status_code delete_status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->counter = 0;
+  ctx->worker_counter[ 0 ] = 0;
+  ctx->worker_counter[ 1 ] = 0;
+  ctx->attribute_set = RTEMS_DEFAULT_ATTRIBUTES;
+  ctx->valid_id = true;
+  ctx->obtain_status = RTEMS_SUCCESSFUL;
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id[ 0 ] = CreateTask( "WRK0", PRIO_HIGH );
+    StartTask( ctx->worker_id[ 0 ], WorkerZero, ctx );
+    ctx->worker_id[ 1 ] = CreateTask( "WRK1", PRIO_VERY_HIGH );
+    StartTask( ctx->worker_id[ 1 ], WorkerOne, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define EVENT_OBTAIN RTEMS_EVENT_0
+
+  typedef ${.:/test-context-type} Context;
+
+  static void WakeUp( Context *ctx, size_t index )
+  {
+    SendEvents( ctx->worker_id[ index ], RTEMS_EVENT_0 );
+  }
+
+  static void Worker( rtems_task_argument arg, size_t index )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    /*
+     * In order to test the flush in FIFO order, we have to use the no-preempt
+     * mode.
+     */
+    SetMode( RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK );
+
+    while ( true ) {
+      rtems_status_code sc;
+      rtems_event_set   events;
+      uint32_t          counter;
+
+      events = ReceiveAnyEvents();
+      T_eq_u32( events, RTEMS_EVENT_0 );
+
+      sc = rtems_semaphore_obtain(
+        ctx->semaphore_id,
+        RTEMS_WAIT,
+        RTEMS_NO_TIMEOUT
+      );
+      T_rsc( sc, ctx->obtain_status );
+
+      counter = ctx->counter;
+      ++counter;
+      ctx->counter = counter;
+      ctx->worker_counter[ index ] = counter;
+
+      if ( sc == RTEMS_SUCCESSFUL ) {
+        sc = rtems_semaphore_release( ctx->semaphore_id );
+        T_rsc_success( sc );
+      }
+    }
+  }
+
+  static void WorkerZero( rtems_task_argument arg )
+  {
+    Worker( arg, 0 );
+  }
+
+  static void WorkerOne( rtems_task_argument arg )
+  {
+    Worker( arg, 1 );
+  }
+test-target: testsuites/validation/tc-sem-delete.c
+test-teardown:
+  brief: null
+  code: |
+    size_t i;
+
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_id ); ++i ) {
+      DeleteTask( ctx->worker_id[ i ] );
+    }
+
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Name: Valid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - NoObj
+    Discipline: all
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Invalid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - Binary
+    Discipline: all
+    State:
+    - GtZeroOrNoOwner
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Name: Valid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - Binary
+    Discipline: all
+    State:
+    - Zero
+    - Blocked
+- enabled-by: true
+  post-conditions: NeedsPriorityDiscipline
+  pre-conditions:
+    Id:
+    - PrioCeiling
+    - PrioInherit
+    - MrsP
+    Discipline:
+    - FIFO
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Invalid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - PrioCeiling
+    - PrioInherit
+    - MrsP
+    Discipline:
+    - Priority
+    State:
+    - GtZeroOrNoOwner
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Name: Valid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - PrioCeiling
+    - PrioInherit
+    - MrsP
+    Discipline:
+    - Priority
+    State:
+    - Zero
+    - Blocked
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Invalid
+    Flush:
+    - if:
+        pre-conditions:
+          State: Blocked
+      then-specified-by: Discipline
+    - else: 'No'
+  pre-conditions: default
+type: requirement

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/entry-initialize
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/entry-initialize:/name} directive is called, the ``next``
+  member of the object referenced by the
+  ${../if/entry-initialize:/params[0]/name} parameter shall be set to the value
+  equal to ${/c/if/null:/name}.
+type: requirement

@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  While thread dispatching is disabled, if the directive performs a thread
+  dispatch, then the fatal error with the fatal source
+  ${/score/interr/if/internal-error-core:/name} and the fatal code
+  ${/score/interr/if/bad-thread-dispatch-disable-level:/name} will occur.
+type: constraint

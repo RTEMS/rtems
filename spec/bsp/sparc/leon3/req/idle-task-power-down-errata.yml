@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: bsps/sparc/leon3
+links:
+- role: requirement-refinement
+  uid: idle-task-body
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/idle-thread:/name} function shall be implemented according to
+  ``Workaround 2`` of {errata-gr712rc-08}.
+type: requirement

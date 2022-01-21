@@ -1,0 +1,590 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/send
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/send:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/send:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/send:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: NotDef
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_DEFINED );
+    text: |
+      The return status of ${../if/send:/name} shall be
+      ${../../status/if/not-defined:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Handler
+  states:
+  - name: NoCall
+    test-code: |
+      T_eq_sz( ctx->calls_after_send, ctx->nested );
+      T_eq_sz( ctx->calls_after_dispatch, ctx->nested );
+      T_eq_sz( ctx->calls_after_enable, ctx->nested );
+    text: |
+      While the ASR processing is disabled, the ASR handler shall not be
+      called.
+  - name: DuringSend
+    test-code: |
+      ++expected_calls;
+      T_eq_sz( ctx->calls_after_send, ctx->nested + 1 );
+      T_eq_sz( ctx->calls_after_dispatch, ctx->nested + 1 );
+      T_eq_sz( ctx->calls_after_enable, ctx->nested + 1 );
+    text: |
+      The ASR handler shall be called during the ${../if/send:/name} call.
+  - name: AfterDispatch
+    test-code: |
+      ++expected_calls;
+      T_eq_sz( ctx->calls_after_send, ctx->nested );
+      T_eq_sz( ctx->calls_after_dispatch, ctx->nested + 1 );
+      T_eq_sz( ctx->calls_after_enable, ctx->nested + 1 );
+    text: |
+      When the next thread dispatch of the target task of the
+      ${../if/send:/name} call takes place, the ASR handler shall be called.
+  - name: AfterEnable
+    test-code: |
+      ++expected_calls;
+      T_eq_sz( ctx->calls_after_send, ctx->nested );
+      T_eq_sz( ctx->calls_after_dispatch, ctx->nested );
+      T_eq_sz( ctx->calls_after_enable, ctx->nested + 1 );
+    text: |
+      When the target task of the ${../if/send:/name} call re-enables ASR
+      processing, the ASR handler shall be called.
+  test-epilogue: |
+    T_eq_sz( ctx->handler_calls, expected_calls );
+
+    if ( ctx->nested != 0 ) {
+      T_eq_u32( ctx->processed_signal_sets[ 0 ], 0x600df00d );
+    }
+
+    if ( expected_calls > ctx->nested ) {
+      T_eq_u32( ctx->processed_signal_sets[ ctx->nested ], 0xdeadbeef );
+    }
+  test-prologue: |
+    size_t expected_calls;
+
+    expected_calls = ctx->nested;
+- name: Recursive
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_sz( ctx->handler_calls, 2 );
+      T_ne_uptr( ctx->stack_pointers[ 0 ], 0 );
+      T_ne_uptr( ctx->stack_pointers[ 1 ], 0 );
+      T_ne_uptr( ctx->stack_pointers[ 0 ], ctx->stack_pointers[ 1 ] );
+    text: |
+      The ASR handler shall be called recursively.
+  - name: 'No'
+    test-code: |
+      if ( ctx->handler_calls == 2 ) {
+        T_ne_uptr( ctx->stack_pointers[ 0 ], 0 );
+        T_ne_uptr( ctx->stack_pointers[ 1 ], 0 );
+        T_eq_uptr( ctx->stack_pointers[ 0 ], ctx->stack_pointers[ 1 ] );
+      }
+    text: |
+      The ASR handler shall not be called recursively.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Task
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      While the ${../if/send:/params[0]/name} parameter is not associated with
+      a task.
+  - name: Self
+    test-code: |
+      ctx->id = RTEMS_SELF;
+    text: |
+      While the ${../if/send:/params[0]/name} parameter is associated with
+      the calling task.
+  - name: Other
+    test-code: |
+      ctx->id = ctx->worker_id;
+    text: |
+      While the ${../if/send:/params[0]/name} parameter is associated with a
+      task other than the calling task.
+  test-epilogue: null
+  test-prologue: null
+- name: Set
+  states:
+  - name: Zero
+    test-code: |
+      ctx->signal_set = 0;
+    text: |
+      While the ${../if/send:/params[1]/name} parameter is zero.
+  - name: NonZero
+    test-code: |
+      ctx->signal_set = 0xdeadbeef;
+    text: |
+      While the ${../if/send:/params[1]/name} parameter is non-zero.
+  test-epilogue: null
+  test-prologue: null
+- name: Handler
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->handler = NULL;
+    text: |
+      While the target task has no valid ASR handler installed.
+  - name: Valid
+    test-code: |
+      ctx->handler = SignalHandler;
+    text: |
+      While the target task has a valid ASR handler installed.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: Enabled
+    test-code: |
+      ctx->mode = RTEMS_DEFAULT_MODES;
+    text: |
+      While the target task has ASR processing enabled.
+  - name: Disabled
+    test-code: |
+      ctx->mode = RTEMS_NO_ASR;
+    text: |
+      While the target task has ASR processing disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Nested
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->nested = 1;
+    text: |
+      While the target task processes an asynchronous signal.
+  - name: 'No'
+    test-code: |
+      ctx->nested = 0;
+    text: |
+      While the target task does not process an asynchronous signal.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_status_code sc;
+
+  if ( ctx->id == ctx->worker_id ) {
+    SendEventsToWorker( ctx, EVENT_START );
+
+    StartDelayThreadDispatch( 1 );
+    ctx->status = rtems_signal_send( ctx->id, ctx->signal_set );
+    ctx->calls_after_send = ctx->handler_calls;
+    StopDelayThreadDispatch( 1 );
+
+    SendEventsToWorker( ctx, EVENT_SEND_DONE );
+    ctx->calls_after_dispatch = ctx->handler_calls;
+    SendEventsToWorker( ctx, EVENT_DO_ENABLE );
+    ctx->calls_after_enable = ctx->handler_calls;
+    SendEventsToWorker( ctx, EVENT_END );
+  } else if ( ctx->nested != 0 ) {
+    sc = rtems_signal_catch( SignalHandler, ctx->mode );
+    T_rsc_success( sc );
+
+    sc = rtems_signal_send( RTEMS_SELF, 0x600df00d );
+    T_rsc_success( sc );
+
+    ctx->calls_after_enable = ctx->handler_calls;
+  } else {
+    rtems_mode mode;
+
+    sc = rtems_task_mode( ctx->mode, RTEMS_ASR_MASK, &mode );
+    T_rsc_success( sc );
+
+    sc = rtems_signal_catch( ctx->handler, RTEMS_NO_ASR );
+    T_rsc_success( sc );
+
+    ctx->status = rtems_signal_send( ctx->id, ctx->signal_set );
+    ctx->calls_after_send = ctx->handler_calls;
+    ctx->calls_after_dispatch = ctx->handler_calls;
+
+    sc = rtems_task_mode( mode, RTEMS_ASR_MASK, &mode );
+    T_rsc_success( sc );
+
+    ctx->calls_after_enable = ctx->handler_calls;
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: null
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_asr_entry handler
+- brief: null
+  description: null
+  member: |
+    size_t nested
+- brief: null
+  description: null
+  member: |
+    size_t handler_calls
+- brief: null
+  description: null
+  member: |
+    size_t calls_after_send
+- brief: null
+  description: null
+  member: |
+    size_t calls_after_dispatch
+- brief: null
+  description: null
+  member: |
+    size_t calls_after_enable
+- brief: null
+  description: null
+  member: |
+    rtems_signal_set processed_signal_sets[ 2 ]
+- brief: null
+  description: null
+  member: |
+    uintptr_t stack_pointers[ 2 ];
+- brief: null
+  description: null
+  member: |
+    rtems_mode mode;
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+- brief: null
+  description: null
+  member: |
+    rtems_id id
+- brief: null
+  description: null
+  member: |
+    rtems_signal_set signal_set
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->handler_calls = 0;
+  ctx->calls_after_send = 0;
+  ctx->calls_after_dispatch = 0;
+  ctx->calls_after_enable = 0;
+  memset( &ctx->processed_signal_sets, 0, sizeof( ctx->processed_signal_sets ) );
+  memset( &ctx->stack_pointers, 0, sizeof( ctx->stack_pointers ) );
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->runner_id = rtems_task_self();
+    SetSelfPriority( PRIO_NORMAL );
+
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+
+    #if defined(RTEMS_SMP)
+    if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+      rtems_status_code sc;
+      rtems_id          scheduler_id;
+
+      sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
+      T_assert_rsc_success( sc );
+
+      sc = rtems_task_set_scheduler( ctx->worker_id, scheduler_id, PRIO_HIGH );
+      T_assert_rsc_success( sc );
+    }
+    #endif
+
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define EVENT_START RTEMS_EVENT_0
+
+  #define EVENT_SEND_DONE RTEMS_EVENT_1
+
+  #define EVENT_DO_ENABLE RTEMS_EVENT_2
+
+  #define EVENT_END RTEMS_EVENT_3
+
+  #define EVENT_WORKER_DONE RTEMS_EVENT_4
+
+  typedef ${.:/test-context-type} Context;
+
+  static void WorkerDone( const Context *ctx )
+  {
+  #if defined(RTEMS_SMP)
+    if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+      SendEvents( ctx->runner_id, EVENT_WORKER_DONE );
+    }
+  #endif
+  }
+
+  static void SendEventsToWorker( const Context *ctx, rtems_event_set events )
+  {
+    SendEvents( ctx->worker_id, events );
+
+  #if defined(RTEMS_SMP)
+    if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+      events = ReceiveAnyEvents();
+      T_eq_u32( events, EVENT_WORKER_DONE );
+    }
+  #endif
+  }
+
+  static void SignalHandler( rtems_signal_set signal_set )
+  {
+    Context *ctx;
+    size_t   i;
+    size_t   n;
+
+    ctx = T_fixture_context();
+    i = ctx->handler_calls;
+    n = RTEMS_ARRAY_SIZE( ctx->processed_signal_sets );
+    ctx->processed_signal_sets[ i % n ] = signal_set;
+    ctx->stack_pointers[ i % n ] = (uintptr_t) __builtin_frame_address( 0 );
+    T_lt_sz( i, n );
+    ctx->handler_calls = i + 1;
+
+    if ( ctx->nested != 0 && i == 0 ) {
+      rtems_status_code sc;
+
+      if ( ctx->id == ctx->worker_id ) {
+        rtems_event_set events;
+
+        sc = rtems_signal_catch( ctx->handler, RTEMS_NO_ASR );
+        T_rsc_success( sc );
+
+        WorkerDone( ctx );
+
+        events = ReceiveAnyEvents();
+        T_eq_u32( events, EVENT_SEND_DONE );
+
+        WorkerDone( ctx );
+
+        events = ReceiveAnyEvents();
+        T_eq_u32( events, EVENT_DO_ENABLE );
+      } else {
+        sc = rtems_signal_catch( ctx->handler, RTEMS_NO_ASR );
+        T_rsc_success( sc );
+
+        ctx->status = rtems_signal_send( ctx->id, ctx->signal_set );
+        ctx->calls_after_send = ctx->handler_calls;
+        ctx->calls_after_dispatch = ctx->handler_calls;
+      }
+    }
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code sc;
+      rtems_event_set   events;
+
+      events = ReceiveAnyEvents();
+      T_eq_u32( events, EVENT_START );
+
+      if ( ctx->nested != 0 ) {
+        sc = rtems_signal_catch( SignalHandler, ctx->mode );
+        T_rsc_success( sc );
+
+        sc = rtems_signal_send( RTEMS_SELF, 0x600df00d );
+        T_rsc_success( sc );
+
+        WorkerDone( ctx );
+      } else {
+        rtems_mode mode;
+
+        sc = rtems_task_mode( ctx->mode, RTEMS_ASR_MASK, &mode );
+        T_rsc_success( sc );
+
+        sc = rtems_signal_catch( ctx->handler, RTEMS_NO_ASR );
+        T_rsc_success( sc );
+
+        WorkerDone( ctx );
+
+        events = ReceiveAnyEvents();
+        T_eq_u32( events, EVENT_SEND_DONE );
+
+        WorkerDone( ctx );
+
+        events = ReceiveAnyEvents();
+        T_eq_u32( events, EVENT_DO_ENABLE );
+
+        sc = rtems_task_mode( mode, RTEMS_ASR_MASK, &mode );
+        T_rsc_success( sc );
+
+        WorkerDone( ctx );
+      }
+
+      events = ReceiveAnyEvents();
+      T_eq_u32( events, EVENT_END );
+
+      WorkerDone( ctx );
+    }
+  }
+test-target: testsuites/validation/tc-signal-send.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Handler: NoCall
+    Recursive: 'No'
+  pre-conditions:
+    Task: all
+    Set:
+    - Zero
+    Handler: all
+    ASR: all
+    Nested: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Handler: NoCall
+    Recursive: 'No'
+  pre-conditions:
+    Task:
+    - NoObj
+    Set:
+    - NonZero
+    Handler: all
+    ASR: all
+    Nested: all
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    Handler: NoCall
+    Recursive: 'No'
+  pre-conditions:
+    Task:
+    - Self
+    - Other
+    Set:
+    - NonZero
+    Handler:
+    - Invalid
+    ASR: all
+    Nested: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Handler: AfterEnable
+    Recursive: 'No'
+  pre-conditions:
+    Task:
+    - Self
+    - Other
+    Set:
+    - NonZero
+    Handler:
+    - Valid
+    ASR:
+    - Disabled
+    Nested: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Handler: DuringSend
+    Recursive: 'No'
+  pre-conditions:
+    Task:
+    - Self
+    Set:
+    - NonZero
+    Handler:
+    - Valid
+    ASR:
+    - Enabled
+    Nested:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Handler: AfterDispatch
+    Recursive: 'No'
+  pre-conditions:
+    Task:
+    - Other
+    Set:
+    - NonZero
+    Handler:
+    - Valid
+    ASR:
+    - Enabled
+    Nested:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Handler: DuringSend
+    Recursive: 'Yes'
+  pre-conditions:
+    Task:
+    - Self
+    Set:
+    - NonZero
+    Handler:
+    - Valid
+    ASR:
+    - Enabled
+    Nested:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Handler: AfterDispatch
+    Recursive: 'Yes'
+  pre-conditions:
+    Task:
+    - Other
+    Set:
+    - NonZero
+    Handler:
+    - Valid
+    ASR:
+    - Enabled
+    Nested:
+    - 'Yes'
+type: requirement

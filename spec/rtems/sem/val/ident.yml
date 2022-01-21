@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/ident
+test-actions:
+- action-brief: |
+    Run the generic object identification tests for Classic API semaphore class
+    objects defined by ${../../req/ident}.
+  action-code: |
+    rtems_status_code sc;
+    rtems_id          id_local_object;
+
+    sc = rtems_semaphore_create(
+      ClassicObjectIdentName,
+      0,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      0,
+      &id_local_object
+    );
+    T_assert_rsc_success( sc );
+
+    ${../../req/ident:/test-run}(
+      id_local_object,
+      ClassicSemIdentAction
+    );
+
+    sc = rtems_semaphore_delete( id_local_object );
+    T_rsc_success( sc );
+  checks: []
+  links: []
+test-brief: Test the ${../if/ident:/name} directive.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes: []
+test-local-includes:
+- tr-object-ident.h
+test-setup: null
+test-stop: null
+test-support: |
+  static rtems_status_code ClassicSemIdentAction(
+    rtems_name name,
+    uint32_t   node,
+    rtems_id  *id
+  )
+  {
+    return rtems_semaphore_ident( name, node, id );
+  }
+test-target: testsuites/validation/tc-sem-ident.c
+test-teardown: null
+type: test-case

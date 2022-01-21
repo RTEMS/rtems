@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/signal-00
+- role: interface-function
+  uid: ../if/signal-01
+- role: interface-function
+  uid: ../if/signal-02
+- role: interface-function
+  uid: ../if/signal-03
+- role: interface-function
+  uid: ../if/signal-04
+- role: interface-function
+  uid: ../if/signal-05
+- role: interface-function
+  uid: ../if/signal-06
+- role: interface-function
+  uid: ../if/signal-07
+- role: interface-function
+  uid: ../if/signal-08
+- role: interface-function
+  uid: ../if/signal-09
+- role: interface-function
+  uid: ../if/signal-10
+- role: interface-function
+  uid: ../if/signal-11
+- role: interface-function
+  uid: ../if/signal-12
+- role: interface-function
+  uid: ../if/signal-13
+- role: interface-function
+  uid: ../if/signal-14
+- role: interface-function
+  uid: ../if/signal-15
+- role: interface-function
+  uid: ../if/signal-16
+- role: interface-function
+  uid: ../if/signal-17
+- role: interface-function
+  uid: ../if/signal-18
+- role: interface-function
+  uid: ../if/signal-19
+- role: interface-function
+  uid: ../if/signal-20
+- role: interface-function
+  uid: ../if/signal-21
+- role: interface-function
+  uid: ../if/signal-22
+- role: interface-function
+  uid: ../if/signal-23
+- role: interface-function
+  uid: ../if/signal-24
+- role: interface-function
+  uid: ../if/signal-25
+- role: interface-function
+  uid: ../if/signal-26
+- role: interface-function
+  uid: ../if/signal-27
+- role: interface-function
+  uid: ../if/signal-28
+- role: interface-function
+  uid: ../if/signal-29
+- role: interface-function
+  uid: ../if/signal-30
+- role: interface-function
+  uid: ../if/signal-31
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Let :math:`J\in\{0, 1, ..., 31\}`.  The :math:`J`-th signal constant shall be
+  a constant expression which evaluates to the integer representation of signal
+  :math:`J`.
+type: requirement

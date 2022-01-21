@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/static-assert
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the argument ${../if/static-assert:/params[0]/name} after
+  applying all possible C pre-processor substitutions to its
+  value results in a valid C expression of integral type,
+  and this expression can be evaluated at compile time,
+  and the argument ${../if/static-assert:/params[1]/name} which
+  may or may not undergo C pre-processor substitutions results
+  into a valid C identifier,
+  the ${../if/static-assert:/name} macro shall cause the compiler to
+  produce a compilation error if the expression resulting from
+  ${../if/static-assert:/params[0]/name} evaluates to 0.
+type: requirement

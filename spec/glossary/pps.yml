@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: PPS
+text: |
+  This term is an acronym for
+  `Pulse-Per-Second <https://en.wikipedia.org/wiki/Pulse-per-second_signal>`_.
+type: glossary

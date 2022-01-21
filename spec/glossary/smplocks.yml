@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: SMP locks
+text: |
+  The SMP locks ensure mutual exclusion on the lowest level and are a
+  replacement for the sections of disabled interrupts.  Interrupts are
+  usually disabled while holding an SMP lock.  They are implemented using
+  atomic operations.  Currently a ticket lock is used in RTEMS.
+type: glossary

@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This header file provides basic definitions used by the API and
+  the implementation.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: header-file
+links:
+- enabled-by: true
+  role: interface-include
+  uid: /build-options/if/cpuopts
+- enabled-by:
+    not: ASM
+  role: interface-include
+  uid: /c/if/stddef
+- enabled-by:
+    not: ASM
+  role: interface-include
+  uid: /c/if/stdbool
+- enabled-by:
+    not: ASM
+  role: interface-include
+  uid: /c/if/stdint
+- role: interface-placement
+  uid: /if/domain
+path: rtems/score/basedefs.h
+prefix: cpukit/include
+type: interface

@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Defines a structure which can be used as a message queue buffer for messages
+  of the specified maximum size.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    struct {
+      ${/score/msgq/if/buffer:/name} _buffer;
+      char _message[ ${.:/params[0]/name} ];
+    }
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_MESSAGE_QUEUE_BUFFER
+notes: |
+  Use this macro to define the message buffer storage area for
+  ${construct:/name}.
+params:
+- description: |
+    is the maximum message size in bytes.
+  dir: null
+  name: _maximum_message_size
+return: null
+type: interface

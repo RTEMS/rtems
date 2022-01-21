@@ -1,0 +1,521 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/cancel
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/cancel:/name} shall be
+      ${../../status/if/successful:/name}
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/cancel:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: NotOwn
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_OWNER_OF_RESOURCE );
+    text: |
+      The return status of ${../if/cancel:/name} shall be
+      ${../../status/if/not-owner-of-resource:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      T_eq_int( ctx->period_status.state, RATE_MONOTONIC_INACTIVE );
+    text: |
+      The ${../glossary/state:/term} of the period shall be
+      ${../glossary/inactive:/term} after the return of the
+      ${../if/cancel:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->period_status.state, ctx->previous_state );
+    text: |
+      Objects referenced by the ${../if/cancel:/params[0]/name}
+      parameter in past calls to ${../if/cancel:/name} shall not be
+      accessed by the ${../if/cancel:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: Postponed
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_u32( ctx->period_status.postponed_jobs_count, 0 );
+    text: |
+      There shall be no ${../glossary/postponedjob:/plural}
+      after the return of the ${../if/cancel:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->period_status.postponed_jobs_count,
+        ctx->postponed_jobs_count );
+    text: |
+      Objects referenced by the ${../if/cancel:/params[0]/name}
+      parameter in past calls to ${../if/cancel:/name} shall not be
+      accessed by the ${../if/cancel:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Called
+    test-code: |
+      /* Cannot be tested as the effect is unknown. */
+    text: |
+      The last call of the ${../if/cancel:/name} function shall execute
+      the ``cancel_job`` ${../glossary/scheduleroperation:/term} of the
+      ${/glossary/scheduler-home:/term}.
+  - name: Nop
+    test-code: |
+      /* Cannot be tested as the effect is unknown. */
+    text: |
+      The last call of the ${../if/cancel:/name} function shall not execute
+      any ${../glossary/scheduleroperation:/term}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_param = ctx->period_id;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->id_param = RTEMS_ID_NONE;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Caller
+  states:
+  - name: OwnerTask
+    test-code: |
+      ctx->do_action = Action;
+    text: |
+      While the ${/glossary/task:/term} invoking ${../if/cancel:/name} is
+      the ${/glossary/task:/term} which created the period -
+      the ${../glossary/ownertask:/term}.
+  - name: OtherTask
+    test-code: |
+      ctx->do_action = WorkerTaskAction;
+    text: |
+      While the ${/glossary/task:/term} invoking ${../if/cancel:/name} is not
+      the ${../glossary/ownertask:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      /* Nothing to do here as the period is newly created. */
+      ctx->previous_state = RATE_MONOTONIC_INACTIVE;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter references an
+      period object in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
+  - name: Active
+    test-code: |
+      rtems_status_code status;
+      status = rtems_rate_monotonic_period( ctx->period_id, period_length );
+      T_rsc_success( status );
+      ctx->previous_state = RATE_MONOTONIC_ACTIVE;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter references an
+      period object in ${../glossary/active:/term} ${../glossary/state:/term}.
+  - name: Expired
+    test-code: |
+      rtems_status_code status;
+      status = rtems_rate_monotonic_period( ctx->period_id, period_length );
+      T_rsc_success( status );
+      ctx->previous_state = RATE_MONOTONIC_EXPIRED;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter references an
+      period object in ${../glossary/expired:/term}
+      ${../glossary/state:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Postponed
+  states:
+  - name: Zero
+    test-code:  |
+      ctx->postponed_jobs_count = 0;
+    text: |
+      While the period is not in ${../glossary/expired:/term}
+      ${../glossary/state:/term}.
+  - name: One
+    test-code: |
+      CreatePostponedJobs( ctx, 1 );
+    text: |
+      While there is one ${../glossary/postponedjob:/term}.
+  - name: Several
+    test-code: |
+      CreatePostponedJobs( ctx, 5 );
+    text: |
+      While there are two or more ${../glossary/postponedjob:/plural}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NotInInactiveState: |
+    ${../glossary/postponedjob:/plural} do not exist in
+    ${../glossary/inactive:/term} ${../glossary/state:/term}.
+  NeverInExpiredState: |
+    There must be ${../glossary/postponedjob:/plural} in
+    ${../glossary/expired:/term} ${../glossary/state:/term}.
+test-action: |
+  rtems_status_code status;
+
+  ctx->do_action( ctx );
+
+  status = rtems_rate_monotonic_get_status(
+    ctx->period_id,
+    &ctx->period_status
+  );
+  T_rsc_success( status );
+test-brief: null
+test-cleanup: |
+  T_rsc_success( rtems_rate_monotonic_delete( ctx->period_id ) );
+test-context:
+- brief: |
+    This member contains a valid identifier of a period.
+  description: null
+  member: |
+    rtems_id period_id
+- brief: |
+    This member is used to receive the ${../if/period-status:/name}
+    after the action.
+  description: null
+  member: |
+    rtems_rate_monotonic_period_status period_status
+- brief: |
+    This member specifies the ${../if/cancel:/params[0]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_id id_param
+- brief: |
+    This member contains the returned ${/glossary/statuscode:/term}
+    of the action.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member contains the pointer to the function which executes the action.
+  description: |
+    The action is either executed by the ${../glossary/ownertask:/term}
+    or by the worker ${/glossary/task:/term} depending on the function pointer
+    used here.  ``argument`` is a pointer to this context structure.
+  member: |
+    void ( *do_action )( void *ctx )
+- brief: |
+    This member contains the ${/glossary/task:/term} identifier of the
+    ${../glossary/ownertask:/term}.
+  description: null
+  member: |
+    rtems_id task_id
+- brief: |
+    This member contains the ${/glossary/task:/term} identifier of the
+    worker ${/glossary/task:/term} (which is not the
+    ${../glossary/ownertask:/term}).
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member contains a backup of the ${/glossary/priority-task:/term}
+    before the execution of this test.
+  description: null
+  member: |
+    rtems_id original_priority
+- brief: |
+    This member contains the number of ${../glossary/postponedjob:/plural}
+    before the action.
+  description: null
+  member: |
+    uint32_t postponed_jobs_count
+- brief: |
+    This member contains the ${../glossary/state:/term}
+    before the action.
+  description: null
+  member: |
+    rtems_rate_monotonic_period_states previous_state
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_status_code status;
+  status =  rtems_rate_monotonic_create(
+    rtems_build_name( 'R', 'M', 'O', 'N' ),
+    &ctx->period_id
+  );
+  T_rsc_success( status );
+
+  ctx->postponed_jobs_count = 0;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code status;
+    rtems_task_priority priority;
+    rtems_event_set event_set;
+    ctx->worker_id = RTEMS_INVALID_ID;
+
+    status = rtems_task_ident(
+      RTEMS_SELF,
+      RTEMS_SEARCH_ALL_NODES,
+      &ctx->task_id
+    );
+    T_rsc_success( status );
+
+    status = rtems_task_set_priority(
+      RTEMS_SELF,
+      RTEMS_CURRENT_PRIORITY,
+      &ctx->original_priority
+    );
+    T_rsc_success( status );
+
+    status = rtems_task_set_priority(
+      RTEMS_SELF,
+      background_task_priority,
+      &priority
+    );
+    T_rsc_success( status );
+
+    status = rtems_task_create(
+      rtems_build_name( 'W', 'O', 'R', 'K' ),
+      foreground_task_priority,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->worker_id
+    );
+    T_rsc_success( status );
+
+    /* Defensive programming: clean away any pending events */
+    status = rtems_event_receive(
+      RTEMS_ALL_EVENTS,
+      RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+      RTEMS_NO_TIMEOUT,
+      &event_set
+    );
+    T_true( status == RTEMS_SUCCESSFUL || status == RTEMS_UNSATISFIED );
+
+    status = rtems_task_start(
+      ctx->worker_id,
+      WorkerTask,
+      (rtems_task_argument) NULL
+    );
+    T_rsc_success( status );
+  description: null
+test-stop: null
+test-support: |
+  static const rtems_interval period_length = 5;
+  static const rtems_task_priority background_task_priority = 100;
+  static const rtems_task_priority foreground_task_priority = 10;
+  static const rtems_event_set wake_main_task_event = RTEMS_EVENT_17;
+
+  static void TickTheClock(
+    RtemsRatemonReqCancel_Context *ctx,
+    uint32_t ticks
+  )
+  {
+    uint32_t i;
+    for ( i = 0; i < ticks; ++i ) {
+      TimecounterTick();
+    }
+  }
+
+  static void Action( void *ctx_in )
+  {
+    RtemsRatemonReqCancel_Context *ctx = ctx_in;
+    ctx->status = rtems_rate_monotonic_cancel( ctx->id_param );
+  }
+
+  static void WorkerTask( rtems_task_argument argument )
+  {
+    RtemsRatemonReqCancel_Context *ctx =
+      (RtemsRatemonReqCancel_Context *) argument;
+
+    if ( ctx != NULL ) {
+      Action( ctx );
+      T_rsc_success( rtems_event_send( ctx->task_id, wake_main_task_event ) );
+    }
+
+    T_rsc_success( rtems_task_suspend( RTEMS_SELF ) );
+  }
+
+  static void WorkerTaskAction( void *ctx_in )
+  {
+    rtems_status_code status;
+    rtems_event_set event_set;
+    RtemsRatemonReqCancel_Context *ctx = ctx_in;
+
+    status = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
+    T_rsc_success( status );
+
+    /* Wait till the worker task finishes */
+    status = rtems_event_receive(
+      wake_main_task_event,
+      RTEMS_DEFAULT_OPTIONS,
+      RTEMS_NO_TIMEOUT,
+      &event_set
+    );
+    T_rsc_success( status );
+  }
+
+  static void CreatePostponedJobs(
+    RtemsRatemonReqCancel_Context *ctx,
+    uint32_t jobs_count
+  )
+  {
+    rtems_status_code status;
+    ctx->postponed_jobs_count = jobs_count;
+    if ( ctx->previous_state == RATE_MONOTONIC_ACTIVE ) {
+      TickTheClock( ctx, ( jobs_count + 1 ) * period_length );
+      status = rtems_rate_monotonic_period( ctx->period_id, period_length );
+      T_rsc( status, RTEMS_TIMEOUT );
+    } else {
+      /* ctx->previous_state == RATE_MONOTONIC_INACTIVE || _EXPIRED */
+      TickTheClock( ctx, jobs_count * period_length );
+    }
+  }
+test-target: testsuites/validation/tc-ratemon-cancel.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code status;
+    rtems_task_priority priority;
+
+    T_rsc_success( rtems_task_delete( ctx->worker_id ) );
+
+    status = rtems_task_set_priority(
+      RTEMS_SELF,
+      ctx->original_priority,
+      &priority
+    );
+    T_rsc_success( status );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    State: Inactive
+    Postponed: N/A
+    Scheduler: Called
+  pre-conditions:
+    Id:
+      - Valid
+    Caller:
+      - OwnerTask
+    State:
+      - Inactive
+    Postponed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    State: Inactive
+    Postponed: Zero
+    Scheduler: Called
+  pre-conditions:
+    Id:
+      - Valid
+    Caller:
+      - OwnerTask
+    State:
+      - Active
+      - Expired
+    Postponed: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    State: Nop
+    Postponed: Nop
+    Scheduler: Nop
+  pre-conditions:
+    Id:
+      - Invalid
+    Caller: all
+    State:
+      - Inactive
+    Postponed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    State: Nop
+    Postponed: Nop
+    Scheduler: Nop
+  pre-conditions:
+    Id:
+      - Invalid
+    Caller: all
+    State:
+      - Active
+      - Expired
+    Postponed: all
+- enabled-by: true
+  post-conditions:
+    Status: NotOwn
+    State: Nop
+    Postponed: Nop
+    Scheduler: Nop
+  pre-conditions:
+    Id:
+      - Valid
+    Caller:
+      - OtherTask
+    State:
+      - Inactive
+    Postponed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: NotOwn
+    State: Nop
+    Postponed: Nop
+    Scheduler: Nop
+  pre-conditions:
+    Id:
+      - Valid
+    Caller:
+      - OtherTask
+    State:
+      - Active
+      - Expired
+    Postponed: all
+- enabled-by: true
+  post-conditions: NotInInactiveState
+  pre-conditions:
+    Id: all
+    Caller: all
+    State:
+      - Inactive
+    Postponed:
+      - One
+      - Several
+- enabled-by: true
+  post-conditions: NeverInExpiredState
+  pre-conditions:
+    Id: all
+    Caller: all
+    State:
+      - Expired
+    Postponed:
+      - Zero
+type: requirement

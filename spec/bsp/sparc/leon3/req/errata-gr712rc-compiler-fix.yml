@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: sparc/gr712rc
+links:
+- role: requirement-refinement
+  uid: errata-gr712rc-13
+- role: requirement-refinement
+  uid: errata-gr712rc-16
+- role: requirement-refinement
+  uid: errata-gr712rc-17
+- role: requirement-refinement
+  uid: errata-gr712rc-20
+non-functional-type: design
+rationale: |
+  This compiler option enables workarounds for chip errata.
+references: []
+requirement-type: non-functional
+text: |
+  The software product shall be compiled using the ``-mfix-gr712rc`` compiler
+  option.
+type: requirement

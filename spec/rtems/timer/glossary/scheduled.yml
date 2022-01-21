@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: scheduled
+text: |
+  A timer in scheduled ${../glossary/state:/term} is set to
+  ${../glossary/fire:/term} at a defined point in the future. A timer enters
+  scheduled ${../glossary/state:/term} when the user calls one of the directives
+  listed below or ${../if/reset:/name} and these directives return
+  ${/glossary/statuscode:/term} ${../../status/if/successful:/name}.
+
+  All directives called on a timer are executed in strict sequential order. The
+  timer remembers the data from the last call (if any) to one of the four
+  directives listed below till another call to one of these directives
+  overwrites the remembered data or the timer is deleted. This stored data is
+  used when the ${../if/reset:/name} directive is called.
+
+  The table below lists the directives which schedule a single invocation of a
+  ${../glossary/timerserviceroutine:/term}. The table states the
+  ${../glossary/context:/term} in which the
+  ${../glossary/timerserviceroutine:/term} will be invoked and the
+  ${../glossary/clock:/term} which ${/glossary/rtems:/term} uses to determine
+  when to ${../glossary/fire:/term} the execution.
+
+  .. list-table:: Timer scheduling directives set ${../glossary/clock:/term} and ${../glossary/context:/term}
+     :widths: 20 10 10
+     :header-rows: 1
+
+     * - Directive
+       - Execution ${../glossary/context:/term}
+       - ${../glossary/clock:/term} used
+     * - ${../if/fire-after:/name}
+       - ${../glossary/interruptcontext:/term}
+       - ${../glossary/ticksbasedclock:/term}
+     * - ${../if/fire-when:/name}
+       - ${../glossary/interruptcontext:/term}
+       - ${../glossary/realtimeclock:/term}
+     * - ${../if/server-fire-after:/name}
+       - ${../glossary/servercontext:/term}
+       - ${../glossary/ticksbasedclock:/term}
+     * - ${../if/server-fire-when:/name}
+       - ${../glossary/servercontext:/term}
+       - ${../glossary/realtimeclock:/term}
+type: glossary

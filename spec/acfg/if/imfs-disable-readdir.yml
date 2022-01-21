@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default: |
+  If this configuration option is undefined, then the root IMFS supports
+  reading directories.
+description: |
+  In case this configuration option is defined, then the root IMFS does not
+  support reading directories (no support for ${/c/if/readdir:/name}).  It is
+  still possible to open files in a directory.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_IMFS_DISABLE_READDIR
+notes: null
+type: interface

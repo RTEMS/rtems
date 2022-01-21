@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/storage-alignment
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/storage-alignment:/name} constant shall expand to a constant
+  expression which evaluates to the value of
+  ${/score/cpu/if/stack-alignment:/name}.
+type: requirement

@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Fires the timer after the interval.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../type/if/interval:/name} ${.:/params[1]/name}
+    - ${service-routine-entry:/name} ${.:/params[2]/name}
+    - void *${.:/params[3]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive initiates the timer specified by ${.:/params[0]/name}.  If the
+  timer is running, it is automatically canceled before being initiated.  The
+  timer is scheduled to fire after an interval of clock ticks has passed
+  specified by ${.:/params[1]/name}.  When the timer fires, the timer service
+  routine ${.:/params[2]/name} will be invoked with the argument
+  ${.:/params[3]/name} in the context of the clock tick ${/glossary/isr:/term}.
+enabled-by: true
+index-entries:
+- fire a timer after an interval
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_timer_fire_after
+notes: null
+params:
+- description: is the timer identifier.
+  dir: null
+  name: id
+- description: is the interval until the routine is fired in clock ticks.
+  dir: null
+  name: ticks
+- description: is the routine to schedule.
+  dir: null
+  name: routine
+- description: is the argument passed to the routine when it is fired.
+  dir: null
+  name: user_data
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was 0.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no timer associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

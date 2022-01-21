@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: group
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The clock implementation shall provide a simple timecounter tick service for
+  timecounter devices with a period equal to the ${/glossary/clock-tick:/term}
+  interval.
+type: requirement

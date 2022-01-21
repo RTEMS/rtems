@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Initiates the Timer Server.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/priority:/name} ${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive initiates the Timer Server task.  This task is responsible for
+  executing all timers initiated via the ${server-fire-after:/name} or
+  ${server-fire-when:/name} directives.
+enabled-by: true
+index-entries:
+- initiate the Timer Server
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
+name: rtems_timer_initiate_server
+notes: |
+  The Timer Server task is created using the ${../../task/if/create:/name}
+  directive and must be accounted for when configuring the system.
+params:
+- description: is the task priority.
+  dir: null
+  name: priority
+- description: is the task stack size in bytes.
+  dir: null
+  name: stack_size
+- description: is the task attribute set.
+  dir: null
+  name: attribute_set
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The Timer Server was already initiated.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The task priority was invalid.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      There was no inactive task object available to create the Timer Server
+      task.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      There was not enough memory to allocate the task storage area.  The task
+      storage area contains the task stack, the thread-local storage, and the
+      floating point context.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      One of the task create extensions failed to create the Timer Server task.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

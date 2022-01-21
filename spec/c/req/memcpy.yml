@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/memcpy
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/memcpy:/name} function  shall be specified by
+  ${/glossary/c11:/term}.
+type: requirement

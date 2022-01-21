@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/ident
+test-actions:
+- action-brief: |
+    Run the generic object identification tests for Classic API rate monotonic
+    class objects defined by ${../../req/ident-local}.
+  action-code: |
+    rtems_status_code sc;
+    rtems_id          id_local_object;
+
+    sc = rtems_rate_monotonic_create(
+      ClassicObjectLocalIdentName,
+      &id_local_object
+    );
+    T_assert_rsc_success( sc );
+
+    ${../../req/ident-local:/test-run}(
+      id_local_object,
+      ClassicRatemonIdentAction
+    );
+
+    sc = rtems_rate_monotonic_delete( id_local_object );
+    T_rsc_success( sc );
+  checks: []
+  links: []
+test-brief: Test the ${../if/ident:/name} directive.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes: []
+test-local-includes:
+- tr-object-ident-local.h
+test-setup: null
+test-stop: null
+test-support: |
+  static rtems_status_code ClassicRatemonIdentAction(
+    rtems_name name,
+    rtems_id  *id
+  )
+  {
+    return rtems_rate_monotonic_ident( name, id );
+  }
+test-target: testsuites/validation/tc-ratemon-ident.c
+test-teardown: null
+type: test-case

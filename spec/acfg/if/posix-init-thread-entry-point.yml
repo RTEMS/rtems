@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: '``POSIX_Init``'
+description: |
+  The value of this configuration option initializes the entry point of the
+  POSIX API initialization thread.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-posixinit
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/init-posix-thread-entry-point
+name: CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+notes: |
+  The application shall provide the function referenced by this configuration
+  option.
+type: interface

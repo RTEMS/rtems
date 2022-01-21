@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: receiver
+text: |
+  In this particular case, *receiver* shall be a ${/glossary/task:/term}
+  which has invoked directive ${../if/receive:/name} with
+  ${../if/receive:/params[3]/name} set to ${../../option/if/wait:/name} on an
+  empty ${/glossary/messagequeue:/term} and which is still waiting to receive
+  a message when a ${../if/send:/name} or ${../if/urgent:/name} directive
+  is invoked on that ${/glossary/messagequeue:/term}.
+type: glossary

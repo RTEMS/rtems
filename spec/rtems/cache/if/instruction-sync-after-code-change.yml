@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Ensures necessary synchronization required after code changes.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016 Pavel Pisa
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const void *${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_cache_instruction_sync_after_code_change
+notes: |
+  When code is loaded or modified, then most systems require synchronization
+  instructions to update the instruction caches so that the loaded or modified
+  code is fetched.  For example, systems with separate data and instruction
+  caches or systems without instruction cache snooping.  The directives should
+  be used by run time loader for example.
+params:
+- description: |
+    is the begin address of the code area to synchronize.
+  dir: null
+  name: begin
+- description: |
+    is the size in bytes of the code area to synchronize.
+  dir: null
+  name: size
+return: null
+type: interface

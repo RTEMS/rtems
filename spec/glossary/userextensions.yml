@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: user extensions
+text: |
+  User extensions are software routines provided by the application to enhance
+  the functionality of RTEMS.  An active user extension is either in the
+  ${initial-extension-sets:/term} or the ${dynamic-extension-sets:/term}.  User
+  extensions are invoked in ${extension-forward-order:/term} or
+  ${extension-reverse-order:/term}.
+type: glossary

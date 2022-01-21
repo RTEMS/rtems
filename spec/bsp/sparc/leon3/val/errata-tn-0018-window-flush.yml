@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-20
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/window.S
+  hash: C4nky3WMzvibNRRv3cK3dmmbw0erz-RV3t1CL6ZV2dk=
+  type: file
+text: |
+  A special ``rett`` sequence errata workaround was implemented for the window
+  flush trap handler.
+type: validation

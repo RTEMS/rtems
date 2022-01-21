@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-20
+method: by-analysis
+references: []
+text: |
+  There is no errata workaround necessary for the window overflow trap, since
+  the window overflow trap always returns to a ``save`` instruction.
+type: validation

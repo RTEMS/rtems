@@ -1,0 +1,93 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/irqamp-get-timestamp
+post-conditions:
+- name: Result
+  states:
+  - name: Registers
+    test-code: |
+      T_not_null( ctx->result );
+    text: |
+      The return value of ${../if/irqamp-get-timestamp:/name} shall be address
+      of the timestamping register block contained in the IRQ(A)MP register
+      block specified by the ${../if/irqamp-get-timestamp:/params[0]/name}
+      parameter.
+  - name: 'Null'
+    test-code: |
+      T_null( ctx->result );
+    text: |
+      The return value of ${../if/irqamp-get-timestamp:/name} shall be
+      ${/c/if/false:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: NumberOfTimestampRegisterSets
+  states:
+  - name: Zero
+    test-code: |
+      ctx->irqamp_regs.itstmp[ 0 ].itstmpc = 0;
+    text: |
+      While the number of timestamp register sets indicated by the IRQ(A)MP
+      register block specified by the
+      ${../if/irqamp-get-timestamp:/params[0]/name} parameter is zero.
+  - name: Positive
+    test-code: |
+      ctx->irqamp_regs.itstmp[ 0 ].itstmpc = IRQAMP_ITSTMPC_TSTAMP( 1 );
+    text: |
+      While the number of timestamp register sets indicated by the IRQ(A)MP
+      register block specified by the
+      ${../if/irqamp-get-timestamp:/params[0]/name} parameter is positive.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->result = irqamp_get_timestamp_registers( &ctx->irqamp_regs );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the return value of the
+    ${../if/irqamp-get-timestamp:/name} call.
+  description: null
+  member: |
+    irqamp_timestamp *result
+- brief: |
+    This member contains the IRQ(A)MP register block.
+  description: null
+  member: |
+    irqamp irqamp_regs
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- grlib/irqamp.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-dev-grlib-irqamp-get-timestamp.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result: Registers
+  pre-conditions:
+    NumberOfTimestampRegisterSets:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Result: 'Null'
+  pre-conditions:
+    NumberOfTimestampRegisterSets:
+    - Zero
+type: requirement

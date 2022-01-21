@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/req/scheduler-edf-smp
+test-brief: |
+  This test suite for SMP-only test cases provides enough resources to run
+  basic tests for all specified managers and functions.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 5
+
+  #include "ts-default.h"
+test-description: |
+  Up to three scheduler instances using the SMP EDF scheduler are provided
+  using up to four processors.
+test-includes: []
+test-local-includes: []
+test-suite-name: ValidationSMPOnly0
+test-target: testsuites/validation/ts-validation-smp-only-0.c
+type: test-suite

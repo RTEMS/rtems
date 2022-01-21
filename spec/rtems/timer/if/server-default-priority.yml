@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This constant represents the default value for the task priority of the Timer
+  Server.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ( (${../../type/if/priority:/name}) -1 )
+  variants: []
+description: |
+  When given this priority, a special high priority not accessible via the
+  Classic API is used.
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_TIMER_SERVER_DEFAULT_PRIORITY
+notes: null
+type: interface

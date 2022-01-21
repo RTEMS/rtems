@@ -1,0 +1,429 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBSPICTRL
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: spictrl-header
+definition:
+- default:
+    count: 1
+    name: CAP
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: MODE
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: EVENT
+  offset: 0x24
+  variants: []
+- default:
+    count: 1
+    name: MASK
+  offset: 0x28
+  variants: []
+- default:
+    count: 1
+    name: CMD
+  offset: 0x2c
+  variants: []
+- default:
+    count: 1
+    name: TX
+  offset: 0x30
+  variants: []
+- default:
+    count: 1
+    name: RX
+  offset: 0x34
+  variants: []
+- default:
+    count: 1
+    name: SLVSEL
+  offset: 0x38
+  variants: []
+- default:
+    count: 1
+    name: ASLVSEL
+  offset: 0x3c
+  variants: []
+register-prefix: null
+register-block-group: SPICTRL
+register-block-size: 64
+registers:
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SSSZ'
+      start: 24
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MAXWLEN'
+      start: 20
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TWEN'
+      start: 19
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AMODE'
+      start: 18
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ASELA'
+      start: 17
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SSEN'
+      start: 16
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'FDEPTH'
+      start: 8
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SR'
+      start: 7
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'FT'
+      start: 5
+      width: 2
+    - access: [r]
+      brief: null
+      description: null
+      name: 'REV'
+      start: 0
+      width: 5
+    variants: []
+  brief: |
+    Capability register
+  description: null
+  name: CAP
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LOOP'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CPOL'
+      start: 29
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CPHA'
+      start: 28
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DIV_16'
+      start: 27
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'REV'
+      start: 26
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MX'
+      start: 25
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 24
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LEN'
+      start: 20
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PM'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TWEN'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ASEL'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FACT'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'OD'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CG'
+      start: 7
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ASELDEL'
+      start: 5
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TAC'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TTO'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IGSEL'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CITE'
+      start: 1
+      width: 1
+    variants: []
+  brief: |
+    Mode register
+  description: null
+  name: MODE
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TIP'
+      start: 31
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'LT'
+      start: 14
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'OV'
+      start: 12
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'UN'
+      start: 11
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'MME'
+      start: 10
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NE'
+      start: 9
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NF'
+      start: 8
+      width: 1
+    variants: []
+  brief: |
+    Event register
+  description: null
+  name: EVENT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TIPE'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LTE'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'OVE'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'UNE'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MMEE'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NEEE'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NFE'
+      start: 8
+      width: 1
+    variants: []
+  brief: |
+    Mask register
+  description: null
+  name: MASK
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'LST'
+      start: 22
+      width: 1
+    variants: []
+  brief: |
+    Command register
+  description: null
+  name: CMD
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'TDATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Transmit register
+  description: null
+  name: TX
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RDATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Receive register
+  description: null
+  name: RX
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SLVSEL'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    Slave select register
+  description: null
+  name: SLVSEL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ASLVSEL'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    Automatic slave select register
+  description: null
+  name: ASLVSEL
+  width: 32
+name: spictrl
+notes: null
+type: interface

@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/req/init
+test-brief: |
+  This validation test suite contains a test case for the system termination
+  procedure.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 2
+
+  #define CONFIGURE_INITIAL_EXTENSIONS \
+    { .fatal = FatalExtension0 }, \
+    { .fatal = FatalExtension1 }
+
+  #define CONFIGURE_DISABLE_BSP_SETTINGS
+
+  #include "ts-default.h"
+test-description: null
+test-includes: []
+test-local-includes:
+- tc-userext.h
+test-suite-name: Terminate
+test-target: testsuites/validation/ts-terminate.c
+type: test-suite

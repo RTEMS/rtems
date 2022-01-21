@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the object class information of the object class of the object API.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - int ${.:/params[0]/name}
+    - int ${.:/params[1]/name}
+    - ${api-class-information:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_object_get_class_information
+notes: null
+params:
+- description: |
+    is the object API of the object class.
+  dir: null
+  name: the_api
+- description: |
+    is the object class of the object API to get the class information.
+  dir: null
+  name: the_class
+- description: |
+    is the pointer to an ${api-class-information:/name} object.  When the
+    directive call is successful, the object class information of the class of
+    the API will be stored in this object.
+  dir: out
+  name: info
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The class of the API or the API was invalid.
+    value: ${../../status/if/invalid-number:/name}
+type: interface

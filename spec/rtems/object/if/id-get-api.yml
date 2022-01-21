@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the API component of the object identifier.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: int
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_object_id_get_api
+notes: |
+  This directive does not validate the object identifier provided in
+  ${.:/params[0]/name}.
+params:
+- description: |
+    is the object identifier with the API component to get.
+  dir: null
+  name: id
+return:
+  return: |
+    Returns the API component of the object identifier.
+  return-values: []
+type: interface

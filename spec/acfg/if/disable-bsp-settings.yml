@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the optional BSP provided
+  settings listed below are disabled.
+
+  The optional BSP provided default values for the following application
+  configuration options are disabled:
+
+  * ${idle-task-body:/name}
+
+  * ${idle-task-stack-size:/name}
+
+  * ${interrupt-stack-size:/name}
+
+  The optional BSP provided initial extension set is disabled (see
+  ${/glossary/initial-extension-sets:/term}).  The optional BSP provided
+  prerequisite IO device drivers are disabled (see
+  ${/acfg/if/group-devdrv:/name}).  The optional BSP provided support for
+  ${/c/if/sbrk:/name} is disabled.
+
+  This configuration option provides an all or nothing choice with respect to
+  the optional BSP provided settings.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+name: CONFIGURE_DISABLE_BSP_SETTINGS
+notes: null
+type: interface

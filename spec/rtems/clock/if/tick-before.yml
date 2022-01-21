@@ -1,0 +1,64 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Indicates if the current ${/glossary/clock-tick:/term} counter is before the
+  ticks.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      return (${/c/if/int32_t:/name}) ( ${.:/params[0]/name} - ${/score/watchdog/if/ticks-since-boot:/name} ) > 0;
+    params:
+    - ${../../type/if/interval:/name} ${.:/params[0]/name}
+    return: ${/c/if/bool:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
+name: rtems_clock_tick_before
+notes: |
+  This directive can be used to write busy loops with a timeout.
+
+  .. code-block:: c
+      :linenos:
+
+      status busy( void )
+      {
+        rtems_interval timeout;
+
+        timeout = rtems_clock_tick_later_usec( 10000 );
+
+        do {
+          if ( ok() ) {
+            return success;
+          }
+        } while ( rtems_clock_tick_before( timeout ) );
+
+        return timeout;
+      }
+params:
+- description: |
+    is the ticks value to check.
+  dir: null
+  name: ticks
+return:
+  return: |
+    Returns true, if current ${/glossary/clock-tick:/term} counter indicates a
+    time before the time in ticks, otherwise returns false.
+  return-values: []
+type: interface

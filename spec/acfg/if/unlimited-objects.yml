@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then unlimited objects are used
+  by default.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_UNLIMITED_OBJECTS
+notes: |
+  When using unlimited objects, it is common practice to also specify
+  ${unified-work-areas:/name} so the system operates with a single pool
+  of memory for both RTEMS Workspace and C Program Heap.
+
+  This option does not override an explicit configuration for a particular
+  object class by the user.
+
+  See also ${unlimited-allocation-size:/name}.
+type: interface

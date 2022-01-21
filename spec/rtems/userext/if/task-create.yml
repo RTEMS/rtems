@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Task create extensions are invoked when a task is created.
+copyrights:
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/userext/if/thread-create:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/thread-dispatching-disabled-init
+- role: constraint
+  uid: /constraint/thread-dispatching-enabled-multitasking
+- role: constraint
+  uid: ../constraint/object-allocator-system
+- role: constraint
+  uid: ../constraint/object-allocator-task-create
+- role: constraint
+  uid: ../constraint/object-allocator-task-construct
+- role: constraint
+  uid: ../constraint/object-allocator-pthread-create
+name: rtems_task_create_extension
+notes: |
+  The task create extensions are invoked in
+  ${/glossary/extension-forward-order:/term}.
+
+  The task create extensions are invoked after a new task has been completely
+  initialized, but before it is started.
+
+  While normal tasks are created, the executing thread is the owner of the
+  object allocator mutex.  The object allocator mutex allows nesting, so the
+  normal memory allocation routines can be used allocate memory for the created
+  thread.
+
+  If the task create extension returns ${/c/if/false:/name}, then the task
+  create operation stops immediately and the entire task create operation will
+  fail.  In this case, all task delete extensions are invoked, see
+  ${task-delete:/name}.
+params:
+- description: |
+    is the ${/glossary/tcb:/term} of the executing thread.  When the idle
+    thread is created, the executing thread is equal to ${/c/if/null:/name}.
+  dir: null
+  name: executing
+- description: |
+    is the ${/glossary/tcb:/term} of the created thread.
+  dir: null
+  name: created
+return:
+  return: |
+    Returns true, if the task create extension was successful, otherwise false.
+  return-values: []
+type: interface

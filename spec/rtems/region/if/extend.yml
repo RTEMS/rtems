@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Extends the region.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    - ${/c/if/uintptr_t:/name} ${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive adds the memory area which starts at ${.:/params[1]/name} for
+  ${.:/params[2]/name} bytes to the region specified by ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- add memory to a region
+- region, add memory
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_region_extend
+notes: |
+  There are no alignment requirements for the memory area.  The memory area
+  must be big enough to contain some maintenance blocks.  It must not overlap
+  parts of the current heap memory areas.  Disconnected memory areas added to
+  the heap will lead to used blocks which cover the gaps.  Extending with an
+  inappropriate memory area will corrupt the heap resulting in undefined
+  behaviour.
+params:
+- description: |
+    is the region identifier.
+  dir: null
+  name: id
+- description: |
+    is the starting address of the memory area to extend the region.
+  dir: null
+  name: starting_address
+- description: |
+    is the length in bytes of the memory area to extend the region.
+  dir: null
+  name: length
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no region associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The memory area specified by ${.:/params[1]/name} and
+      ${.:/params[2]/name} was insufficient to extend the heap.
+    value: ${../../status/if/invalid-address:/name}
+type: interface

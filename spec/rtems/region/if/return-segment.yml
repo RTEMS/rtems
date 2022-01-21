@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the segment to the region.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive returns the segment specified by ${.:/params[1]/name} to the
+  region specified by ${.:/params[0]/name}.  The returned segment is merged
+  with its neighbors to form the largest possible segment.  The first task on
+  the wait queue is examined to determine if its segment request can now be
+  satisfied.  If so, it is given a segment and unblocked.  This process is
+  repeated until the first task's segment request cannot be satisfied.
+enabled-by: true
+index-entries:
+- return segment to region
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_region_return_segment
+notes: |
+  This directive will cause the calling task to be preempted if one or more
+  local tasks are waiting for a segment and the following conditions exist:
+
+  * A waiting task has a higher priority than the calling task.
+
+  * The size of the segment required by the waiting task is less than or equal
+    to the size of the segment returned.
+params:
+- description: |
+    is the region identifier.
+  dir: null
+  name: id
+- description: |
+    is the begin address of the segment to return.
+  dir: null
+  name: segment
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no region associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The segment was not within the region.
+    value: ${../../status/if/invalid-address:/name}
+type: interface

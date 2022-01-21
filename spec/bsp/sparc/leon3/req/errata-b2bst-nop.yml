@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: sparc/gr712rc
+links:
+- role: requirement-refinement
+  uid: errata-gr712rc-13
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The software product shall use the define ``SPARC_LEON3FT_B2BST_NOP`` in
+  ${/glossary/assemblerlanguage:/term} ${/glossary/sourcecode:/term} to insert
+  ``nop`` instructions required by the errata workaround.
+type: requirement

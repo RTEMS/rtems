@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/bsp-output-char
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the function referenced by ${../if/bsp-output-char:/name} is called, it
+  shall output the character specified by the parameter to the kernel character
+  output device.
+type: requirement

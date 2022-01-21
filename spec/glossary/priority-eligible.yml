@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: eligible priority
+text: |
+  An eligible priority of a ${task:/term} is the ${priority-task:/term} with
+  respect to the corresponding ${scheduler-eligible:/term} of the task.  An
+  eligible priority is either the ${priority-current:/term} or a
+  ${priority-helping:/term} of a task.
+type: glossary

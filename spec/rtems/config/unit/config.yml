@@ -1,0 +1,63 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Call get_config_max() indirectly through
+    rtems_configuration_get_maximum_semaphores() with a specially manipulated
+    argument to enter an if-branch only accessed when unlimited objects
+    are configured.
+  action-code: |
+    uint32_t max = rtems_configuration_get_maximum_semaphores();
+  checks:
+  - brief: |
+      The value returned by the function call must be the one artificially
+      injected by this test.
+    code: |
+      T_eq_u32( max, SEMAPHORES_PER_BLOCK | RTEMS_UNLIMITED_OBJECTS );
+    links: []
+  links:
+  - name: get_config_max
+    role: unit-test
+    uid: ../../../score/if/domain
+test-brief: |
+  Unit tests for the configuration manager.
+test-context:
+- brief: |
+    This member contains the original value of
+    ``_Semaphore_Information->objects_per_block``.
+  description: null
+  member: |
+    Objects_Maximum objects_per_block_ori
+test-context-support: |
+  #define SEMAPHORES_PER_BLOCK 32
+test-description: |
+  Parts of the file ``cpukit/sapi/src/getconfigmax.c``
+  are only executed when unlimited objects are configured.  The
+  space qualified code subset does not support this feature.  This test
+  exercises the code parts otherwise not reached in order to achieve full
+  code coverage.
+test-header: null
+test-includes:
+- rtems.h
+- rtems/rtems/semdata.h
+- rtems/score/object.h
+- rtems/score/objectdata.h
+test-local-includes: []
+test-setup:
+  brief: null
+  code: |
+    ctx->objects_per_block_ori = _Semaphore_Information.objects_per_block;
+    _Semaphore_Information.objects_per_block = SEMAPHORES_PER_BLOCK;
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/unit/tc-config.c
+test-teardown:
+  brief: null
+  code: |
+    _Semaphore_Information.objects_per_block = ctx->objects_per_block_ori;
+  description: null
+type: test-case

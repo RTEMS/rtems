@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-boot-time
+- role: interface-function
+  uid: ../if/get-boot-time-bintime
+- role: interface-function
+  uid: ../if/get-boot-time-timeval
+- role: function-implementation
+  uid: /score/timecounter/req/get-coarse
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The directive shall return a time point during system initialization which is
+  used by ${/glossary/clock-realtime:/term}.
+type: requirement

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-stack-free-hook
+functional-type: function
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/task-stack-deallocator:/name} application configuration option.
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-stack-free-hook:/name} directive shall return the address of
+  the task stack deallocator which is used to free the stack of a task which
+  was allocated by the task stack allocator.
+type: requirement

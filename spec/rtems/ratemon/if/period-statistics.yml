@@ -1,0 +1,88 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure provides the statistics of a period.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member contains the number of periods executed.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: count
+  variants: []
+- default:
+    brief: |
+      This member contains the number of periods missed.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: missed_count
+  variants: []
+- default:
+    brief: |
+      This member contains the least amount of processor time used in a period.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: null
+    kind: member
+    name: min_cpu_time
+  variants: []
+- default:
+    brief: |
+      This member contains the highest amount of processor time used in a
+      period.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: null
+    kind: member
+    name: max_cpu_time
+  variants: []
+- default:
+    brief: |
+      This member contains the total amount of processor time used in a period.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: null
+    kind: member
+    name: total_cpu_time
+  variants: []
+- default:
+    brief: |
+      This member contains the least amount of
+      ${/glossary/clock-monotonic:/term} time used in a period.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: null
+    kind: member
+    name: min_wall_time
+  variants: []
+- default:
+    brief: |
+      This member contains the highest amount of
+      ${/glossary/clock-monotonic:/term} time used in a period.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: null
+    kind: member
+    name: max_wall_time
+  variants: []
+- default:
+    brief: |
+      This member contains the total amount of
+      ${/glossary/clock-monotonic:/term} time used in a period.
+    definition: ${/c/if/timespec:/name} ${.:name}
+    description: null
+    kind: member
+    name: total_wall_time
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_rate_monotonic_period_statistics
+notes: null
+type: interface

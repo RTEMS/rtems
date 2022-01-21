@@ -1,0 +1,86 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the configuration of a message queue constructed by
+  ${construct:/name}.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member defines the name of the message queue.
+    definition: ${../../type/if/name:/name} ${.:name}
+    description: null
+    kind: member
+    name: name
+  variants: []
+- default:
+    brief: |
+      This member defines the maximum number of pending messages supported by
+      the message queue.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_pending_messages
+  variants: []
+- default:
+    brief: |
+      This member defines the maximum message size supported by the message
+      queue.
+    definition: ${/c/if/size_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_message_size
+  variants: []
+- default:
+    brief: |
+      This member shall point to the message buffer storage area begin.
+    definition: void *${.:name}
+    description: |
+      The message buffer storage area for the message queue shall be an array
+      of the type defined by ${buffer:/name} with a maximum message size equal
+      to the maximum message size of this configuration.
+    kind: member
+    name: storage_area
+  variants: []
+- default:
+    brief: |
+      This member defines size of the message buffer storage area in bytes.
+    definition: ${/c/if/size_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: storage_size
+  variants: []
+- default:
+    brief: |
+      This member defines the optional handler to free the message buffer
+      storage area.
+    definition: void ( *${.:name} )( void * )
+    description: |
+      It is called when the message queue is deleted.  It is called from task
+      context under protection of the object allocator lock.  It is allowed to
+      call ${/c/if/free:/name} in this handler.  If handler is
+      ${/c/if/null:/name}, then no action will be performed.
+    kind: member
+    name: storage_free
+  variants: []
+- default:
+    brief: |
+      This member defines the attributes of the message queue.
+    definition: ${../../attr/if/attribute:/name} ${.:name}
+    description: null
+    kind: member
+    name: attributes
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_message_queue_config
+notes: null
+type: interface

@@ -1,0 +1,1023 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/entry-install
+- role: interface-function
+  uid: ../if/replace
+- role: interface-function
+  uid: ../if/shared
+- role: interface-function
+  uid: ../if/unique
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/incorrect-state:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: CalledFromISR
+    test-code: |
+      T_rsc( ctx->status, RTEMS_CALLED_FROM_ISR );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/called-from-isr:/name}.
+  - name: InUse
+    test-code: |
+      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE  );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/resource-in-use:/name}.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+    text: |
+      The return status of ${../if/entry-install:/name} shall be
+      ${../../status/if/too-many:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Enable
+  states:
+  - name: Nop
+    test-code: |
+      if ( ctx->handler_counter == 0 ) {
+        T_eq( ctx->enabled_before, ctx->enabled_after );
+      }
+    text: |
+      The enabled status of the interrupt vector specified by
+      ${../if/entry-install:/params[0]/name} shall not be modified by the
+      ${../if/entry-install:/name} call.
+  - name: 'Yes'
+    test-code: |
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
+    text: |
+      The interrupt vector specified by ${../if/entry-install:/params[0]/name}
+      shall be enabled.
+  - name: Maybe
+    test-code: |
+      /*
+       * Interrupt vectors which cannot be enabled are not selected as a
+       * testable interrupt vector by GetTestableInterruptVector(), so this
+       * path is not validated by this test.  See also comment for
+       * ``CanEnable`` pre-condition state ``Yes``.
+       */
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
+    text: |
+      The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
+      may be enabled.
+  - name: 'No'
+    test-code: |
+      /*
+       * Interrupt vectors which cannot be enabled are not selected as a
+       * testable interrupt vector by GetTestableInterruptVector(), so this
+       * path is not validated by this test.  See also comment for
+       * ``CanEnable`` pre-condition state ``Yes``.
+       */
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
+    text: |
+      The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
+      shall not be enabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Installed
+  states:
+  - name: 'No'
+    test-code: |
+      if ( ctx->other_installed && ctx->third_installed ) {
+        T_eq_u32( ctx->visited_entries, 2 );
+      } else if ( ctx->other_installed ) {
+        T_eq_u32( ctx->visited_entries, 1 );
+      } else {
+        T_eq_u32( ctx->visited_entries, 0 );
+      }
+    text: |
+      The entry referenced by ${../if/entry-install:/params[2]/name} shall not
+      be installed at the interrupt vector specified by
+      ${../if/entry-install:/params[0]/name}.
+  - name: Last
+    test-code: |
+      if ( ctx->other_installed && ctx->third_installed ) {
+        T_eq_u32( ctx->visited_entries, 3 );
+      } else if ( ctx->other_installed ) {
+        T_eq_u32( ctx->visited_entries, 2 );
+      } else {
+        T_eq_u32( ctx->visited_entries, 1 );
+      }
+    text: |
+      The entry referenced by ${../if/entry-install:/params[2]/name} shall be
+      installed as the last entry at the interrupt vector specified by
+      ${../if/entry-install:/params[0]/name}.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+
+    ctx->visited_entries = 0;
+    sc = rtems_interrupt_handler_iterate(
+      ctx->test_vector,
+      VisitInstalled,
+      ctx
+    );
+    T_rsc_success( sc );
+
+    if ( ctx->status == RTEMS_SUCCESSFUL ) {
+      uint32_t counter;
+
+      counter = 1;
+
+      if ( ctx->other_installed ) {
+        T_eq_u32( ctx->counter_by_entry[ 1 ], counter );
+        ++counter;
+      }
+
+      if ( ctx->third_installed ) {
+        T_eq_u32( ctx->counter_by_entry[ 2 ], counter );
+        ++counter;
+      }
+
+      T_eq_u32( ctx->counter_by_entry[ 0 ], counter );
+    }
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->vector = ctx->test_vector;
+    text: |
+      While the ${../if/entry-install:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
+    text: |
+      While the ${../if/entry-install:/params[0]/name} parameter is
+      not associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: Options
+  states:
+  - name: Unique
+    test-code: |
+      ctx->options = RTEMS_INTERRUPT_UNIQUE;
+    text: |
+      While the ${../if/entry-install:/params[1]/name} indicates that an unique
+      entry shall be installed.
+  - name: Shared
+    test-code: |
+      ctx->options = RTEMS_INTERRUPT_SHARED;
+    text: |
+      While the ${../if/entry-install:/params[1]/name} indicates that a shared
+      entry shall be installed.
+  - name: Replace
+    test-code: |
+      ctx->options = RTEMS_INTERRUPT_REPLACE;
+    text: |
+      While the ${../if/entry-install:/params[1]/name} indicates that the entry
+      handler routine shall be replaced.
+  test-epilogue: null
+  test-prologue: null
+- name: Entry
+  states:
+  - name: Obj
+    test-code: |
+      ctx->entry = &ctx->entry_obj;
+    text: |
+      While the ${../if/entry-install:/params[2]/name} parameter references an
+      object of type ${../if/entry:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->entry = NULL;
+    text: |
+      While the ${../if/entry-install:/params[2]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Routine
+  states:
+  - name: Valid
+    test-code: |
+      rtems_interrupt_entry_initialize(
+        &ctx->entry_obj,
+        EntryRoutine,
+        &entry_arg,
+        entry_info
+      );
+    text: |
+      While the handler routine of the object referenced by the
+      ${../if/entry-install:/params[2]/name} parameter is valid.
+  - name: 'Null'
+    test-code: |
+      rtems_interrupt_entry_initialize(
+        &ctx->entry_obj,
+        NULL,
+        &entry_arg,
+        entry_info
+      );
+    text: |
+      While the handler routine of the object referenced by the
+      ${../if/entry-install:/params[2]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Init
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->initialized = true;
+    text: |
+      While the service is initialized.
+  - name: 'No'
+    test-code: |
+      ctx->initialized = false;
+    text: |
+      While the service is not initialized.
+  test-epilogue: null
+  test-prologue: null
+- name: ISR
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->isr = true;
+    text: |
+      While ${../if/entry-install:/name} is called from within interrupt
+      context.
+  - name: 'No'
+    test-code: |
+      ctx->isr = false;
+    text: |
+      While ${../if/entry-install:/name} is not called from within interrupt
+      context.
+  test-epilogue: null
+  test-prologue: null
+- name: CanEnable
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector.
+       * For the validation test of ${../if/entry-install:/name} a testable
+       * interrupt vector is determined by GetTestableInterruptVector().  The
+       * implementation of ${../if/entry-install:/name} uses
+       * ${../if/vector-enable:/name} which is validated separately in detail.
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/entry-remove:/params[0]/name} parameter can be enabled.
+  - name: Maybe
+    test-code: |
+      /* See comment for ``Yes`` state */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/entry-remove:/params[0]/name} parameter may be enabled.
+  - name: 'No'
+    test-code: |
+      /* See comment for ``Yes`` state */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/entry-remove:/params[0]/name} parameter cannot be enabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Installed
+  states:
+  - name: None
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the no entry is installed at the interrupt vector specified by the
+      ${../if/entry-install:/params[0]/name} parameter.
+  - name: Unique
+    test-code: |
+      Install( ctx, RTEMS_INTERRUPT_UNIQUE, EntryRoutine, &entry_arg );
+    text: |
+      While a unique entry is installed at the interrupt vector specified by
+      the ${../if/entry-install:/params[0]/name} parameter.
+  - name: Other
+    test-code: |
+      Install( ctx, RTEMS_INTERRUPT_SHARED, OtherRoutine, &other_arg );
+      InstallThird( ctx );
+    text: |
+      While at least one non-unique entry is installed at the interrupt vector
+      specified by the ${../if/entry-install:/params[0]/name} parameter,
+      while all entries installed at the interrupt vector specified by the
+      ${../if/entry-install:/params[0]/name} parameter have a handler routine
+      which is not equal to the handler routine of the object referenced by the
+      ${../if/entry-install:/params[2]/name} parameter,
+      while all entries installed at the interrupt vector specified by the
+      ${../if/entry-install:/params[0]/name} parameter have a handler argument
+      which is not equal to the handler argument of the object referenced by
+      the ${../if/entry-install:/params[2]/name} parameter.
+  - name: EqRoutine
+    test-code: |
+      Install( ctx, RTEMS_INTERRUPT_SHARED, EntryRoutine, &other_arg );
+    text: |
+      While at least one non-unique entry is installed at the interrupt vector
+      specified by the ${../if/entry-install:/params[0]/name} parameter,
+      while at least one entry installed at the interrupt vector specified by
+      the ${../if/entry-install:/params[0]/name} parameter has a handler
+      routine which is equal to the handler routine of the object referenced by
+      the ${../if/entry-install:/params[2]/name} parameter,
+      while all entries installed at the interrupt vector specified by the
+      ${../if/entry-install:/params[0]/name} parameter have a handler argument
+      which is not equal to the handler argument of the object referenced by
+      the ${../if/entry-install:/params[2]/name} parameter.
+  - name: EqArg
+    test-code: |
+      Install( ctx, RTEMS_INTERRUPT_SHARED, OtherRoutine, &other_arg );
+    text: |
+      While at least one non-unique entry is installed at the interrupt vector
+      specified by the ${../if/entry-install:/params[0]/name} parameter,
+      while all entries installed at the interrupt vector specified by the
+      ${../if/entry-install:/params[0]/name} parameter have a handler routine
+      which is not equal to the handler routine of the object referenced by the
+      ${../if/entry-install:/params[2]/name} parameter,
+      while at least one entry installed at the interrupt vector specified by
+      the ${../if/entry-install:/params[0]/name} parameter has a handler
+      argument which is equal to the handler argument of the object referenced
+      by the ${../if/entry-install:/params[2]/name} parameter.
+  - name: Match
+    test-code: |
+      Install( ctx, RTEMS_INTERRUPT_SHARED, EntryRoutine, &entry_arg );
+    text: |
+      While at least one non-unique entry with a handler routine which is equal
+      to the handler routine of the object referenced by the
+      ${../if/entry-install:/params[2]/name} parameter and with a handler
+      argument which is equal to the handler argument of the object referenced
+      by the ${../if/entry-install:/params[2]/name} parameter is installed at
+      the interrupt vector specified by the
+      ${../if/entry-install:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->isr ) {
+    CallWithinISR( Action, ctx );
+  } else {
+    Action( ctx );
+  }
+test-brief: null
+test-cleanup: |
+  rtems_status_code sc;
+
+  if ( ctx->third_installed ) {
+    sc = rtems_interrupt_entry_remove( ctx->test_vector, &ctx->third_entry );
+    T_rsc_success( sc );
+  }
+
+  if ( ctx->other_installed ) {
+    sc = rtems_interrupt_entry_remove( ctx->test_vector, &ctx->other_entry );
+    T_rsc_success( sc );
+  }
+
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    sc = rtems_interrupt_entry_remove( ctx->test_vector, ctx->entry );
+    T_rsc_success( sc );
+  }
+test-context:
+- brief: |
+    If this member is true, then the service was initialized during setup.
+  description: null
+  member: |
+    bool initialized_during_setup
+- brief: |
+    This member provides a counter for handler invocations.
+  description: null
+  member: |
+    uint32_t handler_counter
+- brief: |
+    This member provides a counter snapshot for each entry.
+  description: null
+  member: |
+    uint32_t counter_by_entry[ 3 ];
+- brief: |
+    This member provides the vector number of a testable interrupt vector.
+  description: null
+  member: |
+    rtems_vector_number test_vector
+- brief: |
+    This member provides the attributes of the testable interrupt vector.
+  description: null
+  member: |
+    rtems_interrupt_attributes attributes
+- brief: |
+    If this member is true, then the service shall be initialized.
+  description: null
+  member: |
+    bool initialized
+- brief: |
+    If this member is true, then ${../if/entry-install:/name} shall be called
+    from within interrupt context.
+  description: null
+  member: |
+    bool isr
+- brief: |
+    This member contains the enabled status before the
+    ${../if/entry-install:/name} call.
+  description: null
+  member: |
+    bool enabled_before
+- brief: |
+    This member contains the enabled status after the
+    ${../if/entry-install:/name} call.
+  description: null
+  member: |
+    bool enabled_after
+- brief: |
+    This member provides the count of visited entries.
+  description: null
+  member: |
+    uint32_t visited_entries
+- brief: |
+    This member provides another ${../if/entry:/name} object.
+  description: null
+  member: |
+    rtems_interrupt_entry other_entry
+- brief: |
+    If this member is true, then another entry was installed.
+  description: null
+  member: |
+    bool other_installed
+- brief: |
+    This member provides a third ${../if/entry:/name} object.
+  description: null
+  member: |
+    rtems_interrupt_entry third_entry
+- brief: |
+    If this member is true, then the third entry was installed.
+  description: null
+  member: |
+    bool third_installed
+- brief: |
+    This member provides the options used to install the other
+    ${../if/entry:/name} object.
+  description: null
+  member: |
+    rtems_option other_options
+- brief: |
+    This member provides the ${../if/entry:/name} object.
+  description: null
+  member: |
+    rtems_interrupt_entry entry_obj
+- brief: |
+    This member specifies if the ${../if/entry-install:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_vector_number vector
+- brief: |
+    This member specifies if the ${../if/entry-install:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_option options
+- brief: |
+    This member specifies if the ${../if/entry-install:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_interrupt_entry *entry;
+- brief: |
+    This member contains the return value of the ${../if/entry-install:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  size_t i;
+
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->counter_by_entry ); ++i ) {
+    ctx->counter_by_entry[ i ] = 0;
+  }
+
+  ctx->handler_counter = 0;
+  ctx->other_installed = false;
+  ctx->third_installed = false;
+test-setup:
+  brief: null
+  code: |
+    rtems_interrupt_attributes required = {
+      .can_raise = true
+    };
+    rtems_status_code sc;
+
+    ctx->initialized_during_setup = bsp_interrupt_is_initialized();
+    ctx->test_vector = GetTestableInterruptVector( &required );
+    sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
+    T_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static char entry_arg;
+
+  static char other_arg;
+
+  static char third_arg;
+
+  static const char entry_info[] = "Entry";
+
+  static const char other_info[] = "Other";
+
+  static const char third_info[] = "Third";
+
+  static void Install(
+    Context                *ctx,
+    rtems_option            options,
+    rtems_interrupt_handler routine,
+    void                   *arg
+  )
+  {
+    rtems_status_code sc;
+
+    ctx->other_options = options;
+    rtems_interrupt_entry_initialize(
+      &ctx->other_entry,
+      routine,
+      arg,
+      other_info
+    );
+
+    sc = rtems_interrupt_entry_install(
+      ctx->test_vector,
+      options,
+      &ctx->other_entry
+    );
+    T_rsc_success( sc );
+
+    ctx->other_installed = true;
+  }
+
+  static void Routine( Context *ctx, uint32_t counter )
+  {
+    rtems_status_code sc;
+
+    ctx->handler_counter = counter;
+
+    if (
+      ctx->attributes.can_clear &&
+      !ctx->attributes.cleared_by_acknowledge
+    ) {
+      sc = rtems_interrupt_clear( ctx->test_vector );
+      T_rsc_success( sc );
+    }
+
+    if ( counter > 3 ) {
+      sc = rtems_interrupt_vector_disable( ctx->test_vector );
+      T_rsc_success( sc );
+    }
+  }
+
+  static void EntryRoutine( void *arg )
+  {
+    Context *ctx;
+    uint32_t counter;
+
+    ctx = T_fixture_context();
+    counter = ctx->handler_counter + 1;
+
+    if ( arg == &other_arg ) {
+      ctx->counter_by_entry[ 1 ] = counter;
+    } else {
+      ctx->counter_by_entry[ 0 ] = counter;
+      T_eq_ptr( arg, &entry_arg );
+    }
+
+    Routine( ctx, counter );
+  }
+
+  static void OtherRoutine( void *arg )
+  {
+    Context *ctx;
+    uint32_t counter;
+
+    (void) arg;
+    ctx = T_fixture_context();
+    counter = ctx->handler_counter + 1;
+    ctx->counter_by_entry[ 1 ] = counter;
+    Routine( ctx, counter );
+  }
+
+  static void ThirdRoutine( void *arg )
+  {
+    Context *ctx;
+    uint32_t counter;
+
+    ctx = T_fixture_context();
+    counter = ctx->handler_counter + 1;
+    ctx->counter_by_entry[ 2 ] = counter;
+    T_eq_ptr( arg, &third_arg );
+    Routine( ctx, counter );
+  }
+
+  static void InstallThird( Context *ctx )
+  {
+    rtems_status_code sc;
+
+    rtems_interrupt_entry_initialize(
+      &ctx->third_entry,
+      ThirdRoutine,
+      &third_arg,
+      third_info
+    );
+
+    sc = rtems_interrupt_entry_install(
+      ctx->test_vector,
+      RTEMS_INTERRUPT_SHARED,
+      &ctx->third_entry
+    );
+    T_rsc_success( sc );
+
+    ctx->third_installed = true;
+  }
+
+  static void Action( void *arg )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    ctx = arg;
+
+    sc = rtems_interrupt_vector_is_enabled(
+      ctx->test_vector,
+      &ctx->enabled_before
+    );
+    T_rsc_success( sc );
+
+    bsp_interrupt_set_handler_unique(
+      BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+      ctx->initialized
+    );
+
+    ctx->status = rtems_interrupt_entry_install(
+      ctx->vector,
+      ctx->options,
+      ctx->entry
+    );
+
+    bsp_interrupt_set_handler_unique(
+      BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+      ctx->initialized_during_setup
+    );
+
+    sc = rtems_interrupt_vector_is_enabled(
+      ctx->test_vector,
+      &ctx->enabled_after
+    );
+    T_rsc_success( sc );
+
+    if ( ctx->status == RTEMS_SUCCESSFUL ) {
+      sc = rtems_interrupt_raise( ctx->test_vector );
+      T_rsc_success( sc );
+    }
+  }
+
+  static void VisitInstalled(
+    void                   *arg,
+    const char             *info,
+    rtems_option            options,
+    rtems_interrupt_handler handler_routine,
+    void                   *handler_arg
+  )
+  {
+    Context *ctx;
+    uint32_t visited_entries;
+
+    ctx = arg;
+    visited_entries = ctx->visited_entries;
+
+    if ( visited_entries == 0 && ctx->other_installed ) {
+      T_eq_ptr( info, other_info );
+      T_eq_u32( options, ctx->other_options );
+      T_eq_ptr( handler_routine, ctx->other_entry.handler );
+      T_eq_ptr( handler_arg, ctx->other_entry.arg );
+    } else if ( visited_entries == 1 && ctx->third_installed ) {
+      T_eq_ptr( info, third_info );
+      T_eq_u32( options, RTEMS_INTERRUPT_SHARED );
+      T_eq_ptr( handler_routine, ThirdRoutine );
+      T_eq_ptr( handler_arg, &third_arg );
+    } else {
+      T_eq_ptr( info, entry_info );
+      T_eq_u32( options, ctx->options );
+      T_eq_ptr( handler_routine, ctx->entry_obj.handler );
+      T_eq_ptr( handler_arg, ctx->entry_obj.arg );
+    }
+
+    ctx->visited_entries = visited_entries + 1;
+  }
+test-target: testsuites/validation/tc-intr-entry-install.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Enable:
+    - specified-by: CanEnable
+    Installed: Last
+  pre-conditions:
+    Vector:
+    - Valid
+    Options:
+    - Unique
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+    CanEnable: all
+    Installed:
+    - None
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Enable:
+    - specified-by: CanEnable
+    Installed: Last
+  pre-conditions:
+    Vector:
+    - Valid
+    Options:
+    - Shared
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+    CanEnable: all
+    Installed:
+    - None
+    - Other
+    - EqRoutine
+    - EqArg
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Enable: Nop
+    Installed: N/A
+  pre-conditions:
+    Vector:
+    - Valid
+    Options: all
+    Entry:
+    - 'Null'
+    Routine: N/A
+    Init: all
+    ISR: all
+    CanEnable: all
+    Installed: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Enable: N/A
+    Installed: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    Options: all
+    Entry:
+    - 'Null'
+    Routine: N/A
+    Init: all
+    ISR: all
+    CanEnable: N/A
+    Installed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options: all
+    Entry:
+    - Obj
+    Routine: all
+    Init:
+    - 'No'
+    ISR: all
+    CanEnable: all
+    Installed: all
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Enable: N/A
+    Installed: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    Options: all
+    Entry:
+    - Obj
+    Routine: all
+    Init:
+    - 'No'
+    ISR: all
+    CanEnable: N/A
+    Installed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options: all
+    Entry:
+    - Obj
+    Routine:
+    - 'Null'
+    Init:
+    - 'Yes'
+    ISR: all
+    CanEnable: all
+    Installed: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Enable: N/A
+    Installed: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    Options: all
+    Entry:
+    - Obj
+    Routine:
+    - 'Null'
+    Init:
+    - 'Yes'
+    ISR: all
+    CanEnable: N/A
+    Installed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Enable: N/A
+    Installed: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    Options: all
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR: all
+    CanEnable: N/A
+    Installed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: CalledFromISR
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options: all
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'Yes'
+    CanEnable: all
+    Installed: all
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options:
+    - Replace
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+    CanEnable: all
+    Installed: all
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options:
+    - Unique
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+    CanEnable: all
+    Installed:
+    - Unique
+    - Other
+    - EqRoutine
+    - EqArg
+    - Match
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options:
+    - Shared
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+    CanEnable: all
+    Installed:
+    - Unique
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+    Enable: Nop
+    Installed: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    Options:
+    - Shared
+    Entry:
+    - Obj
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+    CanEnable: all
+    Installed:
+    - Match
+type: requirement

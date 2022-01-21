@@ -1,0 +1,172 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Obtains the semaphore.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../option/if/option:/name} ${.:/params[1]/name}
+    - ${../../type/if/interval:/name} ${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive obtains the semaphore specified by ${.:/params[0]/name}.
+
+  The **option set** specified in ${.:/params[1]/name} is built through a
+  *bitwise or* of the option constants described below.  Not all combinations
+  of options are allowed.  Some options are mutually exclusive.  If mutually
+  exclusive options are combined, the behaviour is undefined.  Options not
+  mentioned below are not evaluated by this directive and have no effect.
+  Default options can be selected by using the ${../../option/if/default:/name}
+  constant.
+
+  The calling task can **wait** or **try to obtain** the semaphore according
+  to the mutually exclusive ${../../option/if/wait:/name} and
+  ${../../option/if/no-wait:/name} options.
+
+  * **Waiting to obtain** the semaphore is the default and can be emphasized
+    through the use of the ${../../option/if/wait:/name} option.  The
+    ${.:/params[2]/name} parameter defines how long the calling task is willing
+    to wait.  Use ${../../type/if/no-timeout:/name} to wait potentially
+    forever, otherwise set a timeout interval in clock ticks.
+
+  * **Trying to obtain** the semaphore is selected by the
+    ${../../option/if/no-wait:/name} option.  If this option is defined, then
+    the ${.:/params[2]/name} parameter is ignored.  When the semaphore cannot
+    be immediately obtained, then the ${../../status/if/unsatisfied:/name}
+    status is returned.
+
+  With either ${../../option/if/wait:/name} or ${../../option/if/no-wait:/name}
+  if the current semaphore count is positive, then it is decremented by one and
+  the semaphore is successfully obtained by returning immediately with the
+  ${../../status/if/successful:/name} status code.
+
+  If the calling task chooses to return immediately and the current semaphore
+  count is zero, then the ${../../status/if/unsatisfied:/name} status code is
+  returned indicating that the semaphore is not available.
+
+  If the calling task chooses to wait for a semaphore and the current semaphore
+  count is zero, then the calling task is placed on the semaphore's wait queue
+  and blocked.  If a local, binary semaphore was created with the
+  ${../../attr/if/inherit-priority:/name} attribute, then the priority of the
+  task currently holding the binary semaphore will inherit the current priority
+  set of the blocking task.  The priority inheritance is carried out
+  recursively.  This means, that if the task currently holding the binary
+  semaphore is blocked on another local, binary semaphore using the priority
+  inheritance locking protocol, then the owner of this semaphore will inherit
+  the current priority sets of both tasks, and so on.  A task has a current
+  priority for each scheduler.
+enabled-by: true
+index-entries:
+- obtain a semaphore
+- lock a semaphore
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: ../constraint/obtain-isr
+- role: constraint
+  uid: ../constraint/obtain-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: ../../constraint/request-may-block
+- role: constraint
+  uid: /constraint/clock-tick
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_semaphore_obtain
+notes: |
+  If a local, binary semaphore was created with the
+  ${../../attr/if/priority-ceiling:/name} or
+  ${../../attr/if/multiprocessor-resource-sharing:/name} attribute, a task
+  successfully obtains the semaphore, and the priority of that task is greater
+  than the ceiling priority for this semaphore, then the priority of the task
+  acquiring the semaphore is elevated to that of the ceiling.
+
+  Deadlock situations are detected for local, binary semaphores.  If a deadlock
+  is detected, then the directive immediately returns the
+  ${../../status/if/incorrect-state:/name} status code.
+
+  It is not allowed to recursively obtain (nested access) a local, binary
+  semaphore using the MrsP locking protocol and any attempt to do this will
+  just return the ${../../status/if/incorrect-state:/name} status code.  This
+  error can only happen in SMP configurations.
+
+  If the semaphore was created with the ${../../attr/if/priority:/name}
+  attribute, then the calling task is inserted into the wait queue according to
+  its priority.  However, if the semaphore was created with the
+  ${../../attr/if/fifo:/name} attribute, then the calling task is placed at the
+  rear of the wait queue.
+
+  Attempting to obtain a global semaphore which does not reside on the local
+  node will generate a request to the remote node to access the semaphore.  If
+  the semaphore is not available and ${../../option/if/no-wait:/name} was not
+  specified, then the task must be blocked until the semaphore is released.  A
+  proxy is allocated on the remote node to represent the task until the
+  semaphore is released.
+params:
+- description: |
+    is the semaphore identifier.
+  dir: null
+  name: id
+- description: |
+    is the option set.
+  dir: null
+  name: option_set
+- description: |
+    is the timeout in ${/glossary/clock-tick:/plural} if the
+    ${../../option/if/wait:/name} option is set.  Use
+    ${../../type/if/no-timeout:/name} to wait potentially forever.
+  dir: null
+  name: timeout
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no semaphore associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The semaphore uses a priority ceiling and there was no priority ceiling
+      defined for the ${/glossary/scheduler-home:/term} of the calling task.
+    value: ${../../status/if/not-defined:/name}
+  - description: |
+      The semaphore could not be obtained immediately.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The semaphore uses a priority ceiling and the calling task had a current
+      priority less than the priority ceiling.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      Acquiring of the local, binary semaphore by the calling task would have
+      cased a deadlock.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The calling task attempted to recursively obtain a local, binary
+      semaphore using the MrsP locking protocol.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The semaphore was flushed while the calling task was waiting to obtain
+      the semaphore.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The timeout happened while the calling task was waiting to obtain the
+      semaphore.
+    value: ${../../status/if/timeout:/name}
+  - description: |
+      The semaphore was deleted while the calling task was waiting to obtain
+      the semaphore.
+    value: ${../../status/if/object-was-deleted:/name}
+type: interface

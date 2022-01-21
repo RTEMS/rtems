@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the time elapsed since the ${/glossary/unix-epoch:/term} at some time
+  point during system initialization in seconds and nanoseconds format.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/timespec:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
+name: rtems_clock_get_boot_time
+notes: |
+  See ${get-boot-time-bintime:/name} and ${get-boot-time-timeval:/name} to get
+  the boot time in alternative formats.  Setting the
+  ${/glossary/clock-realtime:/term} will also set the boot time.
+params:
+- description: |
+    is the pointer to a ${/c/if/timespec:/name} object.  The time elapsed since
+    the ${/glossary/unix-epoch:/term} at some time point during system
+    initialization call will be stored in this object.  Calling the directive
+    with a pointer equal to ${/c/if/null:/name} is undefined behaviour.
+  dir: out
+  name: boot_time
+return: null
+type: interface

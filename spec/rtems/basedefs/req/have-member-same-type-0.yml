@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/have-member-same-type
+non-functional-type: interface
+rationale: |
+  The ${../if/have-member-same-type:/name} does only work in C.
+  Type qualifiers do not matter (``const int`` is
+  compatible to ``int``); arrays with undefined length are compatible
+  with arrays of defined length (``int[]`` is compatible
+  to ``int[5]``); enums are always incompatible; the number of pointer
+  indirection matters (``**int`` is not compatible with ``*int``).
+  See https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005ftypes_005fcompatible_005fp
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and argument ${../if/have-member-same-type:/params[0]/name} is a union or
+  structure,
+  and ${../if/have-member-same-type:/params[1]/name} is a member of
+  ${../if/have-member-same-type:/params[0]/name},
+  and argument ${../if/have-member-same-type:/params[2]/name} is a union or
+  structure,
+  and ${../if/have-member-same-type:/params[3]/name} is a member of
+  ${../if/have-member-same-type:/params[2]/name},
+  the ${../if/have-member-same-type:/name} macro shall
+  evaluate to the integer values 1 or 0 depending on whether
+  the types of the members ${../if/have-member-same-type:/params[1]/name}
+  and ${../if/have-member-same-type:/params[3]/name} are compatible in
+  the sense of C.
+type: requirement

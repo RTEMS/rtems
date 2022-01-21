@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This header file defines interfaces of the generic interrupt controller
+  support.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: header-file
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group-interrupt
+path: bsp/irq-generic.h
+prefix: bsps/include
+type: interface

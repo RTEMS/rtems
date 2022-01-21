@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/fatal
+- role: function-implementation
+  uid: /score/interr/req/terminate
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When ${../if/fatal:/name} is called, the system shall terminate with a fatal
+  source specified by the ${../if/fatal:/params[0]/name} parameter and a fatal
+  code specified by the ${../if/fatal:/params[1]/name} parameter.
+type: requirement

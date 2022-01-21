@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: |
+  This is an performance optimization.
+references: []
+requirement-type: functional
+text: |
+  While a thread is suspended, the thread shall not reconsider help requests.
+type: requirement

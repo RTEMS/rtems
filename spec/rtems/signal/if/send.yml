@@ -1,0 +1,80 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sends the signal set to the task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${set:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive sends the signal set, ${.:/params[1]/name}, to the target
+  task identified by ${.:/params[0]/name}.
+
+  If a caller sends a signal set to a task with an invalid
+  ${/glossary/asr:/term}, then an error code is returned to the caller.  If a
+  caller sends a signal set to a task whose ASR is valid but disabled, then the
+  signal set will be caught and left pending for the ASR to process when it is
+  enabled.  If a caller sends a signal set to a task with an ASR that is both
+  valid and enabled, then the signal set is caught and the ASR will execute the
+  next time the task is dispatched to run.
+enabled-by: true
+index-entries:
+- send signal set
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt-local
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_signal_send
+notes: |
+  Sending a signal set to a task has no effect on that task's state.  If a
+  signal set is sent to a blocked task, then the task will remain blocked and
+  the signals will be processed when the task becomes the running task.
+
+  Sending a signal set to a global task which does not reside on the local node
+  will generate a request telling the remote node to send the signal set to the
+  specified task.
+params:
+- description: |
+    is the identifier of the target task to receive the signal set.
+  dir: null
+  name: id
+- description: |
+    is the signal set to send.
+  dir: null
+  name: signal_set
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was 0.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The target task had no valid ASR installed.
+    value: ${../../status/if/not-defined:/name}
+type: interface

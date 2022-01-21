@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the seconds and microseconds elapsed since some time point during the
+  system initialization using ${/glossary/clock-monotonic:/term}.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/timeval:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
+name: rtems_clock_get_uptime_timeval
+notes: null
+params:
+- description: |
+    is the pointer to a ${/c/if/timeval:/name} object.  The seconds and
+    microseconds elapsed since some time point during the system initialization
+    and some point during the directive call using
+    ${/glossary/clock-monotonic:/term} will be stored in this object.  The
+    pointer shall be valid, otherwise the behaviour is undefined.
+  dir: out
+  name: uptime
+return: null
+type: interface

@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2017, 2019 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: task
+text: |
+  This project uses the
+  `thread definition of Wikipedia <https://en.wikipedia.org/wiki/Thread_(computing)>`_:
+  "a thread of execution is the smallest sequence of programmed
+  instructions that can be managed independently by a scheduler, which is
+  typically a part of the operating system."
+
+  It consists normally of a set of registers and a stack.  The scheduler
+  assigns processors to a subset of the ready tasks.  The terms task and
+  ${thread:/term} are synonym in RTEMS.  The term task is used
+  throughout the Classic API, however, internally in the operating system
+  implementation and the POSIX API the term thread is used.
+
+  A *task* is a ${softwarecomponent:/term}.
+type: glossary

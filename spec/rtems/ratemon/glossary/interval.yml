@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: interval
+text: |
+  The current interval starts with the last return from a successful call to
+  ${../if/period:/name} which does not use ${../if/period-status-define:/name}
+  as value for parameter ${../if/period:/params[1]/name}.  The current
+  interval ends with the return from the next successful call to
+  ${../if/period:/name} which does not use ${../if/period-status-define:/name}
+  as value for parameter ${../if/period:/params[1]/name}.  See also
+  start/end ${../glossary/deadline:/term}.
+
+  The parameter ${../if/period:/params[1]/name} of that call specifies the
+  interval length of the period.
+
+  **Warning**: All calls to ${../if/period:/name} for the same period must
+  provide the same value for parameter ${../if/period:/params[1]/name}.  That
+  is, the intervals of a period must have a strictly regular length.  If that
+  is not the case and the period enters ${../glossary/expired:/term}
+  ${../glossary/state:/term}, future period ${../glossary/deadline:/term} are
+  set arbitrarily because the use of ${../glossary/postponedjob:/plural}
+  implicitly assumes a fixed time length for future
+  ${../glossary/job:/plural}.
+
+  Note, an interval denotes a time while ${../glossary/job:/term} denotes code.
+  Note also, if a first call to ${../if/period:/name} which does not use
+  ${../if/period-status-define:/name} returned and a second
+  ${../if/period:/name} which does not use ${../if/period-status-define:/name}
+  is invoked but did not yet return, the current interval is still the one of
+  the first call.
+type: glossary

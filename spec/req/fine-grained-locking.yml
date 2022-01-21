@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  If the system shall be implemented using fine grained locking at the lowest
+  level.
+type: requirement

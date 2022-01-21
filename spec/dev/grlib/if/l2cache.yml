@@ -1,0 +1,668 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBL2CACHE
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: l2cache-header
+definition:
+- default:
+    count: 1
+    name: L2CC
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: L2CS
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: L2CFMA
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: L2CFSI
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: L2CERR
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: L2CERRA
+  offset: 0x24
+  variants: []
+- default:
+    count: 1
+    name: L2CTCB
+  offset: 0x28
+  variants: []
+- default:
+    count: 1
+    name: L2CCB
+  offset: 0x2c
+  variants: []
+- default:
+    count: 1
+    name: L2CSCRUB
+  offset: 0x30
+  variants: []
+- default:
+    count: 1
+    name: L2CSDEL
+  offset: 0x34
+  variants: []
+- default:
+    count: 1
+    name: L2CEINJ
+  offset: 0x38
+  variants: []
+- default:
+    count: 1
+    name: L2CACCC
+  offset: 0x3c
+  variants: []
+- default:
+    count: 1
+    name: L2CEINJCFG
+  offset: 0x4c
+  variants: []
+- default:
+    count: 1
+    name: L2CMTRR
+  offset: 0x80
+  variants: []
+register-prefix: null
+register-block-group: L2CACHE
+register-block-size: 132
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDAC'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'REPL'
+      start: 28
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BBS'
+      start: 16
+      width: 3
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INDEX_WAY'
+      start: 12
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LOCK'
+      start: 8
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'HPRHB'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'HPB'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'UC'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'HC'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WP'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'HP'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    L2C Control register
+  description: null
+  name: L2CC
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'LS'
+      start: 24
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AT'
+      start: 23
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MP'
+      start: 22
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MTRR'
+      start: 16
+      width: 6
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BBUS_W'
+      start: 13
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'WAY_SIZE'
+      start: 2
+      width: 11
+    - access: [r]
+      brief: null
+      description: null
+      name: 'WAY'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    L2C Status register
+  description: null
+  name: L2CS
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 5
+      width: 27
+    - access: [w]
+      brief: null
+      description: null
+      name: 'DI'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FMODE'
+      start: 0
+      width: 3
+    variants: []
+  brief: |
+    L2C Flush (Memory address) register
+  description: null
+  name: L2CFMA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INDEX'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TAG'
+      start: 10
+      width: 22
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FL'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'VB'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DB'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WAY'
+      start: 4
+      width: 2
+    - access: [w]
+      brief: null
+      description: null
+      name: 'DI'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WF'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FMODE'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    L2C Flush (Set, Index) register
+  description: null
+  name: L2CFSI
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AHB_MASTER_INDEX'
+      start: 28
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SCRUB'
+      start: 27
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TYPE'
+      start: 24
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TAG_DATA'
+      start: 23
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'COR_UCOR'
+      start: 22
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MULTI'
+      start: 21
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'VALID'
+      start: 20
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DISERESP'
+      start: 19
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'CORRECTABLE_ERROR_COUNTER'
+      start: 16
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IRQ_PENDING'
+      start: 12
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQ_MASK'
+      start: 8
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SELECT_CB'
+      start: 6
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SELECT_TCB'
+      start: 4
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'XCB'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RCB'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'COMP'
+      start: 1
+      width: 1
+    - access: [w]
+      brief: null
+      description: null
+      name: 'RST'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    L2CError status/control register
+  description: null
+  name: L2CERR
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    L2C Error address register
+  description: null
+  name: L2CERRA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TCB'
+      start: 0
+      width: 7
+    variants: []
+  brief: |
+    L2C TAG-Check-Bits register
+  description: null
+  name: L2CTCB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CB'
+      start: 0
+      width: 28
+    variants: []
+  brief: |
+    L2C Data-Check-Bits register
+  description: null
+  name: L2CCB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INDEX'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WAY'
+      start: 2
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PEN'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    L2C Scrub control/status register
+  description: null
+  name: L2CSCRUB
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DEL'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    L2C Scrub delay register
+  description: null
+  name: L2CSDEL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 2
+      width: 30
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INJ'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    L2C Error injection register
+  description: null
+  name: L2CEINJ
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DSC'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SH'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SPLITQ'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NHM'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BERR'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'OAPM'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FLINE'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DBPF'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: '128WF'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DBPWS'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SPLIT'
+      start: 1
+      width: 1
+    variants: []
+  brief: |
+    L2C Access control register
+  description: null
+  name: L2CACCC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDI'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TER'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IMD'
+      start: 8
+      width: 1
+    variants: []
+  brief: |
+    L2C injection configuration register
+  description: null
+  name: L2CEINJCFG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ADDR'
+      start: 18
+      width: 14
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ACC'
+      start: 16
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MASK'
+      start: 2
+      width: 14
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WP'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AC'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    L2C Memory type range register
+  description: null
+  name: L2CMTRR
+  width: 32
+name: l2cache
+notes: null
+type: interface

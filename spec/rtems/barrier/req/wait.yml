@@ -1,0 +1,371 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/wait
+- role: interface-function
+  uid: ../../type/if/no-timeout
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/wait:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/wait:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: Timeout
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TIMEOUT );
+    text: |
+      The return status of ${../if/wait:/name} shall be
+      ${../../status/if/timeout:/name}.
+  - name: ObjDel
+    test-code: |
+      T_rsc( ctx->status, RTEMS_OBJECT_WAS_DELETED );
+    text: |
+      The return status of ${../if/wait:/name} shall be
+      ${../../status/if/object-was-deleted:/name}.
+  - name: NoReturn
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The call to ${../if/wait:/name} shall not return to the calling task.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      While the ${../if/release:/params[0]/name} parameter is not associated
+      with a barrier.
+  - name: Manual
+    test-code: |
+      ctx->id = ctx->manual_release_id;
+    text: |
+      While the ${../if/release:/params[0]/name} parameter is associated with a
+      manual release barrier.
+  - name: Auto
+    test-code: |
+      ctx->id = ctx->auto_release_id;
+    text: |
+      While the ${../if/release:/params[0]/name} parameter is associated with an
+      automatic release barrier.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeout
+  states:
+  - name: Ticks
+    test-code: |
+      ctx->timeout = UINT32_MAX;
+    text: |
+      While the ${../if/release:/params[1]/name} parameter is a clock tick
+      interval.
+  - name: Forever
+    test-code: |
+      ctx->timeout = RTEMS_NO_TIMEOUT;
+    text: |
+      While the ${../if/release:/params[1]/name} parameter is
+      ${../../type/if/no-timeout:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Satisfy
+  states:
+  - name: Never
+    test-code: |
+      if ( ctx->timeout == RTEMS_NO_TIMEOUT ) {
+        SendEvents( ctx->low_worker_id, EVENT_TIMER_INACTIVE | EVENT_RELEASE );
+      } else {
+        SendEvents( ctx->low_worker_id, EVENT_TIMER_EXPIRE );
+      }
+    text: |
+      While the calling task waits at the barrier, while the barrier is not
+      released or deleted.
+  - name: Wait
+    test-code: |
+      SendEvents( ctx->high_worker_id, EVENT_WAIT );
+    text: |
+      While calling the directive releases the barrier.
+  - name: Release
+    test-code: |
+      SendEvents( ctx->low_worker_id, EVENT_RELEASE );
+    text: |
+      While the calling task waits at the barrier, while the barrier is
+      released.
+  - name: Delete
+    test-code: |
+      SendEvents( ctx->low_worker_id, EVENT_DELETE );
+    text: |
+      While the calling task waits at the barrier, while the barrier is
+      deleted.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoWaitRelease: |
+    Manual release barriers cannot be released by calling the directive.
+test-action: |
+  ctx->status = rtems_barrier_wait( ctx->id, ctx->timeout );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id main_id
+- brief: null
+  description: null
+  member: |
+    rtems_id high_worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_id low_worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_id manual_release_id
+- brief: null
+  description: null
+  member: |
+    rtems_id auto_release_id
+- brief: null
+  description: null
+  member: |
+    rtems_id id
+- brief: null
+  description: null
+  member: |
+    rtems_interval timeout
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->main_id = rtems_task_self();
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->high_worker_id = CreateTask( "WRKH", PRIO_HIGH );
+    StartTask( ctx->high_worker_id, Worker, ctx );
+    ctx->low_worker_id = CreateTask( "WRKL", PRIO_LOW );
+    StartTask( ctx->low_worker_id, Worker, ctx );
+
+    sc = rtems_barrier_create(
+      NAME,
+      RTEMS_BARRIER_MANUAL_RELEASE,
+      0,
+      &ctx->manual_release_id
+    );
+    T_assert_rsc_success( sc );
+
+    sc = rtems_barrier_create(
+      NAME,
+      RTEMS_BARRIER_AUTOMATIC_RELEASE,
+      2,
+      &ctx->auto_release_id
+    );
+    T_assert_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define EVENT_TIMER_INACTIVE RTEMS_EVENT_0
+
+  #define EVENT_WAIT RTEMS_EVENT_1
+
+  #define EVENT_RELEASE RTEMS_EVENT_2
+
+  #define EVENT_DELETE RTEMS_EVENT_3
+
+  #define EVENT_TIMER_EXPIRE RTEMS_EVENT_4
+
+  typedef ${.:/test-context-type} Context;
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code sc;
+      rtems_event_set   events;
+
+      events = ReceiveAnyEvents();
+
+      if ( ( events & EVENT_TIMER_INACTIVE ) != 0 ) {
+        T_eq_int(
+          T_get_thread_timer_state( ctx->main_id ),
+          T_THREAD_TIMER_INACTIVE
+        );
+      }
+
+      if ( ( events & EVENT_WAIT ) != 0 ) {
+        sc = rtems_barrier_wait( ctx->id, RTEMS_NO_TIMEOUT );
+        T_rsc_success( sc );
+      }
+
+      if ( ( events & EVENT_RELEASE ) != 0 ) {
+        uint32_t released;
+
+        sc = rtems_barrier_release( ctx->id, &released );
+        T_rsc_success( sc );
+      }
+
+      if ( ( events & EVENT_DELETE ) != 0 ) {
+        rtems_attribute     attribute_set;
+        uint32_t            maximum_waiters;
+        rtems_id           *id;
+        rtems_task_priority prio;
+
+        if ( ctx->id == ctx->manual_release_id ) {
+          attribute_set = RTEMS_BARRIER_MANUAL_RELEASE;
+          maximum_waiters = 0;
+          id = &ctx->manual_release_id;
+        } else {
+          attribute_set = RTEMS_BARRIER_AUTOMATIC_RELEASE;
+          maximum_waiters = 2;
+          id = &ctx->auto_release_id;
+        }
+
+        prio = SetSelfPriority( PRIO_HIGH );
+        T_eq_u32( prio, PRIO_LOW );
+
+        sc = rtems_barrier_delete( ctx->id );
+        T_rsc_success( sc );
+
+        sc = rtems_barrier_create( NAME, attribute_set, maximum_waiters, id );
+        T_rsc_success( sc );
+
+        prio = SetSelfPriority( prio );
+        T_eq_u32( prio, PRIO_HIGH );
+      }
+
+      if ( ( events & EVENT_TIMER_EXPIRE ) != 0 ) {
+        T_eq_int(
+          T_get_thread_timer_state( ctx->main_id ),
+          T_THREAD_TIMER_SCHEDULED
+        );
+        FinalClockTick();
+      }
+    }
+  }
+test-target: testsuites/validation/tc-barrier-wait.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    DeleteTask( ctx->high_worker_id );
+    DeleteTask( ctx->low_worker_id );
+
+    if ( ctx->manual_release_id != 0 ) {
+      sc = rtems_barrier_delete( ctx->manual_release_id );
+      T_rsc_success( sc );
+    }
+
+    if ( ctx->auto_release_id != 0 ) {
+      sc = rtems_barrier_delete( ctx->auto_release_id );
+      T_rsc_success( sc );
+    }
+
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+  pre-conditions:
+    Id:
+    - NoObj
+    Timeout: N/A
+    Satisfy: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Manual
+    - Auto
+    Timeout: all
+    Satisfy:
+    - Release
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Auto
+    Timeout: all
+    Satisfy:
+    - Wait
+- enabled-by: true
+  post-conditions:
+    Status: NoReturn
+  pre-conditions:
+    Id:
+    - Manual
+    - Auto
+    Timeout:
+    - Forever
+    Satisfy:
+    - Never
+- enabled-by: true
+  post-conditions: NoWaitRelease
+  pre-conditions:
+    Id:
+    - Manual
+    Timeout: all
+    Satisfy:
+    - Wait
+- enabled-by: true
+  post-conditions:
+    Status: Timeout
+  pre-conditions:
+    Id:
+    - Manual
+    - Auto
+    Timeout:
+    - Ticks
+    Satisfy:
+    - Never
+- enabled-by: true
+  post-conditions:
+    Status: ObjDel
+  pre-conditions:
+    Id:
+    - Manual
+    - Auto
+    Timeout: all
+    Satisfy:
+    - Delete
+type: requirement

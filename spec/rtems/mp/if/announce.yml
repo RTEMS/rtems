@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Announces the arrival of a packet.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: void
+  variants: []
+description: |
+  This directive informs RTEMS that a multiprocessing communications packet has
+  arrived from another node.  This directive is called by the user-provided
+  MPCI, and is only used in multiprocessing configurations.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+name: rtems_multiprocessing_announce
+notes: |
+  This directive is typically called from an ${/glossary/isr:/term}.
+
+  This directive does not generate activity on remote nodes.
+params: []
+return: null
+type: interface

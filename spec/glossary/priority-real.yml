@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: real priority
+text: |
+  Each ${task:/term} has exactly one real priority.  The real priority is
+  always with respect to the ${scheduler-home:/term} of a task.  It is defined
+  during task initialization.  It may be changed by directives such as
+  ${/rtems/task/if/set-priority:/name} and
+  ${/rtems/task/if/set-scheduler:/name}.  The real priority is the foundation
+  of the ${priority-current:/term}.
+type: glossary

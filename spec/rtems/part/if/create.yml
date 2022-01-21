@@ -1,0 +1,167 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Creates a partition.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    - ${/c/if/uintptr_t:/name} ${.:/params[2]/name}
+    - ${/c/if/size_t:/name} ${.:/params[3]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[4]/name}
+    - ${../../type/if/id:/name} *${.:/params[5]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive creates a partition of fixed size buffers from a physically
+  contiguous memory space which starts at ${.:/params[1]/name} and is
+  ${.:/params[2]/name} bytes in size.  Each allocated buffer is to be of
+  ${.:/params[3]/name} in bytes.  The partition has the user-defined object
+  name specified in ${.:/params[0]/name}.  The assigned object identifier is
+  returned in ${.:/params[5]/name}.  This identifier is used to access the
+  partition with other partition related directives.
+
+  The **attribute set** specified in ${.:/params[4]/name} is built through a
+  *bitwise or* of the attribute constants described below.  Not all
+  combinations of attributes are allowed.  Some attributes are mutually
+  exclusive.  If mutually exclusive attributes are combined, the behaviour is
+  undefined.  Attributes not mentioned below are not evaluated by this
+  directive and have no effect.  Default attributes can be selected by using
+  the ${../../attr/if/default:/name} constant.
+
+  The partition has a local or global **scope** in a multiprocessing network
+  (this attribute does not refer to SMP systems).  The scope is selected by the
+  mutually exclusive ${../../attr/if/local:/name} and
+  ${../../attr/if/global:/name} attributes.
+
+  * A **local scope** is the default and can be emphasized through the use of
+    the ${../../attr/if/local:/name} attribute.  A local partition can be only
+    used by the node which created it.
+
+  * A **global scope** is established if the ${../../attr/if/global:/name}
+    attribute is set.  The memory space used for the partition must reside in
+    shared memory.  Setting the global attribute in a single node system has no
+    effect.
+enabled-by: true
+index-entries:
+- create a partition
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/mp-send
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
+- role: constraint
+  uid: ../../constraint/mp-max-global-objects
+name: rtems_partition_create
+notes: |
+  The partition buffer area specified by the ${.:/params[1]/name} must be
+  properly aligned.  It must be possible to directly store target architecture
+  pointers and also the user data.  For example, if the user data contains some
+  long double or vector data types, the partition buffer area and the buffer
+  size must take the alignment of these types into account which is usually
+  larger than the pointer alignment.  A cache line alignment may be also a
+  factor.  Use ${alignment:/name} to specify the minimum alignment of a
+  partition buffer type.
+
+  The ${.:/params[3]/name} parameter must be an integral multiple of the
+  pointer size on the target architecture.  Additionally,
+  ${.:/params[3]/name} must be large enough to hold two pointers on the
+  target architecture.  This is required for RTEMS to manage the buffers when
+  they are free.
+
+  For control and maintenance of the partition, RTEMS allocates a
+  ${/glossary/ptcb:/term} from the local PTCB free pool and initializes it.
+  Memory from the partition buffer area is not used by RTEMS to store the PTCB.
+
+  The PTCB for a global partition is allocated on the local node.  Partitions
+  should not be made global unless remote tasks must interact with the
+  partition.  This is to avoid the overhead incurred by the creation of a
+  global partition.  When a global partition is created, the partition's name
+  and identifier must be transmitted to every node in the system for insertion
+  in the local copy of the global object table.
+params:
+- description: is the object name of the partition.
+  dir: null
+  name: name
+- description: is the starting address of the buffer area used by the partition.
+  dir: null
+  name: starting_address
+- description: is the length in bytes of the buffer area used by the partition.
+  dir: null
+  name: length
+- description: is the size in bytes of a buffer managed by the partition.
+  dir: null
+  name: buffer_size
+- description: is the attribute set of the partition.
+  dir: null
+  name: attribute_set
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the created partition will be stored
+    in this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[5]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was 0.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The ${.:/params[3]/name} parameter was 0.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was less than the
+      ${.:/params[3]/name} parameter.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The ${.:/params[3]/name} parameter was not an integral multiple of
+      the pointer size.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The ${.:/params[3]/name} parameter was less than two times the
+      pointer size.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was not on a pointer size
+      boundary.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no inactive object available to create a partition.  The number
+      of partitions available to the application is configured through the
+      ${/acfg/if/max-partitions:/name} application configuration option.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      In multiprocessing configurations, there was no inactive global object
+      available to create a global semaphore.  The number of global objects
+      available to the application is configured through the
+      ${/acfg/if/mp-max-global-objects:/name} application configuration option.
+    value: ${../../status/if/too-many:/name}
+type: interface

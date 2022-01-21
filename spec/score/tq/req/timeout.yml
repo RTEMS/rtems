@@ -1,0 +1,241 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int(
+        ctx->tq_ctx->status[ TQ_BLOCKER_A ],
+        TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL )
+      );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: Timeout
+    test-code: |
+      T_eq_int(
+        ctx->tq_ctx->status[ TQ_BLOCKER_A ],
+        TQConvertStatus( ctx->tq_ctx, STATUS_TIMEOUT )
+      );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/timeout:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread of the timeout operation shall be unblocked by the timeout
+      operation.
+  - name: 'No'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread of the timeout operation shall not be unblocked by the timeout
+      operation.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+pre-conditions:
+- name: WaitState
+  states:
+  - name: Blocked
+    test-code: |
+      TQEnqueuePrepare( ctx->tq_ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
+      Tick( ctx );
+      TQEnqueueDone( ctx->tq_ctx );
+    text: |
+      While the thread of the timeout operation is in the blocked wait state.
+  - name: IntendToBlock
+    test-code: |
+      TQEnqueuePrepare( ctx->tq_ctx );
+      T_scheduler_set_event_handler( SchedulerBlock, ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
+      TQEnqueueDone( ctx->tq_ctx );
+    text: |
+      While the thread of the timeout operation is in the intend to block wait
+      state.
+  - name: ReadyAgain
+    test-code: |
+      TQEnqueuePrepare( ctx->tq_ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
+      T_scheduler_set_event_handler( SchedulerUnblock, ctx );
+      TQEnqueueDone( ctx->tq_ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+    text: |
+      While the thread of the timeout operation is in the ready again wait
+      state.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  /*
+   * The action is performed by the ``WaitState`` pre-condition preparation.
+   */
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-timeout.h
+test-includes:
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tr-tq-timeout.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    ctx->request.arg = ctx;
+    TQReset( ctx->tq_ctx );
+
+    if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
+    } else {
+      TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_HIGH );
+    }
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+
+  static void Tick( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    FinalClockTick();
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = Tick;
+      CallWithinISRSubmit( &ctx->request );
+    }
+  }
+
+  static void ThreadTimeout( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    _Thread_Timeout(
+      &ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ]->Timer.Watchdog
+    );
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  static void SchedulerUnblock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_UNBLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = ThreadTimeout;
+      CallWithinISRSubmit( &ctx->request );
+    }
+  }
+test-target: testsuites/validation/tr-tq-timeout.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the thread queue enqueue operation timed out.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Timeout
+    Unblock: 'Yes'
+  pre-conditions:
+    WaitState:
+    - Blocked
+- enabled-by: true
+  post-conditions:
+    Status: Timeout
+    Unblock: 'No'
+  pre-conditions:
+    WaitState:
+    - IntendToBlock
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Unblock: 'No'
+  pre-conditions:
+    WaitState:
+    - ReadyAgain
+type: requirement

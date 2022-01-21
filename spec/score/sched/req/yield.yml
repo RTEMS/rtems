@@ -1,0 +1,478 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: group
+post-conditions:
+- name: HomeSchedulerState
+  states:
+  - name: Blocked
+    test-code: |
+      T_true( ctx->is_idle_after_yield );
+      T_eq_u32( ctx->cpu_after_yield, 1 );
+    text: |
+      The thread shall be blocked in its ${/glossary/scheduler-home:/term}.
+  - name: Scheduled
+    test-code: |
+      T_false( ctx->is_idle_before_yield );
+      T_false( ctx->is_idle_after_yield );
+      T_eq_u32( GetCounter( ctx ), 0 );
+      T_eq_u32( ctx->cpu_after_yield, 0 );
+    text: |
+      The thread shall be scheduled in its ${/glossary/scheduler-home:/term}.
+  - name: Ready
+    test-code: |
+      T_eq_u32( GetCounter( ctx ), 1 );
+    text: |
+      The thread shall be ready in its ${/glossary/scheduler-home:/term}.
+  - name: Idle
+    test-code: |
+      T_true( ctx->is_idle_before_yield );
+      T_true( ctx->is_idle_after_yield );
+      T_eq_u32( GetCounter( ctx ), 0 );
+      T_eq_u32( ctx->cpu_after_yield, 1 );
+    text: |
+      An idle thread shall execute on behalf of the thread in its
+      ${/glossary/scheduler-home:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: AskForHelp
+  states:
+  - name: 'Yes'
+    test-code: |
+      event = TQGetNextAskForHelp( &ctx->tq_ctx, &index );
+      T_eq_ptr( event->thread, ctx->tq_ctx.runner_tcb );
+
+      event = TQGetNextAskForHelp( &ctx->tq_ctx, &index );
+      T_eq_ptr( event->thread, ctx->tq_ctx.runner_tcb );
+
+      event = TQGetNextAskForHelp( &ctx->tq_ctx, &index );
+      T_eq_ptr( event, &T_scheduler_event_null );
+    text: |
+      The thread shall ask all its ${/glossary/scheduler-eligible:/term} for
+      help.
+  - name: 'No'
+    test-code: |
+      event = TQGetNextAskForHelp( &ctx->tq_ctx, &index );
+      T_eq_ptr( event, &T_scheduler_event_null );
+    text: |
+      The thread shall not ask for help.
+  test-epilogue: null
+  test-prologue: |
+    size_t                   index;
+    const T_scheduler_event *event;
+
+    index = 0;
+pre-conditions:
+- name: EligibleScheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->has_helping = false;
+    text: |
+      While the only ${/glossary/scheduler-eligible:/term} of the thread is the
+      ${/glossary/scheduler-home:/term}.
+  - name: Helping
+    test-code: |
+      ctx->has_helping = true;
+    text: |
+      While the thread has at least one ${/glossary/scheduler-helping:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: UsedScheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->use_helping = false;
+    text: |
+      While the thread is scheduled on the ${/glossary/scheduler-home:/term}.
+  - name: Helping
+    test-code: |
+      ctx->use_helping = true;
+    text: |
+      While the thread is scheduled on a ${/glossary/scheduler-helping:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: HomeSchedulerState
+  states:
+  - name: Blocked
+    test-code: |
+      ctx->ready = false;
+    text: |
+      The thread shall be blocked in its ${/glossary/scheduler-home:/term}.
+  - name: Scheduled
+    test-code: |
+      ctx->ready = false;
+    text: |
+      The thread shall be scheduled in its ${/glossary/scheduler-home:/term}.
+  - name: Ready
+    test-code: |
+      ctx->ready = true;
+    text: |
+      The thread shall be ready in its ${/glossary/scheduler-home:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Sticky
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->sticky = true;
+    text: |
+      While the thread is sticky.
+  - name: 'No'
+    test-code: |
+      ctx->sticky = false;
+    text: |
+      While the thread not sticky.
+  test-epilogue: null
+  test-prologue: null
+- name: Other
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->other_ready = true;
+    text: |
+      While at least one ready thread with a priority equal to the priority of
+      the thread exists in the ${/glossary/scheduler-home:/term} of the thread.
+  - name: 'No'
+    test-code: |
+      ctx->other_ready = false;
+    text: |
+      While no ready thread with a priority equal to the priority of the thread
+      exists in the ${/glossary/scheduler-home:/term} of the thread.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  HelpingNeedsHelping: |
+    In order to use a helping scheduler a thread needs a helping scheduler.
+  HelpingNeedsSMP: |
+    A helping scheduler is only available where the system was built with SMP
+    support enabled.
+  StickyNeedsSMP: |
+    A thread may be sticky only where the system was built with SMP support
+    enabled.
+  Sticky: |
+    Sticky threads are never blocked in their home scheduler.  Only sticky
+    threads may be scheduled on two schedulers at the same time.
+  HomeNeedsScheduled: |
+    While a thread uses its home scheduler, it is scheduled in the home scheduler.
+test-action: |
+  const Per_CPU_Control *cpu;
+  bool                   other_busy;
+
+  if ( ctx->has_helping ) {
+    TQMutexObtain( &ctx->tq_ctx, TQ_MUTEX_A );
+    TQSendAndWaitForExecutionStop(
+      &ctx->tq_ctx,
+      HELPER,
+      TQ_EVENT_MUTEX_A_OBTAIN
+    );
+  }
+
+  if ( ctx->use_helping ) {
+    MoveToHelping( ctx );
+  }
+
+  TQResetCounter( &ctx->tq_ctx );
+
+  if ( ctx->use_helping && ctx->ready ) {
+    ctx->tq_ctx.busy_wait[ COUNTER ] = true;
+    TQSend( &ctx->tq_ctx, COUNTER, TQ_EVENT_COUNT | TQ_EVENT_BUSY_WAIT );
+    other_busy = true;
+  } else {
+    other_busy = false;
+  }
+
+  if ( ctx->sticky ) {
+    ObtainMutex( ctx->sticky_mutex );
+  }
+
+  if ( ctx->other_ready && !other_busy ) {
+    TQSend( &ctx->tq_ctx, COUNTER, TQ_EVENT_COUNT );
+  }
+
+  cpu = _Per_CPU_Get_by_index( 0 );
+  ctx->is_idle_before_yield = cpu->heir->is_idle;
+
+  TQSchedulerRecordStart( &ctx->tq_ctx );
+  Yield();
+  TQSchedulerRecordStop( &ctx->tq_ctx );
+
+  #if defined(RTEMS_SMP)
+  ctx->tq_ctx.busy_wait[ COUNTER ] = false;
+
+  while ( cpu->heir == ctx->tq_ctx.worker_tcb[ COUNTER ] ) {
+    RTEMS_COMPILER_MEMORY_BARRIER();
+  }
+  #endif
+
+  ctx->is_idle_after_yield = cpu->heir->is_idle;
+  ctx->cpu_after_yield = rtems_scheduler_get_processor();
+
+  if ( ctx->sticky ) {
+    ReleaseMutex( ctx->sticky_mutex );
+  }
+
+  if ( ctx->has_helping ) {
+    TQMutexRelease( &ctx->tq_ctx, TQ_MUTEX_A );
+    TQSendAndWaitForExecutionStop(
+      &ctx->tq_ctx,
+      HELPER,
+      TQ_EVENT_MUTEX_A_RELEASE
+    );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQContext tq_ctx
+- brief: |
+    This member contains the identifier of a sticky mutex.
+  description: null
+  member: |
+    rtems_id sticky_mutex
+- brief: |
+    This member contains the processor index after yielding.
+  description: null
+  member: |
+    uint32_t cpu_after_yield
+- brief: |
+    If this member is true, then the runner shall have a helping scheduler.
+  description: null
+  member: |
+    bool has_helping
+- brief: |
+    If this member is true, then the runner shall use a helping scheduler.
+  description: null
+  member: |
+    bool use_helping
+- brief: |
+    If this member is true, then the runner shall be ready in its home
+    scheduler.
+  description: null
+  member: |
+    bool ready
+- brief: |
+    If this member is true, then the runner shall be sticky.
+  description: null
+  member: |
+    bool sticky
+- brief: |
+    If this member is true, then another ready task in the home scheduler of
+    the runner shall be ready with an equal priority.
+  description: null
+  member: |
+    bool other_ready
+- brief: |
+    If this member is true, then the processor zero was idle before yielding.
+  description: null
+  member: |
+    bool is_idle_before_yield
+- brief: |
+    If this member is true, then the processor zero was idle after yielding.
+  description: null
+  member: |
+    bool is_idle_after_yield
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/percpu.h
+test-local-includes:
+- tx-support.h
+- tx-thread-queue.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
+    ctx->tq_ctx.convert_status = TQConvertStatusClassic;
+    TQInitialize( &ctx->tq_ctx );
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'U', 'T', 'X' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &ctx->sticky_mutex
+    );
+    T_rsc_success( sc );
+
+    TQSetPriority( &ctx->tq_ctx, COUNTER, PRIO_NORMAL );
+
+    #if defined(RTEMS_SMP)
+    TQSetScheduler( &ctx->tq_ctx, HELPER, SCHEDULER_B_ID, PRIO_NORMAL );
+    TQSetPriority( &ctx->tq_ctx, MOVER, PRIO_HIGH );
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  #define COUNTER TQ_BLOCKER_A
+
+  #define HELPER TQ_BLOCKER_B
+
+  #define MOVER TQ_BLOCKER_C
+
+  typedef ${.:/test-context-type} Context;
+
+  static void MoveToHelping( Context *ctx )
+  {
+    ctx->tq_ctx.busy_wait[ MOVER ] = true;
+    TQSend( &ctx->tq_ctx, MOVER, TQ_EVENT_BUSY_WAIT );
+    TQWaitForEventsReceived( &ctx->tq_ctx, MOVER );
+    T_eq_u32( rtems_scheduler_get_processor(), 1 );
+    ctx->tq_ctx.busy_wait[ MOVER ] = false;
+    TQWaitForExecutionStop( &ctx->tq_ctx, MOVER );
+  }
+
+  static uint32_t GetCounter( const Context *ctx )
+  {
+    return TQGetWorkerCounter( &ctx->tq_ctx, COUNTER );
+  }
+test-target: testsuites/validation/tc-sched-yield.c
+test-teardown:
+  brief: null
+  code: |
+    TQDestroy( &ctx->tq_ctx );
+    DeleteMutex( ctx->sticky_mutex );
+  description: null
+text: |
+  When the thread yields.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    HomeSchedulerState:
+    - if:
+        pre-conditions:
+          UsedScheduler: Home
+          HomeSchedulerState: Scheduled
+          Other: 'No'
+      then: Scheduled
+    - if:
+        pre-conditions:
+          UsedScheduler: Home
+          HomeSchedulerState: Scheduled
+          Other: 'Yes'
+      then: Ready
+    - if:
+        pre-conditions:
+          EligibleScheduler: Helping
+          UsedScheduler: Helping
+          HomeSchedulerState: Scheduled
+          Sticky: 'Yes'
+          Other: 'No'
+      then: Idle
+    - if:
+        pre-conditions:
+          EligibleScheduler: Helping
+          UsedScheduler: Helping
+          HomeSchedulerState: Scheduled
+          Sticky: 'Yes'
+          Other: 'Yes'
+      then: Ready
+    - if:
+        pre-conditions:
+          EligibleScheduler: Helping
+          UsedScheduler: Helping
+          HomeSchedulerState: Blocked
+          Sticky: 'No'
+      then: Blocked
+    - else: Ready
+    AskForHelp:
+    - if:
+        pre-conditions:
+          EligibleScheduler: Helping
+          UsedScheduler: Home
+          HomeSchedulerState: Scheduled
+          Other: 'Yes'
+      then: 'Yes'
+    - else: 'No'
+  pre-conditions:
+    EligibleScheduler: all
+    UsedScheduler: all
+    HomeSchedulerState: all
+    Sticky: all
+    Other: all
+- enabled-by: true
+  post-conditions: HelpingNeedsHelping
+  pre-conditions:
+    EligibleScheduler:
+    - Home
+    UsedScheduler:
+    - Helping
+    HomeSchedulerState: all
+    Sticky: all
+    Other: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: HelpingNeedsSMP
+  pre-conditions:
+    EligibleScheduler:
+    - Helping
+    UsedScheduler: all
+    HomeSchedulerState: all
+    Sticky: all
+    Other: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: StickyNeedsSMP
+  pre-conditions:
+    EligibleScheduler: all
+    UsedScheduler: all
+    HomeSchedulerState: all
+    Sticky:
+    - 'Yes'
+    Other: all
+- enabled-by: true
+  post-conditions: Sticky
+  pre-conditions:
+    EligibleScheduler:
+    - Helping
+    UsedScheduler:
+    - Helping
+    HomeSchedulerState:
+    - Scheduled
+    - Ready
+    Sticky:
+    - 'No'
+    Other: all
+- enabled-by: true
+  post-conditions: Sticky
+  pre-conditions:
+    EligibleScheduler: all
+    UsedScheduler: all
+    HomeSchedulerState:
+    - Blocked
+    Sticky:
+    - 'Yes'
+    Other: all
+- enabled-by: true
+  post-conditions: HomeNeedsScheduled
+  pre-conditions:
+    EligibleScheduler: all
+    UsedScheduler:
+    - Home
+    HomeSchedulerState:
+    - Blocked
+    - Ready
+    Sticky: all
+    Other: all
+type: requirement

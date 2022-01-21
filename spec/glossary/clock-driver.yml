@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: Clock Driver
+text: |
+  The Clock Driver is a driver which provides the ${clock-tick:/term} and a
+  time counter.  The time counter is used to drive the ${clock-realtime:/term}
+  and ${clock-monotonic:/term}.  The Clock Driver can be initialized by the
+  application with the ${/acfg/if/appl-needs-clock-driver:/name} and
+  ${/acfg/if/microseconds-per-tick:/name} application configuration options.
+type: glossary

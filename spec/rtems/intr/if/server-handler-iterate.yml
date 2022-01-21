@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Iterates over all interrupt handler installed at the interrupt vector and
+  interrupt server.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    - ${vector-number:/name} ${.:/params[1]/name}
+    - ${per-handler-routine:/name} ${.:/params[2]/name}
+    - void *${.:/params[3]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  For each installed handler at the interrupt vector and interrupt server the
+  visitor function specified by ${.:/params[1]/name} will be called with the
+  argument specified by ${.:/params[2]/name} and the handler information,
+  options, routine and argument.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_interrupt_server_handler_iterate
+notes: |
+  The directive is intended for system information and diagnostics.
+
+  Never install or remove an interrupt handler within the visitor function.
+  This may result in a deadlock.
+params:
+- description: |
+    is the index of the interrupt server.
+  dir: null
+  name: server_index
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the visitor routine.
+  dir: null
+  name: routine
+- description: |
+    is the visitor argument.
+  dir: null
+  name: arg
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no interrupt server associated with the index specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

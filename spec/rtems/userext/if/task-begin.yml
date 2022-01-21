@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Task begin extensions are invoked when a task begins execution.
+copyrights:
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/userext/if/thread-begin:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/thread-dispatching-enabled
+- role: constraint
+  uid: /constraint/object-allocator-not-owner
+name: rtems_task_begin_extension
+notes: |
+  The task begin extensions are invoked in
+  ${/glossary/extension-forward-order:/term}.
+
+  Task begin extensions are invoked with thread dispatching enabled.  This
+  allows the use of dynamic memory allocation, creation of POSIX keys, and use
+  of C++ thread-local storage.  Blocking synchronization primitives are allowed
+  also.
+
+  The task begin extensions are invoked before the global construction.
+
+  The task begin extensions may be called as a result of a task restart through
+  ${../../task/if/restart:/name}.
+params:
+- description: |
+    is the ${/glossary/tcb:/term} of the executing thread.
+  dir: null
+  name: executing
+return: null
+type: interface

@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Invalidates the data cache lines covering the memory area.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const void *${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    return: void
+  variants: []
+description: |
+  The cache lines covering the area are marked as invalid.  A later read
+  access in the area will load the data from memory.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_cache_invalidate_multiple_data_lines
+notes: |
+  In case the area is not aligned on cache line boundaries, then this
+  operation may destroy unrelated data.
+
+  On some systems, the cache lines may be flushed before they are invalidated.
+params:
+- description: |
+    is the begin address of the memory area to invalidate.
+  dir: null
+  name: begin
+- description: |
+    is the size in bytes of the memory area to invalidate.
+  dir: null
+  name: size
+return: null
+type: interface

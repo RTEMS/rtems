@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+identifier: RTEMSScoreSysLockMutex
+links:
+- role: interface-ingroup
+  uid: /score/if/group
+non-functional-type: design-group
+rationale: |
+  The system lock mutexes are used for Newlib internal locking, the C++
+  standard library provided by ${/glossary/gcc:/term}, the OpenMP support
+  provided by GCC, the self-contained objects ${/glossary/api:/term} provided
+  by RTEMS, and the super core internal mutexes such as the objects allocator
+  lock.
+references: []
+requirement-type: non-functional
+text: |
+  The super core shall have a component containing the system lock mutex
+  implementation those interfaces are defined by Newlib.
+type: requirement

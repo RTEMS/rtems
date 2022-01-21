@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: SMP barriers
+text: |
+  The SMP barriers ensure that a defined set of independent threads of
+  execution on a set of processors reaches a common synchronization point
+  in time.  They are implemented using atomic operations.  Currently a
+  sense barrier is used in RTEMS.
+type: glossary

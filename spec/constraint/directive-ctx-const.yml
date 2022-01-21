@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The directive is implemented by a macro and may be called from within C/C++
+  constant expressions.  In addition, a function implementation of the
+  directive exists for bindings to other programming languages.
+type: constraint

@@ -1,0 +1,181 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Any real-time executive must provide a mechanism for quick response to
+  externally generated interrupts to satisfy the critical time constraints of
+  the application.  The Interrupt Manager provides this mechanism for RTEMS.
+  This manager permits quick interrupt response times by providing the critical
+  ability to alter task execution which allows a task to be preempted upon exit
+  from an ISR.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: null
+enabled-by: true
+identifier: RTEMSAPIClassicIntr
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: vector-number
+- role: placement-order
+  uid: level
+- role: placement-order
+  uid: isr
+- role: placement-order
+  uid: isr-entry
+- role: placement-order
+  uid: catch
+- role: placement-order
+  uid: disable
+- role: placement-order
+  uid: enable
+- role: placement-order
+  uid: flash
+- role: placement-order
+  uid: local-disable
+- role: placement-order
+  uid: local-enable
+- role: placement-order
+  uid: is-in-progress
+- role: placement-order
+  uid: lock
+- role: placement-order
+  uid: lock-context
+- role: placement-order
+  uid: lock-initialize
+- role: placement-order
+  uid: lock-destroy
+- role: placement-order
+  uid: lock-acquire
+- role: placement-order
+  uid: lock-release
+- role: placement-order
+  uid: lock-acquire-isr
+- role: placement-order
+  uid: lock-release-isr
+- role: placement-order
+  uid: lock-isr-disable
+- role: placement-order
+  uid: lock-declare
+- role: placement-order
+  uid: lock-define
+- role: placement-order
+  uid: lock-initializer
+- role: placement-order
+  uid: lock-member
+- role: placement-order
+  uid: lock-reference
+- role: placement-order
+  uid: shared
+- role: placement-order
+  uid: unique
+- role: placement-order
+  uid: replace
+- role: placement-order
+  uid: is-shared
+- role: placement-order
+  uid: is-unique
+- role: placement-order
+  uid: is-replace
+- role: placement-order
+  uid: handler
+- role: placement-order
+  uid: per-handler-routine
+- role: placement-order
+  uid: entry
+- role: placement-order
+  uid: entry-initializer
+- role: placement-order
+  uid: entry-initialize
+- role: placement-order
+  uid: entry-install
+- role: placement-order
+  uid: entry-remove
+- role: placement-order
+  uid: handler-install
+- role: placement-order
+  uid: handler-remove
+- role: placement-order
+  uid: vector-is-enabled
+- role: placement-order
+  uid: vector-enable
+- role: placement-order
+  uid: vector-disable
+- role: placement-order
+  uid: is-pending
+- role: placement-order
+  uid: raise
+- role: placement-order
+  uid: raise-on
+- role: placement-order
+  uid: clear
+- role: placement-order
+  uid: get-affinity
+- role: placement-order
+  uid: set-affinity
+- role: placement-order
+  uid: signal-variant
+- role: placement-order
+  uid: attributes
+- role: placement-order
+  uid: get-attributes
+- role: placement-order
+  uid: handler-iterate
+- role: placement-order
+  uid: server-default
+- role: placement-order
+  uid: server-control
+- role: placement-order
+  uid: server-config
+- role: placement-order
+  uid: server-initialize
+- role: placement-order
+  uid: server-create
+- role: placement-order
+  uid: server-handler-install
+- role: placement-order
+  uid: server-handler-remove
+- role: placement-order
+  uid: server-set-affinity
+- role: placement-order
+  uid: server-delete
+- role: placement-order
+  uid: server-suspend
+- role: placement-order
+  uid: server-resume
+- role: placement-order
+  uid: server-move
+- role: placement-order
+  uid: server-handler-iterate
+- role: placement-order
+  uid: server-action
+- role: placement-order
+  uid: server-entry
+- role: placement-order
+  uid: server-entry-initialize
+- role: placement-order
+  uid: server-action-prepend
+- role: placement-order
+  uid: server-entry-destroy
+- role: placement-order
+  uid: server-entry-submit
+- role: placement-order
+  uid: server-entry-move
+- role: placement-order
+  uid: server-request
+- role: placement-order
+  uid: server-request-initialize
+- role: placement-order
+  uid: server-request-set-vector
+- role: placement-order
+  uid: server-request-destroy
+- role: placement-order
+  uid: server-request-submit
+name: Interrupt Manager
+text: |
+  The Classic API shall provide an interface to the Interrupt Manager.
+type: interface

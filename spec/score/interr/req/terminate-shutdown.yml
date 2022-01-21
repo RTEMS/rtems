@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: terminate
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While ${../if/terminate:/name} executes, when the system state was set, a
+  shutdown request to all configured processors shall be issued.
+type: requirement

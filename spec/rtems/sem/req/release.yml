@@ -1,0 +1,357 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/release
+- role: function-implementation
+  uid: /score/mtx/req/surrender
+- role: function-implementation
+  uid: /score/sem/req/surrender
+post-conditions:
+- name: Action
+  states:
+  - name: InvId
+    test-code: |
+      sc = rtems_semaphore_release( 0xffffffff );
+      T_rsc( sc, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/release:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: BinarySurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = NULL;
+      ctx->tq_sem_ctx.variant = TQ_SEM_BINARY;
+      ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
+      ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
+      ${/score/sem/req/surrender:/test-run}( &ctx->tq_sem_ctx );
+    text: |
+      The calling task shall surrender the binary semaphore as specified by
+      ${/score/sem/req/surrender}.
+  - name: CountingSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = NULL;
+      ctx->tq_sem_ctx.variant = TQ_SEM_COUNTING;
+      ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
+      ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
+      ${/score/sem/req/surrender:/test-run}( &ctx->tq_sem_ctx );
+    text: |
+      The calling task shall surrender the counting semaphore as specified by
+      ${/score/sem/req/surrender}.
+  - name: MtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_NO_PROTOCOL;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
+      allowed, the owner is checked, and no locking protocol is used.
+  - name: InheritMtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_INHERIT;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
+      allowed, the owner is checked, and a priority inheritance protocol is
+      used.
+  - name: CeilingMtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_CEILING;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
+      allowed, the owner is checked, and a priority ceiling is used.
+  - name: MrsPMtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue is sticky, a recursive seize
+      returns an error status, the owner is checked, and a priority ceiling is
+      used.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+pre-conditions:
+- name: Class
+  states:
+  - name: Counting
+    test-code: |
+      ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
+    text: |
+      While the semaphore object is a counting semaphore.
+  - name: Simple
+    test-code: |
+      ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
+    text: |
+      While the semaphore object is a simple binary semaphore.
+  - name: Binary
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
+    text: |
+      While the semaphore object is a binary semaphore.
+  - name: PrioCeiling
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
+    text: |
+      While the semaphore object is a priority ceiling semaphore.
+  - name: PrioInherit
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
+    text: |
+      While the semaphore object is a priority inheritance semaphore.
+  - name: MrsP
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the semaphore object is a MrsP semaphore.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      ctx->attribute_set |= RTEMS_FIFO;
+      ctx->tq_ctx.discipline = TQ_FIFO;
+    text: |
+      While the semaphore uses the FIFO task wait queue discipline.
+  - name: Priority
+    test-code: |
+      ctx->attribute_set |= RTEMS_PRIORITY;
+      ctx->tq_ctx.discipline = TQ_PRIORITY;
+    text: |
+      While the semaphore uses the priority task wait queue discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      /* Nothing to prepare */
+    text: |
+      While the ${../if/release:/params[0]/name} parameter is associated with
+      the semaphore.
+  - name: Invalid
+    test-code: |
+      /* Nothing to prepare */
+    text: |
+      While the ${../if/release:/params[0]/name} parameter is not associated
+      with a semaphore.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NeedsPriorityDiscipline: |
+    Binary semaphores with a locking protocol are required to use the priority
+    task wait queue discipline.
+  NoMrsP: |
+    Where the system is build with SMP support disabled, the MrsP locking
+    protocol is not available.
+test-action: |
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_create(
+    NAME,
+    1,
+    ctx->attribute_set,
+    PRIO_VERY_HIGH,
+    &ctx->tq_ctx.thread_queue_id
+  );
+  T_rsc_success( sc );
+
+  if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
+    rtems_task_priority prio;
+
+    sc = rtems_semaphore_set_priority(
+      ctx->tq_ctx.thread_queue_id,
+      SCHEDULER_B_ID,
+      PRIO_VERY_HIGH,
+      &prio
+    );
+    T_rsc_success( sc );
+  }
+test-brief: null
+test-cleanup:
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+  T_rsc_success( sc );
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    union {
+      TQContext tq_ctx;
+      TQMtxContext tq_mtx_ctx;
+      TQSemContext tq_sem_ctx;
+    }
+- brief: |
+    This member specifies if the attribute set of the semaphore.
+  description: null
+  member: |
+    rtems_attribute attribute_set
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+- tr-mtx-surrender.h
+- tr-sem-surrender.h
+- tx-thread-queue.h
+test-prepare: |
+  ctx->attribute_set = RTEMS_DEFAULT_ATTRIBUTES;
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->tq_ctx.deadlock = TQ_DEADLOCK_STATUS;
+    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
+    ctx->tq_ctx.convert_status = TQConvertStatusClassic;
+    TQInitialize( &ctx->tq_ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  typedef ${.:/test-context-type} Context;
+test-target: testsuites/validation/tc-sem-release.c
+test-teardown:
+  brief: null
+  code: |
+    TQDestroy( &ctx->tq_ctx );
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Action: InvId
+  pre-conditions:
+    Class: all
+    Discipline: all
+    Id:
+    - Invalid
+- enabled-by: true
+  post-conditions:
+    Action: BinarySurrender
+  pre-conditions:
+    Class:
+    - Simple
+    Discipline: all
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Action: CountingSurrender
+  pre-conditions:
+    Class:
+    - Counting
+    Discipline: all
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Action: MtxSurrender
+  pre-conditions:
+    Class:
+    - Binary
+    Discipline: all
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Action: CeilingMtxSurrender
+  pre-conditions:
+    Class:
+    - PrioCeiling
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Action: InheritMtxSurrender
+  pre-conditions:
+    Class:
+    - PrioInherit
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions: NoMrsP
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
+    Id: all
+- enabled-by: true
+  post-conditions: NeedsPriorityDiscipline
+  pre-conditions:
+    Class:
+    - PrioCeiling
+    - PrioInherit
+    - MrsP
+    Discipline:
+    - FIFO
+    Id: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: InvId
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
+    Id:
+    - Invalid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: MrsPMtxSurrender
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+type: requirement

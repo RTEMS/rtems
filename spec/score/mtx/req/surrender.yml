@@ -1,0 +1,767 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: function-implementation
+  uid: /score/tq/req/surrender
+- role: function-implementation
+  uid: /score/tq/req/surrender-mrsp
+- role: function-implementation
+  uid: /score/tq/req/surrender-priority-inherit
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: NotOwner
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_NOT_OWNER ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/not-owner:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: None
+    test-code: |
+      T_null( ctx->owner_after );
+    text: |
+      The mutex shall have no owner.
+  - name: Caller
+    test-code: |
+      T_eq_ptr(
+        ctx->owner_after,
+        ctx->tq_ctx->base.runner_tcb
+      );
+    text: |
+      The owner of the mutex shall be the calling thread.
+  - name: Other
+    test-code: |
+      T_eq_ptr(
+        ctx->owner_after,
+        ctx->tq_ctx->base.worker_tcb[ TQ_HELPER_A ]
+      );
+    text: |
+      The owner of the mutex shall not be modified.
+  - name: First
+    test-code: |
+      T_eq_ptr(
+        ctx->owner_after,
+        ctx->tq_ctx->base.worker_tcb[ TQ_BLOCKER_A ]
+      );
+    text: |
+      The owner of the mutex shall be dequeued thread.
+  test-epilogue: null
+  test-prologue: null
+- name: Surrender
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->counter, 0 );
+    text: |
+      The thread queue of the mutex shall not be surrendered to a thread.
+  - name: FIFO
+    test-code: |
+      T_eq_u32( ctx->counter, 1 );
+      ${../../tq/req/surrender:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the mutex shall be surrendered in FIFO order.
+  - name: Priority
+    test-code: |
+      T_eq_u32( ctx->counter, 1 );
+      ${../../tq/req/surrender:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the mutex shall be surrendered in priority order.
+  - name: PriorityInherit
+    test-code: |
+      T_eq_u32( ctx->counter, 1 );
+      ${../../tq/req/surrender-priority-inherit:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the mutex shall be surrendered in priority order
+      with priority inheritance.
+  - name: MrsP
+    test-code: |
+      T_eq_u32( ctx->counter, 1 );
+      ${../../tq/req/surrender-mrsp:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the mutex shall be surrendered in priority order
+      with MrsP.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->priority_after, ctx->priority_before );
+    text: |
+      The ${/glossary/priority-current:/term} of the calling thread shall be
+      not be modified.
+  - name: Low
+    test-code: |
+      T_eq_u32( ctx->priority_after, ctx->priority_real );
+    text: |
+      The ${/glossary/priority-current:/term} of the calling thread shall be
+      lowered to reflect the removal of the priorities available through the
+      mutex.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Protocol
+  states:
+  - name: None
+    test-code: |
+      if ( ctx->tq_ctx->protocol != TQ_MTX_NO_PROTOCOL ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex does not use a locking protocol.
+  - name: Inherit
+    test-code: |
+      if ( ctx->tq_ctx->protocol != TQ_MTX_PRIORITY_INHERIT ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex uses the priority inheritance locking protocol.
+  - name: Ceiling
+    test-code: |
+      if ( ctx->tq_ctx->protocol != TQ_MTX_PRIORITY_CEILING ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex uses the priority ceiling locking protocol.
+  - name: MrsP
+    test-code: |
+      if ( ctx->tq_ctx->protocol != TQ_MTX_MRSP ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex uses the MrsP locking protocol.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      if ( ctx->tq_ctx->base.discipline != TQ_FIFO ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue of the mutex uses the FIFO discipline.
+  - name: Priority
+    test-code: |
+      if ( ctx->tq_ctx->base.discipline != TQ_PRIORITY ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue of the mutex uses the priority discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Recursive
+  states:
+  - name: Allowed
+    test-code: |
+      if ( ctx->tq_ctx->recursive != TQ_MTX_RECURSIVE_ALLOWED ) {
+        ${.:skip}
+      }
+    text: |
+      Where a recursive seize of the mutex is allowed.
+  - name: NotAllowed
+    test-code: |
+      if ( ctx->tq_ctx->recursive == TQ_MTX_RECURSIVE_ALLOWED ) {
+        ${.:skip}
+      }
+    text: |
+      Where a recursive seize of the mutex is not allowed.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerCheck
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( ctx->tq_ctx->owner_check != TQ_MTX_CHECKS_OWNER ) {
+        ${.:skip}
+      }
+    text: |
+      Where the surrender checks that the mutex owner is the calling thread.
+  - name: 'No'
+    test-code: |
+      if ( ctx->tq_ctx->owner_check != TQ_MTX_NO_OWNER_CHECK ) {
+        ${.:skip}
+      }
+    text: |
+      Where the surrender does not check that the mutex owner is the calling
+      thread.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: None
+    test-code: |
+      ctx->owner_caller = false;
+      ctx->owner_other = false;
+    text: |
+      While the mutex has no owner.
+  - name: Caller
+    test-code: |
+      ctx->owner_caller = true;
+      ctx->owner_other = false;
+    text: |
+      While the owner of the mutex is the calling thread.
+  - name: Other
+    test-code: |
+      ctx->owner_caller = false;
+      ctx->owner_other = true;
+    text: |
+      While the owner of the mutex is a thread other than the calling thread.
+  test-epilogue: null
+  test-prologue: null
+- name: Nested
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->nested = true;
+    text: |
+      While calling thread seized the mutex recursively.
+  - name: 'No'
+    test-code: |
+      ctx->nested = false;
+    text: |
+      While calling thread seized the mutex not recursively.
+  test-epilogue: null
+  test-prologue: null
+- name: Blocked
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->blocked = true;
+    text: |
+      While the mutex has threads blocked on the mutex.
+  - name: 'No'
+    test-code: |
+      ctx->blocked = false;
+    text: |
+      While no threads are blocked on the mutex.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: High
+    test-code: |
+      ctx->priority_real = PRIO_ULTRA_HIGH;
+    text: |
+      While the ${/glossary/priority-current:/term} of the calling thread
+      without the priorities available through the mutex would be higher than
+      the highest priority of the priorities available through the mutex.
+  - name: Equal
+    test-code: |
+      ctx->priority_real = PRIO_VERY_HIGH;
+    text: |
+      While the ${/glossary/priority-current:/term} of the calling thread
+      without the priorities available through the mutex would be equal to the
+      highest priority of the priorities available through the mutex.
+  - name: Low
+    test-code: |
+      ctx->priority_real = PRIO_HIGH;
+    text: |
+      While the ${/glossary/priority-current:/term} of the calling thread
+      without the priorities available through the mutex would be lower than
+      the highest priority of the priorities available through the mutex.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  BlockedNeedsOwner: |
+    Blocked threads only exist, if the mutex has an owner.
+  NestedNeedsRecursive: |
+    Where the mutex does not allow a recursive seize, the mutex cannot be
+    recursively seized.
+  MustBeOwner: |
+    Where the mutex does not check that the mutex owner is the calling thread,
+    the mutex owner must be the calling thread, otherwise the system behaviour
+    is undefined.
+  PriorityDisciplineByProtocol: |
+    The locking protocol require a priority discipline.
+test-action: |
+  if ( ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY ) {
+    ActionSticky( ctx );
+  } else {
+    Action( ctx );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then the calling thread shall be the owner of the
+    mutex.
+  description: null
+  member: |
+    bool owner_caller
+- brief: |
+    If this member is true, then a thread other than the calling thread shall
+    be the owner of the mutex.
+  description: null
+  member: |
+    bool owner_other
+- brief: |
+    If this member is true, then the calling thread shall have seized the mutex
+    recursively.
+  description: null
+  member: |
+    bool nested
+- brief: |
+    If this member is true, then there shall be a thread blocked waiting for
+    the mutex.
+  description: null
+  member: |
+    bool blocked
+- brief: |
+    This member contains the real priority of the calling thread.
+  description: null
+  member: |
+    rtems_task_priority priority_real
+- brief: |
+    This member contains the current priority of the calling thread before the
+    directive call.
+  description: null
+  member: |
+    rtems_task_priority priority_before
+- brief: |
+    This member contains the return status of the directive call.
+  description: null
+  member: |
+    Status_Control status
+- brief: |
+    This member contains the owner of the mutex after the directive call.
+  description: null
+  member: |
+    const rtems_tcb *owner_after
+- brief: |
+    This member contains the current priority of the calling thread after the
+    directive call.
+  description: null
+  member: |
+    rtems_task_priority priority_after
+- brief: |
+    This member contains the counter snapshot after the directive call.
+  description: null
+  member: |
+    uint32_t counter
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQMtxContext *${.:name}
+  target: testsuites/validation/tr-mtx-surrender.h
+test-includes: []
+test-local-includes:
+- tr-mtx-surrender.h
+- tr-tq-surrender.h
+- tr-tq-surrender-mrsp.h
+- tr-tq-surrender-priority-inherit.h
+test-prepare: |
+  ctx->owner_caller = false;
+  ctx->owner_other = false;
+  ctx->nested = false;
+  ctx->blocked = false;
+
+  if ( ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY ) {
+    ctx->priority_real = PRIO_ULTRA_HIGH;
+  } else {
+    ctx->priority_real = PRIO_NORMAL;
+  }
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static Status_Control Status( const Context *ctx, Status_Control status )
+  {
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
+  }
+
+  static void Action( Context *ctx )
+  {
+    Status_Control status;
+
+    TQSetScheduler(
+      &ctx->tq_ctx->base,
+      TQ_HELPER_A,
+      SCHEDULER_A_ID,
+      PRIO_VERY_HIGH
+    );
+    TQSetScheduler(
+      &ctx->tq_ctx->base,
+      TQ_BLOCKER_A,
+      SCHEDULER_A_ID,
+      PRIO_VERY_HIGH
+    );
+
+    if ( ctx->owner_caller ) {
+      status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    } else if ( ctx->owner_other ) {
+      TQSend( &ctx->tq_ctx->base, TQ_HELPER_A, TQ_EVENT_ENQUEUE );
+    }
+
+    if ( ctx->nested ) {
+      status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    }
+
+    if ( ctx->blocked ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
+    }
+
+    TQResetCounter( &ctx->tq_ctx->base );
+    SetSelfPriority( ctx->priority_real );
+    ctx->priority_before = GetSelfPriority();
+    TQSchedulerRecordStart( &ctx->tq_ctx->base );
+    ctx->status = TQSurrender( &ctx->tq_ctx->base );
+    TQSchedulerRecordStop( &ctx->tq_ctx->base );
+    ctx->owner_after = TQGetOwner( &ctx->tq_ctx->base );
+    ctx->priority_after = GetSelfPriority();
+    SetSelfPriority( PRIO_NORMAL );
+    Yield();
+    ctx->counter = TQGetCounter( &ctx->tq_ctx->base );
+
+    if ( ctx->nested ) {
+      status = TQSurrender( &ctx->tq_ctx->base );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    }
+
+    if ( ctx->owner_other ) {
+      TQSend( &ctx->tq_ctx->base, TQ_HELPER_A, TQ_EVENT_SURRENDER );
+    }
+
+    if ( ctx->blocked ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+    }
+  }
+
+  static void ActionSticky( Context *ctx )
+  {
+    Status_Control status;
+
+    TQSetScheduler(
+      &ctx->tq_ctx->base,
+      TQ_HELPER_A,
+      SCHEDULER_A_ID,
+      PRIO_VERY_HIGH
+    );
+    TQSetScheduler(
+      &ctx->tq_ctx->base,
+      TQ_BLOCKER_A,
+      SCHEDULER_B_ID,
+      PRIO_VERY_HIGH
+    );
+
+    if ( ctx->owner_caller ) {
+      status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    } else if ( ctx->owner_other ) {
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_HELPER_A,
+        TQ_EVENT_ENQUEUE
+      );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
+    }
+
+    if ( ctx->nested ) {
+      status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    }
+
+    if ( ctx->blocked ) {
+      TQSendAndWaitForIntendToBlock(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_ENQUEUE
+      );
+    }
+
+    TQResetCounter( &ctx->tq_ctx->base );
+    SetSelfPriority( ctx->priority_real );
+    ctx->priority_before = GetSelfPriority();
+    TQSchedulerRecordStart( &ctx->tq_ctx->base );
+    ctx->status = TQSurrender( &ctx->tq_ctx->base );
+    TQSchedulerRecordStop( &ctx->tq_ctx->base );
+    ctx->owner_after = TQGetOwner( &ctx->tq_ctx->base );
+    ctx->priority_after = GetSelfPriority();
+
+    if ( ctx->status == Status( ctx, STATUS_SUCCESSFUL ) ) {
+      TQWaitForExecutionStop( &ctx->tq_ctx->base, TQ_BLOCKER_A );
+    }
+
+    ctx->counter = TQGetCounter( &ctx->tq_ctx->base );
+
+    if ( ctx->nested ) {
+      status = TQSurrender( &ctx->tq_ctx->base );
+      T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+    }
+
+    if ( ctx->owner_other ) {
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_HELPER_A,
+        TQ_EVENT_SURRENDER
+      );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
+    } else {
+      SetSelfPriority( PRIO_NORMAL );
+    }
+
+    if ( ctx->blocked ) {
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_SURRENDER
+      );
+    }
+  }
+test-target: testsuites/validation/tr-mtx-surrender.c
+test-teardown: null
+text: |
+  When the calling thread surrenders the mutex.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner:
+    - if:
+        pre-conditions:
+          Nested: 'Yes'
+      then: Caller
+    - if:
+        pre-conditions:
+          Blocked: 'Yes'
+      then: First
+    - else: None
+    Surrender:
+    - if:
+        post-conditions:
+          Owner: First
+      then-specified-by: Discipline
+    - else: Nop
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - None
+    Discipline: all
+    Recursive: all
+    OwnerCheck: all
+    Owner:
+    - Caller
+    Nested: all
+    Blocked: all
+    Priority: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner:
+    - if:
+        pre-conditions:
+          Nested: 'Yes'
+      then: Caller
+    - if:
+        pre-conditions:
+          Blocked: 'Yes'
+      then: First
+    - else: None
+    Surrender:
+    - if:
+        and:
+        - post-conditions:
+            Owner: First
+        - pre-conditions:
+            Protocol: MrsP
+      then: MrsP
+    - if:
+        post-conditions:
+          Owner: First
+      then: Priority
+    - else: Nop
+    Priority:
+    - if:
+        pre-conditions:
+          Nested: 'No'
+          Priority: Low
+      then: Low
+    - else: Nop
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline: all
+    Recursive: all
+    OwnerCheck: all
+    Owner:
+    - Caller
+    Nested: all
+    Blocked: all
+    Priority: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner:
+    - if:
+        pre-conditions:
+          Nested: 'Yes'
+      then: Caller
+    - else: First
+    Surrender:
+    - if:
+        post-conditions:
+          Owner: First
+      then: PriorityInherit
+    - else: Nop
+    Priority:
+    - if:
+        pre-conditions:
+          Nested: 'No'
+          Priority: Low
+      then: Low
+    - else: Nop
+  pre-conditions:
+    Protocol:
+    - Inherit
+    Discipline: all
+    Recursive: all
+    OwnerCheck: all
+    Owner:
+    - Caller
+    Nested: all
+    Blocked:
+    - 'Yes'
+    Priority: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner:
+    - if:
+        pre-conditions:
+          Nested: 'Yes'
+      then: Caller
+    - if:
+        pre-conditions:
+          Blocked: 'Yes'
+      then: First
+    - else: None
+    Surrender:
+    - if:
+        post-conditions:
+          Owner: First
+      then: PriorityInherit
+    - else: Nop
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Inherit
+    Discipline: all
+    Recursive: all
+    OwnerCheck: all
+    Owner:
+    - Caller
+    Nested: all
+    Blocked:
+    - 'No'
+    Priority: N/A
+- enabled-by: true
+  post-conditions:
+    Status: NotOwner
+    Owner:
+    - specified-by: Owner
+    Surrender: Nop
+    Priority: Nop
+  pre-conditions:
+    Protocol: all
+    Discipline: all
+    Recursive: all
+    OwnerCheck:
+    - 'Yes'
+    Owner: all
+    Owner:
+    - None
+    - Other
+    Nested: N/A
+    Blocked: all
+    Priority: N/A
+- enabled-by: true
+  post-conditions: BlockedNeedsOwner
+  pre-conditions:
+    Protocol: all
+    Discipline: all
+    Recursive: all
+    OwnerCheck: all
+    Owner:
+    - None
+    Nested: N/A
+    Blocked:
+    - 'Yes'
+    Priority: N/A
+- enabled-by: true
+  post-conditions: MustBeOwner
+  pre-conditions:
+    Protocol: all
+    Discipline: all
+    Recursive: all
+    OwnerCheck:
+    - 'No'
+    Owner:
+    - None
+    - Other
+    Nested: all
+    Blocked: all
+    Priority: all
+- enabled-by: true
+  post-conditions: NestedNeedsRecursive
+  pre-conditions:
+    Protocol: all
+    Discipline: all
+    Recursive:
+    - NotAllowed
+    OwnerCheck: all
+    Owner: all
+    Nested:
+    - 'Yes'
+    Blocked: all
+    Priority: all
+- enabled-by: true
+  post-conditions: PriorityDisciplineByProtocol
+  pre-conditions:
+    Protocol:
+    - Inherit
+    - Ceiling
+    - MrsP
+    Discipline:
+    - FIFO
+    Recursive: all
+    OwnerCheck: all
+    Owner: all
+    Nested: all
+    Blocked: all
+    Priority: all
+type: requirement

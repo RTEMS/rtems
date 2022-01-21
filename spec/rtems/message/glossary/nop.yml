@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: Nop
+text: |
+  Nop means *no operation*.  This term is used when directives do not return
+  ${../../status/if/successful:/name} as result.  Nop indicates that the call of
+  a directive has no observable effect on any ${/glossary/rtems:/term} state.
+type: glossary

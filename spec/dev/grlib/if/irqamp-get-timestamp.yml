@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the interrupt timestamping register bock.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      ${irqamp-timestamp:/name} *timestamp_regs;
+      uint32_t itstmpc;
+
+      timestamp_regs = &${.:/params[0]/name}->itstmp[ 0 ];
+      itstmpc = ${load-32:/name}( &timestamp_regs->itstmpc );
+
+      if ( IRQAMP_ITSTMPC_TSTAMP_GET( itstmpc ) == 0 ) {
+        return ${/c/if/null:/name};
+      }
+
+      return timestamp_regs;
+    params:
+    - ${irqamp:/name} *${.:/params[0]/name}
+    return: ${irqamp-timestamp:/name} *
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: irqamp-header-2
+- role: interface-ingroup
+  uid: irqamp
+name: irqamp_get_timestamp_registers
+notes: null
+params:
+- description: |
+    is the IRQ(A)MP register block.
+  dir: null
+  name: irqamp_regs
+return:
+  return: |
+    Returns the interrupt timestamping register block.
+  return-values:
+  - description: |
+      The IRQ(A)MP does not support the interrupt timestamping feature.
+    value: ${/c/if/null:/name}
+type: interface

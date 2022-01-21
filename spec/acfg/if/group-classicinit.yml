@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  This section describes configuration options related to the Classic API
+  initialization task.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-group
+links:
+- role: interface-placement
+  uid: ../../if/domain
+- role: requirement-refinement
+  uid: ../../req/applconfig
+name: Classic API Initialization Task Configuration
+text: ''
+type: interface

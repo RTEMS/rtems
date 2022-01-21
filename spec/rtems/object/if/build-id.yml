@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Builds the object identifier from the API, class, MPCI node, and index
+  components.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[2]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[3]/name}
+    return: ${../../type/if/id:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_build_id
+notes: null
+params:
+- description: |
+    is the API of the object identifier to build.
+  dir: null
+  name: api
+- description: |
+    is the class of the object identifier to build.
+  dir: null
+  name: the_class
+- description: |
+    is the MPCI node of the object identifier to build.
+  dir: null
+  name: node
+- description: |
+    is the index of the object identifier to build.
+  dir: null
+  name: index
+return:
+  return: |
+    Returns the object identifier built from the API, class, MPCI node, and
+    index components.
+  return-values: []
+type: interface

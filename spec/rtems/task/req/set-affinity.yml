@@ -1,0 +1,364 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/set-affinity
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: SetAffinity
+  states:
+  - name: Set
+    test-code: |
+      #if defined(RTEMS_SMP)
+      T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].operation,
+        T_SCHEDULER_SET_AFFINITY
+      );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].set_affinity.status,
+        STATUS_SUCCESSFUL
+      );
+      #else
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+      #endif
+    text: |
+      The affinity set of the task specified by the
+      ${../if/set-affinity:/params[0]/name} parameter shall be set with respect
+      to the ${/glossary/scheduler-home:/term} of the task at some point during
+      the ${../if/set-affinity:/name} call.
+  - name: Nop
+    test-code: |
+      #if defined(RTEMS_SMP)
+      if ( ctx->scheduler_log.header.recorded == 1 ) {
+        T_eq_int(
+          ctx->scheduler_log.events[ 0 ].operation,
+          T_SCHEDULER_SET_AFFINITY
+        );
+        T_eq_int(
+          ctx->scheduler_log.events[ 0 ].set_affinity.status,
+          STATUS_INVALID_NUMBER
+        );
+      } else {
+        T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+      }
+      #else
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+      #endif
+    text: |
+      No task affinity shall be modified by the ${../if/set-affinity:/name}
+      call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/set-affinity:/params[0]/name} parameter is not
+      associated with a task.
+  - name: Task
+    test-code: |
+      ctx->id = RTEMS_SELF;
+    text: |
+      While the ${../if/set-affinity:/params[0]/name} parameter is
+      associated with a task.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetSize
+  states:
+  - name: Askew
+    test-code: |
+      ctx->cpusetsize = SIZE_MAX;
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is not an
+      integral multiple of the size of long.
+  - name: Normal
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj[ 0 ] );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} parameter is less than or
+      equal to the maximum processor set size storable in the system.
+  - name: Huge
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} parameter is greater than
+      the maximum processor set size storable in the system.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetOnline
+  states:
+  - name: Supported
+    test-code: |
+      /* Already prepared */
+    text: |
+      While the intersection of the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors represents an affinity set supported by the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-affinity:/params[0]/name} parameter at some point during the
+      ${../if/set-affinity:/name} call.
+  - name: Unsupported
+    test-code: |
+      CPU_CLR( 0, &ctx->cpuset_obj[ 0 ] );
+    text: |
+      While the intersection of the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors represents an affinity set not supported by the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-affinity:/params[0]/name} parameter at some point during the
+      ${../if/set-affinity:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetHuge
+  states:
+  - name: NotZero
+    test-code: |
+      /* Already prepared */
+    text: |
+      While the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters contains at least one
+      processor which is not storable in a processor set supported by the
+      system.
+  - name: Zero
+    test-code: |
+      CPU_ZERO( &ctx->cpuset_obj[ 1 ] );
+    text: |
+      While the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters contains no processor
+      which is not storable in a processor set supported by the system.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSet
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpuset = &ctx->cpuset_obj[ 0 ];
+    text: |
+      While the ${../if/set-affinity:/params[2]/name} parameter references an
+      object of type ${/c/if/cpu_set_t:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->cpuset = NULL;
+    text: |
+      While the ${../if/set-affinity:/params[2]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  T_scheduler_log *log;
+
+  log = T_scheduler_record_2( &ctx->scheduler_log );
+  T_null( log );
+
+  ctx->status = rtems_task_set_affinity(
+    ctx->id,
+    ctx->cpusetsize,
+    ctx->cpuset
+  );
+
+  log = T_scheduler_record( NULL );
+  T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_2 scheduler_log;
+- brief: |
+    This member provides the object referenced by the
+    ${../if/set-affinity:/params[2]/name} parameter.
+  description: null
+  member: |
+    cpu_set_t cpuset_obj[ 2 ]
+- brief: |
+    This member contains the return value of the ${../if/set-affinity:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/set-affinity:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/set-affinity:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    size_t cpusetsize
+- brief: |
+    This member specifies if the ${../if/set-affinity:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    cpu_set_t *cpuset
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  CPU_FILL_S( sizeof( ctx->cpuset_obj ), &ctx->cpuset_obj[ 0 ] );
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-task-set-affinity.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          CPUSetSize: Askew
+      then: InvNum
+    - if:
+        pre-conditions:
+          CPUSetOnline: Unsupported
+      then: InvNum
+    - else: Ok
+    SetAffinity:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Task
+    CPUSetSize:
+    - Askew
+    - Normal
+    CPUSetOnline: all
+    CPUSetHuge: N/A
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          CPUSetOnline: Unsupported
+      then: InvNum
+    - else: Ok
+    SetAffinity:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Task
+    CPUSetSize:
+    - Huge
+    CPUSetOnline: all
+    CPUSetHuge: all
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    SetAffinity: Nop
+  pre-conditions:
+    Id:
+    - Task
+    CPUSetSize: all
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
+    CPUSet:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    SetAffinity: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    CPUSetSize:
+    - Askew
+    - Normal
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    SetAffinity: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    CPUSetSize:
+    - Huge
+    CPUSetOnline: N/A
+    CPUSetHuge: all
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    SetAffinity: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    CPUSetSize: all
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
+    CPUSet:
+    - 'Null'
+type: requirement

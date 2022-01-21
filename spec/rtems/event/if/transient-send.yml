@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sends the transient event to the task.
+copyrights:
+- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      return ${system-send:/name}( ${.:/params[0]/name}, ${system-transient:/name} );
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+name: rtems_event_transient_send
+notes: null
+params:
+- description: is the identifier of the task to receive the transient event.
+  dir: null
+  name: id
+return: null
+type: interface

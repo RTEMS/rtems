@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the alignment requirement of the type.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    sizeof( ${.:/params[0]/name} )
+  variants:
+  - definition: |
+      alignof( ${.:/params[0]/name} )
+    enabled-by:
+    - ${/compiler/if/cplusplus:/name} >= 201103L
+  - definition: |
+      _Alignof( ${.:/params[0]/name} )
+    enabled-by:
+    - ${/compiler/if/stdc-version:/name} >= 201112L
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_ALIGNOF
+notes: null
+params:
+- description: |
+    is the type name to get the alignment requirement for.
+  dir: null
+  name: _type_name
+return:
+  return: |
+    Returns the alignment requirement of the type.
+  return-values: []
+type: interface

@@ -1,0 +1,56 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Deletes the barrier.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive deletes the barrier specified by ${.:/params[0]/name}.  All
+  tasks blocked waiting for the barrier to be released will be readied and
+  returned a status code which indicates that the barrier was deleted.
+enabled-by: true
+index-entries:
+- delete a barrier
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../../constraint/delete-by-any-task
+- role: constraint
+  uid: /constraint/obj-unlimited-free
+name: rtems_barrier_delete
+notes: |
+  The ${/glossary/bcb:/term} for the deleted barrier is reclaimed by RTEMS.
+params:
+- description: |
+    is the barrier identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no barrier associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

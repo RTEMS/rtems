@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/lock-declare
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/lock-declare:/name} is used, it shall expand to an object
+  declaration with a specifier specified by the
+  ${../if/lock-declare:/params[0]/name} parameter.
+type: requirement

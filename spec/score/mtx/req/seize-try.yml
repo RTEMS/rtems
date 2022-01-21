@@ -1,0 +1,540 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_true( IsEnqueueStatus( ctx, STATUS_SUCCESSFUL ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: MutexCeilingViolated
+    test-code: |
+      T_true( IsEnqueueStatus( ctx, STATUS_MUTEX_CEILING_VIOLATED ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/mutex-ceiling-violated:/name}.
+  - name: Deadlock
+    test-code: |
+      T_true( IsEnqueueStatus( ctx, STATUS_DEADLOCK ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/deadlock:/name}.
+  - name: Unavailable
+    test-code: |
+      T_true( IsEnqueueStatus( ctx, STATUS_UNAVAILABLE ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/unavailable:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: Other
+    test-code: |
+      T_eq_ptr(
+        ctx->owner_after,
+        ctx->tq_ctx->base.worker_tcb[ TQ_BLOCKER_B ]
+      );
+    text: |
+      The owner of the mutex shall not be modified.
+  - name: Caller
+    test-code: |
+      T_eq_ptr(
+        ctx->owner_after,
+        ctx->tq_ctx->base.worker_tcb[ TQ_BLOCKER_A ]
+      );
+    text: |
+      The owner of the mutex shall be the calling thread.
+  - name: None
+    test-code: |
+      T_null( ctx->owner_after );
+    text: |
+      The mutex shall have no owner.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->priority_after, ctx->priority_before );
+    text: |
+      The priorities of the calling thread shall not be modified.
+  - name: Ceiling
+    test-code: |
+      T_eq_u32( ctx->priority_after, ctx->tq_ctx->priority_ceiling );
+    text: |
+      The calling thread shall use the priority ceiling of the mutex.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Protocol
+  states:
+  - name: Ceiling
+    test-code: |
+      if (
+        ctx->tq_ctx->priority_ceiling == PRIO_INVALID ||
+        ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY
+      ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex uses the priority ceiling locking protocol.
+  - name: MrsP
+    test-code: |
+      if (
+        ctx->tq_ctx->priority_ceiling == PRIO_INVALID ||
+        ctx->tq_ctx->base.enqueue_variant != TQ_ENQUEUE_STICKY
+      ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex uses the MrsP locking protocol.
+  - name: Other
+    test-code: |
+      if ( ctx->tq_ctx->priority_ceiling != PRIO_INVALID ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex does not use the priority ceiling or MrsP locking
+      protocol.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      if ( ctx->tq_ctx->base.discipline != TQ_FIFO ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue of the mutex uses the FIFO discipline.
+  - name: Priority
+    test-code: |
+      if ( ctx->tq_ctx->base.discipline != TQ_PRIORITY ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue of the mutex uses the priority discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Recursive
+  states:
+  - name: Allowed
+    test-code: |
+      if ( ctx->tq_ctx->recursive != TQ_MTX_RECURSIVE_ALLOWED ) {
+        ${.:skip}
+      }
+    text: |
+      Where a recursive seize of the mutex is allowed.
+  - name: Unavailable
+    test-code: |
+      if ( ctx->tq_ctx->recursive != TQ_MTX_RECURSIVE_UNAVAILABLE ) {
+        ${.:skip}
+      }
+    text: |
+      Where a recursive seize of the mutex results in an unavailable status.
+  - name: Deadlock
+    test-code: |
+      if ( ctx->tq_ctx->recursive != TQ_MTX_RECURSIVE_DEADLOCK ) {
+        ${.:skip}
+      }
+    text: |
+      Where a recursive seize of the mutex results in a deadlock status.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: None
+    test-code: |
+      /* This is the default */
+    text: |
+      While the mutex has no owner.
+  - name: Caller
+    test-code: |
+      ctx->owner_caller = true;
+    text: |
+      While the owner of the mutex is the calling thread.
+  - name: Other
+    test-code: |
+      ctx->owner_other = true;
+    text: |
+      While the owner of the mutex is a thread other than the calling thread.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: High
+    test-code: |
+      ctx->priority_before = ctx->tq_ctx->priority_ceiling - 1;
+    text: |
+      While the calling thread has a ${/glossary/priority-current:/term} higher
+      than the priority ceiling.
+  - name: Equal
+    test-code: |
+      ctx->priority_before = ctx->tq_ctx->priority_ceiling;
+    text: |
+      While the calling thread has a ${/glossary/priority-current:/term} equal
+      to the priority ceiling.
+  - name: Low
+    test-code: |
+      ctx->priority_before = ctx->tq_ctx->priority_ceiling + 1;
+    text: |
+      While the calling thread has a ${/glossary/priority-current:/term} lower
+      than the priority ceiling.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  CeilingOwner: |
+    Where the mutex provides a priority ceiling, the owner of the mutex cannot
+    have a ${/glossary/priority-current:/term} lower than the priority ceiling.
+  PriorityDisciplineByProtocol: |
+    The priority ceiling and MrsP locking protocol requires a priority
+    discipline.
+test-action: |
+  TQSetScheduler(
+    &ctx->tq_ctx->base,
+    TQ_BLOCKER_B,
+    SCHEDULER_A_ID,
+    PRIO_VERY_HIGH
+  );
+
+  if ( ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY ) {
+    ActionSticky( ctx );
+  } else {
+    Action( ctx );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then the calling thread shall be the owner of the
+    mutex.
+  description: null
+  member: |
+    bool owner_caller;
+- brief: |
+    If this member is true, then a thread other than the calling thread shall
+    be the owner of the mutex.
+  description: null
+  member: |
+    bool owner_other;
+- brief: |
+    This member contains the current priority of the calling thread before the
+    directive call.
+  description: null
+  member: |
+    rtems_task_priority priority_before;
+- brief: |
+    This member contains the owner of the mutex after the directive call.
+  description: null
+  member: |
+    const rtems_tcb *owner_after
+- brief: |
+    This member contains the current priority of the calling thread after the
+    directive call.
+  description: null
+  member: |
+    rtems_task_priority priority_after;
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQMtxContext *${.:name}
+  target: testsuites/validation/tr-mtx-seize-try.h
+test-includes: []
+test-local-includes:
+- tr-mtx-seize-try.h
+- tr-tq-enqueue-ceiling.h
+- tr-tq-enqueue-fifo.h
+- tr-tq-enqueue-mrsp.h
+- tr-tq-enqueue-priority.h
+test-prepare: |
+  ctx->owner_caller = false;
+  ctx->owner_other = false;
+  ctx->priority_before = PRIO_VERY_HIGH;
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static Status_Control Status( const Context *ctx, Status_Control status )
+  {
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
+  }
+
+  static bool IsEnqueueStatus( const Context *ctx, Status_Control expected )
+  {
+    return ctx->tq_ctx->base.status[ TQ_BLOCKER_A ] == Status( ctx, expected );
+  }
+
+  static void Action( Context *ctx )
+  {
+    TQSetScheduler(
+      &ctx->tq_ctx->base,
+      TQ_BLOCKER_A,
+      SCHEDULER_A_ID,
+      PRIO_VERY_HIGH
+    );
+
+    if ( ctx->owner_caller ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+    } else if ( ctx->owner_other ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE );
+    }
+
+    TQSetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A, ctx->priority_before );
+    TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+    ctx->owner_after = TQGetOwner( &ctx->tq_ctx->base );
+    ctx->priority_after = TQGetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A );
+
+    if ( ctx->owner_caller ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+    } else if ( ctx->owner_other ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_B, TQ_EVENT_SURRENDER );
+    }
+
+    if ( IsEnqueueStatus( ctx, STATUS_SUCCESSFUL ) ) {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+    }
+  }
+
+  static void ActionSticky( Context *ctx )
+  {
+    TQSetScheduler(
+      &ctx->tq_ctx->base,
+      TQ_BLOCKER_A,
+      SCHEDULER_B_ID,
+      PRIO_VERY_HIGH
+    );
+
+    if ( ctx->owner_caller ) {
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_ENQUEUE
+      );
+    } else if ( ctx->owner_other ) {
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_B,
+        TQ_EVENT_ENQUEUE
+      );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
+    }
+
+    TQSetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A, ctx->priority_before );
+    TQClearDone( &ctx->tq_ctx->base, TQ_BLOCKER_A );
+    TQSendAndWaitForExecutionStopOrIntendToBlock(
+      &ctx->tq_ctx->base,
+      TQ_BLOCKER_A,
+      TQ_EVENT_ENQUEUE
+    );
+    ctx->owner_after = TQGetOwner( &ctx->tq_ctx->base );
+    ctx->priority_after = TQGetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A );
+
+    if ( ctx->owner_caller ) {
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_SURRENDER
+      );
+    } else if ( ctx->owner_other ) {
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_B,
+        TQ_EVENT_SURRENDER
+      );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
+    }
+
+    TQWaitForDone( &ctx->tq_ctx->base, TQ_BLOCKER_A );
+
+    if ( IsEnqueueStatus( ctx, STATUS_SUCCESSFUL ) ) {
+      TQSendAndSynchronizeRunner(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_SURRENDER
+      );
+    }
+  }
+test-target: testsuites/validation/tr-mtx-seize-try.c
+test-teardown: null
+text: |
+  When the calling thread tries to seize the mutex.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner: Caller
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Other
+    Discipline: all
+    Recursive: all
+    Owner:
+    - None
+    Priority: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner: Caller
+    Priority: Ceiling
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline:
+    - Priority
+    Recursive: all
+    Owner:
+    - None
+    Priority:
+    - Low
+    - Equal
+- enabled-by: true
+  post-conditions:
+    Status: Unavailable
+    Owner: Other
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Other
+    Discipline: all
+    Recursive: all
+    Owner:
+    - Other
+    Priority: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Unavailable
+    Owner: Other
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline: all
+    Recursive: all
+    Owner:
+    - Other
+    Priority: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Recursive: Allowed
+      then: Ok
+    - specified-by: Recursive
+    Owner: Caller
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Other
+    Discipline: all
+    Recursive: all
+    Owner:
+    - Caller
+    Priority: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner: Caller
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline:
+    - Priority
+    Recursive:
+    - Allowed
+    Owner:
+    - Caller
+    Priority:
+    - High
+    - Equal
+- enabled-by: true
+  post-conditions:
+    Status:
+    - specified-by: Recursive
+    Owner: Caller
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline:
+    - Priority
+    Recursive:
+    - Deadlock
+    - Unavailable
+    Owner:
+    - Caller
+    Priority:
+    - High
+    - Equal
+- enabled-by: true
+  post-conditions:
+    Status: MutexCeilingViolated
+    Owner: None
+    Priority: Nop
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline:
+    - Priority
+    Recursive: all
+    Owner:
+    - None
+    Priority:
+    - High
+- enabled-by: true
+  post-conditions: CeilingOwner
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline:
+    - Priority
+    Recursive: all
+    Owner:
+    - Caller
+    Priority:
+    - Low
+- enabled-by: true
+  post-conditions: PriorityDisciplineByProtocol
+  pre-conditions:
+    Protocol:
+    - Ceiling
+    - MrsP
+    Discipline:
+    - FIFO
+    Recursive: all
+    Owner: all
+    Priority: all
+type: requirement

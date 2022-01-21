@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: big endian
+text: |
+  A data representation scheme in which the bytes composing a numeric value
+  are arranged such that the most significant byte is at the lowest
+  address.
+type: glossary

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: Futex
+text: |
+  This term is an abbreviation for
+  `Fast User-Space Locking <https://man7.org/linux/man-pages/man2/futex.2.html>`_.
+  The futex support in RTEMS is provided for the barriers of the
+  ${openmp:/term} library provided by ${gcc:/term}.  It could be used to
+  implement high performance ${smp:/term} synchronization primitives which
+  offer random-fairness.
+type: glossary

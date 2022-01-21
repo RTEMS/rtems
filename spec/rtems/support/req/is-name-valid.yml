@@ -1,0 +1,90 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/is-name-valid
+post-conditions:
+- name: Result
+  states:
+  - name: 'True'
+    test-code: |
+      T_true( ctx->result );
+    text: |
+      The return value of ${../if/is-name-valid:/name} shall be
+      ${/c/if/true:/name}.
+  - name: 'False'
+    test-code: |
+      T_false( ctx->result );
+    text: |
+      The return value of ${../if/is-name-valid:/name} shall be
+      ${/c/if/false:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->name = 1;
+    text: |
+      While the ${../if/is-name-valid:/params[0]/name} parameter is not equal
+      to zero.
+  - name: Invalid
+    test-code: |
+      ctx->name = 0;
+    text: |
+      While the ${../if/is-name-valid:/params[0]/name} parameter is
+      equal to zero.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->result = rtems_is_name_valid( ctx->name );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the return value of the ${../if/is-name-valid:/name}
+    call.
+  description: null
+  member: |
+    bool result
+- brief: |
+    This member specifies if the ${../if/is-name-valid:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_name name
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-support-is-name-valid.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result: 'True'
+  pre-conditions:
+    Name:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Result: 'False'
+  pre-conditions:
+    Name:
+    - Invalid
+type: requirement

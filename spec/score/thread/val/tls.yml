@@ -1,0 +1,63 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by the thread-local objects definition.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the initial value of the zero initialized thread-local
+      object has the expected value.
+    code: |
+      T_step_eq_int( ${step}, tls_object_0, 0 );
+    links:
+    - role: validation
+      uid: ../req/tls-zero-initialized-data
+  - brief: |
+      Check that the alignment of the zero initialized thread-local
+      object has the expected value.
+    code: |
+      T_step_eq_uptr( ${step}, ( (uintptr_t) &tls_object_0 ) % 256, 0 );
+    links:
+    - role: validation
+      uid: ../req/tls-big-alignment
+  - brief: |
+      Check that the initial value of the non-zero initialized thread-local
+      object has the expected value.
+    code: |
+      T_step_eq_int( ${step}, tls_object_1, 123 );
+    links:
+    - role: validation
+      uid: ../req/tls-initialized-data
+  - brief: |
+      Check that the alignment of the non-zero initialized thread-local object
+      has the expected value.
+    code: |
+      T_step_eq_uptr( ${step}, ( (uintptr_t) &tls_object_1 ) % 256, 0 );
+    links:
+    - role: validation
+      uid: ../req/tls-big-alignment
+  links: []
+test-brief: |
+  Tests properties of thread-local objects.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static RTEMS_ALIGNED( 256 ) _Thread_local int volatile tls_object_0;
+
+  static RTEMS_ALIGNED( 256 ) _Thread_local int volatile tls_object_1 = 123;
+test-target: testsuites/validation/tc-score-thread-tls.c
+test-teardown: null
+type: test-case

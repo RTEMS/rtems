@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: tick
+text: |
+  The basic unit of time used by RTEMS.  It is a user-configurable number
+  of microseconds.  The current tick expires when a clock tick directive is
+  invoked.
+type: glossary

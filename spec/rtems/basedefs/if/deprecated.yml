@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Instructs the compiler in a declaration to issue a warning whenever a
+  variable, function, or type using this declaration will be used.
+copyrights:
+- Copyright (C) 2009 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ''
+  variants:
+  - definition: |
+      __attribute__(( __deprecated__ ))
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_DEPRECATED
+notes: null
+type: interface

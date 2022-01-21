@@ -1,0 +1,60 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/if/disable-bsp-settings
+- role: validation
+  uid: /acfg/req/init
+test-brief: |
+  This validation test suite is used to validate the default value of
+  application configuration options where all optional BSP provided settings
+  are disabled.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  static void FatalExtension(
+    rtems_fatal_source source,
+    bool               always_set_to_false,
+    rtems_fatal_code   code
+  )
+  {
+    rtems_extensions_table bsp = BSP_INITIAL_EXTENSION;
+
+    ( *bsp.fatal )( source, always_set_to_false, code );
+  }
+
+  static void Init( rtems_task_argument arg )
+  {
+    (void) arg;
+    RunTestSuite();
+  }
+
+  #define CONFIGURE_INITIAL_EXTENSIONS { .fatal = FatalExtension }
+
+  #define CONFIGURE_DISABLE_BSP_SETTINGS
+
+  #define CONFIGURE_MAXIMUM_TASKS 1
+
+  #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+  #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE \
+    RTEMS_TASK_STORAGE_SIZE( \
+      RTEMS_MINIMUM_STACK_SIZE, \
+      RTEMS_DEFAULT_ATTRIBUTES \
+    )
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-description: null
+test-includes:
+- bsp.h
+test-local-includes:
+- ts-acfg.h
+test-suite-name: ValidationAcfg1
+test-target: testsuites/validation/ts-validation-acfg-1.c
+type: test-suite

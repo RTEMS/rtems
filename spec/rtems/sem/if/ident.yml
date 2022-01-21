@@ -1,0 +1,97 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Identifies a semaphore by the object name.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
+    - ${../../type/if/id:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive obtains a semaphore identifier associated with the semaphore
+  name specified in ${.:/params[0]/name}.
+
+  The node to search is specified in ${.:/params[1]/name}.  It shall be
+
+  * a valid node number,
+
+  * the constant ${../../object/if/search-all-nodes:/name} to search in all nodes,
+
+  * the constant ${../../object/if/search-local-node:/name} to search in the local
+    node only, or
+
+  * the constant ${../../object/if/search-other-nodes:/name} to search in all nodes
+    except the local node.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_semaphore_ident
+notes: |
+  If the semaphore name is not unique, then the semaphore identifier will match
+  the first semaphore with that name in the search order.  However, this
+  semaphore identifier is not guaranteed to correspond to the desired
+  semaphore.
+
+  The objects are searched from lowest to the highest index.  If
+  ${.:/params[1]/name} is ${../../object/if/search-all-nodes:/name}, all nodes
+  are searched with the local node being searched first.  All other nodes are
+  searched from lowest to the highest node number.
+
+  If node is a valid node number which does not represent the local node, then
+  only the semaphores exported by the designated node are searched.
+
+  This directive does not generate activity on remote nodes.  It accesses only
+  the local copy of the global object table.
+
+  The semaphore identifier is used with other semaphore related directives to
+  access the semaphore.
+params:
+- description: |
+    is the object name to look up.
+  dir: null
+  name: name
+- description: |
+    is the node or node set to search for a matching object.
+  dir: null
+  name: node
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the object identifier of an object with the specified
+    name will be stored in this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was 0.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      There was no object with the specified name on the specified nodes.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      In multiprocessing configurations, the specified node was invalid.
+    value: ${../../status/if/invalid-node:/name}
+type: interface

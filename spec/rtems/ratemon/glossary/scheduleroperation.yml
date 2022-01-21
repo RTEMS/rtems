@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: scheduler operation
+text: |
+  When the ${../glossary/ownertask:/term} executes a ${../glossary/job:/term} of
+  a rate monotonic period, it often competes with other
+  ${/glossary/task:/plural} for CPU time.  What exactly happens depends on the
+  ${/glossary/scheduler-home:/term} of the ${/glossary/task:/term}.  Directives
+  like ${../if/period:/name} or ${../if/cancel:/name} invoke
+  ${/glossary/scheduler:/term} operations like ``release_job`` or ``cancel_job``.
+  The ${/glossary/scheduler-home:/term} often changes the
+  ${/glossary/priority-task:/term}.
+type: glossary

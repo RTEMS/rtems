@@ -1,0 +1,113 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Flushes the semaphore.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive unblocks all tasks waiting on the semaphore specified by
+  ${.:/params[0]/name}.  The semaphore's count is not changed by this
+  directive.  Tasks which are unblocked as the result of this directive will
+  return from the ${obtain:/name} directive with a status code of
+  ${../../status/if/unsatisfied:/name} to indicate that the semaphore was not
+  obtained.
+enabled-by: true
+index-entries:
+- flush a semaphore
+- unblock all tasks waiting on a semaphore
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: ../constraint/release-isr
+- role: constraint
+  uid: ../constraint/release-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_semaphore_flush
+notes: |
+  If the task to be unblocked resides on a different node from the semaphore,
+  then the waiting task is unblocked, and the proxy used to represent the
+  task is reclaimed.
+
+  It is not allowed to flush a local, binary semaphore using the MrsP locking
+  protocol and any attempt to do this will just return the
+  ${../../status/if/not-defined:/name} status code.  This error can only happen
+  in SMP configurations.
+
+  For barrier synchronization, the ${../../barrier/if/group:/name} offers a
+  cleaner alternative to using the semaphore flush directive.  Unlike POSIX
+  barriers, they have a manual release option.
+
+  Using the semaphore flush directive for condition synchronization in concert
+  with another semaphore may be subject to the lost wake-up problem.  The
+  following attempt to implement a condition variable is broken.
+
+  .. code-block:: c
+      :linenos:
+
+      #include <rtems.h>
+      #include <assert.h>
+
+      void cnd_wait( rtems_id cnd, rtems_id mtx )
+      {
+        rtems_status_code sc;
+
+        sc = rtems_semaphore_release( mtx );
+        assert( sc == RTEMS_SUCCESSFUL );
+
+        // Here, a higher priority task may run and satisfy the condition.
+        // We may never wake up from the next semaphore obtain.
+
+        sc = rtems_semaphore_obtain( cnd, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+        assert( sc == RTEMS_UNSATISFIED );
+
+        sc = rtems_semaphore_obtain( mtx, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+        assert( sc == RTEMS_SUCCESSFUL );
+      }
+
+      void cnd_broadcast( rtems_id cnd )
+      {
+        rtems_status_code sc;
+
+        sc = rtems_semaphore_flush( cnd );
+        assert( sc == RTEMS_SUCCESSFUL );
+      }
+params:
+- description: |
+    is the semaphore identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no semaphore associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The semaphore resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+  - description: |
+      Flushing a semaphore using the MrsP locking protocol is undefined
+      behaviour.
+    value: ${../../status/if/not-defined:/name}
+type: interface

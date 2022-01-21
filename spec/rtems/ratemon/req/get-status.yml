@@ -1,0 +1,672 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-status
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/get-status:/name} shall be
+      ${../../status/if/successful:/name}
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-status:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/get-status:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: OwnerTask
+    test-code: |
+      T_eq_u32( ctx->period_status.owner, ctx->task_id );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[0]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to the object identifier of the
+      ${../glossary/ownertask:/term} of the period after the return of
+      the ${../if/get-status:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->period_status.owner, initial_owner );
+    text: |
+      Objects referenced by the ${../if/get-status:/params[1]/name}
+      parameter in past call to ${../if/get-status:/name} shall not be
+      accessed by the ${../if/get-status:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      T_eq_int( ctx->period_status.state, RATE_MONOTONIC_INACTIVE );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[1]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name} parameter
+      shall be set to ${../if/inactive:/name} after the return of the
+      ${../if/get-status:/name} call. (See also ${../glossary/inactive:/term})
+  - name: Active
+    test-code: |
+      T_eq_int( ctx->period_status.state, RATE_MONOTONIC_ACTIVE );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[1]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name} parameter
+      shall be set to ${../if/active:/name} after the return of the
+      ${../if/get-status:/name} call. (See also ${../glossary/active:/term})
+  - name: Expired
+    test-code: |
+      T_eq_int( ctx->period_status.state, RATE_MONOTONIC_EXPIRED );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[1]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to ${../if/expired:/name} after the
+      return of the ${../if/get-status:/name} call.
+      (See also ${../glossary/expired:/term})
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->period_status.state, initial_state );
+    text: |
+      Objects referenced by the ${../if/get-status:/params[1]/name}
+      parameter in past calls to ${../if/get-status:/name} shall not be
+      accessed by the ${../if/get-status:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: Elapsed
+  states:
+  - name: Time
+    test-code: |
+      T_log( T_VERBOSE, "Elapsed: %lld.%ld (expected: %lld.%ld)",
+        ctx->period_status.since_last_period.tv_sec,
+        ctx->period_status.since_last_period.tv_nsec,
+        ctx->elapsed.tv_sec,
+        ctx->elapsed.tv_nsec
+      );
+      T_eq_u64(
+        ctx->period_status.since_last_period.tv_sec,
+        ctx->elapsed.tv_sec
+      );
+      /* period_status integer arithmetic is plagued by a rounding error. */
+      T_le_long(
+        ctx->period_status.since_last_period.tv_nsec,
+        ctx->elapsed.tv_nsec + 1
+      );
+      T_ge_long(
+        ctx->period_status.since_last_period.tv_nsec,
+        ctx->elapsed.tv_nsec - 1
+      );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[2]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to the ${../glossary/time:/term}
+      ${../glossary/elapsed:/term}.
+  - name: Zero
+    test-code: |
+      T_eq_u64( ctx->period_status.since_last_period.tv_sec,   0 );
+      T_eq_long( ctx->period_status.since_last_period.tv_nsec, 0 );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[2]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to 0.
+  - name: Nop
+    test-code: |
+      T_eq_u64(
+        ctx->period_status.since_last_period.tv_sec,
+        initial_period.tv_sec
+      );
+      T_eq_long(
+        ctx->period_status.since_last_period.tv_nsec,
+        initial_period.tv_nsec
+      );
+    text: |
+      Objects referenced by the ${../if/get-status:/params[1]/name}
+      parameter in past calls to ${../if/get-status:/name} shall not be
+      accessed by the ${../if/get-status:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: Consumed
+  states:
+  - name: CpuTime
+    test-code: |
+      T_log( T_VERBOSE, "CPU elapsed: %lld.%ld (expected: %lld.%ld)",
+        ctx->period_status.executed_since_last_period.tv_sec,
+        ctx->period_status.executed_since_last_period.tv_nsec,
+        ctx->consumed.tv_sec,
+        ctx->consumed.tv_nsec
+      );
+      T_eq_u64(
+        ctx->period_status.executed_since_last_period.tv_sec,
+        ctx->consumed.tv_sec
+      );
+      /* period_status integer arithmetic is plagued by a rounding error. */
+      T_le_long(
+        ctx->period_status.executed_since_last_period.tv_nsec,
+        ctx->consumed.tv_nsec + 1
+      );
+      T_ge_long(
+        ctx->period_status.executed_since_last_period.tv_nsec,
+        ctx->consumed.tv_nsec - 1
+      );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[3]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to the ${../glossary/cputime:/term}
+      ${../glossary/consumed:/term} by the ${../glossary/ownertask:/term}.
+  - name: Zero
+    test-code: |
+      T_eq_u64( ctx->period_status.executed_since_last_period.tv_sec,   0 );
+      T_eq_long( ctx->period_status.executed_since_last_period.tv_nsec, 0 );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[2]/default/name} of the object
+      referenced by the ${../if/get-status:/params[1]/name} parameter
+      shall be set to 0.
+  - name: Nop
+    test-code: |
+      T_eq_u64(
+        ctx->period_status.executed_since_last_period.tv_sec,
+        initial_period.tv_sec
+      );
+      T_eq_long(
+        ctx->period_status.executed_since_last_period.tv_nsec,
+        initial_period.tv_nsec
+      );
+    text: |
+      Objects referenced by the ${../if/get-status:/params[1]/name}
+      parameter in past calls to ${../if/get-status:/name} shall not be
+      accessed by the ${../if/get-status:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: Postponed
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_u32( ctx->period_status.postponed_jobs_count, 0 );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[4]/default/name}
+      of the object referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to 0 after the return of the
+      ${../if/get-status:/name} call.
+  - name: One
+    test-code: |
+      T_eq_u32( ctx->period_status.postponed_jobs_count, 1 );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[4]/default/name}
+      of the object referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to the number of
+      ${../glossary/postponedjob:/plural} (here 1) after the return of
+      the ${../if/get-status:/name} call.
+  - name: Several
+    test-code: |
+      T_eq_u32(
+        ctx->period_status.postponed_jobs_count,
+        ctx->postponed_jobs_count
+      );
+    text: |
+      The value of the member
+      ${../if/period-status:/definition[4]/default/name}
+      of the object referenced by the ${../if/get-status:/params[1]/name}
+      parameter shall be set to the number of
+      ${../glossary/postponedjob:/plural} after the return of the
+      ${../if/get-status:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->period_status.postponed_jobs_count,
+        initial_postponed_jobs_count );
+    text: |
+      Objects referenced by the ${../if/get-status:/params[1]/name}
+      parameter in past calls to ${../if/get-status:/name} shall not be
+      accessed by the ${../if/get-status:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: StatusAddr
+  states:
+  - name: Valid
+    test-code: |
+      ctx->status_param = &ctx->period_status;
+    text: |
+      While the ${../if/get-status:/params[1]/name} parameter references
+      an object of type ${../if/period-status:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->status_param = NULL;
+    text: |
+      While the ${../if/get-status:/params[1]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_param = ctx->period_id;
+    text: |
+      While the ${../if/get-status:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->id_param = RTEMS_ID_NONE;
+    text: |
+      While the ${../if/get-status:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      /* Nothing to do here as the period is newly created. */
+      ctx->previous_state = RATE_MONOTONIC_INACTIVE;
+    text: |
+      While the ${../if/get-status:/params[0]/name} parameter references an
+      period object in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
+  - name: Active
+    test-code: |
+      rtems_status_code status;
+      status = rtems_rate_monotonic_period( ctx->period_id, period_length );
+      T_rsc_success( status );
+      ctx->previous_state = RATE_MONOTONIC_ACTIVE;
+    text: |
+      While the ${../if/get-status:/params[0]/name} parameter references an
+      period object in ${../glossary/active:/term} ${../glossary/state:/term}.
+  - name: Expired
+    test-code: |
+      rtems_status_code status;
+      status = rtems_rate_monotonic_period( ctx->period_id, period_length );
+      T_rsc_success( status );
+      ctx->previous_state = RATE_MONOTONIC_EXPIRED;
+    text: |
+      While the ${../if/get-status:/params[0]/name} parameter references an
+      period object in ${../glossary/expired:/term}
+      ${../glossary/state:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Elapsed
+  states:
+  - name: Time
+    test-code: |
+      /* Time elapsed while having a CPU is added below in "CpuTime". */
+    text: |
+      While a certain ${../glossary/time:/term} of the
+      ${/glossary/clock-monotonic:/term} has ${../glossary/elapsed:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Consumed
+  states:
+  - name: CpuTime
+    test-code: |
+      TickTheClock( ctx, elapsed_cpu_ticks );
+      ctx->consumed.tv_nsec +=
+        rtems_configuration_get_nanoseconds_per_tick() * elapsed_cpu_ticks;
+    text: |
+      While the owner ${/glossary/task:/term} has ${../glossary/consumed:/term}
+      a certain amount of ${../glossary/cputime:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Postponed
+  states:
+  - name: Zero
+    test-code:  |
+      ctx->postponed_jobs_count = 0;
+    text: |
+      While the period is not in ${../glossary/expired:/term}
+      ${../glossary/state:/term}.
+  - name: One
+    test-code: |
+      CreatePostponedJobs( ctx, 1 );
+    text: |
+      While there is one ${../glossary/postponedjob:/term}.
+  - name: Several
+    test-code: |
+      CreatePostponedJobs( ctx, 5 );
+    text: |
+      While there are two or more ${../glossary/postponedjob:/term}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NotInInactiveState: |
+    ${../glossary/postponedjob:/plural} do not exist in
+    ${../glossary/inactive:/term} ${../glossary/state:/term}.
+  NeverInExpiredState: |
+    There must be ${../glossary/postponedjob:/plural} in
+    ${../glossary/expired:/term} ${../glossary/state:/term}.
+test-action: |
+  if ( ctx->do_reset != NULL ) {
+      ctx->do_reset();
+  }
+  ctx->status = rtems_rate_monotonic_get_status(
+    ctx->id_param,
+    ctx->status_param
+  );
+test-brief: null
+test-cleanup: |
+  T_rsc_success( rtems_rate_monotonic_delete( ctx->period_id ) );
+test-context:
+- brief: |
+    This member contains a valid identifier of a period.
+  description: null
+  member: |
+    rtems_id period_id
+- brief: |
+    This member contains the previous timecounter handler to restore.
+  description: null
+  member: |
+    GetTimecountHandler previous_timecounter_handler
+- brief: |
+    This member is used to receive the ${../if/period-status:/name}
+    from the action.
+  description: null
+  member: |
+    rtems_rate_monotonic_period_status period_status
+- brief: |
+    This member specifies the ${../if/get-status:/params[0]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_id id_param
+- brief: |
+    This member specifies the ${../if/get-status:/params[1]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_rate_monotonic_period_status *status_param
+- brief: |
+    This member contains the returned ${/glossary/statuscode:/term}
+    of the action.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member contains the ${/glossary/task:/term} identifier of the
+    ${../glossary/ownertask:/term}.
+  description: null
+  member: |
+    rtems_id task_id
+- brief: |
+    This member contains the ${../glossary/state:/term}
+    before the action.
+  description: null
+  member: |
+    rtems_rate_monotonic_period_states previous_state
+- brief: |
+    If the ${../../cpuuse/if/reset:/name} directive should be called
+    before ${../if/get-status:/name}, this member contains a pointer to it.
+  description: null
+  member: |
+    void (*do_reset)( void )
+- brief: |
+    This member contains the ${/glossary/clock-monotonic:/term}
+    ${../glossary/time:/term} ${../glossary/elapsed:/term}.
+  description: null
+  member: |
+    struct timespec elapsed
+- brief: |
+    This member contains the ${../glossary/cputime:/term}
+    ${../glossary/consumed:/term} by the ${../glossary/ownertask:/term}.
+  description: null
+  member: |
+    struct timespec consumed
+- brief: |
+    This member contains the number of ${../glossary/postponedjob:/plural}.
+  description: null
+  member: |
+    uint32_t postponed_jobs_count
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/cpuuse.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_status_code status;
+  status =  rtems_rate_monotonic_create(
+    rtems_build_name( 'R', 'M', 'O', 'N' ),
+    &ctx->period_id
+  );
+  T_rsc_success( status );
+
+  ctx->period_status = (rtems_rate_monotonic_period_status) {
+    .owner = initial_owner,
+    .state = initial_state,
+    .since_last_period = initial_period,
+    .executed_since_last_period = initial_period,
+    .postponed_jobs_count = initial_postponed_jobs_count
+  };
+
+  ctx->elapsed.tv_sec  = 0;
+  ctx->elapsed.tv_nsec = 0;
+  ctx->consumed.tv_sec  = 0;
+  ctx->consumed.tv_nsec = 0;
+  ctx->postponed_jobs_count = 0;
+  TimecounterTick();
+test-setup:
+  brief: null
+  code: |
+    ctx->previous_timecounter_handler = SetGetTimecountHandler( FreezeTime );
+    ctx->task_id = rtems_task_self();
+  description: null
+test-stop: null
+test-support: |
+  static const rtems_id initial_owner = 0xFFFFFFFF;
+  static const rtems_rate_monotonic_period_states initial_state =
+    (rtems_rate_monotonic_period_states) 0xFFFFFFFF;
+  static const struct timespec initial_period = { 0xFFFFFFFF, 0xFFFFFFFF };
+  static const uint32_t initial_postponed_jobs_count = 0xFFFFFFFF;
+  static const rtems_interval period_length = 5;
+  static const uint32_t elapsed_cpu_ticks = 3;
+
+  static uint32_t FreezeTime( void )
+  {
+    return GetTimecountCounter() - 1;
+  }
+
+  static void TickTheClock(
+    RtemsRatemonReqGetStatus_Context *ctx,
+    uint32_t ticks
+  )
+  {
+    uint32_t i;
+    for ( i = 0; i < ticks; ++i ) {
+      TimecounterTick();
+    }
+    ctx->elapsed.tv_nsec +=
+      rtems_configuration_get_nanoseconds_per_tick() * ticks;
+  }
+
+  static void CreatePostponedJobs(
+    RtemsRatemonReqGetStatus_Context *ctx,
+    uint32_t jobs_count
+  )
+  {
+    rtems_status_code status;
+    ctx->postponed_jobs_count = jobs_count;
+    if ( ctx->previous_state == RATE_MONOTONIC_ACTIVE ) {
+      jobs_count++;
+      TickTheClock( ctx, jobs_count * period_length );
+      status = rtems_rate_monotonic_period( ctx->period_id, period_length );
+      T_rsc( status, RTEMS_TIMEOUT );
+    } else {
+      /* ctx->previous_state == RATE_MONOTONIC_INACTIVE || _EXPIRED */
+      TickTheClock( ctx, jobs_count * period_length );
+    }
+    ctx->consumed.tv_nsec +=
+      rtems_configuration_get_nanoseconds_per_tick() *
+      jobs_count * period_length;
+  }
+test-target: testsuites/validation/tc-ratemon-get-status.c
+test-teardown:
+  brief: null
+  code: |
+    SetGetTimecountHandler( ctx->previous_timecounter_handler );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner: OwnerTask
+    State: Inactive
+    Elapsed: Zero
+    Consumed: Zero
+    Postponed: N/A
+  pre-conditions:
+    StatusAddr:
+      - Valid
+    Id:
+      - Valid
+    State:
+      - Inactive
+    Elapsed: N/A
+    Consumed: N/A
+    Postponed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner: OwnerTask
+    State:
+      - specified-by: State
+    Elapsed: Time
+    Consumed: CpuTime
+    Postponed:
+      - specified-by: Postponed
+  pre-conditions:
+    StatusAddr:
+      - Valid
+    Id:
+      - Valid
+    State:
+      - Active
+      - Expired
+    Elapsed:
+      - Time
+    Consumed:
+      - CpuTime
+    Postponed: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Owner: Nop
+    State: Nop
+    Elapsed: Nop
+    Consumed: Nop
+    Postponed: Nop
+  pre-conditions:
+    StatusAddr:
+      - 'Null'
+    Id: all
+    State:
+      - Inactive
+    Elapsed: all
+    Consumed: all
+    Postponed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Owner: Nop
+    State: Nop
+    Elapsed: Nop
+    Consumed: Nop
+    Postponed: Nop
+  pre-conditions:
+    StatusAddr:
+      - 'Null'
+    Id: all
+    State:
+      - Active
+      - Expired
+    Elapsed: all
+    Consumed: all
+    Postponed: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Owner: Nop
+    State: Nop
+    Elapsed: Nop
+    Consumed: Nop
+    Postponed: Nop
+  pre-conditions:
+    StatusAddr:
+      - Valid
+    Id:
+      - Invalid
+    State:
+      - Inactive
+    Elapsed: all
+    Consumed: all
+    Postponed: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Owner: Nop
+    State: Nop
+    Elapsed: Nop
+    Consumed: Nop
+    Postponed: Nop
+  pre-conditions:
+    StatusAddr:
+      - Valid
+    Id:
+      - Invalid
+    State:
+      - Active
+      - Expired
+    Elapsed: all
+    Consumed: all
+    Postponed: all
+- enabled-by: true
+  post-conditions: NotInInactiveState
+  pre-conditions:
+    StatusAddr: all
+    Id: all
+    State:
+      - Inactive
+    Elapsed: all
+    Consumed: all
+    Postponed:
+      - One
+      - Several
+- enabled-by: true
+  post-conditions: NeverInExpiredState
+  pre-conditions:
+    StatusAddr: all
+    Id: all
+    State:
+      - Expired
+    Elapsed: all
+    Consumed: all
+    Postponed:
+      - Zero
+type: requirement

@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Suspends the interrupt server.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: ../constraint/not-within-server
+- role: constraint
+  uid: /constraint/request-response
+name: rtems_interrupt_server_suspend
+notes: |
+  Interrupt server may be resumed by ${server-resume:/name}.
+params:
+- description: |
+    is the index of the interrupt server to suspend.  The constant
+    ${server-default:/name} may be used to specify the default interrupt
+    server.
+  dir: null
+  name: server_index
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no interrupt server associated with the index specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

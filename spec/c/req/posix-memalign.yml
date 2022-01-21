@@ -1,0 +1,301 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/posix-memalign
+post-conditions:
+- name: Status
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_int( ctx->status, 0 );
+    text: |
+      The return value of ${../if/posix-memalign:/name} shall be equal to zero.
+  - name: EINVAL
+    test-code: |
+      T_eq_int( ctx->status, EINVAL );
+    text: |
+      The return value of ${../if/posix-memalign:/name} shall be equal to
+      ${../if/einval:/name}.
+  - name: ENOMEM
+    test-code: |
+      T_eq_int( ctx->status, ENOMEM );
+    text: |
+      The return value of ${../if/posix-memalign:/name} shall be equal to
+      ${../if/enomem:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: MemptrVar
+  states:
+  - name: AreaBegin
+    test-code: |
+      T_eq_ptr( ctx->memptr, &ctx->memptr_obj );
+      T_not_null( ctx->memptr_obj );
+    text: |
+      The value of the object referenced by the memptr parameter shall be set
+      to the begin address of the allocated memory area after the return of the
+      ${../if/posix-memalign:/name} call.
+  - name: 'Null'
+    test-code: |
+      T_eq_ptr( ctx->memptr, &ctx->memptr_obj );
+      T_null( ctx->memptr_obj );
+    text: |
+      The value of the object referenced by the memptr parameter shall be set
+      to ${../if/null:/name} after the return of the
+      ${../if/posix-memalign:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_uptr( (uintptr_t) ctx->memptr_obj, 1 );
+    text: |
+      Objects referenced by the memptr parameter in past calls to
+      ${../if/posix-memalign:/name} shall not be accessed by the
+      ${../if/posix-memalign:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Alignment
+  states:
+  - name: Valid
+    test-code: |
+      T_eq_uptr( (uintptr_t) ctx->memptr_obj % 128, 0 );
+    text: |
+      The begin address of the allocated memory area shall be an integral
+      multiple of the alignment parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Size
+  states:
+  - name: Valid
+    test-code: |
+      /* Assume that the next allocation is done from adjacent memory */
+      ptr = ctx->memptr_obj;
+      eno = posix_memalign( &ptr, ctx->alignment, ctx->size );
+      T_eq_int( eno, 0 );
+      T_not_null( ptr );
+      a = (uintptr_t) ptr;
+      b = (uintptr_t) ctx->memptr_obj;
+      size = a < b ? b - a : a - b;
+      T_ge_uptr( size, ctx->size );
+    text: |
+      The size of the allocated memory area shall greater than or equal to the
+      size parameter.
+  test-epilogue: null
+  test-prologue: |
+    void     *ptr;
+    int       eno;
+    uintptr_t a;
+    uintptr_t b;
+    uintptr_t size;
+pre-conditions:
+- name: Memptr
+  states:
+  - name: Valid
+    test-code: |
+      ctx->memptr = &ctx->memptr_obj;
+    text: |
+      While the memptr parameter references an object of type
+      ``void *``.
+  - name: 'Null'
+    test-code: |
+      ctx->memptr = NULL;
+    text: |
+      While the memptr parameter is equal to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Alignment
+  states:
+  - name: Tiny
+    test-code: |
+      ctx->alignment = sizeof( void * ) - 1;
+    text: |
+      While the alignment parameter is less than sizeof( void * ).
+  - name: NotPower2
+    test-code: |
+      ctx->alignment = sizeof( void * ) + 1;
+    text: |
+      While the alignment parameter is greater than or equal to
+      sizeof( void * ), while the alignment parameter is not a power of two.
+  - name: Huge
+    test-code: |
+      ctx->alignment = SIZE_MAX / 2 + 1;
+    text: |
+      While the alignment parameter is greater than or equal to
+      sizeof( void * ), while the alignment parameter is a power of two, while
+      the alignment parameter is too large to allocate a memory area with the
+      specified alignment.
+  - name: Valid
+    test-code: |
+      ctx->alignment = 128;
+    text: |
+      While the alignment parameter is greater than or equal to
+      sizeof( void * ), while the alignment parameter is a power of two, while
+      the alignment parameter is small enough to allocate a memory area with
+      the specified alignment.
+  test-epilogue: null
+  test-prologue: null
+- name: Size
+  states:
+  - name: Huge
+    test-code: |
+      ctx->size = SIZE_MAX;
+    text: |
+      While the size parameter is not equal to zero, while the size parameter
+      is too large to allocate a memory area with the specified size.
+  - name: Zero
+    test-code: |
+      ctx->size = 0;
+    text: |
+      While the size parameter is equal to zero.
+  - name: Valid
+    test-code: |
+      ctx->size = sizeof( uint64_t );
+    text: |
+      While the size parameter is not equal to zero, while the size parameter
+      is small enough to allocate a memory area with the specified size.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = posix_memalign( ctx->memptr, ctx->alignment, ctx->size );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a memory support context.
+  description: null
+  member: |
+    MemoryContext mem_ctx;
+- brief: |
+    This member provides the object referenced by the memptr parameter.
+  description: null
+  member: |
+    void *memptr_obj
+- brief: |
+    This member contains the return value of the directive call.
+  description: null
+  member: |
+    int status
+- brief: |
+    This member specifies if the memptr parameter value.
+  description: null
+  member: |
+    void **memptr
+- brief: |
+    This member specifies if the alignment parameter value.
+  description: null
+  member: |
+    size_t alignment
+- brief: |
+    This member specifies if the size parameter value.
+  description: null
+  member: |
+    size_t size
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- stdlib.h
+- errno.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->memptr_obj = (void *)(uintptr_t) 1;
+test-setup:
+  brief: null
+  code: |
+    MemorySave( &ctx->mem_ctx );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-mem-posix-memalign.c
+test-teardown:
+  brief: null
+  code: |
+    MemoryRestore( &ctx->mem_ctx );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: EINVAL
+    MemptrVar: 'Null'
+    Alignment: N/A
+    Size: N/A
+  pre-conditions:
+    Memptr:
+    - Valid
+    Alignment:
+    - Tiny
+    - NotPower2
+    Size: all
+- enabled-by: true
+  post-conditions:
+    Status: EINVAL
+    MemptrVar: Nop
+    Alignment: N/A
+    Size: N/A
+  pre-conditions:
+    Memptr:
+    - 'Null'
+    Alignment: all
+    Size: all
+- enabled-by: true
+  post-conditions:
+    Status: ENOMEM
+    MemptrVar: 'Null'
+    Alignment: N/A
+    Size: N/A
+  pre-conditions:
+    Memptr:
+    - Valid
+    Alignment:
+    - Huge
+    Size:
+    - Huge
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: ENOMEM
+    MemptrVar: 'Null'
+    Alignment: N/A
+    Size: N/A
+  pre-conditions:
+    Memptr:
+    - Valid
+    Alignment:
+    - Valid
+    Size:
+    - Huge
+- enabled-by: true
+  post-conditions:
+    Status: Zero
+    MemptrVar: AreaBegin
+    Alignment: Valid
+    Size: Valid
+  pre-conditions:
+    Memptr:
+    - Valid
+    Alignment:
+    - Valid
+    Size:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: Zero
+    MemptrVar: 'Null'
+    Alignment: Valid
+    Size: N/A
+  pre-conditions:
+    Memptr:
+    - Valid
+    Alignment:
+    - Valid
+    - Huge
+    Size:
+    - Zero
+type: requirement

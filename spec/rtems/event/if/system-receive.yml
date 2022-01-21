@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Receives or gets a system event set from the executing task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${set:/name} ${.:/params[0]/name}
+    - ${../../option/if/option:/name} ${.:/params[1]/name}
+    - ${../../type/if/interval:/name} ${.:/params[2]/name}
+    - ${set:/name} *${.:/params[3]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive performs the same actions as the ${receive:/name} directive
+  except that it operates with a different set of events for each task.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup-hidden
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-tick
+name: rtems_event_system_receive
+notes: null
+params:
+- description: |
+    is the event set of interest.  Use ${pending-events:/name} to get the
+    pending events.
+  dir: null
+  name: event_in
+- description: is the option set.
+  dir: null
+  name: option_set
+- description: |
+    is the timeout in clock ticks if the ${../../option/if/wait:/name} option was
+    set.  Use ${../../type/if/no-timeout:/name} to wait potentially forever.
+  dir: null
+  name: ticks
+- description: |
+    is the pointer to an event set.  The received or pending events are stored
+    in the referenced event set if the operation was successful.
+  dir: null
+  name: event_out
+return: null
+type: interface

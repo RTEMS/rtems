@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: clock-monotonic
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The initial value of the ${/glossary/clock-monotonic:/term} shall be
+  0000-00-00T00:00:01.000000000.
+type: requirement

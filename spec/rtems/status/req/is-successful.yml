@@ -1,0 +1,89 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/is-successful
+post-conditions:
+- name: Result
+  states:
+  - name: 'True'
+    test-code: |
+      T_true( ctx->result );
+    text: |
+      The return value of ${../if/is-successful:/name} shall be
+      ${/c/if/true:/name}.
+  - name: 'False'
+    test-code: |
+      T_false( ctx->result );
+    text: |
+      The return value of ${../if/is-successful:/name} shall be
+      ${/c/if/false:/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Status
+  states:
+  - name: Successful
+    test-code: |
+      ctx->status = RTEMS_SUCCESSFUL;
+    text: |
+      While the ${../if/is-successful:/params[0]/name} parameter is
+      equal to ${../if/successful:/name}.
+  - name: Other
+    test-code: |
+      ctx->status = RTEMS_INVALID_ID;
+    text: |
+      While the ${../if/is-successful:/params[0]/name} parameter is not
+      equal to ${../if/successful:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->result = rtems_is_status_successful( ctx->status );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the return value of the ${../if/is-successful:/name} call.
+  description: null
+  member: |
+    bool result
+- brief: |
+    This member specifies if the ${../if/is-successful:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-status-is-successful.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result: 'True'
+  pre-conditions:
+    Status:
+    - Successful
+- enabled-by: true
+  post-conditions:
+    Result: 'False'
+  pre-conditions:
+    Status:
+    - Other
+type: requirement

@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: object-oriented
+text: |
+  A term used to describe systems with common mechanisms for utilizing a
+  variety of entities.  Object-oriented systems shield the application from
+  implementation details.
+type: glossary

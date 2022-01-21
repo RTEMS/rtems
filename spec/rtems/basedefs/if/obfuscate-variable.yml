@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Obfuscates the variable so that the compiler cannot perform optimizations
+  based on the variable value.
+copyrights:
+- Copyright (C) 2016, 2018 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    (void) ( ${.:/params[0]/name} )
+  variants:
+  - definition: |
+      ${/compiler/if/asm:/name}( "" : "+r" ( ${.:/params[0]/name} ) )
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: |
+  The variable must be simple enough to fit into a register.
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_OBFUSCATE_VARIABLE
+notes: null
+params:
+- description: |
+    is the variable to obfuscate.
+  dir: null
+  name: _var
+return: null
+type: interface

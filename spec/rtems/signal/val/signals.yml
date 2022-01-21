@@ -1,0 +1,72 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Run the signal test for all 32 signal constants.
+  action-code: |
+    unsigned int i;
+
+    for ( i = 0; i < 32; ++i ) {
+      ${signal-constant:/test-run}( signals[ i ], i );
+      T_step( i ); /* ${steps/32} */
+    }
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/signal-count
+  - role: validation
+    uid: ../req/signal-set
+test-brief: |
+  This test case collection provides validation test cases for the
+  ${../if/group:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tr-signal-constant.h
+test-setup: null
+test-stop: null
+test-support: |
+  static const rtems_signal_set signals[] = {
+    RTEMS_SIGNAL_0,
+    RTEMS_SIGNAL_1,
+    RTEMS_SIGNAL_2,
+    RTEMS_SIGNAL_3,
+    RTEMS_SIGNAL_4,
+    RTEMS_SIGNAL_5,
+    RTEMS_SIGNAL_6,
+    RTEMS_SIGNAL_7,
+    RTEMS_SIGNAL_8,
+    RTEMS_SIGNAL_9,
+    RTEMS_SIGNAL_10,
+    RTEMS_SIGNAL_11,
+    RTEMS_SIGNAL_12,
+    RTEMS_SIGNAL_13,
+    RTEMS_SIGNAL_14,
+    RTEMS_SIGNAL_15,
+    RTEMS_SIGNAL_16,
+    RTEMS_SIGNAL_17,
+    RTEMS_SIGNAL_18,
+    RTEMS_SIGNAL_19,
+    RTEMS_SIGNAL_20,
+    RTEMS_SIGNAL_21,
+    RTEMS_SIGNAL_22,
+    RTEMS_SIGNAL_23,
+    RTEMS_SIGNAL_24,
+    RTEMS_SIGNAL_25,
+    RTEMS_SIGNAL_26,
+    RTEMS_SIGNAL_27,
+    RTEMS_SIGNAL_28,
+    RTEMS_SIGNAL_29,
+    RTEMS_SIGNAL_30,
+    RTEMS_SIGNAL_31
+  };
+test-target: testsuites/validation/tc-signals.c
+test-teardown: null
+type: test-case

@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/instruction-sync-after-code-change
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the ${/glossary/target:/term} has an instruction cache, where the
+  instruction cache needs to be synchronized after code changes, when the
+  ${../if/instruction-sync-after-code-change:/name} directive is called, the
+  instruction cache shall be synchronized so that the code in the memory area
+  specified by ${../if/instruction-sync-after-code-change:/params[0]/name} and
+  ${../if/instruction-sync-after-code-change:/params[1]/name} will be fetched
+  when it needs to be executed.
+type: requirement

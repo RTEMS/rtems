@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the number of ${/glossary/clock-tick:/plural} per second configured for
+  the application.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: ${../../type/if/interval:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_clock_get_ticks_per_second
+notes: |
+  The number of clock ticks per second is defined indirectly by the
+  ${/acfg/if/microseconds-per-tick:/name} configuration option.
+params: []
+return:
+  return: |
+    Returns the number of clock ticks per second configured for this
+    application.
+  return-values: []
+type: interface

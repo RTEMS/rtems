@@ -1,0 +1,134 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create an extension set with a thread terminate extension which deletes the
+    killer task if it is invoked for the worker task.  Create and start the
+    worker task.  Create and start the killer task.  The killer task deletes
+    the worker task.
+  action-code: |
+    rtems_extensions_table table = {
+      .thread_terminate = TaskTerminate
+    };
+    rtems_status_code sc;
+    rtems_id          id;
+    rtems_tcb        *worker_tcb;
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'T', 'E', 'S', 'T' ),
+      &table,
+      &id
+    );
+    T_rsc_success( sc );
+
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    worker_tcb = GetThread( ctx->worker_id );
+    StartTask( ctx->worker_id, WorkerTask, NULL );
+    ctx->killer_id = CreateTask( "KILL", PRIO_HIGH );
+    StartTask( ctx->killer_id, KillerTask, ctx );
+  checks:
+  - brief: |
+      Check that the killer task was deleted.
+    code: |
+      sc = rtems_event_send( ctx->killer_id, RTEMS_EVENT_0 );
+      T_rsc( sc, RTEMS_INVALID_ID );
+    links: []
+  - brief: |
+      Check that the worker task still exists.
+    code: |
+      sc = rtems_event_send( ctx->worker_id, RTEMS_EVENT_0 );
+      T_rsc_success( sc );
+    links: []
+  - brief: |
+      Check that the life of the worker task is protected and terminating.
+    code: |
+      T_eq_int(
+        worker_tcb->Life.state,
+        THREAD_LIFE_PROTECTED | THREAD_LIFE_TERMINATING
+      );
+    links: []
+  - brief: |
+      Check that the worker task is waiting for a joining thread.
+    code: |
+      T_eq_u32(
+        worker_tcb->current_state,
+        STATES_WAITING_FOR_JOIN_AT_EXIT
+      );
+    links: []
+  - brief: |
+      Delete the worker task using brute force.
+    code: |
+      worker_tcb->Life.state = THREAD_LIFE_DETACHED |
+        THREAD_LIFE_PROTECTED | THREAD_LIFE_TERMINATING;
+      _Thread_Clear_state( worker_tcb, STATES_WAITING_FOR_JOIN_AT_EXIT );
+    links: []
+  - brief: |
+      Clean up all used resources.
+    code: |
+      KillZombies();
+      RestoreRunnerPriority();
+
+      sc = rtems_extension_delete( id );
+      T_rsc_success( sc );
+    links: []
+  links:
+  - role: validation
+    uid: ../req/cancel-killer
+test-brief: |
+  Tests general thread behaviour.
+test-context:
+- brief: |
+    This member contains the worker task identifier.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member contains the killer task identifier.
+  description: null
+  member: |
+    rtems_id killer_id
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/statesimpl.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void TaskTerminate( rtems_tcb *executing )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+
+    if ( ctx->worker_id == executing->Object.id ) {
+      DeleteTask( ctx->killer_id );
+    }
+  }
+
+  static void WorkerTask( rtems_task_argument arg )
+  {
+    (void) arg;
+    SuspendSelf();
+  }
+
+  static void KillerTask( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    DeleteTask( ctx->worker_id );
+  }
+test-target: testsuites/validation/tc-score-thread.c
+test-teardown: null
+type: test-case

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: ready task
+text: |
+  A task occupies this state when it is available to be given control of a
+  processor.  A ready task has no processor assigned.  The scheduler
+  decided that other tasks are currently more important.  A task that is
+  ready to execute and has a processor assigned is called scheduled.
+type: glossary

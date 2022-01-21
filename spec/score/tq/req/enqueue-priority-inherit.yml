@@ -1,0 +1,975 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Position
+  states:
+  - name: InitialFirst
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      A priority queue associated with the scheduler which contains exactly the
+      enqueueing thread shall be created as the first priority queue of the
+      thread queue.
+  - name: InitialLast
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      A priority queue associated with the scheduler which contains exactly the
+      enqueueing thread shall be created as the last priority queue of the
+      thread queue.
+  - name: First
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+  - name: Second
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+  - name: FirstFirst
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+
+      The position of the priority queue in the thread queue shall not change.
+  - name: SecondFirst
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+
+      The position of the priority queue in the thread queue shall not change.
+  - name: FirstLast
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+
+      The position of the priority queue in the thread queue shall not change.
+  - name: SecondLast
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The enqueueing thread shall be enqueued in the priority queue associated
+      with the scheduler.
+
+      The position of the priority queue in the thread queue shall not change.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+
+    /* Event receive */
+    T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_HELPER_A ) );
+- name: OwnerPriority
+  states:
+  - name: Raise
+    test-code: |
+      CheckPriorityRaise( ctx, ctx->owner_priority );
+    text: |
+      Each priority of the enqueueing thread which is higher than the highest
+      priority of the owner of the thread queue shall be made the highest
+      priority of the owner.
+  - name: Nop
+    test-code: |
+      CheckPriorityNop( ctx, ctx->owner_priority );
+    text: |
+      The priorities of the owner of the thread queue shall not change.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerScheduler
+  states:
+  - name: NewHelper
+    test-code: |
+      CheckSchedulerNewHelper( ctx, ctx->owner_priority );
+    text: |
+      Each ${/glossary/scheduler-eligible:/term} of the enqueueing thread which
+      is not an ${/glossary/scheduler-eligible:/term} of the owner of the
+      thread queue shall be made a ${/glossary/scheduler-helping:/term} of the
+      owner with the priority of the enqueueing thread.
+  - name: Nop
+    test-code: |
+      CheckSchedulerNop( ctx, ctx->owner_priority );
+    text: |
+      The set of ${/glossary/scheduler-eligible:/plural} of the owner of the
+      thread queue shall not change.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerOwnerPriority
+  states:
+  - name: Raise
+    test-code: |
+      CheckPriorityRaise( ctx, ctx->owner_owner_priority );
+    text: |
+      Each priority of the enqueueing thread which is higher than the highest
+      priority of the owner of the thread queue on which the owner of the
+      thread queue is enqueued shall be made the highest priority of the owner.
+  - name: Nop
+    test-code: |
+      if ( ctx->owner_obtain == TQ_EVENT_MUTEX_C_OBTAIN ) {
+        CheckPriorityNop( ctx, ctx->owner_owner_priority );
+      } else {
+        if ( ctx->vital_priority ) {
+          T_eq_u32( ctx->owner_owner_priority[ 0 ], PRIO_HIGH );
+        } else {
+          T_eq_u32( ctx->owner_owner_priority[ 0 ], PRIO_VERY_HIGH );
+        }
+      }
+    text: |
+      The priorities of the owner of the thread queue on which the owner of the
+      thread queue is enqueued shall not change.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerOwnerScheduler
+  states:
+  - name: NewHelper
+    test-code: |
+      CheckSchedulerNewHelper( ctx, ctx->owner_owner_priority );
+    text: |
+      Each ${/glossary/scheduler-eligible:/term} of the enqueueing thread which
+      is not an ${/glossary/scheduler-eligible:/term} of the owner of the
+      thread queue on which the owner of the thread queue is enqueued shall be
+      made a ${/glossary/scheduler-helping:/term} of the owner with the
+      priority of the enqueueing thread.
+  - name: Nop
+    test-code: |
+      if ( ctx->owner_obtain == TQ_EVENT_MUTEX_C_OBTAIN ) {
+        CheckSchedulerNop( ctx, ctx->owner_owner_priority );
+      } else {
+        T_eq_u32( ctx->owner_owner_priority[ 1 ], PRIO_INVALID );
+        T_eq_u32( ctx->owner_owner_priority[ 2 ], PRIO_INVALID );
+        T_eq_u32( ctx->owner_owner_priority[ 3 ], PRIO_INVALID );
+      }
+    text: |
+      The set of ${/glossary/scheduler-eligible:/plural} of the owner of the
+      thread queue on which the owner of the thread queue is enqueued shall not
+      change.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Scheduler
+  states:
+  - name: One
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() != 1 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system has exactly one schedulers.
+  - name: Two
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() != 2 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system has exactly two schedulers.
+  - name: Three
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() != 3 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system has exactly three schedulers.
+  - name: More
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() < 4 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system has at least three schedulers.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueEligible
+  states:
+  - name: None
+    test-code: |
+      ctx->queue_priority = PRIO_INVALID;
+    text: |
+      While all priority queues of the thread queue associated with eligible
+      schedulers of the enqueueing thread are empty.
+  - name: High
+    test-code: |
+      ++ctx->tq_ctx->how_many;
+      ctx->queue_priority = PRIO_ULTRA_HIGH;
+    text: |
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is higher than the
+      priority of the enqueueing thread with respect to the eligible scheduler.
+  - name: Equal
+    test-code: |
+      ++ctx->tq_ctx->how_many;
+      ctx->queue_priority = PRIO_VERY_HIGH;
+    text: |
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is equal to the priority
+      of the enqueueing thread with respect to the eligible scheduler.
+  - name: Low
+    test-code: |
+      ++ctx->tq_ctx->how_many;
+      ctx->queue_priority = PRIO_HIGH;
+    text: |
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is lower than the
+      priority of the enqueueing thread with respect to the eligible scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueIneligible
+  states:
+  - name: None
+    test-code: |
+      ctx->other_before = false;
+      ctx->other_after = false;
+    text: |
+      While each priority queue of the thread queue is associated with an
+      eligible scheduler of the enqueueing thread.
+  - name: Only
+    test-code: |
+      ++ctx->tq_ctx->how_many;
+      ctx->other_before = true;
+      ctx->other_after = false;
+    text: |
+      While exactly one priority queue of the thread queue exists which is not
+      associated with an eligible scheduler of the enqueueing thread.
+  - name: Before
+    test-code: |
+      ++ctx->tq_ctx->how_many;
+      ctx->other_before = true;
+      ctx->other_after = false;
+    text: |
+      While a priority queue of the thread queue exists which is not
+      associated with an eligible scheduler of the enqueueing thread,
+      while the priority queue is positioned before all priority queues which
+      are associated with eligible schedulers of the enqueueing thread.
+  - name: After
+    test-code: |
+      ++ctx->tq_ctx->how_many;
+      ctx->other_before = false;
+      ctx->other_after = true;
+    text: |
+      While a priority queue of the thread queue exists which is not associated
+      with an eligible scheduler of the enqueueing thread,
+      while the priority queue is positioned after all priority queues which
+      are associated with eligible schedulers of the enqueueing thread.
+  test-epilogue: null
+  test-prologue: null
+- name: PriorityForOwner
+  states:
+  - name: Vital
+    test-code: |
+      ctx->vital_priority = true;
+    text: |
+      While at least one priority of the enqueueing thread is higher than the
+      highest priority of the owner of the thread queue.
+  - name: Dispensable
+    test-code: |
+      ctx->vital_priority = false;
+    text: |
+      While all priorities of the enqueueing thread are lower than or equal to the
+      highest priority of the owner of the thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: SchedulerForOwner
+  states:
+  - name: Vital
+    test-code: |
+      ctx->vital_scheduler = true;
+    text: |
+      While at least one ${/glossary/scheduler-eligible:/term} of the
+      enqueueing thread is not an ${/glossary/scheduler-eligible:/term} of the
+      owner of the thread queue.
+  - name: Dispensable
+    test-code: |
+      ctx->vital_scheduler = false;
+    text: |
+      While all ${/glossary/scheduler-eligible:/plural} of the enqueueing
+      thread are an ${/glossary/scheduler-eligible:/term} of the owner of the
+      thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerState
+  states:
+  - name: NotEnqueued
+    test-code: |
+      ctx->owner_obtain = 0;
+      ctx->owner_release = 0;
+    text: |
+      While the owner of the thread queue is not enqueued on a thread queue.
+  - name: FIFO
+    test-code: |
+      ctx->owner_obtain = TQ_EVENT_MUTEX_FIFO_OBTAIN;
+      ctx->owner_release = TQ_EVENT_MUTEX_FIFO_RELEASE;
+    text: |
+      While the owner of the thread queue is enqueued on a thread queue in FIFO
+      order.
+  - name: Priority
+    test-code: |
+      ctx->owner_obtain = TQ_EVENT_MUTEX_NO_PROTOCOL_OBTAIN;
+      ctx->owner_release = TQ_EVENT_MUTEX_NO_PROTOCOL_RELEASE;
+    text: |
+      While the owner of the thread queue is enqueued on a thread queue in
+      priority order.
+  - name: PriorityInherit
+    test-code: |
+      ctx->owner_obtain = TQ_EVENT_MUTEX_C_OBTAIN;
+      ctx->owner_release = TQ_EVENT_MUTEX_C_RELEASE;
+    text: |
+      While the owner of the thread queue is enqueued on a thread queue in
+      priority order with priority inheritance.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoOtherScheduler: |
+    Where the system has exactly one scheduler, no other scheduler can exist.
+  NeedsAnotherQueue: |
+    A priority queue must be present to have another
+    priority queue positioned before or after the priority queue.
+  NoOtherQueue: |
+    If only one priority queue shall be present, then no other priority queue
+    can exist.
+  NeedsSchedulerForVitalPriority: |
+    A dedicated scheduler is necessary to provide a vital priority for the
+    owner.
+  NeedsSchedulerForVitalScheduler: |
+    A dedicated scheduler is necessary to provide a vital eligible scheduler
+    for the owner.
+test-action: |
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_A_OBTAIN );
+  TQSend(
+    ctx->tq_ctx,
+    TQ_HELPER_A,
+    TQ_EVENT_MUTEX_B_OBTAIN | TQ_EVENT_ENQUEUE_PREPARE
+  );
+
+  if ( ctx->owner_obtain != 0 ) {
+    TQSend( ctx->tq_ctx, TQ_HELPER_C, ctx->owner_obtain );
+  }
+
+  if ( ctx->other_before ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_C,
+      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC_2
+    );
+  }
+
+  if ( ctx->queue_priority != PRIO_INVALID ) {
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B , ctx->queue_priority );
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_B,
+      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+    );
+  }
+
+  if ( ctx->other_after ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_C,
+      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC_2
+    );
+  }
+
+  if ( ctx->vital_priority ) {
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_A, PRIO_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_C, PRIO_HIGH );
+
+    if (
+      ctx->queue_priority == PRIO_VERY_HIGH ||
+      ctx->queue_priority == PRIO_ULTRA_HIGH
+    ) {
+      if ( ctx->other_before || ctx->other_after ) {
+        AddVitalPriority( ctx, SCHEDULER_C_ID );
+        AddVitalPriorityHelper( ctx, SCHEDULER_C_ID );
+
+        if ( ctx->vital_scheduler ) {
+          AddVitalScheduler( ctx, SCHEDULER_D_ID );
+        }
+      } else {
+        AddVitalPriority( ctx, SCHEDULER_B_ID );
+        AddVitalPriorityHelper( ctx, SCHEDULER_B_ID );
+
+        if ( ctx->vital_scheduler ) {
+          AddVitalScheduler( ctx, SCHEDULER_C_ID );
+        }
+      }
+    } else {
+      if ( ctx->vital_scheduler ) {
+        if ( ctx->other_before || ctx->other_after ) {
+          AddVitalScheduler( ctx, SCHEDULER_C_ID );
+        } else {
+          AddVitalScheduler( ctx, SCHEDULER_B_ID );
+        }
+      }
+    }
+  } else {
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_A, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_C, PRIO_VERY_HIGH );
+
+    if ( ctx->vital_scheduler ) {
+      if ( ctx->other_before || ctx->other_after ) {
+        AddVitalScheduler( ctx, SCHEDULER_C_ID );
+      } else {
+        AddVitalScheduler( ctx, SCHEDULER_B_ID );
+      }
+    }
+  }
+
+  if ( ctx->owner_obtain != 0 ) {
+    TQClearDone( ctx->tq_ctx, TQ_HELPER_A );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_HELPER_A,
+      ctx->owner_obtain | ctx->owner_release
+    );
+  }
+
+  TQSend(
+    ctx->tq_ctx,
+    TQ_BLOCKER_A,
+    TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC
+  );
+
+  GetPriorities( ctx, TQ_HELPER_A, ctx->owner_priority );
+  GetPriorities( ctx, TQ_HELPER_C, ctx->owner_owner_priority );
+
+  if ( ctx->owner_obtain != 0 ) {
+    TQSend( ctx->tq_ctx, TQ_HELPER_C, ctx->owner_release );
+    TQWaitForDone( ctx->tq_ctx, TQ_HELPER_A );
+    TQWaitForExecutionStop( ctx->tq_ctx, TQ_HELPER_A );
+  }
+
+  TQSchedulerRecordStart( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_HELPER_A, TQ_EVENT_ENQUEUE_DONE );
+
+  if ( ctx->other_before || ctx->other_after ) {
+    TQSynchronizeRunner2();
+  } else {
+    TQSynchronizeRunner();
+  }
+
+  TQSchedulerRecordStop( ctx->tq_ctx );
+
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_A_RELEASE );
+  TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_A );
+  TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_A );
+
+  TQSend( ctx->tq_ctx, TQ_HELPER_A, TQ_EVENT_MUTEX_B_RELEASE );
+  TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_B );
+  TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_B );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member specifies the priority of a thread on the thread queue with an
+    eligible scheduler equal to an eligible scheduler of the enqueueing thread.
+  description: null
+  member: |
+    rtems_task_priority queue_priority
+- brief: |
+    If this member is true, then a thread those eligible schedulers are
+    ineligible scheduler to the enqueueing task should be enqueued before a
+    thread with an eligible scheduler equal to an eligible scheduler of the
+    enqueueing thread.
+  description: null
+  member: |
+    size_t other_before
+- brief: |
+    If this member is true, then a thread those eligible schedulers are
+    ineligible scheduler to the enqueueing task should be enqueued after a
+    thread with an eligible scheduler equal to an eligible scheduler of the
+    enqueueing thread.
+  description: null
+  member: |
+    size_t other_after
+- brief: |
+    This this member is true, then the priorities of the enqueueing thread
+    shall be dispensable for the owner of the thread queue.
+  description: null
+  member: |
+    bool vital_priority
+- brief: |
+    This this member is true, then the eligible scheduler of the enqueueing
+    thread shall be dispensable for the owner of the thread queue.
+  description: null
+  member: |
+    bool vital_scheduler
+- brief: |
+    This member contains the priorities of the thread queue owner after the
+    enqueue.
+  description: null
+  member: |
+    rtems_task_priority owner_priority[ 4 ]
+- brief: |
+    This member contains the priorities of the owner of the thread queue on
+    which the thread queue owner is blocked after the enqueue.
+  description: null
+  member: |
+    rtems_task_priority owner_owner_priority[ 4 ]
+- brief: |
+    This member specifies which mutex obtain event shall be used to block the
+    thread queue owner.
+  description: null
+  member: |
+    rtems_event_set owner_obtain
+- brief: |
+    This member specifies which mutex release event shall be used to unblock
+    the thread queue owner.
+  description: null
+  member: |
+    rtems_event_set owner_release
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-enqueue-priority-inherit.h
+test-includes: []
+test-local-includes:
+- tr-tq-enqueue-priority-inherit.h
+test-prepare:
+  ctx->tq_ctx->how_many = 1;
+test-setup:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_C, PRIO_HIGH );
+
+    #if defined( RTEMS_SMP )
+    TQSetScheduler(
+      ctx->tq_ctx,
+      TQ_BLOCKER_C,
+      SCHEDULER_B_ID,
+      PRIO_ULTRA_LOW
+    );
+
+    if ( rtems_scheduler_get_processor_maximum() > 3 ) {
+      RemoveProcessor( SCHEDULER_C_ID, 3 );
+      AddProcessor( SCHEDULER_D_ID, 3 );
+    }
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    const rtems_tcb *thread;
+
+    do {
+      thread = TQGetNextUnblock( ctx->tq_ctx, index )->thread;
+    } while ( thread == ctx->tq_ctx->runner_tcb );
+
+    return thread;
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+
+  static void CheckPriorityRaise(
+    const Context             *ctx,
+    const rtems_task_priority *priority
+  )
+  {
+    if ( ctx->queue_priority == PRIO_ULTRA_HIGH ) {
+      T_eq_u32( priority[ 0 ], PRIO_ULTRA_HIGH );
+    } else {
+      T_eq_u32( priority[ 0 ], PRIO_VERY_HIGH );
+    }
+
+    if (
+      ctx->queue_priority == PRIO_VERY_HIGH ||
+      ctx->queue_priority == PRIO_ULTRA_HIGH
+    ) {
+      if ( ctx->other_before || ctx->other_after ) {
+        T_eq_u32( priority[ 1 ], PRIO_ULTRA_LOW );
+        T_eq_u32( priority[ 2 ], PRIO_NORMAL );
+      } else {
+        T_eq_u32( priority[ 1 ], PRIO_NORMAL );
+      }
+    }
+  }
+
+  static void CheckPriorityNop(
+    const Context             *ctx,
+    const rtems_task_priority *priority
+  )
+  {
+    if ( ctx->queue_priority == PRIO_ULTRA_HIGH ) {
+      T_eq_u32( priority[ 0 ], PRIO_ULTRA_HIGH );
+    } else {
+      T_eq_u32( priority[ 0 ], PRIO_VERY_HIGH );
+    }
+  }
+
+  static void CheckSchedulerNewHelper(
+    const Context             *ctx,
+    const rtems_task_priority *priority
+  )
+  {
+    if (
+      ctx->vital_priority &&
+      ( ctx->queue_priority == PRIO_VERY_HIGH ||
+        ctx->queue_priority == PRIO_ULTRA_HIGH )
+    ) {
+      if ( ctx->other_before || ctx->other_after ) {
+        T_eq_u32( priority[ 3 ], PRIO_VERY_LOW );
+      } else {
+        T_eq_u32( priority[ 2 ], PRIO_VERY_LOW );
+        T_eq_u32( priority[ 3 ], PRIO_INVALID );
+      }
+    } else {
+      if ( ctx->other_before || ctx->other_after ) {
+        T_eq_u32( priority[ 1 ], PRIO_ULTRA_LOW );
+        T_eq_u32( priority[ 2 ], PRIO_VERY_LOW );
+      } else {
+        T_eq_u32( priority[ 1 ], PRIO_VERY_LOW );
+        T_eq_u32( priority[ 2 ], PRIO_INVALID );
+      }
+
+       T_eq_u32( priority[ 3 ], PRIO_INVALID );
+    }
+  }
+
+  static void CheckSchedulerNop(
+    const Context             *ctx,
+    const rtems_task_priority *priority
+  )
+  {
+    if (
+      ctx->vital_priority &&
+      ( ctx->queue_priority == PRIO_VERY_HIGH ||
+        ctx->queue_priority == PRIO_ULTRA_HIGH )
+    ) {
+      if ( !ctx->other_before && !ctx->other_after ) {
+        T_eq_u32( priority[ 2 ], PRIO_INVALID );
+      }
+
+      T_eq_u32( priority[ 3 ], PRIO_INVALID );
+    } else {
+      if ( ctx->other_before || ctx->other_after ) {
+        T_eq_u32( priority[ 1 ], PRIO_ULTRA_LOW );
+      } else {
+        T_eq_u32( priority[ 1 ], PRIO_INVALID );
+      }
+
+      T_eq_u32( priority[ 2 ], PRIO_INVALID );
+      T_eq_u32( priority[ 3 ], PRIO_INVALID );
+    }
+  }
+
+  static void GetPriorities(
+    const Context       *ctx,
+    TQWorkerKind         worker,
+    rtems_task_priority *priority
+  )
+  {
+    priority[ 0 ] = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ worker ],
+      SCHEDULER_A_ID
+    );
+    priority[ 1 ] = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ worker ],
+      SCHEDULER_B_ID
+    );
+    priority[ 2 ] = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ worker ],
+      SCHEDULER_C_ID
+    );
+    priority[ 3 ] = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ worker ],
+      SCHEDULER_D_ID
+    );
+  }
+
+  static void AddVitalPriority( Context *ctx, rtems_id scheduler_id )
+  {
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_D, scheduler_id, PRIO_NORMAL );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_D,
+      TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_MUTEX_A_RELEASE
+    );
+  }
+
+  static void AddVitalPriorityHelper( Context *ctx, rtems_id scheduler_id )
+  {
+    TQSetScheduler( ctx->tq_ctx, TQ_HELPER_B, scheduler_id, PRIO_LOW );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_HELPER_B,
+      TQ_EVENT_MUTEX_B_OBTAIN | TQ_EVENT_MUTEX_B_RELEASE
+    );
+  }
+
+  static void AddVitalScheduler( Context *ctx, rtems_id scheduler_id )
+  {
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_E, scheduler_id, PRIO_VERY_LOW );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_E,
+      TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_MUTEX_A_RELEASE
+    );
+  }
+test-target: testsuites/validation/tr-tq-enqueue-priority-inherit.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+
+    #if defined( RTEMS_SMP )
+    if ( rtems_scheduler_get_processor_maximum() > 3 ) {
+      RemoveProcessor( SCHEDULER_D_ID, 3 );
+      AddProcessor( SCHEDULER_C_ID, 3 );
+    }
+    #endif
+  description: null
+text: |
+  When the calling task is enqueued on the thread queue.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Position:
+    - if:
+        pre-conditions:
+          QueueEligible: None
+          QueueIneligible: None
+      then: InitialFirst
+    - if:
+        pre-conditions:
+          QueueEligible: Low
+          QueueIneligible: None
+      then: First
+    - if:
+        pre-conditions:
+          QueueEligible: Low
+          QueueIneligible: After
+      then: FirstFirst
+    - if:
+        pre-conditions:
+          QueueEligible: Low
+          QueueIneligible: Before
+      then: FirstLast
+    - if:
+        pre-conditions:
+          QueueIneligible: None
+      then: Second
+    - if:
+        pre-conditions:
+          QueueIneligible: After
+      then: SecondFirst
+    - if:
+        pre-conditions:
+          QueueIneligible: Before
+      then: SecondLast
+    - if:
+        pre-conditions:
+          QueueIneligible: Only
+      then: InitialLast
+    OwnerPriority:
+    - if:
+        pre-conditions:
+          PriorityForOwner: Vital
+      then: Raise
+    - else: Nop
+    OwnerScheduler:
+    - if:
+        pre-conditions:
+          SchedulerForOwner: Vital
+      then: NewHelper
+    - else: Nop
+    OwnerOwnerPriority:
+    - if:
+        pre-conditions:
+          OwnerState: PriorityInherit
+          PriorityForOwner: Vital
+      then: Raise
+    - else: Nop
+    OwnerOwnerScheduler:
+    - if:
+        pre-conditions:
+          OwnerState: PriorityInherit
+          SchedulerForOwner: Vital
+      then: NewHelper
+    - else: Nop
+  pre-conditions:
+    Scheduler: all
+    QueueEligible: all
+    QueueIneligible: all
+    PriorityForOwner: all
+    SchedulerForOwner: all
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NeedsSchedulerForVitalPriority
+  pre-conditions:
+    Scheduler:
+    - One
+    QueueEligible:
+    - High
+    - Equal
+    QueueIneligible: all
+    PriorityForOwner:
+    - Vital
+    SchedulerForOwner: all
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NeedsSchedulerForVitalPriority
+  pre-conditions:
+    Scheduler:
+    - Two
+    QueueEligible:
+    - High
+    - Equal
+    QueueIneligible:
+    - After
+    - Before
+    PriorityForOwner:
+    - Vital
+    SchedulerForOwner: all
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NeedsSchedulerForVitalScheduler
+  pre-conditions:
+    Scheduler:
+    - Two
+    QueueEligible:
+    - High
+    - Equal
+    QueueIneligible:
+    - None
+    PriorityForOwner:
+    - Vital
+    SchedulerForOwner:
+    - Vital
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NeedsSchedulerForVitalScheduler
+  pre-conditions:
+    Scheduler:
+    - Two
+    QueueEligible: all
+    QueueIneligible:
+    - Only
+    - After
+    - Before
+    PriorityForOwner: all
+    SchedulerForOwner:
+    - Vital
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NeedsSchedulerForVitalScheduler
+  pre-conditions:
+    Scheduler:
+    - Three
+    QueueEligible:
+    - High
+    - Equal
+    QueueIneligible:
+    - After
+    - Before
+    PriorityForOwner:
+    - Vital
+    SchedulerForOwner:
+    - Vital
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NeedsAnotherQueue
+  pre-conditions:
+    Scheduler: all
+    QueueEligible:
+    - None
+    QueueIneligible:
+    - After
+    - Before
+    PriorityForOwner: all
+    SchedulerForOwner: all
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NoOtherQueue
+  pre-conditions:
+    Scheduler: all
+    QueueEligible:
+    - High
+    - Equal
+    - Low
+    QueueIneligible:
+    - Only
+    PriorityForOwner: all
+    SchedulerForOwner: all
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NoOtherScheduler
+  pre-conditions:
+    Scheduler:
+    - One
+    QueueEligible: all
+    QueueIneligible:
+    - Only
+    - After
+    - Before
+    PriorityForOwner: all
+    SchedulerForOwner: all
+    OwnerState: all
+- enabled-by: true
+  post-conditions: NoOtherScheduler
+  pre-conditions:
+    Scheduler:
+    - One
+    QueueEligible: all
+    QueueIneligible: all
+    PriorityForOwner: all
+    SchedulerForOwner:
+    - Vital
+    OwnerState: all
+type: requirement

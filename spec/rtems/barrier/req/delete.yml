@@ -1,0 +1,207 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/delete
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      ctx->barrier_id = 0;
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_barrier_ident( NAME, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->barrier_id );
+    text: |
+      The unique object name shall identify a barrier.
+  - name: Invalid
+    test-code: |
+      sc = rtems_barrier_ident( NAME, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a barrier.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: Flush
+  states:
+  - name: 'Yes'
+    test-code: |
+      ++ctx->wait_expected;
+      T_eq_u32( ctx->wait_done, ctx->wait_expected );
+    text: |
+      Tasks waiting at the barrier shall be unblocked.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->wait_done, ctx->wait_expected );
+    text: |
+      Tasks waiting at the barrier shall remain blocked.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->id = 0;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is not associated
+      with a barrier.
+  - name: Barrier
+    test-code: |
+      ctx->id = ctx->barrier_id;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a barrier.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_barrier_delete( ctx->id );
+test-brief: null
+test-cleanup: |
+  if ( ctx->barrier_id != 0 ) {
+    rtems_status_code sc;
+
+    sc = rtems_barrier_delete( ctx->barrier_id );
+    T_rsc_success( sc );
+
+    ++ctx->wait_expected;
+    T_eq_u32( ctx->wait_done, ctx->wait_expected );
+
+    ctx->barrier_id = 0;
+  }
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_id barrier_id
+- brief: null
+  description: null
+  member: |
+    uint32_t wait_done
+- brief: null
+  description: null
+  member: |
+    uint32_t wait_expected
+- brief: null
+  description: null
+  member: |
+    rtems_id id
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_task_priority prio;
+
+  prio = SetPriority( ctx->worker_id, PRIO_HIGH );
+  T_true( prio == PRIO_LOW || prio == PRIO_HIGH );
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  typedef ${.:/test-context-type} Context;
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code   sc;
+      rtems_task_priority prio;
+
+      T_eq_u32( ctx->barrier_id, 0 );
+
+      sc = rtems_barrier_create(
+        NAME,
+        RTEMS_DEFAULT_ATTRIBUTES,
+        0,
+        &ctx->barrier_id
+      );
+      T_rsc_success( sc );
+
+      sc = rtems_barrier_wait(
+        ctx->barrier_id,
+        RTEMS_NO_TIMEOUT
+      );
+      T_rsc( sc, RTEMS_OBJECT_WAS_DELETED );
+
+      ++ctx->wait_done;
+
+      prio = SetSelfPriority( PRIO_LOW );
+      T_eq_u32( prio, PRIO_HIGH );
+    }
+  }
+test-target: testsuites/validation/tc-barrier-delete.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Invalid
+    Flush: 'Yes'
+  pre-conditions:
+    Id:
+    - Barrier
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Name: Valid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - NoObj
+type: requirement

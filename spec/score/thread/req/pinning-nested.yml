@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: pinning
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  A thread may be pinned more than once at a time.
+type: requirement

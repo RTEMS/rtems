@@ -1,0 +1,68 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Task switch extensions are invoked when a thread switch from an executing
+  thread to a heir thread takes place.
+copyrights:
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/userext/if/thread-switch:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/thread-dispatching-disabled
+- role: constraint
+  uid: /constraint/interrupts-disabled-smp
+name: rtems_task_switch_extension
+notes: |
+  The task switch extensions are invoked in
+  ${/glossary/extension-forward-order:/term}.
+
+  The invocation conditions of the task switch extensions depend on whether
+  RTEMS was built with SMP support enabled or disabled.  A user must pay
+  attention to the differences to correctly implement a task switch extension.
+
+  Where the system was built with SMP support disabled, the task switch
+  extensions are invoked before the context switch from the currently executing
+  thread to the heir thread.  The ${.:/params[0]/name} is a pointer to the
+  ${/glossary/tcb:/term} of the currently executing thread. The
+  ${.:/params[1]/name} is a pointer to the TCB of the heir thread.  The context
+  switch initiated through the multitasking start is not covered by the task
+  switch extensions.
+
+  Where the system was built with SMP support enabled, the task switch
+  extensions are invoked after the context switch to the heir thread.  The
+  ${.:/params[0]/name} is a pointer to the TCB of the previously executing
+  thread. Despite the name, this is not the currently executing thread. The
+  ${.:/params[1]/name} is a pointer to the TCB of the newly executing thread.
+  This is the currently executing thread. The context switches initiated
+  through the multitasking start are covered by the task switch extensions.
+  The reason for the differences to uniprocessor configurations is that the
+  context switch may update the heir thread of the processor.  The task switch
+  extensions are invoked with maskable interrupts disabled and with ownership
+  of a processor-specific SMP lock.  Task switch extensions may run in parallel
+  on multiple processors.  It is recommended to use thread-local or
+  processor-specific data structures for task switch extensions.  A global SMP
+  lock should be avoided for performance reasons, see
+  ${../../intr/if/lock-initialize:/name}.
+params:
+- description: |
+    is the ${/glossary/tcb:/term} of the executing thread.  In SMP
+    configurations, this is the previously executing thread also known as the
+    ancestor thread.
+  dir: null
+  name: executing
+- description: |
+    is the ${/glossary/tcb:/term} of the heir thread.  In SMP configurations,
+    this is the executing thread.
+  dir: null
+  name: heir
+return: null
+type: interface

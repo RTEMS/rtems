@@ -1,0 +1,108 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Installs the interrupt handler routine and argument at the interrupt vector
+  on the interrupt server.
+copyrights:
+- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    - ${vector-number:/name} ${.:/params[1]/name}
+    - const char *${.:/params[2]/name}
+    - ${../../option/if/option:/name} ${.:/params[3]/name}
+    - ${handler:/name} ${.:/params[4]/name}
+    - void *${.:/params[5]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  The handler routine specified by ${.:/params[4]/name} will be executed within
+  the context of the interrupt server task specified by ${.:/params[0]/name}.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_interrupt_server_handler_install
+notes: |
+  See also ${handler-install:/name}.
+params:
+- description: |
+    is the interrupt server index.  The constant ${server-default:/name} may be
+    used to specify the default interrupt server.
+  dir: null
+  name: server_index
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the descriptive information of the interrupt handler to install.
+  dir: null
+  name: info
+- description: |
+    is the interrupt handler install option set.
+  dir: null
+  name: options
+- description: |
+    is the interrupt handler routine to install.
+  dir: null
+  name: routine
+- description: |
+    is the interrupt handler argument to install.
+  dir: null
+  name: arg
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no interrupt server associated with the index specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The directive was called from within interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
+  - description: |
+      The ${.:/params[4]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      An option specified by ${.:/params[2]/name} was not applicable.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The ${unique:/name} option was set in ${.:/params[2]/name} and the
+      interrupt vector was already occupied by a handler.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The ${shared:/name} option was set in ${.:/params[2]/name} and the
+      interrupt vector was already occupied by a unique handler.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The handler specified by ${.:/params[4]/name} was already installed for
+      the interrupt vector specified by ${.:/params[1]/name} with an argument
+      equal to the argument specified by ${.:/params[5]/name}.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      The ${replace:/name} option was set in ${.:/params[2]/name} and no
+      handler to replace was installed.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

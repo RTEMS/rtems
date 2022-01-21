@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  A value of zero for the application configuration option is mandatory for the
+  pre-qualified feature set of RTEMS.  Applications which are restricted to
+  only use interfaces of the pre-qualified feature set of RTEMS shall define
+  the application configuration option to zero.
+type: constraint

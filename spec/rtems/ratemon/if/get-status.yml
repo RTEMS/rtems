@@ -1,0 +1,81 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the detailed status of the period.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2017 Kuan-Hsun Chen
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${period-status:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive returns the detailed status of the rate monotonic period
+  specified by ${.:/params[0]/name}.  The detailed status of the period will be
+  returned in the members of the period status object referenced by
+  ${.:/params[1]/name}:
+
+  * The ``owner`` member is set to the identifier of the owner task of the
+    period.
+
+  * The ``state`` member is set to the current state of the period.
+
+  * The ``postponed_jobs_count`` member is set to the count of jobs which are
+    not released yet.
+
+  * If the current state of the period is ${inactive:/name}, the
+    ``since_last_period`` and ``executed_since_last_period`` members will be
+    set to zero.  Otherwise, both members will contain time information since
+    the last successful invocation of the ${period:/name} directive by the
+    owner task.  More specifically, the ``since_last_period`` member will be
+    set to the time elapsed since the last successful invocation.  The
+    ``executed_since_last_period`` member will be set to the processor time
+    consumed by the owner task since the last successful invocation.
+enabled-by: true
+index-entries:
+- get status of period
+- obtain status of period
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_rate_monotonic_get_status
+notes: null
+params:
+- description: |
+    is the rate monotonic period identifier.
+  dir: null
+  name: id
+- description: |
+    is the pointer to an ${period-status:/name} object.  When the directive
+    call is successful, the detailed period status will be stored in this
+    object.
+  dir: out
+  name: status
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no rate monotonic period associated with the identifier
+      specified by ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+type: interface

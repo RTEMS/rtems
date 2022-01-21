@@ -1,0 +1,301 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBMMCTRL
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: mmctrl-header
+definition:
+- default:
+    count: 1
+    name: SDCFG1
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: SDCFG2
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: MUXCFG
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: FTDA
+  offset: 0x24
+  variants: []
+- default:
+    count: 1
+    name: FTDC
+  offset: 0x28
+  variants: []
+- default:
+    count: 1
+    name: FTDD
+  offset: 0x2c
+  variants: []
+- default:
+    count: 1
+    name: FTBND
+  offset: 0x30
+  variants: []
+register-prefix: null
+register-block-group: MMCTRL
+register-block-size: 52
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RF'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRP'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRFC'
+      start: 27
+      width: 3
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TC'
+      start: 26
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BANKSZ'
+      start: 23
+      width: 3
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'COLSZ'
+      start: 21
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'COMMAND'
+      start: 18
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MS'
+      start: 16
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: '64'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RFLOAD'
+      start: 0
+      width: 15
+    variants: []
+  brief: |
+    SDRAM configuration register 1
+  description: null
+  name: SDCFG1
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CE'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN2T'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DCS'
+      start: 14
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BPARK'
+      start: 13
+      width: 1
+    variants: []
+  brief: |
+    SDRAM configuration register 2
+  description: null
+  name: SDCFG2
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ERRLOC'
+      start: 20
+      width: 12
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DDERR'
+      start: 19
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DWIDTH'
+      start: 16
+      width: 3
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BEID'
+      start: 12
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DATAMUX'
+      start: 5
+      width: 3
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CEN'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BAUPD'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BAEN'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CODE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDEN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Mux configuration register
+  description: null
+  name: MUXCFG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FTDA'
+      start: 2
+      width: 30
+    variants: []
+  brief: |
+    FT diagnostic address register
+  description: null
+  name: FTDA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CBD'
+      start: 24
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CBC'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CBB'
+      start: 8
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CBA'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    FT diagnostic checkbits register
+  description: null
+  name: FTDC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    FT diagnostic data register
+  description: null
+  name: FTDD
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FTBND_31_3'
+      start: 3
+      width: 29
+    variants: []
+  brief: |
+    FT boundary address register
+  description: null
+  name: FTBND
+  width: 32
+name: mmctrl
+notes: null
+type: interface

@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    The test action was carried by the system initialization.  If we execute
+    this test case, then the failed start of an optional processor did not
+    abort the system initialization.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the boot processor is online.
+    code: |
+      T_step_true(
+        ${step},
+        _Per_CPU_Is_processor_online( _Per_CPU_Get_by_index( 0 ) )
+      );
+    links:
+    - role: validation
+      uid: ../req/processor-online
+  - brief: |
+      Check that the optional processor which failed to start is not online.
+    code: |
+      T_step_false(
+        ${step},
+        _Per_CPU_Is_processor_online( _Per_CPU_Get_by_index( 1 ) )
+      );
+    links:
+    - role: validation
+      uid: ../req/start-of-processor-failed-not-online
+  links:
+  - role: validation
+    uid: ../req/start-of-optional-processor-failed-continue
+test-brief: |
+  Tests the state of an optional processor which failed to start.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/score/percpu.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-start-of-optional-processor-failed.c
+test-teardown: null
+type: test-case

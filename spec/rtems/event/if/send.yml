@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sends the event set to the task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${set:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive sends the event set, ${.:/params[1]/name}, to the target
+  task identified by ${.:/params[0]/name}.  Based upon the state of the
+  target task, one of the following situations applies:
+
+  * The target task is blocked waiting for events, then
+
+    * if the waiting task's input event condition is satisfied, then the task
+      is made ready for execution, or
+
+    * otherwise, the event set is posted but left pending and the task remains
+      blocked.
+
+  * The target task is not waiting for events, then the event set is posted and
+    left pending.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+name: rtems_event_send
+notes: |
+  Events can be sent by tasks or an ${/glossary/isr:/term}.
+
+  Specifying ${../../task/if/self-define:/name} for ${.:/params[0]/name} results
+  in the event set being sent to the calling task.
+
+  The event set to send shall be built by a *bitwise or* of the desired events.
+  The set of valid events is ${event-00:/name} through ${event-31:/name}.  If
+  an event is not explicitly specified in the set, then it is not present.
+
+  Identical events sent to a task are not queued.  In other words, the second,
+  and subsequent, posting of an event to a task before it can perform an
+  ${receive:/name} has no effect.
+
+  The calling task will be preempted if it has preemption enabled and a higher
+  priority task is unblocked as the result of this directive.
+
+  Sending an event set to a global task which does not reside on the local node
+  will generate a request telling the remote node to send the event set to the
+  appropriate task.
+params:
+- description: is the identifier of the target task to receive the event set.
+  dir: null
+  name: id
+- description: is the event set to send.
+  dir: null
+  name: event_in
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

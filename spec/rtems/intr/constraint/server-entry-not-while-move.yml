@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The directive shall not be called concurrently with
+  ${../if/server-entry-move:/name} with the same interrupt server entry.
+  Calling the directive under this condition is undefined behaviour.
+type: constraint

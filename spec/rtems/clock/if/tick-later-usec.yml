@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets a ${/glossary/clock-tick:/term} value which is at least delta
+  microseconds in the future.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      ${../../type/if/interval:/name} us_per_tick;
+
+      us_per_tick = ${../../config/if/get-microseconds-per-tick:/name}();
+
+      /*
+       * Add one additional tick, since we do not know the time to the clock
+       * next tick.
+       */
+      return ${/score/watchdog/if/ticks-since-boot:/name} + 1
+        + ( ${.:/params[0]/name} + us_per_tick - 1 ) / us_per_tick;
+    params:
+    - ${../../type/if/interval:/name} ${.:/params[0]/name}
+    return: ${../../type/if/interval:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
+name: rtems_clock_tick_later_usec
+notes: null
+params:
+- description: |
+    is the delta value in microseconds.
+  dir: null
+  name: delta_in_usec
+return:
+  return: |
+    Returns a ${/glossary/clock-tick:/term} counter value which is at least
+    ${.:/params[0]/name} microseconds in the future.
+  return-values: []
+type: interface

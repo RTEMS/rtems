@@ -1,0 +1,56 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  This section describes configuration options related to filesytems.
+  By default, the In-Memory Filesystem (IMFS) is used as the base filesystem (also
+  known as root filesystem).  In order to save some memory for your application,
+  you can disable the filesystem support with the
+  ${appl-disable-filesystem:/name} configuration option.
+  Alternatively, you can strip down the features of the base filesystem with the
+  ${use-miniimfs-as-base-filesystem:/name} and
+  ${use-devfs-as-base-filesystem:/name} configuration options.  These
+  three configuration options are mutually exclusive.  They are intended for an
+  advanced application configuration.
+
+  Features of the IMFS can be disabled and enabled with the following
+  configuration options:
+
+  * ${imfs-disable-chmod:/name}
+
+  * ${imfs-disable-chown:/name}
+
+  * ${imfs-disable-link:/name}
+
+  * ${imfs-disable-mknod:/name}
+
+  * ${imfs-disable-mknod-file:/name}
+
+  * ${imfs-disable-mount:/name}
+
+  * ${imfs-disable-readdir:/name}
+
+  * ${imfs-disable-readlink:/name}
+
+  * ${imfs-disable-rename:/name}
+
+  * ${imfs-disable-rmnod:/name}
+
+  * ${imfs-disable-symlink:/name}
+
+  * ${imfs-disable-unmount:/name}
+
+  * ${imfs-disable-utime:/name}
+
+  * ${imfs-enable-mkfifo:/name}
+enabled-by: true
+index-entries: []
+interface-type: appl-config-group
+links:
+- role: interface-placement
+  uid: ../../if/domain
+- role: requirement-refinement
+  uid: ../../req/applconfig
+name: Filesystem Configuration
+text: ''
+type: interface

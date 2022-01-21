@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The CPU usage reporting directives can be used to report and reset the CPU
+  usage of threads.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: libmisc_cpuuse
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /if/group
+name: CPU Usage Reporting
+text: |
+  The ${group:/name} shall provide an interface group containing functions to
+  report and reset the CPU usage of threads.
+type: interface

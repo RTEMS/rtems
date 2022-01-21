@@ -1,0 +1,949 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBSPWTDP
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: spwtdp-header
+definition:
+- default:
+    count: 1
+    name: CONF0
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: CONF3
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: CTRL
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: CET0
+  offset: 0x24
+  variants: []
+- default:
+    count: 1
+    name: CET1
+  offset: 0x28
+  variants: []
+- default:
+    count: 1
+    name: CET2
+  offset: 0x2c
+  variants: []
+- default:
+    count: 1
+    name: CET0
+  offset: 0x30
+  variants: []
+- default:
+    count: 1
+    name: CET4
+  offset: 0x34
+  variants: []
+- default:
+    count: 1
+    name: DPF
+  offset: 0x40
+  variants: []
+- default:
+    count: 1
+    name: DET0
+  offset: 0x44
+  variants: []
+- default:
+    count: 1
+    name: DET1
+  offset: 0x48
+  variants: []
+- default:
+    count: 1
+    name: DET2
+  offset: 0x4c
+  variants: []
+- default:
+    count: 1
+    name: DET3
+  offset: 0x50
+  variants: []
+- default:
+    count: 1
+    name: DET4
+  offset: 0x54
+  variants: []
+- default:
+    count: 1
+    name: TRPFRX
+  offset: 0x60
+  variants: []
+- default:
+    count: 1
+    name: TR0
+  offset: 0x64
+  variants: []
+- default:
+    count: 1
+    name: TR1
+  offset: 0x68
+  variants: []
+- default:
+    count: 1
+    name: TR2
+  offset: 0x6c
+  variants: []
+- default:
+    count: 1
+    name: TR3
+  offset: 0x70
+  variants: []
+- default:
+    count: 1
+    name: TR4
+  offset: 0x74
+  variants: []
+- default:
+    count: 1
+    name: TTPFTX
+  offset: 0x80
+  variants: []
+- default:
+    count: 1
+    name: TT0
+  offset: 0x84
+  variants: []
+- default:
+    count: 1
+    name: TT1
+  offset: 0x88
+  variants: []
+- default:
+    count: 1
+    name: TT2
+  offset: 0x8c
+  variants: []
+- default:
+    count: 1
+    name: TT3
+  offset: 0x90
+  variants: []
+- default:
+    count: 1
+    name: TT4
+  offset: 0x94
+  variants: []
+- default:
+    count: 1
+    name: LPF
+  offset: 0xa0
+  variants: []
+- default:
+    count: 1
+    name: IE
+  offset: 0xc0
+  variants: []
+- default:
+    count: 1
+    name: DC
+  offset: 0xc8
+  variants: []
+- default:
+    count: 1
+    name: DS
+  offset: 0xcc
+  variants: []
+- default:
+    count: 1
+    name: EDM0
+  offset: 0x100
+  variants: []
+- default:
+    count: 1
+    name: EDPF0
+  offset: 0x110
+  variants: []
+- default:
+    count: 1
+    name: ED0ET0
+  offset: 0x114
+  variants: []
+- default:
+    count: 1
+    name: ED0ET1
+  offset: 0x118
+  variants: []
+- default:
+    count: 1
+    name: ED0ET2
+  offset: 0x11c
+  variants: []
+- default:
+    count: 1
+    name: ED0ET3
+  offset: 0x120
+  variants: []
+- default:
+    count: 1
+    name: ED0ET4
+  offset: 0x124
+  variants: []
+register-prefix: null
+register-block-group: SPWTDP
+register-block-size: 296
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'JE'
+      start: 24
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ST'
+      start: 21
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EP'
+      start: 20
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ET'
+      start: 19
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SP'
+      start: 18
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SE'
+      start: 17
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LE'
+      start: 16
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AE'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MAPPING'
+      start: 8
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TD'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MU'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SEL'
+      start: 4
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ME'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RE'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RS'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Configuration 0
+  description: null
+  name: CONF0
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'STM'
+      start: 16
+      width: 6
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DI64R'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DI64T'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DI64'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DI'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INRX'
+      start: 5
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INTX'
+      start: 0
+      width: 5
+    variants: []
+  brief: |
+    Configuration 3
+  description: null
+  name: CONF3
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NC'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IS'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SPWTC'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CPF'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Control
+  description: null
+  name: CTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CET0'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Command Elapsed Time 0
+  description: null
+  name: CET0
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CET1'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Command Elapsed Time 1
+  description: null
+  name: CET1
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CET2'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Command Elapsed Time 2
+  description: null
+  name: CET2
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CET3'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Command Elapsed Time 3
+  description: null
+  name: CET0
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CET4'
+      start: 24
+      width: 8
+    variants: []
+  brief: |
+    Command Elapsed Time 4
+  description: null
+  name: CET4
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DPF'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Datation Preamble Field
+  description: null
+  name: DPF
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DET0'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Datation Elapsed Time 0
+  description: null
+  name: DET0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DET1'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Datation Elapsed Time 1
+  description: null
+  name: DET1
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DET2'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Datation Elapsed Time 2
+  description: null
+  name: DET2
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DET3'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Datation Elapsed Time 3
+  description: null
+  name: DET3
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DET4'
+      start: 24
+      width: 8
+    variants: []
+  brief: |
+    Datation Elapsed Time 4
+  description: null
+  name: DET4
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TRPF'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Time-Stamp Preamble Field Rx
+  description: null
+  name: TRPFRX
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TR0'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 0 Rx
+  description: null
+  name: TR0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TR1'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 1 Rx
+  description: null
+  name: TR1
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TR2'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 2 Rx
+  description: null
+  name: TR2
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TR3'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 3 Rx
+  description: null
+  name: TR3
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TR4'
+      start: 24
+      width: 8
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 4 Rx
+  description: null
+  name: TR4
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TSTC'
+      start: 24
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TTPF'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Time-Stamp SpaceWire Time-Code and Preamble Field Tx
+  description: null
+  name: TTPFTX
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TT0'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 0 Tx
+  description: null
+  name: TT0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TT1'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 1 Tx
+  description: null
+  name: TT1
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TT2'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 2 Tx
+  description: null
+  name: TT2
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TT3'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 3 Tx
+  description: null
+  name: TT3
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TT4'
+      start: 24
+      width: 8
+    variants: []
+  brief: |
+    Time Stamp Elapsed Time 4 Tx
+  description: null
+  name: TT4
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'LPF'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Latency Preamble Field
+  description: null
+  name: LPF
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NCTCE'
+      start: 19
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SETE'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDIE3'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDIE2'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDIE1'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDIE0'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DITE'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DIRE'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TTE'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TME'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TRE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Interrupt Enable
+  description: null
+  name: IE
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DC'
+      start: 0
+      width: 15
+    variants: []
+  brief: |
+    Delay Count
+  description: null
+  name: DC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CD'
+      start: 0
+      width: 24
+    variants: []
+  brief: |
+    Disable Sync
+  description: null
+  name: DS
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EDM0'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    External Datation 0 Mask
+  description: null
+  name: EDM0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EDPF0'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    External Datation 0 Preamble Field
+  description: null
+  name: EDPF0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ED0ET0'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    External Datation 0 Elapsed Time 0
+  description: null
+  name: ED0ET0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ED0ET1'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    External Datation 0 Elapsed Time 1
+  description: null
+  name: ED0ET1
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ED0ET2'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    External Datation 0 Elapsed Time 2
+  description: null
+  name: ED0ET2
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ED0ET3'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    External Datation 0 Elapsed Time 3
+  description: null
+  name: ED0ET3
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ED0ET4'
+      start: 24
+      width: 8
+    variants: []
+  brief: |
+    External Datation 0 Elapsed Time 4
+  description: null
+  name: ED0ET4
+  width: 32
+name: spwtdp
+notes: null
+type: interface

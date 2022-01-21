@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/alloc-align
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/alloc-align:/name} macro is used as last part of a
+  function declaration,
+  and ${../if/alloc-align:/params[0]/name} is a constant number
+  referring to an argument of that function
+  (counting of arguments starts at 1 from the left),
+  and the argument with that number is an integral value of a power of two,
+  and the declared function
+  returns a pointer to memory which starts at an integral *multiple*
+  of the value provided by the function argument number
+  ${../if/alloc-align:/params[0]/name},
+  the macro shall cause the compiler to use the information of the alignment
+  of the returned memory in its pointer analysis.
+type: requirement

@@ -1,0 +1,356 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Dequeue
+  states:
+  - name: FIFO
+    test-code: |
+      T_eq_u32( TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ), 1 );
+      T_eq_u32(
+        TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_B ),
+        ctx->expected_blocker_b_counter
+      );
+    text: |
+      The first thread in FIFO order shall be dequeued from the thread queue.
+  - name: Priority
+    test-code: |
+      T_eq_u32( TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_A ), 1 );
+      T_eq_u32( TQGetWorkerCounter( ctx->tq_ctx, TQ_BLOCKER_B ), 2 );
+    text: |
+      The first thread in priority order shall be dequeued from the thread
+      queue.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The dequeued thread shall be unblocked by surrender operation.
+  - name: 'No'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The dequeued thread shall not be unblocked by surrender operation.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+pre-conditions:
+- name: HasOwner
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( ctx->tq_ctx->get_owner == NULL ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue has a previous owner thread.
+  - name: 'No'
+    test-code: |
+      if ( ctx->tq_ctx->get_owner != NULL ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue has no owner threads.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      if ( ctx->tq_ctx->discipline != TQ_FIFO ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue uses the FIFO discipline.
+  - name: Priority
+    test-code: |
+      if ( ctx->tq_ctx->discipline != TQ_PRIORITY ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue uses the priority discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: WaitState
+  states:
+  - name: Blocked
+    test-code: |
+      ctx->intend_to_block = false;
+    text: |
+      While the dequeued thread is in the blocked wait state.
+  - name: IntendToBlock
+    test-code: |
+      ctx->intend_to_block = true;
+    text: |
+      While the dequeued thread is in the intend to block wait state.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  OnlyOneExecutingThread: |
+    Where the system was built with SMP support disabled, there is at most one
+    executing thread.  Thread queues with an owner can only be surrendered by
+    the previous owner thread.  Thus, the dequeued thread cannot be in the
+    intend to block wait state.
+test-action: |
+  Status_Control status;
+
+  TQResetCounter( ctx->tq_ctx );
+  ctx->expected_blocker_b_counter = 0;
+
+  status = TQEnqueue( ctx->tq_ctx, TQ_NO_WAIT );
+  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
+
+  if ( ctx->intend_to_block ) {
+  #if defined(RTEMS_SMP)
+    SMP_barrier_State state;
+  #endif
+
+    /*
+     * In uniprocessor configurations, it is impossible to dequeue a thread
+     * in FIFO order which is in the intend to block wait state.  Run this
+     * test with just one worker.
+     */
+    if ( ctx->tq_ctx->discipline != TQ_FIFO ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        TQ_BLOCKER_B,
+        TQ_EVENT_ENQUEUE
+      );
+      ctx->expected_blocker_b_counter = 2;
+    }
+
+
+  #if defined(RTEMS_SMP)
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &state );
+  #endif
+
+    T_scheduler_set_event_handler( SchedulerBlock, ctx );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+
+  #if defined(RTEMS_SMP)
+    /* B0 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+    Surrender( ctx );
+
+    /* B1 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+  #endif
+  } else {
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      TQ_EVENT_HELPER_A_SYNC | TQ_EVENT_ENQUEUE
+    );
+    TQSynchronizeRunner();
+    TQWaitForExecutionStop( ctx->tq_ctx, TQ_BLOCKER_A );
+
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_B,
+      TQ_EVENT_HELPER_A_SYNC | TQ_EVENT_ENQUEUE
+    );
+    TQSynchronizeRunner();
+    TQWaitForExecutionStop( ctx->tq_ctx, TQ_BLOCKER_B );
+    ctx->expected_blocker_b_counter = 2;
+
+    Surrender( ctx );
+  }
+
+  TQSendAndWaitForExecutionStop(
+    ctx->tq_ctx,
+    TQ_BLOCKER_A,
+    TQ_EVENT_SURRENDER
+  );
+
+  if ( ctx->expected_blocker_b_counter != 0 ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_B,
+      TQ_EVENT_SURRENDER
+    );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+- brief: |
+    This member contains the barrier to synchronize the runner and the worker.
+  description: null
+  member: |
+    SMP_barrier_Control barrier
+- brief: |
+    If this member is true, then the dequeued thread shall be in the intend to
+    block wait state.
+  description: null
+  member: |
+    bool intend_to_block
+- brief: |
+    If this member contains the expected counter of worker B.
+  description: null
+  member: |
+    uint32_t expected_blocker_b_counter
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-surrender.h
+test-includes:
+- rtems/score/smpbarrier.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tr-tq-surrender.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    ctx->request.arg = ctx;
+    TQReset( ctx->tq_ctx );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_HIGH );
+
+    #if defined(RTEMS_SMP)
+    /*
+     * For the mutexes with priority ceiling protocol, we need a scheduler with
+     * two processors to set up the intend to block wait state.
+     */
+    RemoveProcessor( SCHEDULER_B_ID, 1 );
+    AddProcessor( SCHEDULER_A_ID, 1 );
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+
+  static void Surrender( void *arg )
+  {
+    Context       *ctx;
+    Status_Control status;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+
+    status = TQSurrender( ctx->tq_ctx );
+    T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
+
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  #if defined(RTEMS_SMP)
+  static void Delay( void *arg )
+  {
+    Context          *ctx;
+    SMP_barrier_State state;
+
+    ctx = arg;
+    _SMP_barrier_State_initialize( &state );
+
+    /* B0 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+    /* B1 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+  }
+  #endif
+
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+  #if defined(RTEMS_SMP)
+      ctx->request.handler = Delay;
+  #else
+      ctx->request.handler = Surrender;
+  #endif
+      CallWithinISRSubmit( &ctx->request );
+    }
+  }
+test-target: testsuites/validation/tr-tq-surrender.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+
+    #if defined(RTEMS_SMP)
+    RemoveProcessor( SCHEDULER_A_ID, 1 );
+    AddProcessor( SCHEDULER_B_ID, 1 );
+    #endif
+  description: null
+text: |
+  When the thread queue enqueue operation timed out.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Dequeue:
+    - specified-by: Discipline
+    Unblock:
+    - if:
+        pre-conditions:
+          WaitState: IntendToBlock
+      then: 'No'
+    - else: 'Yes'
+  pre-conditions:
+    HasOwner: all
+    Discipline: all
+    WaitState: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneExecutingThread
+  pre-conditions:
+    HasOwner:
+    - 'Yes'
+    Discipline: all
+    WaitState:
+    - IntendToBlock
+type: requirement

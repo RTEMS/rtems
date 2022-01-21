@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Prints the exception frame.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: |
+      ${/score/cpu/if/exception-frame-print:/name}( ${.:/params[0]/name} );
+    params:
+    - const ${exception-frame:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: |
+  The exception frame is printed in an architecture-dependent format using
+  ${../../io/if/printk:/name}.
+enabled-by: true
+index-entries:
+- exception frame
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+name: rtems_exception_frame_print
+notes: null
+params:
+- description: |
+    is the reference to the exception frame to print.
+  dir: null
+  name: frame
+return: null
+type: interface

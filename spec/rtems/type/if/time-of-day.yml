@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This type represents Classic API calendar times.
+copyrights:
+- Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member contains the year A.D.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: year
+  variants: []
+- default:
+    brief: |
+      This member contains the month of the year with values from 1 to 12.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: month
+  variants: []
+- default:
+    brief: |
+      This member contains the day of the month with values from 1 to 31.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: day
+  variants: []
+- default:
+    brief: |
+      This member contains the hour of the day with values from 0 to 23.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: hour
+  variants: []
+- default:
+    brief: |
+      This member contains the minute of the hour with values from 0 to 59.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: minute
+  variants: []
+- default:
+    brief: |
+      This member contains the second of the minute with values from 0 to 59.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: second
+  variants: []
+- default:
+    brief: |
+      This member contains the clock tick of the second with values from 0 to
+      ${../../clock/if/get-ticks-per-second:/name} minus one.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: ticks
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_time_of_day
+notes: null
+type: interface

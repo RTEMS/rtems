@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Greedy allocates that empties the RTEMS Workspace.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${/c/if/uintptr_t:/name} *${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    return: void *
+  variants: []
+description: |
+  Afterwards the heap has at most ${.:/params[1]/name} allocatable blocks of
+  sizes specified by ${.:/params[0]/name}.  The ${.:/params[0]/name} must point
+  to an array with ${.:/params[1]/name} members.  All other blocks are used.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+name: rtems_workspace_greedy_allocate
+notes: null
+params:
+- description: |
+    is the array of block sizes.
+  dir: null
+  name: block_sizes
+- description: |
+    is the block count.
+  dir: null
+  name: block_count
+return:
+  return: |
+    The returned pointer value may be used to free the greedy allocation by
+    calling ${workspace-greedy-free:/name}.
+  return-values: []
+type: interface

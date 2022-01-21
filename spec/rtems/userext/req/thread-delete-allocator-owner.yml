@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+- role: requirement-refinement
+  uid: /score/object/req/allocator-mutex
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The thread invoking the thread delete ${/glossary/userextensions:/term} shall
+  be the owner of the allocator mutex.
+type: requirement

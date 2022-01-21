@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread is scheduled by the ${/glossary/scheduler-home:/term}, while
+  an idle thread executes on behalf of the thread in the home scheduler, when
+  the thread is blocked, the idle thread executing on behalf of the thread
+  shall continue to execute on behalf of the thread.
+type: requirement

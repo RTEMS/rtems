@@ -1,0 +1,424 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/set-priority
+- role: interface-function
+  uid: ../if/current-priority
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/set-priority:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/set-priority:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/set-priority:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvPrio
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
+    text: |
+      The return status of ${../if/set-priority:/name} shall be
+      ${../../status/if/invalid-priority:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Set
+    test-code: |
+      T_eq_u32( GetPriority( ctx->id ), ctx->new_priority );
+    text: |
+      The ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter shall be set to the value
+      specified by the ${../if/set-priority:/params[1]/name} parameter at some
+      point during the ${../if/set-priority:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( GetPriority( ctx->worker_id ), PRIO_NORMAL );
+    text: |
+      No ${/glossary/priority-real:/term} of a task shall be modified by the
+      ${../if/set-priority:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: OldPriorityObj
+  states:
+  - name: Set
+    test-code: |
+      T_eq_u32( ctx->old_priority_obj, PRIO_NORMAL );
+    text: |
+      The value of the object referenced by the
+      ${../if/set-priority:/params[2]/name} parameter shall be set after the
+      return of the ${../if/set-priority:/name} call to the
+      ${/glossary/priority-current:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter at some point during the
+      call and before the ${/glossary/priority-real:/term} is modified by the
+      call if it is modified by the call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->old_priority_obj, PRIO_INVALID );
+    text: |
+      Objects referenced by the ${../if/set-priority:/params[2]/name}
+      parameter in past calls to ${../if/set-priority:/name} shall
+      not be accessed by the ${../if/set-priority:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/set-priority:/params[0]/name} parameter is not
+      associated with a task.
+  - name: Task
+    test-code: |
+      ctx->id = ctx->worker_id;
+    text: |
+      While the ${../if/set-priority:/params[0]/name} parameter is
+      associated with a task.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Dormant
+    test-code: |
+      ctx->started = false;
+    text: |
+      While the task specified by the ${../if/set-priority:/params[0]/name}
+      parameter is dormant.
+  - name: Ready
+    test-code: |
+      ctx->started = true;
+      ctx->blocked = false;
+    text: |
+      While the task specified by the ${../if/set-priority:/params[0]/name}
+      parameter is ready.
+  - name: Scheduled
+    test-code: |
+      ctx->started = false;
+      ctx->id = rtems_task_self();
+    text: |
+      While the task specified by the ${../if/set-priority:/params[0]/name}
+      parameter is scheduled.
+  - name: Blocked
+    test-code: |
+      ctx->started = true;
+      ctx->blocked = true;
+    text: |
+      While the task specified by the ${../if/set-priority:/params[0]/name}
+      parameter is blocked.
+  test-epilogue: null
+  test-prologue: null
+- name: NewPriority
+  states:
+  - name: Current
+    test-code: |
+      ctx->new_priority = RTEMS_CURRENT_PRIORITY;
+    text: |
+      While the value of the ${../if/set-priority:/params[1]/name} parameter is
+      equal to ${../if/current-priority:/name}.
+  - name: Other
+    test-code: |
+      ctx->new_priority = PRIO_NORMAL;
+    text: |
+      While the value of the ${../if/set-priority:/params[1]/name} parameter is
+      not equal to ${../if/current-priority:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: TaskPriority
+  states:
+  - name: High
+    test-code: |
+      ctx->new_priority = PRIO_HIGH;
+    text: |
+      While the value of the ${../if/set-priority:/params[1]/name} parameter is
+      a valid ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter when the new priority is
+      set,
+      while the value of the ${../if/set-priority:/params[1]/name} parameter is
+      higher than the ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter at time when the
+      scheduler evaluates the new priority.
+  - name: Equal
+    test-code: |
+      ctx->new_priority = PRIO_NORMAL;
+    text: |
+      While the value of the ${../if/set-priority:/params[1]/name} parameter is
+      a valid ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter when the new priority is
+      set,
+      while the value of the ${../if/set-priority:/params[1]/name} parameter is
+      equal to the ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter at time when the
+      scheduler evaluates the new priority.
+  - name: Low
+    test-code: |
+      ctx->new_priority = PRIO_LOW;
+    text: |
+      While the value of the ${../if/set-priority:/params[1]/name} parameter is
+      a valid ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter when the new priority is
+      set,
+      while the value of the ${../if/set-priority:/params[1]/name} parameter is
+      lower than the ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter at time when the
+      scheduler evaluates the new priority.
+  - name: Invalid
+    test-code: |
+      ctx->new_priority = PRIO_INVALID;
+    text: |
+      While the value of the ${../if/set-priority:/params[1]/name} parameter is
+      an invalid ${/glossary/priority-task:/term} with respect to the
+      ${/glossary/scheduler-home:/term} of the task specified by the
+      ${../if/set-priority:/params[0]/name} parameter when the new priority is
+      evaluated.
+  test-epilogue: null
+  test-prologue: null
+- name: OldPriority
+  states:
+  - name: Valid
+    test-code: |
+      ctx->old_priority = &ctx->old_priority_obj;
+    text: |
+      While the ${../if/set-priority:/params[2]/name} parameter references an
+      object of type ${../../type/if/priority:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->old_priority = NULL;
+    text: |
+      While the ${../if/set-priority:/params[2]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->started ) {
+    SetSelfPriority( PRIO_ULTRA_HIGH );
+    StartTask( ctx->worker_id, Worker, NULL );
+
+    if ( ctx->blocked ) {
+      SetSelfPriority( PRIO_ULTRA_LOW );
+      SetSelfPriority( PRIO_ULTRA_HIGH );
+    }
+  } else {
+    SetSelfPriority( PRIO_NORMAL );
+  }
+
+  ctx->status = rtems_task_set_priority(
+    ctx->id,
+    ctx->new_priority,
+    ctx->old_priority
+  );
+
+  if ( ctx->started ) {
+    SendEvents( ctx->worker_id, RTEMS_EVENT_0 );
+    SetSelfPriority( PRIO_ULTRA_LOW );
+    SetSelfPriority( PRIO_ULTRA_HIGH );
+  }
+test-brief: null
+test-cleanup: |
+  DeleteTask( ctx->worker_id );
+test-context:
+- brief: |
+    This member contains the worker task identifier.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    If this member is true, then the task shall be started.
+  description: null
+  member: |
+    bool started
+- brief: |
+    If this member is true, then the task shall be blocked.
+  description: null
+  member: |
+    bool blocked
+- brief: |
+    This member provides the object referenced by the
+    ${../if/set-priority:/params[2]/name} parameter.
+  description: null
+  member: |
+    rtems_task_priority old_priority_obj
+- brief: |
+    This member contains the return value of the ${../if/set-priority:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/set-priority:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/set-priority:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_task_priority new_priority
+- brief: |
+    This member specifies if the ${../if/set-priority:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_task_priority *old_priority
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->old_priority_obj = PRIO_INVALID;
+  ctx->worker_id = CreateTask( "WORK", PRIO_NORMAL );
+  ctx->started = false;
+  ctx->blocked = false;
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_ULTRA_HIGH );
+  description: null
+test-stop: null
+test-support: |
+  static void Worker( rtems_task_argument arg )
+  {
+    (void) ReceiveAnyEvents();
+    (void) ReceiveAnyEvents();
+  }
+test-target: testsuites/validation/tc-task-set-priority.c
+test-teardown:
+  brief: null
+  code: |
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Priority: Nop
+    OldPriorityObj: Set
+  pre-conditions:
+    Id:
+    - Task
+    State: all
+    NewPriority:
+    - Current
+    TaskPriority: N/A
+    OldPriority:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Priority: Set
+    OldPriorityObj: Set
+  pre-conditions:
+    Id:
+    - Task
+    State: all
+    NewPriority:
+    - Other
+    TaskPriority:
+    - High
+    - Equal
+    - Low
+    OldPriority:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Priority: Nop
+    OldPriorityObj: Nop
+  pre-conditions:
+    Id:
+    - Task
+    State: all
+    NewPriority:
+    - Current
+    TaskPriority: N/A
+    OldPriority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Priority: Nop
+    OldPriorityObj: Nop
+  pre-conditions:
+    Id:
+    - Task
+    State: all
+    NewPriority:
+    - Other
+    TaskPriority: all
+    OldPriority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Priority: Nop
+    OldPriorityObj: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    State: N/A
+    NewPriority: all
+    TaskPriority: N/A
+    OldPriority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Priority: Nop
+    OldPriorityObj: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    State: N/A
+    NewPriority: all
+    TaskPriority: N/A
+    OldPriority:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvPrio
+    Priority: Nop
+    OldPriorityObj: Set
+  pre-conditions:
+    Id:
+    - Task
+    State: all
+    NewPriority:
+    - Other
+    TaskPriority:
+    - Invalid
+    OldPriority:
+    - Valid
+type: requirement

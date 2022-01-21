@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: real-time
+text: |
+  A term used to describe systems which are characterized by requiring
+  deterministic response times to external stimuli.  The external stimuli
+  require that the response occur at a precise time or the response is
+  incorrect.
+type: glossary

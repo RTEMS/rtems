@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Indicates if the resource is unlimited.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/object/if/is-unlimited:/name}( ${.:/params[0]/name} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+name: rtems_resource_is_unlimited
+notes: |
+  This function is implemented as a macro and can be used to define compile
+  time constants.
+params:
+- description: is the resource number.
+  dir: null
+  name: _resource
+return:
+  return: |
+    Returns true, if the resource is unlimited, otherwise false.
+  return-values: []
+type: interface

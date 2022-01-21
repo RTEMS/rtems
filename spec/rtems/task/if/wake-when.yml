@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Wakes up when specified.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${../../type/if/time-of-day:/name} *${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive blocks a task until the date and time specified in
+  ${.:/params[0]/name}.  At the requested date and time, the calling task will
+  be unblocked and made ready to execute.
+enabled-by: true
+index-entries:
+- delay a task until a wall time
+- wake up at a wall time
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-driver
+- role: constraint
+  uid: /constraint/fatal-bad-thread-dispatch-disable-level
+name: rtems_task_wake_when
+notes: |
+  The ticks portion of ${.:/params[0]/name} structure is ignored.  The timing
+  granularity of this directive is a second.
+params:
+- description: |
+    is the date and time to wake up.
+  dir: null
+  name: time_buffer
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The system date and time was not set.
+    value: ${../../status/if/not-defined:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The time of day was invalid.
+    value: ${../../status/if/invalid-clock:/name}
+type: interface

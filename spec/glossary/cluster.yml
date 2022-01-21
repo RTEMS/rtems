@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: cluster
+text: |
+  We have clustered scheduling in case the set of processors of a system is
+  partitioned into non-empty pairwise disjoint subsets.  These subsets are
+  called clusters.  Clusters with a cardinality of one are partitions.
+  Each cluster is owned by exactly one scheduler instance.
+type: glossary

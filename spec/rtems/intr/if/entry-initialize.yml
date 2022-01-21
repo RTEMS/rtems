@@ -1,0 +1,56 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Initializes the interrupt entry.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      ${.:/params[0]/name}->handler = ${.:/params[1]/name};
+      ${.:/params[0]/name}->arg = ${.:/params[2]/name};
+      ${.:/params[0]/name}->next = ${/c/if/null:/name};
+      ${.:/params[0]/name}->info = ${.:/params[3]/name};
+    params:
+    - ${entry:/name} *${.:/params[0]/name}
+    - ${handler:/name} ${.:/params[1]/name}
+    - void *${.:/params[2]/name}
+    - const char *${.:/params[3]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_interrupt_entry_initialize
+notes: |
+  Alternatively, ${entry-initializer:/name} may be used to statically
+  initialize an interrupt entry.
+params:
+- description: |
+    is the interrupt entry to initialize.
+  dir: out
+  name: entry
+- description: |
+    is the interrupt handler routine for the entry.
+  dir: null
+  name: routine
+- description: |
+    is the interrupt handler argument for the entry.
+  dir: null
+  name: arg
+- description: |
+    is the descriptive information for the entry.
+  dir: null
+  name: info
+return: null
+type: interface

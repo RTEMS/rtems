@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  When a local, counting semaphore or a local, simple binary semaphore is
+  accessed and the ${../../option/if/no-wait:/name} option is set, the
+  directive may be called from within interrupt context.
+type: constraint

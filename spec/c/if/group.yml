@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This group contains ${/glossary/c11:/term} and ${/glossary/posix:/term}
+  interfaces.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: CStd
+index-entries: []
+interface-type: group
+links:
+- role: requirement-refinement
+  uid: /req/api
+- role: interface-placement
+  uid: domain
+name: C and POSIX
+text: |
+  The ${/glossary/api:/term} shall provide interfaces specified by
+  ${/glossary/c11:/term} or ${/glossary/posix:/term}.
+type: interface

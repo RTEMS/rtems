@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This general purpose validation test suite provides enough resources to run
+  ${/glossary/target:/term}-specific tests.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #include "ts-default.h"
+test-description: null
+test-includes: []
+test-local-includes: []
+test-suite-name: ValidationDev0
+test-target: testsuites/validation/ts-validation-dev-0.c
+type: test-suite

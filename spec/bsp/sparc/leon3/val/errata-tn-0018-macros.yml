@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-tn-0018-macro-fix
+- role: validation
+  uid: ../req/errata-tn-0018-macro-wait-iflush
+- role: validation
+  uid: ../req/errata-tn-0018-macro-write-psr
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/include/libcpu/grlib-tn-0018.h
+  hash: 2H6O61TZYKcwDpr_dKrDOe8xkMNjXz45Oh6bwL5b2vM=
+  type: file
+text: |
+  The ${/glossary/sourcecode:/term} of the software product was reviewed for a
+  correct implementation of the errata workaround support macros.  The macros
+  are correctly implemented.
+type: validation

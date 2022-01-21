@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/set
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Let :math:`J\in\{0, 1, ..., 31\}`.  The ${../if/set:/name} integer type shall
+  be able to represent the integer representation of signal :math:`J`.
+type: requirement

@@ -1,0 +1,96 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/perf-runtime
+params:
+  sample-count: 100
+test-brief: |
+  This test case provides a context to run ${../if/group:/name} performance
+  tests.
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a worker identifier.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member provides a status code.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: |
+    Create a mutex and a worker task.
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  typedef enum {
+    EVENT_END = RTEMS_EVENT_0,
+    EVENT_OTHER = RTEMS_EVENT_1
+  } Event;
+
+  static void Send( const Context *ctx, rtems_event_set events )
+  {
+    SendEvents( ctx->worker_id, events );
+  }
+
+  static void Satisfy( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    ctx->begin = T_tick();
+    ctx->status = rtems_event_send( ctx->worker_id, EVENT_END | EVENT_OTHER );
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_event_set   events;
+      rtems_status_code sc;
+      T_ticks           ticks;
+
+      sc = rtems_event_receive(
+        EVENT_END | EVENT_OTHER,
+        RTEMS_EVENT_ALL | RTEMS_WAIT,
+        RTEMS_NO_TIMEOUT,
+        &events
+      );
+      ticks = T_tick();
+      T_quiet_rsc_success( sc );
+
+      if ( ( events & EVENT_END ) != 0 ) {
+        ctx->end = ticks;
+      }
+    }
+  }
+test-target: testsuites/validation/tc-event-performance.c
+test-teardown:
+  brief: |
+    Delete the worker task and the mutex.
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  description: null
+type: runtime-measurement-test

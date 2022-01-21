@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 255
+description: |
+  For the following schedulers
+
+  * ${/doc/if/scheduler-priority:/name}, which is the default in uniprocessor
+    configurations and can be configured through the
+    ${scheduler-priority:/name} configuration option,
+
+  * ${/doc/if/scheduler-smp-priority:/name} which can be configured through the
+    ${scheduler-priority-smp:/name} configuration option, and
+
+  * ${/doc/if/scheduler-smp-priority-affinity:/name} which can be configured through the
+    ${scheduler-priority-affinity-smp:/name} configuration option
+
+  this configuration option specifies the maximum numeric priority of any task
+  for these schedulers and one less that the number of priority levels for
+  these schedulers.  For all other schedulers provided by RTEMS, this
+  configuration option has no effect.
+enabled-by: true
+index-entries:
+- maximum priority
+- number of priority levels
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/max-priority
+name: CONFIGURE_MAXIMUM_PRIORITY
+notes: |
+  The numerically greatest priority is the logically lowest priority in the
+  system and will thus be used by the IDLE task.
+
+  Priority zero is reserved for internal use by RTEMS and is not available to
+  applications.
+
+  Reducing the number of priorities through this configuration option reduces
+  the amount of memory allocated by the schedulers listed above.  These
+  schedulers use a chain control structure per priority and this structure
+  consists of three pointers.  On a 32-bit architecture, the allocated memory
+  is 12 bytes * (``CONFIGURE_MAXIMUM_PRIORITY`` + 1), e.g. 3072 bytes for 256
+  priority levels (default), 48 bytes for 4 priority levels
+  (``CONFIGURE_MAXIMUM_PRIORITY == 3``).
+
+  The default value is 255, because RTEMS shall support 256 priority levels to
+  be compliant with various standards.  These priorities range from 0 to 255.
+type: interface

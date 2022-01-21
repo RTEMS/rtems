@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: job
+text: |
+  A job denotes the code which the ${../glossary/ownertask:/term} executes
+  between two successive calls to ${../if/period:/name} (excluding those using
+  ${../if/period-status-define:/name}).  A job starts when the first
+  of these two ${../if/period:/name} calls returns.  A job ends with the next
+  call to ${../if/period:/name} or a call to ${../if/cancel:/name} or
+  ${../if/delete:/name}.
+type: glossary

@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: running
+text: |
+  The state of a rate monotonic timer while it is being used to delineate a
+  period.  The timer exits this state by either expiring or being canceled.
+type: glossary

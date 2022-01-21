@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-define
+links:
+- role: interface-placement
+  uid: time
+name: TIMER_ABSTIME
+references:
+- identifier: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html
+  type: url
+type: interface

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-interrupt-stack-size
+functional-type: function
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/interrupt-stack-size:/name} application configuration option.
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-interrupt-stack-size:/name} directive shall return the
+  interrupt stack size.
+type: requirement

@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/weak-alias
+non-functional-type: interface
+rationale: |
+  The other function at global scope with the same name as
+  ``newname`` can possibly be defined in
+  another compilation unit and linked with the compilation
+  unit containing the function defined with ${../if/weak-alias:/name}.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the produced target file format is ELF or a.out,
+  and argument ${../if/weak-alias:/params[0]/name} is a name of a function,
+  and the macro ${../if/weak-alias:/name} call is in the same compilation unit
+  as the function,
+  and the macro is not used in block scope,
+  and the macro is used in this form:
+  ``<return-type> newname([argument-type-list]) ${../if/weak-alias:/name}(oldname)``;,
+  and the ``<return-type>`` and ``argument-type-list`` match the
+  signature of the function ``oldname``,
+  and there is another function symbol at global scope with the same name as
+  ``newname``,
+  and this other function is not defined with the ${../if/weak:/name} macro or
+  otherwise defined or declared ``weak``,
+  and both functions have the same type,
+  the ${../if/weak-alias:/name} macro shall cause the code to behave as if
+  the function defined with the ${../if/weak-alias:/name} macro does not exist.
+type: requirement

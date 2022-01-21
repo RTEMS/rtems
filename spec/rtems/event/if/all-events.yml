@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This event set constant represents all events of an event set.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: '0xffffffff'
+  variants: []
+description: |
+  This event set constant is equal to the bitwise or of ${event-00:/name},
+  ${event-01:/name}, ${event-02:/name}, ${event-03:/name}, ${event-04:/name},
+  ${event-05:/name}, ${event-06:/name}, ${event-07:/name}, ${event-08:/name},
+  ${event-09:/name}, ${event-10:/name}, ${event-11:/name}, ${event-12:/name},
+  ${event-13:/name}, ${event-14:/name}, ${event-15:/name}, ${event-16:/name},
+  ${event-17:/name}, ${event-18:/name}, ${event-19:/name}, ${event-20:/name},
+  ${event-21:/name}, ${event-22:/name}, ${event-23:/name}, ${event-24:/name},
+  ${event-25:/name}, ${event-26:/name}, ${event-27:/name}, ${event-28:/name},
+  ${event-29:/name}, ${event-30:/name}, and ${event-31:/name}.
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_ALL_EVENTS
+notes: null
+type: interface

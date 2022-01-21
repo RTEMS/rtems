@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Starts an interactive CPU usage reporting using the printer plugin.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${printer:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/request-response
+name: rtems_cpu_usage_top_with_plugin
+notes: |
+  The directive starts a task to do the reporting.  The ${/c/if/getchar:/name}
+  function is used to get commands from the user.
+params:
+- description: |
+    is the printer plugin to output the report.
+  dir: null
+  name: printer
+return:
+  return: null
+  return-values: []
+type: interface

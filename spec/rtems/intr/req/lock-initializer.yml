@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/lock-initializer
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/lock-initializer:/name} is used to statically initialize an
+  object of type ${../if/lock:/name}, the lock contained in the object shall be
+  initialized so that it is available.
+type: requirement

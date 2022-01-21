@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Tells the compiler that this program point is unreachable.
+copyrights:
+- Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    ${/score/if/assert-unreachable:/name}()
+  variants:
+  - definition: |
+      do {
+        ${/compiler/if/builtin-unreachable:/name}();
+        ${/score/if/assert-unreachable:/name}();
+      } while ( 0 )
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_UNREACHABLE
+notes: null
+params: []
+return: null
+type: interface

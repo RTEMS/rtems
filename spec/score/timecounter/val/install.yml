@@ -1,0 +1,1085 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Call the simple timecounter tick service with a zero delta and offset.
+    This will lead to an overflow to zero of the timehand generation.  It shall
+    not change the initial clock values.
+  action-code: |
+    ISR_lock_Context lock_context;
+
+    _Timecounter_Acquire( &lock_context );
+    _Timecounter_Tick_simple( 0, 0, &lock_context );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/tick-simple-delta
+  - role: validation
+    uid: ../req/tick-simple-offset
+- action-brief: |
+    Call the directives to get the initial value of
+    ${/glossary/clock-realtime:/term} and the initial boot time.
+  action-code: |
+    struct bintime  bt;
+    struct timespec ts;
+    struct timeval  tv;
+  checks:
+  - brief: |
+      Check the initial ${/glossary/clock-realtime:/term} in seconds and
+      nanoseconds format.
+    code: |
+      rtems_clock_get_realtime( &ts );
+      T_eq_i64( ts.tv_sec, 567993600 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Check that ${/glossary/clock-realtime:/term} is frozen in seconds and
+      nanoseconds format.
+    code: |
+      rtems_clock_get_realtime( &ts );
+      T_eq_i64( ts.tv_sec, 567993600 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-realtime:/term} in coarse resolution
+      in seconds and nanoseconds format.
+    code: |
+      rtems_clock_get_realtime_coarse( &ts );
+      T_eq_i64( ts.tv_sec, 567993600 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: /rtems/clock/req/get-realtime-coarse
+  - brief: |
+      Check that ${/glossary/clock-realtime:/term} is frozen in coarse
+      resolution in seconds and nanoseconds format.
+    code: |
+      rtems_clock_get_realtime_coarse( &ts );
+      T_eq_i64( ts.tv_sec, 567993600 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-realtime:/term} in binary time
+      format.
+    code: |
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993600 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Check that ${/glossary/clock-realtime:/term} is frozen in binary time
+      format.
+    code: |
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993600 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-realtime:/term} in coarse resolution
+      in binary time format.
+    code: |
+      rtems_clock_get_realtime_coarse_bintime( &bt );
+      T_eq_i64( bt.sec, 567993600 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: /rtems/clock/req/get-realtime-coarse
+  - brief: |
+      Check that ${/glossary/clock-realtime:/term} is frozen in coarse
+      resolution in binary time format.
+    code: |
+      rtems_clock_get_realtime_coarse_bintime( &bt );
+      T_eq_i64( bt.sec, 567993600 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-realtime:/term} in seconds and
+      microseconds format.
+    code: |
+      rtems_clock_get_realtime_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 567993600 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Check that ${/glossary/clock-realtime:/term} is frozen in seconds and
+      microseconds format.
+    code: |
+      rtems_clock_get_realtime_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 567993600 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-realtime:/term} in coarse resolution
+      in seconds and microseconds format.
+    code: |
+      rtems_clock_get_realtime_coarse_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 567993600 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: /rtems/clock/req/get-realtime-coarse
+  - brief: |
+      Check that ${/glossary/clock-realtime:/term} is frozen in coarse
+      resolution in seconds and microseconds format.
+    code: |
+      rtems_clock_get_realtime_coarse_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 567993600 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial-frozen
+  - brief: |
+      Check the initial boot time in seconds and nanoseconds format.
+    code: |
+      rtems_clock_get_boot_time( &ts );
+      T_eq_i64( ts.tv_sec, 567993599 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-boot-time
+  - brief: |
+      Check the initial boot time in binary time format.
+    code: |
+      rtems_clock_get_boot_time_bintime( &bt );
+      T_eq_i64( bt.sec, 567993599 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-boot-time
+  - brief: |
+      Check the initial boot time in seconds and microseconds format.
+    code: |
+      rtems_clock_get_boot_time_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 567993599 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-realtime-initial
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-boot-time
+  links: []
+- action-brief: |
+    Call the directives to get the initial value of
+    ${/glossary/clock-monotonic:/term} and the initial boot time.
+  action-code: |
+    struct bintime  bt;
+    sbintime_t      sb;
+    struct timespec ts;
+    struct timeval  tv;
+  checks:
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in seconds and
+      nanoseconds format.
+    code: |
+      rtems_clock_get_monotonic( &ts );
+      T_eq_i64( ts.tv_sec, 1 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in seconds and
+      nanoseconds format.
+    code: |
+      rtems_clock_get_monotonic( &ts );
+      T_eq_i64( ts.tv_sec, 1 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in coarse resolution
+      in seconds and nanoseconds format.
+    code: |
+      rtems_clock_get_monotonic_coarse( &ts );
+      T_eq_i64( ts.tv_sec, 1 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic-coarse
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in coarse
+      resolution in seconds and nanoseconds format.
+    code: |
+      rtems_clock_get_monotonic_coarse( &ts );
+      T_eq_i64( ts.tv_sec, 1 );
+      T_eq_u64( ts.tv_nsec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in binary time
+      format.
+    code: |
+      rtems_clock_get_monotonic_bintime( &bt );
+      T_eq_i64( bt.sec, 1 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in binary time
+      format.
+    code: |
+      rtems_clock_get_monotonic_bintime( &bt );
+      T_eq_i64( bt.sec, 1 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in coarse resolution
+      in binary time format.
+    code: |
+      rtems_clock_get_monotonic_coarse_bintime( &bt );
+      T_eq_i64( bt.sec, 1 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic-coarse
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in coarse
+      resolution in binary time format.
+    code: |
+      rtems_clock_get_monotonic_coarse_bintime( &bt );
+      T_eq_i64( bt.sec, 1 );
+      T_eq_u64( bt.frac, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in signed binary
+      time format.
+    code: |
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_i64( sb, SBT_1S );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in signed binary
+      time format.
+    code: |
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_i64( sb, SBT_1S );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in seconds and
+      microseconds format.
+    code: |
+      rtems_clock_get_monotonic_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in seconds and
+      microseconds format.
+    code: |
+      rtems_clock_get_monotonic_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  - brief: |
+      Check the initial ${/glossary/clock-monotonic:/term} in coarse resolution
+      in seconds and microseconds format.
+    code: |
+      rtems_clock_get_monotonic_coarse_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic-coarse
+  - brief: |
+      Check that ${/glossary/clock-monotonic:/term} is frozen in coarse
+      resolution in seconds and microseconds format.
+    code: |
+      rtems_clock_get_monotonic_coarse_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links:
+    - role: validation
+      uid: ../req/clock-monotonic-initial-frozen
+  links: []
+- action-brief: |
+    Install timecounter of different quality levels and frequencies.
+  action-code: |
+    Timecounter *hqlf;
+    Timecounter *hqnf;
+    Timecounter *hqhf;
+    Timecounter *lq;
+    sbintime_t   sb;
+
+    hqlf = &high_quality_low_frequency;
+    hqnf = &high_quality_normal_frequency;
+    hqhf = &high_quality_high_frequency;
+    lq = &low_quality;
+  checks:
+  - brief: |
+      Install a timecounter with a high quality level and normal frequency.
+      Check that it was installed.
+    code: |
+      hqnf->base.tc_get_timecount = GetTimecount;
+      hqnf->base.tc_counter_mask = 0xffffffff;
+      hqnf->base.tc_frequency = 0x20000000;
+      hqnf->base.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER + 1;
+      rtems_timecounter_install( &hqnf->base );
+
+      T_eq_u32( GetCounter( hqnf ), 1 );
+
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_u32( GetCounter( hqnf ), 2 );
+      T_eq_i64( sb, SBT_1S + 8 );
+    links:
+    - role: validation
+      uid: ../req/install-quality
+  - brief: |
+      Install a timecounter with a high quality level and low frequency.
+      Check that it was not installed.
+    code: |
+      hqlf->base.tc_get_timecount = GetTimecount;
+      hqlf->base.tc_counter_mask = 0xffffffff;
+      hqlf->base.tc_frequency = 0x10000000;
+      hqlf->base.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER + 1;
+      rtems_timecounter_install( &hqlf->base );
+
+      T_eq_u32( GetCounter( hqlf ), 0 );
+      T_eq_u32( GetCounter( hqnf ), 2 );
+
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_u32( GetCounter( hqlf ), 0 );
+      T_eq_u32( GetCounter( hqnf ), 3 );
+      T_eq_i64( sb, SBT_1S + 16 );
+    links:
+    - role: validation
+      uid: ../req/install-frequency
+  - brief: |
+      Install a timecounter with a high quality level and high frequency.
+      Check that it was installed.
+    code: |
+      hqhf->base.tc_get_timecount = GetTimecount;
+      hqhf->base.tc_counter_mask = 0xffffffff;
+      hqhf->base.tc_frequency = 0x40000000;
+      hqhf->base.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER + 1;
+      rtems_timecounter_install( &hqhf->base );
+
+      T_eq_u32( GetCounter( hqlf ), 0 );
+      T_eq_u32( GetCounter( hqnf ), 4 );
+      T_eq_u32( GetCounter( hqhf ), 1 );
+
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_u32( GetCounter( hqlf ), 0 );
+      T_eq_u32( GetCounter( hqnf ), 4 );
+      T_eq_u32( GetCounter( hqhf ), 2 );
+      T_eq_i64( sb, SBT_1S + 28 );
+    links:
+    - role: validation
+      uid: ../req/install-frequency
+  - brief: |
+      Install a timecounter with a low quality level.  Check that it was not
+      installed.
+    code: |
+      lq->base.tc_get_timecount = GetTimecount;
+      lq->base.tc_counter_mask = 0xffffffff;
+      lq->base.tc_frequency = 0x80000000;
+      lq->base.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+      rtems_timecounter_install( &lq->base );
+
+      T_eq_u32( GetCounter( hqlf ), 0 );
+      T_eq_u32( GetCounter( hqnf ), 4 );
+      T_eq_u32( GetCounter( hqhf ), 2 );
+      T_eq_u32( GetCounter( lq ), 0 );
+
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_u32( GetCounter( hqlf ), 0 );
+      T_eq_u32( GetCounter( hqnf ), 4 );
+      T_eq_u32( GetCounter( hqhf ), 3 );
+      T_eq_u32( GetCounter( lq ), 0 );
+      T_eq_i64( sb, SBT_1S + 32 );
+    links:
+    - role: validation
+      uid: ../req/install-quality
+  links: []
+- action-brief: |
+    Call the directives to get the time in the highest resolution available to
+    the system.
+  action-code: |
+    Timecounter    *tc;
+    uint32_t        counter;
+    struct bintime  bt;
+    struct timespec ts;
+    struct timeval  tv;
+
+    tc = &high_quality_high_frequency;
+    counter = GetCounter( tc );
+  checks:
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-realtime:/name}.
+    code: |
+      rtems_clock_get_realtime( &ts );
+      T_eq_u32( GetCounter( tc ), counter + 1 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-realtime-bintime:/name}.
+    code: |
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_u32( GetCounter( tc ), counter + 2 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-realtime-timeval:/name}.
+    code: |
+      rtems_clock_get_realtime_timeval( &tv );
+      T_eq_u32( GetCounter( tc ), counter + 3 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-monotonic:/name}.
+    code: |
+      rtems_clock_get_monotonic( &ts );
+      T_eq_u32( GetCounter( tc ), counter + 4 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-monotonic-bintime:/name}.
+    code: |
+      rtems_clock_get_monotonic_bintime( &bt );
+      T_eq_u32( GetCounter( tc ), counter + 5 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-monotonic-sbintime:/name}.
+    code: |
+      (void) rtems_clock_get_monotonic_sbintime();
+      T_eq_u32( GetCounter( tc ), counter + 6 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Check that the timecounter was used by
+      ${/rtems/clock/if/get-monotonic-timeval:/name}.
+    code: |
+      rtems_clock_get_monotonic_timeval( &tv );
+      T_eq_u32( GetCounter( tc ), counter + 7 );
+    links:
+    - role: validation
+      uid: ../req/get-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  links: []
+- action-brief: |
+    Call the directives to get the time in a coarse resolution.
+  action-code: |
+    Timecounter    *tc;
+    uint32_t        counter;
+    struct bintime  bt;
+    struct timespec ts;
+    struct timeval  tv;
+
+    tc = &high_quality_high_frequency;
+    counter = GetCounter( tc );
+  checks:
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-realtime-coarse:/name}.
+    code: |
+      rtems_clock_get_realtime_coarse( &ts );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-realtime-coarse
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-realtime-coarse-bintime:/name}.
+    code: |
+      rtems_clock_get_realtime_coarse_bintime( &bt );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-realtime-coarse
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-realtime-coarse-timeval:/name}.
+    code: |
+      rtems_clock_get_realtime_coarse_timeval( &tv );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-realtime-coarse
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-monotonic-coarse:/name}.
+    code: |
+      rtems_clock_get_monotonic_coarse( &ts );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic-coarse
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-monotonic-coarse-bintime:/name}.
+    code: |
+      rtems_clock_get_monotonic_coarse_bintime( &bt );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic-coarse
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-monotonic-coarse-timeval:/name}.
+    code: |
+      rtems_clock_get_monotonic_coarse_timeval( &tv );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic-coarse
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-boot-time:/name}.
+    code: |
+      rtems_clock_get_boot_time( &ts );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-boot-time
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-boot-time-bintime:/name}.
+    code: |
+      rtems_clock_get_boot_time_bintime( &bt );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-boot-time
+  - brief: |
+      Check that the timecounter was not used by
+      ${/rtems/clock/if/get-boot-time-timeval:/name}.
+    code: |
+      rtems_clock_get_boot_time_timeval( &tv );
+      T_eq_u32( GetCounter( tc ), counter );
+    links:
+    - role: validation
+      uid: ../req/get-coarse-no-device
+    - role: validation
+      uid: /rtems/clock/req/get-boot-time
+  links: []
+- action-brief: |
+    Call the directives to get the time in the highest resolution available to
+    the system.
+  action-code: |
+    Timecounter    *tc;
+    uint32_t        counter;
+    struct bintime  bt;
+    sbintime_t      sb;
+    struct timespec ts;
+    struct timeval  tv;
+
+    tc = &high_quality_high_frequency;
+    counter = 3 * tc->base.tc_frequency + 123456789;
+  checks:
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-realtime:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      rtems_clock_get_realtime( &ts );
+      T_eq_i64( ts.tv_sec, 567993603 );
+      T_eq_u64( ts.tv_nsec, 114978100 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-realtime-bintime:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993603 );
+      T_eq_u64( bt.frac, 2120971587975905280 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-realtime-timeval:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      rtems_clock_get_realtime_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 567993603 );
+      T_eq_long( tv.tv_usec, 114978 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-realtime
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-monotonic:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      rtems_clock_get_monotonic( &ts );
+      T_eq_i64( ts.tv_sec, 4 );
+      T_eq_u64( ts.tv_nsec, 114978100 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-monotonic-bintime:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      rtems_clock_get_monotonic_bintime( &bt );
+      T_eq_i64( bt.sec, 4 );
+      T_eq_u64( bt.frac, 2120971587975905280 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-monotonic-sbintime:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      sb = rtems_clock_get_monotonic_sbintime();
+      T_eq_i64( sb, 17673696364 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  - brief: |
+      Prepare the timecounter to get a large time difference.  Check that
+      ${/rtems/clock/if/get-monotonic-timeval:/name} returns the correct time.
+    code: |
+      SetCounter( tc, counter );
+      rtems_clock_get_monotonic_timeval( &tv );
+      T_eq_i64( tv.tv_sec, 4 );
+      T_eq_long( tv.tv_usec, 114978 );
+    links:
+    - role: validation
+      uid: ../req/get-large-delta
+    - role: validation
+      uid: /rtems/clock/req/get-monotonic
+  links: []
+- action-brief: |
+    Update the oldest timehand after a large time interval.
+  action-code: |
+    Timecounter    *tc;
+    struct bintime  bt;
+
+    tc = &high_quality_high_frequency;
+
+    SetCounter( tc, 0 );
+    rtems_clock_get_realtime_bintime( &bt );
+    T_eq_i64( bt.sec, 567993600 );
+    T_eq_u64( bt.frac, 103079215104 );
+
+    SetCounter( tc, 2 * tc->base.tc_frequency );
+    CallTimecounterTick();
+
+    SetCounter( tc, 2 * tc->base.tc_frequency );
+    rtems_clock_get_realtime_bintime( &bt );
+    T_eq_i64( bt.sec, 567993602 );
+    T_eq_u64( bt.frac, 103079215104 );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/tick-large-delta
+- action-brief: |
+    Call the simple timecounter tick service with non-zero delta and offset
+    parameter values so that exactly one second passed.
+  action-code: |
+    ISR_lock_Context lock_context;
+    Timecounter     *tc;
+    struct bintime   bt;
+
+    tc = &high_quality_high_frequency;
+
+    _Timecounter_Acquire( &lock_context );
+    _Timecounter_Tick_simple(
+      tc->base.tc_frequency / 2,
+      GetCounter( tc ) - tc->base.tc_frequency / 2,
+      &lock_context
+    );
+  checks:
+  - brief: |
+      Check that exactly one second passed due to the simple clock tick
+      service.
+    code: |
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993603 );
+      T_eq_u64( bt.frac, 103079215104 );
+    links:
+    - role: validation
+      uid: ../req/tick-simple-delta
+    - role: validation
+      uid: ../req/tick-simple-offset
+  links: []
+- action-brief: |
+    Install a very high quality timecounter with a low frequency to test the
+    NTP support.
+  action-code: |
+    Timecounter   *tc;
+    struct bintime bt;
+
+    tc = &very_high_quality;
+    tc->base.tc_get_timecount = GetTimecount;
+    tc->base.tc_counter_mask = 0xffffffff;
+    tc->base.tc_frequency = 0x01000000;
+    tc->base.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER + 2;
+    rtems_timecounter_install( &tc->base );
+
+    T_eq_u32( GetCounter( tc ), 1 );
+
+    rtems_clock_get_realtime_bintime( &bt );
+    T_eq_i64( bt.sec, 567993603 );
+    T_eq_u64( bt.frac, 1219770712064 );
+  checks:
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} not change.
+      Check that the NTP update second handler is not called.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateCounter );
+      SetCounter( tc, tc->base.tc_frequency / 2 );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      T_eq_u32( ntp_counter, 0 );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993603 );
+      T_eq_u64( bt.frac, UINT64_C( 9223373256625487872 ) );
+    links:
+    - role: validation
+      uid: ../req/ntp-step
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
+      Check that the NTP update second handler is called exactly once.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateCounter );
+      SetCounter( tc, tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      T_eq_u32( ntp_counter, 1 );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993604 );
+      T_eq_u64( bt.frac, 1219770712064 );
+    links:
+    - role: validation
+      uid: ../req/ntp-step
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by 200.
+      Check that the NTP update second handler is called exactly 200 times.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateCounter );
+      SetCounter( tc, 201 * tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      T_eq_u32( ntp_counter, 201 );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993804 );
+      T_eq_u64( bt.frac, 1219770712064 );
+    links:
+    - role: validation
+      uid: ../req/ntp-step
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by 201.
+      Check that the NTP update second handler is called exactly twice.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateCounter );
+      SetCounter( tc, 402 * tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      T_eq_u32( ntp_counter, 203 );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567994005 );
+      T_eq_u64( bt.frac, 1219770712064 );
+    links:
+    - role: validation
+      uid: ../req/ntp-step-large
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
+      Check that the NTP update second handler is incremented the
+      ${/glossary/clock-realtime:/term} by one second.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateSecondIncrement );
+      SetCounter( tc, 403 * tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567994007 );
+      T_eq_u64( bt.frac, 1219770712064 );
+    links:
+    - role: validation
+      uid: ../req/ntp-seconds
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
+      Check that the NTP update second handler is decremented the
+      ${/glossary/clock-realtime:/term} by one second.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateSecondDecrement );
+      SetCounter( tc, 404 * tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567994007 );
+      T_eq_u64( bt.frac, 1219770712064 );
+    links:
+    - role: validation
+      uid: ../req/ntp-seconds
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
+      Check that the NTP update second handler increased the timecounter
+      frequency.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateAdjustmentFaster );
+      SetCounter( tc, 405 * tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      SetCounter( tc, 406 * tc->base.tc_frequency );
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567994009 );
+      T_eq_u64( bt.frac, 92353004044288 );
+    links:
+    - role: validation
+      uid: ../req/ntp-adjustment
+  - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
+      Check that the NTP update second handler decreased the timecounter
+      frequency.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateAdjustmentSlower );
+      SetCounter( tc, 407 * tc->base.tc_frequency );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      SetCounter( tc, 408 * tc->base.tc_frequency );
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567994011 );
+      T_eq_u64( bt.frac, 120259084288 );
+    links:
+    - role: validation
+      uid: ../req/ntp-adjustment
+  links: []
+test-brief: |
+  Tests timecounter installation related functions and directives of the Clock
+  Manager.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/timecounter.h
+- rtems/score/atomic.h
+- rtems/score/threaddispatch.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  typedef struct {
+    struct timecounter base;
+    Atomic_Ulong counter;
+  } Timecounter;
+
+  static Timecounter high_quality_low_frequency;
+
+  static Timecounter high_quality_normal_frequency;
+
+  static Timecounter high_quality_high_frequency;
+
+  static Timecounter low_quality;
+
+  static Timecounter very_high_quality;
+
+  static uint32_t ntp_counter;
+
+  static uint32_t GetTimecount( struct timecounter *base )
+  {
+    Timecounter *tc;
+
+    tc = (Timecounter *) base;
+
+    return (uint32_t) _Atomic_Fetch_add_ulong(
+      &tc->counter,
+      1,
+      ATOMIC_ORDER_RELAXED
+    );
+  }
+
+  static uint32_t GetCounter( const Timecounter *tc )
+  {
+    return (uint32_t) _Atomic_Load_ulong(
+      &tc->counter,
+      ATOMIC_ORDER_RELAXED
+    );
+  }
+
+  static void SetCounter( Timecounter *tc, uint32_t counter )
+  {
+    _Atomic_Store_ulong(
+      &tc->counter,
+      counter,
+      ATOMIC_ORDER_RELAXED
+    );
+  }
+
+  static void NtpUpdateCounter( int64_t *adjustment, time_t *newsec )
+  {
+    (void) newsec;
+    T_eq_i64( *adjustment, 0 );
+    ++ntp_counter;
+  }
+
+  static void NtpUpdateSecondIncrement( int64_t *adjustment, time_t *newsec )
+  {
+    (void) adjustment;
+    ++(*newsec);
+  }
+
+  static void NtpUpdateSecondDecrement( int64_t *adjustment, time_t *newsec )
+  {
+    (void) adjustment;
+    --(*newsec);
+  }
+
+  static void NtpUpdateAdjustmentFaster( int64_t *adjustment, time_t *newsec )
+  {
+    *adjustment = ( (int64_t) 5000 ) << 32;
+    (void) newsec;
+  }
+
+  static void NtpUpdateAdjustmentSlower( int64_t *adjustment, time_t *newsec )
+  {
+    *adjustment = -( (int64_t) 5000 ) << 32;
+    (void) newsec;
+  }
+
+  static void CallTimecounterTick( void )
+  {
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Thread_Dispatch_disable();
+    rtems_timecounter_tick();
+    _Thread_Dispatch_enable( cpu_self );
+  }
+test-target: testsuites/validation/tc-timecounter-install.c
+test-teardown: null
+type: test-case

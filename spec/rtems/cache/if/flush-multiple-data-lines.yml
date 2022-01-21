@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Flushes the data cache lines covering the memory area.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const void *${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    return: void
+  variants: []
+description: |
+  Dirty data cache lines covering the area are transfered to memory.  Depending
+  on the cache implementation this may mark the lines as invalid.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_cache_flush_multiple_data_lines
+notes: null
+params:
+- description: |
+    is the begin address of the memory area to flush.
+  dir: null
+  name: begin
+- description: |
+    is the size in bytes of the memory area to flush.
+  dir: null
+  name: size
+return: null
+type: interface

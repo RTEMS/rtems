@@ -1,0 +1,118 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-uptime
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/get-uptime:/name} shall be
+      ${../../status/if/successful:/name}
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-uptime:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Uptime
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->uptime, &ctx->uptime_value );
+      T_ge_i64( ctx->uptime_value.tv_sec, 0LL );
+      T_ge_long( ctx->uptime_value.tv_nsec, 0L );
+      T_lt_long( ctx->uptime_value.tv_nsec, 1000000000L );
+    text: |
+      The value of the object referenced by the
+      ${../if/get-uptime:/params[0]/name} parameter shall be set to
+      seconds and nanoseconds elapsed since a point in time during
+      the system initialization and a point in time during the
+      call of ${../if/get-uptime:/name} using ${/glossary/clock-monotonic:/term}
+      as result of the ${../if/get-uptime:/name} call.
+  - name: Unchanged
+    test-code: |
+      T_null( ctx->uptime );
+    text: |
+      Objects referenced by the ${../if/get-uptime:/params[0]/name} parameter
+      in calls to ${../if/get-uptime:/name} shall not be modified by
+      the ${../if/get-uptime:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Uptime
+  states:
+  - name: Valid
+    test-code: |
+      ctx->uptime = &ctx->uptime_value;
+    text: |
+      While the ${../if/get-uptime:/params[0]/name} parameter references an
+      object of type ${/c/if/timespec:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->uptime = NULL;
+    text: |
+      While the ${../if/get-uptime:/params[0]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+    ctx->status = rtems_clock_get_uptime( ctx->uptime );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: struct timespec *uptime
+- brief: null
+  description: null
+  member: struct timespec uptime_value
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    ctx->uptime_value.tv_sec  = -1;
+    ctx->uptime_value.tv_nsec = -1;
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-clock-get-uptime.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Uptime: Unchanged
+  pre-conditions:
+    Uptime:
+      - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Uptime: Set
+  pre-conditions:
+    Uptime:
+      - Valid
+type: requirement

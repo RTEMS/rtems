@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the processor affinity set of the interrupt vector.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${vector-number:/name} ${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    - ${/c/if/cpu_set_t:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_interrupt_get_affinity
+notes: null
+params:
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the size of the processor set referenced by ${.:/params[2]/name} in
+    bytes.
+  dir: null
+  name: affinity_size
+- description: |
+    is the pointer to a ${/c/if/cpu_set_t:/name} object.  When the directive
+    call is successful, the processor affinity set of the interrupt vector will
+    be stored in this object.  A set bit in the processor set means that the
+    corresponding processor is in the processor affinity set of the interrupt
+    vector, otherwise the bit is cleared.
+  dir: out
+  name: affinity
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The size specified by ${.:/params[1]/name} of the processor set was too
+      small for the processor affinity set of the interrupt vector.
+    value: ${../../status/if/invalid-size:/name}
+type: interface

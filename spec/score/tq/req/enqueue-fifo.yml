@@ -1,0 +1,127 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Position
+  states:
+  - name: First
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread shall be the first thread in the queue.
+  - name: Last
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread shall be the last thread in the queue.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+
+    /* Event receives */
+    T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
+    T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+pre-conditions:
+- name: Queue
+  states:
+  - name: Empty
+    test-code: |
+      ctx->tq_ctx->how_many = 1;
+    text: |
+      While the queue is empty.
+  - name: NonEmpty
+    test-code: |
+      ctx->tq_ctx->how_many = 2;
+    text: |
+      While the queue is non-empty.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_PREPARE );
+
+  if ( ctx->tq_ctx->how_many >= 2 ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
+  }
+
+  TQSchedulerRecordStart( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
+  TQSchedulerRecordStop( ctx->tq_ctx );
+test-brief: null
+test-cleanup: null
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-enqueue-fifo.h
+test-includes: []
+test-local-includes:
+- tr-tq-enqueue-fifo.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_C, PRIO_ULTRA_HIGH );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+test-target: testsuites/validation/tr-tq-enqueue-fifo.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the calling thread is enqueued on the thread queue.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Position: First
+  pre-conditions:
+    Queue:
+    - Empty
+- enabled-by: true
+  post-conditions:
+    Position: Last
+  pre-conditions:
+    Queue:
+    - NonEmpty
+type: requirement

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The timer ${../glossary/scheduled:/term} at the same processor with the same
+  expiration time point shall ${../glossary/fire:/term} in
+  ${/glossary/fifo:/term} order.
+type: requirement

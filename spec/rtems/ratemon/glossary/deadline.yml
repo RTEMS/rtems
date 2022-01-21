@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: deadline
+text: |
+  A deadline is a point in time.  A sequence of deadlines each separated
+  from the next by the exact period length (i.e. parameter
+  ${../if/period:/params[1]/name}) form a theoretical ideal execution
+  sequence of ${../glossary/interval:/plural} of a rate monotonic period.
+  The return of the first call to ${../if/period:/name} which changes the
+  ${../glossary/state:/term} from ${../glossary/inactive:/term} to
+  ${../glossary/active:/term} defines the first deadline in this sequence.
+
+  Ideally each ${../glossary/interval:/term} takes place between
+  a start and an end deadline whereby the N-th
+  ${../glossary/interval:/term} starts with the N-th deadline and ends
+  with the (N+1)-th deadline.  Due to ${../glossary/postponedjob:/plural}
+  and ${../glossary/expired:/term} ${../glossary/state:/plural}
+  an ${../glossary/interval:/term} can be out-of-sync from this ideal
+  deadline sequence.  In such a case it may start sometime after its
+  start deadline or even start after its end deadline has passed.
+
+  If the period is in ${../glossary/active:/term} ${../glossary/state:/term}
+  and there are no ${../glossary/postponedjob:/plural}, the
+  ${../glossary/interval:/term} end is synchronized with the ideal end
+  deadline of the ${../glossary/interval:/term} by the
+  ${../if/period:/name} directive not returning before that end deadline
+  has passed.
+type: glossary

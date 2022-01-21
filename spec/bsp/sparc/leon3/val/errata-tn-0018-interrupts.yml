@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-20
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/cpu_asm.S
+  hash: ZvR01zogfIGxPsSTqTesSMRDXlQFV9I0TOZ9eUAsQt8=
+  type: file
+- identifier: cpukit/score/cpu/sparc/sparc-isr-handler.S
+  hash: J6qNYoUFUVXetylnUNrz7MY1jrBs4AbuS5mxyZ4FxEc=
+  type: file
+text: |
+  A special ``rett`` sequence errata workaround was implemented for the
+  interrupt trap handler.
+type: validation

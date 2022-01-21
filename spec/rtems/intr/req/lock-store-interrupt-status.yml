@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/lock-acquire
+- role: interface-function
+  uid: ../if/lock-isr-disable
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the directive is called, the status of the maskable interrupts before
+  maskable interrupts are disabled by the directive shall be stored to the lock
+  context parameter.
+type: requirement

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - bsps/sparc/leon3
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the system is initialized, if the data cache snooping is disabled on
+  the boot processor, then the system shall terminate with the
+  ${/score/interr/if/source-bsp:/name} fatal source and the
+  ${/bsp/if/fatal-leon3-invalid-cache-config-boot-processor:/name} fatal code.
+type: requirement

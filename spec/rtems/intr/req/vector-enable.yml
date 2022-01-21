@@ -1,0 +1,361 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/vector-enable
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      /*
+       * Validation is done by CheckVectorEnable() for each interrupt
+       * vector.
+       */
+    text: |
+      The return status of ${../if/vector-enable:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/vector-enable:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: Unsat
+    test-code: |
+      /*
+       * Validation is done by CheckVectorEnable() for each interrupt
+       * vector.
+       */
+    text: |
+      The return status of ${../if/vector-enable:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: IsEnabled
+  states:
+  - name: Nop
+    test-code: |
+      /*
+       * Validation is done by CheckUnsatisfied() for each interrupt
+       * vector which cannot be enabled.
+       */
+    text: |
+      The enabled status of the interrupt vector specified by
+      ${../if/vector-enable:/params[0]/name} shall not be modified by the
+      ${../if/vector-enable:/name} call.
+  - name: 'Yes'
+    test-code: |
+      /*
+       * Validation is done by CheckVectorEnable() for each interrupt
+       * vector.
+       */
+    text: |
+      The interrupt vector specified by ${../if/vector-enable:/params[0]/name}
+      shall be enabled.
+  - name: Maybe
+    test-code: |
+      /*
+       * Validation is done by CheckVectorEnable() for each interrupt
+       * vector.
+       */
+    text: |
+      The interrupt vector specified by ${../if/vector-enable:/params[0]/name}
+      may be enabled.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->valid_vector = true;
+    text: |
+      While the ${../if/vector-enable:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->valid_vector = false;
+    text: |
+      While the ${../if/vector-enable:/params[0]/name} parameter is
+      not associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: IsEnabled
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckVectorEnable().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/vector-enable:/params[0]/name} parameter is enabled.
+  - name: 'No'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckVectorEnable().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/vector-enable:/params[0]/name} parameter is enabled.
+  test-epilogue: null
+  test-prologue: null
+- name: CanEnable
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckVectorEnable().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/vector-enable:/params[0]/name} parameter can be enabled.
+  - name: Maybe
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckVectorEnable().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/vector-enable:/params[0]/name} parameter may be enabled.
+  - name: 'No'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckVectorEnable().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/vector-enable:/params[0]/name} parameter cannot be enabled.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->valid_vector ) {
+    for (
+      ctx->vector = 0;
+      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
+      ++ctx->vector
+    ) {
+      rtems_status_code          sc;
+      rtems_interrupt_attributes attr;
+      bool                       has_installed_entries;
+
+      memset( &attr, 0, sizeof( attr ) );
+      sc = rtems_interrupt_get_attributes( ctx->vector, &attr );
+
+      if ( sc == RTEMS_INVALID_ID ) {
+        continue;
+      }
+
+      T_rsc_success( sc );
+
+      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      CheckVectorEnable( ctx, &attr, has_installed_entries );
+    }
+  } else {
+    ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
+    ctx->status = rtems_interrupt_vector_enable( ctx->vector );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then an interrupt occurred.
+  description: null
+  member: |
+    bool interrupt_occurred
+- brief: |
+    This member contains the current vector number.
+  description: null
+  member: |
+    rtems_vector_number vector
+- brief: |
+    If this member is true, then the ${../if/vector-enable:/params[0]/name}
+    parameter shall be valid.
+  description: null
+  member: |
+    bool valid_vector
+- brief: |
+    This member may contain the return value of the
+    ${../if/vector-enable:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static bool IsEnabled( const Context *ctx )
+  {
+    rtems_status_code sc;
+    bool              enabled;
+
+    enabled = false;
+    sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled );
+    T_rsc_success( sc );
+
+    return enabled;
+  }
+
+  static void Enable( const Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_vector_enable( ctx->vector );
+    T_rsc_success( sc );
+  }
+
+  static void Disable( const Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_vector_disable( ctx->vector );
+    T_rsc_success( sc );
+  }
+
+  static void EntryRoutine( void *arg )
+  {
+    Context *ctx;
+
+    (void) arg;
+    ctx = T_fixture_context();
+
+    T_true( IsEnabled( ctx ) );
+    Enable( ctx );
+    T_true( IsEnabled( ctx ) );
+    Disable( ctx );
+    T_false( IsEnabled( ctx ) );
+    ctx->interrupt_occurred = true;
+  }
+
+  static void CheckUnsatisfied( const Context *ctx )
+  {
+    rtems_status_code sc;
+    bool              enabled_before;
+    bool              enabled_after;
+
+    enabled_before = true;
+    sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled_before );
+    T_rsc_success( sc );
+
+    sc = rtems_interrupt_vector_enable( ctx->vector );
+    T_rsc( sc, RTEMS_UNSATISFIED );
+
+    enabled_after = !enabled_before;
+    sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled_after );
+    T_rsc_success( sc );
+
+    T_eq( enabled_before, enabled_after );
+  }
+
+  static void CheckVectorEnable(
+    Context                          *ctx,
+    const rtems_interrupt_attributes *attr,
+    bool                              has_installed_entries
+  )
+  {
+    rtems_status_code sc;
+
+    if ( !attr->maybe_enable ) {
+      CheckUnsatisfied( ctx );
+    } else if ( has_installed_entries ) {
+      T_true( IsEnabled( ctx ) );
+
+      if ( attr->can_disable ) {
+        Disable( ctx );
+        T_false( IsEnabled( ctx ) );
+      }
+
+      Enable( ctx );
+      T_true( IsEnabled( ctx ) );
+    } else if ( attr->is_maskable && attr->can_disable ) {
+      rtems_interrupt_entry entry;
+      bool                  enabled;
+
+      ctx->interrupt_occurred = false;
+      rtems_interrupt_entry_initialize( &entry, EntryRoutine, ctx, "Info" );
+      sc = rtems_interrupt_entry_install(
+        ctx->vector,
+        RTEMS_INTERRUPT_UNIQUE,
+        &entry
+      );
+      T_rsc_success( sc );
+
+      if ( attr->can_disable ) {
+        Disable( ctx );
+        T_false( IsEnabled( ctx ) );
+      }
+
+      Enable( ctx );
+      Enable( ctx );
+
+      enabled = false;
+      sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled );
+      T_rsc_success( sc );
+      T_true( enabled || ctx->interrupt_occurred || attr->maybe_enable );
+
+      sc = rtems_interrupt_entry_remove( ctx->vector, &entry );
+      T_rsc_success( sc );
+
+      T_true( !attr->can_disable || !IsEnabled( ctx ) );
+    }
+  }
+test-target: testsuites/validation/tc-intr-vector-enable.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    IsEnabled:
+    - specified-by: CanEnable
+  pre-conditions:
+    Vector:
+    - Valid
+    IsEnabled: all
+    CanEnable:
+    - 'Yes'
+    - Maybe
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    IsEnabled: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    IsEnabled: N/A
+    CanEnable: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    IsEnabled: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    IsEnabled: all
+    CanEnable:
+    - 'No'
+type: requirement

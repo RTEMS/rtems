@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The User Extensions Manager allows the application developer to augment the
+  executive by allowing them to supply extension routines which are invoked at
+  critical system events.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: null
+enabled-by: true
+identifier: RTEMSAPIClassicUserExt
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+name: User Extensions Manager
+text: |
+  The Classic API shall provide an interface to the User Extensions Manager.
+type: interface

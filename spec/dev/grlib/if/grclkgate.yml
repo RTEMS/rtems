@@ -1,0 +1,106 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRCLKGATE
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: grclkgate-header
+definition:
+- default:
+    count: 1
+    name: UNLOCK
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: CLKEN
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: RESET
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: OVERRIDE
+  offset: 0xc
+  variants: []
+register-prefix: null
+register-block-group: GRCLKGATE
+register-block-size: 16
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'UNLOCK'
+      start: 0
+      width: 11
+    variants: []
+  brief: |
+    Unlock register
+  description: null
+  name: UNLOCK
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ENABLE'
+      start: 0
+      width: 11
+    variants: []
+  brief: |
+    Clock enable register
+  description: null
+  name: CLKEN
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RESET'
+      start: 0
+      width: 11
+    variants: []
+  brief: |
+    Reset register
+  description: null
+  name: RESET
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FOVERRIDE'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'OVERRIDE'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    CPU/FPU override register
+  description: null
+  name: OVERRIDE
+  width: 32
+name: grclkgate
+notes: null
+type: interface

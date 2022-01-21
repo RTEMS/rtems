@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This interrupt signal variant indicates that the interrupt is triggered by a
+  falling edge signal.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: null
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enumerator
+links: []
+name: RTEMS_INTERRUPT_SIGNAL_EDGE_FALLING
+notes: null
+type: interface

@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/devolatile
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When ${../if/devolatile:/params[0]/name} is a non-volatile pointer type,
+  and ${../if/devolatile:/params[1]/name} is a pointer to a value of
+  volatile type,
+  and the types of ${../if/devolatile:/params[0]/name} and
+  ${../if/devolatile:/params[1]/name} are compatible in the sense of C,
+  the macro ${../if/devolatile:/name} shall result in an expression
+  which returns a pointer of type ${../if/devolatile:/params[0]/name} pointing
+  to the same address as ${../if/devolatile:/params[1]/name}.
+type: requirement

@@ -1,0 +1,482 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/construct
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: InvSize
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_SIZE );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-size:/name}.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/too-many:/name}.
+  - name: Unsat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+    text: |
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_message_queue_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->id_obj );
+    text: |
+      The unique object name shall identify the message queue constructed by
+      the ${../if/construct:/name} call.
+  - name: Invalid
+    test-code: |
+      sc = rtems_message_queue_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a message queue.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: IdObj
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_obj );
+      T_ne_u32( ctx->id_obj, INVALID_ID );
+    text: |
+      The value of the object referenced by the
+      ${../if/construct:/params[1]/name} parameter shall be set to the object
+      identifier of the constructed message queue after the return of the
+      ${../if/construct:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->id_obj, INVALID_ID );
+    text: |
+      Objects referenced by the ${../if/construct:/params[1]/name} parameter in
+      past calls to ${../if/construct:/name} shall not be accessed by the
+      ${../if/construct:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: StorageFree
+  states:
+  - name: Free
+    test-code: |
+      ctx->expected_storage_free_counter = 1;
+    text: |
+      The storage free handler of the message queue configuration specified by
+      the ${../if/construct:/params[0]/name} parameter shall be used to free
+      the message queue storage area.
+  - name: Nop
+    test-code: |
+      ctx->expected_storage_free_counter = 0;
+    text: |
+      No operation shall be performed to free the message queue storage area.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Config
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config = &ctx->config_obj;
+    text: |
+      While the ${../if/construct:/params[0]/name} parameter references an
+      object of type ${../if/config:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->config = NULL;
+    text: |
+      While the ${../if/construct:/params[0]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config_obj.name = NAME;
+    text: |
+      While the name of the message queue configuration is valid.
+  - name: Invalid
+    test-code: |
+      ctx->config_obj.name = 0;
+    text: |
+      While the name of the message queue configuration is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Id
+    test-code: |
+      ctx->id = &ctx->id_obj;
+    text: |
+      While the ${../if/construct:/params[1]/name} parameter references an
+      object of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/construct:/params[1]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: MaxPending
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config_obj.maximum_pending_messages = MAX_PENDING_MESSAGES;
+    text: |
+      While the maximum number of pending messages of the message queue
+      configuration is valid.
+  - name: Zero
+    test-code: |
+      ctx->config_obj.maximum_pending_messages = 0;
+    text: |
+      While the maximum number of pending messages of the message queue
+      configuration is zero.
+  - name: Big
+    test-code: |
+      ctx->config_obj.maximum_pending_messages = UINT32_MAX;
+    text: |
+      While the maximum number of pending messages of the message queue
+      configuration is big enough so that a calculation to get the message
+      buffer storage area size overflows.
+  test-epilogue: null
+  test-prologue: null
+- name: MaxSize
+  states:
+  - name: Valid
+    test-code: |
+      if ( ctx->config_obj.maximum_pending_messages == UINT32_MAX ) {
+        /*
+         * At least on 64-bit systems we need a bit of help to ensure that we
+         * meet the Big state of the MaxPending pre-condition.  The following
+         * message size is valid with respect to calculations involving only
+         * the message size.
+         */
+        ctx->config_obj.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
+          1 - sizeof( CORE_message_queue_Buffer );
+      } else {
+        ctx->config_obj.maximum_message_size = MAX_MESSAGE_SIZE;
+      }
+    text: |
+      While the maximum message size of the message queue configuration is
+      valid.
+  - name: Zero
+    test-code: |
+      ctx->config_obj.maximum_message_size = 0;
+    text: |
+      While the maximum message size of the message queue configuration is
+      zero.
+  - name: Big
+    test-code: |
+      ctx->config_obj.maximum_message_size = SIZE_MAX;
+    text: |
+      While the maximum message size of the message queue configuration is big
+      enough so that a calculation to get the message buffer storage area size
+      overflows.
+  test-epilogue: null
+  test-prologue: null
+- name: Free
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the system has at least one inactive message queue object
+      available.
+  - name: 'No'
+    test-code: |
+      i = 0;
+      ctx->seized_objects = T_seize_objects( Create, &i );
+    text: |
+      While the system has no inactive message queue object available.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+- name: Area
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config_obj.storage_area = buffers;
+    text: |
+      While the message buffer storage area begin pointer of the message queue
+      configuration is valid.
+  - name: 'Null'
+    test-code: |
+      ctx->config_obj.storage_area = NULL;
+    text: |
+      While the message buffer storage area begin pointer of the message queue
+      configuration is ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: AreaSize
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config_obj.storage_size = sizeof( buffers );
+    text: |
+      While the message buffer storage area size of the message queue
+      configuration is valid.
+  - name: Invalid
+    test-code: |
+      ctx->config_obj.storage_size = SIZE_MAX;
+    text: |
+      While the message buffer storage area size of the message queue
+      configuration is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: StorageFree
+  states:
+  - name: 'Null'
+    test-code: |
+      ctx->config_obj.storage_free = NULL;
+    text: |
+      While the storage free member of the message queue configuration is
+      equal to ${/c/if/null:/name}.
+  - name: Handler
+    test-code: |
+      ctx->config_obj.storage_free = StorageFree;
+    text: |
+      While the storage free member of the message queue configuration
+      references a storage free handler.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_message_queue_construct( ctx->config, ctx->id );
+test-brief: null
+test-cleanup: |
+  if ( ctx->id_obj != INVALID_ID ) {
+    rtems_status_code sc;
+
+    sc = rtems_message_queue_delete( ctx->id_obj );
+    T_rsc_success( sc );
+
+    T_eq_u32( ctx->storage_free_counter, ctx->expected_storage_free_counter );
+  } else {
+    T_eq_u32( ctx->storage_free_counter, 0 );
+  }
+
+  T_surrender_objects( &ctx->seized_objects, rtems_message_queue_delete );
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+- brief: null
+  description: null
+  member: |
+    const rtems_message_queue_config *config
+- brief: null
+  description: null
+  member: |
+    rtems_message_queue_config config_obj
+- brief: null
+  description: null
+  member: |
+    rtems_id *id
+- brief: null
+  description: null
+  member: |
+    rtems_id id_obj
+- brief: null
+  description: null
+  member: |
+    void *seized_objects
+- brief: null
+  description: null
+  member: |
+    uint32_t storage_free_counter
+- brief: null
+  description: null
+  member: |
+    uint32_t expected_storage_free_counter
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->id_obj = INVALID_ID;
+  ctx->storage_free_counter = 0;
+  ctx->expected_storage_free_counter = UINT32_MAX;
+  memset( &ctx->config_obj, 0, sizeof( ctx->config_obj ) );
+test-setup: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define MAX_MESSAGE_QUEUES 4
+
+  #define MAX_PENDING_MESSAGES 1
+
+  #define MAX_MESSAGE_SIZE 1
+
+  typedef ${.:/test-context-type} Context;
+
+  static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
+    buffers_to_seize[ MAX_MESSAGE_QUEUES ][ MAX_PENDING_MESSAGES ];
+
+  static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
+    buffers[ MAX_PENDING_MESSAGES ];
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    rtems_message_queue_config config;
+    size_t                    *i;
+
+    i = arg;
+    T_quiet_lt_sz( *i, MAX_MESSAGE_QUEUES );
+
+    memset( &config, 0, sizeof( config ) );
+    config.name = rtems_build_name( 'S', 'I', 'Z', 'E' );
+    config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+    config.maximum_message_size = MAX_MESSAGE_SIZE;
+    config.storage_size = sizeof( buffers_to_seize[ *i ] );
+    config.storage_area = buffers_to_seize[ *i ];
+    config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
+
+    ++(*i);
+
+    return rtems_message_queue_construct( &config, id );
+  }
+
+  static void StorageFree( void *ptr )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    T_eq_ptr( ptr, buffers );
+    ++ctx->storage_free_counter;
+  }
+test-target: testsuites/validation/tc-message-construct.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Config: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Name: Invalid
+      then: InvName
+    - if:
+        pre-conditions:
+          Id: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          MaxPending: Zero
+      then: InvNum
+    - if:
+        pre-conditions:
+          MaxSize: Zero
+      then: InvSize
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+        pre-conditions:
+          MaxSize: Big
+      then: InvSize
+    - if:
+        pre-conditions:
+          MaxPending: Big
+      then: InvNum
+    - if:
+        pre-conditions:
+          Area: 'Null'
+      then: Unsat
+    - if:
+        pre-conditions:
+          AreaSize: Invalid
+      then: Unsat
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdObj:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    StorageFree:
+    - if:
+        and:
+        - post-conditions:
+            Status: Ok
+        - pre-conditions:
+            StorageFree: 'Null'
+      then: Nop
+    - if:
+        and:
+        - post-conditions:
+            Status: Ok
+        - pre-conditions:
+            StorageFree: Handler
+      then: Free
+    - else: N/A
+  pre-conditions:
+    Area: all
+    AreaSize: all
+    Config: all
+    Id: all
+    MaxPending: all
+    MaxSize: all
+    Name: all
+    Free: all
+    StorageFree: all
+type: requirement

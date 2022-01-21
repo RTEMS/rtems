@@ -1,0 +1,225 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/delete
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      ctx->message_queue_id = 0;
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_message_queue_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->message_queue_id );
+    text: |
+      The unique object name shall identify a message queue.
+  - name: Invalid
+    test-code: |
+      sc = rtems_message_queue_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a message queue.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: Flush
+  states:
+  - name: 'Yes'
+    test-code: |
+      ++ctx->wait_expected;
+      T_eq_u32( ctx->wait_done, ctx->wait_expected );
+    text: |
+      Tasks waiting at the message queue shall be unblocked.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->wait_done, ctx->wait_expected );
+    text: |
+      Tasks waiting at the message queue shall remain blocked.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->id = 0;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is not associated
+      with a message queue.
+  - name: MsgQueue
+    test-code: |
+      ctx->id = ctx->message_queue_id;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      a message queue.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_message_queue_delete( ctx->id );
+test-brief: null
+test-cleanup: |
+  if ( ctx->message_queue_id != 0 ) {
+    rtems_status_code sc;
+
+    sc = rtems_message_queue_delete( ctx->message_queue_id );
+    T_rsc_success( sc );
+
+    ++ctx->wait_expected;
+    T_eq_u32( ctx->wait_done, ctx->wait_expected );
+
+    ctx->message_queue_id = 0;
+  }
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_id message_queue_id
+- brief: null
+  description: null
+  member: |
+    uint32_t wait_done
+- brief: null
+  description: null
+  member: |
+    uint32_t wait_expected
+- brief: null
+  description: null
+  member: |
+    rtems_id id
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_task_priority prio;
+
+  prio = SetPriority( ctx->worker_id, PRIO_HIGH );
+  T_true( prio == PRIO_LOW || prio == PRIO_HIGH );
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define MAX_PENDING_MESSAGES 1
+
+  #define MAX_MESSAGE_SIZE 1
+
+  typedef ${.:/test-context-type} Context;
+
+  static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
+    buffers[ MAX_PENDING_MESSAGES ];
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code          sc;
+      rtems_message_queue_config config;
+      char                       buffer[ MAX_MESSAGE_SIZE ];
+      size_t                     size;
+      rtems_task_priority        prio;
+
+      memset( &config, 0, sizeof( config ) );
+      config.name = NAME;
+      config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+      config.maximum_message_size = MAX_MESSAGE_SIZE;
+      config.storage_size = sizeof( buffers );
+      config.storage_area = buffers;
+      config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
+
+      T_eq_u32( ctx->message_queue_id, 0 );
+
+      sc = rtems_message_queue_construct( &config, &ctx->message_queue_id );
+      T_rsc_success( sc );
+
+      size = SIZE_MAX;
+      sc = rtems_message_queue_receive(
+        ctx->message_queue_id,
+        buffer,
+        &size,
+        RTEMS_WAIT,
+        RTEMS_NO_TIMEOUT
+      );
+      T_rsc( sc, RTEMS_OBJECT_WAS_DELETED );
+      T_eq_sz( size, SIZE_MAX );
+
+      ++ctx->wait_done;
+
+      prio = SetSelfPriority( PRIO_LOW );
+      T_eq_u32( prio, PRIO_HIGH );
+    }
+  }
+test-target: testsuites/validation/tc-message-delete.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Name: Invalid
+    Flush: 'Yes'
+  pre-conditions:
+    Id:
+    - MsgQueue
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Name: Valid
+    Flush: 'No'
+  pre-conditions:
+    Id:
+    - NoObj
+type: requirement

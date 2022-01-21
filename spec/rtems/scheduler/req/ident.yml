@@ -1,0 +1,160 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/ident
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/ident:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/ident:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+    text: |
+      The return status of ${../if/ident:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: IdVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_eq_u32( ctx->id_value, 0x0f010001 );
+    text: |
+      The value of the object referenced by the ${../if/ident:/params[1]/name}
+      parameter shall be set to the identifier of the scheduler with the lowest
+      scheduler index and a name equal to the ${../if/ident:/params[0]/name}
+      parameter after the return of the ${../if/ident:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      Objects referenced by the ${../if/ident:/params[1]/name} parameter in
+      past calls to ${../if/ident:/name} shall not be accessed by the
+      ${../if/ident:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->name = 0;
+    text: |
+      While the ${../if/ident:/params[0]/name} parameter is not associated with
+      a scheduler.
+  - name: Valid
+    test-code: |
+      ctx->name = TEST_SCHEDULER_A_NAME;
+    text: |
+      While the ${../if/ident:/params[0]/name} parameter is associated with a
+      scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/ident:/params[1]/name} parameter references an object
+      of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/ident:/params[1]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_scheduler_ident( ctx->name, ctx->id );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the object referenced by the
+    ${../if/ident:/params[1]/name} parameter.
+  description: null
+  member: |
+    rtems_id id_value
+- brief: |
+    This member contains the return value of the ${../if/ident:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/ident:/params[0]/name} parameter
+    value.
+  description: null
+  member: |
+    rtems_name name
+- brief: |
+    This member specifies if the ${../if/ident:/params[1]/name} parameter
+    value.
+  description: null
+  member: |
+    rtems_id *id
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  ctx->id_value = INVALID_ID;
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-scheduler-ident.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    IdVar: Set
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    IdVar: Nop
+  pre-conditions:
+    Name: all
+    Id:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+    IdVar: Nop
+  pre-conditions:
+    Name:
+    - Invalid
+    Id:
+    - Valid
+type: requirement

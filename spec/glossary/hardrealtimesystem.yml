@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: hard real-time system
+text: |
+  A real-time system in which a missed deadline causes the worked performed
+  to have no value or to result in a catastrophic effect on the integrity
+  of the system.
+type: glossary

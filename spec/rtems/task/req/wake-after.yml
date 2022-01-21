@@ -1,0 +1,266 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/wake-after
+- role: interface-function
+  uid: ../if/yield-processor
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/wake-after:/name} shall be
+      ${../../status/if/successful:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Inactive
+    test-code: |
+      T_eq_int( ctx->timer_info.state, TASK_TIMER_INACTIVE );
+    text: |
+      The timer of the calling task shall be inactive.
+  - name: Ticks
+    test-code: |
+      T_eq_int( ctx->timer_info.state, TASK_TIMER_TICKS );
+    text: |
+      The timer of the calling task shall be active using the
+      ${/glossary/clock-tick:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Expire
+  states:
+  - name: Relative
+    test-code: |
+      T_eq_u64( ctx->timer_info.expire_ticks, ctx->now + UINT32_MAX );
+    text: |
+      The timer of the calling task shall expire at the time point specified by
+      the sum of the current ${/glossary/clock-tick:/term} and the interval
+      specified by the ${../if/wake-after:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Block
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].operation,
+        T_SCHEDULER_BLOCK
+      );
+    text: |
+      The calling task shall be blocked by the scheduler exactly once by the
+      ${../if/wake-after:/name} call.
+  - name: Yield
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].operation,
+        T_SCHEDULER_YIELD
+      );
+    text: |
+      The calling task shall yield by the scheduler exactly once by the
+      ${../if/wake-after:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      The calling task shall not carry out a scheduler operation through the
+      ${../if/wake-after:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Ticks
+  states:
+  - name: Yield
+    test-code: |
+      ctx->ticks = RTEMS_YIELD_PROCESSOR;
+    text: |
+      While the ${../if/wake-after:/params[0]/name} parameter is equal to
+      ${../if/yield-processor:/name}.
+  - name: Interval
+    test-code: |
+      ctx->ticks = UINT32_MAX;
+    text: |
+      While the ${../if/wake-after:/params[0]/name} parameter is not equal to
+      ${../if/yield-processor:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspended = true;
+    text: |
+      While the calling task is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspended = false;
+    text: |
+      While the calling task is not suspended.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ResumeTask( ctx->worker_id );
+  (void) T_scheduler_record( NULL );
+  GetTaskTimerInfo( ctx->worker_id, &ctx->timer_info );
+
+  if ( ctx->suspended ) {
+    ResumeTask( ctx->worker_id );
+  }
+
+  FinalClockTick();
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_4 scheduler_log;
+- brief: |
+    This member contains the ${/glossary/clock-tick:/term} value before the
+    ${../if/wake-after:/name} call.
+  description: null
+  member: |
+    uint64_t now;
+- brief: |
+    This member contains the worker task identifier.
+  description: null
+  member: |
+    rtems_id worker_id;
+- brief: |
+    If this member is true, then the worker shall be suspended during the
+    ${../if/wake-after:/name} call.
+  description: null
+  member: |
+    bool suspended;
+- brief: |
+    This member contains the timer information of the worker task.
+  description: null
+  member: |
+    TaskTimerInfo timer_info;
+- brief: |
+    This member contains the return value of the ${../if/wake-after:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies the ${../if/wake-after:/params[0]/name} parameter
+    value.
+  description: null
+  member: |
+    rtems_interval ticks
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/score/timecounter.h
+- rtems/score/threaddispatch.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->status = RTEMS_NOT_IMPLEMENTED;
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      T_scheduler_log *log;
+
+      SuspendSelf();
+
+      ctx->now = rtems_clock_get_ticks_since_boot();
+
+      if ( ctx->suspended ) {
+        Per_CPU_Control *cpu_self;
+
+        /*
+         * The rtems_task_wake_after() disables thread dispatching to carry out
+         * its operations. While thread dispatching is disabled, when an
+         * interrupt suspends the calling task, the suspended task executes
+         * until it enables thread dispatching.  We simulate this situation
+         * with the code below.  Where the system was built with SMP support
+         * enabled, other processors may suspend an executing task in parallel.
+         * This case is also simulated by the code below.
+         */
+        cpu_self = _Thread_Dispatch_disable();
+        SuspendSelf();
+        cpu_self->dispatch_necessary = false;
+        _Thread_Dispatch_enable( cpu_self );
+      }
+
+      log = T_scheduler_record_4( &ctx->scheduler_log );
+      T_null( log );
+
+      ctx->status = rtems_task_wake_after( ctx->ticks );
+
+      (void) T_scheduler_record( NULL );
+    }
+  }
+test-target: testsuites/validation/tc-task-wake-after.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Timer: Ticks
+    Expire: Relative
+    Scheduler:
+    - if:
+        pre-conditions:
+          Suspended: 'Yes'
+      then: Nop
+    - else: Block
+  pre-conditions:
+    Ticks:
+    - Interval
+    Suspended: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Timer: Inactive
+    Expire: N/A
+    Scheduler:
+    - if:
+        pre-conditions:
+          Suspended: 'Yes'
+      then: Nop
+    - else: Yield
+  pre-conditions:
+    Ticks:
+    - Yield
+    Suspended: all
+type: requirement

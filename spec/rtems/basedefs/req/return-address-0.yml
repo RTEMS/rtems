@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/return-address
+non-functional-type: interface
+rationale: |
+  From the GNU C compiler documentation:
+
+  * When inlining the expected behavior is that the function returns
+    the address of the function that is returned to.
+  * When the top of the stack has been reached, this function returns
+    an unspecified value.
+  * Additional post-processing of the returned value may be needed, see
+    ``__builtin_extract_return_addr``.
+  * The stored representation of the return address in memory may be
+    different from the address returned by ``__builtin_return_address``.
+
+  Under these circumstances it is at least difficult to specify
+  what the actual result of this macro is.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  the ${../if/return-address:/name} macro shall evaluate to the
+  code ``__builtin_return_address( 0 )``.
+type: requirement

@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This constant evaluates to ${../../basedefs/if/true:/name}, if this processor
+  variant has hardware floating point support, otherwise to
+  ${../../basedefs/if/false:/name}.
+copyrights:
+- Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/cpu/if/hardware-fp:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/constant-not-pre-qualified
+name: RTEMS_HAS_HARDWARE_FP
+notes: null
+type: interface

@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/if/max-thread-local-storage-size
+test-brief: |
+  This validation test suite contains a test case which triggers a fatal error
+  during system initialization.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define FATAL_SYSINIT_RUN AcfgValFatalTooLargeTlsSize_Run
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE \
+    RTEMS_TASK_STORAGE_ALIGNMENT
+
+  #include "ts-fatal-sysinit.h"
+test-description: null
+test-includes: []
+test-local-includes:
+- tr-fatal-too-large-tls-size.h
+test-suite-name: FatalTooLargeTlsSize
+test-target: testsuites/validation/ts-fatal-too-large-tls-size.c
+type: test-suite

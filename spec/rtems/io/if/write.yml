@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Writes to the device specified by the device major and minor numbers.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${device-major-number:/name} ${.:/params[0]/name}
+    - ${device-minor-number:/name} ${.:/params[1]/name}
+    - void *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive calls the device driver write entry registered in the Device
+  Driver Table for the specified device major number.
+enabled-by: true
+index-entries:
+- write to a device
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+name: rtems_io_write
+notes: |
+  Write operations typically require a buffer address as part of the argument
+  parameter block.  The contents of this buffer will be sent to the device.
+params:
+- description: |
+    is the major number of the device.
+  dir: null
+  name: major
+- description: |
+    is the minor number of the device.
+  dir: null
+  name: minor
+- description: |
+    is the argument passed to the device driver write entry.
+  dir: null
+  name: argument
+return:
+  return: |
+    Other status codes may be returned by the device driver write entry.
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The device major number was invalid.
+    value: ${../../status/if/invalid-number:/name}
+type: interface

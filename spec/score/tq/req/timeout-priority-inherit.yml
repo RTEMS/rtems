@@ -1,0 +1,1278 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int(
+        ctx->tq_ctx->status[ THREAD ],
+        TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL )
+      );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: Timeout
+    test-code: |
+      T_eq_int(
+        ctx->tq_ctx->status[ THREAD ],
+        TQConvertStatus( ctx->tq_ctx, STATUS_TIMEOUT )
+      );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/timeout:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_true( GetUnblock( ctx, &i ) );
+      T_false( GetUnblock( ctx, &i ) );
+    text: |
+      The thread shall be unblocked by the timeout operation.
+  - name: 'No'
+    test-code: |
+      T_false( GetUnblock( ctx, &i ) );
+    text: |
+      The thread shall not be unblocked by the timeout operation.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+- name: OwnerPriority
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->owner_priority_after, ctx->owner_priority );
+    text: |
+      The priority of the owner with respect to the scheduler shall not change
+      by the timeout operation.
+  - name: Lower
+    test-code: |
+      T_eq_u32( ctx->owner_priority_after, ctx->owner_priority + 1 );
+    text: |
+      The priority of the owner with respect to the scheduler shall be lowered
+      to the next highest priority.
+  - name: Drop
+    test-code: |
+      T_eq_u32( ctx->owner_priority_after, PRIO_INVALID );
+    text: |
+      The owner shall not have a priority with respect to the scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerOwnerPriority
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->owner_owner_priority_after, ctx->owner_owner_priority );
+    text: |
+      The priority of the owner of the thread queue on which the owner is
+      enqueued with respect to the scheduler shall not change by the timeout
+      operation.
+  - name: Lower
+    test-code: |
+      T_eq_u32( ctx->owner_owner_priority_after, ctx->owner_owner_priority + 1 );
+    text: |
+      The priority of the owner of the thread queue on which the owner is
+      enqueued with respect to the scheduler shall be lowered to the next
+      highest priority.
+  - name: Drop
+    test-code: |
+      T_eq_u32( ctx->owner_owner_priority_after, PRIO_INVALID );
+    text: |
+      The owner of the thread queue on which the owner is enqueued shall not
+      have a priority with respect to the scheduler.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: HomeScheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->scheduler_id = SCHEDULER_A_ID;
+    text: |
+      While the ${/glossary/scheduler-home:/term} of the thread is the
+      ${/glossary/scheduler-home:/term} of the thread queue owner.
+  - name: Helping
+    test-code: |
+      ctx->scheduler_id = SCHEDULER_B_ID;
+    text: |
+      While the ${/glossary/scheduler-home:/term} of the thread is a
+      ${/glossary/scheduler-helping:/term} of the thread queue owner.
+  test-epilogue: null
+  test-prologue: null
+- name: EligibleScheduler
+  states:
+  - name: One
+    test-code: |
+      ctx->other_scheduler = false;
+    text: |
+      While the thread has exactly one ${/glossary/scheduler-eligible:/term}.
+  - name: More
+    test-code: |
+      ctx->other_scheduler = true;
+    text: |
+      While the thread has at least two ${/glossary/scheduler-eligible:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Queue
+  states:
+  - name: Only
+    test-code: |
+      ctx->queue_node = TQ_NODE_ONLY;
+    text: |
+      While the priority node of the thread is the only priority node in the
+      priority queue associated with the scheduler of the thread queue.
+  - name: Vital
+    test-code: |
+      ctx->queue_node = TQ_NODE_VITAL;
+    text: |
+      While the priority node of the thread is not the only priority node in
+      the priority queue associated with the scheduler of the thread queue,
+      while the priority node of the thread is the highest priority node in the
+      priority queue.
+  - name: Dispensable
+    test-code: |
+      ctx->queue_node = TQ_NODE_DISPENSABLE;
+    text: |
+      While the priority node of the thread is not the only priority node in
+      the priority queue associated with the scheduler of the thread queue,
+      while the priority node of the thread is not the highest priority node in
+      the priority queue.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerPriority
+  states:
+  - name: Only
+    test-code: |
+      ctx->owner_node = TQ_NODE_ONLY;
+    text: |
+      While the priority node of the thread queue is the only priority node
+      associated with the scheduler available to the owner.
+  - name: Vital
+    test-code: |
+      ctx->owner_node = TQ_NODE_VITAL;
+    text: |
+      While the priority node of the thread queue is not the only priority node
+      associated with the scheduler available to the owner,
+      while the priority node of the thread queue is the highest priority node
+      available to the owner.
+  - name: Dispensable
+    test-code: |
+      ctx->owner_node = TQ_NODE_DISPENSABLE;
+    text: |
+      While the priority node of the thread queue is not the only priority node
+      associated with the scheduler available to the owner,
+      while the priority node of the thread queue is not the highest priority
+      node available to the owner.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerState
+  states:
+  - name: NotEnqueued
+    test-code: |
+      ctx->owner_obtain = 0;
+      ctx->owner_release = 0;
+    text: |
+      While the owner of the thread queue is not enqueued on a thread queue.
+  - name: FIFO
+    test-code: |
+      ctx->owner_obtain = TQ_EVENT_MUTEX_FIFO_OBTAIN;
+      ctx->owner_release = TQ_EVENT_MUTEX_FIFO_RELEASE;
+    text: |
+      While the owner of the thread queue is enqueued on a thread queue in FIFO
+      order.
+  - name: Priority
+    test-code: |
+      ctx->owner_obtain = TQ_EVENT_MUTEX_NO_PROTOCOL_OBTAIN;
+      ctx->owner_release = TQ_EVENT_MUTEX_NO_PROTOCOL_RELEASE;
+    text: |
+      While the owner of the thread queue is enqueued on a thread queue in
+      priority order.
+  - name: PriorityInherit
+    test-code: |
+      ctx->owner_obtain = TQ_EVENT_MUTEX_C_OBTAIN;
+      ctx->owner_release = TQ_EVENT_MUTEX_C_RELEASE;
+    text: |
+      While the owner of the thread queue is enqueued on a thread queue in
+      priority order with priority inheritance.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerQueue
+  states:
+  - name: Only
+    test-code: |
+      ctx->owner_queue_node = TQ_NODE_ONLY;
+    text: |
+      While the priority node of the owner is the only priority node in the
+      priority queue associated with the scheduler of the thread queue on which
+      the owner is enqueued.
+  - name: Vital
+    test-code: |
+      ctx->owner_queue_node = TQ_NODE_VITAL;
+    text: |
+      While the priority node of the owner is not the only priority node in the
+      priority queue associated with the scheduler of the thread queue on which
+      the owner is enqueued,
+      while the priority node of the owner is the highest priority node in the
+      priority queue.
+  - name: Dispensable
+    test-code: |
+      ctx->owner_queue_node = TQ_NODE_DISPENSABLE;
+    text: |
+      While the priority node of the owner is not the only priority node in the
+      priority queue associated with the scheduler of the thread queue on which
+      the owner is enqueued,
+      while the priority node of the owner is not the highest priority node in
+      the priority queue.
+  test-epilogue: null
+  test-prologue: null
+- name: OwnerOwnerPriority
+  states:
+  - name: Only
+    test-code: |
+      ctx->owner_owner_node = TQ_NODE_ONLY;
+    text: |
+      While the priority node of the thread queue on which the owner is
+      enqueued is the only priority node associated with the scheduler
+      available to the owner of the thread queue on which the owner is
+      enqueued.
+  - name: Vital
+    test-code: |
+      ctx->owner_owner_node = TQ_NODE_VITAL;
+    text: |
+      While the priority node of the thread queue on which the owner is
+      enqueued is not the only priority node associated with the scheduler
+      available to the owner of the thread queue on which the owner is
+      enqueued,
+      while the priority node of the thread queue on which the owner is
+      enqueued is the highest priority node available to the owner of the
+      thread queue on which the owner is enqueued.
+  - name: Dispensable
+    test-code: |
+      ctx->owner_owner_node = TQ_NODE_DISPENSABLE;
+    text: |
+      While the priority node of the thread queue on which the owner is
+      enqueued is not the only priority node associated with the scheduler
+      available to the owner of the thread queue on which the owner is
+      enqueued,
+      while the priority node of the thread queue is on which the owner is
+      enqueued not the highest priority node available to the owner of the
+      thread queue on which the owner is enqueued.
+  test-epilogue: null
+  test-prologue: null
+- name: WaitState
+  states:
+  - name: Blocked
+    test-code: |
+      ctx->wait_state = TQ_WAIT_STATE_BLOCKED;
+    text: |
+      While the thread is in the blocked wait state.
+  - name: IntendToBlock
+    test-code: |
+      ctx->wait_state = TQ_WAIT_STATE_INTEND_TO_BLOCK;
+    text: |
+      While the thread is in the intend to block wait state.
+  - name: ReadyAgain
+    test-code: |
+      ctx->wait_state = TQ_WAIT_STATE_READY_AGAIN;
+    text: |
+      While the thread is in the ready again wait state.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  ReadyAgainNeedsSurrender: |
+    For the ready again wait state, the owner must surrender the thread queue
+    to the thread.
+  OnlyOneCPU: |
+    Where the system was built with SMP support disabled, exactly one scheduler
+    is present in an application using exactly one processor.
+  HomeHasRealPriority: |
+    There is always at least the ${/glossary/priority-real:/term} available
+    for the ${/glossary/scheduler-home:/term}.
+  DispensableStopsVital: |
+    Vital priority nodes cannot be after a dispensable priority node.
+test-action: |
+  rtems_task_priority priority;
+
+  priority = PRIO_FLEXIBLE;
+  TQSetScheduler( ctx->tq_ctx, THREAD, ctx->scheduler_id, priority );
+
+  TQSend(
+    ctx->tq_ctx,
+    OWNER,
+    TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_ENQUEUE
+  );
+
+  if ( ctx->owner_obtain != 0 ) {
+    TQSend(
+      ctx->tq_ctx,
+      OWNER_OWNER,
+      TQ_EVENT_MUTEX_B_OBTAIN | ctx->owner_obtain
+    );
+    TQSend( ctx->tq_ctx, OWNER, ctx->owner_obtain | ctx->owner_release );
+  }
+
+  PrepareThread( ctx );
+  priority = PrepareQueue( ctx, priority );
+  priority = PrepareOwner( ctx, priority );
+  priority = PrepareOwnerQueue( ctx, priority );
+  PrepareOwnerOwner( ctx, priority );
+
+  TQClearDone( ctx->tq_ctx, THREAD );
+
+  switch ( ctx->wait_state ) {
+    case TQ_WAIT_STATE_BLOCKED:
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD,
+        TQ_EVENT_ENQUEUE_TIMED
+      );
+      Tick( ctx );
+      GetPriorities( ctx );
+      TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_SURRENDER );
+      break;
+    case TQ_WAIT_STATE_INTEND_TO_BLOCK:
+      T_scheduler_set_event_handler( SchedulerBlock, ctx );
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD,
+        TQ_EVENT_ENQUEUE_TIMED
+      );
+      GetPriorities( ctx );
+      TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_SURRENDER );
+      break;
+    case TQ_WAIT_STATE_READY_AGAIN:
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD,
+        TQ_EVENT_ENQUEUE_TIMED
+      );
+      T_scheduler_set_event_handler( SchedulerUnblock, ctx );
+      TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_SURRENDER );
+      GetPriorities( ctx );
+      TQSend( ctx->tq_ctx, THREAD, TQ_EVENT_SURRENDER );
+      break;
+  }
+
+  TQWaitForDone( ctx->tq_ctx, THREAD );
+  TQWaitForExecutionStop( ctx->tq_ctx, THREAD );
+test-brief: null
+test-cleanup: |
+  if ( ctx->owner_obtain != 0 ) {
+    TQSend(
+      ctx->tq_ctx,
+      OWNER_OWNER,
+      TQ_EVENT_MUTEX_B_RELEASE | ctx->owner_release
+    );
+
+    if ( ctx->owner_queue_helper_release ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        OWNER_QUEUE_HELPER,
+        ctx->owner_release
+      );
+    }
+
+    if ( ctx->owner_owner_helper_release ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        OWNER_OWNER_HELPER,
+        TQ_EVENT_MUTEX_B_RELEASE
+      );
+    }
+  }
+
+  TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_MUTEX_A_RELEASE );
+
+  if ( ctx->queue_helper_surrender ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      QUEUE_HELPER,
+      TQ_EVENT_SURRENDER
+    );
+  }
+
+  if ( ctx->owner_helper_release ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      OWNER_HELPER,
+      TQ_EVENT_MUTEX_A_RELEASE
+    );
+  }
+
+  if ( ctx->other_scheduler ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      THREAD,
+      TQ_EVENT_MUTEX_D_RELEASE
+    );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      THREAD_HELPER_A,
+      TQ_EVENT_MUTEX_D_RELEASE
+    );
+
+    if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD_HELPER_B,
+        TQ_EVENT_MUTEX_D_RELEASE
+      );
+    }
+  }
+test-context:
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+- brief: |
+    This member specifies the scheduler of the thread.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    If this member is true, then the thread shall have at least two
+    ${/glossary/scheduler-eligible:/term}.
+  description: null
+  member: |
+    bool other_scheduler
+- brief: |
+    This member specifies the queue node kind.
+  description: null
+  member: |
+    TQNodeKind queue_node
+- brief: |
+    This member specifies the owner priority node kind.
+  description: null
+  member: |
+    TQNodeKind owner_node
+- brief: |
+    This member specifies which mutex obtain event shall be used to block the
+    thread queue owner.
+  description: null
+  member: |
+    rtems_event_set owner_obtain
+- brief: |
+    This member specifies which mutex release event shall be used to unblock
+    the thread queue owner.
+  description: null
+  member: |
+    rtems_event_set owner_release
+- brief: |
+    This member specifies the owner queue node kind.
+  description: null
+  member: |
+    TQNodeKind owner_queue_node
+- brief: |
+    This member specifies the kind of the priority node of the owner of the
+    thread queue on which the owner of the thread queue is blocked.
+  description: null
+  member: |
+    TQNodeKind owner_owner_node
+- brief: |
+    This member specifies the wait state.
+  description: null
+  member: |
+    TQWaitState wait_state
+- brief: |
+    This member contains the thread queue priority.
+  description: null
+  member: |
+    rtems_task_priority queue_priority
+- brief: |
+    This member contains the owner priority.
+  description: null
+  member: |
+    rtems_task_priority owner_priority
+- brief: |
+    This member contains the owner priority after the timeout or surrender.
+  description: null
+  member: |
+    rtems_task_priority owner_priority_after
+- brief: |
+    This member contains the priority of the thread queue on which the owner is
+    enqueued.
+  description: null
+  member: |
+    rtems_task_priority owner_queue_priority
+- brief: |
+    This member contains the priority of the owner of the thread queue on which
+    the owner is enqueued.
+  description: null
+  member: |
+    rtems_task_priority owner_owner_priority
+- brief: |
+    This member contains the priority after the timeout or surrender of the
+    owner of the thread queue on which the owner is enqueued.
+  description: null
+  member: |
+    rtems_task_priority owner_owner_priority_after
+- brief: |
+    If this member is true, then the queue helper shall surrender the thread
+    queue.
+  description: null
+  member: |
+    bool queue_helper_surrender
+- brief: |
+    If this member is true, then the owner helper shall release mutex A.
+  description: null
+  member: |
+    bool owner_helper_release
+- brief: |
+    If this member is true, then the owner queue helper shall release the mutex
+    on which the owner is blocked.
+  description: null
+  member: |
+    bool owner_queue_helper_release
+- brief: |
+    If this member is true, then helper of the owner of the mutex which the
+    owner blocked shall release mutex B.
+  description: null
+  member: |
+    bool owner_owner_helper_release
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-timeout-priority-inherit.h
+test-includes:
+- rtems/score/smpimpl.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tr-tq-timeout-priority-inherit.h
+test-prepare: |
+  ctx->queue_helper_surrender = false;
+  ctx->owner_helper_release = false;
+  ctx->owner_queue_helper_release = false;
+  ctx->owner_owner_helper_release = false;
+test-setup:
+  brief: null
+  code: |
+    ctx->request.arg = ctx;
+    TQReset( ctx->tq_ctx );
+    SetSelfPriority( PRIO_NEARLY_IDLE );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  #define THREAD TQ_BLOCKER_A
+
+  #define THREAD_HELPER_A TQ_HELPER_B
+
+  #define THREAD_HELPER_B TQ_HELPER_C
+
+  #define QUEUE_HELPER TQ_BLOCKER_B
+
+  #define OWNER TQ_BLOCKER_C
+
+  #define OWNER_HELPER TQ_BLOCKER_D
+
+  #define OWNER_QUEUE_HELPER TQ_BLOCKER_E
+
+  #define OWNER_OWNER TQ_WORKER_F
+
+  #define OWNER_OWNER_HELPER TQ_HELPER_A
+
+  static bool GetUnblock( const Context *ctx, size_t *index )
+  {
+    while ( true ) {
+      const T_scheduler_event *event;
+
+      event = TQGetNextUnblock( ctx->tq_ctx, index );
+
+      if ( event == &T_scheduler_event_null ) {
+        return false;
+      }
+
+      if ( event->thread == ctx->tq_ctx->worker_tcb[ THREAD ] ) {
+        return true;
+      }
+    }
+  }
+
+  static void Tick( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    FinalClockTick();
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK &&
+      event->thread == ctx->tq_ctx->worker_tcb[ THREAD ]
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = Tick;
+      CallWithinISRSubmit( &ctx->request );
+    }
+  }
+
+  static void ThreadTimeout( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    _Thread_Timeout(
+      &ctx->tq_ctx->worker_tcb[ THREAD ]->Timer.Watchdog
+    );
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  static void SchedulerUnblock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_UNBLOCK &&
+      event->thread == ctx->tq_ctx->worker_tcb[ THREAD ]
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+
+      if ( ctx->scheduler_id == SCHEDULER_B_ID ) {
+  #if defined(RTEMS_SMP)
+        _SMP_Unicast_action( 1, ThreadTimeout, ctx );
+  #else
+        T_unreachable();
+  #endif
+      } else {
+        ctx->request.handler = ThreadTimeout;
+        CallWithinISRSubmit( &ctx->request );
+      }
+    }
+  }
+
+  static void GetPriorities( Context *ctx )
+  {
+    ctx->owner_priority_after = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ OWNER ],
+      ctx->scheduler_id
+    );
+    ctx->owner_owner_priority_after = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ OWNER_OWNER ],
+      ctx->scheduler_id
+    );
+  }
+
+  static void PrepareThread( const Context *ctx )
+  {
+    if ( ctx->other_scheduler ) {
+      rtems_id other_scheduler_id;
+
+      if ( ctx->scheduler_id == SCHEDULER_A_ID ) {
+        other_scheduler_id = SCHEDULER_B_ID;
+      } else {
+        other_scheduler_id = SCHEDULER_B_ID;
+      }
+
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD,
+        TQ_EVENT_MUTEX_D_OBTAIN
+      );
+
+      TQSetScheduler(
+        ctx->tq_ctx,
+        THREAD_HELPER_A,
+        other_scheduler_id,
+        PRIO_NEARLY_IDLE - 1
+      );
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD_HELPER_A,
+        TQ_EVENT_MUTEX_D_OBTAIN
+      );
+
+      if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+        TQSetScheduler(
+          ctx->tq_ctx,
+          THREAD_HELPER_B,
+          SCHEDULER_C_ID,
+          PRIO_NORMAL
+        );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          THREAD_HELPER_B,
+          TQ_EVENT_MUTEX_D_OBTAIN
+        );
+      }
+    }
+  }
+
+  static rtems_task_priority PrepareQueue(
+    Context            *ctx,
+    rtems_task_priority priority
+  )
+  {
+    switch ( ctx->queue_node ) {
+      case TQ_NODE_ONLY:
+        ctx->queue_helper_surrender = false;
+        break;
+      case TQ_NODE_VITAL:
+        ctx->queue_helper_surrender = true;
+        TQSetScheduler(
+          ctx->tq_ctx,
+          QUEUE_HELPER,
+          ctx->scheduler_id,
+          priority + 1
+        );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          QUEUE_HELPER,
+          TQ_EVENT_ENQUEUE
+        );
+        break;
+      case TQ_NODE_DISPENSABLE:
+        ctx->queue_helper_surrender = true;
+        --priority;
+        TQSetScheduler(
+          ctx->tq_ctx,
+          QUEUE_HELPER,
+          ctx->scheduler_id,
+          priority
+        );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          QUEUE_HELPER,
+          TQ_EVENT_ENQUEUE
+        );
+        break;
+    }
+
+    ctx->queue_priority = priority;
+
+    return priority;
+  }
+
+  static rtems_task_priority PrepareOwner(
+    Context            *ctx,
+    rtems_task_priority priority
+  )
+  {
+    switch ( ctx->owner_node ) {
+      case TQ_NODE_ONLY:
+        ctx->owner_helper_release = false;
+        TQSetPriority( ctx->tq_ctx, OWNER, PRIO_FLEXIBLE );
+        break;
+      case TQ_NODE_VITAL:
+        if ( ctx->scheduler_id == SCHEDULER_A_ID ) {
+          ctx->owner_helper_release = false;
+          TQSetPriority( ctx->tq_ctx, OWNER, priority + 1 );
+        } else {
+          ctx->owner_helper_release = true;
+          TQSetPriority( ctx->tq_ctx, OWNER, PRIO_FLEXIBLE );
+          TQSetScheduler(
+            ctx->tq_ctx,
+            OWNER_HELPER,
+            ctx->scheduler_id,
+            priority + 1
+          );
+          TQSendAndWaitForExecutionStop(
+            ctx->tq_ctx,
+            OWNER_HELPER,
+            TQ_EVENT_MUTEX_A_OBTAIN
+          );
+        }
+        break;
+      case TQ_NODE_DISPENSABLE:
+        --priority;
+
+        if ( ctx->scheduler_id == SCHEDULER_A_ID ) {
+          ctx->owner_helper_release = false;
+          TQSetPriority( ctx->tq_ctx, OWNER, priority );
+        } else {
+          ctx->owner_helper_release = true;
+          TQSetPriority( ctx->tq_ctx, OWNER, PRIO_FLEXIBLE );
+          TQSetScheduler(
+            ctx->tq_ctx,
+            OWNER_HELPER,
+            ctx->scheduler_id,
+            priority
+          );
+          TQSendAndWaitForExecutionStop(
+            ctx->tq_ctx,
+            OWNER_HELPER,
+            TQ_EVENT_MUTEX_A_OBTAIN
+          );
+        }
+        break;
+    }
+
+    ctx->owner_priority = priority;
+
+    return priority;
+  }
+
+  static rtems_task_priority PrepareOwnerQueue(
+    Context            *ctx,
+    rtems_task_priority priority
+  )
+  {
+    if ( ctx->owner_obtain != 0 ) {
+      switch ( ctx->owner_queue_node ) {
+        case TQ_NODE_ONLY:
+          ctx->owner_queue_helper_release = false;
+          break;
+        case TQ_NODE_VITAL:
+          ctx->owner_queue_helper_release = true;
+          TQSetScheduler(
+            ctx->tq_ctx,
+            OWNER_QUEUE_HELPER,
+            ctx->scheduler_id,
+            priority + 1
+          );
+          TQSendAndWaitForExecutionStop(
+            ctx->tq_ctx,
+            OWNER_QUEUE_HELPER,
+            ctx->owner_obtain
+          );
+          break;
+        case TQ_NODE_DISPENSABLE:
+          ctx->owner_queue_helper_release = true;
+          --priority;
+          TQSetScheduler(
+            ctx->tq_ctx,
+            OWNER_QUEUE_HELPER,
+            ctx->scheduler_id,
+            priority
+          );
+          TQSendAndWaitForExecutionStop(
+            ctx->tq_ctx,
+            OWNER_QUEUE_HELPER,
+            ctx->owner_obtain
+          );
+          break;
+      }
+
+      ctx->owner_queue_priority = priority;
+    } else {
+      ctx->owner_queue_helper_release = false;
+      ctx->owner_queue_priority = PRIO_INVALID;
+    }
+
+    return priority;
+  }
+
+  static void PrepareOwnerOwner( Context *ctx, rtems_task_priority priority )
+  {
+    if ( ctx->owner_obtain != 0 ) {
+      switch ( ctx->owner_owner_node ) {
+        case TQ_NODE_ONLY:
+          ctx->owner_owner_helper_release = false;
+          TQSetPriority( ctx->tq_ctx, OWNER_OWNER, PRIO_FLEXIBLE );
+          break;
+        case TQ_NODE_VITAL:
+          if ( ctx->scheduler_id == SCHEDULER_A_ID ) {
+            ctx->owner_owner_helper_release = false;
+            TQSetPriority( ctx->tq_ctx, OWNER_OWNER, priority + 1 );
+          } else {
+            ctx->owner_owner_helper_release = true;
+            TQSetPriority( ctx->tq_ctx, OWNER_OWNER, PRIO_FLEXIBLE );
+            TQSetScheduler(
+              ctx->tq_ctx,
+              OWNER_OWNER_HELPER,
+              ctx->scheduler_id,
+              priority + 1
+            );
+            TQSendAndWaitForExecutionStop(
+              ctx->tq_ctx,
+              OWNER_OWNER_HELPER,
+              TQ_EVENT_MUTEX_B_OBTAIN
+            );
+          }
+          break;
+        case TQ_NODE_DISPENSABLE:
+          --priority;
+
+          if ( ctx->scheduler_id == SCHEDULER_A_ID ) {
+            ctx->owner_owner_helper_release = false;
+            TQSetPriority( ctx->tq_ctx, OWNER_OWNER, priority );
+          } else {
+            ctx->owner_owner_helper_release = true;
+            TQSetPriority( ctx->tq_ctx, OWNER_OWNER, PRIO_FLEXIBLE );
+            TQSetScheduler(
+              ctx->tq_ctx,
+              OWNER_OWNER_HELPER,
+              ctx->scheduler_id,
+              priority
+            );
+            TQSendAndWaitForExecutionStop(
+              ctx->tq_ctx,
+              OWNER_OWNER_HELPER,
+              TQ_EVENT_MUTEX_B_OBTAIN
+            );
+          }
+          break;
+      }
+
+      ctx->owner_owner_priority = priority;
+    } else {
+      ctx->owner_owner_helper_release = false;
+      ctx->owner_owner_priority = PRIO_INVALID;
+    }
+  }
+test-target: testsuites/validation/tr-tq-timeout-priority-inherit.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the thread queue enqueue operation timed out.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          WaitState: ReadyAgain
+      then: Ok
+    - else: Timeout
+    Unblock:
+    - if:
+        pre-conditions:
+          WaitState: Blocked
+      then: 'Yes'
+    - else: 'No'
+    OwnerPriority:
+    - if:
+      - pre-conditions:
+          Queue: Only
+          OwnerPriority: Only
+      - pre-conditions:
+          OwnerPriority: Only
+          WaitState: ReadyAgain
+      then: Drop
+    - if:
+      - pre-conditions:
+          OwnerPriority: Vital
+      - pre-conditions:
+          Queue: Vital
+          OwnerPriority: Only
+      then: Lower
+    - else: Nop
+    OwnerOwnerPriority: N/A
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState:
+    - NotEnqueued
+    - FIFO
+    OwnerQueue: N/A
+    OwnerOwnerPriority: N/A
+    WaitState: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          WaitState: ReadyAgain
+      then: Ok
+    - else: Timeout
+    Unblock:
+    - if:
+        pre-conditions:
+          WaitState: Blocked
+      then: 'Yes'
+    - else: 'No'
+    OwnerPriority:
+    - if:
+      - pre-conditions:
+          Queue: Only
+          OwnerPriority: Only
+      - pre-conditions:
+          OwnerPriority: Only
+          WaitState: ReadyAgain
+      then: Drop
+    - if:
+      - pre-conditions:
+          OwnerPriority: Vital
+      - pre-conditions:
+          Queue: Vital
+          OwnerPriority: Only
+      then: Lower
+    - else: Nop
+    OwnerOwnerPriority: N/A
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState:
+    - Priority
+    OwnerQueue: all
+    OwnerOwnerPriority: N/A
+    WaitState: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          WaitState: ReadyAgain
+      then: Ok
+    - else: Timeout
+    Unblock:
+    - if:
+        pre-conditions:
+          WaitState: Blocked
+      then: 'Yes'
+    - else: 'No'
+    OwnerPriority:
+    - if:
+      - pre-conditions:
+          Queue: Only
+          OwnerPriority: Only
+      - pre-conditions:
+          OwnerPriority: Only
+          WaitState: ReadyAgain
+      then: Drop
+    - if:
+      - pre-conditions:
+          OwnerPriority: Vital
+      - pre-conditions:
+          Queue: Vital
+          OwnerPriority: Only
+      then: Lower
+    - else: Nop
+    OwnerOwnerPriority:
+    - if:
+        and:
+        - post-conditions:
+            OwnerPriority: Drop
+        - pre-conditions:
+            OwnerQueue: Only
+            OwnerOwnerPriority: Only
+      then: Drop
+    - if:
+        and:
+        - post-conditions:
+            OwnerPriority:
+            - Lower
+            - Drop
+        - or:
+          - pre-conditions:
+              OwnerOwnerPriority: Vital
+          - pre-conditions:
+              OwnerQueue:
+              - Only
+              - Vital
+              OwnerOwnerPriority: Only
+      then: Lower
+    - else: Nop
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState:
+    - PriorityInherit
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: ReadyAgainNeedsSurrender
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState:
+    - FIFO
+    - Priority
+    - PriorityInherit
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState:
+    - ReadyAgain
+- enabled-by: true
+  post-conditions: ReadyAgainNeedsSurrender
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue:
+    - Dispensable
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState:
+    - ReadyAgain
+- enabled-by: true
+  post-conditions: HomeHasRealPriority
+  pre-conditions:
+    HomeScheduler:
+    - Home
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority:
+    - Only
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: HomeHasRealPriority
+  pre-conditions:
+    HomeScheduler:
+    - Home
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority:
+    - Only
+    WaitState: all
+- enabled-by: true
+  post-conditions: DispensableStopsVital
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue:
+    - Dispensable
+    OwnerPriority:
+    - Vital
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: DispensableStopsVital
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue:
+    - Dispensable
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue:
+    - Vital
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: DispensableStopsVital
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority:
+    - Dispensable
+    OwnerState: all
+    OwnerQueue:
+    - Vital
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: DispensableStopsVital
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue:
+    - Dispensable
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority:
+    - Vital
+    WaitState: all
+- enabled-by: true
+  post-conditions: DispensableStopsVital
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority:
+    - Dispensable
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority:
+    - Vital
+    WaitState: all
+- enabled-by: true
+  post-conditions: DispensableStopsVital
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue:
+    - Dispensable
+    OwnerOwnerPriority:
+    - Vital
+    WaitState: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    HomeScheduler:
+    - Helping
+    EligibleScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    HomeScheduler: all
+    EligibleScheduler:
+    - More
+    Queue: all
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState: all
+type: requirement

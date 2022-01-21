@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the ${/glossary/clock-realtime:/term} to the time of day.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${../../type/if/time-of-day:/name} *${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/priority-may-preempt
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: ../constraint/tod-begin
+- role: constraint
+  uid: ../constraint/tod-end
+name: rtems_clock_set
+notes: |
+    The date, time, and ticks specified by ${.:/params[0]/name} are all
+    range-checked, and an error is returned if any one is out of its valid
+    range.
+
+    RTEMS can represent time points of the ${/glossary/clock-realtime:/term}
+    clock in nanoseconds ranging from 1988-01-01T00:00:00.000000000Z to
+    2514-05-31T01:53:03.999999999Z.  The future uptime of the system shall be
+    in this range, otherwise the system behaviour is undefined.  Due to
+    implementation constraints, the time of day set by the directive shall be
+    before 2100-01-01:00:00.000000000Z.  The latest valid time of day accepted
+    by the POSIX ${/c/if/clock-settime:/name} is
+    2400-01-01T00:00:00.999999999Z.
+
+    The specified time is based on the configured ${/glossary/clock-tick:/term}
+    rate, see the ${/acfg/if/microseconds-per-tick:/name} application
+    configuration option.
+
+    Setting the time forward will fire all ${/glossary/clock-realtime:/term}
+    timers which are scheduled at a time point before or at the time set by the
+    directive.  This may unblock tasks, which may preempt the calling task.
+    User-provided timer routines will execute in the context of the caller.
+
+    It is allowed to call this directive from within interrupt context,
+    however, this is not recommended since an arbitrary number of timers may
+    fire.
+
+    The directive shall be called at least once to enable the service of
+    ${/glossary/clock-realtime:/term} related directives.  If the clock is not
+    set at least once, they may return an error status.
+params:
+- description: |
+    is the time of day to set the clock.
+  dir: null
+  name: time_of_day
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The time of day specified by ${.:/params[0]/name} was invalid.
+    value: ${../../status/if/invalid-clock:/name}
+type: interface

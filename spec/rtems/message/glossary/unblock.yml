@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: unblock
+text: |
+  Given a ${/glossary/task:/term} which has invoked an
+  ${/glossary/rtems:/term} directive and that directive stopped the
+  execution of this ${/glossary/task:/term}.  *Unblock* means that this
+  ${/glossary/task:/term} stops waiting, the directive returns and the
+  execution of this ${/glossary/task:/term} continues.
+
+  For example a ${/glossary/task:/term}
+  which has invoked directive ${../if/receive:/name} and which was
+  waiting to receive a message from the ${/glossary/messagequeue:/term}
+  stops waiting because it received a message,
+  directive ${../if/receive:/name} returns and the execution of this
+  ${/glossary/task:/term} continues.
+type: glossary

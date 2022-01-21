@@ -1,0 +1,61 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the buffer to the partition.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive returns the buffer specified by ${.:/params[1]/name} to the
+  partition specified by ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- return buffer to partition
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr-local
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt-local
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_partition_return_buffer
+notes: |
+  Returning a buffer multiple times is an error.  It will corrupt the internal
+  state of the partition.
+params:
+- description: is the partition identifier.
+  dir: null
+  name: id
+- description: is the pointer to the buffer to return.
+  dir: null
+  name: buffer
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no partition associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The buffer referenced by ${.:/params[1]/name} was not in the
+      partition.
+    value: ${../../status/if/invalid-address:/name}
+type: interface

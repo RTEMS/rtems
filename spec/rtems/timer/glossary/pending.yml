@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: pending
+text: |
+  The timers in ${../glossary/servercontext:/term} have a third
+  ${../glossary/state:/term} "pending". A Timer enters
+  ${../glossary/state:/term} pending when the time at which it is
+  ${../glossary/scheduled:/term} to ${../glossary/fire:/term} as been reached
+  but the ${../glossary/timerserviceroutine:/term} has not been invoked yet (for
+  example because other tasks with higher priority are active).
+
+  The pending ${../glossary/state:/term} can be left when
+
+  * the ${../glossary/timerserviceroutine:/term} is eventually invoked
+  * the timer is canceled by a call to ${../if/cancel:/name}
+  * the timer is reset by a call to ${../if/reset:/name}
+  * the timer is deleted by a call to ${../if/delete:/name}
+type: glossary

@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Clears all errors and tries to get one character from the receiver FIFO.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${apbuart:/name} *${.:/params[0]/name}
+    return: int
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: apbuart-header-2
+- role: interface-ingroup
+  uid: apbuart
+name: apbuart_inbyte_nonblocking
+notes: null
+params:
+- description: |
+    is the pointer to the APBUART register block.
+  dir: null
+  name: regs
+return:
+  return: |
+    Returns the first character of the receiver FIFO if it was non-empty.
+  return-values:
+  - description: |
+      The receiver FIFO was empty.
+    value: '-1'
+type: interface

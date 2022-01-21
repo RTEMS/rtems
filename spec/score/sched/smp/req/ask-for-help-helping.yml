@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread is registered for help in a
+  ${/glossary/scheduler-helping:/term}, while the thread is scheduled by
+  another scheduler or blocked, when the helping scheduler tries to schedule
+  the thread, the thread shall be blocked with respect to the helping
+  scheduler.
+type: requirement

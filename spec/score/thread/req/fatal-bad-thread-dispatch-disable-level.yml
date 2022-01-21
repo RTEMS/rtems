@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the thread dispatch disable level is not equal to one, if a direct
+  thread dispatch is done, then the system shall terminate with the
+  ${/score/interr/if/internal-error-core:/name} fatal source and the
+  ${/score/interr/if/bad-thread-dispatch-disable-level:/name} fatal code.
+type: requirement

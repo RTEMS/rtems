@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/invalidate-multiple-instruction-lines
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the ${/glossary/target:/term} has an instruction cache, where
+  instruction cache lines can be invalidated, where the instruction cache is
+  not coherent with all bus masters, when the
+  ${../if/invalidate-multiple-instruction-lines:/name} directive is called, the
+  instruction cache lines covering the memory area specified by
+  ${../if/invalidate-multiple-instruction-lines:/params[0]/name} and
+  ${../if/invalidate-multiple-instruction-lines:/params[1]/name} shall be
+  invalidated.
+type: requirement

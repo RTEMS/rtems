@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: first message
+text: |
+  Messages are stored - and kept - in a ${/glossary/messagequeue:/term}
+  in a defined order: Mgs[0], Mgs[1], Mgs[2] till Msg[N-1] when N
+  messages are in the queue. Mgs[0] is named the *first message*.  Msg[N-1]
+  is named the *last message*.
+
+  ${../if/receive:/name} returns the first message (if the
+  ${/glossary/messagequeue:/term} is not empty).  The
+  receive operation removes the first message (Msg[0]) from the queue
+  so that N-1 messages are in the queue.  The remaining messages change
+  place so that "old" message Msg[i] becomes "new" Msg[i-1].
+
+  Messages are stored by ${../if/send:/name} in a
+  ${/glossary/messagequeue:/term} in ${/glossary/fifo:/term} order
+  (if no ${../if/receive:/name} directive is waiting to receive a
+  message).  ${../if/send:/name} adds the message as "new" last message
+  Msg[N] to the queue and the number of messages in the queue increases
+  by one: N+1.
+
+  In contrast, messages are stored by ${../if/urgent:/name} in a
+  ${/glossary/messagequeue:/term} in ${/glossary/lifo:/term} order
+  (if no ${../if/receive:/name} directive is waiting to receive a
+  message).  ${../if/urgent:/name} adds the message as "new" first message
+  Msg[0] to the queue. The messages which have been in the queue before
+  change place so that "old" message Msg[i] becomes "new" Msg[i+1] and the
+  number of messages in the queue increases by one: N+1.
+type: glossary

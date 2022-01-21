@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/lock-initialize
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/lock-initialize:/name} directive is called, the lock
+  contained in the object referenced by the
+  ${../if/lock-initialize:/params[0]/name} parameter shall be initialized so
+  that it is available.
+type: requirement

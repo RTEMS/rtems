@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: timeout
+text: |
+  An argument provided to a number of directives which determines the
+  maximum length of time an application task is willing to wait to acquire
+  the resource if it is not immediately available.
+type: glossary

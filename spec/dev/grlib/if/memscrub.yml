@@ -1,0 +1,402 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBMEMSCRUB
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: memscrub-header
+definition:
+- default:
+    count: 1
+    name: AHBS
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: AHBFAR
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: AHBERC
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: STAT
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: CONFIG
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: RANGEL
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: RANGEH
+  offset: 0x1c
+  variants: []
+- default:
+    count: 1
+    name: POS
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: ETHRES
+  offset: 0x24
+  variants: []
+- default:
+    count: 1
+    name: INIT
+  offset: 0x28
+  variants: []
+- default:
+    count: 1
+    name: RANGEL2
+  offset: 0x2c
+  variants: []
+- default:
+    count: 1
+    name: RANGEH2
+  offset: 0x30
+  variants: []
+register-prefix: null
+register-block-group: MEMSCRUB
+register-block-size: 52
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CECNT'
+      start: 22
+      width: 10
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'UECNT'
+      start: 14
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DONE'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SEC'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SBC'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CE'
+      start: 9
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'NE'
+      start: 8
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'HWRITE'
+      start: 7
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'HMASTER'
+      start: 3
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'HSIZE'
+      start: 0
+      width: 3
+    variants: []
+  brief: |
+    AHB Status register
+  description: null
+  name: AHBS
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AHB_FAILING_ADDRESS'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    AHB Failing Address Register
+  description: null
+  name: AHBFAR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CECNTT'
+      start: 22
+      width: 10
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'UECNTT'
+      start: 14
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CECTE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'UECTE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    AHB Error configuration register
+  description: null
+  name: AHBERC
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RUNCOUNT'
+      start: 22
+      width: 10
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BLKCOUNT'
+      start: 14
+      width: 8
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'DONE'
+      start: 13
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BURSTLEN'
+      start: 1
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ACTIVE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Status register
+  description: null
+  name: STAT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DELAY'
+      start: 8
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQD'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SERA'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LOOP'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MODE'
+      start: 2
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ES'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SCEN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Configuration register
+  description: null
+  name: CONFIG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RLADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Range low address register
+  description: null
+  name: RANGEL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RHADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Range high address register
+  description: null
+  name: RANGEH
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'POSITION'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Position register
+  description: null
+  name: POS
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RECT'
+      start: 22
+      width: 10
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BECT'
+      start: 14
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RECTE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BECTE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Error threshold register
+  description: null
+  name: ETHRES
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Initialisation data register
+  description: null
+  name: INIT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RLADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Second range low address register
+  description: null
+  name: RANGEL2
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RHADDR'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Second range high address register
+  description: null
+  name: RANGEH2
+  width: 32
+name: memscrub
+notes: null
+type: interface

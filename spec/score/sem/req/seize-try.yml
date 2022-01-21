@@ -1,0 +1,128 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: Unsat
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_UNSATISFIED ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Count
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->count_after, ctx->count_before );
+    text: |
+      The count of the semaphore shall not be modified.
+  - name: MinusOne
+    test-code: |
+      T_eq_u32( ctx->count_after, ctx->count_before - 1 );
+    text: |
+      The count of the semaphore shall be decremented by one.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Count
+  states:
+  - name: Zero
+    test-code: |
+      ctx->count_before = 0;
+    text: |
+      While the count of the semaphore is zero.
+  - name: Positive
+    test-code: |
+      ctx->count_before = 1;
+    text: |
+      While the count of the semaphore is greater than zero.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  TQSemSetCount( ctx->tq_ctx, ctx->count_before );
+  ctx->status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+  ctx->count_after = TQSemGetCount( ctx->tq_ctx );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member specifies the semaphore count before the directive call.
+  description: null
+  member: |
+    uint32_t count_before
+- brief: |
+    This member contains the return status of the directive call.
+  description: null
+  member: |
+    Status_Control status
+- brief: |
+    This member contains the semaphore count after the directive call.
+  description: null
+  member: |
+    uint32_t count_after
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQSemContext *${.:name}
+  target: testsuites/validation/tr-sem-seize-try.h
+test-includes: []
+test-local-includes:
+- tr-sem-seize-try.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static Status_Control Status( const Context *ctx, Status_Control status )
+  {
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
+  }
+test-target: testsuites/validation/tr-sem-seize-try.c
+test-teardown: null
+text: |
+  When the calling task tries to seize the semaphore.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Count: MinusOne
+  pre-conditions:
+    Count:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    Count: Nop
+  pre-conditions:
+    Count:
+    - Zero
+type: requirement

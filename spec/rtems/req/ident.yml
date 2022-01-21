@@ -1,0 +1,268 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: group
+- role: interface-function
+  uid: ../object/if/search-all-nodes
+- role: interface-function
+  uid: ../object/if/search-local-node
+- role: interface-function
+  uid: ../object/if/search-other-nodes
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc(ctx->status, RTEMS_SUCCESSFUL);
+    text: |
+      The return status shall be ${../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
+    text: |
+      The return status shall be ${../status/if/invalid-address:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_NAME);
+    text: |
+      The return status shall be ${../status/if/invalid-name:/name}.
+  - name: InvNode
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_NODE);
+    text: |
+      The return status shall be ${../status/if/invalid-node:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, 0xffffffff);
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the value before the action.
+  - name: 'Null'
+    test-code: |
+      T_null(ctx->id)
+    text: |
+      While the id is NULL.
+  - name: LocalObj
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, ctx->id_local_object);
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the identifier of a local object of the specified class with a name
+      equal to the name parameter.  If more than one local object of the
+      specified class with such a name exists, then it shall be the identifier
+      of the object with the lowest object index.
+  - name: RemoteObj
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, ctx->id_remote_object);
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the identifier of a remote object of the specified class on a eligible
+      node defined by the node parameter with a name equal to the name
+      parameter.  If more than one local object of the specified class with
+      such a name exists, then it shall be the identifier of the object with
+      the lowest object index.  Otherwise, if more than one object of the
+      specified class with such a name exists on remote eligible nodes, then it
+      shall be the identifier of the object with the lowest node index and the
+      lowest object index on this node.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->name = 1;
+    text: |
+      While the ``name`` parameter is not associated with an active object of
+      the specified class .
+  - name: Valid
+    test-code: |
+      ctx->name = ClassicObjectIdentName;
+    text: |
+      While the ``name`` parameter is associated with an active object of the
+      specified class .
+  test-epilogue: null
+  test-prologue: null
+- name: Node
+  states:
+  - name: Local
+    test-code: |
+      ctx->node = 1;
+    text: |
+      While the ``node`` parameter is the local node number.
+  - name: Remote
+    test-code: |
+      ctx->node = 2;
+    text: |
+      While the ``node`` parameter is a remote node number.
+  - name: Invalid
+    test-code: |
+      ctx->node = 256;
+    text: |
+      While the ``node`` parameter is an invalid node number.
+  - name: SearchAll
+    test-code: |
+      ctx->node = RTEMS_SEARCH_ALL_NODES;
+    text: |
+      While the ``node`` parameter is ${../object/if/search-all-nodes:/name}.
+  - name: SearchOther
+    test-code: |
+      ctx->node = RTEMS_SEARCH_OTHER_NODES;
+    text: |
+      While the ``node`` parameter is ${../object/if/search-other-nodes:/name}.
+  - name: SearchLocal
+    test-code: |
+      ctx->node = RTEMS_SEARCH_LOCAL_NODE;
+    text: |
+      While the ``node`` parameter is ${../object/if/search-local-node:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_value = 0xffffffff;
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ``id`` parameter references an object of type
+      ${../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ``id`` parameter is ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = ( *ctx->action )( ctx->name, ctx->node, ctx->id );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_name name
+- brief: null
+  description: null
+  member: uint32_t node
+- brief: null
+  description: null
+  member: rtems_id *id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: rtems_id id_remote_object
+test-context-support: null
+test-description: null
+test-header:
+  code: |
+    #define ClassicObjectIdentName \
+      rtems_build_name( 'I', 'D', 'N', 'T' )
+  freestanding: false
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is the identifier of an active object of the class under test with the
+      name ClassicObjectIdentName.
+    dir: null
+    name: id_local_object
+    specifier: rtems_id ${.:name}
+  - description: |
+      is the action handler.
+    dir: null
+    name: action
+    specifier: |
+      rtems_status_code ( *${.:name} )( rtems_name, uint32_t, rtems_id * )
+  target: testsuites/validation/tr-object-ident.h
+test-includes: []
+test-local-includes:
+- tr-object-ident.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-object-ident.c
+test-teardown: null
+text: |
+  When the specified object identification directive is called.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Id: LocalObj
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Valid
+    Node:
+    - SearchAll
+    - SearchLocal
+    - Local
+- enabled-by: true
+  post-conditions:
+    Id: Nop
+    Status: InvName
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Valid
+    Node:
+    - Invalid
+    - SearchOther
+    - Remote
+- enabled-by: true
+  post-conditions:
+    Id: Nop
+    Status: InvName
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Invalid
+    Node: all
+- enabled-by: true
+  post-conditions:
+    Id: 'Null'
+    Status: InvAddr
+  pre-conditions:
+    Id:
+    - 'Null'
+    Name: all
+    Node: all
+- enabled-by: RTEMS_MULTIPROCESSING
+  post-conditions:
+    Id: RemoteObj
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Valid
+    Node:
+    - SearchOther
+    - Remote
+type: requirement

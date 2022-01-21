@@ -1,0 +1,181 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-maximum-priority
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/get-maximum-priority:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-maximum-priority:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/get-maximum-priority:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: PrioObj
+  states:
+  - name: Set
+    test-code: |
+      #if defined(RTEMS_SMP)
+      T_eq_u32( ctx->priority_obj, INT_MAX );
+      #else
+      T_eq_u32( ctx->priority_obj, 127 );
+      #endif
+    text: |
+      The value of the object referenced by the
+      ${../if/get-maximum-priority:/params[1]/name} parameter shall be set to
+      the maximum priority value of the scheduler specified by the
+      ${../if/get-maximum-priority:/params[0]/name} parameter after the return
+      of the ${../if/get-maximum-priority:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->priority_obj, PRIO_INVALID );
+    text: |
+      Objects referenced by the ${../if/get-maximum-priority:/params[1]/name}
+      parameter in past calls to ${../if/get-maximum-priority:/name} shall
+      not be accessed by the ${../if/get-maximum-priority:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/get-maximum-priority:/params[0]/name} parameter is not
+      associated with a scheduler.
+  - name: Scheduler
+    test-code: |
+      ctx->id = ctx->scheduler_id;
+    text: |
+      While the ${../if/get-maximum-priority:/params[0]/name} parameter is
+      associated with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: Prio
+  states:
+  - name: Valid
+    test-code: |
+      ctx->priority = &ctx->priority_obj;
+    text: |
+      While the ${../if/get-maximum-priority:/params[1]/name} parameter
+      references an object of type ${../../type/if/priority:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->priority = NULL;
+    text: |
+      While the ${../if/get-maximum-priority:/params[1]/name} parameter is
+      equal to ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_scheduler_get_maximum_priority( ctx->id, ctx->priority );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the identifier of a scheduler.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member provides the object referenced by the
+    ${../if/get-maximum-priority:/params[1]/name} parameter.
+  description: null
+  member: |
+    rtems_task_priority priority_obj
+- brief: |
+    This member contains the return value of the
+    ${../if/get-maximum-priority:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/get-maximum-priority:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/get-maximum-priority:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_task_priority *priority
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- limits.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  ctx->priority_obj = PRIO_INVALID;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_A_NAME,
+      &ctx->scheduler_id
+    );
+    T_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-scheduler-get-maximum-priority.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    PrioObj: Set
+  pre-conditions:
+    Id:
+    - Scheduler
+    Prio:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    PrioObj: Nop
+  pre-conditions:
+    Id: all
+    Prio:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    PrioObj: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Prio:
+    - Valid
+type: requirement

@@ -1,0 +1,359 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+
+#### _CORE_message_queue_Insert_message() ####################################
+
+- action-brief: |
+    Use _CORE_message_queue_Insert_message() to insert two messages into
+    a ${/glossary/messagequeue:/term} and use the POSIX message priority
+    to define their order in the queue.
+  action-code: |
+    rtems_status_code status_submit_low;
+    rtems_status_code status_submit_high;
+    rtems_status_code status_receive_low;
+    rtems_status_code status_receive_high;
+    uint8_t message_low[] = MESSAGE_CONTENT_LOW;
+    uint8_t message_high[] = MESSAGE_CONTENT_HIGH;
+    uint8_t message_buffer_low[ MAXIMUM_MESSAGE_SIZE ];
+    uint8_t message_buffer_high[ MAXIMUM_MESSAGE_SIZE ];
+    size_t message_size_low;
+    size_t message_size_high;
+
+    status_submit_low = SubmitMessage(
+      ctx->message_queue_id,
+      message_low,
+      sizeof( message_low ),
+      MESSAGE_PRIORITY_LOW
+    );
+
+    status_submit_high = SubmitMessage(
+      ctx->message_queue_id,
+      message_high,
+      sizeof( message_high ),
+      MESSAGE_PRIORITY_HIGH
+    );
+
+    status_receive_high = ReceiveMessage(
+      ctx->message_queue_id,
+      &message_buffer_high,
+      &message_size_high
+    );
+
+    status_receive_low = ReceiveMessage(
+      ctx->message_queue_id,
+      &message_buffer_low,
+      &message_size_low
+    );
+  checks:
+  - brief: |
+      Check that _CORE_message_queue_Submit() was executed successfully.
+    code: |
+      T_rsc_success( status_submit_low );
+      T_rsc_success( status_submit_high );
+    links: []
+  - brief: |
+      Check that the messages are in right order in the
+      ${/glossary/messagequeue:/term}.
+    code: |
+      T_rsc_success( status_receive_high );
+      T_eq_sz( message_size_high, sizeof( message_high ) );
+      T_eq_mem( message_buffer_high, message_high, message_size_high );
+
+      T_rsc_success( status_receive_low );
+      T_eq_sz( message_size_low, sizeof( message_low ) );
+      T_eq_mem( message_buffer_low, message_low, message_size_low );
+    links: []
+  links: []
+  links:
+  - name: _CORE_message_queue_Insert_message
+    role: unit-test
+    uid: ../../if/domain
+
+#### _CORE_message_queue_Seize(), _CORE_message_queue_Submit() ################
+
+- action-brief: |
+    Submit() three messages into a ${/glossary/messagequeue:/term} which can
+    only store two and have the third submit() blocked till a seize() occurs.
+  action-code: |
+    bool is_worker_blocked_after_third_send;
+    bool is_worker_blocked_after_first_receive;
+
+    WorkerSendMessage( ctx );
+    WorkerSendMessage( ctx );
+    WorkerSendMessage( ctx );
+    is_worker_blocked_after_third_send = ctx->is_worker_working;
+
+    T_rsc_success( ReceiveOneMessages( ctx ) );
+    is_worker_blocked_after_first_receive = ctx->is_worker_working;
+
+    T_rsc_success( ReceiveOneMessages( ctx ) );
+    T_rsc_success( ReceiveOneMessages( ctx ) );
+  checks:
+  - brief: |
+      Check that the third _CORE_message_queue_Submit() did actually block
+      till there was room for the message in the
+      ${/glossary/messagequeue:/term}.
+    code: |
+      T_true( is_worker_blocked_after_third_send );
+      T_true( !is_worker_blocked_after_first_receive );
+    links: []
+  links: []
+  links:
+  - name: _CORE_message_queue_Seize
+    role: unit-test
+    uid: ../../if/domain
+  - name: _CORE_message_queue_Submit
+    role: unit-test
+    uid: ../../if/domain
+
+#### _CORE_message_queue_Submit() in ISR ######################################
+
+- action-brief: |
+    Submit() messages in the queue from within an ISR.
+  action-code: |
+    rtems_status_code status_send_first_message;
+    rtems_status_code status_send_second_message;
+    rtems_status_code status_send_third_message;
+
+    CallWithinISR( ( void (*)(void*) ) SendMessage, ctx );
+    status_send_first_message = ctx->send_status;
+    CallWithinISR( ( void (*)(void*) ) SendMessage, ctx );
+    status_send_second_message = ctx->send_status;
+    CallWithinISR( ( void (*)(void*) ) SendMessage, ctx );
+    status_send_third_message = ctx->send_status;
+
+    T_rsc_success( ReceiveOneMessages( ctx ) );
+    T_rsc_success( ReceiveOneMessages( ctx ) );
+  checks:
+  - brief: |
+      Check that the first two messages were successfully send.
+    code: |
+      T_assert_rsc_success( status_send_first_message );
+      T_assert_rsc_success( status_send_second_message );
+    links: []
+  - brief: |
+      Check that trying to send the third message from ISR when the
+      ${/glossary/messagequeue:/term} was full was rejected.
+    code: |
+      T_rsc( status_send_third_message, STATUS_CLASSIC_INTERNAL_ERROR );
+    links: []
+  links: []
+  links:
+  - name: _CORE_message_queue_Submit
+    role: unit-test
+    uid: ../../if/domain
+
+##############################################################################
+
+test-brief: |
+  Unit tests for the Message Queue Handler.
+test-context:
+- brief: |
+    This member contains a valid ${/glossary/id:/term} of a
+    ${/glossary/messagequeue:/term}.
+  description: null
+  member: |
+    rtems_id message_queue_id
+- brief: |
+    This member is used as storage area for the
+    ${/glossary/messagequeue:/term}.
+  description: null
+  member: |
+    RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
+      storage_area[ MAXIMUM_PENDING_MESSAGES]
+- brief: |
+    This member contains the ${/glossary/task:/term} identifier of the
+    worker ${/glossary/task:/term}.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member indicated whether the worker ${/glossary/task:/term}
+    is currently sending a message (``true``) or whether it is
+    waiting to receive an event (``false``)..
+  description: null
+  member: |
+    bool is_worker_working
+- brief: |
+    This member contains the returned ${/glossary/statuscode:/term}
+    of the SendMessage() function.
+  description: null
+  member: |
+    rtems_status_code send_status
+test-context-support: |
+  #define MAXIMUM_PENDING_MESSAGES 2
+  #define MAXIMUM_MESSAGE_SIZE 3
+
+  static void WorkerTask( rtems_task_argument argument );
+test-description: |
+  The files
+
+  * ``cpukit/score/src/coremsginsert.c``,
+  * ``cpukit/score/src/coremsgseize.c``, and
+  * ``cpukit/score/src/coremsgsubmit.c``
+
+  are only executed by the POSIX API.  The space qualified code
+  subset does not contain the POSIX API (see *Space Profile*).  This test
+  exercises the code parts otherwise only reached by the POSIX API
+  to achieve full code coverage.
+test-header: null
+test-includes:
+- rtems.h
+- rtems/rtems/messageimpl.h
+- rtems/score/coremsgimpl.h
+- rtems/rtems/statusimpl.h
+test-local-includes:
+- ../validation/tx-support.h
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code status;
+    rtems_message_queue_config config = {
+      .name                     = rtems_build_name( 'M', 'S', 'G', 'Q' ),
+      .maximum_pending_messages = MAXIMUM_PENDING_MESSAGES,
+      .maximum_message_size     = MAXIMUM_MESSAGE_SIZE,
+      .storage_area             = ctx->storage_area,
+      .storage_size             = sizeof( ctx->storage_area ),
+      .storage_free             = NULL,
+      .attributes               = RTEMS_DEFAULT_ATTRIBUTES
+    };
+
+    status = rtems_message_queue_construct(
+      &config,
+      &ctx->message_queue_id
+    );
+    T_rsc_success( status );
+
+    SetSelfPriority( PRIO_NORMAL );
+
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, WorkerTask, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define EVENT_SEND RTEMS_EVENT_17
+  #define MESSAGE_CONTENT_LOW { 1, 2, 3 }
+  #define MESSAGE_CONTENT_HIGH { 4, 5 }
+  #define MESSAGE_PRIORITY_LOW 5
+  #define MESSAGE_PRIORITY_HIGH 7
+  #define DO_WAIT true
+
+  typedef ${.:/test-context-type} Context;
+
+  /*
+   * This is a code fragment from rtems_message_queue_send() with the
+   * specialty that it uses a POSIX priority and the sender
+   * ${/glossary/task:/term} will wait in case the queue is full.
+   */
+  static rtems_status_code SubmitMessage(
+    rtems_id id,
+    uint8_t *message,
+    size_t message_size,
+    unsigned int posix_piority
+  )
+  {
+    rtems_status_code status;
+    Thread_queue_Context queue_context;
+    Message_queue_Control *the_message_queue;
+
+    T_assert_lt_uint( posix_piority, MQ_PRIO_MAX );
+
+    the_message_queue = _Message_queue_Get(
+      id,
+      &queue_context
+    );
+    T_assert_not_null( the_message_queue );
+
+    /* The next two calls are from _POSIX_Message_queue_Send_support() */
+    _Thread_queue_Context_set_enqueue_callout(
+      &queue_context,
+      _Thread_queue_Enqueue_do_nothing_extra
+    );
+    _Thread_queue_Context_set_timeout_argument( &queue_context, NULL, true );
+
+    _CORE_message_queue_Acquire_critical(
+      &the_message_queue->message_queue,
+      &queue_context
+    );
+
+    status = _CORE_message_queue_Submit(
+      &the_message_queue->message_queue,
+      _Thread_Executing,
+      message,
+      message_size,
+      (CORE_message_queue_Submit_types) ( posix_piority * -1 ),
+      DO_WAIT,
+      &queue_context
+    );
+
+    return _Status_Get( status );
+  }
+
+  static rtems_status_code ReceiveMessage(
+    rtems_id id,
+    void *buffer,
+    size_t *size
+  )
+  {
+    return rtems_message_queue_receive(
+      id,
+      buffer,
+      size,
+      RTEMS_LOCAL | RTEMS_NO_WAIT,
+      RTEMS_NO_TIMEOUT
+    );
+  }
+
+  static rtems_status_code ReceiveOneMessages( Context *ctx )
+  {
+    uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
+    size_t message_size;
+
+    return ReceiveMessage(
+      ctx->message_queue_id,
+      &message_buffer,
+      &message_size
+    );
+  }
+
+  static void SendMessage( Context *ctx )
+  {
+    uint8_t message[] = { 100, 101, 102 };
+    ctx->send_status = SubmitMessage(
+      ctx->message_queue_id,
+      message,
+      sizeof( message ),
+      MESSAGE_PRIORITY_LOW
+    );
+  }
+
+  static void WorkerTask( rtems_task_argument argument )
+  {
+    Context *ctx = (Context *) argument;
+
+    while ( true ) {
+      ctx->is_worker_working = false;
+      ReceiveAnyEvents();
+      ctx->is_worker_working = true;
+      SendMessage( ctx );
+      T_assert_rsc_success( ctx->send_status );
+    }
+  }
+
+  static void WorkerSendMessage( Context *ctx )
+  {
+    SendEvents( ctx->worker_id, EVENT_SEND );
+  }
+test-target: testsuites/unit/tc-score-msgq.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+    T_rsc_success( rtems_message_queue_delete( ctx->message_queue_id ) );
+  description: null
+type: test-case

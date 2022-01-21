@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Iterates over all tasks and invokes the visitor routine for each task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${visitor:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    return: void
+  variants: []
+description: |
+  This directive iterates over all tasks in the system.  This operation covers
+  all tasks of all APIs.  The user should be careful in accessing the contents
+  of the ${/glossary/tcb:/term}.  The visitor argument ${.:/params[1]/name} is
+  passed to all invocations of ${.:/params[0]/name} in addition to the TCB.
+  The iteration stops immediately in case the visitor routine returns true.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_task_iterate
+notes: |
+  The visitor routine is invoked while owning the objects allocator lock.  It
+  is allowed to perform blocking operations in the visitor routine, however,
+  care must be taken so that no deadlocks via the object allocator lock can
+  occur.
+params:
+- description: |
+    is the visitor routine invoked for each task.
+  dir: null
+  name: visitor
+- description: |
+    is the argument passed to each visitor routine invocation during the
+    iteration.
+  dir: null
+  name: arg
+return: null
+type: interface

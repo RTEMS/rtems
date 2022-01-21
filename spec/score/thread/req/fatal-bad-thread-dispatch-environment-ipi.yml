@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - not:
+    - aarch64
+    - arm
+    - riscv
+links:
+- role: requirement-refinement
+  uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the system needs inter-processor interrupts, if a thread dispatch is
+  done with maskable interrupts disabled, then the system shall terminate with
+  the ${/score/interr/if/internal-error-core:/name} fatal source and the
+  ${/score/interr/if/bad-thread-dispatch-environment:/name} fatal code.
+type: requirement

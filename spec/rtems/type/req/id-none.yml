@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/id-none
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/id-none:/name} constant shall be a constant expression which
+  evaluates to an invalid object identifier.
+type: requirement

@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Deletes the semaphore.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive deletes the semaphore specified by ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- delete a semaphore
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/mp-send
+- role: constraint
+  uid: ../../constraint/delete-by-any-task
+- role: constraint
+  uid: /constraint/obj-unlimited-free
+name: rtems_semaphore_delete
+notes: |
+  Binary semaphores with an owner cannot be deleted.
+  
+  When a semaphore is deleted, all tasks blocked waiting to obtain the
+  semaphore will be readied and returned a status code which indicates that the
+  semaphore was deleted.
+
+  The ${/glossary/smcb:/term} for the deleted semaphore is reclaimed by RTEMS.
+
+  When a global semaphore is deleted, the semaphore identifier must be
+  transmitted to every node in the system for deletion from the local copy of
+  the global object table.
+
+  The semaphore must reside on the local node, even if the semaphore was
+  created with the ${../../attr/if/global:/name} attribute.
+
+  Proxies, used to represent remote tasks, are reclaimed when the semaphore is
+  deleted.
+params:
+- description: |
+    is the semaphore identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no semaphore associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The semaphore resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+  - description: |
+      The binary semaphore had an owner.
+    value: ${../../status/if/resource-in-use:/name}
+type: interface

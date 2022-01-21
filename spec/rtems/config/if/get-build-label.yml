@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the RTEMS build label.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: const char *
+  variants: []
+description: |
+  The build label is a user-provided string defined by the build configuration.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_get_build_label
+notes: |
+  The build label can be used to distinguish test suite results obtained from
+  different build configurations.  A use case is to record test results with
+  performance data to track performance regressions.  For this a database of
+  performance limits is required.  The build label and the target hash obtained
+  from ${get-target-hash:/name} can be used as a key to obtain performance
+  limits.
+params: []
+return:
+  return: |
+    Returns the pointer to the RTEMS build label.
+  return-values: []
+type: interface

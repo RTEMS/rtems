@@ -1,0 +1,147 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGR740THSENS
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: gr740thsens-header
+definition:
+- default:
+    count: 1
+    name: CTRL
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: STATUS
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: THRES
+  offset: 0x8
+  variants: []
+register-prefix: null
+register-block-group: GR740THSENS
+register-block-size: 12
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DIV'
+      start: 16
+      width: 10
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ALEN'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PDN'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DCORRECT'
+      start: 2
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SRSTN'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CLKEN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Control register
+  description: null
+  name: CTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MAX'
+      start: 24
+      width: 7
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MIN'
+      start: 16
+      width: 7
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SCLK'
+      start: 15
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WE'
+      start: 10
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'UPD'
+      start: 9
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'ALACT'
+      start: 8
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 7
+    variants: []
+  brief: |
+    Status register
+  description: null
+  name: STATUS
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'THRES'
+      start: 0
+      width: 7
+    variants: []
+  brief: |
+    Threshold register
+  description: null
+  name: THRES
+  width: 32
+name: gr740thsens
+notes: null
+type: interface

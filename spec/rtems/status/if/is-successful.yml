@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Checks if the status code is ${successful:/name}.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: |
+      return ${.:/params[0]/name} == ${successful:/name};
+    params:
+    - ${code:/name} ${.:/params[0]/name}
+    return: ${/c/if/bool:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_is_status_successful
+notes: null
+params:
+- description: is the status code.
+  dir: null
+  name: status_code
+return:
+  return: |
+    Returns true, if the status code is equal to ${successful:/name}, otherwise
+    false.
+  return-values: []
+type: interface

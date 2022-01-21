@@ -1,0 +1,381 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/set-affinity
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      /* Validation done by CheckSetAffinity() for each interrupt vector */
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: Unsat
+    test-code: |
+      /* Validation done by CheckSetAffinity() for each interrupt vector */
+    text: |
+      The return status of ${../if/set-affinity:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: SetAffinity
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Validation done by CheckSetAffinity() for each interrupt vector */
+    text: |
+      The affinity set of the interrupt specified by
+      ${../if/set-affinity:/params[0]/name} shall be set to the processor set
+      specified by ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} at some point during the
+      ${../if/set-affinity:/name} call.
+  - name: Nop
+    test-code: |
+      /*
+       * Validation done by CheckSetAffinity() for each interrupt vector and in
+       * the action code.
+       */
+    text: |
+      The affinity set of the interrupt specified by
+      ${../if/set-affinity:/params[0]/name} shall not be modified by the
+      ${../if/set-affinity:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->valid_vector = true;
+    text: |
+      While the ${../if/set-affinity:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->valid_vector = false;
+    text: |
+      While the ${../if/set-affinity:/params[0]/name} parameter is not
+      associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetKind
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj[ 0 ] );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
+      which is within the implementation limits.
+  - name: Huge
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj );
+      CPU_ZERO( &ctx->cpuset_obj[ 0 ] );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
+      which exceeds the implementation limits.
+  - name: Askew
+    test-code: |
+      ctx->cpusetsize = SIZE_MAX;
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is not an
+      integral multiple of the size of long.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSet
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpuset = &ctx->cpuset_obj[ 0 ];
+    text: |
+      While the ${../if/set-affinity:/params[2]/name} parameter references an
+      object of type ${/c/if/cpu_set_t:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->cpuset = NULL;
+    text: |
+      While the ${../if/set-affinity:/params[2]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: CanSetAffinity
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Validation done by CheckSetAffinity() for each interrupt vector */
+    text: |
+      While setting the affinity for the interrupt vector specified by
+      ${../if/set-affinity:/params[0]/name} parameter is supported.
+  - name: 'No'
+    test-code: |
+      /* Validation done by CheckSetAffinity() for each interrupt vector */
+    text: |
+      While setting the affinity for the interrupt vector specified by
+      ${../if/set-affinity:/params[0]/name} parameter is not supported.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_status_code sc;
+
+  if (
+    ctx->valid_vector && ctx->cpusetsize == sizeof( ctx->cpuset_obj[ 0 ] ) &&
+    ctx->cpuset == &ctx->cpuset_obj[ 0 ]
+  ) {
+    for (
+      ctx->vector = 0;
+      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
+      ++ctx->vector
+    ) {
+      rtems_interrupt_attributes attr;
+
+      memset( &attr, 0, sizeof( attr ) );
+      sc = rtems_interrupt_get_attributes( ctx->vector, &attr );
+
+      if ( sc == RTEMS_INVALID_ID ) {
+        continue;
+      }
+
+      T_rsc_success( sc );
+
+      CheckSetAffinity( ctx, &attr );
+    }
+  } else {
+    cpu_set_t set;
+    cpu_set_t set2;
+
+    CPU_ZERO( &set );
+    CPU_ZERO( &set2 );
+
+    if ( ctx->valid_vector ) {
+      ctx->vector = ctx->some_vector;
+
+      sc = rtems_interrupt_get_affinity( ctx->vector, sizeof( set ), &set );
+      T_true( sc == RTEMS_SUCCESSFUL || sc == RTEMS_UNSATISFIED );
+    } else {
+      ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
+    }
+
+    CPU_ZERO( &ctx->cpuset_obj[ 0 ] );
+
+    ctx->status = rtems_interrupt_set_affinity(
+      ctx->vector,
+      ctx->cpusetsize,
+      ctx->cpuset
+    );
+
+    if ( ctx->valid_vector ) {
+      sc = rtems_interrupt_get_affinity( ctx->vector, sizeof( set2 ), &set2 );
+      T_true( sc == RTEMS_SUCCESSFUL || sc == RTEMS_UNSATISFIED );
+      T_eq_int( CPU_CMP( &set, &set2 ), 0 );
+    }
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the current vector number.
+  description: null
+  member: |
+    rtems_vector_number vector
+- brief: |
+    This member contains some valid vector number.
+  description: null
+  member: |
+    rtems_vector_number some_vector
+- brief: |
+    This member provides the object referenced by the
+    ${../if/set-affinity:/params[2]/name} parameter.
+  description: null
+  member: |
+    cpu_set_t cpuset_obj[ 2 ]
+- brief: |
+    This member contains the return value of the ${../if/set-affinity:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    If this member is true, then the ${../if/set-affinity:/params[0]/name}
+    parameter shall be valid.
+  description: null
+  member: |
+    bool valid_vector
+- brief: |
+    This member specifies if the ${../if/set-affinity:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    size_t cpusetsize
+- brief: |
+    This member specifies if the ${../if/set-affinity:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    cpu_set_t *cpuset
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  CPU_FILL_S( sizeof( ctx->cpuset_obj ), &ctx->cpuset_obj[ 0 ] );
+test-setup:
+  brief: null
+  code: |
+    ctx->some_vector = GetValidInterruptVectorNumber( NULL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void CheckSetAffinity(
+    Context                          *ctx,
+    const rtems_interrupt_attributes *attr
+  )
+  {
+    rtems_status_code sc;
+    cpu_set_t         set;
+    cpu_set_t         set2;
+
+    CPU_ZERO( &set );
+
+    if ( attr->can_get_affinity ) {
+      sc = rtems_interrupt_get_affinity( ctx->vector, sizeof( set ), &set );
+      T_rsc_success( sc );
+    } else {
+      CPU_SET( 0, &set );
+    }
+
+    CPU_COPY( &set, &ctx->cpuset_obj[ 0 ] );
+
+    sc = rtems_interrupt_set_affinity(
+      ctx->vector,
+      ctx->cpusetsize,
+      ctx->cpuset
+    );
+
+    if ( attr->can_set_affinity ) {
+      T_rsc_success( sc );
+    } else {
+      T_rsc( sc, RTEMS_UNSATISFIED );
+    }
+
+    if ( attr->can_get_affinity ) {
+      CPU_FILL( &set2 );
+      sc = rtems_interrupt_get_affinity( ctx->vector, sizeof( set2 ), &set2 );
+      T_rsc_success( sc );
+      T_eq_int( CPU_CMP( &set, &set2 ), 0 );
+    }
+  }
+test-target: testsuites/validation/tc-intr-set-affinity.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    SetAffinity: 'Yes'
+  pre-conditions:
+    Vector:
+    - Valid
+    CPUSetKind:
+    - Valid
+    CPUSet:
+    - Valid
+    CanSetAffinity:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    SetAffinity: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    CPUSetKind: all
+    CPUSet:
+    - 'Null'
+    CanSetAffinity: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    SetAffinity: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    CPUSetKind: all
+    CPUSet:
+    - 'Null'
+    CanSetAffinity: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    SetAffinity: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    CPUSetKind: all
+    CPUSet:
+    - Valid
+    CanSetAffinity: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    SetAffinity: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    CPUSetKind:
+    - Huge
+    - Askew
+    CPUSet:
+    - Valid
+    CanSetAffinity: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    SetAffinity: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    CPUSetKind:
+    - Valid
+    CPUSet:
+    - Valid
+    CanSetAffinity:
+    - 'No'
+type: requirement

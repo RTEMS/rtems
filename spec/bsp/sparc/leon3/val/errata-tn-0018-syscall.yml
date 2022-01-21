@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-20
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/syscall.S
+  hash: QDjhpRe0UrN3OhoVJEGSnJU0028ZHBGjXYFXrZsRwO4=
+  type: file
+text: |
+  The ``syscall`` trap handler shuts down the system and never returns.
+type: validation

@@ -1,0 +1,234 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-buffer
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+      T_eq_ptr( ctx->buffer_pointer, buffers );
+    text: |
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+      T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
+    text: |
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: Unsat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
+      T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
+    text: |
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: BufVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->buffer, &ctx->buffer_pointer );
+      T_eq_ptr( ctx->buffer_pointer, buffers );
+    text: |
+      The value of the object referenced by the ${../if/create:/params[1]/name}
+      parameter shall be set to the object identifier of the begin address of
+      the returned buffer after the return of the ${../if/create:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
+    text: |
+      Objects referenced by the ${../if/get-buffer:/params[1]/name} parameter
+      in past calls to ${../if/get-buffer:/name} shall not be accessed by the
+      ${../if/get-buffer:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      While the ${../if/get-buffer:/params[0]/name} parameter is not associated
+      with a partition.
+  - name: Part
+    test-code: |
+      ctx->id = ctx->id_value;
+    text: |
+      While the ${../if/get-buffer:/params[0]/name} parameter is associated with a
+      partition.
+  test-epilogue: null
+  test-prologue: null
+- name: Buf
+  states:
+  - name: Valid
+    test-code: |
+      ctx->buffer = &ctx->buffer_pointer;
+    text: |
+      While the ${../if/get-buffer:/params[1]/name} parameter references an
+      object of type ``void *``.
+  - name: 'Null'
+    test-code: |
+      ctx->buffer = NULL;
+    text: |
+      While the ${../if/get-buffer:/params[1]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Avail
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the partition has at least one free buffer available.
+  - name: 'No'
+    test-code: |
+      sc = rtems_partition_get_buffer( ctx->id_value, &ctx->stolen_buffer );
+      T_rsc_success( sc );
+    text: |
+      While the partition does not have a buffer available.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_partition_get_buffer( ctx->id, ctx->buffer );
+test-brief: null
+test-cleanup: |
+  rtems_status_code sc;
+
+  if ( (uintptr_t) ctx->buffer_pointer != 1 ) {
+    sc = rtems_partition_return_buffer( ctx->id_value, ctx->buffer_pointer );
+    T_rsc_success( sc );
+  }
+
+  if ( ctx->stolen_buffer != NULL ) {
+    sc = rtems_partition_return_buffer( ctx->id_value, ctx->stolen_buffer );
+    T_rsc_success( sc );
+  }
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_id id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: void **buffer
+- brief: null
+  description: null
+  member: void *buffer_pointer
+- brief: null
+  description: null
+  member: void *stolen_buffer
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: |
+  ctx->buffer_pointer = (void *) (uintptr_t) 1;
+  ctx->stolen_buffer = NULL;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->id_value = 0;
+    sc = rtems_partition_create(
+      rtems_build_name( 'N', 'A', 'M', 'E' ),
+      buffers,
+      sizeof( buffers ),
+      sizeof( buffers[ 0 ] ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->id_value
+    );
+    T_assert_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  #define BUFFER_COUNT 1
+
+  #define BUFFER_SIZE ( 2 * sizeof( void * ) )
+
+  static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
+    buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+test-target: testsuites/validation/tc-part-get.c
+test-teardown:
+  brief: null
+  code: |
+    if ( ctx->id_value != 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_partition_delete( ctx->id_value );
+      T_rsc_success( sc );
+    }
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    BufVar: Set
+  pre-conditions:
+    Avail:
+    - 'Yes'
+    Buf:
+    - Valid
+    Id:
+    - Part
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    BufVar: Nop
+  pre-conditions:
+    Avail: all
+    Buf:
+    - 'Null'
+    Id: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    BufVar: Nop
+  pre-conditions:
+    Avail: all
+    Buf:
+    - Valid
+    Id:
+    - NoObj
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    BufVar: Nop
+  pre-conditions:
+    Avail:
+    - 'No'
+    Buf:
+    - Valid
+    Id:
+    - Part
+type: requirement

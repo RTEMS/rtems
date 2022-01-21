@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/packed
+non-functional-type: interface
+rationale: |
+  The effect of the ${../if/packed:/name} macro is not propagated into any
+  structure, union or C++ class which is member of the structure, union or
+  C++ class declaration to which the macro is attached.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/packed:/name} macro is attached to a
+  struct, union, or C++ class type definition,
+  and the ``aligned`` attribute or ${../if/aligned:/name} macro
+  is not used on the struct, union, or C++ class type definition or
+  any member thereof,
+  the ${../if/packed:/name} macro shall cause all structure, union, or class
+  members to be aligned at one bit for a bit-field member and
+  one byte otherwise.
+type: requirement

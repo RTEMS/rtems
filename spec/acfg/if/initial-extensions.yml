@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  The default value is the empty list.
+description: |
+  The value of this configuration option is used to initialize the table of
+  initial user extensions.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/init-userext-table
+name: CONFIGURE_INITIAL_EXTENSIONS
+notes: |
+  The value of this configuration option is placed before the entries of
+  ${/bsp/if/acfg-initial-extension:/name} and after the entries of all other
+  initial user extensions.
+type: interface

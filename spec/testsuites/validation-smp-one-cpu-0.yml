@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This general purpose validation test suite provides enough resources to run
+  basic tests for all specified managers and functions in a configuration with
+  exactly one processor and an uniprocessor scheduler.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 1
+
+  #include "ts-default.h"
+test-description: null
+test-includes: []
+test-local-includes: []
+test-suite-name: ValidationSmpOneCpu0
+test-target: testsuites/validation/ts-validation-smp-one-cpu-0.c
+type: test-suite

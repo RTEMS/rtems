@@ -1,0 +1,62 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the interrupt vector in the interrupt server request.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      ${.:/params[0]/name}->entry.vector = vector;
+    params:
+    - ${server-request:/name} *${.:/params[0]/name}
+    - ${vector-number:/name} ${.:/params[1]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: ../constraint/server-request-initialized
+- role: constraint
+  uid: ../constraint/server-request-not-while-set-vector
+- role: constraint
+  uid: ../constraint/server-request-not-while-submit
+- role: constraint
+  uid: ../constraint/server-entry-not-while-pending
+name: rtems_interrupt_server_request_set_vector
+notes: |
+  By default, the interrupt vector of an interrupt server request is set to a
+  special value which is outside the range of vectors supported by the
+  interrupt controller hardware.
+
+  Calls to ${server-request-submit:/name} will disable the interrupt vector of
+  the request.  After processing of the request by the interrupt server the
+  interrupt vector will be enabled again.
+params:
+- description: |
+    is the interrupt server request to change.
+  dir: inout
+  name: request
+- description: |
+    is the interrupt vector number to be used by the request.
+  dir: null
+  name: vector
+return: null
+type: interface

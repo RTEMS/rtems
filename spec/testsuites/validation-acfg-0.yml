@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/req/appl-does-not-need-clock-driver
+- role: validation
+  uid: /acfg/req/max-file-descriptors
+- role: validation
+  uid: /acfg/req/disable-newlib-reentrancy
+- role: validation
+  uid: /acfg/req/appl-disable-filesystem
+- role: validation
+  uid: /acfg/req/idle-task-init-appl
+- role: validation
+  uid: /acfg/req/idle-task-body
+- role: validation
+  uid: /acfg/req/init
+test-brief: |
+  This validation test suite is used to validate the default value of
+  application configuration options taking the optional BSP provided settings
+  into account.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+  void *IdleBody( uintptr_t ignored )
+  {
+    (void) ignored;
+    RunTestSuite();
+  }
+
+  #define CONFIGURE_IDLE_TASK_BODY IdleBody
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-description: null
+test-includes: []
+test-local-includes:
+- ts-acfg.h
+- tx-support.h
+test-suite-name: ValidationAcfg0
+test-target: testsuites/validation/ts-validation-acfg-0.c
+type: test-suite

@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of application configuration options with optional
+    BSP-provided settings.
+  action-code: |
+    rtems_extensions_table bsp = BSP_INITIAL_EXTENSION;
+  checks:
+  - brief: |
+      Check the default value ${/acfg/if/idle-task-body:/name} where the
+      optional BSP-provided default value is disabled.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_idle_task(),
+        _CPU_Thread_Idle_body
+      );
+    links:
+    - role: validation
+      uid: ../if/idle-task-body
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  - brief: |
+      Check the default value ${/acfg/if/idle-task-stack-size:/name} where the
+      optional BSP-provided default value is disabled.
+    code: |
+      T_eq_sz(
+        rtems_configuration_get_idle_task_stack_size(),
+        CPU_STACK_MINIMUM_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../if/idle-task-stack-size
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  - brief: |
+      Check the default value ${/acfg/if/interrupt-stack-size:/name} where the
+      optional BSP-provided default value is disabled.
+    code: |
+      T_eq_sz(
+        rtems_configuration_get_interrupt_stack_size(),
+        CPU_STACK_MINIMUM_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../if/interrupt-stack-size
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  - brief: |
+      Check the BSP-provided initial extension is not registered.
+    code: |
+      T_eq_sz( _User_extensions_Initial_count, 1 );
+      T_ne_ptr(
+        _User_extensions_Initial_extensions[ 0 ].fatal,
+        bsp.fatal
+      );
+    links:
+    - role: validation
+      uid: ../req/bsp-initial-extension
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  links: []
+test-brief: |
+  Tests the default values of application configuration options where all
+  optional BSP provided settings are disabled.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- bsp.h
+- rtems/score/userextdata.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-acfg-disabled-bsp-settings.c
+test-teardown: null
+type: test-case

@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 0
+description: |
+  The value of this configuration option defines the maximum number of POSIX
+  API Timers that can be concurrently active.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-posix
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-obj
+- role: constraint
+  uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/unlimited
+- role: constraint
+  uid: ../constraint/posix-api
+name: CONFIGURE_MAXIMUM_POSIX_TIMERS
+notes: |
+  This object class can be configured in unlimited allocation mode, see
+  ${/doc/if/config-unlimited-objects:/name}.
+
+  Timers are only available if RTEMS was built with the
+  ``--enable-posix`` build configuration option.
+type: interface

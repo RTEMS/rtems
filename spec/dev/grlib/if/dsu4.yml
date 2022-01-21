@@ -1,0 +1,652 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBDSU4
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: dsu4-header
+definition:
+- default:
+    count: 1
+    name: CTRL
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: DTTC
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: BRSS
+  offset: 0x20
+  variants: []
+- default:
+    count: 1
+    name: DBGM
+  offset: 0x24
+  variants: []
+- default:
+    count: 1
+    name: ATBC
+  offset: 0x40
+  variants: []
+- default:
+    count: 1
+    name: ATBI
+  offset: 0x44
+  variants: []
+- default:
+    count: 1
+    name: ATBFC
+  offset: 0x48
+  variants: []
+- default:
+    count: 1
+    name: ATBFM
+  offset: 0x4c
+  variants: []
+- default:
+    count: 1
+    name: ATBBA
+  offset: 0x50
+  variants: []
+- default:
+    count: 1
+    name: ATBBM
+  offset: 0x54
+  variants: []
+- default:
+    count: 1
+    name: ATBBA
+  offset: 0x58
+  variants: []
+- default:
+    count: 1
+    name: ATBBM
+  offset: 0x5c
+  variants: []
+- default:
+    count: 1
+    name: ICNT
+  offset: 0x70
+  variants: []
+- default:
+    count: 1
+    name: AHBWPC
+  offset: 0x80
+  variants: []
+- default:
+    count: 1
+    name: AHBWPD
+  offset: 0x90
+  variants: []
+- default:
+    count: 1
+    name: AHBWPD
+  offset: 0x9c
+  variants: []
+- default:
+    count: 1
+    name: AHBWPM
+  offset: 0xa0
+  variants: []
+- default:
+    count: 1
+    name: AHBWPM
+  offset: 0xac
+  variants: []
+- default:
+    count: 1
+    name: AHBWPD
+  offset: 0xb0
+  variants: []
+- default:
+    count: 1
+    name: AHBWPD
+  offset: 0xbc
+  variants: []
+- default:
+    count: 1
+    name: AHBWPM
+  offset: 0xc0
+  variants: []
+- default:
+    count: 1
+    name: AHBWPM
+  offset: 0xcc
+  variants: []
+- default:
+    count: 1
+    name: ITBC0
+  offset: 0x110000
+  variants: []
+- default:
+    count: 1
+    name: ITBC1
+  offset: 0x110004
+  variants: []
+- default:
+    count: 1
+    name: DTR
+  offset: 0x400020
+  variants: []
+- default:
+    count: 1
+    name: DASI
+  offset: 0x400024
+  variants: []
+register-prefix: null
+register-block-group: DSU4
+register-block-size: 4194344
+registers:
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PW'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'HL'
+      start: 10
+      width: 1
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'PE'
+      start: 9
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EB'
+      start: 8
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EE'
+      start: 7
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DM'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BZ'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BX'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BS'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BW'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BE'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TE'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    DSU control register
+  description: null
+  name: CTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TIMETAG'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    DSU time tag counter register
+  description: null
+  name: DTTC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SS_3_0'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BN_3_0'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    DSU break and single step register
+  description: null
+  name: BRSS
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DM_3_0'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ED_3_0'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    DSU debug mode mask register
+  description: null
+  name: DBGM
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EM'
+      start: 12
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TRAPTYPE'
+      start: 4
+      width: 8
+    variants: []
+  brief: |
+    DSU trap register
+  description: null
+  name: DTR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ASI'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    DSU ASI diagnostic access register
+  description: null
+  name: DASI
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DCNT'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DF'
+      start: 8
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SF'
+      start: 7
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TE'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TF'
+      start: 5
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BW'
+      start: 3
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BR'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DM'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    AHB trace buffer control register
+  description: null
+  name: ATBC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'INDEX'
+      start: 4
+      width: 8
+    variants: []
+  brief: |
+    AHB trace buffer index register
+  description: null
+  name: ATBI
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WPF'
+      start: 12
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BPF'
+      start: 8
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PF'
+      start: 3
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'AF'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FR'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FW'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    AHB trace buffer filter control register
+  description: null
+  name: ATBFC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SMASK_15_0'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MMASK_15_0'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    AHB trace buffer filter mask register
+  description: null
+  name: ATBFM
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BADDR_31_2'
+      start: 2
+      width: 30
+    variants: []
+  brief: |
+    AHB trace buffer break address registers
+  description: null
+  name: ATBBA
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BMASK_31_2'
+      start: 2
+      width: 30
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LD'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ST'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    AHB trace buffer break mask registers
+  description: null
+  name: ATBBM
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CE'
+      start: 31
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IC'
+      start: 30
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PE'
+      start: 29
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ICOUNT_28_0'
+      start: 0
+      width: 29
+    variants: []
+  brief: |
+    Instruction trace count register
+  description: null
+  name: ICNT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IN'
+      start: 6
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CP'
+      start: 5
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 4
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IN'
+      start: 2
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CP'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    AHB watchpoint control register
+  description: null
+  name: AHBWPC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DATA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    AHB watchpoint data registers
+  description: null
+  name: AHBWPD
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MASK'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    AHB watchpoint mask registers
+  description: null
+  name: AHBWPM
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TFILT'
+      start: 28
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ITPOINTER'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Instruction trace buffer control register 0
+  description: null
+  name: ITBC0
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WO'
+      start: 27
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TLIM'
+      start: 24
+      width: 3
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'TOV'
+      start: 23
+      width: 1
+    variants: []
+  brief: |
+    Instruction trace buffer control register 1
+  description: null
+  name: ITBC1
+  width: 32
+name: dsu4
+notes: null
+type: interface

@@ -1,0 +1,513 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: PostponedJobs
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->period->postponed_jobs, ctx->postponed_jobs );
+    text: |
+      The count of ${../glossary/postponedjob:/plural} of the period shall
+      not be modified.
+  - name: PlusOne
+    test-code: |
+      T_eq_u32( ctx->period->postponed_jobs, ctx->postponed_jobs + 1 );
+    text: |
+      The count of ${../glossary/postponedjob:/plural} of the period shall
+      be incremented by one.
+  test-epilogue: null
+  test-prologue: null
+- name: ReleaseJob
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->release_job_counter, 1 );
+    text: |
+      The ${../glossary/ownertask:/term} of the period shall release a
+      ${../glossary/job:/term} with a ${../glossary/deadline:/term} equal to the
+      ${/glossary/clock-tick:/term} plus the next period length by the timeout
+      operation.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->release_job_counter, 0 );
+    text: |
+      The ${../glossary/ownertask:/term} of the period shall not release a
+      ${../glossary/job:/term} by the timeout operation.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->unblock_counter, 1 );
+    text: |
+      The ${../glossary/ownertask:/term} of the period shall be unblocked
+      by the timeout operation.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->unblock_counter, 0 );
+    text: |
+      The ${../glossary/ownertask:/term} of the period shall not be
+      unblocked by the timeout operation.
+  test-epilogue: null
+  test-prologue: null
+- name: PeriodState
+  states:
+  - name: Active
+    test-code: |
+      T_eq_int( ctx->period->state, RATE_MONOTONIC_ACTIVE );
+    text: |
+      The period state shall be active.
+  - name: Expired
+    test-code: |
+      T_eq_int( ctx->period->state, RATE_MONOTONIC_EXPIRED );
+    text: |
+      The period state shall be expired.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Active
+    test-code: |
+      T_true( _Watchdog_Is_scheduled( &ctx->period->Timer ) );
+      T_eq_u64(
+        ctx->period->Timer.expire,
+        rtems_clock_get_ticks_since_boot() + 1
+      );
+    text: |
+      The timeout timer of the period shall expired at the current
+      ${/glossary/clock-tick:/term} plus the next period length.
+  test-epilogue: null
+  test-prologue: null
+- name: Uptime
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_i64( ctx->uptime_before, ctx->period->time_period_initiated );
+    text: |
+      The period initiated ${/glossary/clock-monotonic:/term} value shall not
+      be modified.
+  - name: Set
+    test-code: |
+      T_ne_i64( ctx->uptime_before, ctx->period->time_period_initiated );
+    text: |
+      The period initiated ${/glossary/clock-monotonic:/term} value shall be
+      set to the ${/glossary/clock-monotonic:/term} at some time point during
+      the timeout operation.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUUsage
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_i64(
+        ctx->cpu_usage_before,
+        ctx->period->cpu_usage_period_initiated
+      );
+    text: |
+      The period initiated CPU usage of the ${../glossary/ownertask:/term}
+      value shall not be modified.
+  - name: Set
+    test-code: |
+      T_ne_i64(
+        ctx->cpu_usage_before,
+        ctx->period->cpu_usage_period_initiated
+      );
+    text: |
+      The period initiated CPU usage of the ${../glossary/ownertask:/term}
+      value shall be set to the CPU
+      usage of the ${../glossary/ownertask:/term} at some time point during
+      the timeout operation.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: WaitFor
+  states:
+  - name: PeriodSelf
+    test-code: |
+      ctx->wait_for_period = true;
+      ctx->period_is_other = false;
+    text: |
+      While the ${../glossary/ownertask:/term} of the period waits for
+      the period.
+  - name: PeriodOther
+    test-code: |
+      ctx->wait_for_period = true;
+      ctx->period_is_other = true;
+    text: |
+      While the ${../glossary/ownertask:/term} of the period waits for
+      another period.
+  - name: Other
+    test-code: |
+      ctx->wait_for_period = false;
+    text: |
+      While the ${../glossary/ownertask:/term} of the period does not
+      wait for a period.
+  test-epilogue: null
+  test-prologue: null
+- name: WaitState
+  states:
+  - name: Blocked
+    test-code: |
+      ctx->intend_to_block = false;
+    text: |
+      While the ${../glossary/ownertask:/term} is in the blocked wait state.
+  - name: IntendToBlock
+    test-code: |
+      ctx->intend_to_block = true;
+    text: |
+      While the ${../glossary/ownertask:/term} is in the intend to block
+      wait state.
+  test-epilogue: null
+  test-prologue: null
+- name: PostponedJobs
+  states:
+  - name: Zero
+    test-code: |
+      ctx->postponed_jobs = 0;
+    text: |
+      While the count of ${../glossary/postponedjob:/plural} is equal to zero.
+  - name: NotZeroOrMax
+    test-code: |
+      ctx->postponed_jobs = 123;
+    text: |
+      While the count of ${../glossary/postponedjob:/plural} is not equal
+      to zero or ${/c/if/uint32_max:/name}.
+  - name: Max
+    test-code: |
+      ctx->postponed_jobs = UINT32_MAX;
+    text: |
+      While the count of ${../glossary/postponedjob:/plural} is equal
+      to ${/c/if/uint32_max:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  WaitForPeriodZeroPostponedJobs: |
+    A thread can only wait for a period if its
+    ${../glossary/postponedjob:/plural} counter is zero.
+test-action: |
+  SendEvents( ctx->worker_id, EVENT_RESET );
+  Yield();
+
+  if ( ctx->wait_for_period ) {
+    if ( ctx->period_is_other ) {
+      SendEvents( ctx->worker_id, EVENT_PERIOD_OTHER );
+      Yield();
+      Tick( ctx );
+    } else {
+      SendEvents( ctx->worker_id, EVENT_PERIOD_WAIT );
+      Yield();
+
+      if ( !ctx->intend_to_block ) {
+        Tick( ctx );
+      }
+    }
+  } else {
+    Tick( ctx );
+  }
+test-brief: null
+test-cleanup: |
+  ClockTick();
+  Yield();
+test-context:
+- brief: |
+    This member contains the period identifier.
+  description: null
+  member: |
+    rtems_id period_id
+- brief: |
+    This member references the period control block.
+  description: null
+  member: |
+    Rate_monotonic_Control *period
+- brief: |
+    This member contains another period identifier.
+  description: null
+  member: |
+    rtems_id other_period_id
+- brief: |
+    This member contains the worker task identifier.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request
+- brief: |
+    If this member is true, then the worker shall wait for a period.
+  description: null
+  member: |
+    bool wait_for_period
+- brief: |
+    If this member is true, then the worker shall wait for another period.
+  description: null
+  member: |
+    bool period_is_other
+- brief: |
+    If this member is true, then the worker shall intend to block for a period.
+  description: null
+  member: |
+    bool intend_to_block
+- brief: |
+    This member contains the ${../glossary/postponedjob:/plural} count
+    before the timeout.
+  description: null
+  member: |
+    uint32_t postponed_jobs
+- brief: |
+    This member contains the uptime of the period before the timeout.
+  description: null
+  member: |
+    Timestamp_Control uptime_before
+- brief: |
+    This member contains the CPU usage of the period before the timeout.
+  description: null
+  member: |
+    Timestamp_Control cpu_usage_before
+- brief: |
+    This member contains the release ${../glossary/job:/term} counter.
+  description: null
+  member: |
+    uint32_t release_job_counter
+- brief: |
+    This member contains the unblock counter.
+  description: null
+  member: |
+    uint32_t unblock_counter
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/rtems/ratemonimpl.h
+- rtems/test-scheduler.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    ctx->request.arg = ctx;
+    ctx->worker_id = CreateTask( "WORK", GetSelfPriority() );
+    StartTask( ctx->worker_id, Worker, ctx );
+    Yield();
+    ctx->period = GetControl( ctx->period_id );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  typedef enum {
+    EVENT_RESET = RTEMS_EVENT_0,
+    EVENT_PERIOD_WAIT = RTEMS_EVENT_1,
+    EVENT_PERIOD_OTHER = RTEMS_EVENT_2
+  } Event;
+
+  static void Tick( void *arg )
+  {
+    Context               *ctx;
+    T_scheduler_log_10     scheduler_log_10;
+    const T_scheduler_log *scheduler_log;
+    size_t                 index;
+
+    ctx = arg;
+    ctx->release_job_counter = 0;
+    ctx->unblock_counter = 0;
+    ctx->uptime_before = ctx->period->time_period_initiated;
+    ctx->cpu_usage_before = ctx->period->cpu_usage_period_initiated;
+    scheduler_log = T_scheduler_record_10( &scheduler_log_10 );
+    T_null( scheduler_log );
+    ClockTick();
+    scheduler_log = T_scheduler_record( NULL );
+    T_eq_ptr( &scheduler_log->header, &scheduler_log_10.header );
+
+    index = 0;
+
+    while ( true ) {
+      const T_scheduler_event *event;
+
+      event = T_scheduler_next_any( &scheduler_log_10.header, &index );
+
+      if ( event == &T_scheduler_event_null ) {
+        break;
+      }
+
+      T_eq_u32( event->thread->Object.id, ctx->worker_id );
+
+      switch ( event->operation ) {
+        case T_SCHEDULER_RELEASE_JOB:
+          ++ctx->release_job_counter;
+          T_eq_u64(
+            event->release_job.deadline,
+            rtems_clock_get_ticks_since_boot() + 1
+          );
+          break;
+        case T_SCHEDULER_UNBLOCK:
+          ++ctx->unblock_counter;
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = Tick;
+      CallWithinISRSubmit( &ctx->request );
+    }
+  }
+
+  static Rate_monotonic_Control *GetControl( rtems_id id )
+  {
+    Rate_monotonic_Control *period;
+    ISR_lock_Context        lock_context;
+
+    period = _Rate_monotonic_Get( id, &lock_context );
+    T_assert_not_null( period );
+    _ISR_lock_ISR_enable( &lock_context );
+
+    return period;
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    ctx = (Context *) arg;
+
+    sc = rtems_rate_monotonic_create( OBJECT_NAME, &ctx->period_id );
+    T_rsc_success( sc );
+
+    sc = rtems_rate_monotonic_create( OBJECT_NAME, &ctx->other_period_id );
+    T_rsc_success( sc );
+
+    while ( true ) {
+      rtems_event_set events;
+
+      events = ReceiveAnyEvents();
+
+      if ( ( events & EVENT_RESET ) != 0 ) {
+        sc = rtems_rate_monotonic_cancel( ctx->period_id );
+        T_rsc_success( sc );
+
+        sc = rtems_rate_monotonic_cancel( ctx->other_period_id );
+        T_rsc_success( sc );
+
+        sc = rtems_rate_monotonic_period( ctx->period_id, 1 );
+        T_rsc_success( sc );
+
+        ctx->period->postponed_jobs = ctx->postponed_jobs;
+      }
+
+      if ( ( events & EVENT_PERIOD_WAIT ) != 0 ) {
+        if ( ctx->intend_to_block ) {
+          T_scheduler_set_event_handler( SchedulerBlock, ctx );
+        }
+
+        sc = rtems_rate_monotonic_period( ctx->period_id, 1 );
+        T_rsc_success( sc );
+      }
+
+      if ( ( events & EVENT_PERIOD_OTHER ) != 0 ) {
+        sc = rtems_rate_monotonic_period( ctx->other_period_id, 2 );
+        T_rsc_success( sc );
+
+        sc = rtems_rate_monotonic_period( ctx->other_period_id, 2 );
+        T_rsc_success( sc );
+      }
+    }
+  }
+test-target: testsuites/validation/tc-ratemon-timeout.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    DeleteTask( ctx->worker_id );
+
+    sc = rtems_rate_monotonic_delete( ctx->period_id );
+    T_rsc_success( sc );
+
+    sc = rtems_rate_monotonic_delete( ctx->other_period_id );
+    T_rsc_success( sc );
+  description: null
+text: |
+  When the rate monotonic period timer expires.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    PostponedJobs:
+    - if:
+        pre-conditions:
+          PostponedJobs:
+          - Zero
+          - NotZeroOrMax
+      then: PlusOne
+    - else: Nop
+    ReleaseJob: 'No'
+    Unblock: 'No'
+    PeriodState: Expired
+    Timer: Active
+    Uptime: Nop
+    CPUUsage: Nop
+  pre-conditions:
+    WaitFor:
+    - PeriodOther
+    - Other
+    WaitState: N/A
+    PostponedJobs: all
+- enabled-by: true
+  post-conditions:
+    PostponedJobs: Nop
+    ReleaseJob: 'Yes'
+    Unblock:
+    - if:
+        pre-conditions:
+          WaitState:
+          - IntendToBlock
+      then: 'No'
+    - else: 'Yes'
+    PeriodState: Active
+    Timer: Active
+    Uptime: Set
+    CPUUsage: Set
+  pre-conditions:
+    WaitFor:
+    - PeriodSelf
+    WaitState: all
+    PostponedJobs: all
+- enabled-by: true
+  post-conditions: WaitForPeriodZeroPostponedJobs
+  pre-conditions:
+    WaitFor:
+    - PeriodSelf
+    WaitState: all
+    PostponedJobs:
+    - NotZeroOrMax
+    - Max
+type: requirement

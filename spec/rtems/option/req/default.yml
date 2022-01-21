@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/group
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  Each default directive option constant shall have a value of zero.
+type: requirement

@@ -1,0 +1,86 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/flsl
+post-conditions:
+- name: Result
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_int( flsl( 0 ), 0 );
+    text: |
+      The return value of ${../if/flsl:/name} shall be equal to zero.
+  - name: LastBitSet
+    test-code: |
+      expected_result = 1;
+      value = 1;
+
+      for ( i = 0; i < sizeof( long ) * CHAR_BIT; ++i ) {
+        T_eq_int( flsl( value ), expected_result );
+        ++expected_result;
+        value <<= 1;
+      }
+    text: |
+      The return value of ${../if/flsl:/name} shall be equal to the index of
+      the most-significant bit set in the parameter value.
+  test-epilogue: null
+  test-prologue: |
+    int    expected_result;
+    long   value;
+    size_t i;
+pre-conditions:
+- name: Value
+  states:
+  - name: Zero
+    test-code: |
+      /* Nothing to prepare */
+    text: |
+      While the parameter value is equal to zero.
+  - name: NonZero
+    test-code: |
+      /* Nothing to prepare */
+    text: |
+      While the parameter value is not equal to zero.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  /* The action is performed in the post-condition states */
+test-brief: null
+test-cleanup: null
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- limits.h
+- strings.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-flsl.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result: Zero
+  pre-conditions:
+    Value:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Result: LastBitSet
+  pre-conditions:
+    Value:
+    - NonZero
+type: requirement

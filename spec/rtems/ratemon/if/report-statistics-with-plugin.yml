@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Reports the period statistics using the printer plugin.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - const ${printer:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: |
+  This directive prints a report on all active periods which have executed at
+  least one period using the printer plugin specified by ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- print period statistics report
+- period statistics report
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_rate_monotonic_report_statistics_with_plugin
+notes: null
+params:
+- description: |
+    is the printer plugin to output the report.
+  dir: null
+  name: printer
+return: null
+type: interface

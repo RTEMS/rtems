@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Breaks the object name into the four component characters.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: |
+      *${.:/params[1]/name} = (char) ( ( ( ${.:/params[0]/name} ) >> 24 ) & 0xff );
+      *${.:/params[2]/name} = (char) ( ( ( ${.:/params[0]/name} ) >> 16 ) & 0xff );
+      *${.:/params[3]/name} = (char) ( ( ( ${.:/params[0]/name} ) >> 8 ) & 0xff );
+      *${.:/params[4]/name} = (char) ( ( ${.:/params[0]/name} ) & 0xff );
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - char *${.:/params[1]/name}
+    - char *${.:/params[2]/name}
+    - char *${.:/params[3]/name}
+    - char *${.:/params[4]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_name_to_characters
+notes: null
+params:
+- description: is the object name to break into four component characters.
+  dir: null
+  name: name
+- description: is the first character of the object name.
+  dir: out
+  name: c1
+- description: is the second character of the object name.
+  dir: out
+  name: c2
+- description: is the third character of the object name.
+  dir: out
+  name: c3
+- description: is the fourth character of the object name.
+  dir: out
+  name: c4
+return: null
+type: interface

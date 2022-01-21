@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: server context
+text: |
+  The ${../glossary/timerserviceroutine:/term} is or will be executed by the ${/glossary/task:/term} of the timer server.  A timer enters server ${../glossary/context:/term} when the timer is ${../glossary/scheduled:/term} using the directives ${../if/server-fire-after:/name} or ${../if/server-fire-when:/name}.  A timer leaves server ${../glossary/context:/term} when the timer is ${../glossary/scheduled:/term} using the directives ${../if/fire-after:/name} or ${../if/fire-when:/name} or when the timer is deleted.  Canceling or resetting a timer does not change the ${../glossary/context:/term}.
+type: glossary

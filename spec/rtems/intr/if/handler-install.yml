@@ -1,0 +1,129 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Installs the interrupt handler routine and argument at the interrupt vector.
+copyrights:
+- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${vector-number:/name} ${.:/params[0]/name}
+    - const char *${.:/params[1]/name}
+    - ${../../option/if/option:/name} ${.:/params[2]/name}
+    - ${handler:/name} ${.:/params[3]/name}
+    - void *${.:/params[4]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  One of the following mutually exclusive options
+
+  * ${unique:/name},
+
+  * ${shared:/name}, and
+
+  * ${replace:/name}
+
+  shall be set in the ${.:/params[2]/name} parameter.
+
+  The handler routine will be called with the argument specified by
+  ${.:/params[4]/name} when dispatched.  The order in which shared
+  interrupt handlers are dispatched for one vector is defined by the
+  installation order.  The first installed handler is dispatched first.
+
+  If the option ${unique:/name} is set, then it will be ensured that the
+  handler will be the only one for the interrupt vector.
+
+  If the option ${shared:/name} is set, then multiple handler may be installed
+  for the interrupt vector.
+
+  If the option ${replace:/name} is set, then the handler specified by
+  ${.:/params[3]/name} will replace the first handler with the same argument
+  for the interrupt vector if it exists, otherwise an error status will be
+  returned.  A second handler with the same argument for the interrupt vector
+  will remain unchanged.  The new handler will inherit the unique or shared
+  options from the replaced handler.
+
+  An informative description may be provided in ${.:/params[1]/name}.  It may
+  be used for system debugging and diagnostic tools.  The referenced string has
+  to be persistent as long as the handler is installed.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_interrupt_handler_install
+notes: null
+params:
+- description: |
+    is the interrupt vector number.
+  dir: null
+  name: vector
+- description: |
+    is the descriptive information of the interrupt handler to install.
+  dir: null
+  name: info
+- description: |
+    is the interrupt handler install option set.
+  dir: null
+  name: options
+- description: |
+    is the interrupt handler routine to install.
+  dir: null
+  name: routine
+- description: |
+    is the interrupt handler argument to install.
+  dir: null
+  name: arg
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The service was not initialized.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The ${.:/params[3]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no interrupt vector associated with the number specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The directive was called from within interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
+  - description: |
+      There was not enough memory available to allocate data structures to
+      install the handler.
+    value: ${../../status/if/no-memory:/name}
+  - description: |
+      The ${unique:/name} option was set in ${.:/params[2]/name} and the
+      interrupt vector was already occupied by a handler.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The ${shared:/name} option was set in ${.:/params[2]/name} and the
+      interrupt vector was already occupied by a unique handler.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The handler specified by ${.:/params[3]/name} was already installed for
+      the interrupt vector specified by ${.:/params[0]/name} with an argument
+      equal to the argument specified by ${.:/params[4]/name}.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      The ${replace:/name} option was set in ${.:/params[2]/name} and no
+      handler to replace was installed.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

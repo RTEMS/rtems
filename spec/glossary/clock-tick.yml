@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: clock tick
+text: |
+  The clock tick is a coarse time measure provided by RTEMS.  The
+  ${clock-driver:/term} emits clock ticks at rate specified by the
+  ${/acfg/if/microseconds-per-tick:/name} application configuration option.  In
+  contrast to ${clock-realtime:/term} and ${clock-monotonic:/term}, the clock
+  tick rate is not affected by incremental adjustments.
+type: glossary

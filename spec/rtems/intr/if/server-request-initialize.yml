@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Initializes the interrupt server request.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    - ${server-request:/name} *${.:/params[1]/name}
+    - ${handler:/name} ${.:/params[2]/name}
+    - void *${.:/params[3]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_interrupt_server_request_initialize
+notes: |
+  An interrupt server requests consists of an interrupt server entry and
+  exactly one interrupt server action.  The interrupt vector of the request may
+  be changed with ${server-request-set-vector:/name}.  Interrupt server
+  requests may be submitted to get serviced by the interrupt server with
+  ${server-request-submit:/name}.  Requests may be destroyed by
+  ${server-request-destroy:/name}.
+params:
+- description: |
+    is the interrupt server index.  The constant ${server-default:/name} may be
+    used to specify the default interrupt server.
+  dir: null
+  name: server_index
+- description: |
+    is the interrupt server request to initialize.
+  dir: out
+  name: request
+- description: |
+    is the interrupt handler routine for the request action.
+  dir: null
+  name: routine
+- description: |
+    is the interrupt handler argument for the request action.
+  dir: null
+  name: arg
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no interrupt server associated with the index specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

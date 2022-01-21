@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: inactive
+text: |
+  A period is in inactive ${../glossary/state:/term} if no current
+  ${../glossary/interval:/term} is set.  A period enters inactive
+  ${../glossary/state:/term} by a call to ${../if/create:/name} or
+  ${../if/cancel:/name}.  A period leaves inactive state by a call to
+  ${../if/period:/name} (not using ${../if/period-status-define:/name} as value
+  for parameter ${../if/period:/params[1]/name}).
+type: glossary

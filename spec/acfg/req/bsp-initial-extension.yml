@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: init
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where ${../if/disable-bsp-settings:/name} is not defined by the application,
+  where ${/bsp/if/acfg-initial-extension:/name} is defined by the
+  ${/glossary/bsp:/term}, when the application configuration is initialized,
+  the extension set defined by ${/bsp/if/acfg-initial-extension:/name} shall be
+  registered in the ${/glossary/initial-extension-sets:/term}.
+type: requirement

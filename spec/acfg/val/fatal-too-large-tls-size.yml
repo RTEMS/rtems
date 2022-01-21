@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by providing a thread-local storage object
+    of sufficient size with respect to the application configuration of the
+    test suite.
+  action-code: |
+    if ( shall_not_load_the_value ) {
+      uint8_t value;
+
+      value = large_tls_object[ 0 ];
+      RTEMS_OBFUSCATE_VARIABLE( value );
+    }
+  checks:
+  - brief: |
+      Check that the expected fatal source is present.
+    code: |
+      T_step_eq_int( ${step}, ctx->source, INTERNAL_ERROR_CORE );
+    links:
+    - role: validation
+      uid: ../req/fatal-too-large-tls-size
+  - brief: |
+      Check that the expected fatal code is present.
+    code: |
+      T_step_eq_ulong(
+        ${step},
+        ctx->code,
+        INTERNAL_ERROR_TOO_LARGE_TLS_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-too-large-tls-size
+  links: []
+test-brief: |
+  Tests a fatal error.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is fatal source.
+    dir: null
+    name: source
+    specifier: ${/rtems/userext/if/fatal-source:/name} ${.:name}
+  - description: |
+      is fatal code.
+    dir: null
+    name: code
+    specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
+  target: testsuites/validation/tr-fatal-too-large-tls-size.h
+test-includes:
+- rtems.h
+test-local-includes:
+- tr-fatal-too-large-tls-size.h
+test-setup: null
+test-stop: null
+test-support: |
+  static volatile _Thread_local uint8_t large_tls_object[ RTEMS_TASK_STORAGE_ALIGNMENT + 1 ];
+
+  static volatile bool shall_not_load_the_value;
+test-target: testsuites/validation/tr-fatal-too-large-tls-size.c
+test-teardown: null
+type: test-case

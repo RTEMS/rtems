@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/mem-smp-part-4
+test-brief: |
+  This static memory usage benchmark program facilitates a basic application
+  configuration with ${/acfg/if/max-processors:/name} defined to four using one
+  SMP EDF scheduler for each configured processor
+  (${/acfg/if/scheduler-edf-smp:/name}).
+test-code: |
+  static void Init( rtems_task_argument arg )
+  {
+    (void) arg;
+
+    /* Nothing to do */
+  }
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+
+  #if defined(RTEMS_SMP)
+  #define CONFIGURE_SCHEDULER_EDF_SMP
+
+  #include <rtems/scheduler.h>
+
+  RTEMS_SCHEDULER_EDF_SMP( a );
+
+  RTEMS_SCHEDULER_EDF_SMP( b );
+
+  RTEMS_SCHEDULER_EDF_SMP( c );
+
+  RTEMS_SCHEDULER_EDF_SMP( d );
+
+  #define NAME( x ) rtems_build_name( x, ' ', ' ', ' ' )
+
+  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP( a, NAME( 'A' ) ), \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP( b, NAME( 'B' ) ), \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP( c, NAME( 'C' ) ), \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP( d, NAME( 'D' ) )
+
+  #define CONFIGURE_SCHEDULER_ASSIGNMENTS \
+    RTEMS_SCHEDULER_ASSIGN( 0, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+    RTEMS_SCHEDULER_ASSIGN( 1, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+    RTEMS_SCHEDULER_ASSIGN( 2, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY ), \
+    RTEMS_SCHEDULER_ASSIGN( 3, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY )
+  #endif
+
+  #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+
+  #define TASK_STORAGE_SIZE \
+    RTEMS_TASK_STORAGE_SIZE( \
+      RTEMS_MINIMUM_STACK_SIZE, \
+      TASK_ATTRIBUTES   )
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+  #define CONFIGURE_MAXIMUM_TASKS 1
+
+  #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+  #define CONFIGURE_INIT_TASK_ATTRIBUTES TASK_ATTRIBUTES
+
+  #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+  #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE TASK_STORAGE_SIZE
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-description: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-suite-name: MemSmpPart4
+test-target: testsuites/membench/mem-rtems-smp-part-4.c
+type: test-suite

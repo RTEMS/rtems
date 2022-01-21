@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The timer class indicates how the timer was most recently fired.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enum
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: interface-enumerator
+  uid: dormant
+- role: interface-enumerator
+  uid: interval
+- role: interface-enumerator
+  uid: interval-on-task
+- role: interface-enumerator
+  uid: time-of-day
+- role: interface-enumerator
+  uid: time-of-day-on-task
+name: Timer_Classes
+notes: null
+type: interface

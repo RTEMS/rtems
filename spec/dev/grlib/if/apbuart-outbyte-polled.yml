@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Waits until an empty transmitter FIFO was observed and then stores the
+  character to the data register.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${apbuart:/name} *${.:/params[0]/name}
+    - char ${.:/params[1]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: apbuart-header-2
+- role: interface-ingroup
+  uid: apbuart
+name: apbuart_outbyte_polled
+notes: null
+params:
+- description: |
+    is the pointer to the APBUART register block.
+  dir: null
+  name: regs
+- description: |
+    is the character to output.
+  dir: null
+  name: ch
+return: null
+type: interface

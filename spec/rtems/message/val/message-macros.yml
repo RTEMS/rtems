@@ -1,0 +1,84 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+
+# ---- RTEMS_MESSAGE_QUEUE_BUFFER ----
+
+- action-brief: |
+    Check the ${../if/buffer:/name} macro.
+  action-code: |
+    rtems_status_code     status;
+    rtems_id              id;
+
+    static const uint32_t maximum_pending_messages_0 = 1;
+    static const size_t   maximum_message_size_0 = 1;
+    RTEMS_MESSAGE_QUEUE_BUFFER( maximum_message_size_0 )
+                          storage_area_0[ maximum_pending_messages_0 ];
+    rtems_message_queue_config config_0 = {
+      .name = rtems_build_name( 'M', 'S', 'G', '0' ),
+      .maximum_pending_messages = maximum_pending_messages_0,
+      .maximum_message_size = maximum_message_size_0,
+      .storage_area = storage_area_0,
+      .storage_size = sizeof( storage_area_0 ),
+      .storage_free = NULL,
+      .attributes = ${../../option/if/default:/name}
+    };
+
+    static const uint32_t maximum_pending_messages_1 = 3;
+    static const size_t   maximum_message_size_1 = 5;
+    RTEMS_MESSAGE_QUEUE_BUFFER( maximum_message_size_1 )
+                          storage_area_1[ maximum_pending_messages_1 ];
+    rtems_message_queue_config config_1 = {
+      .name = rtems_build_name( 'M', 'S', 'G', '1' ),
+      .maximum_pending_messages = maximum_pending_messages_1,
+      .maximum_message_size = maximum_message_size_1,
+      .storage_area = storage_area_1,
+      .storage_size = sizeof( storage_area_1 ),
+      .storage_free = NULL,
+      .attributes = ${../../option/if/default:/name}
+    };
+  checks:
+  - brief: |
+      Check that the object defined by the ${../if/buffer:/name} expression
+      has the desired size.
+      ${../if/construct:/name} will return ${../../status/if/unsatisfied:/name}
+      instead of ${../../status/if/successful:/name} if the
+      object defined by the ${../if/buffer:/name} expression has incorrect
+      size.
+    code: |
+      status = rtems_message_queue_construct(
+        &config_0,
+        &id
+      );
+      T_step_rsc_success( ${step}, status );
+      T_step_rsc_success( ${step}, rtems_message_queue_delete( id ) );
+
+      status = rtems_message_queue_construct(
+        &config_1,
+        &id
+      );
+      T_step_rsc_success( ${step}, status );
+      T_step_rsc_success( ${step}, rtems_message_queue_delete( id ) );
+    links:
+    - role: validation
+      uid: ../req/buffer
+  links: []
+
+test-brief: |
+  Tests the macros of the ${../if/group:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-message-macros.c
+test-teardown: null
+type: test-case

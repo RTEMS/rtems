@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/grlib-load-32
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/grlib-load-32:/name} directive shall load an unsigned 32-bit value
+  from the address specified by ${../if/grlib-load-32:/params[0]/name} and
+  return it.
+type: requirement

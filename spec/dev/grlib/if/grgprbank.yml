@@ -1,0 +1,357 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRGPRBANK
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: grgprbank-header
+definition:
+- default:
+    count: 1
+    name: FTMFUNC
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: ALTFUNC
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: LVDSMCLK
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: PLLNEWCFG
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: PLLRECFG
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: PLLCURCFG
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: DRVSTR1
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: DRVSTR2
+  offset: 0x1c
+  variants: []
+- default:
+    count: 1
+    name: LOCKDOWN
+  offset: 0x20
+  variants: []
+register-prefix: null
+register-block-group: GPRBANK
+register-block-size: 36
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'FTMEN'
+      start: 0
+      width: 22
+    variants: []
+  brief: |
+    FTMCTRL function enable register
+  description: null
+  name: FTMFUNC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ALTEN'
+      start: 0
+      width: 22
+    variants: []
+  brief: |
+    Alternative function enable register
+  description: null
+  name: ALTFUNC
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SMEM'
+      start: 17
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DMEM'
+      start: 16
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SPWOE'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    LVDS and memory clock pad enable register
+  description: null
+  name: LVDSMCLK
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SWTAG'
+      start: 27
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SPWPLLCFG'
+      start: 18
+      width: 9
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'MEMPLLCFG'
+      start: 9
+      width: 9
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SYSPLLCFG'
+      start: 0
+      width: 9
+    variants: []
+  brief: |
+    PLL new configuration register
+  description: null
+  name: PLLNEWCFG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'RECONF'
+      start: 0
+      width: 3
+    variants: []
+  brief: |
+    PLL reconfigure command register
+  description: null
+  name: PLLRECFG
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SWTAG'
+      start: 27
+      width: 2
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SPWPLLCFG'
+      start: 18
+      width: 9
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MEMPLLCFG'
+      start: 9
+      width: 9
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SYSPLLCFG'
+      start: 0
+      width: 9
+    variants: []
+  brief: |
+    PLL current configuration register
+  description: null
+  name: PLLCURCFG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S9'
+      start: 18
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S8'
+      start: 16
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S7'
+      start: 14
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S6'
+      start: 12
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S5'
+      start: 10
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S4'
+      start: 8
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S3'
+      start: 6
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S2'
+      start: 4
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S1'
+      start: 2
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S0'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    Drive strength configuration register 1
+  description: null
+  name: DRVSTR1
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S19'
+      start: 18
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S18'
+      start: 16
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S17'
+      start: 14
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S16'
+      start: 12
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S15'
+      start: 10
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S14'
+      start: 8
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S13'
+      start: 6
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S12'
+      start: 4
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S11'
+      start: 2
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'S10'
+      start: 0
+      width: 2
+    variants: []
+  brief: |
+    Drive strength configuration register 2
+  description: null
+  name: DRVSTR2
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'PERMANENT'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'REVOCABLE'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    Configuration lockdown register
+  description: null
+  name: LOCKDOWN
+  width: 32
+name: grgprbank
+notes: null
+type: interface

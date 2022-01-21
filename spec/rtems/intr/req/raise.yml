@@ -1,0 +1,350 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/raise
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      /* Validation is done by CheckRaise() for each interrupt vector */
+    text: |
+      The return status of ${../if/raise:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/raise:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: Unsat
+    test-code: |
+      /* Validation is done by CheckRaise() for each interrupt vector */
+    text: |
+      The return status of ${../if/raise:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Pending
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Validation is done by CheckRaise() for each interrupt vector */
+    text: |
+      The interrupt associated with the interrupt vector specified by
+      ${../if/raise:/params[0]/name} shall be made pending by the
+      ${../if/raise:/name} call.
+  - name: 'No'
+    test-code: |
+      /* Validation is done by CheckRaise() for each interrupt vector */
+    text: |
+      The interrupt associated with the interrupt vector specified by
+      ${../if/raise:/params[0]/name} shall not be made pending by the
+      ${../if/raise:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->valid_vector = true;
+    text: |
+      While the ${../if/raise:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->valid_vector = false;
+    text: |
+      While the ${../if/raise:/params[0]/name} parameter is
+      not associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: CanRaise
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckRaise().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/raise:/params[0]/name} parameter can be raised.
+  - name: 'No'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckRaise().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/raise:/params[0]/name} parameter cannot be raised.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->valid_vector ) {
+    for (
+      ctx->vector = 0;
+      ctx->vector < BSP_INTERRUPT_VECTOR_COUNT;
+      ++ctx->vector
+    ) {
+      rtems_status_code          sc;
+      rtems_interrupt_attributes attr;
+      bool                       has_installed_entries;
+
+      memset( &attr, 0, sizeof( attr ) );
+      sc = rtems_interrupt_get_attributes( ctx->vector, &attr );
+
+      if ( sc == RTEMS_INVALID_ID ) {
+        continue;
+      }
+
+      T_rsc_success( sc );
+
+      has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
+      CheckRaise( ctx, &attr, has_installed_entries );
+    }
+  } else {
+    ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
+    ctx->status = rtems_interrupt_raise( ctx->vector );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the count of serviced interrupts.
+  description: null
+  member: |
+    volatile uint32_t interrupt_count
+- brief: |
+    If this member is true, then the interrupt shall be cleared.
+  description: null
+  member: |
+    bool do_clear
+- brief: |
+    This member contains the current vector number.
+  description: null
+  member: |
+    rtems_vector_number vector
+- brief: |
+    If this member is true, then the ${../if/raise:/params[0]/name}
+    parameter shall be valid.
+  description: null
+  member: |
+    bool valid_vector
+- brief: |
+    This member contains the return value of the ${../if/raise:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static bool IsEnabled( const Context *ctx )
+  {
+    rtems_status_code sc;
+    bool              enabled;
+
+    enabled = false;
+    sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled );
+    T_rsc_success( sc );
+
+    return enabled;
+  }
+
+  static bool IsPending( const Context *ctx )
+  {
+    rtems_status_code sc;
+    bool              pending;
+
+    pending = false;
+    sc = rtems_interrupt_is_pending( ctx->vector, &pending );
+    T_rsc_success( sc );
+
+    return pending;
+  }
+
+  static void Disable( const Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_vector_disable( ctx->vector );
+    T_rsc_success( sc );
+  }
+
+  static void Raise( const Context *ctx )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_raise( ctx->vector );
+    T_rsc_success( sc );
+  }
+
+  static void EntryRoutine( void *arg )
+  {
+    Context *ctx;
+    uint32_t count;
+
+    (void) arg;
+    ctx = T_fixture_context();
+
+    count = ctx->interrupt_count;
+    ctx->interrupt_count = count + 1;
+
+    if ( ctx->do_clear ) {
+      rtems_status_code sc;
+
+      sc = rtems_interrupt_clear( ctx->vector );
+      T_rsc_success( sc );
+    }
+
+    if ( count > 2 ) {
+      /* Some interrupts are probably cased by a peripheral */
+      Disable( ctx );
+    }
+  }
+
+  static void CheckUnsatisfied( const Context *ctx )
+  {
+    rtems_status_code sc;
+    bool              pending_before;
+    bool              pending_after;
+
+    pending_before = true;
+    sc = rtems_interrupt_is_pending( ctx->vector, &pending_before );
+    T_rsc_success( sc );
+
+    sc = rtems_interrupt_raise( ctx->vector );
+    T_rsc( sc, RTEMS_UNSATISFIED );
+
+    pending_after = !pending_before;
+    sc = rtems_interrupt_is_pending( ctx->vector, &pending_after );
+    T_rsc_success( sc );
+
+    T_eq( pending_before, pending_after );
+  }
+
+  static void CheckRaise(
+    Context                          *ctx,
+    const rtems_interrupt_attributes *attr,
+    bool                              has_installed_entries
+  )
+  {
+    rtems_status_code sc;
+
+    if ( !attr->can_raise ) {
+      CheckUnsatisfied( ctx );
+    } else if ( has_installed_entries ) {
+      /* We cannot test this vector, since it is used by a device driver */
+    } else if ( !attr->is_maskable ) {
+      /* We can only safely test maskable interrupts */
+    } else if ( IsPending( ctx ) ) {
+      /*
+       * If there is already an interrupt pending, then it is probably raised
+       * by a peripheral which we cannot control.
+       */
+    } else if (
+      attr->can_disable && ( attr->can_clear || attr->cleared_by_acknowledge )
+    ) {
+      rtems_interrupt_entry entry;
+      rtems_interrupt_level level;
+
+      ctx->interrupt_count = 0;
+      ctx->do_clear = attr->can_clear && !attr->cleared_by_acknowledge;
+      rtems_interrupt_entry_initialize( &entry, EntryRoutine, ctx, "Info" );
+      sc = rtems_interrupt_entry_install(
+        ctx->vector,
+        RTEMS_INTERRUPT_UNIQUE,
+        &entry
+      );
+      T_rsc_success( sc );
+
+      if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
+        Disable( ctx );
+        Raise( ctx );
+
+        /*
+         * Some interrupt controllers will signal a pending interrupt if it is
+         * disabled (for example ARM GIC), others will not signal a pending
+         * interrupt if it is disabled (for example Freescale/NXP MPIC).
+         */
+        (void) IsPending( ctx );
+
+        sc = rtems_interrupt_vector_enable( ctx->vector );
+        T_rsc_success( sc );
+
+        while ( ctx->interrupt_count < 1 ) {
+          /* Wait */
+        }
+
+        T_false( IsPending( ctx ) );
+
+        rtems_interrupt_local_disable( level );
+        Raise( ctx );
+        T_true( IsPending( ctx ) );
+        rtems_interrupt_local_enable( level );
+
+        while ( ctx->interrupt_count < 2 ) {
+          /* Wait */
+        }
+
+        T_false( IsPending( ctx ) );
+      }
+
+      sc = rtems_interrupt_entry_remove( ctx->vector, &entry );
+      T_rsc_success( sc );
+    }
+  }
+test-target: testsuites/validation/tc-intr-raise.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Pending: 'Yes'
+  pre-conditions:
+    Vector:
+    - Valid
+    CanRaise:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Pending: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    CanRaise: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    Pending: 'No'
+  pre-conditions:
+    Vector:
+    - Valid
+    CanRaise:
+    - 'No'
+type: requirement

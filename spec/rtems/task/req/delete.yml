@@ -1,0 +1,1443 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/delete
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: CalledFromISR
+    test-code: |
+      T_rsc( ctx->status, RTEMS_CALLED_FROM_ISR );
+    text: |
+      The return status of ${../if/delete:/name} shall be
+      ${../../status/if/called-from-isr:/name}.
+  - name: NoReturn
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_IMPLEMENTED );
+    text: |
+      The ${../if/delete:/name} call shall not return.
+  test-epilogue: null
+  test-prologue: null
+- name: FatalError
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->calls.fatal, 1 );
+    text: |
+      The fatal error with a fatal source of
+      ${/score/interr/if/internal-error-core:/name} and a fatal code of
+      ${/score/interr/if/bad-thread-dispatch-disable-level:/name} shall occur
+      through the ${../if/delete:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls.fatal, 0 );
+    text: |
+      No fatal error shall occur through the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Zombie
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_ZOMBIE, STATES_ZOMBIE )
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      be in the zombie state after the ${../if/delete:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_ZOMBIE, 0 )
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      not be in the zombie state after the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: RealPriority
+  states:
+  - name: Raised
+    test-code: |
+      T_eq_u32( ctx->worker_priority, PRIO_ULTRA_HIGH );
+    text: |
+      The ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/delete:/params[0]/name} parameter shall be raised to the
+      ${/glossary/priority-current:/term} of the caller of
+      ${../if/delete:/name}.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->worker_priority, PRIO_NORMAL );
+    text: |
+      The ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/delete:/params[0]/name} parameter shall not be changed by the
+      ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: RestartExtensions
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_restart, 0 );
+    text: |
+      The thread delete user extensions shall not be invoked by the
+      ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: TerminateExtensions
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_terminate, 1 );
+    text: |
+      The thread terminate user extensions shall be invoked by the
+      ${../if/delete:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_terminate, 0 );
+    text: |
+      The thread terminate user extensions shall not be invoked by the
+      ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Dormant
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_DORMANT, STATES_DORMANT )
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      be dormant after the ${../if/delete:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_DORMANT, 0 )
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      not be dormant after the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_SUSPENDED, STATES_SUSPENDED )
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      be suspended after the ${../if/delete:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_SUSPENDED, 0 )
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      not be suspended after the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Restarting
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_ne_int( ctx->worker_life_state & THREAD_LIFE_RESTARTING, 0 );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter
+      shall be restarting after the ${../if/delete:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_int( ctx->worker_life_state & THREAD_LIFE_RESTARTING, 0 );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter
+      shall not be restarting after the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Terminating
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_ne_int( ctx->worker_life_state & THREAD_LIFE_TERMINATING, 0 );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter
+      shall be terminating after the ${../if/delete:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_int( ctx->worker_life_state & THREAD_LIFE_TERMINATING, 0 );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter
+      shall not be terminating after the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Protected
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_ne_int( ctx->worker_life_state & THREAD_LIFE_PROTECTED, 0 );
+    text: |
+      The thread life of the task specified by the
+      ${../if/delete:/params[0]/name} parameter be protected after the
+      ${../if/delete:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_int( ctx->worker_life_state & THREAD_LIFE_PROTECTED, 0 );
+    text: |
+      The thread life of the task specified by the
+      ${../if/delete:/params[0]/name} parameter shall not be protected after
+      the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Enqueued
+    test-code: |
+      T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
+      T_not_null( ctx->worker_wait_queue );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      be enqueued on a ${/glossary/waitqueue:/term} and blocked.
+  - name: Ready
+    test-code: |
+      T_eq_u32( ctx->worker_state & STATES_BLOCKED, 0 )
+      T_null( ctx->worker_wait_queue );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      not be enqueued on a ${/glossary/waitqueue:/term} and not blocked.
+  - name: Blocked
+    test-code: |
+      T_ne_u32( ctx->worker_state & STATES_BLOCKED, 0 )
+      T_null( ctx->worker_wait_queue );
+    text: |
+      The task specified by the ${../if/delete:/params[0]/name} parameter shall
+      be not enqueued on a ${/glossary/waitqueue:/term} and blocked.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Active
+    test-code: |
+      T_eq_int( ctx->worker_timer_info.state, TASK_TIMER_TICKS );
+    text: |
+      The timer of the task specified by the ${../if/delete:/params[0]/name}
+      parameter shall be active after the ${../if/delete:/name} call.
+  - name: Inactive
+    test-code: |
+      T_eq_int( ctx->worker_timer_info.state, TASK_TIMER_INACTIVE );
+    text: |
+      The timer of the task specified by the ${../if/delete:/params[0]/name}
+      parameter shall be inactive after the ${../if/delete:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Executing
+    test-code: |
+      ctx->id = RTEMS_SELF;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with
+      the calling task.
+  - name: Other
+    test-code: |
+      ctx->id = ctx->worker_id;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is associated with a
+      task other than the calling task.
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/delete:/params[0]/name} parameter is not associated with
+      a task.
+  test-epilogue: null
+  test-prologue: null
+- name: Context
+  states:
+  - name: Task
+    test-code: |
+      ctx->interrupt = false;
+    text: |
+      While the ${../if/delete:/name} directive is called from within task
+      context.
+  - name: Interrupt
+    test-code: |
+      ctx->interrupt = true;
+    text: |
+      While the ${../if/delete:/name} directive is called from within
+      interrupt context.
+  test-epilogue: null
+  test-prologue: null
+- name: ThreadDispatch
+  states:
+  - name: Disabled
+    test-code: |
+      ctx->dispatch_disabled = true;
+    text: |
+      While thread dispatching is disabled for the calling task.
+  - name: Enabled
+    test-code: |
+      ctx->dispatch_disabled = false;
+    text: |
+      While thread dispatching is enabled for the calling task.
+  test-epilogue: null
+  test-prologue: null
+- name: CallerPriority
+  states:
+  - name: Higher
+    test-code: |
+      ctx->deleter_has_higher_priority = true;
+    text: |
+      While the ${/glossary/priority-current:/term} of the task calling
+      ${../if/delete:/name} is higher than the ${/glossary/priority-real:/term}
+      of the task specified by the ${../if/delete:/params[0]/name} parameter.
+  - name: LowerEqual
+    test-code: |
+      ctx->deleter_has_higher_priority = false;
+    text: |
+      While the ${/glossary/priority-current:/term} of the task calling
+      ${../if/delete:/name} is lower than or equal to the
+      ${/glossary/priority-real:/term} of the task specified by the
+      ${../if/delete:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Dormant
+  states:
+  - name: 'No'
+    test-code: |
+      ctx->dormant = false;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is not dormant.
+  - name: 'Yes'
+    test-code: |
+      ctx->dormant = true;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is dormant.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspended = true;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspended = false;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is not suspended.
+  test-epilogue: null
+  test-prologue: null
+- name: Restarting
+  states:
+  - name: 'No'
+    test-code: |
+      ctx->restarting = false;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is not restarting.
+  - name: 'Yes'
+    test-code: |
+      ctx->restarting = true;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is restarting.
+  test-epilogue: null
+  test-prologue: null
+- name: Terminating
+  states:
+  - name: 'No'
+    test-code: |
+      ctx->terminating = false;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is not terminating.
+  - name: 'Yes'
+    test-code: |
+      ctx->terminating = true;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name} parameter
+      is terminating.
+  test-epilogue: null
+  test-prologue: null
+- name: Protected
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->protected = true;
+    text: |
+      While thread life of the task specified by the
+      ${../if/delete:/params[0]/name} parameter is protected.
+  - name: 'No'
+    test-code: |
+      ctx->protected = false;
+    text: |
+      While thread life of the task specified by the
+      ${../if/delete:/params[0]/name} parameter is not protected.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Enqueued
+    test-code: |
+      ctx->blocked = true;
+      ctx->enqueued = true;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name}
+      parameter is enqueued on a ${/glossary/waitqueue:/term}.
+  - name: Ready
+    test-code: |
+      ctx->blocked = false;
+      ctx->enqueued = false;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name}
+      parameter is a ${/glossary/readytask:/term} or a
+      ${/glossary/scheduledtask:/term}.
+  - name: Blocked
+    test-code: |
+      ctx->blocked = true;
+      ctx->enqueued = false;
+    text: |
+      While the task specified by the ${../if/delete:/params[0]/name}
+      parameter is blocked.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Inactive
+    test-code: |
+      ctx->timer_active = false;
+    text: |
+      While timer of the task specified by the ${../if/delete:/params[0]/name}
+      parameter is inactive.
+  - name: Active
+    test-code: |
+      ctx->timer_active = true;
+    text: |
+      While timer of the task specified by the ${../if/delete:/params[0]/name}
+      parameter is active.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  ExecutingIsNotDormant: |
+    An executing thread was started and thus is never dormant.
+  ExecutingIsNotBlocked: |
+    An executing thread is not blocked.
+  NotBlockedHasInactiveTimer: |
+    The timer of a not blocked thread is inactive.
+  ThreadDispatchDisabled: |
+    While ISRs or nested requests are processed, the thread dispatching is
+    disabled.
+test-action: |
+  rtems_status_code sc;
+
+  if ( ctx->id != INVALID_ID && !ctx->dormant ) {
+    ctx->worker_is_mutex_owner = false;
+    StartTask( ctx->worker_id, Worker, ctx );
+
+    /* Let the worker catch signals and set the thread life protection state */
+    Yield();
+
+    sc = rtems_signal_send( ctx->worker_id, RTEMS_SIGNAL_0 );
+    T_rsc_success( sc );
+
+    if ( ctx->restarting ) {
+      sc = rtems_task_restart( ctx->worker_id, 0 );
+      T_rsc_success( sc );
+    }
+
+    if ( ctx->terminating ) {
+      sc = rtems_task_restart( ctx->deleter_id, (rtems_task_argument) ctx );
+      T_rsc_success( sc );
+    } else {
+      Yield();
+    }
+  }
+
+  if ( ctx->id != RTEMS_SELF ) {
+    if ( ctx->interrupt ) {
+      CallWithinISR( Delete, ctx );
+    } else {
+      sc = rtems_task_restart( ctx->deleter_2_id, (rtems_task_argument) ctx );
+      T_rsc_success( sc );
+    }
+  }
+
+  Cleanup( ctx );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_10 scheduler_log
+- brief: |
+    This member provides a jump context to resume a thread dispatch.
+  description: null
+  member: |
+    jmp_buf thread_dispatch_context;
+- brief: |
+    This member contains the identifier of the runner scheduler.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member contains the identifier of the runner task.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member references the TCB of the runner task.
+  description: null
+  member: |
+    rtems_tcb *runner_tcb
+- brief: |
+    This member contains the identifier of the mutex.
+  description: null
+  member: |
+    rtems_id mutex_id
+- brief: |
+    This member provides an event set used to set up the blocking conditions of
+    the task to delete.
+  description: null
+  member: |
+    rtems_event_set events
+- brief: |
+    This member contains the identifier of the worker task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member references the TCB of the worker task.
+  description: null
+  member: |
+    rtems_tcb *worker_tcb
+- brief: |
+    This member contains the worker state at the end of the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    States_Control worker_state
+- brief: |
+    This member contains the worker timer info at the end of the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    TaskTimerInfo worker_timer_info;
+- brief: |
+    This member contains the worker thread queue at the end of the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    const Thread_queue_Queue *worker_wait_queue;
+- brief: |
+    This member contains the worker thread life state at the end of the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    Thread_Life_state worker_life_state
+- brief: |
+    This member contains the worker priority at the end of the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    rtems_task_priority worker_priority
+- brief: |
+    This member contains the identifier of the deleter task.
+  description: null
+  member: |
+    rtems_id deleter_id
+- brief: |
+    This member references the TCB of the deleter task.
+  description: null
+  member: |
+    rtems_tcb *deleter_tcb
+- brief: |
+    This member contains the identifier of the second deleter task.
+  description: null
+  member: |
+    rtems_id deleter_2_id
+- brief: |
+    This member references the TCB of the second deleter task.
+  description: null
+  member: |
+    rtems_tcb *deleter_2_tcb
+- brief: |
+    This member contains the identifier of the test user extensions.
+  description: null
+  member: |
+    rtems_id extension_id
+- brief: |
+    This member contains extension calls.
+  description: null
+  member: |
+    ExtensionCalls calls;
+- brief: |
+    This member contains extension calls after the ${../if/delete:/name} call.
+  description: null
+  member: |
+    ExtensionCalls calls_after_restart;
+- brief: |
+    This member contains the delete counter.
+  description: null
+  member: |
+    uint32_t restart_counter
+- brief: |
+    If this member is true, then the worker shall be dormant before the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool dormant
+- brief: |
+    If this member is true, then the worker shall be suspended before the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool suspended
+- brief: |
+    If this member is true, then the thread life of the worker shall be
+    protected before the ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool protected
+- brief: |
+    If this member is true, then the worker shall be restarting before the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool restarting
+- brief: |
+    If this member is true, then the worker shall be terminating before the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool terminating
+- brief: |
+    If this member is true, then the ${../if/delete:/name} shall be called
+    from within interrupt context.
+  description: null
+  member: |
+    bool interrupt
+- brief: |
+    If this member is true, then the worker shall be blocked before the
+    ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool blocked
+- brief: |
+    If this member is true, then the worker shall be enqueued on a
+    ${/glossary/waitqueue:/term} before the ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool enqueued
+- brief: |
+    If this member is true, then the worker obtained a mutex.
+  description: null
+  member: |
+    bool worker_is_mutex_owner
+- brief: |
+    If this member is true, then the timer of the worker shall be active before
+    the ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool timer_active
+- brief: |
+    If this member is true, then the deleter shall have a higher current
+    priority than the real priority of the worker.
+  description: null
+  member: |
+    bool deleter_has_higher_priority
+- brief: |
+    If this member is true, then thread dispatching is disabled by the worker
+    task before the ${../if/delete:/name} call.
+  description: null
+  member: |
+    bool dispatch_disabled
+- brief: |
+    If this member is true, then it is expected to delete the worker.
+  description: null
+  member: |
+    bool delete_worker_expected
+- brief: |
+    This member contains the return value of the ${../if/delete:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/delete:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+- rtems/bspIo.h
+- rtems/score/io.h
+- rtems/score/statesimpl.h
+- rtems/score/threaddispatch.h
+- rtems/score/threadimpl.h
+- limits.h
+- setjmp.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->status = RTEMS_NOT_IMPLEMENTED;
+  ctx->restart_counter = 0;
+
+  ctx->delete_worker_expected = false;
+  ctx->worker_id = CreateTask( "WORK", PRIO_NORMAL );
+  ctx->delete_worker_expected = true;
+
+  ctx->worker_tcb = GetThread( ctx->worker_id );
+  ctx->worker_state = UINT32_MAX;
+  ctx->worker_life_state = INT_MAX;
+  ctx->worker_priority = UINT32_MAX;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->runner_id = rtems_task_self();
+    ctx->runner_tcb = GetThread( ctx->runner_id );
+    ctx->scheduler_id = GetSelfScheduler();
+    ctx->mutex_id = CreateMutexNoProtocol();
+    ObtainMutex( ctx->mutex_id );
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'T', 'E', 'S', 'T' ),
+      &extensions,
+      &ctx->extension_id
+    );
+    T_rsc_success( sc );
+
+    SetFatalHandler( Fatal, ctx );
+    SetTaskSwitchExtension( TaskSwitch );
+    SetSelfPriority( PRIO_NORMAL );
+
+    ctx->deleter_id = CreateTask( "DELE", PRIO_HIGH );
+    ctx->deleter_tcb = GetThread( ctx->deleter_id );
+    StartTask( ctx->deleter_id, Deleter, NULL );
+
+    ctx->deleter_2_id = CreateTask( "DEL2", PRIO_ULTRA_HIGH );
+    ctx->deleter_2_tcb = GetThread( ctx->deleter_2_id );
+    StartTask( ctx->deleter_2_id, SecondDeleter, NULL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void CaptureWorkerState( Context *ctx )
+  {
+    T_scheduler_log *log;
+
+    log = T_scheduler_record( NULL );
+
+    if ( log != NULL ) {
+      T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+
+      ctx->worker_wait_queue = ctx->worker_tcb->Wait.queue;
+      ctx->worker_state = ctx->worker_tcb->current_state;
+      ctx->worker_life_state = ctx->worker_tcb->Life.state;
+      ctx->worker_priority =
+        SCHEDULER_PRIORITY_UNMAP( ctx->worker_tcb->Real_priority.priority );
+      CopyExtensionCalls( &ctx->calls, &ctx->calls_after_restart );
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &ctx->worker_timer_info );
+    }
+  }
+
+  static void TaskSwitch( rtems_tcb *executing, rtems_tcb *heir )
+  {
+    (void) executing;
+    (void) heir;
+    CaptureWorkerState( T_fixture_context() );
+  }
+
+  static void VerifyTaskPreparation( const Context *ctx )
+  {
+    if ( ctx->id != INVALID_ID ) {
+      States_Control state;
+      Thread_Life_state life_state;
+
+      state = STATES_READY;
+      life_state = ctx->worker_tcb->Life.state;
+
+      if ( ctx->suspended ) {
+        state |= STATES_SUSPENDED;
+      }
+
+      if ( ctx->dormant ) {
+        T_eq_int( life_state, 0 );
+        state |= STATES_DORMANT;
+      } else {
+        T_eq( ctx->protected, ( life_state & THREAD_LIFE_PROTECTED ) != 0 );
+        T_eq( ctx->restarting, ( life_state & THREAD_LIFE_RESTARTING ) != 0 );
+        T_eq( ctx->terminating, ( life_state & THREAD_LIFE_TERMINATING ) != 0 );
+
+        if ( ctx->blocked ) {
+          if ( ctx->enqueued ) {
+            state |= STATES_WAITING_FOR_MUTEX;
+          } else {
+            state |= STATES_WAITING_FOR_EVENT;
+          }
+        }
+      }
+
+      T_eq_u32( ctx->worker_tcb->current_state, state );
+    }
+  }
+
+  static void Fatal(
+    rtems_fatal_source source,
+    rtems_fatal_code   code,
+    void              *arg
+  )
+  {
+    Context *ctx;
+
+    T_eq_int( source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
+
+    ctx = arg;
+    ++ctx->calls.fatal;
+    T_assert_eq_int( ctx->calls.fatal, 1 );
+    longjmp( ctx->thread_dispatch_context, 1 );
+  }
+
+  static void ResumeThreadDispatch(
+    rtems_fatal_source source,
+    rtems_fatal_code   code,
+    void              *arg
+  )
+  {
+    Context *ctx;
+
+    T_eq_int( source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
+
+    ctx = arg;
+    SetFatalHandler( Fatal, ctx );
+    longjmp( ctx->thread_dispatch_context, 1 );
+  }
+
+  static void Delete( void *arg )
+  {
+    Context         *ctx;
+    T_scheduler_log *log;
+
+    ctx = arg;
+
+    if ( ctx->suspended && ctx->id != INVALID_ID ) {
+      if ( ctx->id != RTEMS_SELF || ctx->interrupt ) {
+        SuspendTask( ctx->worker_id );
+      } else {
+        Per_CPU_Control *cpu_self;
+
+        /*
+         * Where the system was built with SMP support enabled, a suspended
+         * executing thread during the ${../if/delete:/name} call can happen
+         * if the thread was suspended by another processor and the
+         * inter-processor interrupt did not yet arrive.  Where the system was
+         * built with SMP support disabled, this state cannot happen with the
+         * current implementation.  However, we still specify and validate this
+         * behaviour unconditionally since there exist alternative
+         * implementations which would lead to such a state if the executing
+         * thread is suspended by an ISR.
+         */
+        cpu_self = _Thread_Dispatch_disable();
+        SuspendSelf();
+        cpu_self->dispatch_necessary = false;
+        _Thread_Dispatch_enable( cpu_self );
+      }
+    }
+
+    if ( ctx->dispatch_disabled ) {
+      _Thread_Dispatch_disable();
+    }
+
+    VerifyTaskPreparation( ctx );
+    ClearExtensionCalls( &ctx->calls );
+
+    log = T_scheduler_record_10( &ctx->scheduler_log );
+    T_null( log );
+
+    if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+      ctx->status = rtems_task_delete( ctx->id );
+    } else {
+      _Thread_Dispatch_unnest( _Per_CPU_Get() );
+    }
+
+    CaptureWorkerState( ctx );
+
+    if ( ctx->dispatch_disabled ) {
+      _Thread_Dispatch_enable( _Per_CPU_Get() );
+    }
+  }
+
+  static void Block( Context *ctx )
+  {
+    rtems_interval ticks;
+
+    if ( ctx->timer_active ) {
+      ticks = UINT32_MAX;
+    } else {
+      ticks = RTEMS_NO_TIMEOUT;
+    }
+
+    if ( ctx->enqueued ) {
+      ObtainMutexTimed( ctx->mutex_id, ticks );
+      ctx->worker_is_mutex_owner = true;
+    } else {
+      /*
+       * Do not use a stack variable for the event set, since we may jump out
+       * of the directive call.
+       */
+      (void) rtems_event_receive(
+        RTEMS_ALL_EVENTS,
+        RTEMS_EVENT_ANY | RTEMS_WAIT,
+        ticks,
+        &ctx->events
+      );
+    }
+  }
+
+  static void BlockDone( Context *ctx )
+  {
+    if ( ctx->enqueued ) {
+      ReleaseMutex( ctx->mutex_id );
+    }
+  }
+
+  static void Signal( rtems_signal_set signals )
+  {
+    Context *ctx;
+
+    (void) signals;
+    ctx = T_fixture_context();
+
+    if ( ctx->id == RTEMS_SELF ) {
+      SetPriority( ctx->runner_id, PRIO_LOW );
+
+      if ( ctx->interrupt ) {
+        if ( ctx->blocked ) {
+          Per_CPU_Control *cpu_self;
+
+          SetFatalHandler( ResumeThreadDispatch, ctx );
+          cpu_self = _Thread_Dispatch_disable();
+
+          if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
+            Block( ctx );
+          } else {
+            _Thread_Dispatch_unnest( cpu_self );
+          }
+
+          CallWithinISR( Delete, ctx );
+
+          _Thread_Dispatch_direct( cpu_self );
+          BlockDone( ctx );
+        } else {
+          CallWithinISR( Delete, ctx );
+        }
+      } else {
+        Delete( ctx );
+      }
+    } else {
+      if ( ctx->blocked ) {
+        Block( ctx );
+        BlockDone( ctx );
+      } else {
+        SetPriority( ctx->runner_id, PRIO_HIGH );
+      }
+    }
+
+    if ( ctx->protected ) {
+      _Thread_Set_life_protection( 0 );
+    }
+  }
+
+  static void Deleter( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    if ( ctx != NULL ) {
+      /* We have to prevent the priority boost in the task delete below */
+      SetPriority( ctx->runner_id, PRIO_LOW );
+      SetSelfPriorityNoYield( PRIO_NORMAL );
+
+      DeleteTask( ctx->worker_id );
+    }
+
+    SuspendSelf();
+  }
+
+  static void SecondDeleter( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    if ( ctx != NULL ) {
+      if ( !ctx->deleter_has_higher_priority ) {
+        SetPriority( ctx->runner_id, PRIO_LOW );
+        SetSelfPriorityNoYield( PRIO_NORMAL );
+      }
+
+      Delete( ctx );
+    }
+
+    SuspendSelf();
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+
+    if ( arg != 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_signal_catch( Signal, RTEMS_NO_ASR );
+      T_rsc_success( sc );
+
+      if ( ctx->protected ) {
+        _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
+      }
+
+      Yield();
+    }
+
+    if ( IsMutexOwner( ctx->mutex_id ) ) {
+      ReleaseMutex( ctx->mutex_id );
+    }
+
+    rtems_task_exit();
+  }
+
+  static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->calls.thread_delete;
+
+    T_eq_u32( executing->Object.id, ctx->runner_id );
+
+    if ( ctx->delete_worker_expected ) {
+      T_eq_u32( deleted->Object.id, ctx->worker_id );
+    }
+  }
+
+  static void ThreadRestart( rtems_tcb *executing, rtems_tcb *restarted )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->calls.thread_restart;
+  }
+
+  static void ThreadTerminate( rtems_tcb *executing )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->calls.thread_terminate;
+
+    T_eq_u32( executing->Object.id, ctx->worker_id );
+
+    if ( IsMutexOwner( ctx->mutex_id ) ) {
+      ReleaseMutex( ctx->mutex_id );
+    }
+  }
+
+  static void Cleanup( Context *ctx )
+  {
+    SetSelfPriority( PRIO_VERY_LOW );
+
+    if ( ( ctx->id == RTEMS_SELF || ctx->interrupt ) && ctx->suspended ) {
+      ResumeTask( ctx->worker_id );
+    }
+
+    if ( ctx->protected && ctx->blocked ) {
+      if ( ctx->enqueued ) {
+        ReleaseMutex( ctx->mutex_id );
+        ObtainMutex( ctx->mutex_id );
+      } else {
+        SendEvents( ctx->worker_id, RTEMS_EVENT_0 );
+      }
+    }
+
+    if (
+      ctx->id == INVALID_ID ||
+      ( ctx->calls.thread_terminate == 0 && 
+      !( ctx->dormant && ctx->status != RTEMS_CALLED_FROM_ISR ) )
+    ) {
+      DeleteTask( ctx->worker_id );
+    }
+
+    SetSelfPriority( PRIO_NORMAL );
+  }
+
+  static const rtems_extensions_table extensions = {
+    .thread_delete = ThreadDelete,
+    .thread_restart = ThreadRestart,
+    .thread_terminate = ThreadTerminate
+  };
+test-target: testsuites/validation/tc-task-delete.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_extension_delete( ctx->extension_id );
+    T_rsc_success( sc );
+
+    SetFatalHandler( NULL, NULL );
+    SetTaskSwitchExtension( NULL );
+    DeleteTask( ctx->deleter_id );
+    DeleteTask( ctx->deleter_2_id );
+    ReleaseMutex( ctx->mutex_id );
+    DeleteMutex( ctx->mutex_id );
+    RestoreRunnerASR();
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then: CalledFromISR
+    - else: NoReturn
+    FatalError:
+    - if:
+        pre-conditions:
+          Context: Task
+          ThreadDispatch: Disabled
+      then: 'Yes'
+    - else: Nop
+    Dormant: 'No'
+    Suspended:
+    - specified-by: Suspended
+    Zombie:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then: 'No'
+    - if:
+        pre-conditions:
+          ThreadDispatch: Disabled
+      then: 'No'
+    - if:
+        pre-conditions:
+          Suspended: 'Yes'
+      then: 'No'
+    - else: 'Yes'
+    RealPriority: Nop
+    State:
+    - specified-by: State
+    Timer:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then-specified-by: Timer
+    - else: Inactive
+    Restarting:
+    - specified-by: Restarting
+    Terminating:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then-specified-by: Terminating
+    - else: 'Yes'
+    Protected:
+    - if:
+        pre-conditions:
+          Suspended: 'No'
+          Context: Task
+          ThreadDispatch: Enabled
+      then: 'Yes'
+    - specified-by: Protected
+    RestartExtensions: Nop
+    TerminateExtensions:
+    - if:
+        pre-conditions:
+          Suspended: 'No'
+          Context: Task
+          ThreadDispatch: Enabled
+      then: 'Yes'
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Executing
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State: all
+    Timer: all
+    CallerPriority: N/A
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then: CalledFromISR
+    - if:
+        pre-conditions:
+          ThreadDispatch: Disabled
+      then: NoReturn
+    - else: Ok
+    FatalError:
+    - if:
+        pre-conditions:
+          Context: Task
+          ThreadDispatch: Disabled
+      then: 'Yes'
+    - else: Nop
+    Dormant: 'No'
+    Suspended:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then-specified-by: Suspended
+    - else: 'No'
+    Zombie: 'No'
+    RealPriority:
+    - if:
+        pre-conditions:
+          Context: Task
+          CallerPriority: Higher
+      then: Raised
+    - else: Nop
+    State:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then-specified-by: State
+    - if:
+        pre-conditions:
+          Protected: 'Yes'
+      then-specified-by: State
+    - else: Ready
+    Timer:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then-specified-by: Timer
+    - if:
+        pre-conditions:
+          Protected: 'Yes'
+      then-specified-by: Timer
+    - else: Inactive
+    Restarting:
+    - specified-by: Restarting
+    Terminating:
+    - if:
+        pre-conditions:
+          Context: Task
+      then: 'Yes'
+    - specified-by: Terminating
+    Protected:
+    - specified-by: Protected
+    RestartExtensions: Nop
+    TerminateExtensions:
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Other
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State: all
+    Timer: all
+    CallerPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    FatalError: Nop
+    Dormant: N/A
+    Suspended: N/A
+    Zombie: N/A
+    RealPriority: N/A
+    State: N/A
+    Timer: N/A
+    Restarting: N/A
+    Terminating: N/A
+    Protected: N/A
+    RestartExtensions: Nop
+    TerminateExtensions: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Dormant: N/A
+    Suspended: N/A
+    Restarting: N/A
+    Terminating: N/A
+    Protected: N/A
+    Context: all
+    State: N/A
+    Timer: N/A
+    CallerPriority: N/A
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then: CalledFromISR
+    - if:
+        pre-conditions:
+          Context: Task
+          ThreadDispatch: Disabled
+      then: NoReturn
+    - else: Ok
+    FatalError:
+    - if:
+        pre-conditions:
+          Context: Task
+          ThreadDispatch: Disabled
+      then: 'Yes'
+    - else: Nop
+    Dormant: 'Yes'
+    Suspended:
+    - specified-by: Suspended
+    Zombie:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then: 'No'
+    - else: 'Yes'
+    RealPriority: Nop
+    State: Ready
+    Timer: Inactive
+    Restarting: 'No'
+    Terminating:
+    - if:
+        pre-conditions:
+          Context: Interrupt
+      then: 'No'
+    - else: 'Yes'
+    Protected: 'No'
+    RestartExtensions: Nop
+    TerminateExtensions: Nop
+  pre-conditions:
+    Id:
+    - Other
+    Dormant:
+    - 'Yes'
+    Suspended: all
+    Restarting: N/A
+    Terminating: N/A
+    Protected: N/A
+    Context: all
+    State: N/A
+    Timer: N/A
+    CallerPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: ExecutingIsNotDormant
+  pre-conditions:
+    Id:
+    - Executing
+    Dormant:
+    - 'Yes'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State: all
+    Timer: all
+    CallerPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: ExecutingIsNotBlocked
+  pre-conditions:
+    Id:
+    - Executing
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context:
+    - Task
+    State:
+    - Blocked
+    - Enqueued
+    Timer: all
+    CallerPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: NotBlockedHasInactiveTimer
+  pre-conditions:
+    Id:
+    - Executing
+    - Other
+    Dormant:
+    - 'No'
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context: all
+    State:
+    - Ready
+    Timer:
+    - Active
+    CallerPriority: all
+    ThreadDispatch: all
+- enabled-by: true
+  post-conditions: ThreadDispatchDisabled
+  pre-conditions:
+    Id: all
+    Dormant: all
+    Suspended: all
+    Restarting: all
+    Terminating: all
+    Protected: all
+    Context:
+    - Interrupt
+    State: all
+    Enqueued: all
+    Timer: all
+    CallerPriority: all
+    ThreadDispatch:
+    - Enabled
+type: requirement

@@ -1,0 +1,99 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Creates a port.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    - void *${.:/params[2]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[3]/name}
+    - ${../../type/if/id:/name} *${.:/params[4]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive creates a port which resides on the local node.  The port has
+  the user-defined object name specified in ${.:/params[0]/name}.  The assigned
+  object identifier is returned in ${.:/params[4]/name}.  This identifier is
+  used to access the port with other dual-ported memory port related
+  directives.
+enabled-by: true
+index-entries:
+- create a port
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
+name: rtems_port_create
+notes: |
+  The ${.:/params[1]/name} and ${.:/params[2]/name} parameters must be on a
+  boundary defined by the target processor architecture.
+
+  For control and maintenance of the port, RTEMS allocates a
+  ${/glossary/dpcb:/term} from the local DPCB free pool and initializes it.
+params:
+- description: |
+    is the object name of the port.
+  dir: null
+  name: name
+- description: |
+    is the internal start address of the memory area.
+  dir: null
+  name: internal_start
+- description: |
+    is the external start address of the memory area.
+  dir: null
+  name: external_start
+- description: |
+    is the length in bytes of the memory area.
+  dir: null
+  name: length
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the created port will be stored in
+    this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[4]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was not properly aligned.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was not properly aligned.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no inactive object available to create a port.  The number of
+      port available to the application is configured through the
+      ${/acfg/if/max-ports:/name} application configuration option.
+    value: ${../../status/if/too-many:/name}
+type: interface

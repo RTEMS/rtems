@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread to processor affinity set is a proper subset of the set of the
+  online processors, while the affinity set contains at least two processors,
+  while at least one processor of the affinity set is owned by a scheduler,
+  while a thread uses the scheduler as its ${/glossary/scheduler-home:/term},
+  when an attempt is made to set the thread to processor affinity set of the
+  thread to the affinity set, the operation shall abort with an error status
+  derived from ${/score/status/if/invalid-number:/name}.
+type: requirement

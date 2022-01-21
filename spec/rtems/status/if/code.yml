@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This enumeration provides status codes for directives of the Classic API.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enum
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: interface-enumerator
+  uid: successful
+- role: interface-enumerator
+  uid: task-exitted
+- role: interface-enumerator
+  uid: mp-not-configured
+- role: interface-enumerator
+  uid: invalid-name
+- role: interface-enumerator
+  uid: invalid-id
+- role: interface-enumerator
+  uid: too-many
+- role: interface-enumerator
+  uid: timeout
+- role: interface-enumerator
+  uid: object-was-deleted
+- role: interface-enumerator
+  uid: invalid-size
+- role: interface-enumerator
+  uid: invalid-address
+- role: interface-enumerator
+  uid: invalid-number
+- role: interface-enumerator
+  uid: not-defined
+- role: interface-enumerator
+  uid: resource-in-use
+- role: interface-enumerator
+  uid: unsatisfied
+- role: interface-enumerator
+  uid: incorrect-state
+- role: interface-enumerator
+  uid: already-suspended
+- role: interface-enumerator
+  uid: illegal-on-self
+- role: interface-enumerator
+  uid: illegal-on-remote-object
+- role: interface-enumerator
+  uid: called-from-isr
+- role: interface-enumerator
+  uid: invalid-priority
+- role: interface-enumerator
+  uid: invalid-clock
+- role: interface-enumerator
+  uid: invalid-node
+- role: interface-enumerator
+  uid: not-configured
+- role: interface-enumerator
+  uid: not-owner-of-resource
+- role: interface-enumerator
+  uid: not-implemented
+- role: interface-enumerator
+  uid: internal-error
+- role: interface-enumerator
+  uid: no-memory
+- role: interface-enumerator
+  uid: io-error
+- role: interface-enumerator
+  uid: interrupted
+- role: interface-enumerator
+  uid: proxy-blocking
+name: rtems_status_code
+notes: null
+type: interface

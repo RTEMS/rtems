@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: ../if/group
+functional-type: function
+rationale: |
+  While a thread has a higher ${/glossary/priority-current:/term} than the
+  ceiling priority of a MrsP semaphore, while the semaphore has an owner
+  thread, if the thread tries to obtain the semaphore, then an error status is
+  returned to notify about a priority ceiling violation.  This error condition
+  is not checked if the ${/glossary/priority-current:/term} is raised to a
+  higher priority than the ceiling priority while the thread is enqueued on the
+  thread queue of the semaphore.  It would complicate the implementation
+  considerable to check this error condition and restore the thread state so
+  that an error status can be returned.  The error check before the thread is
+  enqueued helps to detect application design issues.  For the implementation
+  it does not matter if the ${/glossary/priority-current:/term} is higher than
+  a ceiling priority.
+references: []
+requirement-type: functional
+text: |
+  While a thread is waiting to obtain a MrsP semaphore, while its
+  ${/glossary/priority-current:/term} changed so that it is higher than the
+  ceiling priority of the semaphore, the thread is allowed to become the new
+  owner of the semaphore.
+type: requirement

@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Call ${../if/get-processor:/name} on all online processors and check the
+    returned value.
+  action-code: |
+    rtems_id            scheduler_id;
+    rtems_task_priority priority;
+    uint32_t            cpu_index;
+    uint32_t            cpu_max;
+
+    scheduler_id = GetSelfScheduler();
+    priority = GetSelfPriority();
+    cpu_max = rtems_scheduler_get_processor_maximum();
+    T_step_ge_u32( ${step}, cpu_max, 1 );
+
+    for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
+      rtems_status_code sc;
+      rtems_id          id;
+
+      sc = rtems_scheduler_ident_by_processor( cpu_index, &id );
+      T_quiet_rsc_success( sc );
+
+      SetSelfScheduler( id, priority );
+      SetSelfAffinityOne( cpu_index );
+
+      T_quiet_eq_u32( rtems_scheduler_get_processor(), cpu_index );
+
+      SetSelfAffinityAll();
+    }
+
+    SetSelfScheduler( scheduler_id, priority );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/get-processor-smp-only
+- action-brief: |
+    Call ${../if/get-processor-maximum:/name} and check the returned value.
+  action-code: |
+    uint32_t cpu_max;
+
+    cpu_max = rtems_scheduler_get_processor_maximum();
+  checks:
+  - brief: |
+      Check that the returned value is greater than or equal to one.
+    code: |
+      T_step_ge_u32( ${step}, cpu_max, 1 );
+    links: []
+  - brief: |
+      Check that the returned value is less than or equal to
+      ${../../config/if/get-maximum-processors:/name}.
+    code: |
+      T_step_le_u32(
+        ${step},
+        cpu_max,
+        rtems_configuration_get_maximum_processors()
+      );
+    links: []
+  links:
+  - role: validation
+    uid: ../req/get-processor-maximum-smp-only
+test-brief: |
+  This test case collection provides validation test cases for SMP-only
+  requirements of the ${../if/group:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-scheduler-smp-only.c
+test-teardown: null
+type: test-case

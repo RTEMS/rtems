@@ -1,0 +1,432 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/text
+post-conditions:
+- name: Result
+  states:
+  - name: AlreadySuspended
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_ALREADY_SUSPENDED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_ALREADY_SUSPENDED".
+  - name: CalledFromIsr
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_CALLED_FROM_ISR" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_CALLED_FROM_ISR".
+  - name: IllegalOnRemoteObject
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_ILLEGAL_ON_REMOTE_OBJECT" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_ILLEGAL_ON_REMOTE_OBJECT".
+    test-code: |
+  - name: IllegalOnSelf
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_ILLEGAL_ON_SELF" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_ILLEGAL_ON_SELF".
+  - name: IncorrectState
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INCORRECT_STATE" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INCORRECT_STATE".
+  - name: InternalError
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INTERNAL_ERROR" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INTERNAL_ERROR".
+  - name: Interrupted
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INTERRUPTED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INTERRUPTED".
+  - name: InvalidAddress
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_ADDRESS" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_ADDRESS".
+  - name: InvalidClock
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_CLOCK" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_CLOCK".
+  - name: InvalidId
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_ID" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_ID".
+  - name: InvalidName
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_NAME" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_NAME".
+  - name: InvalidNode
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_NODE" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_NODE".
+  - name: InvalidNumber
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_NUMBER" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_NUMBER".
+  - name: InvalidPriority
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_PRIORITY" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_PRIORITY".
+  - name: InvalidSize
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_INVALID_SIZE" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_INVALID_SIZE".
+  - name: IoError
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_IO_ERROR" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_IO_ERROR".
+  - name: MpNotConfigured
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_MP_NOT_CONFIGURED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_MP_NOT_CONFIGURED".
+  - name: NoMemory
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_NO_MEMORY" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_NO_MEMORY".
+  - name: NotConfigured
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_NOT_CONFIGURED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_NOT_CONFIGURED".
+  - name: NotDefined
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_NOT_DEFINED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_NOT_DEFINED".
+  - name: NotImplemented
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_NOT_IMPLEMENTED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_NOT_IMPLEMENTED".
+  - name: NotOwnerOfResource
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_NOT_OWNER_OF_RESOURCE" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_NOT_OWNER_OF_RESOURCE".
+  - name: ObjectWasDeleted
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_OBJECT_WAS_DELETED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_OBJECT_WAS_DELETED".
+  - name: ProxyBlocking
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_PROXY_BLOCKING" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_PROXY_BLOCKING".
+  - name: ResourceInUse
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_RESOURCE_IN_USE" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_RESOURCE_IN_USE".
+  - name: Successful
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_SUCCESSFUL" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_SUCCESSFUL".
+  - name: TaskExitted
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_TASK_EXITTED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_TASK_EXITTED".
+  - name: Timeout
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_TIMEOUT" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_TIMEOUT".
+  - name: TooMany
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_TOO_MANY" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_TOO_MANY".
+  - name: Unsatisfied
+    test-code: |
+      T_eq_str( ctx->result, "RTEMS_UNSATISFIED" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "RTEMS_UNSATISFIED".
+  - name: NotAStatusCode
+    test-code: |
+      T_eq_str( ctx->result, "?" );
+    text: |
+      The return value of ${../if/text:/name} shall reference a string which is
+      equal to "?".
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Code
+  states:
+  - name: AlreadySuspended
+    test-code: |
+      ctx->code = RTEMS_ALREADY_SUSPENDED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/already-suspended:/name}.
+  - name: CalledFromIsr
+    test-code: |
+      ctx->code = RTEMS_CALLED_FROM_ISR;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/called-from-isr:/name}.
+  - name: IllegalOnRemoteObject
+    test-code: |
+      ctx->code = RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/illegal-on-remote-object:/name}.
+    test-code: |
+  - name: IllegalOnSelf
+    test-code: |
+      ctx->code = RTEMS_ILLEGAL_ON_SELF;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/illegal-on-self:/name}.
+  - name: IncorrectState
+    test-code: |
+      ctx->code = RTEMS_INCORRECT_STATE;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/incorrect-state:/name}.
+  - name: InternalError
+    test-code: |
+      ctx->code = RTEMS_INTERNAL_ERROR;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/internal-error:/name}.
+  - name: Interrupted
+    test-code: |
+      ctx->code = RTEMS_INTERRUPTED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/interrupted:/name}.
+  - name: InvalidAddress
+    test-code: |
+      ctx->code = RTEMS_INVALID_ADDRESS;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-address:/name}.
+  - name: InvalidClock
+    test-code: |
+      ctx->code = RTEMS_INVALID_CLOCK;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-clock:/name}.
+  - name: InvalidId
+    test-code: |
+      ctx->code = RTEMS_INVALID_ID;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-id:/name}.
+  - name: InvalidName
+    test-code: |
+      ctx->code = RTEMS_INVALID_NAME;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-name:/name}.
+  - name: InvalidNode
+    test-code: |
+      ctx->code = RTEMS_INVALID_NODE;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-node:/name}.
+  - name: InvalidNumber
+    test-code: |
+      ctx->code = RTEMS_INVALID_NUMBER;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-number:/name}.
+  - name: InvalidPriority
+    test-code: |
+      ctx->code = RTEMS_INVALID_PRIORITY;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-priority:/name}.
+  - name: InvalidSize
+    test-code: |
+      ctx->code = RTEMS_INVALID_SIZE;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/invalid-size:/name}.
+  - name: IoError
+    test-code: |
+      ctx->code = RTEMS_IO_ERROR;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/io-error:/name}.
+  - name: MpNotConfigured
+    test-code: |
+      ctx->code = RTEMS_MP_NOT_CONFIGURED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/mp-not-configured:/name}.
+  - name: NoMemory
+    test-code: |
+      ctx->code = RTEMS_NO_MEMORY;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/no-memory:/name}.
+  - name: NotConfigured
+    test-code: |
+      ctx->code = RTEMS_NOT_CONFIGURED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/not-configured:/name}.
+  - name: NotDefined
+    test-code: |
+      ctx->code = RTEMS_NOT_DEFINED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/not-defined:/name}.
+  - name: NotImplemented
+    test-code: |
+      ctx->code = RTEMS_NOT_IMPLEMENTED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/not-implemented:/name}.
+  - name: NotOwnerOfResource
+    test-code: |
+      ctx->code = RTEMS_NOT_OWNER_OF_RESOURCE;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/not-owner-of-resource:/name}.
+  - name: ObjectWasDeleted
+    test-code: |
+      ctx->code = RTEMS_OBJECT_WAS_DELETED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/object-was-deleted:/name}.
+  - name: ProxyBlocking
+    test-code: |
+      ctx->code = RTEMS_PROXY_BLOCKING;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/proxy-blocking:/name}.
+  - name: ResourceInUse
+    test-code: |
+      ctx->code = RTEMS_RESOURCE_IN_USE;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/resource-in-use:/name}.
+  - name: Successful
+    test-code: |
+      ctx->code = RTEMS_SUCCESSFUL;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/successful:/name}.
+  - name: TaskExitted
+    test-code: |
+      ctx->code = RTEMS_TASK_EXITTED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/task-exitted:/name}.
+  - name: Timeout
+    test-code: |
+      ctx->code = RTEMS_TIMEOUT;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/timeout:/name}.
+  - name: TooMany
+    test-code: |
+      ctx->code = RTEMS_TOO_MANY;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/too-many:/name}.
+  - name: Unsatisfied
+    test-code: |
+      ctx->code = RTEMS_UNSATISFIED;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter value is equal to
+      ${../if/unsatisfied:/name}.
+  - name: NotAStatusCode
+    test-code: |
+      ctx->code = (rtems_status_code) 123;
+    text: |
+      While the ${../if/text:/params[0]/name} parameter is not equal to an
+      enumerator of ${../if/code:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->result = rtems_status_text( ctx->code );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member specifies the ${../if/text:/params[0]/name} parameter value.
+  description: null
+  member: |
+    rtems_status_code code
+- brief: |
+    This member contains the return value of the ${../if/text:/name} call.
+  description: null
+  member: |
+    const char *result
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-status-text.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result:
+    - specified-by: Code
+  pre-conditions:
+    Code: all
+type: requirement

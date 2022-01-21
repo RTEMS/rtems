@@ -1,0 +1,184 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: deadlock
+post-conditions:
+- name: Result
+  states:
+  - name: Status
+    test-code: |
+      /* Checked by action */
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/deadlock:/name}.
+  - name: Fatal
+    test-code: |
+      /* Checked by action */
+    text: |
+      The system shall terminate with the
+      ${/score/interr/if/internal-error-core:/name} fatal source and the
+      ${/score/interr/if/thread-queue-deadlock:/name} fatal code.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Notification
+  states:
+  - name: Status
+    test-code: |
+      if ( ctx->tq_ctx->deadlock != TQ_DEADLOCK_STATUS ) {
+        ${.:skip}
+      }
+    text: |
+      Where a detected deadlock results in a return with a status code.
+  - name: Fatal
+    test-code: |
+      if ( ctx->tq_ctx->deadlock != TQ_DEADLOCK_FATAL ) {
+        ${.:skip}
+      }
+    text: |
+      Where a detected deadlock results in a fatal error.
+  test-epilogue: null
+  test-prologue: null
+- name: Deadlock
+  states:
+  - name: One
+    test-code: |
+      ctx->more = false;
+    text: |
+      While the owner of the thread queue is enqueued on another thread queue
+      owned by the calling thread.
+  - name: More
+    test-code: |
+      ctx->more = true;
+    text: |
+      While the owner of the thread queue is enqueued on another thread queue
+      owned by a thread other than the calling thread, and so on, while the
+      owner of the last thread queue of this dependency chain is enqueued on a
+      thread queue owned by the calling thread.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  Status_Control status;
+
+  if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
+  } else {
+    TQSetScheduler(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      SCHEDULER_A_ID,
+      PRIO_VERY_HIGH
+    );
+  }
+
+  TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_A_ID, PRIO_HIGH );
+  TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_A_ID, PRIO_HIGH );
+
+  TQSortMutexesByID( ctx->tq_ctx );
+  TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_C );
+  TQSendAndWaitForExecutionStop( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+
+  if ( ctx->more ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_C_OBTAIN );
+    Yield();
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_B_OBTAIN );
+    Yield();
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_A_OBTAIN );
+    Yield();
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      TQ_EVENT_MUTEX_B_OBTAIN
+    );
+  } else {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      TQ_EVENT_MUTEX_C_OBTAIN
+    );
+  }
+
+  if ( ctx->tq_ctx->deadlock == TQ_DEADLOCK_FATAL ) {
+    status = TQEnqueueFatal( ctx->tq_ctx );
+    T_eq_int( status, STATUS_DEADLOCK );
+  } else {
+    status = TQEnqueue( ctx->tq_ctx, TQ_WAIT_FOREVER );
+    T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_DEADLOCK ) );
+  }
+
+  TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_C );
+
+  if ( ctx->more ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_C_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_A_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_B_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_B_RELEASE );
+  } else {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_C_RELEASE );
+  }
+
+  if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+    TQSend(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC
+    );
+    TQSynchronizeRunner();
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_A_ID, PRIO_HIGH );
+  } else {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then more than one mutex shall be used for the
+    deadlock scenario.
+  description: null
+  member: |
+    bool more
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-enqueue-deadlock.h
+test-includes: []
+test-local-includes:
+- tr-tq-enqueue-deadlock.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-tq-enqueue-deadlock.c
+test-teardown: null
+text: |
+  When the calling thread attempts to be enqueued on the thread queue.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result:
+    - specified-by: Notification
+  pre-conditions:
+    Notification: all
+    Deadlock: all
+type: requirement

@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: transient overload
+text: |
+  A temporary rise in system activity which may cause deadlines to be
+  missed.  Rate Monotonic Scheduling can be used to determine if all
+  deadlines will be met under transient overload.
+type: glossary

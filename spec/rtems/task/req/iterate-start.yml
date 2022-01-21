@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/iterate
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When ${../if/iterate:/name} is called, the calling task shall obtain the
+  object allocator lock and then start an iteration over all tasks.
+type: requirement

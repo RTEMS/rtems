@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/weak
+non-functional-type: interface
+rationale: |
+  The other symbol with the same name can possibly be defined in
+  another compilation unit and linked with the compilation
+  unit containing the function or variable defined with ${../if/weak:/name}.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the produced target file format is ELF or a.out,
+  and the ${../if/weak:/name} macro is part of a function definition
+  at global scope or variable definition at global scope,
+  and there is another symbol at global scope with the same name as the above
+  mentioned function or variable,
+  and this other symbol is not defined with the ${../if/weak:/name} macro or
+  otherwise defined or declared ``weak``,
+  and both functions or variables have the same type,
+  and in case of variables both variables have the same alignment and
+  storage size,
+  the macro shall cause the code to behave as if the function or variable
+  defined with the ${../if/weak:/name} macro does not exist.
+type: requirement

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: deadlock
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread ``A`` tries to enqueue on a thread queue ``X``, while a thread
+  ``B`` tries to enqueue on a thread queue ``Y``, while the thread queue
+  dependency graph built up by threads ``A`` and ``B`` contains a cycle, the
+  deadlock shall be detected.
+type: requirement

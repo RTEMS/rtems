@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/malloclike
+non-functional-type: interface
+rationale: |
+  Functions like malloc() and calloc() have this property but functions
+  like realloc() do not have this property because the memory it returns
+  may pointer to valid objects.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/malloclike:/name} macro is used as last part of a
+  function declaration or is attached to a function definition,
+  and the function returns a pointer to memory,
+  and this pointer cannot be an alias of any other pointer valid when
+  the function returns,
+  and no pointers to valid objects occur in any storage addressed by
+  that pointer,
+  and the function returns non-NULL in more than 50% of the cases,
+  the macro shall cause the compiler to use this information for
+  optimization.
+type: requirement

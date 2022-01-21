@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets a ${/glossary/clock-tick:/term} value which is at least delta clock
+  ticks in the future.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: |
+      return ${/score/watchdog/if/ticks-since-boot:/name} + ${.:/params[0]/name};
+    params:
+    - ${../../type/if/interval:/name} ${.:/params[0]/name}
+    return: ${../../type/if/interval:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
+name: rtems_clock_tick_later
+notes: null
+params:
+- description: |
+    is the delta value in clock ticks.
+  dir: null
+  name: delta
+return:
+  return: |
+    Returns a ${/glossary/clock-tick:/term} counter value which is at least
+    ${.:/params[0]/name} clock ticks in the future.
+  return-values: []
+type: interface

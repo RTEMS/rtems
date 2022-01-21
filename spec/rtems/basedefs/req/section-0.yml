@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/section
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/section:/name} macro is attached to a
+  function declaration or definition or a global variable definition,
+  and the argument ${../if/section:/params[0]/name} after applying
+  all possible C pre-processor substitutions to its value is a
+  C sting containing valid linker section name,
+  and the file format used supports arbitary sections,
+  the macro shall cause the compiler to store the function or
+  variable in a section named like the result of the pre-processor
+  substitutions on its argument ${../if/section:/params[0]/name}.
+type: requirement

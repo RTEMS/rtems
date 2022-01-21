@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 Richi Dubey (richidubey@gmail.com)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: Weak APA
+text: |
+  Weak APA is a specialization of ${apa:/term}.  This refers to Linux's push
+  and pull implementation of APA model. When a ${thread:/term} becomes ready
+  for execution, it is allocated a processor if there is an idle processor, or
+  a processor executing a lower priority thread in its affinity set.  Unlike
+  ${strongapa:/term}, no thread is migrated from its processor to find a thread
+  to processor mapping.  See also :cite:`Cerqueira:2014:LPA`.
+type: glossary

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/receive
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/receive:/name} directive shall receive events from the
+  application event set of a task as specified by ${send-receive}.
+type: requirement

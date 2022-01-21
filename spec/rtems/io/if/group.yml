@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The Input/Output (I/O) Manager provides a well-defined mechanism for
+  accessing device drivers and a structured methodology for organizing device
+  drivers.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: null
+enabled-by: true
+identifier: RTEMSAPIClassicIO
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: register-driver
+- role: placement-order
+  uid: unregister-driver
+- role: placement-order
+  uid: initialize
+- role: placement-order
+  uid: register-name
+- role: placement-order
+  uid: open
+- role: placement-order
+  uid: close
+- role: placement-order
+  uid: read
+- role: placement-order
+  uid: write
+- role: placement-order
+  uid: control
+name: I/O Manager
+text: |
+  The Classic API shall provide an interface to the I/O Manager.
+type: interface

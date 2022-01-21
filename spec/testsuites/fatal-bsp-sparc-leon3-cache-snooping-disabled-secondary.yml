@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: bsps/sparc/leon3
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite contains a test case which triggers a fatal error
+  during system initialization.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define FATAL_SYSINIT_RUN \
+    BspSparcLeon3ValFatalCacheSnoopingDisabledSecondary_Run
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 2
+
+  #include "ts-fatal-sysinit.h"
+test-description: null
+test-includes: []
+test-local-includes:
+- tr-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.h
+test-suite-name: FatalBspSparcLeon3CacheSnoopingDisabledSecondary
+test-target: testsuites/validation/ts-fatal-bsp-sparc-leon3-cache-snooping-disabled-secondary.c
+type: test-suite

@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This attribute constant indicates that the Classic API semaphore created by
+  ${../../sem/if/create:/name} shall use the Priority Ceiling Protocol.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: '0x00000080'
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_PRIORITY_CEILING
+notes: |
+  The semaphore shall be a binary semaphore (${binary-semaphore:/name}).
+type: interface

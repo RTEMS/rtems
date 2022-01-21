@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/no-inline
+non-functional-type: interface
+rationale: |
+  If the function has no side effects, it may still be subject to inlining.
+  To avoid this, produce an artificial side effect with ``asm ("");``.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/no-inline:/name} macro is used as last part of a
+  function declaration or is attached to a function definition,
+  and the function has side-effects,
+  the macro shall prevent the compiler from inlining this function.
+type: requirement

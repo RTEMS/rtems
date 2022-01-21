@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Puts the character using ${putc:/name}
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - int ${.:/params[0]/name}
+    - void *${.:/params[1]/name}
+    return: void
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header-3
+- role: interface-ingroup
+  uid: group-3
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_put_char
+notes: |
+  The directive is provided to support the RTEMS Testing Framework.
+params:
+- description: |
+    is the character to output.
+  dir: null
+  name: c
+- description: |
+    is an unused argument.
+  dir: null
+  name: unused
+return: null
+type: interface

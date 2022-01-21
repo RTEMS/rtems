@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Puts the message at the front of the queue.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - const void *${.:/params[1]/name}
+    - ${/c/if/size_t:/name} ${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive sends the message ${.:/params[1]/name} of ${.:/params[2]/name}
+  bytes in length to the queue specified by ${.:/params[0]/name}.  If a task is
+  waiting at the queue, then the message is copied to the waiting task's buffer
+  and the task is unblocked. If no tasks are waiting at the queue, then the
+  message is copied to a message buffer which is obtained from this message
+  queue's message buffer pool.  The message buffer is then placed at the front
+  of the queue.
+enabled-by: true
+index-entries:
+- put message at front of queue
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_message_queue_urgent
+notes: null
+params:
+- description: |
+    is the queue identifier.
+  dir: null
+  name: id
+- description: |
+    is the begin address of the message buffer to send urgently.
+  dir: null
+  name: buffer
+- description: |
+    is the size in bytes of the message buffer to send urgently.
+  dir: null
+  name: size
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no queue associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The size of the message exceeded the maximum message size of the queue as
+      defined by ${create:/name} or ${construct:/name}.
+    value: ${../../status/if/invalid-size:/name}
+  - description: |
+      The maximum number of pending messages supported by the queue as defined
+      by ${create:/name} or ${construct:/name} has been reached.
+    value: ${../../status/if/too-many:/name}
+type: interface

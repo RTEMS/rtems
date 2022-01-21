@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+enabled-by: sparc/gr712rc
+links:
+- role: requirement-refinement
+  uid: errata-gr712rc-20
+non-functional-type: design
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The software product shall provide ${/glossary/assemblerlanguage:/term}
+  macros to help implementing workarounds for the errata.
+type: requirement

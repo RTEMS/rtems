@@ -1,0 +1,72 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the region information.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${/score/heap/if/information-block:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive is used to obtain information about the used and free memory
+  in the region specified by ${.:/params[0]/name}. This is a snapshot at the
+  time of the call. The information will be returned in the structure pointed
+  to by ${.:/params[1]/name}.
+enabled-by: true
+index-entries:
+- obtain region information
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_region_get_information
+notes: |
+  This is primarily intended as a mechanism to obtain a diagnostic information.
+  This method forms am O(n) scan of the free and an O(n) scan of the used
+  blocks in the region to calculate the information provided. Given that the
+  execution time is driven by the number of used and free blocks, it can take a
+  non-deterministic time to execute.
+
+  To get only the free information of the region use
+  ${get-free-information:/name}.
+params:
+- description: |
+    is the region identifier.
+  dir: null
+  name: id
+- description: |
+    is the pointer to a ${/score/heap/if/information-block:/name} object.  When
+    the directive call is successful, the information of the region will be
+    stored in this object.
+  dir: out
+  name: the_info
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no region associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

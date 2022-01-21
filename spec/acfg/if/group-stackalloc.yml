@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  This section describes configuration options related to the task stack
+  allocator.  RTEMS allows the application or BSP to define its own allocation
+  and deallocation methods for task stacks. This can be used to place task stacks
+  in special areas of memory or to utilize a Memory Management Unit so that stack
+  overflows are detected in hardware.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-group
+links:
+- role: interface-placement
+  uid: ../../if/domain
+- role: requirement-refinement
+  uid: ../../req/applconfig
+name: Task Stack Allocator Configuration
+text: ''
+type: interface

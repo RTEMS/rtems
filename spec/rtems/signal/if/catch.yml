@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Establishes an asynchronous signal routine (ASR) for the calling task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${asr-entry:/name} ${.:/params[0]/name}
+    - ${../../mode/if/mode:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive establishes an asynchronous signal routine (ASR) for the
+  calling task.  The ${.:/params[0]/name} parameter specifies the entry point
+  of the ASR.  A task may have at most one handler installed at a time.  The
+  most recently installed handler is used.  When ${.:/params[0]/name} is
+  ${/c/if/null:/name}, the ASR for the calling task is invalidated and all
+  pending signals are cleared.  Any signals sent to a task with an invalid ASR
+  are discarded.  The ${.:/params[1]/name} parameter specifies the execution
+  mode for the ASR.  This execution mode supersedes the task's execution mode
+  while the ASR is executing.
+enabled-by: true
+index-entries:
+- establish an ASR
+- install an ASR
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_signal_catch
+notes: |
+  It is strongly recommended to disable ASR processing during ASR processing by
+  setting ${../../mode/if/no-asr:/name} in ${.:/params[1]/name}, otherwise a
+  recursion may happen during ASR processing.  Uncontrolled recursion may lead
+  to stack overflows.
+
+  Using the same mutex (in particular a recursive mutex) in normal task context
+  and during ASR processing may result in undefined behaviour.
+
+  Asynchronous signal handlers can access thread-local storage
+  (${/glossary/tls:/term}).  When thread-local storage is shared between normal
+  task context and ASR processing, it may be protected by disabled interrupts.
+params:
+- description: |
+    is the handler to process an asynchronous signal set.
+  dir: null
+  name: asr_handler
+- description: |
+    is the task mode while an asynchronous signal set is processed by the
+    handler.  See ${../../task/if/mode:/name}.
+  dir: null
+  name: mode_set
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${../../mode/if/no-preempt:/name} was set in ${.:/params[1]/name} and
+      the system configuration had no implementation for this mode.
+    value: ${../../status/if/not-implemented:/name}
+  - description: |
+      The ${../../mode/if/interrupt-level:/name} was set to a positive level
+      in ${.:/params[1]/name} and the system configuration had no
+      implementation for this mode.
+    value: ${../../status/if/not-implemented:/name}
+type: interface

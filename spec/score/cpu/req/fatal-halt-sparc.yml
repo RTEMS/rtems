@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc
+links:
+- role: requirement-refinement
+  uid: fatal-halt
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/fatal-halt:/name} directive shall cause a system error halt with
+  the primary exit code set to the fatal source and the secondary exit code set
+  to the fatal code.
+type: requirement

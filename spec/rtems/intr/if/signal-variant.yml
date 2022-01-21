@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This enumeration provides interrupt trigger signal variants.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: enum
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: interface-enumerator
+  uid: signal-unspecified
+- role: interface-enumerator
+  uid: signal-no
+- role: interface-enumerator
+  uid: signal-level-low
+- role: interface-enumerator
+  uid: signal-level-high
+- role: interface-enumerator
+  uid: signal-edge-falling
+- role: interface-enumerator
+  uid: signal-edge-raising
+name: rtems_interrupt_signal_variant
+notes: null
+type: interface

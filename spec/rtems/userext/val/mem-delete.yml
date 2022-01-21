@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/mem-delete
+test-brief: |
+  This static memory usage benchmark program facilitates a basic application
+  configuration with ${/acfg/if/max-user-extensions:/name} defined to one and
+  calls to ${../if/create:/name} and ${../if/delete:/name}.
+test-code: |
+  static void Init( rtems_task_argument arg )
+  {
+    (void) arg;
+
+    (void) rtems_extension_create( 0, NULL, NULL );
+    (void) rtems_extension_delete( 0 );
+  }
+
+  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+  #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+
+  #define TASK_STORAGE_SIZE \
+    RTEMS_TASK_STORAGE_SIZE( \
+      RTEMS_MINIMUM_STACK_SIZE, \
+      TASK_ATTRIBUTES   )
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+  #define CONFIGURE_MAXIMUM_TASKS 1
+
+  #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+  #define CONFIGURE_INIT_TASK_ATTRIBUTES TASK_ATTRIBUTES
+
+  #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
+
+  #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE TASK_STORAGE_SIZE
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-description: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-suite-name: MemDelete
+test-target: testsuites/membench/mem-userext-delete.c
+type: test-suite

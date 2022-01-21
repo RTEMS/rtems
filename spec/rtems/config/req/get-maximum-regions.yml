@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-maximum-regions
+functional-type: function
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/max-regions:/name} application configuration option.
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-maximum-regions:/name} directive shall return the maximum
+  number of objects managed by the ${../../region/if/group:/name} that can be
+  concurrently active.
+type: requirement

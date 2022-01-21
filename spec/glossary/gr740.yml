@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: GR740
+text: |
+  The
+  `GR740 <https://www.gaisler.com/index.php/products/components/gr740>`_
+  is a ${system-on-chip:/term} containing four processors of the ${sparc:/term}
+  ${target-arch:/term}.
+type: glossary

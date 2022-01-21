@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/all-mode-masks
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The bitwise and of a task mode mask constant and
+  ${../if/all-mode-masks:/name} shall be equal to the task mode mask constant.
+type: requirement

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: fire
+text: |
+  A timer fires when ${/glossary/rtems:/term} in an ${/glossary/interrupt:/term}
+  detects that the ${../glossary/scheduled:/term} point in time has arrived to
+  invoke the ${../glossary/timerserviceroutine:/term} of the timer. Timer in
+  ${../glossary/servercontext:/term} may not immediately execute the
+  ${../glossary/timerserviceroutine:/term} due to ${../glossary/state:/term}
+  ${../glossary/pending:/term}.
+type: glossary

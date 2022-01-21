@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: owner task
+text: |
+  The owner ${/glossary/task:/term} of a period is the ${/glossary/task:/term}
+  which created it by successfully invoking ${../if/create:/name}.  The
+  ${/glossary/task:/term} looses the ownership when the period is deleted
+  by a call to ${../if/delete:/name}.  The ${../if/group:/name} permits
+  only the ${/glossary/task:/term} owning a period to invoke
+  ${../if/period:/name}.
+type: glossary

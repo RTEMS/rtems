@@ -1,0 +1,150 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBGPTIMER
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: gptimer-header
+- name: TIMER
+  role: register-block-include
+  uid: gptimer-timer
+definition:
+- default:
+    count: 1
+    name: SCALER
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: SRELOAD
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: CONFIG
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: LATCHCFG
+  offset: 0xc
+  variants: []
+- default:
+    count: 15
+    name: TIMER
+  offset: 0x10
+  variants: []
+register-prefix: null
+register-block-group: GPTIMER
+register-block-size: 256
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SCALER'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Scaler value register
+  description: null
+  name: SCALER
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SRELOAD'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    Scaler reload value register
+  description: null
+  name: SRELOAD
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EV'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ES'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EL'
+      start: 11
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EE'
+      start: 10
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'DF'
+      start: 9
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'SI'
+      start: 8
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IRQ'
+      start: 3
+      width: 5
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TIMERS'
+      start: 0
+      width: 3
+    variants: []
+  brief: |
+    Configuration register
+  description: null
+  name: CONFIG
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'LATCHSEL'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Timer latch configuration register
+  description: null
+  name: LATCHCFG
+  width: 32
+name: gptimer
+notes: null
+type: interface

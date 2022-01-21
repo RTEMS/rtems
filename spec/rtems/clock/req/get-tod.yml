@@ -1,0 +1,220 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-tod
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->set_tod_status );
+      T_rsc_success( ctx->get_tod_status );
+    text: |
+      The return status of ${../if/get-tod:/name} shall be
+      ${../../status/if/successful:/name}
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->get_tod_status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-tod:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: NotDef
+    test-code: |
+      T_rsc( ctx->get_tod_status, RTEMS_NOT_DEFINED );
+    text: |
+      The return status of ${../if/get-tod:/name} shall be
+      ${../../status/if/not-defined:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Value
+  states:
+  - name: TimeOfDay
+    test-code: |
+      T_eq_ptr( ctx->get_tod_ref, &ctx->get_tod_value );
+      T_eq_u32( ctx->get_tod_value.year,   ctx->set_tod_value.year );
+      T_eq_u32( ctx->get_tod_value.month,  ctx->set_tod_value.month );
+      T_eq_u32( ctx->get_tod_value.day,    ctx->set_tod_value.day );
+      T_eq_u32( ctx->get_tod_value.hour,   ctx->set_tod_value.hour );
+      T_eq_u32( ctx->get_tod_value.minute, ctx->set_tod_value.minute );
+      T_eq_u32( ctx->get_tod_value.second, ctx->set_tod_value.second );
+      /* rtems_clock_set() or rtems_clock_get_tod() cause an error of 1 tick */
+      T_ge_u32( ctx->get_tod_value.ticks + 1,  ctx->set_tod_value.ticks );
+      T_le_u32( ctx->get_tod_value.ticks, ctx->set_tod_value.ticks );
+    text: |
+      The value of the object referenced by the
+      ${../if/get-tod:/params[0]/name} parameter shall be set to the value
+      of the ${/glossary/clock-realtime:/term} at a point in time
+      during the call to ${../if/get-tod:/name}.
+  - name: Unchanged
+    test-code: |
+      T_eq_u32( ctx->get_tod_value.year,   1 );
+      T_eq_u32( ctx->get_tod_value.month,  1 );
+      T_eq_u32( ctx->get_tod_value.day,    1 );
+      T_eq_u32( ctx->get_tod_value.hour,   1 );
+      T_eq_u32( ctx->get_tod_value.minute, 1 );
+      T_eq_u32( ctx->get_tod_value.second, 1 );
+      T_eq_u32( ctx->get_tod_value.ticks,  1 );
+    text: |
+      Object referenced by the ${../if/get-tod:/params[0]/name} parameter
+      in past call to ${../if/get-tod:/name} shall not be modified
+      by the ${../if/get-tod:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: ToD
+  states:
+  - name: Arbitrary
+    test-code: |
+      ctx->set_tod_value =
+        (rtems_time_of_day) { 2023, 12, 27, 6, 7, 8,
+        rtems_clock_get_ticks_per_second() / 4 };
+    text: |
+      While the ${/glossary/clock-realtime:/term} indicates an
+      arbitrary valid date and time between 1988-01-01T00:00:00.000000000Z and
+      2514-05-30T01:53:03.999999999Z.
+  - name: Leap4
+    test-code: |
+      ctx->set_tod_value =
+        (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
+    text: |
+      While the ${/glossary/clock-realtime:/term} indicates a
+      date for a leap year with the value of 29th of February.
+  - name: Leap400
+    test-code: |
+      ctx->set_tod_value =
+        (rtems_time_of_day) { 2000, 2, 29, 0, 0, 0, 0 };
+    text: |
+      While the ${/glossary/clock-realtime:/term} indicates a
+      date for a leap year with the value of 29th of February.
+  - name: Youngest
+    test-code: |
+      ctx->set_tod_value =
+        (rtems_time_of_day) { 1988, 1, 1, 0, 0, 0, 0 };
+    text: |
+      While the ${/glossary/clock-realtime:/term} indicates the
+      youngest date and time accepted (1988-01-01T00:00:00.000000000Z).
+  - name: Oldest
+    test-code: |
+      ctx->set_tod_value =
+        (rtems_time_of_day) { 2099, 12, 31, 23, 59, 59,
+        rtems_clock_get_ticks_per_second() - 1 };
+    text: |
+      While the ${/glossary/clock-realtime:/term} indicates the
+      oldest date and time accepted (2099-12-31T23:59:59.999999999Z).
+  - name: NotSet
+    test-code: |
+      ctx->isDef = false;
+    text: |
+      While the ${/glossary/clock-realtime:/term} has not been set before.
+  test-epilogue: null
+  test-prologue: null
+- name: Param
+  states:
+  - name: Valid
+    test-code: |
+      ctx->get_tod_ref = &ctx->get_tod_value;
+    text: |
+      While the ${../if/get-tod:/params[0]/name} parameter references an
+      object of type ${../../type/if/time-of-day:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->get_tod_ref = NULL;
+    text: |
+      While the ${../if/get-tod:/params[0]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->isDef ) {
+    ctx->set_tod_status = rtems_clock_set( &ctx->set_tod_value );
+    ctx->get_tod_status = rtems_clock_get_tod( ctx->get_tod_ref );
+  } else {
+    UnsetClock();
+    ctx->get_tod_status = rtems_clock_get_tod( ctx->get_tod_ref );
+  }
+test-brief: null
+test-cleanup: |
+  UnsetClock();
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code set_tod_status
+- brief: null
+  description: null
+  member: rtems_time_of_day set_tod_value
+- brief: null
+  description: null
+  member: rtems_time_of_day *get_tod_ref
+- brief: null
+  description: null
+  member: rtems_time_of_day get_tod_value
+- brief: null
+  description: null
+  member: rtems_status_code get_tod_status
+- brief: null
+  description: null
+  member: bool isDef
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+    ctx->get_tod_value = (rtems_time_of_day) { 1, 1, 1, 1, 1, 1, 1 };
+    ctx->get_tod_ref = &ctx->get_tod_value;
+    ctx->set_tod_value = (rtems_time_of_day) { 2023, 4, 5, 6, 7, 8, 0 };
+    ctx->isDef = true;
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-clock-get-tod.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Value: TimeOfDay
+  pre-conditions:
+    ToD:
+      - Arbitrary
+      - Leap4
+      - Leap400
+      - Youngest
+      - Oldest
+    Param:
+      - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Value: Unchanged
+  pre-conditions:
+    ToD:
+      - Arbitrary
+      - Leap4
+      - Leap400
+      - Youngest
+      - Oldest
+      - NotSet
+    Param:
+      - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    Value: Unchanged
+  pre-conditions:
+    ToD:
+      - NotSet
+    Param:
+      - Valid
+type: requirement

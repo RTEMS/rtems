@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/declare-global-symbol
+non-functional-type: interface
+rationale: |
+  See also ${../if/define-global-symbol:/name}.
+references: []
+requirement-type: non-functional
+text: |
+  When the macro ${../if/declare-global-symbol:/name} appears at file scope,
+  and argument ${../if/declare-global-symbol:/params[0]/name} after undergoing
+  C pre-processor substitutions results in a valid C identifier name,
+  and this identifier name is not yet defined at file scope,
+  the macro ${../if/declare-global-symbol:/name} shall apply all possible C
+  pre-processor substitutions to its argument value
+  before it results in code which declares a global symbol
+  with the respective name.
+type: requirement

@@ -1,0 +1,125 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create a partition with a buffer area length which is greater than three
+    times the buffer size and less than four times the buffer size.
+  action-code: |
+    RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
+      buffers[ 4 ][ 2 * sizeof( void * ) ];
+    void              *pointers[ RTEMS_ARRAY_SIZE( buffers ) ];
+    void              *pointer;
+    rtems_status_code  sc;
+    rtems_id           id;
+
+    id = 0xffffffff;
+    sc = rtems_partition_create(
+      rtems_build_name( 'N', 'A', 'M', 'E' ),
+      buffers,
+      sizeof( buffers ) - 1,
+      sizeof( buffers[ 0 ] ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id
+    );
+    T_step_rsc_success( ${step}, sc );
+  checks:
+  - brief: |
+      Check that exactly three buffers can be obtained from the partition for
+      use in parallel.
+    code: |
+      pointers[ 0 ] = NULL;
+      sc = rtems_partition_get_buffer( id, &pointers[ 0 ] );
+      T_step_rsc_success( ${step}, sc );
+      T_step_not_null( ${step}, pointers[ 0 ] );
+
+      pointers[ 1 ] = NULL;
+      sc = rtems_partition_get_buffer( id, &pointers[ 1 ] );
+      T_step_rsc_success( ${step}, sc );
+      T_step_not_null( ${step}, pointers[ 1 ] );
+
+      pointers[ 2 ] = NULL;
+      sc = rtems_partition_get_buffer( id, &pointers[ 2 ] );
+      T_step_rsc_success( ${step}, sc );
+      T_step_not_null( ${step}, pointers[ 2 ] );
+
+      pointers[ 3 ] = NULL;
+      sc = rtems_partition_get_buffer( id, &pointers[ 3 ] );
+      T_step_rsc( ${step}, sc, RTEMS_UNSATISFIED );
+      T_step_null( ${step}, pointers[ 3 ] );
+    links:
+    - role: validation
+      uid: ../req/buffers
+  - brief: |
+      Return the three buffers in use to the partition and check that they can
+      be obtained from the partition for use in parallel in FIFO order.
+    code: |
+      sc = rtems_partition_return_buffer( id, pointers[ 1 ] );
+      T_step_rsc_success( ${step}, sc );
+
+      sc = rtems_partition_return_buffer( id, pointers[ 2 ] );
+      T_step_rsc_success( ${step}, sc );
+
+      sc = rtems_partition_return_buffer( id, pointers[ 0 ] );
+      T_step_rsc_success( ${step}, sc );
+
+      pointer = NULL;
+      sc = rtems_partition_get_buffer( id, &pointer );
+      T_step_rsc_success( ${step}, sc );
+      T_step_eq_ptr( ${step}, pointer, pointers[ 1 ] );
+
+      pointer = NULL;
+      sc = rtems_partition_get_buffer( id, &pointer );
+      T_step_rsc_success( ${step}, sc );
+      T_step_eq_ptr( ${step}, pointer, pointers[ 2 ] );
+
+      pointer = NULL;
+      sc = rtems_partition_get_buffer( id, &pointer );
+      T_step_rsc_success( ${step}, sc );
+      T_step_eq_ptr( ${step}, pointer, pointers[ 0 ] );
+
+      sc = rtems_partition_return_buffer( id, pointers[ 0 ] );
+      T_step_rsc_success( ${step}, sc );
+
+      sc = rtems_partition_return_buffer( id, pointers[ 1 ] );
+      T_step_rsc_success( ${step}, sc );
+
+      sc = rtems_partition_return_buffer( id, pointers[ 2 ] );
+      T_step_rsc_success( ${step}, sc );
+
+      sc = rtems_partition_delete( id );
+      T_step_rsc_success( ${step}, sc );
+    links:
+    - role: validation
+      uid: ../req/fifo
+  links: []
+- action-brief: |
+    Assert that ${../if/alignment:/name} is a constant expression which
+    evaluates to the expected value.
+  action-code: |
+    RTEMS_STATIC_ASSERT(
+      RTEMS_PARTITION_ALIGNMENT == CPU_SIZEOF_POINTER,
+      ALIGNMENT
+    );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/alignment
+test-brief: |
+  This test case collection provides validation test cases for requirements of
+  the ${../if/group:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-part.c
+test-teardown: null
+type: test-case

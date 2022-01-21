@@ -1,0 +1,69 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Identifies a timer by the object name.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - ${../../type/if/id:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive obtains a timer identifier associated with the timer name
+  specified in ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- obtain the ID of a timer
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_timer_ident
+notes: |
+  If the timer name is not unique, then the timer identifier will match the
+  first timer with that name in the search order.  However, this timer
+  identifier is not guaranteed to correspond to the desired timer.
+
+  The objects are searched from lowest to the highest index.  Only the local
+  node is searched.
+
+  The timer identifier is used with other timer related directives to access
+  the timer.
+params:
+- description: |
+    is the object name to look up.
+  dir: null
+  name: name
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the object identifier of an object with the specified
+    name will be stored in this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was 0.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      There was no object with the specified name on the local node.
+    value: ${../../status/if/invalid-name:/name}
+type: interface

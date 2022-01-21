@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-group
+links:
+- role: interface-placement
+  uid: domain
+name: Announcing a Fatal Error
+references:
+- identifier: Terminate
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/fatal_error.html#announcing-a-fatal-error
+  type: url
+type: interface

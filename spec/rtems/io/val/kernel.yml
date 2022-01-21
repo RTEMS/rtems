@@ -1,0 +1,63 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Call the function referenced by ${../if/bsp-output-char:/name}.
+  action-code: |
+    ( *BSP_output_char )( 'X' );
+    ( *BSP_output_char )( '\n' );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/bsp-output-char
+- action-brief: |
+    If ${../if/bsp-poll-char:/name} references a function, then call it.
+  action-code: |
+    BSP_polling_getchar_function_type poll_char;
+    int c;
+
+    poll_char = BSP_poll_char;
+
+    if ( poll_char != NULL ) {
+      c = ( *poll_char )();
+    } else {
+      c = -1;
+    }
+  checks:
+  - brief: |
+      Check that the returned value is minus one or an unsigned character
+      value.
+    code: |
+      T_step_true( ${step}, c == -1 || ( c & ~0xff ) == 0 );
+    links:
+    - role: validation
+      uid: ../req/bsp-poll-char-empty
+    - role: validation
+      uid: ../req/bsp-poll-char-dequeue
+  links: []
+test-brief: |
+  Tests the functions referenced by ${../if/bsp-output-char:/name} and
+  ${../if/bsp-poll-char:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: true
+  includes: []
+  local-includes: []
+  run-params: []
+  target: testsuites/validation/tr-io-kernel.h
+test-includes:
+- rtems/bspIo.h
+test-local-includes:
+- tr-io-kernel.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-io-kernel.c
+test-teardown: null
+type: test-case

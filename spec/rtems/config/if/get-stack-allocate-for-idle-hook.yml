@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the thread stack allocator allocate hook used to allocate the stack of
+  each ${/glossary/idletask:/term} configured for this application.
+copyrights:
+- Copyright (C) 2021 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${/score/stack/if/allocator-allocate-for-idle:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_configuration_get_stack_allocate_for_idle_hook
+notes: |
+  See ${/acfg/if/task-stack-allocator-for-idle:/name}.
+params: []
+return:
+  return: |
+    Returns the thread stack allocator allocate hook used to allocate the stack
+    of each ${/glossary/idletask:/term} configured for this application.
+  return-values: []
+type: interface

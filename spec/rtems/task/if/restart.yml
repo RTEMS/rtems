@@ -1,0 +1,83 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Restarts the task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${argument:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive resets the task specified by ${.:/params[0]/name} to begin
+  execution at its original entry point.  The task's priority and execution
+  mode are set to the original creation values.  If the task is currently
+  blocked, RTEMS automatically makes the task ready.  A task can be restarted
+  from any state, except the dormant state.  The task's entry point argument is
+  contained in ${.:/params[1]/name}.
+enabled-by: true
+index-entries:
+- restarting a task
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/priority-may-preempt
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+name: rtems_task_restart
+notes: |
+  The type of the entry point argument is an unsigned integer type.  However,
+  the integer type has the property that any valid pointer to ``void`` can be
+  converted to this type and then converted back to a pointer to ``void``.  The
+  result will compare equal to the original pointer.  The type can represent at
+  least 32 bits.  Some applications use the entry point argument as an index
+  into a parameter table to get task-specific parameters.
+
+  A new entry point argument may be used to distinguish between the initial
+  ${start:/name} of the task and any ensuing calls to ${restart:/name} of the
+  task.  This can be beneficial in deleting a task.  Instead of deleting a task
+  using the ${delete:/name} directive, a task can delete another task by
+  restarting that task, and allowing that task to release resources back to
+  RTEMS and then delete itself.
+params:
+- description: |
+    is the task identifier.  The constant ${self-define:/name} may be used to
+    specify the calling task.
+  dir: null
+  name: id
+- description: |
+    is the task entry point argument.
+  dir: null
+  name: argument
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The task never started.
+    value: ${../../status/if/incorrect-state:/name}
+  - description: |
+      The task resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+type: interface

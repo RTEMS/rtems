@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/if/init-task-priority
+test-brief: |
+  This validation test suite contains a test case which triggers a fatal error
+  during system initialization.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define FATAL_SYSINIT_RUN AcfgValFatalInitTaskConstructFailed_Run
+
+  static void Init( rtems_task_argument arg )
+  {
+    (void) arg;
+    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 1 );
+  }
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_TASKS 1
+
+  #define CONFIGURE_MINIMUM_TASKS_WITH_USER_PROVIDED_STORAGE 1
+
+  #define CONFIGURE_INIT_TASK_PRIORITY 0
+
+  #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE RTEMS_MINIMUM_STACK_SIZE
+
+  #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+  #include "ts-fatal-sysinit.h"
+test-description: null
+test-includes: []
+test-local-includes:
+- tr-fatal-init-task-construct-failed.h
+test-suite-name: FatalInitTaskConstructFailed
+test-target: testsuites/validation/ts-fatal-init-task-construct-failed.c
+type: test-suite

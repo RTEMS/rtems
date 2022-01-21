@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Submits the interrupt server entry to be serviced by the interrupt server.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${server-entry:/name} *${.:/params[0]/name}
+    return: void
+  variants: []
+description: |
+  The directive appends the entry to the pending entries of the interrupt
+  server.  The interrupt server is notified that a new entry is pending.  Once
+  the interrupt server is scheduled it services the actions of all pending
+  entries.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: ../constraint/server-entry-initialized
+- role: constraint
+  uid: ../constraint/server-entry-not-while-action-prepend
+- role: constraint
+  uid: ../constraint/server-entry-not-while-move
+name: rtems_interrupt_server_entry_submit
+notes: |
+  This directive may be used to do a two-step interrupt processing.  The first
+  step is done from within interrupt context by a call to this directive.  The
+  second step is then done from within the context of the interrupt server.
+
+  No error checking is performed by the directive.
+
+  A submitted entry may be destroyed by ${server-entry-destroy:/name}.
+params:
+- description: |
+    is the interrupt server entry to submit.
+  dir: null
+  name: entry
+return: null
+type: interface

@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Task start extensions are invoked when a task was made ready for the first
+  time.
+copyrights:
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/userext/if/thread-start:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/thread-dispatching-disabled
+name: rtems_task_start_extension
+notes: |
+  The task start extensions are invoked in
+  ${/glossary/extension-forward-order:/term}.
+
+  In SMP configurations, the thread may already run on another processor before
+  the task start extensions are actually invoked.  Task switch and task begin
+  extensions may run before or in parallel with the thread start extension in
+  SMP configurations, see ${task-switch:/name} and ${task-begin:/name}.
+params:
+- description: |
+    is the ${/glossary/tcb:/term} of the executing thread.
+  dir: null
+  name: executing
+- description: |
+    is the ${/glossary/tcb:/term} of the started thread.
+  dir: null
+  name: started
+return: null
+type: interface

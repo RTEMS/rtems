@@ -1,0 +1,79 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Disables the maskable interrupts on the current processor.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${/score/isr/if/local-disable:/name}( ${.:/params[0]/name} )
+  variants: []
+description: |
+  This directive disables all maskable interrupts on the current processor and
+  returns the previous interrupt level in ${.:/params[0]/name}.
+enabled-by:
+  not: RTEMS_SMP
+index-entries:
+- disable interrupts
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: ../constraint/no-smp
+name: rtems_interrupt_disable
+notes: |
+  A later invocation of the ${enable:/name} directive should be used to restore
+  the previous interrupt level.
+
+  This directive is implemented as a macro which sets the ${.:/params[0]/name}
+  parameter.
+
+  .. code-block:: c
+      :linenos:
+
+      #include <rtems.h>
+
+      void local_critical_section( void )
+      {
+        rtems_interrupt_level level;
+
+        // Please note that the rtems_interrupt_disable() is a macro.  The
+        // previous interrupt level (before the maskable interrupts are
+        // disabled) is returned here in the level macro parameter.  This
+        // would be wrong:
+        //
+        // rtems_interrupt_disable( &level );
+        rtems_interrupt_disable( level );
+
+        // Here is the critical section: maskable interrupts are disabled
+
+        {
+          rtems_interrupt_level nested_level;
+
+          rtems_interrupt_disable( nested_level );
+
+          // Here is a nested critical section
+
+          rtems_interrupt_enable( nested_level );
+        }
+
+        // Maskable interrupts are still disabled
+
+        rtems_interrupt_enable( level );
+      }
+params:
+- description: |
+    is a variable of type ${level:/name} which will be used to save the
+    previous interrupt level.
+  dir: out
+  name: _isr_cookie
+return: null
+type: interface

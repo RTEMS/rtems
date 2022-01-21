@@ -1,0 +1,95 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the real priority or gets the current priority of the task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../type/if/priority:/name} ${.:/params[1]/name}
+    - ${../../type/if/priority:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive manipulates the priority of the task specified by
+  ${.:/params[0]/name}.  When ${.:/params[1]/name} is not equal to
+  ${current-priority:/name}, the specified task's previous priority is returned
+  in ${.:/params[2]/name}.  When ${.:/params[1]/name} is
+  ${current-priority:/name}, the specified task's current priority is returned
+  in ${.:/params[2]/name}.
+enabled-by: true
+index-entries:
+- current task priority
+- set task priority
+- get task priority
+- obtain task priority
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/priority-may-preempt
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_task_set_priority
+notes: |
+  Valid priorities range from one to a maximum value which depends on the
+  configured scheduler.  The lower the priority value the higher is the
+  importance of the task.
+
+  If the task is currently holding any binary semaphores which use a locking
+  protocol, then the task's priority cannot be lowered immediately.  If the
+  task's priority were lowered immediately, then this could violate properties
+  of the locking protocol and may result in priority inversion.  The requested
+  lowering of the task's priority will occur when the task has released all
+  binary semaphores which make the task more important.  The task's priority
+  can be increased regardless of the task's use of binary semaphores with
+  locking protocols.
+params:
+- description: |
+    is the task identifier.  The constant ${self-define:/name} may be used to
+    specify the calling task.
+  dir: null
+  name: id
+- description: |
+    is the new real priority or ${current-priority:/name} to get the current
+    priority.
+  dir: null
+  name: new_priority
+- description: |
+    is the pointer to an ${../../type/if/priority:/name} object.  When the
+    directive call is successful, the current or previous priority of the task
+    with respect to its ${/glossary/scheduler-home:/term} will be stored in
+    this object.
+  dir: out
+  name: old_priority
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The task priority specified in ${.:/params[1]/name} was invalid with
+      respect to the ${/glossary/scheduler-home:/term} of the task.
+    value: ${../../status/if/invalid-priority:/name}
+type: interface

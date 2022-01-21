@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the RTEMS target hash.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: const char *
+  variants: []
+description: |
+  The target hash is calculated from BSP-specific values which characterize a
+  target system.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_get_target_hash
+notes: |
+  For example, the device tree, settings of the memory controller, processor
+  and bus frequencies, a serial number of a chip may be used to calculate the
+  target hash.
+
+  The target hash can be used to distinguish test suite results obtained from
+  different target systems.  See also ${get-build-label:/name}.
+params: []
+return:
+  return: |
+    Returns the pointer to the RTEMS target hash.
+  return-values: []
+type: interface

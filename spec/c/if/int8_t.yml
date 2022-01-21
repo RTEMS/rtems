@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-type
+links:
+- role: interface-placement
+  uid: stdint
+name: int8_t
+references:
+- identifier: https://en.cppreference.com/w/c/types/integer
+  type: url
+type: interface

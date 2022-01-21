@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Stringifies the expansion of the arguments.
+copyrights:
+- Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${string:/name}( __VA_ARGS__ )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_XSTRING
+notes: null
+params:
+- description: |
+    are the arguments to expand and stringify.
+  dir: null
+  name: ...
+return:
+  return: |
+    Returns the stringification of the expansion of the arguments.  In case of
+    several arguments a single string is returned not several.
+  return-values: []
+type: interface

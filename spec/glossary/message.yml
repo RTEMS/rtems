@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: message
+text: |
+  A sixteen byte entity used to communicate between tasks.  Messages are
+  sent to message queues and stored in message buffers.
+type: glossary

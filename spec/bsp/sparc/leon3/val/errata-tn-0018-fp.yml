@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-20
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/syscall.S
+  hash: QDjhpRe0UrN3OhoVJEGSnJU0028ZHBGjXYFXrZsRwO4=
+  type: file
+text: |
+  The ``syscall_irqdis_fp`` trap handler always jumps back to a floating-point
+  instruction, thus no workaround is necessary.
+  
+  The ``syscall_lazy_fp_switch`` trap handler always jumps back to a
+  floating-point instruction or terminates the system with a jump to
+  ``_Internal_error()``, thus no workaround is necessary.  The
+  ``_Internal_error()`` function starts with a ``save`` instruction.  Also this
+  function terminates the system, so that the ``rett`` instruction should never
+  be in the instruction cache since the code path is only executed once.
+type: validation

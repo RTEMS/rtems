@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/unreachable
+non-functional-type: interface
+rationale: |
+  The use of this macro will suppress some compiler warnings
+  and may permit some compiler optimizations.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/unreachable:/name} macro is placed in a part of
+  the code which control flow can under no circumstances ever reach,
+  the macro shall inform the compiler that this place in code
+  cannot be reached.
+type: requirement

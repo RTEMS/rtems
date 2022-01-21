@@ -1,0 +1,1045 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/receive
+- role: interface-function
+  uid: ../../type/if/no-timeout
+- role: function-implementation
+  uid: /score/tq/req/enqueue-fifo
+- role: function-implementation
+  uid: /score/tq/req/enqueue-priority
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/receive:/name} shall be
+      ${../../status/if/successful:/name}
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/receive:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/receive:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: Unsat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+    text: |
+      The return status of ${../if/receive:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  - name: Timeout
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TIMEOUT );
+    text: |
+      The return status of ${../if/receive:/name} shall be
+      ${../../status/if/timeout:/name}.
+  - name: Deleted
+    test-code: |
+      T_rsc( ctx->status, RTEMS_OBJECT_WAS_DELETED );
+    text: |
+      The return status of ${../if/receive:/name} shall be
+      ${../../status/if/object-was-deleted:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Delay
+  states:
+  - name: None
+    test-code: |
+      T_eq_u32( ctx->action_duration, 0 );
+    text: |
+      The ${../if/receive:/name} call shall return immediately.
+  - name: Ticks
+    test-code: |
+      T_eq_u32( ctx->action_duration, timeout_ticks );
+    text: |
+      The ${../if/receive:/name} call shall return after the timeout
+      period in ticks.
+  - name: Forever
+    test-code: |
+      T_gt_u32( ctx->action_duration, timeout_ticks );
+    text: |
+      The ${../if/receive:/name} call shall not return.
+  test-epilogue: null
+  test-prologue: null
+- name: Size
+  states:
+  - name: First
+    test-code: |
+      CheckForFirstMessage(
+        ctx->status,
+        ctx->receive_buffer,
+        ctx->receive_size
+      );
+    text: |
+      The value of the object referenced by the
+      ${../if/receive:/params[2]/name} parameter shall be set to the size of
+      the ${../glossary/firstmessage:/term} (the same value as provided by
+      parameter ${../if/send:/params[2]/name} of the ${../if/send:/name}
+      or ${../if/urgent:/name} directive which added the message to
+      the queue) after the return of the ${../if/receive:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->receive_size, SIZE_MAX );
+    text: |
+      Objects referenced by the ${../if/receive:/params[2]/name}
+      parameter in past calls to ${../if/receive:/name} shall not be
+      accessed by the ${../if/receive:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: Msg
+  states:
+  - name: First
+    test-code: |
+      CheckForFirstMessage(
+        ctx->status,
+        ctx->receive_buffer,
+        ctx->receive_size
+      );
+    text: |
+      The bytes 0 till ${../if/receive:/params[2]/name} - 1 of the object
+      referenced by the ${../if/receive:/params[3]/name} parameter shall
+      contain a copy of the content of the ${../glossary/firstmessage:/term}
+      (all bytes unchanged and in the same order as provided
+      by parameter ${../if/send:/params[1]/name} of the
+      ${../if/send:/name} or ${../if/urgent:/name} directive which added
+      the message to the queue) after the return of the
+      ${../if/receive:/name} call.
+  - name: Nop
+    test-code: |
+      int i;
+      for ( i = 0; i < MAXIMUM_MESSAGE_SIZE; ++i ) {
+        T_eq_u8( ctx->receive_buffer[i], UINT8_MAX );
+      }
+    text: |
+      Objects referenced by the ${../if/receive:/params[3]/name}
+      parameter in past calls to ${../if/receive:/name} shall not be
+      accessed by the ${../if/receive:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: null
+  test-prologue: null
+- name: MsgQueue
+  states:
+  - name: Empty
+    test-code: |
+      PopMessage( ctx, CheckForNoMessage );
+    text: |
+      The ${/glossary/messagequeue:/term} shall be empty after the
+      return of the ${../if/receive:/name} call.
+  - name: OneLess
+    test-code: |
+      PopMessage( ctx, CheckForSecondMessage );
+      PopMessage( ctx, CheckForThirdMessage );
+      PopMessage( ctx, CheckForNoMessage );
+    text: |
+      The ${../glossary/firstmessage:/term} shall be removed from the
+      ${/glossary/messagequeue:/term} after the
+      return of the ${../if/receive:/name} call.
+  - name: Nop
+    test-code: |
+      ctx->check_msgq_unchanged( ctx );
+    text: |
+      Objects referenced by the ${../if/receive:/params[0]/name}
+      parameter in past calls to ${../if/receive:/name} shall not be
+      accessed by the ${../if/receive:/name} call (see also
+      ${../glossary/nop:/term}).
+  test-epilogue: |
+    MessageQueueTeardown( ctx );
+  test-prologue: null
+- name: Tasks
+  states:
+  - name: Fifo
+    test-code: |
+      ${/score/tq/req/enqueue-fifo:/test-run}( &ctx->tq_ctx );
+    text: |
+      Where the thread queue uses the FIFO discipline, the calling thread shall
+      be enqueued in FIFO order.
+  - name: Priority
+    test-code: |
+      ${/score/tq/req/enqueue-priority:/test-run}( &ctx->tq_ctx );
+    text: |
+      Where the thread queue uses the priority discipline, the calling thread
+      shall be enqueued in priority order.
+  test-epilogue: |
+    MessageQueueTeardown( ctx );
+  test-prologue: |
+    MessageQueueSetup( ctx );
+pre-conditions:
+- name: Buffer
+  states:
+  - name: Valid
+    test-code: |
+      ctx->buffer_param = ctx->receive_buffer;
+    text: |
+      While the ${../if/receive:/params[1]/name} parameter references a memory
+      area able to store a message up to the maximum size permitted in this
+      ${/glossary/messagequeue:/term}.
+  - name: 'Null'
+    test-code: |
+      ctx->buffer_param = NULL;
+    text: |
+      While the ${../if/receive:/params[1]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Size
+  states:
+  - name: Valid
+    test-code: |
+      ctx->size_param = &ctx->receive_size;
+    text: |
+      While the ${../if/receive:/params[2]/name} parameter references an object
+      of type ``size_t``.
+  - name: 'Null'
+    test-code: |
+      ctx->size_param = NULL;
+    text: |
+      While the ${../if/receive:/params[2]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_param = 1;
+    text: |
+      While the ${../if/receive:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->id_param = RTEMS_ID_NONE;
+    text: |
+      While the ${../if/receive:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: DuringWait
+  states:
+  - name: Nop
+    test-code: |
+      ctx->concurrent_activity = MessageQueueNop;
+    text: |
+      While no ${../if/delete:/name} directive is called successfully
+      on the ${/glossary/messagequeue:/term} during the time one or more
+      ${/glossary/task:/plural} are waiting to receive messages.
+  - name: Deleted
+    test-code: |
+      ctx->concurrent_activity = MessageQueueDelete;
+    text: |
+      While ${../if/delete:/name} is called successfully on the
+      ${/glossary/messagequeue:/term} while one or more
+      ${/glossary/task:/plural} are waiting to receive messages.
+  test-epilogue: null
+  test-prologue: null
+- name: TaskQueue
+  states:
+  - name: Fifo
+    test-code:  |
+      ctx->attribute_set = RTEMS_LOCAL | RTEMS_FIFO;
+    text: |
+      While the member ${../if/config:/definition[6]/default/name} of type
+      ${../if/config:/name} contains value ${../../attr/if/fifo:/name}
+      when the ${/glossary/messagequeue:/term} is constructed.
+
+      Note: ${../../attr/if/global:/name} is not part of the space profile
+      because no remote ${/glossary/node:/plural} are supported.
+  - name: Priority
+    test-code: |
+      ctx->attribute_set = RTEMS_LOCAL | RTEMS_PRIORITY;
+    text: |
+      While the member ${../if/config:/definition[6]/default/name} of type
+      ${../if/config:/name} contains value ${../../attr/if/priority:/name}
+      when the ${/glossary/messagequeue:/term} is constructed.
+
+      Note: ${../../attr/if/global:/name} is not part of the space profile
+      because no remote ${/glossary/node:/plural} are supported.
+  test-epilogue: |
+    MessageQueueSetup( ctx );
+  test-prologue: null
+- name: Wait
+  states:
+  - name: 'No'
+    test-code: |
+      ctx->tq_ctx.wait =      TQ_NO_WAIT;
+      ctx->option_set_param = RTEMS_NO_WAIT;
+      ctx->timeout_param =    1; /* 0 would be RTEMS_NO_TIMEOUT */
+    text: |
+      While the ${../if/receive:/params[3]/name} parameter indicates the
+      ${../../option/if/no-wait:/name} option.
+  - name: Timeout
+    test-code: |
+      ctx->tq_ctx.wait =      TQ_WAIT_TIMED;
+      ctx->option_set_param = RTEMS_WAIT;
+      ctx->timeout_param =    timeout_ticks;
+    text: |
+      While the ${../if/receive:/params[3]/name} parameter indicates the
+      ${../../option/if/wait:/name} option, while the
+      ${../if/receive:/params[4]/name} parameter is not equal to
+      ${../../type/if/no-timeout:/name}.
+  - name: Forever
+    test-code: |
+      ctx->tq_ctx.wait =      TQ_WAIT_FOREVER;
+      ctx->option_set_param = RTEMS_WAIT;
+      ctx->timeout_param =    RTEMS_NO_TIMEOUT;
+    text: |
+      While the ${../if/receive:/params[3]/name} parameter indicates the
+      ${../../option/if/wait:/name} option, while the
+      ${../if/receive:/params[4]/name} parameter is equal to
+      ${../../type/if/no-timeout:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: MsgQueue
+  states:
+  - name: Empty
+    test-code: |
+      /* Message queue is already empty. */
+      ctx->check_msgq_unchanged = CheckForNoMessageInQueue;
+    text: |
+      While there is no message in the ${/glossary/messagequeue:/term}.
+  - name: One
+    test-code: |
+      SendMsg( &( ctx->tq_ctx ) );
+      ctx->check_msgq_unchanged = CheckForOneMessageInQueue;
+    text: |
+      While there is exactly one message in the ${/glossary/messagequeue:/term}.
+  - name: Several
+    test-code: |
+      SendMsg( &( ctx->tq_ctx ) );
+      SendMsg( &( ctx->tq_ctx ) );
+      SendMsg( &( ctx->tq_ctx ) );
+      ctx->check_msgq_unchanged = CheckForSeveralMessagesInQueue;
+    text: |
+      While there are more than one message in the
+      ${/glossary/messagequeue:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Storage
+  states:
+  - name: Nop
+    test-code: |
+      /* Only a requirement text. */
+    text: |
+      While the memory area to which a pointer is provided as member
+      ${../if/config:/definition[3]/default/name} of type
+      ${../if/config:/name} when the ${/glossary/messagequeue:/term} is
+      constructed by ${../if/construct:/name} is altered only by the
+      RTEMS operating system.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoWait: |
+    The case *Deleted* can only occur when at least one
+    ${../if/receive:/name} call is waiting on an empty
+    ${/glossary/messagequeue:/term}.
+test-action: |
+  WorkerDoAction( ctx );
+  ctx->concurrent_activity( ctx );
+  ctx->action_duration = WaitForWorker( ctx );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQContext tq_ctx
+- brief: |
+    This member specifies the attribute set of the
+    ${/glossary/messagequeue:/term}.
+  description: null
+  member: |
+    rtems_attribute attribute_set
+- brief: |
+    This member is used as storage area for the
+    ${/glossary/messagequeue:/term}.
+  description: null
+  member: |
+    RTEMS_MESSAGE_QUEUE_BUFFER( MAXIMUM_MESSAGE_SIZE )
+      storage_area[ MAXIMUM_PENDING_MESSAGES]
+- brief: |
+    This member contains always the same arbitrary number ``magic``.
+  description: |
+    It is used for run-time type checking.
+  member: |
+    uint32_t magic;
+- brief: |
+    This member contains a number which is sent as next message.
+  description: null
+  member: |
+    uint8_t send_msg_counter
+- brief: |
+    This member contains a buffer to receive messages from the queue.
+  description: null
+  member: |
+    uint8_t receive_buffer[ MAXIMUM_MESSAGE_SIZE ]
+- brief: |
+    This member contains a buffer to receive the messages size.
+  description: null
+  member: |
+    size_t receive_size
+- brief: |
+    This member specifies the ${../if/receive:/params[0]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_id id_param
+- brief: |
+    This member specifies the ${../if/receive:/params[1]/name} parameter
+    for the action.
+  description: null
+  member: |
+    void *buffer_param
+- brief: |
+    This member specifies the ${../if/receive:/params[2]/name} parameter
+    for the action.
+  description: null
+  member: |
+    size_t *size_param
+- brief: |
+    This member specifies the ${../if/receive:/params[3]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_option option_set_param
+- brief: |
+    This member specifies the ${../if/receive:/params[4]/name} parameter
+    for the action.
+  description: null
+  member: |
+    rtems_interval timeout_param
+- brief: |
+    This member contains the returned ${/glossary/statuscode:/term}
+    of the action.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member contains the duration of the action in ticks.
+  description: null
+  member: |
+    uint32_t action_duration
+- brief: |
+    This member contains the ${/glossary/task:/term} identifier of the
+    main ${/glossary/task:/term}.
+  description: null
+  member: |
+    rtems_id task_id
+- brief: |
+    This member contains the ${/glossary/task:/term} identifier of the
+    worker ${/glossary/task:/term}.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member contains a pointer to a function which is executed while
+    the worker is waiting to receive a message (`delete(), nop()``).
+  description: null
+  member: |
+    void (*concurrent_activity)( void *ctx_in )
+- brief: |
+    This member contains a pointer to a function which is executed
+    to check that the action has not changed the content of the
+    ${/glossary/messagequeue:/term}.
+  description: null
+  member: |
+    void (*check_msgq_unchanged)( void *ctx_in )
+test-context-support: |
+  #define MAXIMUM_PENDING_MESSAGES 3
+  #define MAXIMUM_MESSAGE_SIZE 5
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/statesimpl.h
+test-local-includes:
+- tx-support.h
+- tx-thread-queue.h
+- tr-tq-enqueue-fifo.h
+- tr-tq-enqueue-priority.h
+test-prepare: |
+  /* Clean away pending events - happens after RTEMS_WAIT + RTEMS_NO_TIMEOUT */
+  (void) PollAnyEvents();
+
+  ctx->send_msg_counter = 0;
+  ctx->receive_size     = SIZE_MAX;
+  memset( ctx->receive_buffer, UINT8_MAX, MAXIMUM_MESSAGE_SIZE );
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->magic                  = magic;
+    ctx->tq_ctx.enqueue         = ReceiveMsg;
+    ctx->tq_ctx.surrender       = TQDoNothingSuccessfully;
+    ctx->tq_ctx.convert_status  = TQConvertStatusClassic;
+    ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
+    ctx->tq_ctx.enqueue_done    = EnqueueDone;
+    TQInitialize( &ctx->tq_ctx );
+
+    /*
+     * ctx->tq_ctx.thread_queue_id = RTEMS_ID_NONE indicates that the message
+     * queue does currently not exist. A message queue is created
+     * two times in a row in a single test cycle. First after the attributes
+     * are set in the preconditions. That queue is used for all tests of
+     * usual message queue requirements. Second a message queue is recreated
+     * in the tasks post-conditions for the tests of the task queue.
+     * To avoid an accidentally creation of a second
+     * message queue without the first being deleted prior,
+     * ctx->tq_ctx.thread_queue_id is checked for being RTEMS_ID_NONE before
+     * any message queue is created - a run-time sanity check.
+     */
+    ctx->tq_ctx.thread_queue_id = RTEMS_ID_NONE;
+    ctx->task_id                = rtems_task_self();
+
+    /* Note: TQInitialize() will assign the "main" task priority PRIO_NORMAL */
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, WorkerTask, NULL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+  static const uint32_t        magic = 0xA55CA3D1; /* an arbitrary number */
+  static const rtems_interval  timeout_ticks = 3;
+  static const rtems_event_set wake_main_task_event = RTEMS_EVENT_17;
+
+  static void DoAction( void *ctx_in )
+  {
+    Context *ctx = ctx_in;
+    ctx->status = rtems_message_queue_receive(
+      ctx->id_param,
+      ctx->buffer_param,
+      ctx->size_param,
+      ctx->option_set_param,
+      ctx->timeout_param
+    );
+  }
+
+  static void WorkerTask( unsigned int argument )
+  {
+    Context *ctx = (Context *) argument;
+    if ( ctx != NULL ) {
+      T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+      DoAction( ctx );
+      T_rsc_success( rtems_event_send( ctx->task_id, wake_main_task_event ) );
+    }
+    T_rsc_success( rtems_task_suspend( RTEMS_SELF ) );
+  }
+
+  static void WorkerDoAction( void *ctx_in )
+  {
+    rtems_status_code status;
+    Context *ctx = ctx_in;
+    T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+    status = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
+    T_rsc_success( status );
+  }
+
+  static uint32_t WaitForWorker( Context *ctx )
+  {
+    uint32_t ticks_to_wait = timeout_ticks + 1;
+    rtems_status_code status;
+    rtems_event_set event_set;
+
+     for ( ; ticks_to_wait > 0; --ticks_to_wait ) {
+      /* Check whether the worker finished executing the action */
+      status = rtems_event_receive(
+        RTEMS_PENDING_EVENTS,
+        RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
+        RTEMS_NO_TIMEOUT,
+        &event_set
+      );
+      T_rsc_success( status );
+
+      if ( ( event_set & wake_main_task_event ) == wake_main_task_event ) {
+        break;
+      }
+      TimecounterTick();
+    }
+
+    if ( ctx->timeout_param != RTEMS_NO_TIMEOUT ) {
+      /* Wait till the worker task finishes */
+      status = rtems_event_receive(
+        wake_main_task_event,
+        RTEMS_DEFAULT_OPTIONS,
+        RTEMS_NO_TIMEOUT,
+        &event_set
+      );
+    T_rsc_success( status );
+    }
+
+    return timeout_ticks + 1 - ticks_to_wait;
+  }
+
+  static void MessageQueueSetup( Context *ctx )
+  {
+    rtems_status_code status;
+    /* Sanity check: Make sure the message queue does not exist, yet. */
+    T_assert_eq_u32( ctx->tq_ctx.thread_queue_id, RTEMS_ID_NONE );
+    rtems_message_queue_config config = {
+      .name = rtems_build_name( 'M', 'S', 'G', 'Q' ),
+      .maximum_pending_messages = MAXIMUM_PENDING_MESSAGES,
+      .maximum_message_size = MAXIMUM_MESSAGE_SIZE,
+      .storage_area = ctx->storage_area,
+      .storage_size = sizeof( ctx->storage_area ),
+      .storage_free = NULL,
+      .attributes = ctx->attribute_set
+    };
+
+    status = rtems_message_queue_construct(
+      &config,
+      &ctx->tq_ctx.thread_queue_id
+    );
+    T_rsc_success( status );
+
+    if ( ctx->id_param != RTEMS_ID_NONE ) {
+      ctx->id_param = ctx->tq_ctx.thread_queue_id;
+    }
+  }
+
+  static void MessageQueueTeardown( Context *ctx )
+  {
+    rtems_status_code status;
+    if ( ctx->tq_ctx.thread_queue_id != RTEMS_ID_NONE ) {
+      status = rtems_message_queue_delete( ctx->tq_ctx.thread_queue_id );
+      T_rsc_success( status );
+      ctx->tq_ctx.thread_queue_id = RTEMS_ID_NONE;
+    }
+  }
+
+  static void CheckForNoMessage(
+    rtems_status_code status,
+    uint8_t *message_buffer,
+    size_t message_size
+  )
+  {
+    (void) message_buffer;
+    (void) message_size;
+    T_rsc( status, RTEMS_UNSATISFIED  );
+  }
+
+  static void CheckForFirstMessage(
+    rtems_status_code status,
+    uint8_t *message_buffer,
+    size_t message_size
+  )
+  {
+    T_rsc_success( status );
+    T_eq_u32( message_size, 1 );
+    T_eq_u8( message_buffer[0], 0 );
+  }
+
+  static void CheckForSecondMessage(
+    rtems_status_code status,
+    uint8_t *message_buffer,
+    size_t message_size
+  )
+  {
+    T_rsc_success( status );
+    T_eq_u32( message_size, 3 );
+    T_eq_u8( message_buffer[0], 1 );
+    T_eq_u8( message_buffer[1], 1 );
+    T_eq_u8( message_buffer[2], 1 );
+  }
+
+  static void CheckForThirdMessage(
+    rtems_status_code status,
+    uint8_t *message_buffer,
+    size_t message_size
+  )
+  {
+    T_rsc_success( status );
+    T_eq_u32( message_size, 5 );
+    T_eq_u8( message_buffer[0], 2 );
+    T_eq_u8( message_buffer[1], 2 );
+    T_eq_u8( message_buffer[2], 2 );
+    T_eq_u8( message_buffer[3], 2 );
+    T_eq_u8( message_buffer[4], 2 );
+  }
+
+  static void PopMessage(
+    Context *ctx,
+    void (*check_fn)(
+      rtems_status_code status,
+      uint8_t *message_buffer,
+      size_t message_size
+    )
+  )
+  {
+    rtems_status_code status;
+    uint8_t message_buffer[ MAXIMUM_MESSAGE_SIZE ];
+    size_t message_size;
+
+    status = rtems_message_queue_receive(
+      ctx->tq_ctx.thread_queue_id,
+      &message_buffer,
+      &message_size,
+      RTEMS_LOCAL | RTEMS_NO_WAIT,
+      RTEMS_NO_TIMEOUT
+    );
+
+   check_fn( status, message_buffer, message_size );
+  }
+
+  static void CheckForNoMessageInQueue( void *ctx_in )
+  {
+    Context *ctx = ctx_in;
+    T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+    PopMessage( ctx, CheckForNoMessage );
+  }
+
+  static void CheckForOneMessageInQueue( void *ctx_in )
+  {
+    Context *ctx = ctx_in;
+    T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+    PopMessage( ctx, CheckForFirstMessage );
+    PopMessage( ctx, CheckForNoMessage );
+  }
+
+  static void CheckForSeveralMessagesInQueue( void *ctx_in )
+  {
+    Context *ctx = ctx_in;
+    T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+    PopMessage( ctx, CheckForFirstMessage );
+    PopMessage( ctx, CheckForSecondMessage );
+    PopMessage( ctx, CheckForThirdMessage );
+    PopMessage( ctx, CheckForNoMessage );
+  }
+
+  static void MessageQueueNop( void *ctx_in )
+  {
+    (void) ctx_in;
+  }
+
+  static void MessageQueueDelete( void *ctx_in )
+  {
+    Context *ctx = ctx_in;
+    T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+    MessageQueueTeardown( ctx );
+  }
+
+  static Context *ToContext( TQContext *tqctx )
+  {
+    Context *ctx = RTEMS_CONTAINER_OF( tqctx, Context, tq_ctx );
+    T_assert_eq_u32( ctx->magic, magic ); /* Run-time type check */
+    return ctx;
+  }
+
+  static Status_Control ReceiveMsg( TQContext *tqctx, TQWait wait )
+  {
+    Context *ctx = ToContext( tqctx );
+    rtems_status_code status;
+    rtems_option option_set;
+    rtems_interval timeout;
+
+    switch ( wait ) {
+      case TQ_WAIT_FOREVER:
+        option_set = RTEMS_WAIT;
+        timeout = RTEMS_NO_TIMEOUT;
+        break;
+      case TQ_WAIT_TIMED:
+        option_set = RTEMS_WAIT;
+        timeout = UINT32_MAX;
+        break;
+      default:
+        option_set = RTEMS_NO_WAIT;
+        timeout = 0;
+        break;
+    }
+
+    status = rtems_message_queue_receive(
+      ctx->tq_ctx.thread_queue_id,
+      ctx->receive_buffer,
+      &ctx->receive_size,
+      option_set,
+      timeout
+    );
+
+    return STATUS_BUILD( status, 0 );
+  }
+
+  static void SendMsg( TQContext *tqctx )
+  {
+    Context *ctx = ToContext( tqctx );
+    rtems_status_code status;
+    uint8_t msg[ MAXIMUM_MESSAGE_SIZE ];
+
+    memset( msg, ctx->send_msg_counter, MAXIMUM_MESSAGE_SIZE );
+    status = rtems_message_queue_send(
+      ctx->tq_ctx.thread_queue_id,
+      msg,
+      ( ctx->send_msg_counter * 2 ) % MAXIMUM_MESSAGE_SIZE + 1
+    );
+    T_rsc_success( status );
+    ++ctx->send_msg_counter;
+  }
+
+  static void EnqueuePrepare( TQContext *tqctx )
+  {
+    Status_Control status;
+
+    /* Check that the message queue is empty */
+    status = TQEnqueue( tqctx, TQ_NO_WAIT );
+    T_eq_int( status, STATUS_BUILD( RTEMS_UNSATISFIED, 0 ) );
+  }
+
+  static void EnqueueDone( TQContext *tqctx )
+  {
+    uint32_t i;
+
+    for ( i = 0; i < tqctx->how_many; ++i ) {
+      SendMsg( tqctx );
+    }
+  }
+test-target: testsuites/validation/tc-message-receive.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    TQDestroy( &ctx->tq_ctx );
+    (void) PollAnyEvents();
+  description: null
+text: ${.:text-template}
+transition-map:
+
+# ---- Ok Case ----
+
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Delay: None
+    Tasks: N/A
+    Size: First
+    Msg: First
+    MsgQueue:
+      - if:
+          pre-conditions:
+            MsgQueue: One
+        then: Empty
+      - else: OneLess
+    Tasks: N/A
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - Valid
+    Id:
+      - Valid
+    DuringWait:
+      - Nop
+    TaskQueue: all
+    Wait: all
+    MsgQueue:
+      - One
+      - Several
+    Storage: all
+
+# ---- Empty Queue ----
+
+- enabled-by: true
+  post-conditions:
+    Status:
+      - if:
+          pre-conditions:
+            Wait: Forever
+        then: N/A
+      - if:
+          pre-conditions:
+            Wait: 'No'
+        then: Unsat
+      - else: Timeout
+    Delay:
+      - if:
+          pre-conditions:
+            Wait: 'No'
+        then: None
+      - if:
+          pre-conditions:
+            Wait: Timeout
+        then: Ticks
+      - else: Forever
+    Size: Nop
+    Msg: Nop
+    MsgQueue: Nop
+
+    Tasks:
+      - if:
+          pre-conditions:
+            Wait: 'No'
+        then: N/A
+      - if:
+          pre-conditions:
+            TaskQueue: Fifo
+        then: Fifo
+      - else: Priority
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - Valid
+    Id:
+      - Valid
+    DuringWait:
+      - Nop
+    TaskQueue: all
+    Wait: all
+    MsgQueue:
+      - Empty
+    Storage: all
+
+# ---- InvAddr: Buffer ----
+
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Delay: None
+    Size: Nop
+    Msg: Nop
+    MsgQueue:
+      - if:
+          pre-conditions:
+            DuringWait: Deleted
+        then: N/A
+      - else: Nop
+    Tasks: N/A
+  pre-conditions:
+    Buffer:
+      - 'Null'
+    Size: all
+    Id: all
+    DuringWait: all
+    TaskQueue: all
+    Wait: all
+    MsgQueue: all
+    Storage: all
+
+# ---- InvAddr: Size ----
+
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Delay: None
+    Size: Nop
+    Msg: Nop
+    MsgQueue:
+      - if:
+          pre-conditions:
+            DuringWait: Deleted
+        then: N/A
+      - else: Nop
+    Tasks: N/A
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - 'Null'
+    Id: all
+    DuringWait: all
+    TaskQueue: all
+    Wait: all
+    MsgQueue: all
+    Storage: all
+
+# ---- InvId ----
+
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Delay: None
+    Size: Nop
+    Msg: Nop
+    MsgQueue:
+      - if:
+          pre-conditions:
+            DuringWait: Deleted
+        then: N/A
+      - else: Nop
+    Tasks: N/A
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - Valid
+    Id:
+      - Invalid
+    DuringWait: all
+    TaskQueue: all
+    Wait: all
+    MsgQueue: all
+    Storage: all
+
+# ---- Deleted ----
+
+- enabled-by: true
+  post-conditions:
+    Status: Deleted
+    Delay: None
+    Size: Nop
+    Msg: Nop
+    MsgQueue: N/A
+    Tasks: N/A
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - Valid
+    Id:
+      - Valid
+    DuringWait:
+      - Deleted
+    TaskQueue: all
+    Wait: all
+    MsgQueue: all
+    Storage: all
+
+# ---- Impossible Deleted Cases ----
+
+- enabled-by: true
+  post-conditions: NoWait
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - Valid
+    Id:
+      - Valid
+    DuringWait:
+      - Deleted
+    TaskQueue: all
+    Wait:
+      - 'No'
+    MsgQueue: all
+    Storage: all
+
+- enabled-by: true
+  post-conditions: NoWait
+  pre-conditions:
+    Buffer:
+      - Valid
+    Size:
+      - Valid
+    Id:
+      - Valid
+    DuringWait:
+      - Deleted
+    TaskQueue: all
+    Wait:
+      - Timeout
+      - Forever
+    MsgQueue:
+      - One
+      - Several
+    Storage: all
+type: requirement

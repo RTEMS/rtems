@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr712rc
+links:
+- role: validation
+  uid: ../req/errata-gr712rc-20
+method: by-inspection
+references:
+- identifier: cpukit/score/cpu/sparc/include/rtems/score/sparc.h
+  hash: PRwOyOwR1b2y0Pno_KTXlY-o0QXIm_TfVZM24eDmt0s=
+  type: file
+- identifier: cpukit/score/cpu/sparc/sparc-counter-asm.S
+  hash: X8UNM08ffHOazOxa3gY4Vqsn2ZJmX8rrM3drT_8QpLQ=
+  type: file
+text: |
+  For the ``syscall_irqdis`` and ``syscall_irqen`` traps a workaround was
+  implemented by inserting a ``nop`` instruction in system call generation.
+  Thus the corresponding trap handler always returns to a non-``jmpl``
+  instruction.
+type: validation

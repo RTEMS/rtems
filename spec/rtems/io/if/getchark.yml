@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Tries to dequeue a character from the kernel character input device.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: int
+  variants: []
+description: |
+  The directive tries to dequeue a character from the kernel character input
+  device using the polled character input implementation referenced by
+  ${bsp-poll-char:/name} if it is available.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header-3
+- role: interface-ingroup
+  uid: group-3
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: getchark
+notes: null
+params: []
+return:
+  return: |
+    Returns the character least recently enqueued on the kernel character input
+    device as an unsigned character value.
+  return-values:
+  - description: |
+      The ${bsp-poll-char:/name} pointer was equal to ${/c/if/null:/name}.
+    value: -1
+  - description: |
+      There was no character enqueued on the kernel character input device.
+    value: -1
+type: interface

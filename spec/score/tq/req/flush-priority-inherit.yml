@@ -1,0 +1,296 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+- role: validation
+  uid: flush-filter
+- role: validation
+  uid: flush-remove-timer
+- role: validation
+  uid: flush-unblock
+post-conditions:
+- name: Extract
+  states:
+  - name: Nop
+    test-code: |
+      /* Event receive */
+      T_eq_ptr( GetUnblock( ctx, &i )->thread, GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetPriorityUpdate( ctx, &i ), &T_scheduler_event_null );
+    text: |
+      No operation shall be performed.
+  - name: All
+    test-code: |
+      event = GetUnblock( ctx, &i );
+      T_eq_ptr( event->executing, NULL );
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_D ) );
+
+      event = GetUnblock( ctx, &i );
+      T_eq_ptr( event->executing, NULL );
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_C ) );
+
+      if ( ctx->minimum ) {
+        /*
+         * This priority update is carried out by
+         * _Thread_queue_Flush_critical().
+         */
+        event = GetPriorityUpdate( ctx, &i );
+        T_eq_ptr( event->executing, NULL );
+        T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_A ) );
+      }
+
+      event = GetUnblock( ctx, &i );
+      T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_B ) );
+
+      if ( ctx->minimum && rtems_configuration_get_maximum_processors() > 1 ) {
+        /*
+         * This superfluous priority update is carried out by
+         * _Thread_queue_Enqueue() since TQ_BLOCKER_B would have inherited its
+         * priority for scheduler B to TQ_BLOCKER_A if it were not flushed from
+         * the thread queue.
+         */
+        event = GetPriorityUpdate( ctx, &i );
+        T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_B ) );
+        T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_A ) );
+      }
+
+      event = GetPriorityUpdate( ctx, &i );
+      T_eq_ptr( event, &T_scheduler_event_null );
+
+      T_eq_u32(
+        GetPriority( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] ),
+        PRIO_HIGH
+      );
+    text: |
+      The enqueued threads of the thread queue shall be extracted in
+      ${/glossary/priority:/term} order for each priority queue associated with
+      a scheduler.  The priority queues of the thread queue shall be accessed
+      in ${/glossary/fifo:/term} order.
+  test-epilogue: null
+  test-prologue: |
+    size_t                   i;
+    const T_scheduler_event *event;
+
+    i = 0;
+- name: PriorityUpdate
+  states:
+  - name: 'No'
+    test-code: |
+      /* Checked by ``Extract`` post-condition state ``Nop`` */
+    text: |
+      The ${/glossary/priority-current:/term} of the owner of the thread queue
+      shall not be updated by the thread queue flush operation.
+  - name: 'Yes'
+    test-code: |
+      /* Checked by ``Extract`` post-condition state ``All`` */
+    text: |
+      The ${/glossary/priority-current:/term} of the owner of the thread queue
+      shall be updated by the thread queue flush operation to reflect the loss
+      of inherited priorities of the flushed threads.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Priority
+  states:
+  - name: Minimum
+    test-code: |
+      ctx->minimum = true;
+    text: |
+      While a minimum priority of the owner of the thread queue is inherited
+      from a thread enqueued on the thread queue.
+  - name: NotMinimum
+    test-code: |
+      ctx->minimum = false;
+    text: |
+      While no minimum priority of the owner of the thread queue is inherited
+      from a thread enqueued on the thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: Queue
+  states:
+  - name: Empty
+    test-code: |
+      ctx->tq_ctx->how_many = 0;
+    text: |
+      While the thread queue is empty.
+  - name: NonEmpty
+    test-code: |
+      ctx->tq_ctx->how_many = 3;
+    text: |
+      While the thread queue has at least one enqueued thread.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_PREPARE );
+
+  if ( ctx->tq_ctx->how_many > 0 ) {
+    if ( ctx->minimum ) {
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_B_ID, PRIO_HIGH );
+      } else {
+        TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_A_ID, PRIO_HIGH );
+      }
+
+      TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_C, PRIO_VERY_HIGH );
+      TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_D, PRIO_ULTRA_HIGH );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
+    } else {
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_A_ID, PRIO_HIGH );
+      TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_C, PRIO_HIGH );
+      TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_D, PRIO_HIGH );
+
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_D, TQ_EVENT_ENQUEUE );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE );
+    }
+
+    T_scheduler_set_event_handler( SchedulerEvent, ctx );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      TQ_BLOCKER_B,
+      TQ_EVENT_ENQUEUE
+    );
+  } else {
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_FLUSH );
+  }
+
+  TQSchedulerRecordStop( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+- brief: |
+    If this member is true, then a minimum priority of the owner of the thread
+    queue shall be inherited from a thread enqueued on the thread queue.
+  description: null
+  member: |
+    bool minimum
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-flush-priority-inherit.h
+test-includes: []
+test-local-includes:
+- tx-support.h
+- tr-tq-flush-priority-inherit.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_HIGH );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const T_scheduler_event *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index );
+  }
+
+  static const T_scheduler_event *GetPriorityUpdate( Context *ctx, size_t *index )
+  {
+    return T_scheduler_next(
+      &ctx->tq_ctx->scheduler_log.header,
+      T_SCHEDULER_UPDATE_PRIORITY,
+      index
+    );
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+
+  static void Flush( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    TQFlush( ctx->tq_ctx );
+  }
+
+  static void SchedulerEvent(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      ctx->request.handler = Flush;
+      ctx->request.arg = ctx;
+      CallWithinISRSubmit( &ctx->request );
+      T_scheduler_set_event_handler( NULL, NULL );
+    }
+  }
+test-target: testsuites/validation/tr-tq-flush-priority-inherit.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the ${/glossary/priority:/term} thread queue with support for
+  ${/glossary/priorityinheritance:/term} is flushed.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Extract: Nop
+    PriorityUpdate: 'No'
+  pre-conditions:
+    Queue:
+    - Empty
+    Priority: N/A
+- enabled-by: true
+  post-conditions:
+    Extract: All
+    PriorityUpdate: 'No'
+  pre-conditions:
+    Queue:
+    - NonEmpty
+    Priority:
+    - NotMinimum
+- enabled-by: true
+  post-conditions:
+    Extract: All
+    PriorityUpdate: 'Yes'
+  pre-conditions:
+    Queue:
+    - NonEmpty
+    Priority:
+    - Minimum
+type: requirement

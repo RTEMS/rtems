@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+identifier: bsp_clock
+links:
+- role: interface-ingroup
+  uid: group-shared
+non-functional-type: design-group
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The shared ${/glossary/bsp:/term} interrupt support shall be a component
+  containing functions used to implement a ${/glossary/clock-driver:/term}.
+type: requirement

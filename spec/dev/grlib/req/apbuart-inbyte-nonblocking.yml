@@ -1,0 +1,109 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/apbuart-inbyte-nonblocking
+post-conditions:
+- name: Result
+  states:
+  - name: Data
+    test-code: |
+      T_eq_int( ctx->result, 0xff );
+    text: |
+      The return value of ${../if/apbuart-inbyte-nonblocking:/name} shall be
+      the data read from the data register of the register block specified by
+      ${../if/apbuart-inbyte-nonblocking:/params[0]/name}.
+  - name: MinusOne
+    test-code: |
+      T_eq_int( ctx->result, -1 );
+    text: |
+      The return value of ${../if/apbuart-inbyte-nonblocking:/name} shall be
+      minus one.
+  test-epilogue: null
+  test-prologue: null
+- name: ErrorFlags
+  states:
+  - name: Cleared
+    test-code: |
+      T_eq_u32( ctx->regs.status & 0x78, 0 );
+    text: |
+      The framing error, parity error, overrun, and break received flags in the
+      status register of the register block specified by
+      ${../if/apbuart-inbyte-nonblocking:/params[0]/name} shall be cleared.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: DataReady
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->regs.status |= APBUART_STATUS_DR;
+    text: |
+      While the data ready flag is set in the status register of the register
+      block specified by ${../if/apbuart-inbyte-nonblocking:/params[0]/name}
+      parameter.
+  - name: 'No'
+    test-code: |
+      ctx->regs.status &= ~APBUART_STATUS_DR;
+    text: |
+      While the data ready flag is cleared in the status register of the
+      register block specified by
+      ${../if/apbuart-inbyte-nonblocking:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->result = apbuart_inbyte_nonblocking( &ctx->regs );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the APBUART register block.
+  description: null
+  member: |
+    apbuart regs
+- brief: |
+    This member contains the return value of the
+    ${../if/apbuart-inbyte-nonblocking:/name} call.
+  description: null
+  member: |
+    int result
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- grlib/apbuart.h
+- string.h
+test-local-includes: []
+test-prepare: |
+  memset( &ctx->regs, 0, sizeof( ctx->regs ) );
+  ctx->regs.status = 0x78;
+  ctx->regs.data = 0xff;
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-dev-grlib-apbuart-inbyte-nonblocking.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Result: Data
+    ErrorFlags: Cleared
+  pre-conditions:
+    DataReady:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Result: MinusOne
+    ErrorFlags: Cleared
+  pre-conditions:
+    DataReady:
+    - 'No'
+type: requirement

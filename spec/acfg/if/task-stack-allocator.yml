@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  The default value is ``_Workspace_Allocate``, which indicates that task
+  stacks will be allocated from the RTEMS Workspace.
+description: |
+  The value of this configuration option initializes the stack allocator
+  allocate handler.
+enabled-by: true
+index-entries:
+- task stack allocator
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-stackalloc
+- role: constraint
+  uid: ../constraint/init-task-stack-allocator
+name: CONFIGURE_TASK_STACK_ALLOCATOR
+notes: |
+  A correctly configured system shall configure the following to be consistent:
+
+  * ${task-stack-allocator-init:/name}
+
+  * ``CONFIGURE_TASK_STACK_ALLOCATOR``
+
+  * ${task-stack-deallocator:/name}
+type: interface

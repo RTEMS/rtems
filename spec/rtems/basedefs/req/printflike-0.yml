@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/printflike
+non-functional-type: interface
+rationale: |
+  Counting of arguments starts at 1 from the left with the
+  exception of non-static C++ methods where the counting starts with
+  2 due to the implicit ``this`` argument.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/printflike:/name} macro is used as last part of a
+  function declaration or prefixes a function definition,
+  and ${../if/printflike:/params[0]/name} as well as
+  ${../if/printflike:/params[1]/name} are constant numbers
+  referring to two different arguments of that function,
+  and the function argument number ${../if/printflike:/params[0]/name}
+  is a ``printf``-format string,
+  and the function argument number ${../if/printflike:/params[1]/name}
+  is the first argument to be used in the ``printf``-format string,
+  and all other arguments used in the ``printf``-format string
+  are arguments ${../if/printflike:/params[1]/name} + 1,
+  ${../if/printflike:/params[1]/name} + 2,
+  ${../if/printflike:/params[1]/name} + 3, and so on,
+  the macro shall cause the compiler to use this information for
+  type checking the format string and arguments.
+type: requirement

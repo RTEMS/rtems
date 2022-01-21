@@ -1,0 +1,133 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Receives or gets an event set from the calling task.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${set:/name} ${.:/params[0]/name}
+    - ${../../option/if/option:/name} ${.:/params[1]/name}
+    - ${../../type/if/interval:/name} ${.:/params[2]/name}
+    - ${set:/name} *${.:/params[3]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive can be used to
+
+  * get the pending events of the calling task, or
+
+  * receive events.
+
+  To **get the pending events** use the constant ${pending-events:/name} for
+  the ${.:/params[0]/name} parameter.  The pending events are returned to the
+  calling task but the event set of the calling task is left unaltered.  The
+  ${.:/params[1]/name} and ${.:/params[2]/name} parameters are ignored in this
+  case.  The directive returns immediately and does not block.
+
+  To **receive events** you have to define an input event condition and some
+  options.
+
+  The **option set** specified in ${.:/params[1]/name} is built through a
+  *bitwise or* of the option constants described below.  Not all combinations
+  of options are allowed.  Some options are mutually exclusive.  If mutually
+  exclusive options are combined, the behaviour is undefined.  Options not
+  mentioned below are not evaluated by this directive and have no effect.
+  Default options can be selected by using the ${../../option/if/default:/name}
+  constant.  The option set defines
+
+  * if the calling task will wait or poll for the events, and
+
+  * if the calling task wants to receive all or any of the input events.
+
+  The calling task can **wait** or **poll** for the events.
+
+  * **Waiting** for events is the default and can be emphasized through the use
+    of the ${../../option/if/wait:/name} option.  The ${.:/params[2]/name}
+    parameter defines how long the calling task is willing to wait.  Use
+    ${../../type/if/no-timeout:/name} to wait potentially forever, otherwise
+    set a timeout interval in clock ticks.
+
+  * Not waiting for events (**polling**) is selected by the
+    ${../../option/if/no-wait:/name} option.  If this option is defined, then
+    the ${.:/params[2]/name} parameter is ignored.
+
+  The calling task can receive **all** or **any** of the input events specified
+  in ${.:/params[0]/name}.
+
+  * Receiving **all** input events is the default and can be emphasized through
+    the use of the ${../../option/if/event-all:/name} option.
+
+  * Receiving **any** of the input events is selected by the
+    ${../../option/if/event-any:/name} option.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-tick
+name: rtems_event_receive
+notes: |
+  This directive only affects the events specified in ${.:/params[0]/name}.
+  Any pending events that do not correspond to any of the events specified in
+  ${.:/params[0]/name} will be left pending.
+
+  To receive all events use the event set constant ${all-events:/name} for the
+  ${.:/params[0]/name} parameter.  Do not confuse this event set constant
+  with the directive option ${../../option/if/event-all:/name}.
+
+  A task can **receive all of the pending events** by calling the directive
+  with a value of ${all-events:/name} for the ${.:/params[0]/name}
+  parameter and the bitwise or of the ${../../option/if/no-wait:/name} and
+  ${../../option/if/event-any:/name} options for the ${.:/params[1]/name}
+  parameter.  The pending events are returned and the event set of the task is
+  cleared.  If no events are pending then the
+  ${../../status/if/unsatisfied:/name} status code will be returned.
+params:
+- description: |
+    is the event set of interest.  Use ${pending-events:/name} to get the
+    pending events.
+  dir: null
+  name: event_in
+- description: is the option set.
+  dir: null
+  name: option_set
+- description: |
+    is the timeout in clock ticks if the ${../../option/if/wait:/name} option
+    is set.  Use ${../../type/if/no-timeout:/name} to wait potentially
+    forever.
+  dir: null
+  name: ticks
+- description: |
+    is the pointer to an event set.  The received or pending events are stored
+    in the referenced event set if the operation was successful.
+  dir: null
+  name: event_out
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[3]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The events of interest were not immediately available.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The events of interest were not available within the specified timeout
+      interval.
+    value: ${../../status/if/timeout:/name}
+type: interface

@@ -1,0 +1,1127 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/create
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-name:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: InvPrio
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/invalid-priority:/name}.
+  - name: NotDef
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_DEFINED );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/not-defined:/name}.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+    text: |
+      The return status of ${../if/create:/name} shall be
+      ${../../status/if/too-many:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_semaphore_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->id_value );
+    text: |
+      The unique object name shall identify the semaphore created by the
+      ${../if/create:/name} call.
+  - name: Invalid
+    test-code: |
+      sc = rtems_semaphore_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a semaphore.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_id          id;
+- name: IdVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object referenced by the ${../if/create:/params[4]/name}
+      parameter shall be set to the object identifier of the created semaphore
+      after the return of the ${../if/create:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      Objects referenced by the ${../if/create:/params[4]/name} parameter in
+      past calls to ${../if/create:/name} shall not be accessed by the
+      ${../if/create:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Variant
+  states:
+  - name: Cnt
+    test-code: |
+      T_eq_int( ctx->variant, SEMAPHORE_VARIANT_COUNTING );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be a
+      counting semaphore.
+  - name: Bin
+    test-code: |
+      T_eq_int( ctx->variant, SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be a binary
+      semaphore not using a locking protocol.
+  - name: PI
+    test-code: |
+      T_eq_int( ctx->variant, SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be a binary
+      semaphore using the priority inheritance locking protocol.
+  - name: PC
+    test-code: |
+      T_eq_int( ctx->variant, SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be a binary
+      semaphore using the priority ceiling locking protocol.
+  - name: SB
+    test-code: |
+      T_eq_int( ctx->variant, SEMAPHORE_VARIANT_SIMPLE_BINARY );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be a simple
+      binary semaphore.
+  - name: MrsP
+    test-code: |
+      #if defined(RTEMS_SMP)
+      T_eq_int( ctx->variant, SEMAPHORE_VARIANT_MRSP );
+      #else
+      T_true( false );
+      #endif
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be a binary
+      semaphore using the MrsP locking protocol.
+  test-epilogue: null
+  test-prologue: null
+- name: Disc
+  states:
+  - name: FIFO
+    test-code: |
+      T_eq_int( ctx->discipline, SEMAPHORE_DISCIPLINE_FIFO );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall use the
+      FIFO task wait queue discipline.
+  - name: Prio
+    test-code: |
+      T_eq_int( ctx->discipline, SEMAPHORE_DISCIPLINE_PRIORITY );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall use the
+      priority task wait queue discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Count
+  states:
+  - name: Initial
+    test-code: |
+      T_eq_u32( ctx->sem_count, ctx->count );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall have an
+      initial count equal to the value of the ${../if/create:/params[1]/name}
+      parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: Caller
+    test-code: |
+      T_eq_ptr( ctx->owner, ctx->executing );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall be
+      initially owned by the calling task.
+  - name: 'No'
+    test-code: |
+      T_null( ctx->owner );
+    text: |
+      The semaphore created by the ${../if/create:/name} call shall not
+      initially have an owner.
+  test-epilogue: null
+  test-prologue: null
+- name: Prio
+  states:
+  - name: Ceiling
+    test-code: |
+      T_eq_u32( GetSelfPriority(), ctx->priority_ceiling );
+    text: |
+      The current priority of the task which called ${../if/create:/name} shall
+      be equal to the value of the ${../if/create:/params[3]/name} parameter.
+  - name: Nop
+    test-code: |
+      T_eq_u32( GetSelfPriority(), 1 );
+    text: |
+      The current priority of the task which called ${../if/create:/name} shall
+      not be modified by the ${../if/create:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->name = NAME;
+    text: |
+      While the ${../if/create:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->name = 0;
+    text: |
+      While the ${../if/create:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/create:/params[4]/name} parameter references an object
+      of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/create:/params[4]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Count
+  states:
+  - name: Zero
+    test-code: |
+      ctx->count = 0;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter is zero.
+  - name: One
+    test-code: |
+      ctx->count = 1;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter is one.
+  - name: GtOne
+    test-code: |
+      ctx->count = UINT32_MAX;
+    text: |
+      While the ${../if/create:/params[1]/name} parameter is greater than one.
+  test-epilogue: null
+  test-prologue: null
+- name: Binary
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the binary
+      semaphore class.
+  - name: 'No'
+    test-code: |
+      /* Use default */
+    text: |
+      While the ${../if/create:/params[2]/name} parameter does not specify the
+      binary semaphore class.
+  test-epilogue: null
+  test-prologue: null
+- name: Simple
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the simple
+      binary semaphore class.
+  - name: 'No'
+    test-code: |
+      /* Use default */
+    text: |
+      While the ${../if/create:/params[2]/name} parameter does not specify the
+      simple binary semaphore class.
+  test-epilogue: null
+  test-prologue: null
+- name: Inherit
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->attribute_set |= RTEMS_INHERIT_PRIORITY;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the priority
+      inheritance locking protocol.
+  - name: 'No'
+    test-code: |
+      ctx->attribute_set |= RTEMS_NO_INHERIT_PRIORITY;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter does not specify the
+      priority inheritance locking protocol.
+  test-epilogue: null
+  test-prologue: null
+- name: Ceiling
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->attribute_set |= RTEMS_PRIORITY_CEILING;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the priority
+      ceiling locking protocol.
+  - name: 'No'
+    test-code: |
+      ctx->attribute_set |= RTEMS_NO_PRIORITY_CEILING;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter does not specify the
+      priority ceiling locking protocol.
+  test-epilogue: null
+  test-prologue: null
+- name: MrsP
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->attribute_set |= RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the MrsP
+      locking protocol.
+  - name: 'No'
+    test-code: |
+      ctx->attribute_set |= RTEMS_NO_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter does not specify the
+      MrsP locking protocol.
+  test-epilogue: null
+  test-prologue: null
+- name: Disc
+  states:
+  - name: FIFO
+    test-code: |
+      RTEMS_STATIC_ASSERT( RTEMS_DEFAULT_ATTRIBUTES == RTEMS_FIFO, RTEMS_FIFO );
+      ctx->attribute_set |= RTEMS_FIFO;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the FIFO task
+      wait queue discipline or the default task wait queue discipline.
+  - name: Prio
+    test-code: |
+      ctx->attribute_set |= RTEMS_PRIORITY;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter specifies the priority
+      task wait queue discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Prio
+  states:
+  - name: LeCur
+    test-code: |
+      ctx->priority_ceiling = 0;
+    text: |
+      While the ${../if/create:/params[3]/name} parameter is a valid task
+      priority less than or equal to the current priority of the calling task
+      with respect to the scheduler of the calling task at some point during
+      the directive call.
+  - name: GtCur
+    test-code: |
+      ctx->priority_ceiling = 2;
+    text: |
+      While the ${../if/create:/params[3]/name} parameter is a valid task
+      priority greater than the current priority of the calling task with
+      respect to the scheduler of the calling task at some point during the
+      directive call.
+  - name: Invalid
+    test-code: |
+      ctx->priority_ceiling = UINT32_MAX;
+    text: |
+      The ${../if/create:/params[3]/name} parameter shall not be a valid task
+      priority with respect to the scheduler of the calling task at some point
+      during the directive call.
+  test-epilogue: null
+  test-prologue: null
+- name: Free
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      While the system has at least one inactive semaphore object available.
+  - name: 'No'
+    test-code: |
+      i = 0;
+      ctx->seized_objects = T_seize_objects( Create, &i );
+    text: |
+      While the system has no inactive semaphore object available.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_semaphore_create(
+    ctx->name,
+    ctx->count,
+    ctx->attribute_set,
+    ctx->priority_ceiling,
+    ctx->id
+  );
+
+  GetSemAttributes( ctx );
+test-brief: null
+test-cleanup: |
+  rtems_status_code sc;
+
+  if ( ctx->id_value != INVALID_ID ) {
+    if ( ctx->count == 0 ) {
+      sc = rtems_semaphore_release( ctx->id_value );
+      T_rsc_success( sc );
+    }
+
+    sc = rtems_semaphore_delete( ctx->id_value );
+    T_rsc_success( sc );
+  }
+
+  T_surrender_objects( &ctx->seized_objects, rtems_semaphore_delete );
+test-context:
+- brief: null
+  description: null
+  member: |
+    void *seized_objects
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+- brief: null
+  description: null
+  member: |
+    Semaphore_Variant variant;
+- brief: null
+  description: null
+  member: |
+    Semaphore_Discipline discipline;
+- brief: null
+  description: null
+  member: |
+    uint32_t sem_count;
+- brief: null
+  description: null
+  member: |
+    Thread_Control *executing;
+- brief: null
+  description: null
+  member: |
+    Thread_Control *owner;
+- brief: null
+  description: null
+  member: |
+    rtems_name name
+- brief: null
+  description: null
+  member: |
+    uint32_t count
+- brief: null
+  description: null
+  member: |
+    rtems_attribute attribute_set
+- brief: null
+  description: null
+  member: |
+    rtems_task_priority priority_ceiling
+- brief: null
+  description: null
+  member: |
+    rtems_id *id
+- brief: null
+  description: null
+  member: |
+    rtems_id id_value
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- limits.h
+- string.h
+- rtems/rtems/semimpl.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_status_code sc;
+  rtems_id          id;
+
+  ctx->id_value = INVALID_ID;
+  ctx->attribute_set = RTEMS_DEFAULT_ATTRIBUTES;
+
+  id = INVALID_ID;
+  sc = rtems_semaphore_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+  T_rsc( sc, RTEMS_INVALID_NAME );
+  T_eq_u32( id, INVALID_ID );
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->executing = _Thread_Get_executing();
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  typedef ${.:/test-context-type} Context;
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    (void) arg;
+
+    return rtems_semaphore_create(
+      rtems_build_name( 'S', 'I', 'Z', 'E' ),
+      1,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      0,
+      id
+    );
+  }
+
+  static void GetSemAttributes( Context *ctx )
+  {
+    if ( ctx->id_value != INVALID_ID ) {
+      Semaphore_Control   *semaphore;
+      Thread_queue_Context queue_context;
+      uintptr_t            flags;
+
+      semaphore = _Semaphore_Get( ctx->id_value, &queue_context );
+      T_assert_not_null( semaphore );
+      ctx->sem_count = semaphore->Core_control.Semaphore.count;
+      ctx->owner = semaphore->Core_control.Wait_queue.Queue.owner;
+      flags = _Semaphore_Get_flags( semaphore );
+      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+      ctx->variant = _Semaphore_Get_variant( flags );
+      ctx->discipline = _Semaphore_Get_discipline( flags );
+    } else {
+      ctx->sem_count = 123;
+      ctx->owner = (void *)(uintptr_t) 1;
+      ctx->variant = INT_MAX;
+      ctx->discipline = INT_MAX;
+    }
+  }
+test-target: testsuites/validation/tc-sem-create.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+    Name: Invalid
+    IdVar: Nop
+    Variant: N/A
+    Disc: N/A
+    Count: N/A
+    Owner: N/A
+    Prio: Nop
+  pre-conditions:
+    Name:
+    - Invalid
+    Id: all
+    Count: all
+    Binary: all
+    Simple: all
+    Inherit: all
+    Ceiling: all
+    MrsP: all
+    Disc: all
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Name: Invalid
+    IdVar: Nop
+    Variant: N/A
+    Disc: N/A
+    Count: N/A
+    Owner: N/A
+    Prio: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - 'Null'
+    Count: all
+    Binary: all
+    Simple: all
+    Inherit: all
+    Ceiling: all
+    MrsP: all
+    Disc: all
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Cnt
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Disc
+    - else: N/A
+    Count:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Initial
+    - else: N/A
+    Owner:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count: all
+    Binary:
+    - 'No'
+    Simple:
+    - 'No'
+    Inherit:
+    - 'No'
+    Ceiling:
+    - 'No'
+    MrsP:
+    - 'No'
+    Disc: all
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Count: GtOne
+      then: InvNum
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Bin
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Disc
+    - else: N/A
+    Count: N/A
+    Owner:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Caller
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count: all
+    Binary:
+    - 'Yes'
+    Simple:
+    - 'No'
+    Inherit:
+    - 'No'
+    Ceiling:
+    - 'No'
+    MrsP:
+    - 'No'
+    Disc: all
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Count: GtOne
+      then: InvNum
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: PI
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Prio
+    - else: N/A
+    Count: N/A
+    Owner:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Caller
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count: all
+    Binary:
+    - 'Yes'
+    Simple:
+    - 'No'
+    Inherit:
+    - 'Yes'
+    Ceiling:
+    - 'No'
+    MrsP:
+    - 'No'
+    Disc:
+    - Prio
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Count: GtOne
+      then: InvNum
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+      - pre-conditions:
+          Prio: Invalid
+      - pre-conditions:
+          Count: Zero
+          Prio: GtCur
+      then: InvPrio
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: PC
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Prio
+    - else: N/A
+    Count: N/A
+    Owner:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Caller
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Ceiling
+    - else: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count: all
+    Binary:
+    - 'Yes'
+    Simple:
+    - 'No'
+    Inherit:
+    - 'No'
+    Ceiling:
+    - 'Yes'
+    MrsP:
+    - 'No'
+    Disc:
+    - Prio
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Count: GtOne
+      then: InvNum
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+      - pre-conditions:
+          Prio: Invalid
+      - pre-conditions:
+          Count: Zero
+          Prio: GtCur
+      then: InvPrio
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: PC
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Prio
+    - else: N/A
+    Count: N/A
+    Owner:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Caller
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Ceiling
+    - else: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count: all
+    Binary:
+    - 'Yes'
+    Simple:
+    - 'No'
+    Inherit:
+    - 'No'
+    Ceiling:
+    - 'No'
+    MrsP:
+    - 'Yes'
+    Disc:
+    - Prio
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Count: GtOne
+      then: InvNum
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: SB
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Disc
+    - else: N/A
+    Count:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Initial
+    - else: N/A
+    Owner:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count: all
+    Binary:
+    - 'No'
+    Simple:
+    - 'Yes'
+    Inherit:
+    - 'No'
+    Ceiling:
+    - 'No'
+    MrsP:
+    - 'No'
+    Disc: all
+    Prio: all
+    Free: all
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    Name: Invalid
+    IdVar: Nop
+    Variant: N/A
+    Disc: N/A
+    Count: N/A
+    Owner: N/A
+    Prio: Nop
+  pre-conditions: default
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status:
+    - if:
+      - pre-conditions:
+          Count: Zero
+          Prio: GtCur
+      then: InvPrio
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    Variant:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: MrsP
+    - else: N/A
+    Disc:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Prio
+    - else: N/A
+    Count: N/A
+    Owner:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Caller
+    - if:
+        post-conditions:
+          Status: Ok
+      then: 'No'
+    - else: N/A
+    Prio:
+    - if:
+        and:
+        - pre-conditions:
+            Count: Zero
+        - post-conditions:
+            Status: Ok
+      then: Ceiling
+    - else: Nop
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Count:
+    - Zero
+    - One
+    Binary:
+    - 'Yes'
+    Simple:
+    - 'No'
+    Inherit:
+    - 'No'
+    Ceiling:
+    - 'No'
+    MrsP:
+    - 'Yes'
+    Disc:
+    - Prio
+    Prio:
+    - LeCur
+    - GtCur
+    Free:
+    - 'Yes'
+type: requirement

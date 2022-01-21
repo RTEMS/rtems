@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure represents an interrupt server.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default: null
+  variants:
+  - definition:
+      brief: |
+        This member is the ISR lock protecting the server control state.
+      definition: ${lock:/name} ${.:name}
+      description: null
+      kind: member
+      name: lock
+    enabled-by: defined(RTEMS_SMP)
+- default:
+    brief: |
+      This member is the chain of pending interrupt entries.
+    definition: ${/score/chain/if/control:/name} ${.:name}
+    description: null
+    kind: member
+    name: entries
+  variants: []
+- default:
+    brief: |
+      This member is the identifier of the server task.
+    definition: ${../../type/if/id:/name} ${.:name}
+    description: null
+    kind: member
+    name: server
+  variants: []
+- default:
+    brief: |
+      This member is the error count.
+    definition: unsigned long ${.:name}
+    description: null
+    kind: member
+    name: errors
+  variants: []
+- default:
+    brief: |
+      This member is the server index.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: index
+  variants: []
+- default:
+    brief: |
+      This member is the node for the interrupt server registry.
+    definition: ${/score/chain/if/node:/name} ${.:name}
+    description: null
+    kind: member
+    name: node
+  variants: []
+- default:
+    brief: |
+      This member is the optional handler to destroy the interrupt server
+      control.
+    definition: void ( *${.:name} )( struct rtems_interrupt_server_control * )
+    description: null
+    kind: member
+    name: destroy
+  variants: []
+definition-kind: typedef-and-struct
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_server_control
+notes: |
+  This structure shall be treated as an opaque data type from the
+  ${/glossary/api:/term} point of view.  Members shall not be accessed
+  directly.  The structure is initialized by ${server-create:/name} and
+  maintained by the interrupt server support.
+type: interface

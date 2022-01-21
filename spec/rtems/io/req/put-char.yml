@@ -1,0 +1,131 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/put-char
+post-conditions:
+- name: Output
+  states:
+  - name: CrNl
+    test-code: |
+      T_eq_int( ctx->output[ 0 ], (unsigned char) '\r' );
+      T_eq_int( ctx->output[ 1 ], (unsigned char) '\n' );
+      T_eq_sz( ctx->output_count, 2 );
+    text: |
+      The function referenced by ${../if/bsp-output-char:/name} shall be called
+      with a ``CR`` character followed by a call with a ``NL`` character.
+  - name: Other
+    test-code: |
+      T_eq_int( ctx->output[ 0 ], 0xff );
+      T_eq_sz( ctx->output_count, 1 );
+    text: |
+      The function referenced by ${../if/bsp-output-char:/name} shall be called
+      with the character specified by ${../if/put-char:/params[0]/name}.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Char
+  states:
+  - name: Nl
+    test-code: |
+      ctx->character = '\n';
+    text: |
+      While the ${../if/put-char:/params[0]/name} parameter is
+      equal to ``NL``.
+  - name: Other
+    test-code: |
+      ctx->character = 0xff;
+    text: |
+      While the ${../if/put-char:/params[0]/name} parameter is
+      not equal to ``NL``.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  BSP_output_char_function_type output_char;
+
+  ctx->output[ 0 ] = -1;
+  ctx->output[ 1 ] = -1;
+  ctx->output_count = 0;
+  output_char = BSP_output_char;
+  BSP_output_char = OutputChar;
+  rtems_put_char( ctx->character, NULL );
+  BSP_output_char = output_char;
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the character output.
+  description: null
+  member: |
+    int output[ 2 ]
+- brief: |
+    This member contains the character output count.
+  description: null
+  member: |
+    size_t output_count
+- brief: |
+    This member specifies if the ${../if/put-char:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    int character
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/bspIo.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void Output( int value )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+
+    if ( ctx->output_count < RTEMS_ARRAY_SIZE( ctx->output ) ) {
+      ctx->output[ ctx->output_count ] = value;
+    }
+
+    ++ctx->output_count;
+  }
+
+  static void WrongOutput( char c )
+  {
+    (void) c;
+    Output( -1 );
+  }
+
+  static void OutputChar( char c )
+  {
+    BSP_output_char = WrongOutput;
+    Output( (unsigned char) c );
+  }
+test-target: testsuites/validation/tc-io-put-char.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Output: CrNl
+  pre-conditions:
+    Char:
+    - Nl
+- enabled-by: true
+  post-conditions:
+    Output: Other
+  pre-conditions:
+    Char:
+    - Other
+type: requirement

@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: get
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The directives to get time values in the highest resolution shall use the
+  currently installed timecounter to get a clock snapshot.
+type: requirement

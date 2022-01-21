@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The value of the application configuration option shall be zero if the POSIX
+  API is not enabled (e.g. RTEMS was built without the
+  ``RTEMS_POSIX_API = True`` build configuration option).  Otherwise a compile
+  time error in the configuration file will occur.
+type: constraint

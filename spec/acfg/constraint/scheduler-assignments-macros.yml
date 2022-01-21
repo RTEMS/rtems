@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The value of the application configuration option shall be a list of the
+  following macros:
+
+  * ``RTEMS_SCHEDULER_ASSIGN( processor_index, attributes )``
+
+  * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
+type: constraint

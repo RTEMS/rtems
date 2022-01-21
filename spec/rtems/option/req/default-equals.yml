@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/default
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The value of macro ${../if/default:/name} shall be equal
+  to the value of expression ``${../if/wait:/name}``.
+type: requirement

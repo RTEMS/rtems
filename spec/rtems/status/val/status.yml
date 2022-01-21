@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate the status code constants.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that ${../if/first:/name} has the expected value and is a constant
+      expression.
+    code: |
+      RTEMS_STATIC_ASSERT( RTEMS_STATUS_CODES_FIRST == 0, FIRST );
+    links:
+    - role: validation
+      uid: ../req/first
+  - brief: |
+      Check that ${../if/last:/name} has the expected value and is a constant
+      expression.
+    code: |
+      RTEMS_STATIC_ASSERT( RTEMS_STATUS_CODES_LAST == 29, LAST );
+    links:
+    - role: validation
+      uid: ../req/last
+  links: []
+test-brief: |
+  Tests some ${../if/group:/name} interfaces.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-status.c
+test-teardown: null
+type: test-case

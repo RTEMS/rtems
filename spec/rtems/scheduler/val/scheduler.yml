@@ -1,0 +1,82 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate ${../if/get-processor:/name}.
+  action-code: |
+    uint32_t cpu_index;
+    uint32_t cpu_index_macro;
+
+    cpu_index = GetProcessor();
+    cpu_index_macro = GetProcessorMacro();
+  checks:
+  - brief: |
+      Check that the values returned by ${../if/get-processor:/name}
+      and ${../if/get-processor-macro:/name} are equal.
+    code: |
+      T_step_eq_u32( ${step}, cpu_index, cpu_index_macro );
+    links:
+    - role: validation
+      uid: ../req/get-processor
+  links: []
+- action-brief: |
+    Validate ${../if/get-processor-maximum:/name}.
+  action-code: |
+    uint32_t cpu_max;
+    uint32_t cpu_max_macro;
+
+    cpu_max = GetProcessorMaximum();
+    cpu_max_macro = GetProcessorMaximumMacro();
+  checks:
+  - brief: |
+      Check that the values returned by ${../if/get-processor-maximum:/name}
+      and ${../if/get-processor-maximum-macro:/name} are equal.
+    code: |
+      T_step_eq_u32( ${step}, cpu_max, cpu_max_macro );
+    links:
+    - role: validation
+      uid: ../req/get-processor-maximum
+  links: []
+test-brief: |
+  This test case collection provides validation test cases for
+  general requirements of the ${../if/group:/name}.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static uint32_t GetProcessorMaximumMacro( void )
+  {
+    return rtems_scheduler_get_processor_maximum();
+  }
+
+  #undef rtems_scheduler_get_processor_maximum
+
+  static uint32_t GetProcessorMaximum( void )
+  {
+    return rtems_scheduler_get_processor_maximum();
+  }
+
+  static uint32_t GetProcessorMacro( void )
+  {
+    return rtems_scheduler_get_processor();
+  }
+
+  #undef rtems_scheduler_get_processor
+
+  static uint32_t GetProcessor( void )
+  {
+    return rtems_scheduler_get_processor();
+  }
+test-target: testsuites/validation/tc-scheduler.c
+test-teardown: null
+type: test-case

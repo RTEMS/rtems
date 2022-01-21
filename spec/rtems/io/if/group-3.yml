@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The kernel character input/output support is an extension of the
+  ${group:/name} to output characters to the kernel character output device and
+  receive characters from the kernel character input device using a polled and
+  non-blocking implementation.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  The directives may be used to print debug and test information.  The kernel
+  character input/output support should work even if no Console Driver is
+  configured, see ${/acfg/if/appl-needs-console-driver:/name}.  The kernel
+  character input and output device is provided by the ${/glossary/bsp:/term}.
+  Applications may change the device.
+enabled-by: true
+identifier: RTEMSAPIKernelCharIO
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header-3
+- role: interface-ingroup
+  uid: group
+- role: placement-order
+  uid: bsp-output-char-function-type
+- role: placement-order
+  uid: bsp-output-char
+- role: placement-order
+  uid: putc
+- role: placement-order
+  uid: put-char
+- role: placement-order
+  uid: putk
+- role: placement-order
+  uid: printk
+- role: placement-order
+  uid: vprintk
+- role: placement-order
+  uid: printk-printer
+- role: placement-order
+  uid: bsp-polling-getchar-function-type
+- role: placement-order
+  uid: bsp-poll-char
+- role: placement-order
+  uid: getchark
+name: Kernel Character I/O Support
+text: |
+  The ${group:/name} shall provide an interface group containing functions to
+  input and output characters to a ${/glossary/bsp:/term} defined device using
+  a polled and non-blocking implementation.
+type: interface

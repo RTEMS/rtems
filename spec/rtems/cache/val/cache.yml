@@ -1,0 +1,528 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Call the ${../if/disable-data:/name} and ${../if/enable-data:/name}
+    directives.
+  action-code: |
+    rtems_cache_disable_data();
+    rtems_cache_enable_data();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/disable-data
+  - role: validation
+    uid: ../req/enable-data
+- action-brief: |
+    Call the ${../if/disable-data:/name} and ${../if/enable-data:/name}
+    directives with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_disable_data();
+    rtems_cache_enable_data();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/disable-data
+  - role: validation
+    uid: ../req/enable-data
+- action-brief: |
+    Call the ${../if/disable-instruction:/name} and
+    ${../if/enable-instruction:/name} directives.
+  action-code: |
+    rtems_cache_disable_instruction();
+    rtems_cache_enable_instruction();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/disable-instruction
+  - role: validation
+    uid: ../req/enable-instruction
+- action-brief: |
+    Call the ${../if/disable-instruction:/name} and
+    ${../if/enable-instruction:/name} directives with maskable interrupts
+    disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_disable_instruction();
+    rtems_cache_enable_instruction();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/disable-instruction
+  - role: validation
+    uid: ../req/enable-instruction
+- action-brief: |
+    Call the ${../if/freeze-data:/name} and ${../if/unfreeze-data:/name}
+    directives.
+  action-code: |
+    rtems_cache_freeze_data();
+    rtems_cache_unfreeze_data();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/freeze-data
+  - role: validation
+    uid: ../req/unfreeze-data
+- action-brief: |
+    Call the ${../if/freeze-data:/name} and ${../if/unfreeze-data:/name}
+    directives with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_freeze_data();
+    rtems_cache_unfreeze_data();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/freeze-data
+  - role: validation
+    uid: ../req/unfreeze-data
+- action-brief: |
+    Call the ${../if/freeze-instruction:/name} and
+    ${../if/unfreeze-instruction:/name} directives.
+  action-code: |
+    rtems_cache_freeze_instruction();
+    rtems_cache_unfreeze_instruction();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/freeze-instruction
+  - role: validation
+    uid: ../req/unfreeze-instruction
+- action-brief: |
+    Call the ${../if/freeze-instruction:/name} and
+    ${../if/unfreeze-instruction:/name} directives with maskable interrupts
+    disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_freeze_instruction();
+    rtems_cache_unfreeze_instruction();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/freeze-instruction
+  - role: validation
+    uid: ../req/unfreeze-instruction
+- action-brief: |
+    Call the ${../if/invalidate-entire-data:/name} directive with maskable
+    interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_disable_data();
+    rtems_cache_invalidate_entire_data();
+    rtems_cache_enable_data();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-entire-data
+- action-brief: |
+    Call the ${../if/invalidate-entire-instruction:/name} directive.
+  action-code: |
+    rtems_cache_invalidate_entire_instruction();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-entire-instruction
+- action-brief: |
+    Call the ${../if/invalidate-entire-instruction:/name} directive with
+    maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_invalidate_entire_instruction();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-entire-instruction
+- action-brief: |
+    Call the ${../if/flush-entire-data:/name} directive.
+  action-code: |
+    rtems_cache_flush_entire_data();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/flush-entire-data
+- action-brief: |
+    Call the ${../if/flush-entire-data:/name} directive with maskable
+    interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    rtems_cache_flush_entire_data();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/flush-entire-data
+- action-brief: |
+    Call the ${../if/flush-multiple-data-lines:/name} directive with a sample
+    set of memory areas.
+  action-code: |
+    CallFlushMultipleDataLines();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/flush-multiple-data-lines
+- action-brief: |
+    Call the ${../if/flush-multiple-data-lines:/name} directive with a sample
+    set of memory areas with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    CallFlushMultipleDataLines();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/flush-multiple-data-lines
+- action-brief: |
+    Call the ${../if/invalidate-multiple-data-lines:/name} directive with a sample
+    set of memory areas.
+  action-code: |
+    CallInvalidateMultipleDataLines();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-multiple-data-lines
+- action-brief: |
+    Call the ${../if/invalidate-multiple-data-lines:/name} directive with a sample
+    set of memory areas with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    CallInvalidateMultipleDataLines();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-multiple-data-lines
+- action-brief: |
+    Call the ${../if/invalidate-multiple-instruction-lines:/name} directive
+    with a sample set of memory areas.
+  action-code: |
+    CallInvalidateMultipleInstructionLines();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-multiple-instruction-lines
+- action-brief: |
+    Call the ${../if/invalidate-multiple-instruction-lines:/name} directive
+    with a sample set of memory areas with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    CallInvalidateMultipleInstructionLines();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/invalidate-multiple-instruction-lines
+- action-brief: |
+    Call the ${../if/instruction-sync-after-code-change:/name} directive
+    with a sample set of memory areas.
+  action-code: |
+    CallInstructionSyncAfterCodeChange();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/instruction-sync-after-code-change
+- action-brief: |
+    Call the ${../if/instruction-sync-after-code-change:/name} directive
+    with a sample set of memory areas with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    CallInstructionSyncAfterCodeChange();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/instruction-sync-after-code-change
+- action-brief: |
+    Call the ${../if/get-data-line-size:/name},
+    ${../if/get-instruction-line-size:/name}, and the
+    ${../if/get-maximal-line-size:/name} directives.
+  action-code: |
+    size_t data_line_size;
+    size_t instruction_line_size;
+    size_t maximal_line_size;
+
+    data_line_size = rtems_cache_get_data_line_size();
+    instruction_line_size = rtems_cache_get_instruction_line_size();
+    maximal_line_size = rtems_cache_get_maximal_line_size();
+  checks:
+  - brief: |
+      Check that the maximal cache line size is greater than or equal to the
+      data cache line size.
+    code: |
+      T_step_ge_sz( ${step}, maximal_line_size, data_line_size );
+    links:
+    - role: validation
+      uid: ../req/get-maximal-line-size
+  - brief: |
+      Check that the maximal cache line size is greater than or equal to the
+      instruction cache line size.
+    code: |
+      T_step_ge_sz( ${step}, maximal_line_size, instruction_line_size );
+    links:
+    - role: validation
+      uid: ../req/get-maximal-line-size
+  links:
+  - role: validation
+    uid: ../req/get-data-line-size
+  - role: validation
+    uid: ../req/get-instruction-line-size
+- action-brief: |
+    Call the ${../if/get-data-line-size:/name},
+    ${../if/get-instruction-line-size:/name}, and the
+    ${../if/get-maximal-line-size:/name} directives with maskable interrupts
+    disabled.
+  action-code: |
+    size_t data_line_size;
+    size_t instruction_line_size;
+    size_t maximal_line_size;
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    data_line_size = rtems_cache_get_data_line_size();
+    instruction_line_size = rtems_cache_get_instruction_line_size();
+    maximal_line_size = rtems_cache_get_maximal_line_size();
+    rtems_interrupt_local_enable(level);
+  checks:
+  - brief: |
+      Check that the maximal cache line size is greater than or equal to the
+      data cache line size.
+    code: |
+      T_step_ge_sz( ${step}, maximal_line_size, data_line_size );
+    links:
+    - role: validation
+      uid: ../req/get-maximal-line-size
+  - brief: |
+      Check that the maximal cache line size is greater than or equal to the
+      instruction cache line size.
+    code: |
+      T_step_ge_sz( ${step}, maximal_line_size, instruction_line_size );
+    links:
+    - role: validation
+      uid: ../req/get-maximal-line-size
+  links:
+  - role: validation
+    uid: ../req/get-data-line-size
+  - role: validation
+    uid: ../req/get-instruction-line-size
+- action-brief: |
+    Call the ${../if/get-data-size:/name} directive with increasing level
+    starting with zero until it returns zero.
+  action-code: |
+    CallGetDataSize();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/get-data-size
+  - role: validation
+    uid: ../req/get-data-size-level-zero
+  - role: validation
+    uid: ../req/get-data-size-no-cache
+  - role: validation
+    uid: ../req/get-data-size-no-level
+- action-brief: |
+    Call the ${../if/get-data-size:/name} directive with increasing level
+    starting with zero until it returns zero with maskable interrupts disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    CallGetDataSize();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/get-data-size
+- action-brief: |
+    Call the ${../if/get-instruction-size:/name} directive with increasing
+    level starting with zero until it returns zero.
+  action-code: |
+    CallGetInstructionSize();
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/get-instruction-size
+  - role: validation
+    uid: ../req/get-instruction-size-level-zero
+  - role: validation
+    uid: ../req/get-instruction-size-no-cache
+  - role: validation
+    uid: ../req/get-instruction-size-no-level
+- action-brief: |
+    Call the ${../if/get-instruction-size:/name} directive with increasing
+    level starting with zero until it returns zero with maskable interrupts
+    disabled.
+  action-code: |
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    CallGetInstructionSize();
+    rtems_interrupt_local_enable(level);
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/get-instruction-size
+test-brief: |
+  Tests some ${../if/group:/name} directives.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: |
+  static void CallFlushMultipleDataLines( void )
+  {
+    uint8_t buf[256];
+    uintptr_t data;
+    uintptr_t n;
+    uintptr_t i;
+
+    rtems_cache_flush_multiple_data_lines( NULL, 0 );
+    data = RTEMS_ALIGN_UP( (uintptr_t) &buf[ 1 ], 128 );
+
+    for ( n = 16; n <= 128 ; n *= 2 ) {
+      for ( i = 0; i < 3; ++i ) {
+        uintptr_t j;
+
+        for ( j = 0; j < 3; ++j ) {
+          rtems_cache_flush_multiple_data_lines(
+            (const void *) ( data + 1 - i ),
+            n + 1 - j
+          );
+        }
+      }
+    }
+  }
+
+  static void CallInvalidateMultipleDataLines( void )
+  {
+    uint8_t buf[256];
+    uintptr_t data;
+    uintptr_t n;
+    uintptr_t i;
+
+    rtems_cache_invalidate_multiple_data_lines( NULL, 0 );
+    data = RTEMS_ALIGN_UP( (uintptr_t) &buf[ 1 ], 128 );
+
+    for ( n = 16; n <= 128 ; n *= 2 ) {
+      for ( i = 0; i < 3; ++i ) {
+        uintptr_t j;
+
+        for ( j = 0; j < 3; ++j ) {
+          rtems_cache_invalidate_multiple_data_lines(
+            (const void *) ( data + 1 - i ),
+            n + 1 - j
+          );
+        }
+      }
+    }
+  }
+
+  static void CallInvalidateMultipleInstructionLines( void )
+  {
+    uintptr_t data;
+    uintptr_t n;
+    uintptr_t i;
+
+    rtems_cache_invalidate_multiple_instruction_lines( NULL, 0 );
+    data = (uintptr_t) rtems_cache_invalidate_multiple_instruction_lines;
+
+    for ( n = 16; n <= 128 ; n *= 2 ) {
+      for ( i = 0; i < 3; ++i ) {
+        uintptr_t j;
+
+        for ( j = 0; j < 3; ++j ) {
+          rtems_cache_invalidate_multiple_instruction_lines(
+            (const void *) ( data + 1 - i ),
+            n + 1 - j
+          );
+        }
+      }
+    }
+  }
+
+  static void CallInstructionSyncAfterCodeChange( void )
+  {
+    uintptr_t data;
+    uintptr_t n;
+    uintptr_t i;
+
+    rtems_cache_instruction_sync_after_code_change( NULL, 0 );
+    data = (uintptr_t) rtems_cache_instruction_sync_after_code_change;
+
+    for ( n = 16; n <= 128 ; n *= 2 ) {
+      for ( i = 0; i < 3; ++i ) {
+        uintptr_t j;
+
+        for ( j = 0; j < 3; ++j ) {
+          rtems_cache_instruction_sync_after_code_change(
+            (const void *) ( data + 1 - i ),
+            n + 1 - j
+          );
+        }
+      }
+    }
+  }
+
+  static void CallGetDataSize( void )
+  {
+    uint32_t level;
+    size_t   n;
+
+    level = 0;
+
+    do {
+      n = rtems_cache_get_data_cache_size( level );
+      ++level;
+    } while (n != 0 );
+  }
+
+  static void CallGetInstructionSize( void )
+  {
+    uint32_t level;
+    size_t   n;
+
+    level = 0;
+
+    do {
+      n = rtems_cache_get_instruction_cache_size( level );
+      ++level;
+    } while (n != 0 );
+  }
+test-target: testsuites/validation/tc-cache.c
+test-teardown: null
+type: test-case

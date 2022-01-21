@@ -1,0 +1,313 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This set of defines the ${.:/register-block-group} address map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBSPWPNP
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: spwpnp-header
+definition:
+- default:
+    count: 1
+    name: PNPVEND
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: PNPVER
+  offset: 0x1
+  variants: []
+- default:
+    count: 1
+    name: PNPDEVSTS
+  offset: 0x2
+  variants: []
+- default:
+    count: 1
+    name: PNPACTLNK
+  offset: 0x3
+  variants: []
+- default:
+    count: 1
+    name: PNPOA0
+  offset: 0x5
+  variants: []
+- default:
+    count: 1
+    name: PNPOA1
+  offset: 0x6
+  variants: []
+- default:
+    count: 1
+    name: PNPOA2
+  offset: 0x7
+  variants: []
+- default:
+    count: 1
+    name: PNPDEVID
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: PNPUVEND
+  offset: 0x9
+  variants: []
+- default:
+    count: 1
+    name: PNPUSN
+  offset: 0xa
+  variants: []
+- default:
+    count: 1
+    name: PNPVSTRL
+  offset: 0x4000
+  variants: []
+- default:
+    count: 1
+    name: PNPPSTRL
+  offset: 0x6000
+  variants: []
+- default:
+    count: 1
+    name: PNPPCNT
+  offset: 0x8000
+  variants: []
+- default:
+    count: 1
+    name: PNPACNT
+  offset: 0xc000
+  variants: []
+register-prefix: null
+register-block-group: SpaceWire Plug-and-Play
+register-block-size: 49156
+registers:
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'VEND'
+      start: 16
+      width: 16
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PROD'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Device Vendor and Product ID
+  description: null
+  name: PNPVEND
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MAJOR'
+      start: 24
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MINOR'
+      start: 16
+      width: 8
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PATCH'
+      start: 8
+      width: 8
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Version
+  description: null
+  name: PNPVER
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'STATUS'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Device Status
+  description: null
+  name: PNPDEVSTS
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ACTIVE'
+      start: 1
+      width: 12
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Active Links
+  description: null
+  name: PNPACTLNK
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Owner Address 0
+  description: null
+  name: PNPOA0
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Owner Address 1
+  description: null
+  name: PNPOA1
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'RA'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Owner Address 2
+  description: null
+  name: PNPOA2
+  width: 32
+- bits:
+  - default:
+    - access: [r, w, cas]
+      brief: null
+      description: null
+      name: 'DID'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Device ID
+  description: null
+  name: PNPDEVID
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'VEND'
+      start: 16
+      width: 16
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PROD'
+      start: 0
+      width: 16
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Unit Vendor and Product ID
+  description: null
+  name: PNPUVEND
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'USN'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Unit Serial Number
+  description: null
+  name: PNPUSN
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'LEN'
+      start: 0
+      width: 15
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Vendor String Length
+  description: null
+  name: PNPVSTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'LEN'
+      start: 0
+      width: 15
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Product String Length
+  description: null
+  name: PNPPSTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'PC'
+      start: 0
+      width: 5
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Protocol Count
+  description: null
+  name: PNPPCNT
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AC'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    SpaceWire Plug-and-Play - Application Count
+  description: null
+  name: PNPACNT
+  width: 32
+name: spwpnp
+notes: null
+type: interface

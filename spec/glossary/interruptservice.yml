@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: interrupt service
+text: |
+  An *interrupt service* consists of an
+  ${interruptserviceroutine:/term} which is called with a user
+  provided argument upon reception of an interrupt service request.  The
+  routine is invoked in interrupt context.  Interrupt service requests may have
+  a priority and an affinity to a set of processors.  An *interrupt service* is
+  a ${softwarecomponent:/term}.
+type: glossary

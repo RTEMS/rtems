@@ -1,0 +1,74 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the object name of the object associated with the object identifier.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - const char *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive will set the object name based upon the user string.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_object_set_name
+notes: |
+  This directive can be used to set the name of objects which do not have a
+  naming scheme per their API.
+
+  If the object specified by ${.:/params[0]/name} is of a class that has a
+  string name, this directive will free the existing name to the RTEMS Workspace
+  and allocate enough memory from the RTEMS Workspace to make a copy of the
+  string located at ${.:/params[1]/name}.
+
+  If the object specified by ${.:/params[0]/name} is of a class that has a
+  32-bit integer style name, then the first four characters in
+  ${.:/params[1]/name} will be used to construct the name.
+params:
+- description: |
+    is the object identifier of the object to set the name.
+  dir: null
+  name: id
+- description: |
+    is the object name to set.
+  dir: null
+  name: name
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no object information available for the object identifier.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      There was no object associated with the object identifier.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      There was no memory available to duplicate the name.
+    value: ${../../status/if/no-memory:/name}
+type: interface

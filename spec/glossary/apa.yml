@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 Richi Dubey (richidubey@gmail.com)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: APA
+text: |
+  This term is an acronym for Arbitrary Processor Affinity.  APA schedulers
+  allow a thread to have an arbitrary affinity to a processor set, rather than
+  a restricted mapping to only one processor of the set or the ability to run
+  on all processors of the set.
+
+  It has two variants, ${weakapa:/term} and ${strongapa:/term}.
+type: glossary

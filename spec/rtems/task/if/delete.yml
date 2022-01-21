@@ -1,0 +1,88 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Deletes the task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive deletes the task, either the calling task or another task, as
+  specified by ${.:/params[0]/name}.
+enabled-by: true
+index-entries:
+- delete a task
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/mp-send
+- role: constraint
+  uid: ../../constraint/delete-by-any-task
+- role: constraint
+  uid: /constraint/obj-unlimited-free
+name: rtems_task_delete
+notes: |
+  RTEMS stops the execution of the task and reclaims the stack memory, any
+  allocated delay or timeout timers, the TCB, and, if the task is
+  ${../../attr/if/floating-point:/name}, its floating point context area.
+  RTEMS explicitly does not reclaim the following resources: region segments,
+  partition buffers, semaphores, timers, or rate monotonic periods.
+
+  A task is responsible for releasing its resources back to RTEMS before
+  deletion.  To insure proper deallocation of resources, a task should not be
+  deleted unless it is unable to execute or does not hold any RTEMS resources.
+  If a task holds RTEMS resources, the task should be allowed to deallocate its
+  resources before deletion.  A task can be directed to release its resources
+  and delete itself by restarting it with a special argument or by sending it a
+  message, an event, or a signal.
+
+  Deletion of the current task (${self-define:/name}) will force RTEMS to
+  select another task to execute.
+
+  The ${/glossary/tcb:/term} for the deleted task is reclaimed by RTEMS.
+
+  When a global task is deleted, the task identifier must be transmitted to
+  every node in the system for deletion from the local copy of the global
+  object table.
+
+  The task must reside on the local node, even if the task was created with the
+  ${../../attr/if/global:/name} attribute.
+params:
+- description: |
+    is the task identifier.  The constant ${self-define:/name} may be used to
+    specify the calling task.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The directive was called from within interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
+  - description: |
+      The task resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+type: interface

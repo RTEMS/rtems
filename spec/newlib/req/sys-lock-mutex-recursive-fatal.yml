@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: sys-lock-mutex-acquire
+- role: requirement-refinement
+  uid: sys-lock-mutex-acquire-timed
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When an attempt to recursively acquire the mutex is made, the system shall
+  terminate with the ${/score/interr/if/internal-error-core:/name} fatal source
+  and the ${/score/interr/if/thread-queue-deadlock:/name} fatal code.
+type: requirement

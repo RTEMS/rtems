@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the object name associated with the object identifier as a string.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    - char *${.:/params[2]/name}
+    return: char *
+  variants: []
+description: |
+  The object name is stored in the name buffer.  If the name buffer length is
+  greater than zero, then the stored object name will be ``NUL`` terminated.
+  The stored object name may be truncated to fit the length.  There is no
+  indication if a truncation occurred.  Every attempt is made to return name as
+  a printable string even if the object has the Classic API 32-bit integer
+  style name.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_object_get_name
+notes: null
+params:
+- description: |
+    is the object identifier to get the name.
+  dir: null
+  name: id
+- description: |
+    is the buffer length in bytes.
+  dir: null
+  name: length
+- description: |
+    is the pointer to a buffer of the specified length.
+  dir: out
+  name: name
+return:
+  return: |
+    Returns the ${.:/params[2]/name} parameter value, if there is an object
+    name associated with the object identifier.
+  return-values:
+  - description: |
+      The ${.:/params[1]/name} parameter was 0.
+    value: ${/c/if/null:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${/c/if/null:/name}
+  - description: |
+      There was no object information available for the object identifier.
+    value: ${/c/if/null:/name}
+  - description: |
+      There was no object associated with the object identifier.
+    value: ${/c/if/null:/name}
+type: interface

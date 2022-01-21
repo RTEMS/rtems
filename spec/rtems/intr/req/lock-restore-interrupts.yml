@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/lock-release
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When the ${../if/lock-release:/name} directive is called, the status of
+  maskable interrupts shall be restored according to the
+  ${../if/lock-release:/params[1]/name} parameter.
+type: requirement

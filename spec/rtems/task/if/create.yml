@@ -1,0 +1,273 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Creates a task.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - ${../../type/if/priority:/name} ${.:/params[1]/name}
+    - ${/c/if/size_t:/name} ${.:/params[2]/name}
+    - ${../../mode/if/mode:/name} ${.:/params[3]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[4]/name}
+    - ${../../type/if/id:/name} *${.:/params[5]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive creates a task which resides on the local node.  The task has
+  the user-defined object name specified in ${.:/params[0]/name}.  The assigned
+  object identifier is returned in ${.:/params[5]/name}.  This identifier is
+  used to access the task with other task related directives.
+
+  The **initial priority** of the task is specified in ${.:/params[1]/name}.
+  The scheduler of the created task is the scheduler of the calling task at
+  some point during the task creation.  The initial task priority specified in
+  ${.:/params[1]/name} shall be valid for this scheduler.
+
+  The **stack size** of the task is specified in ${.:/params[2]/name}.  If the
+  requested stack size is less than the configured minimum stack size, then
+  RTEMS will use the configured minimum as the stack size for this task.  The
+  configured minimum stack size is defined by the
+  ${/acfg/if/min-task-stack-size:/name} application configuration option.  In
+  addition to being able to specify the task stack size as a integer, there are
+  two constants which may be specified:
+
+  * The ${minimum-stack-size:/name} constant can be specified to use the
+    **recommended minimum stack size** for the target processor.  This value is
+    selected by the RTEMS maintainers conservatively to minimize the risk of
+    blown stacks for most user applications.  Using this constant when
+    specifying the task stack size, indicates that the stack size will be at
+    least ${minimum-stack-size:/name} bytes in size.  If the user configured
+    minimum stack size is larger than the recommended minimum, then it will be
+    used.
+
+  * The ${configured-minimum-stack-size:/name} constant can be specified to use
+    the minimum stack size that was configured by the application.  If not
+    explicitly configured by the application, the default configured minimum
+    stack size is the target processor dependent value
+    ${minimum-stack-size:/name}.  Since this uses the configured minimum stack
+    size value, you may get a stack size that is smaller or larger than the
+    recommended minimum.  This can be used to provide large stacks for all
+    tasks on complex applications or small stacks on applications that are
+    trying to conserve memory.
+
+  The **initial mode set** specified in ${.:/params[3]/name} is built through a
+  *bitwise or* of the mode constants described below.  Not all combinations of
+  modes are allowed.  Some modes are mutually exclusive.  If mutually exclusive
+  modes are combined, the behaviour is undefined.  Default task modes can be
+  selected by using the ${../../mode/if/default:/name} constant.  The task mode
+  set defines
+
+  * the preemption mode of the task: ${../../mode/if/preempt:/name} (default)
+    or ${../../mode/if/no-preempt:/name},
+
+  * the timeslicing mode of the task: ${../../mode/if/timeslice:/name} or
+    ${../../mode/if/no-timeslice:/name} (default),
+
+  * the ${/glossary/asr:/term} processing mode of the task:
+    ${../../mode/if/asr:/name} (default) or ${../../mode/if/no-asr:/name},
+
+  * the interrupt level of the task: ${../../mode/if/interrupt-level:/name}
+    with a default of ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with
+    enabled interrupts.
+
+  The **initial preemption mode** of the task is enabled or disabled.
+
+  * An **enabled preemption** is the default and can be emphasized through the
+    use of the ${../../mode/if/preempt:/name} mode constant.
+
+  * A **disabled preemption** is set by the ${../../mode/if/no-preempt:/name}
+    mode constant.
+
+  The **initial timeslicing mode** of the task is enabled or disabled.
+
+  * A **disabled timeslicing** is the default and can be emphasized through the
+    use of the ${../../mode/if/no-timeslice:/name} mode constant.
+
+  * An **enabled timeslicing** is set by the ${../../mode/if/timeslice:/name}
+    mode constant.
+
+  The **initial ASR processing mode** of the task is enabled or disabled.
+
+  * An **enabled ASR processing** is the default and can be emphasized through
+    the use of the ${../../mode/if/asr:/name} mode constant.
+
+  * A **disabled ASR processing** is set by the ${../../mode/if/no-asr:/name}
+    mode constant.
+
+  The **initial interrupt level mode** of the task is defined by
+  ${../../mode/if/interrupt-level:/name}.
+
+  * Task execution with **interrupts enabled** the default and can be
+    emphasized through the use of the ${../../mode/if/interrupt-level:/name}
+    mode macro with a value of zero (0) for the parameter.  An interrupt level
+    of zero is associated with enabled interrupts on all target processors.
+
+  * Task execution at a **non-zero interrupt level** can be specified by the
+    ${../../mode/if/interrupt-level:/name} mode macro with a non-zero value for
+    the parameter.  The interrupt level portion of the task mode supports a
+    maximum of 256 interrupt levels.  These levels are mapped onto the
+    interrupt levels actually supported by the target processor in a processor
+    dependent fashion.
+
+  The **attribute set** specified in ${.:/params[4]/name} is built through a
+  *bitwise or* of the attribute constants described below.  Not all
+  combinations of attributes are allowed.  Some attributes are mutually
+  exclusive.  If mutually exclusive attributes are combined, the behaviour is
+  undefined.  Attributes not mentioned below are not evaluated by this
+  directive and have no effect.  Default attributes can be selected by using
+  the ${../../attr/if/default:/name} constant.  The attribute set defines
+
+  * the scope of the task: ${../../attr/if/local:/name} (default) or
+    ${../../attr/if/global:/name} and
+
+  * the floating-point unit use of the task:
+    ${../../attr/if/floating-point:/name} or
+    ${../../attr/if/no-floating-point:/name} (default).
+
+  The task has a local or global **scope** in a multiprocessing network
+  (this attribute does not refer to SMP systems).  The scope is selected by the
+  mutually exclusive ${../../attr/if/local:/name} and
+  ${../../attr/if/global:/name} attributes.
+
+  * A **local scope** is the default and can be emphasized through the use of
+    the ${../../attr/if/local:/name} attribute.  A local task can be only used
+    by the node which created it.
+
+  * A **global scope** is established if the ${../../attr/if/global:/name}
+    attribute is set.  Setting the global attribute in a single node system has
+    no effect.the 
+
+  The **use of the floating-point unit** is selected by the mutually exclusive
+  ${../../attr/if/floating-point:/name} and
+  ${../../attr/if/no-floating-point:/name} attributes.  On some target
+  processors, the use of the floating-point unit can be enabled or disabled for
+  each task.  Other target processors may have no hardware floating-point unit
+  or enable the use of the floating-point unit for all tasks.  Consult the
+  *RTEMS CPU Architecture Supplement* for the details.
+
+  * A **disabled floating-point unit** is the default and can be emphasized
+    through use of the ${../../attr/if/no-floating-point:/name} attribute.  For
+    performance reasons, it is recommended that tasks not using the
+    floating-point unit should specify this attribute.
+
+  * An **enabled floating-point unit** is selected by the
+    ${../../attr/if/floating-point:/name} attribute.
+enabled-by: true
+index-entries:
+- create a task
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/mp-send
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
+- role: constraint
+  uid: ../../constraint/mp-max-global-objects
+name: rtems_task_create
+notes: |
+  The task processor affinity is initialized to the set of online processors.
+
+  When created, a task is placed in the dormant state and can only be made
+  ready to execute using the directive ${start:/name}.
+
+  Application developers should consider the stack usage of the device drivers
+  when calculating the stack size required for tasks which utilize the driver.
+  The task stack size shall account for an target processor dependent interrupt
+  stack frame which may be placed on the stack of the interrupted task while
+  servicing an interrupt.  The stack checker may be used to monitor the stack
+  usage, see ${/acfg/if/stack-checker-enabled:/name}.
+
+  For control and maintenance of the task, RTEMS allocates a
+  ${/glossary/tcb:/term} from the local TCB free pool and initializes it.
+
+  The TCB for a global task is allocated on the local node.  Task should not be
+  made global unless remote tasks must interact with the task.  This is to
+  avoid the system overhead incurred by the creation of a global task.  When a
+  global task is created, the task's name and identifier must be transmitted to
+  every node in the system for insertion in the local copy of the global object
+  table.
+params:
+- description: |
+    is the object name of the task.
+  dir: null
+  name: name
+- description: |
+    is the initial task priority.
+  dir: null
+  name: initial_priority
+- description: |
+    is the task stack size in bytes.
+  dir: null
+  name: stack_size
+- description: |
+    is the initial mode set of the task.
+  dir: null
+  name: initial_modes
+- description: |
+    is the attribute set of the task.
+  dir: null
+  name: attribute_set
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the created task will be stored in
+    this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[5]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[1]/name} was invalid.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      There was no inactive object available to create a task.  The number of
+      tasks available to the application is configured through the
+      ${/acfg/if/max-tasks:/name} application configuration option.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      In multiprocessing configurations, there was no inactive global object
+      available to create a global task.  The number of global objects
+      available to the application is configured through the
+      ${/acfg/if/mp-max-global-objects:/name} application configuration option.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      There was not enough memory to allocate the task storage area.  The task
+      storage area contains the task stack, the thread-local storage, and the
+      floating point context.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      One of the task create extensions failed to create the task.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      In SMP configurations, the non-preemption mode was not supported.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      In SMP configurations, the interrupt level mode was not supported.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

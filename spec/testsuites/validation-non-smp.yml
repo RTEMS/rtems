@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  not: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This test suite for non-SMP test cases provides enough resources to run basic
+  tests for all specified managers and functions.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 1
+
+  #include "ts-default.h"
+test-description: null
+test-includes: []
+test-local-includes: []
+test-suite-name: ValidationNonSMP
+test-target: testsuites/validation/ts-validation-non-smp.c
+type: test-suite

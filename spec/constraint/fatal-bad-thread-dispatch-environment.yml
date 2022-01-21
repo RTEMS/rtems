@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  Where the ${/glossary/target-arch:/term} enabled robust thread dispatching,
+  or the system was built with SMP support enabled and inter-processor
+  interrupts are necessary, while thread dispatching is enabled, while maskable
+  interrupts are disabled, if the directive performs a thread dispatch, then
+  the fatal error with the fatal source
+  ${/score/interr/if/internal-error-core:/name} and the fatal code
+  ${/score/interr/if/bad-thread-dispatch-environment:/name} will occur.
+type: constraint

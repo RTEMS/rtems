@@ -1,0 +1,503 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/cancel
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/cancel:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/cancel:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Context
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( class, TIMER_DORMANT );
+    text: |
+      The timer shall have never been ${../glossary/scheduled:/term}.
+      See also ${../glossary/none:/term}.
+  - name: Interrupt
+    test-code: |
+      T_eq_int( class & TIMER_CLASS_BIT_ON_TASK, 0 );
+    text: |
+      The timer shall be in ${../glossary/interruptcontext:/term}.
+  - name: Server
+    test-code: |
+      T_eq_int( class & TIMER_CLASS_BIT_ON_TASK, TIMER_CLASS_BIT_ON_TASK );
+    text: |
+      The timer shall be in ${../glossary/servercontext:/term}.
+  - name: Nop
+    test-code: |
+      T_eq_int( class, ctx->pre_class );
+    text: |
+      Objects referenced by the ${../if/cancel:/params[0]/name}
+      parameter in past call to ${../if/cancel:/name} shall not be
+      accessed by the ${../if/cancel:/name} call.
+      See also ${../glossary/nop:/term}.
+  test-epilogue: null
+  test-prologue: |
+      Timer_Classes class;
+      class = GetTimerClass( ctx->timer_id );
+- name: Clock
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( class, TIMER_DORMANT );
+    text: |
+      The timer shall have never been ${../glossary/scheduled:/term}.
+  - name: Ticks
+    test-code: |
+      T_eq_int( class & TIMER_CLASS_BIT_TIME_OF_DAY, 0 );
+    text: |
+      The timer shall use the ${../glossary/ticksbasedclock:/term}.
+  - name: Realtime
+    test-code: |
+      T_eq_int(
+        class & TIMER_CLASS_BIT_TIME_OF_DAY,
+        TIMER_CLASS_BIT_TIME_OF_DAY
+      );
+    text: |
+      The timer shall use the ${../glossary/realtimeclock:/term}.
+  - name: Nop
+    test-code: |
+      T_eq_int( class, ctx->pre_class );
+    text: |
+      Objects referenced by the ${../if/cancel:/params[0]/name}
+      parameter in past call to ${../if/cancel:/name} shall not be
+      accessed by the ${../if/cancel:/name} call.
+  test-epilogue: null
+  test-prologue: |
+      Timer_Classes class;
+      class = GetTimerClass( ctx->timer_id );
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      /* Try to fire the timer service routine - which should not fire. */
+      TriggerTimer();
+      T_eq_int( ctx->invocations, 0 );
+    text: |
+      The timer shall be in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
+  - name: Nop
+    test-code: |
+      T_eq_int( ctx->post_state, ctx->pre_state );
+    text: |
+      Objects referenced by the ${../if/cancel:/params[0]/name}
+      parameter in past call to ${../if/cancel:/name} shall not be
+      accessed by the ${../if/cancel:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id_param = ctx->timer_id;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter is valid.
+  - name: Invalid
+    test-code: |
+      ctx->id_param = RTEMS_ID_NONE;
+    text: |
+      While the ${../if/cancel:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Context
+  states:
+  - name: None
+    test-code: |
+      ctx->pre_cond_contex = PRE_NONE;
+    text: |
+      While the ${../glossary/timerserviceroutine:/term} has never been
+      ${../glossary/scheduled:/term} since creation of the timer.
+      See also ${../glossary/none:/term}.
+  - name: Interrupt
+    test-code: |
+      ctx->pre_cond_contex = PRE_INTERRUPT;
+    text: |
+      While the timer is in ${../glossary/interruptcontext:/term}.
+  - name: Server
+    test-code: |
+      ctx->pre_cond_contex = PRE_SERVER;
+    text: |
+      While the timer is in ${../glossary/servercontext:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Clock
+  states:
+  - name: None
+    test-code: |
+      T_eq_int( ctx->pre_cond_contex, PRE_NONE );
+    text: |
+      While the timer has never been ${../glossary/scheduled:/term}
+      since creation of the timer.
+  - name: Ticks
+    test-code: |
+      rtems_status_code status;
+
+      if ( ctx->pre_cond_contex == PRE_INTERRUPT ) {
+        status = rtems_timer_fire_after(
+          ctx->timer_id,
+          1,
+          TimerServiceRoutine,
+          ctx
+        );
+      } else {
+         status = rtems_timer_server_fire_after(
+          ctx->timer_id,
+          1,
+          TimerServiceRoutine,
+          ctx
+        );
+      }
+      T_rsc_success( status );
+    text: |
+      While the ${../glossary/clock:/term} used to determine when the timer
+      will ${../glossary/fire:/term} is the
+      ${../glossary/ticksbasedclock:/term}.
+  - name: Realtime
+    test-code: |
+      rtems_status_code status;
+
+      if ( ctx->pre_cond_contex == PRE_INTERRUPT ) {
+        status = rtems_timer_fire_when(
+          ctx->timer_id,
+          &tod_schedule,
+          TimerServiceRoutine,
+          ctx
+        );
+      } else {
+        status = rtems_timer_server_fire_when(
+          ctx->timer_id,
+          &tod_schedule,
+          TimerServiceRoutine,
+          ctx
+        );
+      }
+      T_rsc_success( status );
+    text: |
+      While the ${../glossary/clock:/term} used to determine when the timer
+      will ${../glossary/fire:/term} is the ${../glossary/realtimeclock:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Inactive
+    test-code: |
+      TriggerTimer();
+      T_eq_int(
+        ctx->invocations,
+        ( ctx->pre_cond_contex == PRE_NONE ) ? 0 : 1
+      );
+      ctx->invocations = 0;
+      ctx->pre_state = TIMER_INACTIVE;
+    text: |
+      While the timer is in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
+  - name: Scheduled
+    test-code: |
+      /* The timer was already scheduled in the "Clock" pre-conditions. */
+      ctx->pre_state = TIMER_SCHEDULED;
+    text: |
+      While the timer is in ${../glossary/scheduled:/term}
+      ${../glossary/state:/term}.
+  - name: Pending
+    test-code: |
+      T_rsc_success( rtems_task_suspend( GetTimerServerTaskId() ) );
+      TriggerTimer();
+      T_eq_int( ctx->invocations, 0 );
+      ctx->pre_state = TIMER_PENDING;
+    text: |
+      While the timer is in ${../glossary/pending:/term}
+      ${../glossary/state:/term}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NotExist: |
+    The pre-condition combination of ${../glossary/context:/term},
+    ${../glossary/clock:/term} and ${../glossary/state:/term} cannot be
+    produced and does therefore not exist.
+test-action: |
+  ctx->pre_class = GetTimerClass( ctx->timer_id );
+  ctx->status = rtems_timer_cancel( ctx->id_param );
+  ctx->post_state = GetTimerState( ctx->timer_id );
+  /* Ignoring return status: the timer server task may be suspended or not. */
+  rtems_task_resume( GetTimerServerTaskId() );
+test-brief: null
+test-cleanup: |
+  T_rsc_success( rtems_timer_delete( ctx->timer_id ) );
+test-context:
+- brief: |
+    This member contains a valid id of a timer.
+  description: null
+  member: |
+    rtems_id timer_id
+- brief: |
+    This member specifies the ${../if/cancel:/params[0]/name} parameter for the
+    action.
+  description: null
+  member: |
+    rtems_id id_param
+- brief: |
+    This member contains the return status of the action.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member contains the counter for invocations of the
+    ${../glossary/timerserviceroutine:/term}.
+  description: null
+  member: |
+    int invocations
+- brief: |
+    This member specifies which pre-condition ${../glossary/context:/term}
+    (${../glossary/none:/term}, ${../glossary/interruptcontext:/term},
+    ${../glossary/servercontext:/term}) must be created before the cancel
+    action gets executed.
+  description: null
+  member: |
+    PreConditionContext pre_cond_contex
+- brief: |
+    This member stores ${/glossary/rtems:/term} internal
+    ${../glossary/clock:/term} and ${../glossary/context:/term} settings
+    of the timer before the execution of the test action.
+  description: null
+  member: |
+    Timer_Classes pre_class
+- brief: |
+    This member stores the ${../glossary/state:/term} of the timer before
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_States pre_state
+- brief: |
+    This member stores the ${../glossary/state:/term} of the timer after
+    the execution of the test action.
+  description: null
+  member: |
+    Timer_States post_state
+test-context-support: |
+  typedef enum {
+    PRE_NONE = 0,
+    PRE_INTERRUPT = 1,
+    PRE_SERVER = 2
+  } PreConditionContext;
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  rtems_status_code status;
+  status = rtems_timer_create(
+    rtems_build_name( 'T', 'I', 'M', 'E' ),
+    &ctx->timer_id
+  );
+  T_rsc_success( status );
+
+  ctx->invocations = 0;
+  T_rsc_success( rtems_clock_set( &tod_now ) );
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code status;
+    status = rtems_timer_initiate_server(
+      RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_ATTRIBUTES
+    );
+    T_rsc_success( status );
+  description: null
+test-stop: null
+test-support: |
+  static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
+  static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 1, 0, 0, 0 };
+  static const rtems_time_of_day tod_fire     = { 2000, 1, 2, 0, 0, 0, 0 };
+
+  static void TriggerTimer( void )
+  {
+    /* Fire the timer service routine for ticks and realtime clock */
+    int i;
+    for ( i = 0; i < 5; i++ ) {
+      ClockTick();
+    }
+    T_rsc_success( rtems_clock_set( &tod_fire ) );
+  }
+
+  static void TimerServiceRoutine(
+    rtems_id timer_id,
+    void *user_data
+  )
+  {
+    RtemsTimerReqCancel_Context *ctx = user_data;
+    ++( ctx->invocations );
+  }
+test-target: testsuites/validation/tc-timer-cancel.c
+test-teardown:
+  brief: Make sure the timer server is not running and the realtime clock
+    is not set after this test.
+  code: |
+    DeleteTimerServer();
+    UnsetClock();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Context: None
+    Clock: None
+    State: Inactive
+  pre-conditions:
+    Id:
+    - Valid
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Context: Server
+    Clock:
+    - specified-by: Clock
+    State: Inactive
+  pre-conditions:
+    Id:
+    - Valid
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Context: Interrupt
+    Clock:
+    - specified-by: Clock
+    State: Inactive
+  pre-conditions:
+    Id:
+    - Valid
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Id: all
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Scheduled
+    - Pending
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Id: all
+    Context:
+    - None
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Id: all
+    Context:
+    - Interrupt
+    - Server
+    Clock:
+    - None
+    State: all
+- enabled-by: true
+  post-conditions: NotExist
+  pre-conditions:
+    Id: all
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Pending
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Context: Nop
+    Clock: Nop
+    State: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Context:
+    - None
+    Clock:
+    - None
+    State:
+    - Inactive
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Context: Nop
+    Clock: Nop
+    State: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Context:
+    - Server
+    Clock:
+    - Ticks
+    - Realtime
+    State: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Context: Nop
+    Clock: Nop
+    State: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Context:
+    - Interrupt
+    Clock:
+    - Ticks
+    - Realtime
+    State:
+    - Inactive
+    - Scheduled
+type: requirement

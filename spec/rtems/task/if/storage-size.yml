@@ -1,0 +1,41 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the recommended task storage area size for the size and task attributes.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    ( ( ${.:/params[0]/name} ) +
+      ( ( ( ${.:/params[1]/name} ) & ${../../attr/if/floating-point:/name} ) != 0 ?
+        ${/score/context/if/fp-size:/name} : 0 ) )
+  variants:
+  - definition: |
+      ( ( ${.:/params[0]/name} ) + ${/score/context/if/fp-size:/name} )
+    enabled-by:
+    - ${/score/cpu/if/all-tasks-are-fp:/name} == ${../../basedefs/if/true:/name}
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_TASK_STORAGE_SIZE
+notes: null
+params:
+- description: |
+    is the size dedicated to the task stack and thread-local storage in bytes.
+  dir: null
+  name: _size
+- description: |
+    is the attribute set of the task using the storage area.
+  dir: null
+  name: _attributes
+return:
+  return: |
+    Returns the recommended task storage area size calculated from the input
+    parameters.
+  return-values: []
+type: interface

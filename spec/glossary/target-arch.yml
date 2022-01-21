@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: target architecture
+text: |
+  The target architecture is the instruction set architecture (ISA) of the
+  ${target:/term}.  Some RTEMS features depend on the target architecture.  For
+  the details consult the *RTEMS CPU Architecture Supplement*.
+type: glossary

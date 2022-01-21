@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: requirement-refinement
+  uid: pinning
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While a thread is pinned, while the thread executes on a processor which is
+  not owned by its ${/glossary/scheduler-home:/term}, the thread shall only use
+  the ${/glossary/scheduler:/term} of the processor to which it is pinned.
+type: requirement

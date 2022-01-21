@@ -1,0 +1,144 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/malloc
+post-conditions:
+- name: Status
+  states:
+  - name: 'Null'
+    test-code: |
+      T_null( ctx->ptr );
+    text: |
+      The return value of ${../if/malloc:/name} shall be equal to
+      ${/c/if/null:/name}.
+  - name: AreaBegin
+    test-code: |
+      T_not_null( ctx->ptr );
+    text: |
+      The return value of ${../if/malloc:/name} shall be equal to the begin
+      address of the allocated memory area.
+  test-epilogue: null
+  test-prologue: null
+- name: Alignment
+  states:
+  - name: Valid
+    test-code: |
+      T_eq_uptr( (uintptr_t) ctx->ptr % CPU_HEAP_ALIGNMENT, 0 );
+    text: |
+      The begin address of the allocated memory area shall be an integral
+      multiple of the heap alignment of the ${/glossary/target-arch:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Size
+  states:
+  - name: Valid
+    test-code: |
+      /* Assume that the next allocation is done from adjacent memory */
+      ptr = ctx->ptr;
+      ctx->ptr = rtems_malloc( ctx->size );
+      T_not_null( ptr );
+      a = (uintptr_t) ptr;
+      b = (uintptr_t) ctx->ptr;
+      size = a < b ? b - a : a - b;
+      T_ge_uptr( size, ctx->size );
+    text: |
+      The size of the allocated memory area shall greater than or equal to the
+      ``size` parameter.
+  test-epilogue: null
+  test-prologue: |
+    void     *ptr;
+    uintptr_t a;
+    uintptr_t b;
+    uintptr_t size;
+pre-conditions:
+- name: Size
+  states:
+  - name: Huge
+    test-code: |
+      ctx->size = SIZE_MAX;
+    text: |
+      While the ``size`` parameter is not equal to zero, while the ``size``
+      parameter is too large to allocate a memory area with the specified size.
+  - name: Zero
+    test-code: |
+      ctx->size = 0;
+    text: |
+      While the ``size`` parameter is equal to zero.
+  - name: Valid
+    test-code: |
+      ctx->size = 1;
+    text: |
+      While the ``size`` parameter is not equal to zero, while the ``size``
+      parameter is small enough to allocate a memory area with the specified
+      size.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->ptr = rtems_malloc( ctx->size );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a memory support context.
+  description: null
+  member: |
+    MemoryContext mem_ctx;
+- brief: |
+    This member contains the return value of the ${../if/malloc:/name} call.
+  description: null
+  member: |
+    void *ptr
+- brief: |
+    This member specifies if the ``size`` parameter value.
+  description: null
+  member: |
+    size_t size
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/malloc.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    MemorySave( &ctx->mem_ctx );
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-mem-rtems-malloc.c
+test-teardown:
+  brief: null
+  code: |
+    MemoryRestore( &ctx->mem_ctx );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: AreaBegin
+    Alignment: Valid
+    Size: Valid
+  pre-conditions:
+    Size:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: 'Null'
+    Alignment: Valid
+    Size: N/A
+  pre-conditions:
+    Size:
+    - Huge
+    - Zero
+type: requirement

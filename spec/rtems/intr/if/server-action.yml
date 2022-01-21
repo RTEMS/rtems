@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure represents an interrupt server action.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member is the reference to the next action or ${/c/if/null:/name}.
+    definition: struct rtems_interrupt_server_action *${.:name}
+    description: null
+    kind: member
+    name: next
+  variants: []
+- default:
+    brief: |
+      This member is the interrupt handler.
+    definition: ${handler:/name} ${.:name}
+    description: null
+    kind: member
+    name: handler
+  variants: []
+- default:
+    brief: |
+      This member is the interrupt handler argument.
+    definition: void *${.:name}
+    description: null
+    kind: member
+    name: arg
+  variants: []
+definition-kind: typedef-and-struct
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_server_action
+notes: |
+  This structure shall be treated as an opaque data type from the
+  ${/glossary/api:/term} point of view.  Members shall not be accessed
+  directly.
+type: interface

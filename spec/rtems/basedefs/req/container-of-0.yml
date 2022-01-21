@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/container-of
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When argument ${../if/container-of:/params[0]/name} points to a
+  member field of a structure or union or C++ class,
+  and argument ${../if/container-of:/params[1]/name} is the C type of this
+  structure or union or C++ class,
+  and argument ${../if/container-of:/params[2]/name} is the name of
+  this member field,
+  the ${../if/container-of:/name} macro shall result in a pointer
+  to the start address of the structure or union or C++ class.
+type: requirement

@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by:
+  and:
+  - RTEMS_SMP
+  - bsps/sparc/leon3
+links:
+- role: interface-function
+  uid: /bsp/if/fatal-extension
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the fatal source is not ${/score/interr/if/source-smp:/name} or the
+  fatal code is not ${/score/smp/if/fatal-shutdown-response:/name}, the
+  ${/bsp/if/fatal-extension:/name} directive shall request all other configured
+  and present processors to power down.
+type: requirement

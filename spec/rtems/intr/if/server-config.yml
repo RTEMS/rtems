@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines an interrupt server configuration.
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member is the task name of the interrupt server.
+    definition: ${../../type/if/name:/name} ${.:name}
+    description: null
+    kind: member
+    name: name
+  variants: []
+- default:
+    brief: |
+      This member is the initial ${/glossary/priority-task:/term} of the
+      interrupt server.
+    definition: ${../../type/if/priority:/name} ${.:name}
+    description: null
+    kind: member
+    name: priority
+  variants: []
+- default:
+    brief: |
+      This member is the task storage area of the interrupt server.
+    definition: void *${.:name}
+    description: |
+      It shall be ${/c/if/null:/name} for interrupt servers created by
+      ${server-create:/name}.
+    kind: member
+    name: storage_area
+  variants: []
+- default:
+    brief: |
+      This member is the task storage size of the interrupt server.
+    definition: ${/c/if/size_t:/name} ${.:name}
+    description: |
+      For interrupt servers created by ${server-create:/name} this is the task
+      stack size.
+    kind: member
+    name: storage_size
+  variants: []
+- default:
+    brief: |
+      This member is the initial mode set of the interrupt server.
+    definition: ${../../mode/if/mode:/name} ${.:name}
+    description: null
+    kind: member
+    name: modes
+  variants: []
+- default:
+    brief: |
+      This member is the attribute set of the interrupt server.
+    definition: ${../../attr/if/attribute:/name} ${.:name}
+    description: null
+    kind: member
+    name: attributes
+  variants: []
+- default:
+    brief: |
+      This member is an optional handler to destroy the interrupt server
+      control handed over to ${server-create:/name}.
+    definition: void ( *${.:name} )( ${server-control:/name} * )
+    description: |
+      The destroy handler is optional and may be ${/c/if/null:/name}.  If the
+      destroy handler is present, it is called from within the context of the
+      interrupt server to be deleted, see also ${server-delete:/name}.
+    kind: member
+    name: destroy
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_server_config
+notes: |
+  See also ${server-create:/name}.
+type: interface

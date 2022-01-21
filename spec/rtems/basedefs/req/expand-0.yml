@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/expand
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The macro ${../if/expand:/name} shall apply all possible C
+  pre-processor substitutions to its argument value
+  before it results in the substituted value.
+type: requirement

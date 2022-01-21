@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: sparc/gr740
+links:
+- role: validation
+  uid: ../req/errata-gr740-18-1
+method: by-analysis
+references: []
+text: |
+  The errata of the ${/glossary/gr740:/term} is not applicable to the software
+  product since it does not provide a high-level SpaceWire driver.
+type: validation

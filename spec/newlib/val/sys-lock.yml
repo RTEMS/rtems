@@ -1,0 +1,382 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create a mutex and validate the mutex directives.
+  action-code: |
+    const struct timespec invalid_abstime = {
+      .tv_sec = -1,
+      .tv_nsec = -1
+    };
+    int                   eno;
+    struct _Mutex_Control mutex;
+
+    _Mutex_Initialize( &mutex );
+
+    ctx->tq_mtx_ctx.base.thread_queue_object = &mutex;
+    ctx->tq_mtx_ctx.base.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_mtx_ctx.base.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_mtx_ctx.base.enqueue = Enqueue;
+    ctx->tq_mtx_ctx.base.surrender = Surrender;
+    ctx->tq_mtx_ctx.base.get_owner = GetOwner;
+  checks:
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-try-acquire:/name} directive.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_NO_WAIT;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_UNAVAILABLE;
+      ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-try-acquire
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-busy
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-acquire-timed:/name} directive for
+      valid timeout parameters.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_TIMED;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-acquire-timed
+    - role: validation
+      uid: ../req/sys-lock-mutex-clock-realtime
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-fatal
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-acquire-timed:/name} directive for
+      an invalid timeout parameter.
+    code: |
+      TQSetScheduler(
+        &ctx->tq_mtx_ctx.base,
+        TQ_HELPER_A,
+        SCHEDULER_A_ID,
+        PRIO_HIGH
+      );
+      TQSend( &ctx->tq_mtx_ctx.base, TQ_HELPER_A, TQ_EVENT_ENQUEUE );
+      eno = _Mutex_Acquire_timed( &mutex, &invalid_abstime );
+      T_eq_int( eno, EINVAL );
+      TQSend( &ctx->tq_mtx_ctx.base, TQ_HELPER_A, TQ_EVENT_SURRENDER );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-acquire-timed
+    - role: validation
+      uid: ../req/sys-lock-mutex-clock-realtime
+    - role: validation
+      uid: ../req/sys-lock-mutex-invalid-timeout
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-acquire-timed:/name} timeout
+      behaviour.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
+      ${/score/tq/req/timeout-priority-inherit:/test-run}(
+        &ctx->tq_mtx_ctx.base
+      );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-acquire-timed
+    - role: validation
+      uid: ../req/sys-lock-mutex-clock-realtime
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-acquire:/name} directive.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-acquire
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-fatal
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-try-acquire:/name} directive.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-release
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+  - brief: |
+      Destroy the mutex.
+    code: |
+      _Mutex_Destroy( &mutex );
+    links: []
+  links: []
+- action-brief: |
+    Create a recursive mutex and validate the mutex directives.
+  action-code: |
+    const struct timespec invalid_abstime = {
+      .tv_sec = -1,
+      .tv_nsec = -1
+    };
+    int                             eno;
+    struct _Mutex_recursive_Control mutex;
+
+    _Mutex_recursive_Initialize( &mutex );
+
+    ctx->tq_mtx_ctx.base.thread_queue_object = &mutex;
+    ctx->tq_mtx_ctx.base.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_mtx_ctx.base.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_mtx_ctx.base.enqueue = RecursiveEnqueue;
+    ctx->tq_mtx_ctx.base.surrender = RecursiveSurrender;
+    ctx->tq_mtx_ctx.base.get_owner = RecursiveGetOwner;
+  checks:
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-recursive-try-acquire:/name}
+      directive.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_NO_WAIT;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-try-acquire
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-allowed
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-recursive-acquire-timed:/name}
+      directive for valid timeout parameters.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_TIMED;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-acquire-timed
+    - role: validation
+      uid: ../req/sys-lock-mutex-clock-realtime
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-allowed
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-recursive-acquire-timed:/name}
+      directive for an invalid timeout parameter.
+    code: |
+      TQSetScheduler(
+        &ctx->tq_mtx_ctx.base,
+        TQ_HELPER_A,
+        SCHEDULER_A_ID,
+        PRIO_HIGH
+      );
+      TQSend( &ctx->tq_mtx_ctx.base, TQ_HELPER_A, TQ_EVENT_ENQUEUE );
+      eno = _Mutex_recursive_Acquire_timed( &mutex, &invalid_abstime );
+      T_eq_int( eno, EINVAL );
+      TQSend( &ctx->tq_mtx_ctx.base, TQ_HELPER_A, TQ_EVENT_SURRENDER );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-acquire-timed
+    - role: validation
+      uid: ../req/sys-lock-mutex-clock-realtime
+    - role: validation
+      uid: ../req/sys-lock-mutex-invalid-timeout
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-recursive-acquire-timed:/name}
+      timeout behaviour.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ${/score/tq/req/timeout-priority-inherit:/test-run}(
+        &ctx->tq_mtx_ctx.base
+      );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-acquire-timed
+    - role: validation
+      uid: ../req/sys-lock-mutex-clock-realtime
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-recursive-acquire:/name} directive.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-acquire
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-allowed
+  - brief: |
+      Validate the ${../if/sys-lock-mutex-recursive-try-acquire:/name}
+      directive.
+    code: |
+      ctx->tq_mtx_ctx.base.wait = TQ_WAIT_FOREVER;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    links:
+    - role: validation
+      uid: ../req/sys-lock-mutex-recursive-release
+    - role: validation
+      uid: ../req/sys-lock-mutex-omip
+    - role: validation
+      uid: ../req/sys-lock-mutex-priority-inherit
+  - brief: |
+      Destroy the mutex.
+    code: |
+      _Mutex_recursive_Destroy( &mutex );
+    links: []
+  links: []
+test-brief: |
+  Tests the <sys/lock.h> mutex directives.
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQMtxContext tq_mtx_ctx
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- errno.h
+- string.h
+- sys/lock.h
+test-local-includes:
+- tr-mtx-seize-try.h
+- tr-mtx-seize-wait.h
+- tr-mtx-surrender.h
+- tr-tq-timeout-priority-inherit.h
+- tx-thread-queue.h
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+    ctx->tq_mtx_ctx.base.discipline = TQ_PRIORITY;
+    ctx->tq_mtx_ctx.base.deadlock = TQ_DEADLOCK_FATAL;
+    ctx->tq_mtx_ctx.base.convert_status = TQConvertStatusPOSIX;
+    ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_INHERIT;
+    ctx->tq_mtx_ctx.owner_check = TQ_MTX_NO_OWNER_CHECK;
+    ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+    TQInitialize( &ctx->tq_mtx_ctx.base );
+  description: null
+test-stop: null
+test-support: |
+  static Status_Control Enqueue( TQContext *ctx, TQWait wait )
+  {
+    const struct timespec abstime = {
+      .tv_sec = INT64_MAX,
+      .tv_nsec = 0
+    };
+    int                   eno;
+
+    switch ( wait ) {
+      case TQ_NO_WAIT:
+        eno = _Mutex_Try_acquire( ctx->thread_queue_object );
+        break;
+      case TQ_WAIT_FOREVER:
+        _Mutex_Acquire( ctx->thread_queue_object );
+        eno = 0;
+        break;
+      case TQ_WAIT_TIMED:
+        eno = _Mutex_Acquire_timed( ctx->thread_queue_object, &abstime );
+        break;
+      default:
+        T_unreachable();
+        break;
+    }
+
+    return STATUS_BUILD( 0, eno );
+  }
+
+  static Status_Control Surrender( TQContext *ctx )
+  {
+    _Mutex_Release( ctx->thread_queue_object );
+
+    return STATUS_SUCCESSFUL;
+  }
+
+  static rtems_tcb *GetOwner( TQContext *ctx )
+  {
+    const struct _Mutex_Control *mutex;
+
+    mutex = ctx->thread_queue_object;
+
+    return mutex->_Queue._owner;
+  }
+
+  static Status_Control RecursiveEnqueue( TQContext *ctx, TQWait wait )
+  {
+    const struct timespec abstime = {
+      .tv_sec = INT64_MAX,
+      .tv_nsec = 0
+    };
+    int                   eno;
+
+    switch ( wait ) {
+      case TQ_NO_WAIT:
+        eno = _Mutex_recursive_Try_acquire( ctx->thread_queue_object );
+        break;
+      case TQ_WAIT_FOREVER:
+        _Mutex_recursive_Acquire( ctx->thread_queue_object );
+        eno = 0;
+        break;
+      case TQ_WAIT_TIMED:
+        eno = _Mutex_recursive_Acquire_timed(
+          ctx->thread_queue_object,
+          &abstime
+        );
+        break;
+      default:
+        T_unreachable();
+        break;
+    }
+
+    return STATUS_BUILD( 0, eno );
+  }
+
+  static Status_Control RecursiveSurrender( TQContext *ctx )
+  {
+    _Mutex_recursive_Release( ctx->thread_queue_object );
+
+    return STATUS_SUCCESSFUL;
+  }
+
+  static rtems_tcb *RecursiveGetOwner( TQContext *ctx )
+  {
+    const struct _Mutex_recursive_Control *mutex;
+
+    mutex = ctx->thread_queue_object;
+
+    return mutex->_Mutex._Queue._owner;
+  }
+test-target: testsuites/validation/tc-sys-lock.c
+test-teardown:
+  brief: null
+  code: |
+    TQDestroy( &ctx->tq_mtx_ctx.base );
+    RestoreRunnerPriority();
+  description: null
+type: test-case

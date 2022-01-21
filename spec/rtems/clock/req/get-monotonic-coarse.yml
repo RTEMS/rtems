@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-monotonic-coarse
+- role: interface-function
+  uid: ../if/get-monotonic-coarse-bintime
+- role: interface-function
+  uid: ../if/get-monotonic-coarse-timeval
+- role: function-implementation
+  uid: /score/timecounter/req/get-coarse
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The directive shall return the time elapsed since some fixed time point in
+  the past measured using the ${/glossary/clock-monotonic:/term} at some time
+  point close to the directive call.
+type: requirement

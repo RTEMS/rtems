@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: active
+text: |
+  A period is in active ${../glossary/state:/term} if a time
+  ${../glossary/interval:/term} is set and the end
+  ${../glossary/deadline:/term} has not yet been reached.  In active
+  ${../glossary/state:/term} either the ${../glossary/ownertask:/term}
+  executes the current ${../glossary/job:/term} or the
+  ${../glossary/ownertask:/term} is waiting for the end of the current
+  ${../glossary/interval:/term} inside the ${../if/period:/name} directive.
+
+  A period enters active ${../glossary/state:/term} by a call to
+  ${../if/period:/name} if it was before in ${../glossary/inactive:/term}
+  or ${../glossary/expired:/term} ${../glossary/state:/term}.
+
+  A period leaves active ${../glossary/state:/term} when the execution of the
+  current ${../glossary/job:/term} passes over the next
+  ${../glossary/deadline:/term} (no matter whether this
+  ${../glossary/deadline:/term} belongs to the current
+  ${../glossary/interval:/term} or not) or by a call to ${../if/cancel:/name}.
+type: glossary

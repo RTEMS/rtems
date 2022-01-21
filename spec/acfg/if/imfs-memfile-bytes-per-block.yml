@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 128
+description: |
+  The value of this configuration option defines the block size for in-memory
+  files managed by the IMFS.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/imfs-memfile-bytes-per-block
+name: CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+notes: |
+  The configured block size has two impacts. The first is the average amount of
+  unused memory in the last block of each file.  For example, when the block
+  size is 512, on average one-half of the last block of each file will remain
+  unused and the memory is wasted. In contrast, when the block size is 16, the
+  average unused memory per file is only 8 bytes. However, it requires more
+  allocations for the same size file and thus more overhead per block for the
+  dynamic memory management.
+
+  Second, the block size has an impact on the maximum size file that can be
+  stored in the IMFS. With smaller block size, the maximum file size is
+  correspondingly smaller. The following shows the maximum file size possible
+  based on the configured block size:
+
+  * when the block size is 16 bytes, the maximum file size is 1,328 bytes.
+
+  * when the block size is 32 bytes, the maximum file size is 18,656 bytes.
+
+  * when the block size is 64 bytes, the maximum file size is 279,488 bytes.
+
+  * when the block size is 128 bytes, the maximum file size is 4,329,344 bytes.
+
+  * when the block size is 256 bytes, the maximum file size is 68,173,568 bytes.
+
+  * when the block size is 512 bytes, the maximum file size is 1,082,195,456
+    bytes.
+type: interface

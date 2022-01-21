@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: signal set
+text: |
+  A thirty-two bit entity which is used to represent a task's collection of
+  pending signals and the signals sent to a task.
+type: glossary

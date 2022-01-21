@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Issue two jobs on the current processor with interrupts disabled.  Wait for
+    completion of the second job.
+  action-code: |
+    rtems_interrupt_level level;
+    Per_CPU_Control      *cpu;
+
+    rtems_interrupt_local_disable(level);
+    cpu = _Per_CPU_Get();
+    _Per_CPU_Add_job( cpu, &job_0 );
+    _Per_CPU_Submit_job( cpu, &job_1 );
+    rtems_interrupt_local_enable(level);
+
+    _Per_CPU_Wait_for_job( cpu, &job_1 );
+  checks:
+  - brief: |
+      Check that the first job was processed firstly.
+    code: |
+      T_step_eq_int( ${step}, counter_0, 1 );
+    links:
+    - role: validation
+      uid: ../req/per-cpu-jobs-order
+  - brief: |
+      Check that the second job was processed secondly.
+    code: |
+      T_step_eq_int( ${step}, counter_1, 2 );
+    links:
+    - role: validation
+      uid: ../req/per-cpu-jobs-order
+  links: []
+test-brief: |
+  Tests the processing order of per-processor jobs.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/atomic.h
+- rtems/score/percpu.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: |
+  static Atomic_Uint job_counter;
+
+  static void Increment( void *arg )
+  {
+    unsigned int *value;
+
+    value = (unsigned int *) arg;
+    *value =
+      _Atomic_Fetch_add_uint( &job_counter, 1, ATOMIC_ORDER_RELAXED ) + 1;
+  }
+
+  static unsigned int counter_0;
+
+  static const Per_CPU_Job_context job_context_0 = {
+    .handler = Increment,
+    .arg = &counter_0
+  };
+
+  Per_CPU_Job job_0 = {
+    .context = &job_context_0
+  };
+
+  static unsigned int counter_1;
+
+  static const Per_CPU_Job_context job_context_1 = {
+    .handler = Increment,
+    .arg = &counter_1
+  };
+
+  Per_CPU_Job job_1 = {
+    .context = &job_context_1,
+  };
+test-target: testsuites/validation/tc-score-smp-per-cpu-jobs.c
+test-teardown: null
+type: test-case

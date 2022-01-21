@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: priority
+text: |
+  The priority is a mechanism used to represent the relative importance of an
+  element in a set of items.
+
+  For example, ${rtems:/term} uses ${priority-task:/plural} to determine which
+  ${task:/term} should execute on a processor.  In RTEMS, priorities are
+  represented by non-negative integers.
+
+  For the Classic ${api:/term}, if a numerical priority value ``A`` is greater
+  than a numerical priority value ``B``, then ``A`` expresses a
+  ${priority-lower:/term} than ``B``.  If a numerical priority value ``C`` is
+  less than a numerical priority value ``D``, then ``C`` expresses a
+  ${priority-higher:/term} than ``D``.
+  
+  For the ${posix:/term} API, if a numerical priority value ``R`` is less than
+  a numerical priority value ``S``, then ``R`` expresses a lower priority than
+  ``S``.  If a numerical priority value ``T`` is greater than a numerical
+  priority value ``U``, then ``T`` expresses a higher priority than ``U``.
+type: glossary

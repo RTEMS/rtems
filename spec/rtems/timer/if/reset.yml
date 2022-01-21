@@ -1,0 +1,64 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Resets the timer.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive resets the timer specified by ${.:/params[0]/name}.  This
+  timer must have been previously initiated with either the ${fire-after:/name}
+  or ${server-fire-after:/name} directive.  If active the timer is canceled,
+  after which the timer is reinitiated using the same interval and timer
+  service routine which the original ${fire-after:/name} or
+  ${server-fire-after:/name} directive used.
+enabled-by: true
+index-entries:
+- reset a timer
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_timer_reset
+notes: |
+  If the timer has not been used or the last usage of this timer was by a
+  ${fire-when:/name} or ${server-fire-when:/name} directive, then the
+  ${../../status/if/not-defined:/name} error is returned.
+
+  Restarting a cancelled after timer results in the timer being reinitiated
+  with its previous timer service routine and interval.
+params:
+- description: is the timer identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no timer associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The timer was not of the interval class.
+    value: ${../../status/if/not-defined:/name}
+type: interface

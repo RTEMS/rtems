@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the processor maximum supported by the system.
+copyrights:
+- Copyright (C) 2013, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: ${/c/if/uint32_t:/name}
+  variants: []
+description: |
+  Where the system was built with SMP support disabled, this directive
+  evaluates to a compile time constant of one.
+
+  Where the system was built with SMP support enabled, this directive returns
+  the minimum of the processors (physically or virtually) available at the
+  ${/glossary/target:/term} and the configured processor maximum
+  (see ${/acfg/if/max-processors:/name}).  Not all processors in the range from
+  processor index zero to the last processor index (which is the processor
+  maximum minus one) may be configured to be used by a scheduler or may be
+  online (online processors have a scheduler assigned).
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+name: rtems_scheduler_get_processor_maximum
+notes: null
+params: []
+return:
+  return: |
+    Returns the processor maximum supported by the system.
+  return-values: []
+type: interface

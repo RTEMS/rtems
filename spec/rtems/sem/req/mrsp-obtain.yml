@@ -1,0 +1,857 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/obtain
+post-conditions:
+- name: Home
+  states:
+  - name: Task
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      T_eq_ptr( scheduled, ctx->tq_ctx.runner_tcb );
+    text: |
+      The obtaining task shall execute on the processor owned by the
+      ${/glossary/scheduler-home:/term} of the obtaining task.
+  - name: TaskIdle
+    test-code: |
+      T_eq_u32( task_cpu_index, 1 );
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_node_by_index(
+        ctx->tq_ctx.runner_tcb,
+        0
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of the obtaining task shall execute on the processor
+      owned by the ${/glossary/scheduler-home:/term} of the obtaining task.
+  - name: Second
+    test-code: |
+      T_eq_u32( task_cpu_index, 1 );
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ SECOND ] );
+    text: |
+      The second task shall execute on the processor owned by the
+      ${/glossary/scheduler-home:/term} of the obtaining task.
+  - name: SecondIdle
+    test-code: |
+      T_eq_u32( task_cpu_index, 1 );
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_node_by_index(
+        ctx->tq_ctx.worker_tcb[ SECOND ],
+        0
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of the second task shall execute on the processor
+      owned by the ${/glossary/scheduler-home:/term} of the obtaining task.
+  test-epilogue: null
+  test-prologue: |
+    const Per_CPU_Control *cpu;
+    const Thread_Control  *scheduled;
+    const Scheduler_Node  *scheduler_node;
+    uint32_t               task_cpu_index;
+
+    cpu = _Per_CPU_Get_by_index( 0 );
+    scheduled = cpu->heir;
+    task_cpu_index = rtems_scheduler_get_processor(); 
+- name: Helping
+  states:
+  - name: Idle
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      T_true( scheduled->is_idle );
+    text: |
+      An idle task shall execute on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: Task
+    test-code: |
+      T_eq_u32( task_cpu_index, 1 );
+      T_eq_ptr( scheduled, ctx->tq_ctx.runner_tcb );
+    text: |
+      The obtaining task shall execute on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: TaskIdle
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_node_by_index(
+        ctx->tq_ctx.runner_tcb,
+        1
+      );
+      T_eq_ptr( scheduler_node->user, ctx->tq_ctx.runner_tcb );
+    text: |
+      An idle task on behalf of the obtaining task shall execute on the processor
+      owned by the ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: Helping
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ HELPING ] );
+    text: |
+      The helping task shall execute on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: HelpingIdle
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_node_by_index(
+        ctx->tq_ctx.worker_tcb[ HELPING ],
+        1
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of the helping task shall execute on the processor
+      owned by the ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: Third
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ THIRD ] );
+    text: |
+      The third task shall execute on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: ThirdIdle
+    test-code: |
+      T_eq_u32( task_cpu_index, 0 );
+      scheduler_node = _Thread_Scheduler_get_node_by_index(
+        ctx->tq_ctx.worker_tcb[ THIRD ],
+        1
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of the third task shall execute on the processor
+      owned by the ${/glossary/scheduler-helping:/term} of the obtaining task.
+  test-epilogue: null
+  test-prologue: |
+    const Per_CPU_Control *cpu;
+    const Thread_Control  *scheduled;
+    const Scheduler_Node  *scheduler_node;
+    uint32_t               task_cpu_index;
+
+    cpu = _Per_CPU_Get_by_index( 1 );
+    scheduled = cpu->heir;
+    task_cpu_index = rtems_scheduler_get_processor(); 
+pre-conditions:
+- name: Home
+  states:
+  - name: Idle
+    test-code: |
+      ctx->scheduler_a_idle = true;
+    text: |
+      While an idle task executes on the processor owned by the
+      ${/glossary/scheduler-home:/term} of the obtaining task.
+  - name: Task
+    test-code: |
+      ctx->task_scheduler = SCHEDULER_A_ID;
+    text: |
+      While the obtaining task executes on the processor owned by the
+      ${/glossary/scheduler-home:/term} of the obtaining task.
+  - name: TaskIdle
+    test-code: |
+      ctx->scheduler_a_idle = true;
+    text: |
+      While an idle task on behalf of the obtaining task executes on the
+      processor owned by the ${/glossary/scheduler-home:/term} of the obtaining
+      task.
+  - name: Second
+    test-code: |
+      ctx->second_active = true;
+    text: |
+      While the second task executes on the processor owned by the
+      ${/glossary/scheduler-home:/term} of the obtaining task.
+  - name: SecondIdle
+    test-code: |
+      ctx->second_active = true;
+      ctx->scheduler_a_idle = true;
+    text: |
+      While an idle task on behalf of the second task executes on the processor
+      owned by the ${/glossary/scheduler-home:/term} of the obtaining task.
+  test-epilogue: null
+  test-prologue: null
+- name: Helping
+  states:
+  - name: Idle
+    test-code: |
+      ctx->scheduler_b_idle = true;
+    text: |
+      While an idle task executes on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: Task
+    test-code: |
+      ctx->task_scheduler = SCHEDULER_B_ID;
+    text: |
+      While the obtaining task executes on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: Helping
+    test-code: |
+      ctx->task_owns_mrsp_semaphore = true;
+      ctx->helping_active = true;
+    text: |
+      While a helping task of the obtaining task executes on the processor
+      owned by the ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: HelpingIdle
+    test-code: |
+      ctx->task_owns_mrsp_semaphore = true;
+      ctx->helping_active = true;
+      ctx->scheduler_b_idle = true;
+    text: |
+      While an idle task on behalf of a helping task of the obtaining task
+      executes on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: Third
+    test-code: |
+      ctx->third_active = true;
+    text: |
+      While the third task executes on the processor owned by the
+      ${/glossary/scheduler-helping:/term} of the obtaining task.
+  - name: ThirdIdle
+    test-code: |
+      ctx->third_active = true;
+      ctx->scheduler_b_idle = true;
+    text: |
+      While an idle task on behalf of the third task executes on the processor
+      owned by the ${/glossary/scheduler-helping:/term} of the obtaining task.
+  test-epilogue: null
+  test-prologue: null
+- name: PriorityHome
+  states:
+  - name: None
+    test-code: |
+      ctx->second_priority = PRIO_HIGH;
+      ctx->sema_priority_scheduler_a = PRIO_NORMAL;
+    text: |
+      While no ceiling priority with respect to the
+      ${/glossary/scheduler-home:/term} of the obtaining task is already
+      available to the task.
+  - name: NewHigh
+    test-code: |
+      ctx->task_owns_mrsp_semaphore = true;
+      ctx->sema_priority_scheduler_a = PRIO_HIGH;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-home:/term} of the obtaining task is higher than
+      the ceiling priorities already available to the task.
+  - name: NewEqual
+    test-code: |
+      ctx->task_owns_mrsp_semaphore = true;
+      ctx->sema_priority_scheduler_a = PRIO_NORMAL;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-home:/term} of the obtaining task is equal to the
+      ceiling priorities already available to the task.
+  - name: SecondHigh
+    test-code: |
+      ctx->second_priority = PRIO_HIGH;
+      ctx->sema_priority_scheduler_a = PRIO_VERY_HIGH;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-home:/term} of the obtaining task is higher than
+      the priority of the second task.
+  - name: SecondEqual
+    test-code: |
+      ctx->second_priority = PRIO_HIGH;
+      ctx->sema_priority_scheduler_a = PRIO_HIGH;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-home:/term} of the obtaining task is equal to
+      the priority of the second task.
+  - name: SecondLow
+    test-code: |
+      ctx->second_priority = PRIO_HIGH;
+      ctx->sema_priority_scheduler_a = PRIO_NORMAL;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-home:/term} of the obtaining task is lower than the
+      priority of the second task.
+  test-epilogue: null
+  test-prologue: null
+- name: PriorityHelping
+  states:
+  - name: None
+    test-code: |
+      ctx->sema_priority_scheduler_b = PRIO_NORMAL;
+    text: |
+      While no ceiling priority with respect to the
+      ${/glossary/scheduler-helping:/term} of the obtaining task is already
+      available to the task.
+  - name: Helping
+    test-code: |
+      ctx->helping_active = true;
+      ctx->task_owns_mrsp_semaphore = true;
+      ctx->sema_priority_scheduler_b = PRIO_NORMAL;
+    text: |
+      While ceiling priorities with respect to the
+      ${/glossary/scheduler-helping:/term} of the obtaining task are already
+      available to the task.
+  - name: ThirdHigh
+    test-code: |
+      ctx->third_priority = PRIO_LOW;
+      ctx->sema_priority_scheduler_b = PRIO_NORMAL;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-helping:/term} of the obtaining task is higher than
+      the priority of the third task.
+  - name: ThirdEqual
+    test-code: |
+      ctx->third_priority = PRIO_NORMAL;
+      ctx->sema_priority_scheduler_b = PRIO_NORMAL;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-helping:/term} of the obtaining task is equal to
+      the priority of the third task.
+  - name: ThirdLow
+    test-code: |
+      ctx->third_priority = PRIO_HIGH;
+      ctx->sema_priority_scheduler_b = PRIO_NORMAL;
+    text: |
+      While the ceiling priority of the semaphore with respect to the
+      ${/glossary/scheduler-helping:/term} of the obtaining task is lower than
+      the priority of the third task.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  TaskExecutesExactlyOnce: |
+    The task executes on either the home or the helping scheduler.
+  MrsPCeilingRequired: |
+    The availability of MrsP ceiling priorities depends on the ownership of a
+    MrsP semaphore and helping tasks associated with such a semaphore.
+  SecondProrityNeedsSecondTask: |
+    The second task is required to have a priority relative to the second task.
+  ThirdProrityNeedsThirdTask: |
+    The third task is required to have a priority relative to the third task.
+test-action: |
+  if ( ctx->task_owns_mrsp_semaphore ) {
+    TQMutexObtain( &ctx->tq_ctx, TQ_MUTEX_B );
+  }
+
+  if ( ctx->helping_active ) {
+    T_true( ctx->task_owns_mrsp_semaphore );
+
+    TQSendAndWaitForIntendToBlock(
+      &ctx->tq_ctx,
+      HELPING,
+      TQ_EVENT_MUTEX_B_OBTAIN
+    );
+
+    if ( ctx->scheduler_b_idle ) {
+      SuspendTask( ctx->tq_ctx.worker_id[ HELPING ] );
+    }
+  }
+
+  if ( ctx->scheduler_a_idle || ctx->second_active ) {
+    MoveToScheduler( ctx, SCHEDULER_B_ID );
+  }
+
+  if ( ctx->second_active ) {
+    T_false( ctx->third_active );
+
+    TQSetPriority( &ctx->tq_ctx, SECOND, ctx->second_priority );
+
+    if ( ctx->scheduler_a_idle ) {
+      SetSemaphorePriority(
+        ctx->tq_ctx.mutex_id[ TQ_MUTEX_C ],
+        ctx->second_priority,
+        ctx->second_priority
+      );
+      TQSendAndWaitForExecutionStop(
+        &ctx->tq_ctx,
+        SECOND,
+        TQ_EVENT_MUTEX_C_OBTAIN
+      );
+    } else {
+      ctx->tq_ctx.busy_wait[ SECOND ] = true;
+      TQSend( &ctx->tq_ctx, SECOND, TQ_EVENT_BUSY_WAIT );
+      TQWaitForEventsReceived( &ctx->tq_ctx, SECOND );
+    }
+  }
+
+  if ( ctx->third_active ) {
+    T_false( ctx->second_active );
+
+    TQSetPriority( &ctx->tq_ctx, THIRD, ctx->third_priority );
+
+    if ( ctx->scheduler_b_idle ) {
+      SetSemaphorePriority(
+        ctx->tq_ctx.mutex_id[ TQ_MUTEX_C ],
+        ctx->third_priority,
+        ctx->third_priority
+      );
+      TQSendAndWaitForExecutionStop(
+        &ctx->tq_ctx,
+        THIRD,
+        TQ_EVENT_MUTEX_C_OBTAIN
+      );
+    } else {
+      ctx->tq_ctx.busy_wait[ THIRD ] = true;
+      TQSend( &ctx->tq_ctx, THIRD, TQ_EVENT_BUSY_WAIT );
+      TQWaitForEventsReceived( &ctx->tq_ctx, THIRD );
+    }
+  }
+
+  SetSemaphorePriority(
+    ctx->sema_id,
+    ctx->sema_priority_scheduler_a,
+    ctx->sema_priority_scheduler_b
+  );
+  ObtainMutex( ctx->sema_id );
+test-brief: null
+test-cleanup: |
+  ReleaseMutex( ctx->sema_id );
+
+  if ( ctx->task_owns_mrsp_semaphore ) {
+    TQMutexRelease( &ctx->tq_ctx, TQ_MUTEX_B );
+  }
+
+  if ( ctx->second_active ) {
+    MoveToScheduler( ctx, SCHEDULER_B_ID );
+
+    if ( ctx->scheduler_a_idle ) {
+      TQSendAndWaitForExecutionStop(
+        &ctx->tq_ctx,
+        SECOND,
+        TQ_EVENT_MUTEX_C_RELEASE
+      );
+    } else {
+      ctx->tq_ctx.busy_wait[ SECOND ] = false;
+      TQWaitForExecutionStop( &ctx->tq_ctx, SECOND );
+    }
+  }
+
+  if ( ctx->third_active ) {
+    MoveToScheduler( ctx, SCHEDULER_A_ID );
+
+    if ( ctx->scheduler_b_idle ) {
+      TQSendAndWaitForExecutionStop(
+        &ctx->tq_ctx,
+        THIRD,
+        TQ_EVENT_MUTEX_C_RELEASE
+      );
+    } else {
+      ctx->tq_ctx.busy_wait[ THIRD ] = false;
+      TQWaitForExecutionStop( &ctx->tq_ctx, THIRD );
+    }
+  }
+
+  if ( ctx->helping_active ) {
+    MoveToScheduler( ctx, SCHEDULER_A_ID );
+
+    if ( ctx->scheduler_b_idle ) {
+      ResumeTask( ctx->tq_ctx.worker_id[ HELPING ] );
+    }
+
+    TQSendAndWaitForExecutionStop(
+      &ctx->tq_ctx,
+      HELPING,
+      TQ_EVENT_MUTEX_B_RELEASE
+    );
+  }
+
+  MoveToScheduler( ctx, SCHEDULER_A_ID );
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQContext tq_ctx
+- brief: |
+    This member contains the MrsP semaphore to obtain.
+  description: null
+  member: |
+    rtems_id sema_id
+- brief: |
+    This member specifies the scheduler on which the task executes.
+  description: null
+  member: |
+    rtems_id task_scheduler
+- brief: |
+    If this member is true, then the task shall already own a MrsP semaphore.
+  description: null
+  member: |
+    bool task_owns_mrsp_semaphore
+- brief: |
+    If this member is true, then an idle task shall execute on scheduler A.
+  description: null
+  member: |
+    bool scheduler_a_idle
+- brief: |
+    If this member is true, then an idle task shall execute on scheduler B.
+  description: null
+  member: |
+    bool scheduler_b_idle
+- brief: |
+    If this member is true, then the second task shall be active.
+  description: null
+  member: |
+    bool second_active
+- brief: |
+    This member specifies the priority of the second task.
+  description: null
+  member: |
+    rtems_task_priority second_priority
+- brief: |
+    If this member is true, then the third task shall be active.
+  description: null
+  member: |
+    bool third_active
+- brief: |
+    This member specifies the priority of the third task.
+  description: null
+  member: |
+    rtems_task_priority third_priority
+- brief: |
+    If this member is true, then the helping task shall be active.
+  description: null
+  member: |
+    bool helping_active
+- brief: |
+    This member specifies the priority of the MrsP semaphore with respect to
+    scheduler A.
+  description: null
+  member: |
+    rtems_task_priority sema_priority_scheduler_a
+- brief: |
+    This member specifies the priority of the MrsP semaphore with respect to
+    scheduler B.
+  description: null
+  member: |
+    rtems_task_priority sema_priority_scheduler_b
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/percpu.h
+- rtems/score/threadimpl.h
+- string.h
+test-local-includes:
+- tx-support.h
+- tx-thread-queue.h
+test-prepare: |
+  ctx->task_scheduler = INVALID_ID;
+  ctx->task_owns_mrsp_semaphore = false;
+  ctx->scheduler_a_idle = false;
+  ctx->scheduler_b_idle = false;
+  ctx->helping_active = false;
+  ctx->second_active = false;
+  ctx->third_active = false;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+    rtems_id          mutex_b;
+    rtems_id          mutex_c;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'S', 'E', 'M', 'A' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &ctx->sema_id
+    );
+    T_rsc_success( sc );
+
+    ctx->tq_ctx.deadlock = TQ_DEADLOCK_STATUS;
+    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
+    ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+    ctx->tq_ctx.convert_status = TQConvertStatusClassic;
+    TQInitialize( &ctx->tq_ctx );
+
+    DeleteMutex( ctx->tq_ctx.mutex_id[ TQ_MUTEX_B ] );
+    DeleteMutex( ctx->tq_ctx.mutex_id[ TQ_MUTEX_C ] );
+
+    mutex_b = 0;
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', 'B' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &mutex_b
+    );
+    T_rsc_success( sc );
+
+    mutex_c = 0;
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', 'C' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &mutex_c
+    );
+    T_rsc_success( sc );
+
+    ctx->tq_ctx.mutex_id[ TQ_MUTEX_B ] = mutex_b;
+    ctx->tq_ctx.mutex_id[ TQ_MUTEX_C ] = mutex_c;
+
+    TQSetScheduler( &ctx->tq_ctx, HELPING, SCHEDULER_B_ID, PRIO_VERY_LOW );
+    TQSetScheduler( &ctx->tq_ctx, THIRD, SCHEDULER_B_ID, PRIO_NORMAL );
+
+    TQMutexObtain( &ctx->tq_ctx, TQ_MUTEX_A );
+    TQSetScheduler( &ctx->tq_ctx, ASSISTANT, SCHEDULER_B_ID, PRIO_VERY_LOW );
+    TQSendAndWaitForExecutionStop(
+      &ctx->tq_ctx,
+      ASSISTANT,
+      TQ_EVENT_MUTEX_A_OBTAIN
+    );
+
+    SetSemaphorePriority(
+      ctx->tq_ctx.mutex_id[ TQ_MUTEX_B ],
+      PRIO_NORMAL,
+      PRIO_VERY_LOW
+    );
+  description: null
+test-stop: null
+test-support: |
+  #define HELPING TQ_BLOCKER_A
+
+  #define SECOND TQ_BLOCKER_B
+
+  #define THIRD TQ_BLOCKER_C
+
+  #define ASSISTANT TQ_BLOCKER_D
+
+  #define MOVER TQ_BLOCKER_E
+
+  typedef ${.:/test-context-type} Context;
+
+  static void SetSemaphorePriority(
+    rtems_id            id,
+    rtems_task_priority priority_a,
+    rtems_task_priority priority_b
+  )
+  {
+    rtems_status_code   sc;
+    rtems_task_priority priority;
+
+    sc = rtems_semaphore_set_priority(
+      id,
+      SCHEDULER_A_ID,
+      priority_a,
+      &priority
+    );
+    T_rsc_success( sc );
+
+    sc = rtems_semaphore_set_priority(
+      id,
+      SCHEDULER_B_ID,
+      priority_b,
+      &priority
+    );
+    T_rsc_success( sc );
+  }
+
+  static void MoveToScheduler( Context *ctx, rtems_id scheduler_id )
+  {
+    rtems_id other_scheduler_id;
+    uint32_t cpu;
+
+    if ( scheduler_id == SCHEDULER_A_ID ) {
+      other_scheduler_id =  SCHEDULER_B_ID;
+      cpu = 0;
+    } else {
+      other_scheduler_id =  SCHEDULER_A_ID;
+      cpu = 1;
+    }
+
+    TQSetScheduler( &ctx->tq_ctx, MOVER, other_scheduler_id, PRIO_VERY_HIGH );
+    ctx->tq_ctx.busy_wait[ MOVER ] = true;
+    TQSend( &ctx->tq_ctx, MOVER, TQ_EVENT_BUSY_WAIT );
+    TQWaitForEventsReceived( &ctx->tq_ctx, MOVER );
+    T_eq_u32( rtems_scheduler_get_processor(), cpu );
+    ctx->tq_ctx.busy_wait[ MOVER ] = false;
+    TQWaitForExecutionStop( &ctx->tq_ctx, MOVER );
+  }
+test-target: testsuites/validation/tc-sem-mrsp-obtain.c
+test-teardown:
+  brief: null
+  code: |
+    TQMutexRelease( &ctx->tq_ctx, TQ_MUTEX_A );
+    TQSendAndWaitForExecutionStop(
+      &ctx->tq_ctx,
+      ASSISTANT,
+      TQ_EVENT_MUTEX_A_RELEASE
+    );
+    TQDestroy( &ctx->tq_ctx );
+    DeleteMutex( ctx->sema_id );
+  description: null
+text: |
+  When a ${/glossary/mrsp:/term} semaphore is obtained.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Home:
+    - if:
+        pre-conditions:
+          Home: Task
+      then: Task
+    - if:
+      - pre-conditions:
+          Home:
+          - Idle
+          - TaskIdle
+      - pre-conditions:
+          Home:
+          - Second
+          - SecondIdle
+          PriorityHome:
+          - SecondHigh
+      then: TaskIdle
+    - specified-by: Home
+    Helping:
+    - specified-by: Helping
+  pre-conditions:
+    Home: all
+    Helping: all
+    PriorityHome: all
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: TaskExecutesExactlyOnce
+  pre-conditions:
+    Home:
+    - Task
+    Helping:
+    - Task
+    PriorityHome: all
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: TaskExecutesExactlyOnce
+  pre-conditions:
+    Home:
+    - Idle
+    - TaskIdle
+    - Second
+    - SecondIdle
+    Helping:
+    - Idle
+    - Helping
+    - HelpingIdle
+    - Third
+    - ThirdIdle
+    PriorityHome: all
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: SecondProrityNeedsSecondTask
+  pre-conditions:
+    Home:
+    - Idle
+    - Task
+    - TaskIdle
+    Helping: all
+    PriorityHome:
+    - SecondHigh
+    - SecondEqual
+    - SecondLow
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: ThirdProrityNeedsThirdTask
+  pre-conditions:
+    Home: all
+    Helping:
+    - Idle
+    - Task
+    - Helping
+    - HelpingIdle
+    PriorityHome: all
+    PriorityHelping:
+    - ThirdHigh
+    - ThirdEqual
+    - ThirdLow
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home:
+    - Idle
+    - Second
+    - SecondIdle
+    Helping: all
+    PriorityHome:
+    - NewHigh
+    - NewEqual
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home: all
+    Helping:
+    - Idle
+    PriorityHome:
+    - NewHigh
+    - NewEqual
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home:
+    - TaskIdle
+    Helping: all
+    PriorityHome:
+    - None
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home:
+    - TaskIdle
+    Helping: all
+    PriorityHome: all
+    PriorityHelping:
+    - None
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home: all
+    Helping:
+    - Helping
+    - HelpingIdle
+    PriorityHome:
+    - None
+    PriorityHelping: all
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home: all
+    Helping:
+    - HelpingIdle
+    PriorityHome: all
+    PriorityHelping:
+    - None
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home: all
+    Helping: all
+    PriorityHome:
+    - NewHigh
+    - NewEqual
+    PriorityHelping:
+    - None
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home: all
+    Helping:
+    - Idle
+    PriorityHome: all
+    PriorityHelping:
+    - Helping
+- enabled-by: true
+  post-conditions: MrsPCeilingRequired
+  pre-conditions:
+    Home: all
+    Helping: all
+    PriorityHome:
+    - None
+    PriorityHelping:
+    - Helping
+type: requirement

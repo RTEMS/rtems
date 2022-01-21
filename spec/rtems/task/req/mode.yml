@@ -1,0 +1,860 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/mode
+- role: interface-function
+  uid: ../../mode/if/current-mode
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/mode:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/mode:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: NotImplIntLvl
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_IMPLEMENTED );
+    text: |
+      The return status of ${../if/mode:/name} shall be
+      ${../../status/if/not-implemented:/name}.
+  - name: NotImplIntLvlSMP
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->status );
+      }
+    text: |
+      Where the system needs inter-processor interrupts, the return status of
+      ${../if/mode:/name} shall be ${../../status/if/not-implemented:/name}.
+
+      Where the system does not need inter-processor interrupts, the return
+      status of ${../if/mode:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: NotImplNoPreempt
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->status );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, the return
+      status of ${../if/mode:/name} shall be
+      ${../../status/if/not-implemented:/name}.
+
+      Where the scheduler does support the no-preempt mode, the return status
+      of ${../if/mode:/name} shall be ${../../status/if/successful:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->worker_counter_after, ctx->worker_counter_before + 1 );
+    text: |
+      The calling task shall be preempted by a higher priority ready task
+      during the ${../if/mode:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->worker_counter_after, ctx->worker_counter_before );
+    text: |
+      The calling task shall not be preempted during the ${../if/mode:/name}
+      call.
+  - name: Maybe
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_eq_u32( ctx->worker_counter_after, ctx->worker_counter_before );
+      } else {
+        T_eq_u32( ctx->worker_counter_after, ctx->worker_counter_before + 1 );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, the calling
+      task shall not be preempted during the ${../if/mode:/name} call.
+
+      Where the scheduler does support the no-preempt mode, the calling task
+      shall be preempted by a higher priority ready task during the
+      ${../if/mode:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->signal_counter_after, ctx->signal_counter_before + 1 );
+    text: |
+      The calling task shall process pending signals during the
+      ${../if/mode:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->signal_counter_after, ctx->signal_counter_before );
+    text: |
+      The calling task shall not process signals during the ${../if/mode:/name}
+      call.
+  - name: Maybe
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_eq_u32( ctx->signal_counter_after, ctx->signal_counter_before );
+      } else {
+        T_eq_u32( ctx->signal_counter_after, ctx->signal_counter_before + 1 );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, the calling
+      task shall not process signals during the ${../if/mode:/name} call.
+
+      Where the scheduler does support the no-preempt mode, the calling task
+      shall process pending signals during the ${../if/mode:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: PMVar
+  states:
+  - name: Set
+    test-code: |
+      T_eq_ptr( ctx->previous_mode_set, &ctx->previous_mode_set_value );
+      T_eq_u32( ctx->previous_mode_set_value, ctx->current_mode );
+    text: |
+      The value of the object referenced by the ${../if/mode:/params[2]/name}
+      parameter shall be set to the task modes of the calling task on entry of
+      the call to ${../if/mode:/name}.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->previous_mode_set_value, INVALID_MODE );
+    text: |
+      Objects referenced by the ${../if/create:/params[2]/name} parameter in
+      past calls to ${../if/mode:/name} shall not be accessed by the
+      ${../if/mode:/name} call.
+  - name: Maybe
+    test-code: |
+      T_eq_ptr( ctx->previous_mode_set, &ctx->previous_mode_set_value );
+
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_eq_u32( ctx->previous_mode_set_value, INVALID_MODE );
+      } else {
+        T_eq_u32( ctx->previous_mode_set_value, ctx->current_mode );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, objects
+      referenced by the ${../if/create:/params[2]/name} parameter in past calls
+      to ${../if/mode:/name} shall not be accessed by the ${../if/mode:/name}
+      call.
+
+      Where the scheduler does support the no-preempt mode, the value of the
+      object referenced by the ${../if/mode:/params[2]/name} parameter shall be
+      set to the task modes of the calling task on entry of the call to
+      ${../if/mode:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Mode
+  states:
+  - name: Set
+    test-code: |
+      CheckMode( ctx, ctx->current_mode, ctx->mode_mask, ctx->mode_set );
+    text: |
+      The task modes of the calling task indicated by the
+      ${../if/mode:/params[1]/name} parameter shall be set to the corrsponding
+      modes specified by the ${../if/mode:/params[0]/name} parameter.
+  - name: Nop
+    test-code: |
+      CheckMode( ctx, ctx->current_mode, 0, 0 );
+    text: |
+      The task modes of the calling task shall not be modified by the
+      ${../if/mode:/name} call.
+  - name: Maybe
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        CheckMode( ctx, ctx->current_mode, 0, 0 );
+      } else {
+        CheckMode( ctx, ctx->current_mode, ctx->mode_mask, ctx->mode_set );
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, the task modes
+      of the calling task shall not be modified by the ${../if/mode:/name}
+      call.
+
+      Where the scheduler does support the no-preempt mode, the task modes of
+      the calling task indicated by the ${../if/mode:/params[1]/name} parameter
+      shall be set to the corrsponding modes specified by the
+      ${../if/mode:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: PrevMode
+  states:
+  - name: Valid
+    test-code: |
+      ctx->previous_mode_set = &ctx->previous_mode_set_value;
+    text: |
+      While the ${../if/mode:/params[2]/name} parameter references an object of
+      type ${../../mode/if/mode:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->previous_mode_set = NULL;
+    text: |
+      While the ${../if/mode:/params[2]/name} parameter is ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: PreemptCur
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->current_mode |= RTEMS_PREEMPT;
+    text: |
+      While the calling task has preemption enabled.
+  - name: 'No'
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        ctx->current_mode |= RTEMS_PREEMPT;
+      } else {
+        ctx->current_mode |= RTEMS_NO_PREEMPT;
+      }
+    text: |
+      Where the scheduler does not support the no-preempt mode, while the
+      calling task has preemption enabled.
+
+      Where the scheduler does support the no-preempt mode, while the calling
+      task has preemption disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: TimesliceCur
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->current_mode |= RTEMS_TIMESLICE;
+    text: |
+      While the calling task has timeslicing enabled.
+  - name: 'No'
+    test-code: |
+      ctx->current_mode |= RTEMS_NO_TIMESLICE;
+    text: |
+      While the calling task has timeslicing disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASRCur
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->current_mode |= RTEMS_ASR;
+    text: |
+      While the calling task has ASR processing enabled.
+  - name: 'No'
+    test-code: |
+      ctx->current_mode |= RTEMS_NO_ASR;
+    text: |
+      While the calling task has ASR processing disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvlCur
+  states:
+  - name: Zero
+    test-code: |
+      ctx->current_mode |= RTEMS_INTERRUPT_LEVEL( 0 );
+    text: |
+      While the calling task executes with an interrupt level of zero.
+  - name: Positive
+    test-code: |
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        ctx->current_mode |= RTEMS_INTERRUPT_LEVEL( 0 );
+      } else {
+        ctx->current_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
+      }
+    text: |
+      Where the system needs inter-processor interrupts, while the calling task
+      executes with an interrupt level of zero.
+
+      Where the system does not need inter-processor interrupts, while the
+      calling task executes with an an interrupt level greater than zero and
+      less than or equal to ${/score/cpu/if/modes-interrupt-mask:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_set |= RTEMS_PREEMPT;
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies that
+      preemption is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode_set |= RTEMS_NO_PREEMPT;
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies that
+      preemption is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeslice
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_set |= RTEMS_TIMESLICE;
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies that
+      timeslicing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode_set |= RTEMS_NO_TIMESLICE;
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies that
+      timeslicing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_set |= RTEMS_ASR;
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies that
+      ASR processing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode_set |= RTEMS_NO_ASR;
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies that
+      ASR processing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvl
+  states:
+  - name: Zero
+    test-code: |
+      ctx->mode_set |= RTEMS_INTERRUPT_LEVEL( 0 );
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies an interrupt
+      level of zero.
+  - name: Positive
+    test-code: |
+      ctx->mode_set |= RTEMS_INTERRUPT_LEVEL( 1 );
+    text: |
+      While the ${../if/mode:/params[0]/name} parameter specifies an interrupt
+      level greater than zero and less than or equal to
+      ${/score/cpu/if/modes-interrupt-mask:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: PreemptMsk
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_mask |= RTEMS_PREEMPT_MASK;
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      preemption mode shall be set.
+  - name: 'No'
+    test-code: |
+      /* This is the default mode mask */
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      preemption mode shall not be set.
+  test-epilogue: null
+  test-prologue: null
+- name: TimesliceMsk
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_mask |= RTEMS_TIMESLICE_MASK;
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      timeslicing mode shall be set.
+  - name: 'No'
+    test-code: |
+      /* This is the default mode mask */
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      timeslicing mode shall not be set.
+  test-epilogue: null
+  test-prologue: null
+- name: ASRMsk
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_mask |= RTEMS_ASR_MASK;
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      ASR processing mode shall be set.
+  - name: 'No'
+    test-code: |
+      /* This is the default mode mask */
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      ASR processing mode shall not be set.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvlMsk
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode_mask |= RTEMS_INTERRUPT_MASK;
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      interrupt level shall be set.
+  - name: 'No'
+    test-code: |
+      /* This is the default mode mask */
+    text: |
+      While the ${../if/mode:/params[1]/name} parameter specifies that the
+      interrupt level shall not be set.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  RobustThreadDispatching: |
+    Where the system enabled robust thread dispatching, the interrupt level
+    mode of a task shall be exactly zero.
+test-action: |
+  rtems_status_code sc;
+  rtems_mode        mode;
+
+  sc = rtems_task_mode( ctx->current_mode, RTEMS_ALL_MODE_MASKS, &mode );
+  T_rsc_success( sc );
+
+  SendEvents( ctx->worker_id, EVENT_MAKE_READY );
+
+  sc = rtems_signal_catch( SignalHandler, ctx->current_mode | RTEMS_NO_ASR );
+  T_rsc_success( sc );
+
+  sc = rtems_signal_send( RTEMS_SELF, 0xdeadbeef );
+  T_rsc_success( sc );
+
+  ctx->worker_counter_before = ctx->worker_counter;
+  ctx->signal_counter_before = ctx->signal_counter;
+  ctx->status = rtems_task_mode(
+    ctx->mode_set,
+    ctx->mode_mask,
+    ctx->previous_mode_set
+  );
+  ctx->worker_counter_after = ctx->worker_counter;
+  ctx->signal_counter_after = ctx->signal_counter;
+test-brief: null
+test-cleanup: |
+  rtems_status_code sc;
+  rtems_mode        mode;
+
+  sc = rtems_task_mode( RTEMS_DEFAULT_MODES, RTEMS_ALL_MODE_MASKS, &mode );
+  T_rsc_success( sc );
+
+  sc = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+  T_rsc_success( sc );
+
+  sc = rtems_signal_catch( NULL, RTEMS_DEFAULT_MODES );
+  T_rsc_success( sc );
+test-context:
+- brief: |
+    This member contains the object identifier of the worker task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+    If this member is contains the initial mode of the runner.
+  description: null
+  member: |
+    rtems_mode runner_mode
+- brief: |
+    This member provides a value for the previous mode set.
+  description: null
+  member: |
+    rtems_mode previous_mode_set_value
+- brief: |
+    This member specifies the task mode in which rtems_task_mode() is called.
+  description: null
+  member: |
+    rtems_mode current_mode
+- brief: |
+    This member counts worker activity.
+  description: null
+  member: |
+    uint32_t worker_counter
+- brief: |
+    This member contains worker counter before the rtems_task_mode() call.
+  description: null
+  member: |
+    uint32_t worker_counter_before
+- brief: |
+    This member contains worker counter after the rtems_task_mode() call.
+  description: null
+  member: |
+    uint32_t worker_counter_after
+- brief: |
+    This member counts signal handler activity.
+  description: null
+  member: |
+    uint32_t signal_counter
+- brief: |
+    This member contains signal counter before the rtems_task_mode() call.
+  description: null
+  member: |
+    uint32_t signal_counter_before
+- brief: |
+    This member contains signal counter after the rtems_task_mode() call.
+  description: null
+  member: |
+    uint32_t signal_counter_after
+- brief: |
+    This member specifies the ${../if/mode:/params[0]/name} parameter for
+    rtems_task_mode().
+  description: null
+  member: |
+    rtems_mode mode_set
+- brief: |
+    This member specifies the mode mask ${../if/mode:/params[1]/name} parameter
+    for rtems_task_mode() for the action.
+  description: null
+  member: |
+    rtems_mode mode_mask
+- brief: |
+    This member specifies the previous mode set ${../if/mode:/params[2]/name}
+    parameter for rtems_task_mode().
+  description: null
+  member: |
+    rtems_mode *previous_mode_set
+- brief: |
+    This member contains the return status of the rtems_task_mode() call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->current_mode = RTEMS_DEFAULT_MODES;
+  ctx->mode_set = RTEMS_DEFAULT_MODES;
+  ctx->mode_mask = RTEMS_CURRENT_MODE;
+  ctx->previous_mode_set_value = INVALID_MODE;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+
+    sc = rtems_task_mode(
+      RTEMS_DEFAULT_MODES,
+      RTEMS_CURRENT_MODE,
+      &ctx->runner_mode
+    );
+    T_rsc_success( sc );
+
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define INVALID_MODE 0xffffffff
+
+  #define EVENT_MAKE_READY RTEMS_EVENT_0
+
+  #define EVENT_TIMESLICE RTEMS_EVENT_1
+
+  typedef ${.:/test-context-type} Context;
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_event_set events;
+
+      events = ReceiveAnyEvents();
+
+      if ( ( events & EVENT_TIMESLICE ) != 0 ) {
+        SetSelfPriority( PRIO_NORMAL );
+        SetSelfPriority( PRIO_HIGH );
+      }
+
+      ++ctx->worker_counter;
+    }
+  }
+
+  static void SignalHandler( rtems_signal_set signal_set )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->signal_counter;
+    T_eq_u32( signal_set, 0xdeadbeef );
+  }
+
+  static void ExhaustTimeslice( void )
+  {
+    uint32_t ticks;
+
+    for (
+      ticks = 0;
+      ticks < rtems_configuration_get_ticks_per_timeslice();
+      ++ticks
+    ) {
+      ClockTick();
+    }
+  }
+
+  static void CheckMode(
+    Context   *ctx,
+    rtems_mode mode,
+    rtems_mode mask,
+    rtems_mode set
+  )
+  {
+    rtems_status_code sc;
+    uint32_t          counter;
+
+    mode &= ~mask;
+    mode |= set & mask;
+
+    counter = ctx->worker_counter;
+    SendEvents( ctx->worker_id, EVENT_MAKE_READY );
+
+    if ( ( mode & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT ) {
+      T_eq_u32( ctx->worker_counter, counter + 1 );
+    } else {
+      T_eq_u32( ctx->worker_counter, counter );
+    }
+
+    counter = ctx->worker_counter;
+    SendEvents( ctx->worker_id, EVENT_TIMESLICE );
+    ExhaustTimeslice();
+
+    if ( ( mode & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT ) {
+      if ( ( mode & RTEMS_TIMESLICE_MASK ) == RTEMS_TIMESLICE ) {
+        T_eq_u32( ctx->worker_counter, counter + 1 );
+      } else {
+        T_eq_u32( ctx->worker_counter, counter );
+      }
+    } else {
+      T_eq_u32( ctx->worker_counter, counter );
+    }
+
+    counter = ctx->signal_counter;
+    sc = rtems_signal_send( RTEMS_SELF, 0xdeadbeef );
+    T_rsc_success( sc );
+
+    if ( ( mode & RTEMS_ASR_MASK ) == RTEMS_ASR ) {
+      T_eq_u32( ctx->signal_counter, counter + 1 );
+    } else {
+      T_eq_u32( ctx->signal_counter, counter );
+    }
+
+    T_eq_u32( mode & RTEMS_INTERRUPT_MASK, _ISR_Get_level() );
+  }
+test-target: testsuites/validation/tc-task-mode.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerMode();
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          PrevMode: 'Null'
+      then: InvAddr
+    - else: Ok
+    Preempt:
+    - if:
+        and:
+        - post-conditions:
+            Status: Ok
+        - pre-conditions:
+            PreemptCur: 'No'
+            Preempt: 'Yes'
+            PreemptMsk: 'Yes'
+      then: 'Yes'
+    - else: 'No'
+    ASR:
+    - if:
+        and:
+        - post-conditions:
+            Status: Ok
+        - pre-conditions:
+            ASRCur: 'No'
+            ASR: 'Yes'
+            ASRMsk: 'Yes'
+      then: 'Yes'
+    - else: 'No'
+    PMVar:
+    - if:
+        pre-conditions:
+          PrevMode: 'Null'
+      then: Nop
+    - else: Set
+    Mode:
+    - if:
+        pre-conditions:
+          PrevMode: 'Null'
+      then: Nop
+    - else: Set
+  pre-conditions:
+    PreemptCur: all
+    TimesliceCur: all
+    ASRCur: all
+    IntLvlCur: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+    PreemptMsk: all
+    TimesliceMsk: all
+    ASRMsk: all
+    IntLvlMsk: all
+    PrevMode: all
+- enabled-by: CPU_ENABLE_ROBUST_THREAD_DISPATCH
+  post-conditions:
+    Status: NotImplIntLvl
+    Preempt: 'No'
+    ASR: 'No'
+    PMVar: Nop
+    Mode: Nop
+  pre-conditions:
+    PreemptCur: all
+    TimesliceCur: all
+    ASRCur: all
+    IntLvlCur:
+    - Zero
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl:
+    - Positive
+    PreemptMsk: all
+    TimesliceMsk: all
+    ASRMsk: all
+    IntLvlMsk:
+    - 'Yes'
+    PrevMode:
+    - Valid
+- enabled-by: CPU_ENABLE_ROBUST_THREAD_DISPATCH
+  post-conditions: RobustThreadDispatching
+  pre-conditions:
+    PreemptCur: all
+    TimesliceCur: all
+    ASRCur: all
+    IntLvlCur:
+    - Positive
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+    PreemptMsk: all
+    TimesliceMsk: all
+    ASRMsk: all
+    IntLvlMsk: all
+    PrevMode: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Preempt: 'No'
+          PreemptMsk: 'Yes'
+      then: NotImplNoPreempt
+    - if:
+        pre-conditions:
+          IntLvl: Positive
+          IntLvlMsk: 'Yes'
+      then: NotImplIntLvlSMP
+    - else: Ok
+    Preempt:
+    - if:
+        pre-conditions:
+          PreemptCur: 'No'
+          Preempt: 'Yes'
+          PreemptMsk: 'Yes'
+      then: Maybe
+    - else: 'No'
+    ASR:
+    - if:
+        and:
+          - pre-conditions:
+              ASRCur: 'No'
+              ASR: 'Yes'
+              ASRMsk: 'Yes'
+          - or:
+            - pre-conditions:
+                Preempt: 'No'
+                PreemptMsk: 'Yes'
+            - pre-conditions:
+                IntLvl: Positive
+                IntLvlMsk: 'Yes'
+      then: Maybe
+    - if:
+        and:
+          - pre-conditions:
+              ASRCur: 'No'
+              ASR: 'Yes'
+              ASRMsk: 'Yes'
+          - or:
+            - pre-conditions:
+                PreemptMsk: 'No'
+                IntLvlMsk: 'No'
+            - pre-conditions:
+                Preempt: 'Yes'
+                IntLvlMsk: 'No'
+            - pre-conditions:
+                PreemptMsk: 'No'
+                IntLvl: Zero
+            - pre-conditions:
+                Preempt: 'Yes'
+                IntLvl: Zero
+      then: 'Yes'
+    - else: 'No'
+    PMVar:
+    - if:
+      - pre-conditions:
+          Preempt: 'No'
+          PreemptMsk: 'Yes'
+      - pre-conditions:
+          IntLvl: Positive
+          IntLvlMsk: 'Yes'
+      then: Maybe
+    - else: Set
+    Mode:
+    - if:
+      - pre-conditions:
+          Preempt: 'No'
+          PreemptMsk: 'Yes'
+      - pre-conditions:
+          IntLvl: Positive
+          IntLvlMsk: 'Yes'
+      then: Maybe
+    - else: Set
+  pre-conditions:
+    PreemptCur: all
+    TimesliceCur: all
+    ASRCur: all
+    IntLvlCur: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+    PreemptMsk: all
+    TimesliceMsk: all
+    ASRMsk: all
+    IntLvlMsk: all
+    PrevMode:
+    - Valid
+type: requirement

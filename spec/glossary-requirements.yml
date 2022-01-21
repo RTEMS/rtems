@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: group
+links:
+- role: requirement-refinement
+  uid: /req/root
+name: Requirements
+text: |
+  The system shall have a glossary for terms used in requirements and specification.
+type: glossary

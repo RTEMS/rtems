@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: OMIP
+text: |
+  This term is an acronym for O(m) Independence-Preserving Protocol.  OMIP is a
+  generalization of the ${priorityinheritance:/term} locking protocol to
+  clustered scheduling.  The ``m`` denotes the number of processors in the
+  system.
+type: glossary

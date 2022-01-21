@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite is intended test cases related to the use of
+  timecouters.  The ${/glossary/clock-driver:/term} is enabled.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+
+  #include "ts-default.h"
+test-description: null
+test-includes: []
+test-local-includes: []
+test-suite-name: ValidationTimecounter1
+test-target: testsuites/validation/ts-validation-timecounter-1.c
+type: test-suite

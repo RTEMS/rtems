@@ -1,0 +1,100 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sets the home scheduler for the task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../type/if/id:/name} ${.:/params[1]/name}
+    - ${../../type/if/priority:/name} ${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive sets the ${/glossary/scheduler-home:/term} to the scheduler
+  specified by ${.:/params[1]/name} for the task specified by
+  ${.:/params[0]/name}.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/priority-may-preempt
+name: rtems_task_set_scheduler
+notes: null
+params:
+- description: |
+    is the task identifier.  The constant ${self-define:/name} may be used to
+    specify the calling task.
+  dir: null
+  name: task_id
+- description: |
+    is the scheduler identifier of the new ${/glossary/scheduler-home:/term} for
+    the task specified by ${.:/params[0]/name}.
+  dir: null
+  name: scheduler_id
+- description: |
+    is the new real priority for the task with respect to the scheduler
+    specified by ${.:/params[1]/name}.
+  dir: null
+  name: priority
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no scheduler associated with the identifier specified by
+      ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The ${/glossary/priority-task:/term} specified by ${.:/params[2]/name}
+      was invalid with respect to the scheduler specified by
+      ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} was enqueued on a
+      ${/glossary/waitqueue:/term}.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} had a
+      ${/glossary/priority-current:/term} which consisted of more than the
+      ${/glossary/priority-real:/term}.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} had a
+      ${/glossary/scheduler-helping:/term}.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} was pinned.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The scheduler specified by ${.:/params[1]/name} owned no processor.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The scheduler specified by ${.:/params[1]/name} did not support the
+      affinity set of the task specified by ${.:/params[0]/name}.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The task resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
+type: interface

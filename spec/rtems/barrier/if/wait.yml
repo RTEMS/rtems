@@ -1,0 +1,71 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Waits at the barrier.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../type/if/interval:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive waits at the barrier specified by ${.:/params[0]/name}.  The
+  ${.:/params[1]/name} parameter defines how long the calling task is willing
+  to wait.  Use ${../../type/if/no-timeout:/name} to wait potentially forever,
+  otherwise set a timeout interval in clock ticks.
+
+  Conceptually, the calling task should always be thought of as blocking when
+  it makes this call and being unblocked when the barrier is released.  If the
+  barrier is configured for manual release, this rule of thumb will always be
+  valid.  If the barrier is configured for automatic release, all callers will
+  block except for the one which trips the automatic release condition.
+enabled-by: true
+index-entries:
+- wait at a barrier
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-tick
+name: rtems_barrier_wait
+notes: |
+  For automatic release barriers, the maximum count of waiting tasks is defined
+  during barrier creation, see ${create:/name}.
+params:
+- description: |
+    is the barrier identifier.
+  dir: null
+  name: id
+- description: |
+    is the timeout in clock ticks.  Use ${../../type/if/no-timeout:/name} to
+    wait potentially forever.
+  dir: null
+  name: timeout
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no barrier associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The timeout happened while the calling task was waiting at the barrier.
+    value: ${../../status/if/timeout:/name}
+  - description: |
+      The barrier was deleted while the calling task was waiting at the
+      barrier.
+    value: ${../../status/if/object-was-deleted:/name}
+type: interface

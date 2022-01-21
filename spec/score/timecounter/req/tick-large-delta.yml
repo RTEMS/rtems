@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: group
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the oldest timehand was not updated for one second or more, while the
+  time interval from the time point of the timehand to the time point of the
+  update is measureable with the timecounter of the timehand, the time point of
+  the timehand shall be incremented by the time interval.
+type: requirement

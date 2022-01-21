@@ -1,0 +1,72 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Allocates a memory area from cache coherent memory.
+copyrights:
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/size_t:/name} ${.:/params[0]/name}
+    - ${/c/if/uintptr_t:/name} ${.:/params[1]/name}
+    - ${/c/if/uintptr_t:/name} ${.:/params[2]/name}
+    return: void *
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup-hidden
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_cache_coherent_allocate
+notes: |
+  A size value of zero will return a unique address which may be freed with
+  ${coherent-free:/name}.
+
+  The memory allocated by the directive may be released with a call to
+  ${coherent-free:/name}.
+
+  By default the C Program Heap allocator is used.  In case special memory
+  areas must be used, then the ${/glossary/bsp:/term} or the application should
+  add cache coherent memory areas for the allocator via
+  ${coherent-add-area:/name}.
+params:
+- description: |
+    is the requested size in bytes of the memory area to allocate.
+  dir: null
+  name: size
+- description: |
+    is the requested alignment in bytes of the memory area to allocate.  If the
+    alignment parameter is not equal to zero, the allocated memory area will
+    begin at an address aligned by this value.
+  dir: null
+  name: alignment
+- description: |
+    is the requested boundary in bytes of the memory area to allocate.  If the
+    boundary parameter is not equal to zero, the allocated memory area will
+    comply with a boundary constraint.  The boundary value specifies the set of
+    addresses which are aligned by the boundary value.  The interior of the
+    allocated memory area will not contain an element of this set.  The begin
+    or end address of the area may be a member of the set.
+  dir: null
+  name: boundary
+return:
+  return: |
+    Returns the begin address of the allocated memory.
+  return-values:
+  - description: |
+      There is not enough memory available to satisfy the allocation request.
+    value: ${/c/if/null:/name}
+type: interface

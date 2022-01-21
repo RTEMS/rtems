@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/bsp-prerequisite-drivers
+method: by-inspection
+references:
+- identifier: cpukit/include/rtems/confdefs/iodrivers.h
+  hash: yz8gesoF_me3cP7VhsO_BITvVnexGuPGTh1dEs87eKs=
+  type: file
+text: |
+  Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
+  the ${../req/bsp-prerequisite-drivers} requirement is implemented as
+  specified.
+type: validation

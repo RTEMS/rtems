@@ -1,0 +1,86 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Releases the semaphore.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive releases the semaphore specified by ${.:/params[0]/name}.  If
+  the semaphore's wait queue is not empty, then
+
+  * the first task on the wait queue is removed and unblocked, the semaphore's
+    count is not changed, otherwise
+
+  * the semaphore's count is incremented by one for counting semaphores and set
+    to one for binary and simple binary semaphores.
+enabled-by: true
+index-entries:
+- release a semaphore
+- unlock a semaphore
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: ../constraint/release-isr
+- role: constraint
+  uid: ../constraint/release-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: /constraint/directive-remote
+name: rtems_semaphore_release
+notes: |
+  The calling task may be preempted if it causes a higher priority task to be
+  made ready for execution.
+
+  The outermost release of a local, binary semaphore using the priority
+  inheritance, priority ceiling, or MrsP locking protocol may result
+  in the calling task having its priority lowered.  This will occur if the
+  highest priority of the calling task was available due to the ownership of
+  the released semaphore.  If a task was on the semaphore's wait queue, then
+  the priority associated with the semaphore will be transferred to the new
+  owner.
+
+  Releasing a global semaphore which does not reside on the local node will
+  generate a request telling the remote node to release the semaphore.
+
+  If the task to be unblocked resides on a different node from the semaphore,
+  then the semaphore allocation is forwarded to the appropriate node, the
+  waiting task is unblocked, and the proxy used to represent the task is
+  reclaimed.
+params:
+- description: |
+    is the semaphore identifier.
+  dir: null
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no semaphore associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The calling task was not the owner of the semaphore.
+    value: ${../../status/if/not-owner-of-resource:/name}
+  - description: |
+      The semaphore's count already had the maximum value of
+      ${/c/if/uint32_max:/name}.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

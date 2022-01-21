@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links:
+- role: interface-function
+  uid: ../if/get-processor-macro
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The return value of the ${../if/get-processor-macro:/name} directive shall be
+  the index of a processor which executed at least one instruction of the
+  directive call.
+type: requirement

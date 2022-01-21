@@ -1,0 +1,64 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure is used to return information to the application about the
+  objects configured for a specific API/Class combination.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member contains the minimum valid object identifier for this class.
+    definition: ${../../type/if/id:/name} ${.:name}
+    description: null
+    kind: member
+    name: minimum_id
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum valid object identifier for this class.
+    definition: ${../../type/if/id:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_id
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of active objects configured
+      for this class.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum
+  variants: []
+- default:
+    brief: |
+      This member is true, if this class is configured for automatic object
+      extension, otherwise it is false.
+    definition: ${/c/if/bool:/name} ${.:name}
+    description: null
+    kind: member
+    name: auto_extend
+  variants: []
+- default:
+    brief: |
+      This member contains the number of currently inactive objects of this
+      class.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: unallocated
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_object_api_class_information
+notes: null
+type: interface

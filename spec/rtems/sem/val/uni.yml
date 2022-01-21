@@ -1,0 +1,117 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create a worker thread and two MrsP mutexes.  Obtain the Mrsp mutexes and
+    check that a task yield works (owner is not sticky).  We need two mutexes
+    since the uniprocessor schedulers do not increment the stick level in the
+    scheduler unblock operation.
+  action-code: |
+    rtems_status_code   sc;
+    rtems_id            worker_id;
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', '1' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &ctx->mutex_id
+    );
+    T_rsc_success( sc );
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', '2' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &ctx->mutex_2_id
+    );
+    T_rsc_success( sc );
+
+    ctx->counter = 0;
+
+    worker_id = CreateTask( "WORK", PRIO_NORMAL );
+    StartTask( worker_id, ObtainReleaseMrsPTask, ctx );
+  checks:
+  - brief: |
+      Yield and let the worker obtain the MrsP mutexes.
+    code: |
+      Yield();
+      T_eq_u32( ctx->counter, 1 );
+    links:
+    - role: validation
+      uid: ../req/mrsp-uniprocessor-scheduler
+  - brief: |
+      Yield and let the worker release the MrsP mutexes.
+    code: |
+      Yield();
+      T_eq_u32( ctx->counter, 2 );
+    links: []
+  - brief: |
+      Clean up all used resources.
+    code: |
+      DeleteTask( worker_id );
+      DeleteMutex( ctx->mutex_2_id );
+      DeleteMutex( ctx->mutex_id );
+    links: []
+  links: []
+test-brief: |
+  Tests uniprocessor-specific semaphore behaviour.
+test-context:
+- brief: |
+    This member contains the mutex identifier.
+  description: null
+  member: |
+    rtems_id mutex_id
+- brief: |
+    This member contains the second mutex identifier.
+  description: null
+  member: |
+    rtems_id mutex_2_id
+- brief: |
+    This member contains a progress counter.
+  description: null
+  member: |
+    uint32_t counter
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- tx-support.h
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void ObtainReleaseMrsPTask( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    ObtainMutex( ctx->mutex_id );
+    ObtainMutex( ctx->mutex_2_id );
+    ctx->counter = 1;
+    Yield();
+    ReleaseMutex( ctx->mutex_2_id );
+    ReleaseMutex( ctx->mutex_id );
+    ctx->counter = 2;
+    (void) ReceiveAnyEvents();
+  }
+test-target: testsuites/validation/tc-sem-uni.c
+test-teardown:
+  brief: null
+  code: |
+    RestoreRunnerPriority();
+  description: null
+type: test-case

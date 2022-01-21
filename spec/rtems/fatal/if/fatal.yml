@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Invokes the fatal error handler.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: ${../../basedefs/if/no-return:/name}
+    body: |
+      ${/score/interr/if/terminate:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} );
+    params:
+    - ${../../userext/if/fatal-source:/name} ${.:/params[0]/name}
+    - ${../../userext/if/fatal-code:/name} ${.:/params[1]/name}
+    return: void
+  variants: []
+description: |
+  This directive processes fatal errors.  The fatal source is set to the value
+  of the ${.:/params[0]/name} parameter.  The fatal code is set to the value of
+  the ${.:/params[1]/name} parameter.
+enabled-by: true
+index-entries:
+- announce fatal error
+- fatal error, announce
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-return
+- role: constraint
+  uid: /constraint/extensions-fatal
+- role: constraint
+  uid: /constraint/no-atexit
+- role: constraint
+  uid: /constraint/terminate
+name: rtems_fatal
+notes: null
+params:
+- description: |
+    is the fatal source.
+  dir: null
+  name: fatal_source
+- description: |
+    is the fatal code.
+  dir: null
+  name: fatal_code
+return: null
+type: interface

@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  If the ${disable-bsp-settings:/name} configuration option is not defined and
+  ${/bsp/if/acfg-interrupt-stack-size:/name} is provided by the
+  ${/glossary/bsp:/term}, then the default value is defined by
+  ${/bsp/if/acfg-interrupt-stack-size:/name}, otherwise the default value is
+  ${/score/cpu/if/stack-minimum-size:/name}.
+description: |
+  The value of this configuration option defines the size of an interrupt stack
+  in bytes.
+enabled-by: true
+index-entries:
+- interrupt stack size
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/min-bsp-app
+- role: constraint
+  uid: ../constraint/valid-isr-stack-area
+- role: constraint
+  uid: ../constraint/valid-isr-stack-alignment
+name: CONFIGURE_INTERRUPT_STACK_SIZE
+notes: |
+  There is one interrupt stack available for each configured processor
+  (${max-processors:/name}).  The interrupt stack areas are
+  statically allocated in a special linker section (``.rtemsstack.interrupt``).
+  The placement of this linker section is BSP-specific.
+
+  Some BSPs use the interrupt stack as the initialization stack which is used
+  to perform the sequential system initialization before the multithreading
+  is started.
+
+  The interrupt stacks are covered by the stack checker, see
+  ${stack-checker-enabled:/name}.  However, using a too small interrupt stack
+  size may still result in undefined behaviour.
+
+  In releases before RTEMS 5.1 the default value was
+  ${min-task-stack-size:/name} instead of
+  ${/score/cpu/if/stack-minimum-size:/name}.
+type: interface

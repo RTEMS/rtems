@@ -1,0 +1,431 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBIRQAMP
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: irqamp-header
+- name: ITSTMP
+  role: register-block-include
+  uid: irqamp-timestamp
+definition:
+- default:
+    count: 1
+    name: ILEVEL
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: IPEND
+  offset: 0x4
+  variants: []
+- default:
+    count: 1
+    name: IFORCE0
+  offset: 0x8
+  variants: []
+- default:
+    count: 1
+    name: ICLEAR
+  offset: 0xc
+  variants: []
+- default:
+    count: 1
+    name: MPSTAT
+  offset: 0x10
+  variants: []
+- default:
+    count: 1
+    name: BRDCST
+  offset: 0x14
+  variants: []
+- default:
+    count: 1
+    name: ERRSTAT
+  offset: 0x18
+  variants: []
+- default:
+    count: 1
+    name: WDOGCTRL
+  offset: 0x1c
+  variants: []
+- default:
+    count: 1
+    name: ASMPCTRL
+  offset: 0x20
+  variants: []
+- default:
+    count: 2
+    name: ICSELR
+  offset: 0x24
+  variants: []
+- default:
+    count: 16
+    name: PIMASK
+  offset: 0x40
+  variants: []
+- default:
+    count: 16
+    name: PIFORCE
+  offset: 0x80
+  variants: []
+- default:
+    count: 16
+    name: PEXTACK
+  offset: 0xc0
+  variants: []
+- default:
+    count: 16
+    name: ITSTMP
+  offset: 0x100
+  variants: []
+- default:
+    count: 16
+    name: BADDR
+  offset: 0x200
+  variants: []
+- default:
+    count: 16
+    name: IRQMAP
+  offset: 0x300
+  variants: []
+register-prefix: null
+register-block-group: IRQ(A)MP
+register-block-size: 1024
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IL_15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Interrupt level register
+  description: null
+  name: ILEVEL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EIP_31_16'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IP_15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Interrupt pending register
+  description: null
+  name: IPEND
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IF_15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Interrupt force register for processor 0
+  description: null
+  name: IFORCE0
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'EIC_31_16'
+      start: 16
+      width: 16
+    - access: [w]
+      brief: null
+      description: null
+      name: 'IC_15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Interrupt clear register
+  description: null
+  name: ICLEAR
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NCPU'
+      start: 28
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'BA'
+      start: 27
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'ER'
+      start: 26
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EIRQ'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'STATUS'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    Multiprocessor status register
+  description: null
+  name: MPSTAT
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'BM15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Broadcast register
+  description: null
+  name: BRDCST
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ERRMODE_3_0'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    Error Mode Status Register
+  description: null
+  name: ERRSTAT
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NWDOG'
+      start: 27
+      width: 5
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WDOGIRQ'
+      start: 16
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'WDOGMSK'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    Watchdog control register
+  description: null
+  name: WDOGCTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NCTRL'
+      start: 28
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ICF'
+      start: 1
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'L'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Asymmetric multiprocessing control register
+  description: null
+  name: ASMPCTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ICSEL0'
+      start: 28
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ICSEL1'
+      start: 24
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ICSEL2'
+      start: 20
+      width: 4
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'ICSEL3'
+      start: 16
+      width: 4
+    variants: []
+  brief: |
+    Interrupt controller select register
+  description: null
+  name: ICSELR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EIM_31_16'
+      start: 16
+      width: 16
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IM15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Processor n interrupt mask register
+  description: null
+  name: PIMASK
+  width: 32
+- bits:
+  - default:
+    - access: [r, w1c]
+      brief: null
+      description: null
+      name: 'FC_15_1'
+      start: 17
+      width: 15
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IF15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Processor n interrupt force register
+  description: null
+  name: PIFORCE
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EID_4_0'
+      start: 0
+      width: 5
+    variants: []
+  brief: |
+    Processor n extended interrupt acknowledge register
+  description: null
+  name: PEXTACK
+  width: 32
+- bits:
+  - default:
+    - access: [w]
+      brief: null
+      description: null
+      name: 'BOOTADDR_31_3'
+      start: 3
+      width: 29
+    - access: [w]
+      brief: null
+      description: null
+      name: 'AS'
+      start: 0
+      width: 1
+    variants: []
+  brief: |
+    Processor n Boot Address register
+  description: null
+  name: BADDR
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_4_N_0'
+      start: 24
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_4_N_1'
+      start: 16
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_4_N_2'
+      start: 8
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IRQMAP_4_N_3'
+      start: 0
+      width: 8
+    variants: []
+  brief: |
+    Interrupt map register n
+  description: null
+  name: IRQMAP
+  width: 32
+name: irqamp
+notes: null
+type: interface

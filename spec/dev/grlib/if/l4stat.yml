@@ -1,0 +1,193 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RTEMSDeviceGRLIBL4STAT
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-ingroup
+  uid: group
+- role: interface-placement
+  uid: l4stat-header
+definition:
+- default:
+    count: 1
+    name: CVAL
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: CVAL
+  offset: 0x3c
+  variants: []
+- default:
+    count: 1
+    name: CCTRL
+  offset: 0x80
+  variants: []
+- default:
+    count: 1
+    name: CCTRL
+  offset: 0xcc
+  variants: []
+- default:
+    count: 1
+    name: CSVAL
+  offset: 0x100
+  variants: []
+- default:
+    count: 1
+    name: CSVAL
+  offset: 0x13c
+  variants: []
+- default:
+    count: 1
+    name: TSTAMP
+  offset: 0x180
+  variants: []
+register-prefix: null
+register-block-group: L4STAT
+register-block-size: 388
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CVAL'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Counter 0-15 value register
+  description: null
+  name: CVAL
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NCPU'
+      start: 28
+      width: 4
+    - access: [r]
+      brief: null
+      description: null
+      name: 'NCNT'
+      start: 23
+      width: 5
+    - access: [r]
+      brief: null
+      description: null
+      name: 'MC'
+      start: 22
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'IA'
+      start: 21
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'DS'
+      start: 20
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'EE'
+      start: 19
+      width: 1
+    - access: [r]
+      brief: null
+      description: null
+      name: 'AE'
+      start: 18
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EL'
+      start: 17
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CD'
+      start: 16
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'SU'
+      start: 14
+      width: 2
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CL'
+      start: 13
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EN'
+      start: 12
+      width: 1
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'EVENT_ID'
+      start: 4
+      width: 8
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CPU_AHBM'
+      start: 0
+      width: 4
+    variants: []
+  brief: |
+    Counter 0-15 control register
+  description: null
+  name: CCTRL
+  width: 32
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'CSVAL'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Counter 0-15 max/latch register
+  description: null
+  name: CSVAL
+  width: 32
+- bits:
+  - default:
+    - access: [r]
+      brief: null
+      description: null
+      name: 'TSTAMP'
+      start: 0
+      width: 32
+    variants: []
+  brief: |
+    Timestamp register
+  description: null
+  name: TSTAMP
+  width: 32
+name: l4stat
+notes: null
+type: interface

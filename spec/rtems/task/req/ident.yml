@@ -1,0 +1,159 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/ident
+- role: interface-function
+  uid: ../../object/if/who-am-i
+post-conditions:
+- name: Status
+  states:
+  - name: OkAndWhoAmI
+    test-code: |
+      T_rsc( ctx->status, RTEMS_SUCCESSFUL );
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_eq_u32( ctx->id_value, rtems_task_self() );
+    text: |
+      The return status of ${../if/ident:/name} shall be
+      ${../../status/if/successful:/name}.  The value of the object identifier
+      referenced by the ${../if/ident:/params[0]/name} parameter shall be the
+      identifier of the executing thread.
+  - name: Skip
+    test-code: |
+      /* Checks performed by ${../../req/ident:/test-run}() */
+    text: |
+      There is no status to validate.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: WhoAmI
+    test-code: |
+      ctx->id_value = 0xffffffff;
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/ident:/params[0]/name} parameter is equal to
+      ${../../object/if/who-am-i:/name},
+      while ${../if/ident:/params[2]/name} parameter is not equal to
+      ${/c/if/null:/name}.
+  - name: NotWhoAmI
+    test-code: |
+      ctx->id = NULL;
+      /* Preparation performed by ${../../req/ident:/test-run}() */
+    text: |
+      While the ${../if/ident:/params[0]/name} is not equal to
+      ${../../object/if/who-am-i:/name} or ${../if/ident:/params[2]/name}
+      parameter is equal to ${/c/if/null:/name},
+      the behaviour of ${../if/ident:/name} shall be specified by
+      ${../../req/ident}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->id != NULL ) {
+    ctx->status = rtems_task_ident( RTEMS_SELF, 0xdeadbeef, ctx->id );
+  } else {
+    ${../../req/ident:/test-run}(
+      ctx->id_local_object,
+      ClassicTaskIdentAction
+    );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_id *id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: rtems_id id_local_object
+test-context-support: null
+test-description: null
+test-header: null
+test-includes: []
+test-local-includes:
+- tr-object-ident.h
+- ts-config.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_task_construct(
+      &ClassicTaskIdentConfig,
+      &ctx->id_local_object
+    );
+    T_assert_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  static rtems_status_code ClassicTaskIdentAction(
+    rtems_name name,
+    uint32_t   node,
+    rtems_id  *id
+  )
+  {
+    return rtems_task_ident( name, node, id );
+  }
+
+  #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+
+  #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 64, RTEMS_TASK_STORAGE_ALIGNMENT )
+
+  RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
+  static char ClassicTaskIdentStorage[
+    RTEMS_TASK_STORAGE_SIZE(
+      MAX_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
+      TASK_ATTRIBUTES
+    )
+  ];
+
+  static const rtems_task_config ClassicTaskIdentConfig = {
+    .name = ClassicObjectIdentName,
+    .initial_priority = 1,
+    .storage_area = ClassicTaskIdentStorage,
+    .storage_size = sizeof( ClassicTaskIdentStorage ),
+    .maximum_thread_local_storage_size = MAX_TLS_SIZE,
+    .initial_modes = RTEMS_DEFAULT_MODES,
+    .attributes = TASK_ATTRIBUTES
+  };
+test-target: testsuites/validation/tc-task-ident.c
+test-teardown:
+  brief: null
+  code: |
+    if ( ctx->id_local_object != 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_task_delete( ctx->id_local_object );
+      T_rsc_success( sc );
+    }
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: OkAndWhoAmI
+  pre-conditions:
+    Name:
+    - WhoAmI
+- enabled-by: true
+  post-conditions:
+    Status: Skip
+  pre-conditions:
+    Name:
+    - NotWhoAmI
+type: requirement

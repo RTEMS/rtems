@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This status code indicates the directive or requested portion of the
+  directive is not implemented.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: '24'
+  variants: []
+description: |
+  This is a hint that you have stumbled across an opportunity to submit code to
+  the RTEMS Project.
+enabled-by: true
+index-entries: []
+interface-type: enumerator
+links: []
+name: RTEMS_NOT_IMPLEMENTED
+notes: null
+type: interface

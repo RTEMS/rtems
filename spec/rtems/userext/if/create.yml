@@ -1,0 +1,97 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Creates an extension set.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - const ${table:/name} *${.:/params[1]/name}
+    - ${../../type/if/id:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive creates an extension set which resides on the local node.  The
+  extension set has the user-defined object name specified in
+  ${.:/params[0]/name}.  The assigned object identifier is returned in
+  ${.:/params[2]/name}.  This identifier is used to access the extension set
+  with other extension set related directives.
+
+  The extension set is initialized using the extension table specified in
+  ${.:/params[1]/name}.
+enabled-by: true
+index-entries:
+- create an extension set
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../constraint/max
+name: rtems_extension_create
+notes: |
+  The user-provided extension table is not used after the return of the
+  directive.
+
+  Each extension of the extension table is optional and may be
+  ${/c/if/null:/name}.  All extensions except the task switch extension of the
+  extension table are atomically and immediately installed.  A task switch
+  extension is separately installed after the other extensions.  The extensions
+  of the extension table are invoked upon the next system event supporting an
+  extension.
+
+  An alternative to dynamically created extension sets are initial extensions,
+  see ${/acfg/if/initial-extensions:/name}.  Initial extensions are recommended
+  for extension sets which provide a fatal error extension.
+
+  For control and maintenance of the extension set, RTEMS allocates a
+  ${/glossary/escb:/term} from the local ESCB free pool and initializes it.
+params:
+- description: |
+    is the object name of the extension set.
+  dir: null
+  name: name
+- description: |
+    is the table with the extensions to be used by the extension set.
+  dir: null
+  name: extension_table
+- description: |
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the created extension set will be
+    stored in this object.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no inactive object available to create an extension set.  The
+      number of extension sets available to the application is configured
+      through the ${/acfg/if/max-user-extensions:/name} application
+      configuration option.
+    value: ${../../status/if/too-many:/name}
+type: interface

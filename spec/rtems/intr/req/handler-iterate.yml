@@ -1,0 +1,359 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/handler-iterate
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/handler-iterate:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/handler-iterate:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/handler-iterate:/name} shall be
+      ${../../status/if/incorrect-state:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/handler-iterate:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: CalledFromISR
+    test-code: |
+      T_rsc( ctx->status, RTEMS_CALLED_FROM_ISR );
+    text: |
+      The return status of ${../if/handler-iterate:/name} shall be
+      ${../../status/if/called-from-isr:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Visit
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->visited_entries, 1 );
+    text: |
+      For each interrupt entry installed at the interrupt vector specified by
+      ${../if/handler-iterate:/params[0]/name} the visitor routine specified by
+      ${../if/handler-iterate:/params[1]/name} shall be called with the
+      argument specified by ${../if/handler-iterate:/params[2]/name}, the entry
+      information, the entry install options, the entry handler routine, and
+      the entry handler argument.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->visited_entries, 0 );
+    text: |
+      The visitor routine specified by ${../if/handler-iterate:/params[1]/name}
+      shall not be called.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Vector
+  states:
+  - name: Valid
+    test-code: |
+      ctx->vector = ctx->test_vector;
+    text: |
+      While the ${../if/handler-iterate:/params[0]/name} parameter is
+      associated with an interrupt vector.
+  - name: Invalid
+    test-code: |
+      ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
+    text: |
+      While the ${../if/handler-iterate:/params[0]/name} parameter is
+      not associated with an interrupt vector.
+  test-epilogue: null
+  test-prologue: null
+- name: Routine
+  states:
+  - name: Valid
+    test-code: |
+      ctx->routine = VisitorRoutine;
+    text: |
+      While the visitor routine specified by the
+      ${../if/handler-iterate:/params[1]/name} parameter is valid.
+  - name: 'Null'
+    test-code: |
+      ctx->routine = NULL;
+    text: |
+      While the visitor routine specified by the
+      ${../if/handler-iterate:/params[1]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Init
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->initialized = true;
+    text: |
+      While the service is initialized.
+  - name: 'No'
+    test-code: |
+      ctx->initialized = false;
+    text: |
+      While the service is not initialized.
+  test-epilogue: null
+  test-prologue: null
+- name: ISR
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->isr = true;
+    text: |
+      While ${../if/handler-iterate:/name} is called from within interrupt
+      context.
+  - name: 'No'
+    test-code: |
+      ctx->isr = false;
+    text: |
+      While ${../if/handler-iterate:/name} is not called from within interrupt
+      context.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->isr ) {
+    CallWithinISR( Action, ctx );
+  } else {
+    Action( ctx );
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then the service was initialized during setup.
+  description: null
+  member: |
+    bool initialized_during_setup
+- brief: |
+    This member provides the vector number of a testable interrupt vector.
+  description: null
+  member: |
+    rtems_vector_number test_vector
+- brief: |
+    If this member is true, then the service shall be initialized.
+  description: null
+  member: |
+    bool initialized
+- brief: |
+    If this member is true, then ${../if/handler-iterate:/name} shall be called
+    from within interrupt context.
+  description: null
+  member: |
+    bool isr
+- brief: |
+    This member provides the count of visited entries.
+  description: null
+  member: |
+    uint32_t visited_entries
+- brief: |
+    This member provides an ${../if/entry:/name} object.
+  description: null
+  member: |
+    rtems_interrupt_entry entry
+- brief: |
+    This member specifies if the ${../if/handler-iterate:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_vector_number vector
+- brief: |
+    This member specifies if the ${../if/handler-iterate:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_interrupt_per_handler_routine routine
+- brief: |
+    This member contains the return value of the ${../if/handler-iterate:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/irq-extension.h
+- bsp/irq-generic.h
+test-local-includes:
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->initialized_during_setup = bsp_interrupt_is_initialized();
+    ctx->test_vector = GetTestableInterruptVector( NULL );
+    rtems_interrupt_entry_initialize(
+      &ctx->entry,
+      EntryRoutine,
+      &entry_arg,
+      entry_info
+    );
+    sc = rtems_interrupt_entry_install(
+      ctx->test_vector,
+      RTEMS_INTERRUPT_UNIQUE,
+      &ctx->entry
+    );
+    T_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static char entry_arg;
+
+  static char visitor_arg;
+
+  static const char entry_info[] = "Entry";
+
+  static void EntryRoutine( void *arg )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    (void) arg;
+    ctx = T_fixture_context();
+    sc = rtems_interrupt_vector_disable( ctx->test_vector );
+    T_rsc_success( sc );
+
+    T_eq_ptr( arg, &entry_arg );
+  }
+
+  static void VisitorRoutine(
+    void                   *arg,
+    const char             *info,
+    rtems_option            options,
+    rtems_interrupt_handler handler_routine,
+    void                   *handler_arg
+  )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->visited_entries;
+    T_eq_ptr( arg, &visitor_arg );
+    T_eq_ptr( info, entry_info );
+    T_eq_u32( options, RTEMS_INTERRUPT_UNIQUE );
+    T_eq_ptr( handler_routine, EntryRoutine );
+    T_eq_ptr( handler_arg, &entry_arg );
+  }
+
+  static void Action( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    ctx->visited_entries = 0;
+
+    bsp_interrupt_set_handler_unique(
+      BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+      ctx->initialized
+    );
+
+    ctx->status = rtems_interrupt_handler_iterate(
+      ctx->vector,
+      ctx->routine,
+      &visitor_arg
+    );
+
+    bsp_interrupt_set_handler_unique(
+      BSP_INTERRUPT_HANDLER_TABLE_SIZE,
+      ctx->initialized_during_setup
+    );
+  }
+test-target: testsuites/validation/tc-intr-handler-iterate.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Visit: 'Yes'
+  pre-conditions:
+    Vector:
+    - Valid
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Visit: Nop
+  pre-conditions:
+    Vector: all
+    Routine:
+    - Valid
+    Init:
+    - 'No'
+    ISR: all
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Visit: N/A
+  pre-conditions:
+    Vector: all
+    Routine:
+    - 'Null'
+    Init:
+    - 'No'
+    ISR: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Visit: N/A
+  pre-conditions:
+    Vector: all
+    Routine:
+    - 'Null'
+    Init:
+    - 'Yes'
+    ISR: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Visit: Nop
+  pre-conditions:
+    Vector:
+    - Invalid
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR: all
+- enabled-by: true
+  post-conditions:
+    Status: CalledFromISR
+    Visit: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    Routine:
+    - Valid
+    Init:
+    - 'Yes'
+    ISR:
+    - 'Yes'
+type: requirement

@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then an IMFS with a reduced
+  feature set will be the base filesystem (also known as root filesystem).
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
+notes: |
+  In case this configuration option is defined, then the following
+  configuration options will be defined as well
+
+  * ${imfs-disable-chmod:/name},
+
+  * ${imfs-disable-chown:/name},
+
+  * ${imfs-disable-link:/name},
+
+  * ${imfs-disable-readlink:/name},
+
+  * ${imfs-disable-rename:/name},
+
+  * ${imfs-disable-symlink:/name},
+
+  * ${imfs-disable-utime:/name}, and
+
+  * ${imfs-disable-unmount:/name}.
+type: interface

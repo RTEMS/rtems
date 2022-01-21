@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: scheduler
+text: |
+  A scheduler or scheduling algorithm allocates processors to a subset of
+  its set of ready tasks.  So it manages access to the processor resource.
+  Various algorithms exist to choose the tasks allowed to use a processor
+  out of the set of ready tasks.  One method is to assign each task a
+  priority number and assign the tasks with the lowest priority number to
+  one processor of the set of processors owned by a scheduler instance.
+
+  A scheduler is either an ${scheduler-eligible:/term} or a
+  ${scheduler-ineligible:/term} for a task.  An ${scheduler-eligible:/term} is
+  either the ${scheduler-home:/term} or a ${scheduler-helping:/term} for a
+  task.
+type: glossary

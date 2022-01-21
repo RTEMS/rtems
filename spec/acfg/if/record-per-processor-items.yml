@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: 0
+description: |
+  The value of this configuration option defines the event record item count
+  per processor.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-eventrecord
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
+  uid: ../constraint/min-16
+- role: constraint
+  uid: ../constraint/max-size
+- role: constraint
+  uid: ../constraint/power-of-two
+- role: constraint
+  uid: ../constraint/memory-size
+name: CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
+notes: |
+  The event record buffers are statically allocated for each configured
+  processor (${max-processors:/name}).  If the value of this
+  configuration option is zero, then nothing is allocated.
+type: interface

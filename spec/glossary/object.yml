@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: object
+text: |
+  In this document, this term is used to refer collectively to tasks,
+  timers, message queues, partitions, regions, semaphores, ports, and rate
+  monotonic periods.  All RTEMS objects have IDs and user-assigned names.
+type: glossary

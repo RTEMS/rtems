@@ -1,0 +1,76 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure contains the device driver entries.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member is the device driver initialization entry.
+    definition: ${device-driver-entry:/name} ${.:name}
+    description: |
+      This entry is called by ${initialize:/name}.
+    kind: member
+    name: initialization_entry
+  variants: []
+- default:
+    brief: |
+      This member is the device driver open entry.
+    definition: ${device-driver-entry:/name} ${.:name}
+    description: |
+      This entry is called by ${open:/name}.
+    kind: member
+    name: open_entry
+  variants: []
+- default:
+    brief: |
+      This member is the device driver close entry.
+    definition: ${device-driver-entry:/name} ${.:name}
+    description: |
+      This entry is called by ${close:/name}.
+    kind: member
+    name: close_entry
+  variants: []
+- default:
+    brief: |
+      This member is the device driver read entry.
+    definition: ${device-driver-entry:/name} ${.:name}
+    description: |
+      This entry is called by ${read:/name}.
+    kind: member
+    name: read_entry
+  variants: []
+- default:
+    brief: |
+      This member is the device driver write entry.
+    definition: ${device-driver-entry:/name} ${.:name}
+    description: |
+      This entry is called by ${write:/name}.
+    kind: member
+    name: write_entry
+  variants: []
+- default:
+    brief: |
+      This member is the device driver control entry.
+    definition: ${device-driver-entry:/name} ${.:name}
+    description: |
+      This entry is called by ${control:/name}.
+    kind: member
+    name: control_entry
+  variants: []
+definition-kind: typedef-only
+description: |
+  This structure is used to register a device driver via
+  ${register-driver:/name}.
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_driver_address_table
+notes: null
+type: interface

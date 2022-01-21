@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: inactive
+text: |
+  A timer in inactive ${../glossary/state:/term} will not
+  ${../glossary/fire:/term} nor invoke its
+  ${../glossary/timerserviceroutine:/term}. To change the
+  ${../glossary/state:/term} the timer must be ${../glossary/scheduled:/term}. A
+  timer enters inactive ${../glossary/state:/term} after
+
+  * being created by a call to ${../if/create:/name}
+  * being canceled by a call to ${../if/cancel:/name}
+  * the ${../glossary/timerserviceroutine:/term} was invoked (the execution may still be ongoing).
+type: glossary

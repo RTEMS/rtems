@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Statically initializes an interrupt entry object.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    { ${.:/params[0]/name},  ${.:/params[1]/name}, ${/c/if/null:/name}, ${.:/params[2]/name} }
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_INTERRUPT_ENTRY_INITIALIZER
+notes: |
+  Alternatively, ${entry-initialize:/name} may be used to dynamically
+  initialize an interrupt entry.
+params:
+- description: |
+    is the interrupt handler routine for the entry.
+  dir: null
+  name: _routine
+- description: |
+    is the interrupt handler argument for the entry.
+  dir: null
+  name: _arg
+- description: |
+    is the descriptive information for the entry.
+  dir: null
+  name: _info
+return: null
+type: interface

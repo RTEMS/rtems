@@ -1,0 +1,365 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of application configuration options.
+  action-code: |
+    rtems_status_code sc;
+    rtems_id          id;
+  checks:
+  - brief: |
+      Check the default value ${/acfg/if/idle-task-body:/name} where the
+      optional BSP-provided default value is enabled.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_idle_task(),
+      #if defined(BSP_IDLE_TASK_BODY)
+        BSP_IDLE_TASK_BODY
+      #else
+        _CPU_Thread_Idle_body
+      #endif
+      );
+    links:
+    - role: validation
+      uid: ../req/idle-task-body
+    - role: validation
+      uid: ../req/disable-bsp-settings
+  - brief: |
+      Check the configured ${/acfg/if/init-task-arguments:/name}.  This
+      validates also the effect of ${/acfg/if/init-task-entrypoint:/name} and
+      ${/acfg/if/rtems-init-tasks-table:/name}.
+    code: |
+      T_eq_ulong( test_runner_argument, TEST_RUNNER_ARGUMENT );
+    links:
+    - role: validation
+      uid: ../req/init-task-arguments
+    - role: validation
+      uid: ../req/init-task-entrypoint
+    - role: validation
+      uid: ../req/rtems-init-tasks-table
+  - brief: |
+      Check the configured ${/acfg/if/init-task-initial-modes:/name}.
+    code: |
+      T_eq_u32( test_runner_initial_modes, TEST_RUNNER_INITIAL_MODES );
+    links:
+    - role: validation
+      uid: ../req/init-task-initial-modes
+  - brief: |
+      Check the configured ${/acfg/if/init-task-name:/name}.
+    code: |
+      sc = rtems_task_ident( TEST_RUNNER_NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, rtems_task_self() );
+    links:
+    - role: validation
+      uid: ../req/init-task-name
+  - brief: |
+      Check the configured ${/acfg/if/init-task-priority:/name}.  A priority of
+      zero can only be set for system tasks.  This validates also
+      ${/acfg/if/init-task-attributes:/name}.
+    code: |
+      T_eq_u32( test_runner_initial_priority, 0 );
+    links:
+    - role: validation
+      uid: ../req/init-task-priority
+    - role: validation
+      uid: ../req/init-task-attributes
+  - brief: |
+      Check that the configured
+      ${/acfg/if/min-tasks-with-user-provided-storage:/name} value reduced the
+      stack space size.
+    code: |
+      T_eq_uptr(
+        _Stack_Space_size,
+        RTEMS_ALIGN_UP( HEAP_BLOCK_HEADER_SIZE, CPU_HEAP_ALIGNMENT )
+      );
+    links:
+    - role: validation
+      uid: ../req/min-tasks-with-user-provided-storage
+  - brief: |
+      Check the configured ${/acfg/if/max-barriers:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_barriers(),
+        TEST_MAXIMUM_BARRIERS
+      );
+    links:
+    - role: validation
+      uid: ../req/max-barriers
+    - role: validation
+      uid: /rtems/config/req/get-maximum-barriers
+  - brief: |
+      Check the configured ${/acfg/if/max-user-extensions:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_extensions(),
+        TEST_MAXIMUM_USER_EXTENSIONS
+      );
+    links:
+    - role: validation
+      uid: ../req/max-user-extensions
+    - role: validation
+      uid: /rtems/config/req/get-maximum-extensions
+  - brief: |
+      Check the configured ${/acfg/if/max-message-queues:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_message_queues(),
+        TEST_MAXIMUM_MESSAGE_QUEUES
+      );
+    links:
+    - role: validation
+      uid: ../req/max-message-queues
+    - role: validation
+      uid: /rtems/config/req/get-maximum-message-queues
+  - brief: |
+      Check the configured ${/acfg/if/max-partitions:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_partitions(),
+        TEST_MAXIMUM_PARTITIONS
+      );
+    links:
+    - role: validation
+      uid: ../req/max-partitions
+    - role: validation
+      uid: /rtems/config/req/get-maximum-partitions
+  - brief: |
+      Check the configured ${/acfg/if/max-periods:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_periods(),
+        TEST_MAXIMUM_PERIODS
+      );
+    links:
+    - role: validation
+      uid: ../req/max-periods
+    - role: validation
+      uid: /rtems/config/req/get-maximum-periods
+  - brief: |
+      Check the default ${/acfg/if/max-ports:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_ports(),
+        0
+      );
+    links:
+    - role: validation
+      uid: /rtems/config/req/get-maximum-ports
+  - brief: |
+      Check the configured ${/acfg/if/max-processors:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_processors(),
+      #if defined(RTEMS_SMP)
+        5
+      #else
+        1
+      #endif
+      );
+    links:
+    - role: validation
+      uid: ../req/max-processors
+    - role: validation
+      uid: /rtems/config/req/get-maximum-processors
+  - brief: |
+      Check the default ${/acfg/if/max-regions:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_regions(),
+        0
+      );
+    links:
+    - role: validation
+      uid: /rtems/config/req/get-maximum-regions
+  - brief: |
+      Check the configured ${/acfg/if/max-semaphores:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_semaphores(),
+        TEST_MAXIMUM_SEMAPHORES
+      );
+    links:
+    - role: validation
+      uid: ../req/max-semaphores
+    - role: validation
+      uid: /rtems/config/req/get-maximum-semaphores
+  - brief: |
+      Check the configured ${/acfg/if/max-tasks:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_tasks(),
+        TEST_MAXIMUM_TASKS
+      );
+    links:
+    - role: validation
+      uid: ../req/max-tasks
+    - role: validation
+      uid: /rtems/config/req/get-maximum-tasks
+  - brief: |
+      Check the configured ${/acfg/if/max-timers:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_timers(),
+        TEST_MAXIMUM_TIMERS
+      );
+    links:
+    - role: validation
+      uid: ../req/max-timers
+    - role: validation
+      uid: /rtems/config/req/get-maximum-timers
+  - brief: |
+      Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
+      microseconds.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_microseconds_per_tick(),
+        TEST_MICROSECONDS_PER_TICK
+      );
+    links:
+    - role: validation
+      uid: ../req/microseconds-per-tick
+    - role: validation
+      uid: /rtems/config/req/get-microseconds-per-tick
+  - brief: |
+      Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
+      milliseconds.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_milliseconds_per_tick(),
+        TEST_MICROSECONDS_PER_TICK / 1000
+      );
+    links:
+    - role: validation
+      uid: ../req/microseconds-per-tick
+    - role: validation
+      uid: /rtems/config/req/get-milliseconds-per-tick
+  - brief: |
+      Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
+      nanoseconds.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_nanoseconds_per_tick(),
+        TEST_MICROSECONDS_PER_TICK * 1000
+      );
+    links:
+    - role: validation
+      uid: ../req/microseconds-per-tick
+    - role: validation
+      uid: /rtems/config/req/get-nanoseconds-per-tick
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-allocator:/name} hook.  Using
+      the test stack allocator validates also
+      ${/acfg/if/init-task-construct-storage-size}, since the
+      test_task_stack_allocate() allocate handler only supports
+      ${/acfg/if/max-tasks:/name} minus one stacks and the validation test for
+      ${/rtems/task/req/create-errors} creates for some pre-condition variants
+      all tasks until ${/rtems/status/if/too-many:/name} is returned.  In
+      addition, test_task_stack_allocate() checks that the allocation size is
+      greater than or equal to TEST_MINIMUM_STACK_SIZE which validates
+      ${/acfg/if/min-task-stack-size:/name}.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_stack_allocate_hook(),
+        test_task_stack_allocate
+      );
+    links:
+    - role: validation
+      uid: ../req/task-stack-allocator
+    - role: validation
+      uid: ../req/init-task-construct-storage-size
+    - role: validation
+      uid: ../req/min-task-stack-size
+    - role: validation
+      uid: /rtems/config/req/get-stack-allocate-hook
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-no-workspace:/name} value.
+    code: |
+      T_true( rtems_configuration_get_stack_allocator_avoids_work_space() );
+    links:
+    - role: validation
+      uid: ../req/task-stack-no-workspace
+    - role: validation
+      uid: /rtems/config/req/get-stack-allocator-avoids-work-space
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-deallocator:/name} hook.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_stack_free_hook(),
+        test_task_stack_deallocate
+      );
+    links:
+    - role: validation
+      uid: ../req/task-stack-deallocator
+    - role: validation
+      uid: /rtems/config/req/get-stack-free-hook
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-allocator-for-idle:/name} hook.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_stack_allocate_for_idle_hook(),
+        test_idle_task_stack_allocate
+      );
+    links:
+    - role: validation
+      uid: ../req/task-stack-allocator-for-idle
+    - role: validation
+      uid: /rtems/config/req/get-stack-allocate-for-idle-hook
+  - brief: |
+      Check the configured ${/acfg/if/idle-task-stack-size:/name} value.
+    code: |
+      T_eq_sz(
+        rtems_configuration_get_idle_task_stack_size(),
+        TEST_IDLE_STACK_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../req/idle-task-stack-size
+    - role: validation
+      uid: /rtems/config/req/get-idle-task-stack-size
+  - brief: |
+      Check the configured ${/acfg/if/interrupt-stack-size:/name} value.
+    code: |
+      T_eq_sz(
+        rtems_configuration_get_interrupt_stack_size(),
+        TEST_INTERRUPT_STACK_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../req/interrupt-stack-size
+    - role: validation
+      uid: /rtems/config/req/get-interrupt-stack-size
+  - brief: |
+      Check the configured ${/acfg/if/ticks-per-time-slice:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_ticks_per_timeslice(),
+        TEST_TICKS_PER_TIMESLICE
+      );
+    links:
+    - role: validation
+      uid: ../req/ticks-per-time-slice
+    - role: validation
+      uid: /rtems/config/req/get-ticks-per-timeslice
+  links: []
+test-brief: |
+  Tests the effect of application configuration options.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- bsp.h
+- rtems/score/heap.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-acfg.c
+test-teardown: null
+type: test-case

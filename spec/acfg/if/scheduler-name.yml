@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  The default value is
+
+  * ``"MEDF"`` for the ${/doc/if/scheduler-smp-edf:/name},
+
+  * ``"MPA "`` for the ${/doc/if/scheduler-smp-priority-affinity:/name},
+
+  * ``"MPD "`` for the ${/doc/if/scheduler-smp-priority:/name},
+
+  * ``"MPS "`` for the ${/doc/if/scheduler-smp-priority-simple:/name},
+
+  * ``"UCBS"`` for the ${/doc/if/scheduler-cbs:/name},
+
+  * ``"UEDF"`` for the ${/doc/if/scheduler-edf:/name},
+
+  * ``"UPD "`` for the ${/doc/if/scheduler-priority:/name}, and
+
+  * ``"UPS "`` for the ${/doc/if/scheduler-priority-simple:/name}.
+description: |
+  The value of this configuration option defines the name of the default
+  scheduler.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/type-rtems-name
+name: CONFIGURE_SCHEDULER_NAME
+notes: |
+  This scheduler configuration option is an advanced configuration option.
+  Think twice before you use it.
+
+  Schedulers can be identified via ${/rtems/scheduler/if/ident:/name}.
+
+  Use ${/rtems/object/if/build-name:/name} to define the scheduler name.
+type: interface

@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/dequalify
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  When ${../if/dequalify:/params[0]/name} is a non-const non-volatile
+  pointer type,
+  and ${../if/dequalify:/params[1]/name} is a pointer to a value of
+  const volatile type,
+  and the types of ${../if/dequalify:/params[0]/name} and
+  ${../if/dequalify:/params[1]/name} are compatible in the sense of C,
+  the macro ${../if/dequalify:/name} shall result in an expression
+  which returns a pointer of type ${../if/dequalify:/params[0]/name} pointing
+  to the same address as ${../if/dequalify:/params[1]/name}.
+type: requirement

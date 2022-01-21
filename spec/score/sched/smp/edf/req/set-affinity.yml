@@ -1,0 +1,899 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: group
+post-conditions:
+- name: X
+  states:
+  - name: Task
+    test-code: |
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ TASK ] );
+    text: |
+      The task ``T`` shall be scheduled on processor ``X``.
+  - name: TaskIdle
+    test-code: |
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_home_node(
+        ctx->tq_ctx.worker_tcb[ TASK ]
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of task ``T`` shall be scheduled on processor
+      ``X``.
+  - name: Alpha
+    test-code: |
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ ALPHA ] );
+    text: |
+      The task ``A`` shall be scheduled on processor ``X``.
+  - name: AlphaIdle
+    test-code: |
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_home_node(
+        ctx->tq_ctx.worker_tcb[ ALPHA ]
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of task ``A`` shall be scheduled on processor
+      ``X``.
+  - name: Beta
+    test-code: |
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ BETA ] );
+    text: |
+      The task ``B`` shall be scheduled on processor ``X``.
+  - name: BetaIdle
+    test-code: |
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_home_node(
+        ctx->tq_ctx.worker_tcb[ BETA ]
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of task ``B`` shall be scheduled on processor
+      ``X``.
+  test-epilogue: null
+  test-prologue: |
+    const Per_CPU_Control *cpu;
+    const Thread_Control  *scheduled;
+    const Scheduler_Node  *scheduler_node;
+
+    cpu = _Per_CPU_Get_by_index( 0 );
+    scheduled = cpu->heir;
+- name: Y
+  states:
+  - name: Task
+    test-code: |
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ TASK ] );
+    text: |
+      The task ``T`` shall be scheduled on processor ``Y``.
+  - name: TaskIdle
+    test-code: |
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_home_node(
+        ctx->tq_ctx.worker_tcb[ TASK ]
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of task ``T`` shall be scheduled on processor
+      ``Y``.
+  - name: Alpha
+    test-code: |
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ ALPHA ] );
+    text: |
+      The task ``A`` shall be scheduled on processor ``Y``.
+  - name: AlphaIdle
+    test-code: |
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_home_node(
+        ctx->tq_ctx.worker_tcb[ ALPHA ]
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of task ``A`` shall be scheduled on processor
+      ``Y``.
+  - name: Beta
+    test-code: |
+      T_eq_ptr( scheduled, ctx->tq_ctx.worker_tcb[ BETA ] );
+    text: |
+      The task ``B`` shall be scheduled on processor ``Y``.
+  - name: BetaIdle
+    test-code: |
+      T_true( scheduled->is_idle );
+      scheduler_node = _Thread_Scheduler_get_home_node(
+        ctx->tq_ctx.worker_tcb[ BETA ]
+      );
+      T_eq_ptr( scheduler_node->user, scheduled );
+    text: |
+      An idle task on behalf of task ``B`` shall be scheduled on processor
+      ``Y``.
+  test-epilogue: null
+  test-prologue: |
+    const Per_CPU_Control *cpu;
+    const Thread_Control  *scheduled;
+    const Scheduler_Node  *scheduler_node;
+
+    cpu = _Per_CPU_Get_by_index( 1 );
+    scheduled = cpu->heir;
+pre-conditions:
+- name: Before
+  states:
+  - name: All
+    test-code: |
+      CPU_FILL( &ctx->task_affinity_before );
+    text: |
+      While task ``T`` is affine to all processors of its
+      ${/glossary/scheduler-home:/term} before the new thread to processor
+      affinity is set.
+  - name: X
+    test-code: |
+      CPU_ZERO( &ctx->task_affinity_before );
+      CPU_SET( 0, &ctx->task_affinity_before );
+    text: |
+      While task ``T`` is affine to processor ``X`` before the new thread to
+      processor affinity is set.
+  test-epilogue: null
+  test-prologue: null
+- name: After
+  states:
+  - name: All
+    test-code: |
+      CPU_FILL( &ctx->task_affinity_after );
+    text: |
+      While task ``T`` is set to be affine to all processors of its
+      ${/glossary/scheduler-home:/term}.
+  - name: X
+    test-code: |
+      CPU_ZERO( &ctx->task_affinity_after );
+      CPU_SET( 0, &ctx->task_affinity_after );
+    text: |
+      While task ``T`` is set to be affine to processor ``X``.
+  - name: Y
+    test-code: |
+      CPU_ZERO( &ctx->task_affinity_after );
+      CPU_SET( 1, &ctx->task_affinity_after );
+    text: |
+      While task ``T`` is set to be affine to processor ``Y``.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: High
+    test-code: |
+      ctx->task_priority = PRIO_HIGH;
+    text: |
+      While task ``T`` has a high priority.
+  - name: Low
+    test-code: |
+      ctx->task_priority = PRIO_NORMAL;
+    text: |
+      While task ``T`` has a low priority.
+  test-epilogue: null
+  test-prologue: null
+- name: State
+  states:
+  - name: Ready
+    test-code: |
+      ctx->task_ready = true;
+    text: |
+      While task ``T`` is ready.
+  - name: Blocked
+    test-code: |
+      ctx->task_ready = false;
+    text: |
+      While task ``T`` is blocked.
+  test-epilogue: null
+  test-prologue: null
+- name: Sticky
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->task_sticky = true;
+    text: |
+      While task ``T`` is sticky.
+  - name: 'No'
+    test-code: |
+      ctx->task_sticky = false;
+    text: |
+      While task ``T`` is not sticky.
+  test-epilogue: null
+  test-prologue: null
+- name: Pinned
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->task_pinned = true;
+    text: |
+      While task ``T`` is pinned to a processor.
+  - name: 'No'
+    test-code: |
+      ctx->task_pinned = false;
+    text: |
+      While task ``T`` is not pinned to a processor.
+  test-epilogue: null
+  test-prologue: null
+- name: AlphaPriority
+  states:
+  - name: High
+    test-code: |
+      ctx->alpha_priority = PRIO_HIGH;
+    text: |
+      While task ``A`` has a high priority.
+  - name: Low
+    test-code: |
+      ctx->alpha_priority = PRIO_NORMAL;
+    text: |
+      While task ``A`` has a low priority.
+  test-epilogue: null
+  test-prologue: null
+- name: AlphaAffinity
+  states:
+  - name: All
+    test-code: |
+      CPU_FILL( &ctx->alpha_affinity );
+    text: |
+      While task ``A`` is affine to all processors of its
+      ${/glossary/scheduler-home:/term}.
+  - name: X
+    test-code: |
+      CPU_ZERO( &ctx->alpha_affinity );
+      CPU_SET( 0, &ctx->alpha_affinity );
+    text: |
+      While task ``A`` is affine to processor ``X``.
+  test-epilogue: null
+  test-prologue: null
+- name: AlphaIdle
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->alpha_idle = true;
+    text: |
+      While task ``A`` is sticky,
+      while task ``A`` is blocked.
+  - name: 'No'
+    test-code: |
+      ctx->alpha_idle = false;
+    text: |
+      While task ``A`` is not sticky.
+  test-epilogue: null
+  test-prologue: null
+- name: BetaPriority
+  states:
+  - name: High
+    test-code: |
+      ctx->beta_priority = PRIO_HIGH;
+    text: |
+      While task ``B`` has a high priority.
+  - name: Low
+    test-code: |
+      ctx->beta_priority = PRIO_NORMAL;
+    text: |
+      While task ``B`` has a low priority.
+  test-epilogue: null
+  test-prologue: null
+- name: BetaAffinity
+  states:
+  - name: All
+    test-code: |
+      CPU_FILL( &ctx->beta_affinity );
+    text: |
+      While task ``B`` is affine to all processors of its
+      ${/glossary/scheduler-home:/term}.
+  - name: Y
+    test-code: |
+      CPU_ZERO( &ctx->beta_affinity );
+      CPU_SET( 1, &ctx->beta_affinity );
+    text: |
+      While task ``B`` is affine to processor ``Y``.
+  test-epilogue: null
+  test-prologue: null
+- name: BetaIdle
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->beta_idle = true;
+    text: |
+      While task ``B`` is sticky,
+      while task ``B`` is blocked.
+  - name: 'No'
+    test-code: |
+      ctx->beta_idle = false;
+    text: |
+      While task ``B`` is not sticky,
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoStickyAndPinned: |
+    Thread pinning while the thread owns a sticky mutex is undefined behaviour.
+test-action: |
+  rtems_event_set events;
+
+  SetSelfPriority( PRIO_ULTRA_HIGH );
+  SetSelfAffinityAll();
+
+  if ( ctx->beta_idle ) {
+    events = TQ_EVENT_MUTEX_B_OBTAIN;
+    TQSendAndWaitForExecutionStop( &ctx->tq_ctx, BETA, events );
+  } else {
+    ctx->tq_ctx.busy_wait[ BETA ] = true;
+    events = TQ_EVENT_BUSY_WAIT;
+    TQSendAndSynchronizeRunner( &ctx->tq_ctx, BETA, events );
+  }
+
+  if ( ctx->alpha_idle ) {
+    events = TQ_EVENT_MUTEX_A_OBTAIN;
+    TQSendAndWaitForExecutionStop( &ctx->tq_ctx, ALPHA, events );
+  } else {
+    ctx->tq_ctx.busy_wait[ ALPHA ] = true;
+    events = TQ_EVENT_BUSY_WAIT;
+    TQSendAndSynchronizeRunner( &ctx->tq_ctx, ALPHA, events );
+  }
+
+  if ( ctx->task_pinned ) {
+    SetSelfAffinityOne( 1 );
+    TQSendAndSynchronizeRunner( &ctx->tq_ctx, TASK, TQ_EVENT_PIN );
+    SetSelfAffinityAll();
+  }
+
+  if ( ctx->task_ready ) {
+    ctx->tq_ctx.busy_wait[ TASK ] = true;
+    events = TQ_EVENT_BUSY_WAIT;
+  } else {
+    events = 0;
+  }
+
+  if ( ctx->task_sticky ) {
+    events |= TQ_EVENT_MUTEX_C_OBTAIN;
+  }
+
+  TQSendAndSynchronizeRunner( &ctx->tq_ctx, TASK, events );
+
+  if ( !ctx->task_ready ) {
+    TQWaitForExecutionStop( &ctx->tq_ctx, TASK );
+  }
+
+  (void) _Thread_Dispatch_disable();
+
+  SetAffinity( ctx->tq_ctx.worker_id[ TASK ], &ctx->task_affinity_before );
+  SetAffinity( ctx->tq_ctx.worker_id[ ALPHA ], &ctx->alpha_affinity );
+  SetAffinity( ctx->tq_ctx.worker_id[ BETA ], &ctx->beta_affinity );
+  SetSelfAffinityOne( 1 );
+  TQSetPriority( &ctx->tq_ctx, TASK, ctx->task_priority );
+  SetSelfPriority( PRIO_ULTRA_LOW );
+  TQSetPriority( &ctx->tq_ctx, ALPHA, ctx->alpha_priority );
+  TQSetPriority( &ctx->tq_ctx, BETA, ctx->beta_priority );
+
+  SetAffinity( ctx->tq_ctx.worker_id[ TASK ], &ctx->task_affinity_after );
+test-brief: null
+test-cleanup: |
+  rtems_event_set events;
+
+  SetSelfPriority( PRIO_ULTRA_HIGH );
+  _Thread_Dispatch_enable( _Per_CPU_Get() );
+
+  SetSelfAffinityAll();
+
+  ctx->tq_ctx.busy_wait[ TASK ] = false;
+  ctx->tq_ctx.busy_wait[ ALPHA ] = false;
+  ctx->tq_ctx.busy_wait[ BETA ] = false;
+
+  TQSetPriority( &ctx->tq_ctx, TASK, PRIO_NORMAL );
+  TQSetPriority( &ctx->tq_ctx, ALPHA, PRIO_LOW );
+  TQSetPriority( &ctx->tq_ctx, BETA, PRIO_VERY_LOW );
+
+  if ( ctx->task_sticky ) {
+    events = TQ_EVENT_MUTEX_C_RELEASE;
+  } else {
+    events = 0;
+  }
+
+  if ( ctx->task_pinned ) {
+    events |= TQ_EVENT_UNPIN;
+  }
+
+  if ( events != 0 ) {
+    TQSendAndWaitForExecutionStop( &ctx->tq_ctx, TASK, events );
+  } else {
+    TQWaitForExecutionStop( &ctx->tq_ctx, TASK );
+  }
+
+  SetAffinityAll( ctx->tq_ctx.worker_id[ TASK ] );
+  SetAffinityAll( ctx->tq_ctx.worker_id[ ALPHA ] );
+
+  if ( ctx->alpha_idle ) {
+    events = TQ_EVENT_MUTEX_A_RELEASE;
+  } else {
+    events = 0;
+  }
+
+  if ( events != 0 ) {
+    TQSendAndWaitForExecutionStop( &ctx->tq_ctx, ALPHA, events );
+  } else {
+    TQWaitForExecutionStop( &ctx->tq_ctx, ALPHA );
+  }
+
+  SetAffinityAll( ctx->tq_ctx.worker_id[ BETA ] );
+
+  if ( ctx->beta_idle ) {
+    events = TQ_EVENT_MUTEX_B_RELEASE;
+  } else {
+    events = 0;
+  }
+
+  if ( events != 0 ) {
+    TQSendAndWaitForExecutionStop( &ctx->tq_ctx, BETA, events );
+  } else {
+    TQWaitForExecutionStop( &ctx->tq_ctx, BETA );
+  }
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQContext tq_ctx
+- brief: |
+    This member specifies the task affinity before changing the affinity.
+  description: null
+  member: |
+    cpu_set_t task_affinity_before
+- brief: |
+    This member specifies the task affinity after changing the affinity.
+  description: null
+  member: |
+    cpu_set_t task_affinity_after
+- brief: |
+    This member specifies the priority of the task.
+  description: null
+  member: |
+    rtems_task_priority task_priority
+- brief: |
+    If this member is true, then the task state shall be ready.
+  description: null
+  member: |
+    bool task_ready
+- brief: |
+    If this member is true, then the task shall have obtained a sticky mutex.
+  description: null
+  member: |
+    bool task_sticky
+- brief: |
+    If this member is true, then the task shall be pinned.
+  description: null
+  member: |
+    bool task_pinned
+- brief: |
+    This member specifies the priority of the alpha task.
+  description: null
+  member: |
+    rtems_task_priority alpha_priority
+- brief: |
+    This member specifies the affinity of the alpha task.
+  description: null
+  member: |
+    cpu_set_t alpha_affinity
+- brief: |
+    If this member is true, then an idle task shall execute on behalf of the
+    alpha task.
+  description: null
+  member: |
+    bool alpha_idle
+- brief: |
+    This member specifies the priority of the beta task.
+  description: null
+  member: |
+    rtems_task_priority beta_priority
+- brief: |
+    This member specifies the affinity of the beta task.
+  description: null
+  member: |
+    cpu_set_t beta_affinity
+- brief: |
+    If this member is true, then an idle task shall execute on behalf of the
+    beta task.
+  description: null
+  member: |
+    bool beta_idle
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/percpu.h
+- rtems/score/threaddispatch.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tx-thread-queue.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+    rtems_id          mutex_a;
+    rtems_id          mutex_b;
+    rtems_id          mutex_c;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->tq_ctx.deadlock = TQ_DEADLOCK_STATUS;
+    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
+    ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+    ctx->tq_ctx.convert_status = TQConvertStatusClassic;
+    TQInitialize( &ctx->tq_ctx );
+
+    DeleteMutex( ctx->tq_ctx.mutex_id[ TQ_MUTEX_A ] );
+    DeleteMutex( ctx->tq_ctx.mutex_id[ TQ_MUTEX_B ] );
+    DeleteMutex( ctx->tq_ctx.mutex_id[ TQ_MUTEX_C ] );
+
+    mutex_a = 0;
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', 'A' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_LOW,
+      &mutex_a
+    );
+    T_rsc_success( sc );
+
+    mutex_b = 0;
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', 'B' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_VERY_LOW,
+      &mutex_b
+    );
+    T_rsc_success( sc );
+
+    mutex_c = 0;
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'T', 'X', 'C' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &mutex_c
+    );
+    T_rsc_success( sc );
+
+    ctx->tq_ctx.mutex_id[ TQ_MUTEX_A ] = mutex_a;
+    ctx->tq_ctx.mutex_id[ TQ_MUTEX_B ] = mutex_b;
+    ctx->tq_ctx.mutex_id[ TQ_MUTEX_C ] = mutex_c;
+
+    RemoveProcessor( SCHEDULER_B_ID, 1 );
+    AddProcessor( SCHEDULER_A_ID, 1 );
+
+    TQSetPriority( &ctx->tq_ctx, TASK, PRIO_NORMAL );
+    TQSetPriority( &ctx->tq_ctx, ALPHA, PRIO_LOW );
+    TQSetPriority( &ctx->tq_ctx, BETA, PRIO_VERY_LOW );
+  description: null
+test-stop: null
+test-support: |
+  #define TASK TQ_BLOCKER_C
+
+  #define ALPHA TQ_BLOCKER_A
+
+  #define BETA TQ_BLOCKER_B
+test-target: testsuites/validation/tc-sched-smp-edf-set-affinity.c
+test-teardown:
+  brief: null
+  code: |
+    SetSelfAffinityAll();
+    TQDestroy( &ctx->tq_ctx );
+    RemoveProcessor( SCHEDULER_A_ID, 1 );
+    AddProcessor( SCHEDULER_B_ID, 1 );
+  description: null
+text: |
+  When the thread to processor affinity is set for task ``T``.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    X:
+    - if:
+        and:
+        - pre-conditions:
+            State: Ready
+            Pinned: 'Yes'
+        - or:
+          - pre-conditions:
+              Priority: High
+          - pre-conditions:
+              Priority: Low
+              AlphaPriority: Low
+          - pre-conditions:
+              Priority: Low
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: Low
+      then: Task
+    - if:
+        and:
+        - pre-conditions:
+            After:
+            - All
+            - X
+            Priority: High
+            State: Ready
+        - or:
+          - pre-conditions:
+              AlphaPriority: Low
+              AlphaAffinity: All
+              BetaPriority: Low
+              BetaAffinity: All
+          - pre-conditions:
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: Low
+              BetaAffinity: All
+          - pre-conditions:
+              AlphaPriority: Low
+              BetaPriority: High
+      then: Task
+    - if:
+        and:
+        - pre-conditions:
+            After:
+            - All
+            - X
+            Priority: High
+            State: Blocked
+            Sticky: 'Yes'
+        - or:
+          - pre-conditions:
+              AlphaPriority: Low
+              AlphaAffinity: All
+              BetaPriority: Low
+              BetaAffinity: All
+          - pre-conditions:
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: Low
+              BetaAffinity: All
+          - pre-conditions:
+              AlphaPriority: Low
+              BetaPriority: High
+      then: TaskIdle
+    - if:
+        and:
+        - pre-conditions:
+            After: X
+            Priority: High
+            State: Ready
+        - or:
+          - pre-conditions:
+              AlphaPriority: Low
+          - pre-conditions:
+              AlphaAffinity: All
+              BetaPriority: Low
+      then: Task
+    - if:
+        and:
+        - pre-conditions:
+            After: X
+            Priority: High
+            State: Blocked
+            Sticky: 'Yes'
+        - or:
+          - pre-conditions:
+              AlphaPriority: Low
+          - pre-conditions:
+              AlphaAffinity: All
+              BetaPriority: Low
+      then: TaskIdle
+    - if:
+        and:
+        - pre-conditions:
+           BetaAffinity: All
+           BetaIdle: 'No'
+        - or:
+          - pre-conditions:
+              State: Ready
+          - pre-conditions:
+              State: Blocked
+              Sticky: 'Yes'
+        - or:
+          - pre-conditions:
+              After: Y
+              Priority: High
+              AlphaPriority: Low
+              BetaPriority: High
+          - pre-conditions:
+              Priority: High
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: High
+          - pre-conditions:
+              Priority: Low
+              AlphaAffinity: All
+              BetaPriority: Low
+          - pre-conditions:
+              Priority: Low
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: High
+      then: Beta
+    - if:
+        and:
+        - pre-conditions:
+           BetaAffinity: All
+        - or:
+          - pre-conditions:
+              State: Ready
+          - pre-conditions:
+              State: Blocked
+              Sticky: 'Yes'
+        - or:
+          - pre-conditions:
+              After: Y
+              Priority: High
+              AlphaPriority: Low
+              BetaPriority: High
+          - pre-conditions:
+              Priority: High
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: High
+          - pre-conditions:
+              Priority: Low
+              AlphaAffinity: All
+              BetaPriority: Low
+              BetaAffinity: All
+          - pre-conditions:
+              Priority: Low
+              AlphaPriority: High
+              AlphaAffinity: All
+              BetaPriority: High
+      then: BetaIdle
+    - if:
+        pre-conditions:
+          AlphaIdle: 'Yes'
+      then: AlphaIdle
+    - else: Alpha
+    Y:
+    - if:
+        and:
+        - post-conditions:
+            X:
+            - Alpha
+            - AlphaIdle
+        - pre-conditions:
+            After:
+            - All
+            - Y
+            Priority: High
+            State: Ready
+            BetaPriority: Low
+      then: Task
+    - if:
+        and:
+        - post-conditions:
+            X:
+            - Alpha
+            - AlphaIdle
+        - pre-conditions:
+            After:
+            - All
+            - Y
+            Priority: High
+            State: Blocked
+            Sticky: 'Yes'
+            BetaPriority: Low
+      then: TaskIdle
+    - if:
+        and:
+        - post-conditions:
+            X:
+            - Beta
+            - BetaIdle
+        - pre-conditions:
+            After:
+            - All
+            - Y
+            Priority: High
+            State: Ready
+            AlphaPriority: Low
+      then: Task
+    - if:
+        and:
+        - post-conditions:
+            X:
+            - Beta
+            - BetaIdle
+        - pre-conditions:
+            After:
+            - All
+            - Y
+            Priority: High
+            State: Blocked
+            Sticky: 'Yes'
+            AlphaPriority: Low
+      then: TaskIdle
+    - if:
+        and:
+        - pre-conditions:
+            AlphaIdle: 'No'
+        - post-conditions:
+            X:
+            - Beta
+            - BetaIdle
+      then: Alpha
+    - if:
+        post-conditions:
+          X:
+          - Beta
+          - BetaIdle
+      then: AlphaIdle
+    - if:
+        and:
+        - pre-conditions:
+            AlphaAffinity: All
+            AlphaIdle: 'No'
+        - post-conditions:
+            X:
+            - Task
+            - TaskIdle
+        - or:
+          - pre-conditions:
+              AlphaPriority: High
+          - pre-conditions:
+              BetaPriority: Low
+      then: Alpha
+    - if:
+        and:
+        - pre-conditions:
+            AlphaAffinity: All
+        - post-conditions:
+            X:
+            - Task
+            - TaskIdle
+        - or:
+          - pre-conditions:
+              AlphaPriority: High
+          - pre-conditions:
+              BetaPriority: Low
+      then: AlphaIdle
+    - if:
+        pre-conditions:
+          BetaIdle: 'Yes'
+      then: BetaIdle
+    - else: Beta
+  pre-conditions:
+    Before: all
+    After: all
+    Priority: all
+    State: all
+    Sticky: all
+    Pinned: all
+    AlphaPriority: all
+    AlphaAffinity: all
+    AlphaIdle: all
+    BetaPriority: all
+    BetaAffinity: all
+    BetaIdle: all
+- enabled-by: true
+  post-conditions: NoStickyAndPinned
+  pre-conditions:
+    Before: all
+    After: all
+    Priority: all
+    State: all
+    Sticky:
+    - 'Yes'
+    Pinned:
+    - 'Yes'
+    AlphaPriority: all
+    AlphaAffinity: all
+    AlphaIdle: all
+    BetaPriority: all
+    BetaAffinity: all
+    BetaIdle: all
+type: requirement

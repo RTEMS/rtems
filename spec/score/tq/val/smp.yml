@@ -1,0 +1,433 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Create two or three worker threads and a mutex.  Use the mutex and the
+    worker to do a thread priority change in parallel with a thread queue
+    extraction.
+  action-code: |
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &ctx->barrier_state );
+    WrapThreadQueueInitialize( &ctx->wrap, Extract, ctx );
+
+    if ( rtems_scheduler_get_processor_maximum() > 2 ) {
+      ctx->used_cpus = 3;
+    } else {
+      ctx->used_cpus = 2;
+    }
+  checks:
+  - brief: |
+      Create a mutex and let the runner obtain it.
+    code: |
+      ctx->mutex_a_id = CreateMutexNoProtocol();
+      ctx->thread_queue = GetMutexThreadQueue( ctx->mutex_a_id );
+      ObtainMutex( ctx->mutex_a_id );
+    links: []
+  - brief: |
+      Create and start worker A on a second processor.
+      mutex.  Let it wait on the barrier.
+    code: |
+      ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
+      SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
+      StartTask( ctx->worker_a_id, PriorityChangeWorker, ctx );
+    links: []
+  - brief: |
+      If there are more than two processors, then create and start also
+      worker C.  Let it wait on the barrier.
+    code: |
+      if ( ctx->used_cpus > 2 ) {
+        ctx->worker_c_id = CreateTask( "WRKC", PRIO_NORMAL );
+        SetScheduler( ctx->worker_c_id, SCHEDULER_C_ID, PRIO_NORMAL );
+        StartTask( ctx->worker_c_id, PriorityChangeWorker, ctx );
+      }
+    links: []
+  - brief: |
+      Create and start worker B.  Let it try to obtain the mutex which is owned
+      by the runner.  Delete worker B to extract it from the thread queue.
+      Wrap the thread queue extract operation to do a parallel thread priority
+      change carried out by worker A (and maybe C).
+    code: |
+      ctx->worker_b_id = CreateTask( "WRKB", PRIO_HIGH );
+      StartTask( ctx->worker_b_id, MutexObtainWorker, ctx );
+      WrapThreadQueueExtractDirect( &ctx->wrap, GetThread( ctx->worker_b_id ) );
+      DeleteTask( ctx->worker_b_id );
+    links:
+    - role: validation
+      uid: ../req/lock
+    - role: validation
+      uid: ../req/priority-change
+  - brief: |
+      Clean up all used resources.
+    code: |
+      /* PC1 */
+      _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, ctx->used_cpus );
+
+      WaitForExecutionStop( ctx->worker_a_id );
+      DeleteTask( ctx->worker_a_id );
+
+      if ( ctx->used_cpus > 2 ) {
+        WaitForExecutionStop( ctx->worker_c_id );
+        DeleteTask( ctx->worker_c_id );
+      }
+
+      ReleaseMutex( ctx->mutex_a_id );
+      DeleteMutex( ctx->mutex_a_id );
+      WrapThreadQueueDestroy( &ctx->wrap );
+    links: []
+  links: []
+- action-brief: |
+    Build a cyclic dependency graph using several worker threads and mutexes.
+    Use the mutexes and the worker to construct a thread queue deadlock which
+    is detected on one processor while it uses thread queue links inserted by
+    another processor.  The runner thread controls the test scenario via the
+    two thread queue locks.  This is an important test scenario which shows why
+    the thread queue implementation is a bit more complicated in SMP
+    configurations.
+  action-code: |
+    Thread_queue_Queue *queue_b;
+    Thread_queue_Queue *queue_c;
+    ISR_lock_Context    lock_context;
+    SMP_barrier_State   state;
+
+    if ( rtems_scheduler_get_processor_maximum() <= 2 ) {
+      /*
+       * We can only run this validation test on systems with three or more
+       * processors.  The sequence under test can happen on systems with only two
+       * processors, however, we need a third processor to control the other two
+       * processors via ISR locks to get a deterministic test scenario.
+       */
+      return;
+    }
+
+    ctx->runner_id = rtems_task_self();
+
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &state );
+
+    ctx->mutex_a_id = CreateMutexNoProtocol();
+    ctx->mutex_b_id = CreateMutexNoProtocol();
+    ctx->mutex_c_id = CreateMutexNoProtocol();
+    ctx->mutex_d_id = CreateMutexNoProtocol();
+
+    queue_b = GetMutexThreadQueue( ctx->mutex_b_id );
+    queue_c = GetMutexThreadQueue( ctx->mutex_c_id );
+
+    ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
+    ctx->worker_b_id = CreateTask( "WRKB", PRIO_NORMAL );
+    ctx->worker_c_id = CreateTask( "WRKC", PRIO_NORMAL );
+    ctx->worker_d_id = CreateTask( "WRKD", PRIO_NORMAL );
+    ctx->worker_e_id = CreateTask( "WRKE", PRIO_NORMAL );
+
+    SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
+    SetScheduler( ctx->worker_b_id, SCHEDULER_B_ID, PRIO_HIGH );
+    SetScheduler( ctx->worker_c_id, SCHEDULER_B_ID, PRIO_HIGH );
+    SetScheduler( ctx->worker_d_id, SCHEDULER_B_ID, PRIO_HIGH );
+    SetScheduler( ctx->worker_e_id, SCHEDULER_C_ID, PRIO_NORMAL );
+  checks:
+  - brief: |
+      Let worker D wait for mutex A.  Let worker C wait for mutex D.  Let
+      worker B wait for mutex C.
+    code: |
+      StartTask( ctx->worker_a_id, DeadlockWorkerA, ctx );
+
+      /* D0 */
+      _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+      StartTask( ctx->worker_d_id, DeadlockWorkerD, ctx );
+      StartTask( ctx->worker_c_id, DeadlockWorkerC, ctx );
+      StartTask( ctx->worker_b_id, DeadlockWorkerB, ctx );
+      ReceiveAllEvents( RTEMS_EVENT_5 );
+      WaitForExecutionStop( ctx->worker_b_id );
+    links: []
+  - brief: |
+      Let worker A attempt to obtain mutex B.  Let worker A wait on the lock of
+      mutex C.  Worker A will insert two thread queue links.
+    code: |
+      _ISR_lock_ISR_disable( &lock_context );
+      _Thread_queue_Queue_acquire_critical(
+        queue_c,
+        &_Thread_Executing->Potpourri_stats,
+        &lock_context
+      );
+      _ISR_lock_ISR_enable( &lock_context );
+
+      /* D1 */
+      _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+      TicketLockWaitForOthers( &queue_c->Lock, 1 );
+    links: []
+  - brief: |
+      Let worker E try to obtain mutex D.  Worker E will add a thread queue
+      link which is later used by worker A to detect the deadlock.
+    code: |
+      StartTask( ctx->worker_e_id, DeadlockWorkerE, ctx );
+      TicketLockWaitForOthers( &queue_b->Lock, 1 );
+    links: []
+  - brief: |
+      Let worker A continue the obtain sequence.  It will detect a deadlock.
+    code: |
+      _ISR_lock_ISR_disable( &lock_context );
+      _Thread_queue_Queue_release( queue_c, &lock_context );
+    links:
+    - role: validation
+      uid: ../req/deadlock-concurrent
+  - brief: |
+      Clean up all used resources.
+    code: |
+      ReceiveAllEvents(
+        RTEMS_EVENT_0 | RTEMS_EVENT_1 | RTEMS_EVENT_2 | RTEMS_EVENT_3 |
+        RTEMS_EVENT_4
+      );
+      WaitForExecutionStop( ctx->worker_a_id );
+      WaitForExecutionStop( ctx->worker_b_id );
+      WaitForExecutionStop( ctx->worker_c_id );
+      WaitForExecutionStop( ctx->worker_d_id );
+      WaitForExecutionStop( ctx->worker_e_id );
+      DeleteTask( ctx->worker_a_id );
+      DeleteTask( ctx->worker_b_id );
+      DeleteTask( ctx->worker_c_id );
+      DeleteTask( ctx->worker_d_id );
+      DeleteTask( ctx->worker_e_id );
+      DeleteMutex( ctx->mutex_a_id );
+      DeleteMutex( ctx->mutex_b_id );
+      DeleteMutex( ctx->mutex_c_id );
+      DeleteMutex( ctx->mutex_d_id );
+    links: []
+  links: []
+test-brief: |
+  Tests SMP-specific thread queue behaviour.
+test-context:
+- brief: |
+    This member contains the runner identifier.
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: |
+    This member contains the worker A identifier.
+  description: null
+  member: |
+    rtems_id worker_a_id
+- brief: |
+    This member contains the worker B identifier.
+  description: null
+  member: |
+    rtems_id worker_b_id
+- brief: |
+    This member contains the worker C identifier.
+  description: null
+  member: |
+    rtems_id worker_c_id
+- brief: |
+    This member contains the worker D identifier.
+  description: null
+  member: |
+    rtems_id worker_d_id
+- brief: |
+    This member contains the worker E identifier.
+  description: null
+  member: |
+    rtems_id worker_e_id
+- brief: |
+    This member contains the mutex A identifier.
+  description: null
+  member: |
+    rtems_id mutex_a_id
+- brief: |
+    This member contains the mutex B identifier.
+  description: null
+  member: |
+    rtems_id mutex_b_id
+- brief: |
+    This member contains the mutex C identifier.
+  description: null
+  member: |
+    rtems_id mutex_c_id
+- brief: |
+    This member contains the mutex D identifier.
+  description: null
+  member: |
+    rtems_id mutex_d_id
+- brief: |
+    This member contains the count of processors used by the test.
+  description: null
+  member: |
+    uint32_t used_cpus
+- brief: |
+    This member contains the thread queue of the mutex.
+  description: null
+  member: |
+    Thread_queue_Queue *thread_queue
+- brief: |
+    This member contains the context to wrap the thread queue extract.
+  description: null
+  member: |
+    WrapThreadQueueContext wrap
+- brief: |
+    This member contains the barrier to synchronize the runner and the workers.
+  description: null
+  member: |
+    SMP_barrier_Control barrier
+- brief: |
+    This member contains the barrier state for the runner processor.
+  description: null
+  member: |
+    SMP_barrier_State barrier_state
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/score/smpbarrier.h
+- rtems/score/threadqimpl.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void Extract( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    /* PC0 */
+    _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, ctx->used_cpus );
+
+    /*
+     * Ensure that worker A (and maybe C) acquired the thread wait lock of
+     * worker B.
+     */
+    TicketLockWaitForOthers( &ctx->thread_queue->Lock, ctx->used_cpus - 1 );
+
+    /*
+     * Continue with the thread queue extraction.  The thread wait lock of
+     * worker B will be changed back to the default thread wait lock.  This
+     * will cause worker A (and maybe C) to release the thread queue lock and
+     * acquire the default thread wait lock of worker B instead to carry out
+     * the priority change.
+     *
+     * See also _Thread_Wait_acquire_critical().
+     */
+  }
+
+  static void PriorityChangeWorker( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    SMP_barrier_State state;
+
+    ctx = (Context *) arg;
+    _SMP_barrier_State_initialize( &state );
+
+    /* PC0 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, ctx->used_cpus );
+
+    SetPriority( ctx->worker_b_id, PRIO_VERY_HIGH );
+
+    /* PC1 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, ctx->used_cpus );
+
+    (void) ReceiveAnyEvents();
+  }
+
+  static void MutexObtainWorker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    ObtainMutex( ctx->mutex_a_id );
+  }
+
+  static void DeadlockWorkerA( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    SMP_barrier_State state;
+
+    ctx = (Context *) arg;
+    _SMP_barrier_State_initialize( &state );
+
+    ObtainMutex( ctx->mutex_a_id );
+
+    /* D0 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+    /* D1 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+
+    ObtainMutexDeadlock( ctx->mutex_b_id );
+
+    ReleaseMutex( ctx->mutex_a_id );
+    SendEvents( ctx->runner_id, RTEMS_EVENT_0 );
+    (void) ReceiveAnyEvents();
+  }
+
+  static void DeadlockWorkerB( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    ObtainMutex( ctx->mutex_b_id );
+    SendEvents( ctx->runner_id, RTEMS_EVENT_5 );
+    ObtainMutex( ctx->mutex_c_id );
+    ReleaseMutex( ctx->mutex_c_id );
+    ReleaseMutex( ctx->mutex_b_id );
+    SendEvents( ctx->runner_id, RTEMS_EVENT_1 );
+    (void) ReceiveAnyEvents();
+  }
+
+  static void DeadlockWorkerC( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    ObtainMutex( ctx->mutex_c_id );
+    ObtainMutex( ctx->mutex_d_id );
+    ReleaseMutex( ctx->mutex_d_id );
+    ReleaseMutex( ctx->mutex_c_id );
+    SendEvents( ctx->runner_id, RTEMS_EVENT_2 );
+    (void) ReceiveAnyEvents();
+  }
+
+  static void DeadlockWorkerD( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    ObtainMutex( ctx->mutex_d_id );
+    ObtainMutex( ctx->mutex_a_id );
+    ReleaseMutex( ctx->mutex_a_id );
+    ReleaseMutex( ctx->mutex_d_id );
+    SendEvents( ctx->runner_id, RTEMS_EVENT_3 );
+    (void) ReceiveAnyEvents();
+  }
+
+  static void DeadlockWorkerE( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    ObtainMutex( ctx->mutex_d_id );
+    ReleaseMutex( ctx->mutex_d_id );
+    SendEvents( ctx->runner_id, RTEMS_EVENT_4 );
+    (void) ReceiveAnyEvents();
+  }
+test-target: testsuites/validation/tc-score-tq-smp.c
+test-teardown:
+  brief: null
+  code: |
+    RestoreRunnerPriority();
+  description: null
+type: test-case

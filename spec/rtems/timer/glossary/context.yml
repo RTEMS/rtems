@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: context
+text: |
+  The timer context denotes whether the ${../glossary/timerserviceroutine:/term}
+  is executed as part of an interrupt handler or from the task of the Timer
+  Server. A timer can be in one of these three contexts:
+
+  * ${../glossary/none:/term}
+  * ${../glossary/interruptcontext:/term}
+  * ${../glossary/servercontext:/term}
+type: glossary

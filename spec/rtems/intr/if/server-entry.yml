@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure represents an interrupt server entry.
+copyrights:
+- Copyright (C) 2017, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member is the node for the interrupt entry processing.
+    definition: ${/score/chain/if/node:/name} ${.:name}
+    description: null
+    kind: member
+    name: node
+  variants: []
+- default:
+    brief: |
+      This member references the interrupt server used to process the entry.
+    definition: ${server-control:/name} *${.:name}
+    description: null
+    kind: member
+    name: server
+  variants: []
+- default:
+    brief: |
+      This member is the interrupt vector number.
+    definition: ${vector-number:/name} ${.:name}
+    description: null
+    kind: member
+    name: vector
+  variants: []
+- default:
+    brief: |
+      This member is the interrupt server actions list head.
+    definition: ${server-action:/name} *${.:name}
+    description: null
+    kind: member
+    name: actions
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_server_entry
+notes: |
+  This structure shall be treated as an opaque data type from the
+  ${/glossary/api:/term} point of view.  Members shall not be accessed
+  directly.  An entry is initialized by ${server-entry-initialize:/name} and
+  destroyed by ${server-entry-destroy:/name}.  Interrupt server actions can be
+  prepended to the entry by ${server-action-prepend:/name}.  The entry is
+  submitted to be serviced by ${server-entry-submit:/name}.
+type: interface

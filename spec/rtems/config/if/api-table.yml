@@ -1,0 +1,140 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure contains a summary of the Classic API configuration.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Tasks configured
+      for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-tasks:/name}.
+    kind: member
+    name: maximum_tasks
+  variants: []
+- default:
+    brief: |
+      This member is true, if the Classic API Notepads are enabled, otherwise
+      it is false.
+    definition: ${/c/if/bool:/name} ${.:name}
+    description: null
+    kind: member
+    name: notepads_enabled
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Timers configured
+      for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-timers:/name}.
+    kind: member
+    name: maximum_timers
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Semaphores
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-semaphores:/name}.
+    kind: member
+    name: maximum_semaphores
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Message Queues
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-message-queues:/name}.
+    kind: member
+    name: maximum_message_queues
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Partitions
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-partitions:/name}.
+    kind: member
+    name: maximum_partitions
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Regions configured
+      for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-regions:/name}.
+    kind: member
+    name: maximum_regions
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Dual-Ported
+      Memories configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-ports:/name}.
+    kind: member
+    name: maximum_ports
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Rate Monotonic
+      Periods configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-periods:/name}.
+    kind: member
+    name: maximum_periods
+  variants: []
+- default:
+    brief: |
+      This member contains the maximum number of Classic API Barriers
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/max-barriers:/name}.
+    kind: member
+    name: maximum_barriers
+  variants: []
+- default:
+    brief: |
+      This member contains the number of Classic API Initialization
+      Tasks configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: |
+      See ${/acfg/if/rtems-init-tasks-table:/name}.
+    kind: member
+    name: number_of_initialization_tasks
+  variants: []
+- default:
+    brief: |
+      This member contains the pointer to Classic API Initialization Tasks
+      Table of this application.
+    definition: const ${../../task/if/initialization-table:/name} *${.:name}
+    description: |
+      See ${/acfg/if/rtems-init-tasks-table:/name}.
+    kind: member
+    name: User_initialization_tasks_table
+  variants: []
+definition-kind: typedef-only
+description: |
+  Use ${get-api-configuration:/name} to get the configuration table.
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: group
+name: rtems_api_configuration_table
+notes: null
+type: interface

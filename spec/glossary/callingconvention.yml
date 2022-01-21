@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: calling convention
+text: |
+  The processor and compiler dependent rules which define the mechanism
+  used to invoke subroutines in a high-level language.  These rules define
+  the passing of arguments, the call and return mechanism, and the register
+  set which must be preserved.
+type: glossary

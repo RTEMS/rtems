@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: /glossary-requirements
+term: postponed job
+text: |
+  A postponed job is a ${../glossary/job:/term} which should already have been
+  started but which has not yet been started because an earlier
+  ${../glossary/job:/term} is still executed.  Postponed jobs exist in
+  ${../glossary/active:/term} and ${../glossary/expired:/term}
+  ${../glossary/state:/term}.
+
+  Note that the ${../if/cancel:/name}
+  directive does not change the number of postponed jobs,
+  ${../glossary/elapsed:/term} or ${../glossary/consumed:/term}
+  ${../glossary/time:/term}.  Moreover, the ${../if/create:/name}
+  directive does not set these values 0.
+
+  The period has a counter for the number of currently postponed jobs (with a
+  maximum of 0xffffffff).  The number of postponed jobs is increased whenever
+  the execution of the current ${../glossary/job:/term} exceeds the time
+  ${../glossary/interval:/term} length allotted for the current job (with the
+  ${../glossary/interval:/term} starting over again).  This assumes and in
+  effect works only correct when all future jobs have the same
+  ${../glossary/interval:/term} length as the current one.
+
+  If one or more postponed jobs are present when ${../if/period:/name} is
+  called, ${../if/period:/name} returns immediately without waiting for the
+  end of an ${../glossary/interval:/term} in an attempt to reduce the number
+  of postponed jobs.
+type: glossary

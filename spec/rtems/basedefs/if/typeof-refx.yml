@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the pointer reference type.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014 Paval Pisa
+definition:
+  default: ''
+  variants:
+  - definition: |
+      ${/compiler/if/typeof:/name}( ${.:/params[0]/name}( union { int _z; ${/compiler/if/typeof:/name}( ${.:/params[1]/name} ) _x; } ){ 0 }._x )
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: |
+  The reference type idea is based on libHX by Jan Engelhardt.
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_TYPEOF_REFX
+notes: null
+params:
+- description: |
+    is the pointer indirection level expressed in *.
+  dir: null
+  name: _level
+- description: |
+    is the reference target type.
+  dir: null
+  name: _target
+return:
+  return: |
+    Returns the type of a pointer reference of the specified level to the specified type.
+  return-values: []
+type: interface

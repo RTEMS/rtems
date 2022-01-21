@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+glossary-type: term
+links:
+- role: glossary-member
+  uid: ../glossary-general
+term: interrupt level
+text: |
+  A mask used to by the CPU to determine which pending interrupts should be
+  serviced.  If a pending interrupt is below the current interrupt level,
+  then the CPU does not recognize that interrupt.
+type: glossary

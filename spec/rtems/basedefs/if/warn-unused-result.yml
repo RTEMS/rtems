@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Tells the compiler in a declaration that the result of this function should
+  be used.
+copyrights:
+- Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ''
+  variants:
+  - definition: |
+      __attribute__(( __warn_unused_result__ ))
+    enabled-by:
+    - defined(${/compiler/if/gnuc:/name})
+description: null
+enabled-by: true
+index-entries: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_WARN_UNUSED_RESULT
+notes: null
+type: interface

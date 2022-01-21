@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: signal-count
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Let :math:`J\in\{0, 1, ..., 31\}`.  The signal :math:`J` shall be represented
+  by the integer :math:`2^J`.
+type: requirement

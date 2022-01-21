@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Maps the status code to a descriptive text.
+copyrights:
+- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${code:/name} ${.:/params[0]/name}
+    return: const char *
+  variants: []
+description: |
+  The text for each status code is the enumerator constant.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_status_text
+notes: null
+params:
+- description: is the status code.
+  dir: null
+  name: status_code
+return:
+  return: |
+    Returns a text describing the status code, if the status code is valid.
+  return-values:
+  - description: The status code is invalid.
+    value: '"?"'
+type: interface

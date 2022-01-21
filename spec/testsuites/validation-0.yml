@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+- role: validation
+  uid: /acfg/req/appl-needs-clock-driver
+- role: validation
+  uid: /acfg/req/init
+test-brief: |
+  This general purpose validation test suite provides enough resources to run
+  basic tests for all specified managers and functions.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 5
+
+  #include "ts-default.h"
+test-description: |
+  In SMP configurations, up to three scheduler instances using the SMP EDF
+  scheduler are provided using up to four processors.
+test-includes: []
+test-local-includes: []
+test-suite-name: Validation0
+test-target: testsuites/validation/ts-validation-0.c
+type: test-suite

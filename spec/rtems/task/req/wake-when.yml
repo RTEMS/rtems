@@ -1,0 +1,317 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/wake-when
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/wake-when:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: NotDef
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_DEFINED );
+    text: |
+      The return status of ${../if/wake-when:/name} shall be
+      ${../../status/if/not-defined:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/wake-when:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvClock
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_CLOCK );
+    text: |
+      The return status of ${../if/wake-when:/name} shall be
+      ${../../status/if/invalid-clock:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Timer
+  states:
+  - name: Inactive
+    test-code: |
+      T_eq_int( ctx->timer_info.state, TASK_TIMER_INACTIVE );
+    text: |
+      The timer of the calling task shall be inactive.
+  - name: Realtime
+    test-code: |
+      T_eq_int( ctx->timer_info.state, TASK_TIMER_REALTIME );
+    text: |
+      The timer of the calling task shall be active using the
+      ${/glossary/clock-realtime:/term}.
+  test-epilogue: null
+  test-prologue: null
+- name: Expire
+  states:
+  - name: Absolute
+    test-code: |
+      T_eq_i64( ctx->timer_info.expire_timespec.tv_sec, 1262304000 );
+      T_eq_long( ctx->timer_info.expire_timespec.tv_nsec, 0 );
+    text: |
+      The timer of the calling task shall expire at the time point specified by
+      the ${../if/wake-when:/params[0]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Block
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].operation,
+        T_SCHEDULER_BLOCK
+      );
+    text: |
+      The calling task shall be blocked by the scheduler exactly once by the
+      ${../if/wake-when:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      The calling task shall not be altered by the scheduler by the
+      ${../if/wake-when:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: TODSet
+  states:
+  - name: 'Yes'
+    test-code: |
+      SetTOD( &tod, 2000 );
+      sc = rtems_clock_set( &tod );
+      T_rsc_success( sc );
+    text: |
+      While the CLOCK_REALTIME was set at least once.
+  - name: 'No'
+    test-code: |
+      UnsetClock();
+    text: |
+      While the CLOCK_REALTIME was never set.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+    rtems_time_of_day tod;
+- name: TOD
+  states:
+  - name: Valid
+    test-code: |
+      ctx->tod = &ctx->tod_obj;
+    text: |
+      While the ${../if/wake-when:/params[0]/name} parameter references an
+      object of type ${../../type/if/time-of-day:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->tod = NULL;
+    text: |
+      While the ${../if/wake-when:/params[0]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: TODObj
+  states:
+  - name: Future
+    test-code: |
+      SetTOD( &ctx->tod_obj, 2010 );
+    text: |
+      While the object referenced by the ${../if/wake-when:/params[0]/name}
+      parameter specifies a valid time of day in the future.
+  - name: PastOrNow
+    test-code: |
+      SetTOD( &ctx->tod_obj, 1990 );
+    text: |
+      While the object referenced by the ${../if/wake-when:/params[0]/name}
+      parameter specifies a valid time of day in the past or at the time of the
+      ${../if/wake-when:/name} call.
+  - name: Invalid
+    test-code: |
+      memset( &ctx->tod_obj, 0xff, sizeof( ctx->tod_obj ) );
+    text: |
+      While the object referenced by the ${../if/wake-when:/params[0]/name}
+      parameter specifies an invalid time of day.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ResumeTask( ctx->worker_id );
+  (void) T_scheduler_record( NULL );
+  GetTaskTimerInfo( ctx->worker_id, &ctx->timer_info );
+  FinalClockTick();
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_4 scheduler_log;
+- brief: |
+    This member contains the CLOCK_REALTIME value before the
+    ${../if/wake-when:/name} call.
+  description: null
+  member: |
+    struct timespec now;
+- brief: |
+    This member contains the worker task identifier.
+  description: null
+  member: |
+    rtems_id worker_id;
+- brief: |
+    This member contains the timer information of the worker task.
+  description: null
+  member: |
+    TaskTimerInfo timer_info;
+- brief: |
+    This member provides the object referenced by the
+    ${../if/wake-when:/params[0]/name} parameter.
+  description: null
+  member: |
+    rtems_time_of_day tod_obj
+- brief: |
+    This member contains the return value of the ${../if/wake-when:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies the ${../if/wake-when:/params[0]/name} parameter
+    value.
+  description: null
+  member: |
+    const rtems_time_of_day *tod
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+- rtems/test-scheduler.h
+- rtems/score/timecounter.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->status = RTEMS_NOT_IMPLEMENTED;
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void SetTOD( rtems_time_of_day *tod, uint32_t year )
+  {
+    memset( tod, 0, sizeof( *tod ) );
+    tod->year = year;
+    tod->month = 1;
+    tod->day = 1;
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      T_scheduler_log *log;
+
+      SuspendSelf();
+
+      log = T_scheduler_record_4( &ctx->scheduler_log );
+      T_null( log );
+
+      _Timecounter_Getnanotime( &ctx->now );
+
+      ctx->status = rtems_task_wake_when( ctx->tod );
+
+      (void) T_scheduler_record( NULL );
+    }
+  }
+test-target: testsuites/validation/tc-task-wake-when.c
+test-teardown:
+  brief: null
+  code: |
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Timer: Realtime
+    Expire: Absolute
+    Scheduler: Block
+  pre-conditions:
+    TODSet:
+    - 'Yes'
+    TOD:
+    - Valid
+    TODObj:
+    - Future
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    Timer: Inactive
+    Expire: N/A
+    Scheduler: Nop
+  pre-conditions:
+    TODSet:
+    - 'No'
+    TOD:
+    - Valid
+    TODObj: all
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    Timer: Inactive
+    Expire: N/A
+    Scheduler: Nop
+  pre-conditions:
+    TODSet:
+    - 'No'
+    TOD:
+    - 'Null'
+    TODObj: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Timer: Inactive
+    Expire: N/A
+    Scheduler: Nop
+  pre-conditions:
+    TODSet:
+    - 'Yes'
+    TOD:
+    - 'Null'
+    TODObj: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvClock
+    Timer: Inactive
+    Expire: N/A
+    Scheduler: Nop
+  pre-conditions:
+    TODSet:
+    - 'Yes'
+    TOD:
+    - Valid
+    TODObj:
+    - PastOrNow
+    - Invalid
+type: requirement

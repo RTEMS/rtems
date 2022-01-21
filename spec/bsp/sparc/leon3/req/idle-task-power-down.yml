@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: bsps/sparc/leon3
+links:
+- role: requirement-refinement
+  uid: idle-task-body
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/idle-thread:/name} function shall perform an endless loop which
+  sets the processor into the power-down mode using a write to ``%asr19`` in
+  each iteration.
+type: requirement

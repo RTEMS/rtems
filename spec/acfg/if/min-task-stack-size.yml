@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: ${/score/cpu/if/stack-minimum-size:/name}
+description: |
+  The value of this configuration option defines the minimum stack size in
+  bytes for every user task or thread in the system.
+enabled-by: true
+index-entries:
+- minimum task stack size
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-general
+- role: constraint
+  uid: ../constraint/stack-space
+- role: constraint
+  uid: ../constraint/min-bsp-app
+name: CONFIGURE_MINIMUM_TASK_STACK_SIZE
+notes: |
+  Adjusting this parameter should be done with caution.  Examining the actual
+  stack usage using the stack checker usage reporting facility is recommended
+  (see also ${stack-checker-enabled:/name}).
+
+  This parameter can be used to lower the minimum from that recommended. This
+  can be used in low memory systems to reduce memory consumption for
+  stacks. However, this shall be done with caution as it could increase the
+  possibility of a blown task stack.
+
+  This parameter can be used to increase the minimum from that
+  recommended. This can be used in higher memory systems to reduce the risk
+  of stack overflow without performing analysis on actual consumption.
+
+  By default, this configuration parameter defines also the minimum stack
+  size of POSIX threads.  This can be changed with the
+  ${min-posix-thread-stack-size:/name}
+  configuration option.
+
+  In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
+  used to define the default value of ${interrupt-stack-size:/name}.
+type: interface

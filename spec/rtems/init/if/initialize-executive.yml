@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Initializes the system and starts multitasking.
+copyrights:
+- Copyright (C) 2015, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: ${../../basedefs/if/no-return:/name}
+    body: null
+    params: []
+    return: void
+  variants: []
+description: |
+  Iterates through the system initialization linker set and invokes the
+  registered handlers.  The final step is to start multitasking.
+enabled-by: true
+index-entries:
+- initialize RTEMS
+- start multitasking
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: ../constraint/directive-ctx-boot
+- role: constraint
+  uid: /constraint/directive-no-return
+name: rtems_initialize_executive
+notes: |
+  Errors in the initialization sequence are usually fatal and lead to a system
+  termination.
+params: []
+return: null
+type: interface

@@ -1,0 +1,67 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/receive
+- role: validation
+  uid: ../req/send
+test-actions:
+- action-brief: |
+    Run the event send and receive tests for the application event set defined
+    by ${../req/send-receive}.
+  action-code: |
+    ${../req/send-receive:/test-run}(
+      EventSend,
+      EventReceive,
+      GetPendingEvents,
+      THREAD_WAIT_CLASS_EVENT,
+      STATES_WAITING_FOR_EVENT
+    );
+  checks: []
+  links: []
+test-brief: |
+  Tests the ${../if/send:/name} and ${../if/receive:/name} directives.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/rtems/eventimpl.h
+- rtems/rtems/tasksdata.h
+- rtems/score/statesimpl.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tr-event-send-receive.h
+test-setup: null
+test-stop: null
+test-support: |
+  static rtems_status_code EventSend(
+    rtems_id        id,
+    rtems_event_set event_in
+  )
+  {
+    return rtems_event_send( id, event_in );
+  }
+
+  static rtems_status_code EventReceive(
+    rtems_id         event_in,
+    rtems_option     option_set,
+    rtems_interval   ticks,
+    rtems_event_set *event_out
+  )
+  {
+    return rtems_event_receive( event_in, option_set, ticks, event_out );
+  }
+
+  static rtems_event_set GetPendingEvents( Thread_Control *thread )
+  {
+    RTEMS_API_Control *api;
+
+    api = thread->API_Extensions[ THREAD_API_RTEMS ];
+    return api->Event.pending_events;
+  }
+test-target: testsuites/validation/tc-event-send-receive.c
+test-teardown: null
+type: test-case

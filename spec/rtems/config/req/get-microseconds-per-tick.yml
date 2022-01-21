@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-microseconds-per-tick
+functional-type: function
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/microseconds-per-tick:/name} application configuration option.
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-microseconds-per-tick:/name} directive shall return the
+  ${/glossary/clock-tick:/term} interval in microseconds.
+type: requirement

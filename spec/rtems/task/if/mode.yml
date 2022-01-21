@@ -1,0 +1,158 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets and optionally sets the mode of the calling task.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../mode/if/mode:/name} ${.:/params[0]/name}
+    - ${../../mode/if/mode:/name} ${.:/params[1]/name}
+    - ${../../mode/if/mode:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive queries and optionally manipulates the execution mode of the
+  calling task.  A task's execution mode enables and disables preemption,
+  timeslicing, asynchronous signal processing, as well as specifying the
+  interrupt level.  To modify an execution mode, the mode class(es) to be
+  changed must be specified in the ${.:/params[1]/name} parameter and the
+  desired mode(s) must be specified in the ${.:/params[0]/name} parameter.
+
+  A task can obtain its current execution mode, without modifying it, by
+  calling this directive with a ${.:/params[1]/name} value of
+  ${../../mode/if/current-mode:/name}.
+
+  The **mode set** specified in ${.:/params[0]/name} is built through a
+  *bitwise or* of the mode constants described below.  Not all combinations of
+  modes are allowed.  Some modes are mutually exclusive.  If mutually exclusive
+  modes are combined, the behaviour is undefined.  Default task modes can be
+  selected by using the ${../../mode/if/default:/name} constant.  The task mode
+  set defines
+
+  * the preemption mode of the task: ${../../mode/if/preempt:/name} (default)
+    or ${../../mode/if/no-preempt:/name},
+
+  * the timeslicing mode of the task: ${../../mode/if/timeslice:/name} or
+    ${../../mode/if/no-timeslice:/name} (default),
+
+  * the ${/glossary/asr:/term} processing mode of the task:
+    ${../../mode/if/asr:/name} (default) or ${../../mode/if/no-asr:/name},
+
+  * the interrupt level of the task: ${../../mode/if/interrupt-level:/name}
+    with a default of ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with
+    enabled interrupts.
+
+  The **mode mask** specified in ${.:/params[1]/name} is built through a
+  *bitwise or* of the mode mask constants described below.
+
+  When the ${../../mode/if/preempt-mask:/name} is set in ${.:/params[1]/name},
+  the **preemption mode** of the calling task is
+
+  * enabled by using the ${../../mode/if/preempt:/name} mode constant in
+    ${.:/params[0]/name} and
+
+  * disabled by using the ${../../mode/if/no-preempt:/name} mode constant
+    in ${.:/params[0]/name}.
+
+  When the ${../../mode/if/timeslice-mask:/name} is set in
+  ${.:/params[1]/name}, the **timeslicing mode** of the calling task is
+
+  * enabled by using the ${../../mode/if/timeslice:/name} mode constant in
+    ${.:/params[0]/name} and
+
+  * disabled by using the ${../../mode/if/no-timeslice:/name} mode constant
+    in ${.:/params[0]/name}.
+
+  Enabling timeslicing has no effect if preemption is disabled.  For a task to
+  be timesliced, that task must have both preemption and timeslicing enabled.
+
+  When the ${../../mode/if/asr-mask:/name} is set in ${.:/params[1]/name},
+  the **ASR processing mode** of the calling task is
+
+  * enabled by using the ${../../mode/if/asr:/name} mode constant in
+    ${.:/params[0]/name} and
+
+  * disabled by using the ${../../mode/if/no-asr:/name} mode constant
+    in ${.:/params[0]/name}.
+
+  When the ${../../mode/if/interrupt-mask:/name} is set in
+  ${.:/params[1]/name}, **interrupts** of the calling task are
+
+  * enabled by using the ${../../mode/if/interrupt-level:/name} mode macro
+    with a value of zero (0) in ${.:/params[0]/name} and
+
+  * disabled up to the specified level by using the
+    ${../../mode/if/interrupt-level:/name} mode macro with a positive value in
+    ${.:/params[0]/name}.
+
+  An interrupt level of zero is associated with enabled interrupts on all
+  target processors.  The interrupt level portion of the task mode supports a
+  maximum of 256 interrupt levels.  These levels are mapped onto the interrupt
+  levels actually supported by the target processor in a processor dependent
+  fashion.
+enabled-by: true
+index-entries:
+- current task mode
+- set task mode
+- get task mode
+- set task preemption mode
+- get task preemption mode
+- obtain task mode
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: ../constraint/preempt-enable
+- role: constraint
+  uid: /constraint/fatal-bad-thread-dispatch-disable-level
+name: rtems_task_mode
+notes: null
+params:
+- description: |
+    is the mode set to apply to the calling task.  When ${.:/params[1]/name} is
+    set to ${../../mode/if/current-mode:/name}, the value of this parameter is
+    ignored.  Only modes requested by ${.:/params[1]/name} are applied to the
+    calling task.
+  dir: null
+  name: mode_set
+- description: |
+    is the mode mask which specifies which modes in ${.:/params[0]/name} are
+    applied to the calling task.  When the value is
+    ${../../mode/if/current-mode:/name}, the mode of the calling task is not
+    changed.
+  dir: null
+  name: mask
+- description: |
+    is the pointer to an ${../../mode/if/mode:/name} object.  When the
+    directive call is successful, the mode of the task before any mode changes
+    done by the directive call will be stored in this object.
+  dir: null
+  name: previous_mode_set
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${../../mode/if/no-preempt:/name} was set in ${.:/params[0]/name} and
+      setting the preemption mode was requested by
+      ${../../mode/if/preempt-mask:/name} in ${.:/params[1]/name} and the
+      system configuration had no implementation for this mode.
+    value: ${../../status/if/not-implemented:/name}
+  - description: |
+      The ${../../mode/if/interrupt-level:/name} was set to a positive level in
+      ${.:/params[0]/name} and setting the interrupt level was requested by
+      ${../../mode/if/interrupt-mask:/name} in ${.:/params[1]/name} and the
+      system configuration had no implementation for this mode.
+    value: ${../../status/if/not-implemented:/name}
+type: interface

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/disable-instruction
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  Where the ${/glossary/target:/term} has an instruction cache, where the
+  instruction cache can be disabled, when the
+  ${../if/disable-instruction:/name} directive is called, the instruction cache
+  shall be disabled.
+type: requirement

@@ -1,0 +1,44 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/zero-length-array
+non-functional-type: interface
+rationale: |
+  From GNU C documentation:
+
+    Although the size of a zero-length array is zero, an array member of this
+    kind may increase the size of the enclosing type as a result of tail padding.
+
+    Example::
+
+      struct line
+      {
+        int length;
+        char contents[RTEMS_ZERO_LENGTH_ARRAY];
+      };
+
+      struct line *thisline = (struct line *)
+        malloc (sizeof (struct line) + this_length);
+      thisline->length = this_length;
+
+  Zero-length arrays and especially objects ending with zero-length arrays
+  can be statically initialized so that they are larger than declared (have more
+  that 0 elements). See the documentation of the GNU C compiler
+  below keyword: *arrays of length zero*.
+references: []
+requirement-type: non-functional
+text: |
+  When the code is compiled with the GNU C compiler,
+  and the ${../if/zero-length-array:/name} macro is used as
+  element count of an array declaration,
+  and that array declaration is the last member of a ``struct`` that is
+  otherwise non-empty,
+  and that structure is never used as member of another structure or
+  array,
+  the macro shall cause the compiler to layout the structure as if the
+  array had an element count of one but to reduce the total size
+  of the structure by the size of that one array element.
+type: requirement

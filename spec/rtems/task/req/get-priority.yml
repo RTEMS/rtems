@@ -1,0 +1,338 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-priority
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/get-priority:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/get-priority:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/get-priority:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: NotDef
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_DEFINED );
+    text: |
+      The return status of ${../if/get-priority:/name} shall be
+      ${../../status/if/not-defined:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: PriorityObj
+  states:
+  - name: Set
+    test-code: |
+      T_eq_u32( ctx->priority_obj, PRIO_DEFAULT );
+    text: |
+      The value of the object referenced by the
+      ${../if/get-priority:/params[1]/name} parameter shall be set to the
+      object identifier of the ${/glossary/scheduler-home:/term} of the task
+      specified by the ${../if/get-priority:/params[0]/name} parameter at some
+      point during the call after the return of the
+      ${../if/get-priority:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->priority_obj, PRIO_INVALID );
+    text: |
+      Objects referenced by the ${../if/get-priority:/params[1]/name}
+      parameter in past calls to ${../if/get-priority:/name} shall
+      not be accessed by the ${../if/get-priority:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: TaskId
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->task_id = INVALID_ID;
+    text: |
+      While the ${../if/get-priority:/params[0]/name} parameter is not
+      associated with a task.
+  - name: Task
+    test-code: |
+      ctx->task_id = RTEMS_SELF;
+    text: |
+      While the ${../if/get-priority:/params[0]/name} parameter is
+      associated with a task.
+  test-epilogue: null
+  test-prologue: null
+- name: SchedulerId
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->scheduler_id = INVALID_ID;
+    text: |
+      While the ${../if/get-priority:/params[1]/name} parameter is not
+      associated with a scheduler.
+  - name: Scheduler
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_a_id;
+    text: |
+      While the ${../if/get-priority:/params[1]/name} parameter is associated
+      with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Eligible
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_a_id;
+    text: |
+      While the ${../if/get-priority:/params[1]/name} parameter is associated
+      with an ${/glossary/scheduler-eligible:/term} of the task specified by
+      ${../if/get-priority:/params[0]/name}.
+  - name: Ineligible
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_b_id;
+    text: |
+      While the ${../if/get-priority:/params[1]/name} parameter is associated
+      with an ${/glossary/scheduler-ineligible:/term} of the task specified by
+      ${../if/get-priority:/params[0]/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Valid
+    test-code: |
+      ctx->priority = &ctx->priority_obj;
+    text: |
+      While the ${../if/get-priority:/params[2]/name} parameter references an
+      object of type ${../../type/if/priority:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->priority = NULL;
+    text: |
+      While the ${../if/get-priority:/params[2]/name} parameter is equal to
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoOtherScheduler: |
+    Where the system was built with SMP support disabled, exactly one scheduler
+    is present in an application.
+test-action: |
+  ctx->status = rtems_task_get_priority(
+    ctx->task_id,
+    ctx->scheduler_id,
+    ctx->priority
+  );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    This member contains the scheduler A identifier.
+  description: null
+  member: |
+    rtems_id scheduler_a_id
+- brief: |
+    This member contains the scheduler B identifier.
+  description: null
+  member: |
+    rtems_id scheduler_b_id
+- brief: |
+    This member provides the object referenced by the
+    ${../if/get-priority:/params[2]/name} parameter.
+  description: null
+  member: |
+    rtems_task_priority priority_obj
+- brief: |
+    This member contains the return value of the ${../if/get-priority:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/get-priority:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id task_id
+- brief: |
+    This member specifies if the ${../if/get-priority:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member specifies if the ${../if/get-priority:/params[2]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id *priority
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: |
+  ctx->priority_obj = PRIO_INVALID;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_A_NAME,
+      &ctx->scheduler_a_id
+    );
+    T_rsc_success( sc );
+
+    #if defined(RTEMS_SMP)
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_B_NAME,
+      &ctx->scheduler_b_id
+    );
+    T_rsc_success( sc );
+    #endif
+  description: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-task-get-priority.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    PriorityObj: Set
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Scheduler:
+    - Eligible
+    Priority:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Invalid
+    SchedulerId:
+    - Invalid
+    Scheduler: N/A
+    Priority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Invalid
+    Scheduler: N/A
+    Priority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Invalid
+    SchedulerId:
+    - Scheduler
+    Scheduler: N/A
+    Priority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Scheduler:
+    - Eligible
+    Priority:
+    - 'Null'
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId: all
+    SchedulerId:
+    - Invalid
+    Scheduler: N/A
+    Priority:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Invalid
+    SchedulerId:
+    - Scheduler
+    Scheduler: N/A
+    Priority:
+    - Valid
+- enabled-by: true
+  post-conditions: NoOtherScheduler
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Scheduler:
+    - Ineligible
+    Priority: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: NotDef
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Scheduler:
+    - Ineligible
+    Priority:
+    - Valid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: InvAddr
+    PriorityObj: Nop
+  pre-conditions:
+    TaskId:
+    - Task
+    SchedulerId:
+    - Scheduler
+    Scheduler:
+    - Ineligible
+    Priority:
+    - 'Null'
+type: requirement

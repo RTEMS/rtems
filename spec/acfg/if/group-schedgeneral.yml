@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  This section describes configuration options related to selecting a
+  scheduling algorithm for an application.  A scheduler configuration is optional
+  and only necessary in very specific circumstances.  A normal application
+  configuration does not need any of the configuration options described in this
+  section.
+
+  By default, the ${/doc/if/scheduler-priority:/name}
+  algorithm is used in uniprocessor configurations.  In case SMP is enabled and
+  the configured maximum processors
+  (${max-processors:/name}) is greater
+  than one, then the
+  ${/doc/if/scheduler-smp-edf:/name}
+  is selected as the default scheduler algorithm.
+
+  For the schedulers provided by RTEMS (see ${/doc/if/scheduler-concepts:/name}), the
+  configuration is straightforward.  All that is required is to define the
+  configuration option which specifies which scheduler you want for in your
+  application.
+
+  The pluggable scheduler interface also enables the user to provide their own
+  scheduling algorithm.  If you choose to do this, you must define multiple
+  configuration option.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-group
+links:
+- role: interface-placement
+  uid: ../../if/domain
+- role: requirement-refinement
+  uid: ../../req/applconfig
+name: General Scheduler Configuration
+text: ''
+type: interface

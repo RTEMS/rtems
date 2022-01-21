@@ -1,0 +1,88 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Initializes the interrupt server tasks.
+copyrights:
+- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${../../type/if/priority:/name} ${.:/params[0]/name}
+    - ${/c/if/size_t:/name} ${.:/params[1]/name}
+    - ${../../mode/if/mode:/name} ${.:/params[2]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[3]/name}
+    - ${/c/if/uint32_t:/name} *${.:/params[4]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  The directive tries to create an interrupt server task for each online
+  processor in the system.  The tasks will have the initial priority specified
+  by ${.:/params[0]/name}, the stack size specified by ${.:/params[1]/name},
+  the initial mode set specified by ${.:/params[2]/name}, and the attribute set
+  specified by ${.:/params[3]/name}.  The count of successfully created server
+  tasks will be returned in ${.:/params[4]/name} if the pointer is not equal to
+  ${/c/if/null:/name}.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+name: rtems_interrupt_server_initialize
+notes: |
+  Interrupt handlers may be installed on an interrupt server with
+  ${server-handler-install:/name} and removed with
+  ${server-handler-remove:/name} using a server index.  In case of an
+  interrupt, the request will be forwarded to the interrupt server.  The
+  handlers are executed within the interrupt server context.  If one handler
+  blocks on something this may delay the processing of other handlers.
+
+  Interrupt servers may be deleted by ${server-delete:/name}.
+params:
+- description: |
+    is the initial ${/glossary/priority-task:/term} of the created interrupt
+    servers.
+  dir: null
+  name: priority
+- description: |
+    is the task stack size of the created interrupt servers.
+  dir: null
+  name: stack_size
+- description: |
+    is the initial mode set of the created interrupt servers.
+  dir: null
+  name: modes
+- description: |
+    is the attribute set of the created interrupt servers.
+  dir: null
+  name: attributes
+- description: |
+    is the pointer to an ${/c/if/uint32_t:/name} object or ${/c/if/null:/name}.
+    When the pointer is not equal to ${/c/if/null:/name}, the count of
+    successfully created interrupt servers is stored in this object regardless
+    of the return status.
+  dir: out
+  name: server_count
+return:
+  return: |
+    The directive uses ${../../task/if/create:/name}.  If this directive fails,
+    then its error status will be returned.
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The interrupt servers were already initialized.
+    value: ${../../status/if/incorrect-state:/name}
+type: interface

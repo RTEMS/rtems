@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Concatenates expansion of _x and expansion of _y.
+copyrights:
+- Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${concat:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_XCONCAT
+notes: null
+params:
+- description: |
+    is expanded first and then used as the left hand side token of the
+    concatenation.
+  dir: null
+  name: _x
+- description: |
+    is expanded first and then used as the right hand side token of the
+    concatenation.
+  dir: null
+  name: _y
+return:
+  return: |
+    Returns the concatenation of the expansions of tokens _x and _y.
+  return-values: []
+type: interface

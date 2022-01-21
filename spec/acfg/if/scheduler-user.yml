@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2010 Gedare Bloom
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the user shall provide a
+  scheduler algorithm to the application.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
+name: CONFIGURE_SCHEDULER_USER
+notes: |
+  This scheduler configuration option is an advanced configuration option.
+  Think twice before you use it.
+
+  RTEMS allows the application to provide its own task/thread scheduling
+  algorithm. In order to do this, one shall define
+  ``CONFIGURE_SCHEDULER_USER`` to indicate the application provides its own
+  scheduling algorithm. If ``CONFIGURE_SCHEDULER_USER`` is defined then the
+  following additional macros shall be defined:
+
+  * ``CONFIGURE_SCHEDULER`` shall be defined to a static definition of
+    the scheduler data structures of the user scheduler.
+
+  * ``CONFIGURE_SCHEDULER_TABLE_ENTRIES`` shall be defined to a scheduler
+    table entry initializer for the user scheduler.
+
+  * ``CONFIGURE_SCHEDULER_USER_PER_THREAD`` shall be defined to the type of
+    the per-thread information of the user scheduler.
+
+  At this time, the mechanics and requirements for writing a new scheduler
+  are evolving and not fully documented.  It is recommended that you look at
+  the existing Deterministic Priority Scheduler in
+  ``cpukit/score/src/schedulerpriority*.c`` for guidance.  For guidance on
+  the configuration macros, please examine ``cpukit/sapi/include/confdefs.h``
+  for how these are defined for the Deterministic Priority Scheduler.
+type: interface

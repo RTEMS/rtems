@@ -1,0 +1,94 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
+test-brief: |
+  This validation test suite contains test cases which test the kernel
+  character input/output device provided by the ${/glossary/bsp:/term} before
+  the system initialization is performed.
+test-code: |
+  const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  static char buffer[ 512 ];
+
+  static const T_action actions[] = {
+    T_report_hash_sha256
+  };
+
+  static const T_config test_config = {
+    .name = rtems_test_name,
+    .buf = buffer,
+    .buf_size = sizeof( buffer ),
+    .putchar = rtems_put_char,
+    .verbosity = RTEMS_TEST_VERBOSITY,
+    .now = T_now_tick,
+    .action_count = T_ARRAY_SIZE( actions ),
+    .actions = actions
+  };
+
+  void boot_card( const char *cmdline )
+  {
+    uint32_t exit_code;
+
+    (void) cmdline;
+
+    rtems_test_begin( rtems_test_name, TEST_STATE );
+    T_run_initialize( &test_config );
+    ${/rtems/io/val/kernel:/test-run}();
+
+    if ( T_run_finalize() ) {
+      rtems_test_end( rtems_test_name );
+      exit_code = 0;
+    } else {
+      exit_code = 1;
+    }
+
+    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, exit_code );
+  }
+
+  static void *IdleBody( uintptr_t ignored )
+  {
+    (void) ignored;
+
+    while ( true ) {
+      /* Do nothing */
+    }
+
+    return NULL;
+  }
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+  #define CONFIGURE_SCHEDULER_USER
+
+  #define CONFIGURE_SCHEDULER
+
+  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES { }
+
+  #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+  #define CONFIGURE_IDLE_TASK_BODY IdleBody
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-description: null
+test-includes:
+- bsp/bootcard.h
+- rtems/test.h
+- rtems/test-info.h
+- rtems/testopts.h
+test-local-includes:
+- tr-io-kernel.h
+test-suite-name: ValidationIoKernel
+test-target: testsuites/validation/ts-validation-io-kernel.c
+type: test-suite

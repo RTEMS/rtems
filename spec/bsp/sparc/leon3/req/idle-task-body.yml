@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: bsps/sparc/leon3
+links:
+- role: interface-function
+  uid: ../../../if/acfg-idle-task-body
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${/glossary/bsp:/term} shall define
+  ${../../../if/acfg-idle-task-body:/name} to ${../if/idle-thread:/name}.
+type: requirement

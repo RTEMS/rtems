@@ -1,0 +1,55 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of application configuration options.
+  action-code: |
+    rtems_status_code sc;
+    rtems_id          id;
+  checks:
+  - brief: |
+      Check the configured ${/acfg/if/max-priority:/name} value using
+      ${/rtems/task/if/maximum-priority}.  This configuration option affects
+      only the Deterministic Priority Scheduler which was explicitly configured
+      by ${/acfg/if/scheduler-priority:/name} in the test suite.
+    code: |
+      T_eq_u32( RTEMS_MAXIMUM_PRIORITY, 127 );
+    links:
+    - role: validation
+      uid: ../req/max-priority
+    - role: validation
+      uid: ../req/scheduler-priority
+    - role: validation
+      uid: /rtems/task/req/maximum-priority
+  - brief: |
+      Check the configured ${/acfg/if/max-priority:/name} value using
+      ${/rtems/task/if/maximum-priority}.  This configuration option affects
+      only the Deterministic Priority Scheduler which was explicitly configured
+      by ${/acfg/if/scheduler-priority:/name} in the test suite.
+    code: |
+      sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id );
+      T_rsc_success( sc );
+    links:
+    - role: validation
+      uid: ../req/scheduler-name
+  links: []
+test-brief: |
+  Tests the effect of application configuration options.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-acfg-one-cpu.c
+test-teardown: null
+type: test-case

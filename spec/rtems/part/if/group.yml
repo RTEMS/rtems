@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  The Partition Manager provides facilities to dynamically allocate memory in
+  fixed-size units.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: null
+enabled-by: true
+identifier: RTEMSAPIClassicPart
+index-entries: []
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: create
+- role: placement-order
+  uid: ident
+- role: placement-order
+  uid: delete
+- role: placement-order
+  uid: get-buffer
+- role: placement-order
+  uid: return-buffer
+name: Partition Manager
+text: |
+  The Classic API shall provide an interface to the Partition Manager.
+type: interface
