@@ -194,6 +194,10 @@ typedef struct {
 #define MICROBLAZE_MSR_C   ( 1 << 2 )
 #define MICROBLAZE_MSR_IE  ( 1 << 1 )
 
+#define MICROBLAZE_ESR_DS  ( 1 << 12 )
+#define MICROBLAZE_ESR_EC_MASK   0x1f
+#define MICROBLAZE_ESR_ESS_MASK  0x7f
+#define MICROBLAZE_ESR_ESS_SHIFT 5
 
 #define _CPU_MSR_GET( _msr_value ) \
   do { \
@@ -357,6 +361,40 @@ void _CPU_Context_switch(
   Context_Control  *run,
   Context_Control  *heir
 );
+
+/* Selects the appropriate resume function based on CEF state */
+RTEMS_NO_RETURN void _CPU_Exception_resume( CPU_Exception_frame *frame );
+
+RTEMS_NO_RETURN void _MicroBlaze_Exception_resume_from_exception(
+  CPU_Exception_frame *frame
+);
+
+RTEMS_NO_RETURN void _MicroBlaze_Exception_resume_from_break(
+  CPU_Exception_frame *frame
+);
+
+/*
+ * Only functions for exception cases since debug exception frames will never
+ * need dispatch
+ */
+RTEMS_NO_RETURN void _CPU_Exception_dispatch_and_resume(
+  CPU_Exception_frame *frame
+);
+
+void _CPU_Exception_disable_thread_dispatch( void );
+
+int _CPU_Exception_frame_get_signal( CPU_Exception_frame *frame );
+
+void _CPU_Exception_frame_set_resume(
+  CPU_Exception_frame *frame,
+  void                *address
+);
+
+void _CPU_Exception_frame_make_resume_next_instruction(
+  CPU_Exception_frame *frame
+);
+
+uint32_t *_MicroBlaze_Get_return_address( CPU_Exception_frame *ef );
 
 RTEMS_NO_RETURN void _CPU_Context_restore(
   Context_Control *new_context

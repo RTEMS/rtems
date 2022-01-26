@@ -13,6 +13,7 @@ description: |
   frames.
 enabled-by:
 - aarch64
+- microblaze
 links: []
 name: RTEMS_EXCEPTION_EXTENSIONS
 type: build

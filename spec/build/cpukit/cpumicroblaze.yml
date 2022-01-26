@@ -24,6 +24,8 @@ source:
 - cpukit/score/cpu/microblaze/microblaze-context-switch.S
 - cpukit/score/cpu/microblaze/microblaze-context-validate.S
 - cpukit/score/cpu/microblaze/microblaze-context-volatile-clobber.S
+- cpukit/score/cpu/microblaze/microblaze-exception-extensions.c
+- cpukit/score/cpu/microblaze/microblaze-exception-extensions.S
 - cpukit/score/cpu/microblaze/cpu.c
 - cpukit/score/cpu/microblaze/cpu_asm.S
 type: build
