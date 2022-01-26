@@ -65,6 +65,44 @@
 
 #define CPU_MODES_INTERRUPT_MASK 0x00000001
 
+#define MICROBLAZE_EXCEPTION_FRAME_R1    0
+#define MICROBLAZE_EXCEPTION_FRAME_R2    4
+#define MICROBLAZE_EXCEPTION_FRAME_R3    8
+#define MICROBLAZE_EXCEPTION_FRAME_R4   12
+#define MICROBLAZE_EXCEPTION_FRAME_R5   16
+#define MICROBLAZE_EXCEPTION_FRAME_R6   20
+#define MICROBLAZE_EXCEPTION_FRAME_R7   24
+#define MICROBLAZE_EXCEPTION_FRAME_R8   28
+#define MICROBLAZE_EXCEPTION_FRAME_R9   32
+#define MICROBLAZE_EXCEPTION_FRAME_R10  36
+#define MICROBLAZE_EXCEPTION_FRAME_R11  40
+#define MICROBLAZE_EXCEPTION_FRAME_R12  44
+#define MICROBLAZE_EXCEPTION_FRAME_R13  48
+#define MICROBLAZE_EXCEPTION_FRAME_R14  52
+#define MICROBLAZE_EXCEPTION_FRAME_R15  56
+#define MICROBLAZE_EXCEPTION_FRAME_R16  60
+#define MICROBLAZE_EXCEPTION_FRAME_R17  64
+#define MICROBLAZE_EXCEPTION_FRAME_R18  68
+#define MICROBLAZE_EXCEPTION_FRAME_R19  72
+#define MICROBLAZE_EXCEPTION_FRAME_R20  76
+#define MICROBLAZE_EXCEPTION_FRAME_R21  80
+#define MICROBLAZE_EXCEPTION_FRAME_R22  84
+#define MICROBLAZE_EXCEPTION_FRAME_R23  88
+#define MICROBLAZE_EXCEPTION_FRAME_R24  92
+#define MICROBLAZE_EXCEPTION_FRAME_R25  96
+#define MICROBLAZE_EXCEPTION_FRAME_R26 100
+#define MICROBLAZE_EXCEPTION_FRAME_R27 104
+#define MICROBLAZE_EXCEPTION_FRAME_R28 108
+#define MICROBLAZE_EXCEPTION_FRAME_R29 112
+#define MICROBLAZE_EXCEPTION_FRAME_R30 116
+#define MICROBLAZE_EXCEPTION_FRAME_R31 120
+#define MICROBLAZE_EXCEPTION_FRAME_MSR 124
+#define MICROBLAZE_EXCEPTION_FRAME_EAR 128
+#define MICROBLAZE_EXCEPTION_FRAME_ESR 132
+#define MICROBLAZE_EXCEPTION_FRAME_BTR 136
+
+#define CPU_EXCEPTION_FRAME_SIZE 140
+
 #ifndef ASM
 
 #ifdef __cplusplus
@@ -139,8 +177,23 @@ typedef struct {
 
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
 
-#define MICROBLAZE_MSR_IE (1 << 1)
-#define MICROBLAZE_MSR_EE (1 << 8)
+/*
+ * bit definitions in the documentation are reversed for all special registers
+ * such that bit 0 is the most significant bit
+ */
+#define MICROBLAZE_MSR_VM  ( 1 << 13 )
+#define MICROBLAZE_MSR_UM  ( 1 << 11 )
+#define MICROBLAZE_MSR_PVR ( 1 << 10 )
+#define MICROBLAZE_MSR_EIP ( 1 << 9 )
+#define MICROBLAZE_MSR_EE  ( 1 << 8 )
+#define MICROBLAZE_MSR_DCE ( 1 << 7 )
+#define MICROBLAZE_MSR_DZO ( 1 << 6 )
+#define MICROBLAZE_MSR_ICE ( 1 << 5 )
+#define MICROBLAZE_MSR_FSL ( 1 << 4 )
+#define MICROBLAZE_MSR_BIP ( 1 << 3 )
+#define MICROBLAZE_MSR_C   ( 1 << 2 )
+#define MICROBLAZE_MSR_IE  ( 1 << 1 )
+
 
 #define _CPU_MSR_GET( _msr_value ) \
   do { \
@@ -228,8 +281,42 @@ void _CPU_Context_Initialize(
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 typedef struct {
-  /* TODO: enumerate registers */
-  uint32_t r[32];
+  /* r0 is unnecessary since it is always 0 */
+  uint32_t r1;
+  uint32_t r2;
+  uint32_t r3; /* return 1/scratch */
+  uint32_t r4; /* return 2/scratch */
+  uint32_t r5; /* param 1/scratch */
+  uint32_t r6; /* param 2/scratch */
+  uint32_t r7; /* param 3/scratch */
+  uint32_t r8; /* param 4/scratch */
+  uint32_t r9; /* param 5/scratch */
+  uint32_t r10; /* param 6/scratch */
+  uint32_t r11; /* scratch */
+  uint32_t r12; /* scratch */
+  uint32_t r13;
+  uint32_t *r14; /* Interrupt Link Register */
+  uint32_t *r15; /* Link Register */
+  uint32_t *r16; /* Trap/Debug Link Register */
+  uint32_t *r17; /* Exception Link Register */
+  uint32_t r18;
+  uint32_t r19;
+  uint32_t r20;
+  uint32_t r21;
+  uint32_t r22;
+  uint32_t r23;
+  uint32_t r24;
+  uint32_t r25;
+  uint32_t r26;
+  uint32_t r27;
+  uint32_t r28;
+  uint32_t r29;
+  uint32_t r30;
+  uint32_t r31;
+  uint32_t msr; /* Machine Status Register */
+  uint32_t *ear; /* Exception Address Register */
+  uint32_t esr; /* Exception Status Register */
+  uint32_t *btr; /* Branch Target Register */
 } CPU_Exception_frame;
 
 /* end of Priority handler macros */
@@ -244,6 +331,17 @@ void _CPU_ISR_install_vector(
   uint32_t         vector,
   CPU_ISR_handler  new_handler,
   CPU_ISR_handler *old_handler
+);
+
+typedef void ( *MicroBlaze_Exception_handler )( CPU_Exception_frame *ef );
+
+void _MicroBlaze_Exception_install_handler(
+  MicroBlaze_Exception_handler  new_handler,
+  MicroBlaze_Exception_handler *old_handler
+);
+
+void _MicroBlaze_Exception_handle(
+  CPU_Exception_frame *ef
 );
 
 void _CPU_Context_switch(

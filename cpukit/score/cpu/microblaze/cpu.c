@@ -38,6 +38,10 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
+
+#include <rtems/bspIo.h>
+#include <rtems/fatal.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/tls.h>
 #include <rtems/score/wkspace.h>
@@ -75,6 +79,60 @@ void _CPU_Context_Initialize(
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *ctx )
 {
+  printk(
+    "\n"
+    "R0   = 0x%08" PRIx32  " R17  = %p\n"
+    "R1   = 0x%08" PRIx32  " R18  = 0x%08" PRIx32 "\n"
+    "R2   = 0x%08" PRIx32  " R19  = 0x%08" PRIx32 "\n"
+    "R3   = 0x%08" PRIx32  " R20  = 0x%08" PRIx32 "\n"
+    "R4   = 0x%08" PRIx32  " R21  = 0x%08" PRIx32 "\n"
+    "R5   = 0x%08" PRIx32  " R22  = 0x%08" PRIx32 "\n"
+    "R6   = 0x%08" PRIx32  " R23  = 0x%08" PRIx32 "\n"
+    "R7   = 0x%08" PRIx32  " R24  = 0x%08" PRIx32 "\n"
+    "R8   = 0x%08" PRIx32  " R25  = 0x%08" PRIx32 "\n"
+    "R9   = 0x%08" PRIx32  " R26  = 0x%08" PRIx32 "\n"
+    "R10  = 0x%08" PRIx32  " R27  = 0x%08" PRIx32 "\n"
+    "R11  = 0x%08" PRIx32  " R28  = 0x%08" PRIx32 "\n"
+    "R12  = 0x%08" PRIx32  " R29  = 0x%08" PRIx32 "\n"
+    "R13  = 0x%08" PRIx32  " R30  = 0x%08" PRIx32 "\n"
+    "R14  = %p"            " R31  = 0x%08" PRIx32 "\n"
+    "R15  = %p"            " ESR  = 0x%08" PRIx32 "\n"
+    "R16  = %p"            " EAR  = %p\n",
+    0,  ctx->r17,
+    ctx->r1,  ctx->r18,
+    ctx->r2,  ctx->r19,
+    ctx->r3,  ctx->r20,
+    ctx->r4,  ctx->r21,
+    ctx->r5,  ctx->r22,
+    ctx->r6,  ctx->r23,
+    ctx->r7,  ctx->r24,
+    ctx->r8,  ctx->r25,
+    ctx->r9,  ctx->r26,
+    ctx->r10, ctx->r27,
+    ctx->r11, ctx->r28,
+    ctx->r12, ctx->r29,
+    ctx->r13, ctx->r30,
+    ctx->r14, ctx->r31,
+    ctx->r15, ctx->esr,
+    ctx->r16, ctx->ear
+  );
+
+  printk(
+    "MSR  = 0x%08" PRIx32 " %s%s%s%s%s%s%s%s%s%s%s%s\n",
+    ctx->msr,
+    ( ctx->msr & MICROBLAZE_MSR_VM ) ? "VM " : "",
+    ( ctx->msr & MICROBLAZE_MSR_UM ) ? "UM " : "",
+    ( ctx->msr & MICROBLAZE_MSR_PVR ) ? "PVR " : "",
+    ( ctx->msr & MICROBLAZE_MSR_EIP ) ? "EiP " : "",
+    ( ctx->msr & MICROBLAZE_MSR_EE ) ? "EE " : "",
+    ( ctx->msr & MICROBLAZE_MSR_DCE ) ? "DCE " : "",
+    ( ctx->msr & MICROBLAZE_MSR_DZO ) ? "DZO " : "",
+    ( ctx->msr & MICROBLAZE_MSR_ICE ) ? "ICE " : "",
+    ( ctx->msr & MICROBLAZE_MSR_FSL ) ? "FSL " : "",
+    ( ctx->msr & MICROBLAZE_MSR_BIP ) ? "BiP " : "",
+    ( ctx->msr & MICROBLAZE_MSR_C ) ? "C " : "",
+    ( ctx->msr & MICROBLAZE_MSR_IE ) ? "IE " : ""
+  );
 }
 
 void _CPU_ISR_Set_level( uint32_t level )
@@ -117,4 +175,31 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   while ( true ) {
   }
+}
+
+MicroBlaze_Exception_handler installed_exception_handler = NULL;
+
+void _MicroBlaze_Exception_install_handler(
+  MicroBlaze_Exception_handler  new_handler,
+  MicroBlaze_Exception_handler *old_handler
+)
+{
+  if ( old_handler != NULL ) {
+    *old_handler = installed_exception_handler;
+  }
+
+  installed_exception_handler = new_handler;
+}
+
+void _MicroBlaze_Exception_handle( CPU_Exception_frame *ef )
+{
+  /* EiP is not set for user exceptions which are unused and not hooked */
+  if (
+    ( ef->msr & MICROBLAZE_MSR_EIP ) != 0
+    && installed_exception_handler != NULL
+  ) {
+    installed_exception_handler( ef );
+  }
+
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) ef );
 }

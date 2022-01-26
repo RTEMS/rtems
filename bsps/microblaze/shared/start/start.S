@@ -76,7 +76,12 @@ _vector_interrupt:
 	.section .vectors.hw_exception, "ax"
 	.align 2
 _vector_hw_exception:
-	brai _hw_exception_handler
+/*
+ * Hardware and software exceptions are handled identically with the MSR[EiP]
+ * bit differentiating them and determining which register should be used for
+ * return.
+ */
+	brai _exception_handler
 
 	.section .text
 	.globl _start1

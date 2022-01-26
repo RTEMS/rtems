@@ -54,9 +54,6 @@ _ISR_Handler:
 	swi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
 	swi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
 
-	xori r3, r5, 0xFFFF
-	beqi r3, do_exception
-
 	/* Disable dispatching */
 	lwi r3, r0, _Per_CPU_Information + 16
 	addik r3, r3, 1
@@ -180,13 +177,3 @@ thread_dispatch:
 	addik r1, r1, 52
 
 	bri quick_exit
-
-do_exception:
-	/* exception no longer in progress */
-	mfs r3, rmsr
-	andni r3, r3, 0x200
-	mts rmsr, r3
-	addi r5, r0, 9
-	add r6, r0, r1
-
-	brai _Terminate
