@@ -25,6 +25,7 @@ source:
 - bsps/microblaze/microblaze_fpga/console/debug-io.c
 - bsps/microblaze/microblaze_fpga/fdt/bsp_fdt.c
 - bsps/microblaze/microblaze_fpga/irq/irq.c
+- bsps/microblaze/microblaze_fpga/start/_debug_sw_break_handler.S
 - bsps/microblaze/microblaze_fpga/start/_exception_handler.S
 - bsps/microblaze/microblaze_fpga/start/_interrupt_handler.S
 - bsps/microblaze/microblaze_fpga/start/bspreset.c

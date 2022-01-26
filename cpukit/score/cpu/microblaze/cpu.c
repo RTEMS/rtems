@@ -203,3 +203,29 @@ void _MicroBlaze_Exception_handle( CPU_Exception_frame *ef )
 
   rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) ef );
 }
+
+MicroBlaze_Exception_handler installed_debug_handler = NULL;
+
+void _MicroBlaze_Debug_install_handler(
+  MicroBlaze_Exception_handler  new_handler,
+  MicroBlaze_Exception_handler *old_handler
+)
+{
+  if ( old_handler != NULL ) {
+    *old_handler = installed_debug_handler;
+  }
+
+  installed_debug_handler = new_handler;
+}
+
+void _MicroBlaze_Debug_handle( CPU_Exception_frame *ef )
+{
+  /* BiP is not set for software debug events, set it here */
+  ef->msr |= MICROBLAZE_MSR_BIP;
+
+  if ( installed_debug_handler != NULL ) {
+    installed_debug_handler( ef );
+  }
+
+  rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) ef );
+}

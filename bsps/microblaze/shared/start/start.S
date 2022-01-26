@@ -46,7 +46,7 @@
 		# 0x14 #				Hardware Interrupt          _interrupt_handler
 
 		# 0x18 #				(-- IMM --)
-		# 0x1C #				Breakpoint Exception        (-- Don't Care --)
+		# 0x1C #				Breakpoint Exception        _debug_sw_break_handler
 
 		# 0x20 #				(-- IMM --)
 		# 0x24 #				Hardware Exception          _hw_exception_handler
@@ -72,6 +72,11 @@ _vector_sw_exception:
 	.align 2
 _vector_interrupt:
 	brai _interrupt_handler
+
+	.section .vectors.debug_sw_break, "ax"
+	.align 2
+_vector_debug_sw_break:
+	brai _debug_sw_break_handler
 
 	.section .vectors.hw_exception, "ax"
 	.align 2

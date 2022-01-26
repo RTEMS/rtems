@@ -344,6 +344,15 @@ void _MicroBlaze_Exception_handle(
   CPU_Exception_frame *ef
 );
 
+void _MicroBlaze_Debug_install_handler(
+  MicroBlaze_Exception_handler  new_handler,
+  MicroBlaze_Exception_handler *old_handler
+);
+
+void _MicroBlaze_Debug_handle(
+  CPU_Exception_frame *ef
+);
+
 void _CPU_Context_switch(
   Context_Control  *run,
   Context_Control  *heir
