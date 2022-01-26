@@ -410,6 +410,11 @@ static bool Stack_check_Dump_stack_usage(
   void     *low;
   void     *high_water_mark;
 
+  /* This is likely to occur if the stack checker is not actually enabled */
+  if ( stack->area == NULL ) {
+    return false;
+  }
+
   low  = Stack_check_Usable_stack_start(stack);
   size = Stack_check_Usable_stack_size(stack);
 

@@ -1,0 +1,16 @@
+#  COPYRIGHT (c) 2022.
+#  On-Line Applications Research Corporation (OAR).
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+This file describes the directives and concepts tested by this test set.
+
+test set name: stackchk02
+
+directives:
+  + rtems_stack_checker_report_usage
+
+concepts:
+  + This task verifies that the stack checker will not perform bad
+    accesses when not properly enabled.

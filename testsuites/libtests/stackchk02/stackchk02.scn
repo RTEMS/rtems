@@ -1,0 +1,7 @@
+*** TEST STACKCHK02 ***
+                             STACK USAGE BY THREAD
+ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED
+0x09010001 IDLE                  0x10104940 0x1010713f 0x10107140  10224 N/A
+0x0a010001 UI1                   0x10109950 0x1010c14f 0x1010c150  10224 N/A
+
+*** END OF TEST STACKCHK02 ***
