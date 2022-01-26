@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: objects
+cflags: []
+copyrights:
+- Copyright (C) 2022 On-Line Applications Research (OAR)
+cppflags: []
+cxxflags: []
+enabled-by:
+- microblaze
+includes: []
+install: []
+links: []
+source:
+- cpukit/libdebugger/rtems-debugger-microblaze.c
+type: build

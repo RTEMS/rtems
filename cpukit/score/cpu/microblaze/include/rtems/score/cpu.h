@@ -208,6 +208,30 @@ typedef struct {
 #define _CPU_MSR_SET( _msr_value ) \
 { __asm__ volatile ("mts rmsr, %0" : "=&r" ((_msr_value)) : "0" ((_msr_value))); }
 
+#define MICROBLAZE_PVR0_VERSION_GET( _pvr0_value ) \
+  ( ( _pvr0_value >> 8 ) & 0xff )
+
+#define _CPU_PVR0_GET( _pvr0_value ) \
+  do { \
+    ( _pvr0_value ) = 0; \
+    __asm__ volatile ( "mfs %0, rpvr0" : "=&r" ( ( _pvr0_value ) ) ); \
+  } while ( 0 )
+
+#define MICROBLAZE_PVR3_BP_GET( _pvr3_value ) \
+  ( ( _pvr3_value >> 25 ) & 0xf )
+
+#define MICROBLAZE_PVR3_RWP_GET( _pvr3_value ) \
+  ( ( _pvr3_value >> 19 ) & 0x7 )
+
+#define MICROBLAZE_PVR3_WWP_GET( _pvr3_value ) \
+  ( ( _pvr3_value >> 13 ) & 0x7 )
+
+#define _CPU_PVR3_GET( _pvr3_value ) \
+  do { \
+    ( _pvr3_value ) = 0; \
+    __asm__ volatile ( "mfs %0, rpvr3" : "=&r" ( ( _pvr3_value ) ) ); \
+  } while ( 0 )
+
 #define _CPU_ISR_Disable( _isr_cookie ) \
   { \
     unsigned int _new_msr;  \

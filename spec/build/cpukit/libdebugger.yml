@@ -16,6 +16,8 @@ links:
   uid: objdbgarm
 - role: build-dependency
   uid: objdbgi386
+- role: build-dependency
+  uid: objdbgmicroblaze
 source:
 - cpukit/libdebugger/rtems-debugger-block.c
 - cpukit/libdebugger/rtems-debugger-bsp.c

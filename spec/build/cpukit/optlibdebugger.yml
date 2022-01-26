@@ -12,6 +12,7 @@ enabled-by:
 - aarch64
 - arm
 - i386
+- microblaze
 links: []
 name: BUILD_LIBDEBUGGER
 type: build
