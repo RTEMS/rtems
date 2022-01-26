@@ -238,10 +238,6 @@ links:
 - role: build-dependency
   uid: spfatal15
 - role: build-dependency
-  uid: spfatal24
-- role: build-dependency
-  uid: spfatal25
-- role: build-dependency
   uid: spfatal26
 - role: build-dependency
   uid: spfatal28

@@ -108,7 +108,6 @@ install:
   - cpukit/include/rtems/framebuffer.h
   - cpukit/include/rtems/fs.h
   - cpukit/include/rtems/fsmount.h
-  - cpukit/include/rtems/gxx_wrappers.h
   - cpukit/include/rtems/ide_part_table.h
   - cpukit/include/rtems/imfs.h
   - cpukit/include/rtems/init.h
@@ -658,7 +657,6 @@ source:
 - cpukit/libcsupport/src/getreentglobal.c
 - cpukit/libcsupport/src/getrusage.c
 - cpukit/libcsupport/src/getuid.c
-- cpukit/libcsupport/src/gxx_wrappers.c
 - cpukit/libcsupport/src/ioctl.c
 - cpukit/libcsupport/src/isatty_r.c
 - cpukit/libcsupport/src/issetugid.c
