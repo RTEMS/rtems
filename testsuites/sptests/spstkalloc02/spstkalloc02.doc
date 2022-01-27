@@ -9,6 +9,8 @@ This file describes the directives and concepts tested by this test set.
 
 test set name:  spstkalloc01
 
+The test expects that no thread-local object is present.
+
 directives:
 
 concepts:

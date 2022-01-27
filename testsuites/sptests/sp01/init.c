@@ -25,6 +25,8 @@ static const rtems_task_config Task_1_config = {
   .initial_priority = 1,
   .storage_area = Task_1_storage,
   .storage_size = sizeof( Task_1_storage ),
+  .maximum_thread_local_storage_size = 0,
+  .storage_free = NULL,
   .initial_modes = RTEMS_DEFAULT_MODES,
   .attributes = RTEMS_FLOATING_POINT
 };

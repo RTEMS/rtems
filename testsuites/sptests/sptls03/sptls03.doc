@@ -2,6 +2,8 @@ This file describes the directives and concepts tested by this test set.
 
 test set name: sptls03
 
+The test expects that no thread-local object is present.
+
 directives:
 
   - _Thread_Initialize()

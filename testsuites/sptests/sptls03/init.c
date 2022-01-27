@@ -48,7 +48,12 @@ static void Init(rtems_task_argument arg)
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+
+/*
+ * Avoid a dependency on errno which might be a thread-local object.  This test
+ * assumes that no thread-local storage object is present.
+ */
+#define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

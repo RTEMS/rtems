@@ -8,6 +8,8 @@
 
 test name:  sp01
 
+The test expects that no thread-local object is present.
+
 directives:
   rtems_task_construct
   rtems_task_create

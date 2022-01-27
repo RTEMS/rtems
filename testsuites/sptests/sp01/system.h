@@ -21,8 +21,13 @@ rtems_task Task_1_through_3(
 
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+/*
+ * Avoid a dependency on errno which might be a thread-local object.  This test
+ * assumes that no thread-local storage object is present.
+ */
+#define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
