@@ -13,7 +13,9 @@ install:
   source:
   - bsps/sparc/include/drvmgr/leon2_amba_bus.h
 ldflags: []
-links: []
+links:
+- role: build-dependency
+  uid: ../tst-xfail-dl06
 type: build
 use-after: []
 use-before: []
