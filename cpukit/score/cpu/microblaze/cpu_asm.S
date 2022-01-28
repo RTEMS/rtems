@@ -115,7 +115,9 @@ after_stack_switch:
 	beqi r3, quick_exit
 
 	/* Return to interrupted thread and make it do a dispatch */
-	bri thread_dispatch
+	bralid r15, _Thread_Dispatch
+	nop
+	/* Fall through to quick exit */
 
 quick_exit:
 	/* Simple return from nested interrupt */
@@ -141,47 +143,3 @@ quick_exit:
 
 	rtid r14, 0
 	nop
-
-thread_dispatch:
-	/* Reserve stack */
-	addik r1, r1, -(CPU_INTERRUPT_FRAME_SIZE)
-	/* Save scratch registers */
-	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
-	swi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
-	swi  r5, r1, MICROBLAZE_INTERRUPT_FRAME_R5
-	swi  r6, r1, MICROBLAZE_INTERRUPT_FRAME_R6
-	swi  r7, r1, MICROBLAZE_INTERRUPT_FRAME_R7
-	swi  r8, r1, MICROBLAZE_INTERRUPT_FRAME_R8
-	swi  r9, r1, MICROBLAZE_INTERRUPT_FRAME_R9
-	swi r10, r1, MICROBLAZE_INTERRUPT_FRAME_R10
-	swi r11, r1, MICROBLAZE_INTERRUPT_FRAME_R11
-	swi r12, r1, MICROBLAZE_INTERRUPT_FRAME_R12
-	swi r14, r1, MICROBLAZE_INTERRUPT_FRAME_R14
-	swi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
-	swi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
-	mfs r3, rmsr
-	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
-
-	bralid r15, _Thread_Dispatch
-	nop
-
-	/* Restore scratch registers */
-	lwi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
-	mts  rmsr, r3
-	lwi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
-	lwi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
-	lwi  r5, r1, MICROBLAZE_INTERRUPT_FRAME_R5
-	lwi  r6, r1, MICROBLAZE_INTERRUPT_FRAME_R6
-	lwi  r7, r1, MICROBLAZE_INTERRUPT_FRAME_R7
-	lwi  r8, r1, MICROBLAZE_INTERRUPT_FRAME_R8
-	lwi  r9, r1, MICROBLAZE_INTERRUPT_FRAME_R9
-	lwi r10, r1, MICROBLAZE_INTERRUPT_FRAME_R10
-	lwi r11, r1, MICROBLAZE_INTERRUPT_FRAME_R11
-	lwi r12, r1, MICROBLAZE_INTERRUPT_FRAME_R12
-	lwi r14, r1, MICROBLAZE_INTERRUPT_FRAME_R14
-	lwi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
-	lwi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
-	/* Free stack space */
-	addik r1, r1, CPU_INTERRUPT_FRAME_SIZE
-
-	bri quick_exit
