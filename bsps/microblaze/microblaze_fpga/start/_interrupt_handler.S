@@ -31,6 +31,8 @@
 
 */
 
+#include <rtems/score/cpuimpl.h>
+
 	.text
 	.globl _interrupt_handler    # Interrupt Handler Label
 	.align 2
@@ -41,7 +43,7 @@
 	nop
 #else /* __rtems__ */
 	/* Subtract stack frame */
-	addik r1, r1, -52
+	addik r1, r1, -(CPU_INTERRUPT_FRAME_SIZE)
 
 	swi r5, r1, 8
 

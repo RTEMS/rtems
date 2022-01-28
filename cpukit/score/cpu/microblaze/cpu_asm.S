@@ -53,6 +53,8 @@ _ISR_Handler:
 	swi r12, r1, MICROBLAZE_INTERRUPT_FRAME_R12
 	swi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
 	swi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
+	mfs r3, rmsr
+	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
 
 	/* Disable dispatching */
 	lwi r3, r0, _Per_CPU_Information + 16
@@ -76,7 +78,7 @@ _ISR_Handler:
 switch_to_interrupt_stack:
 	add r4, r0, r1
 	lwi r1, r0, _Per_CPU_Information + 4
-	addik r1, r1, -52
+	addik r1, r1, -(CPU_INTERRUPT_FRAME_SIZE)
 	swi r4, r1, 0
 
 on_interrupt_stack:
@@ -118,6 +120,8 @@ after_stack_switch:
 quick_exit:
 	/* Simple return from nested interrupt */
 	/* Restore registers */
+	lwi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
+	mts  rmsr, r3
 	lwi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
 	lwi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
 	lwi  r5, r1, MICROBLAZE_INTERRUPT_FRAME_R5
@@ -133,14 +137,14 @@ quick_exit:
 	lwi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
 
 	/* Remove stack frame */
-	addik r1, r1, 52
+	addik r1, r1, CPU_INTERRUPT_FRAME_SIZE
 
 	rtid r14, 0
 	nop
 
 thread_dispatch:
 	/* Reserve stack */
-	addik r1, r1, -52
+	addik r1, r1, -(CPU_INTERRUPT_FRAME_SIZE)
 	/* Save scratch registers */
 	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
 	swi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
@@ -155,11 +159,15 @@ thread_dispatch:
 	swi r14, r1, MICROBLAZE_INTERRUPT_FRAME_R14
 	swi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
 	swi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
+	mfs r3, rmsr
+	swi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
 
 	bralid r15, _Thread_Dispatch
 	nop
 
 	/* Restore scratch registers */
+	lwi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_MSR
+	mts  rmsr, r3
 	lwi  r3, r1, MICROBLAZE_INTERRUPT_FRAME_R3
 	lwi  r4, r1, MICROBLAZE_INTERRUPT_FRAME_R4
 	lwi  r5, r1, MICROBLAZE_INTERRUPT_FRAME_R5
@@ -174,6 +182,6 @@ thread_dispatch:
 	lwi r15, r1, MICROBLAZE_INTERRUPT_FRAME_R15
 	lwi r18, r1, MICROBLAZE_INTERRUPT_FRAME_R18
 	/* Free stack space */
-	addik r1, r1, 52
+	addik r1, r1, CPU_INTERRUPT_FRAME_SIZE
 
 	bri quick_exit
