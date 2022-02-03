@@ -33,18 +33,18 @@
 static void
 atsam_i2c_disable_interrupts(Twihs *regs)
 {
-	regs->TWIHS_IDR = 0xFFFFFFFF;
+	TWI_DisableIt(regs, 0xFFFFFFFF);
 }
 
-static void
-atsam_i2c_set_transfer_status(atsam_i2c_bus *bus, transfer_state state)
-{
-	bus->trans_state = state;
-}
-
-static void
+/*
+ * Return true if the message is done right after this. That is the case if all
+ * bytes are received but no stop is requested.
+ */
+static bool
 atsam_i2c_continue_read(Twihs *regs, atsam_i2c_bus *bus)
 {
+	bool done = false;
+
 	*bus->current_msg_byte = TWI_ReadByte(regs);
 	++bus->current_msg_byte;
 	--bus->current_msg_todo;
@@ -54,35 +54,35 @@ atsam_i2c_continue_read(Twihs *regs, atsam_i2c_bus *bus)
 		if (bus->stop_request){
 			TWI_DisableIt(regs, TWIHS_IDR_RXRDY);
 			TWI_EnableIt(regs, TWIHS_IER_TXCOMP);
-			atsam_i2c_set_transfer_status(bus, TX_RX_STOP_SENT);
 		} else {
-			atsam_i2c_set_transfer_status(bus, RX_CONT_MESSAGE_NEEDED);
+			done = true;
 		}
 	}
 	/* Last byte? */
 	else if (bus->current_msg_todo == 1 && bus->stop_request) {
 		TWI_Stop(regs);
 	}
+
+	return done;
 }
 
+/*
+ * Return true if the message is done right after this. That is the case if all
+ * bytes are sent but no stop is requested.
+ */
 static bool
-atsam_i2c_is_state(atsam_i2c_bus *bus, transfer_state state)
-{
-	return (bus->trans_state == state);
-}
-
-static void
 atsam_i2c_continue_write(Twihs *regs, atsam_i2c_bus *bus)
 {
+	bool done = false;
+
 	/* Transfer finished ? */
 	if (bus->current_msg_todo == 0) {
 		TWI_DisableIt(regs, TWIHS_IDR_TXRDY);
 		if (bus->stop_request){
 			TWI_EnableIt(regs, TWIHS_IER_TXCOMP);
 			TWI_SendSTOPCondition(regs);
-			atsam_i2c_set_transfer_status(bus, TX_RX_STOP_SENT);
 		} else {
-			atsam_i2c_set_transfer_status(bus, TX_CONT_MESSAGE_NEEDED);
+			done = true;
 		}
 	}
 	/* Bytes remaining */
@@ -91,13 +91,7 @@ atsam_i2c_continue_write(Twihs *regs, atsam_i2c_bus *bus)
 		++bus->current_msg_byte;
 		--bus->current_msg_todo;
 	}
-}
-
-static void
-atsam_i2c_finish_write_transfer(Twihs *regs)
-{
-		TWI_ReadByte(regs);
-		TWI_DisableIt(regs, TWIHS_IDR_TXCOMP);
+	return done;
 }
 
 static void
@@ -202,11 +196,9 @@ atsam_i2c_setup_transfer(atsam_i2c_bus *bus, Twihs *regs)
 		if (bus->current_msg_todo == 1){
 			send_stop = true;
 		}
-		atsam_i2c_set_transfer_status(bus, RX_SEND_DATA);
 		atsam_i2c_setup_read_transfer(regs, ten_bit_addr,
 		    slave_addr, send_stop);
 	} else {
-		atsam_i2c_set_transfer_status(bus, TX_SEND_DATA);
 		atsam_i2c_setup_write_transfer(bus, regs, ten_bit_addr,
 		    slave_addr);
 	}
@@ -222,33 +214,24 @@ atsam_i2c_interrupt(void *arg)
 	Twihs *regs = bus->regs;
 
 	/* read interrupts */
-	irqstatus = regs->TWIHS_SR;
+	irqstatus = TWI_GetMaskedStatus(regs);
 
-	if((irqstatus & (TWIHS_SR_ARBLST | TWIHS_SR_NACK)) != 0) {
+	if((irqstatus & ATSAMV_I2C_IRQ_ERROR) != 0) {
 		done = true;
-	}
-
-	if (((irqstatus & TWIHS_SR_RXRDY) != 0) &&
-	    (atsam_i2c_is_state(bus, RX_SEND_DATA))){
-		/* carry on read transfer */
-		atsam_i2c_continue_read(regs, bus);
-	} else if (((irqstatus & TWIHS_SR_TXCOMP) != 0) &&
-	    (atsam_i2c_is_state(bus, TX_RX_STOP_SENT))){
-		atsam_i2c_finish_write_transfer(regs);
+	} else if ((irqstatus & TWIHS_SR_RXRDY) != 0) {
+		done = atsam_i2c_continue_read(regs, bus);
+	} else if ((irqstatus & TWIHS_SR_TXCOMP) != 0) {
+		TWI_DisableIt(regs, TWIHS_IDR_TXCOMP);
 		done = true;
-	} else if (((irqstatus & TWIHS_SR_TXRDY) != 0) &&
-	    (atsam_i2c_is_state(bus, TX_SEND_DATA))){
-		atsam_i2c_continue_write(regs, bus);
-		if (atsam_i2c_is_state(bus, TX_CONT_MESSAGE_NEEDED)){
-			done = true;
-		}
+	} else if ((irqstatus & TWIHS_SR_TXRDY) != 0) {
+		done = atsam_i2c_continue_write(regs, bus);
 	}
 
 	if(done){
-		uint32_t err = irqstatus & ATSAMV_I2C_IRQ_ERROR;
+		bus->err = irqstatus & ATSAMV_I2C_IRQ_ERROR;
 
 		atsam_i2c_next_packet(bus);
-		if (bus->msg_todo == 0 || err != 0) {
+		if (bus->msg_todo == 0 || bus->err != 0) {
 			atsam_i2c_disable_interrupts(regs);
 			rtems_binary_semaphore_post(&bus->sem);
 		} else {
@@ -273,27 +256,38 @@ atsam_i2c_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
 		if ((msgs[i].flags & I2C_M_RECV_LEN) != 0) {
 			return -EINVAL;
 		}
+		if (msgs[i].len == 0) {
+			/* Hardware doesn't support zero length messages */
+			return -EINVAL;
+		}
 	}
 
 	bus->msgs = &msgs[0];
 	bus->msg_todo = msg_count;
 	bus->current_msg_todo = msgs[0].len;
 	bus->current_msg_byte = msgs[0].buf;
+	bus->err = 0;
 
 	regs = bus->regs;
 
-	atsam_i2c_setup_transfer(bus, regs);
+	/* Start with a clean start. Enable error interrupts. */
+	TWI_ConfigureMaster(bus->regs, bus->output_clock, BOARD_MCK);
+	TWI_EnableIt(regs, ATSAMV_I2C_IRQ_ERROR);
 
-	regs->TWIHS_IER = ATSAMV_I2C_IRQ_ERROR;
+	atsam_i2c_setup_transfer(bus, regs);
 
 	eno = rtems_binary_semaphore_wait_timed_ticks(
 		&bus->sem,
 		bus->base.timeout
 	);
-	if (eno != 0) {
+	if (eno != 0 || bus->err != 0) {
 		TWI_ConfigureMaster(bus->regs, bus->output_clock, BOARD_MCK);
 		rtems_binary_semaphore_try_wait(&bus->sem);
-		return -ETIMEDOUT;
+		if (bus->err != 0) {
+			return -EIO;
+		} else {
+			return -ETIMEDOUT;
+		}
 	}
 
 	return 0;
