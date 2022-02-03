@@ -37,68 +37,67 @@ atsam_i2c_disable_interrupts(Twihs *regs)
 }
 
 static void
-atsam_i2c_set_transfer_status(transfer_desc *trans_desc, transfer_state state)
+atsam_i2c_set_transfer_status(atsam_i2c_bus *bus, transfer_state state)
 {
-	trans_desc->trans_state = state;
+	bus->trans_state = state;
 }
 
 static void
-atsam_i2c_continue_read(Twihs *regs, transfer_desc *trans_desc)
+atsam_i2c_continue_read(Twihs *regs, atsam_i2c_bus *bus)
 {
-	trans_desc->data[trans_desc->already_transferred] = TWI_ReadByte(regs);
-	trans_desc->already_transferred++;
+	*bus->current_msg_byte = TWI_ReadByte(regs);
+	++bus->current_msg_byte;
+	--bus->current_msg_todo;
 
 	/* check for transfer finish */
-	if (trans_desc->already_transferred == trans_desc->data_size) {
-		if (trans_desc->stop_request){
+	if (bus->current_msg_todo == 0) {
+		if (bus->stop_request){
 			TWI_DisableIt(regs, TWIHS_IDR_RXRDY);
 			TWI_EnableIt(regs, TWIHS_IER_TXCOMP);
-			atsam_i2c_set_transfer_status(trans_desc, TX_RX_STOP_SENT);
+			atsam_i2c_set_transfer_status(bus, TX_RX_STOP_SENT);
 		} else {
-			atsam_i2c_set_transfer_status(trans_desc, RX_CONT_MESSAGE_NEEDED);
+			atsam_i2c_set_transfer_status(bus, RX_CONT_MESSAGE_NEEDED);
 		}
 	}
 	/* Last byte? */
-	else if ((trans_desc->already_transferred == (trans_desc->data_size - 1))
-	    && (trans_desc->stop_request)){
+	else if (bus->current_msg_todo == 1 && bus->stop_request) {
 		TWI_Stop(regs);
 	}
 }
 
 static bool
-atsam_i2c_is_state(transfer_desc *trans_desc, transfer_state state)
+atsam_i2c_is_state(atsam_i2c_bus *bus, transfer_state state)
 {
-	return (trans_desc->trans_state == state);
+	return (bus->trans_state == state);
 }
 
 static void
-atsam_i2c_continue_write(Twihs *regs, transfer_desc *trans_desc)
+atsam_i2c_continue_write(Twihs *regs, atsam_i2c_bus *bus)
 {
 	/* Transfer finished ? */
-	if (trans_desc->already_transferred == trans_desc->data_size) {
+	if (bus->current_msg_todo == 0) {
 		TWI_DisableIt(regs, TWIHS_IDR_TXRDY);
-		if (trans_desc->stop_request){
+		if (bus->stop_request){
 			TWI_EnableIt(regs, TWIHS_IER_TXCOMP);
 			TWI_SendSTOPCondition(regs);
-			atsam_i2c_set_transfer_status(trans_desc, TX_RX_STOP_SENT);
+			atsam_i2c_set_transfer_status(bus, TX_RX_STOP_SENT);
 		} else {
-			atsam_i2c_set_transfer_status(trans_desc, TX_CONT_MESSAGE_NEEDED);
+			atsam_i2c_set_transfer_status(bus, TX_CONT_MESSAGE_NEEDED);
 		}
 	}
 	/* Bytes remaining */
 	else {
-		TWI_WriteByte(regs,
-		    trans_desc->data[trans_desc->already_transferred]);
-		trans_desc->already_transferred++;
+		TWI_WriteByte(regs, *bus->current_msg_byte);
+		++bus->current_msg_byte;
+		--bus->current_msg_todo;
 	}
 }
 
 static void
-atsam_i2c_finish_write_transfer(Twihs *regs, transfer_desc *trans_desc)
+atsam_i2c_finish_write_transfer(Twihs *regs)
 {
 		TWI_ReadByte(regs);
 		TWI_DisableIt(regs, TWIHS_IDR_TXCOMP);
-		trans_desc->status = 0;
 }
 
 static void
@@ -113,19 +112,6 @@ atsam_i2c_next_packet(atsam_i2c_bus *bus)
 
 	bus->current_msg_todo = msg->len;
 	bus->current_msg_byte = msg->buf;
-}
-
-static void
-atsam_i2c_set_td(atsam_i2c_bus *bus, uint32_t already_transferred,
-    bool stop_needed)
-{
-	transfer_desc *trans_desc = &bus->trans_desc;
-
-	trans_desc->status = ASYNC_STATUS_PENDING;
-	trans_desc->data = bus->current_msg_byte;
-	trans_desc->data_size = bus->current_msg_todo;
-	trans_desc->already_transferred = already_transferred;
-	trans_desc->stop_request = stop_needed;
 }
 
 static bool
@@ -186,6 +172,8 @@ atsam_i2c_setup_write_transfer(atsam_i2c_bus *bus, Twihs *regs, bool ctrl,
 {
 	atsam_i2c_set_address_regs(regs, slave_addr, ctrl, false);
 	TWI_WriteByte(regs, *bus->current_msg_byte);
+	++bus->current_msg_byte;
+	--bus->current_msg_todo;
 	TWI_EnableIt(regs, TWIHS_IER_TXRDY);
 }
 
@@ -197,8 +185,8 @@ atsam_i2c_setup_transfer(atsam_i2c_bus *bus, Twihs *regs)
 	uint32_t msg_todo = bus->msg_todo;
 	uint16_t slave_addr;
 	bool ten_bit_addr = false;
-	uint32_t already_transferred;
 	bool stop_needed = true;
+	bool read;
 
 	ten_bit_addr = atsam_i2c_set_address_size(msgs);
 
@@ -206,22 +194,19 @@ atsam_i2c_setup_transfer(atsam_i2c_bus *bus, Twihs *regs)
 		stop_needed = false;
 	}
 
-	bus->read = (msgs->flags & I2C_M_RD) != 0;
+	read = (msgs->flags & I2C_M_RD) != 0;
 	slave_addr = msgs->addr;
-	already_transferred = (bus->read == true) ? 0 : 1;
-	atsam_i2c_set_td(bus, already_transferred, stop_needed);
+	bus->stop_request = stop_needed;
 
-	transfer_desc *trans_desc = &bus->trans_desc;
-
-	if (bus->read){
+	if (read){
 		if (bus->current_msg_todo == 1){
 			send_stop = true;
 		}
-		atsam_i2c_set_transfer_status(trans_desc, RX_SEND_DATA);
+		atsam_i2c_set_transfer_status(bus, RX_SEND_DATA);
 		atsam_i2c_setup_read_transfer(regs, ten_bit_addr,
 		    slave_addr, send_stop);
 	} else {
-		atsam_i2c_set_transfer_status(trans_desc, TX_SEND_DATA);
+		atsam_i2c_set_transfer_status(bus, TX_SEND_DATA);
 		atsam_i2c_setup_write_transfer(bus, regs, ten_bit_addr,
 		    slave_addr);
 	}
@@ -233,7 +218,6 @@ atsam_i2c_interrupt(void *arg)
 	atsam_i2c_bus *bus = arg;
 	uint32_t irqstatus;
 	bool done = false;
-	transfer_desc *trans_desc;
 
 	Twihs *regs = bus->regs;
 
@@ -244,20 +228,18 @@ atsam_i2c_interrupt(void *arg)
 		done = true;
 	}
 
-	trans_desc = &bus->trans_desc;
-
 	if (((irqstatus & TWIHS_SR_RXRDY) != 0) &&
-	    (atsam_i2c_is_state(trans_desc, RX_SEND_DATA))){
+	    (atsam_i2c_is_state(bus, RX_SEND_DATA))){
 		/* carry on read transfer */
-		atsam_i2c_continue_read(regs, trans_desc);
+		atsam_i2c_continue_read(regs, bus);
 	} else if (((irqstatus & TWIHS_SR_TXCOMP) != 0) &&
-	    (atsam_i2c_is_state(trans_desc, TX_RX_STOP_SENT))){
-		atsam_i2c_finish_write_transfer(regs, trans_desc);
+	    (atsam_i2c_is_state(bus, TX_RX_STOP_SENT))){
+		atsam_i2c_finish_write_transfer(regs);
 		done = true;
 	} else if (((irqstatus & TWIHS_SR_TXRDY) != 0) &&
-	    (atsam_i2c_is_state(trans_desc, TX_SEND_DATA))){
-		atsam_i2c_continue_write(regs, trans_desc);
-		if (trans_desc->trans_state == TX_CONT_MESSAGE_NEEDED){
+	    (atsam_i2c_is_state(bus, TX_SEND_DATA))){
+		atsam_i2c_continue_write(regs, bus);
+		if (atsam_i2c_is_state(bus, TX_CONT_MESSAGE_NEEDED)){
 			done = true;
 		}
 	}

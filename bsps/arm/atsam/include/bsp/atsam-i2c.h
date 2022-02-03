@@ -30,33 +30,27 @@ extern "C" {
 
 typedef enum {
 	TX_SEND_DATA,
-	TX_SEND_STOP,
 	TX_CONT_MESSAGE_NEEDED,
 	RX_SEND_DATA,
-	RX_SEND_STOP,
 	RX_CONT_MESSAGE_NEEDED,
 	TX_RX_STOP_SENT
 }transfer_state;
 
 typedef struct {
-	uint8_t status;
-	uint8_t *data;
-	bool stop_request;
-	uint32_t data_size;
-	uint32_t already_transferred;
-	transfer_state trans_state;
-} transfer_desc;
-
-typedef struct {
 	i2c_bus base;
-	i2c_msg *msgs;
 	Twihs *regs;
-	transfer_desc trans_desc;
+
+	/* First message and number of messages that have to be processed. */
+	i2c_msg *msgs;
 	uint32_t msg_todo;
+
+	/* Information about the current transfer. */
+	bool stop_request;
+	transfer_state trans_state;
 	uint32_t current_msg_todo;
 	uint8_t *current_msg_byte;
+
 	uint32_t output_clock;
-	bool read;
 	rtems_binary_semaphore sem;
 	rtems_vector_number irq;
 } atsam_i2c_bus;
