@@ -338,6 +338,8 @@ links:
 - role: build-dependency
   uid: spnsext01
 - role: build-dependency
+  uid: spntp01
+- role: build-dependency
   uid: spobjgetnext
 - role: build-dependency
   uid: sppagesize

@@ -135,13 +135,13 @@ atomic_load_ptr(void *ptr)
 	return ((void *)_Atomic_Load_uintptr(ptr, ATOMIC_ORDER_RELAXED));
 }
 
-static Timecounter_NTP_update_second _Timecounter_NTP_update_second;
+static Timecounter_NTP_update_second _Timecounter_NTP_update_second_handler;
 
 void
 _Timecounter_Set_NTP_update_second(Timecounter_NTP_update_second handler)
 {
 
-	_Timecounter_NTP_update_second = handler;
+	_Timecounter_NTP_update_second_handler = handler;
 }
 
 #define	ntp_update_second(a, b) (*ntp_update_second_handler)(a, b)
@@ -1721,7 +1721,7 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	bt = th->th_offset;
 	bintime_add(&bt, &th->th_boottime);
 #ifdef __rtems__
-	ntp_update_second_handler = _Timecounter_NTP_update_second;
+	ntp_update_second_handler = _Timecounter_NTP_update_second_handler;
 	if (ntp_update_second_handler != NULL) {
 #endif /* __rtems__ */
 	i = bt.sec - tho->th_microtime.tv_sec;

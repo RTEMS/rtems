@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSScoreTimecounter
+ *
+ * @brief This source file contains the implementation of ntp_gettime(),
+ *   ntp_adjtime(), adjtime(), and _Timecounter_NTP_update_second().
+ */
+
 /*-
  ***********************************************************************
  *								       *
@@ -36,6 +45,7 @@ __FBSDID("$FreeBSD$");
 #include "opt_ntp.h"
 
 #include <sys/param.h>
+#ifndef __rtems__
 #include <sys/systm.h>
 #include <sys/sysproto.h>
 #include <sys/eventhandler.h>
@@ -44,12 +54,24 @@ __FBSDID("$FreeBSD$");
 #include <sys/proc.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
+#endif /* __rtems__ */
 #include <sys/time.h>
 #include <sys/timex.h>
 #include <sys/timetc.h>
 #include <sys/timepps.h>
+#ifndef __rtems__
 #include <sys/syscallsubr.h>
 #include <sys/sysctl.h>
+#else /* __rtems__ */
+#include <rtems/sysinit.h>
+#include <rtems/score/timecounter.h>
+#include <errno.h>
+#include <string.h>
+#define	nanotime(_tsp) _Timecounter_Nanotime(_tsp)
+#define	ntp_update_second _Timecounter_NTP_update_second
+#define	time_uptime _Timecounter_Time_uptime
+struct thread;
+#endif /* __rtems__ */
 
 #ifdef PPS_SYNC
 FEATURE(pps_sync, "Support usage of external PPS signal by kernel PLL");
@@ -148,12 +170,18 @@ typedef int64_t l_fp;
 #define SHIFT_FLL	2		/* FLL loop gain (shift) */
 
 static int time_state = TIME_OK;	/* clock state */
+#ifdef __rtems__
+static
+#endif /* __rtems__ */
 int time_status = STA_UNSYNC;	/* clock status bits */
 static long time_tai;			/* TAI offset (s) */
 static long time_monitor;		/* last time offset scaled (ns) */
 static long time_constant;		/* poll interval (shift) (s) */
 static long time_precision = 1;		/* clock precision (ns) */
 static long time_maxerror = MAXPHASE / 1000; /* maximum error (us) */
+#ifdef __rtems__
+static
+#endif /* __rtems__ */
 long time_esterror = MAXPHASE / 1000; /* estimated error (us) */
 static long time_reftime;		/* uptime at last adjustment (s) */
 static l_fp time_offset;		/* time offset (ns) */
@@ -162,12 +190,24 @@ static l_fp time_adj;			/* tick adjust (ns/s) */
 
 static int64_t time_adjtime;		/* correction from adjtime(2) (usec) */
 
+#ifndef __rtems__
 static struct mtx ntp_lock;
 MTX_SYSINIT(ntp, &ntp_lock, "ntp", MTX_SPIN);
 
 #define	NTP_LOCK()		mtx_lock_spin(&ntp_lock)
 #define	NTP_UNLOCK()		mtx_unlock_spin(&ntp_lock)
 #define	NTP_ASSERT_LOCKED()	mtx_assert(&ntp_lock, MA_OWNED)
+#else /* __rtems__ */
+#define	NTP_LOCK()					\
+    do {						\
+        ISR_lock_Context lock_context;			\
+        _Timecounter_Acquire(&lock_context);
+#define	NTP_UNLOCK()					\
+        _Timecounter_Release(&lock_context);		\
+    } while (0)
+#define	NTP_ASSERT_LOCKED()				\
+    _Assert(_ISR_lock_Is_owner(&_Timecounter_Lock))
+#endif /* __rtems__ */
 
 #ifdef PPS_SYNC
 /*
@@ -273,6 +313,7 @@ ntp_gettime1(struct ntptimeval *ntvp)
  * See the timex.h header file for synopsis and API description.  Note that
  * the TAI offset is returned in the ntvtimeval.tai structure member.
  */
+#ifndef __rtems__
 #ifndef _SYS_SYSPROTO_H_
 struct ntp_gettime_args {
 	struct ntptimeval *ntvp;
@@ -293,7 +334,27 @@ sys_ntp_gettime(struct thread *td, struct ntp_gettime_args *uap)
 	td->td_retval[0] = ntv.time_state;
 	return (copyout(&ntv, uap->ntvp, sizeof(ntv)));
 }
+#else /* __rtems__ */
+int
+ntp_gettime(struct ntptimeval *ntv)
+{
 
+	if (ntv == NULL) {
+		errno = EFAULT;
+		return (-1);
+	}
+
+	ntv = memset(ntv, 0, sizeof(*ntv));
+
+	NTP_LOCK();
+	ntp_gettime1(ntv);
+	NTP_UNLOCK();
+
+	return (ntv->time_state);
+}
+#endif /* __rtems__ */
+
+#ifndef __rtems__
 static int
 ntp_sysctl(SYSCTL_HANDLER_ARGS)
 {
@@ -313,6 +374,7 @@ SYSCTL_NODE(_kern, OID_AUTO, ntp_pll, CTLFLAG_RW | CTLFLAG_MPSAFE, 0,
 SYSCTL_PROC(_kern_ntp_pll, OID_AUTO, gettime, CTLTYPE_OPAQUE | CTLFLAG_RD |
     CTLFLAG_MPSAFE, 0, sizeof(struct ntptimeval) , ntp_sysctl, "S,ntptimeval",
     "");
+#endif /* __rtems__ */
 
 #ifdef PPS_SYNC
 SYSCTL_INT(_kern_ntp_pll, OID_AUTO, pps_shiftmax, CTLFLAG_RW,
@@ -337,12 +399,19 @@ SYSCTL_S64(_kern_ntp_pll, OID_AUTO, time_freq, CTLFLAG_RD | CTLFLAG_MPSAFE,
  * the timex.constant structure member has a dual purpose to set the time
  * constant and to set the TAI offset.
  */
+#ifdef __rtems__
+static
+#endif /* __rtems__ */
 int
 kern_ntp_adjtime(struct thread *td, struct timex *ntv, int *retvalp)
 {
 	long freq;		/* frequency ns/s) */
 	int modes;		/* mode bits from structure */
+#ifndef __rtems__
 	int error, retval;
+#else /* __rtems__ */
+	int retval;
+#endif /* __rtems__ */
 
 	/*
 	 * Update selected clock variables - only the superuser can
@@ -354,11 +423,13 @@ kern_ntp_adjtime(struct thread *td, struct timex *ntv, int *retvalp)
 	 * status words are reset to the initial values at boot.
 	 */
 	modes = ntv->modes;
+#ifndef __rtems__
 	error = 0;
 	if (modes)
 		error = priv_check(td, PRIV_NTP_ADJTIME);
 	if (error != 0)
 		return (error);
+#endif /* __rtems__ */
 	NTP_LOCK();
 	if (modes & MOD_MAXERROR)
 		time_maxerror = ntv->maxerror;
@@ -460,6 +531,16 @@ kern_ntp_adjtime(struct thread *td, struct timex *ntv, int *retvalp)
 	ntv->jitcnt = pps_jitcnt;
 	ntv->stbcnt = pps_stbcnt;
 #endif /* PPS_SYNC */
+#ifdef __rtems__
+	ntv->ppsfreq = 0;
+	ntv->jitter = 0;
+	ntv->shift = 0;
+	ntv->stabil = 0;
+	ntv->jitcnt = 0;
+	ntv->calcnt = 0;
+	ntv->errcnt = 0;
+	ntv->stbcnt = 0;
+#endif /* __rtems__ */
 	retval = ntp_is_time_error(time_status) ? TIME_ERROR : time_state;
 	NTP_UNLOCK();
 
@@ -473,6 +554,7 @@ struct ntp_adjtime_args {
 };
 #endif
 
+#ifndef __rtems__
 int
 sys_ntp_adjtime(struct thread *td, struct ntp_adjtime_args *uap)
 {
@@ -490,6 +572,23 @@ sys_ntp_adjtime(struct thread *td, struct ntp_adjtime_args *uap)
 	}
 	return (error);
 }
+#else /* __rtems__ */
+int
+ntp_adjtime(struct timex *ntv)
+{
+	int error;
+	int retval;
+
+	if (ntv == NULL) {
+		errno = EFAULT;
+		return (-1);
+	}
+
+	error = kern_ntp_adjtime(NULL, ntv, &retval);
+	_Assert_Unused_variable_equals(error, 0);
+	return (retval);
+}
+#endif /* __rtems__ */
 
 /*
  * second_overflow() - called after ntp_tick_adjust()
@@ -505,7 +604,11 @@ ntp_update_second(int64_t *adjustment, time_t *newsec)
 	int tickrate;
 	l_fp ftemp;		/* 32/64-bit temporary */
 
+#ifndef __rtems__
 	NTP_LOCK();
+#else /* __rtems__ */
+	NTP_ASSERT_LOCKED();
+#endif /* __rtems__ */
 
 	/*
 	 * On rollover of the second both the nanosecond and microsecond
@@ -628,8 +731,21 @@ ntp_update_second(int64_t *adjustment, time_t *newsec)
 		time_status &= ~STA_PPSSIGNAL;
 #endif /* PPS_SYNC */
 
+#ifndef __rtems__
 	NTP_UNLOCK();
+#endif /* __rtems__ */
 }
+#ifdef __rtems__
+static void
+_NTP_Initialize(void)
+{
+
+	_Timecounter_Set_NTP_update_second(ntp_update_second);
+}
+
+RTEMS_SYSINIT_ITEM(_NTP_Initialize, RTEMS_SYSINIT_DEVICE_DRIVERS,
+    RTEMS_SYSINIT_ORDER_FOURTH);
+#endif /* __rtems__ */
 
 /*
  * hardupdate() - local clock update
@@ -930,6 +1046,7 @@ out:
 }
 #endif /* PPS_SYNC */
 
+#ifndef __rtems__
 #ifndef _SYS_SYSPROTO_H_
 struct adjtime_args {
 	struct timeval *delta;
@@ -958,15 +1075,23 @@ sys_adjtime(struct thread *td, struct adjtime_args *uap)
 
 int
 kern_adjtime(struct thread *td, struct timeval *delta, struct timeval *olddelta)
+#else /* __rtems__ */
+static int
+kern_adjtime(const struct timeval *delta, struct timeval *olddelta)
+#endif /* __rtems__ */
 {
 	struct timeval atv;
 	int64_t ltr, ltw;
+#ifndef __rtems__
 	int error;
+#endif /* __rtems__ */
 
 	if (delta != NULL) {
+#ifndef __rtems__
 		error = priv_check(td, PRIV_ADJTIME);
 		if (error != 0)
 			return (error);
+#endif /* __rtems__ */
 		ltw = (int64_t)delta->tv_sec * 1000000 + delta->tv_usec;
 	}
 	NTP_LOCK();
@@ -985,7 +1110,19 @@ kern_adjtime(struct thread *td, struct timeval *delta, struct timeval *olddelta)
 	}
 	return (0);
 }
+#ifdef __rtems__
+int
+adjtime(const struct timeval *delta, struct timeval *olddelta)
+{
+	int error;
 
+	error = kern_adjtime(delta, olddelta);
+	_Assert_Unused_variable_equals(error, 0);
+	return (0);
+}
+#endif /* __rtems__ */
+
+#ifndef __rtems__
 static struct callout resettodr_callout;
 static int resettodr_period = 1800;
 
@@ -1051,3 +1188,4 @@ start_periodic_resettodr(void *arg __unused)
 
 SYSINIT(periodic_resettodr, SI_SUB_LAST, SI_ORDER_MIDDLE,
 	start_periodic_resettodr, NULL);
+#endif /* __rtems__ */

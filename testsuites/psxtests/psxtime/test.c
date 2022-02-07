@@ -122,17 +122,15 @@ void test_adjtime(void)
   olddelta.tv_sec = 0;
   olddelta.tv_usec = 0;
 
-  puts( "adjtime - NULL delta - EINVAL" );
+  puts( "adjtime - NULL delta - OK" );
   sc = adjtime( NULL, &olddelta );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( sc == 0 );
 
-  puts( "adjtime - delta out of range - EINVAL" );
+  puts( "adjtime - large us delta - OK" );
   delta.tv_sec = 0;
   delta.tv_usec = 1000000000; /* 100 seconds worth */
   sc = adjtime( &delta, &olddelta );
-  rtems_test_assert( sc == -1 );
-  rtems_test_assert( errno == EINVAL );
+  rtems_test_assert( sc == 0 );
 
   puts( "adjtime - delta range of 0 - OK" );
   delta.tv_sec = 0;

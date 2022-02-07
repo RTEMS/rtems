@@ -270,6 +270,15 @@ void _Timecounter_Set_NTP_update_second(
   Timecounter_NTP_update_second handler
 );
 
+/**
+ * @brief Updates the time adjustment and seconds according to the NTP state.
+ *
+ * @param[in, out] adjustment is the NTP time adjustment.
+ *
+ * @param[in, out] newsec is the number of seconds since Unix epoch.
+ */
+void _Timecounter_NTP_update_second(int64_t *adjustment, time_t *newsec);
+
 /** @} */
 
 #ifdef __cplusplus

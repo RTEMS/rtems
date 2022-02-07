@@ -37,7 +37,7 @@
 
 #define NTP_API		4		/* NTP API version */
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__rtems__)
 #include <sys/_timespec.h>
 #endif /* __FreeBSD__ */
 
@@ -153,7 +153,7 @@ struct timex {
 	long	stbcnt;			/* stability limit exceeded (ro) */
 };
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__rtems__)
 
 #ifdef _KERNEL
 void	ntp_update_second(int64_t *adjustment, time_t *newsec);

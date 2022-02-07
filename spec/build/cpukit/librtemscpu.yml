@@ -983,7 +983,6 @@ source:
 - cpukit/libtrace/record/record-util.c
 - cpukit/libtrace/record/record.c
 - cpukit/posix/src/_execve.c
-- cpukit/posix/src/adjtime.c
 - cpukit/posix/src/aio_suspend.c
 - cpukit/posix/src/barrierattrdestroy.c
 - cpukit/posix/src/barrierattrgetpshared.c
@@ -1424,6 +1423,7 @@ source:
 - cpukit/score/src/isrisinprogress.c
 - cpukit/score/src/isrvectortable.c
 - cpukit/score/src/iterateoverthreads.c
+- cpukit/score/src/kern_ntptime.c
 - cpukit/score/src/kern_tc.c
 - cpukit/score/src/libatomic.c
 - cpukit/score/src/log2table.c
