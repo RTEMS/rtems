@@ -191,6 +191,22 @@ rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
     if (loc == swbreaks[i].address) {
       size_t remaining;
       if (!insert) {
+        if (target->breakpoint_size > 4)
+          memcpy(loc, swbreaks[i].contents, target->breakpoint_size);
+        else {
+          switch (target->breakpoint_size) {
+          case 4:
+            loc[3] = swbreaks[i].contents[3];
+          case 3:
+            loc[2] = swbreaks[i].contents[2];
+          case 2:
+            loc[1] = swbreaks[i].contents[1];
+          case 1:
+            loc[0] = swbreaks[i].contents[0];
+            break;
+          }
+        }
+        rtems_debugger_target_cache_sync(&swbreaks[i]);
         --target->swbreaks.level;
         remaining = (target->swbreaks.level - i) * swbreak_size;
         memmove(&swbreaks[i], &swbreaks[i + 1], remaining);
