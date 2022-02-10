@@ -355,9 +355,11 @@ rtems_debugger_thread_system_resume(bool detaching)
   current = rtems_debugger_thread_current(threads);
   if (current != NULL) {
     size_t i;
+    rtems_debugger_target* target = rtems_debugger->target;
     if (rtems_debugger_verbose())
       rtems_debugger_printf("rtems-db: sys:    : resuming\n");
-    if (!detaching) {
+    if (!detaching
+      && (target->capabilities & RTEMS_DEBUGGER_TARGET_CAP_PURE_SWBREAK) == 0) {
       r = rtems_debugger_target_swbreak_insert();
       if (r == 0)
         r = rtems_debugger_target_hwbreak_insert();

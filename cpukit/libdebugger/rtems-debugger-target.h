@@ -49,9 +49,17 @@ extern "C" {
 /**
  * Target capabilities mask.
  */
-#define RTEMS_DEBUGGER_TARGET_CAP_SWBREAK   (1 << 0)
-#define RTEMS_DEBUGGER_TARGET_CAP_HWBREAK   (1 << 1)
-#define RTEMS_DEBUGGER_TARGET_CAP_HWWATCH   (1 << 2)
+#define RTEMS_DEBUGGER_TARGET_CAP_SWBREAK      (1 << 0)
+#define RTEMS_DEBUGGER_TARGET_CAP_HWBREAK      (1 << 1)
+#define RTEMS_DEBUGGER_TARGET_CAP_HWWATCH      (1 << 2)
+/*
+ * This target capability indicates that the target implementation uses a pure
+ * software break implementation which must not allow breakpoints to be
+ * inserted before the actual switch to the thread, be it in interrupt context
+ * or otherwise. Such implementations must necessarily implement a thread
+ * switch hook and interrupt hooks to handle these situations.
+ */
+#define RTEMS_DEBUGGER_TARGET_CAP_PURE_SWBREAK (1 << 3)
 
 /**
  * Types of hardware breakpoints.
