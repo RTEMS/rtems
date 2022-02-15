@@ -70,7 +70,7 @@ static void worker_task(rtems_task_argument arg)
   char buf[1] = { 'x' };
   size_t n;
 
-  rtems_test_assert(reent->__sdidinit == 0);
+  rtems_test_assert(reent->__cleanup == NULL);
 
   output = stdout = fopen(&file_path[0], "r+");
   rtems_test_assert(stdout != NULL);
@@ -78,9 +78,9 @@ static void worker_task(rtems_task_argument arg)
   /*
    * Check newlib's __sinit does not touch our assigned file pointer.
    */
-  rtems_test_assert(reent->__sdidinit == 0);
+  rtems_test_assert(reent->__cleanup == NULL);
   rtems_test_assert(fflush(stdout) == 0);
-  rtems_test_assert(reent->__sdidinit != 0);
+  rtems_test_assert(reent->__cleanup != NULL);
   rtems_test_assert(stdout == output);
 
   n = fwrite(&buf[0], sizeof(buf), 1, stdout);
