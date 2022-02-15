@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    The test action is carried out by the thread-local objects definition and
+    the application configuration.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the ${/acfg/if/max-thread-local-storage-size:/name}
+      application configuration option resulted in the expected system setting.
+      Since at least one thread-local objects is available, the referenced
+      requirement is validated.
+    code: |
+      T_step_eq_int( ${step}, tls_object, 0 );
+      T_step_eq_sz( ${step}, _Thread_Maximum_TLS_size, 0 );
+    links:
+    - role: validation
+      uid: ../req/tls-max-zero
+    - role: validation
+      uid: /acfg/if/max-thread-local-storage-size
+  links: []
+test-brief: |
+  Tests properties of thread-local objects.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/score/thread.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: |
+  static _Thread_local int volatile tls_object;
+test-target: testsuites/validation/tc-score-thread-tls-max-zero.c
+test-teardown: null
+type: test-case

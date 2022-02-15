@@ -6,19 +6,11 @@ links:
 - role: requirement-refinement
   uid: /req/test-suites
 - role: validation
-  uid: /acfg/req/appl-does-not-need-clock-driver
-- role: validation
   uid: /acfg/req/max-file-descriptors
 - role: validation
   uid: /acfg/req/disable-newlib-reentrancy
 - role: validation
   uid: /acfg/req/appl-disable-filesystem
-- role: validation
-  uid: /acfg/req/idle-task-init-appl
-- role: validation
-  uid: /acfg/req/idle-task-body
-- role: validation
-  uid: /acfg/req/init
 test-brief: |
   This validation test suite is used to validate the default value of
   application configuration options taking the optional BSP provided settings

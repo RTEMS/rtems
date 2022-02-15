@@ -5,7 +5,15 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Check the effect of application configuration options.
+    Check the effect of application configuration options.  In addition, this
+    test case validates the effect of ${../if/init:/name}.  The test case
+    includes ${../if/header:/path} without defining ${../if/init:/name} before
+    the include.  If this header would define configuration data structures,
+    then linking the test suite executable would result in multiple definition
+    errors.  This header is included in the test suite runner translation unit
+    while ${../if/init:/name} is defined before the include.  If this would not
+    result in the definition of application defined configuration data
+    structures, then the checks below for non-default settings would fail.
   action-code: |
     rtems_status_code sc;
     rtems_id          id;
@@ -344,7 +352,9 @@ test-actions:
       uid: ../req/ticks-per-time-slice
     - role: validation
       uid: /rtems/config/req/get-ticks-per-timeslice
-  links: []
+  links:
+  - role: validation
+    uid: ../req/init
 test-brief: |
   Tests the effect of application configuration options.
 test-context: []
@@ -353,6 +363,7 @@ test-description: null
 test-header: null
 test-includes:
 - bsp.h
+- rtems/confdefs.h
 - rtems/score/heap.h
 test-local-includes:
 - ts-config.h

@@ -28,9 +28,21 @@ test-actions:
     links:
     - role: validation
       uid: ../req/fatal-init-task-construct-failed
+  - brief: |
+      Check that the ${../if/init-task-priority:/name} application
+      configuration option resulted in the expected system setting.
+    code: |
+      T_step_eq_u32(
+        ${step},
+        _RTEMS_tasks_User_task_config.config.initial_priority,
+        0
+      );
+    links:
+    - role: validation
+      uid: ../req/init-task-priority
   links: []
 test-brief: |
-  Tests a fatal error.
+  Tests a fatal error caused by an invalid application configuration.
 test-context: []
 test-context-support: null
 test-description: null
@@ -54,6 +66,7 @@ test-header:
   target: testsuites/validation/tr-fatal-init-task-construct-failed.h
 test-includes:
 - rtems.h
+- rtems/rtems/tasksdata.h
 test-local-includes:
 - tr-fatal-init-task-construct-failed.h
 test-setup: null

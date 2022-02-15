@@ -5,15 +5,11 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /score/thread/req/tls-max-zero
 test-brief: |
   This validation test suite contains test cases related to the thread-local
   storage support.
 test-code: |
   const char rtems_test_name[] = "${.:/test-suite-name}";
-
-  #define CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE 0
 
   #include "ts-idle.h"
 test-description: null

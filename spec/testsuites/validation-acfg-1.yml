@@ -5,10 +5,6 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /acfg/if/disable-bsp-settings
-- role: validation
-  uid: /acfg/req/init
 test-brief: |
   This validation test suite is used to validate the default value of
   application configuration options where all optional BSP provided settings

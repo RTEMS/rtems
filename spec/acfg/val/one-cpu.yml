@@ -9,26 +9,35 @@ test-actions:
   action-code: |
     rtems_status_code sc;
     rtems_id          id;
+    uint32_t          yield_count_before;
   checks:
   - brief: |
-      Check the configured ${/acfg/if/max-priority:/name} value using
-      ${/rtems/task/if/maximum-priority}.  This configuration option affects
-      only the Deterministic Priority Scheduler which was explicitly configured
-      by ${/acfg/if/scheduler-priority:/name} in the test suite.
+      Check that the ${/acfg/if/max-priority:/name} application configuration
+      option resulted in the expected system setting using
+      ${/rtems/task/if/maximum-priority}.
     code: |
       T_eq_u32( RTEMS_MAXIMUM_PRIORITY, 127 );
     links:
     - role: validation
       uid: ../req/max-priority
     - role: validation
-      uid: ../req/scheduler-priority
-    - role: validation
       uid: /rtems/task/req/maximum-priority
   - brief: |
-      Check the configured ${/acfg/if/max-priority:/name} value using
-      ${/rtems/task/if/maximum-priority}.  This configuration option affects
-      only the Deterministic Priority Scheduler which was explicitly configured
-      by ${/acfg/if/scheduler-priority:/name} in the test suite.
+      Check that the Deterministic Priority Scheduler which was configured by
+      the ${/acfg/if/scheduler-priority:/name} application configuration in the
+      test suite.
+    code: |
+      yield_count_before = yield_count;
+      sc = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+      T_rsc_success( sc );
+      T_eq_u32( yield_count, yield_count_before + 1 );
+    links:
+    - role: validation
+      uid: ../req/scheduler-priority
+  - brief: |
+      Check that we are able to identify the scheduler by the name configured
+      by the ${/acfg/if/scheduler-priority:/name} application configuration
+      option in the test suite.
     code: |
       sc = rtems_scheduler_ident( TEST_SCHEDULER_A_NAME, &id );
       T_rsc_success( sc );
@@ -44,12 +53,36 @@ test-description: null
 test-header: null
 test-includes:
 - rtems.h
+- rtems/score/schedulerpriority.h
 test-local-includes:
 - ts-config.h
 - tx-support.h
 test-setup: null
 test-stop: null
-test-support: null
+test-support: |
+  static uint32_t yield_count;
+
+  void __real__Scheduler_priority_Yield(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *thread,
+    Scheduler_Node          *node
+  );
+
+  void __wrap__Scheduler_priority_Yield(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *thread,
+    Scheduler_Node          *node
+  );
+
+  void __wrap__Scheduler_priority_Yield(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *thread,
+    Scheduler_Node          *node
+  )
+  {
+    ++yield_count;
+    __real__Scheduler_priority_Yield( scheduler, thread, node );
+  }
 test-target: testsuites/validation/tc-acfg-one-cpu.c
 test-teardown: null
 type: test-case

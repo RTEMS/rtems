@@ -5,8 +5,6 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /acfg/if/max-thread-local-storage-size
 test-brief: |
   This validation test suite contains a test case which triggers a fatal error
   during system initialization.

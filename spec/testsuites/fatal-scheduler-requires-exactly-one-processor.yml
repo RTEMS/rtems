@@ -5,8 +5,6 @@ enabled-by: RTEMS_SMP
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /score/smp/req/fatal-scheduler-requires-exactly-one-processor
 test-brief: |
   This validation test suite uses an application configuration which triggers a
   fatal error during system initialization.

@@ -208,6 +208,23 @@ test-actions:
     links:
     - role: validation
       uid: ../if/max-tasks
+  - brief: |
+      Check the default ${/acfg/if/max-tasks:/name} value.  A maximum Classic
+      API task value of zero is only configurable if
+      ${../if/idle-task-init-appl:/name} is defined or
+      ${../if/max-posix-threads:/name} is set to a positive value.  The default
+      value of zero for ${../if/max-posix-threads:/name} is used by the test
+      suite containing the test case.  The test suite defines
+      ${../if/idle-task-init-appl:/name}.
+    code: |
+      T_step_eq_u32( ${step}, rtems_configuration_get_maximum_tasks(), 0 );
+    links:
+    - role: validation
+      uid: ../req/max-tasks
+    - role: validation
+      uid: ../req/idle-task-init-appl
+    - role: validation
+      uid: /rtems/config/req/get-maximum-tasks
   links: []
 - action-brief: |
     Try to create a timer.

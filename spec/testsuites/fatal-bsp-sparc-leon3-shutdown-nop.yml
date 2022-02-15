@@ -8,8 +8,6 @@ enabled-by:
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /bsp/sparc/leon3/req/fatal-shutdown-request
 test-brief: |
   This validation test suite provides an application configuration to perform a
   shutdown with present but not configured processors and a processor which is

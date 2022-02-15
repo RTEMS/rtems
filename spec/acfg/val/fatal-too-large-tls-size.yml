@@ -34,6 +34,18 @@ test-actions:
     links:
     - role: validation
       uid: ../req/fatal-too-large-tls-size
+  - brief: |
+      Check that the ${/acfg/if/max-thread-local-storage-size:/name}
+      application configuration option resulted in the expected system setting.
+    code: |
+      T_step_eq_sz(
+        ${step},
+        _Thread_Maximum_TLS_size,
+        RTEMS_TASK_STORAGE_ALIGNMENT
+      );
+    links:
+    - role: validation
+      uid: /acfg/if/max-thread-local-storage-size
   links: []
 test-brief: |
   Tests a fatal error.
@@ -60,6 +72,7 @@ test-header:
   target: testsuites/validation/tr-fatal-too-large-tls-size.h
 test-includes:
 - rtems.h
+- rtems/score/thread.h
 test-local-includes:
 - tr-fatal-too-large-tls-size.h
 test-setup: null

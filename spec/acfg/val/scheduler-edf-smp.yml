@@ -1,0 +1,66 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of application configuration options.
+  action-code: |
+    rtems_status_code sc;
+    uint32_t          yield_count_before;
+  checks:
+  - brief: |
+      Check that the Earliest Deadline First SMP Scheduler which was configured
+      by the ${/acfg/if/scheduler-edf-smp:/name} application configuration in
+      the test suite.
+    code: |
+      yield_count_before = yield_count;
+      sc = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+      T_rsc_success( sc );
+      T_eq_u32( yield_count, yield_count_before + 1 );
+    links:
+    - role: validation
+      uid: ../req/scheduler-edf-smp
+  links: []
+test-brief: |
+  Tests the effect of application configuration options.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/scheduleredfsmp.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static uint32_t yield_count;
+
+  void __real__Scheduler_EDF_SMP_Yield(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *thread,
+    Scheduler_Node          *node
+  );
+
+  void __wrap__Scheduler_EDF_SMP_Yield(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *thread,
+    Scheduler_Node          *node
+  );
+
+  void __wrap__Scheduler_EDF_SMP_Yield(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *thread,
+    Scheduler_Node          *node
+  )
+  {
+    ++yield_count;
+    __real__Scheduler_EDF_SMP_Yield( scheduler, thread, node );
+  }
+test-target: testsuites/validation/tc-acfg-scheduler-edf-smp.c
+test-teardown: null
+type: test-case

@@ -5,8 +5,6 @@ enabled-by: RTEMS_SMP
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /acfg/req/scheduler-edf-smp
 test-brief: |
   This test suite for SMP-only test cases provides enough resources to run
   basic tests for all specified managers and functions.

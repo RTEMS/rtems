@@ -5,8 +5,6 @@ enabled-by: RTEMS_SMP
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /score/smp/req/fatal-mandatory-processor-not-present
 test-brief: |
   This validation test suite contains a test case which triggers a fatal error
   during system initialization.
