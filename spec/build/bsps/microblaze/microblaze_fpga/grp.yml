@@ -36,6 +36,10 @@ links:
 - role: build-dependency
   uid: optramlen
 - role: build-dependency
+  uid: optspibaseaddress
+- role: build-dependency
+  uid: optspiirq
+- role: build-dependency
   uid: opttimerbaseaddress
 - role: build-dependency
   uid: opttimerfrequency
@@ -43,6 +47,8 @@ links:
   uid: optuartlitebaseaddress
 - role: build-dependency
   uid: ../../obj
+- role: build-dependency
+  uid: ../../objdevspixil
 - role: build-dependency
   uid: ../../objirq
 - role: build-dependency
