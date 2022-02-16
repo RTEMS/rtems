@@ -57,7 +57,7 @@ extern "C" {
 #define BSP_FEATURE_IRQ_EXTENSION
 
 #define BSP_FDT_IS_SUPPORTED
-extern const unsigned char imxrt_dtb[];
+extern const unsigned char imxrt_dtb[] __attribute__(( __aligned__(8) ));
 extern const size_t imxrt_dtb_size;
 
 void *imx_get_reg_of_node(const void *fdt, int node);
