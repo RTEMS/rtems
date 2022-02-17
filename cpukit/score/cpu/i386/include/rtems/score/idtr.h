@@ -15,6 +15,8 @@
  *              Volume 3 : Architecture and Programming Manual
  *
  * Formerly contained in and extracted from libcpu/i386/cpu.h.
+ *
+ * Applications must not include this file directly.
  */
 
 /*
@@ -24,8 +26,6 @@
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
- *
- *  Applications must not include this file directly.
  */
 
 #ifndef _RTEMS_SCORE_IDTR_H

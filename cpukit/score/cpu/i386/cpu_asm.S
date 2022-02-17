@@ -1,8 +1,11 @@
-/*  cpu_asm.s
+/**
+ *  @file
  *
  *  This file contains all assembly code for the Intel i386 implementation
  *  of RTEMS.
- *
+ */
+
+/*
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
