@@ -28,9 +28,10 @@
 #ifndef LIBBSP_ARM_XILINX_ZYNQ_I2C_H
 #define LIBBSP_ARM_XILINX_ZYNQ_I2C_H
 
-#include <bsp/cadence-i2c.h>
 #include <bsp/irq.h>
 #include <bsp.h>
+
+#include <dev/i2c/cadence-i2c.h>
 
 #ifdef __cplusplus
 extern "C" {
