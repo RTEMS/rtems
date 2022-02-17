@@ -7,9 +7,11 @@
  */
 
 /*
- * RTEMS Project (http://www.rtems.org/)
- *
  * Copyright 2007 Chris Johns (chrisj@rtems.org)
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H
