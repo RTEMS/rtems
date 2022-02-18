@@ -81,6 +81,9 @@ _crtinit:
 #ifndef __rtems__
 	brlid	r15, main					   /* Execute the program */
 #else
+	mfs r3, rmsr
+	ori r3, r3, 0x100					   /* Set Exception Enable MSR flag */
+	mts rmsr, r3
 	brlid	r15, boot_card
 #endif /* __rtems__ */
 	addi	r5, r0, 0

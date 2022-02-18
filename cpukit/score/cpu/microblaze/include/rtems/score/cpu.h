@@ -212,7 +212,7 @@ typedef struct {
   { \
     unsigned int _new_msr;  \
     _CPU_MSR_GET(_isr_cookie); \
-    _new_msr = (_isr_cookie) & ~(MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE); \
+    _new_msr = (_isr_cookie) & ~(MICROBLAZE_MSR_IE); \
     _CPU_MSR_SET(_new_msr); \
   }
 
@@ -221,9 +221,9 @@ typedef struct {
     uint32_t _microblaze_interrupt_enable; \
     uint32_t _microblaze_switch_reg; \
     \
-    _microblaze_interrupt_enable = (_isr_cookie) & (MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE); \
+    _microblaze_interrupt_enable = (_isr_cookie) & (MICROBLAZE_MSR_IE); \
     _CPU_MSR_GET(_microblaze_switch_reg); \
-    _microblaze_switch_reg &= ~(MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE); \
+    _microblaze_switch_reg &= ~(MICROBLAZE_MSR_IE); \
     _microblaze_switch_reg |= _microblaze_interrupt_enable; \
     _CPU_MSR_SET(_microblaze_switch_reg); \
   }
@@ -232,7 +232,7 @@ typedef struct {
   { \
     unsigned int _new_msr;  \
     _CPU_MSR_SET(_isr_cookie); \
-    _new_msr = (_isr_cookie) & ~(MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE); \
+    _new_msr = (_isr_cookie) & ~(MICROBLAZE_MSR_IE); \
     _CPU_MSR_SET(_new_msr); \
   }
 
@@ -242,7 +242,7 @@ uint32_t _CPU_ISR_Get_level( void );
 
 RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
 {
-  return ( level & (MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE) ) != 0;
+  return ( level & MICROBLAZE_MSR_IE ) != 0;
 }
 
 void _CPU_Context_Initialize(

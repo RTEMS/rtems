@@ -142,9 +142,9 @@ void _CPU_ISR_Set_level( uint32_t level )
   _CPU_MSR_GET( microblaze_switch_reg );
 
   if ( level == 0 ) {
-    microblaze_switch_reg |= (MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE);
+    microblaze_switch_reg |= MICROBLAZE_MSR_IE;
   } else {
-    microblaze_switch_reg &= ~(MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE);
+    microblaze_switch_reg &= ~(MICROBLAZE_MSR_IE);
   }
 
   _CPU_MSR_SET( microblaze_switch_reg );
@@ -158,7 +158,7 @@ uint32_t _CPU_ISR_Get_level( void )
 
   /* This is unique. The MSR register contains an interrupt enable flag where
    * most other architectures have an interrupt disable flag. */
-  return ( level & (MICROBLAZE_MSR_IE | MICROBLAZE_MSR_EE) ) == 0;
+  return ( level & MICROBLAZE_MSR_IE ) == 0;
 }
 
 void _CPU_ISR_install_vector(
