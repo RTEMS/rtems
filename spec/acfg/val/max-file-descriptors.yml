@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/max-file-descriptors
+method: by-inspection
+references:
+- identifier: cpukit/include/rtems/confdefs/libio.h
+  hash: 2PF8S7RMgdgdPEe68H37pgxQ94KGMIlb5DULb6N0RHA=
+  type: file
+- identifier: cpukit/libcsupport/src/libiozeroiops.c
+  hash: 87rsMIa1Z9n0hvw4xH06KrpdmUXetjWvHF25Z8hw1do=
+  type: file
+text: |
+  Setting ${../if/max-file-descriptors:/name} to zero is mandatory for
+  applications using only the pre-qualified feature set.  The reason is to get
+  linker errors in case such applications are linked if they depend on file
+  descriptors.  Thus no validation test case can be used.  Inspection of the
+  referenced ${/glossary/sourcecode:/term} file showed that no file descriptor
+  table is statically allocated, if ${../if/max-file-descriptors:/name} is
+  defined to zero, otherwise a table with an entry count specified by the
+  option is statically allocated.  For a not pre-qualified only build of RTEMS,
+  a file descriptor table with zero entries is provided by an RTEMS library.
+  This shows that the ${../req/max-file-descriptors} requirement is implemented
+  as specified.
+type: validation

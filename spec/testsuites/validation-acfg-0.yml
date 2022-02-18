@@ -5,12 +5,6 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /acfg/req/max-file-descriptors
-- role: validation
-  uid: /acfg/req/disable-newlib-reentrancy
-- role: validation
-  uid: /acfg/req/appl-disable-filesystem
 test-brief: |
   This validation test suite is used to validate the default value of
   application configuration options taking the optional BSP provided settings

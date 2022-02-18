@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/disable-newlib-reentrancy
+method: by-inspection
+references:
+- identifier: cpukit/include/rtems/confdefs/extensions.h
+  hash: o1zTKlcoJAoVIQYziWnRhZFx8v1R7ntNmT1W7zfdA5A=
+  type: file
+- identifier: cpukit/include/rtems/confdefs/newlib.h
+  hash: wKlyOe7m5g4ThjUtsP2ujODiuZrOtK9qFBkMiCcFlxU=
+  type: file
+- identifier: cpukit/include/rtems/confdefs/threads.h
+  hash: B3GWt2DpJYAMe6qvc_kBODb4MFOOXcESQ2y4Jk4PIIY=
+  type: file
+text: |
+  Defining ${../if/disable-newlib-reentrancy:/name} is mandatory for
+  applications using only the pre-qualified feature set.  The reason is to get
+  linker errors in case such applications are linked if they depend on the
+  Newlib reentrancy support.  Thus no validation test case can be used.
+  Inspection of the referenced ${/glossary/sourcecode:/term} files showed that
+  an initial extension set is registered, if
+  ${../if/disable-newlib-reentrancy:/name} is not defined.  For the
+  pre-qualified only build of RTEMS, this would lead to an unresolved reference
+  linker error.  If ${../if/disable-newlib-reentrancy:/name} is defined, then
+  the ``__getreent()`` function is not provided by RTEMS.  If
+  ${../if/disable-newlib-reentrancy:/name} is defined, then the Newlib
+  reentrancy structure is not contained in the ${/glossary/tcb:/term}.  This
+  shows that the ${../req/disable-newlib-reentrancy} requirement is implemented
+  as specified.
+type: validation
