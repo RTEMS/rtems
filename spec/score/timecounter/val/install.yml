@@ -972,7 +972,7 @@ test-actions:
       SetCounter( tc, 408 * tc->base.tc_frequency );
       rtems_clock_get_realtime_bintime( &bt );
       T_eq_i64( bt.sec, 567994011 );
-      T_eq_u64( bt.frac, 120259084288 );
+      T_eq_u64( bt.frac, 92353004044288 );
     links:
     - role: validation
       uid: ../req/ntp-adjustment
