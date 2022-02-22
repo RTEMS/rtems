@@ -10,8 +10,9 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  Where ${../if/init:/name} is defined, where ${../if/header:/path} is included
-  in a translation unit after the definition of ${../if/init:/name}, when the
-  translation unit is preprocessed and compiled, the application configuration
-  shall be initialized.
+  While ${../if/init:/name} is defined, while ${../if/header-confdefs:/path} is
+  included in a translation unit after the definition of ${../if/init:/name},
+  when the translation unit is preprocessed and compiled, the system settings
+  defined by present application configuration options shall be statically
+  allocated and initialized.
 type: requirement
