@@ -222,6 +222,11 @@ extern int rtems_debugger_target_swbreak_insert(void);
 extern int rtems_debugger_target_swbreak_remove(void);
 
 /**
+ * Determine whether a software breakpoint is configured for the given address.
+ */
+extern bool rtems_debugger_target_swbreak_is_configured( uintptr_t addr );
+
+/**
  * Insert hardware breakpoints into the hardware.
  */
 extern int rtems_debugger_target_hwbreak_insert(void);

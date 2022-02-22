@@ -167,6 +167,32 @@ rtems_debugger_target_reg_table_size(void)
   return 0;
 }
 
+bool
+rtems_debugger_target_swbreak_is_configured( uintptr_t addr )
+{
+  size_t                         i;
+  rtems_debugger_target_swbreak *swbreaks;
+  rtems_debugger_target         *target = rtems_debugger->target;
+
+  if ( target == NULL ) {
+    return false;
+  }
+
+  swbreaks = target->swbreaks.block;
+
+  if ( swbreaks == NULL ) {
+    return false;
+  }
+
+  for ( i = 0; i < target->swbreaks.level; ++i ) {
+    if ( (uintptr_t) swbreaks[ i ].address == addr ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 int
 rtems_debugger_target_swbreak_control(bool insert, uintptr_t addr, DB_UINT kind)
 {
@@ -323,13 +349,81 @@ rtems_debugger_target_swbreak_remove(void)
   return r;
 }
 
+uintptr_t saved_break_address = 0;
+rtems_id saved_tid = 0;
+
+static rtems_debugger_target_exc_action
+soft_step_and_continue(CPU_Exception_frame* frame)
+{
+  uintptr_t              break_address;
+  rtems_debugger_target *target = rtems_debugger->target;
+  Thread_Control        *thread = _Thread_Get_executing();
+  const rtems_id         tid = thread->Object.id;
+  rtems_debugger_thread  fake_debugger_thread;
+
+  /*
+   * If this was a hwbreak, cascade. If this is a swbreak replace the contents
+   * of the instruction, step then return the swbreak's contents.
+   */
+  if ((target->capabilities & RTEMS_DEBUGGER_TARGET_CAP_SWBREAK) == 0) {
+    target_printk("rtems-db: exception in an interrupt, cascading\n");
+    rtems_debugger_unlock();
+    return rtems_debugger_target_exc_cascade;
+  }
+
+  break_address = rtems_debugger_target_frame_pc( frame );
+  if ( rtems_debugger_target_swbreak_is_configured( break_address ) == false ) {
+    target_printk("rtems-db: exception in an interrupt, cascading\n");
+    rtems_debugger_unlock();
+    return rtems_debugger_target_exc_cascade;
+  }
+
+  /* Remove the current breakpoint */
+  rtems_debugger_target_swbreak_control(
+    false,
+    break_address,
+    target->breakpoint_size
+  );
+
+  /* Save off thread ID and break address for later usage */
+  saved_tid = tid;
+  saved_break_address = break_address;
+
+  /* Populate the fake rtems_debugger_thread */
+  fake_debugger_thread.flags |= RTEMS_DEBUGGER_THREAD_FLAG_STEP;
+  fake_debugger_thread.frame = frame;
+  target_printk("rtems-db: stepping to the next instruction\n");
+  rtems_debugger_target_thread_stepping(&fake_debugger_thread);
+
+  /* rtems_debugger_unlock() not called until the step is resolved */
+  return rtems_debugger_target_exc_step;
+}
+
 rtems_debugger_target_exc_action
 rtems_debugger_target_exception(CPU_Exception_frame* frame)
 {
+  Thread_Control* thread = _Thread_Get_executing();
+  const rtems_id  tid = thread->Object.id;
+
+  /* Resolve outstanding step+continue */
+  if ( saved_break_address != 0 && tid == saved_tid ) {
+    rtems_debugger_target_swbreak_control(
+      true,
+      saved_break_address,
+      rtems_debugger->target->breakpoint_size
+    );
+    saved_break_address = saved_tid = 0;
+
+    /* Release the debugger lock now that the step+continue is complete */
+    target_printk("rtems-db: resuming after step\n");
+    rtems_debugger_unlock();
+    return rtems_debugger_target_exc_consumed;
+  }
+
+  rtems_debugger_lock();
+
   if (!rtems_interrupt_is_in_progress()) {
     rtems_debugger_threads*              threads = rtems_debugger->threads;
-    Thread_Control*                      thread = _Thread_Get_executing();
-    const rtems_id                       tid = thread->Object.id;
     rtems_id*                            excludes;
     uintptr_t                            pc;
     const rtems_debugger_thread_stepper* stepper;
@@ -339,8 +433,6 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
     target_printk("[} tid:%08" PRIx32 ": thread:%08" PRIxPTR
                   " frame:%08" PRIxPTR "\n",
                   tid, (intptr_t) thread, (intptr_t) frame);
-
-    rtems_debugger_lock();
 
     /*
      * If the thread is in the debugger recover. If the access is from gdb
@@ -430,9 +522,10 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
     return rtems_debugger_target_exc_consumed;
   }
 
-  rtems_debugger_printf("rtems-db: exception in an interrupt, cascading\n");
+  target_printk("[} tid:%08" PRIx32 ": exception in interrupt context\n", tid);
 
-  return rtems_debugger_target_exc_cascade;
+  /* soft_step_and_continue releases the debugger lock */
+  return soft_step_and_continue( frame );
 }
 
 void
