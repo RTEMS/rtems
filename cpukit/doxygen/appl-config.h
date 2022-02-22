@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2019, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2019, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 2010 Gedare Bloom
  * Copyright (C) 1988, 2021 On-Line Applications Research Corporation (OAR)
  *
@@ -4243,16 +4243,29 @@
  *
  * * It shall be a list of the following macros:
  *
- *   * ``RTEMS_SCHEDULER_ASSIGN( processor_index, attributes )``
+ *   * ``RTEMS_SCHEDULER_ASSIGN( scheduler_index, attributes )``
  *
  *   * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
  *
- * * It shall be a list of exactly #CONFIGURE_MAXIMUM_PROCESSORS elements.
+ *   The ``scheduler_index`` macro parameter shall be a valid index of the
+ *   scheduler table defined by the #CONFIGURE_SCHEDULER_TABLE_ENTRIES
+ *   configuration option.
+ *
+ *   The ``attributes`` macro parameter shall be set to exactly one of the
+ *   following constants:
+ *
+ *   * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_MANDATORY``
+ *
+ *   * ``RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL``
+ *
+ * * The value of the configuration option shall be a list of exactly
+ *   #CONFIGURE_MAXIMUM_PROCESSORS elements.
  * @endparblock
  *
  * @par Notes
  * @parblock
- * This configuration option is only evaluated in SMP configurations.
+ * Where the system was built with SMP support enabled, this configuration
+ * option is evaluated, otherwise it is ignored.
  *
  * This is an advanced configuration option, see <a
  * href=https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html>Clustered
@@ -4584,6 +4597,69 @@
  * @endparblock
  */
 #define CONFIGURE_SCHEDULER_STRONG_APA
+
+/* Generated from spec:/acfg/if/scheduler-table-entries */
+
+/**
+ * @brief This configuration option is an initializer define.
+ *
+ * The value of this configuration option is used to initialize the table of
+ * configured schedulers.
+ *
+ * @par Default Value
+ * The default value of this configuration option is the definition of exactly
+ * one table entry for the configured scheduler.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this configuration option:
+ *
+ * * The value of the configuration option shall be a list of the following
+ *   macros:
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )``
+ *
+ *   * ``RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )``
+ *
+ *   The ``name`` macro parameter shall be the name associated with the
+ *   scheduler data structures, see <a
+ *   href="https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html">Clustered
+ *   Scheduler Configuration</a>.
+ *
+ *   The ``obj_name`` macro parameter shall be the scheduler object name.  It
+ *   is recommended to define the scheduler object name through
+ *   rtems_build_name().
+ *
+ * * Where the system was build with SMP support enabled, the table shall have
+ *   one or more entries, otherwise it shall have exactly one entry.
+ * @endparblock
+ *
+ * @par Notes
+ * @parblock
+ * Schedulers registered in the scheduler table by this configuration option
+ * are available to the application.  The scheduler table entry index defines
+ * the index of the scheduler.
+ *
+ * This is an advanced configuration option, see <a
+ * href="https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html">Clustered
+ * Scheduler Configuration</a>.
+ * @endparblock
+ */
+#define CONFIGURE_SCHEDULER_TABLE_ENTRIES
 
 /* Generated from spec:/acfg/if/scheduler-user */
 
