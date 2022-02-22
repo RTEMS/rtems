@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  The value of the application configuration option shall be a list of the
+  following macros:
+
+  * ``RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )``
+
+  * ``RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )``
+
+  The ``name`` macro parameter shall be the name associated with the scheduler
+  data structures, see ${/doc/if/config-scheduler-clustered:/name}.
+
+  The ``obj_name`` macro parameter shall be the scheduler object name.  It is
+  recommended to define the scheduler object name through
+  ${/rtems/object/if/build-name:/name}.
+type: constraint

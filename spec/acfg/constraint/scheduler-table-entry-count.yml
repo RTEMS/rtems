@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
+rationale: null
+text: |
+  Where the system was build with SMP support enabled, the table shall have one
+  or more entries, otherwise it shall have exactly one entry.
+type: constraint

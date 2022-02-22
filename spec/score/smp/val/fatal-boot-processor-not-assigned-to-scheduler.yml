@@ -28,7 +28,9 @@ test-actions:
     links:
     - role: validation
       uid: ../req/fatal-boot-processor-not-assigned-to-scheduler
-  links: []
+  links:
+  - role: validation
+    uid: /acfg/req/scheduler-assign-no-scheduler
 test-brief: |
   Tests a fatal error.
 test-context: []

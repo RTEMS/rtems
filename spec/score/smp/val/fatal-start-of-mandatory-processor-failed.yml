@@ -28,7 +28,9 @@ test-actions:
     links:
     - role: validation
       uid: ../req/fatal-start-of-mandatory-processor-failed
-  links: []
+  links:
+  - role: validation
+    uid: /acfg/req/scheduler-assign-processor-mandatory
 test-brief: |
   Tests a fatal error.
 test-context: []

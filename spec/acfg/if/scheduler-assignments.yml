@@ -20,7 +20,8 @@ links:
   uid: ../constraint/scheduler-assignments-count
 name: CONFIGURE_SCHEDULER_ASSIGNMENTS
 notes: |
-  This configuration option is only evaluated in SMP configurations.
+  Where the system was built with SMP support enabled, this configuration
+  option is evaluated, otherwise it is ignored.
 
   This is an advanced configuration option, see
   ${/doc/if/config-scheduler-clustered:/name}.

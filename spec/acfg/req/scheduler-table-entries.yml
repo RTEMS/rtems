@@ -1,17 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
 functional-type: function
 links:
 - role: interface-function
-  uid: ../if/scheduler-assignments
+  uid: ../if/scheduler-table-entries
 - role: requirement-refinement
   uid: group
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The application configuration option shall define the initial scheduler to
-  processor assignments.
+  The application configuration option shall define the entries of the table of
+  configured schedulers.
 type: requirement

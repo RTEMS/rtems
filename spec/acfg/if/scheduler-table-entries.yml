@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: |
+  The default value of this configuration option is the definition of exactly
+  one table entry for the configured scheduler.
+description: |
+  The value of this configuration option is used to initialize the table of
+  configured schedulers.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/scheduler-table-entry-macros
+- role: constraint
+  uid: ../constraint/scheduler-table-entry-count
+name: CONFIGURE_SCHEDULER_TABLE_ENTRIES
+notes: |
+  Schedulers registered in the scheduler table by this configuration option are
+  available to the application.  The scheduler table entry index defines the
+  index of the scheduler.
+
+  This is an advanced configuration option, see
+  ${/doc/if/config-scheduler-clustered:/name}.
+type: interface

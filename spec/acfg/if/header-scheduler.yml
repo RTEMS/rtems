@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This header file provides interfaces to define a scheduler application
+  configuration.
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: header-file
+links:
+- role: interface-placement
+  uid: domain
+- role: interface-ingroup
+  uid: group
+path: rtems/scheduler.h
+prefix: cpukit/include
+type: interface

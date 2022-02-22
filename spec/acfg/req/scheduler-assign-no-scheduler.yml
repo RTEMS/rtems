@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/scheduler-assign-no-scheduler
+- role: requirement-refinement
+  uid: scheduler-assignments
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${../if/scheduler-assign-no-scheduler:/name} define is used to
+  define an entry of a ${../if/scheduler-assignments:/name} application
+  configuration option value, the processor associated with the entry shall not
+  have a scheduler assigned.
+type: requirement

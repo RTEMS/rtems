@@ -5,8 +5,6 @@ enabled-by: RTEMS_SMP
 links:
 - role: requirement-refinement
   uid: /req/test-suites
-- role: validation
-  uid: /acfg/req/scheduler-assignments
 test-brief: |
   This SMP-only test suite validates the clustered scheduler configuration
   through an application configuration with a processor maximum of two.  The

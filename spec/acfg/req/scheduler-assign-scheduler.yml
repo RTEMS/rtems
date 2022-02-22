@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/scheduler-assign
+- role: requirement-refinement
+  uid: scheduler-assignments
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${../if/scheduler-assign:/name} macro is used to define an entry of
+  a ${../if/scheduler-assignments:/name} application configuration option
+  value, the scheduler associated with the first parameter shall be assigned to
+  the processor associated with the entry.
+type: requirement

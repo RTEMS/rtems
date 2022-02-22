@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+functional-type: function
+links:
+- role: interface-function
+  uid: ../if/scheduler-assign-processor-optional
+- role: requirement-refinement
+  uid: scheduler-assign-attributes
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  While the ${../if/scheduler-assign-processor-optional:/name} define is used
+  as the second parameter in the ${../if/scheduler-assign:/name} macro in an
+  entry of a ${../if/scheduler-assignments:/name} application configuration
+  option value, the presence of the processor associated with the entry in the
+  ${/glossary/target:/term} shall be optional.
+type: requirement
