@@ -34,6 +34,8 @@ links:
 - role: build-dependency
   uid: optintcbaseaddress
 - role: build-dependency
+  uid: optramlen
+- role: build-dependency
   uid: opttimerbaseaddress
 - role: build-dependency
   uid: opttimerfrequency
