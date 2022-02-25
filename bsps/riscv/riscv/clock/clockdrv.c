@@ -41,6 +41,7 @@
 #include <rtems/timecounter.h>
 #include <rtems/score/cpuimpl.h>
 #include <rtems/score/riscv-utility.h>
+#include <rtems/score/smpimpl.h>
 
 #include <libfdt.h>
 
