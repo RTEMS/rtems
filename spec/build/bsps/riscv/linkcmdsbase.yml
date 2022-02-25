@@ -387,7 +387,7 @@ content: |
     .debug_rnglists 0 : { *(.debug_rnglists) }
     .debug_str_offsets 0 : { *(.debug_str_offsets) }
     .debug_sup      0 : { *(.debug_sup) }
-    .gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
+    .riscv.attributes 0 : { KEEP (*(.riscv.attributes)) KEEP (*(.gnu.attributes)) }
     /DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
     .shstrtab     0 : { *(.shstrtab) }
     .strtab       0 : { *(.strtab) }
