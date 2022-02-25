@@ -35,6 +35,7 @@
 
 	.section	.text, "ax", @progbits
 	.align	2
+	.option	arch, +zicsr
 
 PUBLIC(_CPU_Context_switch)
 PUBLIC(_CPU_Context_switch_no_return)

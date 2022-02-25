@@ -399,7 +399,13 @@ static inline struct Per_CPU_Control *_RISCV_Get_current_per_CPU_control( void )
 {
   struct Per_CPU_Control *cpu_self;
 
-  __asm__ volatile ( "csrr %0, mscratch" : "=r" ( cpu_self ) );
+  __asm__ volatile (
+    ".option push\n"
+    ".option arch, +zicsr\n"
+    "csrr %0, mscratch\n"
+    ".option pop" :
+    "=r" ( cpu_self )
+  );
 
   return cpu_self;
 }

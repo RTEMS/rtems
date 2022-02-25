@@ -187,7 +187,13 @@ CPU_Counter_ticks _CPU_Counter_read( void )
 {
   unsigned long timec;
 
-  __asm__ volatile ( "csrr %0, time" : "=&r" ( timec ) );
+  __asm__ volatile (
+    ".option push\n"
+    ".option arch, +zicsr\n"
+    "csrr %0, time\n"
+    ".option pop" :
+    "=&r" ( timec )
+  );
 
   return timec;
 }

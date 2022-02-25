@@ -39,6 +39,7 @@ PUBLIC(_start)
 
 	.section	.bsp_start_text, "wax", @progbits
 	.align	2
+	.option	arch, +zicsr
 
 TYPE_FUNC(_start)
 SYM(_start):

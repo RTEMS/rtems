@@ -45,6 +45,7 @@ PUBLIC(_RISCV_Exception_handler)
 
 	.section	.text, "ax", @progbits
 	.align	2
+	.option	arch, +zicsr
 
 TYPE_FUNC(_RISCV_Exception_handler)
 SYM(_RISCV_Exception_handler):

@@ -247,22 +247,27 @@ typedef enum {
 #ifdef __GNUC__
 
 #define read_csr(reg) ({ unsigned long __tmp; \
-  asm volatile ("csrr %0, " #reg : "=r"(__tmp)); \
+  asm volatile (".option push\n.option arch, +zicsr\n" \
+  "csrr %0, " #reg "\n.option pop ": "=r"(__tmp)); \
   __tmp; })
 
 #define write_csr(reg, val) ({ \
-  asm volatile ("csrw " #reg ", %0" :: "rK"(val)); })
+  asm volatile (".option push\n.option arch, +zicsr\n" \
+  "csrw " #reg ", %0\n.option pop" :: "rK"(val)); })
 
 #define swap_csr(reg, val) ({ unsigned long __tmp; \
-  asm volatile ("csrrw %0, " #reg ", %1" : "=r"(__tmp) : "rK"(val)); \
+  asm volatile (".option push\n.option arch, +zicsr\n" \
+  "csrrw %0, " #reg ", %1\n.option pop" : "=r"(__tmp) : "rK"(val)); \
   __tmp; })
 
 #define set_csr(reg, bit) ({ unsigned long __tmp; \
-  asm volatile ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \
+  asm volatile (".option push\n.option arch, +zicsr\nc" \
+  "srrs %0, " #reg ", %1\n.option pop" : "=r"(__tmp) : "rK"(bit)); \
   __tmp; })
 
 #define clear_csr(reg, bit) ({ unsigned long __tmp; \
-  asm volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \
+  asm volatile (".option push\n.option arch, +zicsr\n" \
+  "csrrc %0, " #reg ", %1\n.option pop" : "=r"(__tmp) : "rK"(bit)); \
   __tmp; })
 
 #define rdtime() read_csr(time)

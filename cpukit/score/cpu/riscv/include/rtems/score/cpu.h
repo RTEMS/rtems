@@ -152,7 +152,10 @@ static inline uint32_t riscv_interrupt_disable( void )
   unsigned long mstatus;
 
   __asm__ volatile (
-    "csrrc %0, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) :
+    ".option push\n"
+    ".option arch, +zicsr\n"
+    "csrrc %0, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
+    ".option pop" :
       "=&r" ( mstatus )
   );
 
@@ -161,7 +164,14 @@ static inline uint32_t riscv_interrupt_disable( void )
 
 static inline void riscv_interrupt_enable( uint32_t level )
 {
-  __asm__ volatile ( "csrrs zero, mstatus, %0" : : "r" ( level ) );
+  __asm__ volatile (
+    ".option push\n"
+    ".option arch, +zicsr\n"
+    "csrrs zero, mstatus, %0\n"
+    ".option pop" :
+    :
+    "r" ( level )
+  );
 }
 
 #define _CPU_ISR_Disable( _level ) \
@@ -185,11 +195,17 @@ RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level( uint32_t level )
 {
   if ( ( level & CPU_MODES_INTERRUPT_MASK) == 0 ) {
     __asm__ volatile (
-      "csrrs zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE )
+      ".option push\n"
+      ".option arch, +zicsr\n"
+      "csrrs zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
+      ".option pop"
     );
   } else {
     __asm__ volatile (
-      "csrrc zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE )
+      ".option push\n"
+      ".option arch, +zicsr\n"
+      "csrrc zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) "\n"
+      ".option pop"
     );
   }
 }
@@ -465,7 +481,13 @@ static inline uint32_t _CPU_SMP_Get_current_processor( void )
 {
   unsigned long mhartid;
 
-  __asm__ volatile ( "csrr %0, mhartid" : "=&r" ( mhartid ) );
+  __asm__ volatile (
+    ".option push\n"
+    ".option arch, +zicsr\n"
+    "csrr %0, mhartid\n"
+    ".option pop" :
+    "=&r" ( mhartid )
+  );
 
   return (uint32_t) mhartid;
 }
