@@ -103,6 +103,7 @@
 #include <rtems/bspIo.h>	/* printk */
 #include <rtems/error.h>
 #include <rtems/pci.h>
+#include <rtems/score/sysstate.h>
 #include <bsp.h>
 #include <libcpu/byteorder.h>
 
@@ -297,7 +298,7 @@ uprintf(FILE *f, char *fmt, ...)
 va_list	ap;
 	va_start(ap, fmt);
 #ifdef __rtems__
-	if (!f || !_impure_ptr->__sdidinit) {
+	if (!f || !_System_state_Is_up(_System_state_Get())) {
 		/* Might be called at an early stage when
 		 * stdio is not yet initialized.
 		 * There is no vprintk, hence we must assemble

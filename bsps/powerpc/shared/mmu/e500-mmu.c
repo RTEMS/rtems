@@ -71,6 +71,7 @@
  */
 #include <rtems.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/sysstate.h>
 #include <inttypes.h>
 #include <stdio.h>
 
@@ -125,7 +126,7 @@ myprintf(FILE *f, char *fmt, ...)
   va_list ap;
   va_start(ap, fmt);
 
-  if (!f || !_impure_ptr->__sdidinit) {
+  if (!f || !_System_state_Is_up(_System_state_Get())) {
       /*
        * Might be called at an early stage when
        * stdio is not yet initialized.
