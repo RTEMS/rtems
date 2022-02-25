@@ -158,7 +158,14 @@
 static uint32_t
 seg2vsid (uint32_t ea)
 {
-  __asm__ volatile ("mfsrin %0, %0":"=r" (ea):"0" (ea));
+  __asm__ volatile (
+    ".machine \"push\"\n"
+    ".machine \"any\"\n"
+    "mfsrin %0, %0\n"
+    ".machine \"pop\"" :
+    "=r" (ea) :
+    "0" (ea)
+  );
   return ea & ((1 << LD_VSID_SIZE) - 1);
 }
 #else
@@ -620,6 +627,8 @@ triv121PgTblActivate (Triv121PgTbl pt)
    * - restore original MSR
    */
   __asm__ __volatile (
+    "	.machine \"push\"\n"
+    "	.machine \"any\"\n"
     "	mtctr	%[tmp0]\n"
     /* Get MSR and switch interrupts off - just in case.
      * Also switch the MMU off; the book
@@ -651,6 +660,7 @@ triv121PgTblActivate (Triv121PgTbl pt)
     /* restore original MSR  */
     "	mtmsr	%[tmp0]\n"
     "	isync	\n"
+    "	.machine \"pop\"\n"
       :[tmp0]"+r&"(tmp0), [tmp1]"+b&"(tmp1), [tmp2]"+b&"(tmp2)
       :[ea_range]"i"(FLUSH_EA_RANGE), [pg_sz]"i" (1 << LD_PG_SIZE),
        [sdr1]"i"(SDR1), [sdr1val]"r" (sdr1)

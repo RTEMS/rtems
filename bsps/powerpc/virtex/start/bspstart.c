@@ -98,7 +98,13 @@ void bsp_start( void )
     (uintptr_t) _ISR_Stack_area_begin,
     virtex_exc_vector_base
   );
-  __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));
+  __asm__ volatile (
+    ".machine \"push\"\n"
+    ".machine \"any\"\n"
+    "mtevpr %0\n"
+    ".machine \"pop\"" : :
+    "r" (virtex_exc_vector_base)
+  );
 
   bsp_interrupt_initialize();
 }

@@ -129,7 +129,12 @@ static inline uint32_t mpc55xx_count_leading_zeros( uint32_t value)
 static inline void mpc55xx_wait_for_interrupt(void)
 {
   #ifdef MPC55XX_HAS_WAIT_INSTRUCTION
-    __asm__ volatile ("wait");
+    __asm__ volatile (
+      ".machine \"push\"\n"
+      ".machine \"any\"\n"
+      "wait\n"
+      ".machine \"pop\""
+    );
   #else
     __asm__ volatile ("");
   #endif

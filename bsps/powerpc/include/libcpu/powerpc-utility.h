@@ -229,7 +229,12 @@ static inline void ppc_enforce_in_order_execution_of_io(void)
 {
   RTEMS_COMPILER_MEMORY_BARRIER();
 
-  __asm__ volatile ("eieio");
+  __asm__ volatile (
+    ".machine \"push\"\n"
+    ".machine \"any\"\n"
+    "eieio\n"
+    ".machine \"pop\""
+  );
 }
 
 static inline void ppc_data_cache_block_flush(void *addr)

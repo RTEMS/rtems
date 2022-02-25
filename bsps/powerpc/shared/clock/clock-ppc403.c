@@ -188,9 +188,22 @@ static void ClockOn(const rtems_irq_connect_data* unused)
     auto_restart = true;
 
 #else /* ppc405 */
-  __asm__ volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));              /*405GP CPC0_CR1 */
+  __asm__ volatile (
+    ".machine \"push\"\n"
+    ".machine \"any\"\n"
+    "mfdcr %0, 0x0b2\n"
+    ".machine \"pop\"" :
+    "=r" (iocr)
+  ); /*405GP CPC0_CR1 */
   iocr &=~0x800000;               /* timer clocked from system clock CETE*/
-  __asm__ volatile ("mtdcr 0x0b2, %0" : "=r" (iocr) : "0" (iocr)); /* 405GP CPC0_CR1 */
+  __asm__ volatile (
+    ".machine \"push\"\n"
+    ".machine \"any\"\n"
+    "mtdcr 0x0b2, %0\n"
+    ".machine \"pop\"" :
+    "=r" (iocr) :
+    "0" (iocr)
+  ); /* 405GP CPC0_CR1 */
 
   /*
    * Enable auto restart

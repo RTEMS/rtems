@@ -133,13 +133,16 @@ static void
 fetch(bsp_tlb_idx_t key, bsp_tlb_entry_t* tlb)
 {
   register uint32_t tmp;
-  __asm__ volatile ("mfpid   %[tmp]           \n\t"
+  __asm__ volatile (".machine \"push\"        \n\t"
+                    ".machine \"any\"         \n\t"
+                    "mfpid   %[tmp]           \n\t"
                     "stw     %[tmp],0(%[tlb]) \n\t"
                     "tlbrehi %[tmp],%[key]    \n\t"
                     "stw     %[tmp],4(%[tlb]) \n\t"
                     "tlbrelo %[tmp],%[key]    \n\t"
                     "stw     %[tmp],8(%[tlb]) \n\t"
                     "sync                     \n\t"
+                    ".machine \"pop\"         \n\t"
                     : [tmp]"=&r"(tmp)
                     : [key]"r"(key),
                       [tlb]"b"(tlb)
@@ -151,12 +154,15 @@ static void
 store(bsp_tlb_idx_t key, bsp_tlb_entry_t* tlb)
 {
   register uint32_t tmp;
-  __asm__ volatile ("lwz     %[tmp],0(%[tlb]) \n\t"
+  __asm__ volatile (".machine \"push\"        \n\t"
+                    ".machine \"any\"         \n\t"
+                    "lwz     %[tmp],0(%[tlb]) \n\t"
                     "mtpid   %[tmp]           \n\t"
                     "lwz     %[tmp],4(%[tlb]) \n\t"
                     "tlbwehi %[tmp],%[key]    \n\t"
                     "lwz     %[tmp],8(%[tlb]) \n\t"
                     "tlbwelo %[tmp],%[key]    \n\t"
+                    ".machine \"pop\"         \n\t"
                     : [tmp]"=&r"(tmp)
                     : [tlb]"b"(tlb),
                       [key]"r"(key)
@@ -290,9 +296,12 @@ bsp_mmu_find_first_free()
 
   for (idx=0; idx<NTLBS; idx++) {
     register uint32_t tmp;
-    __asm__ volatile ("tlbrehi %[tmp],%[idx]    \n\t"
+    __asm__ volatile (".machine \"push\"        \n\t"
+                      ".machine \"any\"         \n\t"
+                      "tlbrehi %[tmp],%[idx]    \n\t"
                       "stw     %[tmp],4(%[tlb]) \n\t" /* entry.hi */
                       "sync                     \n\t"
+                      ".machine \"pop\"         \n\t"
                       : [tmp]"=&r"(tmp)
                       : [idx]"r"(idx),
                         [tlb]"b"(&entry)
@@ -489,11 +498,14 @@ bsp_mmu_find(uint32_t ea, uint32_t tid)
 
   rtems_interrupt_disable(lvl);
 
-  __asm__ volatile ("mfpid  %[pid]         \n\t" /* Save PID */
+  __asm__ volatile (".machine \"push\"\n\t"
+                    ".machine \"any\"\n\t"
+                    "mfpid  %[pid]         \n\t" /* Save PID */
                     "mtpid  %[tid]         \n\t"
                     "tlbsx. %[idx],0,%[ea] \n\t" /* Failure changes the index reg randomly. */
                     "mfcr   %[failure]     \n\t"
                     "mtpid  %[pid]         \n\t" /* Restore PID */
+                    ".machine \"pop\"\n\t"
                     : [pid]"=r"(pid),
                       [idx]"=&r"(idx),
                       [failure]"=&r"(failure)

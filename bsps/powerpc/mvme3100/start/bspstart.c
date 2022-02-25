@@ -364,9 +364,21 @@ VpdBufRec          vpdData [] = {
     int i;
     unsigned msr,tcr;
     asm volatile("mfmsr %0":"=r"(msr));
-    asm volatile("mftcr %0":"=r"(tcr));
+    asm volatile (
+      ".machine \"push\"\n"
+      ".machine \"any\"\n"
+      "mftcr %0\n"
+      ".machine \"pop\"" :
+      "=r"(tcr)
+    );
     printk("MSR is 0x%08x, TCR 0x%08x\n",msr,tcr);
-    asm volatile("mttcr %0"::"r"(0));
+    asm volatile (
+      ".machine \"push\"\n"
+      ".machine \"any\"\n"
+      "mttcr %0\n"
+      ".machine \"pop\"" : :
+      "r"(0)
+    );
     if (0) {
       asm volatile("mtmsr %0"::"r"(msr|0x8000));
       for (i=0; i<12; i++)
