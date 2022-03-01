@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file Create_Files.cs
  *
  * @brief Format a USB memory stick and create files on the stick
