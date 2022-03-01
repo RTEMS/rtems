@@ -1,25 +1,17 @@
-/*===============================================================*\
-| Project: SPI driver for M25P40 like spi flash device            |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-\*===============================================================*/
 /*
+ * SPI driver for M25P40 like spi flash device
+ *
  * FIXME: currently, this driver only supports read/write accesses
  * erase accesses are to be completed
  */
 
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef _LIBCHIP_SPI_FLASH_M25P40_H
 #define _LIBCHIP_SPI_FLASH_M25P40_H
