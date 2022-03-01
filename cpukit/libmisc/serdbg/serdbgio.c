@@ -1,26 +1,18 @@
-/*===============================================================*\
-| File: serdbgio.c                                                |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2002 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|      Hebststr. 8, 82178 Puchheim, Germany                       |
-|      <Thomas.Doerfler@imd-systems.de>                           |
-|  The license and distribution terms for this file may be        |
-|  found in the file LICENSE in this distribution or at           |
-|  http://www.rtems.org/license/LICENSE.                     |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| TERMIOS serial gdb interface support                            |
-| the functions in this file allow the standard gdb stubs like    |
-| "m68k-stub.c" to access any serial interfaces that work with    |
-| RTEMS termios in polled mode                                    |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 10.05.02  creation                                         doe  |
-|*****************************************************************|
-\*===============================================================*/
+/*
+ * TERMIOS serial gdb interface support
+ * the functions in this file allow the standard gdb stubs like
+ * "m68k-stub.c" to access any serial interfaces that work with
+ * RTEMS termios in polled mode
+ */
+
+/*
+ * Copyright (c) 2002 Ingenieurbuero fuer Microcomputertechnik 
+ * All rights reserved.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,25 +1,17 @@
-/*===============================================================*\
-| File: termios_printk.c                                          |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2002 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|      Hebststr. 8, 82178 Puchheim, Germany                       |
-|      <Thomas.Doerfler@imd-systems.de>                           |
-|  The license and distribution terms for this file may be        |
-|  found in the file LICENSE in this distribution or at           |
-|  http://www.rtems.org/license/LICENSE.                     |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| TERMIOS printk support                                          |
-| this module performs low-level printk output using              |
-| a polled termios driver                                         |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 13.05.02  creation                                         doe  |
-|*****************************************************************|
-\*===============================================================*/
+/*
+ * TERMIOS printk support
+ * this module performs low-level printk output using
+ * a polled termios driver
+ */
+
+/*
+ * Copyright (c) 2002 Ingenieurbuero fuer Microcomputertechnik 
+ * All rights reserved.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
