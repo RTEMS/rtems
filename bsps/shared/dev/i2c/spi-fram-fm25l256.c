@@ -2,9 +2,9 @@
 | Project: SPI driver for FM25L256 like spi fram device           |
 +-----------------------------------------------------------------+
 |                    Copyright (c) 2008                           |
-|                    Embedded Brains GmbH                         |
+|                    embedded brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
+|                    82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 +-----------------------------------------------------------------+

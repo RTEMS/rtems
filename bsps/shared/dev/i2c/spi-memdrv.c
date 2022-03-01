@@ -2,9 +2,9 @@
 | Project: SPI driver for spi memory devices                      |
 +-----------------------------------------------------------------+
 |                    Copyright (c) 2008                           |
-|                    Embedded Brains GmbH                         |
+|                    embedded brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
+|                    82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 +-----------------------------------------------------------------+
