@@ -5,12 +5,7 @@
 +-----------------------------------------------------------------+
 | This is the README for the  generic MCF548x BSP.                |
 +-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
+| Copyright (c) 2007 embedded brains GmbH.  All rights reserved.  |
 +-----------------------------------------------------------------+
 |                                                                 |
 | Parts of the code has been derived from the "dBUG source code"  |
@@ -32,7 +27,6 @@
 |                                                                 |
 | The license and distribution terms for this file may be         |
 | found in the file LICENSE in this distribution or at            |
-|                                                                 |
 | http://www.rtems.org/license/LICENSE.                           |
 |                                                                 |
 +-----------------------------------------------------------------+
