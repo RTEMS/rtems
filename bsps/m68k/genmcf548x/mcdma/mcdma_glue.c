@@ -1,21 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS generic MCF548x BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2004-2009                      |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains glue functions to the Freescale MC_DMA API   |
-\*===============================================================*/
+/*
+ * RTEMS generic MCF548x BSP
+ *
+ * This file contains glue functions to the Freescale MC_DMA API
+ */
+
+/*
+ * Copyright (c) 2004-2009 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #include <rtems.h>
 #include <rtems/error.h>
 #include <bsp.h>
