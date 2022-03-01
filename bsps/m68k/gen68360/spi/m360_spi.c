@@ -1,21 +1,16 @@
-/*===============================================================*\
-| Project: RTEMS support for PGH360                               |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the M360 SPI driver                          |
-\*===============================================================*/
+/*
+ * This file contains the M360 SPI driver
+ */
+
+/*
+ * Copyright (c) 2008 Embedded Brains GmbH. All rights reserved.
+ *
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #include <stdlib.h>
 #include <bsp.h>
 #include <rtems/m68k/m68360.h>
