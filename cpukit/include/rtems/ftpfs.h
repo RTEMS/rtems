@@ -5,20 +5,10 @@
  */
 
 /*
- * Copyright (c) 2009
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
+ * Copyright (c) 2009 embedded brains GmbH.  All rights reserved.
  *
- * (c) Copyright 2002
- * Thomas Doerfler
- * IMD Ingenieurbuero fuer Microcomputertechnik
- * Herbststr. 8
- * 82178 Puchheim, Germany
- * <Thomas.Doerfler@imd-systems.de>
- *
+ * Copyright (c) 2002 IMD Ingenieurbuero fuer Microcomputertechnik.
+ * All rights reserved.
  * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>.
  *
  * This code has been created after closly inspecting "tftpdriver.c" from Eric

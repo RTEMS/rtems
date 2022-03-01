@@ -7,11 +7,6 @@
 /*
  * Copyright (c) 2009-2014 embedded brains GmbH and others.
  *
- * embedded brains GmbH
- * Dornierstr. 4
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
  *
  * Based on work from Chris Johns and Fernando Ruiz.
  *

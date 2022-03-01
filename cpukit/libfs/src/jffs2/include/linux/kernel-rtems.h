@@ -1,12 +1,6 @@
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
- *
  * Copyright 2016 Chris Johns <chrisj@rtems.org>
  *
  * The license and distribution terms for this file may be

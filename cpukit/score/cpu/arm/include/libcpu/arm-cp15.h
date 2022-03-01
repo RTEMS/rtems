@@ -12,12 +12,6 @@
  * Copyright (c) 2013 Hesham AL-Matary
  * Copyright (c) 2009-2017 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <info@embedded-brains.de>
- *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:

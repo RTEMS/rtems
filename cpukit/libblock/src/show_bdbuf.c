@@ -16,13 +16,7 @@
  */
 
 /*
- * Copyright (c) 2005
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
- *
+ * Copyright (c) 2005 embedded brains GmbH.  All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:

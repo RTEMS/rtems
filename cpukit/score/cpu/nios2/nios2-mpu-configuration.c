@@ -3,12 +3,6 @@
 /*
  * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
- *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:

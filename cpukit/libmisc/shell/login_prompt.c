@@ -50,12 +50,6 @@
  *
  * Copyright (c) 2009 embedded brains GmbH and others.
  *
- * embedded brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * <rtems@embedded-brains.de>
- *
  * Based on work from Chris Johns, Fernando Ruiz and Till Straumann.
  *
  * Derived from files "cpukit/libmisc/shell/shell.c" and
