@@ -1,21 +1,14 @@
-/*===============================================================*\
-| Project: SPI driver for spi memory devices                      |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-\*===============================================================*/
+/*
+ * SPI driver for spi memory devices
+ */
 
+/*
+ * Copyright (c) 2008 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef _LIBCHIP_SPI_MEMDRV_H
 #define _LIBCHIP_SPI_MEMDRV_H
