@@ -2,9 +2,9 @@
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
 |                    Copyright (c) 2004-2005                      |
-|                    Embedded Brains GmbH                         |
+|                    embedded brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
+|                    82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 +-----------------------------------------------------------------+

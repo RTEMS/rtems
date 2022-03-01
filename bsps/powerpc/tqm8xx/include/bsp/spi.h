@@ -2,9 +2,9 @@
 | Project: RTEMS support for MPC8xx                               |
 +-----------------------------------------------------------------+
 |                    Copyright (c) 2009                           |
-|                    Embedded Brains GmbH                         |
+|                    embedded brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
+|                    82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 +-----------------------------------------------------------------+

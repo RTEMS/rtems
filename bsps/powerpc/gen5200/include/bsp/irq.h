@@ -5,9 +5,9 @@
 | Adaptions, modifications, enhancements and any recent parts of  |
 | the code are:                                                   |
 |                    Copyright (c) 2005, 2010                     |
-|                    Embedded Brains GmbH                         |
+|                    embedded brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
+|                    82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 +-----------------------------------------------------------------+
