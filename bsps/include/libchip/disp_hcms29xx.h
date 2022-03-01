@@ -1,22 +1,16 @@
-/*===============================================================*\
-| Project: display driver for HCMS29xx                            |
-+-----------------------------------------------------------------+
-| File: disp_hcms29xx.h                                           |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-| http://www.rtems.org/license/LICENSE.                           |
-+-----------------------------------------------------------------+
-| this file declares the SPI based driver for a HCMS29xx 4 digit  |
-| alphanumeric LED display                                        |
-\*===============================================================*/
+/*
+ * Display driver for HCMS29xx
+ *
+ * This file declares the SPI based driver for a HCMS29xx 4 digit
+ * alphanumeric LED display
+ */
+
+/*
+ * Copyright (c) 2008 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
 
 #ifndef _DISP_HCMS29XX_H
 #define _DISP_HCMS29XX_H
