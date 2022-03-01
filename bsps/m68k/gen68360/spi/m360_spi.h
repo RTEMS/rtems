@@ -6,22 +6,13 @@
  *  @brief this file contains the MC68360 SPI driver declarations
  */
 
-/*===============================================================*\
-| Project: RTEMS support for MC68360                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    Embedded Brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-\*===============================================================*/
+/*
+ * Copyright (c) 2008 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 /**
  *  @defgroup m68k_m360spi M360_SPIDRV Support
