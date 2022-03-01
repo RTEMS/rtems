@@ -1,12 +1,6 @@
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <info@embedded-brains.de>
- *
  * Copyright (c) 2014 Chris Johns.  All rights reserved.
  *
  * The license and distribution terms for this file may be

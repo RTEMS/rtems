@@ -7,12 +7,6 @@
 /*
  * Copyright (c) 2008, 2020 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
- *
  * Copyright (c) 2016 Pavel Pisa <pisa@cmp.felk.cvut.cz>
  *
  *  Czech Technical University in Prague

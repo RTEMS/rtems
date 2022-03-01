@@ -9,12 +9,6 @@
 /*
  * Copyright (c) 2010-2011 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
- *
  * Copyright (c) 2011 Stephan Hoffmann <sho@reLinux.de>
  *
  * The license and distribution terms for this file may be
