@@ -5,12 +5,6 @@
  *
  *  Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *
- *  embedded brains GmbH
- *  Dornierstr. 4
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
- *
  *  COPYRIGHT (c) 2014
  *  Aeroflex Gaisler
  *
