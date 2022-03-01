@@ -2,9 +2,9 @@
 | Project: RTEMS generic MFC548x BSP                              |
 +-----------------------------------------------------------------+
 |                    Copyright (c) 2004-2009                      |
-|                    Embedded Brains GmbH                         |
+|                    embedded brains GmbH                         |
 |                    Obere Lagerstr. 30                           |
-|                    D-82178 Puchheim                             |
+|                    82178 Puchheim                             |
 |                    Germany                                      |
 |                    rtems@embedded-brains.de                     |
 +-----------------------------------------------------------------+
