@@ -1,27 +1,8 @@
-/*===============================================================*\
-| Project: RTEMS TQM8xx BSP                                       |
-+-----------------------------------------------------------------+
-| This file has been adapted to MPC8xx by                         |
-|    Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>         |
-|                    Copyright (c) 2008                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-|                                                                 |
-| See the other copyright notice below for the original parts.    |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the console driver                           |
-\*===============================================================*/
-/* derived from: */
 /*
+ * RTEMS TQM8xx BSP
+ *
+ * This file contains the console driver.
+ *
  *  SMC1/2 SCC1..4 raw console serial I/O.
  *  adapted to work with up to 4 SCC and 2 SMC
  *
@@ -29,7 +10,9 @@
  *
  *  To run with interrupt-driven I/O, ensure m8xx_smc1_interrupt
  *  is set before calling the initialization routine.
- *
+ */
+
+/*
  *  Author:
  *    W. Eric Norum
  *    Saskatchewan Accelerator Laboratory
@@ -40,6 +23,9 @@
  *  COPYRIGHT (c) 1989-1998.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright assigned to U.S. Government, 1994.
+ *
+ *  Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ *  All rights reserved.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

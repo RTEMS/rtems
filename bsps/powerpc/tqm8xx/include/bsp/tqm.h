@@ -1,25 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS BSP support for TQ modules                       |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains definitions to interact with TQC's           |
-|  processor modules                                              |
-\*===============================================================*/
+/*
+ * RTEMS BSP support for TQ modules
+ *
+ * This file contains definitions to interact with TQC's
+ * processor modules.
+ */
+
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef __TQM_H__
 #define __TQM_H__

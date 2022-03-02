@@ -1,30 +1,13 @@
-/*===============================================================*\
-| Project: RTEMS TQM8xx BSP                                       |
-+-----------------------------------------------------------------+
-| This file has been adapted to MPC8xx by                         |
-|    Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>         |
-|                    Copyright (c) 2008                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-|                                                                 |
-| See the other copyright notice below for the original parts.    |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the console driver                           |
-\*===============================================================*/
-/* derived from: */
 /*
- * mmutlbtab.c
+ * RTEMS TQM8xx BSP
  *
+ * This file contains the console driver.
+ */
+
+/*
  * Copyright (c) 1999, National Research Council of Canada
+ * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ * All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

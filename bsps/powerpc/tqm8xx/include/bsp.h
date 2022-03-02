@@ -12,17 +12,11 @@
  */
 
 /*
- * This file has been adapted to MPC8xx by:
- *    Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>
- *    Copyright (c) 2008
- *    embedded brains GmbH
- *    Obere Lagerstr. 30
- *    82178 Puchheim
- *    Germany
- *    rtems@embedded-brains.de
- *
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ *  All rights reserved.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

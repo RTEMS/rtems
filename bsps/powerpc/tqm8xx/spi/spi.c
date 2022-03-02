@@ -1,21 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS support for tqm8xx                               |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2009                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the MPC8xx SPI driver                        |
-\*===============================================================*/
+/*
+ * RTEMS support for tqm8xx
+ *
+ * This file contains the MPC8xx SPI driver.
+ */
+
+/*
+ * Copyright (c) 2009 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #include <stdlib.h>
 #include <bsp.h>
 #include <mpc8xx.h>

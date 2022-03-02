@@ -1,21 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS support for MPC8xx                               |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2009                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the MPC8xx SPI driver declarations           |
-\*===============================================================*/
+/*
+ * RTEMS support for MPC8xx
+ *
+ * This file contains the MPC8xx SPI driver declarations.
+ */
+
+/*
+ * Copyright (c) 2009 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef _M8XX_SPIDRV_H
 #define _M8XX_SPIDRV_H
 

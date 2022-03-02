@@ -1,26 +1,19 @@
-/*===============================================================*\
-| Project: RTEMS TQM8xx BSP                                       |
-+-----------------------------------------------------------------+
-| This file has been adapted to MPC8xx by                         |
-|    Thomas Doerfler <Thomas.Doerfler@embedded-brains.de>         |
-|                    Copyright (c) 2008                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-|                                                                 |
-| See the other copyright notice below for the original parts.    |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the console driver                           |
-\*===============================================================*/
-/* derived from: generic MPC83xx BSP */
+/*
+ * RTEMS TQM8xx BSP
+ *
+ * This file contains the console driver.
+ *
+ * Derived from: generic MPC83xx BSP
+ */
+
+/*
+ * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <rtems.h>
 #include <mpc8xx.h>
