@@ -1,22 +1,16 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC83xx BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007, 2010                     |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file declares constants of the interrupt controller        |
-\*===============================================================*/
+/*
+ * RTEMS generic MPC83xx BSP
+ *
+ * This file declares constants of the interrupt controller.
+ */
 
+/*
+ * Copyright (c) 2008, 2010 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef GEN83xx_IRQ_IRQ_H
 #define GEN83xx_IRQ_IRQ_H

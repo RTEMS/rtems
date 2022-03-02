@@ -1,22 +1,16 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC83xx BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains board specific definitions                   |
-\*===============================================================*/
+/*
+ * RTEMS generic MPC83xx BSP
+ *
+ * This file contains board specific definitions.
+ */
 
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef __GEN83xx_HWREG_VALS_h
 #define __GEN83xx_HWREG_VALS_h

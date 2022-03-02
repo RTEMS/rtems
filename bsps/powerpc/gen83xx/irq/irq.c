@@ -1,21 +1,16 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC83xx BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file integrates the IPIC irq controller                    |
-\*===============================================================*/
+/*
+ * RTEMS generic MPC83xx BSP
+ *
+ * This file integrates the IPIC irq controller.
+ */
+
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <mpc83xx/mpc83xx.h>
 

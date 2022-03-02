@@ -1,22 +1,16 @@
-/*===============================================================*\
-| Project: RTEMS support for MPC83xx                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the low level MPC83xx I2C driver parameters  |
-\*===============================================================*/
+/*
+ * RTEMS support for MPC83xx
+ *
+ * This file contains the low level MPC83xx I2C driver parameters.
+ */
 
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <mpc83xx/mpc83xx_i2cdrv.h>
 #include <libchip/i2c-2b-eeprom.h>
