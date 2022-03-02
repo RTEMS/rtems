@@ -1,21 +1,16 @@
-/*===============================================================*\
-| Project: display driver for HCMS29xx                            |
-+-----------------------------------------------------------------+
-| File: font_hcms29xx.c                                           |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-| http://www.rtems.org/license/LICENSE.                           |
-+-----------------------------------------------------------------+
-| This file defines the 5x7 bit font used in disp_hcms29xx        |
-\*===============================================================*/
+/*
+ * Display driver for HCMS29xx.
+ *
+ * This file defines the 5x7 bit font used in disp_hcms29xx.
+ */
+
+/*
+ * Copyright (c) 2008 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <stddef.h>
 #include "disp_fonts.h"

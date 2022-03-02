@@ -1,20 +1,15 @@
-/*===============================================================*\
-| Project: SPI driver for spi memory devices                      |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-\*===============================================================*/
+/*
+ * SPI driver for spi memory devices.
+ */
+
+/*
+ * Copyright (c) 2008 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 /*
  * FIXME: currently, this driver only supports read/write accesses
  * erase accesses are to be completed

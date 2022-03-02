@@ -1,22 +1,16 @@
-/*===============================================================*\
-| Project: display driver for HCMS29xx                            |
-+-----------------------------------------------------------------+
-| File: disp_fonts.h                                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2008                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| This file declares general data structures for font management  |
-\*===============================================================*/
+/*
+ * Display driver for HCMS29xx.
+ *
+ * This file declares general data structures for font management.
+ */
+
+/*
+ * Copyright (c) 2008 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef DISP_FONTS_H
 #define DISP_FONTS_H
