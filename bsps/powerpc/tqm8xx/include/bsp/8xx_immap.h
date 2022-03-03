@@ -1,30 +1,24 @@
-/*===============================================================*\
-| Project: RTEMS BSP support for TQ modules                       |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains definitions to interact with TQC's           |
-|  processor modules                                              |
-\*===============================================================*/
-/* derived from mbx8xx BSP */
 /*
- * MPC8xx Internal Memory Map
- * Copyright (c) 1997 Dan Malek (dmalek@jlc.net)
+ * RTEMS BSP support for TQ modules
  *
+ * This file contains definitions to interact with TQC's
+ * processor modules.
+ *
+ * derived from mbx8xx BSP
+ *
+ * MPC8xx Internal Memory Map
+ */
+
+/*
+ * Copyright (c) 1997 Dan Malek (dmalek@jlc.net)
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
+/*
  * The I/O on the MPC860 is comprised of blocks of special registers
  * and the dual port ram for the Communication Processor Module.
  * Within this space are functional units such as the SIU, memory
