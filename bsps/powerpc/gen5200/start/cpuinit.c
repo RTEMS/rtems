@@ -1,69 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the code to initialize the cpu               |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       cpuinit.c                                           */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 C level startup code                  */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:  This file contains additional functions for         */
-/*                 initializing the MPC5x00 CPU                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   MPC8260ads additional CPU initialization            */
-/*   Module:       cpuinit.c                                           */
-/*   Project:      RTEMS 4.6.0pre1 / MCF8260ads BSP                    */
-/*   Version       1.1                                                 */
-/*   Date:         10/22/2002                                          */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*   Written by Jay Monkman (jmonkman@frasca.com)                      */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains the code to initialize the cpu.
+ */
+
+/*
+ * Copyright (c) 2003 IPR Engineering
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <stdbool.h>
 #include <string.h>
