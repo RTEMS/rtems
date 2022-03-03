@@ -9,15 +9,12 @@
  */
 
 /*
- *  Copyright (C) 2004 IMD
- *  Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
- *  <Thomas.Doerfler@imd-systems.de>
+ * Copyright (c) 2004 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * All rights reserved.
  *
- *  All rights reserved.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifdef HAVE_CONFIG_H

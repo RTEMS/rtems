@@ -1,27 +1,20 @@
-/*===============================================================*\
-| Project: RTEMS PC386 IDE harddisc driver                        |
-+-----------------------------------------------------------------+
-| File: ide.c                                                     |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2003 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file contains the BSP layer for IDE access below the       |
-| libchip IDE harddisc driver                                     |
-| based on a board specific driver from                           |
-| Eugeny S. Mints, Oktet                                          |
-|                                                                 |
-|  The license and distribution terms for this file may be        |
-|  found in the file LICENSE in this distribution or at           |
-|  http://www.rtems.org/license/LICENSE.                     |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 01.14.03  creation                                         doe  |
-\*===============================================================*/
+/*
+ * RTEMS PC386 IDE harddisc driver
+ *
+ * This file contains the BSP layer for IDE access below the
+ * libchip IDE harddisc driver.
+ * based on a board specific driver from
+ * Eugeny S. Mints, Oktet
+ */
+
+/*
+ * Copyright (c) 2003 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <inttypes.h>
 

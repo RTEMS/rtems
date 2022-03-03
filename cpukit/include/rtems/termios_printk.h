@@ -1,21 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS remote gdb over serial line                      |
-+-----------------------------------------------------------------+
-| File: termios_printk.h                                          |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2002 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file declares intialization functions to add               |
-| printk polled output via termios polled drivers                 |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 13.04.02  creation                                         doe  |
-\*===============================================================*/
+/*
+ * This file declares intialization functions to add
+ * printk polled output via termios polled drivers.
+ */
+
+/*
+ * Copyright (c) 2002 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef _TERMIOS_PRINTK_H
 #define _TERMIOS_PRINTK_H
 

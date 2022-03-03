@@ -1,21 +1,19 @@
-/*===============================================================*\
-| Project: RTEMS remote gdb over serial line                      |
-+-----------------------------------------------------------------+
-| File: serdbg.h                                                  |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2002 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file declares intialization functions to add               |
-| a gdb remote debug stub to an RTEMS system                      |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 04.04.02  creation                                         doe  |
-\*===============================================================*/
+/*
+ * RTEMS remote gdb over serial line
+ *
+ * This file declares intialization functions to add
+ * a gdb remote debug stub to an RTEMS system.
+ */
+
+/*
+ * Copyright (c) 2002 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef _SERDBG_H
 #define _SERDBG_H
 

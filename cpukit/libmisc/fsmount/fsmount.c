@@ -7,18 +7,18 @@
  */
 
 /*
- *                    Copyright (c) 2003 IMD
- *      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
- *               <Thomas.Doerfler@imd-systems.de>
- *                       all rights reserved
- *
  * This file contains the fsmount functions. These functions
  * are used to mount a list of filesystems (and create their mount
  * points before).
+ */
+
+/*
+ * Copyright (c) 2003 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * All rights reserved.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef HAVE_CONFIG_H

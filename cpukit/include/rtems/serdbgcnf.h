@@ -4,24 +4,15 @@
  * @brief Adds a GDB remote Debug Stub to an RTEMS System
  */
 
-/*===============================================================*\
-| Project: RTEMS configure remote gdb over serial line            |
-+-----------------------------------------------------------------+
-| File: serdbgcnf.h                                               |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2002 IMD                       |
-|      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler      |
-|               <Thomas.Doerfler@imd-systems.de>                  |
-|                       all rights reserved                       |
-+-----------------------------------------------------------------+
-| this file declares intialization functions to add               |
-| a gdb remote debug stub to an RTEMS system                      |
-|                                                                 |
-+-----------------------------------------------------------------+
-|   date                      history                        ID   |
-| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ |
-| 13.05.02  creation                                         doe  |
-\*===============================================================*/
+/*
+ * Copyright (c) 2002 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef _SERDBGCNF_H
 #define _SERDBGCNF_H
 
