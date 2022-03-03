@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2004-2005 embedded brains GmbH. All rights reserved.
+ * Copyright (c) 2004, 2005 embedded brains GmbH. All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

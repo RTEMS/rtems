@@ -1,66 +1,18 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains declarations for the PCMCIA IDE Interface    |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       pcmcia_ide.h                                        */
-/*   Date:         17/07/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 PCMCIA IDE harddisk header file       */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:                                                      */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   none                                                */
-/*   Module:                                                           */
-/*   Project:                                                          */
-/*   Version                                                           */
-/*   Date:                                                             */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * RTEMS MPC5x00 PCMCIA IDE harddisk header file
+ * This file contains declarations for the PCMCIA IDE Interface.
+ */
+
+/*
+ * Copyright (c) 2003 IPR Engineering
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef __PCMCIA_IDE_h
 #define __PCMCIA_IDE_h

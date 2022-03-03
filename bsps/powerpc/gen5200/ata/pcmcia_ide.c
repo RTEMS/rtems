@@ -1,79 +1,23 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the PCMCIA IDE access functions              |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       pcmcia_ide.c                                        */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 PCMCIA IDE harddisk driver            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:                                                      */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   RTEMS MBX8xx PCMCIA IDE harddisc driver             */
-/*   Module:       pcmcia_ide.c                                        */
-/*   Project:      RTEMS 4.6.0pre1 / Mbx8xx BSP                        */
-/*   Version                                                           */
-/*   Date:         01/14/2003                                          */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*                    Copyright (c) 2003 IMD                           */
-/*      Ingenieurbuero fuer Microcomputertechnik Th. Doerfler          */
-/*               <Thomas.Doerfler@imd-systems.de>                      */
-/*                       all rights reserved                           */
-/*                                                                     */
-/*  this file contains the BSP layer for PCMCIA IDE access below the   */
-/*  libchip IDE harddisc driver based on a board specific driver from  */
-/*  Eugeny S. Mints, Oktet                                             */
-/*                                                                     */
-/*  The license and distribution terms for this file may be            */
-/*  found in the file LICENSE in this distribution or at               */
-/*  http://www.rtems.org/license/LICENSE.                         */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * RTEMS MPC5x00 PCMCIA IDE harddisk driver
+ *
+ * This file contains the BSP layer for PCMCIA IDE access below the
+ * libchip IDE harddisc driver based on a board specific driver from
+ * Eugeny S. Mints, Oktet
+ */
+
+/*
+ * Copyright (c) 2003 IMD Ingenieurbuero fuer Microcomputertechnik Th. Doerfler.
+ * All rights reserved.
+ * Copyright (c) 2003 IPR Engineering
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <sys/param.h>
 #include <rtems.h>
