@@ -1,21 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS virtex BSP                                       |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file declares constants of the interrupt controller        |
-\*===============================================================*/
+/*
+ * RTEMS virtex BSP
+ *
+ * This file declares constants of the interrupt controller.
+ */
+
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef VIRTEX_IRQ_IRQ_H
 #define VIRTEX_IRQ_IRQ_H
 

@@ -1,22 +1,18 @@
-/*===============================================================*\
-| Project: RTEMS support for MPC83xx                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the MPC83xx SPI driver declarations          |
-| NOTE: this driver has the same API as a I2C driver              |
-\*===============================================================*/
+/*
+ * RTEMS support for MPC83xx
+ *
+ * This file contains the MPC83xx SPI driver declarations.
+ * NOTE: This driver has the same API as a I2C driver.
+ */
+
+/*
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef _MPC83XX_SPIDRV_H
 #define _MPC83XX_SPIDRV_H
 

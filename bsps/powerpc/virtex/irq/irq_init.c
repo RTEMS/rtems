@@ -1,36 +1,22 @@
-/*===============================================================*\
-| Project: RTEMS virtex BSP                                       |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2007                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the irq controller handler                   |
-\*===============================================================*/
-
-/*  Content moved from opbintctrl.c:
+/*
+ * RTEMS virtex BSP
+ *
+ * This file contains the irq controller handler.
+ *
+ * Content moved from opbintctrl.c:
  *
  *  This file contains definitions and declarations for the
  *  Xilinx Off Processor Bus (OPB) Interrupt Controller
+ */
+
+/*
+ * Author: Keith Robertson <kjrobert@alumni.uwaterloo.ca>
+ * COPYRIGHT (c) 2005 Linn Products Ltd, Scotland.
+ * Copyright (c) 2007 embedded brains GmbH. All rights reserved.
  *
- *  Author: Keith Robertson <kjrobert@alumni.uwaterloo.ca>
- *  COPYRIGHT (c) 2005 Linn Products Ltd, Scotland.
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <bsp.h>
