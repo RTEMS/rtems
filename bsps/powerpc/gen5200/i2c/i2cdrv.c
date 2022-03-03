@@ -1,37 +1,24 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| I2C driver for MPC5200                                          |
-+-----------------------------------------------------------------+
-| This file has been adapted from an existing source code file,   |
-| see the original file header below for reference                |
-\*===============================================================*/
-
-/* I2C driver for MCF5206eLITE board. I2C bus accessed through on-chip
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * I2C driver for MPC5200
+ *
+ * Adapted from:
+ *
+ * I2C driver for MCF5206eLITE board. I2C bus accessed through on-chip
  * MCF5206e MBUS controller.
  *
  * The purpose of this module is to perform I2C driver initialization
  * and serialize I2C transfers.
- *
+ */
+
+/*
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- *
  * http://www.rtems.org/license/LICENSE.
  */
 

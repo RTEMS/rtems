@@ -1,34 +1,20 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file configures the pcf8563 RTC for a PM520 board          |
-\*===============================================================*/
 /*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file configures the pcf8563 RTC for a PM520 board.
+ *
+ * Based on:
  * This file contains the RTC driver table for Motorola MCF5206eLITE
  * ColdFire evaluation board.
- *
+ */
+
+/*
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- *
  * http://www.rtems.org/license/LICENSE.
  */
 

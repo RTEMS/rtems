@@ -1,24 +1,17 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file has to be included by application when using mscan    |
-\*===============================================================*/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file has to be included by application when using mscan.
+ */
+
+/*
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 #ifndef __MSCAN_H__
 #define __MSCAN_H__
 

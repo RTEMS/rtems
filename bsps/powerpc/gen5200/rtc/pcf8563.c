@@ -1,25 +1,8 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the tod driver for a Philips pcf8563 I2C RTC |
-\*===============================================================*/
 /*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains the tod driver for a Philips pcf8563 I2C RTC.
+ *
  * This file interfaces with the real-time clock found in a
  * Philips PCF8563 serial real-time clock chip.
  * This RTC have I2C bus interface. BSP have to provide I2C bus primitives
@@ -29,10 +12,13 @@
  * occurs). ulControlPort contains I2C bus number; ulDataPort contains
  * RTC I2C device address.
  *
- * Based on a ds1307 driver from:
- *
+ * Based on a ds1307 driver.
+ */
+
+/*
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at

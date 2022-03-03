@@ -1,34 +1,20 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains declarations for the pcf8563 RTC driver      |
-\*===============================================================*/
 /*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains declarations for the pcf8563 RTC driver.
+ *
+ * Based on:
  * This file contains the definitions for Dallas Semiconductor
  * DS1307/DS1308 serial real-time clock/NVRAM.
- *
+ */
+
+/*
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- *
  * http://www.rtems.org/license/LICENSE.
  */
 

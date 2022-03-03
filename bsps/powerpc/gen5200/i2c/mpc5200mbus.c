@@ -1,35 +1,22 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| MBUS module (I2C bus) driver                                    |
-+-----------------------------------------------------------------+
-| This file has been adapted from an existing source code file,   |
-| see the original file header below for reference                |
-\*===============================================================*/
-
-/* MCF5206e MBUS module (I2C bus) driver
+/*
+ * RTEMS generic MPC5200 BSP
  *
+ * MBUS module (I2C bus) driver
+ *
+ * Adapted from:
+ * MCF5206e MBUS module (I2C bus) driver
+ */
+
+/*
  * Copyright (C) 2000 OKTET Ltd., St.-Petersburg, Russia
  * Author: Victor V. Vengerov <vvv@oktet.ru>
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
- *
  * http://www.rtems.org/license/LICENSE.
  */
+
 #include "../i2c/mpc5200mbus.h"
 #include <bsp/mpc5200.h>
 #include <bsp/irq.h>
