@@ -1,77 +1,23 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the irq controller handler                   |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       irq.c                                               */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 CPU main interrupt handler & routines */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:  This file contains the implementation of the        */
-/*                 functions described in irq.h                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   MPC8260ads main interrupt handler & routines        */
-/*   Module:       irc.c                                               */
-/*   Project:      RTEMS 4.6.0pre1 / MCF8260ads BSP                    */
-/*   Version       1.2                                                 */
-/*   Date:         04/18/2002                                          */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*   Copyright (C) 1998, 1999 valette@crf.canon.fr                     */
-/*                                                                     */
-/*   Modified for mpc8260 Andy Dachs <a.dachs@sstl.co.uk>              */
-/*   Surrey Satellite Technology Limited, 2000                         */
-/*   Nested exception handlers not working yet.                        */
-/*                                                                     */
-/*   The license and distribution terms for this file may be           */
-/*   found in the file LICENSE in this distribution or at     */
-/*   http://www.rtems.org/license/LICENSE.                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains the irq controller handler.
+ */
+
+/*
+ * Copyright (c) 1998, 1999 valette@crf.canon.fr
+ *
+ * Copyright (c) 2000 Andy Dachs <a.dachs@sstl.co.uk>
+ * Surrey Satellite Technology Limited
+ *
+ * Copyright (c) 2003 IPR Engineering. All rights reserved.
+ *
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <inttypes.h>
 

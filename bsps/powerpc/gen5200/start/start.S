@@ -1,94 +1,47 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the startup assembly code                    |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       start.S                                             */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 CPU assembly startup                  */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:  This file contains the assembler portion of MPC5x00 */
-/*                 startup code                                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   startup code for Motorola PQII ADS board            */
-/*   Module:       start.S                                             */
-/*   Project:      RTEMS 4.6.0pre1 / MCF8260ads BSP                    */
-/*   Version       1.2                                                 */
-/*   Date:         04/18/2002                                          */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*   Modified for the Motorola PQII ADS board by                       */
-/*   Andy Dachs <a.dachs@sstl.co.uk> 23-11-00.                         */
-/*   Surrey Satellite Technology Limited                               */
-/*                                                                     */
-/*   I have a proprietary bootloader programmed into the flash         */
-/*   on the board which initialises the SDRAM prior to calling         */
-/*   this function.                                                    */
-/*                                                                     */
-/*   This file is based on the one by Jay Monkman (jmonkman@fracsa.com)*/
-/*   which in turn was based on the dlentry.s file for the Papyrus BSP,*/
-/*   written by:                                                       */
-/*                                                                     */
-/*   Author:     Andrew Bray <andy@i-cubed.co.uk>                      */
-/*                                                                     */
-/*   COPYRIGHT (c) 1995 by i-cubed ltd.                                */
-/*                                                                     */
-/*   To anyone who acknowledges that this file is provided "AS IS"     */
-/*   without any express or implied warranty:                          */
-/*      permission to use, copy, modify, and distribute this file      */
-/*      for any purpose is hereby granted without fee, provided that   */
-/*      the above copyright notice and this notice appears in all      */
-/*      copies, and that the name of i-cubed limited not be used in    */
-/*      advertising or publicity pertaining to distribution of the     */
-/*      software without specific, written prior permission.           */
-/*      i-cubed limited makes no representations about the suitability */
-/*      of this software for any purpose.                              */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains the startup assembly code.
+ *
+ * References: startup code for Motorola PQII ADS board.
+ * Modified for the Motorola PQII ADS board by Andy Dachs.
+ * Comment for the original code:
+ *
+ *   I have a proprietary bootloader programmed into the flash
+ *   on the board which initialises the SDRAM prior to calling
+ *   this function.
+ */
+
+/*
+ * Modified for the Motorola PQII ADS board by
+ * Andy Dachs <a.dachs@sstl.co.uk> 23-11-00.
+ * Surrey Satellite Technology Limited
+ *
+ * Based on the one by Jay Monkman (jmonkman@fracsa.com)
+ * which in turn was based on the dlentry.s file for the Papyrus BSP,
+ * written by:
+ *
+ * Author: Andrew Bray <andy@i-cubed.co.uk>
+ * Copyright (c) 1995 by i-cubed ltd.
+ *
+ * To anyone who acknowledges that this file is provided "AS IS"
+ * without any express or implied warranty:
+ *    permission to use, copy, modify, and distribute this file
+ *    for any purpose is hereby granted without fee, provided that
+ *    the above copyright notice and this notice appears in all
+ *    copies, and that the name of i-cubed limited not be used in
+ *    advertising or publicity pertaining to distribution of the
+ *    software without specific, written prior permission.
+ *    i-cubed limited makes no representations about the suitability
+ *    of this software for any purpose.
+ *
+ * Copyright (c) 2003 IPR Engineering
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <rtems/asm.h>
 #include <rtems/powerpc/cache.h>

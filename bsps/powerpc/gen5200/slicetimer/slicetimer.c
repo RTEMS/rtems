@@ -1,101 +1,47 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains functions to implement a slice timer         |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       slicetimer.c                                        */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 slicetimer driver                     */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:  MPC5x00 slice timer routines for cyclic short time  */
-/*                 trigger                                             */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   Clock driver for PPC403                             */
-/*   Module:       clock.c                                             */
-/*   Project:      RTEMS 4.6.0pre1 / PPC403 BSP                        */
-/*   Version       1.16                                                */
-/*   Date:         2002/11/01                                          */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*   Author: Jay Monkman (jmonkman@frasca.com)                         */
-/*   Copyright (C) 1998 by Frasca International, Inc.                  */
-/*                                                                     */
-/*   Derived from c/src/lib/libcpu/ppc/ppc403/clock/clock.c:           */
-/*                                                                     */
-/*   Author: Andrew Bray <andy@i-cubed.co.uk>                          */
-/*                                                                     */
-/*   COPYRIGHT (c) 1995 by i-cubed ltd.                                */
-/*                                                                     */
-/*   To anyone who acknowledges that this file is provided "AS IS"     */
-/*   without any express or implied warranty:                          */
-/*      permission to use, copy, modify, and distribute this file      */
-/*      for any purpose is hereby granted without fee, provided that   */
-/*      the above copyright notice and this notice appears in all      */
-/*      copies, and that the name of i-cubed limited not be used in    */
-/*      advertising or publicity pertaining to distribution of the     */
-/*      software without specific, written prior permission.           */
-/*      i-cubed limited makes no representations about the suitability */
-/*      of this software for any purpose.                              */
-/*                                                                     */
-/*   Derived from c/src/lib/libcpu/hppa1.1/clock/clock.c:              */
-/*                                                                     */
-/*   Modifications for deriving timer clock from cpu system clock by   */
-/*              Thomas Doerfler <td@imd.m.isar.de>                     */
-/*   for these modifications:                                          */
-/*   COPYRIGHT (c) 1997 by IMD, Puchheim, Germany.                     */
-/*                                                                     */
-/*   COPYRIGHT (c) 1989-1999.                                          */
-/*   On-Line Applications Research Corporation (OAR).                  */
-/*                                                                     */
-/*   The license and distribution terms for this file may be           */
-/*   found in the file LICENSE in this distribution or at              */
-/*   http://www.rtems.org/license/LICENSE.                        */
-/*                                                                     */
-/*   Modifications for PPC405GP by Dennis Ehlin                        */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains functions to implement a slice timer.
+ *
+ * References: Clock driver for PPC403
+ */
+
+/*
+ * Author: Jay Monkman (jmonkman@frasca.com)
+ * Copyright (C) 1998 by Frasca International, Inc.
+ *
+ * Derived from c/src/lib/libcpu/ppc/ppc403/clock/clock.c:
+ * Author: Andrew Bray <andy@i-cubed.co.uk>
+ *
+ * Copyright (c) 1995 by i-cubed ltd.
+ *
+ * To anyone who acknowledges that this file is provided "AS IS"
+ * without any express or implied warranty:
+ *    permission to use, copy, modify, and distribute this file
+ *    for any purpose is hereby granted without fee, provided that
+ *    the above copyright notice and this notice appears in all
+ *    copies, and that the name of i-cubed limited not be used in
+ *    advertising or publicity pertaining to distribution of the
+ *    software without specific, written prior permission.
+ *    i-cubed limited makes no representations about the suitability
+ *    of this software for any purpose.
+ *
+ * Modifications for deriving timer clock from cpu system clock by
+ * Copyright (c) 1997 by Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ *
+ * COPYRIGHT (c) 1989-1999.
+ * On-Line Applications Research Corporation (OAR).
+ *
+ * Copyright (c) 2003 IPR Engineering
+ *
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ *
+ * Modifications for PPC405GP by Dennis Ehlin
+ */
 
 #include <bsp.h>
 #include <rtems/bspIo.h>

@@ -1,81 +1,37 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the nvram declarations                       |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       nvram.h                                             */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS M93C64-based header file                      */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:  M93C46 is a serial microwire EEPROM which contains  */
-/*                 1Kbit (128 bytes/64 words) of non-volatile memory.  */
-/*                 The device can be configured for byte- or word-     */
-/*                 access. The driver provides a file-like interface   */
-/*                 to this memory.                                     */
-/*                                                                     */
-/*                 MPC5x00 PIN settings:                               */
-/*                                                                     */
-/*                 PSC3_6 (output) -> MC93C46 serial data in    (D)    */
-/*                 PSC3_7 (input)  -> MC93C46 serial data out   (Q)    */
-/*                 PSC3_8 (output) -> MC93C46 chip select input (S)    */
-/*                 PSC3_9 (output) -> MC93C46 serial clock      (C)    */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   DS1307-based Non-Volatile memory device driver      */
-/*   Module:       nvram.h                                             */
-/*   Project:      RTEMS 4.6.0pre1 / MCF5206Elite BSP                  */
-/*   Version       1.1                                                 */
-/*   Date:         10/26/2001                                          */
-/*   Author:       Victor V. Vengerov                                  */
-/*   Copyright:    Copyright (C) 2000 OKTET Ltd.,St.-Petersburg,Russia */
-/*                                                                     */
-/*   The license and distribution terms for this file may be           */
-/*   found in the file LICENSE in this distribution or at              */
-/*   http://www.rtems.org/license/LICENSE.                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains the nvram declarations.
+ *
+ * M93C46 is a serial microwire EEPROM which contains
+ * 1Kbit (128 bytes/64 words) of non-volatile memory.
+ * The device can be configured for byte- or word-
+ * access. The driver provides a file-like interface
+ * to this memory.
+ *
+ * MPC5x00 PIN settings:
+ *
+ * PSC3_6 (output) -> MC93C46 serial data in    (D)
+ * PSC3_7 (input)  -> MC93C46 serial data out   (Q)
+ * PSC3_8 (output) -> MC93C46 chip select input (S)
+ * PSC3_9 (output) -> MC93C46 serial clock      (C)
+ *
+ * References: DS1307-based Non-Volatile memory device driver
+ * by Victor V. Vengerov.
+ */
+
+/*
+ * Author: Victor V. Vengerov
+ * Copyright (c) 2000 OKTET Ltd.,St.-Petersburg,Russia
+ *
+ * Copyright (c) 2003 IPR Engineering
+ *
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef __NVRAM_H__
 #define __NVRAM_H__

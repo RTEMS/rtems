@@ -1,99 +1,42 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005                           |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains the console driver functions                 |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       console.c                                           */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 console driver                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:                                                      */
-/*                                                                     */
-/*  The PSCs of mpc5200 are assigned as follows                        */
-/*                                                                     */
-/*              Channel     Device      Minor   Note                   */
-/*                PSC1      /dev/tty0      0                           */
-/*                PSC2      /dev/tty1      1                           */
-/*                PSC3      /dev/tty2      2                           */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   Serial driver for MPC8260ads                        */
-/*   Module:       console-generic.c                                   */
-/*   Project:      RTEMS 4.6.0pre1 / MPC8260ads BSP                    */
-/*   Version       1.3                                                 */
-/*   Date:         2002/11/04                                          */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*   Author: Jay Monkman (jmonkman@frasca.com)                         */
-/*   Copyright (C) 1998 by Frasca International, Inc.                  */
-/*                                                                     */
-/*   Derived from c/src/lib/libbsp/m68k/gen360/console/console.c       */
-/*   written by:                                                       */
-/*   W. Eric Norum                                                     */
-/*   Saskatchewan Accelerator Laboratory                               */
-/*   University of Saskatchewan                                        */
-/*   Saskatoon, Saskatchewan, CANADA                                   */
-/*   eric@skatter.usask.ca                                             */
-/*                                                                     */
-/*   COPYRIGHT (c) 1989-2008.                                          */
-/*   On-Line Applications Research Corporation (OAR).                  */
-/*                                                                     */
-/*   Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>     */
-/*   and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>        */
-/*   Copyright (c) 1999, National Research Council of Canada           */
-/*                                                                     */
-/*   Modifications by Andy Dachs <a.dachs@sstl.co.uk> to add MPC8260   */
-/*   support.                                                          */
-/*   Copyright (c) 2001, Surrey Satellite Technology Ltd               */
-/*                                                                     */
-/*   The license and distribution terms for this file may be           */
-/*   found in the file LICENSE in this distribution or at              */
-/*   http://www.rtems.org/license/LICENSE.                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains the console driver functions.
+ *
+ * The PSCs of mpc5200 are assigned as follows
+ *
+ *    Channel     Device      Minor   Note
+ *      PSC1      /dev/tty0      0
+ *      PSC2      /dev/tty1      1
+ *      PSC3      /dev/tty2      2
+ */
+
+/*
+ * Author: Jay Monkman (jmonkman@frasca.com)
+ * Copyright (C) 1998 by Frasca International, Inc.
+ *
+ * Derived from c/src/lib/libbsp/m68k/gen360/console/console.c
+ * Author: W. Eric Norum <eric@skatter.usask.ca>
+ * Saskatchewan Accelerator Laboratory, University of Saskatchewan, CANADA
+ *
+ * COPYRIGHT (c) 1989, 2008.
+ * On-Line Applications Research Corporation (OAR).
+ *
+ * Modifications by Darlene Stewart <Darlene.Stewart@iit.nrc.ca>
+ * and Charles-Antoine Gauthier <charles.gauthier@iit.nrc.ca>
+ * Copyright (c) 1999, National Research Council of Canada
+ *
+ * Modifications by Andy Dachs <a.dachs@sstl.co.uk> to add MPC8260 support.
+ * Copyright (c) 2001, Surrey Satellite Technology Ltd
+ *
+ * Copyright (c) 2003, IPR Engineering
+ *
+ * Copyright (c) 2005 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #include <assert.h>
 #include <string.h>

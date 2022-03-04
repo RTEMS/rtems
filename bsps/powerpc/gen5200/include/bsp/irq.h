@@ -1,88 +1,38 @@
-/*===============================================================*\
-| Project: RTEMS generic MPC5200 BSP                              |
-+-----------------------------------------------------------------+
-| Partially based on the code references which are named below.   |
-| Adaptions, modifications, enhancements and any recent parts of  |
-| the code are:                                                   |
-|                    Copyright (c) 2005, 2010                     |
-|                    embedded brains GmbH                         |
-|                    Obere Lagerstr. 30                           |
-|                    82178 Puchheim                             |
-|                    Germany                                      |
-|                    rtems@embedded-brains.de                     |
-+-----------------------------------------------------------------+
-| The license and distribution terms for this file may be         |
-| found in the file LICENSE in this distribution or at            |
-|                                                                 |
-| http://www.rtems.org/license/LICENSE.                           |
-|                                                                 |
-+-----------------------------------------------------------------+
-| this file contains declarations for the irq controller handler  |
-\*===============================================================*/
-/***********************************************************************/
-/*                                                                     */
-/*   Module:       irq.h                                               */
-/*   Date:         07/17/2003                                          */
-/*   Purpose:      RTEMS MPC5x00 CPU interrupt header file             */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Description:  This include file describe the data structure and   */
-/*                 the functions implemented by rtems to write         */
-/*                 interrupt handlers.                                 */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Code                                                              */
-/*   References:   MPC8260ads CPU interrupt header file                */
-/*   Module:       irq.h                                               */
-/*   Project:      RTEMS 4.6.0pre1 / MCF8260ads BSP                    */
-/*   Version       1.1                                                 */
-/*   Date:         10/10/2002                                          */
-/*                                                                     */
-/*   Author(s) / Copyright(s):                                         */
-/*                                                                     */
-/*   Copyright (C) 1999 valette@crf.canon.fr                           */
-/*                                                                     */
-/*   This code is heavilly inspired by the public specification of     */
-/*   STREAM V2 that can be found at:                                   */
-/*                                                                     */
-/*   <http://www.chorus.com/Documentation/index.html> by following     */
-/*   the STREAM API Specification Document link.                       */
-/*                                                                     */
-/*   Modified for mpc8260 by Andy Dachs <a.dachs@sstl.co.uk>           */
-/*   Surrey Satellite Technology Limited                               */
-/*   The interrupt handling on the mpc8260 seems quite different from  */
-/*   the 860 (I don't know the 860 well).  Although some interrupts    */
-/*   are routed via the CPM irq and some are direct to the SIU they    */
-/*   all appear logically the same.Therefore I removed the distinction */
-/*   between SIU and CPM interrupts.                                   */
-/*                                                                     */
-/*   The license and distribution terms for this file may be           */
-/*   found in the file LICENSE in this distribution or at     */
-/*   http://www.rtems.org/license/LICENSE.                        */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Partially based on the code references which are named above.     */
-/*   Adaptions, modifications, enhancements and any recent parts of    */
-/*   the code are under the right of                                   */
-/*                                                                     */
-/*         IPR Engineering, Dachauer Straße 38, D-80335 München        */
-/*                        Copyright(C) 2003                            */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   IPR Engineering makes no representation or warranties with        */
-/*   respect to the performance of this computer program, and          */
-/*   specifically disclaims any responsibility for any damages,        */
-/*   special or consequential, connected with the use of this program. */
-/*                                                                     */
-/*---------------------------------------------------------------------*/
-/*                                                                     */
-/*   Version history:  1.0                                             */
-/*                                                                     */
-/***********************************************************************/
+/*
+ * RTEMS generic MPC5200 BSP
+ *
+ * This file contains declarations for the irq controller handler.
+ *
+ * References: MPC8260ads CPU interrupt header file.
+ * Comment for that:
+ *
+ *   This code is heavilly inspired by the public specification of
+ *   STREAM V2 that can be found at:
+ *
+ *   <http://www.chorus.com/Documentation/index.html> by following
+ *   the STREAM API Specification Document link.
+ *
+ *   The interrupt handling on the mpc8260 seems quite different from
+ *   the 860 (I don't know the 860 well).  Although some interrupts
+ *   are routed via the CPM irq and some are direct to the SIU they
+ *   all appear logically the same.Therefore I removed the distinction
+ *   between SIU and CPM interrupts.
+ */
+
+/*
+ * Copyright (C) 1999 valette@crf.canon.fr
+ *
+ * Modified for mpc8260 by Andy Dachs <a.dachs@sstl.co.uk>
+ * Surrey Satellite Technology Limited
+ *
+ * Copyright (c) 2003 IPR Engineering
+ *
+ * Copyright (c) 2005, 2010 embedded brains GmbH. All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
 
 #ifndef LIBBSP_POWERPC_GEN5200_IRQ_H
 #define LIBBSP_POWERPC_GEN5200_IRQ_H
