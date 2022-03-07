@@ -26,7 +26,7 @@
  *  Modifications for deriving timer clock from cpu system clock by
  *              Thomas Doerfler <td@imd.m.isar.de>
  *  for these modifications:
- *  COPYRIGHT (c) 1997 by IMD, Puchheim, Germany.
+ *  Copyright (c) 1997 IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  COPYRIGHT (c) 1989-2012.
  *  On-Line Applications Research Corporation (OAR).

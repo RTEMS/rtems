@@ -16,7 +16,7 @@
  *  Author:	Thomas Doerfler <td@imd.m.isar.de>
  *              IMD Ingenieurbuero fuer Microcomputertechnik
  *
- *  COPYRIGHT (c) 1998 by IMD
+ *  Copyright (c) 1998 IMD Ingenieurbuero fuer Microcomputertechnik
  *
  *  Changes from IMD are covered by the original distributions terms.
  *  This file has been derived from the papyrus BSP.

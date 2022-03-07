@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (c) 2003 IMD Ingenieurbuero fuer Microcomputertechnik Th. Doerfler.
+ * Copyright (c) 2003 IMD Ingenieurbuero fuer Microcomputertechnik
  * All rights reserved.
  * Copyright (c) 2003 IPR Engineering
  * Copyright (c) 2005 embedded brains GmbH. All rights reserved.

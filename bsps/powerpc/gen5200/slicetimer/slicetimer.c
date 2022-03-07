@@ -27,7 +27,7 @@
  *    of this software for any purpose.
  *
  * Modifications for deriving timer clock from cpu system clock by
- * Copyright (c) 1997 by Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * Copyright (c) 1997 IMD Ingenieurbuero fuer Microcomputertechnik
  *
  * COPYRIGHT (c) 1989-1999.
  * On-Line Applications Research Corporation (OAR).
