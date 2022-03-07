@@ -4,7 +4,7 @@
  */
 
 /*
- * Copyright (c) 2002 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * Copyright (c) 2002 IMD Ingenieurbuero fuer Microcomputertechnik
  * All rights reserved.
  *
  * The license and distribution terms for this file may be

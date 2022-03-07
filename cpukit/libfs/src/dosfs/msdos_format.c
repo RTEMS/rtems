@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright (c) 2004 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * Copyright (c) 2004 IMD Ingenieurbuero fuer Microcomputertechnik
  * All rights reserved.
  *
  * The license and distribution terms for this file may be

@@ -7,7 +7,7 @@
 /*
  * Copyright (c) 2009 embedded brains GmbH.  All rights reserved.
  *
- * Copyright (c) 2002 IMD Ingenieurbuero fuer Microcomputertechnik.
+ * Copyright (c) 2002 IMD Ingenieurbuero fuer Microcomputertechnik
  * All rights reserved.
  * Modified by Sebastian Huber <sebastian.huber@embedded-brains.de>.
  *

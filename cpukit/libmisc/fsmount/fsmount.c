@@ -13,7 +13,7 @@
  */
 
 /*
- * Copyright (c) 2003 Ingenieurbuero fuer Microcomputertechnik Th. Doerfler
+ * Copyright (c) 2003 IMD Ingenieurbuero fuer Microcomputertechnik
  * All rights reserved.
  *
  * The license and distribution terms for this file may be
