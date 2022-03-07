@@ -19,7 +19,7 @@
  *
  * The Freescale license terms can be reviewed in the file
  *
- *    Freescale_license.txt
+ *    LICENSE.Freescale
  *
  * The generic mcf548x BSP has been developed on the basic
  * structures and modules of the av5282 BSP.
