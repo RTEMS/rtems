@@ -354,7 +354,7 @@ Status_Control _Objects_MP_Global_name_search(
 
   if ( the_global_object != NULL ) {
     *the_id = the_global_object->id;
-    _Assert( the_global_object->name.name_u32 != 0 );
+    _Assert( the_global_object->name != 0 );
     status = STATUS_SUCCESSFUL;
   } else {
     status = STATUS_INVALID_NAME;
