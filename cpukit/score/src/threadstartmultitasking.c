@@ -51,12 +51,6 @@ void _Thread_Start_multitasking( void )
 #if defined(RTEMS_SMP)
   _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_UP );
   _SMP_Try_to_process_message( cpu_self, SMP_MESSAGE_FORCE_PROCESSING );
-
-  /*
-   * Threads begin execution in the _Thread_Handler() function.   This
-   * function will set the thread dispatch disable level to zero.
-   */
-  cpu_self->thread_dispatch_disable_level = 1;
 #endif
 
   heir = _Thread_Get_heir_and_make_it_executing( cpu_self );

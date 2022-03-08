@@ -253,6 +253,12 @@ void _SMP_Start_multitasking_on_secondary_processor(
 
   cpu_index_self = _Per_CPU_Get_index( cpu_self );
 
+  /*
+   * Call fatal error and per-CPU job handlers with thread dispatching
+   * disabled.
+   */
+  cpu_self->thread_dispatch_disable_level = 1;
+
   if ( cpu_index_self >= rtems_configuration_get_maximum_processors() ) {
     _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR );
   }
