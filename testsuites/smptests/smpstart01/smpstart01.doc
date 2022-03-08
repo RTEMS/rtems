@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpstart01
+
+directives:
+
+  - _Thread_Start_multitasking()
+
+concepts:
+
+  - Ensure that the multitasking start works in case the first context switch
+    has an heir thread which already executes the thread body.

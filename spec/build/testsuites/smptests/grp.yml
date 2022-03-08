@@ -125,6 +125,8 @@ links:
 - role: build-dependency
   uid: smpsignal01
 - role: build-dependency
+  uid: smpstart01
+- role: build-dependency
   uid: smpstrongapa01
 - role: build-dependency
   uid: smpswitchextension01
