@@ -41,7 +41,7 @@ void Shm_Get_configuration(
 {
   int i;
   unsigned int tmp;
-  rtems_multiprocessing_table *mptable;
+  const rtems_multiprocessing_table *mptable;
 
   BSP_shm_cfgtbl.format       = SHM_BIG;
 
