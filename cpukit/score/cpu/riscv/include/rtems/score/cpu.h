@@ -509,6 +509,10 @@ static inline void _CPU_Context_Set_is_executing(
   context->is_executing = is_executing;
 }
 
+RTEMS_NO_RETURN void _RISCV_Start_multitasking( Context_Control *heir );
+
+#define _CPU_Start_multitasking( _heir ) _RISCV_Start_multitasking( _heir )
+
 #endif /* RTEMS_SMP */
 
 /** Type that can store a 32-bit integer or a pointer. */

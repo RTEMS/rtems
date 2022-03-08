@@ -64,6 +64,9 @@ void _Thread_Start_multitasking( void )
 #if defined(_CPU_Start_multitasking)
   _CPU_Start_multitasking( &heir->Registers );
 #elif defined(RTEMS_SMP)
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+#error "The CPU port has to provide _CPU_Start_multitasking()"
+#endif
   {
     Context_Control trash;
 

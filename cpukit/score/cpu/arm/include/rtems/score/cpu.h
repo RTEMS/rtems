@@ -443,6 +443,10 @@ void _CPU_Context_Initialize(
   {
     context->is_executing = is_executing;
   }
+
+  RTEMS_NO_RETURN void _ARM_Start_multitasking( Context_Control *heir );
+
+  #define _CPU_Start_multitasking( _heir ) _ARM_Start_multitasking( _heir )
 #endif
 
 #define _CPU_Context_Restart_self( _the_context ) \

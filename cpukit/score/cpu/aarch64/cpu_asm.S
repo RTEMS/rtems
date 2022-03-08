@@ -203,4 +203,21 @@ DEFINE_FUNCTION_AARCH64(_CPU_Context_restore)
 #endif
 
 	b	.L_check_is_executing
+
+DEFINE_FUNCTION_AARCH64(_AArch64_Start_multitasking)
+#ifdef AARCH64_MULTILIB_ARCH_V8_ILP32
+	/* Sanitize input for ILP32 ABI */
+	mov	w0, w0
+#endif
+
+	mov	x1, x0
+	GET_SELF_CPU_CONTROL	reg_2
+
+	/* Switch the stack to the temporary interrupt stack of this processor */
+	add	sp, x2, #(PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE)
+
+	/* Enable interrupts */
+	msr	DAIFClr, #0x2
+
+	b	.L_check_is_executing
 #endif

@@ -40,6 +40,9 @@
 PUBLIC(_CPU_Context_switch)
 PUBLIC(_CPU_Context_switch_no_return)
 PUBLIC(_CPU_Context_restore)
+#ifdef RTEMS_SMP
+PUBLIC(_RISCV_Start_multitasking)
+#endif
 
 SYM(_CPU_Context_switch):
 SYM(_CPU_Context_switch_no_return):
@@ -173,6 +176,18 @@ SYM(_CPU_Context_restore):
 
 	/* Update the executing */
 	sw	a5, PER_CPU_OFFSET_EXECUTING(a2)
+
+	j	.Ltry_update_is_executing
+
+SYM(_RISCV_Start_multitasking):
+	mv	a1, a0
+	GET_SELF_CPU_CONTROL	a2
+
+	/* Switch the stack to the temporary interrupt stack of this processor */
+	addi	sp, a2, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE
+
+	/* Enable interrupts */
+	csrrs	zero, mstatus, RISCV_MSTATUS_MIE
 
 	j	.Ltry_update_is_executing
 #endif

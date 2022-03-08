@@ -182,6 +182,18 @@ DEFINE_FUNCTION_ARM(_CPU_Context_restore)
 	str	r5, [r2, #PER_CPU_OFFSET_EXECUTING]
 
 	b	.L_check_is_executing
+
+DEFINE_FUNCTION_ARM(_ARM_Start_multitasking)
+	mov	r1, r0
+	GET_SELF_CPU_CONTROL	r2
+
+	/* Switch the stack to the temporary interrupt stack of this processor */
+	add	sp, r2, #(PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE)
+
+	/* Enable IRQ interrupts */
+	cpsie	i
+
+	b	.L_check_is_executing
 #endif
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
