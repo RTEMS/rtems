@@ -43,6 +43,7 @@
 
 /* LEON3 Low level transmit/receive functions provided by debug-uart code */
 #ifdef LEON3
+#include <leon.h>
 extern struct apbuart_regs *leon3_debug_uart; /* The debug UART */
 #endif
 

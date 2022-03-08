@@ -15,6 +15,7 @@
 
 #include <rtems.h>
 #include <bsp.h>
+#include <leon.h>
 #include <shm_driver.h>
 
 /* Let user override this configuration by declaring this a weak variable */
