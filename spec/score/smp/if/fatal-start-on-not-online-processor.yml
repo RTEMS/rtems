@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-define
+links:
+- role: interface-placement
+  uid: header-impl
+name: SMP_FATAL_START_ON_NOT_ONLINE_PROCESSOR
+references: []
+type: interface

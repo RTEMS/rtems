@@ -1,12 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
-    The test action is carried out by the application configuration of the test
-    suite and the wrapped _CPU_SMP_Start_processor().
+    The test action is carried out by the wrapped _CPU_SMP_Start_processor().
   action-code: |
     /* Nothing to do */
   checks:
@@ -16,18 +15,18 @@ test-actions:
       T_step_eq_int( ${step}, ctx->source, RTEMS_FATAL_SOURCE_SMP );
     links:
     - role: validation
-      uid: ../req/fatal-start-of-mandatory-processor-failed
+      uid: ../req/fatal-start-on-not-online-processor
   - brief: |
       Check that the expected fatal code is present.
     code: |
       T_step_eq_ulong(
         ${step},
         ctx->code,
-        SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
+        SMP_FATAL_MULTITASKING_START_ON_NOT_ONLINE_PROCESSOR
       );
     links:
     - role: validation
-      uid: ../req/fatal-start-of-mandatory-processor-failed
+      uid: ../req/fatal-start-on-not-online-processor
   links:
   - role: validation
     uid: /acfg/req/scheduler-assign-processor-mandatory
@@ -53,21 +52,23 @@ test-header:
     dir: null
     name: code
     specifier: ${/rtems/userext/if/fatal-code:/name} ${.:name}
-  target: testsuites/validation/tr-fatal-start-of-mandatory-processor-failed.h
+  target: testsuites/validation/tr-fatal-start-on-not-online-processor.h
 test-includes:
 - rtems/score/smpimpl.h
 test-local-includes:
-- tr-fatal-start-of-mandatory-processor-failed.h
+- tr-fatal-start-on-not-online-processor.h
 test-setup: null
 test-stop: null
 test-support: |
+  bool __real__CPU_SMP_Start_processor( uint32_t cpu_index );
+
   bool __wrap__CPU_SMP_Start_processor( uint32_t cpu_index );
 
   bool __wrap__CPU_SMP_Start_processor( uint32_t cpu_index )
   {
-    (void) cpu_index;
+    (void) __real__CPU_SMP_Start_processor( cpu_index );
     return false;
   }
-test-target: testsuites/validation/tr-fatal-start-of-mandatory-processor-failed.c
+test-target: testsuites/validation/tr-fatal-start-on-not-online-processor.c
 test-teardown: null
 type: test-case
