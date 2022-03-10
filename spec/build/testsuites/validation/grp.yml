@@ -25,6 +25,8 @@ links:
 - role: build-dependency
   uid: fatal-start-of-mandatory-processor-failed
 - role: build-dependency
+  uid: fatal-start-on-not-online-processor
+- role: build-dependency
   uid: fatal-too-large-tls-size
 - role: build-dependency
   uid: performance-no-clock-0

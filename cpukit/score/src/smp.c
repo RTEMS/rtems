@@ -269,6 +269,11 @@ void _SMP_Start_multitasking_on_secondary_processor(
 
   _Per_CPU_Set_state( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
   _SMP_Wait_for_start_multitasking( cpu_self );
+
+  if ( !_Per_CPU_Is_processor_online( cpu_self ) ) {
+    _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_NOT_ONLINE_PROCESSOR );
+  }
+
   _Thread_Start_multitasking();
 }
 
