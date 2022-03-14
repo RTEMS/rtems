@@ -104,10 +104,7 @@ rtems_status_code bsp_interrupt_raise(rtems_vector_number vector)
   if (vector <= ARM_GIC_IRQ_SGI_LAST) {
     arm_gic_trigger_sgi(vector, 1U << _SMP_Get_current_processor());
   } else if (vector <= ARM_GIC_IRQ_PPI_LAST) {
-    volatile gic_sgi_ppi *sgi_ppi =
-      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
-
-    sgi_ppi->icspispendr[0] = 1U << vector;
+    gicv3_ppi_set_pending(vector, _SMP_Get_current_processor());
   } else {
     volatile gic_dist *dist = ARM_GIC_DIST;
 
