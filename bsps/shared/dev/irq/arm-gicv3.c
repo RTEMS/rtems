@@ -49,32 +49,7 @@ rtems_status_code bsp_interrupt_get_attributes(
   rtems_interrupt_attributes *attributes
 )
 {
-  attributes->is_maskable = true;
-  attributes->maybe_enable = true;
-  attributes->maybe_disable = true;
-  attributes->can_raise = true;
-
-  if ( vector <= ARM_GIC_IRQ_SGI_LAST ) {
-    /*
-     * It is implementation-defined whether implemented SGIs are permanently
-     * enabled, or can be enabled and disabled by writes to GICD_ISENABLER0 and
-     * GICD_ICENABLER0.
-     */
-    attributes->can_raise_on = true;
-    attributes->cleared_by_acknowledge = true;
-    attributes->trigger_signal = RTEMS_INTERRUPT_NO_SIGNAL;
-  } else {
-    attributes->can_disable = true;
-    attributes->can_clear = true;
-    attributes->trigger_signal = RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL;
-
-    if ( vector > ARM_GIC_IRQ_PPI_LAST ) {
-      /* SPI */
-      attributes->can_get_affinity = true;
-      attributes->can_set_affinity = true;
-    }
-  }
-
+  gicv3_get_attributes(vector, attributes);
   return RTEMS_SUCCESSFUL;
 }
 
