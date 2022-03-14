@@ -87,10 +87,7 @@ rtems_status_code bsp_interrupt_is_pending(
   bsp_interrupt_assert(pending != NULL);
 
   if (vector <= ARM_GIC_IRQ_PPI_LAST) {
-    volatile gic_sgi_ppi *sgi_ppi =
-      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
-
-    *pending = (sgi_ppi->icspispendr[0] & (1U << vector)) != 0;
+    *pending = gicv3_sgi_ppi_is_pending(vector, _SMP_Get_current_processor());
   } else {
     volatile gic_dist *dist = ARM_GIC_DIST;
 
