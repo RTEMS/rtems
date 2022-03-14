@@ -171,6 +171,16 @@ static inline void gicv3_sgi_ppi_enable(
   sgi_ppi->icspiser[0] = 1U << vector;
 }
 
+static inline void gicv3_sgi_ppi_disable(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+)
+{
+  volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
+
+  sgi_ppi->icspicer[0] = 1U << vector;
+}
+
 static inline bool gicv3_sgi_ppi_is_enabled(
   rtems_vector_number vector,
   uint32_t            cpu_index

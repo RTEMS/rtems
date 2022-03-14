@@ -192,10 +192,7 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
     gic_id_disable(dist, vector);
   } else {
-    volatile gic_sgi_ppi *sgi_ppi =
-      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
-
-    sgi_ppi->icspicer[0] = 1U << vector;
+    gicv3_sgi_ppi_disable(vector, _SMP_Get_current_processor());
   }
 
   return RTEMS_SUCCESSFUL;
