@@ -138,10 +138,7 @@ rtems_status_code bsp_interrupt_clear(rtems_vector_number vector)
   }
 
   if ( vector <= ARM_GIC_IRQ_PPI_LAST ) {
-    volatile gic_sgi_ppi *sgi_ppi =
-      gicv3_get_sgi_ppi(_SMP_Get_current_processor());
-
-    sgi_ppi->icspicpendr[0] = 1U << vector;
+    gicv3_ppi_clear_pending(vector, _SMP_Get_current_processor());
   } else {
     volatile gic_dist *dist = ARM_GIC_DIST;
 

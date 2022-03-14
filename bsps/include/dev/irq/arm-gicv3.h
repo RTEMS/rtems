@@ -176,6 +176,16 @@ static inline void gicv3_ppi_set_pending(
   sgi_ppi->icspispendr[0] = 1U << vector;
 }
 
+static inline void gicv3_ppi_clear_pending(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+)
+{
+  volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
+
+  sgi_ppi->icspicpendr[0] = 1U << vector;
+}
+
 static inline void gicv3_trigger_sgi(
   rtems_vector_number vector,
   uint32_t            targets
