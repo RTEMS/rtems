@@ -242,6 +242,43 @@ static inline void gicv3_trigger_sgi(
   WRITE64_SR(ICC_SGI1, value);
 }
 
+static inline uint32_t gicv3_get_id_count(volatile gic_dist *dist)
+{
+  uint32_t id_count = GIC_DIST_ICDICTR_IT_LINES_NUMBER_GET(dist->icdictr);
+
+  id_count = 32 * (id_count + 1);
+  id_count = id_count <= 1020 ? id_count : 1020;
+
+  return id_count;
+}
+
+static void gicv3_init_dist(volatile gic_dist *dist)
+{
+  uint32_t id_count = gicv3_get_id_count(dist);
+  uint32_t id;
+
+  dist->icddcr = GIC_DIST_ICDDCR_ARE_NS | GIC_DIST_ICDDCR_ARE_S
+               | GIC_DIST_ICDDCR_ENABLE_GRP1S | GIC_DIST_ICDDCR_ENABLE_GRP1NS
+               | GIC_DIST_ICDDCR_ENABLE_GRP0;
+
+  for (id = 0; id < id_count; id += 32) {
+    /* Disable all interrupts */
+    dist->icdicer[id / 32] = 0xffffffff;
+
+    /* Set G1NS */
+    dist->icdigr[id / 32] = 0xffffffff;
+    dist->icdigmr[id / 32] = 0;
+  }
+
+  for (id = 0; id < id_count; ++id) {
+    gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
+  }
+
+  for (id = 32; id < id_count; ++id) {
+    gic_id_set_targets(dist, id, 0x01);
+  }
+}
+
 #ifdef __cplusplus
 }
 #endif

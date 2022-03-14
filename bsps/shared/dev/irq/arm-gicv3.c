@@ -198,44 +198,6 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-static inline uint32_t get_id_count(volatile gic_dist *dist)
-{
-  uint32_t id_count = GIC_DIST_ICDICTR_IT_LINES_NUMBER_GET(dist->icdictr);
-
-  id_count = 32 * (id_count + 1);
-  id_count = id_count <= 1020 ? id_count : 1020;
-
-  return id_count;
-}
-
-static void gicv3_init_dist(void)
-{
-  volatile gic_dist *dist = ARM_GIC_DIST;
-  uint32_t id_count = get_id_count(dist);
-  uint32_t id;
-
-  dist->icddcr = GIC_DIST_ICDDCR_ARE_NS | GIC_DIST_ICDDCR_ARE_S
-               | GIC_DIST_ICDDCR_ENABLE_GRP1S | GIC_DIST_ICDDCR_ENABLE_GRP1NS
-               | GIC_DIST_ICDDCR_ENABLE_GRP0;
-
-  for (id = 0; id < id_count; id += 32) {
-    /* Disable all interrupts */
-    dist->icdicer[id / 32] = 0xffffffff;
-
-    /* Set G1NS */
-    dist->icdigr[id / 32] = 0xffffffff;
-    dist->icdigmr[id / 32] = 0;
-  }
-
-  for (id = 0; id < id_count; ++id) {
-    gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
-  }
-
-  for (id = 32; id < id_count; ++id) {
-    gic_id_set_targets(dist, id, 0x01);
-  }
-}
-
 static void gicv3_init_cpu_interface(void)
 {
   uint32_t cpu_index = _SMP_Get_current_processor();
@@ -267,7 +229,7 @@ static void gicv3_init_cpu_interface(void)
 void bsp_interrupt_facility_initialize(void)
 {
   arm_interrupt_facility_set_exception_handler();
-  gicv3_init_dist();
+  gicv3_init_dist(ARM_GIC_DIST);
   gicv3_init_cpu_interface();
 }
 
