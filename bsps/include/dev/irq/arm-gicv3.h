@@ -156,6 +156,21 @@ static inline volatile gic_sgi_ppi *gicv3_get_sgi_ppi(uint32_t cpu_index)
     ((uintptr_t)BSP_ARM_GIC_REDIST_BASE + cpu_index * 0x20000 + 0x10000);
 }
 
+static inline void gicv3_sgi_ppi_enable(
+  rtems_vector_number vector,
+  uint32_t            cpu_index
+)
+{
+  volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
+
+  /* Set G1NS */
+  sgi_ppi->icspigrpr[0] |= 1U << vector;
+  sgi_ppi->icspigrpmodr[0] &= ~(1U << vector);
+
+  /* Set enable */
+  sgi_ppi->icspiser[0] = 1U << vector;
+}
+
 static inline bool gicv3_sgi_ppi_is_enabled(
   rtems_vector_number vector,
   uint32_t            cpu_index
