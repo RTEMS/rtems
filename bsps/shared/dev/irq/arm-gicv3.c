@@ -385,20 +385,7 @@ rtems_status_code bsp_interrupt_get_affinity(
 
 void arm_gic_trigger_sgi(rtems_vector_number vector, uint32_t targets)
 {
-#ifndef ARM_MULTILIB_ARCH_V4
-  uint64_t mpidr;
-#else
-  uint32_t mpidr;
-#endif
-  mpidr = READ_SR(MPIDR);
-  uint64_t value = ICC_SGIR_AFFINITY2(MPIDR_AFFINITY2_GET(mpidr))
-                 | ICC_SGIR_INTID(vector)
-                 | ICC_SGIR_AFFINITY1(MPIDR_AFFINITY1_GET(mpidr))
-                 | ICC_SGIR_CPU_TARGET_LIST(targets);
-#ifndef ARM_MULTILIB_ARCH_V4
-  value |= ICC_SGIR_AFFINITY3(MPIDR_AFFINITY3_GET(mpidr));
-#endif
-  WRITE64_SR(ICC_SGI1, value);
+  gicv3_trigger_sgi(vector, targets);
 }
 
 uint32_t arm_gic_irq_processor_count(void)
