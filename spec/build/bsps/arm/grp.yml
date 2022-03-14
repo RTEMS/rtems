@@ -42,6 +42,7 @@ install:
   - bsps/include/dev/irq/arm-gic-regs.h
   - bsps/include/dev/irq/arm-gic-tm27.h
   - bsps/include/dev/irq/arm-gic.h
+  - bsps/include/dev/irq/arm-gicv3.h
 - destination: ${BSP_INCLUDEDIR}/libcpu
   source:
   - bsps/arm/include/libcpu/am335x.h
