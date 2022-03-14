@@ -198,39 +198,11 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   return RTEMS_SUCCESSFUL;
 }
 
-static void gicv3_init_cpu_interface(void)
-{
-  uint32_t cpu_index = _SMP_Get_current_processor();
-  uint32_t sre_value = 0x7;
-  WRITE_SR(ICC_SRE, sre_value);
-  WRITE_SR(ICC_PMR, GIC_CPUIF_ICCPMR_PRIORITY(0xff));
-  WRITE_SR(ICC_BPR0, GIC_CPUIF_ICCBPR_BINARY_POINT(0x0));
-
-  volatile gic_redist *redist = gicv3_get_redist(cpu_index);
-  uint32_t waker = redist->icrwaker;
-  uint32_t waker_mask = GIC_REDIST_ICRWAKER_PROCESSOR_SLEEP;
-  waker &= ~waker_mask;
-  redist->icrwaker = waker;
-
-  volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
-  /* Set G1NS */
-  sgi_ppi->icspigrpr[0] = 0xffffffff;
-  sgi_ppi->icspigrpmodr[0] = 0;
-  for (int id = 0; id < 32; id++) {
-    sgi_ppi->icspiprior[id] = PRIORITY_DEFAULT;
-  }
-
-  /* Enable interrupt groups 0 and 1 */
-  WRITE_SR(ICC_IGRPEN0, 0x1);
-  WRITE_SR(ICC_IGRPEN1, 0x1);
-  WRITE_SR(ICC_CTLR, 0x0);
-}
-
 void bsp_interrupt_facility_initialize(void)
 {
   arm_interrupt_facility_set_exception_handler();
   gicv3_init_dist(ARM_GIC_DIST);
-  gicv3_init_cpu_interface();
+  gicv3_init_cpu_interface(_SMP_Get_current_processor());
 }
 
 #ifdef RTEMS_SMP
@@ -242,7 +214,7 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
     /* Wait */
   }
 
-  gicv3_init_cpu_interface();
+  gicv3_init_cpu_interface(_SMP_Get_current_processor());
 }
 #endif
 
