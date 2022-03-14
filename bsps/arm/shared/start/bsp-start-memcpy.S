@@ -45,6 +45,10 @@ DEFINE_FUNCTION_ARM(bsp_start_memcpy)
 	adr	ip, worker_begin
 	ldm	ip, {r3-r8}
 	push	{r3-r8}
+#ifdef ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
+	dsb
+	isb
+#endif
 
 	/* Execute worker routine */
 	mov	r3, #0
