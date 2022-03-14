@@ -191,6 +191,17 @@ static inline bool gicv3_sgi_ppi_is_enabled(
   return (sgi_ppi->icspiser[0] & (1U << vector)) != 0;
 }
 
+static inline void gicv3_sgi_ppi_set_priority(
+  rtems_vector_number vector,
+  uint8_t             priority,
+  uint32_t            cpu_index
+)
+{
+  volatile gic_sgi_ppi *sgi_ppi = gicv3_get_sgi_ppi(cpu_index);
+
+  sgi_ppi->icspiprior[vector] = priority;
+}
+
 static inline bool gicv3_sgi_ppi_is_pending(
   rtems_vector_number vector,
   uint32_t            cpu_index

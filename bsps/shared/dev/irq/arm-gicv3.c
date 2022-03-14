@@ -230,9 +230,11 @@ rtems_status_code arm_gic_irq_set_priority(
       volatile gic_dist *dist = ARM_GIC_DIST;
       gic_id_set_priority(dist, vector, priority);
     } else {
-      volatile gic_sgi_ppi *sgi_ppi =
-        gicv3_get_sgi_ppi(_SMP_Get_current_processor());
-      sgi_ppi->icspiprior[vector] = priority;
+      gicv3_sgi_ppi_set_priority(
+        vector,
+        priority,
+        _SMP_Get_current_processor()
+      );
     }
   } else {
     sc = RTEMS_INVALID_ID;
