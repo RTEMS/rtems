@@ -51,17 +51,17 @@ rtems_status_code rtems_interrupt_set_affinity(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if (!bsp_interrupt_is_valid_vector(vector)) {
+  if ( !bsp_interrupt_is_valid_vector( vector ) ) {
     return RTEMS_INVALID_ID;
   }
 
-  status = _Processor_mask_From_cpu_set_t(&set, affinity_size, affinity);
+  status = _Processor_mask_From_cpu_set_t( &set, affinity_size, affinity );
   if ( !_Processor_mask_Is_at_most_partial_loss( status ) ) {
     return RTEMS_INVALID_NUMBER;
   }
 
 #if defined(RTEMS_SMP)
-  return bsp_interrupt_set_affinity(vector, &set);
+  return bsp_interrupt_set_affinity( vector, &set );
 #else
   return RTEMS_SUCCESSFUL;
 #endif
