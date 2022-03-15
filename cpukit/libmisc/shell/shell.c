@@ -1149,7 +1149,6 @@ static rtems_status_code rtems_shell_run (
   const char *output,
   bool output_append,
   rtems_id wake_on_end,
-  int *exit_code,
   bool echo,
   rtems_shell_login_check_t login_check
 )
@@ -1202,7 +1201,6 @@ static rtems_status_code rtems_shell_run (
   shell_env->parent_stdout = stdout;
   shell_env->parent_stderr = stderr;
   shell_env->wake_on_end   = wake_on_end;
-  shell_env->exit_code     = exit_code;
   shell_env->login_check   = login_check;
   shell_env->uid           = getuid();
   shell_env->gid           = getgid();
@@ -1229,7 +1227,7 @@ static rtems_status_code rtems_shell_run (
     sc = rtems_event_receive (RTEMS_EVENT_1, RTEMS_WAIT, 0, &out);
   }
 
-  shell_std_debug("run: end: sc:%d ec:%d\n", sc, *exit_code);
+  shell_std_debug("run: end: sc:%d\n", sc);
 
   return sc;
 }
@@ -1245,7 +1243,6 @@ rtems_status_code rtems_shell_init(
 )
 {
   rtems_id to_wake = RTEMS_ID_NONE;
-  int exit_code = 0;
 
   if ( wait )
     to_wake = rtems_task_self();
@@ -1261,7 +1258,6 @@ rtems_status_code rtems_shell_init(
     "stdout",                /* output */
     false,                   /* output_append */
     to_wake,                 /* wake_on_end */
-    &exit_code,              /* exit code of command */
     false,                   /* echo */
     login_check              /* login check */
   );
@@ -1279,7 +1275,6 @@ rtems_status_code rtems_shell_script (
 )
 {
   rtems_id to_wake = RTEMS_ID_NONE;
-  int exit_code = 0;
   rtems_status_code sc;
 
   shell_std_debug("script: in: %s out: %s\n", input, output);
@@ -1298,7 +1293,6 @@ rtems_status_code rtems_shell_script (
     output,          /* output */
     output_append,   /* output_append */
     to_wake,         /* wake_on_end */
-    &exit_code,      /* exit_code */
     echo,            /* echo */
     NULL             /* login check */
   );
