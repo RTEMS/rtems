@@ -10,7 +10,7 @@
  */
 
 /*
- * Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2017, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,6 +37,7 @@
 #include <bsp/irq-generic.h>
 
 #include <rtems/score/processormask.h>
+#include <rtems/score/smpimpl.h>
 
 rtems_status_code rtems_interrupt_set_affinity(
   rtems_vector_number  vector,
@@ -57,6 +58,11 @@ rtems_status_code rtems_interrupt_set_affinity(
 
   status = _Processor_mask_From_cpu_set_t( &set, affinity_size, affinity );
   if ( !_Processor_mask_Is_at_most_partial_loss( status ) ) {
+    return RTEMS_INVALID_NUMBER;
+  }
+
+  _Processor_mask_And( &set, _SMP_Get_online_processors(), &set );
+  if ( _Processor_mask_Is_zero( &set ) ) {
     return RTEMS_INVALID_NUMBER;
   }
 

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2008, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  * Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1759,8 +1759,15 @@ rtems_status_code rtems_interrupt_get_affinity(
  *   interrupt vector has not been satisfied.
  *
  * @par Notes
+ * @parblock
  * The rtems_interrupt_get_attributes() directive may be used to check if the
  * processor affinity of an interrupt vector can be set.
+ *
+ * Only online processors of the affinity set specified by ``affinity_size``
+ * and ``affinity`` are considered by the directive.  Other processors of the
+ * set are ignored.  If the set contains no online processor, then the set is
+ * invalid and an error status is returned.
+ * @endparblock
  *
  * @par Constraints
  * @parblock
