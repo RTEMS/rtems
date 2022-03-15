@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 functional-type: action
 links:
@@ -43,7 +43,7 @@ post-conditions:
   test-prologue: null
 - name: SetAffinity
   states:
-  - name: 'Yes'
+  - name: Set
     test-code: |
       /* Validation done by CheckSetAffinity() for each interrupt vector */
     text: |
@@ -81,33 +81,75 @@ pre-conditions:
       associated with an interrupt vector.
   test-epilogue: null
   test-prologue: null
-- name: CPUSetKind
+- name: CPUSetSize
   states:
-  - name: Valid
-    test-code: |
-      ctx->cpusetsize = sizeof( ctx->cpuset_obj[ 0 ] );
-    text: |
-      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long,
-      while the ${../if/set-affinity:/params[1]/name} and
-      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
-      which is within the implementation limits.
-  - name: Huge
-    test-code: |
-      ctx->cpusetsize = sizeof( ctx->cpuset_obj );
-      CPU_ZERO( &ctx->cpuset_obj[ 0 ] );
-    text: |
-      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long,
-      while the ${../if/set-affinity:/params[1]/name} and
-      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
-      which exceeds the implementation limits.
   - name: Askew
     test-code: |
       ctx->cpusetsize = SIZE_MAX;
     text: |
       While the ${../if/set-affinity:/params[1]/name} parameter is not an
       integral multiple of the size of long.
+  - name: Normal
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj[ 0 ] );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} parameter is less than or
+      equal to the maximum processor set size storable in the system.
+  - name: Huge
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} parameter is greater than
+      the maximum processor set size storable in the system.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetOnline
+  states:
+  - name: Valid
+    test-code: |
+      /* Already prepared */
+    text: |
+      While the intersection of the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors is not empty,
+      while the intersection of the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors is a processor affinity set supported by the interrupt vector.
+  - name: Empty
+    test-code: |
+      CPU_ZERO( &ctx->cpuset_obj[ 0 ] );
+    text: |
+      While the intersection of the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors is empty.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetHuge
+  states:
+  - name: NotZero
+    test-code: |
+      /* Already prepared */
+    text: |
+      While the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters contains at least one
+      processor which is not storable in a processor set supported by the
+      system.
+  - name: Zero
+    test-code: |
+      CPU_ZERO( &ctx->cpuset_obj[ 1 ] );
+    text: |
+      While the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters contains no processor
+      which is not storable in a processor set supported by the system.
   test-epilogue: null
   test-prologue: null
 - name: CPUSet
@@ -151,7 +193,7 @@ test-action: |
 
   if (
     ctx->valid_vector && ctx->cpusetsize == sizeof( ctx->cpuset_obj[ 0 ] ) &&
-    ctx->cpuset == &ctx->cpuset_obj[ 0 ]
+    ctx->cpuset == &ctx->cpuset_obj[ 0 ] && !CPU_EMPTY( &ctx->cpuset_obj[ 0 ] )
   ) {
     for (
       ctx->vector = 0;
@@ -170,6 +212,7 @@ test-action: |
       T_rsc_success( sc );
 
       CheckSetAffinity( ctx, &attr );
+      ctx->status = RTEMS_SUCCESSFUL;
     }
   } else {
     cpu_set_t set;
@@ -177,6 +220,8 @@ test-action: |
 
     CPU_ZERO( &set );
     CPU_ZERO( &set2 );
+    CPU_SET( 0, &set );
+    CPU_SET( 0, &set2 );
 
     if ( ctx->valid_vector ) {
       ctx->vector = ctx->some_vector;
@@ -187,7 +232,9 @@ test-action: |
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
     }
 
-    CPU_ZERO( &ctx->cpuset_obj[ 0 ] );
+    if ( !CPU_EMPTY( &ctx->cpuset_obj[ 0 ] ) ) {
+      CPU_COPY( &set, &ctx->cpuset_obj[ 0 ] );
+    }
 
     ctx->status = rtems_interrupt_set_affinity(
       ctx->vector,
@@ -308,17 +355,65 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: Ok
-    SetAffinity: 'Yes'
+    Status:
+    - if:
+        pre-conditions:
+          CPUSetSize: Askew
+      then: InvNum
+    - if:
+        pre-conditions:
+          CPUSetOnline: Empty
+      then: InvNum
+    - if:
+        pre-conditions:
+          CanSetAffinity: 'No'
+      then: Unsat
+    - else: Ok
+    SetAffinity:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
   pre-conditions:
     Vector:
     - Valid
-    CPUSetKind:
-    - Valid
+    CPUSetSize:
+    - Askew
+    - Normal
+    CPUSetOnline: all
+    CPUSetHuge: N/A
     CPUSet:
     - Valid
-    CanSetAffinity:
-    - 'Yes'
+    CanSetAffinity: all
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          CPUSetOnline: Empty
+      then: InvNum
+    - if:
+        pre-conditions:
+          CanSetAffinity: 'No'
+      then: Unsat
+    - else: Ok
+    SetAffinity:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+  pre-conditions:
+    Vector:
+    - Valid
+    CPUSetSize:
+    - Huge
+    CPUSetOnline: all
+    CPUSetHuge: all
+    CPUSet:
+    - Valid
+    CanSetAffinity: all
 - enabled-by: true
   post-conditions:
     Status: InvAddr
@@ -326,56 +421,52 @@ transition-map:
   pre-conditions:
     Vector:
     - Valid
-    CPUSetKind: all
+    CPUSetSize: all
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
     CPUSet:
     - 'Null'
     CanSetAffinity: all
 - enabled-by: true
   post-conditions:
-    Status: InvAddr
-    SetAffinity: N/A
+    Status: InvId
+    SetAffinity: Nop
   pre-conditions:
     Vector:
     - Invalid
-    CPUSetKind: all
+    CPUSetSize:
+    - Askew
+    - Normal
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
     CPUSet:
-    - 'Null'
+    - Valid
     CanSetAffinity: N/A
 - enabled-by: true
   post-conditions:
     Status: InvId
-    SetAffinity: N/A
+    SetAffinity: Nop
   pre-conditions:
     Vector:
     - Invalid
-    CPUSetKind: all
+    CPUSetSize:
+    - Huge
+    CPUSetOnline: N/A
+    CPUSetHuge: all
     CPUSet:
     - Valid
     CanSetAffinity: N/A
 - enabled-by: true
   post-conditions:
-    Status: InvNum
+    Status: InvAddr
     SetAffinity: Nop
   pre-conditions:
     Vector:
-    - Valid
-    CPUSetKind:
-    - Huge
-    - Askew
+    - Invalid
+    CPUSetSize: all
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
     CPUSet:
-    - Valid
-    CanSetAffinity: all
-- enabled-by: true
-  post-conditions:
-    Status: Unsat
-    SetAffinity: Nop
-  pre-conditions:
-    Vector:
-    - Valid
-    CPUSetKind:
-    - Valid
-    CPUSet:
-    - Valid
-    CanSetAffinity:
-    - 'No'
+    - 'Null'
+    CanSetAffinity: N/A
 type: requirement
