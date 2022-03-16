@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2022 embedded brains GmbH.  All rights reserved.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -11,13 +11,16 @@
 #endif
 
 #include <stdio.h>
+#include <errno.h>
 
 #include <sys/reent.h>
+#include <sys/stat.h>
 
 #include <rtems.h>
 #include <rtems/console.h>
 #include <rtems/imfs.h>
 #include <rtems/libcsupport.h>
+#include <rtems/sysinit.h>
 
 #include "tmacros.h"
 
@@ -247,21 +250,11 @@ static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
   IMFS_node_destroy_default
 );
 
-static void test(void)
+static void test_thread_specific_close(test_context *ctx)
 {
-  test_context *ctx = &test_instance;
   rtems_status_code sc;
   int rv;
   rtems_resource_snapshot snapshot;
-  FILE *file;
-
-  ctx->main_task_id = rtems_task_self();
-
-  /* Fill dynamic file pool in Newlib _GLOBAL_REENT */
-  file = fopen(CONSOLE_DEVICE_NAME, "r+");
-  rtems_test_assert(file != NULL);
-  rv = fclose(file);
-  rtems_test_assert(rv == 0);
 
   rtems_resource_snapshot_take(&snapshot);
 
@@ -297,14 +290,137 @@ static void test(void)
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 }
 
+/*
+ * This exit handler will be called last among the functions registered with
+ * atexit(). Check that stdio file descriptors are closed. The Newlib cleanup
+ * handler has not yet run, so the stdio FILE objects themselves are still
+ * open.
+ */
+static void check_after_libio_exit(void)
+{
+  struct stat unused;
+  int rv;
+
+  errno = 0;
+  rv = fstat(0, &unused);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EBADF);
+
+  errno = 0;
+  rv = fstat(1, &unused);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EBADF);
+
+  errno = 0;
+  rv = fstat(2, &unused);
+  rtems_test_assert(rv == -1);
+  rtems_test_assert(errno == EBADF);
+
+  rtems_test_assert(stdin->_flags != 0);
+  rtems_test_assert(stdout->_flags != 0);
+  rtems_test_assert(stderr->_flags != 0);
+}
+
+static void register_exit_handler_before_libio_exit(void)
+{
+  int rv;
+
+  rv = atexit(check_after_libio_exit);
+  rtems_test_assert(rv == 0);
+}
+
+/*
+ * Register the exit handler before rtems_libio_exit() so that
+ * check_after_libio_exit() is called after rtems_libio_exit().  The exit()
+ * handlers are in a LIFO list.
+ */
+RTEMS_SYSINIT_ITEM(register_exit_handler_before_libio_exit,
+    RTEMS_SYSINIT_STD_FILE_DESCRIPTORS, RTEMS_SYSINIT_ORDER_FIRST);
+
+/*
+ * At this point, neither the functions registered with atexit() nor the Newlib
+ * cleanup procedures have been called. Therefore, stdio file descriptors
+ * should be open and stdio FILE object flags should be non-zero.
+ */
+static void test_exit_handling(void)
+{
+  struct stat unused;
+  int rv;
+
+  rv = fstat(0, &unused);
+  rtems_test_assert(rv == 0);
+
+  rv = fstat(1, &unused);
+  rtems_test_assert(rv == 0);
+
+  rv = fstat(2, &unused);
+  rtems_test_assert(rv == 0);
+
+  rtems_test_assert(stdin->_flags != 0);
+  rtems_test_assert(stdout->_flags != 0);
+  rtems_test_assert(stderr->_flags != 0);
+
+  /* Run exit handlers and Newlib cleanup procedures */
+  exit(0);
+}
+
 static void Init(rtems_task_argument arg)
 {
+  test_context *ctx = &test_instance;
+  FILE *file;
+  int rv;
+
   TEST_BEGIN();
+  ctx->main_task_id = rtems_task_self();
 
-  test();
+  /* Fill dynamic file pool in Newlib */
+  file = fopen(CONSOLE_DEVICE_NAME, "r+");
+  rtems_test_assert(file != NULL);
+  rv = fclose(file);
+  rtems_test_assert(rv == 0);
 
-  TEST_END();
-  rtems_test_exit(0);
+  test_thread_specific_close(ctx);
+  test_exit_handling();
+}
+
+static void fatal_extension(
+  rtems_fatal_source source,
+  bool always_set_to_false,
+  rtems_fatal_code error
+)
+{
+  if (
+    source == RTEMS_FATAL_SOURCE_EXIT
+      && !always_set_to_false
+      && error == 0
+  ) {
+    /*
+     * Final conditions check after exit handlers and Newlib cleanup procedures
+     * have run. File descriptors and FILE objects themselves are closed.
+     */
+    struct stat buffer;
+    int rv;
+
+    errno = 0;
+    rv = fstat(0, &buffer);
+    rtems_test_assert(rv == -1);
+    rtems_test_assert(errno == EBADF);
+
+    errno = 0;
+    rv = fstat(1, &buffer);
+    rtems_test_assert(rv == -1);
+    rtems_test_assert(errno == EBADF);
+
+    errno = 0;
+    rv = fstat(2, &buffer);
+    rtems_test_assert(rv == -1);
+    rtems_test_assert(errno == EBADF);
+
+    rtems_test_assert(stdin->_flags == 0);
+    rtems_test_assert(stdout->_flags == 0);
+    rtems_test_assert(stderr->_flags == 0);
+    TEST_END();
+  }
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -314,7 +430,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
