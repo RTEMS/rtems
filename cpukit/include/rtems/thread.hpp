@@ -220,6 +220,12 @@ namespace rtems
       /* affinity, cpu set size is? */
     };
 
+    template <class T>
+    inline typename std::decay<T>::type
+    decay_copy(T&& t) {
+      return std::forward<T>(t);
+    }
+
     /**
      * @brief Create a thread with thread attributes.
      *
@@ -310,7 +316,14 @@ namespace rtems
        */
       template <typename A, typename F, typename ...Args,
                 class = enable_if_attributes<A>>
-      explicit thread(A&& attr, F&& func, Args&&... args);
+      explicit thread(A&& attr, F&& func, Args&&... args)
+        : id_(0) {
+        start_thread(
+          make_state(attr,
+                     make_invoker(decay_copy(std::forward<F>(func)),
+                                  decay_copy(std::forward<Args>(args))...))
+        );
+      }
 
       /**
        * Move the thread id to this instance.
@@ -428,27 +441,10 @@ namespace rtems
       void start_thread(state_ptr s);
     };
 
-    template <class T>
-    inline typename std::decay<T>::type
-    decay_copy(T&& t) {
-      return std::forward<T>(t);
-    }
-
     template<typename F, typename... Args>
     thread::thread(F&& func, Args&&... args)
       : id_(0)  {
       attributes attr;
-      start_thread(
-        make_state(attr,
-                   make_invoker(decay_copy(std::forward<F>(func)),
-                                decay_copy(std::forward<Args>(args))...))
-      );
-    }
-
-    template<typename A, typename F, typename... Args,
-             class = thread::enable_if_attributes<A>>
-    thread::thread(A&& attr, F&& func, Args&&... args)
-      : id_(0) {
       start_thread(
         make_state(attr,
                    make_invoker(decay_copy(std::forward<F>(func)),
