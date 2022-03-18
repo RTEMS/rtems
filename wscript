@@ -1423,15 +1423,16 @@ def configure_variant(conf, cp, bsp_map, path_list, top_group, variant):
     conf.env["TOPGROUP"] = top_group
     conf.env["VARIANT"] = variant
 
+    prepare_rtems_options(conf)
     cic = ConfigItemContext(cp, path_list)
-
     items[conf.env.TOPGROUP].configure(conf, cic)
-
     bsp_item.configure(conf, cic)
 
     options = set([o[0].upper() for o in cp.items(variant)])
     for o in options.difference(cic.options):
         conf.msg("Unknown configuration option", o.upper(), color="RED")
+    for key in conf.rtems_options:
+        conf.msg("Unknown command line RTEMS option", key, color="RED")
 
 
 def check_forbidden_options(ctx, opts):
@@ -1490,7 +1491,6 @@ def prepare_rtems_options(conf):
 
 def configure(conf):
     check_forbidden_options(conf, ["compiler"])
-    prepare_rtems_options(conf)
     check_environment(conf)
     conf.env["SPECS"] = load_items_from_options(conf)
     top_group = get_top_group(conf)
@@ -1504,8 +1504,6 @@ def configure(conf):
         configure_variant(conf, cp, bsp_map, path_list, top_group, variant)
     conf.setenv("")
     conf.env["VARIANTS"] = variant_list
-    for key in conf.rtems_options:
-        conf.msg("Unknown command line RTEMS option", key, color="RED")
 
 
 def append_variant_builds(bld):
