@@ -1,7 +1,7 @@
           RTEMS Performance Monitoring and Measurement Framework
 
-                              Copyright 2002-2007 Chris Johns (chrisj@rtems.org)
-                                                                 23 April 2002
+          Copyright 2002-2007 Chris Johns (chrisj@rtems.org)
+                          23 April 2002
 
 This directory contains the source code for the performance monitoring and
 measurement framework. It is more commonly know as the capture engine.
