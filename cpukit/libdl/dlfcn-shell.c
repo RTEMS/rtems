@@ -1,5 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtld
+ *
+ * @brief RTEMS Run-Time Link Editor Dynamic Loading API Shell Support.
+ *
+ * Shell command wrappers for the Dynamic Loading API.
+ */
+
 /*
  *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
@@ -23,15 +33,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtld
- *
- * @brief RTEMS Run-Time Link Editor Dynamic Loading API Shell Support.
- *
- * Shell command wrappers for the Dynamic Loading API.
  */
 
 #ifdef HAVE_CONFIG_H

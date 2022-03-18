@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtl
+ *
+ * @brief RTEMS Run-Time Linker Bit Allocator Header
+ */
+
 /*
  *  COPYRIGHT (c) 2019 Chris Johns <chrisj@rtems.org>
  *
@@ -23,13 +31,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtl
- *
- * @brief RTEMS Run-Time Linker Bit Allocator Header
  */
 
 #if !defined (_RTEMS_RTL_BIT_ALLOC_H_)

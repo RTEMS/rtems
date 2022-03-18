@@ -1,5 +1,17 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtld
+ *
+ * @brief RTEMS Run-Time Link Editor Bit Allocator
+ *
+ * A configurable allocator for small peices of memory where embedding
+ * control blocks into the memory are not viable. The amount of memory
+ * should be small and the minimum allocator a 32bit work or higher.
+ */
+
 /*
  *  COPYRIGHT (c) 2019 Chris Johns <chrisj@rtems.org>
  *
@@ -23,17 +35,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtld
- *
- * @brief RTEMS Run-Time Link Editor Bit Allocator
- *
- * A configurable allocator for small peices of memory where embedding
- * control blocks into the memory are not viable. The amount of memory
- * should be small and the minimum allocator a 32bit work or higher.
  */
 
 #ifdef HAVE_CONFIG_H

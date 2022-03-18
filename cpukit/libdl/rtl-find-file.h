@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtl
+ *
+ * @brief RTEMS Run-Time Linker Object Support.
+ */
+
 /*
  *  COPYRIGHT (c) 2012-2013 Chris Johns <chrisj@rtems.org>
  *
@@ -23,13 +31,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtl
- *
- * @brief RTEMS Run-Time Linker Object Support.
  */
 
 #if !defined (_RTEMS_RTL_FIND_FILE_H_)

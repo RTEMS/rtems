@@ -1,5 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtld
+ *
+ * @brief RTEMS Run-Time Link Editor Trace
+ *
+ * A configurable tracer for the RTL. See the header file for the enable and
+ * disable.
+ */
+
 /*
  *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
  *
@@ -23,16 +34,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtld
- *
- * @brief RTEMS Run-Time Link Editor Trace
- *
- * A configurable tracer for the RTL. See the header file for the enable and
- * disable.
  */
 
 #ifdef HAVE_CONFIG_H

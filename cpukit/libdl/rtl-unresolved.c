@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtl
+ *
+ * @brief RTEMS Run-Time Linker Object File Unresolved Relocations Table.
+ */
+
 /*
  *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
@@ -23,13 +31,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtl
- *
- * @brief RTEMS Run-Time Linker Object File Unresolved Relocations Table.
  */
 
 #ifdef HAVE_CONFIG_H

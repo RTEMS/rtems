@@ -1,5 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtl
+ *
+ * @brief RTEMS POSIX Dynamic Module Loading Interface.
+ *
+ * This is the POSIX interface to run-time loading of code into RTEMS.
+ */
+
 /*
  *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
@@ -23,15 +33,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtl
- *
- * @brief RTEMS POSIX Dynamic Module Loading Interface.
- *
- * This is the POSIX interface to run-time loading of code into RTEMS.
  */
 
 #include <stdint.h>

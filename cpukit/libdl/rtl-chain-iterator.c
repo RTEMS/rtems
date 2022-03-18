@@ -1,5 +1,15 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup rtems_rtld
+ *
+ * @brief RTEMS Run-Time Link Editor Chain Iterator
+ *
+ * A means of executing an iterator on a chain.
+ */
+
 /*
  *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
  *
@@ -23,15 +33,6 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- */
-/**
- * @file
- *
- * @ingroup rtems_rtld
- *
- * @brief RTEMS Run-Time Link Editor Chain Iterator
- *
- * A means of executing an iterator on a chain.
  */
 
 #ifdef HAVE_CONFIG_H
