@@ -4,12 +4,12 @@
 # The main purpose of this script is to perform minimum initialization of
 # processor so code can be loaded. Also, exception handling is performed.
 # 
+
 # Copyright (C) OKTET Ltd., St.-Petersburg, Russia
 # Author: Victor V. Vengerov <vvv@oktet.ru>
 #
 # This script partially based on gdb scripts written by 
-# Eric Norum, <eric@skatter.usask.ca>
-#
+# Eric Norum, <eric@norum.ca>
 #
 # The license and distribution terms for this file may be
 # found in the file LICENSE in this distribution or at

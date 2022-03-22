@@ -1,14 +1,16 @@
 /*
  * Use the last periodic interval timer (PIT3) as the system clock.
+ */
+
+/*
+ * Copyright (c) 2005 Eric Norum <eric@norum.ca>
  *
- *  Author: W. Eric Norum <norume@aps.anl.gov>
+ * COPYRIGHT (c) 2005.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  COPYRIGHT (c) 2005.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>

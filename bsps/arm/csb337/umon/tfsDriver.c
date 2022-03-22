@@ -1,6 +1,10 @@
-/*
- *  tfsDriver.c - MicroMonitor TFS Hookup to RTEMS FS
+/**
+ * @file
  *
+ * @brief MicroMonitor TFS Hookup to RTEMS FS
+ */
+
+/*
  *  Initial release: Oct 1, 2004   by Ed Sutter
  *
  *  Modifications to support reference counting in the file system are

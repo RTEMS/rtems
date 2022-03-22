@@ -3,22 +3,17 @@
  *  This file contains the entry point for the application.
  *  It jumps to the BSP which is responsible for performing
  *  all initialization.
+ */
+
+/*
+ * Copyright (c) 1996 Eric Norum <eric@norum.ca>
+
+ * COPYRIGHT (c) 1989-1999.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may in
- *  the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
- *
- * Based on the `gen68302' board support package, and covered by the
- * original distribution terms.
- *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
+ * The license and distribution terms for this file may in
+ * the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems/asm.h>

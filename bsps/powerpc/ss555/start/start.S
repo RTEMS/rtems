@@ -8,7 +8,7 @@
  * This file is based on several others:
  *
  * (1) start360.s from the gen68360 BSP by
- *     W. Eric Norum (eric@skatter.usask.ca)
+ *     W. Eric Norum (eric@norum.ca)
  *     with the following copyright and license:
  *
  *     COPYRIGHT (c) 1989-1998.

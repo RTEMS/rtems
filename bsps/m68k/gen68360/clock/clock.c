@@ -3,12 +3,10 @@
  *
  * The PIT has rather poor resolution, but it is easy to set up
  * and requires no housekeeping once it is going.
- *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
+ */
+
+/*
+ * Copyright (c) 1996 Eric Norum <eric@norum.ca>
  */
 
 #include <rtems.h>

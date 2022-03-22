@@ -9,14 +9,7 @@
 **                                                                      **
 **  Submitted By:                                                       **
 **                                                                      **
-**      W. Eric Norum                                                   **
-**      Saskatchewan Accelerator Laboratory                             **
-**      University of Saskatchewan                                      **
-**      107 North Road                                                  **
-**      Saskatoon, Saskatchewan, CANADA                                 **
-**      S7N 5C6                                                         **
-**                                                                      **
-**      eric@skatter.usask.ca                                           **
+**      Eric Norum <eric.norum.ca>                                      **
 **                                                                      **
 **  Modified for use with the MPC860 (original code was for MC68360)    **
 **  by                                                                  **

@@ -7,25 +7,14 @@
  */
 
 /*
+ * Copyright (c) 1996 Eric Norum <eric@norum.ca>
  *
- * Based on the `gen68302' board support package, and covered by the
- * original distribution terms.
+ * COPYRIGHT (c) 1989-1999.
+ * On-Line Applications Research Corporation (OAR).
  *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
- */
-
-/*  bsp.h
- *
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
- *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #ifndef LIBBSP_M68K_GEN68360_BSP_H

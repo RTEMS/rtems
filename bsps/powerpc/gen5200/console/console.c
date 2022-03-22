@@ -16,8 +16,7 @@
  * Copyright (C) 1998 by Frasca International, Inc.
  *
  * Derived from c/src/lib/libbsp/m68k/gen360/console/console.c
- * Author: W. Eric Norum <eric@skatter.usask.ca>
- * Saskatchewan Accelerator Laboratory, University of Saskatchewan, CANADA
+ * Author: W. Eric Norum <eric@norum.ca>
  *
  * COPYRIGHT (c) 1989, 2008.
  * On-Line Applications Research Corporation (OAR).

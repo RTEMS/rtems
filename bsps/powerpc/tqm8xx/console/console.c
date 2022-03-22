@@ -13,23 +13,18 @@
  */
 
 /*
- *  Author:
- *    W. Eric Norum
- *    Saskatchewan Accelerator Laboratory
- *    University of Saskatchewan
- *    Saskatoon, Saskatchewan, CANADA
- *    eric@skatter.usask.ca
+ * Copyright (c) 2005 Eric Norum <eric@norum.ca>
  *
- *  COPYRIGHT (c) 1989-1998.
- *  On-Line Applications Research Corporation (OAR).
- *  Copyright assigned to U.S. Government, 1994.
+ * COPYRIGHT (c) 1989-1998.
+ * On-Line Applications Research Corporation (OAR).
+ * Copyright assigned to U.S. Government, 1994.
  *
- *  Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
- *  All rights reserved.
+ * Copyright (c) 2008 Thomas Doerfler, embedded brains GmbH.
+ * All rights reserved.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.OARcorp.com/rtems/license.html.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.OARcorp.com/rtems/license.html.
  */
 
 #include <unistd.h>

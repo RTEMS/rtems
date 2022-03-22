@@ -6,7 +6,7 @@
  * Based on code (alloc860.c in eth_comm port) by
  * Jay Monkman (jmonkman@frasca.com),
  * which, in turn, is based on code by
- * W. Eric Norum (eric@skatter.usask.ca).
+ * W. Eric Norum (eric@norum.ca).
  *
  *
  * Modifications :

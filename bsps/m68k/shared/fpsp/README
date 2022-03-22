@@ -1,7 +1,7 @@
 M68040FPSP -- Motorola 68040 floating point support package
 -----------------------------------------------------------
 
-Modified for RTEMS by Eric Norum (eric@skatter.usask.ca)
+Modified for RTEMS by Eric Norum (eric@norum.ca)
 
 To include these routines in your application call
 

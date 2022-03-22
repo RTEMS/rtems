@@ -1,11 +1,9 @@
 /*
  * MC68360 buffer descriptor allocation routines
- *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
+ */
+
+/*
+ * Copyright (c) 1996 Eric Norum <eric@norum.ca>
  */
 
 #include <rtems.h>

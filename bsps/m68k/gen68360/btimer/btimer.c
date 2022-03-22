@@ -2,31 +2,23 @@
  * Use TIMER 1 and TIMER 2 for Timing Test Suite
  * The hardware on the MC68360 makes these routines very simple.
  *
- * Based on the `gen68302' board support package, and covered by the
- * original distribution terms.
- *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
- */
-
-/*
- *
- *  Input parameters:  NONE
- *
- *  Output parameters:  NONE
- *
  *  NOTE: It is important that the timer start/stop overhead be
  *        determined when porting or modifying this code.
  *
- *  COPYRIGHT (c) 1989-1999.
- *  On-Line Applications Research Corporation (OAR).
+ */
+
+/*
+ * Based on the `gen68302' board support package, and covered by the
+ * original distribution terms.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Copyright (c) 1996 Eric Norum <eric@norum.ca>
+ * 
+ * COPYRIGHT (c) 1989-1999.
+ * On-Line Applications Research Corporation (OAR).
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  */
 
 #include <rtems.h>
