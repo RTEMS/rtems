@@ -1,19 +1,13 @@
 /*
  * RTEMS configuration/initialization
- *
+ */
+
+/*
  * This program may be distributed and used for any purpose.
- * I ask only that you:
- *  1. Leave this author information intact.
- *  2. Document any changes you make.
  *
- * W. Eric Norum
- * Saskatchewan Accelerator Laboratory
- * University of Saskatchewan
- * Saskatoon, Saskatchewan, CANADA
- * eric@skatter.usask.ca
+ * Copyright (c) 1997 Eric Norum <eric@norum.ca>
  *
- * Additions:
- * Charles-Antoine Gauthier
+ * Copyright (c) 2000 Charles-Antoine Gauthier <charles.gauthier@nrc.ca>
  * Software Engineering Group
  * Institute for Information Technology
  * National Research Council of Canada
