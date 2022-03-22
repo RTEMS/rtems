@@ -9,7 +9,7 @@
  */
 
 /*
- * Copyright 1998 Eric Norum <eric.norum@usask.ca>
+ * Copyright (c) 1998 Eric Norum <eric@norum.ca>
  *
  * Modifications to support reference counting in the file system are
  * Copyright (c) 2012 embedded brains GmbH.
