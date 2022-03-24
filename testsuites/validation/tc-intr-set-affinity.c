@@ -381,7 +381,7 @@ static void RtemsIntrReqSetAffinity_Pre_CPUSetOnline_Prepare(
        * ``affinity_size`` and ``affinity`` parameters and the set of online
        * processors is not empty, while the intersection of the processor set
        * specified by the ``affinity_size`` and ``affinity`` parameters and the
-       * set of online processors is a supported processor affinity set of the
+       * set of online processors is a processor affinity set supported by the
        * interrupt vector.
        */
       /* Already prepared */
