@@ -1,10 +1,17 @@
-/*  PCI bus driver Interface.
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brief PCI bus driver Interface.
+ */
+
+/*
  *  COPYRIGHT (c) 2008 Cobham Gaisler AB.
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
  *
  */
 

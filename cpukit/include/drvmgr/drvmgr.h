@@ -1,5 +1,12 @@
-/* Driver Manager Interface.
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brief Driver Manager Interface.
+ */
+
+/*
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be

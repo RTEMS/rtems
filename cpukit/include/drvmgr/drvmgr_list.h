@@ -1,5 +1,12 @@
-/* Linked list help functions used by driver manager.
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brief Linked list help functions used by driver manager.
+ */
+
+/*
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be
