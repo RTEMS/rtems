@@ -398,21 +398,21 @@ static void fatal_extension(
      * Final conditions check after exit handlers and Newlib cleanup procedures
      * have run. File descriptors and FILE objects themselves are closed.
      */
-    struct stat buffer;
+    struct stat unused;
     int rv;
 
     errno = 0;
-    rv = fstat(0, &buffer);
+    rv = fstat(0, &unused);
     rtems_test_assert(rv == -1);
     rtems_test_assert(errno == EBADF);
 
     errno = 0;
-    rv = fstat(1, &buffer);
+    rv = fstat(1, &unused);
     rtems_test_assert(rv == -1);
     rtems_test_assert(errno == EBADF);
 
     errno = 0;
-    rv = fstat(2, &buffer);
+    rv = fstat(2, &unused);
     rtems_test_assert(rv == -1);
     rtems_test_assert(errno == EBADF);
 
