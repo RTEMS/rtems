@@ -1,6 +1,15 @@
-/* Routines to access PCI memory/configuration space and other PCI related
- * functions the PCI Library provides.
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brief PCI Access Methods
+ *
+ * Routines to access PCI memory/configuration space and other PCI related
+ * functions the PCI Library provides.
+ */
+
+/*
  * COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be

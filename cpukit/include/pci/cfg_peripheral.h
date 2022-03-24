@@ -1,5 +1,12 @@
-/* PCI Peripheral Configuration Library
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brie PCI Peripheral Configuration Libraryf
+ */
+
+/*
  * COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be

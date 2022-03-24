@@ -1,6 +1,14 @@
-/* PCI Read Configuration Library. Read current config that bootloader/BIOS
- * has setup.
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brief PCI Read Configuration Library
+ *
+ * Read current config where bootloader/BIOS has setup.
+ */
+
+/*
  * COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be

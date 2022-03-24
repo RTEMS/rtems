@@ -1,5 +1,12 @@
-/* PCI Configuration Library
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
  *
+ * @brief PCI Configuration Library
+ */
+
+/*
  * COPYRIGHT (c) 2010 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be
