@@ -26,7 +26,9 @@
 
 const char rtems_test_name[] = "NEWLIB 1";
 
-static const char file_path[] = "/file";
+static const char stdio_file_path[] = "/stdio-file";
+
+static const char non_stdio_file_path[] = "/non-stdio-file";
 
 typedef enum {
   INIT,
@@ -39,6 +41,8 @@ typedef struct {
   rtems_id main_task_id;
   rtems_id worker_task_id;
   test_state current;
+  FILE *non_stdio_file;
+  int non_stdio_fd;
 } test_context;
 
 static test_context test_instance;
@@ -59,7 +63,7 @@ static void wait(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void worker_task(rtems_task_argument arg)
+static void stdio_file_worker(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
   struct _reent *reent = _REENT;
@@ -69,7 +73,7 @@ static void worker_task(rtems_task_argument arg)
 
   rtems_test_assert(reent->__cleanup == NULL);
 
-  output = stdout = fopen(&file_path[0], "r+");
+  output = stdout = fopen(&stdio_file_path[0], "r+");
   rtems_test_assert(stdout != NULL);
 
   /*
@@ -84,6 +88,30 @@ static void worker_task(rtems_task_argument arg)
   rtems_test_assert(n == 1);
 
   rtems_test_assert(ctx->current == OPEN);
+
+  wake_up_main(ctx);
+
+  rtems_test_assert(0);
+}
+
+static void non_stdio_file_worker(rtems_task_argument arg)
+{
+  test_context *ctx = &test_instance;
+  FILE *fp;
+  char buf[1] = { 'y' };
+  size_t n;
+  int fd;
+
+  fp = ctx->non_stdio_file = fopen(&non_stdio_file_path[0], "w");
+  rtems_test_assert(fp != NULL);
+
+  /* Get file descriptor of new global file stream, store it in text context */
+  fd = fileno(fp);
+  rtems_test_assert(fd != -1);
+  ctx->non_stdio_fd = fd;
+
+  n = fwrite(&buf[0], sizeof(buf), 1, fp);
+  rtems_test_assert(n == 1);
 
   wake_up_main(ctx);
 
@@ -250,21 +278,9 @@ static const IMFS_node_control node_control = IMFS_GENERIC_INITIALIZER(
   IMFS_node_destroy_default
 );
 
-static void test_thread_specific_close(test_context *ctx)
+static void create_and_run_worker(test_context *ctx, rtems_task_entry entry)
 {
   rtems_status_code sc;
-  int rv;
-  rtems_resource_snapshot snapshot;
-
-  rtems_resource_snapshot_take(&snapshot);
-
-  rv = IMFS_make_generic_node(
-    &file_path[0],
-    S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
-    &node_control,
-    NULL
-  );
-  rtems_test_assert(rv == 0);
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
@@ -276,18 +292,49 @@ static void test_thread_specific_close(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_start(ctx->worker_task_id, worker_task, 0);
+  sc = rtems_task_start(ctx->worker_task_id, entry, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   wait();
 
   sc = rtems_task_delete(ctx->worker_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
 
-  rv = unlink(&file_path[0]);
+/*
+ * Check that a FILE opened by a task and assigned to a stdio stream is closed
+ * during thread termination. Ensure that resources are returned to the system.
+ */
+static void test_stdio_file(test_context *ctx)
+{
+  int rv;
+  rtems_resource_snapshot snapshot;
+
+  rtems_resource_snapshot_take(&snapshot);
+
+  rv = IMFS_make_generic_node(
+    &stdio_file_path[0],
+    S_IFCHR | S_IRWXU | S_IRWXG | S_IRWXO,
+    &node_control,
+    NULL
+  );
+  rtems_test_assert(rv == 0);
+
+  create_and_run_worker(ctx, stdio_file_worker);
+
+  rv = unlink(&stdio_file_path[0]);
   rtems_test_assert(rv == 0);
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+}
+
+/*
+ * Open a global FILE object from a task but do not assign it to a stdio
+ * stream. The FILE is not closed upon thread termination.
+ */
+static void test_non_stdio_file(test_context *ctx)
+{
+  create_and_run_worker(ctx, non_stdio_file_worker);
 }
 
 /*
@@ -298,6 +345,7 @@ static void test_thread_specific_close(test_context *ctx)
  */
 static void check_after_libio_exit(void)
 {
+  test_context *ctx = &test_instance;
   struct stat unused;
   int rv;
 
@@ -319,6 +367,14 @@ static void check_after_libio_exit(void)
   rtems_test_assert(stdin->_flags != 0);
   rtems_test_assert(stdout->_flags != 0);
   rtems_test_assert(stderr->_flags != 0);
+
+  /*
+   * The non-stdio file and its file descriptor should be still open at this
+   * point.
+   */
+  rv = fstat(ctx->non_stdio_fd, &unused);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(ctx->non_stdio_file->_flags != 0);
 }
 
 static void register_exit_handler_before_libio_exit(void)
@@ -342,7 +398,7 @@ RTEMS_SYSINIT_ITEM(register_exit_handler_before_libio_exit,
  * cleanup procedures have been called. Therefore, stdio file descriptors
  * should be open and stdio FILE object flags should be non-zero.
  */
-static void test_exit_handling(void)
+static void test_exit_handling(test_context *ctx)
 {
   struct stat unused;
   int rv;
@@ -359,6 +415,14 @@ static void test_exit_handling(void)
   rtems_test_assert(stdin->_flags != 0);
   rtems_test_assert(stdout->_flags != 0);
   rtems_test_assert(stderr->_flags != 0);
+
+  /*
+   * The file descriptor of the non-stdio file should still be open; the FILE
+   * object flags should still be non-zero.
+   */
+  rv = fstat(ctx->non_stdio_fd, &unused);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(ctx->non_stdio_file->_flags != 0);
 
   /* Run exit handlers and Newlib cleanup procedures */
   exit(0);
@@ -379,8 +443,9 @@ static void Init(rtems_task_argument arg)
   rv = fclose(file);
   rtems_test_assert(rv == 0);
 
-  test_thread_specific_close(ctx);
-  test_exit_handling();
+  test_stdio_file(ctx);
+  test_non_stdio_file(ctx);
+  test_exit_handling(ctx);
 }
 
 static void fatal_extension(
@@ -400,6 +465,7 @@ static void fatal_extension(
      */
     struct stat unused;
     int rv;
+    test_context *ctx = &test_instance;
 
     errno = 0;
     rv = fstat(0, &unused);
@@ -419,6 +485,14 @@ static void fatal_extension(
     rtems_test_assert(stdin->_flags == 0);
     rtems_test_assert(stdout->_flags == 0);
     rtems_test_assert(stderr->_flags == 0);
+
+    /* The non-stdio file and its file descriptor should be closed */
+    errno = 0;
+    rv = fstat(ctx->non_stdio_fd, &unused);
+    rtems_test_assert(rv == -1);
+    rtems_test_assert(errno == EBADF);
+    rtems_test_assert(ctx->non_stdio_file->_flags == 0);
+
     TEST_END();
   }
 }
@@ -426,7 +500,7 @@ static void fatal_extension(
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
-#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 

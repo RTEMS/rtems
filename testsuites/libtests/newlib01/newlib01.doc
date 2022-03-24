@@ -14,5 +14,8 @@ concepts:
     written to the open file during thread termination.
   - Ensure that the open file is closed after the write during thread
     termination.
-  - Ensure that all resources are returned to the system using resouce
+  - Ensure that all resources are returned to the system using resource
     snapshots.
+  - Check that exit procedures provide proper resource cleanup. Ensure that
+    a file opened from a worker task--but that is not assigned to a stdio
+    stream--is not closed during thread termination.
