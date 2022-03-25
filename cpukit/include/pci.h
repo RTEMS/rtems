@@ -1,7 +1,16 @@
-/*
- * PCI library. Defines in this file was taken from FreeBSD and auto-generated
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @brief PCI Library
+ *
+ * Defines in this file was taken from FreeBSD and auto-generated
  * pci_ids.h reused from RTEMS.
  *
+ */
+
+/*
  * COPYRIGHT (c) 2009 Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be
