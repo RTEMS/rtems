@@ -84,6 +84,14 @@
 
 #define MAX_NAME_FIELD_SIZE      99
 
+#define TAR_BLOCK_SIZE           512
+#define TAR_BLOCK_SIZE_MASK      (TAR_BLOCK_SIZE - 1)
+
+/*
+ * Number of blocks read or written
+ */
+#define TAR_WORK_BLOCKS          16
+
 static int _rtems_tar_header_checksum(const char *bufr);
 
 /*
@@ -240,7 +248,8 @@ Untar_ProcessHeader(
   } else if (ctx->linkflag == REGTYPE) {
     rtems_printf(ctx->printer, "untar: file: %s (s:%lu,m:%04lo)\n",
                  ctx->file_path, ctx->file_size, ctx->mode);
-    ctx->nblocks = (((ctx->file_size) + 511) & ~511) / 512;
+    ctx->nblocks =
+      (((ctx->file_size) + TAR_BLOCK_SIZE_MASK) & ~TAR_BLOCK_SIZE_MASK) / TAR_BLOCK_SIZE;
   } else if (ctx->linkflag == DIRTYPE) {
     rtems_printf(ctx->printer, "untar: dir: %s\n", ctx->file_path);
     r = mkdir(ctx->file_path, ctx->mode);
@@ -311,14 +320,14 @@ Untar_FromMemory_Print(
 
   ptr = 0;
   while (true) {
-    if (ptr + 512 > size) {
+    if (ptr + TAR_BLOCK_SIZE > size) {
       retval = UNTAR_SUCCESSFUL;
       break;
     }
 
     /* Read the header */
     bufr = &tar_ptr[ptr];
-    ptr += 512;
+    ptr += TAR_BLOCK_SIZE;
 
     retval = Untar_ProcessHeader(&ctx, bufr);
 
@@ -329,27 +338,26 @@ Untar_FromMemory_Print(
       if ((fd = open(ctx.file_path,
                      O_TRUNC | O_CREAT | O_WRONLY, ctx.mode)) == -1) {
         Print_Error(printer, "open", ctx.file_path);
-        ptr += 512 * ctx.nblocks;
+        ptr += TAR_BLOCK_SIZE * ctx.nblocks;
       } else {
-        unsigned long sizeToGo = ctx.file_size;
-        ssize_t       len;
-        ssize_t       i;
-        ssize_t       n;
-
         /*
          * Read out the data.  There are nblocks of data where nblocks is the
          * file_size rounded to the nearest 512-byte boundary.
          */
-        for (i = 0; i < ctx.nblocks; i++) {
-          len = ((sizeToGo < 512L) ? (sizeToGo) : (512L));
-          n = write(fd, &tar_ptr[ptr], len);
+        ssize_t file_size = ctx.file_size;
+        size_t blocks = ctx.nblocks;
+        while (blocks > 0) {
+          size_t blks = blocks > TAR_WORK_BLOCKS ? TAR_WORK_BLOCKS : blocks;
+          ssize_t len = MIN(blks * TAR_BLOCK_SIZE, file_size);
+          ssize_t n = write(fd, &tar_ptr[ptr], len);
           if (n != len) {
             Print_Error(printer, "write", ctx.file_path);
             retval  = UNTAR_FAIL;
             break;
           }
-          ptr += 512;
-          sizeToGo -= n;
+          ptr += blks * TAR_BLOCK_SIZE;
+          file_size -= n;
+          blocks -= blks;
         }
         close(fd);
       }
@@ -419,7 +427,6 @@ Untar_FromFile_Print(
   char                *bufr;
   ssize_t              n;
   int                  retval;
-  unsigned long        i;
   char                 buf[UNTAR_FILE_NAME_SIZE];
   Untar_HeaderContext  ctx;
 
@@ -429,7 +436,7 @@ Untar_FromFile_Print(
     return UNTAR_FAIL;
   }
 
-  bufr = (char *)malloc(512);
+  bufr = (char *)malloc(TAR_WORK_BLOCKS * TAR_BLOCK_SIZE);
   if (bufr == NULL) {
     close(fd);
     return(UNTAR_FAIL);
@@ -442,7 +449,7 @@ Untar_FromFile_Print(
   while (1) {
     /* Read the header */
     /* If the header read fails, we just consider it the end of the tarfile. */
-    if ((n = read(fd, bufr, 512)) != 512) {
+    if ((n = read(fd, bufr, TAR_BLOCK_SIZE)) != TAR_BLOCK_SIZE) {
       break;
     }
 
@@ -464,10 +471,16 @@ Untar_FromFile_Print(
         retval = UNTAR_FAIL;
         break;
       } else {
-        for (i = 0; i < ctx.nblocks; i++) {
-          n = read(fd, bufr, 512);
-          n = MIN(n, ctx.file_size - (i * 512UL));
+        ssize_t file_size = ctx.file_size;
+        size_t blocks = ctx.nblocks;
+        while (blocks > 0) {
+          size_t blks = blocks > TAR_WORK_BLOCKS ? TAR_WORK_BLOCKS : blocks;
+          size_t bytes = blks * TAR_BLOCK_SIZE;
+          n = read(fd, bufr, bytes);
+          n = MIN(n, file_size);
           (void) write(out_fd, bufr, n);
+          file_size -= n;
+          blocks -= blks;
         }
         close(out_fd);
       }
