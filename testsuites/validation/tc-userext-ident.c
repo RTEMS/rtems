@@ -71,6 +71,8 @@
  * @{
  */
 
+#define NAME_LOCAL_OBJECT rtems_build_name( 'U', 'E', 'X', 'T' )
+
 static rtems_status_code ClassicUserExtIdentAction(
   rtems_name name,
   rtems_id  *id
@@ -90,7 +92,7 @@ static void RtemsUserextValIdent_Action_0( void )
   rtems_id                            id_local_object;
 
   sc = rtems_extension_create(
-    ClassicObjectLocalIdentName,
+    NAME_LOCAL_OBJECT,
     &table,
     &id_local_object
   );
@@ -98,6 +100,7 @@ static void RtemsUserextValIdent_Action_0( void )
 
   RtemsReqIdentLocal_Run(
     id_local_object,
+    NAME_LOCAL_OBJECT,
     ClassicUserExtIdentAction
   );
 

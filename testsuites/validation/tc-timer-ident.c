@@ -71,6 +71,8 @@
  * @{
  */
 
+#define NAME_LOCAL_OBJECT rtems_build_name( 'T', 'I', 'M', 'R' )
+
 static rtems_status_code ClassicTimerIdentAction(
   rtems_name name,
   rtems_id  *id
@@ -89,13 +91,14 @@ static void RtemsTimerValIdent_Action_0( void )
   rtems_id          id_local_object;
 
   sc = rtems_timer_create(
-    ClassicObjectLocalIdentName,
+    NAME_LOCAL_OBJECT,
     &id_local_object
   );
   T_assert_rsc_success( sc );
 
   RtemsReqIdentLocal_Run(
     id_local_object,
+    NAME_LOCAL_OBJECT,
     ClassicTimerIdentAction
   );
 

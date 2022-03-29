@@ -71,6 +71,8 @@
  * @{
  */
 
+#define NAME_LOCAL_OBJECT rtems_build_name( 'P', 'A', 'R', 'T' )
+
 static rtems_status_code ClassicPartIdentAction(
   rtems_name name,
   uint32_t   node,
@@ -91,7 +93,7 @@ static void RtemsPartValIdent_Action_0( void )
   rtems_id                                               id_local_object;
 
   sc = rtems_partition_create(
-    ClassicObjectIdentName,
+    NAME_LOCAL_OBJECT,
     area,
     sizeof( area ),
     sizeof( area ),
@@ -102,6 +104,7 @@ static void RtemsPartValIdent_Action_0( void )
 
   RtemsReqIdent_Run(
     id_local_object,
+    NAME_LOCAL_OBJECT,
     ClassicPartIdentAction
   );
 

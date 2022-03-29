@@ -71,6 +71,8 @@
  * @{
  */
 
+#define NAME_LOCAL_OBJECT rtems_build_name( 'B', 'A', 'R', 'R' )
+
 static rtems_status_code ClassicBarrierIdentAction(
   rtems_name name,
   rtems_id  *id
@@ -89,7 +91,7 @@ static void RtemsBarrierValIdent_Action_0( void )
   rtems_id          id_local_object;
 
   sc = rtems_barrier_create(
-    ClassicObjectLocalIdentName,
+    NAME_LOCAL_OBJECT,
     RTEMS_DEFAULT_ATTRIBUTES,
     1,
     &id_local_object
@@ -98,6 +100,7 @@ static void RtemsBarrierValIdent_Action_0( void )
 
   RtemsReqIdentLocal_Run(
     id_local_object,
+    NAME_LOCAL_OBJECT,
     ClassicBarrierIdentAction
   );
 

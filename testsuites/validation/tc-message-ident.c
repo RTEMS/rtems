@@ -71,10 +71,12 @@
  * @{
  */
 
+#define NAME_LOCAL_OBJECT rtems_build_name( 'M', 'E', 'S', 'Q' )
+
 static RTEMS_MESSAGE_QUEUE_BUFFER( 1 ) ClassicMessageIdentBuffers[ 1 ];
 
 static rtems_message_queue_config ClassicObjectIdentConfig = {
-  .name = ClassicObjectIdentName,
+  .name = NAME_LOCAL_OBJECT,
   .maximum_pending_messages = RTEMS_ARRAY_SIZE( ClassicMessageIdentBuffers ),
   .maximum_message_size = 1,
   .storage_area = ClassicMessageIdentBuffers,
@@ -108,6 +110,7 @@ static void RtemsMessageValIdent_Action_0( void )
 
   RtemsReqIdent_Run(
     id_local_object,
+    NAME_LOCAL_OBJECT,
     ClassicMessageIdentAction
   );
 

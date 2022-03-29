@@ -101,19 +101,20 @@ typedef enum {
   RtemsReqIdent_Post_Id_NA
 } RtemsReqIdent_Post_Id;
 
-#define ClassicObjectIdentName \
-  rtems_build_name( 'I', 'D', 'N', 'T' )
-
 /**
  * @brief Runs the parameterized test case.
  *
  * @param id_local_object is the identifier of an active object of the class
- *   under test with the name ClassicObjectIdentName.
+ *   under test.
+ *
+ * @param name_local_object is the name of the active object of the class under
+ *   test.
  *
  * @param action is the action handler.
  */
 void RtemsReqIdent_Run(
   rtems_id             id_local_object,
+  rtems_name           name_local_object,
   rtems_status_code ( *action )( rtems_name, uint32_t, rtems_id * )
 );
 

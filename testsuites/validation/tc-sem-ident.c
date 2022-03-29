@@ -71,6 +71,8 @@
  * @{
  */
 
+#define NAME_LOCAL_OBJECT rtems_build_name( 'S', 'E', 'M', 'A' )
+
 static rtems_status_code ClassicSemIdentAction(
   rtems_name name,
   uint32_t   node,
@@ -90,7 +92,7 @@ static void RtemsSemValIdent_Action_0( void )
   rtems_id          id_local_object;
 
   sc = rtems_semaphore_create(
-    ClassicObjectIdentName,
+    NAME_LOCAL_OBJECT,
     0,
     RTEMS_DEFAULT_ATTRIBUTES,
     0,
@@ -100,6 +102,7 @@ static void RtemsSemValIdent_Action_0( void )
 
   RtemsReqIdent_Run(
     id_local_object,
+    NAME_LOCAL_OBJECT,
     ClassicSemIdentAction
   );
 

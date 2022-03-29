@@ -590,6 +590,15 @@ static inline void ISRLockWaitForOthers(
 
 void *IdleBody( uintptr_t ignored );
 
+/**
+ * @brief This task configurations may be used to construct a task during
+ *   tests.
+ *
+ * Only one task shall use this configuration at a time, otherwise two tasks
+ * would share a stack.
+ */
+extern const rtems_task_config DefaultTaskConfig;
+
 /** @} */
 
 #ifdef __cplusplus

@@ -53,7 +53,7 @@
 #endif
 
 #include "tr-object-ident.h"
-#include "ts-config.h"
+#include "tx-support.h"
 
 #include <rtems/test.h>
 
@@ -147,28 +147,6 @@ static rtems_status_code ClassicTaskIdentAction(
   return rtems_task_ident( name, node, id );
 }
 
-#define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
-
-#define MAX_TLS_SIZE RTEMS_ALIGN_UP( 64, RTEMS_TASK_STORAGE_ALIGNMENT )
-
-RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT )
-static char ClassicTaskIdentStorage[
-  RTEMS_TASK_STORAGE_SIZE(
-    MAX_TLS_SIZE + TEST_MINIMUM_STACK_SIZE,
-    TASK_ATTRIBUTES
-  )
-];
-
-static const rtems_task_config ClassicTaskIdentConfig = {
-  .name = ClassicObjectIdentName,
-  .initial_priority = 1,
-  .storage_area = ClassicTaskIdentStorage,
-  .storage_size = sizeof( ClassicTaskIdentStorage ),
-  .maximum_thread_local_storage_size = MAX_TLS_SIZE,
-  .initial_modes = RTEMS_DEFAULT_MODES,
-  .attributes = TASK_ATTRIBUTES
-};
-
 static void RtemsTaskReqIdent_Pre_Name_Prepare(
   RtemsTaskReqIdent_Context *ctx,
   RtemsTaskReqIdent_Pre_Name state
@@ -237,7 +215,7 @@ static void RtemsTaskReqIdent_Setup( RtemsTaskReqIdent_Context *ctx )
   rtems_status_code sc;
 
   sc = rtems_task_construct(
-    &ClassicTaskIdentConfig,
+    &DefaultTaskConfig,
     &ctx->id_local_object
   );
   T_assert_rsc_success( sc );
@@ -278,6 +256,7 @@ static void RtemsTaskReqIdent_Action( RtemsTaskReqIdent_Context *ctx )
   } else {
     RtemsReqIdent_Run(
       ctx->id_local_object,
+      DefaultTaskConfig.name,
       ClassicTaskIdentAction
     );
   }

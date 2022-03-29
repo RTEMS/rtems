@@ -94,6 +94,12 @@ typedef struct {
    * @brief This member contains a copy of the corresponding
    *   RtemsReqIdentLocal_Run() parameter.
    */
+  rtems_name name_local_object;
+
+  /**
+   * @brief This member contains a copy of the corresponding
+   *   RtemsReqIdentLocal_Run() parameter.
+   */
   rtems_status_code ( *action )( rtems_name, rtems_id * );
 
   struct {
@@ -166,7 +172,7 @@ static void RtemsReqIdentLocal_Pre_Name_Prepare(
        * While the ``name`` parameter is associated with an active object of
        * the specified class .
        */
-      ctx->name = ClassicObjectLocalIdentName;
+      ctx->name = ctx->name_local_object;
       break;
     }
 
@@ -346,6 +352,7 @@ static T_fixture_node RtemsReqIdentLocal_Node;
 
 void RtemsReqIdentLocal_Run(
   rtems_id             id_local_object,
+  rtems_name           name_local_object,
   rtems_status_code ( *action )( rtems_name, rtems_id * )
 )
 {
@@ -353,6 +360,7 @@ void RtemsReqIdentLocal_Run(
 
   ctx = &RtemsReqIdentLocal_Instance;
   ctx->id_local_object = id_local_object;
+  ctx->name_local_object = name_local_object;
   ctx->action = action;
 
   ctx = T_push_fixture( &RtemsReqIdentLocal_Node, &RtemsReqIdentLocal_Fixture );
