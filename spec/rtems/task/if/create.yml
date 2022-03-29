@@ -24,9 +24,10 @@ description: |
   used to access the task with other task related directives.
 
   The **initial priority** of the task is specified in ${.:/params[1]/name}.
-  The scheduler of the created task is the scheduler of the calling task at
-  some point during the task creation.  The initial task priority specified in
-  ${.:/params[1]/name} shall be valid for this scheduler.
+  The ${/glossary/scheduler-home:/term} of the created task is the home
+  scheduler of the calling task at some time point during the task creation.
+  The initial task priority specified in ${.:/params[1]/name} shall be valid
+  for this scheduler.
 
   The **stack size** of the task is specified in ${.:/params[2]/name}.  If the
   requested stack size is less than the configured minimum stack size, then

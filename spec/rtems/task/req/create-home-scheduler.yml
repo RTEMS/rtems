@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/create
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  When a task is created, the ${/glossary/scheduler-home:/term} of the created
+  task shall be set to the home scheduler of the task calling the
+  ${../if/create:/name} directive at some time point during the directive call.
+type: requirement

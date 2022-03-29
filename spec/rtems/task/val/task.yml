@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
 test-actions:
@@ -161,6 +161,45 @@ test-actions:
     - role: validation
       uid: ../req/self-define
   links: []
+- action-brief: |
+    Validate the home scheduler of tasks created by ${../if/create:/name} and
+    constructed by ${../if/construct:/name}.
+  action-code: |
+    rtems_status_code sc;
+    rtems_status_code id;
+  checks:
+  - brief: |
+      Create a task.  Check that the home scheduler of the created task is
+      scheduler A.
+    code: |
+      sc = rtems_task_create(
+        OBJECT_NAME,
+        1,
+        TEST_MINIMUM_STACK_SIZE,
+        RTEMS_DEFAULT_MODES,
+        RTEMS_DEFAULT_ATTRIBUTES,
+        &id
+      );
+      T_step_rsc_success( ${step}, sc );
+
+      T_step_eq_u32( ${step}, GetScheduler( id ), SCHEDULER_A_ID );
+      DeleteTask( id );
+    links:
+    - role: validation
+      uid: ../req/create-home-scheduler
+  - brief: |
+      Construct a task.  Check that the home scheduler of the constructed task
+      is scheduler A.
+    code: |
+      sc = rtems_task_construct( &DefaultTaskConfig, &id );
+      T_step_rsc_success( ${step}, sc );
+
+      T_step_eq_u32( ${step}, GetScheduler( id ), SCHEDULER_A_ID );
+      DeleteTask( id );
+    links:
+    - role: validation
+      uid: ../req/construct-home-scheduler
+  links: []
 test-brief: |
   This test case collection provides validation test cases for requirements of
   the ${../if/group:/name}.
@@ -172,7 +211,9 @@ test-includes:
 - rtems.h
 - string.h
 - rtems/score/apimutex.h
-test-local-includes: []
+test-local-includes:
+- ts-config.h
+- tx-support.h
 test-setup: null
 test-stop: null
 test-support: |
