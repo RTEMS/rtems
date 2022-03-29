@@ -15,7 +15,7 @@ test-actions:
     rtems_id                                               id_local_object;
 
     sc = rtems_partition_create(
-      ClassicObjectIdentName,
+      NAME_LOCAL_OBJECT,
       area,
       sizeof( area ),
       sizeof( area ),
@@ -26,6 +26,7 @@ test-actions:
 
     ${../../req/ident:/test-run}(
       id_local_object,
+      NAME_LOCAL_OBJECT,
       ClassicPartIdentAction
     );
 
@@ -44,6 +45,8 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: |
+  #define NAME_LOCAL_OBJECT rtems_build_name( 'P', 'A', 'R', 'T' )
+
   static rtems_status_code ClassicPartIdentAction(
     rtems_name name,
     uint32_t   node,

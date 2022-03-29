@@ -63,7 +63,7 @@ pre-conditions:
       the specified class .
   - name: Valid
     test-code: |
-      ctx->name = ClassicObjectLocalIdentName;
+      ctx->name = ctx->name_local_object;
     text: |
       While the ``name`` parameter is associated with an active object of the
       specified class .
@@ -109,20 +109,22 @@ test-context:
 test-context-support: null
 test-description: null
 test-header:
-  code: |
-    #define ClassicObjectLocalIdentName \
-      rtems_build_name( 'I', 'D', 'N', 'T' )
+  code: null
   freestanding: false
   includes:
   - rtems.h
   local-includes: []
   run-params:
   - description: |
-      is the identifier of an active object of the class under test with the
-      name ClassicObjectLocalIdentName.
+      is the identifier of an active object of the class under test.
     dir: null
     name: id_local_object
     specifier: rtems_id ${.:name}
+  - description: |
+      is the name of the active object of the class under test.
+    dir: null
+    name: name_local_object
+    specifier: rtems_name ${.:name}
   - description: |
       is the action handler.
     dir: null

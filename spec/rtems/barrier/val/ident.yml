@@ -14,7 +14,7 @@ test-actions:
     rtems_id          id_local_object;
 
     sc = rtems_barrier_create(
-      ClassicObjectLocalIdentName,
+      NAME_LOCAL_OBJECT,
       RTEMS_DEFAULT_ATTRIBUTES,
       1,
       &id_local_object
@@ -23,6 +23,7 @@ test-actions:
 
     ${../../req/ident-local:/test-run}(
       id_local_object,
+      NAME_LOCAL_OBJECT,
       ClassicBarrierIdentAction
     );
 
@@ -41,6 +42,8 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: |
+  #define NAME_LOCAL_OBJECT rtems_build_name( 'B', 'A', 'R', 'R' )
+
   static rtems_status_code ClassicBarrierIdentAction(
     rtems_name name,
     rtems_id  *id

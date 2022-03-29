@@ -14,13 +14,14 @@ test-actions:
     rtems_id          id_local_object;
 
     sc = rtems_rate_monotonic_create(
-      ClassicObjectLocalIdentName,
+      NAME_LOCAL_OBJECT,
       &id_local_object
     );
     T_assert_rsc_success( sc );
 
     ${../../req/ident-local:/test-run}(
       id_local_object,
+      NAME_LOCAL_OBJECT,
       ClassicRatemonIdentAction
     );
 
@@ -39,6 +40,8 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: |
+  #define NAME_LOCAL_OBJECT rtems_build_name( 'R', 'A', 'T', 'E' )
+
   static rtems_status_code ClassicRatemonIdentAction(
     rtems_name name,
     rtems_id  *id
