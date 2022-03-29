@@ -228,6 +228,8 @@ void RestoreRunnerMode( void );
 
 void RestoreRunnerPriority( void );
 
+void RestoreRunnerScheduler( void );
+
 struct _Thread_Control;
 
 struct _Thread_Control *GetThread( rtems_id id );

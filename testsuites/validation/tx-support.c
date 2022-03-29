@@ -557,6 +557,11 @@ void RestoreRunnerPriority( void )
   SetSelfPriority( 1 );
 }
 
+void RestoreRunnerScheduler( void )
+{
+  SetSelfScheduler( SCHEDULER_A_ID, 1 );
+}
+
 Thread_Control *GetThread( rtems_id id )
 {
   Thread_Control  *the_thread;

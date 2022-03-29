@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2021, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,6 +55,9 @@
 #include <rtems.h>
 #include <string.h>
 #include <rtems/score/apimutex.h>
+
+#include "ts-config.h"
+#include "tx-support.h"
 
 #include <rtems/test.h>
 
@@ -109,6 +112,15 @@
  *
  *   - Check that rtems_task_is_suspended() returns the expected status if
  *     called with a task identifier parameter of RTEMS_SELF.
+ *
+ * - Validate the home scheduler of tasks created by rtems_task_create() and
+ *   constructed by rtems_task_construct().
+ *
+ *   - Create a task.  Check that the home scheduler of the created task is
+ *     scheduler A.
+ *
+ *   - Construct a task.  Check that the home scheduler of the constructed task
+ *     is scheduler A.
  *
  * @{
  */
@@ -285,11 +297,48 @@ static void RtemsTaskValTask_Action_8( void )
 }
 
 /**
+ * @brief Validate the home scheduler of tasks created by rtems_task_create()
+ *   and constructed by rtems_task_construct().
+ */
+static void RtemsTaskValTask_Action_9( void )
+{
+  rtems_status_code sc;
+  rtems_status_code id;
+
+  /*
+   * Create a task.  Check that the home scheduler of the created task is
+   * scheduler A.
+   */
+  sc = rtems_task_create(
+    OBJECT_NAME,
+    1,
+    TEST_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  T_step_rsc_success( 8, sc );
+
+  T_step_eq_u32( 9, GetScheduler( id ), SCHEDULER_A_ID );
+  DeleteTask( id );
+
+  /*
+   * Construct a task.  Check that the home scheduler of the constructed task
+   * is scheduler A.
+   */
+  sc = rtems_task_construct( &DefaultTaskConfig, &id );
+  T_step_rsc_success( 10, sc );
+
+  T_step_eq_u32( 11, GetScheduler( id ), SCHEDULER_A_ID );
+  DeleteTask( id );
+}
+
+/**
  * @fn void T_case_body_RtemsTaskValTask( void )
  */
 T_TEST_CASE( RtemsTaskValTask )
 {
-  T_plan( 8 );
+  T_plan( 12 );
 
   RtemsTaskValTask_Action_0();
   RtemsTaskValTask_Action_1();
@@ -300,6 +349,7 @@ T_TEST_CASE( RtemsTaskValTask )
   RtemsTaskValTask_Action_6();
   RtemsTaskValTask_Action_7();
   RtemsTaskValTask_Action_8();
+  RtemsTaskValTask_Action_9();
 }
 
 /** @} */
