@@ -33,6 +33,8 @@
 
 #include <bspopts.h>
 
+#ifndef STM32H7B3xxQ
+
 static const stm32h7_gpio_config gpiog = {
   .regs = GPIOG,
   .config = {
@@ -94,3 +96,5 @@ HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
   stm32h7_gpio_init(&gpiob);
 #endif
 }
+
+#endif
