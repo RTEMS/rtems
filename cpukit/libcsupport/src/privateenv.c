@@ -8,7 +8,7 @@
  */
 
 /*
- *  Submitted by: fernando.ruiz@ctv.es (correo@fernando-ruiz.com)
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).

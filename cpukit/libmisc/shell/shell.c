@@ -1,11 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief Instantatiate a new terminal shell.
+ */
+
 /*
- *
- *  Instantatiate a new terminal shell.
- *
- *  Author:
- *
- *   WORK: fernando.ruiz@ctv.es
- *   HOME: correo@fernando-ruiz.com
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

@@ -1,8 +1,12 @@
+/**
+ * @file
+ * 
+ * @brief Telnet Daemon Interface
+ */
+
 /*
- *  Original Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
- *  May 2001
- *  Reworked by Till Straumann and .h overhauled by Joel Sherrill.
- *
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
+ * Reworked by Till Straumann and .h overhauled by Joel Sherrill.
  * Copyright (c) 2009 embedded brains GmbH and others.
  *
  * The license and distribution terms for this file may be

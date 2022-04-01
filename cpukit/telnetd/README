@@ -1,13 +1,11 @@
-Author: fernando.ruiz@ctv.es (correo@fernando-ruiz.com)
+Author: Fernando Ruiz Casas <fruizcasas@gmail.com>
 
-This directory contains a telnetd server
-primary features:
+This directory contains a telnetd server with the primary features:
 
    + create a user shell pseudo-terminal task.
 
-This code has not been extensively tested.  It is provided as a tool
-for RTEMS users to open more shell tcp/ip pseudo-terminal.
-Suggestions and comments are appreciated.
+It is provided as a tool for RTEMS users to open more shell tcp/ip
+pseudo-terminal.  Suggestions and comments are appreciated.
 
 Read libmisc/shell for more information.
 
@@ -20,4 +18,3 @@ NOTES:
 
 Enjoy it.
 
-FUTURE:

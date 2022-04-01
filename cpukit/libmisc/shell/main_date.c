@@ -1,11 +1,12 @@
+/**
+ * @file
+ * 
+ * @brief DATE Shell Command Implmentation
+ */
+
 /*
- *  DATE Shell Command Implmentation
- *
- *  OAuthor: Fernando RUIZ CASAS
- *  Work: fernando.ruiz@ctv.es
- *  Home: correo@fernando-ruiz.com
- *
- *  Significantly rewritten by Joel Sherrill <joel.sherrill@oarcorp.com>.
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
+ * Copyright (c) 2008 Joel Sherrill <joel.sherrill@oarcorp.com>.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

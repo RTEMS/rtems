@@ -1,9 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief MDUMP Shell Command Implmentation
+ */
+
 /*
- *  MDUMP Shell Command Implmentation
- *
- *  Author: Fernando RUIZ CASAS
- *  Work: fernando.ruiz@ctv.es
- *  Home: correo@fernando-ruiz.com
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  *  Reworked by Ric Claus at SLAC.Stanford.edu
  *

@@ -5,13 +5,12 @@
  */
 
 /*
- *  Author:
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
- *   WORK: fernando.ruiz@ctv.es
- *   HOME: correo@fernando-ruiz.com
- *
- *   Thanks at:
- *    Chris Johns
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ * 
  */
 
 #ifndef __RTEMS_SHELL_H__

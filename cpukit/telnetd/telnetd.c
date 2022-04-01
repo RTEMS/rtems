@@ -1,12 +1,7 @@
-/***********************************************************/
-/*
- *
- *  The telnet DAEMON
- *
- *  Author: 17,may 2001
- *
- *   WORK: fernando.ruiz@ctv.es
- *   HOME: correo@fernando-ruiz.com
+/**
+ * @file
+ * 
+ * @brief The telnet DAEMON
  *
  * After start the net you can start this daemon.
  * It uses the previously inited pseudo-terminales (pty.c)
@@ -17,6 +12,10 @@
  * this daemon interactively. (Login in /dev/console of course)
  *
  * Sorry but OOB is not still implemented. (This is the first version)
+ */
+
+/*
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  * Till Straumann <strauman@slac.stanford.edu>
  *  - made the 'shell' interface more generic, i.e. it is now

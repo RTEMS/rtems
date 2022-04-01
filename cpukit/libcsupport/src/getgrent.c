@@ -8,7 +8,7 @@
 /*
  *  Copyright (c) 1999-2009 Ralf Corsepius <corsepiu@faw.uni-ulm.de>
  *  Copyright (c) 1999-2013 Joel Sherrill <joel.sherrill@OARcorp.com>
- *  Copyright (c) 2000-2001 Fernando Ruiz Casas <fernando.ruiz@ctv.es>
+ *  Copyright (c) 2000-2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *  Copyright (c) 2002 Eric Norum <eric@norum.ca>
  *  Copyright (c) 2003 Till Straumann <strauman@slac.stanford.edu>
  *  Copyright (c) 2012 Alex Ivanov <alexivanov97@gmail.com>

@@ -9,13 +9,13 @@
  */
 
 /*
- *  Author: fernando.ruiz@ctv.es
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 1989-2008.
+ * On-Line Applications Research Corporation (OAR).
  *
- *  Modifications to support reference counting in the file system are
- *  Copyright (c) 2012 embedded brains GmbH.
+ * Modifications to support reference counting in the file system are
+ * Copyright (c) 2012 embedded brains GmbH.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

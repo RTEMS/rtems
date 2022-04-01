@@ -1,9 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief CHDIR Shell Command Implmentation
+ */
+
 /*
- *  CHDIR Shell Command Implmentation
- *
- *  Author: Fernando RUIZ CASAS
- *  Work: fernando.ruiz@ctv.es
- *  Home: correo@fernando-ruiz.com
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at

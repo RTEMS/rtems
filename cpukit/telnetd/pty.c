@@ -1,8 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief /dev/ptyXX  (Support for pseudo-terminals)
+ */
+
 /*
- * /dev/ptyXX  (Support for pseudo-terminals)
- *
- *  Original Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
- *  May 2001
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of

@@ -1,8 +1,11 @@
+/**
+ * @file
+ * 
+ * @brief /dev/ptyXX  (A first version for pseudo-terminals)
+ */
+
 /*
- * /dev/ptyXX  (A first version for pseudo-terminals)
- *
- *  Author: Fernando RUIZ CASAS (fernando.ruiz@ctv.es)
- *  May 2001
+ * Copyright (c) 2001 Fernando Ruiz Casas <fruizcasas@gmail.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of

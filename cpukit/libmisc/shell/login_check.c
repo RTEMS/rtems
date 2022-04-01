@@ -7,7 +7,6 @@
 /*
  * Copyright (c) 2009-2014 embedded brains GmbH and others.
  *
- *
  * Based on work from Chris Johns and Fernando Ruiz.
  *
  * Derived from file "cpukit/libmisc/shell/shell.c".
