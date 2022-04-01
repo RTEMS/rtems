@@ -43,7 +43,7 @@ void HAL_MspInit(void)
 
 static void init_power(void)
 {
-  HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
+  HAL_PWREx_ConfigSupply(STM32H7_PWR_SUPPLY);
   __HAL_PWR_VOLTAGESCALING_CONFIG(stm32h7_config_pwr_regulator_voltagescaling);
 
   while (!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {
