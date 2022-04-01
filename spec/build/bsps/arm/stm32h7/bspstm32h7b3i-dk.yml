@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: arm
+bsp: stm32h7b3i-dk
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2022 Karel Gardas <karel@functional.vision>
+cppflags: []
+enabled-by: true
+family: stm32h7
+includes: []
+install: []
+links:
+- role: build-dependency
+  uid: grp
+source: []
+type: build
