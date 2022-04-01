@@ -13,7 +13,10 @@ actions:
     conf.define_cond(value, True)
 build-type: option
 default: STM32H743xx
-default-by-variant: []
+default-by-variant:
+- value: STM32H7B3xxQ
+  variants:
+    - arm/stm32h7b3i-dk
 enabled-by: true
 format: '{}'
 links: []
