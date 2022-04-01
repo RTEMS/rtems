@@ -31,15 +31,17 @@
 
 #include <stm32h7/hal.h>
 
+#include <bspopts.h>
+
 const stm32h7_uart_config stm32h7_usart1_config = {
   .gpio = {
-    .regs = GPIOB,
+    .regs = STM32H7_USART1_GPIO_REGS,
     .config = {
-      .Pin = GPIO_PIN_14 | GPIO_PIN_15,
+      .Pin = STM32H7_USART1_GPIO_PINS,
       .Mode = GPIO_MODE_AF_PP,
       .Pull = GPIO_NOPULL,
       .Speed = GPIO_SPEED_FREQ_LOW,
-      .Alternate = GPIO_AF4_USART1
+      .Alternate = STM32H7_USART1_ALT_FUNC
     }
   },
   .irq = USART1_IRQn,

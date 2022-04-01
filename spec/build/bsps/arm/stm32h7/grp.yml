@@ -82,6 +82,12 @@ links:
 - role: build-dependency
   uid: optpwrsupply
 - role: build-dependency
+  uid: optusart1gpiopins
+- role: build-dependency
+  uid: optusart1gpioregs
+- role: build-dependency
+  uid: optusart1alternatefunc
+- role: build-dependency
   uid: optusart3gpiopins
 - role: build-dependency
   uid: optusart3gpioregs
