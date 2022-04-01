@@ -50,6 +50,8 @@ links:
 - role: build-dependency
   uid: optmemflashsz
 - role: build-dependency
+  uid: optmemflashlatency
+- role: build-dependency
   uid: optmemitcmsz
 - role: build-dependency
   uid: optmemnandsz

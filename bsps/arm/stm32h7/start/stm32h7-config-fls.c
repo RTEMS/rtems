@@ -31,4 +31,4 @@
 
 #include <stm32h7/hal.h>
 
-const uint32_t stm32h7_config_flash_latency = FLASH_LATENCY_4;
+const uint32_t stm32h7_config_flash_latency = STM32H7_FLASH_LATENCY;
