@@ -23,6 +23,8 @@
 #include <rtems/malloc.h>
 #include <rtems/libcsupport.h>
 
+#define MEMFILE_BYTES_PER_BLOCK 16
+
 const char rtems_test_name[] = "PSXIMFS 2";
 
 /* forward declarations to avoid warnings */
@@ -43,12 +45,17 @@ rtems_task Init(
   static const uintptr_t slink_2_name_size [] = {
     sizeof( slink_2_name )
   };
+  static const uintptr_t some_blocks [] = {
+    MEMFILE_BYTES_PER_BLOCK * 10
+  };
+  static const char some_data[MEMFILE_BYTES_PER_BLOCK * 11];
 
   int status = 0;
   void *opaque;
   char linkname_n[32] = {0};
   char linkname_p[32] = {0};
   int i;
+  int fd;
   struct stat stat_buf;
 
   TEST_BEGIN();
@@ -101,6 +108,27 @@ rtems_task Init(
   status = open( "/node-slink", O_WRONLY );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EACCES );
+
+  puts( "Allocate most of heap with a little bit left" );
+  opaque = rtems_heap_greedy_allocate( some_blocks, 1 );
+
+  puts( "Create an empty file.");
+  status = mknod( "/foo", S_IFREG | S_IRWXU, 0LL );
+  rtems_test_assert( status == 0 );
+
+  puts( "Then increase it's size to more than remaining space" );
+  fd = open( "/foo", O_WRONLY | O_TRUNC);
+  rtems_test_assert( fd >= 0 );
+  status = write(fd, some_data, sizeof(some_data));
+  rtems_test_assert( status == -1);
+  rtems_test_assert( errno == ENOSPC );
+
+  puts( "Clean up again" );
+  status = close(fd);
+  rtems_test_assert( status == 0);
+  status = remove( "/foo" );
+  rtems_test_assert( status == 0);
+  rtems_heap_greedy_free( opaque );
 
   puts( "Allocate most of heap" );
   opaque = rtems_heap_greedy_allocate( mount_table_entry_size, 1 );
@@ -202,7 +230,7 @@ rtems_task Init(
 #define CONFIGURE_FILESYSTEM_IMFS
 
 #define CONFIGURE_MAXIMUM_TASKS                  1
-#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK   16
+#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK   MEMFILE_BYTES_PER_BLOCK
 #define CONFIGURE_IMFS_ENABLE_MKFIFO
 #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

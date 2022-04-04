@@ -208,9 +208,10 @@ static int IMFS_memfile_extend(
           offset = 0;
        }
     } else {
-       for ( ; block>=old_blocks ; block-- ) {
+       for ( ; block>old_blocks ; block-- ) {
          IMFS_memfile_remove_block( memfile, block );
        }
+       IMFS_memfile_remove_block( memfile, old_blocks );
        rtems_set_errno_and_return_minus_one( ENOSPC );
     }
   }
