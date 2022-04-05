@@ -313,32 +313,21 @@ static int rtems_shell_line_editor(
   int          c;
   int          col;
   int          last_col;
-  int          output;
   char         line[size];
   char         new_line[size];
   int          up;
   int          cmd = -1;
   int          inserting = 1;
   int          in_fileno = fileno(in);
-  int          out_fileno;
-
-  _Assert(out != NULL);
-  out_fileno = fileno(out);
-
-  /*
-   * Only this task can use this file descriptor because calling
-   * fileno will block if another thread call made a call on this
-   * descriptor.
-   */
-  output = (out && isatty(in_fileno));
 
   col = last_col = 0;
 
   tcdrain(in_fileno);
-  if (out)
-    tcdrain(out_fileno);
+  if (out != NULL) {
+    tcdrain(fileno(out));
+  }
 
-  if (output && prompt)
+  if (out != NULL && prompt != NULL)
     fprintf(out, "\r%s", prompt);
 
   line[0] = 0;
@@ -346,7 +335,7 @@ static int rtems_shell_line_editor(
 
   for (;;) {
 
-    if (output)
+    if (out != NULL)
       fflush(out);
 
     extended_key = rtems_shell_getchar(in);
@@ -368,15 +357,14 @@ static int rtems_shell_line_editor(
       switch (c)
       {
         case RTEMS_SHELL_KEYS_END:
-          if (output)
+          if (out != NULL)
             fprintf(out, "%s", line + col);
           col = (int) strlen (line);
           break;
 
         case RTEMS_SHELL_KEYS_HOME:
-          if (output) {
-            if (prompt)
-              fprintf(out,"\r%s", prompt);
+          if (out != NULL && prompt != NULL) {
+            fprintf(out,"\r%s", prompt);
           }
           col = 0;
           break;
@@ -407,7 +395,7 @@ static int rtems_shell_line_editor(
             int end;
             int bs;
             rtems_shell_move_left(line + col, 1);
-            if (output) {
+            if (out != NULL) {
               fprintf(out,"\r%s%s ", prompt, line);
               end = (int) strlen (line);
               for (bs = 0; bs < ((end - col) + 1); bs++)
@@ -426,9 +414,8 @@ static int rtems_shell_line_editor(
       switch (c)
       {
         case 1:                         /*Control-a*/
-          if (output) {
-            if (prompt)
-              fprintf(out,"\r%s", prompt);
+          if (out != NULL && prompt != NULL) {
+            fprintf(out,"\r%s", prompt);
           }
           col = 0;
           break;
@@ -437,7 +424,7 @@ static int rtems_shell_line_editor(
           if (col > 0)
           {
             col--;
-            if (output)
+            if (out != NULL)
               fputc('\b', out);
           }
           break;
@@ -446,7 +433,7 @@ static int rtems_shell_line_editor(
           if (strlen(line)) {
             if (col < strlen(line)) {
               rtems_shell_move_left(line + col, 1);
-              if (output) {
+              if (out != NULL) {
                 int bs;
                 fprintf(out,"%s \b", line + col);
                 for (bs = 0; bs < ((int) strlen (line) - col); bs++)
@@ -458,26 +445,26 @@ static int rtems_shell_line_editor(
           /* Fall through */
 
         case EOF:
-          if (output)
+          if (out != NULL)
             fputc('\n', out);
           return -2;
 
         case 5:                         /*Control-e*/
-          if (output)
+          if (out != NULL)
             fprintf(out, "%s", line + col);
           col = (int) strlen (line);
           break;
 
         case 6:                         /* Control-F */
           if ((col < size) && (line[col] != '\0')) {
-            if (output)
+            if (out != NULL)
               fputc(line[col], out);
             col++;
           }
           break;
 
         case 7:                         /* Control-G */
-          if (output) {
+          if (out != NULL) {
             /*
              * The (int) cast is needed because the width specifier (%*)
              * must be an int, but strlen() returns a size_t. Without
@@ -492,7 +479,7 @@ static int rtems_shell_line_editor(
 
         case 11:                        /*Control-k*/
           if (line[col]) {
-            if (output) {
+            if (out != NULL) {
               int end = strlen(line);
               int bs;
               fprintf(out,"%*c", end - col, ' ');
@@ -504,7 +491,7 @@ static int rtems_shell_line_editor(
           break;
 
         case '\f':
-          if (output) {
+          if (out != NULL) {
             int end;
             int bs;
             fputc('\f',out);
@@ -522,7 +509,7 @@ static int rtems_shell_line_editor(
             int bs;
             col--;
             rtems_shell_move_left(line + col, 1);
-            if (output) {
+            if (out != NULL) {
               fprintf(out,"\b%s \b", line + col);
               for (bs = 0; bs < ((int) strlen (line) - col); bs++)
                 fputc('\b', out);
@@ -536,7 +523,7 @@ static int rtems_shell_line_editor(
           /*
            * Process the command.
            */
-          if (output)
+          if (out != NULL)
             fprintf(out,"\n");
 
           /*
@@ -564,7 +551,7 @@ static int rtems_shell_line_editor(
 
         case 16:                         /* Control-P */
           if ((cmd >= (count - 1)) || (strlen(cmds[cmd + 1]) == 0)) {
-            if (output)
+            if (out != NULL)
               fputc('\x7', out);
             break;
           }
@@ -584,7 +571,7 @@ static int rtems_shell_line_editor(
             cmd++;
           } else {
             if (cmd < 0) {
-              if (output)
+              if (out != NULL)
                 fprintf(out, "\x7");
               break;
             }
@@ -602,7 +589,7 @@ static int rtems_shell_line_editor(
 
           col = strlen (line);
 
-          if (output) {
+          if (out != NULL) {
             fprintf(out,"\r%s%*c", prompt, clen, ' ');
             fprintf(out,"\r%s%s", prompt, line);
           }
@@ -615,17 +602,17 @@ static int rtems_shell_line_editor(
             char tmp;
             if (col == strlen(line)) {
               col--;
-              if (output)
+              if (out != NULL)
                 fprintf(out,"\b");
             }
             tmp           = line[col];
             line[col]     = line[col - 1];
             line[col - 1] = tmp;
-            if (output)
+            if (out != NULL)
               fprintf(out,"\b%c%c", line[col - 1], line[col]);
             col++;
           } else {
-            if (output)
+            if (out != NULL)
               fputc('\x7', out);
           }
           break;
@@ -639,7 +626,7 @@ static int rtems_shell_line_editor(
             int bs;
 
             rtems_shell_move_left(line, col);
-            if (output) {
+            if (out != NULL) {
               fprintf(out,"\r%s%*c", prompt, clen, ' ');
               fprintf(out,"\r%s%s", prompt, line);
 
@@ -658,7 +645,7 @@ static int rtems_shell_line_editor(
               int ch, bs;
               for (ch = end + 1; ch > col; ch--)
                 line[ch] = line[ch - 1];
-              if (output) {
+              if (out != NULL) {
                 fprintf(out, "%s", line + col);
                 for (bs = 0; bs < (end - col + 1); bs++)
                   fputc('\b', out);
@@ -667,7 +654,7 @@ static int rtems_shell_line_editor(
             line[col++] = c;
             if (col > end)
               line[col] = '\0';
-            if (output)
+            if (out != NULL)
               fputc(c, out);
           }
           break;
@@ -869,6 +856,7 @@ bool rtems_shell_main_loop(
   int             line = 0;
   FILE           *stdinToClose = NULL;
   FILE           *stdoutToClose = NULL;
+  FILE           *line_editor_output;
 
   rtems_shell_init_environment();
 
@@ -974,6 +962,12 @@ bool rtems_shell_main_loop(
     setvbuf(stdin, NULL, _IONBF, 0);
   setvbuf(stdout, NULL, _IONBF, 0);
 
+  if (isatty(fileno(stdin))) {
+     line_editor_output = stdout;
+  } else {
+     line_editor_output = NULL;
+  }
+
   /*
    * Allocate the command line buffers.
    */
@@ -1044,7 +1038,7 @@ bool rtems_shell_main_loop(
           /* getcmd section */
           cmd = rtems_shell_line_editor(cmds, cmd_count,
                                         RTEMS_SHELL_CMD_SIZE, prompt,
-                                        stdin, stdout);
+                                        stdin, line_editor_output);
 
           if (cmd == -1)
             continue; /* empty line */
