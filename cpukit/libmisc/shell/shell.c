@@ -838,134 +838,30 @@ static bool rtems_shell_init_user_env(void)
 #define RTEMS_SHELL_CMD_COUNT         (32)
 #define RTEMS_SHELL_PROMPT_SIZE       (128)
 
-bool rtems_shell_main_loop(
-  rtems_shell_env_t *shell_env
+static bool shell_main_loop(
+  rtems_shell_env_t *shell_env,
+  bool               interactive,
+  FILE              *line_editor_output
 )
 {
-  struct termios  term;
-  struct termios  previous_term;
-  char           *prompt = NULL;
-  int             cmd;
-  int             cmd_count = 1; /* assume a script and so only 1 command line */
-  char           *cmds[RTEMS_SHELL_CMD_COUNT];
-  char           *cmd_argv;
-  int             argc;
-  char           *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
-  bool            result = true;
-  bool            input_file = false;
-  int             line = 0;
-  FILE           *stdinToClose = NULL;
-  FILE           *stdoutToClose = NULL;
-  FILE           *line_editor_output;
+  bool result = false;
+  int line = 0;
+  int cmd_count;
+  char *cmds[RTEMS_SHELL_CMD_COUNT];
+  char *cmd_argv;
+  char *prompt;
 
-  rtems_shell_init_environment();
-
-  if (shell_env->magic != rtems_build_name('S', 'E', 'N', 'V')) {
-    rtems_error(0, "invalid shell environment passed to the main loop)");
-    return false;
-  }
-
-  if (!rtems_shell_set_shell_env(shell_env))
-    return false;
-
-  if (!rtems_shell_init_user_env()) {
-    rtems_error(0, "rtems_shell_init_user_env");
-    rtems_shell_clear_shell_env();
-    return false;
-  }
-
-  shell_std_debug("env: %p\n", shell_env);
-
-  if (shell_env->output == NULL || strcmp(shell_env->output, "stdout") == 0) {
-    if (shell_env->parent_stdout != NULL)
-      stdout = shell_env->parent_stdout;
-  }
-  else if (strcmp(shell_env->output, "stderr") == 0) {
-    if (shell_env->parent_stderr != NULL)
-      stdout = shell_env->parent_stderr;
-    else
-      stdout = stderr;
-  } else if (strcmp(shell_env->output, "/dev/null") == 0) {
-    if (stdout == NULL) {
-      fprintf(stderr, "shell: stdout is NULLs\n");
-      rtems_shell_clear_shell_env();
-      return false;
-    }
-    fclose (stdout);
-  } else {
-    FILE *output = fopen(shell_env->output,
-                         shell_env->output_append ? "a" : "w");
-    if (output == NULL) {
-      fprintf(stderr, "shell: open output %s failed: %s\n",
-              shell_env->output, strerror(errno));
-      rtems_shell_clear_shell_env();
-      return false;
-    }
-    stdout = output;
-    stdoutToClose = output;
-  }
-
-  if (shell_env->input == NULL || strcmp(shell_env->input, "stdin") == 0) {
-    if (shell_env->parent_stdin != NULL)
-      stdin = shell_env->parent_stdin;
-  } else {
-    FILE *input = fopen(shell_env->input, "r");
-    if (input == NULL) {
-      fprintf(stderr, "shell: open input %s failed: %s\n",
-              shell_env->input, strerror(errno));
-      if (stdoutToClose != NULL)
-        fclose(stdoutToClose);
-      rtems_shell_clear_shell_env();
-      return false;
-    }
-    stdin = input;
-    stdinToClose = input;
-    shell_env->forever = false;
-    input_file = true;
-  }
-
-  if (!input_file) {
-    if (stdin == NULL) {
-      fprintf(stderr, "shell: stdin is NULLs\n");
-      if (stdoutToClose != NULL)
-        fclose(stdoutToClose);
-      rtems_shell_clear_shell_env();
-      return false;
-    }
-    /* Make a raw terminal, Linux Manuals */
-    if (tcgetattr(fileno(stdin), &previous_term) >= 0) {
-      term = previous_term;
-      term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
-      term.c_oflag &= ~OPOST;
-      term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
-      term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-      term.c_cflag |= CLOCAL | CREAD;
-      term.c_cc[VMIN]  = 1;
-      term.c_cc[VTIME] = 0;
-      if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
-        fprintf(stderr,
-                "shell: cannot set terminal attributes(%s)\n",shell_env->devname);
-      }
-    }
-    cmd_count = RTEMS_SHELL_CMD_COUNT;
+  if (interactive) {
     prompt = malloc(RTEMS_SHELL_PROMPT_SIZE);
-    if (!prompt)
-        fprintf(stderr,
-                "shell: cannot allocate prompt memory\n");
-  }
+    if (prompt == NULL) {
+      fprintf(stderr, "shell: cannot allocate prompt memory\n");
+      return false;
+    }
 
-  shell_std_debug("child out: %d (%p)\n", fileno(stdout), stdout);
-  shell_std_debug("child  in: %d (%p)\n", fileno(stdin), stdin);
-
-   /* Do not buffer if interactive else leave buffered */
-  if (!input_file)
-    setvbuf(stdin, NULL, _IONBF, 0);
-  setvbuf(stdout, NULL, _IONBF, 0);
-
-  if (isatty(fileno(stdin))) {
-     line_editor_output = stdout;
+    cmd_count = RTEMS_SHELL_CMD_COUNT;
   } else {
-     line_editor_output = NULL;
+    prompt = NULL;
+    cmd_count = 1;
   }
 
   /*
@@ -982,6 +878,7 @@ bool rtems_shell_main_loop(
   }
 
   if (cmd_argv && cmds[0]) {
+    size_t cmd;
 
     memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
 
@@ -1012,23 +909,25 @@ bool rtems_shell_main_loop(
       }
 
       if (result)  {
-        const char *c;
         memset (cmds[0], 0, cmd_count * RTEMS_SHELL_CMD_SIZE);
-        if (!input_file) {
+
+        if (interactive) {
           rtems_shell_cat_file(stdout,"/etc/motd");
           fprintf(stdout, "\n"
                   "RTEMS Shell on %s. Use 'help' to list commands.\n",
                   shell_env->devname);
-        }
-
-        if (input_file)
-          chdir(shell_env->cwd);
-        else
           chdir("/"); /* XXX: chdir to getpwent homedir */
+        } else {
+          chdir(shell_env->cwd);
+        }
 
         shell_env->exit_shell = false;
 
         for (;;) {
+          const char *c;
+          int argc;
+          char *argv[RTEMS_SHELL_MAXIMUM_ARGUMENTS];
+
           /* Prompt section */
           if (prompt) {
             rtems_shell_get_prompt(shell_env, prompt,
@@ -1101,16 +1000,133 @@ bool rtems_shell_main_loop(
       }
       shell_std_debug("end: %d %d\n", result, shell_env->forever);
     } while (result && shell_env->forever);
-
   }
 
-  if (cmds[0])
-    free (cmds[0]);
-  if (cmd_argv)
-    free (cmd_argv);
-  if (prompt)
-    free (prompt);
+  free(cmds[0]);
+  free(cmd_argv);
+  free(prompt);
 
+  return result;
+}
+
+bool rtems_shell_main_loop(
+  rtems_shell_env_t *shell_env
+)
+{
+  struct termios  term;
+  struct termios  previous_term;
+  bool            result;
+  bool            interactive = true;
+  FILE           *stdinToClose = NULL;
+  FILE           *stdoutToClose = NULL;
+  FILE           *line_editor_output;
+
+  rtems_shell_init_environment();
+
+  if (shell_env->magic != rtems_build_name('S', 'E', 'N', 'V')) {
+    rtems_error(0, "invalid shell environment passed to the main loop)");
+    return false;
+  }
+
+  if (!rtems_shell_set_shell_env(shell_env))
+    return false;
+
+  if (!rtems_shell_init_user_env()) {
+    rtems_error(0, "rtems_shell_init_user_env");
+    rtems_shell_clear_shell_env();
+    return false;
+  }
+
+  shell_std_debug("env: %p\n", shell_env);
+
+  if (shell_env->output == NULL || strcmp(shell_env->output, "stdout") == 0) {
+    if (shell_env->parent_stdout != NULL)
+      stdout = shell_env->parent_stdout;
+  }
+  else if (strcmp(shell_env->output, "stderr") == 0) {
+    if (shell_env->parent_stderr != NULL)
+      stdout = shell_env->parent_stderr;
+    else
+      stdout = stderr;
+  } else if (strcmp(shell_env->output, "/dev/null") == 0) {
+    if (stdout == NULL) {
+      fprintf(stderr, "shell: stdout is NULLs\n");
+      rtems_shell_clear_shell_env();
+      return false;
+    }
+    fclose (stdout);
+  } else {
+    FILE *output = fopen(shell_env->output,
+                         shell_env->output_append ? "a" : "w");
+    if (output == NULL) {
+      fprintf(stderr, "shell: open output %s failed: %s\n",
+              shell_env->output, strerror(errno));
+      rtems_shell_clear_shell_env();
+      return false;
+    }
+    stdout = output;
+    stdoutToClose = output;
+  }
+
+  if (shell_env->input == NULL || strcmp(shell_env->input, "stdin") == 0) {
+    if (shell_env->parent_stdin != NULL)
+      stdin = shell_env->parent_stdin;
+  } else {
+    FILE *input = fopen(shell_env->input, "r");
+    if (input == NULL) {
+      fprintf(stderr, "shell: open input %s failed: %s\n",
+              shell_env->input, strerror(errno));
+      if (stdoutToClose != NULL)
+        fclose(stdoutToClose);
+      rtems_shell_clear_shell_env();
+      return false;
+    }
+    stdin = input;
+    stdinToClose = input;
+    shell_env->forever = false;
+    interactive = false;
+  }
+
+  if (interactive) {
+    if (stdin == NULL) {
+      fprintf(stderr, "shell: stdin is NULLs\n");
+      if (stdoutToClose != NULL)
+        fclose(stdoutToClose);
+      rtems_shell_clear_shell_env();
+      return false;
+    }
+    /* Make a raw terminal, Linux Manuals */
+    if (tcgetattr(fileno(stdin), &previous_term) >= 0) {
+      term = previous_term;
+      term.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
+      term.c_oflag &= ~OPOST;
+      term.c_oflag |= (OPOST|ONLCR); /* But with cr+nl on output */
+      term.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+      term.c_cflag |= CLOCAL | CREAD;
+      term.c_cc[VMIN]  = 1;
+      term.c_cc[VTIME] = 0;
+      if (tcsetattr (fileno(stdin), TCSADRAIN, &term) < 0) {
+        fprintf(stderr,
+                "shell: cannot set terminal attributes(%s)\n",shell_env->devname);
+      }
+    }
+  }
+
+  shell_std_debug("child out: %d (%p)\n", fileno(stdout), stdout);
+  shell_std_debug("child  in: %d (%p)\n", fileno(stdin), stdin);
+
+   /* Do not buffer if interactive else leave buffered */
+  if (interactive)
+    setvbuf(stdin, NULL, _IONBF, 0);
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  if (isatty(fileno(stdin))) {
+     line_editor_output = stdout;
+  } else {
+     line_editor_output = NULL;
+  }
+
+  result = shell_main_loop(shell_env, interactive, line_editor_output);
   shell_std_debug("child in-to-close: %p\n", stdinToClose);
   shell_std_debug("child out-to-close: %p\n", stdoutToClose);
 
