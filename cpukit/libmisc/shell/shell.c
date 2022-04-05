@@ -53,7 +53,7 @@ const rtems_shell_env_t rtems_global_shell_env = {
   .magic         = rtems_build_name('S', 'E', 'N', 'V'),
   .managed       = false,
   .devname       = CONSOLE_DEVICE_NAME,
-  .taskname      = "SHGL",
+  .taskname      = "RTSH",
   .exit_shell    = false,
   .forever       = true,
   .echo          = false,
@@ -267,12 +267,13 @@ void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
   if (env != NULL) {
     shell_std_debug("dup: existing parent\n");
     *copy = *env;
-  }
-  else {
+
+    /*
+     * Duplicated environments are not managed.
+     */
+    copy->managed = false;
+  } else {
     *copy = rtems_global_shell_env;
-    copy->magic         = rtems_build_name('S', 'E', 'N', 'V');
-    copy->devname       = CONSOLE_DEVICE_NAME;
-    copy->taskname      = "RTSH";
     copy->parent_stdout = stdout;
     copy->parent_stdin  = stdin;
     copy->parent_stderr = stderr;
@@ -281,10 +282,6 @@ void rtems_shell_dup_current_env(rtems_shell_env_t *copy)
                     fileno(copy->parent_stdout), copy->parent_stdout,
                     fileno(copy->parent_stdin), copy->parent_stdin);
   }
-  /*
-   * Duplicated environments are not managed.
-   */
-  copy->managed = false;
 }
 
 /*
